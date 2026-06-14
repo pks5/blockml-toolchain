@@ -67,7 +67,7 @@ xmlns:ac="com.martianmicro.anyclosure"
 A type reference using a prefix:
 
 ```xml
-<ac:Wall id="00003" size="[1, 8, 9]" />
+<ac:Wall id="wall" size="[1, 8, 9]" />
 ```
 
 is resolved by the Namespace Resolver to the FQN:
@@ -77,6 +77,18 @@ com.martianmicro.anyclosure.Wall
 ```
 
 The MBOM always uses the full FQN. Namespace prefixes are a MBML authoring convenience only.
+
+### Type Namespace Shorthand
+
+Property `type` attributes do not require the full FQN. Unqualified type names are implicitly resolved against `com.machineblocks.types`:
+
+```text
+type="Size3D"    →  com.machineblocks.types.Size3D
+type="Color"     →  com.machineblocks.types.Color
+type="Boolean"   →  com.machineblocks.types.Boolean
+```
+
+Explicit FQNs and namespace-prefixed types are always supported for types outside `com.machineblocks.types`.
 
 ---
 
@@ -102,11 +114,69 @@ A block definition describes a reusable block type. It combines a control defini
 ```text
 <name>              — short class name (PascalCase)
 <fullQualifiedName> — FQN (e.g. com.martianmicro.anyclosure.Wall)
-<baseType>          — FQN of the parent type
 <version>           — semantic version of this block definition
 ```
 
-### Structure
+### Optional Fields
+
+```text
+<baseType>      — FQN of the parent type. Default: com.machineblocks.core.Block
+<properties>    — property declarations. Omit if no custom properties or default overrides needed.
+<aggregations>  — aggregation declarations. Omit to use the implicit _parts aggregation.
+<composition>   — internal structure. Omit for primitive (leaf) blocks.
+```
+
+### Conventions
+
+**`baseType`** defaults to `com.machineblocks.core.Block` when omitted. Specify explicitly only when inheriting from a non-default base type:
+
+```xml
+<baseType>com.martianmicro.anyclosure.Wall</baseType>
+```
+
+**`<aggregations>`** when omitted, an implicit hidden aggregation `_parts` is created:
+
+```text
+name:        _parts
+cardinality: 0..n
+type:        com.machineblocks.bricks.StandardBrick
+visibility:  hidden
+```
+
+Specify `<aggregations>` explicitly only when you need a different aggregation name, type, cardinality, or visibility — or multiple aggregations.
+
+**`<composition>`** when no `aggregation` attribute is specified, the composition fills the implicit (or sole) `_parts` aggregation. Specify `aggregation` explicitly only when multiple aggregations exist.
+
+### Minimal Block Example
+
+```xml
+<block xmlns="http://www.machineblocks.com/mbml/block.xsd"
+       xmlns:bricks="com.machineblocks.bricks">
+
+  <name>Wall</name>
+  <fullQualifiedName>com.martianmicro.anyclosure.Wall</fullQualifiedName>
+  <version>1.0.0</version>
+
+  <composition>
+    <bricks:StandardBrick
+        id="bottom"
+        size="${[size[0], size[1], size[2] - 1]}"
+        recess="true"
+        tongue="true"
+        recessWallGaps="x+" />
+
+    <bricks:StandardBrick
+        id="top"
+        size="${[size[0], size[1], 1]}"
+        offset="${[0, 0, size[2] - 1]}"
+        recessWallGaps="x+"
+        baseCutoutType="groove" />
+  </composition>
+
+</block>
+```
+
+### Full Block Example
 
 ```xml
 <block xmlns="http://www.machineblocks.com/mbml/block.xsd"
@@ -118,12 +188,12 @@ A block definition describes a reusable block type. It combines a control defini
   <version>1.0.0</version>
 
   <properties>
-    <!-- Native properties (inherited from baseType, listed for documentation) -->
-    <property name="size" type="com.machineblocks.types.Size" defaultValue="[1, 8, 9]">
-      <documentation>The size of the block.</documentation>
-    </property>
+    <!-- Native properties with non-default values -->
+    <property name="size"      type="Size3D"       defaultValue="[1, 8, 8]" />
+    <property name="baseColor" type="Color"        defaultValue="#303D4E" />
+    <property name="assembly"  type="AssemblyMode" defaultValue="Merged" />
 
-    <!-- Custom properties (defined inline, specific to this block) -->
+    <!-- Custom properties -->
     <property name="wallThickness" type="Integer" defaultValue="1">
       <documentation>Thickness of the wall in grid units.</documentation>
     </property>
@@ -133,33 +203,24 @@ A block definition describes a reusable block type. It combines a control defini
     <aggregation name="_parts"
                  cardinality="0..n"
                  type="com.machineblocks.bricks.StandardBrick"
-                 visibility="hidden">
-      <documentation>Internal block parts.</documentation>
-    </aggregation>
+                 visibility="hidden" />
   </aggregations>
 
-  <compositions>
-    <composition aggregation="_parts">
+  <composition aggregation="_parts">
+    <bricks:StandardBrick
+        id="bottom"
+        size="${[size[0], size[1], size[2] - 1]}"
+        recess="true"
+        tongue="true"
+        recessWallGaps="x+" />
 
-      <bricks:StandardBrick
-          id="bottom"
-          renderGroup="bottom"
-          namespace="bottom"
-          size="${[size[0], size[1], size[2] - 1]}"
-          recess="true"
-          tongue="true"
-          recessWallGaps="x+" />
-
-      <bricks:StandardBrick
-          id="top"
-          renderGroup="top"
-          namespace="top"
-          size="${[size[0], size[1], 1]}"
-          baseCutoutType="groove"
-          recessWallGaps="x+" />
-
-    </composition>
-  </compositions>
+    <bricks:StandardBrick
+        id="top"
+        size="${[size[0], size[1], 1]}"
+        offset="${[0, 0, size[2] - 1]}"
+        recessWallGaps="x+"
+        baseCutoutType="groove" />
+  </composition>
 
 </block>
 ```
@@ -174,6 +235,8 @@ Properties are typed parameters of the block. Two kinds exist:
 
 Both kinds use the same `<property>` element. The compiler determines whether a property is native or custom by checking `09_mbom_properties.yml`.
 
+Native properties only need to be listed in `<properties>` when their default value differs from the core default.
+
 ### Aggregations
 
 Aggregations describe ownership relationships between a block and its child objects.
@@ -187,12 +250,14 @@ visibility    — "public" | "hidden"
 
 `visibility="hidden"` marks an aggregation as internal — it is not directly fillable from outside the block definition.
 
-### Compositions
+When `<aggregations>` is omitted, the compiler creates an implicit `_parts` aggregation (hidden, 0..n). This covers the vast majority of composite blocks.
+
+### Composition
 
 A composition fills an aggregation with concrete child instances directly inside the block definition. It is the internal structure of a composite block.
 
 ```text
-aggregation   — name of the aggregation to fill
+aggregation   — name of the aggregation to fill (optional, defaults to "_parts")
 ```
 
 Child elements inside `<composition>` are block instances. Each instance:
@@ -218,7 +283,7 @@ See `03_mbom.md` for expression scope and rules.
 
 ## Set Definition (`<set>`)
 
-A set definition describes a concrete arrangement of block instances. It is conceptually equivalent to a SAPUI5 View.
+A set definition describes a concrete arrangement of block instances. It separates block configuration, spatial placement, and assembly order into three distinct sections.
 
 ### Structure
 
@@ -226,53 +291,97 @@ A set definition describes a concrete arrangement of block instances. It is conc
 <set xmlns="http://www.machineblocks.com/mbml/set.xsd"
      xmlns:ac="com.martianmicro.anyclosure">
 
-  <name>DefaultEnclosureSet</name>
-  <fullQualifiedName>com.martianmicro.anyclosure.DefaultEnclosureSet</fullQualifiedName>
+  <name>DefaultEnclosure</name>
+  <fullQualifiedName>com.martianmicro.anyclosure.DefaultEnclosure</fullQualifiedName>
   <version>1.0.0</version>
 
   <properties>
-    <property name="baseColor" type="com.machineblocks.types.Color" defaultValue="#EAC645" />
-    <property name="assembly" type="com.machineblocks.types.AssemblyMode" defaultValue="merged" />
+    <property name="baseColor"      type="Color"        defaultValue="#EAC645" />
+    <property name="highlightColor" type="Color"        defaultValue="#55AB68" />
+    <property name="assembly"       type="AssemblyMode" defaultValue="Merged" />
   </properties>
 
-  <instances>
-    <ac:Floor     id="00001" version="1.0.0" size="[16, 16, 1]" />
-    <ac:Corner    id="00002" version="1.0.0" size="[4, 4, 9]"   direction="west"  offset="[0, 0, 1]" />
-    <ac:Wall      id="00003" version="1.0.0" size="[1, 8, 9]"   direction="west"  offset="[0, 4, 1]" />
-    <ac:Corner    id="00004" version="1.0.0" size="[4, 4, 9]"   direction="north" offset="[0, 12, 1]" />
-    <ac:Lid       id="0000A" version="1.0.0" size="[16, 16, 1]" offset="[0, 0, 10]" />
-  </instances>
+  <blocks>
+    <ac:Floor  id="floor"  version="1.0.0" size="[16, 16, 1]" />
+    <ac:Corner id="corner" version="1.0.0" size="[4, 4, 9]" />
+    <ac:Wall   id="wall"   version="1.0.0" size="[1, 8, 9]" />
+    <ac:Lid    id="lid"    version="1.0.0" size="[16, 16, 1]" />
+  </blocks>
 
-  <steps>
-    <step instanceId="00001" />
-    <step instanceId="00002" />
-    <step instanceId="00003" />
-    <step instanceId="00004" />
-    <step instanceId="0000A" />
-  </steps>
+  <placement>
+    <place id="00001" blockId="floor"  direction="West"  offset="[0, 0, 0]" />
+    <place id="00002" blockId="corner" direction="West"  offset="[0, 0, 1]" />
+    <place id="00003" blockId="wall"   direction="West"  offset="[0, 4, 1]" />
+    <place id="00004" blockId="corner" direction="North" offset="[0, 12, 1]" />
+    <place id="00005" blockId="wall"   direction="North" offset="[4, 15, 1]" />
+    <place id="00006" blockId="corner" direction="East"  offset="[12, 12, 1]" />
+    <place id="00007" blockId="wall"   direction="East"  offset="[15, 4, 1]" />
+    <place id="00008" blockId="corner" direction="South" offset="[12, 0, 1]" />
+    <place id="00009" blockId="wall"   direction="South" offset="[4, 0, 1]" />
+    <place id="0000A" blockId="lid"    direction="West"  offset="[0, 0, 10]" />
+  </placement>
 
 </set>
 ```
 
-### Instance Attributes
+### Three-Section Model
+
+The set is split into three clearly separated concerns:
 
 ```text
-id          — instance ID (used in :: separated full ID)
-version     — version of the referenced block type (required)
-size        — bounding box
-direction   — orientation in the set
-offset      — position in the set (grid units)
-assembly    — assembly mode for this instance
-<property>  — any property of the referenced block type
+<blocks>    — what exists and how it is configured (type, size, custom props)
+<placement> — where it is (offset, direction) — id here becomes the SCAD instance id
+<steps>     — in which order it is assembled (optional)
 ```
 
-Block instances in a set can be configured in three ways:
+**`<blocks>`** defines block configurations. The `id` here is MBML/MBOM internal only — it identifies a configuration, not a physical instance. The same block configuration can be referenced by multiple `<place>` entries.
 
-**Option 1 — Inline:** All properties defined directly on the instance element.
+**`<placement>`** defines physical instances. The `id` on `<place>` becomes the SCAD instance id. `blockId` references a block from `<blocks>`.
 
-**Option 2 — Preset reference:** Instance references a `<blockPresets>` document.
+**`<steps>`** is optional. When omitted, assembly order follows the document order of `<placement>` entries. Specify `<steps>` explicitly only when assembly order differs from placement order:
 
-**Option 3 — Preset + inline override:** Preset as base, inline properties override individual values. Merge order: preset < inline.
+```xml
+<steps>
+  <step placeId="0000A" />
+  <step placeId="00001" />
+  <step placeId="00002" />
+  ...
+</steps>
+```
+
+### Block Reuse
+
+Because configuration and placement are separated, one block configuration can be placed multiple times without duplication:
+
+```xml
+<blocks>
+  <ac:Wall id="wall" version="1.0.0" size="[1, 8, 9]" baseColor="#303D4E" />
+</blocks>
+
+<placement>
+  <place id="00003" blockId="wall" direction="West"  offset="[0, 4, 1]" />
+  <place id="00005" blockId="wall" direction="North" offset="[4, 15, 1]" />
+  <place id="00007" blockId="wall" direction="East"  offset="[15, 4, 1]" />
+  <place id="00009" blockId="wall" direction="South" offset="[4, 0, 1]" />
+</placement>
+```
+
+### Block Configuration in a Set
+
+Three configuration modes, combinable:
+
+```text
+Option 1 — Inline:
+  All properties defined directly on the <block> element.
+
+Option 2 — Preset reference:
+  Block references a blockPresets document.
+  All preset values apply.
+
+Option 3 — Preset + inline override:
+  Preset as base. Inline properties override individual values.
+  Merge order: configProfile < blockPreset < inline property
+```
 
 ### SCAD Set Output
 
@@ -400,13 +509,17 @@ The JSON format is semantically equivalent to XML. The document type is determin
   "type": "block",
   "name": "Wall",
   "fullQualifiedName": "com.martianmicro.anyclosure.Wall",
-  "baseType": "com.machineblocks.core.Block",
   "version": "1.0.0",
   "properties": [
     {
       "name": "size",
-      "type": "com.machineblocks.types.Size",
-      "defaultValue": [1, 8, 9]
+      "type": "Size3D",
+      "defaultValue": [1, 8, 8]
+    },
+    {
+      "name": "baseColor",
+      "type": "Color",
+      "defaultValue": "#303D4E"
     },
     {
       "name": "wallThickness",
@@ -415,23 +528,12 @@ The JSON format is semantically equivalent to XML. The document type is determin
       "documentation": "Thickness of the wall in grid units."
     }
   ],
-  "aggregations": [
-    {
-      "name": "_parts",
-      "cardinality": "0..n",
-      "type": "com.machineblocks.bricks.StandardBrick",
-      "visibility": "hidden"
-    }
-  ],
   "compositions": [
     {
-      "aggregation": "_parts",
       "children": [
         {
           "type": "com.machineblocks.bricks.StandardBrick",
           "id": "bottom",
-          "renderGroup": "bottom",
-          "namespace": "bottom",
           "size": "${[size[0], size[1], size[2] - 1]}",
           "recess": true,
           "tongue": true,
@@ -440,14 +542,47 @@ The JSON format is semantically equivalent to XML. The document type is determin
         {
           "type": "com.machineblocks.bricks.StandardBrick",
           "id": "top",
-          "renderGroup": "top",
-          "namespace": "top",
           "size": "${[size[0], size[1], 1]}",
+          "offset": "${[0, 0, size[2] - 1]}",
           "baseCutoutType": "groove",
           "recessWallGaps": "x+"
         }
       ]
     }
+  ]
+}
+```
+
+### Set Definition (JSON)
+
+```json
+{
+  "type": "set",
+  "name": "DefaultEnclosure",
+  "fullQualifiedName": "com.martianmicro.anyclosure.DefaultEnclosure",
+  "version": "1.0.0",
+  "properties": [
+    { "name": "baseColor",      "type": "Color",       "defaultValue": "#EAC645" },
+    { "name": "highlightColor", "type": "Color",       "defaultValue": "#55AB68" },
+    { "name": "assembly",       "type": "AssemblyMode","defaultValue": "Merged" }
+  ],
+  "blocks": [
+    { "type": "com.martianmicro.anyclosure.Floor",  "id": "floor",  "version": "1.0.0", "size": [16, 16, 1] },
+    { "type": "com.martianmicro.anyclosure.Corner", "id": "corner", "version": "1.0.0", "size": [4, 4, 9] },
+    { "type": "com.martianmicro.anyclosure.Wall",   "id": "wall",   "version": "1.0.0", "size": [1, 8, 9] },
+    { "type": "com.martianmicro.anyclosure.Lid",    "id": "lid",    "version": "1.0.0", "size": [16, 16, 1] }
+  ],
+  "placement": [
+    { "id": "00001", "blockId": "floor",  "direction": "West",  "offset": [0, 0, 0] },
+    { "id": "00002", "blockId": "corner", "direction": "West",  "offset": [0, 0, 1] },
+    { "id": "00003", "blockId": "wall",   "direction": "West",  "offset": [0, 4, 1] },
+    { "id": "00004", "blockId": "corner", "direction": "North", "offset": [0, 12, 1] },
+    { "id": "00005", "blockId": "wall",   "direction": "North", "offset": [4, 15, 1] },
+    { "id": "00006", "blockId": "corner", "direction": "East",  "offset": [12, 12, 1] },
+    { "id": "00007", "blockId": "wall",   "direction": "East",  "offset": [15, 4, 1] },
+    { "id": "00008", "blockId": "corner", "direction": "South", "offset": [12, 0, 1] },
+    { "id": "00009", "blockId": "wall",   "direction": "South", "offset": [4, 0, 1] },
+    { "id": "0000A", "blockId": "lid",    "direction": "West",  "offset": [0, 0, 10] }
   ]
 }
 ```
@@ -466,3 +601,20 @@ The MBML→MBOM mapping is defined once per root type and applies uniformly to a
 ```
 
 The mapping rules define how XML attributes and elements translate to MBOM properties, aggregations, and compositions. They are not hardcoded in the parser — they are registered per root type.
+
+### Default Resolution for Block Definitions
+
+```text
+baseType missing        → com.machineblocks.core.Block
+<aggregations> missing  → implicit _parts aggregation (hidden, 0..n)
+<composition> without aggregation attribute
+  + implicit _parts exists → fills _parts
+  + explicit aggregations  → compiler error: aggregation attribute required
+type="Foo" (unqualified) → com.machineblocks.types.Foo
+```
+
+### Default Resolution for Set Definitions
+
+```text
+<steps> missing → assembly order = document order of <placement> entries
+```

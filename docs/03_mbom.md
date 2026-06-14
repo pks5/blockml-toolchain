@@ -89,7 +89,7 @@ Every MBOM class has metadata that describes its structure. Metadata is defined 
 ```text
 name               — short class name
 fullQualifiedName  — FQN
-baseType           — FQN of the parent class
+baseType           — FQN of the parent class (default: com.machineblocks.core.Block)
 version            — semantic version of this class definition
 properties         — list of Property metadata
 aggregations       — list of Aggregation metadata
@@ -111,15 +111,19 @@ Properties are typed parameters of a block. Every property has a name, a type, a
 
 The compiler determines whether a property is native or custom by checking `09_mbom_properties.yml`. No special markup is required in the block definition — both use the same `<property>` element.
 
+Native properties only need to be declared in a block definition when their default value differs from the core default defined in `09_mbom_properties.yml`.
+
 ### Property Metadata
 
 ```text
 name          — camelCase property name
-type          — MBOM type FQN (e.g. com.machineblocks.types.Size)
+type          — MBOM type FQN (e.g. com.machineblocks.types.Size3D)
 defaultValue  — typed default value
 group         — optional grouping for editor display
 documentation — human-readable description
 ```
+
+Unqualified type names in MBML are resolved against `com.machineblocks.types` by the parser before being stored in MBOM as full FQNs.
 
 ### Property Groups
 
@@ -130,6 +134,19 @@ Properties can be organized into named groups for editor display. Groups are met
 ## Aggregations
 
 Aggregations describe ownership relationships. An aggregation defines that a block can contain zero or more child objects of a given type.
+
+### Implicit _parts Aggregation
+
+When no `<aggregations>` section is present in a block definition, the MBML parser creates an implicit aggregation:
+
+```text
+name:        _parts
+cardinality: 0..n
+type:        com.machineblocks.bricks.StandardBrick
+visibility:  hidden
+```
+
+This covers the vast majority of composite blocks. Explicit `<aggregations>` are only needed when a different name, type, cardinality, or visibility is required, or when multiple aggregations are needed.
 
 ### Aggregation Metadata
 
@@ -160,9 +177,11 @@ A composition fills an aggregation with concrete child instances. It is the inte
 ### Composition Structure
 
 ```text
-aggregation   — name of the aggregation to fill
+aggregation   — name of the aggregation to fill (default: "_parts")
 children      — ordered list of block instances
 ```
+
+When no `aggregation` attribute is specified on a `<composition>`, the compiler fills the implicit (or sole) `_parts` aggregation. If multiple explicit aggregations exist, the `aggregation` attribute is required — the compiler reports an error if it is missing.
 
 Each child instance in a composition:
 
@@ -201,9 +220,9 @@ Wall._parts:
       renderGroup: "bottom"
       namespace:   "bottom"
       properties:
-        size:          Expression([size[0], size[1], size[2] - 1])
-        recess:        true
-        tongue:        true
+        size:           Expression([size[0], size[1], size[2] - 1])
+        recess:         true
+        tongue:         true
         recessWallGaps: "x+"
 
   [1] com.machineblocks.bricks.StandardBrick
@@ -211,7 +230,8 @@ Wall._parts:
       renderGroup: "top"
       namespace:   "top"
       properties:
-        size:          Expression([size[0], size[1], 1])
+        size:           Expression([size[0], size[1], 1])
+        offset:         Expression([0, 0, size[2] - 1])
         baseCutoutType: "groove"
         recessWallGaps: "x+"
 ```
@@ -324,6 +344,14 @@ Registry scope: per composition. A registry is created when entering a compositi
 
 A Set is an MBOM object that describes a concrete arrangement of block instances. It is the equivalent of a SAPUI5 View.
 
+The set is structured around three clearly separated concerns:
+
+```text
+blocks    — block configurations (what exists, how it is configured)
+placement — physical instances (where each block is, what its SCAD instance id is)
+steps     — assembly order (optional, defaults to placement order)
+```
+
 ### Set Structure
 
 ```text
@@ -331,36 +359,57 @@ name               — short name
 fullQualifiedName  — FQN
 version            — semantic version
 properties         — set-level properties (e.g. baseColor, assembly)
-instances          — ordered list of block instances with position data
-steps              — ordered list of assembly steps (references to instances)
+blocks             — list of block configurations
+placement          — list of placed instances
+steps              — ordered list of placed instance IDs (optional)
 ```
 
-### Instance in a Set
+### Block Configuration (in `blocks`)
 
-Each instance in a set carries:
+Each entry in `blocks` defines a named block configuration:
 
 ```text
-id            — instance ID
-type          — FQN of the block class
-version       — version of the block class
-size          — bounding box [x, y, z]
-direction     — orientation
-offset        — position in grid units [x, y, z]
-assembly      — assembly mode for this instance
-supportsAssembly — boolean
-properties    — additional property values (preset ref, inline, or both)
+id        — MBML/MBOM internal identifier (not a SCAD instance id)
+type      — FQN of the block class
+version   — version of the block class
+properties — property values (preset ref, inline, or both)
 ```
 
-### Block Configuration in a Set
+The `id` in `blocks` is a configuration handle only. Multiple `<place>` entries can reference the same block `id`, producing multiple physical instances from one configuration.
+
+### Placement
+
+Each entry in `placement` defines a physical instance of a block in the set:
+
+```text
+id        — SCAD instance id (used in STEPS array and instance dispatcher)
+blockId   — references a block configuration from <blocks>
+direction — orientation in the set
+offset    — position in the set (grid units)
+```
+
+The `id` on a `<place>` entry is what becomes the SCAD instance id. It must be unique across all placements in the set.
+
+### Assembly Steps
+
+`steps` is optional. When present, it defines the assembly order as an ordered list of `placeId` references:
+
+```text
+steps: ["00001", "00002", "00003", ...]
+```
+
+When absent, the assembly order equals the document order of `placement` entries. This is the common case — authors typically write placements in assembly order.
+
+### Block Configuration Modes
 
 Three configuration modes, combinable:
 
 ```text
 Option 1 — Inline:
-  All properties defined directly on the instance.
+  All properties defined directly on the block entry.
 
 Option 2 — Preset reference:
-  Instance references a blockPresets document.
+  Block references a blockPresets document.
   All preset values apply.
 
 Option 3 — Preset + inline override:
@@ -381,7 +430,7 @@ com.machineblocks.core.MBObject          — base for all MBOM objects
     com.martianmicro.anyclosure.Corner
     ...
   com.machineblocks.core.Set             — set of block instances
-    com.martianmicro.anyclosure.DefaultEnclosureSet
+    com.martianmicro.anyclosure.DefaultEnclosure
     ...
 ```
 
@@ -391,8 +440,8 @@ com.machineblocks.core.MBObject          — base for all MBOM objects
 
 Every block definition and set definition carries a semantic version. Sets must specify a version for every referenced block type:
 
-```text
-<ac:Wall id="00003" version="1.0.0" ... />
+```xml
+<ac:Wall id="wall" version="1.0.0" size="[1, 8, 9]" />
 ```
 
 No implicit `latest` references. Versions are always explicit.
