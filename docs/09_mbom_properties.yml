@@ -1,0 +1,765 @@
+# ============================================================================
+# MachineBlocks Compiler — MBOM Native Property Definitions
+# Single Source of Truth for all native MBOM properties
+# ============================================================================
+#
+# This file is the authoritative specification for all native MBOM properties
+# of com.machineblocks.core.Block and its base types.
+#
+# Native properties have dedicated SCAD getters in the render target:
+#   mb_param_{propertyName}(config, settings)
+#
+# Custom properties defined inline in block definitions use the generic getter:
+#   mb_param(config, settings, "propertyName", defaultValue)
+#
+# For the full SCAD parameter specification (types, formats, constraints,
+# version history) see: docs/scad-reference/09_api_parameters.yml
+#
+# For the MBOM type system see: 04_types.md
+#
+# ============================================================================
+
+version: "1.0.0"
+
+# ============================================================================
+# RESOLUTION ORDER
+# ============================================================================
+
+resolution_order:
+  order: ["settings", "config", "default"]
+  description: |
+    Every property is resolved in this order:
+    1. Instance settings
+    2. Config (active config profile)
+    3. Default value
+
+# ============================================================================
+# SCAD RENDERER MAPPING NOTES
+# ============================================================================
+
+scad_mapping_notes:
+  description: |
+    The scad_name field specifies the SCAD parameter name (settings array key).
+    In most cases it is identical to the MBOM property name (camelCase).
+    Where they differ, scad_name is set explicitly.
+
+    The serializer field references the serialization rule from 04_types.md.
+    Assembly patterns (mb_assembly_groove, mb_assembly_offset, etc.) are
+    resolved by the Assembly Pattern Mapper — not by the property renderer.
+    See 05_scad_renderer.md for assembly pattern mapping details.
+
+# ============================================================================
+# PROPERTIES
+# ============================================================================
+
+properties:
+
+  # --------------------------------------------------------------------------
+  # GROUP: System
+  # --------------------------------------------------------------------------
+
+  - name: unitMbu
+    group: system
+    type: com.machineblocks.types.FloatMm
+    default: 1.6
+    scad_name: unitMbu
+    serializer: scalar
+    ai_usage: rarely
+    description: |
+      Base unit of the MachineBlocks system in millimeters.
+      All grid-based size values are multiples of this unit.
+
+  - name: unitGrid
+    group: system
+    type: com.machineblocks.types.AxisXY<com.machineblocks.types.FloatMbu>
+    default: { x: 5, y: 2 }
+    scad_name: unitGrid
+    serializer: AxisXY
+    ai_usage: rarely
+    description: |
+      Grid size in mbu. X/Y share the first value, Z uses the second.
+      A 1x1 plate = 5×5×2 mbu = 8×8×3.2 mm at default settings.
+
+  - name: scale
+    group: system
+    type: com.machineblocks.types.Float
+    default: 1.0
+    scad_name: scale
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Global scaling factor. Scales all mbu-based values.
+      Adjustment parameters (mm) do NOT scale.
+
+  - name: printerNozzleDiameter
+    group: system
+    type: com.machineblocks.types.FloatMm
+    default: 0.4
+    scad_name: printerNozzleDiameter
+    serializer: scalar
+    ai_usage: config_only
+    description: |
+      Nozzle diameter of the 3D printer in mm.
+      Used as the basis for "auto" resolution in tongue/groove clearance
+      and topPlateHelperThickness.
+
+  - name: printerLayerHeight
+    group: system
+    type: com.machineblocks.types.FloatMm
+    default: 0.2
+    scad_name: printerLayerHeight
+    serializer: scalar
+    ai_usage: config_only
+    description: |
+      Layer height of the 3D printer in mm.
+      Used as the basis for "auto" resolution in topPlateHelperHeight,
+      stabilizerLayerOffset, screwHoleZHelperLayerOffset,
+      tongueGrooveDepthClearance, and tongueGrooveClampOffsetClearance.
+
+  - name: id
+    group: system
+    type: com.machineblocks.types.String
+    default: ""
+    scad_name: id
+    serializer: scalar
+    assembly_pattern: mb_block_id
+    ai_usage: yes
+    description: |
+      Unique identifier of the block or part within a block tree.
+      In composite blocks, child part IDs are derived from the parent ID:
+        childId = parentId + "::" + partId
+      The SCAD renderer emits: mb_block_id(blockId, part_name)
+
+  - name: render
+    group: system
+    type: com.machineblocks.types.Boolean
+    default: true
+    scad_name: render
+    serializer: scalar
+    assembly_pattern: mb_group_render
+    ai_usage: yes
+    description: |
+      Whether the block is rendered. When false, no geometry is produced.
+      The SCAD renderer emits: mb_group_render(renderGroups, group_name)
+
+  - name: debug
+    group: system
+    type: com.machineblocks.types.Boolean
+    default: false
+    scad_name: debug
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Enables debug output to the console. No effect on geometry.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Core Geometry
+  # --------------------------------------------------------------------------
+
+  - name: size
+    group: core_geometry
+    type: com.machineblocks.types.Size3D
+    default: { x: 1, y: 1, z: 1 }
+    scad_name: size
+    serializer: Size3D
+    ai_usage: yes
+    description: |
+      Size of the bounding box in grid units (integer values only).
+      X/Y count in studs, Z counts in plates.
+
+  - name: sizeMod
+    group: core_geometry
+    type: com.machineblocks.types.FaceVector6<com.machineblocks.types.FloatGrid>
+    default: { "x-": 0, "x+": 0, "y-": 0, "y+": 0, "z-": 0, "z+": 0 }
+    scad_name: sizeMod
+    serializer: FaceVector6
+    ai_usage: yes
+    description: |
+      Semantic size modification per face in grid units.
+      Adjusts geometry structurally (walls, studs remain consistent).
+
+  - name: crop
+    group: core_geometry
+    type: com.machineblocks.types.FaceVector6<com.machineblocks.types.FloatGrid>
+    default: { "x-": 0, "x+": 0, "y-": 0, "y+": 0, "z-": 0, "z+": 0 }
+    scad_name: crop
+    serializer: FaceVector6
+    ai_usage: yes
+    description: |
+      Hard cut per face in grid units (values must be <= 0).
+      Applied brutally without regard to structural features.
+
+  - name: slope
+    group: core_geometry
+    type: com.machineblocks.types.FalseOr<com.machineblocks.types.PerSide4<com.machineblocks.types.FloatGrid>>
+    default: false
+    scad_name: slope
+    serializer: PerSide4_or_false
+    ai_usage: yes
+    description: |
+      Slope per side in grid units (plates).
+      Positive: slope on top. Negative: inverted slope on bottom.
+
+  - name: bevel
+    group: core_geometry
+    type: com.machineblocks.types.Float
+    default: [[0,0],[0,0],[0,0],[0,0]]
+    scad_name: bevel
+    serializer: bevel_array
+    ai_usage: yes
+    description: |
+      Creates wedges by shifting Z-axis corners in XY space.
+      Format: [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] in grid units.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Positioning
+  # --------------------------------------------------------------------------
+
+  - name: offset
+    group: positioning
+    type: com.machineblocks.types.GridPosition3D
+    default: { x: 0, y: 0, z: 0 }
+    scad_name: offset
+    serializer: GridPosition3D
+    assembly_pattern: mb_assembly_offset
+    ai_usage: yes
+    description: |
+      Position of the block in the grid.
+      In assembly-dependent parts the SCAD renderer emits:
+      mb_assembly_offset([x, y, z], assembly, renderGroups, group_name)
+
+  - name: direction
+    group: positioning
+    type: com.machineblocks.types.Direction
+    default: West
+    scad_name: direction
+    serializer: Direction
+    ai_usage: yes
+    description: |
+      Orientation of the block. West | North | East | South.
+
+  - name: align
+    group: positioning
+    type: com.machineblocks.types.AlignValue
+    default: Start
+    scad_name: align
+    serializer: AlignValue
+    ai_usage: yes
+    description: |
+      Alignment of the block relative to its parent. Start | Center | End.
+
+  - name: rotation
+    group: positioning
+    type: com.machineblocks.types.AxisXYZ<com.machineblocks.types.FloatDeg>
+    default: { x: 0, y: 0, z: 0 }
+    scad_name: rotation
+    serializer: AxisXYZ
+    ai_usage: yes
+    description: |
+      Rotation of the block in degrees per axis.
+
+  - name: rotationOffset
+    group: positioning
+    type: com.machineblocks.types.GridPosition3D
+    default: { x: 0, y: 0, z: 0 }
+    scad_name: rotationOffset
+    serializer: GridPosition3D
+    ai_usage: rarely
+    description: |
+      Offset applied before rotation, reverted after.
+      Used to rotate around a specific point.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Base / Shell
+  # --------------------------------------------------------------------------
+
+  - name: base
+    group: base
+    type: com.machineblocks.types.Boolean
+    default: true
+    scad_name: base
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Whether the base shell is rendered. Set to false for wrapper blocks.
+
+  - name: baseColor
+    group: base
+    type: com.machineblocks.types.Color
+    default: "#EAC645"
+    scad_name: baseColor
+    serializer: Color
+    ai_usage: yes
+    description: |
+      Color of the base shell.
+
+  - name: baseAdjustment
+    group: base
+    type: com.machineblocks.types.FaceMap<com.machineblocks.types.FloatMm>
+    default: {}
+    scad_name: baseAdjustment
+    serializer: FaceMap
+    assembly_pattern: mb_params_filter
+    ai_usage: config_only
+    description: |
+      Calibration adjustment per face in mm.
+      Supports namespace-qualified keys for composite block forwarding:
+      "bottom.y-" targets the y- face of the "bottom" part.
+      The SCAD renderer applies mb_params_filter for namespace resolution.
+
+  - name: baseCutoutType
+    group: base
+    type: com.machineblocks.types.String
+    default: "standard"
+    scad_name: baseCutoutType
+    serializer: scalar
+    assembly_pattern: mb_assembly_groove
+    ai_usage: yes
+    description: |
+      Type of the base cutout. "standard" | "groove" | "none".
+      When set to "groove" on assembly-dependent parts, the SCAD renderer emits:
+      mb_assembly_groove(assembly, renderGroups, group_name)
+
+  - name: baseWallGaps
+    group: base
+    type: com.machineblocks.types.WallGapList
+    default: []
+    scad_name: baseWallGaps
+    serializer: WallGapList
+    ai_usage: yes
+    description: |
+      Gaps in the base wall per face. List of WallGap entries.
+
+  - name: baseRoundingRadius
+    group: base
+    type: com.machineblocks.types.RoundingRadius
+    default: 0
+    scad_name: baseRoundingRadius
+    serializer: RoundingRadius
+    ai_usage: yes
+    description: |
+      Corner rounding radii. See 04_types.md for the full RoundingRadius
+      type specification and SCAD input modes.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Studs
+  # --------------------------------------------------------------------------
+
+  - name: studs
+    group: studs
+    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.BooleanOr<com.machineblocks.types.StudType>>
+    default: true
+    scad_name: studs
+    serializer: SelectiveGrid
+    ai_usage: yes
+    description: |
+      Whether studs are rendered. Supports selective grid format for
+      per-region control. Values: true | false | "solid" | "hollow".
+
+  - name: studType
+    group: studs
+    type: com.machineblocks.types.StudType
+    default: Solid
+    scad_name: studType
+    serializer: StudType
+    ai_usage: yes
+    description: |
+      Default stud type. Solid | Hollow.
+
+  - name: studPadding
+    group: studs
+    type: com.machineblocks.types.PerSide4<com.machineblocks.types.FloatGrid>
+    default: { "x-": 0.2, "x+": 0.2, "y-": 0.2, "y+": 0.2 }
+    scad_name: studPadding
+    serializer: PerSide4
+    ai_usage: yes
+    description: |
+      Inset of studs from the block edge per side in grid units.
+
+  - name: studShift
+    group: studs
+    type: com.machineblocks.types.Boolean
+    default: false
+    scad_name: studShift
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Shifts studs by half a grid unit (jumper plate behavior).
+
+  # --------------------------------------------------------------------------
+  # GROUP: Pillars
+  # --------------------------------------------------------------------------
+
+  - name: pillars
+    group: pillars
+    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.Boolean>
+    default: true
+    scad_name: pillars
+    serializer: SelectiveGrid
+    ai_usage: yes
+    description: |
+      Whether pillars (tubes inside the base) are rendered.
+      Supports selective grid format for per-region control.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Holes
+  # --------------------------------------------------------------------------
+
+  - name: holeX
+    group: holes
+    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.Boolean>
+    default: false
+    scad_name: holeX
+    serializer: SelectiveGrid
+    ai_usage: yes
+    description: |
+      Technic pin/axle holes through the X axis.
+
+  - name: holeY
+    group: holes
+    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.Boolean>
+    default: false
+    scad_name: holeY
+    serializer: SelectiveGrid
+    ai_usage: yes
+    description: |
+      Technic pin/axle holes through the Y axis.
+
+  - name: holeZ
+    group: holes
+    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.Boolean>
+    default: false
+    scad_name: holeZ
+    serializer: SelectiveGrid
+    ai_usage: yes
+    description: |
+      Technic pin/axle holes through the Z axis (top face).
+
+  - name: holeXYZType
+    group: holes
+    type: com.machineblocks.types.AxisXYZ<com.machineblocks.types.HoleType>
+    default: { x: Pin, y: Pin, z: Pin }
+    scad_name: holeXYZType
+    serializer: AxisXYZ
+    ai_usage: yes
+    description: |
+      Hole type (Pin | Axle) per axis.
+
+  - name: holeXYZDiameter
+    group: holes
+    type: com.machineblocks.types.AutoOr<com.machineblocks.types.AxisXYZ<com.machineblocks.types.FloatMbu>>
+    default: "auto"
+    scad_name: holeXYZDiameter
+    serializer: AutoOr_AxisXYZ
+    ai_usage: rarely
+    description: |
+      Hole diameter per axis in mbu. "auto" uses the printer nozzle diameter.
+
+  - name: holeXYGridOffsetZ
+    group: holes
+    type: com.machineblocks.types.AxisXY<com.machineblocks.types.FloatMbu>
+    default: { x: 3.625, y: 3.625 }
+    scad_name: holeXYGridOffsetZ
+    serializer: AxisXY
+    ai_usage: rarely
+    description: |
+      Z offset of X/Y holes from the block bottom in mbu.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Recess / Tongue-Groove
+  # --------------------------------------------------------------------------
+
+  - name: recess
+    group: recess
+    type: com.machineblocks.types.Boolean
+    default: false
+    scad_name: recess
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Whether the block has a recessed top (tongue-groove system).
+
+  - name: tongue
+    group: recess
+    type: com.machineblocks.types.Boolean
+    default: false
+    scad_name: tongue
+    serializer: scalar
+    assembly_pattern: mb_assembly_tongue
+    ai_usage: yes
+    description: |
+      Whether the block has a tongue (bottom part of tongue-groove).
+      On assembly-dependent parts the SCAD renderer emits:
+      mb_assembly_tongue(assembly, renderGroups, group_name)
+
+  - name: recessWallGaps
+    group: recess
+    type: com.machineblocks.types.WallGapList
+    default: []
+    scad_name: recessWallGaps
+    serializer: WallGapList
+    ai_usage: yes
+    description: |
+      Gaps in the recess wall per face.
+
+  - name: recessWallThickness
+    group: recess
+    type: com.machineblocks.types.PerSide4<com.machineblocks.types.FloatGrid>
+    default: { "x-": 0.333, "x+": 0.333, "y-": 0.333, "y+": 0.333 }
+    scad_name: recessWallThickness
+    serializer: PerSide4
+    ai_usage: rarely
+    description: |
+      Thickness of the recess wall per side in grid units.
+
+  - name: tongueGrooveThicknessClearance
+    group: recess
+    type: com.machineblocks.types.AutoOr<com.machineblocks.types.FloatMm>
+    default: "auto"
+    scad_name: tongueGrooveThicknessClearance
+    serializer: AutoOr_scalar
+    ai_usage: config_only
+    description: |
+      Clearance between tongue and groove in the thickness direction (mm).
+      "auto" = 0.25 * printerNozzleDiameter (min 0.1 mm).
+
+  - name: tongueGrooveDepthClearance
+    group: recess
+    type: com.machineblocks.types.AutoOr<com.machineblocks.types.FloatMm>
+    default: "auto"
+    scad_name: tongueGrooveDepthClearance
+    serializer: AutoOr_scalar
+    ai_usage: config_only
+    description: |
+      Clearance between tongue and groove in the depth direction (mm).
+      "auto" = printerLayerHeight.
+
+  - name: tongueGrooveClampOffsetClearance
+    group: recess
+    type: com.machineblocks.types.AutoOr<com.machineblocks.types.FloatMm>
+    default: "auto"
+    scad_name: tongueGrooveClampOffsetClearance
+    serializer: AutoOr_scalar
+    ai_usage: config_only
+    description: |
+      Clearance for the tongue clamp offset (mm).
+      "auto" = printerLayerHeight.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Connectors
+  # --------------------------------------------------------------------------
+
+  - name: connectors
+    group: connectors
+    type: com.machineblocks.types.List<com.machineblocks.types.Connector>
+    default: []
+    scad_name: connectors
+    serializer: ConnectorList
+    ai_usage: yes
+    description: |
+      List of snap connectors. Each connector: { face, axis, gender, align, paddingStart, paddingEnd }.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Screw Holes
+  # --------------------------------------------------------------------------
+
+  - name: screwHoles
+    group: screw_holes
+    type: com.machineblocks.types.List<com.machineblocks.types.ScrewHole>
+    default: []
+    scad_name: screwHoles
+    serializer: ScrewHoleList
+    ai_usage: yes
+    description: |
+      List of screw holes for all faces.
+
+  - name: screwHoleDiameter
+    group: screw_holes
+    type: com.machineblocks.types.FloatMm
+    default: 2.5
+    scad_name: screwHoleDiameter
+    serializer: scalar
+    ai_usage: rarely
+    description: |
+      Default screw hole diameter in mm (applies to all screwHoles entries
+      that do not specify their own diameter).
+
+  # --------------------------------------------------------------------------
+  # GROUP: PCB Mounting
+  # --------------------------------------------------------------------------
+
+  - name: pcb
+    group: pcb
+    type: com.machineblocks.types.String
+    default: "none"
+    scad_name: pcb
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      PCB mounting configuration. "none" or PCB preset identifier.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Assembly / Rendering
+  # --------------------------------------------------------------------------
+
+  - name: assembly
+    group: assembly
+    type: com.machineblocks.types.AssemblyMode
+    default: Merged
+    scad_name: assembly
+    serializer: AssemblyMode
+    ai_usage: yes
+    description: |
+      Assembly display mode. Unassembled | Assembled | Merged.
+      Controls how composite blocks are rendered in the set context.
+
+  - name: renderGroups
+    group: assembly
+    type: com.machineblocks.types.String
+    default: "all"
+    scad_name: renderGroups
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Comma-separated list of render group names to render.
+      "all" renders all groups. Used in set step view to render
+      specific parts of a composite block.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Surface / Decoration
+  # --------------------------------------------------------------------------
+
+  - name: grille
+    group: surface
+    type: com.machineblocks.types.NoneOr<com.machineblocks.types.String>
+    default: "none"
+    scad_name: grille
+    serializer: NoneOr_scalar
+    ai_usage: yes
+    description: |
+      Grille pattern on a face. "none" or pattern identifier.
+
+  - name: surfacePattern
+    group: surface
+    type: com.machineblocks.types.NoneOr<com.machineblocks.types.String>
+    default: "none"
+    scad_name: surfacePattern
+    serializer: NoneOr_scalar
+    ai_usage: yes
+    description: |
+      SVG-based surface pattern. "none" or path to SVG file.
+
+  - name: text
+    group: surface
+    type: com.machineblocks.types.String
+    default: ""
+    scad_name: text
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Text to emboss or deboss on a face.
+
+  - name: textFace
+    group: surface
+    type: com.machineblocks.types.Face
+    default: "z+"
+    scad_name: textFace
+    serializer: Face
+    ai_usage: yes
+    description: |
+      Face on which text is rendered.
+
+  - name: textSize
+    group: surface
+    type: com.machineblocks.types.FloatPt
+    default: 9
+    scad_name: textSize
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Text size in points.
+
+  - name: textFont
+    group: surface
+    type: com.machineblocks.types.String
+    default: "RBNo3.1 Black"
+    scad_name: textFont
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Font name for text rendering.
+
+  - name: textColor
+    group: surface
+    type: com.machineblocks.types.Color
+    default: "#303D4E"
+    scad_name: textColor
+    serializer: Color
+    ai_usage: yes
+    description: |
+      Color of the rendered text.
+
+  - name: textDepth
+    group: surface
+    type: com.machineblocks.types.FloatMbu
+    default: 0.5
+    scad_name: textDepth
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Depth of embossed/debossed text in mbu.
+
+  - name: textAlign
+    group: surface
+    type: com.machineblocks.types.AlignValue
+    default: Center
+    scad_name: textAlign
+    serializer: AlignValue
+    ai_usage: yes
+    description: |
+      Text alignment on the face.
+
+  - name: textSpacing
+    group: surface
+    type: com.machineblocks.types.FloatPt
+    default: 1
+    scad_name: textSpacing
+    serializer: scalar
+    ai_usage: rarely
+    description: |
+      Letter spacing multiplier.
+
+  # --------------------------------------------------------------------------
+  # GROUP: Stabilizers
+  # --------------------------------------------------------------------------
+
+  - name: stabilizers
+    group: stabilizers
+    type: com.machineblocks.types.Boolean
+    default: false
+    scad_name: stabilizers
+    serializer: scalar
+    ai_usage: yes
+    description: |
+      Whether stabilizer ribs are rendered inside the base shell.
+
+  - name: stabilizerLayerOffset
+    group: stabilizers
+    type: com.machineblocks.types.AutoOr<com.machineblocks.types.FloatMm>
+    default: "auto"
+    scad_name: stabilizerLayerOffset
+    serializer: AutoOr_scalar
+    ai_usage: rarely
+    description: |
+      Z offset of stabilizer ribs from the floor in mm.
+      "auto" = printerLayerHeight.
+
+# ============================================================================
+# AI USAGE GUIDELINES
+# ============================================================================
+
+ai_usage_values:
+  yes:         "Safe to use in instance settings."
+  rarely:      "Usually not needed. Safe if intentional."
+  config_only: "Place only in config profile, not in per-instance settings."
+  never:       "Do not use. Internal constant."
