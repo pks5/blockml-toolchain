@@ -6,7 +6,7 @@ version: 1.0.0
 
 This documentation describes the MachineBlocks Compiler project (`mbc`) — the toolchain that translates MBML (MachineBlocks Markup Language) source files into SCAD render target files via MBOM (MachineBlocks Object Model).
 
-The MachineBlocks V3 SCAD Library is the reference render target. Its documentation is available under `docs/scad-reference/` (Git Submodule).
+The MachineBlocks V3 SCAD Library is the reference render target. It is included as a Git Submodule at `machineblocks/` in the MBC installation directory.
 
 ---
 
@@ -19,7 +19,7 @@ MBML Source (.mbml / .json)
   ↓ parse + validate
 MBOM (MachineBlocks Object Model)
   ↓ compile
-SCAD Render Target  ←  docs/scad-reference/
+SCAD Render Target  ←  machineblocks/docs/scad-reference/
   ↓ render
 STL / 3MF
 ```
@@ -48,6 +48,20 @@ STL / 3MF
 
 ---
 
+## Tool vs. Content
+
+`mbc` is a standalone tool — it is installed or cloned once and used across multiple content projects. Content projects (MBML sources, SCAD output) live in separate directories and are not part of the MBC repository.
+
+```text
+~/.../machineblocks-compiler/   ← MBC tool (installed once)
+~/.../my-enclosure-project/     ← content project (MBML sources, SCAD output)
+~/.../another-project/          ← another content project
+```
+
+This is analogous to `tsc` or `webpack` — the tool is global, content projects each have their own `mbc.config.json`.
+
+---
+
 ## Monorepo Structure
 
 ```text
@@ -57,13 +71,26 @@ machineblocks-compiler/
     mbml/           — XML/JSON parser, namespace resolver, MBML→MBOM mapper
     scad-renderer/  — MBOM→SCAD compiler, settings renderer, assembly patterns
     compiler/       — Facade: compileMbmlToScad(), compileMbomToScad()
-    cli-tools/      — Node-only: mbc CLI commands, file watcher
+    cli-tools/      — Node-only: mbc CLI commands, file watcher, thumbnail renderer
 
-  docs/
-    scad-reference/ — Git Submodule → MachineBlocks V3 SCAD Library Docs
+  machineblocks/    — Git Submodule: MachineBlocks V3 SCAD Library (full repository)
+    lib/            — SCAD Library source
+    examples/       — example SCAD files (useful for compiler development and testing)
+    docs/
+      scad-reference/ — SCAD API reference docs (used by renderer and compiler)
 
   README.md
 ```
+
+### Why the full repository?
+
+The entire MachineBlocks V3 SCAD Library repository is included as a submodule — not just the `docs/` folder — because:
+
+- `machineblocks/lib/` is the runtime the generated SCAD files depend on
+- `machineblocks/examples/` provides verified SCAD output for correctness testing
+- `machineblocks/docs/scad-reference/` is the API reference for the renderer
+
+Git does not support including only a subdirectory of a foreign repository as a submodule. Including the full repository is the pragmatic and reliable choice.
 
 ---
 
@@ -112,7 +139,7 @@ The SCAD render backend. Browser and Node compatible.
 - Import resolver
 - Assembly pattern mapping (mb_assembly_groove, mb_assembly_offset, etc.)
 - Source map generation (Source Map Spec V3)
-- Reference: docs/scad-reference/
+- Reference: machineblocks/docs/scad-reference/
 ```
 
 ### `@machineblocks/compiler`
@@ -137,6 +164,8 @@ Node.js-only CLI tools.
 - mbc inspect <file>
 - mbc watch [--src <dir>] [--out <dir>]
 - mbc activate-config <profileName>
+- OpenSCAD executable resolver
+- Thumbnail renderer (Sharp-based, Node-only)
 ```
 
 ---
@@ -177,6 +206,21 @@ File:  scad/com/martianmicro/anyclosure/Wall.scad
 
 Multiple block classes may exist in one SCAD file. The file is named after the primary class.
 
+### Thumbnail File Names
+
+Thumbnails are generated per preset. The naming schema is:
+
+```text
+{BlockName}__{preset-name-in-kebab-case}.webp
+
+Examples:
+  Wall__brick-2x4.webp
+  Wall__brick-1x1.webp
+  StandardBrick__standard-2x4-yellow.webp
+```
+
+Preset name transformation: lowercase, spaces replaced with `-`, special characters stripped.
+
 ### Instance IDs
 
 ```text
@@ -213,9 +257,14 @@ src/                          — MBML source files (configurable via srcDir)
 scad/                         — SCAD output files (configurable via outDir)
   com/machineblocks/bricks/
     StandardBrick.scad        — compiled block
+    StandardBrick.scad.map    — source map
     StandardBrick.json        — compiled presets (OpenSCAD Customizer format)
+    StandardBrick__brick-2x4.webp  — thumbnail per preset
+    StandardBrick__brick-1x1.webp
     StandardBrickSet.scad     — compiled set
 ```
+
+Thumbnail files are placed alongside the SCAD output by default. The output directory for thumbnails is configurable via `thumbsDir` in `mbc.config.json`.
 
 Root element of the MBML file determines the document type — not the filename or path.
 
@@ -225,16 +274,20 @@ Root element of the MBML file determines the document type — not the filename 
 
 ```text
 <block>        → scad/com/.../ClassName.scad
-                 Block module + customizer
+                 scad/com/.../ClassName.scad.map
+                 Block module + customizer. No thumbnails.
 
 <set>          → scad/com/.../ClassName.scad
-                 Assembly instructions: all block instances
-                 positioned with assembly/renderGroups logic
+                 scad/com/.../ClassName.scad.map
+                 Assembly instructions. No thumbnails.
 
-<blockPresets> → scad/com/.../ClassName.json
-                 OpenSCAD Customizer preset file
-                 Same name as the referenced block's SCAD output
+<blockPresets> → scad/com/.../ClassName.scad        (implicit compile of referenced block)
+                 scad/com/.../ClassName.scad.map
+                 scad/com/.../ClassName.json         (OpenSCAD Customizer preset file)
+                 scad/com/.../ClassName__{preset}.webp  (one thumbnail per preset)
 ```
+
+Compiling a `<blockPresets>` document is the standard entry point when generating visible output. It triggers compilation of the referenced block and produces all artifacts in one step.
 
 ---
 
@@ -246,12 +299,14 @@ Project-level configuration:
 
 ```json
 {
-  "srcDir": "src",
-  "outDir": "scad",
-  "mbLibPath": "../machineblocks",
+  "srcDir":       "src",
+  "outDir":       "scad",
+  "thumbsDir":    null,
   "activeConfig": "prusa_pla"
 }
 ```
+
+`mbLibPath` is optional. When absent, the CLI resolves the MachineBlocks V3 SCAD Library relative to its own executable location (see Library Resolution below).
 
 ### `mbc-cli.config.json`
 
@@ -267,6 +322,30 @@ CLI-level configuration (command names, argument names, shortcuts):
   }
 }
 ```
+
+---
+
+## Library Resolution
+
+The MachineBlocks V3 SCAD Library (`machineblocks/`) is bundled with the MBC installation as a Git Submodule. Content projects do not need to install or reference the library separately.
+
+Resolution order for the library path:
+
+```text
+1. mbc.config.json → "mbLibPath"  (explicit override, highest priority)
+2. Environment variable MACHINEBLOCKS_LIB_PATH
+3. Resolved relative to the mbc executable:
+     path.join(dirname(mbc_executable), "../machineblocks")
+```
+
+If none of the above yields a valid library path, the CLI reports a clear error:
+
+```text
+ERROR: MachineBlocks V3 SCAD Library not found.
+  Set "mbLibPath" in mbc.config.json or MACHINEBLOCKS_LIB_PATH to the library root.
+```
+
+This resolution is implemented in `@machineblocks/cli-tools` as `resolveMbLib.ts`.
 
 ---
 
@@ -307,8 +386,11 @@ configProfile < blockPreset < inline property
 07_cli.md              — CLI commands, configuration, watch mode, scaffolding
 09_mbom_properties.yml — native property definitions (authoritative)
 
-docs/
-  scad-reference/      — Git Submodule: MachineBlocks V3 SCAD Library Docs
+machineblocks/                    — Git Submodule: MachineBlocks V3 SCAD Library
+  docs/
+    scad-reference/               — SCAD API reference (used by renderer)
+  lib/                            — SCAD Library runtime
+  examples/                       — example SCAD files (used in correctness tests)
 ```
 
 `09_mbom_properties.yml` is the authoritative source for all native MBOM property definitions (types, defaults, constraints). The Markdown documents explain concepts, relationships, and decision logic.
