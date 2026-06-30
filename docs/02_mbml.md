@@ -6,6 +6,7 @@ version: 1.0.0
 
 This document defines the MBML (MachineBlocks Markup Language) format — the declarative authoring language for MachineBlocks blocks, sets, and presets.
 
+MBML is a serialization of MBOM, which is itself a domain-specific specialization of BOM Core. For the abstract object model see `00_bom_core.md`.
 For the MBOM object model see `03_mbom.md`.
 For the MBOM type system see `04_types.md`.
 For native property definitions see `09_mbom_properties.yml`.
@@ -34,13 +35,14 @@ The document type is determined by the root element (XML) or the `type` field (J
 
 ## Document Types
 
-MBML defines three core document types:
+MBML defines two core document types:
 
 ```text
-<block>        — Block Definition
-<set>          — Set Definition
-<blockPresets> — Parameter Presets for a specific block
+<block>        — Block Definition (includes Sets, which are Blocks with baseType=com.bom.core.Set)
+<blockPresets> — Parameter Presets for a specific Block
 ```
+
+A **Set** is not a separate document type in MBML. It is a `<block>` document with `<baseType>com.machineblocks.core.Set</baseType>`. The SCAD Renderer detects the Set base type and produces STEPS-based output instead of a composite `mb_block()`. See the Set Definition section below.
 
 Extension document types (defined in external packages, not in core):
 
@@ -281,89 +283,103 @@ See `03_mbom.md` for expression scope and rules.
 
 ---
 
-## Set Definition (`<set>`)
+## Set Definition
 
-A set definition describes a concrete arrangement of block instances. It separates block configuration, spatial placement, and assembly order into three distinct sections.
+A Set is a Block whose `baseType` is `com.machineblocks.core.Set` (which extends `com.bom.core.Set`). It uses the standard `<block>` document type — there is no separate `<set>` root element.
+
+A Set uses Multi-Aggregation to separate three concerns into distinct Compositions. The aggregation names `_blocks`, `_placement`, and `_steps` are conventional for Sets.
+
+```text
+_blocks     — Block configurations (what exists, how it is parameterized)
+_placement  — placed instances (where each block is; id becomes the SCAD instance id)
+_steps      — assembly order (optional; defaults to document order of _placement)
+```
 
 ### Structure
 
 ```xml
-<set xmlns="http://www.machineblocks.com/mbml/set.xsd"
-     xmlns:ac="com.martianmicro.anyclosure">
+<block xmlns="http://www.machineblocks.com/mbml/block.xsd"
+       xmlns:core="com.machineblocks.core"
+       xmlns:ac="com.martianmicro.anyclosure">
 
   <name>DefaultEnclosure</name>
   <fullQualifiedName>com.martianmicro.anyclosure.DefaultEnclosure</fullQualifiedName>
+  <baseType>com.machineblocks.core.Set</baseType>
   <version>1.0.0</version>
 
   <properties>
     <property name="baseColor"      type="Color"        defaultValue="#EAC645" />
     <property name="highlightColor" type="Color"        defaultValue="#55AB68" />
-    <property name="assembly"       type="AssemblyMode" defaultValue="Merged" />
+    <property name="assembly"       type="AssemblyMode" defaultValue="Merged"  />
   </properties>
 
-  <blocks>
+  <aggregations>
+    <aggregation name="_blocks"    cardinality="0..n" type="com.machineblocks.core.Block" visibility="hidden" />
+    <aggregation name="_placement" cardinality="0..n" type="com.machineblocks.core.Place" visibility="hidden" />
+    <aggregation name="_steps"     cardinality="0..n" type="com.machineblocks.core.Step"  visibility="hidden" />
+  </aggregations>
+
+  <composition aggregation="_blocks">
     <ac:Floor  id="floor"  version="1.0.0" size="[16, 16, 1]" />
-    <ac:Corner id="corner" version="1.0.0" size="[4, 4, 9]" />
-    <ac:Wall   id="wall"   version="1.0.0" size="[1, 8, 9]" />
+    <ac:Corner id="corner" version="1.0.0" size="[4, 4, 9]"   />
+    <ac:Wall   id="wall"   version="1.0.0" size="[1, 8, 9]"   />
     <ac:Lid    id="lid"    version="1.0.0" size="[16, 16, 1]" />
-  </blocks>
+  </composition>
 
-  <placement>
-    <place id="00001" blockId="floor"  direction="West"  offset="[0, 0, 0]" />
-    <place id="00002" blockId="corner" direction="West"  offset="[0, 0, 1]" />
-    <place id="00003" blockId="wall"   direction="West"  offset="[0, 4, 1]" />
-    <place id="00004" blockId="corner" direction="North" offset="[0, 12, 1]" />
-    <place id="00005" blockId="wall"   direction="North" offset="[4, 15, 1]" />
-    <place id="00006" blockId="corner" direction="East"  offset="[12, 12, 1]" />
-    <place id="00007" blockId="wall"   direction="East"  offset="[15, 4, 1]" />
-    <place id="00008" blockId="corner" direction="South" offset="[12, 0, 1]" />
-    <place id="00009" blockId="wall"   direction="South" offset="[4, 0, 1]" />
-    <place id="0000A" blockId="lid"    direction="West"  offset="[0, 0, 10]" />
-  </placement>
+  <composition aggregation="_placement">
+    <core:Place id="00001" blockId="floor"  direction="West"  offset="[0, 0, 0]"   />
+    <core:Place id="00002" blockId="corner" direction="West"  offset="[0, 0, 1]"   />
+    <core:Place id="00003" blockId="wall"   direction="West"  offset="[0, 4, 1]"   />
+    <core:Place id="00004" blockId="corner" direction="North" offset="[0, 12, 1]"  />
+    <core:Place id="00005" blockId="wall"   direction="North" offset="[4, 15, 1]"  />
+    <core:Place id="00006" blockId="corner" direction="East"  offset="[12, 12, 1]" />
+    <core:Place id="00007" blockId="wall"   direction="East"  offset="[15, 4, 1]"  />
+    <core:Place id="00008" blockId="corner" direction="South" offset="[12, 0, 1]"  />
+    <core:Place id="00009" blockId="wall"   direction="South" offset="[4, 0, 1]"   />
+    <core:Place id="0000A" blockId="lid"    direction="West"  offset="[0, 0, 10]"  />
+  </composition>
 
-</set>
+  <!-- _steps omitted → assembly order = document order of _placement -->
+
+</block>
 ```
 
-### Three-Section Model
+### Place and Step
 
-The set is split into three clearly separated concerns:
+`com.machineblocks.core.Place` and `com.machineblocks.core.Step` are lightweight Block types defined in MBOM. They are used as children in their respective Compositions exactly like any other Block type — resolved via namespace prefix, instantiated by the MBOM Mapper.
+
+`Place` properties:
 
 ```text
-<blocks>    — what exists and how it is configured (type, size, custom props)
-<placement> — where it is (offset, direction) — id here becomes the SCAD instance id
-<steps>     — in which order it is assembled (optional)
+id         — instance ID (becomes the SCAD instance id)
+blockId    — references a Block configuration from _blocks
+direction  — orientation in the set
+offset     — position in the set (grid units)
 ```
 
-**`<blocks>`** defines block configurations. The `id` here is MBML/MBOM internal only — it identifies a configuration, not a physical instance. The same block configuration can be referenced by multiple `<place>` entries.
+`Step` properties:
 
-**`<placement>`** defines physical instances. The `id` on `<place>` becomes the SCAD instance id. `blockId` references a block from `<blocks>`.
-
-**`<steps>`** is optional. When omitted, assembly order follows the document order of `<placement>` entries. Specify `<steps>` explicitly only when assembly order differs from placement order:
-
-```xml
-<steps>
-  <step placeId="0000A" />
-  <step placeId="00001" />
-  <step placeId="00002" />
-  ...
-</steps>
+```text
+placeId    — references a Place in _placement
 ```
+
+When `_steps` is omitted, assembly order equals the document order of `_placement` entries.
 
 ### Block Reuse
 
-Because configuration and placement are separated, one block configuration can be placed multiple times without duplication:
+Because `_blocks` and `_placement` are separated, one Block configuration can be placed multiple times without duplication:
 
 ```xml
-<blocks>
+<composition aggregation="_blocks">
   <ac:Wall id="wall" version="1.0.0" size="[1, 8, 9]" baseColor="#303D4E" />
-</blocks>
+</composition>
 
-<placement>
-  <place id="00003" blockId="wall" direction="West"  offset="[0, 4, 1]" />
-  <place id="00005" blockId="wall" direction="North" offset="[4, 15, 1]" />
-  <place id="00007" blockId="wall" direction="East"  offset="[15, 4, 1]" />
-  <place id="00009" blockId="wall" direction="South" offset="[4, 0, 1]" />
-</placement>
+<composition aggregation="_placement">
+  <core:Place id="00003" blockId="wall" direction="West"  offset="[0, 4, 1]"  />
+  <core:Place id="00005" blockId="wall" direction="North" offset="[4, 15, 1]" />
+  <core:Place id="00007" blockId="wall" direction="East"  offset="[15, 4, 1]" />
+  <core:Place id="00009" blockId="wall" direction="South" offset="[4, 0, 1]"  />
+</composition>
 ```
 
 ### Block Configuration in a Set
@@ -372,7 +388,7 @@ Three configuration modes, combinable:
 
 ```text
 Option 1 — Inline:
-  All properties defined directly on the <block> element.
+  All properties defined directly on the Block entry in _blocks.
 
 Option 2 — Preset reference:
   Block references a blockPresets document.
@@ -385,7 +401,7 @@ Option 3 — Preset + inline override:
 
 ### SCAD Set Output
 
-The SCAD Renderer generates the following views from a set:
+The SCAD Renderer detects `baseType = com.machineblocks.core.Set` and generates the following views:
 
 ```text
 total     — all instances assembled at their positions
@@ -557,32 +573,46 @@ The JSON format is semantically equivalent to XML. The document type is determin
 
 ```json
 {
-  "type": "set",
+  "type": "block",
   "name": "DefaultEnclosure",
   "fullQualifiedName": "com.martianmicro.anyclosure.DefaultEnclosure",
+  "baseType": "com.machineblocks.core.Set",
   "version": "1.0.0",
   "properties": [
-    { "name": "baseColor",      "type": "Color",       "defaultValue": "#EAC645" },
-    { "name": "highlightColor", "type": "Color",       "defaultValue": "#55AB68" },
-    { "name": "assembly",       "type": "AssemblyMode","defaultValue": "Merged" }
+    { "name": "baseColor",      "type": "Color",        "defaultValue": "#EAC645" },
+    { "name": "highlightColor", "type": "Color",        "defaultValue": "#55AB68" },
+    { "name": "assembly",       "type": "AssemblyMode", "defaultValue": "Merged"  }
   ],
-  "blocks": [
-    { "type": "com.martianmicro.anyclosure.Floor",  "id": "floor",  "version": "1.0.0", "size": [16, 16, 1] },
-    { "type": "com.martianmicro.anyclosure.Corner", "id": "corner", "version": "1.0.0", "size": [4, 4, 9] },
-    { "type": "com.martianmicro.anyclosure.Wall",   "id": "wall",   "version": "1.0.0", "size": [1, 8, 9] },
-    { "type": "com.martianmicro.anyclosure.Lid",    "id": "lid",    "version": "1.0.0", "size": [16, 16, 1] }
+  "aggregations": [
+    { "name": "_blocks",    "cardinality": "0..n", "type": "com.machineblocks.core.Block", "visibility": "hidden" },
+    { "name": "_placement", "cardinality": "0..n", "type": "com.machineblocks.core.Place", "visibility": "hidden" },
+    { "name": "_steps",     "cardinality": "0..n", "type": "com.machineblocks.core.Step",  "visibility": "hidden" }
   ],
-  "placement": [
-    { "id": "00001", "blockId": "floor",  "direction": "West",  "offset": [0, 0, 0] },
-    { "id": "00002", "blockId": "corner", "direction": "West",  "offset": [0, 0, 1] },
-    { "id": "00003", "blockId": "wall",   "direction": "West",  "offset": [0, 4, 1] },
-    { "id": "00004", "blockId": "corner", "direction": "North", "offset": [0, 12, 1] },
-    { "id": "00005", "blockId": "wall",   "direction": "North", "offset": [4, 15, 1] },
-    { "id": "00006", "blockId": "corner", "direction": "East",  "offset": [12, 12, 1] },
-    { "id": "00007", "blockId": "wall",   "direction": "East",  "offset": [15, 4, 1] },
-    { "id": "00008", "blockId": "corner", "direction": "South", "offset": [12, 0, 1] },
-    { "id": "00009", "blockId": "wall",   "direction": "South", "offset": [4, 0, 1] },
-    { "id": "0000A", "blockId": "lid",    "direction": "West",  "offset": [0, 0, 10] }
+  "compositions": [
+    {
+      "aggregation": "_blocks",
+      "children": [
+        { "type": "com.martianmicro.anyclosure.Floor",  "id": "floor",  "version": "1.0.0", "size": [16, 16, 1] },
+        { "type": "com.martianmicro.anyclosure.Corner", "id": "corner", "version": "1.0.0", "size": [4, 4, 9]   },
+        { "type": "com.martianmicro.anyclosure.Wall",   "id": "wall",   "version": "1.0.0", "size": [1, 8, 9]   },
+        { "type": "com.martianmicro.anyclosure.Lid",    "id": "lid",    "version": "1.0.0", "size": [16, 16, 1] }
+      ]
+    },
+    {
+      "aggregation": "_placement",
+      "children": [
+        { "type": "com.machineblocks.core.Place", "id": "00001", "blockId": "floor",  "direction": "West",  "offset": [0, 0, 0]   },
+        { "type": "com.machineblocks.core.Place", "id": "00002", "blockId": "corner", "direction": "West",  "offset": [0, 0, 1]   },
+        { "type": "com.machineblocks.core.Place", "id": "00003", "blockId": "wall",   "direction": "West",  "offset": [0, 4, 1]   },
+        { "type": "com.machineblocks.core.Place", "id": "00004", "blockId": "corner", "direction": "North", "offset": [0, 12, 1]  },
+        { "type": "com.machineblocks.core.Place", "id": "00005", "blockId": "wall",   "direction": "North", "offset": [4, 15, 1]  },
+        { "type": "com.machineblocks.core.Place", "id": "00006", "blockId": "corner", "direction": "East",  "offset": [12, 12, 1] },
+        { "type": "com.machineblocks.core.Place", "id": "00007", "blockId": "wall",   "direction": "East",  "offset": [15, 4, 1]  },
+        { "type": "com.machineblocks.core.Place", "id": "00008", "blockId": "corner", "direction": "South", "offset": [12, 0, 1]  },
+        { "type": "com.machineblocks.core.Place", "id": "00009", "blockId": "wall",   "direction": "South", "offset": [4, 0, 1]   },
+        { "type": "com.machineblocks.core.Place", "id": "0000A", "blockId": "lid",    "direction": "West",  "offset": [0, 0, 10]  }
+      ]
+    }
   ]
 }
 ```
@@ -594,13 +624,14 @@ The JSON format is semantically equivalent to XML. The document type is determin
 The MBML→MBOM mapping is defined once per root type and applies uniformly to all documents of that type. It is configurable and extensible for new root types.
 
 ```text
-<block>        → Block mapping rule
-<set>          → Set mapping rule
+<block>        → Block mapping rule (covers all Blocks, including Sets)
 <blockPresets> → BlockPresets mapping rule
 <device>       → Device mapping rule (external package)
 ```
 
 The mapping rules define how XML attributes and elements translate to MBOM properties, aggregations, and compositions. They are not hardcoded in the parser — they are registered per root type.
+
+There is no separate mapping rule for Sets. The `<block>` mapping rule handles Sets identically to any other Block. The SCAD Renderer detects `baseType = com.machineblocks.core.Set` and switches to STEPS-based output.
 
 ### Default Resolution for Block Definitions
 
@@ -616,5 +647,6 @@ type="Foo" (unqualified) → com.machineblocks.types.Foo
 ### Default Resolution for Set Definitions
 
 ```text
-<steps> missing → assembly order = document order of <placement> entries
+baseType = com.machineblocks.core.Set  → SCAD Renderer produces STEPS + view submodules
+_steps aggregation missing or empty    → assembly order = document order of _placement entries
 ```

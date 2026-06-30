@@ -62,7 +62,7 @@ MBOM
   ↓
 [14] Composition Renderer
   ↓
-[15] Set Renderer (if set document)
+[15] Set Renderer (if baseType ⊆ com.machineblocks.core.Set)
   ↓
 [16] Customizer Generator
   ↓
@@ -88,12 +88,11 @@ Parses the raw source into an intermediate document tree. Browser-compatible par
 Reads the root element name (XML) or `type` field (JSON) to determine the document type:
 
 ```text
-<block>        → Block Definition
-<set>          → Set Definition
+<block>        → Block Definition (includes Sets — detected via baseType in stage 5)
 <blockPresets> → Block Presets
 ```
 
-Selects the appropriate MBML→MBOM mapping rule for this root type. Extension root types register their mapping rule via the root type registry.
+Selects the appropriate MBML→MBOM mapping rule for this root type. There is no separate mapping rule for Sets — a Set is a Block with `baseType = com.machineblocks.core.Set`, resolved in the MBOM Mapper stage. Extension root types register their mapping rule via the root type registry.
 
 ### [4] Namespace Resolver
 

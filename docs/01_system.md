@@ -6,6 +6,8 @@ version: 1.0.0
 
 This documentation describes the MachineBlocks Compiler project (`mbc`) — the toolchain that translates MBML (MachineBlocks Markup Language) source files into SCAD render target files via MBOM (MachineBlocks Object Model).
 
+MBOM is a domain-specific specialization of BOM Core (`00_bom_core.md`) — the abstract, domain-agnostic object model for parametric, composable units. BOM Core defines the structural foundation (Block, Preset, Set, Place, Step, Library, Catalog, Expression system). MBOM extends it with MachineBlocks-specific types, properties, and the SCAD render target.
+
 The MachineBlocks V3 SCAD Library is the reference render target. It is included as a Git Submodule at `machineblocks/` in the MBC installation directory.
 
 ---
@@ -17,7 +19,7 @@ MachineBlocks follows a layered architecture:
 ```text
 MBML Source (.mbml / .json)
   ↓ parse + validate
-MBOM (MachineBlocks Object Model)
+MBOM (MachineBlocks Object Model)   ←  specializes BOM Core
   ↓ compile
 SCAD Render Target  ←  machineblocks/docs/scad-reference/
   ↓ render
@@ -26,7 +28,7 @@ STL / 3MF
 
 **MBML** is the declarative authoring format. It is XML-based (reference format) with JSON as an equally supported alternative. Block definitions, sets, and presets are all authored in MBML.
 
-**MBOM** is the canonical, typed object model. It is the internal representation of all block data. MBOM is renderer-independent — it has no knowledge of SCAD syntax or parameters.
+**MBOM** is the canonical, typed object model. It is the internal representation of all block data. MBOM is renderer-independent — it has no knowledge of SCAD syntax or parameters. MBOM is a domain-specific specialization of BOM Core — it extends the abstract Block, Set, Place, Step, Library, and Catalog concepts with MachineBlocks-specific types and properties.
 
 **SCAD** is the render target. The SCAD Renderer serializes MBOM into OpenSCAD files compatible with the MachineBlocks V3 SCAD Library.
 
@@ -377,6 +379,7 @@ configProfile < blockPreset < inline property
 ## Documentation Architecture
 
 ```text
+00_bom_core.md         — BOM Core abstract model (Block, Set, Library, Catalog, ...)
 01_system.md           — this document (architecture, packages, conventions)
 02_mbml.md             — MBML format, document types, namespaces, schema
 03_mbom.md             — MBOM object model, properties, aggregations, expressions

@@ -6,6 +6,8 @@ version: 1.0.0
 
 This document defines the MBOM (MachineBlocks Object Model) — the canonical, typed internal representation of all MachineBlocks data. MBOM is the interface between the MBML parser and the SCAD renderer.
 
+MBOM is a domain-specific specialization of BOM Core (`00_bom_core.md`). BOM Core defines the abstract structural foundation — Block, Preset, Set, Place, Step, Library, Catalog, and the Expression system. MBOM extends these with MachineBlocks-specific types, properties, and the SCAD render target. Concepts already defined in BOM Core are not repeated here; this document covers only MBOM-specific extensions and decisions.
+
 For the MBML authoring format see `02_mbml.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
 For native property definitions see `09_mbom_properties.yml`.
@@ -15,6 +17,8 @@ For native property definitions see `09_mbom_properties.yml`.
 ## Overview
 
 MBOM is the renderer-independent object model. It has no knowledge of SCAD syntax, parameters, or file formats. All block authoring, validation, composition, and expression evaluation operate on MBOM.
+
+MBOM specializes BOM Core for the MachineBlocks domain — adding MB-specific property types (`Size3D`, `WallGap`, `Direction`, ...), the native property set (`09_mbom_properties.yml`), and the SCAD render target interface.
 
 MBOM is strongly inspired by the SAPUI5 object model. Existing SAPUI5 concepts are adopted where they fit. Deviations are documented explicitly.
 
@@ -342,63 +346,38 @@ Registry scope: per composition. A registry is created when entering a compositi
 
 ## Set Model
 
-A Set is an MBOM object that describes a concrete arrangement of block instances. It is the equivalent of a SAPUI5 View.
+A Set is a Block whose `baseType` is `com.machineblocks.core.Set` (see BOM Core, `00_bom_core.md`). It is not a separate MBOM class — it is a Block that the SCAD Renderer treats differently based on its base type.
 
-The set is structured around three clearly separated concerns:
-
-```text
-blocks    — block configurations (what exists, how it is configured)
-placement — physical instances (where each block is, what its SCAD instance id is)
-steps     — assembly order (optional, defaults to placement order)
-```
-
-### Set Structure
+A Set uses Multi-Aggregation to separate three concerns. The conventional aggregation names are:
 
 ```text
-name               — short name
-fullQualifiedName  — FQN
-version            — semantic version
-properties         — set-level properties (e.g. baseColor, assembly)
-blocks             — list of block configurations
-placement          — list of placed instances
-steps              — ordered list of placed instance IDs (optional)
+_blocks     — Block configurations (what exists, how it is parameterized)
+_placement  — placed instances (where each block is; id becomes the SCAD instance id)
+_steps      — assembly order (optional; defaults to document order of _placement)
 ```
 
-### Block Configuration (in `blocks`)
+### Place
 
-Each entry in `blocks` defines a named block configuration:
+`com.machineblocks.core.Place` is a lightweight Block type (extends `com.bom.core.Place`) used as children in the `_placement` aggregation. It adds MachineBlocks positioning properties to the abstract BOM Core Place:
 
 ```text
-id        — MBML/MBOM internal identifier (not a SCAD instance id)
-type      — FQN of the block class
-version   — version of the block class
-properties — property values (preset ref, inline, or both)
+id         — instance ID (becomes the SCAD instance id in STEPS array and dispatcher)
+blockId    — references a Block configuration from _blocks
+direction  — orientation in the set (Direction)
+offset     — position in the set in grid units (GridPosition3D)
 ```
 
-The `id` in `blocks` is a configuration handle only. Multiple `<place>` entries can reference the same block `id`, producing multiple physical instances from one configuration.
+The `id` on a Place must be unique across all placements in the Set.
 
-### Placement
+### Step
 
-Each entry in `placement` defines a physical instance of a block in the set:
+`com.machineblocks.core.Step` is a lightweight Block type (extends `com.bom.core.Step`) used as children in the `_steps` aggregation:
 
 ```text
-id        — SCAD instance id (used in STEPS array and instance dispatcher)
-blockId   — references a block configuration from <blocks>
-direction — orientation in the set
-offset    — position in the set (grid units)
+placeId    — references a Place in _placement
 ```
 
-The `id` on a `<place>` entry is what becomes the SCAD instance id. It must be unique across all placements in the set.
-
-### Assembly Steps
-
-`steps` is optional. When present, it defines the assembly order as an ordered list of `placeId` references:
-
-```text
-steps: ["00001", "00002", "00003", ...]
-```
-
-When absent, the assembly order equals the document order of `placement` entries. This is the common case — authors typically write placements in assembly order.
+When `_steps` is absent or empty, assembly order equals the document order of `_placement` entries. This is the common case — authors typically write placements in assembly order.
 
 ### Block Configuration Modes
 
@@ -406,7 +385,7 @@ Three configuration modes, combinable:
 
 ```text
 Option 1 — Inline:
-  All properties defined directly on the block entry.
+  All properties defined directly on the Block entry in _blocks.
 
 Option 2 — Preset reference:
   Block references a blockPresets document.
@@ -422,16 +401,21 @@ Option 3 — Preset + inline override:
 ## MBOM Class Hierarchy
 
 ```text
-com.machineblocks.core.MBObject          — base for all MBOM objects
-  com.machineblocks.core.Block           — base block (primitive)
-    com.machineblocks.core.CompositeBlock — block with composition
+com.bom.core.Block                           ← BOM Core (00_bom_core.md)
+  com.machineblocks.core.Block               ← MBOM base (adds MB-specific properties)
+    com.machineblocks.core.Set               ← Set is a Block; SCAD Renderer dispatches on baseType
+      com.martianmicro.anyclosure.DefaultEnclosure
+      ...
     com.machineblocks.bricks.StandardBrick
     com.martianmicro.anyclosure.Wall
     com.martianmicro.anyclosure.Corner
     ...
-  com.machineblocks.core.Set             — set of block instances
-    com.martianmicro.anyclosure.DefaultEnclosure
-    ...
+
+com.bom.core.Place                           ← BOM Core
+  com.machineblocks.core.Place               ← adds direction, offset
+
+com.bom.core.Step                            ← BOM Core
+  com.machineblocks.core.Step                ← no MB-specific additions (placeId sufficient)
 ```
 
 ---
