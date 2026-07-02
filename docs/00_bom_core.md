@@ -467,14 +467,52 @@ When a child instance's Aggregation is bound to a ServiceBlock Model, all childr
 
 A Preset is a named, concrete property set for a specific Block type. Presets apply only to Properties — not to Aggregations, Associations, or Capabilities.
 
+### Preset Document Metadata
+
 ```text
-name        — human-readable preset name
-blockType   — FQN of the Block this preset applies to
-version     — semantic version of this preset definition
-parameters  — map of property name → concrete value
+fullQualifiedName — FQN of this Presets document
+blockType         — FQN of the Block this document applies to
+version           — semantic version of this Presets document
+presets           — list of named property sets
 ```
 
-Only Properties that differ from the Block's defaults need to be listed. Missing Properties fall back through the resolution order.
+A Presets document has its own FQN and is a first-class BOM object. Multiple Presets documents can target the same Block type — from different authors or packages.
+
+### Preset Reference Syntax
+
+Presets are referenced using the `::` separator — consistent with the instance ID convention:
+
+```text
+{PresetsDocumentFQN}::{PresetName}
+
+Example:
+  com.machineblocks.bricks.StandardBrickPresets::Brick 2x4
+```
+
+This reference is always fully qualified. There is no implicit lookup by preset name alone.
+
+### Preset in Compositions
+
+A child Block instance in a Composition may reference a Preset. Inline property values override Preset values:
+
+```xml
+<!-- Preset only -->
+<bricks:StandardBrick
+    preset="com.machineblocks.bricks.StandardBrickPresets::Brick 2x4" />
+
+<!-- Preset + inline override: baseColor overrides the Preset value -->
+<bricks:StandardBrick
+    preset="com.machineblocks.bricks.StandardBrickPresets::Brick 2x4"
+    baseColor="#303D4E" />
+```
+
+### Merge Order
+
+```text
+configProfile < preset < inline property
+```
+
+Inline properties always win over Preset values. Preset values always win over Config profile values. Only Properties that differ from the Block's defaults need to be listed in a Preset.
 
 A Block can have multiple Presets. Only one Preset is active at a time per Block instance. For complex structures, define a Composite Block and apply a Preset to that.
 

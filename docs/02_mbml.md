@@ -590,6 +590,8 @@ instance  — single instance in isolation
 
 A `<blockPresets>` document defines named property presets for a specific Block type. Presets apply only to Properties. For complex structures, define a Composite Block and apply a Preset to that.
 
+A Presets document is a first-class BOM object with its own FQN. Multiple Presets documents can target the same Block type — from different authors or packages. The Block definition has no knowledge of its Presets documents.
+
 ### Structure
 
 ```xml
@@ -612,6 +614,45 @@ A `<blockPresets>` document defines named property presets for a specific Block 
 
 </blockPresets>
 ```
+
+### Preset Reference Syntax
+
+Presets are referenced using the `::` separator — consistent with the instance ID convention:
+
+```text
+{PresetsDocumentFQN}::{PresetName}
+
+Example:
+  com.machineblocks.bricks.StandardBrickPresets::Brick 2x4
+```
+
+The reference is always fully qualified. There is no implicit lookup by preset name alone.
+
+### Preset in Compositions
+
+```xml
+<!-- Preset only -->
+<bricks:StandardBrick version="1.0.0"
+    preset="com.machineblocks.bricks.StandardBrickPresets::Brick 2x4" />
+
+<!-- Preset + inline override: baseColor overrides the Preset value -->
+<bricks:StandardBrick version="1.0.0"
+    preset="com.machineblocks.bricks.StandardBrickPresets::Brick 2x4"
+    baseColor="#303D4E" />
+```
+
+Merge order: `configProfile < preset < inline property`
+
+### Multiple Presets Documents for the Same Block
+
+Different authors or packages can contribute Presets for the same Block type:
+
+```text
+com.machineblocks.bricks.StandardBrickPresets   ← from @machineblocks/bricks library
+com.myproject.presets.MyBrickPresets            ← own additions, same blockType
+```
+
+Both are referenced by their own FQN — no conflict, no registry ambiguity.
 
 ### SCAD Output
 
