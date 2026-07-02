@@ -1,47 +1,49 @@
 # BOM Core
 
-version: 1.0.0
+version: 2.0.0
 
 ## Purpose of this Document
 
-This document defines BOM Core — a domain-agnostic abstract object model for parametric, composable units and their assemblies. BOM Core is the foundation from which domain-specific object models are derived.
+This document defines BOM Core — a domain-agnostic abstract object model for parametric, composable units. BOM Core is the foundation from which domain-specific object models are derived.
 
-BOM Core is not tied to any render target, serialization format, or domain. It defines only structural concepts: what a Block is, how Blocks relate to each other, how Presets, Sets, Libraries, and Catalogs are organized.
+BOM Core is not tied to any render target, serialization format, or domain. It defines only structural concepts: what a Block is, how Blocks relate to each other, how Members are organized, how Presets, Libraries, and Catalogs work, and how Targets are registered and dispatched.
 
 Known specializations:
 
 ```text
 MBOM  — MachineBlocks Object Model (physical, parametric geometry blocks → SCAD)
-WoT   — Web of Things Object Model (connected devices → Thing Description)
+EBOM  — Electronics Object Model (electronic components → KiCad / Schematic)
+UBOM  — Unity Object Model (game objects → Unity Prefabs)
+SBOM  — Service / Logic Object Model (service beans → runtime)
+UIBOM — UI Object Model (UI controls → UI framework)
+KBOM  — Knowledge Object Model (knowledge graph → graph DB)
 ```
+
+New domain BOMs can be added without modifying BOM Core. The architecture is designed to accommodate domain BOMs that are not yet known.
 
 ---
 
 ## Core Concepts
 
-BOM Core defines six first-class concepts:
+BOM Core defines four first-class concepts:
 
 ```text
-Block    — a parametric, reusable unit (definition / type)
-Preset   — a named, concrete parameter set for a Block
-Set      — a concrete assembly of Block instances with resolved parameters
-Place    — a positioned instance reference within a Set
-Step     — an ordered assembly instruction referencing a Place
-Library  — a collection of Block definitions
-Catalog  — a collection of Set definitions
+Block        — a parametric, reusable unit (definition / type)
+Preset       — a named, concrete property set for a Block
+Library      — a collection of Block definitions
+Catalog      — a collection of top-level composite Block definitions
 ```
+
+Everything else — assemblies, placements, steps, scenes, views — is defined by domain-specific BOMs as specialized Block types.
 
 ### Relationships
 
 ```text
 Library   contains   Block(s)
+Block     has        Member(s)   — Properties, Aggregations, Associations, Capabilities
 Block     has        Preset(s)
-Set       is a       Block (baseType = com.bom.core.Set)
-Set       contains   Place(s)  via _placement aggregation
-Set       contains   Step(s)   via _steps aggregation  (optional)
-Place     references Block     via blockId
-Step      references Place     via placeId
-Catalog   contains   Set(s)
+Block     has        Composition(s)
+Catalog   contains   Block(s)   — top-level composite Blocks (finished products / assemblies)
 ```
 
 ---
@@ -59,14 +61,15 @@ Class:    PascalCase
 
 Examples:
   com.bom.core.Block
-  com.bom.core.Set
+  com.machineblocks.core.Block
   com.machineblocks.bricks.StandardBrick
-  com.wot.core.Device
+  com.electronics.core.Component
+  com.ui.core.Control
 ```
 
 ### Instance Identity
 
-Instances within a Set or Composition are identified by an instance ID. Nested IDs are composed with `::` as separator:
+Instances within a Composition are identified by an instance ID. Nested IDs are composed with `::` as separator:
 
 ```text
 Format:    <instanceId>::<partId>::<subPartId>
@@ -92,10 +95,8 @@ name               — short class name (PascalCase)
 fullQualifiedName  — globally unique FQN
 baseType           — FQN of the parent Block (default: com.bom.core.Block)
 version            — semantic version of this definition
-properties         — list of Property definitions
-aggregations       — list of Aggregation definitions
-associations       — list of Association definitions
-events             — list of Event definitions
+members            — named members: Properties, Aggregations, Associations, Capabilities
+compositions       — list of Composition definitions
 ```
 
 ### Inheritance
@@ -107,25 +108,45 @@ Domain-specific specializations extend this root:
 ```text
 com.bom.core.Block
   com.machineblocks.core.Block   — adds size, color, offset, direction, ...
-  com.wot.core.Device            — adds connectivity, firmware, sensors, ...
+  com.electronics.core.Component — adds footprint, schematic symbol, ...
+  com.ui.core.Control            — adds layout, style, events, ...
+  com.service.core.Bean          — adds lifecycle, dependencies, ...
 ```
 
 ### Composite Blocks
 
-A Block with a non-empty Composition is a **Composite Block**. It defines internal structure by filling one or more of its aggregations with child Block instances.
+A Block with a non-empty Composition is a **Composite Block**. It defines internal structure by filling one or more of its Aggregations with child Block instances.
 
-A Block without a Composition is a **Leaf Block** — it has no internal structure defined at the BOM level. Domain-specific renderers handle its output directly.
+A Block without a Composition is a **Leaf Block** — it has no internal structure defined at the BOM level. Domain-specific Block Renderers handle its output directly.
+
+---
+
+## Member Namespace
+
+Properties, Aggregations, Associations, and Capabilities all share a single namespace per Block. Member names must be unique across all member types within a Block definition.
+
+This is a deliberate design decision: authors think in names, not in member categories. Bindings, expressions, and presets all reference members by name without needing to know the category. It also prevents naming conflicts between member types.
+
+```text
+Block: MyBlock
+  size        — Property      (name must be unique)
+  parts       — Aggregation   (cannot also be a Property name)
+  target      — Association   (cannot also be a Property or Aggregation name)
+  assemble    — Capability    (cannot also be any other member name)
+```
+
+Members are inherited via `baseType`. Derived Blocks inherit all Members of their base type and may add their own. Overriding inherited members is not permitted — this is enforced at parse time.
 
 ---
 
 ## Properties
 
-Properties are typed parameters of a Block. Every property has a name, a type, and a default value.
+Properties are typed parameters of a Block. Every Property has a name, a type, and a default value.
 
 ### Property Metadata
 
 ```text
-name          — camelCase property name
+name          — camelCase property name (unique within the Block's member namespace)
 type          — FQN of the BOM type
 defaultValue  — typed default value
 group         — optional grouping hint (for editors)
@@ -137,10 +158,10 @@ documentation — human-readable description
 Property values are resolved in this order (highest priority first):
 
 ```text
-1. Inline value        — set directly on a Block instance
-2. Preset value        — from the active Preset
-3. Config value        — from the active Config profile (domain-specific)
-4. Default value       — from the Block definition
+1. Inline value    — set directly on a Block instance in a Composition
+2. Preset value    — from the active Preset
+3. Config value    — from the active Config profile (domain-specific)
+4. Default value   — from the Block definition
 ```
 
 ---
@@ -152,19 +173,148 @@ An Aggregation describes an ownership relationship: a Block can contain zero or 
 ### Aggregation Metadata
 
 ```text
-name              — aggregation name (convention: leading _ for internal)
-type              — FQN of the child type
-cardinality       — "0..1" | "0..n" | "1..1" | "1..n"
-visibility        — "public" | "hidden"
+name               — member name (unique within the Block's member namespace)
+type               — FQN of the child type
+cardinality        — "0..1" | "0..n" | "1..1" | "1..n"
+visibility         — "public" | "hidden"
 defaultAggregation — boolean
-documentation     — human-readable description
+documentation      — human-readable description
 ```
 
-`visibility="hidden"` marks an aggregation as internal — it can only be filled by the Block's own Composition, not from outside.
+`visibility="hidden"` marks an Aggregation as internal — it can only be filled by the Block's own Composition, not from outside.
 
 ### Implicit Default Aggregation
 
-When no `<aggregations>` section is present, a domain-specific default aggregation is created implicitly. BOM Core does not prescribe the name or child type — that is the domain's responsibility.
+When no Aggregations are declared, a domain-specific default Aggregation is created implicitly. BOM Core does not prescribe the name or child type — that is the domain's responsibility.
+
+### ServiceBlock Aggregations
+
+A ServiceBlock is a special Block type that provides named, reusable services — such as data models, math utilities, or formatters. ServiceBlocks are bound into a Block via Aggregations with a bean name. Once bound, they are accessible in Expressions via their bean name using the `@` prefix.
+
+Built-in ServiceBlocks are defined in the `baseType` hierarchy and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
+
+```text
+#math    — built-in math service (min, max, ceil, floor, ...)
+#string  — built-in string utilities (format, trim, ...)
+```
+
+User-defined ServiceBlocks are declared as Aggregations and given a bean name:
+
+```text
+@myModel   — user-defined JSONModel, bound as bean "myModel"
+@myService — user-defined service Block, bound as bean "myService"
+```
+
+The distinction between `#` (built-in) and `@` (user-defined) is enforced at parse time. `#`-prefixed names are reserved and cannot be used as bean names.
+
+---
+
+## Associations
+
+Associations describe loose references between objects without ownership. They are defined for future use across all BOM specializations.
+
+```text
+name          — member name (unique within the Block's member namespace)
+type          — FQN of the referenced type
+cardinality   — "0..1" | "0..n"
+documentation — human-readable description
+```
+
+Associations carry no ownership and do not affect rendering.
+
+---
+
+## Capabilities
+
+Capabilities describe how a Block communicates — with the outside world or internally within a Composition. A Capability is a named member of a Block, sharing the member namespace with Properties, Aggregations, and Associations.
+
+### Capability Types
+
+BOM Core defines three Capability types:
+
+**Inbound** — receives a message from an external sender. Activated by an incoming message at a registered address. Asynchronous.
+
+**Outbound** — sends a message to an external receiver. Triggered by the Block in response to domain-specific conditions. Asynchronous.
+
+**Synchronous** — called directly within an Expression. Has a return value. No address. Not reachable via messaging protocols.
+
+### Capability Metadata
+
+All Capabilities share these base fields:
+
+```text
+name           — camelCase capability name (unique within the Block's member namespace)
+type           — "inbound" | "outbound" | "synchronous"
+payloadType    — declared payload type: Object schema or Array schema
+documentation  — human-readable description
+```
+
+**Inbound** adds:
+
+```text
+address        — path pattern that activates this capability
+                 path variables use {variableName} syntax
+                 e.g. /blocks/{id}/resize
+```
+
+**Outbound** adds:
+
+```text
+address        — receiver address as a protocol URI
+                 e.g. stud://enclosure/nfc/tag-detected
+```
+
+**Synchronous** adds:
+
+```text
+returnType     — declared return type (primitive, Object, or Array)
+```
+
+### Payload
+
+Every Capability declares a payload type. The payload is either an Object or an Array. The call syntax in Expressions determines which form is used:
+
+```text
+Object payload:  myCapa(a = 4, b = 5)   →  { a: 4, b: 5 }
+Array payload:   myCapa(4, 5)           →  [4, 5]
+```
+
+The declared payload type must match the call syntax. A mismatch is a parse-time error.
+
+### Inheritance
+
+Capabilities are inherited via `baseType`, identical to Properties and Aggregations. A derived Block inherits all Capabilities of its base type and may add its own.
+
+### Synchronous Capabilities and Expressions
+
+Synchronous Capabilities are the only Capability type accessible via Expressions. They have no address and cannot be reached via messaging protocols. This constraint is current — future use cases may relax it.
+
+Inbound and Outbound Capabilities can be linked in a Composition via Expressions (see Expression System). Whether Capability linking is permitted in Presets is to be defined.
+
+### Address Schemes
+
+BOM Core uses `protocol://` as a generic placeholder. Domain specializations define concrete schemes:
+
+```text
+stud://    — MachineBlocks physical block network
+http://    — REST / WebHook
+mqtt://    — MQTT broker topic
+wot://     — Web of Things device hub
+```
+
+### Message Model
+
+BOM Core defines a minimal abstract message model for Inbound and Outbound Capabilities:
+
+```text
+Message
+  address   — URI identifying the target capability
+  headers   — key-value metadata
+    replyTo — optional; address to send a response to
+  payload   — Object or Array; structure declared by the Capability
+```
+
+All messaging is asynchronous. An Inbound Capability may reply using the `replyTo` header. BOM Core does not prescribe when or whether a response is sent.
 
 ---
 
@@ -173,7 +323,7 @@ When no `<aggregations>` section is present, a domain-specific default aggregati
 A Composition fills an Aggregation with concrete child Block instances. It defines the internal structure of a Composite Block.
 
 ```text
-aggregation   — name of the target aggregation
+aggregation   — name of the target Aggregation
 children      — ordered list of child Block instances
 ```
 
@@ -182,61 +332,27 @@ Each child instance carries:
 ```text
 type          — FQN of the child Block class
 id            — instance ID (used for nested identity: parentId::childId)
-properties    — property values (literals or expressions)
+version       — version of the referenced Block type
+members       — member values (literals or expressions) for Properties and Capabilities
 ```
 
----
+### Model Binding Context
 
-## Set
+When a child instance's Aggregation is bound to a ServiceBlock Model, all children within that Aggregation inherit the Model binding context. Relative Model paths are resolved against this context:
 
-A Set is a Block whose `baseType` is `com.bom.core.Set`. It describes a concrete assembly of Block instances.
-
-A Set uses Multi-Aggregation to separate three concerns:
-
-```text
-_blocks     — Block configurations (what exists, how it is parameterized)
-_placement  — placed instances (what is placed where, id becomes the instance id)
-_steps      — assembly order (optional; defaults to document order of _placement)
+```xml
+<List items="{@myModel:/path/to/array}">
+    <ListItem label="{@myModel:relAttr}" />
+</List>
 ```
 
-`_blocks`, `_placement`, and `_steps` are conventional aggregation names for Sets. Domain specializations may rename or extend them.
-
-### Place
-
-`com.bom.core.Place` is a lightweight Block type that represents a positioned instance reference within a Set's `_placement` aggregation.
-
-```text
-id        — instance ID (the identity of this physical placement)
-blockId   — references a Block configuration from _blocks
-```
-
-Domain specializations extend Place with positioning properties relevant to their domain (e.g. `direction` + `offset` for MachineBlocks, `location` + `ipAddress` for WoT).
-
-### Step
-
-`com.bom.core.Step` is a lightweight Block type that represents a single ordered assembly instruction within a Set's `_steps` aggregation.
-
-```text
-placeId   — references a Place in _placement
-```
-
-When `_steps` is empty or absent, assembly order equals the document order of `_placement` entries.
-
-### Set as Block
-
-Because a Set is a Block, it:
-
-- has Properties
-- can be placed inside another Set (Sets of Sets)
-- can define its own Presets
-- can appear in a Catalog
-- inherits from other Sets via `baseType`
+`:` separates the bean name from the path. An absolute path starts with `/`. A relative path is resolved against the binding context established by the parent Aggregation.
 
 ---
 
 ## Preset
 
-A Preset is a named, concrete parameter set for a specific Block type. It assigns values to a subset of the Block's Properties.
+A Preset is a named, concrete property set for a specific Block type. Presets apply only to Properties — not to Aggregations, Associations, or Capabilities.
 
 ```text
 name        — human-readable preset name
@@ -245,9 +361,9 @@ version     — semantic version of this preset definition
 parameters  — map of property name → concrete value
 ```
 
-Only properties that differ from the Block's defaults need to be listed. Missing properties fall back through the resolution order.
+Only Properties that differ from the Block's defaults need to be listed. Missing Properties fall back through the resolution order.
 
-A Block can have multiple Presets. Only one Preset is active at a time per Block instance (in the context of a Set or direct instantiation).
+A Block can have multiple Presets. Only one Preset is active at a time per Block instance. For complex structures, define a Composite Block and apply a Preset to that.
 
 ---
 
@@ -264,88 +380,130 @@ blocks            — list of Block FQNs contained in this library
 
 A Library answers: *"What Block types are available?"*
 
-Libraries are the distribution unit for Block definitions. A domain ecosystem typically publishes one or more Libraries (e.g. `com.machineblocks.bricks`, `com.machineblocks.closure`).
-
 ---
 
 ## Catalog
 
-A Catalog is a named collection of Set definitions.
+A Catalog is a named collection of top-level composite Block definitions — finished products or assemblies intended for direct use.
 
 ```text
 name              — short catalog name
 fullQualifiedName — FQN of the catalog
 version           — semantic version
-sets              — list of Set FQNs contained in this catalog
+blocks            — list of Block FQNs contained in this catalog
 ```
 
-A Catalog answers: *"What assemblies / products are available?"*
+A Catalog answers: *"What finished assemblies are available?"*
 
-Where a Library contains reusable types, a Catalog contains concrete, finished assemblies ready for use. The relationship mirrors the distinction between a component library and a product catalog in manufacturing.
-
----
-
-## Associations
-
-Associations describe loose references between objects without ownership. They are defined for future use across all BOM specializations.
-
-```text
-name          — association name
-type          — FQN of the referenced type
-cardinality   — "0..1" | "0..n"
-documentation — human-readable description
-```
-
-Associations carry no ownership and do not affect rendering or assembly.
-
----
-
-## Events
-
-Events are defined for future use. They describe lifecycle hooks relevant when BOM objects participate in interactive, editor-side, or runtime logic.
-
-```text
-onAssemble
-onRender
-onSelect
-onParameterChange
-onConnect
-onValidate
-```
-
-Events are not part of any render target. Their semantics are domain-specific.
+Where a Library contains reusable types, a Catalog contains concrete finished compositions. The relationship mirrors the distinction between a component library and a product catalog in manufacturing.
 
 ---
 
 ## Expression System
 
-BOM Core defines an expression system for dynamic property values. Expressions allow child Block instances in a Composition to derive their property values from the parent Block's properties.
+BOM Core defines an expression system for dynamic member values. Expressions are used in Compositions to derive child Block property values from the parent Block's members, or to bind to ServiceBlock Models and Capabilities.
 
 ### Syntax
 
-Expressions use SpEL (Spring Expression Language) syntax, wrapped in `${}`:
+Expressions are wrapped in `${ }`:
 
 ```text
-${parameters.size[2] - 1}
-${math.max(parameters.size[0], 2)}
-${parameters.size[0] > 2 ? "groove" : "standard"}
+${ myProperty }                            — Property of the current Block
+${ myProperty.x }                          — Object attribute of a Property
+${ #math.min(myProperty.x, myProperty.y) } — Built-in ServiceBlock capability
+${ @myBean.hello(z = myProperty.x) }       — User Bean: synchronous capability, Object payload
+${ @myBean.hello(myProperty.x, 5) }        — User Bean: synchronous capability, Array payload
+${ @myBean.hello2 }                        — Capability linking (see below)
+${ @myModel:/some/path }                   — Absolute Model binding path
+${ @myModel:relAttr }                      — Relative Model binding path
+${ @myBean.format(@myModel:attr, @myModel:/a/b/attr2) } — Combined: bean call with model bindings as arguments
 ```
 
-### Expression Roots
+### Expression Prefixes
 
 ```text
-parameters   — properties of the current Block instance (read-only)
-math         — mathematical functions (min, max, ceil, floor, ...)
-registry     — shared value store within the current Composition (read/write)
+(no prefix)   — Property or member of the current Block instance
+#name         — Built-in ServiceBlock (defined in baseType hierarchy, reserved)
+@name         — User-defined Bean (bound via Aggregation in the current Block)
 ```
+
+### Property Access
+
+```text
+${ myProperty }       — direct property value
+${ myProperty.x }     — attribute access on structured property (e.g. Size2D.x)
+${ myProperty[0] }    — index access on list property
+```
+
+### Built-in ServiceBlock Calls (`#`)
+
+```text
+${ #math.min(a, b) }       — synchronous capability, Array payload → primitive return
+${ #math.max(a, b) }
+${ #string.format(tpl, v) }
+```
+
+Built-in ServiceBlocks are defined in the `baseType` hierarchy. Their Capabilities must be `synchronous`. The `#` namespace is reserved — user-defined beans cannot use `#`.
+
+### User Bean Calls (`@`)
+
+```text
+${ @myBean.myCapa(a = 4, b = 5) }   — Object payload: { a: 4, b: 5 }
+${ @myBean.myCapa(4, 5) }           — Array payload: [4, 5]
+```
+
+The referenced bean must be declared as an Aggregation on the current Block. The Capability must be `synchronous`. The return type is used as the expression value.
+
+### Capability Linking
+
+```text
+${ @myBean.myOutbound }
+```
+
+Links an Outbound Capability of a Bean to a member of the current Block. The target member must be an Inbound Capability. The payload is forwarded without transformation. This form is only valid when the target is a Capability — using it on a Property is a parse-time error.
+
+Whether Capability linking is permitted in Presets is to be defined.
+
+### Model Binding
+
+```text
+${ @myModel:/absolute/path }      — absolute path from Model root
+${ @myModel:relativeAttr }        — relative path, resolved against binding context
+```
+
+The binding context is established by the parent Aggregation (see Compositions → Model Binding Context). Relative paths are only valid when a binding context exists — otherwise a parse-time error.
+
+### Ternary and Arithmetic
+
+```text
+${ myProperty > 2 ? "groove" : "standard" }
+${ myProperty.x + myProperty.y - 1 }
+${ myProperty.z * 2 }
+```
+
+Standard arithmetic (`+`, `-`, `*`, `/`, `%`) and comparison (`>`, `<`, `==`, `!=`, `>=`, `<=`) operators are supported.
+
+### Registry
+
+A shared registry is available within a Composition for sibling child Blocks to exchange values:
+
+```text
+Write:  registry.totalHeight = value
+Read:   registry.totalHeight
+```
+
+Registry scope is per Composition. It is initialized on entry and not accessible outside.
 
 ### Scope Rules
 
 ```text
-- Access only to properties of the current Block instance
-- No access to parent, grandparent, or sibling instances
+- Direct property access: current Block instance only
+- No access to parent, grandparent, or sibling Block properties
 - Direction is always parent → child (top-down only)
 - Registry scope is per Composition
+- @bean references: only beans declared as Aggregations on the current Block
+- #built-in references: always available (inherited via baseType)
+- Model binding context: inherited from parent Aggregation
 ```
 
 ### Expression AST
@@ -356,7 +514,7 @@ Expressions are parsed into a typed Expression AST at parse time — not evaluat
 
 ## Type System
 
-BOM Core defines a minimal set of primitive types. Domain specializations extend this with domain-specific types.
+BOM Core defines a minimal set of primitive types. Domain specializations extend this with domain-specific types. The type registry is dynamic — new types can be registered at runtime without modifying BOM Core.
 
 ### BOM Core Primitive Types
 
@@ -376,6 +534,18 @@ com.bom.types.NoneOr<T>    — "none" | T
 com.bom.types.FalseOr<T>   — false  | T
 ```
 
+### Domain Type Namespaces
+
+Each domain BOM defines its own type namespace:
+
+```text
+com.machineblocks.types.*   — Size3D, Direction, WallGap, Color, ...
+com.electronics.types.*     — Voltage, Resistance, Footprint, ...
+com.ui.types.*              — Color, Length, FontSize, ...
+```
+
+Types are never shared across domain namespaces unless explicitly defined in `com.bom.types`. This is intentional — domain-specific types carry domain-specific semantics even when they share a name.
+
 ### Type Resolution Shorthand
 
 Unqualified type names in serialization formats are resolved against the domain's default type namespace. BOM Core does not prescribe the namespace — that is the domain's responsibility.
@@ -384,7 +554,7 @@ Unqualified type names in serialization formats are resolved against the domain'
 
 ## Versioning
 
-Every Block, Set, Library, and Catalog definition carries a semantic version. All instance references (in Compositions and Sets) must specify a version explicitly. There are no implicit `latest` references.
+Every Block, Library, and Catalog definition carries a semantic version. All instance references in Compositions must specify a version explicitly. There are no implicit `latest` references.
 
 ```text
 version: "1.0.0"   — on every definition
@@ -395,26 +565,70 @@ Version resolution against a package registry is domain-specific and outside BOM
 
 ---
 
-## Render Target Interface
+## Target System
 
-BOM Core defines a minimal interface that domain-specific renderers implement:
+The Target System is the bridge between BOM Core and domain-specific output formats. It defines how Blocks are rendered, and how the compiler dispatches rendering to the correct Target.
 
-```text
-render(block: Block): RenderOutput
+### Target Types
+
+**Atomic Target** — handles one domain's base types. Declares which `baseType` FQNs it supports. Contains one or more Block Renderers.
+
+**Composite Target** — delegates across multiple Atomic Targets. Used when a BOM file contains Blocks from multiple domains. Has no Block Renderers of its own — it resolves per Block which Atomic Target is responsible and delegates.
+
+### Target Registry
+
+Targets are registered centrally in the compiler before compilation begins. The CLI selects the active Target by name:
+
+```bash
+bom compile my-file.mbml scad
+bom compile my-file.mbml device   # composite target
 ```
 
-BOM Core has no knowledge of what `RenderOutput` contains. Domain specializations define:
+The Target Registry is the single point of dispatch. It maps target names to Target implementations and resolves Block Renderer lookup.
 
-```text
-MBOM:  RenderOutput = { scadFiles: ScadFile[], sourceMaps: SourceMap[] }
-WoT:   RenderOutput = { thingDescription: ThingDescription }
+### Target Interface
+
+Every Target implements the following interface:
+
+```typescript
+interface BomTarget {
+  name:                  string
+  supportsBaseType(fqn: string): boolean
+  getBlockRenderer(fqn:  string): BlockRenderer
+}
 ```
 
-The render dispatch is based on `baseType`:
+For Composite Targets, `getBlockRenderer` delegates to the appropriate registered Atomic Target.
+
+If no registered Target supports a Block's `baseType`, the compiler emits a diagnostic error and does not produce output for that Block.
+
+### Block Renderer
+
+A Block Renderer is the component within a Target that serializes a specific Block into the target format. The SCAD Target may have one generic renderer for all `com.machineblocks.core.Block` instances. A UI Target may have one renderer per Control FQN — analogous to UI5 Control Renderers.
+
+```typescript
+interface BlockRenderer {
+  render(block: Block, context: RenderContext): RenderOutput
+}
+```
+
+BOM Core has no knowledge of what `RenderOutput` contains. Domain-specific Targets define it:
 
 ```text
-baseType ⊆ com.bom.core.Block  →  domain Block renderer
-baseType ⊆ com.bom.core.Set    →  domain Set renderer
+SCAD Target:    RenderOutput = { scadFiles: ScadFile[], sourceMaps: SourceMap[] }
+Unity Target:   RenderOutput = { prefabFiles: PrefabFile[] }
+UI Target:      RenderOutput = { componentFiles: ComponentFile[] }
+```
+
+### Composite Target Example
+
+```text
+bom compile my-device.mbml device
+
+device (Composite Target)
+  com.machineblocks.core.Block  →  scad (Atomic)    →  Wall.scad
+  com.electronics.core.Component → kicad (Atomic)  →  board.kicad_pcb
+  com.ui.core.Control           →  ui (Atomic)      →  Panel.jsx
 ```
 
 ---
@@ -427,11 +641,12 @@ BOM Core is published as a standalone package with no domain dependencies:
 @bom/core
 ```
 
-Domain specializations declare it as a dependency:
+Domain BOMs declare it as a dependency:
 
 ```text
 @machineblocks/mbom   depends on   @bom/core
-@wot/bom              depends on   @bom/core
+@electronics/ebom     depends on   @bom/core
+@ui/uibom             depends on   @bom/core
 ```
 
 BOM Core is browser and Node compatible. It contains no render logic, no file system access, and no domain-specific types.
