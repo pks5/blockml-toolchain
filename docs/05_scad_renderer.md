@@ -1,14 +1,15 @@
-# MachineBlocks Compiler — SCAD Renderer
+# SCAD Renderer — Render Target
 
-version: 1.0.0
+version: 2.0.0
 
 ## Purpose of this Document
 
-This document defines the SCAD Renderer — the backend that serializes MBOM into MachineBlocks V3 SCAD files. It covers the FQN→SCAD naming convention, the MBOM→SCAD property mapping strategy, assembly pattern resolution, set rendering, and source map generation.
+This document defines the SCAD Renderer — the MachineBlocks Atomic Render Target that serializes MBOM Blocks into MachineBlocks V3 SCAD files. It covers the Target registration, Block Renderer and Set Renderer, FQN→SCAD naming, MBOM→SCAD property mapping, assembly pattern resolution, and source map generation.
 
 For the MBOM object model see `03_mbom.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
-For the MachineBlocks V3 SCAD Library specification see `docs/scad-reference/`.
+For the Target system see `06_compiler.md`.
+For the MachineBlocks V3 SCAD Library specification see `machineblocks-lib/docs/scad-reference/`.
 
 ---
 
@@ -16,14 +17,62 @@ For the MachineBlocks V3 SCAD Library specification see `docs/scad-reference/`.
 
 The SCAD Renderer is implemented in `@machineblocks/scad-renderer`. It is browser and Node compatible — no Node-only APIs.
 
-The renderer receives MBOM as input and produces SCAD files as output. It has no knowledge of MBML syntax. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the renderer logic.
+The renderer is an **Atomic Target** registered with `@bom/compiler` under the name `"scad"`. It has no knowledge of BML syntax. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the renderer logic.
+
+### V1 Scope
+
+The SCAD Renderer V1 supports exactly two base types:
+
+```text
+com.machineblocks.core.Block  →  ScadBlockRenderer  (standard SCAD block module)
+com.machineblocks.core.Set    →  ScadSetRenderer    (STEPS-based set with view submodules)
+```
+
+All user-defined Block types that inherit from `com.machineblocks.core.Block` or `com.machineblocks.core.Set` are handled by the same two renderers respectively. There are no per-FQN Block Renderers in V1.
+
+---
+
+## Target Registration
+
+The SCAD Renderer registers itself as an Atomic Target:
+
+```typescript
+import { registerTarget } from "@bom/compiler";
+import { ScadTarget } from "@machineblocks/scad-renderer";
+
+registerTarget(new ScadTarget());
+```
+
+The `ScadTarget` implements `BomTarget`:
+
+```typescript
+class ScadTarget implements BomTarget {
+  name = "scad"
+
+  supportsBaseType(fqn: string): boolean {
+    return isSubtypeOf(fqn, "com.machineblocks.core.Block")
+        || isSubtypeOf(fqn, "com.machineblocks.core.Set")
+  }
+
+  getBlockRenderer(fqn: string): BlockRenderer {
+    if (isSubtypeOf(fqn, "com.machineblocks.core.Set")) {
+      return new ScadSetRenderer()
+    }
+    return new ScadBlockRenderer()
+  }
+}
+```
+
+`isSubtypeOf` traverses the `baseType` chain in the BOM type registry. A Block whose `baseType` chain does not include `com.machineblocks.core.Block` is not supported by this Target — the compiler emits `BML_NO_TARGET` for that Block.
 
 ---
 
 ## Renderer Pipeline
 
+Each Block Renderer runs the following internal pipeline:
+
 ```text
-MBOM
+MBOM Block
   ↓
 Module Name Resolver     — FQN → SCAD module name
   ↓
@@ -36,21 +85,21 @@ Expression Renderer      — Expression AST → SCAD expressions
 Assembly Pattern Mapper  — semantic values → SCAD assembly function calls
   ↓
 Composition Renderer     — MBOM compositions → nested mb_block() calls
-  ↓
+  ↓      (ScadBlockRenderer only)
 Set Renderer             — MBOM set → STEPS array + view submodules
-  ↓
+  ↓      (ScadSetRenderer only)
 Customizer Generator     — block properties → OpenSCAD customizer section
   ↓
-Source Map Generator     — MBML positions → SCAD positions (Source Map V3)
+Source Map Generator     — BML positions → SCAD positions (Source Map V3)
   ↓
-SCAD File(s)
+ScadFile(s)
 ```
 
 ---
 
 ## FQN → SCAD Module Name
 
-Every MBOM block class is identified by its FQN. The SCAD Renderer maps FQNs to SCAD module names following a deterministic convention.
+Every MBOM Block class is identified by its FQN. The SCAD Renderer maps FQNs to SCAD module names following a deterministic convention.
 
 ### Convention
 
@@ -90,13 +139,13 @@ FQN:   com.martianmicro.anyclosure.Wall
 File:  scad/com/martianmicro/anyclosure/Wall.scad
 ```
 
-Multiple block classes may exist in one SCAD file. The file is named after the primary class. The output directory root (`scad/`) is configurable via `outDir` in `mbc.config.json`.
+Multiple block classes may exist in one SCAD file. The file is named after the primary class. The output directory root (`scad/`) is configurable via `outDir` in `bom.config.json`.
 
 ---
 
 ## Import Resolver
 
-Every generated SCAD file includes the required imports for the MachineBlocks V3 Library and the project config. Import paths are computed relative to the output file location using the `mbLibPath` from `mbc.config.json`.
+Every generated SCAD file includes the required imports for the MachineBlocks V3 Library and the project config. Import paths are computed relative to the output file location using the `mbLibPath` from `bom.config.json`.
 
 ### Standard Imports
 
@@ -129,7 +178,7 @@ Every generated SCAD file follows the standard MachineBlocks Block File structur
  * Name: Wall
  * Filename: Wall.scad
  * Package: com.martianmicro.anyclosure.Wall
- * Generated by: mbc <version>
+ * Generated by: bom <version>
  */
 
 /* Imports */
@@ -185,7 +234,7 @@ baseColor = mb_param_baseColor(config, settings);
 **Custom properties** map to the generic getter:
 
 ```scad
-wallThickness = mb_param(config, settings, "wallThickness", 1);
+wallThickness  = mb_param(config, settings, "wallThickness", 1);
 cornerRounding = mb_param(config, settings, "cornerRounding", 0.5);
 ```
 
@@ -195,41 +244,45 @@ The renderer determines native vs. custom by checking `09_mbom_properties.yml`.
 
 ## Expression Renderer
 
-Expressions in MBOM are stored as typed Expression AST nodes. The Expression Renderer serializes AST nodes into SCAD-compatible expressions.
+Expressions in BOM are stored as typed Expression AST nodes. The Expression Renderer serializes AST nodes into SCAD-compatible expressions.
 
 ### Static Resolution
 
 If an expression can be fully resolved at compile time (no runtime-dependent roots), the renderer emits the resolved value directly:
 
 ```text
-Expression: ${[1, 1, 1]}   →   SCAD: [1, 1, 1]
+Expression: ${ [1, 1, 1] }   →   SCAD: [1, 1, 1]
 ```
 
 ### Dynamic Rendering
 
-If an expression references block properties (`parameters.*`) or the registry, the renderer emits a SCAD expression referencing the corresponding SCAD variables:
+If an expression references block properties or the registry, the renderer emits a SCAD expression:
 
 ```text
-Expression: ${[size[0], size[1], size[2] - 1]}
+Expression: ${ [size[0], size[1], size[2] - 1] }
 SCAD:       [size[0], size[1], size[2] - 1]
 
-Expression: ${math.max(parameters.size[2] - 1, 0)}
+Expression: ${ #math.max(size[2] - 1, 0) }
 SCAD:       max(size[2] - 1, 0)
 ```
 
 ### Expression Root Mapping
 
 ```text
-parameters.<name>   →  SCAD local variable <name>
-math.<func>()       →  SCAD built-in function <func>()
+myProperty          →  SCAD local variable <name>
+myProperty.x        →  SCAD: <name>[0] or <name>.x depending on type
+#math.min(a, b)     →  SCAD: min(a, b)
+#math.max(a, b)     →  SCAD: max(a, b)
 registry.<name>     →  SCAD local variable registry_<name>  (to be defined)
 ```
+
+`@bean` expressions (user-defined ServiceBlock calls and model bindings) are resolved at compile time where possible. Runtime behavior for `@bean` expressions in SCAD output is to be defined.
 
 ---
 
 ## Assembly Pattern Mapper
 
-Assembly patterns are SCAD-level constructs that have no equivalent in MBML/MBOM. The renderer resolves them automatically based on the semantic MBOM value and the block's composition structure.
+Assembly patterns are SCAD-level constructs that have no equivalent in BML/BOM. The renderer resolves them automatically based on the semantic MBOM value and the block's composition structure.
 
 All assembly pattern mappings are declarative and configurable — not hardcoded.
 
@@ -254,27 +307,13 @@ group_bottom = part_bottom;
 ns_bottom    = part_bottom;
 ```
 
-These are emitted as SCAD local variables inside the wrapper `mb_block()` children block. They are not visible in MBML.
-
-### mb_block_id Resolution
-
-Child block IDs are derived from the parent block ID and the part ID:
-
-```scad
-["id", mb_block_id(blockId, part_bottom)]
-```
-
-Whether this is precomputed in MBOM or emitted as a SCAD function call is to be finalized. Current default: SCAD function call (`mb_block_id`).
-
-### mb_params_filter Resolution
-
-Parameter filtering (baseAdjustment per namespace) is to be resolved in MBOM before rendering. The renderer emits the pre-filtered value directly. Whether `mb_params_filter` appears in the SCAD output or is resolved earlier is to be finalized.
+These are emitted as SCAD local variables inside the wrapper `mb_block()` children block.
 
 ---
 
-## Composite Block Rendering
+## ScadBlockRenderer — Composite Block Rendering
 
-A MBOM Composite Block (a block with a non-empty composition) is rendered as a wrapper `mb_block()` call with nested child calls.
+A MBOM Composite Block (a Block with a non-empty Composition) is rendered as a wrapper `mb_block()` call with nested child calls.
 
 ### Generated Structure
 
@@ -351,18 +390,26 @@ module mb_block__com__martianmicro__anyclosure__Wall(config = undef, settings = 
 
 ---
 
-## Set Rendering
+## ScadSetRenderer — Set Rendering
 
-A MBOM Set is rendered as a SCAD file with a STEPS array and four view submodules.
+A MBOM Block whose `baseType` chain includes `com.machineblocks.core.Set` is rendered by `ScadSetRenderer` as a SCAD file with a STEPS array and four view submodules.
+
+A MachineBlocks Set uses three conventional Aggregations to separate concerns:
+
+```text
+_blocks     — Block configurations (what exists, how it is parameterized)
+_placement  — placed instances (where each block is; id becomes the SCAD instance id)
+_steps      — assembly order (optional; defaults to document order of _placement)
+```
 
 ### STEPS Array
 
-The STEPS array is generated from the set's instance list. Each entry:
+The STEPS array is generated from the set's placement list. Each entry:
 
 ```scad
 STEPS = [
-    ["00001", [16, 16, 1], false, "west", [0, 0, 0]],
-    ["00002", [4, 4, 9],   true,  "west", [0, 0, 1]],
+    ["00001", [16, 16, 1], "west", [0, 0, 0]],
+    ["00002", [4, 4, 9],   "west", [0, 0, 1]],
     ...
 ];
 ```
@@ -370,11 +417,10 @@ STEPS = [
 Fields per entry:
 
 ```text
-[0]  instanceId        — string
-[1]  boundingBox       — [x, y, z]
-[2]  supportsAssembly  — boolean
-[3]  direction         — "west" | "north" | "east" | "south"
-[4]  offset            — [x, y, z]
+[0]  instanceId   — string (from Place id)
+[1]  boundingBox  — [x, y, z] (from referenced Block configuration size)
+[2]  direction    — "west" | "north" | "east" | "south" (from Place direction)
+[3]  offset       — [x, y, z] (from Place offset)
 ```
 
 ### Bounding Box
@@ -392,10 +438,10 @@ The compiler does not precompute the bounding box.
 Four submodules are generated, each as a PascalCase subclass of the set module:
 
 ```scad
-mb_block__com__martianmicro__anyclosure__DefaultEnclosureSet__Total
-mb_block__com__martianmicro__anyclosure__DefaultEnclosureSet__Print
-mb_block__com__martianmicro__anyclosure__DefaultEnclosureSet__Step
-mb_block__com__martianmicro__anyclosure__DefaultEnclosureSet__Instance
+mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Total
+mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Print
+mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Step
+mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance
 ```
 
 ### Instance Dispatcher
@@ -403,22 +449,22 @@ mb_block__com__martianmicro__anyclosure__DefaultEnclosureSet__Instance
 The Instance submodule dispatches to per-instance submodules via if/else chain:
 
 ```scad
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosureSet__Instance(config = undef, settings = undef){
+module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = undef, settings = undef){
     instanceId = mb_param(config, settings, "instanceId");
     if(instanceId == "00001"){
-        mb_block__com__martianmicro__anyclosure__DefaultEnclosureSet__Instance00001(...);
+        mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001(...);
     }
     else if(instanceId == "00002"){
-        mb_block__com__martianmicro__anyclosure__DefaultEnclosureSet__Instance00002(...);
+        mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00002(...);
     }
     ...
 }
 ```
 
-Per-instance submodule names use PascalCase with the instance ID appended:
+Per-instance submodule names use the instance ID appended with an underscore:
 
 ```scad
-mb_block__com__martianmicro__anyclosure__DefaultEnclosureSet__Instance00001
+mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001
 ```
 
 ### Customizer Variables
@@ -447,7 +493,7 @@ For each exposed property:
 - Group comment (/* [Group Name] */) for property groups
 ```
 
-Hidden section (`/* [Hidden] */`) contains derived variables that combine customizer inputs for passing to the module — for example combining multiple bevel values into a single array. Internal module computations are never placed in the hidden section.
+Hidden section (`/* [Hidden] */`) contains derived variables that combine customizer inputs for passing to the module. Internal module computations are never placed in the hidden section.
 
 ---
 
@@ -481,7 +527,7 @@ Wall.scad      — generated SCAD
 Wall.scad.map  — Source Map V3
 ```
 
-The source map records the MBML source file, line, and column for every generated SCAD line. This allows compiler errors and validation messages to reference the original MBML source position rather than the generated SCAD.
+The source map records the BML source file, line, and column for every generated SCAD line. This allows compiler errors and validation messages to reference the original BML source position rather than the generated SCAD.
 
 Source Map V3 format is used as-is (it is language-agnostic). Applicability to SCAD output is to be verified in practice.
 
@@ -489,7 +535,7 @@ Source Map V3 format is used as-is (it is language-agnostic). Applicability to S
 
 ## SCAD Helper Function Strategy
 
-Several SCAD helper functions compute values at SCAD render time rather than being precomputed by the compiler. The decision per function:
+Several SCAD helper functions compute values at SCAD render time rather than being precomputed by the compiler:
 
 | Function | Strategy | Status |
 |---|---|---|

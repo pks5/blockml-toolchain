@@ -1,96 +1,116 @@
-# MachineBlocks Compiler — System
+# BOM Compiler — System
 
-version: 1.0.0
+version: 2.0.0
 
 ## Purpose
 
-This documentation describes the MachineBlocks Compiler project (`mbc`) — the toolchain that translates MBML (MachineBlocks Markup Language) source files into SCAD render target files via MBOM (MachineBlocks Object Model).
+This document describes the BOM Compiler project (`bom`) — the universal toolchain that translates BML (Block Markup Language) source files into domain-specific render target files via a typed BOM (Block Object Model).
 
-MBOM is a domain-specific specialization of BOM Core (`00_bom_core.md`) — the abstract, domain-agnostic object model for parametric, composable units. BOM Core defines the structural foundation (Block, Preset, Set, Place, Step, Library, Catalog, Expression system). MBOM extends it with MachineBlocks-specific types, properties, and the SCAD render target.
+The compiler is domain-agnostic. It understands the BML format and the BOM object model. Domain-specific knowledge lives exclusively in Render Targets. MachineBlocks is the reference implementation (Blaupause) — the first domain built on this foundation.
 
-The MachineBlocks V3 SCAD Library is the reference render target. It is included as a Git Submodule at `machineblocks/` in the MBC installation directory.
+The architecture is designed to accommodate domain BOMs and Render Targets that are not yet known. Adding a new domain requires no changes to the core.
 
 ---
 
 ## Architecture
 
-MachineBlocks follows a layered architecture:
+The BOM Compiler follows a layered architecture:
 
 ```text
-MBML Source (.mbml / .json)
+BML Source (.mbml / .json)      content-type: bml
+  ↓ parse + validate
+BOM (Block Object Model)        domain-agnostic, typed
+  ↓ compile
+Render Target                   domain-specific
+  ↓ render
+Target Output (SCAD, KiCad, JSX, ...)
+```
+
+**BML** (Block Markup Language) is the universal declarative authoring format. File extension `.mbml` (for tooling compatibility). Content-type `bml`. XML is the reference format; JSON is equally supported. Block definitions, composite blocks, and presets are all authored in BML.
+
+**BOM** (Block Object Model) is the canonical, typed, domain-agnostic object model. It is the internal representation of all block data. BOM is renderer-independent — it has no knowledge of any render target, syntax, or parameters. BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific types and properties.
+
+**Render Target** is the domain-specific output backend. A Target declares which `baseType` FQNs it supports, and contains one or more Block Renderers that serialize BOM Blocks into target-specific output files. Targets are registered centrally in the compiler.
+
+**The Compiler** is the universal pipeline that connects BML → BOM → Render Target. It runs in both browser (React) and Node.js environments.
+
+**The CLI** (`bom`) is the Node.js command-line interface for compiling, validating, watching, and scaffolding BML projects.
+
+### Reference Implementation: MachineBlocks
+
+MachineBlocks is the first and reference domain. Its BOM specialization is **MBOM** (MachineBlocks Object Model). Its Render Target is the **SCAD Renderer**, producing OpenSCAD files compatible with the MachineBlocks V3 SCAD Library.
+
+```text
+BML Source (.mbml)
   ↓ parse + validate
 MBOM (MachineBlocks Object Model)   ←  specializes BOM Core
-  ↓ compile
+  ↓ compile (scad target)
 SCAD Render Target  ←  machineblocks/docs/scad-reference/
   ↓ render
 STL / 3MF
 ```
 
-**MBML** is the declarative authoring format. It is XML-based (reference format) with JSON as an equally supported alternative. Block definitions, sets, and presets are all authored in MBML.
-
-**MBOM** is the canonical, typed object model. It is the internal representation of all block data. MBOM is renderer-independent — it has no knowledge of SCAD syntax or parameters. MBOM is a domain-specific specialization of BOM Core — it extends the abstract Block, Set, Place, Step, Library, and Catalog concepts with MachineBlocks-specific types and properties.
-
-**SCAD** is the render target. The SCAD Renderer serializes MBOM into OpenSCAD files compatible with the MachineBlocks V3 SCAD Library.
-
-**The Compiler** is the pipeline that connects MBML → MBOM → SCAD. It runs in both browser (React) and Node.js environments.
-
-**The CLI** (`mbc`) is the Node.js command-line interface for compiling, validating, watching, and scaffolding MBML projects.
-
 ---
 
 ## Key Design Principles
 
-**MBML is not SCAD with XML syntax.** MBML describes semantic MachineBlocks objects. SCAD is only a render target.
+**BML is not a SCAD wrapper.** BML describes semantic BOM objects. Any render target is just one possible output — SCAD, KiCad, JSX, JSON, or anything else.
 
-**MBOM is not a SCAD AST.** MBOM is the typed object model. The SCAD Renderer is a backend that serializes MBOM.
+**BOM is not a render target AST.** BOM is the typed object model. Render Targets are backends that serialize BOM.
 
-**The Core is browser-compatible.** No Node.js-only APIs (`fs`, `path`, `child_process`) in `@machineblocks/mbom`, `@machineblocks/mbml`, `@machineblocks/scad-renderer`, or `@machineblocks/compiler`.
+**The core is browser-compatible.** No Node.js-only APIs (`fs`, `path`, `child_process`) in `@bom/core`, `@bom/parser`, `@bom/compiler`, or any Render Target package. Only the CLI tools package may use Node-only APIs.
 
-**All mappings are declarative and configurable.** No MBOM types, MBOM properties, or MBOM→SCAD mappings are hardcoded in compiler logic. Changes to mappings require only configuration changes, not code changes.
+**All mappings are declarative and configurable.** No BOM types, properties, or render mappings are hardcoded in compiler logic. Changes to mappings require only configuration changes, not code changes.
+
+**Domain BOMs extend, never modify core.** Adding EBOM, UBOM, or any future BOM does not change `@bom/core`, `@bom/parser`, or `@bom/compiler`.
 
 ---
 
 ## Tool vs. Content
 
-`mbc` is a standalone tool — it is installed or cloned once and used across multiple content projects. Content projects (MBML sources, SCAD output) live in separate directories and are not part of the MBC repository.
+`bom` is a standalone tool — installed or cloned once and used across multiple content projects. Content projects (BML sources, render target output) live in separate directories and are not part of the compiler repository.
 
 ```text
-~/.../machineblocks-compiler/   ← MBC tool (installed once)
-~/.../my-enclosure-project/     ← content project (MBML sources, SCAD output)
-~/.../another-project/          ← another content project
+~/.../bom-compiler/             ← BOM Compiler tool (installed once)
+~/.../my-enclosure-project/     ← content project (BML sources, SCAD output)
+~/.../my-electronics-project/   ← another content project
 ```
 
-This is analogous to `tsc` or `webpack` — the tool is global, content projects each have their own `mbc.config.json`.
+This is analogous to `tsc` or `webpack` — the tool is global, content projects each have their own `bom.config.json`.
 
 ---
 
 ## Monorepo Structure
 
 ```text
-machineblocks-compiler/
+bom-compiler/
   packages/
-    mbom/           — MBOM object model, type registry, expression AST, validation
-    mbml/           — XML/JSON parser, namespace resolver, MBML→MBOM mapper
-    scad-renderer/  — MBOM→SCAD compiler, settings renderer, assembly patterns
-    compiler/       — Facade: compileMbmlToScad(), compileMbomToScad()
-    cli-tools/      — Node-only: mbc CLI commands, file watcher, thumbnail renderer
+    core/              — @bom/core: BOM object model, type registry, expression AST, validation
+    parser/            — @bom/parser: XML/JSON parser, namespace resolver, BML→BOM mapper
+    compiler/          — @bom/compiler: Facade + Target Registry
+    cli-tools/         — @bom/cli: Node-only: bom CLI commands, file watcher, thumbnail renderer
 
-  machineblocks/    — Git Submodule: MachineBlocks V3 SCAD Library (full repository)
-    lib/            — SCAD Library source
-    examples/       — example SCAD files (useful for compiler development and testing)
+  domains/
+    machineblocks/
+      mbom/            — @machineblocks/mbom: MBOM domain model, native properties
+      scad-renderer/   — @machineblocks/scad-renderer: MBOM→SCAD Block Renderers + Target
+
+  machineblocks-lib/   — Git Submodule: MachineBlocks V3 SCAD Library (full repository)
+    lib/               — SCAD Library source (runtime for generated SCAD files)
+    examples/          — example SCAD files (used in correctness tests)
     docs/
-      scad-reference/ — SCAD API reference docs (used by renderer and compiler)
+      scad-reference/  — SCAD API reference (used by the SCAD Renderer)
 
   README.md
 ```
 
-### Why the full repository?
+### Why the full MachineBlocks library repository?
 
 The entire MachineBlocks V3 SCAD Library repository is included as a submodule — not just the `docs/` folder — because:
 
-- `machineblocks/lib/` is the runtime the generated SCAD files depend on
-- `machineblocks/examples/` provides verified SCAD output for correctness testing
-- `machineblocks/docs/scad-reference/` is the API reference for the renderer
+- `machineblocks-lib/lib/` is the runtime the generated SCAD files depend on
+- `machineblocks-lib/examples/` provides verified SCAD output for correctness testing
+- `machineblocks-lib/docs/scad-reference/` is the API reference for the SCAD Renderer
 
 Git does not support including only a subdirectory of a foreign repository as a submodule. Including the full repository is the pragmatic and reliable choice.
 
@@ -98,76 +118,92 @@ Git does not support including only a subdirectory of a foreign repository as a 
 
 ## Package Overview
 
-### `@machineblocks/mbom`
+### `@bom/core`
 
-The MBOM object model. Browser and Node compatible.
+The BOM object model. Browser and Node compatible.
 
 ```text
-- Block, CompositeBlock, Set classes
-- Property model (typed, native and custom)
-- Aggregation, Association, Composition model
-- Expression AST (typed, SpEL-based)
-- Type Registry (FQN-based)
+- Block class (metadata, members, compositions)
+- Member model: Property, Aggregation, Association, Capability (shared namespace)
+- Composition model
+- Preset model
+- Library and Catalog model
+- Expression AST (typed)
+- Type Registry (FQN-based, dynamic)
 - Validation API
-- No SCAD logic, no Node-only APIs
+- Target Registry interface
+- No domain-specific types, no render logic, no Node-only APIs
 ```
 
-### `@machineblocks/mbml`
+### `@bom/parser`
 
-The MBML parser and MBOM builder. Browser and Node compatible.
+The universal BML parser and BOM builder. Browser and Node compatible.
 
 ```text
 - XML parser (browser-compatible)
 - JSON parser
 - Namespace resolver (xmlns → FQN)
 - XSD / JSON Schema loader
-- MBML → MBOM mapper (per root type)
+- BML → BOM mapper (per root type, extensible)
 - Diagnostics and error reporting
-- No SCAD output
+- No render output
 ```
 
-### `@machineblocks/scad-renderer`
+### `@bom/compiler`
 
-The SCAD render backend. Browser and Node compatible.
+Facade and Target Registry. Browser and Node compatible.
 
 ```text
-- MBOM → SCAD renderer
-- Module name resolver (FQN → mb_block__com__...)
-- Settings renderer (MBOM properties → SCAD settings array)
-- Expression renderer (Expression AST → SCAD)
-- Composite block renderer (compositions → nested mb_block() calls)
-- Set renderer (total / print / step / instance views)
-- Customizer generator
-- Import resolver
-- Assembly pattern mapping (mb_assembly_groove, mb_assembly_offset, etc.)
-- Source map generation (Source Map Spec V3)
-- Reference: machineblocks/docs/scad-reference/
+- Target Registry: registerTarget(target), getTarget(name)
+- compileBmlToBom(source): CompilerResult<BomDocument>
+- compileBomToOutput(model, targetName): CompilerResult<RenderOutput>
+- compileBmlToOutput(source, targetName): CompilerResult<RenderOutput>
 ```
 
-### `@machineblocks/compiler`
-
-Facade over mbom + mbml + scad-renderer. Browser and Node compatible.
-
-```text
-- compileMbmlToMbom(source)
-- compileMbomToScad(model)
-- compileMbmlToScad(source)
-```
-
-### `@machineblocks/cli-tools`
+### `@bom/cli`
 
 Node.js-only CLI tools.
 
 ```text
-- mbc new block <fqn> [--format mbml|json]
-- mbc compile <file>
-- mbc compile --all
-- mbc validate <file>
-- mbc inspect <file>
-- mbc watch [--src <dir>] [--out <dir>]
-- mbc activate-config <profileName>
-- OpenSCAD executable resolver
-- Thumbnail renderer (Sharp-based, Node-only)
+- bom new block <fqn> [--format mbml|json]
+- bom compile <file> <target>
+- bom compile --all <target>
+- bom validate <file>
+- bom inspect <file>
+- bom watch [--src <dir>] [--out <dir>] <target>
+- bom activate-config <profileName>
+- OpenSCAD executable resolver (for SCAD target)
+- Thumbnail renderer (Sharp-based, Node-only, for SCAD target)
+```
+
+### `@machineblocks/mbom`
+
+The MachineBlocks domain BOM. Browser and Node compatible.
+
+```text
+- MBOM Block class (extends BOM Core Block)
+- MachineBlocks-specific member types (Size3D, Direction, WallGap, Color, ...)
+- Native property definitions (from 09_mbom_properties.yml)
+- MB-specific Aggregation defaults (_parts)
+- No SCAD logic, no Node-only APIs
+```
+
+### `@machineblocks/scad-renderer`
+
+The SCAD Render Target. Browser and Node compatible.
+
+```text
+- Atomic Target: registers for com.machineblocks.core.Block and com.machineblocks.core.Set
+- Block Renderer: MBOM Block → SCAD module (V1: one generic renderer for all MB Blocks)
+- Set Renderer: MBOM Set → STEPS array + view submodules
+- Module name resolver (FQN → mb_block__com__...)
+- Settings renderer (MBOM properties → SCAD settings array)
+- Expression renderer (Expression AST → SCAD)
+- Assembly pattern mapping (mb_assembly_groove, mb_assembly_offset, etc.)
+- Import resolver
+- Customizer generator
+- Source map generation (Source Map Spec V3)
+- Reference: machineblocks-lib/docs/scad-reference/
 ```
 
 ---
@@ -176,30 +212,33 @@ Node.js-only CLI tools.
 
 ### FQN (Fully Qualified Name)
 
-All MBOM types use Java-style reverse-domain FQNs with dot separators:
+All BOM types use Java-style reverse-domain FQNs with dot separators:
 
 ```text
+com.bom.core.Block
 com.machineblocks.core.Block
 com.machineblocks.bricks.StandardBrick
 com.martianmicro.anyclosure.Wall
-com.martianmicro.anyclosure.Corner
+com.electronics.core.Component
 ```
 
 Package segments are lowercase. Class names are PascalCase.
 
-### SCAD Module Names
+### SCAD Module Names (MachineBlocks domain)
 
 FQN segments are separated by double underscores. Package segments are lowercase, class names are PascalCase:
 
 ```scad
 mb_block__com__machineblocks__bricks__StandardBrick
 mb_block__com__martianmicro__anyclosure__Wall
-mb_block__com__martianmicro__anyclosure__Wall__Bottom      ← subclass
+mb_block__com__martianmicro__anyclosure__Wall__Bottom          ← subclass
 mb_block__com__martianmicro__anyclosure__Wall__help__myHelper  ← private helper
 mb_block__com__martianmicro__anyclosure__Wall__func__myFunc    ← private function
 ```
 
-### SCAD File Paths
+The names `help` and `func` are reserved and cannot be used as subclass names.
+
+### SCAD File Paths (MachineBlocks domain)
 
 ```text
 FQN:   com.martianmicro.anyclosure.Wall
@@ -208,9 +247,9 @@ File:  scad/com/martianmicro/anyclosure/Wall.scad
 
 Multiple block classes may exist in one SCAD file. The file is named after the primary class.
 
-### Thumbnail File Names
+### Thumbnail File Names (MachineBlocks domain)
 
-Thumbnails are generated per preset. The naming schema is:
+Thumbnails are generated per preset. The naming convention is:
 
 ```text
 {BlockName}__{preset-name-in-kebab-case}.webp
@@ -237,11 +276,11 @@ Examples:
 
 ### camelCase Throughout
 
-All property names, parameter names, and attribute names use camelCase in MBML, MBOM, and SCAD:
+All property names, parameter names, and attribute names use camelCase in BML, BOM, and render targets:
 
 ```text
-MBML attribute:  baseCutoutType="groove"
-MBOM property:   baseCutoutType
+BML attribute:   baseCutoutType="groove"
+BOM property:    baseCutoutType
 SCAD parameter:  baseCutoutType
 ```
 
@@ -250,10 +289,10 @@ SCAD parameter:  baseCutoutType
 ## Project File Structure
 
 ```text
-src/                          — MBML source files (configurable via srcDir)
+src/                          — BML source files (configurable via srcDir)
   com/machineblocks/bricks/
     StandardBrick.mbml        — block definition
-    StandardBrickSet.mbml     — set definition
+    StandardBrickSet.mbml     — composite block (MachineBlocks Set)
     StandardBrickPresets.mbml — block presets
 
 scad/                         — SCAD output files (configurable via outDir)
@@ -266,22 +305,18 @@ scad/                         — SCAD output files (configurable via outDir)
     StandardBrickSet.scad     — compiled set
 ```
 
-Thumbnail files are placed alongside the SCAD output by default. The output directory for thumbnails is configurable via `thumbsDir` in `mbc.config.json`.
+Thumbnail files are placed alongside the SCAD output by default. The output directory for thumbnails is configurable via `thumbsDir` in `bom.config.json`.
 
-Root element of the MBML file determines the document type — not the filename or path.
+The root element of the BML file determines the document type — not the filename or path.
 
 ---
 
-## SCAD Output per Document Type
+## SCAD Output per Document Type (MachineBlocks domain)
 
 ```text
 <block>        → scad/com/.../ClassName.scad
                  scad/com/.../ClassName.scad.map
                  Block module + customizer. No thumbnails.
-
-<set>          → scad/com/.../ClassName.scad
-                 scad/com/.../ClassName.scad.map
-                 Assembly instructions. No thumbnails.
 
 <blockPresets> → scad/com/.../ClassName.scad        (implicit compile of referenced block)
                  scad/com/.../ClassName.scad.map
@@ -291,11 +326,13 @@ Root element of the MBML file determines the document type — not the filename 
 
 Compiling a `<blockPresets>` document is the standard entry point when generating visible output. It triggers compilation of the referenced block and produces all artifacts in one step.
 
+A MachineBlocks Set is a `<block>` document with `baseType = com.machineblocks.core.Set`. The SCAD Renderer detects this and produces STEPS-based output.
+
 ---
 
 ## Configuration Files
 
-### `mbc.config.json`
+### `bom.config.json`
 
 Project-level configuration:
 
@@ -310,16 +347,17 @@ Project-level configuration:
 
 `mbLibPath` is optional. When absent, the CLI resolves the MachineBlocks V3 SCAD Library relative to its own executable location (see Library Resolution below).
 
-### `mbc-cli.config.json`
+### `bom-cli.config.json`
 
 CLI-level configuration (command names, argument names, shortcuts):
 
 ```json
 {
   "commands": {
-    "compile": "compile",
-    "watch": "watch",
-    "validate": "validate",
+    "compile":        "compile",
+    "watch":          "watch",
+    "validate":       "validate",
+    "inspect":        "inspect",
     "activateConfig": "activate-config"
   }
 }
@@ -327,35 +365,35 @@ CLI-level configuration (command names, argument names, shortcuts):
 
 ---
 
-## Library Resolution
+## Library Resolution (MachineBlocks domain)
 
-The MachineBlocks V3 SCAD Library (`machineblocks/`) is bundled with the MBC installation as a Git Submodule. Content projects do not need to install or reference the library separately.
+The MachineBlocks V3 SCAD Library (`machineblocks-lib/`) is bundled with the BOM Compiler installation as a Git Submodule. Content projects do not need to install or reference the library separately.
 
 Resolution order for the library path:
 
 ```text
-1. mbc.config.json → "mbLibPath"  (explicit override, highest priority)
+1. bom.config.json → "mbLibPath"         (explicit override, highest priority)
 2. Environment variable MACHINEBLOCKS_LIB_PATH
-3. Resolved relative to the mbc executable:
-     path.join(dirname(mbc_executable), "../machineblocks")
+3. Resolved relative to the bom executable:
+     path.join(dirname(bom_executable), "../machineblocks-lib")
 ```
 
 If none of the above yields a valid library path, the CLI reports a clear error:
 
 ```text
 ERROR: MachineBlocks V3 SCAD Library not found.
-  Set "mbLibPath" in mbc.config.json or MACHINEBLOCKS_LIB_PATH to the library root.
+  Set "mbLibPath" in bom.config.json or MACHINEBLOCKS_LIB_PATH to the library root.
 ```
 
-This resolution is implemented in `@machineblocks/cli-tools` as `resolveMbLib.ts`.
+This resolution is implemented in `@bom/cli` as `resolveMbLib.ts`.
 
 ---
 
 ## Config Profiles
 
-Config profiles are project-wide parameter presets that define hardware-specific or rendering-specific defaults (printer calibration, filament shrinkage, scale, etc.).
+Config profiles are project-wide property presets that define hardware-specific or rendering-specific defaults (printer calibration, filament shrinkage, scale, etc.).
 
-They use the same format as `<blockPresets>` and share the same parameter namespace as block properties.
+They use the same format as `<blockPresets>` and share the same property namespace as block properties.
 
 ```text
 config/prusa_pla.mbml   — printer + filament profile
@@ -365,7 +403,7 @@ config/scale_2x.mbml    — scale profile
 Only one config profile is active at a time:
 
 ```bash
-mbc activate-config prusa_pla
+bom activate-config prusa_pla
 ```
 
 Merge priority (ascending):
@@ -379,19 +417,19 @@ configProfile < blockPreset < inline property
 ## Documentation Architecture
 
 ```text
-00_bom_core.md         — BOM Core abstract model (Block, Set, Library, Catalog, ...)
-01_system.md           — this document (architecture, packages, conventions)
-02_mbml.md             — MBML format, document types, namespaces, schema
-03_mbom.md             — MBOM object model, properties, aggregations, expressions
+00_bom_core.md         — BOM Core: abstract model (Block, Member, Preset, Library, Catalog, Target System)
+01_system.md           — this document (architecture, packages, conventions, project structure)
+02_mbml.md             — BML format, document types, namespaces, schema
+03_mbom.md             — MBOM: MachineBlocks domain model, properties, aggregations, expressions
 04_types.md            — MBOM type system, serialization rules
-05_scad_renderer.md    — MBOM→SCAD mapping, assembly patterns, naming, source maps
-06_compiler.md         — compiler pipeline, error handling, testing strategy
+05_scad_renderer.md    — SCAD Render Target: Block Renderers, assembly patterns, naming, source maps
+06_compiler.md         — compiler pipeline, Target Registry, error handling, testing strategy
 07_cli.md              — CLI commands, configuration, watch mode, scaffolding
-09_mbom_properties.yml — native property definitions (authoritative)
+09_mbom_properties.yml — MBOM native property definitions (authoritative)
 
-machineblocks/                    — Git Submodule: MachineBlocks V3 SCAD Library
+machineblocks-lib/                — Git Submodule: MachineBlocks V3 SCAD Library
   docs/
-    scad-reference/               — SCAD API reference (used by renderer)
+    scad-reference/               — SCAD API reference (used by the SCAD Renderer)
   lib/                            — SCAD Library runtime
   examples/                       — example SCAD files (used in correctness tests)
 ```
