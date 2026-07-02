@@ -19,7 +19,74 @@ Command names, argument names, and shorthand flags are configurable via `bom-cli
 
 ---
 
+## Installation
+
+The BOM Compiler is installed from source by cloning the repository. No npm registry is required.
+
+### 1. Clone and initialize
+
+```bash
+git clone https://github.com/.../bom-compiler
+cd bom-compiler
+git submodule update --init --recursive
+```
+
+`git submodule update --init --recursive` initializes all runtime submodules (e.g. `domains/machineblocks/runtimes/scad-lib/`).
+
+### 2. Build and link
+
+```bash
+npm install
+npm run build
+npm link
+```
+
+`npm link` makes the `bom` command available globally. This step only needs to be run once.
+
+### 3. Verify
+
+```bash
+bom --version
+```
+
+### Updating
+
+When pulling new changes from the repository:
+
+```bash
+git pull
+git submodule update --recursive
+npm install
+npm run build
+```
+
+`npm link` does not need to be repeated after updates.
+
+---
+
 ## Commands
+
+### `bom init`
+
+Initializes a new BOM content project in the current directory.
+
+```bash
+bom init
+```
+
+Creates the following structure:
+
+```text
+./
+  bom.config.json       — project configuration (srcDir, outDir, etc.)
+  bom-cli.config.json   — CLI configuration (optional, defaults apply)
+  src/
+    config/             — config profiles go here
+```
+
+If `bom.config.json` already exists, the command exits with an error without modifying anything.
+
+---
 
 ### `bom new block`
 
@@ -83,7 +150,12 @@ bom compile --all <target>
 --all     — compile all source files in srcDir
 --src     — override srcDir (default: from bom.config.json)
 --out     — override outDir (default: from bom.config.json)
+--force   — ignore hash cache, recompile everything
 ```
+
+`--all` processes every `.mbml` file in `srcDir` independently. Each file is evaluated against its stored hash — unchanged artifacts are skipped. There is no special logic for "does this block have a preset?" — every file is checked, the hash decides.
+
+A Block referenced by both a direct `<block>` compile and an implicit compile from a `<blockPresets>` document is only built once — the hash check prevents redundant work.
 
 #### Output by document type (SCAD target)
 

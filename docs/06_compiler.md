@@ -375,6 +375,61 @@ BML_DEPRECATED_TYPE    — referenced type is deprecated
 
 ---
 
+## Incremental Build
+
+The compiler supports incremental builds — skipping compilation of artifacts whose inputs have not changed. This applies to both `bom compile --all` and `bom watch`.
+
+### Strategy
+
+Every output artifact has a set of hash inputs. Before compiling, the compiler computes a combined hash of all inputs and compares it to the stored hash from the previous build. If the hash matches, the artifact is skipped.
+
+```text
+Wall.scad
+  Hash inputs:
+    - Wall.mbml content
+    - all transitive Block dependency versions
+    - scad-renderer version
+
+Wall.json
+  Hash inputs:
+    - WallPresets.mbml content
+    - Wall.scad hash (implicit dependency)
+
+Wall__brick-2x4.webp
+  Hash inputs:
+    - Wall.json hash
+    - OpenSCAD version
+    - thumbnail rendering config
+```
+
+### --all Behavior
+
+`bom compile --all scad` processes every `.mbml` file in `srcDir` independently:
+
+```text
+<block>        → Block compile    (hash check → skip if unchanged)
+<blockPresets> → Presets compile  (hash check → skip if unchanged)
+               → implicit Block compile (hash check → skip if unchanged)
+```
+
+No special logic determines whether a Block has a Presets document. Every file is evaluated. The hash check prevents redundant work — a Block referenced by both a direct compile and an implicit Presets compile is only built once.
+
+### Hash Storage
+
+Hashes are stored in a `.bom-cache/` directory at the project root:
+
+```text
+.bom-cache/
+  com/martianmicro/anyclosure/
+    Wall.scad.hash
+    Wall.json.hash
+    Wall__brick-2x4.webp.hash
+```
+
+The `.bom-cache/` directory should be added to `.gitignore`.
+
+---
+
 ## Source Maps
 
 The compiler (via the Render Target) generates a Source Map V3 file alongside each output file:
