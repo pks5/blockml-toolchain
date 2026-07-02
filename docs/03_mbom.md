@@ -211,6 +211,7 @@ name         — camelCase member name (unique within the Block's member namespa
 class        — com.bom.capability.AsyncInbound
 payloadType  — declared payload type (see Payload Types)
 returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
+visibility   — "public" | "hidden" (default: "public")
 documentation
 ```
 
@@ -223,6 +224,7 @@ name         — camelCase member name
 class        — com.bom.capability.AsyncOutbound
 payloadType  — declared payload type
 returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
+visibility   — "public" | "hidden" (default: "public")
 documentation
 ```
 
@@ -235,6 +237,7 @@ name         — camelCase member name
 class        — com.bom.capability.Sync
 payloadType  — declared payload type
 returnType   — required; FQN of the return type
+visibility   — "public" | "hidden" (default: "public")
 documentation
 ```
 
@@ -366,11 +369,15 @@ myProperty.x          — Attribute access
 myProperty[0]         — Index access
 [size[0], size[1], 1] — Array literal with expressions
 {x: size[0], y: 1}    — Object literal with expressions
+mySyncCapa()          — Own Block: Sync Capability call (no prefix)
+mySyncCapa(a=1)       — Own Block: Sync call with payload
+myInbound             — Own Block: AsyncInbound linking (no prefix, no parentheses)
 #math.min(a, b)       — Built-in Sync Capability call
 @bean.capa(a=4, b=size[0])     — Named parameters (Object payload shorthand)
 @bean.capa({a: 4, b: size[0]}) — Object literal (equivalent)
 @bean.capa(4, size[0])         — Positional arguments (Array payload)
-@bean.capa                     — Capability linking (no parentheses)
+@bean.capa([4, size[0]])       — Array literal (equivalent)
+@bean.capa                     — External Capability linking (no parentheses)
 @model:/absolute/path          — Absolute Model binding
 @model:relAttr                 — Relative Model binding
 size[0] + 1                    — Arithmetic
@@ -378,6 +385,17 @@ size[0] > 2 ? "a" : "b"       — Ternary
 ```
 
 **Outside `${ }`** (raw attribute values): pure JSON only — no property references, no model bindings. `[1, 8, 9]` and `{x: 1, y: 0}` are valid; `[size[0], 1]` is not.
+
+**Disambiguation — own Block vs. bean:**
+
+Property access, own Sync call, and own AsyncInbound linking all use no prefix. The parser resolves by checking the member namespace:
+
+```text
+foo     → Property in namespace? → yes: property access
+foo()   → Sync Capability in namespace? → yes: own Sync call
+foo     → AsyncInbound in namespace? → yes (in Capability binding context): own linking
+@foo    → always a bean reference
+```
 
 ### Available Operations
 
@@ -390,11 +408,13 @@ Ternary:      condition ? valueIfTrue : valueIfFalse
 ### Expression Scope Rules
 
 ```text
-- Direct property access: current Block instance only (no prefix needed)
+- Property access: current Block instance only (no prefix)
+- Own Sync Capability call: current Block only (no prefix, with parentheses)
+- Own AsyncInbound linking: current Block only (no prefix, no parentheses)
 - No access to parent, grandparent, or sibling Block properties
 - Direction is always parent → child (top-down only)
 - Registry scope is per Composition — initialized on entry, not accessible outside
-- @bean references: only beans declared as Aggregations on the current Block
+- @bean references: resolved by walking up Composition hierarchy (scope="context" beans)
 - #built-in references: always available (inherited via baseType)
 - Model binding context: inherited from parent Aggregation
 ```

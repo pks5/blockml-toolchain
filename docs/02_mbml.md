@@ -271,17 +271,29 @@ type          — FQN of the child type
 visibility    — "public" | "hidden"
 ```
 
-**ServiceBlock Aggregations** bind named service beans into the Block. Once declared, the bean is accessible in Expressions via `@beanName`:
+**ServiceBlock Aggregations** bind named service beans into the Block. Once declared, the bean is accessible in Expressions via `@beanName`. The `scope` attribute controls visibility to child Blocks:
 
 ```xml
 <aggregations>
-  <aggregation name="myModel"
-               type="com.bom.service.JSONModel"
-               beanName="myModel"
+  <!-- local: only accessible in this Block (default) -->
+  <aggregation name="fmt"
+               type="com.bom.service.Formatter"
+               beanName="fmt"
                cardinality="0..1"
+               scope="local"
+               visibility="hidden" />
+
+  <!-- context: passed down to all child Blocks in Compositions, overridable -->
+  <aggregation name="data"
+               type="com.bom.service.JSONModel"
+               beanName="data"
+               cardinality="0..1"
+               scope="context"
                visibility="hidden" />
 </aggregations>
 ```
+
+`scope="context"` beans are resolved by walking up the Composition hierarchy — a child Block sees the nearest `@data` with `scope="context"` in any ancestor.
 
 ### Associations
 
@@ -349,6 +361,8 @@ Unqualified type names resolve against the domain's default type namespace (dete
 
 **`AsyncInbound`** and **`AsyncOutbound`**: `returnType` is optional (for async reply via `replyTo`).
 **`Sync`**: `returnType` is required. No address — only callable within Expressions.
+
+**`visibility="hidden"`**: Capability is internal — cannot be bound from outside the Block's Composition. Accessible within the Block's own Expressions and internal Compositions only.
 
 ---
 

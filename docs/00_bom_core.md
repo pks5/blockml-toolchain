@@ -207,6 +207,42 @@ User-defined ServiceBlocks are declared as Aggregations and given a bean name:
 
 The distinction between `#` (built-in) and `@` (user-defined) is enforced at parse time. `#`-prefixed names are reserved and cannot be used as bean names.
 
+### Bean Scope
+
+Every ServiceBlock Aggregation declares a `scope` that controls visibility to child Blocks:
+
+```text
+scope   — "local" | "context"    default: "local"
+```
+
+`local` — the bean is only accessible within the Block that declares it. Child Blocks in Compositions cannot see it.
+
+`context` — the bean is passed down to all child Blocks in Compositions. A child Block can declare a bean with the same name to override it for its own children.
+
+**Scope resolution in Expressions:**
+
+When an Expression references `@myBean`, the resolver walks up the Composition hierarchy:
+
+```text
+1. Current Block — has a bean named "myBean" with scope="context"? → use it
+2. Not found → go one level up
+3. Repeat until root
+4. Not found → parse-time error: bean "myBean" not in scope
+```
+
+A bean with `scope="local"` is invisible to children — it is skipped during the upward walk.
+
+**Override example:**
+
+```text
+App       @data scope="context"  ← ODataModel (visible to all descendants)
+  View    @data scope="context"  ← JSONModel  (overrides App @data for this View and its children)
+    Table                        ← sees JSONModel via @data
+  Sidebar                        ← sees ODataModel via @data (no override here)
+```
+
+This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) — but scope is declared on the Aggregation, not on the ServiceBlock type itself. The same ServiceBlock type can have different scopes in different contexts.
+
 ---
 
 ## Associations
@@ -250,8 +286,11 @@ All Capabilities share these base fields:
 name           — camelCase member name (unique within the Block's member namespace)
 class          — FQN of the Capability class (AsyncInbound | AsyncOutbound | Sync)
 payloadType    — declared payload type (see Payload Types below)
+visibility     — "public" | "hidden" (default: "public")
 documentation  — human-readable description
 ```
+
+`visibility="hidden"` marks a Capability as internal — it cannot be bound from outside the Block's own Composition. Hidden Capabilities are only accessible within the Block itself, either via Expressions or internal Composition bindings.
 
 **`AsyncInbound`** adds:
 
@@ -328,6 +367,20 @@ Capabilities are inherited via `baseType`, identical to Properties and Aggregati
 ### Sync Capabilities in Expressions
 
 `Sync` Capabilities are the only Capability class callable within Expressions. `AsyncInbound` and `AsyncOutbound` Capabilities appear in Compositions as address/binding values only — they are not callable in Expressions directly.
+
+### Direct Capability Access in Own Block
+
+A Block can reference its own Capabilities in Expressions without a prefix — identical to how Properties are accessed:
+
+```text
+${ mySyncCapa() }             — call own Sync Capability, return value is used
+${ mySyncCapa(a = 1, b = 2) } — with payload
+${ myInbound }                — link own AsyncInbound Capability (no parentheses)
+```
+
+The rule mirrors external access: with `()` = Sync call, without `()` = AsyncInbound linking.
+
+`AsyncOutbound` Capabilities of the same Block cannot be referenced in Expressions — they are triggered by the Block's internal logic, not bound.
 
 Whether Capability linking in Presets is permitted is to be defined.
 
@@ -475,12 +528,15 @@ ${ [size[0], size[1], 1] }                         — Array with expressions
 ${ {x: size[0], y: 1} }                            — Object with expressions
 ${ size[0] + 1 }                                   — Arithmetic
 ${ size[0] > 2 ? "groove" : "standard" }           — Ternary
+${ mySyncCapa() }                                  — Own Block: Sync Capability call
+${ mySyncCapa(a = 1, b = size[0]) }               — Own Block: Sync call with payload
+${ myInbound }                                     — Own Block: AsyncInbound linking (no parentheses)
 ${ #math.min(size[0], size[1]) }                   — Built-in ServiceBlock call
 ${ @myBean.format(value = size[0], unit = "mm") }  — Bean call, named params (Object payload)
 ${ @myBean.format({value: size[0], unit: "mm"}) }  — Bean call, object literal (equivalent)
 ${ @myBean.compute(size[0], size[1]) }             — Bean call, positional (Array payload)
 ${ @myBean.compute([size[0], size[1]]) }           — Bean call, array literal (equivalent)
-${ @myBean.otherCapa }                             — Capability linking (no parentheses)
+${ @myBean.otherCapa }                             — External Capability linking (no parentheses)
 ${ @myModel:/some/path }                           — Absolute Model binding
 ${ @myModel:relAttr }                              — Relative Model binding
 ${ @myBean.format(@myModel:attr, size[0]) }        — Bean call with mixed arguments
