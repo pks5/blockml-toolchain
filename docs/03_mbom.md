@@ -1,14 +1,14 @@
-# MachineBlocks Compiler — MBOM
+# BOM Compiler — MBOM
 
-version: 1.0.0
+version: 2.0.0
 
 ## Purpose of this Document
 
-This document defines the MBOM (MachineBlocks Object Model) — the canonical, typed internal representation of all MachineBlocks data. MBOM is the interface between the MBML parser and the SCAD renderer.
+This document defines the MBOM (MachineBlocks Object Model) — the canonical, typed internal representation of all MachineBlocks data. MBOM is the interface between the BML parser and the SCAD Renderer.
 
-MBOM is a domain-specific specialization of BOM Core (`00_bom_core.md`). BOM Core defines the abstract structural foundation — Block, Preset, Set, Place, Step, Library, Catalog, and the Expression system. MBOM extends these with MachineBlocks-specific types, properties, and the SCAD render target. Concepts already defined in BOM Core are not repeated here; this document covers only MBOM-specific extensions and decisions.
+MBOM is a domain-specific specialization of BOM Core (`00_bom_core.md`). BOM Core defines the abstract structural foundation — Block, Member (Properties, Aggregations, Associations, Capabilities), Preset, Library, Catalog, and the Expression system. MBOM extends these with MachineBlocks-specific types, properties, and the SCAD render target. Concepts already defined in BOM Core are not repeated here — this document covers only MBOM-specific extensions and decisions.
 
-For the MBML authoring format see `02_mbml.md`.
+For the BML authoring format see `02_mbml.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
 For native property definitions see `09_mbom_properties.yml`.
 
@@ -27,19 +27,22 @@ MBOM is strongly inspired by the SAPUI5 object model. Existing SAPUI5 concepts a
 ```text
 SAPUI5 Control            →  MBOM Block
 SAPUI5 Composite Control  →  MBOM Composite Block
-SAPUI5 View               →  MBOM Set
 SAPUI5 Property           →  MBOM Property
 SAPUI5 Aggregation        →  MBOM Aggregation
 SAPUI5 Association        →  MBOM Association
-SAPUI5 Event              →  MBOM Event
+SAPUI5 Event              →  MBOM Outbound Capability
+SAPUI5 Control Renderer   →  MBOM Block Renderer (inside a Target)
 ```
 
 Key differences from SAPUI5:
 
 ```text
-Expression syntax:  SpEL (not SAPUI5 binding syntax)
+Expression syntax:  BOM Expression system (see 00_bom_core.md)
+                    (not SAPUI5 binding syntax)
 Block definition:   combines control definition + composition
                     (control definition + fragment/view in SAPUI5 terms)
+Capabilities:       three types: inbound, outbound, synchronous
+                    (SAPUI5 only has events / outbound)
 Domain:             physical, parametric geometry objects
                     (not UI controls)
 ```
@@ -48,11 +51,9 @@ Domain:             physical, parametric geometry objects
 
 ## Object Identity
 
-Every MBOM object has a globally unique identity based on its FQN (Fully Qualified Name).
+Every MBOM object has a globally unique identity based on its FQN.
 
 ### Class Identity (FQN)
-
-The FQN uniquely identifies a block class:
 
 ```text
 com.machineblocks.core.Block
@@ -71,7 +72,7 @@ Full FQN:          <reverse-domain-package>.<ClassName>
 
 ### Instance Identity
 
-Block instances (within a set or composition) have an instance ID. Instance IDs are composed using `::` as separator:
+Block instances (within a Composition) have an instance ID composed with `::` as separator:
 
 ```text
 Format:    <instanceId>::<partId>::<subPartId>
@@ -82,66 +83,62 @@ Examples:
   com.martianmicro.anyclosure.Wall::bottom   ← FQN as fallback (no instance ID)
 ```
 
-Instance IDs can be specified explicitly or are auto-generated. Auto-generated IDs follow a deterministic scheme (details to be defined). The FQN is the fallback when no instance ID is present.
-
 ---
 
 ## Metadata Model
 
-Every MBOM class has metadata that describes its structure. Metadata is defined in the block definition and used by the parser, validator, compiler, and editor.
+Every MBOM Block class has metadata describing its structure. Metadata is defined in the Block definition and used by the parser, validator, compiler, and editor.
 
 ```text
 name               — short class name
 fullQualifiedName  — FQN
 baseType           — FQN of the parent class (default: com.machineblocks.core.Block)
 version            — semantic version of this class definition
-properties         — list of Property metadata
-aggregations       — list of Aggregation metadata
-associations       — list of Association metadata
-events             — list of Event metadata
+members            — shared namespace: Properties, Aggregations, Associations, Capabilities
+compositions       — list of Composition definitions
 ```
+
+All Members share one namespace per Block. Names must be unique across Properties, Aggregations, Associations, and Capabilities within the same Block definition. This is enforced at parse time.
 
 ---
 
 ## Properties
 
-Properties are typed parameters of a block. Every property has a name, a type, and a default value.
+Properties are typed parameters of a Block. Every Property has a name, a type, and a default value.
 
 ### Native vs. Custom Properties
 
 **Native properties** are defined in `com.machineblocks.core.Block` and its base types. They are listed in `09_mbom_properties.yml` and have dedicated SCAD getters in the render target (`mb_param_size()`, `mb_param_baseColor()`, etc.).
 
-**Custom properties** are defined inline in a block definition. They are specific to that block type and generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
+**Custom properties** are defined inline in a Block definition. They generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
 
-The compiler determines whether a property is native or custom by checking `09_mbom_properties.yml`. No special markup is required in the block definition — both use the same `<property>` element.
-
-Native properties only need to be declared in a block definition when their default value differs from the core default defined in `09_mbom_properties.yml`.
+The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Both use the same `<property>` element in BML. Native properties only need to be declared when their default value differs from the core default.
 
 ### Property Metadata
 
 ```text
-name          — camelCase property name
+name          — camelCase member name (unique within the Block's member namespace)
 type          — MBOM type FQN (e.g. com.machineblocks.types.Size3D)
 defaultValue  — typed default value
 group         — optional grouping for editor display
 documentation — human-readable description
 ```
 
-Unqualified type names in MBML are resolved against `com.machineblocks.types` by the parser before being stored in MBOM as full FQNs.
+Unqualified type names in BML are resolved against `com.machineblocks.types` by the parser before being stored in MBOM as full FQNs.
 
 ### Property Groups
 
-Properties can be organized into named groups for editor display. Groups are metadata only — they have no effect on compiler behavior.
+Properties can be organized into named groups for editor display. Groups are metadata only — no effect on compiler behavior.
 
 ---
 
 ## Aggregations
 
-Aggregations describe ownership relationships. An aggregation defines that a block can contain zero or more child objects of a given type.
+Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type.
 
-### Implicit _parts Aggregation
+### Implicit `_parts` Aggregation
 
-When no `<aggregations>` section is present in a block definition, the MBML parser creates an implicit aggregation:
+When no `<aggregations>` section is present, the BML parser creates an implicit Aggregation:
 
 ```text
 name:        _parts
@@ -150,59 +147,151 @@ type:        com.machineblocks.bricks.StandardBrick
 visibility:  hidden
 ```
 
-This covers the vast majority of composite blocks. Explicit `<aggregations>` are only needed when a different name, type, cardinality, or visibility is required, or when multiple aggregations are needed.
+This covers the vast majority of Composite Blocks. Explicit `<aggregations>` are only needed when a different name, type, cardinality, or visibility is required, or when multiple Aggregations are needed.
 
 ### Aggregation Metadata
 
 ```text
-name              — aggregation name
-type              — FQN of the child type
-cardinality       — "0..1" | "0..n" | "1..1" | "1..n"
-visibility        — "public" | "hidden"
+name               — member name (unique within the Block's member namespace)
+type               — FQN of the child type
+cardinality        — "0..1" | "0..n" | "1..1" | "1..n"
+visibility         — "public" | "hidden"
 defaultAggregation — boolean, marks the default aggregation
-documentation     — human-readable description
+beanName           — optional; marks this Aggregation as a ServiceBlock binding
+documentation      — human-readable description
 ```
 
-`visibility="hidden"` marks an aggregation as internal. It can only be filled by the block's own composition, not from outside.
+`visibility="hidden"` marks an Aggregation as internal. It can only be filled by the Block's own Composition, not from outside.
+
+When `beanName` is set, the Aggregation is a ServiceBlock binding. The bean is accessible in Expressions via `@beanName`.
 
 ### Example
 
 ```text
 Wall
-  _parts: com.machineblocks.bricks.StandardBrick [0..n] (hidden)
+  _parts:  com.machineblocks.bricks.StandardBrick [0..n] (hidden)
+  myModel: com.bom.service.JSONModel [0..1] (hidden, beanName="myModel")
 ```
+
+---
+
+## Associations
+
+Associations describe loose references to other objects without ownership. Defined for future use.
+
+Planned use cases in MachineBlocks:
+
+```text
+PCB component reference
+External device module
+Connector partner
+Instruction asset
+Render profile
+Material profile
+```
+
+Associations have no ownership relationship and do not affect geometry compilation.
+
+---
+
+## Capabilities
+
+Capabilities describe how a Block communicates — externally via messaging or internally via synchronous calls in Expressions. Capabilities are Members and share the namespace with Properties, Aggregations, and Associations.
+
+Three Capability types exist:
+
+### Inbound Capability
+
+Receives a message from an external sender. Activated by an incoming message at a registered address. Asynchronous.
+
+```text
+name         — camelCase member name (unique within the Block's member namespace)
+type         — "inbound"
+address      — path pattern; path variables use {variableName} syntax
+payloadType  — "object" | "array"
+payload      — declared field structure (named for object, positional for array)
+documentation
+```
+
+### Outbound Capability
+
+Sends a message to an external receiver. Triggered by the Block in response to domain-specific conditions. Asynchronous.
+
+```text
+name         — camelCase member name
+type         — "outbound"
+address      — receiver address as a protocol URI (e.g. stud://local/blocks/resized)
+payloadType  — "object" | "array"
+payload      — declared field structure
+documentation
+```
+
+### Synchronous Capability
+
+Called directly within an Expression. Has a return value. No address. Not reachable via messaging protocols. This constraint is current — future use cases may relax it.
+
+```text
+name         — camelCase member name
+type         — "synchronous"
+payloadType  — "object" | "array"
+payload      — declared field structure
+returnType   — FQN of the return type (primitive, Object, or Array)
+documentation
+```
+
+### Payload Call Syntax
+
+The call syntax in Expressions determines whether the payload is Object or Array:
+
+```text
+Object payload:  myCapa(fieldA = 1, fieldB = 2)  →  { fieldA: 1, fieldB: 2 }
+Array payload:   myCapa(1, 2)                    →  [1, 2]
+```
+
+A mismatch between declared `payloadType` and call syntax is a parse-time error.
+
+### Inheritance
+
+Capabilities are inherited via `baseType`, identical to Properties and Aggregations.
+
+### MachineBlocks Built-in ServiceBlocks
+
+Built-in ServiceBlocks are defined in the `com.machineblocks.core.Block` base type and accessible in all MachineBlocks Blocks via the `#` prefix:
+
+```text
+#math    — synchronous capabilities: min, max, ceil, floor, abs, round, ...
+#string  — synchronous capabilities: format, trim, padStart, ...
+```
+
+These are shared across all MachineBlocks Blocks and cannot be overridden. The `#` namespace is reserved.
 
 ---
 
 ## Compositions
 
-A composition fills an aggregation with concrete child instances. It is the internal structure definition of a composite block — the equivalent of a SAPUI5 Fragment embedded directly in a Control definition.
+A Composition fills an Aggregation with concrete child instances. It is the internal structure definition of a Composite Block.
 
 ### Composition Structure
 
 ```text
-aggregation   — name of the aggregation to fill (default: "_parts")
-children      — ordered list of block instances
+aggregation   — name of the Aggregation to fill (default: "_parts")
+children      — ordered list of Block instances
 ```
 
-When no `aggregation` attribute is specified on a `<composition>`, the compiler fills the implicit (or sole) `_parts` aggregation. If multiple explicit aggregations exist, the `aggregation` attribute is required — the compiler reports an error if it is missing.
-
-Each child instance in a composition:
+Each child instance:
 
 ```text
-type          — FQN of the block class
-id            — part ID (becomes part of the instance ID: parentId::bottom)
+type          — FQN of the Block class
+id            — part ID (becomes part of the instance ID: parentId::partId)
 renderGroup   — render group name (optional, fallback = id)
 namespace     — parameter filter namespace (optional, fallback = id)
-version       — version of the referenced block type
-properties    — property values (literals or expressions)
+version       — version of the referenced Block type
+(members)     — member values: Properties and Capabilities (literals or Expressions)
 ```
 
 ### renderGroup
 
-Render groups control which parts of a composite block are rendered (e.g. only the top part, only the bottom part). They are user-defined — there is no automatic derivation.
-
-Fallback: if no `renderGroup` is specified on a child instance, the child's `id` is used as the render group name.
+Render groups control which parts of a Composite Block are rendered (e.g. only the top part). They are user-defined — no automatic derivation. Fallback: child's `id`.
 
 ### namespace
 
@@ -223,8 +312,8 @@ Wall._parts:
       id:          "bottom"
       renderGroup: "bottom"
       namespace:   "bottom"
-      properties:
-        size:           Expression([size[0], size[1], size[2] - 1])
+      members:
+        size:           Expression([ size[0], size[1], size[2] - 1 ])
         recess:         true
         tongue:         true
         recessWallGaps: "x+"
@@ -233,70 +322,30 @@ Wall._parts:
       id:          "top"
       renderGroup: "top"
       namespace:   "top"
-      properties:
-        size:           Expression([size[0], size[1], 1])
-        offset:         Expression([0, 0, size[2] - 1])
+      members:
+        size:           Expression([ size[0], size[1], 1 ])
+        offset:         Expression([ 0, 0, size[2] - 1 ])
         baseCutoutType: "groove"
         recessWallGaps: "x+"
 ```
 
 ---
 
-## Associations
-
-Associations describe loose references to other objects without ownership. They are defined for future use.
-
-Planned use cases:
-
-```text
-PCB component reference
-External device module
-Connector partner
-Instruction asset
-Render profile
-Material profile
-```
-
-Associations have no ownership relationship and do not affect geometry compilation.
-
----
-
-## Events
-
-Events are defined for future use. They are relevant when MachineBlocks describes interactive, editor-side, or device-side logic.
-
-Planned events:
-
-```text
-onAssemble
-onRender
-onSelect
-onParameterChange
-onConnect
-onValidate
-```
-
-Events are not part of the SCAD render target. They may be relevant in the editor or device system.
-
----
-
 ## Expression System
-
-### Engine
-
-Expressions use SpEL (Spring Expression Language) syntax, wrapped in `${}` in MBML.
 
 ### Expression Roots
 
-All expressions are bound to named root variables. Direct variable access without a root is not permitted.
+All expressions are bound to named roots. Direct variable access without a qualifying root is not permitted.
 
 ```text
-parameters   — properties of the current block instance (read-only)
-math         — mathematical functions
-registry     — shared registry within the current composition (read/write)
+myProperty          — Property of the current Block instance (no prefix)
+myProperty.x        — Attribute access on a structured Property
+#builtIn.capa(...)  — Built-in ServiceBlock (defined in baseType, reserved prefix)
+@bean.capa(...)     — User-defined Bean (declared as Aggregation with beanName)
+@model:/path        — Absolute Model binding path
+@model:relPath      — Relative Model binding path (requires binding context)
+registry.name       — Shared registry within the current Composition
 ```
-
-Custom helper roots may be added (e.g. `myHelper.someFunction()`). Details to be defined.
 
 ### Available Operations
 
@@ -304,51 +353,43 @@ Custom helper roots may be added (e.g. `myHelper.someFunction()`). Details to be
 Arithmetic:   +  -  *  /  %
 Comparison:   >  <  ==  !=  >=  <=
 Ternary:      condition ? valueIfTrue : valueIfFalse
-math root:    math.min()  math.max()  math.ceil()  math.floor()  etc.
 Array:        [a, b, c]  expr[0]
 ```
 
 ### Expression Scope Rules
 
 ```text
-- Access only to properties of the current block instance (via parameters)
-- No access to parent, grandparent, or sibling block properties
+- Direct property access: current Block instance only (no prefix needed)
+- No access to parent, grandparent, or sibling Block properties
 - Direction is always parent → child (top-down only)
-- Registry scope is per composition — initialized on entry, not visible outside
+- Registry scope is per Composition — initialized on entry, not accessible outside
+- @bean references: only beans declared as Aggregations on the current Block
+- #built-in references: always available (inherited via baseType)
+- Model binding context: inherited from parent Aggregation
 ```
 
 ### Expression AST
 
-Expressions are not evaluated as raw JavaScript or SpEL strings. The MBML parser translates them into typed Expression AST nodes. The AST is part of MBOM — it is renderer-independent.
-
-The SCAD Renderer serializes Expression AST nodes into SCAD-compatible output (variable references, arithmetic, ternary operators, etc.).
+Expressions are parsed into typed Expression AST nodes at parse time — not evaluated as raw strings. The AST is part of MBOM and is renderer-independent. The SCAD Renderer serializes AST nodes into SCAD-compatible output.
 
 ### Registry
 
-The registry allows sibling child blocks within the same composition to share values:
+Sibling child Blocks within the same Composition can share values:
 
 ```text
 Write:  registry.totalHeight = value
 Read:   registry.totalHeight
 ```
 
-Registry scope: per composition. A registry is created when entering a composition and is not accessible outside it. Child blocks within the same composition share the same registry instance.
-
-```xml
-<!-- Child 1 writes -->
-<SomeBlock registry.totalHeight="${parameters.size[2]}" ... />
-
-<!-- Child 2 reads -->
-<OtherBlock size="${[1, 1, registry.totalHeight - 1]}" ... />
-```
+Registry scope is per Composition. Created on entry, not visible outside.
 
 ---
 
-## Set Model
+## MachineBlocks Set Model
 
-A Set is a Block whose `baseType` is `com.machineblocks.core.Set` (see BOM Core, `00_bom_core.md`). It is not a separate MBOM class — it is a Block that the SCAD Renderer treats differently based on its base type.
+A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`. It is not a separate MBOM class — it is a Block that the SCAD Renderer dispatches to `ScadSetRenderer` based on its base type.
 
-A Set uses Multi-Aggregation to separate three concerns. The conventional aggregation names are:
+A Set uses three conventional Aggregations:
 
 ```text
 _blocks     — Block configurations (what exists, how it is parameterized)
@@ -356,78 +397,59 @@ _placement  — placed instances (where each block is; id becomes the SCAD insta
 _steps      — assembly order (optional; defaults to document order of _placement)
 ```
 
-### Place
+### com.machineblocks.core.Place
 
-`com.machineblocks.core.Place` is a lightweight Block type (extends `com.bom.core.Place`) used as children in the `_placement` aggregation. It adds MachineBlocks positioning properties to the abstract BOM Core Place:
+A lightweight MachineBlocks Block type used as children in the `_placement` Aggregation.
 
 ```text
-id         — instance ID (becomes the SCAD instance id in STEPS array and dispatcher)
-blockId    — references a Block configuration from _blocks
-direction  — orientation in the set (Direction)
-offset     — position in the set in grid units (GridPosition3D)
+Members:
+  id         — instance ID (becomes the SCAD instance id in STEPS and dispatcher)
+  blockId    — references a Block configuration from _blocks
+  direction  — orientation in the set (Direction)
+  offset     — position in the set in grid units (GridPosition3D)
 ```
 
 The `id` on a Place must be unique across all placements in the Set.
 
-### Step
+### com.machineblocks.core.Step
 
-`com.machineblocks.core.Step` is a lightweight Block type (extends `com.bom.core.Step`) used as children in the `_steps` aggregation:
-
-```text
-placeId    — references a Place in _placement
-```
-
-When `_steps` is absent or empty, assembly order equals the document order of `_placement` entries. This is the common case — authors typically write placements in assembly order.
-
-### Block Configuration Modes
-
-Three configuration modes, combinable:
+A lightweight MachineBlocks Block type used as children in the `_steps` Aggregation.
 
 ```text
-Option 1 — Inline:
-  All properties defined directly on the Block entry in _blocks.
-
-Option 2 — Preset reference:
-  Block references a blockPresets document.
-  All preset values apply.
-
-Option 3 — Preset + inline override:
-  Preset as base. Inline properties override individual values.
-  Merge order: configProfile < blockPreset < inline property
+Members:
+  placeId    — references a Place in _placement
 ```
+
+When `_steps` is absent or empty, assembly order equals the document order of `_placement` entries.
 
 ---
 
 ## MBOM Class Hierarchy
 
 ```text
-com.bom.core.Block                           ← BOM Core (00_bom_core.md)
-  com.machineblocks.core.Block               ← MBOM base (adds MB-specific properties)
-    com.machineblocks.core.Set               ← Set is a Block; SCAD Renderer dispatches on baseType
+com.bom.core.Block                              ← BOM Core (00_bom_core.md)
+  com.machineblocks.core.Block                  ← MBOM base (native properties, #math, #string)
+    com.machineblocks.core.Set                  ← dispatched to ScadSetRenderer
       com.martianmicro.anyclosure.DefaultEnclosure
       ...
+    com.machineblocks.core.Place                ← used in Set _placement
+    com.machineblocks.core.Step                 ← used in Set _steps
     com.machineblocks.bricks.StandardBrick
     com.martianmicro.anyclosure.Wall
     com.martianmicro.anyclosure.Corner
     ...
-
-com.bom.core.Place                           ← BOM Core
-  com.machineblocks.core.Place               ← adds direction, offset
-
-com.bom.core.Step                            ← BOM Core
-  com.machineblocks.core.Step                ← no MB-specific additions (placeId sufficient)
 ```
+
+Note: `com.machineblocks.core.Place` and `com.machineblocks.core.Step` are Blocks like any other — they inherit from `com.machineblocks.core.Block` and are processed by the same pipeline. They are not special-cased in BOM Core.
 
 ---
 
 ## Versioning
 
-Every block definition and set definition carries a semantic version. Sets must specify a version for every referenced block type:
+Every Block definition carries a semantic version. Compositions must specify a version for every referenced Block type:
 
 ```xml
 <ac:Wall id="wall" version="1.0.0" size="[1, 8, 9]" />
 ```
 
-No implicit `latest` references. Versions are always explicit.
-
-Version resolution against a package registry is to be defined.
+No implicit `latest` references. Versions are always explicit. Version resolution against a package registry is to be defined.

@@ -1,32 +1,32 @@
-# MachineBlocks Compiler — CLI
+# BOM Compiler — CLI
 
-version: 1.0.0
+version: 2.0.0
 
 ## Purpose of this Document
 
-This document defines the `mbc` CLI tool — its commands, configuration files, watch mode, scaffolding, config profile management, and thumbnail generation.
+This document defines the `bom` CLI tool — its commands, configuration files, watch mode, scaffolding, config profile management, and thumbnail generation.
 
-For the compiler pipeline see `06_compiler.md`.
+For the compiler pipeline and Target Registry see `06_compiler.md`.
 For the project file structure and library resolution see `01_system.md`.
 
 ---
 
 ## Overview
 
-The CLI is implemented in `@machineblocks/cli-tools`. It is Node.js-only — it may use `fs`, `path`, `chokidar`, `child_process`, and other Node-only APIs. The CLI wraps `@machineblocks/compiler` and adds file system operations, watching, scaffolding, and thumbnail rendering.
+The CLI is implemented in `@bom/cli`. It is Node.js-only — it may use `fs`, `path`, `chokidar`, `child_process`, and other Node-only APIs. The CLI wraps `@bom/compiler` and adds file system operations, watching, scaffolding, and (for the SCAD target) thumbnail rendering.
 
-Command names, argument names, and shorthand flags are configurable via `mbc-cli.config.json`.
+Command names, argument names, and shorthand flags are configurable via `bom-cli.config.json`.
 
 ---
 
 ## Commands
 
-### `mbc new block`
+### `bom new block`
 
 Scaffolds a new block definition file with the required structure.
 
 ```bash
-mbc new block <fqn> [--format mbml|json]
+bom new block <fqn> [--format mbml|json]
 ```
 
 ```text
@@ -65,26 +65,27 @@ The generated file contains the minimum required structure:
 
 ---
 
-### `mbc compile`
+### `bom compile`
 
-Compiles one or all MBML source files. Output depends on the document type of the input file.
+Compiles one or all BML source files to a specified render target. Output depends on the document type of the input file and the selected target.
 
 ```bash
 # Compile a single file
-mbc compile <file>
+bom compile <file> <target>
 
 # Compile all files in srcDir
-mbc compile --all
+bom compile --all <target>
 ```
 
 ```text
 <file>    — path to a .mbml or .json file
+<target>  — registered target name, e.g. "scad"
 --all     — compile all source files in srcDir
---src     — override srcDir (default: from mbc.config.json)
---out     — override outDir (default: from mbc.config.json)
+--src     — override srcDir (default: from bom.config.json)
+--out     — override outDir (default: from bom.config.json)
 ```
 
-#### Output by document type
+#### Output by document type (SCAD target)
 
 **`<block>` document:**
 
@@ -107,70 +108,61 @@ src/com/martianmicro/anyclosure/WallPresets.mbml
 →  scad/com/martianmicro/anyclosure/Wall__brick-1x1.webp
 ```
 
-Compiling a `<blockPresets>` document is the standard entry point for generating visible output. It triggers an implicit compile of the referenced block (resolved via `blockType` FQN + `srcDir`), then produces the Customizer JSON and one thumbnail per preset.
-
-**`<set>` document:**
-
-```text
-src/com/martianmicro/anyclosure/DefaultEnclosureSet.mbml
-→  scad/com/martianmicro/anyclosure/DefaultEnclosureSet.scad
-→  scad/com/martianmicro/anyclosure/DefaultEnclosureSet.scad.map
-```
-
-No thumbnails are generated for set documents.
+Compiling a `<blockPresets>` document is the standard entry point for generating visible output. It triggers an implicit compile of the referenced block, then produces the Customizer JSON and one thumbnail per preset.
 
 #### Exit codes
 
 ```text
 0  — success
 1  — compiler errors
-2  — configuration error
+2  — configuration error (unknown target, missing config, etc.)
 ```
 
 ---
 
-### `mbc validate`
+### `bom validate`
 
-Validates one or all MBML source files without producing any output.
+Validates one or all BML source files without producing any output.
 
 ```bash
-mbc validate <file>
-mbc validate --all
+bom validate <file>
+bom validate --all
 ```
 
-Runs the full compiler pipeline up to and including the Semantic Validator (stages 1–8). Reports all diagnostics. Produces no output files.
+Runs the full compiler pipeline up to and including the Semantic Validator (stages 1–8). Reports all diagnostics. Produces no output files. No target is required — validation is universal.
 
 ---
 
-### `mbc inspect`
+### `bom inspect`
 
-Prints the MBOM representation of a compiled MBML file for debugging.
+Prints the BOM representation of a compiled BML file for debugging.
 
 ```bash
-mbc inspect <file>
+bom inspect <file>
 ```
 
-Outputs a human-readable dump of the MBOM object graph produced from the given MBML file. No SCAD output is produced.
+Outputs a human-readable dump of the BOM object graph produced from the given BML file. No target output is produced.
 
 ---
 
-### `mbc watch`
+### `bom watch`
 
 Watches the source directory and recompiles changed files automatically.
 
 ```bash
-mbc watch [--src <dir>] [--out <dir>]
+bom watch [--src <dir>] [--out <dir>] <target>
 ```
 
 ```text
---src   — source directory to watch (default: srcDir from mbc.config.json)
---out   — output directory (default: outDir from mbc.config.json)
+<target>  — registered target name, e.g. "scad"
+--src     — source directory to watch (default: srcDir from bom.config.json)
+--out     — output directory (default: outDir from bom.config.json)
 ```
 
 Behavior:
 
 ```text
-- On startup: compiles all files in srcDir (equivalent to mbc compile --all)
+- On startup: compiles all files in srcDir (equivalent to bom compile --all <target>)
 - On file change: recompiles the changed file only
 - On file add: compiles the new file
 - On file delete: removes the corresponding output file(s)
@@ -178,18 +170,18 @@ Behavior:
 - Continues running until interrupted (Ctrl+C)
 ```
 
-Thumbnail generation follows the same rules as `mbc compile` — thumbnails are generated automatically when a `<blockPresets>` file changes.
+Thumbnail generation follows the same rules as `bom compile` — thumbnails are generated automatically when a `<blockPresets>` file changes (SCAD target only).
 
 Conceptually equivalent to TypeScript watch mode (`tsc --watch`).
 
 ---
 
-### `mbc activate-config`
+### `bom activate-config`
 
 Sets the active config profile for the project.
 
 ```bash
-mbc activate-config <profileName>
+bom activate-config <profileName>
 ```
 
 ```text
@@ -197,7 +189,7 @@ mbc activate-config <profileName>
                  Profile file must exist at src/config/<profileName>.mbml
 ```
 
-Updates `mbc.config.json`:
+Updates `bom.config.json`:
 
 ```json
 {
@@ -209,9 +201,9 @@ Only one config profile is active at a time. Activating a new profile replaces t
 
 ---
 
-## Thumbnail Generation
+## Thumbnail Generation (SCAD Target)
 
-Thumbnails are generated automatically as part of `mbc compile` when the input is a `<blockPresets>` document. There is no separate `mbc thumbnails` command.
+Thumbnails are generated automatically as part of `bom compile scad` when the input is a `<blockPresets>` document. There is no separate thumbnail command.
 
 ### Pipeline
 
@@ -251,7 +243,7 @@ Example:        Wall__brick-2x4.webp
 
 ### Output Location
 
-Thumbnails are placed alongside the SCAD output files by default. Configurable via `thumbsDir` in `mbc.config.json`:
+Thumbnails are placed alongside the SCAD output files by default. Configurable via `thumbsDir` in `bom.config.json`:
 
 ```json
 {
@@ -264,12 +256,12 @@ Any path → thumbnails are placed there, mirroring the `outDir` package structu
 
 ---
 
-## OpenSCAD Executable Resolution
+## OpenSCAD Executable Resolution (SCAD Target)
 
 Thumbnail generation requires a local OpenSCAD installation. The CLI resolves the OpenSCAD executable using the following order (highest priority first):
 
 ```text
-1. mbc.config.json → "openscadPath"   (explicit project override)
+1. bom.config.json → "openscadPath"   (explicit project override)
 2. Environment variable OPENSCAD_PATH
 3. OS-specific default paths (checked in order):
 
@@ -294,16 +286,16 @@ If no path is found, the CLI reports:
 
 ```text
 ERROR: OpenSCAD executable not found.
-  Set "openscadPath" in mbc.config.json or the OPENSCAD_PATH environment variable.
+  Set "openscadPath" in bom.config.json or the OPENSCAD_PATH environment variable.
 ```
 
-This logic is implemented in `@machineblocks/cli-tools` as `resolveOpenScad.ts`.
+This logic is implemented in `@bom/cli` as `resolveOpenScad.ts`.
 
 ---
 
 ## Configuration Files
 
-### `mbc.config.json`
+### `bom.config.json`
 
 Project-level configuration. Located at the project root.
 
@@ -320,18 +312,16 @@ Project-level configuration. Located at the project root.
 
 | Field | Default | Description |
 |---|---|---|
-| `srcDir` | `"src"` | Root directory for MBML source files |
-| `outDir` | `"scad"` | Root directory for SCAD output files |
-| `thumbsDir` | `null` | Output directory for thumbnails. `null` = alongside SCAD files in `outDir` |
-| `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library. `null` = resolved from mbc executable location |
-| `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved (see OpenSCAD Executable Resolution) |
+| `srcDir` | `"src"` | Root directory for BML source files |
+| `outDir` | `"scad"` | Root directory for target output files |
+| `thumbsDir` | `null` | Output directory for thumbnails. `null` = alongside output files in `outDir` |
+| `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library. `null` = resolved from bom executable location |
+| `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved |
 | `activeConfig` | `null` | Name of the active config profile |
-
-`mbLibPath` import paths in generated SCAD files are computed relative to each output file's location. See `01_system.md` for library resolution details.
 
 ---
 
-### `mbc-cli.config.json`
+### `bom-cli.config.json`
 
 CLI-level configuration. Located at the project root. All fields are optional — defaults apply when absent.
 
@@ -366,7 +356,7 @@ Command names, argument names, and shorthand flags can all be renamed. This allo
 
 ## Config Profiles
 
-Config profiles define project-wide hardware or rendering defaults. They use the same format as `<blockPresets>` and share the same property namespace as block properties.
+Config profiles define project-wide property defaults. They use the same format as `<blockPresets>` and share the same property namespace as block properties.
 
 ### File Location
 
@@ -395,8 +385,6 @@ Config profiles use the `<blockPresets>` root element with no `<blockType>` — 
 
 ### Merge Order
 
-When a config profile is active, its values are applied with the lowest priority:
-
 ```text
 configProfile < blockPreset < inline property
 ```
@@ -406,10 +394,10 @@ A property set inline on a block instance always wins over a preset, which alway
 ### Activation
 
 ```bash
-mbc activate-config prusa_pla
+bom activate-config prusa_pla
 ```
 
-Sets `"activeConfig": "prusa_pla"` in `mbc.config.json`. The compiler reads the active profile on every compilation run.
+Sets `"activeConfig": "prusa_pla"` in `bom.config.json`. The compiler reads the active profile on every compilation run.
 
 ---
 
@@ -417,8 +405,8 @@ Sets `"activeConfig": "prusa_pla"` in `mbc.config.json`. The compiler reads the 
 
 ```text
 <project-root>/
-  mbc.config.json
-  mbc-cli.config.json
+  bom.config.json
+  bom-cli.config.json
 
   src/
     config/
@@ -454,10 +442,10 @@ Sets `"activeConfig": "prusa_pla"` in `mbc.config.json`. The compiler reads the 
 The CLI prints diagnostics to stdout in a human-readable format:
 
 ```text
-ERROR  [MBML_UNKNOWN_TYPE]  src/com/martianmicro/anyclosure/Wall.mbml:12:5
+ERROR  [BML_UNKNOWN_TYPE]  src/com/martianmicro/anyclosure/Wall.mbml:12:5
   Referenced type 'com.machineblocks.bricks.UnknownBrick' not found.
 
-WARNING  [MBML_UNKNOWN_PROPERTY]  src/com/martianmicro/anyclosure/Wall.mbml:18:3
+WARNING  [BML_UNKNOWN_PROPERTY]  src/com/martianmicro/anyclosure/Wall.mbml:18:3
   Property 'myCustomProp' not found in type definition. Treating as custom property.
 
 ✓  src/com/martianmicro/anyclosure/Corner.mbml  →  scad/.../Corner.scad
