@@ -9,7 +9,7 @@ This document defines the SCAD Renderer — the MachineBlocks Atomic Render Targ
 For the MBOM object model see `03_mbom.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
 For the Target system see `06_compiler.md`.
-For the MachineBlocks V3 SCAD Library specification see `machineblocks-lib/docs/scad-reference/`.
+For the MachineBlocks V3 SCAD Library specification see `domains/machineblocks/runtimes/scad-lib/docs/`.
 
 ---
 
@@ -150,8 +150,8 @@ Every generated SCAD file includes the required imports for the MachineBlocks V3
 ### Standard Imports
 
 ```scad
-use <{relative_path_to_mbLibPath}/lib/block.scad>;
-include <{relative_path_to_config}/mb_config.scad>;
+use <{relative_path_to_scad-lib}/lib/block.scad>;
+include <{relative_path_to_scad-lib}/config/mb_config.scad>;
 ```
 
 ### Block-to-Block Imports

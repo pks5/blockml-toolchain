@@ -315,7 +315,7 @@ Project-level configuration. Located at the project root.
 | `srcDir` | `"src"` | Root directory for BML source files |
 | `outDir` | `"scad"` | Root directory for target output files |
 | `thumbsDir` | `null` | Output directory for thumbnails. `null` = alongside output files in `outDir` |
-| `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library. `null` = resolved from bom executable location |
+| `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library root (`scad-lib/`). `null` = resolved from bom executable location |
 | `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved |
 | `activeConfig` | `null` | Name of the active config profile |
 

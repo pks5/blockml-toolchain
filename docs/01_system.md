@@ -94,25 +94,42 @@ bom-compiler/
     machineblocks/
       mbom/            — @machineblocks/mbom: MBOM domain model, native properties
       scad-renderer/   — @machineblocks/scad-renderer: MBOM→SCAD Block Renderers + Target
-
-  machineblocks-lib/   — Git Submodule: MachineBlocks V3 SCAD Library (full repository)
-    lib/               — SCAD Library source (runtime for generated SCAD files)
-    examples/          — example SCAD files (used in correctness tests)
-    docs/
-      scad-reference/  — SCAD API reference (used by the SCAD Renderer)
+      runtimes/
+        scad-lib/      — Git Submodule: MachineBlocks V3 SCAD Library
+          lib/         — SCAD Runtime (every generated SCAD file uses this)
+          config/      — mb_config.scad (project-wide SCAD configuration)
+          docs/        — SCAD API reference (used by the scad-renderer)
+          blocks/      — pre-rendered reference Blocks (Compiler output format)
+            com/
+              machineblocks/
+                bricks/
+                anyclosure/
+                ...
 
   README.md
 ```
 
-### Why the full MachineBlocks library repository?
+### Runtime Structure
 
-The entire MachineBlocks V3 SCAD Library repository is included as a submodule — not just the `docs/` folder — because:
+Each domain may have one or more runtimes under `domains/*/runtimes/`. A runtime is a Git Submodule that provides:
 
-- `machineblocks-lib/lib/` is the runtime the generated SCAD files depend on
-- `machineblocks-lib/examples/` provides verified SCAD output for correctness testing
-- `machineblocks-lib/docs/scad-reference/` is the API reference for the SCAD Renderer
+```text
+lib/      — the runtime library that generated output files depend on
+config/   — default configuration (domain-specific)
+docs/     — API reference used by the domain's renderer
+blocks/   — pre-rendered reference artifacts (same format as compiler output)
+```
 
-Git does not support including only a subdirectory of a foreign repository as a submodule. Including the full repository is the pragmatic and reliable choice.
+For MachineBlocks, the `scad-lib` runtime is the MachineBlocks V3 SCAD Library. Every generated `.scad` file binds to it via:
+
+```scad
+use <{relative_path}/lib/block.scad>;
+include <{relative_path}/config/mb_config.scad>;
+```
+
+The `blocks/` folder mirrors the compiler output structure (`com/machineblocks/bricks/StandardBrick.scad`, etc.) and serves as both a reference and a directly usable pre-rendered set.
+
+Longer term, runtimes will be distributed via package registries (npm, Maven, etc.) rather than Git Submodules. The submodule approach is pragmatic for the initial phase.
 
 ---
 
@@ -427,11 +444,14 @@ configProfile < blockPreset < inline property
 07_cli.md              — CLI commands, configuration, watch mode, scaffolding
 09_mbom_properties.yml — MBOM native property definitions (authoritative)
 
-machineblocks-lib/                — Git Submodule: MachineBlocks V3 SCAD Library
-  docs/
-    scad-reference/               — SCAD API reference (used by the SCAD Renderer)
-  lib/                            — SCAD Library runtime
-  examples/                       — example SCAD files (used in correctness tests)
+domains/machineblocks/runtimes/scad-lib/
+  lib/                 — SCAD Runtime (every generated SCAD file uses this)
+  config/              — mb_config.scad
+  docs/                — SCAD API reference (used by the scad-renderer)
+  blocks/              — pre-rendered reference Blocks
+    com/machineblocks/
+      bricks/          — StandardBrick.scad, StandardBrick.json, thumbnails, ...
+      ...
 ```
 
 `09_mbom_properties.yml` is the authoritative source for all native MBOM property definitions (types, defaults, constraints). The Markdown documents explain concepts, relationships, and decision logic.
