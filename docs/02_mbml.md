@@ -297,56 +297,58 @@ Associations describe loose references without ownership. Defined for future use
 
 ### Capabilities
 
-Capabilities describe how a Block communicates. Three types exist: `inbound`, `outbound`, and `synchronous`.
+Capabilities describe how a Block communicates. Like Properties, they are declared with a name and a class (FQN). Their value in a Composition is the address or binding — set as an attribute on the child Block instance, just like a Property value.
+
+> **Capability package TBD** — placeholder `com.bom.capability.*`. Candidate: `bom.foundation`.
 
 ```xml
 <capabilities>
 
-  <!-- Inbound: activated by an incoming message at a registered address -->
+  <!-- AsyncInbound: receives a message asynchronously -->
   <capability name="resize"
-              type="inbound"
-              address="/blocks/{id}/resize"
-              payloadType="object">
-    <payload>
-      <field name="width"  type="Integer" />
-      <field name="height" type="Integer" />
-    </payload>
+              class="com.bom.capability.AsyncInbound"
+              payloadType="com.myDomain.ResizePayload">
     <documentation>Resize the block to the given dimensions.</documentation>
   </capability>
 
-  <!-- Outbound: sends a message when triggered -->
-  <capability name="resized"
-              type="outbound"
-              address="stud://local/blocks/resized"
-              payloadType="object">
-    <payload>
-      <field name="newSize" type="Size3D" />
-    </payload>
+  <!-- AsyncInbound with optional returnType (for replyTo) -->
+  <capability name="query"
+              class="com.bom.capability.AsyncInbound"
+              payloadType="com.myDomain.QueryPayload"
+              returnType="com.myDomain.QueryResult">
+    <documentation>Query and receive an async reply.</documentation>
   </capability>
 
-  <!-- Synchronous: callable within Expressions only, has a return value -->
+  <!-- AsyncOutbound: sends a message asynchronously -->
+  <capability name="resized"
+              class="com.bom.capability.AsyncOutbound"
+              payloadType="com.myDomain.ResizedPayload">
+  </capability>
+
+  <!-- Sync: callable within Expressions only, returnType required -->
   <capability name="computeArea"
-              type="synchronous"
-              payloadType="array"
+              class="com.bom.capability.Sync"
+              payloadType="Array&lt;Integer&gt;"
               returnType="Integer">
-    <payload>
-      <field type="Integer" />
-      <field type="Integer" />
-    </payload>
     <documentation>Returns width * height.</documentation>
   </capability>
 
 </capabilities>
 ```
 
-**Payload types:**
+**Payload type forms:**
 
 ```text
-payloadType="object"  →  named fields; call syntax: myCapa(fieldA = 1, fieldB = 2)
-payloadType="array"   →  positional fields; call syntax: myCapa(1, 2)
+com.bom.types.Integer            — primitive
+com.myDomain.MyClass             — Object (named fields)
+Array&lt;Integer&gt;             — Array of primitives  (XML-escaped: Array<Integer>)
+Array&lt;com.myDomain.MyClass&gt; — Array of objects
 ```
 
-**Inbound** and **Outbound** use an `address` for external messaging. **Synchronous** has no address — it is only callable within Expressions.
+Unqualified type names resolve against the domain's default type namespace (determined by the Block's `baseType`).
+
+**`AsyncInbound`** and **`AsyncOutbound`**: `returnType` is optional (for async reply via `replyTo`).
+**`Sync`**: `returnType` is required. No address — only callable within Expressions.
 
 ---
 
@@ -373,24 +375,54 @@ Member values on child instances may be literals or Expressions.
 
 ### Expressions in Compositions
 
+Property values:
+
 ```xml
-<!-- Property access -->
+<!-- Array literal (pure) -->
+size="[1, 8, 9]"
+
+<!-- Object literal (pure) -->
+config="{mode: 'groove', depth: 2}"
+
+<!-- Expression: property reference -->
 size="${ [size[0], size[1], size[2] - 1] }"
 
-<!-- Built-in service call -->
+<!-- Expression: object with property reference and model binding -->
+config="${ {mode: baseCutoutType, label: @myModel:/config/label} }"
+
+<!-- Expression: built-in service call -->
 size="${ [size[0], size[1], #math.max(size[2] - 1, 0)] }"
 
-<!-- User bean call (Object payload) -->
+<!-- Expression: bean call, named parameters (Object payload) -->
 label="${ @myFormatter.format(value = size[0], unit = 'mm') }"
 
-<!-- Model binding (absolute) -->
+<!-- Expression: bean call, object literal (equivalent) -->
+label="${ @myFormatter.format({value: size[0], unit: 'mm'}) }"
+
+<!-- Expression: model binding (absolute) -->
 label="${ @myModel:/config/label }"
 
-<!-- Model binding (relative — requires binding context on parent aggregation) -->
+<!-- Expression: model binding (relative — requires binding context on parent aggregation) -->
 label="${ @myModel:label }"
 
-<!-- Ternary -->
+<!-- Expression: ternary -->
 baseCutoutType="${ size[2] > 2 ? 'groove' : 'standard' }"
+```
+
+Capability values:
+
+```xml
+<!-- Absolute URI → AsyncOutbound routing -->
+<ac:MyBlock onResized="stud://enclosure/blocks/resized" />
+
+<!-- Relative path → context-resolved (TBD) -->
+<ac:MyBlock onResized="/blocks/resized" />
+
+<!-- Capability linking: AsyncOutbound → AsyncInbound, or Sync → Sync -->
+<ac:MyBlock onResized="${ @myService.resizeHandler }" />
+
+<!-- Dynamic address: Sync Capability returns the address String -->
+<ac:MyBlock onResized="${ @myService.getAddress() }" />
 ```
 
 See `00_bom_core.md` — Expression System for the full specification.

@@ -228,68 +228,108 @@ Associations carry no ownership and do not affect rendering.
 
 Capabilities describe how a Block communicates — with the outside world or internally within a Composition. A Capability is a named member of a Block, sharing the member namespace with Properties, Aggregations, and Associations.
 
-### Capability Types
+Like Properties, Capabilities are declared with a name and a class (type). Like Properties, their value in a Composition is set directly on the child Block instance as an attribute. For Capabilities, this value is the address or binding — not a data value.
 
-BOM Core defines three Capability types:
+### Capability Classes
 
-**Inbound** — receives a message from an external sender. Activated by an incoming message at a registered address. Asynchronous.
+Capabilities use FQN classes instead of string type values. The class determines the communication pattern.
 
-**Outbound** — sends a message to an external receiver. Triggered by the Block in response to domain-specific conditions. Asynchronous.
+> **Package TBD** — placeholder `com.bom.capability.*`. Candidate: `bom.foundation` (domain to be confirmed).
 
-**Synchronous** — called directly within an Expression. Has a return value. No address. Not reachable via messaging protocols.
+```text
+com.bom.capability.AsyncInbound   — receives a message asynchronously
+com.bom.capability.AsyncOutbound  — sends a message asynchronously
+com.bom.capability.Sync           — called synchronously within an Expression
+```
 
 ### Capability Metadata
 
 All Capabilities share these base fields:
 
 ```text
-name           — camelCase capability name (unique within the Block's member namespace)
-type           — "inbound" | "outbound" | "synchronous"
-payloadType    — declared payload type: Object schema or Array schema
+name           — camelCase member name (unique within the Block's member namespace)
+class          — FQN of the Capability class (AsyncInbound | AsyncOutbound | Sync)
+payloadType    — declared payload type (see Payload Types below)
 documentation  — human-readable description
 ```
 
-**Inbound** adds:
+**`AsyncInbound`** adds:
 
 ```text
-address        — path pattern that activates this capability
-                 path variables use {variableName} syntax
-                 e.g. /blocks/{id}/resize
+returnType     — optional; type of the asynchronous reply (for replyTo scenarios)
 ```
 
-**Outbound** adds:
+**`AsyncOutbound`** adds:
 
 ```text
-address        — receiver address as a protocol URI
-                 e.g. stud://enclosure/nfc/tag-detected
+returnType     — optional; type of the asynchronous reply (for replyTo scenarios)
 ```
 
-**Synchronous** adds:
+**`Sync`** adds:
 
 ```text
-returnType     — declared return type (primitive, Object, or Array)
+returnType     — required; declared return type of the synchronous call
 ```
 
-### Payload
+### Payload Types
 
-Every Capability declares a payload type. The payload is either an Object or an Array. The call syntax in Expressions determines which form is used:
+Every Capability declares a `payloadType`. Supported forms:
 
 ```text
-Object payload:  myCapa(a = 4, b = 5)   →  { a: 4, b: 5 }
-Array payload:   myCapa(4, 5)           →  [4, 5]
+com.bom.types.Integer          — primitive
+com.bom.types.String           — primitive
+com.myDomain.MyClass           — Object (named fields)
+Array<com.bom.types.Integer>   — Array of primitives
+Array<com.myDomain.MyClass>    — Array of objects
 ```
 
-The declared payload type must match the call syntax. A mismatch is a parse-time error.
+Unqualified type names are resolved against the domain's default type namespace (determined by the Block's `baseType`). Array shorthand: `Array<Integer>` resolves identically to `Array<com.bom.types.Integer>` in a domain that defaults to `com.bom.types`.
+
+### Payload Call Syntax
+
+The payload type determines how the Capability is called in Expressions:
+
+```text
+Primitive:        myCapa(5)                    →  single value
+Object payload:   myCapa(a = 4, b = 5)         →  named parameters (shorthand)
+                  myCapa({a: 4, b: 5})         →  object literal (equivalent)
+Array payload:    myCapa(4, 5)                 →  positional arguments
+                  myCapa([4, 5])               →  array literal (equivalent)
+```
+
+Named parameters `(a=4, b=5)` and object literal `({a:4, b:5})` produce identical AST nodes. The parser accepts both forms for Object payloads. A mismatch between declared `payloadType` and call syntax is a parse-time error.
+
+### Capability Value in Compositions
+
+Capabilities do not have an `address` attribute in their definition. The address or binding is set as the Capability's value on a child Block instance in a Composition — exactly like a Property value.
+
+Four value patterns are recognized:
+
+```text
+Absolute URI      — outbound routing to a fixed address
+  stud://domain/path
+
+Relative path     — context-resolved address (TBD: resolved against nearest App/Area Block)
+  /path/to/resource
+
+Capability linking — forward to another Capability (via Expression)
+  ${ @myService.otherCapa }
+  Valid for: AsyncOutbound → AsyncInbound (payload forwarded), Sync → Sync (payload + returnType must match)
+
+Dynamic address   — synchronous Capability call produces the address string
+  ${ @myService.getAddress() }
+  returnType of the Sync Capability must be String
+```
 
 ### Inheritance
 
 Capabilities are inherited via `baseType`, identical to Properties and Aggregations. A derived Block inherits all Capabilities of its base type and may add its own.
 
-### Synchronous Capabilities and Expressions
+### Sync Capabilities in Expressions
 
-Synchronous Capabilities are the only Capability type accessible via Expressions. They have no address and cannot be reached via messaging protocols. This constraint is current — future use cases may relax it.
+`Sync` Capabilities are the only Capability class callable within Expressions. `AsyncInbound` and `AsyncOutbound` Capabilities appear in Compositions as address/binding values only — they are not callable in Expressions directly.
 
-Inbound and Outbound Capabilities can be linked in a Composition via Expressions (see Expression System). Whether Capability linking is permitted in Presets is to be defined.
+Whether Capability linking in Presets is permitted is to be defined.
 
 ### Address Schemes
 
@@ -304,17 +344,17 @@ wot://     — Web of Things device hub
 
 ### Message Model
 
-BOM Core defines a minimal abstract message model for Inbound and Outbound Capabilities:
+BOM Core defines a minimal abstract message model for AsyncInbound and AsyncOutbound Capabilities:
 
 ```text
 Message
   address   — URI identifying the target capability
   headers   — key-value metadata
-    replyTo — optional; address to send a response to
-  payload   — Object or Array; structure declared by the Capability
+    replyTo — optional; address to send an asynchronous response to
+  payload   — structure declared by the Capability's payloadType
 ```
 
-All messaging is asynchronous. An Inbound Capability may reply using the `replyTo` header. BOM Core does not prescribe when or whether a response is sent.
+All async messaging is asynchronous. A Capability may reply using the `replyTo` header. BOM Core does not prescribe when or whether a response is sent.
 
 ---
 
@@ -333,7 +373,27 @@ Each child instance carries:
 type          — FQN of the child Block class
 id            — instance ID (used for nested identity: parentId::childId)
 version       — version of the referenced Block type
-members       — member values (literals or expressions) for Properties and Capabilities
+members       — member values for Properties and Capabilities (see below)
+```
+
+**Property values** are literals or Expressions:
+
+```text
+"groove"              — String literal
+2                     — Number literal
+true                  — Boolean literal
+[1, 8, 9]             — Array literal (pure literals only outside ${ })
+{x: 1, y: 0}         — Object literal (pure literals only outside ${ })
+${ size[0] + 1 }      — Expression
+```
+
+**Capability values** are addresses or bindings (see Capabilities → Capability Value in Compositions):
+
+```text
+stud://domain/path            — Absolute URI
+/path/to/resource             — Relative path (context-resolved, TBD)
+${ @myService.otherCapa }     — Capability linking
+${ @myService.getAddress() }  — Dynamic address
 ```
 
 ### Model Binding Context
@@ -405,18 +465,55 @@ BOM Core defines an expression system for dynamic member values. Expressions are
 
 ### Syntax
 
-Expressions are wrapped in `${ }`:
+Expressions are wrapped in `${ }`. The content inside `${ }` is **extended JSON** — standard JSON syntax extended with three additions: property references, model bindings, and bean calls.
 
 ```text
-${ myProperty }                            — Property of the current Block
-${ myProperty.x }                          — Object attribute of a Property
-${ #math.min(myProperty.x, myProperty.y) } — Built-in ServiceBlock capability
-${ @myBean.hello(z = myProperty.x) }       — User Bean: synchronous capability, Object payload
-${ @myBean.hello(myProperty.x, 5) }        — User Bean: synchronous capability, Array payload
-${ @myBean.hello2 }                        — Capability linking (see below)
-${ @myModel:/some/path }                   — Absolute Model binding path
-${ @myModel:relAttr }                      — Relative Model binding path
-${ @myBean.format(@myModel:attr, @myModel:/a/b/attr2) } — Combined: bean call with model bindings as arguments
+${ myProperty }                                    — Property reference
+${ myProperty.x }                                  — Attribute access
+${ myProperty[0] }                                 — Index access
+${ [size[0], size[1], 1] }                         — Array with expressions
+${ {x: size[0], y: 1} }                            — Object with expressions
+${ size[0] + 1 }                                   — Arithmetic
+${ size[0] > 2 ? "groove" : "standard" }           — Ternary
+${ #math.min(size[0], size[1]) }                   — Built-in ServiceBlock call
+${ @myBean.format(value = size[0], unit = "mm") }  — Bean call, named params (Object payload)
+${ @myBean.format({value: size[0], unit: "mm"}) }  — Bean call, object literal (equivalent)
+${ @myBean.compute(size[0], size[1]) }             — Bean call, positional (Array payload)
+${ @myBean.compute([size[0], size[1]]) }           — Bean call, array literal (equivalent)
+${ @myBean.otherCapa }                             — Capability linking (no parentheses)
+${ @myModel:/some/path }                           — Absolute Model binding
+${ @myModel:relAttr }                              — Relative Model binding
+${ @myBean.format(@myModel:attr, size[0]) }        — Bean call with mixed arguments
+```
+
+### Extended JSON Rules
+
+Inside `${ }`, the following extensions to JSON are permitted:
+
+```text
+Property reference:    size   size[0]   size.x        — unquoted, resolves to current Block member
+Model binding:         @myModel:/path   @myModel:rel  — @ prefix, : separator
+Bean call:             @myBean.capa(...)               — @ prefix, dot notation
+Built-in call:         #math.min(...)                  — # prefix, reserved namespace
+```
+
+Everything else follows JSON rules: strings in quotes, numbers as-is, booleans `true`/`false`, `null`, arrays `[...]`, objects `{...}`.
+
+Object and array literals may contain expressions as values:
+
+```text
+${ [size[0], size[1], 1] }              ✓  array with property references
+${ {x: size[0], y: @model:/y} }        ✓  object with property reference and model binding
+${ {label: @myBean.format(size[0])} }  ✓  object with bean call as value
+```
+
+Outside `${ }` (as raw attribute values), only pure JSON literals are allowed:
+
+```text
+size="[1, 8, 9]"          ✓  pure array literal
+config="{x: 1, y: 0}"    ✓  pure object literal
+size="${ [size[0], 1] }"  ✓  expression (dynamic)
+config="${ {x: size[0]} }" ✓  expression (dynamic)
 ```
 
 ### Expression Prefixes
@@ -424,64 +521,70 @@ ${ @myBean.format(@myModel:attr, @myModel:/a/b/attr2) } — Combined: bean call 
 ```text
 (no prefix)   — Property or member of the current Block instance
 #name         — Built-in ServiceBlock (defined in baseType hierarchy, reserved)
-@name         — User-defined Bean (bound via Aggregation in the current Block)
-```
-
-### Property Access
-
-```text
-${ myProperty }       — direct property value
-${ myProperty.x }     — attribute access on structured property (e.g. Size2D.x)
-${ myProperty[0] }    — index access on list property
+@name         — User-defined Bean (bound via Aggregation) or Model binding
 ```
 
 ### Built-in ServiceBlock Calls (`#`)
 
+Built-in ServiceBlocks are defined in the `baseType` hierarchy. Their Capabilities must be `Sync`. The `#` namespace is reserved — user-defined beans cannot use `#`.
+
 ```text
-${ #math.min(a, b) }       — synchronous capability, Array payload → primitive return
+${ #math.min(size[0], size[1]) }   — Sync Capability, Array payload → primitive return
 ${ #math.max(a, b) }
 ${ #string.format(tpl, v) }
 ```
 
-Built-in ServiceBlocks are defined in the `baseType` hierarchy. Their Capabilities must be `synchronous`. The `#` namespace is reserved — user-defined beans cannot use `#`.
-
 ### User Bean Calls (`@`)
 
-```text
-${ @myBean.myCapa(a = 4, b = 5) }   — Object payload: { a: 4, b: 5 }
-${ @myBean.myCapa(4, 5) }           — Array payload: [4, 5]
-```
+The referenced bean must be declared as an Aggregation with a `beanName` on the current Block. Only `Sync` Capabilities are callable in Expressions. The return value is used as the expression result.
 
-The referenced bean must be declared as an Aggregation on the current Block. The Capability must be `synchronous`. The return type is used as the expression value.
+```text
+Object payload — two equivalent forms:
+  ${ @myBean.capa(a = 4, b = size[0]) }    — named parameters
+  ${ @myBean.capa({a: 4, b: size[0]}) }    — object literal
+
+Array payload — two equivalent forms:
+  ${ @myBean.capa(4, size[0]) }            — positional arguments
+  ${ @myBean.capa([4, size[0]]) }          — array literal
+
+Primitive payload:
+  ${ @myBean.capa(size[0]) }               — single value
+
+Mixed arguments (passing model binding as argument):
+  ${ @myBean.format(@myModel:attr, size[0]) }
+  ${ @myBean.format(@myModel:/abs/path, "mm") }
+```
 
 ### Capability Linking
 
 ```text
-${ @myBean.myOutbound }
+${ @myBean.myOutbound }   — no parentheses; links without calling
 ```
 
-Links an Outbound Capability of a Bean to a member of the current Block. The target member must be an Inbound Capability. The payload is forwarded without transformation. This form is only valid when the target is a Capability — using it on a Property is a parse-time error.
+Links an `AsyncOutbound` Capability of a Bean to an `AsyncInbound` Capability of the current Block. The payload is forwarded without transformation. Both Capabilities must have compatible `payloadType`.
 
-Whether Capability linking is permitted in Presets is to be defined.
+For `Sync → Sync` linking: payload type and return type must both match.
+
+This form is only valid when the target member is a Capability — using it on a Property is a parse-time error. Whether Capability linking is permitted in Presets is to be defined.
 
 ### Model Binding
 
 ```text
-${ @myModel:/absolute/path }      — absolute path from Model root
-${ @myModel:relativeAttr }        — relative path, resolved against binding context
+${ @myModel:/absolute/path }   — absolute path from Model root
+${ @myModel:relativeAttr }     — relative path, resolved against binding context
 ```
 
 The binding context is established by the parent Aggregation (see Compositions → Model Binding Context). Relative paths are only valid when a binding context exists — otherwise a parse-time error.
 
-### Ternary and Arithmetic
+### Arithmetic and Ternary
 
 ```text
-${ myProperty > 2 ? "groove" : "standard" }
 ${ myProperty.x + myProperty.y - 1 }
 ${ myProperty.z * 2 }
+${ myProperty > 2 ? "groove" : "standard" }
 ```
 
-Standard arithmetic (`+`, `-`, `*`, `/`, `%`) and comparison (`>`, `<`, `==`, `!=`, `>=`, `<=`) operators are supported.
+Operators: arithmetic `+  -  *  /  %`, comparison `>  <  ==  !=  >=  <=`.
 
 ### Registry
 
@@ -497,13 +600,15 @@ Registry scope is per Composition. It is initialized on entry and not accessible
 ### Scope Rules
 
 ```text
-- Direct property access: current Block instance only
+- Property references: current Block instance only (no prefix)
 - No access to parent, grandparent, or sibling Block properties
 - Direction is always parent → child (top-down only)
 - Registry scope is per Composition
 - @bean references: only beans declared as Aggregations on the current Block
 - #built-in references: always available (inherited via baseType)
 - Model binding context: inherited from parent Aggregation
+- Array/Object literals outside ${ }: pure JSON only (no expressions)
+- Array/Object literals inside ${ }: expressions allowed as values
 ```
 
 ### Expression AST

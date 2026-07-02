@@ -196,59 +196,82 @@ Associations have no ownership relationship and do not affect geometry compilati
 
 ## Capabilities
 
-Capabilities describe how a Block communicates — externally via messaging or internally via synchronous calls in Expressions. Capabilities are Members and share the namespace with Properties, Aggregations, and Associations.
+Capabilities describe how a Block communicates — externally via async messaging or internally via synchronous calls in Expressions. Capabilities are Members and share the namespace with Properties, Aggregations, and Associations.
 
-Three Capability types exist:
+Like Properties, Capabilities are declared with a name and a class (FQN). Their value in a Composition is the address or binding — set as an attribute on the child instance, exactly like a Property value.
 
-### Inbound Capability
+> **Capability package TBD** — placeholder `com.bom.capability.*`. Candidate: `bom.foundation`.
 
-Receives a message from an external sender. Activated by an incoming message at a registered address. Asynchronous.
+### AsyncInbound
+
+Receives a message from an external sender. Asynchronous.
 
 ```text
 name         — camelCase member name (unique within the Block's member namespace)
-type         — "inbound"
-address      — path pattern; path variables use {variableName} syntax
-payloadType  — "object" | "array"
-payload      — declared field structure (named for object, positional for array)
+class        — com.bom.capability.AsyncInbound
+payloadType  — declared payload type (see Payload Types)
+returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
 documentation
 ```
 
-### Outbound Capability
+### AsyncOutbound
 
 Sends a message to an external receiver. Triggered by the Block in response to domain-specific conditions. Asynchronous.
 
 ```text
 name         — camelCase member name
-type         — "outbound"
-address      — receiver address as a protocol URI (e.g. stud://local/blocks/resized)
-payloadType  — "object" | "array"
-payload      — declared field structure
+class        — com.bom.capability.AsyncOutbound
+payloadType  — declared payload type
+returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
 documentation
 ```
 
-### Synchronous Capability
+### Sync
 
-Called directly within an Expression. Has a return value. No address. Not reachable via messaging protocols. This constraint is current — future use cases may relax it.
+Called directly within an Expression. Has a return value. No address. Not reachable via async messaging. This constraint is current — future use cases may relax it.
 
 ```text
 name         — camelCase member name
-type         — "synchronous"
-payloadType  — "object" | "array"
-payload      — declared field structure
-returnType   — FQN of the return type (primitive, Object, or Array)
+class        — com.bom.capability.Sync
+payloadType  — declared payload type
+returnType   — required; FQN of the return type
 documentation
 ```
 
-### Payload Call Syntax
-
-The call syntax in Expressions determines whether the payload is Object or Array:
+### Payload Types
 
 ```text
-Object payload:  myCapa(fieldA = 1, fieldB = 2)  →  { fieldA: 1, fieldB: 2 }
-Array payload:   myCapa(1, 2)                    →  [1, 2]
+com.bom.types.Integer            — primitive
+com.bom.types.String             — primitive
+com.myDomain.MyClass             — Object (named fields)
+Array<com.bom.types.Integer>     — Array of primitives
+Array<com.myDomain.MyClass>      — Array of objects
 ```
 
-A mismatch between declared `payloadType` and call syntax is a parse-time error.
+Unqualified names resolve against the domain's default type namespace (determined by the Block's `baseType`). For MachineBlocks that is `com.machineblocks.types.*`; for primitives `com.bom.types.*`.
+
+### Payload Call Syntax
+
+```text
+Primitive:        myCapa(size[0])                  — single value
+Object payload:   myCapa(a = 4, b = size[0])       — named parameters (shorthand)
+                  myCapa({a: 4, b: size[0]})       — object literal (equivalent)
+Array payload:    myCapa(4, size[0])               — positional arguments
+                  myCapa([4, size[0]])             — array literal (equivalent)
+```
+
+Named parameters and object literal are interchangeable for Object payloads. A mismatch between declared `payloadType` and call syntax is a parse-time error.
+
+### Capability Value in Compositions
+
+The address or binding is the Capability's value on a child Block instance:
+
+```text
+stud://domain/path                  — Absolute URI (AsyncOutbound routing)
+/path/to/resource                   — Relative path (context-resolved, TBD)
+${ @myService.otherCapa }           — Capability linking (no parentheses)
+${ @myService.getAddress() }        — Dynamic address (Sync returnType must be String)
+```
 
 ### Inheritance
 
@@ -256,14 +279,14 @@ Capabilities are inherited via `baseType`, identical to Properties and Aggregati
 
 ### MachineBlocks Built-in ServiceBlocks
 
-Built-in ServiceBlocks are defined in the `com.machineblocks.core.Block` base type and accessible in all MachineBlocks Blocks via the `#` prefix:
+Built-in ServiceBlocks are defined in `com.machineblocks.core.Block` and accessible in all MachineBlocks Blocks via the `#` prefix:
 
 ```text
-#math    — synchronous capabilities: min, max, ceil, floor, abs, round, ...
-#string  — synchronous capabilities: format, trim, padStart, ...
+#math    — Sync capabilities: min, max, ceil, floor, abs, round, ...
+#string  — Sync capabilities: format, trim, padStart, ...
 ```
 
-These are shared across all MachineBlocks Blocks and cannot be overridden. The `#` namespace is reserved.
+Shared across all MachineBlocks Blocks. Cannot be overridden. The `#` namespace is reserved.
 
 ---
 
@@ -333,19 +356,28 @@ Wall._parts:
 
 ## Expression System
 
-### Expression Roots
+### Expression Syntax
 
-All expressions are bound to named roots. Direct variable access without a qualifying root is not permitted.
+Inside `${ }`, the content is **extended JSON** — standard JSON extended with property references, model bindings, and bean calls. See `00_bom_core.md` — Expression System for the full specification.
 
 ```text
-myProperty          — Property of the current Block instance (no prefix)
-myProperty.x        — Attribute access on a structured Property
-#builtIn.capa(...)  — Built-in ServiceBlock (defined in baseType, reserved prefix)
-@bean.capa(...)     — User-defined Bean (declared as Aggregation with beanName)
-@model:/path        — Absolute Model binding path
-@model:relPath      — Relative Model binding path (requires binding context)
-registry.name       — Shared registry within the current Composition
+myProperty            — Property reference (no prefix)
+myProperty.x          — Attribute access
+myProperty[0]         — Index access
+[size[0], size[1], 1] — Array literal with expressions
+{x: size[0], y: 1}    — Object literal with expressions
+#math.min(a, b)       — Built-in Sync Capability call
+@bean.capa(a=4, b=size[0])     — Named parameters (Object payload shorthand)
+@bean.capa({a: 4, b: size[0]}) — Object literal (equivalent)
+@bean.capa(4, size[0])         — Positional arguments (Array payload)
+@bean.capa                     — Capability linking (no parentheses)
+@model:/absolute/path          — Absolute Model binding
+@model:relAttr                 — Relative Model binding
+size[0] + 1                    — Arithmetic
+size[0] > 2 ? "a" : "b"       — Ternary
 ```
+
+**Outside `${ }`** (raw attribute values): pure JSON only — no property references, no model bindings. `[1, 8, 9]` and `{x: 1, y: 0}` are valid; `[size[0], 1]` is not.
 
 ### Available Operations
 
@@ -353,7 +385,6 @@ registry.name       — Shared registry within the current Composition
 Arithmetic:   +  -  *  /  %
 Comparison:   >  <  ==  !=  >=  <=
 Ternary:      condition ? valueIfTrue : valueIfFalse
-Array:        [a, b, c]  expr[0]
 ```
 
 ### Expression Scope Rules
