@@ -484,6 +484,141 @@ When a child instance's Aggregation is bound to a ServiceBlock Model, all childr
 
 ---
 
+## BML Directives
+
+BML Directives are special attributes in the `bml:` namespace that control the structure and flow of a Composition. They are not Block properties — they are instructions to the BML processor. Whether a directive is pre-processed at compile time or translated 1:1 into target-specific constructs is the BlockProcessor's decision.
+
+The `bml:` prefix is the canonical namespace. It is analogous to `th:` in Thymeleaf.
+
+### `bml:each` — Loop
+
+Repeats a Block instance for each element in a collection or for a numeric count. An optional second variable provides iteration status:
+
+```xml
+<!-- Numeric loop: i runs from 0 to n-1 -->
+<bricks:StandardBrick
+    bml:each="i : ${ numberOfSamples }"
+    offset="${ [2 * i, 0, 0] }" />
+
+<!-- Numeric loop with stat -->
+<bricks:StandardBrick
+    bml:each="i, stat : ${ numberOfSamples }"
+    offset="${ [2 * stat.index, 0, 0] }"
+    baseCutoutType="${ stat.last ? 'groove' : 'none' }" />
+
+<!-- Collection loop -->
+<bricks:StandardBrick
+    bml:each="item, stat : ${ @myModel:/items }"
+    size="${ item.size }"
+    offset="${ [stat.index * 2, 0, 0] }" />
+```
+
+**Stat variables:**
+
+```text
+stat.index   — 0-based position
+stat.count   — 1-based position
+stat.size    — total count
+stat.first   — boolean
+stat.last    — boolean
+stat.even    — boolean (based on 0-based index)
+stat.odd     — boolean (based on 0-based index)
+```
+
+For numeric loops, the loop variable `i` equals `stat.index`. `stat.size` equals the numeric value. The stat variable is optional — omit it when not needed.
+
+### `bml:if` and `bml:unless` — Conditional
+
+Includes a Block instance only when the condition is true (`bml:if`) or false (`bml:unless`):
+
+```xml
+<bricks:StandardBrick
+    bml:if="${ numberOfSamples > 3 }"
+    size="[2, 2, 1]" />
+
+<bricks:StandardBrick
+    bml:unless="${ compact }"
+    size="[4, 4, 1]" />
+```
+
+### `bml:block` — Virtual Container
+
+A container that produces no Block output itself but allows directives to apply to a group of child Blocks:
+
+```xml
+<bml:block bml:each="i, stat : ${ numberOfSamples }">
+    <Calibrator.Base
+        offset="${ [0, i * -3, 0] }"
+        label="${ rows[i].label }" />
+    <Calibrator.StudDiameter
+        offset="${ [0, i * -3, 0] }" />
+</bml:block>
+
+<bml:block bml:if="${ showOptional }">
+    <ac:Corner offset="[0, 0, 0]" />
+    <ac:Corner offset="[12, 0, 0]" />
+</bml:block>
+```
+
+### `bml:id` — Dynamic ID
+
+Sets the instance ID from an Expression:
+
+```xml
+<bricks:StandardBrick
+    bml:each="i : ${ numberOfSamples }"
+    bml:id="${ 'sample_' + i }"
+    offset="${ [2 * i, 0, 0] }" />
+```
+
+---
+
+## Sub-Blocks
+
+Sub-Blocks are Block definitions nested inside a parent Block definition. They are analogous to static inner classes in Java — they belong to the parent Block conceptually and share its FQN prefix.
+
+Sub-Blocks are declared in a `<subBlocks>` section within the parent Block definition. Each Sub-Block is a full Block definition with its own properties, aggregations, capabilities, and composition.
+
+### FQN Convention
+
+```text
+Parent:    com.machineblocks.calibration.Calibrator
+Sub-Block: com.machineblocks.calibration.Calibrator.Base
+           com.machineblocks.calibration.Calibrator.StudDiameter
+```
+
+The Sub-Block name is appended with a dot separator. Sub-Blocks can be nested recursively:
+
+```text
+com.machineblocks.calibration.Calibrator.Base.Strip
+```
+
+### SCAD Mapping
+
+Sub-Block FQNs map to SCAD module names following the same convention as regular Blocks, using `__` as separator:
+
+```text
+com.machineblocks.calibration.Calibrator.Base
+→  mb_block__com__machineblocks__calibration__Calibrator__Base
+```
+
+### Visibility
+
+Sub-Blocks are full BOM objects with their own FQN. They can be referenced from outside the parent Block via their full FQN. However, the naming convention makes their belonging to the parent clear — external use is possible but uncommon.
+
+### Functions
+
+Global functions within a Block follow the `func` convention:
+
+```text
+com.machineblocks.calibration.Calibrator → func → round1
+→  mb_block__com__machineblocks__calibration__Calibrator__func__round1
+```
+
+Functions are declared alongside Sub-Blocks and are Block-scoped utilities — not Capabilities. They are target-specific and declared in the `<functions>` section.
+
+---
+
 ## Preset
 
 A Preset is a named, concrete property set for a specific Block type. Presets apply only to Properties — not to Aggregations, Associations, or Capabilities.

@@ -457,6 +457,252 @@ Registry scope is per Composition.
 
 ---
 
+## BML Directives
+
+BML Directives are special attributes in the `bml:` namespace that control structure and flow within a Composition. They are not Block properties — they are BML-level instructions. Whether a directive is pre-processed at compile time or translated into target-specific constructs is the BlockProcessor's decision.
+
+### `bml:each` — Loop
+
+```xml
+<!-- Numeric loop: i runs from 0 to numberOfSamples-1 -->
+<bricks:StandardBrick
+    bml:each="i : ${ numberOfSamples }"
+    offset="${ [2 * i, 0, 0] }"
+    studDiameterAdjustment="${ valueStart + i * valueStep }" />
+
+<!-- Numeric loop with stat variable -->
+<bricks:StandardBrick
+    bml:each="i, stat : ${ numberOfSamples }"
+    offset="${ [2 * stat.index, 0, 0] }"
+    baseCutoutType="${ stat.last ? 'groove' : 'none' }" />
+
+<!-- Collection loop from model -->
+<bricks:StandardBrick
+    bml:each="item, stat : ${ @myModel:/items }"
+    size="${ item.size }"
+    offset="${ [stat.index * 2, 0, 0] }" />
+```
+
+**Stat variables:**
+
+```text
+stat.index   — 0-based position
+stat.count   — 1-based position
+stat.size    — total count
+stat.first   — boolean
+stat.last    — boolean
+stat.even    — boolean (0-based)
+stat.odd     — boolean (0-based)
+```
+
+For numeric loops, `i` equals `stat.index`. `stat.size` equals the numeric value. The stat variable is optional.
+
+### `bml:if` and `bml:unless` — Conditional
+
+```xml
+<!-- Include only when condition is true -->
+<bricks:StandardBrick
+    bml:if="${ numberOfSamples > 3 }"
+    size="[2, 2, 1]" />
+
+<!-- Include only when condition is false -->
+<bricks:StandardBrick
+    bml:unless="${ compact }"
+    size="[4, 4, 1]" />
+```
+
+### `bml:block` — Virtual Container
+
+Produces no Block output itself — groups child Blocks for shared directives:
+
+```xml
+<!-- Loop over a group of Blocks -->
+<bml:block bml:each="i, stat : ${ numberOfSamples }">
+    <Calibrator.Base
+        offset="${ [0, i * -3, 0] }"
+        label="${ rows[i].label }"
+        valueStart="${ rows[i].valueStart }"
+        valueStep="${ rows[i].valueStep }" />
+    <Calibrator.StudDiameter
+        offset="${ [0, i * -3, 0] }"
+        valueStart="${ rows[i].valueStart }"
+        valueStep="${ rows[i].valueStep }" />
+</bml:block>
+
+<!-- Conditional group -->
+<bml:block bml:if="${ showCorners }">
+    <ac:Corner offset="[0, 0, 0]"  direction="West" />
+    <ac:Corner offset="[12, 0, 0]" direction="East" />
+</bml:block>
+```
+
+### `bml:id` — Dynamic ID
+
+```xml
+<bricks:StandardBrick
+    bml:each="i : ${ numberOfSamples }"
+    bml:id="${ 'sample_' + i }"
+    offset="${ [2 * i, 0, 0] }" />
+```
+
+---
+
+## Sub-Blocks
+
+Sub-Blocks are Block definitions nested inside a parent Block. They are analogous to static inner classes in Java — they belong to the parent Block conceptually and share its FQN prefix. Sub-Blocks are declared in a `<subBlocks>` section within the parent `<block>` document.
+
+### FQN Convention
+
+```text
+Parent:    com.machineblocks.calibration.Calibrator
+Sub-Block: com.machineblocks.calibration.Calibrator.Base
+           com.machineblocks.calibration.Calibrator.StudDiameter
+```
+
+Sub-Blocks can be nested recursively:
+```text
+com.machineblocks.calibration.Calibrator.Base.Strip
+```
+
+### Calibrator Example
+
+```xml
+<block xmlns="http://www.machineblocks.com/mbml/block.xsd">
+
+  <name>Calibrator</name>
+  <fullQualifiedName>com.machineblocks.calibration.Calibrator</fullQualifiedName>
+  <version>1.0.0</version>
+
+  <properties>
+    <property name="numberOfSamples" type="Integer" defaultValue="5" />
+    <property name="font"            type="String"  defaultValue="Liberation Sans" />
+    <property name="fontSize"        type="Float"   defaultValue="3" />
+    <property name="labelSize"       type="Integer" defaultValue="5" />
+    <property name="valueStart"      type="Float"   defaultValue="0.0" />
+    <property name="valueStep"       type="Float"   defaultValue="0.1" />
+  </properties>
+
+  <subBlocks>
+
+    <!-- Sub-Block: Calibrator.Base -->
+    <!-- FQN: com.machineblocks.calibration.Calibrator.Base -->
+    <block name="Base">
+      <properties>
+        <property name="label"           type="String"  defaultValue="" />
+        <property name="numberOfSamples" type="Integer" defaultValue="5" />
+        <property name="valueStart"      type="Float"   defaultValue="0" />
+        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+        <property name="font"            type="String"  defaultValue="Liberation Sans" />
+        <property name="fontSize"        type="Float"   defaultValue="3" />
+        <property name="labelSize"       type="Integer" defaultValue="5" />
+      </properties>
+      <composition>
+        <!-- Base strip -->
+        <bricks:StandardBrick
+            id="strip"
+            size="${ [2 * numberOfSamples + 1, 1, 1] }"
+            baseCutoutType="none"
+            studs="false" />
+
+        <!-- Label block -->
+        <bricks:StandardBrick
+            id="label"
+            size="${ [labelSize, 1, 1] }"
+            offset="${ [0, 1, 0] }"
+            text="${ label }"
+            textFont="${ font }"
+            textSize="${ fontSize }"
+            baseCutoutType="none"
+            studs="false" />
+
+        <!-- Value label blocks -->
+        <bricks:StandardBrick
+            bml:each="i, stat : ${ numberOfSamples }"
+            bml:id="${ 'val_' + stat.index }"
+            size="[1, 1, 1]"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
+            text="${ #math.round1(valueStart + i * valueStep) }"
+            textFont="${ font }"
+            textSize="${ fontSize }"
+            baseCutoutType="none"
+            studs="false" />
+      </composition>
+    </block>
+
+    <!-- Sub-Block: Calibrator.StudDiameter -->
+    <!-- FQN: com.machineblocks.calibration.Calibrator.StudDiameter -->
+    <block name="StudDiameter">
+      <properties>
+        <property name="numberOfSamples" type="Integer" defaultValue="5" />
+        <property name="valueStart"      type="Float"   defaultValue="0" />
+        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+      </properties>
+      <composition>
+        <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 's_' + i }"
+            size="[1, 1, 1]"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0] }"
+            studDiameterAdjustment="${ valueStart + i * valueStep }"
+            baseCutoutType="none" />
+      </composition>
+    </block>
+
+  </subBlocks>
+
+  <composition>
+    <!-- Four calibration rows via bml:block loop -->
+    <bml:block bml:each="row, stat : ${ rows }">
+      <Calibrator.Base
+          bml:id="${ 'base_' + stat.index }"
+          offset="${ [0, stat.index * -3, 0] }"
+          label="${ row.label }"
+          valueStart="${ row.valueStart }"
+          valueStep="${ row.valueStep }"
+          numberOfSamples="${ numberOfSamples }"
+          font="${ font }"
+          fontSize="${ fontSize }"
+          labelSize="${ labelSize }" />
+      <Calibrator.StudDiameter
+          bml:id="${ 'samples_' + stat.index }"
+          offset="${ [0, stat.index * -3, 0] }"
+          numberOfSamples="${ numberOfSamples }"
+          valueStart="${ row.valueStart }"
+          valueStep="${ row.valueStep }" />
+    </bml:block>
+  </composition>
+
+</block>
+```
+
+### Visibility
+
+Sub-Blocks have their own FQN and can be referenced from outside the parent Block via full FQN. External use is possible but uncommon — the naming convention makes their belonging clear.
+
+### Functions
+
+Target-specific helper functions are declared in a `<functions>` section alongside Sub-Blocks. Functions use the `func` naming convention:
+
+```text
+com.machineblocks.calibration.Calibrator → func → round1
+→  mb_block__com__machineblocks__calibration__Calibrator__func__round1
+```
+
+```xml
+<functions>
+  <function name="round1" language="scad">
+    <![CDATA[
+      function mb_block__com__machineblocks__calibration__Calibrator__func__round1(x) =
+          round(x * 10) / 10;
+    ]]>
+  </function>
+</functions>
+```
+
+Functions are target-specific — a function declared with `language="scad"` is only emitted by the SCAD BlockProcessor. Other targets ignore it or provide their own implementation.
+
+---
+
 ## MachineBlocks Set Definition
 
 A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`. It uses the standard `<block>` document type — there is no separate root element for Sets.
