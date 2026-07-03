@@ -75,12 +75,33 @@ Instances within a Composition are identified by an instance ID. Nested IDs are 
 Format:    <instanceId>::<partId>::<subPartId>
 
 Examples:
-  00001
-  00001::bottom
-  00001::bottom::inner
+  wall                         — explicit, top-level
+  wall::bottom                 — explicit, nested
+  wall::bottom::inner          — explicit, deeply nested
+  a3f7c2                       — auto-generated, top-level
+  wall::a3f7c2                 — auto-generated, nested under explicit parent
 ```
 
-The FQN is the fallback identifier when no explicit instance ID is present.
+**Explicit IDs** are defined by the author in the Composition. They are stable, human-readable, and the preferred form for any instance that needs to be referenced externally (e.g. `Place.blockId` in a MachineBlocks Set).
+
+**Auto-generated IDs** are assigned when no explicit ID is given. They are short deterministic hashes — 6 hex characters derived from the Block's FQN, its position in the Composition, and its parent ID:
+
+```text
+Hash inputs:
+  - FQN of the Block type
+  - Index in the Composition
+  - Parent instance ID
+
+Result:  6 hex characters  (e.g. "a3f7c2")
+         16^6 = ~16.7 million possibilities — collision probability negligible
+         for typical Composition sizes (2–50 children)
+```
+
+Auto-generated IDs are deterministic — the same Block at the same position always produces the same ID across compile runs. This keeps generated output diffs clean.
+
+Auto-generated IDs are not "private" — they may appear in generated output (e.g. as SCAD instance IDs). They are simply not intended for external cross-document references. If a collision occurs at 6 characters, the hash length is extended automatically.
+
+Not every child instance requires an ID in BML. If omitted, the compiler assigns an auto-generated ID. If an instance must be referenced by another element (e.g. a `Place` referencing a block by ID), an explicit ID is required — the compiler emits a diagnostic error if a reference targets an auto-generated ID.
 
 ---
 
