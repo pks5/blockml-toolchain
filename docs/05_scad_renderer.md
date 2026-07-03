@@ -499,7 +499,7 @@ Hidden section (`/* [Hidden] */`) contains derived variables that combine custom
 
 ## Preset File Rendering
 
-A `<blockPresets>` document is rendered to an OpenSCAD Customizer JSON file:
+A `<blockPresets>` document is rendered to an OpenSCAD Customizer JSON file. The Customizer JSON uses the Preset **name** as the key — it is the human-readable label shown in the OpenSCAD UI:
 
 ```json
 {
@@ -509,6 +509,10 @@ A `<blockPresets>` document is rendered to an OpenSCAD Customizer JSON file:
       "size": "[2, 4, 3]",
       "baseColor": "#EAC645",
       "studs": "true"
+    },
+    "Brick 1x1": {
+      "size": "[1, 1, 3]",
+      "baseColor": "#EAC645"
     }
   }
 }

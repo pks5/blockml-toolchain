@@ -282,8 +282,8 @@ Thumbnails are generated automatically as part of `bom compile scad` when the in
 For each preset in the compiled `<blockName>.json`:
 
 ```text
-1. Resolve preset name → kebab-case filename
-     "Brick 2x4"  →  Wall__brick-2x4
+1. Use preset id directly as filename component (already kebab-case)
+     id: "brick-2x4"  →  Wall__brick-2x4
 
 2. Render PNG via OpenSCAD:
      openscad
@@ -303,15 +303,18 @@ For each preset in the compiled `<blockName>.json`:
 
 Existing thumbnails are always overwritten without prompting.
 
-### Preset Name → Filename
+### Preset ID → Filename
+
+Thumbnails use the Preset **id** directly — no transformation needed:
 
 ```text
-Rule:    lowercase, spaces → "-", strip special characters
-Example: "Brick 2x4"  →  "brick-2x4"
+Preset id:  brick-2x4
+Filename:   Wall__brick-2x4.webp
 
-Full filename:  {BlockName}__{preset-kebab-name}.webp
-Example:        Wall__brick-2x4.webp
+Full pattern:  {BlockName}__{preset-id}.webp
 ```
+
+The `id` is kebab-case by convention. No transformation step required. The Preset `name` ("Brick 2x4") is used only in the SCAD Customizer JSON and editor UI — never in filenames.
 
 ### Output Location
 

@@ -266,10 +266,10 @@ Multiple block classes may exist in one SCAD file. The file is named after the p
 
 ### Thumbnail File Names (MachineBlocks domain)
 
-Thumbnails are generated per preset. The naming convention is:
+Thumbnails are named using the Preset **id** directly — no transformation needed:
 
 ```text
-{BlockName}__{preset-name-in-kebab-case}.webp
+{BlockName}__{preset-id}.webp
 
 Examples:
   Wall__brick-2x4.webp
@@ -277,7 +277,7 @@ Examples:
   StandardBrick__standard-2x4-yellow.webp
 ```
 
-Preset name transformation: lowercase, spaces replaced with `-`, special characters stripped.
+The Preset `id` is kebab-case by convention. The Preset `name` ("Brick 2x4") is used in the SCAD Customizer JSON and editor UI only — never in filenames.
 
 ### Instance IDs
 

@@ -476,33 +476,40 @@ version           — semantic version of this Presets document
 presets           — list of named property sets
 ```
 
+Each Preset has:
+
+```text
+id    — stable kebab-case identifier (used for references, thumbnail filenames)
+name  — human-readable display name (used in SCAD Customizer, editor UI)
+```
+
+The `id` is the canonical reference key. The `name` is display-only and may change without breaking references. The `id` must be unique within a Presets document.
+
 A Presets document has its own FQN and is a first-class BOM object. Multiple Presets documents can target the same Block type — from different authors or packages.
 
 ### Preset Reference Syntax
 
-Presets are referenced using the `::` separator — consistent with the instance ID convention:
+Presets are referenced by `id` using the `::` separator:
 
 ```text
-{PresetsDocumentFQN}::{PresetName}
+{PresetsDocumentFQN}::{preset-id}
 
 Example:
-  com.machineblocks.bricks.StandardBrickPresets::Brick 2x4
+  com.machineblocks.bricks.StandardBrickPresets::brick-2x4
 ```
 
-This reference is always fully qualified. There is no implicit lookup by preset name alone.
+This reference is always fully qualified and ID-based. Renaming a Preset's `name` never breaks references.
 
 ### Preset in Compositions
-
-A child Block instance in a Composition may reference a Preset. Inline property values override Preset values:
 
 ```xml
 <!-- Preset only -->
 <bricks:StandardBrick
-    preset="com.machineblocks.bricks.StandardBrickPresets::Brick 2x4" />
+    preset="com.machineblocks.bricks.StandardBrickPresets::brick-2x4" />
 
 <!-- Preset + inline override: baseColor overrides the Preset value -->
 <bricks:StandardBrick
-    preset="com.machineblocks.bricks.StandardBrickPresets::Brick 2x4"
+    preset="com.machineblocks.bricks.StandardBrickPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
 
