@@ -15,51 +15,43 @@ For the MachineBlocks V3 SCAD Library specification see `domains/machineblocks/r
 
 ## Overview
 
-The SCAD Renderer is implemented in `@machineblocks/scad-renderer`. It is browser and Node compatible — no Node-only APIs.
+The MachineBlocks V3 SCAD Target is implemented in `@machineblocks/machineblocks-v3-scad-target`. It is browser and Node compatible — no Node-only APIs.
 
-The renderer is an **Atomic Target** registered with `@bom/compiler` under the name `"scad"`. It has no knowledge of BML syntax. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the renderer logic.
+The target uses `@bom/engine-compiler` as its RenderEngine. It registers under the name `"machineblocks-v3-scad"` and contains two BlockProcessors. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the processor logic.
 
 ### V1 Scope
 
-The SCAD Renderer V1 supports exactly two base types:
+The MachineBlocks V3 SCAD Target V1 supports exactly two base types:
 
 ```text
-com.machineblocks.core.Block  →  ScadBlockRenderer  (standard SCAD block module)
-com.machineblocks.core.Set    →  ScadSetRenderer    (STEPS-based set with view submodules)
+com.machineblocks.core.Block  →  ScadBlockProcessor  (standard SCAD block module)
+com.machineblocks.core.Set    →  ScadSetProcessor    (STEPS-based set with view submodules)
 ```
 
-All user-defined Block types that inherit from `com.machineblocks.core.Block` or `com.machineblocks.core.Set` are handled by the same two renderers respectively. There are no per-FQN Block Renderers in V1.
+All user-defined Block types that inherit from `com.machineblocks.core.Block` or `com.machineblocks.core.Set` are handled by the same two processors respectively.
 
 ---
 
 ## Target Registration
 
-The SCAD Renderer registers itself as an Atomic Target:
-
 ```typescript
 import { registerTarget } from "@bom/compiler";
-import { ScadTarget } from "@machineblocks/scad-renderer";
+import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
 
-registerTarget(new ScadTarget());
+registerTarget(new MachineBlocksV3ScadTarget());
 ```
 
-The `ScadTarget` implements `BomTarget`:
-
 ```typescript
-class ScadTarget implements BomTarget {
-  name = "scad"
+class MachineBlocksV3ScadTarget implements RenderTarget {
+  name = "machineblocks-v3-scad"
+  engine = new CompilerEngine()
 
-  supportsBaseType(fqn: string): boolean {
-    return isSubtypeOf(fqn, "com.machineblocks.core.Block")
-        || isSubtypeOf(fqn, "com.machineblocks.core.Set")
-  }
+  processors = [
+    new ScadSetProcessor(),    // checked first — more specific
+    new ScadBlockProcessor()   // fallback for all com.machineblocks.core.Block
+  ]
 
-  getBlockRenderer(fqn: string): BlockRenderer {
-    if (isSubtypeOf(fqn, "com.machineblocks.core.Set")) {
-      return new ScadSetRenderer()
-    }
-    return new ScadBlockRenderer()
-  }
+  delegates = []
 }
 ```
 

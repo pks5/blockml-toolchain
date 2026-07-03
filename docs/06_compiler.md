@@ -14,16 +14,19 @@ For the SCAD Renderer see `05_scad_renderer.md`.
 
 ## Overview
 
-The compiler is implemented across four packages:
+The compiler is implemented across these packages:
 
 ```text
-@bom/parser                    — parse BML → BOM
-@bom/core                      — BOM object model, validation
-@bom/compiler                  — Facade + Target Registry
-@machineblocks/scad-renderer   — SCAD Render Target (Atomic)
+@bom/parser                              — parse BML → BOM
+@bom/core                                — BOM object model, validation
+@bom/compiler                            — Facade + Target Registry
+@bom/engine-compiler                     — CompilerEngine
+@bom/engine-template                     — TemplateEngine
+@bom/engine-llm                          — LlmEngine
+@machineblocks/machineblocks-v3-scad-target  — RenderTarget + BlockProcessors
 ```
 
-`@bom/parser`, `@bom/core`, and `@bom/compiler` are browser and Node compatible. No Node-only APIs in any of these packages. Render Target packages follow the same constraint.
+`@bom/parser`, `@bom/core`, and `@bom/compiler` are browser and Node compatible. No Node-only APIs in any of these packages. RenderTarget and RenderEngine packages follow the same constraint.
 
 ---
 
@@ -184,73 +187,84 @@ Dispatches each Block in the BOM to its Block Renderer within the resolved Targe
 
 ## Target Registry
 
-The Target Registry is the central registration point for all Render Targets. It is part of `@bom/compiler`.
+The Target Registry is the central registration point for all RenderTargets. It is part of `@bom/compiler`.
 
 ### Registration
 
-Targets are registered before compilation begins. In the CLI, registration happens at startup based on installed Target packages:
+RenderTargets are registered before compilation begins:
 
 ```typescript
 import { registerTarget } from "@bom/compiler";
-import { ScadTarget } from "@machineblocks/scad-renderer";
+import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
 
-registerTarget(new ScadTarget());
+registerTarget(new MachineBlocksV3ScadTarget());
 ```
 
-### Target Interface
+### Interfaces
 
 ```typescript
-interface BomTarget {
-  name:                    string
-  supportsBaseType(fqn:    string): boolean
-  getBlockRenderer(fqn:    string): BlockRenderer
+interface RenderTarget {
+  name:       string
+  engine?:    RenderEngine
+  processors: BlockProcessor[]
+  delegates:  RenderTarget[]
 }
 
-interface BlockRenderer {
-  render(block: Block, context: RenderContext): RenderOutput
+interface BlockProcessor {
+  baseType: string
+  process(block: Block, engine: RenderEngine): RenderOutput
 }
-```
 
-### Atomic vs. Composite Targets
-
-An **Atomic Target** handles one domain. It declares a set of supported `baseType` FQNs and returns a Block Renderer for each:
-
-```typescript
-class ScadTarget implements BomTarget {
-  name = "scad"
-
-  supportsBaseType(fqn: string): boolean {
-    return fqn === "com.machineblocks.core.Block"
-        || fqn === "com.machineblocks.core.Set"
-        || isSubtypeOf(fqn, "com.machineblocks.core.Block")
-  }
-
-  getBlockRenderer(fqn: string): BlockRenderer {
-    if (isSubtypeOf(fqn, "com.machineblocks.core.Set")) {
-      return new ScadSetRenderer()
-    }
-    return new ScadBlockRenderer()
-  }
+interface RenderEngine {
+  render(
+    block:     Block,
+    processor: BlockProcessor,
+    context:   RenderContext
+  ): RenderOutput
 }
 ```
 
-A **Composite Target** has no Block Renderers of its own. It resolves per Block which Atomic Target is responsible and delegates:
+### Dispatch Logic
+
+For each Block:
+
+```text
+1. Own processors: exact FQN match        (most specific wins)
+2. Own processors: baseType-chain fallback
+3. Delegates: same logic applied recursively
+4. No match → BML_NO_TARGET diagnostic error
+```
+
+### Target Example — Own Processors Only
 
 ```typescript
-class DeviceTarget implements BomTarget {
-  name = "device"
-  atomics = [scadTarget, kicadTarget, uiTarget]
-
-  supportsBaseType(fqn: string): boolean {
-    return this.atomics.some(t => t.supportsBaseType(fqn))
-  }
-
-  getBlockRenderer(fqn: string): BlockRenderer {
-    const target = this.atomics.find(t => t.supportsBaseType(fqn))
-    if (!target) throw new Error(`No atomic target for ${fqn}`)
-    return target.getBlockRenderer(fqn)
-  }
+class MachineBlocksV3ScadTarget implements RenderTarget {
+  name = "machineblocks-v3-scad"
+  engine = new CompilerEngine()
+  processors = [
+    new ScadSetProcessor(),    // more specific — checked first
+    new ScadBlockProcessor()   // baseType fallback
+  ]
+  delegates = []
 }
+```
+
+### Target Example — Mixed (Own Processors + Delegates)
+
+```typescript
+class FullStackTarget implements RenderTarget {
+  name = "full-stack-react-spring"
+  engine = new CompilerEngine()
+  processors = [
+    new AppConfigProcessor(),
+    new DockerComposeProcessor()
+  ]
+  delegates = [
+    reactUiTarget,
+    springBoot3Target
+  ]
+}
+```
 ```
 
 ---

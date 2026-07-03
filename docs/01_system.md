@@ -85,51 +85,57 @@ This is analogous to `tsc` or `webpack` — the tool is global, content projects
 ```text
 bom-compiler/
   packages/
-    core/              — @bom/core: BOM object model, type registry, expression AST, validation
-    parser/            — @bom/parser: XML/JSON parser, namespace resolver, BML→BOM mapper
-    compiler/          — @bom/compiler: Facade + Target Registry
-    cli-tools/         — @bom/cli: Node-only: bom CLI commands, file watcher, thumbnail renderer
+    core/              — @bom/core
+    parser/            — @bom/parser
+    compiler/          — @bom/compiler (Rahmen + Target Registry)
+    cli-tools/         — @bom/cli
+
+  engines/
+    compiler-engine/   — @bom/engine-compiler (deterministic code transformation)
+    template-engine/   — @bom/engine-template (template loading + substitution)
+    llm-engine/        — @bom/engine-llm      (LLM-based generation)
 
   domains/
     machineblocks/
-      mbom/            — @machineblocks/mbom: MBOM domain model, native properties
-      scad-renderer/   — @machineblocks/scad-renderer: MBOM→SCAD Block Renderers + Target
-      runtimes/
-        scad-lib/      — Git Submodule: MachineBlocks V3 SCAD Library
-          lib/         — SCAD Runtime (every generated SCAD file uses this)
-          config/      — mb_config.scad (project-wide SCAD configuration)
-          docs/        — SCAD API reference (used by the scad-renderer)
-          blocks/      — pre-rendered reference Blocks (Compiler output format)
-            com/
-              machineblocks/
-                bricks/
-                anyclosure/
-                ...
+      mbom/            — @machineblocks/mbom
+      machineblocks-v3-scad-target/
+        src/
+          target.ts
+          processors/
+            ScadBlockProcessor/
+              processor.ts
+            ScadSetProcessor/
+              processor.ts
+        runtimes/
+          scad-lib/    — Git Submodule: MachineBlocks V3 SCAD Library
+            lib/
+            config/
+            docs/
+            blocks/
+              com/
+                machineblocks/
+                  bricks/
+                  ...
 
   README.md
 ```
 
+### Engine Packages
+
+Engines are always independent packages. There is no fixed set — any engine can be built and published separately. The three engines in `engines/` are bundled with the compiler as a convenience. Third-party engines are installed as npm packages and registered in the same way.
+
 ### Runtime Structure
 
-Each domain may have one or more runtimes under `domains/*/runtimes/`. A runtime is a Git Submodule that provides:
+Each domain target may have one or more runtimes under its `runtimes/` folder. A runtime is a Git Submodule that provides assets the BlockProcessors depend on at compile time:
 
 ```text
-lib/      — the runtime library that generated output files depend on
-config/   — default configuration (domain-specific)
-docs/     — API reference used by the domain's renderer
+lib/      — runtime library that generated output files depend on
+config/   — default configuration
+docs/     — API reference used by BlockProcessors
 blocks/   — pre-rendered reference artifacts (same format as compiler output)
 ```
 
-For MachineBlocks, the `scad-lib` runtime is the MachineBlocks V3 SCAD Library. Every generated `.scad` file binds to it via:
-
-```scad
-use <{relative_path}/lib/block.scad>;
-include <{relative_path}/config/mb_config.scad>;
-```
-
-The `blocks/` folder mirrors the compiler output structure (`com/machineblocks/bricks/StandardBrick.scad`, etc.) and serves as both a reference and a directly usable pre-rendered set.
-
-Longer term, runtimes will be distributed via package registries (npm, Maven, etc.) rather than Git Submodules. The submodule approach is pragmatic for the initial phase.
+Longer term, runtimes will be distributed via package registries rather than Git Submodules.
 
 ---
 

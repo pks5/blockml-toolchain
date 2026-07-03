@@ -773,68 +773,139 @@ Version resolution against a package registry is domain-specific and outside BOM
 
 ## Target System
 
-The Target System is the bridge between BOM Core and domain-specific output formats. It defines how Blocks are rendered, and how the compiler dispatches rendering to the correct Target.
+The Target System is the bridge between BOM Core and domain-specific output formats. It defines how Blocks are processed, and how the compiler dispatches processing to the correct RenderTarget.
+
+### Concepts
+
+**RenderTarget** — defines the output system. Its name is the full stack identifier used on the CLI. It has a RenderEngine, zero or more BlockProcessors, and zero or more delegates to other RenderTargets.
+
+**RenderEngine** — an independent package that provides the processing infrastructure. There is no fixed set of engine types — any engine can be built and published as its own package. Known examples: `@bom/engine-compiler` (deterministic code transformation), `@bom/engine-template` (template lookup + substitution), `@bom/engine-llm` (LLM-based generation).
+
+**BlockProcessor** — a sub-unit of the RenderTarget registered for a specific `baseType`. Uses the RenderEngine as infrastructure. A single BlockProcessor can handle many Block types internally (e.g. convention-based template lookup), or a target may have one specialized BlockProcessor per Block type, or any combination of both.
+
+### RenderTarget Interface
+
+```typescript
+interface RenderTarget {
+  name:       string             // e.g. "machineblocks-v3-scad"
+  engine?:    RenderEngine       // optional if target only delegates
+  processors: BlockProcessor[]   // 0..n own processors
+  delegates:  RenderTarget[]     // 0..n other targets for delegation
+}
+
+interface BlockProcessor {
+  baseType: string
+  process(block: Block, engine: RenderEngine): RenderOutput
+}
+
+interface RenderEngine {
+  render(
+    block:     Block,
+    processor: BlockProcessor,
+    context:   RenderContext
+  ): RenderOutput
+}
+```
+
+### Dispatch Logic
+
+For each Block in the BOM document:
+
+```text
+1. Own processors: exact FQN match
+2. Own processors: baseType-chain fallback (most specific wins)
+3. Delegates: same logic applied recursively
+4. No match → BML_NO_TARGET diagnostic error
+```
+
+More specific processors always win over generic ones — analogous to CSS selector specificity.
 
 ### Target Types
 
-**Atomic Target** — handles one domain's base types. Declares which `baseType` FQNs it supports. Contains one or more Block Renderers.
+A RenderTarget is not categorized as "atomic" or "composite" — the combination of processors and delegates determines its behavior:
 
-**Composite Target** — delegates across multiple Atomic Targets. Used when a BOM file contains Blocks from multiple domains. Has no Block Renderers of its own — it resolves per Block which Atomic Target is responsible and delegates.
-
-### Target Registry
-
-Targets are registered centrally in the compiler before compilation begins. The CLI selects the active Target by name:
-
-```bash
-bom compile my-file.mbml scad
-bom compile my-file.mbml device   # composite target
+```text
+Only own processors              — handles everything itself
+Only delegates                   — pure delegation
+Own processors + delegates       — mixed: handles some blocks, delegates others
 ```
 
-The Target Registry is the single point of dispatch. It maps target names to Target implementations and resolves Block Renderer lookup.
+### RenderEngine Packages
 
-### Target Interface
+Engines are always independent packages. There is no fixed set — any engine can be built and published:
 
-Every Target implements the following interface:
+```text
+@bom/engine-compiler   — deterministic code transformation (bundled)
+@bom/engine-template   — template loading, substitution, output writing (bundled)
+@bom/engine-llm        — LLM-based generation via API (bundled)
+@mycorp/engine-xslt    — XSLT transformation (third party)
+@mycorp/engine-copy    — simple file copy (third party)
+```
+
+BOM Core defines only the `RenderEngine` interface. The compiler has no knowledge of specific engine implementations.
+
+### BlockProcessor Patterns
+
+**Convention-based (one processor, many block types):**
+
+A single BlockProcessor handles many Block types by resolving the appropriate template or logic internally based on the Block's FQN. This is the standard minimal approach for TemplateEngine targets:
 
 ```typescript
-interface BomTarget {
-  name:                  string
-  supportsBaseType(fqn: string): boolean
-  getBlockRenderer(fqn:  string): BlockRenderer
+class PiMachineProcessor implements BlockProcessor {
+  baseType = "com.pimachine.core.Block"
+
+  process(block: Block, engine: TemplateEngine): RenderOutput {
+    // Resolves template path from FQN — convention-based, not hardcoded
+    const template = this.resolveTemplate(block.fullQualifiedName)
+    if (!template) throw new BmlDiagnostic("BML_NO_TARGET", block)
+    return engine.renderTemplate(block, template)
+  }
 }
 ```
 
-For Composite Targets, `getBlockRenderer` delegates to the appropriate registered Atomic Target.
+**Specialized (one processor per block type):**
 
-If no registered Target supports a Block's `baseType`, the compiler emits a diagnostic error and does not produce output for that Block.
-
-### Block Renderer
-
-A Block Renderer is the component within a Target that serializes a specific Block into the target format. The SCAD Target may have one generic renderer for all `com.machineblocks.core.Block` instances. A UI Target may have one renderer per Control FQN — analogous to UI5 Control Renderers.
+A dedicated BlockProcessor for a specific Block type with custom logic — multiple templates, external API calls, complex transformations:
 
 ```typescript
-interface BlockRenderer {
-  render(block: Block, context: RenderContext): RenderOutput
+class NfcProProcessor implements BlockProcessor {
+  baseType = "com.pimachine.nfc.NfcPro"  // exact FQN match
+
+  process(block: Block, engine: TemplateEngine): RenderOutput {
+    // Custom multi-step logic
+    return engine.renderTemplates(block, [
+      "nfc_pro_setup.py.tpl",
+      "nfc_pro_config.json.tpl",
+      "nfc_pro_service.sh.tpl"
+    ])
+  }
 }
 ```
 
-BOM Core has no knowledge of what `RenderOutput` contains. Domain-specific Targets define it:
+**Mixed (both in same target):**
 
 ```text
-SCAD Target:    RenderOutput = { scadFiles: ScadFile[], sourceMaps: SourceMap[] }
-Unity Target:   RenderOutput = { prefabFiles: PrefabFile[] }
-UI Target:      RenderOutput = { componentFiles: ComponentFile[] }
+Target: pimachine-node-python
+  NfcProProcessor     — exact FQN: com.pimachine.nfc.NfcPro   (1%)
+  PiMachineProcessor  — baseType:  com.pimachine.core.Block    (99% fallback)
 ```
 
-### Composite Target Example
+Dispatch always tries the most specific match first.
 
-```text
-bom compile my-device.mbml device
+### RenderOutput
 
-device (Composite Target)
-  com.machineblocks.core.Block  →  scad (Atomic)    →  Wall.scad
-  com.electronics.core.Component → kicad (Atomic)  →  board.kicad_pcb
-  com.ui.core.Control           →  ui (Atomic)      →  Panel.jsx
+`RenderOutput` is defined by each RenderTarget — the compiler treats it as opaque:
+
+```typescript
+// CompilerEngine target example
+interface ScadRenderOutput {
+  files: { path: string; content: string; sourceMap: string }[]
+}
+
+// TemplateEngine target example
+interface PythonRenderOutput {
+  files: { path: string; content: string }[]
+}
 ```
 
 ---
