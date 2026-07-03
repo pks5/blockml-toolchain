@@ -22,11 +22,43 @@ File extension: `.mbml` (for tooling compatibility). Content-type: `bml`.
 
 ## Serialization Formats
 
-BML supports two serialization formats. Both are semantically equivalent and produce identical BOM output.
+**XML is the canonical BML format.** It is the format of choice for all Block definitions, Composite Blocks, Sub-Blocks, and anything involving BML Directives or Functions. XML is not a legacy choice — it is the right tool for this kind of structured, namespace-aware, hierarchical information.
 
-**XML** is the reference format. It supports namespaces, structured documents, and schema validation via XSD.
+Specific XML capabilities that make it irreplaceable for BML:
 
-**JSON** is an equally supported alternative. It uses JSON Schema for validation.
+```text
+Namespaces          xmlns:bricks="com.machineblocks.bricks"
+                    → Block types used directly as element names: <bricks:StandardBrick />
+                    → No need for explicit type="..." attributes
+
+Attribute namespaces bml:each, bml:if, bml:block
+                    → Clean separation of directives from Block properties
+                    → No equivalent mechanism in JSON
+
+Mixed content       <bml:block> with heterogeneous children
+                    → Natural in XML, awkward in JSON arrays
+
+CDATA               <![CDATA[ ... ]]> for inline Function bodies
+                    → No JSON equivalent
+
+Comments            <!-- Row 0 — studDiameterAdjustment -->
+                    → JSON has no comments
+
+Schema validation   XSD with full namespace awareness
+                    → JSON Schema cannot match this expressiveness
+```
+
+**JSON is supported for simple cases only:**
+
+```text
+✓  <blockPresets>    — flat property sets, no directives needed
+✓  Simple <block>    — no Sub-Blocks, no bml: directives, no Functions
+✗  Composite blocks  — bml: directives are not representable in JSON
+✗  Sub-Blocks        — nesting and FQN conventions require XML structure
+✗  Functions         — CDATA has no JSON equivalent
+```
+
+JSON support for simple cases is pragmatic — it may be useful for tool-generated or API-produced content. It is not a design goal to make JSON equivalent to XML. Any Block definition that uses the full power of BML must be authored in XML.
 
 The document type is determined by the root element (XML) or the `type` field (JSON) — not by the file extension or path.
 
@@ -936,9 +968,11 @@ configProfile < blockPreset < inline property
 
 ## JSON Format
 
-The JSON format is semantically equivalent to XML. The document type is determined by the `type` field.
+JSON is supported for simple Block definitions and Presets only. It is not semantically equivalent to XML — BML Directives (`bml:`), Sub-Blocks, and Functions cannot be represented in JSON. The document type is determined by the `type` field.
 
-### Block Definition (JSON)
+Use JSON only when the Block has no Composition directives, no Sub-Blocks, and no Functions. For anything more complex, use XML.
+
+### Block Definition (JSON) — Simple Blocks Only
 
 ```json
 {

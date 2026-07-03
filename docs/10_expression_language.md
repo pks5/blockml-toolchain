@@ -1,0 +1,675 @@
+# BOM Compiler — Expression Language
+
+version: 1.0.0
+
+## Purpose of this Document
+
+This document is the authoritative reference for the BML Expression Language — the dynamic value system used within `${ }` in BML documents.
+
+For the BML format see `02_mbml.md`.
+For the BOM object model see `00_bom_core.md`.
+For MBOM-specific types and properties see `03_mbom.md`.
+
+---
+
+## Overview
+
+The BML Expression Language is used wherever a Block member value needs to be dynamic — derived from other properties, computed, or bound to a service. Expressions appear inside `${ }` delimiters in BML attribute values.
+
+The language is **extended JSON**: standard JSON syntax with four additions:
+
+```text
+1. Property references    myProp, myProp.x, myProp[0]
+2. Model bindings         @model:/path, @model:relAttr
+3. Bean calls             @bean.capa(...), @bean.capa
+4. Built-in calls         #math.min(a, b), #string.trim(s)
+```
+
+Everything else follows JSON: strings in double quotes, numbers, booleans `true`/`false`, `null`, arrays `[...]`, objects `{...}`.
+
+---
+
+## Formal Grammar (EBNF)
+
+```ebnf
+expression     ::= ternary
+
+ternary        ::= logical ( '?' expression ':' expression )?
+
+logical        ::= comparison ( ('&&' | '||') comparison )*
+
+comparison     ::= additive ( ('==' | '!=' | '<' | '>' | '<=' | '>=') additive )*
+
+additive       ::= multiplicative ( ('+' | '-') multiplicative )*
+
+multiplicative ::= unary ( ('*' | '/' | '%') unary )*
+
+unary          ::= ('-' | '!') unary
+               | postfix
+
+postfix        ::= primary ( '[' expression ']' | '.' identifier )*
+
+primary        ::= literal
+               | propertyAccess
+               | builtinCall
+               | beanCall
+               | funcCall
+               | modelBinding
+               | '(' expression ')'
+
+literal        ::= string | number | boolean | null | array | object
+
+string         ::= '"' [^"]* '"'
+                 | "'" [^']* "'"
+
+number         ::= '-'? [0-9]+ ('.' [0-9]+)?
+
+boolean        ::= 'true' | 'false'
+
+null           ::= 'null'
+
+array          ::= '[' ( expression (',' expression)* )? ']'
+
+object         ::= '{' ( key ':' expression (',' key ':' expression)* )? '}'
+
+key            ::= string | identifier
+
+propertyAccess ::= identifier ( '.' identifier | '[' expression ']' )*
+
+builtinCall    ::= '#' identifier '.' identifier '(' argList? ')'
+
+beanCall       ::= '@' identifier '.' identifier ( '(' argList? ')' )?
+                 | capabilityLink
+
+capabilityLink ::= '@' identifier '.' identifier   /* no parentheses = linking */
+
+funcCall       ::= identifier '(' argList? ')'     /* block-scoped function */
+
+modelBinding   ::= '@' identifier ':' path
+                 | '@' identifier ':' '/' path
+
+path           ::= ( identifier | number | '-' | '_' ) ( '/' ( identifier | number | '-' | '_' ) )*
+
+argList        ::= arg (',' arg)*
+
+arg            ::= identifier '=' expression       /* named parameter */
+               | expression                        /* positional */
+
+identifier     ::= [a-zA-Z_] [a-zA-Z0-9_]*
+```
+
+---
+
+## Operator Precedence
+
+From highest to lowest:
+
+```text
+1  (highest)  unary        -x  !x
+2             postfix      x.y  x[i]
+3             multiplicative  *  /  %
+4             additive     +  -
+5             comparison   ==  !=  <  >  <=  >=
+6             logical      &&  ||
+7  (lowest)   ternary      ? :
+```
+
+Left-associative at each level except ternary (right-associative).
+
+---
+
+## String Rules
+
+Strings use double quotes `"..."` or single quotes `'...'`. Both are equivalent. Single quotes are useful inside attribute values already wrapped in double quotes:
+
+```xml
+baseCutoutType="${ size[2] > 2 ? 'groove' : 'standard' }"
+```
+
+Escape sequences: `\"`, `\'`, `\\`, `\n`, `\t`.
+
+---
+
+## Identifier Rules
+
+```text
+Valid:    camelCase, PascalCase, snake_case, _leadingUnderscore
+Start:    letter or _
+Continue: letter, digit, or _
+Examples: myProp, size, _parts, numberOfSamples, valueStart
+```
+
+Identifiers are resolved against the current Block's member namespace (Properties, Aggregations, Associations, Capabilities) — see Scope Rules.
+
+---
+
+## Whitespace
+
+Whitespace (space, tab, newline) is ignored everywhere inside `${ }` except within string literals.
+
+---
+
+## Literals
+
+### Primitives
+
+```text
+"hello"         — string (double quotes)
+'hello'         — string (single quotes, equivalent)
+42              — integer
+3.14            — float
+-0.5            — negative float
+true            — boolean
+false           — boolean
+null            — null
+```
+
+### Arrays
+
+```text
+[1, 2, 3]
+[size[0], size[1], 1]
+[size[0], #math.max(size[1], 2), 0]
+['groove', 'none', 'groove']
+```
+
+### Objects
+
+```text
+{x: 1, y: 0}
+{x: size[0], y: size[1]}
+{mode: 'groove', depth: size[2] - 1}
+{label: @myModel:title, value: size[0]}
+```
+
+Objects inside `${ }` may contain expressions as values. Objects outside `${ }` (raw attribute values) are pure JSON literals only.
+
+---
+
+## Property Access
+
+Accesses a member of the current Block instance. No prefix required.
+
+```text
+${ size }             — property value (e.g. Size3D [1, 8, 9])
+${ size[0] }          — index access (x component)
+${ size[1] }          — index access (y component)
+${ size.x }           — attribute access (equivalent to size[0] for Size3D)
+${ baseColor }        — string property
+${ numberOfSamples }  — integer property
+```
+
+Nested access:
+
+```text
+${ config.mode }
+${ items[0].size }
+${ items[0].size[2] }
+```
+
+---
+
+## Bean Calls (`@`)
+
+User-defined Beans are declared as Aggregations with a `beanName` on the current Block. Beans are resolved by walking up the Composition hierarchy — context-scoped beans (`scope="context"`) are visible to all descendants.
+
+### Sync Capability Call
+
+```text
+${ @myBean.format(value = size[0], unit = 'mm') }   — named parameters (Object payload)
+${ @myBean.format({value: size[0], unit: 'mm'}) }   — object literal (equivalent)
+${ @myBean.compute(size[0], size[1]) }              — positional (Array payload)
+${ @myBean.compute([size[0], size[1]]) }            — array literal (equivalent)
+${ @myBean.getLabel(size[0]) }                      — primitive payload
+```
+
+Named parameters `(a=x, b=y)` and object literal `({a:x, b:y})` are interchangeable for Object payloads. The return value of the Sync Capability is used as the expression result.
+
+### Capability Linking
+
+```text
+${ @myBean.myOutbound }     — no parentheses = capability linking
+```
+
+Links an `AsyncOutbound` Capability of the Bean to the target member. The target must be an `AsyncInbound` Capability. Payload is forwarded without transformation. Both Capabilities must have compatible `payloadType`.
+
+For `Sync → Sync` linking: payload type and return type must match.
+
+### Direct Own-Block Access
+
+A Block can reference its own Capabilities in Expressions without a prefix:
+
+```text
+${ mySyncCapa() }              — own Sync Capability call
+${ mySyncCapa(a = 1, b = 2) } — with payload
+${ myInbound }                 — own AsyncInbound linking (no parentheses)
+```
+
+The parser resolves ambiguity by checking the member namespace: `foo()` → Sync Capability, `foo` → Property or AsyncInbound (context-dependent).
+
+---
+
+## Model Binding (`@model:`)
+
+Model Bindings connect a member value to a path in a ServiceBlock Model (JSONModel, ODataModel, etc.).
+
+```text
+${ @myModel:/absolute/path }    — absolute path from model root
+${ @myModel:relativeAttr }      — relative path, resolved against binding context
+```
+
+The `:` separator distinguishes Model Bindings from Bean Calls (`.`). An absolute path starts with `/`. A relative path is resolved against the binding context established by the nearest parent Aggregation bound to this model.
+
+### Binding Context (Model Inheritance)
+
+```xml
+<List items="${ @myModel:/orders }">
+    <ListItem label="${ @myModel:title }" />
+</List>
+```
+
+Children within a Model-bound Aggregation inherit the binding context. Relative paths are resolved against the current element in the bound array.
+
+---
+
+## Block-Scoped Functions
+
+Functions declared in the `<functions>` section of a Block are callable within Expressions using their name directly — like a Sync Capability but target-specific:
+
+```text
+${ round1(valueStart + i * valueStep) }
+${ formatValue(valueStart + i * valueStep) }
+```
+
+Functions have no prefix. The parser resolves them by checking the Block's function registry after the member namespace. A function name must not collide with a member name.
+
+Functions are target-specific — declared with a `language` attribute. A SCAD BlockProcessor emits SCAD functions; other processors ignore them or provide their own implementation.
+
+```xml
+<functions>
+  <function name="round1" language="scad">
+    <![CDATA[
+function mb_block__....__func__round1(x) = round(x * 10) / 10;
+    ]]>
+  </function>
+</functions>
+```
+
+---
+
+## Built-in Functions (`#`)
+
+Built-in functions are always available in all Blocks of a domain. They are defined in the `baseType` hierarchy and accessible via the `#` prefix. The `#` namespace is reserved — user-defined beans cannot use `#`.
+
+Built-ins are pure functions — no side effects, no state. They are resolved at compile time when all arguments are literals.
+
+### `#math`
+
+```text
+#math.min(a, b)              — minimum of two numbers
+#math.max(a, b)              — maximum of two numbers
+#math.abs(x)                 — absolute value
+#math.floor(x)               — round down to nearest integer
+#math.ceil(x)                — round up to nearest integer
+#math.round(x)               — round to nearest integer
+#math.round(x, decimals)     — round to n decimal places
+#math.pow(base, exp)         — base raised to exp
+#math.sqrt(x)                — square root
+#math.clamp(x, min, max)     — clamp x to [min, max]
+```
+
+### `#numbers`
+
+```text
+#numbers.formatDecimal(x, minIntDigits, decPoint, minFracDigits)
+  — format a number as a decimal string
+  — e.g. #numbers.formatDecimal(0.1, 0, '.', 1)  →  ".1"
+  — e.g. #numbers.formatDecimal(3.14, 1, '.', 2) →  "3.14"
+  — minIntDigits=0 removes the leading zero (0.1 → .1)
+```
+
+### `#strings`
+
+```text
+#strings.trim(s)                    — remove leading/trailing whitespace
+#strings.toUpperCase(s)             — uppercase
+#strings.toLowerCase(s)             — lowercase
+#strings.concat(a, b)               — concatenate (prefer + operator)
+#strings.length(s)                  — string length
+#strings.contains(s, sub)           — boolean
+#strings.startsWith(s, prefix)      — boolean
+#strings.endsWith(s, suffix)        — boolean
+#strings.indexOf(s, sub)            — first index of sub in s, -1 if not found
+#strings.substring(s, start, end)   — substring [start, end)
+#strings.replace(s, old, new)       — replace first occurrence
+#strings.replaceAll(s, old, new)    — replace all occurrences
+```
+
+### `#lists`
+
+```text
+#lists.size(list)                   — number of elements
+#lists.isEmpty(list)                — boolean
+#lists.contains(list, item)         — boolean
+#lists.first(list)                  — first element
+#lists.last(list)                   — last element
+#lists.get(list, index)             — element at index
+#lists.sequence(start, end)         — integer list from start to end (inclusive)
+                                      e.g. #lists.sequence(1, 5) → [1, 2, 3, 4, 5]
+#lists.sequence(start, end, step)   — with step
+                                      e.g. #lists.sequence(0, 10, 2) → [0, 2, 4, 6, 8, 10]
+```
+
+### `#bools`
+
+```text
+#bools.isTrue(x)                    — boolean coercion
+#bools.isFalse(x)                   — boolean coercion
+```
+
+---
+
+## SCAD Mapping
+
+The SCAD BlockProcessor must map each built-in to SCAD output. Three strategies:
+
+**Native SCAD** — direct 1:1 mapping:
+
+```text
+#math.min(a, b)    →  min(a, b)
+#math.max(a, b)    →  max(a, b)
+#math.abs(x)       →  abs(x)
+#math.floor(x)     →  floor(x)
+#math.ceil(x)      →  ceil(x)
+#math.round(x)     →  round(x)          ← integer rounding only
+#math.pow(b, e)    →  pow(b, e)
+#math.sqrt(x)      →  sqrt(x)
+#strings.concat(a,b) → str(a, b)
+#strings.length(s)   → len(s)
+```
+
+**Processor-implemented** — SCAD expression generated inline by the processor:
+
+```text
+#math.round(x, 1)      →  round(x * 10) / 10
+#math.round(x, n)      →  round(x * pow(10, n)) / pow(10, n)
+#math.clamp(x, lo, hi) →  min(max(x, lo), hi)
+#lists.sequence(s, e)  →  [s : e]                    ← SCAD range
+#lists.sequence(s,e,st)→  [s : st : e]
+#lists.size(list)      →  len(list)
+#lists.get(list, i)    →  list[i]
+#lists.first(list)     →  list[0]
+#lists.last(list)      →  list[len(list) - 1]
+```
+
+**Processor-implemented with helper function** — the processor emits a SCAD helper function into the output file and calls it:
+
+```text
+#numbers.formatDecimal(x, 0, '.', 1)
+  →  emits: function mb_built_in__numbers__formatDecimal(x, minInt, dec, minFrac) = ...
+  →  calls: mb_built_in__numbers__formatDecimal(x, 0, ".", 1)
+
+#strings.trim(s)
+  →  emits helper function
+  →  calls it
+
+#strings.replace(s, old, new)
+  →  emits recursive helper function (SCAD has no native replace)
+  →  calls it
+```
+
+Helper functions emitted by the processor use the prefix `mb_built_in__` to avoid collisions with user-defined functions.
+
+**Not mappable in V1** — explicitly excluded from V1 scope:
+
+```text
+#strings.toUpperCase    — no SCAD equivalent, not needed in V1
+#strings.toLowerCase    — no SCAD equivalent, not needed in V1
+#strings.contains       — requires helper, not needed in V1
+#strings.startsWith     — requires helper, not needed in V1
+#strings.endsWith       — requires helper, not needed in V1
+#strings.indexOf        — requires helper, not needed in V1
+#strings.substring      — requires helper, not needed in V1
+#strings.replaceAll     — requires helper, not needed in V1
+#bools.*                — not needed in SCAD context
+```
+
+---
+
+## `bml:` Directives
+
+Directives are special attributes in the `bml:` namespace that control Composition structure. They are not Block properties.
+
+### `bml:each`
+
+```text
+Syntax:  bml:each="var : ${ expression }"
+         bml:each="var, stat : ${ expression }"
+```
+
+**Numeric loop:** expression evaluates to an Integer `n`. Loop variable runs from `0` to `n-1`:
+
+```xml
+<bricks:StandardBrick
+    bml:each="i : ${ numberOfSamples }"
+    offset="${ [2 * i, 0, 0] }" />
+```
+
+**Collection loop:** expression evaluates to an Array. Loop variable is the current element:
+
+```xml
+<bricks:StandardBrick
+    bml:each="item, stat : ${ @myModel:/items }"
+    size="${ item.size }" />
+```
+
+**Stat variable:**
+
+```text
+stat.index   — 0-based current position
+stat.count   — 1-based current position
+stat.size    — total count
+stat.first   — true when index == 0
+stat.last    — true when index == size - 1
+stat.even    — true when index is even (0-based)
+stat.odd     — true when index is odd (0-based)
+```
+
+For numeric loops, the loop variable `i` equals `stat.index`. `stat.size` equals `n`.
+
+### `bml:if`
+
+```text
+Syntax:  bml:if="${ expression }"
+```
+
+Includes the Block only when the expression evaluates to `true`. Combined with `bml:each`, `bml:if` is evaluated per iteration:
+
+```xml
+<bricks:StandardBrick
+    bml:each="i : ${ numberOfSamples }"
+    bml:if="${ i > 0 }"
+    offset="${ [2 * i, 0, 0] }" />
+```
+
+### `bml:unless`
+
+```text
+Syntax:  bml:unless="${ expression }"
+```
+
+Includes the Block only when the expression evaluates to `false`. Negation of `bml:if`.
+
+### `bml:block`
+
+A virtual container that produces no Block output but applies directives to a group of children:
+
+```xml
+<bml:block bml:each="i : ${ numberOfSamples }">
+    <Calibrator.Base  offset="${ [0, i * -3, 0] }" ... />
+    <Calibrator.StudDiameter offset="${ [0, i * -3, 0] }" ... />
+</bml:block>
+```
+
+### `bml:id`
+
+```text
+Syntax:  bml:id="${ expression }"
+```
+
+Sets the instance ID from an Expression. Required when using `bml:each` with external references:
+
+```xml
+<bricks:StandardBrick
+    bml:each="i : ${ numberOfSamples }"
+    bml:id="${ 'sample_' + i }"
+    offset="${ [2 * i, 0, 0] }" />
+```
+
+---
+
+## Registry
+
+A shared registry is available within a Composition for sibling child Blocks to exchange values:
+
+```text
+Write:  registry.totalHeight = value
+Read:   ${ registry.totalHeight }
+```
+
+Registry scope is per Composition. Initialized on entry, not visible outside.
+
+---
+
+## Scope Rules
+
+```text
+Property access (no prefix):
+  — current Block instance only
+  — no access to parent, grandparent, or sibling properties
+  — direction is always parent → child (top-down)
+
+@bean references:
+  — resolved by walking up the Composition hierarchy
+  — context-scoped beans (scope="context") visible to all descendants
+  — local beans (scope="local") visible only in declaring Block
+
+#built-in references:
+  — always available, inherited via baseType
+  — cannot be overridden
+
+Model binding context:
+  — inherited from nearest parent Aggregation bound to that model
+  — relative paths only valid when binding context exists
+
+bml:each loop variable:
+  — visible only within the looped element and its children
+  — shadows outer variables of the same name
+
+Registry:
+  — per Composition only
+  — not visible outside
+
+Block-scoped functions:
+  — visible within the Block's own Composition only
+  — not inherited by child Blocks
+```
+
+---
+
+## Type Inference
+
+Expression result types are inferred from context:
+
+```text
+Property type       → expected result type
+Capability payload  → declared payloadType
+Arithmetic result   → Float if any operand is Float, else Integer
+Comparison result   → Boolean
+Ternary result      → union of both branch types (must be compatible)
+Array literal       → List<T> where T is inferred from elements
+Object literal      → anonymous Object
+```
+
+A type mismatch between the inferred result and the expected member type is a parse-time error.
+
+---
+
+## Distinguishing Call vs. Link
+
+```text
+@bean.capa(...)    — parentheses present = Sync Capability call
+@bean.capa         — no parentheses = Capability linking (AsyncOutbound → AsyncInbound)
+func(...)          — parentheses present = block-scoped function call
+myCapa()           — own Sync Capability call (no prefix)
+myInbound          — own AsyncInbound linking (no prefix, no parentheses)
+```
+
+The parser distinguishes call vs. link by the presence or absence of parentheses. Using `@bean.capa` (no parentheses) on a Sync Capability is a parse-time error. Using `@bean.capa()` (with parentheses) on an AsyncOutbound Capability is also a parse-time error.
+
+---
+
+## Error Cases
+
+```text
+BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in member namespace
+BML_EXPR_UNKNOWN_BEAN          — @bean not declared as Aggregation
+BML_EXPR_UNKNOWN_BUILTIN       — #name not a registered built-in
+BML_EXPR_UNKNOWN_FUNCTION      — func() not declared in <functions>
+BML_EXPR_TYPE_MISMATCH         — expression result type incompatible with member type
+BML_EXPR_PAYLOAD_MISMATCH      — call syntax doesn't match declared payloadType
+BML_EXPR_LINK_INVALID_SOURCE   — @bean.capa (no parens) on non-AsyncOutbound Capability
+BML_EXPR_LINK_INVALID_TARGET   — capability linking target is not AsyncInbound
+BML_EXPR_LINK_PAYLOAD_MISMATCH — linked Capabilities have incompatible payloadTypes
+BML_EXPR_MODEL_NO_CONTEXT      — relative model path used without binding context
+BML_EXPR_BUILTIN_NOT_V1        — built-in called that is excluded from V1 scope
+BML_EXPR_DIVISION_BY_ZERO      — compile-time division by zero (literal operands only)
+```
+
+---
+
+## V1 Scope
+
+V1 implements a focused subset. Everything not listed here is deferred.
+
+**V1 — Supported:**
+
+```text
+Literals:        string, number, boolean, array, object
+Operators:       + - * / %  ==  != < > <= >=  &&  ||  !  ?:
+Property access: myProp  myProp.x  myProp[i]
+Arithmetic:      all standard operators
+Ternary:         condition ? a : b
+Built-ins:       #math.min/max/abs/floor/ceil/round/round(x,n)/pow/sqrt/clamp
+                 #numbers.formatDecimal
+                 #strings.concat/length
+                 #lists.size/get/first/last/sequence
+bml: directives: bml:each (numeric + collection), bml:if, bml:unless,
+                 bml:block, bml:id
+Registry:        read + write within Composition
+Block functions: func() call syntax, language="scad"
+```
+
+**V1 — Deferred:**
+
+```text
+@bean calls        — no runtime bean execution in V1
+Model bindings     — no runtime model in V1
+Capability linking — no runtime messaging in V1
+#strings.*         — (except concat, length)
+#bools.*
+TypeScript ServiceBlocks / transpilation
+```
+
+---
+
+## TypeScript ServiceBlock (Future)
+
+A TypeScript-based ServiceBlock allows functions to be defined in TypeScript and transpiled to the target language by the BlockProcessor.
+
+This is the mechanism for cases where:
+- No `#built-in` covers the needed logic
+- The logic is too complex for inline expressions
+- The logic needs to be reusable across multiple Blocks
+
+Specification deferred — to be defined when the first concrete use case requires it. The SCAD BlockProcessor would need a TypeScript→SCAD transpiler for a defined safe subset of TypeScript (pure functions, no I/O, no classes).
