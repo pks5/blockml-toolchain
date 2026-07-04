@@ -110,6 +110,8 @@ Properties are typed parameters of a Block. Every Property has a name, a type, a
 
 **Native properties** are defined in `com.machineblocks.core.Block` and its base types. They are listed in `09_mbom_properties.yml` and have dedicated SCAD getters in the render target (`mb_param_size()`, `mb_param_baseColor()`, etc.).
 
+Native properties include (non-exhaustive): `size`, `offset`, `direction`, `align`, `baseColor`, `studs`, `base`, `recess`, `tongue`, `baseCutoutType`, `rotation`, `alignChildren`, `sizeMod`, `baseCrop`, `baseAdjustment`, `baseWallThickness`, `topPlateHelpers`. See `09_mbom_properties.yml` for the full authoritative list.
+
 **Custom properties** are defined inline in a Block definition. They generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
 
 The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Both use the same `<property>` element in BML. Native properties only need to be declared when their default value differs from the core default.
@@ -119,12 +121,14 @@ The compiler determines native vs. custom by checking `09_mbom_properties.yml`. 
 ```text
 name          — camelCase member name (unique within the Block's member namespace)
 type          — MBOM type FQN (e.g. com.machineblocks.types.Size3D)
-defaultValue  — typed default value
+defaultValue  — typed default value (literal or expression)
 group         — optional grouping for editor display
 documentation — human-readable description
 ```
 
 Unqualified type names in BML are resolved against `com.machineblocks.types` by the parser before being stored in MBOM as full FQNs.
+
+**Computed default values:** `defaultValue` may be an Expression referencing other Properties of the same Block. See `10_expression_language.md` — Expressions in defaultValue.
 
 ### Property Groups
 

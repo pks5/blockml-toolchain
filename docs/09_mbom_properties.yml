@@ -173,6 +173,9 @@ properties:
     default: { "x-": 0, "x+": 0, "y-": 0, "y+": 0, "z-": 0, "z+": 0 }
     scad_name: sizeMod
     serializer: FaceVector6
+    bml_syntax: JSON Object — only specify faces that differ from 0.
+                BML: sizeMod="${ {'z+': -0.5} }"
+                SCAD: [["z+", -0.5]]
     ai_usage: yes
     description: |
       Semantic size modification per face in grid units.
@@ -299,6 +302,9 @@ properties:
     default: {}
     scad_name: baseAdjustment
     serializer: FaceMap
+    bml_syntax: JSON Object — only specify faces that differ from default.
+                BML: baseAdjustment="${ {'y': 0.11} }"
+                SCAD: [["y", 0.11]]
     assembly_pattern: mb_params_filter
     ai_usage: config_only
     description: |

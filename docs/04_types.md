@@ -427,18 +427,53 @@ Three SCAD input modes are supported (Block-Axis, Block-Axis Map, Per-Corner Dir
 
 ---
 
-# 9. Expression Type
+# 9. Map Type
+
+A Map type represents a set of key-value pairs where keys are strings and values are typed. In BML, Maps use **JSON Object syntax**. The SCAD BlockProcessor translates to SCAD's array-of-arrays format.
 
 ```text
-com.machineblocks.types.Expression
+BML (JSON Object):         { 'z+': -0.5 }
+SCAD (array-of-arrays):    [["z+", -0.5]]
 
-An expression is a typed SpEL expression wrapped in ${}.
-It is parsed into an Expression AST node at MBML parse time.
+BML:   { 'z+': -0.5, 'x+': 1.0 }
+SCAD:  [["z+", -0.5], ["x+", 1.0]]
+```
+
+Properties using Map type in MBOM:
+
+```text
+sizeMod          — Map<Face, Float>    per-face size modification
+baseAdjustment   — Map<Axis, Float>    per-axis base adjustment
+baseSideAdj      — Map<Face, Float>    per-face side adjustment
+baseCrop         — Map<Face, Float>    per-face crop
+```
+
+BML examples:
+
+```xml
+sizeMod="${ {'z+': -0.5} }"
+baseAdjustment="${ {'y': 0.11} }"
+baseCrop="${ {'xy': -0.5} }"
+baseCrop="${ {'x': -0.5, 'y-': 0.2} }"
+```
+
+Map values are always wrapped in `${ }` because they are object literals in the extended JSON expression syntax. Pure literal maps outside `${ }` are not supported for Map-type properties.
+
+---
+
+# 10. Expression Type
+
+```text
+com.bom.types.Expression
+
+An expression is a typed value wrapped in ${ }.
+It is parsed into an Expression AST node at BML parse time.
 It is not evaluated at parse time — evaluation happens at compile time
 or render time depending on the expression root.
+See 10_expression_language.md for the full specification.
 
-MBML:  size="${[size[0], size[1], size[2] - 1]}"
-MBOM:  Expression { ast: ExpressionNode, resultType: Size3D }
+BML:   size="${ [size[0], size[1], size[2] - 1] }"
+BOM:   Expression { ast: ExpressionNode, resultType: Size3D }
 SCAD:  serialized as the expression result or as a SCAD expression
        depending on whether it can be statically resolved
 ```

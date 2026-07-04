@@ -114,7 +114,7 @@ A Block is the fundamental unit of BOM Core. It is a parametric, typed, reusable
 ```text
 name               — short class name (PascalCase)
 fullQualifiedName  — globally unique FQN
-baseType           — FQN of the parent Block (default: com.bom.core.Block)
+baseType           — FQN of the parent Block. Required — no default. Must be declared explicitly on every Block definition.
 version            — semantic version of this definition
 members            — named members: Properties, Aggregations, Associations, Capabilities
 compositions       — list of Composition definitions
@@ -123,6 +123,8 @@ compositions       — list of Composition definitions
 ### Inheritance
 
 Blocks inherit from other Blocks via `baseType`. Inheritance is single — each Block has exactly one base type. The root of all inheritance is `com.bom.core.Block`.
+
+`baseType` is mandatory on every Block definition. Omitting it is a parse-time error (`BML_MISSING_BASE_TYPE`). There is no implicit default — the author must always make an explicit choice about which domain the Block belongs to.
 
 Domain-specific specializations extend this root:
 
@@ -169,10 +171,36 @@ Properties are typed parameters of a Block. Every Property has a name, a type, a
 ```text
 name          — camelCase property name (unique within the Block's member namespace)
 type          — FQN of the BOM type
-defaultValue  — typed default value
+defaultValue  — typed default value (literal or expression)
 group         — optional grouping hint (for editors)
 documentation — human-readable description
 ```
+
+### Computed Default Values
+
+A `defaultValue` may be a static literal or an Expression. Expressions in `defaultValue` allow a Property's default to be derived from other Properties of the same Block:
+
+```xml
+<property name="numberOfSamples" type="Integer" defaultValue="5" />
+<property name="labelSize"       type="Integer" defaultValue="5" />
+<property name="size"            type="Size3D"
+          defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
+```
+
+**Allowed expression roots in `defaultValue`:**
+
+```text
+✓  Other Properties of the same Block
+✓  #built-in functions (#math.*, #strings.*, etc.)
+✗  @bean references
+✗  @model bindings
+✗  bml: directives
+✗  registry
+```
+
+**Cycle detection:** The compiler performs a topological sort of all Property dependencies before resolving defaults. If Property A's `defaultValue` references Property B and B's `defaultValue` references A — directly or transitively — a `BML_PROPERTY_CYCLE` error is emitted and compilation stops.
+
+Resolution is always deterministic: Properties with no dependencies are resolved first, then those that depend on already-resolved Properties.
 
 ### Resolution Order
 
@@ -182,7 +210,7 @@ Property values are resolved in this order (highest priority first):
 1. Inline value    — set directly on a Block instance in a Composition
 2. Preset value    — from the active Preset
 3. Config value    — from the active Config profile (domain-specific)
-4. Default value   — from the Block definition
+4. Default value   — from the Block definition (literal or computed expression)
 ```
 
 ---
@@ -212,6 +240,40 @@ When no Aggregations are declared, a domain-specific default Aggregation is crea
 
 A ServiceBlock is a special Block type that provides named, reusable services — such as data models, math utilities, or formatters. ServiceBlocks are bound into a Block via Aggregations with a bean name. Once bound, they are accessible in Expressions via their bean name using the `@` prefix.
 
+### ServiceBlock Class Hierarchy
+
+```text
+com.bom.core.Block
+  com.bom.service.ServiceBlock          — base for all service types
+    com.bom.service.ModelBlock          — holds data (JSONModel, ODataModel, XMLModel)
+    com.bom.service.FunctionBlock       — binds TypeScript functions to Sync Capabilities
+```
+
+**`com.bom.service.ServiceBlock`** — the abstract base. All service types extend this. Declares no members of its own.
+
+**`com.bom.service.ModelBlock`** — provides data access via Sync Capabilities (`get`, path-based access). Specializations: `com.bom.service.JSONModel`, `com.bom.service.ODataModel`, `com.bom.service.XMLModel`.
+
+**`com.bom.service.FunctionBlock`** — binds one or more TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are known literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call, and the Capability signature remains unchanged.
+
+```xml
+<block>
+  <name>MyUtils</name>
+  <baseType>com.bom.service.FunctionBlock</baseType>
+  <version>1.0.0</version>
+
+  <capabilities>
+    <capability name="round1"
+                class="com.bom.capability.Sync"
+                payloadType="com.bom.types.Float"
+                returnType="com.bom.types.Float">
+      <implementation language="typescript"><![CDATA[
+        (x: number): number => Math.round(x * 10) / 10
+      ]]></implementation>
+    </capability>
+  </capabilities>
+</block>
+```
+
 Built-in ServiceBlocks are defined in the `baseType` hierarchy and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
 
 ```text
@@ -223,7 +285,7 @@ User-defined ServiceBlocks are declared as Aggregations and given a bean name:
 
 ```text
 @myModel   — user-defined JSONModel, bound as bean "myModel"
-@myService — user-defined service Block, bound as bean "myService"
+@myUtils   — user-defined FunctionBlock, bound as bean "myUtils"
 ```
 
 The distinction between `#` (built-in) and `@` (user-defined) is enforced at parse time. `#`-prefixed names are reserved and cannot be used as bean names.

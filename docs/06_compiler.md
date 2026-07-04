@@ -366,8 +366,10 @@ Examples:
 ```text
 BML_UNKNOWN_TYPE              — referenced block type not found
 BML_INVALID_PROPERTY          — property value does not match declared type
+BML_MISSING_BASE_TYPE         — baseType not declared on a Block definition
 BML_MISSING_VERSION           — block instance in composition has no version
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
+BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
 BML_CARDINALITY_VIOLATION     — aggregation cardinality not satisfied
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
 BML_UNKNOWN_BEAN              — @bean reference not found in aggregations
@@ -389,7 +391,41 @@ BML_DEPRECATED_TYPE    — referenced type is deprecated
 
 ---
 
-## Incremental Build
+## FunctionBlock Transpilation
+
+A `FunctionBlock` Sub-Block binds TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The compiler pipeline handles these in stage [6] Type Validator / [7] Expression Parser:
+
+```text
+1. Parse <implementation language="typescript"> body
+2. Validate: must be a single arrow function expression
+             with declared payload and return types matching the Capability
+3. Store as FunctionImplementationNode in the BOM
+
+At render time, the BlockProcessor decides:
+  a) Compile-time execution:  all call arguments are literals
+                              → execute the TS function directly in Node.js
+                              → emit the result as a literal
+  b) Transpilation:           arguments contain property references or expressions
+                              → transpile TS → target language
+                              → emit the transpiled function + call
+```
+
+**Supported TypeScript subset for transpilation:**
+
+```text
+✓  Arrow functions: (x: number): string => { ... }
+✓  const declarations
+✓  Arithmetic, string operations, ternary
+✓  Math.round, Math.floor, Math.ceil, Math.abs, Math.min, Math.max
+✓  String.prototype: replace (with literal regex or string)
+✓  Template literals (simple: no nested expressions)
+✗  Classes, closures over external state
+✗  Async/await, Promises
+✗  Imports, require
+✗  DOM or Node.js APIs
+```
+
+Violations of the supported subset are reported as `BML_FUNCTION_UNSUPPORTED_SYNTAX` at parse time.
 
 The compiler supports incremental builds — skipping compilation of artifacts whose inputs have not changed. This applies to both `bom compile --all` and `bom watch`.
 

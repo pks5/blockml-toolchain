@@ -272,28 +272,90 @@ Children within a Model-bound Aggregation inherit the binding context. Relative 
 
 ---
 
-## Block-Scoped Functions
+## Block-Scoped Functions (FunctionBlock)
 
-Functions declared in the `<functions>` section of a Block are callable within Expressions using their name directly — like a Sync Capability but target-specific:
+Block-scoped functions are Sync Capabilities of a `FunctionBlock` Sub-Block, bound as a context-scoped bean. They are called in Expressions via the bean name and capability name:
 
 ```text
-${ round1(valueStart + i * valueStep) }
-${ formatValue(valueStart + i * valueStep) }
+${ @utils.formatValue(valueStart + i * valueStep) }
+${ @utils.round1(valueStart + i * valueStep) }
 ```
 
-Functions have no prefix. The parser resolves them by checking the Block's function registry after the member namespace. A function name must not collide with a member name.
-
-Functions are target-specific — declared with a `language` attribute. A SCAD BlockProcessor emits SCAD functions; other processors ignore them or provide their own implementation.
+The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggregation:
 
 ```xml
-<functions>
-  <function name="round1" language="scad">
-    <![CDATA[
-function mb_block__....__func__round1(x) = round(x * 10) / 10;
-    ]]>
-  </function>
-</functions>
+<!-- Aggregation on parent Block: -->
+<aggregation name="utils"
+             type="com.machineblocks.calibration.Calibrator.Utils"
+             beanName="utils"
+             cardinality="0..1"
+             scope="context"
+             visibility="hidden" />
+
+<!-- FunctionBlock Sub-Block: -->
+<block>
+  <name>Utils</name>
+  <baseType>com.bom.service.FunctionBlock</baseType>
+  <version>1.0.0</version>
+  <capabilities>
+    <capability name="formatValue"
+                class="com.bom.capability.Sync"
+                payloadType="com.bom.types.Float"
+                returnType="com.bom.types.String">
+      <implementation language="typescript"><![CDATA[
+        (x: number): string => {
+            const rounded = Math.round(x * 10) / 10
+            return String(rounded)
+                .replace(/^0\./, '.')
+                .replace(/^-0\./, '-.')
+        }
+      ]]></implementation>
+    </capability>
+  </capabilities>
+</block>
 ```
+
+The `<implementation>` element is a child of `<capability>`. The `language` attribute identifies the implementation language (`"typescript"` is the only defined value in V1). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
+
+FunctionBlock calls follow the same syntax as regular `@bean` Sync Capability calls — there is no special syntax. The FunctionBlock pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
+
+**Transition path:** when a FunctionBlock capability is later covered by a `#built-in`, the `<implementation>` is removed and the call site is updated from `@utils.formatValue(x)` to `#numbers.formatDecimal(x, 0, '.', 1)`. The Capability signature and all other call sites remain unchanged.
+
+---
+
+## Expressions in `defaultValue`
+
+Property `defaultValue` may be a static literal or an Expression. When an Expression, it may reference other Properties of the same Block and `#built-in` functions:
+
+```xml
+<property name="numberOfSamples" type="Integer" defaultValue="5" />
+<property name="labelSize"       type="Integer" defaultValue="5" />
+<property name="size"            type="Size3D"
+          defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
+```
+
+**Allowed roots in `defaultValue` expressions:**
+
+```text
+✓  Other Properties of the same Block
+✓  #built-in functions
+✗  @bean references
+✗  @model bindings
+✗  bml: loop variables
+✗  registry
+✗  own Capabilities
+```
+
+**Cycle detection:** The compiler resolves all `defaultValue` expressions via topological sort before compilation begins:
+
+```text
+1. Build dependency graph: which Properties reference which other Properties
+2. Topological sort: resolve Properties with no dependencies first
+3. Cycle detected → BML_PROPERTY_CYCLE error (lists the involved properties)
+4. All resolved → proceed with compilation
+```
+
+A cycle occurs when Property A's `defaultValue` references Property B and B's `defaultValue` references A — directly or transitively. This is always an error, never a warning.
 
 ---
 
@@ -549,10 +611,11 @@ Property access (no prefix):
   — no access to parent, grandparent, or sibling properties
   — direction is always parent → child (top-down)
 
-@bean references:
+@bean Sync Capability calls:
   — resolved by walking up the Composition hierarchy
   — context-scoped beans (scope="context") visible to all descendants
   — local beans (scope="local") visible only in declaring Block
+  — FunctionBlock beans follow the same scoping rules
 
 #built-in references:
   — always available, inherited via baseType
@@ -570,9 +633,10 @@ Registry:
   — per Composition only
   — not visible outside
 
-Block-scoped functions:
-  — visible within the Block's own Composition only
-  — not inherited by child Blocks
+defaultValue expressions:
+  — only own Block Properties and #built-ins allowed
+  — resolved before compilation via topological sort
+  — cycles → BML_PROPERTY_CYCLE error
 ```
 
 ---
