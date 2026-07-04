@@ -20,13 +20,12 @@ The compiler is implemented across these packages:
 @bom/parser                              — parse BML → BOM
 @bom/core                                — BOM object model, validation
 @bom/compiler                            — Facade + Target Registry
-@bom/engine-compiler                     — CompilerEngine
-@bom/engine-template                     — TemplateEngine
-@bom/engine-llm                          — LlmEngine
+@bom/core-services                       — built-in ServiceBlock BML definitions
+@bom/engine-maker                        — V1 RenderEngine (compile, template, copy, llm)
 @machineblocks/machineblocks-v3-scad-target  — RenderTarget + BlockProcessors
 ```
 
-`@bom/parser`, `@bom/core`, and `@bom/compiler` are browser and Node compatible. No Node-only APIs in any of these packages. RenderTarget and RenderEngine packages follow the same constraint.
+`@bom/parser`, `@bom/core`, `@bom/compiler`, and `@bom/engine-maker` are browser and Node compatible. No Node-only APIs in any of these packages. RenderTarget packages follow the same constraint.
 
 ---
 
@@ -195,9 +194,11 @@ RenderTargets are registered before compilation begins:
 
 ```typescript
 import { registerTarget } from "@bom/compiler";
+import { MakerEngine } from "@bom/engine-maker";
 import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
 
-registerTarget(new MachineBlocksV3ScadTarget());
+const engine = new MakerEngine();
+registerTarget(new MachineBlocksV3ScadTarget(engine));
 ```
 
 ### Interfaces
@@ -216,11 +217,11 @@ interface BlockProcessor {
 }
 
 interface RenderEngine {
-  render(
-    block:     Block,
-    processor: BlockProcessor,
-    context:   RenderContext
-  ): RenderOutput
+  compile(block: Block, processor: BlockProcessor, context: RenderContext): RenderOutput
+  renderTemplate(block: Block, templatePath: string): RenderOutput
+  renderTemplates(block: Block, templatePaths: string[]): RenderOutput
+  copyTemplate(sourcePath: string, targetPath: string): RenderOutput
+  callLLM(block: Block, prompt: string, context: RenderContext): RenderOutput  // future
 }
 ```
 
@@ -235,34 +236,32 @@ For each Block:
 4. No match → BML_NO_TARGET diagnostic error
 ```
 
-### Target Example — Own Processors Only
+### Target Example — Mixed Strategies
 
 ```typescript
 class MachineBlocksV3ScadTarget implements RenderTarget {
   name = "machineblocks-v3-scad"
-  engine = new CompilerEngine()
+  engine = new MakerEngine()
+
   processors = [
-    new ScadSetProcessor(),    // more specific — checked first
-    new ScadBlockProcessor()   // baseType fallback
+    new ScadSetProcessor(),           // compile strategy — more specific
+    new ScadBlockProcessor(),         // compile strategy — baseType fallback
+    new MathServiceProcessor(),       // copy strategy
+    new FunctionBlockProcessor()      // compile strategy (TS → SCAD)
   ]
+
   delegates = []
 }
 ```
 
-### Target Example — Mixed (Own Processors + Delegates)
+### Delegate-Only Target Example
 
 ```typescript
-class FullStackTarget implements RenderTarget {
-  name = "full-stack-react-spring"
-  engine = new CompilerEngine()
-  processors = [
-    new AppConfigProcessor(),
-    new DockerComposeProcessor()
-  ]
-  delegates = [
-    reactUiTarget,
-    springBoot3Target
-  ]
+class MartianMicroAnyclosureTarget implements RenderTarget {
+  name = "martianmicro-anyclosure"
+  engine = undefined                  // no engine needed
+  processors = []                     // no own processors
+  delegates = [machineBlocksV3ScadTarget]  // full delegation
 }
 ```
 ```
@@ -376,6 +375,7 @@ BML_UNKNOWN_BEAN              — @bean reference not found in aggregations
 BML_CAPABILITY_LINK_MISMATCH  — capability linking: direction or payload mismatch
 BML_NO_TARGET                 — no registered target supports the block's baseType
 BML_UNKNOWN_TARGET            — requested target name not registered
+BML_FUNCTION_UNSUPPORTED_SYNTAX — FunctionBlock implementation uses unsupported TS syntax
 ```
 
 ### Warnings
@@ -393,7 +393,7 @@ BML_DEPRECATED_TYPE    — referenced type is deprecated
 
 ## FunctionBlock Transpilation
 
-A `FunctionBlock` Sub-Block binds TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The compiler pipeline handles these in stage [6] Type Validator / [7] Expression Parser:
+A `FunctionBlock` Sub-Block binds TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The compiler handles these after stage [5] BML→BOM Mapper:
 
 ```text
 1. Parse <implementation language="typescript"> body
@@ -410,22 +410,24 @@ At render time, the BlockProcessor decides:
                               → emit the transpiled function + call
 ```
 
-**Supported TypeScript subset for transpilation:**
+**Supported TypeScript subset for transpilation (V1):**
 
 ```text
 ✓  Arrow functions: (x: number): string => { ... }
 ✓  const declarations
 ✓  Arithmetic, string operations, ternary
 ✓  Math.round, Math.floor, Math.ceil, Math.abs, Math.min, Math.max
-✓  String.prototype: replace (with literal regex or string)
-✓  Template literals (simple: no nested expressions)
+✓  String.prototype.replace (with literal regex or string)
+✓  Template literals (simple, no nested expressions)
 ✗  Classes, closures over external state
 ✗  Async/await, Promises
 ✗  Imports, require
 ✗  DOM or Node.js APIs
 ```
 
-Violations of the supported subset are reported as `BML_FUNCTION_UNSUPPORTED_SYNTAX` at parse time.
+---
+
+## Incremental Build
 
 The compiler supports incremental builds — skipping compilation of artifacts whose inputs have not changed. This applies to both `bom compile --all` and `bom watch`.
 

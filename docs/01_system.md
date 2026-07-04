@@ -89,11 +89,10 @@ bom-compiler/
     parser/            — @bom/parser
     compiler/          — @bom/compiler (Rahmen + Target Registry)
     cli-tools/         — @bom/cli
+    core-services/     — @bom/core-services (built-in ServiceBlock BML definitions)
 
   engines/
-    compiler-engine/   — @bom/engine-compiler (deterministic code transformation)
-    template-engine/   — @bom/engine-template (template loading + substitution)
-    llm-engine/        — @bom/engine-llm      (LLM-based generation)
+    maker-engine/      — @bom/engine-maker (V1 engine: compile + template + copy + llm)
 
   domains/
     machineblocks/
@@ -102,9 +101,13 @@ bom-compiler/
         src/
           target.ts
           processors/
-            ScadBlockProcessor/
+            ScadBlockProcessor/      — compile strategy
               processor.ts
-            ScadSetProcessor/
+            ScadSetProcessor/        — compile strategy
+              processor.ts
+            MathServiceProcessor/    — copy strategy (copies scad-lib math helpers)
+              processor.ts
+            FunctionBlockProcessor/  — compile strategy (TS → SCAD transpilation)
               processor.ts
         runtimes/
           scad-lib/    — Git Submodule: MachineBlocks V3 SCAD Library
@@ -120,22 +123,59 @@ bom-compiler/
   README.md
 ```
 
-### Engine Packages
+### The First Engine: `@bom/engine-maker`
 
-Engines are always independent packages. There is no fixed set — any engine can be built and published separately. The three engines in `engines/` are bundled with the compiler as a convenience. Third-party engines are installed as npm packages and registered in the same way.
-
-### Runtime Structure
-
-Each domain target may have one or more runtimes under its `runtimes/` folder. A runtime is a Git Submodule that provides assets the BlockProcessors depend on at compile time:
+V1 ships with a single engine that covers all rendering strategies needed for the MakerUniverse use cases. BlockProcessors within any target call whichever engine method fits their needs:
 
 ```text
-lib/      — runtime library that generated output files depend on
-config/   — default configuration
-docs/     — API reference used by BlockProcessors
-blocks/   — pre-rendered reference artifacts (same format as compiler output)
+engine.compile(...)         — deterministic code transformation
+engine.renderTemplate(...)  — template file + variable substitution
+engine.copyTemplate(...)    — pure file copy, no transformation
+engine.callLLM(...)         — LLM-based generation (deferred to later)
 ```
 
-Longer term, runtimes will be distributed via package registries rather than Git Submodules.
+This means a single RenderTarget can mix strategies freely — some Processors compile, others use templates, others copy. The engine is the infrastructure; the Processors make the strategy decisions.
+
+New engines can always be built as independent packages. They implement the same `RenderEngine` interface. The first engine is named `maker-engine` because it is designed around the use cases that emerge from the MakerUniverse — physical blocks, electronics, services.
+
+### Built-in ServiceBlock Definitions
+
+Built-in ServiceBlocks (`#math`, `#string`, `#numbers`, `#lists`) are defined as BML Block files in `@bom/core-services`. This makes their Capabilities formally typed, editor-discoverable, and testable:
+
+```text
+packages/core-services/
+  src/
+    com/bom/service/
+      MathService.mbml
+      StringService.mbml
+      NumbersService.mbml
+      ListsService.mbml
+```
+
+Each domain target registers a BlockProcessor for these ServiceBlock types. For SCAD, `MathServiceProcessor` uses the copy strategy — it copies or references the relevant SCAD helper functions from `scad-lib/`.
+
+### Delegate-Only Targets
+
+A domain that builds entirely on existing targets needs no engine and no processors — only delegates:
+
+```text
+martianmicro-anyclosure-target
+  engine: —
+  processors: —
+  delegates: [machineblocks-v3-scad-target]
+```
+
+MartianMicro defines only its Block types as MBML files. All rendering is handled by the MB SCAD target. This is the natural pattern for domain libraries that extend an existing render ecosystem without introducing new rendering logic.
+
+### Engine Packages
+
+Engines are always independent packages implementing the `RenderEngine` interface. There is no fixed set — any engine can be built and published separately:
+
+```text
+@bom/engine-maker      — V1 engine (bundled): compile, template, copy, llm
+@mycorp/engine-xslt    — XSLT transformation (third party example)
+@mycorp/engine-rust    — Rust code generator (third party example)
+```
 
 ---
 

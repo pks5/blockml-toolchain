@@ -200,8 +200,6 @@ A `defaultValue` may be a static literal or an Expression. Expressions in `defau
 
 **Cycle detection:** The compiler performs a topological sort of all Property dependencies before resolving defaults. If Property A's `defaultValue` references Property B and B's `defaultValue` references A — directly or transitively — a `BML_PROPERTY_CYCLE` error is emitted and compilation stops.
 
-Resolution is always deterministic: Properties with no dependencies are resolved first, then those that depend on already-resolved Properties.
-
 ### Resolution Order
 
 Property values are resolved in this order (highest priority first):
@@ -249,30 +247,11 @@ com.bom.core.Block
     com.bom.service.FunctionBlock       — binds TypeScript functions to Sync Capabilities
 ```
 
-**`com.bom.service.ServiceBlock`** — the abstract base. All service types extend this. Declares no members of its own.
+**`com.bom.service.ServiceBlock`** — the abstract base. All service types extend this.
 
-**`com.bom.service.ModelBlock`** — provides data access via Sync Capabilities (`get`, path-based access). Specializations: `com.bom.service.JSONModel`, `com.bom.service.ODataModel`, `com.bom.service.XMLModel`.
+**`com.bom.service.ModelBlock`** — provides data access via path-based Sync Capabilities. Specializations: `com.bom.service.JSONModel`, `com.bom.service.ODataModel`, `com.bom.service.XMLModel`.
 
-**`com.bom.service.FunctionBlock`** — binds one or more TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are known literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call, and the Capability signature remains unchanged.
-
-```xml
-<block>
-  <name>MyUtils</name>
-  <baseType>com.bom.service.FunctionBlock</baseType>
-  <version>1.0.0</version>
-
-  <capabilities>
-    <capability name="round1"
-                class="com.bom.capability.Sync"
-                payloadType="com.bom.types.Float"
-                returnType="com.bom.types.Float">
-      <implementation language="typescript"><![CDATA[
-        (x: number): number => Math.round(x * 10) / 10
-      ]]></implementation>
-    </capability>
-  </capabilities>
-</block>
-```
+**`com.bom.service.FunctionBlock`** — binds TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
 
 Built-in ServiceBlocks are defined in the `baseType` hierarchy and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
 
@@ -285,7 +264,7 @@ User-defined ServiceBlocks are declared as Aggregations and given a bean name:
 
 ```text
 @myModel   — user-defined JSONModel, bound as bean "myModel"
-@myUtils   — user-defined FunctionBlock, bound as bean "myUtils"
+@myService — user-defined service Block, bound as bean "myService"
 ```
 
 The distinction between `#` (built-in) and `@` (user-defined) is enforced at parse time. `#`-prefixed names are reserved and cannot be used as bean names.
@@ -997,9 +976,32 @@ The Target System is the bridge between BOM Core and domain-specific output form
 
 **RenderTarget** — defines the output system. Its name is the full stack identifier used on the CLI. It has a RenderEngine, zero or more BlockProcessors, and zero or more delegates to other RenderTargets.
 
-**RenderEngine** — an independent package that provides the processing infrastructure. There is no fixed set of engine types — any engine can be built and published as its own package. Known examples: `@bom/engine-compiler` (deterministic code transformation), `@bom/engine-template` (template lookup + substitution), `@bom/engine-llm` (LLM-based generation).
+**RenderEngine** — provides the processing infrastructure for BlockProcessors. A BlockProcessor chooses which engine methods to use — compile, renderTemplate, copyTemplate, or callLLM. Each BlockProcessor within the same target may use a different strategy. New engines can always be built and published as independent packages. BOM Core defines only the interface.
 
-**BlockProcessor** — a sub-unit of the RenderTarget registered for a specific `baseType`. Uses the RenderEngine as infrastructure. A single BlockProcessor can handle many Block types internally (e.g. convention-based template lookup), or a target may have one specialized BlockProcessor per Block type, or any combination of both.
+**BlockProcessor** — a sub-unit of the RenderTarget registered for a specific `baseType`. Uses the RenderEngine as infrastructure and chooses its own rendering strategy. A single BlockProcessor can handle many Block types internally, or a target may have one specialized BlockProcessor per Block type, or any combination.
+
+### RenderEngine Interface
+
+A RenderEngine provides methods for all rendering strategies. BlockProcessors call whichever method fits their needs:
+
+```typescript
+interface RenderEngine {
+  // Deterministic code transformation (compile strategy)
+  compile(block: Block, processor: BlockProcessor, context: RenderContext): RenderOutput
+
+  // Template loading + variable substitution (template strategy)
+  renderTemplate(block: Block, templatePath: string): RenderOutput
+  renderTemplates(block: Block, templatePaths: string[]): RenderOutput
+
+  // Pure file copy — no transformation (copy strategy)
+  copyTemplate(sourcePath: string, targetPath: string): RenderOutput
+
+  // LLM-based generation (llm strategy — future)
+  callLLM(block: Block, prompt: string, context: RenderContext): RenderOutput
+}
+```
+
+BOM Core defines only this interface. Each engine package implements it in its own way.
 
 ### RenderTarget Interface
 
@@ -1014,14 +1016,6 @@ interface RenderTarget {
 interface BlockProcessor {
   baseType: string
   process(block: Block, engine: RenderEngine): RenderOutput
-}
-
-interface RenderEngine {
-  render(
-    block:     Block,
-    processor: BlockProcessor,
-    context:   RenderContext
-  ): RenderOutput
 }
 ```
 
@@ -1044,85 +1038,93 @@ A RenderTarget is not categorized as "atomic" or "composite" — the combination
 
 ```text
 Only own processors              — handles everything itself
-Only delegates                   — pure delegation
+Only delegates                   — pure delegation (e.g. MartianMicro targets)
 Own processors + delegates       — mixed: handles some blocks, delegates others
 ```
 
-### RenderEngine Packages
+### BlockProcessor Strategies
 
-Engines are always independent packages. There is no fixed set — any engine can be built and published:
+A BlockProcessor chooses its rendering strategy by calling the appropriate engine method. Multiple strategies can coexist within a single RenderTarget:
 
-```text
-@bom/engine-compiler   — deterministic code transformation (bundled)
-@bom/engine-template   — template loading, substitution, output writing (bundled)
-@bom/engine-llm        — LLM-based generation via API (bundled)
-@mycorp/engine-xslt    — XSLT transformation (third party)
-@mycorp/engine-copy    — simple file copy (third party)
-```
-
-BOM Core defines only the `RenderEngine` interface. The compiler has no knowledge of specific engine implementations.
-
-### BlockProcessor Patterns
-
-**Convention-based (one processor, many block types):**
-
-A single BlockProcessor handles many Block types by resolving the appropriate template or logic internally based on the Block's FQN. This is the standard minimal approach for TemplateEngine targets:
+**Compile strategy** — deterministic code transformation:
 
 ```typescript
-class PiMachineProcessor implements BlockProcessor {
-  baseType = "com.pimachine.core.Block"
-
-  process(block: Block, engine: TemplateEngine): RenderOutput {
-    // Resolves template path from FQN — convention-based, not hardcoded
-    const template = this.resolveTemplate(block.fullQualifiedName)
-    if (!template) throw new BmlDiagnostic("BML_NO_TARGET", block)
-    return engine.renderTemplate(block, template)
+class ScadBlockProcessor implements BlockProcessor {
+  baseType = "com.machineblocks.core.Block"
+  process(block: Block, engine: RenderEngine): RenderOutput {
+    return engine.compile(block, this, context)
   }
 }
 ```
 
-**Specialized (one processor per block type):**
-
-A dedicated BlockProcessor for a specific Block type with custom logic — multiple templates, external API calls, complex transformations:
+**Template strategy** — template file + variable substitution:
 
 ```typescript
-class NfcProProcessor implements BlockProcessor {
-  baseType = "com.pimachine.nfc.NfcPro"  // exact FQN match
-
-  process(block: Block, engine: TemplateEngine): RenderOutput {
-    // Custom multi-step logic
-    return engine.renderTemplates(block, [
-      "nfc_pro_setup.py.tpl",
-      "nfc_pro_config.json.tpl",
-      "nfc_pro_service.sh.tpl"
-    ])
+class NfcPlayerProcessor implements BlockProcessor {
+  baseType = "com.pimachine.nfc.NfcPlayer"
+  process(block: Block, engine: RenderEngine): RenderOutput {
+    return engine.renderTemplates(block, ["nfc_player.py.tpl", "config.json.tpl"])
   }
 }
 ```
 
-**Mixed (both in same target):**
+**Copy strategy** — pure file copy, no transformation:
 
-```text
-Target: pimachine-node-python
-  NfcProProcessor     — exact FQN: com.pimachine.nfc.NfcPro   (1%)
-  PiMachineProcessor  — baseType:  com.pimachine.core.Block    (99% fallback)
+```typescript
+class MathServiceProcessor implements BlockProcessor {
+  baseType = "com.bom.service.MathService"
+  process(block: Block, engine: RenderEngine): RenderOutput {
+    return engine.copyTemplate("lib/math_service.scad", "lib/math_service.scad")
+  }
+}
 ```
 
-Dispatch always tries the most specific match first.
+**Mixed within one target:**
+
+```text
+machineblocks-v3-scad-target
+  ScadBlockProcessor      → compile strategy    (com.machineblocks.core.Block)
+  ScadSetProcessor        → compile strategy    (com.machineblocks.core.Set)
+  MathServiceProcessor    → copy strategy       (com.bom.service.MathService)
+  FunctionBlockProcessor  → compile strategy    (com.bom.service.FunctionBlock)
+```
+
+### Built-in ServiceBlocks as BML
+
+Built-in ServiceBlocks (`#math`, `#string`, etc.) are defined as BML Block files in a dedicated package. This makes their Capabilities formally typed, editor-discoverable, and extensible:
+
+```text
+@bom/core-services/
+  src/
+    com/bom/service/
+      MathService.mbml       — defines all #math Sync Capabilities
+      StringService.mbml     — defines all #string Sync Capabilities
+      NumbersService.mbml    — defines all #numbers Sync Capabilities
+      ListsService.mbml      — defines all #lists Sync Capabilities
+```
+
+Each domain target registers a corresponding BlockProcessor that renders these ServiceBlocks into the target-appropriate form (e.g. `MathServiceProcessor` for SCAD copies or generates the required SCAD helper functions).
+
+### Delegate-Only Targets
+
+A target with no processors and no engine — only delegates. Used for domain libraries that build entirely on existing targets:
+
+```text
+martianmicro-anyclosure-target
+  engine: —
+  processors: —
+  delegates: [machineblocks-v3-scad-target]
+```
+
+MartianMicro defines only its Block types as MBML files. All rendering is handled by the MB SCAD target. The target itself is a thin declaration — no rendering logic needed.
 
 ### RenderOutput
 
 `RenderOutput` is defined by each RenderTarget — the compiler treats it as opaque:
 
 ```typescript
-// CompilerEngine target example
 interface ScadRenderOutput {
   files: { path: string; content: string; sourceMap: string }[]
-}
-
-// TemplateEngine target example
-interface PythonRenderOutput {
-  files: { path: string; content: string }[]
 }
 ```
 
