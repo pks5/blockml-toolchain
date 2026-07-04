@@ -60,7 +60,7 @@ Package:  lowercase, dot-separated, reverse-domain
 Class:    PascalCase
 
 Examples:
-  com.bom.core.Block
+  org.blockml.core.Block
   com.machineblocks.core.Block
   com.machineblocks.bricks.StandardBrick
   com.electronics.core.Component
@@ -112,24 +112,42 @@ A Block is the fundamental unit of BOM Core. It is a parametric, typed, reusable
 ### Metadata
 
 ```text
-name               — short class name (PascalCase)
+name               — short class name (PascalCase). Required. See naming convention below.
 fullQualifiedName  — globally unique FQN
-baseType           — FQN of the parent Block. Required — no default. Must be declared explicitly on every Block definition.
+baseType           — FQN of the parent Block. Required — no default.
 version            — semantic version of this definition
 members            — named members: Properties, Aggregations, Associations, Capabilities
 compositions       — list of Composition definitions
 ```
 
+### Block Name Convention
+
+The `name` field is a class name — not a label or a description:
+
+```text
+Format:  PascalCase — starts with uppercase letter, letters and digits only
+Regex:   [A-Z][a-zA-Z0-9]*
+Valid:   Wall, StandardBrick, Calibrator, DefaultEnclosure, NfcPlayer
+Invalid: my-wall, wall_v2, 2Wall, My Wall
+
+Error:   BML_INVALID_BLOCK_NAME
+```
+
+PascalCase is required because:
+- Sub-Block short-name references (`<Base />`) are unambiguous — no Property name starts with an uppercase letter
+- Block names map directly to SCAD module names without transformation
+- Consistent with class naming conventions in Java and TypeScript
+
 ### Inheritance
 
-Blocks inherit from other Blocks via `baseType`. Inheritance is single — each Block has exactly one base type. The root of all inheritance is `com.bom.core.Block`.
+Blocks inherit from other Blocks via `baseType`. Inheritance is single — each Block has exactly one base type. The root of all inheritance is `org.blockml.core.Block`.
 
 `baseType` is mandatory on every Block definition. Omitting it is a parse-time error (`BML_MISSING_BASE_TYPE`). There is no implicit default — the author must always make an explicit choice about which domain the Block belongs to.
 
 Domain-specific specializations extend this root:
 
 ```text
-com.bom.core.Block
+org.blockml.core.Block
   com.machineblocks.core.Block   — adds size, color, offset, direction, ...
   com.electronics.core.Component — adds footprint, schematic symbol, ...
   com.ui.core.Control            — adds layout, style, events, ...
@@ -241,17 +259,17 @@ A ServiceBlock is a special Block type that provides named, reusable services �
 ### ServiceBlock Class Hierarchy
 
 ```text
-com.bom.core.Block
-  com.bom.service.ServiceBlock          — base for all service types
-    com.bom.service.ModelBlock          — holds data (JSONModel, ODataModel, XMLModel)
-    com.bom.service.FunctionBlock       — binds TypeScript functions to Sync Capabilities
+org.blockml.core.Block
+  org.blockml.service.ServiceBlock          — base for all service types
+    org.blockml.service.ModelBlock          — holds data (JSONModel, ODataModel, XMLModel)
+    org.blockml.service.FunctionBlock       — binds TypeScript functions to Sync Capabilities
 ```
 
-**`com.bom.service.ServiceBlock`** — the abstract base. All service types extend this.
+**`org.blockml.service.ServiceBlock`** — the abstract base. All service types extend this.
 
-**`com.bom.service.ModelBlock`** — provides data access via path-based Sync Capabilities. Specializations: `com.bom.service.JSONModel`, `com.bom.service.ODataModel`, `com.bom.service.XMLModel`.
+**`org.blockml.service.ModelBlock`** — provides data access via path-based Sync Capabilities. Specializations: `org.blockml.service.JSONModel`, `org.blockml.service.ODataModel`, `org.blockml.service.XMLModel`.
 
-**`com.bom.service.FunctionBlock`** — binds TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
+**`org.blockml.service.FunctionBlock`** — binds TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
 
 Built-in ServiceBlocks are defined in the `baseType` hierarchy and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
 
@@ -305,6 +323,34 @@ App       @data scope="context"  ← ODataModel (visible to all descendants)
 
 This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) — but scope is declared on the Aggregation, not on the ServiceBlock type itself. The same ServiceBlock type can have different scopes in different contexts.
 
+### Custom Data
+
+Every Block has an implicit hidden Aggregation `customData` of type `org.blockml.core.CustomData`. This allows arbitrary key-value metadata to be attached to Block definitions and Composition instances without affecting rendering.
+
+```text
+org.blockml.core.CustomData
+  key:   String  — metadata key
+  value: String  — metadata value
+```
+
+In BML, `data:*` attributes are syntactic sugar for `customData` entries. The parser expands them automatically:
+
+```xml
+<!-- BML authoring shortform: -->
+<bricks:StandardBrick
+    id="strip"
+    data:role="structural"
+    data:group="calibration-row-0" />
+
+<!-- Equivalent BOM representation: -->
+StandardBrick._customData: [
+    CustomData { key: "role",  value: "structural" }
+    CustomData { key: "group", value: "calibration-row-0" }
+]
+```
+
+`customData` has no effect on compilation or rendering. It is passed through to the BOM for use by tooling, editors, documentation generators, and CI systems.
+
 ---
 
 ## Associations
@@ -332,12 +378,12 @@ Like Properties, Capabilities are declared with a name and a class (type). Like 
 
 Capabilities use FQN classes instead of string type values. The class determines the communication pattern.
 
-> **Package TBD** — placeholder `com.bom.capability.*`. Candidate: `bom.foundation` (domain to be confirmed).
+> **Package TBD** — placeholder `org.blockml.capability.*`. Candidate: `bom.foundation` (domain to be confirmed).
 
 ```text
-com.bom.capability.AsyncInbound   — receives a message asynchronously
-com.bom.capability.AsyncOutbound  — sends a message asynchronously
-com.bom.capability.Sync           — called synchronously within an Expression
+org.blockml.capability.AsyncInbound   — receives a message asynchronously
+org.blockml.capability.AsyncOutbound  — sends a message asynchronously
+org.blockml.capability.Sync           — called synchronously within an Expression
 ```
 
 ### Capability Metadata
@@ -377,14 +423,14 @@ returnType     — required; declared return type of the synchronous call
 Every Capability declares a `payloadType`. Supported forms:
 
 ```text
-com.bom.types.Integer          — primitive
-com.bom.types.String           — primitive
+org.blockml.type.Integer          — primitive
+org.blockml.type.String           — primitive
 com.myDomain.MyClass           — Object (named fields)
-Array<com.bom.types.Integer>   — Array of primitives
+Array<org.blockml.type.Integer>   — Array of primitives
 Array<com.myDomain.MyClass>    — Array of objects
 ```
 
-Unqualified type names are resolved against the domain's default type namespace (determined by the Block's `baseType`). Array shorthand: `Array<Integer>` resolves identically to `Array<com.bom.types.Integer>` in a domain that defaults to `com.bom.types`.
+Unqualified type names are resolved against the domain's default type namespace (determined by the Block's `baseType`). Array shorthand: `Array<Integer>` resolves identically to `Array<org.blockml.type.Integer>` in a domain that defaults to `org.blockml.type`.
 
 ### Payload Call Syntax
 
@@ -445,6 +491,31 @@ The rule mirrors external access: with `()` = Sync call, without `()` = AsyncInb
 `AsyncOutbound` Capabilities of the same Block cannot be referenced in Expressions — they are triggered by the Block's internal logic, not bound.
 
 Whether Capability linking in Presets is permitted is to be defined.
+
+### Sync Capability Implementations
+
+A `Sync` Capability may carry an `<implementation>` element that provides a target-language function body. This is only permitted when the Block's `baseType` declares support for that implementation language.
+
+```text
+baseType declares:
+  supportedImplementationLanguages: ["scad"]           — e.g. com.machineblocks.core.Block
+  supportedImplementationLanguages: ["scad","typescript"] — e.g. org.blockml.service.FunctionBlock
+```
+
+If a Block carries an `<implementation language="scad">` but its `baseType` does not list `"scad"` in `supportedImplementationLanguages`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
+
+A Sync Capability implementation can live directly on any Block whose `baseType` supports it — not only on `FunctionBlock` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
+
+```xml
+<!-- Direct on Block — valid if baseType supports "scad" -->
+<capabilities>
+  <capability name="formatValue" class="org.blockml.capability.Sync" ...>
+    <implementation language="scad"><![CDATA[
+function formatValue(x) = ...;
+    ]]></implementation>
+  </capability>
+</capabilities>
+```
 
 ### Address Schemes
 
@@ -640,7 +711,7 @@ Sub-Block FQNs map to SCAD module names following the same convention as regular
 
 ```text
 com.machineblocks.calibration.Calibrator.Base
-→  mb_block__com__machineblocks__calibration__Calibrator__Base
+→  mb__com__machineblocks__calibration__Calibrator__Base
 ```
 
 ### Visibility
@@ -653,7 +724,7 @@ Global functions within a Block follow the `func` convention:
 
 ```text
 com.machineblocks.calibration.Calibrator → func → round1
-→  mb_block__com__machineblocks__calibration__Calibrator__func__round1
+→  mb__com__machineblocks__calibration__Calibrator__func__round1
 ```
 
 Functions are declared alongside Sub-Blocks and are Block-scoped utilities — not Capabilities. They are target-specific and declared in the `<functions>` section.
@@ -922,19 +993,19 @@ BOM Core defines a minimal set of primitive types. Domain specializations extend
 ### BOM Core Primitive Types
 
 ```text
-com.bom.types.Boolean
-com.bom.types.Integer
-com.bom.types.Float
-com.bom.types.String
+org.blockml.type.Boolean
+org.blockml.type.Integer
+org.blockml.type.Float
+org.blockml.type.String
 ```
 
 ### Generic Container Types
 
 ```text
-com.bom.types.List<T>
-com.bom.types.AutoOr<T>    — "auto" | T
-com.bom.types.NoneOr<T>    — "none" | T
-com.bom.types.FalseOr<T>   — false  | T
+org.blockml.type.List<T>
+org.blockml.type.AutoOr<T>    — "auto" | T
+org.blockml.type.NoneOr<T>    — "none" | T
+org.blockml.type.FalseOr<T>   — false  | T
 ```
 
 ### Domain Type Namespaces
@@ -947,7 +1018,7 @@ com.electronics.types.*     — Voltage, Resistance, Footprint, ...
 com.ui.types.*              — Color, Length, FontSize, ...
 ```
 
-Types are never shared across domain namespaces unless explicitly defined in `com.bom.types`. This is intentional — domain-specific types carry domain-specific semantics even when they share a name.
+Types are never shared across domain namespaces unless explicitly defined in `org.blockml.type`. This is intentional — domain-specific types carry domain-specific semantics even when they share a name.
 
 ### Type Resolution Shorthand
 
@@ -1072,7 +1143,7 @@ class NfcPlayerProcessor implements BlockProcessor {
 
 ```typescript
 class MathServiceProcessor implements BlockProcessor {
-  baseType = "com.bom.service.MathService"
+  baseType = "org.blockml.service.MathService"
   process(block: Block, engine: RenderEngine): RenderOutput {
     return engine.copyTemplate("lib/math_service.scad", "lib/math_service.scad")
   }
@@ -1085,8 +1156,8 @@ class MathServiceProcessor implements BlockProcessor {
 machineblocks-v3-scad-target
   ScadBlockProcessor      → compile strategy    (com.machineblocks.core.Block)
   ScadSetProcessor        → compile strategy    (com.machineblocks.core.Set)
-  MathServiceProcessor    → copy strategy       (com.bom.service.MathService)
-  FunctionBlockProcessor  → compile strategy    (com.bom.service.FunctionBlock)
+  MathServiceProcessor    → copy strategy       (org.blockml.service.MathService)
+  FunctionBlockProcessor  → compile strategy    (org.blockml.service.FunctionBlock)
 ```
 
 ### Built-in ServiceBlocks as BML
@@ -1094,7 +1165,7 @@ machineblocks-v3-scad-target
 Built-in ServiceBlocks (`#math`, `#string`, etc.) are defined as BML Block files in a dedicated package. This makes their Capabilities formally typed, editor-discoverable, and extensible:
 
 ```text
-@bom/core-services/
+@blockml/core-services/
   src/
     com/bom/service/
       MathService.mbml       — defines all #math Sync Capabilities
@@ -1135,15 +1206,15 @@ interface ScadRenderOutput {
 BOM Core is published as a standalone package with no domain dependencies:
 
 ```text
-@bom/core
+@blockml/core
 ```
 
 Domain BOMs declare it as a dependency:
 
 ```text
-@machineblocks/mbom   depends on   @bom/core
-@electronics/ebom     depends on   @bom/core
-@ui/uibom             depends on   @bom/core
+@machineblocks/mbom   depends on   @blockml/core
+@electronics/ebom     depends on   @blockml/core
+@ui/uibom             depends on   @blockml/core
 ```
 
 BOM Core is browser and Node compatible. It contains no render logic, no file system access, and no domain-specific types.

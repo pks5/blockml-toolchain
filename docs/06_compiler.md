@@ -17,15 +17,15 @@ For the SCAD Renderer see `05_scad_renderer.md`.
 The compiler is implemented across these packages:
 
 ```text
-@bom/parser                              — parse BML → BOM
-@bom/core                                — BOM object model, validation
-@bom/compiler                            — Facade + Target Registry
-@bom/core-services                       — built-in ServiceBlock BML definitions
-@bom/engine-maker                        — V1 RenderEngine (compile, template, copy, llm)
+@blockml/parser                              — parse BML → BOM
+@blockml/core                                — BOM object model, validation
+@blockml/compiler                            — Facade + Target Registry
+@blockml/core-services                       — built-in ServiceBlock BML definitions
+@blockml/engine-maker                        — V1 RenderEngine (compile, template, copy, llm)
 @machineblocks/machineblocks-v3-scad-target  — RenderTarget + BlockProcessors
 ```
 
-`@bom/parser`, `@bom/core`, `@bom/compiler`, and `@bom/engine-maker` are browser and Node compatible. No Node-only APIs in any of these packages. RenderTarget packages follow the same constraint.
+`@blockml/parser`, `@blockml/core`, `@blockml/compiler`, and `@blockml/engine-maker` are browser and Node compatible. No Node-only APIs in any of these packages. RenderTarget packages follow the same constraint.
 
 ---
 
@@ -77,7 +77,7 @@ BOM
 Target Output File(s) + Source Map(s)
 ```
 
-Stages 1–8 are universal — implemented in `@bom/parser` and `@bom/core`. Stages 9–19 are Target-specific — implemented in the registered Render Target package.
+Stages 1–8 are universal — implemented in `@blockml/parser` and `@blockml/core`. Stages 9–19 are Target-specific — implemented in the registered Render Target package.
 
 ---
 
@@ -186,15 +186,15 @@ Dispatches each Block in the BOM to its Block Renderer within the resolved Targe
 
 ## Target Registry
 
-The Target Registry is the central registration point for all RenderTargets. It is part of `@bom/compiler`.
+The Target Registry is the central registration point for all RenderTargets. It is part of `@blockml/compiler`.
 
 ### Registration
 
 RenderTargets are registered before compilation begins:
 
 ```typescript
-import { registerTarget } from "@bom/compiler";
-import { MakerEngine } from "@bom/engine-maker";
+import { registerTarget } from "@blockml/compiler";
+import { MakerEngine } from "@blockml/engine-maker";
 import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
 
 const engine = new MakerEngine();
@@ -270,7 +270,7 @@ class MartianMicroAnyclosureTarget implements RenderTarget {
 
 ## Compiler Facade API
 
-`@bom/compiler` exposes three public functions:
+`@blockml/compiler` exposes three public functions:
 
 ```typescript
 // Parse BML → BOM
@@ -313,7 +313,7 @@ interface ScadFile {
 ### Browser Usage
 
 ```typescript
-import { compileBmlToOutput, registerTarget } from "@bom/compiler";
+import { compileBmlToOutput, registerTarget } from "@blockml/compiler";
 import { ScadTarget } from "@machineblocks/scad-renderer";
 
 registerTarget(new ScadTarget());
@@ -366,6 +366,7 @@ Examples:
 BML_UNKNOWN_TYPE              — referenced block type not found
 BML_INVALID_PROPERTY          — property value does not match declared type
 BML_MISSING_BASE_TYPE         — baseType not declared on a Block definition
+BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
 BML_MISSING_VERSION           — block instance in composition has no version
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
@@ -375,7 +376,11 @@ BML_UNKNOWN_BEAN              — @bean reference not found in aggregations
 BML_CAPABILITY_LINK_MISMATCH  — capability linking: direction or payload mismatch
 BML_NO_TARGET                 — no registered target supports the block's baseType
 BML_UNKNOWN_TARGET            — requested target name not registered
-BML_FUNCTION_UNSUPPORTED_SYNTAX — FunctionBlock implementation uses unsupported TS syntax
+BML_FUNCTION_MISSING_MAIN     — no function named after the Capability found in CDATA
+BML_FUNCTION_DUPLICATE_MAIN   — more than one function matches the Capability name
+BML_FUNCTION_UNSUPPORTED_LANG — language attribute not "scad" or "typescript"
+BML_FUNCTION_NO_RUNTIME_IMPL  — Sync Capability called with non-literal args but no runtime impl
+BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation> language not supported by baseType
 ```
 
 ### Warnings
@@ -412,19 +417,32 @@ Each Capability has exactly one `<implementation>` block. The implementation con
 **Name replacement:** The processor scans the CDATA for all `function <name>(` declarations — these are the names to replace. All occurrences (declarations + calls) are replaced via regex:
 
 ```text
-formatValue    → mb_block__com__machineblocks__calibration__Calibrator__Utils__formatValue
-replaceZeroDot → mb_block__com__machineblocks__calibration__Calibrator__Utils__replaceZeroDot
-strPrefix      → mb_block__com__machineblocks__calibration__Calibrator__Utils__strPrefix
-strSuffix      → mb_block__com__machineblocks__calibration__Calibrator__Utils__strSuffix
+formatValue    → mb__com__machineblocks__calibration__Calibrator__Utils__formatValue
+replaceZeroDot → mb__com__machineblocks__calibration__Calibrator__Utils__replaceZeroDot
+strPrefix      → mb__com__machineblocks__calibration__Calibrator__Utils__strPrefix
+strSuffix      → mb__com__machineblocks__calibration__Calibrator__Utils__strSuffix
+```
+
+**`#built-in` calls in SCAD CDATA:** `#math.*`, `#strings.*` etc. are resolved inside CDATA blocks using the same native mapping logic as in BML expressions. The author never writes raw SCAD FQN calls:
+
+```scad
+// Author writes:
+function formatValue(x) =
+    replaceZeroDot(str(#math.round_n(x, 1)));
+
+// Compiler emits:
+function mb__...__Utils__formatValue(x) =
+    mb__...__Utils__replaceZeroDot(str(bom__org__blockml__service__Math__round_n(x, 1)));
+// + adds: use <.../blocks/org/blockml/service/Math.scad>
 ```
 
 **Example:**
 
 ```xml
 <capability name="formatValue"
-            class="com.bom.capability.Sync"
-            payloadType="com.bom.types.Float"
-            returnType="com.bom.types.String">
+            class="org.blockml.capability.Sync"
+            payloadType="org.blockml.type.Float"
+            returnType="org.blockml.type.String">
   <implementation language="scad"><![CDATA[
 // Main function — name matches capability name
 function formatValue(x) =
@@ -456,10 +474,10 @@ BML_FUNCTION_UNSUPPORTED_LANG — language attribute not "scad" or "typescript"
 
 ### Built-in Services — No Processor Needed
 
-Built-in Services (`#math`, `#string`, etc.) are defined as BML FunctionBlocks in `@bom/core-services`. Their SCAD equivalents live in `scad-lib/services/` using a consistent naming convention:
+Built-in Services (`#math`, `#string`, etc.) are defined as BML FunctionBlocks in `@blockml/core-services`. Their SCAD equivalents live in `scad-lib/services/` using a consistent naming convention:
 
 ```text
-FQN:  com.bom.service.Math  →  scad-lib/services/com/bom/service/Math.scad
+FQN:  org.blockml.service.Math  →  scad-lib/services/com/bom/service/Math.scad
 ```
 
 `Math.scad` example:
@@ -485,9 +503,9 @@ The natural next step is the LLM Engine: given the Capability signature (name, p
 ```xml
 <!-- Future: LLM generates implementation from signature + documentation -->
 <capability name="formatValue"
-            class="com.bom.capability.Sync"
-            payloadType="com.bom.types.Float"
-            returnType="com.bom.types.String">
+            class="org.blockml.capability.Sync"
+            payloadType="org.blockml.type.Float"
+            returnType="org.blockml.type.String">
   <documentation>
     Formats a float by removing the leading zero before the decimal point.
     Examples: 0.1 → ".1"   -0.2 → "-.2"   3.0 → "3.0"
@@ -592,7 +610,7 @@ The compiler supports extension root types (e.g. `<device>`) without modifying t
 Root type registration:
 
 ```typescript
-import { registerRootType } from "@bom/parser";
+import { registerRootType } from "@blockml/parser";
 
 registerRootType({
   name:    "device",
@@ -604,7 +622,7 @@ registerRootType({
 Target registration:
 
 ```typescript
-import { registerTarget } from "@bom/compiler";
+import { registerTarget } from "@blockml/compiler";
 
 registerTarget(new DeviceTarget());
 ```

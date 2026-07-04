@@ -295,13 +295,13 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
 <!-- FunctionBlock Sub-Block: -->
 <block>
   <name>Utils</name>
-  <baseType>com.bom.service.FunctionBlock</baseType>
+  <baseType>org.blockml.service.FunctionBlock</baseType>
   <version>1.0.0</version>
   <capabilities>
     <capability name="formatValue"
-                class="com.bom.capability.Sync"
-                payloadType="com.bom.types.Float"
-                returnType="com.bom.types.String">
+                class="org.blockml.capability.Sync"
+                payloadType="org.blockml.type.Float"
+                returnType="org.blockml.type.String">
       <implementation language="typescript"><![CDATA[
         (x: number): string => {
             const rounded = Math.round(x * 10) / 10

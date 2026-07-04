@@ -14,7 +14,7 @@ BML is a serialization of BOM, which is itself built on BOM Core. For the abstra
 
 BML is the human- and editor-friendly authoring format for BOM. It describes semantic BOM objects — Blocks, Composite Blocks, and Presets — without any knowledge of render target syntax or parameters.
 
-BML is parsed and validated by `@bom/parser`, which produces a BOM document as output. The BOM is then compiled to the selected render target by `@bom/compiler`.
+BML is parsed and validated by `@blockml/parser`, which produces a BOM document as output. The BOM is then compiled to the selected render target by `@blockml/compiler`.
 
 File extension: `.mbml` (for tooling compatibility). Content-type: `bml`.
 
@@ -116,7 +116,7 @@ Property `type` attributes do not require the full FQN. Unqualified type names a
 ```text
 type="Size3D"    →  com.machineblocks.types.Size3D
 type="Color"     →  com.machineblocks.types.Color
-type="Integer"   →  com.bom.types.Integer
+type="Integer"   →  org.blockml.type.Integer
 ```
 
 Explicit FQNs and namespace-prefixed types are always supported.
@@ -128,7 +128,7 @@ Explicit FQNs and namespace-prefixed types are always supported.
 Each document type has its own schema:
 
 ```text
-XML:   XSD schema  (http://www.machineblocks.com/mbml/<type>.xsd)
+XML:   XSD schema  (http://blockml.org/<type>.xsd)
 JSON:  JSON Schema
 ```
 
@@ -143,13 +143,24 @@ A Block definition describes a reusable Block type. It declares Members (Propert
 ### Required Fields
 
 ```text
-<name>              — short class name (PascalCase)
+<name>              — short class name (PascalCase). See naming convention below.
 <fullQualifiedName> — FQN (e.g. com.martianmicro.anyclosure.Wall)
 <baseType>          — FQN of the parent type. Mandatory — no default.
 <version>           — semantic version of this Block definition
 ```
 
-`baseType` is mandatory on every Block definition. Omitting it is a parse-time error (`BML_MISSING_BASE_TYPE`). There is no implicit default — the author must always declare which domain the Block belongs to.
+### Block Name Convention
+
+`<name>` is a class name — PascalCase, letters and digits only:
+
+```text
+Format:  [A-Z][a-zA-Z0-9]*
+Valid:   Wall, StandardBrick, Calibrator, NfcPlayer
+Invalid: my-wall, wall_v2, 2Wall, My Wall
+Error:   BML_INVALID_BLOCK_NAME
+```
+
+PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous — no Property or member name starts with an uppercase letter.
 
 ### Optional Fields
 
@@ -164,15 +175,23 @@ A Block definition describes a reusable Block type. It declares Members (Propert
 
 ### Namespace Declarations
 
-Every BML document must declare the `bml:` namespace alongside any domain namespaces:
+Every BML document must declare the `bml:` namespace alongside any domain namespaces. The `data:` namespace is declared when custom metadata is used:
 
 ```xml
-<block xmlns="http://www.machineblocks.com/mbml/block.xsd"
-       xmlns:bml="http://www.machineblocks.com/mbml/bml"
+<block xmlns="http://blockml.org/block.xsd"
+       xmlns:bml="http://blockml.org/bml"
+       xmlns:data="http://blockml.org/data"
        xmlns:bricks="com.machineblocks.bricks">
 ```
 
-`xmlns:bml` is required whenever `bml:` directives are used (`bml:each`, `bml:if`, etc.). It is recommended to always declare it for consistency.
+```text
+xmlns (default)   — required, identifies the document schema
+xmlns:bml         — required when using bml:each, bml:if, bml:block, bml:id
+xmlns:data        — required when using data:* custom metadata attributes
+xmlns:*           — domain namespaces for Block type references
+```
+
+`xmlns:bml` and `xmlns:data` are recommended to always declare for consistency even when not immediately used.
 
 ### Member Namespace
 
@@ -196,7 +215,7 @@ Specify `<aggregations>` explicitly only when you need a different name, type, c
 ### Minimal Block Example
 
 ```xml
-<block xmlns="http://www.machineblocks.com/mbml/block.xsd"
+<block xmlns="http://blockml.org/block.xsd"
        xmlns:bricks="com.machineblocks.bricks">
 
   <name>Wall</name>
@@ -225,7 +244,7 @@ Specify `<aggregations>` explicitly only when you need a different name, type, c
 ### Full Block Example
 
 ```xml
-<block xmlns="http://www.machineblocks.com/mbml/block.xsd"
+<block xmlns="http://blockml.org/block.xsd"
        xmlns:bricks="com.machineblocks.bricks">
 
   <name>Wall</name>
@@ -339,7 +358,7 @@ visibility    — "public" | "hidden"
 <aggregations>
   <!-- local: only accessible in this Block (default) -->
   <aggregation name="fmt"
-               type="com.bom.service.Formatter"
+               type="org.blockml.service.Formatter"
                beanName="fmt"
                cardinality="0..1"
                scope="local"
@@ -347,7 +366,7 @@ visibility    — "public" | "hidden"
 
   <!-- context: passed down to all child Blocks in Compositions, overridable -->
   <aggregation name="data"
-               type="com.bom.service.JSONModel"
+               type="org.blockml.service.JSONModel"
                beanName="data"
                cardinality="0..1"
                scope="context"
@@ -373,21 +392,21 @@ Associations describe loose references without ownership. Defined for future use
 
 Capabilities describe how a Block communicates. Like Properties, they are declared with a name and a class (FQN). Their value in a Composition is the address or binding — set as an attribute on the child Block instance, just like a Property value.
 
-> **Capability package TBD** — placeholder `com.bom.capability.*`. Candidate: `bom.foundation`.
+> **Capability package TBD** — placeholder `org.blockml.capability.*`. Candidate: `bom.foundation`.
 
 ```xml
 <capabilities>
 
   <!-- AsyncInbound: receives a message asynchronously -->
   <capability name="resize"
-              class="com.bom.capability.AsyncInbound"
+              class="org.blockml.capability.AsyncInbound"
               payloadType="com.myDomain.ResizePayload">
     <documentation>Resize the block to the given dimensions.</documentation>
   </capability>
 
   <!-- AsyncInbound with optional returnType (for replyTo) -->
   <capability name="query"
-              class="com.bom.capability.AsyncInbound"
+              class="org.blockml.capability.AsyncInbound"
               payloadType="com.myDomain.QueryPayload"
               returnType="com.myDomain.QueryResult">
     <documentation>Query and receive an async reply.</documentation>
@@ -395,13 +414,13 @@ Capabilities describe how a Block communicates. Like Properties, they are declar
 
   <!-- AsyncOutbound: sends a message asynchronously -->
   <capability name="resized"
-              class="com.bom.capability.AsyncOutbound"
+              class="org.blockml.capability.AsyncOutbound"
               payloadType="com.myDomain.ResizedPayload">
   </capability>
 
   <!-- Sync: callable within Expressions only, returnType required -->
   <capability name="computeArea"
-              class="com.bom.capability.Sync"
+              class="org.blockml.capability.Sync"
               payloadType="Array&lt;Integer&gt;"
               returnType="Integer">
     <documentation>Returns width * height.</documentation>
@@ -413,7 +432,7 @@ Capabilities describe how a Block communicates. Like Properties, they are declar
 **Payload type forms:**
 
 ```text
-com.bom.types.Integer            — primitive
+org.blockml.type.Integer            — primitive
 com.myDomain.MyClass             — Object (named fields)
 Array&lt;Integer&gt;             — Array of primitives  (XML-escaped: Array<Integer>)
 Array&lt;com.myDomain.MyClass&gt; — Array of objects
@@ -516,6 +535,60 @@ Sibling child Blocks within the same Composition can share values via the regist
 ```
 
 Registry scope is per Composition.
+
+---
+
+## Custom Data (`data:`)
+
+The `data:` namespace allows arbitrary key-value metadata to be attached to Block definitions and Composition instances. It has no effect on compilation or rendering — it is purely for tooling, editors, documentation, and CI systems.
+
+### Namespace Declaration
+
+```xml
+<block xmlns="http://blockml.org/block.xsd"
+       xmlns:bml="http://blockml.org/bml"
+       xmlns:data="http://blockml.org/data"
+       xmlns:bricks="com.machineblocks.bricks">
+```
+
+### Usage
+
+On a Block definition:
+
+```xml
+<block xmlns="http://blockml.org/block.xsd"
+       xmlns:data="http://blockml.org/data">
+  <name>Wall</name>
+  <fullQualifiedName>com.martianmicro.anyclosure.Wall</fullQualifiedName>
+  <baseType>com.machineblocks.core.Block</baseType>
+  <version>1.0.0</version>
+  <data:category>structural</data:category>
+  <data:tags>enclosure wall</data:tags>
+  <data:author>Jan Knoeller</data:author>
+  ...
+</block>
+```
+
+On a Composition instance:
+
+```xml
+<bricks:StandardBrick
+    id="strip"
+    size="[2, 4, 3]"
+    data:role="base-strip"
+    data:group="calibration-row-0" />
+```
+
+### BOM Representation
+
+`data:*` attributes are syntactic sugar for the implicit `customData` Aggregation on every Block. The parser expands them automatically:
+
+```text
+data:role="structural"  →  CustomData { key: "role", value: "structural" }
+data:tags="wall enclosure" →  CustomData { key: "tags", value: "wall enclosure" }
+```
+
+All values are strings. No type validation. No schema. No rendering effect.
 
 ---
 
@@ -670,7 +743,7 @@ xmlns:cal="com.machineblocks.calibration"
 
 ### FunctionBlock Sub-Blocks
 
-A Sub-Block with `baseType="com.bom.service.FunctionBlock"` binds target-language function implementations to Sync Capabilities via `<implementation language="...">`.
+A Sub-Block with `baseType="org.blockml.service.FunctionBlock"` binds target-language function implementations to Sync Capabilities via `<implementation language="...">`.
 
 Two languages are supported:
 
@@ -679,14 +752,14 @@ Two languages are supported:
 ```xml
 <block>
   <name>Utils</name>
-  <baseType>com.bom.service.FunctionBlock</baseType>
+  <baseType>org.blockml.service.FunctionBlock</baseType>
   <version>1.0.0</version>
 
   <capabilities>
     <capability name="formatValue"
-                class="com.bom.capability.Sync"
-                payloadType="com.bom.types.Float"
-                returnType="com.bom.types.String">
+                class="org.blockml.capability.Sync"
+                payloadType="org.blockml.type.Float"
+                returnType="org.blockml.type.String">
       <documentation>Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>
       <implementation language="scad"><![CDATA[
 // Main function — name must match capability name
@@ -722,7 +795,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
 ### Calibrator Example
 
 ```xml
-<block xmlns="http://www.machineblocks.com/mbml/block.xsd">
+<block xmlns="http://blockml.org/block.xsd">
 
   <name>Calibrator</name>
   <fullQualifiedName>com.machineblocks.calibration.Calibrator</fullQualifiedName>
@@ -840,14 +913,14 @@ Target-specific helper functions are declared in a `<functions>` section alongsi
 
 ```text
 com.machineblocks.calibration.Calibrator → func → round1
-→  mb_block__com__machineblocks__calibration__Calibrator__func__round1
+→  mb__com__machineblocks__calibration__Calibrator__func__round1
 ```
 
 ```xml
 <functions>
   <function name="round1" language="scad">
     <![CDATA[
-      function mb_block__com__machineblocks__calibration__Calibrator__func__round1(x) =
+      function mb__com__machineblocks__calibration__Calibrator__func__round1(x) =
           round(x * 10) / 10;
     ]]>
   </function>
@@ -873,7 +946,7 @@ _steps      — assembly order (optional; defaults to document order of _placeme
 ### Structure
 
 ```xml
-<block xmlns="http://www.machineblocks.com/mbml/block.xsd"
+<block xmlns="http://blockml.org/block.xsd"
        xmlns:core="com.machineblocks.core"
        xmlns:ac="com.martianmicro.anyclosure">
 
@@ -996,7 +1069,7 @@ A Presets document is a first-class BOM object with its own FQN. Multiple Preset
 ### Structure
 
 ```xml
-<blockPresets xmlns="http://www.machineblocks.com/mbml/blockPresets.xsd">
+<blockPresets xmlns="http://blockml.org/blockPresets.xsd">
 
   <fullQualifiedName>com.machineblocks.bricks.StandardBrickPresets</fullQualifiedName>
   <blockType>com.machineblocks.bricks.StandardBrick</blockType>

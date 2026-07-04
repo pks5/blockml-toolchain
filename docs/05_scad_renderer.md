@@ -17,7 +17,7 @@ For the MachineBlocks V3 SCAD Library specification see `domains/machineblocks/r
 
 The MachineBlocks V3 SCAD Target is implemented in `@machineblocks/machineblocks-v3-scad-target`. It is browser and Node compatible — no Node-only APIs.
 
-The target uses `@bom/engine-compiler` as its RenderEngine. It registers under the name `"machineblocks-v3-scad"` and contains two BlockProcessors. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the processor logic.
+The target uses `@blockml/engine-maker` as its RenderEngine. It registers under the name `"machineblocks-v3-scad"` and contains two BlockProcessors. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the processor logic.
 
 ### V1 Scope
 
@@ -35,7 +35,7 @@ All user-defined Block types that inherit from `com.machineblocks.core.Block` or
 ## Target Registration
 
 ```typescript
-import { registerTarget } from "@bom/compiler";
+import { registerTarget } from "@blockml/compiler";
 import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
 
 registerTarget(new MachineBlocksV3ScadTarget());
@@ -108,16 +108,16 @@ Functions:    __func__camelCase  (private, not a block)
 
 ```text
 FQN:   com.martianmicro.anyclosure.Wall
-SCAD:  mb_block__com__martianmicro__anyclosure__Wall
+SCAD:  mb__com__martianmicro__anyclosure__Wall
 
 FQN:   com.martianmicro.anyclosure.Wall  (subclass Bottom)
-SCAD:  mb_block__com__martianmicro__anyclosure__Wall__Bottom
+SCAD:  mb__com__martianmicro__anyclosure__Wall__Bottom
 
 FQN:   com.martianmicro.anyclosure.Wall  (private helper)
-SCAD:  mb_block__com__martianmicro__anyclosure__Wall__help__myHelper
+SCAD:  mb__com__martianmicro__anyclosure__Wall__help__myHelper
 
 FQN:   com.martianmicro.anyclosure.Wall  (private function)
-SCAD:  mb_block__com__martianmicro__anyclosure__Wall__func__myFunc
+SCAD:  mb__com__martianmicro__anyclosure__Wall__func__myFunc
 ```
 
 The names `help` and `func` are reserved and cannot be used as subclass names.
@@ -155,7 +155,101 @@ use <../wall/Wall.scad>;
 use <../corner/Corner.scad>;
 ```
 
+### Built-in Service Imports
+
+When a Block's expressions reference `#built-in` calls, the processor automatically adds `use` imports for the required service files. The import is only added when the service is actually used:
+
+```scad
+use <{relative_path_to_scad-lib}/blocks/org/blockml/service/Math.scad>;
+use <{relative_path_to_scad-lib}/blocks/org/blockml/service/Strings.scad>;
+```
+
+Built-in service files live under `scad-lib/blocks/org/blockml/service/` — the same `blocks/` structure as all other pre-rendered blocks, following the FQN package convention:
+
+```text
+scad-lib/blocks/org/blockml/service/
+  Math.scad
+  Strings.scad
+  Numbers.scad
+  Lists.scad
+```
+
 Import paths are always relative and computed from the output file's directory.
+
+---
+
+## SCAD Native Mapping
+
+The SCAD BlockProcessor reads a declarative JSON mapping file (`scad-native-mappings.json`) that maps `#built-in` Capability calls to native SCAD functions where a 1:1 equivalent exists. This avoids unnecessary helper function imports for trivial cases.
+
+### File Location
+
+```text
+machineblocks-v3-scad-target/
+  scad-native-mappings.json
+```
+
+### Format
+
+```json
+{
+  "org.blockml.service.Math": {
+    "min":     { "native": "min",   "arity": 2 },
+    "max":     { "native": "max",   "arity": 2 },
+    "floor":   { "native": "floor", "arity": 1 },
+    "ceil":    { "native": "ceil",  "arity": 1 },
+    "round":   { "native": "round", "arity": 1 },
+    "abs":     { "native": "abs",   "arity": 1 },
+    "pow":     { "native": "pow",   "arity": 2 },
+    "sqrt":    { "native": "sqrt",  "arity": 1 },
+    "round_n": { "native": null },
+    "clamp":   { "native": null }
+  },
+  "org.blockml.service.Strings": {
+    "length":  { "native": "len",   "arity": 1 },
+    "concat":  { "native": "str",   "arity": -1 }
+  }
+}
+```
+
+`native: null` — no direct SCAD equivalent. The processor emits the FQN-prefixed function call and adds a `use` import for the service file.
+
+`arity: -1` — variadic function.
+
+### Resolution Logic
+
+For each `#built-in` call in a Block's expressions or SCAD implementations:
+
+```text
+#math.min(a, b)
+  → native mapping found: min(a, b)     → emit directly, no import needed
+
+#math.round_n(x, 1)
+  → native: null
+  → emit: bom__org__blockml__service__Math__round_n(x, 1)
+  → add:  use <.../blocks/org/blockml/service/Math.scad>
+
+#strings.length(s)
+  → native mapping found: len(s)        → emit directly, no import needed
+```
+
+### SCAD Built-in Service Function Naming
+
+Functions in the service SCAD files use the `bom__` prefix followed by the full FQN with `__` as separator:
+
+```scad
+// Math.scad
+function bom__org__blockml__service__Math__min(a, b) = min(a, b);
+function bom__org__blockml__service__Math__max(a, b) = max(a, b);
+function bom__org__blockml__service__Math__floor(x) = floor(x);
+function bom__org__blockml__service__Math__ceil(x) = ceil(x);
+function bom__org__blockml__service__Math__round(x) = round(x);
+function bom__org__blockml__service__Math__round_n(x, n) = round(x * pow(10, n)) / pow(10, n);
+function bom__org__blockml__service__Math__abs(x) = abs(x);
+function bom__org__blockml__service__Math__pow(b, e) = pow(b, e);
+function bom__org__blockml__service__Math__sqrt(x) = sqrt(x);
+function bom__org__blockml__service__Math__clamp(x, lo, hi) = min(max(x, lo), hi);
+```
 
 ---
 
@@ -310,7 +404,7 @@ A MBOM Composite Block (a Block with a non-empty Composition) is rendered as a w
 ### Generated Structure
 
 ```scad
-module mb_block__com__martianmicro__anyclosure__Wall(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__Wall(config = undef, settings = undef){
     // Native parameters
     blockId    = mb_param_id(config, settings, "com.martianmicro.anyclosure.Wall");
     size       = mb_param_size(config, settings, [1, 8, 9]);
@@ -430,10 +524,10 @@ The compiler does not precompute the bounding box.
 Four submodules are generated, each as a PascalCase subclass of the set module:
 
 ```scad
-mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Total
-mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Print
-mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Step
-mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance
+mb__com__martianmicro__anyclosure__DefaultEnclosure__Total
+mb__com__martianmicro__anyclosure__DefaultEnclosure__Print
+mb__com__martianmicro__anyclosure__DefaultEnclosure__Step
+mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance
 ```
 
 ### Instance Dispatcher
@@ -441,13 +535,13 @@ mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance
 The Instance submodule dispatches to per-instance submodules via if/else chain:
 
 ```scad
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = undef, settings = undef){
     instanceId = mb_param(config, settings, "instanceId");
     if(instanceId == "00001"){
-        mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001(...);
+        mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001(...);
     }
     else if(instanceId == "00002"){
-        mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00002(...);
+        mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00002(...);
     }
     ...
 }
@@ -456,7 +550,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(confi
 Per-instance submodule names use the instance ID appended with an underscore:
 
 ```scad
-mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001
+mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001
 ```
 
 ### Customizer Variables

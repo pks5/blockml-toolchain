@@ -174,7 +174,7 @@ When `beanName` is set, the Aggregation is a ServiceBlock binding. The bean is a
 ```text
 Wall
   _parts:  com.machineblocks.bricks.StandardBrick [0..n] (hidden)
-  myModel: com.bom.service.JSONModel [0..1] (hidden, beanName="myModel")
+  myModel: org.blockml.service.JSONModel [0..1] (hidden, beanName="myModel")
 ```
 
 ---
@@ -204,7 +204,7 @@ Capabilities describe how a Block communicates — externally via async messagin
 
 Like Properties, Capabilities are declared with a name and a class (FQN). Their value in a Composition is the address or binding — set as an attribute on the child instance, exactly like a Property value.
 
-> **Capability package TBD** — placeholder `com.bom.capability.*`. Candidate: `bom.foundation`.
+> **Capability package TBD** — placeholder `org.blockml.capability.*`. Candidate: `bom.foundation`.
 
 ### AsyncInbound
 
@@ -212,7 +212,7 @@ Receives a message from an external sender. Asynchronous.
 
 ```text
 name         — camelCase member name (unique within the Block's member namespace)
-class        — com.bom.capability.AsyncInbound
+class        — org.blockml.capability.AsyncInbound
 payloadType  — declared payload type (see Payload Types)
 returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
 visibility   — "public" | "hidden" (default: "public")
@@ -225,7 +225,7 @@ Sends a message to an external receiver. Triggered by the Block in response to d
 
 ```text
 name         — camelCase member name
-class        — com.bom.capability.AsyncOutbound
+class        — org.blockml.capability.AsyncOutbound
 payloadType  — declared payload type
 returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
 visibility   — "public" | "hidden" (default: "public")
@@ -238,7 +238,7 @@ Called directly within an Expression. Has a return value. No address. Not reacha
 
 ```text
 name         — camelCase member name
-class        — com.bom.capability.Sync
+class        — org.blockml.capability.Sync
 payloadType  — declared payload type
 returnType   — required; FQN of the return type
 visibility   — "public" | "hidden" (default: "public")
@@ -248,14 +248,14 @@ documentation
 ### Payload Types
 
 ```text
-com.bom.types.Integer            — primitive
-com.bom.types.String             — primitive
+org.blockml.type.Integer            — primitive
+org.blockml.type.String             — primitive
 com.myDomain.MyClass             — Object (named fields)
-Array<com.bom.types.Integer>     — Array of primitives
+Array<org.blockml.type.Integer>     — Array of primitives
 Array<com.myDomain.MyClass>      — Array of objects
 ```
 
-Unqualified names resolve against the domain's default type namespace (determined by the Block's `baseType`). For MachineBlocks that is `com.machineblocks.types.*`; for primitives `com.bom.types.*`.
+Unqualified names resolve against the domain's default type namespace (determined by the Block's `baseType`). For MachineBlocks that is `com.machineblocks.types.*`; for primitives `org.blockml.type.*`.
 
 ### Payload Call Syntax
 
@@ -482,7 +482,7 @@ When `_steps` is absent or empty, assembly order equals the document order of `_
 ## MBOM Class Hierarchy
 
 ```text
-com.bom.core.Block                              ← BOM Core (00_bom_core.md)
+org.blockml.core.Block                              ← BOM Core (00_bom_core.md)
   com.machineblocks.core.Block                  ← MBOM base (native properties, #math, #string)
     com.machineblocks.core.Set                  ← dispatched to ScadSetRenderer
       com.martianmicro.anyclosure.DefaultEnclosure

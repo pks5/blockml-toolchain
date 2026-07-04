@@ -58,11 +58,11 @@ STL / 3MF
 
 **BOM is not a render target AST.** BOM is the typed object model. Render Targets are backends that serialize BOM.
 
-**The core is browser-compatible.** No Node.js-only APIs (`fs`, `path`, `child_process`) in `@bom/core`, `@bom/parser`, `@bom/compiler`, or any Render Target package. Only the CLI tools package may use Node-only APIs.
+**The core is browser-compatible.** No Node.js-only APIs (`fs`, `path`, `child_process`) in `@blockml/core`, `@blockml/parser`, `@blockml/compiler`, or any Render Target package. Only the CLI tools package may use Node-only APIs.
 
 **All mappings are declarative and configurable.** No BOM types, properties, or render mappings are hardcoded in compiler logic. Changes to mappings require only configuration changes, not code changes.
 
-**Domain BOMs extend, never modify core.** Adding EBOM, UBOM, or any future BOM does not change `@bom/core`, `@bom/parser`, or `@bom/compiler`.
+**Domain BOMs extend, never modify core.** Adding EBOM, UBOM, or any future BOM does not change `@blockml/core`, `@blockml/parser`, or `@blockml/compiler`.
 
 ---
 
@@ -85,14 +85,14 @@ This is analogous to `tsc` or `webpack` — the tool is global, content projects
 ```text
 bom-compiler/
   packages/
-    core/              — @bom/core
-    parser/            — @bom/parser
-    compiler/          — @bom/compiler (Rahmen + Target Registry)
-    cli-tools/         — @bom/cli
-    core-services/     — @bom/core-services (built-in ServiceBlock BML definitions)
+    core/              — @blockml/core
+    parser/            — @blockml/parser
+    compiler/          — @blockml/compiler (Rahmen + Target Registry)
+    cli-tools/         — @blockml/cli
+    core-services/     — @blockml/core-services (built-in ServiceBlock BML definitions)
 
   engines/
-    maker-engine/      — @bom/engine-maker (V1 engine: compile + template + copy + llm)
+    maker-engine/      — @blockml/engine-maker (V1 engine: compile + template + copy + llm)
 
   domains/
     machineblocks/
@@ -123,7 +123,7 @@ bom-compiler/
   README.md
 ```
 
-### The First Engine: `@bom/engine-maker`
+### The First Engine: `@blockml/engine-maker`
 
 V1 ships with a single engine that covers all rendering strategies needed for the MakerUniverse use cases. BlockProcessors within any target call whichever engine method fits their needs:
 
@@ -140,7 +140,7 @@ New engines can always be built as independent packages. They implement the same
 
 ### Built-in ServiceBlock Definitions
 
-Built-in ServiceBlocks (`#math`, `#string`, `#numbers`, `#lists`) are defined as BML Block files in `@bom/core-services`. This makes their Capabilities formally typed, editor-discoverable, and testable:
+Built-in ServiceBlocks (`#math`, `#string`, `#numbers`, `#lists`) are defined as BML Block files in `@blockml/core-services`. This makes their Capabilities formally typed, editor-discoverable, and testable:
 
 ```text
 packages/core-services/
@@ -172,7 +172,7 @@ MartianMicro defines only its Block types as MBML files. All rendering is handle
 Engines are always independent packages implementing the `RenderEngine` interface. There is no fixed set — any engine can be built and published separately:
 
 ```text
-@bom/engine-maker      — V1 engine (bundled): compile, template, copy, llm
+@blockml/engine-maker      — V1 engine (bundled): compile, template, copy, llm
 @mycorp/engine-xslt    — XSLT transformation (third party example)
 @mycorp/engine-rust    — Rust code generator (third party example)
 ```
@@ -181,7 +181,7 @@ Engines are always independent packages implementing the `RenderEngine` interfac
 
 ## Package Overview
 
-### `@bom/core`
+### `@blockml/core`
 
 The BOM object model. Browser and Node compatible.
 
@@ -198,7 +198,7 @@ The BOM object model. Browser and Node compatible.
 - No domain-specific types, no render logic, no Node-only APIs
 ```
 
-### `@bom/parser`
+### `@blockml/parser`
 
 The universal BML parser and BOM builder. Browser and Node compatible.
 
@@ -212,7 +212,7 @@ The universal BML parser and BOM builder. Browser and Node compatible.
 - No render output
 ```
 
-### `@bom/compiler`
+### `@blockml/compiler`
 
 Facade and Target Registry. Browser and Node compatible.
 
@@ -223,7 +223,7 @@ Facade and Target Registry. Browser and Node compatible.
 - compileBmlToOutput(source, targetName): CompilerResult<RenderOutput>
 ```
 
-### `@bom/cli`
+### `@blockml/cli`
 
 Node.js-only CLI tools.
 
@@ -259,7 +259,7 @@ The SCAD Render Target. Browser and Node compatible.
 - Atomic Target: registers for com.machineblocks.core.Block and com.machineblocks.core.Set
 - Block Renderer: MBOM Block → SCAD module (V1: one generic renderer for all MB Blocks)
 - Set Renderer: MBOM Set → STEPS array + view submodules
-- Module name resolver (FQN → mb_block__com__...)
+- Module name resolver (FQN → mb__com__...)
 - Settings renderer (MBOM properties → SCAD settings array)
 - Expression renderer (Expression AST → SCAD)
 - Assembly pattern mapping (mb_assembly_groove, mb_assembly_offset, etc.)
@@ -278,7 +278,7 @@ The SCAD Render Target. Browser and Node compatible.
 All BOM types use Java-style reverse-domain FQNs with dot separators:
 
 ```text
-com.bom.core.Block
+org.blockml.core.Block
 com.machineblocks.core.Block
 com.machineblocks.bricks.StandardBrick
 com.martianmicro.anyclosure.Wall
@@ -292,11 +292,11 @@ Package segments are lowercase. Class names are PascalCase.
 FQN segments are separated by double underscores. Package segments are lowercase, class names are PascalCase:
 
 ```scad
-mb_block__com__machineblocks__bricks__StandardBrick
-mb_block__com__martianmicro__anyclosure__Wall
-mb_block__com__martianmicro__anyclosure__Wall__Bottom          ← subclass
-mb_block__com__martianmicro__anyclosure__Wall__help__myHelper  ← private helper
-mb_block__com__martianmicro__anyclosure__Wall__func__myFunc    ← private function
+mb__com__machineblocks__bricks__StandardBrick
+mb__com__martianmicro__anyclosure__Wall
+mb__com__martianmicro__anyclosure__Wall__Bottom          ← subclass
+mb__com__martianmicro__anyclosure__Wall__help__myHelper  ← private helper
+mb__com__martianmicro__anyclosure__Wall__func__myFunc    ← private function
 ```
 
 The names `help` and `func` are reserved and cannot be used as subclass names.
@@ -448,7 +448,7 @@ ERROR: MachineBlocks V3 SCAD Library not found.
   Set "mbLibPath" in bom.config.json or MACHINEBLOCKS_LIB_PATH to the library root.
 ```
 
-This resolution is implemented in `@bom/cli` as `resolveMbLib.ts`.
+This resolution is implemented in `@blockml/cli` as `resolveMbLib.ts`.
 
 ---
 
