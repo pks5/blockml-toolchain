@@ -393,37 +393,88 @@ BML_DEPRECATED_TYPE    — referenced type is deprecated
 
 ## FunctionBlock Transpilation
 
-A `FunctionBlock` Sub-Block binds TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The compiler handles these after stage [5] BML→BOM Mapper:
+A `FunctionBlock` Sub-Block binds target-language implementations to Sync Capabilities via `<implementation language="...">`. Two languages are supported in V1:
+
+**`language="scad"`** — SCAD function(s) written directly in the BML. The compiler prefixes all function names with the block FQN.
+
+**`language="typescript"`** — TypeScript arrow function. Compile-time execution only (V1): when all arguments at the call site are literals, the compiler executes the TS function in Node.js and emits the result as a literal. Runtime transpilation to SCAD is deferred (requires LLM or dedicated transpiler).
+
+### SCAD Implementation Rules
+
+Each Capability has exactly one `<implementation>` block. The implementation contains:
 
 ```text
-1. Parse <implementation language="typescript"> body
-2. Validate: must be a single arrow function expression
-             with declared payload and return types matching the Capability
-3. Store as FunctionImplementationNode in the BOM
-
-At render time, the BlockProcessor decides:
-  a) Compile-time execution:  all call arguments are literals
-                              → execute the TS function directly in Node.js
-                              → emit the result as a literal
-  b) Transpilation:           arguments contain property references or expressions
-                              → transpile TS → target language
-                              → emit the transpiled function + call
+- Exactly one main function whose name matches the Capability name
+- Zero or more helper functions with any names
+- All function names are replaced by the compiler with the block-FQN-prefixed form
 ```
 
-**Supported TypeScript subset for transpilation (V1):**
+**Name replacement:** The processor scans the CDATA for all `function <name>(` declarations — these are the names to replace. All occurrences (declarations + calls) are replaced via regex:
 
 ```text
-✓  Arrow functions: (x: number): string => { ... }
-✓  const declarations
-✓  Arithmetic, string operations, ternary
-✓  Math.round, Math.floor, Math.ceil, Math.abs, Math.min, Math.max
-✓  String.prototype.replace (with literal regex or string)
-✓  Template literals (simple, no nested expressions)
-✗  Classes, closures over external state
-✗  Async/await, Promises
-✗  Imports, require
-✗  DOM or Node.js APIs
+formatValue    → mb_block__com__machineblocks__calibration__Calibrator__Utils__formatValue
+replaceZeroDot → mb_block__com__machineblocks__calibration__Calibrator__Utils__replaceZeroDot
+strPrefix      → mb_block__com__machineblocks__calibration__Calibrator__Utils__strPrefix
+strSuffix      → mb_block__com__machineblocks__calibration__Calibrator__Utils__strSuffix
 ```
+
+**Example:**
+
+```xml
+<capability name="formatValue"
+            class="com.bom.capability.Sync"
+            payloadType="com.bom.types.Float"
+            returnType="com.bom.types.String">
+  <implementation language="scad"><![CDATA[
+// Main function — name matches capability name
+function formatValue(x) =
+    replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
+
+// Helper functions
+function replaceZeroDot(s, i = 0) =
+    (i >= len(s) - 1) ? s :
+    (s[i] == "0" && s[i + 1] == ".")
+        ? str(strPrefix(s, i), ".", replaceZeroDot(strSuffix(s, i + 2), 0))
+        : replaceZeroDot(s, i + 1);
+
+function strPrefix(s, k, i = 0) =
+    (i >= k) ? "" : str(s[i], strPrefix(s, k, i + 1));
+
+function strSuffix(s, k, i = 0) =
+    (k + i >= len(s)) ? "" : str(s[k + i], strSuffix(s, k, i + 1));
+  ]]></implementation>
+</capability>
+```
+
+**Validation errors:**
+
+```text
+BML_FUNCTION_MISSING_MAIN    — no function named after the Capability found in CDATA
+BML_FUNCTION_DUPLICATE_MAIN  — more than one function matches the Capability name
+BML_FUNCTION_UNSUPPORTED_LANG — language attribute not "scad" or "typescript"
+```
+
+### Built-in Services — No Processor Needed
+
+Built-in Services (`#math`, `#string`, etc.) are defined as BML FunctionBlocks in `@bom/core-services`. Their SCAD equivalents live in `scad-lib/services/` using a consistent naming convention:
+
+```text
+FQN:  com.bom.service.Math  →  scad-lib/services/com/bom/service/Math.scad
+```
+
+`Math.scad` example:
+
+```scad
+function bom__com__bom__service__Math__min(a, b) = min(a, b);
+function bom__com__bom__service__Math__max(a, b) = max(a, b);
+function bom__com__bom__service__Math__round_n(x, n) = round(x * pow(10, n)) / pow(10, n);
+function bom__com__bom__service__Math__floor(x) = floor(x);
+function bom__com__bom__service__Math__ceil(x) = ceil(x);
+function bom__com__bom__service__Math__abs(x) = abs(x);
+function bom__com__bom__service__Math__clamp(x, lo, hi) = min(max(x, lo), hi);
+```
+
+The ScadBlockProcessor automatically adds `use` imports for each service file that the Block's expressions reference — no separate ServiceBlock Processor needed.
 
 ---
 

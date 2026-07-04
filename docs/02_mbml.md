@@ -670,7 +670,11 @@ xmlns:cal="com.machineblocks.calibration"
 
 ### FunctionBlock Sub-Blocks
 
-A Sub-Block with `baseType="com.bom.service.FunctionBlock"` binds TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The BlockProcessor transpiles the function to the target language.
+A Sub-Block with `baseType="com.bom.service.FunctionBlock"` binds target-language function implementations to Sync Capabilities via `<implementation language="...">`.
+
+Two languages are supported:
+
+**`language="scad"`** — SCAD function(s) written directly in the BML. Each Capability has exactly one main function (whose name matches the Capability name) and zero or more helper functions. The compiler automatically prefixes all function names with the block FQN — so names are written short and clean in the BML:
 
 ```xml
 <block>
@@ -684,20 +688,32 @@ A Sub-Block with `baseType="com.bom.service.FunctionBlock"` binds TypeScript arr
                 payloadType="com.bom.types.Float"
                 returnType="com.bom.types.String">
       <documentation>Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>
-      <implementation language="typescript"><![CDATA[
-        (x: number): string => {
-            const rounded = Math.round(x * 10) / 10
-            return String(rounded)
-                .replace(/^0\./, '.')
-                .replace(/^-0\./, '-.')
-        }
+      <implementation language="scad"><![CDATA[
+// Main function — name must match capability name
+function formatValue(x) =
+    replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
+
+// Helper functions — any names, also prefixed by compiler
+function replaceZeroDot(s, i = 0) =
+    (i >= len(s) - 1) ? s :
+    (s[i] == "0" && s[i + 1] == ".")
+        ? str(strPrefix(s, i), ".", replaceZeroDot(strSuffix(s, i + 2), 0))
+        : replaceZeroDot(s, i + 1);
+
+function strPrefix(s, k, i = 0) =
+    (i >= k) ? "" : str(s[i], strPrefix(s, k, i + 1));
+
+function strSuffix(s, k, i = 0) =
+    (k + i >= len(s)) ? "" : str(s[k + i], strSuffix(s, k, i + 1));
       ]]></implementation>
     </capability>
   </capabilities>
 </block>
 ```
 
-The `<implementation>` element is a child of `<capability>`. The `language` attribute identifies the implementation language. The BlockProcessor decides whether to transpile to the target language or execute at compile time (when all arguments are literals).
+**`language="typescript"`** — TypeScript arrow function. In V1, compile-time execution only: when all call arguments are literals, the compiler executes the function in Node.js and emits the result as a literal. Runtime transpilation to SCAD is deferred.
+
+The `<implementation>` element is a child of `<capability>`. One `<implementation>` per Capability.
 
 ### Visibility
 
