@@ -476,6 +476,30 @@ function bom__com__bom__service__Math__clamp(x, lo, hi) = min(max(x, lo), hi);
 
 The ScadBlockProcessor automatically adds `use` imports for each service file that the Block's expressions reference — no separate ServiceBlock Processor needed.
 
+### Future: LLM-Based Implementation
+
+In V1, a FunctionBlock without a matching `<implementation language="scad">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
+
+The natural next step is the LLM Engine: given the Capability signature (name, payloadType, returnType) and its `<documentation>`, the LLM generates a correct target-language implementation. No `<implementation>` block needed:
+
+```xml
+<!-- Future: LLM generates implementation from signature + documentation -->
+<capability name="formatValue"
+            class="com.bom.capability.Sync"
+            payloadType="com.bom.types.Float"
+            returnType="com.bom.types.String">
+  <documentation>
+    Formats a float by removing the leading zero before the decimal point.
+    Examples: 0.1 → ".1"   -0.2 → "-.2"   3.0 → "3.0"
+  </documentation>
+  <!-- No <implementation> — LLM Engine generates it -->
+</capability>
+```
+
+This also applies to `language="typescript"` → target transpilation: TS → SCAD, TS → Python, TS → Java are all LLM tasks. The `<implementation language="typescript">` then becomes the LLM's input spec rather than a directly executable artifact.
+
+The Capability documentation is therefore not just for humans — it is a primary input for the LLM compiler. Well-written documentation directly improves generated implementation quality.
+
 ---
 
 ## Incremental Build
