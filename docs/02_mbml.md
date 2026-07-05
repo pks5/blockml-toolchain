@@ -332,6 +332,25 @@ baseCrop="${ {'xy': -0.5} }"
 <!-- [["z+", -0.5]]   [["y", 0.11]]   [["xy", -0.5]] -->
 ```
 
+**Suggestions:** A Property may declare a list of suggested values as a combobox hint for editors and the SCAD Customizer. The property type remains unchanged — any value is still accepted:
+
+```xml
+<property name="textColor" type="String" defaultValue="#303D4E">
+  <documentation>Text color for engraved labels.</documentation>
+  <suggestions>
+    <suggestion value="#303D4E" label="Midnight Blue" />
+    <suggestion value="#EAC645" label="Sun Flower" />
+    <suggestion value="#58B99D" label="Turquoise" />
+    <suggestion value="#65C97A" label="Emerald" />
+  </suggestions>
+</property>
+```
+
+SCAD Customizer output:
+```scad
+textColor = "#303D4E"; // [#303D4E:Midnight Blue, #EAC645:Sun Flower, #58B99D:Turquoise, #65C97A:Emerald]
+```
+
 ### Aggregations
 
 Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type.

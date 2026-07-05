@@ -482,20 +482,80 @@ When `_steps` is absent or empty, assembly order equals the document order of `_
 ## MBOM Class Hierarchy
 
 ```text
-org.blockml.core.Block                              ← BOM Core (00_bom_core.md)
-  com.machineblocks.core.Block                  ← MBOM base (native properties, #math, #string)
-    com.machineblocks.core.Set                  ← dispatched to ScadSetRenderer
+org.blockml.core.Block                                  ← BOM Core (abstract)
+  com.machineblocks.core.Block                          ← MBOM base
+    com.machineblocks.core.NativeBlock                  ← final, 1:1 mb_block() mapping
+    com.machineblocks.core.Set                          ← STEPS + View Submodules
       com.martianmicro.anyclosure.DefaultEnclosure
       ...
-    com.machineblocks.core.Place                ← used in Set _placement
-    com.machineblocks.core.Step                 ← used in Set _steps
-    com.machineblocks.bricks.StandardBrick
-    com.martianmicro.anyclosure.Wall
+    com.machineblocks.core.Place                        ← used in Set _placement
+    com.machineblocks.core.Step                         ← used in Set _steps
+    com.machineblocks.bricks.StandardBrick              ← CompositeBlock, uses NativeBlock
+    com.martianmicro.anyclosure.Wall                    ← CompositeBlock, uses NativeBlock
     com.martianmicro.anyclosure.Corner
     ...
 ```
 
-Note: `com.machineblocks.core.Place` and `com.machineblocks.core.Step` are Blocks like any other — they inherit from `com.machineblocks.core.Block` and are processed by the same pipeline. They are not special-cased in BOM Core.
+### com.machineblocks.core.NativeBlock
+
+`NativeBlock` is the direct BML representation of a raw `mb_block()` call. It is **final** — it cannot be used as `baseType` in any Block definition. It can only appear as a child element in Compositions.
+
+```text
+Properties:     native MB3 properties only (from 09_mbom_properties.yml)
+                no custom properties allowed — BML_NATIVE_BLOCK_CUSTOM_PROPERTY
+Capabilities:   none
+Aggregations:   _parts (0..n, hidden) — like all Blocks
+Composition:    allowed — _parts children become mb_block() children
+Final:          baseType = com.machineblocks.core.NativeBlock → BML_FINAL_BASE_TYPE
+```
+
+The ScadBlockProcessor renders `NativeBlock` directly as `mb_block()` with all declared settings.
+
+### com.machineblocks.core.Set
+
+`Set` is a sibling of `NativeBlock` — both extend `com.machineblocks.core.Block`. Unlike `NativeBlock`, `Set` is derivable:
+
+```text
+Derivable:  baseType = com.machineblocks.core.Set  ✓
+Processor:  ScadSetProcessor → STEPS array + 4 view submodules
+```
+
+### allowedSubBlockTypes
+
+```text
+com.machineblocks.core.Block:
+  allowedSubBlockTypes: [com.machineblocks.core.Block,
+                         org.blockml.service.FunctionBlock]
+
+com.machineblocks.core.NativeBlock:
+  allowedSubBlockTypes: []  (final — no Sub-Blocks)
+
+com.machineblocks.core.Set:
+  allowedSubBlockTypes: [com.machineblocks.core.Block,
+                         org.blockml.service.FunctionBlock]
+```
+
+### supportedImplementationLanguages
+
+```text
+com.machineblocks.core.Block:
+  supportedImplementationLanguages: ["scad"]
+
+org.blockml.service.FunctionBlock:
+  supportedImplementationLanguages: ["scad", "typescript"]
+```
+
+### Validation
+
+```text
+BML_FINAL_BASE_TYPE             — NativeBlock used as baseType
+BML_NATIVE_BLOCK_CUSTOM_PROPERTY — custom property declared on NativeBlock
+BML_INVALID_SUBBLOCK_TYPE       — Sub-Block baseType not in allowedSubBlockTypes
+MB_EMPTY_BLOCK                  — Block has no Composition and no registered custom Processor
+                                   (MB_* prefix = MachineBlocks-specific, not BML Core)
+```
+
+Note: `com.machineblocks.core.Place` and `com.machineblocks.core.Step` are regular Blocks — they inherit from `com.machineblocks.core.Block` and are processed by the same pipeline. They are not special-cased in BOM Core.
 
 ---
 

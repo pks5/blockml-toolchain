@@ -51,6 +51,20 @@ scad_mapping_notes:
 # ============================================================================
 # PROPERTIES
 # ============================================================================
+#
+# scad_customizer field (optional):
+#   Defines how the SCAD BlockProcessor serializes a Property for the
+#   OpenSCAD Customizer UI. Only needed for properties that require
+#   special handling (complex types, toggles, suggestions).
+#
+#   split: [x, y, z]    — splits vector into named scalar variables
+#                          recombined in [Hidden] section
+#   hidden_merge: true  — emits recombination in [Hidden] section
+#   auto_toggle: true   — NoneOr<T>: Boolean toggle + value variable
+#                          recombined in [Hidden] section
+#   suggestions: true   — Property has <suggestions> in BML
+#                          → Customizer dropdown comment
+# ============================================================================
 
 properties:
 
@@ -342,6 +356,9 @@ properties:
     default: 0
     scad_name: baseRoundingRadius
     serializer: RoundingRadius
+    scad_customizer:
+      split: [x, y, z]
+      hidden_merge: true
     ai_usage: yes
     description: |
       Corner rounding radii. See 04_types.md for the full RoundingRadius

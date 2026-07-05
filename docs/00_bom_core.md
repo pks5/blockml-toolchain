@@ -192,7 +192,21 @@ type          — FQN of the BOM type
 defaultValue  — typed default value (literal or expression)
 group         — optional grouping hint (for editors)
 documentation — human-readable description
+suggestions   — optional list of suggested values (see below)
 ```
+
+### Suggestions
+
+A Property may declare a list of suggested values. Suggestions are purely metadata — they do not affect type validation or compilation. The Property type remains unchanged. Editors display the property as a combobox; the SCAD BlockProcessor generates an OpenSCAD Customizer dropdown comment.
+
+```text
+suggestions:
+  - value: "#303D4E"   label: "Midnight Blue"
+  - value: "#EAC645"   label: "Sun Flower"
+  - value: "#58B99D"   label: "Turquoise"
+```
+
+The author can always enter any value regardless of suggestions.
 
 ### Computed Default Values
 
@@ -691,6 +705,26 @@ Sub-Blocks are Block definitions nested inside a parent Block definition. They a
 
 Sub-Blocks are declared in a `<subBlocks>` section within the parent Block definition. Each Sub-Block is a full Block definition with its own properties, aggregations, capabilities, and composition.
 
+### Allowed Sub-Block Types
+
+The `baseType` of the parent Block declares which Sub-Block base types are permitted via `allowedSubBlockTypes`. This is defined on concrete domain base types — not on `org.blockml.core.Block` which is abstract and domain-agnostic.
+
+```text
+org.blockml.core.Block
+  → no allowedSubBlockTypes defined (abstract)
+
+com.machineblocks.core.Block
+  → allowedSubBlockTypes: [com.machineblocks.core.Block,
+                            org.blockml.service.FunctionBlock]
+
+org.blockml.service.FunctionBlock
+  → allowedSubBlockTypes: []  (no Sub-Blocks)
+```
+
+**Default when not defined:** no Sub-Blocks allowed.
+
+If a Sub-Block's `baseType` is not in the parent's `allowedSubBlockTypes`, the compiler emits `BML_INVALID_SUBBLOCK_TYPE`.
+
 ### FQN Convention
 
 ```text
@@ -699,15 +733,22 @@ Sub-Block: com.machineblocks.calibration.Calibrator.Base
            com.machineblocks.calibration.Calibrator.StudDiameter
 ```
 
-The Sub-Block name is appended with a dot separator. Sub-Blocks can be nested recursively:
+The Sub-Block `<fullQualifiedName>` is never declared — it is always derived from the parent FQN + `<name>`. Sub-Blocks can be nested recursively:
 
 ```text
 com.machineblocks.calibration.Calibrator.Base.Strip
 ```
 
-### SCAD Mapping
+### Short-Name Reference
 
-Sub-Block FQNs map to SCAD module names following the same convention as regular Blocks, using `__` as separator:
+Within the parent Block's own Composition, Sub-Blocks are referenced by short name without namespace prefix:
+
+```xml
+<Base id="base_stud" ... />
+<StudDiameter id="samples_stud" ... />
+```
+
+### SCAD Mapping
 
 ```text
 com.machineblocks.calibration.Calibrator.Base
@@ -716,18 +757,7 @@ com.machineblocks.calibration.Calibrator.Base
 
 ### Visibility
 
-Sub-Blocks are full BOM objects with their own FQN. They can be referenced from outside the parent Block via their full FQN. However, the naming convention makes their belonging to the parent clear — external use is possible but uncommon.
-
-### Functions
-
-Global functions within a Block follow the `func` convention:
-
-```text
-com.machineblocks.calibration.Calibrator → func → round1
-→  mb__com__machineblocks__calibration__Calibrator__func__round1
-```
-
-Functions are declared alongside Sub-Blocks and are Block-scoped utilities — not Capabilities. They are target-specific and declared in the `<functions>` section.
+Sub-Blocks are full BOM objects referenceable via full FQN from outside the parent Block. External use is possible but uncommon.
 
 ---
 

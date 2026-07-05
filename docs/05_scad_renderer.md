@@ -581,6 +581,58 @@ For each exposed property:
 
 Hidden section (`/* [Hidden] */`) contains derived variables that combine customizer inputs for passing to the module. Internal module computations are never placed in the hidden section.
 
+### Complex Type Serialization
+
+OpenSCAD Customizer only supports flat primitives — no arrays, no compound types. The BlockProcessor splits complex properties into multiple Customizer variables and recombines them in the `[Hidden]` section. The splitting rules are defined per property in `09_mbom_properties.yml` via the `scad_customizer` field:
+
+**`split: [x, y, z]`** — splits a vector/array property into named scalar variables:
+
+```scad
+// Customizer variables (visible):
+baseRoundingRadiusX = 0.5; // [0:0.1:2]
+baseRoundingRadiusY = 0.5;
+baseRoundingRadiusZ = 0.5;
+
+/* [Hidden] */
+baseRoundingRadius = [baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ];
+```
+
+**`auto_toggle: true`** — splits a `NoneOr<T>` property into a boolean toggle + a value:
+
+```scad
+// Customizer variables (visible):
+recessDepthAuto = true;
+recessDepth = 0.5;
+
+/* [Hidden] */
+recessDepthResolved = recessDepthAuto ? "auto" : recessDepth;
+```
+
+**`suggestions`** — generates a Customizer dropdown comment from `<suggestions>` on the Property:
+
+```scad
+textColor = "#303D4E"; // [#303D4E:Midnight Blue, #EAC645:Sun Flower, #58B99D:Turquoise]
+```
+
+### Wrapper mb_block() Logic
+
+The ScadBlockProcessor automatically decides whether to emit a wrapper `mb_block()`:
+
+```text
+Composition has 0 children:
+  → no wrapper — custom Processor logic handles rendering
+  → 0 Compositions without custom Processor → MB_EMPTY_BLOCK
+
+Composition has exactly 1 child:
+  → no wrapper — child is rendered directly
+
+Composition has 2+ children:
+  → automatic wrapper mb_block() with all Block Properties as settings
+  → children rendered inside the wrapper as mb_block() children
+```
+
+Nested NativeBlocks or other Blocks within a Composition are true instances — not wrappers. The automatic wrapper is only ever the outermost container, set once by the Processor.
+
 ---
 
 ## Preset File Rendering
