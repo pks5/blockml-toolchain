@@ -588,6 +588,47 @@ Sets the instance ID from an Expression. Required when using `bml:each` with ext
     offset="${ [2 * i, 0, 0] }" />
 ```
 
+### `bml:with` — Local Variable Scope
+
+```text
+Syntax:  bml:with="var = ${ expression }"
+         bml:with="var1 = ${ expr1 }, var2 = ${ expr2 }"
+
+Allowed on:
+  <composition>
+  <bml:block>
+  <? extends org.blockml.core.Block>
+```
+
+Defines local variables visible only within the element and its descendants. Variables are evaluated left-to-right — later variables can reference earlier ones in the same `bml:with`. Own Properties can be overridden within the local scope.
+
+```xml
+<!-- Local variable -->
+<bricks:Standard
+    bml:with="half = ${ size[0] / 2 }"
+    offset="${ [half, 0, 0] }" />
+
+<!-- Multiple variables -->
+<bml:block bml:with="w = ${ size[0] - 1 }, h = ${ size[2] - 2 }">
+  <core:NativeBlock size="${ [w, size[1], h] }" />
+  <core:NativeBlock size="${ [w, size[1], 1] }" offset="${ [0, 0, h] }" />
+</bml:block>
+
+<!-- Override own property within scope -->
+<bml:block bml:with="numberOfSamples = ${ numberOfSamples + 1 }">
+  <Base numberOfSamples="${ numberOfSamples }" />
+</bml:block>
+```
+
+**Scope rules:**
+```text
+- Visible only within the declaring element and its descendants
+- Shadows outer variables of the same name
+- Can reference Properties of the current Block
+- Can override Properties in local scope (does not mutate the Property)
+- Later variables in the same bml:with can reference earlier ones
+```
+
 ---
 
 ## Registry

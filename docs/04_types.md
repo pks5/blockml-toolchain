@@ -27,6 +27,37 @@ All MBOM types are defined in the `com.machineblocks.types` namespace.
 
 ---
 
+## Type Resolution in BML
+
+Type names in BML `<property type="...">` declarations are resolved as follows:
+
+**No namespace prefix → `org.blockml.type.*` (BOM Core primitives):**
+
+```text
+Float    → org.blockml.type.Float
+Integer  → org.blockml.type.Integer
+String   → org.blockml.type.String
+Boolean  → org.blockml.type.Boolean
+Array<T> → org.blockml.type.Array<T>
+```
+
+**With namespace prefix → resolved via `xmlns` declaration:**
+
+```xml
+xmlns:types="com.machineblocks.types"
+
+type="types:Size3D"          → com.machineblocks.types.Size3D
+type="types:Color"           → com.machineblocks.types.Color
+type="types:BaseCutoutType"  → com.machineblocks.types.BaseCutoutType
+type="types:AutoOr_Float"    → com.machineblocks.types.AutoOr<Float>
+```
+
+There is no implicit fallback to the baseType's namespace. If a type cannot be resolved the compiler emits `BML_UNKNOWN_TYPE`.
+
+**Enum types** are defined in the domain XSD (e.g. `bricks.xsd`). They appear as `types:BaseCutoutType` in BML. The XSD provides the valid values — the editor renders a SelectBox and the XML parser validates. `<suggestions>` on an enum property is an error (`BML_SUGGESTIONS_ON_ENUM`).
+
+---
+
 ## Documentation Status
 
 Type definitions may carry one of the following status annotations:

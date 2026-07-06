@@ -370,6 +370,8 @@ BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
 BML_MISSING_VERSION           — block instance in composition has no version
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
+BML_PRESET_CYCLE              — circular dependency in composite preset basePresets
+BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
 BML_CARDINALITY_VIOLATION     — aggregation cardinality not satisfied
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
 BML_UNKNOWN_BEAN              — @bean reference not found in aggregations

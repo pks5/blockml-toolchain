@@ -179,6 +179,66 @@ Engines are always independent packages implementing the `RenderEngine` interfac
 
 ---
 
+## XSD Schema Structure
+
+BML uses XSD schemas for IDE validation, autocomplete, and Enum enforcement. Schemas are distributed as part of npm packages and referenced via `xsi:schemaLocation` in every BML document.
+
+### Namespace URLs
+
+```text
+BlockML Core (blockml.org):
+  http://blockml.org/schema/block      ← default xmlns for <block> documents
+  http://blockml.org/schema/bml        ← bml: directives namespace
+  http://blockml.org/schema/data       ← data: custom metadata namespace
+  http://blockml.org/schema/types      ← org.blockml.type.*
+  http://blockml.org/schema/service    ← org.blockml.service.*
+  http://blockml.org/schema/blockPresets ← <blockPresets> documents
+  http://blockml.org/schema/library    ← library.xml documents
+
+MachineBlocks (machineblocks.com):
+  http://machineblocks.com/schema/core        ← MB Core, NativeBlock, Set
+  http://machineblocks.com/schema/bricks      ← com.machineblocks.bricks.*
+  http://machineblocks.com/schema/calibration ← com.machineblocks.calibration.*
+```
+
+### Schema Files
+
+```text
+blockml.org schemas (in @blockml/core package):
+  schemas/core/
+    block.xsd          ← BML document structure, bml:* directives, data:*
+    types.xsd          ← org.blockml.type.* primitives
+    service.xsd        ← org.blockml.service.* hierarchy
+    blockPresets.xsd   ← <blockPresets> document structure
+    library.xsd        ← library.xml document structure
+
+machineblocks.com schemas (in @machineblocks/mbom package):
+  schemas/machineblocks/
+    core.xsd           ← MB Core Block, NativeBlock, Set, native properties
+    bricks.xsd         ← com.machineblocks.bricks.* + Enum types
+    calibration.xsd    ← com.machineblocks.calibration.*
+    anyclosure.xsd     ← com.martianmicro.anyclosure.*
+```
+
+### catalog.xml
+
+A `catalog.xml` in the project root maps namespace URLs to local XSD files for offline IDE resolution:
+
+```xml
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <uri name="http://blockml.org/schema/block"
+       uri="./node_modules/@blockml/core/schemas/core/block.xsd" />
+  <uri name="http://blockml.org/schema/bml"
+       uri="./node_modules/@blockml/core/schemas/core/block.xsd" />
+  <uri name="http://machineblocks.com/schema/core"
+       uri="./node_modules/@machineblocks/mbom/schemas/machineblocks/core.xsd" />
+  <uri name="http://machineblocks.com/schema/bricks"
+       uri="./node_modules/@machineblocks/mbom/schemas/machineblocks/bricks.xsd" />
+</catalog>
+```
+
+---
+
 ## Package Overview
 
 ### `@blockml/core`

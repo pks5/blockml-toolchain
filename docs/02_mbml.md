@@ -175,23 +175,71 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
 
 ### Namespace Declarations
 
-Every BML document must declare the `bml:` namespace alongside any domain namespaces. The `data:` namespace is declared when custom metadata is used:
+Every BML document declares namespaces and a `xsi:schemaLocation` for IDE validation and autocomplete. The pattern follows the same convention as Spring and Maven XSD declarations:
 
 ```xml
-<block xmlns="http://blockml.org/block.xsd"
-       xmlns:bml="http://blockml.org/bml"
-       xmlns:data="http://blockml.org/data"
-       xmlns:bricks="com.machineblocks.bricks">
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:data="http://blockml.org/schema/data"
+  xmlns:types="com.machineblocks.types"
+  xmlns:bricks="com.machineblocks.bricks"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+    http://machineblocks.com/schema/core
+        https://machineblocks.com/schemas/core/core.xsd
+    http://machineblocks.com/schema/bricks
+        https://machineblocks.com/schemas/bricks/bricks.xsd
+  ">
 ```
+
+**Namespace URL Konventionen:**
 
 ```text
-xmlns (default)   — required, identifies the document schema
-xmlns:bml         — required when using bml:each, bml:if, bml:block, bml:id
-xmlns:data        — required when using data:* custom metadata attributes
-xmlns:*           — domain namespaces for Block type references
+BlockML Core (Sprach-Namespaces):
+  http://blockml.org/schema/block    ← Dokument-Root (default xmlns)
+  http://blockml.org/schema/bml      ← bml: Direktiven
+  http://blockml.org/schema/data     ← data: Custom Data
+  http://blockml.org/schema/types    ← org.blockml.type.*
+  http://blockml.org/schema/service  ← org.blockml.service.*
+
+MachineBlocks (Domain-Namespaces):
+  http://machineblocks.com/schema/core        ← MB Core, NativeBlock, Set
+  http://machineblocks.com/schema/bricks      ← com.machineblocks.bricks.*
+  http://machineblocks.com/schema/calibration ← com.machineblocks.calibration.*
+
+Domain-Namespaces für Block-FQN Referenzen:
+  xmlns:bricks="com.machineblocks.bricks"     ← <bricks:Standard />
+  xmlns:core="com.machineblocks.core"         ← <core:NativeBlock />
+  xmlns:cal="com.machineblocks.calibration"   ← <cal:Calibrator />
 ```
 
-`xmlns:bml` and `xmlns:data` are recommended to always declare for consistency even when not immediately used.
+**catalog.xml für lokale XSD-Auflösung:**
+
+IDEs nutzen eine Catalog-Datei im Projekt-Root für offline XSD-Auflösung statt Remote-Download:
+
+```xml
+<!-- catalog.xml -->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <uri name="http://blockml.org/schema/block"
+       uri="./node_modules/@blockml/core/schemas/block.xsd" />
+  <uri name="http://machineblocks.com/schema/core"
+       uri="./node_modules/@machineblocks/mbom/schemas/core.xsd" />
+  <uri name="http://machineblocks.com/schema/bricks"
+       uri="./node_modules/@machineblocks/bricks/schemas/bricks.xsd" />
+</catalog>
+```
+
+XSD-Dateien werden als Teil der npm-Packages ausgeliefert.
+
+```text
+xmlns:bml   — required when using bml:* directives
+xmlns:data  — required when using data:* attributes
+xmlns:types — required when using domain-specific types (e.g. types:Size3D)
+xmlns:*     — domain namespaces for Block type references
+```
 
 ### Member Namespace
 
@@ -304,11 +352,55 @@ Properties are typed parameters of the Block. Two kinds exist:
 
 Both use the same `<property>` element. The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Native properties only need to be declared when their default value differs from the core default.
 
+### Type Resolution
+
+Unqualified type names (no namespace prefix) resolve to `org.blockml.type.*` — the BOM Core primitives:
+
+```text
+Float    → org.blockml.type.Float
+Integer  → org.blockml.type.Integer
+String   → org.blockml.type.String
+Boolean  → org.blockml.type.Boolean
+Array<T> → org.blockml.type.Array<T>
+```
+
+Domain-specific types require an explicit namespace prefix declared via `xmlns`:
+
 ```xml
-<properties>
-  <property name="size"          type="Size3D"  defaultValue="[1, 8, 8]" />
-  <property name="wallThickness" type="Integer" defaultValue="1" />
-</properties>
+xmlns:types="com.machineblocks.types"
+
+<property name="size"      type="types:Size3D"         defaultValue="[1, 1, 3]" />
+<property name="baseColor" type="types:Color"           defaultValue="#EAC645" />
+<property name="cutout"    type="types:BaseCutoutType"  defaultValue="standard" />
+
+<!-- Primitives — no prefix needed -->
+<property name="text"      type="String"  defaultValue="" />
+<property name="pillars"   type="Boolean" defaultValue="true" />
+<property name="textSize"  type="Integer" defaultValue="9" />
+```
+
+There is no implicit fallback to the baseType's namespace. If a type cannot be resolved, the compiler emits `BML_UNKNOWN_TYPE`.
+
+### Enum Types vs. Suggestions
+
+**Enum types** are formally defined types with a fixed set of valid values. They are defined in the domain XSD (e.g. `bricks.xsd`). The editor renders them as a **SelectBox**. Compiler validates values against the enum. `<suggestions>` on an enum property is an error:
+
+```xml
+<!-- Enum type — SelectBox, validated -->
+<property name="baseCutoutType" type="types:BaseCutoutType" defaultValue="standard" />
+<!-- No <suggestions> allowed → BML_SUGGESTIONS_ON_ENUM -->
+```
+
+**Suggestions** are hints for free-text properties — the author can enter any value. The editor renders them as a **Combobox**. No compiler validation of suggested values:
+
+```xml
+<!-- Free-text with suggestions — Combobox, not validated -->
+<property name="textFont" type="String" defaultValue="RBNo3.1 Black">
+  <suggestions>
+    <suggestion value="Creato Display"  label="Creato Display" />
+    <suggestion value="RBNo3.1 Black"   label="RBNo3.1 Black" />
+  </suggestions>
+</property>
 ```
 
 **Computed default values:** `defaultValue` may be an Expression referencing other Properties of the same Block. Cycle detection applies — see `10_expression_language.md`.
@@ -316,39 +408,16 @@ Both use the same `<property>` element. The compiler determines native vs. custo
 ```xml
 <property name="numberOfSamples" type="Integer" defaultValue="5" />
 <property name="labelSize"       type="Integer" defaultValue="5" />
-<property name="size"            type="Size3D"
+<property name="size"            type="types:Size3D"
           defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
 ```
 
 **Map-type properties:** Properties with a Map type use JSON Object syntax — not array-of-arrays. The SCAD BlockProcessor translates to SCAD's array-of-arrays format internally:
 
 ```xml
-<!-- BML: JSON Object -->
 sizeMod="${ {'z+': -0.5} }"
 baseAdjustment="${ {'y': 0.11} }"
 baseCrop="${ {'xy': -0.5} }"
-
-<!-- SCAD output (generated by BlockProcessor): -->
-<!-- [["z+", -0.5]]   [["y", 0.11]]   [["xy", -0.5]] -->
-```
-
-**Suggestions:** A Property may declare a list of suggested values as a combobox hint for editors and the SCAD Customizer. The property type remains unchanged — any value is still accepted:
-
-```xml
-<property name="textColor" type="String" defaultValue="#303D4E">
-  <documentation>Text color for engraved labels.</documentation>
-  <suggestions>
-    <suggestion value="#303D4E" label="Midnight Blue" />
-    <suggestion value="#EAC645" label="Sun Flower" />
-    <suggestion value="#58B99D" label="Turquoise" />
-    <suggestion value="#65C97A" label="Emerald" />
-  </suggestions>
-</property>
-```
-
-SCAD Customizer output:
-```scad
-textColor = "#303D4E"; // [#303D4E:Midnight Blue, #EAC645:Sun Flower, #58B99D:Turquoise, #65C97A:Emerald]
 ```
 
 ### Aggregations
@@ -698,6 +767,47 @@ Produces no Block output itself — groups child Blocks for shared directives:
     bml:id="${ 'sample_' + i }"
     offset="${ [2 * i, 0, 0] }" />
 ```
+
+### `bml:with` — Local Variable Scope
+
+Defines local variables within the scope of an element and its children. Variables can reference Properties and other expressions. Own Properties can be overridden within the local scope:
+
+```xml
+<!-- Simple local variable -->
+<bricks:Standard
+    bml:with="halfSize = ${ size[0] / 2 }"
+    size="${ [halfSize, size[1], size[2]] }" />
+
+<!-- Override own property within scope -->
+<bml:block bml:with="numberOfSamples = ${ numberOfSamples + 1 }">
+  <Base numberOfSamples="${ numberOfSamples }" />
+</bml:block>
+
+<!-- Multiple variables — comma-separated -->
+<bml:block bml:with="w = ${ size[0] }, h = ${ size[2] - 1 }">
+  <core:NativeBlock size="${ [w, size[1], h] }" />
+</bml:block>
+```
+
+**Allowed on:**
+```text
+<composition>                       — scope for all children
+<bml:block>                        — scope for block's children
+<? extends org.blockml.core.Block> — scope for that instance only
+```
+
+**Scope rules:**
+```text
+- Variables visible only within the element and its descendants
+- Shadows outer variables of the same name
+- Can reference Properties of the current Block
+- Can override Properties within the local scope
+- Evaluated left-to-right — later variables can reference earlier ones
+```
+
+### `data:` — Custom Metadata Restriction
+
+`data:*` attributes are only allowed on elements that extend `org.blockml.core.Block`. They are not allowed on `<aggregation>`, `<capability>`, or other non-Block elements.
 
 ---
 
@@ -1149,6 +1259,85 @@ com.myproject.presets.MyBrickPresets            ← own additions, same blockTyp
 
 Both are referenced by their own FQN — no conflict, no registry ambiguity.
 
+### Composite Presets
+
+A Preset can extend other Presets via a `<basePresets>` section — a sibling to `<properties>`. This allows building Preset hierarchies without duplicating property values:
+
+```xml
+<blockPresets xmlns="http://blockml.org/schema/blockPresets"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://blockml.org/schema/blockPresets
+                  https://blockml.org/schemas/core/blockPresets.xsd">
+
+  <fullQualifiedName>com.machineblocks.bricks.StandardPresets</fullQualifiedName>
+  <blockType>com.machineblocks.bricks.Standard</blockType>
+  <version>3.0.0</version>
+
+  <presets>
+
+    <!-- Base preset -->
+    <preset id="brick-1x1">
+      <name>Brick 1x1</name>
+      <properties>
+        <property name="size" value="[1, 1, 3]" />
+      </properties>
+    </preset>
+
+    <!-- Base color preset -->
+    <preset id="color-red">
+      <name>Red</name>
+      <properties>
+        <property name="baseColor" value="#D65745" />
+      </properties>
+    </preset>
+
+    <!-- Composite preset — extends two base presets -->
+    <preset id="brick-1x1-red">
+      <name>Brick 1x1 Red</name>
+      <basePresets>
+        <basePreset ref="brick-1x1" />
+        <basePreset ref="color-red" />
+      </basePresets>
+      <!-- No own properties needed — everything from basePresets -->
+    </preset>
+
+    <!-- Chain: composite of a composite -->
+    <preset id="brick-1x1-red-text">
+      <name>Brick 1x1 Red with Text</name>
+      <basePresets>
+        <basePreset ref="brick-1x1-red" />
+      </basePresets>
+      <properties>
+        <property name="text"      value="MB" />
+        <property name="textColor" value="#EDF0F1" />
+      </properties>
+    </preset>
+
+    <!-- Cross-file reference -->
+    <preset id="brick-2x4-special">
+      <name>Brick 2x4 Special</name>
+      <basePresets>
+        <basePreset ref="com.myproject.presets.MyPresets::my-base" />
+      </basePresets>
+      <properties>
+        <property name="size" value="[2, 4, 3]" />
+      </properties>
+    </preset>
+
+  </presets>
+
+</blockPresets>
+```
+
+**Resolution order** (highest priority first):
+```text
+1. Own <properties> of the preset
+2. <basePresets> — applied top-to-bottom, later entries override earlier
+3. Block defaultValues
+```
+
+Cycles (`A extends B extends A`) are detected at compile time: `BML_PRESET_CYCLE`.
+
 ### SCAD Output
 
 A `<blockPresets>` document compiles to a `.json` file in OpenSCAD Customizer format:
@@ -1178,6 +1367,62 @@ Only one config profile is active at a time (set via `bom activate-config`). Mer
 ```text
 configProfile < blockPreset < inline property
 ```
+
+---
+
+## Library Format (`library.xml`)
+
+A Library groups related Blocks, Presets, and Types into a publishable unit. Each package directory may contain a `library.xml` descriptor. If absent, all Blocks in the directory are treated as public.
+
+```xml
+<!-- com.machineblocks.bricks/library.xml -->
+<library xmlns="http://blockml.org/schema/library"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://blockml.org/schema/library
+             https://blockml.org/schemas/core/library.xsd">
+
+  <name>MachineBlocks Bricks</name>
+  <fullQualifiedName>com.machineblocks.bricks</fullQualifiedName>
+  <version>3.0.0</version>
+  <description>Standard brick types for MachineBlocks</description>
+
+  <dependencies>
+    <dependency ref="com.machineblocks.core" version="3.0.0" />
+  </dependencies>
+
+  <types>
+    <schema ref="bricks.xsd" />
+  </types>
+
+  <blocks>
+    <block ref="blocks/Standard.mbml" />
+    <block ref="blocks/Plate.mbml" />
+    <block ref="blocks/Tile.mbml" />
+  </blocks>
+
+  <presets>
+    <presets ref="presets/StandardPresets.mbml" />
+    <presets ref="presets/PlatePresets.mbml" />
+  </presets>
+
+</library>
+```
+
+**Directory structure:**
+
+```text
+com.machineblocks.bricks/
+  library.xml          ← descriptor (optional)
+  bricks.xsd           ← Enum + Type definitions
+  blocks/
+    Standard.mbml
+    Plate.mbml
+    Tile.mbml
+  presets/
+    StandardPresets.mbml
+```
+
+Without `library.xml`: all `.mbml` files in the directory are public.
 
 ---
 
