@@ -114,8 +114,8 @@ The BOM always uses the full FQN. Namespace prefixes are a BML authoring conveni
 Property `type` attributes do not require the full FQN. Unqualified type names are implicitly resolved against the domain's default type namespace. For MachineBlocks that is `com.machineblocks.types`:
 
 ```text
-type="Size3D"    →  com.machineblocks.types.Size3D
-type="Color"     →  com.machineblocks.types.Color
+type="Size3D"    →  com.machineblocks.type.Size3D
+type="Color"     →  com.machineblocks.type.Color
 type="Integer"   →  org.blockml.type.Integer
 ```
 
@@ -182,8 +182,8 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
   xmlns:data="http://blockml.org/schema/data"
-  xmlns:types="com.machineblocks.types"
-  xmlns:bricks="com.machineblocks.bricks"
+  xmlns:core="com.machineblocks.core"
+  xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
     http://blockml.org/schema/block
@@ -202,7 +202,6 @@ BlockML Core (Sprach-Namespaces):
   http://blockml.org/schema/block    ← Dokument-Root (default xmlns)
   http://blockml.org/schema/bml      ← bml: Direktiven
   http://blockml.org/schema/data     ← data: Custom Data
-  http://blockml.org/schema/types    ← org.blockml.type.*
   http://blockml.org/schema/service  ← org.blockml.service.*
 
 MachineBlocks (Domain-Namespaces):
@@ -210,9 +209,10 @@ MachineBlocks (Domain-Namespaces):
   http://machineblocks.com/schema/bricks      ← com.machineblocks.bricks.*
   http://machineblocks.com/schema/calibration ← com.machineblocks.calibration.*
 
-Domain-Namespaces für Block-FQN Referenzen:
-  xmlns:bricks="com.machineblocks.bricks"     ← <bricks:Standard />
+FQN-Referenz-Namespaces:
   xmlns:core="com.machineblocks.core"         ← <core:NativeBlock />
+  xmlns:type="com.machineblocks.type"         ← type="type:Size3D"
+  xmlns:bricks="com.machineblocks.bricks"     ← <bricks:Standard />
   xmlns:cal="com.machineblocks.calibration"   ← <cal:Calibrator />
 ```
 
@@ -224,11 +224,11 @@ IDEs nutzen eine Catalog-Datei im Projekt-Root für offline XSD-Auflösung statt
 <!-- catalog.xml -->
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
   <uri name="http://blockml.org/schema/block"
-       uri="./node_modules/@blockml/core/schemas/block.xsd" />
+       uri="./node_modules/@blockml/core/schemas/core/block.xsd" />
   <uri name="http://machineblocks.com/schema/core"
-       uri="./node_modules/@machineblocks/mbom/schemas/core.xsd" />
+       uri="./node_modules/@machineblocks/mbom/schemas/machineblocks/core.xsd" />
   <uri name="http://machineblocks.com/schema/bricks"
-       uri="./node_modules/@machineblocks/bricks/schemas/bricks.xsd" />
+       uri="./node_modules/@machineblocks/mbom/schemas/machineblocks/bricks.xsd" />
 </catalog>
 ```
 
@@ -237,7 +237,7 @@ XSD-Dateien werden als Teil der npm-Packages ausgeliefert.
 ```text
 xmlns:bml   — required when using bml:* directives
 xmlns:data  — required when using data:* attributes
-xmlns:types — required when using domain-specific types (e.g. types:Size3D)
+xmlns:type  — required when using domain-specific types (e.g. type:Size3D)
 xmlns:*     — domain namespaces for Block type references
 ```
 
@@ -263,7 +263,7 @@ Specify `<aggregations>` explicitly only when you need a different name, type, c
 ### Minimal Block Example
 
 ```xml
-<block xmlns="http://blockml.org/block.xsd"
+<block xmlns="http://blockml.org/schema/block"
        xmlns:bricks="com.machineblocks.bricks">
 
   <name>Wall</name>
@@ -292,7 +292,7 @@ Specify `<aggregations>` explicitly only when you need a different name, type, c
 ### Full Block Example
 
 ```xml
-<block xmlns="http://blockml.org/block.xsd"
+<block xmlns="http://blockml.org/schema/block"
        xmlns:bricks="com.machineblocks.bricks">
 
   <name>Wall</name>
@@ -367,11 +367,11 @@ Array<T> → org.blockml.type.Array<T>
 Domain-specific types require an explicit namespace prefix declared via `xmlns`:
 
 ```xml
-xmlns:types="com.machineblocks.types"
+xmlns:type="com.machineblocks.type"
 
-<property name="size"      type="types:Size3D"         defaultValue="[1, 1, 3]" />
-<property name="baseColor" type="types:Color"           defaultValue="#EAC645" />
-<property name="cutout"    type="types:BaseCutoutType"  defaultValue="standard" />
+<property name="size"      type="type:Size3D"         defaultValue="[1, 1, 3]" />
+<property name="baseColor" type="type:Color"           defaultValue="#EAC645" />
+<property name="cutout"    type="type:BaseCutoutType"  defaultValue="standard" />
 
 <!-- Primitives — no prefix needed -->
 <property name="text"      type="String"  defaultValue="" />
@@ -387,7 +387,7 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 ```xml
 <!-- Enum type — SelectBox, validated -->
-<property name="baseCutoutType" type="types:BaseCutoutType" defaultValue="standard" />
+<property name="baseCutoutType" type="type:BaseCutoutType" defaultValue="standard" />
 <!-- No <suggestions> allowed → BML_SUGGESTIONS_ON_ENUM -->
 ```
 
@@ -408,7 +408,7 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 ```xml
 <property name="numberOfSamples" type="Integer" defaultValue="5" />
 <property name="labelSize"       type="Integer" defaultValue="5" />
-<property name="size"            type="types:Size3D"
+<property name="size"            type="type:Size3D"
           defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
 ```
 
@@ -633,9 +633,9 @@ The `data:` namespace allows arbitrary key-value metadata to be attached to Bloc
 ### Namespace Declaration
 
 ```xml
-<block xmlns="http://blockml.org/block.xsd"
-       xmlns:bml="http://blockml.org/bml"
-       xmlns:data="http://blockml.org/data"
+<block xmlns="http://blockml.org/schema/block"
+       xmlns:bml="http://blockml.org/schema/bml"
+       xmlns:data="http://blockml.org/schema/data"
        xmlns:bricks="com.machineblocks.bricks">
 ```
 
@@ -644,8 +644,8 @@ The `data:` namespace allows arbitrary key-value metadata to be attached to Bloc
 On a Block definition:
 
 ```xml
-<block xmlns="http://blockml.org/block.xsd"
-       xmlns:data="http://blockml.org/data">
+<block xmlns="http://blockml.org/schema/block"
+       xmlns:data="http://blockml.org/schema/data">
   <name>Wall</name>
   <fullQualifiedName>com.martianmicro.anyclosure.Wall</fullQualifiedName>
   <baseType>com.machineblocks.core.Block</baseType>
@@ -924,7 +924,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
 ### Calibrator Example
 
 ```xml
-<block xmlns="http://blockml.org/block.xsd">
+<block xmlns="http://blockml.org/schema/block">
 
   <name>Calibrator</name>
   <fullQualifiedName>com.machineblocks.calibration.Calibrator</fullQualifiedName>
@@ -1075,7 +1075,7 @@ _steps      — assembly order (optional; defaults to document order of _placeme
 ### Structure
 
 ```xml
-<block xmlns="http://blockml.org/block.xsd"
+<block xmlns="http://blockml.org/schema/block"
        xmlns:core="com.machineblocks.core"
        xmlns:ac="com.martianmicro.anyclosure">
 
@@ -1198,7 +1198,7 @@ A Presets document is a first-class BOM object with its own FQN. Multiple Preset
 ### Structure
 
 ```xml
-<blockPresets xmlns="http://blockml.org/blockPresets.xsd">
+<blockPresets xmlns="http://blockml.org/schema/blockPresets">
 
   <fullQualifiedName>com.machineblocks.bricks.StandardBrickPresets</fullQualifiedName>
   <blockType>com.machineblocks.bricks.StandardBrick</blockType>

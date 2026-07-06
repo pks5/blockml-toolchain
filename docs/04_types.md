@@ -44,17 +44,17 @@ Array<T> → org.blockml.type.Array<T>
 **With namespace prefix → resolved via `xmlns` declaration:**
 
 ```xml
-xmlns:types="com.machineblocks.types"
+xmlns:type="com.machineblocks.type"
 
-type="types:Size3D"          → com.machineblocks.types.Size3D
-type="types:Color"           → com.machineblocks.types.Color
-type="types:BaseCutoutType"  → com.machineblocks.types.BaseCutoutType
-type="types:AutoOr_Float"    → com.machineblocks.types.AutoOr<Float>
+type="type:Size3D"          → com.machineblocks.type.Size3D
+type="type:Color"           → com.machineblocks.type.Color
+type="type:BaseCutoutType"  → com.machineblocks.type.BaseCutoutType
+type="type:AutoOr_Float"    → com.machineblocks.type.AutoOr<Float>
 ```
 
 There is no implicit fallback to the baseType's namespace. If a type cannot be resolved the compiler emits `BML_UNKNOWN_TYPE`.
 
-**Enum types** are defined in the domain XSD (e.g. `bricks.xsd`). They appear as `types:BaseCutoutType` in BML. The XSD provides the valid values — the editor renders a SelectBox and the XML parser validates. `<suggestions>` on an enum property is an error (`BML_SUGGESTIONS_ON_ENUM`).
+**Enum types** are defined in the domain XSD (e.g. `bricks.xsd`). They appear as `type:BaseCutoutType` in BML. The XSD provides the valid values — the editor renders a SelectBox and the XML parser validates. `<suggestions>` on an enum property is an error (`BML_SUGGESTIONS_ON_ENUM`).
 
 ---
 
@@ -73,10 +73,10 @@ Type definitions may carry one of the following status annotations:
 # 1. Primitive Types
 
 ```text
-com.machineblocks.types.Boolean
-com.machineblocks.types.Integer
-com.machineblocks.types.Float
-com.machineblocks.types.String
+com.machineblocks.type.Boolean
+com.machineblocks.type.Integer
+com.machineblocks.type.Float
+com.machineblocks.type.String
 ```
 
 MBML serialization:
@@ -95,7 +95,7 @@ String:   "west"
 ## Direction
 
 ```text
-com.machineblocks.types.Direction
+com.machineblocks.type.Direction
 
 Values:  West | North | East | South
 
@@ -107,7 +107,7 @@ SCAD:  "west"
 ## Face
 
 ```text
-com.machineblocks.types.Face
+com.machineblocks.type.Face
 
 Values:  x- | x+ | y- | y+ | z- | z+
 
@@ -119,7 +119,7 @@ SCAD:  "x+"
 ## Axis
 
 ```text
-com.machineblocks.types.Axis
+com.machineblocks.type.Axis
 
 Values:  X | Y | Z
 
@@ -131,7 +131,7 @@ SCAD:  "x"
 ## AlignValue
 
 ```text
-com.machineblocks.types.AlignValue
+com.machineblocks.type.AlignValue
 
 Values:  Start | Center | End
 
@@ -143,7 +143,7 @@ SCAD:  "start"
 ## StudType
 
 ```text
-com.machineblocks.types.StudType
+com.machineblocks.type.StudType
 
 Values:  Solid | Hollow
 
@@ -155,7 +155,7 @@ SCAD:  "solid"
 ## HoleType
 
 ```text
-com.machineblocks.types.HoleType
+com.machineblocks.type.HoleType
 
 Values:  Pin | Axle
 
@@ -167,7 +167,7 @@ SCAD:  "pin"
 ## AssemblyMode
 
 ```text
-com.machineblocks.types.AssemblyMode
+com.machineblocks.type.AssemblyMode
 
 Values:  Unassembled | Assembled | Merged
 
@@ -179,7 +179,7 @@ SCAD:  "merged"
 ## Color
 
 ```text
-com.machineblocks.types.Color
+com.machineblocks.type.Color
 
 Values:  "#RRGGBB" | "#RRGGBBAA" | [r, g, b] | [r, g, b, a]
 
@@ -191,7 +191,7 @@ SCAD:  "#EAC645"
 ## ColorOrInherit
 
 ```text
-com.machineblocks.types.ColorOrInherit
+com.machineblocks.type.ColorOrInherit
 
 Values:  Color | "inherit"
 ```
@@ -202,11 +202,11 @@ Values:  Color | "inherit"
 
 | Type                                  | Description                   |
 |---------------------------------------|-------------------------------|
-| `com.machineblocks.types.FloatMm`     | Length in millimeters         |
-| `com.machineblocks.types.FloatMbu`    | Length in MachineBlocks units |
-| `com.machineblocks.types.FloatGrid`   | Length in grid units          |
-| `com.machineblocks.types.FloatPt`     | Text size unit                |
-| `com.machineblocks.types.FloatDeg`    | Angle in degrees              |
+| `com.machineblocks.type.FloatMm`     | Length in millimeters         |
+| `com.machineblocks.type.FloatMbu`    | Length in MachineBlocks units |
+| `com.machineblocks.type.FloatGrid`   | Length in grid units          |
+| `com.machineblocks.type.FloatPt`     | Text size unit                |
+| `com.machineblocks.type.FloatDeg`    | Angle in degrees              |
 
 ---
 
@@ -250,7 +250,7 @@ Boolean | T
 ## AxisXY\<T\>
 
 ```text
-com.machineblocks.types.AxisXY
+com.machineblocks.type.AxisXY
 
 MBOM:  { x: T, y: T }
 
@@ -266,7 +266,7 @@ SCAD serialization:
 ## AxisXYZ\<T\>
 
 ```text
-com.machineblocks.types.AxisXYZ
+com.machineblocks.type.AxisXYZ
 
 MBOM:  { x: T, y: T, z: T }
 
@@ -290,7 +290,7 @@ SCAD serialization:
 Covers the four lateral faces: `x-`, `x+`, `y-`, `y+`
 
 ```text
-com.machineblocks.types.PerSide4
+com.machineblocks.type.PerSide4
 
 MBOM:  { "x-": T, "x+": T, "y-": T, "y+": T }
 
@@ -310,7 +310,7 @@ SCAD serialization:
 Covers all six faces: `x-`, `x+`, `y-`, `y+`, `z-`, `z+`
 
 ```text
-com.machineblocks.types.FaceVector6
+com.machineblocks.type.FaceVector6
 
 MBOM:  { "x-": T, "x+": T, "y-": T, "y+": T, "z-": T, "z+": T }
 
@@ -323,7 +323,7 @@ SCAD serialization:  always full 6-element array
 Sparse face map — only present faces are set.
 
 ```text
-com.machineblocks.types.FaceMap
+com.machineblocks.type.FaceMap
 
 MBOM:  { face: T, ... }  (partial)
 
@@ -341,7 +341,7 @@ Supports namespace-qualified keys for composite block forwarding:
 ## Size3D
 
 ```text
-com.machineblocks.types.Size3D
+com.machineblocks.type.Size3D
 
 MBOM:  { x: Integer, y: Integer, z: Integer }
 
@@ -354,7 +354,7 @@ Integer grid dimensions. Defines the block's spatial contract.
 ## GridPosition3D
 
 ```text
-com.machineblocks.types.GridPosition3D
+com.machineblocks.type.GridPosition3D
 
 MBOM:  { x: Integer, y: Integer, z: Integer }
 
@@ -365,7 +365,7 @@ SCAD:  ["offset", [0, 4, 1]]
 ## SelectiveGrid\<T\>
 
 ```text
-com.machineblocks.types.SelectiveGrid
+com.machineblocks.type.SelectiveGrid
 
 MBOM:
 {
@@ -387,7 +387,7 @@ SCAD serialization:
 ## WallGap
 
 ```text
-com.machineblocks.types.WallGap
+com.machineblocks.type.WallGap
 
 MBOM:  { face: Face, position: Integer, length: Integer | "full" }
 
@@ -401,7 +401,7 @@ SCAD:  ["x+"]                          →  position 0, full length
 ## WallGapList
 
 ```text
-com.machineblocks.types.WallGapList
+com.machineblocks.type.WallGapList
 
 List of WallGap entries.
 
@@ -415,7 +415,7 @@ SCAD:
 ## Connector
 
 ```text
-com.machineblocks.types.Connector
+com.machineblocks.type.Connector
 
 MBOM:  { face, axis, gender, align, paddingStart, paddingEnd }
 
@@ -429,7 +429,7 @@ SCAD:
 ## ScrewHole
 
 ```text
-com.machineblocks.types.ScrewHole
+com.machineblocks.type.ScrewHole
 
 MBOM:  { face, position: {x,y}, diameter, depth, insetThickness, insetDepth }
 
@@ -446,7 +446,7 @@ SCAD:
 > implementation status.
 
 ```text
-com.machineblocks.types.RoundingRadius
+com.machineblocks.type.RoundingRadius
 
 MBOM canonical:  8 corners × 6 radii per corner
 Corners:         sw-  nw-  ne-  se-  (lower Z)

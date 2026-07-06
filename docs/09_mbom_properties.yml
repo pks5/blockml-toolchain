@@ -74,7 +74,7 @@ properties:
 
   - name: unitMbu
     group: system
-    type: com.machineblocks.types.FloatMm
+    type: com.machineblocks.type.FloatMm
     default: 1.6
     scad_name: unitMbu
     serializer: scalar
@@ -85,7 +85,7 @@ properties:
 
   - name: unitGrid
     group: system
-    type: com.machineblocks.types.AxisXY<com.machineblocks.types.FloatMbu>
+    type: com.machineblocks.type.AxisXY<com.machineblocks.type.FloatMbu>
     default: { x: 5, y: 2 }
     scad_name: unitGrid
     serializer: AxisXY
@@ -96,7 +96,7 @@ properties:
 
   - name: scale
     group: system
-    type: com.machineblocks.types.Float
+    type: com.machineblocks.type.Float
     default: 1.0
     scad_name: scale
     serializer: scalar
@@ -107,7 +107,7 @@ properties:
 
   - name: printerNozzleDiameter
     group: system
-    type: com.machineblocks.types.FloatMm
+    type: com.machineblocks.type.FloatMm
     default: 0.4
     scad_name: printerNozzleDiameter
     serializer: scalar
@@ -119,7 +119,7 @@ properties:
 
   - name: printerLayerHeight
     group: system
-    type: com.machineblocks.types.FloatMm
+    type: com.machineblocks.type.FloatMm
     default: 0.2
     scad_name: printerLayerHeight
     serializer: scalar
@@ -132,7 +132,7 @@ properties:
 
   - name: id
     group: system
-    type: com.machineblocks.types.String
+    type: com.machineblocks.type.String
     default: ""
     scad_name: id
     serializer: scalar
@@ -146,7 +146,7 @@ properties:
 
   - name: render
     group: system
-    type: com.machineblocks.types.Boolean
+    type: com.machineblocks.type.Boolean
     default: true
     scad_name: render
     serializer: scalar
@@ -158,7 +158,7 @@ properties:
 
   - name: debug
     group: system
-    type: com.machineblocks.types.Boolean
+    type: com.machineblocks.type.Boolean
     default: false
     scad_name: debug
     serializer: scalar
@@ -172,7 +172,7 @@ properties:
 
   - name: size
     group: core_geometry
-    type: com.machineblocks.types.Size3D
+    type: com.machineblocks.type.Size3D
     default: { x: 1, y: 1, z: 1 }
     scad_name: size
     serializer: Size3D
@@ -183,7 +183,7 @@ properties:
 
   - name: sizeMod
     group: core_geometry
-    type: com.machineblocks.types.FaceVector6<com.machineblocks.types.FloatGrid>
+    type: com.machineblocks.type.FaceVector6<com.machineblocks.type.FloatGrid>
     default: { "x-": 0, "x+": 0, "y-": 0, "y+": 0, "z-": 0, "z+": 0 }
     scad_name: sizeMod
     serializer: FaceVector6
@@ -197,7 +197,7 @@ properties:
 
   - name: crop
     group: core_geometry
-    type: com.machineblocks.types.FaceVector6<com.machineblocks.types.FloatGrid>
+    type: com.machineblocks.type.FaceVector6<com.machineblocks.type.FloatGrid>
     default: { "x-": 0, "x+": 0, "y-": 0, "y+": 0, "z-": 0, "z+": 0 }
     scad_name: crop
     serializer: FaceVector6
@@ -208,7 +208,7 @@ properties:
 
   - name: slope
     group: core_geometry
-    type: com.machineblocks.types.FalseOr<com.machineblocks.types.PerSide4<com.machineblocks.types.FloatGrid>>
+    type: com.machineblocks.type.FalseOr<com.machineblocks.type.PerSide4<com.machineblocks.type.FloatGrid>>
     default: false
     scad_name: slope
     serializer: PerSide4_or_false
@@ -219,7 +219,7 @@ properties:
 
   - name: bevel
     group: core_geometry
-    type: com.machineblocks.types.Float
+    type: com.machineblocks.type.Float
     default: [[0,0],[0,0],[0,0],[0,0]]
     scad_name: bevel
     serializer: bevel_array
@@ -234,7 +234,7 @@ properties:
 
   - name: offset
     group: positioning
-    type: com.machineblocks.types.GridPosition3D
+    type: com.machineblocks.type.GridPosition3D
     default: { x: 0, y: 0, z: 0 }
     scad_name: offset
     serializer: GridPosition3D
@@ -247,7 +247,7 @@ properties:
 
   - name: direction
     group: positioning
-    type: com.machineblocks.types.Direction
+    type: com.machineblocks.type.Direction
     default: West
     scad_name: direction
     serializer: Direction
@@ -257,7 +257,7 @@ properties:
 
   - name: align
     group: positioning
-    type: com.machineblocks.types.AlignValue
+    type: com.machineblocks.type.AlignValue
     default: Start
     scad_name: align
     serializer: AlignValue
@@ -267,7 +267,7 @@ properties:
 
   - name: rotation
     group: positioning
-    type: com.machineblocks.types.AxisXYZ<com.machineblocks.types.FloatDeg>
+    type: com.machineblocks.type.AxisXYZ<com.machineblocks.type.FloatDeg>
     default: { x: 0, y: 0, z: 0 }
     scad_name: rotation
     serializer: AxisXYZ
@@ -277,7 +277,7 @@ properties:
 
   - name: rotationOffset
     group: positioning
-    type: com.machineblocks.types.GridPosition3D
+    type: com.machineblocks.type.GridPosition3D
     default: { x: 0, y: 0, z: 0 }
     scad_name: rotationOffset
     serializer: GridPosition3D
@@ -292,7 +292,7 @@ properties:
 
   - name: base
     group: base
-    type: com.machineblocks.types.Boolean
+    type: com.machineblocks.type.Boolean
     default: true
     scad_name: base
     serializer: scalar
@@ -302,7 +302,7 @@ properties:
 
   - name: baseColor
     group: base
-    type: com.machineblocks.types.Color
+    type: com.machineblocks.type.Color
     default: "#EAC645"
     scad_name: baseColor
     serializer: Color
@@ -312,7 +312,7 @@ properties:
 
   - name: baseAdjustment
     group: base
-    type: com.machineblocks.types.FaceMap<com.machineblocks.types.FloatMm>
+    type: com.machineblocks.type.FaceMap<com.machineblocks.type.FloatMm>
     default: {}
     scad_name: baseAdjustment
     serializer: FaceMap
@@ -329,7 +329,7 @@ properties:
 
   - name: baseCutoutType
     group: base
-    type: com.machineblocks.types.String
+    type: com.machineblocks.type.String
     default: "standard"
     scad_name: baseCutoutType
     serializer: scalar
@@ -342,7 +342,7 @@ properties:
 
   - name: baseWallGaps
     group: base
-    type: com.machineblocks.types.WallGapList
+    type: com.machineblocks.type.WallGapList
     default: []
     scad_name: baseWallGaps
     serializer: WallGapList
@@ -352,7 +352,7 @@ properties:
 
   - name: baseRoundingRadius
     group: base
-    type: com.machineblocks.types.RoundingRadius
+    type: com.machineblocks.type.RoundingRadius
     default: 0
     scad_name: baseRoundingRadius
     serializer: RoundingRadius
@@ -370,7 +370,7 @@ properties:
 
   - name: studs
     group: studs
-    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.BooleanOr<com.machineblocks.types.StudType>>
+    type: com.machineblocks.type.SelectiveGrid<com.machineblocks.type.BooleanOr<com.machineblocks.type.StudType>>
     default: true
     scad_name: studs
     serializer: SelectiveGrid
@@ -381,7 +381,7 @@ properties:
 
   - name: studType
     group: studs
-    type: com.machineblocks.types.StudType
+    type: com.machineblocks.type.StudType
     default: Solid
     scad_name: studType
     serializer: StudType
@@ -391,7 +391,7 @@ properties:
 
   - name: studPadding
     group: studs
-    type: com.machineblocks.types.PerSide4<com.machineblocks.types.FloatGrid>
+    type: com.machineblocks.type.PerSide4<com.machineblocks.type.FloatGrid>
     default: { "x-": 0.2, "x+": 0.2, "y-": 0.2, "y+": 0.2 }
     scad_name: studPadding
     serializer: PerSide4
@@ -401,7 +401,7 @@ properties:
 
   - name: studShift
     group: studs
-    type: com.machineblocks.types.Boolean
+    type: com.machineblocks.type.Boolean
     default: false
     scad_name: studShift
     serializer: scalar
@@ -415,7 +415,7 @@ properties:
 
   - name: pillars
     group: pillars
-    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.Boolean>
+    type: com.machineblocks.type.SelectiveGrid<com.machineblocks.type.Boolean>
     default: true
     scad_name: pillars
     serializer: SelectiveGrid
@@ -430,7 +430,7 @@ properties:
 
   - name: holeX
     group: holes
-    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.Boolean>
+    type: com.machineblocks.type.SelectiveGrid<com.machineblocks.type.Boolean>
     default: false
     scad_name: holeX
     serializer: SelectiveGrid
@@ -440,7 +440,7 @@ properties:
 
   - name: holeY
     group: holes
-    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.Boolean>
+    type: com.machineblocks.type.SelectiveGrid<com.machineblocks.type.Boolean>
     default: false
     scad_name: holeY
     serializer: SelectiveGrid
@@ -450,7 +450,7 @@ properties:
 
   - name: holeZ
     group: holes
-    type: com.machineblocks.types.SelectiveGrid<com.machineblocks.types.Boolean>
+    type: com.machineblocks.type.SelectiveGrid<com.machineblocks.type.Boolean>
     default: false
     scad_name: holeZ
     serializer: SelectiveGrid
@@ -460,7 +460,7 @@ properties:
 
   - name: holeXYZType
     group: holes
-    type: com.machineblocks.types.AxisXYZ<com.machineblocks.types.HoleType>
+    type: com.machineblocks.type.AxisXYZ<com.machineblocks.type.HoleType>
     default: { x: Pin, y: Pin, z: Pin }
     scad_name: holeXYZType
     serializer: AxisXYZ
@@ -470,7 +470,7 @@ properties:
 
   - name: holeXYZDiameter
     group: holes
-    type: com.machineblocks.types.AutoOr<com.machineblocks.types.AxisXYZ<com.machineblocks.types.FloatMbu>>
+    type: com.machineblocks.type.AutoOr<com.machineblocks.type.AxisXYZ<com.machineblocks.type.FloatMbu>>
     default: "auto"
     scad_name: holeXYZDiameter
     serializer: AutoOr_AxisXYZ
@@ -480,7 +480,7 @@ properties:
 
   - name: holeXYGridOffsetZ
     group: holes
-    type: com.machineblocks.types.AxisXY<com.machineblocks.types.FloatMbu>
+    type: com.machineblocks.type.AxisXY<com.machineblocks.type.FloatMbu>
     default: { x: 3.625, y: 3.625 }
     scad_name: holeXYGridOffsetZ
     serializer: AxisXY
@@ -494,7 +494,7 @@ properties:
 
   - name: recess
     group: recess
-    type: com.machineblocks.types.Boolean
+    type: com.machineblocks.type.Boolean
     default: false
     scad_name: recess
     serializer: scalar
@@ -504,7 +504,7 @@ properties:
 
   - name: tongue
     group: recess
-    type: com.machineblocks.types.Boolean
+    type: com.machineblocks.type.Boolean
     default: false
     scad_name: tongue
     serializer: scalar
@@ -517,7 +517,7 @@ properties:
 
   - name: recessWallGaps
     group: recess
-    type: com.machineblocks.types.WallGapList
+    type: com.machineblocks.type.WallGapList
     default: []
     scad_name: recessWallGaps
     serializer: WallGapList
@@ -527,7 +527,7 @@ properties:
 
   - name: recessWallThickness
     group: recess
-    type: com.machineblocks.types.PerSide4<com.machineblocks.types.FloatGrid>
+    type: com.machineblocks.type.PerSide4<com.machineblocks.type.FloatGrid>
     default: { "x-": 0.333, "x+": 0.333, "y-": 0.333, "y+": 0.333 }
     scad_name: recessWallThickness
     serializer: PerSide4
@@ -537,7 +537,7 @@ properties:
 
   - name: tongueGrooveThicknessClearance
     group: recess
-    type: com.machineblocks.types.AutoOr<com.machineblocks.types.FloatMm>
+    type: com.machineblocks.type.AutoOr<com.machineblocks.type.FloatMm>
     default: "auto"
     scad_name: tongueGrooveThicknessClearance
     serializer: AutoOr_scalar
@@ -548,7 +548,7 @@ properties:
 
   - name: tongueGrooveDepthClearance
     group: recess
-    type: com.machineblocks.types.AutoOr<com.machineblocks.types.FloatMm>
+    type: com.machineblocks.type.AutoOr<com.machineblocks.type.FloatMm>
     default: "auto"
     scad_name: tongueGrooveDepthClearance
     serializer: AutoOr_scalar
@@ -559,7 +559,7 @@ properties:
 
   - name: tongueGrooveClampOffsetClearance
     group: recess
-    type: com.machineblocks.types.AutoOr<com.machineblocks.types.FloatMm>
+    type: com.machineblocks.type.AutoOr<com.machineblocks.type.FloatMm>
     default: "auto"
     scad_name: tongueGrooveClampOffsetClearance
     serializer: AutoOr_scalar
@@ -574,7 +574,7 @@ properties:
 
   - name: connectors
     group: connectors
-    type: com.machineblocks.types.List<com.machineblocks.types.Connector>
+    type: com.machineblocks.type.List<com.machineblocks.type.Connector>
     default: []
     scad_name: connectors
     serializer: ConnectorList
@@ -588,7 +588,7 @@ properties:
 
   - name: screwHoles
     group: screw_holes
-    type: com.machineblocks.types.List<com.machineblocks.types.ScrewHole>
+    type: com.machineblocks.type.List<com.machineblocks.type.ScrewHole>
     default: []
     scad_name: screwHoles
     serializer: ScrewHoleList
@@ -598,7 +598,7 @@ properties:
 
   - name: screwHoleDiameter
     group: screw_holes
-    type: com.machineblocks.types.FloatMm
+    type: com.machineblocks.type.FloatMm
     default: 2.5
     scad_name: screwHoleDiameter
     serializer: scalar
@@ -613,7 +613,7 @@ properties:
 
   - name: pcb
     group: pcb
-    type: com.machineblocks.types.String
+    type: com.machineblocks.type.String
     default: "none"
     scad_name: pcb
     serializer: scalar
@@ -627,7 +627,7 @@ properties:
 
   - name: assembly
     group: assembly
-    type: com.machineblocks.types.AssemblyMode
+    type: com.machineblocks.type.AssemblyMode
     default: Merged
     scad_name: assembly
     serializer: AssemblyMode
@@ -638,7 +638,7 @@ properties:
 
   - name: renderGroups
     group: assembly
-    type: com.machineblocks.types.String
+    type: com.machineblocks.type.String
     default: "all"
     scad_name: renderGroups
     serializer: scalar
@@ -654,7 +654,7 @@ properties:
 
   - name: grille
     group: surface
-    type: com.machineblocks.types.NoneOr<com.machineblocks.types.String>
+    type: com.machineblocks.type.NoneOr<com.machineblocks.type.String>
     default: "none"
     scad_name: grille
     serializer: NoneOr_scalar
@@ -664,7 +664,7 @@ properties:
 
   - name: surfacePattern
     group: surface
-    type: com.machineblocks.types.NoneOr<com.machineblocks.types.String>
+    type: com.machineblocks.type.NoneOr<com.machineblocks.type.String>
     default: "none"
     scad_name: surfacePattern
     serializer: NoneOr_scalar
@@ -674,7 +674,7 @@ properties:
 
   - name: text
     group: surface
-    type: com.machineblocks.types.String
+    type: com.machineblocks.type.String
     default: ""
     scad_name: text
     serializer: scalar
@@ -684,7 +684,7 @@ properties:
 
   - name: textFace
     group: surface
-    type: com.machineblocks.types.Face
+    type: com.machineblocks.type.Face
     default: "z+"
     scad_name: textFace
     serializer: Face
@@ -694,7 +694,7 @@ properties:
 
   - name: textSize
     group: surface
-    type: com.machineblocks.types.FloatPt
+    type: com.machineblocks.type.FloatPt
     default: 9
     scad_name: textSize
     serializer: scalar
@@ -704,7 +704,7 @@ properties:
 
   - name: textFont
     group: surface
-    type: com.machineblocks.types.String
+    type: com.machineblocks.type.String
     default: "RBNo3.1 Black"
     scad_name: textFont
     serializer: scalar
@@ -714,7 +714,7 @@ properties:
 
   - name: textColor
     group: surface
-    type: com.machineblocks.types.Color
+    type: com.machineblocks.type.Color
     default: "#303D4E"
     scad_name: textColor
     serializer: Color
@@ -724,7 +724,7 @@ properties:
 
   - name: textDepth
     group: surface
-    type: com.machineblocks.types.FloatMbu
+    type: com.machineblocks.type.FloatMbu
     default: 0.5
     scad_name: textDepth
     serializer: scalar
@@ -734,7 +734,7 @@ properties:
 
   - name: textAlign
     group: surface
-    type: com.machineblocks.types.AlignValue
+    type: com.machineblocks.type.AlignValue
     default: Center
     scad_name: textAlign
     serializer: AlignValue
@@ -744,7 +744,7 @@ properties:
 
   - name: textSpacing
     group: surface
-    type: com.machineblocks.types.FloatPt
+    type: com.machineblocks.type.FloatPt
     default: 1
     scad_name: textSpacing
     serializer: scalar
@@ -758,7 +758,7 @@ properties:
 
   - name: stabilizers
     group: stabilizers
-    type: com.machineblocks.types.Boolean
+    type: com.machineblocks.type.Boolean
     default: false
     scad_name: stabilizers
     serializer: scalar
@@ -768,7 +768,7 @@ properties:
 
   - name: stabilizerLayerOffset
     group: stabilizers
-    type: com.machineblocks.types.AutoOr<com.machineblocks.types.FloatMm>
+    type: com.machineblocks.type.AutoOr<com.machineblocks.type.FloatMm>
     default: "auto"
     scad_name: stabilizerLayerOffset
     serializer: AutoOr_scalar

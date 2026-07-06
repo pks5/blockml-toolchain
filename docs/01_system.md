@@ -190,7 +190,6 @@ BlockML Core (blockml.org):
   http://blockml.org/schema/block      ← default xmlns for <block> documents
   http://blockml.org/schema/bml        ← bml: directives namespace
   http://blockml.org/schema/data       ← data: custom metadata namespace
-  http://blockml.org/schema/types      ← org.blockml.type.*
   http://blockml.org/schema/service    ← org.blockml.service.*
   http://blockml.org/schema/blockPresets ← <blockPresets> documents
   http://blockml.org/schema/library    ← library.xml documents
