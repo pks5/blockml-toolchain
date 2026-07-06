@@ -564,6 +564,7 @@ configProfile < blockPreset < inline property
 05_scad_renderer.md    — SCAD Render Target: Block Renderers, assembly patterns, naming, source maps
 06_compiler.md         — compiler pipeline, Target Registry, error handling, testing strategy
 07_cli.md              — CLI commands, configuration, watch mode, scaffolding
+12_bom_object_model.md — formal BOM data structures (BomDocument, BlockDefinition, CompositionNode)
 09_mbom_properties.yml — MBOM native property definitions (authoritative)
 
 domains/machineblocks/runtimes/scad-lib/

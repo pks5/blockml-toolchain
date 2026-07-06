@@ -1105,12 +1105,14 @@ Unqualified type names in serialization formats are resolved against the domain'
 
 ## Versioning
 
-Every Block, Library, and Catalog definition carries a semantic version. All instance references in Compositions must specify a version explicitly. There are no implicit `latest` references.
+Every Block, Library, and Catalog definition carries a semantic version. External instance references in Compositions must specify a version explicitly — same-document Sub-Block references do not. There are no implicit `latest` references.
 
 ```text
-version: "1.0.0"   — on every definition
-version="1.0.0"    — on every instance reference
+version: "1.0.0"   — on every Block definition (root and Sub-Block)
+version="1.0.0"    — on external block instance references only
 ```
+
+See `12_bom_object_model.md` — Instance Version Rules.
 
 Version resolution against a package registry is domain-specific and outside BOM Core.
 

@@ -6,7 +6,7 @@ version: 2.0.0
 
 This document defines the BML (Block Markup Language) format — the universal declarative authoring language for BOM Blocks, Composite Blocks, and Presets.
 
-BML is a serialization of BOM, which is itself built on BOM Core. For the abstract object model see `00_bom_core.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For the MBOM type system see `04_types.md`. For native MBOM property definitions see `09_mbom_properties.yml`.
+For the abstract object model see `00_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For the MBOM type system see `04_types.md`. For native MBOM property definitions see `09_mbom_properties.yml`.
 
 ---
 
@@ -575,7 +575,8 @@ Tag name      — class name (with namespace prefix)
 id            — part ID (used for instance ID: parentId::partId)
 renderGroup   — optional, fallback = id
 namespace     — optional, fallback = id
-version       — required; version of the referenced Block type
+version       — required on external block references (types from another file);
+                optional on same-document Sub-Block references. See `12_bom_object_model.md`.
 (attributes)  — any Member value of the referenced Block type (camelCase)
 ```
 
@@ -1550,6 +1551,6 @@ baseType missing              → BML_MISSING_BASE_TYPE (no default)
   + implicit _parts exists    → fills _parts
   + explicit aggregations     → compiler error: aggregation attribute required
 type="Foo" (unqualified)      → resolved against org.blockml.type.* (primitives only)
-version missing on instance   → BML_MISSING_VERSION
+version missing on external instance → BML_MISSING_VERSION (same-document Sub-Blocks exempt)
 _steps missing or empty       → assembly order = document order of _placement
 ```

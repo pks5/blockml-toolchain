@@ -315,7 +315,7 @@ type          — FQN of the Block class
 id            — part ID (becomes part of the instance ID: parentId::partId)
 renderGroup   — render group name (optional, fallback = id)
 namespace     — parameter filter namespace (optional, fallback = id)
-version       — version of the referenced Block type
+version       — version of the referenced Block type (required for external references only)
 (members)     — member values: Properties and Capabilities (literals or Expressions)
 ```
 
@@ -561,10 +561,11 @@ Note: `com.machineblocks.core.Place` and `com.machineblocks.core.Step` are regul
 
 ## Versioning
 
-Every Block definition carries a semantic version. Compositions must specify a version for every referenced Block type:
+Every Block definition carries a semantic version. External composition references must specify a version. Same-document Sub-Block references do not — see `12_bom_object_model.md`.
 
 ```xml
 <ac:Wall id="wall" version="1.0.0" size="[1, 8, 9]" />
+<Base id="base_stud" offset="[0, 0, 0]" ... />   <!-- no version — Sub-Block, same file -->
 ```
 
 No implicit `latest` references. Versions are always explicit. Version resolution against a package registry is to be defined.

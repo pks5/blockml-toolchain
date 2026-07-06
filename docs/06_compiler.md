@@ -7,6 +7,7 @@ version: 2.0.0
 This document defines the compiler pipeline — the full translation path from BML source to render target output — including the Target Registry, error handling, diagnostics, and the testing strategy.
 
 For the BML format see `02_mbml.md`.
+For the formal BOM object model see `12_bom_object_model.md`.
 For the MBOM object model see `03_mbom.md`.
 For the SCAD Renderer see `05_scad_renderer.md`.
 
@@ -162,7 +163,7 @@ Validates the BOM graph for semantic correctness:
 
 ```text
 - Referenced block types exist and are accessible
-- Versions are specified on all instance references in compositions
+- Versions are specified on external instance references in compositions
 - Composition child member values are valid for the referenced block type
 - Aggregation cardinality constraints are satisfied
 - Expression result types match the target member type
@@ -368,7 +369,7 @@ BML_UNKNOWN_TYPE              — referenced block type not found
 BML_INVALID_PROPERTY          — property value does not match declared type
 BML_MISSING_BASE_TYPE         — baseType not declared on a Block definition
 BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
-BML_MISSING_VERSION           — block instance in composition has no version
+BML_MISSING_VERSION           — version missing on external block instance reference
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
 BML_PRESET_CYCLE              — circular dependency in composite preset basePresets
