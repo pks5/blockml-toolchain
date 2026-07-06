@@ -119,7 +119,7 @@ interface SourceInfo {
 
 ## `BlockDefinition`
 
-A Block definition is the abstract representation of a `<block>` document (or a Sub-Block within one).
+A Block definition is the abstract representation of a `<block>` document (or a Sub-Block within one). Semantically: a **Class** — type shape without instance state.
 
 ```typescript
 interface BlockDefinition {
@@ -577,7 +577,7 @@ _placement child blockId="floor" ← reference  ✗  BML_UNRESOLVABLE_INSTANCE_R
 
 ## `BlockInstance`
 
-Represents a concrete child block in a composition (XML element or JSON child object).
+Represents a concrete child block in a composition (XML element or JSON child object). Semantically: an **Object** — instance of a Block class (`typeFqn`) with optional `id` and member values.
 
 ```typescript
 interface BlockInstance {

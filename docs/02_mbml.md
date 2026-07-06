@@ -155,7 +155,9 @@ Extension document types bring their own schema. The schema location and managem
 
 ## Block Definition (`<block>`)
 
-A Block definition describes a reusable Block type. It declares Members (Properties, Aggregations, Associations, Capabilities) and an optional Composition (internal structure).
+A Block definition describes a reusable Block type — semantically a **Class**: declarative shape, members, and optional composition template. It declares Members (Properties, Aggregations, Associations, Capabilities) and an optional Composition (internal structure).
+
+Composition children (`<ac:Wall id="wall" …/>`, `<core:Placement …/>`) are **Block Instances** — semantically **Objects**: they reference a class (`typeFqn`) and carry instance state (`id`, property values). See `00_bom_core.md` — Block and Block Instance.
 
 ### Required Fields
 

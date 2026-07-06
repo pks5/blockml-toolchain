@@ -177,6 +177,8 @@ See `WOT_Reference_v26.md` §1 · The Idea · Manifestation.
 
 BOM Core defines Block as **„a parametric, reusable unit (definition / type)“** — not only as a composable physical object. TypeBlocks and LanguageBlocks are type definitions. They **are Blocks**.
 
+**Class vs Object:** In familiar terms, every `<block>` document is a **Class** (declarative, semantic type). Every element in a `<composition>` is a **Block Instance** — an **Object** referencing that class by FQN. TypeBlocks (`Integer`, `Size3D`) are type-classes for property signatures; they are not instantiated in compositions. See `00_bom_core.md` — Block and Block Instance.
+
 All definitions use the BML `<block>` element, register in the same TypeRegistry, and inherit from **`org.blockml.core.Block`** — the sole inheritance root.
 
 ```text

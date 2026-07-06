@@ -34,6 +34,29 @@ Library      — a collection of Block definitions
 Catalog      — a collection of top-level composite Block definitions
 ```
 
+### Block and Block Instance — Class and Object
+
+The closest familiar model: a **Block** is a declarative, semantic **Class**; a **Block Instance** is an **Object**.
+
+```text
+Block (definition)              Block Instance (in composition)
+  .bml file · BlockDefinition     <ac:Wall id="wall" size="[1,8,9]" />
+  FQN · members · composition     typeFqn + id + member values
+  describes shape & behaviour     one concrete occurrence
+  no Runtime · no address         may become a Thing in Runtime (WOT)
+```
+
+This is a **semantic** analogy — not a mandate for runtime OOP. The compiler may represent definitions and instances as plain data; the parser nonetheless distinguishes `<block>` documents (classes) from composition children (objects). See `17_type_system_bml.md`.
+
+```text
+TypeBlock (Integer, Size3D)     →  semantic „type class“ for property values
+LanguageBlock (OpenSCAD)        →  semantic meta-class for implementation contract
+Sub-Block in same .bml file     →  nested class (derived type, inner scope)
+Preset                          →  named default binding on a class (partial object factory)
+```
+
+WOT vocabulary: Block = grammar / template; Block Instance configured via Preset may become a **Thing** when a Runtime activates it — see `WOT_Reference_v26.md` — Block · Block Instance · Set.
+
 Everything else — assemblies, placements, steps, scenes, views — is defined by domain-specific BOMs as specialized Block types.
 
 ### Relationships
