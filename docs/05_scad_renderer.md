@@ -147,14 +147,18 @@ use <{relative_path_to_scad-lib}/lib/block.scad>;
 include <{relative_path_to_scad-lib}/config/mb_config.scad>;
 ```
 
-### Block-to-Block Imports
+### Block-to-Block Imports (Sets only)
 
-When a composite block references another block class, the renderer generates a `use` import for that block's SCAD file:
+Ordinary Composite Block compositions render leaf instances as **`mb_block()`** (NativeBlock) — no `use` import of dependency block SCAD files. See `14_compiler_runtime.md` — NativeBlock Render Model.
+
+For **Sets** (`com.machineblocks.core.Set`), `_blocks` configurations may reference typed block modules by `blockId`. In that case the Set renderer generates `use` imports for the referenced block SCAD files:
 
 ```scad
 use <../wall/Wall.scad>;
 use <../corner/Corner.scad>;
 ```
+
+Set `_blocks` dispatch is specified separately when Set MBML examples are available in scad-lib.
 
 ### Built-in Service Imports
 
@@ -396,6 +400,28 @@ ns_bottom    = part_bottom;
 ```
 
 These are emitted as SCAD local variables inside the wrapper `mb_block()` children block.
+
+---
+
+## ScadBlockRenderer — Leaf-Only Block Optimization
+
+Some Block types are effectively a **single NativeBlock** — all properties map 1:1 to native MB settings, no Sub-Blocks, no multi-child composition (e.g. `com.machineblocks.bricks.Standard`).
+
+For **standalone compile** of such blocks, the processor emits a **direct `mb_block()` main call** with Customizer variables as settings — no typed wrapper module, no `mb_param_*` extraction layer:
+
+```scad
+// Optimized output (Standard.mbml standalone)
+mb_block(
+    config = mb_config,
+    settings = [
+        ["size", size],
+        ["studs", studs],
+        ...
+    ]
+);
+```
+
+This avoids the extra module call and duplicate parameter forwarding present in hand-maintained scad-lib artifacts. Composite blocks with real inner structure (Wall, Calibrator) still emit typed modules. See `14_compiler_runtime.md` — Leaf-only blocks.
 
 ---
 

@@ -8,6 +8,7 @@ This document defines the compiler pipeline — the full translation path from B
 
 For the BML format see `02_mbml.md`.
 For the BML→BOM mapping algorithm see `13_bml_to_bom_mapping.md`.
+For compiler runtime (compile scope, NativeBlock model) see `14_compiler_runtime.md`.
 For the formal BOM object model see `12_bom_object_model.md`.
 For the MBOM object model see `03_mbom.md`.
 For the SCAD Renderer see `05_scad_renderer.md`.

@@ -532,6 +532,10 @@ Final:          baseType = com.machineblocks.core.NativeBlock → BML_FINAL_BASE
 
 The ScadBlockProcessor renders `NativeBlock` directly as `mb_block()` with all declared settings.
 
+**All leaf geometry in compositions renders as `mb_block()`.** Domain-typed composition children (e.g. `bricks:StandardBrick`) are **lowered** to the same `mb_block()` settings — they are not rendered via typed block modules or `use` imports of dependency SCAD files.
+
+For **standalone compile**, leaf-only Block types (e.g. `com.machineblocks.bricks.Standard` — effectively one NativeBlock) are **optimized to a direct `mb_block()` main call**, skipping typed module indirection and duplicate `mb_param_*` extraction. See `14_compiler_runtime.md` — Leaf-only blocks.
+
 ### com.machineblocks.core.Set
 
 `Set` is a sibling of `NativeBlock` — both extend `com.machineblocks.core.Block`. Unlike `NativeBlock`, `Set` is derivable:

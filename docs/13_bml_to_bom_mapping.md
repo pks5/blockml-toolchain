@@ -43,6 +43,7 @@ Stage [5] produces the abstract BOM graph with expression **raw** text only. Sta
 | **Expression parsing** | Two-phase: stage [5] stores `raw`; stage [7] builds AST |
 | **Cross-file resolution** | Single-file parser; TypeRegistry bootstrap by CLI/orchestrator before validate |
 | **JSON BML format** | **Deferred (TBD).** V1 parser accepts XML only (`.bml` / `.mbml`) |
+| **Composition render** | Leaf geometry → NativeBlock → `mb_block()`; see `14_compiler_runtime.md` |
 
 ---
 
