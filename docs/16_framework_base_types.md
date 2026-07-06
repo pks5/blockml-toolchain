@@ -19,11 +19,13 @@ For value types and implementation languages as BML see `17_type_system_bml.md`.
 | Aspect | Decision |
 |---|---|
 | **Base type SSOT** | BML files in `@blockml/core`, `@machineblocks/mbom`, `@blockml/core-services` |
-| **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry |
-| **Compiler internals** | **Free** — see `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation |
+| **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry; **renderers free in output** — see `17_type_system_bml.md` — Renderer freedom |
+| **Compiler internals** | Parser **must** know `<block>` as input concept; internal representation **free** — see `17_type_system_bml.md` |
 | **09_mbom_properties.yml** | **Render mapping only** (serializer, scad_name, customizer) — not type SSOT |
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
 | **Block documentation** | Every root `<block>` carries `<documentation>` as first child — what this Block is |
+| **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
+| **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — the system describes itself in BML |
 
 ```text
 BML (what the type IS)          →  TypeRegistry
@@ -112,8 +114,10 @@ All other definitions must declare `<baseType>`. Composable framework types inhe
 
 ## Bootstrap Order
 
+The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistry level. Framework packages are not special-cased in code; they are loaded first because later definitions depend on them.
+
 ```text
-1. @blockml/core BML
+1. @blockml/core BML                    ← BlockML describes BlockML
      org/blockml/core/Block.bml
      org/blockml/core/ComposableBlock.bml
      org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · …
@@ -123,8 +127,7 @@ All other definitions must declare `<baseType>`. Composable framework types inhe
      org/blockml/service/ServiceBlock.bml
      org/blockml/service/FunctionBlock.bml
 
-2. @machineblocks/mbom BML
-     com/machineblocks/core/Placement.bml · Step.bml
+2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/core/Placement.bml · Step.bml · Block.bml · NativeBlock.bml · Set.bml
      …
 
@@ -134,7 +137,19 @@ All other definitions must declare `<baseType>`. Composable framework types inhe
 4. Project srcDir + libraries
 ```
 
-Each file is parsed and `registerBlockDefinition(doc)` — same path as user content.
+Each file is parsed and `registerBlockDefinition(doc)` — **identical path** to user-authored content. The only difference is load order.
+
+### What is defined in BML vs code
+
+| In BML (Ideas) | In compiler code (Manifestation) |
+|---|---|
+| `org.blockml.core.Block`, branches, primitives | XML/BOM parse algorithm |
+| `com.machineblocks.core.Set`, `Placement`, `Step` | `baseType` chain resolution |
+| `org.blockml.language.OpenSCAD` | branch-specific validation rules |
+| `org.blockml.service.Math` capabilities | render/processor dispatch |
+| User Walls, Sets, Bricks | SCAD emission, cache, CLI |
+
+No framework FQN should exist only in TypeScript — if it is part of the grammar, it has a `.bml` file with `<documentation>`.
 
 ---
 

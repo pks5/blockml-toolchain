@@ -52,30 +52,51 @@ Types are structure. They belong in BML — the same language humans, LLMs, and 
 
 ## Semantic Layer vs Compiler Implementation
 
-> **Block is a semantic unit in BML — not a mandatory runtime class in the compiler.**
+> **Block is the universal BML input concept — not a mandatory uniform runtime model.**
 
-The statement „everything is a Block“ applies to the **authoring ontology** and the **WOT vocabulary**. It does not prescribe how `@blockml/parser`, `@blockml/core`, or `@blockml/compiler` represent definitions internally.
+Two layers must be distinguished:
+
+```text
+Einlesen (Pflicht)         Der Compiler KENNT „Block“ als Konzept
+                           — <block> root element · FQN · baseType · documentation
+                           — ohne das kein Parser, kein Bootstrap, kein TypeRegistry
+
+Abbilden (frei)            Der Compiler MUSS Block intern NICHT als einheitliches Objektmodell führen
+                           — nach dem Parse: plain data, split interfaces, separate indexes
+```
+
+The statement „everything is a Block“ applies to the **authoring ontology** and the **WOT vocabulary**. It does not prescribe a single `Block` class hierarchy inside `@blockml/core`.
 
 ```text
 BML / WOT layer          semantic · interpretable · human- and LLM-facing
                          „Block“ = named definable unit with FQN + baseType chain
 
-Compiler layer           pragmatic · free · implementation detail
-                         may split registries · may use plain data · may ignore „Block“ as a concept
+Compiler — input         parser reads <block> · maps to BOM · validator walks baseType chain
+                         (Block as concept is mandatory here)
+
+Compiler — internals     pragmatic · free · implementation detail
+                         may split storage · no uniform runtime „Block“ object required
 ```
 
 | Layer | What it guarantees |
 |---|---|
 | **BML** | One syntax (`<block>`) · one bootstrap path · FQN identity · `baseType` inheritance |
+| **Parser** | Understands `<block>` documents — **must** know the Block input concept |
 | **BOM** | Abstract parse result — preserves authored structure; see `12_bom_object_model.md` |
 | **Validator** | Walks `baseType` chain · applies branch rules · resolves effective members |
 | **Renderer** | Interprets semantics for its target — SCAD, React, firmware, … |
 
-The compiler **does not** need to:
+The compiler **must** (input / pipeline):
+
+- parse `<block>` root documents and map them to a BOM shape
+- resolve `baseType` chains against the TypeRegistry
+- apply branch-specific validation rules derived from framework BML
+
+The compiler **does not** need to (internal representation):
 
 - store all definitions in one homogeneous `Block` class hierarchy at runtime
 - treat TypeBlocks and LanguageBlocks identically to ComposableBlocks in memory
-- expose „Block“ as a public API concept beyond BML/BOM documents
+- expose „Block“ as a domain object API beyond parser/BOM/validator surfaces
 - map BML 1:1 onto object-oriented domain models
 
 The compiler **may** (V1 convenience example):
@@ -89,6 +110,41 @@ ScadBlockProcessor          →  knows property serializers · not „what is a 
 ```
 
 **Interpretation is free.** A World’s renderer decides what a `Wall` or a `Size3D` *means* for its output. BML only ensures the description is **complete, typed, and addressable** — the WOT contract at the grammar level.
+
+### Renderer freedom
+
+The **Render Target** is free in **what** it produces and **how** it maps BML to output. No global rule requires:
+
+```text
+output must be „blocks“ in the target language
+1:1 mapping input Block → one output artifact
+NativeBlock / mb_block() pattern
+any files at all (side effects-only targets are valid)
+```
+
+Cardinality, format, and semantics are **target-defined** — see `14_compiler_runtime.md` (C4).
+
+**MachineBlocks SCAD — a common pattern, not a platform obligation:**
+
+```text
+BML Block (Idea)          →  ScadBlockProcessor
+  composition leaves      →  nested mb_block() calls (SCAD „blocks“)
+  NativeBlock             →  direct mb_block()  (explicit 1:1 at leaf)
+  domain blocks (Wall, …) →  lowered to mb_block() settings (convention)
+Set                       →  STEPS array + view submodules
+```
+
+The SCAD renderer **re-creates Blocks in the target language** — `mb_block()` is SCAD’s manifestation of the BML Block idea. That **blocks-beget-blocks** pattern may repeat in other Worlds (React components, Unity prefabs, firmware modules) — but each renderer chooses its own mapping.
+
+```text
+ScreenMachine (example)   →  React JSX · no mb_block · no SCAD blocks
+EBOM (example)            →  KiCad symbols · different ontology entirely
+MachineBlocks             →  mb_block() tree · Blocks in SCAD grammar
+```
+
+The renderer reads BML Blocks; it does **not** need to preserve „Block“ as a runtime concept in its internal pipeline — only to emit correct target output. Same separation as parser: **know the input semantics · free internal representation · free output shape**.
+
+See `05_scad_renderer.md` · `14_compiler_runtime.md` — NativeBlock Render Model.
 
 This matches WOT §0.5 pragmatism: ontological unity at the language layer, engineering freedom at the implementation layer. Without adoption, there is no WOT — and without internal freedom, there is no maintainable compiler.
 
@@ -104,8 +160,9 @@ Idea (Plato)              BML / semantic layer
 
 Manifestation             Compiler · Renderer · Runtime
   Abbild · konkret          TypeScript-Interfaces · SCAD · ThingKit · Thing
-  World liefert Deutung     MachineBlocks → SCAD · ScreenMachine → React
+  World liefert Deutung     MachineBlocks → SCAD mb_block() · ScreenMachine → React
   Runtime vervollständigt   Compiler übersetzt · Drucker druckt
+  Renderer (optional)       may emit „blocks“ again in target grammar — not required
 ```
 
 > *„Die Ideen stehen wie Urbilder da. Die anderen Dinge gleichen ihnen und sind Abbilder."* — Platon
@@ -130,6 +187,60 @@ org.blockml.core.Block                         abstract root · omits baseType
 ```
 
 **One root · one registry · one parser.** Branch-specific rules come from the `baseType` chain — not from parallel ontologies.
+
+### Literally everything — including the compiler's grammar
+
+This is a **foundational decision**, not a naming convention:
+
+```text
+Wall              →  Block  (ComposableBlock branch)
+Integer           →  Block  (TypeBlock branch)
+OpenSCAD          →  Block  (LanguageBlock branch)
+Placement · Step  →  Block  (ComposableBlock — Set meta blocks)
+Math · #strings   →  Block  (ComposableBlock — ServiceBlock branch)
+org.blockml.core.Block itself  →  Block  (root)
+```
+
+There is no parallel type system in code, no hidden XSD ontology for framework concepts, no hardcoded list of „allowed languages“ outside BML. **The grammar describes itself in the same language it describes user content.**
+
+Implications:
+
+```text
+LLM target structure     one shape — always <block> with FQN + baseType + documentation
+TypeRegistry bootstrap   framework .bml loaded before user .bml — same registerDefinition()
+New primitive / language add a .bml file — not a compiler patch (V1 bootstrap set is fixed; mechanism is open)
+WCMS / Blockiverse       framework Blocks are first-class publishable definitions
+WOT Idea layer           compiler infrastructure is itself Ideas — not implementation exceptions
+```
+
+### Self-hosting on the compiler level
+
+Before the compiler validates or renders **any** user file, it bootstraps the TypeRegistry from **its own BML packages**:
+
+```text
+@blockml/core BML
+  Block.bml · ComposableBlock.bml · TypeBlock.bml · LanguageBlock.bml
+  Integer.bml · OpenSCAD.bml · …
+
+@machineblocks/mbom BML
+  Block.bml · Set.bml · Placement.bml · Step.bml · NativeBlock.bml · …
+
+@blockml/core-services BML
+  Math.bml · Strings.bml · …
+
+→  then  project srcDir
+```
+
+The compiler **uses BlockML to understand BlockML**. Framework semantics (`Integer`, `ComposableBlock`, …) come from BML in the TypeRegistry — not from hardcoded FQN lists. The parser nonetheless **must** understand the `<block>` input format; only the **internal representation** after parse is free.
+
+```text
+Hardcoded in compiler     <block> parse contract · baseType chain walk · branch rules · diagnostics
+Defined in BML            every named type · every framework branch · every language · every service
+```
+
+This is the WOT manifest principle applied to tooling: **the system manifesting itself** — the compiler is not outside the World grammar; it is the first consumer of that grammar. See `16_framework_base_types.md` — Bootstrap Order.
+
+Internally the compiler may represent definitions as plain data (`BlockDefinition`, split indexes) — see § Semantic Layer vs Compiler Implementation. **Semantically** in BML there is only Block; **internally** there is no obligation to model it uniformly.
 
 ### Why ComposableBlock?
 

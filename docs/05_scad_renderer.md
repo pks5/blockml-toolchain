@@ -30,6 +30,17 @@ com.machineblocks.core.Set    →  ScadSetProcessor    (STEPS-based set with vie
 
 All user-defined Block types that inherit from `com.machineblocks.core.Block` or `com.machineblocks.core.Set` are handled by the same two processors respectively.
 
+### Renderer output — MachineBlocks convention
+
+This target maps BML Blocks to **SCAD `mb_block()` calls** — Blocks manifesting as blocks in the target language. That is the **MachineBlocks World interpretation**, not a BlockML platform requirement. Other render targets may emit React, KiCad, Python, or any other shape without a „block“ concept in output. See `17_type_system_bml.md` — Renderer freedom.
+
+```text
+BML NativeBlock     ↔  mb_block() at leaf (explicit 1:1)
+BML composition     →  nested mb_block() tree (common pattern)
+BML domain Wall     →  lowered to mb_block() settings (MB convention)
+BML Set             →  STEPS + view submodules (Set-specific — not generic Block output)
+```
+
 ---
 
 ## Target Registration

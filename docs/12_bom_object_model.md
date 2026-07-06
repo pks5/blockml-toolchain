@@ -20,7 +20,7 @@ This document is the **implementation contract** for `@blockml/core`. It specifi
 
 > **A BOM document is an abstract representation of BML source.** It preserves authored structure — including directives, aggregation declarations, and unresolved type references. BOM makes **no statement** about how directives are expanded, how aggregations are interpreted, or how blocks are rendered.
 
-> **„Block“ in BML is a semantic unit — not a runtime concept the compiler must implement uniformly.** The parser may map all `<block>` documents to one BOM shape; validators and renderers interpret `baseType` chains freely. See `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation.
+> **„Block“ in BML is the mandatory input concept — not a uniform runtime object model.** The parser must read `<block>` documents; validators must walk `baseType` chains. Internal representation after parse is free. See `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation.
 
 ```text
 BML source          →  abstract, authoring-true

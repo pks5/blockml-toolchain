@@ -34,6 +34,8 @@ Target Output (SCAD, KiCad, JSX, ...)
 
 **The Compiler** is the universal pipeline that connects BML → BOM → Render Target. It runs in both browser (React) and Node.js environments.
 
+**Self-hosting:** Before processing user projects, the compiler bootstraps its TypeRegistry from framework BML in `@blockml/core`, `@machineblocks/mbom`, and `@blockml/core-services` — literally **BlockML describing BlockML**. Primitives, language types, service blocks, and MBOM framework types are Blocks in the same registry as user Walls and Sets. See `16_framework_base_types.md` and `17_type_system_bml.md`.
+
 **The CLI** (`bom`) is the Node.js command-line interface for compiling, validating, watching, and scaffolding BML projects.
 
 ### Reference Implementation: MachineBlocks

@@ -18,8 +18,8 @@ For pipeline stages see `06_compiler.md`.
 | Topic | Decision |
 |---|---|
 | **Compile I/O (C4)** | **BlockML:** no mandatory input↔output mapping; targets define cardinality (0..n files, side effects). **MachineBlocks convention:** 1 BML → 1 primary SCAD (+ side artifacts) |
-| **NativeBlock = mb_block** | `com.machineblocks.core.NativeBlock` is the direct BML representation of SCAD `mb_block()` — the only geometry primitive at render time |
-| **Composition leaves** | All leaf geometry in compositions renders as `mb_block()` — authored as `<core:NativeBlock>` or lowered from domain block instances |
+| **NativeBlock = mb_block** | **MachineBlocks convention:** `com.machineblocks.core.NativeBlock` maps to SCAD `mb_block()` — not a global BlockML rule; other targets need not emit blocks |
+| **Composition leaves** | **MachineBlocks convention:** leaf geometry → `mb_block()` — authored as `<core:NativeBlock>` or lowered from domain instances |
 | **Sub-Blocks** | Same-document Sub-Blocks → sub-modules embedded in the parent output SCAD file |
 | **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.mbml` is compiled |
 | **JSON BML** | Deferred (TBD — not V1) |
@@ -33,6 +33,8 @@ For pipeline stages see `06_compiler.md`.
 ---
 
 ## NativeBlock Render Model
+
+> **Scope:** MachineBlocks SCAD target only. Render targets are free in output shape — see `17_type_system_bml.md` — Renderer freedom.
 
 ### Core rule
 
