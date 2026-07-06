@@ -1,6 +1,6 @@
 # Compiler Runtime
 
-version: 0.2.0
+version: 0.3.0
 
 ## Purpose of this Document
 
@@ -24,6 +24,7 @@ For pipeline stages see `06_compiler.md`.
 | **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.mbml` is compiled |
 | **JSON BML** | Deferred (TBD — not V1) |
 | **Facade API (C2)** | `CompileInput` + `CompileOptions`; explicit `TypeRegistry`; CLI writes files |
+| **Target bootstrap (C3)** | V1: CLI hardcoded `bootstrapTargets()`; configurability planned — early hooks, no `targets[]` in V1 |
 
 ---
 
@@ -286,13 +287,103 @@ const result = compileBmlToOutput(
 
 ---
 
+## Target Bootstrap (C3)
+
+Before stage [9] can resolve a target by name, the caller must populate the **Target Registry** via `registerTarget()`. `@blockml/compiler` ships **no default targets** — targets live in domain packages (e.g. `@machineblocks/machineblocks-v3-scad-target`).
+
+### V1 decision — CLI hardcoded
+
+In V1, **`@blockml/cli` registers targets explicitly** in a dedicated bootstrap function — not via `bom.config.json`.
+
+```typescript
+// @blockml/cli — bootstrapTargets.ts
+import { registerTarget } from "@blockml/compiler";
+import { MakerEngine } from "@blockml/engine-maker";
+import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
+
+let bootstrapped = false;
+
+/** Idempotent — safe to call on every compile/watch invocation. */
+export function bootstrapTargets(): void {
+  if (bootstrapped) return;
+  registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
+  bootstrapped = true;
+}
+```
+
+V1 registers exactly one target: `"machineblocks-v3-scad"`.
+
+Commands that require a target call `bootstrapTargets()` before `compileBmlToOutput()`:
+
+```text
+bom compile <file> <target>
+bom compile --all <target>
+bom watch <target>
+```
+
+Commands that do **not** call `bootstrapTargets()`:
+
+```text
+bom validate   — stages 1–8 only; no target required
+bom inspect    — BOM dump only; no target required
+```
+
+### Planned configurability (post-V1)
+
+Target selection will become configurable. V1 sets the following **extension points** so later changes stay localized:
+
+| Hook | V1 | Planned |
+|---|---|---|
+| `bootstrapTargets(config?)` | Hardcoded SCAD target | Reads `bom.config.json` → `targets[]` and/or plugin manifest |
+| CLI `<target>` argument | Required on compile/watch | Stays required; config defines *available* targets, not implicit default |
+| `@blockml/compiler` | `registerTarget()` / `getTarget()` only | Unchanged — no built-in targets |
+| `bom.config.json` → `targets` | **Not read in V1** (field reserved, TBD) | List of target names to bootstrap for this project |
+| Target packages | Direct import in CLI | Dynamic import / plugin loader by target name |
+
+**Reserved config field (TBD — not V1):**
+
+```json
+{
+  "targets": ["machineblocks-v3-scad"]
+}
+```
+
+Do not add this field to `bom init` scaffolding in V1. When implemented, missing `targets` should fall back to the V1 hardcoded set for backward compatibility.
+
+### Bootstrap order (CLI)
+
+```text
+1. load bom.config.json
+2. bootstrapTypeRegistry({ srcDir, mbLibPath, bmlExtensions })   — B5; validate + compile
+3. bootstrapTargets()                                             — C3; compile + watch only
+4. compileBmlToOutput(input, targetName, compileOptions)
+5. write RenderOutput.files[] to disk                           — CLI only
+```
+
+`bootstrapTypeRegistry` and `bootstrapTargets` are **separate concerns** — do not merge them. TypeRegistry answers “what types exist?”; Target Registry answers “how do we render?”.
+
+### Browser / tests
+
+Hosts that call `@blockml/compiler` directly (browser playground, unit tests) call `registerTarget()` themselves — there is no CLI bootstrap. Same registry API, different host responsibility.
+
+```typescript
+registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
+compileBmlToOutput(input, "machineblocks-v3-scad", { typeRegistry });
+```
+
+### Unknown target
+
+If `<target>` is not in the registry after bootstrap, the CLI exits with code **2** (configuration error). V1 only registers `"machineblocks-v3-scad"` — any other name fails immediately with a clear message.
+
+---
+
 ## Open Decisions (Phase C — remaining)
 
 | ID | Topic | Status |
 |---|---|---|
 | C1 | `RenderContext` fields | Pending |
 | C2 | Facade API — `CompileInput` + `CompileOptions` | **Decided** |
-| C3 | Target bootstrap V1 (hardcoded vs config) | Pending |
+| C3 | Target bootstrap — CLI hardcoded V1; config/plugins planned | **Decided** |
 | C4 | Compile scope + NativeBlock model | **Decided** |
 | C5 | Incremental build hash algorithm | Pending |
 | C6 | Thumbnails — CLI-only vs compiler | Pending |

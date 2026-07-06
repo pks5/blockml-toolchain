@@ -19,6 +19,38 @@ Command names, argument names, and shorthand flags are configurable via `bom-cli
 
 ---
 
+## Runtime Bootstrap
+
+Before compile or watch, the CLI bootstraps two registries in a fixed order. See `14_compiler_runtime.md` for full specification.
+
+```text
+1. load bom.config.json
+2. bootstrapTypeRegistry()   — discover + parse project/library BML (B5)
+3. bootstrapTargets()        — register render targets (C3)
+4. compileBmlToOutput(...)
+5. write output files to disk
+```
+
+### TypeRegistry bootstrap (B5)
+
+Scans `srcDir` and library paths, parses all BML sources, populates `TypeRegistry`. Required for `bom validate`, `bom inspect`, and `bom compile` when cross-file references exist.
+
+Implemented in `@blockml/cli` as `bootstrapTypeRegistry.ts`.
+
+### Target bootstrap (C3)
+
+Registers render targets in `@blockml/compiler` before stage [9]. **V1:** hardcoded — registers `"machineblocks-v3-scad"` only. Called by `bom compile` and `bom watch`; **not** by `bom validate` or `bom inspect`.
+
+Implemented in `@blockml/cli` as `bootstrapTargets.ts` — idempotent, single entry point. Post-V1 this module will read `bom.config.json` → `targets[]` (field reserved, TBD — not V1).
+
+```typescript
+bootstrapTargets();   // V1: MachineBlocksV3ScadTarget only
+```
+
+The `<target>` CLI argument remains required in V1. Configurable target lists will define *available* targets later, not replace the explicit argument.
+
+---
+
 ## Installation
 
 The BOM Compiler is installed from source by cloning the repository. No npm registry is required.
@@ -401,6 +433,7 @@ MachineBlocks projects typically include the legacy suffix:
 | `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved |
 | `activeConfig` | `null` | Name of the active config profile |
 | `bmlExtensions` | `[".bml"]` | File suffixes scanned by `compile --all` / `validate --all`. Domains add their own (e.g. `.mbml` for MachineBlocks). |
+| `targets` | *(not V1)* | **Reserved (TBD).** Future: target names to bootstrap via `bootstrapTargets()`. V1 ignores this field. |
 
 ---
 

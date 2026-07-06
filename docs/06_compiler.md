@@ -209,11 +209,11 @@ Dispatches each Block in the BOM to its Block Renderer within the resolved Targe
 
 ## Target Registry
 
-The Target Registry is the central registration point for all RenderTargets. It is part of `@blockml/compiler`.
+The Target Registry is the central registration point for all RenderTargets. It is part of `@blockml/compiler`. The compiler **does not register any targets by default** — see `14_compiler_runtime.md` — Target Bootstrap (C3).
 
 ### Registration
 
-RenderTargets are registered before compilation begins:
+RenderTargets must be registered before compilation reaches stage [9]:
 
 ```typescript
 import { registerTarget } from "@blockml/compiler";
@@ -223,6 +223,16 @@ import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-
 const engine = new MakerEngine();
 registerTarget(new MachineBlocksV3ScadTarget(engine));
 ```
+
+**Who registers:**
+
+```text
+@blockml/cli     → bootstrapTargets() before compile/watch (V1: hardcoded SCAD target)
+Browser / tests  → caller invokes registerTarget() directly
+@blockml/compiler → registerTarget() / getTarget() API only — no built-in targets
+```
+
+Future: CLI reads `bom.config.json` → `targets[]` (TBD — not V1). See C3 in `14_compiler_runtime.md`.
 
 ### Interfaces
 

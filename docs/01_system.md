@@ -326,6 +326,7 @@ Node.js-only CLI tools.
 - bom inspect <file>
 - bom watch [--src <dir>] [--out <dir>] <target>
 - bom activate-config <profileName>
+- bootstrapTypeRegistry() + bootstrapTargets() before compile/watch (see 14_compiler_runtime.md)
 - OpenSCAD executable resolver (for SCAD target)
 - Thumbnail renderer (Sharp-based, Node-only, for SCAD target)
 ```

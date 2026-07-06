@@ -817,7 +817,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 |---|---|
 | Expression AST node union | `10_expression_language.md` — Expression AST |
 | BML → BOM mapping algorithm | `13_bml_to_bom_mapping.md` |
-| Compiler runtime (C4, NativeBlock, C2 Facade API) | `14_compiler_runtime.md` |
+| Compiler runtime (C4, NativeBlock, C2 Facade API, C3 Target bootstrap) | `14_compiler_runtime.md` |
 | MBOM native property list | `09_mbom_properties.yml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |
 | ManagedObject runtime API | `08_managed_object.md` (optional pattern) |
