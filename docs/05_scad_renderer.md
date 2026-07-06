@@ -627,9 +627,25 @@ Composition has exactly 1 child:
   → no wrapper — child is rendered directly
 
 Composition has 2+ children:
-  → automatic wrapper mb_block() with all Block Properties as settings
+  → automatic wrapper mb_block() with Block Properties as settings
   → children rendered inside the wrapper as mb_block() children
 ```
+
+**Wrapper always gets `base=false` and `studs=false`** — regardless of the Block's own `base` and `studs` property values. The wrapper is a layout container only; geometry is rendered entirely by the children.
+
+The Block's `base` and `studs` properties are passed to the NativeBlock children — not to the wrapper:
+
+```text
+Cross.studs = true
+  → wrapper mb_block():   studs=false  (always, hardcoded by Processor)
+  → NativeBlock children: studs=true   (from Block property)
+
+Cross.studs = false
+  → wrapper mb_block():   studs=false  (always)
+  → NativeBlock children: studs=false  (from Block property)
+```
+
+This means CompositeBlocks never need to declare `base=false` or `studs=false` explicitly for the wrapper — those are always set by the Processor. The `base` and `studs` properties retain their normal meaning for the children.
 
 Nested NativeBlocks or other Blocks within a Composition are true instances — not wrappers. The automatic wrapper is only ever the outermost container, set once by the Processor.
 
