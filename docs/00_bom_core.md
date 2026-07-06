@@ -1342,13 +1342,18 @@ MartianMicro defines only its Block types as MBML files. All rendering is handle
 
 ### RenderOutput
 
-`RenderOutput` is defined by each RenderTarget — the compiler treats it as opaque:
+`RenderOutput` is defined by each RenderTarget — the compiler treats it as **opaque**. BlockML imposes **no mandatory file output** and **no 1:1 input→output mapping**. A successful compile may produce zero files, one file, many files, or side effects only. See `14_compiler_runtime.md` — Compile I/O Model (C4).
+
+File-based targets typically use a `files[]` structure:
 
 ```typescript
 interface ScadRenderOutput {
-  files: { path: string; content: string; sourceMap: string }[]
+  files: { path: string; content: string; sourceMap?: string }[]
+  sideEffects?: RenderSideEffect[]   // optional — service calls, deploy actions, …
 }
 ```
+
+`files` may be an **empty array** when the target performs side effects only. Side-effect shape is target-defined — BOM Core does not prescribe it.
 
 ---
 

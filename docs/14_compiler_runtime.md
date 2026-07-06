@@ -1,6 +1,6 @@
 # Compiler Runtime
 
-version: 0.6.0
+version: 0.7.0
 
 ## Purpose of this Document
 
@@ -17,7 +17,7 @@ For pipeline stages see `06_compiler.md`.
 
 | Topic | Decision |
 |---|---|
-| **Compile scope (C4)** | One input file → one primary output artifact; no transitive compile of composition dependencies |
+| **Compile I/O (C4)** | **BlockML:** no mandatory input↔output mapping; targets define cardinality (0..n files, side effects). **MachineBlocks convention:** 1 BML → 1 primary SCAD (+ side artifacts) |
 | **NativeBlock = mb_block** | `com.machineblocks.core.NativeBlock` is the direct BML representation of SCAD `mb_block()` — the only geometry primitive at render time |
 | **Composition leaves** | All leaf geometry in compositions renders as `mb_block()` — authored as `<core:NativeBlock>` or lowered from domain block instances |
 | **Sub-Blocks** | Same-document Sub-Blocks → sub-modules embedded in the parent output SCAD file |
@@ -32,7 +32,7 @@ For pipeline stages see `06_compiler.md`.
 
 ---
 
-## NativeBlock Render Model (C4)
+## NativeBlock Render Model
 
 ### Core rule
 
@@ -120,9 +120,112 @@ When a Composite Block has **2+ composition children**, the processor emits an o
 
 ---
 
-## Compile Scope
+## Compile I/O Model (C4)
 
-### Per input file
+BlockML imposes **no fixed relationship** between BML inputs and render outputs. The compiler pipeline ends at **`RenderTarget` + `BlockProcessor`** — they decide what happens after validation.
+
+### BlockML rules (core)
+
+```text
+No mandatory 1:1 mapping     — one BML file may produce 0, 1, or many output artifacts
+Multi-input → one output     — a processor may consume multiple BomDocuments → one artifact
+One input → arbitrary output — a single BML file may emit files, API calls, or nothing
+Zero file output is valid    — success with empty files[] and/or side effects only
+RenderOutput is opaque       — shape defined per target, not by @blockml/compiler
+Facade is input-oriented     — compileBmlToOutput(input) passes one BomDocument; targets
+                               may pull additional inputs from TypeRegistry internally
+```
+
+The compiler **does not** assume every compile produces files on disk. A target may:
+
+```text
+Emit text/binary artifacts     →  files[] in RenderOutput (SCAD, JSON, KiCad, …)
+Perform side effects only      →  service calls, HTTP deploy, DB writes, message publish
+Combine both                   →  files + side effects in one RenderOutput
+Return success with no output  →  validate-and-register, dry-run deploy, analysis-only
+```
+
+### Architecture layers
+
+```text
+@blockml/compiler (generic)
+  compileBmlToBom(input)           → BomDocument        (1 input → 1 BOM)
+  compileBomToOutput(model, target)  → RenderOutput       (target decides cardinality)
+
+RenderTarget / BlockProcessor (domain-specific)
+  process(block, engine)             → RenderOutput       (per block or batch — target policy)
+  may merge multiple blocks          → one combined output
+  may emit zero files                → side effects only
+
+@blockml/cli (orchestration — not a BlockML rule)
+  typically: one file per compileBmlToOutput call
+  writes files[] when present; runs post-steps (thumbnails, cache)
+  side effects: CLI may invoke Node-only follow-ups; browser hosts handle RenderOutput themselves
+```
+
+### RenderOutput variants (examples)
+
+BOM Core defines only the **`RenderOutput` opaque contract**. Targets choose structure:
+
+```typescript
+/** File-based target (MachineBlocks SCAD) */
+interface ScadRenderOutput {
+  files: ScadFile[]              // may be empty on no-op compile
+  sideEffects?: RenderSideEffect[]   // optional — future targets
+}
+
+/** Side-effect-only target (illustrative) */
+interface DeployRenderOutput {
+  files: []                      // intentionally empty
+  sideEffects: [
+    { kind: "http-post", url: "...", body: "..." },
+    { kind: "service-call", service: "com.example.Registry", method: "register" },
+  ]
+}
+
+/** Multi-input aggregation (illustrative) */
+interface BundleRenderOutput {
+  files: [{ path: "bundle.scad", content: "..." }]   // merged from N blocks
+  sourceInputs: string[]         // provenance — which BML files contributed
+}
+```
+
+`CompilerResult.success === true` with `output.files.length === 0` is **valid** when the target's job is side effects or registration only.
+
+### Input cardinality
+
+| Pattern | BlockML | Example |
+|---|---|---|
+| 1 BML → 0 outputs | Allowed | Deploy target registers block metadata via API |
+| 1 BML → 1 output | Common | MachineBlocks SCAD default |
+| 1 BML → N outputs | Allowed | blockPresets → `.scad` + `.json` |
+| N BML → 1 output | Allowed | Set/library processor bundles blocks into one file |
+| N BML → M outputs | Allowed | Target-defined batch policy |
+
+The Facade V1 API takes **one `CompileInput`** per call. Multi-input aggregation is a **target/orchestrator concern**:
+
+```text
+Option A — target reads TypeRegistry, pulls related BomDocuments during render
+Option B — orchestrator calls compileBmlToBom N times, passes merged model to compileBomToOutput
+Option C — future CompileBatchInput { inputs: CompileInput[] } on Facade (extension point)
+```
+
+V1 does not require Option C — targets may aggregate via TypeRegistry (Option A).
+
+### MachineBlocks convention (not a BlockML rule)
+
+The **reference SCAD target** follows a project convention that the CLI implements:
+
+```text
+Standard case:   1 .bml / .mbml  →  1 primary .scad (+ .map)
+blockPresets:    1 presets file  →  .scad + .json (+ CLI thumbnails)
+No transitive compile of dependency .scad files into project output
+Sub-Blocks embedded in parent .scad — not separate output files
+```
+
+Other domains or future targets may differ without changing `@blockml/compiler`.
+
+### Per input file (MachineBlocks SCAD)
 
 ```text
 bom compile src/.../Calibrator.mbml machineblocks-v3-scad

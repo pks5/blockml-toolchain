@@ -30,7 +30,7 @@ Target Output (SCAD, KiCad, JSX, ...)
 
 **BOM** (Block Object Model) is the canonical, typed, domain-agnostic object model. It is the internal representation of all block data. BOM is renderer-independent — it has no knowledge of any render target, syntax, or parameters. BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific types and properties.
 
-**Render Target** is the domain-specific output backend. A Target declares which `baseType` FQNs it supports, and contains one or more Block Renderers that serialize BOM Blocks into target-specific output files. Targets are registered centrally in the compiler.
+**Render Target** is the domain-specific output backend. A Target declares which `baseType` FQNs it supports, and contains one or more Block Processors that turn BOM into target-specific results — files, side effects, or both. Output cardinality is **target-defined** (not fixed 1:1 with input). Targets are registered centrally in the compiler.
 
 **The Compiler** is the universal pipeline that connects BML → BOM → Render Target. It runs in both browser (React) and Node.js environments.
 
@@ -63,6 +63,8 @@ STL / 3MF
 **All mappings are declarative and configurable.** No BOM types, properties, or render mappings are hardcoded in compiler logic. Changes to mappings require only configuration changes, not code changes.
 
 **Domain BOMs extend, never modify core.** Adding EBOM, UBOM, or any future BOM does not change `@blockml/core`, `@blockml/parser`, or `@blockml/compiler`.
+
+**No mandatory input↔output mapping.** BlockML does not require one BML file to produce one output file. Render targets define output cardinality — zero files, many files, multi-input aggregation, or side effects only. MachineBlocks uses **1 BML → 1 primary SCAD** as a domain convention, not a platform rule. See `14_compiler_runtime.md` — Compile I/O Model (C4).
 
 ---
 

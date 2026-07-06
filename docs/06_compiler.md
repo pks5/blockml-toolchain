@@ -8,7 +8,7 @@ This document defines the compiler pipeline — the full translation path from B
 
 For the BML format see `02_mbml.md`.
 For the BML→BOM mapping algorithm see `13_bml_to_bom_mapping.md`.
-For compiler runtime (compile scope, NativeBlock model) see `14_compiler_runtime.md`.
+For compiler runtime (compile I/O model, NativeBlock model) see `14_compiler_runtime.md`.
 For the formal BOM object model see `12_bom_object_model.md`.
 For the MBOM object model see `03_mbom.md`.
 For the SCAD Renderer see `05_scad_renderer.md`.
@@ -366,22 +366,25 @@ interface CompilerResult<T> {
 
 ### RenderOutput
 
-`RenderOutput` is defined by the Render Target, not by the compiler. The compiler treats it as opaque. Each Target defines its own output structure. **Thumbnails (`.webp`) are not part of `RenderOutput`** — see `14_compiler_runtime.md` — Thumbnails (C6).
+`RenderOutput` is defined by the Render Target, not by the compiler. The compiler treats it as opaque — **no assumption of 1:1 input→output or non-empty files**. See `14_compiler_runtime.md` — Compile I/O Model (C4).
 
 ```typescript
-// SCAD Target
+// SCAD Target (file-based — MachineBlocks convention)
 interface ScadRenderOutput {
-  files: ScadFile[]
+  files: ScadFile[]                    // may be [] — side-effect-only compile is valid
+  sideEffects?: RenderSideEffect[]     // optional — future / other targets
 }
 
 interface ScadFile {
-  path:      string    // relative output path, e.g. "com/martianmicro/anyclosure/Wall.scad"
-  content:   string    // text content (.scad, .json) or Source Map JSON string
-  sourceMap?: string   // Source Map V3 — present on .scad outputs
+  path:      string
+  content:   string
+  sourceMap?: string
 }
 ```
 
-For `<blockPresets>` documents, `files[]` includes the implicit block `.scad`, its `.map`, and the Customizer `.json`. Binary artifacts (`.webp`) are produced by `@blockml/cli` after compile.
+A target may also return **side effects without files** (service calls, deploy, registry update). `CompilerResult.success === true` with empty `files[]` is valid.
+
+For `<blockPresets>` in the MachineBlocks SCAD target, `files[]` includes the implicit block `.scad`, its `.map`, and the Customizer `.json`. Binary artifacts (`.webp`) are produced by `@blockml/cli` after compile — see `14_compiler_runtime.md` — Thumbnails (C6).
 
 ### Browser Usage
 

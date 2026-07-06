@@ -7,7 +7,7 @@ version: 2.0.0
 This document defines the `bom` CLI tool — its commands, configuration files, watch mode, scaffolding, config profile management, and thumbnail generation.
 
 For the compiler pipeline and Target Registry see `06_compiler.md`.
-For compiler runtime (bootstrap, RenderContext, thumbnails) see `14_compiler_runtime.md`.
+For compiler runtime (bootstrap, RenderContext, compile I/O model) see `14_compiler_runtime.md`.
 For the project file structure and library resolution see `01_system.md`.
 
 ---
@@ -15,6 +15,8 @@ For the project file structure and library resolution see `01_system.md`.
 ## Overview
 
 The CLI is implemented in `@blockml/cli`. It is Node.js-only — it may use `fs`, `path`, `chokidar`, `child_process`, and other Node-only APIs. The CLI wraps `@blockml/compiler` and adds file system operations, watching, scaffolding, and (for the SCAD target) thumbnail rendering.
+
+**CLI orchestration convention:** one BML file per `compileBmlToOutput` call, writing `RenderOutput.files[]` to disk. This reflects the **MachineBlocks 1→1 convention**, not a BlockML platform rule. Targets may return empty `files[]` or side effects — the CLI handles each target's output shape accordingly.
 
 Command names, argument names, and shorthand flags are configurable via `bom-cli.config.json`.
 
