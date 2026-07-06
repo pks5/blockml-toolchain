@@ -571,8 +571,9 @@ Tag name      — class name (with namespace prefix)
 id            — Block property (org.blockml.core.Block). Part ID for composition identity (parentId::partId). May be an Expression in loops.
 renderGroup   — optional, fallback = id
 namespace     — optional, fallback = id
-version       — required on external block references (types from another file);
-                optional on same-document Sub-Block references. See `12_bom_object_model.md`.
+version       — **required** on external block references (types from another file);
+                omitted only on same-document Sub-Block references. Missing → BML_MISSING_VERSION.
+                See `12_bom_object_model.md`.
 (attributes)  — any Member value of the referenced Block type (camelCase)
 ```
 
@@ -1565,6 +1566,8 @@ baseType missing              → BML_MISSING_BASE_TYPE (no default)
   + single default aggregation in effective members → fills that aggregation (typically _parts for MB Blocks)
   + multiple aggregations, no default               → compiler error: aggregation attribute required
 type="Foo" (unqualified)      → resolved against org.blockml.type.* (primitives only)
-version missing on external instance → BML_MISSING_VERSION (same-document Sub-Blocks exempt)
+version missing on external instance → BML_MISSING_VERSION (error, no fallback)
+unknown version on external instance → BML_UNKNOWN_VERSION (error)
+same-document Sub-Block instance     → version not required
 _steps missing or empty       → assembly order = document order of _placement
 ```

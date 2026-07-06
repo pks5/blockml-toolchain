@@ -581,11 +581,11 @@ Note: `com.machineblocks.core.Place` and `com.machineblocks.core.Step` are regul
 
 ## Versioning
 
-Every Block definition carries a semantic version. External composition references must specify a version. Same-document Sub-Block references do not — see `12_bom_object_model.md`.
+Every Block definition carries a semantic version. External composition references are dependencies — each must specify an exact version. Same-document Sub-Block references do not.
 
 ```xml
 <ac:Wall id="wall" version="1.0.0" size="[1, 8, 9]" />
 <Base id="base_stud" offset="[0, 0, 0]" ... />   <!-- no version — Sub-Block, same file -->
 ```
 
-No implicit `latest` references. Versions are always explicit. Version resolution against a package registry is to be defined.
+Strict from V1: missing `version` on an external reference → `BML_MISSING_VERSION`. Unknown version → `BML_UNKNOWN_VERSION`. No implicit `latest`, no registry default. Legacy scad-lib files must be updated before they compile.

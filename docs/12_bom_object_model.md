@@ -49,7 +49,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
 | **Directives** | `bml:*` stored as **attributes on the element** they apply to (Thymeleaf model) — not as wrapper nodes. **Not expanded** at parse time. `bml:id` is not a directive — `id` is a normal Block property. |
 | **Custom data** | `data:*` follows the **UI5 customData model** — arbitrary key/value metadata on Block elements. Parsed into `customData[]`; not a `bml:` directive. |
-| **Instance `version`** | **Required only for external block references** (types defined in another file). Not required for same-document Sub-Block references. |
+| **Instance `version`** | **Required on every external block reference** (another file). **Strict from V1** — no registry default, no implicit `latest`, no migration warnings. Missing → `BML_MISSING_VERSION` (error). Unknown version → `BML_UNKNOWN_VERSION` (error). Same-document Sub-Blocks exempt. |
 
 ---
 
@@ -463,14 +463,19 @@ Resolution scope for Sub-Block short names: **current BlockDefinition only** (in
 
 ## Instance Version Rules
 
+External block references are **dependencies**. Every dependency must pin an exact semantic version — from V1, with no exceptions and no fallback behavior.
+
 ```text
 Same-document reference (Sub-Block or type defined in subBlocks[]):
   → version attribute NOT required on instance
   → effective version = Sub-Block definition's version field
 
-External reference (type from another .mbml file / Type Registry):
+External reference (type from another .mbml file):
   → version attribute REQUIRED on instance
-  → missing → BML_MISSING_VERSION
+  → missing                    → BML_MISSING_VERSION (error — always, no warning mode)
+  → version not in registry    → BML_UNKNOWN_VERSION (error)
+  → no implicit latest         → TypeRegistry MUST NOT resolve without explicit version
+  → no registry default        → library.xml version does NOT substitute for instance version
 ```
 
 Examples from `Calibrator.mbml`:
@@ -479,13 +484,20 @@ Examples from `Calibrator.mbml`:
 <!-- Same file, Sub-Block — no version required -->
 <Base id="base_stud" offset="[0, 0, 0]" ... />
 
-<!-- External type (Standard.mbml) — version SHOULD be present -->
+<!-- External type (Standard.mbml) — version REQUIRED -->
 <bricks:StandardBrick version="3.0.0" id="strip" ... />
 ```
 
-Existing library files may omit `version` on external references during migration. The validator MAY emit `BML_MISSING_VERSION` as warning first, then error once the library is updated.
+Legacy library files that omit `version` on external references are **invalid** and must be updated before they compile. There is no migration period with warnings.
 
 Block **definitions** (root and Sub-Block) always carry `<version>` as definition metadata — independent of instance version rules.
+
+### TypeRegistry lookup
+
+```typescript
+getBlockDefinition(fqn: string, version: string): BlockDefinition | undefined
+// version is required for external lookups — omitting it is a validator error, not a silent default
+```
 
 ---
 
@@ -563,7 +575,8 @@ The Type Registry is **not** part of `BomDocument`. It is a runtime service in `
 
 ```typescript
 interface TypeRegistry {
-  getBlockDefinition(fqn: string, version?: string): BlockDefinition | undefined
+  /** version is required for external block lookups — no implicit latest */
+  getBlockDefinition(fqn: string, version: string): BlockDefinition | undefined
   getNativeMembers(baseTypeFqn: string): MemberDefinition[]
   resolveType(typeName: string, contextFqn: string): string | undefined
   registerBlockDefinition(doc: BomDocument): void
@@ -626,7 +639,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Member namespace uniqueness (declared members per block)
 ✓  baseType exists in TypeRegistry
 ✓  resolveEffectiveMembers() — property/capability references in expressions
-✓  External instance references have version
+✓  External instance references have exact pinned version (BML_MISSING_VERSION / BML_UNKNOWN_VERSION)
 ✓  Sub-Block baseType ∈ parent's allowedSubBlockTypes (domain rule)
 ✓  Expression result types match member types
 ✓  Preset property names exist on target blockType
@@ -655,7 +668,8 @@ The validator does **not** expand directives or interpret aggregations.
 
 ```text
 BML_MISSING_BASE_TYPE         — baseType absent on BlockDefinition
-BML_MISSING_VERSION           — version absent on external BlockInstance reference
+BML_MISSING_VERSION           — version absent on external BlockInstance reference (always error)
+BML_UNKNOWN_VERSION           — version present but no matching BlockDefinition in TypeRegistry
 BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members
 BML_UNKNOWN_TYPE              — typeFqn cannot be resolved
 BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent

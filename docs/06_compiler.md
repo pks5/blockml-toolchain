@@ -162,8 +162,8 @@ ${ a + b - 1 }                             — arithmetic
 Validates the BOM graph for semantic correctness:
 
 ```text
-- Referenced block types exist and are accessible
-- Versions are specified on external instance references in compositions
+- Referenced block types exist at the **exact pinned version** (no implicit latest)
+- Versions are specified on all external instance references in compositions
 - Composition child member values are valid for the referenced block type
 - Aggregation cardinality constraints are satisfied
 - Expression result types match the target member type
@@ -369,7 +369,8 @@ BML_UNKNOWN_TYPE              — referenced block type not found
 BML_INVALID_PROPERTY          — property value does not match declared type
 BML_MISSING_BASE_TYPE         — baseType not declared on a Block definition
 BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
-BML_MISSING_VERSION           — version missing on external block instance reference
+BML_MISSING_VERSION           — version missing on external block instance reference (always error)
+BML_UNKNOWN_VERSION           — version specified but no matching BlockDefinition in TypeRegistry
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
 BML_PRESET_CYCLE              — circular dependency in composite preset basePresets
