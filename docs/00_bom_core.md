@@ -148,7 +148,7 @@ Domain-specific specializations extend this root:
 
 ```text
 org.blockml.core.Block
-  com.machineblocks.core.Block   — adds size, color, offset, direction, ...
+  com.machineblocks.core.Block   — adds size, color, offset, direction, _parts aggregation, ...
   com.electronics.core.Component — adds footprint, schematic symbol, ...
   com.ui.core.Control            — adds layout, style, events, ...
   com.service.core.Bean          — adds lifecycle, dependencies, ...
@@ -347,7 +347,7 @@ org.blockml.core.CustomData
   value: String  — metadata value
 ```
 
-In BML, `data:*` attributes are syntactic sugar for `customData` entries. The parser expands them automatically:
+In BML, `data:*` attributes follow the **UI5 customData pattern** — the same idea as `data:myVal` on Controls and Elements in SAP UI5 views. They are syntactic sugar for `customData` entries. The parser expands them automatically:
 
 ```xml
 <!-- BML authoring shortform: -->
@@ -636,7 +636,21 @@ When a child instance's Aggregation is bound to a ServiceBlock Model, all childr
 
 BML Directives are special attributes in the `bml:` namespace that control the structure and flow of a Composition. They are not Block properties — they are instructions to the BML processor. Whether a directive is pre-processed at compile time or translated 1:1 into target-specific constructs is the BlockProcessor's decision.
 
-The `bml:` prefix is the canonical namespace. It is analogous to `th:` in Thymeleaf.
+The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*` attributes follow the **Thymeleaf model** — they sit on the element they apply to, not in wrapper elements.
+
+`data:*` is unrelated to directives. It follows the **UI5 customData model** — arbitrary key/value metadata attached to Block elements, like `data:myVal` on Controls in SAP UI5 views.
+
+### Directive Placement
+
+| Attribute / namespace | Allowed on | Notes |
+|---|---|---|
+| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style customData shorthand for `org.blockml.core.Block`. |
+| `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
+| `bml:each` | `<bml:block>`, Block instances | Loop |
+| `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
+| `id` | Block instances | Normal Block property — use `id="${ expr }"` for dynamic IDs in loops |
+
+There is no `bml:id` directive. Dynamic instance IDs use the `id` property from `org.blockml.core.Block`.
 
 ### `bml:each` — Loop
 
@@ -708,14 +722,14 @@ A container that produces no Block output itself but allows directives to apply 
 </bml:block>
 ```
 
-### `bml:id` — Dynamic ID
+### Dynamic Instance ID
 
-Sets the instance ID from an Expression:
+Use the `id` property (not a directive) for dynamic IDs inside loops:
 
 ```xml
 <bricks:StandardBrick
     bml:each="i : ${ numberOfSamples }"
-    bml:id="${ 'sample_' + i }"
+    id="${ 'sample_' + i }"
     offset="${ [2 * i, 0, 0] }" />
 ```
 

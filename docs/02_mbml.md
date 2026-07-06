@@ -176,7 +176,7 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
 
 ```text
 <properties>    — Property declarations. Omit if no custom properties or default overrides needed.
-<aggregations>  — Aggregation declarations. Omit to use the implicit _parts aggregation.
+<aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice (see MBOM: `_parts` on com.machineblocks.core.Block).
 <associations>  — Association declarations.
 <capabilities>  — Capability declarations.
 <subBlocks>     — Sub-Block definitions (see Sub-Blocks section).
@@ -257,18 +257,19 @@ All Members — Properties, Aggregations, Associations, and Capabilities — sha
 
 ### Conventions
 
-**`<aggregations>`** when omitted, an implicit hidden Aggregation `_parts` is created (MachineBlocks domain default):
+**`<aggregations>`** — BlockML does not define domain aggregations. For MachineBlocks Blocks (`baseType` chain includes `com.machineblocks.core.Block`), `_parts` is inherited from that type — it is **not** synthesized by the parser. Omit `<aggregations>` when the inherited members are sufficient; declare explicitly only when adding further aggregations or when the Block does not inherit `_parts`.
+
+Inherited `_parts` on `com.machineblocks.core.Block`:
 
 ```text
 name:        _parts
 cardinality: 0..n
-type:        com.machineblocks.bricks.StandardBrick
+type:        com.machineblocks.core.Block
 visibility:  hidden
+defaultAggregation: true
 ```
 
-Specify `<aggregations>` explicitly only when you need a different name, type, cardinality, visibility, or multiple Aggregations.
-
-**`<composition>`** when no `aggregation` attribute is specified, the Composition fills the implicit (or sole) `_parts` Aggregation. If multiple explicit Aggregations exist, the `aggregation` attribute is required — the compiler reports an error if it is missing.
+**`<composition>`** — when no `aggregation` attribute is specified and the effective members include a single default aggregation, the Composition fills that aggregation. For MachineBlocks Blocks this is typically inherited `_parts`. If multiple aggregations exist and none is marked default, the `aggregation` attribute is required — the compiler reports an error if it is missing.
 
 ### Minimal Block Example
 
@@ -325,14 +326,7 @@ Specify `<aggregations>` explicitly only when you need a different name, type, c
     </property>
   </properties>
 
-  <aggregations>
-    <aggregation name="_parts"
-                 cardinality="0..n"
-                 type="com.machineblocks.bricks.StandardBrick"
-                 visibility="hidden" />
-  </aggregations>
-
-  <composition aggregation="_parts">
+  <composition>
     <bricks:StandardBrick
         id="bottom"
         size="${ [size[0], size[1], size[2] - 1] }"
@@ -449,12 +443,14 @@ The SCAD BlockProcessor translates JSON Objects to SCAD's internal array format.
 
 Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type.
 
+For MachineBlocks Blocks, `_parts` is inherited from `com.machineblocks.core.Block` — it does not need to be declared. Declare `<aggregations>` only when adding aggregations beyond the inherited set:
+
 ```xml
+<!-- Set: additional aggregations beyond inherited _parts -->
 <aggregations>
-  <aggregation name="_parts"
-               cardinality="0..n"
-               type="com.machineblocks.bricks.StandardBrick"
-               visibility="hidden" />
+  <aggregation name="_blocks"    cardinality="0..n" type="com.machineblocks.core.Block" visibility="hidden" />
+  <aggregation name="_placement" cardinality="0..n" type="com.machineblocks.core.Place" visibility="hidden" />
+  <aggregation name="_steps"     cardinality="0..n" type="com.machineblocks.core.Step"  visibility="hidden" />
 </aggregations>
 ```
 
@@ -572,7 +568,7 @@ Child elements inside `<composition>` are Block instances. Each instance:
 
 ```text
 Tag name      — class name (with namespace prefix)
-id            — part ID (used for instance ID: parentId::partId)
+id            — Block property (org.blockml.core.Block). Part ID for composition identity (parentId::partId). May be an Expression in loops.
 renderGroup   — optional, fallback = id
 namespace     — optional, fallback = id
 version       — required on external block references (types from another file);
@@ -656,7 +652,9 @@ Registry scope is per Composition.
 
 ## Custom Data (`data:`)
 
-The `data:` namespace allows arbitrary key-value metadata to be attached to Block definitions and Composition instances. It has no effect on compilation or rendering — it is purely for tooling, editors, documentation, and CI systems.
+The `data:` namespace allows arbitrary key-value metadata to be attached to Block definitions and Composition instances. The pattern is borrowed from **SAP UI5 customData** — in UI5 views, `data:myVal` on a Control or Element sets a customData key/value pair on that element. BlockML applies the same idea to Blocks via the implicit `customData` aggregation on `org.blockml.core.Block`.
+
+Custom data has no effect on compilation or rendering — it is purely for tooling, editors, documentation, and CI systems.
 
 ### Namespace Declaration
 
@@ -697,7 +695,7 @@ On a Composition instance:
 
 ### BOM Representation
 
-`data:*` attributes are syntactic sugar for the implicit `customData` Aggregation on every Block. The parser expands them automatically:
+`data:*` attributes are UI5-style syntactic sugar for the implicit `customData` Aggregation on every Block. The parser expands them automatically:
 
 ```text
 data:role="structural"  →  CustomData { key: "role", value: "structural" }
@@ -710,7 +708,21 @@ All values are strings. No type validation. No schema. No rendering effect.
 
 ## BML Directives
 
-BML Directives are special attributes in the `bml:` namespace that control structure and flow within a Composition. They are not Block properties — they are BML-level instructions. Whether a directive is pre-processed at compile time or translated into target-specific constructs is the BlockProcessor's decision.
+BML Directives are special attributes in the `bml:` namespace that control structure and flow within a Composition. They follow the **Thymeleaf model** — attributes on the element they apply to. Whether a directive is pre-processed at compile time or translated into target-specific constructs is the BlockProcessor's decision.
+
+`data:*` is not part of this mechanism — it follows the **UI5 customData model** (see Custom Data section above).
+
+### Directive Placement
+
+| Attribute / namespace | Allowed on | Notes |
+|---|---|---|
+| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style customData shorthand for `org.blockml.core.Block`. |
+| `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
+| `bml:each` | `<bml:block>`, Block instances | Loop |
+| `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
+| `id` | Block instances | Normal Block property — `id="${ expr }"` for dynamic IDs |
+
+There is no `bml:id` directive.
 
 ### `bml:each` — Loop
 
@@ -787,12 +799,14 @@ Produces no Block output itself — groups child Blocks for shared directives:
 </bml:block>
 ```
 
-### `bml:id` — Dynamic ID
+### Dynamic Instance ID
+
+Use the `id` property for dynamic IDs in loops — not a directive:
 
 ```xml
 <bricks:StandardBrick
     bml:each="i : ${ numberOfSamples }"
-    bml:id="${ 'sample_' + i }"
+    id="${ 'sample_' + i }"
     offset="${ [2 * i, 0, 0] }" />
 ```
 
@@ -819,9 +833,9 @@ Defines local variables within the scope of an element and its children. Variabl
 
 **Allowed on:**
 ```text
-<composition>                       — scope for all children
-<bml:block>                        — scope for block's children
-<? extends org.blockml.core.Block> — scope for that instance only
+<composition>     — scope for all direct children
+<bml:block>       — scope for block's children
+Block instances   — scope for that instance only (properties on the element)
 ```
 
 **Scope rules:**
@@ -835,7 +849,7 @@ Defines local variables within the scope of an element and its children. Variabl
 
 ### `data:` — Custom Metadata Restriction
 
-`data:*` attributes are only allowed on elements that extend `org.blockml.core.Block`. They are not allowed on `<aggregation>`, `<capability>`, or other non-Block elements.
+`data:*` attributes are only allowed on Block definitions and Block instances (elements extending `org.blockml.core.Block`). They follow the **UI5 customData pattern** — not the Thymeleaf directive model and not `bml:` directives. They must not appear on `<aggregation>`, `<capability>`, or other non-Block elements.
 
 ---
 
@@ -1004,7 +1018,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
         <!-- Value label blocks -->
         <bricks:StandardBrick
             bml:each="i, stat : ${ numberOfSamples }"
-            bml:id="${ 'val_' + stat.index }"
+            id="${ 'val_' + stat.index }"
             size="[1, 1, 1]"
             offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
             text="${ #numbers.formatDecimal(valueStart + i * valueStep, 0, '.', 1) }"
@@ -1026,7 +1040,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 's_' + i }"
+            id="${ 's_' + i }"
             size="[1, 1, 1]"
             offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0] }"
             studDiameterAdjustment="${ valueStart + i * valueStep }"
@@ -1039,8 +1053,8 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
   <composition>
     <!-- Four calibration rows via bml:block loop -->
     <bml:block bml:each="row, stat : ${ rows }">
-      <Calibrator.Base
-          bml:id="${ 'base_' + stat.index }"
+      <Base
+          id="${ 'base_' + stat.index }"
           offset="${ [0, stat.index * -3, 0] }"
           label="${ row.label }"
           valueStart="${ row.valueStart }"
@@ -1049,8 +1063,8 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
           font="${ font }"
           fontSize="${ fontSize }"
           labelSize="${ labelSize }" />
-      <Calibrator.StudDiameter
-          bml:id="${ 'samples_' + stat.index }"
+      <StudDiameter
+          id="${ 'samples_' + stat.index }"
           offset="${ [0, stat.index * -3, 0] }"
           numberOfSamples="${ numberOfSamples }"
           valueStart="${ row.valueStart }"
@@ -1546,10 +1560,10 @@ There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping 
 
 ```text
 baseType missing              → BML_MISSING_BASE_TYPE (no default)
-<aggregations> missing        → implicit _parts aggregation (hidden, 0..n)
+<aggregations> missing        → no parser action; inherited members resolved at validate (e.g. _parts from com.machineblocks.core.Block)
 <composition> without aggregation attribute
-  + implicit _parts exists    → fills _parts
-  + explicit aggregations     → compiler error: aggregation attribute required
+  + single default aggregation in effective members → fills that aggregation (typically _parts for MB Blocks)
+  + multiple aggregations, no default               → compiler error: aggregation attribute required
 type="Foo" (unqualified)      → resolved against org.blockml.type.* (primitives only)
 version missing on external instance → BML_MISSING_VERSION (same-document Sub-Blocks exempt)
 _steps missing or empty       → assembly order = document order of _placement

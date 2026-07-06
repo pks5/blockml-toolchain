@@ -140,18 +140,26 @@ Properties can be organized into named groups for editor display. Groups are met
 
 Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type.
 
-### Implicit `_parts` Aggregation
+BlockML (`org.blockml.core.Block`) defines only the implicit `customData` aggregation. Domain-specific aggregations are declared on domain base types.
 
-When no `<aggregations>` section is present, the BML parser creates an implicit Aggregation:
+### `_parts` on `com.machineblocks.core.Block`
+
+`_parts` is **not** a BlockML feature. It is a base aggregation declared on `com.machineblocks.core.Block`, which extends `org.blockml.core.Block`. All MachineBlocks Blocks inherit it via `baseType` — resolved at validate time through the Type Registry, not materialized by the parser.
 
 ```text
-name:        _parts
-cardinality: 0..n
-type:        com.machineblocks.bricks.StandardBrick
-visibility:  hidden
+com.machineblocks.core.Block  (extends org.blockml.core.Block)
+  _parts:
+    cardinality:        0..n
+    type:               com.machineblocks.core.Block
+    visibility:         hidden
+    defaultAggregation: true
 ```
 
-This covers the vast majority of Composite Blocks. Explicit `<aggregations>` are only needed when a different name, type, cardinality, or visibility is required, or when multiple Aggregations are needed.
+When a Block's `baseType` chain includes `com.machineblocks.core.Block` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited `_parts` appears via `resolveEffectiveMembers()`.
+
+Declare `<aggregations>` explicitly only when **adding** aggregations beyond the inherited set (e.g. `_blocks`, `_placement`, `_steps` on `Set`). Redeclaring `_parts` to change its type is not permitted — inherited members cannot be overridden.
+
+This covers the vast majority of Composite Blocks. Explicit `<aggregations>` are needed when multiple Aggregations are required or when the Block does not inherit `_parts`.
 
 ### Aggregation Metadata
 
@@ -172,9 +180,9 @@ When `beanName` is set, the Aggregation is a ServiceBlock binding. The bean is a
 ### Example
 
 ```text
-Wall
-  _parts:  com.machineblocks.bricks.StandardBrick [0..n] (hidden)
-  myModel: org.blockml.service.JSONModel [0..1] (hidden, beanName="myModel")
+Wall  (baseType: com.machineblocks.core.Block)
+  _parts:  com.machineblocks.core.Block [0..n] (hidden, inherited)
+  myModel: org.blockml.service.JSONModel [0..1] (hidden, beanName="myModel", declared)
 ```
 
 ---
@@ -304,7 +312,7 @@ A Composition fills an Aggregation with concrete child instances. It is the inte
 ### Composition Structure
 
 ```text
-aggregation   — name of the Aggregation to fill (default: "_parts")
+aggregation   — name of the Aggregation to fill (default: inherited default aggregation — `_parts` for com.machineblocks.core.Block)
 children      — ordered list of Block instances
 ```
 
@@ -483,7 +491,7 @@ When `_steps` is absent or empty, assembly order equals the document order of `_
 
 ```text
 org.blockml.core.Block                                  ← BOM Core (abstract)
-  com.machineblocks.core.Block                          ← MBOM base
+  com.machineblocks.core.Block                          ← MBOM base (native MB properties + _parts)
     com.machineblocks.core.NativeBlock                  ← final, 1:1 mb_block() mapping
     com.machineblocks.core.Set                          ← STEPS + View Submodules
       com.martianmicro.anyclosure.DefaultEnclosure
@@ -496,6 +504,18 @@ org.blockml.core.Block                                  ← BOM Core (abstract)
     ...
 ```
 
+### com.machineblocks.core.Block
+
+MachineBlocks domain base type. Extends `org.blockml.core.Block` with native MB properties (see `09_mbom_properties.yml`) and the `_parts` aggregation.
+
+```text
+Extends:        org.blockml.core.Block
+Properties:     native MB properties (size, offset, direction, baseColor, ...)
+Aggregations:   _parts (0..n, hidden, defaultAggregation, type: com.machineblocks.core.Block)
+                customData (inherited from org.blockml.core.Block)
+Composition:    allowed — _parts children become SCAD block children
+```
+
 ### com.machineblocks.core.NativeBlock
 
 `NativeBlock` is the direct BML representation of a raw `mb_block()` call. It is **final** — it cannot be used as `baseType` in any Block definition. It can only appear as a child element in Compositions.
@@ -504,7 +524,7 @@ org.blockml.core.Block                                  ← BOM Core (abstract)
 Properties:     native MB3 properties only (from 09_mbom_properties.yml)
                 no custom properties allowed — BML_NATIVE_BLOCK_CUSTOM_PROPERTY
 Capabilities:   none
-Aggregations:   _parts (0..n, hidden) — like all Blocks
+Aggregations:   _parts (0..n, hidden, inherited from com.machineblocks.core.Block)
 Composition:    allowed — _parts children become mb_block() children
 Final:          baseType = com.machineblocks.core.NativeBlock → BML_FINAL_BASE_TYPE
 ```

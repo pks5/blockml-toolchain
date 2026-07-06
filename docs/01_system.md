@@ -323,7 +323,7 @@ The MachineBlocks domain BOM. Browser and Node compatible.
 - MBOM Block class (extends BOM Core Block)
 - MachineBlocks-specific member types (Size3D, Direction, WallGap, Color, ...)
 - Native property definitions (from 09_mbom_properties.yml)
-- MB-specific Aggregation defaults (_parts)
+- `com.machineblocks.core.Block` type definition — including inherited `_parts` aggregation
 - No SCAD logic, no Node-only APIs
 ```
 

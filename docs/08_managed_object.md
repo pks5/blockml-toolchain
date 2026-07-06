@@ -147,8 +147,8 @@ setOnResized(value: Address): this {
 ### Aggregation 0..n Example
 
 ```typescript
-// Block definition declares:
-//   aggregation name="_parts" cardinality="0..n" type="com.machineblocks.bricks.StandardBrick"
+// Block inherits from com.machineblocks.core.Block:
+//   aggregation _parts: cardinality="0..n" type="com.machineblocks.core.Block" (hidden, defaultAggregation)
 
 // Generated:
 getParts(): StandardBrick[] {

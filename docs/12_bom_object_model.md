@@ -31,8 +31,9 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 
 | Authored in BML | Stored in BOM | Interpreted downstream |
 |---|---|---|
-| `bml:each`, `bml:if`, `bml:with` | `DirectiveNode` | Preprocessor, BlockProcessor, or Validator |
-| `<aggregations>` declaration | `AggregationDefinition` | Domain rules (e.g. implicit `_parts` in MBOM) |
+| `bml:each`, `bml:if`, `bml:with` | `directives[]` on element | Preprocessor, BlockProcessor, or Validator |
+| `data:*` attributes | `customData[]` on Block | Tooling only — UI5-style customData shorthand (see below) |
+| `<aggregations>` declaration | `AggregationDefinition` (declared only) | Inherited members (e.g. `_parts` on `com.machineblocks.core.Block`) resolved at validate |
 | `<composition>` children | `CompositionNode` tree | Renderer (wrapper logic, assembly patterns) |
 | `baseType` FQN | string reference | Type Registry → effective members |
 | Preset reference | string `FQN::id` | Preset merge resolver |
@@ -46,7 +47,8 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Mutability** | Parse result is an **immutable plain-data graph** (`BomDocument`). Mutable object APIs (ManagedObject pattern) are optional — see `08_managed_object.md`. |
 | **Member inheritance** | **Lookup at validate.** BOM stores only **declared** members per Block. Effective members are resolved via `baseType` chain + Type Registry — never merged into the parse result. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
-| **Directives** | Stored as **`DirectiveNode`** in the composition tree. **Not expanded** at parse time. |
+| **Directives** | `bml:*` stored as **attributes on the element** they apply to (Thymeleaf model) — not as wrapper nodes. **Not expanded** at parse time. `bml:id` is not a directive — `id` is a normal Block property. |
+| **Custom data** | `data:*` follows the **UI5 customData model** — arbitrary key/value metadata on Block elements. Parsed into `customData[]`; not a `bml:` directive. |
 | **Instance `version`** | **Required only for external block references** (types defined in another file). Not required for same-document Sub-Block references. |
 
 ---
@@ -139,7 +141,8 @@ interface BlockDefinition {
 
   /**
    * Composition templates — one per aggregation filled.
-   * May contain BlockInstance, DirectiveNode, VirtualBlockNode.
+   * May contain BlockInstanceNode and VirtualBlockNode children.
+   * bml:with may appear on the composition itself.
    */
   compositions: CompositionTemplate[]
 
@@ -304,34 +307,102 @@ interface Address {
 
 ## Composition Tree
 
-A Composition fills an Aggregation with a tree of nodes. The tree preserves BML structure including directives.
+A Composition fills an Aggregation with a tree of nodes. `bml:*` directives follow the **Thymeleaf model** — attributes on the element they modify, not separate wrapper nodes.
 
 ```typescript
 interface CompositionTemplate {
   /** Target aggregation name — e.g. "_parts", "_blocks" */
   aggregationName: string
+  /** bml:with on <composition> */
+  directives?: DirectiveAttribute[]
   children: CompositionNode[]
   source?: SourceLocation
 }
 
 type CompositionNode =
   | BlockInstanceNode
-  | DirectiveNode
   | VirtualBlockNode
 
 interface BlockInstanceNode {
   kind: "blockInstance"
   instance: BlockInstance
+  /** bml:each, bml:if, bml:unless, bml:with on this block instance element */
+  directives?: DirectiveAttribute[]
+  source?: SourceLocation
 }
 
 interface VirtualBlockNode {
   kind: "virtualBlock"
-  /** bml:block — groups children, produces no block output itself */
-  directives: DirectiveAttribute[]
+  /** bml:each, bml:if, bml:unless, bml:with on <bml:block> */
+  directives?: DirectiveAttribute[]
   children: CompositionNode[]
   source?: SourceLocation
 }
 ```
+
+### Directive Placement Rules
+
+`bml:*` directives are stored in `directives[]` on the element they appear on — analogous to Thymeleaf `th:*` attributes on HTML elements.
+
+`data:*` is a separate mechanism, modeled after **SAP UI5 customData**: in UI5 views, `data:myVal` on a Control or Element sets a key/value pair in that element's customData. BlockML applies the same pattern to Block definitions and Block instances — shorthand for the implicit `customData` aggregation on `org.blockml.core.Block`.
+
+| Attribute / namespace | Allowed on | Notes |
+|---|---|---|
+| `data:*` | Block definitions and Block instances only | **Not** a `bml:` directive. UI5-style customData shorthand — parsed into `customData[]`. |
+| `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
+| `bml:each` | `<bml:block>`, Block instances | Loop |
+| `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional inclusion |
+| `id` | Block instances | **Normal property** from `org.blockml.core.Block` — not a directive. Use `id="${ expr }"` for dynamic IDs in loops. |
+
+`data:*` is only valid on elements that extend `org.blockml.core.Block`. It must not appear on `<aggregation>`, `<capability>`, or other non-Block elements.
+
+Directives are **never expanded** at parse time. Expansion (if any) is a downstream concern.
+
+```typescript
+type DirectiveAttribute =
+  | EachDirective
+  | IfDirective
+  | UnlessDirective
+  | WithDirective
+
+interface EachDirective {
+  type: "each"
+  variables: string[]
+  statVariable?: string
+  collection: ExpressionValue
+}
+
+interface IfDirective {
+  type: "if"
+  condition: ExpressionValue
+}
+
+interface UnlessDirective {
+  type: "unless"
+  condition: ExpressionValue
+}
+
+interface WithDirective {
+  type: "with"
+  bindings: WithBinding[]
+}
+
+interface WithBinding {
+  name: string
+  value: ExpressionValue
+}
+```
+
+Dynamic instance IDs in loops use the **`id` property** with an expression value — not a separate directive:
+
+```xml
+<bricks:StandardBrick
+    bml:each="i : ${ numberOfSamples }"
+    id="${ 'val_' + i }"
+    size="[1, 1, 1]" />
+```
+
+In BOM: `memberValues.id` is an `ExpressionValue` on the `BlockInstance`.
 
 ---
 
@@ -351,16 +422,17 @@ interface BlockInstance {
    */
   version?: string
 
-  /** Instance/part ID — explicit or derived via bml:id directive */
-  id?: string
+  /** Preset reference: {PresetsDocumentFQN}::{preset-id} */
+  presetRef?: string
 
   renderGroup?: string
   namespace?: string
 
-  /** Preset reference: {PresetsDocumentFQN}::{preset-id} */
-  presetRef?: string
-
-  /** Member values set on this instance (properties + capabilities) */
+  /**
+   * Member values set on this instance (properties + capabilities).
+   * Includes `id` (org.blockml.core.Block) — literal or Expression for dynamic IDs in loops.
+   * Resolved `id` value serves as the composition instance identity (partId).
+   */
   memberValues: Record<string, MemberValue>
 
   customData: CustomDataEntry[]
@@ -414,66 +486,6 @@ Examples from `Calibrator.mbml`:
 Existing library files may omit `version` on external references during migration. The validator MAY emit `BML_MISSING_VERSION` as warning first, then error once the library is updated.
 
 Block **definitions** (root and Sub-Block) always carry `<version>` as definition metadata — independent of instance version rules.
-
----
-
-## Directive Nodes
-
-Directives are **not** Block properties. They are stored as structured nodes wrapping or annotating composition elements.
-
-```typescript
-interface DirectiveNode {
-  kind: "directive"
-  /** Directives applied to the following element or virtual block */
-  directives: DirectiveAttribute[]
-  /** The element this directive applies to */
-  target: BlockInstanceNode | VirtualBlockNode
-  source?: SourceLocation
-}
-
-type DirectiveAttribute =
-  | EachDirective
-  | IfDirective
-  | UnlessDirective
-  | WithDirective
-  | IdDirective
-
-interface EachDirective {
-  type: "each"
-  /** "i : ${ expr }" or "item, stat : ${ expr }" — parsed form */
-  variables: string[]
-  statVariable?: string
-  collection: ExpressionValue
-}
-
-interface IfDirective {
-  type: "if"
-  condition: ExpressionValue
-}
-
-interface UnlessDirective {
-  type: "unless"
-  condition: ExpressionValue
-}
-
-interface WithDirective {
-  type: "with"
-  /** Local bindings: [{ name, value: ExpressionValue }, ...] */
-  bindings: WithBinding[]
-}
-
-interface WithBinding {
-  name: string
-  value: ExpressionValue
-}
-
-interface IdDirective {
-  type: "id"
-  expression: ExpressionValue
-}
-```
-
-Directives are **never expanded** into multiple `BlockInstance` nodes at parse time. Expansion (if any) is a downstream concern.
 
 ---
 
@@ -581,14 +593,14 @@ BomDocument
 
     subBlocks:
       - BlockDefinition Utils (FunctionBlock, capabilities with scad implementation)
-      - BlockDefinition Base (composition with bml:each DirectiveNodes)
+      - BlockDefinition Base (composition with bml:each on instances, dynamic id via id property)
       - BlockDefinition StudDiameter
       - BlockDefinition BaseWallThickness
       - BlockDefinition TubeDiameter
       - BlockDefinition PinDiameter
 
     compositions:
-      - aggregationName: "_parts" (implicit)
+      - aggregationName: "_parts" (inherited from com.machineblocks.core.Block)
         children:
           - BlockInstanceNode Base (no version — same document)
           - BlockInstanceNode StudDiameter

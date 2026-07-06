@@ -607,7 +607,7 @@ The stat variable name is arbitrary — choose any valid identifier. This is ess
 <bml:block bml:each="x, xStat : ${ columns }">
   <core:NativeBlock
       bml:each="y, yStat : ${ rows }"
-      bml:id="${ 'brick_' + x + '_' + y }"
+      id="${ 'brick_' + x + '_' + y }"
       offset="${ [x * blockSize[0], y * blockSize[1], 0] }"
       baseColor="${ (x + y) % 2 == 0 ? colorA : colorB }"
       connectors="${ #lists.concat(
@@ -669,18 +669,14 @@ A virtual container that produces no Block output but applies directives to a gr
 </bml:block>
 ```
 
-### `bml:id`
+### Dynamic Instance ID
 
-```text
-Syntax:  bml:id="${ expression }"
-```
-
-Sets the instance ID from an Expression. Required when using `bml:each` with external references:
+Use the `id` Block property for dynamic IDs in loops — there is no `bml:id` directive:
 
 ```xml
 <bricks:StandardBrick
     bml:each="i : ${ numberOfSamples }"
-    bml:id="${ 'sample_' + i }"
+    id="${ 'sample_' + i }"
     offset="${ [2 * i, 0, 0] }" />
 ```
 
@@ -845,7 +841,7 @@ Built-ins:       #math.min/max/abs/floor/ceil/round/round(x,n)/pow/sqrt/clamp
                  #strings.concat/length
                  #lists.size/get/first/last/sequence
 bml: directives: bml:each (numeric + collection), bml:if, bml:unless,
-                 bml:block, bml:id, bml:with
+                 bml:block, bml:with
 Registry:        read + write within Composition
 FunctionBlock:   Sub-Blocks with language="scad" implementations (specified;
                  callable via @bean — deferred in V1)
