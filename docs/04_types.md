@@ -56,6 +56,16 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 **Enum types** are defined in the domain XSD (e.g. `bricks.xsd`). They appear as `type:BaseCutoutType` in BML. The XSD provides the valid values — the editor renders a SelectBox and the XML parser validates. `<suggestions>` on an enum property is an error (`BML_SUGGESTIONS_ON_ENUM`).
 
+**Anonymous Object payloadType for FunctionBlock Capabilities:** a structured Object literal `{ a: Float, b: Float }` in a Capability `payloadType` serves as the function signature. Keys are the parameter names; key order defines positional order. Both positional and named call syntax are valid:
+
+```text
+payloadType: { a: Float, b: Float }      → #math.max(a, b)  or  #math.max(a=x, b=y)
+payloadType: { x: Float, n: Integer }    → #math.round_n(x, n)
+payloadType: Float                       → #math.floor(x)   (single primitive, no Object wrapper)
+```
+
+`Tuple<T1, T2>` is not used — the anonymous Object pattern covers this role with the added benefit of named parameters.
+
 ---
 
 ## Documentation Status

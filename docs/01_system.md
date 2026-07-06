@@ -140,19 +140,34 @@ New engines can always be built as independent packages. They implement the same
 
 ### Built-in ServiceBlock Definitions
 
-Built-in ServiceBlocks (`#math`, `#string`, `#numbers`, `#lists`) are defined as BML Block files in `@blockml/core-services`. This makes their Capabilities formally typed, editor-discoverable, and testable:
+Built-in ServiceBlocks (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML FunctionBlock files in `@blockml/core-services`. This makes their Capabilities formally typed, editor-discoverable, and testable.
+
+The library is based on Thymeleaf's `#` utility objects — same naming conventions and semantics, extended with `#math` which Thymeleaf does not provide.
 
 ```text
 packages/core-services/
   src/
-    com/bom/service/
-      MathService.mbml
-      StringService.mbml
-      NumbersService.mbml
-      ListsService.mbml
+    org/blockml/service/
+      Math.mbml        ← #math.min, max, floor, ceil, round, round_n, abs, pow, sqrt, clamp
+      Strings.mbml     ← #strings.trim, length, concat, contains, startsWith, endsWith,
+                          indexOf, substring, replace, toUpperCase, toLowerCase
+      Numbers.mbml     ← #numbers.formatDecimal
+      Lists.mbml       ← #lists.size, isEmpty, contains, first, last, get, concat, sequence
+      Bools.mbml       ← #bools.isTrue, isFalse
 ```
 
-Each domain target registers a BlockProcessor for these ServiceBlock types. For SCAD, `MathServiceProcessor` uses the copy strategy — it copies or references the relevant SCAD helper functions from `scad-lib/`.
+All Capabilities use structured Object `payloadType` with named keys — enabling both positional and named call syntax. Single-parameter Capabilities use the primitive type directly:
+
+```text
+#math.max       → payloadType: { a: Float, b: Float }
+#math.floor     → payloadType: Float
+#math.clamp     → payloadType: { x: Float, lo: Float, hi: Float }
+#math.round_n   → payloadType: { x: Float, n: Integer }
+#lists.concat   → payloadType: { a: Array<Object>, b: Array<Object> }
+#numbers.formatDecimal → payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
+```
+
+Each Capability has a TypeScript implementation in `<implementation language="typescript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
 
 ### Delegate-Only Targets
 

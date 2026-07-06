@@ -434,31 +434,53 @@ returnType     — required; declared return type of the synchronous call
 
 ### Payload Types
 
-Every Capability declares a `payloadType`. Supported forms:
+Every Capability declares a `payloadType`. A Capability is a **messaging concept** — it has a payload, not a parameter list. The payload is an abstract message; its structure is irrelevant to the transport layer.
 
 ```text
 org.blockml.type.Integer          — primitive
 org.blockml.type.String           — primitive
-com.myDomain.MyClass           — Object (named fields)
-Array<org.blockml.type.Integer>   — Array of primitives
-Array<com.myDomain.MyClass>    — Array of objects
+{ a: Float, b: Float }            — anonymous Object with named keys
+com.myDomain.MyClass              — typed Object (named fields)
+Array<org.blockml.type.Integer>   — Array of primitives (variable length)
+Array<com.myDomain.MyClass>       — Array of objects
 ```
 
-Unqualified type names are resolved against the domain's default type namespace (determined by the Block's `baseType`). Array shorthand: `Array<Integer>` resolves identically to `Array<org.blockml.type.Integer>` in a domain that defaults to `org.blockml.type`.
+Unqualified type names are resolved against the domain's default type namespace (determined by the Block's `baseType`).
+
+### Object Payload as Function Signature
+
+When a `FunctionBlock` Capability uses a structured Object as `payloadType`, the Object's keys serve as the function signature:
+
+```text
+payloadType: { a: Float, b: Float }
+  → Arity:       2  (number of keys)
+  → Parameter names: a, b  (key names in declaration order)
+  → Positional call: #math.max(size[0], labelSize)
+  → Named call:      #math.max(a=size[0], b=labelSize)
+```
+
+Both call syntaxes are always valid for Object payloads. This is the standard pattern for all `#math.*`, `#strings.*`, `#lists.*` built-ins.
+
+`Array<T>` payloads are **not** suitable as FunctionBlock signatures — arity is undefined. Use a structured Object for any Capability with fixed parameters.
 
 ### Payload Call Syntax
 
 The payload type determines how the Capability is called in Expressions:
 
 ```text
-Primitive:        myCapa(5)                    →  single value
-Object payload:   myCapa(a = 4, b = 5)         →  named parameters (shorthand)
-                  myCapa({a: 4, b: 5})         →  object literal (equivalent)
-Array payload:    myCapa(4, 5)                 →  positional arguments
-                  myCapa([4, 5])               →  array literal (equivalent)
+Primitive:
+  myCapa(5)                        →  single value
+
+Object payload { a: T, b: T }:
+  myCapa(a = 4, b = 5)            →  named parameters
+  myCapa({a: 4, b: 5})            →  object literal (equivalent)
+  myCapa(4, 5)                    →  positional (key order)
+
+Array payload Array<T>:
+  myCapa([4, 5])                  →  array literal
 ```
 
-Named parameters `(a=4, b=5)` and object literal `({a:4, b:5})` produce identical AST nodes. The parser accepts both forms for Object payloads. A mismatch between declared `payloadType` and call syntax is a parse-time error.
+Named parameters `(a=4, b=5)`, object literal `({a:4, b:5})`, and positional `(4, 5)` all produce identical payloads for Object payloads. A mismatch between declared `payloadType` and call syntax is a parse-time error.
 
 ### Capability Value in Compositions
 

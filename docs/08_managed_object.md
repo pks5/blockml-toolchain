@@ -114,7 +114,7 @@ For every declared Member, dedicated getters and setters are generated. They are
 
 ```typescript
 // Block definition declares:
-//   property name="size" type="com.machineblocks.types.Size3D" defaultValue="[1,1,1]"
+//   property name="size" type="com.machineblocks.type.Size3D" defaultValue="[1,1,1]"
 
 // Generated:
 getSize(): Size3D {

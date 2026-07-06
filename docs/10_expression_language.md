@@ -384,9 +384,10 @@ Built-ins are pure functions — no side effects, no state. They are resolved at
 
 ```text
 #numbers.formatDecimal(x, minIntDigits, decPoint, minFracDigits)
+  payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
   — format a number as a decimal string
-  — e.g. #numbers.formatDecimal(0.1, 0, '.', 1)  →  ".1"
-  — e.g. #numbers.formatDecimal(3.14, 1, '.', 2) →  "3.14"
+  — positional: #numbers.formatDecimal(0.1, 0, '.', 1)  →  ".1"
+  — named:      #numbers.formatDecimal(x=0.1, minInt=0, decPoint='.', minFrac=1)
   — minIntDigits=0 removes the leading zero (0.1 → .1)
 ```
 
@@ -416,10 +417,21 @@ Built-ins are pure functions — no side effects, no state. They are resolved at
 #lists.first(list)                  — first element
 #lists.last(list)                   — last element
 #lists.get(list, index)             — element at index
+#lists.concat(a, b)                 — concatenate two lists → Array
 #lists.sequence(start, end)         — integer list from start to end (inclusive)
                                       e.g. #lists.sequence(1, 5) → [1, 2, 3, 4, 5]
 #lists.sequence(start, end, step)   — with step
                                       e.g. #lists.sequence(0, 10, 2) → [0, 2, 4, 6, 8, 10]
+```
+
+`#lists.concat` is particularly useful for building conditional arrays in Expressions:
+
+```text
+#lists.concat(
+  condition1 ? [item1] : [],
+  condition2 ? [item2] : [],
+  condition3 ? [item3] : []
+)
 ```
 
 ### `#bools`
@@ -428,6 +440,67 @@ Built-ins are pure functions — no side effects, no state. They are resolved at
 #bools.isTrue(x)                    — boolean coercion
 #bools.isFalse(x)                   — boolean coercion
 ```
+
+---
+
+## Capability Payload and Function Parameters
+
+### Capabilities Have No Parameters — Only Payload
+
+A Capability is a messaging concept — it has a payload, not a parameter list. The payload is an abstract message:
+
+```text
+payloadType options:
+  Float, Integer, String, Boolean  — primitive
+  Array<T>                         — homogeneous list, variable length
+  { key: Type, ... }               — structured object with named keys
+```
+
+In a messaging context, the structure of the payload is irrelevant to transport. Any valid payload type works.
+
+### FunctionBlock: Object Payload as Function Signature
+
+A `FunctionBlock` interprets a Capability as a function. When the `payloadType` is a structured Object with named keys, it serves as the function signature:
+
+```text
+{ a: Float, b: Float }
+  → Arity:      2  (number of keys)
+  → Parameter names: a, b  (key names)
+  → Positional call: #math.max(size[0], labelSize)
+  → Named call:      #math.max(a=size[0], b=labelSize)
+```
+
+Both call syntaxes are always valid for Object payloads. The key order defines positional order.
+
+**Single primitive payload** — no Object wrapper needed:
+
+```text
+payloadType: Float
+  → Positional: #math.floor(x)
+  → Named:      #math.floor(x=val)
+```
+
+**FunctionBlock implementation receives named parameters directly:**
+
+```typescript
+// payloadType: { a: Float, b: Float }
+({a, b}: {a: number, b: number}): number => Math.max(a, b)
+
+// payloadType: Float
+(x: number): number => Math.floor(x)
+```
+
+**Array vs. Object payload:**
+
+```text
+Array<T>               — variable length, homogeneous, no named structure
+                         → only positional with array literal: func([a, b])
+{ a: T, b: T }         — fixed keys, named, ordered
+                         → positional: func(a, b)
+                         → named: func(a=x, b=y)
+```
+
+`Array<T>` payloads are not suitable as function signatures because arity is undefined. Use a structured Object for any FunctionBlock capability with fixed parameters.
 
 ---
 
@@ -506,13 +579,15 @@ Directives are special attributes in the `bml:` namespace that control Compositi
 
 ```text
 Syntax:  bml:each="var : ${ expression }"
-         bml:each="var, stat : ${ expression }"
+         bml:each="var, statName : ${ expression }"
 ```
+
+The stat variable name is arbitrary — choose any valid identifier. This is essential for nested loops to avoid name collision.
 
 **Numeric loop:** expression evaluates to an Integer `n`. Loop variable runs from `0` to `n-1`:
 
 ```xml
-<bricks:StandardBrick
+<bricks:Standard
     bml:each="i : ${ numberOfSamples }"
     offset="${ [2 * i, 0, 0] }" />
 ```
@@ -520,12 +595,32 @@ Syntax:  bml:each="var : ${ expression }"
 **Collection loop:** expression evaluates to an Array. Loop variable is the current element:
 
 ```xml
-<bricks:StandardBrick
+<bricks:Standard
     bml:each="item, stat : ${ @myModel:/items }"
     size="${ item.size }" />
 ```
 
-**Stat variable:**
+**Nested loops — named stat variables avoid collision:**
+
+```xml
+<bml:block bml:each="x, xStat : ${ columns }">
+  <core:NativeBlock
+      bml:each="y, yStat : ${ rows }"
+      bml:id="${ 'brick_' + x + '_' + y }"
+      offset="${ [x * blockSize[0], y * blockSize[1], 0] }"
+      baseColor="${ (x + y) % 2 == 0 ? colorA : colorB }"
+      connectors="${ #lists.concat(
+        !xStat.first ? [{ face: 'x-', axis: 'z', type: 'female' }] : [],
+        !xStat.last  ? [{ face: 'x+', axis: 'z', type: 'male'   }] : [],
+        !yStat.first ? [{ face: 'y-', axis: 'z', type: 'female' }] : [],
+        !yStat.last  ? [{ face: 'y+', axis: 'z', type: 'male'   }] : []
+      ) }" />
+</bml:block>
+```
+
+The outer loop's stat (`xStat`) remains visible inside the inner loop's scope.
+
+**Stat variables:**
 
 ```text
 stat.index   — 0-based current position
