@@ -412,13 +412,25 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
           defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
 ```
 
-**Map-type properties:** Properties with a Map type use JSON Object syntax — not array-of-arrays. The SCAD BlockProcessor translates to SCAD's array-of-arrays format internally:
+**Map-type and Object-type properties — JSON Object syntax is mandatory:**
+
+Whenever a value is semantically a structured object — a set of named attributes — it **must** be written as a JSON Object in BML. Using arrays `[...]` as a substitute for objects is not permitted, even if the target language (e.g. SCAD) uses arrays internally.
 
 ```xml
+<!-- CORRECT: Object with named keys -->
 sizeMod="${ {'z+': -0.5} }"
 baseAdjustment="${ {'y': 0.11} }"
 baseCrop="${ {'xy': -0.5} }"
+connectors="${ [{ face: 'x-', axis: 'z', type: 'female' }] }"
+
+<!-- WRONG: Array as object substitute — not allowed in BML -->
+sizeMod="${ [['z+', -0.5]] }"                      <!-- ✗ -->
+connectors="${ [['x-', 'z', 'female']] }"           <!-- ✗ -->
 ```
+
+The SCAD BlockProcessor translates JSON Objects to SCAD's internal array format. This translation is the Processor's responsibility — the BML author never writes SCAD-style arrays for structured data.
+
+**The rule:** if the value has named attributes (face, axis, type, key, value...) it is an Object and must use `{ }` syntax. Only truly homogeneous sequences without named structure use array `[ ]` syntax.
 
 ### Aggregations
 

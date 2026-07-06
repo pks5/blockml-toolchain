@@ -915,6 +915,31 @@ size="${ [size[0], 1] }"  ✓  expression (dynamic)
 config="${ {x: size[0]} }" ✓  expression (dynamic)
 ```
 
+### Object vs. Array — Mandatory Rule
+
+**If a value has named attributes, it must be written as an Object `{ }` — never as an Array `[ ]`.**
+
+This rule is enforced regardless of how the target language (e.g. SCAD) represents the value internally. The translation from Object to target format is always the BlockProcessor's responsibility.
+
+```text
+CORRECT — structured value with named keys → Object:
+  { face: 'x-', axis: 'z', type: 'female' }
+  { 'z+': -0.5 }
+  { x: size[0], y: size[1] }
+
+WRONG — array used as object substitute:
+  ['x-', 'z', 'female']    ✗  has implicit positional semantics — not allowed
+  [['z+', -0.5]]           ✗  SCAD-style array — not allowed in BML
+```
+
+The distinction:
+```text
+Array  → homogeneous sequence, no named structure: [1, 2, 3], [size[0], 0, 0]
+Object → named attributes, structured: { face: 'x-', axis: 'z', type: 'female' }
+```
+
+If the SCAD representation uses arrays internally (e.g. `[["z+", -0.5]]`), the BML must still use Object syntax. The Processor translates.
+
 ### Expression Prefixes
 
 ```text
@@ -1043,7 +1068,7 @@ org.blockml.type.FalseOr<T>   — false  | T
 Each domain BOM defines its own type namespace:
 
 ```text
-com.machineblocks.types.*   — Size3D, Direction, WallGap, Color, ...
+com.machineblocks.type.*   — Size3D, Direction, WallGap, Color, ...
 com.electronics.types.*     — Voltage, Resistance, Footprint, ...
 com.ui.types.*              — Color, Length, FontSize, ...
 ```
