@@ -1,0 +1,4 @@
+[submodule "domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib"]
+	path = domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib
+	url = https://github.com/pks5/machineblocks.git
+	branch = machineblocks2
