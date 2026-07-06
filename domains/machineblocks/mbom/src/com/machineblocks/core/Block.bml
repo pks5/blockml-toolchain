@@ -13,6 +13,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>MachineBlocks domain base Block. Abstract composable type for all physical MBOM blocks — carries native properties (size, offset, direction, …) and the default _parts aggregation.</documentation>
+
   <name>Block</name>
   <fullQualifiedName>com.machineblocks.core.Block</fullQualifiedName>
   <baseType>org.blockml.core.ComposableBlock</baseType>

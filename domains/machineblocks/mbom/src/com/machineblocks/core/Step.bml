@@ -1,0 +1,32 @@
+<!--
+  MachineBlocks MBOM — Set assembly step
+
+  FQN: com.machineblocks.core.Step
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:type="com.machineblocks.type"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation>Composable Block defining one assembly instruction step in a Set — references a Placement by placementId. Used as children of composition aggregation="_steps". Document order defines build order when _steps is present.</documentation>
+
+  <name>Step</name>
+  <fullQualifiedName>com.machineblocks.core.Step</fullQualifiedName>
+  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <version>1.0.0</version>
+
+  <final>true</final>
+
+  <allowedSubBlockTypes />
+
+  <properties>
+    <property name="placementId" type="String">
+      <documentation>References the explicit id of a Placement in the Set's _placement aggregation.</documentation>
+    </property>
+  </properties>
+
+</block>

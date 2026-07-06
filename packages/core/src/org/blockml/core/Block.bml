@@ -12,6 +12,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>Root semantic unit of BlockML. Sole inheritance root for all Block, TypeBlock, and LanguageBlock definitions. Carries identity and versioning only — no composition semantics.</documentation>
+
   <name>Block</name>
   <fullQualifiedName>org.blockml.core.Block</fullQualifiedName>
   <version>1.0.0</version>

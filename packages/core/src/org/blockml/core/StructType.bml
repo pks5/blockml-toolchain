@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>Abstract branch for named struct TypeBlocks with ordered fields (e.g. Size3D, Vector3D).</documentation>
+
   <name>StructType</name>
   <fullQualifiedName>org.blockml.core.StructType</fullQualifiedName>
   <baseType>org.blockml.core.TypeBlock</baseType>

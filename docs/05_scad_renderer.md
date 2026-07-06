@@ -151,14 +151,14 @@ include <{relative_path_to_scad-lib}/config/mb_config.scad>;
 
 Ordinary Composite Block compositions render leaf instances as **`mb_block()`** (NativeBlock) — no `use` import of dependency block SCAD files. See `14_compiler_runtime.md` — NativeBlock Render Model.
 
-For **Sets** (`com.machineblocks.core.Set`), `_blocks` configurations may reference typed block modules by `blockId`. In that case the Set renderer generates `use` imports for the referenced block SCAD files:
+For **Sets** (`com.machineblocks.core.Set`), `_parts` palette entries may reference typed block modules by `blockId`. In that case the Set renderer generates `use` imports for the referenced block SCAD files:
 
 ```scad
 use <../wall/Wall.scad>;
 use <../corner/Corner.scad>;
 ```
 
-Set `_blocks` dispatch is specified separately when Set MBML examples are available in scad-lib.
+Set `_parts` dispatch is specified separately when Set MBML examples are available in scad-lib.
 
 ### Built-in Service Imports
 
@@ -621,10 +621,10 @@ module mb__com__martianmicro__anyclosure__Wall(config = undef, settings = undef)
 
 A MBOM Block whose `baseType` chain includes `com.machineblocks.core.Set` is rendered by `ScadSetRenderer` as a SCAD file with a STEPS array and four view submodules.
 
-A MachineBlocks Set uses three conventional Aggregations to separate concerns:
+A MachineBlocks Set uses three conventional Aggregations — `_parts` inherited from `com.machineblocks.core.Block`:
 
 ```text
-_blocks     — Block configurations (what exists, how it is parameterized)
+_parts      — block palette (configurations referenced by blockId in _placement)
 _placement  — placed instances (where each block is; id becomes the SCAD instance id)
 _steps      — assembly order (optional; defaults to document order of _placement)
 ```
@@ -644,10 +644,10 @@ STEPS = [
 Fields per entry:
 
 ```text
-[0]  instanceId   — string (from Place id)
+[0]  instanceId   — string (from Placement id)
 [1]  boundingBox  — [x, y, z] (from referenced Block configuration size)
-[2]  direction    — "west" | "north" | "east" | "south" (from Place direction)
-[3]  offset       — [x, y, z] (from Place offset)
+[2]  direction    — "west" | "north" | "east" | "south" (from Placement direction)
+[3]  offset       — [x, y, z] (from Placement offset)
 ```
 
 ### Bounding Box

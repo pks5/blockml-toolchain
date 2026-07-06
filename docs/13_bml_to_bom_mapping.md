@@ -224,6 +224,7 @@ V1 known types: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCA
 Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_framework_base_types.md`.
 
 ```text
+<documentation>…</documentation>             → block.documentation (trimmed text)
 <abstract>true</abstract>                    → block.abstract = true
 <final>true</final>                          → block.final = true
 <allowedSubBlockType type="…"/>              → block.allowedSubBlockTypes[]
@@ -231,7 +232,8 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 ```
 
 ```text
-Omitted abstract/final           → false
+Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1)
+Omitted abstract/final                 → false
 Empty <allowedSubBlockTypes/>    → [] (no Sub-Blocks allowed)
 Omitted lists                    → undefined (inherit from baseType at validate)
 org.blockml.core.Block           → omits <baseType> (sole inheritance root)

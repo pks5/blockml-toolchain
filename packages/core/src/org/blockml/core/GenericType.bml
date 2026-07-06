@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>Abstract branch for parameterized generic TypeBlocks (e.g. Array&lt;T&gt;, AutoOr&lt;T&gt;).</documentation>
+
   <name>GenericType</name>
   <fullQualifiedName>org.blockml.core.GenericType</fullQualifiedName>
   <baseType>org.blockml.core.TypeBlock</baseType>

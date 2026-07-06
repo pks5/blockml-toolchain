@@ -164,7 +164,7 @@ com.machineblocks.core.Block  (extends org.blockml.core.Block)
 
 When a Block's `baseType` chain includes `com.machineblocks.core.Block` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited `_parts` appears via `resolveEffectiveMembers()`.
 
-Declare `<aggregations>` explicitly only when **adding** aggregations beyond the inherited set (e.g. `_blocks`, `_placement`, `_steps` on `Set`). Redeclaring `_parts` to change its type is not permitted — inherited members cannot be overridden.
+Declare `<aggregations>` explicitly only when **adding** aggregations beyond the inherited set (e.g. `_placement`, `_steps` on `Set`). Block palette entries use inherited `_parts` from `com.machineblocks.core.Block`. Redeclaring `_parts` to change its type is not permitted — inherited members cannot be overridden.
 
 This covers the vast majority of Composite Blocks. Explicit `<aggregations>` are needed when multiple Aggregations are required or when the Block does not inherit `_parts`.
 
@@ -453,35 +453,42 @@ Sibling child Blocks within the same Composition share computed values via **`bm
 
 A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`. It is not a separate MBOM class — it is a Block that the SCAD Renderer dispatches to `ScadSetRenderer` based on its base type.
 
-A Set uses three conventional Aggregations:
+A Set uses three conventional Aggregations — `_parts` inherited from `com.machineblocks.core.Block`:
 
 ```text
-_blocks     — Block configurations (what exists, how it is parameterized)
+_parts      — block palette (configurations referenced by blockId in _placement; inherited)
 _placement  — placed instances (where each block is; id becomes the SCAD instance id)
 _steps      — assembly order (optional; defaults to document order of _placement)
 ```
 
-### com.machineblocks.core.Place
+### com.machineblocks.core.Placement
 
-A lightweight MachineBlocks Block type used as children in the `_placement` Aggregation.
+Framework BML: `com/machineblocks/core/Placement.bml`. Extends `org.blockml.core.ComposableBlock` — a composable Block (not a geometry block) for Set placement entries.
 
 ```text
+Extends:        org.blockml.core.ComposableBlock
+Final:          true
 Members:
-  id         — instance ID (becomes the SCAD instance id in STEPS and dispatcher); must be explicit
-  blockId    — references explicit `id` of a Block in _blocks (BML_MISSING_ID / BML_UNRESOLVABLE_INSTANCE_REF)
+  id         — instance ID (inherited system property; becomes SCAD instance id); must be explicit
+  blockId    — references explicit `id` of a Block in _parts (BML_UNRESOLVABLE_INSTANCE_REF)
   direction  — orientation in the set (Direction)
-  offset     — position in the set in grid units (GridPosition3D)
+  offset     — position in grid units (GridPosition3D)
+Composition:    none — leaf meta Block
 ```
 
-The `id` on a Place must be unique across all placements in the Set.
+The `id` on a Placement must be unique across all placements in the Set.
 
 ### com.machineblocks.core.Step
 
-A lightweight MachineBlocks Block type used as children in the `_steps` Aggregation.
+Framework BML: `com/machineblocks/core/Step.bml`. Extends `org.blockml.core.ComposableBlock` — a composable Block for Set assembly order.
 
 ```text
+Extends:        org.blockml.core.ComposableBlock
+Final:          true
 Members:
-  placeId    — references explicit `id` of a Place in _placement
+  id         — optional; inherited system property when referenced
+  placementId    — references explicit `id` of a Placement in _placement
+Composition:    none — leaf meta Block
 ```
 
 When `_steps` is absent or empty, assembly order equals the document order of `_placement` entries.
@@ -494,6 +501,9 @@ Framework types are **BML files** — see `16_framework_base_types.md`. Interpre
 
 ```text
 org.blockml.core.Block                                  ← packages/core/…/Block.bml (abstract, root)
+  org.blockml.core.ComposableBlock                      ← ComposableBlock.bml (abstract)
+    com.machineblocks.core.Placement                        ← mbom/…/Placement.bml (final)
+    com.machineblocks.core.Step                         ← mbom/…/Step.bml (final)
   org.blockml.service.ServiceBlock                      ← ServiceBlock.bml
     org.blockml.service.FunctionBlock                   ← FunctionBlock.bml
       org.blockml.service.Math                          ← core-services/Math.bml
@@ -501,8 +511,6 @@ org.blockml.core.Block                                  ← packages/core/…/Bl
     com.machineblocks.core.NativeBlock                  ← NativeBlock.bml (final)
     com.machineblocks.core.Set                          ← Set.bml (abstract)
       com.martianmicro.anyclosure.DefaultEnclosure      ← user BML
-    com.machineblocks.core.Place                        ← user / library BML
-    com.machineblocks.core.Step
     com.machineblocks.bricks.StandardBrick              ← user BML
     com.martianmicro.anyclosure.Wall
     …
@@ -541,11 +549,13 @@ For **standalone compile**, leaf-only Block types (e.g. `com.machineblocks.brick
 
 ### com.machineblocks.core.Set
 
-`Set` is a sibling of `NativeBlock` — both extend `com.machineblocks.core.Block`. Unlike `NativeBlock`, `Set` is derivable:
+`Set` extends `com.machineblocks.core.Block` and inherits `_parts` for the block palette. Unlike `NativeBlock`, `Set` is derivable:
 
 ```text
-Derivable:  baseType = com.machineblocks.core.Set  ✓
-Processor:  ScadSetProcessor → STEPS array + 4 view submodules
+Aggregations:   _parts (0..n, hidden, defaultAggregation — inherited)
+                _placement, _steps (declared on Set.bml)
+Derivable:      baseType = com.machineblocks.core.Set  ✓
+Processor:      ScadSetProcessor → STEPS array + 4 view submodules
 ```
 
 ### allowedSubBlockTypes
@@ -591,7 +601,7 @@ MB_EMPTY_BLOCK                  — Block has no Composition and no registered c
                                    (MB_* prefix = MachineBlocks-specific, not BML Core)
 ```
 
-Note: `com.machineblocks.core.Place` and `com.machineblocks.core.Step` are regular Blocks — they inherit from `com.machineblocks.core.Block` and are processed by the same pipeline. They are not special-cased in BOM Core.
+Note: `com.machineblocks.core.Placement` and `com.machineblocks.core.Step` are regular ComposableBlocks — framework BML extending `org.blockml.core.ComposableBlock`. They are processed by the same pipeline as other Blocks; the SCAD Set renderer interprets their properties for STEPS assembly output.
 
 ---
 

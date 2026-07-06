@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>TypeBlock branch of BlockML. Semantic unit for property and payload types (primitives, structs, enums, generics) — not composable.</documentation>
+
   <name>TypeBlock</name>
   <fullQualifiedName>org.blockml.core.TypeBlock</fullQualifiedName>
   <baseType>org.blockml.core.Block</baseType>

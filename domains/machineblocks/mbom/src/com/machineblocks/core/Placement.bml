@@ -1,0 +1,38 @@
+<!--
+  MachineBlocks MBOM — Set placement instance
+
+  FQN: com.machineblocks.core.Placement
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:type="com.machineblocks.type"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation>Composable Block defining one placed instance in a Set — references a block from _parts by blockId and specifies direction and offset. Used as children of composition aggregation="_placement".</documentation>
+
+  <name>Placement</name>
+  <fullQualifiedName>com.machineblocks.core.Placement</fullQualifiedName>
+  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <version>1.0.0</version>
+
+  <final>true</final>
+
+  <allowedSubBlockTypes />
+
+  <properties>
+    <property name="blockId" type="String">
+      <documentation>References the explicit id of a Block in the Set's _parts palette.</documentation>
+    </property>
+    <property name="direction" type="type:Direction">
+      <documentation>Orientation of the placed instance in the Set coordinate system.</documentation>
+    </property>
+    <property name="offset" type="type:GridPosition3D">
+      <documentation>Position in grid units relative to the Set origin.</documentation>
+    </property>
+  </properties>
+
+</block>

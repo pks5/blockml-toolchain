@@ -12,6 +12,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>Composable branch of BlockML. Blocks that may appear in compositions, carry instance id, aggregations, capabilities, and sub-blocks (Walls, Bricks, ServiceBlocks, Sets).</documentation>
+
   <name>ComposableBlock</name>
   <fullQualifiedName>org.blockml.core.ComposableBlock</fullQualifiedName>
   <baseType>org.blockml.core.Block</baseType>

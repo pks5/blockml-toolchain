@@ -160,10 +160,21 @@ A Block definition describes a reusable Block type. It declares Members (Propert
 ### Required Fields
 
 ```text
+<documentation>     — human-readable description of what this Block is (first child element).
 <name>              — short class name (PascalCase). See naming convention below.
 <fullQualifiedName> — FQN (e.g. com.martianmicro.anyclosure.Wall)
-<baseType>          — FQN of the parent type. Mandatory — no default.
+<baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.core.Block.
 <version>           — semantic version of this Block definition
+```
+
+`<documentation>` is placed **directly under the root `<block>` element**, before `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+
+```xml
+<block ...>
+  <documentation>Parametric wall segment for AnyClosure enclosures.</documentation>
+  <name>Wall</name>
+  ...
+</block>
 ```
 
 ### Block Name Convention
@@ -484,10 +495,9 @@ Aggregations describe ownership relationships. An Aggregation defines that a Blo
 For MachineBlocks Blocks, `_parts` is inherited from `com.machineblocks.core.Block` — it does not need to be declared. Declare `<aggregations>` only when adding aggregations beyond the inherited set:
 
 ```xml
-<!-- Set: additional aggregations beyond inherited _parts -->
+<!-- Set: _placement and _steps beyond inherited _parts -->
 <aggregations>
-  <aggregation name="_blocks"    cardinality="0..n" type="com.machineblocks.core.Block" visibility="hidden" />
-  <aggregation name="_placement" cardinality="0..n" type="com.machineblocks.core.Place" visibility="hidden" />
+  <aggregation name="_placement" cardinality="0..n" type="com.machineblocks.core.Placement" visibility="hidden" />
   <aggregation name="_steps"     cardinality="0..n" type="com.machineblocks.core.Step"  visibility="hidden" />
 </aggregations>
 ```
@@ -607,7 +617,7 @@ Child elements inside `<composition>` are Block instances. Each instance:
 ```text
 Tag name      — class name (with namespace prefix)
 id            — **system property** (org.blockml.core.Block). Part ID for composition identity (parentId::partId).
-                Required when referenced (blockId, placeId, …) or on bml:each elements (literal or Expression).
+                Required when referenced (blockId, placementId, …) or on bml:each elements (literal or Expression).
                 Omitted on anonymous static children → auto-ID after directive expansion. Not a custom property.
 renderGroup   — optional, fallback = id
 namespace     — optional, fallback = id
@@ -1131,10 +1141,10 @@ Sub-Blocks have their own FQN and can be referenced from outside the parent Bloc
 
 A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`. It uses the standard `<block>` document type — there is no separate root element for Sets.
 
-A Set uses three conventional Aggregations to separate concerns:
+A Set uses three conventional Aggregations — `_parts` inherited from `com.machineblocks.core.Block`:
 
 ```text
-_blocks     — Block configurations (what exists, how it is parameterized)
+_parts      — block palette (configurations referenced by blockId in _placement)
 _placement  — placed instances (where each block is; id becomes the SCAD instance id)
 _steps      — assembly order (optional; defaults to document order of _placement)
 ```
@@ -1157,46 +1167,53 @@ _steps      — assembly order (optional; defaults to document order of _placeme
     <property name="assembly"       type="AssemblyMode" defaultValue="Merged"  />
   </properties>
 
-  <aggregations>
-    <aggregation name="_blocks"    cardinality="0..n" type="com.machineblocks.core.Block" visibility="hidden" />
-    <aggregation name="_placement" cardinality="0..n" type="com.machineblocks.core.Place" visibility="hidden" />
-    <aggregation name="_steps"     cardinality="0..n" type="com.machineblocks.core.Step"  visibility="hidden" />
-  </aggregations>
-
-  <composition aggregation="_blocks">
-    <ac:Floor  id="floor"  version="1.0.0" size="[16, 16, 1]" />
-    <ac:Corner id="corner" version="1.0.0" size="[4, 4, 9]"   />
-    <ac:Wall   id="wall"   version="1.0.0" size="[1, 8, 9]"   />
-    <ac:Lid    id="lid"    version="1.0.0" size="[16, 16, 1]" />
+  <!-- Block palette: inherited _parts (no explicit <aggregations> needed on user Sets) -->
+  <composition aggregation="_parts">
+    <ac:Floor  id="floor"  size="[16, 16, 1]" />
+    <ac:Corner id="corner" size="[4, 4, 9]"   />
+    <ac:Wall   id="wall"   size="[1, 8, 9]"   />
+    <ac:Lid    id="lid"    size="[16, 16, 1]" />
   </composition>
 
   <composition aggregation="_placement">
-    <core:Place id="00001" blockId="floor"  direction="West"  offset="[0, 0, 0]"   />
-    <core:Place id="00002" blockId="corner" direction="West"  offset="[0, 0, 1]"   />
-    <core:Place id="00003" blockId="wall"   direction="West"  offset="[0, 4, 1]"   />
-    <core:Place id="00004" blockId="corner" direction="North" offset="[0, 12, 1]"  />
-    <core:Place id="00005" blockId="wall"   direction="North" offset="[4, 15, 1]"  />
-    <core:Place id="00006" blockId="corner" direction="East"  offset="[12, 12, 1]" />
-    <core:Place id="00007" blockId="wall"   direction="East"  offset="[15, 4, 1]"  />
-    <core:Place id="00008" blockId="corner" direction="South" offset="[12, 0, 1]"  />
-    <core:Place id="00009" blockId="wall"   direction="South" offset="[4, 0, 1]"   />
-    <core:Place id="0000A" blockId="lid"    direction="West"  offset="[0, 0, 10]"  />
+    <core:Placement id="00001" blockId="floor"  direction="West"  offset="[0, 0, 0]"   />
+    <core:Placement id="00002" blockId="corner" direction="West"  offset="[0, 0, 1]"   />
+    <core:Placement id="00003" blockId="wall"   direction="West"  offset="[0, 4, 1]"   />
+    <core:Placement id="00004" blockId="corner" direction="North" offset="[0, 12, 1]"  />
+    <core:Placement id="00005" blockId="wall"   direction="North" offset="[4, 15, 1]"  />
+    <core:Placement id="00006" blockId="corner" direction="East"  offset="[12, 12, 1]" />
+    <core:Placement id="00007" blockId="wall"   direction="East"  offset="[15, 4, 1]"  />
+    <core:Placement id="00008" blockId="corner" direction="South" offset="[12, 0, 1]"  />
+    <core:Placement id="00009" blockId="wall"   direction="South" offset="[4, 0, 1]"   />
+    <core:Placement id="0000A" blockId="lid"    direction="West"  offset="[0, 0, 10]"  />
   </composition>
 
   <!-- _steps omitted → assembly order = document order of _placement -->
 
+  <composition aggregation="_steps">
+    <core:Step placementId="00001" />
+    <core:Step placementId="00002" />
+    <core:Step placementId="00003" />
+  </composition>
+
 </block>
 ```
 
-### Place and Step
+### Placement and Step
 
-`com.machineblocks.core.Place` and `com.machineblocks.core.Step` are lightweight MachineBlocks Block types. They are used as children in their respective Compositions exactly like any other Block type — resolved via namespace prefix, instantiated by the BOM Mapper.
+`com.machineblocks.core.Placement` and `com.machineblocks.core.Step` are **framework ComposableBlocks** (`Placement.bml`, `Step.bml`) — they extend `org.blockml.core.ComposableBlock`, not `com.machineblocks.core.Block`. They carry no geometry properties (no `size`, `studs`, …). Used as composition children on Sets:
 
-`Place` members:
+```text
+composition aggregation="_parts"      →  physical block palette (Floor, Wall, …)
+composition aggregation="_placement"  →  core:Placement instances
+composition aggregation="_steps"      →  core:Step instances (optional)
+```
+
+`Placement` members:
 
 ```text
 id         — instance ID (becomes the SCAD instance id); must be explicit
-blockId    — references explicit id of a Block in _blocks
+blockId    — references explicit id of a Block in _parts
 direction  — orientation in the set
 offset     — position in the set (grid units)
 ```
@@ -1204,25 +1221,25 @@ offset     — position in the set (grid units)
 `Step` members:
 
 ```text
-placeId    — references explicit id of a Place in _placement
+placementId    — references explicit id of a Placement in _placement
 ```
 
 When `_steps` is omitted, assembly order equals the document order of `_placement` entries.
 
 ### Block Reuse
 
-Because `_blocks` and `_placement` are separated, one Block configuration can be referenced by multiple placements without duplication:
+Because `_parts` and `_placement` are separated, one Block configuration can be referenced by multiple placements without duplication:
 
 ```xml
-<composition aggregation="_blocks">
-  <ac:Wall id="wall" version="1.0.0" size="[1, 8, 9]" baseColor="#303D4E" />
+<composition aggregation="_parts">
+  <ac:Wall id="wall" size="[1, 8, 9]" baseColor="#303D4E" />
 </composition>
 
 <composition aggregation="_placement">
-  <core:Place id="00003" blockId="wall" direction="West"  offset="[0, 4, 1]"  />
-  <core:Place id="00005" blockId="wall" direction="North" offset="[4, 15, 1]" />
-  <core:Place id="00007" blockId="wall" direction="East"  offset="[15, 4, 1]" />
-  <core:Place id="00009" blockId="wall" direction="South" offset="[4, 0, 1]"  />
+  <core:Placement id="00003" blockId="wall" direction="West"  offset="[0, 4, 1]"  />
+  <core:Placement id="00005" blockId="wall" direction="North" offset="[4, 15, 1]" />
+  <core:Placement id="00007" blockId="wall" direction="East"  offset="[15, 4, 1]" />
+  <core:Placement id="00009" blockId="wall" direction="South" offset="[4, 0, 1]"  />
 </composition>
 ```
 
@@ -1232,7 +1249,7 @@ Three modes, combinable:
 
 ```text
 Option 1 — Inline:
-  All properties defined directly on the Block entry in _blocks.
+  All properties defined directly on the Block entry in _parts.
 
 Option 2 — Preset reference:
   Block references a blockPresets document.
@@ -1567,13 +1584,12 @@ The examples below are **illustrative drafts only** — not valid V1 input.
     { "name": "assembly",       "type": "AssemblyMode", "defaultValue": "Merged"  }
   ],
   "aggregations": [
-    { "name": "_blocks",    "cardinality": "0..n", "type": "com.machineblocks.core.Block", "visibility": "hidden" },
-    { "name": "_placement", "cardinality": "0..n", "type": "com.machineblocks.core.Place", "visibility": "hidden" },
+    { "name": "_placement", "cardinality": "0..n", "type": "com.machineblocks.core.Placement", "visibility": "hidden" },
     { "name": "_steps",     "cardinality": "0..n", "type": "com.machineblocks.core.Step",  "visibility": "hidden" }
   ],
   "compositions": [
     {
-      "aggregation": "_blocks",
+      "aggregation": "_parts",
       "children": [
         { "type": "com.martianmicro.anyclosure.Floor",  "id": "floor",  "version": "1.0.0", "size": [16, 16, 1] },
         { "type": "com.martianmicro.anyclosure.Corner", "id": "corner", "version": "1.0.0", "size": [4, 4, 9]   },
@@ -1584,16 +1600,16 @@ The examples below are **illustrative drafts only** — not valid V1 input.
     {
       "aggregation": "_placement",
       "children": [
-        { "type": "com.machineblocks.core.Place", "id": "00001", "blockId": "floor",  "direction": "West",  "offset": [0, 0, 0]   },
-        { "type": "com.machineblocks.core.Place", "id": "00002", "blockId": "corner", "direction": "West",  "offset": [0, 0, 1]   },
-        { "type": "com.machineblocks.core.Place", "id": "00003", "blockId": "wall",   "direction": "West",  "offset": [0, 4, 1]   },
-        { "type": "com.machineblocks.core.Place", "id": "00004", "blockId": "corner", "direction": "North", "offset": [0, 12, 1]  },
-        { "type": "com.machineblocks.core.Place", "id": "00005", "blockId": "wall",   "direction": "North", "offset": [4, 15, 1]  },
-        { "type": "com.machineblocks.core.Place", "id": "00006", "blockId": "corner", "direction": "East",  "offset": [12, 12, 1] },
-        { "type": "com.machineblocks.core.Place", "id": "00007", "blockId": "wall",   "direction": "East",  "offset": [15, 4, 1]  },
-        { "type": "com.machineblocks.core.Place", "id": "00008", "blockId": "corner", "direction": "South", "offset": [12, 0, 1]  },
-        { "type": "com.machineblocks.core.Place", "id": "00009", "blockId": "wall",   "direction": "South", "offset": [4, 0, 1]   },
-        { "type": "com.machineblocks.core.Place", "id": "0000A", "blockId": "lid",    "direction": "West",  "offset": [0, 0, 10]  }
+        { "type": "com.machineblocks.core.Placement", "id": "00001", "blockId": "floor",  "direction": "West",  "offset": [0, 0, 0]   },
+        { "type": "com.machineblocks.core.Placement", "id": "00002", "blockId": "corner", "direction": "West",  "offset": [0, 0, 1]   },
+        { "type": "com.machineblocks.core.Placement", "id": "00003", "blockId": "wall",   "direction": "West",  "offset": [0, 4, 1]   },
+        { "type": "com.machineblocks.core.Placement", "id": "00004", "blockId": "corner", "direction": "North", "offset": [0, 12, 1]  },
+        { "type": "com.machineblocks.core.Placement", "id": "00005", "blockId": "wall",   "direction": "North", "offset": [4, 15, 1]  },
+        { "type": "com.machineblocks.core.Placement", "id": "00006", "blockId": "corner", "direction": "East",  "offset": [12, 12, 1] },
+        { "type": "com.machineblocks.core.Placement", "id": "00007", "blockId": "wall",   "direction": "East",  "offset": [15, 4, 1]  },
+        { "type": "com.machineblocks.core.Placement", "id": "00008", "blockId": "corner", "direction": "South", "offset": [12, 0, 1]  },
+        { "type": "com.machineblocks.core.Placement", "id": "00009", "blockId": "wall",   "direction": "South", "offset": [4, 0, 1]   },
+        { "type": "com.machineblocks.core.Placement", "id": "0000A", "blockId": "lid",    "direction": "West",  "offset": [0, 0, 10]  }
       ]
     }
   ]
@@ -1630,7 +1646,7 @@ unknown version on external instance → BML_UNKNOWN_VERSION (error)
 same-document Sub-Block instance     → version not required
 id missing on referenced instance    → BML_MISSING_ID
 id missing on bml:each element       → BML_MISSING_ID
-blockId / placeId unresolvable       → BML_UNRESOLVABLE_INSTANCE_REF
+blockId / placementId unresolvable       → BML_UNRESOLVABLE_INSTANCE_REF
 anonymous static child without id    → auto-ID after directive expansion (not stored in BOM)
 _steps missing or empty       → assembly order = document order of _placement
 ```

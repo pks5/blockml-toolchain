@@ -118,7 +118,7 @@ Examples:
 There is **no FQN fallback** — a Block's type FQN is never used as instance identity.
 
 **Explicit IDs** are authored in BML via the `id` system property. Required when:
-- another instance references this one (`blockId`, `placeId`, …)
+- another instance references this one (`blockId`, `placementId`, …)
 - the element carries `bml:each` (literal or Expression — auto-ID is not available in loops)
 
 **Auto-generated IDs** are assigned **after directive expansion** for static, unreferenced children that omit `id`. They are deterministic 6-hex hashes:

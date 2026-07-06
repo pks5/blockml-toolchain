@@ -23,6 +23,7 @@ For value types and implementation languages as BML see `17_type_system_bml.md`.
 | **Compiler internals** | **Free** — see `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation |
 | **09_mbom_properties.yml** | **Render mapping only** (serializer, scad_name, customizer) — not type SSOT |
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
+| **Block documentation** | Every root `<block>` carries `<documentation>` as first child — what this Block is |
 
 ```text
 BML (what the type IS)          →  TypeRegistry
@@ -123,9 +124,8 @@ All other definitions must declare `<baseType>`. Composable framework types inhe
      org/blockml/service/FunctionBlock.bml
 
 2. @machineblocks/mbom BML
-     com/machineblocks/core/Block.bml
-     com/machineblocks/core/NativeBlock.bml
-     com/machineblocks/core/Set.bml
+     com/machineblocks/core/Placement.bml · Step.bml
+     com/machineblocks/core/Placement.bml · Step.bml · Block.bml · NativeBlock.bml · Set.bml
      …
 
 3. @blockml/core-services BML
@@ -165,9 +165,8 @@ packages/core/src/
     Block.bml · ComposableBlock.bml · TypeBlock.bml · LanguageBlock.bml · …
 
 domains/machineblocks/mbom/src/
-  com/machineblocks/core/Block.bml
-  com/machineblocks/core/NativeBlock.bml
-  com/machineblocks/core/Set.bml
+  com/machineblocks/core/
+    Placement.bml · Step.bml · Block.bml · NativeBlock.bml · Set.bml
 
 packages/core-services/src/
   org/blockml/service/Math.bml          ← concrete; already exists

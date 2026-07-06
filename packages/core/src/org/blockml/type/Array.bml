@@ -1,5 +1,8 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd">
+
+  <documentation>BOM Core generic TypeBlock for homogeneous lists. Author syntax: Array&lt;T&gt; (e.g. Array&lt;Integer&gt;).</documentation>
+
   <name>Array</name>
   <fullQualifiedName>org.blockml.type.Array</fullQualifiedName>
   <baseType>org.blockml.core.GenericType</baseType>

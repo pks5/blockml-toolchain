@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>Abstract base for FunctionBlocks — ServiceBlocks whose Sync Capabilities may carry TypeScript or OpenSCAD implementations. Used for #math, #strings, and similar expression utilities.</documentation>
+
   <name>FunctionBlock</name>
   <fullQualifiedName>org.blockml.service.FunctionBlock</fullQualifiedName>
   <baseType>org.blockml.service.ServiceBlock</baseType>

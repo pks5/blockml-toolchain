@@ -1,5 +1,8 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd">
+
+  <documentation>BOM Core primitive TypeBlock representing absence of value. Used in expression and capability typing where null is explicit.</documentation>
+
   <name>Null</name>
   <fullQualifiedName>org.blockml.type.Null</fullQualifiedName>
   <baseType>org.blockml.core.PrimitiveType</baseType>

@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>Abstract base for built-in ServiceBlocks — addressable logic units invoked via stud:// or expressions, with no sub-blocks.</documentation>
+
   <name>ServiceBlock</name>
   <fullQualifiedName>org.blockml.service.ServiceBlock</fullQualifiedName>
   <baseType>org.blockml.core.ComposableBlock</baseType>

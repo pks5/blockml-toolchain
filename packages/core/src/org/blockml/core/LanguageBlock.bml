@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>LanguageBlock branch of BlockML. Declares an implementation language permitted on Sync Capability implementations (OpenSCAD, TypeScript, …).</documentation>
+
   <name>LanguageBlock</name>
   <fullQualifiedName>org.blockml.core.LanguageBlock</fullQualifiedName>
   <baseType>org.blockml.core.Block</baseType>

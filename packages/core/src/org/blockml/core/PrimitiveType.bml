@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <documentation>Abstract branch for built-in scalar TypeBlocks (Integer, Float, String, Boolean, Null).</documentation>
+
   <name>PrimitiveType</name>
   <fullQualifiedName>org.blockml.core.PrimitiveType</fullQualifiedName>
   <baseType>org.blockml.core.TypeBlock</baseType>
