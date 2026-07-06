@@ -307,10 +307,12 @@ Facade and Target Registry. Browser and Node compatible.
 
 ```text
 - Target Registry: registerTarget(target), getTarget(name)
-- compileBmlToBom(source): CompilerResult<BomDocument>
-- compileBomToOutput(model, targetName): CompilerResult<RenderOutput>
-- compileBmlToOutput(source, targetName): CompilerResult<RenderOutput>
+- compileBmlToBom(input: CompileInput, options?): CompilerResult<BomDocument>
+- compileBomToOutput(model, targetName, options?): CompilerResult<RenderOutput>
+- compileBmlToOutput(input: CompileInput, targetName, options?): CompilerResult<RenderOutput>
 ```
+
+See `14_compiler_runtime.md` — Compiler Facade API (C2).
 
 ### `@blockml/cli`
 

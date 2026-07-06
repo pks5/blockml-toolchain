@@ -1,6 +1,6 @@
 # Compiler Runtime
 
-version: 0.1.0
+version: 0.2.0
 
 ## Purpose of this Document
 
@@ -23,6 +23,7 @@ For pipeline stages see `06_compiler.md`.
 | **Sub-Blocks** | Same-document Sub-Blocks → sub-modules embedded in the parent output SCAD file |
 | **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.mbml` is compiled |
 | **JSON BML** | Deferred (TBD — not V1) |
+| **Facade API (C2)** | `CompileInput` + `CompileOptions`; explicit `TypeRegistry`; CLI writes files |
 
 ---
 
@@ -172,12 +173,125 @@ Block-to-block `use` imports apply to **Set `_blocks` dispatch** (block configur
 
 ---
 
+## Compiler Facade API (C2)
+
+`@blockml/compiler` exposes three public functions. Input is structured — not a bare `string`.
+
+### Types
+
+```typescript
+interface CompileInput {
+  /** Raw BML source text */
+  source: string
+  /** Project-relative or absolute path — used in SourceInfo and Diagnostic.source.file */
+  filePath: string
+  /** V1: always "xml". Default: inferred from filePath extension or first non-whitespace char */
+  format?: "xml"
+}
+
+interface CompileOptions {
+  /** Pre-bootstrapped registry (CLI scans srcDir + libraries before compile). Required for validate/compile with cross-file refs. */
+  typeRegistry?: TypeRegistry
+  /** Active config profile name — from bom.config.json activeConfig */
+  activeConfig?: string
+  /** Output root (outDir) — used by render targets for relative output paths and SCAD import resolution */
+  outputBasePath?: string
+  /** MachineBlocks SCAD library root — mbLibPath; required for SCAD target import paths */
+  mbLibPath?: string
+}
+
+interface CompilerResult<T> {
+  output:      T | null
+  diagnostics: Diagnostic[]
+  success:     boolean
+}
+```
+
+`CompileOptions` is **session-level** (one compile invocation). Per-block render state is `RenderContext` (C1) — built internally by the BlockProcessor from `CompileOptions`.
+
+### Functions
+
+```typescript
+/** Stages 1–8: parse + validate. No target required. */
+compileBmlToBom(
+  input: CompileInput,
+  options?: CompileOptions
+): CompilerResult<BomDocument>
+
+/** Stages 9–19: render. Target must be registered. */
+compileBomToOutput(
+  model: BomDocument,
+  targetName: string,
+  options?: CompileOptions
+): CompilerResult<RenderOutput>
+
+/** Full pipeline: stages 1–19. */
+compileBmlToOutput(
+  input: CompileInput,
+  targetName: string,
+  options?: CompileOptions
+): CompilerResult<RenderOutput>
+```
+
+### Design rules
+
+```text
+TypeRegistry     — explicit in CompileOptions, not a hidden global singleton
+                   CLI bootstraps registry (B5) and passes it on every call
+
+File output      — Facade returns RenderOutput.files[] with relative paths + content
+                   CLI writes to disk; browser uses content in-memory
+
+validate         — compileBmlToBom only; no targetName; typeRegistry required when
+                   the file has external references
+
+Diagnostics      — always reference input.filePath + line/column from parse
+```
+
+### CLI example
+
+```typescript
+const registry = bootstrapTypeRegistry({ srcDir, mbLibPath, bmlExtensions });
+
+const input: CompileInput = {
+  source: fs.readFileSync("src/com/.../Calibrator.mbml", "utf8"),
+  filePath: "src/com/.../Calibrator.mbml",
+};
+
+const result = compileBmlToOutput(input, "machineblocks-v3-scad", {
+  typeRegistry: registry,
+  outputBasePath: config.outDir,
+  mbLibPath: resolveMbLibPath(config),
+  activeConfig: config.activeConfig,
+});
+
+if (result.success) {
+  for (const file of (result.output as ScadRenderOutput).files) {
+    fs.writeFileSync(path.join(config.outDir, file.path), file.content);
+  }
+}
+```
+
+### Browser example
+
+```typescript
+registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
+
+const result = compileBmlToOutput(
+  { source: xmlSource, filePath: "Wall.bml" },
+  "machineblocks-v3-scad",
+  { typeRegistry: preloadedRegistry }
+);
+```
+
+---
+
 ## Open Decisions (Phase C — remaining)
 
 | ID | Topic | Status |
 |---|---|---|
 | C1 | `RenderContext` fields | Pending |
-| C2 | Facade API / `CompileInput` | Pending |
+| C2 | Facade API — `CompileInput` + `CompileOptions` | **Decided** |
 | C3 | Target bootstrap V1 (hardcoded vs config) | Pending |
 | C4 | Compile scope + NativeBlock model | **Decided** |
 | C5 | Incremental build hash algorithm | Pending |

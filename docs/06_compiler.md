@@ -287,23 +287,30 @@ class MartianMicroAnyclosureTarget implements RenderTarget {
   delegates = [machineBlocksV3ScadTarget]  // full delegation
 }
 ```
-```
 
 ---
 
 ## Compiler Facade API
 
-`@blockml/compiler` exposes three public functions:
+`@blockml/compiler` exposes three public functions. See `14_compiler_runtime.md` — Compiler Facade API (C2) for full specification.
 
 ```typescript
-// Parse BML → BOM
-compileBmlToBom(source: string): CompilerResult<BomDocument>
+interface CompileInput {
+  source:   string
+  filePath: string
+  format?:  "xml"          // V1: xml only
+}
 
-// Compile BOM → Target Output
-compileBomToOutput(model: BomDocument, targetName: string): CompilerResult<RenderOutput>
+interface CompileOptions {
+  typeRegistry?:    TypeRegistry
+  activeConfig?:    string
+  outputBasePath?:  string
+  mbLibPath?:       string
+}
 
-// Full pipeline: BML → Target Output
-compileBmlToOutput(source: string, targetName: string): CompilerResult<RenderOutput>
+compileBmlToBom(input: CompileInput, options?: CompileOptions): CompilerResult<BomDocument>
+compileBomToOutput(model: BomDocument, targetName: string, options?: CompileOptions): CompilerResult<RenderOutput>
+compileBmlToOutput(input: CompileInput, targetName: string, options?: CompileOptions): CompilerResult<RenderOutput>
 ```
 
 ### CompilerResult
@@ -342,7 +349,11 @@ import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-
 
 registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
 
-const result = compileBmlToOutput(xmlSource, "machineblocks-v3-scad");
+const result = compileBmlToOutput(
+  { source: xmlSource, filePath: "Wall.bml" },
+  "machineblocks-v3-scad",
+  { typeRegistry: preloadedRegistry }
+);
 
 if (result.success) {
   const scad = (result.output as ScadRenderOutput).files[0].content;
