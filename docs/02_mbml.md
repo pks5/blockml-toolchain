@@ -499,14 +499,14 @@ Capabilities describe how a Block communicates. Like Properties, they are declar
 
   <!-- AsyncInbound: receives a message asynchronously -->
   <capability name="resize"
-              class="org.blockml.capability.AsyncInbound"
+              type="org.blockml.capability.AsyncInbound"
               payloadType="com.myDomain.ResizePayload">
     <documentation>Resize the block to the given dimensions.</documentation>
   </capability>
 
   <!-- AsyncInbound with optional returnType (for replyTo) -->
   <capability name="query"
-              class="org.blockml.capability.AsyncInbound"
+              type="org.blockml.capability.AsyncInbound"
               payloadType="com.myDomain.QueryPayload"
               returnType="com.myDomain.QueryResult">
     <documentation>Query and receive an async reply.</documentation>
@@ -514,13 +514,13 @@ Capabilities describe how a Block communicates. Like Properties, they are declar
 
   <!-- AsyncOutbound: sends a message asynchronously -->
   <capability name="resized"
-              class="org.blockml.capability.AsyncOutbound"
+              type="org.blockml.capability.AsyncOutbound"
               payloadType="com.myDomain.ResizedPayload">
   </capability>
 
   <!-- Sync: callable within Expressions only, returnType required -->
   <capability name="computeArea"
-              class="org.blockml.capability.Sync"
+              type="org.blockml.capability.Sync"
               payloadType="Array&lt;Integer&gt;"
               returnType="Integer">
     <documentation>Returns width * height.</documentation>
@@ -898,7 +898,7 @@ Two languages are supported:
 
   <capabilities>
     <capability name="formatValue"
-                class="org.blockml.capability.Sync"
+                type="org.blockml.capability.Sync"
                 payloadType="org.blockml.type.Float"
                 returnType="org.blockml.type.String">
       <documentation>Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>

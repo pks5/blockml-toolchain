@@ -299,7 +299,7 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
   <version>1.0.0</version>
   <capabilities>
     <capability name="formatValue"
-                class="org.blockml.capability.Sync"
+                type="org.blockml.capability.Sync"
                 payloadType="org.blockml.type.Float"
                 returnType="org.blockml.type.String">
       <implementation language="typescript"><![CDATA[

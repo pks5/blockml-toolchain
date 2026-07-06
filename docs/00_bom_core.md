@@ -545,7 +545,7 @@ A Sync Capability implementation can live directly on any Block whose `baseType`
 ```xml
 <!-- Direct on Block — valid if baseType supports "scad" -->
 <capabilities>
-  <capability name="formatValue" class="org.blockml.capability.Sync" ...>
+  <capability name="formatValue" type="org.blockml.capability.Sync" ...>
     <implementation language="scad"><![CDATA[
 function formatValue(x) = ...;
     ]]></implementation>

@@ -442,7 +442,7 @@ function mb__...__Utils__formatValue(x) =
 
 ```xml
 <capability name="formatValue"
-            class="org.blockml.capability.Sync"
+            type="org.blockml.capability.Sync"
             payloadType="org.blockml.type.Float"
             returnType="org.blockml.type.String">
   <implementation language="scad"><![CDATA[
@@ -505,7 +505,7 @@ The natural next step is the LLM Engine: given the Capability signature (name, p
 ```xml
 <!-- Future: LLM generates implementation from signature + documentation -->
 <capability name="formatValue"
-            class="org.blockml.capability.Sync"
+            type="org.blockml.capability.Sync"
             payloadType="org.blockml.type.Float"
             returnType="org.blockml.type.String">
   <documentation>
