@@ -20,6 +20,7 @@ For value types and implementation languages as BML see `17_type_system_bml.md`.
 |---|---|
 | **Base type SSOT** | BML files in `@blockml/core`, `@machineblocks/mbom`, `@blockml/core-services` |
 | **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry |
+| **Compiler internals** | **Free** — see `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation |
 | **09_mbom_properties.yml** | **Render mapping only** (serializer, scad_name, customizer) — not type SSOT |
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
 

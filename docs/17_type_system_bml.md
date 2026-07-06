@@ -50,6 +50,72 @@ Types are structure. They belong in BML — the same language humans, LLMs, and 
 
 ---
 
+## Semantic Layer vs Compiler Implementation
+
+> **Block is a semantic unit in BML — not a mandatory runtime class in the compiler.**
+
+The statement „everything is a Block“ applies to the **authoring ontology** and the **WOT vocabulary**. It does not prescribe how `@blockml/parser`, `@blockml/core`, or `@blockml/compiler` represent definitions internally.
+
+```text
+BML / WOT layer          semantic · interpretable · human- and LLM-facing
+                         „Block“ = named definable unit with FQN + baseType chain
+
+Compiler layer           pragmatic · free · implementation detail
+                         may split registries · may use plain data · may ignore „Block“ as a concept
+```
+
+| Layer | What it guarantees |
+|---|---|
+| **BML** | One syntax (`<block>`) · one bootstrap path · FQN identity · `baseType` inheritance |
+| **BOM** | Abstract parse result — preserves authored structure; see `12_bom_object_model.md` |
+| **Validator** | Walks `baseType` chain · applies branch rules · resolves effective members |
+| **Renderer** | Interprets semantics for its target — SCAD, React, firmware, … |
+
+The compiler **does not** need to:
+
+- store all definitions in one homogeneous `Block` class hierarchy at runtime
+- treat TypeBlocks and LanguageBlocks identically to ComposableBlocks in memory
+- expose „Block“ as a public API concept beyond BML/BOM documents
+- map BML 1:1 onto object-oriented domain models
+
+The compiler **may** (V1 convenience example):
+
+```text
+registerDefinition(doc)     →  one bootstrap API for all .bml framework files
+BlockDefinition interface   →  single parse result shape for all <block> documents
+definitionBranch            →  derived at validate time from baseType chain — not stored in BML
+TypeRegistry + TypeIndex    →  split internal indexes per branch if that is simpler
+ScadBlockProcessor          →  knows property serializers · not „what is a Block philosophically“
+```
+
+**Interpretation is free.** A World’s renderer decides what a `Wall` or a `Size3D` *means* for its output. BML only ensures the description is **complete, typed, and addressable** — the WOT contract at the grammar level.
+
+This matches WOT §0.5 pragmatism: ontological unity at the language layer, engineering freedom at the implementation layer. Without adoption, there is no WOT — and without internal freedom, there is no maintainable compiler.
+
+### Platonic mapping (Idea · Manifestation)
+
+The split is the WOT architecture applied to BlockML:
+
+```text
+Idea (Plato)              BML / semantic layer
+  Urbild · unveränderlich   Block · TypeBlock · LanguageBlock · FQN
+  existiert vor der Welt    beschreibbar ohne Render Target
+  keine Substanz            keine SCAD · kein Python · kein 3D-Druck
+
+Manifestation             Compiler · Renderer · Runtime
+  Abbild · konkret          TypeScript-Interfaces · SCAD · ThingKit · Thing
+  World liefert Deutung     MachineBlocks → SCAD · ScreenMachine → React
+  Runtime vervollständigt   Compiler übersetzt · Drucker druckt
+```
+
+> *„Die Ideen stehen wie Urbilder da. Die anderen Dinge gleichen ihnen und sind Abbilder."* — Platon
+
+BML hält die Idee stabil. Der Compiler ist Manifestor-Werkzeug — er darf die Idee intern beliebig repräsentieren, solange die Beschreibungssprache intakt bleibt. Die vollständige Manifestation kennt der Compiler nicht; das ist Sache des Renderers und der Runtime.
+
+See `WOT_Reference_v26.md` §1 · The Idea · Manifestation.
+
+---
+
 ## One Root: Everything is a Block
 
 BOM Core defines Block as **„a parametric, reusable unit (definition / type)“** — not only as a composable physical object. TypeBlocks and LanguageBlocks are type definitions. They **are Blocks**.
@@ -344,13 +410,24 @@ Domain packages use the singular `.type` segment per `00_bom_core.md` FQN conven
 
 ## Relationship to BlockDefinition BOM
 
-V1 stores all definitions in the existing `BlockDefinition` interface. The validator derives `definitionBranch` by walking the `baseType` chain:
+BML uses one element (`<block>`) for all semantic units. The **BOM parse result** may use one interface (`BlockDefinition`) for convenience — this is a **transport shape**, not a claim that everything is the same kind of object at runtime.
+
+The validator derives `definitionBranch` by walking the `baseType` chain:
 
 ```typescript
 type DefinitionBranch = "composable" | "typeBlock" | "languageBlock"
 ```
 
-A future `TypeDefinition` interface may split the BOM model when implementation begins — parse result shape unchanged at BML level.
+Implementation is free to:
+
+```text
+keep BlockDefinition for all branches          →  V1 pragmatic default
+split into ComposableDefinition · TypeDefinition · LanguageDefinition
+use separate registries / indexes per branch
+never expose „Block“ outside parser/BOM types
+```
+
+**Only BML semantics are normative.** Internal data structures may change without altering a single `.bml` file.
 
 `TypeDescriptor` in `12_bom_object_model.md` remains the **reference syntax** for inline types (anonymous structs, arrays). Named types always resolve to registry FQNs.
 

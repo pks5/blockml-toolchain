@@ -20,6 +20,8 @@ This document is the **implementation contract** for `@blockml/core`. It specifi
 
 > **A BOM document is an abstract representation of BML source.** It preserves authored structure — including directives, aggregation declarations, and unresolved type references. BOM makes **no statement** about how directives are expanded, how aggregations are interpreted, or how blocks are rendered.
 
+> **„Block“ in BML is a semantic unit — not a runtime concept the compiler must implement uniformly.** The parser may map all `<block>` documents to one BOM shape; validators and renderers interpret `baseType` chains freely. See `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation.
+
 ```text
 BML source          →  abstract, authoring-true
 BOM (this doc)      →  canonical parse result — still abstract
@@ -47,6 +49,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Mutability** | Parse result is an **immutable plain-data graph** (`BomDocument`). Mutable object APIs (ManagedObject pattern) are optional — see `08_managed_object.md`. |
 | **Member inheritance** | **Lookup at validate.** BOM stores only **declared** members per Block. Effective members are resolved via `baseType` chain + Type Registry — never merged into the parse result. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
+| **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | `bml:*` stored as **attributes on the element** they apply to (Thymeleaf model) — not as wrapper nodes. **Not expanded** at parse time. `bml:id` does not exist — `id` is a **system property** on `org.blockml.core.Block`. |
 | **Custom data** | `data:*` follows the **UI5 customData model** — arbitrary key/value metadata on Block elements. Parsed into `customData[]`; not a `bml:` directive. |
 | **Instance `version`** | **Required on every external block reference** (another file). **Strict from V1** — no registry default, no implicit `latest`, no migration warnings. Missing → `BML_MISSING_VERSION` (error). Unknown version → `BML_UNKNOWN_VERSION` (error). Same-document Sub-Blocks exempt. |
