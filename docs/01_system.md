@@ -142,21 +142,33 @@ New engines can always be built as independent packages. Each implements the Com
 
 ### Built-in ServiceBlock Definitions
 
-Built-in ServiceBlocks (`#math`, `#string`, `#number`, `#list`, `#bool`) are defined as BML FunctionBlock files in `@blockml/core-services`. This makes their Capabilities formally typed, editor-discoverable, and testable.
+Built-in ServiceBlocks (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML FunctionBlock files in `@blockml/core-services` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
-The library is based on Thymeleaf's `#` utility objects — same naming conventions and semantics, extended with `#math` which Thymeleaf does not provide.
+The library follows Thymeleaf's `#` utility object naming — plural for utilities (`#strings`, `#lists`, …), extended with `#math` which Thymeleaf does not provide.
 
 ```text
 packages/core-services/
   src/
     org/blockml/service/
-      Math.bml         ← #math.min, max, floor, ceil, round, round_n, abs, pow, sqrt, clamp
-      String.bml       ← #string.trim, length, concat, contains, startsWith, endsWith,
-                          indexOf, substring, replace, toUpperCase, toLowerCase
-      Number.bml       ← #number.formatDecimal
-      List.bml         ← #list.size, isEmpty, contains, first, last, get, concat, sequence
-      Bool.bml         ← #bool.isTrue, isFalse
+      Math.bml         ← org.blockml.service.Math      — #math.*
+      Strings.bml      ← org.blockml.service.Strings   — #strings.*
+      Numbers.bml      ← org.blockml.service.Numbers   — #numbers.*
+      Lists.bml        ← org.blockml.service.Lists     — #lists.*
+      Bools.bml        ← org.blockml.service.Bools     — #bools.*
 ```
+
+**Naming mapping** (package segment `.service` is singular; utility names follow Thymeleaf):
+
+```text
+# prefix (authoring)     FunctionBlock FQN                  BML file
+#math.*                  org.blockml.service.Math           Math.bml
+#strings.*               org.blockml.service.Strings        Strings.bml
+#numbers.*               org.blockml.service.Numbers        Numbers.bml
+#lists.*                 org.blockml.service.Lists          Lists.bml
+#bools.*                 org.blockml.service.Bools          Bools.bml
+```
+
+BML files are **SSOT**. SCAD files in scad-lib are pre-rendered compile artifacts — not hand-edited.
 
 All Capabilities use structured Object `payloadType` with named keys — enabling both positional and named call syntax. Single-parameter Capabilities use the primitive type directly:
 
@@ -165,8 +177,8 @@ All Capabilities use structured Object `payloadType` with named keys — enablin
 #math.floor     → payloadType: Float
 #math.clamp     → payloadType: { x: Float, lo: Float, hi: Float }
 #math.round_n   → payloadType: { x: Float, n: Integer }
-#list.concat   → payloadType: { a: Array<Object>, b: Array<Object> }
-#number.formatDecimal → payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
+#lists.concat   → payloadType: { a: Array<Object>, b: Array<Object> }
+#numbers.formatDecimal → payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
 ```
 
 Each Capability has a TypeScript implementation in `<implementation language="typescript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.

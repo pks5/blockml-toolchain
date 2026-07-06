@@ -23,7 +23,7 @@ The language is **extended JSON**: standard JSON syntax with four additions:
 1. Property references    myProp, myProp.x, myProp[0]
 2. Model bindings         @model:/path, @model:relAttr
 3. Bean calls             @bean.capa(...), @bean.capa
-4. Built-in calls         #math.min(a, b), #string.trim(s)
+4. Built-in calls         #math.min(a, b), #strings.trim(s)
 ```
 
 Everything else follows JSON: strings in double quotes, numbers, booleans `true`/`false`, `null`, arrays `[...]`, objects `{...}`.
@@ -321,7 +321,7 @@ The `<implementation>` element is a child of `<capability>`. The `language` attr
 
 FunctionBlock calls follow the same syntax as regular `@bean` Sync Capability calls — there is no special syntax. The FunctionBlock pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
 
-**Transition path:** when a FunctionBlock capability is later covered by a `#built-in`, the `<implementation>` is removed and the call site is updated from `@utils.formatValue(x)` to `#number.formatDecimal(x, 0, '.', 1)`. The Capability signature and all other call sites remain unchanged.
+**Transition path:** when a FunctionBlock capability is later covered by a `#built-in`, the `<implementation>` is removed and the call site is updated from `@utils.formatValue(x)` to `#numbers.formatDecimal(x, 0, '.', 1)`. The Capability signature and all other call sites remain unchanged.
 
 ---
 
@@ -382,65 +382,65 @@ Built-ins are pure functions — no side effects, no state. They are resolved at
 #math.clamp(x, min, max)     — clamp x to [min, max]
 ```
 
-### `#number`
+### `#numbers`
 
 ```text
-#number.formatDecimal(x, minIntDigits, decPoint, minFracDigits)
+#numbers.formatDecimal(x, minIntDigits, decPoint, minFracDigits)
   payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
   — format a number as a decimal string
-  — positional: #number.formatDecimal(0.1, 0, '.', 1)  →  ".1"
-  — named:      #number.formatDecimal(x=0.1, minInt=0, decPoint='.', minFrac=1)
+  — positional: #numbers.formatDecimal(0.1, 0, '.', 1)  →  ".1"
+  — named:      #numbers.formatDecimal(x=0.1, minInt=0, decPoint='.', minFrac=1)
   — minIntDigits=0 removes the leading zero (0.1 → .1)
 ```
 
-### `#string`
+### `#strings`
 
 ```text
-#string.trim(s)                    — remove leading/trailing whitespace
-#string.toUpperCase(s)             — uppercase
-#string.toLowerCase(s)             — lowercase
-#string.concat(a, b)               — concatenate (prefer + operator)
-#string.length(s)                  — string length
-#string.contains(s, sub)           — boolean
-#string.startsWith(s, prefix)      — boolean
-#string.endsWith(s, suffix)        — boolean
-#string.indexOf(s, sub)            — first index of sub in s, -1 if not found
-#string.substring(s, start, end)   — substring [start, end)
-#string.replace(s, old, new)       — replace first occurrence
-#string.replaceAll(s, old, new)    — replace all occurrences
+#strings.trim(s)                    — remove leading/trailing whitespace
+#strings.toUpperCase(s)             — uppercase
+#strings.toLowerCase(s)             — lowercase
+#strings.concat(a, b)               — concatenate (prefer + operator)
+#strings.length(s)                  — string length
+#strings.contains(s, sub)           — boolean
+#strings.startsWith(s, prefix)      — boolean
+#strings.endsWith(s, suffix)        — boolean
+#strings.indexOf(s, sub)            — first index of sub in s, -1 if not found
+#strings.substring(s, start, end)   — substring [start, end)
+#strings.replace(s, old, new)       — replace first occurrence
+#strings.replaceAll(s, old, new)    — replace all occurrences
 ```
 
-### `#list`
+### `#lists`
 
 ```text
-#list.size(list)                   — number of elements
-#list.isEmpty(list)                — boolean
-#list.contains(list, item)         — boolean
-#list.first(list)                  — first element
-#list.last(list)                   — last element
-#list.get(list, index)             — element at index
-#list.concat(a, b)                 — concatenate two lists → Array
-#list.sequence(start, end)         — integer list from start to end (inclusive)
-                                      e.g. #list.sequence(1, 5) → [1, 2, 3, 4, 5]
-#list.sequence(start, end, step)   — with step
-                                      e.g. #list.sequence(0, 10, 2) → [0, 2, 4, 6, 8, 10]
+#lists.size(list)                   — number of elements
+#lists.isEmpty(list)                — boolean
+#lists.contains(list, item)         — boolean
+#lists.first(list)                  — first element
+#lists.last(list)                   — last element
+#lists.get(list, index)             — element at index
+#lists.concat(a, b)                 — concatenate two lists → Array
+#lists.sequence(start, end)         — integer list from start to end (inclusive)
+                                      e.g. #lists.sequence(1, 5) → [1, 2, 3, 4, 5]
+#lists.sequence(start, end, step)   — with step
+                                      e.g. #lists.sequence(0, 10, 2) → [0, 2, 4, 6, 8, 10]
 ```
 
-`#list.concat` is particularly useful for building conditional arrays in Expressions:
+`#lists.concat` is particularly useful for building conditional arrays in Expressions:
 
 ```text
-#list.concat(
+#lists.concat(
   condition1 ? [item1] : [],
   condition2 ? [item2] : [],
   condition3 ? [item3] : []
 )
 ```
 
-### `#bool`
+### `#bools`
 
 ```text
-#bool.isTrue(x)                    — boolean coercion
-#bool.isFalse(x)                   — boolean coercion
+#bools.isTrue(x)                    — boolean coercion
+#bools.isFalse(x)                   — boolean coercion
 ```
 
 ---
@@ -521,8 +521,8 @@ The SCAD BlockProcessor must map each built-in to SCAD output. Three strategies:
 #math.round(x)     →  round(x)          ← integer rounding only
 #math.pow(b, e)    →  pow(b, e)
 #math.sqrt(x)      →  sqrt(x)
-#string.concat(a,b) → str(a, b)
-#string.length(s)   → len(s)
+#strings.concat(a,b) → str(a, b)
+#strings.length(s)   → len(s)
 ```
 
 **Processor-implemented** — SCAD expression generated inline by the processor:
@@ -531,26 +531,26 @@ The SCAD BlockProcessor must map each built-in to SCAD output. Three strategies:
 #math.round(x, 1)      →  round(x * 10) / 10
 #math.round(x, n)      →  round(x * pow(10, n)) / pow(10, n)
 #math.clamp(x, lo, hi) →  min(max(x, lo), hi)
-#list.sequence(s, e)  →  [s : e]                    ← SCAD range
-#list.sequence(s,e,st)→  [s : st : e]
-#list.size(list)      →  len(list)
-#list.get(list, i)    →  list[i]
-#list.first(list)     →  list[0]
-#list.last(list)      →  list[len(list) - 1]
+#lists.sequence(s, e)  →  [s : e]                    ← SCAD range
+#lists.sequence(s,e,st)→  [s : st : e]
+#lists.size(list)      →  len(list)
+#lists.get(list, i)    →  list[i]
+#lists.first(list)     →  list[0]
+#lists.last(list)      →  list[len(list) - 1]
 ```
 
 **Processor-implemented with helper function** — the processor emits a SCAD helper function into the output file and calls it:
 
 ```text
-#number.formatDecimal(x, 0, '.', 1)
-  →  emits: function mb_built_in__number__formatDecimal(x, minInt, dec, minFrac) = ...
-  →  calls: mb_built_in__number__formatDecimal(x, 0, ".", 1)
+#numbers.formatDecimal(x, 0, '.', 1)
+  →  emits: function mb_built_in__numbers__formatDecimal(x, minInt, dec, minFrac) = ...
+  →  calls: mb_built_in__numbers__formatDecimal(x, 0, ".", 1)
 
-#string.trim(s)
+#strings.trim(s)
   →  emits helper function
   →  calls it
 
-#string.replace(s, old, new)
+#strings.replace(s, old, new)
   →  emits recursive helper function (SCAD has no native replace)
   →  calls it
 ```
@@ -560,15 +560,15 @@ Helper functions emitted by the processor use the prefix `mb_built_in__` to avoi
 **Not mappable in V1** — explicitly excluded from V1 scope:
 
 ```text
-#string.toUpperCase    — no SCAD equivalent, not needed in V1
-#string.toLowerCase    — no SCAD equivalent, not needed in V1
-#string.contains       — requires helper, not needed in V1
-#string.startsWith     — requires helper, not needed in V1
-#string.endsWith       — requires helper, not needed in V1
-#string.indexOf        — requires helper, not needed in V1
-#string.substring      — requires helper, not needed in V1
-#string.replaceAll     — requires helper, not needed in V1
-#bool.*                — not needed in SCAD context
+#strings.toUpperCase    — no SCAD equivalent, not needed in V1
+#strings.toLowerCase    — no SCAD equivalent, not needed in V1
+#strings.contains       — requires helper, not needed in V1
+#strings.startsWith     — requires helper, not needed in V1
+#strings.endsWith       — requires helper, not needed in V1
+#strings.indexOf        — requires helper, not needed in V1
+#strings.substring      — requires helper, not needed in V1
+#strings.replaceAll     — requires helper, not needed in V1
+#bools.*                — not needed in SCAD context
 ```
 
 ---
@@ -611,7 +611,7 @@ The stat variable name is arbitrary — choose any valid identifier. This is ess
       id="${ 'brick_' + x + '_' + y }"
       offset="${ [x * blockSize[0], y * blockSize[1], 0] }"
       baseColor="${ (x + y) % 2 == 0 ? colorA : colorB }"
-      connectors="${ #list.concat(
+      connectors="${ #lists.concat(
         !xStat.first ? [{ face: 'x-', axis: 'z', type: 'female' }] : [],
         !xStat.last  ? [{ face: 'x+', axis: 'z', type: 'male'   }] : [],
         !yStat.first ? [{ face: 'y-', axis: 'z', type: 'female' }] : [],
@@ -1291,9 +1291,9 @@ Property access: myProp  myProp.x  myProp[i]
 Arithmetic:      all standard operators
 Ternary:         condition ? a : b
 Built-ins:       #math.min/max/abs/floor/ceil/round/round(x,n)/pow/sqrt/clamp
-                 #number.formatDecimal
-                 #string.concat/length
-                 #list.size/get/first/last/sequence
+                 #numbers.formatDecimal
+                 #strings.concat/length
+                 #lists.size/get/first/last/sequence
 bml: directives: bml:each (numeric + collection), bml:if, bml:unless,
                  bml:block, bml:with
 Registry:        read + write within Composition
@@ -1307,8 +1307,8 @@ FunctionBlock:   Sub-Blocks with language="scad" implementations (specified;
 @bean calls        — no bean execution in V1 (includes FunctionBlock calls)
 Model bindings     — no runtime model in V1
 Capability linking — no runtime messaging in V1
-#string.*         — (except concat, length)
-#bool.*
+#strings.*         — (except concat, length)
+#bools.*
 TypeScript ServiceBlocks / transpilation
 ```
 

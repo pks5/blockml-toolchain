@@ -82,13 +82,13 @@ com.machineblocks.calibration.*  ✓   — Calibrator, …
 
 Do not infer from `bricks` that other packages may freely use plural segments. New infrastructure namespaces (`.type`, `.service`, `.core`, `.capability`) are always singular. New domain libraries may choose a collective name deliberately — document the decision in the domain spec.
 
-Built-in ServiceBlocks live in `org.blockml.service.*` with **singular class names** (`Math`, `String`, `Number`, `List`, `Bool`). Expression calls use the `#` prefix with the lowercase bean name: `#math`, `#string`, `#number`, `#list`, `#bool`.
+Built-in ServiceBlocks live in `org.blockml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
 
 ```text
 Examples:
   org.blockml.core.Block
   org.blockml.service.Math
-  org.blockml.service.String
+  org.blockml.service.Strings
   org.blockml.type.Integer
   com.machineblocks.core.Block
   com.machineblocks.type.Size3D
@@ -278,7 +278,7 @@ A `defaultValue` may be a static literal or an Expression. Expressions in `defau
 
 ```text
 ✓  Other Properties of the same Block
-✓  #built-in functions (#math.*, #string.*, etc.)
+✓  #built-in functions (#math.*, #strings.*, etc.)
 ✗  @bean references
 ✗  @model bindings
 ✗  bml: directives
@@ -344,7 +344,7 @@ Built-in ServiceBlocks are defined in the `baseType` hierarchy and accessible vi
 
 ```text
 #math    — built-in math service (min, max, ceil, floor, ...)
-#string  — built-in string utilities (format, trim, ...)
+#strings  — built-in string utilities (format, trim, ...)
 ```
 
 User-defined ServiceBlocks are declared as Aggregations and given a bean name:
@@ -514,7 +514,7 @@ payloadType: { a: Float, b: Float }
   → Named call:      #math.max(a=size[0], b=labelSize)
 ```
 
-Both call syntaxes are always valid for Object payloads. This is the standard pattern for all `#math.*`, `#string.*`, `#list.*` built-ins.
+Both call syntaxes are always valid for Object payloads. This is the standard pattern for all `#math.*`, `#strings.*`, `#lists.*` built-ins.
 
 `Array<T>` payloads are **not** suitable as FunctionBlock signatures — arity is undefined. Use a structured Object for any Capability with fixed parameters.
 
@@ -1047,7 +1047,7 @@ Built-in ServiceBlocks are defined in the `baseType` hierarchy. Their Capabiliti
 ```text
 ${ #math.min(size[0], size[1]) }   — Sync Capability, Array payload → primitive return
 ${ #math.max(a, b) }
-${ #string.format(tpl, v) }
+${ #strings.format(tpl, v) }
 ```
 
 ### User Bean Calls (`@`)
@@ -1313,17 +1313,17 @@ machineblocks-v3-scad-target
 
 ### Built-in ServiceBlocks as BML
 
-Built-in ServiceBlocks (`#math`, `#string`, etc.) are defined as BML Block files in a dedicated package. This makes their Capabilities formally typed, editor-discoverable, and extensible:
+Built-in ServiceBlocks (`#math`, `#strings`, etc.) are defined as BML FunctionBlock files in `@blockml/core-services` — **SSOT**. SCAD equivalents in `scad-lib/blocks/org/blockml/service/` are pre-rendered build artifacts. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 ```text
 @blockml/core-services/
   src/
     com/bom/service/
-      Math.bml            — defines all #math Sync Capabilities
-      String.bml          — defines all #string Sync Capabilities
-      Number.bml          — defines all #number Sync Capabilities
-      List.bml            — defines all #list Sync Capabilities
-      Bool.bml            — defines all #bool Sync Capabilities
+      Math.bml            — org.blockml.service.Math      — #math.*
+      Strings.bml         — org.blockml.service.Strings   — #strings.*
+      Numbers.bml         — org.blockml.service.Numbers   — #numbers.*
+      Lists.bml           — org.blockml.service.Lists     — #lists.*
+      Bools.bml           — org.blockml.service.Bools     — #bools.*
 ```
 
 Each domain target registers a corresponding BlockProcessor that renders these ServiceBlocks into the target-appropriate form (e.g. `MathBuiltInProcessor` for SCAD copies or generates the required SCAD helper functions).

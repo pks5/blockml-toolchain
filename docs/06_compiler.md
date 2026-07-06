@@ -446,7 +446,7 @@ strPrefix      → mb__com__machineblocks__calibration__Calibrator__Utils__strPr
 strSuffix      → mb__com__machineblocks__calibration__Calibrator__Utils__strSuffix
 ```
 
-**`#built-in` calls in SCAD CDATA:** `#math.*`, `#string.*` etc. are resolved inside CDATA blocks using the same native mapping logic as in BML expressions. The author never writes raw SCAD FQN calls:
+**`#built-in` calls in SCAD CDATA:** `#math.*`, `#strings.*` etc. are resolved inside CDATA blocks using the same native mapping logic as in BML expressions. The author never writes raw SCAD FQN calls:
 
 ```scad
 // Author writes:
@@ -497,7 +497,7 @@ BML_FUNCTION_UNSUPPORTED_LANG — language attribute not "scad" or "typescript"
 
 ### Built-in Services — No Processor Needed
 
-Built-in Services (`#math`, `#string`, etc.) are defined as BML FunctionBlocks in `@blockml/core-services`. Their SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` following the FQN path convention:
+Built-in Services (`#math`, `#strings`, etc.) are defined as BML FunctionBlocks in `@blockml/core-services` (SSOT). Their SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` as pre-rendered artifacts:
 
 ```text
 FQN:  org.blockml.service.Math  →  scad-lib/blocks/org/blockml/service/Math.scad
