@@ -1,14 +1,15 @@
 # BOM Compiler — Expression Language
 
-version: 1.0.0
+version: 1.1.0
 
 ## Purpose of this Document
 
 This document is the authoritative reference for the BML Expression Language — the dynamic value system used within `${ }` in BML documents.
 
-For the BML format see `02_mbml.md`.
-For the BOM object model see `00_bom_core.md`.
+For the BOM object model (`ExpressionValue`, `MemberValue`) see `12_bom_object_model.md`.
 For MBOM-specific types and properties see `03_mbom.md`.
+
+This document specifies both the **surface syntax** (EBNF, semantics) and the **formal AST** (`ExpressionNode` union) — the implementation contract for `@blockml/core` and `@blockml/parser`.
 
 ---
 
@@ -774,6 +775,456 @@ defaultValue expressions:
 
 ---
 
+## Expression AST
+
+The Expression Parser (compiler stage [7]) converts each `${ }` span into an **`ExpressionValue`** on the BOM:
+
+```typescript
+interface ExpressionValue {
+  kind: "expression"
+  raw: string                    // source text inside ${ }
+  ast: ExpressionNode            // root node — this section
+  resultTypeFqn: string          // inferred or context-expected type
+  source: SourceLocation
+}
+```
+
+See `12_bom_object_model.md` — Member Values.
+
+### Design Principles
+
+```text
+Parse, don't eval     — store AST; no runtime evaluation during parse/validate
+                        (except literal fold diagnostics like division by zero)
+Typed nodes           — every ExpressionNode carries resultTypeFqn after inference
+EBNF 1:1              — each grammar production maps to one AST node kind
+Immutable             — plain-data graph; same rules as BomDocument
+Renderer-independent  — SCAD/TS renderers serialize AST nodes; never re-parse raw
+Context annotation    — unresolved names are errors; resolved names carry member metadata
+```
+
+### Base Types
+
+```typescript
+/** Every AST node */
+interface ExpressionNodeBase {
+  kind: string
+  /** Inferred type FQN of this node's value */
+  resultTypeFqn: string
+  source: SourceLocation
+}
+
+interface SourceLocation {
+  file?: string
+  line: number
+  column: number
+  offset?: number
+  length?: number
+}
+
+/** Positional or named call argument */
+type CallArgument =
+  | { style: "positional"; value: ExpressionNode }
+  | { style: "named"; name: string; value: ExpressionNode }
+```
+
+### `ExpressionNode` Union
+
+Root type of `ExpressionValue.ast`:
+
+```typescript
+type ExpressionNode =
+  // Literals
+  | StringLiteral
+  | NumberLiteral
+  | BooleanLiteral
+  | NullLiteral
+  | ArrayLiteral
+  | ObjectLiteral
+  // Grouping
+  | GroupExpression
+  // Operators
+  | UnaryExpression
+  | BinaryExpression
+  | ConditionalExpression
+  // Access chains (postfix)
+  | AccessExpression
+  // References (primary identifiers)
+  | PropertyReference
+  | LoopVariableReference
+  | WithVariableReference
+  | RegistryRead
+  // Calls and bindings
+  | BuiltinCall
+  | BeanSyncCall
+  | BeanCapabilityLink
+  | OwnSyncCall
+  | OwnCapabilityLink
+  | ModelBinding
+```
+
+---
+
+### Literal Nodes
+
+```typescript
+interface StringLiteral extends ExpressionNodeBase {
+  kind: "stringLiteral"
+  value: string
+  resultTypeFqn: "org.blockml.type.String"
+}
+
+interface NumberLiteral extends ExpressionNodeBase {
+  kind: "numberLiteral"
+  value: number
+  /** integer when source has no decimal point; float otherwise */
+  numericKind: "integer" | "float"
+  resultTypeFqn: "org.blockml.type.Integer" | "org.blockml.type.Float"
+}
+
+interface BooleanLiteral extends ExpressionNodeBase {
+  kind: "booleanLiteral"
+  value: boolean
+  resultTypeFqn: "org.blockml.type.Boolean"
+}
+
+interface NullLiteral extends ExpressionNodeBase {
+  kind: "nullLiteral"
+  resultTypeFqn: "org.blockml.type.Null"
+}
+
+interface ArrayLiteral extends ExpressionNodeBase {
+  kind: "arrayLiteral"
+  elements: ExpressionNode[]
+  /** org.blockml.type.List<T> — T inferred from elements (must be compatible) */
+  resultTypeFqn: string
+}
+
+interface ObjectLiteral extends ExpressionNodeBase {
+  kind: "objectLiteral"
+  properties: ObjectProperty[]
+  /** Anonymous object type or declared payload shape when in call context */
+  resultTypeFqn: string
+}
+
+interface ObjectProperty {
+  key: string
+  value: ExpressionNode
+  source: SourceLocation
+}
+
+interface GroupExpression extends ExpressionNodeBase {
+  kind: "group"
+  expression: ExpressionNode
+}
+```
+
+**Examples:**
+
+```text
+${ [1, 2, size[0]] }
+  → ArrayLiteral { elements: [NumberLiteral(1), NumberLiteral(2), AccessExpression(...)] }
+
+${ {mode: 'groove', depth: size[2] - 1} }
+  → ObjectLiteral { properties: [{key:"mode", ...}, {key:"depth", ...}] }
+```
+
+---
+
+### Operator Nodes
+
+Map directly to EBNF precedence levels:
+
+```typescript
+type UnaryOperator = "-" | "!"
+type BinaryOperator =
+  | "+" | "-" | "*" | "/" | "%"
+  | "==" | "!=" | "<" | ">" | "<=" | ">="
+  | "&&" | "||"
+
+interface UnaryExpression extends ExpressionNodeBase {
+  kind: "unary"
+  operator: UnaryOperator
+  operand: ExpressionNode
+}
+
+interface BinaryExpression extends ExpressionNodeBase {
+  kind: "binary"
+  operator: BinaryOperator
+  left: ExpressionNode
+  right: ExpressionNode
+}
+
+interface ConditionalExpression extends ExpressionNodeBase {
+  kind: "conditional"
+  condition: ExpressionNode
+  consequent: ExpressionNode
+  alternate: ExpressionNode
+}
+```
+
+**Type inference:**
+
+```text
+Unary `-` on Integer/Float     → same numeric kind
+Unary `!`                      → Boolean
+Binary `+ - * / %`             → Float if any operand Float, else Integer
+                                (+ on String: deferred — not in V1)
+Binary comparisons / logical   → Boolean
+Conditional `? :`              → consequent and alternate must be compatible;
+                                 result type = narrower compatible type
+```
+
+---
+
+### Access Expressions (Postfix Chain)
+
+EBNF `postfix ::= primary ( '[' expression ']' | '.' identifier )*` becomes a single node with an accessor chain:
+
+```typescript
+interface AccessExpression extends ExpressionNodeBase {
+  kind: "access"
+  /** Primary at the start of the chain */
+  root: PropertyReference | LoopVariableReference | WithVariableReference | RegistryRead | GroupExpression
+  accessors: AccessStep[]
+}
+
+type AccessStep =
+  | { kind: "member"; name: string; source: SourceLocation }
+  | { kind: "index"; index: ExpressionNode; source: SourceLocation }
+```
+
+**Examples:**
+
+```text
+${ size[0] }
+  → AccessExpression {
+       root: PropertyReference { name: "size", ... },
+       accessors: [{ kind: "index", index: NumberLiteral(0) }]
+     }
+
+${ items[0].size[2] }
+  → AccessExpression {
+       root: PropertyReference { name: "items" },
+       accessors: [
+         { kind: "index", index: NumberLiteral(0) },
+         { kind: "member", name: "size" },
+         { kind: "index", index: NumberLiteral(2) }
+       ]
+     }
+```
+
+Each step narrows `resultTypeFqn` using the member/type registry (validator).
+
+---
+
+### Reference Nodes
+
+Primary identifiers before postfix accessors:
+
+```typescript
+interface PropertyReference extends ExpressionNodeBase {
+  kind: "property"
+  name: string
+  /** Filled by validator from resolveEffectiveMembers() */
+  memberKind?: "property" | "capability" | "aggregation" | "association"
+  memberTypeFqn?: string
+}
+
+interface LoopVariableReference extends ExpressionNodeBase {
+  kind: "loopVariable"
+  name: string
+  /** From bml:each on ancestor element */
+  loopKind: "numeric" | "collection"
+}
+
+interface WithVariableReference extends ExpressionNodeBase {
+  kind: "withVariable"
+  name: string
+  /** From bml:with on ancestor element */
+}
+
+interface RegistryRead extends ExpressionNodeBase {
+  kind: "registryRead"
+  name: string
+  resultTypeFqn: string   /* inferred from prior registry write in same composition, else error */
+}
+```
+
+**Scope resolution order** for a bare `identifier`:
+
+```text
+1. bml:with variable on ancestor chain      → WithVariableReference
+2. bml:each loop variable on ancestor chain → LoopVariableReference
+3. registry.<name> prefix (see RegistryRead) → RegistryRead
+4. current Block member namespace           → PropertyReference
+5. not found                                → BML_EXPR_UNKNOWN_PROPERTY
+```
+
+`defaultValue` expressions allow only steps 4 (properties) and `#built-in` calls — no loop/with/registry nodes.
+
+---
+
+### Call and Binding Nodes
+
+```typescript
+interface BuiltinCall extends ExpressionNodeBase {
+  kind: "builtinCall"
+  namespace: string          // e.g. "math"
+  name: string               // e.g. "max"
+  arguments: CallArgument[]
+  /** FQN e.g. org.blockml.service.Math — from built-in registry */
+  serviceFqn?: string
+  capabilityName?: string
+}
+
+interface BeanSyncCall extends ExpressionNodeBase {
+  kind: "beanSyncCall"
+  beanName: string
+  capabilityName: string
+  arguments: CallArgument[]
+  returnTypeFqn: string
+}
+
+interface BeanCapabilityLink extends ExpressionNodeBase {
+  kind: "beanCapabilityLink"
+  beanName: string
+  capabilityName: string
+  payloadTypeFqn: string
+}
+
+interface OwnSyncCall extends ExpressionNodeBase {
+  kind: "ownSyncCall"
+  capabilityName: string
+  arguments: CallArgument[]
+  returnTypeFqn: string
+}
+
+interface OwnCapabilityLink extends ExpressionNodeBase {
+  kind: "ownCapabilityLink"
+  capabilityName: string
+  payloadTypeFqn: string
+}
+
+interface ModelBinding extends ExpressionNodeBase {
+  kind: "modelBinding"
+  beanName: string
+  path: string               // "/orders/0/title" or "relativeAttr"
+  isAbsolute: boolean
+  resultTypeFqn: string
+}
+```
+
+**Parse disambiguation** (see Distinguishing Call vs. Link):
+
+```text
+#math.max(a, b)           → BuiltinCall
+@utils.formatValue(x)     → BeanSyncCall
+@utils.myOutbound         → BeanCapabilityLink
+myCapa(a=1)               → OwnSyncCall      (identifier + '(')
+myInbound                 → OwnCapabilityLink OR PropertyReference
+                              → resolved by member kind on current Block
+@myModel:/path            → ModelBinding
+@myModel:title            → ModelBinding (relative)
+```
+
+`funcCall` in EBNF is **`OwnSyncCall`** when the identifier names a Sync Capability on the current Block. When the same syntax appears with `@bean.` prefix, use **`BeanSyncCall`**.
+
+---
+
+### Registry Writes (Not AST)
+
+Registry **writes** are not expression nodes. They use a dedicated attribute name on composition instances:
+
+```xml
+<SomeBlock registry.totalHeight="${ size[2] }" ... />
+```
+
+The attribute value is a normal **`ExpressionValue`** (typically a `PropertyReference` or operator tree). The BOM mapper stores registry assignments separately on the composition instance — outside `ExpressionNode`.
+
+Registry **reads** inside `${ }` use **`RegistryRead`**.
+
+---
+
+### AST Construction from EBNF
+
+Mapping from grammar to tree (parser implementation guide):
+
+```text
+expression      → ConditionalExpression | delegate to logical
+ternary         → ConditionalExpression if '?:' present, else logical result
+logical         → left-associative BinaryExpression chain (&& ||)
+comparison      → left-associative BinaryExpression chain
+additive        → left-associative BinaryExpression chain (+ -)
+multiplicative  → left-associative BinaryExpression chain (* / %)
+unary           → UnaryExpression | postfix
+postfix         → AccessExpression wrapping primary + accessors
+primary         → literal | reference | call | binding | GroupExpression
+```
+
+---
+
+### Validation Responsibilities
+
+| Stage | Responsibility |
+|---|---|
+| **Expression Parser** | Build AST; literal types; operator structure; call/binding shape |
+| **Semantic Validator** | `resultTypeFqn` vs member type; resolve PropertyReference; bean/builtin existence; link/call legality; registry read/write pairing; V1 deferred features |
+| **Renderer** | Serialize AST → target syntax; emit helpers for processor-implemented built-ins |
+
+The validator **does not mutate** AST nodes — it attaches diagnostics. Optional: a separate `ValidatedExpression` wrapper with resolved types if needed; V1 may enrich nodes in-place via optional fields (`memberTypeFqn?`).
+
+---
+
+### Package Ownership
+
+```text
+@blockml/core
+  - ExpressionNode union and all interfaces in this section
+  - Type inference helpers
+  - validateExpression(ast, context): Diagnostic[]
+
+@blockml/parser
+  - parseExpression(raw: string, context: ParseContext): ExpressionValue
+  - Does NOT evaluate expressions
+
+@blockml/compiler / render targets
+  - Serialize ExpressionNode → SCAD / TS / JSON
+  - Never re-parse raw strings from BOM
+```
+
+---
+
+### Worked Example
+
+Source:
+
+```xml
+size="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }"
+```
+
+AST (abbreviated):
+
+```text
+ExpressionValue
+  raw: "[#math.max(2 * numberOfSamples + 1, labelSize), 12, 2]"
+  resultTypeFqn: "com.machineblocks.type.Size3D"
+  ast: ArrayLiteral
+    elements:
+      [0] BuiltinCall { namespace:"math", name:"max",
+            arguments: [
+              positional: BinaryExpression { operator:"+", left:
+                BinaryExpression { operator:"*", left: PropertyReference(numberOfSamples),
+                                   right: NumberLiteral(2) },
+                right: NumberLiteral(1) },
+              positional: PropertyReference(labelSize)
+            ] }
+      [1] NumberLiteral(12)
+      [2] NumberLiteral(2)
+```
+
+---
+
 ## Type Inference
 
 Expression result types are inferred from context:
@@ -788,7 +1239,9 @@ Array literal       → List<T> where T is inferred from elements
 Object literal      → anonymous Object
 ```
 
-A type mismatch between the inferred result and the expected member type is a parse-time error.
+A type mismatch between the inferred/explicit `resultTypeFqn` on the root AST node and the expected member type is a validation error (`BML_EXPR_TYPE_MISMATCH`).
+
+Each sub-node carries its own `resultTypeFqn` — used for operator compatibility checks and renderer dispatch.
 
 ---
 
@@ -809,7 +1262,8 @@ The parser distinguishes call vs. link by the presence or absence of parentheses
 ## Error Cases
 
 ```text
-BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in member namespace
+BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in scope (member, loop, with, registry)
+BML_EXPR_UNKNOWN_REGISTRY      — registry read with no matching write in composition
 BML_EXPR_UNKNOWN_BEAN          — @bean not declared as Aggregation
 BML_EXPR_UNKNOWN_BUILTIN       — #name not a registered built-in
 BML_EXPR_TYPE_MISMATCH         — expression result type incompatible with member type

@@ -133,15 +133,18 @@ Errors at this stage reference the BML source position via the source map.
 
 ### [7] Expression Parser
 
-Parses all `${ }` expressions into typed Expression AST nodes. Each AST node carries:
+Parses all `${ }` expressions into **`ExpressionValue`** with typed **`ExpressionNode`** AST trees. See `10_expression_language.md` — Expression AST.
+
+Each result carries:
 
 ```text
-- The parsed expression tree
-- The expected result type (inferred from the member type)
-- The source position (line, column in the BML file)
+- raw source text
+- root ExpressionNode (literals, operators, AccessExpression, calls, bindings, …)
+- resultTypeFqn (inferred against member context)
+- source position (line, column in the BML file)
 ```
 
-Expressions are not evaluated at this stage.
+Expressions are **not evaluated** at this stage.
 
 Recognized expression forms (see `00_bom_core.md` — Expression System):
 

@@ -10,7 +10,7 @@ For conceptual foundations see `00_bom_core.md`.
 For BML authoring syntax see `02_mbml.md`.
 For MachineBlocks domain extensions see `03_mbom.md`.
 For optional runtime object patterns see `08_managed_object.md` (implementation blueprint, not required).
-For Expression AST node types see `10_expression_language.md` (separate spec).
+For Expression AST node types see `10_expression_language.md` — Expression AST.
 
 This document is the **implementation contract** for `@blockml/core`. It specifies TypeScript-oriented interfaces and validation rules. It does not duplicate domain semantics already defined elsewhere.
 
@@ -302,7 +302,7 @@ interface Address {
 }
 ```
 
-`ExpressionNode` is specified separately. This document defines only the **slot** that holds it.
+`ExpressionNode` is specified in `10_expression_language.md` — Expression AST.
 
 ---
 
@@ -727,7 +727,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 
 | Topic | Document |
 |---|---|
-| Expression AST node union | `10_expression_language.md` (extend) |
+| Expression AST node union | `10_expression_language.md` — Expression AST |
 | BML → BOM mapping algorithm | `13_bml_to_bom_mapping.md` (planned) |
 | MBOM native property list | `09_mbom_properties.yml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |

@@ -438,7 +438,7 @@ Ternary:      condition ? valueIfTrue : valueIfFalse
 
 ### Expression AST
 
-Expressions are parsed into typed Expression AST nodes at parse time — not evaluated as raw strings. The AST is part of MBOM and is renderer-independent. The SCAD Renderer serializes AST nodes into SCAD-compatible output.
+Expressions are parsed into typed **`ExpressionNode`** trees — not evaluated as raw strings. Stored as `ExpressionValue` on the BOM. The SCAD Renderer serializes AST nodes. See `10_expression_language.md` — Expression AST.
 
 ### Registry
 

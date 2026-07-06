@@ -1099,7 +1099,7 @@ Registry scope is per Composition. It is initialized on entry and not accessible
 
 ### Expression AST
 
-Expressions are parsed into a typed Expression AST at parse time — not evaluated as raw strings. The AST is part of BOM Core and is renderer-independent. Domain-specific renderers serialize the AST into their target format.
+Expressions are parsed into typed **`ExpressionNode`** trees at compile stage [7] — not evaluated as raw strings. Each `${ }` span becomes an `ExpressionValue { raw, ast, resultTypeFqn }` on the BOM. The AST is renderer-independent. See `10_expression_language.md` — Expression AST.
 
 ---
 
