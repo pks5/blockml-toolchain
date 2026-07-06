@@ -47,9 +47,10 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Mutability** | Parse result is an **immutable plain-data graph** (`BomDocument`). Mutable object APIs (ManagedObject pattern) are optional — see `08_managed_object.md`. |
 | **Member inheritance** | **Lookup at validate.** BOM stores only **declared** members per Block. Effective members are resolved via `baseType` chain + Type Registry — never merged into the parse result. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
-| **Directives** | `bml:*` stored as **attributes on the element** they apply to (Thymeleaf model) — not as wrapper nodes. **Not expanded** at parse time. `bml:id` is not a directive — `id` is a normal Block property. |
+| **Directives** | `bml:*` stored as **attributes on the element** they apply to (Thymeleaf model) — not as wrapper nodes. **Not expanded** at parse time. `bml:id` does not exist — `id` is a **system property** on `org.blockml.core.Block`. |
 | **Custom data** | `data:*` follows the **UI5 customData model** — arbitrary key/value metadata on Block elements. Parsed into `customData[]`; not a `bml:` directive. |
 | **Instance `version`** | **Required on every external block reference** (another file). **Strict from V1** — no registry default, no implicit `latest`, no migration warnings. Missing → `BML_MISSING_VERSION` (error). Unknown version → `BML_UNKNOWN_VERSION` (error). Same-document Sub-Blocks exempt. |
+| **Instance `id`** | **Authored in BOM only** — parser stores `memberValues.id` when present; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `id`. No FQN fallback. |
 
 ---
 
@@ -393,7 +394,7 @@ interface WithBinding {
 }
 ```
 
-Dynamic instance IDs in loops use the **`id` property** with an expression value — not a separate directive:
+Dynamic instance IDs in loops use the **`id` system property** with an expression value — not a separate directive:
 
 ```xml
 <bricks:StandardBrick
@@ -402,7 +403,76 @@ Dynamic instance IDs in loops use the **`id` property** with an expression value
     size="[1, 1, 1]" />
 ```
 
-In BOM: `memberValues.id` is an `ExpressionValue` on the `BlockInstance`.
+In BOM: `memberValues.id` is an `ExpressionValue` or literal on the `BlockInstance` — **only when authored**. Omitted `id` is stored as absent; the parser does not assign auto-IDs.
+
+---
+
+## Instance ID Rules
+
+`id` is a **system property** on `org.blockml.core.Block` — inherited by every Block, system-relevant, and treated specially by the compiler (identity, references, auto-ID, render output). It is **not** a `bml:` directive and **not** a custom property like `wallThickness`.
+
+It identifies a child within its parent's composition tree. Nested paths use `::`:
+
+```text
+parentPartId::childPartId::grandchildPartId
+```
+
+There is **no FQN fallback** — instance identity is never derived from the Block type's FQN.
+
+### Pipeline
+
+```text
+Parse       →  id stored only when authored (literal or ExpressionValue)
+Validate    →  cross-instance references (blockId, placeId, …) must target
+               siblings with explicit authored id; BML_MISSING_ID /
+               BML_UNRESOLVABLE_INSTANCE_REF on failure
+Expand      →  bml:each / bml:if / bml:with resolved to concrete instances
+Resolve ID  →  id expressions evaluated; auto-ID for remaining static children
+Render      →  mb_block_id(parentId, partId) using resolved part IDs
+```
+
+Auto-generated IDs are **not** stored in `BomDocument`. They exist only on the expanded composition tree used for rendering.
+
+### Explicit vs. auto-generated
+
+| Case | Rule |
+|---|---|
+| Referenced by another instance (`blockId`, `placeId`, registry, …) | **Explicit `id` required** (literal) — `BML_MISSING_ID` if absent |
+| Element with `bml:each` | **Explicit `id` required** (literal or Expression) — no auto-ID |
+| Static anonymous `_parts` child, not referenced | Auto-ID after expansion (deterministic hash) |
+| FQN as identity fallback | **Forbidden** |
+
+### Auto-ID algorithm
+
+Assigned after directive expansion, only for static instances still lacking `id`:
+
+```text
+Hash inputs:
+  - typeFqn of the Block instance
+  - sibling index in the parent's composition (post-expansion)
+  - parent resolved part ID
+
+Result:  6 hex characters (e.g. "a3f7c2"); extend on collision
+```
+
+Deterministic across compile runs — same position → same ID → clean SCAD diffs.
+
+### Reference validation (pre-expansion)
+
+Cross-references within the same composition scope are validated against **authored explicit ids**:
+
+```text
+_blocks child with id="wall"     ← target
+_placement child blockId="wall"  ← reference  ✓
+
+_blocks child without id         ← target
+_placement child blockId="wall"  ← reference  ✗  BML_MISSING_ID on target
+
+_blocks child with id="wall"     ← target
+_placement child blockId="floor" ← reference  ✗  BML_UNRESOLVABLE_INSTANCE_REF
+```
+
+`blockId` / `placeId` values must match an authored `id` in the referenced aggregation — not an auto-generated or FQN-derived value.
 
 ---
 
@@ -430,7 +500,7 @@ interface BlockInstance {
 
   /**
    * Member values set on this instance (properties + capabilities).
-   * Includes `id` (org.blockml.core.Block) — literal or Expression for dynamic IDs in loops.
+   * Includes `id` (system property on org.blockml.core.Block) — literal or Expression.
    * Resolved `id` value serves as the composition instance identity (partId).
    */
   memberValues: Record<string, MemberValue>
@@ -640,6 +710,8 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  baseType exists in TypeRegistry
 ✓  resolveEffectiveMembers() — property/capability references in expressions
 ✓  External instance references have exact pinned version (BML_MISSING_VERSION / BML_UNKNOWN_VERSION)
+✓  Cross-instance references (blockId, placeId) resolve to explicit authored id
+✓  bml:each elements have explicit id (literal or Expression)
 ✓  Sub-Block baseType ∈ parent's allowedSubBlockTypes (domain rule)
 ✓  Expression result types match member types
 ✓  Preset property names exist on target blockType
@@ -647,7 +719,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Preset basePresetRefs cycles
 ```
 
-The validator does **not** expand directives or interpret aggregations.
+The validator does **not** expand directives, assign auto-IDs, or interpret aggregations.
 
 ---
 
@@ -670,6 +742,8 @@ The validator does **not** expand directives or interpret aggregations.
 BML_MISSING_BASE_TYPE         — baseType absent on BlockDefinition
 BML_MISSING_VERSION           — version absent on external BlockInstance reference (always error)
 BML_UNKNOWN_VERSION           — version present but no matching BlockDefinition in TypeRegistry
+BML_MISSING_ID                — referenced instance or bml:each element lacks explicit id
+BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId does not match any explicit id in target aggregation
 BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members
 BML_UNKNOWN_TYPE              — typeFqn cannot be resolved
 BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent

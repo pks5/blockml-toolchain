@@ -162,8 +162,9 @@ ${ a + b - 1 }                             — arithmetic
 Validates the BOM graph for semantic correctness:
 
 ```text
+- Cross-instance references resolve to explicit authored id (blockId, placeId)
+- bml:each elements have explicit id
 - Referenced block types exist at the **exact pinned version** (no implicit latest)
-- Versions are specified on all external instance references in compositions
 - Composition child member values are valid for the referenced block type
 - Aggregation cardinality constraints are satisfied
 - Expression result types match the target member type
@@ -179,7 +180,19 @@ Looks up the requested Target by name in the Target Registry. Verifies that the 
 
 For Composite Targets: resolves the responsible Atomic Target per Block and validates accordingly.
 
-### [10] Block Renderer Dispatch
+### [10] Directive Expansion and ID Resolution
+
+Before rendering, the BlockProcessor expands `bml:each`, `bml:if`, and `bml:with` on the composition tree. Then:
+
+```text
+1. Evaluate id expressions on expanded instances
+2. Assign deterministic auto-IDs to static unreferenced children still lacking id
+3. Compose nested paths (parentPartId::childPartId) for render output
+```
+
+Auto-IDs are not written back to `BomDocument`.
+
+### [11] Block Renderer Dispatch
 
 Dispatches each Block in the BOM to its Block Renderer within the resolved Target. For Atomic Targets this is a direct lookup. For Composite Targets this iterates across Atomic Targets.
 
@@ -371,6 +384,8 @@ BML_MISSING_BASE_TYPE         — baseType not declared on a Block definition
 BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
 BML_MISSING_VERSION           — version missing on external block instance reference (always error)
 BML_UNKNOWN_VERSION           — version specified but no matching BlockDefinition in TypeRegistry
+BML_MISSING_ID                — referenced instance or bml:each element lacks explicit id
+BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId does not match any explicit id in target aggregation
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
 BML_PRESET_CYCLE              — circular dependency in composite preset basePresets

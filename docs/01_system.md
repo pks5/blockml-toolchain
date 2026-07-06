@@ -410,7 +410,7 @@ Format:     <instanceId>::<partId>::<subPartId>
 Examples:
   00001::bottom
   00001::bottom::inner
-  com.martianmicro.anyclosure.Wall::bottom   ← FQN as fallback when no instance ID
+  wall::a3f7c2                 — auto-generated part under explicit parent (no FQN fallback)
 ```
 
 ### camelCase Throughout

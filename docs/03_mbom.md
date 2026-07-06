@@ -72,16 +72,18 @@ Full FQN:          <reverse-domain-package>.<ClassName>
 
 ### Instance Identity
 
-Block instances (within a Composition) have an instance ID composed with `::` as separator:
+Block instances (within a Composition) are identified by the **`id` system property** on `org.blockml.core.Block`. Nested paths use `::`:
 
 ```text
-Format:    <instanceId>::<partId>::<subPartId>
+Format:    <parentPartId>::<childPartId>::<subPartId>
 
 Examples:
   00001::bottom
   00001::bottom::inner
-  com.martianmicro.anyclosure.Wall::bottom   ← FQN as fallback (no instance ID)
+  wall::a3f7c2                 — auto-generated part under explicit parent
 ```
+
+No FQN fallback. See `00_bom_core.md` and `12_bom_object_model.md` — Instance ID Rules.
 
 ---
 
@@ -108,9 +110,11 @@ Properties are typed parameters of a Block. Every Property has a name, a type, a
 
 ### Native vs. Custom Properties
 
-**Native properties** are defined in `com.machineblocks.core.Block` and its base types. They are listed in `09_mbom_properties.yml` and have dedicated SCAD getters in the render target (`mb_param_size()`, `mb_param_baseColor()`, etc.).
+**System properties** are defined on `org.blockml.core.Block` and inherited by all Blocks — notably `id` (instance identity). They are system-relevant: the compiler, validator, and renderer treat them with dedicated logic. In MachineBlocks, `id` is also listed in `09_mbom_properties.yml` for SCAD serialization (`mb_block_id`). See `00_bom_core.md` — System Properties.
 
-Native properties include (non-exhaustive): `size`, `offset`, `direction`, `align`, `baseColor`, `studs`, `base`, `recess`, `tongue`, `baseCutoutType`, `rotation`, `alignChildren`, `sizeMod`, `baseCrop`, `baseAdjustment`, `baseWallThickness`, `topPlateHelpers`. See `09_mbom_properties.yml` for the full authoritative list.
+**Domain native properties** are defined in `com.machineblocks.core.Block` and its base types. They are listed in `09_mbom_properties.yml` and have dedicated SCAD getters in the render target (`mb_param_size()`, `mb_param_baseColor()`, etc.).
+
+Domain native properties include (non-exhaustive): `size`, `offset`, `direction`, `align`, `baseColor`, `studs`, `base`, `recess`, `tongue`, `baseCutoutType`, `rotation`, `alignChildren`, `sizeMod`, `baseCrop`, `baseAdjustment`, `baseWallThickness`, `topPlateHelpers`, `render`, `debug`. See `09_mbom_properties.yml` for the full authoritative list. (`id` is a system property — listed there for SCAD mapping, not a domain-native geometry parameter.)
 
 **Custom properties** are defined inline in a Block definition. They generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
 
@@ -320,7 +324,8 @@ Each child instance:
 
 ```text
 type          — FQN of the Block class
-id            — part ID (becomes part of the instance ID: parentId::partId)
+id            — system property (org.blockml.core.Block). Required when referenced or on bml:each.
+                Anonymous static children receive auto-ID after directive expansion.
 renderGroup   — render group name (optional, fallback = id)
 namespace     — parameter filter namespace (optional, fallback = id)
 version       — version of the referenced Block type (required for external references only)
@@ -466,8 +471,8 @@ A lightweight MachineBlocks Block type used as children in the `_placement` Aggr
 
 ```text
 Members:
-  id         — instance ID (becomes the SCAD instance id in STEPS and dispatcher)
-  blockId    — references a Block configuration from _blocks
+  id         — instance ID (becomes the SCAD instance id in STEPS and dispatcher); must be explicit
+  blockId    — references explicit `id` of a Block in _blocks (BML_MISSING_ID / BML_UNRESOLVABLE_INSTANCE_REF)
   direction  — orientation in the set (Direction)
   offset     — position in the set in grid units (GridPosition3D)
 ```
@@ -480,7 +485,7 @@ A lightweight MachineBlocks Block type used as children in the `_steps` Aggregat
 
 ```text
 Members:
-  placeId    — references a Place in _placement
+  placeId    — references explicit `id` of a Place in _placement
 ```
 
 When `_steps` is absent or empty, assembly order equals the document order of `_placement` entries.

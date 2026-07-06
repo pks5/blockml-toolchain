@@ -351,13 +351,15 @@ defaultAggregation: true
 
 ### Properties
 
-Properties are typed parameters of the Block. Two kinds exist:
+Properties are typed parameters of the Block. Three kinds exist:
 
-**Native properties** are defined in `com.machineblocks.core.Block` and its base types. They have dedicated SCAD getters (`mb_param_size()`, etc.) and are listed in `09_mbom_properties.yml`.
+**System properties** are defined on `org.blockml.core.Block` — notably `id` (instance identity). System-relevant: dedicated compiler/validator/renderer handling. Not custom properties. See `00_bom_core.md` — System Properties.
+
+**Domain native properties** are defined in `com.machineblocks.core.Block` and its base types. They have dedicated SCAD getters (`mb_param_size()`, etc.) and are listed in `09_mbom_properties.yml`.
 
 **Custom properties** are defined inline in the Block definition. They generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
 
-Both use the same `<property>` element. The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Native properties only need to be declared when their default value differs from the core default.
+Native and custom properties use the same `<property>` element. The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Native properties only need to be declared when their default value differs from the core default. System properties like `id` are set as XML attributes on composition instances — not declared in `<properties>`.
 
 ### Type Resolution
 
@@ -568,7 +570,9 @@ Child elements inside `<composition>` are Block instances. Each instance:
 
 ```text
 Tag name      — class name (with namespace prefix)
-id            — Block property (org.blockml.core.Block). Part ID for composition identity (parentId::partId). May be an Expression in loops.
+id            — **system property** (org.blockml.core.Block). Part ID for composition identity (parentId::partId).
+                Required when referenced (blockId, placeId, …) or on bml:each elements (literal or Expression).
+                Omitted on anonymous static children → auto-ID after directive expansion. Not a custom property.
 renderGroup   — optional, fallback = id
 namespace     — optional, fallback = id
 version       — **required** on external block references (types from another file);
@@ -721,7 +725,7 @@ BML Directives are special attributes in the `bml:` namespace that control struc
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
-| `id` | Block instances | Normal Block property — `id="${ expr }"` for dynamic IDs |
+| `id` | Block instances | **System property** — not a directive, not a custom property. `id="${ expr }"` for dynamic IDs |
 
 There is no `bml:id` directive.
 
@@ -802,7 +806,7 @@ Produces no Block output itself — groups child Blocks for shared directives:
 
 ### Dynamic Instance ID
 
-Use the `id` property for dynamic IDs in loops — not a directive:
+Use the `id` system property for dynamic IDs in loops — not a directive:
 
 ```xml
 <bricks:StandardBrick
@@ -1150,8 +1154,8 @@ _steps      — assembly order (optional; defaults to document order of _placeme
 `Place` members:
 
 ```text
-id         — instance ID (becomes the SCAD instance id)
-blockId    — references a Block configuration from _blocks
+id         — instance ID (becomes the SCAD instance id); must be explicit
+blockId    — references explicit id of a Block in _blocks
 direction  — orientation in the set
 offset     — position in the set (grid units)
 ```
@@ -1159,7 +1163,7 @@ offset     — position in the set (grid units)
 `Step` members:
 
 ```text
-placeId    — references a Place in _placement
+placeId    — references explicit id of a Place in _placement
 ```
 
 When `_steps` is omitted, assembly order equals the document order of `_placement` entries.
@@ -1569,5 +1573,9 @@ type="Foo" (unqualified)      → resolved against org.blockml.type.* (primitive
 version missing on external instance → BML_MISSING_VERSION (error, no fallback)
 unknown version on external instance → BML_UNKNOWN_VERSION (error)
 same-document Sub-Block instance     → version not required
+id missing on referenced instance    → BML_MISSING_ID
+id missing on bml:each element       → BML_MISSING_ID
+blockId / placeId unresolvable       → BML_UNRESOLVABLE_INSTANCE_REF
+anonymous static child without id    → auto-ID after directive expansion (not stored in BOM)
 _steps missing or empty       → assembly order = document order of _placement
 ```

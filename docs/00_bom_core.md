@@ -69,39 +69,40 @@ Examples:
 
 ### Instance Identity
 
-Instances within a Composition are identified by an instance ID. Nested IDs are composed with `::` as separator:
+Instances within a Composition are identified by a **part ID** — the **`id` system property** on `org.blockml.core.Block`. Nested paths are composed with `::`:
 
 ```text
-Format:    <instanceId>::<partId>::<subPartId>
+Format:    <parentPartId>::<childPartId>::<grandchildPartId>
 
 Examples:
   wall                         — explicit, top-level
   wall::bottom                 — explicit, nested
   wall::bottom::inner          — explicit, deeply nested
-  a3f7c2                       — auto-generated, top-level
+  a3f7c2                       — auto-generated, top-level (after expansion)
   wall::a3f7c2                 — auto-generated, nested under explicit parent
 ```
 
-**Explicit IDs** are defined by the author in the Composition. They are stable, human-readable, and the preferred form for any instance that needs to be referenced externally (e.g. `Place.blockId` in a MachineBlocks Set).
+There is **no FQN fallback** — a Block's type FQN is never used as instance identity.
 
-**Auto-generated IDs** are assigned when no explicit ID is given. They are short deterministic hashes — 6 hex characters derived from the Block's FQN, its position in the Composition, and its parent ID:
+**Explicit IDs** are authored in BML via the `id` system property. Required when:
+- another instance references this one (`blockId`, `placeId`, registry, …)
+- the element carries `bml:each` (literal or Expression — auto-ID is not available in loops)
+
+**Auto-generated IDs** are assigned **after directive expansion** for static, unreferenced children that omit `id`. They are deterministic 6-hex hashes:
 
 ```text
 Hash inputs:
   - FQN of the Block type
-  - Index in the Composition
-  - Parent instance ID
+  - Sibling index in the composition (post-expansion)
+  - Parent resolved part ID
 
 Result:  6 hex characters  (e.g. "a3f7c2")
-         16^6 = ~16.7 million possibilities — collision probability negligible
-         for typical Composition sizes (2–50 children)
+         extend length automatically on collision
 ```
 
-Auto-generated IDs are deterministic — the same Block at the same position always produces the same ID across compile runs. This keeps generated output diffs clean.
+Auto-generated IDs are deterministic across compile runs. They may appear in generated output (SCAD instance IDs) but are not intended for cross-references.
 
-Auto-generated IDs are not "private" — they may appear in generated output (e.g. as SCAD instance IDs). They are simply not intended for external cross-document references. If a collision occurs at 6 characters, the hash length is extended automatically.
-
-Not every child instance requires an ID in BML. If omitted, the compiler assigns an auto-generated ID. If an instance must be referenced by another element (e.g. a `Place` referencing a block by ID), an explicit ID is required — the compiler emits a diagnostic error if a reference targets an auto-generated ID.
+**BOM storage:** the parser stores `id` only when authored. Auto-IDs are not written into `BomDocument` — see `12_bom_object_model.md` — Instance ID Rules.
 
 ---
 
@@ -183,6 +184,30 @@ Members are inherited via `baseType`. Derived Blocks inherit all Members of thei
 ## Properties
 
 Properties are typed parameters of a Block. Every Property has a name, a type, and a default value.
+
+### System Properties
+
+BOM Core defines **system properties** on `org.blockml.core.Block`. Every Block in every domain inherits them. They are not custom properties declared inline in a Block definition — they are part of the core type system and drive compiler infrastructure.
+
+```text
+org.blockml.core.Block
+  id   — instance identity within a composition tree (String)
+```
+
+System properties are **highlighted** compared to other properties:
+
+```text
+Same in BML:     authored as XML attributes / memberValues entries
+Not a directive: no bml:id — id is a property, not flow-control
+Special semantics: identity paths (parent::child), reference validation,
+                   auto-ID rules, render identity (mb_block_id)
+Domain mapping:    render targets register serialization via native property
+                   registries (e.g. 09_mbom_properties.yml for MB SCAD)
+```
+
+Do not treat `id` as a regular custom property like `wallThickness`. It is system-relevant — the compiler, validator, and renderer give it dedicated handling. See Instance Identity and `12_bom_object_model.md` — Instance ID Rules.
+
+Domain-specific **native properties** (e.g. `size`, `offset` on `com.machineblocks.core.Block`) and **custom properties** (declared inline) are separate categories — see `03_mbom.md`.
 
 ### Property Metadata
 
@@ -593,7 +618,8 @@ Each child instance carries:
 
 ```text
 type          — FQN of the child Block class
-id            — instance ID (used for nested identity: parentId::childId)
+id            — system property (org.blockml.core.Block). Required when referenced or on bml:each.
+                Omitted on anonymous static children → auto-ID after expansion. See Instance Identity.
 version       — version of the referenced Block type
 members       — member values for Properties and Capabilities (see below)
 ```
@@ -648,9 +674,9 @@ The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
-| `id` | Block instances | Normal Block property — use `id="${ expr }"` for dynamic IDs in loops |
+| `id` | Block instances | **System property** (not a directive, not a custom property). Drives instance identity, references, and render output. Explicit when referenced or on `bml:each`. Auto-ID only after expansion for anonymous static children. |
 
-There is no `bml:id` directive. Dynamic instance IDs use the `id` property from `org.blockml.core.Block`.
+There is no `bml:id` directive. Dynamic instance IDs use the `id` system property from `org.blockml.core.Block`.
 
 ### `bml:each` — Loop
 
@@ -724,7 +750,7 @@ A container that produces no Block output itself but allows directives to apply 
 
 ### Dynamic Instance ID
 
-Use the `id` property (not a directive) for dynamic IDs inside loops:
+Use the `id` system property (not a directive) for dynamic IDs inside loops:
 
 ```xml
 <bricks:StandardBrick
