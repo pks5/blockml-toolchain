@@ -1043,7 +1043,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
             id="${ 'val_' + stat.index }"
             size="[1, 1, 1]"
             offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
-            text="${ #numbers.formatDecimal(valueStart + i * valueStep, 0, '.', 1) }"
+            text="${ #number.formatDecimal(valueStart + i * valueStep, 0, '.', 1) }"
             textFont="${ font }"
             textSize="${ fontSize }"
             baseCutoutType="none"

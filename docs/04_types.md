@@ -23,7 +23,7 @@ Do not design MBOM types around SCAD arrays.
 Design SCAD arrays as serializations of MBOM.
 ```
 
-All MBOM types are defined in the `com.machineblocks.type` namespace.
+All MBOM types are defined in the **`com.machineblocks.type`** namespace (singular `.type` segment — see `00_bom_core.md` — FQN Convention).
 
 ---
 

@@ -263,7 +263,7 @@ class MachineBlocksV3ScadTarget implements RenderTarget {
   processors = [
     new ScadSetProcessor(),           // compile strategy — more specific
     new ScadBlockProcessor(),         // compile strategy — baseType fallback
-    new MathServiceProcessor(),       // copy strategy
+    new MathBuiltInProcessor(),       // copy strategy
     new FunctionBlockProcessor()      // compile strategy (TS → SCAD)
   ]
 
@@ -446,7 +446,7 @@ strPrefix      → mb__com__machineblocks__calibration__Calibrator__Utils__strPr
 strSuffix      → mb__com__machineblocks__calibration__Calibrator__Utils__strSuffix
 ```
 
-**`#built-in` calls in SCAD CDATA:** `#math.*`, `#strings.*` etc. are resolved inside CDATA blocks using the same native mapping logic as in BML expressions. The author never writes raw SCAD FQN calls:
+**`#built-in` calls in SCAD CDATA:** `#math.*`, `#string.*` etc. are resolved inside CDATA blocks using the same native mapping logic as in BML expressions. The author never writes raw SCAD FQN calls:
 
 ```scad
 // Author writes:
@@ -497,10 +497,10 @@ BML_FUNCTION_UNSUPPORTED_LANG — language attribute not "scad" or "typescript"
 
 ### Built-in Services — No Processor Needed
 
-Built-in Services (`#math`, `#string`, etc.) are defined as BML FunctionBlocks in `@blockml/core-services`. Their SCAD equivalents live in `scad-lib/services/` using a consistent naming convention:
+Built-in Services (`#math`, `#string`, etc.) are defined as BML FunctionBlocks in `@blockml/core-services`. Their SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` following the FQN path convention:
 
 ```text
-FQN:  org.blockml.service.Math  →  scad-lib/services/com/bom/service/Math.scad
+FQN:  org.blockml.service.Math  →  scad-lib/blocks/org/blockml/service/Math.scad
 ```
 
 `Math.scad` example:

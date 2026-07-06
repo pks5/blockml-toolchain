@@ -105,7 +105,7 @@ bom-compiler/
               processor.ts
             ScadSetProcessor/        — compile strategy
               processor.ts
-            MathServiceProcessor/    — copy strategy (copies scad-lib math helpers)
+            MathBuiltInProcessor/    — copy strategy (copies scad-lib math helpers)
               processor.ts
             FunctionBlockProcessor/  — compile strategy (TS → SCAD transpilation)
               processor.ts
@@ -142,7 +142,7 @@ New engines can always be built as independent packages. Each implements the Com
 
 ### Built-in ServiceBlock Definitions
 
-Built-in ServiceBlocks (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML FunctionBlock files in `@blockml/core-services`. This makes their Capabilities formally typed, editor-discoverable, and testable.
+Built-in ServiceBlocks (`#math`, `#string`, `#number`, `#list`, `#bool`) are defined as BML FunctionBlock files in `@blockml/core-services`. This makes their Capabilities formally typed, editor-discoverable, and testable.
 
 The library is based on Thymeleaf's `#` utility objects — same naming conventions and semantics, extended with `#math` which Thymeleaf does not provide.
 
@@ -151,11 +151,11 @@ packages/core-services/
   src/
     org/blockml/service/
       Math.bml         ← #math.min, max, floor, ceil, round, round_n, abs, pow, sqrt, clamp
-      Strings.bml      ← #strings.trim, length, concat, contains, startsWith, endsWith,
+      String.bml       ← #string.trim, length, concat, contains, startsWith, endsWith,
                           indexOf, substring, replace, toUpperCase, toLowerCase
-      Numbers.bml      ← #numbers.formatDecimal
-      Lists.bml        ← #lists.size, isEmpty, contains, first, last, get, concat, sequence
-      Bools.bml        ← #bools.isTrue, isFalse
+      Number.bml       ← #number.formatDecimal
+      List.bml         ← #list.size, isEmpty, contains, first, last, get, concat, sequence
+      Bool.bml         ← #bool.isTrue, isFalse
 ```
 
 All Capabilities use structured Object `payloadType` with named keys — enabling both positional and named call syntax. Single-parameter Capabilities use the primitive type directly:
@@ -165,8 +165,8 @@ All Capabilities use structured Object `payloadType` with named keys — enablin
 #math.floor     → payloadType: Float
 #math.clamp     → payloadType: { x: Float, lo: Float, hi: Float }
 #math.round_n   → payloadType: { x: Float, n: Integer }
-#lists.concat   → payloadType: { a: Array<Object>, b: Array<Object> }
-#numbers.formatDecimal → payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
+#list.concat   → payloadType: { a: Array<Object>, b: Array<Object> }
+#number.formatDecimal → payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
 ```
 
 Each Capability has a TypeScript implementation in `<implementation language="typescript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
@@ -223,7 +223,7 @@ MachineBlocks (machineblocks.com):
 blockml.org schemas (in @blockml/core package):
   schemas/core/
     block.xsd          ← BML document structure, bml:* directives, data:*
-    types.xsd          ← org.blockml.type.* primitives
+    types.xsd          ← org.blockml.type.* primitives (filename plural; maps to singular .type package)
     service.xsd        ← org.blockml.service.* hierarchy
     blockPresets.xsd   ← <blockPresets> document structure
     library.xsd        ← library.xml document structure

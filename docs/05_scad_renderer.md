@@ -162,7 +162,7 @@ When a Block's expressions reference `#built-in` calls, the processor automatica
 
 ```scad
 use <{relative_path_to_scad-lib}/blocks/org/blockml/service/Math.scad>;
-use <{relative_path_to_scad-lib}/blocks/org/blockml/service/Strings.scad>;
+use <{relative_path_to_scad-lib}/blocks/org/blockml/service/String.scad>;
 ```
 
 Built-in service files live under `scad-lib/blocks/org/blockml/service/` — the same `blocks/` structure as all other pre-rendered blocks, following the FQN package convention:
@@ -170,9 +170,10 @@ Built-in service files live under `scad-lib/blocks/org/blockml/service/` — the
 ```text
 scad-lib/blocks/org/blockml/service/
   Math.scad
-  Strings.scad
-  Numbers.scad
-  Lists.scad
+  Math.scad
+  String.scad
+  Number.scad
+  List.scad
 ```
 
 Import paths are always relative and computed from the output file's directory.
@@ -206,7 +207,7 @@ machineblocks-v3-scad-target/
     "round_n": { "native": null },
     "clamp":   { "native": null }
   },
-  "org.blockml.service.Strings": {
+  "org.blockml.service.String": {
     "length":  { "native": "len",   "arity": 1 },
     "concat":  { "native": "str",   "arity": -1 }
   }
@@ -230,7 +231,7 @@ For each `#built-in` call in a Block's expressions or SCAD implementations:
   → emit: bom__org__blockml__service__Math__round_n(x, 1)
   → add:  use <.../blocks/org/blockml/service/Math.scad>
 
-#strings.length(s)
+#string.length(s)
   → native mapping found: len(s)        → emit directly, no import needed
 ```
 

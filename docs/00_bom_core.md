@@ -58,11 +58,41 @@ Every BOM object is identified by a globally unique **Fully Qualified Name (FQN)
 Format:   <reverse-domain-package>.<ClassName>
 Package:  lowercase, dot-separated, reverse-domain
 Class:    PascalCase
+```
 
+**Package segments are singular** for infrastructure namespaces:
+
+```text
+org.blockml.core.*         ✓
+org.blockml.type.*         ✓   (not .types)
+org.blockml.service.*      ✓   (not .services)
+org.blockml.capability.*   ✓   (not .capabilities)
+com.machineblocks.type.*   ✓
+com.machineblocks.core.*   ✓
+com.electronics.type.*     ✓
+com.ui.type.*              ✓
+```
+
+**Documented exception — domain library packages:** collective/plural segment names are allowed when the package denotes a **family of related Block types**, not an infrastructure concern. These are stable, intentional FQNs — not typos.
+
+```text
+com.machineblocks.bricks.*       ✓   — StandardBrick, Plate, Tile, … (MachineBlocks brick library)
+com.machineblocks.calibration.*  ✓   — Calibrator, …
+```
+
+Do not infer from `bricks` that other packages may freely use plural segments. New infrastructure namespaces (`.type`, `.service`, `.core`, `.capability`) are always singular. New domain libraries may choose a collective name deliberately — document the decision in the domain spec.
+
+Built-in ServiceBlocks live in `org.blockml.service.*` with **singular class names** (`Math`, `String`, `Number`, `List`, `Bool`). Expression calls use the `#` prefix with the lowercase bean name: `#math`, `#string`, `#number`, `#list`, `#bool`.
+
+```text
 Examples:
   org.blockml.core.Block
+  org.blockml.service.Math
+  org.blockml.service.String
+  org.blockml.type.Integer
   com.machineblocks.core.Block
-  com.machineblocks.bricks.StandardBrick
+  com.machineblocks.type.Size3D
+  com.machineblocks.bricks.StandardBrick   ← domain library (documented plural exception)
   com.electronics.core.Component
   com.ui.core.Control
 ```
@@ -248,7 +278,7 @@ A `defaultValue` may be a static literal or an Expression. Expressions in `defau
 
 ```text
 ✓  Other Properties of the same Block
-✓  #built-in functions (#math.*, #strings.*, etc.)
+✓  #built-in functions (#math.*, #string.*, etc.)
 ✗  @bean references
 ✗  @model bindings
 ✗  bml: directives
@@ -484,7 +514,7 @@ payloadType: { a: Float, b: Float }
   → Named call:      #math.max(a=size[0], b=labelSize)
 ```
 
-Both call syntaxes are always valid for Object payloads. This is the standard pattern for all `#math.*`, `#strings.*`, `#lists.*` built-ins.
+Both call syntaxes are always valid for Object payloads. This is the standard pattern for all `#math.*`, `#string.*`, `#list.*` built-ins.
 
 `Array<T>` payloads are **not** suitable as FunctionBlock signatures — arity is undefined. Use a structured Object for any Capability with fixed parameters.
 
@@ -1131,8 +1161,8 @@ Each domain BOM defines its own type namespace:
 
 ```text
 com.machineblocks.type.*   — Size3D, Direction, WallGap, Color, ...
-com.electronics.types.*     — Voltage, Resistance, Footprint, ...
-com.ui.types.*              — Color, Length, FontSize, ...
+com.electronics.type.*     — Voltage, Resistance, Footprint, ...
+com.ui.type.*              — Color, Length, FontSize, ...
 ```
 
 Types are never shared across domain namespaces unless explicitly defined in `org.blockml.type`. This is intentional — domain-specific types carry domain-specific semantics even when they share a name.
@@ -1263,8 +1293,8 @@ class NfcPlayerProcessor implements BlockProcessor {
 **Copy strategy** — pure file copy, no transformation:
 
 ```typescript
-class MathServiceProcessor implements BlockProcessor {
-  baseType = "org.blockml.service.MathService"
+class MathBuiltInProcessor implements BlockProcessor {
+  baseType = "org.blockml.service.Math"
   process(block: Block, engine: RenderEngine): RenderOutput {
     return engine.copyTemplate("lib/math_service.scad", "lib/math_service.scad")
   }
@@ -1277,7 +1307,7 @@ class MathServiceProcessor implements BlockProcessor {
 machineblocks-v3-scad-target
   ScadBlockProcessor      → compile strategy    (com.machineblocks.core.Block)
   ScadSetProcessor        → compile strategy    (com.machineblocks.core.Set)
-  MathServiceProcessor    → copy strategy       (org.blockml.service.MathService)
+  MathBuiltInProcessor    → copy strategy       (org.blockml.service.Math)
   FunctionBlockProcessor  → compile strategy    (org.blockml.service.FunctionBlock)
 ```
 
@@ -1289,13 +1319,14 @@ Built-in ServiceBlocks (`#math`, `#string`, etc.) are defined as BML Block files
 @blockml/core-services/
   src/
     com/bom/service/
-      MathService.bml       — defines all #math Sync Capabilities
-      StringService.bml     — defines all #string Sync Capabilities
-      NumbersService.bml    — defines all #numbers Sync Capabilities
-      ListsService.bml      — defines all #lists Sync Capabilities
+      Math.bml            — defines all #math Sync Capabilities
+      String.bml          — defines all #string Sync Capabilities
+      Number.bml          — defines all #number Sync Capabilities
+      List.bml            — defines all #list Sync Capabilities
+      Bool.bml            — defines all #bool Sync Capabilities
 ```
 
-Each domain target registers a corresponding BlockProcessor that renders these ServiceBlocks into the target-appropriate form (e.g. `MathServiceProcessor` for SCAD copies or generates the required SCAD helper functions).
+Each domain target registers a corresponding BlockProcessor that renders these ServiceBlocks into the target-appropriate form (e.g. `MathBuiltInProcessor` for SCAD copies or generates the required SCAD helper functions).
 
 ### Delegate-Only Targets
 

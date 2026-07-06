@@ -66,9 +66,12 @@ FQN conventions:
 
 ```text
 Package segments:  lowercase, dot-separated, reverse-domain
+                   infrastructure segments singular (.type, .service, .core)
 Class name:        PascalCase
 Full FQN:          <reverse-domain-package>.<ClassName>
 ```
+
+`com.machineblocks.bricks` is a **documented exception** — plural library package for the brick Block family. See `00_bom_core.md` — FQN Convention.
 
 ### Instance Identity
 
