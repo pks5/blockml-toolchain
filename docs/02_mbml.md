@@ -16,7 +16,24 @@ BML is the human- and editor-friendly authoring format for BOM. It describes sem
 
 BML is parsed and validated by `@blockml/parser`, which produces a BOM document as output. The BOM is then compiled to the selected render target by `@blockml/compiler`.
 
-File extension: `.mbml` (for tooling compatibility). Content-type: `bml`.
+### File Extensions
+
+```text
+Standard extension:     .bml          — all BML source files (default)
+Content-type:           bml           — MIME / tooling identifier (unchanged)
+Domain extensions:      optional      — domains may register additional suffixes
+MachineBlocks (legacy): .mbml         — still used in scad-lib and existing MB projects
+```
+
+**`.bml` is the canonical file extension.** Blocks, presets, config profiles, and library descriptors all use `.bml` unless a domain specifies otherwise.
+
+Domains may register their own extensions when a single `.bml` suffix is too generic for tooling (e.g. IDE file associations per domain). **MachineBlocks** still uses `.mbml` for historical library content — the compiler accepts both `.bml` and `.mbml` when the MachineBlocks target is active.
+
+New projects outside the MachineBlocks library should use **`.bml` only**.
+
+The compiler discovers source files via `bmlExtensions` in `bom.config.json` (default: `[".bml"]`; MachineBlocks: `[".bml", ".mbml"]`).
+
+The root XML/JSON element determines the document type — not the filename suffix.
 
 ---
 
@@ -1384,8 +1401,8 @@ Only Properties that differ from the Block's defaults are required in a preset. 
 Config profiles use the same format as `<blockPresets>` and share the same property namespace as Block properties. They define project-wide hardware or rendering defaults.
 
 ```text
-src/config/prusa_pla.mbml   — printer + filament profile
-src/config/scale_2x.mbml    — scale profile
+src/config/prusa_pla.bml   — printer + filament profile
+src/config/scale_2x.bml    — scale profile
 ```
 
 Only one config profile is active at a time (set via `bom activate-config`). Merge priority:
@@ -1399,6 +1416,8 @@ configProfile < blockPreset < inline property
 ## Library Format (`library.xml`)
 
 A Library groups related Blocks, Presets, and Types into a publishable unit. Each package directory may contain a `library.xml` descriptor. If absent, all Blocks in the directory are treated as public.
+
+The example below uses **`.mbml`** paths because it describes the MachineBlocks bricks library (legacy domain extension).
 
 ```xml
 <!-- com.machineblocks.bricks/library.xml -->
@@ -1448,7 +1467,7 @@ com.machineblocks.bricks/
     StandardPresets.mbml
 ```
 
-Without `library.xml`: all `.mbml` files in the directory are public.
+Without `library.xml`: all BML source files in the directory are public (`.bml` by default; `.mbml` in MachineBlocks library trees).
 
 ---
 

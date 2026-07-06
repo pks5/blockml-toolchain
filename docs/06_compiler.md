@@ -33,7 +33,7 @@ The compiler is implemented across these packages:
 ## Compiler Pipeline
 
 ```text
-BML Source (.mbml or .json)
+BML Source (.bml / .json; .mbml for MachineBlocks legacy)
   ↓
 [1] Format Detector
   ↓
@@ -554,13 +554,13 @@ Every output artifact has a set of hash inputs. Before compiling, the compiler c
 ```text
 Wall.scad
   Hash inputs:
-    - Wall.mbml content
+    - Wall.bml content
     - all transitive Block dependency versions
     - machineblocks-v3-scad-target version
 
 Wall.json
   Hash inputs:
-    - WallPresets.mbml content
+    - WallPresets.bml content
     - Wall.scad hash (implicit dependency)
 
 Wall__brick-2x4.webp
@@ -572,7 +572,7 @@ Wall__brick-2x4.webp
 
 ### --all Behavior
 
-`bom compile --all machineblocks-v3-scad` processes every `.mbml` file in `srcDir` independently:
+`bom compile --all machineblocks-v3-scad` processes every BML source file in `srcDir` (`.bml` and `.mbml`):
 
 ```text
 <block>        → Block compile    (hash check → skip if unchanged)
@@ -698,16 +698,16 @@ Behavior:
 tests/
   correctness/
     wall/
-      Wall.mbml           — input
+      Wall.bml            — input
       Wall.expected.scad  — manually verified reference
     corner/
-      Corner.mbml
+      Corner.bml
       Corner.expected.scad
     set/
-      DefaultEnclosureSet.mbml
+      DefaultEnclosureSet.bml
       DefaultEnclosureSet.expected.scad
     presets/
-      StandardBrickPresets.mbml
+      StandardBrickPresets.mbml   — MachineBlocks library fixture (legacy .mbml)
       StandardBrick.expected.json
 
   snapshots/

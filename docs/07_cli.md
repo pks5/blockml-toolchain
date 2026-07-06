@@ -93,19 +93,19 @@ If `bom.config.json` already exists, the command exits with an error without mod
 Scaffolds a new block definition file with the required structure.
 
 ```bash
-bom new block <fqn> [--format mbml|json]
+bom new block <fqn> [--format bml|json]
 ```
 
 ```text
 <fqn>       — fully qualified name, e.g. com.martianmicro.anyclosure.Wall
---format    — output format: mbml (default) or json
+--format    — serialization format: bml (XML, default) or json
 ```
 
 Output file location follows the FQN → path convention:
 
 ```text
 FQN:   com.martianmicro.anyclosure.Wall
-File:  src/com/martianmicro/anyclosure/Wall.mbml
+File:  src/com/martianmicro/anyclosure/Wall.bml
 ```
 
 The generated file contains the minimum required structure:
@@ -145,7 +145,7 @@ bom compile --all <target>
 ```
 
 ```text
-<file>    — path to a .mbml or .json file
+<file>    — path to a .bml, domain-specific extension (e.g. .mbml), or .json file
 <target>  — registered target name, e.g. "machineblocks-v3-scad"
 --all     — compile all source files in srcDir
 --src     — override srcDir (default: from bom.config.json)
@@ -153,7 +153,7 @@ bom compile --all <target>
 --force   — ignore hash cache, recompile everything
 ```
 
-`--all` processes every `.mbml` file in `srcDir` independently. Each file is evaluated against its stored hash — unchanged artifacts are skipped. There is no special logic for "does this block have a preset?" — every file is checked, the hash decides.
+`--all` processes every BML source file in `srcDir` (`.bml` by default; `.mbml` when MachineBlocks extensions are registered). Each file is evaluated against its stored hash — unchanged artifacts are skipped.
 
 A Block referenced by both a direct `<block>` compile and an implicit compile from a `<blockPresets>` document is only built once — the hash check prevents redundant work.
 
@@ -162,7 +162,7 @@ A Block referenced by both a direct `<block>` compile and an implicit compile fr
 **`<block>` document:**
 
 ```text
-src/com/martianmicro/anyclosure/Wall.mbml
+src/com/martianmicro/anyclosure/Wall.bml
 →  scad/com/martianmicro/anyclosure/Wall.scad
 →  scad/com/martianmicro/anyclosure/Wall.scad.map
 ```
@@ -172,7 +172,7 @@ No thumbnails are generated when compiling a block definition directly.
 **`<blockPresets>` document:**
 
 ```text
-src/com/martianmicro/anyclosure/WallPresets.mbml
+src/com/martianmicro/anyclosure/WallPresets.bml
 →  scad/com/martianmicro/anyclosure/Wall.scad        (implicit compile of referenced block)
 →  scad/com/martianmicro/anyclosure/Wall.scad.map
 →  scad/com/martianmicro/anyclosure/Wall.json
@@ -258,7 +258,7 @@ bom activate-config <profileName>
 
 ```text
 <profileName>  — name of the config profile (without path or extension)
-                 Profile file must exist at src/config/<profileName>.mbml
+                 Profile file must exist at src/config/<profileName>.bml
 ```
 
 Updates `bom.config.json`:
@@ -381,8 +381,15 @@ Project-level configuration. Located at the project root.
   "thumbsDir":     null,
   "mbLibPath":     null,
   "openscadPath":  null,
-  "activeConfig":  "prusa_pla"
+  "activeConfig":  "prusa_pla",
+  "bmlExtensions": [".bml"]
 }
+```
+
+MachineBlocks projects typically include the legacy suffix:
+
+```json
+  "bmlExtensions": [".bml", ".mbml"]
 ```
 
 | Field | Default | Description |
@@ -393,6 +400,7 @@ Project-level configuration. Located at the project root.
 | `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library root (`scad-lib/`). `null` = resolved from bom executable location |
 | `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved |
 | `activeConfig` | `null` | Name of the active config profile |
+| `bmlExtensions` | `[".bml"]` | File suffixes scanned by `compile --all` / `validate --all`. Domains add their own (e.g. `.mbml` for MachineBlocks). |
 
 ---
 
@@ -436,8 +444,8 @@ Config profiles define project-wide property defaults. They use the same format 
 ### File Location
 
 ```text
-src/config/prusa_pla.mbml
-src/config/scale_2x.mbml
+src/config/prusa_pla.bml
+src/config/scale_2x.bml
 ```
 
 ### Format
@@ -485,15 +493,15 @@ Sets `"activeConfig": "prusa_pla"` in `bom.config.json`. The compiler reads the 
 
   src/
     config/
-      prusa_pla.mbml
-      scale_2x.mbml
+      prusa_pla.bml
+      scale_2x.bml
     com/
       martianmicro/
         anyclosure/
-          Wall.mbml
-          Corner.mbml
-          DefaultEnclosureSet.mbml
-          WallPresets.mbml
+          Wall.bml
+          Corner.bml
+          DefaultEnclosureSet.bml
+          WallPresets.bml
 
   scad/
     com/
@@ -501,7 +509,7 @@ Sets `"activeConfig": "prusa_pla"` in `bom.config.json`. The compiler reads the 
         anyclosure/
           Wall.scad
           Wall.scad.map
-          Wall.json                        ← compiled from WallPresets.mbml
+          Wall.json                        ← compiled from WallPresets.bml
           Wall__brick-2x4.webp             ← thumbnail per preset
           Wall__brick-1x1.webp
           Corner.scad
@@ -517,15 +525,15 @@ Sets `"activeConfig": "prusa_pla"` in `bom.config.json`. The compiler reads the 
 The CLI prints diagnostics to stdout in a human-readable format:
 
 ```text
-ERROR  [BML_UNKNOWN_TYPE]  src/com/martianmicro/anyclosure/Wall.mbml:12:5
+ERROR  [BML_UNKNOWN_TYPE]  src/com/martianmicro/anyclosure/Wall.bml:12:5
   Referenced type 'com.machineblocks.bricks.UnknownBrick' not found.
 
-WARNING  [BML_UNKNOWN_PROPERTY]  src/com/martianmicro/anyclosure/Wall.mbml:18:3
+WARNING  [BML_UNKNOWN_PROPERTY]  src/com/martianmicro/anyclosure/Wall.bml:18:3
   Property 'myCustomProp' not found in type definition. Treating as custom property.
 
-✓  src/com/martianmicro/anyclosure/Corner.mbml  →  scad/.../Corner.scad
-✓  src/com/martianmicro/anyclosure/WallPresets.mbml  →  Wall.scad, Wall.json, 2 thumbnails
-✗  src/com/martianmicro/anyclosure/Wall.mbml    →  1 error, 1 warning
+✓  src/com/martianmicro/anyclosure/Corner.bml  →  scad/.../Corner.scad
+✓  src/com/martianmicro/anyclosure/WallPresets.bml  →  Wall.scad, Wall.json, 2 thumbnails
+✗  src/com/martianmicro/anyclosure/Wall.bml    →  1 error, 1 warning
 ```
 
 In watch mode, diagnostics are reprinted on every recompilation of a changed file.

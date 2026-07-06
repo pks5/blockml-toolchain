@@ -540,7 +540,7 @@ Same-document reference (Sub-Block or type defined in subBlocks[]):
   → version attribute NOT required on instance
   → effective version = Sub-Block definition's version field
 
-External reference (type from another .mbml file):
+External reference (type from another BML file — `.bml`, or `.mbml` in MachineBlocks library):
   → version attribute REQUIRED on instance
   → missing                    → BML_MISSING_VERSION (error — always, no warning mode)
   → version not in registry    → BML_UNKNOWN_VERSION (error)
@@ -637,7 +637,7 @@ Every `BlockDefinition`, `BlockInstance`, `MemberDefinition`, and `ExpressionVal
 The Type Registry is **not** part of `BomDocument`. It is a runtime service in `@blockml/core`, populated from:
 
 ```text
-- Parsed BlockDefinitions (all loaded .mbml files)
+- Parsed BlockDefinitions (all loaded `.bml` / domain extension files)
 - Domain packages (09_mbom_properties.yml native members on com.machineblocks.core.Block)
 - Built-in ServiceBlock definitions (@blockml/core-services)
 - Enum / type schemas (domain XSD)

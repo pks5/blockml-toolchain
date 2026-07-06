@@ -1289,10 +1289,10 @@ Built-in ServiceBlocks (`#math`, `#string`, etc.) are defined as BML Block files
 @blockml/core-services/
   src/
     com/bom/service/
-      MathService.mbml       — defines all #math Sync Capabilities
-      StringService.mbml     — defines all #string Sync Capabilities
-      NumbersService.mbml    — defines all #numbers Sync Capabilities
-      ListsService.mbml      — defines all #lists Sync Capabilities
+      MathService.bml       — defines all #math Sync Capabilities
+      StringService.bml     — defines all #string Sync Capabilities
+      NumbersService.bml    — defines all #numbers Sync Capabilities
+      ListsService.bml      — defines all #lists Sync Capabilities
 ```
 
 Each domain target registers a corresponding BlockProcessor that renders these ServiceBlocks into the target-appropriate form (e.g. `MathServiceProcessor` for SCAD copies or generates the required SCAD helper functions).

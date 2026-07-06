@@ -17,7 +17,7 @@ The architecture is designed to accommodate domain BOMs and Render Targets that 
 The BOM Compiler follows a layered architecture:
 
 ```text
-BML Source (.mbml / .json)      content-type: bml
+BML Source (.bml / .json)        content-type: bml
   ↓ parse + validate
 BOM (Block Object Model)        domain-agnostic, typed
   ↓ compile
@@ -26,7 +26,7 @@ Render Target                   domain-specific
 Target Output (SCAD, KiCad, JSX, ...)
 ```
 
-**BML** (Block Markup Language) is the universal declarative authoring format. File extension `.mbml` (for tooling compatibility). Content-type `bml`. XML is the reference format; JSON is equally supported. Block definitions, composite blocks, and presets are all authored in BML.
+**BML** (Block Markup Language) is the universal declarative authoring format. Standard file extension **`.bml`**. Content-type `bml`. XML is the reference format; JSON is equally supported. Domains may register additional extensions — MachineBlocks still uses **`.mbml`** for legacy library content.
 
 **BOM** (Block Object Model) is the canonical, typed, domain-agnostic object model. It is the internal representation of all block data. BOM is renderer-independent — it has no knowledge of any render target, syntax, or parameters. BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific types and properties.
 
@@ -41,7 +41,7 @@ Target Output (SCAD, KiCad, JSX, ...)
 MachineBlocks is the first and reference domain. Its BOM specialization is **MBOM** (MachineBlocks Object Model). Its Render Target is the **SCAD Renderer**, producing OpenSCAD files compatible with the MachineBlocks V3 SCAD Library.
 
 ```text
-BML Source (.mbml)
+BML Source (.bml)                    ← .mbml in MachineBlocks scad-lib (legacy)
   ↓ parse + validate
 MBOM (MachineBlocks Object Model)   ←  specializes BOM Core
   ↓ compile (machineblocks-v3-scad target)
@@ -150,12 +150,12 @@ The library is based on Thymeleaf's `#` utility objects — same naming conventi
 packages/core-services/
   src/
     org/blockml/service/
-      Math.mbml        ← #math.min, max, floor, ceil, round, round_n, abs, pow, sqrt, clamp
-      Strings.mbml     ← #strings.trim, length, concat, contains, startsWith, endsWith,
+      Math.bml         ← #math.min, max, floor, ceil, round, round_n, abs, pow, sqrt, clamp
+      Strings.bml      ← #strings.trim, length, concat, contains, startsWith, endsWith,
                           indexOf, substring, replace, toUpperCase, toLowerCase
-      Numbers.mbml     ← #numbers.formatDecimal
-      Lists.mbml       ← #lists.size, isEmpty, contains, first, last, get, concat, sequence
-      Bools.mbml       ← #bools.isTrue, isFalse
+      Numbers.bml      ← #numbers.formatDecimal
+      Lists.bml        ← #lists.size, isEmpty, contains, first, last, get, concat, sequence
+      Bools.bml        ← #bools.isTrue, isFalse
 ```
 
 All Capabilities use structured Object `payloadType` with named keys — enabling both positional and named call syntax. Single-parameter Capabilities use the primitive type directly:
@@ -304,7 +304,7 @@ Facade and Target Registry. Browser and Node compatible.
 Node.js-only CLI tools.
 
 ```text
-- bom new block <fqn> [--format mbml|json]
+- bom new block <fqn> [--format bml|json]
 - bom compile <file> <target>
 - bom compile --all <target>
 - bom validate <file>
@@ -429,10 +429,15 @@ SCAD parameter:  baseCutoutType
 
 ```text
 src/                          — BML source files (configurable via srcDir)
-  com/machineblocks/bricks/
-    StandardBrick.mbml        — block definition
-    StandardBrickSet.mbml     — composite block (MachineBlocks Set)
-    StandardBrickPresets.mbml — block presets
+  com/martianmicro/anyclosure/
+    Wall.bml                    — block definition (.bml = standard)
+    WallPresets.bml             — block presets
+
+  com/machineblocks/bricks/     — MachineBlocks library (legacy .mbml)
+    StandardBrick.mbml
+    StandardBrickSet.mbml
+    StandardBrickPresets.mbml
+```
 
 scad/                         — SCAD output files (configurable via outDir)
   com/machineblocks/bricks/
@@ -535,8 +540,8 @@ Config profiles are project-wide property presets that define hardware-specific 
 They use the same format as `<blockPresets>` and share the same property namespace as block properties.
 
 ```text
-config/prusa_pla.mbml   — printer + filament profile
-config/scale_2x.mbml    — scale profile
+config/prusa_pla.bml    — printer + filament profile
+config/scale_2x.bml     — scale profile
 ```
 
 Only one config profile is active at a time:
