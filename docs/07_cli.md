@@ -7,6 +7,7 @@ version: 2.0.0
 This document defines the `bom` CLI tool — its commands, configuration files, watch mode, scaffolding, config profile management, and thumbnail generation.
 
 For the compiler pipeline and Target Registry see `06_compiler.md`.
+For compiler runtime (bootstrap, RenderContext, thumbnails) see `14_compiler_runtime.md`.
 For the project file structure and library resolution see `01_system.md`.
 
 ---
@@ -27,9 +28,14 @@ Before compile or watch, the CLI bootstraps two registries in a fixed order. See
 1. load bom.config.json
 2. bootstrapTypeRegistry()   — discover + parse project/library BML (B5)
 3. bootstrapTargets()        — register render targets (C3)
-4. compileBmlToOutput(...)
-5. write output files to disk
+4. for each file (or single file):
+     shouldSkip(artifact) ? skip : compileBmlToOutput(...)
+5. write RenderOutput.files[] to disk
+6. generateThumbnails(...)   — blockPresets + SCAD target only (C6)
+7. writeStoredHash(...)      — update .bom-cache (C5)
 ```
+
+Incremental skip checks (step 4) and hash writes (step 7) are CLI-only. See `14_compiler_runtime.md` — Incremental Build (C5).
 
 ### TypeRegistry bootstrap (B5)
 
@@ -307,7 +313,29 @@ Only one config profile is active at a time. Activating a new profile replaces t
 
 ## Thumbnail Generation (SCAD Target)
 
-Thumbnails are generated automatically as part of `bom compile machineblocks-v3-scad` when the input is a `<blockPresets>` document. There is no separate thumbnail command.
+Thumbnails are **CLI-only** (C6) — not part of `@blockml/compiler` or `RenderOutput`. The compiler produces `.scad` and `.json`; the CLI renders `.webp` afterward using OpenSCAD + Sharp. See `14_compiler_runtime.md` — Thumbnails (C6).
+
+Thumbnails run automatically as part of `bom compile machineblocks-v3-scad` when the input is a `<blockPresets>` document. There is no separate thumbnail command.
+
+### Architecture boundary
+
+```text
+@blockml/compiler   →  Wall.scad, Wall.scad.map, Wall.json  (RenderOutput.files[])
+@blockml/cli        →  Wall__brick-2x4.webp, …               (generateThumbnails.ts)
+```
+
+Browser `compileBmlToOutput` never produces thumbnails — no OpenSCAD dependency in the compiler package.
+
+### CLI orchestration
+
+```typescript
+if (result.success && isBlockPresetsInput(input)) {
+  writeRenderOutputFiles(result.output, config.outDir);
+  await generateThumbnails({ scadPath, jsonPath, thumbsDir, openscad });
+}
+```
+
+If OpenSCAD is not found, compiler artifacts are still written; the CLI reports exit code **2** for the thumbnail step.
 
 ### Pipeline
 
@@ -346,7 +374,7 @@ Filename:   Wall__brick-2x4.webp
 Full pattern:  {BlockName}__{preset-id}.webp
 ```
 
-The `id` is kebab-case by convention. No transformation step required. The Preset `name` ("Brick 2x4") is used only in the SCAD Customizer JSON and editor UI — never in filenames.
+The `id` is kebab-case by convention. No transformation step required. The Preset **`name`** ("Brick 2x4") is used as the OpenSCAD `--P` argument and in the Customizer JSON — not in filenames.
 
 ### Output Location
 

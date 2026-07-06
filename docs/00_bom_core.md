@@ -1213,7 +1213,7 @@ interface RenderEngine {
 }
 ```
 
-BOM Core defines only this interface. Each engine package implements it in its own way.
+BOM Core defines only this interface. Each engine package implements it in its own way. For `RenderContext` fields see `14_compiler_runtime.md` — RenderContext (C1).
 
 ### RenderTarget Interface
 

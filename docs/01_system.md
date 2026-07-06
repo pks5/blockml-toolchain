@@ -327,6 +327,7 @@ Node.js-only CLI tools.
 - bom watch [--src <dir>] [--out <dir>] <target>
 - bom activate-config <profileName>
 - bootstrapTypeRegistry() + bootstrapTargets() before compile/watch (see 14_compiler_runtime.md)
+- incrementalBuild.ts — SHA-256 cache in .bom-cache/ (C5)
 - OpenSCAD executable resolver (for SCAD target)
 - Thumbnail renderer (Sharp-based, Node-only, for SCAD target)
 ```

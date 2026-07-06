@@ -258,6 +258,37 @@ interface RenderEngine {
 }
 ```
 
+### RenderContext
+
+Per-block render state passed to `RenderEngine.compile()`. **Internal API** — not part of the public Facade (C2). Full specification: `14_compiler_runtime.md` — RenderContext (C1).
+
+```typescript
+interface RenderSession {
+  typeRegistry: TypeRegistry
+  sourceFilePath: string
+  outputBasePath: string
+  targetName: string
+  documentKind: BomDocumentKind
+  activeConfig?: string
+  mbLibPath?: string
+}
+
+interface RenderContext {
+  session: RenderSession
+  blockFqn: string
+  outputRelativePath: string
+  parentPartId?: string
+  partId?: string
+  instance?: BlockInstance
+  withScope: ReadonlyMap<string, ExpressionValue>
+  loopScope?: ReadonlyMap<string, ExpressionValue>
+  activePresetId?: string
+  child(overrides: Partial<Omit<RenderContext, "session" | "child">>): RenderContext
+}
+```
+
+`CompileOptions` (session-level) maps into `RenderSession`. Per-node fields are forked via `context.child()` during composition rendering. Property values are resolved on demand via `PropertyResolver` — not cached on context (V1).
+
 ### Dispatch Logic
 
 For each Block:
@@ -335,7 +366,7 @@ interface CompilerResult<T> {
 
 ### RenderOutput
 
-`RenderOutput` is defined by the Render Target, not by the compiler. The compiler treats it as opaque. Each Target defines its own output structure:
+`RenderOutput` is defined by the Render Target, not by the compiler. The compiler treats it as opaque. Each Target defines its own output structure. **Thumbnails (`.webp`) are not part of `RenderOutput`** — see `14_compiler_runtime.md` — Thumbnails (C6).
 
 ```typescript
 // SCAD Target
@@ -345,10 +376,12 @@ interface ScadRenderOutput {
 
 interface ScadFile {
   path:      string    // relative output path, e.g. "com/martianmicro/anyclosure/Wall.scad"
-  content:   string    // SCAD file content
-  sourceMap: string    // Source Map V3 JSON string
+  content:   string    // text content (.scad, .json) or Source Map JSON string
+  sourceMap?: string   // Source Map V3 — present on .scad outputs
 }
 ```
+
+For `<blockPresets>` documents, `files[]` includes the implicit block `.scad`, its `.map`, and the Customizer `.json`. Binary artifacts (`.webp`) are produced by `@blockml/cli` after compile.
 
 ### Browser Usage
 
@@ -575,56 +608,56 @@ The Capability documentation is therefore not just for humans — it is a primar
 
 ## Incremental Build
 
-The compiler supports incremental builds — skipping compilation of artifacts whose inputs have not changed. This applies to both `bom compile --all` and `bom watch`.
+The CLI supports incremental builds — skipping compilation (and thumbnail generation) when hash inputs are unchanged. Applies to `bom compile --all`, single-file `bom compile`, and `bom watch`. Full specification: `14_compiler_runtime.md` — Incremental Build (C5).
 
 ### Strategy
 
-Every output artifact has a set of hash inputs. Before compiling, the compiler computes a combined hash of all inputs and compares it to the stored hash from the previous build. If the hash matches, the artifact is skipped.
+Every output artifact has a canonical input set. Before work begins, the CLI computes `SHA-256(canonicalJSON(inputs))` and compares it to `.bom-cache/<output-path>.hash`. Match → skip. `--force` bypasses the cache.
+
+Cache key is the **output path** — implicit and direct compiles of the same block share one `.scad.hash` file.
+
+### Hash inputs (summary)
 
 ```text
 Wall.scad
-  Hash inputs:
-    - Wall.bml content
-    - all transitive Block dependency versions
-    - machineblocks-v3-scad-target version
+  - Wall.bml content hash
+  - external BlockInstance refs (typeFqn + version), sorted
+  - activeConfig profile hash (or null)
+  - target + compiler package versions
 
 Wall.json
-  Hash inputs:
-    - WallPresets.bml content
-    - Wall.scad hash (implicit dependency)
+  - WallPresets.bml content hash
+  - stored Wall.scad hash (cascade)
+  - activeConfig, target, compiler versions
 
 Wall__brick-2x4.webp
-  Hash inputs:
-    - Wall.json hash
-    - OpenSCAD version
-    - thumbnail rendering config
+  - stored Wall.json + Wall.scad hashes
+  - OpenSCAD version
+  - thumbnailPipelineVersion: "1"
 ```
 
 ### --all Behavior
 
-`bom compile --all machineblocks-v3-scad` processes every BML source file in `srcDir` (`.bml` and `.mbml`):
-
 ```text
 <block>        → Block compile    (hash check → skip if unchanged)
-<blockPresets> → Presets compile  (hash check → skip if unchanged)
-               → implicit Block compile (hash check → skip if unchanged)
+<blockPresets> → implicit .scad   (same hash key as direct block compile)
+               → Presets .json    (hash check → skip if unchanged)
+               → thumbnails       (per-preset hash check)
 ```
 
-No special logic determines whether a Block has a Presets document. Every file is evaluated. The hash check prevents redundant work — a Block referenced by both a direct compile and an implicit Presets compile is only built once.
+Every file in `srcDir` is evaluated. Shared output paths deduplicate work via the cache.
 
 ### Hash Storage
-
-Hashes are stored in a `.bom-cache/` directory at the project root:
 
 ```text
 .bom-cache/
   com/martianmicro/anyclosure/
-    Wall.scad.hash
+    Wall.scad.hash              →  sha256:<hex>
     Wall.json.hash
     Wall__brick-2x4.webp.hash
 ```
 
-The `.bom-cache/` directory should be added to `.gitignore`.
+Mirror `outDir` structure. Add `.bom-cache/` to `.gitignore`. Implemented in `@blockml/cli` as `incrementalBuild.ts`.
 
 ---
 
