@@ -1,6 +1,8 @@
 # ============================================================================
 # MachineBlocks Compiler — MBOM Native Property Definitions
-# Single Source of Truth for all native MBOM properties
+# SCAD render mapping for properties declared in com/machineblocks/core/Block.bml
+# Type SSOT: BML (see docs/16_framework_base_types.md)
+# Single Source of Truth for SCAD serialization rules (not for property existence)
 # ============================================================================
 #
 # This file is the authoritative specification for all native MBOM properties

@@ -502,8 +502,10 @@ jobs:
 Recommended first coding milestones:
 
 ```text
-1. Scaffold root + empty packages (this document)
-2. @blockml/core        — types from 12_bom_object_model.md + Diagnostic
+1. @blockml/core BML          — org.blockml.core.Block, org.blockml.service.*
+2. @machineblocks/mbom BML    — com.machineblocks.core.*
+3. @blockml/core-services BML — org.blockml.service.Math, …
+4. @blockml/core        — types from 12_bom_object_model.md + Diagnostic
 3. @blockml/parser      — stage [5] mapper skeleton + tests
 4. @blockml/core        — TypeRegistry + validate (stages 6–8)
 5. @blockml/compiler    — Facade + Target Registry (C2, C3)

@@ -1,0 +1,27 @@
+<!--
+  MachineBlocks MBOM — NativeBlock (mb_block primitive)
+
+  FQN: com.machineblocks.core.NativeBlock
+  Final — cannot be used as baseType on Block definitions
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:type="com.machineblocks.type"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <name>NativeBlock</name>
+  <fullQualifiedName>com.machineblocks.core.NativeBlock</fullQualifiedName>
+  <baseType>com.machineblocks.core.Block</baseType>
+  <version>1.0.0</version>
+
+  <final>true</final>
+
+  <allowedSubBlockTypes />
+
+  <!-- Native MB properties only — no custom properties on NativeBlock instances -->
+
+</block>

@@ -182,12 +182,41 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
 ### Optional Fields
 
 ```text
+<abstract>                    — true | false (default false). Abstract types are not instantiable.
+<final>                       — true | false (default false). Final types cannot be used as baseType.
+<allowedSubBlockTypes>        — FQNs permitted as Sub-Block baseType (see Framework Base Types)
+<supportedImplementationTypes> — org.blockml.language.* FQNs for <implementation type="...">
 <properties>    — Property declarations. Omit if no custom properties or default overrides needed.
-<aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice (see MBOM: `_parts` on com.machineblocks.core.Block).
+<aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice.
 <associations>  — Association declarations.
 <capabilities>  — Capability declarations.
 <subBlocks>     — Sub-Block definitions (see Sub-Blocks section).
 <composition>   — internal structure. Omit for Leaf Blocks.
+```
+
+Framework base types (`org.blockml.core.Block`, `com.machineblocks.core.Block`, …) are **BML files** in `@blockml/core` and `@machineblocks/mbom` — not code or YAML. See `16_framework_base_types.md`.
+
+### Type Modifiers
+
+```xml
+<abstract>true</abstract>
+<final>true</final>
+
+<allowedSubBlockTypes>
+  <allowedSubBlockType type="com.machineblocks.core.Block" />
+  <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
+</allowedSubBlockTypes>
+
+<supportedImplementationTypes>
+  <supportedImplementationType type="org.blockml.language.OpenSCAD" />
+  <supportedImplementationType type="org.blockml.language.TypeScript" />
+</supportedImplementationTypes>
+```
+
+```text
+<allowedSubBlockTypes/>     — empty: no Sub-Blocks allowed (e.g. NativeBlock, FunctionBlock)
+Omitted modifiers           — inherit from baseType where applicable (validator walks chain)
+org.blockml.core.Block      — sole type that omits <baseType> (inheritance root)
 ```
 
 ### Namespace Declarations
@@ -264,9 +293,9 @@ All Members — Properties, Aggregations, Associations, and Capabilities — sha
 
 ### Conventions
 
-**`<aggregations>`** — BlockML does not define domain aggregations. For MachineBlocks Blocks (`baseType` chain includes `com.machineblocks.core.Block`), `_parts` is inherited from that type — it is **not** synthesized by the parser. Omit `<aggregations>` when the inherited members are sufficient; declare explicitly only when adding further aggregations or when the Block does not inherit `_parts`.
+**`<aggregations>`** — Domain base types declare inherited aggregations in BML (e.g. `_parts` on `com.machineblocks.core.Block` in `com/machineblocks/core/Block.bml`). The parser stores **declared** members only; inherited members resolve at validate via `baseType` chain. Omit `<aggregations>` on user blocks when the inherited set suffices.
 
-Inherited `_parts` on `com.machineblocks.core.Block`:
+`_parts` on `com.machineblocks.core.Block` (declared in framework BML):
 
 ```text
 name:        _parts

@@ -219,6 +219,24 @@ Unsupported type → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseT
 
 V1 known types: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`.
 
+### Type modifiers
+
+Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_framework_base_types.md`.
+
+```text
+<abstract>true</abstract>                    → block.abstract = true
+<final>true</final>                          → block.final = true
+<allowedSubBlockType type="…"/>              → block.allowedSubBlockTypes[]
+<supportedImplementationType type="…"/>     → block.supportedImplementationTypes[]
+```
+
+```text
+Omitted abstract/final           → false
+Empty <allowedSubBlockTypes/>    → [] (no Sub-Blocks allowed)
+Omitted lists                    → undefined (inherit from baseType at validate)
+org.blockml.core.Block           → omits <baseType> (sole inheritance root)
+```
+
 ---
 
 ## Expression Parsing (Two-Phase)
@@ -310,9 +328,10 @@ The parser is **single-file scoped**. Cross-file resolution is a **bootstrap + v
 Before validating or compiling a file that references external types, the orchestrator builds a populated `TypeRegistry`:
 
 ```text
-1. Pre-register built-ins
-     @blockml/core-services  →  org.blockml.service.Math, Strings, …
-     Domain YAML             →  native members on com.machineblocks.core.Block
+1. Pre-register framework BML (fixed paths — see 16_framework_base_types.md)
+     @blockml/core/src           →  org.blockml.core.Block, org.blockml.service.*
+     @machineblocks/mbom/src     →  com.machineblocks.core.*
+     @blockml/core-services/src  →  org.blockml.service.Math, Strings, …
 
 2. Discover BML sources
      Project srcDir scan     →  all *.bml (and configured extensions, e.g. .mbml)

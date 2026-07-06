@@ -89,7 +89,7 @@ See `15_dev_setup.md` for workspace configuration, build scripts, and implementa
 ```text
 bom-compiler/
   packages/
-    core/              — @blockml/core
+    core/              — @blockml/core (framework BML: org.blockml.core.Block, …)
     parser/            — @blockml/parser
     compiler/          — @blockml/compiler (Rahmen + Target Registry)
     cli-tools/         — @blockml/cli
@@ -100,7 +100,8 @@ bom-compiler/
 
   domains/
     machineblocks/
-      mbom/            — @machineblocks/mbom
+      mbom/            — @machineblocks/mbom (framework BML: com.machineblocks.core.*)
+        src/com/machineblocks/core/
       machineblocks-v3-scad-target/
         src/
           target.ts
@@ -594,7 +595,8 @@ configProfile < blockPreset < inline property
 13_bml_to_bom_mapping.md — BML → BOM algorithm (parser implementation contract)
 14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
 15_dev_setup.md        — monorepo tooling, build, test, IDE setup
-09_mbom_properties.yml — MBOM native property definitions (authoritative)
+16_framework_base_types.md — framework base types as BML (abstract, final, allowedSubBlockTypes)
+09_mbom_properties.yml — MBOM native property SCAD mapping (render only)
 
 domains/machineblocks/runtimes/scad-lib/
   lib/                 — SCAD Runtime (every generated SCAD file uses this)

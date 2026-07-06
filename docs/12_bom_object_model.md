@@ -78,7 +78,9 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
   - Consumes BomDocument (opaque to most pipeline stages)
 
 @machineblocks/mbom
-  - Extends TypeRegistry with MBOM types + 09_mbom_properties.yml native members
+  - Framework base type BML (com.machineblocks.core.Block, NativeBlock, Set, …)
+  - 09_mbom_properties.yml — SCAD render mapping only (not type SSOT)
+  - Extends TypeRegistry bootstrap with mbom BML paths
 ```
 
 ---
@@ -133,6 +135,18 @@ interface BlockDefinition {
 
   /** Semantic version of this definition. Required. */
   version: string
+
+  /** Abstract type — not usable as composition instance type. Default false. */
+  abstract?: boolean
+
+  /** Final type — cannot be used as baseType on definitions. Default false. */
+  final?: boolean
+
+  /** Sub-Block baseTypes permitted in subBlocks[]. Default: inherit from baseType chain. */
+  allowedSubBlockTypes?: string[]
+
+  /** org.blockml.language.* FQNs allowed on capability implementations. Default: inherit. */
+  supportedImplementationTypes?: string[]
 
   /**
    * Members declared in THIS block only — not inherited.

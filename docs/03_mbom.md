@@ -490,30 +490,33 @@ When `_steps` is absent or empty, assembly order equals the document order of `_
 
 ## MBOM Class Hierarchy
 
+Framework types are **BML files** — see `16_framework_base_types.md`. Interpretation (SCAD mapping, processors) lives in render targets only.
+
 ```text
-org.blockml.core.Block                                  ← BOM Core (abstract)
-  com.machineblocks.core.Block                          ← MBOM base (native MB properties + _parts)
-    com.machineblocks.core.NativeBlock                  ← final, 1:1 mb_block() mapping
-    com.machineblocks.core.Set                          ← STEPS + View Submodules
-      com.martianmicro.anyclosure.DefaultEnclosure
-      ...
-    com.machineblocks.core.Place                        ← used in Set _placement
-    com.machineblocks.core.Step                         ← used in Set _steps
-    com.machineblocks.bricks.StandardBrick              ← CompositeBlock, uses NativeBlock
-    com.martianmicro.anyclosure.Wall                    ← CompositeBlock, uses NativeBlock
-    com.martianmicro.anyclosure.Corner
-    ...
+org.blockml.core.Block                                  ← packages/core/…/Block.bml (abstract, root)
+  org.blockml.service.ServiceBlock                      ← ServiceBlock.bml
+    org.blockml.service.FunctionBlock                   ← FunctionBlock.bml
+      org.blockml.service.Math                          ← core-services/Math.bml
+  com.machineblocks.core.Block                          ← mbom/…/Block.bml (abstract)
+    com.machineblocks.core.NativeBlock                  ← NativeBlock.bml (final)
+    com.machineblocks.core.Set                          ← Set.bml (abstract)
+      com.martianmicro.anyclosure.DefaultEnclosure      ← user BML
+    com.machineblocks.core.Place                        ← user / library BML
+    com.machineblocks.core.Step
+    com.machineblocks.bricks.StandardBrick              ← user BML
+    com.martianmicro.anyclosure.Wall
+    …
 ```
 
 ### com.machineblocks.core.Block
 
-MachineBlocks domain base type. Extends `org.blockml.core.Block` with native MB properties (see `09_mbom_properties.yml`) and the `_parts` aggregation.
+MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/src/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.Block`.
 
 ```text
 Extends:        org.blockml.core.Block
-Properties:     native MB properties (size, offset, direction, baseColor, ...)
+Properties:     native MB properties declared in Block.bml (<properties>)
+                SCAD mapping in 09_mbom_properties.yml (render only)
 Aggregations:   _parts (0..n, hidden, defaultAggregation, type: com.machineblocks.core.Block)
-                customData (inherited from org.blockml.core.Block)
 Composition:    allowed — _parts children become SCAD block children
 ```
 
@@ -547,27 +550,35 @@ Processor:  ScadSetProcessor → STEPS array + 4 view submodules
 
 ### allowedSubBlockTypes
 
+Declared in framework BML — see `16_framework_base_types.md`:
+
+```xml
+<allowedSubBlockTypes>
+  <allowedSubBlockType type="com.machineblocks.core.Block" />
+  <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
+</allowedSubBlockTypes>
+```
+
 ```text
-com.machineblocks.core.Block:
-  allowedSubBlockTypes: [com.machineblocks.core.Block,
-                         org.blockml.service.FunctionBlock]
-
-com.machineblocks.core.NativeBlock:
-  allowedSubBlockTypes: []  (final — no Sub-Blocks)
-
-com.machineblocks.core.Set:
-  allowedSubBlockTypes: [com.machineblocks.core.Block,
-                         org.blockml.service.FunctionBlock]
+com.machineblocks.core.Block     — Block, FunctionBlock
+com.machineblocks.core.NativeBlock — (empty — final, no Sub-Blocks)
+com.machineblocks.core.Set       — Block, FunctionBlock
+org.blockml.service.FunctionBlock — (empty)
 ```
 
 ### supportedImplementationTypes
 
-```text
-com.machineblocks.core.Block:
-  supportedImplementationTypes: [org.blockml.language.OpenSCAD]
+Declared in framework BML:
 
-org.blockml.service.FunctionBlock:
-  supportedImplementationTypes: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
+```xml
+<supportedImplementationTypes>
+  <supportedImplementationType type="org.blockml.language.OpenSCAD" />
+</supportedImplementationTypes>
+```
+
+```text
+com.machineblocks.core.Block       — OpenSCAD
+org.blockml.service.FunctionBlock  — OpenSCAD, TypeScript
 ```
 
 ### Validation
