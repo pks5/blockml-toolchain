@@ -443,16 +443,9 @@ Ternary:      condition ? valueIfTrue : valueIfFalse
 
 Expressions are parsed into typed **`ExpressionNode`** trees — not evaluated as raw strings. Stored as `ExpressionValue` on the BOM. The SCAD Renderer serializes AST nodes. See `10_expression_language.md` — Expression AST.
 
-### Registry
+### Sharing Values Between Siblings
 
-Sibling child Blocks within the same Composition can share values:
-
-```text
-Write:  registry.totalHeight = value
-Read:   registry.totalHeight
-```
-
-Registry scope is per Composition. Created on entry, not visible outside.
+Sibling child Blocks within the same Composition share computed values via **`bml:with`** on `<composition>` or a wrapping `<bml:block>` — not via a separate registry. See `02_mbml.md` — `bml:with`.
 
 ---
 

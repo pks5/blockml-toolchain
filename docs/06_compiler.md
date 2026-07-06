@@ -7,6 +7,7 @@ version: 2.0.0
 This document defines the compiler pipeline — the full translation path from BML source to render target output — including the Target Registry, error handling, diagnostics, and the testing strategy.
 
 For the BML format see `02_mbml.md`.
+For the BML→BOM mapping algorithm see `13_bml_to_bom_mapping.md`.
 For the formal BOM object model see `12_bom_object_model.md`.
 For the MBOM object model see `03_mbom.md`.
 For the SCAD Renderer see `05_scad_renderer.md`.
@@ -33,7 +34,7 @@ The compiler is implemented across these packages:
 ## Compiler Pipeline
 
 ```text
-BML Source (.bml / .json; .mbml for MachineBlocks legacy)
+BML Source (.bml / .mbml)           — V1: XML only; JSON BML deferred (TBD)
   ↓
 [1] Format Detector
   ↓
@@ -86,15 +87,19 @@ Stages 1–8 are universal — implemented in `@blockml/parser` and `@blockml/co
 
 ### [1] Format Detector
 
-Detects whether the input is XML or JSON based on the first non-whitespace character. Selects the appropriate parser.
+V1 accepts **XML only** (`.bml`, domain extensions such as `.mbml`). Detects XML from the first non-whitespace character (`<`).
 
-### [2] XML Parser / JSON Parser
+JSON BML authoring is deferred (TBD). When implemented, the format detector will branch on `{` vs. `<`.
 
-Parses the raw source into an intermediate document tree. Browser-compatible parsers only.
+### [2] XML Parser
+
+Parses the raw XML source into an intermediate document tree. Browser-compatible parsers only.
+
+JSON parser: **not in V1.**
 
 ### [3] Root Type Resolver
 
-Reads the root element name (XML) or `type` field (JSON) to determine the document type:
+Reads the root element name to determine the document type:
 
 ```text
 <block>        → Block Definition
@@ -116,10 +121,10 @@ The resolved FQN is used throughout the rest of the pipeline.
 
 ### [5] BML → BOM Mapper
 
-Maps the parsed document tree to BOM objects using the mapping rule for the detected root type.
+Maps the parsed document tree to BOM objects using the mapping rule for the detected root type. Expression `${ }` spans are captured as `ExpressionValue { raw }` only — AST construction is deferred to stage [7]. See `13_bml_to_bom_mapping.md`.
 
 ```text
-XML attribute        →  BOM property value
+XML attribute        →  BOM property value (literal or ExpressionValue { raw })
 XML child element    →  BOM composition child instance or aggregation metadata
 ```
 
@@ -133,15 +138,15 @@ Errors at this stage reference the BML source position via the source map.
 
 ### [7] Expression Parser
 
-Parses all `${ }` expressions into **`ExpressionValue`** with typed **`ExpressionNode`** AST trees. See `10_expression_language.md` — Expression AST.
+Walks the stage-[5] `BomDocument` and enriches all `ExpressionValue` nodes: parses `raw` into typed **`ExpressionNode`** AST trees. See `10_expression_language.md` — Expression AST and `13_bml_to_bom_mapping.md` — Expression Parsing.
 
-Each result carries:
+Each enriched `ExpressionValue` carries:
 
 ```text
-- raw source text
-- root ExpressionNode (literals, operators, AccessExpression, calls, bindings, …)
-- resultTypeFqn (inferred against member context)
-- source position (line, column in the BML file)
+- raw source text           (from stage [5])
+- root ExpressionNode       (added in stage [7])
+- resultTypeFqn             (initial inference in stage [7])
+- source position           (from stage [5])
 ```
 
 Expressions are **not evaluated** at this stage.
@@ -414,6 +419,9 @@ Examples:
 
 ```text
 BML_UNKNOWN_PROPERTY   — property not defined on block type (custom property assumed)
+BML_UNKNOWN_DIRECTIVE  — unrecognized bml:* attribute name (always error)
+BML_DIRECTIVE_NOT_ALLOWED — known bml:* directive on disallowed element (always error)
+BML_CUSTOM_DATA_NOT_ALLOWED — data:* on non-Block element (always error)
 BML_DEPRECATED_TYPE    — referenced type is deprecated
 ```
 

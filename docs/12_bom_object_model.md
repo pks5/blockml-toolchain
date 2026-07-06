@@ -59,12 +59,18 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 ```text
 @blockml/core
   - All interfaces in this document
-  - TypeRegistry
+  - TypeRegistry + bootstrap API (called by CLI/host before validate)
   - resolveEffectiveMembers()
-  - Validation API (uses effective members + TypeRegistry)
+  - Validation API (stages [6–8] — uses populated TypeRegistry)
+
+@blockml/cli
+  - TypeRegistry bootstrap: discover + parse + register all project/library sources
+  - Then invoke validate/compile on target file(s)
 
 @blockml/parser
-  - BML → BomDocument mapper
+  - BML → BomDocument mapper (stage [5]) — **single file per invocation**
+  - parseExpression enrichment pass (stage [7]) — raw → AST
+  - Does NOT load external BML files or populate TypeRegistry
   - Does NOT merge inherited members
   - Does NOT expand directives
 
@@ -97,7 +103,7 @@ interface BomDocument {
 interface SourceInfo {
   /** Absolute or project-relative path */
   filePath: string
-  /** "xml" | "json" */
+  /** "xml" in V1. "json" deferred (TBD). */
   format: "xml" | "json"
   /** xmlns prefix → FQN package prefix (XML only) */
   namespaceBindings?: Record<string, string>
@@ -172,6 +178,79 @@ Sub-Blocks are **part of the same `BomDocument`** as their parent root block.
 
 ---
 
+## Type Descriptors
+
+Types in BOM are represented by **`TypeDescriptor`** — a structured, parse-time model. This applies to Capability `payloadType` / `returnType` and (future) Property types.
+
+### Anonymous struct = shorthand for inline class
+
+An anonymous Object payload type is **not** an untyped string. It is shorthand for an anonymous class with private typed fields:
+
+```text
+{ a: Float, b: Float }
+
+  ≡  (conceptually)
+
+class /*anonymous*/ {
+  private Float a;
+  private Float b;
+}
+```
+
+The BOM stores this as `AnonymousStructType` with **ordered fields** — field order defines positional call parameter order. Named and positional call syntax both map to the same struct instance at runtime.
+
+A single primitive (`Float`, `org.blockml.type.Integer`, …) is **not** wrapped — it is a `NamedTypeReference` directly (equivalent to a single-parameter method, not a one-field class).
+
+### `TypeDescriptor` union
+
+```typescript
+type TypeDescriptor =
+  | NamedTypeReference
+  | ArrayTypeDescriptor
+  | AnonymousStructType
+
+interface NamedTypeReference {
+  kind: "named"
+  /** Resolved FQN, e.g. org.blockml.type.Float or com.myDomain.ResizePayload */
+  fqn: string
+}
+
+interface ArrayTypeDescriptor {
+  kind: "array"
+  elementType: TypeDescriptor
+}
+
+interface AnonymousStructType {
+  kind: "anonymousStruct"
+  /** Ordered — declaration order = positional parameter order */
+  fields: StructField[]
+}
+
+interface StructField {
+  name: string
+  type: TypeDescriptor
+}
+```
+
+### BML surface syntax → `TypeDescriptor`
+
+Parsed from `payloadType` / `returnType` / `type` attribute strings at map time:
+
+```text
+Float                              → NamedTypeReference { fqn: "org.blockml.type.Float" }
+org.blockml.type.Float             → NamedTypeReference { fqn: "org.blockml.type.Float" }
+type:Size3D                        → NamedTypeReference { fqn: "com.machineblocks.type.Size3D" }
+Array<Integer>                     → ArrayTypeDescriptor { elementType: Named(Integer) }
+{ a: Float, b: Float }             → AnonymousStructType { fields: [a, b] }
+{ list: Array<Object>, index: Integer }  → nested descriptors
+```
+
+Unqualified primitive names resolve to `org.blockml.type.*`. Domain types require the `type:` prefix or full FQN. Parse failure → `BML_UNKNOWN_TYPE`.
+
+FunctionBlock Capabilities use `AnonymousStructType` for multi-parameter signatures; variadic built-ins (e.g. `#strings.concat`) use `ArrayTypeDescriptor` instead.
+
+---
+
 ## Member Definitions
 
 Properties, Aggregations, Associations, and Capabilities share one namespace per Block. All are stored as a discriminated union:
@@ -222,8 +301,8 @@ interface AssociationDefinition extends MemberDefinitionBase {
 interface CapabilityDefinition extends MemberDefinitionBase {
   kind: "capability"
   classFqn: string          // org.blockml.capability.Sync | AsyncInbound | AsyncOutbound
-  payloadTypeFqn: string    // or structured type descriptor
-  returnTypeFqn?: string
+  payloadType: TypeDescriptor
+  returnType?: TypeDescriptor
   visibility?: "public" | "hidden"
   implementation?: ImplementationBlock
 }
@@ -277,13 +356,13 @@ interface LiteralValue {
 
 interface ExpressionValue {
   kind: "expression"
-  /** Raw source inside ${ } */
+  /** Raw source inside ${ } — set at stage [5] */
   raw: string
-  /** Parsed AST — node types defined in 10_expression_language.md */
-  ast: ExpressionNode
-  /** Expected/inferred result type FQN */
-  resultTypeFqn: string
   source: SourceLocation
+  /** Parsed AST — filled at stage [7]. Required before semantic validation. */
+  ast?: ExpressionNode
+  /** Inferred result type — filled at stage [7]. Validated at stage [8]. */
+  resultTypeFqn?: string
 }
 
 interface AddressValue {
@@ -437,7 +516,7 @@ Auto-generated IDs are **not** stored in `BomDocument`. They exist only on the e
 
 | Case | Rule |
 |---|---|
-| Referenced by another instance (`blockId`, `placeId`, registry, …) | **Explicit `id` required** (literal) — `BML_MISSING_ID` if absent |
+| Referenced by another instance (`blockId`, `placeId`, …) | **Explicit `id` required** (literal) — `BML_MISSING_ID` if absent |
 | Element with `bml:each` | **Explicit `id` required** (literal or Expression) — no auto-ID |
 | Static anonymous `_parts` child, not referenced | Auto-ID after expansion (deterministic hash) |
 | FQN as identity fallback | **Forbidden** |
@@ -634,14 +713,23 @@ Every `BlockDefinition`, `BlockInstance`, `MemberDefinition`, and `ExpressionVal
 
 ## Type Registry
 
-The Type Registry is **not** part of `BomDocument`. It is a runtime service in `@blockml/core`, populated from:
+The Type Registry is **not** part of `BomDocument`. It is a runtime service in `@blockml/core`, populated **before validation** by the compile orchestrator (`@blockml/cli` or host application).
+
+The parser (`@blockml/parser`) is **single-file scoped** — it does not load or resolve external BML files. External block references are stored as `typeFqn` + `version` on `BlockInstance`; resolution happens at validate time against a bootstrapped registry. See `13_bml_to_bom_mapping.md` — Cross-File Resolution.
+
+### Bootstrap sources
 
 ```text
-- Parsed BlockDefinitions (all loaded `.bml` / domain extension files)
-- Domain packages (09_mbom_properties.yml native members on com.machineblocks.core.Block)
-- Built-in ServiceBlock definitions (@blockml/core-services)
-- Enum / type schemas (domain XSD)
+1. Built-in ServiceBlocks     — @blockml/core-services (org.blockml.service.*)
+2. Domain native members      — 09_mbom_properties.yml on com.machineblocks.core.Block
+3. Project srcDir scan        — all *.bml / configured extensions in bom.config.json
+4. Library manifests          — library.xml <blocks> / <presets> refs (optional)
+5. Declared dependencies      — library.xml <dependencies> + bom.config.json paths
 ```
+
+Each discovered file is parsed independently (stages [5–7]) and registered via `registerBlockDefinition(doc)`.
+
+Without `library.xml`, all BML files in a directory are registered. With `library.xml`, the manifest explicitly lists public blocks and presets.
 
 ```typescript
 interface TypeRegistry {
@@ -728,11 +816,11 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 | Topic | Document |
 |---|---|
 | Expression AST node union | `10_expression_language.md` — Expression AST |
-| BML → BOM mapping algorithm | `13_bml_to_bom_mapping.md` (planned) |
+| BML → BOM mapping algorithm | `13_bml_to_bom_mapping.md` |
 | MBOM native property list | `09_mbom_properties.yml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |
 | ManagedObject runtime API | `08_managed_object.md` (optional pattern) |
-| Built-in `#math` / `#strings` capabilities | `@blockml/core-services` (pending) |
+| Built-in `#math` / `#strings` capabilities | `@blockml/core-services` |
 
 ---
 
@@ -746,6 +834,10 @@ BML_MISSING_ID                — referenced instance or bml:each element lacks 
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId does not match any explicit id in target aggregation
 BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members
 BML_UNKNOWN_TYPE              — typeFqn cannot be resolved
+BML_UNKNOWN_PROPERTY          — instance attribute not in effective members (warning)
+BML_UNKNOWN_DIRECTIVE         — unrecognized bml:* attribute (error)
+BML_DIRECTIVE_NOT_ALLOWED     — bml:* on disallowed element (error)
+BML_CUSTOM_DATA_NOT_ALLOWED   — data:* on non-Block element (error)
 BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent
 BML_PROPERTY_CYCLE            — circular defaultValue dependencies
 BML_PRESET_CYCLE              — circular basePresetRefs

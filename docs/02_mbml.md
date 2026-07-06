@@ -33,7 +33,7 @@ New projects outside the MachineBlocks library should use **`.bml` only**.
 
 The compiler discovers source files via `bmlExtensions` in `bom.config.json` (default: `[".bml"]`; MachineBlocks: `[".bml", ".mbml"]`).
 
-The root XML/JSON element determines the document type — not the filename suffix.
+The root XML element determines the document type — not the filename suffix. (JSON `type` field: deferred TBD.)
 
 ---
 
@@ -65,19 +65,9 @@ Schema validation   XSD with full namespace awareness
                     → JSON Schema cannot match this expressiveness
 ```
 
-**JSON is supported for simple cases only:**
+**JSON BML authoring is deferred (TBD — not V1).** JSON may eventually cover a very restricted subset; intensive namespace usage makes full parity unlikely. See § JSON Format (Deferred) below.
 
-```text
-✓  <blockPresets>    — flat property sets, no directives needed
-✓  Simple <block>    — no Sub-Blocks, no bml: directives, no Functions
-✗  Composite blocks  — bml: directives are not representable in JSON
-✗  Sub-Blocks        — nesting and FQN conventions require XML structure
-✗  Functions         — CDATA has no JSON equivalent
-```
-
-JSON support for simple cases is pragmatic — it may be useful for tool-generated or API-produced content. It is not a design goal to make JSON equivalent to XML. Any Block definition that uses the full power of BML must be authored in XML.
-
-The document type is determined by the root element (XML) or the `type` field (JSON) — not by the file extension or path.
+The document type is determined by the root element (XML). JSON `type` field mapping is not implemented in V1.
 
 ---
 
@@ -602,7 +592,7 @@ Member values on child instances may be literals or Expressions.
 
 ### Expressions in Compositions
 
-> **V1 scope:** `@bean` calls, Model bindings (`@model:`), and Capability linking are fully specified below but **not implemented in V1**. The V1 compiler supports property references, `#built-in` calls, `bml:` directives, and the registry.
+> **V1 scope:** `@bean` calls, Model bindings (`@model:`), and Capability linking are fully specified below but **not implemented in V1**. The V1 compiler supports property references, `#built-in` calls, and `bml:` directives (including `bml:with` for local scope).
 
 Property values:
 
@@ -656,19 +646,18 @@ Capability values:
 
 See `00_bom_core.md` — Expression System for the full specification.
 
-### Registry
+### Sharing Values Between Siblings
 
-Sibling child Blocks within the same Composition can share values via the registry:
+Sibling child Blocks within the same Composition share computed values via **`bml:with`** on a common ancestor — typically `<composition>` or a wrapping `<bml:block>`:
 
 ```xml
-<!-- Child 1 writes -->
-<SomeBlock registry.totalHeight="${ size[2] }" ... />
-
-<!-- Child 2 reads -->
-<OtherBlock size="${ [1, 1, registry.totalHeight - 1] }" ... />
+<composition bml:with="totalHeight = ${ size[2] }">
+  <SomeBlock ... />
+  <OtherBlock size="${ [1, 1, totalHeight - 1] }" ... />
+</composition>
 ```
 
-Registry scope is per Composition.
+Variables from `bml:with` are visible to the element and all descendants. There is no separate registry mechanism.
 
 ---
 
@@ -851,6 +840,12 @@ Defines local variables within the scope of an element and its children. Variabl
 <bml:block bml:with="w = ${ size[0] }, h = ${ size[2] - 1 }">
   <core:NativeBlock size="${ [w, size[1], h] }" />
 </bml:block>
+
+<!-- Share values between sibling instances (replaces former registry pattern) -->
+<composition bml:with="totalHeight = ${ size[2] }">
+  <SomeBlock ... />
+  <OtherBlock size="${ [1, 1, totalHeight - 1] }" ... />
+</composition>
 ```
 
 **Allowed on:**
@@ -1471,11 +1466,23 @@ Without `library.xml`: all BML source files in the directory are public (`.bml` 
 
 ---
 
-## JSON Format
+## JSON Format (Deferred — TBD)
 
-JSON is supported for simple Block definitions and Presets only. It is not semantically equivalent to XML — BML Directives (`bml:`), Sub-Blocks, and Functions cannot be represented in JSON. The document type is determined by the `type` field.
+> **Not in V1.** The V1 compiler parser accepts XML only. This section sketches a possible future subset — specification and implementation are **TBD**.
 
-Use JSON only when the Block has no Composition directives, no Sub-Blocks, and no Functions. For anything more complex, use XML.
+JSON as a BML authoring format faces fundamental constraints from BlockML's namespace model:
+
+```text
+Namespaces          → no element-name types (bricks:StandardBrick); explicit type fields only
+bml:* directives    → no attribute-namespace mechanism
+data:* customData   → no equivalent to UI5-style namespaced attributes
+Sub-Blocks          → awkward nesting; FQN derivation unclear
+Functions (CDATA)   → no inline SCAD/TS bodies
+```
+
+A future JSON subset might cover flat `<blockPresets>` or simple leaf `<block>` definitions without composition directives — if a mapping can be specified without compromising the BOM model. **No commitment until the mapping is formally defined.**
+
+The examples below are **illustrative drafts only** — not valid V1 input.
 
 ### Block Definition (JSON) — Simple Blocks Only
 
@@ -1576,7 +1583,7 @@ The BML→BOM mapping is defined once per root type and applies uniformly to all
 <device>       → Device mapping rule (external package)
 ```
 
-Mapping rules are not hardcoded in the parser — they are registered per root type.
+Mapping rules are not hardcoded in the parser — they are registered per root type. The algorithmic rules are specified in `13_bml_to_bom_mapping.md`.
 
 There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping rule handles them identically to any other Block. The SCAD Renderer detects `baseType = com.machineblocks.core.Set` and switches to STEPS-based output.
 

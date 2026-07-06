@@ -344,7 +344,7 @@ Property `defaultValue` may be a static literal or an Expression. When an Expres
 ✗  @bean references
 ✗  @model bindings
 ✗  bml: loop variables
-✗  registry
+✗  bml:with variables
 ✗  own Capabilities
 ```
 
@@ -724,19 +724,6 @@ Defines local variables visible only within the element and its descendants. Var
 
 ---
 
-## Registry
-
-A shared registry is available within a Composition for sibling child Blocks to exchange values:
-
-```text
-Write:  registry.totalHeight = value
-Read:   ${ registry.totalHeight }
-```
-
-Registry scope is per Composition. Initialized on entry, not visible outside.
-
----
-
 ## Scope Rules
 
 ```text
@@ -763,9 +750,10 @@ bml:each loop variable:
   — visible only within the looped element and its children
   — shadows outer variables of the same name
 
-Registry:
-  — per Composition only
-  — not visible outside
+bml:with variable:
+  — visible on the element and all descendants
+  — use on <composition> or <bml:block> to share values between sibling instances
+  — shadows outer variables of the same name
 
 defaultValue expressions:
   — only own Block Properties and #built-ins allowed
@@ -777,7 +765,7 @@ defaultValue expressions:
 
 ## Expression AST
 
-The Expression Parser (compiler stage [7]) converts each `${ }` span into an **`ExpressionValue`** on the BOM:
+The Expression Parser (compiler stage [7]) enriches each stage-[5] `ExpressionValue` — parsing `raw` into an AST on the BOM:
 
 ```typescript
 interface ExpressionValue {
@@ -853,7 +841,6 @@ type ExpressionNode =
   | PropertyReference
   | LoopVariableReference
   | WithVariableReference
-  | RegistryRead
   // Calls and bindings
   | BuiltinCall
   | BeanSyncCall
@@ -985,7 +972,7 @@ EBNF `postfix ::= primary ( '[' expression ']' | '.' identifier )*` becomes a si
 interface AccessExpression extends ExpressionNodeBase {
   kind: "access"
   /** Primary at the start of the chain */
-  root: PropertyReference | LoopVariableReference | WithVariableReference | RegistryRead | GroupExpression
+  root: PropertyReference | LoopVariableReference | WithVariableReference | GroupExpression
   accessors: AccessStep[]
 }
 
@@ -1043,12 +1030,6 @@ interface WithVariableReference extends ExpressionNodeBase {
   name: string
   /** From bml:with on ancestor element */
 }
-
-interface RegistryRead extends ExpressionNodeBase {
-  kind: "registryRead"
-  name: string
-  resultTypeFqn: string   /* inferred from prior registry write in same composition, else error */
-}
 ```
 
 **Scope resolution order** for a bare `identifier`:
@@ -1056,12 +1037,11 @@ interface RegistryRead extends ExpressionNodeBase {
 ```text
 1. bml:with variable on ancestor chain      → WithVariableReference
 2. bml:each loop variable on ancestor chain → LoopVariableReference
-3. registry.<name> prefix (see RegistryRead) → RegistryRead
-4. current Block member namespace           → PropertyReference
-5. not found                                → BML_EXPR_UNKNOWN_PROPERTY
+3. current Block member namespace           → PropertyReference
+4. not found                                → BML_EXPR_UNKNOWN_PROPERTY
 ```
 
-`defaultValue` expressions allow only steps 4 (properties) and `#built-in` calls — no loop/with/registry nodes.
+`defaultValue` expressions allow only step 3 (properties) and `#built-in` calls — no loop/with nodes.
 
 ---
 
@@ -1132,20 +1112,6 @@ myInbound                 → OwnCapabilityLink OR PropertyReference
 
 ---
 
-### Registry Writes (Not AST)
-
-Registry **writes** are not expression nodes. They use a dedicated attribute name on composition instances:
-
-```xml
-<SomeBlock registry.totalHeight="${ size[2] }" ... />
-```
-
-The attribute value is a normal **`ExpressionValue`** (typically a `PropertyReference` or operator tree). The BOM mapper stores registry assignments separately on the composition instance — outside `ExpressionNode`.
-
-Registry **reads** inside `${ }` use **`RegistryRead`**.
-
----
-
 ### AST Construction from EBNF
 
 Mapping from grammar to tree (parser implementation guide):
@@ -1169,7 +1135,7 @@ primary         → literal | reference | call | binding | GroupExpression
 | Stage | Responsibility |
 |---|---|
 | **Expression Parser** | Build AST; literal types; operator structure; call/binding shape |
-| **Semantic Validator** | `resultTypeFqn` vs member type; resolve PropertyReference; bean/builtin existence; link/call legality; registry read/write pairing; V1 deferred features |
+| **Semantic Validator** | `resultTypeFqn` vs member type; resolve PropertyReference; bean/builtin existence; link/call legality; with/each scope; V1 deferred features |
 | **Renderer** | Serialize AST → target syntax; emit helpers for processor-implemented built-ins |
 
 The validator **does not mutate** AST nodes — it attaches diagnostics. Optional: a separate `ValidatedExpression` wrapper with resolved types if needed; V1 may enrich nodes in-place via optional fields (`memberTypeFqn?`).
@@ -1185,7 +1151,8 @@ The validator **does not mutate** AST nodes — it attaches diagnostics. Optiona
   - validateExpression(ast, context): Diagnostic[]
 
 @blockml/parser
-  - parseExpression(raw: string, context: ParseContext): ExpressionValue
+  - Stage [5]: capture ExpressionValue { raw } during BML → BOM mapping
+  - Stage [7]: parseExpression(raw, context) → fills ast + resultTypeFqn
   - Does NOT evaluate expressions
 
 @blockml/compiler / render targets
@@ -1262,8 +1229,8 @@ The parser distinguishes call vs. link by the presence or absence of parentheses
 ## Error Cases
 
 ```text
-BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in scope (member, loop, with, registry)
-BML_EXPR_UNKNOWN_REGISTRY      — registry read with no matching write in composition
+BML_EXPR_SYNTAX_ERROR          — raw expression text fails to parse (stage [7])
+BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in scope (member, loop, with)
 BML_EXPR_UNKNOWN_BEAN          — @bean not declared as Aggregation
 BML_EXPR_UNKNOWN_BUILTIN       — #name not a registered built-in
 BML_EXPR_TYPE_MISMATCH         — expression result type incompatible with member type
@@ -1296,7 +1263,6 @@ Built-ins:       #math.min/max/abs/floor/ceil/round/round(x,n)/pow/sqrt/clamp
                  #lists.size/get/first/last/sequence
 bml: directives: bml:each (numeric + collection), bml:if, bml:unless,
                  bml:block, bml:with
-Registry:        read + write within Composition
 FunctionBlock:   Sub-Blocks with language="scad" implementations (specified;
                  callable via @bean — deferred in V1)
 ```

@@ -93,12 +93,12 @@ If `bom.config.json` already exists, the command exits with an error without mod
 Scaffolds a new block definition file with the required structure.
 
 ```bash
-bom new block <fqn> [--format bml|json]
+bom new block <fqn> [--format bml]   # json deferred (TBD — not V1)
 ```
 
 ```text
 <fqn>       — fully qualified name, e.g. com.martianmicro.anyclosure.Wall
---format    — serialization format: bml (XML, default) or json
+--format    — serialization format: bml (XML, default). JSON deferred (TBD — not V1)
 ```
 
 Output file location follows the FQN → path convention:
@@ -145,7 +145,7 @@ bom compile --all <target>
 ```
 
 ```text
-<file>    — path to a .bml, domain-specific extension (e.g. .mbml), or .json file
+<file>    — path to a .bml file (or domain extension, e.g. .mbml). JSON BML deferred (TBD)
 <target>  — registered target name, e.g. "machineblocks-v3-scad"
 --all     — compile all source files in srcDir
 --src     — override srcDir (default: from bom.config.json)

@@ -344,7 +344,7 @@ Expression: ${ [1, 1, 1] }   →   SCAD: [1, 1, 1]
 
 ### Dynamic Rendering
 
-If an expression references block properties or the registry, the renderer emits a SCAD expression:
+If an expression references block properties or `bml:with` variables, the renderer emits a SCAD expression:
 
 ```text
 Expression: ${ [size[0], size[1], size[2] - 1] }
@@ -359,9 +359,9 @@ SCAD:       max(size[2] - 1, 0)
 ```text
 myProperty          →  SCAD local variable <name>
 myProperty.x        →  SCAD: <name>[0] or <name>.x depending on type
+withVariable        →  SCAD local variable (from bml:with scope)
 #math.min(a, b)     →  SCAD: min(a, b)
 #math.max(a, b)     →  SCAD: max(a, b)
-registry.<name>     →  SCAD local variable registry_<name>  (to be defined)
 ```
 
 `@bean` expressions (user-defined ServiceBlock calls and model bindings) are resolved at compile time where possible. Runtime behavior for `@bean` expressions in SCAD output is to be defined.

@@ -115,7 +115,7 @@ Examples:
 There is **no FQN fallback** — a Block's type FQN is never used as instance identity.
 
 **Explicit IDs** are authored in BML via the `id` system property. Required when:
-- another instance references this one (`blockId`, `placeId`, registry, …)
+- another instance references this one (`blockId`, `placeId`, …)
 - the element carries `bml:each` (literal or Expression — auto-ID is not available in loops)
 
 **Auto-generated IDs** are assigned **after directive expansion** for static, unreferenced children that omit `id`. They are deterministic 6-hex hashes:
@@ -282,7 +282,7 @@ A `defaultValue` may be a static literal or an Expression. Expressions in `defau
 ✗  @bean references
 ✗  @model bindings
 ✗  bml: directives
-✗  registry
+✗  bml:with variables
 ```
 
 **Cycle detection:** The compiler performs a topological sort of all Property dependencies before resolving defaults. If Property A's `defaultValue` references Property B and B's `defaultValue` references A — directly or transitively — a `BML_PROPERTY_CYCLE` error is emitted and compilation stops.
@@ -492,19 +492,20 @@ returnType     — required; declared return type of the synchronous call
 Every Capability declares a `payloadType`. A Capability is a **messaging concept** — it has a payload, not a parameter list. The payload is an abstract message; its structure is irrelevant to the transport layer.
 
 ```text
-org.blockml.type.Integer          — primitive
+org.blockml.type.Integer          — primitive (NamedTypeReference)
 org.blockml.type.String           — primitive
-{ a: Float, b: Float }            — anonymous Object with named keys
-com.myDomain.MyClass              — typed Object (named fields)
-Array<org.blockml.type.Integer>   — Array of primitives (variable length)
-Array<com.myDomain.MyClass>       — Array of objects
+{ a: Float, b: Float }            — anonymous struct (AnonymousStructType)
+com.myDomain.MyClass              — named type (NamedTypeReference)
+Array<org.blockml.type.Integer>   — array type (ArrayTypeDescriptor)
 ```
+
+See `12_bom_object_model.md` — Type Descriptors for the formal BOM representation.
 
 Unqualified type names are resolved against the domain's default type namespace (determined by the Block's `baseType`).
 
 ### Object Payload as Function Signature
 
-When a `FunctionBlock` Capability uses a structured Object as `payloadType`, the Object's keys serve as the function signature:
+When a `FunctionBlock` Capability uses a structured Object as `payloadType`, the Object defines an **anonymous struct type** — conceptually an inline class with private typed fields. Field names are parameter names; field order defines positional call order:
 
 ```text
 payloadType: { a: Float, b: Float }
@@ -1102,24 +1103,13 @@ ${ myProperty > 2 ? "groove" : "standard" }
 
 Operators: arithmetic `+  -  *  /  %`, comparison `>  <  ==  !=  >=  <=`.
 
-### Registry
-
-A shared registry is available within a Composition for sibling child Blocks to exchange values:
-
-```text
-Write:  registry.totalHeight = value
-Read:   registry.totalHeight
-```
-
-Registry scope is per Composition. It is initialized on entry and not accessible outside.
-
 ### Scope Rules
 
 ```text
 - Property references: current Block instance only (no prefix)
 - No access to parent, grandparent, or sibling Block properties
 - Direction is always parent → child (top-down only)
-- Registry scope is per Composition
+- bml:with variables: visible on the element and all descendants (use on <composition> or <bml:block> to share values between siblings)
 - @bean references: only beans declared as Aggregations on the current Block
 - #built-in references: always available (inherited via baseType)
 - Model binding context: inherited from parent Aggregation

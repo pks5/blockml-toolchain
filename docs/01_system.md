@@ -17,7 +17,7 @@ The architecture is designed to accommodate domain BOMs and Render Targets that 
 The BOM Compiler follows a layered architecture:
 
 ```text
-BML Source (.bml / .json)        content-type: bml
+BML Source (.bml / .mbml)         content-type: bml   (V1: XML only)
   ↓ parse + validate
 BOM (Block Object Model)        domain-agnostic, typed
   ↓ compile
@@ -26,7 +26,7 @@ Render Target                   domain-specific
 Target Output (SCAD, KiCad, JSX, ...)
 ```
 
-**BML** (Block Markup Language) is the universal declarative authoring format. Standard file extension **`.bml`**. Content-type `bml`. XML is the reference format; JSON is equally supported. Domains may register additional extensions — MachineBlocks still uses **`.mbml`** for legacy library content.
+**BML** (Block Markup Language) is the universal declarative authoring format. Standard file extension **`.bml`**. Content-type `bml`. **XML is the V1 reference format.** JSON as an alternate BML authoring serialization is **deferred (TBD — not V1)** due to namespace and directive constraints. Domains may register additional extensions — MachineBlocks still uses **`.mbml`** for legacy library content.
 
 **BOM** (Block Object Model) is the canonical, typed, domain-agnostic object model. It is the internal representation of all block data. BOM is renderer-independent — it has no knowledge of any render target, syntax, or parameters. BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific types and properties.
 
@@ -292,9 +292,10 @@ The universal BML parser and BOM builder. Browser and Node compatible.
 
 ```text
 - XML parser (browser-compatible)
-- JSON parser
+- XML parser (V1)
+- JSON BML parser — deferred (TBD, not V1)
 - Namespace resolver (xmlns → FQN)
-- XSD / JSON Schema loader
+- XSD loader (JSON Schema for BML authoring — deferred with JSON format)
 - BML → BOM mapper (per root type, extensible)
 - Diagnostics and error reporting
 - No render output
@@ -316,7 +317,7 @@ Facade and Target Registry. Browser and Node compatible.
 Node.js-only CLI tools.
 
 ```text
-- bom new block <fqn> [--format bml|json]
+- bom new block <fqn> [--format bml]   # JSON deferred (TBD)
 - bom compile <file> <target>
 - bom compile --all <target>
 - bom validate <file>
