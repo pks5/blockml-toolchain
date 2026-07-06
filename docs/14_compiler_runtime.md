@@ -28,6 +28,7 @@ For pipeline stages see `06_compiler.md`.
 | **RenderContext (C1)** | `RenderSession` (immutable) + forked `RenderContext` per render node; `PropertyResolver` on-demand; internal API |
 | **Thumbnails (C6)** | CLI-only (OpenSCAD + Sharp); not in `RenderOutput`; compiler produces `.scad` + `.json` prerequisites |
 | **Incremental build (C5)** | CLI-only cache (`.bom-cache/`); SHA-256 canonical input hash; skip before compile; dedup by output path |
+| **SCAD settings format** | V1: pseudo-map `[["key", val], …]`; renderer uses SettingsBundle + pluggable SettingsEmitter; future: OpenSCAD `object()` |
 
 ---
 
@@ -812,3 +813,4 @@ Phase C complete.
 | Wrapper + composition render | `05_scad_renderer.md` |
 | Incremental build (C5) | `14_compiler_runtime.md` |
 | CLI compile outputs | `07_cli.md` |
+| Monorepo / build / test | `15_dev_setup.md` |

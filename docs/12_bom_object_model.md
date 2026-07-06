@@ -308,7 +308,7 @@ interface CapabilityDefinition extends MemberDefinitionBase {
 }
 
 interface ImplementationBlock {
-  language: string          // "scad" | "typescript"
+  typeFqn: string          // org.blockml.language.TypeScript | org.blockml.language.OpenSCAD
   source: string            // CDATA body
   sourceLocation?: SourceLocation
 }
@@ -763,7 +763,7 @@ BomDocument
       - AggregationDefinition utils → typeFqn: ...Calibrator.Utils, beanName: "utils"
 
     subBlocks:
-      - BlockDefinition Utils (FunctionBlock, capabilities with scad implementation)
+      - BlockDefinition Utils (FunctionBlock, capabilities with OpenSCAD implementation)
       - BlockDefinition Base (composition with bml:each on instances, dynamic id via id property)
       - BlockDefinition StudDiameter
       - BlockDefinition BaseWallThickness
@@ -817,7 +817,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 |---|---|
 | Expression AST node union | `10_expression_language.md` — Expression AST |
 | BML → BOM mapping algorithm | `13_bml_to_bom_mapping.md` |
-| Compiler runtime (Phase C complete — C1–C6) | `14_compiler_runtime.md` |
+| Development setup (Phase D) | `15_dev_setup.md` |
 | MBOM native property list | `09_mbom_properties.yml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |
 | ManagedObject runtime API | `08_managed_object.md` (optional pattern) |

@@ -461,9 +461,9 @@ BML_NO_TARGET                 — no registered target supports the block's base
 BML_UNKNOWN_TARGET            — requested target name not registered
 BML_FUNCTION_MISSING_MAIN     — no function named after the Capability found in CDATA
 BML_FUNCTION_DUPLICATE_MAIN   — more than one function matches the Capability name
-BML_FUNCTION_UNSUPPORTED_LANG — language attribute not "scad" or "typescript"
+BML_IMPLEMENTATION_UNKNOWN_TYPE — <implementation type="..."> is not a known org.blockml.language.* FQN
 BML_FUNCTION_NO_RUNTIME_IMPL  — Sync Capability called with non-literal args but no runtime impl
-BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation> language not supported by baseType
+BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation type="..."> not listed in baseType supportedImplementationTypes
 ```
 
 ### Warnings
@@ -484,11 +484,13 @@ BML_DEPRECATED_TYPE    — referenced type is deprecated
 
 ## FunctionBlock Transpilation
 
-A `FunctionBlock` Sub-Block binds target-language implementations to Sync Capabilities via `<implementation language="...">`. Two languages are supported in V1:
+A `FunctionBlock` Sub-Block binds target-language implementations to Sync Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs.
 
-**`language="scad"`** — SCAD function(s) written directly in the BML. The compiler prefixes all function names with the block FQN.
+Two implementation types are supported in V1:
 
-**`language="typescript"`** — TypeScript arrow function. Compile-time execution only (V1): when all arguments at the call site are literals, the compiler executes the TS function in Node.js and emits the result as a literal. Runtime transpilation to SCAD is deferred (requires LLM or dedicated transpiler).
+**`type="org.blockml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. The compiler prefixes all function names with the block FQN.
+
+**`type="org.blockml.language.TypeScript"`** — TypeScript arrow function. Compile-time execution only (V1): when all arguments at the call site are literals, the compiler executes the TS function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred (requires LLM or dedicated transpiler).
 
 ### SCAD Implementation Rules
 
@@ -529,7 +531,7 @@ function mb__...__Utils__formatValue(x) =
             type="org.blockml.capability.Sync"
             payloadType="org.blockml.type.Float"
             returnType="org.blockml.type.String">
-  <implementation language="scad"><![CDATA[
+  <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
 // Main function — name matches capability name
 function formatValue(x) =
     replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
@@ -555,7 +557,7 @@ function strSuffix(s, k, i = 0) =
 ```text
 BML_FUNCTION_MISSING_MAIN    — no function named after the Capability found in CDATA
 BML_FUNCTION_DUPLICATE_MAIN  — more than one function matches the Capability name
-BML_FUNCTION_UNSUPPORTED_LANG — language attribute not "scad" or "typescript"
+BML_IMPLEMENTATION_UNKNOWN_TYPE — type attribute is not a known org.blockml.language.* FQN
 ```
 
 ### Built-in Services — No Processor Needed
@@ -582,7 +584,7 @@ The ScadBlockProcessor automatically adds `use` imports for each service file th
 
 ### Future: LLM-Based Implementation
 
-In V1, a FunctionBlock without a matching `<implementation language="scad">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
+In V1, a FunctionBlock without a matching `<implementation type="org.blockml.language.OpenSCAD">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
 
 The natural next step is the LLM Engine: given the Capability signature (name, payloadType, returnType) and its `<documentation>`, the LLM generates a correct target-language implementation. No `<implementation>` block needed:
 
@@ -600,7 +602,7 @@ The natural next step is the LLM Engine: given the Capability signature (name, p
 </capability>
 ```
 
-This also applies to `language="typescript"` → target transpilation: TS → SCAD, TS → Python, TS → Java are all LLM tasks. The `<implementation language="typescript">` then becomes the LLM's input spec rather than a directly executable artifact.
+This also applies to `org.blockml.language.TypeScript` → target transpilation: TS → OpenSCAD, TS → Python, TS → Java are all LLM tasks. The `<implementation type="org.blockml.language.TypeScript">` then becomes the LLM's input spec rather than a directly executable artifact.
 
 The Capability documentation is therefore not just for humans — it is a primary input for the LLM compiler. Well-written documentation directly improves generated implementation quality.
 

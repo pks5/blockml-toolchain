@@ -530,7 +530,7 @@ Composition:    allowed — _parts children become mb_block() children
 Final:          baseType = com.machineblocks.core.NativeBlock → BML_FINAL_BASE_TYPE
 ```
 
-The ScadBlockProcessor renders `NativeBlock` directly as `mb_block()` with all declared settings.
+The ScadBlockProcessor renders `NativeBlock` directly as `mb_block()` with all declared settings. V1 emits settings as pseudo-map `[["key", value], …]` — see `05_scad_renderer.md` — Settings Format.
 
 **All leaf geometry in compositions renders as `mb_block()`.** Domain-typed composition children (e.g. `bricks:StandardBrick`) are **lowered** to the same `mb_block()` settings — they are not rendered via typed block modules or `use` imports of dependency SCAD files.
 
@@ -560,14 +560,14 @@ com.machineblocks.core.Set:
                          org.blockml.service.FunctionBlock]
 ```
 
-### supportedImplementationLanguages
+### supportedImplementationTypes
 
 ```text
 com.machineblocks.core.Block:
-  supportedImplementationLanguages: ["scad"]
+  supportedImplementationTypes: [org.blockml.language.OpenSCAD]
 
 org.blockml.service.FunctionBlock:
-  supportedImplementationLanguages: ["scad", "typescript"]
+  supportedImplementationTypes: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
 ```
 
 ### Validation

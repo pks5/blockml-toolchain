@@ -82,6 +82,8 @@ This is analogous to `tsc` or `webpack` — the tool is global, content projects
 
 ## Monorepo Structure
 
+See `15_dev_setup.md` for workspace configuration, build scripts, and implementation order.
+
 ```text
 bom-compiler/
   packages/
@@ -181,7 +183,7 @@ All Capabilities use structured Object `payloadType` with named keys — enablin
 #numbers.formatDecimal → payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
 ```
 
-Each Capability has a TypeScript implementation in `<implementation language="typescript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
+Each Capability has a TypeScript implementation in `<implementation type="org.blockml.language.TypeScript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
 
 ### Delegate-Only Targets
 
@@ -587,6 +589,9 @@ configProfile < blockPreset < inline property
 06_compiler.md         — compiler pipeline, Target Registry, error handling, testing strategy
 07_cli.md              — CLI commands, configuration, watch mode, scaffolding
 12_bom_object_model.md — formal BOM data structures (BomDocument, BlockDefinition, CompositionNode)
+13_bml_to_bom_mapping.md — BML → BOM algorithm (parser implementation contract)
+14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
+15_dev_setup.md        — monorepo tooling, build, test, IDE setup
 09_mbom_properties.yml — MBOM native property definitions (authoritative)
 
 domains/machineblocks/runtimes/scad-lib/

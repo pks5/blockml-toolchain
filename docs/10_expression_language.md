@@ -304,7 +304,7 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
                 type="org.blockml.capability.Sync"
                 payloadType="org.blockml.type.Float"
                 returnType="org.blockml.type.String">
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): string => {
             const rounded = Math.round(x * 10) / 10
             return String(rounded)
@@ -317,7 +317,7 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
 </block>
 ```
 
-The `<implementation>` element is a child of `<capability>`. The `language` attribute identifies the implementation language (`"typescript"` is the only defined value in V1). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
+The `<implementation>` element is a child of `<capability>`. The **`type`** attribute identifies the implementation language as an `org.blockml.language.*` FQN (V1: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
 
 FunctionBlock calls follow the same syntax as regular `@bean` Sync Capability calls — there is no special syntax. The FunctionBlock pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
 
@@ -1263,7 +1263,7 @@ Built-ins:       #math.min/max/abs/floor/ceil/round/round(x,n)/pow/sqrt/clamp
                  #lists.size/get/first/last/sequence
 bml: directives: bml:each (numeric + collection), bml:if, bml:unless,
                  bml:block, bml:with
-FunctionBlock:   Sub-Blocks with language="scad" implementations (specified;
+FunctionBlock:   Sub-Blocks with type="org.blockml.language.OpenSCAD" implementations (specified;
                  callable via @bean — deferred in V1)
 ```
 

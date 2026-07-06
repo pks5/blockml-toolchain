@@ -33,7 +33,7 @@
           #bools.isTrue(true)   → true
           #bools.isTrue(1)      → false
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: boolean): boolean => x === true
       ]]></implementation>
     </capability>
@@ -49,7 +49,7 @@
           #bools.isFalse(false)  → true
           #bools.isFalse(0)      → false
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: boolean): boolean => x === false
       ]]></implementation>
     </capability>

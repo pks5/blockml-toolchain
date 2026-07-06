@@ -530,9 +530,14 @@ The serialization rules are configurable and defined per property in `09_mbom_pr
 1. Read MBOM canonical value
 2. Validate type
 3. Normalize to renderer-neutral form
-4. Choose shortest valid SCAD representation
-5. Emit SCAD settings array entry: ["paramName", value]
+4. Choose shortest valid SCAD representation (expression text per value)
+5. Add to SettingsBundle: scadName → SCAD expression
+6. SettingsEmitter emits bundle:
+     V1 (pseudo-map):  ["paramName", value]  pairs in an array
+     Future (object):  object(paramName = value, …)
 ```
+
+See `05_scad_renderer.md` — Settings Format for the pseudo-map vs. OpenSCAD `object()` roadmap.
 
 ## Serialization Examples
 
@@ -540,7 +545,9 @@ The serialization rules are configurable and defined per property in `09_mbom_pr
 
 ```text
 MBOM: { x:4, y:2, z:3 }
-SCAD: ["size", [4, 2, 3]]
+SettingsBundle: size → [4, 2, 3]
+V1 SCAD: ["size", [4, 2, 3]]
+Future:  object(size = [4, 2, 3])
 ```
 
 ### AxisXYZ — holeXYZDiameter

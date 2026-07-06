@@ -40,9 +40,13 @@ resolution_order:
 
 scad_mapping_notes:
   description: |
-    The scad_name field specifies the SCAD parameter name (settings array key).
+    The scad_name field specifies the SCAD parameter name (settings key).
     In most cases it is identical to the MBOM property name (camelCase).
     Where they differ, scad_name is set explicitly.
+
+    V1: settings are emitted as OpenSCAD pseudo-maps — arrays of [key, value] pairs.
+    Future: native object(key = value, …) when OpenSCAD object support stabilizes.
+    See 05_scad_renderer.md — Settings Format.
 
     The serializer field references the serialization rule from 04_types.md.
     Assembly patterns (mb_assembly_groove, mb_assembly_offset, etc.) are

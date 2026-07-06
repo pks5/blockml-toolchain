@@ -65,6 +65,7 @@ Class:    PascalCase
 ```text
 org.blockml.core.*         ✓
 org.blockml.type.*         ✓   (not .types)
+org.blockml.language.*     ✓   — implementation language types (TypeScript, OpenSCAD, …)
 org.blockml.service.*      ✓   (not .services)
 org.blockml.capability.*   ✓   (not .capabilities)
 com.machineblocks.type.*   ✓
@@ -89,6 +90,8 @@ Examples:
   org.blockml.core.Block
   org.blockml.service.Math
   org.blockml.service.Strings
+  org.blockml.language.TypeScript
+  org.blockml.language.OpenSCAD
   org.blockml.type.Integer
   com.machineblocks.core.Block
   com.machineblocks.type.Size3D
@@ -338,7 +341,7 @@ org.blockml.core.Block
 
 **`org.blockml.service.ModelBlock`** — provides data access via path-based Sync Capabilities. Specializations: `org.blockml.service.JSONModel`, `org.blockml.service.ODataModel`, `org.blockml.service.XMLModel`.
 
-**`org.blockml.service.FunctionBlock`** — binds TypeScript arrow functions to Sync Capabilities via `<implementation language="typescript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
+**`org.blockml.service.FunctionBlock`** — binds TypeScript arrow functions to Sync Capabilities via `<implementation type="org.blockml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
 
 Built-in ServiceBlocks are defined in the `baseType` hierarchy and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
 
@@ -586,23 +589,29 @@ Whether Capability linking in Presets is permitted is to be defined.
 
 ### Sync Capability Implementations
 
-A `Sync` Capability may carry an `<implementation>` element that provides a target-language function body. This is only permitted when the Block's `baseType` declares support for that implementation language.
+A `Sync` Capability may carry an `<implementation>` element that provides a target-language function body. This is only permitted when the Block's `baseType` declares support for that implementation type.
 
 ```text
+Implementation language types (org.blockml.language.*):
+  org.blockml.language.TypeScript   — TypeScript arrow function (compile-time / transpile)
+  org.blockml.language.OpenSCAD     — OpenSCAD function(s) in CDATA
+
 baseType declares:
-  supportedImplementationLanguages: ["scad"]           — e.g. com.machineblocks.core.Block
-  supportedImplementationLanguages: ["scad","typescript"] — e.g. org.blockml.service.FunctionBlock
+  supportedImplementationTypes: [org.blockml.language.OpenSCAD]
+    — e.g. com.machineblocks.core.Block
+  supportedImplementationTypes: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
+    — e.g. org.blockml.service.FunctionBlock
 ```
 
-If a Block carries an `<implementation language="scad">` but its `baseType` does not list `"scad"` in `supportedImplementationLanguages`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
+If a Block carries `<implementation type="org.blockml.language.OpenSCAD">` but its `baseType` does not list that type in `supportedImplementationTypes`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
 
 A Sync Capability implementation can live directly on any Block whose `baseType` supports it — not only on `FunctionBlock` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
 
 ```xml
-<!-- Direct on Block — valid if baseType supports "scad" -->
+<!-- Direct on Block — valid if baseType supports OpenSCAD -->
 <capabilities>
   <capability name="formatValue" type="org.blockml.capability.Sync" ...>
-    <implementation language="scad"><![CDATA[
+    <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
 function formatValue(x) = ...;
     ]]></implementation>
   </capability>

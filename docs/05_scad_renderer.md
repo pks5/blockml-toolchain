@@ -1,6 +1,6 @@
 # SCAD Renderer — Render Target
 
-version: 2.0.0
+version: 2.1.0
 
 ## Purpose of this Document
 
@@ -292,9 +292,122 @@ The header is mandatory. All section comments are mandatory even if the section 
 
 ---
 
+## Settings Format (V1 + Future)
+
+The MachineBlocks V3 SCAD Library (`mb_block`, `mb_param_*`) passes block instance parameters via a **`settings`** argument. The SCAD renderer must support two emission formats — only one is active at runtime.
+
+### V1 — Pseudo-map (current library)
+
+The scad-lib **only supports** the OpenSCAD **pseudo-map** format today — an array of `[key, value]` pairs:
+
+```scad
+mb_block(
+    config = mb_config,
+    settings = [
+        ["size", size],
+        ["brick1SizeY", brick1SizeY],
+        ["brick2SizeX", brick2SizeX],
+        ["brick1OffsetY", brick1OffsetY],
+        ["brick2OffsetX", brick2OffsetX]
+    ]
+);
+```
+
+`mb_param(config, settings, "key", default)` and `mb_param_size(config, settings, …)` read from this structure. **V1 always emits pseudo-maps** — this is the only format the current library understands.
+
+### Future — OpenSCAD native `object()` (beta)
+
+The OpenSCAD team is working on a native **`object()`** type (currently beta). When stable, the same settings will be expressible as:
+
+```scad
+mb_block(
+    config = mb_config,
+    settings = object(
+        size = size,
+        brick1SizeY = brick1SizeY,
+        brick2SizeX = brick2SizeX,
+        brick1OffsetY = brick1OffsetY,
+        brick2OffsetX = brick2OffsetX
+    )
+);
+```
+
+Nested composition settings map to nested objects:
+
+```scad
+settings = object(
+    size = size,
+    child = object(
+        recess = true,
+        offset = [0, 0, 1]
+    )
+);
+```
+
+Equivalent pseudo-map nesting today uses separate `mb_block()` calls with flat settings per call — not nested pair arrays.
+
+### Renderer architecture — prepared for both
+
+The Property Renderer must **not** hardcode pseudo-map syntax in composition or property logic. Use a two-layer model:
+
+```text
+1. Resolve properties  →  SettingsBundle (renderer-neutral)
+      Map<scadName, ScadSerializedValue>
+      Built from PropertyResolver (inline → preset → config → default)
+
+2. Emit settings       →  SettingsEmitter strategy
+      pseudo-map (V1)  →  [ ["size", size], ["studs", studs], … ]
+      object  (future) →  object(size = size, studs = studs, …)
+```
+
+```typescript
+interface SettingsBundle {
+  entries: ReadonlyMap<string, string>   // scadName → SCAD expression text
+}
+
+interface SettingsEmitter {
+  emit(bundle: SettingsBundle): string    // SCAD expression for settings argument
+}
+
+class PseudoMapSettingsEmitter implements SettingsEmitter { … }   // V1 default
+class ObjectSettingsEmitter implements SettingsEmitter { … }      // future
+```
+
+**Rules:**
+
+```text
+Property resolution is format-agnostic  — same SettingsBundle for both emitters
+Only the emitter changes when switching format
+Composition renderer calls emitter.emit(childBundle) per mb_block() call
+Nested mb_block() trees stay structurally identical — only settings syntax changes
+Switch is target-level config, not per-property
+```
+
+### Format selection (extension point)
+
+```typescript
+interface ScadRenderOptions {
+  /** V1 default: "pseudo-map". Future: "object" when scad-lib + OpenSCAD stable. */
+  settingsFormat?: "pseudo-map" | "object"
+}
+```
+
+Wired from `CompileOptions` / target config when OpenSCAD object support lands. V1 ignores `"object"` or rejects with a clear diagnostic if scad-lib does not support it yet.
+
+Migration path when `object()` stabilizes:
+
+```text
+1. scad-lib adds object-aware mb_param_* (or parallel getters)
+2. ObjectSettingsEmitter implemented in machineblocks-v3-scad-target
+3. settingsFormat: "object" opt-in per project, then default
+4. PseudoMapSettingsEmitter retained for older OpenSCAD versions
+```
+
+---
+
 ## Property Renderer
 
-The Property Renderer maps MBOM property values to SCAD settings array entries:
+The Property Renderer maps MBOM property values to **settings entries** (via `SettingsBundle`). V1 emission uses pseudo-map pairs:
 
 ```scad
 ["paramName", value]

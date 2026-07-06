@@ -33,7 +33,7 @@
           #math.min(3, 5)          → 3
           #math.min(size[0], 10)   → min(size[0], 10)
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (a: number, b: number): number => Math.min(a, b)
       ]]></implementation>
     </capability>
@@ -49,7 +49,7 @@
           #math.max(3, 5)          → 5
           #math.max(size[0], 10)   → max(size[0], 10)
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (a: number, b: number): number => Math.max(a, b)
       ]]></implementation>
     </capability>
@@ -64,7 +64,7 @@
         Examples:
           #math.abs(-3)  → 3
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.abs(x)
       ]]></implementation>
     </capability>
@@ -79,7 +79,7 @@
         Examples:
           #math.floor(3.7)  → 3
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.floor(x)
       ]]></implementation>
     </capability>
@@ -94,7 +94,7 @@
         Examples:
           #math.ceil(3.2)  → 4
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.ceil(x)
       ]]></implementation>
     </capability>
@@ -110,7 +110,7 @@
           #math.round(3.4)  → 3
           #math.round(3.6)  → 4
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.round(x)
       ]]></implementation>
     </capability>
@@ -126,7 +126,7 @@
           #math.round_n(3.14159, 2)   → 3.14
           #math.round_n(0.1 + 0.2, 1) → 0.3
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number, n: number): number =>
             Math.round(x * Math.pow(10, n)) / Math.pow(10, n)
       ]]></implementation>
@@ -142,7 +142,7 @@
         Examples:
           #math.pow(2, 10)  → 1024
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (base: number, exp: number): number => Math.pow(base, exp)
       ]]></implementation>
     </capability>
@@ -157,7 +157,7 @@
         Examples:
           #math.sqrt(9)  → 3
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.sqrt(x)
       ]]></implementation>
     </capability>
@@ -174,7 +174,7 @@
           #math.clamp(-1, 0, 1)  → 0
           #math.clamp(0.5, 0, 1) → 0.5
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number, lo: number, hi: number): number =>
             Math.min(Math.max(x, lo), hi)
       ]]></implementation>

@@ -32,7 +32,7 @@
         Examples:
           #strings.trim('  hello  ')  → "hello"
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string): string => s.trim()
       ]]></implementation>
     </capability>
@@ -47,7 +47,7 @@
         Examples:
           #strings.toUpperCase('abc')  → "ABC"
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string): string => s.toUpperCase()
       ]]></implementation>
     </capability>
@@ -62,7 +62,7 @@
         Examples:
           #strings.toLowerCase('ABC')  → "abc"
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string): string => s.toLowerCase()
       ]]></implementation>
     </capability>
@@ -77,7 +77,7 @@
         Examples:
           #strings.concat('a', 'b', 'c')  → "abc"
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (...parts: string[]): string => parts.join('')
       ]]></implementation>
     </capability>
@@ -92,7 +92,7 @@
         Examples:
           #strings.length('hello')  → 5
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string): number => s.length
       ]]></implementation>
     </capability>
@@ -107,7 +107,7 @@
         Examples:
           #strings.contains('hello', 'ell')  → true
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, fragment: string): boolean => s.includes(fragment)
       ]]></implementation>
     </capability>
@@ -122,7 +122,7 @@
         Examples:
           #strings.startsWith('hello', 'he')  → true
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, prefix: string): boolean => s.startsWith(prefix)
       ]]></implementation>
     </capability>
@@ -137,7 +137,7 @@
         Examples:
           #strings.endsWith('hello', 'lo')  → true
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, suffix: string): boolean => s.endsWith(suffix)
       ]]></implementation>
     </capability>
@@ -152,7 +152,7 @@
         Examples:
           #strings.indexOf('hello', 'll')  → 2
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, fragment: string): number => s.indexOf(fragment)
       ]]></implementation>
     </capability>
@@ -167,7 +167,7 @@
         Examples:
           #strings.substring('hello', 1, 4)  → "ell"
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, start: number, end: number): string => s.substring(start, end)
       ]]></implementation>
     </capability>
@@ -182,7 +182,7 @@
         Examples:
           #strings.replace('a-b-c', '-', '_')  → "a_b-c"
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, target: string, replacement: string): string =>
             s.replace(target, replacement)
       ]]></implementation>
@@ -198,7 +198,7 @@
         Examples:
           #strings.replaceAll('a-b-c', '-', '_')  → "a_b_c"
       </documentation>
-      <implementation language="typescript"><![CDATA[
+      <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, target: string, replacement: string): string =>
             s.split(target).join(replacement)
       ]]></implementation>

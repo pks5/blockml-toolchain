@@ -196,6 +196,29 @@ Single-parameter Capabilities use a primitive `NamedTypeReference` directly — 
 
 Parse failure → `BML_UNKNOWN_TYPE`.
 
+### `<implementation>` mapping
+
+Child of `<capability>`. Maps to `CapabilityDefinition.implementation`:
+
+```text
+<implementation type="org.blockml.language.TypeScript"><![CDATA[ ... ]]></implementation>
+  → ImplementationBlock {
+       typeFqn: "org.blockml.language.TypeScript",
+       source: CDATA body (trimmed)
+     }
+```
+
+Rules:
+
+```text
+type attribute   — required; must be org.blockml.language.* FQN (not a language= shorthand)
+Missing type     → BML_MISSING_IMPLEMENTATION_TYPE (error)
+Unknown type FQN → BML_IMPLEMENTATION_UNKNOWN_TYPE (error)
+Unsupported type → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseType supportedImplementationTypes)
+```
+
+V1 known types: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`.
+
 ---
 
 ## Expression Parsing (Two-Phase)

@@ -931,11 +931,11 @@ xmlns:cal="com.machineblocks.calibration"
 
 ### FunctionBlock Sub-Blocks
 
-A Sub-Block with `baseType="org.blockml.service.FunctionBlock"` binds target-language function implementations to Sync Capabilities via `<implementation language="...">`.
+A Sub-Block with `baseType="org.blockml.service.FunctionBlock"` binds target-language function implementations to Sync Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs, not a `language` attribute.
 
-Two languages are supported:
+Two implementation types are supported in V1:
 
-**`language="scad"`** — SCAD function(s) written directly in the BML. Each Capability has exactly one main function (whose name matches the Capability name) and zero or more helper functions. The compiler automatically prefixes all function names with the block FQN — so names are written short and clean in the BML:
+**`type="org.blockml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. Each Capability has exactly one main function (whose name matches the Capability name) and zero or more helper functions. The compiler automatically prefixes all function names with the block FQN — so names are written short and clean in the BML:
 
 ```xml
 <block>
@@ -949,7 +949,7 @@ Two languages are supported:
                 payloadType="org.blockml.type.Float"
                 returnType="org.blockml.type.String">
       <documentation>Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>
-      <implementation language="scad"><![CDATA[
+      <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
 // Main function — name must match capability name
 function formatValue(x) =
     replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
@@ -972,9 +972,9 @@ function strSuffix(s, k, i = 0) =
 </block>
 ```
 
-**`language="typescript"`** — TypeScript arrow function. In V1, compile-time execution only: when all call arguments are literals, the compiler executes the function in Node.js and emits the result as a literal. Runtime transpilation to SCAD is deferred.
+**`type="org.blockml.language.TypeScript"`** — TypeScript arrow function. In V1, compile-time execution only: when all call arguments are literals, the compiler executes the function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred.
 
-The `<implementation>` element is a child of `<capability>`. One `<implementation>` per Capability.
+The `<implementation>` element is a child of `<capability>`. One `<implementation>` per Capability. The **`type`** attribute is required and must be an `org.blockml.language.*` FQN.
 
 ### Visibility
 
