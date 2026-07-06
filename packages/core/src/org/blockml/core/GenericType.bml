@@ -1,0 +1,21 @@
+<!--
+  BlockML Core — generic type branch (Array<T>, AutoOr<T>, …)
+
+  FQN: org.blockml.core.GenericType
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <name>GenericType</name>
+  <fullQualifiedName>org.blockml.core.GenericType</fullQualifiedName>
+  <baseType>org.blockml.core.TypeBlock</baseType>
+  <version>1.0.0</version>
+
+  <abstract>true</abstract>
+
+</block>

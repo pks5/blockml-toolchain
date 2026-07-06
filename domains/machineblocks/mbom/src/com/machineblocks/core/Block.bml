@@ -15,7 +15,7 @@
 
   <name>Block</name>
   <fullQualifiedName>com.machineblocks.core.Block</fullQualifiedName>
-  <baseType>org.blockml.core.Block</baseType>
+  <baseType>org.blockml.core.ComposableBlock</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

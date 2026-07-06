@@ -4,9 +4,11 @@ version: 1.0.0
 
 ## Purpose of this Document
 
-This document defines the MBOM type system — all types that can be assigned to MBOM properties, and the rules for how MBML values (XML attributes or JSON values) are parsed into MBOM, and how MBOM values are serialized to SCAD.
+This document defines **parse and serialize behaviour** for MBOM types — how BML attribute values become MBOM values, and how MBOM values become SCAD.
 
-For native property definitions (names, types, defaults) see `09_mbom_properties.yml`.
+**Type definitions (SSOT)** are BML files — see `17_type_system_bml.md`. This document describes behaviour per type; it does not define type shape.
+
+For native property declarations (names, types, defaults) see `com/machineblocks/core/Block.bml` (migrating from `09_mbom_properties.yml`).
 For the MBOM object model see `03_mbom.md`.
 For the SCAD render target see `docs/scad-reference/05_types_and_mapping.md`.
 
@@ -54,7 +56,7 @@ type="type:AutoOr_Float"    → com.machineblocks.type.AutoOr<Float>
 
 There is no implicit fallback to the baseType's namespace. If a type cannot be resolved the compiler emits `BML_UNKNOWN_TYPE`.
 
-**Enum types** are defined in the domain XSD (e.g. `bricks.xsd`). They appear as `type:BaseCutoutType` in BML. The XSD provides the valid values — the editor renders a SelectBox and the XML parser validates. `<suggestions>` on an enum property is an error (`BML_SUGGESTIONS_ON_ENUM`).
+**Enum types** are defined as BML `EnumType` files — see `17_type_system_bml.md`. During migration, domain XSD enums remain accepted with `BML_LEGACY_TYPE_SOURCE` warning. `<suggestions>` on an enum property is an error (`BML_SUGGESTIONS_ON_ENUM`).
 
 **Anonymous Object payloadType for FunctionBlock Capabilities:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Key order defines positional parameter order. Both positional and named call syntax are valid:
 

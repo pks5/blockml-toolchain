@@ -237,6 +237,8 @@ Omitted lists                    → undefined (inherit from baseType at validat
 org.blockml.core.Block           → omits <baseType> (sole inheritance root)
 ```
 
+TypeBlock BML (`<fields>`, `<enumValues>`) maps to the same `BlockDefinition` structure with branch-specific validation — see `17_type_system_bml.md`.
+
 ---
 
 ## Expression Parsing (Two-Phase)

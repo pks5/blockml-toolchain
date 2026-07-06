@@ -10,6 +10,7 @@ For BML block syntax see `02_mbml.md`.
 For MBOM hierarchy see `03_mbom.md`.
 For TypeRegistry bootstrap see `13_bml_to_bom_mapping.md`.
 For SCAD property mapping (render-only) see `09_mbom_properties.yml`.
+For value types and implementation languages as BML see `17_type_system_bml.md`.
 
 ---
 
@@ -101,9 +102,9 @@ Unknown type on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 
 ## Root Type Exception
 
-`org.blockml.core.Block` is the **inheritance root**. It **omits `<baseType>`** — the only type allowed to do so.
+`org.blockml.core.Block` is the **sole inheritance root**. It **omits `<baseType>`** — the only definition allowed to do so.
 
-All other Block definitions must declare `<baseType>`.
+All other definitions must declare `<baseType>`. Composable framework types inherit via `org.blockml.core.ComposableBlock`. Type and language blocks inherit via `org.blockml.core.TypeBlock` and `org.blockml.core.LanguageBlock` — see `17_type_system_bml.md`.
 
 ---
 
@@ -112,6 +113,11 @@ All other Block definitions must declare `<baseType>`.
 ```text
 1. @blockml/core BML
      org/blockml/core/Block.bml
+     org/blockml/core/ComposableBlock.bml
+     org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · …
+     org/blockml/core/LanguageBlock.bml
+     org/blockml/type/Integer.bml · …
+     org/blockml/language/TypeScript.bml · OpenSCAD.bml
      org/blockml/service/ServiceBlock.bml
      org/blockml/service/FunctionBlock.bml
 
@@ -154,9 +160,8 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 
 ```text
 packages/core/src/
-  org/blockml/core/Block.bml
-  org/blockml/service/ServiceBlock.bml
-  org/blockml/service/FunctionBlock.bml
+  org/blockml/core/
+    Block.bml · ComposableBlock.bml · TypeBlock.bml · LanguageBlock.bml · …
 
 domains/machineblocks/mbom/src/
   com/machineblocks/core/Block.bml
@@ -179,3 +184,4 @@ packages/core-services/src/
 | BlockDefinition BOM | `12_bom_object_model.md` |
 | Bootstrap | `13_bml_to_bom_mapping.md` |
 | SCAD property mapping | `09_mbom_properties.yml` |
+| Value types · languages (BML) | `17_type_system_bml.md` |

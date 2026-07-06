@@ -596,6 +596,7 @@ configProfile < blockPreset < inline property
 14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
 15_dev_setup.md        — monorepo tooling, build, test, IDE setup
 16_framework_base_types.md — framework base types as BML (abstract, final, allowedSubBlockTypes)
+17_type_system_bml.md  — TypeBlock, LanguageBlock, ComposableBlock hierarchy
 09_mbom_properties.yml — MBOM native property SCAD mapping (render only)
 
 domains/machineblocks/runtimes/scad-lib/
@@ -608,4 +609,4 @@ domains/machineblocks/runtimes/scad-lib/
       ...
 ```
 
-`09_mbom_properties.yml` is the authoritative source for all native MBOM property definitions (types, defaults, constraints). The Markdown documents explain concepts, relationships, and decision logic.
+Native MBOM property **declarations** (names, types, defaults) migrate to BML — see `16_framework_base_types.md` and `17_type_system_bml.md`. `09_mbom_properties.yml` retains SCAD render mapping only. The Markdown documents explain concepts, relationships, and decision logic.

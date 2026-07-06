@@ -2,7 +2,7 @@
   BlockML Core — root Block type
 
   FQN: org.blockml.core.Block
-  Inheritance root — omits baseType
+  Sole inheritance root — omits baseType
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -17,20 +17,5 @@
   <version>1.0.0</version>
 
   <abstract>true</abstract>
-
-  <!-- System property — instance identity (see 00_bom_core.md) -->
-  <properties>
-    <property name="id" type="String">
-      <documentation>Composition instance identity (partId). Required when referenced or in bml:each.</documentation>
-    </property>
-  </properties>
-
-  <!-- UI5-style customData — expanded from data:* attributes at parse time -->
-  <aggregations>
-    <aggregation name="customData"
-                 cardinality="0..n"
-                 type="org.blockml.core.CustomData"
-                 visibility="hidden" />
-  </aggregations>
 
 </block>

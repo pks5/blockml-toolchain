@@ -13,7 +13,7 @@
 
   <name>ServiceBlock</name>
   <fullQualifiedName>org.blockml.service.ServiceBlock</fullQualifiedName>
-  <baseType>org.blockml.core.Block</baseType>
+  <baseType>org.blockml.core.ComposableBlock</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

@@ -831,6 +831,8 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 |---|---|
 | Expression AST node union | `10_expression_language.md` — Expression AST |
 | BML → BOM mapping algorithm | `13_bml_to_bom_mapping.md` |
+| Framework base types (BML) | `16_framework_base_types.md` |
+| TypeBlock · LanguageBlock (BML) | `17_type_system_bml.md` |
 | Development setup (Phase D) | `15_dev_setup.md` |
 | MBOM native property list | `09_mbom_properties.yml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |
@@ -849,6 +851,9 @@ BML_MISSING_ID                — referenced instance or bml:each element lacks 
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId does not match any explicit id in target aggregation
 BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members
 BML_UNKNOWN_TYPE              — typeFqn cannot be resolved
+BML_INVALID_DEFINITION_BRANCH — member/element not allowed on this baseType branch (see 17_type_system_bml.md)
+BML_INVALID_TYPE_REFERENCE    — type FQN resolves but wrong branch (e.g. Block used as property type)
+BML_LEGACY_TYPE_SOURCE        — type from XSD only · migrate to BML (warning)
 BML_UNKNOWN_PROPERTY          — instance attribute not in effective members (warning)
 BML_UNKNOWN_DIRECTIVE         — unrecognized bml:* attribute (error)
 BML_DIRECTIVE_NOT_ALLOWED     — bml:* on disallowed element (error)

@@ -1,0 +1,13 @@
+<!--
+  BlockML Core — OpenSCAD implementation language
+
+  FQN: org.blockml.language.OpenSCAD
+-->
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd">
+  <name>OpenSCAD</name>
+  <fullQualifiedName>org.blockml.language.OpenSCAD</fullQualifiedName>
+  <baseType>org.blockml.core.LanguageBlock</baseType>
+  <version>1.0.0</version>
+  <abstract>true</abstract>
+</block>

@@ -1,0 +1,8 @@
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd">
+  <name>Boolean</name>
+  <fullQualifiedName>org.blockml.type.Boolean</fullQualifiedName>
+  <baseType>org.blockml.core.PrimitiveType</baseType>
+  <version>1.0.0</version>
+  <abstract>true</abstract>
+</block>
