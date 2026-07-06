@@ -23,7 +23,7 @@ Do not design MBOM types around SCAD arrays.
 Design SCAD arrays as serializations of MBOM.
 ```
 
-All MBOM types are defined in the `com.machineblocks.types` namespace.
+All MBOM types are defined in the `com.machineblocks.type` namespace.
 
 ---
 
@@ -505,7 +505,7 @@ Map values are always wrapped in `${ }` because they are object literals in the 
 # 10. Expression Type
 
 ```text
-com.bom.types.Expression
+org.blockml.type.Expression
 
 An expression is a typed value wrapped in ${ }.
 It is parsed into an Expression AST node at BML parse time.

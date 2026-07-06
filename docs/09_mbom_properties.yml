@@ -26,12 +26,13 @@ version: "1.0.0"
 # ============================================================================
 
 resolution_order:
-  order: ["settings", "config", "default"]
+  order: ["inline", "preset", "config", "default"]
   description: |
-    Every property is resolved in this order:
-    1. Instance settings
-    2. Config (active config profile)
-    3. Default value
+    Every property is resolved in this order (highest priority first):
+    1. Inline value — set directly on a Block instance in a Composition
+    2. Preset value — from the active Preset
+    3. Config value — from the active Config profile
+    4. Default value — from the Block definition (literal or computed expression)
 
 # ============================================================================
 # SCAD RENDERER MAPPING NOTES

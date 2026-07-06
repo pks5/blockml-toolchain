@@ -44,7 +44,7 @@ MachineBlocks is the first and reference domain. Its BOM specialization is **MBO
 BML Source (.mbml)
   ↓ parse + validate
 MBOM (MachineBlocks Object Model)   ←  specializes BOM Core
-  ↓ compile (scad target)
+  ↓ compile (machineblocks-v3-scad target)
 SCAD Render Target  ←  machineblocks/docs/scad-reference/
   ↓ render
 STL / 3MF
@@ -125,7 +125,9 @@ bom-compiler/
 
 ### The First Engine: `@blockml/engine-maker`
 
-V1 ships with a single engine that covers all rendering strategies needed for the MakerUniverse use cases. BlockProcessors within any target call whichever engine method fits their needs:
+**CompilerEngine** is the generic term for the processing infrastructure that BlockProcessors use. BOM Core defines the TypeScript interface `RenderEngine` — this is the CompilerEngine contract. **MakerEngine** (`@blockml/engine-maker`) is the first CompilerEngine implementation, built for the Maker Universe platform — the first product ecosystem to use BlockML.
+
+V1 ships with MakerEngine, which covers all rendering strategies needed for the MakerUniverse use cases. BlockProcessors within any target call whichever engine method fits their needs:
 
 ```text
 engine.compile(...)         — deterministic code transformation
@@ -136,7 +138,7 @@ engine.callLLM(...)         — LLM-based generation (deferred to later)
 
 This means a single RenderTarget can mix strategies freely — some Processors compile, others use templates, others copy. The engine is the infrastructure; the Processors make the strategy decisions.
 
-New engines can always be built as independent packages. They implement the same `RenderEngine` interface. The first engine is named `maker-engine` because it is designed around the use cases that emerge from the MakerUniverse — physical blocks, electronics, services.
+New engines can always be built as independent packages. Each implements the CompilerEngine contract via the `RenderEngine` interface. MakerEngine is the first such implementation — named `maker-engine` because it is designed around the use cases that emerge from the MakerUniverse — physical blocks, electronics, services.
 
 ### Built-in ServiceBlock Definitions
 
@@ -184,7 +186,7 @@ MartianMicro defines only its Block types as MBML files. All rendering is handle
 
 ### Engine Packages
 
-Engines are always independent packages implementing the `RenderEngine` interface. There is no fixed set — any engine can be built and published separately:
+Engines are always independent packages implementing the CompilerEngine contract (`RenderEngine` interface). There is no fixed set — any engine can be built and published separately:
 
 ```text
 @blockml/engine-maker      — V1 engine (bundled): compile, template, copy, llm
@@ -325,9 +327,9 @@ The MachineBlocks domain BOM. Browser and Node compatible.
 - No SCAD logic, no Node-only APIs
 ```
 
-### `@machineblocks/scad-renderer`
+### `@machineblocks/machineblocks-v3-scad-target`
 
-The SCAD Render Target. Browser and Node compatible.
+The MachineBlocks V3 SCAD Render Target. Browser and Node compatible. Registers under the name `"machineblocks-v3-scad"`.
 
 ```text
 - Atomic Target: registers for com.machineblocks.core.Block and com.machineblocks.core.Set
@@ -567,7 +569,7 @@ configProfile < blockPreset < inline property
 domains/machineblocks/runtimes/scad-lib/
   lib/                 — SCAD Runtime (every generated SCAD file uses this)
   config/              — mb_config.scad
-  docs/                — SCAD API reference (used by the scad-renderer)
+  docs/                — SCAD API reference (used by machineblocks-v3-scad-target)
   blocks/              — pre-rendered reference Blocks
     com/machineblocks/
       bricks/          — StandardBrick.scad, StandardBrick.json, thumbnails, ...

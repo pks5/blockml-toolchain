@@ -21,7 +21,7 @@ The compiler is implemented across these packages:
 @blockml/core                                — BOM object model, validation
 @blockml/compiler                            — Facade + Target Registry
 @blockml/core-services                       — built-in ServiceBlock BML definitions
-@blockml/engine-maker                        — V1 RenderEngine (compile, template, copy, llm)
+@blockml/engine-maker                        — V1 CompilerEngine implementation (MakerEngine)
 @machineblocks/machineblocks-v3-scad-target  — RenderTarget + BlockProcessors
 ```
 
@@ -314,11 +314,12 @@ interface ScadFile {
 
 ```typescript
 import { compileBmlToOutput, registerTarget } from "@blockml/compiler";
-import { ScadTarget } from "@machineblocks/scad-renderer";
+import { MakerEngine } from "@blockml/engine-maker";
+import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
 
-registerTarget(new ScadTarget());
+registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
 
-const result = compileBmlToOutput(xmlSource, "scad");
+const result = compileBmlToOutput(xmlSource, "machineblocks-v3-scad");
 
 if (result.success) {
   const scad = (result.output as ScadRenderOutput).files[0].content;
@@ -535,7 +536,7 @@ Wall.scad
   Hash inputs:
     - Wall.mbml content
     - all transitive Block dependency versions
-    - scad-renderer version
+    - machineblocks-v3-scad-target version
 
 Wall.json
   Hash inputs:
@@ -551,7 +552,7 @@ Wall__brick-2x4.webp
 
 ### --all Behavior
 
-`bom compile --all scad` processes every `.mbml` file in `srcDir` independently:
+`bom compile --all machineblocks-v3-scad` processes every `.mbml` file in `srcDir` independently:
 
 ```text
 <block>        → Block compile    (hash check → skip if unchanged)

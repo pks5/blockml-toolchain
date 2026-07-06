@@ -278,8 +278,9 @@ Block-scoped functions are Sync Capabilities of a `FunctionBlock` Sub-Block, bou
 
 ```text
 ${ @utils.formatValue(valueStart + i * valueStep) }
-${ @utils.round1(valueStart + i * valueStep) }
 ```
+
+> **V1 scope:** FunctionBlock calls use `@bean` syntax and are **not implemented in V1**. The example above illustrates the complete language.
 
 The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggregation:
 
@@ -815,7 +816,6 @@ The parser distinguishes call vs. link by the presence or absence of parentheses
 BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in member namespace
 BML_EXPR_UNKNOWN_BEAN          — @bean not declared as Aggregation
 BML_EXPR_UNKNOWN_BUILTIN       — #name not a registered built-in
-BML_EXPR_UNKNOWN_FUNCTION      — func() not declared in <functions>
 BML_EXPR_TYPE_MISMATCH         — expression result type incompatible with member type
 BML_EXPR_PAYLOAD_MISMATCH      — call syntax doesn't match declared payloadType
 BML_EXPR_LINK_INVALID_SOURCE   — @bean.capa (no parens) on non-AsyncOutbound Capability
@@ -845,15 +845,16 @@ Built-ins:       #math.min/max/abs/floor/ceil/round/round(x,n)/pow/sqrt/clamp
                  #strings.concat/length
                  #lists.size/get/first/last/sequence
 bml: directives: bml:each (numeric + collection), bml:if, bml:unless,
-                 bml:block, bml:id
+                 bml:block, bml:id, bml:with
 Registry:        read + write within Composition
-Block functions: func() call syntax, language="scad"
+FunctionBlock:   Sub-Blocks with language="scad" implementations (specified;
+                 callable via @bean — deferred in V1)
 ```
 
 **V1 — Deferred:**
 
 ```text
-@bean calls        — no runtime bean execution in V1
+@bean calls        — no bean execution in V1 (includes FunctionBlock calls)
 Model bindings     — no runtime model in V1
 Capability linking — no runtime messaging in V1
 #strings.*         — (except concat, length)

@@ -4,7 +4,7 @@ version: 1.0.0
 
 ## Purpose of this Document
 
-This document defines the BOM ManagedObject model — the runtime class hierarchy and generated API that backs every Block instance. It is the direct inspiration source for the `@bom/core` implementation.
+This document defines the BOM ManagedObject model — the runtime class hierarchy and generated API that backs every Block instance. It is the direct inspiration source for the `@blockml/core` implementation.
 
 The BOM ManagedObject model is strongly inspired by the SAPUI5 ManagedObject pattern. Where BOM deviates from UI5, the deviation is documented explicitly with its rationale.
 
@@ -31,7 +31,7 @@ Associations                 Associations         (identical concept)
 Events                       Capabilities         (extended: AsyncInbound, AsyncOutbound, Sync)
 Renderer on Control          No renderer on Block (renderer lives in Target — fully separated)
 suppressInvalidate param     Not needed           (no reactive DOM, compile-time only)
-String property types        Address type added   (com.bom.types.Address for Capability values)
+String property types        Address type added   (org.blockml.type.Address for Capability values)
 ```
 
 The most important deviation: **the renderer is completely separated from the Block**. In UI5, a Control references its Renderer directly. In BOM, a Block has no knowledge of any renderer. The Target holds all renderers and dispatches per Block type. This makes it possible for the same Block model to be rendered by multiple Targets without any changes to the Block.
@@ -41,7 +41,7 @@ The most important deviation: **the renderer is completely separated from the Bl
 ## Class Hierarchy
 
 ```text
-ManagedObject                        — @bom/core base class
+ManagedObject                        — @blockml/core base class
   Block                              — adds metadata, compositions, preset resolution
     com.machineblocks.core.Block     — MBOM base (adds native MB properties)
       com.machineblocks.bricks.StandardBrick
@@ -61,7 +61,7 @@ Dedicated getters and setters (generated per member) always delegate to these me
 
 ### Properties and Capabilities
 
-Capabilities use the same generic methods as Properties. Their value type is `Address` (`com.bom.types.Address`) rather than a domain-specific type, but the mechanism is identical.
+Capabilities use the same generic methods as Properties. Their value type is `Address` (`org.blockml.type.Address`) rather than a domain-specific type, but the mechanism is identical.
 
 ```typescript
 protected setProperty(name: string, value: any): this
@@ -132,7 +132,7 @@ Capabilities are declared with a class (`AsyncInbound`, `AsyncOutbound`, `Sync`)
 
 ```typescript
 // Block definition declares:
-//   capability name="onResized" class="com.bom.capability.AsyncOutbound"
+//   capability name="onResized" class="org.blockml.capability.AsyncOutbound"
 
 // Generated:
 getOnResized(): Address {
@@ -184,7 +184,7 @@ destroyParts(): this {
 
 ```typescript
 // Block definition declares:
-//   aggregation name="tooltip" cardinality="0..1" type="com.bom.service.Formatter"
+//   aggregation name="tooltip" cardinality="0..1" type="org.blockml.service.Formatter"
 
 // Generated:
 getTooltip(): Formatter | null {
@@ -320,7 +320,7 @@ removeAll{NamePascalCase}()
 
 ## Address Type
 
-`com.bom.types.Address` is a structured primitive type used as the value type for all Capabilities. It is parsed from the raw string value at parse time.
+`org.blockml.type.Address` is a structured primitive type used as the value type for all Capabilities. It is parsed from the raw string value at parse time.
 
 ```typescript
 interface Address {
@@ -359,7 +359,7 @@ The base class reads the metadata at runtime and dynamically attaches getter/set
 
 Both approaches produce the same API surface. Option A gives better TypeScript type safety and IDE support. Option B is more dynamic and requires no build step for new Block types.
 
-The recommended approach for `@bom/core` is **Option A** for known domain types (MBOM) and **Option B** for dynamically loaded Block types (user-defined blocks loaded at runtime).
+The recommended approach for `@blockml/core` is **Option A** for known domain types (MBOM) and **Option B** for dynamically loaded Block types (user-defined blocks loaded at runtime).
 
 ---
 

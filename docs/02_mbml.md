@@ -111,15 +111,25 @@ The BOM always uses the full FQN. Namespace prefixes are a BML authoring conveni
 
 ### Type Namespace Shorthand
 
-Property `type` attributes do not require the full FQN. Unqualified type names are implicitly resolved against the domain's default type namespace. For MachineBlocks that is `com.machineblocks.types`:
+Property `type` attributes accept unqualified names for BOM Core primitives and namespace-prefixed names for domain types.
+
+**Unqualified names** resolve to `org.blockml.type.*`:
 
 ```text
-type="Size3D"    →  com.machineblocks.type.Size3D
-type="Color"     →  com.machineblocks.type.Color
 type="Integer"   →  org.blockml.type.Integer
+type="String"    →  org.blockml.type.String
+type="Boolean"   →  org.blockml.type.Boolean
+type="Float"     →  org.blockml.type.Float
 ```
 
-Explicit FQNs and namespace-prefixed types are always supported.
+**Domain types** require the `type:` namespace prefix (declared via `xmlns:type="com.machineblocks.type"`):
+
+```text
+type="type:Size3D"   →  com.machineblocks.type.Size3D
+type="type:Color"    →  com.machineblocks.type.Color
+```
+
+There is no implicit fallback to the domain namespace. Explicit FQNs are always supported.
 
 ---
 
@@ -268,11 +278,13 @@ Specify `<aggregations>` explicitly only when you need a different name, type, c
 
   <name>Wall</name>
   <fullQualifiedName>com.martianmicro.anyclosure.Wall</fullQualifiedName>
+  <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 
   <composition>
     <bricks:StandardBrick
         id="bottom"
+        version="1.0.0"
         size="${ [size[0], size[1], size[2] - 1] }"
         recess="true"
         tongue="true"
@@ -280,6 +292,7 @@ Specify `<aggregations>` explicitly only when you need a different name, type, c
 
     <bricks:StandardBrick
         id="top"
+        version="1.0.0"
         size="${ [size[0], size[1], 1] }"
         offset="${ [0, 0, size[2] - 1] }"
         recessWallGaps="x+"
@@ -562,13 +575,15 @@ Tag name      — class name (with namespace prefix)
 id            — part ID (used for instance ID: parentId::partId)
 renderGroup   — optional, fallback = id
 namespace     — optional, fallback = id
-version       — optional, version of the referenced Block type
+version       — required; version of the referenced Block type
 (attributes)  — any Member value of the referenced Block type (camelCase)
 ```
 
 Member values on child instances may be literals or Expressions.
 
 ### Expressions in Compositions
+
+> **V1 scope:** `@bean` calls, Model bindings (`@model:`), and Capability linking are fully specified below but **not implemented in V1**. The V1 compiler supports property references, `#built-in` calls, `bml:` directives, and the registry.
 
 Property values:
 
@@ -940,6 +955,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
 
   <name>Calibrator</name>
   <fullQualifiedName>com.machineblocks.calibration.Calibrator</fullQualifiedName>
+  <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 
   <properties>
@@ -990,7 +1006,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
             bml:id="${ 'val_' + stat.index }"
             size="[1, 1, 1]"
             offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
-            text="${ #math.round1(valueStart + i * valueStep) }"
+            text="${ #numbers.formatDecimal(valueStart + i * valueStep, 0, '.', 1) }"
             textFont="${ font }"
             textSize="${ fontSize }"
             baseCutoutType="none"
@@ -1047,28 +1063,6 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
 ### Visibility
 
 Sub-Blocks have their own FQN and can be referenced from outside the parent Block via full FQN. External use is possible but uncommon — the naming convention makes their belonging clear.
-
-### Functions
-
-Target-specific helper functions are declared in a `<functions>` section alongside Sub-Blocks. Functions use the `func` naming convention:
-
-```text
-com.machineblocks.calibration.Calibrator → func → round1
-→  mb__com__machineblocks__calibration__Calibrator__func__round1
-```
-
-```xml
-<functions>
-  <function name="round1" language="scad">
-    <![CDATA[
-      function mb__com__machineblocks__calibration__Calibrator__func__round1(x) =
-          round(x * 10) / 10;
-    ]]>
-  </function>
-</functions>
-```
-
-Functions are target-specific — a function declared with `language="scad"` is only emitted by the SCAD BlockProcessor. Other targets ignore it or provide their own implementation.
 
 ---
 
@@ -1550,11 +1544,12 @@ There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping 
 ### Default Resolution
 
 ```text
-baseType missing              → com.machineblocks.core.Block
+baseType missing              → BML_MISSING_BASE_TYPE (no default)
 <aggregations> missing        → implicit _parts aggregation (hidden, 0..n)
 <composition> without aggregation attribute
   + implicit _parts exists    → fills _parts
   + explicit aggregations     → compiler error: aggregation attribute required
-type="Foo" (unqualified)      → resolved against domain default type namespace
+type="Foo" (unqualified)      → resolved against org.blockml.type.* (primitives only)
+version missing on instance   → BML_MISSING_VERSION
 _steps missing or empty       → assembly order = document order of _placement
 ```

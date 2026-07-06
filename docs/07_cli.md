@@ -13,7 +13,7 @@ For the project file structure and library resolution see `01_system.md`.
 
 ## Overview
 
-The CLI is implemented in `@bom/cli`. It is Node.js-only — it may use `fs`, `path`, `chokidar`, `child_process`, and other Node-only APIs. The CLI wraps `@bom/compiler` and adds file system operations, watching, scaffolding, and (for the SCAD target) thumbnail rendering.
+The CLI is implemented in `@blockml/cli`. It is Node.js-only — it may use `fs`, `path`, `chokidar`, `child_process`, and other Node-only APIs. The CLI wraps `@blockml/compiler` and adds file system operations, watching, scaffolding, and (for the SCAD target) thumbnail rendering.
 
 Command names, argument names, and shorthand flags are configurable via `bom-cli.config.json`.
 
@@ -146,7 +146,7 @@ bom compile --all <target>
 
 ```text
 <file>    — path to a .mbml or .json file
-<target>  — registered target name, e.g. "scad"
+<target>  — registered target name, e.g. "machineblocks-v3-scad"
 --all     — compile all source files in srcDir
 --src     — override srcDir (default: from bom.config.json)
 --out     — override outDir (default: from bom.config.json)
@@ -226,7 +226,7 @@ bom watch [--src <dir>] [--out <dir>] <target>
 ```
 
 ```text
-<target>  — registered target name, e.g. "scad"
+<target>  — registered target name, e.g. "machineblocks-v3-scad"
 --src     — source directory to watch (default: srcDir from bom.config.json)
 --out     — output directory (default: outDir from bom.config.json)
 ```
@@ -275,7 +275,7 @@ Only one config profile is active at a time. Activating a new profile replaces t
 
 ## Thumbnail Generation (SCAD Target)
 
-Thumbnails are generated automatically as part of `bom compile scad` when the input is a `<blockPresets>` document. There is no separate thumbnail command.
+Thumbnails are generated automatically as part of `bom compile machineblocks-v3-scad` when the input is a `<blockPresets>` document. There is no separate thumbnail command.
 
 ### Pipeline
 
@@ -364,7 +364,7 @@ ERROR: OpenSCAD executable not found.
   Set "openscadPath" in bom.config.json or the OPENSCAD_PATH environment variable.
 ```
 
-This logic is implemented in `@bom/cli` as `resolveOpenScad.ts`.
+This logic is implemented in `@blockml/cli` as `resolveOpenScad.ts`.
 
 ---
 

@@ -17,7 +17,7 @@ For the MachineBlocks V3 SCAD Library specification see `domains/machineblocks/r
 
 The MachineBlocks V3 SCAD Target is implemented in `@machineblocks/machineblocks-v3-scad-target`. It is browser and Node compatible — no Node-only APIs.
 
-The target uses `@blockml/engine-maker` as its RenderEngine. It registers under the name `"machineblocks-v3-scad"` and contains two BlockProcessors. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the processor logic.
+The target uses `@blockml/engine-maker` (**MakerEngine**) as its CompilerEngine implementation. It registers under the name `"machineblocks-v3-scad"` and contains two BlockProcessors. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the processor logic.
 
 ### V1 Scope
 
@@ -36,15 +36,16 @@ All user-defined Block types that inherit from `com.machineblocks.core.Block` or
 
 ```typescript
 import { registerTarget } from "@blockml/compiler";
+import { MakerEngine } from "@blockml/engine-maker";
 import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
 
-registerTarget(new MachineBlocksV3ScadTarget());
+registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
 ```
 
 ```typescript
 class MachineBlocksV3ScadTarget implements RenderTarget {
   name = "machineblocks-v3-scad"
-  engine = new CompilerEngine()
+  engine = new MakerEngine()
 
   processors = [
     new ScadSetProcessor(),    // checked first — more specific

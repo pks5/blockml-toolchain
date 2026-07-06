@@ -1124,13 +1124,13 @@ The Target System is the bridge between BOM Core and domain-specific output form
 
 **RenderTarget** — defines the output system. Its name is the full stack identifier used on the CLI. It has a RenderEngine, zero or more BlockProcessors, and zero or more delegates to other RenderTargets.
 
-**RenderEngine** — provides the processing infrastructure for BlockProcessors. A BlockProcessor chooses which engine methods to use — compile, renderTemplate, copyTemplate, or callLLM. Each BlockProcessor within the same target may use a different strategy. New engines can always be built and published as independent packages. BOM Core defines only the interface.
+**RenderEngine (CompilerEngine)** — provides the processing infrastructure for BlockProcessors. **CompilerEngine** is the generic term; BOM Core defines the contract as the TypeScript `RenderEngine` interface. A BlockProcessor chooses which engine methods to use — compile, renderTemplate, copyTemplate, or callLLM. Each BlockProcessor within the same target may use a different strategy. New CompilerEngine implementations can always be built and published as independent packages. **MakerEngine** (`@blockml/engine-maker`) is the first implementation.
 
 **BlockProcessor** — a sub-unit of the RenderTarget registered for a specific `baseType`. Uses the RenderEngine as infrastructure and chooses its own rendering strategy. A single BlockProcessor can handle many Block types internally, or a target may have one specialized BlockProcessor per Block type, or any combination.
 
-### RenderEngine Interface
+### RenderEngine Interface (CompilerEngine)
 
-A RenderEngine provides methods for all rendering strategies. BlockProcessors call whichever method fits their needs:
+A CompilerEngine provides methods for all rendering strategies. BlockProcessors call whichever method fits their needs. The TypeScript interface name is `RenderEngine`:
 
 ```typescript
 interface RenderEngine {

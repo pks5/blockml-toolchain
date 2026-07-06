@@ -92,7 +92,7 @@ Every MBOM Block class has metadata describing its structure. Metadata is define
 ```text
 name               — short class name
 fullQualifiedName  — FQN
-baseType           — FQN of the parent class (default: com.machineblocks.core.Block)
+baseType           — FQN of the parent class. Required — no default.
 version            — semantic version of this class definition
 members            — shared namespace: Properties, Aggregations, Associations, Capabilities
 compositions       — list of Composition definitions
@@ -120,13 +120,13 @@ The compiler determines native vs. custom by checking `09_mbom_properties.yml`. 
 
 ```text
 name          — camelCase member name (unique within the Block's member namespace)
-type          — MBOM type FQN (e.g. com.machineblocks.types.Size3D)
+type          — MBOM type FQN (e.g. com.machineblocks.type.Size3D)
 defaultValue  — typed default value (literal or expression)
 group         — optional grouping for editor display
 documentation — human-readable description
 ```
 
-Unqualified type names in BML are resolved against `com.machineblocks.types` by the parser before being stored in MBOM as full FQNs.
+Unqualified type names in BML are resolved against `com.machineblocks.type` by the parser before being stored in MBOM as full FQNs.
 
 **Computed default values:** `defaultValue` may be an Expression referencing other Properties of the same Block. See `10_expression_language.md` — Expressions in defaultValue.
 
@@ -255,7 +255,7 @@ Array<org.blockml.type.Integer>     — Array of primitives
 Array<com.myDomain.MyClass>      — Array of objects
 ```
 
-Unqualified names resolve against the domain's default type namespace (determined by the Block's `baseType`). For MachineBlocks that is `com.machineblocks.types.*`; for primitives `org.blockml.type.*`.
+Unqualified names resolve against the domain's default type namespace (determined by the Block's `baseType`). For MachineBlocks that is `com.machineblocks.type.*`; for primitives `org.blockml.type.*`.
 
 ### Payload Call Syntax
 
