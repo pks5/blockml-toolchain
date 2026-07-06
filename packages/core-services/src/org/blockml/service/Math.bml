@@ -1,0 +1,185 @@
+<!--
+  BlockML Core Services
+
+  Name: Math Service
+  Filename: Math.bml
+  FQN: org.blockml.service.Math
+  Expression prefix: #math.*
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <name>Math</name>
+  <fullQualifiedName>org.blockml.service.Math</fullQualifiedName>
+  <baseType>org.blockml.service.FunctionBlock</baseType>
+  <version>1.0.0</version>
+
+  <capabilities>
+
+    <!-- #math.min(a, b) — SCAD: native min(a, b) -->
+    <capability name="min"
+                type="org.blockml.capability.Sync"
+                payloadType="{ a: Float, b: Float }"
+                returnType="org.blockml.type.Float">
+      <documentation>
+        Returns the smaller of two numbers.
+        Examples:
+          #math.min(3, 5)          → 3
+          #math.min(size[0], 10)   → min(size[0], 10)
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (a: number, b: number): number => Math.min(a, b)
+      ]]></implementation>
+    </capability>
+
+    <!-- #math.max(a, b) — SCAD: native max(a, b) -->
+    <capability name="max"
+                type="org.blockml.capability.Sync"
+                payloadType="{ a: Float, b: Float }"
+                returnType="org.blockml.type.Float">
+      <documentation>
+        Returns the larger of two numbers.
+        Examples:
+          #math.max(3, 5)          → 5
+          #math.max(size[0], 10)   → max(size[0], 10)
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (a: number, b: number): number => Math.max(a, b)
+      ]]></implementation>
+    </capability>
+
+    <!-- #math.abs(x) — SCAD: native abs(x) -->
+    <capability name="abs"
+                type="org.blockml.capability.Sync"
+                payloadType="org.blockml.type.Float"
+                returnType="org.blockml.type.Float">
+      <documentation>
+        Returns the absolute value of x.
+        Examples:
+          #math.abs(-3)  → 3
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (x: number): number => Math.abs(x)
+      ]]></implementation>
+    </capability>
+
+    <!-- #math.floor(x) — SCAD: native floor(x) -->
+    <capability name="floor"
+                type="org.blockml.capability.Sync"
+                payloadType="org.blockml.type.Float"
+                returnType="org.blockml.type.Integer">
+      <documentation>
+        Rounds x down to the nearest integer.
+        Examples:
+          #math.floor(3.7)  → 3
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (x: number): number => Math.floor(x)
+      ]]></implementation>
+    </capability>
+
+    <!-- #math.ceil(x) — SCAD: native ceil(x) -->
+    <capability name="ceil"
+                type="org.blockml.capability.Sync"
+                payloadType="org.blockml.type.Float"
+                returnType="org.blockml.type.Integer">
+      <documentation>
+        Rounds x up to the nearest integer.
+        Examples:
+          #math.ceil(3.2)  → 4
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (x: number): number => Math.ceil(x)
+      ]]></implementation>
+    </capability>
+
+    <!-- #math.round(x) — SCAD: native round(x) -->
+    <capability name="round"
+                type="org.blockml.capability.Sync"
+                payloadType="org.blockml.type.Float"
+                returnType="org.blockml.type.Integer">
+      <documentation>
+        Rounds x to the nearest integer.
+        Examples:
+          #math.round(3.4)  → 3
+          #math.round(3.6)  → 4
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (x: number): number => Math.round(x)
+      ]]></implementation>
+    </capability>
+
+    <!-- #math.round_n(x, n) — SCAD: round(x * pow(10, n)) / pow(10, n) -->
+    <capability name="round_n"
+                type="org.blockml.capability.Sync"
+                payloadType="{ x: Float, n: Integer }"
+                returnType="org.blockml.type.Float">
+      <documentation>
+        Rounds x to n decimal places.
+        Examples:
+          #math.round_n(3.14159, 2)   → 3.14
+          #math.round_n(0.1 + 0.2, 1) → 0.3
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (x: number, n: number): number =>
+            Math.round(x * Math.pow(10, n)) / Math.pow(10, n)
+      ]]></implementation>
+    </capability>
+
+    <!-- #math.pow(base, exp) — SCAD: native pow(base, exp) -->
+    <capability name="pow"
+                type="org.blockml.capability.Sync"
+                payloadType="{ base: Float, exp: Float }"
+                returnType="org.blockml.type.Float">
+      <documentation>
+        Returns base raised to the power of exp.
+        Examples:
+          #math.pow(2, 10)  → 1024
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (base: number, exp: number): number => Math.pow(base, exp)
+      ]]></implementation>
+    </capability>
+
+    <!-- #math.sqrt(x) — SCAD: native sqrt(x) -->
+    <capability name="sqrt"
+                type="org.blockml.capability.Sync"
+                payloadType="org.blockml.type.Float"
+                returnType="org.blockml.type.Float">
+      <documentation>
+        Returns the square root of x.
+        Examples:
+          #math.sqrt(9)  → 3
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (x: number): number => Math.sqrt(x)
+      ]]></implementation>
+    </capability>
+
+    <!-- #math.clamp(x, lo, hi) — SCAD: min(max(x, lo), hi) -->
+    <capability name="clamp"
+                type="org.blockml.capability.Sync"
+                payloadType="{ x: Float, lo: Float, hi: Float }"
+                returnType="org.blockml.type.Float">
+      <documentation>
+        Clamps x to the range [lo, hi].
+        Examples:
+          #math.clamp(5, 0, 3)   → 3
+          #math.clamp(-1, 0, 1)  → 0
+          #math.clamp(0.5, 0, 1) → 0.5
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (x: number, lo: number, hi: number): number =>
+            Math.min(Math.max(x, lo), hi)
+      ]]></implementation>
+    </capability>
+
+  </capabilities>
+
+</block>

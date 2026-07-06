@@ -1,0 +1,56 @@
+<!--
+  BlockML Core Services
+
+  Name: Numbers Service
+  Filename: Numbers.bml
+  FQN: org.blockml.service.Numbers
+  Expression prefix: #numbers.*
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <name>Numbers</name>
+  <fullQualifiedName>org.blockml.service.Numbers</fullQualifiedName>
+  <baseType>org.blockml.service.FunctionBlock</baseType>
+  <version>1.0.0</version>
+
+  <capabilities>
+
+    <!--
+      #numbers.formatDecimal(x, minInt, decPoint, minFrac)
+      Formats a number as a decimal string with locale-style rules.
+      SCAD: no native — Processor emits custom formatting logic.
+    -->
+    <capability name="formatDecimal"
+                type="org.blockml.capability.Sync"
+                payloadType="{ x: Float, minInt: Integer, decPoint: String, minFrac: Integer }"
+                returnType="org.blockml.type.String">
+      <documentation>
+        Formats x as a decimal string.
+        minInt: minimum integer digits (0 omits leading zero before decimal point).
+        decPoint: decimal separator character (e.g. "." or ",").
+        minFrac: minimum fractional digits (also controls rounding).
+        Examples:
+          #numbers.formatDecimal(0.1, 0, '.', 1)   → ".1"
+          #numbers.formatDecimal(3.14159, 1, '.', 2) → "3.14"
+      </documentation>
+      <implementation language="typescript"><![CDATA[
+        (x: number, minInt: number, decPoint: string, minFrac: number): string => {
+          const rounded = Math.round(x * Math.pow(10, minFrac)) / Math.pow(10, minFrac);
+          let s = rounded.toFixed(minFrac);
+          if (minInt === 0 && s.startsWith('0.')) s = s.slice(1);
+          if (minInt === 0 && s.startsWith('-0.')) s = '-' + s.slice(2);
+          return decPoint === '.' ? s : s.replace('.', decPoint);
+        }
+      ]]></implementation>
+    </capability>
+
+  </capabilities>
+
+</block>
