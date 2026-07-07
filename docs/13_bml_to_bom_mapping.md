@@ -390,6 +390,21 @@ basePresets="brick-1x1 com.other.Presets::color-red"
 
 Preset instances in a PresetCollection composition map like any other Block instance: element `Preset` → `typeFqn: org.blockml.core.Preset`. Child block elements fill the `block` aggregation (defaultAggregation). The Preset `name` attribute maps to `memberValues.name`; `id` maps to `memberValues.id`.
 
+### Library blocks
+
+Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.core.Library`. Composition children:
+
+```text
+<Dependency ref="…" version="…"/>  → typeFqn org.blockml.core.Dependency; ref, version → memberValues
+<Schema ref="bricks.xsd"/>         → typeFqn org.blockml.core.Schema; ref → memberValues.ref
+<BlockRef ref="blocks/Wall.bml"/>  → typeFqn org.blockml.core.BlockRef
+<PresetsRef ref="presets/…"/>      → typeFqn org.blockml.core.PresetsRef
+```
+
+Each child requires `aggregation=` (`_dependencies`, `_schemas`, `_blocks`, `_presets`) — Library has no default aggregation.
+
+**Orchestrator (not parser):** after parsing a Library block, resolve each `ref` path relative to the library package root, parse referenced files, and `registerBlockDefinition`. Validate `Dependency.ref` + `version` against a registered Library block FQN.
+
 ### Incremental builds
 
 Because the parser is single-file, the hash cache keys per output artifact include **transitive dependency versions** from the TypeRegistry — not inline parsed trees. See `06_compiler.md` — Incremental Build.

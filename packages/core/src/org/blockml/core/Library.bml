@@ -1,0 +1,50 @@
+<!--
+  BlockML Core — library descriptor (blocks, types, presets, dependencies)
+
+  FQN: org.blockml.core.Library
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation>Publishable library unit — groups exported Block definitions, PresetCollections, optional XSD schemas, and dependencies on other libraries. Replaces the legacy library.xml descriptor.</documentation>
+
+  <name>Library</name>
+  <fullQualifiedName>org.blockml.core.Library</fullQualifiedName>
+  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <version>1.0.0</version>
+
+  <abstract>true</abstract>
+
+  <allowedSubBlockTypes />
+
+  <properties>
+    <property name="description" type="String">
+      <documentation>Human-readable summary of what this library provides.</documentation>
+    </property>
+  </properties>
+
+  <aggregations>
+    <aggregation name="_dependencies"
+                 cardinality="0..n"
+                 type="org.blockml.core.Dependency"
+                 visibility="hidden" />
+    <aggregation name="_schemas"
+                 cardinality="0..n"
+                 type="org.blockml.core.Schema"
+                 visibility="hidden" />
+    <aggregation name="_blocks"
+                 cardinality="0..n"
+                 type="org.blockml.core.BlockRef"
+                 visibility="hidden" />
+    <aggregation name="_presets"
+                 cardinality="0..n"
+                 type="org.blockml.core.PresetsRef"
+                 visibility="hidden" />
+  </aggregations>
+
+</block>

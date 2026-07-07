@@ -709,6 +709,34 @@ Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 
 ---
 
+## Libraries (`org.blockml.core.Library`)
+
+Library descriptors are ordinary `BlockDefinition` documents with `baseType="org.blockml.core.Library"`.
+
+**Naming (soft convention):** block `<name>` is `{Segment}Library` (e.g. `BricksLibrary`); FQN = package + name (e.g. `com.machineblocks.bricks.BricksLibrary`); filename = block name.
+
+```text
+org.blockml.core.Library
+  property     description     String
+  aggregation  _dependencies   0..n  org.blockml.core.Dependency
+  aggregation  _schemas        0..n  org.blockml.core.Schema
+  aggregation  _blocks         0..n  org.blockml.core.BlockRef
+  aggregation  _presets        0..n  org.blockml.core.PresetsRef
+
+org.blockml.core.Dependency   properties: ref (Library FQN), version
+org.blockml.core.Schema       property:  ref (relative .xsd path)
+org.blockml.core.BlockRef     property:  ref (relative block file path)
+org.blockml.core.PresetsRef   property:  ref (relative PresetCollection path)
+```
+
+Composition children use element names `Dependency`, `Schema`, `BlockRef`, `PresetsRef` — each `aggregation=` attribute is required (Library has four aggregations, none is default).
+
+The orchestrator resolves `ref` paths relative to the library package root, loads referenced files into the TypeRegistry, and validates Library dependencies (`ref` + `version` must match a registered Library block).
+
+`_schemas` is optional — omit when all types are BML. XSD may be generated from type blocks in a future tooling pass.
+
+---
+
 ## Custom Data
 
 ```typescript
@@ -751,10 +779,10 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 
 ```text
 1. Built-in ServiceBlocks     — @blockml/core-services (org.blockml.service.*)
-2. Domain native members      — 09_mbom_properties.yml on com.machineblocks.core.Block
-3. Project srcDir scan        — all *.bml / configured extensions in bom.config.json
-4. Library manifests          — library.xml <blocks> / <presets> refs (optional)
-5. Declared dependencies      — library.xml <dependencies> + bom.config.json paths
+2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
+3. Library blocks             — org.blockml.core.Library → resolve BlockRef / PresetsRef paths
+4. Project srcDir scan        — remaining *.bml / configured extensions in bom.config.json
+5. Declared dependencies      — Library Dependency entries + bom.config.json paths
 ```
 
 Each discovered file is parsed independently (stages [5–7]) and registered via `registerBlockDefinition(doc)`.
@@ -835,6 +863,8 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property defaultValue cycles (topological sort)
 ✓  Preset basePresets resolve (local id or FQN::id) and have no cycles
+✓  Library BlockRef / PresetsRef paths resolve to existing files
+✓  Library Dependency ref + version matches registered Library block
 ```
 
 The validator does **not** expand directives, assign auto-IDs, or interpret aggregations.

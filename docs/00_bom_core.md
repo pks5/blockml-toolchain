@@ -945,16 +945,31 @@ configProfile < presetRef < inline property
 
 ## Library
 
-A Library is a named collection of Block definitions.
+A Library is a **Block** with `baseType="org.blockml.core.Library"`. It groups exported Block definitions, PresetCollections, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
 
 ```text
-name              — short library name
-fullQualifiedName — FQN of the library
-version           — semantic version
-blocks            — list of Block FQNs contained in this library
+org.blockml.core.Library           abstract composable Block
+  property     description   String
+  aggregation  _dependencies  0..n  org.blockml.core.Dependency
+  aggregation  _schemas       0..n  org.blockml.core.Schema      (optional — omit when types are BML-only)
+  aggregation  _blocks        0..n  org.blockml.core.BlockRef
+  aggregation  _presets       0..n  org.blockml.core.PresetsRef
+
+org.blockml.core.Dependency        ref (Library FQN) · version (exact semver)
+org.blockml.core.Schema            ref (relative .xsd path)
+org.blockml.core.BlockRef          ref (relative block .bml / .mbml path)
+org.blockml.core.PresetsRef        ref (relative PresetCollection path)
 ```
 
-A Library answers: *"What Block types are available?"*
+The Library block lives in a package directory (e.g. `com/machineblocks/bricks/`). Its FQN follows the normal block rule: package path + block name (e.g. `com.machineblocks.bricks.BricksLibrary`).
+
+**Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for the `com.machineblocks.bricks` package. Makes the library descriptor identifiable as such; not enforced by the compiler. Filename matches block name (`BricksLibrary.mbml`).
+
+**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `BlockRef` / `PresetsRef` paths relative to the library root, and registers referenced files in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+
+**XSD:** `_schemas` is optional. As domain types migrate to StructType/EnumType BML, libraries may omit XSD entirely. A future tool may **generate** XSD from Library type blocks for IDE/legacy tooling — authored XSD in `_schemas` is not required when types are BML SSOT.
+
+A Library answers: *"What Block types, presets, and types does this package export?"*
 
 ---
 
@@ -1203,7 +1218,7 @@ version="1.0.0"    — on every external block instance reference (mandatory)
 
 See `12_bom_object_model.md` — Instance Version Rules.
 
-Library `dependency` entries in `library.xml` also require an explicit `version` attribute — same dependency semantics.
+Library `<Dependency>` entries require an explicit `version` attribute — same dependency semantics as composition instance versions.
 
 ---
 

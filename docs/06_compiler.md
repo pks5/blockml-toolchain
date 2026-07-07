@@ -776,8 +776,9 @@ tests/
       DefaultEnclosureSet.bml
       DefaultEnclosureSet.expected.scad
     presets/
-      StandardBrickPresets.mbml   — MachineBlocks library fixture (legacy .mbml)
-      StandardBrick.expected.json
+      presets/StandardPresets.mbml   — @machineblocks/mbom fixture (PresetCollection)
+      BricksLibrary.mbml             — @machineblocks/mbom fixture (Library)
+      Standard.expected.json
 
   snapshots/
     wall/

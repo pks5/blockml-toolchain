@@ -227,7 +227,6 @@ BlockML Core (blockml.org):
   http://blockml.org/schema/bml        ← bml: directives namespace
   http://blockml.org/schema/data       ← data: custom metadata namespace
   http://blockml.org/schema/service    ← org.blockml.service.*
-  http://blockml.org/schema/library    ← library.xml documents
 
 MachineBlocks (machineblocks.com):
   http://machineblocks.com/schema/core        ← MB Core, NativeBlock, Set
@@ -240,10 +239,9 @@ MachineBlocks (machineblocks.com):
 ```text
 blockml.org schemas (in @blockml/core package):
   schemas/core/
-    block.xsd          ← BML document structure, bml:* directives, data:* (all <block> roots including PresetCollection)
+    block.xsd          ← BML document structure (all <block> roots: composable, types, Library, PresetCollection, …)
     types.xsd          ← org.blockml.type.* primitives (filename plural; maps to singular .type package)
     service.xsd        ← org.blockml.service.* hierarchy
-    library.xsd        ← library.xml document structure
 
 machineblocks.com schemas (in @machineblocks/mbom package):
   schemas/machineblocks/

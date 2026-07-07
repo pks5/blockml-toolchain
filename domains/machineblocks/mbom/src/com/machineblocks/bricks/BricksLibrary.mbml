@@ -1,0 +1,53 @@
+<!--
+  BlockML Library Descriptor
+
+  Name: BricksLibrary
+  Filename: BricksLibrary.mbml
+  FQN: com.machineblocks.bricks.BricksLibrary
+
+  MachineBlocks brick library — exports block definitions, presets, and optional XSD.
+  Block .mbml sources live under blocks/ (scad-lib submodule in full deployment).
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:core="org.blockml.core"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their PresetCollections.</documentation>
+
+  <name>BricksLibrary</name>
+  <fullQualifiedName>com.machineblocks.bricks.BricksLibrary</fullQualifiedName>
+  <baseType>org.blockml.core.Library</baseType>
+  <version>3.0.0</version>
+
+  <properties>
+    <property name="description" type="String"
+              defaultValue="Standard brick types for MachineBlocks" />
+  </properties>
+
+  <composition aggregation="_dependencies">
+    <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
+  </composition>
+
+  <!-- Optional while domain types migrate from XSD to BML; omit when types are BML-only -->
+  <composition aggregation="_schemas">
+    <Schema ref="bricks.xsd" />
+  </composition>
+
+  <composition aggregation="_blocks">
+    <BlockRef ref="blocks/Standard.mbml" />
+    <BlockRef ref="blocks/Plate.mbml" />
+    <BlockRef ref="blocks/Tile.mbml" />
+  </composition>
+
+  <composition aggregation="_presets">
+    <PresetsRef ref="presets/StandardPresets.mbml" />
+    <PresetsRef ref="presets/PlatePresets.mbml" />
+  </composition>
+
+</block>

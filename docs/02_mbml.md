@@ -81,6 +81,8 @@ BML defines one core document root:
 
 Property presets are **not** a separate document type. A presets file is a normal `<block>` with `baseType="org.blockml.core.PresetCollection"` — see § Preset Collections.
 
+Library packages use `<block baseType="org.blockml.core.Library">` — see § Library Format.
+
 Extension document types (defined in domain packages, not in core):
 
 ```text
@@ -1433,58 +1435,80 @@ configProfile < blockPreset < inline property
 
 ---
 
-## Library Format (`library.xml`)
+## Library Format (`org.blockml.core.Library`)
 
-A Library groups related Blocks, Presets, and Types into a publishable unit. Each package directory may contain a `library.xml` descriptor. If absent, all Blocks in the directory are treated as public.
+A Library groups related Blocks, PresetCollections, optional XSD schemas, and dependencies into a publishable unit. Each package directory should contain one Library block at package root. If absent, all BML source files in the directory are treated as public.
 
-The example below uses **`.mbml`** paths because it describes the MachineBlocks bricks library (legacy domain extension).
+**Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for package `com.machineblocks.bricks`. Filename matches block name (`BricksLibrary.mbml`). Not enforced by the compiler.
+
+### Structure
 
 ```xml
-<!-- com.machineblocks.bricks/library.xml -->
-<library xmlns="http://blockml.org/schema/library"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://blockml.org/schema/library
-             https://blockml.org/schemas/core/library.xsd">
+<!--
+  FQN: com.machineblocks.bricks
+  Filename: BricksLibrary.mbml
+-->
+<block xmlns="http://blockml.org/schema/block"
+       xmlns:core="org.blockml.core"
+       ...>
 
-  <name>MachineBlocks Bricks</name>
-  <fullQualifiedName>com.machineblocks.bricks</fullQualifiedName>
+  <documentation>MachineBlocks standard brick library.</documentation>
+
+  <name>BricksLibrary</name>
+  <fullQualifiedName>com.machineblocks.bricks.BricksLibrary</fullQualifiedName>
+  <baseType>org.blockml.core.Library</baseType>
   <version>3.0.0</version>
-  <description>Standard brick types for MachineBlocks</description>
 
-  <dependencies>
-    <dependency ref="com.machineblocks.core" version="3.0.0" />
-  </dependencies>
+  <properties>
+    <property name="description" type="String"
+              defaultValue="Standard brick types for MachineBlocks" />
+  </properties>
 
-  <types>
-    <schema ref="bricks.xsd" />
-  </types>
+  <composition aggregation="_dependencies">
+    <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
+  </composition>
 
-  <blocks>
-    <block ref="blocks/Standard.mbml" />
-    <block ref="blocks/Plate.mbml" />
-    <block ref="blocks/Tile.mbml" />
-    <block ref="presets/StandardPresets.mbml" />
-    <block ref="presets/PlatePresets.mbml" />
-  </blocks>
+  <!-- Optional — omit when all types are BML StructType/EnumType -->
+  <composition aggregation="_schemas">
+    <Schema ref="bricks.xsd" />
+  </composition>
 
-</library>
+  <composition aggregation="_blocks">
+    <BlockRef ref="blocks/Standard.mbml" />
+    <BlockRef ref="blocks/Plate.mbml" />
+    <BlockRef ref="blocks/Tile.mbml" />
+  </composition>
+
+  <composition aggregation="_presets">
+    <PresetsRef ref="presets/StandardPresets.mbml" />
+    <PresetsRef ref="presets/PlatePresets.mbml" />
+  </composition>
+
+</block>
 ```
+
+**`ref` paths** on `BlockRef`, `PresetsRef`, and `Schema` are relative to the **library package root** (directory containing the Library block file).
+
+**`_schemas`** is optional. Domain types may live entirely in BML (`com.machineblocks.type.*` StructType/EnumType blocks). XSD entries support legacy tooling during migration; a future compiler tool may generate XSD from Library type blocks instead of requiring authored `.xsd` files.
 
 **Directory structure:**
 
 ```text
 com.machineblocks.bricks/
-  library.xml          ← descriptor (optional)
-  bricks.xsd           ← Enum + Type definitions
+  BricksLibrary.mbml       ← Library block (FQN = com.machineblocks.bricks.BricksLibrary)
+  bricks.xsd             ← optional; legacy or generated
   blocks/
     Standard.mbml
     Plate.mbml
     Tile.mbml
   presets/
     StandardPresets.mbml
+    PlatePresets.mbml
 ```
 
-Without `library.xml`: all BML source files in the directory are public (`.bml` by default; `.mbml` in MachineBlocks library trees).
+Without a Library block: all BML source files in the directory are public (`.bml` by default; `.mbml` in MachineBlocks library trees).
+
+Legacy `library.xml` is **replaced** by the Library block — not supported in V1.
 
 ---
 

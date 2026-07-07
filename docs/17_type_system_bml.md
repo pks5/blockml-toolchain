@@ -201,6 +201,8 @@ OpenSCAD          →  Block  (LanguageBlock branch)
 Placement · Step  →  Block  (ComposableBlock — Set meta blocks)
 PresetCollection  →  Block  (ComposableBlock — named property preset groups)
 Preset            →  Block  (ComposableBlock — single preset instance)
+Library           →  Block  (ComposableBlock — publishable package descriptor)
+Dependency · Schema · BlockRef · PresetsRef  →  Block  (Library entry types)
 Math · #strings   →  Block  (ComposableBlock — ServiceBlock branch)
 org.blockml.core.Block itself  →  Block  (root)
 ```
@@ -256,6 +258,7 @@ org.blockml.core.ComposableBlock   + id · aggregations · composition · capabi
                                    + allowedSubBlockTypes · supportedImplementationTypes
 org.blockml.core.PresetCollection  + presets aggregation (Preset instances)
 org.blockml.core.Preset            + name · block aggregation · basePresets association
+org.blockml.core.Library           + _dependencies · _schemas · _blocks · _presets aggregations
 org.blockml.core.TypeBlock         + fields · enumValues · type parameters
 org.blockml.core.LanguageBlock   (meta — no extra members in V1)
 ```
