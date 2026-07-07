@@ -611,21 +611,17 @@ interface BlockInstance {
 
 ### Type Reference Resolution
 
-When parsing a composition child element, the parser resolves `typeFqn`:
+When parsing a composition child element, the parser resolves `typeFqn` for unqualified PascalCase tag names:
 
 ```text
-1. Short name (no prefix, starts with uppercase)
-   → search current Block's subBlocks[] by name
-   → found: typeFqn = derived Sub-Block FQN (same document)
-
-2. Prefixed name (bricks:StandardBrick)
-   → Namespace Resolver: prefix → FQN package + local name
-
-3. Full FQN
-   → use directly
+1. subBlocks[] of innermost containing BlockDefinition (same BomDocument)
+2. Walk up parent BlockDefinition chain (nested Sub-Block → root)
+3. Inherited subBlocks from baseType chain (e.g. org.blockml.core.Library.* for Library-typed blocks)
+4. Prefixed name (bricks:Standard) → Namespace Resolver
+5. Full FQN or TypeRegistry lookup
 ```
 
-Resolution scope for Sub-Block short names: **current BlockDefinition only** (innermost containing block definition — root or sub-block).
+Steps 1–3 are **same-document / inheritance scope** — no `version` attribute required on instances. Step 4–5 are external references — `version` required when from another file.
 
 ---
 
@@ -718,18 +714,21 @@ Library descriptors are ordinary `BlockDefinition` documents with `baseType="org
 ```text
 org.blockml.core.Library
   property     description     String
-  aggregation  _dependencies   0..n  org.blockml.core.Dependency
-  aggregation  _schemas        0..n  org.blockml.core.Schema
-  aggregation  _types          0..n  org.blockml.core.TypeRef
-  aggregation  _blocks         0..n  org.blockml.core.BlockRef
-  aggregation  _presets        0..n  org.blockml.core.PresetsRef
+  subBlocks      Dependency · Schema · TypeRef · BlockRef · PresetsRef
+  aggregation  _dependencies   0..n  org.blockml.core.Library.Dependency
+  aggregation  _schemas        0..n  org.blockml.core.Library.Schema
+  aggregation  _types          0..n  org.blockml.core.Library.TypeRef
+  aggregation  _blocks         0..n  org.blockml.core.Library.BlockRef
+  aggregation  _presets        0..n  org.blockml.core.Library.PresetsRef
 
-org.blockml.core.Dependency   properties: ref (Library FQN), version
-org.blockml.core.Schema       property:  ref (relative .xsd path)
-org.blockml.core.TypeRef      property:  ref (relative TypeBlock file path)
-org.blockml.core.BlockRef     property:  ref (relative block file path)
-org.blockml.core.PresetsRef   property:  ref (relative PresetCollection path)
+org.blockml.core.Library.Dependency   properties: ref (Library FQN), version
+org.blockml.core.Library.Schema       property:  ref (relative .xsd path)
+org.blockml.core.Library.TypeRef      property:  ref (relative TypeBlock file path)
+org.blockml.core.Library.BlockRef     property:  ref (relative block file path)
+org.blockml.core.Library.PresetsRef   property:  ref (relative PresetCollection path)
 ```
+
+Entry types are **Sub-Blocks of `org.blockml.core.Library`** — defined in `Library.bml`, not separate framework files. Library-typed blocks (`baseType="org.blockml.core.Library"`) resolve `<Dependency>`, `<TypeRef>`, etc. by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
 
 Composition children use element names `Dependency`, `Schema`, `TypeRef`, `BlockRef`, `PresetsRef` — each `aggregation=` attribute is required (Library has five aggregations, none is default).
 

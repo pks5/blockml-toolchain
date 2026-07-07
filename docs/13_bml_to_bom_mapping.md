@@ -395,12 +395,14 @@ Preset instances in a PresetCollection composition map like any other Block inst
 Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.core.Library`. Composition children:
 
 ```text
-<Dependency ref="…" version="…"/>  → typeFqn org.blockml.core.Dependency; ref, version → memberValues
-<Schema ref="bricks.xsd"/>         → typeFqn org.blockml.core.Schema; ref → memberValues.ref
-<TypeRef ref="types/Size3D.bml"/>  → typeFqn org.blockml.core.TypeRef
-<BlockRef ref="blocks/Wall.bml"/>  → typeFqn org.blockml.core.BlockRef
-<PresetsRef ref="presets/…"/>      → typeFqn org.blockml.core.PresetsRef
+<Dependency ref="…" version="…"/>  → org.blockml.core.Library.Dependency (short name)
+<Schema ref="bricks.xsd"/>         → org.blockml.core.Library.Schema
+<TypeRef ref="types/Size3D.bml"/>  → org.blockml.core.Library.TypeRef
+<BlockRef ref="blocks/Wall.bml"/>  → org.blockml.core.Library.BlockRef
+<PresetsRef ref="presets/…"/>      → org.blockml.core.Library.PresetsRef
 ```
+
+Short names resolve via inherited Sub-Blocks of `org.blockml.core.Library` on any Library-typed root block.
 
 Each child requires `aggregation=` (`_dependencies`, `_schemas`, `_types`, `_blocks`, `_presets`) — Library has no default aggregation.
 

@@ -2,6 +2,10 @@
   BlockML Core — library descriptor (blocks, types, presets, dependencies)
 
   FQN: org.blockml.core.Library
+
+  Entry types (Dependency, Schema, TypeRef, BlockRef, PresetsRef) are Sub-Blocks
+  of Library — not separate framework files. Any block with baseType Library
+  resolves them by short name in compositions.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -31,24 +35,101 @@
   <aggregations>
     <aggregation name="_dependencies"
                  cardinality="0..n"
-                 type="org.blockml.core.Dependency"
+                 type="org.blockml.core.Library.Dependency"
                  visibility="hidden" />
     <aggregation name="_schemas"
                  cardinality="0..n"
-                 type="org.blockml.core.Schema"
+                 type="org.blockml.core.Library.Schema"
                  visibility="hidden" />
     <aggregation name="_types"
                  cardinality="0..n"
-                 type="org.blockml.core.TypeRef"
+                 type="org.blockml.core.Library.TypeRef"
                  visibility="hidden" />
     <aggregation name="_blocks"
                  cardinality="0..n"
-                 type="org.blockml.core.BlockRef"
+                 type="org.blockml.core.Library.BlockRef"
                  visibility="hidden" />
     <aggregation name="_presets"
                  cardinality="0..n"
-                 type="org.blockml.core.PresetsRef"
+                 type="org.blockml.core.Library.PresetsRef"
                  visibility="hidden" />
   </aggregations>
+
+  <subBlocks>
+
+    <block>
+      <documentation>Dependency on another Library — pins required library FQN and exact semantic version.</documentation>
+      <name>Dependency</name>
+      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <version>1.0.0</version>
+      <final>true</final>
+      <allowedSubBlockTypes />
+      <properties>
+        <property name="ref" type="String">
+          <documentation>FQN of the required Library (e.g. com.machineblocks.core.CoreLibrary).</documentation>
+        </property>
+        <property name="version" type="String">
+          <documentation>Exact semantic version required — no implicit latest.</documentation>
+        </property>
+      </properties>
+    </block>
+
+    <block>
+      <documentation>Optional XSD schema file exported by a Library — legacy type/enum definitions.</documentation>
+      <name>Schema</name>
+      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <version>1.0.0</version>
+      <final>true</final>
+      <allowedSubBlockTypes />
+      <properties>
+        <property name="ref" type="String">
+          <documentation>Path to the .xsd file relative to the library package root.</documentation>
+        </property>
+      </properties>
+    </block>
+
+    <block>
+      <documentation>Reference to a TypeBlock definition file (StructType, EnumType, …) exported by this Library.</documentation>
+      <name>TypeRef</name>
+      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <version>1.0.0</version>
+      <final>true</final>
+      <allowedSubBlockTypes />
+      <properties>
+        <property name="ref" type="String">
+          <documentation>Path to the type .bml / .mbml file relative to the library package root.</documentation>
+        </property>
+      </properties>
+    </block>
+
+    <block>
+      <documentation>Reference to a Block definition file exported by this Library.</documentation>
+      <name>BlockRef</name>
+      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <version>1.0.0</version>
+      <final>true</final>
+      <allowedSubBlockTypes />
+      <properties>
+        <property name="ref" type="String">
+          <documentation>Path to the block .bml / .mbml file relative to the library package root.</documentation>
+        </property>
+      </properties>
+    </block>
+
+    <block>
+      <documentation>Reference to a PresetCollection block file exported by this Library.</documentation>
+      <name>PresetsRef</name>
+      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <version>1.0.0</version>
+      <final>true</final>
+      <allowedSubBlockTypes />
+      <properties>
+        <property name="ref" type="String">
+          <documentation>Path to the PresetCollection .bml / .mbml file relative to the library package root.</documentation>
+        </property>
+      </properties>
+    </block>
+
+  </subBlocks>
 
 </block>

@@ -955,7 +955,17 @@ com.machineblocks.calibration.Calibrator.Base.Strip
 
 ### Short-Name Reference in Compositions
 
-When referencing a Sub-Block within its parent Block's own Composition, the short name alone is sufficient — no namespace prefix needed:
+When a composition child element has **no namespace prefix** (PascalCase tag name only), the parser resolves `typeFqn` in this order:
+
+```text
+1. subBlocks[] of the innermost containing BlockDefinition (same BML document)
+2. Walk up the parent chain — parent Sub-Block → … → root Block subBlocks[]
+3. Inherited subBlocks from the baseType chain (framework bases — see below)
+4. xmlns prefix → package FQN (bricks:Standard)
+5. TypeRegistry global lookup
+```
+
+**Same document, local first:**
 
 ```xml
 <!-- Inside Calibrator's composition: -->
@@ -963,9 +973,16 @@ When referencing a Sub-Block within its parent Block's own Composition, the shor
 <StudDiameter id="samples_stud" ... />
 ```
 
-The parser resolves unqualified names against the current Block's `<subBlocks>` first. If no Sub-Block matches, it falls back to the registered type registry. This mirrors how local classes are resolved before global ones in Java.
+**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.Library"` (e.g. `BricksLibrary`) automatically resolves `Dependency`, `TypeRef`, `BlockRef`, … without prefix — they are Sub-Blocks of `org.blockml.core.Library`, inherited via the baseType chain. Authors do not redeclare them in each library file.
 
-When referencing a Sub-Block from outside the parent Block, use the full FQN:
+```xml
+<!-- BricksLibrary.mbml — no xmlns needed for entry types -->
+<composition aggregation="_dependencies">
+  <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
+</composition>
+```
+
+When referencing a Sub-Block from **outside** the parent Block, use the full FQN:
 
 ```xml
 xmlns:cal="com.machineblocks.calibration"
@@ -1449,7 +1466,6 @@ A Library groups related Blocks, PresetCollections, optional XSD schemas, and de
   Filename: BricksLibrary.mbml
 -->
 <block xmlns="http://blockml.org/schema/block"
-       xmlns:core="org.blockml.core"
        ...>
 
   <documentation>MachineBlocks standard brick library.</documentation>

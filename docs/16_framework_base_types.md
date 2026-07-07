@@ -127,7 +127,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/service/ServiceBlock.bml
      org/blockml/service/FunctionBlock.bml
      org/blockml/core/Preset.bml · PresetCollection.bml
-     org/blockml/core/Library.bml · Dependency.bml · Schema.bml · TypeRef.bml · BlockRef.bml · PresetsRef.bml
+     org/blockml/core/Library.bml   ← includes Dependency · Schema · TypeRef · BlockRef · PresetsRef as subBlocks
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/core/Placement.bml · Step.bml · Block.bml · NativeBlock.bml · Set.bml

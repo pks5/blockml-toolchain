@@ -11,7 +11,6 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
-  xmlns:core="org.blockml.core"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
     http://blockml.org/schema/block
