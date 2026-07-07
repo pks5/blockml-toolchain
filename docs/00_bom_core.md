@@ -951,12 +951,14 @@ A Library is a **Block** with `baseType="org.blockml.core.Library"`. It groups e
 org.blockml.core.Library           abstract composable Block
   property     description   String
   aggregation  _dependencies  0..n  org.blockml.core.Dependency
-  aggregation  _schemas       0..n  org.blockml.core.Schema      (optional — omit when types are BML-only)
+  aggregation  _schemas        0..n  org.blockml.core.Schema      (optional — legacy XSD)
+  aggregation  _types          0..n  org.blockml.core.TypeRef     (StructType / EnumType BML)
   aggregation  _blocks        0..n  org.blockml.core.BlockRef
   aggregation  _presets       0..n  org.blockml.core.PresetsRef
 
 org.blockml.core.Dependency        ref (Library FQN) · version (exact semver)
 org.blockml.core.Schema            ref (relative .xsd path)
+org.blockml.core.TypeRef           ref (relative TypeBlock .bml path)
 org.blockml.core.BlockRef          ref (relative block .bml / .mbml path)
 org.blockml.core.PresetsRef        ref (relative PresetCollection path)
 ```
@@ -965,9 +967,9 @@ The Library block lives in a package directory (e.g. `com/machineblocks/bricks/`
 
 **Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for the `com.machineblocks.bricks` package. Makes the library descriptor identifiable as such; not enforced by the compiler. Filename matches block name (`BricksLibrary.mbml`).
 
-**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `BlockRef` / `PresetsRef` paths relative to the library root, and registers referenced files in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `TypeRef` / `BlockRef` / `PresetsRef` paths relative to the library root, and registers referenced files in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
-**XSD:** `_schemas` is optional. As domain types migrate to StructType/EnumType BML, libraries may omit XSD entirely. A future tool may **generate** XSD from Library type blocks for IDE/legacy tooling — authored XSD in `_schemas` is not required when types are BML SSOT.
+**Types:** `_types` lists exported TypeBlock BML (StructType, EnumType, …). `_schemas` is optional legacy XSD — omit when types are BML-only. A future tool may generate XSD from `_types` for IDE tooling.
 
 A Library answers: *"What Block types, presets, and types does this package export?"*
 

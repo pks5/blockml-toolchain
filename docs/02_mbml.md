@@ -1468,9 +1468,14 @@ A Library groups related Blocks, PresetCollections, optional XSD schemas, and de
     <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
   </composition>
 
-  <!-- Optional — omit when all types are BML StructType/EnumType -->
+  <!-- Optional legacy XSD -->
   <composition aggregation="_schemas">
     <Schema ref="bricks.xsd" />
+  </composition>
+
+  <composition aggregation="_types">
+    <TypeRef ref="types/Size3D.bml" />
+    <TypeRef ref="types/Direction.bml" />
   </composition>
 
   <composition aggregation="_blocks">
@@ -1487,16 +1492,18 @@ A Library groups related Blocks, PresetCollections, optional XSD schemas, and de
 </block>
 ```
 
-**`ref` paths** on `BlockRef`, `PresetsRef`, and `Schema` are relative to the **library package root** (directory containing the Library block file).
+**`ref` paths** on `TypeRef`, `BlockRef`, `PresetsRef`, and `Schema` are relative to the **library package root** (directory containing the Library block file).
 
-**`_schemas`** is optional. Domain types may live entirely in BML (`com.machineblocks.type.*` StructType/EnumType blocks). XSD entries support legacy tooling during migration; a future compiler tool may generate XSD from Library type blocks instead of requiring authored `.xsd` files.
+**`_types`** lists exported TypeBlock definitions (StructType, EnumType, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML. A future compiler tool may generate XSD from `_types` instead of requiring authored `.xsd` files.
 
 **Directory structure:**
 
 ```text
 com.machineblocks.bricks/
   BricksLibrary.mbml       ← Library block (FQN = com.machineblocks.bricks.BricksLibrary)
-  bricks.xsd             ← optional; legacy or generated
+  bricks.xsd               ← optional legacy XSD
+  types/
+    Size3D.bml · Direction.bml · …
   blocks/
     Standard.mbml
     Plate.mbml

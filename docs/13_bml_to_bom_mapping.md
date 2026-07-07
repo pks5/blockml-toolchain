@@ -397,11 +397,12 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.c
 ```text
 <Dependency ref="…" version="…"/>  → typeFqn org.blockml.core.Dependency; ref, version → memberValues
 <Schema ref="bricks.xsd"/>         → typeFqn org.blockml.core.Schema; ref → memberValues.ref
+<TypeRef ref="types/Size3D.bml"/>  → typeFqn org.blockml.core.TypeRef
 <BlockRef ref="blocks/Wall.bml"/>  → typeFqn org.blockml.core.BlockRef
 <PresetsRef ref="presets/…"/>      → typeFqn org.blockml.core.PresetsRef
 ```
 
-Each child requires `aggregation=` (`_dependencies`, `_schemas`, `_blocks`, `_presets`) — Library has no default aggregation.
+Each child requires `aggregation=` (`_dependencies`, `_schemas`, `_types`, `_blocks`, `_presets`) — Library has no default aggregation.
 
 **Orchestrator (not parser):** after parsing a Library block, resolve each `ref` path relative to the library package root, parse referenced files, and `registerBlockDefinition`. Validate `Dependency.ref` + `version` against a registered Library block FQN.
 

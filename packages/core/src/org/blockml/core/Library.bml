@@ -37,6 +37,10 @@
                  cardinality="0..n"
                  type="org.blockml.core.Schema"
                  visibility="hidden" />
+    <aggregation name="_types"
+                 cardinality="0..n"
+                 type="org.blockml.core.TypeRef"
+                 visibility="hidden" />
     <aggregation name="_blocks"
                  cardinality="0..n"
                  type="org.blockml.core.BlockRef"

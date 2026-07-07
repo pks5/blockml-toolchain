@@ -720,20 +720,22 @@ org.blockml.core.Library
   property     description     String
   aggregation  _dependencies   0..n  org.blockml.core.Dependency
   aggregation  _schemas        0..n  org.blockml.core.Schema
+  aggregation  _types          0..n  org.blockml.core.TypeRef
   aggregation  _blocks         0..n  org.blockml.core.BlockRef
   aggregation  _presets        0..n  org.blockml.core.PresetsRef
 
 org.blockml.core.Dependency   properties: ref (Library FQN), version
 org.blockml.core.Schema       property:  ref (relative .xsd path)
+org.blockml.core.TypeRef      property:  ref (relative TypeBlock file path)
 org.blockml.core.BlockRef     property:  ref (relative block file path)
 org.blockml.core.PresetsRef   property:  ref (relative PresetCollection path)
 ```
 
-Composition children use element names `Dependency`, `Schema`, `BlockRef`, `PresetsRef` — each `aggregation=` attribute is required (Library has four aggregations, none is default).
+Composition children use element names `Dependency`, `Schema`, `TypeRef`, `BlockRef`, `PresetsRef` — each `aggregation=` attribute is required (Library has five aggregations, none is default).
 
 The orchestrator resolves `ref` paths relative to the library package root, loads referenced files into the TypeRegistry, and validates Library dependencies (`ref` + `version` must match a registered Library block).
 
-`_schemas` is optional — omit when all types are BML. XSD may be generated from type blocks in a future tooling pass.
+`_schemas` is optional legacy XSD. `_types` lists exported TypeBlock BML — primary SSOT as types migrate from XSD.
 
 ---
 
@@ -863,7 +865,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property defaultValue cycles (topological sort)
 ✓  Preset basePresets resolve (local id or FQN::id) and have no cycles
-✓  Library BlockRef / PresetsRef paths resolve to existing files
+✓  Library TypeRef / BlockRef / PresetsRef paths resolve to existing files
 ✓  Library Dependency ref + version matches registered Library block
 ```
 
