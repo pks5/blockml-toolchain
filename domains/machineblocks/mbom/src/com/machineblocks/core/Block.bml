@@ -2,7 +2,6 @@
   MachineBlocks MBOM — domain base Block
 
   FQN: com.machineblocks.core.Block
-  Native properties: full set migrates from 09_mbom_properties.yml into <properties>
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -13,7 +12,7 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation>MachineBlocks domain base Block. Abstract composable type for all physical MBOM blocks — carries native properties (size, offset, direction, …) and the default _parts aggregation.</documentation>
+  <documentation>MachineBlocks domain base Block. Carries _presets aggregation and appliedPresets association for domain-specific preset resolution. Preset merge is compiler logic; Customizer output is render-target logic.</documentation>
 
   <name>Block</name>
   <fullQualifiedName>com.machineblocks.core.Block</fullQualifiedName>
@@ -22,28 +21,18 @@
 
   <abstract>true</abstract>
 
-  <allowedSubBlockTypes>
-    <allowedSubBlockType type="com.machineblocks.core.Block" />
-    <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
-  </allowedSubBlockTypes>
-
-  <supportedImplementationTypes>
-    <supportedImplementationType type="org.blockml.language.OpenSCAD" />
-  </supportedImplementationTypes>
+  <properties>
+    <property name="name" type="String">
+      <documentation>The human readable name of the Block.</documentation>
+    </property>
+  </properties>
+  
+  <associations>
+    <association name="appliedPresets" type="_self[]"></association>
+  </associations>
 
   <aggregations>
-    <aggregation name="_parts"
-                 type="com.machineblocks.core.Block[]"
-                 default="true" />
+    <aggregation name="_presets" type="com.machineblocks.core.Block[]" />
   </aggregations>
-
-  <!-- Representative native properties — remainder to migrate from 09_mbom_properties.yml -->
-  <properties>
-    <property name="size" type="type:Size3D" defaultValue="[1, 1, 1]" />
-    <property name="offset" type="type:Vector3D" defaultValue="[0, 0, 0]" />
-    <property name="direction" type="type:Direction" defaultValue="north" />
-    <property name="baseColor" type="type:Color" />
-    <property name="studs" type="Boolean" defaultValue="true" />
-  </properties>
-
+  
 </block>

@@ -126,11 +126,10 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/language/TypeScript.bml · OpenSCAD.bml
      org/blockml/service/ServiceBlock.bml
      org/blockml/service/FunctionBlock.bml
-     org/blockml/core/PresetCollection.bml   ← includes Preset as subBlock
-     org/blockml/core/Library.bml   ← includes Dependency · Schema · TypeRef · BlockRef · PresetsRef as subBlocks
+     org/blockml/core/Library.bml   ← includes Dependency · Schema · TypeRef · BlockRef as subBlocks
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
-     com/machineblocks/core/Placement.bml · Step.bml · Block.bml · NativeBlock.bml · Set.bml
+     com/machineblocks/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
      …
 
 3. @blockml/core-services BML
@@ -146,7 +145,7 @@ Each file is parsed and `registerBlockDefinition(doc)` — **identical path** to
 | In BML (Ideas) | In compiler code (Manifestation) |
 |---|---|
 | `org.blockml.core.Block`, branches, primitives | XML/BOM parse algorithm |
-| `com.machineblocks.core.Set`, `Placement`, `Step` | `baseType` chain resolution |
+| `com.machineblocks.core.Set`, `Step` | `baseType` chain resolution |
 | `org.blockml.language.OpenSCAD` | branch-specific validation rules |
 | `org.blockml.service.Math` capabilities | render/processor dispatch |
 | User Walls, Sets, Bricks | SCAD emission, cache, CLI |
@@ -157,7 +156,7 @@ No framework FQN should exist only in TypeScript — if it is part of the gramma
 
 ## Native Properties Migration
 
-Native MB properties (`size`, `offset`, …) are declared in **`com/machineblocks/core/Block.bml`** under `<properties>` — not in `09_mbom_properties.yml`.
+Native MB properties (`size`, `offset`, …) are declared on **concrete MachineBlocks block types** (e.g. `com.machineblocks.bricks.Standard`) — not on the abstract `com.machineblocks.core.Block` base.
 
 `09_mbom_properties.yml` retains **SCAD render hints** keyed by property name:
 
@@ -179,11 +178,11 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/src/
   org/blockml/core/
-    Block.bml · ComposableBlock.bml · PresetCollection.bml · Library.bml · …
+    Block.bml · ComposableBlock.bml · Library.bml · …
 
 domains/machineblocks/mbom/src/
   com/machineblocks/core/
-    Placement.bml · Step.bml · Block.bml · NativeBlock.bml · Set.bml
+    Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
   com/machineblocks/bricks/
     BricksLibrary.mbml · presets/StandardPresets.mbml
 

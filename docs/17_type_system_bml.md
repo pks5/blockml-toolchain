@@ -198,8 +198,8 @@ This is a **foundational decision**, not a naming convention:
 Wall              →  Block  (ComposableBlock branch)
 Integer           →  Block  (TypeBlock branch)
 OpenSCAD          →  Block  (LanguageBlock branch)
-Placement · Step  →  Block  (ComposableBlock — Set meta blocks)
-PresetCollection  →  Block  (ComposableBlock — Preset as subBlock)
+Step  →  Block  (ComposableBlock — Set meta block)
+PresetCollection  →  removed — presets are MachineBlocks `_presets` on Block
 Library           →  Block  (ComposableBlock — publishable package descriptor; entry types as subBlocks)
 Math · #strings   →  Block  (ComposableBlock — ServiceBlock branch)
 org.blockml.core.Block itself  →  Block  (root)
@@ -227,7 +227,7 @@ Before the compiler validates or renders **any** user file, it bootstraps the Ty
   Integer.bml · OpenSCAD.bml · …
 
 @machineblocks/mbom BML
-  Block.bml · Set.bml · Placement.bml · Step.bml · NativeBlock.bml · …
+  Block.bml · CompositeBlock.bml · Set.bml · Step.bml · NativeBlock.bml · …
 
 @blockml/core-services BML
   Math.bml · Strings.bml · …
@@ -254,9 +254,10 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 org.blockml.core.Block           identity · version · abstract · final · documentation
 org.blockml.core.ComposableBlock   + id · aggregations · composition · capabilities
                                    + allowedSubBlockTypes · supportedImplementationTypes
-org.blockml.core.PresetCollection  + subBlocks (Preset) · presets aggregation (type="Preset")
-org.blockml.core.Library           + subBlocks (Dependency · Schema · TypeRef · BlockRef · PresetsRef)
-                                   + _dependencies · _schemas · _types · _blocks · _presets aggregations
+com.machineblocks.core.Block         + _presets aggregation · appliedPresets association
+com.machineblocks.core.CompositeBlock + _parts aggregation (default)
+org.blockml.core.Library             + subBlocks (Dependency · Schema · TypeRef · BlockRef)
+                                   + _dependencies · _schemas · _types · _blocks aggregations
 org.blockml.core.TypeBlock         + fields · enumValues · type parameters
 org.blockml.core.LanguageBlock   (meta — no extra members in V1)
 ```

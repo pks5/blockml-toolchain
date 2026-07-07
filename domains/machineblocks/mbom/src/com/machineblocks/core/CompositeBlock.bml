@@ -1,0 +1,39 @@
+<!--
+  MachineBlocks MBOM — composable Block with _parts aggregation
+
+  FQN: com.machineblocks.core.CompositeBlock
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:type="com.machineblocks.type"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation>Composable MachineBlocks Block with default _parts aggregation. On Sets, _parts holds placed block instances (direction, offset, appliedPresets). On other composites, _parts holds child blocks for SCAD composition.</documentation>
+
+  <name>CompositeBlock</name>
+  <fullQualifiedName>com.machineblocks.core.CompositeBlock</fullQualifiedName>
+  <baseType>com.machineblocks.core.Block</baseType>
+  <version>1.0.0</version>
+
+  <abstract>true</abstract>
+
+  <allowedSubBlockTypes>
+    <allowedSubBlockType type="com.machineblocks.core.Block" />
+    <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
+  </allowedSubBlockTypes>
+
+  <supportedImplementationTypes>
+    <supportedImplementationType type="org.blockml.language.OpenSCAD" />
+  </supportedImplementationTypes>
+
+  <aggregations>
+    <aggregation name="_parts"
+                 type="com.machineblocks.core.Block[]"
+                 default="true" />
+  </aggregations>
+
+</block>

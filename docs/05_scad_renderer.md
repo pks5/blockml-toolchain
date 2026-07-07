@@ -632,12 +632,12 @@ module mb__com__martianmicro__anyclosure__Wall(config = undef, settings = undef)
 
 A MBOM Block whose `baseType` chain includes `com.machineblocks.core.Set` is rendered by `ScadSetRenderer` as a SCAD file with a STEPS array and four view submodules.
 
-A MachineBlocks Set uses three conventional Aggregations — `_parts` inherited from `com.machineblocks.core.Block`:
+A MachineBlocks Set uses three conventional Aggregations — `_presets` and `_parts` inherited from the base type chain, `_steps` declared on Set:
 
 ```text
-_parts      — block palette (configurations referenced by blockId in _placement)
-_placement  — placed instances (where each block is; id becomes the SCAD instance id)
-_steps      — assembly order (optional; defaults to document order of _placement)
+_presets    — block palette (configurations referenced by appliedPresets on _parts entries)
+_parts      — placed block instances (direction, offset, appliedPresets; id becomes SCAD instance id)
+_steps      — assembly order (optional; defaults to document order of _parts)
 ```
 
 ### STEPS Array
@@ -655,10 +655,10 @@ STEPS = [
 Fields per entry:
 
 ```text
-[0]  instanceId   — string (from Placement id)
-[1]  boundingBox  — [x, y, z] (from referenced Block configuration size)
-[2]  direction    — "west" | "north" | "east" | "south" (from Placement direction)
-[3]  offset       — [x, y, z] (from Placement offset)
+[0]  instanceId   — string (from placed instance id in _parts)
+[1]  boundingBox  — [x, y, z] (from merged preset/configuration size)
+[2]  direction    — "west" | "north" | "east" | "south" (from instance direction)
+[3]  offset       — [x, y, z] (from instance offset)
 ```
 
 ### Bounding Box
@@ -803,9 +803,9 @@ Nested NativeBlocks or other Blocks within a Composition are true instances — 
 
 ---
 
-## Preset File Rendering
+## Preset Block Rendering (MachineBlocks)
 
-A Preset Collection block (`baseType="org.blockml.core.PresetCollection"`) is rendered to an OpenSCAD Customizer JSON file. The Customizer JSON uses the Preset **name** as the key — it is the human-readable label shown in the OpenSCAD UI:
+A preset block (e.g. `com.machineblocks.bricks.StandardPresets` with `_presets` composition) may be rendered to an OpenSCAD Customizer JSON file by the render target. The compiler merges `appliedPresets` chains before serialization. The Customizer JSON uses the preset **name** as the key — the human-readable label shown in the OpenSCAD UI:
 
 ```json
 {

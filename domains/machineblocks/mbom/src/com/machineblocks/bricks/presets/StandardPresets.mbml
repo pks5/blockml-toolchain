@@ -5,8 +5,9 @@
   Filename: StandardPresets.mbml
   FQN: com.machineblocks.bricks.StandardPresets
 
-  Preset Collection for com.machineblocks.bricks.Standard (Standard.mbml).
-  Compiles to scad/com/machineblocks/bricks/Standard.json (OpenSCAD Customizer).
+  Named property presets for com.machineblocks.bricks.Standard (Standard.mbml).
+  Presets are Block instances in _presets — appliedPresets resolves within this Block.
+  Customizer JSON output is render-target logic (machineblocks-v3-scad).
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -21,58 +22,49 @@
         https://machineblocks.com/schemas/machineblocks/bricks.xsd
   ">
 
-  <documentation>Named property presets for the MachineBlocks Standard brick — sizes, colors, and composite combinations for Customizer and composition presetRef.</documentation>
+  <documentation>Named property presets for the MachineBlocks Standard brick — sizes, colors, and composite combinations for Customizer and appliedPresets references.</documentation>
 
   <name>StandardPresets</name>
   <fullQualifiedName>com.machineblocks.bricks.StandardPresets</fullQualifiedName>
-  <baseType>org.blockml.core.PresetCollection</baseType>
+  <baseType>com.machineblocks.core.Block</baseType>
   <version>3.0.0</version>
 
-  <composition>
+  <composition aggregation="_presets">
 
-    <Preset id="brick-1x1" name="Brick 1x1">
-      <bricks:Standard version="3.0.0" size="[1, 1, 3]" />
-    </Preset>
+    <bricks:Standard id="brick-1x1" name="Brick 1x1" version="3.0.0" size="[1, 1, 3]" />
 
-    <Preset id="brick-2x4" name="Brick 2x4">
-      <bricks:Standard version="3.0.0" size="[2, 4, 3]" />
-    </Preset>
+    <bricks:Standard id="brick-2x4" name="Brick 2x4" version="3.0.0" size="[2, 4, 3]" />
 
-    <Preset id="brick-4x4" name="Brick 4x4">
-      <bricks:Standard version="3.0.0" size="[4, 4, 3]" />
-    </Preset>
+    <bricks:Standard id="brick-4x4" name="Brick 4x4" version="3.0.0" size="[4, 4, 3]" />
 
-    <Preset id="color-red" name="Red">
-      <bricks:Standard version="3.0.0" baseColor="#D65745" />
-    </Preset>
+    <bricks:Standard id="color-red" name="Red" version="3.0.0" baseColor="#D65745" />
 
-    <Preset id="color-blue" name="Blue">
-      <bricks:Standard version="3.0.0" baseColor="#5296D5" />
-    </Preset>
+    <bricks:Standard id="color-blue" name="Blue" version="3.0.0" baseColor="#5296D5" />
 
-    <Preset id="color-midnight" name="Midnight Blue">
-      <bricks:Standard version="3.0.0" baseColor="#303D4E" />
-    </Preset>
+    <bricks:Standard id="color-midnight" name="Midnight Blue" version="3.0.0" baseColor="#303D4E" />
 
-    <Preset id="brick-1x1-red"
-            name="Brick 1x1 Red"
-            basePresets="brick-1x1 color-red" />
+    <bricks:Standard id="brick-1x1-red"
+                     name="Brick 1x1 Red"
+                     version="3.0.0"
+                     appliedPresets="brick-1x1 color-red" />
 
-    <Preset id="brick-2x4-blue"
-            name="Brick 2x4 Blue"
-            basePresets="brick-2x4 color-blue" />
+    <bricks:Standard id="brick-2x4-blue"
+                     name="Brick 2x4 Blue"
+                     version="3.0.0"
+                     appliedPresets="brick-2x4 color-blue" />
 
-    <Preset id="brick-1x1-red-text"
-            name="Brick 1x1 Red MB"
-            basePresets="brick-1x1-red">
-      <bricks:Standard version="3.0.0" text="MB" textColor="#EDF0F1" />
-    </Preset>
+    <bricks:Standard id="brick-1x1-red-text"
+                     name="Brick 1x1 Red MB"
+                     version="3.0.0"
+                     appliedPresets="brick-1x1-red"
+                     text="MB"
+                     textColor="#EDF0F1" />
 
-    <Preset id="brick-2x4-special"
-            name="Brick 2x4 Special"
-            basePresets="com.myproject.presets.MyPresets::my-base brick-2x4">
-      <bricks:Standard version="3.0.0" textColor="#EDF0F1" />
-    </Preset>
+    <bricks:Standard id="brick-2x4-special"
+                     name="Brick 2x4 Special"
+                     version="3.0.0"
+                     appliedPresets="com.myproject.presets.MyPresets::my-base brick-2x4"
+                     textColor="#EDF0F1" />
 
   </composition>
 

@@ -11,22 +11,16 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation>Abstract composable Block for LEGO-style Sets — block palette in inherited _parts, plus _placement and _steps for assembly. Top-level catalog unit in MachineBlocks.</documentation>
+  <documentation>Abstract composable Block for LEGO-style Sets — block palette in inherited _presets, placed instances in inherited _parts, assembly order in _steps. Top-level catalog unit in MachineBlocks.</documentation>
 
   <name>Set</name>
   <fullQualifiedName>com.machineblocks.core.Set</fullQualifiedName>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <baseType>com.machineblocks.core.CompositeBlock</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
 
-  <allowedSubBlockTypes>
-    <allowedSubBlockType type="com.machineblocks.core.Block" />
-    <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
-  </allowedSubBlockTypes>
-
   <aggregations>
-    <aggregation name="_placement" type="com.machineblocks.core.Placement[]" />
     <aggregation name="_steps"     type="com.machineblocks.core.Step[]" />
   </aggregations>
 

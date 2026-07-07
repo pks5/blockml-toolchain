@@ -149,22 +149,39 @@ Aggregations describe ownership relationships. An Aggregation defines that a Blo
 
 BlockML (`org.blockml.core.ComposableBlock`) defines the implicit `_customData` aggregation. Domain-specific aggregations are declared on domain base types.
 
-### `_parts` on `com.machineblocks.core.Block`
+### `_presets` and `_parts` on MachineBlocks Blocks
 
-`_parts` is **not** a BlockML feature. It is a base aggregation declared on `com.machineblocks.core.Block`, which extends `org.blockml.core.Block`. All MachineBlocks Blocks inherit it via `baseType` — resolved at validate time through the Type Registry, not materialized by the parser.
+MachineBlocks declares two domain aggregations on the base type chain:
 
 ```text
 com.machineblocks.core.Block  (extends org.blockml.core.ComposableBlock)
+  _presets:
+    type:    com.machineblocks.core.Block[]
+  appliedPresets:
+    type:    _self[]   (association — references ids in enclosing Block's _presets)
+
+com.machineblocks.core.CompositeBlock  (extends Block)
   _parts:
     type:    com.machineblocks.core.Block[]
     default: true
 ```
 
-When a Block's `baseType` chain includes `com.machineblocks.core.Block` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited `_parts` appears via `resolveEffectiveMembers()`.
+Every MachineBlocks Block inherits `_presets` and `appliedPresets`. Composite blocks additionally inherit `_parts` as the default composition aggregation.
 
-Declare `<aggregations>` explicitly only when **adding** aggregations beyond the inherited set (e.g. `_placement`, `_steps` on `Set`). Block palette entries use inherited `_parts` from `com.machineblocks.core.Block`. Redeclaring `_parts` to change its type is not permitted — inherited members cannot be overridden.
+**Presets are not a BlockML core feature.** Preset instances are ordinary Block instances in `_presets`. The `appliedPresets` association references preset ids (local or `{BlockFQN}::{id}`). Preset merge is compiler logic; Customizer JSON is render-target logic.
 
-This covers the vast majority of Composite Blocks. Explicit `<aggregations>` are needed when multiple Aggregations are required or when the Block does not inherit `_parts`.
+When a Block's `baseType` chain includes `com.machineblocks.core.CompositeBlock` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited members appear via `resolveEffectiveMembers()`.
+
+Declare `<aggregations>` explicitly only when **adding** aggregations beyond the inherited set (e.g. `_steps` on `Set`). Redeclaring inherited members to change their type is not permitted.
+
+### Example
+
+```text
+Wall  (baseType: com.machineblocks.core.CompositeBlock)
+  _presets:  com.machineblocks.core.Block[] (inherited)
+  _parts:    com.machineblocks.core.Block[] (inherited, default)
+  _myModel:  org.blockml.service.JSONModel (hidden, beanName="myModel", declared)
+```
 
 ### Aggregation Metadata
 
@@ -180,21 +197,15 @@ Member visibility is determined by naming convention: names starting with `_` ar
 
 When `beanName` is set, the Aggregation is a ServiceBlock binding. The bean is accessible in Expressions via `@beanName`.
 
-### Example
-
-```text
-Wall  (baseType: com.machineblocks.core.Block)
-  _parts:  com.machineblocks.core.Block[] (inherited, default)
-  _myModel: org.blockml.service.JSONModel (hidden, beanName="myModel", declared)
-```
-
 ---
 
 ## Associations
 
-Associations describe loose references to other objects without ownership. Defined for future use.
+Associations describe loose references to other objects without ownership.
 
-Planned use cases in MachineBlocks:
+MachineBlocks uses `appliedPresets` on `com.machineblocks.core.Block` — an association (`_self[]`) referencing preset ids in the enclosing Block's `_presets` aggregation. Local ids resolve within the same Block; cross-file entries use `{BlockFQN}::{id}`.
+
+Other planned use cases in MachineBlocks:
 
 ```text
 PCB component reference
@@ -203,9 +214,10 @@ Connector partner
 Instruction asset
 Render profile
 Material profile
+Step.part — references a placed block instance in a Set's _parts
 ```
 
-Associations have no ownership relationship and do not affect geometry compilation.
+Associations have no ownership relationship and do not affect geometry compilation directly — preset merge is resolved by the compiler before rendering.
 
 ---
 
@@ -318,7 +330,7 @@ A Composition fills an Aggregation with concrete child instances. It is the inte
 ### Composition Structure
 
 ```text
-aggregation   — name of the Aggregation to fill (default: inherited default aggregation — `_parts` for com.machineblocks.core.Block)
+aggregation   — name of the Aggregation to fill (default: inherited default aggregation — `_parts` for CompositeBlock, `_presets` for preset palette)
 children      — ordered list of Block instances
 ```
 
@@ -452,30 +464,15 @@ Sibling child Blocks within the same Composition share computed values via **`bm
 
 A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`. It is not a separate MBOM class — it is a Block that the SCAD Renderer dispatches to `ScadSetRenderer` based on its base type.
 
-A Set uses three conventional Aggregations — `_parts` inherited from `com.machineblocks.core.Block`:
+A Set uses three conventional Aggregations — `_presets` and `_parts` inherited from the base type chain, `_steps` declared on Set:
 
 ```text
-_parts      — block palette (configurations referenced by blockId in _placement; inherited)
-_placement  — placed instances (where each block is; id becomes the SCAD instance id)
-_steps      — assembly order (optional; defaults to document order of _placement)
+_presets    — block palette (configurations referenced by appliedPresets on _parts entries; inherited from Block)
+_parts      — placed block instances (direction, offset, appliedPresets; inherited from CompositeBlock, default)
+_steps      — assembly order (optional; defaults to document order of _parts)
 ```
 
-### com.machineblocks.core.Placement
-
-Framework BML: `com/machineblocks/core/Placement.bml`. Extends `org.blockml.core.ComposableBlock` — a composable Block (not a geometry block) for Set placement entries.
-
-```text
-Extends:        org.blockml.core.ComposableBlock
-Final:          true
-Members:
-  id         — instance ID (inherited system property; becomes SCAD instance id); must be explicit
-  blockId    — references explicit `id` of a Block in _parts (BML_UNRESOLVABLE_INSTANCE_REF)
-  direction  — orientation in the set (Direction)
-  offset     — position in grid units (GridPosition3D)
-Composition:    none — leaf meta Block
-```
-
-The `id` on a Placement must be unique across all placements in the Set.
+There is no separate Placement meta-block. Placed instances are real Block instances in `_parts` with `appliedPresets`, `direction`, and `offset` as properties.
 
 ### com.machineblocks.core.Step
 
@@ -485,12 +482,13 @@ Framework BML: `com/machineblocks/core/Step.bml`. Extends `org.blockml.core.Comp
 Extends:        org.blockml.core.ComposableBlock
 Final:          true
 Members:
-  id         — optional; inherited system property when referenced
-  placementId    — references explicit `id` of a Placement in _placement
+  id             — optional; inherited system property when referenced
+  part           — association com.machineblocks.core.Block: references explicit id of a placed instance in _parts
+  description    — optional human-readable step label
 Composition:    none — leaf meta Block
 ```
 
-When `_steps` is absent or empty, assembly order equals the document order of `_placement` entries.
+When `_steps` is absent or empty, assembly order equals the document order of `_parts` entries.
 
 ---
 
@@ -501,30 +499,43 @@ Framework types are **BML files** — see `16_framework_base_types.md`. Interpre
 ```text
 org.blockml.core.Block                                  ← packages/core/…/Block.bml (abstract, root)
   org.blockml.core.ComposableBlock                      ← ComposableBlock.bml (abstract)
-    com.machineblocks.core.Placement                        ← mbom/…/Placement.bml (final)
     com.machineblocks.core.Step                         ← mbom/…/Step.bml (final)
   org.blockml.service.ServiceBlock                      ← ServiceBlock.bml
     org.blockml.service.FunctionBlock                   ← FunctionBlock.bml
       org.blockml.service.Math                          ← core-services/Math.bml
   com.machineblocks.core.Block                          ← mbom/…/Block.bml (abstract)
+    com.machineblocks.core.CompositeBlock               ← CompositeBlock.bml (abstract)
+      com.machineblocks.core.Set                        ← Set.bml (abstract)
+        com.martianmicro.anyclosure.DefaultEnclosure   ← user BML
+      com.machineblocks.bricks.StandardPresets          ← preset block (_presets)
     com.machineblocks.core.NativeBlock                  ← NativeBlock.bml (final)
-    com.machineblocks.core.Set                          ← Set.bml (abstract)
-      com.martianmicro.anyclosure.DefaultEnclosure      ← user BML
-    com.machineblocks.bricks.StandardBrick              ← user BML
+    com.machineblocks.bricks.Standard                   ← user BML
     com.martianmicro.anyclosure.Wall
     …
 ```
 
 ### com.machineblocks.core.Block
 
-MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/src/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.Block`.
+MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/src/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.ComposableBlock`.
 
 ```text
-Extends:        org.blockml.core.Block
-Properties:     native MB properties declared in Block.bml (<properties>)
-                SCAD mapping in 09_mbom_properties.yml (render only)
-Aggregations:   _parts (type: com.machineblocks.core.Block[], default, inherited)
-Composition:    allowed — _parts children become SCAD block children
+Extends:        org.blockml.core.ComposableBlock
+Properties:     name (String)
+Associations:   appliedPresets (_self[] — references ids in _presets)
+Aggregations:   _presets (type: com.machineblocks.core.Block[])
+```
+
+Domain native properties (size, offset, direction, …) are declared on concrete block types (e.g. `com.machineblocks.bricks.Standard`), not on the abstract base. SCAD mapping in `09_mbom_properties.yml` (render only).
+
+### com.machineblocks.core.CompositeBlock
+
+Defined in `CompositeBlock.bml`. Extends `Block`. Adds `_parts` as the default composition aggregation.
+
+```text
+Extends:        com.machineblocks.core.Block
+Aggregations:   _parts (type: com.machineblocks.core.Block[], default)
+allowedSubBlockTypes: Block, FunctionBlock
+supportedImplementationTypes: OpenSCAD
 ```
 
 ### com.machineblocks.core.NativeBlock
@@ -532,11 +543,11 @@ Composition:    allowed — _parts children become SCAD block children
 `NativeBlock` is the direct BML representation of a raw `mb_block()` call. It is **final** — it cannot be used as `baseType` in any Block definition. It can only appear as a child element in Compositions.
 
 ```text
-Properties:     native MB3 properties only (from 09_mbom_properties.yml)
+Properties:     native MB properties (declared on concrete types or via appliedPresets)
                 no custom properties allowed — BML_NATIVE_BLOCK_CUSTOM_PROPERTY
 Capabilities:   none
-Aggregations:   _parts (type: com.machineblocks.core.Block[] — inherited from com.machineblocks.core.Block)
-Composition:    allowed — _parts children become mb_block() children
+Aggregations:   children (type: com.machineblocks.core.Block[], default — mb_block() sub-geometry)
+Composition:    allowed — children become mb_block() children
 Final:          baseType = com.machineblocks.core.NativeBlock → BML_FINAL_BASE_TYPE
 ```
 
@@ -548,18 +559,19 @@ For **standalone compile**, leaf-only Block types (e.g. `com.machineblocks.brick
 
 ### com.machineblocks.core.Set
 
-`Set` extends `com.machineblocks.core.Block` and inherits `_parts` for the block palette. Unlike `NativeBlock`, `Set` is derivable:
+`Set` extends `com.machineblocks.core.CompositeBlock` and inherits `_presets` (palette) and `_parts` (placed instances). Unlike `NativeBlock`, `Set` is derivable:
 
 ```text
-Aggregations:   _parts (type: com.machineblocks.core.Block[], default — inherited)
-                _placement, _steps (declared on Set.bml)
+Aggregations:   _presets (type: com.machineblocks.core.Block[] — inherited from Block)
+                _parts  (type: com.machineblocks.core.Block[], default — inherited from CompositeBlock)
+                _steps  (type: com.machineblocks.core.Step[] — declared on Set.bml)
 Derivable:      baseType = com.machineblocks.core.Set  ✓
 Processor:      ScadSetProcessor → STEPS array + 4 view submodules
 ```
 
 ### allowedSubBlockTypes
 
-Declared in framework BML — see `16_framework_base_types.md`:
+Declared on `CompositeBlock.bml`:
 
 ```xml
 <allowedSubBlockTypes>
@@ -569,15 +581,15 @@ Declared in framework BML — see `16_framework_base_types.md`:
 ```
 
 ```text
-com.machineblocks.core.Block     — Block, FunctionBlock
-com.machineblocks.core.NativeBlock — (empty — final, no Sub-Blocks)
-com.machineblocks.core.Set       — Block, FunctionBlock
-org.blockml.service.FunctionBlock — (empty)
+com.machineblocks.core.CompositeBlock — Block, FunctionBlock
+com.machineblocks.core.NativeBlock    — (empty — final, no Sub-Blocks)
+com.machineblocks.core.Set            — inherits from CompositeBlock
+org.blockml.service.FunctionBlock     — (empty)
 ```
 
 ### supportedImplementationTypes
 
-Declared in framework BML:
+Declared on `CompositeBlock.bml`:
 
 ```xml
 <supportedImplementationTypes>
@@ -586,8 +598,8 @@ Declared in framework BML:
 ```
 
 ```text
-com.machineblocks.core.Block       — OpenSCAD
-org.blockml.service.FunctionBlock  — OpenSCAD, TypeScript
+com.machineblocks.core.CompositeBlock — OpenSCAD
+org.blockml.service.FunctionBlock       — OpenSCAD, TypeScript
 ```
 
 ### Validation
@@ -600,7 +612,7 @@ MB_EMPTY_BLOCK                  — Block has no Composition and no registered c
                                    (MB_* prefix = MachineBlocks-specific, not BML Core)
 ```
 
-Note: `com.machineblocks.core.Placement` and `com.machineblocks.core.Step` are regular ComposableBlocks — framework BML extending `org.blockml.core.ComposableBlock`. They are processed by the same pipeline as other Blocks; the SCAD Set renderer interprets their properties for STEPS assembly output.
+Note: `com.machineblocks.core.Step` is a regular ComposableBlock — framework BML extending `org.blockml.core.ComposableBlock`. The SCAD Set renderer interprets its `part` association for STEPS assembly output.
 
 ---
 

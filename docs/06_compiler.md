@@ -103,10 +103,10 @@ JSON parser: **not in V1.**
 Reads the root element name to determine the document type:
 
 ```text
-<block>   → Block Definition (all block types, including PresetCollection)
+<block>   → Block Definition (all block types)
 ```
 
-V1 has a single root element. Preset files use `<block baseType="org.blockml.core.PresetCollection">`.
+V1 has a single root element. Preset blocks use `<block baseType="com.machineblocks.core.Block">` with `_presets` composition.
 
 Selects the appropriate BML→BOM mapping rule for this root type. Extension root types register their mapping rule via the root type registry.
 
@@ -385,7 +385,7 @@ interface ScadFile {
 
 A target may also return **side effects without files** (service calls, deploy, registry update). `CompilerResult.success === true` with empty `files[]` is valid.
 
-For Preset Collection blocks in the MachineBlocks SCAD target, `files[]` includes the implicit block `.scad`, its `.map`, and the Customizer `.json`. Binary artifacts (`.webp`) are produced by `@blockml/cli` after compile — see `14_compiler_runtime.md` — Thumbnails (C6).
+For preset blocks in the MachineBlocks SCAD target, `files[]` includes the implicit block `.scad`, its `.map`, and the Customizer `.json`. Binary artifacts (`.webp`) are produced by `@blockml/cli` after compile — see `14_compiler_runtime.md` — Thumbnails (C6).
 
 ### Browser Usage
 
@@ -455,7 +455,7 @@ BML_MISSING_ID                — referenced instance or bml:each element lacks 
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId does not match any explicit id in target aggregation
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
-BML_PRESET_CYCLE              — circular dependency in composite preset basePresets
+BML_PRESET_CYCLE              — circular dependency in appliedPresets chain
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
 BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfied (type notation)
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
@@ -646,7 +646,7 @@ Wall__brick-2x4.webp
 
 ```text
 <block>        → Block compile    (hash check → skip if unchanged)
-<block> (PresetCollection) → implicit .scad   (same hash key as direct block compile)
+<block> (preset block) → implicit .scad   (same hash key as direct block compile)
                → Presets .json    (hash check → skip if unchanged)
                → thumbnails       (per-preset hash check)
 ```
@@ -736,7 +736,7 @@ Coverage (SCAD target):
   - Block definition → SCAD module
   - Composite block → nested mb_block() calls
   - MachineBlocks Set definition → STEPS + view submodules
-  - PresetCollection → Customizer JSON
+  - Preset blocks (_presets) → Customizer JSON (render target)
   - Expressions → correct SCAD expressions
   - Assembly patterns → correct mb_assembly_*() calls
   - Config profile → correct parameter defaults
@@ -776,7 +776,7 @@ tests/
       DefaultEnclosureSet.bml
       DefaultEnclosureSet.expected.scad
     presets/
-      presets/StandardPresets.mbml   — @machineblocks/mbom fixture (PresetCollection)
+      presets/StandardPresets.mbml   — @machineblocks/mbom fixture (preset block)
       BricksLibrary.mbml             — @machineblocks/mbom fixture (Library)
       Standard.expected.json
 

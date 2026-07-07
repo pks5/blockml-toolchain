@@ -12,7 +12,7 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation>Composable Block defining one assembly instruction step in a Set — references a Placement by placementId. Used as children of composition aggregation="_steps". Document order defines build order when _steps is present.</documentation>
+  <documentation>Composable Block defining one assembly instruction step in a Set — references a placed block instance via the part association. Used as children of composition aggregation="_steps". Document order defines build order when _steps is present.</documentation>
 
   <name>Step</name>
   <fullQualifiedName>com.machineblocks.core.Step</fullQualifiedName>
@@ -23,9 +23,13 @@
 
   <allowedSubBlockTypes />
 
+  <associations>
+    <association name="part" type="com.machineblocks.core.Block"></association>
+  </associations>
+
   <properties>
-    <property name="placementId" type="String">
-      <documentation>References the explicit id of a Placement in the Set's _placement aggregation.</documentation>
+    <property name="description" type="String">
+      <documentation>Additional description of the step.</documentation>
     </property>
   </properties>
 

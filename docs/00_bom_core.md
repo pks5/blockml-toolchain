@@ -141,7 +141,7 @@ Examples:
 There is **no FQN fallback** — a Block's type FQN is never used as instance identity.
 
 **Explicit IDs** are authored in BML via the `id` system property. Required when:
-- another instance references this one (`blockId`, `placementId`, …)
+- another instance references this one (`appliedPresets`, `Step.part`, …)
 - the element carries `bml:each` (literal or Expression — auto-ID is not available in loops)
 
 **Auto-generated IDs** are assigned **after directive expansion** for static, unreferenced children that omit `id`. They are deterministic 6-hex hashes:
@@ -918,39 +918,39 @@ Sub-Blocks are full BOM objects referenceable via full FQN from outside the pare
 
 ---
 
-## Preset
+## Preset (MachineBlocks)
 
-A Preset is a named, concrete property set for a specific Block type. Presets are **Blocks** — Sub-Blocks of `org.blockml.core.PresetCollection`, grouped in PresetCollection documents.
+Presets are **not** a BlockML core feature. In MachineBlocks, a preset is a named property configuration represented as a Block instance in the `_presets` aggregation. Any MachineBlocks Block instance can reference presets via the `appliedPresets` association.
 
-Presets apply only to Properties — not to Aggregations, Associations, or Capabilities.
+Presets apply only to Properties — not to Aggregations, Associations, or Capabilities. Preset merge is compiler logic; Customizer JSON is render-target logic.
 
-### Preset Collection
+### Preset Block
 
-A Preset Collection is a Block definition with `baseType="org.blockml.core.PresetCollection"`:
+A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a Block definition with `baseType="com.machineblocks.core.Block"`:
 
 ```text
-fullQualifiedName — FQN of this Preset Collection (e.g. com.machineblocks.bricks.StandardPresets)
+fullQualifiedName — FQN of this preset block (e.g. com.machineblocks.bricks.StandardPresets)
 version           — semantic version
-composition       — Preset instances (org.blockml.core.PresetCollection.Preset)
+composition       — Block instances in aggregation _presets
 ```
 
-Each Preset instance (`org.blockml.core.PresetCollection.Preset` — Sub-Block of PresetCollection):
+Each preset instance in `_presets`:
 
 ```text
-id           — stable kebab-case identifier (ComposableBlock id property; reference key)
-name         — human-readable display name (Customizer UI, editor)
-block        — aggregation Block (0..1): block instance with property overrides
-basePresets  — association Preset[]: space-separated preset ids (local or FQN::id)
+id               — stable kebab-case identifier (ComposableBlock id property; reference key)
+name             — human-readable display name (Customizer UI, editor)
+appliedPresets   — association _self[]: space-separated preset ids (local or FQN::id)
+                   own instance properties override merged preset chain
 ```
 
-The `id` is the canonical reference key. The `name` is display-only. The `id` must be unique within a Preset Collection.
+The `id` is the canonical reference key. The `name` is display-only. The `id` must be unique within the enclosing Block's `_presets`.
 
-Multiple Preset Collections can target the same Block type — from different authors or packages.
+Multiple preset blocks can target the same Block type — from different authors or packages.
 
 ### Preset Reference Syntax
 
 ```text
-{PresetCollectionFQN}::{preset-id}
+{BlockFQN}::{preset-id}
 
 Example:
   com.machineblocks.bricks.StandardPresets::brick-2x4
@@ -959,48 +959,46 @@ Example:
 ### Preset in Compositions
 
 ```xml
-<bricks:StandardBrick
-    presetRef="com.machineblocks.bricks.StandardPresets::brick-2x4" />
+<bricks:Standard
+    appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />
 
-<bricks:StandardBrick
-    presetRef="com.machineblocks.bricks.StandardPresets::brick-2x4"
+<bricks:Standard
+    appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
 
 ### Merge Order
 
 ```text
-configProfile < presetRef < inline property
+configProfile < appliedPresets chain < inline property
 ```
 
 ---
 
 ## Library
 
-A Library is a **Block** with `baseType="org.blockml.core.Library"`. It groups exported Block definitions, PresetCollections, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
+A Library is a **Block** with `baseType="org.blockml.core.Library"`. It groups exported Block definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Preset blocks are exported as ordinary Block definitions via `_blocks`. Replaces the legacy `library.xml` descriptor.
 
 ```text
 org.blockml.core.Library           abstract composable Block
   property     description   String
-  subBlocks    Dependency · Schema · TypeRef · BlockRef · PresetsRef
+  subBlocks    Dependency · Schema · TypeRef · BlockRef
   aggregation  _dependencies  Dependency[]
   aggregation  _schemas       Schema[]       (optional — legacy XSD)
   aggregation  _types         TypeRef[]      (StructType / EnumType BML)
   aggregation  _blocks        BlockRef[]
-  aggregation  _presets       PresetsRef[]
 
 org.blockml.core.Library.Dependency   ref (Library FQN) · version
 org.blockml.core.Library.Schema       ref (relative .xsd path)
 org.blockml.core.Library.TypeRef      ref (relative TypeBlock .bml path)
 org.blockml.core.Library.BlockRef     ref (relative block .bml / .mbml path)
-org.blockml.core.Library.PresetsRef   ref (relative PresetCollection path)
 ```
 
 The Library block lives in a package directory (e.g. `com/machineblocks/bricks/`). Its FQN follows the normal block rule: package path + block name (e.g. `com.machineblocks.bricks.BricksLibrary`).
 
 **Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for the `com.machineblocks.bricks` package. Makes the library descriptor identifiable as such; not enforced by the compiler. Filename matches block name (`BricksLibrary.mbml`).
 
-**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `TypeRef` / `BlockRef` / `PresetsRef` paths relative to the library root, and registers referenced files in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `TypeRef` / `BlockRef` paths relative to the library root, and registers referenced files in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
 **Types:** `_types` lists exported TypeBlock BML (StructType, EnumType, …). `_schemas` is optional legacy XSD — omit when types are BML-only. A future tool may generate XSD from `_types` for IDE tooling.
 

@@ -11,7 +11,7 @@ For BML authoring syntax see `02_mbml.md`.
 For expression parsing see `10_expression_language.md`.
 For compiler pipeline placement see `06_compiler.md`.
 
-Mapping rules are registered per root type (`<block>`, …) — not hardcoded in the parser core. V1 has a single root type: `<block>` (including PresetCollection blocks).
+Mapping rules are registered per root type (`<block>`, …) — not hardcoded in the parser core. V1 has a single root type: `<block>`.
 
 ---
 
@@ -102,7 +102,7 @@ Applies to **Block instance elements** in a composition. These map to `BlockInst
 | Attribute | BOM field |
 |---|---|
 | `version` | `BlockInstance.version` |
-| `presetRef` | `BlockInstance.presetRef` |
+| `appliedPresets` | `BlockInstance.memberValues.appliedPresets` (association) |
 | `renderGroup` | `BlockInstance.renderGroup` |
 | `namespace` | `BlockInstance.namespace` |
 
@@ -381,19 +381,19 @@ registry.getBlockDefinition("com.machineblocks.bricks.StandardBrick", "3.0.0")
 
 Same-document Sub-Block references omit `version` — resolved against `subBlocks[]` in the same `BomDocument`.
 
-### Preset cross-file references
+### Preset cross-file references (MachineBlocks)
 
 ```text
-presetRef="com.martianmicro.anyclosure.WallPresets::large"
+appliedPresets="com.martianmicro.anyclosure.WallPresets::large"
   → Parser stores string as authored (stage [5])
-  → Validator resolves PresetCollection BlockDefinition + Preset instance id in composition (stage [8])
+  → Validator resolves preset BlockDefinition + preset instance id in _presets (stage [8])
 
-basePresets="brick-1x1 com.other.Presets::color-red"
-  → Stored on Preset instance memberValues.basePresets (stage [5])
+appliedPresets="brick-1x1 com.other.Presets::color-red"
+  → Stored on Block instance memberValues.appliedPresets (stage [5])
   → Validator resolves each token as local id or FQN::id (stage [8])
 ```
 
-Preset instances in a PresetCollection composition map like any other Block instance: element `Preset` → `typeFqn: org.blockml.core.PresetCollection.Preset` (short name via inherited Sub-Blocks). Child block elements fill the `block` aggregation (defaultAggregation). The Preset `name` attribute maps to `memberValues.name`; `id` maps to `memberValues.id`.
+Preset instances in `_presets` composition map like any other Block instance. The `name` attribute maps to `memberValues.name`; `id` maps to `memberValues.id`.
 
 ### Library blocks
 
@@ -404,7 +404,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.c
 <Schema ref="bricks.xsd"/>         → org.blockml.core.Library.Schema
 <TypeRef ref="types/Size3D.bml"/>  → org.blockml.core.Library.TypeRef
 <BlockRef ref="blocks/Wall.bml"/>  → org.blockml.core.Library.BlockRef
-<PresetsRef ref="presets/…"/>      → org.blockml.core.Library.PresetsRef
+<BlockRef ref="presets/WallPresets.mbml"/>  → preset block via _blocks
 ```
 
 Short names resolve via inherited Sub-Blocks of `org.blockml.core.Library` on any Library-typed root block.
@@ -425,7 +425,7 @@ The orchestrator re-bootstraps or incrementally updates the TypeRegistry when an
 
 JSON as a BML **authoring format** is **not implemented in V1**. The V1 parser accepts **XML only** (`.bml`, domain extensions such as `.mbml`).
 
-JSON may eventually support a very restricted subset (e.g. flat Preset Collections, simple leaf blocks). Whether a viable mapping exists is **TBD** — intensive XML namespace usage (`xmlns:bricks`, `bml:*`, `data:*`, typed element names) has no natural JSON equivalent. Full BML power requires XML.
+JSON may eventually support a very restricted subset (e.g. flat preset blocks, simple leaf blocks). Whether a viable mapping exists is **TBD** — intensive XML namespace usage (`xmlns:bricks`, `bml:*`, `data:*`, typed element names) has no natural JSON equivalent. Full BML power requires XML.
 
 When JSON support is specified, it will register a separate root-type mapping rule and JSON Schema — not in V1.
 

@@ -3,7 +3,7 @@
 
   FQN: org.blockml.core.Library
 
-  Entry types (Dependency, Schema, TypeRef, BlockRef, PresetsRef) are Sub-Blocks
+  Entry types (Dependency, Schema, TypeRef, BlockRef) are Sub-Blocks
   of Library. Aggregations use short type names (type="Dependency") — parser
   resolves against subBlocks[] in the same file.
 -->
@@ -15,7 +15,7 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation>Publishable library unit — groups exported Block definitions, PresetCollections, optional XSD schemas, and dependencies on other libraries. Replaces the legacy library.xml descriptor.</documentation>
+  <documentation>Publishable library unit — groups exported Block definitions, optional XSD schemas, and dependencies on other libraries. Replaces the legacy library.xml descriptor.</documentation>
 
   <name>Library</name>
   <fullQualifiedName>org.blockml.core.Library</fullQualifiedName>
@@ -37,7 +37,6 @@
     <aggregation name="_schemas"     type="Schema[]" />
     <aggregation name="_types"        type="TypeRef[]" />
     <aggregation name="_blocks"       type="BlockRef[]" />
-    <aggregation name="_presets"      type="PresetsRef[]" />
   </aggregations>
 
   <subBlocks>
@@ -97,20 +96,6 @@
       <properties>
         <property name="ref" type="String">
           <documentation>Path to the block .bml / .mbml file relative to the library package root.</documentation>
-        </property>
-      </properties>
-    </block>
-
-    <block>
-      <documentation>Reference to a PresetCollection block file exported by this Library.</documentation>
-      <name>PresetsRef</name>
-      <baseType>org.blockml.core.ComposableBlock</baseType>
-      <version>1.0.0</version>
-      <final>true</final>
-      <allowedSubBlockTypes />
-      <properties>
-        <property name="ref" type="String">
-          <documentation>Path to the PresetCollection .bml / .mbml file relative to the library package root.</documentation>
         </property>
       </properties>
     </block>

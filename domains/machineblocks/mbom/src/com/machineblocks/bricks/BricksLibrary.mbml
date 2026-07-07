@@ -5,7 +5,7 @@
   Filename: BricksLibrary.mbml
   FQN: com.machineblocks.bricks.BricksLibrary
 
-  MachineBlocks brick library — exports block definitions, presets, and optional XSD.
+  MachineBlocks brick library — exports block definitions and optional XSD.
   Block .mbml sources live under blocks/ (scad-lib submodule in full deployment).
 -->
 <block
@@ -17,7 +17,7 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their PresetCollections.</documentation>
+  <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their preset blocks.</documentation>
 
   <name>BricksLibrary</name>
   <fullQualifiedName>com.machineblocks.bricks.BricksLibrary</fullQualifiedName>
@@ -48,11 +48,7 @@
     <BlockRef ref="blocks/Standard.mbml" />
     <BlockRef ref="blocks/Plate.mbml" />
     <BlockRef ref="blocks/Tile.mbml" />
-  </composition>
-
-  <composition aggregation="_presets">
-    <PresetsRef ref="presets/StandardPresets.mbml" />
-    <PresetsRef ref="presets/PlatePresets.mbml" />
+    <BlockRef ref="presets/StandardPresets.mbml" />
   </composition>
 
 </block>

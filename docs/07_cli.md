@@ -33,7 +33,7 @@ Before compile or watch, the CLI bootstraps two registries in a fixed order. See
 4. for each file (or single file):
      shouldSkip(artifact) ? skip : compileBmlToOutput(...)
 5. write RenderOutput.files[] to disk
-6. generateThumbnails(...)   — PresetCollection + SCAD target only (C6)
+6. generateThumbnails(...)   — preset blocks + SCAD target only (C6)
 7. writeStoredHash(...)      — update .bom-cache (C5)
 ```
 
@@ -195,7 +195,7 @@ bom compile --all <target>
 
 `--all` processes every BML source file in `srcDir` (`.bml` by default; `.mbml` when MachineBlocks extensions are registered). Each file is evaluated against its stored hash — unchanged artifacts are skipped.
 
-A Block referenced by both a direct `<block>` compile and an implicit compile from a Preset Collection is only built once — the hash check prevents redundant work.
+A Block referenced by both a direct `<block>` compile and an implicit compile from a preset block is only built once — the hash check prevents redundant work.
 
 #### Output by document type (SCAD target)
 
@@ -209,7 +209,7 @@ src/com/martianmicro/anyclosure/Wall.bml
 
 No thumbnails are generated when compiling a block definition directly.
 
-**Preset Collection block** (`baseType="org.blockml.core.PresetCollection"`):
+**Preset block** (`baseType="com.machineblocks.core.Block"` with `_presets` composition):
 
 ```text
 src/com/martianmicro/anyclosure/WallPresets.bml
@@ -220,7 +220,7 @@ src/com/martianmicro/anyclosure/WallPresets.bml
 →  scad/com/martianmicro/anyclosure/Wall__brick-1x1.webp
 ```
 
-Compiling a Preset Collection is the standard entry point for generating visible output. It triggers implicit compilation of referenced block types, then produces the Customizer JSON and one thumbnail per preset.
+Compiling a preset block is a standard entry point for generating Customizer output. It triggers implicit compilation of referenced block types, then produces the Customizer JSON and one thumbnail per preset.
 
 #### Exit codes
 
@@ -282,7 +282,7 @@ Behavior:
 - Continues running until interrupted (Ctrl+C)
 ```
 
-Thumbnail generation follows the same rules as `bom compile` — thumbnails are generated automatically when a Preset Collection file changes (SCAD target only).
+Thumbnail generation follows the same rules as `bom compile` — thumbnails are generated automatically when a preset block file changes (SCAD target only).
 
 Conceptually equivalent to TypeScript watch mode (`tsc --watch`).
 
@@ -317,7 +317,7 @@ Only one config profile is active at a time. Activating a new profile replaces t
 
 Thumbnails are **CLI-only** (C6) — not part of `@blockml/compiler` or `RenderOutput`. The compiler produces `.scad` and `.json`; the CLI renders `.webp` afterward using OpenSCAD + Sharp. See `14_compiler_runtime.md` — Thumbnails (C6).
 
-Thumbnails run automatically as part of `bom compile machineblocks-v3-scad` when the input is a Preset Collection block. There is no separate thumbnail command.
+Thumbnails run automatically as part of `bom compile machineblocks-v3-scad` when the input is a preset block. There is no separate thumbnail command.
 
 ### Architecture boundary
 
@@ -502,7 +502,7 @@ Command names, argument names, and shorthand flags can all be renamed. This allo
 
 ## Config Profiles
 
-Config profiles define project-wide property defaults. They are Preset Collection blocks and share the same property namespace as block properties.
+Config profiles define project-wide property defaults. They are preset blocks and share the same property namespace as block properties.
 
 ### File Location
 
@@ -518,13 +518,11 @@ src/config/scale_2x.bml
 
   <name>PrusaPla</name>
   <fullQualifiedName>com.machineblocks.config.PrusaPla</fullQualifiedName>
-  <baseType>org.blockml.core.PresetCollection</baseType>
+  <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 
-  <composition>
-    <Preset id="default" name="Default">
-      <!-- project ConfigBlock instance with global defaults -->
-    </Preset>
+  <composition aggregation="_presets">
+    <ConfigBlock id="default" name="Default" ... />
   </composition>
 
 </block>

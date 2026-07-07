@@ -79,7 +79,7 @@ BML defines one core document root:
 <block>   — Block Definition (composable types, type blocks, language blocks, preset collections, …)
 ```
 
-Property presets are **not** a separate document type. A presets file is a normal `<block>` with `baseType="org.blockml.core.PresetCollection"` — see § Preset Collections.
+Property presets are **not** a BlockML core feature. MachineBlocks models presets as Block instances in `_presets` with `appliedPresets` associations — see § Presets (MachineBlocks) and `03_mbom.md`.
 
 Library packages use `<block baseType="org.blockml.core.Library">` — see § Library Format.
 
@@ -160,7 +160,7 @@ Extension document types bring their own schema. The schema location and managem
 
 A Block definition describes a reusable Block type — semantically a **Class**: declarative shape, members, and optional composition template. It declares Members (Properties, Aggregations, Associations, Capabilities) and an optional Composition (internal structure).
 
-Composition children (`<ac:Wall id="wall" …/>`, `<core:Placement …/>`) are **Block Instances** — semantically **Objects**: they reference a class (`typeFqn`) and carry instance state (`id`, property values). See `00_bom_core.md` — Block and Block Instance.
+Composition children (`<ac:Wall id="wall" …/>`, `<core:Step …/>`) are **Block Instances** — semantically **Objects**: they reference a class (`typeFqn`) and carry instance state (`id`, property values). See `00_bom_core.md` — Block and Block Instance.
 
 ### Required Fields
 
@@ -309,17 +309,22 @@ All Members — Properties, Aggregations, Associations, and Capabilities — sha
 
 ### Conventions
 
-**`<aggregations>`** — Domain base types declare inherited aggregations in BML (e.g. `_parts` on `com.machineblocks.core.Block` in `com/machineblocks/core/Block.bml`). The parser stores **declared** members only; inherited members resolve at validate via `baseType` chain. Omit `<aggregations>` on user blocks when the inherited set suffices.
+**`<aggregations>`** — Domain base types declare inherited aggregations in BML (e.g. `_presets` on `Block.bml`, `_parts` on `CompositeBlock.bml`). The parser stores **declared** members only; inherited members resolve at validate via `baseType` chain. Omit `<aggregations>` on user blocks when the inherited set suffices.
 
-`_parts` on `com.machineblocks.core.Block` (declared in framework BML):
+`_presets` on `com.machineblocks.core.Block` and `_parts` on `com.machineblocks.core.CompositeBlock` (declared in framework BML):
 
 ```text
-name:    _parts
-type:    com.machineblocks.core.Block[]
-default: true
+_presets (Block):
+  name:    _presets
+  type:    com.machineblocks.core.Block[]
+
+_parts (CompositeBlock):
+  name:    _parts
+  type:    com.machineblocks.core.Block[]
+  default: true
 ```
 
-**`<composition>`** — when no `aggregation` attribute is specified and the effective members include a single default aggregation, the Composition fills that aggregation. For MachineBlocks Blocks this is typically inherited `_parts`. If multiple aggregations exist and none is marked `default="true"`, the `aggregation` attribute is required — the compiler reports an error if it is missing.
+**`<composition>`** — when no `aggregation` attribute is specified and the effective members include a single default aggregation, the Composition fills that aggregation. For CompositeBlocks this is typically inherited `_parts`. Sets require explicit `aggregation=` for `_presets`, `_parts`, and `_steps`. If multiple aggregations exist and none is marked `default="true"`, the `aggregation` attribute is required — the compiler reports an error if it is missing.
 
 ### Minimal Block Example
 
@@ -495,13 +500,12 @@ The SCAD BlockProcessor translates JSON Objects to SCAD's internal array format.
 
 Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type.
 
-For MachineBlocks Blocks, `_parts` is inherited from `com.machineblocks.core.Block` — it does not need to be declared. Declare `<aggregations>` only when adding aggregations beyond the inherited set:
+For MachineBlocks Blocks, `_presets` and `_parts` are inherited from the base type chain — they do not need to be redeclared. Declare `<aggregations>` only when adding aggregations beyond the inherited set:
 
 ```xml
-<!-- Set: _placement and _steps beyond inherited _parts -->
+<!-- Set: _steps beyond inherited _presets and _parts -->
 <aggregations>
-  <aggregation name="_placement" type="com.machineblocks.core.Placement[]" />
-  <aggregation name="_steps"     type="com.machineblocks.core.Step[]" />
+  <aggregation name="_steps" type="com.machineblocks.core.Step[]" />
 </aggregations>
 ```
 
@@ -634,7 +638,7 @@ Child elements inside `<composition>` are Block instances. Each instance:
 ```text
 Tag name      — class name (with namespace prefix)
 id            — **system property** (org.blockml.core.Block). Part ID for composition identity (parentId::partId).
-                Required when referenced (blockId, placementId, …) or on bml:each elements (literal or Expression).
+                Required when referenced (appliedPresets targets, Step.part, …) or on bml:each elements (literal or Expression).
                 Omitted on anonymous static children → auto-ID after directive expansion. Not a custom property.
 renderGroup   — optional, fallback = id
 namespace     — optional, fallback = id
@@ -1002,8 +1006,6 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Li
 
 **Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.Library"` (e.g. `BricksLibrary`) automatically resolves `Dependency`, `TypeRef`, `BlockRef`, … without prefix — they are Sub-Blocks of `org.blockml.core.Library`, inherited via the baseType chain. Authors do not redeclare them in each library file.
 
-A block with `baseType="org.blockml.core.PresetCollection"` resolves `<Preset>` the same way — Sub-Block of `org.blockml.core.PresetCollection` (aggregation `type="Preset[]"` in framework BML).
-
 ```xml
 <!-- BricksLibrary.mbml — no xmlns needed for entry types -->
 <composition aggregation="_dependencies">
@@ -1192,12 +1194,12 @@ Sub-Blocks have their own FQN and can be referenced from outside the parent Bloc
 
 A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`. It uses the standard `<block>` document type — there is no separate root element for Sets.
 
-A Set uses three conventional Aggregations — `_parts` inherited from `com.machineblocks.core.Block`:
+A Set uses three conventional Aggregations — `_presets` and `_parts` inherited from the base type chain, `_steps` declared on Set:
 
 ```text
-_parts      — block palette (configurations referenced by blockId in _placement)
-_placement  — placed instances (where each block is; id becomes the SCAD instance id)
-_steps      — assembly order (optional; defaults to document order of _placement)
+_presets    — block palette (configurations referenced by appliedPresets on _parts entries)
+_parts      — placed block instances (direction, offset, appliedPresets; id becomes SCAD instance id)
+_steps      — assembly order (optional; defaults to document order of _parts)
 ```
 
 ### Structure
@@ -1218,79 +1220,72 @@ _steps      — assembly order (optional; defaults to document order of _placeme
     <property name="assembly"       type="AssemblyMode" defaultValue="Merged"  />
   </properties>
 
-  <!-- Block palette: inherited _parts (no explicit <aggregations> needed on user Sets) -->
-  <composition aggregation="_parts">
+  <!-- Block palette: inherited _presets -->
+  <composition aggregation="_presets">
     <ac:Floor  id="floor"  size="[16, 16, 1]" />
     <ac:Corner id="corner" size="[4, 4, 9]"   />
     <ac:Wall   id="wall"   size="[1, 8, 9]"   />
     <ac:Lid    id="lid"    size="[16, 16, 1]" />
   </composition>
 
-  <composition aggregation="_placement">
-    <core:Placement id="00001" blockId="floor"  direction="West"  offset="[0, 0, 0]"   />
-    <core:Placement id="00002" blockId="corner" direction="West"  offset="[0, 0, 1]"   />
-    <core:Placement id="00003" blockId="wall"   direction="West"  offset="[0, 4, 1]"   />
-    <core:Placement id="00004" blockId="corner" direction="North" offset="[0, 12, 1]"  />
-    <core:Placement id="00005" blockId="wall"   direction="North" offset="[4, 15, 1]"  />
-    <core:Placement id="00006" blockId="corner" direction="East"  offset="[12, 12, 1]" />
-    <core:Placement id="00007" blockId="wall"   direction="East"  offset="[15, 4, 1]"  />
-    <core:Placement id="00008" blockId="corner" direction="South" offset="[12, 0, 1]"  />
-    <core:Placement id="00009" blockId="wall"   direction="South" offset="[4, 0, 1]"   />
-    <core:Placement id="0000A" blockId="lid"    direction="West"  offset="[0, 0, 10]"  />
+  <!-- Placed instances: inherited _parts -->
+  <composition aggregation="_parts">
+    <ac:Floor id="00001" appliedPresets="floor"  direction="West"  offset="[0, 0, 0]"   />
+    <ac:Corner id="00002" appliedPresets="corner" direction="West"  offset="[0, 0, 1]"   />
+    <ac:Wall id="00003" appliedPresets="wall"   direction="West"  offset="[0, 4, 1]"   />
+    <ac:Corner id="00004" appliedPresets="corner" direction="North" offset="[0, 12, 1]"  />
+    <ac:Wall id="00005" appliedPresets="wall"   direction="North" offset="[4, 15, 1]"  />
+    <ac:Corner id="00006" appliedPresets="corner" direction="East"  offset="[12, 12, 1]" />
+    <ac:Wall id="00007" appliedPresets="wall"   direction="East"  offset="[15, 4, 1]"  />
+    <ac:Corner id="00008" appliedPresets="corner" direction="South" offset="[12, 0, 1]"  />
+    <ac:Wall id="00009" appliedPresets="wall"   direction="South" offset="[4, 0, 1]"   />
+    <ac:Lid id="0000A" appliedPresets="lid"    direction="West"  offset="[0, 0, 10]"  />
   </composition>
 
-  <!-- _steps omitted → assembly order = document order of _placement -->
+  <!-- _steps omitted → assembly order = document order of _parts -->
 
   <composition aggregation="_steps">
-    <core:Step placementId="00001" />
-    <core:Step placementId="00002" />
-    <core:Step placementId="00003" />
+    <core:Step part="00001" />
+    <core:Step part="00002" />
+    <core:Step part="00003" />
   </composition>
 
 </block>
 ```
 
-### Placement and Step
+### Step
 
-`com.machineblocks.core.Placement` and `com.machineblocks.core.Step` are **framework ComposableBlocks** (`Placement.bml`, `Step.bml`) — they extend `org.blockml.core.ComposableBlock`, not `com.machineblocks.core.Block`. They carry no geometry properties (no `size`, `studs`, …). Used as composition children on Sets:
-
-```text
-composition aggregation="_parts"      →  physical block palette (Floor, Wall, …)
-composition aggregation="_placement"  →  core:Placement instances
-composition aggregation="_steps"      →  core:Step instances (optional)
-```
-
-`Placement` members:
+`com.machineblocks.core.Step` is a **framework ComposableBlock** (`Step.bml`) — it extends `org.blockml.core.ComposableBlock`, not `com.machineblocks.core.Block`. Used as composition children on Sets:
 
 ```text
-id         — instance ID (becomes the SCAD instance id); must be explicit
-blockId    — references explicit id of a Block in _parts
-direction  — orientation in the set
-offset     — position in the set (grid units)
+composition aggregation="_presets"  →  block palette (Floor, Wall, …)
+composition aggregation="_parts"  →  placed block instances
+composition aggregation="_steps"  →  core:Step instances (optional)
 ```
 
 `Step` members:
 
 ```text
-placementId    — references explicit id of a Placement in _placement
+part           — association: references explicit id of a placed instance in _parts
+description    — optional human-readable step label
 ```
 
-When `_steps` is omitted, assembly order equals the document order of `_placement` entries.
+When `_steps` is omitted, assembly order equals the document order of `_parts` entries.
 
 ### Block Reuse
 
-Because `_parts` and `_placement` are separated, one Block configuration can be referenced by multiple placements without duplication:
+Because `_presets` and `_parts` are separated, one Block configuration can be referenced by multiple placed instances without duplication:
 
 ```xml
-<composition aggregation="_parts">
+<composition aggregation="_presets">
   <ac:Wall id="wall" size="[1, 8, 9]" baseColor="#303D4E" />
 </composition>
 
-<composition aggregation="_placement">
-  <core:Placement id="00003" blockId="wall" direction="West"  offset="[0, 4, 1]"  />
-  <core:Placement id="00005" blockId="wall" direction="North" offset="[4, 15, 1]" />
-  <core:Placement id="00007" blockId="wall" direction="East"  offset="[15, 4, 1]" />
-  <core:Placement id="00009" blockId="wall" direction="South" offset="[4, 0, 1]"  />
+<composition aggregation="_parts">
+  <ac:Wall id="00003" appliedPresets="wall" direction="West"  offset="[0, 4, 1]"  />
+  <ac:Wall id="00005" appliedPresets="wall" direction="North" offset="[4, 15, 1]" />
+  <ac:Wall id="00007" appliedPresets="wall" direction="East"  offset="[15, 4, 1]" />
+  <ac:Wall id="00009" appliedPresets="wall" direction="South" offset="[4, 0, 1]"  />
 </composition>
 ```
 
@@ -1300,15 +1295,15 @@ Three modes, combinable:
 
 ```text
 Option 1 — Inline:
-  All properties defined directly on the Block entry in _parts.
+  All properties defined directly on the instance in _parts.
 
 Option 2 — Preset reference:
-  Block references a Preset Collection preset (FQN::id).
-  All preset values apply.
+  Instance references preset id(s) via appliedPresets.
+  Compiler merges preset chain into effective properties.
 
 Option 3 — Preset + inline override:
-  Preset as base. Inline properties override individual values.
-  Merge order: configProfile < blockPreset < inline property
+  appliedPresets as base. Inline properties override individual values.
+  Merge order: configProfile < appliedPresets chain < inline property
 ```
 
 ### SCAD Set Output
@@ -1324,13 +1319,13 @@ instance  — single instance in isolation
 
 ---
 
-## Preset Collections
+## Presets (MachineBlocks)
 
-A Preset Collection is a **Block** with `baseType="org.blockml.core.PresetCollection"`. It groups named property presets as `<Preset>` instances in its composition — the same “everything is a Block” model as Sets, Placements, and Steps.
+Presets are **not** a BlockML core feature. MachineBlocks models them as ordinary Block instances in the `_presets` aggregation, referenced via the `appliedPresets` association on any MachineBlocks Block.
 
-Each preset applies property overrides to a specific Block type via an optional block instance child. Presets apply only to Properties — not Aggregations, Associations, or Capabilities.
+Preset merge is compiler logic (`resolveAppliedPresets`, block merge helpers). Customizer JSON output is render-target logic (machineblocks-v3-scad).
 
-A Preset Collection has its own FQN (`com.machineblocks.bricks.StandardPresets`). Multiple Preset Collections can target the same Block type from different packages. The Block definition has no knowledge of preset collections.
+A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<block>` with `baseType="com.machineblocks.core.Block"` whose composition fills `_presets` with Block instances of the target type.
 
 ### Structure
 
@@ -1352,62 +1347,53 @@ A Preset Collection has its own FQN (`com.machineblocks.bricks.StandardPresets`)
 
   <name>StandardPresets</name>
   <fullQualifiedName>com.machineblocks.bricks.StandardPresets</fullQualifiedName>
-  <baseType>org.blockml.core.PresetCollection</baseType>
+  <baseType>com.machineblocks.core.Block</baseType>
   <version>3.0.0</version>
 
-  <composition>
+  <composition aggregation="_presets">
 
-    <!-- Atomic preset — block child fills Preset.block aggregation -->
-    <Preset id="brick-1x1" name="Brick 1x1">
-      <bricks:Standard size="[1, 1, 3]" />
-    </Preset>
+    <bricks:Standard id="brick-1x1" name="Brick 1x1" version="3.0.0" size="[1, 1, 3]" />
 
-    <Preset id="brick-2x4" name="Brick 2x4">
-      <bricks:Standard size="[2, 4, 3]" />
-    </Preset>
+    <bricks:Standard id="color-red" name="Red" version="3.0.0" baseColor="#D65745" />
 
-    <Preset id="color-red" name="Red">
-      <bricks:Standard baseColor="#D65745" />
-    </Preset>
-
-    <!-- Composite preset — no own block when basePresets cover everything -->
-    <Preset id="brick-1x1-red"
-            name="Brick 1x1 Red"
-            basePresets="brick-1x1 color-red" />
+    <!-- Composite preset — appliedPresets merges preset chain -->
+    <bricks:Standard id="brick-1x1-red"
+                     name="Brick 1x1 Red"
+                     version="3.0.0"
+                     appliedPresets="brick-1x1 color-red" />
 
     <!-- Composite with own override -->
-    <Preset id="brick-1x1-red-text"
-            name="Brick 1x1 Red MB"
-            basePresets="brick-1x1-red">
-      <bricks:Standard text="MB" textColor="#EDF0F1" />
-    </Preset>
+    <bricks:Standard id="brick-1x1-red-text"
+                     name="Brick 1x1 Red MB"
+                     version="3.0.0"
+                     appliedPresets="brick-1x1-red"
+                     text="MB"
+                     textColor="#EDF0F1" />
 
-    <!-- Cross-file basePresets reference -->
-    <Preset id="brick-2x4-special"
-            name="Brick 2x4 Special"
-            basePresets="com.myproject.presets.MyPresets::my-base brick-2x4">
-      <bricks:Standard textColor="#EDF0F1" />
-    </Preset>
+    <!-- Cross-file appliedPresets reference -->
+    <bricks:Standard id="brick-2x4-special"
+                     name="Brick 2x4 Special"
+                     version="3.0.0"
+                     appliedPresets="com.myproject.presets.MyPresets::my-base brick-2x4"
+                     textColor="#EDF0F1" />
 
   </composition>
 
 </block>
 ```
 
-**`id`** (on Preset) — stable kebab-case identifier. Used for references in compositions and thumbnail filenames. Must be unique within the Preset Collection. Never changes once published.
+**`id`** — stable kebab-case identifier. Used for references via `appliedPresets` and thumbnail filenames. Must be unique within the enclosing Block's `_presets`. Never changes once published.
 
-**`name`** (on Preset) — human-readable display name. Used in the SCAD Customizer JSON and editor UI. May be renamed without breaking references.
+**`name`** — human-readable display name. Used in the SCAD Customizer JSON and editor UI. May be renamed without breaking references.
 
-**`basePresets`** — space-separated preset ids. Local ids resolve within the same Preset Collection; cross-file entries use `{FQN}::{id}`. Applied left-to-right; later entries override earlier. Own block properties override all base presets.
+**`appliedPresets`** — space-separated preset ids on any MachineBlocks Block instance. Local ids resolve within the enclosing Block's `_presets`; cross-file entries use `{BlockFQN}::{id}`. Applied left-to-right; later entries override earlier. Own instance properties override all applied presets.
 
-Since `Preset` has exactly one aggregation (`block`, type without brackets = 0..1) marked `default="true"`, the block instance placed as child fills it automatically — no `aggregation=` attribute needed.
+Presets can reference other presets — preset instances in `_presets` may themselves carry `appliedPresets`, forming an inheritance chain.
 
 ### Preset Reference Syntax
 
-Presets are referenced by `id` using the `::` separator:
-
 ```text
-{PresetCollectionFQN}::{preset-id}
+{BlockFQN}::{preset-id}
 
 Example:
   com.machineblocks.bricks.StandardPresets::brick-2x4
@@ -1417,20 +1403,20 @@ Example:
 
 ```xml
 <!-- Preset only -->
-<bricks:StandardBrick version="1.0.0"
-    presetRef="com.machineblocks.bricks.StandardPresets::brick-2x4" />
+<bricks:Standard version="3.0.0"
+    appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />
 
-<!-- Preset + inline override: baseColor overrides the Preset value -->
-<bricks:StandardBrick version="1.0.0"
-    presetRef="com.machineblocks.bricks.StandardPresets::brick-2x4"
+<!-- Preset + inline override -->
+<bricks:Standard version="3.0.0"
+    appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
 
-Merge order: `configProfile < presetRef < inline property`
+Merge order: `configProfile < appliedPresets chain < inline property`
 
-### Multiple Preset Collections for the Same Block
+### Multiple Preset Blocks for the Same Block Type
 
-Different authors or packages can contribute presets for the same Block type:
+Different authors or packages can contribute preset blocks for the same Block type:
 
 ```text
 com.machineblocks.bricks.StandardPresets   ← from @machineblocks/bricks library
@@ -1439,34 +1425,32 @@ com.myproject.presets.MyBrickPresets       ← own additions
 
 Both are referenced by their own FQN — no conflict, no registry ambiguity.
 
-**Resolution order** when merging a preset (highest priority first):
+**Resolution order** when merging (highest priority first):
 
 ```text
-1. Own block instance properties (child of Preset)
-2. basePresets — applied left-to-right, later entries override earlier
+1. Own instance properties
+2. appliedPresets — applied left-to-right, later entries override earlier
 3. Block defaultValues
 ```
 
-Cycles (`A extends B extends A`) are detected at compile time: `BML_PRESET_CYCLE`.
+Cycles in `appliedPresets` → `BML_PRESET_CYCLE`.
 
 ### SCAD Output
 
-Compiling a Preset Collection triggers implicit compilation of each referenced block type and produces a `.json` file in OpenSCAD Customizer format:
+The render target may produce a `.json` file in OpenSCAD Customizer format when compiling a preset block:
 
 ```text
-BML:   src/com/machineblocks/bricks/StandardPresets.mbml
+BML:   src/com/machineblocks/bricks/presets/StandardPresets.mbml
 JSON:  scad/com/machineblocks/bricks/Standard.json
 ```
 
-The Customizer JSON uses the Preset **name** as the key — the human-readable label shown in the OpenSCAD UI.
-
-Only Properties that differ from the Block's defaults are required in a preset. Whether the compiler fills missing properties with defaults or relies on OpenSCAD's own fallback is to be verified against OpenSCAD Customizer behavior.
+The Customizer JSON uses the preset **name** as the key — the human-readable label shown in the OpenSCAD UI.
 
 ---
 
 ## Config Profiles
 
-Config profiles are Preset Collection blocks (`baseType="org.blockml.core.PresetCollection"`) that define project-wide hardware or rendering defaults. Each `<Preset>` carries a project ConfigBlock instance (or inherits via `basePresets`).
+Config profiles are MachineBlocks preset blocks (`baseType="com.machineblocks.core.Block"`) that define project-wide hardware or rendering defaults. Each preset instance in `_presets` carries a project ConfigBlock instance (or inherits via `appliedPresets`).
 
 ```text
 src/config/prusa_pla.bml   — printer + filament profile
@@ -1476,14 +1460,14 @@ src/config/scale_2x.bml    — scale profile
 Only one config profile is active at a time (set via `bom activate-config`). Merge priority:
 
 ```text
-configProfile < blockPreset < inline property
+configProfile < appliedPresets chain < inline property
 ```
 
 ---
 
 ## Library Format (`org.blockml.core.Library`)
 
-A Library groups related Blocks, PresetCollections, optional XSD schemas, and dependencies into a publishable unit. Each package directory should contain one Library block at package root. If absent, all BML source files in the directory are treated as public.
+A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Preset blocks are exported as ordinary Block definitions via `_blocks`. Each package directory should contain one Library block at package root. If absent, all BML source files in the directory are treated as public.
 
 **Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for package `com.machineblocks.bricks`. Filename matches block name (`BricksLibrary.mbml`). Not enforced by the compiler.
 
@@ -1527,17 +1511,13 @@ A Library groups related Blocks, PresetCollections, optional XSD schemas, and de
     <BlockRef ref="blocks/Standard.mbml" />
     <BlockRef ref="blocks/Plate.mbml" />
     <BlockRef ref="blocks/Tile.mbml" />
-  </composition>
-
-  <composition aggregation="_presets">
-    <PresetsRef ref="presets/StandardPresets.mbml" />
-    <PresetsRef ref="presets/PlatePresets.mbml" />
+    <BlockRef ref="presets/StandardPresets.mbml" />
   </composition>
 
 </block>
 ```
 
-**`ref` paths** on `TypeRef`, `BlockRef`, `PresetsRef`, and `Schema` are relative to the **library package root** (directory containing the Library block file).
+**`ref` paths** on `TypeRef`, `BlockRef`, and `Schema` are relative to the **library package root** (directory containing the Library block file).
 
 **`_types`** lists exported TypeBlock definitions (StructType, EnumType, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML. A future compiler tool may generate XSD from `_types` instead of requiring authored `.xsd` files.
 
@@ -1578,7 +1558,7 @@ Sub-Blocks          → awkward nesting; FQN derivation unclear
 Functions (CDATA)   → no inline SCAD/TS bodies
 ```
 
-A future JSON subset might cover flat Preset Collections or simple leaf `<block>` definitions without composition directives — if a mapping can be specified without compromising the BOM model. **No commitment until the mapping is formally defined.**
+A future JSON subset might cover flat preset blocks or simple leaf `<block>` definitions without composition directives — if a mapping can be specified without compromising the BOM model. **No commitment until the mapping is formally defined.**
 
 The examples below are **illustrative drafts only** — not valid V1 input.
 
@@ -1636,12 +1616,11 @@ The examples below are **illustrative drafts only** — not valid V1 input.
     { "name": "assembly",       "type": "AssemblyMode", "defaultValue": "Merged"  }
   ],
   "aggregations": [
-    { "name": "_placement", "type": "com.machineblocks.core.Placement[]" },
-    { "name": "_steps",     "type": "com.machineblocks.core.Step[]" }
+    { "name": "_steps", "type": "com.machineblocks.core.Step[]" }
   ],
   "compositions": [
     {
-      "aggregation": "_parts",
+      "aggregation": "_presets",
       "children": [
         { "type": "com.martianmicro.anyclosure.Floor",  "id": "floor",  "version": "1.0.0", "size": [16, 16, 1] },
         { "type": "com.martianmicro.anyclosure.Corner", "id": "corner", "version": "1.0.0", "size": [4, 4, 9]   },
@@ -1650,18 +1629,11 @@ The examples below are **illustrative drafts only** — not valid V1 input.
       ]
     },
     {
-      "aggregation": "_placement",
+      "aggregation": "_parts",
       "children": [
-        { "type": "com.machineblocks.core.Placement", "id": "00001", "blockId": "floor",  "direction": "West",  "offset": [0, 0, 0]   },
-        { "type": "com.machineblocks.core.Placement", "id": "00002", "blockId": "corner", "direction": "West",  "offset": [0, 0, 1]   },
-        { "type": "com.machineblocks.core.Placement", "id": "00003", "blockId": "wall",   "direction": "West",  "offset": [0, 4, 1]   },
-        { "type": "com.machineblocks.core.Placement", "id": "00004", "blockId": "corner", "direction": "North", "offset": [0, 12, 1]  },
-        { "type": "com.machineblocks.core.Placement", "id": "00005", "blockId": "wall",   "direction": "North", "offset": [4, 15, 1]  },
-        { "type": "com.machineblocks.core.Placement", "id": "00006", "blockId": "corner", "direction": "East",  "offset": [12, 12, 1] },
-        { "type": "com.machineblocks.core.Placement", "id": "00007", "blockId": "wall",   "direction": "East",  "offset": [15, 4, 1]  },
-        { "type": "com.machineblocks.core.Placement", "id": "00008", "blockId": "corner", "direction": "South", "offset": [12, 0, 1]  },
-        { "type": "com.machineblocks.core.Placement", "id": "00009", "blockId": "wall",   "direction": "South", "offset": [4, 0, 1]   },
-        { "type": "com.machineblocks.core.Placement", "id": "0000A", "blockId": "lid",    "direction": "West",  "offset": [0, 0, 10]  }
+        { "type": "com.martianmicro.anyclosure.Floor",  "id": "00001", "appliedPresets": "floor",  "direction": "West",  "offset": [0, 0, 0]   },
+        { "type": "com.martianmicro.anyclosure.Corner", "id": "00002", "appliedPresets": "corner", "direction": "West",  "offset": [0, 0, 1]   },
+        { "type": "com.martianmicro.anyclosure.Wall",   "id": "00003", "appliedPresets": "wall",   "direction": "West",  "offset": [0, 4, 1]   }
       ]
     }
   ]
@@ -1675,7 +1647,7 @@ The examples below are **illustrative drafts only** — not valid V1 input.
 The BML→BOM mapping is defined once per root type and applies uniformly to all documents of that type. It is configurable and extensible for new root types.
 
 ```text
-<block>   → Block mapping rule (all block types including PresetCollection)
+<block>   → Block mapping rule (all block types)
 <device>    → Device mapping rule (external package)
 ```
 
@@ -1687,7 +1659,7 @@ There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping 
 
 ```text
 baseType missing              → BML_MISSING_BASE_TYPE (no default)
-<aggregations> missing        → no parser action; inherited members resolved at validate (e.g. _parts from com.machineblocks.core.Block)
+<aggregations> missing        → no parser action; inherited members resolved at validate (e.g. _presets, _parts from MachineBlocks base types)
 <composition> without aggregation attribute
   + single default aggregation in effective members → fills that aggregation (typically _parts for MB Blocks)
   + multiple aggregations, no default               → compiler error: aggregation attribute required
@@ -1697,7 +1669,7 @@ unknown version on external instance → BML_UNKNOWN_VERSION (error)
 same-document Sub-Block instance     → version not required
 id missing on referenced instance    → BML_MISSING_ID
 id missing on bml:each element       → BML_MISSING_ID
-blockId / placementId unresolvable       → BML_UNRESOLVABLE_INSTANCE_REF
+appliedPresets / Step.part unresolvable  → BML_UNRESOLVABLE_INSTANCE_REF
 anonymous static child without id    → auto-ID after directive expansion (not stored in BOM)
-_steps missing or empty       → assembly order = document order of _placement
+_steps missing or empty       → assembly order = document order of _parts
 ```

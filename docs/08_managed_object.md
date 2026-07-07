@@ -147,8 +147,10 @@ setOnResized(value: Address): this {
 ### Aggregation 0..n Example
 
 ```typescript
-// Block inherits from com.machineblocks.core.Block:
+// Block inherits from com.machineblocks.core.CompositeBlock:
 //   aggregation _parts: type="com.machineblocks.core.Block[]" default="true"
+// Block inherits from com.machineblocks.core.Block:
+//   aggregation _presets: type="com.machineblocks.core.Block[]"
 
 // Generated:
 getParts(): StandardBrick[] {

@@ -35,7 +35,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 |---|---|---|
 | `bml:each`, `bml:if`, `bml:with` | `directives[]` on element | Preprocessor, BlockProcessor, or Validator |
 | `data:*` attributes | `customData[]` on Block | Tooling only — UI5-style customData shorthand (see below) |
-| `<aggregations>` declaration | `AggregationDefinition` (declared only) | Inherited members (e.g. `_parts` on `com.machineblocks.core.Block`) resolved at validate |
+| `<aggregations>` declaration | `AggregationDefinition` (declared only) | Inherited members (e.g. `_presets`, `_parts`) resolved at validate |
 | `<composition>` children | `CompositionNode` tree | Renderer (wrapper logic, assembly patterns) |
 | `baseType` FQN | string reference | Type Registry → effective members |
 | Preset reference | string `FQN::id` | Preset merge resolver |
@@ -94,7 +94,7 @@ Every parsed BML file produces exactly one `BomDocument`.
 
 ```typescript
 interface BomDocument {
-  /** V1: always `<block>` root. Legacy `<blockPresets>` removed — presets are PresetCollection blocks. */
+  /** V1: always `<block>` root. Legacy `<blockPresets>` removed — presets are MachineBlocks `_presets` blocks. */
   kind: "block"
 
   /** Parse metadata */
@@ -560,17 +560,17 @@ Deterministic across compile runs — same position → same ID → clean SCAD d
 Cross-references within the same composition scope are validated against **authored explicit ids**:
 
 ```text
-_blocks child with id="wall"     ← target
-_placement child blockId="wall"  ← reference  ✓
+_presets child with id="wall"           ← target
+_parts child appliedPresets="wall"       ← reference  ✓
 
-_blocks child without id         ← target
-_placement child blockId="wall"  ← reference  ✗  BML_MISSING_ID on target
+_presets child without id               ← target
+_parts child appliedPresets="wall"     ← reference  ✗  BML_MISSING_ID on target preset
 
-_blocks child with id="wall"     ← target
-_placement child blockId="floor" ← reference  ✗  BML_UNRESOLVABLE_INSTANCE_REF
+_presets child with id="wall"           ← target
+_parts child appliedPresets="floor"     ← reference  ✗  BML_UNRESOLVABLE_INSTANCE_REF
 ```
 
-`blockId` / `placeId` values must match an authored `id` in the referenced aggregation — not an auto-generated or FQN-derived value.
+`appliedPresets` / `Step.part` values must match an authored `id` in the referenced aggregation — not an auto-generated or FQN-derived value.
 
 ---
 
@@ -591,7 +591,7 @@ interface BlockInstance {
   version?: string
 
   /** Preset reference: {PresetsDocumentFQN}::{preset-id} */
-  presetRef?: string
+  appliedPresets?: string
 
   renderGroup?: string
   namespace?: string
@@ -665,44 +665,38 @@ getBlockDefinition(fqn: string, version: string): BlockDefinition | undefined
 
 ---
 
-## Preset Collections (`org.blockml.core.PresetCollection`)
+## Presets (MachineBlocks)
 
-Preset files are ordinary `BlockDefinition` documents — not a separate BOM root type.
+Presets are **not** a BlockML core feature. MachineBlocks models them via `_presets` aggregation and `appliedPresets` association on `com.machineblocks.core.Block`. Preset files are ordinary `BlockDefinition` documents.
 
 ```text
-org.blockml.core.PresetCollection   abstract composable Block
-  subBlocks    Preset
-  aggregation  presets   0..n   Preset   (defaultAggregation; short name → PresetCollection.Preset)
-
-org.blockml.core.PresetCollection.Preset   final composable Sub-Block
-  property     name      String   — display label (Customizer UI)
-  property     id        String   — inherited from ComposableBlock; stable reference key
-  aggregation  block     0..1   org.blockml.core.Block   (defaultAggregation)
-  association  basePresets 0..n Preset  — space-separated ids on instance
+com.machineblocks.core.Block
+  aggregation  _presets   0..n   com.machineblocks.core.Block
+  association  appliedPresets  0..n  _self  — space-separated ids on instance
 ```
 
-Preset instances appear as `<Preset>` children in the PresetCollection's default `<composition>`. PresetCollection-typed blocks resolve `<Preset>` by short name via inherited Sub-Blocks (same rule as Library entry types).
+Preset instances appear as Block children in `_presets` composition. Preset merge is compiler logic; Customizer JSON is render-target logic.
 
-**Preset reference syntax** (unchanged):
+**Preset reference syntax:**
 
 ```text
-{PresetCollectionFQN}::{preset-id}
+{BlockFQN}::{preset-id}
 
 Example:
   com.machineblocks.bricks.StandardPresets::brick-2x4
 ```
 
-Cross-file `basePresets` entries use the same `FQN::id` form. Local ids resolve within the same PresetCollection document.
+Cross-file `appliedPresets` entries use the same `FQN::id` form. Local ids resolve within the enclosing Block's `_presets`.
 
-**Merge order** when resolving a preset for rendering:
+**Merge order** when resolving applied presets:
 
 ```text
-1. Own block instance properties (child of Preset)
-2. basePresets — applied left-to-right; later entries override earlier
-3. Referenced Block defaultValues
+1. Own instance properties
+2. appliedPresets — applied left-to-right; later entries override earlier
+3. Block defaultValues
 ```
 
-Cycles in `basePresets` → `BML_PRESET_CYCLE`.
+Cycles in `appliedPresets` → `BML_PRESET_CYCLE`.
 
 ---
 
@@ -715,23 +709,21 @@ Library descriptors are ordinary `BlockDefinition` documents with `baseType="org
 ```text
 org.blockml.core.Library
   property     description     String
-  subBlocks      Dependency · Schema · TypeRef · BlockRef · PresetsRef
+  subBlocks      Dependency · Schema · TypeRef · BlockRef
   aggregation  _dependencies   0..n  org.blockml.core.Library.Dependency
   aggregation  _schemas        0..n  org.blockml.core.Library.Schema
   aggregation  _types          0..n  org.blockml.core.Library.TypeRef
   aggregation  _blocks         0..n  org.blockml.core.Library.BlockRef
-  aggregation  _presets        0..n  org.blockml.core.Library.PresetsRef
 
 org.blockml.core.Library.Dependency   properties: ref (Library FQN), version
 org.blockml.core.Library.Schema       property:  ref (relative .xsd path)
 org.blockml.core.Library.TypeRef      property:  ref (relative TypeBlock file path)
 org.blockml.core.Library.BlockRef     property:  ref (relative block file path)
-org.blockml.core.Library.PresetsRef   property:  ref (relative PresetCollection path)
 ```
 
 Entry types are **Sub-Blocks of `org.blockml.core.Library`** — defined in `Library.bml`, not separate framework files. Library-typed blocks (`baseType="org.blockml.core.Library"`) resolve `<Dependency>`, `<TypeRef>`, etc. by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
 
-Composition children use element names `Dependency`, `Schema`, `TypeRef`, `BlockRef`, `PresetsRef` — each `aggregation=` attribute is required (Library has five aggregations, none is default).
+Composition children use element names `Dependency`, `Schema`, `TypeRef`, `BlockRef` — each `aggregation=` attribute is required (Library has four aggregations, none is default).
 
 The orchestrator resolves `ref` paths relative to the library package root, loads referenced files into the TypeRegistry, and validates Library dependencies (`ref` + `version` must match a registered Library block).
 
@@ -782,7 +774,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ```text
 1. Built-in ServiceBlocks     — @blockml/core-services (org.blockml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
-3. Library blocks             — org.blockml.core.Library → resolve BlockRef / PresetsRef paths
+3. Library blocks             — org.blockml.core.Library → resolve BlockRef paths
 4. Project srcDir scan        — remaining *.bml / configured extensions in bom.config.json
 5. Declared dependencies      — Library Dependency entries + bom.config.json paths
 ```
@@ -831,7 +823,7 @@ BomDocument
       - BlockDefinition PinDiameter
 
     compositions:
-      - aggregationName: "_parts" (inherited from com.machineblocks.core.Block)
+      - aggregationName: "_parts" (inherited from com.machineblocks.core.CompositeBlock)
         children:
           - BlockInstanceNode Base (no version — same document)
           - BlockInstanceNode StudDiameter
@@ -864,8 +856,8 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Expression result types match member types
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property defaultValue cycles (topological sort)
-✓  Preset basePresets resolve (local id or FQN::id) and have no cycles
-✓  Library TypeRef / BlockRef / PresetsRef paths resolve to existing files
+✓  appliedPresets resolve (local id or FQN::id) and have no cycles
+✓  Library TypeRef / BlockRef paths resolve to existing files
 ✓  Library Dependency ref + version matches registered Library block
 ```
 

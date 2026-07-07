@@ -239,7 +239,7 @@ MachineBlocks (machineblocks.com):
 ```text
 blockml.org schemas (in @blockml/core package):
   schemas/core/
-    block.xsd          ← BML document structure (all <block> roots: composable, types, Library, PresetCollection, …)
+    block.xsd          ← BML document structure (all <block> roots: composable, types, Library, …)
     types.xsd          ← org.blockml.type.* primitives (filename plural; maps to singular .type package)
     service.xsd        ← org.blockml.service.* hierarchy
 
@@ -482,13 +482,13 @@ The root element of the BML file determines the document type — not the filena
                            scad/com/.../ClassName.scad.map
                            Block module + customizer. No thumbnails.
 
-<block> (PresetCollection) → scad/com/.../ReferencedBlock.scad   (implicit compile per preset block type)
+<block> (preset block)    → scad/com/.../ReferencedBlock.scad   (implicit compile per preset block type)
                            scad/com/.../ReferencedBlock.scad.map
                            scad/com/.../ReferencedBlock.json     (OpenSCAD Customizer preset file)
                            scad/com/.../ReferencedBlock__{preset-id}.webp  (one thumbnail per preset)
 ```
 
-Compiling a Preset Collection (`baseType = org.blockml.core.PresetCollection`) is the standard entry point when generating visible output. It triggers implicit compilation of referenced block types and produces all artifacts in one step.
+Compiling a preset block (`baseType = com.machineblocks.core.Block` with `_presets` composition) is a standard entry point when generating Customizer output. It triggers implicit compilation of referenced block types and produces all artifacts in one step.
 
 A MachineBlocks Set is a `<block>` document with `baseType = com.machineblocks.core.Set`. The SCAD Renderer detects this and produces STEPS-based output.
 
@@ -557,7 +557,7 @@ This resolution is implemented in `@blockml/cli` as `resolveMbLib.ts`.
 
 Config profiles are project-wide property presets that define hardware-specific or rendering-specific defaults (printer calibration, filament shrinkage, scale, etc.).
 
-They are Preset Collection blocks (`baseType="org.blockml.core.PresetCollection"`) and share the same property namespace as block properties.
+They are preset blocks (`baseType="com.machineblocks.core.Block"` with `_presets` composition) and share the same property namespace as block properties.
 
 ```text
 config/prusa_pla.bml    — printer + filament profile
@@ -573,7 +573,7 @@ bom activate-config prusa_pla
 Merge priority (ascending):
 
 ```text
-configProfile < blockPreset < inline property
+configProfile < appliedPresets chain < inline property
 ```
 
 ---
