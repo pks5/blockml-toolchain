@@ -287,12 +287,10 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
 
 ```xml
 <!-- Aggregation on parent Block: -->
-<aggregation name="utils"
+<aggregation name="_utils"
              type="com.machineblocks.calibration.Calibrator.Utils"
              beanName="utils"
-             cardinality="0..1"
-             scope="context"
-             visibility="hidden" />
+             scope="context" />
 
 <!-- FunctionBlock Sub-Block: -->
 <block>

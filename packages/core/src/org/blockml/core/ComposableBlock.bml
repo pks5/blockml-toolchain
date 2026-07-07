@@ -28,10 +28,8 @@
   </properties>
 
   <aggregations>
-    <aggregation name="customData"
-                 cardinality="0..n"
-                 type="org.blockml.core.CustomData"
-                 visibility="hidden" />
+    <aggregation name="_customData"
+                 type="org.blockml.core.CustomData[]" />
   </aggregations>
 
 </block>

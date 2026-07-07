@@ -333,15 +333,49 @@ An Aggregation describes an ownership relationship: a Block can contain zero or 
 ### Aggregation Metadata
 
 ```text
-name               — member name (unique within the Block's member namespace)
-type               — FQN of the child type
-cardinality        — "0..1" | "0..n" | "1..1" | "1..n"
-visibility         — "public" | "hidden"
-defaultAggregation — boolean
-documentation      — human-readable description
+name          — member name (unique within the Block's member namespace)
+type          — FQN of the child type, optionally with occurrence brackets (see Type Notation below)
+default       — boolean; marks the default aggregation for bare <composition>
+beanName      — optional; marks this Aggregation as a ServiceBlock binding
+scope         — optional; "local" | "context" (ServiceBlock bindings only)
+documentation — human-readable description
 ```
 
-`visibility="hidden"` marks an Aggregation as internal — it can only be filled by the Block's own Composition, not from outside.
+**Member visibility** is determined by naming convention, not an attribute:
+
+```text
+name starts with "_"  →  hidden (internal)
+all other names       →  public
+```
+
+Hidden Aggregations can only be filled by the Block's own Composition, not from outside.
+
+### Type Notation
+
+Cardinality is expressed in the `type` attribute — there is no separate `cardinality` attribute:
+
+```text
+Block         →  0..1
+Block[]       →  0..n
+Block[1..1]   →  1..1
+Block[1..]    →  1..n
+Block[3]      →  0..3
+Block[1..3]   →  1..3
+```
+
+The internal BOM representation may use `minOccurs` / `maxOccurs` or an equivalent structure. BML surface syntax uses type brackets only.
+
+### `_self` Type
+
+`_self` refers to the **current effective Block type**, resolved **after inheritance** — not at parse time.
+
+```xml
+<association name="next" type="_self"/>
+```
+
+On `com.foo.Node` → `next : com.foo.Node`. On `com.bar.SpecialNode extends com.foo.Node` → `next : com.bar.SpecialNode`.
+
+Collection forms: `_self[]`, `_self[1..3]`, etc. `_self` is especially useful for Associations (parent, children, connectedTo) but is also valid on Aggregations.
 
 ### Implicit Default Aggregation
 
@@ -420,7 +454,7 @@ This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) 
 
 ### Custom Data
 
-Every Block has an implicit hidden Aggregation `customData` of type `org.blockml.core.CustomData`. This allows arbitrary key-value metadata to be attached to Block definitions and Composition instances without affecting rendering.
+Every Block has an implicit hidden Aggregation `_customData` of type `org.blockml.core.CustomData[]`. This allows arbitrary key-value metadata to be attached to Block definitions and Composition instances without affecting rendering.
 
 ```text
 org.blockml.core.CustomData
@@ -428,7 +462,7 @@ org.blockml.core.CustomData
   value: String  — metadata value
 ```
 
-In BML, `data:*` attributes follow the **UI5 customData pattern** — the same idea as `data:myVal` on Controls and Elements in SAP UI5 views. They are syntactic sugar for `customData` entries. The parser expands them automatically:
+In BML, `data:*` attributes follow the **UI5 customData pattern** — the same idea as `data:myVal` on Controls and Elements in SAP UI5 views. They are syntactic sugar for `_customData` entries. The parser expands them automatically:
 
 ```xml
 <!-- BML authoring shortform: -->
@@ -444,7 +478,7 @@ StandardBrick._customData: [
 ]
 ```
 
-`customData` has no effect on compilation or rendering. It is passed through to the BOM for use by tooling, editors, documentation generators, and CI systems.
+`_customData` has no effect on compilation or rendering. It is passed through to the BOM for use by tooling, editors, documentation generators, and CI systems.
 
 ---
 
@@ -454,8 +488,7 @@ Associations describe loose references between objects without ownership. They a
 
 ```text
 name          — member name (unique within the Block's member namespace)
-type          — FQN of the referenced type
-cardinality   — "0..1" | "0..n"
+type          — FQN of the referenced type, optionally with occurrence brackets (see Type Notation)
 documentation — human-readable description
 ```
 
@@ -489,11 +522,10 @@ All Capabilities share these base fields:
 name           — camelCase member name (unique within the Block's member namespace)
 class          — FQN of the Capability class (AsyncInbound | AsyncOutbound | Sync)
 payloadType    — declared payload type (see Payload Types below)
-visibility     — "public" | "hidden" (default: "public")
 documentation  — human-readable description
 ```
 
-`visibility="hidden"` marks a Capability as internal — it cannot be bound from outside the Block's own Composition. Hidden Capabilities are only accessible within the Block itself, either via Expressions or internal Composition bindings.
+Member visibility follows the same naming convention as Aggregations: names starting with `_` are hidden. Hidden Capabilities cannot be bound from outside the Block's own Composition. They are only accessible within the Block itself, either via Expressions or internal Composition bindings.
 
 **`AsyncInbound`** adds:
 
@@ -733,7 +765,7 @@ The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*
 
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
-| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style customData shorthand for `org.blockml.core.Block`. |
+| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style `_customData` shorthand for `org.blockml.core.ComposableBlock`. |
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
@@ -907,8 +939,8 @@ Each Preset instance (`org.blockml.core.PresetCollection.Preset` — Sub-Block o
 ```text
 id           — stable kebab-case identifier (ComposableBlock id property; reference key)
 name         — human-readable display name (Customizer UI, editor)
-block        — aggregation 0..1: block instance with property overrides
-basePresets  — association 0..n: space-separated preset ids (local or FQN::id)
+block        — aggregation Block (0..1): block instance with property overrides
+basePresets  — association Preset[]: space-separated preset ids (local or FQN::id)
 ```
 
 The `id` is the canonical reference key. The `name` is display-only. The `id` must be unique within a Preset Collection.
@@ -951,11 +983,11 @@ A Library is a **Block** with `baseType="org.blockml.core.Library"`. It groups e
 org.blockml.core.Library           abstract composable Block
   property     description   String
   subBlocks    Dependency · Schema · TypeRef · BlockRef · PresetsRef
-  aggregation  _dependencies  0..n  org.blockml.core.Library.Dependency
-  aggregation  _schemas        0..n  org.blockml.core.Library.Schema      (optional — legacy XSD)
-  aggregation  _types          0..n  org.blockml.core.Library.TypeRef     (StructType / EnumType BML)
-  aggregation  _blocks        0..n  org.blockml.core.Library.BlockRef
-  aggregation  _presets       0..n  org.blockml.core.Library.PresetsRef
+  aggregation  _dependencies  Dependency[]
+  aggregation  _schemas       Schema[]       (optional — legacy XSD)
+  aggregation  _types         TypeRef[]      (StructType / EnumType BML)
+  aggregation  _blocks        BlockRef[]
+  aggregation  _presets       PresetsRef[]
 
 org.blockml.core.Library.Dependency   ref (Library FQN) · version
 org.blockml.core.Library.Schema       ref (relative .xsd path)

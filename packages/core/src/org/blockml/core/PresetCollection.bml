@@ -3,7 +3,7 @@
 
   FQN: org.blockml.core.PresetCollection
 
-  Preset is a Sub-Block of PresetCollection. Aggregation uses type="Preset" —
+  Preset is a Sub-Block of PresetCollection. Aggregation uses type="Preset[]" —
   parser resolves against subBlocks[] in the same file.
 -->
 <block
@@ -26,11 +26,9 @@
   <allowedSubBlockTypes />
 
   <aggregations>
-    <aggregation name="presets"
-                 cardinality="0..n"
-                 type="Preset"
-                 visibility="hidden"
-                 defaultAggregation="true" />
+    <aggregation name="_presets"
+                 type="Preset[]"
+                 default="true" />
   </aggregations>
 
   <subBlocks>
@@ -49,14 +47,12 @@
       </properties>
       <aggregations>
         <aggregation name="block"
-                     cardinality="0..1"
                      type="org.blockml.core.Block"
-                     defaultAggregation="true" />
+                     default="true" />
       </aggregations>
       <associations>
         <association name="basePresets"
-                     type="Preset"
-                     cardinality="0..n" />
+                     type="Preset[]" />
       </associations>
     </block>
 

@@ -26,8 +26,8 @@
   </allowedSubBlockTypes>
 
   <aggregations>
-    <aggregation name="_placement" cardinality="0..n" type="com.machineblocks.core.Placement" visibility="hidden" />
-    <aggregation name="_steps"     cardinality="0..n" type="com.machineblocks.core.Step"  visibility="hidden" />
+    <aggregation name="_placement" type="com.machineblocks.core.Placement[]" />
+    <aggregation name="_steps"     type="com.machineblocks.core.Step[]" />
   </aggregations>
 
 </block>

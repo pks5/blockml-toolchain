@@ -314,14 +314,12 @@ All Members — Properties, Aggregations, Associations, and Capabilities — sha
 `_parts` on `com.machineblocks.core.Block` (declared in framework BML):
 
 ```text
-name:        _parts
-cardinality: 0..n
-type:        com.machineblocks.core.Block
-visibility:  hidden
-defaultAggregation: true
+name:    _parts
+type:    com.machineblocks.core.Block[]
+default: true
 ```
 
-**`<composition>`** — when no `aggregation` attribute is specified and the effective members include a single default aggregation, the Composition fills that aggregation. For MachineBlocks Blocks this is typically inherited `_parts`. If multiple aggregations exist and none is marked default, the `aggregation` attribute is required — the compiler reports an error if it is missing.
+**`<composition>`** — when no `aggregation` attribute is specified and the effective members include a single default aggregation, the Composition fills that aggregation. For MachineBlocks Blocks this is typically inherited `_parts`. If multiple aggregations exist and none is marked `default="true"`, the `aggregation` attribute is required — the compiler reports an error if it is missing.
 
 ### Minimal Block Example
 
@@ -502,16 +500,35 @@ For MachineBlocks Blocks, `_parts` is inherited from `com.machineblocks.core.Blo
 ```xml
 <!-- Set: _placement and _steps beyond inherited _parts -->
 <aggregations>
-  <aggregation name="_placement" cardinality="0..n" type="com.machineblocks.core.Placement" visibility="hidden" />
-  <aggregation name="_steps"     cardinality="0..n" type="com.machineblocks.core.Step"  visibility="hidden" />
+  <aggregation name="_placement" type="com.machineblocks.core.Placement[]" />
+  <aggregation name="_steps"     type="com.machineblocks.core.Step[]" />
 </aggregations>
 ```
 
 ```text
-name          — member name (unique within the Block's member namespace)
-cardinality   — "0..1" | "0..n" | "1..1" | "1..n"
-type          — child type: unqualified Sub-Block name (same file) or FQN / prefixed type
-visibility    — "public" | "hidden"
+name    — member name (unique within the Block's member namespace)
+type    — child type: unqualified Sub-Block name (same file), FQN, prefixed type, _self, or type with occurrence brackets
+default — boolean; marks the default aggregation for bare <composition>
+```
+
+**Member visibility** is determined by naming convention: names starting with `_` are hidden (internal); all other names are public.
+
+**Type notation** — cardinality is part of the type, not a separate attribute:
+
+```text
+Block         →  0..1
+Block[]       →  0..n
+Block[1..1]   →  1..1
+Block[1..]    →  1..n
+Block[3]      →  0..3
+Block[1..3]   →  1..3
+```
+
+**`_self`** — refers to the current effective Block type, resolved after inheritance:
+
+```xml
+<association name="parent"   type="_self" />
+<association name="children" type="_self[]" />
 ```
 
 **ServiceBlock Aggregations** bind named service beans into the Block. Once declared, the bean is accessible in Expressions via `@beanName`. The `scope` attribute controls visibility to child Blocks:
@@ -519,20 +536,16 @@ visibility    — "public" | "hidden"
 ```xml
 <aggregations>
   <!-- local: only accessible in this Block (default) -->
-  <aggregation name="fmt"
+  <aggregation name="_fmt"
                type="org.blockml.service.Formatter"
                beanName="fmt"
-               cardinality="0..1"
-               scope="local"
-               visibility="hidden" />
+               scope="local" />
 
   <!-- context: passed down to all child Blocks in Compositions, overridable -->
-  <aggregation name="data"
+  <aggregation name="_data"
                type="org.blockml.service.JSONModel"
                beanName="data"
-               cardinality="0..1"
-               scope="context"
-               visibility="hidden" />
+               scope="context" />
 </aggregations>
 ```
 
@@ -545,8 +558,7 @@ Associations describe loose references without ownership. Defined for future use
 ```xml
 <associations>
   <association name="targetDevice"
-               type="com.electronics.core.Component"
-               cardinality="0..1" />
+               type="com.electronics.core.Component" />
 </associations>
 ```
 
@@ -605,7 +617,7 @@ Unqualified type names resolve against the domain's default type namespace (dete
 **`AsyncInbound`** and **`AsyncOutbound`**: `returnType` is optional (for async reply via `replyTo`).
 **`Sync`**: `returnType` is required. No address — only callable within Expressions.
 
-**`visibility="hidden"`**: Capability is internal — cannot be bound from outside the Block's Composition. Accessible within the Block's own Expressions and internal Compositions only.
+**Hidden Capabilities** — names starting with `_` are internal: cannot be bound from outside the Block's Composition. Accessible within the Block's own Expressions and internal Compositions only.
 
 ---
 
@@ -707,7 +719,7 @@ Variables from `bml:with` are visible to the element and all descendants. There 
 
 ## Custom Data (`data:`)
 
-The `data:` namespace allows arbitrary key-value metadata to be attached to Block definitions and Composition instances. The pattern is borrowed from **SAP UI5 customData** — in UI5 views, `data:myVal` on a Control or Element sets a customData key/value pair on that element. BlockML applies the same idea to Blocks via the implicit `customData` aggregation on `org.blockml.core.Block`.
+The `data:` namespace allows arbitrary key-value metadata to be attached to Block definitions and Composition instances. The pattern is borrowed from **SAP UI5 customData** — in UI5 views, `data:myVal` on a Control or Element sets a customData key/value pair on that element. BlockML applies the same idea to Blocks via the implicit `_customData` aggregation on `org.blockml.core.ComposableBlock`.
 
 Custom data has no effect on compilation or rendering — it is purely for tooling, editors, documentation, and CI systems.
 
@@ -750,7 +762,7 @@ On a Composition instance:
 
 ### BOM Representation
 
-`data:*` attributes are UI5-style syntactic sugar for the implicit `customData` Aggregation on every Block. The parser expands them automatically:
+`data:*` attributes are UI5-style syntactic sugar for the implicit `_customData` Aggregation on every Block. The parser expands them automatically:
 
 ```text
 data:role="structural"  →  CustomData { key: "role", value: "structural" }
@@ -771,7 +783,7 @@ BML Directives are special attributes in the `bml:` namespace that control struc
 
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
-| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style customData shorthand for `org.blockml.core.Block`. |
+| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style `_customData` shorthand for `org.blockml.core.ComposableBlock`. |
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
@@ -973,7 +985,7 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Li
 
 ```xml
 <aggregations>
-  <aggregation name="_dependencies" type="Dependency" cardinality="0..n" />
+  <aggregation name="_dependencies" type="Dependency[]" />
 </aggregations>
 <subBlocks>
   <block><name>Dependency</name>...</block>
@@ -990,7 +1002,7 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Li
 
 **Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.Library"` (e.g. `BricksLibrary`) automatically resolves `Dependency`, `TypeRef`, `BlockRef`, … without prefix — they are Sub-Blocks of `org.blockml.core.Library`, inherited via the baseType chain. Authors do not redeclare them in each library file.
 
-A block with `baseType="org.blockml.core.PresetCollection"` resolves `<Preset>` the same way — Sub-Block of `org.blockml.core.PresetCollection` (aggregation `type="Preset"` in framework BML).
+A block with `baseType="org.blockml.core.PresetCollection"` resolves `<Preset>` the same way — Sub-Block of `org.blockml.core.PresetCollection` (aggregation `type="Preset[]"` in framework BML).
 
 ```xml
 <!-- BricksLibrary.mbml — no xmlns needed for entry types -->
@@ -1388,7 +1400,7 @@ A Preset Collection has its own FQN (`com.machineblocks.bricks.StandardPresets`)
 
 **`basePresets`** — space-separated preset ids. Local ids resolve within the same Preset Collection; cross-file entries use `{FQN}::{id}`. Applied left-to-right; later entries override earlier. Own block properties override all base presets.
 
-Since `Preset` has exactly one aggregation (`block`, 0..1) marked `defaultAggregation`, the block instance placed as child fills it automatically — no `aggregation=` attribute needed.
+Since `Preset` has exactly one aggregation (`block`, type without brackets = 0..1) marked `default="true"`, the block instance placed as child fills it automatically — no `aggregation=` attribute needed.
 
 ### Preset Reference Syntax
 
@@ -1561,7 +1573,7 @@ JSON as a BML authoring format faces fundamental constraints from BlockML's name
 ```text
 Namespaces          → no element-name types (bricks:StandardBrick); explicit type fields only
 bml:* directives    → no attribute-namespace mechanism
-data:* customData   → no equivalent to UI5-style namespaced attributes
+data:* _customData   → no equivalent to UI5-style namespaced attributes
 Sub-Blocks          → awkward nesting; FQN derivation unclear
 Functions (CDATA)   → no inline SCAD/TS bodies
 ```
@@ -1624,8 +1636,8 @@ The examples below are **illustrative drafts only** — not valid V1 input.
     { "name": "assembly",       "type": "AssemblyMode", "defaultValue": "Merged"  }
   ],
   "aggregations": [
-    { "name": "_placement", "cardinality": "0..n", "type": "com.machineblocks.core.Placement", "visibility": "hidden" },
-    { "name": "_steps",     "cardinality": "0..n", "type": "com.machineblocks.core.Step",  "visibility": "hidden" }
+    { "name": "_placement", "type": "com.machineblocks.core.Placement[]" },
+    { "name": "_steps",     "type": "com.machineblocks.core.Step[]" }
   ],
   "compositions": [
     {

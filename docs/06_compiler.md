@@ -176,7 +176,7 @@ Validates the BOM graph for semantic correctness:
 - bml:each elements have explicit id
 - Referenced block types exist at the **exact pinned version** (no implicit latest)
 - Composition child member values are valid for the referenced block type
-- Aggregation cardinality constraints are satisfied
+- Aggregation occurrence constraints are satisfied (derived from type notation: `[]`, `[1..1]`, `[1..]`, `[n]`, `[min..max]`)
 - Expression result types match the target member type
 - @bean references resolve to declared Aggregations
 - Capability linking: source must be Outbound, target must be Inbound, payload types must match
@@ -457,7 +457,7 @@ BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
 BML_PRESET_CYCLE              — circular dependency in composite preset basePresets
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
-BML_CARDINALITY_VIOLATION     — aggregation cardinality not satisfied
+BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfied (type notation)
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
 BML_UNKNOWN_BEAN              — @bean reference not found in aggregations
 BML_CAPABILITY_LINK_MISMATCH  — capability linking: direction or payload mismatch

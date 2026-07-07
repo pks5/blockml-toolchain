@@ -148,7 +148,7 @@ setOnResized(value: Address): this {
 
 ```typescript
 // Block inherits from com.machineblocks.core.Block:
-//   aggregation _parts: cardinality="0..n" type="com.machineblocks.core.Block" (hidden, defaultAggregation)
+//   aggregation _parts: type="com.machineblocks.core.Block[]" default="true"
 
 // Generated:
 getParts(): StandardBrick[] {
@@ -184,7 +184,7 @@ destroyParts(): this {
 
 ```typescript
 // Block definition declares:
-//   aggregation name="tooltip" cardinality="0..1" type="org.blockml.service.Formatter"
+//   aggregation name="tooltip" type="org.blockml.service.Formatter"
 
 // Generated:
 getTooltip(): Formatter | null {
@@ -204,7 +204,7 @@ destroyTooltip(): this {
 
 ```typescript
 // Block definition declares:
-//   association name="targetDevice" cardinality="0..1"
+//   association name="targetDevice" type="com.electronics.core.Component"
 
 // Generated:
 getTargetDevice(): string | null {

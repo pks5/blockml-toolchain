@@ -147,19 +147,17 @@ Properties can be organized into named groups for editor display. Groups are met
 
 Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type.
 
-BlockML (`org.blockml.core.Block`) defines only the implicit `customData` aggregation. Domain-specific aggregations are declared on domain base types.
+BlockML (`org.blockml.core.ComposableBlock`) defines the implicit `_customData` aggregation. Domain-specific aggregations are declared on domain base types.
 
 ### `_parts` on `com.machineblocks.core.Block`
 
 `_parts` is **not** a BlockML feature. It is a base aggregation declared on `com.machineblocks.core.Block`, which extends `org.blockml.core.Block`. All MachineBlocks Blocks inherit it via `baseType` — resolved at validate time through the Type Registry, not materialized by the parser.
 
 ```text
-com.machineblocks.core.Block  (extends org.blockml.core.Block)
+com.machineblocks.core.Block  (extends org.blockml.core.ComposableBlock)
   _parts:
-    cardinality:        0..n
-    type:               com.machineblocks.core.Block
-    visibility:         hidden
-    defaultAggregation: true
+    type:    com.machineblocks.core.Block[]
+    default: true
 ```
 
 When a Block's `baseType` chain includes `com.machineblocks.core.Block` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited `_parts` appears via `resolveEffectiveMembers()`.
@@ -171,16 +169,14 @@ This covers the vast majority of Composite Blocks. Explicit `<aggregations>` are
 ### Aggregation Metadata
 
 ```text
-name               — member name (unique within the Block's member namespace)
-type               — FQN of the child type
-cardinality        — "0..1" | "0..n" | "1..1" | "1..n"
-visibility         — "public" | "hidden"
-defaultAggregation — boolean, marks the default aggregation
-beanName           — optional; marks this Aggregation as a ServiceBlock binding
-documentation      — human-readable description
+name          — member name (unique within the Block's member namespace)
+type          — FQN of the child type, optionally with occurrence brackets (see 02_mbml.md — Type Notation)
+default       — boolean; marks the default aggregation for bare <composition>
+beanName      — optional; marks this Aggregation as a ServiceBlock binding
+documentation — human-readable description
 ```
 
-`visibility="hidden"` marks an Aggregation as internal. It can only be filled by the Block's own Composition, not from outside.
+Member visibility is determined by naming convention: names starting with `_` are hidden (internal). Hidden Aggregations can only be filled by the Block's own Composition, not from outside.
 
 When `beanName` is set, the Aggregation is a ServiceBlock binding. The bean is accessible in Expressions via `@beanName`.
 
@@ -188,8 +184,8 @@ When `beanName` is set, the Aggregation is a ServiceBlock binding. The bean is a
 
 ```text
 Wall  (baseType: com.machineblocks.core.Block)
-  _parts:  com.machineblocks.core.Block [0..n] (hidden, inherited)
-  myModel: org.blockml.service.JSONModel [0..1] (hidden, beanName="myModel", declared)
+  _parts:  com.machineblocks.core.Block[] (inherited, default)
+  _myModel: org.blockml.service.JSONModel (hidden, beanName="myModel", declared)
 ```
 
 ---
@@ -230,9 +226,10 @@ name         — camelCase member name (unique within the Block's member namespa
 class        — org.blockml.capability.AsyncInbound
 payloadType  — declared payload type (see Payload Types)
 returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
-visibility   — "public" | "hidden" (default: "public")
 documentation
 ```
+
+Member visibility: names starting with `_` are hidden.
 
 ### AsyncOutbound
 
@@ -243,9 +240,10 @@ name         — camelCase member name
 class        — org.blockml.capability.AsyncOutbound
 payloadType  — declared payload type
 returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
-visibility   — "public" | "hidden" (default: "public")
 documentation
 ```
+
+Member visibility: names starting with `_` are hidden.
 
 ### Sync
 
@@ -256,9 +254,10 @@ name         — camelCase member name
 class        — org.blockml.capability.Sync
 payloadType  — declared payload type
 returnType   — required; FQN of the return type
-visibility   — "public" | "hidden" (default: "public")
 documentation
 ```
+
+Member visibility: names starting with `_` are hidden.
 
 ### Payload Types
 
@@ -524,7 +523,7 @@ MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/src/com/m
 Extends:        org.blockml.core.Block
 Properties:     native MB properties declared in Block.bml (<properties>)
                 SCAD mapping in 09_mbom_properties.yml (render only)
-Aggregations:   _parts (0..n, hidden, defaultAggregation, type: com.machineblocks.core.Block)
+Aggregations:   _parts (type: com.machineblocks.core.Block[], default, inherited)
 Composition:    allowed — _parts children become SCAD block children
 ```
 
@@ -536,7 +535,7 @@ Composition:    allowed — _parts children become SCAD block children
 Properties:     native MB3 properties only (from 09_mbom_properties.yml)
                 no custom properties allowed — BML_NATIVE_BLOCK_CUSTOM_PROPERTY
 Capabilities:   none
-Aggregations:   _parts (0..n, hidden, inherited from com.machineblocks.core.Block)
+Aggregations:   _parts (type: com.machineblocks.core.Block[] — inherited from com.machineblocks.core.Block)
 Composition:    allowed — _parts children become mb_block() children
 Final:          baseType = com.machineblocks.core.NativeBlock → BML_FINAL_BASE_TYPE
 ```
@@ -552,7 +551,7 @@ For **standalone compile**, leaf-only Block types (e.g. `com.machineblocks.brick
 `Set` extends `com.machineblocks.core.Block` and inherits `_parts` for the block palette. Unlike `NativeBlock`, `Set` is derivable:
 
 ```text
-Aggregations:   _parts (0..n, hidden, defaultAggregation — inherited)
+Aggregations:   _parts (type: com.machineblocks.core.Block[], default — inherited)
                 _placement, _steps (declared on Set.bml)
 Derivable:      baseType = com.machineblocks.core.Set  ✓
 Processor:      ScadSetProcessor → STEPS array + 4 view submodules
