@@ -4,8 +4,8 @@
   FQN: org.blockml.core.Library
 
   Entry types (Dependency, Schema, TypeRef, BlockRef, PresetsRef) are Sub-Blocks
-  of Library — not separate framework files. Any block with baseType Library
-  resolves them by short name in compositions.
+  of Library. Aggregations use short type names (type="Dependency") — parser
+  resolves against subBlocks[] in the same file.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -35,23 +35,23 @@
   <aggregations>
     <aggregation name="_dependencies"
                  cardinality="0..n"
-                 type="org.blockml.core.Library.Dependency"
+                 type="Dependency"
                  visibility="hidden" />
     <aggregation name="_schemas"
                  cardinality="0..n"
-                 type="org.blockml.core.Library.Schema"
+                 type="Schema"
                  visibility="hidden" />
     <aggregation name="_types"
                  cardinality="0..n"
-                 type="org.blockml.core.Library.TypeRef"
+                 type="TypeRef"
                  visibility="hidden" />
     <aggregation name="_blocks"
                  cardinality="0..n"
-                 type="org.blockml.core.Library.BlockRef"
+                 type="BlockRef"
                  visibility="hidden" />
     <aggregation name="_presets"
                  cardinality="0..n"
-                 type="org.blockml.core.Library.PresetsRef"
+                 type="PresetsRef"
                  visibility="hidden" />
   </aggregations>
 

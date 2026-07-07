@@ -510,7 +510,7 @@ For MachineBlocks Blocks, `_parts` is inherited from `com.machineblocks.core.Blo
 ```text
 name          — member name (unique within the Block's member namespace)
 cardinality   — "0..1" | "0..n" | "1..1" | "1..n"
-type          — FQN of the child type
+type          — child type: unqualified Sub-Block name (same file) or FQN / prefixed type
 visibility    — "public" | "hidden"
 ```
 
@@ -957,15 +957,30 @@ com.machineblocks.calibration.Calibrator.Base.Strip
 
 When a composition child element has **no namespace prefix** (PascalCase tag name only), the parser resolves `typeFqn` in this order:
 
+The **same resolution order** applies to `type="..."` on `<property>`, `<aggregation>`, `<capability>`, and related member declarations when the value is an unqualified PascalCase name (e.g. `type="Dependency"` on an aggregation when `Dependency` is a Sub-Block in the same file).
+
 ```text
 1. subBlocks[] of the innermost containing BlockDefinition (same BML document)
 2. Walk up the parent chain — parent Sub-Block → … → root Block subBlocks[]
 3. Inherited subBlocks from the baseType chain (framework bases — see below)
-4. xmlns prefix → package FQN (bricks:Standard)
+4. xmlns prefix → package FQN (bricks:Standard, type:Size3D)
 5. TypeRegistry global lookup
 ```
 
-**Same document, local first:**
+Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Library.Dependency`). Authors may write the short name in BML.
+
+**Same document — aggregation example (`Library.bml`):**
+
+```xml
+<aggregations>
+  <aggregation name="_dependencies" type="Dependency" cardinality="0..n" />
+</aggregations>
+<subBlocks>
+  <block><name>Dependency</name>...</block>
+</subBlocks>
+```
+
+**Same document — composition example:**
 
 ```xml
 <!-- Inside Calibrator's composition: -->

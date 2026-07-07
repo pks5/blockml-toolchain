@@ -177,7 +177,12 @@ directives:
 
 Capability and property type attributes are parsed into **`TypeDescriptor`** objects at map time — not stored as raw strings.
 
+Unqualified PascalCase names on `type="..."` (properties, aggregations, capabilities) use the **same Sub-Block resolution order** as composition children (see `02_mbml.md` — Short-Name Reference) before falling back to `NamedTypeReference` registry lookup.
+
 ```text
+<aggregation type="Dependency" .../>   on org.blockml.core.Library
+  → NamedTypeReference { fqn: "org.blockml.core.Library.Dependency" }
+
 payloadType="Float"
   → NamedTypeReference { fqn: "org.blockml.type.Float" }
 
