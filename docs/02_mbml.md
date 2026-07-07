@@ -206,6 +206,7 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
 <aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice.
 <associations>  — Association declarations.
 <capabilities>  — Capability declarations.
+<contracts>     — Contract declarations (interface implementation). Root block only.
 <subBlocks>     — Sub-Block definitions (see Sub-Blocks section).
 <composition>   — internal structure. Omit for Leaf Blocks.
 ```
@@ -233,6 +234,69 @@ Framework base types (`org.blockml.core.Block`, `com.machineblocks.core.Block`, 
 <allowedSubBlockTypes/>     — empty: no Sub-Blocks allowed (e.g. NativeBlock, FunctionBlock)
 Omitted modifiers           — inherit from baseType where applicable (validator walks chain)
 org.blockml.core.Block      — sole type that omits <baseType> (inheritance root)
+```
+
+### Contracts
+
+Blocks may declare `<contracts>` at root level to signal that they implement the member surface of one or more abstract Block types (interfaces):
+
+```xml
+<contracts>
+  <contract type="com.foo.IPlaceable" />
+  <contract type="com.foo.IColored" />
+</contracts>
+```
+
+```text
+type    — FQN of an abstract Block whose members this Block implements (required)
+```
+
+**Semantics:**
+
+```text
+Scope           — Properties, Aggregations, Associations, Capabilities of the contract type
+Ignored         — subBlocks and compositions on the contract Block
+Contract target — must be abstract (abstract=true)
+Orthogonal to   — baseType inheritance (extends one base, implements zero or more contracts)
+Validation      — effective members of this Block must include all contract members
+                  with compatible types (stage [8])
+Multiple        — all declared contracts must be satisfied
+Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
+```
+
+**Example — interface Block:**
+
+```xml
+<block xmlns="http://blockml.org/schema/block" …>
+  <name>IPlaceable</name>
+  <fullQualifiedName>com.foo.IPlaceable</fullQualifiedName>
+  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <version>1.0.0</version>
+  <abstract>true</abstract>
+  <properties>
+    <property name="offset"    type="type:Vector3D" />
+    <property name="direction" type="type:Direction" />
+  </properties>
+</block>
+```
+
+**Example — implementing Block:**
+
+```xml
+<block xmlns="http://blockml.org/schema/block" …>
+  <name>Wall</name>
+  <fullQualifiedName>com.foo.Wall</fullQualifiedName>
+  <baseType>com.machineblocks.core.CompositeBlock</baseType>
+  <version>1.0.0</version>
+  <contracts>
+    <contract type="com.foo.IPlaceable" />
+  </contracts>
+  <properties>
+    <property name="offset"    type="type:Vector3D" defaultValue="[0, 0, 0]" />
+    <property name="direction" type="type:Direction" defaultValue="north" />
+    <property name="size"      type="type:Size3D"    defaultValue="[1, 8, 9]" />
+  </properties>
+</block>
 ```
 
 ### Namespace Declarations

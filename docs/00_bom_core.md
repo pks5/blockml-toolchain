@@ -64,6 +64,7 @@ Everything else — assemblies, placements, steps, scenes, views — is defined 
 ```text
 Library   contains   Block(s)
 Block     has        Member(s)   — Properties, Aggregations, Associations, Capabilities
+Block     implements Contract(s) — abstract Block types whose member surface is satisfied
 Block     has        Preset(s)
 Block     has        Composition(s)
 Catalog   contains   Block(s)   — top-level composite Blocks (finished products / assemblies)
@@ -234,6 +235,37 @@ Block: MyBlock
 ```
 
 Members are inherited via `baseType`. Derived Blocks inherit all Members of their base type and may add their own. Overriding inherited members is not permitted — this is enforced at parse time.
+
+### Contracts (Block Interfaces)
+
+A Block may declare one or more **contracts** — references to abstract Block types whose **member surface** the declaring Block implements. Contracts correspond to interface implementation in classical OOP: the Block signals that its effective member set includes all Properties, Aggregations, Associations, and Capabilities of each contract type.
+
+```xml
+<contracts>
+  <contract type="com.foo.IPlaceable" />
+  <contract type="com.foo.IColored" />
+</contracts>
+```
+
+```text
+Declared on:     root <block> only (not on Sub-Blocks)
+Attribute:       type — FQN of the contract Block (required)
+Contract target: must be abstract (abstract=true)
+Member scope:    Properties, Aggregations, Associations, Capabilities only
+Ignored on target: subBlocks[], compositions[] on the contract Block
+```
+
+Any abstract Block may serve as a contract (interface). A concrete Block implements a contract by declaring `<contracts>`; it does not inherit contract members via `baseType` — the validator checks that **effective members** (after `baseType` chain resolution) satisfy each contract.
+
+```text
+com.foo.IPlaceable   abstract Block — offset, direction properties
+com.foo.MyWall       baseType CompositeBlock + contract IPlaceable
+  → effective members must include offset, direction with compatible types
+```
+
+Contracts are orthogonal to `baseType` inheritance: a Block extends one base type and may implement zero or more contracts. Multiple contracts merge — the implementing Block must satisfy all of them.
+
+Contract validation runs at stage [8] (semantic validation), after `resolveEffectiveMembers()` for both the implementing Block and each contract type.
 
 ---
 

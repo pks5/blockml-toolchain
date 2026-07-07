@@ -198,8 +198,8 @@ This is a **foundational decision**, not a naming convention:
 Wall              →  Block  (ComposableBlock branch)
 Integer           →  Block  (TypeBlock branch)
 OpenSCAD          →  Block  (LanguageBlock branch)
-Step  →  Block  (ComposableBlock — Set meta block)
-PresetCollection  →  removed — presets are MachineBlocks `_presets` on Block
+Step              →  Block  (ComposableBlock — Set meta block)
+IPlaceable        →  Block  (abstract — usable as contract / interface)
 Library           →  Block  (ComposableBlock — publishable package descriptor; entry types as subBlocks)
 Math · #strings   →  Block  (ComposableBlock — ServiceBlock branch)
 org.blockml.core.Block itself  →  Block  (root)

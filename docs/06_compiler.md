@@ -456,6 +456,12 @@ BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId does not match any explicit 
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
 BML_PRESET_CYCLE              — circular dependency in appliedPresets chain
+BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
+BML_CONTRACT_NOT_ABSTRACT     — contract type is not abstract
+BML_CONTRACT_NOT_ON_ROOT      — <contracts> declared on a Sub-Block
+BML_DUPLICATE_CONTRACT        — same contract type declared twice
+BML_CONTRACT_MEMBER_MISSING   — implementing Block lacks a contract member
+BML_CONTRACT_MEMBER_INCOMPATIBLE — member present but type/cardinality mismatch
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
 BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfied (type notation)
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block

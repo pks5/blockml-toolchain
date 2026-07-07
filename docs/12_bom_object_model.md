@@ -154,6 +154,13 @@ interface BlockDefinition {
   supportedImplementationTypes?: string[]
 
   /**
+   * Abstract Block FQNs whose member surface this Block implements (contracts / interfaces).
+   * Root block only. Validator checks effective members against each contract type.
+   * subBlocks and compositions on contract types are ignored.
+   */
+  contracts?: string[]
+
+  /**
    * Members declared in THIS block only — not inherited.
    * Validator resolves effective members via baseType chain.
    */
@@ -353,6 +360,22 @@ interface EffectiveMemberSet {
 ```
 
 Native MBOM properties from `09_mbom_properties.yml` are attached to `com.machineblocks.core.Block` in the Type Registry — not repeated in every derived Block's `members[]`.
+
+### Contract Members (not stored in BOM)
+
+Contract satisfaction is validated at stage [8] — not materialized in `BlockDefinition.members[]`:
+
+```typescript
+/** @blockml/core — not part of BomDocument */
+function resolveContractMembers(
+  contractFqn: string,
+  registry: TypeRegistry
+): EffectiveMemberSet
+// Walks contract Block's effective members (properties, aggregations,
+// associations, capabilities). Ignores subBlocks[] and compositions[].
+```
+
+The implementing Block's `resolveEffectiveMembers()` result must be a **superset** of each contract's member surface — same member names, compatible types and cardinality.
 
 ---
 
@@ -857,6 +880,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property defaultValue cycles (topological sort)
 ✓  appliedPresets resolve (local id or FQN::id) and have no cycles
+✓  contract types resolve, are abstract, and member surface is satisfied by effective members
 ✓  Library TypeRef / BlockRef paths resolve to existing files
 ✓  Library Dependency ref + version matches registered Library block
 ```
@@ -901,7 +925,11 @@ BML_DIRECTIVE_NOT_ALLOWED     — bml:* on disallowed element (error)
 BML_CUSTOM_DATA_NOT_ALLOWED   — data:* on non-Block element (error)
 BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent
 BML_PROPERTY_CYCLE            — circular defaultValue dependencies
-BML_PRESET_CYCLE              — circular basePresetRefs
+BML_PRESET_CYCLE              — circular appliedPresets chain
+BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
+BML_CONTRACT_NOT_ABSTRACT     — contract type is not abstract
+BML_CONTRACT_MEMBER_MISSING   — implementing Block lacks a contract member
+BML_CONTRACT_MEMBER_INCOMPATIBLE — member present but type/cardinality mismatch
 BML_EXPR_UNKNOWN_PROPERTY     — property reference not in effective members
 ```
 

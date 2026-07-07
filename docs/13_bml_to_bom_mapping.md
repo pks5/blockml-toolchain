@@ -234,6 +234,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <final>true</final>                          → block.final = true
 <allowedSubBlockType type="…"/>              → block.allowedSubBlockTypes[]
 <supportedImplementationType type="…"/>     → block.supportedImplementationTypes[]
+<contract type="…"/>                        → block.contracts[]   (root block only)
 ```
 
 ```text
@@ -241,6 +242,8 @@ Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1
 Omitted abstract/final                 → false
 Empty <allowedSubBlockTypes/>    → [] (no Sub-Blocks allowed)
 Omitted lists                    → undefined (inherit from baseType at validate)
+<contracts> on Sub-Block           → BML_CONTRACT_NOT_ON_ROOT (error)
+Duplicate contract type            → BML_DUPLICATE_CONTRACT (error)
 org.blockml.core.Block           → omits <baseType> (sole inheritance root)
 ```
 
@@ -395,6 +398,28 @@ appliedPresets="brick-1x1 com.other.Presets::color-red"
 
 Preset instances in `_presets` composition map like any other Block instance. The `name` attribute maps to `memberValues.name`; `id` maps to `memberValues.id`.
 
+### Contract validation (stage [8])
+
+```text
+<contract type="com.foo.IPlaceable"/>
+  → Parser stores FQN in block.contracts[] (stage [5])
+  → Validator resolves contract BlockDefinition (stage [8])
+  → Contract target must have abstract=true
+  → resolveContractMembers(contractFqn) — effective members only;
+    subBlocks[] and compositions[] on contract type ignored
+  → resolveEffectiveMembers(implementingBlock) must superset contract members
+     (name, kind, typeFqn, cardinality compatible)
+```
+
+```text
+BML_UNKNOWN_CONTRACT              — type FQN not in TypeRegistry
+BML_CONTRACT_NOT_ABSTRACT         — contract Block is not abstract
+BML_CONTRACT_NOT_ON_ROOT          — <contracts> on Sub-Block
+BML_DUPLICATE_CONTRACT            — same type listed twice in block.contracts[]
+BML_CONTRACT_MEMBER_MISSING         — required contract member absent
+BML_CONTRACT_MEMBER_INCOMPATIBLE    — member kind or type/cardinality mismatch
+```
+
 ### Library blocks
 
 Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.core.Library`. Composition children:
@@ -409,7 +434,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.c
 
 Short names resolve via inherited Sub-Blocks of `org.blockml.core.Library` on any Library-typed root block.
 
-Each child requires `aggregation=` (`_dependencies`, `_schemas`, `_types`, `_blocks`, `_presets`) — Library has no default aggregation.
+Each child requires `aggregation=` (`_dependencies`, `_schemas`, `_types`, `_blocks`) — Library has no default aggregation.
 
 **Orchestrator (not parser):** after parsing a Library block, resolve each `ref` path relative to the library package root, parse referenced files, and `registerBlockDefinition`. Validate `Dependency.ref` + `version` against a registered Library block FQN.
 
