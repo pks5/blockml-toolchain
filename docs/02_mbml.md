@@ -990,6 +990,8 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Li
 
 **Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.Library"` (e.g. `BricksLibrary`) automatically resolves `Dependency`, `TypeRef`, `BlockRef`, … without prefix — they are Sub-Blocks of `org.blockml.core.Library`, inherited via the baseType chain. Authors do not redeclare them in each library file.
 
+A block with `baseType="org.blockml.core.PresetCollection"` resolves `<Preset>` the same way — Sub-Block of `org.blockml.core.PresetCollection` (aggregation `type="Preset"` in framework BML).
+
 ```xml
 <!-- BricksLibrary.mbml — no xmlns needed for entry types -->
 <composition aggregation="_dependencies">

@@ -2,6 +2,9 @@
   BlockML Core — collection of Preset instances
 
   FQN: org.blockml.core.PresetCollection
+
+  Preset is a Sub-Block of PresetCollection. Aggregation uses type="Preset" —
+  parser resolves against subBlocks[] in the same file.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -25,9 +28,38 @@
   <aggregations>
     <aggregation name="presets"
                  cardinality="0..n"
-                 type="org.blockml.core.Preset"
+                 type="Preset"
                  visibility="hidden"
                  defaultAggregation="true" />
   </aggregations>
+
+  <subBlocks>
+
+    <block>
+      <documentation>Named property preset for a Block type. Carries optional block instance and optional basePresets association for inheritance.</documentation>
+      <name>Preset</name>
+      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <version>1.0.0</version>
+      <final>true</final>
+      <allowedSubBlockTypes />
+      <properties>
+        <property name="name" type="String">
+          <documentation>Human-readable display name (SCAD Customizer, editor UI). The id property is the stable reference key.</documentation>
+        </property>
+      </properties>
+      <aggregations>
+        <aggregation name="block"
+                     cardinality="0..1"
+                     type="org.blockml.core.Block"
+                     defaultAggregation="true" />
+      </aggregations>
+      <associations>
+        <association name="basePresets"
+                     type="Preset"
+                     cardinality="0..n" />
+      </associations>
+    </block>
+
+  </subBlocks>
 
 </block>

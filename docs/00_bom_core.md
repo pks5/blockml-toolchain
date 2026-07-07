@@ -888,7 +888,7 @@ Sub-Blocks are full BOM objects referenceable via full FQN from outside the pare
 
 ## Preset
 
-A Preset is a named, concrete property set for a specific Block type. Presets are **Blocks** — instances of `org.blockml.core.Preset` grouped in a `org.blockml.core.PresetCollection` document.
+A Preset is a named, concrete property set for a specific Block type. Presets are **Blocks** — Sub-Blocks of `org.blockml.core.PresetCollection`, grouped in PresetCollection documents.
 
 Presets apply only to Properties — not to Aggregations, Associations, or Capabilities.
 
@@ -899,10 +899,10 @@ A Preset Collection is a Block definition with `baseType="org.blockml.core.Prese
 ```text
 fullQualifiedName — FQN of this Preset Collection (e.g. com.machineblocks.bricks.StandardPresets)
 version           — semantic version
-composition       — Preset instances (org.blockml.core.Preset)
+composition       — Preset instances (org.blockml.core.PresetCollection.Preset)
 ```
 
-Each Preset instance (`org.blockml.core.Preset`):
+Each Preset instance (`org.blockml.core.PresetCollection.Preset` — Sub-Block of PresetCollection):
 
 ```text
 id           — stable kebab-case identifier (ComposableBlock id property; reference key)

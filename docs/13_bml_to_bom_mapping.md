@@ -393,7 +393,7 @@ basePresets="brick-1x1 com.other.Presets::color-red"
   → Validator resolves each token as local id or FQN::id (stage [8])
 ```
 
-Preset instances in a PresetCollection composition map like any other Block instance: element `Preset` → `typeFqn: org.blockml.core.Preset`. Child block elements fill the `block` aggregation (defaultAggregation). The Preset `name` attribute maps to `memberValues.name`; `id` maps to `memberValues.id`.
+Preset instances in a PresetCollection composition map like any other Block instance: element `Preset` → `typeFqn: org.blockml.core.PresetCollection.Preset` (short name via inherited Sub-Blocks). Child block elements fill the `block` aggregation (defaultAggregation). The Preset `name` attribute maps to `memberValues.name`; `id` maps to `memberValues.id`.
 
 ### Library blocks
 

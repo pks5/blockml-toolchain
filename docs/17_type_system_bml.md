@@ -199,8 +199,7 @@ Wall              →  Block  (ComposableBlock branch)
 Integer           →  Block  (TypeBlock branch)
 OpenSCAD          →  Block  (LanguageBlock branch)
 Placement · Step  →  Block  (ComposableBlock — Set meta blocks)
-PresetCollection  →  Block  (ComposableBlock — named property preset groups)
-Preset            →  Block  (ComposableBlock — single preset instance)
+PresetCollection  →  Block  (ComposableBlock — Preset as subBlock)
 Library           →  Block  (ComposableBlock — publishable package descriptor; entry types as subBlocks)
 Math · #strings   →  Block  (ComposableBlock — ServiceBlock branch)
 org.blockml.core.Block itself  →  Block  (root)
@@ -255,8 +254,7 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 org.blockml.core.Block           identity · version · abstract · final · documentation
 org.blockml.core.ComposableBlock   + id · aggregations · composition · capabilities
                                    + allowedSubBlockTypes · supportedImplementationTypes
-org.blockml.core.PresetCollection  + presets aggregation (Preset instances)
-org.blockml.core.Preset            + name · block aggregation · basePresets association
+org.blockml.core.PresetCollection  + subBlocks (Preset) · presets aggregation (type="Preset")
 org.blockml.core.Library           + subBlocks (Dependency · Schema · TypeRef · BlockRef · PresetsRef)
                                    + _dependencies · _schemas · _types · _blocks · _presets aggregations
 org.blockml.core.TypeBlock         + fields · enumValues · type parameters

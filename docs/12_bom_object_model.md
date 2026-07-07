@@ -671,16 +671,17 @@ Preset files are ordinary `BlockDefinition` documents — not a separate BOM roo
 
 ```text
 org.blockml.core.PresetCollection   abstract composable Block
-  aggregation  presets   0..n   org.blockml.core.Preset   (defaultAggregation)
+  subBlocks    Preset
+  aggregation  presets   0..n   Preset   (defaultAggregation; short name → PresetCollection.Preset)
 
-org.blockml.core.Preset             final composable Block
+org.blockml.core.PresetCollection.Preset   final composable Sub-Block
   property     name      String   — display label (Customizer UI)
   property     id        String   — inherited from ComposableBlock; stable reference key
   aggregation  block     0..1   org.blockml.core.Block   (defaultAggregation)
-  association  basePresets 0..n org.blockml.core.Preset  — space-separated ids on instance
+  association  basePresets 0..n Preset  — space-separated ids on instance
 ```
 
-Preset instances appear as `<Preset>` children in the PresetCollection's default `<composition>`. Each preset's optional block child fills the `block` aggregation automatically — no `aggregation=` attribute needed when only one aggregation exists on Preset.
+Preset instances appear as `<Preset>` children in the PresetCollection's default `<composition>`. PresetCollection-typed blocks resolve `<Preset>` by short name via inherited Sub-Blocks (same rule as Library entry types).
 
 **Preset reference syntax** (unchanged):
 
