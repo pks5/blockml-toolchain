@@ -12,11 +12,11 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation>Composable Block defining one assembly instruction step in a Set — references a placed block instance via the part association. Used as children of composition aggregation="_steps". Document order defines build order when _steps is present.</documentation>
+  <documentation>Framework Block defining one assembly instruction step in a Set — references a placed block instance via the part association. Used as children of composition aggregation="_steps". Document order defines build order when _steps is present.</documentation>
 
   <name>Step</name>
   <fullQualifiedName>com.machineblocks.core.Step</fullQualifiedName>
-  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
 
   <final>true</final>

@@ -126,7 +126,7 @@ Examples:
 
 ### Instance Identity
 
-Instances within a Composition are identified by a **part ID** — the **`id` system property** on `org.blockml.core.Block`. Nested paths are composed with `::`:
+Instances within a Composition are identified by a **part ID** — the **`id` meta property** on every Block instance. Nested paths are composed with `::`:
 
 ```text
 Format:    <parentPartId>::<childPartId>::<grandchildPartId>
@@ -141,7 +141,7 @@ Examples:
 
 There is **no FQN fallback** — a Block's type FQN is never used as instance identity.
 
-**Explicit IDs** are authored in BML via the `id` system property. Required when:
+**Explicit IDs** are authored in BML via the `id` attribute (meta property). Required when:
 - another instance references this one (`appliedPresets`, `Step.part`, …)
 - the element carries `bml:each` (literal or Expression — auto-ID is not available in loops)
 
@@ -273,35 +273,41 @@ Contract validation runs at stage [8] (semantic validation), after `resolveEffec
 
 Properties are typed parameters of a Block. Every Property has a name, a type, and a default value.
 
-### System Properties
+### Meta Properties
 
-BOM Core defines **system properties** on `org.blockml.core.Block`. Every Block in every domain inherits them. They are not custom properties declared inline in a Block definition — they are part of the core type system and drive compiler infrastructure.
+BOM Core defines **meta properties** on every Block instance. They are not declared in `<properties>` and cannot be redeclared by authors.
 
 ```text
-org.blockml.core.Block
-  id   — instance identity within a composition tree (String)
+id   — instance identity within a composition tree (String); present on every Block instance, may be empty
 ```
 
-System properties are **highlighted** compared to other properties:
-
 ```text
-Same in BML:     authored as XML attributes / memberValues entries
-Not a directive: no bml:id — id is a property, not flow-control
+Authored as:     XML attribute id="…" on composition instances
+Not declarable:  <property name="id" …/> forbidden — BML_RESERVED_PROPERTY_NAME
+Not a directive: no bml:id — id is instance metadata, not flow-control
 Special semantics: identity paths (parent::child), reference validation,
                    auto-ID rules, render identity (mb_block_id)
-Domain mapping:    render targets register serialization via native property
-                   registries (e.g. 09_mbom_properties.yml for MB SCAD)
 ```
 
-Do not treat `id` as a regular custom property like `wallThickness`. It is system-relevant — the compiler, validator, and renderer give it dedicated handling. See Instance Identity and `12_bom_object_model.md` — Instance ID Rules.
+Do not treat `id` as a regular custom property like `wallThickness`. The compiler, validator, and renderer give it dedicated handling. See Instance Identity and `12_bom_object_model.md` — Instance ID Rules.
 
-Domain-specific **native properties** (e.g. `size`, `offset` on `com.machineblocks.core.Block`) and **custom properties** (declared inline) are separate categories — see `03_mbom.md`.
+### Property Types
 
-### Property Metadata
+Property `type` attributes must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock` (primitives, structs, enums, generics). Block types used for composition (Wall, ServiceBlock, …) are not valid property types.
 
 ```text
-name          — camelCase property name (unique within the Block's member namespace)
-type          — FQN of the BOM type
+type="Integer"        →  org.blockml.type.Integer     ✓  (PrimitiveType → TypeBlock)
+type="type:Size3D"    →  com.machineblocks.type.Size3D ✓  (StructType → TypeBlock)
+type="com.foo.Wall"   →  ✗  BML_INVALID_PROPERTY_TYPE (not a TypeBlock)
+```
+
+The same rule applies to Capability `payloadType` and `returnType`.
+
+### Properties
+
+```text
+name          — camelCase property name (unique within the Block's member namespace; must not be "id")
+type          — FQN of a TypeBlock (baseType chain includes org.blockml.core.TypeBlock)
 defaultValue  — typed default value (literal or expression)
 group         — optional grouping hint (for editors)
 documentation — human-readable description
@@ -745,7 +751,7 @@ Each child instance carries:
 
 ```text
 type          — FQN of the child Block class
-id            — system property (org.blockml.core.Block). Required when referenced or on bml:each.
+id            — meta property. Required when referenced or on bml:each.
                 Omitted on anonymous static children → auto-ID after expansion. See Instance Identity.
 version       — version of the referenced Block type
 members       — member values for Properties and Capabilities (see below)
@@ -797,13 +803,13 @@ The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*
 
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
-| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style `_customData` shorthand for `org.blockml.core.ComposableBlock`. |
+| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style `_customData` shorthand for `org.blockml.core.Block._customData`. |
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
 | `id` | Block instances | **System property** (not a directive, not a custom property). Drives instance identity, references, and render output. Explicit when referenced or on `bml:each`. Auto-ID only after expansion for anonymous static children. |
 
-There is no `bml:id` directive. Dynamic instance IDs use the `id` system property from `org.blockml.core.Block`.
+There is no `bml:id` directive. Dynamic instance IDs use the `id` meta property.
 
 ### `bml:each` — Loop
 
@@ -877,7 +883,7 @@ A container that produces no Block output itself but allows directives to apply 
 
 ### Dynamic Instance ID
 
-Use the `id` system property (not a directive) for dynamic IDs inside loops:
+Use the `id` meta property (not a directive) for dynamic IDs inside loops:
 
 ```xml
 <bricks:StandardBrick
@@ -969,7 +975,7 @@ composition       — Block instances in aggregation _presets
 Each preset instance in `_presets`:
 
 ```text
-id               — stable kebab-case identifier (ComposableBlock id property; reference key)
+id               — stable kebab-case identifier (meta property id; reference key)
 name             — human-readable display name (Customizer UI, editor)
 appliedPresets   — association _self[]: space-separated preset ids (local or FQN::id)
                    own instance properties override merged preset chain

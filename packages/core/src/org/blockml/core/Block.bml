@@ -12,12 +12,17 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation>Root semantic unit of BlockML. Sole inheritance root for all Block, TypeBlock, and LanguageBlock definitions. Carries identity and versioning only — no composition semantics.</documentation>
+  <documentation>Root semantic unit of BlockML. Sole inheritance root for all Block definitions — composable blocks, TypeBlocks, LanguageBlocks, ServiceBlocks, and domain types. Every Block instance carries the meta property id (not declared). Any Block FQN may appear in aggregation and association types. Property and Capability types must resolve to org.blockml.core.TypeBlock.</documentation>
 
   <name>Block</name>
   <fullQualifiedName>org.blockml.core.Block</fullQualifiedName>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
+
+  <aggregations>
+    <aggregation name="_customData"
+                 type="org.blockml.core.CustomData[]" />
+  </aggregations>
 
 </block>

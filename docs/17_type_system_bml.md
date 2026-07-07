@@ -95,7 +95,7 @@ The compiler **must** (input / pipeline):
 The compiler **does not** need to (internal representation):
 
 - store all definitions in one homogeneous `Block` class hierarchy at runtime
-- treat TypeBlocks and LanguageBlocks identically to ComposableBlocks in memory
+- treat TypeBlocks and LanguageBlocks identically to other Blocks in memory
 - expose „Block“ as a domain object API beyond parser/BOM/validator surfaces
 - map BML 1:1 onto object-oriented domain models
 
@@ -182,26 +182,30 @@ BOM Core defines Block as **„a parametric, reusable unit (definition / type)�
 All definitions use the BML `<block>` element, register in the same TypeRegistry, and inherit from **`org.blockml.core.Block`** — the sole inheritance root.
 
 ```text
-org.blockml.core.Block                         abstract root · omits baseType
-  ├── org.blockml.core.ComposableBlock         composable grammar (Wall, Brick, Math, …)
+org.blockml.core.Block                         abstract root · omits baseType · _customData aggregation
   ├── org.blockml.core.TypeBlock               property / payload types (Size3D, Integer, …)
-  └── org.blockml.core.LanguageBlock           capability implementation contract (OpenSCAD, …)
+  ├── org.blockml.core.LanguageBlock           capability implementation contract (OpenSCAD, …)
+  ├── org.blockml.service.ServiceBlock         service branch
+  ├── com.machineblocks.core.Block             domain base
+  └── … user and domain Blocks
 ```
 
-**One root · one registry · one parser.** Branch-specific rules come from the `baseType` chain — not from parallel ontologies.
+**One root · one registry · one parser.** Branch-specific rules come from the `baseType` chain — not from parallel ontologies. There is no separate ComposableBlock — all Blocks inherit directly from `org.blockml.core.Block` (or via domain/service branches).
+
+Every Block instance carries the **meta property** `id` (may be empty). Properties must not be named `id`. Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **TypeBlock** only.
 
 ### Literally everything — including the compiler's grammar
 
 This is a **foundational decision**, not a naming convention:
 
 ```text
-Wall              →  Block  (ComposableBlock branch)
+Wall              →  Block  (domain composable)
 Integer           →  Block  (TypeBlock branch)
 OpenSCAD          →  Block  (LanguageBlock branch)
-Step              →  Block  (ComposableBlock — Set meta block)
+Step              →  Block  (Set meta block)
 IPlaceable        →  Block  (abstract — usable as contract / interface)
-Library           →  Block  (ComposableBlock — publishable package descriptor; entry types as subBlocks)
-Math · #strings   →  Block  (ComposableBlock — ServiceBlock branch)
+Library           →  Block  (publishable package descriptor; entry types as subBlocks)
+Math · #strings   →  Block  (ServiceBlock branch)
 org.blockml.core.Block itself  →  Block  (root)
 ```
 
@@ -223,7 +227,7 @@ Before the compiler validates or renders **any** user file, it bootstraps the Ty
 
 ```text
 @blockml/core BML
-  Block.bml · ComposableBlock.bml · TypeBlock.bml · LanguageBlock.bml
+  Block.bml · TypeBlock.bml · LanguageBlock.bml
   Integer.bml · OpenSCAD.bml · …
 
 @machineblocks/mbom BML
@@ -235,7 +239,7 @@ Before the compiler validates or renders **any** user file, it bootstraps the Ty
 →  then  project srcDir
 ```
 
-The compiler **uses BlockML to understand BlockML**. Framework semantics (`Integer`, `ComposableBlock`, …) come from BML in the TypeRegistry — not from hardcoded FQN lists. The parser nonetheless **must** understand the `<block>` input format; only the **internal representation** after parse is free.
+The compiler **uses BlockML to understand BlockML**. Framework semantics (`Integer`, `TypeBlock`, …) come from BML in the TypeRegistry — not from hardcoded FQN lists. The parser nonetheless **must** understand the `<block>` input format; only the **internal representation** after parse is free.
 
 ```text
 Hardcoded in compiler     <block> parse contract · baseType chain walk · branch rules · diagnostics
@@ -246,31 +250,33 @@ This is the WOT manifest principle applied to tooling: **the system manifesting 
 
 Internally the compiler may represent definitions as plain data (`BlockDefinition`, split indexes) — see § Semantic Layer vs Compiler Implementation. **Semantically** in BML there is only Block; **internally** there is no obligation to model it uniformly.
 
-### Why ComposableBlock?
+### Flat hierarchy under Block
 
-`org.blockml.core.Block` today carries composable-only members (`id` system property, `customData` aggregation). Those belong on **`ComposableBlock`**, not on the root:
+`org.blockml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.core.Block` directly (or via intermediate branches like `TypeBlock`, `ServiceBlock`, `com.machineblocks.core.Block`):
 
 ```text
-org.blockml.core.Block           identity · version · abstract · final · documentation
-org.blockml.core.ComposableBlock   + id · aggregations · composition · capabilities
-                                   + allowedSubBlockTypes · supportedImplementationTypes
-com.machineblocks.core.Block         + _presets aggregation · appliedPresets association
-com.machineblocks.core.CompositeBlock + _parts aggregation (default)
-org.blockml.core.Library             + subBlocks (Dependency · Schema · TypeRef · BlockRef)
-                                   + _dependencies · _schemas · _types · _blocks aggregations
-org.blockml.core.TypeBlock         + fields · enumValues · type parameters
-org.blockml.core.LanguageBlock   (meta — no extra members in V1)
+org.blockml.core.Block           root · _customData aggregation · meta property id on every instance
+org.blockml.service.ServiceBlock baseType: Block
+com.machineblocks.core.Block     baseType: Block · _presets · appliedPresets
+com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)
+org.blockml.core.TypeBlock         baseType: Block · fields · enumValues · type parameters
+org.blockml.core.LanguageBlock     baseType: Block (meta — no extra members in V1)
 ```
 
-`Integer` inheriting `Block` directly without inheriting `id` or `<composition>` is correct. `Wall` inheriting via `ComposableBlock` → `com.machineblocks.core.Block` gets composition semantics.
+```text
+com.machineblocks.core.Block     baseType: org.blockml.core.Block
+org.blockml.service.ServiceBlock baseType: org.blockml.core.Block
+com.machineblocks.type.Size3D    baseType: StructType → … → TypeBlock → Block
+org.blockml.language.OpenSCAD    baseType: LanguageBlock → Block
+```
 
-Existing framework BML updates `baseType`:
+**Member usage rules:**
 
 ```text
-com.machineblocks.core.Block     baseType: org.blockml.core.ComposableBlock  (was org.blockml.core.Block)
-org.blockml.service.ServiceBlock baseType: org.blockml.core.ComposableBlock  (was org.blockml.core.Block)
-com.machineblocks.type.Size3D    baseType: org.blockml.core.StructType       → … → org.blockml.core.TypeBlock → Block
-org.blockml.language.OpenSCAD    baseType: org.blockml.core.LanguageBlock → Block
+Aggregation / association type   — any Block FQN (Wall, Step, Integer is invalid — not composable in practice)
+Property type                    — TypeBlock only (baseType chain includes org.blockml.core.TypeBlock)
+Capability payloadType/returnType  — TypeBlock only
+Meta property id                 — every Block instance; not declarable as <property name="id">
 ```
 
 ### Roles, not separate ontologies
@@ -414,7 +420,7 @@ V1: two bootstrap languages in `@blockml/core`. Extensibility: domains register 
 
 ## Root Exception
 
-Only **`org.blockml.core.Block`** omits `<baseType>`. Every other definition must declare `<baseType>` — including `ComposableBlock`, `TypeBlock`, and `LanguageBlock`.
+Only **`org.blockml.core.Block`** omits `<baseType>`. Every other definition must declare `<baseType>` — including `TypeBlock` and `LanguageBlock`.
 
 ---
 
@@ -423,12 +429,12 @@ Only **`org.blockml.core.Block`** omits `<baseType>`. Every other definition mus
 Branch is derived by walking the `baseType` chain until a branch marker is found:
 
 ```text
-… → ComposableBlock → Block     composable branch
 … → TypeBlock → Block           type block branch
-… → LanguageBlock → Block   language branch
+… → LanguageBlock → Block         language branch
+… → Block (no TypeBlock/LanguageBlock ancestor)   general block branch
 ```
 
-| Rule | ComposableBlock | TypeBlock | LanguageBlock |
+| Rule | General Block | TypeBlock | LanguageBlock |
 |---|---|---|---|
 | `<composition>` | allowed | forbidden | forbidden |
 | `<capabilities>` | allowed | forbidden | forbidden |
@@ -436,10 +442,13 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 | `<fields>` | forbidden | StructType only | forbidden |
 | `<enumValues>` | forbidden | EnumType only | forbidden |
 | `<supportedImplementationTypes>` | allowed | forbidden | forbidden |
-| `id` system property (inherited) | yes | no | no |
+| Meta property `id` on instances | yes (always) | yes (always) | yes (always) |
+| `<property name="id">` | forbidden | forbidden | forbidden |
 | Used as composition `typeFqn` | if not abstract | forbidden | forbidden |
-| Used as property `type` | — | yes | forbidden |
-| Used as `<implementation type>` | — | forbidden | yes |
+| Used as aggregation/association `type` | any Block FQN | — | — |
+| Used as property `type` | forbidden | yes | forbidden |
+| Used as Capability payload/return type | forbidden | yes | forbidden |
+| Used as `<implementation type>` | forbidden | forbidden | yes |
 
 Wrong branch usage → `BML_INVALID_DEFINITION_BRANCH`.
 
@@ -473,16 +482,15 @@ Type definitions bootstrap **before** composable Blocks that reference them:
 ```text
 1. @blockml/core — root + branches + bootstrap types
      org/blockml/core/Block.bml
-     org/blockml/core/ComposableBlock.bml
      org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · …
      org/blockml/core/LanguageBlock.bml
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml
-     org/blockml/service/ServiceBlock.bml · FunctionBlock.bml   ← baseType: ComposableBlock
+     org/blockml/service/ServiceBlock.bml · FunctionBlock.bml   ← baseType: Block
 
 2. @machineblocks/mbom
      com/machineblocks/type/Size3D.bml · …
-     com/machineblocks/core/Block.bml                             ← baseType: ComposableBlock
+     com/machineblocks/core/Block.bml                             ← baseType: Block
      …
 ```
 
@@ -510,7 +518,7 @@ Property declarations on composable Blocks migrate from `09_mbom_properties.yml`
 ```text
 packages/core/src/
   org/blockml/core/
-    Block.bml · ComposableBlock.bml · TypeBlock.bml · LanguageBlock.bml · StructType.bml · …
+    Block.bml · TypeBlock.bml · LanguageBlock.bml · StructType.bml · …
   org/blockml/type/
     Integer.bml · Float.bml · String.bml · Boolean.bml · Array.bml · …
   org/blockml/language/

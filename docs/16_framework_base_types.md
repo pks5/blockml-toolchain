@@ -108,7 +108,7 @@ Unknown type on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 
 `org.blockml.core.Block` is the **sole inheritance root**. It **omits `<baseType>`** — the only definition allowed to do so.
 
-All other definitions must declare `<baseType>`. Composable framework types inherit via `org.blockml.core.ComposableBlock`. Type and language blocks inherit via `org.blockml.core.TypeBlock` and `org.blockml.core.LanguageBlock` — see `17_type_system_bml.md`.
+All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.core.TypeBlock`, `org.blockml.core.LanguageBlock`, or domain bases — all ultimately extend `org.blockml.core.Block`. See `17_type_system_bml.md`.
 
 ---
 
@@ -119,7 +119,6 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
 ```text
 1. @blockml/core BML                    ← BlockML describes BlockML
      org/blockml/core/Block.bml
-     org/blockml/core/ComposableBlock.bml
      org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · …
      org/blockml/core/LanguageBlock.bml
      org/blockml/type/Integer.bml · …
@@ -178,7 +177,7 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/src/
   org/blockml/core/
-    Block.bml · ComposableBlock.bml · Library.bml · …
+    Block.bml · TypeBlock.bml · Library.bml · …
 
 domains/machineblocks/mbom/src/
   com/machineblocks/core/

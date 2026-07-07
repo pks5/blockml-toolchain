@@ -1,0 +1,33 @@
+<!--
+  BlockML Core — enum type branch (closed value sets)
+
+  FQN: org.blockml.core.EnumType
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation></documentation>
+
+  <name>BaseCutoutType</name>
+  <fullQualifiedName>com.machineblocks.type.BaseCutoutType</fullQualifiedName>
+  <baseType>org.blockml.core.EnumType</baseType>
+  <version>1.0.0</version>
+
+  <subBlocks>
+    <block>
+        <documentation>Standard Cutout.</documentation>
+        <name>Standard</name>
+        <baseType>org.blockml.core.EnumTypeValue</baseType>
+    </block>
+    <block>
+      <documentation>No Cutout</documentation>
+      <name>None</name>
+      <baseType>org.blockml.core.EnumTypeValue</baseType>
+    </block>
+  </subBlocks>
+</block>

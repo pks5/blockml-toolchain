@@ -16,10 +16,17 @@
 
   <name>Block</name>
   <fullQualifiedName>com.machineblocks.core.Block</fullQualifiedName>
-  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
+
+  <allowedSubBlockTypes>
+    <allowedSubBlockType type="com.machineblocks.core.Block" />
+    <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
+  </allowedSubBlockTypes>
+
+  
 
   <properties>
     <property name="name" type="String">

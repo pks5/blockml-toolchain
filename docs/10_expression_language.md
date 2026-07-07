@@ -670,7 +670,7 @@ A virtual container that produces no Block output but applies directives to a gr
 
 ### Dynamic Instance ID
 
-Use the `id` system property for dynamic IDs in loops — there is no `bml:id` directive:
+Use the `id` meta property for dynamic IDs in loops — there is no `bml:id` directive:
 
 ```xml
 <bricks:StandardBrick

@@ -83,7 +83,7 @@ Known directive on a disallowed element (see placement rules in `12_bom_object_m
 
 Directive values that contain `${ }` are stored as `ExpressionValue` (raw in stage [5], AST in stage [7]).
 
-There is no `bml:id` — `id` is a system property (rule 5).
+There is no `bml:id` — `id` is a meta property (rule 5).
 
 ### Rule 3 — `data:*` custom data
 
@@ -114,7 +114,7 @@ All remaining attributes become `memberValues[name]`:
 
 ```text
 size="[1, 8, 9]"           → memberValues.size (LiteralValue or ExpressionValue)
-id="wall"                    → memberValues.id   (system property — still stored here)
+id="wall"                    → memberValues.id   (meta property — still stored here)
 id="${ 'val_' + i }"         → memberValues.id   (ExpressionValue)
 blockId="wall"               → memberValues.blockId
 onResized="stud://..."       → memberValues.onResized (AddressValue or ExpressionValue)

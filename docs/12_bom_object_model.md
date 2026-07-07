@@ -50,7 +50,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Member inheritance** | **Lookup at validate.** BOM stores only **declared** members per Block. Effective members are resolved via `baseType` chain + Type Registry — never merged into the parse result. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
-| **Directives** | `bml:*` stored as **attributes on the element** they apply to (Thymeleaf model) — not as wrapper nodes. **Not expanded** at parse time. `bml:id` does not exist — `id` is a **system property** on `org.blockml.core.Block`. |
+| **Directives** | `bml:*` stored as **attributes on the element** they apply to (Thymeleaf model) — not as wrapper nodes. **Not expanded** at parse time. `bml:id` does not exist — `id` is a **meta property** on every Block instance. |
 | **Custom data** | `data:*` follows the **UI5 customData model** — arbitrary key/value metadata on Block elements. Parsed into `customData[]`; not a `bml:` directive. |
 | **Instance `version`** | **Required on every external block reference** (another file). **Strict from V1** — no registry default, no implicit `latest`, no migration warnings. Missing → `BML_MISSING_VERSION` (error). Unknown version → `BML_UNKNOWN_VERSION` (error). Same-document Sub-Blocks exempt. |
 | **Instance `id`** | **Authored in BOM only** — parser stores `memberValues.id` when present; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `id`. No FQN fallback. |
@@ -515,7 +515,7 @@ interface WithBinding {
 }
 ```
 
-Dynamic instance IDs in loops use the **`id` system property** with an expression value — not a separate directive:
+Dynamic instance IDs in loops use the **`id` meta property** with an expression value — not a separate directive:
 
 ```xml
 <bricks:StandardBrick
@@ -530,7 +530,7 @@ In BOM: `memberValues.id` is an `ExpressionValue` or literal on the `BlockInstan
 
 ## Instance ID Rules
 
-`id` is a **system property** on `org.blockml.core.Block` — inherited by every Block, system-relevant, and treated specially by the compiler (identity, references, auto-ID, render output). It is **not** a `bml:` directive and **not** a custom property like `wallThickness`.
+`id` is a **meta property** on every Block instance — present even when empty, not declared in `<properties>`, and treated specially by the compiler (identity, references, auto-ID, render output). It is **not** a `bml:` directive and **not** a custom property like `wallThickness`. Declaring `<property name="id">` → `BML_RESERVED_PROPERTY_NAME`.
 
 It identifies a child within its parent's composition tree. Nested paths use `::`:
 
@@ -621,7 +621,7 @@ interface BlockInstance {
 
   /**
    * Member values set on this instance (properties + capabilities).
-   * Includes `id` (system property on org.blockml.core.Block) — literal or Expression.
+   * Includes `id` (meta property) — literal or Expression.
    * Resolved `id` value serves as the composition instance identity (partId).
    */
   memberValues: Record<string, MemberValue>
@@ -915,6 +915,8 @@ BML_UNKNOWN_VERSION           — version present but no matching BlockDefinitio
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit id
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId does not match any explicit id in target aggregation
 BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members
+BML_RESERVED_PROPERTY_NAME    — property name "id" (reserved meta property)
+BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a TypeBlock
 BML_UNKNOWN_TYPE              — typeFqn cannot be resolved
 BML_INVALID_DEFINITION_BRANCH — member/element not allowed on this baseType branch (see 17_type_system_bml.md)
 BML_INVALID_TYPE_REFERENCE    — type FQN resolves but wrong branch (e.g. Block used as property type)

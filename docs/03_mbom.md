@@ -75,7 +75,7 @@ Full FQN:          <reverse-domain-package>.<ClassName>
 
 ### Instance Identity
 
-Block instances (within a Composition) are identified by the **`id` system property** on `org.blockml.core.Block`. Nested paths use `::`:
+Block instances (within a Composition) are identified by the **`id` meta property**. Nested paths use `::`:
 
 ```text
 Format:    <parentPartId>::<childPartId>::<subPartId>
@@ -147,14 +147,14 @@ Properties can be organized into named groups for editor display. Groups are met
 
 Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type.
 
-BlockML (`org.blockml.core.ComposableBlock`) defines the implicit `_customData` aggregation. Domain-specific aggregations are declared on domain base types.
+BlockML (`org.blockml.core.Block`) defines the implicit `_customData` aggregation on the root type. Domain-specific aggregations are declared on domain base types.
 
 ### `_presets` and `_parts` on MachineBlocks Blocks
 
 MachineBlocks declares two domain aggregations on the base type chain:
 
 ```text
-com.machineblocks.core.Block  (extends org.blockml.core.ComposableBlock)
+com.machineblocks.core.Block  (extends org.blockml.core.Block)
   _presets:
     type:    com.machineblocks.core.Block[]
   appliedPresets:
@@ -338,7 +338,7 @@ Each child instance:
 
 ```text
 type          — FQN of the Block class
-id            — system property (org.blockml.core.Block). Required when referenced or on bml:each.
+id            — meta property. Required when referenced or on bml:each.
                 Anonymous static children receive auto-ID after directive expansion.
 renderGroup   — render group name (optional, fallback = id)
 namespace     — parameter filter namespace (optional, fallback = id)
@@ -476,13 +476,13 @@ There is no separate Placement meta-block. Placed instances are real Block insta
 
 ### com.machineblocks.core.Step
 
-Framework BML: `com/machineblocks/core/Step.bml`. Extends `org.blockml.core.ComposableBlock` — a composable Block for Set assembly order.
+Framework BML: `com/machineblocks/core/Step.bml`. Extends `org.blockml.core.Block` — a framework Block for Set assembly order.
 
 ```text
-Extends:        org.blockml.core.ComposableBlock
+Extends:        org.blockml.core.Block
 Final:          true
 Members:
-  id             — optional; inherited system property when referenced
+  id             — optional meta property when referenced
   part           — association com.machineblocks.core.Block: references explicit id of a placed instance in _parts
   description    — optional human-readable step label
 Composition:    none — leaf meta Block
@@ -498,8 +498,9 @@ Framework types are **BML files** — see `16_framework_base_types.md`. Interpre
 
 ```text
 org.blockml.core.Block                                  ← packages/core/…/Block.bml (abstract, root)
-  org.blockml.core.ComposableBlock                      ← ComposableBlock.bml (abstract)
     com.machineblocks.core.Step                         ← mbom/…/Step.bml (final)
+  org.blockml.core.TypeBlock                            ← TypeBlock.bml (abstract)
+  org.blockml.core.LanguageBlock                        ← LanguageBlock.bml (abstract)
   org.blockml.service.ServiceBlock                      ← ServiceBlock.bml
     org.blockml.service.FunctionBlock                   ← FunctionBlock.bml
       org.blockml.service.Math                          ← core-services/Math.bml
@@ -516,10 +517,10 @@ org.blockml.core.Block                                  ← packages/core/…/Bl
 
 ### com.machineblocks.core.Block
 
-MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/src/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.ComposableBlock`.
+MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/src/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.Block`.
 
 ```text
-Extends:        org.blockml.core.ComposableBlock
+Extends:        org.blockml.core.Block
 Properties:     name (String)
 Associations:   appliedPresets (_self[] — references ids in _presets)
 Aggregations:   _presets (type: com.machineblocks.core.Block[])
@@ -612,7 +613,7 @@ MB_EMPTY_BLOCK                  — Block has no Composition and no registered c
                                    (MB_* prefix = MachineBlocks-specific, not BML Core)
 ```
 
-Note: `com.machineblocks.core.Step` is a regular ComposableBlock — framework BML extending `org.blockml.core.ComposableBlock`. The SCAD Set renderer interprets its `part` association for STEPS assembly output.
+Note: `com.machineblocks.core.Step` is a framework Block extending `org.blockml.core.Block`. The SCAD Set renderer interprets its `part` association for STEPS assembly output.
 
 ---
 

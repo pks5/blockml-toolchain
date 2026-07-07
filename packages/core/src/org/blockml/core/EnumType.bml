@@ -20,4 +20,9 @@
 
   <abstract>true</abstract>
 
+  <allowedSubBlockTypes>
+    <allowedSubBlockType type="org.blockml.core.EnumTypeValue" />
+  </allowedSubBlockTypes>
+
+  
 </block>

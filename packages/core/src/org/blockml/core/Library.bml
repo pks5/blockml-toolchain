@@ -19,7 +19,7 @@
 
   <name>Library</name>
   <fullQualifiedName>org.blockml.core.Library</fullQualifiedName>
-  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
@@ -44,7 +44,7 @@
     <block>
       <documentation>Dependency on another Library — pins required library FQN and exact semantic version.</documentation>
       <name>Dependency</name>
-      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
       <allowedSubBlockTypes />
@@ -61,7 +61,7 @@
     <block>
       <documentation>Optional XSD schema file exported by a Library — legacy type/enum definitions.</documentation>
       <name>Schema</name>
-      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
       <allowedSubBlockTypes />
@@ -75,7 +75,7 @@
     <block>
       <documentation>Reference to a TypeBlock definition file (StructType, EnumType, …) exported by this Library.</documentation>
       <name>TypeRef</name>
-      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
       <allowedSubBlockTypes />
@@ -89,7 +89,7 @@
     <block>
       <documentation>Reference to a Block definition file exported by this Library.</documentation>
       <name>BlockRef</name>
-      <baseType>org.blockml.core.ComposableBlock</baseType>
+      <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
       <allowedSubBlockTypes />

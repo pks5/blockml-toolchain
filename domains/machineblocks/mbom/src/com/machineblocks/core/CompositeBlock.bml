@@ -21,11 +21,6 @@
 
   <abstract>true</abstract>
 
-  <allowedSubBlockTypes>
-    <allowedSubBlockType type="com.machineblocks.core.Block" />
-    <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
-  </allowedSubBlockTypes>
-
   <supportedImplementationTypes>
     <supportedImplementationType type="org.blockml.language.OpenSCAD" />
   </supportedImplementationTypes>

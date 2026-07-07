@@ -141,6 +141,12 @@ type="type:Color"    →  com.machineblocks.type.Color
 
 There is no implicit fallback to the domain namespace. Explicit FQNs are always supported.
 
+**Property and Capability types** must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock`. Non-TypeBlock FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability payload/return types → `BML_INVALID_PROPERTY_TYPE`.
+
+**Reserved names:** `<property name="id">` is forbidden — `id` is a meta property on every Block instance, not a declarable property → `BML_RESERVED_PROPERTY_NAME`.
+
+**Aggregation and association types** may reference any Block FQN — not limited to TypeBlocks.
+
 ---
 
 ## Schema Validation
@@ -270,7 +276,7 @@ Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
 <block xmlns="http://blockml.org/schema/block" …>
   <name>IPlaceable</name>
   <fullQualifiedName>com.foo.IPlaceable</fullQualifiedName>
-  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>
   <properties>
@@ -701,7 +707,7 @@ Child elements inside `<composition>` are Block instances. Each instance:
 
 ```text
 Tag name      — class name (with namespace prefix)
-id            — **system property** (org.blockml.core.Block). Part ID for composition identity (parentId::partId).
+id            — **meta property** on every Block instance. Part ID for composition identity (parentId::partId). Not declarable as `<property name="id">`.
                 Required when referenced (appliedPresets targets, Step.part, …) or on bml:each elements (literal or Expression).
                 Omitted on anonymous static children → auto-ID after directive expansion. Not a custom property.
 renderGroup   — optional, fallback = id
@@ -787,7 +793,7 @@ Variables from `bml:with` are visible to the element and all descendants. There 
 
 ## Custom Data (`data:`)
 
-The `data:` namespace allows arbitrary key-value metadata to be attached to Block definitions and Composition instances. The pattern is borrowed from **SAP UI5 customData** — in UI5 views, `data:myVal` on a Control or Element sets a customData key/value pair on that element. BlockML applies the same idea to Blocks via the implicit `_customData` aggregation on `org.blockml.core.ComposableBlock`.
+The `data:` namespace allows arbitrary key-value metadata to be attached to Block definitions and Composition instances. The pattern is borrowed from **SAP UI5 customData** — in UI5 views, `data:myVal` on a Control or Element sets a customData key/value pair on that element. BlockML applies the same idea to Blocks via the `_customData` aggregation on `org.blockml.core.Block`.
 
 Custom data has no effect on compilation or rendering — it is purely for tooling, editors, documentation, and CI systems.
 
@@ -851,7 +857,7 @@ BML Directives are special attributes in the `bml:` namespace that control struc
 
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
-| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style `_customData` shorthand for `org.blockml.core.ComposableBlock`. |
+| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style `_customData` shorthand for `org.blockml.core.Block._customData`. |
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
@@ -936,7 +942,7 @@ Produces no Block output itself — groups child Blocks for shared directives:
 
 ### Dynamic Instance ID
 
-Use the `id` system property for dynamic IDs in loops — not a directive:
+Use the `id` meta property for dynamic IDs in loops — not a directive:
 
 ```xml
 <bricks:StandardBrick
@@ -1319,7 +1325,7 @@ _steps      — assembly order (optional; defaults to document order of _parts)
 
 ### Step
 
-`com.machineblocks.core.Step` is a **framework ComposableBlock** (`Step.bml`) — it extends `org.blockml.core.ComposableBlock`, not `com.machineblocks.core.Block`. Used as composition children on Sets:
+`com.machineblocks.core.Step` is a **framework Block** (`Step.bml`) — it extends `org.blockml.core.Block`. Used as composition children on Sets:
 
 ```text
 composition aggregation="_presets"  →  block palette (Floor, Wall, …)

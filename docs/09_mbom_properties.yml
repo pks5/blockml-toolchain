@@ -146,8 +146,8 @@ properties:
     assembly_pattern: mb_block_id
     ai_usage: yes
     description: |
-      BOM Core system property (org.blockml.core.Block) — instance identity within a
-      composition tree. Not a custom property; receives dedicated compiler/validator
+      BOM Core meta property — instance identity on every Block instance.
+      Not a declarable <property>; receives dedicated compiler/validator
       handling (reference checks, auto-ID, nested paths).
       In composite blocks, child part IDs are derived from the parent ID:
         childId = parentId + "::" + partId
