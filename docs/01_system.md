@@ -227,7 +227,6 @@ BlockML Core (blockml.org):
   http://blockml.org/schema/bml        ← bml: directives namespace
   http://blockml.org/schema/data       ← data: custom metadata namespace
   http://blockml.org/schema/service    ← org.blockml.service.*
-  http://blockml.org/schema/blockPresets ← <blockPresets> documents
   http://blockml.org/schema/library    ← library.xml documents
 
 MachineBlocks (machineblocks.com):
@@ -241,10 +240,9 @@ MachineBlocks (machineblocks.com):
 ```text
 blockml.org schemas (in @blockml/core package):
   schemas/core/
-    block.xsd          ← BML document structure, bml:* directives, data:*
+    block.xsd          ← BML document structure, bml:* directives, data:* (all <block> roots including PresetCollection)
     types.xsd          ← org.blockml.type.* primitives (filename plural; maps to singular .type package)
     service.xsd        ← org.blockml.service.* hierarchy
-    blockPresets.xsd   ← <blockPresets> document structure
     library.xsd        ← library.xml document structure
 
 machineblocks.com schemas (in @machineblocks/mbom package):
@@ -482,17 +480,17 @@ The root element of the BML file determines the document type — not the filena
 ## SCAD Output per Document Type (MachineBlocks domain)
 
 ```text
-<block>        → scad/com/.../ClassName.scad
-                 scad/com/.../ClassName.scad.map
-                 Block module + customizer. No thumbnails.
+<block> (composable)     → scad/com/.../ClassName.scad
+                           scad/com/.../ClassName.scad.map
+                           Block module + customizer. No thumbnails.
 
-<blockPresets> → scad/com/.../ClassName.scad        (implicit compile of referenced block)
-                 scad/com/.../ClassName.scad.map
-                 scad/com/.../ClassName.json         (OpenSCAD Customizer preset file)
-                 scad/com/.../ClassName__{preset}.webp  (one thumbnail per preset)
+<block> (PresetCollection) → scad/com/.../ReferencedBlock.scad   (implicit compile per preset block type)
+                           scad/com/.../ReferencedBlock.scad.map
+                           scad/com/.../ReferencedBlock.json     (OpenSCAD Customizer preset file)
+                           scad/com/.../ReferencedBlock__{preset-id}.webp  (one thumbnail per preset)
 ```
 
-Compiling a `<blockPresets>` document is the standard entry point when generating visible output. It triggers compilation of the referenced block and produces all artifacts in one step.
+Compiling a Preset Collection (`baseType = org.blockml.core.PresetCollection`) is the standard entry point when generating visible output. It triggers implicit compilation of referenced block types and produces all artifacts in one step.
 
 A MachineBlocks Set is a `<block>` document with `baseType = com.machineblocks.core.Set`. The SCAD Renderer detects this and produces STEPS-based output.
 
@@ -561,7 +559,7 @@ This resolution is implemented in `@blockml/cli` as `resolveMbLib.ts`.
 
 Config profiles are project-wide property presets that define hardware-specific or rendering-specific defaults (printer calibration, filament shrinkage, scale, etc.).
 
-They use the same format as `<blockPresets>` and share the same property namespace as block properties.
+They are Preset Collection blocks (`baseType="org.blockml.core.PresetCollection"`) and share the same property namespace as block properties.
 
 ```text
 config/prusa_pla.bml    — printer + filament profile

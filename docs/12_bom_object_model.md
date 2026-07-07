@@ -94,15 +94,14 @@ Every parsed BML file produces exactly one `BomDocument`.
 
 ```typescript
 interface BomDocument {
-  /** Discriminator — matches BML root element / JSON type field */
-  kind: "block" | "blockPresets"
+  /** V1: always `<block>` root. Legacy `<blockPresets>` removed — presets are PresetCollection blocks. */
+  kind: "block"
 
   /** Parse metadata */
   source: SourceInfo
 
-  /** Root payload — exactly one is set per kind */
-  block?: BlockDefinition
-  presets?: PresetsDocument
+  /** Root block definition */
+  block: BlockDefinition
 }
 
 interface SourceInfo {
@@ -670,32 +669,43 @@ getBlockDefinition(fqn: string, version: string): BlockDefinition | undefined
 
 ---
 
-## `PresetsDocument`
+## Preset Collections (`org.blockml.core.PresetCollection`)
 
-Root type for `<blockPresets>` documents.
+Preset files are ordinary `BlockDefinition` documents — not a separate BOM root type.
 
-```typescript
-interface PresetsDocument {
-  fullQualifiedName: string
-  blockTypeFqn: string
-  version: string
-  presets: Preset[]
-  source: SourceLocation
-}
+```text
+org.blockml.core.PresetCollection   abstract composable Block
+  aggregation  presets   0..n   org.blockml.core.Preset   (defaultAggregation)
 
-interface Preset {
-  id: string
-  name: string
-  basePresetRefs?: PresetRef[]
-  properties: Record<string, MemberValue>
-  source?: SourceLocation
-}
-
-interface PresetRef {
-  /** Same-document preset id or full "FQN::id" for cross-file */
-  ref: string
-}
+org.blockml.core.Preset             final composable Block
+  property     name      String   — display label (Customizer UI)
+  property     id        String   — inherited from ComposableBlock; stable reference key
+  aggregation  block     0..1   org.blockml.core.Block   (defaultAggregation)
+  association  basePresets 0..n org.blockml.core.Preset  — space-separated ids on instance
 ```
+
+Preset instances appear as `<Preset>` children in the PresetCollection's default `<composition>`. Each preset's optional block child fills the `block` aggregation automatically — no `aggregation=` attribute needed when only one aggregation exists on Preset.
+
+**Preset reference syntax** (unchanged):
+
+```text
+{PresetCollectionFQN}::{preset-id}
+
+Example:
+  com.machineblocks.bricks.StandardPresets::brick-2x4
+```
+
+Cross-file `basePresets` entries use the same `FQN::id` form. Local ids resolve within the same PresetCollection document.
+
+**Merge order** when resolving a preset for rendering:
+
+```text
+1. Own block instance properties (child of Preset)
+2. basePresets — applied left-to-right; later entries override earlier
+3. Referenced Block defaultValues
+```
+
+Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 
 ---
 
@@ -822,9 +832,9 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  bml:each elements have explicit id (literal or Expression)
 ✓  Sub-Block baseType ∈ parent's allowedSubBlockTypes (domain rule)
 ✓  Expression result types match member types
-✓  Preset property names exist on target blockType
+✓  Preset block instance properties exist on referenced block type
 ✓  Property defaultValue cycles (topological sort)
-✓  Preset basePresetRefs cycles
+✓  Preset basePresets resolve (local id or FQN::id) and have no cycles
 ```
 
 The validator does **not** expand directives, assign auto-IDs, or interpret aggregations.

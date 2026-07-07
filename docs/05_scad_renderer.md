@@ -805,7 +805,7 @@ Nested NativeBlocks or other Blocks within a Composition are true instances — 
 
 ## Preset File Rendering
 
-A `<blockPresets>` document is rendered to an OpenSCAD Customizer JSON file. The Customizer JSON uses the Preset **name** as the key — it is the human-readable label shown in the OpenSCAD UI:
+A Preset Collection block (`baseType="org.blockml.core.PresetCollection"`) is rendered to an OpenSCAD Customizer JSON file. The Customizer JSON uses the Preset **name** as the key — it is the human-readable label shown in the OpenSCAD UI:
 
 ```json
 {

@@ -888,63 +888,58 @@ Sub-Blocks are full BOM objects referenceable via full FQN from outside the pare
 
 ## Preset
 
-A Preset is a named, concrete property set for a specific Block type. Presets apply only to Properties — not to Aggregations, Associations, or Capabilities.
+A Preset is a named, concrete property set for a specific Block type. Presets are **Blocks** — instances of `org.blockml.core.Preset` grouped in a `org.blockml.core.PresetCollection` document.
 
-### Preset Document Metadata
+Presets apply only to Properties — not to Aggregations, Associations, or Capabilities.
 
-```text
-fullQualifiedName — FQN of this Presets document
-blockType         — FQN of the Block this document applies to
-version           — semantic version of this Presets document
-presets           — list of named property sets
-```
+### Preset Collection
 
-Each Preset has:
+A Preset Collection is a Block definition with `baseType="org.blockml.core.PresetCollection"`:
 
 ```text
-id    — stable kebab-case identifier (used for references, thumbnail filenames)
-name  — human-readable display name (used in SCAD Customizer, editor UI)
+fullQualifiedName — FQN of this Preset Collection (e.g. com.machineblocks.bricks.StandardPresets)
+version           — semantic version
+composition       — Preset instances (org.blockml.core.Preset)
 ```
 
-The `id` is the canonical reference key. The `name` is display-only and may change without breaking references. The `id` must be unique within a Presets document.
+Each Preset instance (`org.blockml.core.Preset`):
 
-A Presets document has its own FQN and is a first-class BOM object. Multiple Presets documents can target the same Block type — from different authors or packages.
+```text
+id           — stable kebab-case identifier (ComposableBlock id property; reference key)
+name         — human-readable display name (Customizer UI, editor)
+block        — aggregation 0..1: block instance with property overrides
+basePresets  — association 0..n: space-separated preset ids (local or FQN::id)
+```
+
+The `id` is the canonical reference key. The `name` is display-only. The `id` must be unique within a Preset Collection.
+
+Multiple Preset Collections can target the same Block type — from different authors or packages.
 
 ### Preset Reference Syntax
 
-Presets are referenced by `id` using the `::` separator:
-
 ```text
-{PresetsDocumentFQN}::{preset-id}
+{PresetCollectionFQN}::{preset-id}
 
 Example:
-  com.machineblocks.bricks.StandardBrickPresets::brick-2x4
+  com.machineblocks.bricks.StandardPresets::brick-2x4
 ```
-
-This reference is always fully qualified and ID-based. Renaming a Preset's `name` never breaks references.
 
 ### Preset in Compositions
 
 ```xml
-<!-- Preset only -->
 <bricks:StandardBrick
-    preset="com.machineblocks.bricks.StandardBrickPresets::brick-2x4" />
+    presetRef="com.machineblocks.bricks.StandardPresets::brick-2x4" />
 
-<!-- Preset + inline override: baseColor overrides the Preset value -->
 <bricks:StandardBrick
-    preset="com.machineblocks.bricks.StandardBrickPresets::brick-2x4"
+    presetRef="com.machineblocks.bricks.StandardPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
 
 ### Merge Order
 
 ```text
-configProfile < preset < inline property
+configProfile < presetRef < inline property
 ```
-
-Inline properties always win over Preset values. Preset values always win over Config profile values. Only Properties that differ from the Block's defaults need to be listed in a Preset.
-
-A Block can have multiple Presets. Only one Preset is active at a time per Block instance. For complex structures, define a Composite Block and apply a Preset to that.
 
 ---
 

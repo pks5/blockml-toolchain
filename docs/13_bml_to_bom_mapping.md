@@ -11,7 +11,7 @@ For BML authoring syntax see `02_mbml.md`.
 For expression parsing see `10_expression_language.md`.
 For compiler pipeline placement see `06_compiler.md`.
 
-Mapping rules are registered per root type (`<block>`, `<blockPresets>`, …) — not hardcoded in the parser core.
+Mapping rules are registered per root type (`<block>`, …) — not hardcoded in the parser core. V1 has a single root type: `<block>` (including PresetCollection blocks).
 
 ---
 
@@ -381,8 +381,14 @@ Same-document Sub-Block references omit `version` — resolved against `subBlock
 ```text
 presetRef="com.martianmicro.anyclosure.WallPresets::large"
   → Parser stores string as authored (stage [5])
-  → Validator resolves PresetsDocument + Preset id in TypeRegistry (stage [8])
+  → Validator resolves PresetCollection BlockDefinition + Preset instance id in composition (stage [8])
+
+basePresets="brick-1x1 com.other.Presets::color-red"
+  → Stored on Preset instance memberValues.basePresets (stage [5])
+  → Validator resolves each token as local id or FQN::id (stage [8])
 ```
+
+Preset instances in a PresetCollection composition map like any other Block instance: element `Preset` → `typeFqn: org.blockml.core.Preset`. Child block elements fill the `block` aggregation (defaultAggregation). The Preset `name` attribute maps to `memberValues.name`; `id` maps to `memberValues.id`.
 
 ### Incremental builds
 
@@ -396,7 +402,7 @@ The orchestrator re-bootstraps or incrementally updates the TypeRegistry when an
 
 JSON as a BML **authoring format** is **not implemented in V1**. The V1 parser accepts **XML only** (`.bml`, domain extensions such as `.mbml`).
 
-JSON may eventually support a very restricted subset (e.g. flat `<blockPresets>`, simple leaf blocks). Whether a viable mapping exists is **TBD** — intensive XML namespace usage (`xmlns:bricks`, `bml:*`, `data:*`, typed element names) has no natural JSON equivalent. Full BML power requires XML.
+JSON may eventually support a very restricted subset (e.g. flat Preset Collections, simple leaf blocks). Whether a viable mapping exists is **TBD** — intensive XML namespace usage (`xmlns:bricks`, `bml:*`, `data:*`, typed element names) has no natural JSON equivalent. Full BML power requires XML.
 
 When JSON support is specified, it will register a separate root-type mapping rule and JSON Schema — not in V1.
 

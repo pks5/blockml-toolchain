@@ -126,6 +126,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/language/TypeScript.bml · OpenSCAD.bml
      org/blockml/service/ServiceBlock.bml
      org/blockml/service/FunctionBlock.bml
+     org/blockml/core/Preset.bml · PresetCollection.bml
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/core/Placement.bml · Step.bml · Block.bml · NativeBlock.bml · Set.bml
@@ -177,7 +178,7 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/src/
   org/blockml/core/
-    Block.bml · ComposableBlock.bml · TypeBlock.bml · LanguageBlock.bml · …
+    Block.bml · ComposableBlock.bml · Preset.bml · PresetCollection.bml · TypeBlock.bml · LanguageBlock.bml · …
 
 domains/machineblocks/mbom/src/
   com/machineblocks/core/

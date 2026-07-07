@@ -1,0 +1,33 @@
+<!--
+  BlockML Core — collection of Preset instances
+
+  FQN: org.blockml.core.PresetCollection
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation>Block that groups named Preset instances in its composition. Each Preset may carry a block instance with property overrides and/or inherit from other presets via basePresets. Replaces the legacy blockPresets document type.</documentation>
+
+  <name>PresetCollection</name>
+  <fullQualifiedName>org.blockml.core.PresetCollection</fullQualifiedName>
+  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <version>1.0.0</version>
+
+  <abstract>true</abstract>
+
+  <allowedSubBlockTypes />
+
+  <aggregations>
+    <aggregation name="presets"
+                 cardinality="0..n"
+                 type="org.blockml.core.Preset"
+                 visibility="hidden"
+                 defaultAggregation="true" />
+  </aggregations>
+
+</block>

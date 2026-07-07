@@ -103,9 +103,10 @@ JSON parser: **not in V1.**
 Reads the root element name to determine the document type:
 
 ```text
-<block>        → Block Definition
-<blockPresets> → Block Presets
+<block>   → Block Definition (all block types, including PresetCollection)
 ```
+
+V1 has a single root element. Preset files use `<block baseType="org.blockml.core.PresetCollection">`.
 
 Selects the appropriate BML→BOM mapping rule for this root type. Extension root types register their mapping rule via the root type registry.
 
@@ -384,7 +385,7 @@ interface ScadFile {
 
 A target may also return **side effects without files** (service calls, deploy, registry update). `CompilerResult.success === true` with empty `files[]` is valid.
 
-For `<blockPresets>` in the MachineBlocks SCAD target, `files[]` includes the implicit block `.scad`, its `.map`, and the Customizer `.json`. Binary artifacts (`.webp`) are produced by `@blockml/cli` after compile — see `14_compiler_runtime.md` — Thumbnails (C6).
+For Preset Collection blocks in the MachineBlocks SCAD target, `files[]` includes the implicit block `.scad`, its `.map`, and the Customizer `.json`. Binary artifacts (`.webp`) are produced by `@blockml/cli` after compile — see `14_compiler_runtime.md` — Thumbnails (C6).
 
 ### Browser Usage
 
@@ -645,7 +646,7 @@ Wall__brick-2x4.webp
 
 ```text
 <block>        → Block compile    (hash check → skip if unchanged)
-<blockPresets> → implicit .scad   (same hash key as direct block compile)
+<block> (PresetCollection) → implicit .scad   (same hash key as direct block compile)
                → Presets .json    (hash check → skip if unchanged)
                → thumbnails       (per-preset hash check)
 ```
@@ -735,7 +736,7 @@ Coverage (SCAD target):
   - Block definition → SCAD module
   - Composite block → nested mb_block() calls
   - MachineBlocks Set definition → STEPS + view submodules
-  - blockPresets → Customizer JSON
+  - PresetCollection → Customizer JSON
   - Expressions → correct SCAD expressions
   - Assembly patterns → correct mb_assembly_*() calls
   - Config profile → correct parameter defaults

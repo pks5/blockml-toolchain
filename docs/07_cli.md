@@ -33,7 +33,7 @@ Before compile or watch, the CLI bootstraps two registries in a fixed order. See
 4. for each file (or single file):
      shouldSkip(artifact) ? skip : compileBmlToOutput(...)
 5. write RenderOutput.files[] to disk
-6. generateThumbnails(...)   — blockPresets + SCAD target only (C6)
+6. generateThumbnails(...)   — PresetCollection + SCAD target only (C6)
 7. writeStoredHash(...)      — update .bom-cache (C5)
 ```
 
@@ -195,7 +195,7 @@ bom compile --all <target>
 
 `--all` processes every BML source file in `srcDir` (`.bml` by default; `.mbml` when MachineBlocks extensions are registered). Each file is evaluated against its stored hash — unchanged artifacts are skipped.
 
-A Block referenced by both a direct `<block>` compile and an implicit compile from a `<blockPresets>` document is only built once — the hash check prevents redundant work.
+A Block referenced by both a direct `<block>` compile and an implicit compile from a Preset Collection is only built once — the hash check prevents redundant work.
 
 #### Output by document type (SCAD target)
 
@@ -209,18 +209,18 @@ src/com/martianmicro/anyclosure/Wall.bml
 
 No thumbnails are generated when compiling a block definition directly.
 
-**`<blockPresets>` document:**
+**Preset Collection block** (`baseType="org.blockml.core.PresetCollection"`):
 
 ```text
 src/com/martianmicro/anyclosure/WallPresets.bml
-→  scad/com/martianmicro/anyclosure/Wall.scad        (implicit compile of referenced block)
+→  scad/com/martianmicro/anyclosure/Wall.scad        (implicit compile of referenced block types)
 →  scad/com/martianmicro/anyclosure/Wall.scad.map
 →  scad/com/martianmicro/anyclosure/Wall.json
-→  scad/com/martianmicro/anyclosure/Wall__brick-2x4.webp   (one per preset)
+→  scad/com/martianmicro/anyclosure/Wall__brick-2x4.webp   (one per preset id)
 →  scad/com/martianmicro/anyclosure/Wall__brick-1x1.webp
 ```
 
-Compiling a `<blockPresets>` document is the standard entry point for generating visible output. It triggers an implicit compile of the referenced block, then produces the Customizer JSON and one thumbnail per preset.
+Compiling a Preset Collection is the standard entry point for generating visible output. It triggers implicit compilation of referenced block types, then produces the Customizer JSON and one thumbnail per preset.
 
 #### Exit codes
 
@@ -282,7 +282,7 @@ Behavior:
 - Continues running until interrupted (Ctrl+C)
 ```
 
-Thumbnail generation follows the same rules as `bom compile` — thumbnails are generated automatically when a `<blockPresets>` file changes (SCAD target only).
+Thumbnail generation follows the same rules as `bom compile` — thumbnails are generated automatically when a Preset Collection file changes (SCAD target only).
 
 Conceptually equivalent to TypeScript watch mode (`tsc --watch`).
 
@@ -317,7 +317,7 @@ Only one config profile is active at a time. Activating a new profile replaces t
 
 Thumbnails are **CLI-only** (C6) — not part of `@blockml/compiler` or `RenderOutput`. The compiler produces `.scad` and `.json`; the CLI renders `.webp` afterward using OpenSCAD + Sharp. See `14_compiler_runtime.md` — Thumbnails (C6).
 
-Thumbnails run automatically as part of `bom compile machineblocks-v3-scad` when the input is a `<blockPresets>` document. There is no separate thumbnail command.
+Thumbnails run automatically as part of `bom compile machineblocks-v3-scad` when the input is a Preset Collection block. There is no separate thumbnail command.
 
 ### Architecture boundary
 
@@ -502,7 +502,7 @@ Command names, argument names, and shorthand flags can all be renamed. This allo
 
 ## Config Profiles
 
-Config profiles define project-wide property defaults. They use the same format as `<blockPresets>` and share the same property namespace as block properties.
+Config profiles define project-wide property defaults. They are Preset Collection blocks and share the same property namespace as block properties.
 
 ### File Location
 
@@ -513,20 +513,21 @@ src/config/scale_2x.bml
 
 ### Format
 
-Config profiles use the `<blockPresets>` root element with no `<blockType>` — they apply globally:
-
 ```xml
-<blockPresets xmlns="http://www.machineblocks.com/mbml/blockPresets.xsd">
+<block xmlns="http://blockml.org/schema/block" ...>
 
+  <name>PrusaPla</name>
   <fullQualifiedName>com.machineblocks.config.PrusaPla</fullQualifiedName>
+  <baseType>org.blockml.core.PresetCollection</baseType>
   <version>1.0.0</version>
 
-  <preset name="default">
-    <printerNozzleDiameter>0.4</printerNozzleDiameter>
-    <printerLayerHeight>0.2</printerLayerHeight>
-  </preset>
+  <composition>
+    <Preset id="default" name="Default">
+      <!-- project ConfigBlock instance with global defaults -->
+    </Preset>
+  </composition>
 
-</blockPresets>
+</block>
 ```
 
 ### Merge Order

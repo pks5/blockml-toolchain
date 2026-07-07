@@ -1,0 +1,44 @@
+<!--
+  BlockML Core — single named property preset instance type
+
+  FQN: org.blockml.core.Preset
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation>Named property preset for a Block type. Used as composition children of PresetCollection. Carries optional block instance (aggregation block) and optional basePresets association for inheritance.</documentation>
+
+  <name>Preset</name>
+  <fullQualifiedName>org.blockml.core.Preset</fullQualifiedName>
+  <baseType>org.blockml.core.ComposableBlock</baseType>
+  <version>1.0.0</version>
+
+  <final>true</final>
+
+  <allowedSubBlockTypes />
+
+  <properties>
+    <property name="name" type="String">
+      <documentation>Human-readable display name (SCAD Customizer, editor UI). The id property is the stable reference key.</documentation>
+    </property>
+  </properties>
+
+  <aggregations>
+    <aggregation name="block"
+                 cardinality="0..1"
+                 type="org.blockml.core.Block"
+                 defaultAggregation="true" />
+  </aggregations>
+
+  <associations>
+    <association name="basePresets"
+                 type="org.blockml.core.Preset"
+                 cardinality="0..n" />
+  </associations>
+
+</block>

@@ -200,7 +200,7 @@ interface BundleRenderOutput {
 |---|---|---|
 | 1 BML → 0 outputs | Allowed | Deploy target registers block metadata via API |
 | 1 BML → 1 output | Common | MachineBlocks SCAD default |
-| 1 BML → N outputs | Allowed | blockPresets → `.scad` + `.json` |
+| 1 BML → N outputs | Allowed | PresetCollection → `.scad` + `.json` |
 | N BML → 1 output | Allowed | Set/library processor bundles blocks into one file |
 | N BML → M outputs | Allowed | Target-defined batch policy |
 
@@ -220,7 +220,7 @@ The **reference SCAD target** follows a project convention that the CLI implemen
 
 ```text
 Standard case:   1 .bml / .mbml  →  1 primary .scad (+ .map)
-blockPresets:    1 presets file  →  .scad + .json (+ CLI thumbnails)
+PresetCollection:  1 presets block  →  .scad + .json (+ CLI thumbnails)
 No transitive compile of dependency .scad files into project output
 Sub-Blocks embedded in parent .scad — not separate output files
 ```
@@ -246,8 +246,8 @@ bom compile src/.../Standard.mbml machineblocks-v3-scad
 See Thumbnails (C6) for the full split between compiler and CLI.
 
 ```text
-WallPresets.bml
-  ── @blockml/compiler (blockPresets render) ──
+WallPresets.bml  (baseType = org.blockml.core.PresetCollection)
+  ── @blockml/compiler (PresetCollection render) ──
   → implicit compile of referenced Wall block → Wall.scad + Wall.scad.map
   → Wall.json (OpenSCAD Customizer)
   ── @blockml/cli (after compile success) ──
@@ -523,7 +523,9 @@ interface RenderSession {
   sourceFilePath:  string          // CompileInput.filePath
   outputBasePath:  string          // CompileOptions.outputBasePath
   targetName:      string          // e.g. "machineblocks-v3-scad"
-  documentKind:    BomDocumentKind // "block" | "blockPresets" | …
+  documentKind:    BomDocumentKind // V1: always "block"
+  /** True when root block baseType is org.blockml.core.PresetCollection */
+  isPresetCollection: boolean
   activeConfig?:   string          // CompileOptions.activeConfig
   mbLibPath?:      string          // CompileOptions.mbLibPath — SCAD import paths
 }
@@ -552,7 +554,7 @@ interface RenderContext {
   /** Innermost bml:each bindings — undefined outside loops */
   loopScope?: ReadonlyMap<string, ExpressionValue>
 
-  /** blockPresets compile — active preset when serializing JSON / thumbnail input */
+  /** PresetCollection compile — active preset id when serializing JSON / thumbnail input */
   activePresetId?: string
 
   /** Fork for nested render — session unchanged, per-node fields overridden */
@@ -587,7 +589,8 @@ compileBomToOutput(input, targetName, options)
 | `sourceFilePath` | `CompileInput.filePath` | Source maps, diagnostics |
 | `outputBasePath` | `CompileOptions` | Output path computation |
 | `targetName` | CLI / caller argument | Target-specific behavior, diagnostics |
-| `documentKind` | `BomDocument.kind` | `<block>` vs `<blockPresets>` render paths |
+| `documentKind` | `BomDocument.kind` | Always `"block"` in V1 |
+| `isPresetCollection` | root `BlockDefinition.baseType` chain | PresetCollection vs composable render paths |
 | `activeConfig` | `CompileOptions` | Property merge — config profile layer |
 | `mbLibPath` | `CompileOptions` | SCAD `use` / `include` relative paths |
 
@@ -658,17 +661,17 @@ Thumbnails (`.webp`) are **CLI-only** — not produced by `@blockml/compiler` an
 | Artifact | Producer | Package |
 |---|---|---|
 | `.scad`, `.scad.map` | Compiler (implicit block render) | `@blockml/compiler` + SCAD target |
-| `.json` (Customizer) | Compiler (`blockPresets` render) | `@blockml/compiler` + SCAD target |
+| `.json` (Customizer) | Compiler (PresetCollection render) | `@blockml/compiler` + SCAD target |
 | `.webp` (thumbnails) | CLI post-step | `@blockml/cli` only |
 
-### Compiler — `blockPresets` render
+### Compiler — PresetCollection render
 
-When `BomDocument.kind === "blockPresets"`, the SCAD target render pipeline:
+When the root block's effective `baseType` is `org.blockml.core.PresetCollection`, the SCAD target render pipeline:
 
 ```text
-1. TypeRegistry lookup → referenced Block definition
-2. Implicit block render → .scad + .scad.map in RenderOutput.files[]
-3. Preset property merge (inline → preset → config → default)
+1. Walk Preset instances in composition → collect referenced block types
+2. Implicit block render per referenced type → .scad + .scad.map in RenderOutput.files[]
+3. Preset property merge per instance (own block → basePresets → default)
 4. Customizer JSON → .json in RenderOutput.files[]
 ```
 
@@ -679,7 +682,7 @@ No thumbnail step. `RenderOutput` contains **text artifacts only** (`.scad`, `.m
 ```typescript
 const result = compileBmlToOutput(input, "machineblocks-v3-scad", options);
 
-if (result.success && isBlockPresetsInput(input)) {
+if (result.success && session.isPresetCollection) {
   writeRenderOutputFiles(result.output, config.outDir);
 
   await generateThumbnails({
@@ -708,7 +711,7 @@ CLI iterates `parameterSets` in the compiled `.json`:
 ### Trigger and scope
 
 ```text
-Trigger:     bom compile <blockPresets.bml> machineblocks-v3-scad
+Trigger:     bom compile <PresetCollection.bml> machineblocks-v3-scad
              bom watch (same rules on file change)
 Not triggered: bom compile <block.bml>  — no thumbnails
                bom validate / bom inspect
@@ -728,9 +731,6 @@ Thumbnail skip logic uses the incremental build cache (C5) — see `.webp` artif
 generateThumbnails()     — single CLI entry point; post-V1 may move to @blockml/thumbnail-scad
 RenderOutput             — never includes binary files (.webp)
 @blockml/compiler        — never depends on OpenSCAD or Sharp
-Thumbnail backend        — post-V1: swap OpenSCAD renderer without touching compiler
-```
-
 Thumbnail backend        — post-V1: swap OpenSCAD renderer without touching compiler
 ```
 
@@ -799,7 +799,7 @@ The compiler Facade is unaware of caching. Browser hosts never use `.bom-cache`.
 
 `activeConfigHash`: hash of the active config profile BML file (`src/config/<activeConfig>.bml`), or `null` when `activeConfig` is unset.
 
-#### `.json` (blockPresets compile)
+#### `.json` (PresetCollection compile)
 
 ```typescript
 {
@@ -851,10 +851,10 @@ Wall.scad + Wall.json
 ```text
 For each BML file in srcDir (every file evaluated independently):
 
-  <block>        →  check Wall.scad hash → compile or skip
-  <blockPresets> →  check Wall.scad hash (implicit, same key as direct compile)
-                 →  check Wall.json hash → compile or skip
-                 →  check each .webp hash → thumbnail or skip
+  <block> (composable)        →  check Wall.scad hash → compile or skip
+  <block> (PresetCollection)  →  check Wall.scad hash (implicit, same key as direct compile)
+                              →  check Wall.json hash → compile or skip
+                              →  check each .webp hash → thumbnail or skip
 ```
 
 No special coupling between files in the scan loop — deduplication comes from shared output-path hash keys.

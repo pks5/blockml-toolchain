@@ -73,12 +73,13 @@ The document type is determined by the root element (XML). JSON `type` field map
 
 ## Document Types
 
-BML defines two core document types:
+BML defines one core document root:
 
 ```text
-<block>        — Block Definition
-<blockPresets> — Property Presets for a specific Block
+<block>   — Block Definition (composable types, type blocks, language blocks, preset collections, …)
 ```
+
+Property presets are **not** a separate document type. A presets file is a normal `<block>` with `baseType="org.blockml.core.PresetCollection"` — see § Preset Collections.
 
 Extension document types (defined in domain packages, not in core):
 
@@ -1254,7 +1255,7 @@ Option 1 — Inline:
   All properties defined directly on the Block entry in _parts.
 
 Option 2 — Preset reference:
-  Block references a blockPresets document.
+  Block references a Preset Collection preset (FQN::id).
   All preset values apply.
 
 Option 3 — Preset + inline override:
@@ -1275,48 +1276,93 @@ instance  — single instance in isolation
 
 ---
 
-## Block Presets (`<blockPresets>`)
+## Preset Collections
 
-A `<blockPresets>` document defines named property presets for a specific Block type. Presets apply only to Properties. For complex structures, define a Composite Block and apply a Preset to that.
+A Preset Collection is a **Block** with `baseType="org.blockml.core.PresetCollection"`. It groups named property presets as `<Preset>` instances in its composition — the same “everything is a Block” model as Sets, Placements, and Steps.
 
-A Presets document is a first-class BOM object with its own FQN. Multiple Presets documents can target the same Block type — from different authors or packages. The Block definition has no knowledge of its Presets documents.
+Each preset applies property overrides to a specific Block type via an optional block instance child. Presets apply only to Properties — not Aggregations, Associations, or Capabilities.
+
+A Preset Collection has its own FQN (`com.machineblocks.bricks.StandardPresets`). Multiple Preset Collections can target the same Block type from different packages. The Block definition has no knowledge of preset collections.
 
 ### Structure
 
 ```xml
-<blockPresets xmlns="http://blockml.org/schema/blockPresets">
+<!--
+  FQN: com.machineblocks.bricks.StandardPresets
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:type="com.machineblocks.type"
+  xmlns:bricks="com.machineblocks.bricks"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
 
-  <fullQualifiedName>com.machineblocks.bricks.StandardBrickPresets</fullQualifiedName>
-  <blockType>com.machineblocks.bricks.StandardBrick</blockType>
-  <version>1.0.0</version>
+  <documentation>Standard brick presets for MachineBlocks Standard block.</documentation>
 
-  <preset id="brick-2x4" name="Brick 2x4">
-    <size>[2, 4, 3]</size>
-    <baseColor>#EAC645</baseColor>
-    <studs>true</studs>
-  </preset>
+  <name>StandardPresets</name>
+  <fullQualifiedName>com.machineblocks.bricks.StandardPresets</fullQualifiedName>
+  <baseType>org.blockml.core.PresetCollection</baseType>
+  <version>3.0.0</version>
 
-  <preset id="brick-1x1" name="Brick 1x1">
-    <size>[1, 1, 3]</size>
-    <baseColor>#EAC645</baseColor>
-  </preset>
+  <composition>
 
-</blockPresets>
+    <!-- Atomic preset — block child fills Preset.block aggregation -->
+    <Preset id="brick-1x1" name="Brick 1x1">
+      <bricks:Standard size="[1, 1, 3]" />
+    </Preset>
+
+    <Preset id="brick-2x4" name="Brick 2x4">
+      <bricks:Standard size="[2, 4, 3]" />
+    </Preset>
+
+    <Preset id="color-red" name="Red">
+      <bricks:Standard baseColor="#D65745" />
+    </Preset>
+
+    <!-- Composite preset — no own block when basePresets cover everything -->
+    <Preset id="brick-1x1-red"
+            name="Brick 1x1 Red"
+            basePresets="brick-1x1 color-red" />
+
+    <!-- Composite with own override -->
+    <Preset id="brick-1x1-red-text"
+            name="Brick 1x1 Red MB"
+            basePresets="brick-1x1-red">
+      <bricks:Standard text="MB" textColor="#EDF0F1" />
+    </Preset>
+
+    <!-- Cross-file basePresets reference -->
+    <Preset id="brick-2x4-special"
+            name="Brick 2x4 Special"
+            basePresets="com.myproject.presets.MyPresets::my-base brick-2x4">
+      <bricks:Standard textColor="#EDF0F1" />
+    </Preset>
+
+  </composition>
+
+</block>
 ```
 
-**`id`** — stable kebab-case identifier. Used for references in Compositions and for thumbnail filenames. Must be unique within the Presets document. Never changes once published.
+**`id`** (on Preset) — stable kebab-case identifier. Used for references in compositions and thumbnail filenames. Must be unique within the Preset Collection. Never changes once published.
 
-**`name`** — human-readable display name. Used in the SCAD Customizer JSON and editor UI. May be renamed without breaking any references.
+**`name`** (on Preset) — human-readable display name. Used in the SCAD Customizer JSON and editor UI. May be renamed without breaking references.
+
+**`basePresets`** — space-separated preset ids. Local ids resolve within the same Preset Collection; cross-file entries use `{FQN}::{id}`. Applied left-to-right; later entries override earlier. Own block properties override all base presets.
+
+Since `Preset` has exactly one aggregation (`block`, 0..1) marked `defaultAggregation`, the block instance placed as child fills it automatically — no `aggregation=` attribute needed.
 
 ### Preset Reference Syntax
 
 Presets are referenced by `id` using the `::` separator:
 
 ```text
-{PresetsDocumentFQN}::{preset-id}
+{PresetCollectionFQN}::{preset-id}
 
 Example:
-  com.machineblocks.bricks.StandardBrickPresets::brick-2x4
+  com.machineblocks.bricks.StandardPresets::brick-2x4
 ```
 
 ### Preset in Compositions
@@ -1324,101 +1370,32 @@ Example:
 ```xml
 <!-- Preset only -->
 <bricks:StandardBrick version="1.0.0"
-    preset="com.machineblocks.bricks.StandardBrickPresets::brick-2x4" />
+    presetRef="com.machineblocks.bricks.StandardPresets::brick-2x4" />
 
 <!-- Preset + inline override: baseColor overrides the Preset value -->
 <bricks:StandardBrick version="1.0.0"
-    preset="com.machineblocks.bricks.StandardBrickPresets::brick-2x4"
+    presetRef="com.machineblocks.bricks.StandardPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
 
-Merge order: `configProfile < preset < inline property`
+Merge order: `configProfile < presetRef < inline property`
 
-### Multiple Presets Documents for the Same Block
+### Multiple Preset Collections for the Same Block
 
-Different authors or packages can contribute Presets for the same Block type:
+Different authors or packages can contribute presets for the same Block type:
 
 ```text
-com.machineblocks.bricks.StandardBrickPresets   ← from @machineblocks/bricks library
-com.myproject.presets.MyBrickPresets            ← own additions, same blockType
+com.machineblocks.bricks.StandardPresets   ← from @machineblocks/bricks library
+com.myproject.presets.MyBrickPresets       ← own additions
 ```
 
 Both are referenced by their own FQN — no conflict, no registry ambiguity.
 
-### Composite Presets
+**Resolution order** when merging a preset (highest priority first):
 
-A Preset can extend other Presets via a `<basePresets>` section — a sibling to `<properties>`. This allows building Preset hierarchies without duplicating property values:
-
-```xml
-<blockPresets xmlns="http://blockml.org/schema/blockPresets"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://blockml.org/schema/blockPresets
-                  https://blockml.org/schemas/core/blockPresets.xsd">
-
-  <fullQualifiedName>com.machineblocks.bricks.StandardPresets</fullQualifiedName>
-  <blockType>com.machineblocks.bricks.Standard</blockType>
-  <version>3.0.0</version>
-
-  <presets>
-
-    <!-- Base preset -->
-    <preset id="brick-1x1">
-      <name>Brick 1x1</name>
-      <properties>
-        <property name="size" value="[1, 1, 3]" />
-      </properties>
-    </preset>
-
-    <!-- Base color preset -->
-    <preset id="color-red">
-      <name>Red</name>
-      <properties>
-        <property name="baseColor" value="#D65745" />
-      </properties>
-    </preset>
-
-    <!-- Composite preset — extends two base presets -->
-    <preset id="brick-1x1-red">
-      <name>Brick 1x1 Red</name>
-      <basePresets>
-        <basePreset ref="brick-1x1" />
-        <basePreset ref="color-red" />
-      </basePresets>
-      <!-- No own properties needed — everything from basePresets -->
-    </preset>
-
-    <!-- Chain: composite of a composite -->
-    <preset id="brick-1x1-red-text">
-      <name>Brick 1x1 Red with Text</name>
-      <basePresets>
-        <basePreset ref="brick-1x1-red" />
-      </basePresets>
-      <properties>
-        <property name="text"      value="MB" />
-        <property name="textColor" value="#EDF0F1" />
-      </properties>
-    </preset>
-
-    <!-- Cross-file reference -->
-    <preset id="brick-2x4-special">
-      <name>Brick 2x4 Special</name>
-      <basePresets>
-        <basePreset ref="com.myproject.presets.MyPresets::my-base" />
-      </basePresets>
-      <properties>
-        <property name="size" value="[2, 4, 3]" />
-      </properties>
-    </preset>
-
-  </presets>
-
-</blockPresets>
-```
-
-**Resolution order** (highest priority first):
 ```text
-1. Own <properties> of the preset
-2. <basePresets> — applied top-to-bottom, later entries override earlier
+1. Own block instance properties (child of Preset)
+2. basePresets — applied left-to-right, later entries override earlier
 3. Block defaultValues
 ```
 
@@ -1426,14 +1403,14 @@ Cycles (`A extends B extends A`) are detected at compile time: `BML_PRESET_CYCLE
 
 ### SCAD Output
 
-A `<blockPresets>` document compiles to a `.json` file in OpenSCAD Customizer format:
+Compiling a Preset Collection triggers implicit compilation of each referenced block type and produces a `.json` file in OpenSCAD Customizer format:
 
 ```text
-BML:   src/com/machineblocks/bricks/StandardBrickPresets.mbml
-JSON:  scad/com/machineblocks/bricks/StandardBrick.json
+BML:   src/com/machineblocks/bricks/StandardPresets.mbml
+JSON:  scad/com/machineblocks/bricks/Standard.json
 ```
 
-The output filename matches the referenced Block's SCAD file, with `.json` extension.
+The Customizer JSON uses the Preset **name** as the key — the human-readable label shown in the OpenSCAD UI.
 
 Only Properties that differ from the Block's defaults are required in a preset. Whether the compiler fills missing properties with defaults or relies on OpenSCAD's own fallback is to be verified against OpenSCAD Customizer behavior.
 
@@ -1441,7 +1418,7 @@ Only Properties that differ from the Block's defaults are required in a preset. 
 
 ## Config Profiles
 
-Config profiles use the same format as `<blockPresets>` and share the same property namespace as Block properties. They define project-wide hardware or rendering defaults.
+Config profiles are Preset Collection blocks (`baseType="org.blockml.core.PresetCollection"`) that define project-wide hardware or rendering defaults. Each `<Preset>` carries a project ConfigBlock instance (or inherits via `basePresets`).
 
 ```text
 src/config/prusa_pla.bml   — printer + filament profile
@@ -1486,12 +1463,9 @@ The example below uses **`.mbml`** paths because it describes the MachineBlocks 
     <block ref="blocks/Standard.mbml" />
     <block ref="blocks/Plate.mbml" />
     <block ref="blocks/Tile.mbml" />
+    <block ref="presets/StandardPresets.mbml" />
+    <block ref="presets/PlatePresets.mbml" />
   </blocks>
-
-  <presets>
-    <presets ref="presets/StandardPresets.mbml" />
-    <presets ref="presets/PlatePresets.mbml" />
-  </presets>
 
 </library>
 ```
@@ -1528,7 +1502,7 @@ Sub-Blocks          → awkward nesting; FQN derivation unclear
 Functions (CDATA)   → no inline SCAD/TS bodies
 ```
 
-A future JSON subset might cover flat `<blockPresets>` or simple leaf `<block>` definitions without composition directives — if a mapping can be specified without compromising the BOM model. **No commitment until the mapping is formally defined.**
+A future JSON subset might cover flat Preset Collections or simple leaf `<block>` definitions without composition directives — if a mapping can be specified without compromising the BOM model. **No commitment until the mapping is formally defined.**
 
 The examples below are **illustrative drafts only** — not valid V1 input.
 
@@ -1625,9 +1599,8 @@ The examples below are **illustrative drafts only** — not valid V1 input.
 The BML→BOM mapping is defined once per root type and applies uniformly to all documents of that type. It is configurable and extensible for new root types.
 
 ```text
-<block>        → Block mapping rule
-<blockPresets> → BlockPresets mapping rule
-<device>       → Device mapping rule (external package)
+<block>   → Block mapping rule (all block types including PresetCollection)
+<device>    → Device mapping rule (external package)
 ```
 
 Mapping rules are not hardcoded in the parser — they are registered per root type. The algorithmic rules are specified in `13_bml_to_bom_mapping.md`.
