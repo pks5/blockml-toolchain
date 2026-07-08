@@ -186,7 +186,7 @@ All definitions use the BML `<block>` element, register in the same TypeRegistry
 org.blockml.core.Block                         abstract root · omits baseType · _customData aggregation
   ├── org.blockml.core.TypeBlock               property / payload types (Size3D, Integer, …)
   ├── org.blockml.core.LanguageBlock           capability implementation contract (OpenSCAD, …)
-  ├── org.blockml.service.ServiceBlock         service branch
+  ├── org.blockml.core.ServiceBlock          service branch
   ├── com.machineblocks.core.Block             domain base
   └── … user and domain Blocks
 ```
@@ -228,14 +228,12 @@ Before the compiler validates or renders **any** user file, it bootstraps the Ty
 
 ```text
 @blockml/core BML
-  Block.bml · TypeBlock.bml · LanguageBlock.bml
+  Block.bml · TypeBlock.bml · LanguageBlock.bml · ServiceBlock.bml · FunctionBlock.bml
   Integer.bml · OpenSCAD.bml · …
+  Math.bml · Strings.bml · …
 
 @machineblocks/mbom BML
   Block.bml · CompositeBlock.bml · Set.bml · Step.bml · NativeBlock.bml · …
-
-@blockml/core-services BML
-  Math.bml · Strings.bml · …
 
 →  then  project srcDir
 ```
@@ -257,7 +255,7 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 
 ```text
 org.blockml.core.Block           root · _customData aggregation · meta property id on every instance
-org.blockml.service.ServiceBlock baseType: Block
+org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
 com.machineblocks.core.Block     baseType: Block · _presets · appliedPresets
 com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)
 org.blockml.core.TypeBlock         baseType: Block · primitives · structs · enums · generics
@@ -266,7 +264,7 @@ org.blockml.core.LanguageBlock     baseType: Block (meta — no extra members in
 
 ```text
 com.machineblocks.core.Block     baseType: org.blockml.core.Block
-org.blockml.service.ServiceBlock baseType: org.blockml.core.Block
+org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
 com.machineblocks.type.Size3d    baseType: StructType → … → TypeBlock → Block
 org.blockml.language.OpenSCAD    baseType: LanguageBlock → Block
 ```
@@ -630,7 +628,8 @@ Type definitions bootstrap **before** composable Blocks that reference them:
      org/blockml/core/LanguageBlock.bml
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml
-     org/blockml/service/ServiceBlock.bml · FunctionBlock.bml   ← baseType: Block
+     org/blockml/core/ServiceBlock.bml · FunctionBlock.bml
+     org/blockml/service/Math.bml · Strings.bml · …
 
 2. @machineblocks/mbom
      com/machineblocks/type/Size3D.bml · …
@@ -664,11 +663,13 @@ Property declarations on composable Blocks migrate from `09_mbom_properties.yml`
 ```text
 packages/core/src/
   org/blockml/core/
-    Block.bml · TypeBlock.bml · LanguageBlock.bml · GenericType.bml · StructType.bml · …
+    Block.bml · TypeBlock.bml · ServiceBlock.bml · FunctionBlock.bml · LanguageBlock.bml · …
   org/blockml/type/
     Integer.bml · Float.bml · String.bml · Boolean.bml · Array.bml · …
   org/blockml/language/
     TypeScript.bml · OpenSCAD.bml
+  org/blockml/service/
+    Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 
 domains/machineblocks/mbom/src/
   com/machineblocks/type/

@@ -492,16 +492,16 @@ A ServiceBlock is a special Block type that provides named, reusable services �
 
 ```text
 org.blockml.core.Block
-  org.blockml.service.ServiceBlock          — base for all service types
+  org.blockml.core.ServiceBlock          — base for all service types
     org.blockml.service.ModelBlock          — holds data (JSONModel, ODataModel, XMLModel)
-    org.blockml.service.FunctionBlock       — binds TypeScript functions to Sync Capabilities
+    org.blockml.core.FunctionBlock       — binds TypeScript functions to Sync Capabilities
 ```
 
-**`org.blockml.service.ServiceBlock`** — the abstract base. All service types extend this.
+**`org.blockml.core.ServiceBlock`** — the abstract base. All service types extend this.
 
 **`org.blockml.service.ModelBlock`** — provides data access via path-based Sync Capabilities. Specializations: `org.blockml.service.JSONModel`, `org.blockml.service.ODataModel`, `org.blockml.service.XMLModel`.
 
-**`org.blockml.service.FunctionBlock`** — binds TypeScript arrow functions to Sync Capabilities via `<implementation type="org.blockml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
+**`org.blockml.core.FunctionBlock`** — binds TypeScript arrow functions to Sync Capabilities via `<implementation type="org.blockml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
 
 Built-in ServiceBlocks are defined in the `baseType` hierarchy and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
 
@@ -758,7 +758,7 @@ baseType declares:
   implTypes: [org.blockml.language.OpenSCAD]
     — e.g. com.machineblocks.core.Block
   implTypes: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
-    — e.g. org.blockml.service.FunctionBlock
+    — e.g. org.blockml.core.FunctionBlock
 ```
 
 If a Block carries `<implementation type="org.blockml.language.OpenSCAD">` but its `baseType` does not list that type in `implTypes`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
@@ -979,12 +979,12 @@ com.machineblocks.core.Block
 
 com.machineblocks.core.CompositeBlock
   → subTypes declared explicitly:
-    [com.machineblocks.core.Block, org.blockml.service.FunctionBlock]
+    [com.machineblocks.core.Block, org.blockml.core.FunctionBlock]
 
 com.machineblocks.core.Set
   → subTypes omitted → inherits CompositeBlock chain
 
-org.blockml.service.FunctionBlock
+org.blockml.core.FunctionBlock
   → subTypes omitted → inherits [] via ServiceBlock → org.blockml.core.Block
 
 com.machineblocks.core.NativeBlock
@@ -1488,17 +1488,17 @@ machineblocks-v3-scad-target
   ScadBlockProcessor      → compile strategy    (com.machineblocks.core.Block)
   ScadSetProcessor        → compile strategy    (com.machineblocks.core.Set)
   MathBuiltInProcessor    → copy strategy       (org.blockml.service.Math)
-  FunctionBlockProcessor  → compile strategy    (org.blockml.service.FunctionBlock)
+  FunctionBlockProcessor  → compile strategy    (org.blockml.core.FunctionBlock)
 ```
 
 ### Built-in ServiceBlocks as BML
 
-Built-in ServiceBlocks (`#math`, `#strings`, etc.) are defined as BML FunctionBlock files in `@blockml/core-services` — **SSOT**. SCAD equivalents in `scad-lib/blocks/org/blockml/service/` are pre-rendered build artifacts. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
+Built-in ServiceBlocks (`#math`, `#strings`, etc.) are defined as BML FunctionBlock files in `@blockml/core` — **SSOT**. SCAD equivalents in `scad-lib/blocks/org/blockml/service/` are pre-rendered build artifacts. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 ```text
-@blockml/core-services/
+@blockml/core/
   src/
-    com/bom/service/
+    org/blockml/service/
       Math.bml            — org.blockml.service.Math      — #math.*
       Strings.bml         — org.blockml.service.Strings   — #strings.*
       Numbers.bml         — org.blockml.service.Numbers   — #numbers.*

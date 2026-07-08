@@ -295,7 +295,7 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
 <!-- FunctionBlock Sub-Block: -->
 <block>
   <name>Utils</name>
-  <baseType>org.blockml.service.FunctionBlock</baseType>
+  <baseType>org.blockml.core.FunctionBlock</baseType>
   <version>1.0.0</version>
   <capabilities>
     <capability name="formatValue"

@@ -501,9 +501,9 @@ org.blockml.core.Block                                  ← packages/core/…/Bl
     com.machineblocks.core.Step                         ← mbom/…/Step.bml (final)
   org.blockml.core.TypeBlock                            ← TypeBlock.bml (abstract)
   org.blockml.core.LanguageBlock                        ← LanguageBlock.bml (abstract)
-  org.blockml.service.ServiceBlock                      ← ServiceBlock.bml
-    org.blockml.service.FunctionBlock                   ← FunctionBlock.bml
-      org.blockml.service.Math                          ← core-services/Math.bml
+  org.blockml.core.ServiceBlock                         ← core/…/ServiceBlock.bml
+    org.blockml.core.FunctionBlock                      ← core/…/FunctionBlock.bml
+      org.blockml.service.Math                          ← core/…/service/Math.bml
   com.machineblocks.core.Block                          ← mbom/…/Block.bml (abstract)
     com.machineblocks.core.CompositeBlock               ← CompositeBlock.bml (abstract)
       com.machineblocks.core.Set                        ← Set.bml (abstract)
@@ -581,7 +581,7 @@ Declared on `CompositeBlock.bml` (enables Sub-Blocks for composites):
 ```xml
 <subTypes>
   <subType type="com.machineblocks.core.Block" />
-  <subType type="org.blockml.service.FunctionBlock" />
+  <subType type="org.blockml.core.FunctionBlock" />
 </subTypes>
 ```
 
@@ -591,7 +591,7 @@ com.machineblocks.core.Block          — omitted → inherits []
 com.machineblocks.core.CompositeBlock — explicit → Block, FunctionBlock
 com.machineblocks.core.Set            — omitted → inherits CompositeBlock
 com.machineblocks.core.NativeBlock    — omitted → inherits [] (final leaf)
-org.blockml.service.FunctionBlock     — omitted → inherits []
+org.blockml.core.FunctionBlock     — omitted → inherits []
 ```
 
 To close Sub-Blocks on a type whose parent enabled them: `<subTypes/>` (explicit empty override).
@@ -608,7 +608,7 @@ Declared on `CompositeBlock.bml`:
 
 ```text
 com.machineblocks.core.CompositeBlock — OpenSCAD
-org.blockml.service.FunctionBlock       — OpenSCAD, TypeScript
+org.blockml.core.FunctionBlock       — OpenSCAD, TypeScript
 ```
 
 ### Validation

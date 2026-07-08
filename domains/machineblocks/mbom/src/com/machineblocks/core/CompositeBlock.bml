@@ -23,7 +23,7 @@
 
   <subTypes>
     <subType type="com.machineblocks.core.Block" />
-    <subType type="org.blockml.service.FunctionBlock" />
+    <subType type="org.blockml.core.FunctionBlock" />
   </subTypes>
 
   <implTypes>

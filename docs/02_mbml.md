@@ -227,7 +227,7 @@ Framework base types (`org.blockml.core.Block`, `com.machineblocks.core.Block`, 
 
 <subTypes>
   <subType type="com.machineblocks.core.Block" />
-  <subType type="org.blockml.service.FunctionBlock" />
+  <subType type="org.blockml.core.FunctionBlock" />
 </subTypes>
 
 <implTypes>
@@ -1108,7 +1108,7 @@ xmlns:cal="com.machineblocks.calibration"
 
 ### FunctionBlock Sub-Blocks
 
-A Sub-Block with `baseType="org.blockml.service.FunctionBlock"` binds target-language function implementations to Sync Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs, not a `language` attribute.
+A Sub-Block with `baseType="org.blockml.core.FunctionBlock"` binds target-language function implementations to Sync Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs, not a `language` attribute.
 
 Two implementation types are supported in V1:
 
@@ -1117,7 +1117,7 @@ Two implementation types are supported in V1:
 ```xml
 <block>
   <name>Utils</name>
-  <baseType>org.blockml.service.FunctionBlock</baseType>
+  <baseType>org.blockml.core.FunctionBlock</baseType>
   <version>1.0.0</version>
 
   <capabilities>

@@ -19,7 +19,7 @@
 
   <name>Strings</name>
   <type>org.blockml.service.Strings</type>
-  <baseType>org.blockml.service.FunctionBlock</baseType>
+  <baseType>org.blockml.core.FunctionBlock</baseType>
   <version>1.0.0</version>
 
   <capabilities>

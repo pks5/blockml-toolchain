@@ -83,11 +83,10 @@ blockml/
   .gitignore
 
   packages/
-    core/                      — @blockml/core
+    core/                      — @blockml/core (framework + built-in service BML)
     parser/                    — @blockml/parser
     compiler/                  — @blockml/compiler
     cli-tools/                 — @blockml/cli          (Node-only)
-    core-services/             — @blockml/core-services (BML SSOT, no TS build)
 
   engines/
     maker-engine/              — @blockml/engine-maker
@@ -108,7 +107,7 @@ blockml/
   docs/                        — specifications (authoritative)
 ```
 
-**Present today:** `docs/`, `packages/core-services/src/**/*.bml`, `domains/.../scad-lib/` (submodule).
+**Present today:** `docs/`, `packages/core/src/**/*.bml`, `domains/.../scad-lib/` (submodule).
 
 **Scaffold next:** empty package shells with `package.json`, `tsconfig.json`, `src/index.ts` per build order below.
 
@@ -239,14 +238,16 @@ Each package `tsconfig.json`:
 
 Entry point: `src/index.ts` — re-exports public API only.
 
-### `@blockml/core-services` (BML SSOT)
+### `@blockml/core` (BML SSOT)
 
 No TypeScript build. Package contains BML source files only:
 
 ```text
-packages/core-services/
-  package.json          — name: @blockml/core-services, private: true
+packages/core/
+  package.json          — name: @blockml/core, private: true
   src/
+    org/blockml/core/
+      Block.bml · ServiceBlock.bml · FunctionBlock.bml · …
     org/blockml/service/
       Math.bml
       Strings.bml
@@ -297,7 +298,7 @@ src/
 ## Dependency Graph
 
 ```text
-@blockml/core-services (BML files — no TS deps)
+@blockml/core (BML files — no TS deps)
 
 @blockml/core
   ↑
@@ -502,16 +503,15 @@ jobs:
 Recommended first coding milestones:
 
 ```text
-1. @blockml/core BML          — org.blockml.core.Block, org.blockml.service.*
+1. @blockml/core BML          — org.blockml.core.*, org.blockml.service.*
 2. @machineblocks/mbom BML    — com.machineblocks.core.*
-3. @blockml/core-services BML — org.blockml.service.Math, …
-4. @blockml/core        — types from 12_bom_object_model.md + Diagnostic
-3. @blockml/parser      — stage [5] mapper skeleton + tests
-4. @blockml/core        — TypeRegistry + validate (stages 6–8)
-5. @blockml/compiler    — Facade + Target Registry (C2, C3)
-6. @blockml/engine-maker — RenderEngine stub
-7. @machineblocks/mbom  — domain types + property registry from 09_mbom_properties.yml
-8. @machineblocks/...-scad-target — ScadBlockProcessor MVP
+3. @blockml/core              — types from 12_bom_object_model.md + Diagnostic
+4. @blockml/parser            — stage [5] mapper skeleton + tests
+5. @blockml/core              — TypeRegistry + validate (stages 6–8)
+6. @blockml/compiler          — Facade + Target Registry (C2, C3)
+7. @blockml/engine-maker      — RenderEngine stub
+8. @machineblocks/mbom        — domain types + property registry from 09_mbom_properties.yml
+9. @machineblocks/...-scad-target — ScadBlockProcessor MVP
 9. @blockml/cli         — bom validate, then bom compile
 10. Correctness tests   — Calibrator, Standard, Cross from scad-lib
 ```

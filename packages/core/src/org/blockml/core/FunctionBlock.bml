@@ -1,7 +1,7 @@
 <!--
-  BlockML Core Services — FunctionBlock base (Sync Capability implementations)
+  BlockML Core — FunctionBlock base (Sync Capability implementations)
 
-  FQN: org.blockml.service.FunctionBlock
+  FQN: org.blockml.core.FunctionBlock
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -14,8 +14,8 @@
   <documentation>Abstract base for FunctionBlocks — ServiceBlocks whose Sync Capabilities may carry TypeScript or OpenSCAD implementations. Used for #math, #strings, and similar expression utilities.</documentation>
 
   <name>FunctionBlock</name>
-  <type>org.blockml.service.FunctionBlock</type>
-  <baseType>org.blockml.service.ServiceBlock</baseType>
+  <type>org.blockml.core.FunctionBlock</type>
+  <baseType>org.blockml.core.ServiceBlock</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

@@ -4,7 +4,7 @@ version: 0.1.0
 
 ## Purpose of this Document
 
-This document specifies how **framework base types** (`org.blockml.core.Block`, `com.machineblocks.core.Block`, `org.blockml.service.FunctionBlock`, …) are defined — as **BML files**, not code or YAML.
+This document specifies how **framework base types** (`org.blockml.core.Block`, `com.machineblocks.core.Block`, `org.blockml.core.FunctionBlock`, …) are defined — as **BML files**, not code or YAML.
 
 For BML block syntax see `02_mbml.md`.
 For MBOM hierarchy see `03_mbom.md`.
@@ -19,7 +19,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 
 | Aspect | Decision |
 |---|---|
-| **Base type SSOT** | BML files in `@blockml/core`, `@machineblocks/mbom`, `@blockml/core-services` |
+| **Base type SSOT** | BML files in `@blockml/core`, `@machineblocks/mbom` |
 | **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry; **renderers free in output** — see `17_type_system_bml.md` — Renderer freedom |
 | **Compiler internals** | Parser **must** know `<block>` as input concept; internal representation **free** — see `17_type_system_bml.md` |
 | **09_mbom_properties.yml** | **Render mapping only** (serializer, scad_name, customizer) — not type SSOT |
@@ -77,7 +77,7 @@ false  — default when omitted
 ```xml
 <subTypes>
   <subType type="com.machineblocks.core.Block" />
-  <subType type="org.blockml.service.FunctionBlock" />
+  <subType type="org.blockml.core.FunctionBlock" />
 </subTypes>
 ```
 
@@ -146,21 +146,18 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
 1. @blockml/core BML                    ← BlockML describes BlockML
      org/blockml/core/Block.bml
      org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · GenericType.bml · …
+     org/blockml/core/ServiceBlock.bml · FunctionBlock.bml
      org/blockml/core/LanguageBlock.bml
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml
-     org/blockml/service/ServiceBlock.bml
-     org/blockml/service/FunctionBlock.bml
+     org/blockml/service/Math.bml · Strings.bml · …
      org/blockml/core/Library.bml   ← includes Dependency · Schema · TypeRef · BlockRef as subBlocks
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
      …
 
-3. @blockml/core-services BML
-     org/blockml/service/Math.bml, …
-
-4. Project srcDir + libraries
+3. Project srcDir + libraries
 ```
 
 Each file is parsed and `registerBlockDefinition(doc)` — **identical path** to user-authored content. The only difference is load order.
@@ -203,17 +200,15 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/src/
   org/blockml/core/
-    Block.bml · TypeBlock.bml · Library.bml · …
+    Block.bml · TypeBlock.bml · ServiceBlock.bml · FunctionBlock.bml · Library.bml · …
+  org/blockml/service/
+    Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 
 domains/machineblocks/mbom/src/
   com/machineblocks/core/
     Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
   com/machineblocks/bricks/
     BricksLibrary.mbml · presets/StandardPresets.mbml
-
-packages/core-services/src/
-  org/blockml/service/Math.bml          ← concrete; already exists
-  …
 ```
 
 ---

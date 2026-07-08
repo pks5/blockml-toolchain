@@ -34,7 +34,7 @@ Target Output (SCAD, KiCad, JSX, ...)
 
 **The Compiler** is the universal pipeline that connects BML → BOM → Render Target. It runs in both browser (React) and Node.js environments.
 
-**Self-hosting (bootstrap):** Before processing user projects, the compiler bootstraps its TypeRegistry from framework BML in `@blockml/core`, `@machineblocks/mbom`, and `@blockml/core-services`. Primitives, language types, service blocks, and MBOM framework types are Blocks in the same registry as user Walls and Sets. Full self-description of the compiler in BML is a **long-term goal**, not a V1 requirement — see [BML Self-Description Roadmap](#bml-self-description-roadmap).
+**Self-hosting (bootstrap):** Before processing user projects, the compiler bootstraps its TypeRegistry from framework BML in `@blockml/core` and `@machineblocks/mbom`. Primitives, language types, service blocks, and MBOM framework types are Blocks in the same registry as user Walls and Sets. Full self-description of the compiler in BML is a **long-term goal**, not a V1 requirement — see [BML Self-Description Roadmap](#bml-self-description-roadmap).
 
 **The CLI** (`bom`) is the Node.js command-line interface for compiling, validating, watching, and scaffolding BML projects.
 
@@ -91,11 +91,10 @@ See `15_dev_setup.md` for workspace configuration, build scripts, and implementa
 ```text
 bom-compiler/
   packages/
-    core/              — @blockml/core (framework BML: org.blockml.core.Block, …)
+    core/              — @blockml/core (framework BML: org.blockml.core.*, org.blockml.service.*)
     parser/            — @blockml/parser
     compiler/          — @blockml/compiler (Rahmen + Target Registry)
     cli-tools/         — @blockml/cli
-    core-services/     — @blockml/core-services (built-in ServiceBlock BML definitions)
 
   engines/
     maker-engine/      — @blockml/engine-maker (V1 engine: compile + template + copy + llm)
@@ -149,19 +148,22 @@ New engines can always be built as independent packages. Each implements the Com
 
 ### Built-in ServiceBlock Definitions
 
-Built-in ServiceBlocks (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML FunctionBlock files in `@blockml/core-services` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
+Built-in ServiceBlocks (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML FunctionBlock files in `@blockml/core` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 The library follows Thymeleaf's `#` utility object naming — plural for utilities (`#strings`, `#lists`, …), extended with `#math` which Thymeleaf does not provide.
 
 ```text
-packages/core-services/
+packages/core/
   src/
+    org/blockml/core/
+      ServiceBlock.bml   ← org.blockml.core.ServiceBlock
+      FunctionBlock.bml  ← org.blockml.core.FunctionBlock
     org/blockml/service/
-      Math.bml         ← org.blockml.service.Math      — #math.*
-      Strings.bml      ← org.blockml.service.Strings   — #strings.*
-      Numbers.bml      ← org.blockml.service.Numbers   — #numbers.*
-      Lists.bml        ← org.blockml.service.Lists     — #lists.*
-      Bools.bml        ← org.blockml.service.Bools     — #bools.*
+      Math.bml           ← org.blockml.service.Math      — #math.*
+      Strings.bml        ← org.blockml.service.Strings   — #strings.*
+      Numbers.bml        ← org.blockml.service.Numbers   — #numbers.*
+      Lists.bml          ← org.blockml.service.Lists     — #lists.*
+      Bools.bml          ← org.blockml.service.Bools     — #bools.*
 ```
 
 **Naming mapping** (package segment `.service` is singular; utility names follow Thymeleaf):

@@ -21,9 +21,8 @@ The compiler is implemented across these packages:
 
 ```text
 @blockml/parser                              — parse BML → BOM
-@blockml/core                                — BOM object model, validation
+@blockml/core                                — BOM object model, validation, framework + built-in service BML
 @blockml/compiler                            — Facade + Target Registry
-@blockml/core-services                       — built-in ServiceBlock BML definitions
 @blockml/engine-maker                        — V1 CompilerEngine implementation (MakerEngine)
 @machineblocks/machineblocks-v3-scad-target  — RenderTarget + BlockProcessors
 ```
@@ -578,7 +577,7 @@ BML_IMPLEMENTATION_UNKNOWN_TYPE — type attribute is not a known org.blockml.la
 
 ### Built-in Services — No Processor Needed
 
-Built-in Services (`#math`, `#strings`, etc.) are defined as BML FunctionBlocks in `@blockml/core-services` (SSOT). Their SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` as pre-rendered artifacts:
+Built-in Services (`#math`, `#strings`, etc.) are defined as BML FunctionBlocks in `@blockml/core` (SSOT). Their SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` as pre-rendered artifacts:
 
 ```text
 FQN:  org.blockml.service.Math  →  scad-lib/blocks/org/blockml/service/Math.scad

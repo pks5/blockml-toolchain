@@ -893,7 +893,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ### Bootstrap sources
 
 ```text
-1. Built-in ServiceBlocks     — @blockml/core-services (org.blockml.service.*)
+1. Built-in ServiceBlocks     — @blockml/core (org.blockml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
 3. Library blocks             — org.blockml.core.Library → resolve BlockRef paths
 4. Project srcDir scan        — remaining *.bml / configured extensions in bom.config.json
@@ -1000,7 +1000,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 | MBOM native property list | `09_mbom_properties.yml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |
 | ManagedObject runtime API | `08_managed_object.md` (optional pattern) |
-| Built-in `#math` / `#strings` capabilities | `@blockml/core-services` |
+| Built-in `#math` / `#strings` capabilities | `@blockml/core` |
 
 ---
 
