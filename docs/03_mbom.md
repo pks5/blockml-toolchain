@@ -145,9 +145,7 @@ Properties can be organized into named groups for editor display. Groups are met
 
 ## Aggregations
 
-Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type.
-
-BlockML (`org.blockml.core.Block`) defines the implicit `_customData` aggregation on the root type. Domain-specific aggregations are declared on domain base types.
+Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type. Domain-specific aggregations are declared on domain base types.
 
 ### `_presets` and `_parts` on MachineBlocks Blocks
 

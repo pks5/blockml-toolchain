@@ -55,7 +55,7 @@ Ordinal = index in `members[]` after mapping. Used by render targets and by Stru
 | Topic | Decision |
 |---|---|
 | **Directives** | Stored as `directives[]` on the element — not expanded at parse time |
-| **Custom data** | `data:*` → `customData[]` (UI5 model — not a `bml:` directive) |
+| **Data attributes** | `data:*` → `dataAttributes[]` with uninterpreted values (not a `bml:` directive) |
 | **Registry** | **Removed.** Sibling value sharing via `bml:with` on `<composition>` or `<bml:block>` |
 | **Attribute classification** | Fixed priority chain — see § Attribute Classification below |
 | **Unknown member attributes** | Warning `BML_UNKNOWN_PROPERTY` at validate (custom property assumed) |
@@ -76,7 +76,7 @@ When mapping an XML element to a BOM node, every attribute is classified using t
 ```text
 1. xmlns*, xsi:*              → ignore (except xmlns bindings → SourceInfo.namespaceBindings)
 2. bml:*                      → DirectiveAttribute → directives[]
-3. data:*                     → CustomDataEntry → customData[]  (Block definitions + Block instances only)
+3. data:*                     → DataAttribute → dataAttributes[]  (Block definitions + Block instances only)
 4. Instance meta attributes   → BlockInstance fields (not memberValues)
 5. All other attributes       → memberValues[name]  (camelCase property/capability values)
 ```
@@ -107,15 +107,16 @@ Directive values that contain `${ }` are stored as `ExpressionValue` (raw in sta
 
 There is no `bml:id` — `id` is a meta property (rule 5).
 
-### Rule 3 — `data:*` custom data
+### Rule 3 — `data:*` data attributes
 
 Only valid on Block definitions and Block instances (elements whose type extends `org.blockml.core.Block`).
 
 ```text
-data:role="structural"  →  customData[] { key: "role", value: "structural" }
+data:role="structural"         →  dataAttributes[] { key: "role", value: LiteralValue("structural") }
+data:count="${ sampleCount }"  →  dataAttributes[] { key: "count", value: ExpressionValue(...) }
 ```
 
-All values are strings. Invalid placement (e.g. on `<capability>`) → diagnostic error at map time.
+Values are **not evaluated** at parse or validate time. Invalid placement (e.g. on `<capability>`) → diagnostic error at map time.
 
 ### Rule 4 — Instance meta attributes
 
@@ -187,8 +188,8 @@ instance:
   memberValues:
     id:   ExpressionValue
     size: LiteralValue
-  customData:
-    [{ key: "role", value: "sample" }]
+  dataAttributes:
+    [{ key: "role", value: LiteralValue("sample") }]
 directives:
   [EachDirective { variables: ["i"], collection: ExpressionValue }]
 ```

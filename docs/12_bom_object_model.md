@@ -36,7 +36,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | Authored in BML | Stored in BOM | Interpreted downstream |
 |---|---|---|
 | `bml:each`, `bml:if`, `bml:with` | `directives[]` on element | Preprocessor, BlockProcessor, or Validator |
-| `data:*` attributes | `customData[]` on Block | Tooling only — UI5-style customData shorthand (see below) |
+| `data:*` attributes | `dataAttributes[]` on Block | Uninterpreted — renderer may consume (e.g. UI5 → customData) |
 | `<aggregations>` declaration | `AggregationDefinition` (declared only) | Inherited members (e.g. `_presets`, `_parts`) resolved at validate |
 | `<composition>` children | `CompositionNode` tree | Renderer (wrapper logic, assembly patterns) |
 | `baseType` FQN | string reference | Type Registry → effective members |
@@ -53,7 +53,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | `bml:*` stored as **attributes on the element** they apply to (Thymeleaf model) — not as wrapper nodes. **Not expanded** at parse time. `bml:id` does not exist — `id` is a **meta property** on every Block instance. |
-| **Custom data** | `data:*` follows the **UI5 customData model** — arbitrary key/value metadata on Block elements. Parsed into `customData[]`; not a `bml:` directive. |
+| **Data attributes** | `data:*` stored as `dataAttributes[]` with **uninterpreted** values — not a `bml:` directive, not a Block aggregation. Renderers may interpret (e.g. UI5 target → runtime customData). |
 | **Instance `version`** | **Required on every external block reference** (another file). **Strict from V1** — no registry default, no implicit `latest`, no migration warnings. Missing → `BML_MISSING_VERSION` (error). Unknown version → `BML_UNKNOWN_VERSION` (error). Same-document Sub-Blocks exempt. |
 | **Instance `id`** | **Authored in BOM only** — parser stores `memberValues.id` when present; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `id`. No FQN fallback. |
 
@@ -190,8 +190,8 @@ interface BlockDefinition {
    */
   compositions: CompositionTemplate[]
 
-  /** Expanded from data:* attributes and explicit customData entries */
-  customData: CustomDataEntry[]
+  /** data:* attributes and data:* child elements — uninterpreted values, not evaluated at parse/validate */
+  dataAttributes: DataAttribute[]
 
   /** BML source span of this definition (root or sub-block) */
   source: SourceLocation
@@ -553,11 +553,11 @@ interface VirtualBlockNode {
 
 `bml:*` directives are stored in `directives[]` on the element they appear on — analogous to Thymeleaf `th:*` attributes on HTML elements.
 
-`data:*` is a separate mechanism, modeled after **SAP UI5 customData**: in UI5 views, `data:myVal` on a Control or Element sets a key/value pair in that element's customData. BlockML applies the same pattern to Block definitions and Block instances — shorthand for the implicit `customData` aggregation on `org.blockml.core.Block`.
+`data:*` is a separate mechanism from `bml:*` directives. Authoring syntax is inspired by **SAP UI5** (`data:myVal` on Controls) — but BlockML has **no `_customData` aggregation** on `org.blockml.core.Block`. The parser stores `data:*` as `dataAttributes[]` with **uninterpreted** values. A target renderer (e.g. UI5) may map them into runtime object aggregations — that is render concern, not BOM structure.
 
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
-| `data:*` | Block definitions and Block instances only | **Not** a `bml:` directive. UI5-style customData shorthand — parsed into `customData[]`. |
+| `data:*` | Block definitions and Block instances only | **Not** a `bml:` directive. Parsed into `dataAttributes[]` — values not evaluated. |
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional inclusion |
@@ -755,7 +755,7 @@ interface BlockInstance {
    */
   memberValues: Record<string, MemberValue>
 
-  customData: CustomDataEntry[]
+  dataAttributes: DataAttribute[]
 
   source: SourceLocation
 }
@@ -883,16 +883,20 @@ The orchestrator resolves `ref` paths relative to the library package root, load
 
 ---
 
-## Custom Data
+## Data Attributes (`data:`)
 
 ```typescript
-interface CustomDataEntry {
+interface DataAttribute {
+  /** Local name after data: prefix (e.g. "role" from data:role) */
   key: string
-  value: string
+  /** Uninterpreted value — LiteralValue or ExpressionValue; not evaluated at parse/validate */
+  value: MemberValue
 }
 ```
 
-`data:*` XML attributes are expanded to `CustomDataEntry` at parse time. Custom data has no effect on validation or rendering.
+`data:*` XML attributes and `data:*` child elements are mapped to `DataAttribute` at parse time. Values follow the same classification as member attributes (`${ }` → `ExpressionValue`, otherwise `LiteralValue`) but are **not** type-checked against Block members.
+
+There is **no `_customData` aggregation** on `org.blockml.core.Block`. A target renderer may interpret `dataAttributes` — e.g. a UI5 renderer could populate `customData` on runtime Controls — but that is outside the BOM contract.
 
 ---
 

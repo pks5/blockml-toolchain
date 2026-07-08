@@ -360,7 +360,7 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 BlockML Core (Sprach-Namespaces):
   http://blockml.org/schema/block    ← Dokument-Root (default xmlns)
   http://blockml.org/schema/bml      ← bml: Direktiven
-  http://blockml.org/schema/data     ← data: Custom Data
+  http://blockml.org/schema/data     ← data: attributes (uninterpreted metadata)
   http://blockml.org/schema/service  ← org.blockml.service.*
 
 MachineBlocks (Domain-Namespaces):
@@ -846,11 +846,9 @@ Variables from `bml:with` are visible to the element and all descendants. There 
 
 ---
 
-## Custom Data (`data:`)
+## Data Attributes (`data:`)
 
-The `data:` namespace allows arbitrary key-value metadata to be attached to Block definitions and Composition instances. The pattern is borrowed from **SAP UI5 customData** — in UI5 views, `data:myVal` on a Control or Element sets a customData key/value pair on that element. BlockML applies the same idea to Blocks via the `_customData` aggregation on `org.blockml.core.Block`.
-
-Custom data has no effect on compilation or rendering — it is purely for tooling, editors, documentation, and CI systems.
+The `data:` namespace allows arbitrary metadata to be attached to Block definitions and Composition instances. Authoring syntax is inspired by **SAP UI5** — in UI5 views, `data:myVal` on a Control sets a customData key/value pair. BlockML uses the same **authoring pattern**, but there is **no `_customData` aggregation** on `org.blockml.core.Block`. Values land in the BOM as **uninterpreted expressions** in `dataAttributes[]`. A target renderer (e.g. UI5) may map them into runtime object aggregations — that is render concern.
 
 ### Namespace Declaration
 
@@ -891,14 +889,15 @@ On a Composition instance:
 
 ### BOM Representation
 
-`data:*` attributes are UI5-style syntactic sugar for the implicit `_customData` Aggregation on every Block. The parser expands them automatically:
+`data:*` attributes and `data:*` child elements are stored as `dataAttributes[]` — **uninterpreted**, not evaluated at parse or validate time:
 
 ```text
-data:role="structural"  →  CustomData { key: "role", value: "structural" }
-data:tags="wall enclosure" →  CustomData { key: "tags", value: "wall enclosure" }
+data:role="structural"           →  DataAttribute { key: "role",  value: LiteralValue("structural") }
+data:count="${ sampleCount }"    →  DataAttribute { key: "count", value: ExpressionValue(...) }
+<data:tags>wall enclosure</data:tags>  →  DataAttribute { key: "tags", value: LiteralValue(...) }
 ```
 
-All values are strings. No type validation. No schema. No rendering effect.
+No type validation against Block members. Renderers may interpret — e.g. UI5 target → runtime `customData`.
 
 ---
 
@@ -906,13 +905,13 @@ All values are strings. No type validation. No schema. No rendering effect.
 
 BML Directives are special attributes in the `bml:` namespace that control structure and flow within a Composition. They follow the **Thymeleaf model** — attributes on the element they apply to. Whether a directive is pre-processed at compile time or translated into target-specific constructs is the BlockProcessor's decision.
 
-`data:*` is not part of this mechanism — it follows the **UI5 customData model** (see Custom Data section above).
+`data:*` is not part of this mechanism — see Data Attributes section above. Not a `bml:` directive; not a Block aggregation.
 
 ### Directive Placement
 
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
-| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style `_customData` shorthand for `org.blockml.core.Block._customData`. |
+| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` in BOM — renderer may consume. |
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
@@ -1049,9 +1048,9 @@ Block instances   — scope for that instance only (properties on the element)
 - Evaluated left-to-right — later variables can reference earlier ones
 ```
 
-### `data:` — Custom Metadata Restriction
+### `data:` — Data Attribute Restriction
 
-`data:*` attributes are only allowed on Block definitions and Block instances (elements extending `org.blockml.core.Block`). They follow the **UI5 customData pattern** — not the Thymeleaf directive model and not `bml:` directives. They must not appear on `<aggregation>`, `<capability>`, or other non-Block elements.
+`data:*` attributes are only allowed on Block definitions and Block instances (elements extending `org.blockml.core.Block`). They are **not** the Thymeleaf directive model and **not** `bml:` directives. They must not appear on `<aggregation>`, `<capability>`, or other non-Block elements. Values are stored uninterpreted in `dataAttributes[]`.
 
 ---
 
@@ -1692,7 +1691,7 @@ JSON as a BML authoring format faces fundamental constraints from BlockML's name
 ```text
 Namespaces          → no element-name types (bricks:StandardBrick); explicit type fields only
 bml:* directives    → no attribute-namespace mechanism
-data:* _customData   → no equivalent to UI5-style namespaced attributes
+data:* attributes    → no equivalent to UI5-style namespaced attributes; would need explicit dataAttributes array
 Sub-Blocks          → awkward nesting; FQN derivation unclear
 Functions (CDATA)   → no inline SCAD/TS bodies
 ```

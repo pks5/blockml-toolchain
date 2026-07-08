@@ -615,33 +615,31 @@ App       @data scope="context"  ← ODataModel (visible to all descendants)
 
 This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) — but scope is declared on the Aggregation, not on the ServiceBlock type itself. The same ServiceBlock type can have different scopes in different contexts.
 
-### Custom Data
+### Data Attributes (`data:`)
 
-Every Block has an implicit hidden Aggregation `_customData` of type `org.blockml.core.CustomData[]`. This allows arbitrary key-value metadata to be attached to Block definitions and Composition instances without affecting rendering.
+BlockML has **no `_customData` aggregation** on `org.blockml.core.Block`. The `data:` namespace attaches arbitrary metadata to Block definitions and Composition instances. Authoring syntax follows the **SAP UI5** pattern (`data:myVal` on Controls) — but in BlockML the values are **uninterpreted expressions** in the BOM, not typed aggregation members.
 
 ```text
-org.blockml.core.CustomData
-  key:   String  — metadata key
-  value: String  — metadata value
+org.blockml.core.Block   — no implicit aggregations for data:*
 ```
 
-In BML, `data:*` attributes follow the **UI5 customData pattern** — the same idea as `data:myVal` on Controls and Elements in SAP UI5 views. They are syntactic sugar for `_customData` entries. The parser expands them automatically:
+In BML, `data:*` attributes and `data:*` child elements are stored as `dataAttributes[]` on the Block definition or instance. Values are **not evaluated** at parse or validate time:
 
 ```xml
-<!-- BML authoring shortform: -->
+<!-- BML authoring: -->
 <bricks:StandardBrick
     id="strip"
     data:role="structural"
-    data:group="calibration-row-0" />
+    data:count="${ sampleCount }" />
 
-<!-- Equivalent BOM representation: -->
-StandardBrick._customData: [
-    CustomData { key: "role",  value: "structural" }
-    CustomData { key: "group", value: "calibration-row-0" }
+<!-- BOM representation: -->
+StandardBrick.dataAttributes: [
+    DataAttribute { key: "role",  value: LiteralValue("structural") }
+    DataAttribute { key: "count", value: ExpressionValue("${ sampleCount }") }
 ]
 ```
 
-`_customData` has no effect on compilation or rendering. It is passed through to the BOM for use by tooling, editors, documentation generators, and CI systems.
+A target renderer may interpret `dataAttributes` — e.g. a **UI5 renderer** could map them into `customData` aggregations on runtime Controls. That mapping is **render concern**, not part of the Block type system or BOM validation.
 
 ---
 
@@ -923,13 +921,13 @@ BML Directives are special attributes in the `bml:` namespace that control the s
 
 The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*` attributes follow the **Thymeleaf model** — they sit on the element they apply to, not in wrapper elements.
 
-`data:*` is unrelated to directives. It follows the **UI5 customData model** — arbitrary key/value metadata attached to Block elements, like `data:myVal` on Controls in SAP UI5 views.
+`data:*` is unrelated to directives. Authoring syntax is inspired by **SAP UI5** (`data:myVal` on Controls) — values land as **uninterpreted** `dataAttributes[]` in the BOM. No `_customData` aggregation on `org.blockml.core.Block`; renderers may interpret.
 
 ### Directive Placement
 
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
-| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. UI5-style `_customData` shorthand for `org.blockml.core.Block._customData`. |
+| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` — renderer may consume. |
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |

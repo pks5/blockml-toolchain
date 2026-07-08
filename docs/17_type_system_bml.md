@@ -187,7 +187,7 @@ BOM Core defines Block as **„a parametric, reusable unit (definition / type)�
 All definitions use the BML `<block>` element, register in the same TypeRegistry, and inherit from **`org.blockml.core.Block`** — the sole inheritance root.
 
 ```text
-org.blockml.core.Block                         abstract root · omits baseType · _customData aggregation
+org.blockml.core.Block                         abstract root · omits baseType
   ├── org.blockml.core.TypeBlock               property / payload types (Size3D, Integer, …)
   ├── org.blockml.core.LanguageBlock           capability implementation contract (OpenSCAD, …)
   ├── org.blockml.core.ServiceBlock          service branch
@@ -258,7 +258,7 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 `org.blockml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.core.Block` directly (or via intermediate branches like `TypeBlock`, `ServiceBlock`, `com.machineblocks.core.Block`):
 
 ```text
-org.blockml.core.Block           root · _customData aggregation · meta property id on every instance
+org.blockml.core.Block           root · meta property id on every instance
 org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
 com.machineblocks.core.Block     baseType: Block · _presets · appliedPresets
 com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)
