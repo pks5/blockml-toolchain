@@ -381,6 +381,8 @@ All Members — Properties, Aggregations, Associations, and Capabilities — sha
 
 ### Conventions
 
+**Member declaration order:** within `<properties>`, `<aggregations>`, and `<associations>`, child elements are mapped to `members[]` in **XML document order**. The parser must not reorder. Order is significant for render targets and for StructType array literals (`size="[4,2,3]"`). See `12_bom_object_model.md` — Member Declaration Order.
+
 **`<aggregations>`** — Domain base types declare inherited aggregations in BML (e.g. `_presets` on `Block.bml`, `_parts` on `CompositeBlock.bml`). The parser stores **declared** members only; inherited members resolve at validate via `baseType` chain. Omit `<aggregations>` on user blocks when the inherited set suffices.
 
 `_presets` on `com.machineblocks.core.Block` and `_parts` on `com.machineblocks.core.CompositeBlock` (declared in framework BML):

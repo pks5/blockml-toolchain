@@ -355,13 +355,13 @@ Supports namespace-qualified keys for composite block forwarding:
 ```text
 com.machineblocks.type.Size3D
 
-MBOM:  { x: Integer, y: Integer, z: Integer }
+MBOM:  { x: Integer, y: Integer, z: Integer }   — field order = property declaration order in Size3d.bml
 
-MBML:  size="[4, 2, 3]"
+MBML:  size="[4, 2, 3]"   →  positional: index 0=x, 1=y, 2=z (not name-sorted)
 SCAD:  ["size", [4, 2, 3]]
 ```
 
-Integer grid dimensions. Defines the block's spatial contract.
+Integer grid dimensions. Defines the block's spatial contract. Array literals map by **StructType property declaration order** — the parser must preserve that order from BML. See `12_bom_object_model.md` — Member Declaration Order.
 
 ## GridPosition3D
 

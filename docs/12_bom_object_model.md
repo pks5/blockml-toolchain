@@ -168,6 +168,7 @@ interface BlockDefinition {
   /**
    * Members declared in THIS block only — not inherited.
    * Validator resolves effective members via baseType chain.
+   * Array order is significant — see § Member Declaration Order.
    */
   members: MemberDefinition[]
 
@@ -355,6 +356,39 @@ interface ImplementationBlock {
   source: string            // CDATA body
   sourceLocation?: SourceLocation
 }
+```
+
+### Member Declaration Order
+
+The parser **must preserve** the declaration order of members from BML. **No sorting** (e.g. alphabetically by name) at parse, map, or validate time.
+
+```text
+Mapping sequence (append to members[] in this order):
+  1. <properties>     — child <property> elements in XML document order
+  2. <aggregations>   — child <aggregation> elements in XML document order
+  3. <associations>   — child <association> elements in XML document order
+  4. <capabilities>   — child <capability> elements in XML document order
+```
+
+The position of each entry in `BlockDefinition.members[]` is the **declaration ordinal** for that block. Render targets may use this order (e.g. Customizer parameter sequence, UI field layout). The compiler must not reorder declared members when writing BOM or when passing definitions to processors.
+
+**StructType positional values:** for a StructType defined via `<properties>` (e.g. `Size3d` with `x`, `y`, `z`), property **declaration order** defines positional array mapping:
+
+```text
+size="[4, 2, 3]"   →  index 0 = x, index 1 = y, index 2 = z  (order in Size3d.bml)
+size="${ [size[0], size[1], size[2] - 1] }"  — same positional contract
+```
+
+Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" z="3"` on a StructType instance) are equivalent; array literals use **declaration order**, not alphabetical name order.
+
+**Function argument mapping:** anonymous struct `payloadType` values (`{ a: Float, b: Float }`) and named StructTypes share the same rule — field order in the type definition = positional parameter order. See `10_expression_language.md` — Object Payload Calls.
+
+**Effective members:** `resolveEffectiveMembers()` merges by name along the `baseType` chain. For a **named StructType** referenced as a property type, positional array indices resolve against that type's own property declaration order (from its BML definition), not against the declaring Block's member list.
+
+```text
+Parser / mapper     MUST NOT reorder declared members
+Validator           MUST NOT reorder members[] or struct fields for display
+Render target       MAY use declaration order for output sequencing
 ```
 
 ### Effective Members (not stored in BOM)

@@ -128,9 +128,10 @@ Maps the parsed document tree to BOM objects using the mapping rule for the dete
 ```text
 XML attribute        →  BOM property value (literal or ExpressionValue { raw })
 XML child element    →  BOM composition child instance or aggregation metadata
+Member sections      →  members[] in document order (properties → aggregations → associations → capabilities); no sorting
 ```
 
-Mapping rules are defined once per root type and apply uniformly to all documents of that type. They are configurable and extensible.
+Mapping rules are defined once per root type and apply uniformly to all documents of that type. They are configurable and extensible. Member order contract: `13_bml_to_bom_mapping.md` — Member Mapping Order.
 
 ### [6] Type Validator
 

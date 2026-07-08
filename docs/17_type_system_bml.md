@@ -385,6 +385,14 @@ Complex values are described by **normal Properties** — no special struct synt
 </block>
 ```
 
+**Property declaration order is significant.** It defines positional array mapping when values are authored as array literals:
+
+```text
+size="[4, 2, 3]"   →  [x, y, z] in the order declared above (not alphabetical)
+```
+
+Render targets and expression coercion use this order for StructType values. The parser must preserve property order from BML — no reordering. See `12_bom_object_model.md` — Member Declaration Order.
+
 **As type reference:**
 
 ```xml

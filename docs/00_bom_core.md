@@ -349,6 +349,8 @@ documentation — human-readable description
 suggestions   — optional list of suggested values (see below)
 ```
 
+**Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order matters for render-target output sequencing and for StructType positional array literals (`size="[4,2,3]"` → fields in declaration order). See `12_bom_object_model.md` — Member Declaration Order.
+
 ### Property Types
 
 Property `type` attributes must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock` (primitives, structs, enums, generics). Non-type Blocks (Wall, ServiceBlock, NativeBlock, …) are not valid property types.
@@ -437,6 +439,8 @@ beanName      — optional; marks this Aggregation as a ServiceBlock binding
 scope         — optional; "local" | "context" (ServiceBlock bindings only)
 documentation — human-readable description
 ```
+
+`<aggregation>` and `<association>` child order within their containers is preserved by the parser (same rules as properties). Render targets may use aggregation order for UI or output sequencing.
 
 **Member visibility** is determined by naming convention, not an attribute:
 

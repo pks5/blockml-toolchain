@@ -29,6 +29,27 @@ Stage [5] produces the abstract BOM graph with expression **raw** text only. Sta
 
 ---
 
+## Member Mapping Order
+
+When mapping `<block>` definitions, member elements are appended to `BlockDefinition.members[]` **in BML document order**:
+
+```text
+<properties>    → each <property> in XML order
+<aggregations>  → each <aggregation> in XML order
+<associations>  → each <association> in XML order
+<capabilities>  → each <capability> in XML order
+```
+
+```text
+MUST NOT sort by name, kind, or typeFqn
+MUST NOT merge sections out of document sequence
+MAY omit empty sections (<properties> absent → skip)
+```
+
+Ordinal = index in `members[]` after mapping. Used by render targets and by StructType array-literal deserialization (`[v0, v1, …]` → fields in property declaration order). See `12_bom_object_model.md` — Member Declaration Order · `17_type_system_bml.md` — StructType.
+
+---
+
 ## Design Decisions
 
 | Topic | Decision |
@@ -44,6 +65,7 @@ Stage [5] produces the abstract BOM graph with expression **raw** text only. Sta
 | **Cross-file resolution** | Single-file parser; TypeRegistry bootstrap by CLI/orchestrator before validate |
 | **JSON BML format** | **Deferred (TBD).** V1 parser accepts XML only (`.bml` / `.mbml`) |
 | **Composition render** | Leaf geometry → NativeBlock → `mb_block()`; see `14_compiler_runtime.md` |
+| **Member order** | Properties, aggregations, associations, capabilities appended in BML document order — **never sorted**; see `12_bom_object_model.md` — Member Declaration Order |
 
 ---
 
