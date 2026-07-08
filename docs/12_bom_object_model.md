@@ -250,8 +250,14 @@ A single primitive (`Float`, `org.blockml.type.Integer`, …) is **not** wrapped
 ```typescript
 type TypeDescriptor =
   | NamedTypeReference
-  | ArrayTypeDescriptor
   | AnonymousStructType
+
+interface Multiplicity {
+  /** Minimum instance count. */
+  min: number
+  /** Maximum instance count, or "*" for unbounded. */
+  max: number | "*"
+}
 
 interface NamedTypeReference {
   kind: "named"
@@ -259,11 +265,8 @@ interface NamedTypeReference {
   fqn: string
   /** Concrete type arguments when referencing a generic Block, e.g. Box<Integer> */
   typeArguments?: TypeDescriptor[]
-}
-
-interface ArrayTypeDescriptor {
-  kind: "array"
-  elementType: TypeDescriptor
+  /** Parsed from [..] suffix on the type reference. Absent = exactly 1. */
+  multiplicity?: Multiplicity
 }
 
 interface AnonymousStructType {
@@ -286,15 +289,17 @@ Parsed from `payloadType` / `returnType` / `type` attribute strings at map time:
 Float                              → NamedTypeReference { fqn: "org.blockml.type.Float" }
 org.blockml.type.Float             → NamedTypeReference { fqn: "org.blockml.type.Float" }
 type:Size3D                        → NamedTypeReference { fqn: "com.machineblocks.type.Size3D" }
-Array<Integer>                     → ArrayTypeDescriptor { elementType: Named(Integer) }
+Integer[0..n]                      → NamedTypeReference { fqn: Integer, multiplicity: { min: 0, max: "*" } }
+Integer[]                          → same as Integer[0..n]
+Integer[3]                         → NamedTypeReference { fqn: Integer, multiplicity: { min: 3, max: 3 } }
 com.foo.Box<Integer>               → NamedTypeReference { fqn: "com.foo.Box", typeArguments: [Integer] }
 { a: Float, b: Float }             → AnonymousStructType { fields: [a, b] }
-{ list: Array<Object>, index: Integer }  → nested descriptors
+{ list: String[0..n], index: Integer }  → nested descriptors with multiplicity on fields
 ```
 
 Unqualified primitive names resolve to `org.blockml.type.*`. Domain types require the `type:` prefix or full FQN. Parse failure → `BML_UNKNOWN_TYPE`.
 
-FunctionBlock Capabilities use `AnonymousStructType` for multi-parameter signatures; variadic built-ins (e.g. `#strings.concat`) use `ArrayTypeDescriptor` instead.
+FunctionBlock Capabilities use `AnonymousStructType` for multi-parameter signatures. Variadic built-ins (e.g. `#strings.concat`) use a named collection field (`{ values: String[0..n] }`) — not a separate Array type. See `17_type_system_bml.md` — Collections and Multiplicity.
 
 ---
 

@@ -186,7 +186,7 @@ All Capabilities use structured Object `payloadType` with named keys — enablin
 #math.floor     → payloadType: Float
 #math.clamp     → payloadType: { x: Float, lo: Float, hi: Float }
 #math.round_n   → payloadType: { x: Float, n: Integer }
-#lists.concat   → payloadType: { a: Array<Object>, b: Array<Object> }
+#lists.concat   → payloadType: { a: Object[0..n], b: Object[0..n] }
 #numbers.formatDecimal → payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
 ```
 

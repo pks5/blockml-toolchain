@@ -522,7 +522,14 @@ Float    → org.blockml.type.Float
 Integer  → org.blockml.type.Integer
 String   → org.blockml.type.String
 Boolean  → org.blockml.type.Boolean
-Array<T> → org.blockml.type.Array<T>
+Null     → org.blockml.type.Null
+```
+
+Collections use multiplicity on the type — not `Array<T>`:
+
+```text
+Integer[]              → org.blockml.type.Integer with multiplicity 0..n
+com.foo.Box<Integer>   → generic type reference (see GenericType)
 ```
 
 Domain-specific types require an explicit namespace prefix declared via `xmlns`:
@@ -624,15 +631,19 @@ default — boolean; marks the default aggregation for bare <composition>
 
 **Member visibility** is determined by naming convention: names starting with `_` are hidden (internal); all other names are public.
 
-**Type notation** — cardinality is part of the type, not a separate attribute:
+**Type notation** — multiplicity is part of the type reference, not a separate attribute. BlockML has no `Array` type — see `17_type_system_bml.md` — Collections and Multiplicity.
 
 ```text
-Block         →  0..1
-Block[]       →  0..n
-Block[1..1]   →  1..1
-Block[1..]    →  1..n
-Block[3]      →  0..3
-Block[1..3]   →  1..3
+Integer         →  exactly 1
+Integer[]       →  0..n   (shorthand for Integer[0..n])
+Integer[0..n]   →  0..n
+Integer[3]      →  exactly 3
+Integer[1..5]   →  1..5
+Integer[1..]    →  1..n
+
+Block           →  0..1   (association/aggregation — optional single)
+Block[]         →  0..n
+Block[1..1]     →  exactly 1 required
 ```
 
 **`_self`** — refers to the current effective Block type, resolved after inheritance:
@@ -706,7 +717,7 @@ Capabilities describe how a Block communicates. Like Properties, they are declar
   <!-- Sync: callable within Expressions only, returnType required -->
   <capability name="computeArea"
               type="org.blockml.capability.Sync"
-              payloadType="Array&lt;Integer&gt;"
+              payloadType="{ values: Integer[0..n] }"
               returnType="Integer">
     <documentation>Returns width * height.</documentation>
   </capability>
@@ -719,8 +730,8 @@ Capabilities describe how a Block communicates. Like Properties, they are declar
 ```text
 org.blockml.type.Integer            — primitive
 com.myDomain.MyClass             — Object (named fields)
-Array&lt;Integer&gt;             — Array of primitives  (XML-escaped: Array<Integer>)
-Array&lt;com.myDomain.MyClass&gt; — Array of objects
+{ values: Integer[0..n] }        — collection field (multiplicity on reference)
+{ items: com.myDomain.MyClass[] } — collection of domain objects
 ```
 
 Unqualified type names resolve against the domain's default type namespace (determined by the Block's `baseType`).

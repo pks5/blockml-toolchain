@@ -40,7 +40,12 @@ Float    → org.blockml.type.Float
 Integer  → org.blockml.type.Integer
 String   → org.blockml.type.String
 Boolean  → org.blockml.type.Boolean
-Array<T> → org.blockml.type.Array<T>
+```
+
+Collections use multiplicity on the type reference — not `Array<T>`. See `17_type_system_bml.md` — Collections and Multiplicity.
+
+```text
+Integer[]   → org.blockml.type.Integer with multiplicity 0..n
 ```
 
 **With namespace prefix → resolved via `xmlns` declaration:**

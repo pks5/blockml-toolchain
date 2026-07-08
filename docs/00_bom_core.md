@@ -457,18 +457,23 @@ Hidden Aggregations can only be filled by the Block's own Composition, not from 
 
 ### Type Notation
 
-Cardinality is expressed in the `type` attribute — there is no separate `cardinality` attribute:
+**Multiplicity** is expressed in the `type` attribute — there is no separate `cardinality` attribute. BlockML has no `Array` type; brackets describe how many instances of the referenced type are permitted. See `17_type_system_bml.md` — Collections and Multiplicity.
 
 ```text
-Block         →  0..1
-Block[]       →  0..n
-Block[1..1]   →  1..1
-Block[1..]    →  1..n
-Block[3]      →  0..3
-Block[1..3]   →  1..3
+Integer         →  exactly 1
+Integer[]       →  0..n   (shorthand for Integer[0..n])
+Integer[0..n]   →  0..n
+Integer[3]      →  exactly 3
+Integer[1..5]   →  1..5
+Integer[1..]    →  1..n
+Integer[1..1]   →  exactly 1 (explicit)
+
+Block           →  0..1   (association/aggregation — optional single reference)
+Block[]         →  0..n
+Block[1..1]     →  exactly 1 required reference
 ```
 
-The internal BOM representation may use `minOccurs` / `maxOccurs` or an equivalent structure. BML surface syntax uses type brackets only.
+The internal BOM representation uses `minOccurs` / `maxOccurs` (or equivalent) on the type reference. BML surface syntax uses bracket notation only; the element type FQN is unchanged.
 
 ### `_self` Type
 
@@ -659,7 +664,7 @@ org.blockml.type.Integer          — primitive (NamedTypeReference)
 org.blockml.type.String           — primitive
 { a: Float, b: Float }            — anonymous struct (AnonymousStructType)
 com.myDomain.MyClass              — named type (NamedTypeReference)
-Array<org.blockml.type.Integer>   — array type (ArrayTypeDescriptor)
+{ items: org.blockml.type.Integer[0..n] }  — collection field (multiplicity on reference)
 ```
 
 See `12_bom_object_model.md` — Type Descriptors for the formal BOM representation.
@@ -680,7 +685,7 @@ payloadType: { a: Float, b: Float }
 
 Both call syntaxes are always valid for Object payloads. This is the standard pattern for all `#math.*`, `#strings.*`, `#lists.*` built-ins.
 
-`Array<T>` payloads are **not** suitable as FunctionBlock signatures — arity is undefined. Use a structured Object for any Capability with fixed parameters.
+`Object[0..n]` payloads with a single named field are **not** suitable as FunctionBlock signatures when arity must be fixed — use a structured Object with named keys for each parameter. Variadic built-ins (e.g. `#strings.concat`) declare an explicit collection field: `{ values: String[0..n] }`.
 
 ### Payload Call Syntax
 
@@ -695,8 +700,8 @@ Object payload { a: T, b: T }:
   myCapa({a: 4, b: 5})            →  object literal (equivalent)
   myCapa(4, 5)                    →  positional (key order)
 
-Array payload Array<T>:
-  myCapa([4, 5])                  →  array literal
+Collection field { values: T[0..n] }:
+  myCapa([4, 5])                  →  sequence literal (positional values)
 ```
 
 Named parameters `(a=4, b=5)`, object literal `({a:4, b:5})`, and positional `(4, 5)` all produce identical payloads for Object payloads. A mismatch between declared `payloadType` and call syntax is a parse-time error.

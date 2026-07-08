@@ -27,6 +27,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
 | **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail) — see `02_mbml.md` |
+| **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Collections and Multiplicity |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
 | **Domain XSD enums** | Deprecated as type SSOT — migrate to BML `EnumType` |
 
@@ -320,7 +321,7 @@ org.blockml.core.TypeBlock              abstract
   ├── org.blockml.core.PrimitiveType    Integer · Float · String · Boolean · Null
   ├── org.blockml.core.StructType       Size3d · domain product types
   ├── org.blockml.core.EnumType         BaseCutoutType · Direction · …
-  └── org.blockml.core.GenericType      Array<T> · user-defined parameterized types
+  └── org.blockml.core.GenericType      user-defined parameterized types (Box&lt;T&gt;, …)
 ```
 
 Only TypeBlocks may be used where a **type reference** is required (Property `type`, Capability `payloadType` / `returnType`). Any Block FQN is valid in aggregation and association `type` attributes — including TypeBlocks.
@@ -330,6 +331,58 @@ Allowed:     type="org.blockml.type.Integer"
              payloadType="com.foo.Request"
 Not allowed: type="com.machineblocks.core.NativeBlock"   → BML_INVALID_PROPERTY_TYPE
 ```
+
+---
+
+## Collections and Multiplicity
+
+BlockML has **no separate `Array` type**. Any type may carry a **multiplicity** — how many instances of that type are permitted. Multiplicity is **not part of the type itself**; it is metadata on the type reference.
+
+```text
+Integer         → exactly one Integer
+Integer[]       → 0..n Integers (shorthand for Integer[0..n])
+Integer[0..n]   → 0..n Integers
+Integer[3]      → exactly 3 Integers
+Integer[1..5]   → 1 to 5 Integers
+Integer[1..]    → at least one Integer (1..n)
+Integer[1..1]   → exactly one Integer (explicit)
+```
+
+The FQN (`Integer`, `com.machineblocks.core.Block`, …) is unchanged. Bracket notation describes only the allowed instance count.
+
+### Semantics, not implementation
+
+BlockML describes the **semantics of a collection** — not how it is stored. Whether a renderer maps `Block[]` to a Java `List`, a `Set`, XML child elements, a JSON sequence, an SQL relation, graph edges, or a SCAD composition is **entirely target-defined**.
+
+BlockML makes **no claim about ordered vs. unordered** collections. An ordered collection may always be interpreted as unordered by a target. XML composition yields ordered child lists by default; another platform may treat the same definition as a set.
+
+### Terminology
+
+Avoid **Array** in BlockML type documentation — it suggests a concrete implementation. Prefer:
+
+```text
+Collection · Sammlung · Menge · Multiplicity · Multiplizität
+```
+
+JSON `[1, 2, 3]` in property values remains a **literal sequence** in expression syntax — not a type named `Array`.
+
+### WOT alignment
+
+> **The World provides the interpretation.**
+
+BlockML states what a collection *means*. The concrete data structure is part of the Manifestation — decided by the render target and runtime. See `WOT_Reference_v26.md` — The Idea.
+
+### Where multiplicity applies
+
+```text
+Aggregation type=     com.machineblocks.core.Step[]
+Association type=     _self[]
+Property type=        (bare — exactly one value; collections rare on properties)
+Capability payloadType=  { items: String[0..n] }   — named field with multiplicity
+Composition children=   governed by parent aggregation multiplicity
+```
+
+See `00_bom_core.md` — Type Notation · `02_mbml.md` — Type notation · `12_bom_object_model.md` — Type Descriptors.
 
 ---
 
@@ -509,7 +562,7 @@ At validate time the compiler substitutes each placeholder (`T`) with the concre
 
 Generic type arguments are allowed wherever type references are allowed (Properties, Capabilities, aggregation/association types when referencing a generic Block).
 
-Parameterized bootstrap types (e.g. `org.blockml.type.Array<T>`) inherit from `org.blockml.core.GenericType`. Author syntax: `Array<Integer>`, `type:AutoOr_Float` (domain).
+Parameterized bootstrap types and user-defined generics (`Box<T>`, `Result<T, E>`) inherit from `org.blockml.core.GenericType`. Author syntax: `com.foo.Box<org.blockml.type.Integer>`, `type:AutoOr_Float` (domain).
 
 User-defined generics (`Result<T, E>`, `Box<T>`) use the same mechanism — declare `<generics>` on the Block definition.
 
@@ -666,7 +719,7 @@ packages/core/src/
   org/blockml/core/
     Block.bml · TypeBlock.bml · ServiceBlock.bml · FunctionBlock.bml · LanguageBlock.bml · …
   org/blockml/type/
-    Integer.bml · Float.bml · String.bml · Boolean.bml · Array.bml · …
+    Integer.bml · Float.bml · String.bml · Boolean.bml · Null.bml · …
   org/blockml/language/
     TypeScript.bml · OpenSCAD.bml
   org/blockml/service/
@@ -704,7 +757,7 @@ never expose „Block“ outside parser/BOM types
 
 **Only BML semantics are normative.** Internal data structures may change without altering a single `.bml` file.
 
-`TypeDescriptor` in `12_bom_object_model.md` remains the **reference syntax** for inline types (anonymous structs, arrays). Named types always resolve to registry FQNs.
+`TypeDescriptor` in `12_bom_object_model.md` remains the **reference syntax** for inline types (anonymous structs, multiplicity on references). Named types always resolve to registry FQNs.
 
 ---
 
@@ -717,6 +770,7 @@ never expose „Block“ outside parser/BOM types
 | BML block syntax | `02_mbml.md` |
 | TypeDescriptor AST | `12_bom_object_model.md` |
 | Parse/serialize behaviour | `04_types.md` |
+| Collections and Multiplicity | this document — § Collections and Multiplicity |
 | Bootstrap mapping | `13_bml_to_bom_mapping.md` |
 | SCAD property mapping | `09_mbom_properties.yml` |
 | WOT vision | `WOT_Reference_v26.md` |

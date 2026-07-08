@@ -277,8 +277,7 @@ Member visibility: names starting with `_` are hidden.
 org.blockml.type.Integer            — primitive
 org.blockml.type.String             — primitive
 com.myDomain.MyClass             — Object (named fields)
-Array<org.blockml.type.Integer>     — Array of primitives
-Array<com.myDomain.MyClass>      — Array of objects
+{ items: org.blockml.type.Integer[0..n] }  — collection field
 ```
 
 Unqualified names resolve against the domain's default type namespace (determined by the Block's `baseType`). For MachineBlocks that is `com.machineblocks.type.*`; for primitives `org.blockml.type.*`.
@@ -289,8 +288,7 @@ Unqualified names resolve against the domain's default type namespace (determine
 Primitive:        myCapa(size[0])                  — single value
 Object payload:   myCapa(a = 4, b = size[0])       — named parameters (shorthand)
                   myCapa({a: 4, b: size[0]})       — object literal (equivalent)
-Array payload:    myCapa(4, size[0])               — positional arguments
-                  myCapa([4, size[0]])             — array literal (equivalent)
+Collection field payload:  myCapa([4, size[0]])   — sequence literal (positional values)
 ```
 
 Named parameters and object literal are interchangeable for Object payloads. A mismatch between declared `payloadType` and call syntax is a parse-time error.

@@ -452,8 +452,8 @@ A Capability is a messaging concept — it has a payload, not a parameter list. 
 ```text
 payloadType options:
   Float, Integer, String, Boolean  — primitive
-  Array<T>                         — homogeneous list, variable length
   { key: Type, ... }               — structured object with named keys
+  { items: T[0..n] }               — collection field (multiplicity on reference)
 ```
 
 In a messaging context, the structure of the payload is irrelevant to transport. Any valid payload type works.
@@ -490,17 +490,17 @@ payloadType: Float
 (x: number): number => Math.floor(x)
 ```
 
-**Array vs. Object payload:**
+**Collection field vs. Object payload:**
 
 ```text
-Array<T>               — variable length, homogeneous, no named structure
-                         → only positional with array literal: func([a, b])
+{ values: T[0..n] }    — variadic collection under a named field
+                         → positional with sequence literal: func([a, b])
 { a: T, b: T }         — fixed keys, named, ordered
                          → positional: func(a, b)
                          → named: func(a=x, b=y)
 ```
 
-`Array<T>` payloads are not suitable as function signatures because arity is undefined. Use a structured Object for any FunctionBlock capability with fixed parameters.
+`T[0..n]` is multiplicity on a type reference — not a separate Array type. Use a structured Object with named keys for fixed-arity FunctionBlock capabilities. See `17_type_system_bml.md` — Collections and Multiplicity.
 
 ---
 
