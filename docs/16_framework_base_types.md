@@ -11,6 +11,7 @@ For MBOM hierarchy see `03_mbom.md`.
 For TypeRegistry bootstrap see `13_bml_to_bom_mapping.md`.
 For SCAD property mapping (render-only) see `09_mbom_properties.yml`.
 For value types and implementation languages as BML see `17_type_system_bml.md`.
+For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self-Description Roadmap.
 
 ---
 
@@ -25,7 +26,7 @@ For value types and implementation languages as BML see `17_type_system_bml.md`.
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
 | **Block documentation** | Every root `<block>` carries `<documentation>` as first child — what this Block is |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
-| **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — the system describes itself in BML |
+| **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `01_system.md` |
 
 ```text
 BML (what the type IS)          →  TypeRegistry
@@ -221,6 +222,7 @@ packages/core-services/src/
 
 | Topic | Document |
 |---|---|
+| V1/V2/V3 scope · BML vs Markdown | `01_system.md` — BML Self-Description Roadmap |
 | Block BML syntax | `02_mbml.md` |
 | MBOM hierarchy | `03_mbom.md` |
 | BlockDefinition BOM | `12_bom_object_model.md` |

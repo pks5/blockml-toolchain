@@ -1,6 +1,6 @@
 # BOM Compiler — System
 
-version: 2.0.0
+version: 2.1.0
 
 ## Purpose
 
@@ -34,7 +34,7 @@ Target Output (SCAD, KiCad, JSX, ...)
 
 **The Compiler** is the universal pipeline that connects BML → BOM → Render Target. It runs in both browser (React) and Node.js environments.
 
-**Self-hosting:** Before processing user projects, the compiler bootstraps its TypeRegistry from framework BML in `@blockml/core`, `@machineblocks/mbom`, and `@blockml/core-services` — literally **BlockML describing BlockML**. Primitives, language types, service blocks, and MBOM framework types are Blocks in the same registry as user Walls and Sets. See `16_framework_base_types.md` and `17_type_system_bml.md`.
+**Self-hosting (bootstrap):** Before processing user projects, the compiler bootstraps its TypeRegistry from framework BML in `@blockml/core`, `@machineblocks/mbom`, and `@blockml/core-services`. Primitives, language types, service blocks, and MBOM framework types are Blocks in the same registry as user Walls and Sets. Full self-description of the compiler in BML is a **long-term goal**, not a V1 requirement — see [BML Self-Description Roadmap](#bml-self-description-roadmap).
 
 **The CLI** (`bom`) is the Node.js command-line interface for compiling, validating, watching, and scaffolding BML projects.
 
@@ -578,6 +578,86 @@ configProfile < appliedPresets chain < inline property
 
 ---
 
+## BML Self-Description Roadmap
+
+BlockML should eventually be the language in which BlockML is understood. The path there is **evolutionary** — V1 must not be overloaded. V1 exists first to make **MachineBlocks** workable.
+
+### Decision criterion
+
+When choosing whether content belongs in BML or Markdown:
+
+```text
+Does this information directly benefit authoring, validation, the customizer,
+the type system, or MachineBlocks implementation?
+
+  yes  →  prefer BML (V1 scope)
+  no   →  keep Markdown for now; mark as V2 migration candidate
+```
+
+### V1 — MachineBlocks-focused BML SSOT
+
+V1 does **not** model the full compiler in BML. V1 pulls into BML only what you actively extend, validate, or author against — without wading through long Markdown handbooks.
+
+| In BML (V1) | Stays Markdown (V1) |
+|---|---|
+| Parameter definitions | Compiler pipeline architecture |
+| Property types | Parser architecture |
+| Primitive, Struct, Enum, Generic container types | CLI specification |
+| Native MachineBlocks properties | Target implementation details |
+| Defaults and computed defaults | Design rationale and principles |
+| Suggestions / customizer metadata | Runtime and bootstrap internals |
+| ServiceBlocks / built-ins used in expressions | Full replacement of existing docs |
+| Framework base types for validation and authoring | Self-hosting of the entire toolchain |
+
+Markdown remains **authoritative** in V1 for architecture, pipeline, runtime, CLI, implementation details, and design rationale.
+
+### V2 — Documentation migration
+
+From V2 onward, stable structural information moves from Markdown into BML Blocks. Roles split as follows:
+
+| Markdown | BML |
+|---|---|
+| Principles, motivation, architecture decisions | Structure, types, members, rules |
+| Reading guide and commentary | Stages, targets, diagnostics |
+| Links to BML definitions | Reusable, machine-readable concepts |
+
+Rules:
+
+- Avoid duplicate tables across Markdown and BML.
+- Anything machine-readable, validatable, or editor/LLM-relevant migrates to BML step by step.
+- Markdown becomes increasingly a **table of contents** and commentary on the BML structure.
+
+**V2 migration candidates** (compiler-adjacent Blocks, when they add real value):
+
+```text
+Pipeline · Stage · Validator · Diagnostic · RenderTarget
+BlockProcessor · RenderEngine · CliCommand
+```
+
+During migration, content is classified as: stays prose · becomes BML · removed from Markdown (link only) · temporarily duplicated.
+
+### V3 — Compiler as BlockML system
+
+Pipeline, stages, targets, processors, diagnostics, CLI, and tests are **predominantly** described as Blocks. Prose remains only for core principles and rationale.
+
+### Phases
+
+```text
+Phase 1 / V1   MachineBlocks-focused BML SSOT
+               Types, properties, framework base types, service blocks, authoring metadata
+               Goal: practical usability — not complete self-description
+
+Phase 2 / V2   Documentation migration
+               Stable structure from Markdown → BML; Markdown shortens and links to FQNs
+
+Phase 3 / V3   Compiler as BlockML system
+               Pipeline, stages, targets, diagnostics, CLI largely in BML
+```
+
+Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is specified in `17_type_system_bml.md` — Migration from XSD and 04_types.md. Framework bootstrap scope is in `16_framework_base_types.md`.
+
+---
+
 ## Documentation Architecture
 
 ```text
@@ -607,4 +687,6 @@ domains/machineblocks/runtimes/scad-lib/
       ...
 ```
 
-Native MBOM property **declarations** (names, types, defaults) migrate to BML — see `16_framework_base_types.md` and `17_type_system_bml.md`. `09_mbom_properties.yml` retains SCAD render mapping only. The Markdown documents explain concepts, relationships, and decision logic.
+Native MBOM property **declarations** (names, types, defaults) migrate to BML — see `16_framework_base_types.md` and `17_type_system_bml.md`. `09_mbom_properties.yml` retains SCAD render mapping only.
+
+**BML vs Markdown:** BML is SSOT for structure you author and validate against (V1 scope above). Markdown explains concepts, relationships, architecture decisions, and reading order. Long-term, Markdown links to BML FQNs instead of duplicating tables — see [BML Self-Description Roadmap](#bml-self-description-roadmap).

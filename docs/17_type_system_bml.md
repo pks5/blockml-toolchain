@@ -11,6 +11,7 @@ For property parse/serialize rules (MB domain) see `04_types.md`.
 For `TypeDescriptor` AST see `12_bom_object_model.md`.
 For SCAD render mapping see `09_mbom_properties.yml`.
 For WOT vision and motivation see `WOT_Reference_v26.md`.
+For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self-Description Roadmap.
 
 ---
 
@@ -643,6 +644,8 @@ Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType`
 
 ## Migration from XSD and 04_types.md
 
+> **Note:** These phases are **type-migration steps within V1** — not the system-wide V1/V2/V3 roadmap. See `01_system.md` — BML Self-Description Roadmap.
+
 ```text
 Phase 1 (this document)   Spec + bootstrap primitives + LanguageBlock BML
 Phase 2                   Migrate com.machineblocks.type.* from 04_types.md → BML
@@ -707,6 +710,7 @@ never expose „Block“ outside parser/BOM types
 
 | Topic | Document |
 |---|---|
+| V1/V2/V3 scope · BML vs Markdown | `01_system.md` — BML Self-Description Roadmap |
 | Composable Block base types | `16_framework_base_types.md` |
 | BML block syntax | `02_mbml.md` |
 | TypeDescriptor AST | `12_bom_object_model.md` |
