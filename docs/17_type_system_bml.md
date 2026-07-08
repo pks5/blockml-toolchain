@@ -188,7 +188,7 @@ All definitions use the BML `<block>` element, register in the same TypeRegistry
 
 ```text
 org.blockml.core.Block                         abstract root · omits baseType
-  ├── org.blockml.core.TypeBlock               property / payload types (Size3D, Integer, …)
+  ├── org.blockml.core.TypeBlock               property / capability type descriptors (Size3D, Integer, …)
   ├── org.blockml.core.LanguageBlock           capability implementation contract (OpenSCAD, …)
   ├── org.blockml.core.ServiceBlock          service branch
   ├── com.machineblocks.core.Block             domain base
@@ -278,7 +278,7 @@ org.blockml.language.OpenSCAD    baseType: LanguageBlock → Block
 ```text
 Aggregation / association type     — any Block FQN (composable Blocks, TypeBlocks, meta Blocks)
 Property type                      — TypeBlock only (baseType chain includes org.blockml.core.TypeBlock)
-Capability payloadType/returnType  — TypeBlock only (generic arguments substituted at validate time)
+Capability inputType/outputType  — TypeBlock only (generic arguments substituted at validate time)
 Meta property id                   — every Block instance; not declarable as <property name="id">
 ```
 
@@ -288,7 +288,7 @@ The WOT Relativität Principle applies to types as well:
 
 ```text
 com.machineblocks.type.Size3D   →  TypeBlock in MachineBlocks
-                                →  payload struct in Expression signatures
+                                →  input struct in Expression signatures
                                 →  serializer input in SCAD Renderer
                                 →  layout constraint in ScreenMachine (future)
 ```
@@ -427,7 +427,7 @@ BlockML states what a collection *means*. The concrete data structure is part of
 Aggregation type=     com.machineblocks.core.Step[]
 Association type=     _self[]
 Property type=        (bare — exactly one value; collections rare on properties)
-Capability payloadType=  { items: String[0..n] }   — named field with multiplicity
+Capability inputType=  { items: String[0..n] }   — named field with multiplicity
 Composition children=   governed by parent aggregation multiplicity
 ```
 
@@ -449,13 +449,14 @@ Literal alternatives use JSON literal syntax (`"auto"`, `"none"`, `false`, `true
 
 ---
 
-Only TypeBlocks may be used where a **bare type name** is required (Property `type`, Capability `payloadType` / `returnType`). Type expressions (multiplicity, unions, generic application) extend those references. Any Block FQN is valid in aggregation and association `type` attributes — including TypeBlocks.
+Only TypeBlocks may be used where a **bare type name** is required (Property `type`, Capability `inputType` / `outputType`). Type expressions (multiplicity, unions, generic application) extend those references. Any Block FQN is valid in aggregation and association `type` attributes — including TypeBlocks.
 
 ```text
 Allowed:     type="org.blockml.type.Integer"
              type='"auto" | Float'
              type="Integer[]"
-             payloadType="com.foo.Request"
+             inputType="com.foo.Request"
+             outputType="com.foo.Response"
 Not allowed: type="com.machineblocks.core.NativeBlock"   → BML_INVALID_PROPERTY_TYPE
 ```
 
@@ -604,7 +605,7 @@ Qualified form references the enum value's id (from _values composition).
           defaultValue="com.machineblocks.type.BaseCutoutType::STANDARD" />
 ```
 
-The short form is valid only when the expected type is known from the property (or capability payload field) declaration — not for untyped strings. The validator resolves the token against `_values` by `id`.
+The short form is valid only when the expected type is known from the property (or capability input field) declaration — not for untyped strings. The validator resolves the token against `_values` by `id`.
 
 **Value literal:** enum instances also carry a `value` property (e.g. `value="standard"` on id `STANDARD`). The runtime/serialization literal `standard` remains valid where a string enum literal is expected — see `04_types.md` · MBML examples. Id reference (`STANDARD` / `FQN::STANDARD`) and value literal (`standard`) are distinct surface forms; both must match a declared `_values` entry.
 
@@ -730,7 +731,7 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 | Used as composition instance typeFqn | if not abstract | if not abstract | forbidden |
 | Used as aggregation/association `type` | any Block FQN | any Block FQN | — |
 | Used as property `type` | forbidden | yes (+ generic substitution) | forbidden |
-| Used as Capability payload/return type | forbidden | yes (+ generic substitution) | forbidden |
+| Used as Capability input/output type | forbidden | yes (+ generic substitution) | forbidden |
 | Used as `<implementation type>` | forbidden | forbidden | yes |
 
 Wrong branch usage → `BML_INVALID_DEFINITION_BRANCH`.
@@ -745,7 +746,7 @@ At validate time, every `TypeDescriptor` named reference resolves against the re
 type="Integer"                              → org.blockml.type.Integer
 type="type:Size3d"                          → com.machineblocks.type.Size3d
 type="com.foo.Box<Integer>"                 → generic substitution at validate time
-payloadType="{ a: Float, b: Float }"        → AnonymousStructType (inline)
+inputType="{ a: Float, b: Float }"        → AnonymousStructType (inline)
 capability implementation type="org.blockml.language.TypeScript"  → registry lookup
 ```
 

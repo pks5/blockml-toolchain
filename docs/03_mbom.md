@@ -223,53 +223,51 @@ Associations have no ownership relationship and do not affect geometry compilati
 
 Capabilities describe how a Block communicates — externally via async messaging or internally via synchronous calls in Expressions. Capabilities are Members and share the namespace with Properties, Aggregations, and Associations.
 
-Like Properties, Capabilities are declared with a name and a class (FQN). Their value in a Composition is the address or binding — set as an attribute on the child instance, exactly like a Property value.
+Like Properties, Capabilities are declared with a name and a type (FQN). Their value in a Composition is the address or binding — set as an attribute on the child instance, exactly like a Property value.
 
 > **Capability package TBD** — placeholder `org.blockml.capability.*`. Candidate: `bom.foundation`.
 
-### AsyncInbound
+### Inbound
 
-Receives a message from an external sender. Asynchronous.
+Receives data/messages from an external sender. Asynchronous.
 
 ```text
 name         — camelCase member name (unique within the Block's member namespace)
-class        — org.blockml.capability.AsyncInbound
-payloadType  — declared payload type (see Payload Types)
-returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
+type         — org.blockml.capability.Inbound
+inputType    — required; declared input type (see Type Descriptors)
 documentation
 ```
 
 Member visibility: see `02_mbml.md` — § Member Visibility.
 
-### AsyncOutbound
+### Outbound
 
-Sends a message to an external receiver. Triggered by the Block in response to domain-specific conditions. Asynchronous.
+Sends/emits data/messages to an external receiver. Triggered by the Block in response to domain-specific conditions. Asynchronous.
 
 ```text
 name         — camelCase member name
-class        — org.blockml.capability.AsyncOutbound
-payloadType  — declared payload type
-returnType   — optional; type of the asynchronous reply (for replyTo scenarios)
+type         — org.blockml.capability.Outbound
+outputType   — required; declared output type
 documentation
 ```
 
 Member visibility: see `02_mbml.md` — § Member Visibility.
 
-### Sync
+### Transformation
 
-Called directly within an Expression. Has a return value. No address. Not reachable via async messaging. This constraint is current — future use cases may relax it.
+Called directly within an Expression. Transforms `inputType` to `outputType`. No address. Not reachable via async messaging. This constraint is current — future use cases may relax it.
 
 ```text
 name         — camelCase member name
-class        — org.blockml.capability.Sync
-payloadType  — declared payload type
-returnType   — required; FQN of the return type
+type         — org.blockml.capability.Transformation
+inputType    — required; declared input type
+outputType   — required; declared output type
 documentation
 ```
 
 Member visibility: see `02_mbml.md` — § Member Visibility.
 
-### Payload Types
+### Type Descriptors
 
 ```text
 org.blockml.type.Integer            — primitive
@@ -284,22 +282,22 @@ Unqualified names resolve against the domain's default type namespace (determine
 
 ```text
 Primitive:        myCapa(size[0])                  — single value
-Object payload:   myCapa(a = 4, b = size[0])       — named parameters (shorthand)
+Object input:   myCapa(a = 4, b = size[0])       — named parameters (shorthand)
                   myCapa({a: 4, b: size[0]})       — object literal (equivalent)
-Collection field payload:  myCapa([4, size[0]])   — sequence literal (positional values)
+Collection field input:  myCapa([4, size[0]])   — sequence literal (positional values)
 ```
 
-Named parameters and object literal are interchangeable for Object payloads. A mismatch between declared `payloadType` and call syntax is a parse-time error.
+Named parameters and object literal are interchangeable for Object input types. A mismatch between declared `inputType` and call syntax is a parse-time error.
 
 ### Capability Value in Compositions
 
 The address or binding is the Capability's value on a child Block instance:
 
 ```text
-stud://domain/path                  — Absolute URI (AsyncOutbound routing)
+stud://domain/path                  — Absolute URI (Outbound routing)
 /path/to/resource                   — Relative path (context-resolved, TBD)
 ${ @myService.otherCapa }           — Capability linking (no parentheses)
-${ @myService.getAddress() }        — Dynamic address (Sync returnType must be String)
+${ @myService.getAddress() }        — Dynamic address (Transformation outputType must be String)
 ```
 
 ### Inheritance
@@ -311,8 +309,8 @@ Capabilities are inherited via `baseType`, identical to Properties and Aggregati
 Built-in ServiceBlocks are defined in `com.machineblocks.core.Block` and accessible in all MachineBlocks Blocks via the `#` prefix:
 
 ```text
-#math    — Sync capabilities: min, max, ceil, floor, abs, round, ...
-#strings  — Sync capabilities: format, trim, padStart, ...
+#math    — Transformation capabilities: min, max, ceil, floor, abs, round, ...
+#strings  — Transformation capabilities: format, trim, padStart, ...
 ```
 
 Shared across all MachineBlocks Blocks. Cannot be overridden. The `#` namespace is reserved.
@@ -396,13 +394,13 @@ myProperty.x          — Attribute access
 myProperty[0]         — Index access
 [size[0], size[1], 1] — Array literal with expressions
 {x: size[0], y: 1}    — Object literal with expressions
-mySyncCapa()          — Own Block: Sync Capability call (no prefix)
-mySyncCapa(a=1)       — Own Block: Sync call with payload
-myInbound             — Own Block: AsyncInbound linking (no prefix, no parentheses)
-#math.min(a, b)       — Built-in Sync Capability call
-@bean.capa(a=4, b=size[0])     — Named parameters (Object payload shorthand)
+myTransform()         — Own Block: Transformation Capability call (no prefix)
+myTransform(a=1)      — Own Block: Transformation call with input
+myInbound             — Own Block: Inbound linking (no prefix, no parentheses)
+#math.min(a, b)       — Built-in Transformation Capability call
+@bean.capa(a=4, b=size[0])     — Named parameters (Object input)
 @bean.capa({a: 4, b: size[0]}) — Object literal (equivalent)
-@bean.capa(4, size[0])         — Positional arguments (Array payload)
+@bean.capa(4, size[0])         — Positional arguments (Array input)
 @bean.capa([4, size[0]])       — Array literal (equivalent)
 @bean.capa                     — External Capability linking (no parentheses)
 @model:/absolute/path          — Absolute Model binding
@@ -415,12 +413,12 @@ size[0] > 2 ? "a" : "b"       — Ternary
 
 **Disambiguation — own Block vs. bean:**
 
-Property access, own Sync call, and own AsyncInbound linking all use no prefix. The parser resolves by checking the member namespace:
+Property access, own Transformation call, and own Inbound linking all use no prefix. The parser resolves by checking the member namespace:
 
 ```text
 foo     → Property in namespace? → yes: property access
-foo()   → Sync Capability in namespace? → yes: own Sync call
-foo     → AsyncInbound in namespace? → yes (in Capability binding context): own linking
+foo()   → Transformation Capability in namespace? → yes: own Transformation call
+foo     → Inbound in namespace? → yes (in Capability binding context): own linking
 @foo    → always a bean reference
 ```
 
@@ -436,8 +434,8 @@ Ternary:      condition ? valueIfTrue : valueIfFalse
 
 ```text
 - Property access: current Block instance only (no prefix)
-- Own Sync Capability call: current Block only (no prefix, with parentheses)
-- Own AsyncInbound linking: current Block only (no prefix, no parentheses)
+- Own Transformation Capability call: current Block only (no prefix, with parentheses)
+- Own Inbound linking: current Block only (no prefix, no parentheses)
 - No access to parent, grandparent, or sibling Block properties
 - Direction is always parent → child (top-down only)
 - Registry scope is per Composition — initialized on entry, not accessible outside

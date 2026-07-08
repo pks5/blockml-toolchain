@@ -213,17 +213,17 @@ ${ items[0].size[2] }
 
 User-defined Beans are declared as Aggregations with a `beanName` on the current Block. Beans are resolved by walking up the Composition hierarchy — context-scoped beans (`scope="context"`) are visible to all descendants.
 
-### Sync Capability Call
+### Transformation Capability Call
 
 ```text
-${ @myBean.format(value = size[0], unit = 'mm') }   — named parameters (Object payload)
+${ @myBean.format(value = size[0], unit = 'mm') }   — named parameters (Object input)
 ${ @myBean.format({value: size[0], unit: 'mm'}) }   — object literal (equivalent)
-${ @myBean.compute(size[0], size[1]) }              — positional (Array payload)
+${ @myBean.compute(size[0], size[1]) }              — positional (Array input)
 ${ @myBean.compute([size[0], size[1]]) }            — array literal (equivalent)
-${ @myBean.getLabel(size[0]) }                      — primitive payload
+${ @myBean.getLabel(size[0]) }                      — primitive input
 ```
 
-Named parameters `(a=x, b=y)` and object literal `({a:x, b:y})` are interchangeable for Object payloads. The return value of the Sync Capability is used as the expression result.
+Named parameters `(a=x, b=y)` and object literal `({a:x, b:y})` are interchangeable for Object input types. The output value of the Transformation Capability is used as the expression result.
 
 ### Capability Linking
 
@@ -231,21 +231,21 @@ Named parameters `(a=x, b=y)` and object literal `({a:x, b:y})` are interchangea
 ${ @myBean.myOutbound }     — no parentheses = capability linking
 ```
 
-Links an `AsyncOutbound` Capability of the Bean to the target member. The target must be an `AsyncInbound` Capability. Payload is forwarded without transformation. Both Capabilities must have compatible `payloadType`.
+Links an `Outbound` Capability of the Bean to the target member. The target must be an `Inbound` Capability. The Outbound's `outputType` must match the Inbound's `inputType`.
 
-For `Sync → Sync` linking: payload type and return type must match.
+For `Transformation → Transformation` linking: `inputType` and `outputType` must match.
 
 ### Direct Own-Block Access
 
 A Block can reference its own Capabilities in Expressions without a prefix:
 
 ```text
-${ mySyncCapa() }              — own Sync Capability call
-${ mySyncCapa(a = 1, b = 2) } — with payload
-${ myInbound }                 — own AsyncInbound linking (no parentheses)
+${ myTransform() }              — own Transformation Capability call
+${ myTransform(a = 1, b = 2) } — with input
+${ myInbound }                 — own Inbound linking (no parentheses)
 ```
 
-The parser resolves ambiguity by checking the member namespace: `foo()` → Sync Capability, `foo` → Property or AsyncInbound (context-dependent).
+The parser resolves ambiguity by checking the member namespace: `foo()` → Transformation Capability, `foo` → Property or Inbound (context-dependent).
 
 ---
 
@@ -274,7 +274,7 @@ Children within a Model-bound Aggregation inherit the binding context. Relative 
 
 ## Block-Scoped Functions (FunctionBlock)
 
-Block-scoped functions are Sync Capabilities of a `FunctionBlock` Sub-Block, bound as a context-scoped bean. They are called in Expressions via the bean name and capability name:
+Block-scoped functions are Transformation Capabilities of a `FunctionBlock` Sub-Block, bound as a context-scoped bean. They are called in Expressions via the bean name and capability name:
 
 ```text
 ${ @utils.formatValue(valueStart + i * valueStep) }
@@ -298,9 +298,9 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
   <version>1.0.0</version>
   <capabilities>
     <capability name="formatValue"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.Float"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.Float"
+                outputType="org.blockml.type.String">
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): string => {
             const rounded = Math.round(x * 10) / 10
@@ -316,7 +316,7 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
 
 The `<implementation>` element is a child of `<capability>`. The **`type`** attribute identifies the implementation language as an `org.blockml.language.*` FQN (V1: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
 
-FunctionBlock calls follow the same syntax as regular `@bean` Sync Capability calls — there is no special syntax. The FunctionBlock pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
+FunctionBlock calls follow the same syntax as regular `@bean` Transformation Capability calls — there is no special syntax. The FunctionBlock pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
 
 **Transition path:** when a FunctionBlock capability is later covered by a `#built-in`, the `<implementation>` is removed and the call site is updated from `@utils.formatValue(x)` to `#numbers.formatDecimal(x, 0, '.', 1)`. The Capability signature and all other call sites remain unchanged.
 
@@ -383,7 +383,8 @@ Built-ins are pure functions — no side effects, no state. They are resolved at
 
 ```text
 #numbers.formatDecimal(x, minIntDigits, decPoint, minFracDigits)
-  payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
+  inputType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
+  outputType: String
   — format a number as a decimal string
   — positional: #numbers.formatDecimal(0.1, 0, '.', 1)  →  ".1"
   — named:      #numbers.formatDecimal(x=0.1, minInt=0, decPoint='.', minFrac=1)
@@ -442,24 +443,22 @@ Built-ins are pure functions — no side effects, no state. They are resolved at
 
 ---
 
-## Capability Payload and Function Parameters
+## Capability Input Types and Function Parameters
 
-### Capabilities Have No Parameters — Only Payload
+### Capabilities Have No Parameters — Only Typed Input/Output
 
-A Capability is a messaging concept — it has a payload, not a parameter list. The payload is an abstract message:
+A Capability declares typed data via `inputType` and/or `outputType`. In a messaging context, the structure is irrelevant to transport. Any valid type descriptor works.
 
 ```text
-payloadType options:
+inputType / outputType options:
   Float, Integer, String, Boolean  — primitive
   { key: Type, ... }               — structured object with named keys
   { items: T[0..n] }               — collection field (multiplicity on reference)
 ```
 
-In a messaging context, the structure of the payload is irrelevant to transport. Any valid payload type works.
+### FunctionBlock: Object inputType as Function Signature
 
-### FunctionBlock: Object Payload as Function Signature
-
-A `FunctionBlock` interprets a Capability as a function. When the `payloadType` is a structured Object with named keys, it serves as the function signature:
+A `FunctionBlock` interprets a Capability as a function. When the `inputType` is a structured Object with named keys, it serves as the function signature:
 
 ```text
 { a: Float, b: Float }
@@ -469,12 +468,12 @@ A `FunctionBlock` interprets a Capability as a function. When the `payloadType` 
   → Named call:      #math.max(a=size[0], b=labelSize)
 ```
 
-Both call syntaxes are always valid for Object payloads. The key order defines positional order.
+Both call syntaxes are always valid for Object input types. The key order defines positional order.
 
-**Single primitive payload** — no Object wrapper needed:
+**Single primitive inputType** — no Object wrapper needed:
 
 ```text
-payloadType: Float
+inputType: Float
   → Positional: #math.floor(x)
   → Named:      #math.floor(x=val)
 ```
@@ -482,14 +481,14 @@ payloadType: Float
 **FunctionBlock implementation receives named parameters directly:**
 
 ```typescript
-// payloadType: { a: Float, b: Float }
+// inputType: { a: Float, b: Float }
 ({a, b}: {a: number, b: number}): number => Math.max(a, b)
 
-// payloadType: Float
+// inputType: Float
 (x: number): number => Math.floor(x)
 ```
 
-**Collection field vs. Object payload:**
+**Collection field vs. Object input:**
 
 ```text
 { values: T[0..n] }    — variadic collection under a named field
@@ -729,7 +728,7 @@ Property access (no prefix):
   — no access to parent, grandparent, or sibling properties
   — direction is always parent → child (top-down)
 
-@bean Sync Capability calls:
+@bean Transformation Capability calls:
   — resolved by walking up the Composition hierarchy
   — context-scoped beans (scope="context") visible to all descendants
   — local beans (scope="local") visible only in declaring Block
@@ -883,7 +882,7 @@ interface ArrayLiteral extends ExpressionNodeBase {
 interface ObjectLiteral extends ExpressionNodeBase {
   kind: "objectLiteral"
   properties: ObjectProperty[]
-  /** Anonymous object type or declared payload shape when in call context */
+  /** Anonymous object type or declared input shape when in call context */
   resultTypeFqn: string
 }
 
@@ -1056,27 +1055,27 @@ interface BeanSyncCall extends ExpressionNodeBase {
   beanName: string
   capabilityName: string
   arguments: CallArgument[]
-  returnTypeFqn: string
+  outputTypeFqn: string
 }
 
 interface BeanCapabilityLink extends ExpressionNodeBase {
   kind: "beanCapabilityLink"
   beanName: string
   capabilityName: string
-  payloadTypeFqn: string
+  outputTypeFqn: string
 }
 
 interface OwnSyncCall extends ExpressionNodeBase {
   kind: "ownSyncCall"
   capabilityName: string
   arguments: CallArgument[]
-  returnTypeFqn: string
+  outputTypeFqn: string
 }
 
 interface OwnCapabilityLink extends ExpressionNodeBase {
   kind: "ownCapabilityLink"
   capabilityName: string
-  payloadTypeFqn: string
+  inputTypeFqn: string
 }
 
 interface ModelBinding extends ExpressionNodeBase {
@@ -1101,7 +1100,7 @@ myInbound                 → OwnCapabilityLink OR PropertyReference
 @myModel:title            → ModelBinding (relative)
 ```
 
-`funcCall` in EBNF is **`OwnSyncCall`** when the identifier names a Sync Capability on the current Block. When the same syntax appears with `@bean.` prefix, use **`BeanSyncCall`**.
+`funcCall` in EBNF is **`OwnSyncCall`** when the identifier names a Transformation Capability on the current Block. When the same syntax appears with `@bean.` prefix, use **`BeanSyncCall`**.
 
 ---
 
@@ -1191,7 +1190,7 @@ Expression result types are inferred from context:
 
 ```text
 Property type       → expected result type
-Capability payload  → declared payloadType
+Capability input    → declared inputType
 Arithmetic result   → Float if any operand is Float, else Integer
 Comparison result   → Boolean
 Ternary result      → union of both branch types (must be compatible)
@@ -1208,14 +1207,14 @@ Each sub-node carries its own `resultTypeFqn` — used for operator compatibilit
 ## Distinguishing Call vs. Link
 
 ```text
-@bean.capa(...)    — parentheses present = Sync Capability call
-@bean.capa         — no parentheses = Capability linking (AsyncOutbound → AsyncInbound)
+@bean.capa(...)    — parentheses present = Transformation Capability call
+@bean.capa         — no parentheses = Capability linking (Outbound → Inbound)
 func(...)          — parentheses present = block-scoped function call
-myCapa()           — own Sync Capability call (no prefix)
-myInbound          — own AsyncInbound linking (no prefix, no parentheses)
+myCapa()           — own Transformation Capability call (no prefix)
+myInbound          — own Inbound linking (no prefix, no parentheses)
 ```
 
-The parser distinguishes call vs. link by the presence or absence of parentheses. Using `@bean.capa` (no parentheses) on a Sync Capability is a parse-time error. Using `@bean.capa()` (with parentheses) on an AsyncOutbound Capability is also a parse-time error.
+The parser distinguishes call vs. link by the presence or absence of parentheses. Using `@bean.capa` (no parentheses) on a Transformation Capability is a parse-time error. Using `@bean.capa()` (with parentheses) on an Outbound Capability is also a parse-time error.
 
 ---
 
@@ -1227,10 +1226,10 @@ BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in scope (member, loop, 
 BML_EXPR_UNKNOWN_BEAN          — @bean not declared as Aggregation
 BML_EXPR_UNKNOWN_BUILTIN       — #name not a registered built-in
 BML_EXPR_TYPE_MISMATCH         — expression result type incompatible with member type
-BML_EXPR_PAYLOAD_MISMATCH      — call syntax doesn't match declared payloadType
-BML_EXPR_LINK_INVALID_SOURCE   — @bean.capa (no parens) on non-AsyncOutbound Capability
-BML_EXPR_LINK_INVALID_TARGET   — capability linking target is not AsyncInbound
-BML_EXPR_LINK_PAYLOAD_MISMATCH — linked Capabilities have incompatible payloadTypes
+BML_EXPR_PAYLOAD_MISMATCH      — call syntax doesn't match declared inputType
+BML_EXPR_LINK_INVALID_SOURCE   — @bean.capa (no parens) on non-Outbound Capability
+BML_EXPR_LINK_INVALID_TARGET   — capability linking target is not Inbound
+BML_EXPR_LINK_PAYLOAD_MISMATCH — linked Capabilities have incompatible inputType/outputType
 BML_EXPR_MODEL_NO_CONTEXT      — relative model path used without binding context
 BML_EXPR_BUILTIN_NOT_V1        — built-in called that is excluded from V1 scope
 BML_EXPR_DIVISION_BY_ZERO      — compile-time division by zero (literal operands only)

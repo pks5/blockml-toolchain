@@ -180,7 +180,7 @@ Validates the BOM graph for semantic correctness:
 - Aggregation occurrence constraints are satisfied (derived from type notation: `[]`, `[1..1]`, `[1..]`, `[n]`, `[min..max]`)
 - Expression result types match the target member type
 - @bean references resolve to declared Aggregations
-- Capability linking: source must be Outbound, target must be Inbound, payload types must match
+- Capability linking: source must be Outbound, target must be Inbound, outputType must match inputType
 - Model binding: relative paths only used where a binding context exists
 - Member namespace uniqueness: no duplicate (namespace, name) pairs across Properties, Aggregations, Associations, Capabilities
 - Member override merge: partial overrides merged at validate; private/final violations → errors
@@ -475,13 +475,13 @@ BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfie
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
 BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a TypeBlock
 BML_UNKNOWN_BEAN              — @bean reference not found in aggregations
-BML_CAPABILITY_LINK_MISMATCH  — capability linking: direction or payload mismatch
+BML_CAPABILITY_LINK_MISMATCH  — capability linking: direction or inputType/outputType mismatch
 BML_NO_TARGET                 — no registered target supports the block's baseType
 BML_UNKNOWN_TARGET            — requested target name not registered
 BML_FUNCTION_MISSING_MAIN     — no function named after the Capability found in CDATA
 BML_FUNCTION_DUPLICATE_MAIN   — more than one function matches the Capability name
 BML_IMPLEMENTATION_UNKNOWN_TYPE — <implementation type="..."> is not a known org.blockml.language.* FQN
-BML_FUNCTION_NO_RUNTIME_IMPL  — Sync Capability called with non-literal args but no runtime impl
+BML_FUNCTION_NO_RUNTIME_IMPL  — Transformation Capability called with non-literal args but no runtime impl
 BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation type="..."> not listed in baseType implTypes
 ```
 
@@ -503,7 +503,7 @@ BML_DEPRECATED_TYPE    — referenced type is deprecated
 
 ## FunctionBlock Transpilation
 
-A `FunctionBlock` Sub-Block binds target-language implementations to Sync Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs.
+A `FunctionBlock` Sub-Block binds target-language implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs.
 
 Two implementation types are supported in V1:
 
@@ -547,9 +547,9 @@ function mb__...__Utils__formatValue(x) =
 
 ```xml
 <capability name="formatValue"
-            type="org.blockml.capability.Sync"
-            payloadType="org.blockml.type.Float"
-            returnType="org.blockml.type.String">
+            type="org.blockml.capability.Transformation"
+            inputType="org.blockml.type.Float"
+            outputType="org.blockml.type.String">
   <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
 // Main function — name matches capability name
 function formatValue(x) =
@@ -605,14 +605,14 @@ The ScadBlockProcessor automatically adds `use` imports for each service file th
 
 In V1, a FunctionBlock without a matching `<implementation type="org.blockml.language.OpenSCAD">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
 
-The natural next step is the LLM Engine: given the Capability signature (name, payloadType, returnType) and its `<documentation>`, the LLM generates a correct target-language implementation. No `<implementation>` block needed:
+The natural next step is the LLM Engine: given the Capability signature (name, inputType, outputType) and its `<documentation>`, the LLM generates a correct target-language implementation. No `<implementation>` block needed:
 
 ```xml
 <!-- Future: LLM generates implementation from signature + documentation -->
 <capability name="formatValue"
-            type="org.blockml.capability.Sync"
-            payloadType="org.blockml.type.Float"
-            returnType="org.blockml.type.String">
+            type="org.blockml.capability.Transformation"
+            inputType="org.blockml.type.Float"
+            outputType="org.blockml.type.String">
   <documentation>
     Formats a float by removing the leading zero before the decimal point.
     Examples: 0.1 → ".1"   -0.2 → "-.2"   3.0 → "3.0"

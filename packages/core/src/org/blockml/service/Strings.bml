@@ -28,9 +28,9 @@
 
     <!-- #strings.trim(s) -->
     <capability name="trim"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.String"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.String"
+                outputType="org.blockml.type.String">
       <documentation>
         Removes leading and trailing whitespace from s.
         Examples:
@@ -43,9 +43,9 @@
 
     <!-- #strings.toUpperCase(s) -->
     <capability name="toUpperCase"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.String"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.String"
+                outputType="org.blockml.type.String">
       <documentation>
         Converts s to uppercase.
         Examples:
@@ -58,9 +58,9 @@
 
     <!-- #strings.toLowerCase(s) -->
     <capability name="toLowerCase"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.String"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.String"
+                outputType="org.blockml.type.String">
       <documentation>
         Converts s to lowercase.
         Examples:
@@ -73,9 +73,9 @@
 
     <!-- #strings.concat(a, b, ...) -->
     <capability name="concat"
-                type="org.blockml.capability.Sync"
-                payloadType="Array<String>"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="Array<String>"
+                outputType="org.blockml.type.String">
       <documentation>
         Concatenates all string arguments.
         Examples:
@@ -88,9 +88,9 @@
 
     <!-- #strings.length(s) -->
     <capability name="length"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.String"
-                returnType="org.blockml.type.Integer">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.String"
+                outputType="org.blockml.type.Integer">
       <documentation>
         Returns the length of s.
         Examples:
@@ -103,9 +103,9 @@
 
     <!-- #strings.contains(s, fragment) -->
     <capability name="contains"
-                type="org.blockml.capability.Sync"
-                payloadType="{ s: String, fragment: String }"
-                returnType="org.blockml.type.Boolean">
+                type="org.blockml.capability.Transformation"
+                inputType="{ s: String, fragment: String }"
+                outputType="org.blockml.type.Boolean">
       <documentation>
         Returns true if s contains fragment.
         Examples:
@@ -118,9 +118,9 @@
 
     <!-- #strings.startsWith(s, prefix) -->
     <capability name="startsWith"
-                type="org.blockml.capability.Sync"
-                payloadType="{ s: String, prefix: String }"
-                returnType="org.blockml.type.Boolean">
+                type="org.blockml.capability.Transformation"
+                inputType="{ s: String, prefix: String }"
+                outputType="org.blockml.type.Boolean">
       <documentation>
         Returns true if s starts with prefix.
         Examples:
@@ -133,9 +133,9 @@
 
     <!-- #strings.endsWith(s, suffix) -->
     <capability name="endsWith"
-                type="org.blockml.capability.Sync"
-                payloadType="{ s: String, suffix: String }"
-                returnType="org.blockml.type.Boolean">
+                type="org.blockml.capability.Transformation"
+                inputType="{ s: String, suffix: String }"
+                outputType="org.blockml.type.Boolean">
       <documentation>
         Returns true if s ends with suffix.
         Examples:
@@ -148,9 +148,9 @@
 
     <!-- #strings.indexOf(s, fragment) -->
     <capability name="indexOf"
-                type="org.blockml.capability.Sync"
-                payloadType="{ s: String, fragment: String }"
-                returnType="org.blockml.type.Integer">
+                type="org.blockml.capability.Transformation"
+                inputType="{ s: String, fragment: String }"
+                outputType="org.blockml.type.Integer">
       <documentation>
         Returns the index of fragment in s, or -1 if not found.
         Examples:
@@ -163,9 +163,9 @@
 
     <!-- #strings.substring(s, start, end) -->
     <capability name="substring"
-                type="org.blockml.capability.Sync"
-                payloadType="{ s: String, start: Integer, end: Integer }"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="{ s: String, start: Integer, end: Integer }"
+                outputType="org.blockml.type.String">
       <documentation>
         Returns the substring of s from start (inclusive) to end (exclusive).
         Examples:
@@ -178,9 +178,9 @@
 
     <!-- #strings.replace(s, target, replacement) -->
     <capability name="replace"
-                type="org.blockml.capability.Sync"
-                payloadType="{ s: String, target: String, replacement: String }"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="{ s: String, target: String, replacement: String }"
+                outputType="org.blockml.type.String">
       <documentation>
         Replaces the first occurrence of target in s with replacement.
         Examples:
@@ -194,9 +194,9 @@
 
     <!-- #strings.replaceAll(s, target, replacement) -->
     <capability name="replaceAll"
-                type="org.blockml.capability.Sync"
-                payloadType="{ s: String, target: String, replacement: String }"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="{ s: String, target: String, replacement: String }"
+                outputType="org.blockml.type.String">
       <documentation>
         Replaces all occurrences of target in s with replacement.
         Examples:

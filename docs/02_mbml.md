@@ -139,7 +139,7 @@ type="type:Color"    →  com.machineblocks.type.Color
 
 There is no implicit fallback to the domain namespace. Explicit FQNs are always supported.
 
-**Property and Capability types** must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock`. Non-TypeBlock FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability payload/return types → `BML_INVALID_PROPERTY_TYPE`.
+**Property and Capability types** must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock`. Non-TypeBlock FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability input/output types → `BML_INVALID_PROPERTY_TYPE`.
 
 **Member namespace:** `org.blockml.core.Block` declares **no members**. Every sub-type chooses its own Properties, Aggregations, Associations, and Capabilities — including names like `id` or `version` if a domain needs them. On composition instances, **instance identity** uses `bml:id` and **external reference version** uses `bml:version` — not bare attributes (see Composition section).
 
@@ -875,46 +875,38 @@ Associations describe loose references without ownership. Defined for future use
 
 ### Capabilities
 
-Capabilities describe how a Block communicates. Like Properties, they are declared with a name and a class (FQN). Their value in a Composition is the address or binding — set as an attribute on the child Block instance, just like a Property value.
+Capabilities describe how a Block communicates. Like Properties, they are declared with a name and a type (FQN). Their value in a Composition is the address or binding — set as an attribute on the child Block instance, just like a Property value.
 
 > **Capability package TBD** — placeholder `org.blockml.capability.*`. Candidate: `bom.foundation`.
 
 ```xml
 <capabilities>
 
-  <!-- AsyncInbound: receives a message asynchronously -->
+  <!-- Inbound: receives data/messages asynchronously -->
   <capability name="resize"
-              type="org.blockml.capability.AsyncInbound"
-              payloadType="com.myDomain.ResizePayload">
+              type="org.blockml.capability.Inbound"
+              inputType="com.myDomain.ResizePayload">
     <documentation>Resize the block to the given dimensions.</documentation>
   </capability>
 
-  <!-- AsyncInbound with optional returnType (for replyTo) -->
-  <capability name="query"
-              type="org.blockml.capability.AsyncInbound"
-              payloadType="com.myDomain.QueryPayload"
-              returnType="com.myDomain.QueryResult">
-    <documentation>Query and receive an async reply.</documentation>
-  </capability>
-
-  <!-- AsyncOutbound: sends a message asynchronously -->
+  <!-- Outbound: sends/emits data/messages asynchronously -->
   <capability name="resized"
-              type="org.blockml.capability.AsyncOutbound"
-              payloadType="com.myDomain.ResizedPayload">
+              type="org.blockml.capability.Outbound"
+              outputType="com.myDomain.ResizedPayload">
   </capability>
 
-  <!-- Sync: callable within Expressions only, returnType required -->
+  <!-- Transformation: synchronously callable; inputType → outputType -->
   <capability name="computeArea"
-              type="org.blockml.capability.Sync"
-              payloadType="{ values: Integer[0..n] }"
-              returnType="Integer">
+              type="org.blockml.capability.Transformation"
+              inputType="{ width: Integer, height: Integer }"
+              outputType="Integer">
     <documentation>Returns width * height.</documentation>
   </capability>
 
 </capabilities>
 ```
 
-**Payload type forms:**
+**Type descriptor forms:**
 
 ```text
 org.blockml.type.Integer            — primitive
@@ -925,7 +917,7 @@ com.myDomain.MyClass             — Object (named fields)
 
 Unqualified type names resolve against the domain's default type namespace (determined by the Block's `baseType`).
 
-**`Sync`**: `returnType` is required. No address — only callable within Expressions.
+**Validation:** `Inbound` requires `inputType` (no `outputType`). `Outbound` requires `outputType` (no `inputType`). `Transformation` requires both. Async reply via `replyTo` is a runtime/message pattern — not modeled on the Capability.
 
 **Protected and private Capabilities** — follow § Member Visibility. Private Capabilities (`__name`) cannot be bound from outside the declaring Block. Protected Capabilities (`_name`) are accessible in child Blocks.
 
@@ -1060,16 +1052,16 @@ baseCutoutType="${ size[2] > 2 ? 'groove' : 'standard' }"
 Capability values:
 
 ```xml
-<!-- Absolute URI → AsyncOutbound routing -->
+<!-- Absolute URI → Outbound routing -->
 <ac:MyBlock onResized="stud://enclosure/blocks/resized" />
 
 <!-- Relative path → context-resolved (TBD) -->
 <ac:MyBlock onResized="/blocks/resized" />
 
-<!-- Capability linking: AsyncOutbound → AsyncInbound, or Sync → Sync -->
+<!-- Capability linking: Outbound → Inbound, or Transformation → Transformation -->
 <ac:MyBlock onResized="${ @myService.resizeHandler }" />
 
-<!-- Dynamic address: Sync Capability returns the address String -->
+<!-- Dynamic address: Transformation Capability returns the address String -->
 <ac:MyBlock onResized="${ @myService.getAddress() }" />
 ```
 
@@ -1396,7 +1388,7 @@ xmlns:cal="com.machineblocks.calibration"
 
 ### FunctionBlock Sub-Blocks
 
-A Sub-Block with `baseType="org.blockml.core.FunctionBlock"` binds target-language function implementations to Sync Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs, not a `language` attribute.
+A Sub-Block with `baseType="org.blockml.core.FunctionBlock"` binds target-language function implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs, not a `language` attribute.
 
 Two implementation types are supported in V1:
 
@@ -1410,9 +1402,9 @@ Two implementation types are supported in V1:
 
   <capabilities>
     <capability name="formatValue"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.Float"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.Float"
+                outputType="org.blockml.type.String">
       <documentation>Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>
       <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
 // Main function — name must match capability name

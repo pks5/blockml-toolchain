@@ -32,9 +32,9 @@
       SCAD: no native — Processor emits custom formatting logic.
     -->
     <capability name="formatDecimal"
-                type="org.blockml.capability.Sync"
-                payloadType="{ x: Float, minInt: Integer, decPoint: String, minFrac: Integer }"
-                returnType="org.blockml.type.String">
+                type="org.blockml.capability.Transformation"
+                inputType="{ x: Float, minInt: Integer, decPoint: String, minFrac: Integer }"
+                outputType="org.blockml.type.String">
       <documentation>
         Formats x as a decimal string.
         minInt: minimum integer digits (0 omits leading zero before decimal point).

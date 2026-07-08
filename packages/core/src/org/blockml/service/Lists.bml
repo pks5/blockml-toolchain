@@ -28,9 +28,9 @@
 
     <!-- #lists.size(list) -->
     <capability name="size"
-                type="org.blockml.capability.Sync"
-                payloadType="Array<Object>"
-                returnType="org.blockml.type.Integer">
+                type="org.blockml.capability.Transformation"
+                inputType="Array<Object>"
+                outputType="org.blockml.type.Integer">
       <documentation>
         Returns the number of elements in list.
         Examples:
@@ -43,9 +43,9 @@
 
     <!-- #lists.isEmpty(list) -->
     <capability name="isEmpty"
-                type="org.blockml.capability.Sync"
-                payloadType="Array<Object>"
-                returnType="org.blockml.type.Boolean">
+                type="org.blockml.capability.Transformation"
+                inputType="Array<Object>"
+                outputType="org.blockml.type.Boolean">
       <documentation>
         Returns true if list has no elements.
         Examples:
@@ -58,9 +58,9 @@
 
     <!-- #lists.contains(list, element) -->
     <capability name="contains"
-                type="org.blockml.capability.Sync"
-                payloadType="{ list: Array<Object>, element: Object }"
-                returnType="org.blockml.type.Boolean">
+                type="org.blockml.capability.Transformation"
+                inputType="{ list: Array<Object>, element: Object }"
+                outputType="org.blockml.type.Boolean">
       <documentation>
         Returns true if list contains element.
         Examples:
@@ -73,9 +73,9 @@
 
     <!-- #lists.first(list) -->
     <capability name="first"
-                type="org.blockml.capability.Sync"
-                payloadType="Array<Object>"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="Array<Object>"
+                outputType="org.blockml.type.Float">
       <documentation>
         Returns the first element of list.
         Return type follows list element type at runtime.
@@ -89,9 +89,9 @@
 
     <!-- #lists.last(list) -->
     <capability name="last"
-                type="org.blockml.capability.Sync"
-                payloadType="Array<Object>"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="Array<Object>"
+                outputType="org.blockml.type.Float">
       <documentation>
         Returns the last element of list.
         Return type follows list element type at runtime.
@@ -105,9 +105,9 @@
 
     <!-- #lists.get(list, index) -->
     <capability name="get"
-                type="org.blockml.capability.Sync"
-                payloadType="{ list: Array<Object>, index: Integer }"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="{ list: Array<Object>, index: Integer }"
+                outputType="org.blockml.type.Float">
       <documentation>
         Returns the element at index in list.
         Return type follows list element type at runtime.
@@ -121,9 +121,9 @@
 
     <!-- #lists.concat(a, b, ...) -->
     <capability name="concat"
-                type="org.blockml.capability.Sync"
-                payloadType="Array<Array<Object>>"
-                returnType="Array<Object>">
+                type="org.blockml.capability.Transformation"
+                inputType="Array<Array<Object>>"
+                outputType="Array<Object>">
       <documentation>
         Concatenates all list arguments into a single list.
         Examples:
@@ -140,9 +140,9 @@
       When step is omitted, defaults to 1 (or -1 when start &gt; end).
     -->
     <capability name="sequence"
-                type="org.blockml.capability.Sync"
-                payloadType="{ start: Integer, end: Integer, step: Integer }"
-                returnType="Array<Integer>">
+                type="org.blockml.capability.Transformation"
+                inputType="{ start: Integer, end: Integer, step: Integer }"
+                outputType="Array<Integer>">
       <documentation>
         Generates a sequence of integers from start to end (inclusive).
         step defaults to 1 when start &lt;= end, -1 when start &gt; end.

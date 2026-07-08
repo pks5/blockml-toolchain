@@ -115,7 +115,7 @@ Direct package segments under `org.blockml` that belong to the **language** are 
 org.blockml.core.*         — framework base types (Block, TypeBlock, Library, …)
 org.blockml.type.*         — primitive and bootstrap TypeBlocks (Integer, Float, …)
 org.blockml.service.*      — built-in ServiceBlocks (#math, #strings, …)
-org.blockml.capability.*   — Capability type branches (Sync, AsyncInbound, …)
+org.blockml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
 org.blockml.language.*     — LanguageBlocks (TypeScript, OpenSCAD, …)
 ```
 
@@ -471,7 +471,7 @@ type="type:Size3d"            →  com.machineblocks.type.Size3d ✓  (StructTyp
 type="com.foo.Wall"           →  ✗  BML_INVALID_PROPERTY_TYPE (not a TypeBlock)
 ```
 
-The same rule applies to Capability `payloadType` and `returnType`. Generic type arguments must satisfy each parameter's `baseType` constraint — see `17_type_system_bml.md` — Generics.
+The same rule applies to Capability `inputType` and `outputType`. Generic type arguments must satisfy each parameter's `baseType` constraint — see `17_type_system_bml.md` — Generics.
 
 ### Aggregations and Associations
 
@@ -605,14 +605,14 @@ A ServiceBlock is a special Block type that provides named, reusable services �
 org.blockml.core.Block
   org.blockml.core.ServiceBlock          — base for all service types
     org.blockml.service.ModelBlock          — holds data (JSONModel, ODataModel, XMLModel)
-    org.blockml.core.FunctionBlock       — binds TypeScript functions to Sync Capabilities
+    org.blockml.core.FunctionBlock       — binds TypeScript functions to Transformation Capabilities
 ```
 
 **`org.blockml.core.ServiceBlock`** — the abstract base. All service types extend this.
 
-**`org.blockml.service.ModelBlock`** — provides data access via path-based Sync Capabilities. Specializations: `org.blockml.service.JSONModel`, `org.blockml.service.ODataModel`, `org.blockml.service.XMLModel`.
+**`org.blockml.service.ModelBlock`** — provides data access via path-based Transformation Capabilities. Specializations: `org.blockml.service.JSONModel`, `org.blockml.service.ODataModel`, `org.blockml.service.XMLModel`.
 
-**`org.blockml.core.FunctionBlock`** — binds TypeScript arrow functions to Sync Capabilities via `<implementation type="org.blockml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
+**`org.blockml.core.FunctionBlock`** — binds TypeScript arrow functions to Transformation Capabilities via `<implementation type="org.blockml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
 
 Built-in ServiceBlocks are defined in the `baseType` hierarchy and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
 
@@ -712,18 +712,18 @@ Associations carry no ownership and do not affect rendering.
 
 Capabilities describe how a Block communicates — with the outside world or internally within a Composition. A Capability is a named member of a Block, sharing the member namespace with Properties, Aggregations, and Associations.
 
-Like Properties, Capabilities are declared with a name and a class (type). Like Properties, their value in a Composition is set directly on the child Block instance as an attribute. For Capabilities, this value is the address or binding — not a data value.
+Like Properties, Capabilities are declared with a name and a type (FQN). Like Properties, their value in a Composition is set directly on the child Block instance as an attribute. For Capabilities, this value is the address or binding — not a data value.
 
-### Capability Classes
+### Capability Types
 
-Capabilities use FQN classes instead of string type values. The class determines the communication pattern.
+Capabilities use FQN type values. The type determines the communication pattern.
 
 > **Package TBD** — placeholder `org.blockml.capability.*`. Candidate: `bom.foundation` (domain to be confirmed).
 
 ```text
-org.blockml.capability.AsyncInbound   — receives a message asynchronously
-org.blockml.capability.AsyncOutbound  — sends a message asynchronously
-org.blockml.capability.Sync           — called synchronously within an Expression
+org.blockml.capability.Inbound         — receives data/messages asynchronously
+org.blockml.capability.Outbound        — sends/emits data/messages asynchronously
+org.blockml.capability.Transformation  — synchronously callable; transforms inputType to outputType
 ```
 
 ### Capability Metadata
@@ -732,34 +732,23 @@ All Capabilities share these base fields:
 
 ```text
 name           — camelCase member name (unique within the Block's member namespace)
-class          — FQN of the Capability class (AsyncInbound | AsyncOutbound | Sync)
-payloadType    — declared payload type (see Payload Types below)
+type           — FQN of the Capability type (Inbound | Outbound | Transformation)
 documentation  — human-readable description
 ```
 
 Member visibility follows § Member Visibility. Private Capabilities (`__name`) cannot be bound from outside the declaring Block. Protected Capabilities (`_name`) are accessible in child Blocks.
 
-**`AsyncInbound`** adds:
+**`Inbound`** — `inputType` required, `outputType` forbidden.
 
-```text
-returnType     — optional; type of the asynchronous reply (for replyTo scenarios)
-```
+**`Outbound`** — `outputType` required, `inputType` forbidden.
 
-**`AsyncOutbound`** adds:
+**`Transformation`** — `inputType` and `outputType` both required.
 
-```text
-returnType     — optional; type of the asynchronous reply (for replyTo scenarios)
-```
+Async reply via `replyTo` is a runtime/message pattern — not modeled via Capability attributes.
 
-**`Sync`** adds:
+### Input and Output Types
 
-```text
-returnType     — required; declared return type of the synchronous call
-```
-
-### Payload Types
-
-Every Capability declares a `payloadType`. A Capability is a **messaging concept** — it has a payload, not a parameter list. The payload is an abstract message; its structure is irrelevant to the transport layer.
+Capabilities declare typed data via `inputType` and/or `outputType` (see validation rules above). Values are `TypeDescriptor` expressions that resolve to TypeBlocks — same parsing rules as Property `type`.
 
 ```text
 org.blockml.type.Integer          — primitive (NamedTypeReference)
@@ -773,31 +762,31 @@ See `12_bom_object_model.md` — Type Descriptors for the formal BOM representat
 
 Unqualified type names are resolved against the domain's default type namespace (determined by the Block's `baseType`).
 
-### Object Payload as Function Signature
+### Object Input as Function Signature
 
-When a `FunctionBlock` Capability uses a structured Object as `payloadType`, the Object defines an **anonymous struct type** — conceptually an inline class with private typed fields. Field names are parameter names; field order defines positional call order:
+When a `FunctionBlock` Capability uses a structured Object as `inputType`, the Object defines an **anonymous struct type** — conceptually an inline class with private typed fields. Field names are parameter names; field order defines positional call order:
 
 ```text
-payloadType: { a: Float, b: Float }
+inputType: { a: Float, b: Float }
   → Arity:       2  (number of keys)
   → Parameter names: a, b  (key names in declaration order)
   → Positional call: #math.max(size[0], labelSize)
   → Named call:      #math.max(a=size[0], b=labelSize)
 ```
 
-Both call syntaxes are always valid for Object payloads. This is the standard pattern for all `#math.*`, `#strings.*`, `#lists.*` built-ins.
+Both call syntaxes are always valid for Object input types. This is the standard pattern for all `#math.*`, `#strings.*`, `#lists.*` built-ins.
 
-`Object[0..n]` payloads with a single named field are **not** suitable as FunctionBlock signatures when arity must be fixed — use a structured Object with named keys for each parameter. Variadic built-ins (e.g. `#strings.concat`) declare an explicit collection field: `{ values: String[0..n] }`.
+`Object[0..n]` input types with a single named field are **not** suitable as FunctionBlock signatures when arity must be fixed — use a structured Object with named keys for each parameter. Variadic built-ins (e.g. `#strings.concat`) declare an explicit collection field: `{ values: String[0..n] }`.
 
-### Payload Call Syntax
+### Input Call Syntax
 
-The payload type determines how the Capability is called in Expressions:
+The `inputType` determines how a Transformation Capability is called in Expressions:
 
 ```text
 Primitive:
   myCapa(5)                        →  single value
 
-Object payload { a: T, b: T }:
+Object input { a: T, b: T }:
   myCapa(a = 4, b = 5)            →  named parameters
   myCapa({a: 4, b: 5})            →  object literal (equivalent)
   myCapa(4, 5)                    →  positional (key order)
@@ -806,7 +795,7 @@ Collection field { values: T[0..n] }:
   myCapa([4, 5])                  →  sequence literal (positional values)
 ```
 
-Named parameters `(a=4, b=5)`, object literal `({a:4, b:5})`, and positional `(4, 5)` all produce identical payloads for Object payloads. A mismatch between declared `payloadType` and call syntax is a parse-time error.
+Named parameters `(a=4, b=5)`, object literal `({a:4, b:5})`, and positional `(4, 5)` all produce identical input values for Object `inputType`s. A mismatch between declared `inputType` and call syntax is a parse-time error.
 
 ### Capability Value in Compositions
 
@@ -823,40 +812,40 @@ Relative path     — context-resolved address (TBD: resolved against nearest Ap
 
 Capability linking — forward to another Capability (via Expression)
   ${ @myService.otherCapa }
-  Valid for: AsyncOutbound → AsyncInbound (payload forwarded), Sync → Sync (payload + returnType must match)
+  Valid for: Outbound → Inbound (outputType forwarded as inputType), Transformation → Transformation (inputType + outputType must match)
 
-Dynamic address   — synchronous Capability call produces the address string
+Dynamic address   — Transformation Capability call produces the address string
   ${ @myService.getAddress() }
-  returnType of the Sync Capability must be String
+  outputType of the Transformation Capability must be String
 ```
 
 ### Inheritance
 
 Capabilities are inherited via `baseType`, identical to Properties and Aggregations. A derived Block inherits all Capabilities of its base type and may add its own.
 
-### Sync Capabilities in Expressions
+### Transformation Capabilities in Expressions
 
-`Sync` Capabilities are the only Capability class callable within Expressions. `AsyncInbound` and `AsyncOutbound` Capabilities appear in Compositions as address/binding values only — they are not callable in Expressions directly.
+`Transformation` Capabilities are the only Capability type callable within Expressions. `Inbound` and `Outbound` Capabilities appear in Compositions as address/binding values only — they are not callable in Expressions directly.
 
 ### Direct Capability Access in Own Block
 
 A Block can reference its own Capabilities in Expressions without a prefix — identical to how Properties are accessed:
 
 ```text
-${ mySyncCapa() }             — call own Sync Capability, return value is used
-${ mySyncCapa(a = 1, b = 2) } — with payload
-${ myInbound }                — link own AsyncInbound Capability (no parentheses)
+${ myTransform() }             — call own Transformation Capability, output value is used
+${ myTransform(a = 1, b = 2) } — with input
+${ myInbound }                 — link own Inbound Capability (no parentheses)
 ```
 
-The rule mirrors external access: with `()` = Sync call, without `()` = AsyncInbound linking.
+The rule mirrors external access: with `()` = Transformation call, without `()` = Inbound linking.
 
-`AsyncOutbound` Capabilities of the same Block cannot be referenced in Expressions — they are triggered by the Block's internal logic, not bound.
+`Outbound` Capabilities of the same Block cannot be referenced in Expressions — they are triggered by the Block's internal logic, not bound.
 
 Whether Capability linking in Presets is permitted is to be defined.
 
-### Sync Capability Implementations
+### Transformation Capability Implementations
 
-A `Sync` Capability may carry an `<implementation>` element that provides a target-language function body. This is only permitted when the Block's `baseType` declares support for that implementation type.
+A `Transformation` Capability may carry an `<implementation>` element that provides a target-language function body. This is only permitted when the Block's `baseType` declares support for that implementation type.
 
 ```text
 Implementation language types (org.blockml.language.*):
@@ -872,12 +861,12 @@ baseType declares:
 
 If a Block carries `<implementation type="org.blockml.language.OpenSCAD">` but its `baseType` does not list that type in `implTypes`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
 
-A Sync Capability implementation can live directly on any Block whose `baseType` supports it — not only on `FunctionBlock` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
+A Transformation Capability implementation can live directly on any Block whose `baseType` supports it — not only on `FunctionBlock` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
 
 ```xml
 <!-- Direct on Block — valid if baseType supports OpenSCAD -->
 <capabilities>
-  <capability name="formatValue" type="org.blockml.capability.Sync" ...>
+  <capability name="formatValue" type="org.blockml.capability.Transformation" ...>
     <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
 function formatValue(x) = ...;
     ]]></implementation>
@@ -898,14 +887,14 @@ wot://     — Web of Things device hub
 
 ### Message Model
 
-BOM Core defines a minimal abstract message model for AsyncInbound and AsyncOutbound Capabilities:
+BOM Core defines a minimal abstract message model for Inbound and Outbound Capabilities:
 
 ```text
 Message
   address   — URI identifying the target capability
   headers   — key-value metadata
     replyTo — optional; address to send an asynchronous response to
-  payload   — structure declared by the Capability's payloadType
+  payload   — structure declared by the Capability's inputType (Inbound) or outputType (Outbound)
 ```
 
 All async messaging is asynchronous. A Capability may reply using the `replyTo` header. BOM Core does not prescribe when or whether a response is sent.
@@ -1274,9 +1263,9 @@ ${ [size[0], size[1], 1] }                         — Array with expressions
 ${ {x: size[0], y: 1} }                            — Object with expressions
 ${ size[0] + 1 }                                   — Arithmetic
 ${ size[0] > 2 ? "groove" : "standard" }           — Ternary
-${ mySyncCapa() }                                  — Own Block: Sync Capability call
-${ mySyncCapa(a = 1, b = size[0]) }               — Own Block: Sync call with payload
-${ myInbound }                                     — Own Block: AsyncInbound linking (no parentheses)
+${ myTransform() }                                 — Own Block: Transformation Capability call
+${ myTransform(a = 1, b = size[0]) }               — Own Block: Transformation call with input
+${ myInbound }                                     — Own Block: Inbound linking (no parentheses)
 ${ #math.min(size[0], size[1]) }                   — Built-in ServiceBlock call
 ${ @myBean.format(value = size[0], unit = "mm") }  — Bean call, named params (Object payload)
 ${ @myBean.format({value: size[0], unit: "mm"}) }  — Bean call, object literal (equivalent)
@@ -1353,28 +1342,28 @@ If the SCAD representation uses arrays internally (e.g. `[["z+", -0.5]]`), the B
 
 ### Built-in ServiceBlock Calls (`#`)
 
-Built-in ServiceBlocks are defined in the `baseType` hierarchy. Their Capabilities must be `Sync`. The `#` namespace is reserved — user-defined beans cannot use `#`.
+Built-in ServiceBlocks are defined in the `baseType` hierarchy. Their Capabilities must be `Transformation`. The `#` namespace is reserved — user-defined beans cannot use `#`.
 
 ```text
-${ #math.min(size[0], size[1]) }   — Sync Capability, Array payload → primitive return
+${ #math.min(size[0], size[1]) }   — Transformation Capability, array input → primitive output
 ${ #math.max(a, b) }
 ${ #strings.format(tpl, v) }
 ```
 
 ### User Bean Calls (`@`)
 
-The referenced bean must be declared as an Aggregation with a `beanName` on the current Block. Only `Sync` Capabilities are callable in Expressions. The return value is used as the expression result.
+The referenced bean must be declared as an Aggregation with a `beanName` on the current Block. Only `Transformation` Capabilities are callable in Expressions. The output value is used as the expression result.
 
 ```text
-Object payload — two equivalent forms:
+Object input — two equivalent forms:
   ${ @myBean.capa(a = 4, b = size[0]) }    — named parameters
   ${ @myBean.capa({a: 4, b: size[0]}) }    — object literal
 
-Array payload — two equivalent forms:
+Array input — two equivalent forms:
   ${ @myBean.capa(4, size[0]) }            — positional arguments
   ${ @myBean.capa([4, size[0]]) }          — array literal
 
-Primitive payload:
+Primitive input:
   ${ @myBean.capa(size[0]) }               — single value
 
 Mixed arguments (passing model binding as argument):
@@ -1388,9 +1377,9 @@ Mixed arguments (passing model binding as argument):
 ${ @myBean.myOutbound }   — no parentheses; links without calling
 ```
 
-Links an `AsyncOutbound` Capability of a Bean to an `AsyncInbound` Capability of the current Block. The payload is forwarded without transformation. Both Capabilities must have compatible `payloadType`.
+Links an `Outbound` Capability of a Bean to an `Inbound` Capability of the current Block. The message is forwarded without transformation. The Outbound's `outputType` must match the Inbound's `inputType`.
 
-For `Sync → Sync` linking: payload type and return type must both match.
+For `Transformation → Transformation` linking: `inputType` and `outputType` must both match.
 
 This form is only valid when the target member is a Capability — using it on a Property is a parse-time error. Whether Capability linking is permitted in Presets is to be defined.
 

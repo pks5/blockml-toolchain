@@ -28,9 +28,9 @@
 
     <!-- #math.min(a, b) — SCAD: native min(a, b) -->
     <capability name="min"
-                type="org.blockml.capability.Sync"
-                payloadType="{ a: Float, b: Float }"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="{ a: Float, b: Float }"
+                outputType="org.blockml.type.Float">
       <documentation>
         Returns the smaller of two numbers.
         Examples:
@@ -44,9 +44,9 @@
 
     <!-- #math.max(a, b) — SCAD: native max(a, b) -->
     <capability name="max"
-                type="org.blockml.capability.Sync"
-                payloadType="{ a: Float, b: Float }"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="{ a: Float, b: Float }"
+                outputType="org.blockml.type.Float">
       <documentation>
         Returns the larger of two numbers.
         Examples:
@@ -60,9 +60,9 @@
 
     <!-- #math.abs(x) — SCAD: native abs(x) -->
     <capability name="abs"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.Float"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.Float"
+                outputType="org.blockml.type.Float">
       <documentation>
         Returns the absolute value of x.
         Examples:
@@ -75,9 +75,9 @@
 
     <!-- #math.floor(x) — SCAD: native floor(x) -->
     <capability name="floor"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.Float"
-                returnType="org.blockml.type.Integer">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.Float"
+                outputType="org.blockml.type.Integer">
       <documentation>
         Rounds x down to the nearest integer.
         Examples:
@@ -90,9 +90,9 @@
 
     <!-- #math.ceil(x) — SCAD: native ceil(x) -->
     <capability name="ceil"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.Float"
-                returnType="org.blockml.type.Integer">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.Float"
+                outputType="org.blockml.type.Integer">
       <documentation>
         Rounds x up to the nearest integer.
         Examples:
@@ -105,9 +105,9 @@
 
     <!-- #math.round(x) — SCAD: native round(x) -->
     <capability name="round"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.Float"
-                returnType="org.blockml.type.Integer">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.Float"
+                outputType="org.blockml.type.Integer">
       <documentation>
         Rounds x to the nearest integer.
         Examples:
@@ -121,9 +121,9 @@
 
     <!-- #math.round_n(x, n) — SCAD: round(x * pow(10, n)) / pow(10, n) -->
     <capability name="round_n"
-                type="org.blockml.capability.Sync"
-                payloadType="{ x: Float, n: Integer }"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="{ x: Float, n: Integer }"
+                outputType="org.blockml.type.Float">
       <documentation>
         Rounds x to n decimal places.
         Examples:
@@ -138,9 +138,9 @@
 
     <!-- #math.pow(base, exp) — SCAD: native pow(base, exp) -->
     <capability name="pow"
-                type="org.blockml.capability.Sync"
-                payloadType="{ base: Float, exp: Float }"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="{ base: Float, exp: Float }"
+                outputType="org.blockml.type.Float">
       <documentation>
         Returns base raised to the power of exp.
         Examples:
@@ -153,9 +153,9 @@
 
     <!-- #math.sqrt(x) — SCAD: native sqrt(x) -->
     <capability name="sqrt"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.Float"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.Float"
+                outputType="org.blockml.type.Float">
       <documentation>
         Returns the square root of x.
         Examples:
@@ -168,9 +168,9 @@
 
     <!-- #math.clamp(x, lo, hi) — SCAD: min(max(x, lo), hi) -->
     <capability name="clamp"
-                type="org.blockml.capability.Sync"
-                payloadType="{ x: Float, lo: Float, hi: Float }"
-                returnType="org.blockml.type.Float">
+                type="org.blockml.capability.Transformation"
+                inputType="{ x: Float, lo: Float, hi: Float }"
+                outputType="org.blockml.type.Float">
       <documentation>
         Clamps x to the range [lo, hi].
         Examples:

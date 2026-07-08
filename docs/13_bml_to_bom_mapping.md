@@ -60,7 +60,7 @@ Ordinal = index in `members[]` after mapping. Used by render targets and by Stru
 | **Attribute classification** | Fixed priority chain — see § Attribute Classification below |
 | **Unknown member attributes** | Warning `BML_UNKNOWN_PROPERTY` at validate (custom property assumed) |
 | **Unknown `bml:*` attributes** | Error `BML_UNKNOWN_DIRECTIVE` at map time |
-| **`payloadType` / `returnType`** | Parsed into `TypeDescriptor` at map time — anonymous `{ a: Float }` = anonymous struct type |
+| **`inputType` / `outputType`** | Parsed into `TypeDescriptor` at map time — anonymous `{ a: Float }` = anonymous struct type |
 | **Expression parsing** | Two-phase: stage [5] stores `raw`; stage [7] builds AST |
 | **Cross-file resolution** | Single-file parser; TypeRegistry bootstrap by CLI/orchestrator before validate |
 | **JSON BML format** | **Deferred (TBD).** V1 parser accepts XML only (`.bml`) |
@@ -199,10 +199,10 @@ Unqualified PascalCase names on `type="..."` (properties, aggregations, capabili
 <aggregation type="Dependency" .../>   on org.blockml.core.Library
   → NamedTypeReference { fqn: "org.blockml.core.Library.Dependency" }
 
-payloadType="Float"
+inputType="Float"
   → NamedTypeReference { fqn: "org.blockml.type.Float" }
 
-payloadType="{ a: Float, b: Float }"
+inputType="{ a: Float, b: Float }"
   → AnonymousStructType {
        fields: [
          { name: "a", type: NamedTypeReference(Float) },
@@ -213,7 +213,15 @@ payloadType="{ a: Float, b: Float }"
 
 Conceptually, `{ a: Float, b: Float }` is shorthand for an anonymous class with private fields `a` and `b` — see `12_bom_object_model.md` — Type Descriptors.
 
-Single-parameter Capabilities use a primitive `NamedTypeReference` directly — no one-field struct wrapper.
+Single-parameter Transformation Capabilities use a primitive `NamedTypeReference` directly — no one-field struct wrapper.
+
+Validation by Capability type:
+
+```text
+Inbound         — inputType required, outputType forbidden
+Outbound        — outputType required, inputType forbidden
+Transformation  — inputType and outputType both required
+```
 
 Parse failure → `BML_UNKNOWN_TYPE`.
 
@@ -575,7 +583,7 @@ See `02_mbml.md` — Serialization Formats for the design rationale.
 | ID | Topic | Status |
 |---|---|---|
 | B2 | Unknown instance attributes — warning; unknown `bml:*` — error | **Decided** |
-| B3 | `payloadType` storage — `TypeDescriptor` union (anonymous struct model) | **Decided** |
+| B3 | `inputType` / `outputType` storage — `TypeDescriptor` union (anonymous struct model) | **Decided** |
 | B4 | Expression parsing — two-phase (raw in [5], AST in [7]) | **Decided** |
 | B5 | Cross-file / TypeRegistry — single-file parser; orchestrator bootstrap | **Decided** |
 | B6 | JSON BML authoring format | **Deferred (TBD)** — not in V1; XML-only parser |

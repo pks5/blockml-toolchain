@@ -28,7 +28,7 @@ Control metadata             Block metadata
 Properties                   Properties           (identical concept)
 Aggregations                 Aggregations         (identical concept)
 Associations                 Associations         (identical concept)
-Events                       Capabilities         (extended: AsyncInbound, AsyncOutbound, Sync)
+Events                       Capabilities         (extended: Inbound, Outbound, Transformation)
 Renderer on Control          No renderer on Block (renderer lives in Target — fully separated)
 suppressInvalidate param     Not needed           (no reactive DOM, compile-time only)
 String property types        Address type added   (org.blockml.type.Address for Capability values)
@@ -128,11 +128,11 @@ setSize(value: Size3D): this {
 
 ### Capability Example
 
-Capabilities are declared with a class (`AsyncInbound`, `AsyncOutbound`, `Sync`) but their runtime value is an `Address`. The generated getter/setter follow the same pattern as Properties:
+Capabilities are declared with a type (`Inbound`, `Outbound`, `Transformation`) but their runtime value is an `Address`. The generated getter/setter follow the same pattern as Properties:
 
 ```typescript
 // Block definition declares:
-//   capability name="onResized" class="org.blockml.capability.AsyncOutbound"
+//   capability name="onResized" type="org.blockml.capability.Outbound"
 
 // Generated:
 getOnResized(): Address {

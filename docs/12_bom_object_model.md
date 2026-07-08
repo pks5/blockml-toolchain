@@ -228,13 +228,13 @@ Sub-Blocks are **part of the same `BomDocument`** as their parent root block.
 
 ## Type Expressions
 
-Types in BOM are represented by **`TypeExpression`** (alias: `TypeDescriptor` in V1 docs) — a structured, parse-time model. This applies to Capability `payloadType` / `returnType` and Property `type` attributes.
+Types in BOM are represented by **`TypeExpression`** (alias: `TypeDescriptor` in V1 docs) — a structured, parse-time model. This applies to Capability `inputType` / `outputType` and Property `type` attributes.
 
 **Language vs. BOM:** BML knows three TypeBlock kinds (Primitive, Enum, Struct). Unions, collections, and generic applications are **type expressions** — not TypeBlocks. The parser maps them to `org.blockml.bom.*` descriptor types internally.
 
 ### Anonymous struct = shorthand for inline class
 
-An anonymous Object payload type is **not** an untyped string. It is shorthand for an anonymous class with private typed fields:
+An anonymous Object input type is **not** an untyped string. It is shorthand for an anonymous class with private typed fields:
 
 ```text
 { a: Float, b: Float }
@@ -303,7 +303,7 @@ V1 may keep the alias `TypeDescriptor = TypeExpression`. Internal-only shapes th
 
 ### BML surface syntax → `TypeExpression`
 
-Parsed from `payloadType` / `returnType` / `type` attribute strings at map time:
+Parsed from `inputType` / `outputType` / `type` attribute strings at map time:
 
 ```text
 Float                              → NamedTypeReference { fqn: "org.blockml.type.Float" }
@@ -391,9 +391,9 @@ interface AssociationDefinition extends MemberDefinitionBase {
 
 interface CapabilityDefinition extends MemberDefinitionBase {
   kind: "capability"
-  classFqn: string          // org.blockml.capability.Sync | AsyncInbound | AsyncOutbound
-  payloadType: TypeDescriptor
-  returnType?: TypeDescriptor
+  typeFqn: string           // org.blockml.capability.Inbound | Outbound | Transformation
+  inputType?: TypeDescriptor
+  outputType?: TypeDescriptor
   implementation?: ImplementationBlock
 }
 
@@ -427,7 +427,7 @@ size="${ [size[0], size[1], size[2] - 1] }"  — same positional contract
 
 Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" z="3"` on a StructType instance) are equivalent; array literals use **declaration order**, not alphabetical name order.
 
-**Function argument mapping:** anonymous struct `payloadType` values (`{ a: Float, b: Float }`) and named StructTypes share the same rule — field order in the type definition = positional parameter order. See `10_expression_language.md` — Object Payload Calls.
+**Function argument mapping:** anonymous struct `inputType` values (`{ a: Float, b: Float }`) and named StructTypes share the same rule — field order in the type definition = positional parameter order. See `10_expression_language.md` — Object Input Calls.
 
 **Effective members:** `resolveEffectiveMembers()` merges by `(namespace, name)` along the `baseType` chain. Child override declarations merge with parent members — only specified attributes replace inherited values. Private members cannot be overridden; `final="true"` prevents override.
 

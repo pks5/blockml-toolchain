@@ -8,7 +8,7 @@
 
   <idea>OpenSCAD as an implementation language for sync capabilities.</idea>
 
-  <documentation>LanguageBlock for OpenSCAD function implementations on Sync Capabilities. Emitted by the MachineBlocks SCAD renderer with FQN-prefixed function names.</documentation>
+  <documentation>LanguageBlock for OpenSCAD function implementations on Transformation Capabilities. Emitted by the MachineBlocks SCAD renderer with FQN-prefixed function names.</documentation>
 
   <name>OpenSCAD</name>
   <type>org.blockml.language.OpenSCAD</type>

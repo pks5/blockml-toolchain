@@ -28,9 +28,9 @@
 
     <!-- #bools.isTrue(x) -->
     <capability name="isTrue"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.Boolean"
-                returnType="org.blockml.type.Boolean">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.Boolean"
+                outputType="org.blockml.type.Boolean">
       <documentation>
         Returns true if x is strictly true.
         Examples:
@@ -44,9 +44,9 @@
 
     <!-- #bools.isFalse(x) -->
     <capability name="isFalse"
-                type="org.blockml.capability.Sync"
-                payloadType="org.blockml.type.Boolean"
-                returnType="org.blockml.type.Boolean">
+                type="org.blockml.capability.Transformation"
+                inputType="org.blockml.type.Boolean"
+                outputType="org.blockml.type.Boolean">
       <documentation>
         Returns true if x is strictly false.
         Examples:

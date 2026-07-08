@@ -70,12 +70,12 @@ On a property typed with an EnumType, enum values may be written as:
 - **short id** — `STANDARD` (omits `com.machineblocks.type.BaseCutoutType::` because the property type is known)
 - **qualified id** — `com.machineblocks.type.BaseCutoutType::STANDARD`
 
-**Anonymous Object payloadType for FunctionBlock Capabilities:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Key order defines positional parameter order. Both positional and named call syntax are valid:
+**Anonymous Object inputType for FunctionBlock Capabilities:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Key order defines positional parameter order. Both positional and named call syntax are valid:
 
 ```text
-payloadType: { a: Float, b: Float }      → #math.max(a, b)  or  #math.max(a=x, b=y)
-payloadType: { x: Float, n: Integer }    → #math.round_n(x, n)
-payloadType: Float                       → #math.floor(x)   (single primitive — no struct wrapper)
+inputType: { a: Float, b: Float }      → #math.max(a, b)  or  #math.max(a=x, b=y)
+inputType: { x: Float, n: Integer }    → #math.round_n(x, n)
+inputType: Float                       → #math.floor(x)   (single primitive — no struct wrapper)
 ```
 
 `Tuple<T1, T2>` is not used — the anonymous struct pattern covers this role with the added benefit of named parameters.

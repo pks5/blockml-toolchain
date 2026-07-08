@@ -179,15 +179,15 @@ packages/core/
 
 BML files are **SSOT**. SCAD files in scad-lib are pre-rendered compile artifacts — not hand-edited.
 
-All Capabilities use structured Object `payloadType` with named keys — enabling both positional and named call syntax. Single-parameter Capabilities use the primitive type directly:
+All Transformation Capabilities use structured Object `inputType` with named keys — enabling both positional and named call syntax. Single-parameter Capabilities use the primitive type directly:
 
 ```text
-#math.max       → payloadType: { a: Float, b: Float }
-#math.floor     → payloadType: Float
-#math.clamp     → payloadType: { x: Float, lo: Float, hi: Float }
-#math.round_n   → payloadType: { x: Float, n: Integer }
-#lists.concat   → payloadType: { a: Object[0..n], b: Object[0..n] }
-#numbers.formatDecimal → payloadType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }
+#math.max       → inputType: { a: Float, b: Float }, outputType: Float
+#math.floor     → inputType: Float, outputType: Integer
+#math.clamp     → inputType: { x: Float, lo: Float, hi: Float }, outputType: Float
+#math.round_n   → inputType: { x: Float, n: Integer }, outputType: Float
+#lists.concat   → inputType: { a: Object[0..n], b: Object[0..n] }, outputType: Object[0..n]
+#numbers.formatDecimal → inputType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }, outputType: String
 ```
 
 Each Capability has a TypeScript implementation in `<implementation type="org.blockml.language.TypeScript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
