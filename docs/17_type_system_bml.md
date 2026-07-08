@@ -197,7 +197,7 @@ org.blockml.core.Block                         abstract root · omits baseType
 
 **One root · one registry · one parser.** Branch-specific rules come from the `baseType` chain — not from parallel ontologies. There is no separate ComposableBlock — all Blocks inherit directly from `org.blockml.core.Block` (or via domain/service branches).
 
-Every Block instance carries the **meta property** `id` (may be empty). Properties must not be named `id`. Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **TypeBlock** only.
+Every sub-type is free to declare its own members — `org.blockml.core.Block` declares **none**. Composition instance identity uses **`bml:id`** (may be empty); external references use **`bml:version`**. Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **TypeBlock** only.
 
 ### Literally everything — including the compiler's grammar
 
@@ -258,7 +258,7 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 `org.blockml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.core.Block` directly (or via intermediate branches like `TypeBlock`, `ServiceBlock`, `com.machineblocks.core.Block`):
 
 ```text
-org.blockml.core.Block           root · meta property id on every instance
+org.blockml.core.Block           root · declares no members · bml:id / bml:version on composition instances
 org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
 com.machineblocks.core.Block     baseType: Block · _presets · appliedPresets
 com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)

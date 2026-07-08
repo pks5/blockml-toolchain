@@ -75,7 +75,7 @@ Full FQN:          <reverse-domain-package>.<ClassName>
 
 ### Instance Identity
 
-Block instances (within a Composition) are identified by the **`id` meta property**. Nested paths use `::`:
+Block instances (within a Composition) are identified by **`bml:id`**. Nested paths use `::`:
 
 ```text
 Format:    <parentPartId>::<childPartId>::<subPartId>
@@ -334,11 +334,11 @@ Each child instance:
 
 ```text
 type          — FQN of the Block class
-id            — meta property. Required when referenced or on bml:each.
+bml:id        — composition instance identity. Required when referenced or on bml:each.
                 Anonymous static children receive auto-ID after directive expansion.
-renderGroup   — render group name (optional, fallback = id)
-namespace     — parameter filter namespace (optional, fallback = id)
-version       — version of the referenced Block type (required for external references only)
+renderGroup   — render group name (optional, fallback = resolved bml:id)
+namespace     — parameter filter namespace (optional, fallback = resolved bml:id)
+bml:version   — version pin when type refers to an external block (required for external references only)
 (members)     — member values: Properties and Capabilities (literals or Expressions)
 ```
 
@@ -478,11 +478,12 @@ Framework BML: `com/machineblocks/core/Step.bml`. Extends `org.blockml.core.Bloc
 Extends:        org.blockml.core.Block
 Final:          true
 Members:
-  id             — optional meta property when referenced
-  part           — association com.machineblocks.core.Block: references explicit id of a placed instance in _parts
+  part           — association com.machineblocks.core.Block: references bml:id of a placed instance in _parts
   description    — optional human-readable step label
 Composition:    none — leaf meta Block
 ```
+
+Step instances in `_steps` use **`bml:id`** when referenced; `part` points at a sibling's **`bml:id`** in `_parts`.
 
 When `_steps` is absent or empty, assembly order equals the document order of `_parts` entries.
 
@@ -626,8 +627,8 @@ Note: `com.machineblocks.core.Step` is a framework Block extending `org.blockml.
 Every Block definition carries a semantic version. External composition references are dependencies — each must specify an exact version. Same-document Sub-Block references do not.
 
 ```xml
-<ac:Wall id="wall" version="1.0.0" size="[1, 8, 9]" />
-<Base id="base_stud" offset="[0, 0, 0]" ... />   <!-- no version — Sub-Block, same file -->
+<ac:Wall bml:id="wall" bml:version="1.0.0" size="[1, 8, 9]" />
+<Base bml:id="base_stud" offset="[0, 0, 0]" ... />   <!-- no bml:version — Sub-Block, same file -->
 ```
 
 Strict from V1: missing `version` on an external reference → `BML_MISSING_VERSION`. Unknown version → `BML_UNKNOWN_VERSION`. No implicit `latest`, no registry default. Legacy scad-lib files must be updated before they compile.

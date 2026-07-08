@@ -14,7 +14,7 @@
 
   <idea>The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
 
-  <documentation>Root semantic unit of BlockML. Sole inheritance root for all Block definitions — composable blocks, TypeBlocks, LanguageBlocks, ServiceBlocks, and domain types. Every Block instance carries the meta property id (not declared). Any Block FQN may appear in aggregation and association types. Property and Capability types must resolve to org.blockml.core.TypeBlock.</documentation>
+  <documentation>Root semantic unit of BlockML. Sole inheritance root for all Block definitions — composable blocks, TypeBlocks, LanguageBlocks, ServiceBlocks, and domain types. Declares no members — every sub-type is free to define its own Properties, Aggregations, Associations, and Capabilities. Composition instance identity uses bml:id and bml:version (not member attributes). Any Block FQN may appear in aggregation and association types. Property and Capability types must resolve to org.blockml.core.TypeBlock.</documentation>
 
   <name>Block</name>
   <type>org.blockml.core.Block</type>

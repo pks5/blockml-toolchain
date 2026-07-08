@@ -104,7 +104,7 @@ xmlns:ac="com.martianmicro.anyclosure"
 A type reference using a prefix:
 
 ```xml
-<ac:Wall id="wall" size="[1, 8, 9]" />
+<ac:Wall bml:id="wall" size="[1, 8, 9]" />
 ```
 
 is resolved by the Namespace Resolver to the FQN:
@@ -139,7 +139,7 @@ There is no implicit fallback to the domain namespace. Explicit FQNs are always 
 
 **Property and Capability types** must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock`. Non-TypeBlock FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability payload/return types → `BML_INVALID_PROPERTY_TYPE`.
 
-**Reserved names:** `<property name="id">` is forbidden — `id` is a meta property on every Block instance, not a declarable property → `BML_RESERVED_PROPERTY_NAME`.
+**Member namespace:** `org.blockml.core.Block` declares **no members**. Every sub-type chooses its own Properties, Aggregations, Associations, and Capabilities — including names like `id` or `version` if a domain needs them. On composition instances, **instance identity** uses `bml:id` and **external reference version** uses `bml:version` — not bare attributes (see Composition section).
 
 **Aggregation and association types** may reference any Block FQN — not limited to TypeBlocks.
 
@@ -162,7 +162,7 @@ Extension document types bring their own schema. The schema location and managem
 
 A Block definition describes a reusable Block type — semantically a **Class**: declarative shape, members, and optional composition template. It declares Members (Properties, Aggregations, Associations, Capabilities) and an optional Composition (internal structure).
 
-Composition children (`<ac:Wall id="wall" …/>`, `<core:Step …/>`) are **Block Instances** — semantically **Objects**: they reference a class (`typeFqn`) and carry instance state (`id`, property values). See `00_bom_core.md` — Block and Block Instance.
+Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **Block Instances** — semantically **Objects**: they reference a class (`typeFqn`) and carry instance state (`bml:id`, member values). See `00_bom_core.md` — Block and Block Instance.
 
 ### Required Fields
 
@@ -438,16 +438,16 @@ _parts (CompositeBlock):
 
   <composition>
     <bricks:StandardBrick
-        id="bottom"
-        version="1.0.0"
+        bml:id="bottom"
+        bml:version="1.0.0"
         size="${ [size[0], size[1], size[2] - 1] }"
         recess="true"
         tongue="true"
         recessWallGaps="x+" />
 
     <bricks:StandardBrick
-        id="top"
-        version="1.0.0"
+        bml:id="top"
+        bml:version="1.0.0"
         size="${ [size[0], size[1], 1] }"
         offset="${ [0, 0, size[2] - 1] }"
         recessWallGaps="x+"
@@ -482,14 +482,14 @@ _parts (CompositeBlock):
 
   <composition>
     <bricks:StandardBrick
-        id="bottom"
+        bml:id="bottom"
         size="${ [size[0], size[1], size[2] - 1] }"
         recess="true"
         tongue="true"
         recessWallGaps="x+" />
 
     <bricks:StandardBrick
-        id="top"
+        bml:id="top"
         size="${ [size[0], size[1], 1] }"
         offset="${ [0, 0, size[2] - 1] }"
         recessWallGaps="x+"
@@ -761,16 +761,14 @@ export        — optional; export="true" exposes children with static id for {E
 Child elements inside `<composition>` are Block instances. Each instance:
 
 ```text
-Tag name      — class name (with namespace prefix)
-id            — **meta property** on every Block instance. Part ID for composition identity (parentId::partId). Not declarable as `<property name="id">`.
-                Required when referenced (appliedPresets targets, Step.part, …) or on bml:each elements (literal or Expression).
-                Omitted on anonymous static children → auto-ID after directive expansion. Not a custom property.
-renderGroup   — optional, fallback = id
-namespace     — optional, fallback = id
-version       — **required** on external block references (types from another file);
-                omitted only on same-document Sub-Block references. Missing → BML_MISSING_VERSION.
-                See `12_bom_object_model.md`.
-(attributes)  — any Member value of the referenced Block type (camelCase)
+Tag name        — class name (with namespace prefix)
+bml:id          — composition instance identity (part ID). Required when referenced or on bml:each (literal or Expression).
+                  Omitted on anonymous static children → auto-ID after directive expansion.
+bml:version     — required on external block references (types from another file);
+                  omitted only on same-document Sub-Block references. Missing → BML_MISSING_VERSION.
+renderGroup     — optional, fallback = resolved bml:id
+namespace       — optional, fallback = resolved bml:id
+(attributes)    — any Member value of the referenced Block type (camelCase) — property namespace is free
 ```
 
 Member values on child instances may be literals or Expressions.
@@ -881,7 +879,7 @@ On a Composition instance:
 
 ```xml
 <bricks:StandardBrick
-    id="strip"
+    bml:id="strip"
     size="[2, 4, 3]"
     data:role="base-strip"
     data:group="calibration-row-0" />
@@ -911,13 +909,14 @@ BML Directives are special attributes in the `bml:` namespace that control struc
 
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
-| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` in BOM — renderer may consume. |
+| `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
+| `bml:version` | Block instances | External block reference version (required when type is from another file) |
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
-| `id` | Block instances | **System property** — not a directive, not a custom property. `id="${ expr }"` for dynamic IDs |
+| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` in BOM — renderer may consume. |
 
-There is no `bml:id` directive.
+Bare `id=` or `version=` on composition instances are **member values** — same as any other attribute. Use `bml:id` / `bml:version` for composition meta.
 
 ### `bml:each` — Loop
 
@@ -996,12 +995,12 @@ Produces no Block output itself — groups child Blocks for shared directives:
 
 ### Dynamic Instance ID
 
-Use the `id` meta property for dynamic IDs in loops — not a directive:
+Use `bml:id` for dynamic IDs in loops:
 
 ```xml
 <bricks:StandardBrick
     bml:each="i : ${ numberOfSamples }"
-    id="${ 'sample_' + i }"
+    bml:id="${ 'sample_' + i }"
     offset="${ [2 * i, 0, 0] }" />
 ```
 
@@ -1124,8 +1123,8 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Li
 
 ```xml
 <!-- Inside Calibrator's composition: -->
-<Base id="base_stud" offset="[0, 0, 0]" ... />
-<StudDiameter id="samples_stud" ... />
+<Base bml:id="base_stud" offset="[0, 0, 0]" ... />
+<StudDiameter bml:id="samples_stud" ... />
 ```
 
 **Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.Library"` (e.g. `BricksLibrary`) automatically resolves `Dependency`, `TypeRef`, `BlockRef`, … without prefix — they are Sub-Blocks of `org.blockml.core.Library`, inherited via the baseType chain. Authors do not redeclare them in each library file.
@@ -1232,14 +1231,14 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
       <composition>
         <!-- Base strip -->
         <bricks:StandardBrick
-            id="strip"
+            bml:id="strip"
             size="${ [2 * numberOfSamples + 1, 1, 1] }"
             baseCutoutType="none"
             studs="false" />
 
         <!-- Label block -->
         <bricks:StandardBrick
-            id="label"
+            bml:id="label"
             size="${ [labelSize, 1, 1] }"
             offset="${ [0, 1, 0] }"
             text="${ label }"
@@ -1251,7 +1250,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
         <!-- Value label blocks -->
         <bricks:StandardBrick
             bml:each="i, stat : ${ numberOfSamples }"
-            id="${ 'val_' + stat.index }"
+            bml:id="${ 'val_' + stat.index }"
             size="[1, 1, 1]"
             offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
             text="${ #numbers.formatDecimal(valueStart + i * valueStep, 0, '.', 1) }"
@@ -1273,7 +1272,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            id="${ 's_' + i }"
+            bml:id="${ 's_' + i }"
             size="[1, 1, 1]"
             offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0] }"
             studDiameterAdjustment="${ valueStart + i * valueStep }"
@@ -1287,7 +1286,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
     <!-- Four calibration rows via bml:block loop -->
     <bml:block bml:each="row, stat : ${ rows }">
       <Base
-          id="${ 'base_' + stat.index }"
+          bml:id="${ 'base_' + stat.index }"
           offset="${ [0, stat.index * -3, 0] }"
           label="${ row.label }"
           valueStart="${ row.valueStart }"
@@ -1297,7 +1296,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
           fontSize="${ fontSize }"
           labelSize="${ labelSize }" />
       <StudDiameter
-          id="${ 'samples_' + stat.index }"
+          bml:id="${ 'samples_' + stat.index }"
           offset="${ [0, stat.index * -3, 0] }"
           numberOfSamples="${ numberOfSamples }"
           valueStart="${ row.valueStart }"
@@ -1346,24 +1345,24 @@ _steps      — assembly order (optional; defaults to document order of _parts)
 
   <!-- Block palette: inherited _presets -->
   <composition aggregation="_presets">
-    <ac:Floor  id="floor"  size="[16, 16, 1]" />
-    <ac:Corner id="corner" size="[4, 4, 9]"   />
-    <ac:Wall   id="wall"   size="[1, 8, 9]"   />
-    <ac:Lid    id="lid"    size="[16, 16, 1]" />
+    <ac:Floor  bml:id="floor"  size="[16, 16, 1]" />
+    <ac:Corner bml:id="corner" size="[4, 4, 9]"   />
+    <ac:Wall   bml:id="wall"   size="[1, 8, 9]"   />
+    <ac:Lid    bml:id="lid"    size="[16, 16, 1]" />
   </composition>
 
   <!-- Placed instances: inherited _parts -->
   <composition aggregation="_parts">
-    <ac:Floor id="00001" appliedPresets="floor"  direction="West"  offset="[0, 0, 0]"   />
-    <ac:Corner id="00002" appliedPresets="corner" direction="West"  offset="[0, 0, 1]"   />
-    <ac:Wall id="00003" appliedPresets="wall"   direction="West"  offset="[0, 4, 1]"   />
-    <ac:Corner id="00004" appliedPresets="corner" direction="North" offset="[0, 12, 1]"  />
-    <ac:Wall id="00005" appliedPresets="wall"   direction="North" offset="[4, 15, 1]"  />
-    <ac:Corner id="00006" appliedPresets="corner" direction="East"  offset="[12, 12, 1]" />
-    <ac:Wall id="00007" appliedPresets="wall"   direction="East"  offset="[15, 4, 1]"  />
-    <ac:Corner id="00008" appliedPresets="corner" direction="South" offset="[12, 0, 1]"  />
-    <ac:Wall id="00009" appliedPresets="wall"   direction="South" offset="[4, 0, 1]"   />
-    <ac:Lid id="0000A" appliedPresets="lid"    direction="West"  offset="[0, 0, 10]"  />
+    <ac:Floor bml:id="00001" appliedPresets="floor"  direction="West"  offset="[0, 0, 0]"   />
+    <ac:Corner bml:id="00002" appliedPresets="corner" direction="West"  offset="[0, 0, 1]"   />
+    <ac:Wall bml:id="00003" appliedPresets="wall"   direction="West"  offset="[0, 4, 1]"   />
+    <ac:Corner bml:id="00004" appliedPresets="corner" direction="North" offset="[0, 12, 1]"  />
+    <ac:Wall bml:id="00005" appliedPresets="wall"   direction="North" offset="[4, 15, 1]"  />
+    <ac:Corner bml:id="00006" appliedPresets="corner" direction="East"  offset="[12, 12, 1]" />
+    <ac:Wall bml:id="00007" appliedPresets="wall"   direction="East"  offset="[15, 4, 1]"  />
+    <ac:Corner bml:id="00008" appliedPresets="corner" direction="South" offset="[12, 0, 1]"  />
+    <ac:Wall bml:id="00009" appliedPresets="wall"   direction="South" offset="[4, 0, 1]"   />
+    <ac:Lid bml:id="0000A" appliedPresets="lid"    direction="West"  offset="[0, 0, 10]"  />
   </composition>
 
   <!-- _steps omitted → assembly order = document order of _parts -->
@@ -1402,14 +1401,14 @@ Because `_presets` and `_parts` are separated, one Block configuration can be re
 
 ```xml
 <composition aggregation="_presets">
-  <ac:Wall id="wall" size="[1, 8, 9]" baseColor="#303D4E" />
+  <ac:Wall bml:id="wall" size="[1, 8, 9]" baseColor="#303D4E" />
 </composition>
 
 <composition aggregation="_parts">
-  <ac:Wall id="00003" appliedPresets="wall" direction="West"  offset="[0, 4, 1]"  />
-  <ac:Wall id="00005" appliedPresets="wall" direction="North" offset="[4, 15, 1]" />
-  <ac:Wall id="00007" appliedPresets="wall" direction="East"  offset="[15, 4, 1]" />
-  <ac:Wall id="00009" appliedPresets="wall" direction="South" offset="[4, 0, 1]"  />
+  <ac:Wall bml:id="00003" appliedPresets="wall" direction="West"  offset="[0, 4, 1]"  />
+  <ac:Wall bml:id="00005" appliedPresets="wall" direction="North" offset="[4, 15, 1]" />
+  <ac:Wall bml:id="00007" appliedPresets="wall" direction="East"  offset="[15, 4, 1]" />
+  <ac:Wall bml:id="00009" appliedPresets="wall" direction="South" offset="[4, 0, 1]"  />
 </composition>
 ```
 
@@ -1477,28 +1476,28 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
 
   <composition aggregation="_presets" export="true">
 
-    <bricks:Standard id="brick-1x1" name="Brick 1x1" version="3.0.0" size="[1, 1, 3]" />
+    <bricks:Standard bml:id="brick-1x1" name="Brick 1x1" bml:version="3.0.0" size="[1, 1, 3]" />
 
-    <bricks:Standard id="color-red" name="Red" version="3.0.0" baseColor="#D65745" />
+    <bricks:Standard bml:id="color-red" name="Red" bml:version="3.0.0" baseColor="#D65745" />
 
     <!-- Composite preset — appliedPresets merges preset chain -->
-    <bricks:Standard id="brick-1x1-red"
+    <bricks:Standard bml:id="brick-1x1-red"
                      name="Brick 1x1 Red"
-                     version="3.0.0"
+                     bml:version="3.0.0"
                      appliedPresets="brick-1x1 color-red" />
 
     <!-- Composite with own override -->
-    <bricks:Standard id="brick-1x1-red-text"
+    <bricks:Standard bml:id="brick-1x1-red-text"
                      name="Brick 1x1 Red MB"
-                     version="3.0.0"
+                     bml:version="3.0.0"
                      appliedPresets="brick-1x1-red"
                      text="MB"
                      textColor="#EDF0F1" />
 
     <!-- Cross-file appliedPresets reference -->
-    <bricks:Standard id="brick-2x4-special"
+    <bricks:Standard bml:id="brick-2x4-special"
                      name="Brick 2x4 Special"
-                     version="3.0.0"
+                     bml:version="3.0.0"
                      appliedPresets="com.myproject.presets.MyPresets::my-base brick-2x4"
                      textColor="#EDF0F1" />
 
@@ -1507,13 +1506,13 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
 </block>
 ```
 
-**`id`** — stable kebab-case identifier. Used for references via `appliedPresets` and thumbnail filenames. Must be unique within the enclosing Block's `_presets`. Never changes once published.
+**`bml:id`** — stable kebab-case identifier. Used for references via `appliedPresets` and thumbnail filenames. Must be unique within the enclosing Block's `_presets`. Never changes once published.
 
 **`name`** — human-readable display name. Used in the SCAD Customizer JSON and editor UI. May be renamed without breaking references.
 
 **`appliedPresets`** — space-separated preset ids on any MachineBlocks Block instance. Local ids resolve within the enclosing Block's `_presets`; cross-file entries use `{BlockFQN}::{id}`. Applied left-to-right; later entries override earlier. Own instance properties override all applied presets.
 
-Qualified `{BlockFQN}::{id}` references require the target composition to declare `export="true"` and the target instance to have a **literal static `id`** — see `00_bom_core.md` — Qualified Block Instance References.
+Qualified `{BlockFQN}::{id}` references require the target composition to declare `export="true"` and the target instance to have a **literal static `bml:id`** — see `00_bom_core.md` — Qualified Block Instance References.
 
 Presets can reference other presets — preset instances in `_presets` may themselves carry `appliedPresets`, forming an inheritance chain.
 
@@ -1530,7 +1529,7 @@ Requirements for qualified references:
 
 ```text
 1. Target <composition … export="true">
-2. Target instance: literal id (no ${ … }, not bml:each-only)
+2. Target instance: literal bml:id (no ${ … }, not bml:each-only)
 3. Reference: literal attribute value (not ${ … })
 ```
 
@@ -1540,11 +1539,11 @@ Diagnostics: `BML_UNEXPORTED_INSTANCE_REF` · `BML_NON_STATIC_INSTANCE_REF`
 
 ```xml
 <!-- Preset only -->
-<bricks:Standard version="3.0.0"
+<bricks:Standard bml:version="3.0.0"
     appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />
 
 <!-- Preset + inline override -->
-<bricks:Standard version="3.0.0"
+<bricks:Standard bml:version="3.0.0"
     appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
@@ -1802,14 +1801,14 @@ baseType missing              → BML_MISSING_BASE_TYPE (no default)
   + single default aggregation in effective members → fills that aggregation (typically _parts for MB Blocks)
   + multiple aggregations, no default               → compiler error: aggregation attribute required
 type="Foo" (unqualified)      → resolved against org.blockml.type.* (primitives only)
-version missing on external instance → BML_MISSING_VERSION (error, no fallback)
-unknown version on external instance → BML_UNKNOWN_VERSION (error)
-same-document Sub-Block instance     → version not required
-id missing on referenced instance    → BML_MISSING_ID
-id missing on bml:each element       → BML_MISSING_ID
+bml:version missing on external instance → BML_MISSING_VERSION (error, no fallback)
+unknown bml:version on external instance → BML_UNKNOWN_VERSION (error)
+same-document Sub-Block instance          → bml:version not required
+bml:id missing on referenced instance     → BML_MISSING_ID
+bml:id missing on bml:each element        → BML_MISSING_ID
 appliedPresets / Step.part unresolvable     → BML_UNRESOLVABLE_INSTANCE_REF
 qualified FQN::id without export="true"     → BML_UNEXPORTED_INSTANCE_REF
 qualified FQN::id with Expression id/ref    → BML_NON_STATIC_INSTANCE_REF
-anonymous static child without id    → auto-ID after directive expansion (not stored in BOM)
+anonymous static child without bml:id     → auto-ID after directive expansion (not stored in BOM)
 _steps missing or empty       → assembly order = document order of _parts
 ```

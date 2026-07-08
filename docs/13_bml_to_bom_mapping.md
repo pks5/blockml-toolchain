@@ -75,10 +75,9 @@ When mapping an XML element to a BOM node, every attribute is classified using t
 
 ```text
 1. xmlns*, xsi:*              → ignore (except xmlns bindings → SourceInfo.namespaceBindings)
-2. bml:*                      → DirectiveAttribute → directives[]
+2. bml:*                      → see § Rule 2 — meta (bml:id, bml:version) or directives[]
 3. data:*                     → DataAttribute → dataAttributes[]  (Block definitions + Block instances only)
-4. Instance meta attributes   → BlockInstance fields (not memberValues)
-5. All other attributes       → memberValues[name]  (camelCase property/capability values)
+4. All other attributes       → memberValues[name]  (camelCase property/capability values)
 ```
 
 ### Rule 1 — XML infrastructure
@@ -88,9 +87,16 @@ xmlns:bricks="com.machineblocks.bricks"   → namespaceBindings["bricks"]
 xsi:schemaLocation="..."                  → ignored
 ```
 
-### Rule 2 — `bml:*` directives
+### Rule 2 — `bml:*` attributes
 
-Parsed into `DirectiveAttribute` on the **same element** (Thymeleaf model):
+**Composition meta** (Block instances only) — stored on `BlockInstance` fields, not in `directives[]`:
+
+| Attribute | BOM field |
+|---|---|
+| `bml:id` | `BlockInstance.id` (`MemberValue`) |
+| `bml:version` | `BlockInstance.version` (`MemberValue`) |
+
+**Flow-control directives** — stored in `directives[]` on the same element (Thymeleaf model):
 
 | Attribute | AST type |
 |---|---|
@@ -99,13 +105,11 @@ Parsed into `DirectiveAttribute` on the **same element** (Thymeleaf model):
 | `bml:unless` | `UnlessDirective` |
 | `bml:with` | `WithDirective` |
 
-Any other `bml:*` attribute name → **`BML_UNKNOWN_DIRECTIVE` (error)**. Examples: `bml:id`, `bml:foo`, typos like `bml:ech`.
+Any other `bml:*` attribute name → **`BML_UNKNOWN_DIRECTIVE` (error)**. Examples: `bml:foo`, typos like `bml:ech`.
 
 Known directive on a disallowed element (see placement rules in `12_bom_object_model.md`) → **`BML_DIRECTIVE_NOT_ALLOWED` (error)**.
 
-Directive values that contain `${ }` are stored as `ExpressionValue` (raw in stage [5], AST in stage [7]).
-
-There is no `bml:id` — `id` is a meta property (rule 5).
+Directive and meta values that contain `${ }` are stored as `ExpressionValue` (raw in stage [5], AST in stage [7]).
 
 ### Rule 3 — `data:*` data attributes
 
@@ -118,32 +122,21 @@ data:count="${ sampleCount }"  →  dataAttributes[] { key: "count", value: Expr
 
 Values are **not evaluated** at parse or validate time. Invalid placement (e.g. on `<capability>`) → diagnostic error at map time.
 
-### Rule 4 — Instance meta attributes
-
-Applies to **Block instance elements** in a composition. These map to `BlockInstance` fields directly — not `memberValues`:
-
-| Attribute | BOM field |
-|---|---|
-| `version` | `BlockInstance.version` |
-| `appliedPresets` | `BlockInstance.memberValues.appliedPresets` (association) |
-| `renderGroup` | `BlockInstance.renderGroup` |
-| `namespace` | `BlockInstance.namespace` |
-
-On Block **definitions**, these attributes do not appear — definition metadata uses child elements (`<version>`, etc.).
-
-### Rule 5 — Member values
+### Rule 4 — Member values
 
 All remaining attributes become `memberValues[name]`:
 
 ```text
 size="[1, 8, 9]"           → memberValues.size (LiteralValue or ExpressionValue)
-id="wall"                    → memberValues.id   (meta property — still stored here)
-id="${ 'val_' + i }"         → memberValues.id   (ExpressionValue)
+id="wall"                    → memberValues.id   (only when Block type declares id Property)
+version="1.0.0"              → memberValues.version (only when Block type declares version Property)
 blockId="wall"               → memberValues.blockId
 onResized="stud://..."       → memberValues.onResized (AddressValue or ExpressionValue)
 ```
 
-Value classification within rule 5:
+Use **`bml:id`** / **`bml:version`** for composition instance identity and external reference version — not bare attributes.
+
+Value classification within rule 4:
 
 ```text
 ${ ... }                     → ExpressionValue { raw }  (AST added in stage [7])
@@ -151,7 +144,7 @@ address-shaped capability    → AddressValue
 otherwise                    → LiteralValue (typed deserializer — see § Literal Deserialization, pending)
 ```
 
-Unknown member names survive rule 5 and are stored in `memberValues`. The semantic validator emits **`BML_UNKNOWN_PROPERTY` (warning)** — custom property assumed. See § Unknown Attributes below.
+Unknown member names survive rule 4 and are stored in `memberValues`. The semantic validator emits **`BML_UNKNOWN_PROPERTY` (warning)** — custom property assumed. See § Unknown Attributes below.
 
 ### Unknown Attributes
 
@@ -170,8 +163,8 @@ Input:
 
 ```xml
 <bricks:StandardBrick
-    version="3.0.0"
-    id="${ 'val_' + i }"
+    bml:version="3.0.0"
+    bml:id="${ 'val_' + i }"
     bml:each="i : ${ numberOfSamples }"
     size="[1, 1, 1]"
     data:role="sample"
@@ -183,10 +176,10 @@ Output (`BlockInstanceNode`):
 ```text
 instance:
   typeFqn:     com.machineblocks.bricks.StandardBrick
-  version:     "3.0.0"
+  version:     LiteralValue("3.0.0")
   renderGroup: "calibration"
+  id:          ExpressionValue
   memberValues:
-    id:   ExpressionValue
     size: LiteralValue
   dataAttributes:
     [{ key: "role", value: LiteralValue("sample") }]
@@ -393,7 +386,7 @@ Without `library.xml`, all BML files in a directory are discovered and registere
 ### What the parser stores for external references
 
 ```xml
-<bricks:StandardBrick version="3.0.0" id="strip" size="[2, 4, 3]" />
+<bricks:StandardBrick bml:version="3.0.0" bml:id="strip" size="[2, 4, 3]" />
 ```
 
 Stage [5] output — no file load:
@@ -428,7 +421,7 @@ appliedPresets="brick-1x1 com.other.Presets::color-red"
   → Validator resolves each token as local id or FQN::id (stage [8])
 ```
 
-Preset instances in `_presets` composition map like any other Block instance. The `name` attribute maps to `memberValues.name`; `id` maps to `memberValues.id`.
+Preset instances in `_presets` composition map like any other Block instance. The `name` attribute maps to `memberValues.name`; `bml:id` maps to `BlockInstance.id`.
 
 ```text
 <composition aggregation="_presets" export="true">  →  CompositionTemplate.export = true

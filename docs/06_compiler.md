@@ -468,7 +468,6 @@ BML_CONTRACT_MEMBER_INCOMPATIBLE — member present but type/cardinality mismatc
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
 BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfied (type notation)
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
-BML_RESERVED_PROPERTY_NAME    — property name "id" (reserved meta property)
 BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a TypeBlock
 BML_UNKNOWN_BEAN              — @bean reference not found in aggregations
 BML_CAPABILITY_LINK_MISMATCH  — capability linking: direction or payload mismatch

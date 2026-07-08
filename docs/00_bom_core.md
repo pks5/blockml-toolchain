@@ -40,8 +40,8 @@ The closest familiar model: a **Block** is a declarative, semantic **Class**; a 
 
 ```text
 Block (definition)              Block Instance (in composition)
-  .bml file · BlockDefinition     <ac:Wall id="wall" size="[1,8,9]" />
-  FQN · members · composition     typeFqn + id + member values
+  .bml file · BlockDefinition     <ac:Wall bml:id="wall" size="[1,8,9]" />
+  FQN · members · composition     typeFqn + bml:id + member values
   describes shape & behaviour     one concrete occurrence
   no Runtime · no address         may become a Thing in Runtime (WOT)
 ```
@@ -179,7 +179,7 @@ Examples:
 
 ### Instance Identity
 
-Instances within a Composition are identified by a **part ID** — the **`id` meta property** on every Block instance. Nested paths are composed with `::`:
+Instances within a Composition are identified by a **part ID** — the value of **`bml:id`** on the Block instance. Nested paths are composed with `::`:
 
 ```text
 Format:    <parentPartId>::<childPartId>::<grandchildPartId>
@@ -194,11 +194,11 @@ Examples:
 
 There is **no FQN fallback** — a Block's type FQN is never used as instance identity.
 
-**Explicit IDs** are authored in BML via the `id` attribute (meta property). Required when:
+**Explicit IDs** are authored in BML via **`bml:id`**. Required when:
 - another instance references this one (`appliedPresets`, `Step.part`, …)
 - the element carries `bml:each` (literal or Expression — auto-ID is not available in loops)
 
-**Auto-generated IDs** are assigned **after directive expansion** for static, unreferenced children that omit `id`. They are deterministic 6-hex hashes:
+**Auto-generated IDs** are assigned **after directive expansion** for static, unreferenced children that omit **`bml:id`**. They are deterministic 6-hex hashes:
 
 ```text
 Hash inputs:
@@ -214,7 +214,7 @@ Auto-generated IDs are deterministic across compile runs. They may appear in gen
 
 ### Qualified Block Instance References
 
-A Block instance in another document is referenced by **`{BlockFQN}::{id}`** — the FQN of the **enclosing Block definition** (the document that owns the composition) plus the target instance's `id` meta property:
+A Block instance in another document is referenced by **`{BlockFQN}::{id}`** — the FQN of the **enclosing Block definition** (the document that owns the composition) plus the target instance's **`bml:id` value**:
 
 ```text
 Format:     {EnclosingBlockFQN}::{instanceId}
@@ -232,7 +232,7 @@ A qualified reference is valid **only when both** conditions hold:
 
 ```xml
 <composition aggregation="_presets" export="true">
-  <bricks:Standard id="brick-2x4" version="3.0.0" size="[2, 4, 3]" />
+  <bricks:Standard bml:id="brick-2x4" bml:version="3.0.0" size="[2, 4, 3]" />
 </composition>
 ```
 
@@ -241,24 +241,24 @@ Without `export="true"` on that composition, `com.machineblocks.bricks.StandardP
 **2. Static target.** The target instance must be statically resolvable at validate time:
 
 ```text
-Target id     — explicit literal (not ${ … }); not produced only by bml:each expansion
+Target bml:id  — explicit literal (not ${ … }); not produced only by bml:each expansion
 Reference     — literal token in the attribute value (not wrapped in ${ … })
 ```
 
 ```xml
 <!-- ✓ valid reference target -->
-<bricks:Standard id="brick-2x4" … />
+<bricks:Standard bml:id="brick-2x4" … />
 
 <!-- ✗ not referencable via FQN::id -->
-<bricks:Standard bml:each="i : ${ n }" id="${ 'p_' + i }" … />
-<bricks:Standard id="${ presetId }" … />
+<bricks:Standard bml:each="i : ${ n }" bml:id="${ 'p_' + i }" … />
+<bricks:Standard bml:id="${ presetId }" … />
 ```
 
 Dynamic references → `BML_NON_STATIC_INSTANCE_REF`.
 
 Same-document references (unqualified id only, e.g. `appliedPresets="brick-2x4"` within the same Block) resolve within the enclosing Block's aggregations and do not require `export="true"`. The export rule applies to **`{BlockFQN}::{id}`** references only.
 
-**BOM storage:** the parser stores `id` only when authored. Auto-IDs are not written into `BomDocument` — see `12_bom_object_model.md` — Instance ID Rules.
+**BOM storage:** the parser stores `bml:id` only when authored. Auto-IDs are not written into `BomDocument` — see `12_bom_object_model.md` — Instance ID Rules.
 
 ---
 
@@ -375,28 +375,31 @@ Contract validation runs at stage [8] (semantic validation), after `resolveEffec
 
 Properties are typed parameters of a Block. Every Property has a name, a type, and a default value.
 
-### Meta Properties
+### Composition Meta (`bml:id`, `bml:version`)
 
-BOM Core defines **meta properties** on every Block instance. They are not declared in `<properties>` and cannot be redeclared by authors.
+`org.blockml.core.Block` declares **no members**. The property namespace on every sub-type is **completely free** — domains may declare Properties named `id`, `version`, or anything else.
+
+Composition **instance identity** and **external reference version** are not member attributes. They use the `bml:` namespace on Block instance elements:
 
 ```text
-id   — instance identity within a composition tree (String); present on every Block instance, may be empty
+bml:id       — instance identity within a composition tree; may be empty
+bml:version  — semantic version pin when typeFqn refers to an external block (another file)
 ```
 
 ```text
-Authored as:     XML attribute id="…" on composition instances
-Not declarable:  <property name="id" …/> forbidden — BML_RESERVED_PROPERTY_NAME
-Not a directive: no bml:id — id is instance metadata, not flow-control
+Authored as:     bml:id="…" and bml:version="…" on composition instances
+Not on Block:    org.blockml.core.Block declares no members — no reserved property names
+Bare id=/version= on instances → memberValues if the referenced Block type declares such Properties
 Special semantics: identity paths (parent::child), reference validation,
                    auto-ID rules, render identity (mb_block_id)
 ```
 
-Do not treat `id` as a regular custom property like `wallThickness`. The compiler, validator, and renderer give it dedicated handling. See Instance Identity and `12_bom_object_model.md` — Instance ID Rules.
+Do not confuse `bml:id` (composition meta) with a domain Property named `id`. The compiler, validator, and renderer give `bml:id` dedicated handling. See Instance Identity and `12_bom_object_model.md` — Instance ID Rules.
 
 ### Property metadata
 
 ```text
-name          — camelCase property name (unique within the Block's member namespace; must not be "id")
+name          — camelCase property name (unique within the Block's member namespace)
 type          — FQN of a TypeBlock (baseType chain includes org.blockml.core.TypeBlock)
 defaultValue  — typed default value (literal or Expression)
 group         — optional grouping hint (for editors)
@@ -628,7 +631,7 @@ In BML, `data:*` attributes and `data:*` child elements are stored as `dataAttri
 ```xml
 <!-- BML authoring: -->
 <bricks:StandardBrick
-    id="strip"
+    bml:id="strip"
     data:role="structural"
     data:count="${ sampleCount }" />
 
@@ -875,9 +878,9 @@ Each child instance carries:
 
 ```text
 type          — FQN of the child Block class
-id            — meta property. Required when referenced or on bml:each.
+bml:id        — composition instance identity. Required when referenced or on bml:each.
                 Omitted on anonymous static children → auto-ID after expansion. See Instance Identity.
-version       — version of the referenced Block type
+bml:version   — version pin when type refers to an external block (another file)
 members       — member values for Properties and Capabilities (see below)
 ```
 
@@ -930,10 +933,11 @@ The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*
 | `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` — renderer may consume. |
 | `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:block>`, Block instances | Loop |
+| `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
+| `bml:version` | Block instances | External block reference version (required when type is from another file) |
 | `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
-| `id` | Block instances | **System property** (not a directive, not a custom property). Drives instance identity, references, and render output. Explicit when referenced or on `bml:each`. Auto-ID only after expansion for anonymous static children. |
 
-There is no `bml:id` directive. Dynamic instance IDs use the `id` meta property.
+Bare `id=` / `version=` on instances are member values when the Block type declares such Properties.
 
 ### `bml:each` — Loop
 
@@ -1007,12 +1011,12 @@ A container that produces no Block output itself but allows directives to apply 
 
 ### Dynamic Instance ID
 
-Use the `id` meta property (not a directive) for dynamic IDs inside loops:
+Use `bml:id` for dynamic IDs inside loops:
 
 ```xml
 <bricks:StandardBrick
     bml:each="i : ${ numberOfSamples }"
-    id="${ 'sample_' + i }"
+    bml:id="${ 'sample_' + i }"
     offset="${ [2 * i, 0, 0] }" />
 ```
 
@@ -1072,8 +1076,8 @@ com.machineblocks.calibration.Calibrator.Base.Strip
 Within the parent Block's own Composition, Sub-Blocks are referenced by short name without namespace prefix:
 
 ```xml
-<Base id="base_stud" ... />
-<StudDiameter id="samples_stud" ... />
+<Base bml:id="base_stud" ... />
+<StudDiameter bml:id="samples_stud" ... />
 ```
 
 ### SCAD Mapping
@@ -1108,7 +1112,7 @@ composition       — Block instances in aggregation _presets; use export="true"
 Each preset instance in `_presets`:
 
 ```text
-id               — stable kebab-case identifier (meta property id; reference key)
+bml:id           — stable kebab-case identifier (composition meta; reference key)
 name             — human-readable display name (Customizer UI, editor)
 appliedPresets   — association _self[]: space-separated preset ids (local or FQN::id)
                    own instance properties override merged preset chain
@@ -1419,15 +1423,15 @@ Unqualified type names in serialization formats are resolved against the domain'
 Every Block, Library, and Catalog definition carries a semantic version. External instance references in Compositions are **dependencies** — each must pin an exact version explicitly. Same-document Sub-Block references do not require an instance version.
 
 ```text
-version: "1.0.0"   — on every Block definition (root and Sub-Block)
-version="1.0.0"    — on every external block instance reference (mandatory)
+version: "1.0.0"      — on every Block definition (root and Sub-Block)
+bml:version="1.0.0"   — on every external block instance reference in a composition (mandatory)
 ```
 
 **Strict from V1:** no implicit `latest`, no registry fallback, no migration warnings. A missing or unknown version is a compile error.
 
 See `12_bom_object_model.md` — Instance Version Rules.
 
-Library `<Dependency>` entries require an explicit `version` attribute — same dependency semantics as composition instance versions.
+Library `<Dependency>` entries require an explicit `version` member attribute — same dependency semantics as `bml:version` on external composition instances.
 
 ---
 

@@ -605,7 +605,7 @@ The stat variable name is arbitrary — choose any valid identifier. This is ess
 <bml:block bml:each="x, xStat : ${ columns }">
   <core:NativeBlock
       bml:each="y, yStat : ${ rows }"
-      id="${ 'brick_' + x + '_' + y }"
+      bml:id="${ 'brick_' + x + '_' + y }"
       offset="${ [x * blockSize[0], y * blockSize[1], 0] }"
       baseColor="${ (x + y) % 2 == 0 ? colorA : colorB }"
       connectors="${ #lists.concat(
@@ -669,12 +669,12 @@ A virtual container that produces no Block output but applies directives to a gr
 
 ### Dynamic Instance ID
 
-Use the `id` meta property for dynamic IDs in loops — there is no `bml:id` directive:
+Use `bml:id` for dynamic IDs in loops:
 
 ```xml
 <bricks:StandardBrick
     bml:each="i : ${ numberOfSamples }"
-    id="${ 'sample_' + i }"
+    bml:id="${ 'sample_' + i }"
     offset="${ [2 * i, 0, 0] }" />
 ```
 

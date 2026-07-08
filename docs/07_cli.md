@@ -516,7 +516,7 @@ src/config/scale_2x.bml
   <version>1.0.0</version>
 
   <composition aggregation="_presets">
-    <ConfigBlock id="default" name="Default" ... />
+    <ConfigBlock bml:id="default" name="Default" ... />
   </composition>
 
 </block>
