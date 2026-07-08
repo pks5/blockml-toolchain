@@ -1,0 +1,33 @@
+<!--
+  BlockML Core — capbility type branch (capability implementation contract)
+
+  FQN: org.blockml.core.Capability
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <idea>Representation of a capability.</idea>
+
+  <documentation>Capability type branch of BlockML. Declares an capablity type.</documentation>
+
+  <name>CapabilityType</name>
+  <type>org.blockml.core.CapabilityType</type>
+  <baseType>org.blockml.core.TypeBlock</baseType>
+  <version>1.0.0</version>
+
+  <abstract>true</abstract>
+
+  <properties>
+    <property name="hasInput" type="Boolean" readOnly="true" defaultValue="false">
+      <documentation>Whether the capabality has an input and thus requires a specified inputType.</documentation>
+    </property>
+    <property name="hasOutput" type="Boolean" readOnly="true" defaultValue="false">
+      <documentation>Whether the capabality has an output and thus requires a specified outputType.</documentation>
+    </property>
+  </properties>
+</block>

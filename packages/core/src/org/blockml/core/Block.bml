@@ -22,9 +22,4 @@
 
   <abstract>true</abstract>
 
-  <aggregations>
-    <aggregation name="customData"
-                 type="org.blockml.core.CustomData[]" />
-  </aggregations>
-
 </block>
