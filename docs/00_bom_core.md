@@ -351,6 +351,8 @@ suggestions   — optional list of suggested values (see below)
 
 **Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order matters for render-target output sequencing and for StructType positional array literals (`size="[4,2,3]"` → fields in declaration order). See `12_bom_object_model.md` — Member Declaration Order.
 
+**EnumType property values:** when the property `type` is an EnumType, enum instance references may omit the `{EnumTypeFQN}::` prefix — `STANDARD` is equivalent to `com.machineblocks.type.BaseCutoutType::STANDARD` on a `BaseCutoutType` property. See `17_type_system_bml.md` — EnumType.
+
 ### Property Types
 
 Property `type` attributes must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock` (primitives, structs, enums, generics). Non-type Blocks (Wall, ServiceBlock, NativeBlock, …) are not valid property types.

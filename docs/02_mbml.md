@@ -521,13 +521,23 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 ### Enum Types vs. Suggestions
 
-**Enum types** are formally defined types with a fixed set of valid values. They are defined in the domain XSD (e.g. `bricks.xsd`). The editor renders them as a **SelectBox**. Compiler validates values against the enum. `<suggestions>` on an enum property is an error:
+**Enum types** are formally defined EnumType blocks with a fixed set of values in `_values`. The editor renders them as a **SelectBox**. The compiler validates values against the enum definition. `<suggestions>` on an enum property is an error:
 
 ```xml
 <!-- Enum type — SelectBox, validated -->
 <property name="baseCutoutType" type="type:BaseCutoutType" defaultValue="standard" />
+<!-- value literal (matches enum instance value="standard" / id STANDARD) -->
+
+<property name="baseCutoutType" type="type:BaseCutoutType" defaultValue="STANDARD" />
+<!-- short id form — FQN:: prefix omitted because property type is BaseCutoutType -->
+
+<!-- equivalent qualified id reference -->
+<property name="baseCutoutType" type="type:BaseCutoutType"
+          defaultValue="com.machineblocks.type.BaseCutoutType::STANDARD" />
 <!-- No <suggestions> allowed → BML_SUGGESTIONS_ON_ENUM -->
 ```
+
+When the property `type` is an EnumType, `defaultValue` and instance attribute values may use `{EnumTypeFQN}::{valueId}` or the short form `{valueId}` only. See `17_type_system_bml.md` — EnumType.
 
 **Suggestions** are hints for free-text properties — the author can enter any value. The editor renders them as a **Combobox**. No compiler validation of suggested values:
 

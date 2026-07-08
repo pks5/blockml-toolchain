@@ -58,6 +58,11 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 **Enum types** are defined as BML `EnumType` files — see `17_type_system_bml.md`. During migration, domain XSD enums remain accepted with `BML_LEGACY_TYPE_SOURCE` warning. `<suggestions>` on an enum property is an error (`BML_SUGGESTIONS_ON_ENUM`).
 
+On a property typed with an EnumType, enum values may be written as:
+- **value literal** — `standard` (matches `value` on the `_values` instance)
+- **short id** — `STANDARD` (omits `com.machineblocks.type.BaseCutoutType::` because the property type is known)
+- **qualified id** — `com.machineblocks.type.BaseCutoutType::STANDARD`
+
 **Anonymous Object payloadType for FunctionBlock Capabilities:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Key order defines positional parameter order. Both positional and named call syntax are valid:
 
 ```text

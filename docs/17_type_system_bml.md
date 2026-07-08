@@ -437,6 +437,35 @@ Enum values are **Block instances** in `<composition aggregation="_values">` —
 
 Properties typed with an EnumType **must not** carry `<suggestions>` — valid values come from `_values` (`BML_SUGGESTIONS_ON_ENUM` unchanged).
 
+**Enum value references in property values** (`defaultValue`, composition attributes, expressions):
+
+When the property `type` is an EnumType, a qualified enum instance reference may omit the `{EnumTypeFQN}::` prefix:
+
+```text
+Property type:  com.machineblocks.type.BaseCutoutType
+
+Qualified:      com.machineblocks.type.BaseCutoutType::STANDARD
+Short:          STANDARD                              ← equivalent (type known from property)
+
+Qualified form references the enum value's id (from _values composition).
+```
+
+```xml
+<!-- NativeBlock.bml — property type is BaseCutoutType -->
+<property name="baseCutoutType"
+          type="com.machineblocks.type.BaseCutoutType"
+          defaultValue="STANDARD" />
+
+<!-- equivalent explicit form -->
+<property name="baseCutoutType"
+          type="com.machineblocks.type.BaseCutoutType"
+          defaultValue="com.machineblocks.type.BaseCutoutType::STANDARD" />
+```
+
+The short form is valid only when the expected type is known from the property (or capability payload field) declaration — not for untyped strings. The validator resolves the token against `_values` by `id`.
+
+**Value literal:** enum instances also carry a `value` property (e.g. `value="standard"` on id `STANDARD`). The runtime/serialization literal `standard` remains valid where a string enum literal is expected — see `04_types.md` · MBML examples. Id reference (`STANDARD` / `FQN::STANDARD`) and value literal (`standard`) are distinct surface forms; both must match a declared `_values` entry.
+
 ---
 
 ### Context-Dependent Interpretation

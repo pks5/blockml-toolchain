@@ -27,7 +27,7 @@
     <property name="base" type="org.blockml.type.Boolean" defaultValue="true">
       
     </property>
-    <property name="baseCutoutType" type="com.machineblocks.type.BaseCutoutType" defaultValue="com.machineblocks.type.BaseCutoutType::STANDARD">
+    <property name="baseCutoutType" type="com.machineblocks.type.BaseCutoutType" defaultValue="STANDARD">
       
     </property>
     <property name="scale" type="org.blockml.type.Float" defaultValue="1.0">
