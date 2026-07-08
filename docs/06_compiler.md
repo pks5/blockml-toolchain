@@ -182,7 +182,8 @@ Validates the BOM graph for semantic correctness:
 - @bean references resolve to declared Aggregations
 - Capability linking: source must be Outbound, target must be Inbound, payload types must match
 - Model binding: relative paths only used where a binding context exists
-- Member namespace uniqueness: no duplicate names across Properties, Aggregations, Associations, Capabilities
+- Member namespace uniqueness: no duplicate (namespace, name) pairs across Properties, Aggregations, Associations, Capabilities
+- Member override merge: partial overrides merged at validate; private/final violations → errors
 ```
 
 ### [9] Target Resolver
@@ -457,7 +458,11 @@ BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any
 BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without export="true"
 BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
-BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
+BML_PROPERTY_CYCLE            — circular dependency in computed property value expressions
+BML_VISIBILITY_MISMATCH       — visibility attribute does not match naming convention
+BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
+BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
+BML_UNKNOWN_NAMESPACE_PREFIX  — namespace attribute references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular dependency in basePresets chain
 BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
 BML_CONTRACT_NOT_ABSTRACT     — contract type is not abstract

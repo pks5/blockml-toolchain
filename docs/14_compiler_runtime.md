@@ -630,7 +630,7 @@ resolveProperty(name, blockDef, context):
   1. context.instance?.memberValues[name]     — inline
   2. basePresets merge from context.instance  — via session.typeRegistry + compiler merge helpers
   3. config from context.session.activeConfig — via session.typeRegistry
-  4. blockDef property defaultValue
+  4. blockDef property value
 ```
 
 Merge order: `inline > preset > config > default` — see `09_mbom_properties.yml`.

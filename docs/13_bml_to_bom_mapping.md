@@ -273,7 +273,70 @@ Duplicate genericType name                   → BML_DUPLICATE_GENERIC (error)
 org.blockml.core.Block                   → omits <baseType> (sole inheritance root)
 ```
 
-TypeBlock BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<composition aggregation="_values">`; generic Blocks declare parameters via `<genericTypes>`. Branch-specific validation — see `17_type_system_bml.md`.
+TypeBlock BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<aggregation name="_values"><composition>…</composition></aggregation>`; generic Blocks declare parameters via `<genericTypes>`. Branch-specific validation — see `17_type_system_bml.md`.
+
+### Member attributes
+
+All member kinds (`<property>`, `<aggregation>`, `<association>`, `<capability>`) map common attributes to `MemberDefinitionBase`:
+
+```text
+name="size"              → name
+namespace="ui"           → namespace (resolved — see below)
+visibility="protected"   → visibility (optional; derived from name when omitted)
+readOnly="true"          → readOnly
+final="true"             → final
+<documentation>…         → documentation
+```
+
+**Member `namespace` resolution (stage [5]):**
+
+The `namespace` attribute value is an **XML namespace prefix** — not a raw URI or dotted name. The parser looks up the prefix in the current document's `xmlns:` bindings (same mechanism as element prefixes and `type:` shorthand).
+
+```text
+Document:  xmlns:ui="com.foo.ui"
+Authored:  <property namespace="ui" name="width" …/>
+
+BOM:       PropertyDefinition {
+             namespace: "com.foo.ui",   // resolved identifier — never "ui"
+             name: "width",
+             …
+           }
+```
+
+```text
+Omitted namespace attribute  →  namespace undefined / default namespace (empty string)
+Undeclared prefix            →  BML_UNKNOWN_NAMESPACE_PREFIX (parse error)
+Prefix alias never stored    →  BOM contains canonical identifiers only
+```
+
+**Override matching:** `resolveEffectiveMembers()` compares members by **resolved `(namespace, name)`**. A child Block may use a different XML prefix for the same namespace URI — the override still matches.
+
+```text
+Parent (xmlns:ui="com.foo.ui"):     namespace="ui"   name="width"
+Child  (xmlns:design="com.foo.ui"): namespace="design" name="width" value="42"
+→ same key (com.foo.ui, width) → override merges
+```
+
+Property-specific:
+
+```text
+type="…"                 → typeFqn (resolved)
+value="…"                → value (LiteralValue or ExpressionValue). Formerly defaultValue.
+```
+
+Visibility derivation when `visibility` is omitted:
+
+```text
+name starts with "__"  →  private
+name starts with "_"   →  protected (single underscore)
+otherwise              →  public
+```
+
+Mismatch between derived and explicit `visibility` → `BML_VISIBILITY_MISMATCH` at validate.
+
+Partial overrides: a child Block may declare a member with only `name` and changed attributes. Unspecified fields inherit from the parent member at `resolveEffectiveMembers()`. Override key is resolved `(namespace, name)` — not the XML prefix.
+
+**General namespace rule:** all XML prefixes in BML (Block type tags, `type:` shorthand, member `namespace`, `bml:*`, `data:*`) are resolved during parsing. The BOM stores canonical namespace identifiers only. See `02_mbml.md` — Namespaces · § Member Namespace Attribute.
 
 ---
 
@@ -424,10 +487,28 @@ basePresets="brick-1x1 com.other.Presets::color-red"
 Preset instances in `_presets` composition map like any other Block instance. The `name` attribute maps to `memberValues.name`; `bml:id` maps to `BlockInstance.id`.
 
 ```text
-<composition aggregation="_presets" export="true">  →  CompositionTemplate.export = true
+<aggregation name="_presets">
+  <composition export="true">  →  CompositionTemplate.export = true
 ```
 
 Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against exported compositions with static target ids — see `00_bom_core.md` — Qualified Block Instance References.
+
+**Aggregation + composition mapping:**
+
+```text
+<aggregations>
+  <aggregation name="_parts" type="…">     → AggregationDefinition (+ typeFqn)
+    <composition export="true">            → AggregationDefinition.composition OR CompositionTemplate
+      …children…
+    </composition>
+  </aggregation>
+</aggregations>
+
+bare <composition> on definition/instance   → CompositionTemplate for default aggregation
+<aggregation name="…"> on instance          → BlockInstance.aggregationCompositions[]
+```
+
+The `composition aggregation="…"` attribute is **removed** — aggregation is opened by `<aggregation name="…">`.
 
 ### Contract validation (stage [8])
 
@@ -465,7 +546,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.c
 
 Short names resolve via inherited Sub-Blocks of `org.blockml.core.Library` on any Library-typed root block.
 
-Each child requires `aggregation=` (`_dependencies`, `_schemas`, `_types`, `_blocks`) — Library has no default aggregation.
+Each child requires explicit `<aggregation name="…">` (`_dependencies`, `_schemas`, `_types`, `_blocks`) — Library has no default aggregation.
 
 **Orchestrator (not parser):** after parsing a Library block, resolve each `ref` path relative to the library package root, parse referenced files, and `registerBlockDefinition`. Validate `Dependency.ref` + `version` against a registered Library block FQN.
 

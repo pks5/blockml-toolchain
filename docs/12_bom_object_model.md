@@ -49,7 +49,9 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | Topic | Decision |
 |---|---|
 | **Mutability** | Parse result is an **immutable plain-data graph** (`BomDocument`). Mutable object APIs (ManagedObject pattern) are optional — see `08_managed_object.md`. |
-| **Member inheritance** | **Lookup at validate.** BOM stores only **declared** members per Block. Effective members are resolved via `baseType` chain + Type Registry — never merged into the parse result. |
+| **Member inheritance** | **Lookup at validate.** BOM stores only **declared** members per Block (including partial overrides). Effective members are merged via `baseType` chain + Type Registry — never flattened into the parse result. |
+| **Member identity** | Uniqueness by resolved **`(namespace, name)`**. `namespace` attribute is an XML prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
+| **Composition** | Nested inside `<aggregation>` on definitions and instances. Bare `<composition>` is sugar for the single default aggregation. `composition aggregation="…"` removed. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | `bml:*` on composition elements — flow-control in `directives[]`; composition meta (`bml:id`, `bml:version`) on `BlockInstance` fields. **Not expanded** at parse time. |
@@ -111,7 +113,7 @@ interface SourceInfo {
   filePath: string
   /** "xml" in V1. "json" deferred (TBD). */
   format: "xml" | "json"
-  /** xmlns prefix → FQN package prefix (XML only) */
+  /** xmlns prefix → resolved namespace identifier (XML only; authoring aid — members store resolved values) */
   namespaceBindings?: Record<string, string>
 }
 ```
@@ -184,9 +186,9 @@ interface BlockDefinition {
   subBlocks: BlockDefinition[]
 
   /**
-   * Composition templates — one per aggregation filled.
+   * Composition templates — derived from nested <composition> inside <aggregation>
+   * and from bare <composition> (sugar for default aggregation).
    * May contain BlockInstanceNode and VirtualContainerNode children.
-   * bml:with may appear on the composition itself.
    */
   compositions: CompositionTemplate[]
 
@@ -340,13 +342,26 @@ type MemberDefinition =
 interface MemberDefinitionBase {
   name: string
   documentation?: string
+  /**
+   * Resolved canonical namespace identifier (FQN or URI).
+   * Parsed from namespace="prefix" via document xmlns: table.
+   * Omitted in BML → default namespace (empty string).
+   * Never stores the XML alias.
+   */
+  namespace?: string
+  /** Derived from naming convention; explicit attribute must match */
+  visibility?: "private" | "protected" | "public"
+  /** Informational only — no validation semantics */
+  readOnly?: boolean
+  /** When true, child Blocks cannot override this member */
+  final?: boolean
   source?: SourceLocation
 }
 
 interface PropertyDefinition extends MemberDefinitionBase {
   kind: "property"
   typeFqn: string
-  defaultValue: MemberValue
+  value: MemberValue
   group?: string
   suggestions?: Suggestion[]
 }
@@ -360,8 +375,9 @@ interface AggregationDefinition extends MemberDefinitionBase {
   kind: "aggregation"
   typeFqn: string
   cardinality: "0..1" | "0..n" | "1..1" | "1..n"
-  visibility: "public" | "hidden"
   defaultAggregation?: boolean
+  /** Nested composition filling this aggregation (may be omitted on override declarations) */
+  composition?: CompositionTemplate
   /** ServiceBlock binding */
   beanName?: string
   scope?: "local" | "context"
@@ -378,7 +394,6 @@ interface CapabilityDefinition extends MemberDefinitionBase {
   classFqn: string          // org.blockml.capability.Sync | AsyncInbound | AsyncOutbound
   payloadType: TypeDescriptor
   returnType?: TypeDescriptor
-  visibility?: "public" | "hidden"
   implementation?: ImplementationBlock
 }
 
@@ -414,7 +429,7 @@ Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" 
 
 **Function argument mapping:** anonymous struct `payloadType` values (`{ a: Float, b: Float }`) and named StructTypes share the same rule — field order in the type definition = positional parameter order. See `10_expression_language.md` — Object Payload Calls.
 
-**Effective members:** `resolveEffectiveMembers()` merges by name along the `baseType` chain. For a **named StructType** referenced as a property type, positional array indices resolve against that type's own property declaration order (from its BML definition), not against the declaring Block's member list.
+**Effective members:** `resolveEffectiveMembers()` merges by `(namespace, name)` along the `baseType` chain. Child override declarations merge with parent members — only specified attributes replace inherited values. Private members cannot be overridden; `final="true"` prevents override.
 
 ```text
 Parser / mapper     MUST NOT reorder declared members
@@ -518,7 +533,7 @@ interface CompositionTemplate {
   /** Target aggregation name — e.g. "_parts", "_blocks", "_presets" */
   aggregationName: string
   /**
-   * export="true" on <composition> — children with explicit static id
+   * export="true" on nested <composition> — children with explicit static id
    * are referencable via {EnclosingBlockFQN}::{id} from other documents.
    */
   export?: boolean
@@ -526,6 +541,12 @@ interface CompositionTemplate {
   directives?: DirectiveAttribute[]
   children: CompositionNode[]
   source?: SourceLocation
+}
+
+/** Aggregation opened inline on a Block instance */
+interface InstanceAggregationComposition {
+  aggregationName: string
+  composition: CompositionTemplate
 }
 
 type CompositionNode =
@@ -559,7 +580,7 @@ interface VirtualContainerNode {
 |---|---|---|
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
 | `bml:version` | Block instances | External block reference version |
-| `bml:with` | `<composition>`, `<bml:container>`, Block instances | Local variable scope |
+| `bml:with` | `<composition>`, `<aggregation>`, `<bml:container>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional inclusion |
 | `data:*` | Block definitions and Block instances only | **Not** a `bml:` directive. Parsed into `dataAttributes[]` — values not evaluated. |
@@ -695,17 +716,21 @@ Valid only when:
 
 ```text
 <!-- Target document: StandardPresets.bml -->
-<composition aggregation="_presets" export="true">
-  <bricks:Standard bml:id="brick-2x4" … />     ← referencable
-</composition>
+<aggregation name="_presets">
+  <composition export="true">
+    <bricks:Standard bml:id="brick-2x4" … />     ← referencable
+  </composition>
+</aggregation>
 
 <!-- Referencing document -->
 <bricks:Standard basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />  ✓
 
-<!-- Composition without export -->
-<composition aggregation="_presets">
-  <bricks:Standard bml:id="brick-2x4" … />
-</composition>
+<!-- Aggregation without export -->
+<aggregation name="_presets">
+  <composition>
+    <bricks:Standard bml:id="brick-2x4" … />
+  </composition>
+</aggregation>
 → com.machineblocks.bricks.StandardPresets::brick-2x4  ✗  BML_UNEXPORTED_INSTANCE_REF
 
 <!-- Dynamic target or reference -->
@@ -763,6 +788,13 @@ interface BlockInstance {
    * and authored as bare attributes (not bml:id / bml:version).
    */
   memberValues: Record<string, MemberValue>
+
+  /**
+   * Nested aggregation compositions on this instance.
+   * Parsed from <aggregation name="…"><composition>…</composition></aggregation>
+   * or bare <composition> when the referenced Block has a unique default aggregation.
+   */
+  aggregationCompositions?: InstanceAggregationComposition[]
 
   dataAttributes: DataAttribute[]
 
@@ -854,7 +886,7 @@ Cross-file `basePresets` entries use the same `FQN::id` form. Local ids resolve 
 ```text
 1. Own instance properties
 2. basePresets — applied left-to-right; later entries override earlier
-3. Block defaultValues
+3. Block definition values (property `value`)
 ```
 
 Cycles in `basePresets` → `BML_PRESET_CYCLE`.
@@ -976,7 +1008,7 @@ BomDocument
     members: (declared only — NOT including inherited size, offset, baseColor, ...)
       - PropertyDefinition numberOfSamples
       - PropertyDefinition font
-      - PropertyDefinition size (computed defaultValue → ExpressionValue)
+      - PropertyDefinition size (computed value → ExpressionValue)
       - AggregationDefinition utils → typeFqn: ...Calibrator.Utils, beanName: "utils"
 
     subBlocks:
@@ -1021,7 +1053,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Sub-Block baseType ∈ parent's subTypes (domain rule)
 ✓  Expression result types match member types
 ✓  Preset block instance properties exist on referenced block type
-✓  Property defaultValue cycles (topological sort)
+✓  Property value cycles (topological sort)
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
 ✓  contract types resolve, are abstract, and member surface is satisfied by effective members
 ✓  Library TypeRef / BlockRef paths resolve to existing files
@@ -1071,7 +1103,11 @@ BML_UNKNOWN_DIRECTIVE         — unrecognized bml:* attribute (error)
 BML_DIRECTIVE_NOT_ALLOWED     — bml:* on disallowed element (error)
 BML_CUSTOM_DATA_NOT_ALLOWED   — data:* on non-Block element (error)
 BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent
-BML_PROPERTY_CYCLE            — circular defaultValue dependencies
+BML_PROPERTY_CYCLE            — circular property value dependencies
+BML_VISIBILITY_MISMATCH       — visibility attribute does not match naming convention
+BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
+BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
+BML_UNKNOWN_NAMESPACE_PREFIX  — member namespace attribute references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular basePresets chain
 BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
 BML_CONTRACT_NOT_ABSTRACT     — contract type is not abstract

@@ -109,7 +109,7 @@ All Members share one namespace per Block. Names must be unique across Propertie
 
 ## Properties
 
-Properties are typed parameters of a Block. Every Property has a name, a type, and a default value.
+Properties are typed parameters of a Block. Every Property has a name, a type, and a defined value.
 
 ### Native vs. Custom Properties
 
@@ -121,21 +121,21 @@ Domain native properties include (non-exhaustive): `size`, `offset`, `direction`
 
 **Custom properties** are defined inline in a Block definition. They generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
 
-The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Both use the same `<property>` element in BML. Native properties only need to be declared when their default value differs from the core default.
+The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Both use the same `<property>` element in BML. Native properties only need to be declared when their value differs from the inherited value.
 
 ### Property Metadata
 
 ```text
 name          — camelCase member name (unique within the Block's member namespace)
 type          — MBOM type FQN (e.g. com.machineblocks.type.Size3D)
-defaultValue  — typed default value (literal or expression)
+value  — typed defined value (literal or expression)
 group         — optional grouping for editor display
 documentation — human-readable description
 ```
 
 Unqualified type names in BML are resolved against `com.machineblocks.type` by the parser before being stored in MBOM as full FQNs.
 
-**Computed default values:** `defaultValue` may be an Expression referencing other Properties of the same Block. See `10_expression_language.md` — Expressions in defaultValue.
+**Computed values:** `value` may be an Expression referencing other Properties of the same Block. See `10_expression_language.md` — Expressions in `value`.
 
 ### Property Groups
 
@@ -170,7 +170,7 @@ Every MachineBlocks Block inherits `_presets` and `basePresets`. Composite block
 
 When a Block's `baseType` chain includes `com.machineblocks.core.CompositeBlock` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited members appear via `resolveEffectiveMembers()`.
 
-Declare `<aggregations>` explicitly only when **adding** aggregations beyond the inherited set (e.g. `_steps` on `Set`). Redeclaring inherited members to change their type is not permitted.
+Declare `<aggregations>` explicitly when **adding** aggregations beyond the inherited set (e.g. `_steps` on `Set`), when **overriding** inherited aggregations (partial override — type inherited), or when filling an aggregation with a nested `<composition>`.
 
 ### Example
 
@@ -178,7 +178,7 @@ Declare `<aggregations>` explicitly only when **adding** aggregations beyond the
 Wall  (baseType: com.machineblocks.core.CompositeBlock)
   _presets:  com.machineblocks.core.Block[] (inherited)
   _parts:    com.machineblocks.core.Block[] (inherited, default)
-  _myModel:  org.blockml.service.JSONModel (hidden, beanName="myModel", declared)
+  _myModel:  org.blockml.service.JSONModel (protected, beanName="myModel", declared)
 ```
 
 ### Aggregation Metadata
@@ -191,7 +191,7 @@ beanName      — optional; marks this Aggregation as a ServiceBlock binding
 documentation — human-readable description
 ```
 
-Member visibility is determined by naming convention: names starting with `_` are hidden (internal). Hidden Aggregations can only be filled by the Block's own Composition, not from outside.
+Member visibility follows the three-level naming convention in `02_mbml.md` — § Member Visibility (`__` private, `_` protected, plain public). Protected aggregations are visible in child Blocks.
 
 When `beanName` is set, the Aggregation is a ServiceBlock binding. The bean is accessible in Expressions via `@beanName`.
 
@@ -239,7 +239,7 @@ returnType   — optional; type of the asynchronous reply (for replyTo scenarios
 documentation
 ```
 
-Member visibility: names starting with `_` are hidden.
+Member visibility: see `02_mbml.md` — § Member Visibility.
 
 ### AsyncOutbound
 
@@ -253,7 +253,7 @@ returnType   — optional; type of the asynchronous reply (for replyTo scenarios
 documentation
 ```
 
-Member visibility: names starting with `_` are hidden.
+Member visibility: see `02_mbml.md` — § Member Visibility.
 
 ### Sync
 
@@ -267,7 +267,7 @@ returnType   — required; FQN of the return type
 documentation
 ```
 
-Member visibility: names starting with `_` are hidden.
+Member visibility: see `02_mbml.md` — § Member Visibility.
 
 ### Payload Types
 

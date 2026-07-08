@@ -231,9 +231,11 @@ A qualified reference is valid **only when both** conditions hold:
 **1. Export on the target composition.** The composition that contains the target instance must declare `export="true"`. Only instances in an exported composition are visible for qualified references.
 
 ```xml
-<composition aggregation="_presets" export="true">
-  <bricks:Standard bml:id="brick-2x4" bml:version="3.0.0" size="[2, 4, 3]" />
-</composition>
+<aggregation name="_presets">
+  <composition export="true">
+    <bricks:Standard bml:id="brick-2x4" bml:version="3.0.0" size="[2, 4, 3]" />
+  </composition>
+</aggregation>
 ```
 
 Without `export="true"` on that composition, `com.machineblocks.bricks.StandardPresets::brick-2x4` is invalid → `BML_UNEXPORTED_INSTANCE_REF`.
@@ -323,19 +325,63 @@ A Block without a Composition is a **Leaf Block** — it has no internal structu
 
 ## Member Namespace
 
-Properties, Aggregations, Associations, and Capabilities all share a single namespace per Block. Member names must be unique across all member types within a Block definition.
+Properties, Aggregations, Associations, and Capabilities all share a single member namespace per Block. Logical uniqueness is determined by **`(namespace, name)`** — members without an explicit `namespace` belong to the default namespace (empty string).
 
-This is a deliberate design decision: authors think in names, not in member categories. Bindings, expressions, and presets all reference members by name without needing to know the category. It also prevents naming conflicts between member types.
+The `namespace` attribute uses the **same XML namespace mechanism** as element prefixes. The author writes an XML prefix (`xmlns:ui="com.foo.ui"` → `namespace="ui"`). The parser resolves the prefix immediately and stores the **canonical namespace identifier** in the BOM — never the XML alias. See `02_mbml.md` — § Member Namespace Attribute.
+
+This is a deliberate design decision: authors think in names, not in member categories. Bindings, expressions, and presets reference members by resolved `(namespace, name)` without needing to know the category.
 
 ```text
 Block: MyBlock
-  size        — Property      (name must be unique)
-  parts       — Aggregation   (cannot also be a Property name)
-  target      — Association   (cannot also be a Property or Aggregation name)
-  assemble    — Capability    (cannot also be any other member name)
+  size        — Property      ((namespace, name) must be unique)
+  parts       — Aggregation   (cannot collide with size in same namespace)
+  target      — Association
+  assemble    — Capability
 ```
 
-Members are inherited via `baseType`. Derived Blocks inherit all Members of their base type and may add their own. Overriding inherited members is not permitted — this is enforced at parse time.
+**General XML namespace rule:** XML prefixes have no semantic meaning. The BOM contains exclusively canonical namespace identifiers (FQN/URI). Prefixes are authoring syntax only — resolved during parsing for Block types, member namespaces, `type:` shorthand, and all other namespaced BML syntax.
+
+### Member Visibility
+
+All member kinds share the same visibility rules. Visibility is determined primarily by naming convention:
+
+| Name       | Visibility |
+| ---------- | ---------- |
+| `__member` | private    |
+| `_member`  | protected  |
+| `member`   | public     |
+
+**private** — visible only within the declaring Block. Not visible in child Blocks. Does not collide with same-named members in child Blocks.
+
+**protected** — visible within the declaring Block and in all child Blocks. Not package-wide.
+
+**public** — publicly visible.
+
+An optional `visibility="private|protected|public"` attribute may be declared; it must match the naming convention or validation emits `BML_VISIBILITY_MISMATCH`.
+
+### Common Member Attributes
+
+All member kinds support:
+
+```text
+readOnly   — informational only (renderers, editors, generators). No BOM Core semantics.
+final      — when true, child Blocks cannot override this member. Validator-enforced.
+namespace  — XML namespace prefix; resolved to canonical identifier at parse time (see 02_mbml.md)
+```
+
+### Member Inheritance and Overrides
+
+Members are inherited via `baseType`. Derived Blocks inherit all Members of their base type and may add their own. **Partial overrides** are permitted — a child Block may redeclare an inherited member with only the attributes that change; unspecified attributes are inherited from the parent definition.
+
+```text
+Same member kind required
+Only specified attributes replaced
+Override key: resolved (namespace, name) — not XML prefix
+Private members cannot be overridden
+final="true" on parent prevents override → BML_FINAL_MEMBER_OVERRIDE
+```
+
+Effective members are resolved by merging along the `baseType` chain at validation time — see `resolveEffectiveMembers()` in `12_bom_object_model.md`.
 
 ### Contracts (Block Interfaces)
 
@@ -373,7 +419,7 @@ Contract validation runs at stage [8] (semantic validation), after `resolveEffec
 
 ## Properties
 
-Properties are typed parameters of a Block. Every Property has a name, a type, and a default value.
+Properties are typed parameters of a Block. Every Property has a name, a type, and a defined value.
 
 ### Composition Meta (`bml:id`, `bml:version`)
 
@@ -399,12 +445,16 @@ Do not confuse `bml:id` (composition meta) with a domain Property named `id`. Th
 ### Property metadata
 
 ```text
-name          — camelCase property name (unique within the Block's member namespace)
+name          — camelCase property name (unique within namespace — see Member Namespace)
 type          — FQN of a TypeBlock (baseType chain includes org.blockml.core.TypeBlock)
-defaultValue  — typed default value (literal or Expression)
+value         — typed defined value (literal or Expression). Formerly defaultValue.
 group         — optional grouping hint (for editors)
 documentation — human-readable description
 suggestions   — optional list of suggested values (see below)
+readOnly      — informational only
+final         — prevents override in child Blocks
+namespace     — resolved canonical namespace identifier (empty = default namespace)
+visibility    — optional; must match naming convention
 ```
 
 **Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order matters for render-target output sequencing and for StructType positional array literals (`size="[4,2,3]"` → fields in declaration order). See `12_bom_object_model.md` — Member Declaration Order.
@@ -448,18 +498,18 @@ suggestions:
 
 The author can always enter any value regardless of suggestions.
 
-### Computed Default Values
+### Computed Property Values
 
-A `defaultValue` may be a static literal or an Expression. Expressions in `defaultValue` allow a Property's default to be derived from other Properties of the same Block:
+A `value` may be a static literal or an Expression. Expressions in `value` allow a Property's defined value to be derived from other Properties of the same Block:
 
 ```xml
-<property name="numberOfSamples" type="Integer" defaultValue="5" />
-<property name="labelSize"       type="Integer" defaultValue="5" />
+<property name="numberOfSamples" type="Integer" value="5" />
+<property name="labelSize"       type="Integer" value="5" />
 <property name="size"            type="Size3D"
-          defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
+          value="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
 ```
 
-**Allowed expression roots in `defaultValue`:**
+**Allowed expression roots in `value`:**
 
 ```text
 ✓  Other Properties of the same Block
@@ -470,7 +520,7 @@ A `defaultValue` may be a static literal or an Expression. Expressions in `defau
 ✗  bml:with variables
 ```
 
-**Cycle detection:** The compiler performs a topological sort of all Property dependencies before resolving defaults. If Property A's `defaultValue` references Property B and B's `defaultValue` references A — directly or transitively — a `BML_PROPERTY_CYCLE` error is emitted and compilation stops.
+**Cycle detection:** The compiler performs a topological sort of all Property dependencies before resolving values. If Property A's `value` references Property B and B's `value` references A — directly or transitively — a `BML_PROPERTY_CYCLE` error is emitted and compilation stops.
 
 ### Resolution Order
 
@@ -480,7 +530,7 @@ Property values are resolved in this order (highest priority first):
 1. Inline value    — set directly on a Block instance in a Composition
 2. Preset value    — from the active Preset
 3. Config value    — from the active Config profile (domain-specific)
-4. Default value   — from the Block definition (literal or computed expression)
+4. Definition value   — from the Block definition (literal or computed expression)
 ```
 
 ---
@@ -492,24 +542,22 @@ An Aggregation describes an ownership relationship: a Block can contain zero or 
 ### Aggregation Metadata
 
 ```text
-name          — member name (unique within the Block's member namespace)
+name          — member name (unique within namespace)
 type          — FQN of the child type, optionally with occurrence brackets (see Type Notation below)
 default       — boolean; marks the default aggregation for bare <composition>
 beanName      — optional; marks this Aggregation as a ServiceBlock binding
 scope         — optional; "local" | "context" (ServiceBlock bindings only)
 documentation — human-readable description
+composition   — optional nested Composition filling this aggregation
+readOnly      — informational only
+final         — prevents override in child Blocks
+namespace     — resolved canonical namespace identifier (empty = default namespace)
+visibility    — optional; must match naming convention
 ```
 
 `<aggregation>` and `<association>` child order within their containers is preserved by the parser (same rules as properties). Render targets may use aggregation order for UI or output sequencing.
 
-**Member visibility** is determined by naming convention, not an attribute:
-
-```text
-name starts with "_"  →  hidden (internal)
-all other names       →  public
-```
-
-Hidden Aggregations can only be filled by the Block's own Composition, not from outside.
+**Member visibility** follows the naming convention in § Member Visibility. Private aggregations (`__name`) are visible only in the declaring Block. Protected aggregations (`_name`) are visible in child Blocks.
 
 ### Type Notation
 
@@ -689,7 +737,7 @@ payloadType    — declared payload type (see Payload Types below)
 documentation  — human-readable description
 ```
 
-Member visibility follows the same naming convention as Aggregations: names starting with `_` are hidden. Hidden Capabilities cannot be bound from outside the Block's own Composition. They are only accessible within the Block itself, either via Expressions or internal Composition bindings.
+Member visibility follows § Member Visibility. Private Capabilities (`__name`) cannot be bound from outside the declaring Block. Protected Capabilities (`_name`) are accessible in child Blocks.
 
 **`AsyncInbound`** adds:
 
@@ -866,12 +914,22 @@ All async messaging is asynchronous. A Capability may reply using the `replyTo` 
 
 ## Compositions
 
-A Composition fills an Aggregation with concrete child Block instances. It defines the internal structure of a Composite Block.
+A Composition fills an Aggregation with concrete child Block instances. **Composition is part of Aggregation** — the preferred authoring form nests `<composition>` directly inside `<aggregation>`. The `composition aggregation="…"` attribute is removed.
+
+Compositions may appear on Block definitions (filling declared or inherited aggregations) and on Block instances (opening aggregations inline). Every Block instance may optionally contain its own nested composition — the language is fully recursive.
 
 ```text
-aggregation   — name of the target Aggregation
-export        — optional; export="true" marks instances in this composition as referencable via {EnclosingBlockFQN}::{id}
-children      — ordered list of child Block instances
+aggregation   — opened by <aggregation name="…"> on definitions and instances
+export        — optional on <composition>; export="true" marks instances as referencable via {EnclosingBlockFQN}::{id}
+children      — ordered list of child Block instances (each may contain nested compositions)
+```
+
+**Placement rules:**
+
+```text
+Single effective default aggregation  → bare <composition> permitted (sugar)
+Multiple aggregations                 → each opened explicitly via <aggregation name="…">
+Ambiguous bare <composition>          → BML_AMBIGUOUS_COMPOSITION
 ```
 
 Each child instance carries:

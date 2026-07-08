@@ -322,18 +322,18 @@ FunctionBlock calls follow the same syntax as regular `@bean` Sync Capability ca
 
 ---
 
-## Expressions in `defaultValue`
+## Expressions in `value`
 
-Property `defaultValue` may be a static literal or an Expression. When an Expression, it may reference other Properties of the same Block and `#built-in` functions:
+Property `value` may be a static literal or an Expression. When an Expression, it may reference other Properties of the same Block and `#built-in` functions:
 
 ```xml
-<property name="numberOfSamples" type="Integer" defaultValue="5" />
-<property name="labelSize"       type="Integer" defaultValue="5" />
+<property name="numberOfSamples" type="Integer" value="5" />
+<property name="labelSize"       type="Integer" value="5" />
 <property name="size"            type="Size3D"
-          defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
+          value="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
 ```
 
-**Allowed roots in `defaultValue` expressions:**
+**Allowed roots in `value` expressions:**
 
 ```text
 ✓  Other Properties of the same Block
@@ -345,7 +345,7 @@ Property `defaultValue` may be a static literal or an Expression. When an Expres
 ✗  own Capabilities
 ```
 
-**Cycle detection:** The compiler resolves all `defaultValue` expressions via topological sort before compilation begins:
+**Cycle detection:** The compiler resolves all `value` expressions via topological sort before compilation begins:
 
 ```text
 1. Build dependency graph: which Properties reference which other Properties
@@ -354,7 +354,7 @@ Property `defaultValue` may be a static literal or an Expression. When an Expres
 4. All resolved → proceed with compilation
 ```
 
-A cycle occurs when Property A's `defaultValue` references Property B and B's `defaultValue` references A — directly or transitively. This is always an error, never a warning.
+A cycle occurs when Property A's `value` references Property B and B's `value` references A — directly or transitively. This is always an error, never a warning.
 
 ---
 
@@ -752,7 +752,7 @@ bml:with variable:
   — use on <composition> or <bml:container> to share values between sibling instances
   — shadows outer variables of the same name
 
-defaultValue expressions:
+value expressions:
   — only own Block Properties and #built-ins allowed
   — resolved before compilation via topological sort
   — cycles → BML_PROPERTY_CYCLE error
@@ -1034,7 +1034,7 @@ interface WithVariableReference extends ExpressionNodeBase {
 4. not found                                → BML_EXPR_UNKNOWN_PROPERTY
 ```
 
-`defaultValue` expressions allow only step 3 (properties) and `#built-in` calls — no loop/with nodes.
+`value` expressions allow only step 3 (properties) and `#built-in` calls — no loop/with nodes.
 
 ---
 
