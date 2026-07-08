@@ -660,7 +660,7 @@ Valid only when:
 ```
 
 ```text
-<!-- Target document: StandardPresets.mbml -->
+<!-- Target document: StandardPresets.bml -->
 <composition aggregation="_presets" export="true">
   <bricks:Standard id="brick-2x4" … />     ← referencable
 </composition>
@@ -755,7 +755,7 @@ Same-document reference (Sub-Block or type defined in subBlocks[]):
   → version attribute NOT required on instance
   → effective version = Sub-Block definition's version field
 
-External reference (type from another BML file — `.bml`, or `.mbml` in MachineBlocks library):
+External reference (type from another BML file — `.bml`):
   → version attribute REQUIRED on instance
   → missing                    → BML_MISSING_VERSION (error — always, no warning mode)
   → version not in registry    → BML_UNKNOWN_VERSION (error)
@@ -763,13 +763,13 @@ External reference (type from another BML file — `.bml`, or `.mbml` in Machine
   → no registry default        → library.xml version does NOT substitute for instance version
 ```
 
-Examples from `Calibrator.mbml`:
+Examples from `Calibrator.bml`:
 
 ```xml
 <!-- Same file, Sub-Block — no version required -->
 <Base id="base_stud" offset="[0, 0, 0]" ... />
 
-<!-- External type (Standard.mbml) — version REQUIRED -->
+<!-- External type (Standard.bml) — version REQUIRED -->
 <bricks:StandardBrick version="3.0.0" id="strip" ... />
 ```
 
@@ -896,7 +896,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 1. Built-in ServiceBlocks     — @blockml/core (org.blockml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
 3. Library blocks             — org.blockml.core.Library → resolve BlockRef paths
-4. Project srcDir scan        — remaining *.bml / configured extensions in bom.config.json
+4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
 5. Declared dependencies      — Library Dependency entries + bom.config.json paths
 ```
 
@@ -916,9 +916,9 @@ interface TypeRegistry {
 
 ---
 
-## Reference Example: `Calibrator.mbml`
+## Reference Example: `Calibrator.bml`
 
-File: `domains/machineblocks/.../scad-lib/blocks/com/machineblocks/calibration/Calibrator.mbml`
+File: `domains/machineblocks/.../scad-lib/blocks/com/machineblocks/calibration/Calibrator.bml`
 
 ```text
 BomDocument

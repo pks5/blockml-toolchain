@@ -2,10 +2,10 @@
   MachineBlocks.com Presets File
 
   Name: StandardPresets
-  Filename: StandardPresets.mbml
+  Filename: StandardPresets.bml
   FQN: com.machineblocks.bricks.StandardPresets
 
-  Named property presets for com.machineblocks.bricks.Standard (Standard.mbml).
+  Named property presets for com.machineblocks.bricks.Standard (Standard.bml).
   Presets are Block instances in _presets — appliedPresets resolves within this Block.
   Customizer JSON output is render-target logic (machineblocks-v3-scad).
 -->

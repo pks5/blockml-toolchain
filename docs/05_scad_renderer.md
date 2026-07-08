@@ -534,7 +534,7 @@ Some Block types are effectively a **single NativeBlock** — all properties map
 For **standalone compile** of such blocks, the processor emits a **direct `mb_block()` main call** with Customizer variables as settings — no typed wrapper module, no `mb_param_*` extraction layer:
 
 ```scad
-// Optimized output (Standard.mbml standalone)
+// Optimized output (Standard.bml standalone)
 mb_block(
     config = mb_config,
     settings = [

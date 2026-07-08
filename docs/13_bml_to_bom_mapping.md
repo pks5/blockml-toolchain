@@ -63,7 +63,7 @@ Ordinal = index in `members[]` after mapping. Used by render targets and by Stru
 | **`payloadType` / `returnType`** | Parsed into `TypeDescriptor` at map time — anonymous `{ a: Float }` = anonymous struct type |
 | **Expression parsing** | Two-phase: stage [5] stores `raw`; stage [7] builds AST |
 | **Cross-file resolution** | Single-file parser; TypeRegistry bootstrap by CLI/orchestrator before validate |
-| **JSON BML format** | **Deferred (TBD).** V1 parser accepts XML only (`.bml` / `.mbml`) |
+| **JSON BML format** | **Deferred (TBD).** V1 parser accepts XML only (`.bml`) |
 | **Composition render** | Leaf geometry → NativeBlock → `mb_block()`; see `14_compiler_runtime.md` |
 | **Member order** | Properties, aggregations, associations, capabilities appended in BML document order — **never sorted**; see `12_bom_object_model.md` — Member Declaration Order |
 
@@ -373,7 +373,7 @@ Before validating or compiling a file that references external types, the orches
      @machineblocks/mbom/src     →  com.machineblocks.core.*
 
 2. Discover BML sources
-     Project srcDir scan     →  all *.bml (and configured extensions, e.g. .mbml)
+     Project srcDir scan     →  all *.bml
      library.xml manifests   →  explicit <block> / <presets> refs (optional index)
      Declared dependencies   →  transitive library paths from bom.config.json / library.xml
 
@@ -462,7 +462,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.c
 <Schema ref="bricks.xsd"/>         → org.blockml.core.Library.Schema
 <TypeRef ref="types/Size3D.bml"/>  → org.blockml.core.Library.TypeRef
 <BlockRef ref="blocks/Wall.bml"/>  → org.blockml.core.Library.BlockRef
-<BlockRef ref="presets/WallPresets.mbml"/>  → preset block via _blocks
+<BlockRef ref="presets/WallPresets.bml"/>  → preset block via _blocks
 ```
 
 Short names resolve via inherited Sub-Blocks of `org.blockml.core.Library` on any Library-typed root block.
@@ -481,7 +481,7 @@ The orchestrator re-bootstraps or incrementally updates the TypeRegistry when an
 
 ## JSON BML Format (Deferred — TBD)
 
-JSON as a BML **authoring format** is **not implemented in V1**. The V1 parser accepts **XML only** (`.bml`, domain extensions such as `.mbml`).
+JSON as a BML **authoring format** is **not implemented in V1**. The V1 parser accepts **XML only** (`.bml`).
 
 JSON may eventually support a very restricted subset (e.g. flat preset blocks, simple leaf blocks). Whether a viable mapping exists is **TBD** — intensive XML namespace usage (`xmlns:bricks`, `bml:*`, `data:*`, typed element names) has no natural JSON equivalent. Full BML power requires XML.
 

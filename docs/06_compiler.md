@@ -34,7 +34,7 @@ The compiler is implemented across these packages:
 ## Compiler Pipeline
 
 ```text
-BML Source (.bml / .mbml)           — V1: XML only; JSON BML deferred (TBD)
+BML Source (.bml)                   — V1: XML only; JSON BML deferred (TBD)
   ↓
 [1] Format Detector
   ↓
@@ -87,7 +87,7 @@ Stages 1–8 are universal — implemented in `@blockml/parser` and `@blockml/co
 
 ### [1] Format Detector
 
-V1 accepts **XML only** (`.bml`, domain extensions such as `.mbml`). Detects XML from the first non-whitespace character (`<`).
+V1 accepts **XML only** (`.bml`). Detects XML from the first non-whitespace character (`<`).
 
 JSON BML authoring is deferred (TBD). When implemented, the format detector will branch on `{` vs. `<`.
 
@@ -787,8 +787,8 @@ tests/
       DefaultEnclosureSet.bml
       DefaultEnclosureSet.expected.scad
     presets/
-      presets/StandardPresets.mbml   — @machineblocks/mbom fixture (preset block)
-      BricksLibrary.mbml             — @machineblocks/mbom fixture (Library)
+      presets/StandardPresets.bml   — @machineblocks/mbom fixture (preset block)
+      BricksLibrary.bml             — @machineblocks/mbom fixture (Library)
       Standard.expected.json
 
   snapshots/

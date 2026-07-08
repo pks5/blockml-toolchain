@@ -185,7 +185,7 @@ bom compile --all <target>
 ```
 
 ```text
-<file>    — path to a .bml file (or domain extension, e.g. .mbml). JSON BML deferred (TBD)
+<file>    — path to a .bml file. JSON BML deferred (TBD)
 <target>  — registered target name, e.g. "machineblocks-v3-scad"
 --all     — compile all source files in srcDir
 --src     — override srcDir (default: from bom.config.json)
@@ -193,7 +193,7 @@ bom compile --all <target>
 --force   — ignore hash cache, recompile everything
 ```
 
-`--all` processes every BML source file in `srcDir` (`.bml` by default; `.mbml` when MachineBlocks extensions are registered). Each file is evaluated against its stored hash — unchanged artifacts are skipped.
+`--all` processes every `.bml` source file in `srcDir`. Each file is evaluated against its stored hash — unchanged artifacts are skipped.
 
 A Block referenced by both a direct `<block>` compile and an implicit compile from a preset block is only built once — the hash check prevents redundant work.
 
@@ -448,12 +448,6 @@ Project-level configuration. Located at the project root.
 }
 ```
 
-MachineBlocks projects typically include the legacy suffix:
-
-```json
-  "bmlExtensions": [".bml", ".mbml"]
-```
-
 | Field | Default | Description |
 |---|---|---|
 | `srcDir` | `"src"` | Root directory for BML source files |
@@ -462,7 +456,7 @@ MachineBlocks projects typically include the legacy suffix:
 | `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library root (`scad-lib/`). `null` = resolved from bom executable location |
 | `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved |
 | `activeConfig` | `null` | Name of the active config profile |
-| `bmlExtensions` | `[".bml"]` | File suffixes scanned by `compile --all` / `validate --all`. Domains add their own (e.g. `.mbml` for MachineBlocks). |
+| `bmlExtensions` | `[".bml"]` | File suffixes scanned by `compile --all` / `validate --all` |
 | `targets` | *(not V1)* | **Reserved (TBD).** Future: target names to bootstrap via `bootstrapTargets()`. V1 ignores this field. |
 
 ---

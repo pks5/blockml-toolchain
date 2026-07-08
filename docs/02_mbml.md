@@ -19,19 +19,13 @@ BML is parsed and validated by `@blockml/parser`, which produces a BOM document 
 ### File Extensions
 
 ```text
-Standard extension:     .bml          — all BML source files (default)
-Content-type:           bml           — MIME / tooling identifier (unchanged)
-Domain extensions:      optional      — domains may register additional suffixes
-MachineBlocks (legacy): .mbml         — still used in scad-lib and existing MB projects
+Extension:      .bml    — all BML source files
+Content-type:   bml     — MIME / tooling identifier
 ```
 
-**`.bml` is the canonical file extension.** Blocks, presets, config profiles, and library descriptors all use `.bml` unless a domain specifies otherwise.
+**`.bml` is the sole file extension.** Blocks, presets, config profiles, and library descriptors all use `.bml`.
 
-Domains may register their own extensions when a single `.bml` suffix is too generic for tooling (e.g. IDE file associations per domain). **MachineBlocks** still uses `.mbml` for historical library content — the compiler accepts both `.bml` and `.mbml` when the MachineBlocks target is active.
-
-New projects outside the MachineBlocks library should use **`.bml` only**.
-
-The compiler discovers source files via `bmlExtensions` in `bom.config.json` (default: `[".bml"]`; MachineBlocks: `[".bml", ".mbml"]`).
+The compiler discovers source files via `bmlExtensions` in `bom.config.json` (default: `[".bml"]`).
 
 The root XML element determines the document type — not the filename suffix. (JSON `type` field: deferred TBD.)
 
@@ -1092,7 +1086,7 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Li
 **Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.Library"` (e.g. `BricksLibrary`) automatically resolves `Dependency`, `TypeRef`, `BlockRef`, … without prefix — they are Sub-Blocks of `org.blockml.core.Library`, inherited via the baseType chain. Authors do not redeclare them in each library file.
 
 ```xml
-<!-- BricksLibrary.mbml — no xmlns needed for entry types -->
+<!-- BricksLibrary.bml — no xmlns needed for entry types -->
 <composition aggregation="_dependencies">
   <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
 </composition>
@@ -1537,7 +1531,7 @@ Cycles in `appliedPresets` → `BML_PRESET_CYCLE`.
 The render target may produce a `.json` file in OpenSCAD Customizer format when compiling a preset block:
 
 ```text
-BML:   src/com/machineblocks/bricks/presets/StandardPresets.mbml
+BML:   src/com/machineblocks/bricks/presets/StandardPresets.bml
 JSON:  scad/com/machineblocks/bricks/Standard.json
 ```
 
@@ -1566,14 +1560,14 @@ configProfile < appliedPresets chain < inline property
 
 A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Preset blocks are exported as ordinary Block definitions via `_blocks`. Each package directory should contain one Library block at package root. If absent, all BML source files in the directory are treated as public.
 
-**Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for package `com.machineblocks.bricks`. Filename matches block name (`BricksLibrary.mbml`). Not enforced by the compiler.
+**Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for package `com.machineblocks.bricks`. Filename matches block name (`BricksLibrary.bml`). Not enforced by the compiler.
 
 ### Structure
 
 ```xml
 <!--
   FQN: com.machineblocks.bricks
-  Filename: BricksLibrary.mbml
+  Filename: BricksLibrary.bml
 -->
 <block xmlns="http://blockml.org/schema/block"
        ...>
@@ -1605,10 +1599,10 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
   </composition>
 
   <composition aggregation="_blocks">
-    <BlockRef ref="blocks/Standard.mbml" />
-    <BlockRef ref="blocks/Plate.mbml" />
-    <BlockRef ref="blocks/Tile.mbml" />
-    <BlockRef ref="presets/StandardPresets.mbml" />
+    <BlockRef ref="blocks/Standard.bml" />
+    <BlockRef ref="blocks/Plate.bml" />
+    <BlockRef ref="blocks/Tile.bml" />
+    <BlockRef ref="presets/StandardPresets.bml" />
   </composition>
 
 </block>
@@ -1622,20 +1616,20 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 
 ```text
 com.machineblocks.bricks/
-  BricksLibrary.mbml       ← Library block (FQN = com.machineblocks.bricks.BricksLibrary)
+  BricksLibrary.bml       ← Library block (FQN = com.machineblocks.bricks.BricksLibrary)
   bricks.xsd               ← optional legacy XSD
   types/
     Size3D.bml · Direction.bml · …
   blocks/
-    Standard.mbml
-    Plate.mbml
-    Tile.mbml
+    Standard.bml
+    Plate.bml
+    Tile.bml
   presets/
-    StandardPresets.mbml
-    PlatePresets.mbml
+    StandardPresets.bml
+    PlatePresets.bml
 ```
 
-Without a Library block: all BML source files in the directory are public (`.bml` by default; `.mbml` in MachineBlocks library trees).
+Without a Library block: all `.bml` source files in the directory are public.
 
 Legacy `library.xml` is **replaced** by the Library block — not supported in V1.
 

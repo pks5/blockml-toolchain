@@ -1106,12 +1106,12 @@ org.blockml.core.Library           abstract composable Block
 org.blockml.core.Library.Dependency   ref (Library FQN) · version
 org.blockml.core.Library.Schema       ref (relative .xsd path)
 org.blockml.core.Library.TypeRef      ref (relative TypeBlock .bml path)
-org.blockml.core.Library.BlockRef     ref (relative block .bml / .mbml path)
+org.blockml.core.Library.BlockRef     ref (relative block .bml path)
 ```
 
 The Library block lives in a package directory (e.g. `com/machineblocks/bricks/`). Its FQN follows the normal block rule: package path + block name (e.g. `com.machineblocks.bricks.BricksLibrary`).
 
-**Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for the `com.machineblocks.bricks` package. Makes the library descriptor identifiable as such; not enforced by the compiler. Filename matches block name (`BricksLibrary.mbml`).
+**Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for the `com.machineblocks.bricks` package. Makes the library descriptor identifiable as such; not enforced by the compiler. Filename matches block name (`BricksLibrary.bml`).
 
 **Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `TypeRef` / `BlockRef` paths relative to the library root, and registers referenced files in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 

@@ -208,7 +208,7 @@ domains/machineblocks/mbom/src/
   com/machineblocks/core/
     Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
   com/machineblocks/bricks/
-    BricksLibrary.mbml · presets/StandardPresets.mbml
+    BricksLibrary.bml · presets/StandardPresets.bml
 ```
 
 ---

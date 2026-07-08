@@ -382,7 +382,7 @@ tests/correctness/
     Calibrator.bml              — copy or symlink from scad-lib
     Calibrator.expected.scad
   standard-brick/
-    StandardBrickPresets.mbml
+    StandardBrickPresets.bml
     StandardBrick.expected.json
 ```
 
@@ -435,8 +435,7 @@ Until schema packages exist, authors reference published URLs in `xsi:schemaLoca
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.formatOnSave": true,
   "files.associations": {
-    "*.bml": "xml",
-    "*.mbml": "xml"
+    "*.bml": "xml"
   }
 }
 ```

@@ -80,7 +80,7 @@
       <final>true</final>
       <properties>
         <property name="ref" type="String">
-          <documentation>Path to the type .bml / .mbml file relative to the library package root.</documentation>
+          <documentation>Path to the type .bml file relative to the library package root.</documentation>
         </property>
       </properties>
     </block>
@@ -93,7 +93,7 @@
       <final>true</final>
       <properties>
         <property name="ref" type="String">
-          <documentation>Path to the block .bml / .mbml file relative to the library package root.</documentation>
+          <documentation>Path to the block .bml file relative to the library package root.</documentation>
         </property>
       </properties>
     </block>

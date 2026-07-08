@@ -2,11 +2,11 @@
   BlockML Library Descriptor
 
   Name: BricksLibrary
-  Filename: BricksLibrary.mbml
+  Filename: BricksLibrary.bml
   FQN: com.machineblocks.bricks.BricksLibrary
 
   MachineBlocks brick library — exports block definitions and optional XSD.
-  Block .mbml sources live under blocks/ (scad-lib submodule in full deployment).
+  Block .bml sources live under blocks/ (scad-lib submodule in full deployment).
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -45,10 +45,10 @@
   </composition>
 
   <composition aggregation="_blocks">
-    <BlockRef ref="blocks/Standard.mbml" />
-    <BlockRef ref="blocks/Plate.mbml" />
-    <BlockRef ref="blocks/Tile.mbml" />
-    <BlockRef ref="presets/StandardPresets.mbml" />
+    <BlockRef ref="blocks/Standard.bml" />
+    <BlockRef ref="blocks/Plate.bml" />
+    <BlockRef ref="blocks/Tile.bml" />
+    <BlockRef ref="presets/StandardPresets.bml" />
   </composition>
 
 </block>

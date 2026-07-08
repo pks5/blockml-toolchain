@@ -17,7 +17,7 @@ The architecture is designed to accommodate domain BOMs and Render Targets that 
 The BOM Compiler follows a layered architecture:
 
 ```text
-BML Source (.bml / .mbml)         content-type: bml   (V1: XML only)
+BML Source (.bml)                  content-type: bml   (V1: XML only)
   ↓ parse + validate
 BOM (Block Object Model)        domain-agnostic, typed
   ↓ compile
@@ -26,7 +26,7 @@ Render Target                   domain-specific
 Target Output (SCAD, KiCad, JSX, ...)
 ```
 
-**BML** (Block Markup Language) is the universal declarative authoring format. Standard file extension **`.bml`**. Content-type `bml`. **XML is the V1 reference format.** JSON as an alternate BML authoring serialization is **deferred (TBD — not V1)** due to namespace and directive constraints. Domains may register additional extensions — MachineBlocks still uses **`.mbml`** for legacy library content.
+**BML** (Block Markup Language) is the universal declarative authoring format. File extension **`.bml`**. Content-type `bml`. **XML is the V1 reference format.** JSON as an alternate BML authoring serialization is **deferred (TBD — not V1)** due to namespace and directive constraints.
 
 **BOM** (Block Object Model) is the canonical, typed, domain-agnostic object model. It is the internal representation of all block data. BOM is renderer-independent — it has no knowledge of any render target, syntax, or parameters. BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific types and properties.
 
@@ -43,7 +43,7 @@ Target Output (SCAD, KiCad, JSX, ...)
 MachineBlocks is the first and reference domain. Its BOM specialization is **MBOM** (MachineBlocks Object Model). Its Render Target is the **SCAD Renderer**, producing OpenSCAD files compatible with the MachineBlocks V3 SCAD Library.
 
 ```text
-BML Source (.bml)                    ← .mbml in MachineBlocks scad-lib (legacy)
+BML Source (.bml)
   ↓ parse + validate
 MBOM (MachineBlocks Object Model)   ←  specializes BOM Core
   ↓ compile (machineblocks-v3-scad target)
@@ -455,10 +455,10 @@ src/                          — BML source files (configurable via srcDir)
     Wall.bml                    — block definition (.bml = standard)
     WallPresets.bml             — block presets
 
-  com/machineblocks/bricks/     — MachineBlocks library (legacy .mbml)
-    StandardBrick.mbml
-    StandardBrickSet.mbml
-    StandardBrickPresets.mbml
+  com/machineblocks/bricks/     — MachineBlocks library
+    StandardBrick.bml
+    StandardBrickSet.bml
+    StandardBrickPresets.bml
 ```
 
 scad/                         — SCAD output files (configurable via outDir)

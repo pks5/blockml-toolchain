@@ -21,7 +21,7 @@ For pipeline stages see `06_compiler.md`.
 | **NativeBlock = mb_block** | **MachineBlocks convention:** `com.machineblocks.core.NativeBlock` maps to SCAD `mb_block()` — not a global BlockML rule; other targets need not emit blocks |
 | **Composition leaves** | **MachineBlocks convention:** leaf geometry → `mb_block()` — authored as `<core:NativeBlock>` or lowered from domain instances |
 | **Sub-Blocks** | Same-document Sub-Blocks → sub-modules embedded in the parent output SCAD file |
-| **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.mbml` is compiled |
+| **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.bml` is compiled |
 | **JSON BML** | Deferred (TBD — not V1) |
 | **Facade API (C2)** | `CompileInput` + `CompileOptions`; explicit `TypeRegistry`; CLI writes files |
 | **Target bootstrap (C3)** | V1: CLI hardcoded `bootstrapTargets()`; configurability planned — early hooks, no `targets[]` in V1 |
@@ -56,7 +56,7 @@ When a composition needs **leaf brick geometry**, it is always rendered through 
 Evidence from scad-lib (`Calibrator.scad`):
 
 ```text
-Calibrator.mbml references  bricks:StandardBrick  (many instances)
+Calibrator.bml references  bricks:StandardBrick  (many instances)
 Calibrator.scad emits       mb_block(config, settings=[...])   — no use <Standard.scad>
 ```
 
@@ -93,7 +93,7 @@ mb__com__machineblocks__bricks__Standard(config, settings = [...]);  // ✗ avoi
 **Why:** skips the typed module indirection and duplicate parameter extraction — one `mb_block()` call with Customizer variables passed as settings.
 
 ```text
-Standalone Standard.mbml compile:
+Standalone Standard.bml compile:
   Optimized:   Customizer vars → mb_block(config, settings=[...])     ✓
   Not:         Customizer vars → typed module → mb_param_* → mb_block  ✗
 
@@ -219,7 +219,7 @@ V1 does not require Option C — targets may aggregate via TypeRegistry (Option 
 The **reference SCAD target** follows a project convention that the CLI implements:
 
 ```text
-Standard case:   1 .bml / .mbml  →  1 primary .scad (+ .map)
+Standard case:   1 .bml  →  1 primary .scad (+ .map)
 Preset block:       1 presets block  →  .scad + .json (+ CLI thumbnails)
 No transitive compile of dependency .scad files into project output
 Sub-Blocks embedded in parent .scad — not separate output files
@@ -230,14 +230,14 @@ Other domains or future targets may differ without changing `@blockml/compiler`.
 ### Per input file (MachineBlocks SCAD)
 
 ```text
-bom compile src/.../Calibrator.mbml machineblocks-v3-scad
+bom compile src/.../Calibrator.bml machineblocks-v3-scad
   → scad/.../Calibrator.scad
   → scad/.../Calibrator.scad.map
   (does NOT emit Standard.scad — even though Calibrator references StandardBrick)
 ```
 
 ```text
-bom compile src/.../Standard.mbml machineblocks-v3-scad
+bom compile src/.../Standard.bml machineblocks-v3-scad
   → scad/.../Standard.scad        (standalone library / customizer entry)
 ```
 
@@ -370,8 +370,8 @@ Diagnostics      — always reference input.filePath + line/column from parse
 const registry = bootstrapTypeRegistry({ srcDir, mbLibPath, bmlExtensions });
 
 const input: CompileInput = {
-  source: fs.readFileSync("src/com/.../Calibrator.mbml", "utf8"),
-  filePath: "src/com/.../Calibrator.mbml",
+  source: fs.readFileSync("src/com/.../Calibrator.bml", "utf8"),
+  filePath: "src/com/.../Calibrator.bml",
 };
 
 const result = compileBmlToOutput(input, "machineblocks-v3-scad", {
@@ -711,7 +711,7 @@ CLI iterates `parameterSets` in the compiled `.json`:
 ### Trigger and scope
 
 ```text
-Trigger:     bom compile <StandardPresets.mbml> machineblocks-v3-scad
+Trigger:     bom compile <StandardPresets.bml> machineblocks-v3-scad
              bom watch (same rules on file change)
 Not triggered: bom compile <block.bml>  — no thumbnails
                bom validate / bom inspect
