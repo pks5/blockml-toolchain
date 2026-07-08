@@ -195,7 +195,7 @@ Examples:
 There is **no FQN fallback** — a Block's type FQN is never used as instance identity.
 
 **Explicit IDs** are authored in BML via **`bml:id`**. Required when:
-- another instance references this one (`appliedPresets`, `Step.part`, …)
+- another instance references this one (`basePresets`, `Step.part`, …)
 - the element carries `bml:each` (literal or Expression — auto-ID is not available in loops)
 
 **Auto-generated IDs** are assigned **after directive expansion** for static, unreferenced children that omit **`bml:id`**. They are deterministic 6-hex hashes:
@@ -224,7 +224,7 @@ Examples:
   com.myproject.enclosures.DefaultEnclosure::floor
 ```
 
-Used in member values that reference other instances — e.g. `appliedPresets`, `Step.part`, and any association typed as a Block reference.
+Used in member values that reference other instances — e.g. `basePresets`, `Step.part`, and any association typed as a Block reference.
 
 A qualified reference is valid **only when both** conditions hold:
 
@@ -256,7 +256,7 @@ Reference     — literal token in the attribute value (not wrapped in ${ … })
 
 Dynamic references → `BML_NON_STATIC_INSTANCE_REF`.
 
-Same-document references (unqualified id only, e.g. `appliedPresets="brick-2x4"` within the same Block) resolve within the enclosing Block's aggregations and do not require `export="true"`. The export rule applies to **`{BlockFQN}::{id}`** references only.
+Same-document references (unqualified id only, e.g. `basePresets="brick-2x4"` within the same Block) resolve within the enclosing Block's aggregations and do not require `export="true"`. The export rule applies to **`{BlockFQN}::{id}`** references only.
 
 **BOM storage:** the parser stores `bml:id` only when authored. Auto-IDs are not written into `BomDocument` — see `12_bom_object_model.md` — Instance ID Rules.
 
@@ -1095,7 +1095,7 @@ Sub-Blocks are full BOM objects referenceable via full FQN from outside the pare
 
 ## Preset (MachineBlocks)
 
-Presets are **not** a BlockML core feature. In MachineBlocks, a preset is a named property configuration represented as a Block instance in the `_presets` aggregation. Any MachineBlocks Block instance can reference presets via the `appliedPresets` association.
+Presets are **not** a BlockML core feature. In MachineBlocks, a preset is a named property configuration represented as a Block instance in the `_presets` aggregation. Any MachineBlocks Block instance can reference presets via the `basePresets` association.
 
 Presets apply only to Properties — not to Aggregations, Associations, or Capabilities. Preset merge is compiler logic; Customizer JSON is render-target logic.
 
@@ -1114,7 +1114,7 @@ Each preset instance in `_presets`:
 ```text
 bml:id           — stable kebab-case identifier (composition meta; reference key)
 name             — human-readable display name (Customizer UI, editor)
-appliedPresets   — association _self[]: space-separated preset ids (local or FQN::id)
+basePresets   — association _self[]: space-separated preset ids (local or FQN::id)
                    own instance properties override merged preset chain
 ```
 
@@ -1137,17 +1137,17 @@ Qualified references require `export="true"` on the target composition and a **l
 
 ```xml
 <bricks:Standard
-    appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />
+    basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />
 
 <bricks:Standard
-    appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4"
+    basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
 
 ### Merge Order
 
 ```text
-configProfile < appliedPresets chain < inline property
+configProfile < basePresets chain < inline property
 ```
 
 ---

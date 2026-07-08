@@ -601,7 +601,7 @@ compileBomToOutput(input, targetName, options)
 | `blockFqn` | Module name, property definitions, processor dispatch |
 | `outputRelativePath` | Import resolver (Set `_blocks` `use` paths), file output |
 | `parentPartId` / `partId` | Nested SCAD identity (`mb_block_id`, stage [10]) |
-| `instance` | Inline properties, `appliedPresets` — property merge layers 1–2 |
+| `instance` | Inline properties, `basePresets` — property merge layers 1–2 |
 | `withScope` | Expression rendering for `bml:with` variables |
 | `loopScope` | Expression rendering for `bml:each` loop variables |
 | `activePresetId` | Preset JSON + thumbnail filename (`Wall__brick-2x4.webp`) |
@@ -615,7 +615,7 @@ Definition render (Wall.bml → Wall.scad)
   → Customizer parameters from Block properties
 
 Instance render (composition children after stage [10])
-  instance = BlockInstance { memberValues, appliedPresets, … }
+  instance = BlockInstance { memberValues, basePresets, … }
   partId   = resolved id expression
   parentPartId = parent's partIdPath
   → mb_block() settings, nested sub-modules
@@ -628,7 +628,7 @@ Resolved property values are **not cached** on `RenderContext` in V1. A `Propert
 ```text
 resolveProperty(name, blockDef, context):
   1. context.instance?.memberValues[name]     — inline
-  2. appliedPresets merge from context.instance  — via session.typeRegistry + compiler merge helpers
+  2. basePresets merge from context.instance  — via session.typeRegistry + compiler merge helpers
   3. config from context.session.activeConfig — via session.typeRegistry
   4. blockDef property defaultValue
 ```
@@ -671,7 +671,7 @@ When the root block has a `_presets` composition (MachineBlocks preset block), t
 ```text
 1. Walk preset instances in _presets → collect referenced block types
 2. Implicit block render per referenced type → .scad + .scad.map in RenderOutput.files[]
-3. Preset property merge per instance (own properties → appliedPresets chain → default)
+3. Preset property merge per instance (own properties → basePresets chain → default)
 4. Customizer JSON → .json in RenderOutput.files[]
 ```
 

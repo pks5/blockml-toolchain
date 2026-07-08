@@ -155,7 +155,7 @@ MachineBlocks declares two domain aggregations on the base type chain:
 com.machineblocks.core.Block  (extends org.blockml.core.Block)
   _presets:
     type:    com.machineblocks.core.Block[]
-  appliedPresets:
+  basePresets:
     type:    _self[]   (association — references ids in enclosing Block's _presets)
 
 com.machineblocks.core.CompositeBlock  (extends Block)
@@ -164,9 +164,9 @@ com.machineblocks.core.CompositeBlock  (extends Block)
     default: true
 ```
 
-Every MachineBlocks Block inherits `_presets` and `appliedPresets`. Composite blocks additionally inherit `_parts` as the default composition aggregation.
+Every MachineBlocks Block inherits `_presets` and `basePresets`. Composite blocks additionally inherit `_parts` as the default composition aggregation.
 
-**Presets are not a BlockML core feature.** Preset instances are ordinary Block instances in `_presets`. The `appliedPresets` association references preset ids (local or `{BlockFQN}::{id}`). Preset merge is compiler logic; Customizer JSON is render-target logic.
+**Presets are not a BlockML core feature.** Preset instances are ordinary Block instances in `_presets`. The `basePresets` association references preset ids (local or `{BlockFQN}::{id}`). Preset merge is compiler logic; Customizer JSON is render-target logic.
 
 When a Block's `baseType` chain includes `com.machineblocks.core.CompositeBlock` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited members appear via `resolveEffectiveMembers()`.
 
@@ -201,7 +201,7 @@ When `beanName` is set, the Aggregation is a ServiceBlock binding. The bean is a
 
 Associations describe loose references to other objects without ownership.
 
-MachineBlocks uses `appliedPresets` on `com.machineblocks.core.Block` — an association (`_self[]`) referencing preset ids in the enclosing Block's `_presets` aggregation. Local ids resolve within the same Block; cross-file entries use `{BlockFQN}::{id}`.
+MachineBlocks uses `basePresets` on `com.machineblocks.core.Block` — an association (`_self[]`) referencing preset ids in the enclosing Block's `_presets` aggregation. Local ids resolve within the same Block; cross-file entries use `{BlockFQN}::{id}`.
 
 Other planned use cases in MachineBlocks:
 
@@ -463,12 +463,12 @@ A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`.
 A Set uses three conventional Aggregations — `_presets` and `_parts` inherited from the base type chain, `_steps` declared on Set:
 
 ```text
-_presets    — block palette (configurations referenced by appliedPresets on _parts entries; inherited from Block)
-_parts      — placed block instances (direction, offset, appliedPresets; inherited from CompositeBlock, default)
+_presets    — block palette (configurations referenced by basePresets on _parts entries; inherited from Block)
+_parts      — placed block instances (direction, offset, basePresets; inherited from CompositeBlock, default)
 _steps      — assembly order (optional; defaults to document order of _parts)
 ```
 
-There is no separate Placement meta-block. Placed instances are real Block instances in `_parts` with `appliedPresets`, `direction`, and `offset` as properties.
+There is no separate Placement meta-block. Placed instances are real Block instances in `_parts` with `basePresets`, `direction`, and `offset` as properties.
 
 ### com.machineblocks.core.Step
 
@@ -519,7 +519,7 @@ MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/src/com/m
 ```text
 Extends:        org.blockml.core.Block
 Properties:     name (String)
-Associations:   appliedPresets (_self[] — references ids in _presets)
+Associations:   basePresets (_self[] — references ids in _presets)
 Aggregations:   _presets (type: com.machineblocks.core.Block[])
 ```
 
@@ -541,7 +541,7 @@ implTypes: OpenSCAD
 `NativeBlock` is the direct BML representation of a raw `mb_block()` call. It is **final** — it cannot be used as `baseType` in any Block definition. It can only appear as a child element in Compositions.
 
 ```text
-Properties:     native MB properties (declared on concrete types or via appliedPresets)
+Properties:     native MB properties (declared on concrete types or via basePresets)
                 no custom properties allowed — BML_NATIVE_BLOCK_CUSTOM_PROPERTY
 Capabilities:   none
 Aggregations:   children (type: com.machineblocks.core.Block[], default — mb_block() sub-geometry)

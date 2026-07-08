@@ -412,12 +412,12 @@ Same-document Sub-Block references omit `version` — resolved against `subBlock
 ### Preset cross-file references (MachineBlocks)
 
 ```text
-appliedPresets="com.martianmicro.anyclosure.WallPresets::large"
+basePresets="com.martianmicro.anyclosure.WallPresets::large"
   → Parser stores string as authored (stage [5])
   → Validator resolves preset BlockDefinition + preset instance id in _presets (stage [8])
 
-appliedPresets="brick-1x1 com.other.Presets::color-red"
-  → Stored on Block instance memberValues.appliedPresets (stage [5])
+basePresets="brick-1x1 com.other.Presets::color-red"
+  → Stored on Block instance memberValues.basePresets (stage [5])
   → Validator resolves each token as local id or FQN::id (stage [8])
 ```
 
@@ -427,7 +427,7 @@ Preset instances in `_presets` composition map like any other Block instance. Th
 <composition aggregation="_presets" export="true">  →  CompositionTemplate.export = true
 ```
 
-Qualified `{BlockFQN}::{id}` references (e.g. in `appliedPresets`) validate against exported compositions with static target ids — see `00_bom_core.md` — Qualified Block Instance References.
+Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against exported compositions with static target ids — see `00_bom_core.md` — Qualified Block Instance References.
 
 ### Contract validation (stage [8])
 

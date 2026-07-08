@@ -458,7 +458,7 @@ BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a compositi
 BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
-BML_PRESET_CYCLE              — circular dependency in appliedPresets chain
+BML_PRESET_CYCLE              — circular dependency in basePresets chain
 BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
 BML_CONTRACT_NOT_ABSTRACT     — contract type is not abstract
 BML_CONTRACT_NOT_ON_ROOT      — <contracts> declared on a Sub-Block

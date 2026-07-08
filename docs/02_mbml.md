@@ -73,7 +73,7 @@ BML defines one core document root:
 <block>   — Block Definition (composable types, type blocks, language blocks, preset collections, …)
 ```
 
-Property presets are **not** a BlockML core feature. MachineBlocks models presets as Block instances in `_presets` with `appliedPresets` associations — see § Presets (MachineBlocks) and `03_mbom.md`.
+Property presets are **not** a BlockML core feature. MachineBlocks models presets as Block instances in `_presets` with `basePresets` associations — see § Presets (MachineBlocks) and `03_mbom.md`.
 
 Library packages use `<block baseType="org.blockml.core.Library">` — see § Library Format.
 
@@ -1320,8 +1320,8 @@ A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`.
 A Set uses three conventional Aggregations — `_presets` and `_parts` inherited from the base type chain, `_steps` declared on Set:
 
 ```text
-_presets    — block palette (configurations referenced by appliedPresets on _parts entries)
-_parts      — placed block instances (direction, offset, appliedPresets; id becomes SCAD instance id)
+_presets    — block palette (configurations referenced by basePresets on _parts entries)
+_parts      — placed block instances (direction, offset, basePresets; id becomes SCAD instance id)
 _steps      — assembly order (optional; defaults to document order of _parts)
 ```
 
@@ -1353,16 +1353,16 @@ _steps      — assembly order (optional; defaults to document order of _parts)
 
   <!-- Placed instances: inherited _parts -->
   <composition aggregation="_parts">
-    <ac:Floor bml:id="00001" appliedPresets="floor"  direction="West"  offset="[0, 0, 0]"   />
-    <ac:Corner bml:id="00002" appliedPresets="corner" direction="West"  offset="[0, 0, 1]"   />
-    <ac:Wall bml:id="00003" appliedPresets="wall"   direction="West"  offset="[0, 4, 1]"   />
-    <ac:Corner bml:id="00004" appliedPresets="corner" direction="North" offset="[0, 12, 1]"  />
-    <ac:Wall bml:id="00005" appliedPresets="wall"   direction="North" offset="[4, 15, 1]"  />
-    <ac:Corner bml:id="00006" appliedPresets="corner" direction="East"  offset="[12, 12, 1]" />
-    <ac:Wall bml:id="00007" appliedPresets="wall"   direction="East"  offset="[15, 4, 1]"  />
-    <ac:Corner bml:id="00008" appliedPresets="corner" direction="South" offset="[12, 0, 1]"  />
-    <ac:Wall bml:id="00009" appliedPresets="wall"   direction="South" offset="[4, 0, 1]"   />
-    <ac:Lid bml:id="0000A" appliedPresets="lid"    direction="West"  offset="[0, 0, 10]"  />
+    <ac:Floor bml:id="00001" basePresets="floor"  direction="West"  offset="[0, 0, 0]"   />
+    <ac:Corner bml:id="00002" basePresets="corner" direction="West"  offset="[0, 0, 1]"   />
+    <ac:Wall bml:id="00003" basePresets="wall"   direction="West"  offset="[0, 4, 1]"   />
+    <ac:Corner bml:id="00004" basePresets="corner" direction="North" offset="[0, 12, 1]"  />
+    <ac:Wall bml:id="00005" basePresets="wall"   direction="North" offset="[4, 15, 1]"  />
+    <ac:Corner bml:id="00006" basePresets="corner" direction="East"  offset="[12, 12, 1]" />
+    <ac:Wall bml:id="00007" basePresets="wall"   direction="East"  offset="[15, 4, 1]"  />
+    <ac:Corner bml:id="00008" basePresets="corner" direction="South" offset="[12, 0, 1]"  />
+    <ac:Wall bml:id="00009" basePresets="wall"   direction="South" offset="[4, 0, 1]"   />
+    <ac:Lid bml:id="0000A" basePresets="lid"    direction="West"  offset="[0, 0, 10]"  />
   </composition>
 
   <!-- _steps omitted → assembly order = document order of _parts -->
@@ -1405,10 +1405,10 @@ Because `_presets` and `_parts` are separated, one Block configuration can be re
 </composition>
 
 <composition aggregation="_parts">
-  <ac:Wall bml:id="00003" appliedPresets="wall" direction="West"  offset="[0, 4, 1]"  />
-  <ac:Wall bml:id="00005" appliedPresets="wall" direction="North" offset="[4, 15, 1]" />
-  <ac:Wall bml:id="00007" appliedPresets="wall" direction="East"  offset="[15, 4, 1]" />
-  <ac:Wall bml:id="00009" appliedPresets="wall" direction="South" offset="[4, 0, 1]"  />
+  <ac:Wall bml:id="00003" basePresets="wall" direction="West"  offset="[0, 4, 1]"  />
+  <ac:Wall bml:id="00005" basePresets="wall" direction="North" offset="[4, 15, 1]" />
+  <ac:Wall bml:id="00007" basePresets="wall" direction="East"  offset="[15, 4, 1]" />
+  <ac:Wall bml:id="00009" basePresets="wall" direction="South" offset="[4, 0, 1]"  />
 </composition>
 ```
 
@@ -1421,12 +1421,12 @@ Option 1 — Inline:
   All properties defined directly on the instance in _parts.
 
 Option 2 — Preset reference:
-  Instance references preset id(s) via appliedPresets.
+  Instance references preset id(s) via basePresets.
   Compiler merges preset chain into effective properties.
 
 Option 3 — Preset + inline override:
-  appliedPresets as base. Inline properties override individual values.
-  Merge order: configProfile < appliedPresets chain < inline property
+  basePresets as base. Inline properties override individual values.
+  Merge order: configProfile < basePresets chain < inline property
 ```
 
 ### SCAD Set Output
@@ -1444,9 +1444,9 @@ instance  — single instance in isolation
 
 ## Presets (MachineBlocks)
 
-Presets are **not** a BlockML core feature. MachineBlocks models them as ordinary Block instances in the `_presets` aggregation, referenced via the `appliedPresets` association on any MachineBlocks Block.
+Presets are **not** a BlockML core feature. MachineBlocks models them as ordinary Block instances in the `_presets` aggregation, referenced via the `basePresets` association on any MachineBlocks Block.
 
-Preset merge is compiler logic (`resolveAppliedPresets`, block merge helpers). Customizer JSON output is render-target logic (machineblocks-v3-scad).
+Preset merge is compiler logic (`resolveBasePresets`, block merge helpers). Customizer JSON output is render-target logic (machineblocks-v3-scad).
 
 A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<block>` with `baseType="com.machineblocks.core.Block"` whose composition fills `_presets` with Block instances of the target type.
 
@@ -1480,25 +1480,25 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
 
     <bricks:Standard bml:id="color-red" name="Red" bml:version="3.0.0" baseColor="#D65745" />
 
-    <!-- Composite preset — appliedPresets merges preset chain -->
+    <!-- Composite preset — basePresets merges preset chain -->
     <bricks:Standard bml:id="brick-1x1-red"
                      name="Brick 1x1 Red"
                      bml:version="3.0.0"
-                     appliedPresets="brick-1x1 color-red" />
+                     basePresets="brick-1x1 color-red" />
 
     <!-- Composite with own override -->
     <bricks:Standard bml:id="brick-1x1-red-text"
                      name="Brick 1x1 Red MB"
                      bml:version="3.0.0"
-                     appliedPresets="brick-1x1-red"
+                     basePresets="brick-1x1-red"
                      text="MB"
                      textColor="#EDF0F1" />
 
-    <!-- Cross-file appliedPresets reference -->
+    <!-- Cross-file basePresets reference -->
     <bricks:Standard bml:id="brick-2x4-special"
                      name="Brick 2x4 Special"
                      bml:version="3.0.0"
-                     appliedPresets="com.myproject.presets.MyPresets::my-base brick-2x4"
+                     basePresets="com.myproject.presets.MyPresets::my-base brick-2x4"
                      textColor="#EDF0F1" />
 
   </composition>
@@ -1506,15 +1506,15 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
 </block>
 ```
 
-**`bml:id`** — stable kebab-case identifier. Used for references via `appliedPresets` and thumbnail filenames. Must be unique within the enclosing Block's `_presets`. Never changes once published.
+**`bml:id`** — stable kebab-case identifier. Used for references via `basePresets` and thumbnail filenames. Must be unique within the enclosing Block's `_presets`. Never changes once published.
 
 **`name`** — human-readable display name. Used in the SCAD Customizer JSON and editor UI. May be renamed without breaking references.
 
-**`appliedPresets`** — space-separated preset ids on any MachineBlocks Block instance. Local ids resolve within the enclosing Block's `_presets`; cross-file entries use `{BlockFQN}::{id}`. Applied left-to-right; later entries override earlier. Own instance properties override all applied presets.
+**`basePresets`** — space-separated preset ids on any MachineBlocks Block instance. Local ids resolve within the enclosing Block's `_presets`; cross-file entries use `{BlockFQN}::{id}`. Applied left-to-right; later entries override earlier. Own instance properties override all base presets.
 
 Qualified `{BlockFQN}::{id}` references require the target composition to declare `export="true"` and the target instance to have a **literal static `bml:id`** — see `00_bom_core.md` — Qualified Block Instance References.
 
-Presets can reference other presets — preset instances in `_presets` may themselves carry `appliedPresets`, forming an inheritance chain.
+Presets can reference other presets — preset instances in `_presets` may themselves carry `basePresets`, forming an inheritance chain.
 
 ### Preset Reference Syntax
 
@@ -1540,15 +1540,15 @@ Diagnostics: `BML_UNEXPORTED_INSTANCE_REF` · `BML_NON_STATIC_INSTANCE_REF`
 ```xml
 <!-- Preset only -->
 <bricks:Standard bml:version="3.0.0"
-    appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />
+    basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />
 
 <!-- Preset + inline override -->
 <bricks:Standard bml:version="3.0.0"
-    appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4"
+    basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
 
-Merge order: `configProfile < appliedPresets chain < inline property`
+Merge order: `configProfile < basePresets chain < inline property`
 
 ### Multiple Preset Blocks for the Same Block Type
 
@@ -1565,11 +1565,11 @@ Both are referenced by their own FQN — no conflict, no registry ambiguity.
 
 ```text
 1. Own instance properties
-2. appliedPresets — applied left-to-right, later entries override earlier
+2. basePresets — applied left-to-right, later entries override earlier
 3. Block defaultValues
 ```
 
-Cycles in `appliedPresets` → `BML_PRESET_CYCLE`.
+Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 
 ### SCAD Output
 
@@ -1586,7 +1586,7 @@ The Customizer JSON uses the preset **name** as the key — the human-readable l
 
 ## Config Profiles
 
-Config profiles are MachineBlocks preset blocks (`baseType="com.machineblocks.core.Block"`) that define project-wide hardware or rendering defaults. Each preset instance in `_presets` carries a project ConfigBlock instance (or inherits via `appliedPresets`).
+Config profiles are MachineBlocks preset blocks (`baseType="com.machineblocks.core.Block"`) that define project-wide hardware or rendering defaults. Each preset instance in `_presets` carries a project ConfigBlock instance (or inherits via `basePresets`).
 
 ```text
 src/config/prusa_pla.bml   — printer + filament profile
@@ -1596,7 +1596,7 @@ src/config/scale_2x.bml    — scale profile
 Only one config profile is active at a time (set via `bom activate-config`). Merge priority:
 
 ```text
-configProfile < appliedPresets chain < inline property
+configProfile < basePresets chain < inline property
 ```
 
 ---
@@ -1768,9 +1768,9 @@ The examples below are **illustrative drafts only** — not valid V1 input.
     {
       "aggregation": "_parts",
       "children": [
-        { "type": "com.martianmicro.anyclosure.Floor",  "id": "00001", "appliedPresets": "floor",  "direction": "West",  "offset": [0, 0, 0]   },
-        { "type": "com.martianmicro.anyclosure.Corner", "id": "00002", "appliedPresets": "corner", "direction": "West",  "offset": [0, 0, 1]   },
-        { "type": "com.martianmicro.anyclosure.Wall",   "id": "00003", "appliedPresets": "wall",   "direction": "West",  "offset": [0, 4, 1]   }
+        { "type": "com.martianmicro.anyclosure.Floor",  "id": "00001", "basePresets": "floor",  "direction": "West",  "offset": [0, 0, 0]   },
+        { "type": "com.martianmicro.anyclosure.Corner", "id": "00002", "basePresets": "corner", "direction": "West",  "offset": [0, 0, 1]   },
+        { "type": "com.martianmicro.anyclosure.Wall",   "id": "00003", "basePresets": "wall",   "direction": "West",  "offset": [0, 4, 1]   }
       ]
     }
   ]
@@ -1806,7 +1806,7 @@ unknown bml:version on external instance → BML_UNKNOWN_VERSION (error)
 same-document Sub-Block instance          → bml:version not required
 bml:id missing on referenced instance     → BML_MISSING_ID
 bml:id missing on bml:each element        → BML_MISSING_ID
-appliedPresets / Step.part unresolvable     → BML_UNRESOLVABLE_INSTANCE_REF
+basePresets / Step.part unresolvable     → BML_UNRESOLVABLE_INSTANCE_REF
 qualified FQN::id without export="true"     → BML_UNEXPORTED_INSTANCE_REF
 qualified FQN::id with Expression id/ref    → BML_NON_STATIC_INSTANCE_REF
 anonymous static child without bml:id     → auto-ID after directive expansion (not stored in BOM)

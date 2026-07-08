@@ -260,7 +260,7 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 ```text
 org.blockml.core.Block           root · declares no members · bml:id / bml:version on composition instances
 org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
-com.machineblocks.core.Block     baseType: Block · _presets · appliedPresets
+com.machineblocks.core.Block     baseType: Block · _presets · basePresets
 com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)
 org.blockml.core.TypeBlock         baseType: Block · primitives · structs · enums
 org.blockml.core.LanguageBlock     baseType: Block (meta — no extra members in V1)

@@ -674,7 +674,7 @@ Cross-references within the same composition scope are validated against **autho
 
 ```text
 _presets child with bml:id="wall"           ← target
-_parts child appliedPresets="wall"       ← reference  ✓  (same document, unqualified)
+_parts child basePresets="wall"       ← reference  ✓  (same document, unqualified)
 ```
 
 ### Qualified references (`{BlockFQN}::{id}`)
@@ -700,7 +700,7 @@ Valid only when:
 </composition>
 
 <!-- Referencing document -->
-<bricks:Standard appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />  ✓
+<bricks:Standard basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />  ✓
 
 <!-- Composition without export -->
 <composition aggregation="_presets">
@@ -710,22 +710,22 @@ Valid only when:
 
 <!-- Dynamic target or reference -->
 <bricks:Standard bml:id="${ presetId }" … />                              ✗  BML_NON_STATIC_INSTANCE_REF
-<bricks:Standard appliedPresets="${ ref }" … />                      ✗  BML_NON_STATIC_INSTANCE_REF
+<bricks:Standard basePresets="${ ref }" … />                      ✗  BML_NON_STATIC_INSTANCE_REF
 ```
 
-Same-document unqualified ids (`appliedPresets="brick-2x4"`) do not require `export="true"`.
+Same-document unqualified ids (`basePresets="brick-2x4"`) do not require `export="true"`.
 
 Local validation examples:
 
 ```text
 _presets child without bml:id               ← target
-_parts child appliedPresets="wall"     ← reference  ✗  BML_MISSING_ID on target preset
+_parts child basePresets="wall"     ← reference  ✗  BML_MISSING_ID on target preset
 
 _presets child with bml:id="wall"           ← target
-_parts child appliedPresets="floor"     ← reference  ✗  BML_UNRESOLVABLE_INSTANCE_REF
+_parts child basePresets="floor"     ← reference  ✗  BML_UNRESOLVABLE_INSTANCE_REF
 ```
 
-`appliedPresets` / `Step.part` values must match an authored **`bml:id`** in the referenced aggregation — not an auto-generated or FQN-derived value.
+`basePresets` / `Step.part` values must match an authored **`bml:id`** in the referenced aggregation — not an auto-generated or FQN-derived value.
 
 ---
 
@@ -752,7 +752,7 @@ interface BlockInstance {
   version?: MemberValue
 
   /** Preset reference: {PresetsDocumentFQN}::{preset-id} */
-  appliedPresets?: string
+  basePresets?: string
 
   renderGroup?: string
   namespace?: string
@@ -828,12 +828,12 @@ getBlockDefinition(fqn: string, version: string): BlockDefinition | undefined
 
 ## Presets (MachineBlocks)
 
-Presets are **not** a BlockML core feature. MachineBlocks models them via `_presets` aggregation and `appliedPresets` association on `com.machineblocks.core.Block`. Preset files are ordinary `BlockDefinition` documents.
+Presets are **not** a BlockML core feature. MachineBlocks models them via `_presets` aggregation and `basePresets` association on `com.machineblocks.core.Block`. Preset files are ordinary `BlockDefinition` documents.
 
 ```text
 com.machineblocks.core.Block
   aggregation  _presets   0..n   com.machineblocks.core.Block
-  association  appliedPresets  0..n  _self  — space-separated ids on instance
+  association  basePresets  0..n  _self  — space-separated ids on instance
 ```
 
 Preset instances appear as Block children in `_presets` composition. Preset merge is compiler logic; Customizer JSON is render-target logic.
@@ -847,17 +847,17 @@ Example:
   com.machineblocks.bricks.StandardPresets::brick-2x4
 ```
 
-Cross-file `appliedPresets` entries use the same `FQN::id` form. Local ids resolve within the enclosing Block's `_presets`.
+Cross-file `basePresets` entries use the same `FQN::id` form. Local ids resolve within the enclosing Block's `_presets`.
 
-**Merge order** when resolving applied presets:
+**Merge order** when resolving base presets:
 
 ```text
 1. Own instance properties
-2. appliedPresets — applied left-to-right; later entries override earlier
+2. basePresets — applied left-to-right; later entries override earlier
 3. Block defaultValues
 ```
 
-Cycles in `appliedPresets` → `BML_PRESET_CYCLE`.
+Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 
 ---
 
@@ -1022,7 +1022,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Expression result types match member types
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property defaultValue cycles (topological sort)
-✓  appliedPresets resolve (local id or FQN::id) and have no cycles
+✓  basePresets resolve (local id or FQN::id) and have no cycles
 ✓  contract types resolve, are abstract, and member surface is satisfied by effective members
 ✓  Library TypeRef / BlockRef paths resolve to existing files
 ✓  Library Dependency ref + version matches registered Library block
@@ -1072,7 +1072,7 @@ BML_DIRECTIVE_NOT_ALLOWED     — bml:* on disallowed element (error)
 BML_CUSTOM_DATA_NOT_ALLOWED   — data:* on non-Block element (error)
 BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent
 BML_PROPERTY_CYCLE            — circular defaultValue dependencies
-BML_PRESET_CYCLE              — circular appliedPresets chain
+BML_PRESET_CYCLE              — circular basePresets chain
 BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
 BML_CONTRACT_NOT_ABSTRACT     — contract type is not abstract
 BML_CONTRACT_MEMBER_MISSING   — implementing Block lacks a contract member
