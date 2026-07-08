@@ -96,7 +96,7 @@ Every MBOM Block class has metadata describing its structure. Metadata is define
 
 ```text
 name               — short class name
-fullQualifiedName  — FQN
+type  — FQN
 baseType           — FQN of the parent class. Required — no default.
 version            — semantic version of this class definition
 members            — shared namespace: Properties, Aggregations, Associations, Capabilities
@@ -535,8 +535,8 @@ Defined in `CompositeBlock.bml`. Extends `Block`. Adds `_parts` as the default c
 ```text
 Extends:        com.machineblocks.core.Block
 Aggregations:   _parts (type: com.machineblocks.core.Block[], default)
-allowedSubBlockTypes: Block, FunctionBlock
-supportedImplementationTypes: OpenSCAD
+subTypes: Block, FunctionBlock
+implTypes: OpenSCAD
 ```
 
 ### com.machineblocks.core.NativeBlock
@@ -570,32 +570,40 @@ Derivable:      baseType = com.machineblocks.core.Set  ✓
 Processor:      ScadSetProcessor → STEPS array + 4 view submodules
 ```
 
-### allowedSubBlockTypes
+### subTypes
 
-Declared on `CompositeBlock.bml`:
+**Default:** `[]` — Sub-Blocks forbidden until explicitly enabled via `<subTypes>`.
+
+**Omit** `<subTypes>` to inherit the effective list from the `baseType` chain. **Declare** `<subTypes>` only when overriding (enable or restrict).
+
+Declared on `CompositeBlock.bml` (enables Sub-Blocks for composites):
 
 ```xml
-<allowedSubBlockTypes>
-  <allowedSubBlockType type="com.machineblocks.core.Block" />
-  <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
-</allowedSubBlockTypes>
+<subTypes>
+  <subType type="com.machineblocks.core.Block" />
+  <subType type="org.blockml.service.FunctionBlock" />
+</subTypes>
 ```
 
 ```text
-com.machineblocks.core.CompositeBlock — Block, FunctionBlock
-com.machineblocks.core.NativeBlock    — (empty — final, no Sub-Blocks)
-com.machineblocks.core.Set            — inherits from CompositeBlock
-org.blockml.service.FunctionBlock     — (empty)
+org.blockml.core.Block                — omitted → effective []
+com.machineblocks.core.Block          — omitted → inherits []
+com.machineblocks.core.CompositeBlock — explicit → Block, FunctionBlock
+com.machineblocks.core.Set            — omitted → inherits CompositeBlock
+com.machineblocks.core.NativeBlock    — omitted → inherits [] (final leaf)
+org.blockml.service.FunctionBlock     — omitted → inherits []
 ```
 
-### supportedImplementationTypes
+To close Sub-Blocks on a type whose parent enabled them: `<subTypes/>` (explicit empty override).
+
+### implTypes
 
 Declared on `CompositeBlock.bml`:
 
 ```xml
-<supportedImplementationTypes>
-  <supportedImplementationType type="org.blockml.language.OpenSCAD" />
-</supportedImplementationTypes>
+<implTypes>
+  <implType type="org.blockml.language.OpenSCAD" />
+</implTypes>
 ```
 
 ```text
@@ -608,7 +616,7 @@ org.blockml.service.FunctionBlock       — OpenSCAD, TypeScript
 ```text
 BML_FINAL_BASE_TYPE             — NativeBlock used as baseType
 BML_NATIVE_BLOCK_CUSTOM_PROPERTY — custom property declared on NativeBlock
-BML_INVALID_SUBBLOCK_TYPE       — Sub-Block baseType not in allowedSubBlockTypes
+BML_INVALID_SUBBLOCK_TYPE       — Sub-Block baseType not in subTypes
 MB_EMPTY_BLOCK                  — Block has no Composition and no registered custom Processor
                                    (MB_* prefix = MachineBlocks-specific, not BML Core)
 ```

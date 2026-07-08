@@ -4,7 +4,7 @@
   <documentation>BOM Core primitive TypeBlock for true/false values. Unqualified name Boolean resolves to org.blockml.type.Boolean.</documentation>
 
   <name>Boolean</name>
-  <fullQualifiedName>org.blockml.type.Boolean</fullQualifiedName>
+  <type>org.blockml.type.Boolean</type>
   <baseType>org.blockml.core.PrimitiveType</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>

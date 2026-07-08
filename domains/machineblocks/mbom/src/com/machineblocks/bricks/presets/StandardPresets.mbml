@@ -25,7 +25,7 @@
   <documentation>Named property presets for the MachineBlocks Standard brick — sizes, colors, and composite combinations for Customizer and appliedPresets references.</documentation>
 
   <name>StandardPresets</name>
-  <fullQualifiedName>com.machineblocks.bricks.StandardPresets</fullQualifiedName>
+  <type>com.machineblocks.bricks.StandardPresets</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>3.0.0</version>
 

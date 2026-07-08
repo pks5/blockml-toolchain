@@ -18,7 +18,7 @@
   <documentation>Built-in math FunctionBlock. Expression prefix #math.* — min, max, abs, floor, round, and related numeric utilities.</documentation>
 
   <name>Math</name>
-  <fullQualifiedName>org.blockml.service.Math</fullQualifiedName>
+  <type>org.blockml.service.Math</type>
   <baseType>org.blockml.service.FunctionBlock</baseType>
   <version>1.0.0</version>
 

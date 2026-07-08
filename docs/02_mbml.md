@@ -173,7 +173,7 @@ Composition children (`<ac:Wall id="wall" …/>`, `<core:Step …/>`) are **Bloc
 ```text
 <documentation>     — human-readable description of what this Block is (first child element).
 <name>              — short class name (PascalCase). See naming convention below.
-<fullQualifiedName> — FQN (e.g. com.martianmicro.anyclosure.Wall)
+<type>              — FQN (e.g. com.martianmicro.anyclosure.Wall)
 <baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.core.Block.
 <version>           — semantic version of this Block definition
 ```
@@ -206,8 +206,8 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
 ```text
 <abstract>                    — true | false (default false). Abstract types are not instantiable.
 <final>                       — true | false (default false). Final types cannot be used as baseType.
-<allowedSubBlockTypes>        — FQNs permitted as Sub-Block baseType (see Framework Base Types)
-<supportedImplementationTypes> — org.blockml.language.* FQNs for <implementation type="...">
+<subTypes>          — override: permitted Sub-Block baseTypes (omit to inherit — see Framework Base Types)
+<implTypes>         — org.blockml.language.* FQNs for <implementation type="...">
 <properties>    — Property declarations. Omit if no custom properties or default overrides needed.
 <aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice.
 <associations>  — Association declarations.
@@ -225,21 +225,23 @@ Framework base types (`org.blockml.core.Block`, `com.machineblocks.core.Block`, 
 <abstract>true</abstract>
 <final>true</final>
 
-<allowedSubBlockTypes>
-  <allowedSubBlockType type="com.machineblocks.core.Block" />
-  <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
-</allowedSubBlockTypes>
+<subTypes>
+  <subType type="com.machineblocks.core.Block" />
+  <subType type="org.blockml.service.FunctionBlock" />
+</subTypes>
 
-<supportedImplementationTypes>
-  <supportedImplementationType type="org.blockml.language.OpenSCAD" />
-  <supportedImplementationType type="org.blockml.language.TypeScript" />
-</supportedImplementationTypes>
+<implTypes>
+  <implType type="org.blockml.language.OpenSCAD" />
+  <implType type="org.blockml.language.TypeScript" />
+</implTypes>
 ```
 
 ```text
-<allowedSubBlockTypes/>     — empty: no Sub-Blocks allowed (e.g. NativeBlock, FunctionBlock)
-Omitted modifiers           — inherit from baseType where applicable (validator walks chain)
-org.blockml.core.Block      — sole type that omits <baseType> (inheritance root)
+Omitted <subTypes>            — inherit effective subTypes from baseType chain
+Explicit <subTypes>…          — override (enable or restrict Sub-Blocks)
+Explicit empty <subTypes/>    — override: forbid Sub-Blocks even when parent allowed them
+Omitted other modifiers       — inherit from baseType where applicable (validator walks chain)
+org.blockml.core.Block        — sole type that omits <baseType> (inheritance root); effective subTypes []
 ```
 
 ### Contracts
@@ -275,7 +277,7 @@ Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
 ```xml
 <block xmlns="http://blockml.org/schema/block" …>
   <name>IPlaceable</name>
-  <fullQualifiedName>com.foo.IPlaceable</fullQualifiedName>
+  <type>com.foo.IPlaceable</type>
   <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>
@@ -291,7 +293,7 @@ Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
 ```xml
 <block xmlns="http://blockml.org/schema/block" …>
   <name>Wall</name>
-  <fullQualifiedName>com.foo.Wall</fullQualifiedName>
+  <type>com.foo.Wall</type>
   <baseType>com.machineblocks.core.CompositeBlock</baseType>
   <version>1.0.0</version>
   <contracts>
@@ -403,7 +405,7 @@ _parts (CompositeBlock):
        xmlns:bricks="com.machineblocks.bricks">
 
   <name>Wall</name>
-  <fullQualifiedName>com.martianmicro.anyclosure.Wall</fullQualifiedName>
+  <type>com.martianmicro.anyclosure.Wall</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 
@@ -435,7 +437,7 @@ _parts (CompositeBlock):
        xmlns:bricks="com.machineblocks.bricks">
 
   <name>Wall</name>
-  <fullQualifiedName>com.martianmicro.anyclosure.Wall</fullQualifiedName>
+  <type>com.martianmicro.anyclosure.Wall</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 
@@ -815,7 +817,7 @@ On a Block definition:
 <block xmlns="http://blockml.org/schema/block"
        xmlns:data="http://blockml.org/schema/data">
   <name>Wall</name>
-  <fullQualifiedName>com.martianmicro.anyclosure.Wall</fullQualifiedName>
+  <type>com.martianmicro.anyclosure.Wall</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
   <data:category>structural</data:category>
@@ -1007,7 +1009,7 @@ Sub-Blocks are Block definitions nested inside a parent Block. They are analogou
 
 ### Format
 
-Sub-Blocks use the same format as the parent Block — all fields as child elements. The only difference: `<fullQualifiedName>` is omitted. The FQN is resolved automatically from the parent Block's FQN + the Sub-Block's `<name>`.
+Sub-Blocks use the same format as the parent Block — all fields as child elements. The only difference: `<type>` is omitted. The FQN is resolved automatically from the parent Block's FQN + the Sub-Block's `<name>`.
 
 `<baseType>` is required on Sub-Blocks, just like on the parent Block.
 
@@ -1034,7 +1036,7 @@ Sub-Block:   <name>StudDiameter</name>
 → FQN:       com.machineblocks.calibration.Calibrator.StudDiameter
 ```
 
-`<fullQualifiedName>` is never declared on Sub-Blocks — it is always derived. Sub-Blocks can be nested recursively:
+`<type>` is never declared on Sub-Blocks — it is always derived. Sub-Blocks can be nested recursively:
 
 ```text
 com.machineblocks.calibration.Calibrator.Base.Strip
@@ -1149,7 +1151,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
 <block xmlns="http://blockml.org/schema/block">
 
   <name>Calibrator</name>
-  <fullQualifiedName>com.machineblocks.calibration.Calibrator</fullQualifiedName>
+  <type>com.machineblocks.calibration.Calibrator</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 
@@ -1281,7 +1283,7 @@ _steps      — assembly order (optional; defaults to document order of _parts)
        xmlns:ac="com.martianmicro.anyclosure">
 
   <name>DefaultEnclosure</name>
-  <fullQualifiedName>com.martianmicro.anyclosure.DefaultEnclosure</fullQualifiedName>
+  <type>com.martianmicro.anyclosure.DefaultEnclosure</type>
   <baseType>com.machineblocks.core.Set</baseType>
   <version>1.0.0</version>
 
@@ -1417,7 +1419,7 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
   <documentation>Standard brick presets for MachineBlocks Standard block.</documentation>
 
   <name>StandardPresets</name>
-  <fullQualifiedName>com.machineblocks.bricks.StandardPresets</fullQualifiedName>
+  <type>com.machineblocks.bricks.StandardPresets</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>3.0.0</version>
 
@@ -1567,7 +1569,7 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
   <documentation>MachineBlocks standard brick library.</documentation>
 
   <name>BricksLibrary</name>
-  <fullQualifiedName>com.machineblocks.bricks.BricksLibrary</fullQualifiedName>
+  <type>com.machineblocks.bricks.BricksLibrary</type>
   <baseType>org.blockml.core.Library</baseType>
   <version>3.0.0</version>
 
@@ -1651,7 +1653,7 @@ The examples below are **illustrative drafts only** — not valid V1 input.
 {
   "type": "block",
   "name": "Wall",
-  "fullQualifiedName": "com.martianmicro.anyclosure.Wall",
+  "type": "com.martianmicro.anyclosure.Wall",
   "version": "1.0.0",
   "properties": [
     { "name": "size",          "type": "Size3D",  "defaultValue": [1, 8, 8] },
@@ -1690,7 +1692,7 @@ The examples below are **illustrative drafts only** — not valid V1 input.
 {
   "type": "block",
   "name": "DefaultEnclosure",
-  "fullQualifiedName": "com.martianmicro.anyclosure.DefaultEnclosure",
+  "type": "com.martianmicro.anyclosure.DefaultEnclosure",
   "baseType": "com.machineblocks.core.Set",
   "version": "1.0.0",
   "properties": [

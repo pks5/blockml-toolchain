@@ -372,7 +372,7 @@ Complex values are described by **normal Properties** — no special struct synt
        xmlns:type="com.machineblocks.type" ...>
 
   <name>Size3d</name>
-  <fullQualifiedName>com.machineblocks.type.Size3d</fullQualifiedName>
+  <type>com.machineblocks.type.Size3d</type>
   <baseType>org.blockml.core.StructType</baseType>
   <version>1.0.0</version>
 
@@ -414,7 +414,7 @@ Enum values are **Block instances** in `<composition aggregation="_values">` —
 ```xml
 <block ...>
   <name>BaseCutoutType</name>
-  <fullQualifiedName>com.machineblocks.type.BaseCutoutType</fullQualifiedName>
+  <type>com.machineblocks.type.BaseCutoutType</type>
   <baseType>org.blockml.core.EnumType</baseType>
   <version>1.0.0</version>
 
@@ -509,14 +509,14 @@ org.blockml.core.Block
 ```xml
 <block ...>
   <name>OpenSCAD</name>
-  <fullQualifiedName>org.blockml.language.OpenSCAD</fullQualifiedName>
+  <type>org.blockml.language.OpenSCAD</type>
   <baseType>org.blockml.core.LanguageBlock</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>
 </block>
 ```
 
-Composable Blocks reference languages via `<supportedImplementationType type="org.blockml.language.OpenSCAD" />` — see `16_framework_base_types.md`. The language FQN must resolve to a registered LanguageBlock definition.
+Composable Blocks reference languages via `<implType type="org.blockml.language.OpenSCAD" />` — see `16_framework_base_types.md`. The language FQN must resolve to a registered LanguageBlock definition.
 
 V1: two bootstrap languages in `@blockml/core`. Extensibility: domains register new LanguageBlock BML files.
 
@@ -542,10 +542,10 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 |---|---|---|---|
 | `<composition>` | allowed | EnumType: `_values` only; others: definition-level only | forbidden |
 | `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden |
-| `<allowedSubBlockTypes>` | allowed | allowed | forbidden |
+| `<subTypes>` | allowed | allowed | forbidden |
 | `<generics>` | allowed | allowed | forbidden |
 | `<properties>` | allowed | StructType + PrimitiveType branch | forbidden |
-| `<supportedImplementationTypes>` | allowed | forbidden | forbidden |
+| `<implTypes>` | allowed | forbidden | forbidden |
 | Meta property `id` on instances | yes (always) | yes (always) | yes (always) |
 | `<property name="id">` | forbidden | forbidden | forbidden |
 | Used as composition instance typeFqn | if not abstract | if not abstract | forbidden |

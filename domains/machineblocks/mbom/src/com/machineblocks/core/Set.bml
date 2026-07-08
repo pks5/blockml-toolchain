@@ -14,7 +14,7 @@
   <documentation>Abstract composable Block for LEGO-style Sets — block palette in inherited _presets, placed instances in inherited _parts, assembly order in _steps. Top-level catalog unit in MachineBlocks.</documentation>
 
   <name>Set</name>
-  <fullQualifiedName>com.machineblocks.core.Set</fullQualifiedName>
+  <type>com.machineblocks.core.Set</type>
   <baseType>com.machineblocks.core.CompositeBlock</baseType>
   <version>1.0.0</version>
 

@@ -14,7 +14,7 @@
   <documentation>Enum TypeBlock for base cutout variants on MachineBlocks bricks.</documentation>
 
   <name>BaseCutoutType</name>
-  <fullQualifiedName>com.machineblocks.type.BaseCutoutType</fullQualifiedName>
+  <type>com.machineblocks.type.BaseCutoutType</type>
   <baseType>org.blockml.core.EnumType</baseType>
   <version>1.0.0</version>
 

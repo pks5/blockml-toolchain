@@ -18,7 +18,7 @@
   <documentation>Built-in lists FunctionBlock. Expression prefix #lists.* — list construction, indexing, and aggregation utilities.</documentation>
 
   <name>Lists</name>
-  <fullQualifiedName>org.blockml.service.Lists</fullQualifiedName>
+  <type>org.blockml.service.Lists</type>
   <baseType>org.blockml.service.FunctionBlock</baseType>
   <version>1.0.0</version>
 

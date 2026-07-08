@@ -4,7 +4,7 @@
   <documentation>BOM Core primitive TypeBlock for whole numbers. Unqualified name Integer resolves to org.blockml.type.Integer.</documentation>
 
   <name>Integer</name>
-  <fullQualifiedName>org.blockml.type.Integer</fullQualifiedName>
+  <type>org.blockml.type.Integer</type>
   <baseType>org.blockml.core.PrimitiveType</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>

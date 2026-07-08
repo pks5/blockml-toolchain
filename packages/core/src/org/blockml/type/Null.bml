@@ -4,7 +4,7 @@
   <documentation>BOM Core primitive TypeBlock representing absence of value. Used in expression and capability typing where null is explicit.</documentation>
 
   <name>Null</name>
-  <fullQualifiedName>org.blockml.type.Null</fullQualifiedName>
+  <type>org.blockml.type.Null</type>
   <baseType>org.blockml.core.PrimitiveType</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>

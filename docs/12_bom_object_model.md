@@ -130,7 +130,7 @@ interface BlockDefinition {
    * Required on root blocks (authored in BML).
    * Derived on Sub-Blocks: parentFqn + "." + name
    */
-  fullQualifiedName: string
+  type: string
 
   /** Parent type FQN. Required — no default. */
   baseType: string
@@ -147,11 +147,11 @@ interface BlockDefinition {
   /** Final type — cannot be used as baseType on definitions. Default false. */
   final?: boolean
 
-  /** Sub-Block baseTypes permitted in subBlocks[]. Default: inherit from baseType chain. */
-  allowedSubBlockTypes?: string[]
+  /** Sub-Block baseTypes permitted in subBlocks[]. undefined = inherit from baseType chain; explicit [] = override to forbid */
+  subTypes?: string[]
 
   /** org.blockml.language.* FQNs allowed on capability implementations. Default: inherit. */
-  supportedImplementationTypes?: string[]
+  implTypes?: string[]
 
   /** Abstract Block FQNs whose member surface this Block implements (contracts / interfaces).
    * Root block only. Validator checks effective members against each contract type.
@@ -203,7 +203,7 @@ interface GenericParameter {
 
 ### Sub-Block FQN Derivation
 
-Sub-Blocks omit `<fullQualifiedName>` in BML. The parser derives:
+Sub-Blocks omit `<type>` in BML. The parser derives:
 
 ```text
 Parent FQN:  com.machineblocks.calibration.Calibrator
@@ -891,7 +891,7 @@ BomDocument
   kind: "block"
   block: BlockDefinition
     name: Calibrator
-    fullQualifiedName: com.machineblocks.calibration.Calibrator
+    type: com.machineblocks.calibration.Calibrator
     baseType: com.machineblocks.core.Block
     version: "1.0.0"
 
@@ -940,7 +940,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
 ✓  Qualified FQN::id references target export="true" compositions with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
-✓  Sub-Block baseType ∈ parent's allowedSubBlockTypes (domain rule)
+✓  Sub-Block baseType ∈ parent's subTypes (domain rule)
 ✓  Expression result types match member types
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property defaultValue cycles (topological sort)

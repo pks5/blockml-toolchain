@@ -14,12 +14,10 @@
   <documentation>Abstract base for built-in ServiceBlocks — addressable logic units invoked via stud:// or expressions, with no sub-blocks.</documentation>
 
   <name>ServiceBlock</name>
-  <fullQualifiedName>org.blockml.service.ServiceBlock</fullQualifiedName>
+  <type>org.blockml.service.ServiceBlock</type>
   <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
-
-  <allowedSubBlockTypes />
 
 </block>

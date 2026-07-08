@@ -154,7 +154,7 @@ The generated file contains the minimum required structure:
 <block xmlns="http://www.machineblocks.com/mbml/block.xsd">
 
   <name>Wall</name>
-  <fullQualifiedName>com.martianmicro.anyclosure.Wall</fullQualifiedName>
+  <type>com.martianmicro.anyclosure.Wall</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 
@@ -517,7 +517,7 @@ src/config/scale_2x.bml
 <block xmlns="http://blockml.org/schema/block" ...>
 
   <name>PrusaPla</name>
-  <fullQualifiedName>com.machineblocks.config.PrusaPla</fullQualifiedName>
+  <type>com.machineblocks.config.PrusaPla</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 

@@ -14,7 +14,7 @@
   <documentation>Abstract branch for built-in scalar TypeBlocks (Integer, Float, String, Boolean, Null).</documentation>
 
   <name>PrimitiveType</name>
-  <fullQualifiedName>org.blockml.core.PrimitiveType</fullQualifiedName>
+  <type>org.blockml.core.PrimitiveType</type>
   <baseType>org.blockml.core.TypeBlock</baseType>
   <version>1.0.0</version>
 

@@ -16,13 +16,11 @@
   <documentation>Final leaf Block mapped directly to SCAD mb_block() — the native geometry primitive at render time. Extends Block directly (not CompositeBlock). Uses children aggregation for mb_block() sub-geometry instead of _parts.</documentation>
 
   <name>NativeBlock</name>
-  <fullQualifiedName>com.machineblocks.core.NativeBlock</fullQualifiedName>
+  <type>com.machineblocks.core.NativeBlock</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 
   <final>true</final>
-
-  <allowedSubBlockTypes />
 
   <!-- Native MB properties only — no custom properties on NativeBlock instances -->
   <properties>
@@ -42,7 +40,7 @@
       
     </property>
     <!-- Value specified as ordered array [x, y, z] (order of properties definition), alternative: { x: 1, y: 1, z: 1 } -->
-    <property name="size" type="com.machineblocks.type.Size3d" defaultValue="[1, 1, 1]">
+    <property name="size" type="com.machineblocks.type.Size3D" defaultValue="[1, 1, 1]">
         
     </property>
   </properties>

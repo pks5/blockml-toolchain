@@ -18,7 +18,7 @@
   <documentation>Built-in booleans FunctionBlock. Expression prefix #bools.* — logical and boolean conversion utilities.</documentation>
 
   <name>Bools</name>
-  <fullQualifiedName>org.blockml.service.Bools</fullQualifiedName>
+  <type>org.blockml.service.Bools</type>
   <baseType>org.blockml.service.FunctionBlock</baseType>
   <version>1.0.0</version>
 

@@ -20,7 +20,7 @@
   <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their preset blocks.</documentation>
 
   <name>BricksLibrary</name>
-  <fullQualifiedName>com.machineblocks.bricks.BricksLibrary</fullQualifiedName>
+  <type>com.machineblocks.bricks.BricksLibrary</type>
   <baseType>org.blockml.core.Library</baseType>
   <version>3.0.0</version>
 

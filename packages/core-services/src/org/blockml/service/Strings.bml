@@ -18,7 +18,7 @@
   <documentation>Built-in strings FunctionBlock. Expression prefix #strings.* — concat, length, substring, and related text utilities.</documentation>
 
   <name>Strings</name>
-  <fullQualifiedName>org.blockml.service.Strings</fullQualifiedName>
+  <type>org.blockml.service.Strings</type>
   <baseType>org.blockml.service.FunctionBlock</baseType>
   <version>1.0.0</version>
 

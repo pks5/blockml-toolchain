@@ -219,7 +219,7 @@ Rules:
 type attribute   — required; must be org.blockml.language.* FQN (not a language= shorthand)
 Missing type     → BML_MISSING_IMPLEMENTATION_TYPE (error)
 Unknown type FQN → BML_IMPLEMENTATION_UNKNOWN_TYPE (error)
-Unsupported type → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseType supportedImplementationTypes)
+Unsupported type → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseType implTypes)
 ```
 
 V1 known types: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`.
@@ -230,10 +230,12 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 
 ```text
 <documentation>…</documentation>             → block.documentation (trimmed text)
+<name>…</name>                               → block.name
+<type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
 <abstract>true</abstract>                    → block.abstract = true
 <final>true</final>                          → block.final = true
-<allowedSubBlockType type="…"/>              → block.allowedSubBlockTypes[]
-<supportedImplementationType type="…"/>     → block.supportedImplementationTypes[]
+<subType type="…"/>                          → block.subTypes[] (explicit override)
+<implType type="…"/>                         → block.implTypes[]
 <contract type="…"/>                        → block.contracts[]   (root block only)
 <generic name="…" baseType="…"/>            → block.generics[]    (root block only)
 ```
@@ -241,13 +243,14 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 ```text
 Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1)
 Omitted abstract/final                 → false
-Empty <allowedSubBlockTypes/>    → [] (no Sub-Blocks allowed)
-Omitted lists                    → undefined (inherit from baseType at validate)
-<contracts> on Sub-Block           → BML_CONTRACT_NOT_ON_ROOT (error)
-Duplicate contract type            → BML_DUPLICATE_CONTRACT (error)
-<generics> on Sub-Block            → BML_GENERIC_NOT_ON_ROOT (error)
-Duplicate generic name             → BML_DUPLICATE_GENERIC (error)
-org.blockml.core.Block           → omits <baseType> (sole inheritance root)
+Omitted <subTypes>                     → undefined — inherit effective subTypes from baseType chain
+Empty <subTypes/>                        → block.subTypes = [] (explicit override — forbid Sub-Blocks)
+Omitted implTypes / contracts / generics → inherit from baseType at validate
+<contracts> on Sub-Block                 → BML_CONTRACT_NOT_ON_ROOT (error)
+Duplicate contract type                → BML_DUPLICATE_CONTRACT (error)
+<generics> on Sub-Block                  → BML_GENERIC_NOT_ON_ROOT (error)
+Duplicate generic name                   → BML_DUPLICATE_GENERIC (error)
+org.blockml.core.Block                   → omits <baseType> (sole inheritance root)
 ```
 
 TypeBlock BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<composition aggregation="_values">`; generic Blocks declare parameters via `<generics>`. Branch-specific validation — see `17_type_system_bml.md`.

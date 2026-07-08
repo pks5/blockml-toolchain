@@ -593,7 +593,7 @@ configProfile < appliedPresets chain < inline property
 13_bml_to_bom_mapping.md — BML → BOM algorithm (parser implementation contract)
 14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
 15_dev_setup.md        — monorepo tooling, build, test, IDE setup
-16_framework_base_types.md — framework base types as BML (abstract, final, allowedSubBlockTypes)
+16_framework_base_types.md — framework base types as BML (abstract, final, subTypes)
 17_type_system_bml.md  — TypeBlock, LanguageBlock, Block hierarchy
 09_mbom_properties.yml — MBOM native property SCAD mapping (render only)
 

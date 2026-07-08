@@ -71,29 +71,36 @@ false  — default when omitted
 
 `com.machineblocks.core.NativeBlock` is `final=true`.
 
-### `<allowedSubBlockTypes>`
+### `<subTypes>`
 
 ```xml
-<allowedSubBlockTypes>
-  <allowedSubBlockType type="com.machineblocks.core.Block" />
-  <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
-</allowedSubBlockTypes>
+<subTypes>
+  <subType type="com.machineblocks.core.Block" />
+  <subType type="org.blockml.service.FunctionBlock" />
+</subTypes>
 ```
 
 ```text
 Lists FQNs permitted as baseType on Sub-Blocks in <subBlocks>
-Empty container (<allowedSubBlockTypes/>) = no Sub-Blocks allowed
-Omitted = inherit from baseType (validator walks chain)
-Sub-Block baseType not in list → BML_INVALID_SUBBLOCK_TYPE
+
+Default (no declaration on this block):  [] — Sub-Blocks forbidden until explicitly enabled
+Omitted <subTypes>:                      inherit effective subTypes from baseType chain
+Explicit <subTypes>…</subTypes>:          override inherited list (enable or restrict Sub-Blocks)
+Explicit empty <subTypes/>:              override — close Sub-Blocks even when parent allowed them
+
+Declare <subTypes> only when overriding the inherited list. Do not emit an empty element
+merely to restate the default — omit the element instead.
+
+Sub-Block baseType not in effective subTypes → BML_INVALID_SUBBLOCK_TYPE
 ```
 
-### `<supportedImplementationTypes>`
+### `<implTypes>`
 
 ```xml
-<supportedImplementationTypes>
-  <supportedImplementationType type="org.blockml.language.OpenSCAD" />
-  <supportedImplementationType type="org.blockml.language.TypeScript" />
-</supportedImplementationTypes>
+<implTypes>
+  <implType type="org.blockml.language.OpenSCAD" />
+  <implType type="org.blockml.language.TypeScript" />
+</implTypes>
 ```
 
 ```text

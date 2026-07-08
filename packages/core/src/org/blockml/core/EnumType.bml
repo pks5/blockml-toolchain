@@ -14,7 +14,7 @@
   <documentation>Abstract branch for closed enum TypeBlocks. Enum values are Block instances in the default _values aggregation — no special enum syntax.</documentation>
 
   <name>EnumType</name>
-  <fullQualifiedName>org.blockml.core.EnumType</fullQualifiedName>
+  <type>org.blockml.core.EnumType</type>
   <baseType>org.blockml.core.TypeBlock</baseType>
   <version>1.0.0</version>
 

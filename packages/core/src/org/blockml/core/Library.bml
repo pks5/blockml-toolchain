@@ -18,13 +18,15 @@
   <documentation>Publishable library unit — groups exported Block definitions, optional XSD schemas, and dependencies on other libraries. Replaces the legacy library.xml descriptor.</documentation>
 
   <name>Library</name>
-  <fullQualifiedName>org.blockml.core.Library</fullQualifiedName>
+  <type>org.blockml.core.Library</type>
   <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
 
-  <allowedSubBlockTypes />
+  <subTypes>
+    <subType type="org.blockml.core.Block" />
+  </subTypes>
 
   <properties>
     <property name="description" type="String">
@@ -47,7 +49,6 @@
       <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
-      <allowedSubBlockTypes />
       <properties>
         <property name="ref" type="String">
           <documentation>FQN of the required Library (e.g. com.machineblocks.core.CoreLibrary).</documentation>
@@ -64,7 +65,6 @@
       <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
-      <allowedSubBlockTypes />
       <properties>
         <property name="ref" type="String">
           <documentation>Path to the .xsd file relative to the library package root.</documentation>
@@ -78,7 +78,6 @@
       <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
-      <allowedSubBlockTypes />
       <properties>
         <property name="ref" type="String">
           <documentation>Path to the type .bml / .mbml file relative to the library package root.</documentation>
@@ -92,7 +91,6 @@
       <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
-      <allowedSubBlockTypes />
       <properties>
         <property name="ref" type="String">
           <documentation>Path to the block .bml / .mbml file relative to the library package root.</documentation>

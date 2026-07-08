@@ -9,7 +9,7 @@
   <documentation>LanguageBlock for TypeScript arrow-function implementations on Sync Capabilities. V1: compile-time execution when all arguments are literals.</documentation>
 
   <name>TypeScript</name>
-  <fullQualifiedName>org.blockml.language.TypeScript</fullQualifiedName>
+  <type>org.blockml.language.TypeScript</type>
   <baseType>org.blockml.core.LanguageBlock</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>

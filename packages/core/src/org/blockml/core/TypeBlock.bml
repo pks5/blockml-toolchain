@@ -14,7 +14,7 @@
   <documentation>TypeBlock branch of BlockML. Semantic unit for property and Capability types (primitives, structs, enums, generics). Only TypeBlocks may appear as property type or Capability payloadType/returnType.</documentation>
 
   <name>TypeBlock</name>
-  <fullQualifiedName>org.blockml.core.TypeBlock</fullQualifiedName>
+  <type>org.blockml.core.TypeBlock</type>
   <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
 

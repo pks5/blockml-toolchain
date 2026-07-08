@@ -217,7 +217,7 @@ A Block is the fundamental unit of BOM Core. It is a parametric, typed, reusable
 
 ```text
 name               — short class name (PascalCase). Required. See naming convention below.
-fullQualifiedName  — globally unique FQN
+type               — globally unique FQN
 baseType           — FQN of the parent Block. Required — no default.
 version            — semantic version of this definition
 members            — named members: Properties, Aggregations, Associations, Capabilities
@@ -749,13 +749,13 @@ Implementation language types (org.blockml.language.*):
   org.blockml.language.OpenSCAD     — OpenSCAD function(s) in CDATA
 
 baseType declares:
-  supportedImplementationTypes: [org.blockml.language.OpenSCAD]
+  implTypes: [org.blockml.language.OpenSCAD]
     — e.g. com.machineblocks.core.Block
-  supportedImplementationTypes: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
+  implTypes: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
     — e.g. org.blockml.service.FunctionBlock
 ```
 
-If a Block carries `<implementation type="org.blockml.language.OpenSCAD">` but its `baseType` does not list that type in `supportedImplementationTypes`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
+If a Block carries `<implementation type="org.blockml.language.OpenSCAD">` but its `baseType` does not list that type in `implTypes`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
 
 A Sync Capability implementation can live directly on any Block whose `baseType` supports it — not only on `FunctionBlock` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
 
@@ -962,23 +962,32 @@ Sub-Blocks are declared in a `<subBlocks>` section within the parent Block defin
 
 ### Allowed Sub-Block Types
 
-The `baseType` of the parent Block declares which Sub-Block base types are permitted via `allowedSubBlockTypes`. This is defined on concrete domain base types — not on `org.blockml.core.Block` which is abstract and domain-agnostic.
+The `baseType` chain defines which Sub-Block base types are permitted via **effective `subTypes`**. By default every Block has **no** permitted Sub-Block base types (`[]`). A type must **explicitly** declare `<subTypes>` to enable Sub-Blocks — or omit `<subTypes>` to inherit from its parent type.
 
 ```text
 org.blockml.core.Block
-  → no allowedSubBlockTypes defined (abstract)
+  → subTypes omitted → effective [] (default)
 
 com.machineblocks.core.Block
-  → allowedSubBlockTypes: [com.machineblocks.core.Block,
-                            org.blockml.service.FunctionBlock]
+  → subTypes omitted → inherits [] from org.blockml.core.Block
+
+com.machineblocks.core.CompositeBlock
+  → subTypes declared explicitly:
+    [com.machineblocks.core.Block, org.blockml.service.FunctionBlock]
+
+com.machineblocks.core.Set
+  → subTypes omitted → inherits CompositeBlock chain
 
 org.blockml.service.FunctionBlock
-  → allowedSubBlockTypes: []  (no Sub-Blocks)
+  → subTypes omitted → inherits [] via ServiceBlock → org.blockml.core.Block
+
+com.machineblocks.core.NativeBlock
+  → subTypes omitted → inherits [] (final leaf — no Sub-Blocks)
 ```
 
-**Default when not defined:** no Sub-Blocks allowed.
+To **forbid** Sub-Blocks on a type whose parent enabled them, declare an explicit empty override: `<subTypes/>`.
 
-If a Sub-Block's `baseType` is not in the parent's `allowedSubBlockTypes`, the compiler emits `BML_INVALID_SUBBLOCK_TYPE`.
+If a Sub-Block's `baseType` is not in the parent's effective `subTypes`, the compiler emits `BML_INVALID_SUBBLOCK_TYPE`.
 
 ### FQN Convention
 
@@ -988,7 +997,7 @@ Sub-Block: com.machineblocks.calibration.Calibrator.Base
            com.machineblocks.calibration.Calibrator.StudDiameter
 ```
 
-The Sub-Block `<fullQualifiedName>` is never declared — it is always derived from the parent FQN + `<name>`. Sub-Blocks can be nested recursively:
+The Sub-Block `<type>` is never declared — it is always derived from the parent FQN + `<name>`. Sub-Blocks can be nested recursively:
 
 ```text
 com.machineblocks.calibration.Calibrator.Base.Strip
@@ -1027,7 +1036,7 @@ Presets apply only to Properties — not to Aggregations, Associations, or Capab
 A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a Block definition with `baseType="com.machineblocks.core.Block"`:
 
 ```text
-fullQualifiedName — FQN of this preset block (e.g. com.machineblocks.bricks.StandardPresets)
+type — FQN of this preset block (e.g. com.machineblocks.bricks.StandardPresets)
 version           — semantic version
 composition       — Block instances in aggregation _presets; use export="true" for cross-file {FQN}::{id} references
 ```
@@ -1112,7 +1121,7 @@ A Catalog is a named collection of top-level composite Block definitions — fin
 
 ```text
 name              — short catalog name
-fullQualifiedName — FQN of the catalog
+type — FQN of the catalog
 version           — semantic version
 blocks            — list of Block FQNs contained in this catalog
 ```

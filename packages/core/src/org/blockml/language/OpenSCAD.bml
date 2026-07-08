@@ -9,7 +9,7 @@
   <documentation>LanguageBlock for OpenSCAD function implementations on Sync Capabilities. Emitted by the MachineBlocks SCAD renderer with FQN-prefixed function names.</documentation>
 
   <name>OpenSCAD</name>
-  <fullQualifiedName>org.blockml.language.OpenSCAD</fullQualifiedName>
+  <type>org.blockml.language.OpenSCAD</type>
   <baseType>org.blockml.core.LanguageBlock</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>

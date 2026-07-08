@@ -14,7 +14,7 @@
   <documentation>Abstract branch for struct TypeBlocks — complex values described by normal Properties. No special struct syntax.</documentation>
 
   <name>StructType</name>
-  <fullQualifiedName>org.blockml.core.StructType</fullQualifiedName>
+  <type>org.blockml.core.StructType</type>
   <baseType>org.blockml.core.TypeBlock</baseType>
   <version>1.0.0</version>
 

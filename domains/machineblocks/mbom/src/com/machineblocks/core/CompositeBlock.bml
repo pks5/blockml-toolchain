@@ -15,15 +15,20 @@
   <documentation>Composable MachineBlocks Block with default _parts aggregation. On Sets, _parts holds placed block instances (direction, offset, appliedPresets). On other composites, _parts holds child blocks for SCAD composition.</documentation>
 
   <name>CompositeBlock</name>
-  <fullQualifiedName>com.machineblocks.core.CompositeBlock</fullQualifiedName>
+  <type>com.machineblocks.core.CompositeBlock</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
 
-  <supportedImplementationTypes>
-    <supportedImplementationType type="org.blockml.language.OpenSCAD" />
-  </supportedImplementationTypes>
+  <subTypes>
+    <subType type="com.machineblocks.core.Block" />
+    <subType type="org.blockml.service.FunctionBlock" />
+  </subTypes>
+
+  <implTypes>
+    <implType type="org.blockml.language.OpenSCAD" />
+  </implTypes>
 
   <aggregations>
     <aggregation name="_parts"

@@ -14,7 +14,7 @@
   <documentation>Abstract branch for generic TypeBlocks. Declares type parameters via generics; concrete use via type arguments (e.g. Box&lt;Integer&gt;).</documentation>
 
   <name>GenericType</name>
-  <fullQualifiedName>org.blockml.core.GenericType</fullQualifiedName>
+  <type>org.blockml.core.GenericType</type>
   <baseType>org.blockml.core.TypeBlock</baseType>
   <version>1.0.0</version>
 

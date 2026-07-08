@@ -15,13 +15,11 @@
   <documentation>Framework Block defining one assembly instruction step in a Set — references a placed block instance via the part association. Used as children of composition aggregation="_steps". Document order defines build order when _steps is present.</documentation>
 
   <name>Step</name>
-  <fullQualifiedName>com.machineblocks.core.Step</fullQualifiedName>
+  <type>com.machineblocks.core.Step</type>
   <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
 
   <final>true</final>
-
-  <allowedSubBlockTypes />
 
   <associations>
     <association name="part" type="com.machineblocks.core.Block"></association>

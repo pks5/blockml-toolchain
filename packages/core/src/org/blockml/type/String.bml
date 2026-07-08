@@ -4,7 +4,7 @@
   <documentation>BOM Core primitive TypeBlock for text values. Unqualified name String resolves to org.blockml.type.String.</documentation>
 
   <name>String</name>
-  <fullQualifiedName>org.blockml.type.String</fullQualifiedName>
+  <type>org.blockml.type.String</type>
   <baseType>org.blockml.core.PrimitiveType</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>

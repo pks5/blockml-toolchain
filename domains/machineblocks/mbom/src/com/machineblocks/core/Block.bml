@@ -15,16 +15,13 @@
   <documentation>MachineBlocks domain base Block. Carries _presets aggregation and appliedPresets association for domain-specific preset resolution. Preset merge is compiler logic; Customizer output is render-target logic.</documentation>
 
   <name>Block</name>
-  <fullQualifiedName>com.machineblocks.core.Block</fullQualifiedName>
+  <type>com.machineblocks.core.Block</type>
   <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
 
-  <allowedSubBlockTypes>
-    <allowedSubBlockType type="com.machineblocks.core.Block" />
-    <allowedSubBlockType type="org.blockml.service.FunctionBlock" />
-  </allowedSubBlockTypes>
+  
 
   
 

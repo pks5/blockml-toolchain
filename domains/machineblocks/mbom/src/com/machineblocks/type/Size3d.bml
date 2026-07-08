@@ -14,7 +14,7 @@
   <documentation>Struct TypeBlock for three-dimensional size [x, y, z] in grid units.</documentation>
 
   <name>Size3d</name>
-  <fullQualifiedName>com.machineblocks.type.Size3d</fullQualifiedName>
+  <type>com.machineblocks.type.Size3d</type>
   <baseType>org.blockml.core.StructType</baseType>
   <version>1.0.0</version>
 
