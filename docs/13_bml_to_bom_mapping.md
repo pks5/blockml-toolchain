@@ -197,7 +197,7 @@ directives:
 
 ## Type Descriptor Parsing
 
-Capability and property type attributes are parsed into **`TypeDescriptor`** objects at map time — not stored as raw strings. `TypeDescriptor` lives in **`org.blockml.bom.*`** — not in `org.blockml.type.*` (reserved for BML-defined TypeBlocks). See `00_bom_core.md` — Implementation Namespaces.
+Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`org.blockml.bom.*`** — not in `org.blockml.type.*`. See `00_bom_core.md` — Implementation Namespaces · `17_type_system_bml.md` — Type Expressions.
 
 Unqualified PascalCase names on `type="..."` (properties, aggregations, capabilities) use the **same Sub-Block resolution order** as composition children (see `02_mbml.md` — Short-Name Reference) before falling back to `NamedTypeReference` registry lookup.
 

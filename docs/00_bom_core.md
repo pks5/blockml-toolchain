@@ -1239,7 +1239,7 @@ Bean call:             @myBean.capa(...)               — @ prefix, dot notatio
 Built-in call:         #math.min(...)                  — # prefix, reserved namespace
 ```
 
-Everything else follows JSON rules: strings in quotes, numbers as-is, booleans `true`/`false`, `null`, arrays `[...]`, objects `{...}`.
+Everything else follows JSON subset rules: strings in quotes, numbers as-is, booleans `true`/`false`, arrays `[...]`, objects `{...}`. **`null` is not valid in BML** — use absent/empty authoring; targets may map to `null` at render time. See `17_type_system_bml.md` — EMPTY.
 
 Object and array literals may contain expressions as values:
 
@@ -1386,14 +1386,17 @@ org.blockml.type.Float
 org.blockml.type.String
 ```
 
-### Generic Container Types
+### Type Expressions (not TypeBlocks)
+
+BlockML has three TypeBlock kinds only: **Primitive**, **Enum**, **Struct**. Unions, collections, and generic applications are **type expressions** — see `17_type_system_bml.md` — Type Expressions.
 
 ```text
-org.blockml.type.List<T>
-org.blockml.type.AutoOr<T>    — "auto" | T
-org.blockml.type.NoneOr<T>    — "none" | T
-org.blockml.type.FalseOr<T>   — false  | T
+Union:        "auto" | Float · false | T · Boolean | StudType
+Collection:   Integer[] · Size3D[1..3]
+Generic use:  Box<Integer>   (Box is a StructType with <generics>)
 ```
+
+Legacy wrapper types (`AutoOr<T>`, `NoneOr<T>`, `Array<T>`, …) are **obsolete** — use union and multiplicity syntax directly.
 
 ### Domain Type Namespaces
 

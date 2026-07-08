@@ -224,9 +224,11 @@ Sub-Blocks are **part of the same `BomDocument`** as their parent root block.
 
 ---
 
-## Type Descriptors
+## Type Expressions
 
-Types in BOM are represented by **`TypeDescriptor`** — a structured, parse-time model. This applies to Capability `payloadType` / `returnType` and (future) Property types.
+Types in BOM are represented by **`TypeExpression`** (alias: `TypeDescriptor` in V1 docs) — a structured, parse-time model. This applies to Capability `payloadType` / `returnType` and Property `type` attributes.
+
+**Language vs. BOM:** BML knows three TypeBlock kinds (Primitive, Enum, Struct). Unions, collections, and generic applications are **type expressions** — not TypeBlocks. The parser maps them to `org.blockml.bom.*` descriptor types internally.
 
 ### Anonymous struct = shorthand for inline class
 
@@ -247,43 +249,57 @@ The BOM stores this as `AnonymousStructType` with **ordered fields** — field o
 
 A single primitive (`Float`, `org.blockml.type.Integer`, …) is **not** wrapped — it is a `NamedTypeReference` directly (equivalent to a single-parameter method, not a one-field class).
 
-### `TypeDescriptor` union
+### `TypeExpression` union
 
 ```typescript
-type TypeDescriptor =
+/** Parse-time type expression — org.blockml.bom.* (not a language TypeBlock). */
+type TypeExpression =
   | NamedTypeReference
   | AnonymousStructType
+  | UnionTypeExpression
+  | GenericParameterReference
+  | SelfTypeReference
 
 interface Multiplicity {
-  /** Minimum instance count. */
   min: number
-  /** Maximum instance count, or "*" for unbounded. */
   max: number | "*"
 }
 
 interface NamedTypeReference {
   kind: "named"
-  /** Resolved FQN, e.g. org.blockml.type.Float or com.myDomain.ResizePayload */
   fqn: string
-  /** Concrete type arguments when referencing a generic Block, e.g. Box<Integer> */
-  typeArguments?: TypeDescriptor[]
-  /** Parsed from [..] suffix on the type reference. Absent = exactly 1. */
+  typeArguments?: TypeExpression[]
   multiplicity?: Multiplicity
+}
+
+interface UnionTypeExpression {
+  kind: "union"
+  alternatives: TypeExpression[]
+}
+
+interface GenericParameterReference {
+  kind: "genericParam"
+  name: string   // e.g. "T"
+}
+
+interface SelfTypeReference {
+  kind: "self"   // _self — resolved after inheritance
 }
 
 interface AnonymousStructType {
   kind: "anonymousStruct"
-  /** Ordered — declaration order = positional parameter order */
   fields: StructField[]
 }
 
 interface StructField {
   name: string
-  type: TypeDescriptor
+  type: TypeExpression
 }
 ```
 
-### BML surface syntax → `TypeDescriptor`
+V1 may keep the alias `TypeDescriptor = TypeExpression`. Internal-only shapes the compiler may use when normalizing (not BML Block classes): `CollectionTypeDescriptor`, `GenericApplicationDescriptor`, etc.
+
+### BML surface syntax → `TypeExpression`
 
 Parsed from `payloadType` / `returnType` / `type` attribute strings at map time:
 
@@ -295,13 +311,18 @@ Integer[0..n]                      → NamedTypeReference { fqn: Integer, multip
 Integer[]                          → same as Integer[0..n]
 Integer[3]                         → NamedTypeReference { fqn: Integer, multiplicity: { min: 3, max: 3 } }
 com.foo.Box<Integer>               → NamedTypeReference { fqn: "com.foo.Box", typeArguments: [Integer] }
+"auto" | Float                     → UnionTypeExpression { alternatives: [literal "auto", Float] }
+false | Size3D                     → UnionTypeExpression { alternatives: [literal false, Size3D] }
+Boolean | Integer                  → UnionTypeExpression { alternatives: [Boolean, Integer] }
+T                                  → GenericParameterReference { name: "T" }
+_self                              → SelfTypeReference
 { a: Float, b: Float }             → AnonymousStructType { fields: [a, b] }
-{ list: String[0..n], index: Integer }  → nested descriptors with multiplicity on fields
+{ list: String[0..n], index: Integer }  → nested expressions with multiplicity on fields
 ```
 
 Unqualified primitive names resolve to `org.blockml.type.*`. Domain types require the `type:` prefix or full FQN. Parse failure → `BML_UNKNOWN_TYPE`.
 
-FunctionBlock Capabilities use `AnonymousStructType` for multi-parameter signatures. Variadic built-ins (e.g. `#strings.concat`) use a named collection field (`{ values: String[0..n] }`) — not a separate Array type. See `17_type_system_bml.md` — Collections and Multiplicity.
+FunctionBlock Capabilities use `AnonymousStructType` for multi-parameter signatures. Variadic built-ins use a named collection field (`{ values: String[0..n] }`). See `17_type_system_bml.md` — Type Expressions.
 
 ---
 

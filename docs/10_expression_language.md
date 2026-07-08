@@ -26,7 +26,7 @@ The language is **extended JSON**: standard JSON syntax with four additions:
 4. Built-in calls         #math.min(a, b), #strings.trim(s)
 ```
 
-Everything else follows JSON: strings in double quotes, numbers, booleans `true`/`false`, `null`, arrays `[...]`, objects `{...}`.
+Everything else follows JSON subset rules: strings in double quotes, numbers, booleans `true`/`false`, arrays `[...]`, objects `{...}`. **`null` is not a BML literal** — absent/empty values are not typed as null; see `17_type_system_bml.md` — EMPTY.
 
 ---
 
@@ -58,7 +58,7 @@ primary        ::= literal
                | modelBinding
                | '(' expression ')'
 
-literal        ::= string | number | boolean | null | array | object
+literal        ::= string | number | boolean | array | object
 
 string         ::= '"' [^"]* '"'
                  | "'" [^']* "'"
@@ -66,8 +66,6 @@ string         ::= '"' [^"]* '"'
 number         ::= '-'? [0-9]+ ('.' [0-9]+)?
 
 boolean        ::= 'true' | 'false'
-
-null           ::= 'null'
 
 array          ::= '[' ( expression (',' expression)* )? ']'
 
@@ -162,8 +160,9 @@ Whitespace (space, tab, newline) is ignored everywhere inside `${ }` except with
 -0.5            — negative float
 true            — boolean
 false           — boolean
-null            — null
 ```
+
+Absent or empty values are not expressed as `null` — omit the attribute, use `""` for empty String, or use a union sentinel (`"none"`, `false`, …). See `17_type_system_bml.md` — EMPTY.
 
 ### Arrays
 
@@ -824,7 +823,6 @@ type ExpressionNode =
   | StringLiteral
   | NumberLiteral
   | BooleanLiteral
-  | NullLiteral
   | ArrayLiteral
   | ObjectLiteral
   // Grouping
@@ -873,10 +871,7 @@ interface BooleanLiteral extends ExpressionNodeBase {
   resultTypeFqn: "org.blockml.type.Boolean"
 }
 
-interface NullLiteral extends ExpressionNodeBase {
-  kind: "nullLiteral"
-  resultTypeFqn: "org.blockml.type.Null"
-}
+// No NullLiteral — BML has no null. Absent/empty is not an expression node; see EMPTY in 17_type_system_bml.md.
 
 interface ArrayLiteral extends ExpressionNodeBase {
   kind: "arrayLiteral"

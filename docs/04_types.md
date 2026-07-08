@@ -42,7 +42,7 @@ String   → org.blockml.type.String
 Boolean  → org.blockml.type.Boolean
 ```
 
-Collections use multiplicity on the type reference — not `Array<T>`. See `17_type_system_bml.md` — Collections and Multiplicity.
+Collections use multiplicity on the type reference — not `Array<T>`. See `17_type_system_bml.md` — Type Expressions.
 
 ```text
 Integer[]   → org.blockml.type.Integer with multiplicity 0..n
@@ -56,8 +56,10 @@ xmlns:type="com.machineblocks.type"
 type="type:Size3D"          → com.machineblocks.type.Size3D
 type="type:Color"           → com.machineblocks.type.Color
 type="type:BaseCutoutType"  → com.machineblocks.type.BaseCutoutType
-type="type:AutoOr_Float"    → com.machineblocks.type.AutoOr<Float>
+type='"auto" | Float'      → union type expression (replaces type:AutoOr_Float)
 ```
+
+Legacy `type:AutoOr_Float` → `com.machineblocks.type.AutoOr<Float>` is **deprecated** — use `"auto" | Float`. See `17_type_system_bml.md` — Type Expressions.
 
 There is no implicit fallback to the baseType's namespace. If a type cannot be resolved the compiler emits `BML_UNKNOWN_TYPE`.
 
@@ -232,38 +234,52 @@ Values:  Color | "inherit"
 
 ---
 
-# 4. Generic Container Types
+# 4. Type Expressions (Unions and Legacy Wrappers)
 
-## AutoOr\<T\>
+BlockML has three TypeBlock kinds: **Primitive**, **Enum**, **Struct**. The forms below are **type expressions** — not separate TypeBlocks. Write unions directly in `type="..."` attributes.
+
+## Union syntax (replaces wrapper types)
 
 ```text
-"auto" | T
+AutoOr<T>      →  "auto" | T
+FalseOr<T>     →  false | T
+NoneOr<T>      →  "none" | T
+BooleanOr<T>   →  Boolean | T
+```
 
-MBML:  value="auto"  or  value="1.5"
+### AutoOr — migrate to `"auto" | T`
+
+```text
+Was:  type="type:AutoOr_Float"   value="auto" | value="1.5"
+Now:  type='"auto" | Float'      value="auto" | value="1.5"
+
 MBOM:  "auto"  or  T
 SCAD:  "auto"  or  serialized T
 ```
 
-## FalseOr\<T\>
+### FalseOr — migrate to `false | T`
 
 ```text
 false | T
 ```
 
-## NoneOr\<T\>
+### NoneOr — migrate to `"none" | T`
 
 ```text
-"none" | T
+Was:  type="type:NoneOr_…"   value="none"
+Now:  type='"none" | T'
 
-MBML:  value="none"
-SCAD:  "none"
+MBOM:  "none"  or  T
+SCAD:  "none"  or  serialized T
 ```
 
-## BooleanOr\<T\>
+### BooleanOr — migrate to `Boolean | T`
 
 ```text
 Boolean | T
 ```
+
+During migration, legacy `com.machineblocks.type.AutoOr_*` XSD/BML names may still resolve with `BML_LEGACY_TYPE_SOURCE` warning. New authoring uses union syntax only. See `17_type_system_bml.md` — Type Expressions.
 
 ---
 

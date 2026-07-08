@@ -13,7 +13,7 @@
 
   <idea>Branch for scalar value types — single atomic values.</idea>
 
-  <documentation>Abstract branch for built-in scalar TypeBlocks (Integer, Float, String, Boolean, Null).</documentation>
+  <documentation>Abstract branch for built-in scalar TypeBlocks (Integer, Float, String, Boolean).</documentation>
 
   <name>PrimitiveType</name>
   <type>org.blockml.core.PrimitiveType</type>

@@ -524,15 +524,19 @@ Float    → org.blockml.type.Float
 Integer  → org.blockml.type.Integer
 String   → org.blockml.type.String
 Boolean  → org.blockml.type.Boolean
-Null     → org.blockml.type.Null
 ```
 
-Collections use multiplicity on the type — not `Array<T>`:
+There is no `Null` primitive — see `17_type_system_bml.md` — EMPTY.
+
+Collections and unions are type expressions — not TypeBlocks:
 
 ```text
-Integer[]              → org.blockml.type.Integer with multiplicity 0..n
-com.foo.Box<Integer>   → generic type reference (see GenericType)
+Integer[]              → multiplicity 0..n on Integer
+"auto" | Float         → union (replaces AutoOr<Float>)
+com.foo.Box<Integer>   → generic application (Box is StructType with <generics>)
 ```
+
+See `17_type_system_bml.md` — Type Expressions.
 
 Domain-specific types require an explicit namespace prefix declared via `xmlns`:
 

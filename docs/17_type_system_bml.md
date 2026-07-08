@@ -27,7 +27,8 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
 | **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail) — see `02_mbml.md` |
-| **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Collections and Multiplicity |
+| **Three TypeBlock kinds** | PrimitiveType · EnumType · StructType only — everything else is a type expression |
+| **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
 | **Namespace separation** | `org.blockml.core.*`, `type.*`, `service.*`, `capability.*`, `language.*` = public BML grammar only; BOM/compiler types in `org.blockml.bom.*`, etc. — see `00_bom_core.md` |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
 | **Domain XSD enums** | Deprecated as type SSOT — migrate to BML `EnumType` |
@@ -261,7 +262,7 @@ org.blockml.core.Block           root · _customData aggregation · meta propert
 org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
 com.machineblocks.core.Block     baseType: Block · _presets · appliedPresets
 com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)
-org.blockml.core.TypeBlock         baseType: Block · primitives · structs · enums · generics
+org.blockml.core.TypeBlock         baseType: Block · primitives · structs · enums
 org.blockml.core.LanguageBlock     baseType: Block (meta — no extra members in V1)
 ```
 
@@ -319,19 +320,66 @@ All types inherit from **`org.blockml.core.TypeBlock`**. Types are not a separat
 
 ```text
 org.blockml.core.TypeBlock              abstract
-  ├── org.blockml.core.PrimitiveType    Integer · Float · String · Boolean · Null
-  ├── org.blockml.core.StructType       Size3d · domain product types
+  ├── org.blockml.core.PrimitiveType    Integer · Float · String · Boolean
   ├── org.blockml.core.EnumType         BaseCutoutType · Direction · …
-  └── org.blockml.core.GenericType      user-defined parameterized types (Box&lt;T&gt;, …)
+  └── org.blockml.core.StructType       Size3D · Color · domain value objects
 ```
 
-Only TypeBlocks may be used where a **type reference** is required (Property `type`, Capability `payloadType` / `returnType`). Any Block FQN is valid in aggregation and association `type` attributes — including TypeBlocks.
+**BlockML knows only three TypeBlock kinds at language level** — each names a semantic meaning:
+
+| Branch | Role | Examples |
+|---|---|---|
+| **PrimitiveType** | Atomic scalar values | `Boolean`, `Integer`, `Float`, `String` |
+| **EnumType** | Named finite value sets | `Direction`, `Face`, `StudType`, `BaseCutoutType` |
+| **StructType** | Custom value objects from properties | `Size3D`, `Color`, `Address`, `Transform` |
+
+`StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<generics>` — not a separate TypeBlock branch.
+
+There is **no** `GenericType`, `UnionType`, `Array<T>`, `AutoOr<T>`, or similar as language-level TypeBlock branches.
+
+---
+
+## Type Expressions
+
+Everything beyond the three TypeBlock kinds is a **type expression** — a use or combination of named types, not a new BlockML type class.
 
 ```text
-Allowed:     type="org.blockml.type.Integer"
-             payloadType="com.foo.Request"
-Not allowed: type="com.machineblocks.core.NativeBlock"   → BML_INVALID_PROPERTY_TYPE
+TypeBlock        = named semantic meaning     (Primitive · Enum · Struct)
+TypeExpression   = usage or combination       (multiplicity · union · generic application · _self · T)
 ```
+
+### Not TypeBlocks — type expressions only
+
+```text
+Integer[]           — collection / multiplicity
+Integer[3]
+Integer[0..n]
+Size3D[1..3]
+Boolean | Integer   — union
+"auto" | Float
+false | Size3D
+Box<Integer>        — generic application (Box is a StructType with <generics>)
+_self
+T                   — generic parameter reference
+```
+
+The compiler may build internal structures in `org.blockml.bom.*` (e.g. `UnionTypeDescriptor`, `CollectionTypeDescriptor`, `GenericApplicationDescriptor`, `SelfTypeReference`, `GenericParameterReference`). **BML does not define these as Block classes.**
+
+### Obsolete wrapper types — write unions directly
+
+Legacy domain wrapper types are replaced by union syntax:
+
+```text
+Obsolete                    Write instead
+AutoOr<T>                   "auto" | T
+FalseOr<T>                  false | T
+NoneOr<T>                   "none" | T
+BooleanOr<T>                Boolean | T
+Array<T>                    T[]
+UnionType                   A | B | C
+```
+
+See `04_types.md` for parse/serialize migration per MBOM type.
 
 ---
 
@@ -383,7 +431,33 @@ Capability payloadType=  { items: String[0..n] }   — named field with multipli
 Composition children=   governed by parent aggregation multiplicity
 ```
 
-See `00_bom_core.md` — Type Notation · `02_mbml.md` — Type notation · `12_bom_object_model.md` — Type Descriptors.
+See `00_bom_core.md` — Type Notation · `02_mbml.md` — Type notation · `12_bom_object_model.md` — Type Expressions.
+
+### Unions
+
+Union type expressions combine alternatives with `|`:
+
+```text
+"auto" | Float              — auto sentinel or float value
+"none" | T                  — none sentinel or T
+false | Size3D              — false or struct
+Boolean | StudType          — boolean or enum
+Integer | String            — primitive union
+```
+
+Literal alternatives use JSON literal syntax (`"auto"`, `"none"`, `false`, `true`). Type alternatives reference TypeBlocks or nested type expressions.
+
+---
+
+Only TypeBlocks may be used where a **bare type name** is required (Property `type`, Capability `payloadType` / `returnType`). Type expressions (multiplicity, unions, generic application) extend those references. Any Block FQN is valid in aggregation and association `type` attributes — including TypeBlocks.
+
+```text
+Allowed:     type="org.blockml.type.Integer"
+             type='"auto" | Float'
+             type="Integer[]"
+             payloadType="com.foo.Request"
+Not allowed: type="com.machineblocks.core.NativeBlock"   → BML_INVALID_PROPERTY_TYPE
+```
 
 ---
 
@@ -411,7 +485,21 @@ Each concrete primitive (`Integer`, `Float`, …) inherits this member. A primit
 
 Interpretation is context-dependent — same TypeBlock, two roles.
 
-V1 bootstrap primitives: `Integer`, `Float`, `String`, `Boolean`, `Null` in `@blockml/core`.
+V1 bootstrap primitives: `Integer`, `Float`, `String`, `Boolean` in `@blockml/core`.
+
+### EMPTY — not a type
+
+BlockML has **no `Null` type** and **no `null` literal** in expressions or type positions. A parameter or property has a declared type (or union of types) and may be **absent** or **empty** — that is not a separate type.
+
+```text
+Omitted attribute / member     — absent (no value authored)
+defaultValue="" on String      — empty string (still typed as String)
+Optional association           — no target id set
+```
+
+**`null` is target interpretation.** When a renderer or runtime needs JSON `null`, SQL `NULL`, or TypeScript `undefined`, the compiler maps from **absent/empty** authoring — BML does not expose `null` as a language concept.
+
+Union sentinels like `"none" | T` or `false | T` are typed alternatives — not null.
 
 Unqualified names in BML (`type="Integer"`) resolve to `org.blockml.type.*` — unchanged from `02_mbml.md`.
 
@@ -539,33 +627,33 @@ The renderer and validator decide semantics from `baseType` and usage context �
 
 ### Generics
 
-Blocks may declare generic type parameters:
+Generic type parameters are declared on **StructType** (or other TypeBlock) definitions — not via a separate `GenericType` branch:
 
 ```xml
-<generics>
-  <generic name="T" baseType="org.blockml.core.TypeBlock"/>
-</generics>
+<block ...>
+  <name>Box</name>
+  <type>com.foo.Box</type>
+  <baseType>org.blockml.core.StructType</baseType>
+
+  <generics>
+    <generic name="T" baseType="org.blockml.core.TypeBlock"/>
+  </generics>
+
+  <properties>
+    <property name="value" type="T"/>
+  </properties>
+</block>
 ```
 
-Within the Block, the parameter is used as a type reference:
-
-```xml
-<property name="value" type="T"/>
-```
-
-Concrete use at reference sites:
+**Generic application** (`Box<Integer>`) is a **type expression** — not a TypeBlock. At reference sites:
 
 ```xml
 <property name="values" type="com.foo.Box<org.blockml.type.Integer>"/>
 ```
 
-At validate time the compiler substitutes each placeholder (`T`) with the concrete type argument. Each argument must inherit from the parameter's `baseType` constraint (`BML_GENERIC_CONSTRAINT_VIOLATION` on mismatch).
+At validate time the compiler substitutes each placeholder (`T`) with the concrete type argument. Each argument must satisfy the parameter's `baseType` constraint (`BML_GENERIC_CONSTRAINT_VIOLATION` on mismatch).
 
-Generic type arguments are allowed wherever type references are allowed (Properties, Capabilities, aggregation/association types when referencing a generic Block).
-
-Parameterized bootstrap types and user-defined generics (`Box<T>`, `Result<T, E>`) inherit from `org.blockml.core.GenericType`. Author syntax: `com.foo.Box<org.blockml.type.Integer>`, `type:AutoOr_Float` (domain).
-
-User-defined generics (`Result<T, E>`, `Box<T>`) use the same mechanism — declare `<generics>` on the Block definition.
+Generic parameters (`T`) and `_self` in type positions are type-expression references — resolved from the defining Block's `<generics>` or effective Block type respectively.
 
 ---
 
@@ -720,7 +808,7 @@ packages/core/src/
   org/blockml/core/
     Block.bml · TypeBlock.bml · ServiceBlock.bml · FunctionBlock.bml · LanguageBlock.bml · …
   org/blockml/type/
-    Integer.bml · Float.bml · String.bml · Boolean.bml · Null.bml · …
+    Integer.bml · Float.bml · String.bml · Boolean.bml · …
   org/blockml/language/
     TypeScript.bml · OpenSCAD.bml
   org/blockml/service/
@@ -758,7 +846,7 @@ never expose „Block“ outside parser/BOM types
 
 **Only BML semantics are normative.** Internal data structures may change without altering a single `.bml` file.
 
-`TypeDescriptor` in `12_bom_object_model.md` remains the **reference syntax** for inline types (anonymous structs, multiplicity on references). Named types always resolve to registry FQNs.
+`TypeExpression` in `12_bom_object_model.md` (V1 alias `TypeDescriptor`) is the **reference syntax** for type expressions — anonymous structs, unions, multiplicity, generic application. Named TypeBlocks always resolve to registry FQNs.
 
 ---
 
@@ -770,7 +858,8 @@ never expose „Block“ outside parser/BOM types
 | FQN namespaces | `00_bom_core.md` — Reserved Language Namespaces |
 | Composable Block base types | `16_framework_base_types.md` |
 | BML block syntax | `02_mbml.md` |
-| TypeDescriptor AST | `12_bom_object_model.md` |
+| Type expressions · three TypeBlock kinds | `17_type_system_bml.md` — Type Expressions |
+| TypeExpression AST | `12_bom_object_model.md` |
 | Parse/serialize behaviour | `04_types.md` |
 | Collections and Multiplicity | this document — § Collections and Multiplicity |
 | Bootstrap mapping | `13_bml_to_bom_mapping.md` |
