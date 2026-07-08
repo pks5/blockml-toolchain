@@ -23,10 +23,10 @@
   <abstract>true</abstract>
 
   <properties>
-    <property name="hasInput" type="Boolean" readOnly="true" defaultValue="false">
+    <property name="hasInput" type="Boolean" readOnly="true" value="false">
       <documentation>Whether the capabality has an input and thus requires a specified inputType.</documentation>
     </property>
-    <property name="hasOutput" type="Boolean" readOnly="true" defaultValue="false">
+    <property name="hasOutput" type="Boolean" readOnly="true" value="false">
       <documentation>Whether the capabality has an output and thus requires a specified outputType.</documentation>
     </property>
   </properties>

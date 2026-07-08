@@ -28,29 +28,39 @@
 
   <properties>
     <property name="description" type="String"
-              defaultValue="Standard brick types for MachineBlocks" />
+              value="Standard brick types for MachineBlocks" />
   </properties>
 
-  <composition aggregation="_dependencies">
-    <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
-  </composition>
+  <aggregations>
+    <aggregation name="_dependencies">
+      <composition>
+        <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
+      </composition>
+    </aggregation>
 
-  <!-- Optional legacy XSD — omit when types are exported via _types -->
-  <composition aggregation="_schemas">
-    <Schema ref="bricks.xsd" />
-  </composition>
+    <!-- Optional legacy XSD — omit when types are exported via _types -->
+    <aggregation name="_schemas">
+      <composition>
+        <Schema ref="bricks.xsd" />
+      </composition>
+    </aggregation>
 
-  <composition aggregation="_types">
-    <TypeRef ref="types/Size3D.bml" />
-    <TypeRef ref="types/Direction.bml" />
-    <TypeRef ref="types/Color.bml" />
-  </composition>
+    <aggregation name="_types">
+      <composition>
+        <TypeRef ref="types/Size3D.bml" />
+        <TypeRef ref="types/Direction.bml" />
+        <TypeRef ref="types/Color.bml" />
+      </composition>
+    </aggregation>
 
-  <composition aggregation="_blocks">
-    <BlockRef ref="blocks/Standard.bml" />
-    <BlockRef ref="blocks/Plate.bml" />
-    <BlockRef ref="blocks/Tile.bml" />
-    <BlockRef ref="presets/StandardPresets.bml" />
-  </composition>
+    <aggregation name="_blocks">
+      <composition>
+        <BlockRef ref="blocks/Standard.bml" />
+        <BlockRef ref="blocks/Plate.bml" />
+        <BlockRef ref="blocks/Tile.bml" />
+        <BlockRef ref="presets/StandardPresets.bml" />
+      </composition>
+    </aggregation>
+  </aggregations>
 
 </block>

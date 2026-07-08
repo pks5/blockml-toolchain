@@ -22,15 +22,19 @@
 
   <properties>
     <property name="value" type="String">
-      <documentation>Enum literal used in property defaultValue and expressions.</documentation>
+      <documentation>Enum literal used in property values and expressions.</documentation>
     </property>
   </properties>
 
-  <composition aggregation="_values">
-    <BaseCutoutType id="NONE"     value="none"     />
-    <BaseCutoutType id="STANDARD" value="standard" />
-    <BaseCutoutType id="GROOVE"   value="groove"   />
-    <BaseCutoutType id="STUDS"    value="studs"    />
-  </composition>
+  <aggregations>
+    <aggregation name="_values">
+      <composition>
+        <BaseCutoutType id="NONE"     value="none"     />
+        <BaseCutoutType id="STANDARD" value="standard" />
+        <BaseCutoutType id="GROOVE"   value="groove"   />
+        <BaseCutoutType id="STUDS"    value="studs"    />
+      </composition>
+    </aggregation>
+  </aggregations>
 
 </block>

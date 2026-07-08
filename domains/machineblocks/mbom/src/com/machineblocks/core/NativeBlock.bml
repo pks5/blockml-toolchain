@@ -26,23 +26,23 @@
 
   <!-- Native MB properties only — no custom properties on NativeBlock instances -->
   <properties>
-    <property name="base" type="org.blockml.type.Boolean" defaultValue="true">
+    <property name="base" type="org.blockml.type.Boolean" value="true">
       
     </property>
-    <property name="baseCutoutType" type="com.machineblocks.type.BaseCutoutType" defaultValue="STANDARD">
+    <property name="baseCutoutType" type="com.machineblocks.type.BaseCutoutType" value="STANDARD">
       
     </property>
-    <property name="scale" type="org.blockml.type.Float" defaultValue="1.0">
+    <property name="scale" type="org.blockml.type.Float" value="1.0">
       
     </property>
-    <property name="stabilizerExpansion" type="org.blockml.type.Integer" defaultValue="2">
+    <property name="stabilizerExpansion" type="org.blockml.type.Integer" value="2">
       
     </property>
-    <property name="text" type="org.blockml.type.String" defaultValue="">
+    <property name="text" type="org.blockml.type.String" value="">
       
     </property>
     <!-- Value specified as ordered array [x, y, z] (order of properties definition), alternative: { x: 1, y: 1, z: 1 } -->
-    <property name="size" type="com.machineblocks.type.Size3D" defaultValue="[1, 1, 1]">
+    <property name="size" type="com.machineblocks.type.Size3D" value="[1, 1, 1]">
         
     </property>
   </properties>

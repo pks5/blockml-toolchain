@@ -23,8 +23,8 @@
   <abstract>true</abstract>
 
   <properties>
-    <property name="hasInput" defaultValue="true" />
-    <property name="hasOutput" defaultValue="true" />
+    <property name="hasInput" value="true" />
+    <property name="hasOutput" value="true" />
   </properties>
 
 

@@ -23,6 +23,6 @@
   <abstract>true</abstract>
 
   <properties>
-    <property name="hasInput" defaultValue="true" />
+    <property name="hasInput" value="true" />
   </properties>
 </block>
