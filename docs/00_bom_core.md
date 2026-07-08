@@ -216,6 +216,8 @@ A Block is the fundamental unit of BOM Core. It is a parametric, typed, reusable
 ### Metadata
 
 ```text
+idea               — short semantic description: what this Block represents in meaning
+documentation      — human-readable technical description
 name               — short class name (PascalCase). Required. See naming convention below.
 type               — globally unique FQN
 baseType           — FQN of the parent Block. Required — no default.

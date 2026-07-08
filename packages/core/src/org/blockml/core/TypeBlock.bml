@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>A type in the BlockML grammar — values that properties and capabilities may carry.</idea>
+
   <documentation>TypeBlock branch of BlockML. Semantic unit for property and Capability types (primitives, structs, enums, generics). Only TypeBlocks may appear as property type or Capability payloadType/returnType.</documentation>
 
   <name>TypeBlock</name>

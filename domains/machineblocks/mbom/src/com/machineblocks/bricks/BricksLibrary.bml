@@ -17,6 +17,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Published catalog of MachineBlocks standard brick definitions.</idea>
+
   <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their preset blocks.</documentation>
 
   <name>BricksLibrary</name>

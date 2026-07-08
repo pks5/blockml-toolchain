@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Three-dimensional size in MachineBlocks grid units.</idea>
+
   <documentation>Struct TypeBlock for three-dimensional size [x, y, z] in grid units.</documentation>
 
   <name>Size3d</name>

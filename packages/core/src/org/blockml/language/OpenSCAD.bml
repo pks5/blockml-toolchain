@@ -6,6 +6,8 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd">
 
+  <idea>OpenSCAD as an implementation language for sync capabilities.</idea>
+
   <documentation>LanguageBlock for OpenSCAD function implementations on Sync Capabilities. Emitted by the MachineBlocks SCAD renderer with FQN-prefixed function names.</documentation>
 
   <name>OpenSCAD</name>

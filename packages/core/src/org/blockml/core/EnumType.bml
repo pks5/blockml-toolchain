@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Branch for closed sets of named literal values.</idea>
+
   <documentation>Abstract branch for closed enum TypeBlocks. Enum values are Block instances in the default _values aggregation — no special enum syntax.</documentation>
 
   <name>EnumType</name>

@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Reusable logic unit addressable as a service in expressions.</idea>
+
   <documentation>Abstract base for built-in ServiceBlocks — addressable logic units invoked via stud:// or expressions, with no sub-blocks.</documentation>
 
   <name>ServiceBlock</name>

@@ -1,6 +1,8 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd">
 
+  <idea>Primitive BlockML property type capable of holding true or false.</idea>
+
   <documentation>BOM Core primitive TypeBlock for true/false values. Unqualified name Boolean resolves to org.blockml.type.Boolean.</documentation>
 
   <name>Boolean</name>

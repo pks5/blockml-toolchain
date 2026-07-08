@@ -138,7 +138,10 @@ interface BlockDefinition {
   /** Semantic version of this definition. Required. */
   version: string
 
-  /** Human-readable description of what this Block is. Required on root definitions. */
+  /** Short semantic description — what this Block represents in meaning. Required. */
+  idea?: string
+
+  /** Human-readable technical description of what this Block is. Required on root definitions. */
   documentation?: string
 
   /** Abstract type — not usable as composition instance type. Default false. */
@@ -1008,6 +1011,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 
 ```text
 BML_MISSING_BASE_TYPE         — baseType absent on BlockDefinition
+BML_MISSING_IDEA              — root <block> lacks <idea> (warning V1)
 BML_MISSING_DOCUMENTATION     — root <block> lacks <documentation> (warning V1)
 BML_MISSING_VERSION           — version absent on external BlockInstance reference (always error)
 BML_UNKNOWN_VERSION           — version present but no matching BlockDefinition in TypeRegistry

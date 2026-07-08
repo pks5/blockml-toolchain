@@ -12,6 +12,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>MachineBlocks object composed of child block instances.</idea>
+
   <documentation>Composable MachineBlocks Block with default _parts aggregation. On Sets, _parts holds placed block instances (direction, offset, appliedPresets). On other composites, _parts holds child blocks for SCAD composition.</documentation>
 
   <name>CompositeBlock</name>

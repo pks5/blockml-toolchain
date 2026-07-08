@@ -6,6 +6,8 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd">
 
+  <idea>TypeScript as an implementation language for sync capabilities.</idea>
+
   <documentation>LanguageBlock for TypeScript arrow-function implementations on Sync Capabilities. V1: compile-time execution when all arguments are literals.</documentation>
 
   <name>TypeScript</name>

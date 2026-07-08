@@ -251,6 +251,8 @@ V1 known types: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCA
 Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_framework_base_types.md`.
 
 ```text
+```text
+<idea>…</idea>                               → block.idea (trimmed text)
 <documentation>…</documentation>             → block.documentation (trimmed text)
 <name>…</name>                               → block.name
 <type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
@@ -263,6 +265,8 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 ```
 
 ```text
+```text
+Omitted <idea> on root block            → BML_MISSING_IDEA (warning V1)
 Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1)
 Omitted abstract/final                 → false
 Omitted <subTypes>                     → undefined — inherit effective subTypes from baseType chain

@@ -12,6 +12,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
+
   <documentation>Root semantic unit of BlockML. Sole inheritance root for all Block definitions — composable blocks, TypeBlocks, LanguageBlocks, ServiceBlocks, and domain types. Every Block instance carries the meta property id (not declared). Any Block FQN may appear in aggregation and association types. Property and Capability types must resolve to org.blockml.core.TypeBlock.</documentation>
 
   <name>Block</name>

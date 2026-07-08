@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Branch for types parameterized by other types.</idea>
+
   <documentation>Abstract branch for generic TypeBlocks. Declares type parameters via generics; concrete use via type arguments (e.g. Box&lt;Integer&gt;).</documentation>
 
   <name>GenericType</name>

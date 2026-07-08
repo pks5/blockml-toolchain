@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Branch for scalar value types — single atomic values.</idea>
+
   <documentation>Abstract branch for built-in scalar TypeBlocks (Integer, Float, String, Boolean, Null).</documentation>
 
   <name>PrimitiveType</name>

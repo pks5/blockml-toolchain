@@ -165,18 +165,47 @@ Composition children (`<ac:Wall id="wall" …/>`, `<core:Step …/>`) are **Bloc
 ### Required Fields
 
 ```text
-<documentation>     — human-readable description of what this Block is (first child element).
+<idea>              — short semantic description: what this Block represents in meaning (first child element).
+<documentation>     — human-readable technical description of the Block (second child element).
 <name>              — short class name (PascalCase). See naming convention below.
 <type>              — FQN (e.g. com.martianmicro.anyclosure.Wall)
 <baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.core.Block.
 <version>           — semantic version of this Block definition
 ```
 
-`<documentation>` is placed **directly under the root `<block>` element**, before `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+### `<idea>` — semantic meaning
+
+`<idea>` is placed **directly under the root `<block>` element**, as the **first child**, before `<documentation>` and `<name>`. It states how to **interpret** the Block — what it means in the domain, not how it is implemented.
+
+```text
+<idea>       — meaning     what this Block semantically represents (one short sentence)
+<documentation> — detail     technical description, behaviour, constraints, examples
+```
+
+Examples:
+
+```xml
+<idea>Lego compatible standard building block.</idea>
+<documentation>Parametric MachineBlocks brick with size, studs, holes, and style properties.</documentation>
+```
+
+```xml
+<idea>Primitive BlockML property type capable of holding a float number.</idea>
+<documentation>BOM Core primitive TypeBlock for floating-point numbers. Unqualified name Float resolves to org.blockml.type.Float.</documentation>
+```
+
+`<idea>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IDEA` (warning in V1, error in a later release). The idea is primary input for editors, LLMs, and documentation navigation — it answers *what is this?* before *how does it work?*
+
+WOT alignment: the Idea is the stable semantic constant; documentation describes how a World interprets and uses it. See `WOT_Reference_v26.md` — The Idea.
+
+### `<documentation>`
+
+`<documentation>` follows `<idea>`, still before `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
 
 ```xml
 <block ...>
-  <documentation>Parametric wall segment for AnyClosure enclosures.</documentation>
+  <idea>Parametric wall segment for AnyClosure enclosures.</idea>
+  <documentation>Wall block with thickness, height, and opening properties for enclosure design.</documentation>
   <name>Wall</name>
   ...
 </block>
@@ -1422,6 +1451,7 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Named size and color shortcuts for the Standard brick.</idea>
   <documentation>Standard brick presets for MachineBlocks Standard block.</documentation>
 
   <name>StandardPresets</name>
@@ -1572,6 +1602,7 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 <block xmlns="http://blockml.org/schema/block"
        ...>
 
+  <idea>Published catalog of MachineBlocks standard brick definitions.</idea>
   <documentation>MachineBlocks standard brick library.</documentation>
 
   <name>BricksLibrary</name>

@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Branch for product types — composite values with named fields.</idea>
+
   <documentation>Abstract branch for struct TypeBlocks — complex values described by normal Properties. No special struct syntax.</documentation>
 
   <name>StructType</name>

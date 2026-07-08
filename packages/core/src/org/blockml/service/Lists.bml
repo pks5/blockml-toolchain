@@ -15,6 +15,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Built-in list utilities callable as #lists in expressions.</idea>
+
   <documentation>Built-in lists FunctionBlock. Expression prefix #lists.* — list construction, indexing, and aggregation utilities.</documentation>
 
   <name>Lists</name>

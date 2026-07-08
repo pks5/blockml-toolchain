@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>A LEGO-style build — palette, placed parts, and assembly steps.</idea>
+
   <documentation>Abstract composable Block for LEGO-style Sets — block palette in inherited _presets, placed instances in inherited _parts, assembly order in _steps. Top-level catalog unit in MachineBlocks.</documentation>
 
   <name>Set</name>

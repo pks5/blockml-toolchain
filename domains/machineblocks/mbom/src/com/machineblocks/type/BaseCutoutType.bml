@@ -11,6 +11,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Shape variant of the underside cutout on a brick base.</idea>
+
   <documentation>Enum TypeBlock for base cutout variants on MachineBlocks bricks.</documentation>
 
   <name>BaseCutoutType</name>

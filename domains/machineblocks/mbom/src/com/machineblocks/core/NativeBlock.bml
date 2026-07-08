@@ -13,6 +13,8 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
+  <idea>Leaf geometry primitive rendered directly as mb_block() in SCAD.</idea>
+
   <documentation>Final leaf Block mapped directly to SCAD mb_block() — the native geometry primitive at render time. Extends Block directly (not CompositeBlock). Uses children aggregation for mb_block() sub-geometry instead of _parts.</documentation>
 
   <name>NativeBlock</name>

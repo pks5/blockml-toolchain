@@ -26,6 +26,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
+| **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail) — see `02_mbml.md` |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
 | **Domain XSD enums** | Deprecated as type SSOT — migrate to BML `EnumType` |
 
@@ -215,7 +216,7 @@ There is no parallel type system in code, no hidden XSD ontology for framework c
 Implications:
 
 ```text
-LLM target structure     one shape — always <block> with FQN + baseType + documentation
+LLM target structure     one shape — always <block> with FQN + baseType + idea + documentation
 TypeRegistry bootstrap   framework .bml loaded before user .bml — same registerDefinition()
 New primitive / language add a .bml file — not a compiler patch (V1 bootstrap set is fixed; mechanism is open)
 WCMS / Blockiverse       framework Blocks are first-class publishable definitions
