@@ -153,12 +153,17 @@ interface BlockDefinition {
   /** org.blockml.language.* FQNs allowed on capability implementations. Default: inherit. */
   supportedImplementationTypes?: string[]
 
-  /**
-   * Abstract Block FQNs whose member surface this Block implements (contracts / interfaces).
+  /** Abstract Block FQNs whose member surface this Block implements (contracts / interfaces).
    * Root block only. Validator checks effective members against each contract type.
    * subBlocks and compositions on contract types are ignored.
    */
   contracts?: string[]
+
+  /**
+   * Generic type parameters declared on this Block (e.g. T on Box<T>).
+   * Each parameter has a name and a baseType constraint (must inherit from that TypeBlock branch).
+   */
+  generics?: GenericParameter[]
 
   /**
    * Members declared in THIS block only — not inherited.
@@ -184,6 +189,15 @@ interface BlockDefinition {
 
   /** BML source span of this definition (root or sub-block) */
   source: SourceLocation
+}
+```
+
+```typescript
+interface GenericParameter {
+  /** Parameter name (e.g. T) — substituted in type references within this Block */
+  name: string
+  /** FQN constraint — each concrete type argument must inherit from this baseType */
+  baseType: string
 }
 ```
 
@@ -239,6 +253,8 @@ interface NamedTypeReference {
   kind: "named"
   /** Resolved FQN, e.g. org.blockml.type.Float or com.myDomain.ResizePayload */
   fqn: string
+  /** Concrete type arguments when referencing a generic Block, e.g. Box<Integer> */
+  typeArguments?: TypeDescriptor[]
 }
 
 interface ArrayTypeDescriptor {
@@ -267,6 +283,7 @@ Float                              → NamedTypeReference { fqn: "org.blockml.ty
 org.blockml.type.Float             → NamedTypeReference { fqn: "org.blockml.type.Float" }
 type:Size3D                        → NamedTypeReference { fqn: "com.machineblocks.type.Size3D" }
 Array<Integer>                     → ArrayTypeDescriptor { elementType: Named(Integer) }
+com.foo.Box<Integer>               → NamedTypeReference { fqn: "com.foo.Box", typeArguments: [Integer] }
 { a: Float, b: Float }             → AnonymousStructType { fields: [a, b] }
 { list: Array<Object>, index: Integer }  → nested descriptors
 ```

@@ -1,7 +1,7 @@
 <!--
-  BlockML Core — primitive type branch
+  BlockML Core — struct type branch (product types)
 
-  FQN: org.blockml.core.PrimitiveType
+  FQN: org.blockml.core.StructType
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -11,7 +11,7 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation></documentation>
+  <documentation>Abstract branch for struct TypeBlocks — complex values described by normal Properties. No special struct syntax.</documentation>
 
   <name>StructType</name>
   <fullQualifiedName>org.blockml.core.StructType</fullQualifiedName>
@@ -20,5 +20,4 @@
 
   <abstract>true</abstract>
 
-  
 </block>

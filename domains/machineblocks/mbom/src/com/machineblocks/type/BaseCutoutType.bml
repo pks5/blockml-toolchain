@@ -1,7 +1,7 @@
 <!--
-  BlockML Core — enum type branch (closed value sets)
+  MachineBlocks — BaseCutoutType enum
 
-  FQN: org.blockml.core.EnumType
+  FQN: com.machineblocks.type.BaseCutoutType
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -11,7 +11,7 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation></documentation>
+  <documentation>Enum TypeBlock for base cutout variants on MachineBlocks bricks.</documentation>
 
   <name>BaseCutoutType</name>
   <fullQualifiedName>com.machineblocks.type.BaseCutoutType</fullQualifiedName>
@@ -20,14 +20,15 @@
 
   <properties>
     <property name="value" type="String">
-      <documentation>The value of the enum.</documentation>
+      <documentation>Enum literal used in property defaultValue and expressions.</documentation>
     </property>
   </properties>
 
-  <composition export="true">
-      <BaseCutoutType id="NONE" value="none" />
-      <BaseCutoutType id="STANDARD" value="standard" />
-      <BaseCutoutType id="GROOVE" value="groove" />
-      <BaseCutoutType id="STUDS" value="studs" />
+  <composition aggregation="_values">
+    <BaseCutoutType id="NONE"     value="none"     />
+    <BaseCutoutType id="STANDARD" value="standard" />
+    <BaseCutoutType id="GROOVE"   value="groove"   />
+    <BaseCutoutType id="STUDS"    value="studs"    />
   </composition>
+
 </block>

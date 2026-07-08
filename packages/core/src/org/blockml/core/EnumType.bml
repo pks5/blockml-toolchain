@@ -11,7 +11,7 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation>Abstract branch for closed enum TypeBlocks with a fixed set of named values (e.g. Direction, Face).</documentation>
+  <documentation>Abstract branch for closed enum TypeBlocks. Enum values are Block instances in the default _values aggregation — no special enum syntax.</documentation>
 
   <name>EnumType</name>
   <fullQualifiedName>org.blockml.core.EnumType</fullQualifiedName>

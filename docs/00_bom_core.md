@@ -251,8 +251,9 @@ A Block may declare one or more **contracts** — references to abstract Block t
 Declared on:     root <block> only (not on Sub-Blocks)
 Attribute:       type — FQN of the contract Block (required)
 Contract target: must be abstract (abstract=true)
-Member scope:    Properties, Aggregations, Associations, Capabilities only
+Member scope:    Properties, Aggregations, Associations, Capabilities (any subset)
 Ignored on target: subBlocks[], compositions[] on the contract Block
+Partial contracts: a contract may declare only some member kinds — the implementing Block must provide all declared members
 ```
 
 Any abstract Block may serve as a contract (interface). A concrete Block implements a contract by declaring `<contracts>`; it does not inherit contract members via `baseType` — the validator checks that **effective members** (after `baseType` chain resolution) satisfy each contract.
@@ -291,28 +292,40 @@ Special semantics: identity paths (parent::child), reference validation,
 
 Do not treat `id` as a regular custom property like `wallThickness`. The compiler, validator, and renderer give it dedicated handling. See Instance Identity and `12_bom_object_model.md` — Instance ID Rules.
 
-### Property Types
-
-Property `type` attributes must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock` (primitives, structs, enums, generics). Block types used for composition (Wall, ServiceBlock, …) are not valid property types.
-
-```text
-type="Integer"        →  org.blockml.type.Integer     ✓  (PrimitiveType → TypeBlock)
-type="type:Size3D"    →  com.machineblocks.type.Size3D ✓  (StructType → TypeBlock)
-type="com.foo.Wall"   →  ✗  BML_INVALID_PROPERTY_TYPE (not a TypeBlock)
-```
-
-The same rule applies to Capability `payloadType` and `returnType`.
-
-### Properties
+### Property metadata
 
 ```text
 name          — camelCase property name (unique within the Block's member namespace; must not be "id")
 type          — FQN of a TypeBlock (baseType chain includes org.blockml.core.TypeBlock)
-defaultValue  — typed default value (literal or expression)
+defaultValue  — typed default value (literal or Expression)
 group         — optional grouping hint (for editors)
 documentation — human-readable description
 suggestions   — optional list of suggested values (see below)
 ```
+
+### Property Types
+
+Property `type` attributes must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock` (primitives, structs, enums, generics). Non-type Blocks (Wall, ServiceBlock, NativeBlock, …) are not valid property types.
+
+```text
+type="Integer"              →  org.blockml.type.Integer        ✓  (PrimitiveType → TypeBlock)
+type="type:Size3d"            →  com.machineblocks.type.Size3d ✓  (StructType → TypeBlock)
+type="com.foo.Wall"           →  ✗  BML_INVALID_PROPERTY_TYPE (not a TypeBlock)
+```
+
+The same rule applies to Capability `payloadType` and `returnType`. Generic type arguments must satisfy each parameter's `baseType` constraint — see `17_type_system_bml.md` — Generics.
+
+### Aggregations and Associations
+
+Aggregation and association `type` attributes may reference **any Block FQN** — including composable Blocks, TypeBlocks, and meta Blocks:
+
+```text
+type="com.machineblocks.core.Block[]"     ✓
+type="com.machineblocks.type.Size3d[]"    ✓
+type="org.blockml.type.Integer[]"         ✓
+```
+
+TypeBlocks may therefore appear both as type references on Properties and as Block instances in compositions or aggregations — interpretation is context-dependent. See `17_type_system_bml.md`.
 
 ### Suggestions
 

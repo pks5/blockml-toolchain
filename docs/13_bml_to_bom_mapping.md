@@ -235,6 +235,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <allowedSubBlockType type="…"/>              → block.allowedSubBlockTypes[]
 <supportedImplementationType type="…"/>     → block.supportedImplementationTypes[]
 <contract type="…"/>                        → block.contracts[]   (root block only)
+<generic name="…" baseType="…"/>            → block.generics[]    (root block only)
 ```
 
 ```text
@@ -244,10 +245,12 @@ Empty <allowedSubBlockTypes/>    → [] (no Sub-Blocks allowed)
 Omitted lists                    → undefined (inherit from baseType at validate)
 <contracts> on Sub-Block           → BML_CONTRACT_NOT_ON_ROOT (error)
 Duplicate contract type            → BML_DUPLICATE_CONTRACT (error)
+<generics> on Sub-Block            → BML_GENERIC_NOT_ON_ROOT (error)
+Duplicate generic name             → BML_DUPLICATE_GENERIC (error)
 org.blockml.core.Block           → omits <baseType> (sole inheritance root)
 ```
 
-TypeBlock BML (`<fields>`, `<enumValues>`) maps to the same `BlockDefinition` structure with branch-specific validation — see `17_type_system_bml.md`.
+TypeBlock BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<composition aggregation="_values">`; generic Blocks declare parameters via `<generics>`. Branch-specific validation — see `17_type_system_bml.md`.
 
 ---
 

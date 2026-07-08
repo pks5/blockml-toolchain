@@ -1,7 +1,7 @@
 <!--
-  BlockML Core — enum type branch (closed value sets)
+  MachineBlocks — Size3d struct type
 
-  FQN: org.blockml.core.EnumType
+  FQN: com.machineblocks.type.Size3d
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -11,7 +11,7 @@
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <documentation></documentation>
+  <documentation>Struct TypeBlock for three-dimensional size [x, y, z] in grid units.</documentation>
 
   <name>Size3d</name>
   <fullQualifiedName>com.machineblocks.type.Size3d</fullQualifiedName>
@@ -29,4 +29,5 @@
       <documentation>Size in Z direction.</documentation>
     </property>
   </properties>
+
 </block>

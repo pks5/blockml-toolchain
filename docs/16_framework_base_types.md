@@ -102,6 +102,24 @@ Omitted = inherit from baseType
 Unknown type on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 ```
 
+### `<generics>`
+
+```xml
+<generics>
+  <generic name="T" baseType="org.blockml.core.TypeBlock"/>
+</generics>
+```
+
+```text
+Declares type parameters on this Block (root block only)
+name      — parameter identifier used in type references (e.g. type="T")
+baseType  — FQN constraint; concrete type arguments must inherit from this branch
+Usage     — com.foo.Box<org.blockml.type.Integer> at reference sites
+Validator — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
+```
+
+See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — GenericParameter.
+
 ---
 
 ## Root Type Exception
@@ -119,7 +137,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
 ```text
 1. @blockml/core BML                    ← BlockML describes BlockML
      org/blockml/core/Block.bml
-     org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · …
+     org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · GenericType.bml · …
      org/blockml/core/LanguageBlock.bml
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml
