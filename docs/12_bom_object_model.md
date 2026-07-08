@@ -14,6 +14,8 @@ For Expression AST node types see `10_expression_language.md` — Expression AST
 
 This document is the **implementation contract** for `@blockml/core`. It specifies TypeScript-oriented interfaces and validation rules. It does not duplicate domain semantics already defined elsewhere.
 
+**Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) belong to the **`org.blockml.bom.*`** implementation namespace — not to reserved language namespaces such as `org.blockml.core.*` or `org.blockml.type.*`. Language Blocks like `org.blockml.core.Block` are BML-defined; `org.blockml.bom.BlockDefinition` is the parse-time transport shape. See `00_bom_core.md` — Reserved Language Namespaces.
+
 ---
 
 ## Abstraction Principle

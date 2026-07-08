@@ -107,6 +107,59 @@ com.machineblocks.calibration.*  ✓   — Calibrator, …
 
 Do not infer from `bricks` that other packages may freely use plural segments. New infrastructure namespaces (`.type`, `.service`, `.core`, `.capability`) are always singular. New domain libraries may choose a collective name deliberately — document the decision in the domain spec.
 
+### Reserved Language Namespaces
+
+Direct package segments under `org.blockml` that belong to the **language** are reserved for **public BML-defined grammar** only. They must not be reused for internal compiler, parser, runtime, or BOM implementation classes.
+
+```text
+org.blockml.core.*         — framework base types (Block, TypeBlock, Library, …)
+org.blockml.type.*         — primitive and bootstrap TypeBlocks (Integer, Float, …)
+org.blockml.service.*      — built-in ServiceBlocks (#math, #strings, …)
+org.blockml.capability.*   — Capability type branches (Sync, AsyncInbound, …)
+org.blockml.language.*     — LanguageBlocks (TypeScript, OpenSCAD, …)
+```
+
+These namespaces contain BML-defined Blocks, TypeBlocks, ServiceBlocks, Capability types, and LanguageBlocks. They are part of the public BlockML grammar.
+
+### Implementation Namespaces
+
+Internal object models and toolchain infrastructure use **separate** namespaces:
+
+```text
+org.blockml.bom.*          — canonical BOM data model (parse result)
+org.blockml.parser.*       — parser implementation
+org.blockml.compiler.*     — compiler facade, validation, TypeRegistry
+org.blockml.runtime.*      — compile orchestration, RenderContext, cache
+org.blockml.engine.*       — RenderEngine / CompilerEngine implementations
+org.blockml.cli.*          — CLI commands and bootstrap
+```
+
+**Rule:** If a package segment is reserved for the public language, it must not additionally host internal implementation types.
+
+```text
+Correct:
+  org.blockml.core.Block              — public language Block (BML-defined)
+  org.blockml.bom.BlockDefinition     — internal BOM parse shape
+  org.blockml.compiler.TypeRegistry   — compiler infrastructure
+
+Wrong:
+  org.blockml.core.BlockDefinition
+  org.blockml.core.TypeReference
+  org.blockml.type.TypeDescriptor
+```
+
+**Separation goal:**
+
+```text
+org.blockml.core.* · type.* · service.* · capability.* · language.*  →  the language
+org.blockml.bom.*                                                    →  canonical BOM data model
+org.blockml.parser.* · compiler.* · runtime.* · engine.* · cli.*     →  implementation
+```
+
+> Public BlockML namespaces are reserved for the language. Internal implementation classes must never reuse language namespaces.
+
+npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. A single npm package may ship both BML files under `org/blockml/core/` and TypeScript under `org/blockml/bom/`. See `15_dev_setup.md` — Package Conventions.
+
 Built-in ServiceBlocks live in `org.blockml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
 
 ```text

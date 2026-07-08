@@ -215,6 +215,19 @@ Each package `tsconfig.json`:
 
 ## Package Conventions
 
+### FQN namespaces vs. npm packages
+
+npm workspace names (`@blockml/core`, `@blockml/parser`, `@blockml/compiler`, …) are **deployment units**. They are not the same as FQN package segments.
+
+```text
+@blockml/core npm package may contain:
+  src/org/blockml/core/*.bml     →  language FQNs (org.blockml.core.Block, …)
+  src/org/blockml/bom/*.ts       →  BOM interfaces (org.blockml.bom.BlockDefinition, …)
+  src/org/blockml/compiler/*.ts  →  only if colocated; prefer @blockml/compiler package
+```
+
+Reserved language namespaces (`org.blockml.core`, `org.blockml.type`, `org.blockml.service`, `org.blockml.capability`, `org.blockml.language`) are for **public BML grammar only**. Internal types use `org.blockml.bom`, `org.blockml.parser`, `org.blockml.compiler`, etc. See `00_bom_core.md` — Reserved Language Namespaces.
+
 ### Standard library package
 
 ```json

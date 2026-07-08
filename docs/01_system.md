@@ -371,6 +371,16 @@ The MachineBlocks V3 SCAD Render Target. Browser and Node compatible. Registers 
 
 ## Naming Conventions
 
+### FQN Namespaces — Language vs. Implementation
+
+Public BlockML grammar lives under reserved language namespaces. BOM data structures and toolchain classes use separate implementation namespaces — they must never reuse language package segments. See `00_bom_core.md` — Reserved Language Namespaces · Implementation Namespaces.
+
+```text
+Language (BML-defined):     org.blockml.core.* · type.* · service.* · capability.* · language.*
+BOM object model:           org.blockml.bom.*
+Toolchain:                  org.blockml.parser.* · compiler.* · runtime.* · engine.* · cli.*
+```
+
 ### FQN (Fully Qualified Name)
 
 All BOM types use Java-style reverse-domain FQNs with dot separators:

@@ -93,6 +93,8 @@ Extension types register their own BML→BOM mapping rule with the parser. The c
 
 BML uses XML namespaces to resolve Block type references. Namespace prefixes map to FQN package prefixes.
 
+**Language vs. implementation:** Reserved public language namespaces (`org.blockml.core`, `org.blockml.type`, `org.blockml.service`, `org.blockml.capability`, `org.blockml.language`) are for BML-defined grammar only. Internal BOM and toolchain types use separate namespaces (`org.blockml.bom`, `org.blockml.parser`, `org.blockml.compiler`, …). See `00_bom_core.md` — Reserved Language Namespaces.
+
 ```xml
 xmlns:core="com.machineblocks.core"
 xmlns:bricks="com.machineblocks.bricks"

@@ -28,6 +28,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
 | **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail) — see `02_mbml.md` |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Collections and Multiplicity |
+| **Namespace separation** | `org.blockml.core.*`, `type.*`, `service.*`, `capability.*`, `language.*` = public BML grammar only; BOM/compiler types in `org.blockml.bom.*`, etc. — see `00_bom_core.md` |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
 | **Domain XSD enums** | Deprecated as type SSOT — migrate to BML `EnumType` |
 
@@ -766,6 +767,7 @@ never expose „Block“ outside parser/BOM types
 | Topic | Document |
 |---|---|
 | V1/V2/V3 scope · BML vs Markdown | `01_system.md` — BML Self-Description Roadmap |
+| FQN namespaces | `00_bom_core.md` — Reserved Language Namespaces |
 | Composable Block base types | `16_framework_base_types.md` |
 | BML block syntax | `02_mbml.md` |
 | TypeDescriptor AST | `12_bom_object_model.md` |
