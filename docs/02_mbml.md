@@ -533,7 +533,7 @@ Collections and unions are type expressions — not TypeBlocks:
 ```text
 Integer[]              → multiplicity 0..n on Integer
 "auto" | Float         → union (replaces AutoOr<Float>)
-com.foo.Box<Integer>   → generic application (Box is StructType with <generics>)
+com.foo.Box<Integer>   → generic application (Box is StructType with <genericTypes>)
 ```
 
 See `17_type_system_bml.md` — Type Expressions.

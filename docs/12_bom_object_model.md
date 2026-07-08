@@ -168,7 +168,7 @@ interface BlockDefinition {
    * Generic type parameters declared on this Block (e.g. T on Box<T>).
    * Each parameter has a name and a baseType constraint (must inherit from that TypeBlock branch).
    */
-  generics?: GenericParameter[]
+  genericTypes?: GenericType[]
 
   /**
    * Members declared in THIS block only — not inherited.
@@ -199,7 +199,7 @@ interface BlockDefinition {
 ```
 
 ```typescript
-interface GenericParameter {
+interface GenericType {
   /** Parameter name (e.g. T) — substituted in type references within this Block */
   name: string
   /** FQN constraint — each concrete type argument must inherit from this baseType */

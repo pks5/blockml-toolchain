@@ -112,12 +112,12 @@ Omitted = inherit from baseType
 Unknown type on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 ```
 
-### `<generics>`
+### `<genericTypes>`
 
 ```xml
-<generics>
-  <generic name="T" baseType="org.blockml.core.TypeBlock"/>
-</generics>
+<genericTypes>
+  <genericType name="T" baseType="org.blockml.core.TypeBlock"/>
+</genericTypes>
 ```
 
 ```text
@@ -128,7 +128,7 @@ Usage     — com.foo.Box<org.blockml.type.Integer> at reference sites
 Validator — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
 ```
 
-See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — GenericParameter.
+See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — GenericType.
 
 ---
 

@@ -255,7 +255,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <subType type="…"/>                          → block.subTypes[] (explicit override)
 <implType type="…"/>                         → block.implTypes[]
 <contract type="…"/>                        → block.contracts[]   (root block only)
-<generic name="…" baseType="…"/>            → block.generics[]    (root block only)
+<genericType name="…" baseType="…"/>            → block.genericTypes[]    (root block only)
 ```
 
 ```text
@@ -265,15 +265,15 @@ Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1
 Omitted abstract/final                 → false
 Omitted <subTypes>                     → undefined — inherit effective subTypes from baseType chain
 Empty <subTypes/>                        → block.subTypes = [] (explicit override — forbid Sub-Blocks)
-Omitted implTypes / contracts / generics → inherit from baseType at validate
+Omitted implTypes / contracts / genericTypes → inherit from baseType at validate
 <contracts> on Sub-Block                 → BML_CONTRACT_NOT_ON_ROOT (error)
 Duplicate contract type                → BML_DUPLICATE_CONTRACT (error)
-<generics> on Sub-Block                  → BML_GENERIC_NOT_ON_ROOT (error)
-Duplicate generic name                   → BML_DUPLICATE_GENERIC (error)
+<genericTypes> on Sub-Block                  → BML_GENERIC_NOT_ON_ROOT (error)
+Duplicate genericType name                   → BML_DUPLICATE_GENERIC (error)
 org.blockml.core.Block                   → omits <baseType> (sole inheritance root)
 ```
 
-TypeBlock BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<composition aggregation="_values">`; generic Blocks declare parameters via `<generics>`. Branch-specific validation — see `17_type_system_bml.md`.
+TypeBlock BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<composition aggregation="_values">`; generic Blocks declare parameters via `<genericTypes>`. Branch-specific validation — see `17_type_system_bml.md`.
 
 ---
 

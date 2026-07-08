@@ -309,7 +309,7 @@ Primitives are Blocks     — value property + instance syntax (<Integer value="
 Structs are Blocks        — normal <properties>, no special struct syntax
 Enums are Blocks          — _values aggregation + composition, no enumValues syntax
 Contracts are Blocks      — abstract interfaces via <contracts>
-Generics parametrize Blocks — <generics> + type arguments at reference sites
+Generics parametrize Blocks — `<genericTypes>` + type arguments at reference sites
 ```
 
 Semantics are decided by `baseType` and usage context — not by parallel XSD or compiler hardcoding.
@@ -333,7 +333,7 @@ org.blockml.core.TypeBlock              abstract
 | **EnumType** | Named finite value sets | `Direction`, `Face`, `StudType`, `BaseCutoutType` |
 | **StructType** | Custom value objects from properties | `Size3D`, `Color`, `Address`, `Transform` |
 
-`StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<generics>` — not a separate TypeBlock branch.
+`StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate TypeBlock branch.
 
 There is **no** `GenericType`, `UnionType`, `Array<T>`, `AutoOr<T>`, or similar as language-level TypeBlock branches.
 
@@ -358,7 +358,7 @@ Size3D[1..3]
 Boolean | Integer   — union
 "auto" | Float
 false | Size3D
-Box<Integer>        — generic application (Box is a StructType with <generics>)
+Box<Integer>        — generic application (Box is a StructType with <genericTypes>)
 _self
 T                   — generic parameter reference
 ```
@@ -635,9 +635,9 @@ Generic type parameters are declared on **StructType** (or other TypeBlock) defi
   <type>com.foo.Box</type>
   <baseType>org.blockml.core.StructType</baseType>
 
-  <generics>
-    <generic name="T" baseType="org.blockml.core.TypeBlock"/>
-  </generics>
+  <genericTypes>
+    <genericType name="T" baseType="org.blockml.core.TypeBlock"/>
+  </genericTypes>
 
   <properties>
     <property name="value" type="T"/>
@@ -653,7 +653,7 @@ Generic type parameters are declared on **StructType** (or other TypeBlock) defi
 
 At validate time the compiler substitutes each placeholder (`T`) with the concrete type argument. Each argument must satisfy the parameter's `baseType` constraint (`BML_GENERIC_CONSTRAINT_VIOLATION` on mismatch).
 
-Generic parameters (`T`) and `_self` in type positions are type-expression references — resolved from the defining Block's `<generics>` or effective Block type respectively.
+Generic parameters (`T`) and `_self` in type positions are type-expression references — resolved from the defining Block's `<genericTypes>` or effective Block type respectively.
 
 ---
 
@@ -722,7 +722,7 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 | `<composition>` | allowed | EnumType: `_values` only; others: definition-level only | forbidden |
 | `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden |
 | `<subTypes>` | allowed | allowed | forbidden |
-| `<generics>` | allowed | allowed | forbidden |
+| `<genericTypes>` | allowed | allowed | forbidden |
 | `<properties>` | allowed | StructType + PrimitiveType branch | forbidden |
 | `<implTypes>` | allowed | forbidden | forbidden |
 | Meta property `id` on instances | yes (always) | yes (always) | yes (always) |

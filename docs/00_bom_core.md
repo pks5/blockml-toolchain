@@ -1395,7 +1395,7 @@ BlockML has three TypeBlock kinds only: **Primitive**, **Enum**, **Struct**. Uni
 ```text
 Union:        "auto" | Float · false | T · Boolean | StudType
 Collection:   Integer[] · Size3D[1..3]
-Generic use:  Box<Integer>   (Box is a StructType with <generics>)
+Generic use:  Box<Integer>   (Box is a StructType with <genericTypes>)
 ```
 
 Legacy wrapper types (`AutoOr<T>`, `NoneOr<T>`, `Array<T>`, …) are **obsolete** — use union and multiplicity syntax directly.
