@@ -25,6 +25,26 @@
   <allowedSubBlockTypes />
 
   <!-- Native MB properties only — no custom properties on NativeBlock instances -->
+  <properties>
+    <property name="base" type="org.blockml.type.Boolean" defaultValue="true">
+      
+    </property>
+    <property name="baseCutoutType" type="com.machineblocks.type.BaseCutoutType" defaultValue="com.machineblocks.type.BaseCutoutType::STANDARD">
+      
+    </property>
+    <property name="scale" type="org.blockml.type.Float" defaultValue="1.0">
+      
+    </property>
+    <property name="stabilizerExpansion" type="org.blockml.type.Integer" defaultValue="2">
+      
+    </property>
+    <property name="text" type="org.blockml.type.String" defaultValue="">
+      
+    </property>
+    <property name="size" type="com.machineblocks.type.Size3d" defaultValue="[1, 1, 1]">
+      
+    </property>
+  </properties>
 
   <aggregations>
     <aggregation name="children"

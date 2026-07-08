@@ -20,9 +20,9 @@
 
   <abstract>true</abstract>
 
-  <allowedSubBlockTypes>
-    <allowedSubBlockType type="org.blockml.core.EnumTypeValue" />
-  </allowedSubBlockTypes>
-
-  
+  <aggregations>
+    <aggregation name="_values"
+                 type="_self[]"
+                 default="true" />
+  </aggregations>
 </block>

@@ -21,7 +21,7 @@
   <abstract>true</abstract>
 
   <aggregations>
-    <aggregation name="_customData"
+    <aggregation name="customData"
                  type="org.blockml.core.CustomData[]" />
   </aggregations>
 

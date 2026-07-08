@@ -18,16 +18,16 @@
   <baseType>org.blockml.core.EnumType</baseType>
   <version>1.0.0</version>
 
-  <subBlocks>
-    <block>
-        <documentation>Standard Cutout.</documentation>
-        <name>Standard</name>
-        <baseType>org.blockml.core.EnumTypeValue</baseType>
-    </block>
-    <block>
-      <documentation>No Cutout</documentation>
-      <name>None</name>
-      <baseType>org.blockml.core.EnumTypeValue</baseType>
-    </block>
-  </subBlocks>
+  <properties>
+    <property name="value" type="String">
+      <documentation>The value of the enum.</documentation>
+    </property>
+  </properties>
+
+  <composition export="true">
+      <BaseCutoutType id="NONE" value="none" />
+      <BaseCutoutType id="STANDARD" value="standard" />
+      <BaseCutoutType id="GROOVE" value="groove" />
+      <BaseCutoutType id="STUDS" value="studs" />
+  </composition>
 </block>

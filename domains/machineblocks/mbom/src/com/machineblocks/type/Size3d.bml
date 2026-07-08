@@ -1,0 +1,32 @@
+<!--
+  BlockML Core — enum type branch (closed value sets)
+
+  FQN: org.blockml.core.EnumType
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation></documentation>
+
+  <name>Size3d</name>
+  <fullQualifiedName>com.machineblocks.type.Size3d</fullQualifiedName>
+  <baseType>org.blockml.core.TypeBlock</baseType>
+  <version>1.0.0</version>
+
+  <properties>
+    <property name="x" type="org.blockml.type.Float">
+      <documentation>Size in X direction.</documentation>
+    </property>
+    <property name="y" type="org.blockml.type.Float">
+      <documentation>Size in Y direction.</documentation>
+    </property>
+    <property name="z" type="org.blockml.type.Float">
+      <documentation>Size in Z direction.</documentation>
+    </property>
+  </properties>
+</block>
