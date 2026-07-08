@@ -159,6 +159,52 @@ Result:  6 hex characters  (e.g. "a3f7c2")
 
 Auto-generated IDs are deterministic across compile runs. They may appear in generated output (SCAD instance IDs) but are not intended for cross-references.
 
+### Qualified Block Instance References
+
+A Block instance in another document is referenced by **`{BlockFQN}::{id}`** — the FQN of the **enclosing Block definition** (the document that owns the composition) plus the target instance's `id` meta property:
+
+```text
+Format:     {EnclosingBlockFQN}::{instanceId}
+
+Examples:
+  com.machineblocks.bricks.StandardPresets::brick-2x4
+  com.myproject.enclosures.DefaultEnclosure::floor
+```
+
+Used in member values that reference other instances — e.g. `appliedPresets`, `Step.part`, and any association typed as a Block reference.
+
+A qualified reference is valid **only when both** conditions hold:
+
+**1. Export on the target composition.** The composition that contains the target instance must declare `export="true"`. Only instances in an exported composition are visible for qualified references.
+
+```xml
+<composition aggregation="_presets" export="true">
+  <bricks:Standard id="brick-2x4" version="3.0.0" size="[2, 4, 3]" />
+</composition>
+```
+
+Without `export="true"` on that composition, `com.machineblocks.bricks.StandardPresets::brick-2x4` is invalid → `BML_UNEXPORTED_INSTANCE_REF`.
+
+**2. Static target.** The target instance must be statically resolvable at validate time:
+
+```text
+Target id     — explicit literal (not ${ … }); not produced only by bml:each expansion
+Reference     — literal token in the attribute value (not wrapped in ${ … })
+```
+
+```xml
+<!-- ✓ valid reference target -->
+<bricks:Standard id="brick-2x4" … />
+
+<!-- ✗ not referencable via FQN::id -->
+<bricks:Standard bml:each="i : ${ n }" id="${ 'p_' + i }" … />
+<bricks:Standard id="${ presetId }" … />
+```
+
+Dynamic references → `BML_NON_STATIC_INSTANCE_REF`.
+
+Same-document references (unqualified id only, e.g. `appliedPresets="brick-2x4"` within the same Block) resolve within the enclosing Block's aggregations and do not require `export="true"`. The export rule applies to **`{BlockFQN}::{id}`** references only.
+
 **BOM storage:** the parser stores `id` only when authored. Auto-IDs are not written into `BomDocument` — see `12_bom_object_model.md` — Instance ID Rules.
 
 ---
@@ -757,6 +803,7 @@ A Composition fills an Aggregation with concrete child Block instances. It defin
 
 ```text
 aggregation   — name of the target Aggregation
+export        — optional; export="true" marks instances in this composition as referencable via {EnclosingBlockFQN}::{id}
 children      — ordered list of child Block instances
 ```
 
@@ -982,7 +1029,7 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a Block defi
 ```text
 fullQualifiedName — FQN of this preset block (e.g. com.machineblocks.bricks.StandardPresets)
 version           — semantic version
-composition       — Block instances in aggregation _presets
+composition       — Block instances in aggregation _presets; use export="true" for cross-file {FQN}::{id} references
 ```
 
 Each preset instance in `_presets`:
@@ -1006,6 +1053,8 @@ Multiple preset blocks can target the same Block type — from different authors
 Example:
   com.machineblocks.bricks.StandardPresets::brick-2x4
 ```
+
+Qualified references require `export="true"` on the target composition and a **literal static `id`** on the target instance — see Instance Identity → Qualified Block Instance References.
 
 ### Preset in Compositions
 

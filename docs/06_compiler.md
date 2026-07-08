@@ -172,7 +172,8 @@ ${ a + b - 1 }                             — arithmetic
 Validates the BOM graph for semantic correctness:
 
 ```text
-- Cross-instance references resolve to explicit authored id (blockId, placeId)
+- Cross-instance references resolve to explicit authored id (blockId, placeId, FQN::id)
+- Qualified `{BlockFQN}::{id}` references require `export="true"` on the target composition and static literal ids
 - bml:each elements have explicit id
 - Referenced block types exist at the **exact pinned version** (no implicit latest)
 - Composition child member values are valid for the referenced block type
@@ -452,7 +453,9 @@ BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
 BML_MISSING_VERSION           — version missing on external block instance reference (always error)
 BML_UNKNOWN_VERSION           — version specified but no matching BlockDefinition in TypeRegistry
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit id
-BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId does not match any explicit id in target aggregation
+BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
+BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without export="true"
+BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed defaultValue expressions
 BML_PRESET_CYCLE              — circular dependency in appliedPresets chain

@@ -401,6 +401,12 @@ appliedPresets="brick-1x1 com.other.Presets::color-red"
 
 Preset instances in `_presets` composition map like any other Block instance. The `name` attribute maps to `memberValues.name`; `id` maps to `memberValues.id`.
 
+```text
+<composition aggregation="_presets" export="true">  →  CompositionTemplate.export = true
+```
+
+Qualified `{BlockFQN}::{id}` references (e.g. in `appliedPresets`) validate against exported compositions with static target ids — see `00_bom_core.md` — Qualified Block Instance References.
+
 ### Contract validation (stage [8])
 
 ```text

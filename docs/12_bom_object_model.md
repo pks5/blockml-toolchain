@@ -450,8 +450,13 @@ A Composition fills an Aggregation with a tree of nodes. `bml:*` directives foll
 
 ```typescript
 interface CompositionTemplate {
-  /** Target aggregation name — e.g. "_parts", "_blocks" */
+  /** Target aggregation name — e.g. "_parts", "_blocks", "_presets" */
   aggregationName: string
+  /**
+   * export="true" on <composition> — children with explicit static id
+   * are referencable via {EnclosingBlockFQN}::{id} from other documents.
+   */
+  export?: boolean
   /** bml:with on <composition> */
   directives?: DirectiveAttribute[]
   children: CompositionNode[]
@@ -601,8 +606,50 @@ Cross-references within the same composition scope are validated against **autho
 
 ```text
 _presets child with id="wall"           ← target
-_parts child appliedPresets="wall"       ← reference  ✓
+_parts child appliedPresets="wall"       ← reference  ✓  (same document, unqualified)
+```
 
+### Qualified references (`{BlockFQN}::{id}`)
+
+References to instances in **another Block definition** use the qualified form:
+
+```text
+com.machineblocks.bricks.StandardPresets::brick-2x4
+```
+
+Valid only when:
+
+```text
+1. Target composition has export="true"
+2. Target instance has explicit literal id (no Expression, not bml:each-only)
+3. Reference attribute value is a literal token (not ${ … })
+```
+
+```text
+<!-- Target document: StandardPresets.mbml -->
+<composition aggregation="_presets" export="true">
+  <bricks:Standard id="brick-2x4" … />     ← referencable
+</composition>
+
+<!-- Referencing document -->
+<bricks:Standard appliedPresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />  ✓
+
+<!-- Composition without export -->
+<composition aggregation="_presets">
+  <bricks:Standard id="brick-2x4" … />
+</composition>
+→ com.machineblocks.bricks.StandardPresets::brick-2x4  ✗  BML_UNEXPORTED_INSTANCE_REF
+
+<!-- Dynamic target or reference -->
+<bricks:Standard id="${ presetId }" … />                              ✗  BML_NON_STATIC_INSTANCE_REF
+<bricks:Standard appliedPresets="${ ref }" … />                      ✗  BML_NON_STATIC_INSTANCE_REF
+```
+
+Same-document unqualified ids (`appliedPresets="brick-2x4"`) do not require `export="true"`.
+
+Local validation examples:
+
+```text
 _presets child without id               ← target
 _parts child appliedPresets="wall"     ← reference  ✗  BML_MISSING_ID on target preset
 
@@ -890,7 +937,8 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  baseType exists in TypeRegistry
 ✓  resolveEffectiveMembers() — property/capability references in expressions
 ✓  External instance references have exact pinned version (BML_MISSING_VERSION / BML_UNKNOWN_VERSION)
-✓  Cross-instance references (blockId, placeId) resolve to explicit authored id
+✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
+✓  Qualified FQN::id references target export="true" compositions with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
 ✓  Sub-Block baseType ∈ parent's allowedSubBlockTypes (domain rule)
 ✓  Expression result types match member types
@@ -930,7 +978,9 @@ BML_MISSING_DOCUMENTATION     — root <block> lacks <documentation> (warning V1
 BML_MISSING_VERSION           — version absent on external BlockInstance reference (always error)
 BML_UNKNOWN_VERSION           — version present but no matching BlockDefinition in TypeRegistry
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit id
-BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId does not match any explicit id in target aggregation
+BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
+BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without export="true"
+BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
 BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members
 BML_RESERVED_PROPERTY_NAME    — property name "id" (reserved meta property)
 BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a TypeBlock

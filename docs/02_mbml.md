@@ -701,6 +701,7 @@ A Composition fills an Aggregation with concrete child Block instances. It is th
 
 ```text
 aggregation   — name of the Aggregation to fill (optional if only one exists)
+export        — optional; export="true" exposes children with static id for {EnclosingBlockFQN}::{id} references
 ```
 
 Child elements inside `<composition>` are Block instances. Each instance:
@@ -1420,7 +1421,7 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
   <baseType>com.machineblocks.core.Block</baseType>
   <version>3.0.0</version>
 
-  <composition aggregation="_presets">
+  <composition aggregation="_presets" export="true">
 
     <bricks:Standard id="brick-1x1" name="Brick 1x1" version="3.0.0" size="[1, 1, 3]" />
 
@@ -1458,6 +1459,8 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
 
 **`appliedPresets`** — space-separated preset ids on any MachineBlocks Block instance. Local ids resolve within the enclosing Block's `_presets`; cross-file entries use `{BlockFQN}::{id}`. Applied left-to-right; later entries override earlier. Own instance properties override all applied presets.
 
+Qualified `{BlockFQN}::{id}` references require the target composition to declare `export="true"` and the target instance to have a **literal static `id`** — see `00_bom_core.md` — Qualified Block Instance References.
+
 Presets can reference other presets — preset instances in `_presets` may themselves carry `appliedPresets`, forming an inheritance chain.
 
 ### Preset Reference Syntax
@@ -1468,6 +1471,16 @@ Presets can reference other presets — preset instances in `_presets` may thems
 Example:
   com.machineblocks.bricks.StandardPresets::brick-2x4
 ```
+
+Requirements for qualified references:
+
+```text
+1. Target <composition … export="true">
+2. Target instance: literal id (no ${ … }, not bml:each-only)
+3. Reference: literal attribute value (not ${ … })
+```
+
+Diagnostics: `BML_UNEXPORTED_INSTANCE_REF` · `BML_NON_STATIC_INSTANCE_REF`
 
 ### Preset in Compositions
 
@@ -1739,7 +1752,9 @@ unknown version on external instance → BML_UNKNOWN_VERSION (error)
 same-document Sub-Block instance     → version not required
 id missing on referenced instance    → BML_MISSING_ID
 id missing on bml:each element       → BML_MISSING_ID
-appliedPresets / Step.part unresolvable  → BML_UNRESOLVABLE_INSTANCE_REF
+appliedPresets / Step.part unresolvable     → BML_UNRESOLVABLE_INSTANCE_REF
+qualified FQN::id without export="true"     → BML_UNEXPORTED_INSTANCE_REF
+qualified FQN::id with Expression id/ref    → BML_NON_STATIC_INSTANCE_REF
 anonymous static child without id    → auto-ID after directive expansion (not stored in BOM)
 _steps missing or empty       → assembly order = document order of _parts
 ```
