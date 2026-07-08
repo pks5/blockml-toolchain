@@ -56,7 +56,7 @@ Ordinal = index in `members[]` after mapping. Used by render targets and by Stru
 |---|---|
 | **Directives** | Stored as `directives[]` on the element — not expanded at parse time |
 | **Data attributes** | `data:*` → `dataAttributes[]` with uninterpreted values (not a `bml:` directive) |
-| **Registry** | **Removed.** Sibling value sharing via `bml:with` on `<composition>` or `<bml:block>` |
+| **Registry** | **Removed.** Sibling value sharing via `bml:with` on `<composition>` or `<bml:container>` |
 | **Attribute classification** | Fixed priority chain — see § Attribute Classification below |
 | **Unknown member attributes** | Warning `BML_UNKNOWN_PROPERTY` at validate (custom property assumed) |
 | **Unknown `bml:*` attributes** | Error `BML_UNKNOWN_DIRECTIVE` at map time |

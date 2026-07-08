@@ -42,11 +42,11 @@ Namespaces          xmlns:bricks="com.machineblocks.bricks"
                     → Block types used directly as element names: <bricks:StandardBrick />
                     → No need for explicit type="..." attributes
 
-Attribute namespaces bml:each, bml:if, bml:block
+Attribute namespaces bml:each, bml:if, bml:container
                     → Clean separation of directives from Block properties
                     → No equivalent mechanism in JSON
 
-Mixed content       <bml:block> with heterogeneous children
+Mixed content       <bml:container> with heterogeneous children
                     → Natural in XML, awkward in JSON arrays
 
 CDATA               <![CDATA[ ... ]]> for inline Function bodies
@@ -831,7 +831,7 @@ See `00_bom_core.md` — Expression System for the full specification.
 
 ### Sharing Values Between Siblings
 
-Sibling child Blocks within the same Composition share computed values via **`bml:with`** on a common ancestor — typically `<composition>` or a wrapping `<bml:block>`:
+Sibling child Blocks within the same Composition share computed values via **`bml:with`** on a common ancestor — typically `<composition>` or a wrapping `<bml:container>`:
 
 ```xml
 <composition bml:with="totalHeight = ${ size[2] }">
@@ -911,9 +911,9 @@ BML Directives are special attributes in the `bml:` namespace that control struc
 |---|---|---|
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
 | `bml:version` | Block instances | External block reference version (required when type is from another file) |
-| `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
-| `bml:each` | `<bml:block>`, Block instances | Loop |
-| `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
+| `bml:with` | `<composition>`, `<bml:container>`, Block instances | Local variable scope |
+| `bml:each` | `<bml:container>`, Block instances | Loop |
+| `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
 | `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` in BOM — renderer may consume. |
 
 Bare `id=` or `version=` on composition instances are **member values** — same as any other attribute. Use `bml:id` / `bml:version` for composition meta.
@@ -968,13 +968,13 @@ For numeric loops, `i` equals `stat.index`. `stat.size` equals the numeric value
     size="[4, 4, 1]" />
 ```
 
-### `bml:block` — Virtual Container
+### `bml:container` — Virtual Container
 
 Produces no Block output itself — groups child Blocks for shared directives:
 
 ```xml
 <!-- Loop over a group of Blocks -->
-<bml:block bml:each="i, stat : ${ numberOfSamples }">
+<bml:container bml:each="i, stat : ${ numberOfSamples }">
     <Calibrator.Base
         offset="${ [0, i * -3, 0] }"
         label="${ rows[i].label }"
@@ -984,13 +984,13 @@ Produces no Block output itself — groups child Blocks for shared directives:
         offset="${ [0, i * -3, 0] }"
         valueStart="${ rows[i].valueStart }"
         valueStep="${ rows[i].valueStep }" />
-</bml:block>
+</bml:container>
 
 <!-- Conditional group -->
-<bml:block bml:if="${ showCorners }">
+<bml:container bml:if="${ showCorners }">
     <ac:Corner offset="[0, 0, 0]"  direction="West" />
     <ac:Corner offset="[12, 0, 0]" direction="East" />
-</bml:block>
+</bml:container>
 ```
 
 ### Dynamic Instance ID
@@ -1015,14 +1015,14 @@ Defines local variables within the scope of an element and its children. Variabl
     size="${ [halfSize, size[1], size[2]] }" />
 
 <!-- Override own property within scope -->
-<bml:block bml:with="numberOfSamples = ${ numberOfSamples + 1 }">
+<bml:container bml:with="numberOfSamples = ${ numberOfSamples + 1 }">
   <Base numberOfSamples="${ numberOfSamples }" />
-</bml:block>
+</bml:container>
 
 <!-- Multiple variables — comma-separated -->
-<bml:block bml:with="w = ${ size[0] }, h = ${ size[2] - 1 }">
+<bml:container bml:with="w = ${ size[0] }, h = ${ size[2] - 1 }">
   <core:NativeBlock size="${ [w, size[1], h] }" />
-</bml:block>
+</bml:container>
 
 <!-- Share values between sibling instances (replaces former registry pattern) -->
 <composition bml:with="totalHeight = ${ size[2] }">
@@ -1034,7 +1034,7 @@ Defines local variables within the scope of an element and its children. Variabl
 **Allowed on:**
 ```text
 <composition>     — scope for all direct children
-<bml:block>       — scope for block's children
+<bml:container>       — scope for container's children
 Block instances   — scope for that instance only (properties on the element)
 ```
 
@@ -1283,8 +1283,8 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
   </subBlocks>
 
   <composition>
-    <!-- Four calibration rows via bml:block loop -->
-    <bml:block bml:each="row, stat : ${ rows }">
+    <!-- Four calibration rows via bml:container loop -->
+    <bml:container bml:each="row, stat : ${ rows }">
       <Base
           bml:id="${ 'base_' + stat.index }"
           offset="${ [0, stat.index * -3, 0] }"
@@ -1301,7 +1301,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
           numberOfSamples="${ numberOfSamples }"
           valueStart="${ row.valueStart }"
           valueStep="${ row.valueStep }" />
-    </bml:block>
+    </bml:container>
   </composition>
 
 </block>

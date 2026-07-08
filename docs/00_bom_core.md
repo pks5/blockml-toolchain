@@ -931,11 +931,11 @@ The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
 | `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` — renderer may consume. |
-| `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
-| `bml:each` | `<bml:block>`, Block instances | Loop |
+| `bml:with` | `<composition>`, `<bml:container>`, Block instances | Local variable scope |
+| `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
 | `bml:version` | Block instances | External block reference version (required when type is from another file) |
-| `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional |
+| `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
 
 Bare `id=` / `version=` on instances are member values when the Block type declares such Properties.
 
@@ -990,23 +990,23 @@ Includes a Block instance only when the condition is true (`bml:if`) or false (`
     size="[4, 4, 1]" />
 ```
 
-### `bml:block` — Virtual Container
+### `bml:container` — Virtual Container
 
 A container that produces no Block output itself but allows directives to apply to a group of child Blocks:
 
 ```xml
-<bml:block bml:each="i, stat : ${ numberOfSamples }">
+<bml:container bml:each="i, stat : ${ numberOfSamples }">
     <Calibrator.Base
         offset="${ [0, i * -3, 0] }"
         label="${ rows[i].label }" />
     <Calibrator.StudDiameter
         offset="${ [0, i * -3, 0] }" />
-</bml:block>
+</bml:container>
 
-<bml:block bml:if="${ showOptional }">
+<bml:container bml:if="${ showOptional }">
     <ac:Corner offset="[0, 0, 0]" />
     <ac:Corner offset="[12, 0, 0]" />
-</bml:block>
+</bml:container>
 ```
 
 ### Dynamic Instance ID
@@ -1361,7 +1361,7 @@ Operators: arithmetic `+  -  *  /  %`, comparison `>  <  ==  !=  >=  <=`.
 - Property references: current Block instance only (no prefix)
 - No access to parent, grandparent, or sibling Block properties
 - Direction is always parent → child (top-down only)
-- bml:with variables: visible on the element and all descendants (use on <composition> or <bml:block> to share values between siblings)
+- bml:with variables: visible on the element and all descendants (use on <composition> or <bml:container> to share values between siblings)
 - @bean references: only beans declared as Aggregations on the current Block
 - #built-in references: always available (inherited via baseType)
 - Model binding context: inherited from parent Aggregation

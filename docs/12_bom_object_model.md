@@ -185,7 +185,7 @@ interface BlockDefinition {
 
   /**
    * Composition templates — one per aggregation filled.
-   * May contain BlockInstanceNode and VirtualBlockNode children.
+   * May contain BlockInstanceNode and VirtualContainerNode children.
    * bml:with may appear on the composition itself.
    */
   compositions: CompositionTemplate[]
@@ -530,7 +530,7 @@ interface CompositionTemplate {
 
 type CompositionNode =
   | BlockInstanceNode
-  | VirtualBlockNode
+  | VirtualContainerNode
 
 interface BlockInstanceNode {
   kind: "blockInstance"
@@ -540,9 +540,9 @@ interface BlockInstanceNode {
   source?: SourceLocation
 }
 
-interface VirtualBlockNode {
-  kind: "virtualBlock"
-  /** bml:each, bml:if, bml:unless, bml:with on <bml:block> */
+interface VirtualContainerNode {
+  kind: "virtualContainer"
+  /** bml:each, bml:if, bml:unless, bml:with on <bml:container> */
   directives?: DirectiveAttribute[]
   children: CompositionNode[]
   source?: SourceLocation
@@ -559,9 +559,9 @@ interface VirtualBlockNode {
 |---|---|---|
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
 | `bml:version` | Block instances | External block reference version |
-| `bml:with` | `<composition>`, `<bml:block>`, Block instances | Local variable scope |
-| `bml:each` | `<bml:block>`, Block instances | Loop |
-| `bml:if`, `bml:unless` | `<bml:block>`, Block instances | Conditional inclusion |
+| `bml:with` | `<composition>`, `<bml:container>`, Block instances | Local variable scope |
+| `bml:each` | `<bml:container>`, Block instances | Loop |
+| `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional inclusion |
 | `data:*` | Block definitions and Block instances only | **Not** a `bml:` directive. Parsed into `dataAttributes[]` — values not evaluated. |
 
 `data:*` is only valid on elements that extend `org.blockml.core.Block`. It must not appear on `<aggregation>`, `<capability>`, or other non-Block elements.

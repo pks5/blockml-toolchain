@@ -602,7 +602,7 @@ The stat variable name is arbitrary — choose any valid identifier. This is ess
 **Nested loops — named stat variables avoid collision:**
 
 ```xml
-<bml:block bml:each="x, xStat : ${ columns }">
+<bml:container bml:each="x, xStat : ${ columns }">
   <core:NativeBlock
       bml:each="y, yStat : ${ rows }"
       bml:id="${ 'brick_' + x + '_' + y }"
@@ -614,7 +614,7 @@ The stat variable name is arbitrary — choose any valid identifier. This is ess
         !yStat.first ? [{ face: 'y-', axis: 'z', type: 'female' }] : [],
         !yStat.last  ? [{ face: 'y+', axis: 'z', type: 'male'   }] : []
       ) }" />
-</bml:block>
+</bml:container>
 ```
 
 The outer loop's stat (`xStat`) remains visible inside the inner loop's scope.
@@ -656,15 +656,15 @@ Syntax:  bml:unless="${ expression }"
 
 Includes the Block only when the expression evaluates to `false`. Negation of `bml:if`.
 
-### `bml:block`
+### `bml:container`
 
 A virtual container that produces no Block output but applies directives to a group of children:
 
 ```xml
-<bml:block bml:each="i : ${ numberOfSamples }">
+<bml:container bml:each="i : ${ numberOfSamples }">
     <Calibrator.Base  offset="${ [0, i * -3, 0] }" ... />
     <Calibrator.StudDiameter offset="${ [0, i * -3, 0] }" ... />
-</bml:block>
+</bml:container>
 ```
 
 ### Dynamic Instance ID
@@ -686,7 +686,7 @@ Syntax:  bml:with="var = ${ expression }"
 
 Allowed on:
   <composition>
-  <bml:block>
+  <bml:container>
   <? extends org.blockml.core.Block>
 ```
 
@@ -699,15 +699,15 @@ Defines local variables visible only within the element and its descendants. Var
     offset="${ [half, 0, 0] }" />
 
 <!-- Multiple variables -->
-<bml:block bml:with="w = ${ size[0] - 1 }, h = ${ size[2] - 2 }">
+<bml:container bml:with="w = ${ size[0] - 1 }, h = ${ size[2] - 2 }">
   <core:NativeBlock size="${ [w, size[1], h] }" />
   <core:NativeBlock size="${ [w, size[1], 1] }" offset="${ [0, 0, h] }" />
-</bml:block>
+</bml:container>
 
 <!-- Override own property within scope -->
-<bml:block bml:with="numberOfSamples = ${ numberOfSamples + 1 }">
+<bml:container bml:with="numberOfSamples = ${ numberOfSamples + 1 }">
   <Base numberOfSamples="${ numberOfSamples }" />
-</bml:block>
+</bml:container>
 ```
 
 **Scope rules:**
@@ -749,7 +749,7 @@ bml:each loop variable:
 
 bml:with variable:
   — visible on the element and all descendants
-  — use on <composition> or <bml:block> to share values between sibling instances
+  — use on <composition> or <bml:container> to share values between sibling instances
   — shadows outer variables of the same name
 
 defaultValue expressions:
@@ -1255,7 +1255,7 @@ Built-ins:       #math.min/max/abs/floor/ceil/round/round(x,n)/pow/sqrt/clamp
                  #strings.concat/length
                  #lists.size/get/first/last/sequence
 bml: directives: bml:each (numeric + collection), bml:if, bml:unless,
-                 bml:block, bml:with
+                 bml:container, bml:with
 FunctionBlock:   Sub-Blocks with type="org.blockml.language.OpenSCAD" implementations (specified;
                  callable via @bean — deferred in V1)
 ```

@@ -452,7 +452,7 @@ Expressions are parsed into typed **`ExpressionNode`** trees — not evaluated a
 
 ### Sharing Values Between Siblings
 
-Sibling child Blocks within the same Composition share computed values via **`bml:with`** on `<composition>` or a wrapping `<bml:block>` — not via a separate registry. See `02_mbml.md` — `bml:with`.
+Sibling child Blocks within the same Composition share computed values via **`bml:with`** on `<composition>` or a wrapping `<bml:container>` — not via a separate registry. See `02_mbml.md` — `bml:with`.
 
 ---
 
