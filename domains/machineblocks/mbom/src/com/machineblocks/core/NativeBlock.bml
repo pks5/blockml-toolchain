@@ -41,8 +41,9 @@
     <property name="text" type="org.blockml.type.String" defaultValue="">
       
     </property>
+    <!-- Value specified as ordered array [x, y, z] (order of properties definition), alternative: { x: 1, y: 1, z: 1 } -->
     <property name="size" type="com.machineblocks.type.Size3d" defaultValue="[1, 1, 1]">
-      
+        
     </property>
   </properties>
 

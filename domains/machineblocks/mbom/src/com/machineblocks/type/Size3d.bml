@@ -15,7 +15,7 @@
 
   <name>Size3d</name>
   <fullQualifiedName>com.machineblocks.type.Size3d</fullQualifiedName>
-  <baseType>org.blockml.core.TypeBlock</baseType>
+  <baseType>org.blockml.core.StructType</baseType>
   <version>1.0.0</version>
 
   <properties>

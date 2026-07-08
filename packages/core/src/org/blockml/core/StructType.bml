@@ -1,0 +1,24 @@
+<!--
+  BlockML Core — primitive type branch
+
+  FQN: org.blockml.core.PrimitiveType
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <documentation></documentation>
+
+  <name>StructType</name>
+  <fullQualifiedName>org.blockml.core.StructType</fullQualifiedName>
+  <baseType>org.blockml.core.TypeBlock</baseType>
+  <version>1.0.0</version>
+
+  <abstract>true</abstract>
+
+  
+</block>
