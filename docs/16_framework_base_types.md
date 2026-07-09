@@ -48,14 +48,18 @@ Optional elements on any `<block>` definition (framework or user):
 ### `<abstract>`
 
 ```xml
-<abstract>true</abstract>
+<abstract />
 ```
+
+Equivalent to `<abstract>true</abstract>`. Omit or use `<abstract>false</abstract>` for concrete types.
 
 ```text
 true   — type exists for inheritance and validation; must not be used as
          composition instance typeFqn (except as baseType on definitions)
 false  — default when omitted; concrete derivable type
 ```
+
+Prefer the self-closing form for root flags set once and not overridable by children.
 
 Framework types `org.blockml.core.Block`, `org.blockml.service.*` (abstract bases), `com.machineblocks.core.Block` are `abstract=true`.
 
@@ -64,14 +68,18 @@ Concrete blocks (`Wall`, `StandardBrick`, `Math`) omit `<abstract>` or set `fals
 ### `<final>`
 
 ```xml
-<final>true</final>
+<final />
 ```
+
+Equivalent to `<final>true</final>`. Omit or use `<final>false</final>` when the type may be extended.
 
 ```text
 true   — no Block definition may use this type as baseType
          (BML_FINAL_BASE_TYPE)
 false  — default when omitted
 ```
+
+Prefer the self-closing form for root flags set once and not overridable by children.
 
 `com.machineblocks.core.NativeBlock` is `final=true`.
 

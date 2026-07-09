@@ -258,8 +258,8 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <documentation>…</documentation>             → block.documentation (trimmed text)
 <name>…</name>                               → block.name
 <type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
-<abstract>true</abstract>                    → block.abstract = true
-<final>true</final>                          → block.final = true
+<abstract />                                 → block.abstract = true  (equivalent: <abstract>true</abstract>)
+<final />                                    → block.final = true     (equivalent: <final>true</final>)
 <subType type="…"/>                          → block.subTypes[] (explicit override)
 <implType type="…"/>                         → block.implTypes[]
 <contract type="…"/>                        → block.contracts[]   (root block only)

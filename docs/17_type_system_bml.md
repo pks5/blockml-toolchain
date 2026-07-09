@@ -802,7 +802,7 @@ org.blockml.core.Block
   <type>org.blockml.language.OpenSCAD</type>
   <baseType>org.blockml.core.LanguageBlock</baseType>
   <version>1.0.0</version>
-  <abstract>true</abstract>
+  <abstract />
 </block>
 ```
 

@@ -232,7 +232,9 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
 
 ```text
 <abstract>                    — true | false (default false). Abstract types are not instantiable.
+                              — self-closing <abstract /> is equivalent to true (preferred at root)
 <final>                       — true | false (default false). Final types cannot be used as baseType.
+                              — self-closing <final /> is equivalent to true (preferred at root)
 <subTypes>          — override: permitted Sub-Block baseTypes (omit to inherit — see Framework Base Types)
 <implTypes>         — org.blockml.language.* FQNs for <implementation type="...">
 <properties>    — Property declarations. Omit if no custom properties or default overrides needed.
@@ -250,8 +252,8 @@ Framework base types (`org.blockml.core.Block`, `com.machineblocks.core.Block`, 
 ### Type Modifiers
 
 ```xml
-<abstract>true</abstract>
-<final>true</final>
+<abstract />
+<final />
 
 <subTypes>
   <subType type="com.machineblocks.core.Block" />
@@ -308,7 +310,7 @@ Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
   <type>com.foo.IPlaceable</type>
   <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
-  <abstract>true</abstract>
+  <abstract />
   <properties>
     <offset    type="type:Vector3D" />
     <direction type="type:Direction" />

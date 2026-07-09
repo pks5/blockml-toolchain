@@ -24,7 +24,7 @@
   <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
-  <abstract>true</abstract>
+  <abstract />
 
   <subTypes>
     <subType type="core:Block" />
@@ -53,7 +53,7 @@
       <name>Dependency</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
-      <final>true</final>
+      <final />
       <properties>
         <ref type="String">
           <documentation>FQN of the required Library (e.g. com.machineblocks.core.CoreLibrary).</documentation>
@@ -71,7 +71,7 @@
       <name>Schema</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
-      <final>true</final>
+      <final />
       <properties>
         <ref type="String">
           <documentation>Path to the .xsd file relative to the library package root.</documentation>
@@ -87,7 +87,7 @@
       <name>TypeRef</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
-      <final>true</final>
+      <final />
       <properties>
         <ref type="String">
           <documentation>Path to the type .bml file relative to the library package root.</documentation>
@@ -102,7 +102,7 @@
       <name>BlockRef</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
-      <final>true</final>
+      <final />
       <properties>
         <ref type="String">
           <documentation>Path to the block .bml file relative to the library package root.</documentation>

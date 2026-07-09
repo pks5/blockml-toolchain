@@ -17,5 +17,5 @@
   <type>lang:TypeScript</type>
   <baseType>core:LanguageBlock</baseType>
   <version>1.0.0</version>
-  <abstract>true</abstract>
+  <abstract />
 </block>

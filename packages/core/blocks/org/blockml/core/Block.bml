@@ -24,6 +24,6 @@
   <type>core:Block</type>
   <version>1.0.0</version>
 
-  <abstract>true</abstract>
+  <abstract />
 
 </block>

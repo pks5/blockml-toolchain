@@ -24,7 +24,7 @@
   <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
-  <final>true</final>
+  <final />
 
   <!-- Native MB properties only — no custom properties on NativeBlock instances -->
   <properties>

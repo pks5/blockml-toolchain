@@ -23,7 +23,7 @@
   <baseType>bcore:Block</baseType>
   <version>1.0.0</version>
 
-  <final>true</final>
+  <final />
 
   <associations>
     <part type="core:Block"></part>

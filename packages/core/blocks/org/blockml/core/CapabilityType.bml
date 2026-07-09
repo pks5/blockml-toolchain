@@ -19,7 +19,7 @@
   <baseType>core:TypeBlock</baseType>
   <version>1.0.0</version>
 
-  <abstract>true</abstract>
+  <abstract />
 
   <properties>
     <hasInput type="Boolean" readOnly="true">
