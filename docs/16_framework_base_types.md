@@ -138,6 +138,12 @@ name      — parameter identifier used in type references (e.g. type="T")
 baseType  — FQN constraint; concrete type arguments must inherit from this branch
 Usage     — com.foo.Box<org.blockml.type.Integer> at reference sites
 Validator — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
+
+Naming (parse time):
+  name must differ from the Block's <name>           → BML_GENERIC_BLOCK_NAME_COLLISION
+  name must differ from every Sub-Block <name>       → BML_GENERIC_SUBBLOCK_NAME_COLLISION
+  duplicate name among genericType entries           → BML_DUPLICATE_GENERIC
+  <genericTypes> on Sub-Block                        → BML_GENERIC_NOT_ON_ROOT
 ```
 
 See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — GenericType.

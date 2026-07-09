@@ -20,8 +20,6 @@
   <baseType>core:CapabilityType</baseType>
   <version>1.0.0</version>
 
-  <abstract />
-
   <properties>
     <hasOutput>
       <value>true</value>

@@ -770,6 +770,33 @@ Collection property (String[]) → MinItems/MaxItems: T = String[]
 
 Binding rules per constraint FQN are defined in each constraint Block's `<documentation>`. See `18_constraints_and_suggestions.md`.
 
+### Generic parameter naming
+
+Generic parameter names are declared on the root Block only (`<genericTypes>` on Sub-Blocks → `BML_GENERIC_NOT_ON_ROOT`). The parser rejects name collisions:
+
+```text
+<name>Box</name>
+<genericTypes>
+  <genericType name="Box" …/>     → BML_GENERIC_BLOCK_NAME_COLLISION
+</genericTypes>
+
+<name>Library</name>
+<subBlocks>
+  <block><name>Schema</name>…</block>
+</subBlocks>
+<genericTypes>
+  <genericType name="Schema" …/>  → BML_GENERIC_SUBBLOCK_NAME_COLLISION
+</genericTypes>
+```
+
+```text
+BML_GENERIC_BLOCK_NAME_COLLISION    — genericType name equals the Block's <name>
+BML_GENERIC_SUBBLOCK_NAME_COLLISION — genericType name equals a Sub-Block <name> in the same file
+BML_DUPLICATE_GENERIC               — duplicate genericType name (existing)
+```
+
+A generic parameter name must be a distinct identifier — not the Block name, not any Sub-Block name in the same document, and not duplicated among `<genericType>` entries.
+
 ---
 
 ## Contracts

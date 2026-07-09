@@ -154,6 +154,9 @@ interface BlockDefinition {
   /** Final type — cannot be used as baseType on definitions. Default false. */
   final?: boolean
 
+  /** Sub-Block visibility — Sub-Blocks only. Derived from name when omitted. Forbidden on root Blocks. */
+  visibility?: "private" | "protected" | "public"
+
   /** Sub-Block baseTypes permitted in subBlocks[]. undefined = inherit from baseType chain; explicit [] = override to forbid */
   subTypes?: string[]
 
@@ -814,7 +817,7 @@ When parsing a composition child element, the parser resolves `typeFqn` for unqu
 5. Full FQN or TypeRegistry lookup
 ```
 
-Steps 1–3 are **same-document / inheritance scope** — no `bml:version` required on instances. Step 4–5 are external references — `bml:version` required when from another file.
+Steps 1–3 are **same-document / inheritance scope** — no `bml:version` required on instances. Unqualified PascalCase Sub-Block names are valid **only** in steps 1–3 (same BML file). Step 4–5 are external references — `bml:version` required when from another file; Sub-Blocks must use qualified names (`RootBlock.SubBlock`) or prefixed form (`cal:Calibrator.Base`), not bare short names → `BML_SUBBLOCK_UNQUALIFIED_REFERENCE`.
 
 ---
 
@@ -1049,6 +1052,11 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Qualified FQN::id references target bml:exportIds="true" compositions with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
 ✓  Sub-Block baseType ∈ parent's subTypes (domain rule)
+✓  Sub-Block unqualified reference only within same BomDocument
+✓  genericType name ≠ Block name; genericType name ≠ any Sub-Block name in same document
+✓  Sub-Block same name as root Block → qualified reference required at use sites
+✓  Sub-Block visibility derived from name or explicit <visibility>; root Block must not declare visibility
+✓  Sub-Block reference respects visibility scope (private / protected / public)
 ✓  Expression result types match member types
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property value cycles (topological sort)
@@ -1102,7 +1110,9 @@ BML_DIRECTIVE_NOT_ALLOWED     — bml:* on disallowed element (error)
 BML_CUSTOM_DATA_NOT_ALLOWED   — data:* on non-Block element (error)
 BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent
 BML_PROPERTY_CYCLE            — circular property value dependencies
-BML_VISIBILITY_MISMATCH       — visibility attribute does not match naming convention
+BML_VISIBILITY_MISMATCH       — visibility attribute or <visibility> does not match naming convention
+BML_VISIBILITY_ON_ROOT_BLOCK  — <visibility> on root Block
+BML_SUBBLOCK_NOT_IN_SCOPE     — Sub-Block reference outside visibility scope
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — member namespace attribute references undeclared xmlns: prefix

@@ -260,6 +260,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
 <abstract />                                 → block.abstract = true  (equivalent: <abstract>true</abstract>)
 <final />                                    → block.final = true     (equivalent: <final>true</final>)
+<visibility>…</visibility>                   → block.visibility (Sub-Block only; root → BML_VISIBILITY_ON_ROOT_BLOCK)
 <core:Block />                               → block.subTypes[] (direct Block reference in <subTypes>)
 <lang:OpenSCAD />                            → block.languages[] (direct Language reference in <languages>)
 <contract type="…"/>                        → block.contracts[]   (root block only)
@@ -271,6 +272,10 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 Omitted <idea> on root block            → BML_MISSING_IDEA (warning V1)
 Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1)
 Omitted abstract/final                 → false
+Omitted <visibility> on Sub-Block      → derive from <name> (__ → private, _ → protected, else public)
+<visibility> on root Block               → BML_VISIBILITY_ON_ROOT_BLOCK (error)
+<visibility> mismatches <name>           → BML_VISIBILITY_MISMATCH (error)
+Sub-Block reference outside scope        → BML_SUBBLOCK_NOT_IN_SCOPE (error)
 Omitted <subTypes>                     → undefined — inherit effective subTypes from baseType chain
 Empty <subTypes/>                        → block.subTypes = [] (explicit override — forbid Sub-Blocks)
 Omitted languages / contracts / genericTypes → inherit from baseType at validate
@@ -278,6 +283,10 @@ Omitted languages / contracts / genericTypes → inherit from baseType at valida
 Duplicate contract type                → BML_DUPLICATE_CONTRACT (error)
 <genericTypes> on Sub-Block                  → BML_GENERIC_NOT_ON_ROOT (error)
 Duplicate genericType name                   → BML_DUPLICATE_GENERIC (error)
+genericType name equals Block <name>         → BML_GENERIC_BLOCK_NAME_COLLISION (error)
+genericType name equals Sub-Block <name>     → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
+Unqualified Sub-Block reference outside file → BML_SUBBLOCK_UNQUALIFIED_REFERENCE (error)
+Ambiguous Sub-Block short name (same as root) → BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED (error)
 org.blockml.core.Block                   → omits <baseType> (sole inheritance root)
 ```
 

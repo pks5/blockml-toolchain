@@ -459,7 +459,9 @@ BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a compositi
 BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed property value expressions
-BML_VISIBILITY_MISMATCH       — visibility attribute does not match naming convention
+BML_VISIBILITY_MISMATCH       — visibility attribute or <visibility> element does not match naming convention
+BML_VISIBILITY_ON_ROOT_BLOCK  — <visibility> declared on a root Block (Sub-Blocks only)
+BML_SUBBLOCK_NOT_IN_SCOPE     — Sub-Block reference violates visibility (private / protected)
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — namespace attribute references undeclared xmlns: prefix
@@ -487,6 +489,11 @@ BML_FUNCTION_MISSING_MAIN     — no function named after the Capability found i
 BML_FUNCTION_DUPLICATE_MAIN   — more than one function matches the Capability name
 BML_IMPLEMENTATION_UNKNOWN_TYPE — <implementation type="..."> is not a known org.blockml.language.* FQN
 BML_FUNCTION_NO_RUNTIME_IMPL  — Transformation Capability called with non-literal args but no runtime impl
+BML_DUPLICATE_GENERIC           — duplicate genericType name on root Block
+BML_GENERIC_BLOCK_NAME_COLLISION — genericType name equals the Block's <name>
+BML_GENERIC_SUBBLOCK_NAME_COLLISION — genericType name equals a Sub-Block <name> in the same file
+BML_SUBBLOCK_UNQUALIFIED_REFERENCE — bare Sub-Block short name used outside the defining BML file
+BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED — Sub-Block shares root Block name; bare short tag is ambiguous
 BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation type="..."> not listed in baseType languages
 ```
 

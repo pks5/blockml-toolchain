@@ -1132,6 +1132,8 @@ To **forbid** Sub-Blocks on a type whose parent enabled them, declare an explici
 
 If a Sub-Block's `baseType` is not in the parent's effective `subTypes`, the compiler emits `BML_INVALID_SUBBLOCK_TYPE`.
 
+Sub-Blocks follow the same visibility naming convention as members (`__` private, `_` protected, plain public). Optional root-level `<visibility>` on Sub-Blocks only — forbidden on root Blocks (`BML_VISIBILITY_ON_ROOT_BLOCK`). Visibility controls reference scope: private = declaring Block only; protected = declaring Block + child instances; public = anywhere (with qualified cross-file refs). Mismatch → `BML_VISIBILITY_MISMATCH`; out-of-scope reference → `BML_SUBBLOCK_NOT_IN_SCOPE`.
+
 ### FQN Convention
 
 ```text
@@ -1148,12 +1150,16 @@ com.machineblocks.calibration.Calibrator.Base.Strip
 
 ### Short-Name Reference
 
-Within the parent Block's own Composition, Sub-Blocks are referenced by short name without namespace prefix:
+Within the parent Block's own Composition, Sub-Blocks are referenced by short name without namespace prefix — **same BML file only**:
 
 ```xml
 <Base bml:id="base_stud" ... />
 <StudDiameter bml:id="samples_stud" ... />
 ```
+
+From other files or child instances, use the parent Block's namespace and a qualified name (`RootBlock.SubBlock`), full FQN, or prefixed qualified form (`cal:Calibrator.Base`). Bare Sub-Block short names are not resolved across files → `BML_SUBBLOCK_UNQUALIFIED_REFERENCE`.
+
+If a Sub-Block shares the root Block's `<name>`, bare short tags are ambiguous → `BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED`; use `Calibrator.Calibrator`, `cal:Calibrator.Calibrator`, or the full FQN.
 
 ### SCAD Mapping
 

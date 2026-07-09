@@ -235,6 +235,7 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
                               — self-closing <abstract /> is equivalent to true (preferred at root)
 <final>                       — true | false (default false). Final types cannot be used as baseType.
                               — self-closing <final /> is equivalent to true (preferred at root)
+<visibility>                  — Sub-Blocks only: private | protected | public; must match <name>
 <subTypes>          — override: permitted Sub-Block baseTypes (omit to inherit — see Framework Base Types)
 <languages>         — Language references for <implementation type="...">
 <properties>    — Property declarations. Omit if no custom properties or default overrides needed.
@@ -651,6 +652,8 @@ Members may optionally declare an explicit visibility that must match the naming
 ```
 
 A mismatch between `name` and `visibility` is a validation error (`BML_VISIBILITY_MISMATCH`).
+
+The same rules apply to **Sub-Blocks** — see § Sub-Blocks — Sub-Block Visibility. Sub-Blocks may declare optional root-level `<visibility>`; root Blocks must not.
 
 ### Common Member Attributes
 
@@ -1518,7 +1521,80 @@ Sub-Blocks use the same format as the parent Block — all fields as child eleme
     <properties>...</properties>
     <composition>...</composition>
   </block>
+  <block>
+    <name>_Utils</name>
+    <visibility>protected</visibility>
+    <baseType>org.blockml.core.Entity</baseType>
+    <version>1.0.0</version>
+    <capabilities>...</capabilities>
+  </block>
 </subBlocks>
+```
+
+### Sub-Block Visibility
+
+Sub-Blocks follow the **same naming convention as members** (§ Member Visibility). Visibility controls where a Sub-Block type may be referenced in compositions and member types:
+
+| `<name>`     | Visibility  | Reference scope                                      |
+| ------------ | ----------- | ---------------------------------------------------- |
+| `__SubBlock` | private     | declaring Block only                                 |
+| `_SubBlock`  | protected   | declaring Block and child Block instances            |
+| `SubBlock`   | public      | anywhere (subject to cross-file qualified-name rules)|
+
+**private** — referenceable only in the **declaring root Block's** own composition and members. Not in nested Sub-Block compositions. Not from external files.
+
+**protected** — referenceable in the declaring Block and in **child Block instances** (composition descendants). Not from unrelated external Blocks.
+
+**public** — referenceable from anywhere, including other files — using qualified names or FQN as required by § Sub-Block reference scope.
+
+### Optional `<visibility>` on Sub-Blocks
+
+Sub-Blocks may declare an explicit root-level `<visibility>` element. It **must match** the naming convention:
+
+```xml
+<block>
+  <name>__Helper</name>
+  <visibility>private</visibility>
+  ...
+</block>
+
+<block>
+  <name>_Strip</name>
+  <visibility>protected</visibility>
+  ...
+</block>
+
+<block>
+  <name>Base</name>
+  <visibility>public</visibility>
+  ...
+</block>
+```
+
+When `<visibility>` is omitted, the parser **derives** visibility from `<name>` (same rules as members). A mismatch → `BML_VISIBILITY_MISMATCH`.
+
+**Root Blocks must not declare `<visibility>`** — only Sub-Blocks inside `<subBlocks>`. On a root Block → `BML_VISIBILITY_ON_ROOT_BLOCK`.
+
+```text
+Calibrator.bml — root Block:
+  <visibility>public</visibility>     ✗  BML_VISIBILITY_ON_ROOT_BLOCK
+
+Calibrator.bml — Sub-Block _Utils:
+  <visibility>protected</visibility>  ✓  matches _Utils
+
+Calibrator.bml — composition in same file:
+  <Base ... />                        ✓  public Sub-Block
+  <_Utils ... />                      ✓  protected — same Block
+  <__Helper ... />                    ✓  private — same Block only
+
+Calibrator.Base composition (nested Sub-Block):
+  <_Utils ... />                      ✓  protected — child Block
+  <__Helper ... />                    ✗  BML_SUBBLOCK_NOT_IN_SCOPE — private
+
+OtherFile.bml:
+  <cal:Calibrator.Base ... />         ✓  public Sub-Block, qualified ref
+  <cal:Calibrator._Utils ... />       ✗  BML_SUBBLOCK_NOT_IN_SCOPE — protected
+  <cal:Calibrator.__Helper ... />     ✗  BML_SUBBLOCK_NOT_IN_SCOPE — private
 ```
 
 ### FQN Auto-Resolution
@@ -1591,6 +1667,48 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.c
 ```
 
 **Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.BlockLibrary"` (e.g. `BricksLibrary`) still resolves `Schema` by short name — it is a Sub-Block of `org.blockml.core.BlockLibrary`, inherited via the baseType chain.
+
+### Sub-Block reference scope
+
+Unqualified Sub-Block references (PascalCase tag without prefix, or unqualified `type="SubBlockName"`) are permitted **only within the same BML file** where the Sub-Block is defined. The parser resolves them against `subBlocks[]` in that document — not against external files.
+
+```text
+Same file (Calibrator.bml defines Sub-Block Base):
+  <Base bml:id="base_stud" ... />          ✓
+  type="Base" on a member in same file     ✓
+
+Other file (Set.bml composes Calibrator internals):
+  <Base ... />                               ✗  BML_SUBBLOCK_UNQUALIFIED_REFERENCE
+  <cal:Calibrator.Base ... />                ✓  parent Block namespace + qualified name
+  <cal:Calibrator.Base.Strip ... />          ✓  nested Sub-Block
+  xmlns + full FQN on element                ✓  com.machineblocks.calibration.Calibrator.Base
+```
+
+**Rule:** From outside the defining file — including child Block instances in other documents — Sub-Blocks must be referenced with the **parent Block's namespace prefix** and a **qualified name** (`RootBlock.SubBlock`), or with the full FQN. A bare Sub-Block short name is never resolved across files.
+
+Accepted qualified forms:
+
+```text
+Calibrator.Base                              — RootBlock.SubBlock (same package context)
+com.machineblocks.calibration.Calibrator.Base — full FQN
+cal:Calibrator.Base                          — xmlns prefix of parent Block + qualified name
+```
+
+### Sub-Block naming vs parent Block name
+
+A Sub-Block should **not** share the same `<name>` as the root Block that contains it (e.g. root `Calibrator` with Sub-Block `Calibrator`). If it does, the Sub-Block FQN becomes `…Calibrator.Calibrator` and a bare short tag is ambiguous with the root type.
+
+```text
+Root:      <name>Calibrator</name>
+Sub-Block: <name>Calibrator</name>   → FQN …Calibrator.Calibrator  (discouraged)
+
+Reference in same file:
+  <Calibrator />                         ✗  ambiguous — BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED
+  <Calibrator.Calibrator />              ✓
+  <cal:Calibrator.Calibrator />          ✓  (from any file with xmlns:cal)
+```
+
+When the Sub-Block name differs from the root Block name, the short name remains valid **inside the same file only** (see reference scope above).
 
 When referencing a Sub-Block from **outside** the parent Block, use the full FQN:
 
