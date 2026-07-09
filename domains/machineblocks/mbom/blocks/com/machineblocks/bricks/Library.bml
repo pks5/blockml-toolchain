@@ -14,6 +14,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:blockml="org.blockml"
   xmlns:bcore="org.blockml.core"
   xmlns:core="com.machineblocks.core"
   xmlns:type="com.machineblocks.type"
@@ -32,15 +33,12 @@
     <description>
       <value>Standard brick types for MachineBlocks</value>
     </description>
-    <package type="String">
-      <value>com.machineblocks.bricks</value>
-    </package>
   </properties>
 
   <aggregations>
     <_dependencies>
       <composition>
-        <core:CoreLibrary bml:version="3.0.0" />
+        <blockml:Library bml:version="3.0.0" />
       </composition>
     </_dependencies>
 

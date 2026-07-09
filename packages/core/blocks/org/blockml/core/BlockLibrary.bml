@@ -38,9 +38,6 @@
     <description type="String">
       <documentation>Human-readable summary of what this library provides.</documentation>
     </description>
-    <package type="String">
-      <documentation bml:status="status:Draft">The package name of the library.</documentation>
-    </package>
   </properties>
 
   <aggregations>
