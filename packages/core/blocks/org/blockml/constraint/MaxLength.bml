@@ -12,12 +12,15 @@
   "
   xmlns:btype="org.blockml.type"
   xmlns:constraint="org.blockml.constraint"
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Maximum length for a string or collection element.</idea>
+  <idea bml:status="status:Stable">Maximum length for a string or collection element.</idea>
 
-  <documentation>T binds to the property type for scalar String properties, or to the element type when the property is a collection (e.g. String[]). The value property is always Integer — the maximum length threshold.</documentation>
+  <documentation bml:status="status:Stable">T binds to the property type for scalar String properties, or to the element type when the property is a collection (e.g. String[]). The value property is always Integer — the maximum length threshold.</documentation>
 
+  <status>status:Stable</status>
   <name>MaxLength</name>
   <type>constraint:MaxLength</type>
   <baseType>core:Constraint</baseType>
@@ -29,7 +32,7 @@
 
   <properties>
     <value type="Integer">
-      <documentation>Maximum length (inclusive).</documentation>
+      <documentation bml:status="status:Stable">Maximum length (inclusive).</documentation>
     </value>
   </properties>
 

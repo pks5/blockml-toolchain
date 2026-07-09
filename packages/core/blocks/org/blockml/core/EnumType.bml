@@ -8,13 +8,16 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Branch for closed sets of named literal values.</idea>
+  <idea bml:status="status:Stable">Branch for closed sets of named literal values.</idea>
 
-  <documentation>Abstract branch for closed enum ValueTypes. Enum values are Block instances in the
+  <documentation bml:status="status:Stable">Abstract branch for closed enum ValueTypes. Enum values are Block instances in the
     default _values aggregation — no special enum syntax.</documentation>
 
+  <status>status:Stable</status>
   <name>EnumType</name>
   <type>core:EnumType</type>
   <baseType>core:ValueType</baseType>

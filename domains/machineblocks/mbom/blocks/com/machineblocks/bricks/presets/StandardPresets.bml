@@ -18,13 +18,15 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
-  xmlns:core="com.machineblocks.core">
+  xmlns:core="com.machineblocks.core"
+  xmlns:status="org.blockml.status">
 
-  <idea>Named size and color shortcuts for the Standard brick.</idea>
+  <idea bml:status="status:Stable">Named size and color shortcuts for the Standard brick.</idea>
 
-  <documentation>Named property presets for the MachineBlocks Standard brick — sizes, colors, and
+  <documentation bml:status="status:Stable">Named property presets for the MachineBlocks Standard brick — sizes, colors, and
     composite combinations for Customizer and basePresets references.</documentation>
 
+  <status>status:Stable</status>
   <name>StandardPresets</name>
   <type>bricks:StandardPresets</type>
   <baseType>core:Block</baseType>

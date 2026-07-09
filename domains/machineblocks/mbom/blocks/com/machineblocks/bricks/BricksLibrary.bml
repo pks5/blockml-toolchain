@@ -17,13 +17,15 @@
   xmlns:bcore="org.blockml.core"
   xmlns:core="com.machineblocks.core"
   xmlns:type="com.machineblocks.type"
-  xmlns:bricks="com.machineblocks.bricks">
+  xmlns:bricks="com.machineblocks.bricks"
+  xmlns:status="org.blockml.status">
 
-  <idea>Published catalog of MachineBlocks standard brick definitions.</idea>
+  <idea bml:status="status:Stable">Published catalog of MachineBlocks standard brick definitions.</idea>
 
-  <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
+  <documentation bml:status="status:Stable">MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
     preset blocks.</documentation>
 
+  <status>status:Stable</status>
   <name>BricksLibrary</name>
   <type>bricks:BricksLibrary</type>
   <baseType>bcore:BlockLibrary</baseType>

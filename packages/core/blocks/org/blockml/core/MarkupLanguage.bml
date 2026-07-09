@@ -8,13 +8,16 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>A structured markup language for capability implementations.</idea>
+  <idea bml:status="status:Stable">A structured markup language for capability implementations.</idea>
 
-  <documentation>Abstract branch for markup languages — XML and other structured document formats
+  <documentation bml:status="status:Stable">Abstract branch for markup languages — XML and other structured document formats
     used as capability implementation bodies.</documentation>
 
+  <status>status:Stable</status>
   <name>MarkupLanguage</name>
   <type>core:MarkupLanguage</type>
   <baseType>core:Language</baseType>

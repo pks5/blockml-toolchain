@@ -82,15 +82,26 @@ inputType: Float                       → #math.floor(x)   (single primitive �
 
 ---
 
-## Documentation Status
+## Status
 
-Type definitions may carry one of the following status annotations:
+Type and parameter definitions express maturity via **status Block references** — not strings or boolean flags. See `02_mbml.md` — § Status and `00_bom_core.md` — § Status.
 
-**Stable** — defined, MBML parsing complete, SCAD mapping complete.
+Core status blocks:
 
-**Draft** — defined, MBML parsing or SCAD mapping incomplete or untested.
+```text
+status:Stable       — defined, MBML parsing complete, SCAD mapping complete
+status:Draft        — defined; MBML parsing or SCAD mapping incomplete or untested
+status:Stub         — placeholder; shape declared, behaviour not yet specified
+status:Deprecated   — retained for compatibility; do not use in new work
+```
 
-**WIP** — known gap; SCAD implementation and MBOM target are currently misaligned. An explicit note describes what is missing.
+Definition elements carry `<status>status:Draft</status>`. Prose annotations in this document use inline block references:
+
+```text
+Status: status:Draft — known gap; explicit note describes what is missing.
+```
+
+Domain libraries may define additional status blocks (e.g. domain-specific WIP markers). There is no implicit resolution of bare names — always use the `status:` prefix.
 
 ---
 
@@ -478,7 +489,7 @@ SCAD:
 
 ## RoundingRadius
 
-> **Status: WIP**
+> **Status: `status:Draft`**
 > The MBOM canonical form is defined. The SCAD mapping is partially implemented.
 > See `docs/scad-reference/05_types_and_mapping.md` for full details and current
 > implementation status.

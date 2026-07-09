@@ -16,13 +16,15 @@
   xmlns:cap="org.blockml.capability"
   xmlns:core="org.blockml.core"
   xmlns:lang="org.blockml.language"
-  xmlns:service="org.blockml.service">
+  xmlns:service="org.blockml.service"
+  xmlns:status="org.blockml.status">
 
-  <idea>Built-in text utilities callable as #strings in expressions.</idea>
+  <idea bml:status="status:Stable">Built-in text utilities callable as #strings in expressions.</idea>
 
-  <documentation>Built-in strings service. Expression prefix #strings.* — concat, length,
+  <documentation bml:status="status:Stable">Built-in strings service. Expression prefix #strings.* — concat, length,
     substring, and related text utilities.</documentation>
 
+  <status>status:Stable</status>
   <name>Strings</name>
   <type>service:Strings</type>
   <baseType>core:Entity</baseType>
@@ -35,7 +37,7 @@
       type="cap:Transformation"
       inputType="String"
       outputType="String">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Removes leading and trailing whitespace from s.
         Examples:
         #strings.trim(' hello ') → "hello"
@@ -50,7 +52,7 @@
       type="cap:Transformation"
       inputType="String"
       outputType="String">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Converts s to uppercase.
         Examples:
         #strings.toUpperCase('abc') → "ABC"
@@ -65,7 +67,7 @@
       type="cap:Transformation"
       inputType="String"
       outputType="String">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Converts s to lowercase.
         Examples:
         #strings.toLowerCase('ABC') → "abc"
@@ -80,7 +82,7 @@
       type="cap:Transformation"
       inputType="Array<String>"
       outputType="String">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Concatenates all string arguments.
         Examples:
         #strings.concat('a', 'b', 'c') → "abc"
@@ -95,7 +97,7 @@
       type="cap:Transformation"
       inputType="String"
       outputType="Integer">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns the length of s.
         Examples:
         #strings.length('hello') → 5
@@ -110,7 +112,7 @@
       type="cap:Transformation"
       inputType="{ s: String, fragment: String }"
       outputType="Boolean">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns true if s contains fragment.
         Examples:
         #strings.contains('hello', 'ell') → true
@@ -125,7 +127,7 @@
       type="cap:Transformation"
       inputType="{ s: String, prefix: String }"
       outputType="Boolean">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns true if s starts with prefix.
         Examples:
         #strings.startsWith('hello', 'he') → true
@@ -140,7 +142,7 @@
       type="cap:Transformation"
       inputType="{ s: String, suffix: String }"
       outputType="Boolean">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns true if s ends with suffix.
         Examples:
         #strings.endsWith('hello', 'lo') → true
@@ -155,7 +157,7 @@
       type="cap:Transformation"
       inputType="{ s: String, fragment: String }"
       outputType="Integer">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns the index of fragment in s, or -1 if not found.
         Examples:
         #strings.indexOf('hello', 'll') → 2
@@ -170,7 +172,7 @@
       type="cap:Transformation"
       inputType="{ s: String, start: Integer, end: Integer }"
       outputType="String">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns the substring of s from start (inclusive) to end (exclusive).
         Examples:
         #strings.substring('hello', 1, 4) → "ell"
@@ -185,7 +187,7 @@
       type="cap:Transformation"
       inputType="{ s: String, target: String, replacement: String }"
       outputType="String">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Replaces the first occurrence of target in s with replacement.
         Examples:
         #strings.replace('a-b-c', '-', '_') → "a_b-c"
@@ -201,7 +203,7 @@
       type="cap:Transformation"
       inputType="{ s: String, target: String, replacement: String }"
       outputType="String">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Replaces all occurrences of target in s with replacement.
         Examples:
         #strings.replaceAll('a-b-c', '-', '_') → "a_b_c"

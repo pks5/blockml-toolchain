@@ -6,13 +6,16 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.core"
-  xmlns:lang="org.blockml.language">
+  xmlns:lang="org.blockml.language"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>TypeScript as an implementation language for capabilities.</idea>
+  <idea bml:status="status:Stable">TypeScript as an implementation language for capabilities.</idea>
 
-  <documentation>ProgrammingLanguage for TypeScript arrow-function implementations on Capabilities.
+  <documentation bml:status="status:Stable">ProgrammingLanguage for TypeScript arrow-function implementations on Capabilities.
     V1: compile-time execution when all arguments are literals.</documentation>
 
+  <status>status:Stable</status>
   <name>TypeScript</name>
   <type>lang:TypeScript</type>
   <baseType>core:ProgrammingLanguage</baseType>

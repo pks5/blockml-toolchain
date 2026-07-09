@@ -8,14 +8,17 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="com.machineblocks.core">
+  xmlns:core="com.machineblocks.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>A LEGO-style build — palette, placed parts, and assembly steps.</idea>
+  <idea bml:status="status:Stable">A LEGO-style build — palette, placed parts, and assembly steps.</idea>
 
-  <documentation>Abstract composable Block for LEGO-style Sets — block palette in inherited
+  <documentation bml:status="status:Stable">Abstract composable Block for LEGO-style Sets — block palette in inherited
     _presets, placed instances in inherited _parts, assembly order in _steps. Top-level catalog unit
     in MachineBlocks.</documentation>
 
+  <status>status:Stable</status>
   <name>Set</name>
   <type>core:Set</type>
   <baseType>core:CompositeBlock</baseType>

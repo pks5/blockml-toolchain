@@ -16,13 +16,15 @@
   xmlns:cap="org.blockml.capability"
   xmlns:core="org.blockml.core"
   xmlns:lang="org.blockml.language"
-  xmlns:service="org.blockml.service">
+  xmlns:service="org.blockml.service"
+  xmlns:status="org.blockml.status">
 
-  <idea>Built-in boolean utilities callable as #bools in expressions.</idea>
+  <idea bml:status="status:Stable">Built-in boolean utilities callable as #bools in expressions.</idea>
 
-  <documentation>Built-in booleans service. Expression prefix #bools.* — logical and boolean
+  <documentation bml:status="status:Stable">Built-in booleans service. Expression prefix #bools.* — logical and boolean
     conversion utilities.</documentation>
 
+  <status>status:Stable</status>
   <name>Bools</name>
   <type>service:Bools</type>
   <baseType>core:Entity</baseType>
@@ -35,7 +37,7 @@
       type="cap:Transformation"
       inputType="Boolean"
       outputType="Boolean">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns true if x is strictly true.
         Examples:
         #bools.isTrue(true) → true
@@ -51,7 +53,7 @@
       type="cap:Transformation"
       inputType="Boolean"
       outputType="Boolean">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns true if x is strictly false.
         Examples:
         #bools.isFalse(false) → true

@@ -112,8 +112,9 @@ Do not infer from `bricks` that other packages may freely use plural segments. N
 Direct package segments under `org.blockml` that belong to the **language** are reserved for **public BML-defined grammar** only. They must not be reused for internal compiler, parser, runtime, or BOM implementation classes.
 
 ```text
-org.blockml.core.*         — framework base types (Block, ValueType, Library, …)
+org.blockml.core.*         — framework base types (Block, ValueType, Status, Library, …)
 org.blockml.type.*         — primitive and bootstrap ValueTypes (Integer, Float, …)
+org.blockml.status.*       — standard maturity status blocks (Stable, Draft, Stub, Deprecated)
 org.blockml.service.*      — built-in services (#math, #strings, …)
 org.blockml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
 org.blockml.language.*     — Languages (TypeScript, OpenSCAD, …)
@@ -151,7 +152,7 @@ Wrong:
 **Separation goal:**
 
 ```text
-org.blockml.core.* · type.* · service.* · capability.* · language.*  →  the language
+org.blockml.core.* · type.* · status.* · service.* · capability.* · language.*  →  the language
 org.blockml.bom.*                                                    →  canonical BOM data model
 org.blockml.parser.* · compiler.* · runtime.* · engine.* · cli.*     →  implementation
 ```
@@ -993,6 +994,63 @@ When a child instance's Aggregation is bound to a service Model, all children wi
 
 ---
 
+## Status
+
+Status expresses the **maturity or lifecycle** of a BML element. Status is not a string or boolean flag — it is a **Block reference** following the Everything-is-a-Block principle.
+
+### Core status blocks
+
+```text
+org.blockml.core.Status          — abstract base (in @blockml/core)
+org.blockml.status.Stable        — complete, tested, reliable
+org.blockml.status.Draft         — defined; implementation or mapping incomplete
+org.blockml.status.Stub          — placeholder; behaviour not yet specified
+org.blockml.status.Deprecated    — retained for compatibility; do not use in new work
+```
+
+Domain libraries may define additional status blocks (e.g. domain-specific WIP markers).
+
+### Authoring syntax
+
+**Definition elements** — elements that declare something — carry a `<status>` child:
+
+```text
+<block>  <property>  <aggregation>  <association>  <capability>  <constraint>  <suggestion>
+```
+
+```xml
+<property name="width" type="Float">
+    <status>status:Draft</status>
+    …
+</property>
+```
+
+**All other elements** — no `<status>` child — use the `bml:status` attribute:
+
+```xml
+<documentation bml:status="status:Draft">…</documentation>
+<idea bml:status="status:Stub">…</idea>
+<implementation type="lang:TypeScript" bml:status="status:Stub"><![CDATA[…]]></implementation>
+<bricks:StandardBrick bml:status="status:Deprecated" … />
+```
+
+### Status namespace shorthand
+
+Status values use the `status:` prefix (declared via `xmlns:status="org.blockml.status"`):
+
+```text
+status:Stable       →  org.blockml.status.Stable
+status:Draft        →  org.blockml.status.Draft
+status:Stub         →  org.blockml.status.Stub
+status:Deprecated   →  org.blockml.status.Deprecated
+```
+
+There is **no implicit resolution** of bare names (`Draft` → `org.blockml.status.Draft` is invalid). The only existing shorthand exception remains Core primitives (`Integer` → `org.blockml.type.Integer`).
+
+See `02_mbml.md` — § Status for full authoring rules and examples.
+
+---
+
 ## BML Directives
 
 BML Directives are special attributes in the `bml:` namespace that control the structure and flow of a Composition. They are not Block properties — they are instructions to the BML processor. Whether a directive is pre-processed at compile time or translated 1:1 into target-specific constructs is the BlockProcessor's decision.
@@ -1010,6 +1068,7 @@ The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*
 | `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
 | `bml:version` | Block instances | External block reference version (required when type is from another file) |
+| `bml:status` | Non-definition elements | Maturity marker — Block reference (`status:Draft`, …); see § Status |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
 
 Bare `id=` / `version=` on instances are member values when the Block type declares such Properties.

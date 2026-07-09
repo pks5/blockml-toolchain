@@ -165,7 +165,9 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
 ```text
 1. @blockml/core BML                    ← BlockML describes BlockML
      org/blockml/core/Block.bml
+     org/blockml/core/Status.bml
      org/blockml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · …
+     org/blockml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
      org/blockml/core/Constraint.bml
      org/blockml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
      org/blockml/core/
@@ -222,7 +224,9 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/blocks/
   org/blockml/core/
-    Block.bml · ValueType.bml · Constraint.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · BlockLibrary.bml · …
+    Block.bml · Status.bml · ValueType.bml · Constraint.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · BlockLibrary.bml · …
+  org/blockml/status/
+    Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
   org/blockml/constraint/
     Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
   org/blockml/service/

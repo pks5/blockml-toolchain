@@ -10,12 +10,15 @@
                       "
   xmlns:bcore="org.blockml.core"
   xmlns:btype="org.blockml.type"
-  xmlns:type="com.machineblocks.type">
+  xmlns:type="com.machineblocks.type"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Three-dimensional size in MachineBlocks grid units.</idea>
+  <idea bml:status="status:Stable">Three-dimensional size in MachineBlocks grid units.</idea>
 
-  <documentation>Struct ValueType for three-dimensional size [x, y, z] in grid units.</documentation>
+  <documentation bml:status="status:Stable">Struct ValueType for three-dimensional size [x, y, z] in grid units.</documentation>
 
+  <status>status:Stable</status>
   <name>Size3d</name>
   <type>type:Size3d</type>
   <baseType>bcore:StructType</baseType>
@@ -23,13 +26,13 @@
 
   <properties>
     <x type="Float">
-      <documentation>Size in X direction.</documentation>
+      <documentation bml:status="status:Stable">Size in X direction.</documentation>
     </x>
     <y type="Float">
-      <documentation>Size in Y direction.</documentation>
+      <documentation bml:status="status:Stable">Size in Y direction.</documentation>
     </y>
     <z type="Float">
-      <documentation>Size in Z direction.</documentation>
+      <documentation bml:status="status:Stable">Size in Z direction.</documentation>
     </z>
   </properties>
 

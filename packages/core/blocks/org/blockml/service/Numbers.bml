@@ -16,13 +16,15 @@
   xmlns:cap="org.blockml.capability"
   xmlns:core="org.blockml.core"
   xmlns:lang="org.blockml.language"
-  xmlns:service="org.blockml.service">
+  xmlns:service="org.blockml.service"
+  xmlns:status="org.blockml.status">
 
-  <idea>Built-in number formatting and sequence utilities callable as #numbers in expressions.</idea>
+  <idea bml:status="status:Stable">Built-in number formatting and sequence utilities callable as #numbers in expressions.</idea>
 
-  <documentation>Built-in numbers service. Expression prefix #numbers.* — sequence,
+  <documentation bml:status="status:Stable">Built-in numbers service. Expression prefix #numbers.* — sequence,
     formatting, and numeric conversion utilities.</documentation>
 
+  <status>status:Stable</status>
   <name>Numbers</name>
   <type>service:Numbers</type>
   <baseType>core:Entity</baseType>
@@ -39,7 +41,7 @@
       type="cap:Transformation"
       inputType="{ x: Float, minInt: Integer, decPoint: String, minFrac: Integer }"
       outputType="String">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Formats x as a decimal string.
         minInt: minimum integer digits (0 omits leading zero before decimal point).
         decPoint: decimal separator character (e.g. "." or ",").

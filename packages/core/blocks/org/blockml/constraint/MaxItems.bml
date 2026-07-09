@@ -12,12 +12,15 @@
   "
   xmlns:btype="org.blockml.type"
   xmlns:constraint="org.blockml.constraint"
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Maximum number of elements in a collection property.</idea>
+  <idea bml:status="status:Stable">Maximum number of elements in a collection property.</idea>
 
-  <documentation>T binds to the property collection type (e.g. String[]). The value property is Integer — the maximum item count.</documentation>
+  <documentation bml:status="status:Stable">T binds to the property collection type (e.g. String[]). The value property is Integer — the maximum item count.</documentation>
 
+  <status>status:Stable</status>
   <name>MaxItems</name>
   <type>constraint:MaxItems</type>
   <baseType>core:Constraint</baseType>
@@ -29,7 +32,7 @@
 
   <properties>
     <value type="Integer">
-      <documentation>Maximum number of items (inclusive).</documentation>
+      <documentation bml:status="status:Stable">Maximum number of items (inclusive).</documentation>
     </value>
   </properties>
 

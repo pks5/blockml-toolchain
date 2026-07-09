@@ -9,12 +9,15 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:cap="org.blockml.capability"
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Representation of an Transformation capability.</idea>
+  <idea bml:status="status:Stable">Representation of an Transformation capability.</idea>
 
-  <documentation>Transformation capability.</documentation>
+  <documentation bml:status="status:Stable">Transformation capability.</documentation>
 
+  <status>status:Stable</status>
   <name>Transformation</name>
   <type>cap:Transformation</type>
   <baseType>core:CapabilityType</baseType>

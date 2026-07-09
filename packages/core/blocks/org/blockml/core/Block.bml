@@ -9,17 +9,20 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
+  <idea bml:status="status:Stable">The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
 
-  <documentation>Root semantic unit of BlockML. Sole inheritance root for all Block definitions —
+  <documentation bml:status="status:Stable">Root semantic unit of BlockML. Sole inheritance root for all Block definitions —
     composable blocks, ValueTypes, Languages, and domain types. Declares no
     members — every sub-type is free to define its own Properties, Aggregations, Associations, and
     Capabilities. Composition instance identity uses bml:id and bml:version (not member attributes).
     Any Block FQN may appear in aggregation and association types. Property and Capability types
     must resolve to org.blockml.core.ValueType.</documentation>
 
+  <status>status:Stable</status>
   <name>Block</name>
   <type>core:Block</type>
   <version>1.0.0</version>

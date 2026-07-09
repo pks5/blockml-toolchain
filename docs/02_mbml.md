@@ -93,7 +93,7 @@ Extension types register their own BML→BOM mapping rule with the parser. The c
 
 BML uses XML namespaces to resolve Block type references. Namespace prefixes map to FQN package prefixes.
 
-**Language vs. implementation:** Reserved public language namespaces (`org.blockml.core`, `org.blockml.type`, `org.blockml.service`, `org.blockml.capability`, `org.blockml.language`) are for BML-defined grammar only. Internal BOM and toolchain types use separate namespaces (`org.blockml.bom`, `org.blockml.parser`, `org.blockml.compiler`, …). See `00_bom_core.md` — Reserved Language Namespaces.
+**Language vs. implementation:** Reserved public language namespaces (`org.blockml.core`, `org.blockml.type`, `org.blockml.status`, `org.blockml.service`, `org.blockml.capability`, `org.blockml.language`) are for BML-defined grammar only. Internal BOM and toolchain types use separate namespaces (`org.blockml.bom`, `org.blockml.parser`, `org.blockml.compiler`, …). See `00_bom_core.md` — Reserved Language Namespaces.
 
 ```xml
 xmlns:core="com.machineblocks.core"
@@ -139,6 +139,19 @@ type="type:Color"    →  com.machineblocks.type.Color
 
 There is no implicit fallback to the domain namespace. Explicit FQNs are always supported.
 
+### Status Namespace Shorthand
+
+Status references use the `status:` namespace prefix (declared via `xmlns:status="org.blockml.status"`):
+
+```text
+status:Stable       →  org.blockml.status.Stable
+status:Draft        →  org.blockml.status.Draft
+status:Stub         →  org.blockml.status.Stub
+status:Deprecated   →  org.blockml.status.Deprecated
+```
+
+There is **no implicit resolution** of bare status names. `Draft` alone is invalid — always use `status:Draft` or the full FQN `org.blockml.status.Draft`. Domain libraries may define additional status blocks under their own namespace.
+
 **Property and Capability types** must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.core.ValueType`. Non-ValueType FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability input/output types → `BML_INVALID_PROPERTY_TYPE`.
 
 **Member namespace:** `org.blockml.core.Block` declares **no members**. Every sub-type chooses its own Properties, Aggregations, Associations, and Capabilities — including names like `id` or `version` if a domain needs them. On composition instances, **instance identity** uses `bml:id` and **external reference version** uses `bml:version` — not bare attributes (see Composition section).
@@ -175,7 +188,10 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 <type>              — FQN (e.g. com.martianmicro.anyclosure.Wall)
 <baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.core.Block.
 <version>           — semantic version of this Block definition
+<status>            — optional; Block reference (status:Stable, status:Draft, …). Default: status:Stable when omitted
 ```
+
+Definition elements (`<property>`, `<aggregation>`, …) may also carry `<status>` — see § `<status>`.
 
 ### `<idea>` — semantic meaning
 
@@ -189,13 +205,13 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 Examples:
 
 ```xml
-<idea>Lego compatible standard building block.</idea>
-<documentation>Parametric MachineBlocks brick with size, studs, holes, and style properties.</documentation>
+<idea bml:status="status:Stable">Lego compatible standard building block.</idea>
+<documentation bml:status="status:Stable">Parametric MachineBlocks brick with size, studs, holes, and style properties.</documentation>
 ```
 
 ```xml
-<idea>Primitive BlockML property type capable of holding a float number.</idea>
-<documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float resolves to org.blockml.type.Float.</documentation>
+<idea bml:status="status:Stable">Primitive BlockML property type capable of holding a float number.</idea>
+<documentation bml:status="status:Stable">BOM Core primitive ValueType for floating-point numbers. Unqualified name Float resolves to org.blockml.type.Float.</documentation>
 ```
 
 `<idea>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IDEA` (warning in V1, error in a later release). The idea is primary input for editors, LLMs, and documentation navigation — it answers *what is this?* before *how does it work?*
@@ -208,12 +224,85 @@ WOT alignment: the Idea is the stable semantic constant; documentation describes
 
 ```xml
 <block ...>
-  <idea>Parametric wall segment for AnyClosure enclosures.</idea>
-  <documentation>Wall block with thickness, height, and opening properties for enclosure design.</documentation>
+  <idea bml:status="status:Stable">Parametric wall segment for AnyClosure enclosures.</idea>
+  <documentation bml:status="status:Stable">Wall block with thickness, height, and opening properties for enclosure design.</documentation>
   <name>Wall</name>
   ...
 </block>
 ```
+
+### `<status>` — maturity marker
+
+Status expresses the maturity or lifecycle of a definition. Status is a **Block reference**, not a string or boolean — following Everything-is-a-Block.
+
+#### Definition elements: `<status>` child
+
+Only elements that **define** something carry their own `<status>` child node:
+
+```text
+<block>  <property>  <aggregation>  <association>  <capability>  <constraint>  <suggestion>
+```
+
+```xml
+<property name="width" type="Float">
+    <status>status:Draft</status>
+    <documentation>Target width in grid units.</documentation>
+    <value>4</value>
+</property>
+```
+
+Core library defines:
+
+```text
+org.blockml.core.Status          — abstract base
+org.blockml.status.Stable
+org.blockml.status.Draft
+org.blockml.status.Stub
+org.blockml.status.Deprecated
+```
+
+Domain libraries may define additional status blocks.
+
+#### Non-definition elements: `bml:status` attribute
+
+Elements that are **not** definitions do not carry a `<status>` child. When they need a maturity marker, use the `bml:status` attribute exclusively:
+
+```xml
+<documentation bml:status="status:Draft">
+  Partial SCAD mapping — see 05_types_and_mapping.md.
+</documentation>
+
+<idea bml:status="status:Stub">
+  Reserved for future multi-material support.
+</idea>
+
+<implementation
+    type="lang:TypeScript"
+    bml:status="status:Stub">
+<![CDATA[
+export const format = (x: number) => String(x);
+]]>
+</implementation>
+
+<bricks:StandardBrick
+    bml:status="status:Deprecated"
+    bml:id="legacy"
+    size="[2, 4, 3]" />
+```
+
+#### No implicit namespace resolution
+
+Status values are always explicit:
+
+```xml
+<!-- correct -->
+<status>status:Draft</status>
+
+<!-- invalid — no bare-name resolution -->
+<status>Draft</status>
+```
+
+The sole existing shorthand exception remains Core primitives (`Integer` → `org.blockml.type.Integer`).
 
 ### Block Name Convention
 
@@ -483,34 +572,44 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 
 ```xml
 <block xmlns="http://blockml.org/schema/block"
-       xmlns:bricks="com.machineblocks.bricks">
+       xmlns:bricks="com.machineblocks.bricks"
+       xmlns:status="org.blockml.status">
+
+  <idea bml:status="status:Stable">Parametric enclosure wall.</idea>
+  <documentation bml:status="status:Stable">Wall block with native and custom properties.</documentation>
 
   <name>Wall</name>
   <type>com.martianmicro.anyclosure.Wall</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
+  <status>status:Stable</status>
 
   <properties>
     <!-- Native properties with non-default values -->
     <size type="Size3D">
+      <status>status:Stable</status>
       <value>[1, 8, 8]</value>
     </size>
     <baseColor type="Color">
+      <status>status:Stable</status>
       <value>#303D4E</value>
     </baseColor>
     <assembly type="AssemblyMode">
+      <status>status:Stable</status>
       <value>Merged</value>
     </assembly>
 
     <!-- Custom properties -->
     <wallThickness type="Integer">
+      <status>status:Draft</status>
+      <documentation bml:status="status:Draft">Thickness of the wall in grid units.</documentation>
       <value>1</value>
-      <documentation>Thickness of the wall in grid units.</documentation>
     </wallThickness>
   </properties>
 
   <composition>
     <bricks:StandardBrick
+        bml:status="status:Stable"
         bml:id="bottom"
         size="${ [size[0], size[1], size[2] - 1] }"
         recess="true"
@@ -518,6 +617,7 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
         recessWallGaps="x+" />
 
     <bricks:StandardBrick
+        bml:status="status:Stable"
         bml:id="top"
         size="${ [size[0], size[1], 1] }"
         offset="${ [0, 0, size[2] - 1] }"
@@ -570,7 +670,8 @@ Block definitions describe the entire member — not just its value. Each member
 ```xml
 <properties>
     <size type="Size3D">
-        <documentation>Final outer dimensions.</documentation>
+        <status>status:Stable</status>
+        <documentation bml:status="status:Stable">Final outer dimensions.</documentation>
         <value>${[width, height, depth]}</value>
     </size>
 </properties>
@@ -888,6 +989,7 @@ When the property `type` is an EnumType, `value` and instance attribute values m
 
 ```xml
 <textSize type="Integer">
+  <status>status:Stable</status>
   <value>9</value>
   <constraints>
     <constraint:Min value="1"/>
@@ -1737,8 +1839,9 @@ Two implementation types are supported in V1:
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
                 outputType="org.blockml.type.String">
-      <documentation>Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>
-      <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
+      <status>status:Stable</status>
+      <documentation bml:status="status:Stable">Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>
+      <implementation type="org.blockml.language.OpenSCAD" bml:status="status:Stable"><![CDATA[
 // Main function — name must match capability name
 function formatValue(x) =
     replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));

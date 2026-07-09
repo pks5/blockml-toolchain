@@ -16,13 +16,15 @@
   xmlns:cap="org.blockml.capability"
   xmlns:core="org.blockml.core"
   xmlns:lang="org.blockml.language"
-  xmlns:service="org.blockml.service">
+  xmlns:service="org.blockml.service"
+  xmlns:status="org.blockml.status">
 
-  <idea>Built-in numeric utilities callable as #math in expressions.</idea>
+  <idea bml:status="status:Stable">Built-in numeric utilities callable as #math in expressions.</idea>
 
-  <documentation>Built-in math service. Expression prefix #math.* — min, max, abs, floor,
+  <documentation bml:status="status:Stable">Built-in math service. Expression prefix #math.* — min, max, abs, floor,
     round, and related numeric utilities.</documentation>
 
+  <status>status:Stable</status>
   <name>Math</name>
   <type>service:Math</type>
   <baseType>core:Entity</baseType>
@@ -35,7 +37,7 @@
       type="cap:Transformation"
       inputType="{ a: Float, b: Float }"
       outputType="Float">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns the smaller of two numbers.
         Examples:
         #math.min(3, 5) → 3
@@ -51,7 +53,7 @@
       type="cap:Transformation"
       inputType="{ a: Float, b: Float }"
       outputType="Float">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns the larger of two numbers.
         Examples:
         #math.max(3, 5) → 5
@@ -67,7 +69,7 @@
       type="cap:Transformation"
       inputType="Float"
       outputType="Float">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns the absolute value of x.
         Examples:
         #math.abs(-3) → 3
@@ -82,7 +84,7 @@
       type="cap:Transformation"
       inputType="Float"
       outputType="Integer">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Rounds x down to the nearest integer.
         Examples:
         #math.floor(3.7) → 3
@@ -97,7 +99,7 @@
       type="cap:Transformation"
       inputType="Float"
       outputType="Integer">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Rounds x up to the nearest integer.
         Examples:
         #math.ceil(3.2) → 4
@@ -112,7 +114,7 @@
       type="cap:Transformation"
       inputType="Float"
       outputType="Integer">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Rounds x to the nearest integer.
         Examples:
         #math.round(3.4) → 3
@@ -128,7 +130,7 @@
       type="cap:Transformation"
       inputType="{ x: Float, n: Integer }"
       outputType="Float">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Rounds x to n decimal places.
         Examples:
         #math.round_n(3.14159, 2) → 3.14
@@ -145,7 +147,7 @@
       type="cap:Transformation"
       inputType="{ base: Float, exp: Float }"
       outputType="Float">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns base raised to the power of exp.
         Examples:
         #math.pow(2, 10) → 1024
@@ -160,7 +162,7 @@
       type="cap:Transformation"
       inputType="Float"
       outputType="Float">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Returns the square root of x.
         Examples:
         #math.sqrt(9) → 3
@@ -175,7 +177,7 @@
       type="cap:Transformation"
       inputType="{ x: Float, lo: Float, hi: Float }"
       outputType="Float">
-      <documentation>
+      <documentation bml:status="status:Stable">
         Clamps x to the range [lo, hi].
         Examples:
         #math.clamp(5, 0, 3) → 3

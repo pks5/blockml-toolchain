@@ -8,15 +8,18 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Validation rule attached to a property — interpreted by the compiler and editors.</idea>
+  <idea bml:status="status:Stable">Validation rule attached to a property — interpreted by the compiler and editors.</idea>
 
-  <documentation>Abstract branch for property constraints. Each concrete constraint extends this
+  <documentation bml:status="status:Stable">Abstract branch for property constraints. Each concrete constraint extends this
     type and declares its own properties. Generic parameter T is bound automatically to the property
     type (or element type for collection constraints) at validate time — authors never specify the
     type argument in BML.</documentation>
 
+  <status>status:Stable</status>
   <name>Constraint</name>
   <type>core:Constraint</type>
   <baseType>core:Block</baseType>

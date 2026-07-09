@@ -10,14 +10,17 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:bcore="org.blockml.core"
-  xmlns:core="com.machineblocks.core">
+  xmlns:core="com.machineblocks.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Any MachineBlocks domain object — bricks, sets, presets, and compositions.</idea>
+  <idea bml:status="status:Stable">Any MachineBlocks domain object — bricks, sets, presets, and compositions.</idea>
 
-  <documentation>MachineBlocks domain base Block. Carries _presets aggregation and basePresets
+  <documentation bml:status="status:Stable">MachineBlocks domain base Block. Carries _presets aggregation and basePresets
     association for domain-specific preset resolution. Preset merge is compiler logic; Customizer
     output is render-target logic.</documentation>
 
+  <status>status:Stable</status>
   <name>Block</name>
   <type>core:Block</type>
   <baseType>bcore:Entity</baseType>
@@ -27,7 +30,7 @@
 
   <properties>
     <name type="String">
-      <documentation>The human readable name of the Block.</documentation>
+      <documentation bml:status="status:Stable">The human readable name of the Block.</documentation>
     </name>
   </properties>
 

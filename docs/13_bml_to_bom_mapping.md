@@ -95,6 +95,7 @@ xsi:schemaLocation="..."                  → ignored
 |---|---|
 | `bml:id` | `BlockInstance.id` (`MemberValue`) |
 | `bml:version` | `BlockInstance.version` (`MemberValue`) |
+| `bml:status` | `statusFqn` on the element (Block reference; resolved via `status:` shorthand) |
 
 **Flow-control directives** — stored in `directives[]` on the same element (Thymeleaf model):
 
@@ -256,6 +257,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 ```text
 <idea>…</idea>                               → block.idea (trimmed text)
 <documentation>…</documentation>             → block.documentation (trimmed text)
+<status>status:Draft</status>                → block.statusFqn (resolved Block reference)
 <name>…</name>                               → block.name
 <type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
 <abstract />                                 → block.abstract = true  (equivalent: <abstract>true</abstract>)
@@ -303,6 +305,21 @@ visibility="protected"   → visibility (optional; derived from name when omitte
 readOnly="true"          → readOnly
 final="true"             → final
 <documentation>…         → documentation
+<status>status:Draft</status>  → statusFqn (resolved Block reference)
+```
+
+**Non-definition elements** (`<documentation>`, `<idea>`, `<implementation>`, Block instances, …) carry maturity via `bml:status="status:Draft"` — mapped to `statusFqn` on the same BOM node. No `<status>` child on these elements.
+
+**Status resolution (stage [5]):**
+
+```text
+Authored:  <status>status:Draft</status>     xmlns:status="org.blockml.status"
+           bml:status="status:Stable"
+
+BOM:       statusFqn: "org.blockml.status.Draft"
+
+Bare name "Draft" (no status: prefix)  →  BML_UNKNOWN_STATUS (parse error)
+Unknown status FQN                     →  BML_UNKNOWN_STATUS (validate)
 ```
 
 **Member `namespace` resolution (stage [5]):**

@@ -6,13 +6,16 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.core"
-  xmlns:lang="org.blockml.language">
+  xmlns:lang="org.blockml.language"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>XML as an implementation language for capabilities.</idea>
+  <idea bml:status="status:Stable">XML as an implementation language for capabilities.</idea>
 
-  <documentation>MarkupLanguage for XML document implementations on Capabilities — templates,
+  <documentation bml:status="status:Stable">MarkupLanguage for XML document implementations on Capabilities — templates,
     configuration, or structured markup.</documentation>
 
+  <status>status:Stable</status>
   <name>XML</name>
   <type>lang:XML</type>
   <baseType>core:MarkupLanguage</baseType>

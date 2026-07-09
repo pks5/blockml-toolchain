@@ -11,12 +11,15 @@
         https://blockml.org/schemas/core/block.xsd
   "
   xmlns:constraint="org.blockml.constraint"
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Upper bound for a numeric property value.</idea>
+  <idea bml:status="status:Stable">Upper bound for a numeric property value.</idea>
 
-  <documentation>Scalar constraint: T binds to the property type. Compatible with Integer and Float properties. The value property must match T.</documentation>
+  <documentation bml:status="status:Stable">Scalar constraint: T binds to the property type. Compatible with Integer and Float properties. The value property must match T.</documentation>
 
+  <status>status:Stable</status>
   <name>Max</name>
   <type>constraint:Max</type>
   <baseType>core:Constraint</baseType>
@@ -28,7 +31,7 @@
 
   <properties>
     <value type="T">
-      <documentation>Maximum allowed value (inclusive).</documentation>
+      <documentation bml:status="status:Stable">Maximum allowed value (inclusive).</documentation>
     </value>
   </properties>
 

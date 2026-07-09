@@ -10,14 +10,17 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:bcore="org.blockml.core"
-  xmlns:core="com.machineblocks.core">
+  xmlns:core="com.machineblocks.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>One assembly instruction in a Set build sequence.</idea>
+  <idea bml:status="status:Stable">One assembly instruction in a Set build sequence.</idea>
 
-  <documentation>Framework Block defining one assembly instruction step in a Set — references a
+  <documentation bml:status="status:Stable">Framework Block defining one assembly instruction step in a Set — references a
     placed block instance via the part association. Used as children of aggregation _steps. Document
     order defines build order when _steps is present.</documentation>
 
+  <status>status:Stable</status>
   <name>Step</name>
   <type>core:Step</type>
   <baseType>bcore:Block</baseType>
@@ -31,7 +34,7 @@
 
   <properties>
     <description type="String">
-      <documentation>Additional description of the step.</documentation>
+      <documentation bml:status="status:Stable">Additional description of the step.</documentation>
     </description>
   </properties>
 

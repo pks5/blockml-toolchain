@@ -8,13 +8,16 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:status="org.blockml.status"
+  xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Branch for product types — composite values with named fields.</idea>
+  <idea bml:status="status:Stable">Branch for product types — composite values with named fields.</idea>
 
-  <documentation>Abstract branch for struct ValueTypes — complex values described by normal
+  <documentation bml:status="status:Stable">Abstract branch for struct ValueTypes — complex values described by normal
     Properties. No special struct syntax.</documentation>
 
+  <status>status:Stable</status>
   <name>StructType</name>
   <type>core:StructType</type>
   <baseType>core:ValueType</baseType>
