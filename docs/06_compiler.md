@@ -455,6 +455,7 @@ BML_MISSING_VERSION           — Block definition lacks effective version (no o
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
 BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library _dependencies / _blocks
 BML_VERSION_BELOW_LIBRARY     — block.version < library.version when both declared (error)
+BML_LIBRARY_NESTING_VIOLATION  — outer library _blocks re-exports a Block exported by a nested inner library
 BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.version (warning — best practice: patch only)
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit id
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation

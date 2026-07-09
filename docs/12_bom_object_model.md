@@ -923,7 +923,20 @@ Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 
 Library descriptors are ordinary `BlockDefinition` documents with `baseType="org.blockml.BlockLibrary"`.
 
-**Naming (required):** every real library block is named `Library` (`<name>Library</name>`), filename is always `Library.bml`, placed at the **package root**. FQN = package + `Library` (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`).
+**Naming (required):** every real library block is named `Library` (`<name>Library</name>`), filename is always `Library.bml`. FQN = package + `Library` (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`, `org.blockml.compiler.Library`).
+
+**Membership is defined only by `Library.bml` — not by directories.** A Block belongs to the Library whose `_blocks` lists it. Package-prefix overlap does not imply inclusion.
+
+### Nested libraries
+
+Multiple `Library.bml` files may exist at different package levels (e.g. `org.blockml.Library` and `org.blockml.compiler.Library`). Each is an independent publishable unit.
+
+```text
+Typical dependency:   inner _dependencies → outer Library
+Forbidden:            outer _blocks → Block exported by inner Library
+```
+
+Inner libraries usually declare the outer library in `_dependencies`. The outer library must **not** re-export inner-library blocks in `_blocks` — consumers depend on the inner library directly. Violation → `BML_LIBRARY_NESTING_VIOLATION`.
 
 ```text
 org.blockml.BlockLibrary
@@ -1089,6 +1102,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
 ✓  contract types resolve, are abstract, and member surface is satisfied by effective members
 ✓  Library _blocks entries resolve to registered Block definitions (FQN + effectiveBlockVersion)
+✓  Outer library _blocks does not re-export blocks from a nested inner library (BML_LIBRARY_NESTING_VIOLATION)
 ✓  Library _dependencies entries resolve to registered BlockLibrary definitions (FQN + effectiveBlockVersion)
 ```
 
@@ -1123,6 +1137,7 @@ BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no mat
 BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library _dependencies / _blocks
 BML_VERSION_BELOW_LIBRARY     — block.version < library.version when both declared (error)
 BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.version (warning — best practice: patch only)
+BML_LIBRARY_NESTING_VIOLATION  — outer library _blocks re-exports a Block exported by a nested inner library
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit bml:id
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
 BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without bml:exportIds="true"

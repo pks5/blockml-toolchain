@@ -221,24 +221,22 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 
 ## Package Layout
 
+Membership is defined by each `Library.bml` `_blocks` list — not by directory. Nested libraries are independent units:
+
 ```text
 packages/core/blocks/
   org/blockml/
-    BlockLibrary.bml · Library.bml
+    BlockLibrary.bml · Library.bml          ← org.blockml.Library
   org/blockml/core/
-    Block.bml · Status.bml · ValueType.bml · Constraint.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · …
-  org/blockml/status/
-    Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
-  org/blockml/type/
-    Number.bml · Integer.bml · Float.bml · Decimal.bml · String.bml · Boolean.bml
-  org/blockml/constraint/
-    Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
-  org/blockml/service/
-    Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
+    Block.bml · …                           ← member iff in org.blockml.Library _blocks
+  org/blockml/compiler/                     ← example nested library (future)
+    Library.bml                             ← org.blockml.compiler.Library (separate)
+    Parser.bml                              ← member iff in org.blockml.compiler.Library _blocks only
+  org/blockml/status/ · type/ · constraint/ · service/ · …
 
 domains/machineblocks/mbom/blocks/
   com/machineblocks/core/
-    Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
+    Step.bml · Block.bml · …
   com/machineblocks/bricks/
     Library.bml · presets/StandardPresets.bml
 ```

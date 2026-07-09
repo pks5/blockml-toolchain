@@ -1320,11 +1320,46 @@ org.blockml.BlockLibrary.Schema       ref (relative .xsd path)
 
 `_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. `validate="false"` skips constraint evaluation on these reference instances.
 
-The Library block lives at the **package root** as `Library.bml`. Its FQN is `{package}.Library` (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`).
+The Library block is always named `Library.bml`. Its FQN is `{package}.Library` where `{package}` is derived from the file's package path (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`, `org.blockml.compiler.Library`).
 
-**Name (required):** `<name>Library</name>`. Filename is always `Library.bml` at package root — not `{Segment}Library.bml`.
+**Name (required):** `<name>Library</name>`. Filename is always `Library.bml`.
 
-**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `_dependencies` and `_blocks` entries by FQN (effective version from library context), and registers the referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Membership is defined only by `Library.bml` — not by directories.** A Block belongs to exactly the Library whose `_blocks` lists it. Physical file location and package-prefix overlap do not imply inclusion. Two libraries may share a package prefix (e.g. `org.blockml` and `org.blockml.compiler`) without one automatically exporting the other's blocks.
+
+### Nested libraries
+
+Libraries may be **nested by package**. Example: `org.blockml/Library.bml` and `org.blockml.compiler/Library.bml` are **separate** publishable units — the inner library does not merge into the outer one.
+
+```text
+org/blockml/
+  Library.bml                 → org.blockml.Library
+  core/Block.bml              → member iff listed in org.blockml.Library _blocks
+  compiler/
+    Library.bml               → org.blockml.compiler.Library  (own library)
+    Parser.bml                → member iff listed in org.blockml.compiler.Library _blocks only
+```
+
+**Typical pattern:** inner library depends on outer via `_dependencies`; outer does **not** depend on inner.
+
+```xml
+<!-- org/blockml/compiler/Library.bml -->
+<_dependencies>
+  <composition>
+    <blockml:Library />        <!-- outer library as dependency -->
+  </composition>
+</_dependencies>
+<_blocks>
+  <composition>
+    <compiler:Parser />        <!-- only compiler-owned blocks -->
+  </composition>
+</_blocks>
+```
+
+**Nesting rule (required):** an outer library's `_blocks` must **not** reference Blocks exported by an inner library (any `_blocks` entry of a library whose package is a strict sub-package of the outer library's package). Inner-library blocks are consumed via the inner library dependency — not re-exported by the outer catalog.
+
+Violation → `BML_LIBRARY_NESTING_VIOLATION`.
+
+**Bootstrap:** the CLI/orchestrator discovers all `Library.bml` files, resolves `_dependencies` and `_blocks` by FQN (effective version from library context), and registers referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
 **Types:** ValueType definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** is optional legacy XSD — omit when types are BML-only.
 

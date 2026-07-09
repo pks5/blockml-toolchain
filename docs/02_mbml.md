@@ -2380,9 +2380,24 @@ configProfile < basePresets chain < inline property
 
 ## Library Format (`org.blockml.BlockLibrary`)
 
-A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and ValueType definitions are exported via `_blocks`. Each package directory contains one Library block at package root. If absent, all BML source files in the directory are treated as public.
+A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and ValueType definitions are exported via `_blocks`. **Library membership is defined exclusively by `Library.bml`** — not by directory layout. If absent, all BML source files in a directory are treated as public.
 
-**Name (required):** `<name>Library</name>`. Filename is always `Library.bml` at package root. FQN = `{package}.Library` (e.g. `com.machineblocks.bricks.Library`).
+**Name (required):** `<name>Library</name>`. Filename is always `Library.bml`. FQN = `{package}.Library` (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`, `org.blockml.compiler.Library`).
+
+### Nested libraries
+
+Multiple libraries may coexist at different package levels. Example: `org.blockml/Library.bml` and `org.blockml/compiler/Library.bml` are **separate** libraries — the inner one is not automatically part of the outer catalog.
+
+```text
+Typical pattern:
+  inner Library  →  _dependencies includes outer Library
+  outer Library  →  must NOT list inner-library blocks in _blocks
+
+Violation: outer _blocks references a Block exported by org.blockml.compiler.Library
+           → BML_LIBRARY_NESTING_VIOLATION
+```
+
+Physical directories and overlapping package prefixes do not define membership. A `.bml` file is a library member **only** if listed in that library's `_blocks`.
 
 ### Structure
 
@@ -2444,11 +2459,18 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 
 **`_blocks`** lists exported Block and ValueType definitions (composable Blocks, StructType, EnumType, presets, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML.
 
-**Directory structure:**
+**Directory structure (illustrative — membership comes from `_blocks`, not paths):**
 
 ```text
+org/blockml/
+  Library.bml              ← org.blockml.Library
+  core/Block.bml           ← member iff in org.blockml.Library _blocks
+  compiler/
+    Library.bml            ← org.blockml.compiler.Library (separate unit)
+    Parser.bml             ← member iff in org.blockml.compiler.Library _blocks only
+
 com/machineblocks/bricks/
-  Library.bml              ← Library block (FQN = com.machineblocks.bricks.Library)
+  Library.bml              ← com.machineblocks.bricks.Library
   bricks.xsd               ← optional legacy XSD
   types/
     Size3D.bml · Direction.bml · …

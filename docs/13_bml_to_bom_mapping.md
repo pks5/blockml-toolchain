@@ -630,7 +630,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.B
 
 Each child requires explicit aggregation members (`_dependencies`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
 
-**Orchestrator (not parser):** after parsing a Library block, resolve each `_dependencies` and `_blocks` entry by FQN, load the referenced definitions using effective block versions, and `registerBlockDefinition`.
+**Orchestrator (not parser):** after parsing a Library block, resolve each `_dependencies` and `_blocks` entry by FQN, load the referenced definitions using effective block versions, and `registerBlockDefinition`. Validate that outer libraries do not re-export blocks from nested inner libraries (`BML_LIBRARY_NESTING_VIOLATION`).
 
 ### Incremental builds
 

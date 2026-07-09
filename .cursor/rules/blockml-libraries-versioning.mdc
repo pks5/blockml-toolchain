@@ -9,9 +9,22 @@ alwaysApply: false
 ## Library structure
 
 - Abstract base type: `org.blockml.BlockLibrary` (`packages/core/blocks/org/blockml/BlockLibrary.bml`)
-- Every real library: `<name>Library</name>`, filename **`Library.bml`**, at **package root**
-- Examples: `org.blockml/Library.bml`, `com/machineblocks/bricks/Library.bml`
+- Every real library: `<name>Library</name>`, filename **`Library.bml`**
+- FQN = `{package}.Library` from the file's package path
 - `baseType="blockml:BlockLibrary"` on concrete Library blocks
+- **Membership is defined only by `Library.bml` `_blocks`** — not by directories or package overlap
+
+## Nested libraries
+
+Multiple `Library.bml` files may exist at different package levels (e.g. `org.blockml.Library` + `org.blockml.compiler.Library`).
+
+```text
+Typical:  inner _dependencies → outer Library
+Forbidden: outer _blocks → Block exported by inner Library
+Error:    BML_LIBRARY_NESTING_VIOLATION
+```
+
+A `.bml` file physically under `org/blockml/compiler/` belongs to `org.blockml.compiler.Library` only if listed in **that** library's `_blocks` — not in `org.blockml.Library` just because of directory.
 
 ## Effective block version
 
@@ -22,8 +35,8 @@ effectiveBlockVersion =
   else error → BML_MISSING_VERSION
 ```
 
-- **Framework blocks** (`org.blockml.*`, `com.machineblocks.*`): version only on `Library.bml` — no `<version>` on individual block files
-- **Block in library** with own `<version>`: must be `>= library.version` (patch drift OK; minor drift → warning)
+- **Framework blocks** (`org.blockml.*`, `com.machineblocks.*`): version only on `Library.bml`
+- **Block in library** with own `<version>`: must be `>= library.version`
 - **Standalone block**: `<version>` mandatory
 
 ## Instance references (`bml:version`)
@@ -32,26 +45,16 @@ effectiveBlockVersion =
 - **Present** = exact-version assert → `BML_UNKNOWN_VERSION` if no match
 - **Forbidden** inside Library `_dependencies` / `_blocks` → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`
 
-```xml
-<!-- ✓ normal reference -->
-<bricks:Standard bml:id="brick-2x4" />
-
-<!-- ✓ optional assert -->
-<bricks:Standard bml:id="brick-2x4" bml:version="3.0.0" />
-
-<!-- ✗ inside Library.bml -->
-<bricks:Standard bml:version="3.0.0" />
-```
-
 ## Library file pattern
 
 ```xml
 <name>Library</name>
 <baseType>blockml:BlockLibrary</baseType>
 <version>3.0.0</version>
+<_dependencies>
+  <composition><blockml:Library /></composition>  <!-- inner depends on outer -->
+</_dependencies>
 <_blocks>
-  <composition>
-    <bricks:Standard />
-  </composition>
+  <composition><compiler:Parser /></composition>   <!-- own blocks only -->
 </_blocks>
 ```
