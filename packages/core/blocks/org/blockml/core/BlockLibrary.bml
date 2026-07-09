@@ -1,10 +1,10 @@
 <!--
   BlockML Core — library descriptor (blocks, types, presets, dependencies)
 
-  FQN: org.blockml.core.Library
+  FQN: org.blockml.core.BlockLibrary
 
-  Entry types (Dependency, Schema, TypeRef, BlockRef) are Sub-Blocks
-  of Library. Aggregations use short type names (type="Dependency") — parser
+  Entry types (Dependency, Schema, BlockRef) are Sub-Blocks
+  of BlockLibrary. Aggregations use short type names (type="Dependency") — parser
   resolves against subBlocks[] in the same file.
 -->
 <block
@@ -16,11 +16,11 @@
 
   <idea>Catalog of block and type definitions published as a package.</idea>
 
-  <documentation>Publishable library unit — groups exported Block definitions, optional XSD schemas,
+  <documentation>Publishable library unit — groups exported Block and TypeBlock definitions, optional XSD schemas,
     and dependencies on other libraries. Replaces the legacy library.xml descriptor.</documentation>
 
-  <name>Library</name>
-  <type>core:Library</type>
+  <name>BlockLibrary</name>
+  <type>core:BlockLibrary</type>
   <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
@@ -39,7 +39,6 @@
   <aggregations>
     <_dependencies type="Dependency[]" />
     <_schemas type="Schema[]" />
-    <_types type="TypeRef[]" />
     <_blocks type="BlockRef[]" />
   </aggregations>
 
@@ -48,7 +47,7 @@
     <block>
       <idea>Declared dependency on another published Library package.</idea>
 
-      <documentation>Dependency on another Library — pins required library FQN and exact semantic
+      <documentation>Dependency on another BlockLibrary — pins required library FQN and exact semantic
         version.</documentation>
       <name>Dependency</name>
       <baseType>core:Block</baseType>
@@ -56,7 +55,7 @@
       <final />
       <properties>
         <ref type="String">
-          <documentation>FQN of the required Library (e.g. com.machineblocks.core.CoreLibrary).</documentation>
+          <documentation>FQN of the required BlockLibrary (e.g. com.machineblocks.core.CoreLibrary).</documentation>
         </ref>
         <version type="String">
           <documentation>Exact semantic version required — no implicit latest.</documentation>
@@ -67,7 +66,7 @@
     <block>
       <idea>Optional XSD schema exported alongside library types.</idea>
 
-      <documentation>Optional XSD schema file exported by a Library — legacy type/enum definitions.</documentation>
+      <documentation>Optional XSD schema file exported by a BlockLibrary — legacy type/enum definitions.</documentation>
       <name>Schema</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
@@ -80,32 +79,17 @@
     </block>
 
     <block>
-      <idea>Pointer to a type definition file in this library.</idea>
+      <idea>Pointer to a block or type definition file in this library.</idea>
 
-      <documentation>Reference to a TypeBlock definition file (StructType, EnumType, …) exported by
-        this Library.</documentation>
-      <name>TypeRef</name>
-      <baseType>core:Block</baseType>
-      <version>1.0.0</version>
-      <final />
-      <properties>
-        <ref type="String">
-          <documentation>Path to the type .bml file relative to the library package root.</documentation>
-        </ref>
-      </properties>
-    </block>
-
-    <block>
-      <idea>Pointer to a block definition file in this library.</idea>
-
-      <documentation>Reference to a Block definition file exported by this Library.</documentation>
+      <documentation>Reference to a Block or TypeBlock definition file (StructType, EnumType, composable Block, …)
+        exported by this BlockLibrary.</documentation>
       <name>BlockRef</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <final />
       <properties>
         <ref type="String">
-          <documentation>Path to the block .bml file relative to the library package root.</documentation>
+          <documentation>Path to the .bml file relative to the library package root.</documentation>
         </ref>
       </properties>
     </block>

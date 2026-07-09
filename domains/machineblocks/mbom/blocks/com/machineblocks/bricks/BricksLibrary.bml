@@ -24,11 +24,11 @@
 
   <name>BricksLibrary</name>
   <type>bricks:BricksLibrary</type>
-  <baseType>bcore:Library</baseType>
+  <baseType>bcore:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>
-    <description type="String">
+    <description>
       <value>Standard brick types for MachineBlocks</value>
     </description>
     <package type="String">
@@ -43,23 +43,18 @@
       </composition>
     </_dependencies>
 
-    <!-- Optional legacy XSD — omit when types are exported via _types -->
+    <!-- Optional legacy XSD — omit when all types are exported via _blocks -->
     <_schemas>
       <composition>
         <Schema ref="bricks.xsd" />
       </composition>
     </_schemas>
 
-    <_types>
-      <composition>
-        <TypeRef ref="types/Size3D.bml" />
-        <TypeRef ref="types/Direction.bml" />
-        <TypeRef ref="types/Color.bml" />
-      </composition>
-    </_types>
-
     <_blocks>
       <composition>
+        <BlockRef ref="types/Size3D.bml" />
+        <BlockRef ref="types/Direction.bml" />
+        <BlockRef ref="types/Color.bml" />
         <BlockRef ref="blocks/Standard.bml" />
         <BlockRef ref="blocks/Plate.bml" />
         <BlockRef ref="blocks/Tile.bml" />

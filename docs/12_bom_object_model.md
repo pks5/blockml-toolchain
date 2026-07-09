@@ -807,7 +807,7 @@ When parsing a composition child element, the parser resolves `typeFqn` for unqu
 ```text
 1. subBlocks[] of innermost containing BlockDefinition (same BomDocument)
 2. Walk up parent BlockDefinition chain (nested Sub-Block → root)
-3. Inherited subBlocks from baseType chain (e.g. org.blockml.core.Library.* for Library-typed blocks)
+3. Inherited subBlocks from baseType chain (e.g. org.blockml.core.BlockLibrary.* for Library-typed blocks)
 4. Prefixed name (bricks:Standard) → Namespace Resolver
 5. Full FQN or TypeRegistry lookup
 ```
@@ -891,34 +891,32 @@ Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 
 ---
 
-## Libraries (`org.blockml.core.Library`)
+## Libraries (`org.blockml.core.BlockLibrary`)
 
-Library descriptors are ordinary `BlockDefinition` documents with `baseType="org.blockml.core.Library"`.
+Library descriptors are ordinary `BlockDefinition` documents with `baseType="org.blockml.core.BlockLibrary"`.
 
 **Naming (soft convention):** block `<name>` is `{Segment}Library` (e.g. `BricksLibrary`); FQN = package + name (e.g. `com.machineblocks.bricks.BricksLibrary`); filename = block name.
 
 ```text
-org.blockml.core.Library
+org.blockml.core.BlockLibrary
   property     description     String
-  subBlocks      Dependency · Schema · TypeRef · BlockRef
-  aggregation  _dependencies   0..n  org.blockml.core.Library.Dependency
-  aggregation  _schemas        0..n  org.blockml.core.Library.Schema
-  aggregation  _types          0..n  org.blockml.core.Library.TypeRef
-  aggregation  _blocks         0..n  org.blockml.core.Library.BlockRef
+  subBlocks      Dependency · Schema · BlockRef
+  aggregation  _dependencies   0..n  org.blockml.core.BlockLibrary.Dependency
+  aggregation  _schemas        0..n  org.blockml.core.BlockLibrary.Schema
+  aggregation  _blocks         0..n  org.blockml.core.BlockLibrary.BlockRef
 
-org.blockml.core.Library.Dependency   properties: ref (Library FQN), version
-org.blockml.core.Library.Schema       property:  ref (relative .xsd path)
-org.blockml.core.Library.TypeRef      property:  ref (relative TypeBlock file path)
-org.blockml.core.Library.BlockRef     property:  ref (relative block file path)
+org.blockml.core.BlockLibrary.Dependency   properties: ref (BlockLibrary FQN), version
+org.blockml.core.BlockLibrary.Schema       property:  ref (relative .xsd path)
+org.blockml.core.BlockLibrary.BlockRef     property:  ref (relative block or type file path)
 ```
 
-Entry types are **Sub-Blocks of `org.blockml.core.Library`** — defined in `Library.bml`, not separate framework files. Library-typed blocks (`baseType="org.blockml.core.Library"`) resolve `<Dependency>`, `<TypeRef>`, etc. by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
+Entry types are **Sub-Blocks of `org.blockml.core.BlockLibrary`** — defined in `BlockLibrary.bml`, not separate framework files. Library-typed blocks (`baseType="org.blockml.core.BlockLibrary"`) resolve `<Dependency>`, `<BlockRef>`, etc. by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
 
-Composition children use element names `Dependency`, `Schema`, `TypeRef`, `BlockRef` — each `aggregation=` attribute is required (Library has four aggregations, none is default).
+Composition children use element names `Dependency`, `Schema`, `BlockRef` — each `aggregation=` attribute is required (BlockLibrary has three aggregations, none is default).
 
 The orchestrator resolves `ref` paths relative to the library package root, loads referenced files into the TypeRegistry, and validates Library dependencies (`ref` + `version` must match a registered Library block).
 
-`_schemas` is optional legacy XSD. `_types` lists exported TypeBlock BML — primary SSOT as types migrate from XSD.
+`_schemas` is optional legacy XSD. `_blocks` lists exported Block and TypeBlock BML — primary SSOT as types migrate from XSD.
 
 ---
 
@@ -969,7 +967,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ```text
 1. Built-in ServiceBlocks     — @blockml/core (org.blockml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
-3. Library blocks             — org.blockml.core.Library → resolve BlockRef paths
+3. Library blocks             — org.blockml.core.BlockLibrary → resolve BlockRef paths
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
 5. Declared dependencies      — Library Dependency entries + bom.config.json paths
 ```
@@ -1054,7 +1052,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Property value cycles (topological sort)
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
 ✓  contract types resolve, are abstract, and member surface is satisfied by effective members
-✓  Library TypeRef / BlockRef paths resolve to existing files
+✓  Library BlockRef paths resolve to existing files
 ✓  Library Dependency ref + version matches registered Library block
 ```
 

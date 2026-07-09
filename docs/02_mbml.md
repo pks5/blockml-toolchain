@@ -75,7 +75,7 @@ BML defines one core document root:
 
 Property presets are **not** a BlockML core feature. MachineBlocks models presets as Block instances in `_presets` with `basePresets` associations — see § Presets (MachineBlocks) and `03_mbom.md`.
 
-Library packages use `<block baseType="org.blockml.core.Library">` — see § Library Format.
+Library packages use `<block baseType="org.blockml.core.BlockLibrary">` — see § Library Format.
 
 Extension document types (defined in domain packages, not in core):
 
@@ -1550,9 +1550,9 @@ The **same resolution order** applies to `type="..."` on `<property>`, `<aggrega
 5. TypeRegistry global lookup
 ```
 
-Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Library.Dependency`). Authors may write the short name in BML.
+Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.BlockLibrary.Dependency`). Authors may write the short name in BML.
 
-**Same document — aggregation example (`Library.bml`):**
+**Same document — aggregation example (`BlockLibrary.bml`):**
 
 ```xml
 <aggregations>
@@ -1571,7 +1571,7 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Li
 <StudDiameter bml:id="samples_stud" ... />
 ```
 
-**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.Library"` (e.g. `BricksLibrary`) automatically resolves `Dependency`, `TypeRef`, `BlockRef`, … without prefix — they are Sub-Blocks of `org.blockml.core.Library`, inherited via the baseType chain. Authors do not redeclare them in each library file.
+**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.BlockLibrary"` (e.g. `BricksLibrary`) automatically resolves `Dependency`, `BlockRef`, … without prefix — they are Sub-Blocks of `org.blockml.core.BlockLibrary`, inherited via the baseType chain. Authors do not redeclare them in each library file.
 
 ```xml
 <!-- BricksLibrary.bml — no xmlns needed for entry types -->
@@ -2105,9 +2105,9 @@ configProfile < basePresets chain < inline property
 
 ---
 
-## Library Format (`org.blockml.core.Library`)
+## Library Format (`org.blockml.core.BlockLibrary`)
 
-A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Preset blocks are exported as ordinary Block definitions via `_blocks`. Each package directory should contain one Library block at package root. If absent, all BML source files in the directory are treated as public.
+A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and TypeBlock definitions are exported via `_blocks`. Each package directory should contain one Library block at package root. If absent, all BML source files in the directory are treated as public.
 
 **Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for package `com.machineblocks.bricks`. Filename matches block name (`BricksLibrary.bml`). Not enforced by the compiler.
 
@@ -2126,7 +2126,7 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 
   <name>BricksLibrary</name>
   <type>com.machineblocks.bricks.BricksLibrary</type>
-  <baseType>org.blockml.core.Library</baseType>
+  <baseType>org.blockml.core.BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>
@@ -2150,15 +2150,10 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
       </composition>
     </_schemas>
 
-    <_types>
-      <composition>
-        <TypeRef ref="types/Size3D.bml" />
-        <TypeRef ref="types/Direction.bml" />
-      </composition>
-    </_types>
-
     <_blocks>
       <composition>
+        <BlockRef ref="types/Size3D.bml" />
+        <BlockRef ref="types/Direction.bml" />
         <BlockRef ref="blocks/Standard.bml" />
         <BlockRef ref="blocks/Plate.bml" />
         <BlockRef ref="blocks/Tile.bml" />
@@ -2170,9 +2165,9 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 </block>
 ```
 
-**`ref` paths** on `TypeRef`, `BlockRef`, and `Schema` are relative to the **library package root** (directory containing the Library block file).
+**`ref` paths** on `BlockRef` and `Schema` are relative to the **library package root** (directory containing the Library block file).
 
-**`_types`** lists exported TypeBlock definitions (StructType, EnumType, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML. A future compiler tool may generate XSD from `_types` instead of requiring authored `.xsd` files.
+**`_blocks`** lists exported Block and TypeBlock definitions (composable Blocks, StructType, EnumType, presets, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML.
 
 **Directory structure:**
 

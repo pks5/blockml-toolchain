@@ -164,7 +164,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml
      org/blockml/service/Math.bml · Strings.bml · …
-     org/blockml/core/Library.bml   ← includes Dependency · Schema · TypeRef · BlockRef as subBlocks
+     org/blockml/core/BlockLibrary.bml   ← includes Dependency · Schema · BlockRef as subBlocks
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
@@ -213,7 +213,7 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/blocks/
   org/blockml/core/
-    Block.bml · TypeBlock.bml · Constraint.bml · ServiceBlock.bml · FunctionBlock.bml · Library.bml · …
+    Block.bml · TypeBlock.bml · Constraint.bml · ServiceBlock.bml · FunctionBlock.bml · BlockLibrary.bml · …
   org/blockml/constraint/
     Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
   org/blockml/service/

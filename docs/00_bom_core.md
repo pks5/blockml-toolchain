@@ -1229,30 +1229,28 @@ configProfile < basePresets chain < inline property
 
 ## Library
 
-A Library is a **Block** with `baseType="org.blockml.core.Library"`. It groups exported Block definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Preset blocks are exported as ordinary Block definitions via `_blocks`. Replaces the legacy `library.xml` descriptor.
+A Library is a **Block** with `baseType="org.blockml.core.BlockLibrary"`. It groups exported Block and TypeBlock definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
 
 ```text
-org.blockml.core.Library           abstract composable Block
+org.blockml.core.BlockLibrary           abstract composable Block
   property     description   String
-  subBlocks    Dependency · Schema · TypeRef · BlockRef
+  subBlocks    Dependency · Schema · BlockRef
   aggregation  _dependencies  Dependency[]
   aggregation  _schemas       Schema[]       (optional — legacy XSD)
-  aggregation  _types         TypeRef[]      (StructType / EnumType BML)
-  aggregation  _blocks        BlockRef[]
+  aggregation  _blocks        BlockRef[]     (Block + TypeBlock BML)
 
-org.blockml.core.Library.Dependency   ref (Library FQN) · version
-org.blockml.core.Library.Schema       ref (relative .xsd path)
-org.blockml.core.Library.TypeRef      ref (relative TypeBlock .bml path)
-org.blockml.core.Library.BlockRef     ref (relative block .bml path)
+org.blockml.core.BlockLibrary.Dependency   ref (BlockLibrary FQN) · version
+org.blockml.core.BlockLibrary.Schema       ref (relative .xsd path)
+org.blockml.core.BlockLibrary.BlockRef     ref (relative block or type .bml path)
 ```
 
 The Library block lives in a package directory (e.g. `com/machineblocks/bricks/`). Its FQN follows the normal block rule: package path + block name (e.g. `com.machineblocks.bricks.BricksLibrary`).
 
 **Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for the `com.machineblocks.bricks` package. Makes the library descriptor identifiable as such; not enforced by the compiler. Filename matches block name (`BricksLibrary.bml`).
 
-**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `TypeRef` / `BlockRef` paths relative to the library root, and registers referenced files in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `BlockRef` paths relative to the library root, and registers referenced files in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
-**Types:** `_types` lists exported TypeBlock BML (StructType, EnumType, …). `_schemas` is optional legacy XSD — omit when types are BML-only. A future tool may generate XSD from `_types` for IDE tooling.
+**Types:** TypeBlock definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** is optional legacy XSD — omit when types are BML-only.
 
 A Library answers: *"What Block types, presets, and types does this package export?"*
 
