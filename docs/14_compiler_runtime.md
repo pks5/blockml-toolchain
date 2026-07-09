@@ -111,7 +111,7 @@ A Composite Block compiles to **one SCAD file** with:
 1. Typed entry module     mb__…__Calibrator(config, settings)
 2. Sub-Block sub-modules  mb__…__Calibrator__Base(...), …     (same file)
 3. Leaf instances         mb_block(...) inside sub-modules     (NativeBlock)
-4. Utils / FunctionBlock  inline functions in same file
+4. Utils Sub-Blocks  inline functions in same file
 ```
 
 Sub-Blocks are **not** separate output files.

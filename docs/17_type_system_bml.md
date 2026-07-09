@@ -52,7 +52,7 @@ BOM Core is how Things are structured.
 Everything else is implementation.
 ```
 
-Types are structure. They belong in BML — the same language humans, LLMs, and compilers use for Walls, Bricks, and ServiceBlocks. A MachineBlocks Set rendered to SCAD + a Martian Micro Device rendered to Python + React share **the same type FQNs**; only the render mapping differs.
+Types are structure. They belong in BML — the same language humans, LLMs, and compilers use for Walls, Bricks, and built-in services. A MachineBlocks Set rendered to SCAD + a Martian Micro Device rendered to Python + React share **the same type FQNs**; only the render mapping differs.
 
 ---
 
@@ -101,7 +101,7 @@ The compiler **must** (input / pipeline):
 The compiler **does not** need to (internal representation):
 
 - store all definitions in one homogeneous `Block` class hierarchy at runtime
-- treat ValueTypes and LanguageBlocks identically to other Blocks in memory
+- treat ValueTypes and Languages identically to other Blocks in memory
 - expose „Block“ as a domain object API beyond parser/BOM/validator surfaces
 - map BML 1:1 onto object-oriented domain models
 
@@ -160,7 +160,7 @@ The split is the WOT architecture applied to BlockML:
 
 ```text
 Idea (Plato)              BML / semantic layer
-  Urbild · unveränderlich   Block · ValueType · LanguageBlock · FQN
+  Urbild · unveränderlich   Block · ValueType · Language · FQN
   existiert vor der Welt    beschreibbar ohne Render Target
   keine Substanz            keine SCAD · kein Python · kein 3D-Druck
 
@@ -181,7 +181,7 @@ See `WOT_Reference_v26.md` §1 · The Idea · Manifestation.
 
 ## One Root: Everything is a Block
 
-BOM Core defines Block as **„a parametric, reusable unit (definition / type)“** — not only as a composable physical object. ValueTypes and LanguageBlocks are type definitions. They **are Blocks**.
+BOM Core defines Block as **„a parametric, reusable unit (definition / type)“** — not only as a composable physical object. ValueTypes and Languages are type definitions. They **are Blocks**.
 
 **Class vs Object:** In familiar terms, every `<block>` document is a **Class** (declarative, semantic type). Every element in a `<composition>` is a **Block Instance** — an **Object** referencing that class by FQN. ValueTypes (`Integer`, `Size3d`) are type-classes that may also appear as Block instances — interpretation is context-dependent. See `00_bom_core.md` — Block and Block Instance · Context-Dependent Interpretation (below).
 
@@ -190,8 +190,8 @@ All definitions use the BML `<block>` element, register in the same TypeRegistry
 ```text
 org.blockml.core.Block                         abstract root · omits baseType
   ├── org.blockml.core.ValueType               value blocks — Property types · Capability input/output (Size3D, Integer, …)
-  ├── org.blockml.core.LanguageBlock           capability implementation contract (OpenSCAD, …)
-  ├── org.blockml.core.ServiceBlock          service branch
+  ├── org.blockml.core.Language                capability implementation contract (OpenSCAD, English, …)
+  ├── org.blockml.core.Entity                general entities — built-in services, domain blocks
   ├── com.machineblocks.core.Block             domain base
   └── … user and domain Blocks
 ```
@@ -207,11 +207,11 @@ This is a **foundational decision**, not a naming convention:
 ```text
 Wall              →  Block  (domain composable)
 Integer           →  Block  (ValueType branch)
-OpenSCAD          →  Block  (LanguageBlock branch)
+OpenSCAD          →  Block  (Language branch)
 Step              →  Block  (Set meta block)
 IPlaceable        →  Block  (abstract — usable as contract / interface)
 Library           →  Block  (publishable package descriptor; entry types as subBlocks)
-Math · #strings   →  Block  (ServiceBlock branch)
+Math · #strings   →  Block  (org.blockml.service.* · baseType Entity)
 org.blockml.core.Block itself  →  Block  (root)
 ```
 
@@ -233,8 +233,8 @@ Before the compiler validates or renders **any** user file, it bootstraps the Ty
 
 ```text
 @blockml/core BML
-  Block.bml · ValueType.bml · LanguageBlock.bml · ServiceBlock.bml · FunctionBlock.bml
-  Integer.bml · OpenSCAD.bml · …
+  Block.bml · ValueType.bml · Language.bml · ProgrammingLanguage.bml
+  Integer.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml · …
   Math.bml · Strings.bml · …
 
 @machineblocks/mbom BML
@@ -256,22 +256,23 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 
 ### Flat hierarchy under Block
 
-`org.blockml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.core.Block` directly (or via intermediate branches like `ValueType`, `ServiceBlock`, `com.machineblocks.core.Block`):
+`org.blockml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.core.Block` directly (or via intermediate branches like `ValueType`, `Entity`, `com.machineblocks.core.Block`):
 
 ```text
 org.blockml.core.Block           root · declares no members · bml:id / bml:version on composition instances
-org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
-com.machineblocks.core.Block     baseType: Block · _presets · basePresets
+org.blockml.core.Entity          baseType: Block · built-in services · utility Sub-Blocks
+com.machineblocks.core.Block     baseType: Entity · _presets · basePresets
 com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)
 org.blockml.core.ValueType         baseType: Block · primitives · structs · enums
-org.blockml.core.LanguageBlock     baseType: Block (meta — no extra members in V1)
+org.blockml.core.Language          baseType: Block (meta — no extra members in V1)
+org.blockml.core.ProgrammingLanguage baseType: Language
 ```
 
 ```text
-com.machineblocks.core.Block     baseType: org.blockml.core.Block
-org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
+com.machineblocks.core.Block     baseType: org.blockml.core.Entity
+org.blockml.service.Math         baseType: org.blockml.core.Entity
 com.machineblocks.type.Size3d    baseType: StructType → … → ValueType → Block
-org.blockml.language.OpenSCAD    baseType: LanguageBlock → Block
+org.blockml.language.OpenSCAD    baseType: ProgrammingLanguage → Language → Block
 ```
 
 **Member usage rules:**
@@ -300,7 +301,7 @@ Same FQN · different role · one BML definition.
 
 ## ValueType Hierarchy
 
-**`org.blockml.core.ValueType`** is the abstract branch for all **value blocks** — Blocks whose `baseType` chain includes ValueType and that may appear wherever a typed payload is required: Property `type`, Capability `inputType`, and Capability `outputType`. Composable Blocks, ServiceBlocks, and other general Blocks are **not** ValueTypes; they may appear in aggregations and associations, but not as property or Capability payload types.
+**`org.blockml.core.ValueType`** is the abstract branch for all **value blocks** — Blocks whose `baseType` chain includes ValueType and that may appear wherever a typed payload is required: Property `type`, Capability `inputType`, and Capability `outputType`. Composable Blocks, built-in services, and other general Blocks are **not** ValueTypes; they may appear in aggregations and associations, but not as property or Capability payload types.
 
 ### Design Principles
 
@@ -575,9 +576,9 @@ size.x    — named access (TypeScript, object-native targets)
 
 The index is always derivable from the type definition; renderers do not maintain separate field-order tables.
 
-### FunctionBlock parameter mapping
+### Capability parameter mapping
 
-When a `FunctionBlock` Capability declares a structured Object as `inputType`, the Object is an anonymous struct. **Field order defines positional parameter order** — the same rule as StructType properties:
+When a `utility Sub-Block` Capability declares a structured Object as `inputType`, the Object is an anonymous struct. **Field order defines positional parameter order** — the same rule as StructType properties:
 
 ```text
 inputType: { a: Float, b: Float }
@@ -610,7 +611,7 @@ Because field index is part of the **public contract** of a struct type:
 * New fields may be appended **only at the end** to preserve backward compatibility.
 * Removing or reordering fields is an **incompatible breaking change** (requires a new type FQN or major version bump).
 
-This applies to named StructTypes (`Size3d`, `Color`, …) and to anonymous struct signatures on FunctionBlock Capabilities.
+This applies to named StructTypes (`Size3d`, `Color`, …) and to anonymous struct signatures on Capability.
 
 ---
 
@@ -787,36 +788,42 @@ Contracts are orthogonal to `baseType` inheritance. See `00_bom_core.md` — Con
 
 ---
 
-## LanguageBlock
+## Language
 
-Implementation languages inherit from `org.blockml.core.Block` via `org.blockml.core.LanguageBlock`:
+Implementation languages inherit from `org.blockml.core.Block` via `org.blockml.core.Language`:
 
 ```text
 org.blockml.core.Block
-  └── org.blockml.core.LanguageBlock   abstract
-        ├── org.blockml.language.TypeScript
-        └── org.blockml.language.OpenSCAD
+  └── org.blockml.core.Language                    abstract
+        ├── org.blockml.core.ProgrammingLanguage   abstract
+        │     ├── org.blockml.language.TypeScript
+        │     ├── org.blockml.language.OpenSCAD
+        │     └── org.blockml.language.PseudoCode
+        ├── org.blockml.language.English
+        └── org.blockml.language.German
 ```
 
 ```xml
 <block ...>
   <name>OpenSCAD</name>
   <type>org.blockml.language.OpenSCAD</type>
-  <baseType>org.blockml.core.LanguageBlock</baseType>
+  <baseType>org.blockml.core.ProgrammingLanguage</baseType>
   <version>1.0.0</version>
   <abstract />
 </block>
 ```
 
-Composable Blocks reference languages via `<implType type="org.blockml.language.OpenSCAD" />` — see `16_framework_base_types.md`. The language FQN must resolve to a registered LanguageBlock definition.
+Every Capability inherits an optional `<implementation>` member from `org.blockml.core.CapabilityType`. The element **`type`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<implType type="org.blockml.language.OpenSCAD" />` — see `16_framework_base_types.md`.
 
-V1: two bootstrap languages in `@blockml/core`. Extensibility: domains register new LanguageBlock BML files.
+**PseudoCode** is free-form program code that must be internally consistent but is otherwise unconstrained — an LLM may interpret it.
+
+V1 bootstrap languages in `@blockml/core`: TypeScript, OpenSCAD, English, German, PseudoCode. Extensibility: domains register new Language BML files.
 
 ---
 
 ## Root Exception
 
-Only **`org.blockml.core.Block`** omits `<baseType>`. Every other definition must declare `<baseType>` — including `ValueType` and `LanguageBlock`.
+Only **`org.blockml.core.Block`** omits `<baseType>`. Every other definition must declare `<baseType>` — including `ValueType` and `Language`.
 
 ---
 
@@ -827,11 +834,11 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 ```text
 … → ValueType → Block           value type branch
 … → Constraint → Block            constraint branch
-… → LanguageBlock → Block         language branch
-… → Block (no ValueType/LanguageBlock/Constraint ancestor)   general block branch
+… → Language → Block              language branch
+… → Block (no ValueType/Language/Constraint ancestor)   general block branch
 ```
 
-| Rule | General Block | ValueType | Constraint | LanguageBlock |
+| Rule | General Block | ValueType | Constraint | Language |
 |---|---|---|---|---|
 | `<composition>` | allowed | EnumType: `_values` only; others: definition-level only | forbidden | forbidden |
 | `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden | forbidden |
@@ -885,10 +892,9 @@ Type definitions bootstrap **before** composable Blocks that reference them:
      org/blockml/core/Block.bml
      org/blockml/core/ValueType.bml · StructType.bml · EnumType.bml · Constraint.bml · …
      org/blockml/constraint/Min.bml · Max.bml · …
-     org/blockml/core/LanguageBlock.bml
+     org/blockml/core/Language.bml · ProgrammingLanguage.bml
      org/blockml/type/Integer.bml · …
-     org/blockml/language/TypeScript.bml · OpenSCAD.bml
-     org/blockml/core/ServiceBlock.bml · FunctionBlock.bml
+     org/blockml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/service/Math.bml · Strings.bml · …
 
 2. @machineblocks/mbom
@@ -906,7 +912,7 @@ Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType`
 > **Note:** These phases are **type-migration steps within V1** — not the system-wide V1/V2/V3 roadmap. See `01_system.md` — BML Self-Description Roadmap.
 
 ```text
-Phase 1 (this document)   Spec + bootstrap primitives + LanguageBlock BML
+Phase 1 (this document)   Spec + bootstrap primitives + Language BML
 Phase 2                   Migrate com.machineblocks.type.* from 04_types.md → BML
 Phase 3                   Remove enum SSOT from domain XSD files
 Phase 4                   04_types.md becomes parse/serialize reference only
@@ -923,11 +929,11 @@ Property declarations on composable Blocks migrate from `09_mbom_properties.yml`
 ```text
 packages/core/blocks/
   org/blockml/core/
-    Block.bml · ValueType.bml · ServiceBlock.bml · FunctionBlock.bml · LanguageBlock.bml · …
+    Block.bml · ValueType.bml · Language.bml · ProgrammingLanguage.bml · …
   org/blockml/type/
     Integer.bml · Float.bml · String.bml · Boolean.bml · …
   org/blockml/language/
-    TypeScript.bml · OpenSCAD.bml
+    TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
   org/blockml/service/
     Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 

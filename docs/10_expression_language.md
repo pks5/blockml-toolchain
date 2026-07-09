@@ -253,7 +253,7 @@ The parser resolves ambiguity by checking the member namespace: `foo()` → Tran
 
 ## Model Binding (`@model:`)
 
-Model Bindings connect a member value to a path in a ServiceBlock Model (JSONModel, ODataModel, etc.).
+Model Bindings connect a member value to a path in a service Model (JSONModel, ODataModel, etc.).
 
 ```text
 ${ @myModel:/absolute/path }    — absolute path from model root
@@ -274,17 +274,17 @@ Children within a Model-bound Aggregation inherit the binding context. Relative 
 
 ---
 
-## Block-Scoped Functions (FunctionBlock)
+## Block-Scoped Functions (utility Sub-Blocks)
 
-Block-scoped functions are Transformation Capabilities of a `FunctionBlock` Sub-Block, bound as a context-scoped bean. They are called in Expressions via the bean name and capability name:
+Block-scoped functions are Transformation Capabilities of a `utility Sub-Block` Sub-Block, bound as a context-scoped bean. They are called in Expressions via the bean name and capability name:
 
 ```text
 ${ @utils.formatValue(valueStart + i * valueStep) }
 ```
 
-> **V1 scope:** FunctionBlock calls use `@bean` syntax and are **not implemented in V1**. The example above illustrates the complete language.
+> **V1 scope:** utility Sub-Block calls use `@bean` syntax and are **not implemented in V1**. The example above illustrates the complete language.
 
-The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggregation:
+The utility Sub-Block is declared as a Sub-Block and bound via a context-scoped Aggregation:
 
 ```xml
 <!-- Aggregation on parent Block: -->
@@ -292,10 +292,10 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
         beanName="utils"
         scope="context" />
 
-<!-- FunctionBlock Sub-Block: -->
+<!-- utility Sub-Block: -->
 <block>
   <name>Utils</name>
-  <baseType>org.blockml.core.FunctionBlock</baseType>
+  <baseType>org.blockml.core.Entity</baseType>
   <version>1.0.0</version>
   <capabilities>
     <formatValue
@@ -317,9 +317,9 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
 
 The `<implementation>` element is a child of the capability member element. The **`type`** attribute identifies the implementation language as an `org.blockml.language.*` FQN (V1: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
 
-FunctionBlock calls follow the same syntax as regular `@bean` Transformation Capability calls — there is no special syntax. The FunctionBlock pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
+utility Sub-Block calls follow the same syntax as regular `@bean` Transformation Capability calls — there is no special syntax. The utility Sub-Block pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
 
-**Transition path:** when a FunctionBlock capability is later covered by a `#built-in`, the `<implementation>` is removed and the call site is updated from `@utils.formatValue(x)` to `#numbers.formatDecimal(x, 0, '.', 1)`. The Capability signature and all other call sites remain unchanged.
+**Transition path:** when a utility Sub-Block capability is later covered by a `#built-in`, the `<implementation>` is removed and the call site is updated from `@utils.formatValue(x)` to `#numbers.formatDecimal(x, 0, '.', 1)`. The Capability signature and all other call sites remain unchanged.
 
 ---
 
@@ -464,9 +464,9 @@ inputType / outputType options:
   { items: T[0..n] }               — collection field (multiplicity on reference)
 ```
 
-### FunctionBlock: Object inputType as Function Signature
+### utility Sub-Block: Object inputType as Function Signature
 
-A `FunctionBlock` interprets a Capability as a function. When the `inputType` is a structured Object with named keys, it serves as the function signature:
+A `utility Sub-Block` interprets a Capability as a function. When the `inputType` is a structured Object with named keys, it serves as the function signature:
 
 ```text
 { a: Float, b: Float }
@@ -486,7 +486,7 @@ inputType: Float
   → Named:      #math.floor(x=val)
 ```
 
-**FunctionBlock implementation receives named parameters directly:**
+**Capability implementation receives named parameters directly:**
 
 ```typescript
 // inputType: { a: Float, b: Float }
@@ -506,7 +506,7 @@ inputType: Float
                          → named: func(a=x, b=y)
 ```
 
-`T[0..n]` is multiplicity on a type reference — not a separate Array type. Use a structured Object with named keys for fixed-arity FunctionBlock capabilities. See `17_type_system_bml.md` — Collections and Multiplicity.
+`T[0..n]` is multiplicity on a type reference — not a separate Array type. Use a structured Object with named keys for fixed-arity utility Sub-Block capabilities. See `17_type_system_bml.md` — Collections and Multiplicity.
 
 ---
 
@@ -740,7 +740,7 @@ Property access (no prefix):
   — resolved by walking up the Composition hierarchy
   — context-scoped beans (scope="context") visible to all descendants
   — local beans (scope="local") visible only in declaring Block
-  — FunctionBlock beans follow the same scoping rules
+  — utility Sub-Block beans follow the same scoping rules
 
 #built-in references:
   — always available, inherited via baseType
@@ -1263,26 +1263,26 @@ Built-ins:       #math.min/max/abs/floor/ceil/round/round(x,n)/pow/sqrt/clamp
                  #lists.size/get/first/last/sequence
 bml: directives: bml:each (numeric + collection), bml:if, bml:unless,
                  bml:container, bml:with
-FunctionBlock:   Sub-Blocks with type="org.blockml.language.OpenSCAD" implementations (specified;
+utility Sub-Block:   Sub-Blocks with type="org.blockml.language.OpenSCAD" implementations (specified;
                  callable via @bean — deferred in V1)
 ```
 
 **V1 — Deferred:**
 
 ```text
-@bean calls        — no bean execution in V1 (includes FunctionBlock calls)
+@bean calls        — no bean execution in V1 (includes utility Sub-Block calls)
 Model bindings     — no runtime model in V1
 Capability linking — no runtime messaging in V1
 #strings.*         — (except concat, length)
 #bools.*
-TypeScript ServiceBlocks / transpilation
+TypeScript service Blocks / transpilation
 ```
 
 ---
 
-## TypeScript ServiceBlock (Future)
+## TypeScript service Block (Future)
 
-A TypeScript-based ServiceBlock allows functions to be defined in TypeScript and transpiled to the target language by the BlockProcessor.
+A TypeScript-based service Block allows functions to be defined in TypeScript and transpiled to the target language by the BlockProcessor.
 
 This is the mechanism for cases where:
 - No `#built-in` covers the needed logic

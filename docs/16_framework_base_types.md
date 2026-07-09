@@ -4,7 +4,7 @@ version: 0.1.0
 
 ## Purpose of this Document
 
-This document specifies how **framework base types** (`org.blockml.core.Block`, `com.machineblocks.core.Block`, `org.blockml.core.FunctionBlock`, …) are defined — as **BML files**, not code or YAML.
+This document specifies how **framework base types** (`org.blockml.core.Block`, `com.machineblocks.core.Block`, `org.blockml.core.Entity`, …) are defined — as **BML files**, not code or YAML.
 
 For BML block syntax see `02_mbml.md`.
 For MBOM hierarchy see `03_mbom.md`.
@@ -89,7 +89,7 @@ Prefer the self-closing form for root flags set once and not overridable by chil
 ```xml
 <subTypes>
   <subType type="com.machineblocks.core.Block" />
-  <subType type="org.blockml.core.FunctionBlock" />
+  <subType type="org.blockml.core.Entity" />
 </subTypes>
 ```
 
@@ -146,7 +146,7 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 
 `org.blockml.core.Block` is the **sole inheritance root**. It **omits `<baseType>`** — the only definition allowed to do so.
 
-All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.core.ValueType`, `org.blockml.core.LanguageBlock`, or domain bases — all ultimately extend `org.blockml.core.Block`. See `17_type_system_bml.md`.
+All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.core.ValueType`, `org.blockml.core.Language`, or domain bases — all ultimately extend `org.blockml.core.Block`. See `17_type_system_bml.md`.
 
 ---
 
@@ -160,10 +160,10 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · …
      org/blockml/core/Constraint.bml
      org/blockml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
-     org/blockml/core/ServiceBlock.bml · FunctionBlock.bml
-     org/blockml/core/LanguageBlock.bml
+     org/blockml/core/
+     org/blockml/core/Language.bml · ProgrammingLanguage.bml
      org/blockml/type/Integer.bml · …
-     org/blockml/language/TypeScript.bml · OpenSCAD.bml
+     org/blockml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/service/Math.bml · Strings.bml · …
      org/blockml/core/BlockLibrary.bml   ← includes Schema as subBlock; _dependencies / _blocks as Block references
 
@@ -214,7 +214,7 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/blocks/
   org/blockml/core/
-    Block.bml · ValueType.bml · Constraint.bml · ServiceBlock.bml · FunctionBlock.bml · BlockLibrary.bml · …
+    Block.bml · ValueType.bml · Constraint.bml · Language.bml · ProgrammingLanguage.bml · BlockLibrary.bml · …
   org/blockml/constraint/
     Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
   org/blockml/service/

@@ -187,13 +187,13 @@ Wall  (baseType: com.machineblocks.core.CompositeBlock)
 name          — member name (unique within the Block's member namespace)
 type          — FQN of the child type, optionally with occurrence brackets (see 02_mbml.md — Type Notation)
 default       — boolean; marks the default aggregation for bare <composition>
-beanName      — optional; marks this Aggregation as a ServiceBlock binding
+beanName      — optional; marks this Aggregation as a service binding
 documentation — human-readable description
 ```
 
 Member visibility follows the three-level naming convention in `02_mbml.md` — § Member Visibility (`__` private, `_` protected, plain public). Protected aggregations are visible in child Blocks.
 
-When `beanName` is set, the Aggregation is a ServiceBlock binding. The bean is accessible in Expressions via `@beanName`.
+When `beanName` is set, the Aggregation is a service binding. The bean is accessible in Expressions via `@beanName`.
 
 ---
 
@@ -304,9 +304,9 @@ ${ @myService.getAddress() }        — Dynamic address (Transformation outputTy
 
 Capabilities are inherited via `baseType`, identical to Properties and Aggregations.
 
-### MachineBlocks Built-in ServiceBlocks
+### MachineBlocks Built-in services
 
-Built-in ServiceBlocks are defined in `com.machineblocks.core.Block` and accessible in all MachineBlocks Blocks via the `#` prefix:
+Built-in services are defined in `com.machineblocks.core.Block` and accessible in all MachineBlocks Blocks via the `#` prefix:
 
 ```text
 #math    — Transformation capabilities: min, max, ceil, floor, abs, round, ...
@@ -495,9 +495,11 @@ Framework types are **BML files** — see `16_framework_base_types.md`. Interpre
 org.blockml.core.Block                                  ← packages/core/…/Block.bml (abstract, root)
     com.machineblocks.core.Step                         ← mbom/…/Step.bml (final)
   org.blockml.core.ValueType                            ← ValueType.bml (abstract)
-  org.blockml.core.LanguageBlock                        ← LanguageBlock.bml (abstract)
-  org.blockml.core.ServiceBlock                         ← core/…/ServiceBlock.bml
-    org.blockml.core.FunctionBlock                      ← core/…/FunctionBlock.bml
+  org.blockml.core.Language                             ← Language.bml (abstract)
+    org.blockml.core.ProgrammingLanguage                ← ProgrammingLanguage.bml (abstract)
+      org.blockml.language.TypeScript · OpenSCAD · PseudoCode
+    org.blockml.language.English · German
+  org.blockml.core.Entity                               ← Entity.bml (abstract)
       org.blockml.service.Math                          ← core/…/service/Math.bml
   com.machineblocks.core.Block                          ← mbom/…/Block.bml (abstract)
     com.machineblocks.core.CompositeBlock               ← CompositeBlock.bml (abstract)
@@ -512,10 +514,10 @@ org.blockml.core.Block                                  ← packages/core/…/Bl
 
 ### com.machineblocks.core.Block
 
-MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/blocks/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.Block`.
+MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/blocks/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.Entity`.
 
 ```text
-Extends:        org.blockml.core.Block
+Extends:        org.blockml.core.Entity
 Properties:     name (String)
 Associations:   basePresets (_self[] — references ids in _presets)
 Aggregations:   _presets (type: com.machineblocks.core.Block[])
@@ -530,7 +532,7 @@ Defined in `CompositeBlock.bml`. Extends `Block`. Adds `_parts` as the default c
 ```text
 Extends:        com.machineblocks.core.Block
 Aggregations:   _parts (type: com.machineblocks.core.Block[], default)
-subTypes: Block, FunctionBlock
+subTypes: Block
 implTypes: OpenSCAD
 ```
 
@@ -576,17 +578,16 @@ Declared on `CompositeBlock.bml` (enables Sub-Blocks for composites):
 ```xml
 <subTypes>
   <subType type="com.machineblocks.core.Block" />
-  <subType type="org.blockml.core.FunctionBlock" />
 </subTypes>
 ```
 
 ```text
 org.blockml.core.Block                — omitted → effective []
 com.machineblocks.core.Block          — omitted → inherits []
-com.machineblocks.core.CompositeBlock — explicit → Block, FunctionBlock
+com.machineblocks.core.CompositeBlock — explicit → Block
 com.machineblocks.core.Set            — omitted → inherits CompositeBlock
 com.machineblocks.core.NativeBlock    — omitted → inherits [] (final leaf)
-org.blockml.core.FunctionBlock     — omitted → inherits []
+org.blockml.service.Math              — baseType: org.blockml.core.Entity
 ```
 
 To close Sub-Blocks on a type whose parent enabled them: `<subTypes/>` (explicit empty override).
@@ -603,7 +604,7 @@ Declared on `CompositeBlock.bml`:
 
 ```text
 com.machineblocks.core.CompositeBlock — OpenSCAD
-org.blockml.core.FunctionBlock       — OpenSCAD, TypeScript
+org.blockml.service.*                 — TypeScript on Transformation capabilities
 ```
 
 ### Validation

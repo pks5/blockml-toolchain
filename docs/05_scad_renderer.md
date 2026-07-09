@@ -492,7 +492,7 @@ withVariable        →  SCAD local variable (from bml:with scope)
 #math.max(a, b)     →  SCAD: max(a, b)
 ```
 
-`@bean` expressions (user-defined ServiceBlock calls and model bindings) are resolved at compile time where possible. Runtime behavior for `@bean` expressions in SCAD output is to be defined.
+`@bean` expressions (user-defined service calls and model bindings) are resolved at compile time where possible. Runtime behavior for `@bean` expressions in SCAD output is to be defined.
 
 ---
 

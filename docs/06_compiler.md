@@ -158,7 +158,7 @@ Recognized expression forms (see `00_bom_core.md` — Expression System):
 ```text
 ${ myProperty }                             — property access
 ${ myProperty.x }                           — attribute access
-${ #builtIn.capa(args) }                    — built-in ServiceBlock call
+${ #builtIn.capa(args) }                    — built-in service call
 ${ @bean.capa(args) }                       — user Bean call
 ${ @bean.outbound }                         — capability linking
 ${ @model:/path }                           — absolute model binding
@@ -314,7 +314,7 @@ class MachineBlocksV3ScadTarget implements RenderTarget {
     new ScadSetProcessor(),           // compile strategy — more specific
     new ScadBlockProcessor(),         // compile strategy — baseType fallback
     new MathBuiltInProcessor(),       // copy strategy
-    new FunctionBlockProcessor()      // compile strategy (TS → SCAD)
+    new CapabilityImplementationProcessor()      // compile strategy (TS → SCAD)
   ]
 
   delegates = []
@@ -506,9 +506,9 @@ BML_DEPRECATED_TYPE    — referenced type is deprecated
 
 ---
 
-## FunctionBlock Transpilation
+## Capability Implementation Transpilation
 
-A `FunctionBlock` Sub-Block binds target-language implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs.
+A `utility Sub-Block` Sub-Block binds target-language implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs.
 
 Two implementation types are supported in V1:
 
@@ -586,7 +586,7 @@ BML_IMPLEMENTATION_UNKNOWN_TYPE — type attribute is not a known org.blockml.la
 
 ### Built-in Services — No Processor Needed
 
-Built-in Services (`#math`, `#strings`, etc.) are defined as BML FunctionBlocks in `@blockml/core` (SSOT). Their SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` as pre-rendered artifacts:
+Built-in Services (`#math`, `#strings`, etc.) are defined as BML service Blocks in `@blockml/core` (SSOT). Their SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` as pre-rendered artifacts:
 
 ```text
 FQN:  org.blockml.service.Math  →  scad-lib/blocks/org/blockml/service/Math.scad
@@ -604,11 +604,11 @@ function bom__com__bom__service__Math__abs(x) = abs(x);
 function bom__com__bom__service__Math__clamp(x, lo, hi) = min(max(x, lo), hi);
 ```
 
-The ScadBlockProcessor automatically adds `use` imports for each service file that the Block's expressions reference — no separate ServiceBlock Processor needed.
+The ScadBlockProcessor automatically adds `use` imports for each service file that the Block's expressions reference — no separate service processor needed.
 
 ### Future: LLM-Based Implementation
 
-In V1, a FunctionBlock without a matching `<implementation type="org.blockml.language.OpenSCAD">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
+In V1, an Entity Sub-Block without a matching `<implementation type="org.blockml.language.OpenSCAD">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
 
 The natural next step is the LLM Engine: given the Capability signature (name, inputType, outputType) and its `<documentation>`, the LLM generates a correct target-language implementation. No `<implementation>` block needed:
 

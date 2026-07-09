@@ -113,7 +113,7 @@ bom-compiler/
               processor.ts
             MathBuiltInProcessor/    — copy strategy (copies scad-lib math helpers)
               processor.ts
-            FunctionBlockProcessor/  — compile strategy (TS → SCAD transpilation)
+            CapabilityImplementationProcessor/  — compile strategy (TS → SCAD transpilation)
               processor.ts
         runtimes/
           scad-lib/    — Git Submodule: MachineBlocks V3 SCAD Library
@@ -146,9 +146,9 @@ This means a single RenderTarget can mix strategies freely — some Processors c
 
 New engines can always be built as independent packages. Each implements the CompilerEngine contract via the `RenderEngine` interface. MakerEngine is the first such implementation — named `maker-engine` because it is designed around the use cases that emerge from the MakerUniverse — physical blocks, electronics, services.
 
-### Built-in ServiceBlock Definitions
+### Built-in service Definitions
 
-Built-in ServiceBlocks (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML FunctionBlock files in `@blockml/core` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
+Built-in services (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML service files in `@blockml/core` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 The library follows Thymeleaf's `#` utility object naming — plural for utilities (`#strings`, `#lists`, …), extended with `#math` which Thymeleaf does not provide.
 
@@ -156,8 +156,11 @@ The library follows Thymeleaf's `#` utility object naming — plural for utiliti
 packages/core/
   blocks/
     org/blockml/core/
-      ServiceBlock.bml   ← org.blockml.core.ServiceBlock
-      FunctionBlock.bml  ← org.blockml.core.FunctionBlock
+      Entity.bml         ← org.blockml.core.Entity
+      Language.bml       ← org.blockml.core.Language
+      ProgrammingLanguage.bml ← org.blockml.core.ProgrammingLanguage
+    org/blockml/language/
+      TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
     org/blockml/service/
       Math.bml           ← org.blockml.service.Math      — #math.*
       Strings.bml        ← org.blockml.service.Strings   — #strings.*
@@ -169,7 +172,7 @@ packages/core/
 **Naming mapping** (package segment `.service` is singular; utility names follow Thymeleaf):
 
 ```text
-# prefix (authoring)     FunctionBlock FQN                  BML file
+# prefix (authoring)     Service FQN                  BML file
 #math.*                  org.blockml.service.Math           Math.bml
 #strings.*               org.blockml.service.Strings        Strings.bml
 #numbers.*               org.blockml.service.Numbers        Numbers.bml
@@ -618,7 +621,7 @@ V1 does **not** model the full compiler in BML. V1 pulls into BML only what you 
 | Native MachineBlocks properties | Target implementation details |
 | Defaults and computed defaults | Design rationale and principles |
 | Suggestions / customizer metadata | Runtime and bootstrap internals |
-| ServiceBlocks / built-ins used in expressions | Full replacement of existing docs |
+| Built-in services used in expressions | Full replacement of existing docs |
 | Framework base types for validation and authoring | Self-hosting of the entire toolchain |
 
 Markdown remains **authoritative** in V1 for architecture, pipeline, runtime, CLI, implementation details, and design rationale.
@@ -686,7 +689,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
 15_dev_setup.md        — monorepo tooling, build, test, IDE setup
 16_framework_base_types.md — framework base types as BML (abstract, final, subTypes)
-17_type_system_bml.md  — ValueType, LanguageBlock, Block hierarchy
+17_type_system_bml.md  — ValueType, Language, Block hierarchy
 09_mbom_properties.yml — MBOM native property SCAD mapping (render only)
 
 domains/machineblocks/runtimes/scad-lib/

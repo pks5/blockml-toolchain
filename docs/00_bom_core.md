@@ -50,7 +50,7 @@ This is a **semantic** analogy — not a mandate for runtime OOP. The compiler m
 
 ```text
 ValueType (Integer, Size3D)     →  semantic value class for Property values and Capability input/output
-LanguageBlock (OpenSCAD)        →  semantic meta-class for implementation contract
+Language (OpenSCAD)        →  semantic meta-class for implementation contract
 Sub-Block in same .bml file     →  nested class (derived type, inner scope)
 Preset                          →  named default binding on a class (partial object factory)
 ```
@@ -114,12 +114,12 @@ Direct package segments under `org.blockml` that belong to the **language** are 
 ```text
 org.blockml.core.*         — framework base types (Block, ValueType, Library, …)
 org.blockml.type.*         — primitive and bootstrap ValueTypes (Integer, Float, …)
-org.blockml.service.*      — built-in ServiceBlocks (#math, #strings, …)
+org.blockml.service.*      — built-in services (#math, #strings, …)
 org.blockml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
-org.blockml.language.*     — LanguageBlocks (TypeScript, OpenSCAD, …)
+org.blockml.language.*     — Languages (TypeScript, OpenSCAD, …)
 ```
 
-These namespaces contain BML-defined Blocks, ValueTypes, ServiceBlocks, Capability types, and LanguageBlocks. They are part of the public BlockML grammar.
+These namespaces contain BML-defined Blocks, ValueTypes, Blocks, Capability types, and Languages. They are part of the public BlockML grammar.
 
 ### Implementation Namespaces
 
@@ -160,7 +160,7 @@ org.blockml.parser.* · compiler.* · runtime.* · engine.* · cli.*     →  im
 
 npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. A single npm package may ship both BML files under `org/blockml/core/` and TypeScript under `org/blockml/bom/`. See `15_dev_setup.md` — Package Conventions.
 
-Built-in ServiceBlocks live in `org.blockml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
+Built-in services live in `org.blockml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
 
 ```text
 Examples:
@@ -464,7 +464,7 @@ visibility    — optional; must match naming convention
 
 ### Property and Capability Value Types
 
-Property `type` attributes must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.core.ValueType` (primitives, structs, enums, generics). Non-ValueType Blocks (Wall, ServiceBlock, NativeBlock, …) are not valid property types. The same rule applies to Capability `inputType` and `outputType`.
+Property `type` attributes must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.core.ValueType` (primitives, structs, enums, generics). Non-ValueType Blocks (Wall, Entity, NativeBlock, …) are not valid property types. The same rule applies to Capability `inputType` and `outputType`.
 
 ```text
 type="Integer"              →  org.blockml.type.Integer        ✓  (PrimitiveType → ValueType)
@@ -573,8 +573,8 @@ An Aggregation describes an ownership relationship: a Block can contain zero or 
 name          — member name (unique within namespace)
 type          — FQN of the child type, optionally with occurrence brackets (see Type Notation below)
 default       — boolean; marks the default aggregation for bare <composition>
-beanName      — optional; marks this Aggregation as a ServiceBlock binding
-scope         — optional; "local" | "context" (ServiceBlock bindings only)
+beanName      — optional; marks this Aggregation as a service binding
+scope         — optional; "local" | "context" (service bindings only)
 documentation — human-readable description
 composition   — optional nested Composition filling this aggregation
 readOnly      — informational only
@@ -623,33 +623,33 @@ Collection forms: `_self[]`, `_self[1..3]`, etc. `_self` is especially useful fo
 
 When no Aggregations are declared, a domain-specific default Aggregation is created implicitly. BOM Core does not prescribe the name or child type — that is the domain's responsibility.
 
-### ServiceBlock Aggregations
+### Service Aggregations
 
-A ServiceBlock is a special Block type that provides named, reusable services — such as data models, math utilities, or formatters. ServiceBlocks are bound into a Block via Aggregations with a bean name. Once bound, they are accessible in Expressions via their bean name using the `@` prefix.
+A service Block provides named, reusable logic — such as data models, math utilities, or formatters. Services are bound into a Block via Aggregations with a bean name. Once bound, they are accessible in Expressions via their bean name using the `@` prefix.
 
-### ServiceBlock Class Hierarchy
+### Service Class Hierarchy
 
 ```text
 org.blockml.core.Block
-  org.blockml.core.ServiceBlock          — base for all service types
-    org.blockml.service.ModelBlock          — holds data (JSONModel, ODataModel, XMLModel)
-    org.blockml.core.FunctionBlock       — binds TypeScript functions to Transformation Capabilities
+  org.blockml.core.Entity              — base for built-in services and utility Sub-Blocks
+    org.blockml.service.*              — built-in expression utilities (#math, #strings, …)
+    org.blockml.service.ModelBlock     — holds data (JSONModel, ODataModel, XMLModel)
 ```
 
-**`org.blockml.core.ServiceBlock`** — the abstract base. All service types extend this.
+**`org.blockml.core.Entity`** — abstract base for addressable logic units. Built-in services in `org.blockml.service.*` extend Entity directly.
 
 **`org.blockml.service.ModelBlock`** — provides data access via path-based Transformation Capabilities. Specializations: `org.blockml.service.JSONModel`, `org.blockml.service.ODataModel`, `org.blockml.service.XMLModel`.
 
-**`org.blockml.core.FunctionBlock`** — binds TypeScript arrow functions to Transformation Capabilities via `<implementation type="org.blockml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is replaced with a `#built-in` call while the Capability signature remains unchanged.
+Every Capability inherits an optional `<implementation>` from `org.blockml.core.CapabilityType`. The element **`type`** attribute must reference a Language FQN — e.g. `<implementation type="org.blockml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is removed and the call site is updated to a `#built-in` call while the Capability signature remains unchanged.
 
-Built-in ServiceBlocks are defined in the `baseType` hierarchy and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
+Built-in services are defined in `org.blockml.service.*` and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
 
 ```text
 #math    — built-in math service (min, max, ceil, floor, ...)
 #strings  — built-in string utilities (format, trim, ...)
 ```
 
-User-defined ServiceBlocks are declared as Aggregations and given a bean name:
+User-defined services are declared as Aggregations and given a bean name:
 
 ```text
 @myModel   — user-defined JSONModel, bound as bean "myModel"
@@ -660,7 +660,7 @@ The distinction between `#` (built-in) and `@` (user-defined) is enforced at par
 
 ### Bean Scope
 
-Every ServiceBlock Aggregation declares a `scope` that controls visibility to child Blocks:
+Every service Aggregation declares a `scope` that controls visibility to child Blocks:
 
 ```text
 scope   — "local" | "context"    default: "local"
@@ -692,7 +692,7 @@ App       @data scope="context"  ← ODataModel (visible to all descendants)
   Sidebar                        ← sees ODataModel via @data (no override here)
 ```
 
-This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) — but scope is declared on the Aggregation, not on the ServiceBlock type itself. The same ServiceBlock type can have different scopes in different contexts.
+This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) — but scope is declared on the Aggregation, not on the service type itself. The same service type can have different scopes in different contexts.
 
 ### Data Attributes (`data:`)
 
@@ -792,7 +792,7 @@ Unqualified type names are resolved against the domain's default type namespace 
 
 ### Object Input as Function Signature
 
-When a `FunctionBlock` Capability uses a structured Object as `inputType`, the Object defines an **anonymous struct type** — conceptually an inline class with private typed fields. Field names are parameter names; **field order defines positional call order**. This is the FunctionBlock application of the **Ordered Struct Fields** rule — see `17_type_system_bml.md` — Ordered Struct Fields.
+When a Capability uses a structured Object as `inputType`, the Object defines an **anonymous struct type** — conceptually an inline class with private typed fields. Field names are parameter names; **field order defines positional call order**. This is the **Ordered Struct Fields** rule applied to Capability signatures — see `17_type_system_bml.md` — Ordered Struct Fields.
 
 ```text
 inputType: { a: Float, b: Float }
@@ -804,7 +804,7 @@ inputType: { a: Float, b: Float }
 
 Both call syntaxes are always valid for Object input types. This is the standard pattern for all `#math.*`, `#strings.*`, `#lists.*` built-ins.
 
-`Object[0..n]` input types with a single named field are **not** suitable as FunctionBlock signatures when arity must be fixed — use a structured Object with named keys for each parameter. Variadic built-ins (e.g. `#strings.concat`) declare an explicit collection field: `{ values: String[0..n] }`.
+`Object[0..n]` input types with a single named field are **not** suitable as Capability signatures when arity must be fixed — use a structured Object with named keys for each parameter. Variadic built-ins (e.g. `#strings.concat`) declare an explicit collection field: `{ values: String[0..n] }`.
 
 ### Input Call Syntax
 
@@ -884,12 +884,12 @@ baseType declares:
   implTypes: [org.blockml.language.OpenSCAD]
     — e.g. com.machineblocks.core.Block
   implTypes: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
-    — e.g. org.blockml.core.FunctionBlock
+    — e.g. org.blockml.core.Entity
 ```
 
 If a Block carries `<implementation type="org.blockml.language.OpenSCAD">` but its `baseType` does not list that type in `implTypes`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
 
-A Transformation Capability implementation can live directly on any Block whose `baseType` supports it — not only on `FunctionBlock` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
+A Transformation Capability implementation can live directly on any Block whose `baseType` supports it — not only on `utility Sub-Block` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
 
 ```xml
 <!-- Direct on Block — valid if baseType supports OpenSCAD -->
@@ -981,7 +981,7 @@ ${ @myService.getAddress() }  — Dynamic address
 
 ### Model Binding Context
 
-When a child instance's Aggregation is bound to a ServiceBlock Model, all children within that Aggregation inherit the Model binding context. Relative Model paths are resolved against this context:
+When a child instance's Aggregation is bound to a service Model, all children within that Aggregation inherit the Model binding context. Relative Model paths are resolved against this context:
 
 ```xml
 <List items="{@myModel:/path/to/array}">
@@ -1116,13 +1116,13 @@ com.machineblocks.core.Block
 
 com.machineblocks.core.CompositeBlock
   → subTypes declared explicitly:
-    [com.machineblocks.core.Block, org.blockml.core.FunctionBlock]
+    [com.machineblocks.core.Block]
 
 com.machineblocks.core.Set
   → subTypes omitted → inherits CompositeBlock chain
 
-org.blockml.core.FunctionBlock
-  → subTypes omitted → inherits [] via ServiceBlock → org.blockml.core.Block
+org.blockml.service.Math
+  → baseType: org.blockml.core.Entity
 
 com.machineblocks.core.NativeBlock
   → subTypes omitted → inherits [] (final leaf — no Sub-Blocks)
@@ -1275,7 +1275,7 @@ Where a Library contains reusable types, a Catalog contains concrete finished co
 
 ## Expression System
 
-BOM Core defines an expression system for dynamic member values. Expressions are used in Compositions to derive child Block property values from the parent Block's members, or to bind to ServiceBlock Models and Capabilities.
+BOM Core defines an expression system for dynamic member values. Expressions are used in Compositions to derive child Block property values from the parent Block's members, or to bind to service Models and Capabilities.
 
 ### Syntax
 
@@ -1292,7 +1292,7 @@ ${ size[0] > 2 ? "groove" : "standard" }           — Ternary
 ${ myTransform() }                                 — Own Block: Transformation Capability call
 ${ myTransform(a = 1, b = size[0]) }               — Own Block: Transformation call with input
 ${ myInbound }                                     — Own Block: Inbound linking (no parentheses)
-${ #math.min(size[0], size[1]) }                   — Built-in ServiceBlock call
+${ #math.min(size[0], size[1]) }                   — Built-in service call
 ${ @myBean.format(value = size[0], unit = "mm") }  — Bean call, named params (Object payload)
 ${ @myBean.format({value: size[0], unit: "mm"}) }  — Bean call, object literal (equivalent)
 ${ @myBean.compute(size[0], size[1]) }             — Bean call, positional (Array payload)
@@ -1362,13 +1362,13 @@ If the SCAD representation uses arrays internally (e.g. `[["z+", -0.5]]`), the B
 
 ```text
 (no prefix)   — Property or member of the current Block instance
-#name         — Built-in ServiceBlock (defined in baseType hierarchy, reserved)
+#name         — Built-in service (defined in baseType hierarchy, reserved)
 @name         — User-defined Bean (bound via Aggregation) or Model binding
 ```
 
-### Built-in ServiceBlock Calls (`#`)
+### Built-in Service Calls (`#`)
 
-Built-in ServiceBlocks are defined in the `baseType` hierarchy. Their Capabilities must be `Transformation`. The `#` namespace is reserved — user-defined beans cannot use `#`.
+Built-in services are defined in the `baseType` hierarchy. Their Capabilities must be `Transformation`. The `#` namespace is reserved — user-defined beans cannot use `#`.
 
 ```text
 ${ #math.min(size[0], size[1]) }   — Transformation Capability, array input → primitive output
@@ -1626,12 +1626,12 @@ machineblocks-v3-scad-target
   ScadBlockProcessor      → compile strategy    (com.machineblocks.core.Block)
   ScadSetProcessor        → compile strategy    (com.machineblocks.core.Set)
   MathBuiltInProcessor    → copy strategy       (org.blockml.service.Math)
-  FunctionBlockProcessor  → compile strategy    (org.blockml.core.FunctionBlock)
+  CapabilityImplementationProcessor  → compile strategy    (org.blockml.core.Entity)
 ```
 
-### Built-in ServiceBlocks as BML
+### Built-in services as BML
 
-Built-in ServiceBlocks (`#math`, `#strings`, etc.) are defined as BML FunctionBlock files in `@blockml/core` — **SSOT**. SCAD equivalents in `scad-lib/blocks/org/blockml/service/` are pre-rendered build artifacts. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
+Built-in services (`#math`, `#strings`, etc.) are defined as BML BML service files in `@blockml/core` — **SSOT**. SCAD equivalents in `scad-lib/blocks/org/blockml/service/` are pre-rendered build artifacts. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 ```text
 @blockml/core/
@@ -1644,7 +1644,7 @@ Built-in ServiceBlocks (`#math`, `#strings`, etc.) are defined as BML FunctionBl
       Bools.bml           — org.blockml.service.Bools     — #bools.*
 ```
 
-Each domain target registers a corresponding BlockProcessor that renders these ServiceBlocks into the target-appropriate form (e.g. `MathBuiltInProcessor` for SCAD copies or generates the required SCAD helper functions).
+Each domain target registers a corresponding BlockProcessor that renders these services into the target-appropriate form (e.g. `MathBuiltInProcessor` for SCAD copies or generates the required SCAD helper functions).
 
 ### Delegate-Only Targets
 

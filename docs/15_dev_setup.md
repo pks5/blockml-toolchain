@@ -260,7 +260,7 @@ packages/core/
   package.json          — name: @blockml/core, private: true
   blocks/
     org/blockml/core/
-      Block.bml · ServiceBlock.bml · FunctionBlock.bml · …
+      Block.bml · …
     org/blockml/service/
       Math.bml
       Strings.bml

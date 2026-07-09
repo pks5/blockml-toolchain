@@ -324,7 +324,7 @@ _self                              → SelfTypeReference
 
 Unqualified primitive names resolve to `org.blockml.type.*`. Domain types require the `type:` prefix or full FQN. Parse failure → `BML_UNKNOWN_TYPE`.
 
-FunctionBlock Capabilities use `AnonymousStructType` for multi-parameter signatures. Variadic built-ins use a named collection field (`{ values: String[0..n] }`). See `17_type_system_bml.md` — Type Expressions.
+Capability use `AnonymousStructType` for multi-parameter signatures. Variadic built-ins use a named collection field (`{ values: String[0..n] }`). See `17_type_system_bml.md` — Type Expressions.
 
 ---
 
@@ -378,7 +378,7 @@ interface AggregationDefinition extends MemberDefinitionBase {
   validate?: boolean
   /** Nested composition filling this aggregation (may be omitted on override declarations) */
   composition?: CompositionTemplate
-  /** ServiceBlock binding */
+  /** service binding */
   beanName?: string
   scope?: "local" | "context"
 }
@@ -418,7 +418,7 @@ Mapping sequence (append to members[] in this order):
 
 The position of each entry in `BlockDefinition.members[]` is the **declaration ordinal** for that block. Render targets may use this order (e.g. Customizer parameter sequence, UI field layout). The compiler must not reorder declared members when writing BOM or when passing definitions to processors.
 
-**StructType positional values:** for a StructType defined via `<properties>` (e.g. `Size3d` with `x`, `y`, `z`), property **declaration order** defines positional array mapping. See `17_type_system_bml.md` — Ordered Struct Fields for the full rule (dual access, serialization, FunctionBlock mapping, compatibility).
+**StructType positional values:** for a StructType defined via `<properties>` (e.g. `Size3d` with `x`, `y`, `z`), property **declaration order** defines positional array mapping. See `17_type_system_bml.md` — Ordered Struct Fields for the full rule (dual access, serialization, Capability mapping, compatibility).
 
 ```text
 size="[4, 2, 3]"   →  index 0 = x, index 1 = y, index 2 = z  (order in Size3d.bml)
@@ -967,7 +967,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ### Bootstrap sources
 
 ```text
-1. Built-in ServiceBlocks     — @blockml/core (org.blockml.service.*)
+1. Built-in services     — @blockml/core (org.blockml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
 3. Library blocks             — org.blockml.core.BlockLibrary → resolve _dependencies / _blocks by FQN + bml:version
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
@@ -1010,7 +1010,7 @@ BomDocument
       - AggregationDefinition utils → typeFqn: ...Calibrator.Utils, beanName: "utils"
 
     subBlocks:
-      - BlockDefinition Utils (FunctionBlock, capabilities with OpenSCAD implementation)
+      - BlockDefinition Utils (utility Sub-Blocks, capabilities with OpenSCAD implementation)
       - BlockDefinition Base (composition with bml:each on instances, dynamic id via id property)
       - BlockDefinition StudDiameter
       - BlockDefinition BaseWallThickness
@@ -1069,7 +1069,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 | Expression AST node union | `10_expression_language.md` — Expression AST |
 | BML → BOM mapping algorithm | `13_bml_to_bom_mapping.md` |
 | Framework base types (BML) | `16_framework_base_types.md` |
-| ValueType · LanguageBlock (BML) | `17_type_system_bml.md` |
+| ValueType · Language (BML) | `17_type_system_bml.md` |
 | Development setup (Phase D) | `15_dev_setup.md` |
 | MBOM native property list | `09_mbom_properties.yml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |
