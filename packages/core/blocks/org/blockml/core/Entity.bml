@@ -1,7 +1,7 @@
 <!--
   BlockML Core — type Block branch (property / payload types)
 
-  FQN: org.blockml.core.TypeBlock
+  FQN: org.blockml.core.Entity
 -->
 <block
   xmlns="http://blockml.org/schema/block"

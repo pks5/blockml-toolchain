@@ -27,7 +27,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
 | **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail) — see `02_mbml.md` |
-| **Three TypeBlock kinds** | PrimitiveType · EnumType · StructType only — everything else is a type expression |
+| **Three ValueType kinds** | PrimitiveType · EnumType · StructType only — everything else is a type expression |
 | **Ordered struct fields** | Field declaration order is semantically significant — defines implicit index, dual named/positional access, positional serialization; applies to StructType properties and anonymous struct `inputType` — see § Ordered Struct Fields |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
 | **Namespace separation** | `org.blockml.core.*`, `type.*`, `service.*`, `capability.*`, `language.*` = public BML grammar only; BOM/compiler types in `org.blockml.bom.*`, etc. — see `00_bom_core.md` |
@@ -101,7 +101,7 @@ The compiler **must** (input / pipeline):
 The compiler **does not** need to (internal representation):
 
 - store all definitions in one homogeneous `Block` class hierarchy at runtime
-- treat TypeBlocks and LanguageBlocks identically to other Blocks in memory
+- treat ValueTypes and LanguageBlocks identically to other Blocks in memory
 - expose „Block“ as a domain object API beyond parser/BOM/validator surfaces
 - map BML 1:1 onto object-oriented domain models
 
@@ -160,7 +160,7 @@ The split is the WOT architecture applied to BlockML:
 
 ```text
 Idea (Plato)              BML / semantic layer
-  Urbild · unveränderlich   Block · TypeBlock · LanguageBlock · FQN
+  Urbild · unveränderlich   Block · ValueType · LanguageBlock · FQN
   existiert vor der Welt    beschreibbar ohne Render Target
   keine Substanz            keine SCAD · kein Python · kein 3D-Druck
 
@@ -181,15 +181,15 @@ See `WOT_Reference_v26.md` §1 · The Idea · Manifestation.
 
 ## One Root: Everything is a Block
 
-BOM Core defines Block as **„a parametric, reusable unit (definition / type)“** — not only as a composable physical object. TypeBlocks and LanguageBlocks are type definitions. They **are Blocks**.
+BOM Core defines Block as **„a parametric, reusable unit (definition / type)“** — not only as a composable physical object. ValueTypes and LanguageBlocks are type definitions. They **are Blocks**.
 
-**Class vs Object:** In familiar terms, every `<block>` document is a **Class** (declarative, semantic type). Every element in a `<composition>` is a **Block Instance** — an **Object** referencing that class by FQN. TypeBlocks (`Integer`, `Size3d`) are type-classes that may also appear as Block instances — interpretation is context-dependent. See `00_bom_core.md` — Block and Block Instance · Context-Dependent Interpretation (below).
+**Class vs Object:** In familiar terms, every `<block>` document is a **Class** (declarative, semantic type). Every element in a `<composition>` is a **Block Instance** — an **Object** referencing that class by FQN. ValueTypes (`Integer`, `Size3d`) are type-classes that may also appear as Block instances — interpretation is context-dependent. See `00_bom_core.md` — Block and Block Instance · Context-Dependent Interpretation (below).
 
 All definitions use the BML `<block>` element, register in the same TypeRegistry, and inherit from **`org.blockml.core.Block`** — the sole inheritance root.
 
 ```text
 org.blockml.core.Block                         abstract root · omits baseType
-  ├── org.blockml.core.TypeBlock               property / capability type descriptors (Size3D, Integer, …)
+  ├── org.blockml.core.ValueType               value blocks — Property types · Capability input/output (Size3D, Integer, …)
   ├── org.blockml.core.LanguageBlock           capability implementation contract (OpenSCAD, …)
   ├── org.blockml.core.ServiceBlock          service branch
   ├── com.machineblocks.core.Block             domain base
@@ -198,7 +198,7 @@ org.blockml.core.Block                         abstract root · omits baseType
 
 **One root · one registry · one parser.** Branch-specific rules come from the `baseType` chain — not from parallel ontologies. There is no separate ComposableBlock — all Blocks inherit directly from `org.blockml.core.Block` (or via domain/service branches).
 
-Every sub-type is free to declare its own members — `org.blockml.core.Block` declares **none**. Composition instance identity uses **`bml:id`** (may be empty); external references use **`bml:version`**. Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **TypeBlock** only.
+Every sub-type is free to declare its own members — `org.blockml.core.Block` declares **none**. Composition instance identity uses **`bml:id`** (may be empty); external references use **`bml:version`**. Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **ValueType** only (Property `type` · Capability `inputType` · Capability `outputType`).
 
 ### Literally everything — including the compiler's grammar
 
@@ -206,7 +206,7 @@ This is a **foundational decision**, not a naming convention:
 
 ```text
 Wall              →  Block  (domain composable)
-Integer           →  Block  (TypeBlock branch)
+Integer           →  Block  (ValueType branch)
 OpenSCAD          →  Block  (LanguageBlock branch)
 Step              →  Block  (Set meta block)
 IPlaceable        →  Block  (abstract — usable as contract / interface)
@@ -233,7 +233,7 @@ Before the compiler validates or renders **any** user file, it bootstraps the Ty
 
 ```text
 @blockml/core BML
-  Block.bml · TypeBlock.bml · LanguageBlock.bml · ServiceBlock.bml · FunctionBlock.bml
+  Block.bml · ValueType.bml · LanguageBlock.bml · ServiceBlock.bml · FunctionBlock.bml
   Integer.bml · OpenSCAD.bml · …
   Math.bml · Strings.bml · …
 
@@ -243,7 +243,7 @@ Before the compiler validates or renders **any** user file, it bootstraps the Ty
 →  then  project srcDir
 ```
 
-The compiler **uses BlockML to understand BlockML**. Framework semantics (`Integer`, `TypeBlock`, …) come from BML in the TypeRegistry — not from hardcoded FQN lists. The parser nonetheless **must** understand the `<block>` input format; only the **internal representation** after parse is free.
+The compiler **uses BlockML to understand BlockML**. Framework semantics (`Integer`, `ValueType`, …) come from BML in the TypeRegistry — not from hardcoded FQN lists. The parser nonetheless **must** understand the `<block>` input format; only the **internal representation** after parse is free.
 
 ```text
 Hardcoded in compiler     <block> parse contract · baseType chain walk · branch rules · diagnostics
@@ -256,30 +256,30 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 
 ### Flat hierarchy under Block
 
-`org.blockml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.core.Block` directly (or via intermediate branches like `TypeBlock`, `ServiceBlock`, `com.machineblocks.core.Block`):
+`org.blockml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.core.Block` directly (or via intermediate branches like `ValueType`, `ServiceBlock`, `com.machineblocks.core.Block`):
 
 ```text
 org.blockml.core.Block           root · declares no members · bml:id / bml:version on composition instances
 org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
 com.machineblocks.core.Block     baseType: Block · _presets · basePresets
 com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)
-org.blockml.core.TypeBlock         baseType: Block · primitives · structs · enums
+org.blockml.core.ValueType         baseType: Block · primitives · structs · enums
 org.blockml.core.LanguageBlock     baseType: Block (meta — no extra members in V1)
 ```
 
 ```text
 com.machineblocks.core.Block     baseType: org.blockml.core.Block
 org.blockml.core.ServiceBlock baseType: org.blockml.core.Block
-com.machineblocks.type.Size3d    baseType: StructType → … → TypeBlock → Block
+com.machineblocks.type.Size3d    baseType: StructType → … → ValueType → Block
 org.blockml.language.OpenSCAD    baseType: LanguageBlock → Block
 ```
 
 **Member usage rules:**
 
 ```text
-Aggregation / association type     — any Block FQN (composable Blocks, TypeBlocks, meta Blocks)
-Property type                      — TypeBlock only (baseType chain includes org.blockml.core.TypeBlock)
-Capability inputType/outputType  — TypeBlock only (generic arguments substituted at validate time)
+Aggregation / association type     — any Block FQN (composable Blocks, ValueTypes, meta Blocks)
+Property type                      — ValueType only (baseType chain includes org.blockml.core.ValueType)
+Capability inputType/outputType  — ValueType only (generic arguments substituted at validate time)
 Meta property id                   — every Block instance; not declarable as <property name="id">
 ```
 
@@ -288,7 +288,7 @@ Meta property id                   — every Block instance; not declarable as <
 The WOT Relativität Principle applies to types as well:
 
 ```text
-com.machineblocks.type.Size3D   →  TypeBlock in MachineBlocks
+com.machineblocks.type.Size3D   →  ValueType in MachineBlocks
                                 →  input struct in Expression signatures
                                 →  serializer input in SCAD Renderer
                                 →  layout constraint in ScreenMachine (future)
@@ -298,7 +298,9 @@ Same FQN · different role · one BML definition.
 
 ---
 
-## TypeBlock Hierarchy
+## ValueType Hierarchy
+
+**`org.blockml.core.ValueType`** is the abstract branch for all **value blocks** — Blocks whose `baseType` chain includes ValueType and that may appear wherever a typed payload is required: Property `type`, Capability `inputType`, and Capability `outputType`. Composable Blocks, ServiceBlocks, and other general Blocks are **not** ValueTypes; they may appear in aggregations and associations, but not as property or Capability payload types.
 
 ### Design Principles
 
@@ -317,16 +319,16 @@ Semantics are decided by `baseType` and usage context — not by parallel XSD or
 
 ---
 
-All types inherit from **`org.blockml.core.TypeBlock`**. Types are not a separate language construct — they are normal BlockML Blocks. Meaning comes from `baseType` and usage context.
+All types inherit from **`org.blockml.core.ValueType`**. Types are not a separate language construct — they are normal BlockML Blocks. Meaning comes from `baseType` and usage context.
 
 ```text
-org.blockml.core.TypeBlock              abstract
+org.blockml.core.ValueType              abstract
   ├── org.blockml.core.PrimitiveType    Integer · Float · String · Boolean
   ├── org.blockml.core.EnumType         BaseCutoutType · Direction · …
   └── org.blockml.core.StructType       Size3D · Color · domain value objects
 ```
 
-**BlockML knows only three TypeBlock kinds at language level** — each names a semantic meaning:
+**BlockML knows only three ValueType kinds at language level** — each names a semantic meaning:
 
 | Branch | Role | Examples |
 |---|---|---|
@@ -334,22 +336,22 @@ org.blockml.core.TypeBlock              abstract
 | **EnumType** | Named finite value sets | `Direction`, `Face`, `StudType`, `BaseCutoutType` |
 | **StructType** | Custom value objects from properties | `Size3D`, `Color`, `Address`, `Transform` |
 
-`StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate TypeBlock branch.
+`StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate ValueType branch.
 
-There is **no** `GenericType`, `UnionType`, `Array<T>`, `AutoOr<T>`, or similar as language-level TypeBlock branches.
+There is **no** `GenericType`, `UnionType`, `Array<T>`, `AutoOr<T>`, or similar as language-level ValueType branches.
 
 ---
 
 ## Type Expressions
 
-Everything beyond the three TypeBlock kinds is a **type expression** — a use or combination of named types, not a new BlockML type class.
+Everything beyond the three ValueType kinds is a **type expression** — a use or combination of named types, not a new BlockML type class.
 
 ```text
-TypeBlock        = named semantic meaning     (Primitive · Enum · Struct)
+ValueType        = named semantic meaning     (Primitive · Enum · Struct)
 TypeExpression   = usage or combination       (multiplicity · union · generic application · _self · T)
 ```
 
-### Not TypeBlocks — type expressions only
+### Not ValueTypes — type expressions only
 
 ```text
 Integer[]           — collection / multiplicity
@@ -446,11 +448,11 @@ Boolean | StudType          — boolean or enum
 Integer | String            — primitive union
 ```
 
-Literal alternatives use JSON literal syntax (`"auto"`, `"none"`, `false`, `true`). Type alternatives reference TypeBlocks or nested type expressions.
+Literal alternatives use JSON literal syntax (`"auto"`, `"none"`, `false`, `true`). Type alternatives reference ValueTypes or nested type expressions.
 
 ---
 
-Only TypeBlocks may be used where a **bare type name** is required (Property `type`, Capability `inputType` / `outputType`). Type expressions (multiplicity, unions, generic application) extend those references. Any Block FQN is valid in aggregation and association `type` attributes — including TypeBlocks.
+Only ValueTypes may be used where a **bare type name** is required (Property `type`, Capability `inputType` / `outputType`). Type expressions (multiplicity, unions, generic application) extend those references. Any Block FQN is valid in aggregation and association `type` attributes — including ValueTypes when used as composition children.
 
 ```text
 Allowed:     type="org.blockml.type.Integer"
@@ -485,7 +487,7 @@ Each concrete primitive (`Integer`, `Float`, …) inherits this member. A primit
 <Integer value="5"/>
 ```
 
-Interpretation is context-dependent — same TypeBlock, two roles.
+Interpretation is context-dependent — same ValueType, two roles.
 
 V1 bootstrap primitives: `Integer`, `Float`, `String`, `Boolean` in `@blockml/core`.
 
@@ -513,7 +515,7 @@ Field order in any structured value type is **semantically significant**. It def
 
 | Form | Where declared | BOM representation |
 |---|---|---|
-| **Named StructType** | `<properties>` on a StructType TypeBlock | `PropertyDefinition` entries in `members[]` (declaration order) |
+| **Named StructType** | `<properties>` on a StructType ValueType | `PropertyDefinition` entries in `members[]` (declaration order) |
 | **Anonymous struct** | `{ a: Float, b: Float }` in Capability `inputType` / `outputType` | `AnonymousStructType.fields[]` (key order in type string) |
 
 Both forms share the same contract — only the declaration surface differs.
@@ -614,7 +616,7 @@ This applies to named StructTypes (`Size3d`, `Color`, …) and to anonymous stru
 
 ### StructType
 
-Complex values are described by **normal Properties** — no special struct syntax. A StructType is a TypeBlock with `<properties>`:
+Complex values are described by **normal Properties** — no special struct syntax. A StructType is a ValueType with `<properties>`:
 
 ```xml
 <block xmlns="http://blockml.org/schema/block"
@@ -654,7 +656,7 @@ Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) foll
 
 ### EnumType
 
-Enums are normal TypeBlocks. The branch declares a default aggregation for enum values:
+Enums are normal ValueTypes. The branch declares a default aggregation for enum values:
 
 ```xml
 <aggregation name="_values" type="_self[]" default="true"/>
@@ -713,7 +715,7 @@ The short form is valid only when the expected type is known from the property (
 
 ### Context-Dependent Interpretation
 
-A TypeBlock may appear in different roles:
+A ValueType may appear in different roles:
 
 | Context | Example | Role |
 |---|---|---|
@@ -728,7 +730,7 @@ The renderer and validator decide semantics from `baseType` and usage context �
 
 ### Generics
 
-Generic type parameters are declared on **StructType** (or other TypeBlock) definitions — not via a separate `GenericType` branch:
+Generic type parameters are declared on **StructType** (or other ValueType) definitions — not via a separate `GenericType` branch:
 
 ```xml
 <block ...>
@@ -737,7 +739,7 @@ Generic type parameters are declared on **StructType** (or other TypeBlock) defi
   <baseType>org.blockml.core.StructType</baseType>
 
   <genericTypes>
-    <genericType name="T" baseType="org.blockml.core.TypeBlock"/>
+    <genericType name="T" baseType="org.blockml.core.ValueType"/>
   </genericTypes>
 
   <properties>
@@ -746,7 +748,7 @@ Generic type parameters are declared on **StructType** (or other TypeBlock) defi
 </block>
 ```
 
-**Generic application** (`Box<Integer>`) is a **type expression** — not a TypeBlock. At reference sites:
+**Generic application** (`Box<Integer>`) is a **type expression** — not a ValueType. At reference sites:
 
 ```xml
 <property name="values" type="com.foo.Box<org.blockml.type.Integer>"/>
@@ -814,7 +816,7 @@ V1: two bootstrap languages in `@blockml/core`. Extensibility: domains register 
 
 ## Root Exception
 
-Only **`org.blockml.core.Block`** omits `<baseType>`. Every other definition must declare `<baseType>` — including `TypeBlock` and `LanguageBlock`.
+Only **`org.blockml.core.Block`** omits `<baseType>`. Every other definition must declare `<baseType>` — including `ValueType` and `LanguageBlock`.
 
 ---
 
@@ -823,13 +825,13 @@ Only **`org.blockml.core.Block`** omits `<baseType>`. Every other definition mus
 Branch is derived by walking the `baseType` chain until a branch marker is found:
 
 ```text
-… → TypeBlock → Block           type block branch
+… → ValueType → Block           value type branch
 … → Constraint → Block            constraint branch
 … → LanguageBlock → Block         language branch
-… → Block (no TypeBlock/LanguageBlock/Constraint ancestor)   general block branch
+… → Block (no ValueType/LanguageBlock/Constraint ancestor)   general block branch
 ```
 
-| Rule | General Block | TypeBlock | Constraint | LanguageBlock |
+| Rule | General Block | ValueType | Constraint | LanguageBlock |
 |---|---|---|---|---|
 | `<composition>` | allowed | EnumType: `_values` only; others: definition-level only | forbidden | forbidden |
 | `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden | forbidden |
@@ -881,7 +883,7 @@ Type definitions bootstrap **before** composable Blocks that reference them:
 ```text
 1. @blockml/core — root + branches + bootstrap types
      org/blockml/core/Block.bml
-     org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · Constraint.bml · …
+     org/blockml/core/ValueType.bml · StructType.bml · EnumType.bml · Constraint.bml · …
      org/blockml/constraint/Min.bml · Max.bml · …
      org/blockml/core/LanguageBlock.bml
      org/blockml/type/Integer.bml · …
@@ -895,7 +897,7 @@ Type definitions bootstrap **before** composable Blocks that reference them:
      …
 ```
 
-Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType` chain to index Block vs TypeBlock vs Language.
+Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType` chain to index Block vs ValueType vs Language.
 
 ---
 
@@ -921,7 +923,7 @@ Property declarations on composable Blocks migrate from `09_mbom_properties.yml`
 ```text
 packages/core/blocks/
   org/blockml/core/
-    Block.bml · TypeBlock.bml · ServiceBlock.bml · FunctionBlock.bml · LanguageBlock.bml · …
+    Block.bml · ValueType.bml · ServiceBlock.bml · FunctionBlock.bml · LanguageBlock.bml · …
   org/blockml/type/
     Integer.bml · Float.bml · String.bml · Boolean.bml · …
   org/blockml/language/
@@ -961,7 +963,7 @@ never expose „Block“ outside parser/BOM types
 
 **Only BML semantics are normative.** Internal data structures may change without altering a single `.bml` file.
 
-`TypeExpression` in `12_bom_object_model.md` (V1 alias `TypeDescriptor`) is the **reference syntax** for type expressions — anonymous structs, unions, multiplicity, generic application. Named TypeBlocks always resolve to registry FQNs.
+`TypeExpression` in `12_bom_object_model.md` (V1 alias `TypeDescriptor`) is the **reference syntax** for type expressions — anonymous structs, unions, multiplicity, generic application. Named ValueTypes always resolve to registry FQNs.
 
 ---
 
@@ -973,7 +975,7 @@ never expose „Block“ outside parser/BOM types
 | FQN namespaces | `00_bom_core.md` — Reserved Language Namespaces |
 | Composable Block base types | `16_framework_base_types.md` |
 | BML block syntax | `02_mbml.md` |
-| Type expressions · three TypeBlock kinds | `17_type_system_bml.md` — Type Expressions |
+| Type expressions · three ValueType kinds | `17_type_system_bml.md` — Type Expressions |
 | TypeExpression AST | `12_bom_object_model.md` |
 | Parse/serialize behaviour | `04_types.md` |
 | Collections and Multiplicity | this document — § Collections and Multiplicity |

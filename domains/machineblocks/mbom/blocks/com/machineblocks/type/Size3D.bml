@@ -14,7 +14,7 @@
 
   <idea>Three-dimensional size in MachineBlocks grid units.</idea>
 
-  <documentation>Struct TypeBlock for three-dimensional size [x, y, z] in grid units.</documentation>
+  <documentation>Struct ValueType for three-dimensional size [x, y, z] in grid units.</documentation>
 
   <name>Size3d</name>
   <type>type:Size3d</type>

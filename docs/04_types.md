@@ -236,7 +236,7 @@ Values:  Color | "inherit"
 
 # 4. Type Expressions (Unions and Legacy Wrappers)
 
-BlockML has three TypeBlock kinds: **Primitive**, **Enum**, **Struct**. The forms below are **type expressions** — not separate TypeBlocks. Write unions directly in `type="..."` attributes.
+BlockML has three ValueType kinds: **Primitive**, **Enum**, **Struct**. The forms below are **type expressions** — not separate ValueTypes. Write unions directly in `type="..."` attributes.
 
 ## Union syntax (replaces wrapper types)
 

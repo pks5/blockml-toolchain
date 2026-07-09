@@ -494,7 +494,7 @@ Framework types are **BML files** — see `16_framework_base_types.md`. Interpre
 ```text
 org.blockml.core.Block                                  ← packages/core/…/Block.bml (abstract, root)
     com.machineblocks.core.Step                         ← mbom/…/Step.bml (final)
-  org.blockml.core.TypeBlock                            ← TypeBlock.bml (abstract)
+  org.blockml.core.ValueType                            ← ValueType.bml (abstract)
   org.blockml.core.LanguageBlock                        ← LanguageBlock.bml (abstract)
   org.blockml.core.ServiceBlock                         ← core/…/ServiceBlock.bml
     org.blockml.core.FunctionBlock                      ← core/…/FunctionBlock.bml

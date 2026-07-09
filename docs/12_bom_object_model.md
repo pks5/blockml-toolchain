@@ -168,7 +168,7 @@ interface BlockDefinition {
 
   /**
    * Generic type parameters declared on this Block (e.g. T on Box<T>).
-   * Each parameter has a name and a baseType constraint (must inherit from that TypeBlock branch).
+   * Each parameter has a name and a baseType constraint (must inherit from that ValueType branch).
    */
   genericTypes?: GenericType[]
 
@@ -230,7 +230,7 @@ Sub-Blocks are **part of the same `BomDocument`** as their parent root block.
 
 Types in BOM are represented by **`TypeExpression`** (alias: `TypeDescriptor` in V1 docs) — a structured, parse-time model. This applies to Capability `inputType` / `outputType` and Property `type` attributes.
 
-**Language vs. BOM:** BML knows three TypeBlock kinds (Primitive, Enum, Struct). Unions, collections, and generic applications are **type expressions** — not TypeBlocks. The parser maps them to `org.blockml.bom.*` descriptor types internally.
+**Language vs. BOM:** BML knows three ValueType kinds (Primitive, Enum, Struct). Unions, collections, and generic applications are **type expressions** — not ValueTypes. The parser maps them to `org.blockml.bom.*` descriptor types internally.
 
 ### Anonymous struct = shorthand for inline class
 
@@ -254,7 +254,7 @@ A single primitive (`Float`, `org.blockml.type.Integer`, …) is **not** wrapped
 ### `TypeExpression` union
 
 ```typescript
-/** Parse-time type expression — org.blockml.bom.* (not a language TypeBlock). */
+/** Parse-time type expression — org.blockml.bom.* (not a language ValueType). */
 type TypeExpression =
   | NamedTypeReference
   | AnonymousStructType
@@ -918,7 +918,7 @@ Composition children in `_dependencies` and `_blocks` are Block instances (`<cor
 
 The orchestrator resolves `_dependencies` and `_blocks` entries by FQN + `bml:version`, loads referenced definitions into the TypeRegistry, and validates that pinned versions match registered blocks.
 
-`_schemas` is optional legacy XSD. `_blocks` lists exported Block and TypeBlock BML — primary SSOT as types migrate from XSD.
+`_schemas` is optional legacy XSD. `_blocks` lists exported Block and ValueType BML — primary SSOT as types migrate from XSD.
 
 ---
 
@@ -1069,7 +1069,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 | Expression AST node union | `10_expression_language.md` — Expression AST |
 | BML → BOM mapping algorithm | `13_bml_to_bom_mapping.md` |
 | Framework base types (BML) | `16_framework_base_types.md` |
-| TypeBlock · LanguageBlock (BML) | `17_type_system_bml.md` |
+| ValueType · LanguageBlock (BML) | `17_type_system_bml.md` |
 | Development setup (Phase D) | `15_dev_setup.md` |
 | MBOM native property list | `09_mbom_properties.yml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |
@@ -1091,7 +1091,7 @@ BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any
 BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without bml:exportIds="true"
 BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
 BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members
-BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a TypeBlock
+BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a ValueType
 BML_UNKNOWN_TYPE              — typeFqn cannot be resolved
 BML_INVALID_DEFINITION_BRANCH — member/element not allowed on this baseType branch (see 17_type_system_bml.md)
 BML_INVALID_TYPE_REFERENCE    — type FQN resolves but wrong branch (e.g. Block used as property type)

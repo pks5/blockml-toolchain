@@ -686,7 +686,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
 15_dev_setup.md        — monorepo tooling, build, test, IDE setup
 16_framework_base_types.md — framework base types as BML (abstract, final, subTypes)
-17_type_system_bml.md  — TypeBlock, LanguageBlock, Block hierarchy
+17_type_system_bml.md  — ValueType, LanguageBlock, Block hierarchy
 09_mbom_properties.yml — MBOM native property SCAD mapping (render only)
 
 domains/machineblocks/runtimes/scad-lib/

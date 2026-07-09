@@ -49,7 +49,7 @@ Block (definition)              Block Instance (in composition)
 This is a **semantic** analogy — not a mandate for runtime OOP. The compiler may represent definitions and instances as plain data; the parser nonetheless distinguishes `<block>` documents (classes) from composition children (objects). See `17_type_system_bml.md`.
 
 ```text
-TypeBlock (Integer, Size3D)     →  semantic „type class“ for property values
+ValueType (Integer, Size3D)     →  semantic value class for Property values and Capability input/output
 LanguageBlock (OpenSCAD)        →  semantic meta-class for implementation contract
 Sub-Block in same .bml file     →  nested class (derived type, inner scope)
 Preset                          →  named default binding on a class (partial object factory)
@@ -112,14 +112,14 @@ Do not infer from `bricks` that other packages may freely use plural segments. N
 Direct package segments under `org.blockml` that belong to the **language** are reserved for **public BML-defined grammar** only. They must not be reused for internal compiler, parser, runtime, or BOM implementation classes.
 
 ```text
-org.blockml.core.*         — framework base types (Block, TypeBlock, Library, …)
-org.blockml.type.*         — primitive and bootstrap TypeBlocks (Integer, Float, …)
+org.blockml.core.*         — framework base types (Block, ValueType, Library, …)
+org.blockml.type.*         — primitive and bootstrap ValueTypes (Integer, Float, …)
 org.blockml.service.*      — built-in ServiceBlocks (#math, #strings, …)
 org.blockml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
 org.blockml.language.*     — LanguageBlocks (TypeScript, OpenSCAD, …)
 ```
 
-These namespaces contain BML-defined Blocks, TypeBlocks, ServiceBlocks, Capability types, and LanguageBlocks. They are part of the public BlockML grammar.
+These namespaces contain BML-defined Blocks, ValueTypes, ServiceBlocks, Capability types, and LanguageBlocks. They are part of the public BlockML grammar.
 
 ### Implementation Namespaces
 
@@ -446,7 +446,7 @@ Do not confuse `bml:id` (composition meta) with a domain Property named `id`. Th
 
 ```text
 name          — camelCase property name (unique within namespace — see Member Namespace)
-type          — FQN of a TypeBlock (baseType chain includes org.blockml.core.TypeBlock)
+type          — FQN of a ValueType (baseType chain includes org.blockml.core.ValueType)
 value         — typed defined value (literal or Expression). Formerly defaultValue.
 group         — optional grouping hint (for editors)
 documentation — human-readable description
@@ -462,21 +462,21 @@ visibility    — optional; must match naming convention
 
 **EnumType property values:** when the property `type` is an EnumType, enum instance references may omit the `{EnumTypeFQN}::` prefix — `STANDARD` is equivalent to `com.machineblocks.type.BaseCutoutType::STANDARD` on a `BaseCutoutType` property. See `17_type_system_bml.md` — EnumType.
 
-### Property Types
+### Property and Capability Value Types
 
-Property `type` attributes must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock` (primitives, structs, enums, generics). Non-type Blocks (Wall, ServiceBlock, NativeBlock, …) are not valid property types.
+Property `type` attributes must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.core.ValueType` (primitives, structs, enums, generics). Non-ValueType Blocks (Wall, ServiceBlock, NativeBlock, …) are not valid property types. The same rule applies to Capability `inputType` and `outputType`.
 
 ```text
-type="Integer"              →  org.blockml.type.Integer        ✓  (PrimitiveType → TypeBlock)
-type="type:Size3d"            →  com.machineblocks.type.Size3d ✓  (StructType → TypeBlock)
-type="com.foo.Wall"           →  ✗  BML_INVALID_PROPERTY_TYPE (not a TypeBlock)
+type="Integer"              →  org.blockml.type.Integer        ✓  (PrimitiveType → ValueType)
+type="type:Size3d"            →  com.machineblocks.type.Size3d ✓  (StructType → ValueType)
+type="com.foo.Wall"           →  ✗  BML_INVALID_PROPERTY_TYPE (not a ValueType)
 ```
 
-The same rule applies to Capability `inputType` and `outputType`. Generic type arguments must satisfy each parameter's `baseType` constraint — see `17_type_system_bml.md` — Generics.
+Generic type arguments must satisfy each parameter's `baseType` constraint — see `17_type_system_bml.md` — Generics.
 
 ### Aggregations and Associations
 
-Aggregation and association `type` attributes may reference **any Block FQN** — including composable Blocks, TypeBlocks, and meta Blocks:
+Aggregation and association `type` attributes may reference **any Block FQN** — including composable Blocks, ValueTypes, and meta Blocks:
 
 ```text
 type="com.machineblocks.core.Block[]"     ✓
@@ -484,7 +484,7 @@ type="com.machineblocks.type.Size3d[]"    ✓
 type="org.blockml.type.Integer[]"         ✓
 ```
 
-TypeBlocks may therefore appear both as type references on Properties and as Block instances in compositions or aggregations — interpretation is context-dependent. See `17_type_system_bml.md`.
+ValueTypes may therefore appear both as type references on Properties and as Block instances in compositions or aggregations — interpretation is context-dependent. See `17_type_system_bml.md`.
 
 ### Constraints
 
@@ -776,7 +776,7 @@ Async reply via `replyTo` is a runtime/message pattern — not modeled via Capab
 
 ### Input and Output Types
 
-Capabilities declare typed data via `inputType` and/or `outputType` (see validation rules above). Values are `TypeDescriptor` expressions that resolve to TypeBlocks — same parsing rules as Property `type`.
+Capabilities declare typed data via `inputType` and/or `outputType` (see validation rules above). Values are `TypeDescriptor` expressions that resolve to ValueTypes — same parsing rules as Property `type`.
 
 ```text
 org.blockml.type.Integer          — primitive (NamedTypeReference)
@@ -1229,7 +1229,7 @@ configProfile < basePresets chain < inline property
 
 ## Library
 
-A Library is a **Block** with `baseType="org.blockml.core.BlockLibrary"`. It groups exported Block and TypeBlock definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
+A Library is a **Block** with `baseType="org.blockml.core.BlockLibrary"`. It groups exported Block and ValueType definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
 
 ```text
 org.blockml.core.BlockLibrary           abstract composable Block
@@ -1250,7 +1250,7 @@ The Library block lives in a package directory (e.g. `com/machineblocks/bricks/`
 
 **Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `_dependencies` and `_blocks` entries by FQN + `bml:version`, and registers the referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
-**Types:** TypeBlock definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** is optional legacy XSD — omit when types are BML-only.
+**Types:** ValueType definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** is optional legacy XSD — omit when types are BML-only.
 
 A Library answers: *"What Block types, presets, and types does this package export?"*
 
@@ -1461,9 +1461,9 @@ org.blockml.type.Float
 org.blockml.type.String
 ```
 
-### Type Expressions (not TypeBlocks)
+### Type Expressions (not ValueTypes)
 
-BlockML has three TypeBlock kinds only: **Primitive**, **Enum**, **Struct**. Unions, collections, and generic applications are **type expressions** — see `17_type_system_bml.md` — Type Expressions.
+BlockML has three ValueType kinds only: **Primitive**, **Enum**, **Struct**. Unions, collections, and generic applications are **type expressions** — see `17_type_system_bml.md` — Type Expressions.
 
 ```text
 Union:        "auto" | Float · false | T · Boolean | StudType

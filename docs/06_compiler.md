@@ -478,7 +478,7 @@ BML_CONSTRAINT_VIOLATION      — property value fails a declared constraint (Mi
 BML_SUGGESTION_TYPE_MISMATCH  — suggestion Block instance type incompatible with property type
 BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfied (type notation)
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
-BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a TypeBlock
+BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a ValueType
 BML_UNKNOWN_BEAN              — @bean reference not found in aggregations
 BML_CAPABILITY_LINK_MISMATCH  — capability linking: direction or inputType/outputType mismatch
 BML_NO_TARGET                 — no registered target supports the block's baseType

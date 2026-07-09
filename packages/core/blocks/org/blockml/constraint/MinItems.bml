@@ -24,7 +24,7 @@
   <version>1.0.0</version>
 
   <genericTypes>
-    <genericType name="T" baseType="core:TypeBlock"/>
+    <genericType name="T" baseType="core:ValueType"/>
   </genericTypes>
 
   <properties>

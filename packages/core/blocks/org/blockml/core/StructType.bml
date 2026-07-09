@@ -12,12 +12,12 @@
 
   <idea>Branch for product types — composite values with named fields.</idea>
 
-  <documentation>Abstract branch for struct TypeBlocks — complex values described by normal
+  <documentation>Abstract branch for struct ValueTypes — complex values described by normal
     Properties. No special struct syntax.</documentation>
 
   <name>StructType</name>
   <type>core:StructType</type>
-  <baseType>core:TypeBlock</baseType>
+  <baseType>core:ValueType</baseType>
   <version>1.0.0</version>
 
   <abstract />

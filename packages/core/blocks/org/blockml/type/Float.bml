@@ -5,7 +5,7 @@
 
   <idea>Primitive BlockML property type capable of holding a float number.</idea>
 
-  <documentation>BOM Core primitive TypeBlock for floating-point numbers. Unqualified name Float
+  <documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
     resolves to org.blockml.type.Float.</documentation>
 
   <name>Float</name>

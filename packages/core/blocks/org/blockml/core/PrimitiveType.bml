@@ -12,11 +12,11 @@
 
   <idea>Branch for scalar value types — single atomic values.</idea>
 
-  <documentation>Abstract branch for built-in scalar TypeBlocks (Integer, Float, String, Boolean).</documentation>
+  <documentation>Abstract branch for built-in scalar ValueTypes (Integer, Float, String, Boolean).</documentation>
 
   <name>PrimitiveType</name>
   <type>core:PrimitiveType</type>
-  <baseType>core:TypeBlock</baseType>
+  <baseType>core:ValueType</baseType>
   <version>1.0.0</version>
 
   <abstract />

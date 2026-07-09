@@ -25,7 +25,7 @@
   <abstract />
 
   <genericTypes>
-    <genericType name="T" baseType="core:TypeBlock" />
+    <genericType name="T" baseType="core:ValueType" />
   </genericTypes>
 
 </block>

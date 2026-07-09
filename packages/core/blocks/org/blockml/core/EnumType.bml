@@ -12,12 +12,12 @@
 
   <idea>Branch for closed sets of named literal values.</idea>
 
-  <documentation>Abstract branch for closed enum TypeBlocks. Enum values are Block instances in the
+  <documentation>Abstract branch for closed enum ValueTypes. Enum values are Block instances in the
     default _values aggregation — no special enum syntax.</documentation>
 
   <name>EnumType</name>
   <type>core:EnumType</type>
-  <baseType>core:TypeBlock</baseType>
+  <baseType>core:ValueType</baseType>
   <version>1.0.0</version>
 
   <abstract />

@@ -70,7 +70,7 @@ The document type is determined by the root element (XML). JSON `type` field map
 BML defines one core document root:
 
 ```text
-<block>   — Block Definition (composable types, type blocks, language blocks, preset collections, …)
+<block>   — Block Definition (composable types, ValueTypes, language blocks, preset collections, …)
 ```
 
 Property presets are **not** a BlockML core feature. MachineBlocks models presets as Block instances in `_presets` with `basePresets` associations — see § Presets (MachineBlocks) and `03_mbom.md`.
@@ -139,11 +139,11 @@ type="type:Color"    →  com.machineblocks.type.Color
 
 There is no implicit fallback to the domain namespace. Explicit FQNs are always supported.
 
-**Property and Capability types** must resolve to a **TypeBlock** — a Block whose `baseType` chain includes `org.blockml.core.TypeBlock`. Non-TypeBlock FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability input/output types → `BML_INVALID_PROPERTY_TYPE`.
+**Property and Capability types** must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.core.ValueType`. Non-ValueType FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability input/output types → `BML_INVALID_PROPERTY_TYPE`.
 
 **Member namespace:** `org.blockml.core.Block` declares **no members**. Every sub-type chooses its own Properties, Aggregations, Associations, and Capabilities — including names like `id` or `version` if a domain needs them. On composition instances, **instance identity** uses `bml:id` and **external reference version** uses `bml:version` — not bare attributes (see Composition section).
 
-**Aggregation and association types** may reference any Block FQN — not limited to TypeBlocks.
+**Aggregation and association types** may reference any Block FQN — not limited to ValueTypes.
 
 ---
 
@@ -195,7 +195,7 @@ Examples:
 
 ```xml
 <idea>Primitive BlockML property type capable of holding a float number.</idea>
-<documentation>BOM Core primitive TypeBlock for floating-point numbers. Unqualified name Float resolves to org.blockml.type.Float.</documentation>
+<documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float resolves to org.blockml.type.Float.</documentation>
 ```
 
 `<idea>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IDEA` (warning in V1, error in a later release). The idea is primary input for editors, LLMs, and documentation navigation — it answers *what is this?* before *how does it work?*
@@ -804,7 +804,7 @@ Boolean  → org.blockml.type.Boolean
 
 There is no `Null` primitive — see `17_type_system_bml.md` — EMPTY.
 
-Collections and unions are type expressions — not TypeBlocks:
+Collections and unions are type expressions — not ValueTypes:
 
 ```text
 Integer[]              → multiplicity 0..n on Integer
@@ -2115,7 +2115,7 @@ configProfile < basePresets chain < inline property
 
 ## Library Format (`org.blockml.core.BlockLibrary`)
 
-A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and TypeBlock definitions are exported via `_blocks`. Each package directory should contain one Library block at package root. If absent, all BML source files in the directory are treated as public.
+A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and ValueType definitions are exported via `_blocks`. Each package directory should contain one Library block at package root. If absent, all BML source files in the directory are treated as public.
 
 **Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for package `com.machineblocks.bricks`. Filename matches block name (`BricksLibrary.bml`). Not enforced by the compiler.
 
@@ -2177,7 +2177,7 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 
 **`ref` paths** on `Schema` are relative to the **library package root** (directory containing the Library block file).
 
-**`_blocks`** lists exported Block and TypeBlock definitions (composable Blocks, StructType, EnumType, presets, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML.
+**`_blocks`** lists exported Block and ValueType definitions (composable Blocks, StructType, EnumType, presets, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML.
 
 **Directory structure:**
 

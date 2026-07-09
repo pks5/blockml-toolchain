@@ -5,7 +5,7 @@
 
   <idea>Primitive BlockML property type capable of holding text.</idea>
 
-  <documentation>BOM Core primitive TypeBlock for text values. Unqualified name String resolves to
+  <documentation>BOM Core primitive ValueType for text values. Unqualified name String resolves to
     org.blockml.type.String.</documentation>
 
   <name>String</name>

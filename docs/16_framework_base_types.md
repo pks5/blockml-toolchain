@@ -28,6 +28,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **Block idea** | Every `<block>` carries `<idea>` as first child — what this Block semantically represents |
 | **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
+| **ValueType branch** | `org.blockml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; three kinds: PrimitiveType · EnumType · StructType |
 | **Namespace separation** | Language FQNs (`org.blockml.core.*`, `type.*`, …) reserved for BML grammar; BOM/toolchain types in `org.blockml.bom.*`, `parser.*`, `compiler.*`, … — see `00_bom_core.md` |
 | **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `01_system.md` |
 
@@ -125,7 +126,7 @@ Unknown type on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 
 ```xml
 <genericTypes>
-  <genericType name="T" baseType="org.blockml.core.TypeBlock"/>
+  <genericType name="T" baseType="org.blockml.core.ValueType"/>
 </genericTypes>
 ```
 
@@ -145,7 +146,7 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 
 `org.blockml.core.Block` is the **sole inheritance root**. It **omits `<baseType>`** — the only definition allowed to do so.
 
-All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.core.TypeBlock`, `org.blockml.core.LanguageBlock`, or domain bases — all ultimately extend `org.blockml.core.Block`. See `17_type_system_bml.md`.
+All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.core.ValueType`, `org.blockml.core.LanguageBlock`, or domain bases — all ultimately extend `org.blockml.core.Block`. See `17_type_system_bml.md`.
 
 ---
 
@@ -156,7 +157,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
 ```text
 1. @blockml/core BML                    ← BlockML describes BlockML
      org/blockml/core/Block.bml
-     org/blockml/core/TypeBlock.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · …
+     org/blockml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · …
      org/blockml/core/Constraint.bml
      org/blockml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
      org/blockml/core/ServiceBlock.bml · FunctionBlock.bml
@@ -213,7 +214,7 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/blocks/
   org/blockml/core/
-    Block.bml · TypeBlock.bml · Constraint.bml · ServiceBlock.bml · FunctionBlock.bml · BlockLibrary.bml · …
+    Block.bml · ValueType.bml · Constraint.bml · ServiceBlock.bml · FunctionBlock.bml · BlockLibrary.bml · …
   org/blockml/constraint/
     Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
   org/blockml/service/
