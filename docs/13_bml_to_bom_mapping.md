@@ -95,7 +95,7 @@ xsi:schemaLocation="..."                  → ignored
 |---|---|
 | `bml:id` | `BlockInstance.id` (`MemberValue`) |
 | `bml:version` | `BlockInstance.version` (`MemberValue`) |
-| `bml:status` | `statusFqn` on the element (Block reference; resolved via `status:` shorthand) |
+| `bml:status` | `statusFqn` on the element when declared (deviation from inherited effective status) |
 
 **Flow-control directives** — stored in `directives[]` on the same element (Thymeleaf model):
 
@@ -257,7 +257,8 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 ```text
 <idea>…</idea>                               → block.idea (trimmed text)
 <documentation>…</documentation>             → block.documentation (trimmed text)
-<status>status:Draft</status>                → block.statusFqn (resolved Block reference)
+<status>status:Draft</status>                → member.statusFqn or block.statusFqn (when declared)
+                                             → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
 <type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
 <abstract />                                 → block.abstract = true  (equivalent: <abstract>true</abstract>)
@@ -305,21 +306,30 @@ visibility="protected"   → visibility (optional; derived from name when omitte
 readOnly="true"          → readOnly
 final="true"             → final
 <documentation>…         → documentation
-<status>status:Draft</status>  → statusFqn (resolved Block reference)
+<status>status:Draft</status>  → statusFqn (when declared; omitted → inherit from parent)
 ```
 
-**Non-definition elements** (`<documentation>`, `<idea>`, `<implementation>`, Block instances, …) carry maturity via `bml:status="status:Draft"` — mapped to `statusFqn` on the same BOM node. No `<status>` child on these elements.
+**Non-definition elements** (`<documentation>`, `<idea>`, `<implementation>`, Block instances, …) may carry `bml:status="status:Draft"` — mapped to `statusFqn` on the same BOM node **only when deviating** from inherited status. No `<status>` child on these elements.
 
-**Status resolution (stage [5]):**
+**Effective status resolution (stage [5] / validate [8]):**
 
 ```text
-Authored:  <status>status:Draft</status>     xmlns:status="org.blockml.status"
-           bml:status="status:Stable"
+Implicit default (no declaration anywhere in chain from root):
+  effective status = org.blockml.status.Stable
 
-BOM:       statusFqn: "org.blockml.status.Draft"
+Walk element tree depth-first.
+Root (no parent) effective status     →  org.blockml.status.Stable (when omitted)
+Element with declared statusFqn         →  declared value becomes effective for subtree
+Element without declaration             →  effective status = parent's effective status
+
+Authored:  <status>status:Draft</status>     xmlns:status="org.blockml.status"
+           bml:status="status:Deprecated"    (only when ≠ inherited)
+
+BOM:       statusFqn on node (explicit only) + resolved effectiveStatusFqn at validate
 
 Bare name "Draft" (no status: prefix)  →  BML_UNKNOWN_STATUS (parse error)
 Unknown status FQN                     →  BML_UNKNOWN_STATUS (validate)
+Redundant status (= inherited)         →  BML_REDUNDANT_STATUS (warning V1)
 ```
 
 **Member `namespace` resolution (stage [5]):**

@@ -6,16 +6,12 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.core"
-  xmlns:lang="org.blockml.language"
-  xmlns:status="org.blockml.status"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:lang="org.blockml.language">
 
-  <idea bml:status="status:Stable">YML as an implementation language for capabilities.</idea>
+  <idea>YML as an implementation language for capabilities.</idea>
 
-  <documentation bml:status="status:Stable">MarkupLanguage for YAML document implementations on Capabilities — configuration,
+  <documentation>MarkupLanguage for YAML document implementations on Capabilities — configuration,
     structured data, or templates.</documentation>
-
-  <status>status:Stable</status>
   <name>YML</name>
   <type>lang:YML</type>
   <baseType>core:MarkupLanguage</baseType>

@@ -11,17 +11,13 @@
                       "
   xmlns:bcore="org.blockml.core"
   xmlns:core="com.machineblocks.core"
-  xmlns:lang="org.blockml.language"
-  xmlns:status="org.blockml.status"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:lang="org.blockml.language">
 
-  <idea bml:status="status:Stable">MachineBlocks object composed of child block instances.</idea>
+  <idea>MachineBlocks object composed of child block instances.</idea>
 
-  <documentation bml:status="status:Stable">Composable MachineBlocks Block with default _parts aggregation. On Sets, _parts
+  <documentation>Composable MachineBlocks Block with default _parts aggregation. On Sets, _parts
     holds placed block instances (direction, offset, appliedPresets). On other composites, _parts
     holds child blocks for SCAD composition.</documentation>
-
-  <status>status:Stable</status>
   <name>CompositeBlock</name>
   <type>core:CompositeBlock</type>
   <baseType>core:Block</baseType>

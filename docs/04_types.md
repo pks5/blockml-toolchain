@@ -86,6 +86,8 @@ inputType: Float                       → #math.floor(x)   (single primitive �
 
 Type and parameter definitions express maturity via **status Block references** — not strings or boolean flags. See `02_mbml.md` — § Status and `00_bom_core.md` — § Status.
 
+**Implicit default:** `status:Stable` when omitted — at document root and inherited by children unless a deviation is declared. Declare `<status>` or `bml:status` **only when deviating** from the inherited status.
+
 Core status blocks:
 
 ```text
@@ -95,7 +97,7 @@ status:Stub         — placeholder; shape declared, behaviour not yet specified
 status:Deprecated   — retained for compatibility; do not use in new work
 ```
 
-Definition elements carry `<status>status:Draft</status>`. Prose annotations in this document use inline block references:
+Definition elements carry `<status>status:Draft</status>` only when deviating from inherited status. Prose annotations in this document use inline block references where the effective status differs from Stable:
 
 ```text
 Status: status:Draft — known gap; explicit note describes what is missing.

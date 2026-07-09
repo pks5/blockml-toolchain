@@ -8,7 +8,6 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
@@ -16,15 +15,12 @@
   xmlns:cap="org.blockml.capability"
   xmlns:core="org.blockml.core"
   xmlns:lang="org.blockml.language"
-  xmlns:service="org.blockml.service"
-  xmlns:status="org.blockml.status">
+  xmlns:service="org.blockml.service">
 
-  <idea bml:status="status:Stable">Built-in boolean utilities callable as #bools in expressions.</idea>
+  <idea>Built-in boolean utilities callable as #bools in expressions.</idea>
 
-  <documentation bml:status="status:Stable">Built-in booleans service. Expression prefix #bools.* — logical and boolean
+  <documentation>Built-in booleans service. Expression prefix #bools.* — logical and boolean
     conversion utilities.</documentation>
-
-  <status>status:Stable</status>
   <name>Bools</name>
   <type>service:Bools</type>
   <baseType>core:Entity</baseType>
@@ -37,7 +33,7 @@
       type="cap:Transformation"
       inputType="Boolean"
       outputType="Boolean">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Returns true if x is strictly true.
         Examples:
         #bools.isTrue(true) → true
@@ -53,7 +49,7 @@
       type="cap:Transformation"
       inputType="Boolean"
       outputType="Boolean">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Returns true if x is strictly false.
         Examples:
         #bools.isFalse(false) → true

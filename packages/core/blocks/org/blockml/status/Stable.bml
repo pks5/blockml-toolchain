@@ -14,10 +14,8 @@
   <idea>Definition is complete, tested, and reliable.</idea>
 
   <documentation>Implemented, validated, and mapping complete. Behavior is reliable and may be
-    depended on by downstream definitions and tooling.</documentation>
-
-  <status>status:Stable</status>
-
+    depended on by downstream definitions and tooling. Implicit default when no status is declared
+    on an element — omit &lt;status&gt; and bml:status on Stable content.</documentation>
   <name>Stable</name>
   <type>status:Stable</type>
   <baseType>core:Status</baseType>

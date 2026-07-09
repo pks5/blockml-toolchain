@@ -12,15 +12,11 @@
   "
   xmlns:btype="org.blockml.type"
   xmlns:constraint="org.blockml.constraint"
-  xmlns:core="org.blockml.core"
-  xmlns:status="org.blockml.status"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:core="org.blockml.core">
 
-  <idea bml:status="status:Stable">Regular-expression pattern for a string property value.</idea>
+  <idea>Regular-expression pattern for a string property value.</idea>
 
-  <documentation bml:status="status:Stable">T binds to org.blockml.type.String. The value property holds the regex pattern.</documentation>
-
-  <status>status:Stable</status>
+  <documentation>T binds to org.blockml.type.String. The value property holds the regex pattern.</documentation>
   <name>Pattern</name>
   <type>constraint:Pattern</type>
   <baseType>core:Constraint</baseType>
@@ -32,7 +28,7 @@
 
   <properties>
     <value type="String">
-      <documentation bml:status="status:Stable">Regular expression the property value must match.</documentation>
+      <documentation>Regular expression the property value must match.</documentation>
     </value>
   </properties>
 

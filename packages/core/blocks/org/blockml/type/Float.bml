@@ -1,16 +1,12 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.type"
-  xmlns:core="org.blockml.core"
-  xmlns:status="org.blockml.status"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:core="org.blockml.core">
 
-  <idea bml:status="status:Stable">Primitive BlockML property type capable of holding a float number.</idea>
+  <idea>Primitive BlockML property type capable of holding a float number.</idea>
 
-  <documentation bml:status="status:Stable">BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
+  <documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
     resolves to org.blockml.type.Float.</documentation>
-
-  <status>status:Stable</status>
   <name>Float</name>
   <type>Float</type>
   <baseType>core:PrimitiveType</baseType>

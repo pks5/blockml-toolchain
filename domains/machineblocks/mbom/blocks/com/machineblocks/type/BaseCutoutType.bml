@@ -10,14 +10,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:bcore="org.blockml.core"
-  xmlns:type="com.machineblocks.type"
-  xmlns:status="org.blockml.status">
+  xmlns:type="com.machineblocks.type">
 
-  <idea bml:status="status:Stable">Shape variant of the underside cutout on a brick base.</idea>
+  <idea>Shape variant of the underside cutout on a brick base.</idea>
 
-  <documentation bml:status="status:Stable">Enum ValueType for base cutout variants on MachineBlocks bricks.</documentation>
-
-  <status>status:Stable</status>
+  <documentation>Enum ValueType for base cutout variants on MachineBlocks bricks.</documentation>
   <name>BaseCutoutType</name>
   <type>type:BaseCutoutType</type>
   <baseType>bcore:EnumType</baseType>
@@ -25,7 +22,7 @@
 
   <properties>
     <value type="String">
-      <documentation bml:status="status:Stable">Enum literal used in property values and expressions.</documentation>
+      <documentation>Enum literal used in property values and expressions.</documentation>
     </value>
   </properties>
 

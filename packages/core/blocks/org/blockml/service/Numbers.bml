@@ -8,7 +8,6 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
@@ -16,15 +15,12 @@
   xmlns:cap="org.blockml.capability"
   xmlns:core="org.blockml.core"
   xmlns:lang="org.blockml.language"
-  xmlns:service="org.blockml.service"
-  xmlns:status="org.blockml.status">
+  xmlns:service="org.blockml.service">
 
-  <idea bml:status="status:Stable">Built-in number formatting and sequence utilities callable as #numbers in expressions.</idea>
+  <idea>Built-in number formatting and sequence utilities callable as #numbers in expressions.</idea>
 
-  <documentation bml:status="status:Stable">Built-in numbers service. Expression prefix #numbers.* — sequence,
+  <documentation>Built-in numbers service. Expression prefix #numbers.* — sequence,
     formatting, and numeric conversion utilities.</documentation>
-
-  <status>status:Stable</status>
   <name>Numbers</name>
   <type>service:Numbers</type>
   <baseType>core:Entity</baseType>
@@ -41,7 +37,7 @@
       type="cap:Transformation"
       inputType="{ x: Float, minInt: Integer, decPoint: String, minFrac: Integer }"
       outputType="String">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Formats x as a decimal string.
         minInt: minimum integer digits (0 omits leading zero before decimal point).
         decPoint: decimal separator character (e.g. "." or ",").

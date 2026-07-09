@@ -998,6 +998,8 @@ When a child instance's Aggregation is bound to a service Model, all children wi
 
 Status expresses the **maturity or lifecycle** of a BML element. Status is not a string or boolean flag — it is a **Block reference** following the Everything-is-a-Block principle.
 
+**Implicit default:** When no status is declared, the effective status is **`status:Stable`**. At the document root this is the fallback; on nested elements the effective status is inherited from the parent (Stable unless an ancestor deviated).
+
 ### Core status blocks
 
 ```text
@@ -1010,9 +1012,19 @@ org.blockml.status.Deprecated    — retained for compatibility; do not use in n
 
 Domain libraries may define additional status blocks (e.g. domain-specific WIP markers).
 
+### Inheritance and defaults
+
+Status is **inherited downward**. The document root defaults to `status:Stable`. Child elements inherit the effective status of their parent unless they declare a deviation.
+
+```text
+Omitted status on block/property/member   →  inherit from parent (root → Stable)
+<status>status:Draft</status> on property →  Draft for property and its subtree
+bml:status on non-definition element      →  only when deviating from inherited status
+```
+
 ### Authoring syntax
 
-**Definition elements** — elements that declare something — carry a `<status>` child:
+**Definition elements** — `<status>` child **only when deviating** from inherited status:
 
 ```text
 <block>  <property>  <aggregation>  <association>  <capability>  <constraint>  <suggestion>
@@ -1025,12 +1037,10 @@ Domain libraries may define additional status blocks (e.g. domain-specific WIP m
 </property>
 ```
 
-**All other elements** — no `<status>` child — use the `bml:status` attribute:
+**Non-definition elements** — `bml:status` attribute **only when deviating**:
 
 ```xml
-<documentation bml:status="status:Draft">…</documentation>
 <idea bml:status="status:Stub">…</idea>
-<implementation type="lang:TypeScript" bml:status="status:Stub"><![CDATA[…]]></implementation>
 <bricks:StandardBrick bml:status="status:Deprecated" … />
 ```
 
@@ -1068,7 +1078,7 @@ The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*
 | `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
 | `bml:version` | Block instances | External block reference version (required when type is from another file) |
-| `bml:status` | Non-definition elements | Maturity marker — Block reference (`status:Draft`, …); see § Status |
+| `bml:status` | Non-definition elements | Maturity marker — only when deviating from inherited status |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
 
 Bare `id=` / `version=` on instances are member values when the Block type declares such Properties.

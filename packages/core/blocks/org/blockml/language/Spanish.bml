@@ -6,15 +6,11 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.core"
-  xmlns:lang="org.blockml.language"
-  xmlns:status="org.blockml.status"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:lang="org.blockml.language">
 
-  <idea bml:status="status:Stable">Spanish prose as an implementation language for capabilities.</idea>
+  <idea>Spanish prose as an implementation language for capabilities.</idea>
 
-  <documentation bml:status="status:Stable">Language for natural-language capability implementations in Spanish.</documentation>
-
-  <status>status:Stable</status>
+  <documentation>Language for natural-language capability implementations in Spanish.</documentation>
   <name>Spanish</name>
   <type>lang:Spanish</type>
   <baseType>core:Language</baseType>

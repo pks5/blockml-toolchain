@@ -8,16 +8,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.core"
-  xmlns:status="org.blockml.status"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:core="org.blockml.core">
 
-  <idea bml:status="status:Stable">A target implementation language for capability code.</idea>
+  <idea>A target implementation language for capability code.</idea>
 
-  <documentation bml:status="status:Stable">Language branch of BlockML. Declares an implementation language permitted on
+  <documentation>Language branch of BlockML. Declares an implementation language permitted on
     Capability implementations (OpenSCAD, TypeScript, English, …).</documentation>
-
-  <status>status:Stable</status>
   <name>Language</name>
   <type>core:Language</type>
   <baseType>core:Block</baseType>

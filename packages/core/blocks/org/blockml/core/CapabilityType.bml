@@ -9,16 +9,12 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:btype="org.blockml.type"
-  xmlns:core="org.blockml.core"
-  xmlns:status="org.blockml.status"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:core="org.blockml.core">
 
-  <idea bml:status="status:Stable">Representation of a capability.</idea>
+  <idea>Representation of a capability.</idea>
 
-  <documentation bml:status="status:Stable">Capability type branch of BlockML. Declares a capability type. Every capability may
+  <documentation>Capability type branch of BlockML. Declares a capability type. Every capability may
     carry an implementation whose type attribute references a Language FQN.</documentation>
-
-  <status>status:Stable</status>
   <name>CapabilityType</name>
   <type>core:CapabilityType</type>
   <baseType>core:ValueType</baseType>
@@ -29,14 +25,14 @@
   <properties>
     <hasInput type="Boolean" readOnly="true">
       <value>false</value>
-      <documentation bml:status="status:Stable">Whether the capabality has an input and thus requires a specified inputType.</documentation>
+      <documentation>Whether the capabality has an input and thus requires a specified inputType.</documentation>
     </hasInput>
     <hasOutput type="Boolean" readOnly="true">
       <value>false</value>
-      <documentation bml:status="status:Stable">Whether the capabality has an output and thus requires a specified outputType.</documentation>
+      <documentation>Whether the capabality has an output and thus requires a specified outputType.</documentation>
     </hasOutput>
     <implementation type="btype:String">
-      <documentation bml:status="status:Stable">Capability implementation body. The element type attribute must reference a
+      <documentation>Capability implementation body. The element type attribute must reference a
         Language FQN (org.blockml.language.*).</documentation>
     </implementation>
   </properties>

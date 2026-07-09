@@ -9,15 +9,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:cap="org.blockml.capability"
-  xmlns:core="org.blockml.core"
-  xmlns:status="org.blockml.status"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:core="org.blockml.core">
 
-  <idea bml:status="status:Stable">Representation of an Outbound capability.</idea>
+  <idea>Representation of an Outbound capability.</idea>
 
-  <documentation bml:status="status:Stable">Outbound capability.</documentation>
-
-  <status>status:Stable</status>
+  <documentation>Outbound capability.</documentation>
   <name>Outbound</name>
   <type>cap:Outbound</type>
   <baseType>core:CapabilityType</baseType>

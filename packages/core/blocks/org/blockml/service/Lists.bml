@@ -8,7 +8,6 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
@@ -16,15 +15,12 @@
   xmlns:cap="org.blockml.capability"
   xmlns:core="org.blockml.core"
   xmlns:lang="org.blockml.language"
-  xmlns:service="org.blockml.service"
-  xmlns:status="org.blockml.status">
+  xmlns:service="org.blockml.service">
 
-  <idea bml:status="status:Stable">Built-in list utilities callable as #lists in expressions.</idea>
+  <idea>Built-in list utilities callable as #lists in expressions.</idea>
 
-  <documentation bml:status="status:Stable">Built-in lists service. Expression prefix #lists.* — list construction,
+  <documentation>Built-in lists service. Expression prefix #lists.* — list construction,
     indexing, and aggregation utilities.</documentation>
-
-  <status>status:Stable</status>
   <name>Lists</name>
   <type>service:Lists</type>
   <baseType>core:Entity</baseType>
@@ -37,7 +33,7 @@
       type="cap:Transformation"
       inputType="Array<Object>"
       outputType="Integer">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Returns the number of elements in list.
         Examples:
         #lists.size([1, 2, 3]) → 3
@@ -52,7 +48,7 @@
       type="cap:Transformation"
       inputType="Array<Object>"
       outputType="Boolean">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Returns true if list has no elements.
         Examples:
         #lists.isEmpty([]) → true
@@ -67,7 +63,7 @@
       type="cap:Transformation"
       inputType="{ list: Array<Object>, element: Object }"
       outputType="Boolean">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Returns true if list contains element.
         Examples:
         #lists.contains([1, 2, 3], 2) → true
@@ -82,7 +78,7 @@
       type="cap:Transformation"
       inputType="Array<Object>"
       outputType="Float">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Returns the first element of list.
         Return type follows list element type at runtime.
         Examples:
@@ -98,7 +94,7 @@
       type="cap:Transformation"
       inputType="Array<Object>"
       outputType="Float">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Returns the last element of list.
         Return type follows list element type at runtime.
         Examples:
@@ -114,7 +110,7 @@
       type="cap:Transformation"
       inputType="{ list: Array<Object>, index: Integer }"
       outputType="Float">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Returns the element at index in list.
         Return type follows list element type at runtime.
         Examples:
@@ -130,7 +126,7 @@
       type="cap:Transformation"
       inputType="Array<Array<Object>>"
       outputType="Array<Object>">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Concatenates all list arguments into a single list.
         Examples:
         #lists.concat([1, 2], [3, 4]) → [1, 2, 3, 4]
@@ -149,7 +145,7 @@
       type="cap:Transformation"
       inputType="{ start: Integer, end: Integer, step: Integer }"
       outputType="Array<Integer>">
-      <documentation bml:status="status:Stable">
+      <documentation>
         Generates a sequence of integers from start to end (inclusive).
         step defaults to 1 when start &lt;= end, -1 when start &gt; end.
         Examples:
