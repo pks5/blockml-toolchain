@@ -753,6 +753,8 @@ Properties may be written as **attributes** (short form) or **elements** (long f
 
 When both forms exist, the **long form replaces the short form entirely**.
 
+**Primitive properties — scalar only:** Properties typed with `org.blockml.core.PrimitiveType` (Integer, Float, String, Boolean, Decimal) carry **inline scalar values** on Block instances — attributes or child elements with literal text. They do not use nested primitive Block instances (`<Integer value="5"/>`) as property values. Boxed primitive Block instances appear in `<suggestions>`, composition children, and other non-property contexts. See `17_type_system_bml.md` — § PrimitiveType — Scalar role vs instance role.
+
 Aggregations are filled directly by member name:
 
 ```xml

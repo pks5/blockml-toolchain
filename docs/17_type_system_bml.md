@@ -490,21 +490,67 @@ The branch declares:
 <property name="value" type="_self"/>
 ```
 
-Each concrete primitive (`Integer`, `Float`, `Decimal`, …) inherits this member. A primitive value may appear:
+Each concrete primitive (`Integer`, `Float`, `Decimal`, …) inherits this member.
 
-**As a property value** (type reference):
+#### Scalar role vs instance role
+
+PrimitiveTypes have a **dual interpretation** depending on where they appear. The Java `int` / `Integer` distinction is a useful analogy — BlockML applies the same pattern to all primitives (`float`/`Float`, `boolean`/`Boolean`, …):
+
+| Role | Where | Authoring | BOM / runtime |
+|---|---|---|---|
+| **Scalar** | Property `type="Integer"` · property value on a Block instance · Capability scalar input/output | Inline literal: `5`, `"text"`, `true` | `LiteralValue` — no nested `BlockInstance` |
+| **Instance** | Composition child · `<suggestions>` entry · typed Block instance elsewhere | Block instance: `<Integer value="5"/>` | `BlockInstance` with `typeFqn = org.blockml.type.Integer` |
+
+```xml
+<!-- Scalar role — property slot -->
+<properties>
+  <count type="Integer">
+    <value>5</value>
+  </count>
+</properties>
+
+<!-- Instance role — suggestion (boxed primitive) -->
+<count type="Integer">
+  <value>5</value>
+  <suggestions>
+    <Integer value="1"/>
+    <Integer value="5"/>
+  </suggestions>
+</count>
+
+<!-- Instance role — composition / aggregation child -->
+<aggregations>
+  <samples type="Integer[]">
+    <composition>
+      <Integer value="0"/>
+      <Integer value="10"/>
+    </composition>
+  </samples>
+</aggregations>
+```
+
+On Block instances, primitive properties use the **scalar** form only:
+
+```xml
+<bricks:Standard columns="5" studs="true" />
+<!-- not <Integer value="5"/> as property value -->
+```
+
+The **same FQN** (`org.blockml.type.Integer`) applies in both roles. The parser and validator decide scalar vs instance from **context** — not from a different type name.
+
+**As a property type** (scalar reference):
 
 ```xml
 <property name="count" type="Integer"/>
 ```
 
-**As a Block instance** (literal):
+**As a Block instance** (boxed value):
 
 ```xml
 <Integer value="5"/>
 ```
 
-Interpretation is context-dependent — same ValueType, two roles.
+Interpretation is context-dependent — same ValueType, two roles. StructTypes and EnumTypes do not share this split; it is specific to `org.blockml.core.PrimitiveType`.
 
 V1 bootstrap primitives: `Integer`, `Float`, `Decimal`, `String`, `Boolean` in `@blockml/core`. Numeric branch: `org.blockml.type.Number` (abstract).
 
@@ -736,12 +782,16 @@ A ValueType may appear in different roles:
 
 | Context | Example | Role |
 |---|---|---|
-| Property type | `type="com.machineblocks.type.Size3d"` | type reference |
-| Block instance | `<Size3d x="10" y="5" z="2"/>` | value / object |
-| Aggregation type | `type="org.blockml.type.Integer[]"` | collection of primitive instances |
-| Composition child | `<Integer value="5"/>` inside an aggregation | transported value |
+| Property type | `type="org.blockml.type.Integer"` | type reference (scalar slot) |
+| Property value on instance | `columns="5"` | **inline scalar** — PrimitiveType only |
+| Block instance | `<Integer value="5"/>` | **boxed primitive** — BlockInstance |
+| Suggestion | `<Integer value="1"/>` inside `<suggestions>` | boxed primitive |
+| Aggregation type | `type="org.blockml.type.Integer[]"` | collection type reference |
+| Composition child | `<Integer value="5"/>` inside aggregation | boxed primitive |
 
-The renderer and validator decide semantics from `baseType` and usage context — not from separate metamodels.
+**PrimitiveType dual role:** On Properties, primitives act as **scalars** (Java `int` analogy). Everywhere else they appear as **Block instances** of the primitive type (Java `Integer` analogy). Same FQN — semantics from context. See § PrimitiveType — Scalar role vs instance role.
+
+The renderer and validator decide semantics from `baseType`, branch, and usage context — not from separate metamodels.
 
 ---
 

@@ -13,7 +13,15 @@
   <idea>Branch for scalar value types — single atomic values.</idea>
 
   <documentation>Abstract branch for built-in scalar ValueTypes. Numeric branch:
-    org.blockml.type.Number (Integer, Float, Decimal). Other scalars: String, Boolean.</documentation>
+    org.blockml.type.Number (Integer, Float, Decimal). Other scalars: String, Boolean.
+
+    Dual role (Java analogy — int vs Integer, only as illustration):
+    • Property slot (type="Integer" or scalar property value) → inline scalar — no nested Block
+      instance; the value is stored directly (LiteralValue).
+    • Everywhere else (composition child, suggestion, constraint payload as Block instance, …)
+      → Block instance of the primitive type (&lt;Integer value="5"/&gt;).
+
+    Same FQN in both roles; validator and renderer choose semantics from usage context.</documentation>
   <name>PrimitiveType</name>
   <type>core:PrimitiveType</type>
   <baseType>core:ValueType</baseType>

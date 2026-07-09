@@ -486,7 +486,7 @@ type="com.machineblocks.type.Size3d[]"    ✓
 type="org.blockml.type.Integer[]"         ✓
 ```
 
-ValueTypes may therefore appear both as type references on Properties and as Block instances in compositions or aggregations — interpretation is context-dependent. See `17_type_system_bml.md`.
+ValueTypes may therefore appear both as type references on Properties and as Block instances in compositions or aggregations — interpretation is context-dependent. **PrimitiveTypes** additionally split into **scalar** (property slot — inline literal) vs **instance** (boxed Block elsewhere). See `17_type_system_bml.md` — § PrimitiveType · Scalar role vs instance role.
 
 ### Constraints
 
