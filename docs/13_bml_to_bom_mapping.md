@@ -46,7 +46,7 @@ MUST NOT merge sections out of document sequence
 MAY omit empty sections (<properties> absent → skip)
 ```
 
-Ordinal = index in `members[]` after mapping. Used by render targets and by StructType array-literal deserialization (`[v0, v1, …]` → fields in property declaration order). See `12_bom_object_model.md` — Member Declaration Order · `17_type_system_bml.md` — StructType.
+Ordinal = index in `members[]` after mapping. Used by render targets and by StructType array-literal deserialization (`[v0, v1, …]` → fields in property declaration order). See `17_type_system_bml.md` — Ordered Struct Fields · `12_bom_object_model.md` — Member Declaration Order.
 
 ---
 

@@ -190,11 +190,13 @@ Objects inside `${ }` may contain expressions as values. Objects outside `${ }` 
 
 Accesses a member of the current Block instance. No prefix required.
 
+For StructType property values, **named and positional access are equivalent** — index is derived from field declaration order in the type definition. See `17_type_system_bml.md` — Ordered Struct Fields.
+
 ```text
 ${ size }             — property value (e.g. Size3D [1, 8, 9])
-${ size[0] }          — index access (x component)
-${ size[1] }          — index access (y component)
-${ size.x }           — attribute access (equivalent to size[0] for Size3D)
+${ size[0] }          — positional access (index 0 = first declared field)
+${ size[1] }          — positional access (index 1 = second declared field)
+${ size.x }           — named access (equivalent to size[0] when x is the first field)
 ${ baseColor }        — string property
 ${ numberOfSamples }  — integer property
 ```
@@ -445,6 +447,8 @@ Built-ins are pure functions — no side effects, no state. They are resolved at
 
 ## Capability Input Types and Function Parameters
 
+Field order in structured `inputType` values follows the **Ordered Struct Fields** rule — see `17_type_system_bml.md` — Ordered Struct Fields. Anonymous struct `{ a: Float, b: Float }` and named StructType properties share the same positional/named access contract.
+
 ### Capabilities Have No Parameters — Only Typed Input/Output
 
 A Capability declares typed data via `inputType` and/or `outputType`. In a messaging context, the structure is irrelevant to transport. Any valid type descriptor works.
@@ -468,7 +472,7 @@ A `FunctionBlock` interprets a Capability as a function. When the `inputType` is
   → Named call:      #math.max(a=size[0], b=labelSize)
 ```
 
-Both call syntaxes are always valid for Object input types. The key order defines positional order.
+Both call syntaxes are always valid for Object input types. Positional parameter order follows **field declaration order** in `inputType` — see `17_type_system_bml.md` — Ordered Struct Fields.
 
 **Single primitive inputType** — no Object wrapper needed:
 

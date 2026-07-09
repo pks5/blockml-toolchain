@@ -457,7 +457,7 @@ namespace     — resolved canonical namespace identifier (empty = default names
 visibility    — optional; must match naming convention
 ```
 
-**Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order matters for render-target output sequencing and for StructType positional array literals (`size="[4,2,3]"` → fields in declaration order). See `12_bom_object_model.md` — Member Declaration Order.
+**Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order defines StructType field indices and positional serialization — see `17_type_system_bml.md` — Ordered Struct Fields.
 
 **EnumType property values:** when the property `type` is an EnumType, enum instance references may omit the `{EnumTypeFQN}::` prefix — `STANDARD` is equivalent to `com.machineblocks.type.BaseCutoutType::STANDARD` on a `BaseCutoutType` property. See `17_type_system_bml.md` — EnumType.
 
@@ -764,7 +764,7 @@ Unqualified type names are resolved against the domain's default type namespace 
 
 ### Object Input as Function Signature
 
-When a `FunctionBlock` Capability uses a structured Object as `inputType`, the Object defines an **anonymous struct type** — conceptually an inline class with private typed fields. Field names are parameter names; field order defines positional call order:
+When a `FunctionBlock` Capability uses a structured Object as `inputType`, the Object defines an **anonymous struct type** — conceptually an inline class with private typed fields. Field names are parameter names; **field order defines positional call order**. This is the FunctionBlock application of the **Ordered Struct Fields** rule — see `17_type_system_bml.md` — Ordered Struct Fields.
 
 ```text
 inputType: { a: Float, b: Float }

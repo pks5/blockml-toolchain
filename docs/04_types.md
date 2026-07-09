@@ -70,7 +70,7 @@ On a property typed with an EnumType, enum values may be written as:
 - **short id** — `STANDARD` (omits `com.machineblocks.type.BaseCutoutType::` because the property type is known)
 - **qualified id** — `com.machineblocks.type.BaseCutoutType::STANDARD`
 
-**Anonymous Object inputType for FunctionBlock Capabilities:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Key order defines positional parameter order. Both positional and named call syntax are valid:
+**Anonymous Object inputType for FunctionBlock Capabilities:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Field order defines positional parameter order — same **Ordered Struct Fields** rule as named StructTypes (see `17_type_system_bml.md`). Both positional and named call syntax are valid:
 
 ```text
 inputType: { a: Float, b: Float }      → #math.max(a, b)  or  #math.max(a=x, b=y)
@@ -387,7 +387,7 @@ MBML:  size="[4, 2, 3]"   →  positional: index 0=x, 1=y, 2=z (not name-sorted)
 SCAD:  ["size", [4, 2, 3]]
 ```
 
-Integer grid dimensions. Defines the block's spatial contract. Array literals map by **StructType property declaration order** — the parser must preserve that order from BML. See `12_bom_object_model.md` — Member Declaration Order.
+Integer grid dimensions. Defines the block's spatial contract. Array literals map by **StructType property declaration order** — see `17_type_system_bml.md` — Ordered Struct Fields.
 
 ## GridPosition3D
 

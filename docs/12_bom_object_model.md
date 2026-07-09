@@ -247,7 +247,7 @@ class /*anonymous*/ {
 }
 ```
 
-The BOM stores this as `AnonymousStructType` with **ordered fields** — field order defines positional call parameter order. Named and positional call syntax both map to the same struct instance at runtime.
+The BOM stores this as `AnonymousStructType` with **ordered fields** — field order defines positional call parameter order. Named and positional call syntax both map to the same struct instance at runtime. This is the anonymous-struct form of the **Ordered Struct Fields** rule — see `17_type_system_bml.md` — Ordered Struct Fields.
 
 A single primitive (`Float`, `org.blockml.type.Integer`, …) is **not** wrapped — it is a `NamedTypeReference` directly (equivalent to a single-parameter method, not a one-field class).
 
@@ -418,7 +418,7 @@ Mapping sequence (append to members[] in this order):
 
 The position of each entry in `BlockDefinition.members[]` is the **declaration ordinal** for that block. Render targets may use this order (e.g. Customizer parameter sequence, UI field layout). The compiler must not reorder declared members when writing BOM or when passing definitions to processors.
 
-**StructType positional values:** for a StructType defined via `<properties>` (e.g. `Size3d` with `x`, `y`, `z`), property **declaration order** defines positional array mapping:
+**StructType positional values:** for a StructType defined via `<properties>` (e.g. `Size3d` with `x`, `y`, `z`), property **declaration order** defines positional array mapping. See `17_type_system_bml.md` — Ordered Struct Fields for the full rule (dual access, serialization, FunctionBlock mapping, compatibility).
 
 ```text
 size="[4, 2, 3]"   →  index 0 = x, index 1 = y, index 2 = z  (order in Size3d.bml)
@@ -427,7 +427,7 @@ size="${ [size[0], size[1], size[2] - 1] }"  — same positional contract
 
 Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" z="3"` on a StructType instance) are equivalent; array literals use **declaration order**, not alphabetical name order.
 
-**Function argument mapping:** anonymous struct `inputType` values (`{ a: Float, b: Float }`) and named StructTypes share the same rule — field order in the type definition = positional parameter order. See `10_expression_language.md` — Object Input Calls.
+**Function argument mapping:** anonymous struct `inputType` values (`{ a: Float, b: Float }`) and named StructTypes share the same **Ordered Struct Fields** rule — see `17_type_system_bml.md` — Ordered Struct Fields · `10_expression_language.md` — Capability Input Types and Function Parameters.
 
 **Effective members:** `resolveEffectiveMembers()` merges by `(namespace, name)` along the `baseType` chain. Child override declarations merge with parent members — only specified attributes replace inherited values. Private members cannot be overridden; `final="true"` prevents override.
 
