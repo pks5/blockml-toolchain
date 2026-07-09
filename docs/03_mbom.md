@@ -625,11 +625,12 @@ Note: `com.machineblocks.core.Step` is a framework Block extending `org.blockml.
 
 ## Versioning
 
-Every Block definition carries a semantic version. External composition references are dependencies — each must specify an exact version. Same-document Sub-Block references do not.
+Every Block definition has an effective version (own `<version>` or library inheritance). External composition references resolve from TypeRegistry context; `bml:version` is an optional exact-version assert.
 
 ```xml
-<ac:Wall bml:id="wall" bml:version="1.0.0" size="[1, 8, 9]" />
+<ac:Wall bml:id="wall" size="[1, 8, 9]" />
+<ac:Wall bml:id="wall" bml:version="1.0.0" size="[1, 8, 9]" />  <!-- optional assert -->
 <Base bml:id="base_stud" offset="[0, 0, 0]" ... />   <!-- no bml:version — Sub-Block, same file -->
 ```
 
-Strict from V1: missing `version` on an external reference → `BML_MISSING_VERSION`. Unknown version → `BML_UNKNOWN_VERSION`. No implicit `latest`, no registry default. Legacy scad-lib files must be updated before they compile.
+Standalone block without `<version>` and not in a Library → `BML_MISSING_VERSION`. Unknown `bml:version` assert → `BML_UNKNOWN_VERSION`. `bml:version` inside Library files → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`.

@@ -19,6 +19,4 @@
   <name>Deprecated</name>
   <type>status:Deprecated</type>
   <baseType>core:Status</baseType>
-  <version>1.0.0</version>
-
 </block>

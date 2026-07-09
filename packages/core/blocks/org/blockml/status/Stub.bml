@@ -18,6 +18,4 @@
   <name>Stub</name>
   <type>status:Stub</type>
   <baseType>core:Status</baseType>
-  <version>1.0.0</version>
-
 </block>

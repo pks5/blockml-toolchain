@@ -19,6 +19,4 @@
   <name>Stable</name>
   <type>status:Stable</type>
   <baseType>core:Status</baseType>
-  <version>1.0.0</version>
-
 </block>

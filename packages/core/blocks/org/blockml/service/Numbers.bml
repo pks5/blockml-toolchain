@@ -24,8 +24,6 @@
   <name>Numbers</name>
   <type>service:Numbers</type>
   <baseType>core:Entity</baseType>
-  <version>1.0.0</version>
-
   <capabilities>
 
     <!--

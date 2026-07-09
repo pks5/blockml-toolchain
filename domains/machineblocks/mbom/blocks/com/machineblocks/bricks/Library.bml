@@ -1,9 +1,9 @@
 <!--
-  BlockML Library Descriptor
+  MachineBlocks Bricks Library Descriptor
 
-  Name: BricksLibrary
-  Filename: BricksLibrary.bml
-  FQN: com.machineblocks.bricks.BricksLibrary
+  Name: Library
+  Filename: Library.bml
+  FQN: com.machineblocks.bricks.Library
 
   MachineBlocks brick library — exports block definitions and optional XSD.
   Block .bml sources live under blocks/ (scad-lib submodule in full deployment).
@@ -15,7 +15,6 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:blockml="org.blockml"
-  xmlns:bcore="org.blockml.core"
   xmlns:core="com.machineblocks.core"
   xmlns:type="com.machineblocks.type"
   xmlns:bricks="com.machineblocks.bricks">
@@ -26,7 +25,7 @@
     preset blocks.</documentation>
   <name>Library</name>
   <type>bricks:Library</type>
-  <baseType>bcore:BlockLibrary</baseType>
+  <baseType>blockml:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>
@@ -38,7 +37,7 @@
   <aggregations>
     <_dependencies>
       <composition>
-        <blockml:Library bml:version="3.0.0" />
+        <blockml:Library />
       </composition>
     </_dependencies>
 
@@ -51,13 +50,13 @@
 
     <_blocks>
       <composition>
-        <type:Size3d bml:version="1.0.0" />
-        <type:Direction bml:version="1.0.0" />
-        <type:Color bml:version="1.0.0" />
-        <bricks:Standard bml:version="1.0.0" />
-        <bricks:Plate bml:version="1.0.0" />
-        <bricks:Tile bml:version="1.0.0" />
-        <bricks:StandardPresets bml:version="3.0.0" />
+        <type:Size3d />
+        <type:Direction />
+        <type:Color />
+        <bricks:Standard />
+        <bricks:Plate />
+        <bricks:Tile />
+        <bricks:StandardPresets />
       </composition>
     </_blocks>
   </aggregations>

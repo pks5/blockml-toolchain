@@ -17,8 +17,6 @@
   <name>Outbound</name>
   <type>cap:Outbound</type>
   <baseType>core:CapabilityType</baseType>
-  <version>1.0.0</version>
-
   <properties>
     <hasOutput>
       <value>true</value>

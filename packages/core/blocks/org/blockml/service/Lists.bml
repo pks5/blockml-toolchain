@@ -24,8 +24,6 @@
   <name>Lists</name>
   <type>service:Lists</type>
   <baseType>core:Entity</baseType>
-  <version>1.0.0</version>
-
   <capabilities>
 
     <!-- #lists.size(list) -->

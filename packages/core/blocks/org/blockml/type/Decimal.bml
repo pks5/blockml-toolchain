@@ -10,5 +10,4 @@
   <name>Decimal</name>
   <type>btype:Decimal</type>
   <baseType>btype:Number</baseType>
-  <version>1.0.0</version>
 </block>

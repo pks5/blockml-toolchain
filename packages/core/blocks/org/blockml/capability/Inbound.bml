@@ -17,8 +17,6 @@
   <name>Inbound</name>
   <type>cap:Inbound</type>
   <baseType>core:CapabilityType</baseType>
-  <version>1.0.0</version>
-
   <properties>
     <hasInput>
       <value>true</value>

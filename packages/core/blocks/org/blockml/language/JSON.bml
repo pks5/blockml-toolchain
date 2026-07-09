@@ -15,6 +15,4 @@
   <name>JSON</name>
   <type>lang:JSON</type>
   <baseType>core:MarkupLanguage</baseType>
-  <version>1.0.0</version>
-
 </block>

@@ -20,8 +20,6 @@
   <name>MaxItems</name>
   <type>constraint:MaxItems</type>
   <baseType>core:Constraint</baseType>
-  <version>1.0.0</version>
-
   <genericTypes>
     <genericType name="T" baseType="core:ValueType"/>
   </genericTypes>

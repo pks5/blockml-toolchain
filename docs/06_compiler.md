@@ -451,8 +451,11 @@ BML_UNKNOWN_TYPE              — referenced block type not found
 BML_INVALID_PROPERTY          — property value does not match declared type
 BML_MISSING_BASE_TYPE         — baseType not declared on a Block definition
 BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
-BML_MISSING_VERSION           — version missing on external block instance reference (always error)
-BML_UNKNOWN_VERSION           — version specified but no matching BlockDefinition in TypeRegistry
+BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
+BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
+BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library _dependencies / _blocks
+BML_VERSION_BELOW_LIBRARY     — block.version < library.version when both declared (error)
+BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.version (warning — best practice: patch only)
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit id
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
 BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without export="true"
@@ -804,7 +807,7 @@ tests/
       DefaultEnclosureSet.expected.scad
     presets/
       presets/StandardPresets.bml   — @machineblocks/mbom fixture (preset block)
-      BricksLibrary.bml             — @machineblocks/mbom fixture (Library)
+      Library.bml                   — @machineblocks/mbom fixture (Library)
       Standard.expected.json
 
   snapshots/

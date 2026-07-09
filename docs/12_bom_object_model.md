@@ -56,7 +56,8 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | `bml:*` on composition elements — flow-control in `directives[]`; composition meta (`bml:id`, `bml:version`) on `BlockInstance` fields. **Not expanded** at parse time. |
 | **Data attributes** | `data:*` stored as `dataAttributes[]` with **uninterpreted** values — not a `bml:` directive, not a Block aggregation. Renderers may interpret (e.g. UI5 target → runtime customData). |
-| **Instance `version`** | From **`bml:version`** — required on every external block reference (another file). **Strict from V1** — no registry default, no implicit `latest`, no migration warnings. Missing → `BML_MISSING_VERSION` (error). Unknown version → `BML_UNKNOWN_VERSION` (error). Same-document Sub-Blocks exempt. |
+| **Instance `version`** | From **`bml:version`** — optional on external block references. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert (`BML_UNKNOWN_VERSION` if no match). Forbidden inside Library files → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`. Same-document Sub-Blocks exempt. |
+| **Definition `version`** | Every Block definition has an **effective version**: own `<version>` if present, else library version if the block is exported via a Library, else error (`BML_MISSING_VERSION`). |
 | **Instance `id`** | From **`bml:id`** — authored in BOM only on `BlockInstance.id`; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `bml:id`. No FQN fallback. |
 
 ---
@@ -773,9 +774,10 @@ interface BlockInstance {
   id?: MemberValue
 
   /**
-   * From bml:version — required when typeFqn refers to an external block (another file).
-   * Optional for same-document Sub-Block references.
-   * See "Instance Version Rules" below.
+   * From bml:version — optional exact-version assert on external block references.
+   * Omitted → resolve effective version from TypeRegistry context at validate time.
+   * Forbidden inside Library _dependencies / _blocks → BML_VERSION_NOT_ALLOWED_IN_LIBRARY.
+   * See "Version Rules" below.
    */
   version?: MemberValue
 
@@ -812,7 +814,7 @@ When parsing a composition child element, the parser resolves `typeFqn` for unqu
 ```text
 1. subBlocks[] of innermost containing BlockDefinition (same BomDocument)
 2. Walk up parent BlockDefinition chain (nested Sub-Block → root)
-3. Inherited subBlocks from baseType chain (e.g. org.blockml.core.BlockLibrary.* for Library-typed blocks)
+3. Inherited subBlocks from baseType chain (e.g. org.blockml.BlockLibrary.* for Library-typed blocks)
 4. Prefixed name (bricks:Standard) → Namespace Resolver
 5. Full FQN or TypeRegistry lookup
 ```
@@ -821,42 +823,63 @@ Steps 1–3 are **same-document / inheritance scope** — no `bml:version` requi
 
 ---
 
-## Instance Version Rules
+## Version Rules
 
-External block references are **dependencies**. Every dependency must pin an exact semantic version — from V1, with no exceptions and no fallback behavior.
+### Effective block version (definitions)
+
+Every Block definition has an **effective version**:
+
+```text
+effectiveBlockVersion =
+  own <version>,           if present on the Block definition
+  else library.version,    if the Block is exported via a Library (_blocks)
+  else error               → BML_MISSING_VERSION
+```
+
+**Block in a Library:** may omit `<version>` and inherit the Library's version. If the Block declares its own `<version>`, it must be `>= library.version` (semver). Below library version → error. Patch-only drift is best practice; minor drift may warn.
+
+**Framework convention (`org.blockml.*`, `com.machineblocks.*`):** maintain version only on `Library.bml` — no `<version>` on individual block files.
+
+**Standalone block (not in a Library):** `<version>` is mandatory → `BML_MISSING_VERSION` if missing.
+
+### Instance version rules (references)
+
+External block references resolve version from registry context. `bml:version` is an **optional exact-version assert**, not a mandatory pin.
 
 ```text
 Same-document reference (Sub-Block or type defined in subBlocks[]):
-  → bml:version NOT required on instance
-  → effective version = Sub-Block definition's version field
+  → bml:version NOT allowed as resolution hint (same-doc scope)
+  → effective version = Sub-Block definition's effectiveBlockVersion
 
 External reference (type from another BML file — `.bml`):
-  → bml:version REQUIRED on instance
-  → missing                    → BML_MISSING_VERSION (error — always, no warning mode)
-  → bml:version not in registry    → BML_UNKNOWN_VERSION (error)
-  → no implicit latest         → TypeRegistry MUST NOT resolve without explicit version
-  → no registry default        → library.xml version does NOT substitute for bml:version
+  → bml:version omitted  → use effective version from TypeRegistry context
+  → bml:version present  → target must be exactly that version
+                           → no match → BML_UNKNOWN_VERSION (error)
+
+Inside Library files (_dependencies / _blocks):
+  → bml:version FORBIDDEN on composition children
+  → present → BML_VERSION_NOT_ALLOWED_IN_LIBRARY (error)
 ```
 
 Examples from `Calibrator.bml`:
 
 ```xml
-<!-- Same file, Sub-Block — no bml:version required -->
+<!-- Same file, Sub-Block — no bml:version -->
 <Base bml:id="base_stud" offset="[0, 0, 0]" ... />
 
-<!-- External type (Standard.bml) — bml:version REQUIRED -->
+<!-- External type — registry context (preferred) -->
+<bricks:StandardBrick bml:id="strip" ... />
+
+<!-- External type — exact-version assert (optional) -->
 <bricks:StandardBrick bml:version="3.0.0" bml:id="strip" ... />
 ```
-
-Legacy library files that omit `bml:version` on external references are **invalid** and must be updated before they compile. There is no migration period with warnings.
-
-Block **definitions** (root and Sub-Block) always carry `<version>` as definition metadata — independent of instance version rules.
 
 ### TypeRegistry lookup
 
 ```typescript
-getBlockDefinition(fqn: string, version: string): BlockDefinition | undefined
-// version is required for external lookups — omitting it is a validator error, not a silent default
+getBlockDefinition(fqn: string, version?: string): BlockDefinition | undefined
+// version omitted → resolve from registry context (library bootstrap / active dependency set)
+// version present → exact match required
 ```
 
 ---
@@ -896,30 +919,30 @@ Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 
 ---
 
-## Libraries (`org.blockml.core.BlockLibrary`)
+## Libraries (`org.blockml.BlockLibrary`)
 
-Library descriptors are ordinary `BlockDefinition` documents with `baseType="org.blockml.core.BlockLibrary"`.
+Library descriptors are ordinary `BlockDefinition` documents with `baseType="org.blockml.BlockLibrary"`.
 
-**Naming (soft convention):** block `<name>` is `{Segment}Library` (e.g. `BricksLibrary`); FQN = package + name (e.g. `com.machineblocks.bricks.BricksLibrary`); filename = block name.
+**Naming (required):** every real library block is named `Library` (`<name>Library</name>`), filename is always `Library.bml`, placed at the **package root**. FQN = package + `Library` (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`).
 
 ```text
-org.blockml.core.BlockLibrary
+org.blockml.BlockLibrary
   property     description     String
   subBlocks      Schema
-  aggregation  _dependencies   0..n  org.blockml.core.BlockLibrary   validate=false
-  aggregation  _schemas        0..n  org.blockml.core.BlockLibrary.Schema
-  aggregation  _blocks         0..n  org.blockml.core.Block           validate=false
+  aggregation  _dependencies   0..n  org.blockml.BlockLibrary   validate=false
+  aggregation  _schemas        0..n  org.blockml.BlockLibrary.Schema
+  aggregation  _blocks         0..n  org.blockml.core.Block     validate=false
 
-org.blockml.core.BlockLibrary.Schema       property:  ref (relative .xsd path)
+org.blockml.BlockLibrary.Schema       property:  ref (relative .xsd path)
 ```
 
-`_dependencies` and `_blocks` use empty Block instances as type references — element name resolves to FQN, `bml:version` pins the required definition version. `validate="false"` on these aggregations skips constraint evaluation on the reference instances (parser still validates syntax and types).
+`_dependencies` and `_blocks` use empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children; effective version is resolved from library context. `validate="false"` on these aggregations skips constraint evaluation on the reference instances (parser still validates syntax and types).
 
-`Schema` is a **Sub-Block of `org.blockml.core.BlockLibrary`** — defined in `BlockLibrary.bml`. Library-typed blocks resolve `<Schema>` by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
+`Schema` is a **Sub-Block of `org.blockml.BlockLibrary`** — defined in `BlockLibrary.bml`. Library-typed blocks resolve `<Schema>` by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
 
-Composition children in `_dependencies` and `_blocks` are Block instances (`<core:CoreLibrary bml:version="3.0.0" />`, `<bricks:Standard bml:version="1.0.0" />`). `_schemas` uses `<Schema ref="…" />`. Each `aggregation=` attribute is required (BlockLibrary has three aggregations, none is default).
+Composition children in `_dependencies` and `_blocks` are Block instances (`<blockml:Library />`, `<bricks:Standard />`). `_schemas` uses `<Schema ref="…" />`. Each `aggregation=` attribute is required (BlockLibrary has three aggregations, none is default).
 
-The orchestrator resolves `_dependencies` and `_blocks` entries by FQN + `bml:version`, loads referenced definitions into the TypeRegistry, and validates that pinned versions match registered blocks.
+The orchestrator resolves `_dependencies` and `_blocks` entries by FQN, loads referenced definitions into the TypeRegistry using effective block versions, and validates library membership.
 
 `_schemas` is optional legacy XSD. `_blocks` lists exported Block and ValueType BML — primary SSOT as types migrate from XSD.
 
@@ -972,7 +995,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ```text
 1. Built-in services     — @blockml/core (org.blockml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
-3. Library blocks             — org.blockml.core.BlockLibrary → resolve _dependencies / _blocks by FQN + bml:version
+3. Library blocks             — org.blockml.BlockLibrary → resolve _dependencies / _blocks by FQN (no bml:version)
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
 5. Declared dependencies      — Library _dependencies entries + bom.config.json paths
 ```
@@ -1047,7 +1070,10 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Member namespace uniqueness (declared members per block)
 ✓  baseType exists in TypeRegistry
 ✓  resolveEffectiveMembers() — property/capability references in expressions
-✓  External instance references have exact pinned version (BML_MISSING_VERSION / BML_UNKNOWN_VERSION)
+✓  Block definitions have effective version (BML_MISSING_VERSION if standalone and no <version>)
+✓  Library member block.version >= library.version when both declared
+✓  External instance references resolve via registry context; optional bml:version is exact assert (BML_UNKNOWN_VERSION)
+✓  Library _dependencies / _blocks children have no bml:version (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
 ✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
 ✓  Qualified FQN::id references target bml:exportIds="true" compositions with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
@@ -1062,8 +1088,8 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Property value cycles (topological sort)
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
 ✓  contract types resolve, are abstract, and member surface is satisfied by effective members
-✓  Library _blocks entries resolve to registered Block definitions (FQN + bml:version)
-✓  Library _dependencies entries resolve to registered BlockLibrary definitions (FQN + bml:version)
+✓  Library _blocks entries resolve to registered Block definitions (FQN + effectiveBlockVersion)
+✓  Library _dependencies entries resolve to registered BlockLibrary definitions (FQN + effectiveBlockVersion)
 ```
 
 The validator does **not** expand directives, assign auto-IDs, or interpret aggregations.
@@ -1092,8 +1118,11 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 BML_MISSING_BASE_TYPE         — baseType absent on BlockDefinition
 BML_MISSING_IDEA              — root <block> lacks <idea> (warning V1)
 BML_MISSING_DOCUMENTATION     — root <block> lacks <documentation> (warning V1)
-BML_MISSING_VERSION           — bml:version absent on external BlockInstance reference (always error)
-BML_UNKNOWN_VERSION           — version present but no matching BlockDefinition in TypeRegistry
+BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
+BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
+BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library _dependencies / _blocks
+BML_VERSION_BELOW_LIBRARY     — block.version < library.version when both declared (error)
+BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.version (warning — best practice: patch only)
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit bml:id
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
 BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without bml:exportIds="true"

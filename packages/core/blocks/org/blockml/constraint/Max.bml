@@ -21,8 +21,6 @@
   <name>Max</name>
   <type>constraint:Max</type>
   <baseType>core:Constraint</baseType>
-  <version>1.0.0</version>
-
   <genericTypes>
     <genericType name="T" baseType="btype:Number"/>
   </genericTypes>

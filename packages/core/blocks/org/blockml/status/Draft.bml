@@ -19,6 +19,4 @@
   <name>Draft</name>
   <type>status:Draft</type>
   <baseType>core:Status</baseType>
-  <version>1.0.0</version>
-
 </block>

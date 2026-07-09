@@ -17,8 +17,6 @@
   <name>EnumType</name>
   <type>core:EnumType</type>
   <baseType>core:ValueType</baseType>
-  <version>1.0.0</version>
-
   <abstract />
 
   <aggregations>

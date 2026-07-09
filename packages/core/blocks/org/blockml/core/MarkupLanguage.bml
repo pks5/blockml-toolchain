@@ -17,8 +17,6 @@
   <name>MarkupLanguage</name>
   <type>core:MarkupLanguage</type>
   <baseType>core:Language</baseType>
-  <version>1.0.0</version>
-
   <abstract />
 
 </block>

@@ -206,8 +206,8 @@ Unqualified PascalCase names on `type="..."` (properties, aggregations, capabili
 ```
 
 ```text
-<aggregation type="core:BlockLibrary[]" validate="false" .../>   on org.blockml.core.BlockLibrary
-  → NamedTypeReference { fqn: "org.blockml.core.BlockLibrary" }
+<aggregation type="blockml:BlockLibrary[]" validate="false" .../>   on org.blockml.BlockLibrary
+  → NamedTypeReference { fqn: "org.blockml.BlockLibrary" }
 
 inputType="Float"
   → NamedTypeReference { fqn: "org.blockml.type.Float" }
@@ -533,18 +533,24 @@ Stage [5] output — no file load:
 ```text
 BlockInstance:
   typeFqn:  com.machineblocks.bricks.StandardBrick
-  version:  "3.0.0"          ← required pin, stored as authored
+  version:  undefined | "3.0.0"   ← optional; omitted = resolve from registry context at stage [8]
   memberValues: { id, size }
 ```
 
 Stage [8] lookup:
 
 ```typescript
+// version omitted — resolve from registry context (library bootstrap)
+registry.getBlockDefinition("com.machineblocks.bricks.StandardBrick")
+  → BlockDefinition | undefined
+
+// version present — exact assert
 registry.getBlockDefinition("com.machineblocks.bricks.StandardBrick", "3.0.0")
   → BlockDefinition | undefined
   → undefined → BML_UNKNOWN_VERSION
-  → version missing on instance → BML_MISSING_VERSION
 ```
+
+Inside Library files: `bml:version` on `_dependencies` / `_blocks` children → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`.
 
 Same-document Sub-Block references omit `version` — resolved against `subBlocks[]` in the same `BomDocument`.
 
@@ -610,21 +616,21 @@ BML_CONTRACT_MEMBER_INCOMPATIBLE    — member kind or type/cardinality mismatch
 
 ### Library blocks
 
-Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.core.BlockLibrary`. Composition children:
+Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.BlockLibrary`. Composition children:
 
 ```text
-<core:CoreLibrary bml:version="3.0.0"/>  → BlockInstance { typeFqn: "com.machineblocks.core.CoreLibrary", version: "3.0.0" }
-<Schema ref="bricks.xsd"/>                 → org.blockml.core.BlockLibrary.Schema (short name)
-<type:Size3d bml:version="1.0.0"/>         → BlockInstance { typeFqn: "com.machineblocks.type.Size3d", version: "1.0.0" }
-<bricks:Wall bml:version="1.0.0"/>         → BlockInstance { typeFqn: "com.machineblocks.bricks.Wall", version: "1.0.0" }
-<bricks:WallPresets bml:version="1.0.0"/>  → preset block via _blocks
+<blockml:Library />                        → BlockInstance { typeFqn: "org.blockml.Library" }  — no bml:version
+<Schema ref="bricks.xsd"/>                 → org.blockml.BlockLibrary.Schema (short name)
+<type:Size3d />                             → BlockInstance { typeFqn: "com.machineblocks.type.Size3d" }
+<bricks:Wall />                             → BlockInstance { typeFqn: "com.machineblocks.bricks.Wall" }
+<bricks:WallPresets />                      → preset block via _blocks
 ```
 
-`_dependencies` and `_blocks` aggregations declare `validate="false"` — children are type references only; constraint evaluation is skipped.
+`_dependencies` and `_blocks` aggregations declare `validate="false"` — children are type references only; constraint evaluation is skipped. **`bml:version` is forbidden** on these children.
 
 Each child requires explicit aggregation members (`_dependencies`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
 
-**Orchestrator (not parser):** after parsing a Library block, resolve each `_dependencies` and `_blocks` entry by FQN + `bml:version`, load the referenced definitions, and `registerBlockDefinition`. Validate that pinned versions match registered blocks.
+**Orchestrator (not parser):** after parsing a Library block, resolve each `_dependencies` and `_blocks` entry by FQN, load the referenced definitions using effective block versions, and `registerBlockDefinition`.
 
 ### Incremental builds
 

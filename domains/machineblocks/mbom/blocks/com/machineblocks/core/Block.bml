@@ -20,8 +20,6 @@
   <name>Block</name>
   <type>core:Block</type>
   <baseType>bcore:Entity</baseType>
-  <version>1.0.0</version>
-
   <abstract />
 
   <properties>

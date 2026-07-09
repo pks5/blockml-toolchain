@@ -1,32 +1,31 @@
 <!--
-  BlockML Core — library descriptor (blocks, types, presets, dependencies)
+  BlockML — abstract library descriptor base type
 
-  FQN: org.blockml.core.BlockLibrary
+  FQN: org.blockml.BlockLibrary
 
   Entry type Schema is a Sub-Block of BlockLibrary. Aggregations use short type names
   (type="Schema") — parser resolves against subBlocks[] in the same file.
-  _dependencies and _blocks hold Block instances (FQN via element name + xmlns prefix,
-  version via bml:version) — not wrapper Sub-Blocks.
+  _dependencies and _blocks hold Block instances (FQN via element name + xmlns prefix).
+  bml:version is forbidden in Library files — blocks resolve via effective version.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:blockml="org.blockml"
   xmlns:core="org.blockml.core"
-  xmlns:status="org.blockml.status"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>Catalog of block and type definitions published as a package.</idea>
 
-  <documentation>Publishable library unit — groups exported Block and ValueType definitions, optional XSD schemas,
-    and dependencies on other libraries. Replaces the legacy library.xml descriptor.
+  <documentation>Abstract publishable library unit — groups exported Block and ValueType definitions,
+    optional XSD schemas, and dependencies on other libraries. Replaces the legacy library.xml descriptor.
     Dependencies and exported blocks are declared as Block instances in _dependencies and _blocks
-    (element name resolves to FQN; bml:version pins the required definition version).</documentation>
+    (element name resolves to FQN; effective version resolved from library context).</documentation>
   <name>BlockLibrary</name>
-  <type>core:BlockLibrary</type>
+  <type>blockml:BlockLibrary</type>
   <baseType>core:Block</baseType>
-  <version>1.0.0</version>
 
   <abstract />
 
@@ -41,7 +40,7 @@
   </properties>
 
   <aggregations>
-    <_dependencies type="core:BlockLibrary[]" validate="false" />
+    <_dependencies type="blockml:BlockLibrary[]" validate="false" />
     <_schemas type="Schema[]" />
     <_blocks type="core:Block[]" validate="false" />
   </aggregations>
@@ -54,7 +53,6 @@
       <documentation>Optional XSD schema file exported by a BlockLibrary — legacy type/enum definitions.</documentation>
       <name>Schema</name>
       <baseType>core:Block</baseType>
-      <version>1.0.0</version>
       <final />
       <properties>
         <ref type="String">

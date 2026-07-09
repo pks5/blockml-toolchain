@@ -1305,26 +1305,26 @@ configProfile < basePresets chain < inline property
 
 ## Library
 
-A Library is a **Block** with `baseType="org.blockml.core.BlockLibrary"`. It groups exported Block and ValueType definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
+A Library is a **Block** with `baseType="org.blockml.BlockLibrary"`. It groups exported Block and ValueType definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
 
 ```text
-org.blockml.core.BlockLibrary           abstract composable Block
+org.blockml.BlockLibrary           abstract composable Block
   property     description   String
   subBlocks    Schema
   aggregation  _dependencies  BlockLibrary[]   validate=false
   aggregation  _schemas       Schema[]         (optional — legacy XSD)
   aggregation  _blocks        Block[]          validate=false
 
-org.blockml.core.BlockLibrary.Schema       ref (relative .xsd path)
+org.blockml.BlockLibrary.Schema       ref (relative .xsd path)
 ```
 
-`_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN, `bml:version` pins the required definition version. `validate="false"` skips constraint evaluation on these reference instances.
+`_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. `validate="false"` skips constraint evaluation on these reference instances.
 
-The Library block lives in a package directory (e.g. `com/machineblocks/bricks/`). Its FQN follows the normal block rule: package path + block name (e.g. `com.machineblocks.bricks.BricksLibrary`).
+The Library block lives at the **package root** as `Library.bml`. Its FQN is `{package}.Library` (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`).
 
-**Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for the `com.machineblocks.bricks` package. Makes the library descriptor identifiable as such; not enforced by the compiler. Filename matches block name (`BricksLibrary.bml`).
+**Name (required):** `<name>Library</name>`. Filename is always `Library.bml` at package root — not `{Segment}Library.bml`.
 
-**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `_dependencies` and `_blocks` entries by FQN + `bml:version`, and registers the referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `_dependencies` and `_blocks` entries by FQN (effective version from library context), and registers the referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
 **Types:** ValueType definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** is optional legacy XSD — omit when types are BML-only.
 
@@ -1573,18 +1573,23 @@ Unqualified type names in serialization formats are resolved against the domain'
 
 ## Versioning
 
-Every Block, Library, and Catalog definition carries a semantic version. External instance references in Compositions are **dependencies** — each must pin an exact version explicitly. Same-document Sub-Block references do not require an instance version.
+Every Block, Library, and Catalog definition carries a semantic version — directly or via library inheritance. External instance references use **effective version resolution** from the TypeRegistry context; `bml:version` is an optional exact-version assert.
 
 ```text
-version: "1.0.0"      — on every Block definition (root and Sub-Block)
-bml:version="1.0.0"   — on every external block instance reference in a composition (mandatory)
+effectiveBlockVersion:
+  own <version> on Block definition, else library.version if exported via Library, else error
+
+Library.bml:     <version>3.0.0</version>   — release version of the package
+Block in library: <version> optional — inherits library.version; if set, must be >= library.version
+Standalone block: <version> mandatory
+
+bml:version="1.0.0" on instance — optional exact-version assert (not a mandatory pin)
+bml:version inside Library files — forbidden (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
 ```
 
-**Strict from V1:** no implicit `latest`, no registry fallback, no migration warnings. A missing or unknown version is a compile error.
+**Framework convention (`org.blockml.*`, `com.machineblocks.*`):** version only on `Library.bml`, not on individual block files.
 
-See `12_bom_object_model.md` — Instance Version Rules.
-
-Library `_dependencies` entries require an explicit `bml:version` — same dependency semantics as `bml:version` on external composition instances.
+See `12_bom_object_model.md` — Version Rules.
 
 ---
 

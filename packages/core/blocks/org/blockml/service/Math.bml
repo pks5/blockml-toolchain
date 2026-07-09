@@ -24,8 +24,6 @@
   <name>Math</name>
   <type>service:Math</type>
   <baseType>core:Entity</baseType>
-  <version>1.0.0</version>
-
   <capabilities>
 
     <!-- #math.min(a, b) — SCAD: native min(a, b) -->

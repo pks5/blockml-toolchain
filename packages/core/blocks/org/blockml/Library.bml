@@ -1,12 +1,12 @@
 <!--
   BlockML Library Descriptor
 
-  Name: BricksLibrary
-  Filename: BricksLibrary.bml
-  FQN: com.machineblocks.bricks.BricksLibrary
+  Name: Library
+  Filename: Library.bml
+  FQN: org.blockml.Library
 
-  MachineBlocks brick library — exports block definitions and optional XSD.
-  Block .bml sources live under blocks/ (scad-lib submodule in full deployment).
+  BlockML core library — exports framework blocks, value types, and services.
+  Block .bml sources live under blocks/org/blockml/.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -28,7 +28,7 @@
   <documentation>Published catalog of the BlockML library including core blocks and value types.</documentation>
   <name>Library</name>
   <type>blockml:Library</type>
-  <baseType>bcore:BlockLibrary</baseType>
+  <baseType>blockml:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>
@@ -47,64 +47,64 @@
 
     <_blocks>
       <composition>
-        <bcore:Block bml:version="1.0.0" />
-        <bcore:BlockLibrary bml:version="1.0.0" />
-        <bcore:CapabilityType bml:version="1.0.0" />
-        <bcore:Constraint bml:version="1.0.0" />
-        <bcore:Entity bml:version="1.0.0" />
-        <bcore:EnumType bml:version="1.0.0" />
-        <bcore:Language bml:version="1.0.0" />
-        <bcore:MarkupLanguage bml:version="1.0.0" />
-        <bcore:PrimitiveType bml:version="1.0.0" />
-        <bcore:ProgrammingLanguage bml:version="1.0.0" />
-        <bcore:Status bml:version="1.0.0" />
-        <bcore:StructType bml:version="1.0.0" />
-        <bcore:ValueType bml:version="1.0.0" />
-        <cap:Inbound bml:version="1.0.0" />
-        <cap:Outbound bml:version="1.0.0" />
-        <cap:Transformation bml:version="1.0.0" />
-        <constraint:Max bml:version="1.0.0" />
-        <constraint:MaxItems bml:version="1.0.0" />
-        <constraint:MaxLength bml:version="1.0.0" />
-        <constraint:Min bml:version="1.0.0" />
-        <constraint:MinItems bml:version="1.0.0" />
-        <constraint:MinLength bml:version="1.0.0" />
-        <constraint:Pattern bml:version="1.0.0" />
-        <lang:C bml:version="1.0.0" />
-        <lang:CPP bml:version="1.0.0" />
-        <lang:CSharp bml:version="1.0.0" />
-        <lang:Chinese bml:version="1.0.0" />
-        <lang:English bml:version="1.0.0" />
-        <lang:French bml:version="1.0.0" />
-        <lang:German bml:version="1.0.0" />
-        <lang:JSON bml:version="1.0.0" />
-        <lang:Japanese bml:version="1.0.0" />
-        <lang:Java bml:version="1.0.0" />
-        <lang:JavaScript bml:version="1.0.0" />
-        <lang:OpenSCAD bml:version="1.0.0" />
-        <lang:PseudoCode bml:version="1.0.0" />
-        <lang:Python bml:version="1.0.0" />
-        <lang:Russian bml:version="1.0.0" />
-        <lang:Spanish bml:version="1.0.0" />
-        <lang:TypeScript bml:version="1.0.0" />
-        <lang:Unity bml:version="1.0.0" />
-        <lang:XML bml:version="1.0.0" />
-        <lang:YML bml:version="1.0.0" />
-        <service:Bools bml:version="1.0.0" />
-        <service:Lists bml:version="1.0.0" />
-        <service:Math bml:version="1.0.0" />
-        <service:Numbers bml:version="1.0.0" />
-        <service:Strings bml:version="1.0.0" />
-        <status:Deprecated bml:version="1.0.0" />
-        <status:Draft bml:version="1.0.0" />
-        <status:Stable bml:version="1.0.0" />
-        <status:Stub bml:version="1.0.0" />
-        <btype:Boolean bml:version="1.0.0" />
-        <btype:Decimal bml:version="1.0.0" />
-        <btype:Float bml:version="1.0.0" />
-        <btype:Integer bml:version="1.0.0" />
-        <btype:Number bml:version="1.0.0" />
-        <btype:String bml:version="1.0.0" />
+        <bcore:Block />
+        <blockml:BlockLibrary />
+        <bcore:CapabilityType />
+        <bcore:Constraint />
+        <bcore:Entity />
+        <bcore:EnumType />
+        <bcore:Language />
+        <bcore:MarkupLanguage />
+        <bcore:PrimitiveType />
+        <bcore:ProgrammingLanguage />
+        <bcore:Status />
+        <bcore:StructType />
+        <bcore:ValueType />
+        <cap:Inbound />
+        <cap:Outbound />
+        <cap:Transformation />
+        <constraint:Max />
+        <constraint:MaxItems />
+        <constraint:MaxLength />
+        <constraint:Min />
+        <constraint:MinItems />
+        <constraint:MinLength />
+        <constraint:Pattern />
+        <lang:C />
+        <lang:CPP />
+        <lang:CSharp />
+        <lang:Chinese />
+        <lang:English />
+        <lang:French />
+        <lang:German />
+        <lang:JSON />
+        <lang:Japanese />
+        <lang:Java />
+        <lang:JavaScript />
+        <lang:OpenSCAD />
+        <lang:PseudoCode />
+        <lang:Python />
+        <lang:Russian />
+        <lang:Spanish />
+        <lang:TypeScript />
+        <lang:Unity />
+        <lang:XML />
+        <lang:YML />
+        <service:Bools />
+        <service:Lists />
+        <service:Math />
+        <service:Numbers />
+        <service:Strings />
+        <status:Deprecated />
+        <status:Draft />
+        <status:Stable />
+        <status:Stub />
+        <btype:Boolean />
+        <btype:Decimal />
+        <btype:Float />
+        <btype:Integer />
+        <btype:Number />
+        <btype:String />
       </composition>
     </_blocks>
   </aggregations>

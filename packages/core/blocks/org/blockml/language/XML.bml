@@ -15,6 +15,4 @@
   <name>XML</name>
   <type>lang:XML</type>
   <baseType>core:MarkupLanguage</baseType>
-  <version>1.0.0</version>
-
 </block>

@@ -18,8 +18,6 @@
   <name>Set</name>
   <type>core:Set</type>
   <baseType>core:CompositeBlock</baseType>
-  <version>1.0.0</version>
-
   <abstract />
 
   <aggregations>

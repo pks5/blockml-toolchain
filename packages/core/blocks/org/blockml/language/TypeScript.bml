@@ -15,6 +15,4 @@
   <name>TypeScript</name>
   <type>lang:TypeScript</type>
   <baseType>core:ProgrammingLanguage</baseType>
-  <version>1.0.0</version>
-  
 </block>

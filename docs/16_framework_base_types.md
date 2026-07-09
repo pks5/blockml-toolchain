@@ -223,8 +223,10 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 
 ```text
 packages/core/blocks/
+  org/blockml/
+    BlockLibrary.bml · Library.bml
   org/blockml/core/
-    Block.bml · Status.bml · ValueType.bml · Constraint.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · BlockLibrary.bml · …
+    Block.bml · Status.bml · ValueType.bml · Constraint.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · …
   org/blockml/status/
     Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
   org/blockml/type/
@@ -238,7 +240,7 @@ domains/machineblocks/mbom/blocks/
   com/machineblocks/core/
     Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
   com/machineblocks/bricks/
-    BricksLibrary.bml · presets/StandardPresets.bml
+    Library.bml · presets/StandardPresets.bml
 ```
 
 ---

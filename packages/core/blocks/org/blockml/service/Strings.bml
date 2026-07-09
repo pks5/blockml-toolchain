@@ -24,8 +24,6 @@
   <name>Strings</name>
   <type>service:Strings</type>
   <baseType>core:Entity</baseType>
-  <version>1.0.0</version>
-
   <capabilities>
 
     <!-- #strings.trim(s) -->

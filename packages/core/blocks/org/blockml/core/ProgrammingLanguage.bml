@@ -17,8 +17,6 @@
   <name>ProgrammingLanguage</name>
   <type>core:ProgrammingLanguage</type>
   <baseType>core:Language</baseType>
-  <version>1.0.0</version>
-
   <abstract />
 
 </block>

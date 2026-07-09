@@ -24,8 +24,6 @@
   <name>Bools</name>
   <type>service:Bools</type>
   <baseType>core:Entity</baseType>
-  <version>1.0.0</version>
-
   <capabilities>
 
     <!-- #bools.isTrue(x) -->

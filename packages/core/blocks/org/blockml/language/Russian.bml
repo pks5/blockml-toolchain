@@ -14,6 +14,4 @@
   <name>Russian</name>
   <type>lang:Russian</type>
   <baseType>core:Language</baseType>
-  <version>1.0.0</version>
-
 </block>

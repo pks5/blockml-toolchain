@@ -75,7 +75,7 @@ BML defines one core document root:
 
 Property presets are **not** a BlockML core feature. MachineBlocks models presets as Block instances in `_presets` with `basePresets` associations — see § Presets (MachineBlocks) and `03_mbom.md`.
 
-Library packages use `<block baseType="org.blockml.core.BlockLibrary">` — see § Library Format.
+Library packages use `<block baseType="org.blockml.BlockLibrary">` — see § Library Format.
 
 Extension document types (defined in domain packages, not in core):
 
@@ -1359,8 +1359,10 @@ Child elements inside `<composition>` are Block instances. Each instance:
 Tag name        — class name (with namespace prefix)
 bml:id          — composition instance identity (part ID). Required when referenced or on bml:each (literal or Expression).
                   Omitted on anonymous static children → auto-ID after directive expansion.
-bml:version     — required on external block references (types from another file);
-                  omitted only on same-document Sub-Block references. Missing → BML_MISSING_VERSION.
+bml:version     — optional on external block references; exact-version assert when present.
+                  Omitted → resolve effective version from TypeRegistry context.
+                  Forbidden inside Library files → BML_VERSION_NOT_ALLOWED_IN_LIBRARY.
+                  Same-document Sub-Block references omit bml:version.
 renderGroup     — optional, fallback = resolved bml:id
 namespace       — optional, fallback = resolved bml:id
 (attributes)    — any Member value of the referenced Block type (camelCase) — property namespace is free
@@ -1792,26 +1794,26 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.c
 <StudDiameter bml:id="samples_stud" ... />
 ```
 
-**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.core.BlockLibrary` declare `validate="false"`. Composition children are empty Block instances — the element name (with xmlns prefix) resolves to the referenced type FQN; `bml:version` pins the required definition version. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
+**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.BlockLibrary` declare `validate="false"`. Composition children are empty Block instances — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
 
 ```xml
-<!-- BricksLibrary.bml -->
+<!-- com/machineblocks/bricks/Library.bml -->
 <aggregations>
   <_dependencies>
     <composition>
-      <core:CoreLibrary bml:version="3.0.0" />
+      <blockml:Library />
     </composition>
   </_dependencies>
   <_blocks>
     <composition>
-      <type:Size3d bml:version="1.0.0" />
-      <bricks:Standard bml:version="1.0.0" />
+      <type:Size3d />
+      <bricks:Standard />
     </composition>
   </_blocks>
 </aggregations>
 ```
 
-**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.BlockLibrary"` (e.g. `BricksLibrary`) still resolves `Schema` by short name — it is a Sub-Block of `org.blockml.core.BlockLibrary`, inherited via the baseType chain.
+**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.BlockLibrary"` (e.g. `Library`) still resolves `Schema` by short name — it is a Sub-Block of `org.blockml.BlockLibrary`, inherited via the baseType chain.
 
 ### Sub-Block reference scope
 
@@ -2376,18 +2378,18 @@ configProfile < basePresets chain < inline property
 
 ---
 
-## Library Format (`org.blockml.core.BlockLibrary`)
+## Library Format (`org.blockml.BlockLibrary`)
 
-A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and ValueType definitions are exported via `_blocks`. Each package directory should contain one Library block at package root. If absent, all BML source files in the directory are treated as public.
+A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and ValueType definitions are exported via `_blocks`. Each package directory contains one Library block at package root. If absent, all BML source files in the directory are treated as public.
 
-**Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for package `com.machineblocks.bricks`. Filename matches block name (`BricksLibrary.bml`). Not enforced by the compiler.
+**Name (required):** `<name>Library</name>`. Filename is always `Library.bml` at package root. FQN = `{package}.Library` (e.g. `com.machineblocks.bricks.Library`).
 
 ### Structure
 
 ```xml
 <!--
-  FQN: com.machineblocks.bricks
-  Filename: BricksLibrary.bml
+  FQN: com.machineblocks.bricks.Library
+  Filename: Library.bml
 -->
 <block xmlns="http://blockml.org/schema/block"
        ...>
@@ -2395,9 +2397,9 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
   <idea>Published catalog of MachineBlocks standard brick definitions.</idea>
   <documentation>MachineBlocks standard brick library.</documentation>
 
-  <name>BricksLibrary</name>
-  <type>com.machineblocks.bricks.BricksLibrary</type>
-  <baseType>org.blockml.core.BlockLibrary</baseType>
+  <name>Library</name>
+  <type>bricks:Library</type>
+  <baseType>blockml:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>
@@ -2410,7 +2412,7 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
   <aggregations>
     <_dependencies>
       <composition>
-        <core:CoreLibrary bml:version="3.0.0" />
+        <blockml:Library />
       </composition>
     </_dependencies>
 
@@ -2423,12 +2425,12 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 
     <_blocks>
       <composition>
-        <type:Size3d bml:version="1.0.0" />
-        <type:Direction bml:version="1.0.0" />
-        <bricks:Standard bml:version="1.0.0" />
-        <bricks:Plate bml:version="1.0.0" />
-        <bricks:Tile bml:version="1.0.0" />
-        <bricks:StandardPresets bml:version="3.0.0" />
+        <type:Size3d />
+        <type:Direction />
+        <bricks:Standard />
+        <bricks:Plate />
+        <bricks:Tile />
+        <bricks:StandardPresets />
       </composition>
     </_blocks>
   </aggregations>
@@ -2436,17 +2438,17 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 </block>
 ```
 
-**`_dependencies` and `_blocks`** use Block instances as type references (`validate="false"` on the aggregation — constraints are not evaluated). The element name resolves to the Block FQN; `bml:version` pins the required definition version.
+**`_dependencies` and `_blocks`** use Block instances as type references (`validate="false"` on the aggregation — constraints are not evaluated). The element name resolves to the Block FQN. **`bml:version` is forbidden** — effective version is resolved from library context.
 
-**`ref` paths** on `Schema` are relative to the **library package root** (directory containing the Library block file).
+**`ref` paths** on `Schema` are relative to the **library package root** (directory containing `Library.bml`).
 
 **`_blocks`** lists exported Block and ValueType definitions (composable Blocks, StructType, EnumType, presets, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML.
 
 **Directory structure:**
 
 ```text
-com.machineblocks.bricks/
-  BricksLibrary.bml       ← Library block (FQN = com.machineblocks.bricks.BricksLibrary)
+com/machineblocks/bricks/
+  Library.bml              ← Library block (FQN = com.machineblocks.bricks.Library)
   bricks.xsd               ← optional legacy XSD
   types/
     Size3D.bml · Direction.bml · …
@@ -2590,8 +2592,10 @@ visibility mismatch           → BML_VISIBILITY_MISMATCH
 BML_UNKNOWN_NAMESPACE_PREFIX  → member namespace attribute references undeclared xmlns: prefix
 final member override         → BML_FINAL_MEMBER_OVERRIDE
 type="Foo" (unqualified)      → § Unqualified Block Resolution (own name · SubBlocks · generics · primitives whitelist)
-bml:version missing on external instance → BML_MISSING_VERSION (error, no fallback)
-unknown bml:version on external instance → BML_UNKNOWN_VERSION (error)
+bml:version omitted on external instance → resolve effective version from TypeRegistry context
+bml:version present on external instance  → exact-version assert → BML_UNKNOWN_VERSION if no match
+bml:version inside Library file           → BML_VERSION_NOT_ALLOWED_IN_LIBRARY (error)
+Block definition without effective version → BML_MISSING_VERSION (error)
 same-document Sub-Block instance          → bml:version not required
 bml:id missing on referenced instance     → BML_MISSING_ID
 bml:id missing on bml:each element        → BML_MISSING_ID

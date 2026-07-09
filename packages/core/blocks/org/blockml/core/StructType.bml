@@ -17,8 +17,6 @@
   <name>StructType</name>
   <type>core:StructType</type>
   <baseType>core:ValueType</baseType>
-  <version>1.0.0</version>
-
   <abstract />
 
 </block>

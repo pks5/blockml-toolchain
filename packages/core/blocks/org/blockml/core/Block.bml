@@ -22,8 +22,6 @@
     must resolve to org.blockml.core.ValueType.</documentation>
   <name>Block</name>
   <type>core:Block</type>
-  <version>1.0.0</version>
-
   <abstract />
 
 </block>

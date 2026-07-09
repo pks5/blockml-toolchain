@@ -11,5 +11,4 @@
   <name>Integer</name>
   <type>Integer</type>
   <baseType>btype:Number</baseType>
-  <version>1.0.0</version>
 </block>

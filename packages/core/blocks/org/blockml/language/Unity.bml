@@ -15,6 +15,4 @@
   <name>Unity</name>
   <type>lang:Unity</type>
   <baseType>lang:CSharp</baseType>
-  <version>1.0.0</version>
-
 </block>

@@ -11,6 +11,5 @@
   <name>Number</name>
   <type>btype:Number</type>
   <baseType>core:PrimitiveType</baseType>
-  <version>1.0.0</version>
   <abstract />
 </block>
