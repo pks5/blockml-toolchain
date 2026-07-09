@@ -28,7 +28,7 @@
   <documentation>Published catalog of the BlockML library including core blocks and value types.</documentation>
   <name>Library</name>
   <type>blockml:Library</type>
-  <baseType>blockml:BlockLibrary</baseType>
+  <baseType>bcore:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>
@@ -48,7 +48,6 @@
     <_blocks>
       <composition>
         <bcore:Block />
-        <blockml:BlockLibrary />
         <bcore:CapabilityType />
         <bcore:Constraint />
         <bcore:Entity />

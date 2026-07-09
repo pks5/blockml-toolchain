@@ -1305,17 +1305,19 @@ configProfile < basePresets chain < inline property
 
 ## Library
 
-A Library is a **Block** with `baseType="org.blockml.BlockLibrary"`. It groups exported Block and ValueType definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
+A Library is a **Block** with `baseType="org.blockml.core.BlockLibrary"`. It groups exported Block and ValueType definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
+
+`org.blockml.core.BlockLibrary` is a **framework base type** in core — like `Block` or `ValueType`. It is **not** exported via any Library `_blocks` catalog. Concrete `Library.bml` files inherit from it.
 
 ```text
-org.blockml.BlockLibrary           abstract composable Block
+org.blockml.core.BlockLibrary           abstract composable Block
   property     description   String
   subBlocks    Schema
   aggregation  _dependencies  BlockLibrary[]   validate=false
   aggregation  _schemas       Schema[]         (optional — legacy XSD)
   aggregation  _blocks        Block[]          validate=false
 
-org.blockml.BlockLibrary.Schema       ref (relative .xsd path)
+org.blockml.core.BlockLibrary.Schema       ref (relative .xsd path)
 ```
 
 `_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. `validate="false"` skips constraint evaluation on these reference instances.

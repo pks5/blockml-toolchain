@@ -226,12 +226,11 @@ Membership is defined by each `Library.bml` `_blocks` list — not by directory.
 ```text
 packages/core/blocks/
   org/blockml/
-    BlockLibrary.bml · Library.bml          ← org.blockml.Library
+    Library.bml                             ← org.blockml.Library (concrete library)
   org/blockml/core/
-    Block.bml · …                           ← member iff in org.blockml.Library _blocks
+    BlockLibrary.bml · Block.bml · …        ← BlockLibrary = framework base type, not in Library _blocks
   org/blockml/compiler/                     ← example nested library (future)
-    Library.bml                             ← org.blockml.compiler.Library (separate)
-    Parser.bml                              ← member iff in org.blockml.compiler.Library _blocks only
+    Library.bml                             ← org.blockml.compiler.Library
   org/blockml/status/ · type/ · constraint/ · service/ · …
 
 domains/machineblocks/mbom/blocks/

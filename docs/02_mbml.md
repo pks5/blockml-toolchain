@@ -75,7 +75,7 @@ BML defines one core document root:
 
 Property presets are **not** a BlockML core feature. MachineBlocks models presets as Block instances in `_presets` with `basePresets` associations — see § Presets (MachineBlocks) and `03_mbom.md`.
 
-Library packages use `<block baseType="org.blockml.BlockLibrary">` — see § Library Format.
+Library packages use `<block baseType="org.blockml.core.BlockLibrary">` — see § Library Format.
 
 Extension document types (defined in domain packages, not in core):
 
@@ -1794,7 +1794,7 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.c
 <StudDiameter bml:id="samples_stud" ... />
 ```
 
-**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.BlockLibrary` declare `validate="false"`. Composition children are empty Block instances — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
+**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.core.BlockLibrary` declare `validate="false"`. Composition children are empty Block instances — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
 
 ```xml
 <!-- com/machineblocks/bricks/Library.bml -->
@@ -1813,7 +1813,7 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.c
 </aggregations>
 ```
 
-**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.BlockLibrary"` (e.g. `Library`) still resolves `Schema` by short name — it is a Sub-Block of `org.blockml.BlockLibrary`, inherited via the baseType chain.
+**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.BlockLibrary"` (e.g. `Library`) still resolves `Schema` by short name — it is a Sub-Block of `org.blockml.core.BlockLibrary`, inherited via the baseType chain.
 
 ### Sub-Block reference scope
 
@@ -2378,7 +2378,7 @@ configProfile < basePresets chain < inline property
 
 ---
 
-## Library Format (`org.blockml.BlockLibrary`)
+## Library Format (`org.blockml.core.BlockLibrary`)
 
 A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and ValueType definitions are exported via `_blocks`. **Library membership is defined exclusively by `Library.bml`** — not by directory layout. If absent, all BML source files in a directory are treated as public.
 
@@ -2414,7 +2414,7 @@ Physical directories and overlapping package prefixes do not define membership. 
 
   <name>Library</name>
   <type>bricks:Library</type>
-  <baseType>blockml:BlockLibrary</baseType>
+  <baseType>bcore:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>

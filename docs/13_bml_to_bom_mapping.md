@@ -206,8 +206,8 @@ Unqualified PascalCase names on `type="..."` (properties, aggregations, capabili
 ```
 
 ```text
-<aggregation type="blockml:BlockLibrary[]" validate="false" .../>   on org.blockml.BlockLibrary
-  → NamedTypeReference { fqn: "org.blockml.BlockLibrary" }
+<aggregation type="bcore:BlockLibrary[]" validate="false" .../>   on org.blockml.core.BlockLibrary
+  → NamedTypeReference { fqn: "org.blockml.core.BlockLibrary" }
 
 inputType="Float"
   → NamedTypeReference { fqn: "org.blockml.type.Float" }
@@ -616,11 +616,11 @@ BML_CONTRACT_MEMBER_INCOMPATIBLE    — member kind or type/cardinality mismatch
 
 ### Library blocks
 
-Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.BlockLibrary`. Composition children:
+Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.core.BlockLibrary`. Composition children:
 
 ```text
 <blockml:Library />                        → BlockInstance { typeFqn: "org.blockml.Library" }  — no bml:version
-<Schema ref="bricks.xsd"/>                 → org.blockml.BlockLibrary.Schema (short name)
+<Schema ref="bricks.xsd"/>                 → org.blockml.core.BlockLibrary.Schema (short name)
 <type:Size3d />                             → BlockInstance { typeFqn: "com.machineblocks.type.Size3d" }
 <bricks:Wall />                             → BlockInstance { typeFqn: "com.machineblocks.bricks.Wall" }
 <bricks:WallPresets />                      → preset block via _blocks

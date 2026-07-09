@@ -8,11 +8,11 @@ alwaysApply: false
 
 ## Library structure
 
-- Abstract base type: `org.blockml.BlockLibrary` (`packages/core/blocks/org/blockml/BlockLibrary.bml`)
-- Every real library: `<name>Library</name>`, filename **`Library.bml`**
+- Abstract base type: `org.blockml.core.BlockLibrary` in `packages/core/blocks/org/blockml/core/BlockLibrary.bml`
+- Framework base type — **not** exported via any Library `_blocks`
+- Concrete libraries: `<name>Library</name>`, filename **`Library.bml`**, `baseType="bcore:BlockLibrary"`
 - FQN = `{package}.Library` from the file's package path
-- `baseType="blockml:BlockLibrary"` on concrete Library blocks
-- **Membership is defined only by `Library.bml` `_blocks`** — not by directories or package overlap
+- **Membership is defined only by `Library.bml` `_blocks`** — not by directories
 
 ## Nested libraries
 
@@ -23,8 +23,6 @@ Typical:  inner _dependencies → outer Library
 Forbidden: outer _blocks → Block exported by inner Library
 Error:    BML_LIBRARY_NESTING_VIOLATION
 ```
-
-A `.bml` file physically under `org/blockml/compiler/` belongs to `org.blockml.compiler.Library` only if listed in **that** library's `_blocks` — not in `org.blockml.Library` just because of directory.
 
 ## Effective block version
 
@@ -49,12 +47,12 @@ effectiveBlockVersion =
 
 ```xml
 <name>Library</name>
-<baseType>blockml:BlockLibrary</baseType>
+<baseType>bcore:BlockLibrary</baseType>
 <version>3.0.0</version>
 <_dependencies>
-  <composition><blockml:Library /></composition>  <!-- inner depends on outer -->
+  <composition><blockml:Library /></composition>
 </_dependencies>
 <_blocks>
-  <composition><compiler:Parser /></composition>   <!-- own blocks only -->
+  <composition><bcore:Block /></composition>   <!-- export blocks, NOT BlockLibrary -->
 </_blocks>
 ```

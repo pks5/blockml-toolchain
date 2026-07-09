@@ -814,7 +814,7 @@ When parsing a composition child element, the parser resolves `typeFqn` for unqu
 ```text
 1. subBlocks[] of innermost containing BlockDefinition (same BomDocument)
 2. Walk up parent BlockDefinition chain (nested Sub-Block → root)
-3. Inherited subBlocks from baseType chain (e.g. org.blockml.BlockLibrary.* for Library-typed blocks)
+3. Inherited subBlocks from baseType chain (e.g. org.blockml.core.BlockLibrary.* for Library-typed blocks)
 4. Prefixed name (bricks:Standard) → Namespace Resolver
 5. Full FQN or TypeRegistry lookup
 ```
@@ -919,9 +919,11 @@ Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 
 ---
 
-## Libraries (`org.blockml.BlockLibrary`)
+## Libraries (`org.blockml.core.BlockLibrary`)
 
-Library descriptors are ordinary `BlockDefinition` documents with `baseType="org.blockml.BlockLibrary"`.
+Library descriptors are ordinary `BlockDefinition` documents with `baseType="org.blockml.core.BlockLibrary"`.
+
+`org.blockml.core.BlockLibrary` is a framework base type in `core/` — not exported via Library `_blocks`. All concrete `Library.bml` files inherit from it.
 
 **Naming (required):** every real library block is named `Library` (`<name>Library</name>`), filename is always `Library.bml`. FQN = package + `Library` (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`, `org.blockml.compiler.Library`).
 
@@ -939,19 +941,19 @@ Forbidden:            outer _blocks → Block exported by inner Library
 Inner libraries usually declare the outer library in `_dependencies`. The outer library must **not** re-export inner-library blocks in `_blocks` — consumers depend on the inner library directly. Violation → `BML_LIBRARY_NESTING_VIOLATION`.
 
 ```text
-org.blockml.BlockLibrary
+org.blockml.core.BlockLibrary
   property     description     String
   subBlocks      Schema
-  aggregation  _dependencies   0..n  org.blockml.BlockLibrary   validate=false
-  aggregation  _schemas        0..n  org.blockml.BlockLibrary.Schema
+  aggregation  _dependencies   0..n  org.blockml.core.BlockLibrary   validate=false
+  aggregation  _schemas        0..n  org.blockml.core.BlockLibrary.Schema
   aggregation  _blocks         0..n  org.blockml.core.Block     validate=false
 
-org.blockml.BlockLibrary.Schema       property:  ref (relative .xsd path)
+org.blockml.core.BlockLibrary.Schema       property:  ref (relative .xsd path)
 ```
 
 `_dependencies` and `_blocks` use empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children; effective version is resolved from library context. `validate="false"` on these aggregations skips constraint evaluation on the reference instances (parser still validates syntax and types).
 
-`Schema` is a **Sub-Block of `org.blockml.BlockLibrary`** — defined in `BlockLibrary.bml`. Library-typed blocks resolve `<Schema>` by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
+`Schema` is a **Sub-Block of `org.blockml.core.BlockLibrary`** — defined in `BlockLibrary.bml`. Library-typed blocks resolve `<Schema>` by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
 
 Composition children in `_dependencies` and `_blocks` are Block instances (`<blockml:Library />`, `<bricks:Standard />`). `_schemas` uses `<Schema ref="…" />`. Each `aggregation=` attribute is required (BlockLibrary has three aggregations, none is default).
 
@@ -1008,7 +1010,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ```text
 1. Built-in services     — @blockml/core (org.blockml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
-3. Library blocks             — org.blockml.BlockLibrary → resolve _dependencies / _blocks by FQN (no bml:version)
+3. Library blocks             — org.blockml.core.BlockLibrary → resolve _dependencies / _blocks by FQN (no bml:version)
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
 5. Declared dependencies      — Library _dependencies entries + bom.config.json paths
 ```

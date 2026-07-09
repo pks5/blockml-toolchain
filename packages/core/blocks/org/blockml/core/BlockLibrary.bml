@@ -1,30 +1,28 @@
 <!--
-  BlockML — abstract library descriptor base type
+  BlockML Core — abstract library descriptor base type
 
-  FQN: org.blockml.BlockLibrary
+  FQN: org.blockml.core.BlockLibrary
 
-  Entry type Schema is a Sub-Block of BlockLibrary. Aggregations use short type names
-  (type="Schema") — parser resolves against subBlocks[] in the same file.
-  _dependencies and _blocks hold Block instances (FQN via element name + xmlns prefix).
-  bml:version is forbidden in Library files — blocks resolve via effective version.
+  Framework base type — lives in core, not exported via any Library _blocks.
+  Concrete Library blocks (Library.bml) inherit from BlockLibrary.
+  Entry type Schema is a Sub-Block of BlockLibrary.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:blockml="org.blockml"
   xmlns:core="org.blockml.core"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Catalog of block and type definitions published as a package.</idea>
+  <idea>Abstract base for publishable library descriptors.</idea>
 
   <documentation>Abstract publishable library unit — groups exported Block and ValueType definitions,
     optional XSD schemas, and dependencies on other libraries. Replaces the legacy library.xml descriptor.
-    Dependencies and exported blocks are declared as Block instances in _dependencies and _blocks
-    (element name resolves to FQN; effective version resolved from library context).</documentation>
+    Framework base type in org.blockml.core — not exported via Library _blocks.
+    Concrete Library.bml files inherit from BlockLibrary and declare _dependencies / _blocks.</documentation>
   <name>BlockLibrary</name>
-  <type>blockml:BlockLibrary</type>
+  <type>core:BlockLibrary</type>
   <baseType>core:Block</baseType>
 
   <abstract />
@@ -40,7 +38,7 @@
   </properties>
 
   <aggregations>
-    <_dependencies type="blockml:BlockLibrary[]" validate="false" />
+    <_dependencies type="core:BlockLibrary[]" validate="false" />
     <_schemas type="Schema[]" />
     <_blocks type="core:Block[]" validate="false" />
   </aggregations>
