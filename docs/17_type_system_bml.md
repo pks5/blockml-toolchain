@@ -626,9 +626,9 @@ Complex values are described by **normal Properties** — no special struct synt
   <version>1.0.0</version>
 
   <properties>
-    <property name="x" type="Float"/>
-    <property name="y" type="Float"/>
-    <property name="z" type="Float"/>
+    <x type="Float"/>
+    <y type="Float"/>
+    <z type="Float"/>
   </properties>
 
 </block>
@@ -741,7 +741,7 @@ Generic type parameters are declared on **StructType** (or other TypeBlock) defi
   </genericTypes>
 
   <properties>
-    <property name="value" type="T"/>
+    <value type="T"/>
   </properties>
 </block>
 ```

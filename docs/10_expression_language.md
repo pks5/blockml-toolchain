@@ -288,10 +288,9 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
 
 ```xml
 <!-- Aggregation on parent Block: -->
-<aggregation name="_utils"
-             type="com.machineblocks.calibration.Calibrator.Utils"
-             beanName="utils"
-             scope="context" />
+<_utils type="com.machineblocks.calibration.Calibrator.Utils"
+        beanName="utils"
+        scope="context" />
 
 <!-- FunctionBlock Sub-Block: -->
 <block>
@@ -299,7 +298,7 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
   <baseType>org.blockml.core.FunctionBlock</baseType>
   <version>1.0.0</version>
   <capabilities>
-    <capability name="formatValue"
+    <formatValue
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
                 outputType="org.blockml.type.String">
@@ -311,12 +310,12 @@ The FunctionBlock is declared as a Sub-Block and bound via a context-scoped Aggr
                 .replace(/^-0\./, '-.')
         }
       ]]></implementation>
-    </capability>
+    </formatValue>
   </capabilities>
 </block>
 ```
 
-The `<implementation>` element is a child of `<capability>`. The **`type`** attribute identifies the implementation language as an `org.blockml.language.*` FQN (V1: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
+The `<implementation>` element is a child of the capability member element. The **`type`** attribute identifies the implementation language as an `org.blockml.language.*` FQN (V1: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
 
 FunctionBlock calls follow the same syntax as regular `@bean` Transformation Capability calls — there is no special syntax. The FunctionBlock pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
 
@@ -324,15 +323,20 @@ FunctionBlock calls follow the same syntax as regular `@bean` Transformation Cap
 
 ---
 
-## Expressions in `value`
+## Expressions in `<value>`
 
-Property `value` may be a static literal or an Expression. When an Expression, it may reference other Properties of the same Block and `#built-in` functions:
+Property `<value>` may contain a static literal or an Expression. When an Expression, it may reference other Properties of the same Block and `#built-in` functions:
 
 ```xml
-<property name="numberOfSamples" type="Integer" value="5" />
-<property name="labelSize"       type="Integer" value="5" />
-<property name="size"            type="Size3D"
-          value="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
+<numberOfSamples type="Integer">
+  <value>5</value>
+</numberOfSamples>
+<labelSize type="Integer">
+  <value>5</value>
+</labelSize>
+<size type="Size3D">
+  <value>${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }</value>
+</size>
 ```
 
 **Allowed roots in `value` expressions:**

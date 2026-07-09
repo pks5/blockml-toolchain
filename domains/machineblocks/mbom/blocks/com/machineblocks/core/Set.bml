@@ -23,7 +23,7 @@
   <abstract>true</abstract>
 
   <aggregations>
-    <aggregation name="_steps"     type="com.machineblocks.core.Step[]" />
+    <_steps     type="com.machineblocks.core.Step[]" />
   </aggregations>
 
 </block>

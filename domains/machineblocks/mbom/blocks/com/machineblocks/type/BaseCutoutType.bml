@@ -22,20 +22,20 @@
   <version>1.0.0</version>
 
   <properties>
-    <property name="value" type="String">
+    <value type="String">
       <documentation>Enum literal used in property values and expressions.</documentation>
-    </property>
+    </value>
   </properties>
 
   <aggregations>
-    <aggregation name="_values">
-      <composition export="true">
+    <_values>
+      <composition bml:exportIds="true">
         <BaseCutoutType bml:id="NONE"     value="none"     />
         <BaseCutoutType bml:id="STANDARD" value="standard" />
         <BaseCutoutType bml:id="GROOVE"   value="groove"   />
         <BaseCutoutType bml:id="STUDS"    value="studs"    />
       </composition>
-    </aggregation>
+    </_values>
   </aggregations>
 
 </block>

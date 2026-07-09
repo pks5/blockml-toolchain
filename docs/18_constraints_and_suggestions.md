@@ -23,12 +23,12 @@ This keeps the BlockML core small and fully extensible.
 `<constraints>` is an optional container within a Property.
 
 ```xml
-<property name="width" type="Float">
+<width type="Float">
   <constraints>
     <constraint:Min value="0"/>
     <constraint:Max value="100"/>
   </constraints>
-</property>
+</width>
 ```
 
 Each entry inside `<constraints>` is a **Block instance**. The referenced Block must inherit from:
@@ -79,11 +79,11 @@ The generic is **not** specified at the usage site. The compiler binds it automa
 Example:
 
 ```xml
-<property name="width" type="Float">
+<width type="Float">
   <constraints>
     <constraint:Min value="0"/>
   </constraints>
-</property>
+</width>
 ```
 
 The compiler binds `T = Float` and checks:
@@ -98,13 +98,13 @@ The same `Min` constraint works for `Integer`, `Float`, and other numeric types 
 The generic concept also handles collection property validation.
 
 ```xml
-<property name="tags" type="String[]">
+<tags type="String[]">
   <constraints>
     <constraint:MinItems value="1"/>
     <constraint:MaxItems value="10"/>
     <constraint:MinLength value="2"/>
   </constraints>
-</property>
+</tags>
 ```
 
 The compiler infers from each constraint's generic definition:
@@ -125,13 +125,13 @@ Constraints are **enforceable** — the semantic validator checks property value
 Suggestions follow the same principle but use **no special base type**.
 
 ```xml
-<property name="color" type="type:Color">
+<color type="type:Color">
   <suggestions>
     <type:Color value="red"/>
     <type:Color value="green"/>
     <type:Color value="blue"/>
   </suggestions>
-</property>
+</color>
 ```
 
 Each suggestion is a Block instance of the **same type as the property**. The compiler checks only that every suggestion instance matches the property type.
@@ -139,12 +139,13 @@ Each suggestion is a Block instance of the **same type as the property**. The co
 ### Primitive suggestions
 
 ```xml
-<property name="textFont" type="String" value="RBNo3.1 Black">
+<textFont type="String">
+  <value>RBNo3.1 Black</value>
   <suggestions>
     <String value="Creato Display"/>
     <String value="RBNo3.1 Black"/>
   </suggestions>
-</property>
+</textFont>
 ```
 
 Unqualified `String` resolves to `org.blockml.type.String` — same rules as property `type` attributes.
@@ -152,12 +153,12 @@ Unqualified `String` resolves to `org.blockml.type.String` — same rules as pro
 ### Struct suggestions
 
 ```xml
-<property name="size" type="type:Size3D">
+<size type="type:Size3D">
   <suggestions>
     <type:Size3D x="1" y="1" z="1"/>
     <type:Size3D x="2" y="4" z="3"/>
   </suggestions>
-</property>
+</size>
 ```
 
 ### Validation semantics

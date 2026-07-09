@@ -1,6 +1,6 @@
 # BOM Compiler — BML
 
-version: 2.0.0
+version: 2.1.0
 
 ## Purpose of this Document
 
@@ -241,8 +241,8 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
 <capabilities>  — Capability declarations.
 <contracts>     — Contract declarations (interface implementation). Root block only.
 <subBlocks>     — Sub-Block definitions (see Sub-Blocks section).
-<composition>   — internal structure (sugar for the default aggregation). Omit for Leaf Blocks.
-                — equivalent to <aggregation name="…"><composition>…</composition></aggregation>
+<composition>   — internal structure inside the default aggregation. Omit for Leaf Blocks.
+                — equivalent to <{defaultAggregation}><composition>…</composition></{defaultAggregation}>
 ```
 
 Framework base types (`org.blockml.core.Block`, `com.machineblocks.core.Block`, …) are **BML files** in `@blockml/core` and `@machineblocks/mbom` — not code or YAML. See `16_framework_base_types.md`.
@@ -310,8 +310,8 @@ Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
   <version>1.0.0</version>
   <abstract>true</abstract>
   <properties>
-    <property name="offset"    type="type:Vector3D" />
-    <property name="direction" type="type:Direction" />
+    <offset    type="type:Vector3D" />
+    <direction type="type:Direction" />
   </properties>
 </block>
 ```
@@ -328,9 +328,15 @@ Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
     <contract type="com.foo.IPlaceable" />
   </contracts>
   <properties>
-    <property name="offset"    type="type:Vector3D" value="[0, 0, 0]" />
-    <property name="direction" type="type:Direction" value="north" />
-    <property name="size"      type="type:Size3D"    value="[1, 8, 9]" />
+    <offset type="type:Vector3D">
+      <value>[0, 0, 0]</value>
+    </offset>
+    <direction type="type:Direction">
+      <value>north</value>
+    </direction>
+    <size type="type:Size3D">
+      <value>[1, 8, 9]</value>
+    </size>
   </properties>
 </block>
 ```
@@ -436,7 +442,7 @@ _parts (CompositeBlock):
 3. On Block instances — opening a specific aggregation inline (see § Composition)
 ```
 
-For CompositeBlocks the default aggregation is typically inherited `_parts`. Sets and Libraries have multiple aggregations — each must be opened explicitly via `<aggregation name="…"><composition>…</composition></aggregation>` on the definition or on instances.
+For CompositeBlocks the default aggregation is typically inherited `_parts`. Sets and Libraries have multiple aggregations — each must be opened explicitly via `<{aggregationName}><composition>…</composition></{aggregationName}>` on the definition, or directly by member name on instances.
 
 ### Minimal Block Example
 
@@ -483,14 +489,21 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 
   <properties>
     <!-- Native properties with non-default values -->
-    <property name="size"      type="Size3D"       value="[1, 8, 8]" />
-    <property name="baseColor" type="Color"        value="#303D4E" />
-    <property name="assembly"  type="AssemblyMode" value="Merged" />
+    <size type="Size3D">
+      <value>[1, 8, 8]</value>
+    </size>
+    <baseColor type="Color">
+      <value>#303D4E</value>
+    </baseColor>
+    <assembly type="AssemblyMode">
+      <value>Merged</value>
+    </assembly>
 
     <!-- Custom properties -->
-    <property name="wallThickness" type="Integer" value="1">
+    <wallThickness type="Integer">
+      <value>1</value>
       <documentation>Thickness of the wall in grid units.</documentation>
-    </property>
+    </wallThickness>
   </properties>
 
   <composition>
@@ -516,6 +529,97 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 
 ## Members
 
+BlockML distinguishes two levels with **different syntax**:
+
+```text
+Block definition   — describes the full member including metadata
+Block instance     — sets member values only
+```
+
+### Member Element Names
+
+The member name is the **XML element name**. The `name="..."` attribute is removed entirely. The surrounding container determines the member kind:
+
+```xml
+<properties>
+    <size type="Size3D"/>
+</properties>
+
+<aggregations>
+    <items type="com.foo.Wall[]"/>
+</aggregations>
+
+<associations>
+    <parent type="com.foo.Block"/>
+</associations>
+
+<capabilities>
+    <print type="org.blockml.capability.Outbound"/>
+</capabilities>
+```
+
+### Definition Content Containers
+
+Block definitions describe the entire member — not just its value. Each member has an explicit content area:
+
+**Properties** use `<value>`:
+
+```xml
+<properties>
+    <size type="Size3D">
+        <documentation>Final outer dimensions.</documentation>
+        <value>${[width, height, depth]}</value>
+    </size>
+</properties>
+```
+
+**Aggregations** use `<composition>`:
+
+```xml
+<aggregations>
+    <items type="com.foo.Wall[]">
+        <documentation>Child parts.</documentation>
+        <composition>
+            <ac:Wall/>
+        </composition>
+    </items>
+</aggregations>
+```
+
+`value` and `composition` are counterparts: Property → `value`, Aggregation → `composition`.
+
+### Block Instances
+
+Inside a Block instance, members are **set** — not defined. No `<value>` wrapper.
+
+Properties may be written as **attributes** (short form) or **elements** (long form):
+
+```xml
+<!-- Short form -->
+<ac:Wall color="#ff0000"/>
+
+<!-- Long form -->
+<ac:Wall>
+    <color bml:if="${useRed}">#ff0000</color>
+</ac:Wall>
+```
+
+When both forms exist, the **long form replaces the short form entirely**.
+
+Aggregations are filled directly by member name:
+
+```xml
+<ac:Wall>
+    <items>
+        <ac:Corner/>
+    </items>
+</ac:Wall>
+```
+
+A Block instance is itself the container for its members.
+
+---
+
 All member kinds — Property, Aggregation, Association, Capability — share the same visibility rules, optional attributes, and override semantics.
 
 ### Member Visibility
@@ -539,9 +643,9 @@ Visibility is determined primarily by **naming convention**:
 Members may optionally declare an explicit visibility that must match the naming convention:
 
 ```xml
-<property name="__token" visibility="private"/>
-<property name="_size"   visibility="protected"/>
-<property name="label"   visibility="public"/>
+<__token visibility="private"/>
+<_size   visibility="protected"/>
+<label   visibility="public"/>
 ```
 
 A mismatch between `name` and `visibility` is a validation error (`BML_VISIBILITY_MISMATCH`).
@@ -566,8 +670,12 @@ The `namespace` attribute on a member uses the **same namespace mechanism as XML
     xmlns:ui="com.foo.ui">
 
   <properties>
-    <property namespace="ui" name="width" type="Integer" value="100"/>
-    <property namespace="ui" name="height" type="Integer" value="200"/>
+    <width  namespace="ui" type="Integer">
+      <value>100</value>
+    </width>
+    <height namespace="ui" type="Integer">
+      <value>200</value>
+    </height>
   </properties>
 </block>
 ```
@@ -588,12 +696,12 @@ The alias `ui` does not exist in the BOM after parsing.
 
 ```xml
 xmlns:ui="com.foo.ui"
-<property namespace="ui" name="width"/>
+<width namespace="ui" type="Integer"/>
 ```
 
 ```xml
 xmlns:design="com.foo.ui"
-<property namespace="design" name="width"/>
+<width namespace="design" type="Integer"/>
 ```
 
 Both store `namespace = "com.foo.ui"`, `name = "width"`. Different documents may use different prefixes without changing member meaning.
@@ -605,11 +713,15 @@ Both store `namespace = "com.foo.ui"`, `name = "width"`. Different documents may
 ```xml
 <!-- Parent -->
 xmlns:ui="com.foo.ui"
-<property namespace="ui" name="width" type="Integer" value="100"/>
+<width namespace="ui" type="Integer">
+  <value>100</value>
+</width>
 
 <!-- Child -->
 xmlns:design="com.foo.ui"
-<property namespace="design" name="width" value="42"/>
+<width namespace="design">
+  <value>42</value>
+</width>
 ```
 
 Both resolve to key `(com.foo.ui, width)` — the override merges correctly.
@@ -625,19 +737,19 @@ Child Blocks may override inherited members. Only the **member name** and **chan
 Parent:
 
 ```xml
-<property
-    name="size"
-    type="type:Size3D"
-    value="[1,1,1]"
-    documentation="Default size"/>
+<size
+    type="type:Size3D">
+  <value>[1,1,1]</value>
+  <documentation>Default size</documentation>
+</size>
 ```
 
 Child:
 
 ```xml
-<property
-    name="size"
-    value="[2,2,2]"/>
+<size>
+  <value>[2,2,2]</value>
+</size>
 ```
 
 The effective definition is the **merge** of both declarations. Override matching uses the resolved `(namespace, name)` key — see § Member Namespace Attribute.
@@ -661,17 +773,21 @@ Properties are typed parameters of the Block. Three kinds exist:
 
 **Custom properties** are defined inline in the Block definition. They generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
 
-Native and custom properties use the same `<property>` element. The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Native properties only need to be declared when their value differs from the inherited value. System properties like `id` are set as XML attributes on composition instances — not declared in `<properties>`.
+Native and custom properties use the same element syntax — the member name is the element tag. The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Native properties only need to be declared when their value differs from the inherited value. System properties like `id` are set as XML attributes on composition instances — not declared in `<properties>`.
 
-### Property Value (`value`)
+### Property Value (`<value>`)
 
-BlockML describes no runtime. A Property has a **defined value**, not a default state. Properties use:
+Block definitions store property values in a `<value>` child element — not as a `value="..."` attribute:
 
 ```xml
-value="..."
+<size type="type:Size3D">
+  <value>[1, 1, 3]</value>
+</size>
 ```
 
-not `defaultValue`. The attribute may be a literal or an Expression. See § Computed Values below.
+BlockML describes no runtime. A Property has a **defined value**, not a default state. The `<value>` element may contain a literal or an Expression. See § Computed Values below.
+
+On **Block instances**, property values use the short form (attribute) or long form (child element) — see § Block Instances above. No `<value>` wrapper on instances.
 
 ### Type Resolution
 
@@ -701,14 +817,26 @@ Domain-specific types require an explicit namespace prefix declared via `xmlns`:
 ```xml
 xmlns:type="com.machineblocks.type"
 
-<property name="size"      type="type:Size3D"         value="[1, 1, 3]" />
-<property name="baseColor" type="type:Color"           value="#EAC645" />
-<property name="cutout"    type="type:BaseCutoutType"  value="standard" />
+<size type="type:Size3D">
+  <value>[1, 1, 3]</value>
+</size>
+<baseColor type="type:Color">
+  <value>#EAC645</value>
+</baseColor>
+<cutout type="type:BaseCutoutType">
+  <value>standard</value>
+</cutout>
 
 <!-- Primitives — no prefix needed -->
-<property name="text"      type="String"  value="" />
-<property name="pillars"   type="Boolean" value="true" />
-<property name="textSize"  type="Integer" value="9" />
+<text type="String">
+  <value></value>
+</text>
+<pillars type="Boolean">
+  <value>true</value>
+</pillars>
+<textSize type="Integer">
+  <value>9</value>
+</textSize>
 ```
 
 There is no implicit fallback to the baseType's namespace. If a type cannot be resolved, the compiler emits `BML_UNKNOWN_TYPE`.
@@ -719,15 +847,20 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 ```xml
 <!-- Enum type — SelectBox, validated -->
-<property name="baseCutoutType" type="type:BaseCutoutType" value="standard" />
+<baseCutoutType type="type:BaseCutoutType">
+  <value>standard</value>
+</baseCutoutType>
 <!-- value literal (matches enum instance value="standard" / id STANDARD) -->
 
-<property name="baseCutoutType" type="type:BaseCutoutType" value="STANDARD" />
+<baseCutoutType type="type:BaseCutoutType">
+  <value>STANDARD</value>
+</baseCutoutType>
 <!-- short id form — FQN:: prefix omitted because property type is BaseCutoutType -->
 
 <!-- equivalent qualified id reference -->
-<property name="baseCutoutType" type="type:BaseCutoutType"
-          value="com.machineblocks.type.BaseCutoutType::STANDARD" />
+<baseCutoutType type="type:BaseCutoutType">
+  <value>com.machineblocks.type.BaseCutoutType::STANDARD</value>
+</baseCutoutType>
 <!-- No <suggestions> allowed → BML_SUGGESTIONS_ON_ENUM -->
 ```
 
@@ -737,34 +870,37 @@ When the property `type` is an EnumType, `value` and instance attribute values m
 
 ```xml
 <!-- Free-text with suggestions — Combobox, not validated -->
-<property name="textFont" type="String" value="RBNo3.1 Black">
+<textFont type="String">
+  <value>RBNo3.1 Black</value>
   <suggestions>
     <String value="Creato Display"/>
     <String value="RBNo3.1 Black"/>
   </suggestions>
-</property>
+</textFont>
 ```
 
 **Constraints** are validation rules — each entry is a Block instance extending `org.blockml.core.Constraint`. The compiler binds the constraint generic to the property type automatically:
 
 ```xml
-<property name="textSize" type="Integer" value="9">
+<textSize type="Integer">
+  <value>9</value>
   <constraints>
     <constraint:Min value="1"/>
     <constraint:Max value="72"/>
   </constraints>
-</property>
+</textSize>
 ```
 
 For struct properties, suggestions are typed Block instances:
 
 ```xml
-<property name="size" type="type:Size3D" value="[1, 1, 3]">
+<size type="type:Size3D">
+  <value>[1, 1, 3]</value>
   <suggestions>
     <type:Size3D x="1" y="1" z="3"/>
     <type:Size3D x="2" y="4" z="3"/>
   </suggestions>
-</property>
+</size>
 ```
 
 See `18_constraints_and_suggestions.md` for the full constraint hierarchy, generic binding rules, and collection constraints.
@@ -772,10 +908,15 @@ See `18_constraints_and_suggestions.md` for the full constraint hierarchy, gener
 **Computed values:** `value` may be an Expression referencing other Properties of the same Block. Cycle detection applies — see `10_expression_language.md`.
 
 ```xml
-<property name="numberOfSamples" type="Integer" value="5" />
-<property name="labelSize"       type="Integer" value="5" />
-<property name="size"            type="type:Size3D"
-          value="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
+<numberOfSamples type="Integer">
+  <value>5</value>
+</numberOfSamples>
+<labelSize type="Integer">
+  <value>5</value>
+</labelSize>
+<size type="type:Size3D">
+  <value>${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }</value>
+</size>
 ```
 
 **Map-type and Object-type properties — JSON Object syntax is mandatory:**
@@ -800,42 +941,40 @@ The SCAD BlockProcessor translates JSON Objects to SCAD's internal array format.
 
 ### Aggregations
 
-Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type. **Composition is part of Aggregation** — an `<aggregation>` may contain a nested `<composition>` that fills it directly.
+Aggregations describe ownership relationships. An Aggregation defines that a Block can contain zero or more child objects of a given type. **Composition is part of Aggregation** — an aggregation member may contain a nested `<composition>` that fills it directly.
 
 For MachineBlocks Blocks, `_presets` and `_parts` are inherited from the base type chain — they do not need to be redeclared. Declare `<aggregations>` when adding aggregations beyond the inherited set, when overriding inherited aggregations, or when filling an aggregation on the Block definition:
 
 ```xml
 <!-- Set: _steps beyond inherited _presets and _parts -->
 <aggregations>
-  <aggregation name="_steps" type="com.machineblocks.core.Step[]" />
+  <_steps type="com.machineblocks.core.Step[]" />
 </aggregations>
 
 <!-- Fill inherited _parts on the Block definition -->
 <aggregations>
-  <aggregation name="_parts" type="com.machineblocks.core.Block[]">
+  <_parts type="com.machineblocks.core.Block[]">
     <composition>
       <bricks:Standard bml:id="base" size="[2, 4, 3]" />
     </composition>
-  </aggregation>
+  </_parts>
 </aggregations>
 
 <!-- Override inherited aggregation — type inherited, only composition specified -->
 <aggregations>
-  <aggregation name="_parts">
+  <_parts>
     <composition>
       <bricks:Standard bml:id="base" />
     </composition>
-  </aggregation>
+  </_parts>
 </aggregations>
 ```
 
 When overriding an inherited aggregation, `type` is required only for **new** declarations. When filling an inherited aggregation, only `<composition>` needs to be specified.
 
 ```text
-name         — member name (unique within namespace — see Member Namespace)
 type         — child type (required on new declarations; inherited on overrides)
 default      — boolean; marks the default aggregation for bare <composition>
-export       — on nested <composition>: export="true" for {EnclosingBlockFQN}::{id} references
 readOnly     — informational only
 final        — prevents override in child Blocks
 namespace    — XML namespace prefix (resolved at parse time — see § Member Namespace Attribute)
@@ -843,6 +982,8 @@ visibility   — optional; must match naming convention
 ```
 
 Member visibility follows the naming convention in § Member Visibility. Protected aggregations (`_name`) are visible in child Blocks; private aggregations (`__name`) are not.
+
+`bml:exportIds` on `<composition>` controls static ID export — see § `bml:exportIds` below.
 
 **Type notation** — multiplicity is part of the type reference, not a separate attribute. BlockML has no `Array` type — see `17_type_system_bml.md` — Collections and Multiplicity.
 
@@ -862,8 +1003,8 @@ Block[1..1]     →  exactly 1 required
 **`_self`** — refers to the current effective Block type, resolved after inheritance:
 
 ```xml
-<association name="parent"   type="_self" />
-<association name="children" type="_self[]" />
+<association type="_self" />
+<association type="_self[]" />
 ```
 
 **ServiceBlock Aggregations** bind named service beans into the Block. Once declared, the bean is accessible in Expressions via `@beanName`. The `scope` attribute controls visibility to child Blocks:
@@ -871,16 +1012,14 @@ Block[1..1]     →  exactly 1 required
 ```xml
 <aggregations>
   <!-- local: only accessible in this Block (default) -->
-  <aggregation name="_fmt"
-               type="org.blockml.service.Formatter"
-               beanName="fmt"
-               scope="local" />
+  <_fmt type="org.blockml.service.Formatter"
+        beanName="fmt"
+        scope="local" />
 
   <!-- context: passed down to all child Blocks in Compositions, overridable -->
-  <aggregation name="_data"
-               type="org.blockml.service.JSONModel"
-               beanName="data"
-               scope="context" />
+  <_data type="org.blockml.service.JSONModel"
+         beanName="data"
+         scope="context" />
 </aggregations>
 ```
 
@@ -892,8 +1031,7 @@ Associations describe loose references without ownership. Defined for future use
 
 ```xml
 <associations>
-  <association name="targetDevice"
-               type="com.electronics.core.Component" />
+  <targetDevice type="com.electronics.core.Component" />
 </associations>
 ```
 
@@ -907,25 +1045,22 @@ Capabilities describe how a Block communicates. Like Properties, they are declar
 <capabilities>
 
   <!-- Inbound: receives data/messages asynchronously -->
-  <capability name="resize"
-              type="org.blockml.capability.Inbound"
-              inputType="com.myDomain.ResizePayload">
+  <resize type="org.blockml.capability.Inbound"
+          inputType="com.myDomain.ResizePayload">
     <documentation>Resize the block to the given dimensions.</documentation>
-  </capability>
+  </resize>
 
   <!-- Outbound: sends/emits data/messages asynchronously -->
-  <capability name="resized"
-              type="org.blockml.capability.Outbound"
-              outputType="com.myDomain.ResizedPayload">
-  </capability>
+  <resized type="org.blockml.capability.Outbound"
+           outputType="com.myDomain.ResizedPayload">
+  </resized>
 
   <!-- Transformation: synchronously callable; inputType → outputType -->
-  <capability name="computeArea"
-              type="org.blockml.capability.Transformation"
-              inputType="{ width: Integer, height: Integer }"
-              outputType="Integer">
+  <computeArea type="org.blockml.capability.Transformation"
+               inputType="{ width: Integer, height: Integer }"
+               outputType="Integer">
     <documentation>Returns width * height.</documentation>
-  </capability>
+  </computeArea>
 
 </capabilities>
 ```
@@ -949,75 +1084,120 @@ Unqualified type names resolve against the domain's default type namespace (dete
 
 ## Composition
 
-A Composition fills an Aggregation with concrete child Block instances. Composition and Aggregation form a **logical unit** — the preferred authoring form nests `<composition>` directly inside `<aggregation>`.
+A Composition fills an Aggregation with concrete child Block instances. On **Block definitions**, `<composition>` is nested inside the aggregation member. On **Block instances**, aggregations are filled directly by member name — no `<composition>` wrapper.
 
-The `composition aggregation="…"` attribute is **removed**. Aggregations are opened by name — on Block definitions or on Block instances.
+The `composition aggregation="…"` attribute is **removed**.
+
+### Unified Container Concept
+
+BlockML has one container concept with two forms:
+
+```text
+Container
+├── composition      — initial fill of an aggregation inside a Block definition only
+└── bml:container    — general container everywhere else (Block instances)
+```
+
+Both support the same directives: `bml:if`, `bml:each`, `bml:with`, `bml:exportIds`, and future container directives.
+
+```xml
+<!-- Definition: composition inside aggregation member -->
+<aggregations>
+  <items>
+    <composition>
+      <ac:Wall/>
+    </composition>
+  </items>
+</aggregations>
+
+<!-- Instance: bml:container inside aggregation member -->
+<items>
+  <bml:container bml:if="${enabled}" bml:each="${parts}">
+    <ac:Wall/>
+  </bml:container>
+</items>
+```
 
 ### Placement Rules
 
 ```text
 Block definition — single default aggregation:
   <composition>…</composition>
-  → sugar for <aggregation name="{default}"><composition>…</composition></aggregation>
+  → sugar for <{defaultAggregation}><composition>…</composition></{defaultAggregation}>
 
 Block definition — multiple aggregations:
   <aggregations>
-    <aggregation name="_presets">
+    <_presets>
       <composition>…</composition>
-    </aggregation>
-    <aggregation name="_parts">
+    </_presets>
+    <_parts>
       <composition>…</composition>
-    </aggregation>
+    </_parts>
   </aggregations>
 
-Block instance — multiple aggregations on referenced Block type:
-  <house:Room id="kitchen">
-    <aggregation name="_walls">
-      <composition>…</composition>
-    </aggregation>
-    <aggregation name="_furniture">
-      <composition>…</composition>
-    </aggregation>
+Block instance — multiple aggregations:
+  <house:Room bml:id="kitchen">
+    <_walls>
+      <walls:Wall bml:id="left"/>
+    </_walls>
+    <_furniture>
+      <furniture:Table bml:id="table"/>
+    </_furniture>
   </house:Room>
 
 Block instance — recursive inner structure:
-  <walls:Wall id="left">
-    <composition>
+  <walls:Wall bml:id="left">
+    <_parts>
       <bricks:Standard/>
       <bricks:Standard/>
-    </composition>
+    </_parts>
   </walls:Wall>
   → valid when Wall has exactly one effective default aggregation
 ```
 
+### `bml:exportIds`
+
+Static instance ID visibility is controlled by `bml:exportIds`. Permitted on:
+
 ```text
-export   — optional on <composition>; export="true" exposes children with static id
-           for {EnclosingBlockFQN}::{id} references
+<composition>     — inside aggregation definitions
+<bml:container>    — inside Block instances
+Block instances   — on the instance element itself
 ```
+
+```xml
+<composition bml:exportIds="true">
+  <ac:Wall bml:id="wall">
+    <items>
+      <ac:Corner bml:id="corner"/>
+    </items>
+  </ac:Wall>
+</composition>
+```
+
+All static IDs within the container are exported. The value is inherited recursively by child instances and may be overridden at deeper levels.
 
 **Rules:**
 
 ```text
-Single default aggregation  → bare <composition> permitted (on definitions and instances)
-Multiple aggregations       → each must be opened explicitly via <aggregation name="…">
+Single default aggregation  → bare <composition> permitted (on definitions only)
+Multiple aggregations       → each must be opened explicitly by member name
 Ambiguous bare <composition> → validation error when no unique default aggregation exists
 ```
 
 ### Recursive Composition
 
-Every Block instance may optionally contain its own `<composition>` (or explicit `<aggregation>` openings). This makes the language fully recursive — complex object structures can be described wherever Block instances appear.
+Every Block instance may contain aggregation members directly. This makes the language fully recursive — complex object structures can be described wherever Block instances appear.
 
 ```xml
-<aggregation name="_parts">
-  <composition>
-    <walls:Wall id="left">
-      <composition>
-        <bricks:Standard/>
-        <bricks:Standard/>
-      </composition>
-    </walls:Wall>
-  </composition>
-</aggregation>
+<_parts>
+  <walls:Wall bml:id="left">
+    <_parts>
+      <bricks:Standard/>
+      <bricks:Standard/>
+    </_parts>
+  </walls:Wall>
+</_parts>
 ```
 
 Child elements inside `<composition>` are Block instances. Each instance:
@@ -1374,7 +1554,7 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Li
 
 ```xml
 <aggregations>
-  <aggregation name="_dependencies" type="Dependency[]" />
+  <_dependencies type="Dependency[]" />
 </aggregations>
 <subBlocks>
   <block><name>Dependency</name>...</block>
@@ -1394,11 +1574,11 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Li
 ```xml
 <!-- BricksLibrary.bml — no xmlns needed for entry types -->
 <aggregations>
-  <aggregation name="_dependencies">
+  <_dependencies>
     <composition>
       <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
     </composition>
-  </aggregation>
+  </_dependencies>
 </aggregations>
 ```
 
@@ -1425,7 +1605,7 @@ Two implementation types are supported in V1:
   <version>1.0.0</version>
 
   <capabilities>
-    <capability name="formatValue"
+    <formatValue
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
                 outputType="org.blockml.type.String">
@@ -1448,7 +1628,7 @@ function strPrefix(s, k, i = 0) =
 function strSuffix(s, k, i = 0) =
     (k + i >= len(s)) ? "" : str(s[k + i], strSuffix(s, k, i + 1));
       ]]></implementation>
-    </capability>
+    </formatValue>
   </capabilities>
 </block>
 ```
@@ -1472,12 +1652,24 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
   <version>1.0.0</version>
 
   <properties>
-    <property name="numberOfSamples" type="Integer" value="5" />
-    <property name="font"            type="String"  value="Liberation Sans" />
-    <property name="fontSize"        type="Float"   value="3" />
-    <property name="labelSize"       type="Integer" value="5" />
-    <property name="valueStart"      type="Float"   value="0.0" />
-    <property name="valueStep"       type="Float"   value="0.1" />
+    <numberOfSamples type="Integer" >
+      <value>5</value>
+    </numberOfSamples>
+    <font            type="String"  >
+      <value>Liberation Sans</value>
+    </font>
+    <fontSize        type="Float"   >
+      <value>3</value>
+    </fontSize>
+    <labelSize       type="Integer" >
+      <value>5</value>
+    </labelSize>
+    <valueStart      type="Float"   >
+      <value>0.0</value>
+    </valueStart>
+    <valueStep       type="Float"   >
+      <value>0.1</value>
+    </valueStep>
   </properties>
 
   <subBlocks>
@@ -1486,13 +1678,27 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
     <!-- FQN: com.machineblocks.calibration.Calibrator.Base -->
     <block name="Base">
       <properties>
-        <property name="label"           type="String"  value="" />
-        <property name="numberOfSamples" type="Integer" value="5" />
-        <property name="valueStart"      type="Float"   value="0" />
-        <property name="valueStep"       type="Float"   value="0.1" />
-        <property name="font"            type="String"  value="Liberation Sans" />
-        <property name="fontSize"        type="Float"   value="3" />
-        <property name="labelSize"       type="Integer" value="5" />
+        <label           type="String"  >
+      <value></value>
+    </label>
+        <numberOfSamples type="Integer" >
+      <value>5</value>
+    </numberOfSamples>
+        <valueStart      type="Float"   >
+      <value>0</value>
+    </valueStart>
+        <valueStep       type="Float"   >
+      <value>0.1</value>
+    </valueStep>
+        <font            type="String"  >
+      <value>Liberation Sans</value>
+    </font>
+        <fontSize        type="Float"   >
+      <value>3</value>
+    </fontSize>
+        <labelSize       type="Integer" >
+      <value>5</value>
+    </labelSize>
       </properties>
       <composition>
         <!-- Base strip -->
@@ -1531,9 +1737,15 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
     <!-- FQN: com.machineblocks.calibration.Calibrator.StudDiameter -->
     <block name="StudDiameter">
       <properties>
-        <property name="numberOfSamples" type="Integer" value="5" />
-        <property name="valueStart"      type="Float"   value="0" />
-        <property name="valueStep"       type="Float"   value="0.1" />
+        <numberOfSamples type="Integer" >
+      <value>5</value>
+    </numberOfSamples>
+        <valueStart      type="Float"   >
+      <value>0</value>
+    </valueStart>
+        <valueStep       type="Float"   >
+      <value>0.1</value>
+    </valueStep>
       </properties>
       <composition>
         <bricks:StandardBrick
@@ -1604,24 +1816,30 @@ _steps      — assembly order (optional; defaults to document order of _parts)
   <version>1.0.0</version>
 
   <properties>
-    <property name="baseColor"      type="Color"        value="#EAC645" />
-    <property name="highlightColor" type="Color"        value="#55AB68" />
-    <property name="assembly"       type="AssemblyMode" value="Merged"  />
+    <baseColor      type="Color"        >
+      <value>#EAC645</value>
+    </baseColor>
+    <highlightColor type="Color"        >
+      <value>#55AB68</value>
+    </highlightColor>
+    <assembly       type="AssemblyMode"  >
+      <value>Merged</value>
+    </assembly>
   </properties>
 
   <!-- Block palette: inherited _presets -->
   <aggregations>
-    <aggregation name="_presets">
+    <_presets>
       <composition>
         <ac:Floor  bml:id="floor"  size="[16, 16, 1]" />
         <ac:Corner bml:id="corner" size="[4, 4, 9]"   />
         <ac:Wall   bml:id="wall"   size="[1, 8, 9]"   />
         <ac:Lid    bml:id="lid"    size="[16, 16, 1]" />
       </composition>
-    </aggregation>
+    </_presets>
 
     <!-- Placed instances: inherited _parts -->
-    <aggregation name="_parts">
+    <_parts>
       <composition>
         <ac:Floor bml:id="00001" basePresets="floor"  direction="West"  offset="[0, 0, 0]"   />
         <ac:Corner bml:id="00002" basePresets="corner" direction="West"  offset="[0, 0, 1]"   />
@@ -1634,16 +1852,16 @@ _steps      — assembly order (optional; defaults to document order of _parts)
         <ac:Wall bml:id="00009" basePresets="wall"   direction="South" offset="[4, 0, 1]"   />
         <ac:Lid bml:id="0000A" basePresets="lid"    direction="West"  offset="[0, 0, 10]"  />
       </composition>
-    </aggregation>
+    </_parts>
 
     <!-- _steps omitted → assembly order = document order of _parts -->
-    <aggregation name="_steps">
+    <_steps>
       <composition>
         <core:Step part="00001" />
         <core:Step part="00002" />
         <core:Step part="00003" />
       </composition>
-    </aggregation>
+    </_steps>
   </aggregations>
 
 </block>
@@ -1674,20 +1892,20 @@ Because `_presets` and `_parts` are separated, one Block configuration can be re
 
 ```xml
 <aggregations>
-  <aggregation name="_presets">
+  <_presets>
     <composition>
       <ac:Wall bml:id="wall" size="[1, 8, 9]" baseColor="#303D4E" />
     </composition>
-  </aggregation>
+  </_presets>
 
-  <aggregation name="_parts">
+  <_parts>
     <composition>
       <ac:Wall bml:id="00003" basePresets="wall" direction="West"  offset="[0, 4, 1]"  />
       <ac:Wall bml:id="00005" basePresets="wall" direction="North" offset="[4, 15, 1]" />
       <ac:Wall bml:id="00007" basePresets="wall" direction="East"  offset="[15, 4, 1]" />
       <ac:Wall bml:id="00009" basePresets="wall" direction="South" offset="[4, 0, 1]"  />
     </composition>
-  </aggregation>
+  </_parts>
 </aggregations>
 ```
 
@@ -1736,6 +1954,7 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
   FQN: com.machineblocks.bricks.StandardPresets
 -->
 <block
+  xmlns:bml="http://blockml.org/schema/bml"
   xmlns="http://blockml.org/schema/block"
   xmlns:type="com.machineblocks.type"
   xmlns:bricks="com.machineblocks.bricks"
@@ -1754,8 +1973,8 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
   <version>3.0.0</version>
 
   <aggregations>
-    <aggregation name="_presets">
-      <composition export="true">
+    <_presets>
+      <composition bml:exportIds="true">
 
         <bricks:Standard bml:id="brick-1x1" name="Brick 1x1" bml:version="3.0.0" size="[1, 1, 3]" />
 
@@ -1783,7 +2002,7 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
                          textColor="#EDF0F1" />
 
       </composition>
-    </aggregation>
+    </_presets>
   </aggregations>
 
 </block>
@@ -1795,7 +2014,7 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
 
 **`basePresets`** — space-separated preset ids on any MachineBlocks Block instance. Local ids resolve within the enclosing Block's `_presets`; cross-file entries use `{BlockFQN}::{id}`. Applied left-to-right; later entries override earlier. Own instance properties override all base presets.
 
-Qualified `{BlockFQN}::{id}` references require the target composition to declare `export="true"` and the target instance to have a **literal static `bml:id`** — see `00_bom_core.md` — Qualified Block Instance References.
+Qualified `{BlockFQN}::{id}` references require the target composition to declare `bml:exportIds="true"` and the target instance to have a **literal static `bml:id`** — see `00_bom_core.md` — Qualified Block Instance References.
 
 Presets can reference other presets — preset instances in `_presets` may themselves carry `basePresets`, forming an inheritance chain.
 
@@ -1811,7 +2030,7 @@ Example:
 Requirements for qualified references:
 
 ```text
-1. Target `<aggregation name="…"><composition export="true">`
+1. Target `<{aggregationName}><composition bml:exportIds="true">`
 2. Target instance: literal bml:id (no ${ … }, not bml:each-only)
 3. Reference: literal attribute value (not ${ … })
 ```
@@ -1909,39 +2128,41 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
   <version>3.0.0</version>
 
   <properties>
-    <property name="description" type="String"
-              value="Standard brick types for MachineBlocks" />
+    <description type="String"
+              >
+      <value>Standard brick types for MachineBlocks</value>
+    </description>
   </properties>
 
   <aggregations>
-    <aggregation name="_dependencies">
+    <_dependencies>
       <composition>
         <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
       </composition>
-    </aggregation>
+    </_dependencies>
 
     <!-- Optional legacy XSD -->
-    <aggregation name="_schemas">
+    <_schemas>
       <composition>
         <Schema ref="bricks.xsd" />
       </composition>
-    </aggregation>
+    </_schemas>
 
-    <aggregation name="_types">
+    <_types>
       <composition>
         <TypeRef ref="types/Size3D.bml" />
         <TypeRef ref="types/Direction.bml" />
       </composition>
-    </aggregation>
+    </_types>
 
-    <aggregation name="_blocks">
+    <_blocks>
       <composition>
         <BlockRef ref="blocks/Standard.bml" />
         <BlockRef ref="blocks/Plate.bml" />
         <BlockRef ref="blocks/Tile.bml" />
         <BlockRef ref="presets/StandardPresets.bml" />
       </composition>
-    </aggregation>
+    </_blocks>
   </aggregations>
 
 </block>
@@ -2105,7 +2326,7 @@ same-document Sub-Block instance          → bml:version not required
 bml:id missing on referenced instance     → BML_MISSING_ID
 bml:id missing on bml:each element        → BML_MISSING_ID
 basePresets / Step.part unresolvable     → BML_UNRESOLVABLE_INSTANCE_REF
-qualified FQN::id without export="true"     → BML_UNEXPORTED_INSTANCE_REF
+qualified FQN::id without bml:exportIds="true"     → BML_UNEXPORTED_INSTANCE_REF
 qualified FQN::id with Expression id/ref    → BML_NON_STATIC_INSTANCE_REF
 anonymous static child without bml:id     → auto-ID after directive expansion (not stored in BOM)
 _steps missing or empty       → assembly order = document order of _parts

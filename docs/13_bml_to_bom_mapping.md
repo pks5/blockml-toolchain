@@ -31,13 +31,13 @@ Stage [5] produces the abstract BOM graph with expression **raw** text only. Sta
 
 ## Member Mapping Order
 
-When mapping `<block>` definitions, member elements are appended to `BlockDefinition.members[]` **in BML document order**:
+When mapping `<block>` definitions, member elements are appended to `BlockDefinition.members[]` **in BML document order**. The **element name** is the member name — there is no `name="..."` attribute:
 
 ```text
-<properties>    → each <property> in XML order
-<aggregations>  → each <aggregation> in XML order
-<associations>  → each <association> in XML order
-<capabilities>  → each <capability> in XML order
+<properties>    → each child element in XML order (element name = property name)
+<aggregations>  → each child element in XML order (element name = aggregation name)
+<associations>  → each child element in XML order (element name = association name)
+<capabilities>  → each child element in XML order (element name = capability name)
 ```
 
 ```text
@@ -281,7 +281,7 @@ Duplicate genericType name                   → BML_DUPLICATE_GENERIC (error)
 org.blockml.core.Block                   → omits <baseType> (sole inheritance root)
 ```
 
-TypeBlock BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<aggregation name="_values"><composition>…</composition></aggregation>`; generic Blocks declare parameters via `<genericTypes>`. Branch-specific validation — see `17_type_system_bml.md`.
+TypeBlock BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<_values><composition>…</composition></_values>`; generic Blocks declare parameters via `<genericTypes>`. Branch-specific validation — see `17_type_system_bml.md`.
 
 ### Member attributes
 
@@ -518,8 +518,8 @@ basePresets="brick-1x1 com.other.Presets::color-red"
 Preset instances in `_presets` composition map like any other Block instance. The `name` attribute maps to `memberValues.name`; `bml:id` maps to `BlockInstance.id`.
 
 ```text
-<aggregation name="_presets">
-  <composition export="true">  →  CompositionTemplate.export = true
+<_presets>
+  <composition bml:exportIds="true">  →  CompositionTemplate.exportIds = true
 ```
 
 Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against exported compositions with static target ids — see `00_bom_core.md` — Qualified Block Instance References.
@@ -528,18 +528,18 @@ Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against
 
 ```text
 <aggregations>
-  <aggregation name="_parts" type="…">     → AggregationDefinition (+ typeFqn)
-    <composition export="true">            → AggregationDefinition.composition OR CompositionTemplate
+  <_parts type="…">                        → AggregationDefinition (+ typeFqn)
+    <composition bml:exportIds="true">     → AggregationDefinition.composition OR CompositionTemplate
       …children…
     </composition>
-  </aggregation>
+  </_parts>
 </aggregations>
 
-bare <composition> on definition/instance   → CompositionTemplate for default aggregation
-<aggregation name="…"> on instance          → BlockInstance.aggregationCompositions[]
+bare <composition> on definition            → CompositionTemplate for default aggregation
+<memberName> on instance                    → BlockInstance.aggregationCompositions[]
 ```
 
-The `composition aggregation="…"` attribute is **removed** — aggregation is opened by `<aggregation name="…">`.
+The `composition aggregation="…"` attribute is **removed** — aggregations are opened by member element name.
 
 ### Contract validation (stage [8])
 
@@ -577,7 +577,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.c
 
 Short names resolve via inherited Sub-Blocks of `org.blockml.core.Library` on any Library-typed root block.
 
-Each child requires explicit `<aggregation name="…">` (`_dependencies`, `_schemas`, `_types`, `_blocks`) — Library has no default aggregation.
+Each child requires explicit aggregation members (`_dependencies`, `_schemas`, `_types`, `_blocks`) — Library has no default aggregation.
 
 **Orchestrator (not parser):** after parsing a Library block, resolve each `ref` path relative to the library package root, parse referenced files, and `registerBlockDefinition`. Validate `Dependency.ref` + `version` against a registered Library block FQN.
 

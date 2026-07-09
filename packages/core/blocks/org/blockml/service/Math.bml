@@ -27,7 +27,7 @@
   <capabilities>
 
     <!-- #math.min(a, b) — SCAD: native min(a, b) -->
-    <capability name="min"
+    <min
                 type="org.blockml.capability.Transformation"
                 inputType="{ a: Float, b: Float }"
                 outputType="org.blockml.type.Float">
@@ -40,10 +40,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (a: number, b: number): number => Math.min(a, b)
       ]]></implementation>
-    </capability>
+    </min>
 
     <!-- #math.max(a, b) — SCAD: native max(a, b) -->
-    <capability name="max"
+    <max
                 type="org.blockml.capability.Transformation"
                 inputType="{ a: Float, b: Float }"
                 outputType="org.blockml.type.Float">
@@ -56,10 +56,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (a: number, b: number): number => Math.max(a, b)
       ]]></implementation>
-    </capability>
+    </max>
 
     <!-- #math.abs(x) — SCAD: native abs(x) -->
-    <capability name="abs"
+    <abs
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
                 outputType="org.blockml.type.Float">
@@ -71,10 +71,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.abs(x)
       ]]></implementation>
-    </capability>
+    </abs>
 
     <!-- #math.floor(x) — SCAD: native floor(x) -->
-    <capability name="floor"
+    <floor
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
                 outputType="org.blockml.type.Integer">
@@ -86,10 +86,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.floor(x)
       ]]></implementation>
-    </capability>
+    </floor>
 
     <!-- #math.ceil(x) — SCAD: native ceil(x) -->
-    <capability name="ceil"
+    <ceil
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
                 outputType="org.blockml.type.Integer">
@@ -101,10 +101,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.ceil(x)
       ]]></implementation>
-    </capability>
+    </ceil>
 
     <!-- #math.round(x) — SCAD: native round(x) -->
-    <capability name="round"
+    <round
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
                 outputType="org.blockml.type.Integer">
@@ -117,10 +117,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.round(x)
       ]]></implementation>
-    </capability>
+    </round>
 
     <!-- #math.round_n(x, n) — SCAD: round(x * pow(10, n)) / pow(10, n) -->
-    <capability name="round_n"
+    <round_n
                 type="org.blockml.capability.Transformation"
                 inputType="{ x: Float, n: Integer }"
                 outputType="org.blockml.type.Float">
@@ -134,10 +134,10 @@
         (x: number, n: number): number =>
             Math.round(x * Math.pow(10, n)) / Math.pow(10, n)
       ]]></implementation>
-    </capability>
+    </round_n>
 
     <!-- #math.pow(base, exp) — SCAD: native pow(base, exp) -->
-    <capability name="pow"
+    <pow
                 type="org.blockml.capability.Transformation"
                 inputType="{ base: Float, exp: Float }"
                 outputType="org.blockml.type.Float">
@@ -149,10 +149,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (base: number, exp: number): number => Math.pow(base, exp)
       ]]></implementation>
-    </capability>
+    </pow>
 
     <!-- #math.sqrt(x) — SCAD: native sqrt(x) -->
-    <capability name="sqrt"
+    <sqrt
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
                 outputType="org.blockml.type.Float">
@@ -164,10 +164,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.sqrt(x)
       ]]></implementation>
-    </capability>
+    </sqrt>
 
     <!-- #math.clamp(x, lo, hi) — SCAD: min(max(x, lo), hi) -->
-    <capability name="clamp"
+    <clamp
                 type="org.blockml.capability.Transformation"
                 inputType="{ x: Float, lo: Float, hi: Float }"
                 outputType="org.blockml.type.Float">
@@ -182,7 +182,7 @@
         (x: number, lo: number, hi: number): number =>
             Math.min(Math.max(x, lo), hi)
       ]]></implementation>
-    </capability>
+    </clamp>
 
   </capabilities>
 

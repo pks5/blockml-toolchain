@@ -24,13 +24,13 @@
   <final>true</final>
 
   <associations>
-    <association name="part" type="com.machineblocks.core.Block"></association>
+    <part type="com.machineblocks.core.Block"></part>
   </associations>
 
   <properties>
-    <property name="description" type="String">
+    <description type="String">
       <documentation>Additional description of the step.</documentation>
-    </property>
+    </description>
   </properties>
 
 </block>

@@ -21,15 +21,15 @@
   <version>1.0.0</version>
 
   <properties>
-    <property name="x" type="org.blockml.type.Float">
+    <x type="org.blockml.type.Float">
       <documentation>Size in X direction.</documentation>
-    </property>
-    <property name="y" type="org.blockml.type.Float">
+    </x>
+    <y type="org.blockml.type.Float">
       <documentation>Size in Y direction.</documentation>
-    </property>
-    <property name="z" type="org.blockml.type.Float">
+    </y>
+    <z type="org.blockml.type.Float">
       <documentation>Size in Z direction.</documentation>
-    </property>
+    </z>
   </properties>
 
 </block>

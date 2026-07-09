@@ -31,16 +31,16 @@
   </subTypes>
 
   <properties>
-    <property name="description" type="String">
+    <description type="String">
       <documentation>Human-readable summary of what this library provides.</documentation>
-    </property>
+    </description>
   </properties>
 
   <aggregations>
-    <aggregation name="_dependencies" type="Dependency[]" />
-    <aggregation name="_schemas"     type="Schema[]" />
-    <aggregation name="_types"        type="TypeRef[]" />
-    <aggregation name="_blocks"       type="BlockRef[]" />
+    <_dependencies type="Dependency[]" />
+    <_schemas     type="Schema[]" />
+    <_types        type="TypeRef[]" />
+    <_blocks       type="BlockRef[]" />
   </aggregations>
 
   <subBlocks>
@@ -54,12 +54,12 @@
       <version>1.0.0</version>
       <final>true</final>
       <properties>
-        <property name="ref" type="String">
+        <ref type="String">
           <documentation>FQN of the required Library (e.g. com.machineblocks.core.CoreLibrary).</documentation>
-        </property>
-        <property name="version" type="String">
+        </ref>
+        <version type="String">
           <documentation>Exact semantic version required — no implicit latest.</documentation>
-        </property>
+        </version>
       </properties>
     </block>
 
@@ -72,9 +72,9 @@
       <version>1.0.0</version>
       <final>true</final>
       <properties>
-        <property name="ref" type="String">
+        <ref type="String">
           <documentation>Path to the .xsd file relative to the library package root.</documentation>
-        </property>
+        </ref>
       </properties>
     </block>
 
@@ -87,9 +87,9 @@
       <version>1.0.0</version>
       <final>true</final>
       <properties>
-        <property name="ref" type="String">
+        <ref type="String">
           <documentation>Path to the type .bml file relative to the library package root.</documentation>
-        </property>
+        </ref>
       </properties>
     </block>
 
@@ -102,9 +102,9 @@
       <version>1.0.0</version>
       <final>true</final>
       <properties>
-        <property name="ref" type="String">
+        <ref type="String">
           <documentation>Path to the block .bml file relative to the library package root.</documentation>
-        </property>
+        </ref>
       </properties>
     </block>
 

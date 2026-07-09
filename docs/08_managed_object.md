@@ -114,7 +114,7 @@ For every declared Member, dedicated getters and setters are generated. They are
 
 ```typescript
 // Block definition declares:
-//   property name="size" type="com.machineblocks.type.Size3D" value="[1,1,1]"
+//   <size type="com.machineblocks.type.Size3D"><value>[1,1,1]</value></size>
 
 // Generated:
 getSize(): Size3D {
@@ -186,7 +186,7 @@ destroyParts(): this {
 
 ```typescript
 // Block definition declares:
-//   aggregation name="tooltip" type="org.blockml.service.Formatter"
+//   <tooltip type="org.blockml.service.Formatter"
 
 // Generated:
 getTooltip(): Formatter | null {

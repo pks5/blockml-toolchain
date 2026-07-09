@@ -27,42 +27,46 @@
   <version>3.0.0</version>
 
   <properties>
-    <property name="description" type="String"
-              value="Standard brick types for MachineBlocks" />
-    <property name="package" type="String"
-              value="com.machineblocks.bricks" />
+    <description type="String"
+              >
+      <value>Standard brick types for MachineBlocks</value>
+    </description>
+    <package type="String"
+              >
+      <value>com.machineblocks.bricks</value>
+    </package>
   </properties>
 
   <aggregations>
-    <aggregation name="_dependencies">
+    <_dependencies>
       <composition>
         <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
       </composition>
-    </aggregation>
+    </_dependencies>
 
     <!-- Optional legacy XSD — omit when types are exported via _types -->
-    <aggregation name="_schemas">
+    <_schemas>
       <composition>
         <Schema ref="bricks.xsd" />
       </composition>
-    </aggregation>
+    </_schemas>
 
-    <aggregation name="_types">
+    <_types>
       <composition>
         <TypeRef ref="types/Size3D.bml" />
         <TypeRef ref="types/Direction.bml" />
         <TypeRef ref="types/Color.bml" />
       </composition>
-    </aggregation>
+    </_types>
 
-    <aggregation name="_blocks">
+    <_blocks>
       <composition>
         <BlockRef ref="blocks/Standard.bml" />
         <BlockRef ref="blocks/Plate.bml" />
         <BlockRef ref="blocks/Tile.bml" />
         <BlockRef ref="presets/StandardPresets.bml" />
       </composition>
-    </aggregation>
+    </_blocks>
   </aggregations>
 
 </block>

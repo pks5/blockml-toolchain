@@ -27,7 +27,7 @@
   <capabilities>
 
     <!-- #bools.isTrue(x) -->
-    <capability name="isTrue"
+    <isTrue
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Boolean"
                 outputType="org.blockml.type.Boolean">
@@ -40,10 +40,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: boolean): boolean => x === true
       ]]></implementation>
-    </capability>
+    </isTrue>
 
     <!-- #bools.isFalse(x) -->
-    <capability name="isFalse"
+    <isFalse
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Boolean"
                 outputType="org.blockml.type.Boolean">
@@ -56,7 +56,7 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: boolean): boolean => x === false
       ]]></implementation>
-    </capability>
+    </isFalse>
 
   </capabilities>
 

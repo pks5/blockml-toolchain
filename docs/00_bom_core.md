@@ -228,17 +228,17 @@ Used in member values that reference other instances — e.g. `basePresets`, `St
 
 A qualified reference is valid **only when both** conditions hold:
 
-**1. Export on the target composition.** The composition that contains the target instance must declare `export="true"`. Only instances in an exported composition are visible for qualified references.
+**1. Export on the target composition.** The composition that contains the target instance must declare `bml:exportIds="true"`. Only instances in an exported composition are visible for qualified references.
 
 ```xml
-<aggregation name="_presets">
-  <composition export="true">
+<_presets>
+  <composition bml:exportIds="true">
     <bricks:Standard bml:id="brick-2x4" bml:version="3.0.0" size="[2, 4, 3]" />
   </composition>
-</aggregation>
+</_presets>
 ```
 
-Without `export="true"` on that composition, `com.machineblocks.bricks.StandardPresets::brick-2x4` is invalid → `BML_UNEXPORTED_INSTANCE_REF`.
+Without `bml:exportIds="true"` on that composition, `com.machineblocks.bricks.StandardPresets::brick-2x4` is invalid → `BML_UNEXPORTED_INSTANCE_REF`.
 
 **2. Static target.** The target instance must be statically resolvable at validate time:
 
@@ -258,7 +258,7 @@ Reference     — literal token in the attribute value (not wrapped in ${ … })
 
 Dynamic references → `BML_NON_STATIC_INSTANCE_REF`.
 
-Same-document references (unqualified id only, e.g. `basePresets="brick-2x4"` within the same Block) resolve within the enclosing Block's aggregations and do not require `export="true"`. The export rule applies to **`{BlockFQN}::{id}`** references only.
+Same-document references (unqualified id only, e.g. `basePresets="brick-2x4"` within the same Block) resolve within the enclosing Block's aggregations and do not require `bml:exportIds="true"`. The export rule applies to **`{BlockFQN}::{id}`** references only.
 
 **BOM storage:** the parser stores `bml:id` only when authored. Auto-IDs are not written into `BomDocument` — see `12_bom_object_model.md` — Instance ID Rules.
 
@@ -491,12 +491,13 @@ TypeBlocks may therefore appear both as type references on Properties and as Blo
 A Property may declare a list of validation constraints. Each constraint is a Block instance whose `baseType` chain includes `org.blockml.core.Constraint`. The compiler binds each constraint's generic parameter `T` to the property type (or element type for collection constraints) and validates both the constraint instance and the property value.
 
 ```xml
-<property name="width" type="Float" value="50">
+<width type="Float">
+  <value>50</value>
   <constraints>
     <constraint:Min value="0"/>
     <constraint:Max value="100"/>
   </constraints>
-</property>
+</width>
 ```
 
 Constraints are enforceable — value violations emit `BML_CONSTRAINT_VIOLATION`. See `18_constraints_and_suggestions.md`.
@@ -506,13 +507,14 @@ Constraints are enforceable — value violations emit `BML_CONSTRAINT_VIOLATION`
 A Property may declare a list of suggested values. Each suggestion is a Block instance of the **same type as the property** — no special base type. Suggestions are purely metadata — they do not affect type validation or compilation. Editors display the property as a combobox; the SCAD BlockProcessor generates an OpenSCAD Customizer dropdown comment.
 
 ```xml
-<property name="textColor" type="String" value="#303D4E">
+<textColor type="String">
+  <value>#303D4E</value>
   <suggestions>
     <String value="#303D4E"/>
     <String value="#EAC645"/>
     <String value="#58B99D"/>
   </suggestions>
-</property>
+</textColor>
 ```
 
 The author can always enter any value regardless of suggestions. See `18_constraints_and_suggestions.md`.
@@ -522,9 +524,16 @@ The author can always enter any value regardless of suggestions. See `18_constra
 A `value` may be a static literal or an Expression. Expressions in `value` allow a Property's defined value to be derived from other Properties of the same Block:
 
 ```xml
-<property name="numberOfSamples" type="Integer" value="5" />
-<property name="labelSize"       type="Integer" value="5" />
-<property name="size"            type="Size3D"
+<numberOfSamples type="Integer">
+  <value>5</value>
+</numberOfSamples>
+<labelSize type="Integer">
+  <value>5</value>
+</labelSize>
+<size type="Size3D">
+  <value>${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }</value>
+</size>
+```
           value="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
 ```
 
@@ -885,11 +894,11 @@ A Transformation Capability implementation can live directly on any Block whose 
 ```xml
 <!-- Direct on Block — valid if baseType supports OpenSCAD -->
 <capabilities>
-  <capability name="formatValue" type="org.blockml.capability.Transformation" ...>
+  <formatValue type="org.blockml.capability.Transformation" ...>
     <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
 function formatValue(x) = ...;
     ]]></implementation>
-  </capability>
+  </formatValue>
 </capabilities>
 ```
 
@@ -927,8 +936,8 @@ A Composition fills an Aggregation with concrete child Block instances. **Compos
 Compositions may appear on Block definitions (filling declared or inherited aggregations) and on Block instances (opening aggregations inline). Every Block instance may optionally contain its own nested composition — the language is fully recursive.
 
 ```text
-aggregation   — opened by <aggregation name="…"> on definitions and instances
-export        — optional on <composition>; export="true" marks instances as referencable via {EnclosingBlockFQN}::{id}
+aggregation   — opened by aggregation member element name on definitions and instances
+export        — optional on <composition>; bml:exportIds="true" marks instances as referencable via {EnclosingBlockFQN}::{id}
 children      — ordered list of child Block instances (each may contain nested compositions)
 ```
 
@@ -936,7 +945,7 @@ children      — ordered list of child Block instances (each may contain nested
 
 ```text
 Single effective default aggregation  → bare <composition> permitted (sugar)
-Multiple aggregations                 → each opened explicitly via <aggregation name="…">
+Multiple aggregations                 → each opened explicitly by member element name
 Ambiguous bare <composition>          → BML_AMBIGUOUS_COMPOSITION
 ```
 
@@ -1172,7 +1181,7 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a Block defi
 ```text
 type — FQN of this preset block (e.g. com.machineblocks.bricks.StandardPresets)
 version           — semantic version
-composition       — Block instances in aggregation _presets; use export="true" for cross-file {FQN}::{id} references
+composition       — Block instances in aggregation _presets; use bml:exportIds="true" for cross-file {FQN}::{id} references
 ```
 
 Each preset instance in `_presets`:
@@ -1197,7 +1206,7 @@ Example:
   com.machineblocks.bricks.StandardPresets::brick-2x4
 ```
 
-Qualified references require `export="true"` on the target composition and a **literal static `id`** on the target instance — see Instance Identity → Qualified Block Instance References.
+Qualified references require `bml:exportIds="true"` on the target composition and a **literal static `id`** on the target instance — see Instance Identity → Qualified Block Instance References.
 
 ### Preset in Compositions
 

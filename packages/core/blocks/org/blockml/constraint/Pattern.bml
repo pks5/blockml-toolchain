@@ -25,9 +25,9 @@
   </genericTypes>
 
   <properties>
-    <property name="value" type="org.blockml.type.String">
+    <value type="org.blockml.type.String">
       <documentation>Regular expression the property value must match.</documentation>
-    </property>
+    </value>
   </properties>
 
 </block>

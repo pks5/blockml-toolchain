@@ -27,7 +27,7 @@
   <capabilities>
 
     <!-- #strings.trim(s) -->
-    <capability name="trim"
+    <trim
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.String"
                 outputType="org.blockml.type.String">
@@ -39,10 +39,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string): string => s.trim()
       ]]></implementation>
-    </capability>
+    </trim>
 
     <!-- #strings.toUpperCase(s) -->
-    <capability name="toUpperCase"
+    <toUpperCase
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.String"
                 outputType="org.blockml.type.String">
@@ -54,10 +54,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string): string => s.toUpperCase()
       ]]></implementation>
-    </capability>
+    </toUpperCase>
 
     <!-- #strings.toLowerCase(s) -->
-    <capability name="toLowerCase"
+    <toLowerCase
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.String"
                 outputType="org.blockml.type.String">
@@ -69,10 +69,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string): string => s.toLowerCase()
       ]]></implementation>
-    </capability>
+    </toLowerCase>
 
     <!-- #strings.concat(a, b, ...) -->
-    <capability name="concat"
+    <concat
                 type="org.blockml.capability.Transformation"
                 inputType="Array<String>"
                 outputType="org.blockml.type.String">
@@ -84,10 +84,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (...parts: string[]): string => parts.join('')
       ]]></implementation>
-    </capability>
+    </concat>
 
     <!-- #strings.length(s) -->
-    <capability name="length"
+    <length
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.String"
                 outputType="org.blockml.type.Integer">
@@ -99,10 +99,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string): number => s.length
       ]]></implementation>
-    </capability>
+    </length>
 
     <!-- #strings.contains(s, fragment) -->
-    <capability name="contains"
+    <contains
                 type="org.blockml.capability.Transformation"
                 inputType="{ s: String, fragment: String }"
                 outputType="org.blockml.type.Boolean">
@@ -114,10 +114,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, fragment: string): boolean => s.includes(fragment)
       ]]></implementation>
-    </capability>
+    </contains>
 
     <!-- #strings.startsWith(s, prefix) -->
-    <capability name="startsWith"
+    <startsWith
                 type="org.blockml.capability.Transformation"
                 inputType="{ s: String, prefix: String }"
                 outputType="org.blockml.type.Boolean">
@@ -129,10 +129,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, prefix: string): boolean => s.startsWith(prefix)
       ]]></implementation>
-    </capability>
+    </startsWith>
 
     <!-- #strings.endsWith(s, suffix) -->
-    <capability name="endsWith"
+    <endsWith
                 type="org.blockml.capability.Transformation"
                 inputType="{ s: String, suffix: String }"
                 outputType="org.blockml.type.Boolean">
@@ -144,10 +144,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, suffix: string): boolean => s.endsWith(suffix)
       ]]></implementation>
-    </capability>
+    </endsWith>
 
     <!-- #strings.indexOf(s, fragment) -->
-    <capability name="indexOf"
+    <indexOf
                 type="org.blockml.capability.Transformation"
                 inputType="{ s: String, fragment: String }"
                 outputType="org.blockml.type.Integer">
@@ -159,10 +159,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, fragment: string): number => s.indexOf(fragment)
       ]]></implementation>
-    </capability>
+    </indexOf>
 
     <!-- #strings.substring(s, start, end) -->
-    <capability name="substring"
+    <substring
                 type="org.blockml.capability.Transformation"
                 inputType="{ s: String, start: Integer, end: Integer }"
                 outputType="org.blockml.type.String">
@@ -174,10 +174,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (s: string, start: number, end: number): string => s.substring(start, end)
       ]]></implementation>
-    </capability>
+    </substring>
 
     <!-- #strings.replace(s, target, replacement) -->
-    <capability name="replace"
+    <replace
                 type="org.blockml.capability.Transformation"
                 inputType="{ s: String, target: String, replacement: String }"
                 outputType="org.blockml.type.String">
@@ -190,10 +190,10 @@
         (s: string, target: string, replacement: string): string =>
             s.replace(target, replacement)
       ]]></implementation>
-    </capability>
+    </replace>
 
     <!-- #strings.replaceAll(s, target, replacement) -->
-    <capability name="replaceAll"
+    <replaceAll
                 type="org.blockml.capability.Transformation"
                 inputType="{ s: String, target: String, replacement: String }"
                 outputType="org.blockml.type.String">
@@ -206,7 +206,7 @@
         (s: string, target: string, replacement: string): string =>
             s.split(target).join(replacement)
       ]]></implementation>
-    </capability>
+    </replaceAll>
 
   </capabilities>
 

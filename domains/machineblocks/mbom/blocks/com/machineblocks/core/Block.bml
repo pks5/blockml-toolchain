@@ -23,22 +23,18 @@
 
   <abstract>true</abstract>
 
-  
-
-  
-
   <properties>
-    <property name="name" type="String">
+    <name type="String">
       <documentation>The human readable name of the Block.</documentation>
-    </property>
+    </name>
   </properties>
   
   <associations>
-    <association name="basePresets" type="_self[]"></association>
+    <basePresets type="_self[]"></basePresets>
   </associations>
 
   <aggregations>
-    <aggregation name="_presets" type="com.machineblocks.core.Block[]" />
+    <_presets type="com.machineblocks.core.Block[]" />
   </aggregations>
   
 </block>

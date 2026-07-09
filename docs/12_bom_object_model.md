@@ -531,10 +531,10 @@ interface CompositionTemplate {
   /** Target aggregation name — e.g. "_parts", "_blocks", "_presets" */
   aggregationName: string
   /**
-   * export="true" on nested <composition> — children with explicit static id
+   * bml:exportIds="true" on <composition> or <bml:container> — children with explicit static id
    * are referencable via {EnclosingBlockFQN}::{id} from other documents.
    */
-  export?: boolean
+  exportIds?: boolean
   /** bml:with on <composition> */
   directives?: DirectiveAttribute[]
   children: CompositionNode[]
@@ -707,28 +707,28 @@ com.machineblocks.bricks.StandardPresets::brick-2x4
 Valid only when:
 
 ```text
-1. Target composition has export="true"
+1. Target composition has bml:exportIds="true"
 2. Target instance has explicit literal bml:id (no Expression, not bml:each-only)
 3. Reference attribute value is a literal token (not ${ … })
 ```
 
 ```text
 <!-- Target document: StandardPresets.bml -->
-<aggregation name="_presets">
-  <composition export="true">
+<_presets>
+  <composition bml:exportIds="true">
     <bricks:Standard bml:id="brick-2x4" … />     ← referencable
   </composition>
-</aggregation>
+</_presets>
 
 <!-- Referencing document -->
 <bricks:Standard basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />  ✓
 
 <!-- Aggregation without export -->
-<aggregation name="_presets">
+<_presets>
   <composition>
     <bricks:Standard bml:id="brick-2x4" … />
   </composition>
-</aggregation>
+</_presets>
 → com.machineblocks.bricks.StandardPresets::brick-2x4  ✗  BML_UNEXPORTED_INSTANCE_REF
 
 <!-- Dynamic target or reference -->
@@ -736,7 +736,7 @@ Valid only when:
 <bricks:Standard basePresets="${ ref }" … />                      ✗  BML_NON_STATIC_INSTANCE_REF
 ```
 
-Same-document unqualified ids (`basePresets="brick-2x4"`) do not require `export="true"`.
+Same-document unqualified ids (`basePresets="brick-2x4"`) do not require `bml:exportIds="true"`.
 
 Local validation examples:
 
@@ -789,7 +789,7 @@ interface BlockInstance {
 
   /**
    * Nested aggregation compositions on this instance.
-   * Parsed from <aggregation name="…"><composition>…</composition></aggregation>
+   * Parsed from <{aggregationName}><composition>…</composition></{aggregationName}>
    * or bare <composition> when the referenced Block has a unique default aggregation.
    */
   aggregationCompositions?: InstanceAggregationComposition[]
@@ -1046,7 +1046,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  resolveEffectiveMembers() — property/capability references in expressions
 ✓  External instance references have exact pinned version (BML_MISSING_VERSION / BML_UNKNOWN_VERSION)
 ✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
-✓  Qualified FQN::id references target export="true" compositions with static literal ids
+✓  Qualified FQN::id references target bml:exportIds="true" compositions with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
 ✓  Sub-Block baseType ∈ parent's subTypes (domain rule)
 ✓  Expression result types match member types
@@ -1088,7 +1088,7 @@ BML_MISSING_VERSION           — bml:version absent on external BlockInstance r
 BML_UNKNOWN_VERSION           — version present but no matching BlockDefinition in TypeRegistry
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit bml:id
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
-BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without export="true"
+BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without bml:exportIds="true"
 BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
 BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members
 BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a TypeBlock

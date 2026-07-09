@@ -25,9 +25,9 @@
   </genericTypes>
 
   <properties>
-    <property name="value" type="org.blockml.type.Integer">
+    <value type="org.blockml.type.Integer">
       <documentation>Minimum length (inclusive).</documentation>
-    </property>
+    </value>
   </properties>
 
 </block>

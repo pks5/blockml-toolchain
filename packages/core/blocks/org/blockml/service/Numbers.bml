@@ -31,7 +31,7 @@
       Formats a number as a decimal string with locale-style rules.
       SCAD: no native — Processor emits custom formatting logic.
     -->
-    <capability name="formatDecimal"
+    <formatDecimal
                 type="org.blockml.capability.Transformation"
                 inputType="{ x: Float, minInt: Integer, decPoint: String, minFrac: Integer }"
                 outputType="org.blockml.type.String">
@@ -53,7 +53,7 @@
           return decPoint === '.' ? s : s.replace('.', decPoint);
         }
       ]]></implementation>
-    </capability>
+    </formatDecimal>
 
   </capabilities>
 

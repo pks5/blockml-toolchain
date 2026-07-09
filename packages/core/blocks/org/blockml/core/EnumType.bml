@@ -23,7 +23,7 @@
   <abstract>true</abstract>
 
   <aggregations>
-    <aggregation name="_values"
+    <_values
                  type="_self[]"
                  default="true" />
   </aggregations>

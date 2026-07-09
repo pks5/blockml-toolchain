@@ -25,9 +25,9 @@
   </genericTypes>
 
   <properties>
-    <property name="value" type="T">
+    <value type="T">
       <documentation>Maximum allowed value (inclusive).</documentation>
-    </property>
+    </value>
   </properties>
 
 </block>

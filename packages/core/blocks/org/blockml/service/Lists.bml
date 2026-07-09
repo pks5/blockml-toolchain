@@ -27,7 +27,7 @@
   <capabilities>
 
     <!-- #lists.size(list) -->
-    <capability name="size"
+    <size
                 type="org.blockml.capability.Transformation"
                 inputType="Array<Object>"
                 outputType="org.blockml.type.Integer">
@@ -39,10 +39,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (list: unknown[]): number => list.length
       ]]></implementation>
-    </capability>
+    </size>
 
     <!-- #lists.isEmpty(list) -->
-    <capability name="isEmpty"
+    <isEmpty
                 type="org.blockml.capability.Transformation"
                 inputType="Array<Object>"
                 outputType="org.blockml.type.Boolean">
@@ -54,10 +54,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (list: unknown[]): boolean => list.length === 0
       ]]></implementation>
-    </capability>
+    </isEmpty>
 
     <!-- #lists.contains(list, element) -->
-    <capability name="contains"
+    <contains
                 type="org.blockml.capability.Transformation"
                 inputType="{ list: Array<Object>, element: Object }"
                 outputType="org.blockml.type.Boolean">
@@ -69,10 +69,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (list: unknown[], element: unknown): boolean => list.includes(element)
       ]]></implementation>
-    </capability>
+    </contains>
 
     <!-- #lists.first(list) -->
-    <capability name="first"
+    <first
                 type="org.blockml.capability.Transformation"
                 inputType="Array<Object>"
                 outputType="org.blockml.type.Float">
@@ -85,10 +85,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (list: unknown[]): unknown => list[0]
       ]]></implementation>
-    </capability>
+    </first>
 
     <!-- #lists.last(list) -->
-    <capability name="last"
+    <last
                 type="org.blockml.capability.Transformation"
                 inputType="Array<Object>"
                 outputType="org.blockml.type.Float">
@@ -101,10 +101,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (list: unknown[]): unknown => list[list.length - 1]
       ]]></implementation>
-    </capability>
+    </last>
 
     <!-- #lists.get(list, index) -->
-    <capability name="get"
+    <get
                 type="org.blockml.capability.Transformation"
                 inputType="{ list: Array<Object>, index: Integer }"
                 outputType="org.blockml.type.Float">
@@ -117,10 +117,10 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (list: unknown[], index: number): unknown => list[index]
       ]]></implementation>
-    </capability>
+    </get>
 
     <!-- #lists.concat(a, b, ...) -->
-    <capability name="concat"
+    <concat
                 type="org.blockml.capability.Transformation"
                 inputType="Array<Array<Object>>"
                 outputType="Array<Object>">
@@ -132,14 +132,14 @@
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (...lists: unknown[][]): unknown[] => lists.flat()
       ]]></implementation>
-    </capability>
+    </concat>
 
     <!--
       #lists.sequence(start, end)  or  #lists.sequence(start, end, step)
       Generates a numeric sequence from start to end (inclusive) with optional step.
       When step is omitted, defaults to 1 (or -1 when start &gt; end).
     -->
-    <capability name="sequence"
+    <sequence
                 type="org.blockml.capability.Transformation"
                 inputType="{ start: Integer, end: Integer, step: Integer }"
                 outputType="Array<Integer>">
@@ -163,7 +163,7 @@
           return result;
         }
       ]]></implementation>
-    </capability>
+    </sequence>
 
   </capabilities>
 

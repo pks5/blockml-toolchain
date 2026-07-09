@@ -7,14 +7,14 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>MachineBlocks object composed of child block instances.</idea>
 
-  <documentation>Composable MachineBlocks Block with default _parts aggregation. On Sets, _parts holds placed block instances (direction, offset, appliedPresets). On other composites, _parts holds child blocks for SCAD composition.</documentation>
+  <documentation>Composable MachineBlocks Block with default _parts aggregation. On Sets, _parts
+    holds placed block instances (direction, offset, appliedPresets). On other composites, _parts
+    holds child blocks for SCAD composition.</documentation>
 
   <name>CompositeBlock</name>
   <type>com.machineblocks.core.CompositeBlock</type>
@@ -33,9 +33,9 @@
   </implTypes>
 
   <aggregations>
-    <aggregation name="_parts"
-                 type="com.machineblocks.core.Block[]"
-                 default="true" />
+    <_parts
+      type="com.machineblocks.core.Block[]"
+      default="true" />
   </aggregations>
 
 </block>

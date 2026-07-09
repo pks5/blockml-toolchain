@@ -23,8 +23,8 @@
   <abstract>true</abstract>
 
   <properties>
-    <property name="value" type="_self">
+    <value type="_self">
       <documentation>The value of the primitive.</documentation>
-    </property>
+    </value>
   </properties>
 </block>
