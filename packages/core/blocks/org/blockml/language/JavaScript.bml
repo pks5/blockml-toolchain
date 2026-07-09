@@ -1,0 +1,20 @@
+<!--
+  BlockML Core — JavaScript implementation language
+
+  FQN: org.blockml.language.JavaScript
+-->
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:core="org.blockml.core"
+  xmlns:lang="org.blockml.language">
+
+  <idea>JavaScript as an implementation language for capabilities.</idea>
+
+  <documentation>ProgrammingLanguage for JavaScript function implementations on Capabilities.</documentation>
+
+  <name>JavaScript</name>
+  <type>lang:JavaScript</type>
+  <baseType>core:ProgrammingLanguage</baseType>
+  <version>1.0.0</version>
+
+</block>

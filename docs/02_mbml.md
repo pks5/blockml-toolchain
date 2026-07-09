@@ -236,7 +236,7 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
 <final>                       — true | false (default false). Final types cannot be used as baseType.
                               — self-closing <final /> is equivalent to true (preferred at root)
 <subTypes>          — override: permitted Sub-Block baseTypes (omit to inherit — see Framework Base Types)
-<implTypes>         — org.blockml.language.* FQNs for <implementation type="...">
+<languages>         — Language references for <implementation type="...">
 <properties>    — Property declarations. Omit if no custom properties or default overrides needed.
 <aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice.
 <associations>  — Association declarations.
@@ -256,14 +256,14 @@ Framework base types (`org.blockml.core.Block`, `com.machineblocks.core.Block`, 
 <final />
 
 <subTypes>
-  <subType type="com.machineblocks.core.Block" />
-  <subType type="org.blockml.core.Entity" />
+  <core:Block />
+  <bcore:Entity />
 </subTypes>
 
-<implTypes>
-  <implType type="org.blockml.language.OpenSCAD" />
-  <implType type="org.blockml.language.TypeScript" />
-</implTypes>
+<languages>
+  <lang:OpenSCAD />
+  <lang:TypeScript />
+</languages>
 ```
 
 ```text

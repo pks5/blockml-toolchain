@@ -497,8 +497,10 @@ org.blockml.core.Block                                  ← packages/core/…/Bl
   org.blockml.core.ValueType                            ← ValueType.bml (abstract)
   org.blockml.core.Language                             ← Language.bml (abstract)
     org.blockml.core.ProgrammingLanguage                ← ProgrammingLanguage.bml (abstract)
-      org.blockml.language.TypeScript · OpenSCAD · PseudoCode
-    org.blockml.language.English · German
+      org.blockml.language.TypeScript · OpenSCAD · PseudoCode · …
+    org.blockml.core.MarkupLanguage                       ← MarkupLanguage.bml (abstract)
+      org.blockml.language.XML · JSON · YML
+    org.blockml.language.English · German · French · Spanish · Chinese · Japanese · Russian
   org.blockml.core.Entity                               ← Entity.bml (abstract)
       org.blockml.service.Math                          ← core/…/service/Math.bml
   com.machineblocks.core.Block                          ← mbom/…/Block.bml (abstract)
@@ -533,7 +535,7 @@ Defined in `CompositeBlock.bml`. Extends `Block`. Adds `_parts` as the default c
 Extends:        com.machineblocks.core.Block
 Aggregations:   _parts (type: com.machineblocks.core.Block[], default)
 subTypes: Block
-implTypes: OpenSCAD
+languages: OpenSCAD
 ```
 
 ### com.machineblocks.core.NativeBlock
@@ -577,7 +579,7 @@ Declared on `CompositeBlock.bml` (enables Sub-Blocks for composites):
 
 ```xml
 <subTypes>
-  <subType type="com.machineblocks.core.Block" />
+  <core:Block />
 </subTypes>
 ```
 
@@ -592,14 +594,14 @@ org.blockml.service.Math              — baseType: org.blockml.core.Entity
 
 To close Sub-Blocks on a type whose parent enabled them: `<subTypes/>` (explicit empty override).
 
-### implTypes
+### languages
 
 Declared on `CompositeBlock.bml`:
 
 ```xml
-<implTypes>
-  <implType type="org.blockml.language.OpenSCAD" />
-</implTypes>
+<languages>
+  <lang:OpenSCAD />
+</languages>
 ```
 
 ```text

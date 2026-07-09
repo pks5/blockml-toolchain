@@ -243,7 +243,7 @@ Rules:
 type attribute   — required; must be org.blockml.language.* FQN (not a language= shorthand)
 Missing type     → BML_MISSING_IMPLEMENTATION_TYPE (error)
 Unknown type FQN → BML_IMPLEMENTATION_UNKNOWN_TYPE (error)
-Unsupported type → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseType implTypes)
+Unsupported type → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseType languages)
 ```
 
 V1 known types: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`.
@@ -260,8 +260,8 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
 <abstract />                                 → block.abstract = true  (equivalent: <abstract>true</abstract>)
 <final />                                    → block.final = true     (equivalent: <final>true</final>)
-<subType type="…"/>                          → block.subTypes[] (explicit override)
-<implType type="…"/>                         → block.implTypes[]
+<core:Block />                               → block.subTypes[] (direct Block reference in <subTypes>)
+<lang:OpenSCAD />                            → block.languages[] (direct Language reference in <languages>)
 <contract type="…"/>                        → block.contracts[]   (root block only)
 <genericType name="…" baseType="…"/>            → block.genericTypes[]    (root block only)
 ```
@@ -273,7 +273,7 @@ Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1
 Omitted abstract/final                 → false
 Omitted <subTypes>                     → undefined — inherit effective subTypes from baseType chain
 Empty <subTypes/>                        → block.subTypes = [] (explicit override — forbid Sub-Blocks)
-Omitted implTypes / contracts / genericTypes → inherit from baseType at validate
+Omitted languages / contracts / genericTypes → inherit from baseType at validate
 <contracts> on Sub-Block                 → BML_CONTRACT_NOT_ON_ROOT (error)
 Duplicate contract type                → BML_DUPLICATE_CONTRACT (error)
 <genericTypes> on Sub-Block                  → BML_GENERIC_NOT_ON_ROOT (error)

@@ -88,13 +88,14 @@ Prefer the self-closing form for root flags set once and not overridable by chil
 
 ```xml
 <subTypes>
-  <subType type="com.machineblocks.core.Block" />
-  <subType type="org.blockml.core.Entity" />
+  <core:Block />
+  <bcore:Entity />
 </subTypes>
 ```
 
 ```text
-Lists FQNs permitted as baseType on Sub-Blocks in <subBlocks>
+Lists Block type references permitted as baseType on Sub-Blocks in <subBlocks>.
+Each child element is a direct Block reference (element name = FQN via xmlns prefix).
 
 Default (no declaration on this block):  [] — Sub-Blocks forbidden until explicitly enabled
 Omitted <subTypes>:                      inherit effective subTypes from baseType chain
@@ -107,17 +108,18 @@ merely to restate the default — omit the element instead.
 Sub-Block baseType not in effective subTypes → BML_INVALID_SUBBLOCK_TYPE
 ```
 
-### `<implTypes>`
+### `<languages>`
 
 ```xml
-<implTypes>
-  <implType type="org.blockml.language.OpenSCAD" />
-  <implType type="org.blockml.language.TypeScript" />
-</implTypes>
+<languages>
+  <lang:OpenSCAD />
+  <lang:TypeScript />
+</languages>
 ```
 
 ```text
-Lists org.blockml.language.* FQNs permitted on <implementation type="...">
+Lists Language references permitted on <implementation type="...">.
+Each child element is a direct Language reference (element name = FQN via xmlns prefix).
 Omitted = inherit from baseType
 Unknown type on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 ```
@@ -161,7 +163,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/core/Constraint.bml
      org/blockml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
      org/blockml/core/
-     org/blockml/core/Language.bml · ProgrammingLanguage.bml
+     org/blockml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/service/Math.bml · Strings.bml · …
@@ -214,7 +216,7 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/blocks/
   org/blockml/core/
-    Block.bml · ValueType.bml · Constraint.bml · Language.bml · ProgrammingLanguage.bml · BlockLibrary.bml · …
+    Block.bml · ValueType.bml · Constraint.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · BlockLibrary.bml · …
   org/blockml/constraint/
     Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
   org/blockml/service/

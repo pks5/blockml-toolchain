@@ -158,7 +158,7 @@ interface BlockDefinition {
   subTypes?: string[]
 
   /** org.blockml.language.* FQNs allowed on capability implementations. Default: inherit. */
-  implTypes?: string[]
+  languages?: string[]
 
   /** Abstract Block FQNs whose member surface this Block implements (contracts / interfaces).
    * Root block only. Validator checks effective members against each contract type.

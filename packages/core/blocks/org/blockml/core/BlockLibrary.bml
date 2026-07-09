@@ -30,7 +30,7 @@
   <abstract />
 
   <subTypes>
-    <subType type="core:Block" />
+    <core:Block />
   </subTypes>
 
   <properties>

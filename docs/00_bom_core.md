@@ -881,13 +881,13 @@ Implementation language types (org.blockml.language.*):
   org.blockml.language.OpenSCAD     — OpenSCAD function(s) in CDATA
 
 baseType declares:
-  implTypes: [org.blockml.language.OpenSCAD]
+  languages: [org.blockml.language.OpenSCAD]
     — e.g. com.machineblocks.core.Block
-  implTypes: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
+  languages: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
     — e.g. org.blockml.core.Entity
 ```
 
-If a Block carries `<implementation type="org.blockml.language.OpenSCAD">` but its `baseType` does not list that type in `implTypes`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
+If a Block carries `<implementation type="org.blockml.language.OpenSCAD">` but its `baseType` does not list that type in `languages`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
 
 A Transformation Capability implementation can live directly on any Block whose `baseType` supports it — not only on `utility Sub-Block` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
 

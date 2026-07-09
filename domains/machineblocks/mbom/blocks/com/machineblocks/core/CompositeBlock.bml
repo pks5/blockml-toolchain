@@ -27,12 +27,12 @@
   <abstract />
 
   <subTypes>
-    <subType type="core:Block" />
+    <core:Block />
   </subTypes>
 
-  <implTypes>
-    <implType type="lang:OpenSCAD" />
-  </implTypes>
+  <languages>
+    <lang:OpenSCAD />
+  </languages>
 
   <aggregations>
     <_parts

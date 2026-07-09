@@ -266,6 +266,7 @@ com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)
 org.blockml.core.ValueType         baseType: Block · primitives · structs · enums
 org.blockml.core.Language          baseType: Block (meta — no extra members in V1)
 org.blockml.core.ProgrammingLanguage baseType: Language
+org.blockml.core.MarkupLanguage    baseType: Language
 ```
 
 ```text
@@ -796,11 +797,14 @@ Implementation languages inherit from `org.blockml.core.Block` via `org.blockml.
 org.blockml.core.Block
   └── org.blockml.core.Language                    abstract
         ├── org.blockml.core.ProgrammingLanguage   abstract
-        │     ├── org.blockml.language.TypeScript
-        │     ├── org.blockml.language.OpenSCAD
-        │     └── org.blockml.language.PseudoCode
-        ├── org.blockml.language.English
-        └── org.blockml.language.German
+        │     ├── org.blockml.language.TypeScript · OpenSCAD · PseudoCode · JavaScript · Python · …
+        │     └── org.blockml.language.CSharp
+        │           └── org.blockml.language.Unity
+        ├── org.blockml.core.MarkupLanguage          abstract
+        │     ├── org.blockml.language.XML
+        │     ├── org.blockml.language.JSON
+        │     └── org.blockml.language.YML
+        ├── org.blockml.language.English · German · French · Spanish · Chinese · Japanese · Russian
 ```
 
 ```xml
@@ -813,11 +817,11 @@ org.blockml.core.Block
 </block>
 ```
 
-Every Capability inherits an optional `<implementation>` member from `org.blockml.core.CapabilityType`. The element **`type`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<implType type="org.blockml.language.OpenSCAD" />` — see `16_framework_base_types.md`.
+Every Capability inherits an optional `<implementation>` member from `org.blockml.core.CapabilityType`. The element **`type`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<languages>` — see `16_framework_base_types.md`.
 
 **PseudoCode** is free-form program code that must be internally consistent but is otherwise unconstrained — an LLM may interpret it.
 
-V1 bootstrap languages in `@blockml/core`: TypeScript, OpenSCAD, English, German, PseudoCode. Extensibility: domains register new Language BML files.
+V1 bootstrap languages in `@blockml/core`: TypeScript, OpenSCAD, English, German, French, Spanish, Chinese, Japanese, Russian, PseudoCode, XML, JSON, YML, JavaScript, Python, CSharp, Unity, CPP, C, Java. Extensibility: domains register new Language BML files.
 
 ---
 
@@ -845,7 +849,7 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 | `<subTypes>` | allowed | allowed | forbidden | forbidden |
 | `<genericTypes>` | allowed | allowed | allowed | forbidden |
 | `<properties>` | allowed | StructType + PrimitiveType branch | allowed | forbidden |
-| `<implTypes>` | allowed | forbidden | forbidden | forbidden |
+| `<languages>` | allowed | forbidden | forbidden | forbidden |
 | Meta property `id` on instances | yes (always) | yes (always) | yes (always) | yes (always) |
 | `<property name="id">` | forbidden | forbidden | forbidden | forbidden |
 | Used as composition instance typeFqn | if not abstract | if not abstract | if not abstract | forbidden |
@@ -892,7 +896,7 @@ Type definitions bootstrap **before** composable Blocks that reference them:
      org/blockml/core/Block.bml
      org/blockml/core/ValueType.bml · StructType.bml · EnumType.bml · Constraint.bml · …
      org/blockml/constraint/Min.bml · Max.bml · …
-     org/blockml/core/Language.bml · ProgrammingLanguage.bml
+     org/blockml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/service/Math.bml · Strings.bml · …
@@ -929,11 +933,11 @@ Property declarations on composable Blocks migrate from `09_mbom_properties.yml`
 ```text
 packages/core/blocks/
   org/blockml/core/
-    Block.bml · ValueType.bml · Language.bml · ProgrammingLanguage.bml · …
+    Block.bml · ValueType.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · …
   org/blockml/type/
     Integer.bml · Float.bml · String.bml · Boolean.bml · …
   org/blockml/language/
-    TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
+    TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml · XML.bml · …
   org/blockml/service/
     Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 

@@ -1,0 +1,20 @@
+<!--
+  BlockML Core — Spanish implementation language
+
+  FQN: org.blockml.language.Spanish
+-->
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:core="org.blockml.core"
+  xmlns:lang="org.blockml.language">
+
+  <idea>Spanish prose as an implementation language for capabilities.</idea>
+
+  <documentation>Language for natural-language capability implementations in Spanish.</documentation>
+
+  <name>Spanish</name>
+  <type>lang:Spanish</type>
+  <baseType>core:Language</baseType>
+  <version>1.0.0</version>
+
+</block>

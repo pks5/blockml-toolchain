@@ -487,7 +487,7 @@ BML_FUNCTION_MISSING_MAIN     — no function named after the Capability found i
 BML_FUNCTION_DUPLICATE_MAIN   — more than one function matches the Capability name
 BML_IMPLEMENTATION_UNKNOWN_TYPE — <implementation type="..."> is not a known org.blockml.language.* FQN
 BML_FUNCTION_NO_RUNTIME_IMPL  — Transformation Capability called with non-literal args but no runtime impl
-BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation type="..."> not listed in baseType implTypes
+BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation type="..."> not listed in baseType languages
 ```
 
 ### Warnings
