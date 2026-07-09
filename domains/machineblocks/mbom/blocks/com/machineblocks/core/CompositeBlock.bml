@@ -8,7 +8,10 @@
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:bcore="org.blockml.core"
+  xmlns:core="com.machineblocks.core"
+  xmlns:lang="org.blockml.language">
 
   <idea>MachineBlocks object composed of child block instances.</idea>
 
@@ -17,24 +20,24 @@
     holds child blocks for SCAD composition.</documentation>
 
   <name>CompositeBlock</name>
-  <type>com.machineblocks.core.CompositeBlock</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>core:CompositeBlock</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
 
   <subTypes>
-    <subType type="com.machineblocks.core.Block" />
-    <subType type="org.blockml.core.FunctionBlock" />
+    <subType type="core:Block" />
+    <subType type="bcore:FunctionBlock" />
   </subTypes>
 
   <implTypes>
-    <implType type="org.blockml.language.OpenSCAD" />
+    <implType type="lang:OpenSCAD" />
   </implTypes>
 
   <aggregations>
     <_parts
-      type="com.machineblocks.core.Block[]"
+      type="core:Block[]"
       default="true" />
   </aggregations>
 

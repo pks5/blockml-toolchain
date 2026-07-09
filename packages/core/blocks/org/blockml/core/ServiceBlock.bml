@@ -7,7 +7,8 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:core="org.blockml.core">
 
   <idea>Reusable logic unit addressable as a service in expressions.</idea>
 
@@ -15,8 +16,8 @@
     stud:// or expressions, with no sub-blocks.</documentation>
 
   <name>ServiceBlock</name>
-  <type>org.blockml.core.ServiceBlock</type>
-  <baseType>org.blockml.core.Block</baseType>
+  <type>core:ServiceBlock</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

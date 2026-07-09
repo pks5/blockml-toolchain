@@ -7,15 +7,16 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:core="org.blockml.core">
 
   <idea>Representation of a capability.</idea>
 
   <documentation>Capability type branch of BlockML. Declares an capablity type.</documentation>
 
   <name>CapabilityType</name>
-  <type>org.blockml.core.CapabilityType</type>
-  <baseType>org.blockml.core.TypeBlock</baseType>
+  <type>core:CapabilityType</type>
+  <baseType>core:TypeBlock</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

@@ -8,7 +8,9 @@
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:bcore="org.blockml.core"
+  xmlns:core="com.machineblocks.core">
 
   <idea>Any MachineBlocks domain object — bricks, sets, presets, and compositions.</idea>
 
@@ -17,8 +19,8 @@
     output is render-target logic.</documentation>
 
   <name>Block</name>
-  <type>com.machineblocks.core.Block</type>
-  <baseType>org.blockml.core.Block</baseType>
+  <type>core:Block</type>
+  <baseType>bcore:Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
@@ -34,7 +36,7 @@
   </associations>
 
   <aggregations>
-    <_presets type="com.machineblocks.core.Block[]" />
+    <_presets type="core:Block[]" />
   </aggregations>
 
 </block>

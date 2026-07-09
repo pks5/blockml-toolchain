@@ -11,7 +11,12 @@
   xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:btype="org.blockml.type"
+  xmlns:cap="org.blockml.capability"
+  xmlns:core="org.blockml.core"
+  xmlns:lang="org.blockml.language"
+  xmlns:service="org.blockml.service">
 
   <idea>Built-in boolean utilities callable as #bools in expressions.</idea>
 
@@ -19,40 +24,40 @@
     conversion utilities.</documentation>
 
   <name>Bools</name>
-  <type>org.blockml.service.Bools</type>
-  <baseType>org.blockml.core.FunctionBlock</baseType>
+  <type>service:Bools</type>
+  <baseType>core:FunctionBlock</baseType>
   <version>1.0.0</version>
 
   <capabilities>
 
     <!-- #bools.isTrue(x) -->
     <isTrue
-      type="org.blockml.capability.Transformation"
-      inputType="org.blockml.type.Boolean"
-      outputType="org.blockml.type.Boolean">
+      type="cap:Transformation"
+      inputType="Boolean"
+      outputType="Boolean">
       <documentation>
         Returns true if x is strictly true.
         Examples:
         #bools.isTrue(true) → true
         #bools.isTrue(1) → false
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (x: boolean): boolean => x === true
       ]]></implementation>
     </isTrue>
 
     <!-- #bools.isFalse(x) -->
     <isFalse
-      type="org.blockml.capability.Transformation"
-      inputType="org.blockml.type.Boolean"
-      outputType="org.blockml.type.Boolean">
+      type="cap:Transformation"
+      inputType="Boolean"
+      outputType="Boolean">
       <documentation>
         Returns true if x is strictly false.
         Examples:
         #bools.isFalse(false) → true
         #bools.isFalse(0) → false
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (x: boolean): boolean => x === false
       ]]></implementation>
     </isFalse>

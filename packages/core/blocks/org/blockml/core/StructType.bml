@@ -7,7 +7,8 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:core="org.blockml.core">
 
   <idea>Branch for product types — composite values with named fields.</idea>
 
@@ -15,8 +16,8 @@
     Properties. No special struct syntax.</documentation>
 
   <name>StructType</name>
-  <type>org.blockml.core.StructType</type>
-  <baseType>org.blockml.core.TypeBlock</baseType>
+  <type>core:StructType</type>
+  <baseType>core:TypeBlock</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

@@ -8,7 +8,8 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:core="org.blockml.core">
 
   <idea>The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
 
@@ -20,7 +21,7 @@
     must resolve to org.blockml.core.TypeBlock.</documentation>
 
   <name>Block</name>
-  <type>org.blockml.core.Block</type>
+  <type>core:Block</type>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

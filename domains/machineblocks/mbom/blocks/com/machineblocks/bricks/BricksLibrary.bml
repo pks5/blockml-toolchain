@@ -13,7 +13,9 @@
   xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:bcore="org.blockml.core"
+  xmlns:bricks="com.machineblocks.bricks">
 
   <idea>Published catalog of MachineBlocks standard brick definitions.</idea>
 
@@ -21,8 +23,8 @@
     preset blocks.</documentation>
 
   <name>BricksLibrary</name>
-  <type>com.machineblocks.bricks.BricksLibrary</type>
-  <baseType>org.blockml.core.Library</baseType>
+  <type>bricks:BricksLibrary</type>
+  <baseType>bcore:Library</baseType>
   <version>3.0.0</version>
 
   <properties>

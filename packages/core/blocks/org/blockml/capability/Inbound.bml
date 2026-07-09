@@ -7,15 +7,17 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:cap="org.blockml.capability"
+  xmlns:core="org.blockml.core">
 
   <idea>Representation of an Inbound capability.</idea>
 
   <documentation>Inbound capability.</documentation>
 
   <name>Inbound</name>
-  <type>org.blockml.capability.Inbound</type>
-  <baseType>org.blockml.core.Capability</baseType>
+  <type>cap:Inbound</type>
+  <baseType>core:Capability</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

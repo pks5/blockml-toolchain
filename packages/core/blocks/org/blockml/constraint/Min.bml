@@ -9,19 +9,21 @@
   xsi:schemaLocation="
     http://blockml.org/schema/block
         https://blockml.org/schemas/core/block.xsd
-  ">
+  "
+  xmlns:constraint="org.blockml.constraint"
+  xmlns:core="org.blockml.core">
 
   <idea>Lower bound for a numeric property value.</idea>
 
   <documentation>Scalar constraint: T binds to the property type. Compatible with Integer and Float properties. The value property must match T.</documentation>
 
   <name>Min</name>
-  <type>org.blockml.constraint.Min</type>
-  <baseType>org.blockml.core.Constraint</baseType>
+  <type>constraint:Min</type>
+  <baseType>core:Constraint</baseType>
   <version>1.0.0</version>
 
   <genericTypes>
-    <genericType name="T" baseType="org.blockml.core.PrimitiveType"/>
+    <genericType name="T" baseType="core:PrimitiveType"/>
   </genericTypes>
 
   <properties>

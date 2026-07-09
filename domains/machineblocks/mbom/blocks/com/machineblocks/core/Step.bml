@@ -8,7 +8,9 @@
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:bcore="org.blockml.core"
+  xmlns:core="com.machineblocks.core">
 
   <idea>One assembly instruction in a Set build sequence.</idea>
 
@@ -17,14 +19,14 @@
     order defines build order when _steps is present.</documentation>
 
   <name>Step</name>
-  <type>com.machineblocks.core.Step</type>
-  <baseType>org.blockml.core.Block</baseType>
+  <type>core:Step</type>
+  <baseType>bcore:Block</baseType>
   <version>1.0.0</version>
 
   <final>true</final>
 
   <associations>
-    <part type="com.machineblocks.core.Block"></part>
+    <part type="core:Block"></part>
   </associations>
 
   <properties>

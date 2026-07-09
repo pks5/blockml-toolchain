@@ -1,5 +1,7 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:btype="org.blockml.type"
+  xmlns:core="org.blockml.core">
 
   <idea>Primitive BlockML property type capable of holding a whole number.</idea>
 
@@ -7,8 +9,8 @@
     to org.blockml.type.Integer.</documentation>
 
   <name>Integer</name>
-  <type>org.blockml.type.Integer</type>
-  <baseType>org.blockml.core.PrimitiveType</baseType>
+  <type>Integer</type>
+  <baseType>core:PrimitiveType</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>
 </block>

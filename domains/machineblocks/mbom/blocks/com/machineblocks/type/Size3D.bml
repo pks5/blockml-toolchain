@@ -7,25 +7,28 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:bcore="org.blockml.core"
+  xmlns:btype="org.blockml.type"
+  xmlns:type="com.machineblocks.type">
 
   <idea>Three-dimensional size in MachineBlocks grid units.</idea>
 
   <documentation>Struct TypeBlock for three-dimensional size [x, y, z] in grid units.</documentation>
 
   <name>Size3d</name>
-  <type>com.machineblocks.type.Size3d</type>
-  <baseType>org.blockml.core.StructType</baseType>
+  <type>type:Size3d</type>
+  <baseType>bcore:StructType</baseType>
   <version>1.0.0</version>
 
   <properties>
-    <x type="org.blockml.type.Float">
+    <x type="Float">
       <documentation>Size in X direction.</documentation>
     </x>
-    <y type="org.blockml.type.Float">
+    <y type="Float">
       <documentation>Size in Y direction.</documentation>
     </y>
-    <z type="org.blockml.type.Float">
+    <z type="Float">
       <documentation>Size in Z direction.</documentation>
     </z>
   </properties>

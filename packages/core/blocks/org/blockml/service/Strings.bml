@@ -11,7 +11,12 @@
   xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:btype="org.blockml.type"
+  xmlns:cap="org.blockml.capability"
+  xmlns:core="org.blockml.core"
+  xmlns:lang="org.blockml.language"
+  xmlns:service="org.blockml.service">
 
   <idea>Built-in text utilities callable as #strings in expressions.</idea>
 
@@ -19,173 +24,173 @@
     substring, and related text utilities.</documentation>
 
   <name>Strings</name>
-  <type>org.blockml.service.Strings</type>
-  <baseType>org.blockml.core.FunctionBlock</baseType>
+  <type>service:Strings</type>
+  <baseType>core:FunctionBlock</baseType>
   <version>1.0.0</version>
 
   <capabilities>
 
     <!-- #strings.trim(s) -->
     <trim
-      type="org.blockml.capability.Transformation"
-      inputType="org.blockml.type.String"
-      outputType="org.blockml.type.String">
+      type="cap:Transformation"
+      inputType="String"
+      outputType="String">
       <documentation>
         Removes leading and trailing whitespace from s.
         Examples:
         #strings.trim(' hello ') → "hello"
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string): string => s.trim()
       ]]></implementation>
     </trim>
 
     <!-- #strings.toUpperCase(s) -->
     <toUpperCase
-      type="org.blockml.capability.Transformation"
-      inputType="org.blockml.type.String"
-      outputType="org.blockml.type.String">
+      type="cap:Transformation"
+      inputType="String"
+      outputType="String">
       <documentation>
         Converts s to uppercase.
         Examples:
         #strings.toUpperCase('abc') → "ABC"
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string): string => s.toUpperCase()
       ]]></implementation>
     </toUpperCase>
 
     <!-- #strings.toLowerCase(s) -->
     <toLowerCase
-      type="org.blockml.capability.Transformation"
-      inputType="org.blockml.type.String"
-      outputType="org.blockml.type.String">
+      type="cap:Transformation"
+      inputType="String"
+      outputType="String">
       <documentation>
         Converts s to lowercase.
         Examples:
         #strings.toLowerCase('ABC') → "abc"
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string): string => s.toLowerCase()
       ]]></implementation>
     </toLowerCase>
 
     <!-- #strings.concat(a, b, ...) -->
     <concat
-      type="org.blockml.capability.Transformation"
+      type="cap:Transformation"
       inputType="Array<String>"
-      outputType="org.blockml.type.String">
+      outputType="String">
       <documentation>
         Concatenates all string arguments.
         Examples:
         #strings.concat('a', 'b', 'c') → "abc"
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (...parts: string[]): string => parts.join('')
       ]]></implementation>
     </concat>
 
     <!-- #strings.length(s) -->
     <length
-      type="org.blockml.capability.Transformation"
-      inputType="org.blockml.type.String"
-      outputType="org.blockml.type.Integer">
+      type="cap:Transformation"
+      inputType="String"
+      outputType="Integer">
       <documentation>
         Returns the length of s.
         Examples:
         #strings.length('hello') → 5
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string): number => s.length
       ]]></implementation>
     </length>
 
     <!-- #strings.contains(s, fragment) -->
     <contains
-      type="org.blockml.capability.Transformation"
+      type="cap:Transformation"
       inputType="{ s: String, fragment: String }"
-      outputType="org.blockml.type.Boolean">
+      outputType="Boolean">
       <documentation>
         Returns true if s contains fragment.
         Examples:
         #strings.contains('hello', 'ell') → true
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string, fragment: string): boolean => s.includes(fragment)
       ]]></implementation>
     </contains>
 
     <!-- #strings.startsWith(s, prefix) -->
     <startsWith
-      type="org.blockml.capability.Transformation"
+      type="cap:Transformation"
       inputType="{ s: String, prefix: String }"
-      outputType="org.blockml.type.Boolean">
+      outputType="Boolean">
       <documentation>
         Returns true if s starts with prefix.
         Examples:
         #strings.startsWith('hello', 'he') → true
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string, prefix: string): boolean => s.startsWith(prefix)
       ]]></implementation>
     </startsWith>
 
     <!-- #strings.endsWith(s, suffix) -->
     <endsWith
-      type="org.blockml.capability.Transformation"
+      type="cap:Transformation"
       inputType="{ s: String, suffix: String }"
-      outputType="org.blockml.type.Boolean">
+      outputType="Boolean">
       <documentation>
         Returns true if s ends with suffix.
         Examples:
         #strings.endsWith('hello', 'lo') → true
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string, suffix: string): boolean => s.endsWith(suffix)
       ]]></implementation>
     </endsWith>
 
     <!-- #strings.indexOf(s, fragment) -->
     <indexOf
-      type="org.blockml.capability.Transformation"
+      type="cap:Transformation"
       inputType="{ s: String, fragment: String }"
-      outputType="org.blockml.type.Integer">
+      outputType="Integer">
       <documentation>
         Returns the index of fragment in s, or -1 if not found.
         Examples:
         #strings.indexOf('hello', 'll') → 2
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string, fragment: string): number => s.indexOf(fragment)
       ]]></implementation>
     </indexOf>
 
     <!-- #strings.substring(s, start, end) -->
     <substring
-      type="org.blockml.capability.Transformation"
+      type="cap:Transformation"
       inputType="{ s: String, start: Integer, end: Integer }"
-      outputType="org.blockml.type.String">
+      outputType="String">
       <documentation>
         Returns the substring of s from start (inclusive) to end (exclusive).
         Examples:
         #strings.substring('hello', 1, 4) → "ell"
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string, start: number, end: number): string => s.substring(start, end)
       ]]></implementation>
     </substring>
 
     <!-- #strings.replace(s, target, replacement) -->
     <replace
-      type="org.blockml.capability.Transformation"
+      type="cap:Transformation"
       inputType="{ s: String, target: String, replacement: String }"
-      outputType="org.blockml.type.String">
+      outputType="String">
       <documentation>
         Replaces the first occurrence of target in s with replacement.
         Examples:
         #strings.replace('a-b-c', '-', '_') → "a_b-c"
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string, target: string, replacement: string): string =>
             s.replace(target, replacement)
       ]]></implementation>
@@ -193,15 +198,15 @@
 
     <!-- #strings.replaceAll(s, target, replacement) -->
     <replaceAll
-      type="org.blockml.capability.Transformation"
+      type="cap:Transformation"
       inputType="{ s: String, target: String, replacement: String }"
-      outputType="org.blockml.type.String">
+      outputType="String">
       <documentation>
         Replaces all occurrences of target in s with replacement.
         Examples:
         #strings.replaceAll('a-b-c', '-', '_') → "a_b_c"
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (s: string, target: string, replacement: string): string =>
             s.split(target).join(replacement)
       ]]></implementation>

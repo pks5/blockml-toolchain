@@ -11,7 +11,8 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:core="org.blockml.core">
 
   <idea>Catalog of block and type definitions published as a package.</idea>
 
@@ -19,14 +20,14 @@
     and dependencies on other libraries. Replaces the legacy library.xml descriptor.</documentation>
 
   <name>Library</name>
-  <type>org.blockml.core.Library</type>
-  <baseType>org.blockml.core.Block</baseType>
+  <type>core:Library</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
 
   <subTypes>
-    <subType type="org.blockml.core.Block" />
+    <subType type="core:Block" />
   </subTypes>
 
   <properties>
@@ -50,7 +51,7 @@
       <documentation>Dependency on another Library — pins required library FQN and exact semantic
         version.</documentation>
       <name>Dependency</name>
-      <baseType>org.blockml.core.Block</baseType>
+      <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
       <properties>
@@ -68,7 +69,7 @@
 
       <documentation>Optional XSD schema file exported by a Library — legacy type/enum definitions.</documentation>
       <name>Schema</name>
-      <baseType>org.blockml.core.Block</baseType>
+      <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
       <properties>
@@ -84,7 +85,7 @@
       <documentation>Reference to a TypeBlock definition file (StructType, EnumType, …) exported by
         this Library.</documentation>
       <name>TypeRef</name>
-      <baseType>org.blockml.core.Block</baseType>
+      <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
       <properties>
@@ -99,7 +100,7 @@
 
       <documentation>Reference to a Block definition file exported by this Library.</documentation>
       <name>BlockRef</name>
-      <baseType>org.blockml.core.Block</baseType>
+      <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <final>true</final>
       <properties>

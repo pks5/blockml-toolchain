@@ -17,7 +17,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
-                      ">
+                      "
+  xmlns:core="com.machineblocks.core">
 
   <idea>Named size and color shortcuts for the Standard brick.</idea>
 
@@ -25,8 +26,8 @@
     composite combinations for Customizer and basePresets references.</documentation>
 
   <name>StandardPresets</name>
-  <type>com.machineblocks.bricks.StandardPresets</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>bricks:StandardPresets</type>
+  <baseType>core:Block</baseType>
   <version>3.0.0</version>
 
   <aggregations>

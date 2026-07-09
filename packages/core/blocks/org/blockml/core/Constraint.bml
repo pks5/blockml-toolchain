@@ -7,7 +7,8 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:core="org.blockml.core">
 
   <idea>Validation rule attached to a property — interpreted by the compiler and editors.</idea>
 
@@ -17,14 +18,14 @@
     type argument in BML.</documentation>
 
   <name>Constraint</name>
-  <type>org.blockml.core.Constraint</type>
-  <baseType>org.blockml.core.Block</baseType>
+  <type>core:Constraint</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
 
   <genericTypes>
-    <genericType name="T" baseType="org.blockml.core.TypeBlock" />
+    <genericType name="T" baseType="core:TypeBlock" />
   </genericTypes>
 
 </block>

@@ -9,7 +9,9 @@
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:btype="org.blockml.type"
+  xmlns:core="com.machineblocks.core">
 
   <idea>Leaf geometry primitive rendered directly as mb_block() in SCAD.</idea>
 
@@ -18,44 +20,44 @@
     mb_block() sub-geometry instead of _parts.</documentation>
 
   <name>NativeBlock</name>
-  <type>com.machineblocks.core.NativeBlock</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>core:NativeBlock</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <final>true</final>
 
   <!-- Native MB properties only — no custom properties on NativeBlock instances -->
   <properties>
-    <base type="org.blockml.type.Boolean">
+    <base type="Boolean">
       <value>true</value>
     </base>
 
-    <baseCutoutType type="com.machineblocks.type.BaseCutoutType">
+    <baseCutoutType type="type:BaseCutoutType">
       <value>STANDARD</value>
     </baseCutoutType>
 
-    <scale type="org.blockml.type.Float">
+    <scale type="Float">
       <value>1.0</value>
     </scale>
 
-    <stabilizerExpansion type="org.blockml.type.Integer">
+    <stabilizerExpansion type="Integer">
       <value>2</value>
     </stabilizerExpansion>
 
-    <text type="org.blockml.type.String">
+    <text type="String">
       <value></value>
     </text>
 
     <!-- Value specified as ordered array [x, y, z] (order of properties definition), alternative: {
     x: 1, y: 1, z: 1 } -->
-    <size type="com.machineblocks.type.Size3D">
+    <size type="type:Size3D">
       <value>[1, 1, 1]</value>
     </size>
   </properties>
 
   <aggregations>
     <children
-      type="com.machineblocks.core.Block[]"
+      type="core:Block[]"
       default="true" />
   </aggregations>
 

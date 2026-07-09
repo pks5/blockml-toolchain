@@ -7,15 +7,16 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:core="org.blockml.core">
 
   <idea>Branch for scalar value types — single atomic values.</idea>
 
   <documentation>Abstract branch for built-in scalar TypeBlocks (Integer, Float, String, Boolean).</documentation>
 
   <name>PrimitiveType</name>
-  <type>org.blockml.core.PrimitiveType</type>
-  <baseType>org.blockml.core.TypeBlock</baseType>
+  <type>core:PrimitiveType</type>
+  <baseType>core:TypeBlock</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

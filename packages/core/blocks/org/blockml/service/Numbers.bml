@@ -11,7 +11,12 @@
   xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:btype="org.blockml.type"
+  xmlns:cap="org.blockml.capability"
+  xmlns:core="org.blockml.core"
+  xmlns:lang="org.blockml.language"
+  xmlns:service="org.blockml.service">
 
   <idea>Built-in number formatting and sequence utilities callable as #numbers in expressions.</idea>
 
@@ -19,8 +24,8 @@
     formatting, and numeric conversion utilities.</documentation>
 
   <name>Numbers</name>
-  <type>org.blockml.service.Numbers</type>
-  <baseType>org.blockml.core.FunctionBlock</baseType>
+  <type>service:Numbers</type>
+  <baseType>core:FunctionBlock</baseType>
   <version>1.0.0</version>
 
   <capabilities>
@@ -31,9 +36,9 @@
       SCAD: no native — Processor emits custom formatting logic.
     -->
     <formatDecimal
-      type="org.blockml.capability.Transformation"
+      type="cap:Transformation"
       inputType="{ x: Float, minInt: Integer, decPoint: String, minFrac: Integer }"
-      outputType="org.blockml.type.String">
+      outputType="String">
       <documentation>
         Formats x as a decimal string.
         minInt: minimum integer digits (0 omits leading zero before decimal point).
@@ -43,7 +48,7 @@
         #numbers.formatDecimal(0.1, 0, '.', 1) → ".1"
         #numbers.formatDecimal(3.14159, 1, '.', 2) → "3.14"
       </documentation>
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+      <implementation type="lang:TypeScript"><![CDATA[
         (x: number, minInt: number, decPoint: string, minFrac: number): string => {
           const rounded = Math.round(x * Math.pow(10, minFrac)) / Math.pow(10, minFrac);
           let s = rounded.toFixed(minFrac);

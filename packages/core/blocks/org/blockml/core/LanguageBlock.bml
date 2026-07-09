@@ -7,7 +7,8 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:core="org.blockml.core">
 
   <idea>A target implementation language for capability code.</idea>
 
@@ -15,8 +16,8 @@
     Sync Capability implementations (OpenSCAD, TypeScript, …).</documentation>
 
   <name>LanguageBlock</name>
-  <type>org.blockml.core.LanguageBlock</type>
-  <baseType>org.blockml.core.Block</baseType>
+  <type>core:LanguageBlock</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

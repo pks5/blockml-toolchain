@@ -8,15 +8,17 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:bml="http://blockml.org/schema/bml"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:bcore="org.blockml.core"
+  xmlns:type="com.machineblocks.type">
 
   <idea>Shape variant of the underside cutout on a brick base.</idea>
 
   <documentation>Enum TypeBlock for base cutout variants on MachineBlocks bricks.</documentation>
 
   <name>BaseCutoutType</name>
-  <type>com.machineblocks.type.BaseCutoutType</type>
-  <baseType>org.blockml.core.EnumType</baseType>
+  <type>type:BaseCutoutType</type>
+  <baseType>bcore:EnumType</baseType>
   <version>1.0.0</version>
 
   <properties>

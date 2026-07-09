@@ -7,7 +7,8 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      ">
+                      "
+  xmlns:core="com.machineblocks.core">
 
   <idea>A LEGO-style build — palette, placed parts, and assembly steps.</idea>
 
@@ -16,14 +17,14 @@
     in MachineBlocks.</documentation>
 
   <name>Set</name>
-  <type>com.machineblocks.core.Set</type>
-  <baseType>com.machineblocks.core.CompositeBlock</baseType>
+  <type>core:Set</type>
+  <baseType>core:CompositeBlock</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
 
   <aggregations>
-    <_steps type="com.machineblocks.core.Step[]" />
+    <_steps type="core:Step[]" />
   </aggregations>
 
 </block>
