@@ -107,7 +107,7 @@ blockml/
   docs/                        — specifications (authoritative)
 ```
 
-**Present today:** `docs/`, `packages/core/src/**/*.bml`, `domains/.../scad-lib/` (submodule).
+**Present today:** `docs/`, `packages/core/blocks/**/*.bml`, `domains/.../scad-lib/` (submodule).
 
 **Scaffold next:** empty package shells with `package.json`, `tsconfig.json`, `src/index.ts` per build order below.
 
@@ -221,7 +221,7 @@ npm workspace names (`@blockml/core`, `@blockml/parser`, `@blockml/compiler`, �
 
 ```text
 @blockml/core npm package may contain:
-  src/org/blockml/core/*.bml     →  language FQNs (org.blockml.core.Block, …)
+  blocks/org/blockml/core/*.bml  →  language FQNs (org.blockml.core.Block, …)
   src/org/blockml/bom/*.ts       →  BOM interfaces (org.blockml.bom.BlockDefinition, …)
   src/org/blockml/compiler/*.ts  →  only if colocated; prefer @blockml/compiler package
 ```
@@ -258,13 +258,14 @@ No TypeScript build. Package contains BML source files only:
 ```text
 packages/core/
   package.json          — name: @blockml/core, private: true
-  src/
+  blocks/
     org/blockml/core/
       Block.bml · ServiceBlock.bml · FunctionBlock.bml · …
     org/blockml/service/
       Math.bml
       Strings.bml
       …
+  src/                  — reserved for future TypeScript (none today)
 ```
 
 Consumed by:

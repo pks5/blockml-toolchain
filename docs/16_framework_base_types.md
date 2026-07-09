@@ -200,13 +200,13 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ## Package Layout
 
 ```text
-packages/core/src/
+packages/core/blocks/
   org/blockml/core/
     Block.bml · TypeBlock.bml · ServiceBlock.bml · FunctionBlock.bml · Library.bml · …
   org/blockml/service/
     Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 
-domains/machineblocks/mbom/src/
+domains/machineblocks/mbom/blocks/
   com/machineblocks/core/
     Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
   com/machineblocks/bricks/

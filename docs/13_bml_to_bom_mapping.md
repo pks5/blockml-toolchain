@@ -438,8 +438,8 @@ Before validating or compiling a file that references external types, the orches
 
 ```text
 1. Pre-register framework BML (fixed paths — see 16_framework_base_types.md)
-     @blockml/core/src           →  org.blockml.core.*, org.blockml.service.*
-     @machineblocks/mbom/src     →  com.machineblocks.core.*
+     @blockml/core/blocks        →  org.blockml.core.*, org.blockml.service.*
+     @machineblocks/mbom/blocks  →  com.machineblocks.core.*
 
 2. Discover BML sources
      Project srcDir scan     →  all *.bml

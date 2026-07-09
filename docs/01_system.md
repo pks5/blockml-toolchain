@@ -102,7 +102,7 @@ bom-compiler/
   domains/
     machineblocks/
       mbom/            — @machineblocks/mbom (framework BML: com.machineblocks.core.*)
-        src/com/machineblocks/core/
+        blocks/com/machineblocks/core/
       machineblocks-v3-scad-target/
         src/
           target.ts
@@ -154,7 +154,7 @@ The library follows Thymeleaf's `#` utility object naming — plural for utiliti
 
 ```text
 packages/core/
-  src/
+  blocks/
     org/blockml/core/
       ServiceBlock.bml   ← org.blockml.core.ServiceBlock
       FunctionBlock.bml  ← org.blockml.core.FunctionBlock

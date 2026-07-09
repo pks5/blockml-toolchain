@@ -512,7 +512,7 @@ org.blockml.core.Block                                  ← packages/core/…/Bl
 
 ### com.machineblocks.core.Block
 
-MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/src/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.Block`.
+MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/blocks/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.Block`.
 
 ```text
 Extends:        org.blockml.core.Block

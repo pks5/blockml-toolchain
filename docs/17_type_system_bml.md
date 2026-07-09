@@ -905,7 +905,7 @@ Property declarations on composable Blocks migrate from `09_mbom_properties.yml`
 ## Package Layout (target)
 
 ```text
-packages/core/src/
+packages/core/blocks/
   org/blockml/core/
     Block.bml · TypeBlock.bml · ServiceBlock.bml · FunctionBlock.bml · LanguageBlock.bml · …
   org/blockml/type/
@@ -915,7 +915,7 @@ packages/core/src/
   org/blockml/service/
     Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 
-domains/machineblocks/mbom/src/
+domains/machineblocks/mbom/blocks/
   com/machineblocks/type/
     Size3D.bml · Direction.bml · Color.bml · Face.bml · …
   com/machineblocks/core/

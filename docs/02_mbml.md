@@ -1835,7 +1835,7 @@ Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 The render target may produce a `.json` file in OpenSCAD Customizer format when compiling a preset block:
 
 ```text
-BML:   src/com/machineblocks/bricks/presets/StandardPresets.bml
+BML:   blocks/com/machineblocks/bricks/presets/StandardPresets.bml
 JSON:  scad/com/machineblocks/bricks/Standard.json
 ```
 
