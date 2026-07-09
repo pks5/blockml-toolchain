@@ -363,12 +363,10 @@ interface PropertyDefinition extends MemberDefinitionBase {
   typeFqn: string
   value: MemberValue
   group?: string
-  suggestions?: Suggestion[]
-}
-
-interface Suggestion {
-  value: string
-  label?: string
+  /** Constraint Block instances — each typeFqn must extend org.blockml.core.Constraint */
+  constraints?: BlockInstance[]
+  /** Block instances of the same type as typeFqn — metadata only */
+  suggestions?: BlockInstance[]
 }
 
 interface AggregationDefinition extends MemberDefinitionBase {

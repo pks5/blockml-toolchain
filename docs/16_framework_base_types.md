@@ -11,6 +11,7 @@ For MBOM hierarchy see `03_mbom.md`.
 For TypeRegistry bootstrap see `13_bml_to_bom_mapping.md`.
 For SCAD property mapping (render-only) see `09_mbom_properties.yml`.
 For value types and implementation languages as BML see `17_type_system_bml.md`.
+For property constraints and suggestions see `18_constraints_and_suggestions.md`.
 For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self-Description Roadmap.
 
 ---
@@ -148,6 +149,8 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
 1. @blockml/core BML                    ← BlockML describes BlockML
      org/blockml/core/Block.bml
      org/blockml/core/TypeBlock.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · …
+     org/blockml/core/Constraint.bml
+     org/blockml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
      org/blockml/core/ServiceBlock.bml · FunctionBlock.bml
      org/blockml/core/LanguageBlock.bml
      org/blockml/type/Integer.bml · …
@@ -202,7 +205,9 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 ```text
 packages/core/blocks/
   org/blockml/core/
-    Block.bml · TypeBlock.bml · ServiceBlock.bml · FunctionBlock.bml · Library.bml · …
+    Block.bml · TypeBlock.bml · Constraint.bml · ServiceBlock.bml · FunctionBlock.bml · Library.bml · …
+  org/blockml/constraint/
+    Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
   org/blockml/service/
     Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 
@@ -226,3 +231,4 @@ domains/machineblocks/mbom/blocks/
 | Bootstrap | `13_bml_to_bom_mapping.md` |
 | SCAD property mapping | `09_mbom_properties.yml` |
 | Value types · languages (BML) | `17_type_system_bml.md` |
+| Constraints · suggestions | `18_constraints_and_suggestions.md` |

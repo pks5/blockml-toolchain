@@ -29,6 +29,8 @@
   <properties>
     <property name="description" type="String"
               value="Standard brick types for MachineBlocks" />
+    <property name="package" type="String"
+              value="com.machineblocks.bricks" />
   </properties>
 
   <aggregations>

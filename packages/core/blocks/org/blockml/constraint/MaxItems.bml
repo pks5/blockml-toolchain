@@ -1,0 +1,33 @@
+<!--
+  BlockML Core — maximum items constraint
+
+  FQN: org.blockml.constraint.MaxItems
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <idea>Maximum number of elements in a collection property.</idea>
+
+  <documentation>T binds to the property collection type (e.g. String[]). The value property is Integer — the maximum item count.</documentation>
+
+  <name>MaxItems</name>
+  <type>org.blockml.constraint.MaxItems</type>
+  <baseType>org.blockml.core.Constraint</baseType>
+  <version>1.0.0</version>
+
+  <genericTypes>
+    <genericType name="T" baseType="org.blockml.core.TypeBlock"/>
+  </genericTypes>
+
+  <properties>
+    <property name="value" type="org.blockml.type.Integer">
+      <documentation>Maximum number of items (inclusive).</documentation>
+    </property>
+  </properties>
+
+</block>

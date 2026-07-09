@@ -678,7 +678,7 @@ Enum values are **Block instances** in `<composition aggregation="_values">` —
 </block>
 ```
 
-Properties typed with an EnumType **must not** carry `<suggestions>` — valid values come from `_values` (`BML_SUGGESTIONS_ON_ENUM` unchanged).
+Properties typed with an EnumType **must not** carry `<suggestions>` — valid values come from `_values` (`BML_SUGGESTIONS_ON_ENUM` unchanged). Properties may carry `<constraints>` on any type where a compatible Constraint sub-type exists — see `18_constraints_and_suggestions.md`.
 
 **Enum value references in property values** (`defaultValue`, composition attributes, expressions):
 
@@ -756,6 +756,16 @@ At validate time the compiler substitutes each placeholder (`T`) with the concre
 
 Generic parameters (`T`) and `_self` in type positions are type-expression references — resolved from the defining Block's `<genericTypes>` or effective Block type respectively.
 
+**Constraint generic binding** — `org.blockml.core.Constraint` and its sub-types also declare `<genericTypes>`. Unlike StructType generics, constraint type arguments are **never authored** — the compiler binds `T` from the enclosing property's type context at validate time:
+
+```text
+Scalar property (Integer)     → Min/Max: T = Integer
+Collection property (String[]) → MinItems/MaxItems: T = String[]
+                               → MinLength/MaxLength: T = String (element type)
+```
+
+Binding rules per constraint FQN are defined in each constraint Block's `<documentation>`. See `18_constraints_and_suggestions.md`.
+
 ---
 
 ## Contracts
@@ -814,25 +824,28 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 
 ```text
 … → TypeBlock → Block           type block branch
+… → Constraint → Block            constraint branch
 … → LanguageBlock → Block         language branch
-… → Block (no TypeBlock/LanguageBlock ancestor)   general block branch
+… → Block (no TypeBlock/LanguageBlock/Constraint ancestor)   general block branch
 ```
 
-| Rule | General Block | TypeBlock | LanguageBlock |
-|---|---|---|---|
-| `<composition>` | allowed | EnumType: `_values` only; others: definition-level only | forbidden |
-| `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden |
-| `<subTypes>` | allowed | allowed | forbidden |
-| `<genericTypes>` | allowed | allowed | forbidden |
-| `<properties>` | allowed | StructType + PrimitiveType branch | forbidden |
-| `<implTypes>` | allowed | forbidden | forbidden |
-| Meta property `id` on instances | yes (always) | yes (always) | yes (always) |
-| `<property name="id">` | forbidden | forbidden | forbidden |
-| Used as composition instance typeFqn | if not abstract | if not abstract | forbidden |
-| Used as aggregation/association `type` | any Block FQN | any Block FQN | — |
-| Used as property `type` | forbidden | yes (+ generic substitution) | forbidden |
-| Used as Capability input/output type | forbidden | yes (+ generic substitution) | forbidden |
-| Used as `<implementation type>` | forbidden | forbidden | yes |
+| Rule | General Block | TypeBlock | Constraint | LanguageBlock |
+|---|---|---|---|---|
+| `<composition>` | allowed | EnumType: `_values` only; others: definition-level only | forbidden | forbidden |
+| `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden | forbidden |
+| `<subTypes>` | allowed | allowed | forbidden | forbidden |
+| `<genericTypes>` | allowed | allowed | allowed | forbidden |
+| `<properties>` | allowed | StructType + PrimitiveType branch | allowed | forbidden |
+| `<implTypes>` | allowed | forbidden | forbidden | forbidden |
+| Meta property `id` on instances | yes (always) | yes (always) | yes (always) | yes (always) |
+| `<property name="id">` | forbidden | forbidden | forbidden | forbidden |
+| Used as composition instance typeFqn | if not abstract | if not abstract | if not abstract | forbidden |
+| Used as aggregation/association `type` | any Block FQN | any Block FQN | any Block FQN | — |
+| Used as property `type` | forbidden | yes (+ generic substitution) | forbidden | forbidden |
+| Used as property `<constraints>` child | forbidden | forbidden | yes (Constraint sub-type) | forbidden |
+| Used as property `<suggestions>` child | yes (same type as property) | yes | forbidden | forbidden |
+| Used as Capability input/output type | forbidden | yes (+ generic substitution) | forbidden | forbidden |
+| Used as `<implementation type>` | forbidden | forbidden | forbidden | yes |
 
 Wrong branch usage → `BML_INVALID_DEFINITION_BRANCH`.
 
@@ -868,7 +881,8 @@ Type definitions bootstrap **before** composable Blocks that reference them:
 ```text
 1. @blockml/core — root + branches + bootstrap types
      org/blockml/core/Block.bml
-     org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · …
+     org/blockml/core/TypeBlock.bml · StructType.bml · EnumType.bml · Constraint.bml · …
+     org/blockml/constraint/Min.bml · Max.bml · …
      org/blockml/core/LanguageBlock.bml
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml

@@ -6,7 +6,7 @@ version: 2.0.0
 
 This document defines the BML (Block Markup Language) format — the universal declarative authoring language for BOM Blocks, Composite Blocks, and Presets.
 
-For the abstract object model see `00_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For value type BML definitions see `17_type_system_bml.md`. For MBOM type parse/serialize rules see `04_types.md`. For native MBOM property SCAD mapping see `09_mbom_properties.yml`.
+For the abstract object model see `00_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For value type BML definitions see `17_type_system_bml.md`. For property constraints and suggestions see `18_constraints_and_suggestions.md`. For MBOM type parse/serialize rules see `04_types.md`. For native MBOM property SCAD mapping see `09_mbom_properties.yml`.
 
 ---
 
@@ -733,17 +733,41 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 When the property `type` is an EnumType, `value` and instance attribute values may use `{EnumTypeFQN}::{valueId}` or the short form `{valueId}` only. See `17_type_system_bml.md` — EnumType.
 
-**Suggestions** are hints for free-text properties — the author can enter any value. The editor renders them as a **Combobox**. No compiler validation of suggested values:
+**Suggestions** are hints for free-text properties — the author can enter any value. The editor renders them as a **Combobox**. Each suggestion is a Block instance of the property type (not a special element):
 
 ```xml
 <!-- Free-text with suggestions — Combobox, not validated -->
 <property name="textFont" type="String" value="RBNo3.1 Black">
   <suggestions>
-    <suggestion value="Creato Display"  label="Creato Display" />
-    <suggestion value="RBNo3.1 Black"   label="RBNo3.1 Black" />
+    <String value="Creato Display"/>
+    <String value="RBNo3.1 Black"/>
   </suggestions>
 </property>
 ```
+
+**Constraints** are validation rules — each entry is a Block instance extending `org.blockml.core.Constraint`. The compiler binds the constraint generic to the property type automatically:
+
+```xml
+<property name="textSize" type="Integer" value="9">
+  <constraints>
+    <constraint:Min value="1"/>
+    <constraint:Max value="72"/>
+  </constraints>
+</property>
+```
+
+For struct properties, suggestions are typed Block instances:
+
+```xml
+<property name="size" type="type:Size3D" value="[1, 1, 3]">
+  <suggestions>
+    <type:Size3D x="1" y="1" z="3"/>
+    <type:Size3D x="2" y="4" z="3"/>
+  </suggestions>
+</property>
+```
+
+See `18_constraints_and_suggestions.md` for the full constraint hierarchy, generic binding rules, and collection constraints.
 
 **Computed values:** `value` may be an Expression referencing other Properties of the same Block. Cycle detection applies — see `10_expression_language.md`.
 

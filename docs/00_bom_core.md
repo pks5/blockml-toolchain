@@ -450,7 +450,8 @@ type          — FQN of a TypeBlock (baseType chain includes org.blockml.core.T
 value         — typed defined value (literal or Expression). Formerly defaultValue.
 group         — optional grouping hint (for editors)
 documentation — human-readable description
-suggestions   — optional list of suggested values (see below)
+constraints   — optional list of Constraint Block instances (see below)
+suggestions   — optional list of Block instances of the property type (see below)
 readOnly      — informational only
 final         — prevents override in child Blocks
 namespace     — resolved canonical namespace identifier (empty = default namespace)
@@ -485,18 +486,36 @@ type="org.blockml.type.Integer[]"         ✓
 
 TypeBlocks may therefore appear both as type references on Properties and as Block instances in compositions or aggregations — interpretation is context-dependent. See `17_type_system_bml.md`.
 
-### Suggestions
+### Constraints
 
-A Property may declare a list of suggested values. Suggestions are purely metadata — they do not affect type validation or compilation. The Property type remains unchanged. Editors display the property as a combobox; the SCAD BlockProcessor generates an OpenSCAD Customizer dropdown comment.
+A Property may declare a list of validation constraints. Each constraint is a Block instance whose `baseType` chain includes `org.blockml.core.Constraint`. The compiler binds each constraint's generic parameter `T` to the property type (or element type for collection constraints) and validates both the constraint instance and the property value.
 
-```text
-suggestions:
-  - value: "#303D4E"   label: "Midnight Blue"
-  - value: "#EAC645"   label: "Sun Flower"
-  - value: "#58B99D"   label: "Turquoise"
+```xml
+<property name="width" type="Float" value="50">
+  <constraints>
+    <constraint:Min value="0"/>
+    <constraint:Max value="100"/>
+  </constraints>
+</property>
 ```
 
-The author can always enter any value regardless of suggestions.
+Constraints are enforceable — value violations emit `BML_CONSTRAINT_VIOLATION`. See `18_constraints_and_suggestions.md`.
+
+### Suggestions
+
+A Property may declare a list of suggested values. Each suggestion is a Block instance of the **same type as the property** — no special base type. Suggestions are purely metadata — they do not affect type validation or compilation. Editors display the property as a combobox; the SCAD BlockProcessor generates an OpenSCAD Customizer dropdown comment.
+
+```xml
+<property name="textColor" type="String" value="#303D4E">
+  <suggestions>
+    <String value="#303D4E"/>
+    <String value="#EAC645"/>
+    <String value="#58B99D"/>
+  </suggestions>
+</property>
+```
+
+The author can always enter any value regardless of suggestions. See `18_constraints_and_suggestions.md`.
 
 ### Computed Property Values
 

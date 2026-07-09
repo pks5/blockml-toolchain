@@ -1,0 +1,33 @@
+<!--
+  BlockML Core — pattern constraint
+
+  FQN: org.blockml.constraint.Pattern
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <idea>Regular-expression pattern for a string property value.</idea>
+
+  <documentation>T binds to org.blockml.type.String. The value property holds the regex pattern.</documentation>
+
+  <name>Pattern</name>
+  <type>org.blockml.constraint.Pattern</type>
+  <baseType>org.blockml.core.Constraint</baseType>
+  <version>1.0.0</version>
+
+  <genericTypes>
+    <genericType name="T" baseType="org.blockml.type.String"/>
+  </genericTypes>
+
+  <properties>
+    <property name="value" type="org.blockml.type.String">
+      <documentation>Regular expression the property value must match.</documentation>
+    </property>
+  </properties>
+
+</block>

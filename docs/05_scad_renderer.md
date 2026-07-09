@@ -760,11 +760,15 @@ recessDepth = 0.5;
 recessDepthResolved = recessDepthAuto ? "auto" : recessDepth;
 ```
 
-**`suggestions`** — generates a Customizer dropdown comment from `<suggestions>` on the Property:
+**`suggestions`** — generates a Customizer dropdown comment from `<suggestions>` on the Property. Each suggestion is a Block instance of the property type; the renderer serializes each instance to its SCAD literal form:
 
 ```scad
-textColor = "#303D4E"; // [#303D4E:Midnight Blue, #EAC645:Sun Flower, #58B99D:Turquoise]
+textColor = "#303D4E"; // [#303D4E, #EAC645, #58B99D]
 ```
+
+Optional labels may be derived from `<documentation>` on suggestion instances when present.
+
+**`constraints`** — `Min` and `Max` constraint instances map to OpenSCAD Customizer range metadata (`customizer_range: "[min:step:max]"`) when both bounds are present. Individual constraints may also inform editor range hints. See `18_constraints_and_suggestions.md`.
 
 ### Wrapper mb_block() Logic
 

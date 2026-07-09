@@ -330,7 +330,30 @@ Property-specific:
 ```text
 type="…"                 → typeFqn (resolved)
 value="…"                → value (LiteralValue or ExpressionValue). Formerly defaultValue.
+<constraints>            → constraints[] (BlockInstance[], document order)
+<suggestions>            → suggestions[] (BlockInstance[], document order)
 ```
+
+**`<constraints>` mapping:**
+
+Each child element inside `<constraints>` is mapped as a `BlockInstance`. The element name resolves to a Block FQN via namespace prefix (same rules as composition children). Stage [8] validates:
+
+```text
+instance.typeFqn baseType chain includes org.blockml.core.Constraint
+generic T bound to property type (or element/collection type per constraint definition)
+constraint instance member values match bound generic T
+property value satisfies constraint semantics
+```
+
+**`<suggestions>` mapping:**
+
+Each child element inside `<suggestions>` is mapped as a `BlockInstance`. Stage [8] validates:
+
+```text
+instance.typeFqn compatible with property typeFqn
+```
+
+Suggestions are metadata — no value enforcement. See `18_constraints_and_suggestions.md`.
 
 Visibility derivation when `visibility` is omitted:
 

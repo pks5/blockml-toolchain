@@ -1,0 +1,29 @@
+<!--
+  BlockML Core — constraint branch
+
+  FQN: org.blockml.core.Constraint
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  ">
+
+  <idea>Validation rule attached to a property — interpreted by the compiler and editors.</idea>
+
+  <documentation>Abstract branch for property constraints. Each concrete constraint extends this type and declares its own properties. Generic parameter T is bound automatically to the property type (or element type for collection constraints) at validate time — authors never specify the type argument in BML.</documentation>
+
+  <name>Constraint</name>
+  <type>org.blockml.core.Constraint</type>
+  <baseType>org.blockml.core.Block</baseType>
+  <version>1.0.0</version>
+
+  <abstract>true</abstract>
+
+  <genericTypes>
+    <genericType name="T" baseType="org.blockml.core.TypeBlock"/>
+  </genericTypes>
+
+</block>

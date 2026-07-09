@@ -471,6 +471,11 @@ BML_DUPLICATE_CONTRACT        — same contract type declared twice
 BML_CONTRACT_MEMBER_MISSING   — implementing Block lacks a contract member
 BML_CONTRACT_MEMBER_INCOMPATIBLE — member present but type/cardinality mismatch
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
+BML_CONSTRAINT_UNKNOWN        — constraint Block type not in TypeRegistry or not a Constraint sub-type
+BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with property or element type
+BML_CONSTRAINT_VALUE_MISMATCH — constraint instance property value incompatible with bound generic T
+BML_CONSTRAINT_VIOLATION      — property value fails a declared constraint (Min, Max, MinLength, …)
+BML_SUGGESTION_TYPE_MISMATCH  — suggestion Block instance type incompatible with property type
 BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfied (type notation)
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
 BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a TypeBlock
