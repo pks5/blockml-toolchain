@@ -1234,21 +1234,21 @@ A Library is a **Block** with `baseType="org.blockml.core.BlockLibrary"`. It gro
 ```text
 org.blockml.core.BlockLibrary           abstract composable Block
   property     description   String
-  subBlocks    Dependency · Schema · BlockRef
-  aggregation  _dependencies  Dependency[]
-  aggregation  _schemas       Schema[]       (optional — legacy XSD)
-  aggregation  _blocks        BlockRef[]     (Block + TypeBlock BML)
+  subBlocks    Schema
+  aggregation  _dependencies  BlockLibrary[]   validate=false
+  aggregation  _schemas       Schema[]         (optional — legacy XSD)
+  aggregation  _blocks        Block[]          validate=false
 
-org.blockml.core.BlockLibrary.Dependency   ref (BlockLibrary FQN) · version
 org.blockml.core.BlockLibrary.Schema       ref (relative .xsd path)
-org.blockml.core.BlockLibrary.BlockRef     ref (relative block or type .bml path)
 ```
+
+`_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN, `bml:version` pins the required definition version. `validate="false"` skips constraint evaluation on these reference instances.
 
 The Library block lives in a package directory (e.g. `com/machineblocks/bricks/`). Its FQN follows the normal block rule: package path + block name (e.g. `com.machineblocks.bricks.BricksLibrary`).
 
 **Name (soft convention):** `{Segment}Library` in PascalCase — e.g. `<name>BricksLibrary</name>` for the `com.machineblocks.bricks` package. Makes the library descriptor identifiable as such; not enforced by the compiler. Filename matches block name (`BricksLibrary.bml`).
 
-**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `BlockRef` paths relative to the library root, and registers referenced files in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Bootstrap:** the CLI/orchestrator discovers Library blocks first, resolves `_dependencies` and `_blocks` entries by FQN + `bml:version`, and registers the referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
 **Types:** TypeBlock definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** is optional legacy XSD — omit when types are BML-only.
 
@@ -1504,7 +1504,7 @@ bml:version="1.0.0"   — on every external block instance reference in a compos
 
 See `12_bom_object_model.md` — Instance Version Rules.
 
-Library `<Dependency>` entries require an explicit `version` member attribute — same dependency semantics as `bml:version` on external composition instances.
+Library `_dependencies` entries require an explicit `bml:version` — same dependency semantics as `bml:version` on external composition instances.
 
 ---
 

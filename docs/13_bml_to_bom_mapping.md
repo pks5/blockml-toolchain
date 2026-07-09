@@ -196,8 +196,8 @@ Capability and property type attributes are parsed into **`TypeExpression`** obj
 Unqualified PascalCase names on `type="..."` (properties, aggregations, capabilities) use the **same Sub-Block resolution order** as composition children (see `02_mbml.md` — Short-Name Reference) before falling back to `NamedTypeReference` registry lookup.
 
 ```text
-<aggregation type="Dependency" .../>   on org.blockml.core.BlockLibrary
-  → NamedTypeReference { fqn: "org.blockml.core.BlockLibrary.Dependency" }
+<aggregation type="core:BlockLibrary[]" validate="false" .../>   on org.blockml.core.BlockLibrary
+  → NamedTypeReference { fqn: "org.blockml.core.BlockLibrary" }
 
 inputType="Float"
   → NamedTypeReference { fqn: "org.blockml.type.Float" }
@@ -568,18 +568,18 @@ BML_CONTRACT_MEMBER_INCOMPATIBLE    — member kind or type/cardinality mismatch
 Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.core.BlockLibrary`. Composition children:
 
 ```text
-<Dependency ref="…" version="…"/>  → org.blockml.core.BlockLibrary.Dependency (short name)
-<Schema ref="bricks.xsd"/>         → org.blockml.core.BlockLibrary.Schema
-<BlockRef ref="types/Size3D.bml"/> → org.blockml.core.BlockLibrary.BlockRef (TypeBlock)
-<BlockRef ref="blocks/Wall.bml"/>  → org.blockml.core.BlockLibrary.BlockRef (composable Block)
-<BlockRef ref="presets/WallPresets.bml"/>  → preset block via _blocks
+<core:CoreLibrary bml:version="3.0.0"/>  → BlockInstance { typeFqn: "com.machineblocks.core.CoreLibrary", version: "3.0.0" }
+<Schema ref="bricks.xsd"/>                 → org.blockml.core.BlockLibrary.Schema (short name)
+<type:Size3d bml:version="1.0.0"/>         → BlockInstance { typeFqn: "com.machineblocks.type.Size3d", version: "1.0.0" }
+<bricks:Wall bml:version="1.0.0"/>         → BlockInstance { typeFqn: "com.machineblocks.bricks.Wall", version: "1.0.0" }
+<bricks:WallPresets bml:version="1.0.0"/>  → preset block via _blocks
 ```
 
-Short names resolve via inherited Sub-Blocks of `org.blockml.core.BlockLibrary` on any Library-typed root block.
+`_dependencies` and `_blocks` aggregations declare `validate="false"` — children are type references only; constraint evaluation is skipped.
 
 Each child requires explicit aggregation members (`_dependencies`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
 
-**Orchestrator (not parser):** after parsing a Library block, resolve each `ref` path relative to the library package root, parse referenced files, and `registerBlockDefinition`. Validate `Dependency.ref` + `version` against a registered Library block FQN.
+**Orchestrator (not parser):** after parsing a Library block, resolve each `_dependencies` and `_blocks` entry by FQN + `bml:version`, load the referenced definitions, and `registerBlockDefinition`. Validate that pinned versions match registered blocks.
 
 ### Incremental builds
 

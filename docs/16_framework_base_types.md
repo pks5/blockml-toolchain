@@ -164,7 +164,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml
      org/blockml/service/Math.bml · Strings.bml · …
-     org/blockml/core/BlockLibrary.bml   ← includes Dependency · Schema · BlockRef as subBlocks
+     org/blockml/core/BlockLibrary.bml   ← includes Schema as subBlock; _dependencies / _blocks as Block references
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml

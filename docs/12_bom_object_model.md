@@ -374,6 +374,8 @@ interface AggregationDefinition extends MemberDefinitionBase {
   typeFqn: string
   cardinality: "0..1" | "0..n" | "1..1" | "1..n"
   defaultAggregation?: boolean
+  /** When false, composition children are type references only — skip constraint evaluation */
+  validate?: boolean
   /** Nested composition filling this aggregation (may be omitted on override declarations) */
   composition?: CompositionTemplate
   /** ServiceBlock binding */
@@ -900,21 +902,21 @@ Library descriptors are ordinary `BlockDefinition` documents with `baseType="org
 ```text
 org.blockml.core.BlockLibrary
   property     description     String
-  subBlocks      Dependency · Schema · BlockRef
-  aggregation  _dependencies   0..n  org.blockml.core.BlockLibrary.Dependency
+  subBlocks      Schema
+  aggregation  _dependencies   0..n  org.blockml.core.BlockLibrary   validate=false
   aggregation  _schemas        0..n  org.blockml.core.BlockLibrary.Schema
-  aggregation  _blocks         0..n  org.blockml.core.BlockLibrary.BlockRef
+  aggregation  _blocks         0..n  org.blockml.core.Block           validate=false
 
-org.blockml.core.BlockLibrary.Dependency   properties: ref (BlockLibrary FQN), version
 org.blockml.core.BlockLibrary.Schema       property:  ref (relative .xsd path)
-org.blockml.core.BlockLibrary.BlockRef     property:  ref (relative block or type file path)
 ```
 
-Entry types are **Sub-Blocks of `org.blockml.core.BlockLibrary`** — defined in `BlockLibrary.bml`, not separate framework files. Library-typed blocks (`baseType="org.blockml.core.BlockLibrary"`) resolve `<Dependency>`, `<BlockRef>`, etc. by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
+`_dependencies` and `_blocks` use empty Block instances as type references — element name resolves to FQN, `bml:version` pins the required definition version. `validate="false"` on these aggregations skips constraint evaluation on the reference instances (parser still validates syntax and types).
 
-Composition children use element names `Dependency`, `Schema`, `BlockRef` — each `aggregation=` attribute is required (BlockLibrary has three aggregations, none is default).
+`Schema` is a **Sub-Block of `org.blockml.core.BlockLibrary`** — defined in `BlockLibrary.bml`. Library-typed blocks resolve `<Schema>` by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
 
-The orchestrator resolves `ref` paths relative to the library package root, loads referenced files into the TypeRegistry, and validates Library dependencies (`ref` + `version` must match a registered Library block).
+Composition children in `_dependencies` and `_blocks` are Block instances (`<core:CoreLibrary bml:version="3.0.0" />`, `<bricks:Standard bml:version="1.0.0" />`). `_schemas` uses `<Schema ref="…" />`. Each `aggregation=` attribute is required (BlockLibrary has three aggregations, none is default).
+
+The orchestrator resolves `_dependencies` and `_blocks` entries by FQN + `bml:version`, loads referenced definitions into the TypeRegistry, and validates that pinned versions match registered blocks.
 
 `_schemas` is optional legacy XSD. `_blocks` lists exported Block and TypeBlock BML — primary SSOT as types migrate from XSD.
 
@@ -967,9 +969,9 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ```text
 1. Built-in ServiceBlocks     — @blockml/core (org.blockml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
-3. Library blocks             — org.blockml.core.BlockLibrary → resolve BlockRef paths
+3. Library blocks             — org.blockml.core.BlockLibrary → resolve _dependencies / _blocks by FQN + bml:version
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
-5. Declared dependencies      — Library Dependency entries + bom.config.json paths
+5. Declared dependencies      — Library _dependencies entries + bom.config.json paths
 ```
 
 Each discovered file is parsed independently (stages [5–7]) and registered via `registerBlockDefinition(doc)`.
@@ -1052,8 +1054,8 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Property value cycles (topological sort)
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
 ✓  contract types resolve, are abstract, and member surface is satisfied by effective members
-✓  Library BlockRef paths resolve to existing files
-✓  Library Dependency ref + version matches registered Library block
+✓  Library _blocks entries resolve to registered Block definitions (FQN + bml:version)
+✓  Library _dependencies entries resolve to registered BlockLibrary definitions (FQN + bml:version)
 ```
 
 The validator does **not** expand directives, assign auto-IDs, or interpret aggregations.

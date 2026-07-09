@@ -977,6 +977,8 @@ When overriding an inherited aggregation, `type` is required only for **new** de
 ```text
 type         — child type (required on new declarations; inherited on overrides)
 default      — boolean; marks the default aggregation for bare <composition>
+validate     — boolean; when false, composition children are type references only —
+               block constraints are not evaluated (see Library _dependencies / _blocks)
 readOnly     — informational only
 final        — prevents override in child Blocks
 namespace    — XML namespace prefix (resolved at parse time — see § Member Namespace Attribute)
@@ -1540,7 +1542,7 @@ com.machineblocks.calibration.Calibrator.Base.Strip
 
 When a composition child element has **no namespace prefix** (PascalCase tag name only), the parser resolves `typeFqn` in this order:
 
-The **same resolution order** applies to `type="..."` on `<property>`, `<aggregation>`, `<capability>`, and related member declarations when the value is an unqualified PascalCase name (e.g. `type="Dependency"` on an aggregation when `Dependency` is a Sub-Block in the same file).
+The **same resolution order** applies to `type="..."` on `<property>`, `<aggregation>`, `<capability>`, and related member declarations when the value is an unqualified PascalCase name (e.g. `type="Schema"` on an aggregation when `Schema` is a Sub-Block in the same file).
 
 ```text
 1. subBlocks[] of the innermost containing BlockDefinition (same BML document)
@@ -1550,17 +1552,15 @@ The **same resolution order** applies to `type="..."` on `<property>`, `<aggrega
 5. TypeRegistry global lookup
 ```
 
-Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.BlockLibrary.Dependency`). Authors may write the short name in BML.
+Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.calibration.Calibrator.Base`). Authors may write the short name in BML when the type is a Sub-Block in scope.
 
 **Same document — aggregation example (`BlockLibrary.bml`):**
 
 ```xml
 <aggregations>
-  <_dependencies type="Dependency[]" />
+  <_dependencies type="core:BlockLibrary[]" validate="false" />
+  <_blocks type="core:Block[]" validate="false" />
 </aggregations>
-<subBlocks>
-  <block><name>Dependency</name>...</block>
-</subBlocks>
 ```
 
 **Same document — composition example:**
@@ -1571,18 +1571,26 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `org.blockml.core.Bl
 <StudDiameter bml:id="samples_stud" ... />
 ```
 
-**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.BlockLibrary"` (e.g. `BricksLibrary`) automatically resolves `Dependency`, `BlockRef`, … without prefix — they are Sub-Blocks of `org.blockml.core.BlockLibrary`, inherited via the baseType chain. Authors do not redeclare them in each library file.
+**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.core.BlockLibrary` declare `validate="false"`. Composition children are empty Block instances — the element name (with xmlns prefix) resolves to the referenced type FQN; `bml:version` pins the required definition version. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
 
 ```xml
-<!-- BricksLibrary.bml — no xmlns needed for entry types -->
+<!-- BricksLibrary.bml -->
 <aggregations>
   <_dependencies>
     <composition>
-      <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
+      <core:CoreLibrary bml:version="3.0.0" />
     </composition>
   </_dependencies>
+  <_blocks>
+    <composition>
+      <type:Size3d bml:version="1.0.0" />
+      <bricks:Standard bml:version="1.0.0" />
+    </composition>
+  </_blocks>
 </aggregations>
 ```
+
+**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.BlockLibrary"` (e.g. `BricksLibrary`) still resolves `Schema` by short name — it is a Sub-Block of `org.blockml.core.BlockLibrary`, inherited via the baseType chain.
 
 When referencing a Sub-Block from **outside** the parent Block, use the full FQN:
 
@@ -2139,7 +2147,7 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
   <aggregations>
     <_dependencies>
       <composition>
-        <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
+        <core:CoreLibrary bml:version="3.0.0" />
       </composition>
     </_dependencies>
 
@@ -2152,12 +2160,12 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 
     <_blocks>
       <composition>
-        <BlockRef ref="types/Size3D.bml" />
-        <BlockRef ref="types/Direction.bml" />
-        <BlockRef ref="blocks/Standard.bml" />
-        <BlockRef ref="blocks/Plate.bml" />
-        <BlockRef ref="blocks/Tile.bml" />
-        <BlockRef ref="presets/StandardPresets.bml" />
+        <type:Size3d bml:version="1.0.0" />
+        <type:Direction bml:version="1.0.0" />
+        <bricks:Standard bml:version="1.0.0" />
+        <bricks:Plate bml:version="1.0.0" />
+        <bricks:Tile bml:version="1.0.0" />
+        <bricks:StandardPresets bml:version="3.0.0" />
       </composition>
     </_blocks>
   </aggregations>
@@ -2165,7 +2173,9 @@ A Library groups related Blocks, optional XSD schemas, and dependencies into a p
 </block>
 ```
 
-**`ref` paths** on `BlockRef` and `Schema` are relative to the **library package root** (directory containing the Library block file).
+**`_dependencies` and `_blocks`** use Block instances as type references (`validate="false"` on the aggregation — constraints are not evaluated). The element name resolves to the Block FQN; `bml:version` pins the required definition version.
+
+**`ref` paths** on `Schema` are relative to the **library package root** (directory containing the Library block file).
 
 **`_blocks`** lists exported Block and TypeBlock definitions (composable Blocks, StructType, EnumType, presets, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML.
 
