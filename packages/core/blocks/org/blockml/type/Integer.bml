@@ -3,7 +3,8 @@
 
   <idea>Primitive BlockML property type capable of holding a whole number.</idea>
 
-  <documentation>BOM Core primitive TypeBlock for whole numbers. Unqualified name Integer resolves to org.blockml.type.Integer.</documentation>
+  <documentation>BOM Core primitive TypeBlock for whole numbers. Unqualified name Integer resolves
+    to org.blockml.type.Integer.</documentation>
 
   <name>Integer</name>
   <type>org.blockml.type.Integer</type>

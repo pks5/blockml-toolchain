@@ -10,14 +10,13 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Built-in boolean utilities callable as #bools in expressions.</idea>
 
-  <documentation>Built-in booleans FunctionBlock. Expression prefix #bools.* — logical and boolean conversion utilities.</documentation>
+  <documentation>Built-in booleans FunctionBlock. Expression prefix #bools.* — logical and boolean
+    conversion utilities.</documentation>
 
   <name>Bools</name>
   <type>org.blockml.service.Bools</type>
@@ -28,14 +27,14 @@
 
     <!-- #bools.isTrue(x) -->
     <isTrue
-                type="org.blockml.capability.Transformation"
-                inputType="org.blockml.type.Boolean"
-                outputType="org.blockml.type.Boolean">
+      type="org.blockml.capability.Transformation"
+      inputType="org.blockml.type.Boolean"
+      outputType="org.blockml.type.Boolean">
       <documentation>
         Returns true if x is strictly true.
         Examples:
-          #bools.isTrue(true)   → true
-          #bools.isTrue(1)      → false
+        #bools.isTrue(true) → true
+        #bools.isTrue(1) → false
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: boolean): boolean => x === true
@@ -44,14 +43,14 @@
 
     <!-- #bools.isFalse(x) -->
     <isFalse
-                type="org.blockml.capability.Transformation"
-                inputType="org.blockml.type.Boolean"
-                outputType="org.blockml.type.Boolean">
+      type="org.blockml.capability.Transformation"
+      inputType="org.blockml.type.Boolean"
+      outputType="org.blockml.type.Boolean">
       <documentation>
         Returns true if x is strictly false.
         Examples:
-          #bools.isFalse(false)  → true
-          #bools.isFalse(0)      → false
+        #bools.isFalse(false) → true
+        #bools.isFalse(0) → false
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: boolean): boolean => x === false

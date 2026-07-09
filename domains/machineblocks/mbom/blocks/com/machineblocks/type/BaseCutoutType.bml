@@ -7,10 +7,8 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:bml="http://blockml.org/schema/bml"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Shape variant of the underside cutout on a brick base.</idea>
 
@@ -30,10 +28,10 @@
   <aggregations>
     <_values>
       <composition bml:exportIds="true">
-        <BaseCutoutType bml:id="NONE"     value="none"     />
+        <BaseCutoutType bml:id="NONE" value="none" />
         <BaseCutoutType bml:id="STANDARD" value="standard" />
-        <BaseCutoutType bml:id="GROOVE"   value="groove"   />
-        <BaseCutoutType bml:id="STUDS"    value="studs"    />
+        <BaseCutoutType bml:id="GROOVE" value="groove" />
+        <BaseCutoutType bml:id="STUDS" value="studs" />
       </composition>
     </_values>
   </aggregations>

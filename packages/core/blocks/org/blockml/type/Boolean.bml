@@ -3,7 +3,8 @@
 
   <idea>Primitive BlockML property type capable of holding true or false.</idea>
 
-  <documentation>BOM Core primitive TypeBlock for true/false values. Unqualified name Boolean resolves to org.blockml.type.Boolean.</documentation>
+  <documentation>BOM Core primitive TypeBlock for true/false values. Unqualified name Boolean
+    resolves to org.blockml.type.Boolean.</documentation>
 
   <name>Boolean</name>
   <type>org.blockml.type.Boolean</type>

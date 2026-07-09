@@ -15,16 +15,14 @@
   xmlns:type="com.machineblocks.type"
   xmlns:bricks="com.machineblocks.bricks"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-    http://machineblocks.com/schema/bricks
-        https://machineblocks.com/schemas/machineblocks/bricks.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
+                      ">
 
   <idea>Named size and color shortcuts for the Standard brick.</idea>
 
-  <documentation>Named property presets for the MachineBlocks Standard brick — sizes, colors, and composite combinations for Customizer and basePresets references.</documentation>
+  <documentation>Named property presets for the MachineBlocks Standard brick — sizes, colors, and
+    composite combinations for Customizer and basePresets references.</documentation>
 
   <name>StandardPresets</name>
   <type>com.machineblocks.bricks.StandardPresets</type>
@@ -45,30 +43,31 @@
 
         <bricks:Standard bml:id="color-blue" name="Blue" bml:version="3.0.0" baseColor="#5296D5" />
 
-        <bricks:Standard bml:id="color-midnight" name="Midnight Blue" bml:version="3.0.0" baseColor="#303D4E" />
+        <bricks:Standard bml:id="color-midnight" name="Midnight Blue" bml:version="3.0.0"
+          baseColor="#303D4E" />
 
         <bricks:Standard bml:id="brick-1x1-red"
-                         name="Brick 1x1 Red"
-                         bml:version="3.0.0"
-                         basePresets="brick-1x1 color-red" />
+          name="Brick 1x1 Red"
+          bml:version="3.0.0"
+          basePresets="brick-1x1 color-red" />
 
         <bricks:Standard bml:id="brick-2x4-blue"
-                         name="Brick 2x4 Blue"
-                         bml:version="3.0.0"
-                         basePresets="brick-2x4 color-blue" />
+          name="Brick 2x4 Blue"
+          bml:version="3.0.0"
+          basePresets="brick-2x4 color-blue" />
 
         <bricks:Standard bml:id="brick-1x1-red-text"
-                         name="Brick 1x1 Red MB"
-                         bml:version="3.0.0"
-                         basePresets="brick-1x1-red"
-                         text="MB"
-                         textColor="#EDF0F1" />
+          name="Brick 1x1 Red MB"
+          bml:version="3.0.0"
+          basePresets="brick-1x1-red"
+          text="MB"
+          textColor="#EDF0F1" />
 
         <bricks:Standard bml:id="brick-2x4-special"
-                         name="Brick 2x4 Special"
-                         bml:version="3.0.0"
-                         basePresets="com.myproject.presets.MyPresets::my-base brick-2x4"
-                         textColor="#EDF0F1" />
+          name="Brick 2x4 Special"
+          bml:version="3.0.0"
+          basePresets="com.myproject.presets.MyPresets::my-base brick-2x4"
+          textColor="#EDF0F1" />
 
       </composition>
     </_presets>

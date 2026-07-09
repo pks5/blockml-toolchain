@@ -10,14 +10,13 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Catalog of block and type definitions published as a package.</idea>
 
-  <documentation>Publishable library unit — groups exported Block definitions, optional XSD schemas, and dependencies on other libraries. Replaces the legacy library.xml descriptor.</documentation>
+  <documentation>Publishable library unit — groups exported Block definitions, optional XSD schemas,
+    and dependencies on other libraries. Replaces the legacy library.xml descriptor.</documentation>
 
   <name>Library</name>
   <type>org.blockml.core.Library</type>
@@ -38,9 +37,9 @@
 
   <aggregations>
     <_dependencies type="Dependency[]" />
-    <_schemas     type="Schema[]" />
-    <_types        type="TypeRef[]" />
-    <_blocks       type="BlockRef[]" />
+    <_schemas type="Schema[]" />
+    <_types type="TypeRef[]" />
+    <_blocks type="BlockRef[]" />
   </aggregations>
 
   <subBlocks>
@@ -48,7 +47,8 @@
     <block>
       <idea>Declared dependency on another published Library package.</idea>
 
-      <documentation>Dependency on another Library — pins required library FQN and exact semantic version.</documentation>
+      <documentation>Dependency on another Library — pins required library FQN and exact semantic
+        version.</documentation>
       <name>Dependency</name>
       <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>
@@ -81,7 +81,8 @@
     <block>
       <idea>Pointer to a type definition file in this library.</idea>
 
-      <documentation>Reference to a TypeBlock definition file (StructType, EnumType, …) exported by this Library.</documentation>
+      <documentation>Reference to a TypeBlock definition file (StructType, EnumType, …) exported by
+        this Library.</documentation>
       <name>TypeRef</name>
       <baseType>org.blockml.core.Block</baseType>
       <version>1.0.0</version>

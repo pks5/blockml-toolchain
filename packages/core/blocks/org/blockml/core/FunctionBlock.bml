@@ -6,14 +6,14 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Service whose capabilities behave like callable functions.</idea>
 
-  <documentation>Abstract base for FunctionBlocks — ServiceBlocks whose Sync Capabilities may carry TypeScript or OpenSCAD implementations. Used for #math, #strings, and similar expression utilities.</documentation>
+  <documentation>Abstract base for FunctionBlocks — ServiceBlocks whose Sync Capabilities may carry
+    TypeScript or OpenSCAD implementations. Used for #math, #strings, and similar expression
+    utilities.</documentation>
 
   <name>FunctionBlock</name>
   <type>org.blockml.core.FunctionBlock</type>

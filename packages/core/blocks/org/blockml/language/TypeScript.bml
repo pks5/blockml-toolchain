@@ -8,7 +8,8 @@
 
   <idea>TypeScript as an implementation language for sync capabilities.</idea>
 
-  <documentation>LanguageBlock for TypeScript arrow-function implementations on Transformation Capabilities. V1: compile-time execution when all arguments are literals.</documentation>
+  <documentation>LanguageBlock for TypeScript arrow-function implementations on Transformation
+    Capabilities. V1: compile-time execution when all arguments are literals.</documentation>
 
   <name>TypeScript</name>
   <type>org.blockml.language.TypeScript</type>

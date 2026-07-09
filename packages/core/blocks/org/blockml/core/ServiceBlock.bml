@@ -6,14 +6,13 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Reusable logic unit addressable as a service in expressions.</idea>
 
-  <documentation>Abstract base for built-in ServiceBlocks — addressable logic units invoked via stud:// or expressions, with no sub-blocks.</documentation>
+  <documentation>Abstract base for built-in ServiceBlocks — addressable logic units invoked via
+    stud:// or expressions, with no sub-blocks.</documentation>
 
   <name>ServiceBlock</name>
   <type>org.blockml.core.ServiceBlock</type>

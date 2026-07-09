@@ -7,14 +7,14 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Any MachineBlocks domain object — bricks, sets, presets, and compositions.</idea>
 
-  <documentation>MachineBlocks domain base Block. Carries _presets aggregation and basePresets association for domain-specific preset resolution. Preset merge is compiler logic; Customizer output is render-target logic.</documentation>
+  <documentation>MachineBlocks domain base Block. Carries _presets aggregation and basePresets
+    association for domain-specific preset resolution. Preset merge is compiler logic; Customizer
+    output is render-target logic.</documentation>
 
   <name>Block</name>
   <type>com.machineblocks.core.Block</type>
@@ -28,7 +28,7 @@
       <documentation>The human readable name of the Block.</documentation>
     </name>
   </properties>
-  
+
   <associations>
     <basePresets type="_self[]"></basePresets>
   </associations>
@@ -36,5 +36,5 @@
   <aggregations>
     <_presets type="com.machineblocks.core.Block[]" />
   </aggregations>
-  
+
 </block>

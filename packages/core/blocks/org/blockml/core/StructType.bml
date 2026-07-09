@@ -6,14 +6,13 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Branch for product types — composite values with named fields.</idea>
 
-  <documentation>Abstract branch for struct TypeBlocks — complex values described by normal Properties. No special struct syntax.</documentation>
+  <documentation>Abstract branch for struct TypeBlocks — complex values described by normal
+    Properties. No special struct syntax.</documentation>
 
   <name>StructType</name>
   <type>org.blockml.core.StructType</type>

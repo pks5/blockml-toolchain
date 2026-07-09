@@ -12,14 +12,13 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Published catalog of MachineBlocks standard brick definitions.</idea>
 
-  <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their preset blocks.</documentation>
+  <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
+    preset blocks.</documentation>
 
   <name>BricksLibrary</name>
   <type>com.machineblocks.bricks.BricksLibrary</type>
@@ -28,11 +27,11 @@
 
   <properties>
     <description type="String"
-              >
+    >
       <value>Standard brick types for MachineBlocks</value>
     </description>
     <package type="String"
-              >
+    >
       <value>com.machineblocks.bricks</value>
     </package>
   </properties>

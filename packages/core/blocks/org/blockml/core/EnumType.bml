@@ -6,14 +6,13 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Branch for closed sets of named literal values.</idea>
 
-  <documentation>Abstract branch for closed enum TypeBlocks. Enum values are Block instances in the default _values aggregation — no special enum syntax.</documentation>
+  <documentation>Abstract branch for closed enum TypeBlocks. Enum values are Block instances in the
+    default _values aggregation — no special enum syntax.</documentation>
 
   <name>EnumType</name>
   <type>org.blockml.core.EnumType</type>
@@ -24,7 +23,7 @@
 
   <aggregations>
     <_values
-                 type="_self[]"
-                 default="true" />
+      type="_self[]"
+      default="true" />
   </aggregations>
 </block>

@@ -29,23 +29,23 @@
     <base type="org.blockml.type.Boolean">
       <value>true</value>
     </base>
-    
+
     <baseCutoutType type="com.machineblocks.type.BaseCutoutType">
       <value>STANDARD</value>
     </baseCutoutType>
-    
+
     <scale type="org.blockml.type.Float">
       <value>1.0</value>
     </scale>
-    
+
     <stabilizerExpansion type="org.blockml.type.Integer">
       <value>2</value>
     </stabilizerExpansion>
-    
+
     <text type="org.blockml.type.String">
       <value></value>
     </text>
-    
+
     <!-- Value specified as ordered array [x, y, z] (order of properties definition), alternative: {
     x: 1, y: 1, z: 1 } -->
     <size type="com.machineblocks.type.Size3D">

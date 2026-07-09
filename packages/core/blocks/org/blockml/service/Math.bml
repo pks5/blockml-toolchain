@@ -10,14 +10,13 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>Built-in numeric utilities callable as #math in expressions.</idea>
 
-  <documentation>Built-in math FunctionBlock. Expression prefix #math.* — min, max, abs, floor, round, and related numeric utilities.</documentation>
+  <documentation>Built-in math FunctionBlock. Expression prefix #math.* — min, max, abs, floor,
+    round, and related numeric utilities.</documentation>
 
   <name>Math</name>
   <type>org.blockml.service.Math</type>
@@ -28,14 +27,14 @@
 
     <!-- #math.min(a, b) — SCAD: native min(a, b) -->
     <min
-                type="org.blockml.capability.Transformation"
-                inputType="{ a: Float, b: Float }"
-                outputType="org.blockml.type.Float">
+      type="org.blockml.capability.Transformation"
+      inputType="{ a: Float, b: Float }"
+      outputType="org.blockml.type.Float">
       <documentation>
         Returns the smaller of two numbers.
         Examples:
-          #math.min(3, 5)          → 3
-          #math.min(size[0], 10)   → min(size[0], 10)
+        #math.min(3, 5) → 3
+        #math.min(size[0], 10) → min(size[0], 10)
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (a: number, b: number): number => Math.min(a, b)
@@ -44,14 +43,14 @@
 
     <!-- #math.max(a, b) — SCAD: native max(a, b) -->
     <max
-                type="org.blockml.capability.Transformation"
-                inputType="{ a: Float, b: Float }"
-                outputType="org.blockml.type.Float">
+      type="org.blockml.capability.Transformation"
+      inputType="{ a: Float, b: Float }"
+      outputType="org.blockml.type.Float">
       <documentation>
         Returns the larger of two numbers.
         Examples:
-          #math.max(3, 5)          → 5
-          #math.max(size[0], 10)   → max(size[0], 10)
+        #math.max(3, 5) → 5
+        #math.max(size[0], 10) → max(size[0], 10)
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (a: number, b: number): number => Math.max(a, b)
@@ -60,13 +59,13 @@
 
     <!-- #math.abs(x) — SCAD: native abs(x) -->
     <abs
-                type="org.blockml.capability.Transformation"
-                inputType="org.blockml.type.Float"
-                outputType="org.blockml.type.Float">
+      type="org.blockml.capability.Transformation"
+      inputType="org.blockml.type.Float"
+      outputType="org.blockml.type.Float">
       <documentation>
         Returns the absolute value of x.
         Examples:
-          #math.abs(-3)  → 3
+        #math.abs(-3) → 3
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.abs(x)
@@ -75,13 +74,13 @@
 
     <!-- #math.floor(x) — SCAD: native floor(x) -->
     <floor
-                type="org.blockml.capability.Transformation"
-                inputType="org.blockml.type.Float"
-                outputType="org.blockml.type.Integer">
+      type="org.blockml.capability.Transformation"
+      inputType="org.blockml.type.Float"
+      outputType="org.blockml.type.Integer">
       <documentation>
         Rounds x down to the nearest integer.
         Examples:
-          #math.floor(3.7)  → 3
+        #math.floor(3.7) → 3
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.floor(x)
@@ -90,13 +89,13 @@
 
     <!-- #math.ceil(x) — SCAD: native ceil(x) -->
     <ceil
-                type="org.blockml.capability.Transformation"
-                inputType="org.blockml.type.Float"
-                outputType="org.blockml.type.Integer">
+      type="org.blockml.capability.Transformation"
+      inputType="org.blockml.type.Float"
+      outputType="org.blockml.type.Integer">
       <documentation>
         Rounds x up to the nearest integer.
         Examples:
-          #math.ceil(3.2)  → 4
+        #math.ceil(3.2) → 4
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.ceil(x)
@@ -105,14 +104,14 @@
 
     <!-- #math.round(x) — SCAD: native round(x) -->
     <round
-                type="org.blockml.capability.Transformation"
-                inputType="org.blockml.type.Float"
-                outputType="org.blockml.type.Integer">
+      type="org.blockml.capability.Transformation"
+      inputType="org.blockml.type.Float"
+      outputType="org.blockml.type.Integer">
       <documentation>
         Rounds x to the nearest integer.
         Examples:
-          #math.round(3.4)  → 3
-          #math.round(3.6)  → 4
+        #math.round(3.4) → 3
+        #math.round(3.6) → 4
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.round(x)
@@ -121,14 +120,14 @@
 
     <!-- #math.round_n(x, n) — SCAD: round(x * pow(10, n)) / pow(10, n) -->
     <round_n
-                type="org.blockml.capability.Transformation"
-                inputType="{ x: Float, n: Integer }"
-                outputType="org.blockml.type.Float">
+      type="org.blockml.capability.Transformation"
+      inputType="{ x: Float, n: Integer }"
+      outputType="org.blockml.type.Float">
       <documentation>
         Rounds x to n decimal places.
         Examples:
-          #math.round_n(3.14159, 2)   → 3.14
-          #math.round_n(0.1 + 0.2, 1) → 0.3
+        #math.round_n(3.14159, 2) → 3.14
+        #math.round_n(0.1 + 0.2, 1) → 0.3
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number, n: number): number =>
@@ -138,13 +137,13 @@
 
     <!-- #math.pow(base, exp) — SCAD: native pow(base, exp) -->
     <pow
-                type="org.blockml.capability.Transformation"
-                inputType="{ base: Float, exp: Float }"
-                outputType="org.blockml.type.Float">
+      type="org.blockml.capability.Transformation"
+      inputType="{ base: Float, exp: Float }"
+      outputType="org.blockml.type.Float">
       <documentation>
         Returns base raised to the power of exp.
         Examples:
-          #math.pow(2, 10)  → 1024
+        #math.pow(2, 10) → 1024
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (base: number, exp: number): number => Math.pow(base, exp)
@@ -153,13 +152,13 @@
 
     <!-- #math.sqrt(x) — SCAD: native sqrt(x) -->
     <sqrt
-                type="org.blockml.capability.Transformation"
-                inputType="org.blockml.type.Float"
-                outputType="org.blockml.type.Float">
+      type="org.blockml.capability.Transformation"
+      inputType="org.blockml.type.Float"
+      outputType="org.blockml.type.Float">
       <documentation>
         Returns the square root of x.
         Examples:
-          #math.sqrt(9)  → 3
+        #math.sqrt(9) → 3
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): number => Math.sqrt(x)
@@ -168,15 +167,15 @@
 
     <!-- #math.clamp(x, lo, hi) — SCAD: min(max(x, lo), hi) -->
     <clamp
-                type="org.blockml.capability.Transformation"
-                inputType="{ x: Float, lo: Float, hi: Float }"
-                outputType="org.blockml.type.Float">
+      type="org.blockml.capability.Transformation"
+      inputType="{ x: Float, lo: Float, hi: Float }"
+      outputType="org.blockml.type.Float">
       <documentation>
         Clamps x to the range [lo, hi].
         Examples:
-          #math.clamp(5, 0, 3)   → 3
-          #math.clamp(-1, 0, 1)  → 0
-          #math.clamp(0.5, 0, 1) → 0.5
+        #math.clamp(5, 0, 3) → 3
+        #math.clamp(-1, 0, 1) → 0
+        #math.clamp(0.5, 0, 1) → 0.5
       </documentation>
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number, lo: number, hi: number): number =>

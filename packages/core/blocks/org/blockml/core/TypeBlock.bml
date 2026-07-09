@@ -6,14 +6,14 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>A type in the BlockML grammar — values that properties and capabilities may carry.</idea>
 
-  <documentation>TypeBlock branch of BlockML. Semantic unit for property and Capability types (primitives, structs, enums, generics). Only TypeBlocks may appear as property type or Capability payloadType/returnType.</documentation>
+  <documentation>TypeBlock branch of BlockML. Semantic unit for property and Capability types
+    (primitives, structs, enums, generics). Only TypeBlocks may appear as property type or
+    Capability payloadType/returnType.</documentation>
 
   <name>TypeBlock</name>
   <type>org.blockml.core.TypeBlock</type>

@@ -7,14 +7,14 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>One assembly instruction in a Set build sequence.</idea>
 
-  <documentation>Framework Block defining one assembly instruction step in a Set — references a placed block instance via the part association. Used as children of aggregation _steps. Document order defines build order when _steps is present.</documentation>
+  <documentation>Framework Block defining one assembly instruction step in a Set — references a
+    placed block instance via the part association. Used as children of aggregation _steps. Document
+    order defines build order when _steps is present.</documentation>
 
   <name>Step</name>
   <type>com.machineblocks.core.Step</type>

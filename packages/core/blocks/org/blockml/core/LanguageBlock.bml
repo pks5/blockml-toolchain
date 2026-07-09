@@ -6,14 +6,13 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-  ">
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      ">
 
   <idea>A target implementation language for capability code.</idea>
 
-  <documentation>LanguageBlock branch of BlockML. Declares an implementation language permitted on Sync Capability implementations (OpenSCAD, TypeScript, …).</documentation>
+  <documentation>LanguageBlock branch of BlockML. Declares an implementation language permitted on
+    Sync Capability implementations (OpenSCAD, TypeScript, …).</documentation>
 
   <name>LanguageBlock</name>
   <type>org.blockml.core.LanguageBlock</type>
