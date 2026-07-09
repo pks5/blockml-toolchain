@@ -325,7 +325,10 @@ All types inherit from **`org.blockml.core.ValueType`**. Types are not a separat
 
 ```text
 org.blockml.core.ValueType              abstract
-  ├── org.blockml.core.PrimitiveType    Integer · Float · String · Boolean
+  ├── org.blockml.core.PrimitiveType
+  │     ├── org.blockml.type.Number       abstract — Integer · Float · Decimal
+  │     ├── org.blockml.type.String
+  │     └── org.blockml.type.Boolean
   ├── org.blockml.core.EnumType         BaseCutoutType · Direction · …
   └── org.blockml.core.StructType       Size3D · Color · domain value objects
 ```
@@ -334,7 +337,7 @@ org.blockml.core.ValueType              abstract
 
 | Branch | Role | Examples |
 |---|---|---|
-| **PrimitiveType** | Atomic scalar values | `Boolean`, `Integer`, `Float`, `String` |
+| **PrimitiveType** | Atomic scalar values | `Boolean`, `Integer`, `Float`, `Decimal`, `String` |
 | **EnumType** | Named finite value sets | `Direction`, `Face`, `StudType`, `BaseCutoutType` |
 | **StructType** | Custom value objects from properties | `Size3D`, `Color`, `Address`, `Transform` |
 
@@ -469,13 +472,25 @@ Not allowed: type="com.machineblocks.core.NativeBlock"   → BML_INVALID_PROPERT
 
 ### PrimitiveType
 
-Primitive types inherit from `org.blockml.core.PrimitiveType`. The branch declares:
+Primitive types inherit from `org.blockml.core.PrimitiveType`. Numeric primitives extend `org.blockml.type.Number`:
+
+```text
+org.blockml.core.PrimitiveType
+  org.blockml.type.Number     — abstract
+    org.blockml.type.Integer
+    org.blockml.type.Float
+    org.blockml.type.Decimal
+  org.blockml.type.String
+  org.blockml.type.Boolean
+```
+
+The branch declares:
 
 ```xml
 <property name="value" type="_self"/>
 ```
 
-Each concrete primitive (`Integer`, `Float`, …) inherits this member. A primitive value may appear:
+Each concrete primitive (`Integer`, `Float`, `Decimal`, …) inherits this member. A primitive value may appear:
 
 **As a property value** (type reference):
 
@@ -491,7 +506,7 @@ Each concrete primitive (`Integer`, `Float`, …) inherits this member. A primit
 
 Interpretation is context-dependent — same ValueType, two roles.
 
-V1 bootstrap primitives: `Integer`, `Float`, `String`, `Boolean` in `@blockml/core`.
+V1 bootstrap primitives: `Integer`, `Float`, `Decimal`, `String`, `Boolean` in `@blockml/core`. Numeric branch: `org.blockml.type.Number` (abstract).
 
 ### EMPTY — not a type
 
@@ -507,7 +522,7 @@ Optional association           — no target id set
 
 Union sentinels like `"none" | T` or `false | T` are typed alternatives — not null.
 
-Unqualified names in BML (`type="Integer"`) resolve to `org.blockml.type.*` — unchanged from `02_mbml.md`.
+Unqualified names in BML (`type="Integer"`) resolve via the core-primitives whitelist — see `02_mbml.md` — § Unqualified Block Resolution.
 
 ---
 
@@ -962,7 +977,7 @@ packages/core/blocks/
   org/blockml/core/
     Block.bml · ValueType.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · …
   org/blockml/type/
-    Integer.bml · Float.bml · String.bml · Boolean.bml · …
+    Integer.bml · Float.bml · Decimal.bml · Number.bml · String.bml · Boolean.bml · …
   org/blockml/language/
     TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml · XML.bml · …
   org/blockml/service/

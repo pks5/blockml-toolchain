@@ -194,7 +194,16 @@ directives:
 
 Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`org.blockml.bom.*`** — not in `org.blockml.type.*`. See `00_bom_core.md` — Implementation Namespaces · `17_type_system_bml.md` — Type Expressions.
 
-Unqualified PascalCase names on `type="..."` (properties, aggregations, capabilities) use the **same Sub-Block resolution order** as composition children (see `02_mbml.md` — Short-Name Reference) before falling back to `NamedTypeReference` registry lookup.
+Unqualified PascalCase names on `type="..."` (properties, aggregations, capabilities) and unqualified composition tags use the **Unqualified Block Resolution** order (see `02_mbml.md` — § Unqualified Block Resolution):
+
+```text
+1. Own Block name → root BlockDefinition.type FQN
+2. SubBlocks (document scope + baseType-inherited)
+3. genericTypes[] of root BlockDefinition
+4. Core primitives whitelist: String · Float · Integer · Decimal · Boolean → org.blockml.type.*
+5. xmlns prefix
+6. TypeRegistry NamedTypeReference
+```
 
 ```text
 <aggregation type="core:BlockLibrary[]" validate="false" .../>   on org.blockml.core.BlockLibrary

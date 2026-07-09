@@ -33,14 +33,17 @@ All MBOM types are defined in the **`com.machineblocks.type`** namespace (singul
 
 Type names in BML `<property type="...">` declarations are resolved as follows:
 
-**No namespace prefix → `org.blockml.type.*` (BOM Core primitives):**
+**No namespace prefix → core primitives whitelist only** (see `02_mbml.md` — § Unqualified Block Resolution):
 
 ```text
-Float    → org.blockml.type.Float
-Integer  → org.blockml.type.Integer
 String   → org.blockml.type.String
 Boolean  → org.blockml.type.Boolean
+Integer  → org.blockml.type.Integer
+Float    → org.blockml.type.Float
+Decimal  → org.blockml.type.Decimal
 ```
+
+`org.blockml.type.Number` is the abstract numeric branch — not whitelisted for unqualified resolution.
 
 Collections use multiplicity on the type reference — not `Array<T>`. See `17_type_system_bml.md` — Type Expressions.
 
@@ -110,11 +113,14 @@ Domain libraries may define additional status blocks (e.g. domain-specific WIP m
 # 1. Primitive Types
 
 ```text
-com.machineblocks.type.Boolean
-com.machineblocks.type.Integer
-com.machineblocks.type.Float
-com.machineblocks.type.String
+org.blockml.type.Boolean
+org.blockml.type.Integer
+org.blockml.type.Float
+org.blockml.type.Decimal
+org.blockml.type.String
 ```
+
+Numeric branch: `org.blockml.type.Number` (abstract) — `Integer`, `Float`, and `Decimal` extend `Number`.
 
 MBML serialization:
 
@@ -122,6 +128,7 @@ MBML serialization:
 Boolean:  "true" | "false"
 Integer:  "4"
 Float:    "0.5"
+Decimal:  "0.5"
 String:   "west"
 ```
 

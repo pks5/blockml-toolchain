@@ -119,16 +119,7 @@ The BOM always uses the full FQN. Namespace prefixes are a BML authoring conveni
 
 ### Type Namespace Shorthand
 
-Property `type` attributes accept unqualified names for BOM Core primitives and namespace-prefixed names for domain types.
-
-**Unqualified names** resolve to `org.blockml.type.*`:
-
-```text
-type="Integer"   →  org.blockml.type.Integer
-type="String"    →  org.blockml.type.String
-type="Boolean"   →  org.blockml.type.Boolean
-type="Float"     →  org.blockml.type.Float
-```
+Property `type` attributes and unqualified composition tags use **namespace-prefixed names** for domain types. **Unqualified** PascalCase names are resolved in a fixed order within the current BML document — see § Unqualified Block Resolution below.
 
 **Domain types** require the `type:` namespace prefix (declared via `xmlns:type="com.machineblocks.type"`):
 
@@ -138,6 +129,41 @@ type="type:Color"    →  com.machineblocks.type.Color
 ```
 
 There is no implicit fallback to the domain namespace. Explicit FQNs are always supported.
+
+### Unqualified Block Resolution
+
+Unqualified PascalCase identifiers — on composition element names, `type="..."` attributes, and related member declarations — resolve in this **fixed order** within the current BML document:
+
+```text
+1. Own Block name       — matches root <name> of the enclosing BlockDefinition
+2. SubBlocks            — subBlocks[] of innermost enclosing Block, walk up parent chain,
+                          then Sub-Blocks inherited via baseType chain
+3. Generic parameters   — genericTypes[] of the root BlockDefinition (e.g. type="T")
+4. Core primitives      — whitelist only (→ org.blockml.type.*):
+                          String · Float · Integer · Decimal · Boolean
+```
+
+After steps 1–4 fail in document scope:
+
+```text
+5. xmlns prefix         — bricks:Standard, type:Size3D, …
+6. TypeRegistry         — global FQN lookup
+```
+
+**Naming mutual exclusion:** A `genericType` name must differ from the root Block `<name>` and from every Sub-Block `<name>` in the same document (`BML_GENERIC_BLOCK_NAME_COLLISION`, `BML_GENERIC_SUBBLOCK_NAME_COLLISION`). Sub-Blocks and generic parameters therefore never compete for the same identifier — steps 2 and 3 are disjoint in practice.
+
+**Own Block name (step 1):** When an unqualified reference matches the root Block's `<name>`, it resolves to that Block's declared `<type>` FQN — a self-type reference within the same definition. For inheritance-aware self-reference at validate time, `_self` remains available (see § Members — `_self`).
+
+**Core primitives (step 4):** Only the five whitelist names above resolve without prefix. Abstract branches such as `org.blockml.type.Number` or `org.blockml.core.PrimitiveType` are **not** in the whitelist — use `Integer`, `Float`, or `Decimal` for numeric properties.
+
+```text
+type="Integer"   →  org.blockml.type.Integer
+type="Float"     →  org.blockml.type.Float
+type="Decimal"   →  org.blockml.type.Decimal
+type="String"    →  org.blockml.type.String
+type="Boolean"   →  org.blockml.type.Boolean
+type="Number"    →  ✗  not whitelisted — use Integer, Float, or Decimal
+```
 
 ### Status Namespace Shorthand
 
@@ -1734,19 +1760,18 @@ com.machineblocks.calibration.Calibrator.Base.Strip
 
 ### Short-Name Reference in Compositions
 
-When a composition child element has **no namespace prefix** (PascalCase tag name only), the parser resolves `typeFqn` in this order:
-
-The **same resolution order** applies to `type="..."` on `<property>`, `<aggregation>`, `<capability>`, and related member declarations when the value is an unqualified PascalCase name (e.g. `type="Schema"` on an aggregation when `Schema` is a Sub-Block in the same file).
+When a composition child element has **no namespace prefix** (PascalCase tag name only), the parser resolves `typeFqn` using § Unqualified Block Resolution — same order as unqualified `type="..."` on member declarations.
 
 ```text
-1. subBlocks[] of the innermost containing BlockDefinition (same BML document)
-2. Walk up the parent chain — parent Sub-Block → … → root Block subBlocks[]
-3. Inherited subBlocks from the baseType chain (framework bases — see below)
-4. xmlns prefix → package FQN (bricks:Standard, type:Size3D)
-5. TypeRegistry global lookup
+1. Own Block name
+2. SubBlocks (innermost → parent chain → baseType-inherited)
+3. Generic parameters
+4. Core primitives (String · Float · Integer · Decimal · Boolean)
+5. xmlns prefix
+6. TypeRegistry
 ```
 
-Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.calibration.Calibrator.Base`). Authors may write the short name in BML when the type is a Sub-Block in scope.
+Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.calibration.Calibrator.Base`). Authors may write the short name in BML when the type is in scope per the order above.
 
 **Same document — aggregation example (`BlockLibrary.bml`):**
 
@@ -2562,7 +2587,7 @@ partial member override       → merge with parent member at validate; private/
 visibility mismatch           → BML_VISIBILITY_MISMATCH
 BML_UNKNOWN_NAMESPACE_PREFIX  → member namespace attribute references undeclared xmlns: prefix
 final member override         → BML_FINAL_MEMBER_OVERRIDE
-type="Foo" (unqualified)      → resolved against org.blockml.type.* (primitives only)
+type="Foo" (unqualified)      → § Unqualified Block Resolution (own name · SubBlocks · generics · primitives whitelist)
 bml:version missing on external instance → BML_MISSING_VERSION (error, no fallback)
 unknown bml:version on external instance → BML_UNKNOWN_VERSION (error)
 same-document Sub-Block instance          → bml:version not required

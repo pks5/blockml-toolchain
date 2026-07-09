@@ -113,7 +113,7 @@ Direct package segments under `org.blockml` that belong to the **language** are 
 
 ```text
 org.blockml.core.*         — framework base types (Block, ValueType, Status, Library, …)
-org.blockml.type.*         — primitive and bootstrap ValueTypes (Integer, Float, …)
+org.blockml.type.*         — bootstrap ValueTypes (Integer, Float, Decimal, String, Boolean, Number, …)
 org.blockml.status.*       — standard maturity status blocks (Stable, Draft, Stub, Deprecated)
 org.blockml.service.*      — built-in services (#math, #strings, …)
 org.blockml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
@@ -468,7 +468,8 @@ visibility    — optional; must match naming convention
 Property `type` attributes must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.core.ValueType` (primitives, structs, enums, generics). Non-ValueType Blocks (Wall, Entity, NativeBlock, …) are not valid property types. The same rule applies to Capability `inputType` and `outputType`.
 
 ```text
-type="Integer"              →  org.blockml.type.Integer        ✓  (PrimitiveType → ValueType)
+type="Integer"              →  org.blockml.type.Integer        ✓  (Number → PrimitiveType → ValueType)
+type="Decimal"              →  org.blockml.type.Decimal        ✓
 type="type:Size3d"            →  com.machineblocks.type.Size3d ✓  (StructType → ValueType)
 type="com.foo.Wall"           →  ✗  BML_INVALID_PROPERTY_TYPE (not a ValueType)
 ```
@@ -1531,10 +1532,14 @@ BOM Core defines a minimal set of primitive types. Domain specializations extend
 
 ```text
 org.blockml.type.Boolean
-org.blockml.type.Integer
-org.blockml.type.Float
 org.blockml.type.String
+org.blockml.type.Number          — abstract numeric branch
+  org.blockml.type.Integer
+  org.blockml.type.Float
+  org.blockml.type.Decimal
 ```
+
+Unqualified resolution whitelist (step 4): `String`, `Boolean`, `Integer`, `Float`, `Decimal` only — see `02_mbml.md` — § Unqualified Block Resolution.
 
 ### Type Expressions (not ValueTypes)
 
