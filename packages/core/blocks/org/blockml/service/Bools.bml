@@ -20,12 +20,12 @@
 
   <idea>Built-in boolean utilities callable as #bools in expressions.</idea>
 
-  <documentation>Built-in booleans FunctionBlock. Expression prefix #bools.* — logical and boolean
+  <documentation>Built-in booleans service. Expression prefix #bools.* — logical and boolean
     conversion utilities.</documentation>
 
   <name>Bools</name>
   <type>service:Bools</type>
-  <baseType>core:FunctionBlock</baseType>
+  <baseType>core:Entity</baseType>
   <version>1.0.0</version>
 
   <capabilities>

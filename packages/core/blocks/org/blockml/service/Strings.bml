@@ -20,12 +20,12 @@
 
   <idea>Built-in text utilities callable as #strings in expressions.</idea>
 
-  <documentation>Built-in strings FunctionBlock. Expression prefix #strings.* — concat, length,
+  <documentation>Built-in strings service. Expression prefix #strings.* — concat, length,
     substring, and related text utilities.</documentation>
 
   <name>Strings</name>
   <type>service:Strings</type>
-  <baseType>core:FunctionBlock</baseType>
+  <baseType>core:Entity</baseType>
   <version>1.0.0</version>
 
   <capabilities>

@@ -28,7 +28,6 @@
 
   <subTypes>
     <subType type="core:Block" />
-    <subType type="bcore:FunctionBlock" />
   </subTypes>
 
   <implTypes>

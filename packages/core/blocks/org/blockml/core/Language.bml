@@ -1,0 +1,25 @@
+<!--
+  BlockML Core — Language branch (capability implementation contract)
+
+  FQN: org.blockml.core.Language
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core">
+
+  <idea>A target implementation language for capability code.</idea>
+
+  <documentation>Language branch of BlockML. Declares an implementation language permitted on
+    Capability implementations (OpenSCAD, TypeScript, English, …).</documentation>
+
+  <name>Language</name>
+  <type>core:Language</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <abstract />
+
+</block>

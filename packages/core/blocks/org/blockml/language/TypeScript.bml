@@ -8,14 +8,14 @@
   xmlns:core="org.blockml.core"
   xmlns:lang="org.blockml.language">
 
-  <idea>TypeScript as an implementation language for sync capabilities.</idea>
+  <idea>TypeScript as an implementation language for capabilities.</idea>
 
-  <documentation>LanguageBlock for TypeScript arrow-function implementations on Transformation
-    Capabilities. V1: compile-time execution when all arguments are literals.</documentation>
+  <documentation>ProgrammingLanguage for TypeScript arrow-function implementations on Capabilities.
+    V1: compile-time execution when all arguments are literals.</documentation>
 
   <name>TypeScript</name>
   <type>lang:TypeScript</type>
-  <baseType>core:LanguageBlock</baseType>
+  <baseType>core:ProgrammingLanguage</baseType>
   <version>1.0.0</version>
-  <abstract />
+  
 </block>

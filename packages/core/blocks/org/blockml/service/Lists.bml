@@ -20,12 +20,12 @@
 
   <idea>Built-in list utilities callable as #lists in expressions.</idea>
 
-  <documentation>Built-in lists FunctionBlock. Expression prefix #lists.* — list construction,
+  <documentation>Built-in lists service. Expression prefix #lists.* — list construction,
     indexing, and aggregation utilities.</documentation>
 
   <name>Lists</name>
   <type>service:Lists</type>
-  <baseType>core:FunctionBlock</baseType>
+  <baseType>core:Entity</baseType>
   <version>1.0.0</version>
 
   <capabilities>

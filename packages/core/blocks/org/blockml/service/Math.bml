@@ -20,12 +20,12 @@
 
   <idea>Built-in numeric utilities callable as #math in expressions.</idea>
 
-  <documentation>Built-in math FunctionBlock. Expression prefix #math.* — min, max, abs, floor,
+  <documentation>Built-in math service. Expression prefix #math.* — min, max, abs, floor,
     round, and related numeric utilities.</documentation>
 
   <name>Math</name>
   <type>service:Math</type>
-  <baseType>core:FunctionBlock</baseType>
+  <baseType>core:Entity</baseType>
   <version>1.0.0</version>
 
   <capabilities>

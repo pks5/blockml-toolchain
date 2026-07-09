@@ -8,14 +8,14 @@
   xmlns:core="org.blockml.core"
   xmlns:lang="org.blockml.language">
 
-  <idea>OpenSCAD as an implementation language for sync capabilities.</idea>
+  <idea>OpenSCAD as an implementation language for capabilities.</idea>
 
-  <documentation>LanguageBlock for OpenSCAD function implementations on Transformation Capabilities.
+  <documentation>ProgrammingLanguage for OpenSCAD function implementations on Capabilities.
     Emitted by the MachineBlocks SCAD renderer with FQN-prefixed function names.</documentation>
 
   <name>OpenSCAD</name>
   <type>lang:OpenSCAD</type>
-  <baseType>core:LanguageBlock</baseType>
+  <baseType>core:ProgrammingLanguage</baseType>
   <version>1.0.0</version>
-  <abstract />
+  
 </block>

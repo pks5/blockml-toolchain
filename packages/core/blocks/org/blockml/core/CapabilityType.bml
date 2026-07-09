@@ -8,11 +8,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:btype="org.blockml.type"
   xmlns:core="org.blockml.core">
 
   <idea>Representation of a capability.</idea>
 
-  <documentation>Capability type branch of BlockML. Declares an capablity type.</documentation>
+  <documentation>Capability type branch of BlockML. Declares a capability type. Every capability may
+    carry an implementation whose type attribute references a Language FQN.</documentation>
 
   <name>CapabilityType</name>
   <type>core:CapabilityType</type>
@@ -30,5 +32,9 @@
       <value>false</value>
       <documentation>Whether the capabality has an output and thus requires a specified outputType.</documentation>
     </hasOutput>
+    <implementation type="btype:String">
+      <documentation>Capability implementation body. The element type attribute must reference a
+        Language FQN (org.blockml.language.*).</documentation>
+    </implementation>
   </properties>
 </block>

@@ -20,12 +20,12 @@
 
   <idea>Built-in number formatting and sequence utilities callable as #numbers in expressions.</idea>
 
-  <documentation>Built-in numbers FunctionBlock. Expression prefix #numbers.* — sequence,
+  <documentation>Built-in numbers service. Expression prefix #numbers.* — sequence,
     formatting, and numeric conversion utilities.</documentation>
 
   <name>Numbers</name>
   <type>service:Numbers</type>
-  <baseType>core:FunctionBlock</baseType>
+  <baseType>core:Entity</baseType>
   <version>1.0.0</version>
 
   <capabilities>
