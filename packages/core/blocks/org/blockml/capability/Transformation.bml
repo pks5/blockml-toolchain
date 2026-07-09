@@ -17,7 +17,7 @@
 
   <name>Transformation</name>
   <type>cap:Transformation</type>
-  <baseType>core:Capability</baseType>
+  <baseType>core:CapabilityType</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>

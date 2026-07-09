@@ -28,12 +28,10 @@
   <version>3.0.0</version>
 
   <properties>
-    <description type="String"
-    >
+    <description type="String">
       <value>Standard brick types for MachineBlocks</value>
     </description>
-    <package type="String"
-    >
+    <package type="String">
       <value>com.machineblocks.bricks</value>
     </package>
   </properties>

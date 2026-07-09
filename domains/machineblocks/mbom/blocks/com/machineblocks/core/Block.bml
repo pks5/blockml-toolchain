@@ -20,7 +20,7 @@
 
   <name>Block</name>
   <type>core:Block</type>
-  <baseType>bcore:Block</baseType>
+  <baseType>bcore:Entity</baseType>
   <version>1.0.0</version>
 
   <abstract>true</abstract>
