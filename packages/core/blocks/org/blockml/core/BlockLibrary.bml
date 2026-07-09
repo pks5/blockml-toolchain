@@ -3,9 +3,10 @@
 
   FQN: org.blockml.core.BlockLibrary
 
-  Entry types (Dependency, Schema, BlockRef) are Sub-Blocks
-  of BlockLibrary. Aggregations use short type names (type="Dependency") — parser
-  resolves against subBlocks[] in the same file.
+  Entry type Schema is a Sub-Block of BlockLibrary. Aggregations use short type names
+  (type="Schema") — parser resolves against subBlocks[] in the same file.
+  _dependencies and _blocks hold Block instances (FQN via element name + xmlns prefix,
+  version via bml:version) — not wrapper Sub-Blocks.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -17,7 +18,9 @@
   <idea>Catalog of block and type definitions published as a package.</idea>
 
   <documentation>Publishable library unit — groups exported Block and TypeBlock definitions, optional XSD schemas,
-    and dependencies on other libraries. Replaces the legacy library.xml descriptor.</documentation>
+    and dependencies on other libraries. Replaces the legacy library.xml descriptor.
+    Dependencies and exported blocks are declared as Block instances in _dependencies and _blocks
+    (element name resolves to FQN; bml:version pins the required definition version).</documentation>
 
   <name>BlockLibrary</name>
   <type>core:BlockLibrary</type>
@@ -37,31 +40,12 @@
   </properties>
 
   <aggregations>
-    <_dependencies type="Dependency[]" />
+    <_dependencies type="core:BlockLibrary[]" validate="false" />
     <_schemas type="Schema[]" />
-    <_blocks type="BlockRef[]" />
+    <_blocks type="core:Block[]" validate="false" />
   </aggregations>
 
   <subBlocks>
-
-    <block>
-      <idea>Declared dependency on another published Library package.</idea>
-
-      <documentation>Dependency on another BlockLibrary — pins required library FQN and exact semantic
-        version.</documentation>
-      <name>Dependency</name>
-      <baseType>core:Block</baseType>
-      <version>1.0.0</version>
-      <final />
-      <properties>
-        <ref type="String">
-          <documentation>FQN of the required BlockLibrary (e.g. com.machineblocks.core.CoreLibrary).</documentation>
-        </ref>
-        <version type="String">
-          <documentation>Exact semantic version required — no implicit latest.</documentation>
-        </version>
-      </properties>
-    </block>
 
     <block>
       <idea>Optional XSD schema exported alongside library types.</idea>
@@ -74,22 +58,6 @@
       <properties>
         <ref type="String">
           <documentation>Path to the .xsd file relative to the library package root.</documentation>
-        </ref>
-      </properties>
-    </block>
-
-    <block>
-      <idea>Pointer to a block or type definition file in this library.</idea>
-
-      <documentation>Reference to a Block or TypeBlock definition file (StructType, EnumType, composable Block, …)
-        exported by this BlockLibrary.</documentation>
-      <name>BlockRef</name>
-      <baseType>core:Block</baseType>
-      <version>1.0.0</version>
-      <final />
-      <properties>
-        <ref type="String">
-          <documentation>Path to the .bml file relative to the library package root.</documentation>
         </ref>
       </properties>
     </block>

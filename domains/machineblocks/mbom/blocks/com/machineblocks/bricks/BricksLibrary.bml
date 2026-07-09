@@ -15,6 +15,8 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:bcore="org.blockml.core"
+  xmlns:core="com.machineblocks.core"
+  xmlns:type="com.machineblocks.type"
   xmlns:bricks="com.machineblocks.bricks">
 
   <idea>Published catalog of MachineBlocks standard brick definitions.</idea>
@@ -39,7 +41,7 @@
   <aggregations>
     <_dependencies>
       <composition>
-        <Dependency ref="com.machineblocks.core.CoreLibrary" version="3.0.0" />
+        <core:CoreLibrary bml:version="3.0.0" />
       </composition>
     </_dependencies>
 
@@ -52,13 +54,13 @@
 
     <_blocks>
       <composition>
-        <BlockRef ref="types/Size3D.bml" />
-        <BlockRef ref="types/Direction.bml" />
-        <BlockRef ref="types/Color.bml" />
-        <BlockRef ref="blocks/Standard.bml" />
-        <BlockRef ref="blocks/Plate.bml" />
-        <BlockRef ref="blocks/Tile.bml" />
-        <BlockRef ref="presets/StandardPresets.bml" />
+        <type:Size3d bml:version="1.0.0" />
+        <type:Direction bml:version="1.0.0" />
+        <type:Color bml:version="1.0.0" />
+        <bricks:Standard bml:version="1.0.0" />
+        <bricks:Plate bml:version="1.0.0" />
+        <bricks:Tile bml:version="1.0.0" />
+        <bricks:StandardPresets bml:version="3.0.0" />
       </composition>
     </_blocks>
   </aggregations>
