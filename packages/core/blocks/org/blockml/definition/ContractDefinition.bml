@@ -1,7 +1,8 @@
 <!--
-  BlockML Definition — contract reference type
+  BlockML Definition — contract reference meta-model type
 
   FQN: org.blockml.definition.ContractDefinition
+  See docs/02_mbml.md — Contracts · 12_bom_object_model.md — Contract Merge.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -14,11 +15,15 @@
 
   <idea>A reusable partial Block definition merged into the declaring Block.</idea>
 
-  <documentation>References a contract Block whose member fragments are merged into the
-    declaring Block after the baseType chain and before the Block's own declarations.
-    Contracts may supply partial Properties, Aggregations, Associations, Capabilities,
-    Constraints, Suggestions, documentation, examples, and optional default Capability
-    implementations. The Block completes or overrides each merged member.</documentation>
+  <documentation>References a contract Block whose member fragments are merged into the declaring
+    Block after the baseType chain and before the Block's own declarations. Contracts replace
+    interfaces, traits, and mixins — reusable partial definitions that may supply incomplete
+    members the Block completes or overrides. Scope: Properties, Aggregations, Associations,
+    Capabilities, Constraints, Suggestions, documentation, examples, and optional default
+    Capability implementations. Ignored on contract Blocks: subBlocks and compositions (no
+    transitive contract merge). Merge order: baseType chain → contracts (declaration order,
+    later wins) → Block local declarations (override all). Root block only.
+    See 02_mbml.md — Contracts · 12_bom_object_model.md — Contract Merge.</documentation>
   <name>ContractDefinition</name>
   <type>def:ContractDefinition</type>
   <baseType>core:Definition</baseType>
@@ -26,8 +31,8 @@
 
   <properties>
     <type type="core:FullyQualifiedName(core:Block)">
-      <documentation>The FQN of the contract Block whose partial definition is merged into
-        this Block.</documentation>
+      <documentation>FQN of the contract Block whose partial definition is merged into this Block.
+        Required on every contract reference in the contracts container (root block only).</documentation>
     </type>
   </properties>
 </block>

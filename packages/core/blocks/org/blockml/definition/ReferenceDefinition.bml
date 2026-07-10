@@ -1,7 +1,8 @@
 <!--
-  BlockML Definition — contract reference type
+  BlockML Definition — cross-reference meta-model type
 
-  FQN: org.blockml.definition.ContractDefinition
+  FQN: org.blockml.definition.ReferenceDefinition
+  Declared on org.blockml.core.Definition as the references aggregation.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -12,22 +13,29 @@
   xmlns:def="org.blockml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>A reference to a Block definition.</idea>
+  <idea>A cross-reference to a related Block or definition element.</idea>
 
-  <documentation></documentation>
+  <documentation>Records a link from documentation metadata to another Block or definition element.
+    Rendered as a reference element inside the references container on any
+    org.blockml.core.Definition (alongside changelog and examples). Keeps API documentation,
+    version history, examples, and related-type links at the definition site — single source of
+    truth inside BML files. See 02_mbml.md — Documentation extensions ·
+    16_framework_base_types.md — Definition Branch.</documentation>
   <name>ReferenceDefinition</name>
   <type>def:ReferenceDefinition</type>
   <baseType>core:Definition</baseType>
-  <!-- Reference definitions are rendered as xml <reference> elements -->
+  <!-- Cross-references render as <reference> elements inside <references>. -->
   <bml:xml>reference</bml:xml>
 
   <properties>
     <type type="core:FullyQualifiedName(core:Block, core:Definition)">
-      <documentation>The FQN of the Block or Definition that is referenced.</documentation>
+      <documentation>FQN of the Block or Definition being referenced. Rendered as the type
+        attribute on the reference element.</documentation>
     </type>
-    <!-- The context is rendered as text content of the <reference> element -->
+    <!-- Optional context renders as text content of the <reference> element. -->
     <context type="String" bml:xml="text">
-      <documentation>The context of the reference.</documentation>
+      <documentation>Optional human-readable explanation of why or how the referenced element
+        relates to this definition. Rendered as character content of the reference element.</documentation>
     </context>
   </properties>
 </block>

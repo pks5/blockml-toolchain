@@ -1,7 +1,8 @@
 <!--
-  BlockML Definition — property definition type
+  BlockML Definition — property member meta-model type
 
   FQN: org.blockml.definition.PropertyDefinition
+  See docs/12_bom_object_model.md — PropertyDefinition · 02_mbml.md — Members.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -12,11 +13,32 @@
   xmlns:def="org.blockml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea></idea>
+  <idea>A typed value member on a Block definition.</idea>
 
-  <documentation>Defines a property of a block.</documentation>
+  <documentation>Describes a Block member that carries a scalar or structured value. Rendered as a
+    child element inside the properties container; the XML element name is the property name
+    (bml:xml="${ name }"). Maps to BOM PropertyDefinition (kind: "property") with typeFqn, value,
+    and optional constraints and suggestions. Property type must resolve to a ValueType
+    (org.blockml.core.ValueType branch). Declaration order among properties is significant for
+    StructType positional mapping and Capability parameter order.
+    See 12_bom_object_model.md — PropertyDefinition · 02_mbml.md — Members · Properties.</documentation>
   <name>PropertyDefinition</name>
   <type>def:PropertyDefinition</type>
   <baseType>core:Definition</baseType>
   <bml:xml>${ name }</bml:xml>
+
+  <properties>
+    <!-- Without bml:xml, type renders as an XML attribute on the property element. -->
+    <type type="core:FullyQualifiedName(core:Block)">
+      <documentation>FQN of the property's ValueType. Non-ValueType FQNs are invalid here
+        (BML_INVALID_PROPERTY_TYPE). Multiplicity, unions, and generic applications are expressed
+        in the type attribute string as TypeExpressions.</documentation>
+    </type>
+    <!-- Rendered as <value> element or inline attribute depending on bml:xml placement. -->
+    <value type="String" bml:xml="element|attribute">
+      <documentation>Default or computed member value on the Block definition. On instances, the
+        same member is set directly without a value wrapper element. May be a literal or a
+        ${ … } expression.</documentation>
+    </value>
+  </properties>
 </block>

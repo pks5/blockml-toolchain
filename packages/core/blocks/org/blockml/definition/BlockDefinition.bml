@@ -1,7 +1,9 @@
 <!--
-  BlockML Definition — root Block definition type
+  BlockML Definition — Block definition meta-model type
 
   FQN: org.blockml.definition.BlockDefinition
+  Describes the parse-time shape of every <block> document.
+  See docs/12_bom_object_model.md — BlockDefinition.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -12,70 +14,90 @@
   xmlns:def="org.blockml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Structure of a block.</idea>
+  <idea>The structural shape of every Block definition document in BlockML.</idea>
 
-  <documentation>Describes the structure of a block.</documentation>
+  <documentation>Meta-model type for any block document — root blocks and nested Sub-Blocks.
+    Semantically a Class: declarative type shape without instance state. Parsed into
+    BomDocument.block and BlockDefinition.subBlocks[]. Declares identity (name, type, baseType),
+    type modifiers (abstract, final), generic parameters, contracts, allowed Sub-Blocks and
+    languages, and member declaration containers. Member declaration order in BML is preserved
+    in BOM and is significant for StructType positional mapping and render targets.
+    See 12_bom_object_model.md — BlockDefinition · 02_mbml.md — Block Definition.</documentation>
   <name>BlockDefinition</name>
   <type>def:BlockDefinition</type>
   <baseType>core:Definition</baseType>
 
-  <!-- Block definitions are rendered as xml <block> elements. -->
+  <!-- Block definitions render as the root <block> element. -->
   <bml:xml>block</bml:xml>
 
   <!--
-  Property definitions are grouped inside the <properties> element.
-  Each property is rendered as a direct XML child element named after the
-  property itself (for example <name>, <type>, or <baseType>).
--->
+    Scalar Block metadata. Each property renders as a direct XML child element
+    named after the property (for example <name>, <type>, or <baseType>).
+  -->
   <properties>
     <name type="String">
-      <documentation>The name of the block.</documentation>
+      <documentation>Short class name (PascalCase). Required on every Block definition.</documentation>
     </name>
     <type type="core:FullyQualifiedName(core:Block)">
-      <documentation>The full qualified name of the block.</documentation>
+      <documentation>Globally unique FQN. Required on root blocks (authored in BML). On Sub-Blocks
+        derived as parentFqn + "." + name when omitted in source.</documentation>
     </type>
     <baseType type="core:FullyQualifiedName(core:Block)">
-      <documentation>The base type of the block.</documentation>
+      <documentation>Parent type FQN. Required on all definitions except org.blockml.core.Block
+        (the sole inheritance root). No default — validator resolves effective members via the
+        baseType chain.</documentation>
     </baseType>
     <abstract type="Boolean">
       <value>false</value>
-      <documentation>Whether the block is abstract.</documentation>
+      <documentation>When true, the type is abstract — not usable as a composition instance type.
+        Default false.</documentation>
     </abstract>
     <final type="Boolean">
       <value>false</value>
-      <documentation>Whether the block is final.</documentation>
+      <documentation>When true, the type is final — cannot be used as baseType on other
+        definitions. Default false.</documentation>
     </final>
   </properties>
 
   <!--
-  Aggregation definitions are grouped inside the <aggregations> element.
-  Each aggregation is rendered as a direct XML child element named after the
-  aggregation itself (for example <genericTypes>, <languages>, or <subTypes>).
--->
+    Block-level collections and member declaration containers. Each aggregation
+    renders as a direct XML child element named after the aggregation
+    (for example <genericTypes>, <properties>, or <subBlocks>).
+  -->
   <aggregations>
     <genericTypes type="def:GenericTypeDefinition[]">
-
+      <documentation>Generic type parameters declared on this Block (root block only). Each entry
+        has a name and a baseType constraint for concrete type arguments at reference sites.
+        See 16_framework_base_types.md — genericTypes.</documentation>
     </genericTypes>
     <languages type="core:Language[]">
-
+      <documentation>org.blockml.language.* FQNs permitted on capability implementation bindings
+        for this Block. Omitted = inherit from baseType chain.</documentation>
     </languages>
     <subTypes type="core:Block[]">
-
+      <documentation>Block FQNs allowed in subBlocks[]. Omitted = inherit effective subTypes from
+        baseType chain; explicit empty list = override to forbid Sub-Blocks.</documentation>
     </subTypes>
     <contracts type="def:ContractDefinition[]">
-
+      <documentation>Contract Block FQNs merged into this Block after the baseType chain (root
+        block only). Declaration order is significant — later contracts override earlier ones;
+        local Block declarations override all contracts.</documentation>
     </contracts>
     <properties type="def:PropertyDefinition[]">
-
+      <documentation>Property member declarations. Mapped to members[] in XML document order.
+        Order is significant for StructType field indices and positional array literals.</documentation>
     </properties>
     <aggregations type="def:AggregationDefinition[]">
-
+      <documentation>Aggregation member declarations — owned collections that may hold composition
+        children. Mapped to members[] in XML document order.</documentation>
     </aggregations>
     <associations type="def:AssociationDefinition[]">
-
+      <documentation>Association member declarations — loose references without composition
+        ownership. Mapped to members[] in XML document order.</documentation>
     </associations>
     <subBlocks type="def:BlockDefinition[]">
-
+      <documentation>Nested Sub-Block definitions within the same BomDocument. Each Sub-Block is
+        a full BlockDefinition; FQN is derived from the parent chain when type is omitted.</documentation>
     </subBlocks>
   </aggregations>
 </block>

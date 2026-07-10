@@ -1,7 +1,8 @@
 <!--
-  BlockML Definition — generic type definition type
+  BlockML Definition — generic type parameter meta-model type
 
   FQN: org.blockml.definition.GenericTypeDefinition
+  See docs/16_framework_base_types.md — genericTypes · 12_bom_object_model.md — GenericType.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -12,9 +13,15 @@
   xmlns:def="org.blockml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea></idea>
+  <idea>A type parameter declared on a Block definition (e.g. T on Box of T).</idea>
 
-  <documentation>Defines a generic type of a block.</documentation>
+  <documentation>Declares one generic type parameter on a root Block definition. Rendered as
+    genericType inside the genericTypes container (root block only). Maps to BOM GenericType
+    { name, baseType }. The name is substituted in type references within this Block (e.g.
+    type="T" → GenericParameterReference). baseType is the FQN constraint — each concrete type
+    argument at reference sites must inherit from that branch (BML_GENERIC_CONSTRAINT_VIOLATION on
+    mismatch). Parameter name must differ from the Block name and every Sub-Block name.
+    See 16_framework_base_types.md — genericTypes · 17_type_system_bml.md — Generics.</documentation>
   <name>GenericTypeDefinition</name>
   <type>def:GenericTypeDefinition</type>
   <baseType>core:Definition</baseType>
@@ -22,10 +29,12 @@
 
   <properties>
     <name type="String">
-      <documentation>The name of the generic type.</documentation>
+      <documentation>Parameter identifier used in type references within this Block (e.g. T).
+        Must not collide with the Block name or any Sub-Block name in the same document.</documentation>
     </name>
     <baseType type="core:FullyQualifiedName(def:BlockDefinition)">
-      <documentation>The base type of the generic type.</documentation>
+      <documentation>FQN constraint for concrete type arguments. Each supplied type argument at
+        reference sites (e.g. Box of Integer) must inherit from this baseType branch.</documentation>
     </baseType>
   </properties>
 </block>

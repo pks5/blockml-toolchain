@@ -1,7 +1,8 @@
 <!--
-  BlockML Definition — example definition type
+  BlockML Definition — usage example meta-model type
 
   FQN: org.blockml.definition.ExampleDefinition
+  See docs/02_mbml.md — Documentation extensions · examples · 12_bom_object_model.md — DocumentationExample.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -12,30 +13,31 @@
   xmlns:def="org.blockml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea></idea>
+  <idea>A titled usage example attached to a definition element.</idea>
 
-  <documentation>Defines a property of a block.</documentation>
+  <documentation>Describes one usage example in an examples container on any definition element
+    (block, property, aggregation, …). Rendered as an example element with a required title
+    attribute and a CDATA body. Maps to BOM DocumentationExample { title, content, language? }.
+    Body content must be CDATA (BML_EXAMPLE_NOT_CDATA otherwise). A future optional language
+    attribute may distinguish example dialects (OpenSCAD, TypeScript); omitted defaults to
+    BML/MBML source. See 02_mbml.md — examples · 12_bom_object_model.md — DocumentationExample.</documentation>
   <name>ExampleDefinition</name> 
   <type>def:ExampleDefinition</type>
   <baseType>core:Definition</baseType>
 
-  <!-- Example definitions are rendered as xml <example> elements. -->
+  <!-- Usage examples render as <example> elements inside <examples>. -->
   <bml:xml>example</bml:xml>
 
   <properties>
-    <!--
-      bml:xml="attribute" renders this Property as an XML attribute
-      of the containing Block element.
-    -->
+    <!-- bml:xml="attribute" renders title as an XML attribute on <example>. -->
     <title type="String" bml:xml="attribute">
-      <documentation>The title of the example.</documentation>
+      <documentation>Short title identifying this example. Required attribute on every example
+        element (BML_EXAMPLE_MISSING_TITLE when omitted).</documentation>
     </title>
-    <!--
-      bml:xml="text|cdata" renders the Property as character content.
-      The XML renderer may use plain text or CDATA depending on the value.
-    -->
+    <!-- bml:xml="text|cdata" renders content as character data; renderer may use CDATA. -->
     <content type="String" bml:xml="text|cdata">
-      <documentation>The content of the example.</documentation>
+      <documentation>BML or MBML source text demonstrating usage. Stored as CDATA body in BOM
+        DocumentationExample.content.</documentation>
     </content>
   </properties>
 </block>
