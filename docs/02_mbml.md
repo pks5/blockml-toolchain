@@ -257,6 +257,105 @@ WOT alignment: the Idea is the stable semantic constant; documentation describes
 </block>
 ```
 
+### Documentation extensions
+
+Wherever `<documentation>` is permitted, these **optional** siblings are also allowed:
+
+```text
+<since>       — version from which the element is available
+<changelog>   — version history (container of <change> entries)
+<examples>    — usage examples (container of <example> entries)
+```
+
+Applies to all definition elements that carry documentation:
+
+```text
+<block>  <property>  <aggregation>  <association>  <capability>  <constraint>  <suggestion>
+```
+
+and to any future definition element with `<documentation>`.
+
+On root `<block>` definitions, optional documentation extensions follow `<documentation>` and precede `<name>`. On members and Sub-Blocks, they appear alongside `<documentation>` among definition metadata children (before `<value>`, `<composition>`, or other content containers).
+
+Goal: keep API documentation, version history, and examples at the definition site — a single source of truth inside BML files.
+
+#### `<since>`
+
+Declares the version from which the element is available:
+
+```xml
+<since>1.0.3</since>
+```
+
+Value is a semantic version string (same rules as `<version>` on Block definitions). Omitted when the element has been available since the Block's initial release.
+
+#### `<changelog>`
+
+Container for version history. Each entry is a `<change>` with a required `version` attribute and text body:
+
+```xml
+<changelog>
+
+    <change version="1.1.0">
+        Added support for edgeRadius.
+    </change>
+
+    <change version="1.3.2">
+        Changed stud generation behaviour.
+    </change>
+
+    <change version="2.0.0">
+        Deprecated property xyz.
+    </change>
+
+</changelog>
+```
+
+Entries must be ordered chronologically by version — **oldest first**. Out-of-order entries → `BML_CHANGELOG_VERSION_ORDER` (warning V1).
+
+#### `<examples>`
+
+Container for usage examples. Each `<example>` requires a `title` attribute; body content is **CDATA only**:
+
+```xml
+<examples>
+
+    <example title="Basic Brick"><![CDATA[
+<core:Brick size="[2,4,3]" />
+    ]]></example>
+
+    <example title="Brick with Holes"><![CDATA[
+<core:Brick
+    size="[2,4,3]"
+    holes="true" />
+    ]]></example>
+
+</examples>
+```
+
+A future optional `language` attribute (e.g. `OpenSCAD`, `TypeScript`) may distinguish example dialects. Omitted → BML source (MBML/BML).
+
+Example with documentation extensions on a member:
+
+```xml
+<wallThickness type="Integer">
+    <documentation>Thickness of the wall in grid units.</documentation>
+    <since>1.2.0</since>
+    <changelog>
+        <change version="1.2.0">Initial property.</change>
+        <change version="2.0.0">Default changed from 2 to 1.</change>
+    </changelog>
+    <examples>
+        <example title="Thin wall"><![CDATA[
+<wallThickness>1</wallThickness>
+        ]]></example>
+    </examples>
+    <value>1</value>
+</wallThickness>
+```
+
+Non-definition elements (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<implementation>`, Block instances, …) may carry `bml:status="status:Draft"` when deviating from inherited status — same rules as `<documentation>`.
+
 ### `<status>` — maturity marker
 
 Status expresses the maturity or lifecycle of a definition. Status is a **Block reference**, not a string or boolean — following Everything-is-a-Block.
@@ -283,7 +382,7 @@ Examples:
   <bricks:Wall bml:status="status:Deprecated"> → Deprecated instance under Stable block
 ```
 
-On a **Draft** property, nested `<documentation>`, `<constraints>`, and composition children inherit **Draft** — no attribute needed. To mark a child as **Stable** inside a Draft property, set `bml:status="status:Stable"` explicitly.
+On a **Draft** property, nested `<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<constraints>`, and composition children inherit **Draft** — no attribute needed. To mark a child as **Stable** inside a Draft property, set `bml:status="status:Stable"` explicitly.
 
 Core library defines:
 

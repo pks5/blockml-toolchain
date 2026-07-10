@@ -266,6 +266,11 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 ```text
 <idea>…</idea>                               → block.idea (trimmed text)
 <documentation>…</documentation>             → block.documentation (trimmed text)
+<since>…</since>                             → block.since (trimmed text)
+<changelog>                                  → block.changelog[]
+  <change version="…">…</change>             → { version, text: trimmed body }
+<examples>                                   → block.examples[]
+  <example title="…" language="…">           → { title, content: CDATA body, language? }
 <status>status:Draft</status>                → member.statusFqn or block.statusFqn (when declared)
                                              → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
@@ -283,6 +288,11 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 ```text
 Omitted <idea> on root block            → BML_MISSING_IDEA (warning V1)
 Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1)
+Omitted <since> / <changelog> / <examples> → undefined (optional)
+Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
+<changelog> entries out of version order → BML_CHANGELOG_VERSION_ORDER (warning V1)
+<example> without title attribute        → BML_EXAMPLE_MISSING_TITLE (error)
+<example> body not CDATA                 → BML_EXAMPLE_NOT_CDATA (error)
 Omitted abstract/final                 → false
 Omitted <visibility> on Sub-Block      → derive from <name> (__ → private, _ → protected, else public)
 <visibility> on root Block               → BML_VISIBILITY_ON_ROOT_BLOCK (error)
@@ -315,10 +325,13 @@ visibility="protected"   → visibility (optional; derived from name when omitte
 readOnly="true"          → readOnly
 final="true"             → final
 <documentation>…         → documentation
+<since>…                 → since
+<changelog>…             → changelog[]
+<examples>…              → examples[]
 <status>status:Draft</status>  → statusFqn (when declared; omitted → inherit from parent)
 ```
 
-**Non-definition elements** (`<documentation>`, `<idea>`, `<implementation>`, Block instances, …) may carry `bml:status="status:Draft"` — mapped to `statusFqn` on the same BOM node **only when deviating** from inherited status. No `<status>` child on these elements.
+**Non-definition elements** (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<idea>`, `<implementation>`, Block instances, …) may carry `bml:status="status:Draft"` — mapped to `statusFqn` on the same BOM node **only when deviating** from inherited status. No `<status>` child on these elements.
 
 **Effective status resolution (stage [5] / validate [8]):**
 

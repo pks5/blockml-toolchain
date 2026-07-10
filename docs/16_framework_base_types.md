@@ -26,7 +26,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **09_mbom_properties.yml** | **Render mapping only** (serializer, scad_name, customizer) — not type SSOT |
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
 | **Block idea** | Every `<block>` carries `<idea>` as first child — what this Block semantically represents |
-| **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description |
+| **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description; optional `<since>`, `<changelog>`, `<examples>` follow |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
 | **ValueType branch** | `org.blockml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; three kinds: PrimitiveType · EnumType · StructType |
 | **Namespace separation** | Language FQNs (`org.blockml.core.*`, `type.*`, …) reserved for BML grammar; BOM/toolchain types in `org.blockml.bom.*`, `parser.*`, `compiler.*`, … — see `00_bom_core.md` |

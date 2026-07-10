@@ -149,6 +149,15 @@ interface BlockDefinition {
   /** Human-readable technical description of what this Block is. Required on root definitions. */
   documentation?: string
 
+  /** Semantic version from which this definition is available. Omitted = since initial release. */
+  since?: string
+
+  /** Version history entries — oldest first. */
+  changelog?: ChangelogEntry[]
+
+  /** Usage examples with title and CDATA body. */
+  examples?: DocumentationExample[]
+
   /** Abstract type — not usable as composition instance type. Default false. */
   abstract?: boolean
 
@@ -343,9 +352,30 @@ type MemberDefinition =
   | AssociationDefinition
   | CapabilityDefinition
 
+interface ChangelogEntry {
+  /** Semantic version this change applies to */
+  version: string
+  /** Change description (trimmed text body of <change>) */
+  text: string
+  source?: SourceLocation
+}
+
+interface DocumentationExample {
+  /** Required title attribute on <example> */
+  title: string
+  /** CDATA body — BML/MBML source text */
+  content: string
+  /** Reserved — example dialect (e.g. OpenSCAD, TypeScript). Omitted = BML. */
+  language?: string
+  source?: SourceLocation
+}
+
 interface MemberDefinitionBase {
   name: string
   documentation?: string
+  since?: string
+  changelog?: ChangelogEntry[]
+  examples?: DocumentationExample[]
   /**
    * Resolved canonical namespace identifier (FQN or URI).
    * Parsed from namespace="prefix" via document xmlns: table.
@@ -1134,6 +1164,10 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 BML_MISSING_BASE_TYPE         — baseType absent on BlockDefinition
 BML_MISSING_IDEA              — root <block> lacks <idea> (warning V1)
 BML_MISSING_DOCUMENTATION     — root <block> lacks <documentation> (warning V1)
+BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version
+BML_CHANGELOG_VERSION_ORDER   — <changelog> entries not ordered oldest-first (warning V1)
+BML_EXAMPLE_MISSING_TITLE     — <example> lacks required title attribute
+BML_EXAMPLE_NOT_CDATA         — <example> body is not CDATA
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
 BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library _dependencies / _blocks

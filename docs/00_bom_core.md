@@ -274,6 +274,9 @@ A Block is the fundamental unit of BOM Core. It is a parametric, typed, reusable
 ```text
 idea               — short semantic description: what this Block represents in meaning
 documentation      — human-readable technical description
+since              — optional; semantic version from which this Block is available
+changelog          — optional; version history (oldest first)
+examples           — optional; usage examples (title + CDATA body)
 name               — short class name (PascalCase). Required. See naming convention below.
 type               — globally unique FQN
 baseType           — FQN of the parent Block. Required — no default.
@@ -451,6 +454,9 @@ type          — FQN of a ValueType (baseType chain includes org.blockml.core.V
 value         — typed defined value (literal or Expression). Formerly defaultValue.
 group         — optional grouping hint (for editors)
 documentation — human-readable description
+since         — optional; semantic version from which this member is available
+changelog     — optional; version history (oldest first)
+examples      — optional; usage examples (title + CDATA body)
 constraints   — optional list of Constraint Block instances (see below)
 suggestions   — optional list of Block instances of the property type (see below)
 readOnly      — informational only
@@ -578,6 +584,9 @@ default       — boolean; marks the default aggregation for bare <composition>
 beanName      — optional; marks this Aggregation as a service binding
 scope         — optional; "local" | "context" (service bindings only)
 documentation — human-readable description
+since         — optional; semantic version from which this member is available
+changelog     — optional; version history (oldest first)
+examples      — optional; usage examples (title + CDATA body)
 composition   — optional nested Composition filling this aggregation
 readOnly      — informational only
 final         — prevents override in child Blocks
@@ -732,6 +741,9 @@ Associations describe loose references between objects without ownership. They a
 name          — member name (unique within the Block's member namespace)
 type          — FQN of the referenced type, optionally with occurrence brackets (see Type Notation)
 documentation — human-readable description
+since         — optional; semantic version from which this member is available
+changelog     — optional; version history (oldest first)
+examples      — optional; usage examples (title + CDATA body)
 ```
 
 Associations carry no ownership and do not affect rendering.
@@ -764,6 +776,9 @@ All Capabilities share these base fields:
 name           — camelCase member name (unique within the Block's member namespace)
 type           — FQN of the Capability type (Inbound | Outbound | Transformation)
 documentation  — human-readable description
+since          — optional; semantic version from which this member is available
+changelog      — optional; version history (oldest first)
+examples       — optional; usage examples (title + CDATA body)
 ```
 
 Member visibility follows § Member Visibility. Private Capabilities (`__name`) cannot be bound from outside the declaring Block. Protected Capabilities (`_name`) are accessible in child Blocks.
