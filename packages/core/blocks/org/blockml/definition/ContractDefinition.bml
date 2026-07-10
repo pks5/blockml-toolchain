@@ -11,6 +11,7 @@
                       "
   xmlns:core="org.blockml.core"
   xmlns:def="org.blockml.definition"
+  xmlns:btype="org.blockml.type"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>A reusable partial Block definition merged into the declaring Block.</idea>
@@ -30,7 +31,7 @@
   <bml:xml>contract</bml:xml>
 
   <properties>
-    <type type="core:FullyQualifiedName(core:Block)">
+    <type type="btype:FullyQualifiedName(core:Block)">
       <documentation>FQN of the contract Block whose partial definition is merged into this Block.
         Required on every contract reference in the contracts container (root block only).</documentation>
     </type>

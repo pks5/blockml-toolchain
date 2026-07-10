@@ -9,5 +9,5 @@
     org.blockml.type.String.</documentation>
   <name>String</name>
   <type>String</type>
-  <baseType>core:PrimitiveType</baseType>
+  <baseType>btype:PrimitiveType</baseType>
 </block>

@@ -14,5 +14,5 @@
     structured data, or templates.</documentation>
   <name>JSON</name>
   <type>lang:JSON</type>
-  <baseType>core:MarkupLanguage</baseType>
+  <baseType>lang:MarkupLanguage</baseType>
 </block>

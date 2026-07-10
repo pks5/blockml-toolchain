@@ -9,5 +9,5 @@
     resolves to org.blockml.type.Boolean.</documentation>
   <name>Boolean</name>
   <type>Boolean</type>
-  <baseType>core:PrimitiveType</baseType>
+  <baseType>btype:PrimitiveType</baseType>
 </block>

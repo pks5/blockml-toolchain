@@ -13,5 +13,5 @@
   <documentation>ProgrammingLanguage for C++ function implementations on Capabilities.</documentation>
   <name>CPP</name>
   <type>lang:CPP</type>
-  <baseType>core:ProgrammingLanguage</baseType>
+  <baseType>lang:ProgrammingLanguage</baseType>
 </block>

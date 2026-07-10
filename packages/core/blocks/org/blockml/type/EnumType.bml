@@ -1,13 +1,14 @@
 <!--
   BlockML Core — enum type branch (closed value sets)
 
-  FQN: org.blockml.core.EnumType
+  FQN: org.blockml.type.EnumType
 -->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:btype="org.blockml.type"
   xmlns:core="org.blockml.core">
 
   <idea>Branch for closed sets of named literal values.</idea>
@@ -15,7 +16,7 @@
   <documentation>Abstract branch for closed enum ValueTypes. Enum values are Block instances in the
     default _values aggregation — no special enum syntax.</documentation>
   <name>EnumType</name>
-  <type>core:EnumType</type>
+  <type>btype:EnumType</type>
   <baseType>core:ValueType</baseType>
   <abstract />
 

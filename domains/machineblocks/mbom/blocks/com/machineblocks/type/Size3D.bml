@@ -8,7 +8,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:bcore="org.blockml.core"
   xmlns:btype="org.blockml.type"
   xmlns:type="com.machineblocks.type">
 
@@ -17,7 +16,7 @@
   <documentation>Struct ValueType for three-dimensional size [x, y, z] in grid units.</documentation>
   <name>Size3d</name>
   <type>type:Size3d</type>
-  <baseType>bcore:StructType</baseType>
+  <baseType>btype:StructType</baseType>
   <properties>
     <x type="Float">
       <documentation>Size in X direction.</documentation>

@@ -11,6 +11,7 @@
                       "
   xmlns:core="org.blockml.core"
   xmlns:def="org.blockml.definition"
+  xmlns:btype="org.blockml.type"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>A cross-reference to a related Block or definition element.</idea>
@@ -28,7 +29,7 @@
   <bml:xml>reference</bml:xml>
 
   <properties>
-    <type type="core:FullyQualifiedName(core:Block, core:Definition)">
+    <type type="btype:FullyQualifiedName(core:Block, core:Definition)">
       <documentation>FQN of the Block or Definition being referenced. Rendered as the type
         attribute on the reference element.</documentation>
     </type>

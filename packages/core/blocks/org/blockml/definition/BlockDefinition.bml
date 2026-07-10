@@ -12,6 +12,7 @@
                       "
   xmlns:core="org.blockml.core"
   xmlns:def="org.blockml.definition"
+  xmlns:btype="org.blockml.type"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>The structural shape of every Block definition document in BlockML.</idea>
@@ -38,11 +39,11 @@
     <name type="String">
       <documentation>Short class name (PascalCase). Required on every Block definition.</documentation>
     </name>
-    <type type="core:FullyQualifiedName(core:Block)">
+    <type type="btype:FullyQualifiedName(core:Block)">
       <documentation>Globally unique FQN. Required on root blocks (authored in BML). On Sub-Blocks
         derived as parentFqn + "." + name when omitted in source.</documentation>
     </type>
-    <baseType type="core:FullyQualifiedName(core:Block)">
+    <baseType type="btype:FullyQualifiedName(core:Block)">
       <documentation>Parent type FQN. Required on all definitions except org.blockml.core.Block
         (the sole inheritance root). No default — validator resolves effective members via the
         baseType chain.</documentation>

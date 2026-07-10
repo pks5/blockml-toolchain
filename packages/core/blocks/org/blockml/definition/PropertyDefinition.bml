@@ -11,6 +11,7 @@
                       "
   xmlns:core="org.blockml.core"
   xmlns:def="org.blockml.definition"
+  xmlns:btype="org.blockml.type"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>A typed value member on a Block definition.</idea>
@@ -29,7 +30,7 @@
 
   <properties>
     <!-- Without bml:xml, type renders as an XML attribute on the property element. -->
-    <type type="core:FullyQualifiedName(core:Block)">
+    <type type="btype:FullyQualifiedName(core:Block)">
       <documentation>FQN of the property's ValueType. Non-ValueType FQNs are invalid here
         (BML_INVALID_PROPERTY_TYPE). Multiplicity, unions, and generic applications are expressed
         in the type attribute string as TypeExpressions.</documentation>

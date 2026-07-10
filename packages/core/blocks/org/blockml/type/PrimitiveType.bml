@@ -1,13 +1,14 @@
 <!--
   BlockML Core — primitive type branch
 
-  FQN: org.blockml.core.PrimitiveType
+  FQN: org.blockml.type.PrimitiveType
 -->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:btype="org.blockml.type"
   xmlns:core="org.blockml.core">
 
   <idea>Branch for scalar value types — single atomic values.</idea>
@@ -23,7 +24,7 @@
 
     Same FQN in both roles; validator and renderer choose semantics from usage context.</documentation>
   <name>PrimitiveType</name>
-  <type>core:PrimitiveType</type>
+  <type>btype:PrimitiveType</type>
   <baseType>core:ValueType</baseType>
   <abstract />
 

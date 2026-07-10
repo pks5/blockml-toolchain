@@ -14,5 +14,5 @@
     internally consistent but is otherwise unconstrained — an LLM may interpret it.</documentation>
   <name>PseudoCode</name>
   <type>lang:PseudoCode</type>
-  <baseType>core:ProgrammingLanguage</baseType>
+  <baseType>lang:ProgrammingLanguage</baseType>
 </block>

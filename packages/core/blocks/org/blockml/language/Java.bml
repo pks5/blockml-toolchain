@@ -13,5 +13,5 @@
   <documentation>ProgrammingLanguage for Java method implementations on Capabilities.</documentation>
   <name>Java</name>
   <type>lang:Java</type>
-  <baseType>core:ProgrammingLanguage</baseType>
+  <baseType>lang:ProgrammingLanguage</baseType>
 </block>

@@ -14,5 +14,5 @@
     V1: compile-time execution when all arguments are literals.</documentation>
   <name>TypeScript</name>
   <type>lang:TypeScript</type>
-  <baseType>core:ProgrammingLanguage</baseType>
+  <baseType>lang:ProgrammingLanguage</baseType>
 </block>

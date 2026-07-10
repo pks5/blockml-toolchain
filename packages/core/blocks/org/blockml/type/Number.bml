@@ -5,11 +5,11 @@
 
   <idea>Abstract branch for numeric primitive ValueTypes.</idea>
 
-  <documentation>Numeric primitive branch under org.blockml.core.PrimitiveType. Concrete types:
+  <documentation>Numeric primitive branch under org.blockml.type.PrimitiveType. Concrete types:
     org.blockml.type.Integer, org.blockml.type.Float, org.blockml.type.Decimal. Not in the
     unqualified-name whitelist — use Integer, Float, or Decimal explicitly.</documentation>
   <name>Number</name>
   <type>btype:Number</type>
-  <baseType>core:PrimitiveType</baseType>
+  <baseType>btype:PrimitiveType</baseType>
   <abstract />
 </block>

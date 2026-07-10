@@ -14,5 +14,5 @@
     Emitted by the MachineBlocks SCAD renderer with FQN-prefixed function names.</documentation>
   <name>OpenSCAD</name>
   <type>lang:OpenSCAD</type>
-  <baseType>core:ProgrammingLanguage</baseType>
+  <baseType>lang:ProgrammingLanguage</baseType>
 </block>

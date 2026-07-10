@@ -13,5 +13,5 @@
   <documentation>ProgrammingLanguage for C# method implementations on Capabilities.</documentation>
   <name>CSharp</name>
   <type>lang:CSharp</type>
-  <baseType>core:ProgrammingLanguage</baseType>
+  <baseType>lang:ProgrammingLanguage</baseType>
 </block>

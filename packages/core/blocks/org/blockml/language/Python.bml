@@ -13,5 +13,5 @@
   <documentation>ProgrammingLanguage for Python function implementations on Capabilities.</documentation>
   <name>Python</name>
   <type>lang:Python</type>
-  <baseType>core:ProgrammingLanguage</baseType>
+  <baseType>lang:ProgrammingLanguage</baseType>
 </block>

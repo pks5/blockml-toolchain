@@ -51,13 +51,8 @@
         <bcore:CapabilityType />
         <bcore:Constraint />
         <bcore:Entity />
-        <bcore:EnumType />
         <bcore:Language />
-        <bcore:MarkupLanguage />
-        <bcore:PrimitiveType />
-        <bcore:ProgrammingLanguage />
         <bcore:Status />
-        <bcore:StructType />
         <bcore:ValueType />
         <cap:Inbound />
         <cap:Outbound />
@@ -71,6 +66,7 @@
         <constraint:Pattern />
         <lang:C />
         <lang:CPP />
+        <lang:MarkupLanguage />
         <lang:CSharp />
         <lang:Chinese />
         <lang:English />
@@ -82,6 +78,7 @@
         <lang:JavaScript />
         <lang:OpenSCAD />
         <lang:PseudoCode />
+        <lang:ProgrammingLanguage />
         <lang:Python />
         <lang:Russian />
         <lang:Spanish />
@@ -100,10 +97,14 @@
         <status:Stub />
         <btype:Boolean />
         <btype:Decimal />
+        <btype:EnumType />
         <btype:Float />
+        <btype:FullyQualifiedName />
         <btype:Integer />
         <btype:Number />
+        <btype:PrimitiveType />
         <btype:String />
+        <btype:StructType />
       </composition>
     </_blocks>
   </aggregations>
