@@ -2,19 +2,57 @@
   BlockML Core — enum type branch (closed value sets)
 
   FQN: org.blockml.type.EnumType
+  See docs/17_type_system_bml.md — EnumType
+       docs/02_mbml.md — Enum types · Enum value references
+       docs/04_types.md — Enum types · Enum value references
+       docs/00_bom_core.md — EnumType property values
+       docs/16_framework_base_types.md — ValueType branch
 -->
-<block
-  xmlns="http://blockml.org/schema/block"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
-                      "
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.type"
   xmlns:core="org.blockml.core">
 
   <idea>Branch for closed sets of named literal values.</idea>
 
-  <documentation>Abstract branch for closed enum ValueTypes. Enum values are Block instances in the
-    default _values aggregation — no special enum syntax.</documentation>
+  <documentation>
+    Abstract ValueType branch for closed enum ValueTypes — finite sets of named literal values.
+    Unqualified name EnumType resolves to org.blockml.type.EnumType.
+
+    One of three language-level ValueType kinds (PrimitiveType · EnumType · StructType). Concrete
+    EnumTypes declare their allowed values as Block instances in the default _values aggregation
+    — no special enum syntax. Examples: Direction, Face, StudType, BaseCutoutType.
+
+    Each enum value is a Block instance of the EnumType with an id (bml:id) and a value property
+    holding the runtime/serialization literal. The editor renders EnumType properties as a
+    SelectBox; the compiler validates values against _values.
+
+    Properties typed with an EnumType must not carry &lt;suggestions&gt; — valid values come
+    exclusively from _values → BML_SUGGESTIONS_ON_ENUM. Properties may still carry
+    &lt;constraints&gt; where a compatible Constraint sub-type exists.
+
+    Enum value references in property values (defaultValue, composition attributes, expressions):
+    when the property type is an EnumType, qualified references may omit the {EnumTypeFQN}::
+    prefix — STANDARD is equivalent to com.machineblocks.type.BaseCutoutType::STANDARD when the
+    expected type is known from the property declaration. The short form is invalid for untyped
+    strings. The validator resolves tokens against _values by id; unknown values → validation
+    error.
+
+    Id reference (STANDARD / FQN::STANDARD) and value literal (standard) are distinct surface
+    forms; both must match a declared _values entry.
+
+    Domain XSD enums remain accepted during migration with BML_LEGACY_TYPE_SOURCE warning — new
+    enums should be defined as BML EnumType blocks.
+
+    Used wherever BlockML declares or validates closed value sets:
+    • Property &lt;type&gt; references (for example type="com.machineblocks.type.BaseCutoutType")
+    • defaultValue and instance attribute values on EnumType properties
+    • Expression enum literals where the expected EnumType is known from context
+    • Library _blocks export alongside other ValueType definitions
+
+    See 17_type_system_bml.md — EnumType · 02_mbml.md — Enum types · 04_types.md ·
+    00_bom_core.md — EnumType property values.
+  </documentation>
   <name>EnumType</name>
   <type>btype:EnumType</type>
   <baseType>core:ValueType</baseType>
@@ -23,6 +61,14 @@
   <aggregations>
     <_values
       type="_self[]"
-      default="true" />
+      default="true">
+      <documentation>
+        Default composition aggregation for enum literal Block instances. Each child is a Block
+        instance of this EnumType with bml:id (reference token) and value (serialization
+        literal). Valid values for properties typed with this EnumType come exclusively from
+        _values — authored in &lt;composition aggregation="_values"&gt; with no special enum
+        syntax. See 17_type_system_bml.md — EnumType.
+      </documentation>
+    </_values>
   </aggregations>
 </block>
