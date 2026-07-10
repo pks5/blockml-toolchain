@@ -178,8 +178,9 @@ interface BlockDefinition {
   /** org.blockml.language.* FQNs allowed on capability implementations. Default: inherit. */
   languages?: string[]
 
-  /** Abstract Block FQNs whose member surface this Block implements (contracts / interfaces).
-   * Root block only. Validator checks effective members against each contract type.
+  /** Contract Block FQNs merged into this Block after the baseType chain.
+   * Root block only. Order is significant — later contracts override earlier ones;
+   * local Block declarations override all contracts.
    * subBlocks and compositions on contract types are ignored.
    */
   contracts?: string[]
@@ -466,7 +467,15 @@ Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" 
 
 **Function argument mapping:** anonymous struct `inputType` values (`{ a: Float, b: Float }`) and named StructTypes share the same **Ordered Struct Fields** rule — see `17_type_system_bml.md` — Ordered Struct Fields · `10_expression_language.md` — Capability Input Types and Function Parameters.
 
-**Effective members:** `resolveEffectiveMembers()` merges by `(namespace, name)` along the `baseType` chain. Child override declarations merge with parent members — only specified attributes replace inherited values. Private members cannot be overridden; `final="true"` prevents override.
+**Effective members:** `resolveEffectiveMembers()` merges by `(namespace, name)` in this order:
+
+```text
+1. baseType chain   — walk from root Block to direct baseType
+2. contracts[]      — in declaration order (later overrides earlier)
+3. Block local      — declared members on this Block (override all)
+```
+
+Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` prevents override.
 
 ```text
 Parser / mapper     MUST NOT reorder declared members
@@ -486,9 +495,9 @@ function resolveEffectiveMembers(
 ): EffectiveMemberSet
 
 interface EffectiveMemberSet {
-  /** Flattened, de-duplicated member list after baseType chain walk */
+  /** Flattened, de-duplicated member list after baseType chain + contract merge + local declarations */
   members: MemberDefinition[]
-  /** Map member name → declaring block FQN (for diagnostics) */
+  /** Map member name → declaring source FQN (baseType Block, contract Block, or this Block — for diagnostics) */
   declaredOn: Record<string, string>
 }
 ```
@@ -526,21 +535,23 @@ V1: Canonical BOM (`BlockDefinition.members[]`) contains **only authored** membe
 
 Override of a synthetic accessor by an authored Capability with the same name is **TBD**.
 
-### Contract Members (not stored in BOM)
+### Contract Merge (not stored in BOM)
 
-Contract satisfaction is validated at stage [8] — not materialized in `BlockDefinition.members[]`:
+Contract contributions are **merged into** the effective member set — not validated as a separate superset check:
 
 ```typescript
-/** @blockml/core — not part of BomDocument */
+/** @blockml/core — not part of BomDocument; used internally by resolveEffectiveMembers() */
 function resolveContractMembers(
   contractFqn: string,
   registry: TypeRegistry
 ): EffectiveMemberSet
-// Walks contract Block's effective members (properties, aggregations,
-// associations, capabilities). Ignores subBlocks[] and compositions[].
+// Walks contract Block's declared members (properties, aggregations, associations,
+// capabilities, constraints, suggestions, documentation, examples, optional defaults).
+// Ignores subBlocks[] and compositions[].
+// Does not walk contracts[] on the contract Block itself (no transitive contract merge).
 ```
 
-The implementing Block's `resolveEffectiveMembers()` result must be a **superset** of each contract's member surface — same member names, compatible types and cardinality.
+For each FQN in `block.contracts[]`, declared members are merged in order. The Block's own declared members are merged last. Merge semantics match `baseType` partial overrides — same member kind required; only specified attributes replace prior values.
 
 ---
 
@@ -1172,7 +1183,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property value cycles (topological sort)
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
-✓  contract types resolve, are abstract, and member surface is satisfied by effective members
+✓  contract types resolve and merge into effective members (declaration order; later wins)
 ✓  Library _blocks entries resolve to registered Block definitions (FQN + effectiveBlockVersion)
 ✓  Outer library _blocks does not re-export blocks from a nested inner library (BML_LIBRARY_NESTING_VIOLATION)
 ✓  Library _dependencies entries resolve to registered BlockLibrary definitions (FQN + effectiveBlockVersion)
@@ -1238,9 +1249,9 @@ BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggr
 BML_UNKNOWN_NAMESPACE_PREFIX  — member namespace attribute references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular basePresets chain
 BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
-BML_CONTRACT_NOT_ABSTRACT     — contract type is not abstract
-BML_CONTRACT_MEMBER_MISSING   — implementing Block lacks a contract member
-BML_CONTRACT_MEMBER_INCOMPATIBLE — member present but type/cardinality mismatch
+BML_CONTRACT_NOT_ON_ROOT      — <contracts> on Sub-Block
+BML_DUPLICATE_CONTRACT        — same type listed twice in block.contracts[]
+BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
 BML_EXPR_UNKNOWN_PROPERTY     — property reference not in effective members
 ```
 

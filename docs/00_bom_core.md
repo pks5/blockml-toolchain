@@ -223,7 +223,7 @@ Everything else — assemblies, placements, steps, scenes, views — is defined 
 ```text
 Library   contains   Block(s)
 Block     has        Member(s)   — Properties, Aggregations, Associations, Capabilities
-Block     implements Contract(s) — abstract Block types whose member surface is satisfied
+Block     composes Contract(s) — reusable partial Block definitions merged into the effective member set
 Block     has        Preset(s)
 Block     has        Composition(s)
 Catalog   contains   Block(s)   — top-level composite Blocks (finished products / assemblies)
@@ -544,39 +544,82 @@ Private members cannot be overridden
 final="true" on parent prevents override → BML_FINAL_MEMBER_OVERRIDE
 ```
 
-Effective members are resolved by merging along the `baseType` chain at validation time — see `resolveEffectiveMembers()` in `12_bom_object_model.md`.
+Effective members are resolved by merging along the `baseType` chain, then contract fragments, then local declarations — see `resolveEffectiveMembers()` in `12_bom_object_model.md` and Contracts below.
 
-### Contracts (Block Interfaces)
+### Contracts (Reusable Partial Definitions)
 
-A Block may declare one or more **contracts** — references to abstract Block types whose **member surface** the declaring Block implements. Contracts correspond to interface implementation in classical OOP: the Block signals that its effective member set includes all Properties, Aggregations, Associations, and Capabilities of each contract type.
+A Block is a **semantic definition**, not a runtime class. Its internal structure (Properties, Aggregations, Associations) is not the public surface — only Capabilities are visible outward; the renderer decides concrete manifestation (Java getter, REST endpoint, SCAD parameter, UI binding, …).
+
+A **contract** is a **reusable partial definition** of a Block — not a pure interface, but a fragment that can be composed into concrete Blocks. Contracts replace the separate concepts of interfaces, traits, and mixins in classical OOP.
+
+A contract Block may define any subset of:
+
+```text
+Properties, Aggregations, Associations, Capabilities
+Constraints, Suggestions
+Documentation, Examples
+Optional default implementations for Capabilities
+```
+
+A Block references contracts via `<contracts>`:
 
 ```xml
 <contracts>
+  <contract type="com.foo.IIdentifiable" />
   <contract type="com.foo.IPlaceable" />
-  <contract type="com.foo.IColored" />
 </contracts>
 ```
 
 ```text
-Declared on:     root <block> only (not on Sub-Blocks)
-Attribute:       type — FQN of the contract Block (required)
-Contract target: must be abstract (abstract=true)
-Member scope:    Properties, Aggregations, Associations, Capabilities (any subset)
+Declared on:       root <block> only (not on Sub-Blocks)
+Attribute:         type — FQN of the contract Block (required)
+Contract target:   any Block definition usable as a partial definition (typically abstract)
+Member scope:      Properties, Aggregations, Associations, Capabilities, Constraints,
+                   Suggestions, documentation, examples, optional Capability defaults
 Ignored on target: subBlocks[], compositions[] on the contract Block
-Partial contracts: a contract may declare only some member kinds — the implementing Block must provide all declared members
+Partial members:   a contract may declare incomplete members — e.g. only <id type="String"/>
+                   without default, constraints, or documentation; the Block completes them
 ```
 
-Any abstract Block may serve as a contract (interface). A concrete Block implements a contract by declaring `<contracts>`; it does not inherit contract members via `baseType` — the validator checks that **effective members** (after `baseType` chain resolution) satisfy each contract.
+**Effective definition merge order:**
 
 ```text
-com.foo.IPlaceable   abstract Block — offset, direction properties
-com.foo.MyWall       baseType CompositeBlock + contract IPlaceable
-  → effective members must include offset, direction with compatible types
+baseType chain  →  Contract 1  →  Contract 2  →  …  →  Block (local declarations)
 ```
 
-Contracts are orthogonal to `baseType` inheritance: a Block extends one base type and may implement zero or more contracts. Multiple contracts merge — the implementing Block must satisfy all of them.
+Merge rules (identical to `baseType` partial overrides):
 
-Contract validation runs at stage [8] (semantic validation), after `resolveEffectiveMembers()` for both the implementing Block and each contract type.
+```text
+Later contracts override earlier ones          — last contract wins on conflicts
+The Block overrides all contracts              — local declarations win always
+Only explicitly specified attributes override  — omitted attributes are preserved
+final="true" members cannot be overridden      → BML_FINAL_MEMBER_OVERRIDE
+Same member kind required for overrides        → BML_CONTRACT_MEMBER_KIND_MISMATCH
+```
+
+**Example — contract supplies type, Block supplies the rest:**
+
+```xml
+<!-- com.foo.IIdentifiable.bml — contract -->
+<properties>
+  <id type="String"/>
+</properties>
+
+<!-- com.foo.MyEntity.bml — concrete Block -->
+<contracts>
+  <contract type="com.foo.IIdentifiable"/>
+</contracts>
+<properties>
+  <id>
+    <documentation>Unique identifier</documentation>
+    <constraints>…</constraints>
+  </id>
+</properties>
+```
+
+Effective member `id`: `type` from the contract; `documentation` and `constraints` from the Block.
+
+Contract members are **merged into** the effective member set by `resolveEffectiveMembers()` — they are not validated as a separate superset check. Merge resolution runs at stage [8] (semantic validation), after the contract Block definitions themselves are resolved.
 
 ---
 

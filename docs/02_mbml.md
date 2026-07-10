@@ -480,7 +480,7 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
 <aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice.
 <associations>  — Association declarations.
 <capabilities>  — Capability declarations.
-<contracts>     — Contract declarations (interface implementation). Root block only.
+<contracts>     — Contract references (reusable partial definitions). Root block only.
 <subBlocks>     — Sub-Block definitions (see Sub-Blocks section).
 <composition>   — internal structure inside the default aggregation. Omit for Leaf Blocks.
                 — equivalent to <{defaultAggregation}><composition>…</composition></{defaultAggregation}>
@@ -515,72 +515,78 @@ org.blockml.core.Block        — sole type that omits <baseType> (inheritance r
 
 ### Contracts
 
-Blocks may declare `<contracts>` at root level to signal that they implement the member surface of one or more abstract Block types (interfaces):
+Blocks may declare `<contracts>` at root level to compose one or more **contract Blocks** — reusable partial definitions whose member fragments are merged into the effective Block definition:
 
 ```xml
 <contracts>
+  <contract type="com.foo.IIdentifiable" />
   <contract type="com.foo.IPlaceable" />
-  <contract type="com.foo.IColored" />
 </contracts>
 ```
 
 ```text
-type    — FQN of an abstract Block whose members this Block implements (required)
+type    — FQN of a contract Block whose partial definition is merged (required)
 ```
 
 **Semantics:**
 
 ```text
-Scope           — Properties, Aggregations, Associations, Capabilities of the contract type
+Role            — reusable partial Block definition (replaces interfaces, traits, mixins)
+Scope           — Properties, Aggregations, Associations, Capabilities, Constraints,
+                  Suggestions, documentation, examples, optional Capability defaults
 Ignored         — subBlocks and compositions on the contract Block
-Contract target — must be abstract (abstract=true)
-Orthogonal to   — baseType inheritance (extends one base, implements zero or more contracts)
-Validation      — effective members of this Block must include all contract members
-                  with compatible types (stage [8])
-Multiple        — all declared contracts must be satisfied
+Partial members — contracts may declare incomplete members; the Block completes them
+Merge order     — baseType chain → contracts (in declaration order) → Block
+Conflict rule   — later contract wins; Block overrides all contracts
+Override rule   — only explicitly specified attributes replace inherited/merged values
+final           — final members from any layer cannot be overridden
 Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
+Validation      — merge resolution at stage [8] via resolveEffectiveMembers()
 ```
 
-**Example — interface Block:**
+**Example — contract Block (partial definition):**
 
 ```xml
 <block xmlns="http://blockml.org/schema/block" …>
-  <name>IPlaceable</name>
-  <type>com.foo.IPlaceable</type>
+  <name>IIdentifiable</name>
+  <type>com.foo.IIdentifiable</type>
   <baseType>org.blockml.core.Block</baseType>
   <version>1.0.0</version>
   <abstract />
   <properties>
-    <offset    type="type:Vector3D" />
-    <direction type="type:Direction" />
+    <id type="String" />
   </properties>
 </block>
 ```
 
-**Example — implementing Block:**
+**Example — contract supplies type, Block completes the member:**
 
 ```xml
 <block xmlns="http://blockml.org/schema/block" …>
-  <name>Wall</name>
-  <type>com.foo.Wall</type>
-  <baseType>com.machineblocks.core.CompositeBlock</baseType>
+  <name>MyEntity</name>
+  <type>com.foo.MyEntity</type>
+  <baseType>org.blockml.core.Entity</baseType>
   <version>1.0.0</version>
   <contracts>
+    <contract type="com.foo.IIdentifiable" />
     <contract type="com.foo.IPlaceable" />
   </contracts>
   <properties>
+    <id>
+      <documentation>Unique identifier</documentation>
+      <constraints>…</constraints>
+    </id>
     <offset type="type:Vector3D">
       <value>[0, 0, 0]</value>
     </offset>
     <direction type="type:Direction">
       <value>north</value>
     </direction>
-    <size type="type:Size3D">
-      <value>[1, 8, 9]</value>
-    </size>
   </properties>
 </block>
 ```
+
+Effective members: `id.type` from `IIdentifiable`; `id.documentation` and `id.constraints` from `MyEntity`; `offset` and `direction` from `IPlaceable`, with Block-supplied defaults where declared.
 
 ### Namespace Declarations
 

@@ -1,0 +1,33 @@
+<!--
+  BlockML Definition — contract reference type
+
+  FQN: org.blockml.definition.ContractDefinition
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:def="org.blockml.definition"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea>A reusable partial Block definition merged into the declaring Block.</idea>
+
+  <documentation>References a contract Block whose member fragments are merged into the
+    declaring Block after the baseType chain and before the Block's own declarations.
+    Contracts may supply partial Properties, Aggregations, Associations, Capabilities,
+    Constraints, Suggestions, documentation, examples, and optional default Capability
+    implementations. The Block completes or overrides each merged member.</documentation>
+  <name>ContractDefinition</name>
+  <type>def:ContractDefinition</type>
+  <baseType>core:Definition</baseType>
+  <bml:xml>contract</bml:xml>
+
+  <properties>
+    <type type="core:FullyQualifiedName(core:Block)">
+      <documentation>The FQN of the contract Block whose partial definition is merged into
+        this Block.</documentation>
+    </type>
+  </properties>
+</block>

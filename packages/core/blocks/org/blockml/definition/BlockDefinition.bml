@@ -49,6 +49,9 @@
     <subTypes type="core:Block[]">
 
     </subTypes>
+    <contracts type="def:ContractDefinition[]">
+
+    </contracts>
     <properties type="def:PropertyDefinition[]">
 
     </properties>

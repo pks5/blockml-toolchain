@@ -209,7 +209,7 @@ Wall              →  Block  (domain composable)
 Integer           →  Block  (ValueType branch)
 OpenSCAD          →  Block  (Language branch)
 Step              →  Block  (Set meta block)
-IPlaceable        →  Block  (abstract — usable as contract / interface)
+IPlaceable        →  Block  (abstract — typical contract / partial definition)
 Library           →  Block  (publishable package descriptor; entry types as subBlocks)
 Math · #strings   →  Block  (org.blockml.service.* · baseType Entity)
 org.blockml.core.Block itself  →  Block  (root)
@@ -335,7 +335,7 @@ Types are Blocks          — no separate type language construct
 Primitives are Blocks     — value property + instance syntax (<Integer value="5"/>)
 Structs are Blocks        — normal <properties>, no special struct syntax
 Enums are Blocks          — _values aggregation + composition, no enumValues syntax
-Contracts are Blocks      — abstract interfaces via <contracts>
+Contracts are Blocks      — reusable partial definitions merged via <contracts>
 Generics parametrize Blocks — `<genericTypes>` + type arguments at reference sites
 ```
 
@@ -923,18 +923,20 @@ A generic parameter name must be a distinct identifier — not the Block name, n
 
 ## Contracts
 
-Blocks may implement zero or more **contracts** — abstract Block types whose member surface must be satisfied:
+Blocks may compose zero or more **contracts** — reusable partial Block definitions whose member fragments are merged into the effective definition:
 
 ```xml
 <contracts>
-  <contract type="com.foo.Speaker"/>
-  <contract type="com.foo.NetworkNode"/>
+  <contract type="com.foo.IIdentifiable"/>
+  <contract type="com.foo.IPlaceable"/>
 </contracts>
 ```
 
-A contract is an abstract Block. All members declared on the contract (Properties, Aggregations, Associations, Capabilities — any subset) must be provided by the implementing Block's effective members. `subBlocks` and `compositions` on the contract type are ignored.
+A contract Block may declare any subset of Properties, Aggregations, Associations, Capabilities, Constraints, Suggestions, documentation, examples, and optional default Capability implementations. Members may be **partial** — e.g. a contract supplies only `type`, and the concrete Block adds defaults, constraints, and documentation.
 
-Contracts are orthogonal to `baseType` inheritance. See `00_bom_core.md` — Contracts.
+Effective members are resolved by merging in order: `baseType` chain → contracts (declaration order) → local Block declarations. Later contracts override earlier ones; the Block overrides all. Only explicitly specified attributes are replaced; `final` members cannot be overridden. `subBlocks` and `compositions` on contract types are ignored.
+
+See `00_bom_core.md` — Contracts.
 
 ---
 

@@ -614,26 +614,27 @@ bare <composition> on definition            → CompositionTemplate for default 
 
 The `composition aggregation="…"` attribute is **removed** — aggregations are opened by member element name.
 
-### Contract validation (stage [8])
+### Contract merge (stage [8])
 
 ```text
-<contract type="com.foo.IPlaceable"/>
+<contract type="com.foo.IIdentifiable"/>
   → Parser stores FQN in block.contracts[] (stage [5])
   → Validator resolves contract BlockDefinition (stage [8])
-  → Contract target must have abstract=true
-  → resolveContractMembers(contractFqn) — effective members only;
+  → resolveContractMembers(contractFqn) — declared members only;
     subBlocks[] and compositions[] on contract type ignored
-  → resolveEffectiveMembers(implementingBlock) must superset contract members
-     (name, kind, typeFqn, cardinality compatible)
+  → resolveEffectiveMembers(implementingBlock) merges:
+       baseType chain members
+     → contract members (in block.contracts[] order; later overrides earlier)
+     → Block local declarations (override all)
+     Same partial-override rules as baseType inheritance
 ```
 
 ```text
 BML_UNKNOWN_CONTRACT              — type FQN not in TypeRegistry
-BML_CONTRACT_NOT_ABSTRACT         — contract Block is not abstract
 BML_CONTRACT_NOT_ON_ROOT          — <contracts> on Sub-Block
 BML_DUPLICATE_CONTRACT            — same type listed twice in block.contracts[]
-BML_CONTRACT_MEMBER_MISSING         — required contract member absent
-BML_CONTRACT_MEMBER_INCOMPATIBLE    — member kind or type/cardinality mismatch
+BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
+BML_FINAL_MEMBER_OVERRIDE         — override attempted on final member (from contract or baseType)
 ```
 
 ### Library blocks

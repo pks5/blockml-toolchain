@@ -64,7 +64,7 @@ resolveInheritance(bom, registry)       → EffectiveMemberSet
 resolveEffectiveMembers(block, registry)  → EffectiveMemberSet
 resolveType(typeFqn, registry)          → TypeDescriptor
 resolveReference(ref, bom, registry)    → ResolvedReference
-resolveContracts(block, registry)       → ContractValidation
+resolveContracts(block, registry)       → EffectiveMemberSet  (contract merge slice; used by resolveEffectiveMembers)
 resolveGenerics(typeExpr, registry)     → ResolvedTypeExpr
 parseExpression(raw, context)           → ExpressionNode + resultTypeFqn
 evaluateExpression(ast, context)        → evaluated value (working model)
@@ -494,11 +494,9 @@ BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggr
 BML_UNKNOWN_NAMESPACE_PREFIX  — namespace attribute references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular dependency in basePresets chain
 BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
-BML_CONTRACT_NOT_ABSTRACT     — contract type is not abstract
 BML_CONTRACT_NOT_ON_ROOT      — <contracts> declared on a Sub-Block
 BML_DUPLICATE_CONTRACT        — same contract type declared twice
-BML_CONTRACT_MEMBER_MISSING   — implementing Block lacks a contract member
-BML_CONTRACT_MEMBER_INCOMPATIBLE — member present but type/cardinality mismatch
+BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
 BML_CONSTRAINT_UNKNOWN        — constraint Block type not in TypeRegistry or not a Constraint sub-type
 BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with property or element type
