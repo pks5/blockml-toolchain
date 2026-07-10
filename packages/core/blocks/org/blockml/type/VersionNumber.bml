@@ -1,12 +1,53 @@
+<!--
+  BlockML Core — semantic version value type
+
+  FQN: org.blockml.type.VersionNumber
+  See docs/02_mbml.md — Block Definition · Documentation extensions · version / since / changelog
+       docs/12_bom_object_model.md — Version Rules · ChangelogEntry
+       docs/00_bom_core.md — Versioning
+-->
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.type"
   xmlns:core="org.blockml.core">
 
-  <idea>Primitive BlockML property type capable of holding a version number.</idea>
+  <idea>Semantic version string for BlockML definitions, documentation, and instance references.</idea>
 
-  <documentation>BOM Core primitive ValueType for version numbers.</documentation>
+  <documentation>
+    ValueType for semantic version numbers (semver). Values use MAJOR.MINOR.PATCH form
+    (for example 1.0.0, 1.3.2, 2.0.0). Unqualified name VersionNumber resolves to
+    org.blockml.type.VersionNumber.
+
+    Used wherever BlockML tracks or compares definition and reference versions:
+    • &lt;version&gt; on Block, Library, and Catalog definitions — effective block version
+    • &lt;since&gt; on definition elements — version from which a member is available
+    • version attribute on &lt;change&gt; changelog entries (ChangeDefinition)
+    • bml:version on composition instances — optional exact-version assert for external types
+
+    Effective block version: own &lt;version&gt; if present, else library.version when the
+    Block is exported via a Library, else BML_MISSING_VERSION. A Block inside a Library may
+    omit &lt;version&gt;; if set, it must be &gt;= library.version (semver compare). Standalone
+    blocks require &lt;version&gt;. Framework libraries (org.blockml.*, com.machineblocks.*)
+    conventionally declare version only on Library.bml.
+
+    Changelog entries must be ordered oldest-first by version (BML_CHANGELOG_VERSION_ORDER).
+    Invalid semver strings on &lt;since&gt; → BML_INVALID_SINCE_VERSION. Unknown bml:version
+    assert → BML_UNKNOWN_VERSION.
+
+    See 02_mbml.md · 12_bom_object_model.md — Version Rules · 00_bom_core.md — Versioning.
+  </documentation>
   <name>VersionNumber</name>
   <type>btype:VersionNumber</type>
   <baseType>core:ValueType</baseType>
+
+  <properties>
+    <version type="String">
+      <documentation>
+        The semantic version value (MAJOR.MINOR.PATCH). Stored as a string in BOM
+        BlockDefinition.version, Definition.since, ChangelogEntry.version, and instance
+        bml:version asserts. Required when VersionNumber appears as a Block instance;
+        rendered as element text or XML attribute at definition and changelog sites.
+      </documentation>
+    </version>
+  </properties>
 </block>
