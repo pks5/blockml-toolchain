@@ -83,6 +83,34 @@ Stages 1–8 are universal — implemented in `@blockml/parser` and `@blockml/co
 
 ---
 
+## Parser vs Renderer Boundary
+
+> **Fundamental rule:** BML → BOM → BML must always be possible. The renderer receives the BOM as authored. See `00_bom_core.md` — Fundamental Architecture Principles.
+
+```text
+Stages [1]–[8]   Parser + Validator
+                 Syntax, namespaces, type safety, cross-references
+                 NO data resolution, NO canonicalization, NO evaluation
+
+Stages [9]–[19]  Renderer
+                 All interpretive decisions: expansion, merge, evaluation, serialization
+```
+
+| Concern | Stage | Allowed | Forbidden |
+|---|---|---|---|
+| XML → BOM structure | [5] | Map elements, classify attributes, preserve order | Expand directives, merge presets |
+| Literal type check | [6] | Verify value conforms to declared `typeFqn` | Rewrite `[5,5,6]` → `{x:5,y:5,z:6}` |
+| Expression AST | [7] | Parse `raw` → `ExpressionNode` AST | Evaluate expressions |
+| Semantic validation | [8] | Cross-ref checks, type inference on AST | Mutate `memberValues`, expand composition |
+| Directive expansion | [10] | — | Renderer only |
+| Preset/config merge | [13] | — | Renderer only |
+| Expression evaluation | [14] | — | Renderer only |
+| Target serialization | [13]–[16] | — | Renderer only |
+
+The validated `BomDocument` passed to stage [9] is the **same graph** produced by stages [1]–[8]. Render stages operate on views or copies — they **must not write back** resolved values, expanded trees, or auto-IDs into the canonical `BomDocument`.
+
+---
+
 ## Pipeline Stages
 
 ### [1] Format Detector
@@ -134,7 +162,16 @@ Mapping rules are defined once per root type and apply uniformly to all document
 
 ### [6] Type Validator
 
-Validates all BOM member values against their declared types. For MBOM: native property types from `09_mbom_properties.yml`, custom property types from the block definition.
+Validates that all BOM member values **conform to their declared types** — without rewriting authored values.
+
+```text
+size="[5,5,6]" with type Size3D  →  LiteralValue { value: [5,5,6], typeFqn: "…Size3D" }  ✓ valid
+size="[5,5,6]" with type Size3D  →  MUST NOT become { x:5, y:5, z:6 } in BOM
+```
+
+Type validation checks compatibility; it does **not** canonicalize literal forms. The authored shape in `LiteralValue.value` is preserved for lossless BML ↔ BOM round-trip. See `00_bom_core.md` — Fundamental Architecture Principles.
+
+For MBOM: native property types from `09_mbom_properties.yml`, custom property types from the block definition.
 
 Errors at this stage reference the BML source position via the source map.
 
@@ -193,6 +230,8 @@ Looks up the requested Target by name in the Target Registry. Verifies that the 
 For Composite Targets: resolves the responsible Atomic Target per Block and validates accordingly.
 
 ### [10] Directive Expansion and ID Resolution
+
+**Renderer stage** — operates on a **view** of the BOM, not the canonical `BomDocument`. See `00_bom_core.md` — Renderer Boundary.
 
 Before rendering, the BlockProcessor expands `bml:each`, `bml:if`, and `bml:with` on the composition tree. Then:
 

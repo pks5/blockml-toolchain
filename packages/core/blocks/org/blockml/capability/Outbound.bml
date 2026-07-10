@@ -16,10 +16,10 @@
   <documentation>Outbound capability.</documentation>
   <name>Outbound</name>
   <type>cap:Outbound</type>
-  <baseType>core:CapabilityType</baseType>
+  <baseType>core:Capability</baseType>
   <properties>
-    <hasOutput>
+    <_hasOutput>
       <value>true</value>
-    </hasOutput>
+    </_hasOutput>
   </properties>
 </block>

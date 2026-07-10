@@ -1,267 +1,160 @@
-# BOM Compiler — ManagedObject Model
+# BOM Compiler — ManagedObject & Accessor Model
 
-version: 1.0.0
+version: 0.2.0-draft
+
+status: **Draft · TBD** — prepared in V1, **not fully implemented** in V1. Syntax, override process, and renderer dispatch remain open. See [V1 Scope](#v1-scope).
 
 ## Purpose of this Document
 
-This document defines the BOM ManagedObject model — the runtime class hierarchy and generated API that backs every Block instance. It is the direct inspiration source for the `@blockml/core` implementation.
+This document specifies the **target** ManagedObject and **Accessor Capability** model — how Block instances expose storage (private members) through materialized Capabilities in the BOM, and how ValueTypes roundtrip values back to BML.
 
-The BOM ManagedObject model is strongly inspired by the SAPUI5 ManagedObject pattern. Where BOM deviates from UI5, the deviation is documented explicitly with its rationale.
+It is the design source for `@blockml/core` validation (`resolveEffectiveMembers`) and, post-V1, for runtime/render dispatch. The SAPUI5 ManagedObject pattern remains the **delegation inspiration**; the **public API shape** is expressed as Capabilities, not TypeScript methods.
+
+For the formal BOM transport types see `12_bom_object_model.md`.
+For Capability semantics see `00_bom_core.md` — Capabilities.
+For ValueType-as-Block see `17_type_system_bml.md`.
 
 ---
 
-## Relationship to UI5 ManagedObject
+## V1 Scope
 
-SAPUI5's `ManagedObject` is one of the most battle-tested component models in enterprise software. It provides:
+| Area | V1 |
+|---|---|
+| BOM schema fields for synthetic accessors | **Prepare** — `synthetic`, `accessorFor` on `CapabilityDefinition` (optional, may be unused) |
+| `resolveEffectiveMembers()` materialization | **Prepare** — may emit synthetic accessors; consumers may ignore |
+| Union variant discriminator on values | **Prepare** — `LiteralValue` / typed value may carry resolved variant `typeFqn` |
+| Renderer / PropertyResolver | **Unchanged** — continues `memberValues` (authored form) + `04_types.md` rules; accessor dispatch **disabled** or **stub no-op** |
+| ValueType `serialize` / `__construct` | **Not implemented** as BOM Capabilities — behaviour exists as **loose rules** in `04_types.md`; Integer pattern is reference. **Target:** explicit Capabilities in BOM, executed by renderer — not parser |
+| Entity `serialize` | **Out of scope** — not planned for V1 |
+| Expression roundtrip (`ExpressionValue`) | **TBD** — deferred; fields unchanged |
+| Override syntax in BML | **TBD** — not in V1 |
+| Runtime ManagedObject classes | **Optional** — not required for V1 compile/render |
 
-- Declarative metadata (properties, aggregations, associations, events)
-- Automatically generated dedicated getters and setters
-- Generic protected methods as the implementation backbone
-- Change detection and invalidation
+V1 goal: **the BOM and validator can represent the model** without requiring targets or renderers to call accessor Capabilities yet.
 
-BOM adopts this pattern almost entirely. The key differences:
+---
+
+## Design Overview
+
+> **Accessors are BOM metadata for the renderer — not a runtime invocation API.** The renderer reads member values in authored form plus accessor Capability definitions (`getSize`, `setSize`, `__construct`, `serialize`) and implements the translation in the target system. It does **not** call getters to obtain resolved values. See `00_bom_core.md` — Fundamental Architecture Principles.
+
+Every authored **member** (Property, Aggregation, Association) is **private storage**. Visibility applies to the **generated accessors**, not to the storage field. In the default case the author notices nothing: `getColor` / `setColor` map 1:1 to internal `color`.
+
+**Authored Capabilities** (`Inbound`, `Outbound`, `Transformation`) are already Capabilities — they receive **no** synthetic getter/setter.
+
+Accessors are **implicit**, **materialized in the effective member set** at validation time, and **overridable** later by replacing the default implementation (syntax TBD).
+
+### Capability Kind Mapping
 
 ```text
-UI5                          BOM
-─────────────────────────────────────────────────────────
-Control metadata             Block metadata
-Properties                   Properties           (identical concept)
-Aggregations                 Aggregations         (identical concept)
-Associations                 Associations         (identical concept)
-Events                       Capabilities         (extended: Inbound, Outbound, Transformation)
-Renderer on Control          No renderer on Block (renderer lives in Target — fully separated)
-suppressInvalidate param     Not needed           (no reactive DOM, compile-time only)
-String property types        Address type added   (org.blockml.type.Address for Capability values)
+Accessor role          Capability type              Notes
+─────────────────────────────────────────────────────────────────────
+getter                 Outbound                     read storage
+setter                 Inbound                      write storage (0..1)
+add / insert / …       Inbound or Transformation    0..n aggregations/associations — TBD per op
+remove / destroy / …   Transformation or Inbound    0..n / 0..1 — TBD per op
+__construct            Transformation               outputType = _self
+serialize              Outbound                     ValueTypes only — BML roundtrip
 ```
 
-The most important deviation: **the renderer is completely separated from the Block**. In UI5, a Control references its Renderer directly. In BOM, a Block has no knowledge of any renderer. The Target holds all renderers and dispatches per Block type. This makes it possible for the same Block model to be rendered by multiple Targets without any changes to the Block.
-
----
-
-## Class Hierarchy
+### Block Kind Matrix
 
 ```text
-ManagedObject                        — @blockml/core base class
-  Block                              — adds metadata, compositions, preset resolution
-    com.machineblocks.core.Block     — MBOM base (adds native MB properties)
-      com.machineblocks.bricks.StandardBrick
-      com.martianmicro.anyclosure.Wall
-      ...
+Block kind (effective baseType chain)     get/set accessors    __construct    serialize
+──────────────────────────────────────────────────────────────────────────────────────────
+Entity / composable Block                 yes (per member)     yes            no (v1+)
+ValueType (Primitive / Struct / Enum)     yes (internal)       yes            yes
+Union type expression                     via variant winner   first-match    via stored variant
+Authored Capability                       —                    —              —
+ExpressionValue on instance               —                    TBD            TBD
 ```
 
-Every domain Block class ultimately extends `ManagedObject` via `Block`.
+**PrimitiveType is the reference pattern** for all ValueTypes — see [Canonical ValueType Pattern](#canonical-valuetype-pattern-primitives-as-reference). V1 implements it as **loose parser rules** (`04_types.md`); the target model materializes the same behaviour as synthetic Capabilities on every ValueType Block.
+
+**`serialize` purpose:** describes how a ValueType's internal `_self` maps to BML external form — used by BML export, editor roundtrip, and **by renderers** when translating to target syntax (e.g. SCAD `[5,5,6]`). The Capability definition lives in BOM; the renderer implements it for the target — the parser does not execute it.
+
+**Entity `__construct` purpose:** describes how to build a fully initialized Block instance (defaults, preset merge, composition attributes). Default merge order target: `inline > preset > config > default` — see `14_compiler_runtime.md` — Property resolution. This is **renderer-time** behaviour; the BOM stores the Capability definition and unmerged member values.
 
 ---
 
-## ManagedObject — Generic Protected Methods
+## Members Are Private Storage
 
-These methods are defined once on `ManagedObject` and implement all the shared logic: type validation, change tracking, namespace uniqueness enforcement, and internal state management.
+Storage members are always **private** regardless of how the author names them in BML today. The validator maps authored visibility to **accessor** visibility:
 
-Dedicated getters and setters (generated per member) always delegate to these methods — never to each other. This is the key pattern that makes subclass overrides clean.
-
-### Properties and Capabilities
-
-Capabilities use the same generic methods as Properties. Their value type is `Address` (`org.blockml.type.Address`) rather than a domain-specific type, but the mechanism is identical.
-
-```typescript
-protected setProperty(name: string, value: any): this
-protected getProperty(name: string): any
+```text
+Authored member name     Storage (always private)    Accessor visibility (default)
+──────────────────────────────────────────────────────────────────────────────────
+size                     __size (internal)           public  → getSize, setSize
+_size                    __size                      protected
+__token                  __token                     private
 ```
 
-### Aggregations (0..1)
+Exact storage naming (`__` prefix normalization) is **TBD**. V1 may keep authored names in BOM storage and apply this rule only when synthetic accessors are materialized.
+
+---
+
+## Synthetic Accessors in the BOM
+
+Synthetic accessors are **part of the effective member set**, not optional runtime-only metadata. They are produced by `resolveEffectiveMembers()` (or an equivalent validate-stage pass) and may be stored in an extended view — not necessarily re-serialized into authored BML.
+
+### Draft: `CapabilityDefinition` extension
 
 ```typescript
-protected setAggregation(name: string, value: ManagedObject | null): this
-protected getAggregation(name: string): ManagedObject | null
-protected destroyAggregation(name: string): this
+interface CapabilityDefinition {
+  kind: "capability"
+  name: string
+  typeFqn: string   // Inbound | Outbound | Transformation
+  inputType?: TypeDescriptor
+  outputType?: TypeDescriptor
+  implementation?: ImplementationBlock
+
+  /** Draft — V1 optional */
+  synthetic?: true
+  accessorFor?: {
+    memberName: string
+    memberKind: "property" | "aggregation" | "association"
+    role:
+      | "getter" | "setter"
+      | "add" | "insert" | "remove" | "removeAll" | "indexOf" | "destroy"  // aggregation ops — TBD
+      | "construct" | "serialize"
+  }
+  /** Default 1:1 implementation; absent in V1 */
+  defaultImplementation?: "builtin"
+}
+```
+
+An **authored** Capability with the same `(namespace, name)` as a synthetic accessor **replaces** the default (override). Override syntax in BML is **TBD** — candidates: explicit `<capabilities>` child, or a dedicated `<accessorOverride>` element.
+
+### Draft: `EffectiveMemberSet`
+
+```typescript
+interface EffectiveMemberSet {
+  members: MemberDefinition[]
+  declaredOn: Record<string, string>
+  /** Draft — synthetic accessors merged into members[] or exposed separately — TBD */
+  syntheticAccessors?: CapabilityDefinition[]
+}
+```
+
+Whether synthetic entries live in `members[]` or a parallel list is **TBD**. V1 preparatory rule: if present, validator and tooling **must not treat them as authored** (diagnostics, IDE completion).
+
+---
+
+## Naming Convention
+
+Derived from member name (UI5-style). Leading `_` on aggregation names stripped for method/accessor names.
+
+### Properties and Associations (0..1)
+
+```text
+get{NamePascalCase}()              — Outbound
+set{NamePascalCase}(value|id)       — Inbound
 ```
 
 ### Aggregations (0..n)
 
-```typescript
-protected addAggregation(name: string, value: ManagedObject): this
-protected insertAggregation(name: string, value: ManagedObject, index: number): this
-protected removeAggregation(name: string, value: ManagedObject): ManagedObject | null
-protected removeAllAggregation(name: string): ManagedObject[]
-protected getAggregation(name: string): ManagedObject[]
-protected indexOfAggregation(name: string, value: ManagedObject): number
-protected destroyAggregation(name: string): this
-```
-
-### Associations (0..1)
-
-```typescript
-protected setAssociation(name: string, id: string | null): this
-protected getAssociation(name: string): string | null
-```
-
-### Associations (0..n)
-
-```typescript
-protected addAssociation(name: string, id: string): this
-protected removeAssociation(name: string, id: string): string | null
-protected removeAllAssociation(name: string): string[]
-protected getAssociation(name: string): string[]
-```
-
----
-
-## Dedicated Getters and Setters
-
-For every declared Member, dedicated getters and setters are generated. They are thin wrappers that delegate to the generic protected methods.
-
-### Property Example
-
-```typescript
-// Block definition declares:
-//   <size type="com.machineblocks.type.Size3D"><value>[1,1,1]</value></size>
-
-// Generated:
-getSize(): Size3D {
-    return this.getProperty("size")
-}
-
-setSize(value: Size3D): this {
-    return this.setProperty("size", value)
-}
-```
-
-### Capability Example
-
-Capabilities are declared with a type (`Inbound`, `Outbound`, `Transformation`) but their runtime value is an `Address`. The generated getter/setter follow the same pattern as Properties:
-
-```typescript
-// Block definition declares:
-//   capability name="onResized" type="org.blockml.capability.Outbound"
-
-// Generated:
-getOnResized(): Address {
-    return this.getProperty("onResized")
-}
-
-setOnResized(value: Address): this {
-    return this.setProperty("onResized", value)
-}
-```
-
-### Aggregation 0..n Example
-
-```typescript
-// Block inherits from com.machineblocks.core.CompositeBlock:
-//   aggregation _parts: type="com.machineblocks.core.Block[]" default="true"
-// Block inherits from com.machineblocks.core.Block:
-//   aggregation _presets: type="com.machineblocks.core.Block[]"
-
-// Generated:
-getParts(): StandardBrick[] {
-    return this.getAggregation("_parts") as StandardBrick[]
-}
-
-addPart(value: StandardBrick): this {
-    return this.addAggregation("_parts", value)
-}
-
-insertPart(value: StandardBrick, index: number): this {
-    return this.insertAggregation("_parts", value, index)
-}
-
-removePart(value: StandardBrick): StandardBrick | null {
-    return this.removeAggregation("_parts", value) as StandardBrick | null
-}
-
-removeAllParts(): StandardBrick[] {
-    return this.removeAllAggregation("_parts") as StandardBrick[]
-}
-
-indexOfPart(value: StandardBrick): number {
-    return this.indexOfAggregation("_parts", value)
-}
-
-destroyParts(): this {
-    return this.destroyAggregation("_parts")
-}
-```
-
-### Aggregation 0..1 Example
-
-```typescript
-// Block definition declares:
-//   <tooltip type="org.blockml.service.Formatter"
-
-// Generated:
-getTooltip(): Formatter | null {
-    return this.getAggregation("tooltip") as Formatter | null
-}
-
-setTooltip(value: Formatter | null): this {
-    return this.setAggregation("tooltip", value)
-}
-
-destroyTooltip(): this {
-    return this.destroyAggregation("tooltip")
-}
-```
-
-### Association Example
-
-```typescript
-// Block definition declares:
-//   association name="targetDevice" type="com.electronics.core.Component"
-
-// Generated:
-getTargetDevice(): string | null {
-    return this.getAssociation("targetDevice")
-}
-
-setTargetDevice(id: string | null): this {
-    return this.setAssociation("targetDevice", id)
-}
-```
-
----
-
-## The Override Pattern
-
-The two-level design enables clean subclass overrides. A subclass overrides the dedicated setter and calls the generic protected method — not `super.setX()`:
-
-```typescript
-class MyBlock extends Block {
-
-    // Override dedicated setter
-    setSize(value: Size3D): this {
-        // Custom logic before setting
-        const clamped: Size3D = [
-            Math.max(1, value[0]),
-            Math.max(1, value[1]),
-            Math.max(1, value[2])
-        ]
-        // Delegate to generic method — NOT super.setSize()
-        return this.setProperty("size", clamped)
-    }
-}
-```
-
-Calling `super.setSize()` would be wrong — it would recursively call the overridden method. `this.setProperty()` is always the correct delegation target.
-
----
-
-## Dedicated Method Naming Convention
-
-Method names are derived from the member name using these rules:
-
-### Properties and Capabilities
-
 ```text
-get{MemberNamePascalCase}()
-set{MemberNamePascalCase}(value)
-```
-
-### Aggregations (0..n)
-
-The aggregation name is singularized for item-level methods:
-
-```text
-get{NamePascalCase}()                — returns array
+get{NamePascalCase}()
 add{NameSingularPascalCase}(value)
 insert{NameSingularPascalCase}(value, index)
 remove{NameSingularPascalCase}(value)
@@ -270,120 +163,274 @@ indexOf{NameSingularPascalCase}(value)
 destroy{NamePascalCase}()
 ```
 
-Examples:
+Capability kind per aggregation operation is **TBD** (see matrix above).
+
+### Block-level (ValueType and Entity)
 
 ```text
-aggregation "_parts":
-  getParts()
-  addPart(value)
-  insertPart(value, index)
-  removePart(value)
-  removeAllParts()
-  indexOfPart(value)
-  destroyParts()
-
-aggregation "children":
-  getChildren()
-  addChild(value)
-  insertChild(value, index)
-  removeChild(value)
-  removeAllChildren()
-  indexOf Child(value)
-  destroyChildren()
+__construct(input?)    — Transformation, outputType = _self
+serialize()            — Outbound (ValueType only; Entity: not in V1)
 ```
 
-Leading underscores on aggregation names (e.g. `_parts`) are stripped for method names.
+---
 
-### Aggregations (0..1)
+## ValueType `__construct` and `serialize`
+
+ValueTypes are Blocks (`baseType` chain includes `org.blockml.core.ValueType`). Serialization is **on the type**, not on each property of a composable Block.
 
 ```text
-get{NamePascalCase}()
-set{NamePascalCase}(value)
-destroy{NamePascalCase}()
+Wall.getSize()  →  Size3D instance (internal object)
+Size3D.serialize(instance)  →  BML/external form (e.g. "[1, 8, 9]")
 ```
 
-### Associations (0..1)
+Default implementations may delegate to rules in `04_types.md` until Capability implementations exist in BML. **Every ValueType Block must be able to reproduce the same pattern as primitives** — primitives are not a special case, they are the **simplest worked example**.
+
+---
+
+## Canonical ValueType Pattern (Primitives as Reference)
+
+Primitive types (`org.blockml.type.Integer`, `String`, …) **already exhibit the target behaviour today** — implemented as **loose parser/validator rules** in V1, not yet as materialized synthetic Capabilities in the BOM. All other ValueTypes (StructType, EnumType, …) should **produce the same shape** when the accessor model is activated.
+
+### Integer — reference example
+
+**Internal representation** (private storage — always an object, never a bare literal at runtime):
+
+```typescript
+// Runtime / managed instance of org.blockml.type.Integer
+{ value: 5 }          // single private field `value` (name TBD — may match BML property name)
+```
+
+**External / authored form** (what appears in BML attributes, what `serialize` emits):
 
 ```text
-get{NamePascalCase}()
-set{NamePascalCase}(id)
+5                     // bare integer literal in BML
 ```
 
-### Associations (0..n)
+**Synthetic block-level Capabilities (target — Draft):**
 
 ```text
-get{NamePascalCase}()
-add{NameSingularPascalCase}(id)
-remove{NameSingularPascalCase}(id)
-removeAll{NamePascalCase}()
+__construct(value: Integer)  →  _self     Transformation
+  Input:   external form (BML literal / native int)
+  Output:  _self — internal instance { value: 5 }
+
+serialize()  →  Integer                   Outbound
+  Input:   _self (implicit — current instance)
+  Output:  external form (bare literal 5 for BML roundtrip)
 ```
+
+Sketch (TypeScript — illustration only):
+
+```typescript
+// Integer.__construct — Transformation, outputType = _self
+__construct(external: number): IntegerInstance {
+  return { value: external }   // delegate to setProperty("value", external)
+}
+
+// Integer.serialize — Outbound
+serialize(): number {
+  return this.getProperty("value")
+}
+```
+
+**V1 today:** parser maps `size="5"` → `LiteralValue { value: 5, typeFqn: "…Integer" }` without an explicit instance object. The **logical** model is still construct-in / serialize-out; activation means making that explicit.
+
+### Generalizing to other ValueTypes
+
+| ValueType | Internal (`_self`) | `__construct` input (external) | `serialize` output (external) |
+|---|---|---|---|
+| **Integer** | `{ value: 5 }` | `5` | `5` |
+| **String** | `{ value: "hello" }` | `"hello"` | `"hello"` |
+| **Size3D** (StructType) | `{ x: 1, y: 8, z: 9 }` (private fields) | `[1, 8, 9]` or `{ x:1, y:8, z:9 }` | `[1, 8, 9]` (BML form — TBD canonical) |
+| **EnumType** | `{ value: "standard" }` | `standard` or qualified id | `standard` |
+
+Rules:
+
+```text
+Internal     Always an object with private storage fields — never expose bare literals as _self
+__construct  External/authored form  →  _self  (Transformation, outputType = _self)
+serialize    _self  →  external/authored form  (Outbound; outputType = external shape)
+get/set      Per internal field where needed (StructType fields); optional for single-field primitives
+```
+
+StructType and EnumType Blocks **materialize the same Capability pair** as Integer. The only difference is the shape of internal storage and the external literal grammar (see `04_types.md`, Ordered Struct Fields).
+
+### Union types
+
+For union type expressions (e.g. `"auto" | Float`):
+
+```text
+__construct(input):
+  Test union members in declaration order
+  First matching member type wins
+  Store resolved variant typeFqn on the value (discriminator)
+
+serialize(value):
+  Use the variant typeFqn stored at construct time — no re-probe
+```
+
+Draft value shape:
+
+```typescript
+interface LiteralValue {
+  kind: "literal"
+  value: unknown
+  typeFqn: string              // declared member type (may be union expression)
+  resolvedTypeFqn?: string     // Draft — concrete variant after construct
+}
+```
+
+---
+
+## Expression Values (TBD)
+
+`ExpressionValue` (`raw`, `ast`, `resultTypeFqn`) is unchanged in V1.
+
+Post-V1 (open):
+
+- Whether expressions participate in BML roundtrip via accessor Capabilities
+- Whether `serialize` emits canonical `${ }` from AST or preserves `raw`
+
+Render targets and export tools in V1 **must not assume** expression serialization through this model.
+
+---
+
+## Override Pattern
+
+Two-level design (UI5-inspired): an override replaces the **accessor Capability implementation**, not the storage API.
+
+```typescript
+// Target pattern (runtime sketch — not V1 requirement)
+setSize(value: Size3D): this {
+  const clamped = clamp(value)
+  return this.setProperty("size", clamped)  // delegate to generic — NOT super.setSize()
+}
+```
+
+BML equivalent: authored implementation on synthetic `setSize` Inbound Capability that delegates to generic `setProperty("size", …)` — exact syntax **TBD**.
+
+Calling `super.setSize()` or chaining to the synthetic default incorrectly is a **design anti-pattern** (recursive override).
+
+---
+
+## Renderer and Runtime Integration
+
+### V1 (current)
+
+```text
+PropertyResolver / ScadBlockProcessor:
+  Read memberValues in authored form and definition defaults
+  Consult type metadata (04_types.md, 09_mbom_properties.yml, accessor Capabilities when available)
+  Apply target serialization at render time
+  Ignore synthetic accessors OR use stub that reads memberValues directly (legacy path)
+```
+
+No behavioral change required in V1 render targets. Optional `AccessorInvoker` interface may exist as a **no-op stub** for future wiring.
+
+### Post-V1 (target)
+
+```text
+resolveProperty(name, …):
+  read memberValues[name] in authored form
+  consult get{Name} Capability definition for target translation metadata
+  (does NOT invoke getter to obtain a different value — reads storage + applies metadata)
+
+export value to BML:
+  consult ValueType.serialize Capability definition
+  emit authored external form matching original syntax where possible
+
+instantiate Block:
+  consult Entity.__construct Capability definition
+  apply merge rules (inline > preset > config > default) at render time
+```
+
+Render targets remain Block-agnostic; they use Capability **definitions** as translation metadata — not by invoking a runtime getter API.
+
+---
+
+## UI5 ManagedObject Inspiration
+
+SAPUI5's `ManagedObject` provides declarative metadata, generated getters/setters, and generic protected backbone methods. BOM adopts the **delegation pattern**; public surface is **Capabilities in BOM**, not Control renderers.
+
+```text
+UI5                          BOM (target)
+─────────────────────────────────────────────────────────
+Control metadata             Block metadata
+Properties                   Properties (private storage)
+Aggregations                 Aggregations (private storage)
+Associations                 Associations (private storage)
+Events                       Authored Capabilities
+Generated get/set            Synthetic accessor Capabilities
+Renderer on Control          Renderer in Target only (unchanged)
+```
+
+---
+
+## Generic Protected Methods (Implementation Sketch)
+
+When a runtime ManagedObject exists, storage operations delegate through protected generics — accessor Capabilities call these, not each other:
+
+```typescript
+protected setProperty(name: string, value: unknown): this
+protected getProperty(name: string): unknown
+protected setAggregation(name: string, value: ManagedObject | null): this
+protected getAggregation(name: string): ManagedObject | null
+protected addAggregation(name: string, value: ManagedObject): this
+// … see previous revisions for full aggregation/association set
+```
+
+Code generation vs runtime registration (UI5-style prototype attachment) remains an implementation choice — **Option B** acceptable for dynamic blocks; **Option A** for known MBOM types. Both produce the same accessor Capability surface.
 
 ---
 
 ## Address Type
 
-`org.blockml.type.Address` is a structured primitive type used as the value type for all Capabilities. It is parsed from the raw string value at parse time.
+`org.blockml.type.Address` is the value type for **authored** Capability bindings (not for synthetic accessors). Parsed at parse time:
 
 ```typescript
 interface Address {
-    raw:          string          // original string as authored in BML
-    scheme:       string | null   // "stud" | "http" | "mqtt" | "wot" | null
-    path:         string          // the path component
-    isAbsolute:   boolean         // true if starts with scheme:// or /
-    isRelative:   boolean         // true if no scheme and no leading /
-    isExpression: boolean         // true if starts with ${ 
+  raw: string
+  scheme: string | null
+  path: string
+  isAbsolute: boolean
+  isRelative: boolean
+  isExpression: boolean
 }
 ```
 
-Parsing rules:
-
-```text
-"stud://domain/path"          →  scheme="stud",  path="/domain/path",  isAbsolute=true
-"http://api.example.com/x"    →  scheme="http",  path="//api.example.com/x", isAbsolute=true
-"/path/to/resource"           →  scheme=null,    path="/path/to/resource",   isAbsolute=true
-"relPath"                     →  scheme=null,    path="relPath",             isRelative=true
-"${ @myService.getAddr() }"   →  isExpression=true, raw=...
-```
-
-`Address` is serialized back to its `raw` form for BML output and SCAD rendering.
-
----
-
-## Code Generation vs. Runtime Registration
-
-BOM ManagedObject dedicated methods can be provided in two ways:
-
-**Option A — Static Code Generation:**
-The compiler generates TypeScript classes with dedicated methods at build time. Each Block class is a real TypeScript class with fully typed methods.
-
-**Option B — Runtime Registration (UI5 approach):**
-The base class reads the metadata at runtime and dynamically attaches getter/setter methods to the prototype. No code generation needed.
-
-Both approaches produce the same API surface. Option A gives better TypeScript type safety and IDE support. Option B is more dynamic and requires no build step for new Block types.
-
-The recommended approach for `@blockml/core` is **Option A** for known domain types (MBOM) and **Option B** for dynamically loaded Block types (user-defined blocks loaded at runtime).
+BML roundtrip for Address literals may use `serialize` on the Address ValueType when implemented — or literal `raw` in V1.
 
 ---
 
 ## No Renderer Reference on Block
 
-This is an explicit deviation from UI5.
+Blocks do not reference render targets. The same Block model is rendered by multiple targets without Block changes. Accessor Capabilities describe **data access and BML roundtrip** — not SCAD/Unity/React emission.
 
-In UI5, a Control can reference its Renderer:
-```javascript
-Control.extend("my.Button", {
-    metadata: { ... },
-    renderer: "my.ButtonRenderer"
-})
-```
+---
 
-In BOM, a Block has no renderer reference. The Block is completely renderer-agnostic. The Target holds all Block Renderers and dispatches based on the Block's `baseType`. This means:
+## Related Documents
+
+| Topic | Document |
+|---|---|
+| BOM interfaces | `12_bom_object_model.md` — Synthetic Accessors (Draft) |
+| Property merge (V1) | `14_compiler_runtime.md` — Property resolution |
+| Parse/serialize rules (V1 SCAD) | `04_types.md` |
+| ValueType definitions | `17_type_system_bml.md` — ValueType lifecycle (Draft) |
+| Member visibility (authoring) | `02_mbml.md` — Member Visibility |
+| Capability types | `00_bom_core.md` — Capabilities |
+
+---
+
+## Open Items (TBD)
 
 ```text
-The same Wall Block can be rendered by:
-  scad     → Wall.scad
-  unity    → Wall.prefab    (future)
-  preview  → Wall.svg       (future)
+[ ] Override syntax in BML
+[ ] Storage name normalization (__ prefix)
+[ ] synthetic accessors in members[] vs parallel list
+[ ] Capability kind for each 0..n aggregation operation
+[ ] Entity __construct inputType shape
+[ ] Expression serialize/construct
+[ ] Implicit getSize in expression PropertyReference
+[ ] Canonical external form per StructType/EnumType (BML literal grammar)
+[ ] Internal field name for single-field primitives (`value` vs type-specific)
+[ ] AccessorInvoker API in @blockml/core
 ```
-
-Without any change to the Wall Block definition. The separation is total.

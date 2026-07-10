@@ -15,13 +15,24 @@ Mapping rules are registered per root type (`<block>`, …) — not hardcoded in
 
 ---
 
+## Fundamental Rule
+
+> **BML → BOM → BML must always be possible.** The mapper preserves authored structure and authored values. It makes no interpretive decisions. See `00_bom_core.md` — Fundamental Architecture Principles.
+
+```text
+Mapper responsibility:     structure + classification + preservation
+NOT mapper responsibility: canonicalization, expansion, merge, evaluation
+```
+
+---
+
 ## Pipeline Placement
 
 ```text
 [4] Namespace Resolver     → FQN prefix bindings
 [5] BML → BOM Mapper       → this document (structure + attribute classification)
 [7] Expression Parser      → fill ExpressionValue.ast on mapped nodes
-[6] Type Validator         → literal deserialization + type checks
+[6] Type Validator         → type compatibility checks (no value rewriting)
 [8] Semantic Validator     → effective members, cross-refs, expression types
 ```
 
@@ -46,7 +57,7 @@ MUST NOT merge sections out of document sequence
 MAY omit empty sections (<properties> absent → skip)
 ```
 
-Ordinal = index in `members[]` after mapping. Used by render targets and by StructType array-literal deserialization (`[v0, v1, …]` → fields in property declaration order). See `17_type_system_bml.md` — Ordered Struct Fields · `12_bom_object_model.md` — Member Declaration Order.
+Ordinal = index in `members[]` after mapping. Used by expression type checking and by renderers when interpreting StructType array literals against field declaration order. See `17_type_system_bml.md` — Ordered Struct Fields · `12_bom_object_model.md` — Member Declaration Order.
 
 ---
 
@@ -54,6 +65,7 @@ Ordinal = index in `members[]` after mapping. Used by render targets and by Stru
 
 | Topic | Decision |
 |---|---|
+| **Lossless round-trip** | BOM preserves authored literal syntax — `[5,5,6]` and `{x:5,y:5,z:6}` stored as authored, not normalized |
 | **Directives** | Stored as `directives[]` on the element — not expanded at parse time |
 | **Data attributes** | `data:*` → `dataAttributes[]` with uninterpreted values (not a `bml:` directive) |
 | **Registry** | **Removed.** Sibling value sharing via `bml:with` on `<composition>` or `<bml:container>` |
@@ -142,7 +154,7 @@ Value classification within rule 4:
 ```text
 ${ ... }                     → ExpressionValue { raw }  (AST added in stage [7])
 address-shaped capability    → AddressValue
-otherwise                    → LiteralValue (typed deserializer — see § Literal Deserialization, pending)
+otherwise                    → LiteralValue (authored value preserved — type-checked in stage [6])
 ```
 
 Unknown member names survive rule 4 and are stored in `memberValues`. The semantic validator emits **`BML_UNKNOWN_PROPERTY` (warning)** — custom property assumed. See § Unknown Attributes below.
@@ -457,7 +469,7 @@ size="${ [size[0], size[1], size[2] - 1] }"
      }
 
 size="[1, 8, 9]"
-  → LiteralValue   (no ${ } — deserialized in stage [6])
+  → LiteralValue { value: [1, 8, 9], typeFqn: "…Size3D" }   (authored form preserved; type-checked in stage [6])
 ```
 
 Directive values (e.g. `bml:each="i : ${ numberOfSamples }"`) are split structurally in stage [5]: loop variables parsed from the prefix; the `${ }` portion stored as `ExpressionValue { raw }` on the directive node.

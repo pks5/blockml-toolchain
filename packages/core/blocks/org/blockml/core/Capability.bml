@@ -13,22 +13,22 @@
 
   <idea>Representation of a capability.</idea>
 
-  <documentation>Capability type branch of BlockML. Declares a capability type. Every capability may
+  <documentation>Capability branch of BlockML. Declares a capability type. Every capability may
     carry an implementation whose type attribute references a Language FQN.</documentation>
-  <name>CapabilityType</name>
-  <type>core:CapabilityType</type>
+  <name>Capability</name>
+  <type>core:Capability</type>
   <baseType>core:ValueType</baseType>
   <abstract />
 
   <properties>
-    <hasInput type="Boolean" readOnly="true">
+    <_hasInput type="Boolean" readOnly="true">
       <value>false</value>
       <documentation>Whether the capabality has an input and thus requires a specified inputType.</documentation>
-    </hasInput>
-    <hasOutput type="Boolean" readOnly="true">
+    </_hasInput>
+    <_hasOutput type="Boolean" readOnly="true">
       <value>false</value>
       <documentation>Whether the capabality has an output and thus requires a specified outputType.</documentation>
-    </hasOutput>
+    </_hasOutput>
     <implementation type="btype:String">
       <documentation>Capability implementation body. The element type attribute must reference a
         Language FQN (org.blockml.language.*).</documentation>

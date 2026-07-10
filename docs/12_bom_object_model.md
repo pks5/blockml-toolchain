@@ -9,7 +9,7 @@ This document defines the **formal BOM object model** — the canonical data str
 For conceptual foundations see `00_bom_core.md`.
 For BML authoring syntax see `02_mbml.md`.
 For MachineBlocks domain extensions see `03_mbom.md`.
-For optional runtime object patterns see `08_managed_object.md` (implementation blueprint, not required).
+For the ManagedObject and synthetic accessor model (Draft · V1 preparation) see `08_managed_object.md`.
 For Expression AST node types see `10_expression_language.md` — Expression AST.
 
 This document is the **implementation contract** for `@blockml/core`. It specifies TypeScript-oriented interfaces and validation rules. It does not duplicate domain semantics already defined elsewhere.
@@ -20,27 +20,32 @@ This document is the **implementation contract** for `@blockml/core`. It specifi
 
 ## Abstraction Principle
 
-> **A BOM document is an abstract representation of BML source.** It preserves authored structure — including directives, aggregation declarations, and unresolved type references. BOM makes **no statement** about how directives are expanded, how aggregations are interpreted, or how blocks are rendered.
+> **A BOM document is a lossless representation of BML source.** It preserves authored structure and authored values — including directives, aggregation declarations, literal syntax, and unresolved type references. BOM makes **no statement** about how directives are expanded, how aggregations are interpreted, or how blocks are rendered.
+
+> **BML → BOM → BML must always be possible.** See `00_bom_core.md` — Fundamental Architecture Principles.
 
 > **„Block“ in BML is the mandatory input concept — not a uniform runtime object model.** The parser must read `<block>` documents; validators must walk `baseType` chains. Internal representation after parse is free. See `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation.
 
 ```text
-BML source          →  abstract, authoring-true
-BOM (this doc)      →  canonical parse result — still abstract
-Validation          →  resolves inheritance, types, external references
-Render Target       →  interprets and serializes
+BML source          →  authoring format — human/LLM editable
+BOM (this doc)      →  lossless parse result — authored form preserved
+Validation          →  syntax + type safety only — no data resolution
+Render Target       →  all interpretive decisions (expansion, merge, evaluation, serialization)
 ```
 
 Examples of what BOM **stores** vs. what downstream **interprets**:
 
 | Authored in BML | Stored in BOM | Interpreted downstream |
 |---|---|---|
-| `bml:each`, `bml:if`, `bml:with` | `directives[]` on element | Preprocessor, BlockProcessor, or Validator |
+| `bml:each`, `bml:if`, `bml:with` | `directives[]` on element — **unexpanded** | Renderer (directive expansion) |
 | `data:*` attributes | `dataAttributes[]` on Block | Uninterpreted — renderer may consume (e.g. UI5 → customData) |
-| `<aggregations>` declaration | `AggregationDefinition` (declared only) | Inherited members (e.g. `_presets`, `_parts`) resolved at validate |
+| `size="[5,5,6]"` vs `size="{x:5,…}"` | `LiteralValue` in **authored form** | Renderer (target serialization via type metadata) |
+| `${ size[0] }` | `ExpressionValue { raw, ast }` — **not evaluated** | Renderer (expression evaluation) |
+| `<aggregations>` declaration | `AggregationDefinition` (declared only) | Type Registry lookup for effective members — **metadata only, no instance data resolution** |
 | `<composition>` children | `CompositionNode` tree | Renderer (wrapper logic, assembly patterns) |
-| `baseType` FQN | string reference | Type Registry → effective members |
-| Preset reference | string `FQN::id` | Preset merge resolver |
+| `baseType` FQN | string reference | Type Registry → effective member metadata |
+| Preset reference | string `FQN::id` — **unmerged** | Renderer (preset merge) |
+| `__construct`, `serialize`, getters | Capability definitions on ValueType/Entity | Renderer (target translation metadata — not invoked at parse time) |
 
 ---
 
@@ -48,7 +53,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 
 | Topic | Decision |
 |---|---|
-| **Mutability** | Parse result is an **immutable plain-data graph** (`BomDocument`). Mutable object APIs (ManagedObject pattern) are optional — see `08_managed_object.md`. |
+| **Mutability** | Parse result is an **immutable plain-data graph** (`BomDocument`). Mutable runtime APIs are optional. Synthetic accessor Capabilities are **Draft · TBD** — prepared in V1, not required for render — see `08_managed_object.md`. |
 | **Member inheritance** | **Lookup at validate.** BOM stores only **declared** members per Block (including partial overrides). Effective members are merged via `baseType` chain + Type Registry — never flattened into the parse result. |
 | **Member identity** | Uniqueness by resolved **`(namespace, name)`**. `namespace` attribute is an XML prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
 | **Composition** | Nested inside `<aggregation>` on definitions and instances. Bare `<composition>` is sugar for the single default aggregation. `composition aggregation="…"` removed. |
@@ -492,6 +497,39 @@ interface EffectiveMemberSet {
 
 Native MBOM properties from `09_mbom_properties.yml` are attached to `com.machineblocks.core.Block` in the Type Registry — not repeated in every derived Block's `members[]`.
 
+### Synthetic Accessors (Draft · TBD · V1 preparation)
+
+> **Status:** Draft — not fully specified; **not required** for V1 compile or render. See `08_managed_object.md`.
+
+At validation time, the effective member set **may** include **synthetic accessor Capabilities** generated from authored storage members (Properties, Aggregations, Associations). Authored Capabilities do **not** receive synthetic getters/setters.
+
+```text
+Storage member (always private)     Synthetic accessors (materialized at validate)
+──────────────────────────────────────────────────────────────────────────────────
+property color                      getColor (Outbound), setColor (Inbound)
+aggregation _parts (0..n)           getParts, addPart, … (kinds TBD)
+association targetDevice            getTargetDevice, setTargetDevice
+Entity Block (composable)             __construct (Transformation → _self)
+ValueType Block (all kinds)           __construct, serialize — same pattern as Integer (Draft)
+  PrimitiveType                       internal { value: T } · construct/serialize in parser (V1 loose)
+  StructType / EnumType               internal struct fields · target: explicit Capabilities
+```
+
+Draft fields on `CapabilityDefinition`:
+
+```typescript
+synthetic?: true
+accessorFor?: {
+  memberName: string
+  memberKind: "property" | "aggregation" | "association"
+  role: "getter" | "setter" | "construct" | "serialize" | /* aggregation ops — TBD */
+}
+```
+
+V1: parser output (`BlockDefinition.members[]`) contains **only authored** members. Validator may attach synthetics in `EffectiveMemberSet` only. Render targets **continue** `memberValues` + `04_types.md` — accessor dispatch disabled or stubbed.
+
+Override of a synthetic accessor by an authored Capability with the same name is **TBD**.
+
 ### Contract Members (not stored in BOM)
 
 Contract satisfaction is validated at stage [8] — not materialized in `BlockDefinition.members[]`:
@@ -522,9 +560,20 @@ type MemberValue =
 
 interface LiteralValue {
   kind: "literal"
-  /** Typed BOM value — see 04_types.md for canonical forms */
+  /**
+   * Authored value exactly as in BML — preserved for lossless BML ↔ BOM round-trip.
+   * MUST NOT be normalized to a canonical internal form at parse/validate time.
+   * Examples: [5,5,6] stays an array; {x:5,y:5,z:6} stays an object;
+   * <Size3d x="5" …/> stays a nested BlockInstance.
+   * Type compatibility is checked against typeFqn — the stored shape is not rewritten.
+   */
   value: unknown
   typeFqn: string
+  /**
+   * Draft · TBD — union variant discriminator for type checking only.
+   * Records which union member matched during validation — does not replace authored value.
+   */
+  resolvedTypeFqn?: string
 }
 
 interface ExpressionValue {
@@ -1153,7 +1202,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 | Development setup (Phase D) | `15_dev_setup.md` |
 | MBOM native property list | `09_mbom_properties.yml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |
-| ManagedObject runtime API | `08_managed_object.md` (optional pattern) |
+| Synthetic accessors · ManagedObject | `08_managed_object.md` (Draft · V1 preparation) |
 | Built-in `#math` / `#strings` capabilities | `@blockml/core` |
 
 ---

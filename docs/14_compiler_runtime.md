@@ -623,17 +623,29 @@ Instance render (composition children after stage [10])
 
 ### Property resolution
 
-Resolved property values are **not cached** on `RenderContext` in V1. A `PropertyResolver` computes values on demand:
+**Renderer stage** — preset/config merge happens here, not in the parser. See `00_bom_core.md` — Renderer Boundary.
+
+Resolved property values are **not cached** on `RenderContext` in V1. A `PropertyResolver` computes effective values on demand from the **authored BOM** plus merge rules:
 
 ```text
 resolveProperty(name, blockDef, context):
-  1. context.instance?.memberValues[name]     — inline
+  1. context.instance?.memberValues[name]     — inline (authored form)
   2. basePresets merge from context.instance  — via session.typeRegistry + compiler merge helpers
   3. config from context.session.activeConfig — via session.typeRegistry
   4. blockDef property value
 ```
 
 Merge order: `inline > preset > config > default` — see `09_mbom_properties.yml`.
+
+The merge result is a **render-time view** — it is not written back to `BomDocument`.
+
+### Accessor Capabilities (Draft · V1 preparation)
+
+> **Status:** Draft — see `08_managed_object.md`. **Not active in V1 render.**
+
+Post-V1, property resolution **may** consult synthetic accessor Capability **definitions** as translation metadata. Entity `__construct` **may** subsume the merge chain above.
+
+**V1 rule:** `PropertyResolver` reads `memberValues` in authored form directly. An optional `AccessorInvoker` stub may exist for future wiring. SCAD emission uses `04_types.md` and `09_mbom_properties.yml` type metadata.
 
 ### Not in RenderContext
 

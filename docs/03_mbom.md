@@ -4,7 +4,7 @@ version: 2.0.0
 
 ## Purpose of this Document
 
-This document defines the MBOM (MachineBlocks Object Model) — the canonical, typed internal representation of all MachineBlocks data. MBOM is the interface between the BML parser and the SCAD Renderer.
+This document defines the MBOM (MachineBlocks Object Model) — the MachineBlocks domain specialization of BOM Core. MBOM extends the lossless BOM transport model with MachineBlocks-specific types, properties, and render-target conventions.
 
 MBOM is a domain-specific specialization of BOM Core (`00_bom_core.md`). BOM Core defines the abstract structural foundation — Block, Member (Properties, Aggregations, Associations, Capabilities), Preset, Library, Catalog, and the Expression system. MBOM extends these with MachineBlocks-specific types, properties, and the SCAD render target. Concepts already defined in BOM Core are not repeated here — this document covers only MBOM-specific extensions and decisions.
 
@@ -16,7 +16,7 @@ For native property definitions see `09_mbom_properties.yml`.
 
 ## Overview
 
-MBOM is the renderer-independent object model. It has no knowledge of SCAD syntax, parameters, or file formats. All block authoring, validation, composition, and expression evaluation operate on MBOM.
+MBOM is the renderer-independent domain model layered on BOM Core. It has no knowledge of SCAD syntax, parameters, or file formats. Validation operates on the lossless BOM; rendering interprets it for the target.
 
 MBOM specializes BOM Core for the MachineBlocks domain — adding MB-specific property types (`Size3D`, `WallGap`, `Direction`, ...), the native property set (`09_mbom_properties.yml`), and the SCAD render target interface.
 

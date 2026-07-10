@@ -16,10 +16,10 @@
   <documentation>Inbound capability.</documentation>
   <name>Inbound</name>
   <type>cap:Inbound</type>
-  <baseType>core:CapabilityType</baseType>
+  <baseType>core:Capability</baseType>
   <properties>
-    <hasInput>
+    <_hasInput>
       <value>true</value>
-    </hasInput>
+    </_hasInput>
   </properties>
 </block>

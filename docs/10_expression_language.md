@@ -30,6 +30,32 @@ Everything else follows JSON subset rules: strings in double quotes, numbers, bo
 
 ---
 
+## Expression vs BOM Data Layer
+
+> **Expressions and BOM member values are separate layers.** See `00_bom_core.md` — Expression layer vs BOM data layer.
+
+| Layer | Stored where | Mutated by expression parser? |
+|---|---|---|
+| **BOM data** | `LiteralValue.value` on `memberValues` | **No** — authored form preserved |
+| **Expression language** | `ExpressionValue.raw` + `ExpressionNode` AST | AST built at stage [7]; **not evaluated** |
+
+Property and index access in `${ }` (`size.x`, `size[0]`) are **expression semantics** — they describe how to address a StructType field at evaluation time. They do **not** expand or normalize the underlying `size` literal in the BOM.
+
+```text
+BML attribute:  size="[5, 5, 6]"
+BOM storage:    LiteralValue { value: [5,5,6], typeFqn: "…Size3D" }   ← array stays array
+
+BML attribute:  offset="${ size[0] }"
+BOM storage:    ExpressionValue { raw: "size[0]", ast: IndexAccess(PropertyRef("size"), 0) }
+                ← AST references index 0; size member value unchanged
+```
+
+The StructType definition (field names, declaration order) is **type metadata** consulted by the expression type checker (stage [8]) and by the renderer at evaluation/serialization time. It is not applied to rewrite `LiteralValue.value` at parse time.
+
+**Validation** checks that `size[0]` is a valid access on a `Size3D`-typed `size` member. **Evaluation** (resolving `size[0]` to `5`) happens at render time only.
+
+---
+
 ## Formal Grammar (EBNF)
 
 ```ebnf
@@ -190,7 +216,9 @@ Objects inside `${ }` may contain expressions as values. Objects outside `${ }` 
 
 Accesses a member of the current Block instance. No prefix required.
 
-For StructType property values, **named and positional access are equivalent** — index is derived from field declaration order in the type definition. See `17_type_system_bml.md` — Ordered Struct Fields.
+For StructType property values, **named and positional access are equivalent in expression semantics** — index is derived from field declaration order in the type definition. See `17_type_system_bml.md` — Ordered Struct Fields.
+
+This equivalence applies to **expression evaluation and type checking** — not to BOM storage. A `size` member authored as `[5,5,6]` remains `[5,5,6]` in `LiteralValue.value`; `${ size.x }` and `${ size[0] }` both address the same field at evaluation time via type metadata.
 
 ```text
 ${ size }             — property value (e.g. Size3D [1, 8, 9])

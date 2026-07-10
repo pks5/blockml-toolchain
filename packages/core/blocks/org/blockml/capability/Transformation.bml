@@ -16,14 +16,14 @@
   <documentation>Transformation capability.</documentation>
   <name>Transformation</name>
   <type>cap:Transformation</type>
-  <baseType>core:CapabilityType</baseType>
+  <baseType>core:Capability</baseType>
   <properties>
-    <hasInput>
+    <_hasInput>
       <value>true</value>
-    </hasInput>
-    <hasOutput>
+    </_hasInput>
+    <_hasOutput>
       <value>true</value>
-    </hasOutput>
+    </_hasOutput>
   </properties>
 
 

@@ -11,19 +11,26 @@ This document defines **parse and serialize behaviour** for MBOM types — how B
 For native property declarations (names, types, defaults) see `com/machineblocks/core/Block.bml` (migrating from `09_mbom_properties.yml`).
 For the MBOM object model see `03_mbom.md`.
 For the SCAD render target see `docs/scad-reference/05_types_and_mapping.md`.
+For the target ValueType BML roundtrip model (Draft · V1 preparation) see `08_managed_object.md` — Canonical ValueType Pattern.
+
+**V1:** This document remains authoritative for **parse** and **SCAD serialize** behaviour. Primitives already implement the construct/serialize **logic** as loose rules here; explicit accessor Capabilities are **not materialized** in V1.
 
 ---
 
 ## Design Principle
 
 ```text
-MBOM is canonical.
-MBML is a serialization of MBOM (authoring format).
-SCAD is a serialization of MBOM (render target).
+BOM preserves authored form (lossless BML ↔ BOM round-trip).
+BML is the authoring format.
+Target output is renderer-specific serialization (lossy by design).
 
-Do not design MBOM types around SCAD arrays.
-Design SCAD arrays as serializations of MBOM.
+Do not normalize BOM values to a canonical internal shape at parse time.
+Renderers interpret authored values using type metadata (__construct, serialize, field order).
 ```
+
+See `00_bom_core.md` — Fundamental Architecture Principles.
+
+**Type equivalence** (e.g. `[4,2,3]` and `{x:4,y:2,z:3}` both valid for `Size3D`) is a **validation rule** — not a mandate to rewrite stored values. Each authored form is preserved in `LiteralValue.value`.
 
 All MBOM types are defined in the **`com.machineblocks.type`** namespace (singular `.type` segment — see `00_bom_core.md` — FQN Convention).
 
@@ -401,10 +408,9 @@ Supports namespace-qualified keys for composite block forwarding:
 ```text
 com.machineblocks.type.Size3D
 
-MBOM:  { x: Integer, y: Integer, z: Integer }   — field order = property declaration order in Size3d.bml
-
-MBML:  size="[4, 2, 3]"   →  positional: index 0=x, 1=y, 2=z (not name-sorted)
-SCAD:  ["size", [4, 2, 3]]
+BOM (authored):  [4, 2, 3]  or  { x: 4, y: 2, z: 3 }  — preserved as authored
+Type check:      both forms valid against Size3D field order (x, y, z)
+SCAD (render):   ["size", [4, 2, 3]]                    — renderer serialization
 ```
 
 Integer grid dimensions. Defines the block's spatial contract. Array literals map by **StructType property declaration order** — see `17_type_system_bml.md` — Ordered Struct Fields.
@@ -575,9 +581,9 @@ The serialization rules are configurable and defined per property in `09_mbom_pr
 ## General Strategy
 
 ```text
-1. Read MBOM canonical value
-2. Validate type
-3. Normalize to renderer-neutral form
+1. Read BOM member value in authored form
+2. Consult type metadata (field order, serialize Capability, 09_mbom_properties.yml)
+3. Translate to target representation at render time
 4. Choose shortest valid SCAD representation (expression text per value)
 5. Add to SettingsBundle: scadName → SCAD expression
 6. SettingsEmitter emits bundle:

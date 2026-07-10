@@ -23,6 +23,93 @@ New domain BOMs can be added without modifying BOM Core. The architecture is des
 
 ---
 
+## Fundamental Architecture Principles
+
+> **This is the highest-priority design constraint for the entire BlockML stack.**
+
+### Lossless BML ↔ BOM round-trip
+
+Every piece of information in a BML file must survive in the BOM without loss. **BML → BOM → BML must always be possible.** The BOM is the canonical transport format between authoring, validation, editing, and rendering — not an intermediate, normalized, or target-oriented representation.
+
+What must be preserved includes:
+
+- Authored literal syntax (`[5,5,6]` vs `{x:5,y:5,z:6}` vs `<Size3d x="5" …/>`)
+- Expression source text (`ExpressionValue.raw`) and AST
+- Unexpanded directives (`bml:each`, `bml:if`, `bml:with`)
+- Member declaration order
+- Block structure, namespaces, versions, and metadata
+
+### Parser boundary — syntax and type safety only
+
+The parser and validator (pipeline stages [1]–[8]) **must not make interpretive decisions.** They validate:
+
+- XML/BML syntax
+- Namespace and FQN resolution
+- Type compatibility (a value conforms to its declared type)
+- Cross-reference existence (ids, types, capabilities)
+
+They **must not**:
+
+- Normalize or canonicalize authored literal forms
+- Expand directives
+- Merge presets or config profiles
+- Evaluate expressions
+- Lower domain constructs to target forms
+- Invoke getters, setters, `__construct`, or `serialize`
+
+Type checking confirms that `[5,5,6]` is a valid `Size3D` — it does **not** rewrite the stored value to `{x:5,y:5,z:6}`.
+
+### Renderer boundary — all interpretive decisions
+
+The renderer receives the BOM **as authored** — structurally identical to what the parser produced. All decisions that are not syntax or type safety belong here:
+
+- Directive expansion (`bml:each`, `bml:if`, `bml:with`)
+- Preset / config merge
+- Expression evaluation
+- Target serialization (`Size3D` → SCAD `[5,5,6]`)
+- Domain lowering (e.g. `StandardBrick` → `mb_block()`)
+
+The framework may provide **predefined interpretation flows** (accessor metadata, serializer tables, PropertyResolver helpers). These assist the renderer — they are not parser-stage data resolution.
+
+**Wrong model:** renderer calls `getSize()` on a runtime object and receives a resolved value.
+
+**Right model:** renderer reads `memberValues.size` (authored form) plus `getSize` / `serialize` / `__construct` Capability definitions from the Block type — and implements the translation in the target system.
+
+### Expression layer vs BOM data layer
+
+Expressions and BOM values are **separate layers**:
+
+| Layer | What it is | Rules |
+|---|---|---|
+| **BOM data** | Stored member values (`LiteralValue`, `ExpressionValue`) | Authored form preserved; no struct expansion |
+| **Expression language** | `${ }` syntax with its own grammar and AST | Property/index access is **expression semantics**, not BOM mutation |
+
+In `${ size[0] }` or `${ size.x }`, the expression language defines how to **address** a StructType field by index or name. That does **not** mean the underlying `size` literal is expanded or normalized in the BOM. The StructType definition (field order, names, types) is type metadata the expression evaluator and renderer consult — it is not applied to rewrite stored data at parse time.
+
+```text
+BML:  size="[5, 5, 6]"        ← authored literal, stored as-is in BOM
+BML:  expr="${ size[0] }"     ← expression AST references index 0 per Size3D field order
+
+BOM:  memberValues.size = LiteralValue { value: [5,5,6], typeFqn: "…Size3D" }
+      memberValues.expr   = ExpressionValue { raw: "size[0]", ast: IndexAccess(...) }
+
+Renderer: reads Size3D type definition → knows index 0 = x → emits target output
+```
+
+### Three serialization targets, three responsibilities
+
+```text
+BML    — authoring format (human/LLM editable)
+BOM    — lossless parse result (SSOT for structure + values)
+Target — renderer output (SCAD, JSON, … — intentionally lossy / target-specific)
+```
+
+Only **BML ↔ BOM** must be lossless. **BOM → Target** is the renderer's interpretive job.
+
+See also: `12_bom_object_model.md` — Abstraction Principle · `06_compiler.md` — Parser vs Renderer Boundary · `10_expression_language.md` — Expression vs BOM Data Layer · `08_managed_object.md` — Accessor Metadata Model.
+
+---
+
 ## Core Concepts
 
 BOM Core defines four first-class concepts:

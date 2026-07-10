@@ -440,6 +440,8 @@ default     — default value
 
 ### Native vs. Custom Properties
 
+**V1:** Property values are read from `memberValues` and definition defaults — not via accessor Capabilities. See `14_compiler_runtime.md` — Accessor Capabilities (Draft).
+
 **Native properties** map to dedicated SCAD getters in the generated module body:
 
 ```scad

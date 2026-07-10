@@ -227,6 +227,28 @@ WCMS / Blockiverse       framework Blocks are first-class publishable definition
 WOT Idea layer           compiler infrastructure is itself Ideas — not implementation exceptions
 ```
 
+### ValueType lifecycle (Draft · TBD · V1 preparation)
+
+> **Status:** Draft — see `08_managed_object.md`. **Not implemented** as BOM Capabilities in V1; **Integer is the reference pattern**.
+
+All ValueType Blocks (PrimitiveType, StructType, EnumType) share one **lifecycle shape** (Capability metadata in BOM):
+
+```text
+Internal (_self)     private object — e.g. Integer: { value: 5 }
+__construct          external/authored form  →  _self   (Transformation — renderer metadata)
+serialize            _self  →  external/authored form   (Outbound — BML roundtrip + renderer metadata)
+```
+
+**Purpose of `serialize`:** describes external/authored form for BML export and for renderers translating to target syntax. The Capability definition lives in BOM; the renderer implements it — the parser does not execute it.
+
+**V1:** Type compatibility rules in `04_types.md` validate authored forms without rewriting them. Materializing synthetic `__construct` / `serialize` Capabilities on every ValueType Block is **post-V1** — but all types must be able to reproduce the Integer pattern.
+
+**Composable Entity Blocks** (Wall, Set, …) get `__construct` only — **no** `serialize` in V1 scope.
+
+**Union expressions:** `__construct` metadata describes first-match member selection; validation records `resolvedTypeFqn` on `LiteralValue` for type checking — authored value is not rewritten.
+
+**ExpressionValue** roundtrip: `raw` + AST preserved in BOM — evaluation deferred to renderer.
+
 ### Self-hosting on the compiler level
 
 Before the compiler validates or renders **any** user file, it bootstraps the TypeRegistry from **its own BML packages**:
@@ -598,16 +620,19 @@ Size3d with properties x, y, z (in that order):
   size.z == size[2]
 ```
 
-Named and positional access resolve to the same field. The index is derived from **declaration order**, not from alphabetical name order.
+Named and positional access resolve to the same field **in expression semantics and type validation**. The index is derived from **declaration order**, not from alphabetical name order.
 
 ### Serialization
 
-Struct values serialize positionally — array order always matches field declaration order:
+Struct values may be authored in multiple equivalent forms. **Each form is preserved in BOM** — see `00_bom_core.md` — Fundamental Architecture Principles.
 
 ```text
-Size3d { x: 4, y: 2, z: 3 }   →   [4, 2, 3]
-{ a: 4, b: 2 }                 →   [4, 2]
+Authored as array:   size="[4, 2, 3]"              → BOM: [4, 2, 3]
+Authored as object:  size="{ x: 4, y: 2, z: 3 }"    → BOM: { x: 4, y: 2, z: 3 }
+Authored as element: <Size3d x="4" y="2" z="3"/>   → BOM: nested BlockInstance
 ```
+
+All three are **type-equivalent** for validation. Renderers use `serialize` / field-order metadata to emit target form (e.g. SCAD `[4, 2, 3]`). The validator does **not** normalize one form into another.
 
 Equivalent authoring forms for a named StructType:
 
@@ -617,8 +642,6 @@ size="{ x: 4, y: 2, z: 3 }"   — named object literal
 <Size3d x="4" y="2" z="3"/>    — attribute syntax on StructType instance
 ```
 
-All three produce the same canonical value. Array literals map by **declaration order**, not by name.
-
 ### Compiler and BOM
 
 The parser stores each field with its **name** and its **declaration ordinal** (implicit index):
@@ -626,17 +649,17 @@ The parser stores each field with its **name** and its **declaration ordinal** (
 * Named StructTypes — position in `BlockDefinition.members[]` among `<property>` elements (see `12_bom_object_model.md` — Member Declaration Order)
 * Anonymous structs — position in `AnonymousStructType.fields[]` (see `12_bom_object_model.md` — Type Descriptors)
 
-The parser **must not reorder** fields at parse, map, or validate time.
+The parser **must not reorder** fields or **rewrite** literal shapes at parse, map, or validate time.
 
-Render targets choose their preferred representation freely — no per-target field mapping is required:
+Render targets choose their preferred representation at **render time** — using type metadata (`serialize`, field order, `__construct`):
 
 ```text
-size[0]   — index access (OpenSCAD, generic array renderers)
-size.x    — named access (TypeScript, object-native targets)
-[4, 2, 3] — positional serialization (SCAD settings bundles)
+size[0]   — index access in expression evaluation (OpenSCAD, generic array renderers)
+size.x    — named access in expression evaluation (TypeScript, object-native targets)
+[4, 2, 3] — positional serialization output (SCAD settings bundles)
 ```
 
-The index is always derivable from the type definition; renderers do not maintain separate field-order tables.
+The index is always derivable from the type definition; renderers do not maintain separate field-order tables. **BOM storage is not transformed** to match the renderer's preferred form.
 
 ### Capability parameter mapping
 
@@ -654,16 +677,18 @@ All call syntaxes produce identical input values. Positional arguments map to fi
 
 ### Expression access
 
-In `${ }` expressions, StructType property values support both access forms:
+In `${ }` expressions, StructType property values support both access forms — this is **expression-layer semantics**, not BOM data resolution:
 
 ```text
-${ size.x }      — named field access
-${ size[0] }     — positional access (same field)
+${ size.x }      — named field access (expression evaluation)
+${ size[0] }     — positional access (same field, per declaration order)
 ${ size[1] }     — positional access (y)
 ${ [size[0], size[1], size[2] - 1] }   — index access in array literals
 ```
 
-Nested access chains both forms: `items[0].size.x` ≡ `items[0].size[0]`. See `10_expression_language.md` — Property Access.
+Nested access chains both forms: `items[0].size.x` ≡ `items[0].size[0]`. See `10_expression_language.md` — Property Access · Expression vs BOM Data Layer.
+
+The underlying `size` member value in BOM remains in **authored form** (`[5,5,6]` or `{x:5,…}`). Expression access does not expand or normalize it.
 
 ### Compatibility rule
 
@@ -1080,6 +1105,7 @@ never expose „Block“ outside parser/BOM types
 | Type expressions · three ValueType kinds | `17_type_system_bml.md` — Type Expressions |
 | TypeExpression AST | `12_bom_object_model.md` |
 | Parse/serialize behaviour | `04_types.md` |
+| Synthetic accessors · ValueType roundtrip (Draft) | `08_managed_object.md` |
 | Collections and Multiplicity | this document — § Collections and Multiplicity |
 | Bootstrap mapping | `13_bml_to_bom_mapping.md` |
 | SCAD property mapping | `09_mbom_properties.yml` |
