@@ -10,6 +10,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.core"
+  xmlns:def="org.blockml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea></idea>
@@ -25,5 +26,9 @@
       <documentation>The documentation of the definition.</documentation>
     </documentation>
   </properties>
-
+  <aggregations>
+    <examples type="def:ExampleDefinition[]">
+      <documentation>The examples of the definition.</documentation>
+    </examples>
+  </aggregations>
 </block>

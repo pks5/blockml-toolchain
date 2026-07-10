@@ -20,9 +20,16 @@
     Capabilities. Composition instance identity uses bml:id and bml:version (not member attributes).
     Any Block FQN may appear in aggregation and association types. Property and Capability types
     must resolve to org.blockml.core.ValueType.</documentation>
+  
   <name>Block</name>
   <type>core:Block</type>
+  <!-- Root block has no base type -->
+  <baseType />
+  
+  <!-- Blocks are rendered as xml elements with the name of the block type -->
   <bml:xml>${ type }</bml:xml> 
+  
+  <!-- Root block is abstract -->
   <abstract />
   
 </block>

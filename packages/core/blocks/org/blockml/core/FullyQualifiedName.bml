@@ -1,13 +1,19 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:def="org.blockml.definition">
 
-  <idea>A fully qualified name of a block.</idea>
+  <idea>A fully qualified name of a BlockML definition.</idea>
 
-  <documentation>A fully qualified name of a block.</documentation>
+  <documentation>
+    A fully qualified name referencing a Block or a definition owned by a Block.
+    The first generic type constrains the owning Block type. The second generic
+    type constrains the referenced definition type and defaults to BlockDefinition.
+  </documentation>
 
   <genericTypes>
-    <genericType name="T" baseType="core:Block" />
+    <genericType name="B" baseType="core:Block" />
+    <genericType name="D" baseType="core:Definition" defaultType="def:BlockDefinition" />
   </genericTypes>
 
   <name>FullyQualifiedName</name>
