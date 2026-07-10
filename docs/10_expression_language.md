@@ -34,10 +34,11 @@ Everything else follows JSON subset rules: strings in double quotes, numbers, bo
 
 > **Expressions and BOM member values are separate layers.** See `00_bom_core.md` — Expression layer vs BOM data layer.
 
-| Layer | Stored where | Mutated by expression parser? |
+| Layer | Stored where | Mutated by parser? |
 |---|---|---|
-| **BOM data** | `LiteralValue.value` on `memberValues` | **No** — authored form preserved |
-| **Expression language** | `ExpressionValue.raw` + `ExpressionNode` AST | AST built at stage [7]; **not evaluated** |
+| **BOM data** | `LiteralValue.value`, `ExpressionValue.raw` on `memberValues` | **No** — Canonical BOM, immutable |
+| **Expression syntax** | `parseExpression()` utility output | **No** — separate result, not in BOM |
+| **Expression evaluation** | `evaluateExpression()` / renderer working model | **No** — renderer only |
 
 Property and index access in `${ }` (`size.x`, `size[0]`) are **expression semantics** — they describe how to address a StructType field at evaluation time. They do **not** expand or normalize the underlying `size` literal in the BOM.
 
@@ -46,8 +47,8 @@ BML attribute:  size="[5, 5, 6]"
 BOM storage:    LiteralValue { value: [5,5,6], typeFqn: "…Size3D" }   ← array stays array
 
 BML attribute:  offset="${ size[0] }"
-BOM storage:    ExpressionValue { raw: "size[0]", ast: IndexAccess(PropertyRef("size"), 0) }
-                ← AST references index 0; size member value unchanged
+Utility:        parseExpression("size[0]") → { ast: IndexAccess(...), resultTypeFqn: "…" }
+BOM storage:    ExpressionValue { raw: "size[0]" }   ← raw only; AST is utility output
 ```
 
 The StructType definition (field names, declaration order) is **type metadata** consulted by the expression type checker (stage [8]) and by the renderer at evaluation/serialization time. It is not applied to rewrite `LiteralValue.value` at parse time.
@@ -797,28 +798,37 @@ value expressions:
 
 ## Expression AST
 
-The Expression Parser (compiler stage [7]) enriches each stage-[5] `ExpressionValue` — parsing `raw` into an AST on the BOM:
+The **`parseExpression()` utility** (`@blockml/core`) parses `ExpressionValue.raw` into an AST. Output is a **utility result** — not written into Canonical BOM:
 
 ```typescript
-interface ExpressionValue {
-  kind: "expression"
-  raw: string                    // source text inside ${ }
-  ast: ExpressionNode            // root node — this section
-  resultTypeFqn: string          // inferred or context-expected type
+/** Utility result — NOT part of Canonical BomDocument */
+interface ParsedExpression {
+  raw: string
+  ast: ExpressionNode
+  resultTypeFqn?: string
   source: SourceLocation
 }
 ```
 
-See `12_bom_object_model.md` — Member Values.
+Canonical BOM stores only:
+
+```typescript
+interface ExpressionValue {
+  kind: "expression"
+  raw: string
+  source: SourceLocation
+}
+```
+
+See `12_bom_object_model.md` — Member Values · `00_bom_core.md` — Framework Utilities.
 
 ### Design Principles
 
 ```text
-Parse, don't eval     — store AST; no runtime evaluation during parse/validate
-                        (except literal fold diagnostics like division by zero)
+Parse, don't eval     — parseExpression() builds AST; evaluateExpression() is renderer/utility
 Typed nodes           — every ExpressionNode carries resultTypeFqn after inference
 EBNF 1:1              — each grammar production maps to one AST node kind
-Immutable             — plain-data graph; same rules as BomDocument
+Immutable BOM         — raw in Canonical BOM; AST in utility output or working model
 Renderer-independent  — SCAD/TS renderers serialize AST nodes; never re-parse raw
 Context annotation    — unresolved names are errors; resolved names carry member metadata
 ```
@@ -1160,13 +1170,14 @@ primary         → literal | reference | call | binding | GroupExpression
 
 ### Validation Responsibilities
 
-| Stage | Responsibility |
+| Component | Responsibility |
 |---|---|
-| **Expression Parser** | Build AST; literal types; operator structure; call/binding shape |
-| **Semantic Validator** | `resultTypeFqn` vs member type; resolve PropertyReference; bean/builtin existence; link/call legality; with/each scope; V1 deferred features |
+| **parseExpression()** | Build AST from `raw`; literal types; operator structure; call/binding shape |
+| **validateConstraints()** | `resultTypeFqn` vs member type; resolve PropertyReference; bean/builtin existence |
+| **evaluateExpression()** | Resolve to value — renderer working model only |
 | **Renderer** | Serialize AST → target syntax; emit helpers for processor-implemented built-ins |
 
-The validator **does not mutate** AST nodes — it attaches diagnostics. Optional: a separate `ValidatedExpression` wrapper with resolved types if needed; V1 may enrich nodes in-place via optional fields (`memberTypeFqn?`).
+Utilities **never mutate** Canonical BOM. Diagnostics are returned separately.
 
 ---
 
@@ -1174,18 +1185,18 @@ The validator **does not mutate** AST nodes — it attaches diagnostics. Optiona
 
 ```text
 @blockml/core
-  - ExpressionNode union and all interfaces in this section
-  - Type inference helpers
+  - ExpressionNode union and ParsedExpression interface
+  - parseExpression(raw, context) → ParsedExpression
   - validateExpression(ast, context): Diagnostic[]
+  - evaluateExpression(ast, context) → value (renderer/working model)
 
 @blockml/parser
   - Stage [5]: capture ExpressionValue { raw } during BML → BOM mapping
-  - Stage [7]: parseExpression(raw, context) → fills ast + resultTypeFqn
-  - Does NOT evaluate expressions
+  - Does NOT parse or evaluate expressions
 
 @blockml/compiler / render targets
+  - Call parseExpression() / evaluateExpression() as needed in renderer pipeline
   - Serialize ExpressionNode → SCAD / TS / JSON
-  - Never re-parse raw strings from BOM
 ```
 
 ---

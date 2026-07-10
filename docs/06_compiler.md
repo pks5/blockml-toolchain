@@ -33,12 +33,18 @@ The compiler is implemented across these packages:
 
 ## Compiler Pipeline
 
+> **Architecture decision:** Parser produces immutable Canonical BOM. Framework utilities and renderer pipelines are separate layers. See `00_bom_core.md` — Fundamental Architecture Principles.
+
+### Layer 1 — Parser (`@blockml/parser`)
+
+Produces the **Canonical BOM**. No semantic decisions. Output is immutable.
+
 ```text
 BML Source (.bml)                   — V1: XML only; JSON BML deferred (TBD)
   ↓
 [1] Format Detector
   ↓
-[2] XML Parser / JSON Parser
+[2] XML Parser
   ↓
 [3] Root Type Resolver
   ↓
@@ -46,68 +52,69 @@ BML Source (.bml)                   — V1: XML only; JSON BML deferred (TBD)
   ↓
 [5] BML → BOM Mapper
   ↓
-[6] Type Validator
+Canonical BOM (immutable)
+```
+
+### Layer 2 — Framework Utilities (`@blockml/core`)
+
+Optional, composable functions. **Never mutate** the Canonical BOM. Return derived views, diagnostics, or new structures.
+
+```text
+resolveInheritance(bom, registry)       → EffectiveMemberSet
+resolveEffectiveMembers(block, registry)  → EffectiveMemberSet
+resolveType(typeFqn, registry)          → TypeDescriptor
+resolveReference(ref, bom, registry)    → ResolvedReference
+resolveContracts(block, registry)       → ContractValidation
+resolveGenerics(typeExpr, registry)     → ResolvedTypeExpr
+parseExpression(raw, context)           → ExpressionNode + resultTypeFqn
+evaluateExpression(ast, context)        → evaluated value (working model)
+expandComposition(bom, context)       → ExpandedComposition
+expandDirectives(bom, context)          → ExpandedComposition
+validateTypes(bom, registry)            → Diagnostic[]
+validateConstraints(bom, registry)      → Diagnostic[]
+```
+
+The CLI may invoke utilities before or during compile for diagnostics — but utilities **never write back** to the Canonical BOM.
+
+### Layer 3 — Renderer Pipeline (target-specific)
+
+Each renderer defines its own flow. Example — **SCAD Renderer** (reference implementation):
+
+```text
+Canonical BOM (immutable)
   ↓
-[7] Expression Parser
+[9]  Target Resolver
   ↓
-[8] Semantic Validator
+[10] expandDirectives()          — utility → ExpandedComposition (working model)
   ↓
-BOM
+[11] Module Name Resolver
   ↓
-[9] Target Resolver
+[12] Import Resolver
   ↓
-[10] Block Renderer Dispatch
+[13] resolveEffectiveMembers() + Property merge  — utility → resolved values (working model)
   ↓
-[11] Module Name Resolver        (domain-specific)
+[14] evaluateExpression() / Expression emit
   ↓
-[12] Import Resolver             (domain-specific)
+[15] Assembly Pattern Mapper
   ↓
-[13] Property Renderer           (domain-specific)
+[16] Composition Renderer
   ↓
-[14] Expression Renderer         (domain-specific)
+[17] Set Renderer
   ↓
-[15] Assembly Pattern Mapper     (domain-specific, MachineBlocks SCAD)
+[18] Customizer Generator
   ↓
-[16] Composition Renderer        (domain-specific)
-  ↓
-[17] Set Renderer                (domain-specific, if baseType ⊆ com.machineblocks.core.Set)
-  ↓
-[18] Customizer Generator        (domain-specific)
-  ↓
-[19] Source Map Generator        (domain-specific)
+[19] Source Map Generator
   ↓
 Target Output File(s) + Source Map(s)
 ```
 
-Stages 1–8 are universal — implemented in `@blockml/parser` and `@blockml/core`. Stages 9–19 are Target-specific — implemented in the registered Render Target package.
-
----
-
-## Parser vs Renderer Boundary
-
-> **Fundamental rule:** BML → BOM → BML must always be possible. The renderer receives the BOM as authored. See `00_bom_core.md` — Fundamental Architecture Principles.
+Example — **Documentation Renderer**:
 
 ```text
-Stages [1]–[8]   Parser + Validator
-                 Syntax, namespaces, type safety, cross-references
-                 NO data resolution, NO canonicalization, NO evaluation
-
-Stages [9]–[19]  Renderer
-                 All interpretive decisions: expansion, merge, evaluation, serialization
+Canonical BOM (immutable)  →  renderRawBOM()  →  Markdown / HTML
 ```
 
-| Concern | Stage | Allowed | Forbidden |
-|---|---|---|---|
-| XML → BOM structure | [5] | Map elements, classify attributes, preserve order | Expand directives, merge presets |
-| Literal type check | [6] | Verify value conforms to declared `typeFqn` | Rewrite `[5,5,6]` → `{x:5,y:5,z:6}` |
-| Expression AST | [7] | Parse `raw` → `ExpressionNode` AST | Evaluate expressions |
-| Semantic validation | [8] | Cross-ref checks, type inference on AST | Mutate `memberValues`, expand composition |
-| Directive expansion | [10] | — | Renderer only |
-| Preset/config merge | [13] | — | Renderer only |
-| Expression evaluation | [14] | — | Renderer only |
-| Target serialization | [13]–[16] | — | Renderer only |
-
-The validated `BomDocument` passed to stage [9] is the **same graph** produced by stages [1]–[8]. Render stages operate on views or copies — they **must not write back** resolved values, expanded trees, or auto-IDs into the canonical `BomDocument`.
+Stages [9]–[19] are **not** a fixed framework pipeline — they document the SCAD reference renderer. Other renderers choose different utilities and ordering.
 
 ---
 
@@ -150,7 +157,7 @@ The resolved FQN is used throughout the rest of the pipeline.
 
 ### [5] BML → BOM Mapper
 
-Maps the parsed document tree to BOM objects using the mapping rule for the detected root type. Expression `${ }` spans are captured as `ExpressionValue { raw }` only — AST construction is deferred to stage [7]. See `13_bml_to_bom_mapping.md`.
+Maps the parsed document tree to BOM objects using the mapping rule for the detected root type. Expression `${ }` spans are captured as `ExpressionValue { raw }` only — AST construction is a **`parseExpression()` utility**, not a parser stage. See `13_bml_to_bom_mapping.md`.
 
 ```text
 XML attribute        →  BOM property value (literal or ExpressionValue { raw })
@@ -158,70 +165,47 @@ XML child element    →  BOM composition child instance or aggregation metadata
 Member sections      →  members[] in document order (properties → aggregations → associations → capabilities); no sorting
 ```
 
-Mapping rules are defined once per root type and apply uniformly to all documents of that type. They are configurable and extensible. Member order contract: `13_bml_to_bom_mapping.md` — Member Mapping Order.
+Mapping rules are defined once per root type. The mapper produces the **Canonical BOM** — immutable after this stage.
 
-### [6] Type Validator
+---
 
-Validates that all BOM member values **conform to their declared types** — without rewriting authored values.
+## Framework Utilities (formerly stages [6]–[8])
 
-```text
-size="[5,5,6]" with type Size3D  →  LiteralValue { value: [5,5,6], typeFqn: "…Size3D" }  ✓ valid
-size="[5,5,6]" with type Size3D  →  MUST NOT become { x:5, y:5, z:6 } in BOM
-```
+> **`@blockml/core` utilities** — read immutable BOM, return results, **never mutate** Canonical BOM. See `00_bom_core.md` — Framework Utilities.
 
-Type validation checks compatibility; it does **not** canonicalize literal forms. The authored shape in `LiteralValue.value` is preserved for lossless BML ↔ BOM round-trip. See `00_bom_core.md` — Fundamental Architecture Principles.
-
-For MBOM: native property types from `09_mbom_properties.yml`, custom property types from the block definition.
-
-Errors at this stage reference the BML source position via the source map.
-
-### [7] Expression Parser
-
-Walks the stage-[5] `BomDocument` and enriches all `ExpressionValue` nodes: parses `raw` into typed **`ExpressionNode`** AST trees. See `10_expression_language.md` — Expression AST and `13_bml_to_bom_mapping.md` — Expression Parsing.
-
-Each enriched `ExpressionValue` carries:
+### validateTypes()
 
 ```text
-- raw source text           (from stage [5])
-- root ExpressionNode       (added in stage [7])
-- resultTypeFqn             (initial inference in stage [7])
-- source position           (from stage [5])
+validateTypes(bom, registry) → Diagnostic[]
 ```
 
-Expressions are **not evaluated** at this stage.
+Checks member values conform to declared types **without rewriting** authored values. For MBOM: native property types from `09_mbom_properties.yml`, custom types from block definitions.
 
-Recognized expression forms (see `00_bom_core.md` — Expression System):
+### parseExpression()
 
 ```text
-${ myProperty }                             — property access
-${ myProperty.x }                           — attribute access
-${ #builtIn.capa(args) }                    — built-in service call
-${ @bean.capa(args) }                       — user Bean call
-${ @bean.outbound }                         — capability linking
-${ @model:/path }                           — absolute model binding
-${ @model:relPath }                         — relative model binding
-${ condition ? valueA : valueB }            — ternary
-${ a + b - 1 }                             — arithmetic
+parseExpression(raw, context) → { ast: ExpressionNode, resultTypeFqn?: string }
 ```
 
-### [8] Semantic Validator
+Parses `${ }` source into AST. **Utility output** — not written into Canonical BOM. BOM stores `ExpressionValue.raw` only.
 
-Validates the BOM graph for semantic correctness:
+Recognized forms: property access, attribute access, built-in/bean calls, capability linking, model bindings, ternary, arithmetic. See `10_expression_language.md`.
+
+### validateConstraints()
 
 ```text
-- Cross-instance references resolve to explicit authored id (blockId, placeId, FQN::id)
-- Qualified `{BlockFQN}::{id}` references require `export="true"` on the target composition and static literal ids
-- bml:each elements have explicit id
-- Referenced block types exist at the **exact pinned version** (no implicit latest)
-- Composition child member values are valid for the referenced block type
-- Aggregation occurrence constraints are satisfied (derived from type notation: `[]`, `[1..1]`, `[1..]`, `[n]`, `[min..max]`)
-- Expression result types match the target member type
-- @bean references resolve to declared Aggregations
-- Capability linking: source must be Outbound, target must be Inbound, outputType must match inputType
-- Model binding: relative paths only used where a binding context exists
-- Member namespace uniqueness: no duplicate (namespace, name) pairs across Properties, Aggregations, Associations, Capabilities
-- Member override merge: partial overrides merged at validate; private/final violations → errors
+validateConstraints(bom, registry) → Diagnostic[]
 ```
+
+Semantic checks: cross-instance references, capability linking, aggregation cardinality, expression type compatibility (via `parseExpression()`). Returns diagnostics only.
+
+The CLI typically calls these after parse. Renderers may call them during their pipeline.
+
+---
+
+## Renderer Pipeline (SCAD reference — stages [9]–[19])
+
+> **Not a fixed framework pipeline.** Each renderer defines its own flow. Stages below document the SCAD reference renderer.
 
 ### [9] Target Resolver
 
@@ -229,9 +213,9 @@ Looks up the requested Target by name in the Target Registry. Verifies that the 
 
 For Composite Targets: resolves the responsible Atomic Target per Block and validates accordingly.
 
-### [10] Directive Expansion and ID Resolution
+### [10] expandDirectives() + ID Resolution
 
-**Renderer stage** — operates on a **view** of the BOM, not the canonical `BomDocument`. See `00_bom_core.md` — Renderer Boundary.
+**Renderer working model** — uses `expandDirectives()` utility on a **copy/view** of the BOM. Canonical BOM is unchanged. See `00_bom_core.md` — Canonical BOM is immutable.
 
 Before rendering, the BlockProcessor expands `bml:each`, `bml:if`, and `bml:with` on the composition tree. Then:
 

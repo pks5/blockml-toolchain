@@ -14,29 +14,47 @@ The architecture is designed to accommodate domain BOMs and Render Targets that 
 
 ## Architecture
 
-The BOM Compiler follows a layered architecture:
+The BOM Compiler follows a three-layer architecture. See `00_bom_core.md` — Fundamental Architecture Principles for the authoritative design decision.
 
 ```text
-BML Source (.bml)                  content-type: bml   (V1: XML only)
-  ↓ parse + validate
-BOM (Block Object Model)        domain-agnostic, typed
-  ↓ compile
-Render Target                   domain-specific
-  ↓ render
-Target Output (SCAD, KiCad, JSX, ...)
+BML
+ │
+ ▼
+Parser                          @blockml/parser
+ │
+ ▼
+Canonical BOM (immutable)       lossless BML representation — SSOT
+ │
+ ├──────────── Framework Utilities ────────────┐   @blockml/core
+ │  resolveInheritance, validateTypes,         │   never mutate BOM
+ │  parseExpression, expandComposition, …      │
+ │                                             │
+ ▼                                             ▼
+Renderer Pipeline                      other Renderers
+ │                                    @blockml/compiler + target packages
+ ▼
+Renderer Working Model             target-specific, mutable, cacheable
+ │
+ ▼
+Emitter
+ │
+ ▼
+Target Output (SCAD, Java, JSX, JSON, …)
 ```
 
 **BML** (Block Markup Language) is the universal declarative authoring format. File extension **`.bml`**. Content-type `bml`. **XML is the V1 reference format.** JSON as an alternate BML authoring serialization is **deferred (TBD — not V1)** due to namespace and directive constraints.
 
-**BOM** (Block Object Model) is the canonical, typed, domain-agnostic object model. It is the internal representation of all block data. BOM is renderer-independent — it has no knowledge of any render target, syntax, or parameters. BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific types and properties.
+**BOM** (Block Object Model) is the **canonical, immutable, lossless representation of BML** — not a pre-interpreted object model. BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific type definitions declared in BML.
 
-**Render Target** is the domain-specific output backend. A Target declares which `baseType` FQNs it supports, and contains one or more Block Processors that turn BOM into target-specific results — files, side effects, or both. Output cardinality is **target-defined** (not fixed 1:1 with input). Targets are registered centrally in the compiler.
+**Framework Utilities** (`@blockml/core`) provide reusable analysis and transformation algorithms. They read the immutable BOM and return derived views or diagnostics — they never write back to the Canonical BOM.
 
-**The Compiler** is the universal pipeline that connects BML → BOM → Render Target. It runs in both browser (React) and Node.js environments.
+**Render Target** is the domain-specific output backend. Each target defines its own pipeline: which utilities to call, in what order, and how to build its working model. A Target declares which `baseType` FQNs it supports and contains Block Processors that emit target-specific results.
 
-**Self-hosting (bootstrap):** Before processing user projects, the compiler bootstraps its TypeRegistry from framework BML in `@blockml/core` and `@machineblocks/mbom`. Primitives, language types, service blocks, and MBOM framework types are Blocks in the same registry as user Walls and Sets. Full self-description of the compiler in BML is a **long-term goal**, not a V1 requirement — see [BML Self-Description Roadmap](#bml-self-description-roadmap).
+**The Compiler** (`@blockml/compiler`) is the facade and Target Registry. It does not prescribe a fixed compile path — renderers orchestrate utilities themselves.
 
-**The CLI** (`bom`) is the Node.js command-line interface for compiling, validating, watching, and scaffolding BML projects.
+**Self-hosting (bootstrap):** Before processing user projects, the CLI bootstraps a TypeRegistry from framework BML in `@blockml/core` and `@machineblocks/mbom`. Each registered BlockDefinition is an immutable `BomDocument` parse result.
+
+**The CLI** (`bom`) is the Node.js command-line interface for parsing, validating, compiling, watching, and scaffolding BML projects.
 
 ### Reference Implementation: MachineBlocks
 
@@ -44,11 +62,11 @@ MachineBlocks is the first and reference domain. Its BOM specialization is **MBO
 
 ```text
 BML Source (.bml)
-  ↓ parse + validate
-MBOM (MachineBlocks Object Model)   ←  specializes BOM Core
-  ↓ compile (machineblocks-v3-scad target)
-SCAD Render Target  ←  machineblocks/docs/scad-reference/
-  ↓ render
+  ↓ parse
+Canonical BOM (immutable)
+  ↓ renderer pipeline (utilities + working model)
+SCAD Render Target
+  ↓ emit
 STL / 3MF
 ```
 
@@ -56,17 +74,23 @@ STL / 3MF
 
 ## Key Design Principles
 
-**BML is not a SCAD wrapper.** BML describes semantic BOM objects. Any render target is just one possible output — SCAD, KiCad, JSX, JSON, or anything else.
+**BML and BOM are inseparable.** The BOM is the lossless, immutable representation of BML — not a pre-interpreted object model. BML → BOM → BML must always be possible.
 
-**BOM is not a render target AST.** BOM is the typed object model. Render Targets are backends that serialize BOM.
+**The parser makes no semantic decisions.** Validation, inheritance resolution, expression evaluation, and composition expansion are framework utilities or renderer steps — never BOM mutations.
 
-**The core is browser-compatible.** No Node.js-only APIs (`fs`, `path`, `child_process`) in `@blockml/core`, `@blockml/parser`, `@blockml/compiler`, or any Render Target package. Only the CLI tools package may use Node-only APIs.
+**Renderers own their pipeline and working model.** The framework provides utilities; each renderer decides which to use and how to map BML semantics to the target system.
 
-**All mappings are declarative and configurable.** No BOM types, properties, or render mappings are hardcoded in compiler logic. Changes to mappings require only configuration changes, not code changes.
+**BML is not a SCAD wrapper.** BML describes semantic objects. Any render target is one possible output.
+
+**BOM is not a render target AST.** BOM is the authored model. Renderers build their own working models.
+
+**The core is browser-compatible.** No Node.js-only APIs in `@blockml/core`, `@blockml/parser`, `@blockml/compiler`, or any Render Target package.
+
+**All mappings are declarative and configurable.** No BOM types, properties, or render mappings are hardcoded in compiler logic.
 
 **Domain BOMs extend, never modify core.** Adding EBOM, UBOM, or any future BOM does not change `@blockml/core`, `@blockml/parser`, or `@blockml/compiler`.
 
-**No mandatory input↔output mapping.** BlockML does not require one BML file to produce one output file. Render targets define output cardinality — zero files, many files, multi-input aggregation, or side effects only. MachineBlocks uses **1 BML → 1 primary SCAD** as a domain convention, not a platform rule. See `14_compiler_runtime.md` — Compile I/O Model (C4).
+**No mandatory input↔output mapping.** Render targets define output cardinality. See `14_compiler_runtime.md` — Compile I/O Model (C4).
 
 ---
 

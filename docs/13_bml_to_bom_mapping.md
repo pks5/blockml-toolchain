@@ -30,13 +30,12 @@ NOT mapper responsibility: canonicalization, expansion, merge, evaluation
 
 ```text
 [4] Namespace Resolver     → FQN prefix bindings
-[5] BML → BOM Mapper       → this document (structure + attribute classification)
-[7] Expression Parser      → fill ExpressionValue.ast on mapped nodes
-[6] Type Validator         → type compatibility checks (no value rewriting)
-[8] Semantic Validator     → effective members, cross-refs, expression types
+[5] BML → BOM Mapper       → this document (structure + attribute classification) → Canonical BOM
 ```
 
-Stage [5] produces the abstract BOM graph with expression **raw** text only. Stage [7] fills `ExpressionValue.ast` and `resultTypeFqn` on all mapped nodes (two-phase — see § Expression Parsing).
+Expression parsing, type validation, and semantic validation are **framework utilities** — not parser stages. See `06_compiler.md` — Framework Utilities.
+
+Stage [5] produces the immutable BOM graph with expression **raw** text only. `parseExpression()` is a separate utility.
 
 ---
 
@@ -73,7 +72,7 @@ Ordinal = index in `members[]` after mapping. Used by expression type checking a
 | **Unknown member attributes** | Warning `BML_UNKNOWN_PROPERTY` at validate (custom property assumed) |
 | **Unknown `bml:*` attributes** | Error `BML_UNKNOWN_DIRECTIVE` at map time |
 | **`inputType` / `outputType`** | Parsed into `TypeDescriptor` at map time — anonymous `{ a: Float }` = anonymous struct type |
-| **Expression parsing** | Two-phase: stage [5] stores `raw`; stage [7] builds AST |
+| **Expression parsing** | Parser stores `raw` in BOM; `parseExpression()` utility builds AST (separate result) |
 | **Cross-file resolution** | Single-file parser; TypeRegistry bootstrap by CLI/orchestrator before validate |
 | **JSON BML format** | **Deferred (TBD).** V1 parser accepts XML only (`.bml`) |
 | **Composition render** | Leaf geometry → NativeBlock → `mb_block()`; see `14_compiler_runtime.md` |
@@ -122,7 +121,7 @@ Any other `bml:*` attribute name → **`BML_UNKNOWN_DIRECTIVE` (error)**. Exampl
 
 Known directive on a disallowed element (see placement rules in `12_bom_object_model.md`) → **`BML_DIRECTIVE_NOT_ALLOWED` (error)**.
 
-Directive and meta values that contain `${ }` are stored as `ExpressionValue` (raw in stage [5], AST in stage [7]).
+Directive and meta values that contain `${ }` are stored as `ExpressionValue { raw }` in Canonical BOM. AST via `parseExpression()` utility.
 
 ### Rule 3 — `data:*` data attributes
 
@@ -152,7 +151,7 @@ Use **`bml:id`** / **`bml:version`** for composition instance identity and exter
 Value classification within rule 4:
 
 ```text
-${ ... }                     → ExpressionValue { raw }  (AST added in stage [7])
+${ ... }                     → ExpressionValue { raw }  (AST via parseExpression() utility)
 address-shaped capability    → AddressValue
 otherwise                    → LiteralValue (authored value preserved — type-checked in stage [6])
 ```
@@ -443,18 +442,17 @@ Partial overrides: a child Block may declare a member with only `name` and chang
 
 ## Expression Parsing (Two-Phase)
 
-Expression handling is split across two pipeline stages:
+Expression handling spans parser and utility:
 
 ```text
 Stage [5] BML → BOM Mapper
   Detect ${ ... } spans in attribute and directive values
-  Store ExpressionValue { raw, source }  — no AST yet
+  Store ExpressionValue { raw, source } in Canonical BOM
 
-Stage [7] Expression Parser
-  Walk BomDocument; find all ExpressionValue nodes
-  Parse raw → ExpressionNode AST
-  Set resultTypeFqn (initial inference)
-  On parse failure → BML_EXPR_SYNTAX_ERROR
+parseExpression() utility (@blockml/core)
+  Input:  ExpressionValue.raw + ParseContext
+  Output: ParsedExpression { ast, resultTypeFqn } — NOT written to BOM
+  On failure → BML_EXPR_SYNTAX_ERROR
 ```
 
 ### Stage [5] — raw capture
@@ -469,37 +467,36 @@ size="${ [size[0], size[1], size[2] - 1] }"
      }
 
 size="[1, 8, 9]"
-  → LiteralValue { value: [1, 8, 9], typeFqn: "…Size3D" }   (authored form preserved; type-checked in stage [6])
+  → LiteralValue { value: [1, 8, 9], typeFqn: "…Size3D" }   (authored form; type-checked by validateTypes() utility)
 ```
 
 Directive values (e.g. `bml:each="i : ${ numberOfSamples }"`) are split structurally in stage [5]: loop variables parsed from the prefix; the `${ }` portion stored as `ExpressionValue { raw }` on the directive node.
 
 Stage [5] does **not** build AST nodes and does **not** resolve property references.
 
-### Stage [7] — AST construction
+### parseExpression() — AST construction
 
-The Expression Parser receives the stage-[5] `BomDocument` and enriches every `ExpressionValue`:
+The utility receives `ExpressionValue.raw` and `ParseContext` (built from enclosing Block, directive scope, target member):
 
 ```text
-ExpressionValue { raw: "[size[0], size[1], size[2] - 1]" }
-  → ast: AccessExpression / BinaryExpression / … tree
-  → resultTypeFqn: inferred from context (member type hint) or from literal roots
+parseExpression("[size[0], size[1], size[2] - 1]", context)
+  → { ast: AccessExpression / BinaryExpression / … tree, resultTypeFqn: … }
 ```
 
-Parse context (`ParseContext`) is built from the enclosing Block, directive scope (`bml:each` / `bml:with` variables on ancestor chain), and the target member being assigned.
+Parse context is built from the enclosing Block, directive scope (`bml:each` / `bml:with` variables on ancestor chain), and the target member being assigned.
 
-Expressions are **parsed, not evaluated** at this stage. See `10_expression_language.md` — Expression AST.
+Expressions are **parsed, not evaluated**. Evaluation is `evaluateExpression()` — renderer working model only. See `10_expression_language.md` — Expression AST.
 
-### Why two phases
+### Why parser and utility are separate
 
 ```text
 Stage [5] needs no expression grammar  — only ${ } detection and raw extraction
-Stage [7] runs once the BOM graph exists — full scope context available
-Stage [6] can validate literals before expressions are parsed
-Errors in structure (mapping) vs. expression syntax are separated
+parseExpression() runs when needed    — CLI validation, renderer pipeline, tooling
+validateTypes() can check literals before expressions are parsed
+Mapping errors vs. expression syntax errors are separated
 ```
 
-After stage [7] completes successfully, every `ExpressionValue` must have `ast` set. Stage [8] validates AST semantics (types, references, scope).
+`validateConstraints()` uses `parseExpression()` output for semantic checks — diagnostics only, no BOM mutation.
 
 ---
 
@@ -683,7 +680,7 @@ See `02_mbml.md` — Serialization Formats for the design rationale.
 |---|---|---|
 | B2 | Unknown instance attributes — warning; unknown `bml:*` — error | **Decided** |
 | B3 | `inputType` / `outputType` storage — `TypeDescriptor` union (anonymous struct model) | **Decided** |
-| B4 | Expression parsing — two-phase (raw in [5], AST in [7]) | **Decided** |
+| B4 | Expression parsing — raw in BOM; AST via parseExpression() utility | **Decided** |
 | B5 | Cross-file / TypeRegistry — single-file parser; orchestrator bootstrap | **Decided** |
 | B6 | JSON BML authoring format | **Deferred (TBD)** — not in V1; XML-only parser |
 

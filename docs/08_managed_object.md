@@ -36,7 +36,9 @@ V1 goal: **the BOM and validator can represent the model** without requiring tar
 
 ## Design Overview
 
-> **Accessors are BOM metadata for the renderer — not a runtime invocation API.** The renderer reads member values in authored form plus accessor Capability definitions (`getSize`, `setSize`, `__construct`, `serialize`) and implements the translation in the target system. It does **not** call getters to obtain resolved values. See `00_bom_core.md` — Fundamental Architecture Principles.
+> **Semantics remain in BML.** Constructor, Getter, Setter, Transformation, Inbound, and Outbound are semantic information in BML — not compiler rules, not runtime objects. The renderer decides target realisation. See `00_bom_core.md` — Semantics remain in BML.
+
+> **Accessors are BOM metadata for the renderer — not a runtime invocation API.** The renderer reads member values in authored form plus Capability definitions and implements translation in the target system.
 
 Every authored **member** (Property, Aggregation, Association) is **private storage**. Visibility applies to the **generated accessors**, not to the storage field. In the default case the author notices nothing: `getColor` / `setColor` map 1:1 to internal `color`.
 
@@ -95,7 +97,7 @@ Exact storage naming (`__` prefix normalization) is **TBD**. V1 may keep authore
 
 ## Synthetic Accessors in the BOM
 
-Synthetic accessors are **part of the effective member set**, not optional runtime-only metadata. They are produced by `resolveEffectiveMembers()` (or an equivalent validate-stage pass) and may be stored in an extended view — not necessarily re-serialized into authored BML.
+Synthetic accessors are **not part of Canonical BOM**. They may appear in `EffectiveMemberSet` utility output for tooling — never written back to `BomDocument`. Authored Capabilities in BML are stored as declared; implicit getter/setter conventions are renderer interpretation metadata.
 
 ### Draft: `CapabilityDefinition` extension
 

@@ -27,10 +27,10 @@ This document is the **implementation contract** for `@blockml/core`. It specifi
 > **„Block“ in BML is the mandatory input concept — not a uniform runtime object model.** The parser must read `<block>` documents; validators must walk `baseType` chains. Internal representation after parse is free. See `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation.
 
 ```text
-BML source          →  authoring format — human/LLM editable
-BOM (this doc)      →  lossless parse result — authored form preserved
-Validation          →  syntax + type safety only — no data resolution
-Render Target       →  all interpretive decisions (expansion, merge, evaluation, serialization)
+BML source          →  authoring format
+BOM (this doc)      →  canonical, immutable, lossless parse result
+Framework Utilities →  derived views (EffectiveMemberSet, AST, diagnostics) — never mutate BOM
+Render Target       →  own pipeline + working model
 ```
 
 Examples of what BOM **stores** vs. what downstream **interprets**:
@@ -53,8 +53,9 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 
 | Topic | Decision |
 |---|---|
-| **Mutability** | Parse result is an **immutable plain-data graph** (`BomDocument`). Mutable runtime APIs are optional. Synthetic accessor Capabilities are **Draft · TBD** — prepared in V1, not required for render — see `08_managed_object.md`. |
-| **Member inheritance** | **Lookup at validate.** BOM stores only **declared** members per Block (including partial overrides). Effective members are merged via `baseType` chain + Type Registry — never flattened into the parse result. |
+| **Immutability** | Canonical `BomDocument` is **immutable** after parse. No utility or renderer may write derived data back. See `00_bom_core.md` — Canonical BOM is immutable. |
+| **Member inheritance** | **Utility lookup only.** BOM stores **declared** members per Block. `resolveEffectiveMembers()` returns `EffectiveMemberSet` — a separate structure, never flattened into BOM. |
+| **Synthetic accessors** | **Not in BOM.** Generated getters/setters are utility output or renderer working model — never written to Canonical BOM. See `08_managed_object.md`. |
 | **Member identity** | Uniqueness by resolved **`(namespace, name)`**. `namespace` attribute is an XML prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
 | **Composition** | Nested inside `<aggregation>` on definitions and instances. Bare `<composition>` is sugar for the single default aggregation. `composition aggregation="…"` removed. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
@@ -72,27 +73,26 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 ```text
 @blockml/core
   - All interfaces in this document
-  - TypeRegistry + bootstrap API (called by CLI/host before validate)
-  - resolveEffectiveMembers()
-  - Validation API (stages [6–8] — uses populated TypeRegistry)
+  - TypeRegistry + bootstrap API
+  - Framework utilities: resolveEffectiveMembers(), validateTypes(), parseExpression(), …
+  - Utilities return derived views — never mutate Canonical BOM
 
 @blockml/cli
   - TypeRegistry bootstrap: discover + parse + register all project/library sources
-  - Then invoke validate/compile on target file(s)
+  - Calls validateTypes() / validateConstraints() after parse (diagnostics)
+  - Invokes renderer pipeline for compile
 
 @blockml/parser
   - BML → BomDocument mapper (stage [5]) — **single file per invocation**
-  - parseExpression enrichment pass (stage [7]) — raw → AST
-  - Does NOT load external BML files or populate TypeRegistry
-  - Does NOT merge inherited members
-  - Does NOT expand directives
+  - Produces immutable Canonical BOM
+  - Does NOT load external BML files, populate TypeRegistry, merge inheritance, or expand directives
 
 @blockml/compiler
-  - Consumes BomDocument (opaque to most pipeline stages)
+  - Target Registry facade — renderers orchestrate their own pipelines
 
 @machineblocks/mbom
   - Framework base type BML (com.machineblocks.core.Block, NativeBlock, Set, …)
-  - 09_mbom_properties.yml — SCAD render mapping only (not type SSOT)
+  - 09_mbom_properties.yml — SCAD render mapping (renderer concern)
   - Extends TypeRegistry bootstrap with mbom BML paths
 ```
 
@@ -478,7 +478,7 @@ Render target       MAY use declaration order for output sequencing
 
 ### Effective Members (not stored in BOM)
 
-Inherited and native members are resolved at validation time:
+Inherited and native members are resolved by **`resolveEffectiveMembers()` utility** — output is `EffectiveMemberSet`, **not part of `BomDocument`**:
 
 ```typescript
 /** @blockml/core — not part of BomDocument */
@@ -497,11 +497,9 @@ interface EffectiveMemberSet {
 
 Native MBOM properties from `09_mbom_properties.yml` are attached to `com.machineblocks.core.Block` in the Type Registry — not repeated in every derived Block's `members[]`.
 
-### Synthetic Accessors (Draft · TBD · V1 preparation)
+### Synthetic Accessors (Draft · TBD)
 
-> **Status:** Draft — not fully specified; **not required** for V1 compile or render. See `08_managed_object.md`.
-
-At validation time, the effective member set **may** include **synthetic accessor Capabilities** generated from authored storage members (Properties, Aggregations, Associations). Authored Capabilities do **not** receive synthetic getters/setters.
+> **Status:** Draft. Synthetic getters/setters are **not stored in Canonical BOM**. They are either derived by `resolveEffectiveMembers()` utility output or interpreted by the renderer from BML Capability semantics. See `08_managed_object.md` · `00_bom_core.md` — Semantics remain in BML.
 
 ```text
 Storage member (always private)     Synthetic accessors (materialized at validate)
@@ -526,7 +524,7 @@ accessorFor?: {
 }
 ```
 
-V1: parser output (`BlockDefinition.members[]`) contains **only authored** members. Validator may attach synthetics in `EffectiveMemberSet` only. Render targets **continue** `memberValues` + `04_types.md` — accessor dispatch disabled or stubbed.
+V1: Canonical BOM (`BlockDefinition.members[]`) contains **only authored** members. `resolveEffectiveMembers()` returns synthetics in `EffectiveMemberSet` only — a separate utility result. Renderers read BOM member values directly.
 
 Override of a synthetic accessor by an authored Capability with the same name is **TBD**.
 
@@ -569,22 +567,13 @@ interface LiteralValue {
    */
   value: unknown
   typeFqn: string
-  /**
-   * Draft · TBD — union variant discriminator for type checking only.
-   * Records which union member matched during validation — does not replace authored value.
-   */
-  resolvedTypeFqn?: string
 }
 
 interface ExpressionValue {
   kind: "expression"
-  /** Raw source inside ${ } — set at stage [5] */
+  /** Raw source inside ${ } — the only expression field in Canonical BOM */
   raw: string
   source: SourceLocation
-  /** Parsed AST — filled at stage [7]. Required before semantic validation. */
-  ast?: ExpressionNode
-  /** Inferred result type — filled at stage [7]. Validated at stage [8]. */
-  resultTypeFqn?: string
 }
 
 interface AddressValue {
@@ -602,6 +591,10 @@ interface Address {
   isExpression: boolean
 }
 ```
+
+Union variant discrimination (`resolvedTypeFqn`) is a **`validateTypes()` utility result** — not stored in Canonical BOM.
+
+AST (`ExpressionNode`) and `resultTypeFqn` are produced by **`parseExpression()`** — not stored in Canonical BOM.
 
 `ExpressionNode` is specified in `10_expression_language.md` — Expression AST.
 

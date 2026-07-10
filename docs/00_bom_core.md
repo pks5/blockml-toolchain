@@ -27,86 +27,158 @@ New domain BOMs can be added without modifying BOM Core. The architecture is des
 
 > **This is the highest-priority design constraint for the entire BlockML stack.**
 
-### Lossless BML ↔ BOM round-trip
+### BML and BOM are inseparable
 
-Every piece of information in a BML file must survive in the BOM without loss. **BML → BOM → BML must always be possible.** The BOM is the canonical transport format between authoring, validation, editing, and rendering — not an intermediate, normalized, or target-oriented representation.
+The BOM is **not** a pre-interpreted object model. It is the **canonical, lossless representation of BML**.
 
-What must be preserved includes:
+**BML → BOM → BML must always be possible.**
 
-- Authored literal syntax (`[5,5,6]` vs `{x:5,y:5,z:6}` vs `<Size3d x="5" …/>`)
-- Expression source text (`ExpressionValue.raw`) and AST
-- Unexpanded directives (`bml:each`, `bml:if`, `bml:with`)
-- Member declaration order
-- Block structure, namespaces, versions, and metadata
+The parser makes **no semantic decisions**. It exclusively:
 
-### Parser boundary — syntax and type safety only
+- parses XML
+- resolves namespaces
+- resolves type references syntactically
+- transfers the BML tree into a canonical object structure
 
-The parser and validator (pipeline stages [1]–[8]) **must not make interpretive decisions.** They validate:
+All BML information must be fully preserved in the BOM. The parser must **never** pre-empt information that a renderer might interpret differently later.
 
-- XML/BML syntax
-- Namespace and FQN resolution
-- Type compatibility (a value conforms to its declared type)
-- Cross-reference existence (ids, types, capabilities)
+### Canonical BOM is immutable
 
-They **must not**:
+The Canonical BOM is the **Single Source of Truth**. It is **not modified** after parsing.
 
-- Normalize or canonicalize authored literal forms
-- Expand directives
-- Merge presets or config profiles
-- Evaluate expressions
-- Lower domain constructs to target forms
-- Invoke getters, setters, `__construct`, or `serialize`
+The following must **never** be written back into the Canonical BOM:
 
-Type checking confirms that `[5,5,6]` is a valid `Size3D` — it does **not** rewrite the stored value to `{x:5,y:5,z:6}`.
+- resolved inheritance
+- effective properties
+- effective versions
+- effective status
+- expanded composition
+- evaluated expressions
+- resolved references
+- generated getters/setters
+- any other renderer-specific derivations
 
-### Renderer boundary — all interpretive decisions
+The BOM describes **only** what was modelled in BML.
 
-The renderer receives the BOM **as authored** — structurally identical to what the parser produced. All decisions that are not syntax or type safety belong here:
+Parsed literal values remain in **authored form** (`[5,5,6]` stays an array; `{x:5,y:5,z:6}` stays an object). Expression values store **`raw` source text** only — AST and evaluation results are utility output, not BOM mutations.
 
-- Directive expansion (`bml:each`, `bml:if`, `bml:with`)
-- Preset / config merge
-- Expression evaluation
-- Target serialization (`Size3D` → SCAD `[5,5,6]`)
-- Domain lowering (e.g. `StandardBrick` → `mb_block()`)
+### Framework Utilities
 
-The framework may provide **predefined interpretation flows** (accessor metadata, serializer tables, PropertyResolver helpers). These assist the renderer — they are not parser-stage data resolution.
+BlockML provides a toolkit of standardised utilities. Examples:
 
-**Wrong model:** renderer calls `getSize()` on a runtime object and receives a resolved value.
+```text
+resolveInheritance()
+resolveEffectiveMembers()
+resolveType()
+resolveReference()
+resolveContracts()
+resolveGenerics()
+parseExpression()
+evaluateExpression()
+expandComposition()
+expandDirectives()
+validateTypes()
+validateConstraints()
+```
 
-**Right model:** renderer reads `memberValues.size` (authored form) plus `getSize` / `serialize` / `__construct` Capability definitions from the Block type — and implements the translation in the target system.
+Utilities **never mutate** the Canonical BOM. They return derived information or produce **new structures** (views, working models, diagnostics).
+
+A utility may read the immutable BOM plus a TypeRegistry and return e.g. an `EffectiveMemberSet`, an `ExpandedComposition`, or `Diagnostic[]` — always as a separate result object.
+
+### Renderer determines the flow
+
+The framework does **not** prescribe pipeline order. Each renderer decides which utilities it uses and in what sequence.
+
+```text
+SCAD Renderer:
+  resolveInheritance() → evaluateExpression() → expandComposition() → renderSCAD()
+
+Java Renderer:
+  resolveInheritance() → resolveContracts() → renderJava()
+
+Documentation Renderer:
+  renderRawBOM()
+```
+
+Each renderer defines its own pipeline. The framework provides building blocks — not a fixed compile path.
+
+### Renderer Working Model
+
+Each renderer owns an **internal working model** — optimised, cacheable, and freely mutable:
+
+```text
+SCAD:   Modules, Parameters, GeometryGraph
+Java:   Classes, Fields, Methods, Constructors
+React:  Components, Props, JSX Tree
+```
+
+The working model belongs exclusively to the renderer. The Canonical BOM remains unchanged throughout.
+
+### Semantics remain in BML
+
+Concepts such as Constructor, Getter, Setter, Transformation, Inbound, and Outbound are **not** compiler rules and **not** runtime objects. They are **semantic information in BML** only.
+
+The renderer decides how to realise this semantics in the target system:
+
+```text
+Java  → method or constructor
+UI5   → getter/setter + applySettings()
+REST  → endpoint
+PLC   → input/output
+SCAD  → may be ignored entirely
+```
+
+Interpretation happens **only** in the renderer — by reading Capability definitions and member values from the immutable BOM, not by invoking a runtime getter API.
 
 ### Expression layer vs BOM data layer
 
-Expressions and BOM values are **separate layers**:
+Expressions and BOM member values are **separate layers**:
 
-| Layer | What it is | Rules |
+| Layer | What it is | Where it lives |
 |---|---|---|
-| **BOM data** | Stored member values (`LiteralValue`, `ExpressionValue`) | Authored form preserved; no struct expansion |
-| **Expression language** | `${ }` syntax with its own grammar and AST | Property/index access is **expression semantics**, not BOM mutation |
+| **BOM data** | `LiteralValue`, `ExpressionValue.raw` | Canonical BOM (immutable) |
+| **Expression syntax** | AST, type inference | `parseExpression()` utility output |
+| **Expression evaluation** | resolved values | `evaluateExpression()` utility / renderer working model |
 
-In `${ size[0] }` or `${ size.x }`, the expression language defines how to **address** a StructType field by index or name. That does **not** mean the underlying `size` literal is expanded or normalized in the BOM. The StructType definition (field order, names, types) is type metadata the expression evaluator and renderer consult — it is not applied to rewrite stored data at parse time.
+In `${ size[0] }` or `${ size.x }`, property/index access is **expression semantics** — not BOM mutation. The underlying `size` literal stays in authored form.
 
-```text
-BML:  size="[5, 5, 6]"        ← authored literal, stored as-is in BOM
-BML:  expr="${ size[0] }"     ← expression AST references index 0 per Size3D field order
-
-BOM:  memberValues.size = LiteralValue { value: [5,5,6], typeFqn: "…Size3D" }
-      memberValues.expr   = ExpressionValue { raw: "size[0]", ast: IndexAccess(...) }
-
-Renderer: reads Size3D type definition → knows index 0 = x → emits target output
-```
-
-### Three serialization targets, three responsibilities
+### Architecture
 
 ```text
-BML    — authoring format (human/LLM editable)
-BOM    — lossless parse result (SSOT for structure + values)
-Target — renderer output (SCAD, JSON, … — intentionally lossy / target-specific)
+BML
+ │
+ ▼
+Parser
+ │
+ ▼
+Canonical BOM (immutable)
+ │
+ ├─────────────── Framework Utilities ───────────────┐
+ │                                                   │
+ ▼                                                   ▼
+Renderer Pipeline                            other Renderers
+ │
+ ▼
+Renderer Working Model
+ │
+ ▼
+Emitter
+ │
+ ▼
+Target Output
 ```
 
-Only **BML ↔ BOM** must be lossless. **BOM → Target** is the renderer's interpretive job.
+### Summary
 
-See also: `12_bom_object_model.md` — Abstraction Principle · `06_compiler.md` — Parser vs Renderer Boundary · `10_expression_language.md` — Expression vs BOM Data Layer · `08_managed_object.md` — Accessor Metadata Model.
+```text
+The BOM describes exclusively the semantics of BML.
+The framework provides reusable analysis and transformation algorithms.
+The renderer orchestrates these algorithms and produces its own working model for the target system.
+```
+
+Only **BML ↔ BOM** must be lossless. **BOM → Target** is entirely the renderer's interpretive job.
+
+See also: `01_system.md` — Architecture · `06_compiler.md` — Parser, Utilities, and Renderer · `12_bom_object_model.md` — Abstraction Principle · `10_expression_language.md` — Expression vs BOM Data Layer · `08_managed_object.md` — Semantics in BML.
 
 ---
 
