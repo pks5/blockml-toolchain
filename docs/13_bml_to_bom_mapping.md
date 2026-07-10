@@ -217,7 +217,7 @@ Unqualified PascalCase names on `type="..."` (properties, aggregations, capabili
 ```
 
 ```text
-<aggregation type="bcore:BlockLibrary[]" validate="false" .../>   on org.blockml.core.BlockLibrary
+<aggregation type="bcore:BlockLibrary[]" .../>   on org.blockml.core.BlockLibrary
   → NamedTypeReference { fqn: "org.blockml.core.BlockLibrary" }
 
 inputType="Float"
@@ -648,7 +648,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.c
 <bricks:WallPresets />                      → preset block via _blocks
 ```
 
-`_dependencies` and `_blocks` aggregations declare `validate="false"` — children are type references only; constraint evaluation is skipped. **`bml:version` is forbidden** on these children.
+`_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation is context-driven (Library role) — not declared on the aggregation.
 
 Each child requires explicit aggregation members (`_dependencies`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
 

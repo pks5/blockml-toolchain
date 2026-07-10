@@ -1,0 +1,23 @@
+<!--
+  BlockML Core — root Block type
+
+  FQN: org.blockml.core.Block
+  Sole inheritance root — omits baseType
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea></idea>
+
+  <documentation></documentation>
+  <name>Defintion</name>
+  <type>core:Defintion</type>
+  <baseType>core:Block</baseType>
+  <abstract />
+
+</block>

@@ -1,0 +1,22 @@
+<!--
+  BlockML Definition — aggregation definition type
+
+  FQN: org.blockml.definition.AggregationDefinition
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:def="org.blockml.definition"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea></idea>
+  <documentation>Defines an aggregation of a block.</documentation>
+
+  <name>AggregationDefinition</name>
+  <type>def:AggregationDefinition</type>
+  <baseType>core:Definition</baseType>
+
+</block>

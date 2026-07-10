@@ -1,0 +1,30 @@
+<!--
+  BlockML Definition — generic type definition type
+
+  FQN: org.blockml.definition.GenericTypeDefinition
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:def="org.blockml.definition"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea></idea>
+
+  <documentation>Defines a generic type of a block.</documentation>
+  <name>GenericTypeDefinition</name>
+  <type>def:GenericTypeDefinition</type>
+  <baseType>core:Definition</baseType>
+
+  <properties>
+    <name type="String">
+      <documentation>The name of the generic type.</documentation>
+    </name>
+    <baseType type="core:FullyQualifiedName(def:BlockDefinition)">
+      <documentation>The base type of the generic type.</documentation>
+    </baseType>
+  </properties>
+</block>

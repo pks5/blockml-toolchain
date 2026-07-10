@@ -1,0 +1,56 @@
+<!--
+  BlockML Definition — root Block definition type
+
+  FQN: org.blockml.definition.BlockDefinition
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:def="org.blockml.definition"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea></idea>
+
+  <documentation>Defines a block.</documentation>
+  <name>BlockDefinition</name>
+  <type>def:BlockDefinition</type>
+  <baseType>core:Definition</baseType>
+
+  <properties>
+    <name type="String">
+      <documentation>The name of the block.</documentation>
+    </name>
+    <type type="core:FullyQualifiedName(core:Block)">
+      <documentation>The full qualified name of the block.</documentation>
+    </type>
+    <baseType type="core:FullyQualifiedName(core:Block)">
+      <documentation>The base type of the block.</documentation>
+    </baseType>
+  </properties>
+  <aggregations>
+    <genericTypes type="def:GenericTypeDefinition[]">
+
+    </genericTypes>
+    <languages type="core:Language[]">
+
+    </languages>
+    <subTypes type="core:Block[]">
+
+    </subTypes>
+    <properties type="def:PropertyDefinition[]">
+
+    </properties>
+    <aggregations type="def:AggregationDefinition[]">
+
+    </aggregations>
+    <associations type="def:AssociationDefinition[]">
+
+    </associations>
+    <subBlocks type="def:BlockDefinition[]">
+
+    </subBlocks>
+  </aggregations>
+</block>

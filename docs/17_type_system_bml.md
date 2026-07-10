@@ -393,6 +393,8 @@ _self
 T                   — generic parameter reference
 ```
 
+In **`type="..."` XML attributes**, generic applications use **round parentheses** — not angle brackets — so values stay valid XML without escaping. See § Generics — BML attribute syntax.
+
 The compiler may build internal structures in `org.blockml.bom.*` (e.g. `UnionTypeDescriptor`, `CollectionTypeDescriptor`, `GenericApplicationDescriptor`, `SelfTypeReference`, `GenericParameterReference`). **BML does not define these as Block classes.**
 
 ### Obsolete wrapper types — write unions directly
@@ -840,10 +842,40 @@ Generic type parameters are declared on **StructType** (or other ValueType) defi
 </block>
 ```
 
-**Generic application** (`Box<Integer>`) is a **type expression** — not a ValueType. At reference sites:
+**Generic application** (`Box<Integer>`) is a **type expression** — not a ValueType.
+
+#### BML attribute syntax
+
+In `type="..."` attributes, write generic applications with **round parentheses** instead of angle brackets. Angle brackets would require XML escaping (`&lt;` / `&gt;`); round parentheses keep attribute values plain and readable.
+
+```text
+Conceptual / internal     BML attribute (type="...")
+─────────────────────     ───────────────────────────
+Box<Integer>              Box(Integer)
+FullyQualifiedName<T>     FullyQualifiedName(core:Block)
+MyBlock<abc.A, xyz.B>     mynamespace:MyBlock(abc:A, xyz:B)
+```
+
+Resolution rules:
+
+```text
+mynamespace:MyBlock(abc:A, xyz:B)  →  com.mynamespace.MyBlock<abc.A, xyz.B>
+core:FullyQualifiedName(core:Block) → org.blockml.core.FullyQualifiedName<core.Block>
+```
+
+Each parenthesized argument binds one `<genericType>` parameter (in declaration order). When multiple parameters are present, the argument label (`abc`, `xyz`, …) matches the generic parameter name and qualifies the type argument as a namespace prefix (`abc:A` → `abc.A`). With a single generic parameter, the label may be omitted — only the type reference is written.
+
+Examples from core Block definitions:
 
 ```xml
-<property name="values" type="com.foo.Box<org.blockml.type.Integer>"/>
+<type type="core:FullyQualifiedName(core:Block)"/>
+<baseType type="core:FullyQualifiedName(def:BlockDefinition)"/>
+```
+
+At reference sites:
+
+```xml
+<property name="values" type="com.foo.Box(org.blockml.type.Integer)"/>
 ```
 
 At validate time the compiler substitutes each placeholder (`T`) with the concrete type argument. Each argument must satisfy the parameter's `baseType` constraint (`BML_GENERIC_CONSTRAINT_VIOLATION` on mismatch).
@@ -988,7 +1020,7 @@ At validate time, every `TypeDescriptor` named reference resolves against the re
 ```text
 type="Integer"                              → org.blockml.type.Integer
 type="type:Size3d"                          → com.machineblocks.type.Size3d
-type="com.foo.Box<Integer>"                 → generic substitution at validate time
+type="com.foo.Box(org.blockml.type.Integer)"  → generic substitution at validate time
 inputType="{ a: Float, b: Float }"        → AnonymousStructType (inline)
 capability implementation type="org.blockml.language.TypeScript"  → registry lookup
 ```

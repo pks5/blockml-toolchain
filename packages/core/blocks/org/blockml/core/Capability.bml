@@ -17,7 +17,7 @@
     carry an implementation whose type attribute references a Language FQN.</documentation>
   <name>Capability</name>
   <type>core:Capability</type>
-  <baseType>core:ValueType</baseType>
+  <baseType>core:Block</baseType>
   <abstract />
 
   <properties>

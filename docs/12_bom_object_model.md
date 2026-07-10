@@ -413,8 +413,6 @@ interface AggregationDefinition extends MemberDefinitionBase {
   typeFqn: string
   cardinality: "0..1" | "0..n" | "1..1" | "1..n"
   defaultAggregation?: boolean
-  /** When false, composition children are type references only — skip constraint evaluation */
-  validate?: boolean
   /** Nested composition filling this aggregation (may be omitted on override declarations) */
   composition?: CompositionTemplate
   /** service binding */
@@ -1016,14 +1014,14 @@ Inner libraries usually declare the outer library in `_dependencies`. The outer 
 org.blockml.core.BlockLibrary
   property     description     String
   subBlocks      Schema
-  aggregation  _dependencies   0..n  org.blockml.core.BlockLibrary   validate=false
+  aggregation  _dependencies   0..n  org.blockml.core.BlockLibrary
   aggregation  _schemas        0..n  org.blockml.core.BlockLibrary.Schema
-  aggregation  _blocks         0..n  org.blockml.core.Block     validate=false
+  aggregation  _blocks         0..n  org.blockml.core.Block
 
 org.blockml.core.BlockLibrary.Schema       property:  ref (relative .xsd path)
 ```
 
-`_dependencies` and `_blocks` use empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children; effective version is resolved from library context. `validate="false"` on these aggregations skips constraint evaluation on the reference instances (parser still validates syntax and types).
+`_dependencies` and `_blocks` use empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children; effective version is resolved from library context. Type-reference interpretation follows from the Library role (orchestrator / render target) — not from an aggregation attribute.
 
 `Schema` is a **Sub-Block of `org.blockml.core.BlockLibrary`** — defined in `BlockLibrary.bml`. Library-typed blocks resolve `<Schema>` by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
 

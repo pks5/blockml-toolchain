@@ -38,9 +38,9 @@
   </properties>
 
   <aggregations>
-    <_dependencies type="core:BlockLibrary[]" validate="false" />
+    <_dependencies type="core:BlockLibrary[]" />
     <_schemas type="Schema[]" />
-    <_blocks type="core:Block[]" validate="false" />
+    <_blocks type="core:Block[]" />
   </aggregations>
 
   <subBlocks>

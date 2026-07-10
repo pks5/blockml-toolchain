@@ -1487,14 +1487,14 @@ A Library is a **Block** with `baseType="org.blockml.core.BlockLibrary"`. It gro
 org.blockml.core.BlockLibrary           abstract composable Block
   property     description   String
   subBlocks    Schema
-  aggregation  _dependencies  BlockLibrary[]   validate=false
+  aggregation  _dependencies  BlockLibrary[]
   aggregation  _schemas       Schema[]         (optional — legacy XSD)
-  aggregation  _blocks        Block[]          validate=false
+  aggregation  _blocks        Block[]
 
 org.blockml.core.BlockLibrary.Schema       ref (relative .xsd path)
 ```
 
-`_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. `validate="false"` skips constraint evaluation on these reference instances.
+`_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the Library role — no aggregation attribute is required.
 
 The Library block is always named `Library.bml`. Its FQN is `{package}.Library` where `{package}` is derived from the file's package path (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`, `org.blockml.compiler.Library`).
 
@@ -1760,6 +1760,7 @@ BlockML has three ValueType kinds only: **Primitive**, **Enum**, **Struct**. Uni
 Union:        "auto" | Float · false | T · Boolean | StudType
 Collection:   Integer[] · Size3D[1..3]
 Generic use:  Box<Integer>   (Box is a StructType with <genericTypes>)
+              In BML type="..." attributes write Box(Integer) — see 17_type_system_bml.md
 ```
 
 Legacy wrapper types (`AutoOr<T>`, `NoneOr<T>`, `Array<T>`, …) are **obsolete** — use union and multiplicity syntax directly.

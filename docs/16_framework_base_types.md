@@ -120,6 +120,7 @@ Sub-Block baseType not in effective subTypes → BML_INVALID_SUBBLOCK_TYPE
 ```text
 Lists Language references permitted on <implementation type="...">.
 Each child element is a direct Language reference (element name = FQN via xmlns prefix).
+Type-reference interpretation follows from the Block-definition role — same pattern as Library _blocks.
 Omitted = inherit from baseType
 Unknown type on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 ```

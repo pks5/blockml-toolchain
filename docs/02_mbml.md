@@ -1060,6 +1060,8 @@ Integer[]              → multiplicity 0..n on Integer
 com.foo.Box<Integer>   → generic application (Box is StructType with <genericTypes>)
 ```
 
+In `type="..."` attributes write `com.foo.Box(Integer)` — see `17_type_system_bml.md` — Generics — BML attribute syntax.
+
 See `17_type_system_bml.md` — Type Expressions.
 
 Domain-specific types require an explicit namespace prefix declared via `xmlns`:
@@ -1225,13 +1227,13 @@ When overriding an inherited aggregation, `type` is required only for **new** de
 ```text
 type         — child type (required on new declarations; inherited on overrides)
 default      — boolean; marks the default aggregation for bare <composition>
-validate     — boolean; when false, composition children are type references only —
-               block constraints are not evaluated (see Library _dependencies / _blocks)
 readOnly     — informational only
 final        — prevents override in child Blocks
 namespace    — XML namespace prefix (resolved at parse time — see § Member Namespace Attribute)
 visibility   — optional; must match naming convention
 ```
+
+**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `_dependencies` / `_blocks` on `org.blockml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation type="…">`). See also `00_bom_core.md` — Aggregations.
 
 Member visibility follows the naming convention in § Member Visibility. Protected aggregations (`_name`) are visible in child Blocks; private aggregations (`__name`) are not.
 
@@ -1880,8 +1882,8 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.c
 
 ```xml
 <aggregations>
-  <_dependencies type="core:BlockLibrary[]" validate="false" />
-  <_blocks type="core:Block[]" validate="false" />
+  <_dependencies type="core:BlockLibrary[]" />
+  <_blocks type="core:Block[]" />
 </aggregations>
 ```
 
@@ -1893,7 +1895,7 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.c
 <StudDiameter bml:id="samples_stud" ... />
 ```
 
-**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.core.BlockLibrary` declare `validate="false"`. Composition children are empty Block instances — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
+**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.core.BlockLibrary` hold empty Block instances as type references — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
 
 ```xml
 <!-- com/machineblocks/bricks/Library.bml -->
@@ -2552,7 +2554,7 @@ Physical directories and overlapping package prefixes do not define membership. 
 </block>
 ```
 
-**`_dependencies` and `_blocks`** use Block instances as type references (`validate="false"` on the aggregation — constraints are not evaluated). The element name resolves to the Block FQN. **`bml:version` is forbidden** — effective version is resolved from library context.
+**`_dependencies` and `_blocks`** use Block instances as type references — the element name resolves to the Block FQN. **`bml:version` is forbidden** — effective version is resolved from library context.
 
 **`ref` paths** on `Schema` are relative to the **library package root** (directory containing `Library.bml`).
 
