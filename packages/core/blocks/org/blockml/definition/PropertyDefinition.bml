@@ -18,5 +18,5 @@
   <name>PropertyDefinition</name>
   <type>def:PropertyDefinition</type>
   <baseType>core:Definition</baseType>
-
+  <bml:xml>${ name }</bml:xml>
 </block>

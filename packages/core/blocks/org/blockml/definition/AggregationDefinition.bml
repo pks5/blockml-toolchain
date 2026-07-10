@@ -18,5 +18,5 @@
   <name>AggregationDefinition</name>
   <type>def:AggregationDefinition</type>
   <baseType>core:Definition</baseType>
-
+  <bml:xml>${ name }</bml:xml>
 </block>

@@ -18,6 +18,6 @@
   <name>CapabilityDefinition</name>
   <type>def:CapabilityDefinition</type>
   <baseType>core:Definition</baseType>
-
+  <bml:xml>${ name }</bml:xml>
 
 </block>

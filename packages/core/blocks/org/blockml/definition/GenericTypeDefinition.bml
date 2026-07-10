@@ -18,6 +18,7 @@
   <name>GenericTypeDefinition</name>
   <type>def:GenericTypeDefinition</type>
   <baseType>core:Definition</baseType>
+  <bml:xml>genericType</bml:xml>
 
   <properties>
     <name type="String">

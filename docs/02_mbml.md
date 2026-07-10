@@ -1599,7 +1599,9 @@ No type validation against Block members. Renderers may interpret — e.g. UI5 t
 
 ## BML Directives
 
-BML Directives are special attributes in the `bml:` namespace that control structure and flow within a Composition. They follow the **Thymeleaf model** — attributes on the element they apply to. Whether a directive is pre-processed at compile time or translated into target-specific constructs is the BlockProcessor's decision.
+BML Directives are special attributes and elements in the `bml:` namespace. **Flow-control** directives control structure and flow within a Composition. **Serialization** directives (`bml:xml`) declare how Definition blocks map to canonical BML XML — see `19_definition_blocks_and_bml_xml.md`.
+
+Flow-control directives follow the **Thymeleaf model** — attributes on the element they apply to. Whether a directive is pre-processed at compile time or translated into target-specific constructs is the BlockProcessor's decision.
 
 `data:*` is not part of this mechanism — see Data Attributes section above. Not a `bml:` directive; not a Block aggregation.
 
@@ -1612,9 +1614,31 @@ BML Directives are special attributes in the `bml:` namespace that control struc
 | `bml:with` | `<composition>`, `<bml:container>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
+| `<bml:xml>…</bml:xml>` | `org.blockml.core.Block`, Definition blocks | XML root element for this type — `19_definition_blocks_and_bml_xml.md` |
+| `bml:xml="attribute\|element\|text\|cdata"` | Members on Definition blocks | Member serialization shape — `19_definition_blocks_and_bml_xml.md` |
 | `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` in BOM — renderer may consume. |
 
 Bare `id=` or `version=` on composition instances are **member values** — same as any other attribute. Use `bml:id` / `bml:version` for composition meta.
+
+### `bml:xml` — XML Serialization (Definition blocks)
+
+Declares how a block type or member renders to canonical BML XML. Allowed only on `org.blockml.core.Block` and blocks whose `baseType` chain includes `org.blockml.core.Definition`.
+
+```xml
+<!-- Root element name for block documents -->
+<bml:xml>block</bml:xml>
+
+<!-- Root element from instance type FQN -->
+<bml:xml>${ type }</bml:xml>
+
+<!-- Member element from instance name -->
+<bml:xml>${ name }</bml:xml>
+
+<!-- Member value placement on Definition properties -->
+<documentation type="String" bml:xml="element">…</documentation>
+```
+
+Full specification: `19_definition_blocks_and_bml_xml.md`. Implementation status: **WIP**.
 
 ### `bml:each` — Loop
 

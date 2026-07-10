@@ -22,6 +22,7 @@
     must resolve to org.blockml.core.ValueType.</documentation>
   <name>Block</name>
   <type>core:Block</type>
+  <bml:xml>${ type }</bml:xml> 
   <abstract />
-
+  
 </block>

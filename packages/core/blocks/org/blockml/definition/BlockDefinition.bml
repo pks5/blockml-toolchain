@@ -18,6 +18,7 @@
   <name>BlockDefinition</name>
   <type>def:BlockDefinition</type>
   <baseType>core:Definition</baseType>
+  <bml:xml>block</bml:xml>
 
   <properties>
     <name type="String">

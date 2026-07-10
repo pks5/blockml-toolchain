@@ -18,5 +18,5 @@
   <name>AssociationDefinition</name>
   <type>def:AssociationDefinition</type>
   <baseType>core:Definition</baseType>
-
+  <bml:xml>${ name }</bml:xml>
 </block>

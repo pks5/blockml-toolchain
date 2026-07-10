@@ -12,6 +12,7 @@ For TypeRegistry bootstrap see `13_bml_to_bom_mapping.md`.
 For SCAD property mapping (render-only) see `09_mbom_properties.yml`.
 For value types and implementation languages as BML see `17_type_system_bml.md`.
 For property constraints and suggestions see `18_constraints_and_suggestions.md`.
+For Definition blocks and `bml:xml` self-description see `19_definition_blocks_and_bml_xml.md`.
 For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self-Description Roadmap.
 
 ---
@@ -151,6 +152,28 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 
 ---
 
+## Definition Branch (Meta-Model)
+
+**FQN:** `org.blockml.core.Definition` — abstract base for blocks that describe **block structure** in BlockML's own language.
+
+```text
+org.blockml.core.Block
+  org.blockml.core.Definition                    ← abstract; bml:xml placement allowed
+    org.blockml.definition.BlockDefinition       ← shape of every <block> document
+    org.blockml.definition.PropertyDefinition
+    org.blockml.definition.AggregationDefinition
+    org.blockml.definition.AssociationDefinition
+    org.blockml.definition.CapabilityDefinition
+    org.blockml.definition.GenericTypeDefinition
+    …
+```
+
+Each Definition block may declare **`bml:xml`** — how instances serialize to canonical BML XML (root element name, member as attribute/element/text/cdata). The meta-model is **work in progress**; full specification in `19_definition_blocks_and_bml_xml.md`.
+
+`org.blockml.core.Block` itself carries `<bml:xml>${ type }</bml:xml>` — composable instances render under their declared type tag. Definition blocks describe the grammar; ordinary domain blocks consume it.
+
+---
+
 ## Root Type Exception
 
 `org.blockml.core.Block` is the **sole inheritance root**. It **omits `<baseType>`** — the only definition allowed to do so.
@@ -177,6 +200,8 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/service/Math.bml · Strings.bml · …
      org/blockml/core/BlockLibrary.bml   ← includes Schema as subBlock; _dependencies / _blocks as Block references
+     org/blockml/core/Definition.bml     ← meta-model base (WIP)
+     org/blockml/definition/*.bml        ← BlockDefinition, PropertyDefinition, … (WIP)
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
@@ -255,3 +280,4 @@ domains/machineblocks/mbom/blocks/
 | SCAD property mapping | `09_mbom_properties.yml` |
 | Value types · languages (BML) | `17_type_system_bml.md` |
 | Constraints · suggestions | `18_constraints_and_suggestions.md` |
+| Definition blocks · bml:xml | `19_definition_blocks_and_bml_xml.md` |

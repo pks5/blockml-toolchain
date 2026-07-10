@@ -673,6 +673,7 @@ Rules:
 ```text
 Pipeline · Stage · Validator · Diagnostic · RenderTarget
 BlockProcessor · RenderEngine · CliCommand
+org.blockml.definition.* · bml:xml meta-serializer   ← see 19_definition_blocks_and_bml_xml.md
 ```
 
 During migration, content is classified as: stays prose · becomes BML · removed from Markdown (link only) · temporarily duplicated.
@@ -716,6 +717,8 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 15_dev_setup.md        — monorepo tooling, build, test, IDE setup
 16_framework_base_types.md — framework base types as BML (abstract, final, subTypes)
 17_type_system_bml.md  — ValueType, Language, Block hierarchy
+18_constraints_and_suggestions.md — property constraints and suggestions
+19_definition_blocks_and_bml_xml.md — Definition meta-model, bml:xml serialization (WIP)
 09_mbom_properties.yml — MBOM native property SCAD mapping (render only)
 
 domains/machineblocks/runtimes/scad-lib/

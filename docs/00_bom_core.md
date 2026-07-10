@@ -1238,9 +1238,11 @@ See `02_mbml.md` — § Status for full authoring rules and examples.
 
 ## BML Directives
 
-BML Directives are special attributes in the `bml:` namespace that control the structure and flow of a Composition. They are not Block properties — they are instructions to the BML processor. Whether a directive is pre-processed at compile time or translated 1:1 into target-specific constructs is the BlockProcessor's decision.
+BML Directives are special attributes and elements in the `bml:` namespace. They are not Block properties — they are instructions to the BML processor. Whether a directive is pre-processed at compile time or translated 1:1 into target-specific constructs is the BlockProcessor's decision.
 
-The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*` attributes follow the **Thymeleaf model** — they sit on the element they apply to, not in wrapper elements.
+The `bml:` prefix is the canonical namespace for language directives. Flow-control `bml:*` attributes follow the **Thymeleaf model** — they sit on the element they apply to, not in wrapper elements.
+
+**Serialization directives:** `bml:xml` declares how Definition blocks and `org.blockml.core.Block` map to canonical BML XML (root element name, member as attribute/element/text/cdata). This is separate from composition flow control — see `19_definition_blocks_and_bml_xml.md`.
 
 `data:*` is unrelated to directives. Authoring syntax is inspired by **SAP UI5** (`data:myVal` on Controls) — values land as **uninterpreted** `dataAttributes[]` in the BOM. No `_customData` aggregation on `org.blockml.core.Block`; renderers may interpret.
 
@@ -1255,6 +1257,8 @@ The `bml:` prefix is the canonical namespace for flow-control directives. `bml:*
 | `bml:version` | Block instances | External block reference version (required when type is from another file) |
 | `bml:status` | Non-definition elements | Maturity marker — only when deviating from inherited status |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
+| `<bml:xml>…</bml:xml>` | `org.blockml.core.Block`, Definition blocks only | XML root element name for this type — see `19_definition_blocks_and_bml_xml.md` |
+| `bml:xml="attribute\|element\|text\|cdata"` | Members on Definition blocks | How member values serialize to XML — see `19_definition_blocks_and_bml_xml.md` |
 
 Bare `id=` / `version=` on instances are member values when the Block type declares such Properties.
 

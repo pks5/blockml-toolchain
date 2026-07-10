@@ -1108,8 +1108,10 @@ BML uses one element (`<block>`) for all semantic units. The **BOM parse result*
 The validator derives `definitionBranch` by walking the `baseType` chain:
 
 ```typescript
-type DefinitionBranch = "composable" | "typeBlock" | "languageBlock"
+type DefinitionBranch = "composable" | "typeBlock" | "languageBlock" | "definitionBlock"
 ```
+
+Blocks under `org.blockml.core.Definition` (`org.blockml.definition.*`) are **definitionBlock** — meta-model for BML structure and `bml:xml` serialization. See `19_definition_blocks_and_bml_xml.md`.
 
 Implementation is free to:
 
@@ -1133,6 +1135,7 @@ never expose „Block“ outside parser/BOM types
 | V1/V2/V3 scope · BML vs Markdown | `01_system.md` — BML Self-Description Roadmap |
 | FQN namespaces | `00_bom_core.md` — Reserved Language Namespaces |
 | Composable Block base types | `16_framework_base_types.md` |
+| Definition blocks · bml:xml | `19_definition_blocks_and_bml_xml.md` |
 | BML block syntax | `02_mbml.md` |
 | Type expressions · three ValueType kinds | `17_type_system_bml.md` — Type Expressions |
 | TypeExpression AST | `12_bom_object_model.md` |
