@@ -20,4 +20,10 @@
   <baseType>core:Block</baseType>
   <abstract />
 
+  <properties>
+    <documentation type="String" bml:xml="element">
+      <documentation>The documentation of the definition.</documentation>
+    </documentation>
+  </properties>
+
 </block>

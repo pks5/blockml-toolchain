@@ -12,9 +12,9 @@
   xmlns:def="org.blockml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea></idea>
+  <idea>Structure of a block.</idea>
 
-  <documentation>Defines a block.</documentation>
+  <documentation>Describes the structure of a block.</documentation>
   <name>BlockDefinition</name>
   <type>def:BlockDefinition</type>
   <baseType>core:Definition</baseType>
@@ -29,6 +29,14 @@
     <baseType type="core:FullyQualifiedName(core:Block)">
       <documentation>The base type of the block.</documentation>
     </baseType>
+    <abstract type="Boolean">
+      <value>false</value>
+      <documentation>Whether the block is abstract.</documentation>
+    </abstract>
+    <final type="Boolean">
+      <value>false</value>
+      <documentation>Whether the block is final.</documentation>
+    </final>
   </properties>
   <aggregations>
     <genericTypes type="def:GenericTypeDefinition[]">
