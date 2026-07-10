@@ -436,6 +436,7 @@ documentation      — human-readable technical description
 since              — optional; semantic version from which this Block is available
 changelog          — optional; version history (oldest first)
 examples           — optional; usage examples (title + CDATA body)
+references         — optional; cross-references to related Blocks or Definitions (type + optional context)
 name               — short class name (PascalCase). Required. See naming convention below.
 type               — globally unique FQN
 baseType           — FQN of the parent Block. Required — no default.
@@ -575,7 +576,7 @@ Declared on:       root <block> only (not on Sub-Blocks)
 Attribute:         type — FQN of the contract Block (required)
 Contract target:   any Block definition usable as a partial definition (typically abstract)
 Member scope:      Properties, Aggregations, Associations, Capabilities, Constraints,
-                   Suggestions, documentation, examples, optional Capability defaults
+                   Suggestions, documentation, examples, references, optional Capability defaults
 Ignored on target: subBlocks[], compositions[] on the contract Block
 Partial members:   a contract may declare incomplete members — e.g. only <id type="String"/>
                    without default, constraints, or documentation; the Block completes them
@@ -659,6 +660,7 @@ documentation — human-readable description
 since         — optional; semantic version from which this member is available
 changelog     — optional; version history (oldest first)
 examples      — optional; usage examples (title + CDATA body)
+references    — optional; cross-references to related Blocks or Definitions (type + optional context)
 constraints   — optional list of Constraint Block instances (see below)
 suggestions   — optional list of Block instances of the property type (see below)
 readOnly      — informational only
@@ -789,6 +791,7 @@ documentation — human-readable description
 since         — optional; semantic version from which this member is available
 changelog     — optional; version history (oldest first)
 examples      — optional; usage examples (title + CDATA body)
+references    — optional; cross-references to related Blocks or Definitions (type + optional context)
 composition   — optional nested Composition filling this aggregation
 readOnly      — informational only
 final         — prevents override in child Blocks
@@ -946,6 +949,7 @@ documentation — human-readable description
 since         — optional; semantic version from which this member is available
 changelog     — optional; version history (oldest first)
 examples      — optional; usage examples (title + CDATA body)
+references    — optional; cross-references to related Blocks or Definitions (type + optional context)
 ```
 
 Associations carry no ownership and do not affect rendering.
@@ -981,6 +985,7 @@ documentation  — human-readable description
 since          — optional; semantic version from which this member is available
 changelog      — optional; version history (oldest first)
 examples       — optional; usage examples (title + CDATA body)
+references     — optional; cross-references to related Blocks or Definitions (type + optional context)
 ```
 
 Member visibility follows § Member Visibility. Private Capabilities (`__name`) cannot be bound from outside the declaring Block. Protected Capabilities (`_name`) are accessible in child Blocks.

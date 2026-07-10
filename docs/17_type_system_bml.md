@@ -26,7 +26,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
-| **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail); optional `<since>`, `<changelog>`, `<examples>` — see `02_mbml.md` |
+| **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
 | **Three ValueType kinds** | PrimitiveType · EnumType · StructType only — everything else is a type expression |
 | **Ordered struct fields** | Field declaration order is semantically significant — defines implicit index, dual named/positional access, positional serialization; applies to StructType properties and anonymous struct `inputType` — see § Ordered Struct Fields |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
@@ -932,7 +932,7 @@ Blocks may compose zero or more **contracts** — reusable partial Block definit
 </contracts>
 ```
 
-A contract Block may declare any subset of Properties, Aggregations, Associations, Capabilities, Constraints, Suggestions, documentation, examples, and optional default Capability implementations. Members may be **partial** — e.g. a contract supplies only `type`, and the concrete Block adds defaults, constraints, and documentation.
+A contract Block may declare any subset of Properties, Aggregations, Associations, Capabilities, Constraints, Suggestions, documentation, examples, references, and optional default Capability implementations. Members may be **partial** — e.g. a contract supplies only `type`, and the concrete Block adds defaults, constraints, and documentation.
 
 Effective members are resolved by merging in order: `baseType` chain → contracts (declaration order) → local Block declarations. Later contracts override earlier ones; the Block overrides all. Only explicitly specified attributes are replaced; `final` members cannot be overridden. `subBlocks` and `compositions` on contract types are ignored.
 

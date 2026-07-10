@@ -265,6 +265,7 @@ Wherever `<documentation>` is permitted, these **optional** siblings are also al
 <since>       — version from which the element is available
 <changelog>   — version history (container of <change> entries)
 <examples>    — usage examples (container of <example> entries)
+<references>  — cross-references (container of <reference> entries)
 ```
 
 Applies to all definition elements that carry documentation:
@@ -277,7 +278,7 @@ and to any future definition element with `<documentation>`.
 
 On root `<block>` definitions, optional documentation extensions follow `<documentation>` and precede `<name>`. On members and Sub-Blocks, they appear alongside `<documentation>` among definition metadata children (before `<value>`, `<composition>`, or other content containers).
 
-Goal: keep API documentation, version history, and examples at the definition site — a single source of truth inside BML files.
+Goal: keep API documentation, version history, examples, and related-type links at the definition site — a single source of truth inside BML files.
 
 #### `<since>`
 
@@ -335,6 +336,30 @@ Container for usage examples. Each `<example>` requires a `title` attribute; bod
 
 A future optional `language` attribute (e.g. `OpenSCAD`, `TypeScript`) may distinguish example dialects. Omitted → BML source (MBML/BML).
 
+#### `<references>`
+
+Container for cross-references to related Blocks or definition elements. Each `<reference>` requires a `type` attribute — the FQN of the referenced Block or Definition. Optional text body explains why or how the referenced element relates:
+
+```xml
+<references>
+
+    <reference type="com.machineblocks.core.CompositeBlock">
+        Base type when this Block owns child instances in composition.
+    </reference>
+
+    <reference type="org.blockml.core.ValueType" />
+
+    <reference type="org.blockml.definition.PropertyDefinition">
+        See PropertyDefinition for member documentation shape.
+    </reference>
+
+</references>
+```
+
+The `type` attribute accepts any Block FQN or Definition FQN (`org.blockml.definition.*`, `org.blockml.core.Definition` sub-types). Omitted `type` → `BML_REFERENCE_MISSING_TYPE` (error). Unknown FQN at validate time → `BML_UNKNOWN_TYPE` (error).
+
+Maps to BOM `DocumentationReference { type, context? }`. Meta-model: `org.blockml.definition.ReferenceDefinition` on `org.blockml.core.Definition.references` — see `16_framework_base_types.md` — Definition Branch.
+
 Example with documentation extensions on a member:
 
 ```xml
@@ -354,7 +379,7 @@ Example with documentation extensions on a member:
 </wallThickness>
 ```
 
-Non-definition elements (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<implementation>`, Block instances, …) may carry `bml:status="status:Draft"` when deviating from inherited status — same rules as `<documentation>`.
+Non-definition elements (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<implementation>`, Block instances, …) may carry `bml:status="status:Draft"` when deviating from inherited status — same rules as `<documentation>`.
 
 ### `<status>` — maturity marker
 
@@ -382,7 +407,7 @@ Examples:
   <bricks:Wall bml:status="status:Deprecated"> → Deprecated instance under Stable block
 ```
 
-On a **Draft** property, nested `<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<constraints>`, and composition children inherit **Draft** — no attribute needed. To mark a child as **Stable** inside a Draft property, set `bml:status="status:Stable"` explicitly.
+On a **Draft** property, nested `<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<constraints>`, and composition children inherit **Draft** — no attribute needed. To mark a child as **Stable** inside a Draft property, set `bml:status="status:Stable"` explicitly.
 
 Core library defines:
 
@@ -533,7 +558,7 @@ type    — FQN of a contract Block whose partial definition is merged (required
 ```text
 Role            — reusable partial Block definition (replaces interfaces, traits, mixins)
 Scope           — Properties, Aggregations, Associations, Capabilities, Constraints,
-                  Suggestions, documentation, examples, optional Capability defaults
+                  Suggestions, documentation, examples, references, optional Capability defaults
 Ignored         — subBlocks and compositions on the contract Block
 Partial members — contracts may declare incomplete members; the Block completes them
 Merge order     — baseType chain → contracts (in declaration order) → Block

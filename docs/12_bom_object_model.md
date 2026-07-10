@@ -163,6 +163,9 @@ interface BlockDefinition {
   /** Usage examples with title and CDATA body. */
   examples?: DocumentationExample[]
 
+  /** Cross-references to related Blocks or Definitions. */
+  references?: DocumentationReference[]
+
   /** Abstract type — not usable as composition instance type. Default false. */
   abstract?: boolean
 
@@ -376,12 +379,21 @@ interface DocumentationExample {
   source?: SourceLocation
 }
 
+interface DocumentationReference {
+  /** Required type attribute on <reference> — FQN of Block or Definition */
+  type: string
+  /** Optional text body — why or how the referenced element relates */
+  context?: string
+  source?: SourceLocation
+}
+
 interface MemberDefinitionBase {
   name: string
   documentation?: string
   since?: string
   changelog?: ChangelogEntry[]
   examples?: DocumentationExample[]
+  references?: DocumentationReference[]
   /**
    * Resolved canonical namespace identifier (FQN or URI).
    * Parsed from namespace="prefix" via document xmlns: table.
@@ -546,7 +558,7 @@ function resolveContractMembers(
   registry: TypeRegistry
 ): EffectiveMemberSet
 // Walks contract Block's declared members (properties, aggregations, associations,
-// capabilities, constraints, suggestions, documentation, examples, optional defaults).
+// capabilities, constraints, suggestions, documentation, examples, references, optional defaults).
 // Ignores subBlocks[] and compositions[].
 // Does not walk contracts[] on the contract Block itself (no transitive contract merge).
 ```

@@ -41,9 +41,12 @@
     <documentation type="String" bml:xml="element">
       <documentation>The documentation of the definition.</documentation>
     </documentation>
-    <since type="btype:VersionNumber">
+    <since type="btype:VersionNumber" bml:xml="element">
       <documentation>The version in which this definition became available.</documentation>
     </since>
+    <status type="core:Status" bml:xml="element">
+      <documentation>The status of the definition.</documentation>
+    </status>
   </properties>
 
   <!--

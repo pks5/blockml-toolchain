@@ -27,7 +27,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **09_mbom_properties.yml** | **Render mapping only** (serializer, scad_name, customizer) — not type SSOT |
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
 | **Block idea** | Every `<block>` carries `<idea>` as first child — what this Block semantically represents |
-| **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description; optional `<since>`, `<changelog>`, `<examples>` follow |
+| **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description; optional `<since>`, `<changelog>`, `<examples>`, `<references>` follow |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
 | **ValueType branch** | `org.blockml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; three kinds: PrimitiveType · EnumType · StructType |
 | **Namespace separation** | Language FQNs (`org.blockml.core.*`, `type.*`, …) reserved for BML grammar; BOM/toolchain types in `org.blockml.bom.*`, `parser.*`, `compiler.*`, … — see `00_bom_core.md` |
@@ -165,8 +165,28 @@ org.blockml.core.Block
     org.blockml.definition.AssociationDefinition
     org.blockml.definition.CapabilityDefinition
     org.blockml.definition.GenericTypeDefinition
+    org.blockml.definition.ChangeDefinition      ← one <change> in <changelog>
+    org.blockml.definition.ExampleDefinition     ← one <example> in <examples>
+    org.blockml.definition.ReferenceDefinition   ← one <reference> in <references>
     …
 ```
+
+`org.blockml.core.Definition` declares the shared documentation model as properties and aggregations:
+
+```text
+Properties:    documentation · since · status
+Aggregations:  changelog (ChangeDefinition[]) · examples (ExampleDefinition[]) · references (ReferenceDefinition[])
+```
+
+`org.blockml.definition.ReferenceDefinition` — cross-reference to a related Block or Definition element:
+
+```text
+bml:xml         reference          — renders as <reference> inside <references>
+type (required) FullyQualifiedName — FQN of referenced Block or Definition; XML type attribute
+context         String (optional)  — human-readable relation note; XML text content
+```
+
+See `02_mbml.md` — Documentation extensions · `<references>`.
 
 Each Definition block may declare **`bml:xml`** — how instances serialize to canonical BML XML (root element name, member as attribute/element/text/cdata). The meta-model is **work in progress**; full specification in `19_definition_blocks_and_bml_xml.md`.
 
