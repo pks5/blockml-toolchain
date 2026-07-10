@@ -18,14 +18,27 @@
   xmlns:bcore="org.blockml.core"
   xmlns:cap="org.blockml.capability"
   xmlns:constraint="org.blockml.constraint"
+  xmlns:def="org.blockml.definition"
   xmlns:lang="org.blockml.language"
   xmlns:service="org.blockml.service"
   xmlns:status="org.blockml.status"
   xmlns:btype="org.blockml.type">
 
-  <idea>Published catalog of the BlockML library including core blocks and value types.</idea>
+  <idea>Published catalog of the BlockML core library — framework blocks, value types, and services.</idea>
 
-  <documentation>Published catalog of the BlockML library including core blocks and value types.</documentation>
+  <documentation>
+    Publishable BlockML core library (org.blockml.Library). Exports the framework grammar:
+    core branches (Block, ValueType, Language, Status, Constraint, Capability, Definition),
+    concrete value types and constraints, implementation languages, built-in services, lifecycle
+    status blocks, and the Definition meta-model branch (org.blockml.definition.*).
+
+    Membership is defined exclusively by this file's _blocks list — not by directory layout.
+    Framework base type org.blockml.core.BlockLibrary is not exported here. Version 3.0.0 applies
+    to all exported blocks (framework convention: version only on Library.bml).
+
+    See docs/02_mbml.md — Library · docs/16_framework_base_types.md — Bootstrap Order ·
+    docs/12_bom_object_model.md — Library.
+  </documentation>
   <name>Library</name>
   <type>blockml:Library</type>
   <baseType>bcore:BlockLibrary</baseType>
@@ -48,12 +61,23 @@
     <_blocks>
       <composition>
         <bcore:Block />
-        <bcore:CapabilityType />
+        <bcore:Capability />
         <bcore:Constraint />
+        <bcore:Definition />
         <bcore:Entity />
         <bcore:Language />
         <bcore:Status />
         <bcore:ValueType />
+        <def:AggregationDefinition />
+        <def:AssociationDefinition />
+        <def:BlockDefinition />
+        <def:CapabilityDefinition />
+        <def:ChangeDefinition />
+        <def:ContractDefinition />
+        <def:ExampleDefinition />
+        <def:GenericTypeDefinition />
+        <def:PropertyDefinition />
+        <def:ReferenceDefinition />
         <cap:Inbound />
         <cap:Outbound />
         <cap:Transformation />
@@ -105,6 +129,7 @@
         <btype:PrimitiveType />
         <btype:String />
         <btype:StructType />
+        <btype:VersionNumber />
       </composition>
     </_blocks>
   </aggregations>

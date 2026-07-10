@@ -27,8 +27,8 @@
     change history, examples, and references. Concrete definition types inherit
     these members to describe themselves consistently.
   </documentation>
-  <name>Defintion</name>
-  <type>core:Defintion</type>
+  <name>Definition</name>
+  <type>core:Definition</type>
   <baseType>core:Block</baseType>
   <abstract />
 
