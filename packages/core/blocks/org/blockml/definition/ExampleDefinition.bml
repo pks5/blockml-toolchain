@@ -34,8 +34,8 @@
       bml:xml="text|cdata" renders the Property as character content.
       The XML renderer may use plain text or CDATA depending on the value.
     -->
-    <text type="String" bml:xml="text|cdata">
-      <documentation>The text of the example.</documentation>
-    </text>
+    <content type="String" bml:xml="text|cdata">
+      <documentation>The content of the example.</documentation>
+    </content>
   </properties>
 </block>

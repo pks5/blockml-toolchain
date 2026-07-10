@@ -18,8 +18,15 @@
   <name>BlockDefinition</name>
   <type>def:BlockDefinition</type>
   <baseType>core:Definition</baseType>
+
+  <!-- Block definitions are rendered as xml <block> elements. -->
   <bml:xml>block</bml:xml>
 
+  <!--
+  Property definitions are grouped inside the <properties> element.
+  Each property is rendered as a direct XML child element named after the
+  property itself (for example <name>, <type>, or <baseType>).
+-->
   <properties>
     <name type="String">
       <documentation>The name of the block.</documentation>
@@ -39,6 +46,12 @@
       <documentation>Whether the block is final.</documentation>
     </final>
   </properties>
+
+  <!--
+  Aggregation definitions are grouped inside the <aggregations> element.
+  Each aggregation is rendered as a direct XML child element named after the
+  aggregation itself (for example <genericTypes>, <languages>, or <subTypes>).
+-->
   <aggregations>
     <genericTypes type="def:GenericTypeDefinition[]">
 

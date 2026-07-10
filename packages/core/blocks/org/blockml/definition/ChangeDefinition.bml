@@ -1,0 +1,40 @@
+<!--
+  BlockML Definition — example definition type
+
+  FQN: org.blockml.definition.ExampleDefinition
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:def="org.blockml.definition"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea></idea>
+
+  <documentation>Defines a change to a Block definition.</documentation>
+  <name>ChangeDefinition</name> 
+  <type>def:ChangeDefinition</type>
+  <baseType>core:Definition</baseType>
+
+  <!-- Change definitions are rendered as xml <change> elements. -->
+  <bml:xml>change</bml:xml>
+
+  <properties>
+    <!--
+      bml:xml="attribute" renders this Property as an XML attribute
+      of the containing Block element.
+    -->
+    <version type="btype:VersionNumber" bml:xml="attribute">
+      <documentation>The version of the change.</documentation>
+    </version>
+    <!--
+      bml:xml="text" renders the Property as character content.
+    -->
+    <description type="String" bml:xml="text">
+      <documentation>The description of the change.</documentation>
+    </description>
+  </properties>
+</block>

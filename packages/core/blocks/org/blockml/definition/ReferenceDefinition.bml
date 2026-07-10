@@ -1,0 +1,33 @@
+<!--
+  BlockML Definition — contract reference type
+
+  FQN: org.blockml.definition.ContractDefinition
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:def="org.blockml.definition"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea>A reference to a Block definition.</idea>
+
+  <documentation></documentation>
+  <name>ReferenceDefinition</name>
+  <type>def:ReferenceDefinition</type>
+  <baseType>core:Definition</baseType>
+  <!-- Reference definitions are rendered as xml <reference> elements -->
+  <bml:xml>reference</bml:xml>
+
+  <properties>
+    <type type="core:FullyQualifiedName(core:Block, core:Definition)">
+      <documentation>The FQN of the Block or Definition that is referenced.</documentation>
+    </type>
+    <!-- The context is rendered as text content of the <reference> element -->
+    <context type="String" bml:xml="text">
+      <documentation>The context of the reference.</documentation>
+    </context>
+  </properties>
+</block>

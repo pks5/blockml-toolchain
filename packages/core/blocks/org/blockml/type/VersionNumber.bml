@@ -1,0 +1,12 @@
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:btype="org.blockml.type"
+  xmlns:core="org.blockml.core">
+
+  <idea>Primitive BlockML property type capable of holding a version number.</idea>
+
+  <documentation>BOM Core primitive ValueType for version numbers.</documentation>
+  <name>VersionNumber</name>
+  <type>btype:VersionNumber</type>
+  <baseType>core:ValueType</baseType>
+</block>
