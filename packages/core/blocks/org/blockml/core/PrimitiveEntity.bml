@@ -13,17 +13,19 @@
 
   <idea>Wraps a primitive value when it must exist as an Entity in composition or aggregation.</idea>
 
-  <documentation>Generic Entity for primitive values that must appear as Block instances inside a
-    composition or aggregation. Properties continue to store primitive values directly —
-    PrimitiveEntity exists only when the primitive value itself must become an Entity.
+  <documentation>Abstract generic Entity for primitive values that must appear as Block instances
+    inside a composition or aggregation. Follows the general generic resolution rule: T belongs
+    exclusively to this Block and is never inherited. Derived Blocks bind or forward T explicitly
+    through baseType (for example baseType = PrimitiveEntity(Integer) binds T = Integer and yields
+    value : Integer).
 
-    Examples: PrimitiveEntity(Text), PrimitiveEntity(Integer), PrimitiveEntity(Decimal),
-    PrimitiveEntity(URL).
+    Cannot be instantiated directly — concrete specializations (IntegerEntity, TextEntity,
+    DecimalEntity, …) bind all generic parameters and become normal, instantiable Blocks.
 
-    The value property holds the concrete primitive payload. The type parameter T must extend
-    org.blockml.type.PrimitiveType.
+    Properties continue to store primitive values directly — PrimitiveEntity exists only when the
+    primitive value itself must become an Entity with identity, documentation, or metadata.
 
-    See docs/17_type_system_bml.md — PrimitiveEntity.</documentation>
+    See docs/17_type_system_bml.md — PrimitiveEntity · Generic resolution through inheritance.</documentation>
   <name>PrimitiveEntity</name>
   <type>core:PrimitiveEntity</type>
   <baseType>core:Entity</baseType>

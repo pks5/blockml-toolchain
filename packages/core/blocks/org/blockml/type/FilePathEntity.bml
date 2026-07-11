@@ -1,0 +1,13 @@
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:btype="org.blockml.type"
+  xmlns:core="org.blockml.core">
+
+  <idea>FilePath primitive value as an Entity in composition or aggregation.</idea>
+
+  <documentation>Concrete Entity wrapping a FilePath primitive. Binds T = FilePath on
+    org.blockml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>
+  <name>FilePathEntity</name>
+  <type>btype:FilePathEntity</type>
+  <baseType>core:PrimitiveEntity(btype:FilePath)</baseType>
+</block>

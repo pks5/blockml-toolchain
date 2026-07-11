@@ -141,6 +141,12 @@ baseType  — FQN constraint; concrete type arguments must inherit from this bra
 Usage     — com.foo.Box<org.blockml.type.Integer> at reference sites
 Validator — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
 
+Generic parameters belong exclusively to the declaring Block — they are never inherited
+implicitly. When a generic Block is used as baseType, the derived Block must bind or forward
+each parameter explicitly (for example baseType = PrimitiveEntity(Integer) binds T = Integer).
+Resolution substitutes bound parameters in the inherited definition during validate time.
+See 17_type_system_bml.md — § Generic resolution through inheritance.
+
 Naming (parse time):
   name must differ from the Block's <name>           → BML_GENERIC_BLOCK_NAME_COLLISION
   name must differ from every Sub-Block <name>       → BML_GENERIC_SUBBLOCK_NAME_COLLISION
@@ -219,6 +225,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/type/Number.bml · Integer.bml · Decimal.bml · Float.bml · Text.bml · Boolean.bml · …
      org/blockml/type/Version.bml · URL.bml · URI.bml · FilePath.bml · MimeType.bml
      org/blockml/core/PrimitiveEntity.bml
+     org/blockml/type/IntegerEntity.bml · TextEntity.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/service/Math.bml · Strings.bml · …
      org/blockml/core/BlockLibrary.bml   ← includes Schema as subBlock; _dependencies / _blocks as Block references

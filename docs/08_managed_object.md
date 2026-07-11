@@ -59,7 +59,7 @@ Property
     value = 5.3
 ```
 
-When a primitive value must exist as an Entity inside composition or aggregation, wrap it in `org.blockml.core.PrimitiveEntity(T)` — not by adding a `value` member to the PrimitiveType.
+When a primitive value must exist as an Entity inside composition or aggregation, use a concrete `*Entity` type (for example `org.blockml.type.IntegerEntity`) — not by adding a `value` member to the PrimitiveType.
 
 ---
 

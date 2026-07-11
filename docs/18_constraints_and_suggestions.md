@@ -142,8 +142,8 @@ Each suggestion is a Block instance of the **same type as the property**. The co
 <textFont type="Text">
   <value>RBNo3.1 Black</value>
   <suggestions>
-    <PrimitiveEntity(Text) value="Creato Display"/>
-    <PrimitiveEntity(Text) value="RBNo3.1 Black"/>
+    <TextEntity value="Creato Display"/>
+    <TextEntity value="RBNo3.1 Black"/>
   </suggestions>
 </textFont>
 ```

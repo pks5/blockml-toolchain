@@ -121,20 +121,31 @@
         <status:Stable />
         <status:Stub />
         <btype:Boolean />
+        <btype:BooleanEntity />
         <btype:Decimal />
+        <btype:DecimalEntity />
         <btype:EnumType />
         <btype:FilePath />
+        <btype:FilePathEntity />
         <btype:Float />
+        <btype:FloatEntity />
         <btype:FullyQualifiedName />
+        <btype:FullyQualifiedNameEntity />
         <btype:Integer />
+        <btype:IntegerEntity />
         <btype:MimeType />
+        <btype:MimeTypeEntity />
         <btype:Number />
         <btype:PrimitiveType />
         <btype:StructType />
         <btype:Text />
+        <btype:TextEntity />
         <btype:URI />
+        <btype:URIEntity />
         <btype:URL />
+        <btype:URLEntity />
         <btype:Version />
+        <btype:VersionEntity />
       </composition>
     </_blocks>
   </aggregations>

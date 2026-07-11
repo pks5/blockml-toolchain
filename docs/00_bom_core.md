@@ -716,7 +716,7 @@ type="com.machineblocks.type.Size3d[]"    ✓
 type="org.blockml.type.Integer[]"         ✓
 ```
 
-ValueTypes appear as type references on Properties — values are stored on the Property, not on the ValueType. When a primitive must appear as a Block instance in composition, use `org.blockml.core.PrimitiveEntity(T)`. See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity.
+ValueTypes appear as type references on Properties — values are stored on the Property, not on the ValueType. When a primitive must appear as a Block instance in composition, use a concrete `*Entity` type (for example `org.blockml.type.TextEntity`). See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity.
 
 ### Constraints
 
@@ -742,9 +742,9 @@ A Property may declare a list of suggested values. Each suggestion is a Block in
 <textColor type="Text">
   <value>#303D4E</value>
   <suggestions>
-    <PrimitiveEntity(Text) value="#303D4E"/>
-    <PrimitiveEntity(Text) value="#EAC645"/>
-    <PrimitiveEntity(Text) value="#58B99D"/>
+    <TextEntity value="#303D4E"/>
+    <TextEntity value="#EAC645"/>
+    <TextEntity value="#58B99D"/>
   </suggestions>
 </textColor>
 ```

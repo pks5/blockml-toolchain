@@ -314,7 +314,8 @@ Omitted <visibility> on Sub-Block      → derive from <name> (__ → private, _
 Sub-Block reference outside scope        → BML_SUBBLOCK_NOT_IN_SCOPE (error)
 Omitted <subTypes>                     → undefined — inherit effective subTypes from baseType chain
 Empty <subTypes/>                        → block.subTypes = [] (explicit override — forbid Sub-Blocks)
-Omitted languages / contracts / genericTypes → inherit from baseType at validate
+Omitted languages / contracts          → inherit from baseType at validate
+Omitted genericTypes                 → none — generic parameters are not inherited; bind or forward via baseType
 <contracts> on Sub-Block                 → BML_CONTRACT_NOT_ON_ROOT (error)
 Duplicate contract type                → BML_DUPLICATE_CONTRACT (error)
 <genericTypes> on Sub-Block                  → BML_GENERIC_NOT_ON_ROOT (error)

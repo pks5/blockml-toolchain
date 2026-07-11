@@ -240,7 +240,7 @@ Property
 
 A `ValueType` never stores data. All concrete values are stored exclusively in **Properties**. The type describes the nature of the value; the Property owns the value. There is no Java-style `new BigDecimal(5)` in BlockML.
 
-When a primitive value must exist as an **Entity** inside composition or aggregation, wrap it in `org.blockml.core.PrimitiveEntity(T)` — not by adding a `value` member to the PrimitiveType.
+When a primitive value must exist as an **Entity** inside composition or aggregation, use a concrete `*Entity` type (for example `org.blockml.type.IntegerEntity`) — not by adding a `value` member to the PrimitiveType.
 
 ### Capabilities — no special lifecycle types
 
@@ -334,7 +334,7 @@ StructTypes describe layout — properties define data structure; values live in
 Enums are StructTypes     — _values aggregation adds finite allowed values
 Contracts are Blocks      — reusable partial definitions merged via <contracts>
 Generics parametrize Blocks — `<genericTypes>` + type arguments at reference sites
-PrimitiveEntity wraps primitives — when a primitive must appear as an Entity in composition
+PrimitiveEntity defines the abstract generic base — concrete *Entity types wrap primitives in composition
 ```
 
 Semantics are decided by `baseType` and usage context — not by parallel XSD or compiler hardcoding.
@@ -554,17 +554,39 @@ The public BlockML text primitive is **`Text`** (FQN `org.blockml.type.Text`), n
 
 #### PrimitiveEntity
 
+`org.blockml.core.PrimitiveEntity(T)` is an **abstract generic** Block — it follows the general rule in § Generic resolution through inheritance. It cannot be instantiated directly; concrete `*Entity` types bind `T` via `baseType`.
+
+It defines the common structure for primitive value Entities:
+
+```text
+PrimitiveEntity<T extends PrimitiveType>
+  abstract
+  property value : T
+```
+
+Every primitive that should appear as an Entity in composition or aggregation requires a **concrete specialization** that binds all generic parameters:
+
+```text
+IntegerEntity
+  baseType = PrimitiveEntity(Integer)
+  → T = Integer; effective: value : Integer
+```
+
 When a primitive must appear as a Block instance in composition or aggregation:
 
 ```xml
-<composition>
-  <PrimitiveEntity(Integer) value="5"/>
-</composition>
+<values>
+  <composition>
+    <type:IntegerEntity value="5"/>
+    <type:IntegerEntity value="10"/>
+    <type:IntegerEntity value="15"/>
+  </composition>
+</values>
 ```
 
-Or use a typed alias. Properties continue to store primitive values directly — `PrimitiveEntity` exists only when the primitive value itself must become an Entity.
+Properties continue to store primitive values directly (`width : Integer`) — `*Entity` types exist only when the primitive value itself must become an identifiable Block instance (ordered collections, referencable values, metadata-bearing primitives).
 
-V1 bootstrap primitives: `Integer`, `Decimal`, `Float`, `Text`, `Boolean` in `@blockml/core`.
+V1 bootstrap: `IntegerEntity`, `DecimalEntity`, `FloatEntity`, `TextEntity`, `BooleanEntity`, `VersionEntity`, `URLEntity`, `URIEntity`, `FilePathEntity`, `MimeTypeEntity`, `FullyQualifiedNameEntity` in `@blockml/core`.
 
 ### Properties are always Optional
 
@@ -816,10 +838,10 @@ A ValueType may appear in different roles:
 | Property type | `type="org.blockml.type.Integer"` | type reference — value stored on Property |
 | Property value on instance | `columns="5"` | inline literal on Property |
 | Suggestion | Block instance in `<suggestions>` | metadata — same type as property |
-| Aggregation type | `type="org.blockml.core.PrimitiveEntity(Integer)[]"` | collection of primitive Entities |
+| Aggregation type | `type="org.blockml.type.IntegerEntity[]"` | collection of integer Entities |
 | Composition child | `<Size3d x="10" y="5" z="2"/>` | StructType Block instance |
 
-**Primitive values in composition:** use `PrimitiveEntity(T)` when a primitive must be an Entity — not `<Integer value="5"/>`. Properties always store values directly.
+**Primitive values in composition:** use `IntegerEntity`, `TextEntity`, or another concrete `*Entity` type when a primitive must be an Entity — not `<Integer value="5"/>`. Properties always store values directly.
 
 The renderer and validator decide semantics from `baseType`, branch, and usage context — not from separate metamodels.
 
@@ -827,7 +849,87 @@ The renderer and validator decide semantics from `baseType`, branch, and usage c
 
 ### Generics
 
-Generic type parameters are declared on **StructType** (or other ValueType) definitions — not via a separate `GenericType` branch:
+#### Generic resolution through inheritance
+
+Generic parameters belong exclusively to the Block that declares them. They are **never inherited implicitly** by derived Blocks.
+
+Whenever a generic Block is used as `baseType`, the derived Block must **explicitly specify how each generic parameter is handled**. Each parameter must be either:
+
+```text
+bound     — to a concrete type argument in baseType (for example Integer)
+forwarded — to a generic parameter declared by the derived Block (for example T)
+```
+
+The derived Block becomes **concrete** (non-generic) when all parameters are bound. It **remains generic** when one or more parameters are forwarded.
+
+Generic parameter resolution runs during **inheritance resolution**: every occurrence of a bound parameter in the inherited definition is substituted with its concrete type.
+
+**Example — closed (all parameters bound):**
+
+```text
+PrimitiveEntity<T extends PrimitiveType>
+  ↓
+IntegerEntity
+  baseType = PrimitiveEntity(Integer)
+
+Validator resolves T = Integer
+  value : T  →  value : Integer
+
+IntegerEntity has no remaining generic parameters.
+```
+
+**Example — open (parameter forwarded):**
+
+```text
+NamedPrimitiveEntity<T>
+  baseType = PrimitiveEntity(T)
+  genericTypes: T
+
+T is forwarded — NamedPrimitiveEntity remains generic.
+```
+
+**Example — partial binding:**
+
+```text
+Pair<K, V>
+  ↓
+TextKeyPair<V>
+  baseType = Pair(Text, V)
+  genericTypes: V
+
+K = Text (bound); V forwarded — TextKeyPair remains generic.
+```
+
+During inheritance resolution the validator verifies:
+
+```text
+every generic parameter of the baseType is accounted for (bound or forwarded)
+argument count matches the baseType declaration
+each bound argument satisfies the declared baseType constraint
+forwarded parameters are declared on the derived Block
+```
+
+#### Abstract generic Blocks
+
+An **abstract generic Block** cannot be instantiated directly. If a generic Block should appear as a concrete XML element, a derived Block must first **bind all open generic parameters**.
+
+`PrimitiveEntity<T>` is one instance of this rule — not the only one. It applies to **all** generic Blocks (`Box<T>`, `Constraint<T>`, `FullyQualifiedName<B, D>`, …):
+
+```text
+PrimitiveEntity<T>     abstract — not instantiable
+  ↓
+IntegerEntity          baseType = PrimitiveEntity(Integer)   — concrete
+TextEntity             baseType = PrimitiveEntity(Text)       — concrete
+DecimalEntity          baseType = PrimitiveEntity(Decimal)   — concrete
+BooleanEntity          baseType = PrimitiveEntity(Boolean)   — concrete
+…
+```
+
+Each concrete derived type finalizes every generic parameter through `baseType` and becomes a normal, instantiable Block. See § PrimitiveEntity for the primitive-Entity use case.
+
+#### Generic declarations
+
+Generic type parameters are declared on **StructType** (or other Block) definitions — not via a separate `GenericType` branch:
 
 ```xml
 <block ...>
@@ -1037,7 +1139,7 @@ Generic constraint → BML_GENERIC_CONSTRAINT_VIOLATION
 Version mismatch   → BML_UNKNOWN_VERSION         (external type refs — same rules as Blocks)
 ```
 
-Effective type members (StructType properties, EnumType `_values`, generic parameters) are resolved via `baseType` chain — same lookup model as Block member inheritance.
+Effective type members (StructType properties, EnumType `_values`) are resolved via `baseType` chain — same lookup model as Block member inheritance. Generic parameters are **not** inherited; each is bound or forwarded explicitly through `baseType` (see § Generic resolution through inheritance).
 
 ---
 
