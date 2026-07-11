@@ -602,6 +602,20 @@ PropertyDefinitions may declare `valueRequired`:
 
 When `valueRequired=true`, the Property must contain a value in BlockML — otherwise the Validator reports an error. When `valueRequired=false`, the Property may remain empty; the Renderer decides how to interpret missing values.
 
+**Validation timing:** `valueRequired` is checked only in **Stage 2 (Validator)** — never in Stage 1 (Parser / XSD). The check runs **after** the Block is fully resolved:
+
+```text
+1. baseType chain merge        — resolveEffectiveMembers() · generic substitution
+2. contract merge              — contracts[] in declaration order
+3. local member merge          — Block declarations override all
+4. instance value resolution   — definition <value> · instance attribute · <property><value>
+5. valueRequired check         — for each effective Property with valueRequired=true
+```
+
+The validator reads `valueRequired` from the **effective** `PropertyDefinition` (merged result), not from a single declaration layer in isolation. A contract or baseType may declare `valueRequired="true"`; a child override may supply the `<value>` — the merged effective member satisfies the check.
+
+When no value is present after merge and instance binding → `BML_VALUE_REQUIRED` (error). Expression evaluation does not satisfy `valueRequired` — only authored values count (Stage 2 does not evaluate expressions).
+
 ### EMPTY — not a type
 
 BlockML has **no `Null` type** and **no `null` literal** in expressions or type positions. A parameter or property has a declared type (or union of types) and may be **absent** or **empty** — that is not a separate type.

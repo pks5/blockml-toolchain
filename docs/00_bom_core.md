@@ -148,6 +148,8 @@ The Validator creates the immutable Canonical BOM and a mutable **default Workin
 
 Every Property behaves as an **Optional** — it has a value or has no value. There is no `null`. The BOM represents `Optional<Value>` instead of `Value | null`. PropertyDefinitions may declare `valueRequired` — when `true`, the Validator requires a value in BlockML; when `false`, the Renderer decides how to interpret missing values.
 
+The `valueRequired` check runs in Stage 2 **after** full Block resolution (baseType chain, generic substitution, contract merge, local overrides) via `resolveEffectiveMembers()`. Only then does the Validator verify that each effective Property with `valueRequired=true` has an authored value on the definition or instance. Missing value → `BML_VALUE_REQUIRED`.
+
 ### Expression layer vs BOM data layer
 
 Expressions and BOM member values are **separate layers**:
