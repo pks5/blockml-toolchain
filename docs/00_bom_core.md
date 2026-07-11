@@ -527,21 +527,27 @@ Block: MyBlock
 
 ### Member Visibility
 
+Member and Sub-Block visibility is a **BlockML access rule only** — it does not prescribe target-system visibility. Renderers have full access to the entire Canonical BOM regardless of visibility; they decide independently whether and how to manifest BlockML visibility.
+
 All member kinds share the same visibility rules. Visibility is determined primarily by naming convention:
 
 | Name       | Visibility |
 | ---------- | ---------- |
-| `__member` | private    |
-| `_member`  | protected  |
-| `member`   | public     |
+| `myVar`    | public     |
+| `_myVar`   | protected  |
+| `__myVar`  | private    |
 
-**private** — visible only within the declaring Block. Not visible in child Blocks. Does not collide with same-named members in child Blocks.
+The prefix is not the logical member identity. For collision checking, normalize by stripping visibility prefixes (`myVar`, `_myVar`, `__myVar` → `myVar`). Members differing only by prefix → `BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT`.
 
-**protected** — visible within the declaring Block and in all child Blocks. Not package-wide.
+**private** — usable only within the declaring Block's definition (`C = D`). Composition ownership does not grant private access to child instances.
 
-**public** — publicly visible.
+**protected** — usable when `C = D`, `C` inherits from `D`, `C` is the immediate composition owner of the instance, or `C` inherits from the instance type `I`.
+
+**public** — usable from any BlockML definition.
 
 An optional `visibility="private|protected|public"` attribute may be declared; it must match the naming convention or validation emits `BML_VISIBILITY_MISMATCH`.
+
+Full rules, examples, and formal access notation: `02_mbml.md` — § Member Visibility.
 
 ### Common Member Attributes
 
@@ -821,7 +827,7 @@ visibility    — optional; must match naming convention
 
 `<aggregation>` and `<association>` child order within their containers is preserved by the parser (same rules as properties). Render targets may use aggregation order for UI or output sequencing.
 
-**Member visibility** follows the naming convention in § Member Visibility. Private aggregations (`__name`) are visible only in the declaring Block. Protected aggregations (`_name`) are visible in child Blocks.
+**Member visibility** follows § Member Visibility. Private aggregations (`__name`) are confined to the declaring Block. Protected aggregations (`_name`) follow the formal access rule — derived Blocks and the direct composition owner may access them.
 
 ### Type Notation
 
@@ -1008,7 +1014,7 @@ examples       — optional; usage examples (title + CDATA body)
 references     — optional; cross-references to related Blocks or Definitions (type + optional context)
 ```
 
-Member visibility follows § Member Visibility. Private Capabilities (`__name`) cannot be bound from outside the declaring Block. Protected Capabilities (`_name`) are accessible in child Blocks.
+Member visibility follows § Member Visibility. Private Capabilities (`__name`) cannot be bound from outside the declaring Block. Protected Capabilities (`_name`) follow the formal access rule — including derived Blocks and the direct composition owner.
 
 **`Inbound`** — `inputType` required, `outputType` forbidden.
 
@@ -1448,7 +1454,7 @@ To **forbid** Sub-Blocks on a type whose parent enabled them, declare an explici
 
 If a Sub-Block's `baseType` is not in the parent's effective `subTypes`, the compiler emits `BML_INVALID_SUBBLOCK_TYPE`.
 
-Sub-Blocks follow the same visibility naming convention as members (`__` private, `_` protected, plain public). Optional root-level `<visibility>` on Sub-Blocks only — forbidden on root Blocks (`BML_VISIBILITY_ON_ROOT_BLOCK`). Visibility controls reference scope: private = declaring Block only; protected = declaring Block + child instances; public = anywhere (with qualified cross-file refs). Mismatch → `BML_VISIBILITY_MISMATCH`; out-of-scope reference → `BML_SUBBLOCK_NOT_IN_SCOPE`.
+Sub-Blocks follow the same visibility naming convention as members (`__` private, `_` protected, plain public). Optional root-level `<visibility>` on Sub-Blocks only — forbidden on root Blocks (`BML_VISIBILITY_ON_ROOT_BLOCK`). Visibility controls BlockML reference scope only — not target-system visibility. Mismatch → `BML_VISIBILITY_MISMATCH`; out-of-scope reference → `BML_PRIVATE_SUBBLOCK_ACCESS` or `BML_PROTECTED_SUBBLOCK_ACCESS`. See `02_mbml.md` — § Member Visibility · § Sub-Block Visibility.
 
 ### FQN Convention
 

@@ -903,21 +903,170 @@ All member kinds — Property, Aggregation, Association, Capability — share th
 
 ### Member Visibility
 
+#### Core principle
+
+Member and Sub-Block visibility controls **BlockML access only** — which BlockML definitions may reference, read, or set a member or Sub-Block. It does **not** prescribe how a renderer must manifest visibility in the target system.
+
+A renderer always has access to the **entire Canonical BOM** — public, protected, and private definitions and values. Visibility restricts BlockML authoring access, not the renderer's technical access to the BOM. The renderer may map visibility directly, via namespaces or modules, only for generated APIs, ignore it entirely, or interpret it in any target-specific way.
+
+This supersedes the prior view that visibility primarily governed generated accessors.
+
+#### Naming convention
+
 Visibility is determined primarily by **naming convention**:
 
 | Name       | Visibility |
 | ---------- | ---------- |
-| `__member` | private    |
-| `_member`  | protected  |
-| `member`   | public     |
+| `myVar`    | public     |
+| `_myVar`   | protected  |
+| `__myVar`  | private    |
 
-**private** — visible only within the declaring Block. Not visible in child Blocks. Does not collide with same-named members in child Blocks.
+The prefix is part of BlockML visibility, **not** the logical member identity. For collision checking, the **normalized logical name** strips visibility prefixes:
 
-**protected** — visible within the declaring Block and in all child Blocks. Not package-wide.
+```text
+myVar   → myVar
+_myVar  → myVar
+__myVar → myVar
+```
 
-**public** — publicly visible.
+Members that differ only by visibility prefix **must not coexist** in the same Block:
 
-### Optional `visibility` Attribute
+```xml
+<!-- invalid -->
+<properties>
+  <myVar type="Integer" />
+  <_myVar type="Integer" />
+</properties>
+
+<!-- invalid -->
+<properties>
+  <_myVar type="Integer" />
+  <__myVar type="Integer" />
+</properties>
+```
+
+Multiple members with the same normalized name → `BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT`. A logical member exists exactly once with exactly one visibility.
+
+#### Public members
+
+A public member may be read and set from any BlockML definition, subject to type and structural rules.
+
+```xml
+<ac:Wall myVar="5" />
+```
+
+#### Private members
+
+A private member may be used **only within the Block definition that declares it** — in expressions, capabilities, compositions, and on instances of the declaring type within that same definition.
+
+```xml
+<block>
+  <name>Wall</name>
+  <type>ac:Wall</type>
+  <properties>
+    <__myVar type="Integer" />
+  </properties>
+  <composition>
+    <ac:Wall __myVar="5" />
+  </composition>
+</block>
+```
+
+This is valid because `Wall` accesses its own private member within its definition — including when a Block creates instances of its own type (recursive structures, enum values, etc.).
+
+**Private members of Sub-Block instances** — the owning composite Block does **not** gain access to private members of contained instances:
+
+```xml
+<!-- invalid -->
+<block>
+  <name>Wall</name>
+  <type>ac:Wall</type>
+  <composition>
+    <ac:MySubBlock __myVar="5" />
+  </composition>
+</block>
+```
+
+Composition ownership does **not** lift private encapsulation. Private members of `MySubBlock` are usable only inside `MySubBlock`'s own definition.
+
+#### Protected members
+
+A protected member may be used when **at least one** of the following holds:
+
+1. within the declaring Block,
+2. within any Block that inherits directly or indirectly from the declaring Block,
+3. by the **direct composition owner** of the instance (to configure protected members on composition children),
+4. by Blocks that inherit directly or indirectly from the **instance type**.
+
+```xml
+<!-- own type -->
+<block>
+  <name>Wall</name>
+  <type>ac:Wall</type>
+  <properties>
+    <_myVar type="Integer" />
+  </properties>
+  <composition>
+    <ac:Wall _myVar="5" />
+  </composition>
+</block>
+
+<!-- derived Block -->
+<block>
+  <name>SpecialWall</name>
+  <type>ac:SpecialWall</type>
+  <baseType>ac:Wall</baseType>
+  <composition>
+    <ac:SpecialWall _myVar="5" />
+  </composition>
+</block>
+
+<!-- composition owner configures child -->
+<block>
+  <name>Wall</name>
+  <type>ac:Wall</type>
+  <composition>
+    <ac:SubBlock _myVar="5" />
+  </composition>
+</block>
+```
+
+Valid when `_myVar` is a protected member of `SubBlock`. Only the **immediate** composition owner receives this access — not the entire outer composition hierarchy.
+
+```xml
+<!-- derived Sub-Block inherits protected member -->
+<block>
+  <name>SpecialSubBlock</name>
+  <type>ac:SpecialSubBlock</type>
+  <baseType>ac:SubBlock</baseType>
+  <composition>
+    <ac:SpecialSubBlock _myVar="5" />
+  </composition>
+</block>
+```
+
+#### Formal access rule
+
+Given:
+
+```text
+D = Block that declares the member
+C = Block whose definition contains the access
+I = type of the instance on which the member is read or set
+O = immediate composition owner of that instance
+```
+
+Then:
+
+| Visibility | Access allowed when |
+| ---------- | ------------------- |
+| **public** | always |
+| **private** | `C = D` (concrete instance type is irrelevant when access is from the declaring Block's definition) |
+| **protected** | `C = D` **or** `C` inherits from `D` **or** `C = O` **or** `C` inherits from `I` |
+
+Only the immediate composition owner grants protected configuration access on children.
+
+#### Optional `visibility` attribute
 
 Members may optionally declare an explicit visibility that must match the naming convention:
 
@@ -927,9 +1076,20 @@ Members may optionally declare an explicit visibility that must match the naming
 <label   visibility="public"/>
 ```
 
-A mismatch between `name` and `visibility` is a validation error (`BML_VISIBILITY_MISMATCH`).
+A mismatch between `name` and `visibility` → `BML_VISIBILITY_MISMATCH`.
 
 The same rules apply to **Sub-Blocks** — see § Sub-Blocks — Sub-Block Visibility. Sub-Blocks may declare optional root-level `<visibility>`; root Blocks must not.
+
+#### Validator diagnostics
+
+The validator checks every member access against lexical and type context. The parser stores the authored form losslessly; access validation does **not** alter the Canonical BOM.
+
+```text
+BML_PRIVATE_MEMBER_ACCESS              — private member used outside declaring Block
+BML_PROTECTED_MEMBER_ACCESS              — protected member outside allowed inheritance/composition context
+BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT  — members differ only by visibility prefix
+BML_VISIBILITY_MISMATCH                  — explicit visibility does not match naming convention
+```
 
 ### Common Member Attributes
 
@@ -1266,7 +1426,7 @@ visibility   — optional; must match naming convention
 
 **Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `_dependencies` / `_blocks` on `org.blockml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation type="…">`). See also `00_bom_core.md` — Aggregations.
 
-Member visibility follows the naming convention in § Member Visibility. Protected aggregations (`_name`) are visible in child Blocks; private aggregations (`__name`) are not.
+Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block.
 
 `bml:exportIds` on `<composition>` controls static ID export — see § `bml:exportIds` below.
 
@@ -1363,7 +1523,7 @@ Unqualified type names resolve against the domain's default type namespace (dete
 
 **Validation:** `Inbound` requires `inputType` (no `outputType`). `Outbound` requires `outputType` (no `inputType`). `Transformation` requires both. Async reply via `replyTo` is a runtime/message pattern — not modeled on the Capability.
 
-**Protected and private Capabilities** — follow § Member Visibility. Private Capabilities (`__name`) cannot be bound from outside the declaring Block. Protected Capabilities (`_name`) are accessible in child Blocks.
+**Protected and private Capabilities** — follow § Member Visibility. Private Capabilities (`__name`) cannot be bound from outside the declaring Block. Protected Capabilities (`_name`) follow the formal access rule in § Member Visibility — including derived Blocks and the direct composition owner.
 
 ---
 
@@ -1837,19 +1997,15 @@ Sub-Blocks use the same format as the parent Block — all fields as child eleme
 
 ### Sub-Block Visibility
 
-Sub-Blocks follow the **same naming convention as members** (§ Member Visibility). Visibility controls where a Sub-Block type may be referenced in compositions and member types:
+Sub-Blocks follow the **same naming convention and access model as members** (§ Member Visibility). Visibility controls BlockML reference scope only — not target-system visibility. A renderer may manifest private Sub-Blocks as helper classes, local modules, nested functions, separate public artifacts, or fully inlined structures.
 
-| `<name>`     | Visibility  | Reference scope                                      |
-| ------------ | ----------- | ---------------------------------------------------- |
-| `__SubBlock` | private     | declaring Block only                                 |
-| `_SubBlock`  | protected   | declaring Block and child Block instances            |
-| `SubBlock`   | public      | anywhere (subject to cross-file qualified-name rules)|
+| `<name>`     | Visibility  | BlockML reference scope |
+| ------------ | ----------- | ----------------------- |
+| `SubBlock`   | public      | inside and outside the enclosing Block definition |
+| `_SubBlock`  | protected   | inside the enclosing Block definition and its derived Blocks |
+| `__SubBlock` | private     | only inside the immediately declaring Block definition |
 
-**private** — referenceable only in the **declaring root Block's** own composition and members. Not in nested Sub-Block compositions. Not from external files.
-
-**protected** — referenceable in the declaring Block and in **child Block instances** (composition descendants). Not from unrelated external Blocks.
-
-**public** — referenceable from anywhere, including other files — using qualified names or FQN as required by § Sub-Block reference scope.
+The normalized-name rule applies: Sub-Blocks differing only by visibility prefix must not coexist → `BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT`.
 
 ### Optional `<visibility>` on Sub-Blocks
 
@@ -1892,13 +2048,20 @@ Calibrator.bml — composition in same file:
   <__Helper ... />                    ✓  private — same Block only
 
 Calibrator.Base composition (nested Sub-Block):
-  <_Utils ... />                      ✓  protected — child Block
-  <__Helper ... />                    ✗  BML_SUBBLOCK_NOT_IN_SCOPE — private
+  <_Utils ... />                      ✓  protected — derived Sub-Block
+  <__Helper ... />                    ✗  BML_PRIVATE_SUBBLOCK_ACCESS — private
 
 OtherFile.bml:
   <cal:Calibrator.Base ... />         ✓  public Sub-Block, qualified ref
-  <cal:Calibrator._Utils ... />       ✗  BML_SUBBLOCK_NOT_IN_SCOPE — protected
-  <cal:Calibrator.__Helper ... />     ✗  BML_SUBBLOCK_NOT_IN_SCOPE — private
+  <cal:Calibrator._Utils ... />       ✗  BML_PROTECTED_SUBBLOCK_ACCESS — protected
+  <cal:Calibrator.__Helper ... />     ✗  BML_PRIVATE_SUBBLOCK_ACCESS — private
+```
+
+Sub-Block access diagnostics:
+
+```text
+BML_PRIVATE_SUBBLOCK_ACCESS    — private Sub-Block referenced outside declaring Block
+BML_PROTECTED_SUBBLOCK_ACCESS  — protected Sub-Block outside allowed inheritance context
 ```
 
 ### FQN Auto-Resolution
@@ -2767,6 +2930,11 @@ bare <composition> on definition or instance
 <aggregation> without type on new declaration       → BML_MISSING_AGGREGATION_TYPE
 partial member override       → merge with parent member at validate; private/final violations → errors
 visibility mismatch           → BML_VISIBILITY_MISMATCH
+private member access         → BML_PRIVATE_MEMBER_ACCESS
+protected member access       → BML_PROTECTED_MEMBER_ACCESS
+visibility prefix collision   → BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT
+private Sub-Block reference   → BML_PRIVATE_SUBBLOCK_ACCESS
+protected Sub-Block reference → BML_PROTECTED_SUBBLOCK_ACCESS
 BML_UNKNOWN_NAMESPACE_PREFIX  → member namespace attribute references undeclared xmlns: prefix
 final member override         → BML_FINAL_MEMBER_OVERRIDE
 type="Foo" (unqualified)      → § Unqualified Block Resolution (own name · SubBlocks · generics · primitives whitelist)

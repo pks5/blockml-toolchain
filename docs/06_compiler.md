@@ -508,7 +508,11 @@ BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed property value expressions
 BML_VISIBILITY_MISMATCH       — visibility attribute or <visibility> element does not match naming convention
 BML_VISIBILITY_ON_ROOT_BLOCK  — <visibility> declared on a root Block (Sub-Blocks only)
-BML_SUBBLOCK_NOT_IN_SCOPE     — Sub-Block reference violates visibility (private / protected)
+BML_PRIVATE_MEMBER_ACCESS     — private member used outside declaring Block
+BML_PROTECTED_MEMBER_ACCESS   — protected member outside allowed inheritance/composition context
+BML_PRIVATE_SUBBLOCK_ACCESS   — private Sub-Block referenced outside declaring Block
+BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritance context
+BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT — members differ only by visibility prefix (normalized name collision)
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — namespace attribute references undeclared xmlns: prefix

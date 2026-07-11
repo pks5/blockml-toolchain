@@ -172,7 +172,7 @@ interface BlockDefinition {
   /** Final type — cannot be used as baseType on definitions. Default false. */
   final?: boolean
 
-  /** Sub-Block visibility — Sub-Blocks only. Derived from name when omitted. Forbidden on root Blocks. */
+  /** BlockML access visibility — Sub-Blocks only. Derived from name when omitted. Forbidden on root Blocks. Does not restrict renderer BOM access. */
   visibility?: "private" | "protected" | "public"
 
   /** Sub-Block baseTypes permitted in subBlocks[]. undefined = inherit from baseType chain; explicit [] = override to forbid */
@@ -401,7 +401,7 @@ interface MemberDefinitionBase {
    * Never stores the XML alias.
    */
   namespace?: string
-  /** Derived from naming convention; explicit attribute must match */
+  /** BlockML access visibility. Derived from naming convention; explicit attribute must match. Does not restrict renderer BOM access. */
   visibility?: "private" | "protected" | "public"
   /** Informational only — no validation semantics */
   readOnly?: boolean
@@ -1168,7 +1168,9 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  genericType name ≠ Block name; genericType name ≠ any Sub-Block name in same document
 ✓  Sub-Block same name as root Block → qualified reference required at use sites
 ✓  Sub-Block visibility derived from name or explicit <visibility>; root Block must not declare visibility
+✓  Member access respects visibility (private / protected / public) — formal access rule
 ✓  Sub-Block reference respects visibility scope (private / protected / public)
+✓  No duplicate members differing only by visibility prefix (normalized logical name)
 ✓  Expression result types match member types
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property value cycles (topological sort)
@@ -1219,7 +1221,8 @@ BML_MISSING_ID                — referenced instance or bml:each element lacks 
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
 BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without bml:exportIds="true"
 BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
-BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members
+BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members (same normalized name and visibility)
+BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT — members differ only by visibility prefix
 BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a ValueType
 BML_UNKNOWN_TYPE              — typeFqn cannot be resolved
 BML_INVALID_DEFINITION_BRANCH — member/element not allowed on this baseType branch (see 17_type_system_bml.md)
@@ -1233,7 +1236,10 @@ BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent
 BML_PROPERTY_CYCLE            — circular property value dependencies
 BML_VISIBILITY_MISMATCH       — visibility attribute or <visibility> does not match naming convention
 BML_VISIBILITY_ON_ROOT_BLOCK  — <visibility> on root Block
-BML_SUBBLOCK_NOT_IN_SCOPE     — Sub-Block reference outside visibility scope
+BML_PRIVATE_MEMBER_ACCESS     — private member used outside declaring Block
+BML_PROTECTED_MEMBER_ACCESS   — protected member outside allowed inheritance/composition context
+BML_PRIVATE_SUBBLOCK_ACCESS   — private Sub-Block referenced outside declaring Block
+BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritance context
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — member namespace attribute references undeclared xmlns: prefix

@@ -191,7 +191,7 @@ beanName      — optional; marks this Aggregation as a service binding
 documentation — human-readable description
 ```
 
-Member visibility follows the three-level naming convention in `02_mbml.md` — § Member Visibility (`__` private, `_` protected, plain public). Protected aggregations are visible in child Blocks.
+Member visibility follows the three-level naming convention in `02_mbml.md` — § Member Visibility (`__` private, `_` protected, plain public). Visibility is a BlockML access rule only; renderers have full BOM access. Protected members are accessible in derived Blocks and by the direct composition owner.
 
 When `beanName` is set, the Aggregation is a service binding. The bean is accessible in Expressions via `@beanName`.
 

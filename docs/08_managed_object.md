@@ -65,7 +65,11 @@ When a primitive value must exist as an Entity inside composition or aggregation
 
 ## Visibility
 
-Visibility (`private`, `protected`, `public`) is validated before rendering. Expressions store the intended access type:
+Visibility (`private`, `protected`, `public`) is a **BlockML access rule**. It controls which BlockML definitions may reference, read, or set a member or Sub-Block. It does **not** restrict what a renderer may see or use.
+
+The renderer receives the **full Canonical BOM** — all public, protected, and private definitions and values. It decides independently whether to map visibility to target-system access modifiers, namespaces, generated APIs, or to ignore visibility entirely.
+
+The Validator checks BlockML access violations before rendering. Expressions may store the intended access type for renderer interpretation:
 
 ```text
 PropertyAccessExpression
@@ -73,9 +77,15 @@ PropertyAccessExpression
     access = PRIVATE
 ```
 
-The Validator checks visibility violations. Private members cannot be referenced outside the owning Block.
+```text
+BML_PRIVATE_MEMBER_ACCESS              — private member used outside declaring Block
+BML_PROTECTED_MEMBER_ACCESS              — protected member outside allowed context
+BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT  — members differ only by visibility prefix
+```
 
-The Renderer receives access information and decides whether a Property access becomes direct field access, a getter call, a generated accessor, reflection, or target-specific lookup. This is purely renderer behaviour.
+How a Property access becomes direct field access, a getter call, reflection, or target-specific lookup is purely renderer behaviour — not governed by BlockML visibility rules.
+
+Full rules: `02_mbml.md` — § Member Visibility.
 
 ---
 

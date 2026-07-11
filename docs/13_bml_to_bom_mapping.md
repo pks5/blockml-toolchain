@@ -311,7 +311,11 @@ Omitted abstract/final                 → false
 Omitted <visibility> on Sub-Block      → derive from <name> (__ → private, _ → protected, else public)
 <visibility> on root Block               → BML_VISIBILITY_ON_ROOT_BLOCK (error)
 <visibility> mismatches <name>           → BML_VISIBILITY_MISMATCH (error)
-Sub-Block reference outside scope        → BML_SUBBLOCK_NOT_IN_SCOPE (error)
+Private member access outside scope      → BML_PRIVATE_MEMBER_ACCESS (error)
+Protected member access outside scope    → BML_PROTECTED_MEMBER_ACCESS (error)
+Private Sub-Block reference outside scope → BML_PRIVATE_SUBBLOCK_ACCESS (error)
+Protected Sub-Block reference outside scope → BML_PROTECTED_SUBBLOCK_ACCESS (error)
+Duplicate members by visibility prefix   → BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT (error)
 Omitted <subTypes>                     → undefined — inherit effective subTypes from baseType chain
 Empty <subTypes/>                        → block.subTypes = [] (explicit override — forbid Sub-Blocks)
 Omitted languages / contracts          → inherit from baseType at validate
