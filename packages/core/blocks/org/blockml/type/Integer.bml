@@ -6,8 +6,8 @@
   <idea>Primitive BlockML property type capable of holding a whole number.</idea>
 
   <documentation>BOM Core primitive ValueType for whole numbers. Unqualified name Integer resolves
-    to org.blockml.type.Integer. Extends org.blockml.type.Number. Scalar role on Properties
-    (inline literal); instance role elsewhere (&lt;Integer value="5"/&gt;).</documentation>
+    to org.blockml.type.Integer. Extends org.blockml.type.Number. Values are stored in Properties —
+    not on the Integer type itself.</documentation>
   <name>Integer</name>
   <type>Integer</type>
   <baseType>btype:Number</baseType>

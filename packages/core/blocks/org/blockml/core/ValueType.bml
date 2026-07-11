@@ -13,8 +13,9 @@
   <idea>A type in the BlockML grammar — values that properties and capabilities may carry.</idea>
 
   <documentation>ValueType branch of BlockML. Semantic unit for property and Capability types
-    (primitives, structs, enums, generics). Only ValueTypes may appear as property type or
-    Capability payloadType/returnType.</documentation>
+    (primitives, structs, enums). A ValueType never stores data — it describes the nature of a
+    value. All concrete values are stored exclusively in Properties. Only ValueTypes may appear as
+    property type or Capability inputType/outputType.</documentation>
   <name>ValueType</name>
   <type>core:ValueType</type>
   <baseType>core:Block</baseType>

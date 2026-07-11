@@ -172,7 +172,7 @@ On property (and member) definitions inside Definition blocks, `bml:xml` selects
 Example (from WIP `org.blockml.core.Definition`):
 
 ```xml
-<documentation type="String" bml:xml="element">
+<documentation type="Text" bml:xml="element">
   <documentation>The documentation of the definition.</documentation>
 </documentation>
 ```

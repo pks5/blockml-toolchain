@@ -3,10 +3,12 @@
   xmlns:btype="org.blockml.type"
   xmlns:core="org.blockml.core">
 
-  <idea>Primitive BlockML property type capable of holding a float number.</idea>
+  <idea>Binary floating-point numeric type — special-purpose only.</idea>
 
-  <documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
-    resolves to org.blockml.type.Float. Extends org.blockml.type.Number.</documentation>
+  <documentation>BOM Core primitive ValueType for binary floating-point numbers. Not the default
+    floating-point type — use Decimal unless binary IEEE754 semantics are explicitly required
+    (GPU, OpenGL, native C APIs, binary protocols). Unqualified name Float resolves to
+    org.blockml.type.Float. Extends org.blockml.type.Number. Values are stored in Properties.</documentation>
   <name>Float</name>
   <type>Float</type>
   <baseType>btype:Number</baseType>

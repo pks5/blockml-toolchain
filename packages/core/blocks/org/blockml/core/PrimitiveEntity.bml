@@ -1,0 +1,41 @@
+<!--
+  BlockML Core — primitive value as Entity
+
+  FQN: org.blockml.core.PrimitiveEntity
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:btype="org.blockml.type">
+
+  <idea>Wraps a primitive value when it must exist as an Entity in composition or aggregation.</idea>
+
+  <documentation>Generic Entity for primitive values that must appear as Block instances inside a
+    composition or aggregation. Properties continue to store primitive values directly —
+    PrimitiveEntity exists only when the primitive value itself must become an Entity.
+
+    Examples: PrimitiveEntity(Text), PrimitiveEntity(Integer), PrimitiveEntity(Decimal),
+    PrimitiveEntity(URL).
+
+    The value property holds the concrete primitive payload. The type parameter T must extend
+    org.blockml.type.PrimitiveType.
+
+    See docs/17_type_system_bml.md — PrimitiveEntity.</documentation>
+  <name>PrimitiveEntity</name>
+  <type>core:PrimitiveEntity</type>
+  <baseType>core:Entity</baseType>
+  <abstract />
+
+  <genericTypes>
+    <genericType name="T" baseType="btype:PrimitiveType" />
+  </genericTypes>
+
+  <properties>
+    <value type="T">
+      <documentation>The primitive value owned by this Entity instance.</documentation>
+    </value>
+  </properties>
+</block>

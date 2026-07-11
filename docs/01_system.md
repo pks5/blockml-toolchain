@@ -650,7 +650,7 @@ V1 does **not** model the full compiler in BML. V1 pulls into BML only what you 
 
 Markdown remains **authoritative** in V1 for architecture, pipeline, runtime, CLI, implementation details, and design rationale.
 
-**V1 preparation (Draft · TBD):** Synthetic accessor Capabilities (`getSize`, `setSize`, ValueType `serialize`, Entity `__construct`) are specified in `08_managed_object.md` for BOM/validator readiness. V1 render and compile **do not invoke** them — see `14_compiler_runtime.md` — Accessor Capabilities.
+**V1:** Authored Capabilities in BML; no synthetic accessor generation. Renderer interprets Capabilities target-specifically — see `08_managed_object.md`.
 
 ### V2 — Documentation migration
 

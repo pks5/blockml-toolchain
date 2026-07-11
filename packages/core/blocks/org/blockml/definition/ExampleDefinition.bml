@@ -30,12 +30,12 @@
 
   <properties>
     <!-- bml:xml="attribute" renders title as an XML attribute on <example>. -->
-    <title type="String" bml:xml="attribute">
+    <title type="Text" bml:xml="attribute">
       <documentation>Short title identifying this example. Required attribute on every example
         element (BML_EXAMPLE_MISSING_TITLE when omitted).</documentation>
     </title>
     <!-- bml:xml="text|cdata" renders content as character data; renderer may use CDATA. -->
-    <content type="String" bml:xml="text|cdata">
+    <content type="Text" bml:xml="text|cdata">
       <documentation>BML or MBML source text demonstrating usage. Stored as CDATA body in BOM
         DocumentationExample.content.</documentation>
     </content>

@@ -1,6 +1,6 @@
 # Type System — BML Definitions
 
-version: 0.2.0
+version: 0.3.0
 
 ## Purpose of this Document
 
@@ -27,7 +27,8 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
 | **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
-| **Three ValueType kinds** | PrimitiveType · EnumType · StructType only — everything else is a type expression |
+| **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
+| **Three ValueType kinds** | PrimitiveType · StructType · EnumType — EnumType is a specialized StructType |
 | **Ordered struct fields** | Field declaration order is semantically significant — defines implicit index, dual named/positional access, positional serialization; applies to StructType properties and anonymous struct `inputType` — see § Ordered Struct Fields |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
 | **Namespace separation** | `org.blockml.core.*`, `type.*`, `service.*`, `capability.*`, `language.*` = public BML grammar only; BOM/compiler types in `org.blockml.bom.*`, etc. — see `00_bom_core.md` |
@@ -227,27 +228,23 @@ WCMS / Blockiverse       framework Blocks are first-class publishable definition
 WOT Idea layer           compiler infrastructure is itself Ideas — not implementation exceptions
 ```
 
-### ValueType lifecycle (Draft · TBD · V1 preparation)
+### Type and value separation
 
-> **Status:** Draft — see `08_managed_object.md`. **Not implemented** as BOM Capabilities in V1; **Integer is the reference pattern**.
-
-All ValueType Blocks (PrimitiveType, StructType, EnumType) share one **lifecycle shape** (Capability metadata in BOM):
+BlockML distinguishes strictly between **types** and **values**:
 
 ```text
-Internal (_self)     private object — e.g. Integer: { value: 5 }
-__construct          external/authored form  →  _self   (Transformation — renderer metadata)
-serialize            _self  →  external/authored form   (Outbound — BML roundtrip + renderer metadata)
+Property
+    type = Decimal
+    value = 5.3
 ```
 
-**Purpose of `serialize`:** describes external/authored form for BML export and for renderers translating to target syntax. The Capability definition lives in BOM; the renderer implements it — the parser does not execute it.
+A `ValueType` never stores data. All concrete values are stored exclusively in **Properties**. The type describes the nature of the value; the Property owns the value. There is no Java-style `new BigDecimal(5)` in BlockML.
 
-**V1:** Type compatibility rules in `04_types.md` validate authored forms without rewriting them. Materializing synthetic `__construct` / `serialize` Capabilities on every ValueType Block is **post-V1** — but all types must be able to reproduce the Integer pattern.
+When a primitive value must exist as an **Entity** inside composition or aggregation, wrap it in `org.blockml.core.PrimitiveEntity(T)` — not by adding a `value` member to the PrimitiveType.
 
-**Composable Entity Blocks** (Wall, Set, …) get `__construct` only — **no** `serialize` in V1 scope.
+### Capabilities — no special lifecycle types
 
-**Union expressions:** `__construct` metadata describes first-match member selection; validation records `resolvedTypeFqn` on `LiteralValue` for type checking — authored value is not rewritten.
-
-**ExpressionValue** roundtrip: `raw` + AST preserved in BOM — evaluation deferred to renderer.
+BlockML has no special concepts for constructor, getter, or setter. All behaviour is expressed as ordinary **Capabilities** (`init()`, `getValue()`, `setValue()`, `render()`, …). The Renderer decides how to interpret each Capability for the target system. See `00_bom_core.md` — Semantics remain in BML.
 
 ### Self-hosting on the compiler level
 
@@ -332,11 +329,12 @@ The type system follows one metamodel — **everything is a Block**:
 
 ```text
 Types are Blocks          — no separate type language construct
-Primitives are Blocks     — value property + instance syntax (<Integer value="5"/>)
-Structs are Blocks        — normal <properties>, no special struct syntax
-Enums are Blocks          — _values aggregation + composition, no enumValues syntax
+Primitives are pure types — semantics only; no value member on PrimitiveType
+StructTypes describe layout — properties define data structure; values live in Properties
+Enums are StructTypes     — _values aggregation adds finite allowed values
 Contracts are Blocks      — reusable partial definitions merged via <contracts>
 Generics parametrize Blocks — `<genericTypes>` + type arguments at reference sites
+PrimitiveEntity wraps primitives — when a primitive must appear as an Entity in composition
 ```
 
 Semantics are decided by `baseType` and usage context — not by parallel XSD or compiler hardcoding.
@@ -346,22 +344,32 @@ Semantics are decided by `baseType` and usage context — not by parallel XSD or
 All types inherit from **`org.blockml.core.ValueType`**. Types are not a separate language construct — they are normal BlockML Blocks. Meaning comes from `baseType` and usage context.
 
 ```text
-org.blockml.core.ValueType              abstract
-  ├── org.blockml.core.PrimitiveType
-  │     ├── org.blockml.type.Number       abstract — Integer · Float · Decimal
-  │     ├── org.blockml.type.String
-  │     └── org.blockml.type.Boolean
-  ├── org.blockml.core.EnumType         BaseCutoutType · Direction · …
-  └── org.blockml.core.StructType       Size3D · Color · domain value objects
+org.blockml.core.ValueType              abstract — never stores data
+  ├── org.blockml.type.PrimitiveType    abstract
+  │     ├── org.blockml.type.Text         abstract — textual primitives
+  │     │     ├── org.blockml.type.FullyQualifiedName
+  │     │     ├── org.blockml.type.Version
+  │     │     ├── org.blockml.type.URL
+  │     │     ├── org.blockml.type.URI
+  │     │     ├── org.blockml.type.FilePath
+  │     │     ├── org.blockml.type.MimeType
+  │     │     └── …
+  │     ├── org.blockml.type.Number       abstract — numeric primitives
+  │     │     ├── org.blockml.type.Integer
+  │     │     ├── org.blockml.type.Decimal   — default for non-integer numbers
+  │     │     └── org.blockml.type.Float     — binary float — special-purpose only
+  │     └── org.blockml.type.Boolean      — neither textual nor numeric
+  ├── org.blockml.type.StructType         Size3D · Color · …
+  └── org.blockml.type.EnumType           extends StructType — BaseCutoutType · Direction · …
 ```
 
 **BlockML knows only three ValueType kinds at language level** — each names a semantic meaning:
 
 | Branch | Role | Examples |
 |---|---|---|
-| **PrimitiveType** | Atomic scalar values | `Boolean`, `Integer`, `Float`, `Decimal`, `String` |
-| **EnumType** | Named finite value sets | `Direction`, `Face`, `StudType`, `BaseCutoutType` |
-| **StructType** | Custom value objects from properties | `Size3D`, `Color`, `Address`, `Transform` |
+| **PrimitiveType** | Atomic scalar semantics — no stored values | `Boolean`, `Integer`, `Decimal`, `Float`, `Text`, `URL`, `Version` |
+| **StructType** | Custom value objects — structure via properties | `Size3D`, `Color`, `Address`, `Transform` |
+| **EnumType** | StructType + finite allowed values | `Direction`, `Face`, `StudType`, `BaseCutoutType` |
 
 `StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate ValueType branch.
 
@@ -474,7 +482,7 @@ Union type expressions combine alternatives with `|`:
 "none" | T                  — none sentinel or T
 false | Size3D              — false or struct
 Boolean | StudType          — boolean or enum
-Integer | String            — primitive union
+Integer | Text            — primitive union
 ```
 
 Literal alternatives use JSON literal syntax (`"auto"`, `"none"`, `false`, `true`). Type alternatives reference ValueTypes or nested type expressions.
@@ -496,87 +504,81 @@ Not allowed: type="com.machineblocks.core.NativeBlock"   → BML_INVALID_PROPERT
 
 ### PrimitiveType
 
-Primitive types inherit from `org.blockml.core.PrimitiveType`. Numeric primitives extend `org.blockml.type.Number`:
+Primitive types inherit from `org.blockml.type.PrimitiveType`. They are **pure type definitions** — no `value` property.
 
 ```text
-org.blockml.core.PrimitiveType
-  org.blockml.type.Number     — abstract
-    org.blockml.type.Integer
-    org.blockml.type.Float
-    org.blockml.type.Decimal
-  org.blockml.type.String
-  org.blockml.type.Boolean
+org.blockml.type.PrimitiveType
+  org.blockml.type.Text           — abstract
+    org.blockml.type.FullyQualifiedName
+    org.blockml.type.Version
+    org.blockml.type.URL · URI · FilePath · MimeType · …
+  org.blockml.type.Number         — abstract
+    org.blockml.type.Integer      — whole numbers
+    org.blockml.type.Decimal      — default for non-integer numeric values
+    org.blockml.type.Float        — binary float — special-purpose only
+  org.blockml.type.Boolean        — neither textual nor numeric
 ```
 
-The branch declares:
+**Invalid:**
 
 ```xml
-<property name="value" type="_self"/>
+<type:Integer value="5"/>
 ```
 
-Each concrete primitive (`Integer`, `Float`, `Decimal`, …) inherits this member.
-
-#### Scalar role vs instance role
-
-PrimitiveTypes have a **dual interpretation** depending on where they appear. The Java `int` / `Integer` distinction is a useful analogy — BlockML applies the same pattern to all primitives (`float`/`Float`, `boolean`/`Boolean`, …):
-
-| Role | Where | Authoring | BOM / runtime |
-|---|---|---|---|
-| **Scalar** | Property `type="Integer"` · property value on a Block instance · Capability scalar input/output | Inline literal: `5`, `"text"`, `true` | `LiteralValue` — no nested `BlockInstance` |
-| **Instance** | Composition child · `<suggestions>` entry · typed Block instance elsewhere | Block instance: `<Integer value="5"/>` | `BlockInstance` with `typeFqn = org.blockml.type.Integer` |
+**Valid — value on Property:**
 
 ```xml
-<!-- Scalar role — property slot -->
 <properties>
   <count type="Integer">
     <value>5</value>
   </count>
+  <label type="Text">
+    <value>Hello</value>
+  </label>
 </properties>
+```
 
-<!-- Instance role — suggestion (boxed primitive) -->
-<count type="Integer">
+On Block instances, primitive values are inline literals on Properties or attributes:
+
+```xml
+<bricks:Standard columns="5" studs="true" text="ABC" />
+```
+
+#### Text replaces String
+
+The public BlockML text primitive is **`Text`** (FQN `org.blockml.type.Text`), not `String`. BlockML describes semantic types, not implementation data structures. Renderers map `Text` to Java `String`, TypeScript `string`, Python `str`, etc.
+
+#### Decimal vs Float
+
+**Decimal** is the default type for all non-integer numeric values (`3.5`, `12.75`, `0.1`). **Float** is only used when binary floating-point semantics are explicitly required (GPU, OpenGL, IEEE754 APIs, native C APIs, binary protocols).
+
+#### PrimitiveEntity
+
+When a primitive must appear as a Block instance in composition or aggregation:
+
+```xml
+<composition>
+  <PrimitiveEntity(Integer) value="5"/>
+</composition>
+```
+
+Or use a typed alias. Properties continue to store primitive values directly — `PrimitiveEntity` exists only when the primitive value itself must become an Entity.
+
+V1 bootstrap primitives: `Integer`, `Decimal`, `Float`, `Text`, `Boolean` in `@blockml/core`.
+
+### Properties are always Optional
+
+Every Property behaves as an **Optional** — it has a value or has no value. There is no `null`. Internally the BOM represents `Optional<Value>` instead of `Value | null`.
+
+PropertyDefinitions may declare `valueRequired`:
+
+```xml
+<property name="count" type="Integer" valueRequired="true">
   <value>5</value>
-  <suggestions>
-    <Integer value="1"/>
-    <Integer value="5"/>
-  </suggestions>
-</count>
-
-<!-- Instance role — composition / aggregation child -->
-<aggregations>
-  <samples type="Integer[]">
-    <composition>
-      <Integer value="0"/>
-      <Integer value="10"/>
-    </composition>
-  </samples>
-</aggregations>
+</property>
 ```
 
-On Block instances, primitive properties use the **scalar** form only:
-
-```xml
-<bricks:Standard columns="5" studs="true" />
-<!-- not <Integer value="5"/> as property value -->
-```
-
-The **same FQN** (`org.blockml.type.Integer`) applies in both roles. The parser and validator decide scalar vs instance from **context** — not from a different type name.
-
-**As a property type** (scalar reference):
-
-```xml
-<property name="count" type="Integer"/>
-```
-
-**As a Block instance** (boxed value):
-
-```xml
-<Integer value="5"/>
-```
-
-Interpretation is context-dependent — same ValueType, two roles. StructTypes and EnumTypes do not share this split; it is specific to `org.blockml.core.PrimitiveType`.
-
-V1 bootstrap primitives: `Integer`, `Float`, `Decimal`, `String`, `Boolean` in `@blockml/core`. Numeric branch: `org.blockml.type.Number` (abstract).
+When `valueRequired=true`, the Property must contain a value in BlockML — otherwise the Validator reports an error. When `valueRequired=false`, the Property may remain empty; the Renderer decides how to interpret missing values.
 
 ### EMPTY — not a type
 
@@ -584,7 +586,7 @@ BlockML has **no `Null` type** and **no `null` literal** in expressions or type 
 
 ```text
 Omitted attribute / member     — absent (no value authored)
-defaultValue="" on String      — empty string (still typed as String)
+defaultValue="" on Text       — empty string (still typed as Text)
 Optional association           — no target id set
 ```
 
@@ -653,7 +655,7 @@ The parser stores each field with its **name** and its **declaration ordinal** (
 
 The parser **must not reorder** fields or **rewrite** literal shapes at parse, map, or validate time.
 
-Render targets choose their preferred representation at **render time** — using type metadata (`serialize`, field order, `__construct`):
+Render targets choose their preferred representation at **render time** — using type metadata (field order, StructType declaration order):
 
 ```text
 size[0]   — index access in expression evaluation (OpenSCAD, generic array renderers)
@@ -746,7 +748,9 @@ Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) foll
 
 ### EnumType
 
-Enums are normal ValueTypes. The branch declares a default aggregation for enum values:
+EnumType is a **specialized StructType** — it adds a finite list of allowed values. It is not a fourth ValueType category; the three categories remain PrimitiveType, StructType, and EnumType.
+
+Enums are normal ValueTypes extending `org.blockml.type.StructType`. The branch declares a default aggregation for enum values:
 
 ```xml
 <aggregation name="_values" type="_self[]" default="true"/>
@@ -758,7 +762,7 @@ Enum values are **Block instances** in `<composition aggregation="_values">` —
 <block ...>
   <name>BaseCutoutType</name>
   <type>com.machineblocks.type.BaseCutoutType</type>
-  <baseType>org.blockml.core.EnumType</baseType>
+  <baseType>org.blockml.type.EnumType</baseType>
   <version>1.0.0</version>
 
   <composition aggregation="_values">
@@ -809,14 +813,13 @@ A ValueType may appear in different roles:
 
 | Context | Example | Role |
 |---|---|---|
-| Property type | `type="org.blockml.type.Integer"` | type reference (scalar slot) |
-| Property value on instance | `columns="5"` | **inline scalar** — PrimitiveType only |
-| Block instance | `<Integer value="5"/>` | **boxed primitive** — BlockInstance |
-| Suggestion | `<Integer value="1"/>` inside `<suggestions>` | boxed primitive |
-| Aggregation type | `type="org.blockml.type.Integer[]"` | collection type reference |
-| Composition child | `<Integer value="5"/>` inside aggregation | boxed primitive |
+| Property type | `type="org.blockml.type.Integer"` | type reference — value stored on Property |
+| Property value on instance | `columns="5"` | inline literal on Property |
+| Suggestion | Block instance in `<suggestions>` | metadata — same type as property |
+| Aggregation type | `type="org.blockml.core.PrimitiveEntity(Integer)[]"` | collection of primitive Entities |
+| Composition child | `<Size3d x="10" y="5" z="2"/>` | StructType Block instance |
 
-**PrimitiveType dual role:** On Properties, primitives act as **scalars** (Java `int` analogy). Everywhere else they appear as **Block instances** of the primitive type (Java `Integer` analogy). Same FQN — semantics from context. See § PrimitiveType — Scalar role vs instance role.
+**Primitive values in composition:** use `PrimitiveEntity(T)` when a primitive must be an Entity — not `<Integer value="5"/>`. Properties always store values directly.
 
 The renderer and validator decide semantics from `baseType`, branch, and usage context — not from separate metamodels.
 
@@ -886,8 +889,8 @@ Generic parameters (`T`) and `_self` in type positions are type-expression refer
 
 ```text
 Scalar property (Integer)     → Min/Max: T = Integer
-Collection property (String[]) → MinItems/MaxItems: T = String[]
-                               → MinLength/MaxLength: T = String (element type)
+Collection property (String[]) → MinItems/MaxItems: T = Text[]
+                               → MinLength/MaxLength: T = Text (element type)
 ```
 
 Binding rules per constraint FQN are defined in each constraint Block's `<documentation>`. See `18_constraints_and_suggestions.md`.
@@ -1086,7 +1089,7 @@ packages/core/blocks/
   org/blockml/core/
     Block.bml · ValueType.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · …
   org/blockml/type/
-    Integer.bml · Float.bml · Decimal.bml · Number.bml · String.bml · Boolean.bml · …
+    Integer.bml · Float.bml · Decimal.bml · Number.bml · Text.bml · Boolean.bml · …
   org/blockml/language/
     TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml · XML.bml · …
   org/blockml/service/
@@ -1142,7 +1145,7 @@ never expose „Block“ outside parser/BOM types
 | Type expressions · three ValueType kinds | `17_type_system_bml.md` — Type Expressions |
 | TypeExpression AST | `12_bom_object_model.md` |
 | Parse/serialize behaviour | `04_types.md` |
-| Synthetic accessors · ValueType roundtrip (Draft) | `08_managed_object.md` |
+| Synthetic accessors · Capability interpretation | `08_managed_object.md` |
 | Collections and Multiplicity | this document — § Collections and Multiplicity |
 | Bootstrap mapping | `13_bml_to_bom_mapping.md` |
 | SCAD property mapping | `09_mbom_properties.yml` |

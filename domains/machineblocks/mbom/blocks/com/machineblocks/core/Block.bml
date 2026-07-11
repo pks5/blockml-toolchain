@@ -23,7 +23,7 @@
   <abstract />
 
   <properties>
-    <name type="String">
+    <name type="Text">
       <documentation>The human readable name of the Block.</documentation>
     </name>
   </properties>

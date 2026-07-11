@@ -36,7 +36,7 @@
     named after the property (for example <name>, <type>, or <baseType>).
   -->
   <properties>
-    <name type="String">
+    <name type="Text">
       <documentation>Short class name (PascalCase). Required on every Block definition.</documentation>
     </name>
     <type type="btype:FullyQualifiedName(core:Block)">

@@ -30,12 +30,12 @@
 
   <properties>
     <!-- bml:xml="attribute" renders version as an XML attribute on <change>. -->
-    <version type="btype:VersionNumber" bml:xml="attribute">
+    <version type="btype:Version" bml:xml="attribute">
       <documentation>Semantic version this change applies to. Required attribute on every change
         entry.</documentation>
     </version>
     <!-- bml:xml="text" renders the description as character content of <change>. -->
-    <description type="String" bml:xml="text">
+    <description type="Text" bml:xml="text">
       <documentation>Human-readable description of what changed at this version. Stored as trimmed
         text body in BOM ChangelogEntry.text.</documentation>
     </description>

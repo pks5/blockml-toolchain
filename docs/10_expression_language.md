@@ -330,7 +330,7 @@ The utility Sub-Block is declared as a Sub-Block and bound via a context-scoped 
     <formatValue
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
-                outputType="org.blockml.type.String">
+                outputType="org.blockml.type.Text">
       <implementation type="org.blockml.language.TypeScript"><![CDATA[
         (x: number): string => {
             const rounded = Math.round(x * 10) / 10
@@ -899,7 +899,7 @@ type ExpressionNode =
 interface StringLiteral extends ExpressionNodeBase {
   kind: "stringLiteral"
   value: string
-  resultTypeFqn: "org.blockml.type.String"
+  resultTypeFqn: "org.blockml.type.Text"
 }
 
 interface NumberLiteral extends ExpressionNodeBase {

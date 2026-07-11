@@ -35,7 +35,27 @@ The compiler is implemented across these packages:
 
 > **Architecture decision:** Parser produces immutable Canonical BOM. Framework utilities and renderer pipelines are separate layers. See `00_bom_core.md` — Fundamental Architecture Principles.
 
-### Layer 1 — Parser (`@blockml/parser`)
+## Validation Pipeline
+
+> **Architecture decision:** Three independent validation stages. See `00_bom_core.md` — Validation pipeline.
+
+```text
+Stage 1 — XML (Parser)
+  Checks: XML syntax · namespaces · XSD
+  No semantics.
+
+Stage 2 — Validator
+  Creates immutable Canonical BOM + mutable default Working Model.
+  Checks: inheritance · contracts · type compatibility · visibility ·
+          constraints · references · valueRequired · expression correctness
+  Expressions are NOT evaluated.
+
+Stage 3 — Renderer / Runtime
+  Decides: expression evaluation · optional handling · capability interpretation ·
+           code generation · runtime behaviour
+```
+
+### Layer 1 — Parser (`@blockml/parser`) — Stage 1
 
 Produces the **Canonical BOM**. No semantic decisions. Output is immutable.
 
@@ -55,7 +75,7 @@ BML Source (.bml)                   — V1: XML only; JSON BML deferred (TBD)
 Canonical BOM (immutable)
 ```
 
-### Layer 2 — Framework Utilities (`@blockml/core`)
+### Layer 2 — Validator / Framework Utilities (`@blockml/core`) — Stage 2
 
 Optional, composable functions. **Never mutate** the Canonical BOM. Return derived views, diagnostics, or new structures.
 
@@ -76,7 +96,7 @@ validateConstraints(bom, registry)      → Diagnostic[]
 
 The CLI may invoke utilities before or during compile for diagnostics — but utilities **never write back** to the Canonical BOM.
 
-### Layer 3 — Renderer Pipeline (target-specific)
+### Layer 3 — Renderer Pipeline (target-specific) — Stage 3
 
 Each renderer defines its own flow. Example — **SCAD Renderer** (reference implementation):
 
@@ -586,7 +606,7 @@ function mb__...__Utils__formatValue(x) =
 <capability name="formatValue"
             type="org.blockml.capability.Transformation"
             inputType="org.blockml.type.Float"
-            outputType="org.blockml.type.String">
+            outputType="org.blockml.type.Text">
   <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
 // Main function — name matches capability name
 function formatValue(x) =
@@ -649,7 +669,7 @@ The natural next step is the LLM Engine: given the Capability signature (name, i
 <capability name="formatValue"
             type="org.blockml.capability.Transformation"
             inputType="org.blockml.type.Float"
-            outputType="org.blockml.type.String">
+            outputType="org.blockml.type.Text">
   <documentation>
     Formats a float by removing the leading zero before the decimal point.
     Examples: 0.1 → ".1"   -0.2 → "-.2"   3.0 → "3.0"

@@ -271,7 +271,7 @@ Member visibility: see `02_mbml.md` — § Member Visibility.
 
 ```text
 org.blockml.type.Integer            — primitive
-org.blockml.type.String             — primitive
+org.blockml.type.Text             — primitive
 com.myDomain.MyClass             — Object (named fields)
 { items: org.blockml.type.Integer[0..n] }  — collection field
 ```

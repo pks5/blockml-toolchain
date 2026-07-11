@@ -29,7 +29,7 @@
   <bml:xml>genericType</bml:xml>
 
   <properties>
-    <name type="String">
+    <name type="Text">
       <documentation>Parameter identifier used in type references within this Block (e.g. T).
         Must not collide with the Block name or any Sub-Block name in the same document.</documentation>
     </name>

@@ -5,8 +5,11 @@
 
   <idea>Primitive BlockML property type for fixed-precision decimal numbers.</idea>
 
-  <documentation>BOM Core primitive ValueType for decimal numbers. Unqualified name Decimal resolves
-    to org.blockml.type.Decimal. Extends org.blockml.type.Number.</documentation>
+  <documentation>BOM Core primitive ValueType for decimal numbers — the default type for all
+    non-integer numeric values (3.5, 12.75, 0.1). Unqualified name Decimal resolves to
+    org.blockml.type.Decimal. Extends org.blockml.type.Number. Represents mathematical decimal
+    numbers; the renderer decides target representation (BigDecimal, decimal, number, …).
+    Values are stored in Properties — not on the Decimal type itself.</documentation>
   <name>Decimal</name>
   <type>btype:Decimal</type>
   <baseType>btype:Number</baseType>

@@ -70,5 +70,5 @@
 
   <name>FullyQualifiedName</name>
   <type>btype:FullyQualifiedName</type>
-  <baseType>core:ValueType</baseType>
+  <baseType>btype:Text</baseType>
 </block>

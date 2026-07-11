@@ -19,8 +19,9 @@
   <documentation>Describes a Block member that carries a scalar or structured value. Rendered as a
     child element inside the properties container; the XML element name is the property name
     (bml:xml="${ name }"). Maps to BOM PropertyDefinition (kind: "property") with typeFqn, value,
-    and optional constraints and suggestions. Property type must resolve to a ValueType
-    (org.blockml.core.ValueType branch). Declaration order among properties is significant for
+    valueRequired, and optional constraints and suggestions. Property type must resolve to a
+    ValueType (org.blockml.core.ValueType branch). Every Property behaves as Optional — it has a
+    value or has no value; there is no null. Declaration order among properties is significant for
     StructType positional mapping and Capability parameter order.
     See 12_bom_object_model.md — PropertyDefinition · 02_mbml.md — Members · Properties.</documentation>
   <name>PropertyDefinition</name>
@@ -36,10 +37,15 @@
         in the type attribute string as TypeExpressions.</documentation>
     </type>
     <!-- Rendered as <value> element or inline attribute depending on bml:xml placement. -->
-    <value type="String" bml:xml="element|attribute">
+    <value type="Text" bml:xml="element|attribute">
       <documentation>Default or computed member value on the Block definition. On instances, the
         same member is set directly without a value wrapper element. May be a literal or a
-        ${ … } expression.</documentation>
+        ${ … } expression. Absent value means Optional.empty — not null.</documentation>
     </value>
+    <valueRequired type="Boolean" bml:xml="attribute">
+      <documentation>When true, the Property must contain a value in BlockML — otherwise the
+        Validator reports an error. When false, the Property may remain empty; the Renderer decides
+        how to interpret missing values (compile error, Optional.empty(), undefined, omit, …).</documentation>
+    </valueRequired>
   </properties>
 </block>

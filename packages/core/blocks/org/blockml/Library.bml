@@ -46,7 +46,7 @@
 
   <properties>
     <description>
-      <value>BlockML library</value>
+      <value>BlockML core library</value>
     </description>
   </properties>
 
@@ -65,6 +65,7 @@
         <bcore:Constraint />
         <bcore:Definition />
         <bcore:Entity />
+        <bcore:PrimitiveEntity />
         <bcore:Language />
         <bcore:Status />
         <bcore:ValueType />
@@ -122,14 +123,18 @@
         <btype:Boolean />
         <btype:Decimal />
         <btype:EnumType />
+        <btype:FilePath />
         <btype:Float />
         <btype:FullyQualifiedName />
         <btype:Integer />
+        <btype:MimeType />
         <btype:Number />
         <btype:PrimitiveType />
-        <btype:String />
         <btype:StructType />
-        <btype:VersionNumber />
+        <btype:Text />
+        <btype:URI />
+        <btype:URL />
+        <btype:Version />
       </composition>
     </_blocks>
   </aggregations>

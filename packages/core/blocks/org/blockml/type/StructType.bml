@@ -19,10 +19,13 @@
     Abstract ValueType branch for composite value objects — complex values described by normal
     Properties. Unqualified name StructType resolves to org.blockml.type.StructType.
 
-    One of three language-level ValueType kinds (PrimitiveType · EnumType · StructType). Concrete
-    StructTypes declare &lt;properties&gt; whose members become struct fields — no special struct
-    syntax. Examples: Size3d, Color, Address, Transform. Parameterized value types (for example
-    Box&lt;T&gt;) are StructTypes that declare &lt;genericTypes&gt; — not a separate ValueType branch.
+    One of three language-level ValueType kinds (PrimitiveType · StructType · EnumType).
+    StructTypes describe the structure of a value — their properties define the data layout.
+    StructTypes usually contain no values themselves; Property values remain stored in the owning
+    Property. Default values on StructType property definitions are allowed. Concrete StructTypes
+    declare &lt;properties&gt; whose members become struct fields — no special struct syntax.
+    Examples: Size3d, Color, Address, Transform. Parameterized value types (for example Box&lt;T&gt;)
+    are StructTypes that declare &lt;genericTypes&gt; — not a separate ValueType branch.
 
     Field declaration order is semantically significant (Ordered Struct Fields):
     • Each &lt;property&gt; in a StructType definition maps to a field with an implicit index

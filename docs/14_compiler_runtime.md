@@ -643,7 +643,7 @@ The merge result is a **render-time view** — it is not written back to `BomDoc
 
 > **Status:** Draft — see `08_managed_object.md`. **Not active in V1 render.**
 
-Post-V1, property resolution **may** consult synthetic accessor Capability **definitions** as translation metadata. Entity `__construct` **may** subsume the merge chain above.
+Post-V1, property resolution **may** consult authored Capability definitions as translation metadata. The Renderer decides merge order and optional handling.
 
 **V1 rule:** `PropertyResolver` reads `memberValues` in authored form directly. An optional `AccessorInvoker` stub may exist for future wiring. SCAD emission uses `04_types.md` and `09_mbom_properties.yml` type metadata.
 

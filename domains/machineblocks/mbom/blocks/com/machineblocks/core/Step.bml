@@ -27,7 +27,7 @@
   </associations>
 
   <properties>
-    <description type="String">
+    <description type="Text">
       <documentation>Additional description of the step.</documentation>
     </description>
   </properties>

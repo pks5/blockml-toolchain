@@ -19,7 +19,7 @@
   <type>type:BaseCutoutType</type>
   <baseType>btype:EnumType</baseType>
   <properties>
-    <value type="String">
+    <value type="Text">
       <documentation>Enum literal used in property values and expressions.</documentation>
     </value>
   </properties>

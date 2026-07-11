@@ -34,7 +34,7 @@
         attribute on the reference element.</documentation>
     </type>
     <!-- Optional context renders as text content of the <reference> element. -->
-    <context type="String" bml:xml="text">
+    <context type="Text" bml:xml="text">
       <documentation>Optional human-readable explanation of why or how the referenced element
         relates to this definition. Rendered as character content of the reference element.</documentation>
     </context>

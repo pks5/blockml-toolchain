@@ -45,7 +45,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | `<composition>` children | `CompositionNode` tree | Renderer (wrapper logic, assembly patterns) |
 | `baseType` FQN | string reference | Type Registry → effective member metadata |
 | Preset reference | string `FQN::id` — **unmerged** | Renderer (preset merge) |
-| `__construct`, `serialize`, getters | Capability definitions on ValueType/Entity | Renderer (target translation metadata — not invoked at parse time) |
+| Authored Capabilities | `CapabilityDefinition` in BOM | Renderer (interpretation only — not invoked at parse/validate time) |
 
 ---
 
@@ -55,7 +55,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 |---|---|
 | **Immutability** | Canonical `BomDocument` is **immutable** after parse. No utility or renderer may write derived data back. See `00_bom_core.md` — Canonical BOM is immutable. |
 | **Member inheritance** | **Utility lookup only.** BOM stores **declared** members per Block. `resolveEffectiveMembers()` returns `EffectiveMemberSet` — a separate structure, never flattened into BOM. |
-| **Synthetic accessors** | **Not in BOM.** Generated getters/setters are utility output or renderer working model — never written to Canonical BOM. See `08_managed_object.md`. |
+| **Capabilities** | Authored Capabilities stored in BOM. No synthetic getter/setter generation. Renderer interprets all Capabilities. See `08_managed_object.md`. |
 | **Member identity** | Uniqueness by resolved **`(namespace, name)`**. `namespace` attribute is an XML prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
 | **Composition** | Nested inside `<aggregation>` on definitions and instances. Bare `<composition>` is sugar for the single default aggregation. `composition aggregation="…"` removed. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
@@ -413,7 +413,10 @@ interface MemberDefinitionBase {
 interface PropertyDefinition extends MemberDefinitionBase {
   kind: "property"
   typeFqn: string
-  value: MemberValue
+  /** Optional — absent means no value (not null) */
+  value?: MemberValue
+  /** When true, Validator requires a value in BlockML */
+  valueRequired?: boolean
   group?: string
   /** Constraint Block instances — each typeFqn must extend org.blockml.core.Constraint */
   constraints?: BlockInstance[]
@@ -516,36 +519,11 @@ interface EffectiveMemberSet {
 
 Native MBOM properties from `09_mbom_properties.yml` are attached to `com.machineblocks.core.Block` in the Type Registry — not repeated in every derived Block's `members[]`.
 
-### Synthetic Accessors (Draft · TBD)
+### Capabilities in the BOM
 
-> **Status:** Draft. Synthetic getters/setters are **not stored in Canonical BOM**. They are either derived by `resolveEffectiveMembers()` utility output or interpreted by the renderer from BML Capability semantics. See `08_managed_object.md` · `00_bom_core.md` — Semantics remain in BML.
+Authored Capabilities (`Inbound`, `Outbound`, `Transformation`) are stored in Canonical BOM as declared. There are **no special** constructor, getter, or setter types — all behaviour is expressed as ordinary Capabilities. The Renderer decides how to interpret each Capability for the target system. See `08_managed_object.md` · `00_bom_core.md` — Semantics remain in BML.
 
-```text
-Storage member (always private)     Synthetic accessors (materialized at validate)
-──────────────────────────────────────────────────────────────────────────────────
-property color                      getColor (Outbound), setColor (Inbound)
-aggregation _parts (0..n)           getParts, addPart, … (kinds TBD)
-association targetDevice            getTargetDevice, setTargetDevice
-Entity Block (composable)             __construct (Transformation → _self)
-ValueType Block (all kinds)           __construct, serialize — same pattern as Integer (Draft)
-  PrimitiveType                       internal { value: T } · construct/serialize in parser (V1 loose)
-  StructType / EnumType               internal struct fields · target: explicit Capabilities
-```
-
-Draft fields on `CapabilityDefinition`:
-
-```typescript
-synthetic?: true
-accessorFor?: {
-  memberName: string
-  memberKind: "property" | "aggregation" | "association"
-  role: "getter" | "setter" | "construct" | "serialize" | /* aggregation ops — TBD */
-}
-```
-
-V1: Canonical BOM (`BlockDefinition.members[]`) contains **only authored** members. `resolveEffectiveMembers()` returns synthetics in `EffectiveMemberSet` only — a separate utility result. Renderers read BOM member values directly.
-
-Override of a synthetic accessor by an authored Capability with the same name is **TBD**.
+V1: Canonical BOM (`BlockDefinition.members[]`) contains **only authored** members. Renderers read BOM Property values and Capability definitions directly.
 
 ### Contract Merge (not stored in BOM)
 

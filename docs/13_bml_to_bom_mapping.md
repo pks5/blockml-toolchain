@@ -211,7 +211,7 @@ Unqualified PascalCase names on `type="..."` (properties, aggregations, capabili
 1. Own Block name → root BlockDefinition.type FQN
 2. SubBlocks (document scope + baseType-inherited)
 3. genericTypes[] of root BlockDefinition
-4. Core primitives whitelist: String · Float · Integer · Decimal · Boolean → org.blockml.type.*
+4. Core primitives whitelist: Text · Float · Integer · Decimal · Boolean → org.blockml.type.*
 5. xmlns prefix
 6. TypeRegistry NamedTypeReference
 ```
@@ -402,7 +402,8 @@ Property-specific:
 
 ```text
 type="…"                 → typeFqn (resolved)
-value="…"                → value (LiteralValue or ExpressionValue). Formerly defaultValue.
+value="…"                → value (LiteralValue or ExpressionValue). Absent → Optional.empty.
+valueRequired="true|false" → valueRequired (boolean; default false)
 <constraints>            → constraints[] (BlockInstance[], document order)
 <suggestions>            → suggestions[] (BlockInstance[], document order)
 ```

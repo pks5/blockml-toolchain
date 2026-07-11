@@ -140,7 +140,7 @@ Unqualified PascalCase identifiers — on composition element names, `type="..."
                           then Sub-Blocks inherited via baseType chain
 3. Generic parameters   — genericTypes[] of the root BlockDefinition (e.g. type="T")
 4. Core primitives      — whitelist only (→ org.blockml.type.*):
-                          String · Float · Integer · Decimal · Boolean
+                          Text · Float · Integer · Decimal · Boolean
 ```
 
 After steps 1–4 fail in document scope:
@@ -154,13 +154,13 @@ After steps 1–4 fail in document scope:
 
 **Own Block name (step 1):** When an unqualified reference matches the root Block's `<name>`, it resolves to that Block's declared `<type>` FQN — a self-type reference within the same definition. For inheritance-aware self-reference at validate time, `_self` remains available (see § Members — `_self`).
 
-**Core primitives (step 4):** Only the five whitelist names above resolve without prefix. Abstract branches such as `org.blockml.type.Number` or `org.blockml.core.PrimitiveType` are **not** in the whitelist — use `Integer`, `Float`, or `Decimal` for numeric properties.
+**Core primitives (step 4):** Only the five whitelist names above resolve without prefix. Abstract branches such as `org.blockml.type.Number` or `org.blockml.type.PrimitiveType` are **not** in the whitelist — use `Integer`, `Decimal`, or `Float` for numeric properties.
 
 ```text
 type="Integer"   →  org.blockml.type.Integer
 type="Float"     →  org.blockml.type.Float
 type="Decimal"   →  org.blockml.type.Decimal
-type="String"    →  org.blockml.type.String
+type="Text"    →  org.blockml.type.Text
 type="Boolean"   →  org.blockml.type.Boolean
 type="Number"    →  ✗  not whitelisted — use Integer, Float, or Decimal
 ```
@@ -579,7 +579,7 @@ Validation      — merge resolution at stage [8] via resolveEffectiveMembers()
   <version>1.0.0</version>
   <abstract />
   <properties>
-    <id type="String" />
+    <id type="Text" />
   </properties>
 </block>
 ```
@@ -883,7 +883,7 @@ Properties may be written as **attributes** (short form) or **elements** (long f
 
 When both forms exist, the **long form replaces the short form entirely**.
 
-**Primitive properties — scalar only:** Properties typed with `org.blockml.core.PrimitiveType` (Integer, Float, String, Boolean, Decimal) carry **inline scalar values** on Block instances — attributes or child elements with literal text. They do not use nested primitive Block instances (`<Integer value="5"/>`) as property values. Boxed primitive Block instances appear in `<suggestions>`, composition children, and other non-property contexts. See `17_type_system_bml.md` — § PrimitiveType — Scalar role vs instance role.
+**Primitive properties:** Properties typed with `org.blockml.type.PrimitiveType` (Integer, Decimal, Float, Text, Boolean) store values directly on the Property — inline literals on Block instances. PrimitiveTypes never carry values themselves. Use `org.blockml.core.PrimitiveEntity(T)` when a primitive must appear as an Entity in composition. PropertyDefinitions may declare `valueRequired`. See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity · Properties are always Optional.
 
 Aggregations are filled directly by member name:
 
@@ -1077,7 +1077,7 @@ Unqualified type names (no namespace prefix) resolve to `org.blockml.type.*` —
 ```text
 Float    → org.blockml.type.Float
 Integer  → org.blockml.type.Integer
-String   → org.blockml.type.String
+Text     → org.blockml.type.Text
 Boolean  → org.blockml.type.Boolean
 ```
 
@@ -1111,7 +1111,7 @@ xmlns:type="com.machineblocks.type"
 </cutout>
 
 <!-- Primitives — no prefix needed -->
-<text type="String">
+<text type="Text">
   <value></value>
 </text>
 <pillars type="Boolean">
@@ -1153,11 +1153,11 @@ When the property `type` is an EnumType, `value` and instance attribute values m
 
 ```xml
 <!-- Free-text with suggestions — Combobox, not validated -->
-<textFont type="String">
+<textFont type="Text">
   <value>RBNo3.1 Black</value>
   <suggestions>
-    <String value="Creato Display"/>
-    <String value="RBNo3.1 Black"/>
+    <PrimitiveEntity(Text) value="Creato Display"/>
+    <PrimitiveEntity(Text) value="RBNo3.1 Black"/>
   </suggestions>
 </textFont>
 ```
@@ -1666,7 +1666,7 @@ Declares how a block type or member renders to canonical BML XML. Allowed only o
 <bml:xml>${ name }</bml:xml>
 
 <!-- Member value placement on Definition properties -->
-<documentation type="String" bml:xml="element">…</documentation>
+<documentation type="Text" bml:xml="element">…</documentation>
 ```
 
 Full specification: `19_definition_blocks_and_bml_xml.md`. Implementation status: **WIP**.
@@ -1926,7 +1926,7 @@ When a composition child element has **no namespace prefix** (PascalCase tag nam
 1. Own Block name
 2. SubBlocks (innermost → parent chain → baseType-inherited)
 3. Generic parameters
-4. Core primitives (String · Float · Integer · Decimal · Boolean)
+4. Core primitives (Text · Float · Integer · Decimal · Boolean)
 5. xmlns prefix
 6. TypeRegistry
 ```
@@ -2039,7 +2039,7 @@ Two implementation types are supported in V1:
     <formatValue
                 type="org.blockml.capability.Transformation"
                 inputType="org.blockml.type.Float"
-                outputType="org.blockml.type.String">
+                outputType="org.blockml.type.Text">
       <documentation>Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>
       <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
 // Main function — name must match capability name
@@ -2086,7 +2086,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
     <numberOfSamples type="Integer" >
       <value>5</value>
     </numberOfSamples>
-    <font            type="String"  >
+    <font            type="Text"  >
       <value>Liberation Sans</value>
     </font>
     <fontSize        type="Float"   >
@@ -2109,7 +2109,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
     <!-- FQN: com.machineblocks.calibration.Calibrator.Base -->
     <block name="Base">
       <properties>
-        <label           type="String"  >
+        <label           type="Text"  >
       <value></value>
     </label>
         <numberOfSamples type="Integer" >
@@ -2121,7 +2121,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
         <valueStep       type="Float"   >
       <value>0.1</value>
     </valueStep>
-        <font            type="String"  >
+        <font            type="Text"  >
       <value>Liberation Sans</value>
     </font>
         <fontSize        type="Float"   >
@@ -2574,7 +2574,7 @@ Physical directories and overlapping package prefixes do not define membership. 
   <version>3.0.0</version>
 
   <properties>
-    <description type="String"
+    <description type="Text"
               >
       <value>Standard brick types for MachineBlocks</value>
     </description>

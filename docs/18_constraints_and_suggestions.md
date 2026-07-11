@@ -139,16 +139,16 @@ Each suggestion is a Block instance of the **same type as the property**. The co
 ### Primitive suggestions
 
 ```xml
-<textFont type="String">
+<textFont type="Text">
   <value>RBNo3.1 Black</value>
   <suggestions>
-    <String value="Creato Display"/>
-    <String value="RBNo3.1 Black"/>
+    <PrimitiveEntity(Text) value="Creato Display"/>
+    <PrimitiveEntity(Text) value="RBNo3.1 Black"/>
   </suggestions>
 </textFont>
 ```
 
-Unqualified `String` resolves to `org.blockml.type.String` — same rules as property `type` attributes.
+Unqualified `String` resolves to `org.blockml.type.Text` — same rules as property `type` attributes.
 
 ### Struct suggestions
 

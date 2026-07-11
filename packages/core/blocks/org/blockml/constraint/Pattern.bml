@@ -16,7 +16,7 @@
 
   <idea>Regular-expression pattern for a string property value.</idea>
 
-  <documentation>T binds to org.blockml.type.String. The value property holds the regex pattern.</documentation>
+  <documentation>T binds to org.blockml.type.Text. The value property holds the regex pattern.</documentation>
   <name>Pattern</name>
   <type>constraint:Pattern</type>
   <baseType>core:Constraint</baseType>
@@ -25,7 +25,7 @@
   </genericTypes>
 
   <properties>
-    <value type="String">
+    <value type="Text">
       <documentation>Regular expression the property value must match.</documentation>
     </value>
   </properties>

@@ -5,9 +5,11 @@
 
   <idea>Abstract branch for numeric primitive ValueTypes.</idea>
 
-  <documentation>Numeric primitive branch under org.blockml.type.PrimitiveType. Concrete types:
-    org.blockml.type.Integer, org.blockml.type.Float, org.blockml.type.Decimal. Not in the
-    unqualified-name whitelist — use Integer, Float, or Decimal explicitly.</documentation>
+  <documentation>Abstract numeric primitive branch under org.blockml.type.PrimitiveType.
+    Concrete types: Integer (whole numbers), Decimal (default for non-integer numeric values),
+    Float (binary floating-point — only when IEEE754 semantics are explicitly required).
+    Not in the unqualified-name whitelist — use Integer, Decimal, or Float explicitly.
+    Numeric types describe semantics only; values are stored in Properties.</documentation>
   <name>Number</name>
   <type>btype:Number</type>
   <baseType>btype:PrimitiveType</baseType>

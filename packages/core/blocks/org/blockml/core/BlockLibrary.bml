@@ -32,7 +32,7 @@
   </subTypes>
 
   <properties>
-    <description type="String">
+    <description type="Text">
       <documentation>Human-readable summary of what this library provides.</documentation>
     </description>
   </properties>
@@ -53,7 +53,7 @@
       <baseType>core:Block</baseType>
       <final />
       <properties>
-        <ref type="String">
+        <ref type="Text">
           <documentation>Path to the .xsd file relative to the library package root.</documentation>
         </ref>
       </properties>

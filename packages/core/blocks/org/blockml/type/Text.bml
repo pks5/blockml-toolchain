@@ -1,0 +1,18 @@
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:btype="org.blockml.type"
+  xmlns:core="org.blockml.core">
+
+  <idea>Primitive BlockML type for textual values — implementation-independent.</idea>
+
+  <documentation>BOM Core primitive ValueType for text. Unqualified name Text resolves to
+    org.blockml.type.Text. Replaces the former String type — BlockML describes semantic types, not
+    implementation data structures. Renderers may map Text to Java String, TypeScript string,
+    Python str, C# string, or any target representation.
+
+    Semantic subtypes extend Text: FullyQualifiedName, Version, URL, URI, FilePath, MimeType, …
+    Concrete values are stored in Properties, not on the Text type itself.</documentation>
+  <name>Text</name>
+  <type>Text</type>
+  <baseType>btype:PrimitiveType</baseType>
+</block>

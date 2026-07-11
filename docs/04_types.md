@@ -11,9 +11,9 @@ This document defines **parse and serialize behaviour** for MBOM types — how B
 For native property declarations (names, types, defaults) see `com/machineblocks/core/Block.bml` (migrating from `09_mbom_properties.yml`).
 For the MBOM object model see `03_mbom.md`.
 For the SCAD render target see `docs/scad-reference/05_types_and_mapping.md`.
-For the target ValueType BML roundtrip model (Draft · V1 preparation) see `08_managed_object.md` — Canonical ValueType Pattern.
+For the target Capability interpretation model see `08_managed_object.md`.
 
-**V1:** This document remains authoritative for **parse** and **SCAD serialize** behaviour. Primitives already implement the construct/serialize **logic** as loose rules here; explicit accessor Capabilities are **not materialized** in V1.
+**V1:** This document remains authoritative for **parse** and **SCAD serialize** behaviour. Values are stored on Properties; PrimitiveTypes are pure type definitions.
 
 ---
 
@@ -25,7 +25,7 @@ BML is the authoring format.
 Target output is renderer-specific serialization (lossy by design).
 
 Do not normalize BOM values to a canonical internal shape at parse time.
-Renderers interpret authored values using type metadata (__construct, serialize, field order).
+Renderers interpret authored Property values using type metadata and field order.
 ```
 
 See `00_bom_core.md` — Fundamental Architecture Principles.
@@ -43,7 +43,7 @@ Type names in BML `<property type="...">` declarations are resolved as follows:
 **No namespace prefix → core primitives whitelist only** (see `02_mbml.md` — § Unqualified Block Resolution):
 
 ```text
-String   → org.blockml.type.String
+Text     → org.blockml.type.Text
 Boolean  → org.blockml.type.Boolean
 Integer  → org.blockml.type.Integer
 Float    → org.blockml.type.Float
@@ -126,7 +126,7 @@ org.blockml.type.Boolean
 org.blockml.type.Integer
 org.blockml.type.Float
 org.blockml.type.Decimal
-org.blockml.type.String
+org.blockml.type.Text
 ```
 
 Numeric branch: `org.blockml.type.Number` (abstract) — `Integer`, `Float`, and `Decimal` extend `Number`.

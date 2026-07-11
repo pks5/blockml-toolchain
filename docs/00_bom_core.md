@@ -1,6 +1,6 @@
 # BOM Core
 
-version: 2.0.0
+version: 2.1.0
 
 ## Purpose of this Document
 
@@ -116,29 +116,49 @@ The working model belongs exclusively to the renderer. The Canonical BOM remains
 
 ### Semantics remain in BML
 
-Concepts such as Constructor, Getter, Setter, Transformation, Inbound, and Outbound are **not** compiler rules and **not** runtime objects. They are **semantic information in BML** only.
+BlockML describes semantics only. There are **no special concepts** for constructor, getter, or setter — all behaviour is expressed as ordinary **Capabilities** (`init()`, `getValue()`, `setValue()`, `render()`, …). Capability kinds (`Inbound`, `Outbound`, `Transformation`) describe intent; they are not compiler rules or runtime objects.
 
-The renderer decides how to realise this semantics in the target system:
+The renderer decides how to realise each Capability in the target system:
 
 ```text
-Java  → method or constructor
-UI5   → getter/setter + applySettings()
-REST  → endpoint
-PLC   → input/output
-SCAD  → may be ignored entirely
+init()     → Java constructor · UI5 onInit() · React useEffect()
+getValue() → direct field access · generated getter · reflection
+setValue() → direct field assignment · generated setter
+render()   → SCAD module · JSX component · may be ignored
 ```
 
-Interpretation happens **only** in the renderer — by reading Capability definitions and member values from the immutable BOM, not by invoking a runtime getter API.
+Interpretation happens **only** in the renderer — by reading Capability definitions and member values from the immutable BOM. The BOM never contains implementation concepts such as constructors, getters, setters, runtime values, or executable behaviour.
+
+### Validation pipeline
+
+Validation consists of three independent stages:
+
+```text
+Stage 1 — XML          syntax · namespaces · XSD (no semantics)
+Stage 2 — Validator    inheritance · contracts · type compatibility · visibility ·
+                       constraints · references · valueRequired · expression correctness
+                       (expressions are NOT evaluated)
+Stage 3 — Renderer     expression evaluation · optional handling · capability interpretation ·
+                       code generation · runtime behaviour
+```
+
+The Validator creates the immutable Canonical BOM and a mutable **default Working Model** (partial resolution: inheritance, contracts, effective members, default values). This Working Model is shared infrastructure — a Renderer may reuse it or create an entirely new Working Model.
+
+### Properties are Optional
+
+Every Property behaves as an **Optional** — it has a value or has no value. There is no `null`. The BOM represents `Optional<Value>` instead of `Value | null`. PropertyDefinitions may declare `valueRequired` — when `true`, the Validator requires a value in BlockML; when `false`, the Renderer decides how to interpret missing values.
 
 ### Expression layer vs BOM data layer
 
 Expressions and BOM member values are **separate layers**:
 
+Expressions describe **what should happen**, not the computed result. The Validator checks referenced members, visibility, type compatibility, valid capabilities, and valid access — but **never executes** expressions. Evaluation belongs exclusively to the Renderer.
+
 | Layer | What it is | Where it lives |
 |---|---|---|
 | **BOM data** | `LiteralValue`, `ExpressionValue.raw` | Canonical BOM (immutable) |
-| **Expression syntax** | AST, type inference | `parseExpression()` utility output |
-| **Expression evaluation** | resolved values | `evaluateExpression()` utility / renderer working model |
+| **Expression syntax** | AST, type inference, access level | `parseExpression()` utility output |
+| **Expression evaluation** | resolved values | Renderer working model only |
 
 In `${ size[0] }` or `${ size.x }`, property/index access is **expression semantics** — not BOM mutation. The underlying `size` literal stays in authored form.
 
@@ -272,7 +292,7 @@ Direct package segments under `org.blockml` that belong to the **language** are 
 
 ```text
 org.blockml.core.*         — framework base types (Block, ValueType, Status, Library, …)
-org.blockml.type.*         — bootstrap ValueTypes (Integer, Float, Decimal, String, Boolean, Number, …)
+org.blockml.type.*         — bootstrap ValueTypes (Integer, Decimal, Float, Text, Boolean, Number, …)
 org.blockml.status.*       — standard maturity status blocks (Stable, Draft, Stub, Deprecated)
 org.blockml.service.*      — built-in services (#math, #strings, …)
 org.blockml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
@@ -578,7 +598,7 @@ Contract target:   any Block definition usable as a partial definition (typicall
 Member scope:      Properties, Aggregations, Associations, Capabilities, Constraints,
                    Suggestions, documentation, examples, references, optional Capability defaults
 Ignored on target: subBlocks[], compositions[] on the contract Block
-Partial members:   a contract may declare incomplete members — e.g. only <id type="String"/>
+Partial members:   a contract may declare incomplete members — e.g. only <id type="Text"/>
                    without default, constraints, or documentation; the Block completes them
 ```
 
@@ -603,7 +623,7 @@ Same member kind required for overrides        → BML_CONTRACT_MEMBER_KIND_MISM
 ```xml
 <!-- com.foo.IIdentifiable.bml — contract -->
 <properties>
-  <id type="String"/>
+  <id type="Text"/>
 </properties>
 
 <!-- com.foo.MyEntity.bml — concrete Block -->
@@ -696,7 +716,7 @@ type="com.machineblocks.type.Size3d[]"    ✓
 type="org.blockml.type.Integer[]"         ✓
 ```
 
-ValueTypes may therefore appear both as type references on Properties and as Block instances in compositions or aggregations — interpretation is context-dependent. **PrimitiveTypes** additionally split into **scalar** (property slot — inline literal) vs **instance** (boxed Block elsewhere). See `17_type_system_bml.md` — § PrimitiveType · Scalar role vs instance role.
+ValueTypes appear as type references on Properties — values are stored on the Property, not on the ValueType. When a primitive must appear as a Block instance in composition, use `org.blockml.core.PrimitiveEntity(T)`. See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity.
 
 ### Constraints
 
@@ -719,12 +739,12 @@ Constraints are enforceable — value violations emit `BML_CONSTRAINT_VIOLATION`
 A Property may declare a list of suggested values. Each suggestion is a Block instance of the **same type as the property** — no special base type. Suggestions are purely metadata — they do not affect type validation or compilation. Editors display the property as a combobox; the SCAD BlockProcessor generates an OpenSCAD Customizer dropdown comment.
 
 ```xml
-<textColor type="String">
+<textColor type="Text">
   <value>#303D4E</value>
   <suggestions>
-    <String value="#303D4E"/>
-    <String value="#EAC645"/>
-    <String value="#58B99D"/>
+    <PrimitiveEntity(Text) value="#303D4E"/>
+    <PrimitiveEntity(Text) value="#EAC645"/>
+    <PrimitiveEntity(Text) value="#58B99D"/>
   </suggestions>
 </textColor>
 ```
@@ -1004,7 +1024,7 @@ Capabilities declare typed data via `inputType` and/or `outputType` (see validat
 
 ```text
 org.blockml.type.Integer          — primitive (NamedTypeReference)
-org.blockml.type.String           — primitive
+org.blockml.type.Text           — primitive
 { a: Float, b: Float }            — anonymous struct (AnonymousStructType)
 com.myDomain.MyClass              — named type (NamedTypeReference)
 { items: org.blockml.type.Integer[0..n] }  — collection field (multiplicity on reference)
@@ -1795,7 +1815,7 @@ BOM Core defines a minimal set of primitive types. Domain specializations extend
 
 ```text
 org.blockml.type.Boolean
-org.blockml.type.String
+org.blockml.type.Text
 org.blockml.type.Number          — abstract numeric branch
   org.blockml.type.Integer
   org.blockml.type.Float
