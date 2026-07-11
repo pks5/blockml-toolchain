@@ -689,7 +689,7 @@ The `namespace` attribute uses the **same XML namespace mechanism** as element p
 
 ### Conventions
 
-**Member declaration order:** within `<properties>`, `<aggregations>`, and `<associations>`, child elements are mapped to `members[]` in **XML document order**. The parser must not reorder. Order is significant for StructType field indices, array literals (`size="[4,2,3]"`), and Capability positional parameter mapping. See `17_type_system_bml.md` — Ordered Struct Fields · `12_bom_object_model.md` — Member Declaration Order.
+**Member declaration order:** within `<properties>`, `<aggregations>`, and `<associations>`, child elements are mapped to `members[]` in **XML document order**. The parser must not reorder. Order is significant for StructType array literal authoring, FunctionMapping positional parameters, and compatibility. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
 
 **`<aggregations>`** — Domain base types declare inherited aggregations in BML (e.g. `_presets` on `Block.bml`, `_parts` on `CompositeBlock.bml`). The parser stores **declared** members only; inherited members resolve at validate via `baseType` chain. Omit `<aggregations>` on user blocks when the inherited set suffices.
 
@@ -731,7 +731,7 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
     <bricks:StandardBrick
         bml:id="bottom"
         bml:version="1.0.0"
-        size="${ [size[0], size[1], size[2] - 1] }"
+        size="${ [size.x, size.y, size.z - 1] }"
         recess="true"
         tongue="true"
         recessWallGaps="x+" />
@@ -739,8 +739,8 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
     <bricks:StandardBrick
         bml:id="top"
         bml:version="1.0.0"
-        size="${ [size[0], size[1], 1] }"
-        offset="${ [0, 0, size[2] - 1] }"
+        size="${ [size.x, size.y, 1] }"
+        offset="${ [0, 0, size.z - 1] }"
         recessWallGaps="x+"
         baseCutoutType="groove" />
   </composition>
@@ -786,15 +786,15 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
   <composition>
     <bricks:StandardBrick
         bml:id="bottom"
-        size="${ [size[0], size[1], size[2] - 1] }"
+        size="${ [size.x, size.y, size.z - 1] }"
         recess="true"
         tongue="true"
         recessWallGaps="x+" />
 
     <bricks:StandardBrick
         bml:id="top"
-        size="${ [size[0], size[1], 1] }"
-        offset="${ [0, 0, size[2] - 1] }"
+        size="${ [size.x, size.y, 1] }"
+        offset="${ [0, 0, size.z - 1] }"
         recessWallGaps="x+"
         baseCutoutType="groove" />
   </composition>
@@ -1676,19 +1676,19 @@ size="[1, 8, 9]"
 config="{mode: 'groove', depth: 2}"
 
 <!-- Expression: property reference -->
-size="${ [size[0], size[1], size[2] - 1] }"
+size="${ [size.x, size.y, size.z - 1] }"
 
 <!-- Expression: object with property reference and model binding -->
 config="${ {mode: baseCutoutType, label: @myModel:/config/label} }"
 
 <!-- Expression: built-in service call -->
-size="${ [size[0], size[1], #math.max(size[2] - 1, 0)] }"
+size="${ [size.x, size.y, #math.max(size.z - 1, 0)] }"
 
 <!-- Expression: bean call, named parameters (Object payload) -->
-label="${ @myFormatter.format(value = size[0], unit = 'mm') }"
+label="${ @myFormatter.format(value = size.x, unit = 'mm') }"
 
 <!-- Expression: bean call, object literal (equivalent) -->
-label="${ @myFormatter.format({value: size[0], unit: 'mm'}) }"
+label="${ @myFormatter.format({value: size.x, unit: 'mm'}) }"
 
 <!-- Expression: model binding (absolute) -->
 label="${ @myModel:/config/label }"
@@ -1697,7 +1697,7 @@ label="${ @myModel:/config/label }"
 label="${ @myModel:label }"
 
 <!-- Expression: ternary -->
-baseCutoutType="${ size[2] > 2 ? 'groove' : 'standard' }"
+baseCutoutType="${ size.z > 2 ? 'groove' : 'standard' }"
 ```
 
 Capability values:
@@ -1723,7 +1723,7 @@ See `00_bom_core.md` — Expression System for the full specification.
 Sibling child Blocks within the same Composition share computed values via **`bml:with`** on a common ancestor — typically `<composition>` or a wrapping `<bml:container>`:
 
 ```xml
-<composition bml:with="totalHeight = ${ size[2] }">
+<composition bml:with="totalHeight = ${ size.z }">
   <SomeBlock ... />
   <OtherBlock size="${ [1, 1, totalHeight - 1] }" ... />
 </composition>
@@ -1924,8 +1924,8 @@ Defines local variables within the scope of an element and its children. Variabl
 ```xml
 <!-- Simple local variable -->
 <bricks:Standard
-    bml:with="halfSize = ${ size[0] / 2 }"
-    size="${ [halfSize, size[1], size[2]] }" />
+    bml:with="halfSize = ${ size.x / 2 }"
+    size="${ [halfSize, size.y, size.z] }" />
 
 <!-- Override own property within scope -->
 <bml:container bml:with="numberOfSamples = ${ numberOfSamples + 1 }">
@@ -1933,12 +1933,12 @@ Defines local variables within the scope of an element and its children. Variabl
 </bml:container>
 
 <!-- Multiple variables — comma-separated -->
-<bml:container bml:with="w = ${ size[0] }, h = ${ size[2] - 1 }">
-  <core:NativeBlock size="${ [w, size[1], h] }" />
+<bml:container bml:with="w = ${ size.x }, h = ${ size.z - 1 }">
+  <core:NativeBlock size="${ [w, size.y, h] }" />
 </bml:container>
 
 <!-- Share values between sibling instances (replaces former registry pattern) -->
-<composition bml:with="totalHeight = ${ size[2] }">
+<composition bml:with="totalHeight = ${ size.z }">
   <SomeBlock ... />
   <OtherBlock size="${ [1, 1, totalHeight - 1] }" ... />
 </composition>
@@ -2846,7 +2846,7 @@ The examples below are **illustrative drafts only** — not valid V1 input.
         {
           "type": "com.machineblocks.bricks.StandardBrick",
           "id": "bottom",
-          "size": "${ [size[0], size[1], size[2] - 1] }",
+          "size": "${ [size.x, size.y, size.z - 1] }",
           "recess": true,
           "tongue": true,
           "recessWallGaps": "x+"
@@ -2854,8 +2854,8 @@ The examples below are **illustrative drafts only** — not valid V1 input.
         {
           "type": "com.machineblocks.bricks.StandardBrick",
           "id": "top",
-          "size": "${ [size[0], size[1], 1] }",
-          "offset": "${ [0, 0, size[2] - 1] }",
+          "size": "${ [size.x, size.y, 1] }",
+          "offset": "${ [0, 0, size.z - 1] }",
           "baseCutoutType": "groove",
           "recessWallGaps": "x+"
         }

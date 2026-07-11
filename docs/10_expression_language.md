@@ -20,7 +20,7 @@ The BML Expression Language is used wherever a Block member value needs to be dy
 The language is **extended JSON**: standard JSON syntax with four additions:
 
 ```text
-1. Property references    myProp, myProp.x, myProp[0]
+1. Property references    myProp, myProp.x (StructType members by name only)
 2. Model bindings         @model:/path, @model:relAttr
 3. Bean calls             @bean.capa(...), @bean.capa
 4. Built-in calls         #math.min(a, b), #strings.trim(s)
@@ -40,20 +40,20 @@ Everything else follows JSON subset rules: strings in double quotes, numbers, bo
 | **Expression syntax** | `parseExpression()` utility output | **No** — separate result, not in BOM |
 | **Expression evaluation** | `evaluateExpression()` / renderer working model | **No** — renderer only |
 
-Property and index access in `${ }` (`size.x`, `size[0]`) are **expression semantics** — they describe how to address a StructType field at evaluation time. They do **not** expand or normalize the underlying `size` literal in the BOM.
+Property and member access in `${ }` (`size.x`) are **expression semantics** — they describe how to address a StructType field at evaluation time. Numeric index access on StructType members (`size[0]`) is not valid. They do **not** expand or normalize the underlying `size` literal in the BOM.
 
 ```text
 BML attribute:  size="[5, 5, 6]"
 BOM storage:    LiteralValue { value: [5,5,6], typeFqn: "…Size3D" }   ← array stays array
 
-BML attribute:  offset="${ size[0] }"
-Utility:        parseExpression("size[0]") → { ast: IndexAccess(...), resultTypeFqn: "…" }
-BOM storage:    ExpressionValue { raw: "size[0]" }   ← raw only; AST is utility output
+BML attribute:  offset="${ size.x }"
+Utility:        parseExpression("size.x") → { ast: MemberAccess(...), resultTypeFqn: "…" }
+BOM storage:    ExpressionValue { raw: "size.x" }   ← raw only; AST is utility output
 ```
 
 The StructType definition (field names, declaration order) is **type metadata** consulted by the expression type checker (stage [8]) and by the renderer at evaluation/serialization time. It is not applied to rewrite `LiteralValue.value` at parse time.
 
-**Validation** checks that `size[0]` is a valid access on a `Size3D`-typed `size` member. **Evaluation** (resolving `size[0]` to `5`) happens at render time only.
+**Validation** checks that `size.x` is a valid member access on a `Size3D`-typed `size` member. **Evaluation** (resolving `size.x` to `5`) happens at render time only.
 
 ---
 
@@ -149,7 +149,7 @@ Left-associative at each level except ternary (right-associative).
 Strings use double quotes `"..."` or single quotes `'...'`. Both are equivalent. Single quotes are useful inside attribute values already wrapped in double quotes:
 
 ```xml
-baseCutoutType="${ size[2] > 2 ? 'groove' : 'standard' }"
+baseCutoutType="${ size.z > 2 ? 'groove' : 'standard' }"
 ```
 
 Escape sequences: `\"`, `\'`, `\\`, `\n`, `\t`.
@@ -195,8 +195,8 @@ Absent or empty values are not expressed as `null` — omit the attribute, use `
 
 ```text
 [1, 2, 3]
-[size[0], size[1], 1]
-[size[0], #math.max(size[1], 2), 0]
+[size.x, size.y, 1]
+[size.x, #math.max(size.y, 2), 0]
 ['groove', 'none', 'groove']
 ```
 
@@ -204,9 +204,9 @@ Absent or empty values are not expressed as `null` — omit the attribute, use `
 
 ```text
 {x: 1, y: 0}
-{x: size[0], y: size[1]}
-{mode: 'groove', depth: size[2] - 1}
-{label: @myModel:title, value: size[0]}
+{x: size.x, y: size.y}
+{mode: 'groove', depth: size.z - 1}
+{label: @myModel:title, value: size.x}
 ```
 
 Objects inside `${ }` may contain expressions as values. Objects outside `${ }` (raw attribute values) are pure JSON literals only.
@@ -217,15 +217,14 @@ Objects inside `${ }` may contain expressions as values. Objects outside `${ }` 
 
 Accesses a member of the current Block instance. No prefix required.
 
-For StructType property values, **named and positional access are equivalent in expression semantics** — index is derived from field declaration order in the type definition. See `17_type_system_bml.md` — Ordered Struct Fields.
+StructType property values are accessed **by property name only**. Numeric index access (`size[0]`) is not valid on StructType members — see `17_type_system_bml.md` — Struct Property Access · `18_function_mapping.md`.
 
-This equivalence applies to **expression evaluation and type checking** — not to BOM storage. A `size` member authored as `[5,5,6]` remains `[5,5,6]` in `LiteralValue.value`; `${ size.x }` and `${ size[0] }` both address the same field at evaluation time via type metadata.
+This applies to **expression evaluation and type checking** — not to BOM storage. A `size` member authored as `[5,5,6]` remains `[5,5,6]` in `LiteralValue.value`; `${ size.x }` addresses the `x` field at evaluation time via type metadata.
 
 ```text
 ${ size }             — property value (e.g. Size3D [1, 8, 9])
-${ size[0] }          — positional access (index 0 = first declared field)
-${ size[1] }          — positional access (index 1 = second declared field)
-${ size.x }           — named access (equivalent to size[0] when x is the first field)
+${ size.x }           — named member access (x component)
+${ size.y }           — named member access (y component)
 ${ baseColor }        — string property
 ${ numberOfSamples }  — integer property
 ```
@@ -234,9 +233,10 @@ Nested access:
 
 ```text
 ${ config.mode }
-${ items[0].size }
-${ items[0].size[2] }
+${ items[0].size.x }   — collection index; struct member by name
 ```
+
+Array/collection index access (`items[0]`) remains valid for collection-typed members. Index access on StructType values is not.
 
 ---
 
@@ -247,11 +247,11 @@ User-defined Beans are declared as Aggregations with a `beanName` on the current
 ### Transformation Capability Call
 
 ```text
-${ @myBean.format(value = size[0], unit = 'mm') }   — named parameters (Object input)
-${ @myBean.format({value: size[0], unit: 'mm'}) }   — object literal (equivalent)
-${ @myBean.compute(size[0], size[1]) }              — positional (Array input)
-${ @myBean.compute([size[0], size[1]]) }            — array literal (equivalent)
-${ @myBean.getLabel(size[0]) }                      — primitive input
+${ @myBean.format(value = size.x, unit = 'mm') }   — named parameters (Object input)
+${ @myBean.format({value: size.x, unit: 'mm'}) }   — object literal (equivalent)
+${ @myBean.compute(size.x, size.y) }              — positional (FunctionMapping)
+${ @myBean.compute([size.x, size.y]) }            — array literal (equivalent)
+${ @myBean.getLabel(size.x) }                      — primitive input
 ```
 
 Named parameters `(a=x, b=y)` and object literal `({a:x, b:y})` are interchangeable for Object input types. The output value of the Transformation Capability is used as the expression result.
@@ -480,7 +480,7 @@ Built-ins are pure functions — no side effects, no state. They are resolved at
 
 ## Capability Input Types and Function Parameters
 
-Field order in structured `inputType` values follows the **Ordered Struct Fields** rule — see `17_type_system_bml.md` — Ordered Struct Fields. Anonymous struct `{ a: Float, b: Float }` and named StructType properties share the same positional/named access contract.
+Capability call argument mapping is handled by **FunctionMapping** — see `18_function_mapping.md`. Anonymous struct `{ a: Float, b: Float }` and named StructType `inputType` values share the default FunctionMapping rules.
 
 ### Capabilities Have No Parameters — Only Typed Input/Output
 
@@ -495,17 +495,18 @@ inputType / outputType options:
 
 ### utility Sub-Block: Object inputType as Function Signature
 
-A `utility Sub-Block` interprets a Capability as a function. When the `inputType` is a structured Object with named keys, it serves as the function signature:
+A `utility Sub-Block` interprets a Capability as a function. When the `inputType` is a structured Object with named keys, FunctionMapping translates call syntax to the struct:
 
 ```text
 { a: Float, b: Float }
   → Arity:      2  (number of keys)
   → Parameter names: a, b  (key names)
-  → Positional call: #math.max(size[0], labelSize)
-  → Named call:      #math.max(a=size[0], b=labelSize)
+  → Positional call: #math.max(size.x, labelSize)
+  → Named call:      #math.max(a=size.x, b=labelSize)
+  → Canonical:       #math.max({a: size.x, b: labelSize})
 ```
 
-Both call syntaxes are always valid for Object input types. Positional parameter order follows **field declaration order** in `inputType` — see `17_type_system_bml.md` — Ordered Struct Fields.
+Positional parameter order follows **field declaration order** in `inputType` via FunctionMapping — not general StructType index semantics. See `18_function_mapping.md`.
 
 **Single primitive inputType** — no Object wrapper needed:
 
@@ -731,13 +732,13 @@ Defines local variables visible only within the element and its descendants. Var
 ```xml
 <!-- Local variable -->
 <bricks:Standard
-    bml:with="half = ${ size[0] / 2 }"
+    bml:with="half = ${ size.x / 2 }"
     offset="${ [half, 0, 0] }" />
 
 <!-- Multiple variables -->
-<bml:container bml:with="w = ${ size[0] - 1 }, h = ${ size[2] - 2 }">
-  <core:NativeBlock size="${ [w, size[1], h] }" />
-  <core:NativeBlock size="${ [w, size[1], 1] }" offset="${ [0, 0, h] }" />
+<bml:container bml:with="w = ${ size.x - 1 }, h = ${ size.z - 2 }">
+  <core:NativeBlock size="${ [w, size.y, h] }" />
+  <core:NativeBlock size="${ [w, size.y, 1] }" offset="${ [0, 0, h] }" />
 </bml:container>
 
 <!-- Override own property within scope -->
@@ -947,10 +948,10 @@ interface GroupExpression extends ExpressionNodeBase {
 **Examples:**
 
 ```text
-${ [1, 2, size[0]] }
+${ [1, 2, size.x] }
   → ArrayLiteral { elements: [NumberLiteral(1), NumberLiteral(2), AccessExpression(...)] }
 
-${ {mode: 'groove', depth: size[2] - 1} }
+${ {mode: 'groove', depth: size.z - 1} }
   → ObjectLiteral { properties: [{key:"mode", ...}, {key:"depth", ...}] }
 ```
 
@@ -1022,21 +1023,27 @@ type AccessStep =
 **Examples:**
 
 ```text
-${ size[0] }
+${ size.x }
   → AccessExpression {
        root: PropertyReference { name: "size", ... },
-       accessors: [{ kind: "index", index: NumberLiteral(0) }]
+       accessors: [{ kind: "member", name: "x" }]
      }
 
-${ items[0].size[2] }
+${ items[0].size.z }
   → AccessExpression {
        root: PropertyReference { name: "items" },
        accessors: [
          { kind: "index", index: NumberLiteral(0) },
          { kind: "member", name: "size" },
-         { kind: "index", index: NumberLiteral(2) }
+         { kind: "member", name: "z" }
        ]
      }
+```
+
+Index `AccessStep` remains valid for **collection-typed** members. Index access on StructType values is a validation error.
+
+```text
+${ size[0] }   — parses as index AccessStep; validator rejects (StructType)
 ```
 
 Each step narrows `resultTypeFqn` using the member/type registry (validator).
@@ -1269,11 +1276,18 @@ The parser distinguishes call vs. link by the presence or absence of parentheses
 
 ```text
 BML_EXPR_SYNTAX_ERROR          — raw expression text fails to parse (stage [7])
-BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in scope (member, loop, with)
+BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in scope (member, loop, with); or index access on StructType
 BML_EXPR_UNKNOWN_BEAN          — @bean not declared as Aggregation
 BML_EXPR_UNKNOWN_BUILTIN       — #name not a registered built-in
 BML_EXPR_TYPE_MISMATCH         — expression result type incompatible with member type
-BML_EXPR_PAYLOAD_MISMATCH      — call syntax doesn't match declared inputType
+BML_EXPR_PAYLOAD_MISMATCH      — call syntax doesn't match declared inputType after FunctionMapping
+BML_UNKNOWN_FUNCTION_PARAMETER — named call parameter not a StructType property
+BML_DUPLICATE_FUNCTION_PARAMETER — duplicate named parameter in capability call
+BML_MISSING_FUNCTION_PARAMETER — required struct property missing in capability call
+BML_TOO_MANY_FUNCTION_PARAMETERS — excess positional parameters for inputType
+BML_MIXED_FUNCTION_ARGUMENTS   — positional and named parameters mixed (default FunctionMapping)
+BML_MISSING_FUNCTION_MAPPING   — implementation requires mapping but none declared
+BML_AMBIGUOUS_FUNCTION_MAPPING — call form maps ambiguously to inputType
 BML_EXPR_LINK_INVALID_SOURCE   — @bean.capa (no parens) on non-Outbound Capability
 BML_EXPR_LINK_INVALID_TARGET   — capability linking target is not Inbound
 BML_EXPR_LINK_PAYLOAD_MISMATCH — linked Capabilities have incompatible inputType/outputType

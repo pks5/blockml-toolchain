@@ -56,7 +56,7 @@ MUST NOT merge sections out of document sequence
 MAY omit empty sections (<properties> absent → skip)
 ```
 
-Ordinal = index in `members[]` after mapping. Used by expression type checking and by renderers when interpreting StructType array literals against field declaration order. See `17_type_system_bml.md` — Ordered Struct Fields · `12_bom_object_model.md` — Member Declaration Order.
+Ordinal = index in `members[]` after mapping. Used by renderers when interpreting StructType array literals against field declaration order and by FunctionMapping for positional capability parameters. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
 
 ---
 
@@ -473,9 +473,9 @@ parseExpression() utility (@blockml/core)
 When an attribute or directive value contains `${ }`:
 
 ```text
-size="${ [size[0], size[1], size[2] - 1] }"
+size="${ [size.x, size.y, size.z - 1] }"
   → ExpressionValue {
-       raw: "[size[0], size[1], size[2] - 1]",   // inside delimiters, trimmed
+       raw: "[size.x, size.y, size.z - 1]",   // inside delimiters, trimmed
        source: { line, column of opening ${ }
      }
 
@@ -492,7 +492,7 @@ Stage [5] does **not** build AST nodes and does **not** resolve property referen
 The utility receives `ExpressionValue.raw` and `ParseContext` (built from enclosing Block, directive scope, target member):
 
 ```text
-parseExpression("[size[0], size[1], size[2] - 1]", context)
+parseExpression("[size.x, size.y, size.z - 1]", context)
   → { ast: AccessExpression / BinaryExpression / … tree, resultTypeFqn: … }
 ```
 

@@ -2,7 +2,8 @@
   BlockML Core — struct type branch (product types)
 
   FQN: org.blockml.type.StructType
-  See docs/17_type_system_bml.md — StructType · Ordered Struct Fields
+  See docs/17_type_system_bml.md — StructType · Struct Property Access
+       docs/18_function_mapping.md — FunctionMapping (positional call syntax)
        docs/12_bom_object_model.md — Member Declaration Order · Type Descriptors
        docs/16_framework_base_types.md — ValueType branch
        docs/02_mbml.md — Member declaration order
@@ -27,20 +28,20 @@
     Examples: Size3d, Color, Address, Transform. Parameterized value types (for example Box&lt;T&gt;)
     are StructTypes that declare &lt;genericTypes&gt; — not a separate ValueType branch.
 
-    Field declaration order is semantically significant (Ordered Struct Fields):
-    • Each &lt;property&gt; in a StructType definition maps to a field with an implicit index
-      derived from XML document order in members[] — the parser must not reorder fields
-    • Dual access — named (size.x) and positional (size[0]) resolve to the same field in
-      expressions and type validation
-    • Positional array literals (size="[4, 2, 3]") map fields by declaration order, not
-      alphabetical name order
-    • Named object literals (size="{ x: 4, y: 2, z: 3 }") and attribute syntax on StructType
-      instances (&lt;Size3d x="4" y="2" z="3"/&gt;) are type-equivalent authoring forms
-    • Anonymous struct inputType on Capabilities ({ a: Float, b: Float }) follows the same
-      Ordered Struct Fields rule — field order defines positional parameter order
+    Struct property access is exclusively by name (size.x, size.y, size.z). Numeric index access
+    on StructType members (size[0]) is not valid — StructType is a typed object with named
+    properties only. Positional function-parameter syntax (#tool.capa("x", "y")) is handled by
+    FunctionMapping at call sites, not by general StructType semantics — see
+    docs/18_function_mapping.md.
 
-    Compatibility: existing field order must not change across versions; new fields may be
-    appended only at the end. Removing or reordering fields is a breaking change.
+    Field declaration order remains significant for:
+    • Positional array literals (size="[4, 2, 3]") — values map to properties by declaration order
+    • FunctionMapping positional parameter order for capability calls
+    • Compatibility — existing field order must not change across versions; new fields may be
+      appended only at the end
+
+    Named object literals (size="{ x: 4, y: 2, z: 3 }") and attribute syntax on StructType
+    instances (&lt;Size3d x="4" y="2" z="3"/&gt;) are type-equivalent authoring forms.
 
     Used wherever BlockML declares or validates structured values:
     • Property &lt;type&gt; references (for example type="com.machineblocks.type.Size3d")
@@ -49,7 +50,7 @@
     • Generic type applications (for example Box&lt;Integer&gt;) on StructTypes with
       &lt;genericTypes&gt;
 
-    See 17_type_system_bml.md — StructType · Ordered Struct Fields · 12_bom_object_model.md —
+    See 17_type_system_bml.md — StructType · 18_function_mapping.md · 12_bom_object_model.md —
     Member Declaration Order · 02_mbml.md — Member declaration order · 04_types.md.
   </documentation>
   <name>StructType</name>

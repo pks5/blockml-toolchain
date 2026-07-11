@@ -532,6 +532,13 @@ BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
 BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a ValueType
 BML_UNKNOWN_BEAN              — @bean reference not found in aggregations
 BML_CAPABILITY_LINK_MISMATCH  — capability linking: direction or inputType/outputType mismatch
+BML_UNKNOWN_FUNCTION_PARAMETER — named capability call parameter not a StructType property
+BML_DUPLICATE_FUNCTION_PARAMETER — duplicate named parameter in capability call
+BML_MISSING_FUNCTION_PARAMETER — required struct property missing in capability call
+BML_TOO_MANY_FUNCTION_PARAMETERS — excess positional parameters for inputType
+BML_MIXED_FUNCTION_ARGUMENTS   — positional and named parameters mixed (default FunctionMapping)
+BML_MISSING_FUNCTION_MAPPING   — implementation requires FunctionMapping but none declared
+BML_AMBIGUOUS_FUNCTION_MAPPING — capability call form maps ambiguously to inputType
 BML_NO_TARGET                 — no registered target supports the block's baseType
 BML_UNKNOWN_TARGET            — requested target name not registered
 BML_FUNCTION_MISSING_MAIN     — no function named after the Capability found in CDATA

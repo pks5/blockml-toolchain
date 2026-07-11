@@ -12,6 +12,7 @@ For TypeRegistry bootstrap see `13_bml_to_bom_mapping.md`.
 For SCAD property mapping (render-only) see `09_mbom_properties.yml`.
 For value types and implementation languages as BML see `17_type_system_bml.md`.
 For property constraints and suggestions see `18_constraints_and_suggestions.md`.
+For FunctionMapping and capability call semantics see `18_function_mapping.md`.
 For Definition blocks and `bml:xml` self-description see `19_definition_blocks_and_bml_xml.md`.
 For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self-Description Roadmap.
 

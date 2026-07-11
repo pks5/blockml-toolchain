@@ -20,6 +20,7 @@
   xmlns:constraint="org.blockml.constraint"
   xmlns:def="org.blockml.definition"
   xmlns:lang="org.blockml.language"
+  xmlns:mapping="org.blockml.mapping"
   xmlns:service="org.blockml.service"
   xmlns:status="org.blockml.status"
   xmlns:btype="org.blockml.type">
@@ -67,6 +68,7 @@
         <bcore:Entity />
         <bcore:PrimitiveEntity />
         <bcore:Language />
+        <bcore:Mapping />
         <bcore:Status />
         <bcore:ValueType />
         <def:AggregationDefinition />
@@ -111,6 +113,7 @@
         <lang:Unity />
         <lang:XML />
         <lang:YML />
+        <mapping:FunctionMapping />
         <service:Bools />
         <service:Lists />
         <service:Math />

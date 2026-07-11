@@ -29,7 +29,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
 | **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
 | **Three ValueType kinds** | PrimitiveType · StructType · EnumType — EnumType is a specialized StructType |
-| **Ordered struct fields** | Field declaration order is semantically significant — defines implicit index, dual named/positional access, positional serialization; applies to StructType properties and anonymous struct `inputType` — see § Ordered Struct Fields |
+| **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `18_function_mapping.md` |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
 | **Namespace separation** | `org.blockml.core.*`, `type.*`, `service.*`, `capability.*`, `language.*` = public BML grammar only; BOM/compiler types in `org.blockml.bom.*`, etc. — see `00_bom_core.md` |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
@@ -634,33 +634,44 @@ Unqualified names in BML (`type="Integer"`) resolve via the core-primitives whit
 
 ---
 
-## Ordered Struct Fields
+## Struct Property Access
 
-Field order in any structured value type is **semantically significant**. It defines the implicit numeric index of each field. This rule applies uniformly to:
-
-| Form | Where declared | BOM representation |
-|---|---|---|
-| **Named StructType** | `<properties>` on a StructType ValueType | `PropertyDefinition` entries in `members[]` (declaration order) |
-| **Anonymous struct** | `{ a: Float, b: Float }` in Capability `inputType` / `outputType` | `AnonymousStructType.fields[]` (key order in type string) |
-
-Both forms share the same contract — only the declaration surface differs.
-
-### Dual access
-
-Every field has two equivalent access paths:
-
-* **Named access** — field name: `size.x`, `input.a`
-* **Positional access** — implicit index: `size[0]`, `input[0]`
+StructType members are accessed **exclusively by property name**:
 
 ```text
-Size3d with properties x, y, z (in that order):
-
-  size.x == size[0]
-  size.y == size[1]
-  size.z == size[2]
+${ size.x }    ${ size.y }    ${ size.z }
 ```
 
-Named and positional access resolve to the same field **in expression semantics and type validation**. The index is derived from **declaration order**, not from alphabetical name order.
+Numeric index access on StructType values is **not valid**:
+
+```text
+${ size[0] }   — invalid (BML_EXPR_UNKNOWN_PROPERTY or index-not-supported diagnostic)
+```
+
+A StructType is a typed object with named properties. Declaration order does not create general index semantics. See `18_function_mapping.md` for how positional **function-parameter** syntax maps to struct fields at capability call sites.
+
+Nested access uses member names throughout:
+
+```text
+${ items[0].size.x }     — collection index on array; member access on struct
+${ config.mode }
+```
+
+The underlying `size` member value in BOM remains in **authored form** (`[5,5,6]` or `{x:5,…}`). Expression access does not expand or normalize it. See `10_expression_language.md` — Property Access · Expression vs BOM Data Layer.
+
+---
+
+## Declaration Order
+
+Field declaration order in StructType definitions remains significant for purposes **other than** general index access:
+
+| Use | Rule |
+|---|---|
+| **Positional array literals** | `size="[4, 2, 3]"` maps values to properties by declaration order |
+| **FunctionMapping** | Positional capability call parameters map by declaration order — see `18_function_mapping.md` |
+| **Compatibility** | Existing field order must not change across versions; append new fields only at the end |
+
+This applies uniformly to named StructTypes (`<properties>` on a StructType) and anonymous struct `inputType` values (`{ a: Float, b: Float }`).
 
 ### Serialization
 
@@ -672,75 +683,49 @@ Authored as object:  size="{ x: 4, y: 2, z: 3 }"    → BOM: { x: 4, y: 2, z: 3 
 Authored as element: <Size3d x="4" y="2" z="3"/>   → BOM: nested BlockInstance
 ```
 
-All three are **type-equivalent** for validation. Renderers use `serialize` / field-order metadata to emit target form (e.g. SCAD `[4, 2, 3]`). The validator does **not** normalize one form into another.
-
-Equivalent authoring forms for a named StructType:
-
-```text
-size="[4, 2, 3]"              — positional array literal
-size="{ x: 4, y: 2, z: 3 }"   — named object literal
-<Size3d x="4" y="2" z="3"/>    — attribute syntax on StructType instance
-```
+All three are **type-equivalent** for validation. Renderers use field-order metadata to emit target form (e.g. SCAD `[4, 2, 3]`). The validator does **not** normalize one form into another.
 
 ### Compiler and BOM
 
-The parser stores each field with its **name** and its **declaration ordinal** (implicit index):
+The parser stores each field with its **name** and its **declaration ordinal**:
 
 * Named StructTypes — position in `BlockDefinition.members[]` among `<property>` elements (see `12_bom_object_model.md` — Member Declaration Order)
 * Anonymous structs — position in `AnonymousStructType.fields[]` (see `12_bom_object_model.md` — Type Descriptors)
 
 The parser **must not reorder** fields or **rewrite** literal shapes at parse, map, or validate time.
 
-Render targets choose their preferred representation at **render time** — using type metadata (field order, StructType declaration order):
+Render targets choose their preferred representation at **render time**:
 
 ```text
-size[0]   — index access in expression evaluation (OpenSCAD, generic array renderers)
-size.x    — named access in expression evaluation (TypeScript, object-native targets)
+size.x    — named access in expressions (all targets)
 [4, 2, 3] — positional serialization output (SCAD settings bundles)
 ```
 
-The index is always derivable from the type definition; renderers do not maintain separate field-order tables. **BOM storage is not transformed** to match the renderer's preferred form.
-
 ### Capability parameter mapping
 
-When a `utility Sub-Block` Capability declares a structured Object as `inputType`, the Object is an anonymous struct. **Field order defines positional parameter order** — the same rule as StructType properties:
+Positional and named capability call syntax is handled by **FunctionMapping**, not by StructType index semantics. See `18_function_mapping.md` — Canonical Call Form.
 
 ```text
 inputType: { a: Float, b: Float }
 
-  #math.max(4, 5)              — positional: index 0 = a, index 1 = b
+  #math.max(4, 5)              — positional (FunctionMapping: param 0 = a, param 1 = b)
   #math.max(a=4, b=5)          — named
-  #math.max({a: 4, b: 5})      — object literal (equivalent)
+  #math.max({a: 4, b: 5})      — canonical object literal
 ```
-
-All call syntaxes produce identical input values. Positional arguments map to fields by **key order in the `inputType` declaration**, not alphabetically. See `00_bom_core.md` — Object Input as Function Signature · `10_expression_language.md` — Capability Input Types and Function Parameters.
-
-### Expression access
-
-In `${ }` expressions, StructType property values support both access forms — this is **expression-layer semantics**, not BOM data resolution:
-
-```text
-${ size.x }      — named field access (expression evaluation)
-${ size[0] }     — positional access (same field, per declaration order)
-${ size[1] }     — positional access (y)
-${ [size[0], size[1], size[2] - 1] }   — index access in array literals
-```
-
-Nested access chains both forms: `items[0].size.x` ≡ `items[0].size[0]`. See `10_expression_language.md` — Property Access · Expression vs BOM Data Layer.
-
-The underlying `size` member value in BOM remains in **authored form** (`[5,5,6]` or `{x:5,…}`). Expression access does not expand or normalize it.
 
 ### Compatibility rule
 
-Because field index is part of the **public contract** of a struct type:
+Because declaration order is part of the **public contract** of a struct type:
 
 * The order of existing fields **must not change** across versions.
 * New fields may be appended **only at the end** to preserve backward compatibility.
 * Removing or reordering fields is an **incompatible breaking change** (requires a new type FQN or major version bump).
 
-This applies to named StructTypes (`Size3d`, `Color`, …) and to anonymous struct signatures on Capability.
+This applies to named StructTypes (`Size3d`, `Color`, …) and to anonymous struct signatures on Capabilities.
 
 ---
+
+<!-- Former "Ordered Struct Fields" section superseded by Struct Property Access, Declaration Order, and 18_function_mapping.md -->
 
 ### StructType
 
@@ -764,7 +749,7 @@ Complex values are described by **normal Properties** — no special struct synt
 </block>
 ```
 
-StructType properties follow the **Ordered Struct Fields** rule (§ above): declaration order defines implicit index, dual named/positional access, positional serialization, and compatibility constraints.
+StructType properties follow **Struct Property Access** and **Declaration Order** (§ above): named member access only; declaration order used for array literal authoring, FunctionMapping, and compatibility constraints.
 
 **As type reference:**
 
@@ -778,7 +763,7 @@ StructType properties follow the **Ordered Struct Fields** rule (§ above): decl
 <Size3d x="10" y="5" z="2"/>
 ```
 
-Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) follows the same **Ordered Struct Fields** rule. The validator may suggest promoting repeated anonymous structs to named StructTypes.
+Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) follows the same declaration-order contract for FunctionMapping. The validator may suggest promoting repeated anonymous structs to named StructTypes. See `18_function_mapping.md`.
 
 ---
 

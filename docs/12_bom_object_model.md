@@ -40,7 +40,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | `bml:each`, `bml:if`, `bml:with` | `directives[]` on element — **unexpanded** | Renderer (directive expansion) |
 | `data:*` attributes | `dataAttributes[]` on Block | Uninterpreted — renderer may consume (e.g. UI5 → customData) |
 | `size="[5,5,6]"` vs `size="{x:5,…}"` | `LiteralValue` in **authored form** | Renderer (target serialization via type metadata) |
-| `${ size[0] }` | `ExpressionValue { raw, ast }` — **not evaluated** | Renderer (expression evaluation) |
+| `${ size.x }` | `ExpressionValue { raw, ast }` — **not evaluated** | Renderer (expression evaluation) |
 | `<aggregations>` declaration | `AggregationDefinition` (declared only) | Type Registry lookup for effective members — **metadata only, no instance data resolution** |
 | `<composition>` children | `CompositionNode` tree | Renderer (wrapper logic, assembly patterns) |
 | `baseType` FQN | string reference | Type Registry → effective member metadata |
@@ -269,7 +269,7 @@ class /*anonymous*/ {
 }
 ```
 
-The BOM stores this as `AnonymousStructType` with **ordered fields** — field order defines positional call parameter order. Named and positional call syntax both map to the same struct instance at runtime. This is the anonymous-struct form of the **Ordered Struct Fields** rule — see `17_type_system_bml.md` — Ordered Struct Fields.
+The BOM stores this as `AnonymousStructType` with **ordered fields**. FunctionMapping uses field order for positional call parameters — see `18_function_mapping.md`.
 
 A single primitive (`Float`, `org.blockml.type.Integer`, …) is **not** wrapped — it is a `NamedTypeReference` directly (equivalent to a single-parameter method, not a one-field class).
 
@@ -471,16 +471,16 @@ Mapping sequence (append to members[] in this order):
 
 The position of each entry in `BlockDefinition.members[]` is the **declaration ordinal** for that block. Render targets may use this order (e.g. Customizer parameter sequence, UI field layout). The compiler must not reorder declared members when writing BOM or when passing definitions to processors.
 
-**StructType positional values:** for a StructType defined via `<properties>` (e.g. `Size3d` with `x`, `y`, `z`), property **declaration order** defines positional array mapping. See `17_type_system_bml.md` — Ordered Struct Fields for the full rule (dual access, serialization, Capability mapping, compatibility).
+**StructType array literals:** for a StructType defined via `<properties>` (e.g. `Size3d` with `x`, `y`, `z`), property **declaration order** defines positional array literal mapping. Member access in expressions uses property names only. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md`.
 
 ```text
 size="[4, 2, 3]"   →  index 0 = x, index 1 = y, index 2 = z  (order in Size3d.bml)
-size="${ [size[0], size[1], size[2] - 1] }"  — same positional contract
+size="${ [size.x, size.y, size.z - 1] }"
 ```
 
 Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" z="3"` on a StructType instance) are equivalent; array literals use **declaration order**, not alphabetical name order.
 
-**Function argument mapping:** anonymous struct `inputType` values (`{ a: Float, b: Float }`) and named StructTypes share the same **Ordered Struct Fields** rule — see `17_type_system_bml.md` — Ordered Struct Fields · `10_expression_language.md` — Capability Input Types and Function Parameters.
+**Function argument mapping:** handled by FunctionMapping — see `18_function_mapping.md` · `10_expression_language.md` — Capability Input Types and Function Parameters.
 
 **Effective members:** `resolveEffectiveMembers()` merges by `(namespace, name)` in this order:
 

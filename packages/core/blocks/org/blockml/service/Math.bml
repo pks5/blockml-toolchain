@@ -35,7 +35,7 @@
         Returns the smaller of two numbers.
         Examples:
         #math.min(3, 5) → 3
-        #math.min(size[0], 10) → min(size[0], 10)
+        #math.min(size.x, 10) → min(size.x, 10)
       </documentation>
       <implementation type="lang:TypeScript"><![CDATA[
         (a: number, b: number): number => Math.min(a, b)
@@ -51,7 +51,7 @@
         Returns the larger of two numbers.
         Examples:
         #math.max(3, 5) → 5
-        #math.max(size[0], 10) → max(size[0], 10)
+        #math.max(size.x, 10) → max(size.x, 10)
       </documentation>
       <implementation type="lang:TypeScript"><![CDATA[
         (a: number, b: number): number => Math.max(a, b)

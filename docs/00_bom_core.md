@@ -162,7 +162,7 @@ Expressions describe **what should happen**, not the computed result. The Valida
 | **Expression syntax** | AST, type inference, access level | `parseExpression()` utility output |
 | **Expression evaluation** | resolved values | Renderer working model only |
 
-In `${ size[0] }` or `${ size.x }`, property/index access is **expression semantics** — not BOM mutation. The underlying `size` literal stays in authored form.
+In `${ size.x }`, member access is **expression semantics** — not BOM mutation. The underlying `size` literal stays in authored form. Numeric index access on StructType (`size[0]`) is not valid.
 
 ### Architecture
 
@@ -697,7 +697,7 @@ namespace     — resolved canonical namespace identifier (empty = default names
 visibility    — optional; must match naming convention
 ```
 
-**Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order defines StructType field indices and positional serialization — see `17_type_system_bml.md` — Ordered Struct Fields.
+**Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order defines array literal authoring, FunctionMapping positional parameters, and compatibility — see `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md`.
 
 **EnumType property values:** when the property `type` is an EnumType, enum instance references may omit the `{EnumTypeFQN}::` prefix — `STANDARD` is equivalent to `com.machineblocks.type.BaseCutoutType::STANDARD` on a `BaseCutoutType` property. See `17_type_system_bml.md` — EnumType.
 
@@ -1044,17 +1044,18 @@ Unqualified type names are resolved against the domain's default type namespace 
 
 ### Object Input as Function Signature
 
-When a Capability uses a structured Object as `inputType`, the Object defines an **anonymous struct type** — conceptually an inline class with private typed fields. Field names are parameter names; **field order defines positional call order**. This is the **Ordered Struct Fields** rule applied to Capability signatures — see `17_type_system_bml.md` — Ordered Struct Fields.
+When a Capability uses a structured Object as `inputType`, the Object defines an **anonymous struct type**. FunctionMapping translates call syntax to this struct — see `18_function_mapping.md`.
 
 ```text
 inputType: { a: Float, b: Float }
   → Arity:       2  (number of keys)
   → Parameter names: a, b  (key names in declaration order)
-  → Positional call: #math.max(size[0], labelSize)
-  → Named call:      #math.max(a=size[0], b=labelSize)
+  → Positional call: #math.max(size.x, labelSize)
+  → Named call:      #math.max(a=size.x, b=labelSize)
+  → Canonical:       #math.max({a: size.x, b: labelSize})
 ```
 
-Both call syntaxes are always valid for Object input types. This is the standard pattern for all `#math.*`, `#strings.*`, `#lists.*` built-ins.
+Positional and named call syntax are valid for Object input types when FunctionMapping supports them. This is the standard pattern for all `#math.*`, `#strings.*`, `#lists.*` built-ins.
 
 `Object[0..n]` input types with a single named field are **not** suitable as Capability signatures when arity must be fixed — use a structured Object with named keys for each parameter. Variadic built-ins (e.g. `#strings.concat`) declare an explicit collection field: `{ values: String[0..n] }`.
 
