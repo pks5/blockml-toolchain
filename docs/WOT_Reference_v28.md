@@ -1,5 +1,5 @@
 # Web of Things (WOT)
-## Reference Document — v26
+## Reference Document — v28
 
 > *"The WOT is the implementation of Plato's theory of Ideas."*
 > *"As simple as LEGO. As powerful as SAP."*
@@ -28,7 +28,7 @@ It began in Second Life — with a single question:
 
 > **Why can a virtual device not do real things?**
 
-MetaPhone was built as a virtual smartphone in a virtual world — and it triggered real-world actions. This one insight carried everything that followed. Real and virtual are not two worlds. They are two manifestations of the same Idea.
+MetaPhone was built as a virtual smartphone in a virtual world — and it triggered real-world actions. This one insight carried everything that followed. Real and virtual are not two worlds. They are two Manifestations of the same Idea.
 
 Everything since is evolution from this origin:
 
@@ -41,10 +41,12 @@ stud://                   →  virtual things want physical bodies
       ↓
 MachineBlocks             →  ideas need manifestation
       ↓
-Manifestor
+Manifestor                →  and a language to describe Ideas: BlockML
 ```
 
 These were never separate projects. This is one idea, unfolding over time.
+
+The WOT is also a Manifestation of a larger movement — a movement for self-efficacy in the technological age. The movement asks: who shapes technological development? The answer: as many people as possible. The WOT is the technical foundation. The movement is the purpose.
 
 ---
 
@@ -269,6 +271,7 @@ class Human implements Actor {
     // not because ontologically special
     // because the WOT was built for humans
 }
+// FQN: world.wot.core.Actor
 ```
 
 A World that does not ultimately improve Actor lives is not WOT-conformant. This implies environmental protection, animal welfare, and human dignity — not as separate rules, but as logical consequences.
@@ -310,6 +313,46 @@ Everything else  →  Thing · with roles · in the web
 ```
 
 This is also why stud:// works as a universal address — it addresses Things. And almost everything is a Thing.
+
+### The Two Axioms
+
+The entire WOT — and BlockML — rests on two axioms:
+
+> **Axiom 1: Every Idea is a Block.**
+> **Axiom 2: Every Block represents exactly one Idea.**
+
+These are not technical decisions. They are philosophical commitments.
+
+A Block is not a software object. It is not a CAD model. It is not a UI component. It is the canonical description of an Idea — before any World, before any Renderer, before any Manifestation.
+
+```
+Wall              is an Idea.
+Integer           is an Idea.
+Constraint        is an Idea.
+REST Service      is an Idea.
+Story Character   is an Idea.
+Image Style       is an Idea.
+Compiler          is an Idea.
+OpenSCAD          is an Idea.
+```
+
+All of these can be described with the same grammar — because they are all Ideas, and every Idea is a Block.
+
+BlockML does not describe the world. **BlockML describes Ideas about the world.** The Manifestor decides what becomes of them.
+
+```
+Idea (Block)
+  ↓
+Manifestor
+  ↓
+Manifestation
+  ↓
+Thing
+```
+
+A `Wall` Block could be manifested as SCAD geometry, a React component, a Unity GameObject, a text description, an image, a database entry — the same Idea, different Manifestations.
+
+This is also why BlockML and ThingML converge: BlockML is already the universal description language for Ideas. ThingML was a special case. It is no longer needed as a separate concept.
 
 ### The WOT Relativity Principle
 
@@ -359,11 +402,42 @@ Block            →  grows richer · stays understandable over time
 
 Where a Block comes from and who made it is always part of the Block — not metadata that gets lost, but identity that travels with it through every Render Target.
 
+### WOT and BlockML — Two Layers, One Direction
+
+The WOT and BlockML are distinct but connected. The dependency runs in one direction only:
+
+```
+WOT
+ │  uses
+ ▼
+BlockML
+```
+
+BlockML does not know about the WOT. It knows only Blocks.
+
+```
+WOT answers:      Why do we describe the world in Blocks?
+                   Vision · Philosophy · Ontology · Motivation
+                   What is an Idea? What is a Manifestation? How do Worlds emerge?
+
+BlockML answers:  How do we describe Ideas formally?
+                   Blocks · Types · Relationships · Capabilities · Compilers
+                   Technical language · formal model · implementable
+```
+
+BlockML can be used for React, Kubernetes, CAD, medicine, finance, games — without ever reading the WOT. Someone can build a complete BlockML-based system without knowing about Makers, Mars, or MetaPhone.
+
+The WOT benefits enormously from BlockML: its own concepts become Block definitions. `world.wot.core.Idea`, `world.wot.core.Thing`, `world.wot.core.World` — the vision is not only described, it is formalised. The WOT describes itself in the language it recommends.
+
+**BlockML is the recommended standard for WOT Universes.** Other languages are permitted — but BlockML is the natural choice. Two Universes using BlockML can exchange Blocks directly. The `world.wot.core.*` namespace is the shared vocabulary.
+
+This is not arbitrary. It makes the WOT concrete rather than purely philosophical.
+
 ### The LLM
 
 The WOT was conceived before large language models existed. But it always depended on them — without knowing it.
 
-An LLM is good at one thing: translating natural language into abstraction. This is also why LLMs are good at writing code — code is one form of abstraction. ThingML is another. stud:// is another.
+An LLM is good at one thing: translating natural language into abstraction. This is also why LLMs are good at writing code — code is one form of abstraction. BML is another. stud:// is another.
 
 ```
 Human thinks    →  unstructured · implicit · solution-oriented
@@ -381,8 +455,32 @@ Each term is defined exactly once.
 
 ---
 
-**Idea**
-The primary unit of the WOT. An Idea has identity and does not change. It exists in the IdeaRepo, outside all Universes. An Idea does not imply its own substance — the World gives it substance.
+**Idea / Block**
+In the WOT, Idea and Block are the same thing. This is not a simplification — it follows directly from the two axioms:
+
+> **Axiom 1: Every Idea is a Block.**
+> **Axiom 2: Every Block represents exactly one Idea.**
+
+An Idea is a Block before it is formalised. A Block is an Idea in machine-readable form. There is no gap between them — only a spectrum from rough (unspecified Idea) to refined (fully specified BML document with Properties, Capabilities, and Implementations).
+
+```
+Idea (rough)     →  "there is something like a Burger"
+                     no properties · no constraints · exists as concept
+
+BML Block        →  "a Burger has: Bun · Patty · Lettuce · Sauce"
+                     Properties defined · Relationships modelled
+
+Block + Preset   →  "a McDonald's Burger: Brioche · 150g Beef · Iceberg"
+                     concrete values · specific context
+
+Thing            →  the Burger on the table · exists · is real
+```
+
+Ideas consist of other Ideas — through Block composition. A Burger Idea consists of Bun, Patty, Lettuce. Composing Blocks is composing Ideas. Whoever assembles Blocks is thinking — they just may not know it.
+
+An Idea has identity and does not change. It exists in the IdeaRepo (Blockiverse), outside all Universes. An Idea does not imply its own interpretation — the World delivers the interpretation.
+
+*FQN: world.wot.core.Idea*
 
 ---
 
@@ -401,7 +499,10 @@ Maker Universe chooses:
   Address format:   stud:// URI
   Identity format:  OpenID Connect → MakerID
   Message format:   STOMP
+  Block language:   BlockML (recommended standard)
 ```
+
+**BlockML is the recommended block language for WOT Universes.** The WOT does not mandate it — but it is the natural choice. Two Universes using BlockML can exchange Blocks directly via `world.wot.core.*` as shared vocabulary. Universes using different block languages may need an IdeaML translation layer.
 
 Universes are fully autonomous — they connect only via the normal internet. A Universe has no infrastructure of its own. Everything is provided by Worlds that take on specific roles.
 
@@ -476,6 +577,7 @@ horizontal  →  serves other Worlds · no independent soul
 
 *Illustration: McDonald's World · Star Trek World*
 *Implementation: MachineBlocks · MachineMania · Martian Micro · ScreenMachine · WorldMachine · MakerMaker*
+*FQN: world.wot.core.World*
 
 ---
 
@@ -502,14 +604,27 @@ The abstract role that enables Things to communicate with each other within a Un
 
 ---
 
+**Personal Computer** *(abstract WOT concept)*
+The device that belongs to an Actor — through which they formulate Wishes, address Things, and navigate Worlds. Not necessarily a computer in the traditional sense: it could be a smartphone, a laptop, an AR headset, a voice interface, or any future device that gives an Actor agency in the WOT.
+
+MetaPhone is the Maker Universe Manifestation of Personal Computer — a virtual smartphone. It is one possible form, not the only one.
+
+*Implementation in Maker Universe: MetaPhone*
+
+---
+
 **AccessPoint**
-The abstract role that enables Actors to enter a Universe and send Messages. The Actor uses an AccessPoint to formulate Wishes and interact with Things.
+The point where a Personal Computer connects to a World network — where "foreign" devices are admitted and authenticated. The AccessPoint controls which devices may enter the network and what they are permitted to do.
 
-An AccessPoint is not necessarily an app or a smartphone. It can be a CLI, a browser, an API, a voice interface — anything through which an Actor can communicate with the Universe.
+An AccessPoint is a network boundary concept — like a WiFi access point, but for a World's routing domain. It is not the same as a Personal Computer.
 
-MetaPhone is one Manifestation of an AccessPoint — not a WOT requirement.
+```
+Personal Computer  →  the Actor's device · wants to enter the network
+AccessPoint        →  the boundary · checks identity · admits or denies
+                       defines what the Personal Computer may do
+```
 
-*Implementation in Maker Universe: MetaPhone (one possible Manifestation)*
+Each World may have its own AccessPoint with its own admission rules.
 
 ---
 
@@ -552,6 +667,7 @@ Every transition between two Routers requires a Gateway.
 ```
 
 No unnecessary infrastructure when a simpler route exists. There is no BlockBroker — only Routers at different levels connected by Gateways.
+*FQN: world.wot.core.Router*
 
 ---
 
@@ -567,18 +683,38 @@ Unity Router → Gateway → World Router (Martian Micro)
 ```
 
 Like real networks: every hop between routing domains is a Gateway. The identity of a Thing is preserved across routing levels. The routing path changes — the address does not.
+*FQN: world.wot.core.Gateway*
 
 ---
 
 **Thing**
-Anything that can be manifested from an Idea and runs in a Runtime. A Thing has identity and Capabilities. A Thing is not automatically an Addressee — not every Thing needs to communicate.
+Any Manifestation of an Idea that exists in a World. A Thing can be software, a device, a poem, a physical object, a service — anything that has come into existence through a Runtime completing a Manifestation.
 
 ```
-ceramic cup   →  Thing · has Capability: holdLiquid · not an Addressee
-NFC Player    →  Thing · has Capabilities · is an Addressee · has stud:// address
+ceramic cup      →  Thing · has Capability: holdLiquid · not an Addressee
+NFC Music Player →  Thing · has Capabilities · is an Addressee · has stud:// address
+React App        →  Thing · software · runs in Browser Runtime
+Keycloak         →  Thing · software · runs in Server Runtime · speaks no stud://
+Poem             →  Thing · exists as text · Runtime: the reader's imagination
 ```
 
-A Thing is not a Block. A Block is a template — no Runtime, no Capabilities, no identity. Only when a Block Instance runs in a Runtime does it become a Thing.
+**A Thing is not a Block.** A Block (BML file) is the Idea — the template, the grammar, the description. A Thing is what emerges when a Runtime completes the Manifestation. The physical MachineBlocks brick is a Thing. The BML file that describes it is a Block.
+
+```
+BML file: Brick.bml    →  Block · Idea · template · description
+SCAD file: Brick.scad  →  Thing · first Manifestation · CAD model
+3D printed Brick       →  Thing · second Manifestation · physical object
+```
+
+That the physical brick is also called "block" in everyday language is irrelevant to the WOT. In the WOT: Block = Idea (BML). Thing = Manifestation (exists in the world).
+
+Things consist of Things — recursively. Software consists of components. A Device consists of housing, electronics, firmware. Every component is itself a Thing.
+
+A Thing is not automatically an Addressee — not every Thing needs to communicate. Keycloak is a Thing that speaks no stud:// and is not an Addressee. A poem is a Thing with no address at all. Both are fully valid Things.
+
+Things may fulfil WOT roles — Manifestor, Router, Identity, AccessPoint — without speaking the Universe Protocol. The WOT may prescribe that certain roles must be fulfilled by Things that speak the Protocol. Which roles those are: Universe decision.
+
+*FQN: world.wot.core.Thing*
 
 Things can contain ServiceBlocks — the smallest active unit of software within a Thing. A ServiceBlock is addressed via stud:// like any other Thing. Whether a Thing's internal logic is built from ServiceBlocks or from any other implementation is an implementation detail. The best case is full ServiceBlock composition — every Capability addressable, everything modelled. In practice, pragmatism applies.
 
@@ -601,15 +737,50 @@ A Thing that never needs to communicate — a ceramic cup, a printed housing, a 
 ---
 
 **Capability**
-What a Thing can do. The WOT makes no distinction between physical, virtual, software, hardware, or firmware Capabilities. A Capability is a Capability.
+What a Thing can do. Every Block can have Capabilities — they are native to every Block, not a special category. The WOT makes no distinction between physical, virtual, software, hardware, or firmware Capabilities. A Capability is a Capability.
 
-*Illustration: nfcTagRead · audioPlay · wall-mount · holdLiquid*
+A Capability may have one or more implementations — in any language:
+
+```xml
+<max type="org.blockml.capability.Transformation"
+     inputType="{ a: Float, b: Float }"
+     outputType="Float">
+  <implementation language="org.blockml.language.TypeScript">
+    return a > b ? a : b;
+  </implementation>
+  <implementation language="org.blockml.language.English">
+    Return the greater of a and b.
+  </implementation>
+</max>
+```
+
+Implementation describes a process (how it happens). Documentation describes the concept itself (what it means). Both can coexist in a Capability definition.
+
+The Renderer decides how a Capability is realised — as code, as a physical mechanism, as a human instruction, or as an LLM call.
+
+*Illustration: nfcTagRead · audioPlay · wall-mount · holdLiquid · calculate(mass, acceleration)*
 
 ---
 
 **Block · Block Instance · Feature · Set**
 
-**Blocks are the grammar of a World. Things are the concrete objects. Things consist of Blocks. Blocks are templates that only become Things through Presets and a Runtime.**
+**Blocks are the grammar of a World. But more fundamentally: a Block is the canonical description of an Idea.**
+
+Every Idea is a Block. Every Block represents exactly one Idea. A Block exists before any World, before any Renderer, before any Manifestation. It is the Idea in machine-readable form.
+
+```
+Idea = Block (unspecified · no properties · no constraints)
+       ↓ as it becomes more defined
+BML Block (properties · relationships · capabilities modelled)
+       ↓ configured for a context
+Block Instance (Block + Preset)
+       ↓ when it runs in a Runtime
+Thing (exists · has Capabilities · in the world)
+```
+
+This is a spectrum — not a sharp boundary. An Idea is the roughest Block. A fully specified BML Block with Presets and Implementations is the most refined. Both are Blocks.
+
+**Blocks are the grammar of a World. Things are the concrete objects. Things consist of Blocks.**
 
 ```
 Block           →  grammar · template · abstract
@@ -672,8 +843,10 @@ ThingML is the template. The Wish is the filled-in template — with the Actor's
 
 ---
 
-**ThingML**
-The description of an Idea in machine-readable form. Lives in the IdeaRepo. Belongs to no Actor. Describes what a Thing is — not how it should be manifested for a specific Actor.
+**ThingML** *(see BlockML)*
+ThingML was a separate concept for describing Ideas in machine-readable form. It has been absorbed into BlockML — since every Idea is a Block, and BlockML is the universal description language for Blocks/Ideas, ThingML is no longer needed as a separate concept.
+
+A BML document describing a Thing is simply a Block definition in the IdeaRepo (Blockiverse). The Wish references this Block by ID. The Manifestor reads it.
 
 The IdeaRepo may contain narrower variants — an Idea combined with shared ActorCustomization:
 
@@ -736,7 +909,7 @@ General preferences of an Actor that apply to all Things. Stored persistently in
 ---
 
 **Block Object Model (BOM — WOT concept)**
-Every World's block language is derived from a shared structural concept — the Block Object Model. This is a WOT core concept: the idea that Blocks have a consistent structural contract across all Worlds and Universes.
+Every World's block language derives from a shared structural concept. This is a WOT core concept: Blocks have a consistent structural contract across all Worlds and Universes.
 
 ```
 Every Block has:
@@ -747,29 +920,37 @@ Every Block has:
   Compositions →  internal structure of Composite Blocks
 
 Every World organises Blocks into:
-  Preset       →  named concrete parameter set for a Block
+  Preset       →  named concrete parameter configuration for a Block
   Set          →  concrete assembly of Block Instances · is itself a Block
   Library      →  collection of Block definitions
   Catalog      →  collection of Set definitions
 ```
 
-This is the WOT core concept. How it is implemented — as a package, a schema, a specification — is a Universe or World decision.
-
-The WOT says: Blocks have this structure. It does not say: use @bom/core.
-
-*Implementation: @bom/core (Maker Universe) — a concrete Manifestation of this concept*
-
-Every World derives its own dialect from this concept:
+**BML and BOM are distinct:**
 
 ```
-WOT concept
-  ↓
-MBOM (MachineBlocks)    →  Render Target: SCAD → 3D Printer
-Knowledge BOM (Maker)   →  Render Target: Website · AI Context · PDF
-Screen BOM (Screen)     →  Render Target: React · SAPUI5 · Angular
+BML (Block Markup Language)   →  the language · XML · human-readable
+                                   exists independently of any Compiler or BOM
+                                   could be written on paper · SSOT
+
+BOM (Block Object Model)      →  internal Compiler representation
+                                   produced by parsing BML · not part of the language
+                                   like AST in a Compiler pipeline · implementation detail
+
+BML → Parser → BOM → Compiler → Render Target
 ```
 
-This is the LEGO Stud principle at the software level. The BOM concept is the Stud. Domain dialects are the Brick types. Render Targets are the 3D printers.
+The WOT says: Blocks have this structure. It does not say: use @bom/core or any specific implementation.
+
+*Implementation: @bom/core (Maker Universe)*
+
+Domain dialects derive from this concept:
+
+```
+MBOM (MachineBlocks)  →  Render Target: SCAD → 3D Printer
+Knowledge BOM         →  Render Target: Website · AI Context · PDF
+Screen BOM            →  Render Target: React · SAPUI5 · Angular
+```
 
 ---
 
@@ -946,6 +1127,7 @@ WCMS         →  Thing · Addressee · Manifestor · WCMS role
 ```
 
 A Manifestor is always an Addressee — Wishes must be able to reach it.
+*FQN: world.wot.core.Manifestor*
 
 The Manifestor does not manifest — it produces the best possible ThingKit. The full Manifestation (from Idea to Thing) includes the Runtime. The Manifestor is responsible only for the ThingKit — not for what the Runtime does with it.
 
@@ -1003,7 +1185,8 @@ ThingKit
                         everything is a Delivery · including the Manual
 ```
 
-A ThingKit is not reusable — by definition. It is bound to a specific Wish, Actor, and context. As an artefact (manifest.json · MML · Deliveries) it can be stored. But it cannot be reused for a different Actor or a different Wish — the binding is permanent. Exception: a fully digital Thing may produce a ThingKit that is both storable and reproducible, since no physical Deliveries exist.
+A ThingKit is not reusable — by definition.
+*FQN: world.wot.core.ThingKit* It is bound to a specific Wish, Actor, and context. As an artefact (manifest.json · MML · Deliveries) it can be stored. But it cannot be reused for a different Actor or a different Wish — the binding is permanent. Exception: a fully digital Thing may produce a ThingKit that is both storable and reproducible, since no physical Deliveries exist.
 
 MML contains only metadata. A Delivery can be physical, digital, or both — the World decides.
 
@@ -1127,6 +1310,141 @@ derived    →  Idea B extends Idea A
 
 ---
 
+**BlockML (Block Modeling Language)**
+The universal description language for Ideas. BlockML is the Maker Universe implementation of the abstract WOT concept IdeaML.
+
+BlockML consists of two components:
+
+```
+BML  →  Block Markup Language · the language itself
+         XML-based · human-readable · machine-processable
+         can be written on paper · exists independently of any compiler
+         SSOT — Single Source of Truth
+
+BOM  →  Block Object Model · internal compiler representation
+         produced by parsing BML · not part of the language
+         like AST in a compiler pipeline · implementation detail
+```
+
+**Why XML?** XML is a conscious design decision — not a historical accident. It describes objects through named elements, expresses properties as attributes, makes hierarchies immediately visible, and allows documentation and structure to coexist. BlockML feels like a structured document, not a data container.
+
+The translation chain:
+
+```
+Natural Language
+  ↓  LLM
+BML (XML)
+  ↓  Parser
+BOM (internal)
+  ↓  Compiler
+Render Target (SCAD · React · Python · ...)
+  ↓  Runtime
+Manifestation
+```
+
+**BlockML and OOP:** BlockML shares many concepts with OOP — Properties, Aggregations, Associations, Capabilities, Inheritance. This is not because BlockML is derived from OOP. Both independently abstract the same universal organisational principles of reality. A tree has properties. A car consists of components. A dog is a mammal. These exist without computers.
+
+OOP formalised these patterns for software. BlockML formalises them for Ideas — universally, before any World.
+
+> **OOP is a special case of BlockML, not the other way around.**
+
+**BlockML positions itself between natural language and programming languages** — semantically rich enough to describe Ideas precisely, structured enough to be processed deterministically by compilers. It is the shared language of humans, LLMs, and machines.
+
+*Namespace: org.blockml.* — all BlockML Core Blocks*
+*Domain: blockml.org*
+
+**Two BlockML formats:**
+
+```
+BML   →  a single Block definition · application/bml+xml
+           exists independently · SSOT · autarkic
+
+BMLM  →  Block Markup Language Message · multipart/bml
+           a list of Blocks as a multipart message
+           each Block is autarkic · together they form a context
+           Blocks may reference each other · need not
+```
+
+BMLM example — an image prompt composed from multiple Idea Blocks:
+
+```
+Content-Type: multipart/bml; boundary="msg"
+BMLM-Version: 1.0
+
+--msg
+Content-Type: application/bml+xml
+<block type="prompt:CreateImage"> ... </block>
+
+--msg  
+Content-Type: application/bml+xml
+<block type="place:AbandonedObservatory"> ... </block>
+
+--msg
+Content-Type: application/bml+xml
+<block type="person:YoungAstronomer"> ... </block>
+--msg--
+```
+
+The LLM reads all Blocks as a coherent context. Each `<idea>` element gives the immediate essence. `<properties>` give the details. Together they form a complete, structured prompt — without natural language ambiguity.
+
+BMLM can also serve as: a Wish (Actor context + Idea), a ThingKit (Manifestor output), an AI Context (World knowledge for a Manifestor), or a Message between Things via stud://.
+
+---
+
+**WOT Core Vocabulary — Fully Qualified Names**
+
+Every WOT core concept is itself a Block/Idea with a stable FQN in the `world.wot.core.*` namespace. Long-term, each will have a corresponding BML file — the WOT describing itself in the language it recommends.
+
+| Concept | FQN | Role |
+|---------|-----|------|
+| Idea / Block | `world.wot.core.Idea` | primary unit |
+| Thing | `world.wot.core.Thing` | any Manifestation |
+| World | `world.wot.core.World` | interpretive space |
+| Universe | `world.wot.core.Universe` | framework contract |
+| Actor | `world.wot.core.Actor` | purpose of Things |
+| Capability | `world.wot.core.Capability` | what a Thing can do |
+| Manifestation | `world.wot.core.Manifestation` | the process Idea→Thing |
+| Manifestor | `world.wot.core.Manifestor` | role: produces ThingKits |
+| ThingKit | `world.wot.core.ThingKit` | intermediate stage |
+| Router | `world.wot.core.Router` | role: routes Messages |
+| Gateway | `world.wot.core.Gateway` | connects two Routers |
+| Identity | `world.wot.core.Identity` | role: identifies Actors |
+| PersonalComputer | `world.wot.core.PersonalComputer` | Actor's device |
+| AccessPoint | `world.wot.core.AccessPoint` | network boundary |
+| IdeaRepo | `world.wot.core.IdeaRepo` | repository of Ideas |
+| IdeaML | `world.wot.core.IdeaML` | abstract block language concept |
+| WorldNet | `world.wot.core.WorldNet` | communication infrastructure |
+| WorldNetProtocol | `world.wot.core.WorldNetProtocol` | Universe communication standard |
+
+*Domain: wot.world (planned)*
+
+---
+
+**IdeaML** *(abstract WOT concept — world.wot.core.IdeaML)*
+The abstract WOT concept for a language that describes Ideas. BlockML is the first Manifestation of IdeaML in the Maker Universe. Other Universes may develop their own IdeaML implementations. IdeaML becomes relevant as an inter-Universe concept only when multiple Universes with different block languages need to interoperate.
+
+---
+
+**IdeaRepo** *(abstract WOT concept — world.wot.core.IdeaRepo)*
+The abstract WOT concept for a repository of Ideas/Blocks. Blockiverse is the first Manifestation of IdeaRepo in the Maker Universe.
+
+An IdeaRepo contains Blocks at all levels of specificity — a spectrum from rough Ideas to fully specified BML documents:
+
+```
+rough Idea       →  "there is something like a Burger" · minimal definition
+                     exists in the repo · not yet formalised
+
+BML Block        →  Properties · Relationships · Capabilities modelled
+                     someone has described the Idea formally
+
+Block + Presets  →  concrete configurations · ready to manifest
+                     the Manifestor can work with this directly
+```
+
+There is no sharp boundary — it is a continuum. The IdeaRepo grows bottom-up: someone builds something, the Idea is extracted, the repo grows richer.
+
+---
+
 **World Context Management System (WCMS)**
 The WCMS is not a WOT concept — it is a Manifestor within MakerMaker. The WOT does not prescribe centralised project repositories or knowledge/context management. The WCMS is a MakerMaker-specific solution: a Manifestor that takes Knowledge Blocks as input and produces Website · AI Context · PDF · Tutorial as output.
 
@@ -1201,6 +1519,49 @@ A Thing already exists as a potential in the ThingKit before the Runtime execute
 
 There is always a manual step between ThingKit and living Thing. Deliveries make this explicit. No Delivery completes itself.
 
+### Three Levels of Meaning in BlockML
+
+BlockML separates the description of a model from its interpretation. This keeps the language universal and independent of any concrete target platform.
+
+```
+Level 1: Language Semantics (BML itself)
+  Block · Property · Aggregation · Association · Capability
+  Inheritance · Contracts · Type system · Constraints
+  renderer-independent · identical for every BlockML implementation
+  "what BlockML means"
+
+Level 2: World Semantics (Renderer)
+  MachineBlocks  →  mb_block() in OpenSCAD
+  React          →  JSX components
+  Unity          →  GameObjects / Prefabs
+  KiCad          →  schematic and PCB objects
+  "how a Block looks in this World"
+
+Level 3: Execution Semantics (Runtime)
+  usually no own semantics · executes the Renderer output
+  OpenSCAD interprets SCAD · React interprets JSX · 3D Printer prints
+  "how the interpretation is executed"
+```
+
+BlockML describes only the Idea. The Renderer decides meaning. The Runtime executes.
+
+### NativeBlocks (Best Practice for Render Targets)
+
+A BlockML domain may define NativeBlocks — the smallest, indivisible semantic units of the domain. NativeBlocks are part of the domain specification (BML), not a Runtime concept. They are the building blocks every Renderer of that domain understands.
+
+**Best Practice:** map NativeBlocks as directly as possible to native constructs of the target language. This makes the Renderer a simple emitter that mostly generates syntax.
+
+```
+BML Domain
+  Wall · Frame · StandardBrick · NativeBlock · ...
+    ↓
+Renderer (interprets the domain)
+    ↓
+Target Language (OpenSCAD · React · Python · KiCad)
+```
+
+A Renderer may deviate from 1:1 mapping — optimise, combine, or translate differently. NativeBlocks provide a stable canonical foundation within the domain. Renderers remain completely free in their implementation.
+
 ### The Optimisation Function
 
 There is no such thing as an unimportant step. Every step between Wish and living Thing is necessary. The goal is not to eliminate steps — it is to eliminate gaps.
@@ -1226,6 +1587,48 @@ Autonomous robotics →  closes "assemble by hand"
 ```
 
 Martian Micro's mission: close gaps between Wish and Thing.
+
+### Manifestor Evolution
+
+The Manifestor architecture is deliberately evolutionary. LLMs and deterministic Compilers are not opposites — they are different tools within the same architecture, applied at different stages of World maturity.
+
+**Phase 1 — New World**
+A new World has few formalised rules. The Manifestor uses LLMs to interpret Ideas into BML and to produce early Manifestations.
+
+```
+Idea → LLM → BML → LLM → Manifestation
+```
+
+Speed, exploration, and learning are the priority.
+
+**Phase 2 — Consolidation**
+Stable Block Libraries, type systems, and recurring patterns emerge. These are progressively formalised. More of the Manifestation becomes deterministic.
+
+```
+Idea → LLM → BML → Compiler + Templates + LLM → Manifestation
+```
+
+**Phase 3 — Mature World**
+The language of the World is largely understood. The Manifestor uses LLMs mainly for Idea interpretation. Manifestation is mostly deterministic.
+
+```
+Idea → LLM / Rules / Human → BML → Compiler → Manifestation
+```
+
+The Manifestation is now reproducible · testable · versionable · cacheable · optimisable.
+
+**The long-term direction:**
+
+```
+LLM → Recognition → BML Model → Deterministic Rules → Compiler
+```
+
+Knowledge migrates continuously from probabilistic LLM interpretations into formalised BML models and finally into deterministic Compiler logic. The LLM does not disappear — its role shifts from generating Manifestations to generating BML.
+
+```
+Interpretation (Idea → BML)   →  may be creative and probabilistic
+Manifestation  (BML → output) →  should be as deterministic as possible
+```
 
 ### Manifestation Technology Pattern
 
@@ -1361,7 +1764,20 @@ World Repository →  manifested Ideas · concrete · World-specific
 | ScreenMachine *(wn)* | tbd |
 | Martian Micro | tbd |
 
-Blockiverse does not store ThingKits or manifested Ideas. It stores World Grammar — Block definitions, MBML files, Presets, Libraries. Blocks are templates, not Manifestations. Everything in Blockiverse is potential — not yet real. The true Manifestation happens only when a Runtime completes it.
+Blockiverse does not store ThingKits or manifested Ideas. It stores World Grammar — Block definitions, BML files, Presets, Libraries. Blocks are templates, not Manifestations. Everything in Blockiverse is potential — not yet real.
+
+Blockiverse is the Maker Universe Manifestation of the abstract WOT concept IdeaRepo. Long-term, Blockiverse becomes the universal repository for all Block types across all Maker Universe Worlds — not just MachineBlocks:
+
+```
+Physical Blocks    →  MachineBlocks (MBML)
+Electronic Blocks  →  MachineMania
+UI Blocks          →  ScreenMachine
+Virtual Blocks     →  WorldMachine
+Knowledge Blocks   →  MakerMaker / WCMS
+...all in Blockiverse
+```
+
+An IdeaRepo contains Blocks at all levels of specificity — from rough Ideas (minimal definition) to fully specified BML documents with Presets and Implementations. It is a spectrum, not a binary.
 
 ---
 
@@ -1488,13 +1904,12 @@ Physical     →  MachineBlocks    (MBOM → SCAD → 3D Printer)
 Electronics  →  MachineMania     (Feature DSL → Firmware → PiMachine)
 UI           →  ScreenMachine    (Control DSL → React/SAPUI5 → Browser)
 Virtual      →  WorldMachine     (MBML+ → Unity/Three.js → UnityMachine)
-Context      →  WCMS in Maker    (Knowledge BOM → Website/AI Context/PDF)
-Service      →  ServiceBlock     (BOM Core · RendererSet or LLM · all Worlds)
+Knowledge    →  WCMS in Maker    (Knowledge BOM → Website/AI Context/PDF)
 ```
 
-All are based on the same BOM Core. All have Properties · Aggregations · Associations · Capabilities. The dialect changes. The model does not.
+All are based on the same BOM concept (world.wot.core.* + org.blockml.*). All have Properties · Aggregations · Associations · Capabilities. The dialect changes. The model does not.
 
-ServiceBlock is not a World — it is a Block type that exists across all Worlds.
+Capabilities are native to every Block — there is no separate "Service Block" type. A Block whose primary purpose is to expose Capabilities is a domain convention, not a WOT category.
 
 **MakerMaker is the Maker of Makers — the Manifestor of Manifestors.**
 
@@ -1510,6 +1925,16 @@ MakerMaker    →  creates Makers · creates Worlds · creates Manifestors
 ```
 
 This is also why the name was always right — it is self-referential. MakerMaker makes Makers. Like a compiler-compiler that compiles compilers.
+
+**Self-describing architecture:** Long-term, BlockML describes itself. The Compiler reads BML files that define the Compiler's own structure — Pipeline · Stages · Validators · Render Targets. The implementation language (TypeScript) remains. What changes: the structure is described in BlockML, not in documentation.
+
+```
+V1: BML describes stable metamodels (BaseTypes · Properties · Capabilities)
+V2: BML replaces more Markdown — Markdown explains · BML describes
+V3: BML describes most of its own structure · Markdown becomes companion text
+```
+
+The goal is not self-hosting in the classical sense. It is a self-describing architecture where BlockML is the Single Source of Truth for its own structure.
 
 **MakerMaker is also the Maker Universe implementation of the World Context Management System (WCMS) — not a Content Management System, but a **Context Management System**.
 
@@ -1832,24 +2257,24 @@ Simulated Worlds can be reproduced physically — with limitations. What WorldMa
 ### MetaPhone
 
 **Type:** Manifestor · within MakerMaker World
-**Role:** AccessPoint for Actors
+**Role:** Personal Computer · Manifestor of Launchpads
 **Manifestations:** Unity · Web App · Pi/Electron · Native
 
-MetaPhone is not a World. It is a Manifestor within the MakerMaker World — the Thing that fulfils the AccessPoint role for Actors.
+MetaPhone is the Maker Universe Manifestation of the abstract WOT concept Personal Computer — a virtual smartphone through which Actors navigate Worlds, formulate Wishes, and interact with Things.
 
-MetaPhone is the Actor's companion through Worlds. It carries: Identity · personal settings · World transitions. The Actor does not live in Worlds. The Actor visits them — with MetaPhone.
-
-As a Manifestor, MetaPhone manifests Launchpads — reading the World's WCMS and composing the right set of Apps for each Actor. It is to MakerMaker what BlockFoundry is to MachineBlocks: a powerful Thing within a World, not a World itself.
+MetaPhone is not a World. It is a powerful Thing within the MakerMaker World — a Manifestor that reads the context of a World and composes the right Launchpad (set of Apps) for each Actor.
 
 ```
 MakerMaker World
-  ├── Identity Thing       →  Actors are recognised
-  ├── Broker Thing         →  Things communicate
-  └── MetaPhone            →  Manifestor · AccessPoint for Actors
-                               manifests Launchpads
-                               belongs to the Actor · not to any World
-                               the Actor carries it into all Worlds
+  ├── Identity Thing   →  Actors are recognised
+  ├── Router Thing     →  Messages are routed
+  └── MetaPhone        →  Manifestor · Personal Computer
+                           manifests Launchpads
+                           belongs to the Actor · travels with them
+                           the Actor carries it into all Worlds
 ```
+
+MetaPhone connects to World AccessPoints — the Actor presents their Identity, the AccessPoint admits them and defines their permissions within that World.
 
 ---
 
@@ -2046,7 +2471,7 @@ This is the WOT's direction — not a vision, but a target. Mini-LLMs on chips w
 
 ## Appendix B · Legacy Names
 
-| Current (v26) | Previous |
+| Current (v28) | Previous |
 |---------------|----------|
 | Manifestor | ManifestationEngine · BlockFoundry (universal) |
 | BlockBroker | WorldHub · BlockHub |
@@ -2055,6 +2480,16 @@ This is the WOT's direction — not a vision, but a target. Mini-LLMs on chips w
 | ScreenMachine *(wn)* | AppWorld · FeatureHub · ScreenTime |
 | WorldMachine *(wn)* | VirtualWorld · WorldSimulator |
 | ThingKit | Manifestation Archive · MML package |
+| BlockML | Block Modeling Language (umbrella) |
+| BML | Block Markup Language (the language) |
+| BOM | Block Object Model (compiler-internal) |
+| IdeaML | abstract WOT concept · BlockML is first Manifestation |
+| IdeaRepo | abstract WOT concept · Blockiverse is first Manifestation |
+| Personal Computer | abstract WOT concept · MetaPhone is first Manifestation |
+| FunctionBlock | ServiceBlock (deprecated) |
+| world.wot.core.* | world.wot.core.* |
+| BMLM | — (new format) |
+| wot.world | planned domain for WOT core namespace |
 | MakerStore | FeatureStore |
 | MakerID | MakerMaker Account |
 | PiBlock | BlockPi |
@@ -2073,4 +2508,4 @@ The WOT is not above this. It too is a Manifestation — of the Idea that Ideas 
 
 ---
 
-*Internal reference document — June 2026 — v26*
+*Internal reference document — June 2026 — v28*
