@@ -31,8 +31,7 @@
     Struct property access is exclusively by name (size.x, size.y, size.z). Numeric index access
     on StructType members (size[0]) is not valid — StructType is a typed object with named
     properties only. Positional function-parameter syntax (#tool.capa("x", "y")) is handled by
-    FunctionMapping at call sites, not by general StructType semantics — see
-    docs/18_function_mapping.md.
+    FunctionMapping at call sites, not by general StructType semantics.
 
     Field declaration order remains significant for:
     • Positional array literals (size="[4, 2, 3]") — values map to properties by declaration order
@@ -49,10 +48,32 @@
     • Capability inputType / outputType — named StructType or anonymous struct expressions
     • Generic type applications (for example Box&lt;Integer&gt;) on StructTypes with
       &lt;genericTypes&gt;
-
-    See 17_type_system_bml.md — StructType · 18_function_mapping.md · 12_bom_object_model.md —
-    Member Declaration Order · 02_mbml.md — Member declaration order · 04_types.md.
   </documentation>
+
+  <references>
+    <reference file="17_type_system_bml.md">
+      StructType branch and struct property access rules.
+    </reference>
+    <reference file="18_function_mapping.md">
+      Positional function-parameter syntax at call sites.
+    </reference>
+    <reference file="12_bom_object_model.md">
+      Member declaration order and type descriptors.
+    </reference>
+    <reference file="16_framework_base_types.md">
+      ValueType branch.
+    </reference>
+    <reference file="02_mbml.md">
+      Member declaration order authoring rules.
+    </reference>
+    <reference file="04_types.md">
+      Anonymous Object inputType (MBOM).
+    </reference>
+    <reference block="org.blockml.mapping.FunctionMapping">
+      Positional parameter mapping at capability call sites.
+    </reference>
+  </references>
+
   <name>StructType</name>
   <type>btype:StructType</type>
   <baseType>core:ValueType</baseType>

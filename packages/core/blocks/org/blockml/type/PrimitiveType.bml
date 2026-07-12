@@ -16,18 +16,32 @@
   <documentation>Abstract branch for built-in scalar ValueTypes. PrimitiveTypes describe semantics
     only — they never store concrete values. All values are stored exclusively in Properties.
 
-    Numeric branch: org.blockml.type.Number (Integer, Decimal, Float). Textual branch:
-    org.blockml.type.Text (FullyQualifiedName, Version, URL, URI, FilePath, MimeType, …).
-    Boolean is its own branch — neither textual nor numeric.
+    Numeric branch: Number (Integer, Decimal, Float). Textual branch: Text (FullyQualifiedName,
+    Version, URL, URI, FilePath, MimeType, …). Boolean is its own branch — neither textual nor
+    numeric.
 
     When a primitive value must exist as an Entity inside a composition or aggregation, use a
-    concrete *Entity type (for example org.blockml.type.IntegerEntity) — not by adding a value
-    member to the PrimitiveType.
+    concrete Entity specialization (for example IntegerEntity) — not by adding a value member to
+    the PrimitiveType.
 
     Invalid: &lt;type:Integer value="5"/&gt; — PrimitiveTypes cannot carry values.
-    Valid: &lt;property name="count" type="Integer"&gt;&lt;value&gt;5&lt;/value&gt;&lt;/property&gt;
+    Valid: &lt;property name="count" type="Integer"&gt;&lt;value&gt;5&lt;/value&gt;&lt;/property&gt;</documentation>
 
-    See docs/17_type_system_bml.md — PrimitiveType · PrimitiveEntity.</documentation>
+  <references>
+    <reference file="17_type_system_bml.md">
+      PrimitiveType branch and PrimitiveEntity wrappers.
+    </reference>
+    <reference block="org.blockml.type.Number">
+      Numeric primitive branch.
+    </reference>
+    <reference block="org.blockml.type.Text">
+      Textual primitive branch.
+    </reference>
+    <reference block="org.blockml.type.IntegerEntity">
+      Example concrete Entity wrapper for primitive values.
+    </reference>
+  </references>
+
   <name>PrimitiveType</name>
   <type>btype:PrimitiveType</type>
   <baseType>core:ValueType</baseType>

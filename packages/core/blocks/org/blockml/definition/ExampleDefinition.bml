@@ -20,7 +20,17 @@
     attribute and a CDATA body. Maps to BOM DocumentationExample { title, content, language? }.
     Body content must be CDATA (BML_EXAMPLE_NOT_CDATA otherwise). A future optional language
     attribute may distinguish example dialects (OpenSCAD, TypeScript); omitted defaults to
-    BML/MBML source. See 02_mbml.md — examples · 12_bom_object_model.md — DocumentationExample.</documentation>
+    BML/MBML source.</documentation>
+
+  <references>
+    <reference file="02_mbml.md">
+      Examples documentation extension authoring.
+    </reference>
+    <reference file="12_bom_object_model.md">
+      DocumentationExample BOM structure.
+    </reference>
+  </references>
+
   <name>ExampleDefinition</name> 
   <type>def:ExampleDefinition</type>
   <baseType>core:Definition</baseType>

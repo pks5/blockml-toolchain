@@ -238,7 +238,12 @@ Examples:
 ```xml
 <idea>Primitive BlockML property type capable of holding a float number.</idea>
 <documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
-  resolves via the type namespace. See 17_type_system_bml.md — PrimitiveType.</documentation>
+  resolves via the type namespace.</documentation>
+<references>
+  <reference file="17_type_system_bml.md">
+    PrimitiveType — float number payload rules.
+  </reference>
+</references>
 ```
 
 `<idea>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IDEA` (warning in V1, error in a later release). The idea is primary input for editors, LLMs, and documentation navigation — it answers *what is this?* before *how does it work?*
@@ -249,10 +254,7 @@ WOT alignment: the Idea is the stable semantic constant; documentation describes
 
 `<documentation>` follows `<idea>`, still before `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
 
-**Cross-references in prose:**
-
-- **Markdown docs** — pointers to repository documentation files always belong in `<documentation>` (e.g. `See 02_mbml.md — Block Definition · 16_framework_base_types.md — Definition Branch`).
-- **Other Blocks** — do **not** name Block or Definition FQNs in `<documentation>` prose. Link related types exclusively via `<references>` (see below).
+**Cross-references:** Do **not** name Block or Definition FQNs, markdown files, or external URLs in `<documentation>` prose. Link all related types and documentation sources exclusively via `<references>` (see below).
 
 ```xml
 <block ...>
@@ -286,7 +288,7 @@ On root `<block>` definitions, optional documentation extensions follow `<docume
 
 Goal: keep API documentation, version history, examples, and related-type links at the definition site — a single source of truth inside BML files.
 
-**Authoring split:** `<documentation>` carries technical prose and **markdown doc** pointers; `<references>` carries **Block/Definition** cross-links with an explicit relationship note. Never duplicate the same Block links in both places.
+**Authoring split:** `<documentation>` carries technical prose only; `<references>` carries all cross-links — Blocks, Definition elements, repository markdown files (`file`), and external URLs (`url`) — each with an explicit relationship note.
 
 #### `<since>`
 
@@ -346,35 +348,51 @@ A future optional `language` attribute (e.g. `OpenSCAD`, `TypeScript`) may disti
 
 #### `<references>`
 
-Container for cross-references to related Blocks or definition elements. Each `<reference>` requires a `type` attribute — the FQN of the referenced Block or Definition. The text body explains why or how the referenced element relates to the **current** definition.
+Container for cross-references to related Blocks, definition elements, repository documentation files, or external URLs. Each `<reference>` requires **exactly one** target attribute — `block`, `file`, or `url`. The text body explains why or how the referenced element relates to the **current** definition.
+
+**Target attributes (exactly one required):**
+
+```text
+block="org.blockml.core.ValueType"   — Block or Definition FQN
+file="02_mbml.md"                    — repository documentation file
+url="https://blockml.org/schemas/…"  — external URL
+```
 
 **Authoring rules:**
 
-- Include only Blocks or Definitions with a **direct relationship** to the current definition (inheritance branch, sub-types, contracts, sibling types in the same model area, …).
-- Every `<reference>` **must** include a text body describing the relationship — what the linked type is and why it matters here.
-- Do **not** repeat these Block links in `<documentation>`; use `<references>` instead.
+- Include only targets with a **direct relationship** to the current definition.
+- Every `<reference>` **must** include a text body describing the relationship.
+- Do **not** repeat cross-links in `<documentation>`; use `<references>` instead.
 
 ```xml
 <references>
 
-    <reference type="com.machineblocks.core.CompositeBlock">
+    <reference block="com.machineblocks.core.CompositeBlock">
         Composable sub-type — owns child instances via default _parts aggregation.
     </reference>
 
-    <reference type="org.blockml.core.ValueType">
+    <reference block="org.blockml.core.ValueType">
         Branch sub-type — payload types for properties and capabilities.
     </reference>
 
-    <reference type="org.blockml.definition.PropertyDefinition">
+    <reference block="org.blockml.definition.PropertyDefinition">
         Meta-model member shape for property declarations on Block definitions.
+    </reference>
+
+    <reference file="02_mbml.md">
+        Block Definition — idea, documentation, and documentation extensions.
+    </reference>
+
+    <reference url="https://blockml.org/schemas/core/block.xsd">
+        XML schema for block definition documents.
     </reference>
 
 </references>
 ```
 
-The `type` attribute accepts any Block FQN or Definition FQN (`org.blockml.definition.*`, `org.blockml.core.Definition` sub-types). Omitted `type` → `BML_REFERENCE_MISSING_TYPE` (error). Unknown FQN at validate time → `BML_UNKNOWN_TYPE` (error).
+`block` accepts any Block FQN or Definition FQN (`org.blockml.definition.*`, `org.blockml.core.Definition` sub-types). Unknown FQN at validate time → `BML_UNKNOWN_TYPE` (error). Omitted target attribute → `BML_REFERENCE_MISSING_TARGET` (error). More than one target attribute → `BML_REFERENCE_AMBIGUOUS_TARGET` (error).
 
-Maps to BOM `DocumentationReference { type, context? }`. Meta-model: `org.blockml.definition.ReferenceDefinition` on `org.blockml.core.Definition.references` — see `16_framework_base_types.md` — Definition Branch.
+Maps to BOM `DocumentationReference { block?, file?, url?, context }`. Meta-model: `org.blockml.definition.ReferenceDefinition` on `org.blockml.core.Definition.references` — see `16_framework_base_types.md` — Definition Branch.
 
 Example with documentation extensions on a member:
 

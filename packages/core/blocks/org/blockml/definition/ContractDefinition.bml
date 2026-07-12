@@ -23,8 +23,17 @@
     Capabilities, Constraints, Suggestions, documentation, examples, and optional default
     Capability implementations. Ignored on contract Blocks: subBlocks and compositions (no
     transitive contract merge). Merge order: baseType chain → contracts (declaration order,
-    later wins) → Block local declarations (override all). Root block only.
-    See 02_mbml.md — Contracts · 12_bom_object_model.md — Contract Merge.</documentation>
+    later wins) → Block local declarations (override all). Root block only.</documentation>
+
+  <references>
+    <reference file="02_mbml.md">
+      Contracts authoring rules.
+    </reference>
+    <reference file="12_bom_object_model.md">
+      Contract merge semantics.
+    </reference>
+  </references>
+
   <name>ContractDefinition</name>
   <type>def:ContractDefinition</type>
   <baseType>core:Definition</baseType>

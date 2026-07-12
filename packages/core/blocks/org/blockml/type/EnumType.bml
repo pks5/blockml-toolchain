@@ -50,10 +50,26 @@
     • defaultValue and instance attribute values on EnumType properties
     • Expression enum literals where the expected EnumType is known from context
     • Library _blocks export alongside other ValueType definitions
-
-    See 17_type_system_bml.md — EnumType · 02_mbml.md — Enum types · 04_types.md ·
-    00_bom_core.md — EnumType property values.
   </documentation>
+
+  <references>
+    <reference file="17_type_system_bml.md">
+      EnumType branch and value declaration rules.
+    </reference>
+    <reference file="02_mbml.md">
+      Enum types and enum value reference syntax.
+    </reference>
+    <reference file="04_types.md">
+      Enum types and enum value references (MBOM).
+    </reference>
+    <reference file="00_bom_core.md">
+      EnumType property values.
+    </reference>
+    <reference file="16_framework_base_types.md">
+      ValueType branch.
+    </reference>
+  </references>
+
   <name>EnumType</name>
   <type>btype:EnumType</type>
   <baseType>btype:StructType</baseType>
@@ -68,8 +84,7 @@
         instance of this EnumType with bml:id (reference token) and value (serialization
         literal). Valid values for properties typed with this EnumType come exclusively from
         values — authored in &lt;composition aggregation="values"&gt; with no special enum
-        syntax. See 17_type_system_bml.md — EnumType.
-      </documentation>
+        syntax.</documentation>
     </values>
   </aggregations>
 </block>

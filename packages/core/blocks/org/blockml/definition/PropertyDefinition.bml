@@ -20,10 +20,22 @@
     child element inside the properties container; the XML element name is the property name
     (bml:xml="${ #this.name }"). Maps to BOM PropertyDefinition (kind: "property") with typeFqn, value,
     valueRequired, and optional constraints and suggestions. Property type must resolve to a
-    ValueType (org.blockml.core.ValueType branch). Every Property behaves as Optional — it has a
-    value or has no value; there is no null. Declaration order among properties is significant for
-    StructType positional mapping and Capability parameter order.
-    See 12_bom_object_model.md — PropertyDefinition · 02_mbml.md — Members · Properties.</documentation>
+    ValueType branch. Every Property behaves as Optional — it has a value or has no value; there
+    is no null. Declaration order among properties is significant for StructType positional mapping
+    and Capability parameter order.</documentation>
+
+  <references>
+    <reference file="12_bom_object_model.md">
+      PropertyDefinition BOM structure.
+    </reference>
+    <reference file="02_mbml.md">
+      Members and properties authoring rules.
+    </reference>
+    <reference block="org.blockml.core.ValueType">
+      Required branch for property payload types.
+    </reference>
+  </references>
+
   <name>PropertyDefinition</name>
   <type>def:PropertyDefinition</type>
   <baseType>core:Definition</baseType>

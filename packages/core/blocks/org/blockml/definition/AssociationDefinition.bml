@@ -20,8 +20,16 @@
     the associations container; the XML element name is the association name (bml:xml="${ #this.name }").
     Maps to BOM AssociationDefinition (kind: "association") with typeFqn and cardinality 0..1 or
     0..n. Any Block FQN is valid as association type. Domain examples include basePresets on
-    MachineBlocks Block types. See 12_bom_object_model.md — AssociationDefinition ·
-    02_mbml.md — Associations.</documentation>
+    MachineBlocks Block types.</documentation>
+
+  <references>
+    <reference file="12_bom_object_model.md">
+      AssociationDefinition BOM structure.
+    </reference>
+    <reference file="02_mbml.md">
+      Associations authoring rules.
+    </reference>
+  </references>
 
   <name>AssociationDefinition</name>
   <type>def:AssociationDefinition</type>

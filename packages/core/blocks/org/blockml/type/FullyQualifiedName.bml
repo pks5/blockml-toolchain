@@ -27,8 +27,7 @@
     • Class segment — PascalCase (for example Block, Integer, Wall)
     • Full form — &lt;package&gt;.&lt;ClassName&gt; (for example org.blockml.type.Integer,
       com.machineblocks.core.Block)
-    Sub-Block FQNs derive as parentFqn + "." + name when omitted in source. See 00_bom_core.md
-    — FQN Convention · 01_system.md — FQN.
+    Sub-Block FQNs derive as parentFqn + "." + name when omitted in source.
 
     Namespace prefixes in BML (core:, btype:, def:, …) map to package segments; the Namespace
     Resolver stores the resolved FQN string in BOM typeFqn fields. Unknown FQN at validate time
@@ -51,17 +50,44 @@
     uses defaultType. Concrete type arguments must satisfy each parameter's baseType constraint
     → BML_GENERIC_CONSTRAINT_VIOLATION.
 
-    Primary use — meta-model and definition metadata where a type attribute holds an FQN:
-    • org.blockml.definition.BlockDefinition — &lt;type&gt; and &lt;baseType&gt; (Block FQN)
-    • org.blockml.definition.PropertyDefinition — property &lt;type&gt; (ValueType FQN)
-    • org.blockml.definition.GenericTypeDefinition — parameter &lt;baseType&gt; constraint
-    • org.blockml.definition.ContractDefinition — contract Block &lt;type&gt;
-    • org.blockml.definition.ReferenceDefinition — cross-reference &lt;type&gt; (Block or
-      Definition FQN)
-
-    See 17_type_system_bml.md — Generics · 16_framework_base_types.md — Definition Branch ·
-    02_mbml.md — Block Definition · 12_bom_object_model.md — typeFqn.
+    Primary use — meta-model and definition metadata where a type attribute holds an FQN.
   </documentation>
+
+  <references>
+    <reference file="00_bom_core.md">
+      Object identity and FQN convention.
+    </reference>
+    <reference file="01_system.md">
+      FQN (Fully Qualified Name) system overview.
+    </reference>
+    <reference file="17_type_system_bml.md">
+      Generics and BML attribute syntax for type parameters.
+    </reference>
+    <reference file="16_framework_base_types.md">
+      Definition branch and ReferenceDefinition.
+    </reference>
+    <reference file="02_mbml.md">
+      Namespace resolution and Block definition authoring.
+    </reference>
+    <reference file="12_bom_object_model.md">
+      typeFqn fields in BOM structures.
+    </reference>
+    <reference block="org.blockml.definition.BlockDefinition">
+      type and baseType attributes (Block FQN).
+    </reference>
+    <reference block="org.blockml.definition.PropertyDefinition">
+      property type attribute (ValueType FQN).
+    </reference>
+    <reference block="org.blockml.definition.GenericTypeDefinition">
+      parameter baseType constraint attribute.
+    </reference>
+    <reference block="org.blockml.definition.ContractDefinition">
+      contract Block type attribute.
+    </reference>
+    <reference block="org.blockml.definition.ReferenceDefinition">
+      cross-reference block attribute.
+    </reference>
+  </references>
 
   <genericTypes>
     <genericType name="B" baseType="core:Block" />

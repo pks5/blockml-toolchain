@@ -34,12 +34,25 @@
     status blocks, and the Definition meta-model branch (org.blockml.definition.*).
 
     Membership is defined exclusively by this file's _blocks list — not by directory layout.
-    Framework base type org.blockml.core.BlockLibrary is not exported here. Version 3.0.0 applies
-    to all exported blocks (framework convention: version only on Library.bml).
-
-    See docs/02_mbml.md — Library · docs/16_framework_base_types.md — Bootstrap Order ·
-    docs/12_bom_object_model.md — Library.
+    Version 3.0.0 applies to all exported blocks (framework convention: version only on
+    Library.bml).
   </documentation>
+
+  <references>
+    <reference file="02_mbml.md">
+      Library format and publishable catalog rules.
+    </reference>
+    <reference file="16_framework_base_types.md">
+      Bootstrap order for framework base types.
+    </reference>
+    <reference file="12_bom_object_model.md">
+      Library BOM data structure.
+    </reference>
+    <reference block="org.blockml.core.BlockLibrary">
+      Framework base type — not exported from this catalog.
+    </reference>
+  </references>
+
   <name>Library</name>
   <type>blockml:Library</type>
   <baseType>bcore:BlockLibrary</baseType>

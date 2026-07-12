@@ -17,9 +17,17 @@
     Used wherever BlockML tracks or compares definition and reference versions: &lt;version&gt; on
     Block and Library definitions, &lt;since&gt; on members, changelog entries, and bml:version on
     composition instances. Concrete version strings are stored in Properties — not on the Version
-    type itself.
+    type itself.</documentation>
 
-    See docs/02_mbml.md — version · docs/12_bom_object_model.md — Version Rules.</documentation>
+  <references>
+    <reference file="02_mbml.md">
+      Version attribute on Block and Library definitions.
+    </reference>
+    <reference file="12_bom_object_model.md">
+      Version comparison and reference rules.
+    </reference>
+  </references>
+
   <name>Version</name>
   <type>btype:Version</type>
   <baseType>btype:Text</baseType>

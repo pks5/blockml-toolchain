@@ -381,10 +381,14 @@ interface DocumentationExample {
 }
 
 interface DocumentationReference {
-  /** Required type attribute on <reference> — FQN of Block or Definition */
-  type: string
-  /** Optional text body — why or how the referenced element relates */
-  context?: string
+  /** Block or Definition FQN — XML block attribute on <reference> */
+  block?: string
+  /** Repository markdown file — XML file attribute on <reference> */
+  file?: string
+  /** External URL — XML url attribute on <reference> */
+  url?: string
+  /** Required text body — why or how the referenced element relates */
+  context: string
   source?: SourceLocation
 }
 

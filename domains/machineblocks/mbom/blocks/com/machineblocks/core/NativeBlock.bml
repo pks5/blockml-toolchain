@@ -20,10 +20,10 @@
   </documentation>
 
   <references>
-    <reference type="com.machineblocks.core.Block">
+    <reference block="com.machineblocks.core.Block">
       Extends Block directly — not CompositeBlock.
     </reference>
-    <reference type="com.machineblocks.core.CompositeBlock">
+    <reference block="com.machineblocks.core.CompositeBlock">
       Contrasts with CompositeBlock which uses _parts for composition children.
     </reference>
   </references>

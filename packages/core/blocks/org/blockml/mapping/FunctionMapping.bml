@@ -46,10 +46,15 @@
 
     Validation errors: BML_UNKNOWN_FUNCTION_PARAMETER, BML_DUPLICATE_FUNCTION_PARAMETER,
     BML_MISSING_FUNCTION_PARAMETER, BML_TOO_MANY_FUNCTION_PARAMETERS,
-    BML_MIXED_FUNCTION_ARGUMENTS, BML_MISSING_FUNCTION_MAPPING, BML_AMBIGUOUS_FUNCTION_MAPPING.
-
-    See docs/18_function_mapping.md.
+    BML_MIXED_FUNCTION_ARGUMENTS, BML_MISSING_FUNCTION_MAPPING,     BML_AMBIGUOUS_FUNCTION_MAPPING.
   </documentation>
+
+  <references>
+    <reference file="18_function_mapping.md">
+      Function parameter mapping rules and default behavior.
+    </reference>
+  </references>
+
   <name>FunctionMapping</name>
   <type>mapping:FunctionMapping</type>
   <baseType>core:Mapping</baseType>

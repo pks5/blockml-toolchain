@@ -14,14 +14,21 @@
   xmlns:btype="org.blockml.type"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>A cross-reference to a related Block or definition element.</idea>
+  <idea>A cross-reference to a related Block, definition element, or documentation source.</idea>
 
-  <documentation>Records a link from documentation metadata to another Block or definition element.
-    Rendered as a reference element inside the references container on any
-    org.blockml.core.Definition (alongside changelog and examples). Keeps API documentation,
-    version history, examples, and related-type links at the definition site — single source of
-    truth inside BML files. See 02_mbml.md — Documentation extensions ·
-    16_framework_base_types.md — Definition Branch.</documentation>
+  <documentation>Records a link from documentation metadata to another Block, definition element,
+    repository markdown file, or external URL. Rendered as a reference element inside the references
+    container on any org.blockml.core.Definition (alongside changelog and examples).</documentation>
+
+  <references>
+    <reference file="02_mbml.md">
+      Authoring rules for reference elements — block, file, and url attributes.
+    </reference>
+    <reference file="16_framework_base_types.md">
+      Definition branch — ReferenceDefinition meta-model shape.
+    </reference>
+  </references>
+
   <name>ReferenceDefinition</name>
   <type>def:ReferenceDefinition</type>
   <baseType>core:Definition</baseType>
@@ -29,14 +36,21 @@
   <bml:xml>reference</bml:xml>
 
   <properties>
-    <type type="btype:FullyQualifiedName(core:Block, core:Definition)">
-      <documentation>FQN of the Block or Definition being referenced. Rendered as the type
-        attribute on the reference element.</documentation>
-    </type>
-    <!-- Optional context renders as text content of the <reference> element. -->
+    <block type="btype:FullyQualifiedName(core:Block, core:Definition)" bml:xml="attribute">
+      <documentation>FQN of the referenced Block or Definition. Mutually exclusive with file and
+        url — exactly one target attribute must be set.</documentation>
+    </block>
+    <file type="Text" bml:xml="attribute">
+      <documentation>Repository documentation file (e.g. 02_mbml.md). Mutually exclusive with block
+        and url — exactly one target attribute must be set.</documentation>
+    </file>
+    <url type="Text" bml:xml="attribute">
+      <documentation>External URL. Mutually exclusive with block and file — exactly one target
+        attribute must be set.</documentation>
+    </url>
     <context type="Text" bml:xml="text">
-      <documentation>Optional human-readable explanation of why or how the referenced element
-        relates to this definition. Rendered as character content of the reference element.</documentation>
+      <documentation>Human-readable explanation of why or how the referenced element relates to
+        this definition. Required on every reference.</documentation>
     </context>
   </properties>
 </block>

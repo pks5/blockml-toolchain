@@ -22,8 +22,23 @@
     BomDocument.block and BlockDefinition.subBlocks[]. Declares identity (name, type, baseType),
     type modifiers (abstract, final), generic parameters, contracts, allowed Sub-Blocks and
     languages, and member declaration containers. Member declaration order in BML is preserved
-    in BOM and is significant for StructType positional mapping and render targets.
-    See 12_bom_object_model.md — BlockDefinition · 02_mbml.md — Block Definition.</documentation>
+    in BOM and is significant for StructType positional mapping and render targets.</documentation>
+
+  <references>
+    <reference file="12_bom_object_model.md">
+      BlockDefinition BOM structure.
+    </reference>
+    <reference file="02_mbml.md">
+      Block definition authoring format.
+    </reference>
+    <reference file="16_framework_base_types.md">
+      genericTypes aggregation on Block definitions.
+    </reference>
+    <reference block="org.blockml.core.Block">
+      Sole inheritance root — omits baseType on root blocks.
+    </reference>
+  </references>
+
   <name>BlockDefinition</name>
   <type>def:BlockDefinition</type>
   <baseType>core:Definition</baseType>
@@ -44,9 +59,8 @@
         derived as parentFqn + "." + name when omitted in source.</documentation>
     </type>
     <baseType type="btype:FullyQualifiedName(core:Block)">
-      <documentation>Parent type FQN. Required on all definitions except org.blockml.core.Block
-        (the sole inheritance root). No default — validator resolves effective members via the
-        baseType chain.</documentation>
+      <documentation>Parent type FQN. Required on all definitions except the sole inheritance root.
+        No default — validator resolves effective members via the baseType chain.</documentation>
     </baseType>
     <abstract type="Boolean">
       <value>false</value>
@@ -68,12 +82,11 @@
   <aggregations>
     <genericTypes type="def:GenericTypeDefinition[]">
       <documentation>Generic type parameters declared on this Block (root block only). Each entry
-        has a name and a baseType constraint for concrete type arguments at reference sites.
-        See 16_framework_base_types.md — genericTypes.</documentation>
+        has a name and a baseType constraint for concrete type arguments at reference sites.</documentation>
     </genericTypes>
     <languages type="core:Language[]">
-      <documentation>org.blockml.language.* FQNs permitted on capability implementation bindings
-        for this Block. Omitted = inherit from baseType chain.</documentation>
+      <documentation>Language FQNs permitted on capability implementation bindings for this Block.
+        Omitted = inherit from baseType chain.</documentation>
     </languages>
     <subTypes type="core:Block[]">
       <documentation>Block FQNs allowed in subBlocks[]. Omitted = inherit effective subTypes from

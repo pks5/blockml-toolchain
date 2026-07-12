@@ -22,8 +22,16 @@
     cardinality (from type multiplicity), optional defaultAggregation flag, nested composition
     template, and optional service binding (beanName, scope). Any Block FQN is valid as aggregation
     type — not limited to ValueTypes. Bare top-level composition is sugar for the single default
-    aggregation.
-    See 12_bom_object_model.md — AggregationDefinition · 02_mbml.md — Aggregations · Composition.</documentation>
+    aggregation.</documentation>
+
+  <references>
+    <reference file="12_bom_object_model.md">
+      AggregationDefinition BOM structure.
+    </reference>
+    <reference file="02_mbml.md">
+      Aggregations and composition authoring rules.
+    </reference>
+  </references>
 
   <name>AggregationDefinition</name>
   <type>def:AggregationDefinition</type>

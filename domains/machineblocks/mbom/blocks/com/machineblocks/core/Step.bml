@@ -18,10 +18,10 @@
     defines build order.</documentation>
 
   <references>
-    <reference type="com.machineblocks.core.Set">
+    <reference block="com.machineblocks.core.Set">
       Used as children of Set's _steps aggregation.
     </reference>
-    <reference type="com.machineblocks.core.Block">
+    <reference block="com.machineblocks.core.Block">
       part association references a placed instance by bml:id in _parts.
     </reference>
   </references>

@@ -2,11 +2,6 @@
   BlockML Core — root Block type
 
   FQN: org.blockml.core.Block
-  See docs/00_bom_core.md — Block and Block Instance · Fundamental Architecture Principles
-       docs/02_mbml.md — Block Definition · idea · documentation
-       docs/16_framework_base_types.md — Root Type Exception · Definition Branch
-       docs/12_bom_object_model.md — BlockDefinition
-       docs/17_type_system_bml.md — Everything is a Block
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -22,7 +17,7 @@
     Root semantic unit of BlockML — the sole inheritance root for all Block definitions.
     Every concept in the grammar is a Block: composable domain types, ValueTypes, Languages,
     Status values, Constraints, Capabilities, Services, Libraries, and Definition meta-model
-    types. Unqualified name Block resolves to org.blockml.core.Block.
+    types. Unqualified name Block resolves to this type.
 
     Role and constraints:
     • Sole inheritance root — omits baseType; all other definitions must declare one
@@ -33,8 +28,8 @@
 
     Type reference rules:
     • Any Block FQN may appear in aggregation and association member types
-    • Property and Capability payload types must resolve to org.blockml.core.ValueType
-    • Capability implementation type attributes must reference org.blockml.language.* FQNs
+    • Property and Capability payload types must resolve to a ValueType
+    • Capability implementation type attributes must reference language.* FQNs
 
     Documentation model (on every root block definition):
     • &lt;idea&gt; — required first child; semantic meaning of the Block
@@ -46,34 +41,45 @@
     Serialization:
     • bml:xml ${ bml:Self } — composable instances render under their declared type tag
       (for example &lt;core:Block&gt;, &lt;myns:Wall&gt;)
-    • Definition branch types describe block structure and carry their own bml:xml rules —
-      see 19_definition_blocks_and_bml_xml.md
-
-    See 00_bom_core.md — Block and Block Instance · 02_mbml.md — Block Definition ·
-    16_framework_base_types.md — Root Type Exception · 17_type_system_bml.md.
+    • Definition branch types describe block structure and carry their own bml:xml rules
   </documentation>
 
   <references>
-    <reference type="org.blockml.core.ValueType">
+    <reference block="org.blockml.core.ValueType">
       Property and capability payload types.
     </reference>
-    <reference type="org.blockml.core.Language">
+    <reference block="org.blockml.core.Language">
       Implementation language bindings.
     </reference>
-    <reference type="org.blockml.core.Status">
+    <reference block="org.blockml.core.Status">
       Lifecycle status references.
     </reference>
-    <reference type="org.blockml.core.Constraint">
+    <reference block="org.blockml.core.Constraint">
       Property validation constraints.
     </reference>
-    <reference type="org.blockml.core.Capability">
+    <reference block="org.blockml.core.Capability">
       Capability implementation contracts.
     </reference>
-    <reference type="org.blockml.core.Definition">
+    <reference block="org.blockml.core.Definition">
       Meta-model for block structure (WIP).
     </reference>
-    <reference type="com.machineblocks.core.Block">
+    <reference block="com.machineblocks.core.Block">
       Example domain base — domain-specific branches extend Block.
+    </reference>
+    <reference file="00_bom_core.md">
+      Block and Block Instance — fundamental architecture principles.
+    </reference>
+    <reference file="02_mbml.md">
+      Block Definition — idea, documentation, and documentation extensions.
+    </reference>
+    <reference file="16_framework_base_types.md">
+      Root Type Exception and Definition Branch.
+    </reference>
+    <reference file="17_type_system_bml.md">
+      Everything is a Block — type system overview.
+    </reference>
+    <reference file="19_definition_blocks_and_bml_xml.md">
+      Definition branch bml:xml serialization rules.
     </reference>
   </references>
 

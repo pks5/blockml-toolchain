@@ -17,7 +17,7 @@
     of StructType — it belongs at the site where a function-like representation is used.
 
     Concrete mappings extend this branch and declare how authored syntax maps to BlockML types and
-    how BlockML types map to target-language signatures. See docs/18_function_mapping.md.
+    how BlockML types map to target-language signatures.
 
     Component responsibilities:
     • Parser — stores authored syntax only; no mapping in Canonical BOM
@@ -27,6 +27,16 @@
     • Renderer — may emit authored form, evaluate FunctionMapping, or interpret mapping for the
       target system; Canonical BOM stays unchanged
   </documentation>
+
+  <references>
+    <reference file="18_function_mapping.md">
+      Function parameter mapping rules and component responsibilities.
+    </reference>
+    <reference block="org.blockml.mapping.FunctionMapping">
+      Concrete mapping for function-like call syntax.
+    </reference>
+  </references>
+
   <name>Mapping</name>
   <type>core:Mapping</type>
   <baseType>core:Block</baseType>

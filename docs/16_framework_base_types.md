@@ -185,15 +185,17 @@ Properties:    documentation · since · status
 Aggregations:  changelog (ChangeDefinition[]) · examples (ExampleDefinition[]) · references (ReferenceDefinition[])
 ```
 
-`org.blockml.definition.ReferenceDefinition` — cross-reference to a related Block or Definition element:
+`org.blockml.definition.ReferenceDefinition` — cross-reference to a related Block, definition element, or documentation source:
 
 ```text
 bml:xml         reference          — renders as <reference> inside <references>
-type (required) FullyQualifiedName — FQN of referenced Block or Definition; XML type attribute
-context         String (required*)  — relationship note; XML text content (*authoring rule — see below)
+block           FullyQualifiedName — Block or Definition FQN; XML block attribute
+file            String             — repository markdown file; XML file attribute
+url             String             — external URL; XML url attribute
+context         String (required)  — relationship note; XML text content
 ```
 
-Authoring: list only types **relevant to the current definition**; text body describes the relationship. Block cross-links never belong in `<documentation>` — markdown doc pointers do. See `02_mbml.md` — `<documentation>` · `<references>`.
+Exactly one of `block`, `file`, or `url` must be set. Authoring: list only targets **relevant to the current definition**; text body describes the relationship. All cross-links belong in `<references>` — never in `<documentation>`. See `02_mbml.md` — `<documentation>` · `<references>`.
 
 Each Definition block may declare **`bml:xml`** — how instances serialize to canonical BML XML (root element name, member as attribute/element/text/cdata). The meta-model is **work in progress**; full specification in `19_definition_blocks_and_bml_xml.md`.
 
