@@ -573,6 +573,17 @@ Omitted other modifiers       — inherit from baseType where applicable (valida
 org.blockml.core.Block        — sole type that omits <baseType> (inheritance root); effective subTypes []
 ```
 
+**Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous:
+
+```text
+<languages>    →  <lang:OpenSCAD/>           direct Language reference
+<subTypes>     →  <core:Block/>              direct Block reference
+<contracts>    →  <ac:Wall/>                 direct contract Block reference
+<genericTypes> →  <T baseType="…"/>          element name = generic parameter name
+```
+
+See `16_framework_base_types.md` for per-container rules.
+
 ### Contracts
 
 Blocks may declare `<contracts>` at root level to compose one or more **contract Blocks** — reusable partial definitions whose member fragments are merged into the effective Block definition:

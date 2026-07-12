@@ -310,7 +310,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <core:Block />                               → block.subTypes[] (direct Block reference in <subTypes>)
 <lang:OpenSCAD />                            → block.languages[] (direct Language reference in <languages>)
 <ac:Wall />                                  → block.contracts[]   (direct Block reference in <contracts>; root block only)
-<T baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType } (root block only)
+<baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType, defaultType? } (root block only)
 ```
 
 ```text

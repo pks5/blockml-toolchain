@@ -127,6 +127,26 @@ Omitted = inherit from baseType
 Unknown type on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 ```
 
+### `<contracts>`
+
+```xml
+<contracts>
+  <ac:Wall />
+  <core:Identifiable />
+</contracts>
+```
+
+```text
+Lists contract Block references merged into this Block (root block only).
+Each child element is a direct Block reference (element name = FQN via xmlns prefix).
+Same container pattern as <languages> and <subTypes> — no wrapper <contract> element.
+Omitted = inherit from baseType at validate
+Duplicate reference → BML_DUPLICATE_CONTRACT
+<contracts> on Sub-Block → BML_CONTRACT_NOT_ON_ROOT
+```
+
+See `02_mbml.md` — Contracts · `00_bom_core.md` — Contracts.
+
 ### `<genericTypes>`
 
 ```xml

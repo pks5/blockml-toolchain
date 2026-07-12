@@ -1280,7 +1280,7 @@ BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=tru
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — member namespace attribute references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular basePresets chain
-BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
+BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
 BML_CONTRACT_NOT_ON_ROOT      — <contracts> on Sub-Block
 BML_DUPLICATE_CONTRACT        — same type listed twice in block.contracts[]
 BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member

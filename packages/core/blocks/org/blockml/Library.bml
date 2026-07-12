@@ -89,7 +89,6 @@
         <def:BlockDefinition />
         <def:CapabilityDefinition />
         <def:ChangeDefinition />
-        <def:ContractDefinition />
         <def:ExampleDefinition />
         <def:GenericTypeDefinition />
         <def:PropertyDefinition />

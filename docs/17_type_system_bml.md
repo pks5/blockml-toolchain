@@ -965,6 +965,17 @@ Generic type parameters are declared on **StructType** (or other Block) definiti
 </block>
 ```
 
+Multiple parameters:
+
+```xml
+<genericTypes>
+  <T baseType="org.blockml.core.ValueType"/>
+  <D baseType="org.blockml.core.Definition" defaultType="def:BlockDefinition"/>
+</genericTypes>
+```
+
+The parameter name is derived from the XML element name — `<T baseType="…"/>` maps internally to `{ name: "T", baseType: "org.blockml.core.ValueType" }`. The internal BOM `GenericType` shape is unchanged; only the BML syntax is simplified.
+
 **Generic application** (`Box<Integer>`) is a **type expression** — not a ValueType.
 
 #### BML attribute syntax
