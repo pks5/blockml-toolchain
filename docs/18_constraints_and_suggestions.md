@@ -6,7 +6,7 @@ version: 1.0.0
 
 This document specifies how **constraints** and **suggestions** on Properties are modeled as Block instances — unified extension points built on the BlockML type system.
 
-For property metadata see `00_bom_core.md`. For BML property syntax see `02_mbml.md`. For the BOM model see `12_bom_object_model.md`. For framework constraint types see `16_framework_base_types.md`. For generic type binding see `17_type_system_bml.md`. For compiler diagnostics see `06_compiler.md`.
+For property metadata see `00_bom_core.md`. For BML property syntax see `02_mbml.md`. For the BOM model see `12_bom_object_model.md`. For framework constraint types see `16_framework_base_types.md`. For generic type binding see `17_type_system_bml.md`. For ValueType instance configuration see `20_value_type_instance_configuration.md`. For compiler diagnostics see `06_compiler.md`.
 
 ---
 
@@ -15,6 +15,36 @@ For property metadata see `00_bom_core.md`. For BML property syntax see `02_mbml
 The previous `constraints` and `suggestions` concepts are unified and built consistently on the BlockML type system. Instead of fixed XML elements with predefined attributes, both become extension points for Block instances.
 
 This keeps the BlockML core small and fully extensible.
+
+---
+
+## ValueType Configuration vs Constraints
+
+Many validation settings configure the referenced ValueType itself — not an independent business rule. These belong in the `type` attribute as instance configuration:
+
+```xml
+<name type="Text{maxLength=100}"/>
+<price type="Decimal{precision=10, scale=2}"/>
+<quantity type="Integer{min=0, max=100}"/>
+```
+
+Equivalent constraint form remains valid for migration but is redundant when the ValueType exposes the same configuration Property:
+
+```xml
+<!-- Prefer inline configuration -->
+<name type="Text{maxLength=100}"/>
+
+<!-- Still valid — constraint extension point -->
+<name type="Text">
+  <constraints>
+    <constraint:MaxLength value="100"/>
+  </constraints>
+</name>
+```
+
+Keep constraints for semantic validation that is not intrinsic to the ValueType: uniqueness, cross-property rules, dependency rules, custom validators, and `Pattern` when the regex is contextual rather than part of the type definition.
+
+See `20_value_type_instance_configuration.md` for syntax, BOM representation, and the full boundary table.
 
 ---
 

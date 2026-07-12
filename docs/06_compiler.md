@@ -538,6 +538,15 @@ BML_DUPLICATE_FUNCTION_PARAMETER — duplicate named parameter in capability cal
 BML_MISSING_FUNCTION_PARAMETER — required struct property missing in capability call
 BML_TOO_MANY_FUNCTION_PARAMETERS — excess positional parameters for inputType
 BML_MIXED_FUNCTION_ARGUMENTS   — positional and named parameters mixed (default FunctionMapping)
+BML_MIXED_TYPE_CONFIGURATION     — positional and named arguments mixed in ValueType {…} configuration
+BML_UNKNOWN_TYPE_CONFIGURATION   — configuration key or positional index not a ValueType Property
+BML_TYPE_CONFIGURATION_VIOLATION — configuration value incompatible with target Property type
+BML_DUPLICATE_TYPE_CONFIGURATION — same ValueType Property configured twice
+BML_PREFER_TYPE_CONFIGURATION    — constraint duplicates an available ValueType configuration Property (hint)
+BML_MISSING_GENERIC_TYPE_ARGUMENT — generic application missing required type argument (e.g. bare Constant)
+BML_MISSING_CONSTANT_VALUE       — Constant(T) reference without required {value=…} configuration
+BML_CONSTANT_VALUE_MISMATCH      — Constant configured value incompatible with bound type T
+BML_PREFER_CONSTANT_TYPE         — union literal alternative should desugar to Constant(T){value=…} (hint)
 BML_MISSING_FUNCTION_MAPPING   — implementation requires FunctionMapping but none declared
 BML_AMBIGUOUS_FUNCTION_MAPPING — capability call form maps ambiguously to inputType
 BML_NO_TARGET                 — no registered target supports the block's baseType

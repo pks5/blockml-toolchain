@@ -6,9 +6,22 @@
   <idea>Primitive BlockML property type capable of holding a whole number.</idea>
 
   <documentation>BOM Core primitive ValueType for whole numbers. Unqualified name Integer resolves
-    to org.blockml.type.Integer. Extends org.blockml.type.Number. Values are stored in Properties —
-    not on the Integer type itself.</documentation>
+    to org.blockml.type.Integer. Extends org.blockml.type.Number. Payload values are stored on
+    Properties — not on the Integer type itself.
+
+    Optional configuration Properties (min, max) configure a Property's owned Integer instance via
+    inline type syntax — Integer{min=0, max=100}. Positional order: min, max. See
+    20_value_type_instance_configuration.md.</documentation>
   <name>Integer</name>
   <type>Integer</type>
   <baseType>btype:Number</baseType>
+
+  <properties>
+    <min type="Integer">
+      <documentation>Minimum allowed value (inclusive). Configured via Integer{min=n}.</documentation>
+    </min>
+    <max type="Integer">
+      <documentation>Maximum allowed value (inclusive). Configured via Integer{max=n}.</documentation>
+    </max>
+  </properties>
 </block>

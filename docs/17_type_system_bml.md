@@ -359,7 +359,7 @@ org.blockml.core.ValueType              abstract — never stores data
   │     │     ├── org.blockml.type.Decimal   — default for non-integer numbers
   │     │     └── org.blockml.type.Float     — binary float — special-purpose only
   │     └── org.blockml.type.Boolean      — neither textual nor numeric
-  ├── org.blockml.type.StructType         Size3D · Color · …
+  ├── org.blockml.type.StructType         Size3D · Color · Constant · …
   └── org.blockml.type.EnumType           extends StructType — BaseCutoutType · Direction · …
 ```
 
@@ -368,7 +368,7 @@ org.blockml.core.ValueType              abstract — never stores data
 | Branch | Role | Examples |
 |---|---|---|
 | **PrimitiveType** | Atomic scalar semantics — no stored values | `Boolean`, `Integer`, `Decimal`, `Float`, `Text`, `URL`, `Version` |
-| **StructType** | Custom value objects — structure via properties | `Size3D`, `Color`, `Address`, `Transform` |
+| **StructType** | Custom value objects — structure via properties | `Size3D`, `Color`, `Constant`, `Address`, `Transform` |
 | **EnumType** | StructType + finite allowed values | `Direction`, `Face`, `StudType`, `BaseCutoutType` |
 
 `StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate ValueType branch.
@@ -383,7 +383,7 @@ Everything beyond the three ValueType kinds is a **type expression** — a use o
 
 ```text
 ValueType        = named semantic meaning     (Primitive · Enum · Struct)
-TypeExpression   = usage or combination       (multiplicity · union · generic application · bml:Self · T)
+TypeExpression   = usage or combination       (multiplicity · union · generic application · instance configuration · bml:Self · T)
 ```
 
 ### Not ValueTypes — type expressions only
@@ -411,9 +411,9 @@ Legacy domain wrapper types are replaced by union syntax:
 
 ```text
 Obsolete                    Write instead
-AutoOr<T>                   "auto" | T
-FalseOr<T>                  false | T
-NoneOr<T>                   "none" | T
+AutoOr<T>                   Constant(Text){value="auto"} | T
+FalseOr<T>                  Constant(Boolean){value=false} | T
+NoneOr<T>                   Constant(Text){value="none"} | T
 BooleanOr<T>                Boolean | T
 Array<T>                    T[]
 UnionType                   A | B | C
@@ -478,14 +478,22 @@ See `00_bom_core.md` — Type Notation · `02_mbml.md` — Type notation · `12_
 Union type expressions combine alternatives with `|`:
 
 ```text
-"auto" | Float              — auto sentinel or float value
-"none" | T                  — none sentinel or T
-false | Size3D              — false or struct
-Boolean | StudType          — boolean or enum
-Integer | Text            — primitive union
+Boolean | Constant(Text){value="auto"}   — boolean or singleton "auto" (canonical)
+Float | Constant(Text){value="auto"}     — float or auto sentinel
+false | Size3D                           — false or struct
+Boolean | StudType                       — boolean or enum
+Integer | Text                           — primitive union
 ```
 
-Literal alternatives use JSON literal syntax (`"auto"`, `"none"`, `false`, `true`). Type alternatives reference ValueTypes or nested type expressions.
+Singleton alternatives use **Constant** — a generic configured ValueType (`21_constant_value_type.md`). Each Constant application binds `T` via `(...)` and supplies the allowed value via `{value=…}`.
+
+**Future literal shorthand** — JSON literals in union positions desugar to Constant:
+
+```text
+Boolean | "auto"    ≡    Boolean | Constant(Text){value="auto"}
+```
+
+Until that shorthand is enabled, author the explicit Constant form. Legacy literal union syntax (`"auto" | Float`) remains parseable; normalization to Constant is recommended at map time.
 
 ---
 
@@ -493,8 +501,10 @@ Only ValueTypes may be used where a **bare type name** is required (Property `ty
 
 ```text
 Allowed:     type="org.blockml.type.Integer"
-             type='"auto" | Float'
+             type="Boolean | Constant(Text){value=&quot;auto&quot;}"
              type="Integer[]"
+             type="Text{maxLength=100}"
+             type="Decimal{precision=10, scale=2}"
              inputType="com.foo.Request"
              outputType="com.foo.Response"
 Not allowed: type="com.machineblocks.core.NativeBlock"   → BML_INVALID_PROPERTY_TYPE
@@ -765,6 +775,13 @@ StructType properties follow **Struct Property Access** and **Declaration Order*
 
 Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) follows the same declaration-order contract for FunctionMapping. The validator may suggest promoting repeated anonymous structs to named StructTypes. See `18_function_mapping.md`.
 
+**Generic StructType — Constant** — singleton union alternative (`21_constant_value_type.md`):
+
+```text
+Constant<T extends ValueType>   —  value : T
+Constant(Text){value="auto"}    —  used in Boolean | Constant(Text){value="auto"}
+```
+
 ---
 
 ### EnumType
@@ -970,6 +987,22 @@ core:FullyQualifiedName(core:Block) → org.blockml.core.FullyQualifiedName<core
 ```
 
 Each parenthesized argument binds one `<genericType>` parameter (in declaration order). When multiple parameters are present, the argument label (`abc`, `xyz`, …) matches the generic parameter name and qualifies the type argument as a namespace prefix (`abc:A` → `abc.A`). With a single generic parameter, the label may be omitted — only the type reference is written.
+
+#### ValueType instance configuration
+
+Curly braces configure the Property's owned ValueType instance — orthogonal to generic `(...)` binding:
+
+```text
+Conceptual              BML attribute (type="...")
+────────────────        ───────────────────────────
+Text maxLength=100      Text{maxLength=100}
+Decimal p=10, s=2       Decimal{precision=10, scale=2}
+Decimal 10, 2           Decimal{10, 2}     — positional by ValueType property order
+```
+
+Named and positional configuration must not be mixed in one `{...}` block. Positional mapping follows the same declaration-order rules as FunctionMapping — see `18_function_mapping.md` · `20_value_type_instance_configuration.md`.
+
+**Constant** — `Constant(T){value=…}` configures a singleton ValueType for union alternatives. Generic `(...)` binds `T`; `{…}` supplies the required `value`. See `21_constant_value_type.md`.
 
 Examples from core Block definitions:
 
@@ -1232,7 +1265,7 @@ never expose „Block“ outside parser/BOM types
 
 **Only BML semantics are normative.** Internal data structures may change without altering a single `.bml` file.
 
-`TypeExpression` in `12_bom_object_model.md` (V1 alias `TypeDescriptor`) is the **reference syntax** for type expressions — anonymous structs, unions, multiplicity, generic application. Named ValueTypes always resolve to registry FQNs.
+`TypeExpression` in `12_bom_object_model.md` (V1 alias `TypeDescriptor`) is the **reference syntax** for type expressions — anonymous structs, unions, multiplicity, generic application, instance configuration. Named ValueTypes always resolve to registry FQNs.
 
 ---
 
@@ -1247,6 +1280,8 @@ never expose „Block“ outside parser/BOM types
 | BML block syntax | `02_mbml.md` |
 | Type expressions · three ValueType kinds | `17_type_system_bml.md` — Type Expressions |
 | TypeExpression AST | `12_bom_object_model.md` |
+| ValueType instance configuration | `20_value_type_instance_configuration.md` |
+| Constant singleton ValueType | `21_constant_value_type.md` |
 | Parse/serialize behaviour | `04_types.md` |
 | Synthetic accessors · Capability interpretation | `08_managed_object.md` |
 | Collections and Multiplicity | this document — § Collections and Multiplicity |

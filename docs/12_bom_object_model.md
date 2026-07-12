@@ -290,10 +290,19 @@ interface Multiplicity {
   max: number | "*"
 }
 
+interface InstanceConfiguration {
+  /** Named configuration — ValueType property name → value */
+  named?: Record<string, LiteralValue | ExpressionValue>
+  /** Positional configuration — mapped by ValueType property declaration order */
+  positional?: (LiteralValue | ExpressionValue)[]
+}
+
 interface NamedTypeReference {
   kind: "named"
   fqn: string
   typeArguments?: TypeExpression[]
+  /** Configures the Property's owned ValueType instance — see 20_value_type_instance_configuration.md */
+  instanceConfiguration?: InstanceConfiguration
   multiplicity?: Multiplicity
 }
 
@@ -336,7 +345,13 @@ Integer[0..n]                      → NamedTypeReference { fqn: Integer, multip
 Integer[]                          → same as Integer[0..n]
 Integer[3]                         → NamedTypeReference { fqn: Integer, multiplicity: { min: 3, max: 3 } }
 com.foo.Box<Integer>               → NamedTypeReference { fqn: "com.foo.Box", typeArguments: [Integer] }
-"auto" | Float                     → UnionTypeExpression { alternatives: [literal "auto", Float] }
+Text{maxLength=100}                → NamedTypeReference { fqn: Text, instanceConfiguration: { named: { maxLength: 100 } } }
+Decimal{precision=10, scale=2}     → NamedTypeReference { fqn: Decimal, instanceConfiguration: { named: { precision: 10, scale: 2 } } }
+Decimal{10, 2}                     → NamedTypeReference { fqn: Decimal, instanceConfiguration: { positional: [10, 2] } }
+Text{maxLength=50}[0..n]           → NamedTypeReference { fqn: Text, instanceConfiguration: { … }, multiplicity: { min: 0, max: "*" } }
+Constant(Text){value="auto"}       → NamedTypeReference { fqn: Constant, typeArguments: [Text], instanceConfiguration: { named: { value: "auto" } } }
+Boolean | Constant(Text){value="auto"} → UnionTypeExpression { alternatives: [Boolean, Constant(…)] }
+"auto" | Float                     → UnionTypeExpression { alternatives: [literal "auto", Float] } — legacy; normalize to Constant form
 false | Size3D                     → UnionTypeExpression { alternatives: [literal false, Size3D] }
 Boolean | Integer                  → UnionTypeExpression { alternatives: [Boolean, Integer] }
 T                                  → GenericParameterReference { name: "T" }

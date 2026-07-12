@@ -269,34 +269,38 @@ BlockML has three ValueType kinds: **Primitive**, **Enum**, **Struct**. The form
 
 ## Union syntax (replaces wrapper types)
 
+Canonical singleton alternatives use **Constant** — see `21_constant_value_type.md`:
+
 ```text
-AutoOr<T>      →  "auto" | T
-FalseOr<T>     →  false | T
-NoneOr<T>      →  "none" | T
+AutoOr<T>      →  Constant(Text){value="auto"} | T
+FalseOr<T>     →  Constant(Boolean){value=false} | T
+NoneOr<T>      →  Constant(Text){value="none"} | T
 BooleanOr<T>   →  Boolean | T
 ```
 
-### AutoOr — migrate to `"auto" | T`
+Legacy literal union syntax (`"auto" | T`) remains parseable; normalization to Constant is recommended.
+
+### AutoOr — migrate to `Constant(Text){value="auto"} | T`
 
 ```text
 Was:  type="type:AutoOr_Float"   value="auto" | value="1.5"
-Now:  type='"auto" | Float'      value="auto" | value="1.5"
+Now:  type='Constant(Text){value="auto"} | Float'   value="auto" | value="1.5"
 
 MBOM:  "auto"  or  T
 SCAD:  "auto"  or  serialized T
 ```
 
-### FalseOr — migrate to `false | T`
+### FalseOr — migrate to `Constant(Boolean){value=false} | T`
 
 ```text
-false | T
+Constant(Boolean){value=false} | T
 ```
 
-### NoneOr — migrate to `"none" | T`
+### NoneOr — migrate to `Constant(Text){value="none"} | T`
 
 ```text
 Was:  type="type:NoneOr_…"   value="none"
-Now:  type='"none" | T'
+Now:  type='Constant(Text){value="none"} | T'
 
 MBOM:  "none"  or  T
 SCAD:  "none"  or  serialized T

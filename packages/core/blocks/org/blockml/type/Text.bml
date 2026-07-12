@@ -11,8 +11,21 @@
     Python str, C# string, or any target representation.
 
     Semantic subtypes extend Text: FullyQualifiedName, Version, URL, URI, FilePath, MimeType, …
-    Concrete values are stored in Properties, not on the Text type itself.</documentation>
+    Concrete payload values are stored on Properties — not on the Text type itself.
+
+    Optional configuration Properties (minLength, maxLength) configure a Property's owned Text
+    instance via inline type syntax — Text{maxLength=100}. Positional order: minLength, maxLength.
+    See 20_value_type_instance_configuration.md.</documentation>
   <name>Text</name>
   <type>Text</type>
   <baseType>btype:PrimitiveType</baseType>
+
+  <properties>
+    <minLength type="Integer">
+      <documentation>Minimum allowed text length (inclusive). Configured via Text{minLength=n}.</documentation>
+    </minLength>
+    <maxLength type="Integer">
+      <documentation>Maximum allowed text length (inclusive). Configured via Text{maxLength=n}.</documentation>
+    </maxLength>
+  </properties>
 </block>

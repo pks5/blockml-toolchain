@@ -138,6 +138,7 @@
         <status:Stub />
         <btype:Boolean />
         <btype:BooleanEntity />
+        <btype:Constant />
         <btype:Decimal />
         <btype:DecimalEntity />
         <btype:EnumType />
