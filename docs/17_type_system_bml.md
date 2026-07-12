@@ -824,6 +824,8 @@ Qualified form references the enum value's id (from _values composition).
 
 The short form is valid only when the expected type is known from the property (or capability input field) declaration — not for untyped strings. The validator resolves the token against `_values` by `id`.
 
+**Resolution semantics:** the token is a **resolution key**, not a link to the `_values` entry. The effective property value is materialized as a **deep copy** of the enum instance's properties (e.g. `value="standard"`) — never as a reference to another instance. See `12_bom_object_model.md` — Property Value Semantics.
+
 **Value literal:** enum instances also carry a `value` property (e.g. `value="standard"` on id `STANDARD`). The runtime/serialization literal `standard` remains valid where a string enum literal is expected — see `04_types.md` · MBML examples. Id reference (`STANDARD` / `FQN::STANDARD`) and value literal (`standard`) are distinct surface forms; both must match a declared `_values` entry.
 
 ---
