@@ -156,7 +156,7 @@ com.machineblocks.core.Block  (extends org.blockml.core.Block)
   _presets:
     type:    com.machineblocks.core.Block[]
   basePresets:
-    type:    _self[]   (association — references ids in enclosing Block's _presets)
+    type:    bml:Self[]   (association — references ids in enclosing Block's _presets)
 
 com.machineblocks.core.CompositeBlock  (extends Block)
   _parts:
@@ -201,7 +201,7 @@ When `beanName` is set, the Aggregation is a service binding. The bean is access
 
 Associations describe loose references to other objects without ownership.
 
-MachineBlocks uses `basePresets` on `com.machineblocks.core.Block` — an association (`_self[]`) referencing preset ids in the enclosing Block's `_presets` aggregation. Local ids resolve within the same Block; cross-file entries use `{BlockFQN}::{id}`.
+MachineBlocks uses `basePresets` on `com.machineblocks.core.Block` — an association (`bml:Self[]`) referencing preset ids in the enclosing Block's `_presets` aggregation. Local ids resolve within the same Block; cross-file entries use `{BlockFQN}::{id}`.
 
 Other planned use cases in MachineBlocks:
 
@@ -521,7 +521,7 @@ MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/blocks/co
 ```text
 Extends:        org.blockml.core.Entity
 Properties:     name (String)
-Associations:   basePresets (_self[] — references ids in _presets)
+Associations:   basePresets (bml:Self[] — references ids in _presets)
 Aggregations:   _presets (type: com.machineblocks.core.Block[])
 ```
 

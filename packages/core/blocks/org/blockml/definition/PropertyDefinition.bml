@@ -18,7 +18,7 @@
 
   <documentation>Describes a Block member that carries a scalar or structured value. Rendered as a
     child element inside the properties container; the XML element name is the property name
-    (bml:xml="${ name }"). Maps to BOM PropertyDefinition (kind: "property") with typeFqn, value,
+    (bml:xml="${ #this.name }"). Maps to BOM PropertyDefinition (kind: "property") with typeFqn, value,
     valueRequired, and optional constraints and suggestions. Property type must resolve to a
     ValueType (org.blockml.core.ValueType branch). Every Property behaves as Optional — it has a
     value or has no value; there is no null. Declaration order among properties is significant for
@@ -27,7 +27,7 @@
   <name>PropertyDefinition</name>
   <type>def:PropertyDefinition</type>
   <baseType>core:Definition</baseType>
-  <bml:xml>${ name }</bml:xml>
+  <bml:xml>${ #this.name }</bml:xml>
 
   <properties>
     <!-- Without bml:xml, type renders as an XML attribute on the property element. -->

@@ -44,7 +44,7 @@
     (warning V1).
 
     Serialization:
-    • bml:xml ${ type } — composable instances render under their declared type tag
+    • bml:xml ${ bml:Self } — composable instances render under their declared type tag
       (for example &lt;core:Block&gt;, &lt;myns:Wall&gt;)
     • Definition branch types (org.blockml.core.Definition and sub-types) describe block
       structure and carry their own bml:xml rules — see 19_definition_blocks_and_bml_xml.md
@@ -68,7 +68,7 @@
   <baseType />
   
   <!-- Blocks are rendered as xml elements with the name of the block type -->
-  <bml:xml>${ type }</bml:xml> 
+  <bml:xml>${ bml:Self }</bml:xml>
   
   <!-- Root block is abstract -->
   <abstract />

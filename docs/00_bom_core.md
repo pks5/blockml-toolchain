@@ -858,17 +858,71 @@ Block[1..1]     →  exactly 1 required reference
 
 The internal BOM representation uses `minOccurs` / `maxOccurs` (or equivalent) on the type reference. BML surface syntax uses bracket notation only; the element type FQN is unchanged.
 
-### `_self` Type
+### Expression Context — `#this`, `bml:Self`, and `bml:Def`
 
-`_self` refers to the **current effective Block type**, resolved **after inheritance** — not at parse time.
+The special `_self` type placeholder is replaced by three explicit concepts that separate instance, type, and definition.
+
+#### `#this` — current Block instance
+
+`#this` is a magic bean available in expressions. It always refers to the current outer Block instance whose definition is being evaluated. Its binding does not change inside nested compositions, containers, or directives.
+
+Unqualified member references are shorthand for `#this`:
+
+```text
+width          ≡  #this.width
+height         ≡  #this.height
+calculate()    ≡  #this.calculate()
+```
+
+#### `bml:Self` — current effective Block type
+
+`bml:Self` is a context-dependent type reference. It resolves to the effective current Block type after inheritance has been resolved — not at parse time.
 
 ```xml
-<association name="next" type="_self"/>
+<association name="next" type="bml:Self"/>
 ```
 
 On `com.foo.Node` → `next : com.foo.Node`. On `com.bar.SpecialNode extends com.foo.Node` → `next : com.bar.SpecialNode`.
 
-Collection forms: `_self[]`, `_self[1..3]`, etc. `_self` is especially useful for Associations (parent, children, connectedTo) but is also valid on Aggregations.
+Collection forms: `bml:Self[]`, `bml:Self[1..3]`, etc. `bml:Self` is especially useful for Associations (parent, children, connectedTo) but is also valid on Aggregations.
+
+`bml:Self` can be used anywhere a normal type reference is allowed:
+
+```xml
+<property type="bml:Self"/>
+<aggregation type="bml:Self"/>
+<inputType>bml:Self</inputType>
+<reference type="bml:Self"/>
+```
+
+Member references append a member name to create a definition reference — `bml:Self.width` is equivalent to `com.foo.Bar.width` when `bml:Self` resolves to `com.foo.Bar`. Further navigation is possible: `bml:Self.width.name`, `bml:Self.width.type`, `bml:Self.width.documentation`.
+
+#### `bml:Def` — current Block definition
+
+`bml:Def` references the effective Block definition itself. Unlike `bml:Self`, which starts from the type identity, `bml:Def` exposes the definition hierarchy:
+
+```text
+bml:Def.name          →  <name>MyBlock</name>
+bml:Def.type          →  <type>com.foo.MyBlock</type>
+bml:Def.baseType
+bml:Def.documentation
+bml:Def.properties
+bml:Def.aggregations
+bml:Def.capabilities
+```
+
+`bml:Self.width` and `bml:Def.properties.width` reference the same Property definition — the former is the short type-oriented form; the latter is explicit structural navigation.
+
+| Expression | Meaning |
+|---|---|
+| `width` | shorthand for `#this.width` |
+| `#this.width` | value of the Property on the current Block instance |
+| `bml:Self` | current effective Block type |
+| `bml:Self.width` | definition of member `width` |
+| `bml:Self.width.name` | `"width"` |
+| `bml:Def` | current Block definition |
+| `bml:Def.name` | `<name>` metadata of the Block definition |
+| `bml:Def.properties.width` | same Property definition as `bml:Self.width` |
 
 ### Implicit Default Aggregation
 
@@ -1527,7 +1581,7 @@ Each preset instance in `_presets`:
 ```text
 bml:id           — stable kebab-case identifier (composition meta; reference key)
 name             — human-readable display name (Customizer UI, editor)
-basePresets   — association _self[]: space-separated preset ids (local or FQN::id)
+basePresets   — association bml:Self[]: space-separated preset ids (local or FQN::id)
                    own instance properties override merged preset chain
 ```
 

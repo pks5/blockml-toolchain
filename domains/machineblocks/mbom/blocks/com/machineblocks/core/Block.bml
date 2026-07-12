@@ -29,7 +29,7 @@
   </properties>
 
   <associations>
-    <basePresets type="_self[]"></basePresets>
+    <basePresets type="bml:Self[]"></basePresets>
   </associations>
 
   <aggregations>

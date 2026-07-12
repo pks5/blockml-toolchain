@@ -152,7 +152,7 @@ After steps 1–4 fail in document scope:
 
 **Naming mutual exclusion:** A `genericType` name must differ from the root Block `<name>` and from every Sub-Block `<name>` in the same document (`BML_GENERIC_BLOCK_NAME_COLLISION`, `BML_GENERIC_SUBBLOCK_NAME_COLLISION`). Sub-Blocks and generic parameters therefore never compete for the same identifier — steps 2 and 3 are disjoint in practice.
 
-**Own Block name (step 1):** When an unqualified reference matches the root Block's `<name>`, it resolves to that Block's declared `<type>` FQN — a self-type reference within the same definition. For inheritance-aware self-reference at validate time, `_self` remains available (see § Members — `_self`).
+**Own Block name (step 1):** When an unqualified reference matches the root Block's `<name>`, it resolves to that Block's declared `<type>` FQN — a self-type reference within the same definition. For inheritance-aware self-reference at validate time, `bml:Self` remains available (see § Members — `bml:Self`).
 
 **Core primitives (step 4):** Only the five whitelist names above resolve without prefix. Abstract branches such as `org.blockml.type.Number` or `org.blockml.type.PrimitiveType` are **not** in the whitelist — use `Integer`, `Decimal`, or `Float` for numeric properties.
 
@@ -1491,12 +1491,16 @@ Block[]         →  0..n
 Block[1..1]     →  exactly 1 required
 ```
 
-**`_self`** — refers to the current effective Block type, resolved after inheritance:
+**`bml:Self`** — refers to the current effective Block type, resolved after inheritance:
 
 ```xml
-<association type="_self" />
-<association type="_self[]" />
+<association type="bml:Self" />
+<association type="bml:Self[]" />
 ```
+
+**`#this`** — refers to the current Block instance in expression context. Unqualified member references are shorthand for `#this` (`width` ≡ `#this.width`).
+
+**`bml:Def`** — refers to the current Block definition. `bml:Self.width` and `bml:Def.properties.width` reference the same Property definition.
 
 **Service Aggregations** bind named service beans into the Block. Once declared, the bean is accessible in Expressions via `@beanName`. The `scope` attribute controls visibility to child Blocks:
 
@@ -1865,11 +1869,11 @@ Declares how a block type or member renders to canonical BML XML. Allowed only o
 <!-- Root element name for block documents -->
 <bml:xml>block</bml:xml>
 
-<!-- Root element from instance type FQN -->
-<bml:xml>${ type }</bml:xml>
+<!-- Root element from instance effective type -->
+<bml:xml>${ bml:Self }</bml:xml>
 
 <!-- Member element from instance name -->
-<bml:xml>${ name }</bml:xml>
+<bml:xml>${ #this.name }</bml:xml>
 
 <!-- Member value placement on Definition properties -->
 <documentation type="Text" bml:xml="element">…</documentation>

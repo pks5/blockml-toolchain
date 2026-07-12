@@ -383,7 +383,7 @@ Everything beyond the three ValueType kinds is a **type expression** — a use o
 
 ```text
 ValueType        = named semantic meaning     (Primitive · Enum · Struct)
-TypeExpression   = usage or combination       (multiplicity · union · generic application · _self · T)
+TypeExpression   = usage or combination       (multiplicity · union · generic application · bml:Self · T)
 ```
 
 ### Not ValueTypes — type expressions only
@@ -397,7 +397,7 @@ Boolean | Integer   — union
 "auto" | Float
 false | Size3D
 Box<Integer>        — generic application (Box is a StructType with <genericTypes>)
-_self
+bml:Self
 T                   — generic parameter reference
 ```
 
@@ -465,7 +465,7 @@ BlockML states what a collection *means*. The concrete data structure is part of
 
 ```text
 Aggregation type=     com.machineblocks.core.Step[]
-Association type=     _self[]
+Association type=     bml:Self[]
 Property type=        (bare — exactly one value; collections rare on properties)
 Capability inputType=  { items: String[0..n] }   — named field with multiplicity
 Composition children=   governed by parent aggregation multiplicity
@@ -774,7 +774,7 @@ EnumType is a **specialized StructType** — it adds a finite list of allowed va
 Enums are normal ValueTypes extending `org.blockml.type.StructType`. The branch declares a default aggregation for enum values:
 
 ```xml
-<aggregation name="_values" type="_self[]" default="true"/>
+<aggregation name="_values" type="bml:Self[]" default="true"/>
 ```
 
 Enum values are **Block instances** in `<composition aggregation="_values">` — no special enum syntax:
@@ -986,7 +986,7 @@ At reference sites:
 
 At validate time the compiler substitutes each placeholder (`T`) with the concrete type argument. Each argument must satisfy the parameter's `baseType` constraint (`BML_GENERIC_CONSTRAINT_VIOLATION` on mismatch).
 
-Generic parameters (`T`) and `_self` in type positions are type-expression references — resolved from the defining Block's `<genericTypes>` or effective Block type respectively.
+Generic parameters (`T`) and `bml:Self` in type positions are type-expression references — resolved from the defining Block's `<genericTypes>` or effective Block type respectively.
 
 **Constraint generic binding** — `org.blockml.core.Constraint` and its sub-types also declare `<genericTypes>`. Unlike StructType generics, constraint type arguments are **never authored** — the compiler binds `T` from the enclosing property's type context at validate time:
 

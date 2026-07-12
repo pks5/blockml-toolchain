@@ -61,7 +61,7 @@
 
   <aggregations>
     <values
-      type="_self[]"
+      type="bml:Self[]"
       default="true">
       <documentation>
         Default composition aggregation for enum literal Block instances. Each child is a Block

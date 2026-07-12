@@ -18,7 +18,7 @@
   <documentation>Describes a Block member representing composition ownership — a typed collection
     that may contain nested Block instances via a composition child. Rendered as a child element
     inside the aggregations container; the XML element name is the aggregation name
-    (bml:xml="${ name }"). Maps to BOM AggregationDefinition (kind: "aggregation") with typeFqn,
+    (bml:xml="${ #this.name }"). Maps to BOM AggregationDefinition (kind: "aggregation") with typeFqn,
     cardinality (from type multiplicity), optional defaultAggregation flag, nested composition
     template, and optional service binding (beanName, scope). Any Block FQN is valid as aggregation
     type — not limited to ValueTypes. Bare top-level composition is sugar for the single default
@@ -28,5 +28,5 @@
   <name>AggregationDefinition</name>
   <type>def:AggregationDefinition</type>
   <baseType>core:Definition</baseType>
-  <bml:xml>${ name }</bml:xml>
+  <bml:xml>${ #this.name }</bml:xml>
 </block>

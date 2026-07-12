@@ -308,7 +308,7 @@ interface GenericParameterReference {
 }
 
 interface SelfTypeReference {
-  kind: "self"   // _self — resolved after inheritance
+  kind: "self"   // bml:Self — resolved after inheritance
 }
 
 interface AnonymousStructType {
@@ -340,7 +340,7 @@ com.foo.Box<Integer>               → NamedTypeReference { fqn: "com.foo.Box", 
 false | Size3D                     → UnionTypeExpression { alternatives: [literal false, Size3D] }
 Boolean | Integer                  → UnionTypeExpression { alternatives: [Boolean, Integer] }
 T                                  → GenericParameterReference { name: "T" }
-_self                              → SelfTypeReference
+bml:Self                           → SelfTypeReference
 { a: Float, b: Float }             → AnonymousStructType { fields: [a, b] }
 { list: String[0..n], index: Integer }  → nested expressions with multiplicity on fields
 ```
@@ -975,7 +975,7 @@ Presets are **not** a BlockML core feature. MachineBlocks models them via `_pres
 ```text
 com.machineblocks.core.Block
   aggregation  _presets   0..n   com.machineblocks.core.Block
-  association  basePresets  0..n  _self  — space-separated ids on instance
+  association  basePresets  0..n  bml:Self  — space-separated ids on instance
 ```
 
 Preset instances appear as Block children in `_presets` composition. Preset merge is compiler logic; Customizer JSON is render-target logic.

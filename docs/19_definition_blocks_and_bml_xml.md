@@ -113,17 +113,17 @@ Child of the block definition. Defines the **local name** (and optionally namesp
 
 Example: `org.blockml.definition.BlockDefinition` — every block document uses `<block>` as root.
 
-**Expression — type FQN as element name**
+**Expression — effective Block type as element name**
 
 ```xml
-<bml:xml>${ type }</bml:xml>
+<bml:xml>${ bml:Self }</bml:xml>
 ```
 
-→ element name derived from the instance's **`type`** member (Fully Qualified Name). Namespace prefix syntax is supported where authored:
+→ element name derived from the instance's **effective Block type** (`bml:Self`). Namespace prefix syntax is supported where authored:
 
 ```text
-type = org.blockml.core.Block     →  <core:Block>   (xmlns:core bound)
-type = com.foo.MyBlock            →  <myns:MyBlock> or unprefixed per namespace rules
+bml:Self = org.blockml.core.Block     →  <core:Block>   (xmlns:core bound)
+bml:Self = com.foo.MyBlock            →  <myns:MyBlock> or unprefixed per namespace rules
 ```
 
 Example: `org.blockml.core.Block` — composable instances render under their declared type tag.
@@ -131,14 +131,14 @@ Example: `org.blockml.core.Block` — composable instances render under their de
 **Expression — member name as element name**
 
 ```xml
-<bml:xml>${ name }</bml:xml>
+<bml:xml>${ #this.name }</bml:xml>
 ```
 
-→ element name taken from the instance's **`name`** member (camelCase property/aggregation name):
+→ element name taken from the **`name`** member on the current Definition instance (`#this`):
 
 ```text
-name = size        →  <size>…</size>
-name = properties  →  <properties>…</properties>
+#this.name = size        →  <size>…</size>
+#this.name = properties  →  <properties>…</properties>
 ```
 
 Examples: `PropertyDefinition`, `AggregationDefinition`, `AssociationDefinition`, `CapabilityDefinition`.
@@ -154,7 +154,7 @@ Examples: `PropertyDefinition`, `AggregationDefinition`, `AssociationDefinition`
 The element body may contain only:
 
 - a **literal** XML local name, or
-- a **`${ … }` expression** referencing allowed roots (`type`, `name`, … — exact set TBD per Definition block)
+- a **`${ … }` expression** referencing allowed roots (`bml:Self`, `#this`, … — exact set TBD per Definition block)
 
 ---
 
@@ -198,11 +198,11 @@ org.blockml.definition.BlockDefinition
                     …
 
 org.blockml.definition.PropertyDefinition
-  bml:xml element:  ${ name }
+  bml:xml element:  ${ #this.name }
   (member bml:xml rules for type, value, documentation, … — TBD)
 
 org.blockml.core.Block
-  bml:xml element:  ${ type }
+  bml:xml element:  ${ bml:Self }
 ```
 
 Authoring instance:
@@ -226,7 +226,7 @@ Serialization path (conceptual):
 1. Lookup instance typeFqn → org.blockml.definition.BlockDefinition (meta)
 2. Root element name from BlockDefinition.bml:xml → "block"
 3. Each aggregation child resolved via its Definition block's bml:xml
-4. Property "width" → PropertyDefinition.bml:xml → element name from name member → <width>
+4. Property "width" → PropertyDefinition.bml:xml → element name from #this.name → <width>
 5. Member values placed per bml:xml="attribute|element|text|cdata" on PropertyDefinition fields
 ```
 
@@ -249,7 +249,7 @@ Until the meta-serializer exists:
 - Definition `.bml` files are loaded like any framework block (bootstrap in `16_framework_base_types.md`).
 - `bml:xml` elements and attributes are stored in BOM (directives / member metadata — exact BOM fields TBD).
 
-**Non-goals for initial implementation:** Evaluating `${ type }` / `${ name }` at parse time for non-meta blocks; expanding `bml:xml` into XSD automatically (may follow later).
+**Non-goals for initial implementation:** Evaluating `${ bml:Self }` / `${ #this.name }` at parse time for non-meta blocks; expanding `bml:xml` into XSD automatically (may follow later).
 
 ---
 
@@ -282,7 +282,7 @@ packages/core/blocks/org/blockml/definition/GenericTypeDefinition.bml
 | ID | Topic | Notes |
 |---|---|---|
 | D1 | Default `bml:xml` when omitted on members | Likely differ by member kind and context (definition vs instance) |
-| D2 | `${ type }` prefix resolution at serialize time | Reuse xmlns bindings from BOM `SourceInfo.namespaceBindings` |
+| D2 | `${ bml:Self }` prefix resolution at serialize time | Reuse xmlns bindings from BOM `SourceInfo.namespaceBindings` |
 | D3 | BOM storage shape for `<bml:xml>` element | `xmlRendering` on BlockDefinition vs `directives[]` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | Probably forbidden except via Definition branch |
 | D5 | XSD generation from Definition blocks | Future; replaces hand-maintained schemas long-term |

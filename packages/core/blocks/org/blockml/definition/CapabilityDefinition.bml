@@ -17,7 +17,7 @@
 
   <documentation>Describes a Block member defining how the Block communicates. Rendered as a child
     element inside the capabilities container; the XML element name is the capability name
-    (bml:xml="${ name }"). Maps to BOM CapabilityDefinition (kind: "capability") with typeFqn
+    (bml:xml="${ #this.name }"). Maps to BOM CapabilityDefinition (kind: "capability") with typeFqn
     (org.blockml.capability.Inbound, Outbound, or Transformation), inputType, outputType, and
     optional implementation binding to an org.blockml.language.* Block. Inbound requires
     inputType; Outbound requires outputType; Transformation requires both. inputType and outputType
@@ -27,6 +27,6 @@
   <name>CapabilityDefinition</name>
   <type>def:CapabilityDefinition</type>
   <baseType>core:Definition</baseType>
-  <bml:xml>${ name }</bml:xml>
+  <bml:xml>${ #this.name }</bml:xml>
 
 </block>
