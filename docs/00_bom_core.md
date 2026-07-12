@@ -1883,7 +1883,7 @@ Unqualified resolution whitelist (step 4): `String`, `Boolean`, `Integer`, `Floa
 
 ### Type Expressions (not ValueTypes)
 
-BlockML has three ValueType kinds only: **Primitive**, **Enum**, **Struct**. Unions, collections, and generic applications are **type expressions** — see `17_type_system_bml.md` — Type Expressions.
+BlockML has four ValueType kinds: **Primitive**, **Enum**, **Struct**, **Constant**. Unions, collections, and generic applications are **type expressions** — see `17_type_system_bml.md` — Type Expressions.
 
 ```text
 Union:        "auto" | Float · false | T · Boolean | StudType

@@ -252,12 +252,12 @@ Constraint equivalents (`constraint:MaxLength`, etc.) remain supported for migra
 
 ## Constant ValueType
 
-**Constant** reuses instance configuration for singleton union alternatives — no separate literal-type mechanism:
+**Constant** is a **ConstantType** — a dedicated ValueType branch for singleton value domains. It reuses instance configuration for singleton union alternatives — no separate literal-type mechanism:
 
 ```text
 Boolean | Constant(Text){value="auto"}
 ```
 
-Generic `(...)` binds `T`; `{value=…}` configures the single allowed value. Future union literal shorthand (`Boolean | "auto"`) desugars to the same form.
+The external value is `"auto"` — not `{ value: "auto" }`. Generic `(...)` binds `T`; `{value=…}` configures the single allowed value on the internal ValueType instance. Future union literal shorthand (`Boolean | "auto"`) desugars to the same form.
 
 See `21_constant_value_type.md`.

@@ -248,7 +248,7 @@ Sub-Blocks are **part of the same `BomDocument`** as their parent root block.
 
 Types in BOM are represented by **`TypeExpression`** (alias: `TypeDescriptor` in V1 docs) — a structured, parse-time model. This applies to Capability `inputType` / `outputType` and Property `type` attributes.
 
-**Language vs. BOM:** BML knows three ValueType kinds (Primitive, Enum, Struct). Unions, collections, and generic applications are **type expressions** — not ValueTypes. The parser maps them to `org.blockml.bom.*` descriptor types internally.
+**Language vs. BOM:** BML knows four ValueType kinds (Primitive, Enum, Struct, Constant). Unions, collections, and generic applications are **type expressions** — not ValueTypes. The parser maps them to `org.blockml.bom.*` descriptor types internally.
 
 ### Anonymous struct = shorthand for inline class
 

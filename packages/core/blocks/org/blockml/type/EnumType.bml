@@ -19,7 +19,8 @@
     Abstract ValueType branch for closed enum ValueTypes — finite sets of named literal values.
     Unqualified name EnumType resolves to org.blockml.type.EnumType.
 
-    One of three language-level ValueType kinds (PrimitiveType · StructType · EnumType). EnumType
+    One of four language-level ValueType kinds (PrimitiveType · StructType · EnumType ·
+    ConstantType). EnumType
     is a specialized StructType — it adds a finite list of allowed values via the default values
     aggregation. Concrete EnumTypes declare their allowed values as Block instances in values — no
     special enum syntax. Examples: Direction, Face, StudType, BaseCutoutType.

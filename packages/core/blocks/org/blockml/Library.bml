@@ -138,6 +138,7 @@
         <btype:Boolean />
         <btype:BooleanEntity />
         <btype:Constant />
+        <btype:ConstantType />
         <btype:Decimal />
         <btype:DecimalEntity />
         <btype:EnumType />

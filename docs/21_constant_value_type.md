@@ -1,10 +1,12 @@
 # Constant ValueType
 
-version: 0.1.0
+version: 0.2.0
 
 ## Purpose of this Document
 
 This document specifies **Constant** — a generic ValueType for singleton (constant) values in type expressions, built on ValueType instance configuration without a dedicated literal-type mechanism.
+
+Constant is a **ConstantType** — a dedicated ValueType branch with its own validation semantics. It is neither a StructType nor a PrimitiveType.
 
 For instance configuration syntax see `20_value_type_instance_configuration.md`. For unions and generics see `17_type_system_bml.md`. For the BOM model see `12_bom_object_model.md`.
 
@@ -24,11 +26,61 @@ Instead of treating literal values as a separate language feature, BlockML model
 
 ---
 
+## ValueType Hierarchy
+
+```text
+ValueType
+├── PrimitiveType
+├── StructType
+├── EnumType
+└── ConstantType
+      └── Constant
+```
+
+### Why not StructType?
+
+A StructType defines the **shape of the external value**. For example:
+
+```text
+StructType
+└── property value : Text
+```
+
+would mean the external value is:
+
+```json
+{ "value": "auto" }
+```
+
+This is not the desired behavior. The external value of `Constant(Text){value="auto"}` is simply `"auto"`. The configured `value` Property belongs to the internal ValueType instance on the Property definition — not to the property's external representation.
+
+### Why not PrimitiveType?
+
+A PrimitiveType defines a **value domain**:
+
+```text
+Text     → all text values
+Integer  → all integer values
+Boolean  → true | false
+```
+
+Constant defines a **singleton value domain**:
+
+```text
+Constant(Text){value="auto"}   → accepts exactly "auto"
+Constant(Integer){value=5}     → accepts exactly 5
+```
+
+Its defining characteristic is the validation rule, not serialization shape.
+
+---
+
 ## Definition
 
-**FQN:** `org.blockml.type.Constant`
+**FQN:** `org.blockml.type.Constant`  
+**Branch:** `org.blockml.type.ConstantType`
 
-Constant is a generic **StructType**:
+Constant is the standard **ConstantType** implementation:
 
 ```text
 Constant<T extends ValueType>
@@ -80,22 +132,45 @@ Constant(Integer){5}      →  value = 5
 
 ## Validation
 
-| Expression | Result |
-|---|---|
-| `Constant(Text){value="auto"}` | ✓ |
-| `Constant(Integer){value=5}` | ✓ |
-| `Constant(Integer){value="auto"}` | ✗ — value does not match Integer |
-| `Constant{value="auto"}` | ✗ — missing generic type argument |
-| `Constant(Text)` | ✗ — missing required `value` configuration |
-| `Constant(Text){value="auto", value="x"}` | ✗ — duplicate configuration |
+Validation proceeds in two steps:
+
+1. Validate the supplied value against the generic ValueType **T**.
+2. Compare the supplied value with the configured constant value.
+
+| Expression | Supplied value | Result |
+|---|---|---|
+| `Constant(Text){value="auto"}` | `"auto"` | ✓ |
+| `Constant(Text){value="auto"}` | `"manual"` | ✗ |
+| `Constant(Text){value="auto"}` | `5` | ✗ |
+| `Constant(Integer){value=5}` | `5` | ✓ |
+| `Constant(Integer){value=5}` | `6` | ✗ |
+| `Constant(Integer){value="auto"}` | — | ✗ — configured value does not match Integer |
+| `Constant{value="auto"}` | — | ✗ — missing generic type argument |
+| `Constant(Text)` | — | ✗ — missing required `value` configuration |
+| `Constant(Text){value="auto", value="x"}` | — | ✗ — duplicate configuration |
 
 The validator:
 
 1. Resolves `Constant(T)` — `T` must satisfy `T extends ValueType`.
 2. Requires `value` in instance configuration (`BML_MISSING_CONSTANT_VALUE`).
-3. Checks the configured value against the bound type `T` (`BML_CONSTANT_VALUE_MISMATCH`).
+3. Validates the supplied value against the bound type `T`.
+4. Compares the supplied value with the configured constant (`BML_CONSTANT_VALUE_MISMATCH`).
 
 No type inference is required for Constant itself — `T` is always authored explicitly.
+
+---
+
+## External Representation
+
+The external representation is always **identical to the representation of the underlying generic type T**.
+
+| Type reference | External value | Not |
+|---|---|---|
+| `Constant(Text){value="auto"}` | `"auto"` | `{ "value": "auto" }` |
+| `Constant(Integer){value=5}` | `5` | `{ "value": 5 }` |
+| `Constant(Boolean){value=true}` | `true` | `{ "value": true }` |
+
+The configured `value` Property exists only on the internal ValueType instance that belongs to the Property definition.
 
 ---
 
@@ -175,6 +250,8 @@ Boolean | Constant(Text){value="auto"}
      }
 ```
 
+Property values for the Constant alternative use the external representation of T — `"auto"`, not a struct payload.
+
 Future literal form:
 
 ```text
@@ -191,10 +268,22 @@ Boolean | "auto"
 |---|---|
 | `BML_MISSING_GENERIC_TYPE_ARGUMENT` | Constant reference without mandatory `(T)` |
 | `BML_MISSING_CONSTANT_VALUE` | Constant(T) without required `{value=…}` |
-| `BML_CONSTANT_VALUE_MISMATCH` | Configured value incompatible with bound type T |
+| `BML_CONSTANT_VALUE_MISMATCH` | Supplied value does not equal configured constant, or incompatible with T |
 | `BML_PREFER_CONSTANT_TYPE` | Union literal alternative should use Constant form (hint) |
 
 See also instance-configuration codes in `06_compiler.md` and `20_value_type_instance_configuration.md`.
+
+---
+
+## Rationale
+
+Making Constant a dedicated **ConstantType** keeps the type system explicit and avoids hidden special cases in PrimitiveType or StructType.
+
+It aligns with the "Everything is a Block" philosophy:
+
+- Constant is a normal ValueType.
+- It owns a normal Property (`value`).
+- Its special behavior is defined by ConstantType semantics — not by compiler-specific exceptions.
 
 ---
 
@@ -202,6 +291,7 @@ See also instance-configuration codes in `06_compiler.md` and `20_value_type_ins
 
 - No dedicated literal-type mechanism — constants are ordinary configured ValueTypes.
 - Validation is fully type-safe without inference on Constant.
+- External representation follows the underlying generic type — no struct wrapper leakage.
 - Future literal union syntax is syntactic sugar over the same semantic model.
 - Fully aligned with "Everything is a Block" and ValueType instance configuration.
 - Orthogonal to generics: `()` binds T; `{…}` configures the Constant instance.

@@ -28,7 +28,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
 | **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail only); optional `<since>`, `<changelog>`, `<examples>`, `<references>` with `<see>` entries (`block`, `file`, or `url`) — see `02_mbml.md` |
 | **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
-| **Three ValueType kinds** | PrimitiveType · StructType · EnumType — EnumType is a specialized StructType |
+| **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — EnumType is a specialized StructType |
 | **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `18_function_mapping.md` |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
 | **Namespace separation** | `org.blockml.core.*`, `type.*`, `service.*`, `capability.*`, `language.*` = public BML grammar only; BOM/compiler types in `org.blockml.bom.*`, etc. — see `00_bom_core.md` |
@@ -359,17 +359,20 @@ org.blockml.core.ValueType              abstract — never stores data
   │     │     ├── org.blockml.type.Decimal   — default for non-integer numbers
   │     │     └── org.blockml.type.Float     — binary float — special-purpose only
   │     └── org.blockml.type.Boolean      — neither textual nor numeric
-  ├── org.blockml.type.StructType         Size3D · Color · Constant · …
-  └── org.blockml.type.EnumType           extends StructType — BaseCutoutType · Direction · …
+  ├── org.blockml.type.StructType         Size3D · Color · Address · …
+  ├── org.blockml.type.EnumType           extends StructType — BaseCutoutType · Direction · …
+  └── org.blockml.type.ConstantType       singleton value domains
+        └── org.blockml.type.Constant     Constant(T){value=…}
 ```
 
-**BlockML knows only three ValueType kinds at language level** — each names a semantic meaning:
+**BlockML knows four ValueType kinds at language level** — each names a semantic meaning:
 
 | Branch | Role | Examples |
 |---|---|---|
 | **PrimitiveType** | Atomic scalar semantics — no stored values | `Boolean`, `Integer`, `Decimal`, `Float`, `Text`, `URL`, `Version` |
-| **StructType** | Custom value objects — structure via properties | `Size3D`, `Color`, `Constant`, `Address`, `Transform` |
+| **StructType** | Custom value objects — structure via properties | `Size3D`, `Color`, `Address`, `Transform` |
 | **EnumType** | StructType + finite allowed values | `Direction`, `Face`, `StudType`, `BaseCutoutType` |
+| **ConstantType** | Singleton value domain — one configured literal | `Constant(Text){value="auto"}`, `Constant(Integer){value=5}` |
 
 `StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate ValueType branch.
 
@@ -379,10 +382,10 @@ There is **no** `GenericType`, `UnionType`, `Array<T>`, `AutoOr<T>`, or similar 
 
 ## Type Expressions
 
-Everything beyond the three ValueType kinds is a **type expression** — a use or combination of named types, not a new BlockML type class.
+Everything beyond the four ValueType kinds is a **type expression** — a use or combination of named types, not a new BlockML type class.
 
 ```text
-ValueType        = named semantic meaning     (Primitive · Enum · Struct)
+ValueType        = named semantic meaning     (Primitive · Enum · Struct · Constant)
 TypeExpression   = usage or combination       (multiplicity · union · generic application · instance configuration · bml:Self · T)
 ```
 
@@ -775,18 +778,24 @@ StructType properties follow **Struct Property Access** and **Declaration Order*
 
 Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) follows the same declaration-order contract for FunctionMapping. The validator may suggest promoting repeated anonymous structs to named StructTypes. See `18_function_mapping.md`.
 
-**Generic StructType — Constant** — singleton union alternative (`21_constant_value_type.md`):
+**ConstantType — Constant** — singleton union alternative (`21_constant_value_type.md`):
 
 ```text
-Constant<T extends ValueType>   —  value : T
-Constant(Text){value="auto"}    —  used in Boolean | Constant(Text){value="auto"}
+Constant<T extends ValueType>   —  value : T   (internal configuration only)
+Constant(Text){value="auto"}    —  external value: "auto"  (not { value: "auto" })
+                                —  used in Boolean | Constant(Text){value="auto"}
 ```
+
+ConstantType is a dedicated ValueType branch — not a StructType and not a PrimitiveType. A
+PrimitiveType defines a value domain; a StructType defines the shape of the external value; a
+ConstantType defines a singleton value domain validated against the underlying generic type T
+and the configured constant value.
 
 ---
 
 ### EnumType
 
-EnumType is a **specialized StructType** — it adds a finite list of allowed values. It is not a fourth ValueType category; the three categories remain PrimitiveType, StructType, and EnumType.
+EnumType is a **specialized StructType** — it adds a finite list of allowed values. It is not a separate top-level ValueType category alongside PrimitiveType, StructType, and ConstantType; the four categories remain PrimitiveType, StructType, EnumType, and ConstantType.
 
 Enums are normal ValueTypes extending `org.blockml.type.StructType`. The branch declares a default aggregation for enum values:
 
@@ -1289,7 +1298,7 @@ never expose „Block“ outside parser/BOM types
 | Composable Block base types | `16_framework_base_types.md` |
 | Definition blocks · bml:xml | `19_definition_blocks_and_bml_xml.md` |
 | BML block syntax | `02_mbml.md` |
-| Type expressions · three ValueType kinds | `17_type_system_bml.md` — Type Expressions |
+| Type expressions · four ValueType kinds | `17_type_system_bml.md` — Type Expressions |
 | TypeExpression AST | `12_bom_object_model.md` |
 | ValueType instance configuration | `20_value_type_instance_configuration.md` |
 | Constant singleton ValueType | `21_constant_value_type.md` |

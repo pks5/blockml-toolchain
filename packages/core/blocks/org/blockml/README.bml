@@ -1,0 +1,30 @@
+<!--
+  BlockML Core — Language branch (capability implementation contract)
+
+  FQN: org.blockml.core.Language
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:blockml="org.blockml">
+
+  <idea>README block for the BlockML core library.</idea>
+
+  <documentation>README block for the BlockML core library.</documentation>
+  <name>README</name>
+  <type>blockml:README</type>
+  <baseType>core:Bootstrap</baseType>
+  <abstract />
+
+  <aggregations>
+    <readFirst>
+      <composition>
+
+      </composition>
+    </readFirst>
+  </aggregations>
+
+</block>

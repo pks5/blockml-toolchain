@@ -21,7 +21,8 @@
     Abstract ValueType branch for composite value objects — complex values described by normal
     Properties. Unqualified name StructType resolves to org.blockml.type.StructType.
 
-    One of three language-level ValueType kinds (PrimitiveType · StructType · EnumType).
+    One of four language-level ValueType kinds (PrimitiveType · StructType · EnumType ·
+    ConstantType).
     StructTypes describe the structure of a value — their properties define the data layout.
     StructTypes usually contain no values themselves; Property values remain stored in the owning
     Property. Default values on StructType property definitions are allowed. Concrete StructTypes

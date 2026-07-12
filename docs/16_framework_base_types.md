@@ -30,7 +30,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **Block idea** | Every `<block>` carries `<idea>` as first child — what this Block semantically represents |
 | **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description; optional `<since>`, `<changelog>`, `<examples>`, `<references>` follow |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
-| **ValueType branch** | `org.blockml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; three kinds: PrimitiveType · EnumType · StructType |
+| **ValueType branch** | `org.blockml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; four kinds: PrimitiveType · StructType · EnumType · ConstantType |
 | **Namespace separation** | Language FQNs (`org.blockml.core.*`, `type.*`, …) reserved for BML grammar; BOM/toolchain types in `org.blockml.bom.*`, `parser.*`, `compiler.*`, … — see `00_bom_core.md` |
 | **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `01_system.md` |
 
@@ -264,7 +264,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
 1. @blockml/core BML                    ← BlockML describes BlockML
      org/blockml/core/Block.bml
      org/blockml/core/Status.bml
-     org/blockml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · …
+     org/blockml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
      org/blockml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
      org/blockml/core/Constraint.bml
      org/blockml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …

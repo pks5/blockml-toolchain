@@ -1,0 +1,23 @@
+<!--
+  BlockML Core — Language branch (capability implementation contract)
+
+  FQN: org.blockml.core.Language
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core">
+
+  <idea>Abstract base type for all Documentation blocks.</idea>
+
+  <documentation>Abstract base type for all Documentation blocks.</documentation>
+  <name>Documentation</name>
+  <type>core:Documentation</type>
+  <baseType>core:Block</baseType>
+  <abstract />
+
+  
+
+</block>

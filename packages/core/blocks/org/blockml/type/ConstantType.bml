@@ -1,0 +1,65 @@
+<!--
+  BlockML Core — constant type branch (singleton value domains)
+
+  FQN: org.blockml.type.ConstantType
+  See docs/21_constant_value_type.md
+       docs/17_type_system_bml.md — ValueType branch
+-->
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:btype="org.blockml.type"
+  xmlns:core="org.blockml.core">
+
+  <idea>Branch for singleton value domains — exactly one configured literal value.</idea>
+
+  <documentation>
+    Abstract ValueType branch for constant (singleton) value types. Unqualified name ConstantType
+    resolves to org.blockml.type.ConstantType.
+
+    One of four language-level ValueType kinds (PrimitiveType · StructType · EnumType ·
+    ConstantType). ConstantType is neither a PrimitiveType nor a StructType:
+
+    • A PrimitiveType defines a value domain (Text → all text values; Integer → all integers).
+    • A StructType defines the shape of the external value via its properties.
+    • A ConstantType defines a singleton value domain — a value is valid if and only if it
+      conforms to the underlying generic ValueType and equals the configured constant value.
+
+    The standard implementation is Constant&lt;T extends ValueType&gt; with a single Property
+    value : T. The generic type parameter is mandatory. Instance configuration supplies the
+    allowed value — for example Constant(Text){value="auto"} or Constant(Integer){value=5}.
+
+    The configured value Property belongs to the internal ValueType instance on the Property
+    definition — not to the property's external representation. The external value is always
+    identical to the representation of the underlying generic type T. For
+    Constant(Text){value="auto"}, the external value is "auto" — not { value: "auto" }.
+
+    Validation proceeds in two steps:
+    1. Validate the supplied value against the generic ValueType T.
+    2. Compare the supplied value with the configured constant value.
+
+    Used primarily as a union alternative alongside ordinary ValueTypes:
+
+    Boolean | Constant(Text){value="auto"}
+  </documentation>
+
+  <references>
+    <see file="21_constant_value_type.md">
+      Constant ValueType — syntax, validation, and external representation.
+    </see>
+    <see file="17_type_system_bml.md">
+      ValueType branch hierarchy.
+    </see>
+    <see file="20_value_type_instance_configuration.md">
+      ValueType instance configuration via {…} on type references.
+    </see>
+    <see block="btype:Constant">
+      Standard ConstantType implementation.
+    </see>
+  </references>
+
+  <name>ConstantType</name>
+  <type>btype:ConstantType</type>
+  <baseType>core:ValueType</baseType>
+  <abstract />
+
+</block>
