@@ -37,8 +37,9 @@
 
   <properties>
     <block type="btype:FullyQualifiedName(core:Block, core:Definition)" bml:xml="attribute">
-      <documentation>FQN of the referenced Block or Definition. Mutually exclusive with file and
-        url — exactly one target attribute must be set.</documentation>
+      <documentation>Block or Definition reference via xmlns prefix (e.g. core:Block). Resolved to
+        FQN at parse time. Mutually exclusive with file and url — exactly one target attribute must
+        be set.</documentation>
     </block>
     <file type="Text" bml:xml="attribute">
       <documentation>Repository documentation file (e.g. 02_mbml.md). Mutually exclusive with block

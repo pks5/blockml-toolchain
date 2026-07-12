@@ -8,7 +8,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:mapping="org.blockml.mapping">
 
   <idea>Describes how values transfer between two representations.</idea>
 
@@ -32,7 +33,7 @@
     <see file="18_function_mapping.md">
       Function parameter mapping rules and component responsibilities.
     </see>
-    <see block="org.blockml.mapping.FunctionMapping">
+    <see block="mapping:FunctionMapping">
       Concrete mapping for function-like call syntax.
     </see>
   </references>

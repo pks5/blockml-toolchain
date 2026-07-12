@@ -11,6 +11,7 @@
                       "
   xmlns:core="org.blockml.core"
   xmlns:def="org.blockml.definition"
+  xmlns:cap="org.blockml.capability"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>A communication endpoint on a Block — inbound, outbound, or transformation.</idea>
@@ -29,19 +30,19 @@
     <see file="02_mbml.md">
       Capabilities authoring rules.
     </see>
-    <see block="org.blockml.capability.Inbound">
+    <see block="cap:Inbound">
       Capability typeFqn — requires inputType.
     </see>
-    <see block="org.blockml.capability.Outbound">
+    <see block="cap:Outbound">
       Capability typeFqn — requires outputType.
     </see>
-    <see block="org.blockml.capability.Transformation">
+    <see block="cap:Transformation">
       Capability typeFqn — requires inputType and outputType.
     </see>
-    <see block="org.blockml.core.Language">
+    <see block="core:Language">
       Implementation language bindings.
     </see>
-    <see block="org.blockml.core.ValueType">
+    <see block="core:ValueType">
       inputType and outputType payload types.
     </see>
   </references>

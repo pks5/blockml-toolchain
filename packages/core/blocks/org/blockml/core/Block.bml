@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.core"
+  xmlns:mbcore="com.machineblocks.core"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
@@ -45,25 +46,25 @@
   </documentation>
 
   <references>
-    <see block="org.blockml.core.ValueType">
+    <see block="core:ValueType">
       Property and capability payload types.
     </see>
-    <see block="org.blockml.core.Language">
+    <see block="core:Language">
       Implementation language bindings.
     </see>
-    <see block="org.blockml.core.Status">
+    <see block="core:Status">
       Lifecycle status references.
     </see>
-    <see block="org.blockml.core.Constraint">
+    <see block="core:Constraint">
       Property validation constraints.
     </see>
-    <see block="org.blockml.core.Capability">
+    <see block="core:Capability">
       Capability implementation contracts.
     </see>
-    <see block="org.blockml.core.Definition">
+    <see block="core:Definition">
       Meta-model for block structure (WIP).
     </see>
-    <see block="com.machineblocks.core.Block">
+    <see block="mbcore:Block">
       Example domain base — domain-specific branches extend Block.
     </see>
     <see file="00_bom_core.md">

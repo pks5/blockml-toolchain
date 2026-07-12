@@ -34,7 +34,7 @@
     <see file="16_framework_base_types.md">
       genericTypes aggregation on Block definitions.
     </see>
-    <see block="org.blockml.core.Block">
+    <see block="core:Block">
       Sole inheritance root — omits baseType on root blocks.
     </see>
   </references>

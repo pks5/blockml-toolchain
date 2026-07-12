@@ -20,10 +20,10 @@
   </documentation>
 
   <references>
-    <see block="com.machineblocks.core.Block">
+    <see block="core:Block">
       Extends Block directly — not CompositeBlock.
     </see>
-    <see block="com.machineblocks.core.CompositeBlock">
+    <see block="core:CompositeBlock">
       Contrasts with CompositeBlock which uses _parts for composition children.
     </see>
   </references>

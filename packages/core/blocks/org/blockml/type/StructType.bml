@@ -12,7 +12,8 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.type"
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:mapping="org.blockml.mapping">
 
   <idea>Branch for product types — composite values with named fields.</idea>
 
@@ -69,7 +70,7 @@
     <see file="04_types.md">
       Anonymous Object inputType (MBOM).
     </see>
-    <see block="org.blockml.mapping.FunctionMapping">
+    <see block="mapping:FunctionMapping">
       Positional parameter mapping at capability call sites.
     </see>
   </references>

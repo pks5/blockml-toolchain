@@ -72,19 +72,19 @@
     <see file="12_bom_object_model.md">
       typeFqn fields in BOM structures.
     </see>
-    <see block="org.blockml.definition.BlockDefinition">
+    <see block="def:BlockDefinition">
       type and baseType attributes (Block FQN).
     </see>
-    <see block="org.blockml.definition.PropertyDefinition">
+    <see block="def:PropertyDefinition">
       property type attribute (ValueType FQN).
     </see>
-    <see block="org.blockml.definition.GenericTypeDefinition">
+    <see block="def:GenericTypeDefinition">
       parameter baseType constraint attribute.
     </see>
-    <see block="org.blockml.definition.ContractDefinition">
+    <see block="def:ContractDefinition">
       contract Block type attribute.
     </see>
-    <see block="org.blockml.definition.ReferenceDefinition">
+    <see block="def:ReferenceDefinition">
       cross-reference block attribute.
     </see>
   </references>

@@ -31,7 +31,7 @@
     <see file="02_mbml.md">
       Members and properties authoring rules.
     </see>
-    <see block="org.blockml.core.ValueType">
+    <see block="core:ValueType">
       Required branch for property payload types.
     </see>
   </references>

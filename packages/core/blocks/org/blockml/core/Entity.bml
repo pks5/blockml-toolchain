@@ -8,7 +8,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.core">
+  xmlns:core="org.blockml.core"
+  xmlns:mbcore="com.machineblocks.core">
 
   <idea>General entity branch — composable domain blocks, services, and primitive wrappers.</idea>
 
@@ -20,10 +21,10 @@
     <see file="17_type_system_bml.md">
       Entity branch and PrimitiveEntity wrappers.
     </see>
-    <see block="com.machineblocks.core.Block">
+    <see block="mbcore:Block">
       Example domain Entity base type.
     </see>
-    <see block="org.blockml.core.PrimitiveEntity">
+    <see block="core:PrimitiveEntity">
       Primitive value wrappers as Entity instances.
     </see>
   </references>

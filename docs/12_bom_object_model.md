@@ -381,7 +381,7 @@ interface DocumentationExample {
 }
 
 interface DocumentationReference {
-  /** Block or Definition FQN — XML block attribute on <see> */
+  /** Block or Definition reference (xmlns prefix:Name) — XML block attribute on <see> */
   block?: string
   /** Repository markdown file — XML file attribute on <see> */
   file?: string

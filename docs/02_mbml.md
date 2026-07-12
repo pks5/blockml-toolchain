@@ -353,7 +353,7 @@ Container for cross-references to related Blocks, definition elements, repositor
 **Target attributes (exactly one required):**
 
 ```text
-block="org.blockml.core.ValueType"   — Block or Definition FQN
+block="core:ValueType"   — Block or Definition reference via xmlns prefix (e.g. core:Block, def:PropertyDefinition)
 file="02_mbml.md"                    — repository documentation file
 url="https://blockml.org/schemas/…"  — external URL
 ```
@@ -363,19 +363,20 @@ url="https://blockml.org/schemas/…"  — external URL
 - Include only targets with a **direct relationship** to the current definition.
 - Every `<see>` **must** include a text body describing the relationship.
 - Do **not** repeat cross-links in `<documentation>`; use `<references>` instead.
+- `block` values use **namespace prefixes** from the document's `xmlns:` declarations — same rules as `type`, `baseType`, and composition references (e.g. `core:Block`, `def:PropertyDefinition`, `bcore:Entity`).
 
 ```xml
 <references>
 
-    <see block="com.machineblocks.core.CompositeBlock">
+    <see block="core:CompositeBlock">
         Composable sub-type — owns child instances via default _parts aggregation.
     </see>
 
-    <see block="org.blockml.core.ValueType">
+    <see block="core:ValueType">
         Branch sub-type — payload types for properties and capabilities.
     </see>
 
-    <see block="org.blockml.definition.PropertyDefinition">
+    <see block="def:PropertyDefinition">
         Meta-model member shape for property declarations on Block definitions.
     </see>
 
@@ -390,7 +391,7 @@ url="https://blockml.org/schemas/…"  — external URL
 </references>
 ```
 
-`block` accepts any Block FQN or Definition FQN (`org.blockml.definition.*`, `org.blockml.core.Definition` sub-types). Unknown FQN at validate time → `BML_UNKNOWN_TYPE` (error). Omitted target attribute → `BML_REFERENCE_MISSING_TARGET` (error). More than one target attribute → `BML_REFERENCE_AMBIGUOUS_TARGET` (error).
+`block` accepts any Block or Definition reference via xmlns prefix. Resolved to FQN at parse time — same rules as `type` and `baseType`. Unknown FQN at validate time → `BML_UNKNOWN_TYPE` (error). Omitted target attribute → `BML_REFERENCE_MISSING_TARGET` (error). More than one target attribute → `BML_REFERENCE_AMBIGUOUS_TARGET` (error).
 
 Maps to BOM `DocumentationReference { block?, file?, url?, context }`. Meta-model: `org.blockml.definition.ReferenceDefinition` on `org.blockml.core.Definition.references` — see `16_framework_base_types.md` — Definition Branch.
 

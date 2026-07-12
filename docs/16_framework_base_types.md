@@ -189,7 +189,7 @@ Aggregations:  changelog (ChangeDefinition[]) · examples (ExampleDefinition[]) 
 
 ```text
 bml:xml         see                — renders as <see> inside <references>
-block           FullyQualifiedName — Block or Definition FQN; XML block attribute
+block           QName (prefix:Name) — Block or Definition via xmlns prefix; XML block attribute
 file            String             — repository markdown file; XML file attribute
 url             String             — external URL; XML url attribute
 context         String (required)  — relationship note; XML text content
