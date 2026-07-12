@@ -734,19 +734,19 @@ ValueTypes appear as type references on Properties — values are stored on the 
 
 ### Constraints
 
-A Property may declare a list of validation constraints. Each constraint is a Block instance whose `baseType` chain includes `org.blockml.core.Constraint`. The compiler binds each constraint's generic parameter `T` to the property type (or element type for collection constraints) and validates both the constraint instance and the property value.
+A Property may declare a list of constraints. Each constraint is a Block instance whose `baseType` chain includes `org.blockml.core.Constraint`. The compiler binds each constraint's generic parameter `T` to the property type (or element type for collection constraints) and validates the constraint instance. **Value enforcement** depends on the optional `validation` property — when omitted, the BlockML validator ignores the constraint and it remains metadata.
 
 ```xml
 <width type="Float">
   <value>50</value>
   <constraints>
-    <constraint:Min value="0"/>
-    <constraint:Max value="100"/>
+    <constraint:Min value="0" validation="validation:Error"/>
+    <constraint:Max value="100" validation="validation:Error"/>
   </constraints>
 </width>
 ```
 
-Constraints are enforceable — value violations emit `BML_CONSTRAINT_VIOLATION`. See `18_constraints_and_suggestions.md`.
+Constraints without `validation` are purely descriptive — available to renderers, editors, runtimes, and custom validators. See `18_constraints_and_suggestions.md`.
 
 ### Suggestions
 

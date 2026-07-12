@@ -430,8 +430,11 @@ Each child element inside `<constraints>` is mapped as a `BlockInstance`. The el
 instance.typeFqn baseType chain includes org.blockml.core.Constraint
 generic T bound to property type (or element/collection type per constraint definition)
 constraint instance member values match bound generic T
-property value satisfies constraint semantics
+validation reference (when present) resolves to org.blockml.core.Validation sub-type
+property value satisfies constraint semantics only when validation is present and understood
 ```
+
+Constraints without a `validation` reference are not value-enforced by the BlockML validator.
 
 **`<suggestions>` mapping:**
 

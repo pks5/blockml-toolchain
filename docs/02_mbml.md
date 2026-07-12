@@ -1426,17 +1426,19 @@ When the property `type` is an EnumType, `value` and instance attribute values m
 </textFont>
 ```
 
-**Constraints** are validation rules — each entry is a Block instance extending `org.blockml.core.Constraint`. The compiler binds the constraint generic to the property type automatically:
+**Constraints** describe semantic restrictions on a property — each entry is a Block instance extending `org.blockml.core.Constraint`. The compiler binds the constraint generic to the property type automatically. Whether BlockML enforces a constraint depends on its optional `validation` property referencing `org.blockml.core.Validation`:
 
 ```xml
 <textSize type="Integer">
   <value>9</value>
   <constraints>
-    <constraint:Min value="1"/>
-    <constraint:Max value="72"/>
+    <constraint:Min value="1" validation="validation:Error"/>
+    <constraint:Max value="72" validation="validation:Error"/>
   </constraints>
 </textSize>
 ```
+
+Constraints without `validation` are metadata only — the BlockML validator ignores them. See `18_constraints_and_suggestions.md` for the full constraint and validation hierarchy, generic binding rules, and collection constraints.
 
 For struct properties, suggestions are typed Block instances:
 
@@ -1449,8 +1451,6 @@ For struct properties, suggestions are typed Block instances:
   </suggestions>
 </size>
 ```
-
-See `18_constraints_and_suggestions.md` for the full constraint hierarchy, generic binding rules, and collection constraints.
 
 **Computed values:** `value` may be an Expression referencing other Properties of the same Block. Cycle detection applies — see `10_expression_language.md`.
 

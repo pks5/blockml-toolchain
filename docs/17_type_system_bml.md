@@ -1051,6 +1051,8 @@ Collection property (String[]) → MinItems/MaxItems: T = Text[]
 
 Binding rules per constraint FQN are defined in each constraint Block's `<documentation>`. See `18_constraints_and_suggestions.md`.
 
+**Constraint vs Validation** — `org.blockml.core.Constraint` describes the condition; `org.blockml.core.Validation` describes how BlockML enforces it. Every constraint carries an optional `validation` property referencing a Validation block. When omitted, the BlockML validator ignores value enforcement — the constraint remains metadata. Standard Validation blocks: `org.blockml.validation.Error`, `Warning`, `Information`.
+
 ### Generic parameter naming
 
 Generic parameter names are declared on the root Block only (`<genericTypes>` on Sub-Blocks → `BML_GENERIC_NOT_ON_ROOT`). The parser rejects name collisions:
@@ -1148,27 +1150,29 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 ```text
 … → ValueType → Block           value type branch
 … → Constraint → Block            constraint branch
+… → Validation → Block            validation branch
 … → Language → Block              language branch
-… → Block (no ValueType/Language/Constraint ancestor)   general block branch
+… → Block (no ValueType/Language/Constraint/Validation ancestor)   general block branch
 ```
 
-| Rule | General Block | ValueType | Constraint | Language |
-|---|---|---|---|---|
-| `<composition>` | allowed | EnumType: `_values` only; others: definition-level only | forbidden | forbidden |
-| `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden | forbidden |
-| `<subTypes>` | allowed | allowed | forbidden | forbidden |
-| `<genericTypes>` | allowed | allowed | allowed | forbidden |
-| `<properties>` | allowed | StructType + PrimitiveType branch | allowed | forbidden |
-| `<languages>` | allowed | forbidden | forbidden | forbidden |
-| Meta property `id` on instances | yes (always) | yes (always) | yes (always) | yes (always) |
-| `<property name="id">` | forbidden | forbidden | forbidden | forbidden |
-| Used as composition instance typeFqn | if not abstract | if not abstract | if not abstract | forbidden |
-| Used as aggregation/association `type` | any Block FQN | any Block FQN | any Block FQN | — |
-| Used as property `type` | forbidden | yes (+ generic substitution) | forbidden | forbidden |
-| Used as property `<constraints>` child | forbidden | forbidden | yes (Constraint sub-type) | forbidden |
-| Used as property `<suggestions>` child | yes (same type as property) | yes | forbidden | forbidden |
-| Used as Capability input/output type | forbidden | yes (+ generic substitution) | forbidden | forbidden |
-| Used as `<implementation type>` | forbidden | forbidden | forbidden | yes |
+| Rule | General Block | ValueType | Constraint | Validation | Language |
+|---|---|---|---|---|---|
+| `<composition>` | allowed | EnumType: `_values` only; others: definition-level only | forbidden | forbidden | forbidden |
+| `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden | forbidden | forbidden |
+| `<subTypes>` | allowed | allowed | forbidden | forbidden | forbidden |
+| `<genericTypes>` | allowed | allowed | allowed | forbidden | forbidden |
+| `<properties>` | allowed | StructType + PrimitiveType branch | allowed | forbidden | forbidden |
+| `<languages>` | allowed | forbidden | forbidden | forbidden | forbidden |
+| Meta property `id` on instances | yes (always) | yes (always) | yes (always) | yes (always) | yes (always) |
+| `<property name="id">` | forbidden | forbidden | forbidden | forbidden | forbidden |
+| Used as composition instance typeFqn | if not abstract | if not abstract | if not abstract | if not abstract | forbidden |
+| Used as aggregation/association `type` | any Block FQN | any Block FQN | any Block FQN | any Block FQN | — |
+| Used as property `type` | forbidden | yes (+ generic substitution) | forbidden | forbidden | forbidden |
+| Used as property `<constraints>` child | forbidden | forbidden | yes (Constraint sub-type) | forbidden | forbidden |
+| Used as Constraint `validation` property | forbidden | forbidden | forbidden | yes (Validation sub-type) | forbidden |
+| Used as property `<suggestions>` child | yes (same type as property) | yes | forbidden | forbidden | forbidden |
+| Used as Capability input/output type | forbidden | yes (+ generic substitution) | forbidden | forbidden | forbidden |
+| Used as `<implementation type>` | forbidden | forbidden | forbidden | forbidden | yes |
 
 Wrong branch usage → `BML_INVALID_DEFINITION_BRANCH`.
 
@@ -1204,8 +1208,9 @@ Type definitions bootstrap **before** composable Blocks that reference them:
 ```text
 1. @blockml/core — root + branches + bootstrap types
      org/blockml/core/Block.bml
-     org/blockml/core/ValueType.bml · StructType.bml · EnumType.bml · Constraint.bml · …
+     org/blockml/core/ValueType.bml · StructType.bml · EnumType.bml · Constraint.bml · Validation.bml · …
      org/blockml/constraint/Min.bml · Max.bml · …
+     org/blockml/validation/Error.bml · Warning.bml · Information.bml · …
      org/blockml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
      org/blockml/type/Integer.bml · …
      org/blockml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
@@ -1217,7 +1222,7 @@ Type definitions bootstrap **before** composable Blocks that reference them:
      …
 ```
 
-Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType` chain to index Block vs ValueType vs Language.
+Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType` chain to index Block vs ValueType vs Language vs Constraint vs Validation.
 
 ---
 

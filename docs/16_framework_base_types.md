@@ -268,6 +268,8 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
      org/blockml/core/Constraint.bml
      org/blockml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
+     org/blockml/core/Validation.bml
+     org/blockml/validation/Error.bml · Warning.bml · Information.bml · …
      org/blockml/core/
      org/blockml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
      org/blockml/type/Number.bml · Integer.bml · Decimal.bml · Float.bml · Text.bml · Boolean.bml · Constant.bml · …
@@ -334,7 +336,7 @@ packages/core/blocks/
     BlockLibrary.bml · Block.bml · …        ← BlockLibrary = framework base type, not in Library _blocks
   org/blockml/compiler/                     ← example nested library (future)
     Library.bml                             ← org.blockml.compiler.Library
-  org/blockml/status/ · type/ · constraint/ · service/ · …
+  org/blockml/status/ · type/ · constraint/ · validation/ · service/ · …
 
 domains/machineblocks/mbom/blocks/
   com/machineblocks/core/

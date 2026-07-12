@@ -24,13 +24,14 @@
   xmlns:mapping="org.blockml.mapping"
   xmlns:service="org.blockml.service"
   xmlns:status="org.blockml.status"
+  xmlns:validation="org.blockml.validation"
   xmlns:btype="org.blockml.type">
 
   <idea>Published catalog of the BlockML core library — framework blocks, value types, and services.</idea>
 
   <documentation>
     Publishable BlockML core library (org.blockml.Library). Exports the framework grammar:
-    core branches (Block, ValueType, Language, Status, Constraint, Capability, Definition),
+    core branches (Block, ValueType, Language, Status, Constraint, Validation, Capability, Definition),
     concrete value types and constraints, implementation languages, built-in services, lifecycle
     status blocks, the Definition meta-model branch (org.blockml.definition.*), and bootstrap
     documentation blocks (org.blockml.documentation.*).
@@ -85,6 +86,7 @@
         <bcore:Language />
         <bcore:Mapping />
         <bcore:Status />
+        <bcore:Validation />
         <bcore:ValueType />
         <def:AggregationDefinition />
         <def:AssociationDefinition />
@@ -137,6 +139,9 @@
         <status:Draft />
         <status:Stable />
         <status:Stub />
+        <validation:Error />
+        <validation:Information />
+        <validation:Warning />
         <btype:Boolean />
         <btype:BooleanEntity />
         <btype:Constant />

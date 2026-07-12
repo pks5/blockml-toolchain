@@ -527,7 +527,10 @@ BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type propert
 BML_CONSTRAINT_UNKNOWN        — constraint Block type not in TypeRegistry or not a Constraint sub-type
 BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with property or element type
 BML_CONSTRAINT_VALUE_MISMATCH — constraint instance property value incompatible with bound generic T
-BML_CONSTRAINT_VIOLATION      — property value fails a declared constraint (Min, Max, MinLength, …)
+BML_VALIDATION_UNKNOWN        — validation Block type not in TypeRegistry or not a Validation sub-type
+BML_CONSTRAINT_VIOLATION      — property value fails a constraint with validation:Error (Min, Max, MinLength, …)
+BML_CONSTRAINT_WARNING        — property value fails a constraint with validation:Warning
+BML_CONSTRAINT_INFORMATION    — property value fails a constraint with validation:Information
 BML_SUGGESTION_TYPE_MISMATCH  — suggestion Block instance type incompatible with property type
 BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfied (type notation)
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block

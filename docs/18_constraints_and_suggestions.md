@@ -1,214 +1,220 @@
-# Constraints and Suggestions — Generalized Extension Points
+# Constraints and Suggestions
 
-version: 1.0.0
+version: 0.1.0
 
 ## Purpose of this Document
 
-This document specifies how **constraints** and **suggestions** on Properties are modeled as Block instances — unified extension points built on the BlockML type system.
+This document specifies how **property constraints** and **suggestions** are modeled in BlockML — as Block instances, not enums or hardcoded compiler behavior.
 
-For property metadata see `00_bom_core.md`. For BML property syntax see `02_mbml.md`. For the BOM model see `12_bom_object_model.md`. For framework constraint types see `16_framework_base_types.md`. For generic type binding see `17_type_system_bml.md`. For ValueType instance configuration see `20_value_type_instance_configuration.md`. For compiler diagnostics see `06_compiler.md`.
-
----
-
-## Motivation
-
-The previous `constraints` and `suggestions` concepts are unified and built consistently on the BlockML type system. Instead of fixed XML elements with predefined attributes, both become extension points for Block instances.
-
-This keeps the BlockML core small and fully extensible.
+For BML property syntax see `02_mbml.md`.
+For the abstract object model see `00_bom_core.md`.
+For constraint generic binding see `17_type_system_bml.md`.
+For BOM mapping see `13_bml_to_bom_mapping.md`.
+For compiler diagnostics see `06_compiler.md`.
 
 ---
 
-## ValueType Configuration vs Constraints
+## Design Decision
 
-Many validation settings configure the referenced ValueType itself — not an independent business rule. These belong in the `type` attribute as instance configuration:
+Constraints and validation are **separate concepts**:
 
-```xml
-<name type="Text{maxLength=100}"/>
-<price type="Decimal{precision=10, scale=2}"/>
-<quantity type="Integer{min=0, max=100}"/>
+| Concept | Role |
+|---|---|
+| **Constraint** | Describes a semantic restriction or recommendation |
+| **Validation** | Describes whether and how BlockML itself should enforce that constraint |
+
+The same Constraint type can be used both as metadata for renderers, editors, or runtimes **and** as a compile-time validation rule — without introducing separate Constraint types.
+
+```text
+Constraint   →  describes the condition
+Validation   →  describes how a violation is handled
 ```
 
-Equivalent constraint form remains valid for migration but is redundant when the ValueType exposes the same configuration Property:
-
-```xml
-<!-- Prefer inline configuration -->
-<name type="Text{maxLength=100}"/>
-
-<!-- Still valid — constraint extension point -->
-<name type="Text">
-  <constraints>
-    <constraint:MaxLength value="100"/>
-  </constraints>
-</name>
-```
-
-Keep constraints for semantic validation that is not intrinsic to the ValueType: uniqueness, cross-property rules, dependency rules, custom validators, and `Pattern` when the regex is contextual rather than part of the type definition.
-
-See `20_value_type_instance_configuration.md` for syntax, BOM representation, and the full boundary table.
+This follows the BlockML philosophy that semantic information should be represented as Blocks rather than fixed enums or hardcoded compiler behavior.
 
 ---
 
-## Constraints
+## Constraint Branch
 
-`<constraints>` is an optional container within a Property.
+**FQN:** `org.blockml.core.Constraint` — abstract base for property constraints.
+
+```text
+org.blockml.core.Block
+  org.blockml.core.Constraint                    ← abstract; generic Constraint<T>
+    org.blockml.constraint.Min
+    org.blockml.constraint.Max
+    org.blockml.constraint.MinLength
+    org.blockml.constraint.MaxLength
+    org.blockml.constraint.Pattern
+    org.blockml.constraint.MinItems
+    org.blockml.constraint.MaxItems
+    …
+```
+
+Each concrete constraint extends `org.blockml.core.Constraint` and declares its own properties. The generic parameter `T` is bound automatically to the property type (or element type for collection constraints) at validate time — authors never specify the type argument in BML.
+
+### Standard constraints
+
+| FQN | Compatible property types | Properties |
+|---|---|---|
+| `org.blockml.constraint.Min` | `Number` sub-types | `value` |
+| `org.blockml.constraint.Max` | `Number` sub-types | `value` |
+| `org.blockml.constraint.MinLength` | `Text` | `value` |
+| `org.blockml.constraint.MaxLength` | `Text` | `value` |
+| `org.blockml.constraint.Pattern` | `Text` | `value` (regex) |
+| `org.blockml.constraint.MinItems` | collection types (`T[]`) | `value` |
+| `org.blockml.constraint.MaxItems` | collection types (`T[]`) | `value` |
+
+Domain libraries may define additional constraint types (for example `com.machineblocks.constraint.PreferredRange`).
+
+### Authoring
+
+Constraints are declared as child elements inside `<constraints>` on a Property:
 
 ```xml
-<width type="Float">
+<textSize type="Integer">
+  <value>9</value>
   <constraints>
-    <constraint:Min value="0"/>
-    <constraint:Max value="100"/>
+    <constraint:Min value="1" validation="validation:Error"/>
+    <constraint:Max value="72" validation="validation:Error"/>
   </constraints>
-</width>
+</textSize>
 ```
 
-Each entry inside `<constraints>` is a **Block instance**. The referenced Block must inherit from:
+Constraint instance properties serialize as attributes on the constraint element (same pattern as composition children).
+
+---
+
+## Validation Property
+
+Every `org.blockml.core.Constraint` receives an optional property:
 
 ```text
-org.blockml.core.Constraint
+validation : org.blockml.core.Validation
 ```
 
-### Constraint hierarchy
-
-```text
-org.blockml.core.Constraint
- ├── org.blockml.constraint.Min
- ├── org.blockml.constraint.Max
- ├── org.blockml.constraint.MinLength
- ├── org.blockml.constraint.MaxLength
- ├── org.blockml.constraint.Pattern
- ├── org.blockml.constraint.MinItems
- ├── org.blockml.constraint.MaxItems
- └── …
-```
-
-Each constraint defines its own properties. Example:
+This is a normal Block reference (not an enum).
 
 ```xml
-<constraint:Min value="0"/>
+<constraint:Min
+    value="0"
+    validation="validation:Error"/>
 ```
-
-is an instance of `org.blockml.constraint.Min` with the property `value`.
-
-### Generics
-
-`Constraint` declares a generic parameter:
-
-```text
-Constraint<T>
-```
-
-or, on concrete constraints:
-
-```text
-Constraint<T extends PrimitiveType>   — Min, Max
-Constraint<T extends String>          — Pattern
-```
-
-The generic is **not** specified at the usage site. The compiler binds it automatically to the property type.
-
-Example:
 
 ```xml
-<width type="Float">
-  <constraints>
-    <constraint:Min value="0"/>
-  </constraints>
-</width>
+<constraint:PreferredRange
+    min="10"
+    max="20"/>
 ```
 
-The compiler binds `T = Float` and checks:
+### Default behaviour
 
-* Is `Float` compatible with the constraint's generic bound?
-* Is the constraint property value (`value="0"`) of type `Float`?
+When `validation` is omitted:
 
-The same `Min` constraint works for `Integer`, `Float`, and other numeric types without re-specifying the type.
+- The BlockML validator **completely ignores** the constraint.
+- The constraint remains part of the BOM and is available to renderers, editors, runtimes, and custom validators.
 
-### Collections
+Constraints are **metadata by default**.
 
-The generic concept also handles collection property validation.
+When `validation` is present, the BlockML validator still validates the constraint instance itself (type compatibility, generic binding, constraint property values) — only **value enforcement** against the enclosing property is skipped when `validation` is omitted.
+
+---
+
+## Validation Branch
+
+**FQN:** `org.blockml.core.Validation` — abstract base for enforcement semantics.
+
+```text
+org.blockml.core.Block
+  org.blockml.core.Validation                    ← abstract
+    org.blockml.validation.Error
+    org.blockml.validation.Warning
+    org.blockml.validation.Information
+```
+
+The validator interprets the referenced Validation block to determine how a violated constraint should be reported:
+
+| FQN | Semantics | Diagnostic |
+|---|---|---|
+| `org.blockml.validation.Error` | Compilation must fail | `BML_CONSTRAINT_VIOLATION` |
+| `org.blockml.validation.Warning` | Compilation succeeds; warning emitted | `BML_CONSTRAINT_WARNING` |
+| `org.blockml.validation.Information` | Compilation succeeds; informational diagnostic | `BML_CONSTRAINT_INFORMATION` |
+
+Examples:
 
 ```xml
-<tags type="String[]">
-  <constraints>
-    <constraint:MinItems value="1"/>
-    <constraint:MaxItems value="10"/>
-    <constraint:MinLength value="2"/>
-  </constraints>
-</tags>
+<constraint:Min
+    value="0"
+    validation="validation:Error"/>
+<constraint:PreferredRange
+    min="5"
+    max="10"
+    validation="validation:Warning"/>
 ```
 
-The compiler infers from each constraint's generic definition:
+### Extensibility
 
-* `MinItems` / `MaxItems` operate on the collection (`String[]`).
-* `MinLength` operates on the elements (`String`).
+Because Validation is a normal Block hierarchy, libraries may define their own validation semantics:
 
-No additional syntax such as `<itemConstraints>` is required.
+```text
+com.machineblocks.validation.ManufacturingWarning
+com.enterprise.validation.ComplianceError
+com.ui.validation.EditorHint
+com.production.validation.RuntimeOnly
+```
 
-### Validation semantics
+The BlockML validator only interprets the Validation types it understands. Constraints referencing unknown Validation blocks are not enforced by the core validator — they remain metadata for tools that do understand them.
 
-Constraints are **enforceable** — the semantic validator checks property values against declared constraints at compile time (`BML_CONSTRAINT_VIOLATION`). Editors may also use constraint metadata for input validation and range hints.
+---
+
+## Generic Binding
+
+`org.blockml.core.Constraint` and its sub-types declare `<genericTypes>`. Unlike StructType generics, constraint type arguments are **never authored** — the compiler binds `T` from the enclosing property's type context at validate time:
+
+```text
+Scalar property (Integer)       → Min/Max: T = Integer
+Collection property (String[])  → MinItems/MaxItems: T = Text[]
+                                → MinLength/MaxLength: T = Text (element type)
+```
+
+Binding rules per constraint FQN are defined in each constraint Block's `<documentation>`.
 
 ---
 
 ## Suggestions
 
-Suggestions follow the same principle but use **no special base type**.
+A Property may declare a list of suggested values. Each suggestion is a Block instance of the **same type as the property** — no special base type.
 
 ```xml
-<color type="type:Color">
+<textColor type="Text">
+  <value>#303D4E</value>
   <suggestions>
-    <type:Color value="red"/>
-    <type:Color value="green"/>
-    <type:Color value="blue"/>
+    <TextEntity value="#303D4E"/>
+    <TextEntity value="#EAC645"/>
   </suggestions>
-</color>
+</textColor>
 ```
 
-Each suggestion is a Block instance of the **same type as the property**. The compiler checks only that every suggestion instance matches the property type.
+Suggestions are purely metadata — they do not affect type validation or compilation. The author can always enter any value regardless of suggestions.
 
-### Primitive suggestions
-
-```xml
-<textFont type="Text">
-  <value>RBNo3.1 Black</value>
-  <suggestions>
-    <TextEntity value="Creato Display"/>
-    <TextEntity value="RBNo3.1 Black"/>
-  </suggestions>
-</textFont>
-```
-
-Unqualified `String` resolves to `org.blockml.type.Text` — same rules as property `type` attributes.
-
-### Struct suggestions
-
-```xml
-<size type="type:Size3D">
-  <suggestions>
-    <type:Size3D x="1" y="1" z="1"/>
-    <type:Size3D x="2" y="4" z="3"/>
-  </suggestions>
-</size>
-```
-
-### Validation semantics
-
-Suggestions are **metadata only** — they do not affect type validation or compilation. The author can always enter any value. Editors display the property as a combobox; render targets (e.g. SCAD Customizer) may emit dropdown comments.
-
-`<suggestions>` on an EnumType property remains an error (`BML_SUGGESTIONS_ON_ENUM`) — valid values come from `_values`.
+Properties typed with an EnumType **must not** carry `<suggestions>` — valid values come from `_values` (`BML_SUGGESTIONS_ON_ENUM`).
 
 ---
 
-## Result
+## Compiler Diagnostics
 
-Two unified extension points on a Property:
+| Code | When |
+|---|---|
+| `BML_CONSTRAINT_UNKNOWN` | constraint Block type not in TypeRegistry or not a Constraint sub-type |
+| `BML_CONSTRAINT_TYPE_MISMATCH` | constraint generic T incompatible with property or element type |
+| `BML_CONSTRAINT_VALUE_MISMATCH` | constraint instance property value incompatible with bound generic T |
+| `BML_VALIDATION_UNKNOWN` | validation Block type not in TypeRegistry or not a Validation sub-type |
+| `BML_CONSTRAINT_VIOLATION` | property value fails a constraint with `validation:Error` |
+| `BML_CONSTRAINT_WARNING` | property value fails a constraint with `validation:Warning` |
+| `BML_CONSTRAINT_INFORMATION` | property value fails a constraint with `validation:Information` |
+| `BML_SUGGESTION_TYPE_MISMATCH` | suggestion Block instance type incompatible with property type |
 
-| Extension point | Instance type | Generic binding | Enforced |
-|---|---|---|---|
-| **Constraints** | `org.blockml.core.Constraint` sub-types | Compiler binds `T` to property/element type | Yes |
-| **Suggestions** | Same type as the property | None | No (metadata) |
-
-This pattern reduces special rules in the core and delegates interpretation to the participating Block types and type context.
+Constraints without a `validation` reference produce no value-enforcement diagnostics.
 
 ---
 
@@ -216,11 +222,10 @@ This pattern reduces special rules in the core and delegates interpretation to t
 
 | Topic | Document |
 |---|---|
-| Property metadata | `00_bom_core.md` |
-| BML property syntax | `02_mbml.md` |
-| BOM PropertyDefinition | `12_bom_object_model.md` |
-| BML→BOM mapping | `13_bml_to_bom_mapping.md` |
+| Property BML syntax | `02_mbml.md` |
+| Abstract object model | `00_bom_core.md` |
+| Type system · generic binding | `17_type_system_bml.md` |
+| BOM mapping | `13_bml_to_bom_mapping.md` |
 | Compiler diagnostics | `06_compiler.md` |
-| SCAD Customizer rendering | `05_scad_renderer.md` |
-| Framework bootstrap | `16_framework_base_types.md` |
-| Generic type system | `17_type_system_bml.md` |
+| Framework base types | `16_framework_base_types.md` |
+| SCAD customizer mapping | `05_scad_renderer.md` |
