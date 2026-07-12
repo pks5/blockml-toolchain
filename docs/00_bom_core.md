@@ -513,9 +513,9 @@ A Block without a Composition is a **Leaf Block** — it has no internal structu
 
 ## Member Namespace
 
-Properties, Aggregations, Associations, and Capabilities all share a single member namespace per Block. Logical uniqueness is determined by **`(namespace, name)`** — members without an explicit `namespace` belong to the default namespace (empty string).
+Properties, Aggregations, Associations, and Capabilities all share a single member namespace per Block. Logical uniqueness is determined by **`(namespace, name)`** — unprefixed member elements belong to the default namespace (empty string).
 
-The `namespace` attribute uses the **same XML namespace mechanism** as element prefixes. The author writes an XML prefix (`xmlns:ui="com.foo.ui"` → `namespace="ui"`). The parser resolves the prefix immediately and stores the **canonical namespace identifier** in the BOM — never the XML alias. See `02_mbml.md` — § Member Namespace Attribute.
+Member namespace is supplied **exclusively by the XML element QName**. An optional prefix on the member element name (`<ui5:width/>`) is resolved via the document's `xmlns:` table; the parser stores the **canonical namespace identifier** in the BOM — never the XML alias. Unprefixed elements (`<width/>`) use the default member namespace (empty string), independent of the document default `xmlns`. See `02_mbml.md` — § Member Namespace (Element QName).
 
 This is a deliberate design decision: authors think in names, not in member categories. Bindings, expressions, and presets reference members by resolved `(namespace, name)` without needing to know the category.
 
@@ -562,7 +562,6 @@ readOnly   — when true, the member cannot be written on Block instances. Valid
              Block definitions and child Block overrides may still set the value/composition.
              Expressions may read the member. See 02_mbml.md — § readOnly Members.
 final      — when true, child Blocks cannot override this member. Validator-enforced.
-namespace  — XML namespace prefix; resolved to canonical identifier at parse time (see 02_mbml.md)
 ```
 
 ### Member Inheritance and Overrides
@@ -1016,32 +1015,6 @@ App       @data scope="context"  ← ODataModel (visible to all descendants)
 
 This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) — but scope is declared on the Aggregation, not on the service type itself. The same service type can have different scopes in different contexts.
 
-### Data Attributes (`data:`)
-
-BlockML has **no `_customData` aggregation** on `org.blockml.core.Block`. The `data:` namespace attaches arbitrary metadata to Block definitions and Composition instances. Authoring syntax follows the **SAP UI5** pattern (`data:myVal` on Controls) — but in BlockML the values are **uninterpreted expressions** in the BOM, not typed aggregation members.
-
-```text
-org.blockml.core.Block   — no implicit aggregations for data:*
-```
-
-In BML, `data:*` attributes and `data:*` child elements are stored as `dataAttributes[]` on the Block definition or instance. Values are **not evaluated** at parse or validate time:
-
-```xml
-<!-- BML authoring: -->
-<bricks:StandardBrick
-    bml:id="strip"
-    data:role="structural"
-    data:count="${ sampleCount }" />
-
-<!-- BOM representation: -->
-StandardBrick.dataAttributes: [
-    DataAttribute { key: "role",  value: LiteralValue("structural") }
-    DataAttribute { key: "count", value: ExpressionValue("${ sampleCount }") }
-]
-```
-
-A target renderer may interpret `dataAttributes` — e.g. a **UI5 renderer** could map them into `customData` aggregations on runtime Controls. That mapping is **render concern**, not part of the Block type system or BOM validation.
-
 ---
 
 ## Associations
@@ -1399,13 +1372,10 @@ The `bml:` prefix is the canonical namespace for language directives. Flow-contr
 
 **Serialization directives:** `bml:xml` declares how Definition blocks and `org.blockml.core.Block` map to canonical BML XML (root element name, member as attribute/element/text/cdata). This is separate from composition flow control — see `19_definition_blocks_and_bml_xml.md`.
 
-`data:*` is unrelated to directives. Authoring syntax is inspired by **SAP UI5** (`data:myVal` on Controls) — values land as **uninterpreted** `dataAttributes[]` in the BOM. No `_customData` aggregation on `org.blockml.core.Block`; renderers may interpret.
-
 ### Directive Placement
 
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
-| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` — renderer may consume. |
 | `bml:with` | `<composition>`, `<bml:container>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |

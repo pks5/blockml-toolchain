@@ -516,7 +516,8 @@ BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT — members differ only by visibility pr
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
-BML_UNKNOWN_NAMESPACE_PREFIX  — namespace attribute references undeclared xmlns: prefix
+BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
+BML_DEPRECATED_MEMBER_NAMESPACE_ATTR — legacy namespace="…" attribute on member element
 BML_PRESET_CYCLE              — circular dependency in basePresets chain
 BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
 BML_CONTRACT_NOT_ON_ROOT      — <contracts> declared on a Sub-Block
@@ -573,7 +574,6 @@ Examples:
 BML_UNKNOWN_PROPERTY   — property not defined on block type (custom property assumed)
 BML_UNKNOWN_DIRECTIVE  — unrecognized bml:* attribute name (always error)
 BML_DIRECTIVE_NOT_ALLOWED — known bml:* directive on disallowed element (always error)
-BML_CUSTOM_DATA_NOT_ALLOWED — data:* on non-Block element (always error)
 BML_DEPRECATED_TYPE    — referenced type is deprecated
 ```
 

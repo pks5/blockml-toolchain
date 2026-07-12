@@ -18,7 +18,11 @@
 
   <documentation>Describes a Block member that carries a scalar or structured value. Rendered as a
     child element inside the properties container; the XML element name is the property name
-    (bml:xml="${ #this.name }"). Maps to BOM PropertyDefinition (kind: "property") with typeFqn, value,
+    (bml:xml="${ #this.name }"). An optional XML prefix on the element name supplies the member
+    namespace — for example ui5:width resolves via xmlns:ui5 to the canonical namespace stored in
+    BOM namespace; unprefixed elements belong to the default namespace (empty string). The prefix
+    itself is never stored. Member identity is (resolvedNamespace, localName). Maps to BOM
+    PropertyDefinition (kind: "property") with typeFqn, value,
     valueRequired, and optional constraints and suggestions. Property type must resolve to a
     ValueType branch. Every Property behaves as Optional — it has a value or has no value; there
     is no null. Declaration order among properties is significant for StructType positional mapping

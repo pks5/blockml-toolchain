@@ -38,7 +38,6 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | Authored in BML | Stored in BOM | Interpreted downstream |
 |---|---|---|
 | `bml:each`, `bml:if`, `bml:with` | `directives[]` on element — **unexpanded** | Renderer (directive expansion) |
-| `data:*` attributes | `dataAttributes[]` on Block | Uninterpreted — renderer may consume (e.g. UI5 → customData) |
 | `size="[5,5,6]"` vs `size="{x:5,…}"` | `LiteralValue` in **authored form** | Renderer (target serialization via type metadata) |
 | `${ size.x }` | `ExpressionValue { raw, ast }` — **not evaluated** | Renderer (expression evaluation) |
 | `<aggregations>` declaration | `AggregationDefinition` (declared only) | Type Registry lookup for effective members — **metadata only, no instance data resolution** |
@@ -56,12 +55,11 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Immutability** | Canonical `BomDocument` is **immutable** after parse. No utility or renderer may write derived data back. See `00_bom_core.md` — Canonical BOM is immutable. |
 | **Member inheritance** | **Utility lookup only.** BOM stores **declared** members per Block. `resolveEffectiveMembers()` returns `EffectiveMemberSet` — a separate structure, never flattened into BOM. |
 | **Capabilities** | Authored Capabilities stored in BOM. No synthetic getter/setter generation. Renderer interprets all Capabilities. See `08_managed_object.md`. |
-| **Member identity** | Uniqueness by resolved **`(namespace, name)`**. `namespace` attribute is an XML prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
+| **Member identity** | Uniqueness by resolved **`(namespace, name)`**. Namespace from member element QName prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
 | **Composition** | Nested inside `<aggregation>` on definitions and instances. Bare `<composition>` is sugar for the single default aggregation. `composition aggregation="…"` removed. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | `bml:*` on composition elements — flow-control in `directives[]`; composition meta (`bml:id`, `bml:version`) on `BlockInstance` fields. **Not expanded** at parse time. |
-| **Data attributes** | `data:*` stored as `dataAttributes[]` with **uninterpreted** values — not a `bml:` directive, not a Block aggregation. Renderers may interpret (e.g. UI5 target → runtime customData). |
 | **Instance `version`** | From **`bml:version`** — optional on external block references. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert (`BML_UNKNOWN_VERSION` if no match). Forbidden inside Library files → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`. Same-document Sub-Blocks exempt. |
 | **Definition `version`** | Every Block definition has an **effective version**: own `<version>` if present, else library version if the block is exported via a Library, else error (`BML_MISSING_VERSION`). |
 | **Instance `id`** | From **`bml:id`** — authored in BOM only on `BlockInstance.id`; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `bml:id`. No FQN fallback. |
@@ -214,9 +212,6 @@ interface BlockDefinition {
    * May contain BlockInstanceNode and VirtualContainerNode children.
    */
   compositions: CompositionTemplate[]
-
-  /** data:* attributes and data:* child elements — uninterpreted values, not evaluated at parse/validate */
-  dataAttributes: DataAttribute[]
 
   /** BML source span of this definition (root or sub-block) */
   source: SourceLocation
@@ -416,8 +411,8 @@ interface MemberDefinitionBase {
   references?: DocumentationReference[]
   /**
    * Resolved canonical namespace identifier (FQN or URI).
-   * Parsed from namespace="prefix" via document xmlns: table.
-   * Omitted in BML → default namespace (empty string).
+   * Parsed from the member element QName prefix via document xmlns: table.
+   * Unprefixed member elements → default namespace (empty string).
    * Never stores the XML alias.
    */
   namespace?: string
@@ -483,10 +478,10 @@ The parser **must preserve** the declaration order of members from BML. **No sor
 
 ```text
 Mapping sequence (append to members[] in this order):
-  1. <properties>     — child <property> elements in XML document order
-  2. <aggregations>   — child <aggregation> elements in XML document order
-  3. <associations>   — child <association> elements in XML document order
-  4. <capabilities>   — child <capability> elements in XML document order
+  1. <properties>     — child member elements in XML document order (element localName = name)
+  2. <aggregations>   — child member elements in XML document order
+  3. <associations>   — child member elements in XML document order
+  4. <capabilities>   — child member elements in XML document order
 ```
 
 The position of each entry in `BlockDefinition.members[]` is the **declaration ordinal** for that block. Render targets may use this order (e.g. Customizer parameter sequence, UI field layout). The compiler must not reorder declared members when writing BOM or when passing definitions to processors.
@@ -681,8 +676,6 @@ interface VirtualContainerNode {
 
 `bml:*` directives are stored in `directives[]` on the element they appear on — analogous to Thymeleaf `th:*` attributes on HTML elements.
 
-`data:*` is a separate mechanism from `bml:*` directives. Authoring syntax is inspired by **SAP UI5** (`data:myVal` on Controls) — but BlockML has **no `_customData` aggregation** on `org.blockml.core.Block`. The parser stores `data:*` as `dataAttributes[]` with **uninterpreted** values. A target renderer (e.g. UI5) may map them into runtime object aggregations — that is render concern, not BOM structure.
-
 | Attribute / namespace | Allowed on | Notes |
 |---|---|---|
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
@@ -690,9 +683,6 @@ interface VirtualContainerNode {
 | `bml:with` | `<composition>`, `<aggregation>`, `<bml:container>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional inclusion |
-| `data:*` | Block definitions and Block instances only | **Not** a `bml:` directive. Parsed into `dataAttributes[]` — values not evaluated. |
-
-`data:*` is only valid on elements that extend `org.blockml.core.Block`. It must not appear on `<aggregation>`, `<capability>`, or other non-Block elements.
 
 Directives are **never expanded** at parse time. Expansion (if any) is a downstream concern.
 
@@ -904,8 +894,6 @@ interface BlockInstance {
    */
   aggregationCompositions?: InstanceAggregationComposition[]
 
-  dataAttributes: DataAttribute[]
-
   source: SourceLocation
 }
 ```
@@ -1063,23 +1051,6 @@ Composition children in `_dependencies` and `_blocks` are Block instances (`<blo
 The orchestrator resolves `_dependencies` and `_blocks` entries by FQN, loads referenced definitions into the TypeRegistry using effective block versions, and validates library membership.
 
 `_schemas` is optional legacy XSD. `_blocks` lists exported Block and ValueType BML — primary SSOT as types migrate from XSD.
-
----
-
-## Data Attributes (`data:`)
-
-```typescript
-interface DataAttribute {
-  /** Local name after data: prefix (e.g. "role" from data:role) */
-  key: string
-  /** Uninterpreted value — LiteralValue or ExpressionValue; not evaluated at parse/validate */
-  value: MemberValue
-}
-```
-
-`data:*` XML attributes and `data:*` child elements are mapped to `DataAttribute` at parse time. Values follow the same classification as member attributes (`${ }` → `ExpressionValue`, otherwise `LiteralValue`) but are **not** type-checked against Block members.
-
-There is **no `_customData` aggregation** on `org.blockml.core.Block`. A target renderer may interpret `dataAttributes` — e.g. a UI5 renderer could populate `customData` on runtime Controls — but that is outside the BOM contract.
 
 ---
 
@@ -1266,7 +1237,7 @@ BML_LEGACY_TYPE_SOURCE        — type from XSD only · migrate to BML (warning)
 BML_UNKNOWN_PROPERTY          — instance attribute not in effective members (warning)
 BML_UNKNOWN_DIRECTIVE         — unrecognized bml:* attribute (error)
 BML_DIRECTIVE_NOT_ALLOWED     — bml:* on disallowed element (error)
-BML_CUSTOM_DATA_NOT_ALLOWED   — data:* on non-Block element (error)
+BML_DEPRECATED_MEMBER_NAMESPACE_ATTR — legacy namespace="…" attribute on member element (error)
 BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent
 BML_PROPERTY_CYCLE            — circular property value dependencies
 BML_VISIBILITY_MISMATCH       — visibility attribute or <visibility> does not match naming convention
@@ -1278,7 +1249,7 @@ BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritanc
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
-BML_UNKNOWN_NAMESPACE_PREFIX  — member namespace attribute references undeclared xmlns: prefix
+BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular basePresets chain
 BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
 BML_CONTRACT_NOT_ON_ROOT      — <contracts> on Sub-Block

@@ -78,7 +78,6 @@ Block metadata (`name`, `idea`, `documentation`, `version`, `baseType`, …) map
 |---|---|
 | **Lossless round-trip** | BOM preserves authored literal syntax — `[5,5,6]` and `{x:5,y:5,z:6}` stored as authored, not normalized |
 | **Directives** | Stored as `directives[]` on the element — not expanded at parse time |
-| **Data attributes** | `data:*` → `dataAttributes[]` with uninterpreted values (not a `bml:` directive) |
 | **Registry** | **Removed.** Sibling value sharing via `bml:with` on `<composition>` or `<bml:container>` |
 | **Attribute classification** | Fixed priority chain — see § Attribute Classification below |
 | **Unknown member attributes** | Warning `BML_UNKNOWN_PROPERTY` at validate (custom property assumed) |
@@ -99,8 +98,7 @@ When mapping an XML element to a BOM node, every attribute is classified using t
 ```text
 1. xmlns*, xsi:*              → ignore (except xmlns bindings → SourceInfo.namespaceBindings)
 2. bml:*                      → see § Rule 2 — meta (bml:id, bml:version) or directives[]
-3. data:*                     → DataAttribute → dataAttributes[]  (Block definitions + Block instances only)
-4. All other attributes       → memberValues[name]  (camelCase property/capability values)
+3. All other attributes       → memberValues[name]  (camelCase property/capability values)
 ```
 
 ### Rule 1 — XML infrastructure
@@ -135,18 +133,7 @@ Known directive on a disallowed element (see placement rules in `12_bom_object_m
 
 Directive and meta values that contain `${ }` are stored as `ExpressionValue { raw }` in Canonical BOM. AST via `parseExpression()` utility.
 
-### Rule 3 — `data:*` data attributes
-
-Only valid on Block definitions and Block instances (elements whose type extends `org.blockml.core.Block`).
-
-```text
-data:role="structural"         →  dataAttributes[] { key: "role", value: LiteralValue("structural") }
-data:count="${ sampleCount }"  →  dataAttributes[] { key: "count", value: ExpressionValue(...) }
-```
-
-Values are **not evaluated** at parse or validate time. Invalid placement (e.g. on `<capability>`) → diagnostic error at map time.
-
-### Rule 4 — Member values
+### Rule 3 — Member values
 
 All remaining attributes become `memberValues[name]`:
 
@@ -160,7 +147,7 @@ onResized="stud://..."       → memberValues.onResized (AddressValue or Express
 
 Use **`bml:id`** / **`bml:version`** for composition instance identity and external reference version — not bare attributes.
 
-Value classification within rule 4:
+Value classification within rule 3:
 
 ```text
 ${ ... }                     → ExpressionValue { raw }  (AST via parseExpression() utility)
@@ -168,7 +155,7 @@ address-shaped capability    → AddressValue
 otherwise                    → LiteralValue (authored value preserved — type-checked in stage [6])
 ```
 
-Unknown member names survive rule 4 and are stored in `memberValues`. The semantic validator emits **`BML_UNKNOWN_PROPERTY` (warning)** — custom property assumed. See § Unknown Attributes below.
+Unknown member names survive rule 3 and are stored in `memberValues`. The semantic validator emits **`BML_UNKNOWN_PROPERTY` (warning)** — custom property assumed. See § Unknown Attributes below.
 
 ### Unknown Attributes
 
@@ -178,7 +165,7 @@ Unknown member names survive rule 4 and are stored in `memberValues`. The semant
 | readOnly member on instance | Validate — effective member has readOnly=true | **Error** | `BML_READONLY_MEMBER_WRITE` |
 | Unknown `bml:*` name | Map — not in allowed directive list | **Error** | `BML_UNKNOWN_DIRECTIVE` |
 | Known `bml:*` on wrong element | Map or validate — placement rule violated | **Error** | `BML_DIRECTIVE_NOT_ALLOWED` |
-| `data:*` on non-Block element | Map | **Error** | `BML_CUSTOM_DATA_NOT_ALLOWED` |
+| `namespace="…"` on member element | Map | **Error** | `BML_DEPRECATED_MEMBER_NAMESPACE_ATTR` |
 
 Unlike member attributes, **`bml:*` is never silently ignored** — unknown or misplaced directives always fail compilation.
 
@@ -192,7 +179,6 @@ Input:
     bml:id="${ 'val_' + i }"
     bml:each="i : ${ numberOfSamples }"
     size="[1, 1, 1]"
-    data:role="sample"
     renderGroup="calibration" />
 ```
 
@@ -206,8 +192,6 @@ instance:
   id:          ExpressionValue
   memberValues:
     size: LiteralValue
-  dataAttributes:
-    [{ key: "role", value: LiteralValue("sample") }]
 directives:
   [EachDirective { variables: ["i"], collection: ExpressionValue }]
 ```
@@ -352,21 +336,23 @@ ValueType BML uses the same `BlockDefinition` shape as all Blocks — StructType
 
 ### Member attributes
 
-All member kinds (`<property>`, `<aggregation>`, `<association>`, `<capability>`) map common attributes to `MemberDefinitionBase`:
+All member kinds map common fields to `MemberDefinitionBase`:
 
 ```text
-name="size"              → name
-namespace="ui"           → namespace (resolved — see below)
-visibility="protected"   → visibility (optional; derived from name when omitted)
-readOnly="true"          → readOnly (validator-enforced on instances — see 02_mbml.md § readOnly Members)
-final="true"             → final
-<documentation>…         → documentation
-<since>…                 → since
-<changelog>…             → changelog[]
-<examples>…              → examples[]
-<references>…            → references[]
+element localName          → name
+element prefix (if any)    → namespace (resolved — see below)
+visibility="protected"     → visibility (optional; derived from name when omitted)
+readOnly="true"            → readOnly (validator-enforced on instances — see 02_mbml.md § readOnly Members)
+final="true"               → final
+<documentation>…           → documentation
+<since>…                   → since
+<changelog>…               → changelog[]
+<examples>…                → examples[]
+<references>…              → references[]
 <status>status:Draft</status>  → statusFqn (when declared; omitted → inherit from parent)
 ```
+
+Legacy `namespace="…"` attribute on member elements → **`BML_DEPRECATED_MEMBER_NAMESPACE_ATTR` (error)** at map time. Namespace is supplied exclusively by the element QName.
 
 **Non-definition elements** (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<idea>`, `<implementation>`, Block instances, …) may carry `bml:status="status:Draft"` — mapped to `statusFqn` on the same BOM node **only when deviating** from inherited status. No `<status>` child on these elements.
 
@@ -391,33 +377,36 @@ Unknown status FQN                     →  BML_UNKNOWN_STATUS (validate)
 Redundant status (= inherited)         →  BML_REDUNDANT_STATUS (warning V1)
 ```
 
-**Member `namespace` resolution (stage [5]):**
+**Member namespace resolution (stage [5]):**
 
-The `namespace` attribute value is an **XML namespace prefix** — not a raw URI or dotted name. The parser looks up the prefix in the current document's `xmlns:` bindings (same mechanism as element prefixes and `type:` shorthand).
+Member namespace is supplied **exclusively by the XML element QName**. The element local name is the member name; an optional prefix supplies the namespace.
 
 ```text
-Document:  xmlns:ui="com.foo.ui"
-Authored:  <property namespace="ui" name="width" …/>
+Document:  xmlns:ui5="com.sap.ui5"
+Authored:  <properties><ui5:width type="Integer"/></properties>
 
 BOM:       PropertyDefinition {
-             namespace: "com.foo.ui",   // resolved identifier — never "ui"
+             namespace: "com.sap.ui5",   // resolved identifier — never "ui5"
              name: "width",
              …
            }
 ```
 
 ```text
-Omitted namespace attribute  →  namespace undefined / default namespace (empty string)
-Undeclared prefix            →  BML_UNKNOWN_NAMESPACE_PREFIX (parse error)
-Prefix alias never stored    →  BOM contains canonical identifiers only
+Unprefixed element (<width/>)  →  namespace undefined / default namespace (empty string)
+Undeclared prefix on element   →  BML_UNKNOWN_NAMESPACE_PREFIX (parse error)
+Prefix alias never stored      →  BOM contains canonical identifiers only
+namespace="…" attribute       →  BML_DEPRECATED_MEMBER_NAMESPACE_ATTR (parse error)
 ```
+
+The parser treats absence of a prefix as `namespace = ""` — independent of the document default `xmlns`.
 
 **Override matching:** `resolveEffectiveMembers()` compares members by **resolved `(namespace, name)`**. A child Block may use a different XML prefix for the same namespace URI — the override still matches.
 
 ```text
-Parent (xmlns:ui="com.foo.ui"):     namespace="ui"   name="width"
-Child  (xmlns:design="com.foo.ui"): namespace="design" name="width" value="42"
-→ same key (com.foo.ui, width) → override merges
+Parent (xmlns:ui5="com.sap.ui5"):   <ui5:width …/>
+Child  (xmlns:design="com.sap.ui5"): <design:width value="42"/>
+→ same key (com.sap.ui5, width) → override merges
 ```
 
 Property-specific:
@@ -466,7 +455,7 @@ Mismatch between derived and explicit `visibility` → `BML_VISIBILITY_MISMATCH`
 
 Partial overrides: a child Block may declare a member with only `name` and changed attributes. Unspecified fields inherit from the parent member at `resolveEffectiveMembers()`. Override key is resolved `(namespace, name)` — not the XML prefix.
 
-**General namespace rule:** all XML prefixes in BML (Block type tags, `type:` shorthand, member `namespace`, `bml:*`, `data:*`) are resolved during parsing. The BOM stores canonical namespace identifiers only. See `02_mbml.md` — Namespaces · § Member Namespace Attribute.
+**General namespace rule:** all XML prefixes in BML (Block type tags, member element QNames, `type:` shorthand, `bml:*`) are resolved during parsing. The BOM stores canonical namespace identifiers only. See `02_mbml.md` — Namespaces · § Member Namespace (Element QName).
 
 ---
 
@@ -698,7 +687,7 @@ The orchestrator re-bootstraps or incrementally updates the TypeRegistry when an
 
 JSON as a BML **authoring format** is **not implemented in V1**. The V1 parser accepts **XML only** (`.bml`).
 
-JSON may eventually support a very restricted subset (e.g. flat preset blocks, simple leaf blocks). Whether a viable mapping exists is **TBD** — intensive XML namespace usage (`xmlns:bricks`, `bml:*`, `data:*`, typed element names) has no natural JSON equivalent. Full BML power requires XML.
+JSON may eventually support a very restricted subset (e.g. flat preset blocks, simple leaf blocks). Whether a viable mapping exists is **TBD** — intensive XML namespace usage (`xmlns:bricks`, `bml:*`, prefixed member element names, typed element names) has no natural JSON equivalent. Full BML power requires XML.
 
 When JSON support is specified, it will register a separate root-type mapping rule and JSON Schema — not in V1.
 

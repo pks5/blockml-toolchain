@@ -115,7 +115,7 @@ com.martianmicro.anyclosure.Wall
 
 The BOM always uses the full FQN. Namespace prefixes are a BML authoring convenience only.
 
-**General rule:** XML prefixes have no semantic meaning. During parsing, every prefix is resolved via the document's `xmlns:` declarations. The BOM stores **canonical namespace identifiers only** (FQN or URI) — never XML aliases. This applies to Block type references, member `namespace` attributes, `type:` shorthand, and all other namespaced BML syntax. See § Member Namespace Attribute.
+**General rule:** XML prefixes have no semantic meaning. During parsing, every prefix is resolved via the document's `xmlns:` declarations. The BOM stores **canonical namespace identifiers only** (FQN or URI) — never XML aliases. This applies to Block type references, member element QNames, `type:` shorthand, and all other namespaced BML syntax. See § Member Namespace (Element QName).
 
 ### Type Namespace Shorthand
 
@@ -667,7 +667,6 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
-  xmlns:data="http://blockml.org/schema/data"
   xmlns:core="com.machineblocks.core"
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -687,7 +686,6 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 BlockML Core (Sprach-Namespaces):
   http://blockml.org/schema/block    ← Dokument-Root (default xmlns)
   http://blockml.org/schema/bml      ← bml: Direktiven
-  http://blockml.org/schema/data     ← data: attributes (uninterpreted metadata)
   http://blockml.org/schema/service  ← org.blockml.service.*
 
 MachineBlocks (Domain-Namespaces):
@@ -722,16 +720,15 @@ XSD-Dateien werden als Teil der npm-Packages ausgeliefert.
 
 ```text
 xmlns:bml   — required when using bml:* directives
-xmlns:data  — required when using data:* attributes
 xmlns:type  — required when using domain-specific types (e.g. type:Size3D)
-xmlns:*     — domain namespaces for Block type references
+xmlns:*     — domain namespaces for Block type references and member element prefixes
 ```
 
 ### Member Namespace
 
-All Members — Properties, Aggregations, Associations, and Capabilities — share a single member namespace per Block. Logical uniqueness is determined by **`(namespace, name)`** — not by name alone. Members without an explicit `namespace` attribute belong to the **default namespace** (empty string). A validation error is raised for duplicates within the same resolved namespace.
+All Members — Properties, Aggregations, Associations, and Capabilities — share a single member namespace per Block. Logical uniqueness is determined by **`(namespace, name)`** — not by name alone. Unprefixed member elements belong to the **default namespace** (empty string). A validation error is raised for duplicates within the same resolved namespace.
 
-The `namespace` attribute uses the **same XML namespace mechanism** as element prefixes — see § Member Namespace Attribute. The parser stores the resolved identifier, never the XML alias.
+The member namespace is supplied exclusively by the **XML element QName** — see § Member Namespace (Element QName). The parser resolves any prefix via the document's `xmlns:` table and stores the canonical identifier in the BOM; the prefix itself is never stored.
 
 ### Conventions
 
@@ -1145,7 +1142,6 @@ All member kinds support these optional attributes:
 readOnly="true|false"   — when true, the member cannot be written on Block instances. Validator-enforced.
                           Default: false. See § readOnly Members below.
 final="true|false"      — when true, child Blocks cannot override this member. Validator-enforced.
-namespace="prefix"      — XML namespace prefix (declared via xmlns:prefix in the same document)
 ```
 
 ### readOnly Members
@@ -1193,75 +1189,91 @@ The check runs after `resolveEffectiveMembers()` on every `BlockInstance` — co
 
 `readOnly` is independent of `final`: a child Block may override the **value** of a `readOnly` member in its definition, but cannot override a `final` member at all. A member may be both `readOnly` and `final`.
 
-### Member Namespace Attribute
+### Member Namespace (Element QName)
 
-The `namespace` attribute on a member uses the **same namespace mechanism as XML**. The author writes an XML prefix declared in the current document — not a raw URI or dotted name.
+Properties, Aggregations, Associations, and Capabilities receive their namespace **exclusively via the XML element QName**. There is no `namespace` attribute on member elements.
 
 ```xml
 <block
     xmlns="http://blockml.org/schema/block"
-    xmlns:ui="com.foo.ui">
+    xmlns:ui5="com.sap.ui5">
 
   <properties>
-    <width  namespace="ui" type="Integer">
+    <ui5:width type="Integer">
       <value>100</value>
-    </width>
-    <height namespace="ui" type="Integer">
+    </ui5:width>
+    <ui5:height type="Integer">
       <value>200</value>
-    </height>
+    </ui5:height>
   </properties>
+
+  <aggregations>
+    <html:children type="ui:Control[]"/>
+  </aggregations>
+
+  <associations>
+    <aria:labelledBy type="ui:Control[]"/>
+  </associations>
+
+  <capabilities>
+    <dom:click type="cap:Inbound"/>
+  </capabilities>
 </block>
 ```
 
-Here `ui` is a local alias only. The parser resolves it immediately via the document's XML namespace table:
+The parser resolves the element prefix via the document's `xmlns:` table:
 
 ```text
-Authored:   namespace="ui"  name="width"
-            xmlns:ui="com.foo.ui"
+Authored:   <ui5:width …/>   xmlns:ui5="com.sap.ui5"
 
-Stored:     namespace = "com.foo.ui"
+Stored:     namespace = "com.sap.ui5"
             name      = "width"
 ```
 
-The alias `ui` does not exist in the BOM after parsing.
+The prefix `ui5` does not exist in the BOM after parsing. XML prefixes are document aliases only — only the resolved namespace is semantically relevant.
+
+**Default namespace:** unprefixed member elements (for example `<width type="Integer"/>`) belong to the default member namespace (empty string). The parser treats absence of a prefix as `namespace = ""` — independent of the document default `xmlns`.
 
 **Equivalence across prefixes:** these two documents are semantically identical:
 
 ```xml
-xmlns:ui="com.foo.ui"
-<width namespace="ui" type="Integer"/>
+xmlns:ui5="com.sap.ui5"
+<ui5:width type="Integer"/>
 ```
 
 ```xml
-xmlns:design="com.foo.ui"
-<width namespace="design" type="Integer"/>
+xmlns:sap="com.sap.ui5"
+<sap:width type="Integer"/>
 ```
 
-Both store `namespace = "com.foo.ui"`, `name = "width"`. Different documents may use different prefixes without changing member meaning.
+Both store `namespace = "com.sap.ui5"`, `name = "width"`. Different documents may use different prefixes without changing member meaning. Using both in the same document for the same member → duplicate-member error.
 
-**Scope:** the prefix must be declared in the **same document** where it is used. Each Block definition may declare its own `xmlns:` aliases. Importing or referencing blocks does not require matching prefix names.
+**Member identity:** `(resolvedNamespace, localName)` — for example `width` (default namespace) ≠ `ui5:width` (when `ui5` resolves to a non-empty namespace), and `ui5:width` ≠ `abc:width` when the prefixes resolve to different namespaces.
+
+**Scope:** the prefix must be declared in the **same document** where it is used. Each Block definition may declare its own `xmlns:` aliases.
 
 **Overrides:** member override matching uses the **resolved namespace identifier**, not the XML prefix. A child Block may use a different alias for the same namespace:
 
 ```xml
 <!-- Parent -->
-xmlns:ui="com.foo.ui"
-<width namespace="ui" type="Integer">
+xmlns:ui5="com.sap.ui5"
+<ui5:width type="Integer">
   <value>100</value>
-</width>
+</ui5:width>
 
 <!-- Child -->
-xmlns:design="com.foo.ui"
-<width namespace="design">
+xmlns:design="com.sap.ui5"
+<design:width>
   <value>42</value>
-</width>
+</design:width>
 ```
 
-Both resolve to key `(com.foo.ui, width)` — the override merges correctly.
+Both resolve to key `(com.sap.ui5, width)` — the override merges correctly.
 
-**`bml` prefix:** using `xmlns:bml` for member namespaces is permitted but **not recommended** — the `bml:` prefix is reserved for language directives (`bml:id`, `bml:each`, …). Prefer domain-specific prefixes (e.g. `ui`, `physics`, `style`).
+**`bml` prefix:** using `xmlns:bml` for member namespaces is permitted but **not recommended** — the `bml:` prefix is reserved for language directives (`bml:id`, `bml:each`, …). Prefer domain-specific prefixes (e.g. `ui5`, `html`, `aria`).
 
-Undeclared prefix → `BML_UNKNOWN_NAMESPACE_PREFIX`.
+Undeclared prefix on a member element → `BML_UNKNOWN_NAMESPACE_PREFIX`.
+A legacy `namespace="…"` attribute on a member element → parse error.
 
 ### Partial Member Overrides
 
@@ -1285,7 +1297,7 @@ Child:
 </size>
 ```
 
-The effective definition is the **merge** of both declarations. Override matching uses the resolved `(namespace, name)` key — see § Member Namespace Attribute.
+The effective definition is the **merge** of both declarations. Override matching uses the resolved `(namespace, name)` key — see § Member Namespace (Element QName).
 
 ```text
 Same member kind required     — property overrides property, aggregation overrides aggregation, …
@@ -1512,7 +1524,6 @@ type         — child type (required on new declarations; inherited on override
 default      — boolean; marks the default aggregation for bare <composition>
 readOnly     — when true, instance authoring is forbidden (validator-enforced)
 final        — prevents override in child Blocks
-namespace    — XML namespace prefix (resolved at parse time — see § Member Namespace Attribute)
 visibility   — optional; must match naming convention
 ```
 
@@ -1839,68 +1850,11 @@ Variables from `bml:with` are visible to the element and all descendants. There 
 
 ---
 
-## Data Attributes (`data:`)
-
-The `data:` namespace allows arbitrary metadata to be attached to Block definitions and Composition instances. Authoring syntax is inspired by **SAP UI5** — in UI5 views, `data:myVal` on a Control sets a customData key/value pair. BlockML uses the same **authoring pattern**, but there is **no `_customData` aggregation** on `org.blockml.core.Block`. Values land in the BOM as **uninterpreted expressions** in `dataAttributes[]`. A target renderer (e.g. UI5) may map them into runtime object aggregations — that is render concern.
-
-### Namespace Declaration
-
-```xml
-<block xmlns="http://blockml.org/schema/block"
-       xmlns:bml="http://blockml.org/schema/bml"
-       xmlns:data="http://blockml.org/schema/data"
-       xmlns:bricks="com.machineblocks.bricks">
-```
-
-### Usage
-
-On a Block definition:
-
-```xml
-<block xmlns="http://blockml.org/schema/block"
-       xmlns:data="http://blockml.org/schema/data">
-  <name>Wall</name>
-  <type>com.martianmicro.anyclosure.Wall</type>
-  <baseType>com.machineblocks.core.Block</baseType>
-  <version>1.0.0</version>
-  <data:category>structural</data:category>
-  <data:tags>enclosure wall</data:tags>
-  <data:author>Jan Knoeller</data:author>
-  ...
-</block>
-```
-
-On a Composition instance:
-
-```xml
-<bricks:StandardBrick
-    bml:id="strip"
-    size="[2, 4, 3]"
-    data:role="base-strip"
-    data:group="calibration-row-0" />
-```
-
-### BOM Representation
-
-`data:*` attributes and `data:*` child elements are stored as `dataAttributes[]` — **uninterpreted**, not evaluated at parse or validate time:
-
-```text
-data:role="structural"           →  DataAttribute { key: "role",  value: LiteralValue("structural") }
-data:count="${ sampleCount }"    →  DataAttribute { key: "count", value: ExpressionValue(...) }
-<data:tags>wall enclosure</data:tags>  →  DataAttribute { key: "tags", value: LiteralValue(...) }
-```
-
-No type validation against Block members. Renderers may interpret — e.g. UI5 target → runtime `customData`.
-
----
-
 ## BML Directives
 
 BML Directives are special attributes and elements in the `bml:` namespace. **Flow-control** directives control structure and flow within a Composition. **Serialization** directives (`bml:xml`) declare how Definition blocks map to canonical BML XML — see `19_definition_blocks_and_bml_xml.md`.
 
 Flow-control directives follow the **Thymeleaf model** — attributes on the element they apply to. Whether a directive is pre-processed at compile time or translated into target-specific constructs is the BlockProcessor's decision.
-
-`data:*` is not part of this mechanism — see Data Attributes section above. Not a `bml:` directive; not a Block aggregation.
 
 ### Directive Placement
 
@@ -1913,7 +1867,6 @@ Flow-control directives follow the **Thymeleaf model** — attributes on the ele
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
 | `<bml:xml>…</bml:xml>` | `org.blockml.core.Block`, Definition blocks | XML root element for this type — `19_definition_blocks_and_bml_xml.md` |
 | `bml:xml="attribute\|element\|text\|cdata"` | Members on Definition blocks | Member serialization shape — `19_definition_blocks_and_bml_xml.md` |
-| `data:*` | Block definitions and Block instances only | Not a `bml:` directive. Uninterpreted `dataAttributes[]` in BOM — renderer may consume. |
 
 Bare `id=` or `version=` on composition instances are **member values** — same as any other attribute. Use `bml:id` / `bml:version` for composition meta.
 
@@ -2065,10 +2018,6 @@ Block instances   — scope for that instance only (properties on the element)
 - Can override Properties within the local scope
 - Evaluated left-to-right — later variables can reference earlier ones
 ```
-
-### `data:` — Data Attribute Restriction
-
-`data:*` attributes are only allowed on Block definitions and Block instances (elements extending `org.blockml.core.Block`). They are **not** the Thymeleaf directive model and **not** `bml:` directives. They must not appear on `<aggregation>`, `<capability>`, or other non-Block elements. Values are stored uninterpreted in `dataAttributes[]`.
 
 ---
 
@@ -2923,7 +2872,7 @@ JSON as a BML authoring format faces fundamental constraints from BlockML's name
 ```text
 Namespaces          → no element-name types (bricks:StandardBrick); explicit type fields only
 bml:* directives    → no attribute-namespace mechanism
-data:* attributes    → no equivalent to UI5-style namespaced attributes; would need explicit dataAttributes array
+Member QNames       → no prefixed element names; explicit namespace fields would be needed
 Sub-Blocks          → awkward nesting; FQN derivation unclear
 Functions (CDATA)   → no inline SCAD/TS bodies
 ```
@@ -3041,7 +2990,7 @@ protected member access       → BML_PROTECTED_MEMBER_ACCESS
 visibility prefix collision   → BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT
 private Sub-Block reference   → BML_PRIVATE_SUBBLOCK_ACCESS
 protected Sub-Block reference → BML_PROTECTED_SUBBLOCK_ACCESS
-BML_UNKNOWN_NAMESPACE_PREFIX  → member namespace attribute references undeclared xmlns: prefix
+BML_UNKNOWN_NAMESPACE_PREFIX  → member element prefix references undeclared xmlns: prefix
 final member override         → BML_FINAL_MEMBER_OVERRIDE
 readOnly member on instance   → BML_READONLY_MEMBER_WRITE
 type="Foo" (unqualified)      → § Unqualified Block Resolution (own name · SubBlocks · generics · primitives whitelist)
