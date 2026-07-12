@@ -221,12 +221,13 @@ npm workspace names (`@blockml/core`, `@blockml/parser`, `@blockml/compiler`, �
 
 ```text
 @blockml/core npm package may contain:
-  blocks/org/blockml/core/*.bml  →  language FQNs (org.blockml.core.Block, …)
-  src/org/blockml/bom/*.ts       →  BOM interfaces (org.blockml.bom.BlockDefinition, …)
-  src/org/blockml/compiler/*.ts  →  only if colocated; prefer @blockml/compiler package
+  blocks/org/blockml/core/*.bml       →  Block FQNs (org.blockml.core.Block, …)
+  blocks/org/blockml/compiler/*.bml   →  compiler domain Blocks (org.blockml.compiler.*, …)
+  src/org/blockml/impl/bom/*.ts       →  BOM interfaces (org.blockml.impl.bom.BlockDefinition, …)
+  src/org/blockml/impl/**/*.ts        →  other toolchain code under org.blockml.impl.*
 ```
 
-Reserved language namespaces (`org.blockml.core`, `org.blockml.type`, `org.blockml.service`, `org.blockml.capability`, `org.blockml.language`) are for **public BML grammar only**. Internal types use `org.blockml.bom`, `org.blockml.parser`, `org.blockml.compiler`, etc. See `00_bom_core.md` — Reserved Language Namespaces.
+Each root domain splits into `<domain>.*` (BML Blocks) and `<domain>.impl.*` (manifestations / toolchain). No Block FQN or xmlns may use `.impl`. See `00_bom_core.md` — Domain-Scoped Namespace Separation.
 
 ### Standard library package
 

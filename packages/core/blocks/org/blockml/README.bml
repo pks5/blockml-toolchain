@@ -15,7 +15,7 @@
   <idea>README block for the BlockML core library — bootstrap entry point for humans and LLMs.</idea>
 
   <documentation>
-    README block for the BlockML core library. Start with readFirst — sixteen documentation
+    README block for the BlockML core library. Start with readFirst — seventeen documentation
     blocks in mental learning order. The first ten blocks form the BlockML bootstrap: after
     reading them, most of the core library can be derived from Block definitions themselves.
     Later blocks cover conventions, organisation, and background knowledge.
@@ -55,6 +55,7 @@
         <doc:CompilerArchitecture />
         <doc:RendererFreedom />
         <doc:LibrarySystem />
+        <doc:ImplementationNamespace />
         <doc:DocumentationModel />
         <doc:BootstrapModel />
         <doc:ModelingGuidelines />

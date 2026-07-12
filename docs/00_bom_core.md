@@ -290,9 +290,46 @@ com.machineblocks.calibration.*  ✓   — Calibrator, …
 
 Do not infer from `bricks` that other packages may freely use plural segments. New infrastructure namespaces (`.type`, `.service`, `.core`, `.capability`) are always singular. New domain libraries may choose a collective name deliberately — document the decision in the domain spec.
 
-### Reserved Language Namespaces
+### Domain-Scoped Namespace Separation
 
-Direct package segments under `org.blockml` that belong to the **language** are reserved for **public BML-defined grammar** only. They must not be reused for internal compiler, parser, runtime, or BOM implementation classes.
+Each **root domain** defines exactly two clearly separated roots:
+
+```text
+<domain>.*         → BML / Block namespace (semantic model)
+<domain>.impl.*    → Manifestations / technical implementation (reserved)
+```
+
+**Principle:** A domain owns one semantic namespace and one reserved implementation namespace. Blocks describe **what exists**. Implementations describe **how it is manifested**.
+
+The implementation root is **domain-wide** — not per library or sub-library. Implementation structure may be organized independently of Block structure; structural mirroring is allowed but not required.
+
+```text
+Domain examples:
+  org.blockml.*              → BlockML Blocks
+  org.blockml.impl.*         → BlockML implementations / manifestations
+  com.machineblocks.*        → MachineBlocks Blocks
+  com.machineblocks.impl.*   → MachineBlocks manifestations
+  com.martianmicro.*         → Martian Micro Blocks
+  com.martianmicro.impl.*    → Martian Micro implementations
+```
+
+No separate manifestation library, mapping layer, or artificial mirroring of Block packages is required.
+
+### Block namespace (`<domain>.*`)
+
+All BML Block FQNs live under the domain root — **never** under the reserved implementation root:
+
+```text
+org.blockml.core.Block
+org.blockml.type.Integer
+org.blockml.compiler.parser.Parser
+org.blockml.compiler.validator.Validator
+org.blockml.compiler.serializer.Serializer
+com.machineblocks.core.Block
+com.machineblocks.bricks.StandardBrick
+```
+
+Typical BlockML language branches (all under the Block root, not under `.impl`):
 
 ```text
 org.blockml.core.*         — framework base types (Block, ValueType, Status, Library, …)
@@ -301,48 +338,82 @@ org.blockml.status.*       — standard maturity status blocks (Stable, Draft, S
 org.blockml.service.*      — built-in services (#math, #strings, …)
 org.blockml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
 org.blockml.language.*     — Languages (TypeScript, OpenSCAD, …)
+org.blockml.compiler.*     — compiler domain Blocks (Parser, Validator, Serializer, …)
+org.blockml.bom.*          — BOM meta-model Blocks (BlockDefinition, CompositionNode, …)
 ```
 
-These namespaces contain BML-defined Blocks, ValueTypes, Blocks, Capability types, and Languages. They are part of the public BlockML grammar.
+These namespaces contain BML-defined Blocks, ValueTypes, Capability types, and Languages. They are part of the public BlockML grammar.
 
-### Implementation Namespaces
-
-Internal object models and toolchain infrastructure use **separate** namespaces:
+**Independent implementation layout** — the same Block namespace may be manifested in many ways under `.impl`:
 
 ```text
-org.blockml.bom.*          — canonical BOM data model (parse result)
-org.blockml.parser.*       — parser implementation
-org.blockml.compiler.*     — compiler facade, validation, TypeRegistry
-org.blockml.runtime.*      — compile orchestration, RenderContext, cache
-org.blockml.engine.*       — RenderEngine / CompilerEngine implementations
-org.blockml.cli.*          — CLI commands and bootstrap
+Blocks:
+  org.blockml.compiler.parser.Parser
+  org.blockml.compiler.parser.NamespaceResolver
+  org.blockml.compiler.validator.Validator
+
+Valid implementations (no 1:1 mapping required):
+  org.blockml.impl.frontend.XmlFrontend
+  org.blockml.impl.analysis.ValidationEngine
+  org.blockml.impl.io.BmlWriter
+
+Also valid (structural mirroring — optional):
+  org.blockml.compiler.parser.Parser
+    → org.blockml.impl.compiler.parser.DefaultParser
 ```
 
-**Rule:** If a package segment is reserved for the public language, it must not additionally host internal implementation types.
+### Implementation namespace (`<domain>.impl.*`)
+
+Concrete manifestations and implementation types live **exclusively** under the domain's reserved implementation root:
+
+```text
+org.blockml.impl.parser.XmlParser
+org.blockml.impl.validation.DefaultValidator
+org.blockml.impl.serialization.BmlSerializer
+org.blockml.impl.renderer.ScadRenderTarget
+org.blockml.impl.bom.BlockDefinition          — parse-time transport shape (TypeScript)
+org.blockml.impl.compiler.TypeRegistry
+com.machineblocks.impl.renderer.ScadBlockProcessor
+```
+
+`impl` is **not** a manifestation model — it is simply a reserved technical space.
+
+### Reservation rule
+
+The package branch `<domain>.impl` is reserved **exclusively** for manifestations and technical implementation.
+
+Within BML:
+
+```text
+No Block may have an FQN under <domain>.impl
+No BML namespace (xmlns) may point to <domain>.impl
+No Library may export Blocks from <domain>.impl
+```
+
+Violation → **`BML_RESERVED_IMPLEMENTATION_NAMESPACE`** (validation error).
 
 ```text
 Correct:
-  org.blockml.core.Block              — public language Block (BML-defined)
-  org.blockml.bom.BlockDefinition     — internal BOM parse shape
-  org.blockml.compiler.TypeRegistry   — compiler infrastructure
+  org.blockml.core.Block                        — BML-defined language Block
+  org.blockml.bom.BlockDefinition               — BML meta-model Block (if defined)
+  org.blockml.impl.bom.BlockDefinition            — internal BOM parse shape (TypeScript)
+  org.blockml.compiler.parser.Parser              — BML-defined compiler domain Block
+  org.blockml.impl.frontend.XmlFrontend           — parser implementation
 
 Wrong:
-  org.blockml.core.BlockDefinition
-  org.blockml.core.TypeReference
-  org.blockml.type.TypeDescriptor
+  org.blockml.impl.parser.Parser                  — Block FQN under .impl
+  xmlns:parser="org.blockml.impl.parser"          — namespace binding to .impl
+  Library _blocks exports org.blockml.impl.*      — implementation exported as Block
 ```
 
 **Separation goal:**
 
 ```text
-org.blockml.core.* · type.* · status.* · service.* · capability.* · language.*  →  the language
-org.blockml.bom.*                                                    →  canonical BOM data model
-org.blockml.parser.* · compiler.* · runtime.* · engine.* · cli.*     →  implementation
+org.blockml.* · com.machineblocks.* · …     →  Blocks (semantic model)
+org.blockml.impl.* · com.machineblocks.impl.*  →  manifestations / toolchain code
 ```
 
-> Public BlockML namespaces are reserved for the language. Internal implementation classes must never reuse language namespaces.
-
-npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. A single npm package may ship both BML files under `org/blockml/core/` and TypeScript under `org/blockml/bom/`. See `15_dev_setup.md` — Package Conventions.
+npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. A single npm package may ship both BML files under `org/blockml/core/` and TypeScript under `org/blockml/impl/bom/`. See `15_dev_setup.md` — Package Conventions.
 
 Built-in services live in `org.blockml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
 

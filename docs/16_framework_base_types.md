@@ -31,7 +31,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description; optional `<since>`, `<changelog>`, `<examples>`, `<references>` follow |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
 | **ValueType branch** | `org.blockml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; four kinds: PrimitiveType · StructType · EnumType · ConstantType |
-| **Namespace separation** | Language FQNs (`org.blockml.core.*`, `type.*`, …) reserved for BML grammar; BOM/toolchain types in `org.blockml.bom.*`, `parser.*`, `compiler.*`, … — see `00_bom_core.md` |
+| **Namespace separation** | Block FQNs under `<domain>.*`; manifestations and toolchain code under `<domain>.impl.*` — see `00_bom_core.md` |
 | **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `01_system.md` |
 
 ```text
@@ -293,13 +293,14 @@ Each file is parsed and `registerBlockDefinition(doc)` — **identical path** to
 
 ### What is defined in BML vs code
 
-| In BML (Ideas) | In compiler code (Manifestation) |
+| In BML (Blocks under `<domain>.*`) | In code (Manifestation under `<domain>.impl.*`) |
 |---|---|
-| `org.blockml.core.Block`, branches, primitives | XML/BOM parse algorithm |
-| `com.machineblocks.core.Set`, `Step` | `baseType` chain resolution |
+| `org.blockml.core.Block`, branches, primitives | `org.blockml.impl.*` — parser, validator, renderer |
+| `org.blockml.compiler.parser.Parser` | `org.blockml.impl.frontend.XmlFrontend` (example) |
+| `com.machineblocks.core.Set`, `Step` | `com.machineblocks.impl.*` — SCAD emission, processors |
 | `org.blockml.language.OpenSCAD` | branch-specific validation rules |
 | `org.blockml.service.Math` capabilities | render/processor dispatch |
-| User Walls, Sets, Bricks | SCAD emission, cache, CLI |
+| User Walls, Sets, Bricks | cache, CLI, target runtime |
 
 No framework FQN should exist only in TypeScript — if it is part of the grammar, it has a `.bml` file with `<documentation>`.
 

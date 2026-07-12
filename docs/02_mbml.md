@@ -93,7 +93,7 @@ Extension types register their own BML→BOM mapping rule with the parser. The c
 
 BML uses XML namespaces to resolve Block type references. Namespace prefixes map to FQN package prefixes.
 
-**Language vs. implementation:** Reserved public language namespaces (`org.blockml.core`, `org.blockml.type`, `org.blockml.status`, `org.blockml.service`, `org.blockml.capability`, `org.blockml.language`) are for BML-defined grammar only. Internal BOM and toolchain types use separate namespaces (`org.blockml.bom`, `org.blockml.parser`, `org.blockml.compiler`, …). See `00_bom_core.md` — Reserved Language Namespaces.
+**Blocks vs. implementation:** Each root domain splits into `<domain>.*` (BML Blocks) and `<domain>.impl.*` (manifestations / toolchain code). All Block FQNs and xmlns bindings live under the domain root — never under `.impl`. See `00_bom_core.md` — Domain-Scoped Namespace Separation · Reservation rule (`BML_RESERVED_IMPLEMENTATION_NAMESPACE`).
 
 ```xml
 xmlns:core="com.machineblocks.core"

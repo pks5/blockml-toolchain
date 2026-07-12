@@ -397,15 +397,20 @@ The MachineBlocks V3 SCAD Render Target. Browser and Node compatible. Registers 
 
 ## Naming Conventions
 
-### FQN Namespaces — Language vs. Implementation
+### FQN Namespaces — Blocks vs. Implementation
 
-Public BlockML grammar lives under reserved language namespaces. BOM data structures and toolchain classes use separate implementation namespaces — they must never reuse language package segments. See `00_bom_core.md` — Reserved Language Namespaces · Implementation Namespaces.
+Each root domain defines two clearly separated roots: `<domain>.*` for BML Blocks and `<domain>.impl.*` for manifestations and toolchain code. See `00_bom_core.md` — Domain-Scoped Namespace Separation.
 
 ```text
-Language (BML-defined):     org.blockml.core.* · type.* · service.* · capability.* · language.*
-BOM object model:           org.blockml.bom.*
-Toolchain:                  org.blockml.parser.* · compiler.* · runtime.* · engine.* · cli.*
+Block namespace:            org.blockml.* · com.machineblocks.* · …
+Implementation namespace:   org.blockml.impl.* · com.machineblocks.impl.* · …
+
+Examples (org.blockml):
+  Blocks:           org.blockml.core.Block · org.blockml.compiler.parser.Parser
+  Implementation:   org.blockml.impl.bom.BlockDefinition · org.blockml.impl.frontend.XmlFrontend
 ```
+
+No Block FQN, xmlns binding, or Library export may use `<domain>.impl.*` → `BML_RESERVED_IMPLEMENTATION_NAMESPACE`.
 
 ### FQN (Fully Qualified Name)
 

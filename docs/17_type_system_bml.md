@@ -31,7 +31,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — EnumType is a specialized StructType |
 | **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `18_function_mapping.md` |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
-| **Namespace separation** | `org.blockml.core.*`, `type.*`, `service.*`, `capability.*`, `language.*` = public BML grammar only; BOM/compiler types in `org.blockml.bom.*`, etc. — see `00_bom_core.md` |
+| **Namespace separation** | Block FQNs under `<domain>.*` (e.g. `org.blockml.core.*`, `org.blockml.compiler.*`); parse-time / toolchain types under `<domain>.impl.*` (e.g. `org.blockml.impl.bom.*`) — see `00_bom_core.md` |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
 | **Domain XSD enums** | Deprecated as type SSOT — migrate to BML `EnumType` |
 
@@ -406,7 +406,7 @@ T                   — generic parameter reference
 
 In **`type="..."` XML attributes**, generic applications use **round parentheses** — not angle brackets — so values stay valid XML without escaping. See § Generics — BML attribute syntax.
 
-The compiler may build internal structures in `org.blockml.bom.*` (e.g. `UnionTypeDescriptor`, `CollectionTypeDescriptor`, `GenericApplicationDescriptor`, `SelfTypeReference`, `GenericParameterReference`). **BML does not define these as Block classes.**
+The compiler may build internal structures in `org.blockml.impl.bom.*` (e.g. `UnionTypeDescriptor`, `CollectionTypeDescriptor`, `GenericApplicationDescriptor`, `SelfTypeReference`, `GenericParameterReference`). **BML does not define these as Block classes.**
 
 ### Obsolete wrapper types — write unions directly
 
@@ -1299,7 +1299,7 @@ never expose „Block“ outside parser/BOM types
 | Topic | Document |
 |---|---|
 | V1/V2/V3 scope · BML vs Markdown | `01_system.md` — BML Self-Description Roadmap |
-| FQN namespaces | `00_bom_core.md` — Reserved Language Namespaces |
+| FQN namespaces | `00_bom_core.md` — Domain-Scoped Namespace Separation |
 | Composable Block base types | `16_framework_base_types.md` |
 | Definition blocks · bml:xml | `19_definition_blocks_and_bml_xml.md` |
 | BML block syntax | `02_mbml.md` |

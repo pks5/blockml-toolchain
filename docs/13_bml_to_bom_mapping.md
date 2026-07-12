@@ -200,7 +200,7 @@ directives:
 
 ## Type Descriptor Parsing
 
-Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`org.blockml.bom.*`** — not in `org.blockml.type.*`. See `00_bom_core.md` — Implementation Namespaces · `17_type_system_bml.md` — Type Expressions.
+Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`org.blockml.impl.bom.*`** — not in `org.blockml.type.*`. See `00_bom_core.md` — Implementation namespace · `17_type_system_bml.md` — Type Expressions.
 
 Unqualified PascalCase names on `type="..."` (properties, aggregations, capabilities) and unqualified composition tags use the **Unqualified Block Resolution** order (see `02_mbml.md` — § Unqualified Block Resolution):
 

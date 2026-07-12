@@ -1,0 +1,89 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.documentation.ImplementationNamespace
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:doc="org.blockml.documentation">
+
+  <idea>Domain-wide separation of Block and implementation namespaces via the reserved .impl root.</idea>
+
+  <documentation>
+    Each root domain defines exactly two clearly separated roots:
+
+    &lt;domain&gt;.*       → BML / Block namespace (semantic model)
+    &lt;domain&gt;.impl.*  → manifestations / technical implementation (reserved)
+
+    Principle: a domain owns one semantic namespace and one reserved implementation namespace.
+    Blocks describe what exists. Implementations describe how it is manifested.
+
+    Block namespace — all BML Block FQNs live under the domain root, never under .impl:
+    • org.blockml.core.Block
+    • org.blockml.type.Integer
+    • org.blockml.compiler.parser.Parser
+    • org.blockml.compiler.validator.Validator
+    • com.machineblocks.bricks.StandardBrick
+
+    Implementation namespace — concrete manifestations and toolchain types live exclusively under
+    &lt;domain&gt;.impl.*:
+    • org.blockml.impl.parser.XmlParser
+    • org.blockml.impl.validation.DefaultValidator
+    • org.blockml.impl.serialization.BmlSerializer
+    • org.blockml.impl.bom.BlockDefinition
+    • com.machineblocks.impl.renderer.ScadBlockProcessor
+
+    The implementation root is domain-wide — not per library. Implementation structure may be
+    organized independently of Block structure. Structural mirroring is allowed but not required:
+    org.blockml.compiler.parser.Parser may map to org.blockml.impl.compiler.parser.DefaultParser
+    or to org.blockml.impl.frontend.CompilerFrontend — both are valid.
+
+    Reservation rule — the &lt;domain&gt;.impl branch is exclusively for manifestations and
+    technical implementation. Within BML:
+    • no Block may have an FQN under &lt;domain&gt;.impl
+    • no BML namespace (xmlns) may point to &lt;domain&gt;.impl
+    • no Library may export Blocks from &lt;domain&gt;.impl
+    Violation → BML_RESERVED_IMPLEMENTATION_NAMESPACE.
+
+    impl is not a manifestation model — it is simply a reserved technical space. No separate
+    manifestation library, mapping layer, or artificial mirroring of Block packages is required.
+
+    Domain examples:
+    • org.blockml.* / org.blockml.impl.*
+    • com.machineblocks.* / com.machineblocks.impl.*
+    • com.martianmicro.* / com.martianmicro.impl.*
+  </documentation>
+
+  <references>
+    <see file="00_bom_core.md">
+      Domain-Scoped Namespace Separation — authoritative rules, examples, reservation rule.
+    </see>
+    <see file="01_system.md">
+      FQN Namespaces — Blocks vs. Implementation — system-level summary.
+    </see>
+    <see file="02_mbml.md">
+      Namespaces — xmlns bindings and Block FQN resolution.
+    </see>
+    <see file="15_dev_setup.md">
+      Package Conventions — npm packages vs. FQN namespaces, .impl source layout.
+    </see>
+    <see file="06_compiler.md">
+      BML_RESERVED_IMPLEMENTATION_NAMESPACE — validation error code.
+    </see>
+    <see block="doc:LibrarySystem">
+      Libraries, packages, and namespace membership — related reading.
+    </see>
+    <see block="doc:ModelingGuidelines">
+      Next reading step — recommended modeling patterns for Block definitions.
+    </see>
+  </references>
+
+  <name>ImplementationNamespace</name>
+  <type>doc:ImplementationNamespace</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

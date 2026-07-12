@@ -181,6 +181,7 @@
         <doc:CompilerArchitecture />
         <doc:RendererFreedom />
         <doc:LibrarySystem />
+        <doc:ImplementationNamespace />
         <doc:DocumentationModel />
         <doc:BootstrapModel />
         <doc:ModelingGuidelines />

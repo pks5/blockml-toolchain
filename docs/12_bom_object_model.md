@@ -14,7 +14,7 @@ For Expression AST node types see `10_expression_language.md` — Expression AST
 
 This document is the **implementation contract** for `@blockml/core`. It specifies TypeScript-oriented interfaces and validation rules. It does not duplicate domain semantics already defined elsewhere.
 
-**Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) belong to the **`org.blockml.bom.*`** implementation namespace — not to reserved language namespaces such as `org.blockml.core.*` or `org.blockml.type.*`. Language Blocks like `org.blockml.core.Block` are BML-defined; `org.blockml.bom.BlockDefinition` is the parse-time transport shape. See `00_bom_core.md` — Reserved Language Namespaces.
+**Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) belong to the **`org.blockml.impl.bom.*`** implementation namespace — not to Block FQNs under `org.blockml.*` (e.g. `org.blockml.core.*`, `org.blockml.type.*`). Language Blocks like `org.blockml.core.Block` are BML-defined; `org.blockml.impl.bom.BlockDefinition` is the parse-time transport shape. A BML meta-model Block at `org.blockml.bom.BlockDefinition` (if defined) describes the shape semantically; the TypeScript interface lives under `.impl`. See `00_bom_core.md` — Domain-Scoped Namespace Separation.
 
 ---
 
@@ -248,7 +248,7 @@ Sub-Blocks are **part of the same `BomDocument`** as their parent root block.
 
 Types in BOM are represented by **`TypeExpression`** (alias: `TypeDescriptor` in V1 docs) — a structured, parse-time model. This applies to Capability `inputType` / `outputType` and Property `type` attributes.
 
-**Language vs. BOM:** BML knows four ValueType kinds (Primitive, Enum, Struct, Constant). Unions, collections, and generic applications are **type expressions** — not ValueTypes. The parser maps them to `org.blockml.bom.*` descriptor types internally.
+**Language vs. BOM:** BML knows four ValueType kinds (Primitive, Enum, Struct, Constant). Unions, collections, and generic applications are **type expressions** — not ValueTypes. The parser maps them to `org.blockml.impl.bom.*` descriptor types internally.
 
 ### Anonymous struct = shorthand for inline class
 
@@ -272,7 +272,7 @@ A single primitive (`Float`, `org.blockml.type.Integer`, …) is **not** wrapped
 ### `TypeExpression` union
 
 ```typescript
-/** Parse-time type expression — org.blockml.bom.* (not a language ValueType). */
+/** Parse-time type expression — org.blockml.impl.bom.* (not a language ValueType). */
 type TypeExpression =
   | NamedTypeReference
   | AnonymousStructType

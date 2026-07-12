@@ -517,6 +517,7 @@ BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
+BML_RESERVED_IMPLEMENTATION_NAMESPACE — Block FQN, xmlns binding, or Library export uses <domain>.impl.*
 BML_DEPRECATED_MEMBER_NAMESPACE_ATTR — legacy namespace="…" attribute on member element
 BML_PRESET_CYCLE              — circular dependency in basePresets chain
 BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
