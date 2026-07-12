@@ -25,14 +25,14 @@
   </properties>
 
   <aggregations>
-    <_values>
-      <composition bml:exportIds="true">
+    <values>
+      <composition>
         <BaseCutoutType bml:id="NONE" value="none" />
         <BaseCutoutType bml:id="STANDARD" value="standard" />
         <BaseCutoutType bml:id="GROOVE" value="groove" />
         <BaseCutoutType bml:id="STUDS" value="studs" />
       </composition>
-    </_values>
+    </values>
   </aggregations>
 
 </block>

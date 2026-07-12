@@ -13,7 +13,7 @@
   <idea>A LEGO-style build — palette, placed parts, and assembly steps.</idea>
 
   <documentation>Abstract composable Block for LEGO-style Sets — block palette in inherited
-    _presets, placed instances in inherited _parts, assembly order in _steps. Top-level catalog unit
+    presets, placed instances in inherited _parts, assembly order in _steps. Top-level catalog unit
     in MachineBlocks.</documentation>
   <name>Set</name>
   <type>core:Set</type>

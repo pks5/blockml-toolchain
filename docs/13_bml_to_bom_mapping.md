@@ -163,6 +163,7 @@ Unknown member names survive rule 4 and are stored in `memberValues`. The semant
 | Case | When | Severity | Code |
 |---|---|---|---|
 | Unknown member on instance | Validate — name not in effective members | **Warning** | `BML_UNKNOWN_PROPERTY` |
+| readOnly member on instance | Validate — effective member has readOnly=true | **Error** | `BML_READONLY_MEMBER_WRITE` |
 | Unknown `bml:*` name | Map — not in allowed directive list | **Error** | `BML_UNKNOWN_DIRECTIVE` |
 | Known `bml:*` on wrong element | Map or validate — placement rule violated | **Error** | `BML_DIRECTIVE_NOT_ALLOWED` |
 | `data:*` on non-Block element | Map | **Error** | `BML_CUSTOM_DATA_NOT_ALLOWED` |
@@ -341,7 +342,7 @@ All member kinds (`<property>`, `<aggregation>`, `<association>`, `<capability>`
 name="size"              → name
 namespace="ui"           → namespace (resolved — see below)
 visibility="protected"   → visibility (optional; derived from name when omitted)
-readOnly="true"          → readOnly
+readOnly="true"          → readOnly (validator-enforced on instances — see 02_mbml.md § readOnly Members)
 final="true"             → final
 <documentation>…         → documentation
 <since>…                 → since
@@ -648,6 +649,7 @@ BML_CONTRACT_NOT_ON_ROOT          — <contracts> on Sub-Block
 BML_DUPLICATE_CONTRACT            — same type listed twice in block.contracts[]
 BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
 BML_FINAL_MEMBER_OVERRIDE         — override attempted on final member (from contract or baseType)
+BML_READONLY_MEMBER_WRITE         — Block instance sets a member with readOnly=true
 ```
 
 ### Library blocks

@@ -514,6 +514,7 @@ BML_PRIVATE_SUBBLOCK_ACCESS   — private Sub-Block referenced outside declaring
 BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritance context
 BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT — members differ only by visibility prefix (normalized name collision)
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
+BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — namespace attribute references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular dependency in basePresets chain

@@ -1096,10 +1096,56 @@ BML_VISIBILITY_MISMATCH                  — explicit visibility does not match 
 All member kinds support these optional attributes:
 
 ```text
-readOnly="true|false"   — informational only (renderers, editors, generators). No BlockML semantics.
+readOnly="true|false"   — when true, the member cannot be written on Block instances. Validator-enforced.
+                          Default: false. See § readOnly Members below.
 final="true|false"      — when true, child Blocks cannot override this member. Validator-enforced.
 namespace="prefix"      — XML namespace prefix (declared via xmlns:prefix in the same document)
 ```
+
+### readOnly Members
+
+`readOnly` controls whether a member's value or composition may be **changed on Block instances**. It applies to all member kinds — Properties, Aggregations, Associations, and Capabilities.
+
+```text
+Block definition   — may declare and set readOnly members via <value>, <composition>, or partial override
+Child Block definition — may override an inherited readOnly member (value/composition only)
+Block instance     — must not set a member whose effective definition has readOnly=true
+Expressions        — may read readOnly members (subject to normal visibility access rules)
+```
+
+A `readOnly` member remains **publicly readable** when visibility is public (or when access is permitted by protected/private rules). `readOnly` restricts **instance authoring** only — not expression reads and not renderer access to the Canonical BOM.
+
+**Definition authoring (allowed):**
+
+```xml
+<properties>
+  <myReadOnlyProperty type="Boolean" readOnly="true">
+    <value>true</value>
+  </myReadOnlyProperty>
+</properties>
+```
+
+**Child Block override (allowed):**
+
+```xml
+<properties>
+  <myReadOnlyProperty>
+    <value>false</value>
+  </myReadOnlyProperty>
+</properties>
+```
+
+**Block instance (error):**
+
+```xml
+<ac:Wall myReadOnlyProperty="true"/>
+```
+
+→ `BML_READONLY_MEMBER_WRITE` at validate (stage [8]).
+
+The check runs after `resolveEffectiveMembers()` on every `BlockInstance` — composition children, preset instances, constraint instances, and any other instance node. For each authored `memberValues` entry and each aggregation/association child element on the instance, the validator resolves the effective member; when `readOnly=true`, it emits `BML_READONLY_MEMBER_WRITE`.
+
+`readOnly` is independent of `final`: a child Block may override the **value** of a `readOnly` member in its definition, but cannot override a `final` member at all. A member may be both `readOnly` and `final`.
 
 ### Member Namespace Attribute
 
@@ -1418,7 +1464,7 @@ When overriding an inherited aggregation, `type` is required only for **new** de
 ```text
 type         — child type (required on new declarations; inherited on overrides)
 default      — boolean; marks the default aggregation for bare <composition>
-readOnly     — informational only
+readOnly     — when true, instance authoring is forbidden (validator-enforced)
 final        — prevents override in child Blocks
 namespace    — XML namespace prefix (resolved at parse time — see § Member Namespace Attribute)
 visibility   — optional; must match naming convention
@@ -2937,6 +2983,7 @@ private Sub-Block reference   → BML_PRIVATE_SUBBLOCK_ACCESS
 protected Sub-Block reference → BML_PROTECTED_SUBBLOCK_ACCESS
 BML_UNKNOWN_NAMESPACE_PREFIX  → member namespace attribute references undeclared xmlns: prefix
 final member override         → BML_FINAL_MEMBER_OVERRIDE
+readOnly member on instance   → BML_READONLY_MEMBER_WRITE
 type="Foo" (unqualified)      → § Unqualified Block Resolution (own name · SubBlocks · generics · primitives whitelist)
 bml:version omitted on external instance → resolve effective version from TypeRegistry context
 bml:version present on external instance  → exact-version assert → BML_UNKNOWN_VERSION if no match

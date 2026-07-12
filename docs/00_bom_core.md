@@ -150,6 +150,8 @@ Every Property behaves as an **Optional** — it has a value or has no value. Th
 
 The `valueRequired` check runs in Stage 2 **after** full Block resolution (baseType chain, generic substitution, contract merge, local overrides) via `resolveEffectiveMembers()`. Only then does the Validator verify that each effective Property with `valueRequired=true` has an authored value on the definition or instance. Missing value → `BML_VALUE_REQUIRED`.
 
+The `readOnly` check runs in the same stage on every `BlockInstance`. After `resolveEffectiveMembers()` for the instance's `typeFqn`, any authored `memberValues` entry or aggregation/association child element that targets a member with `readOnly=true` → `BML_READONLY_MEMBER_WRITE`. Block definitions and child Block overrides are not instances — they may set or override readOnly members via `<value>` or `<composition>`. Expressions may read readOnly members.
+
 ### Expression layer vs BOM data layer
 
 Expressions and BOM member values are **separate layers**:
@@ -556,7 +558,9 @@ Full rules, examples, and formal access notation: `02_mbml.md` — § Member Vis
 All member kinds support:
 
 ```text
-readOnly   — informational only (renderers, editors, generators). No BOM Core semantics.
+readOnly   — when true, the member cannot be written on Block instances. Validator-enforced.
+             Block definitions and child Block overrides may still set the value/composition.
+             Expressions may read the member. See 02_mbml.md — § readOnly Members.
 final      — when true, child Blocks cannot override this member. Validator-enforced.
 namespace  — XML namespace prefix; resolved to canonical identifier at parse time (see 02_mbml.md)
 ```
@@ -571,6 +575,7 @@ Only specified attributes replaced
 Override key: resolved (namespace, name) — not XML prefix
 Private members cannot be overridden
 final="true" on parent prevents override → BML_FINAL_MEMBER_OVERRIDE
+readOnly="true" prevents instance authoring only — child Block definitions may override value/composition
 ```
 
 Effective members are resolved by merging along the `baseType` chain, then contract fragments, then local declarations — see `resolveEffectiveMembers()` in `12_bom_object_model.md` and Contracts below.
@@ -691,7 +696,7 @@ examples      — optional; usage examples (title + CDATA body)
 references    — optional; cross-references to related Blocks or Definitions (type + optional context)
 constraints   — optional list of Constraint Block instances (see below)
 suggestions   — optional list of Block instances of the property type (see below)
-readOnly      — informational only
+readOnly      — when true, instance authoring forbidden; definition and child override allowed
 final         — prevents override in child Blocks
 namespace     — resolved canonical namespace identifier (empty = default namespace)
 visibility    — optional; must match naming convention
@@ -823,7 +828,7 @@ changelog     — optional; version history (oldest first)
 examples      — optional; usage examples (title + CDATA body)
 references    — optional; cross-references to related Blocks or Definitions (type + optional context)
 composition   — optional nested Composition filling this aggregation
-readOnly      — informational only
+readOnly      — when true, instance authoring forbidden; definition and child override allowed
 final         — prevents override in child Blocks
 namespace     — resolved canonical namespace identifier (empty = default namespace)
 visibility    — optional; must match naming convention

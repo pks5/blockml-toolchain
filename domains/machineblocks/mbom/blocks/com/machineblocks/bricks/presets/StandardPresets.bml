@@ -6,7 +6,7 @@
   FQN: com.machineblocks.bricks.StandardPresets
 
   Named property presets for com.machineblocks.bricks.Standard (Standard.bml).
-  Presets are Block instances in _presets — basePresets resolves within this Block.
+  Presets are Block instances in presets — basePresets resolves within this Block.
   Customizer JSON output is render-target logic (machineblocks-v3-scad).
 -->
 <block
@@ -28,8 +28,8 @@
   <type>bricks:StandardPresets</type>
   <baseType>core:Block</baseType>
   <aggregations>
-    <_presets>
-      <composition bml:exportIds="true">
+    <presets>
+      <composition>
 
         <bricks:Standard bml:id="brick-1x1" name="Brick 1x1" size="[1, 1, 3]" />
 
@@ -64,7 +64,7 @@
           textColor="#EDF0F1" />
 
       </composition>
-    </_presets>
+    </presets>
   </aggregations>
 
 </block>

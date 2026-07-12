@@ -14,7 +14,7 @@
 
   <idea>Any MachineBlocks domain object — bricks, sets, presets, and compositions.</idea>
 
-  <documentation>MachineBlocks domain base Block. Carries _presets aggregation and basePresets
+  <documentation>MachineBlocks domain base Block. Carries presets aggregation and basePresets
     association for domain-specific preset resolution. Preset merge is compiler logic; Customizer
     output is render-target logic.</documentation>
   <name>Block</name>
@@ -33,7 +33,7 @@
   </associations>
 
   <aggregations>
-    <_presets type="core:Block[]" />
+    <presets type="core:Block[]" />
   </aggregations>
 
 </block>

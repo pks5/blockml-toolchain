@@ -404,7 +404,7 @@ interface MemberDefinitionBase {
   namespace?: string
   /** BlockML access visibility. Derived from naming convention; explicit attribute must match. Does not restrict renderer BOM access. */
   visibility?: "private" | "protected" | "public"
-  /** Informational only — no validation semantics */
+  /** When true, Block instances must not set this member. Definition and child override allowed. */
   readOnly?: boolean
   /** When true, child Blocks cannot override this member */
   final?: boolean
@@ -491,7 +491,7 @@ Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" 
 3. Block local      — declared members on this Block (override all)
 ```
 
-Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` prevents override.
+Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` prevents override. `readOnly="true"` prevents instance authoring only — child Block definitions may still override the value/composition.
 
 ```text
 Parser / mapper     MUST NOT reorder declared members
@@ -1191,6 +1191,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
 ✓  contract types resolve and merge into effective members (declaration order; later wins)
 ✓  valueRequired — after resolveEffectiveMembers() and instance value binding: every effective Property with valueRequired=true has an authored value (BML_VALUE_REQUIRED)
+✓  readOnly — after resolveEffectiveMembers(): Block instances must not set members with readOnly=true (BML_READONLY_MEMBER_WRITE)
 ✓  Library _blocks entries resolve to registered Block definitions (FQN + effectiveBlockVersion)
 ✓  Outer library _blocks does not re-export blocks from a nested inner library (BML_LIBRARY_NESTING_VIOLATION)
 ✓  Library _dependencies entries resolve to registered BlockLibrary definitions (FQN + effectiveBlockVersion)
@@ -1256,6 +1257,7 @@ BML_PROTECTED_MEMBER_ACCESS   — protected member outside allowed inheritance/c
 BML_PRIVATE_SUBBLOCK_ACCESS   — private Sub-Block referenced outside declaring Block
 BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritance context
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
+BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — member namespace attribute references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular basePresets chain
