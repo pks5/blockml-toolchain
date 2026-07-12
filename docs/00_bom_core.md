@@ -858,9 +858,9 @@ Block[1..1]     →  exactly 1 required reference
 
 The internal BOM representation uses `minOccurs` / `maxOccurs` (or equivalent) on the type reference. BML surface syntax uses bracket notation only; the element type FQN is unchanged.
 
-### Expression Context — `#this`, `bml:Self`, and `bml:Def`
+### Expression Context — `#this`, `bml:Self`, and Definition Paths
 
-The special `_self` type placeholder is replaced by three explicit concepts that separate instance, type, and definition.
+Three concepts separate instance access, type references, and definition navigation.
 
 #### `#this` — current Block instance
 
@@ -876,7 +876,7 @@ calculate()    ≡  #this.calculate()
 
 #### `bml:Self` — current effective Block type
 
-`bml:Self` is a context-dependent type reference. It resolves to the effective current Block type after inheritance has been resolved — not at parse time.
+`bml:Self` is a context-dependent **type reference**. It resolves to the effective current Block type after inheritance has been resolved — not at parse time.
 
 ```xml
 <association name="next" type="bml:Self"/>
@@ -895,34 +895,51 @@ Collection forms: `bml:Self[]`, `bml:Self[1..3]`, etc. `bml:Self` is especially 
 <reference type="bml:Self"/>
 ```
 
-Member references append a member name to create a definition reference — `bml:Self.width` is equivalent to `com.foo.Bar.width` when `bml:Self` resolves to `com.foo.Bar`. Further navigation is possible: `bml:Self.width.name`, `bml:Self.width.type`, `bml:Self.width.documentation`.
+`bml:Self` is **not** used for definition navigation. Member definition references use canonical structural paths (see below).
 
-#### `bml:Def` — current Block definition
+#### Canonical definition paths
 
-`bml:Def` references the effective Block definition itself. Unlike `bml:Self`, which starts from the type identity, `bml:Def` exposes the definition hierarchy:
+A `BlockDefinition` is a regular Block. Every definition element is addressable via its **canonical path** within the Block FQN — matching the BML document structure exactly:
 
 ```text
-bml:Def.name          →  <name>MyBlock</name>
-bml:Def.type          →  <type>com.foo.MyBlock</type>
-bml:Def.baseType
-bml:Def.documentation
-bml:Def.properties
-bml:Def.aggregations
-bml:Def.capabilities
+com.foo.Bar.name                    →  <name>Wall</name>
+com.foo.Bar.idea                    →  <idea>…</idea>
+com.foo.Bar.documentation           →  <documentation>…</documentation>
+com.foo.Bar.type                    →  <type>com.foo.Bar</type>
+com.foo.Bar.baseType                →  <baseType>…</baseType>
+com.foo.Bar.version                 →  <version>1.0.0</version>
+com.foo.Bar.properties.width        →  PropertyDefinition for width
+com.foo.Bar.aggregations.children   →  AggregationDefinition for children
+com.foo.Bar.associations.parent     →  AssociationDefinition for parent
+com.foo.Bar.capabilities.render     →  CapabilityDefinition for render
+com.foo.Bar.genericTypes.T          →  GenericTypeDefinition for T
+com.foo.Bar.subBlocks.Inner         →  nested BlockDefinition
+com.foo.Bar.contracts               →  contracts aggregation
 ```
 
-`bml:Self.width` and `bml:Def.properties.width` reference the same Property definition — the former is the short type-oriented form; the latter is explicit structural navigation.
+The path encodes both location and definition kind — no special definition-reference constructs (such as `bml:Def`) are required. Further navigation on member definitions follows the same rule: `com.foo.Bar.properties.width.type`, `com.foo.Bar.properties.width.documentation`.
+
+Within the Block being defined, the Block's own FQN serves as the definition root:
+
+```text
+com.foo.Bar.properties.width        ≡  (current definition).properties.width
+```
+
+`org.blockml.definition.BlockDefinition` carries generic type parameter `B extends org.blockml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`.
+
+#### BOM internal representation
+
+BML member containers (`<properties>`, `<aggregations>`, `<associations>`, `<capabilities>`) map to a flat `members: MemberDefinition[]` in the BOM (tagged by `kind`). The canonical path resolver walks the structural containers at reflection time — `com.foo.Bar.properties.width` resolves to the `PropertyDefinition` with `name: "width"` in that Block's effective definition.
 
 | Expression | Meaning |
 |---|---|
-| `width` | shorthand for `#this.width` |
+| `width` | shorthand for `#this.width` (instance value) |
 | `#this.width` | value of the Property on the current Block instance |
-| `bml:Self` | current effective Block type |
-| `bml:Self.width` | definition of member `width` |
-| `bml:Self.width.name` | `"width"` |
-| `bml:Def` | current Block definition |
-| `bml:Def.name` | `<name>` metadata of the Block definition |
-| `bml:Def.properties.width` | same Property definition as `bml:Self.width` |
+| `bml:Self` | current effective Block type (type reference only) |
+| `com.foo.Bar` | BlockDefinition for com.foo.Bar |
+| `com.foo.Bar.name` | `<name>` metadata of the Block definition |
+| `com.foo.Bar.properties.width` | PropertyDefinition for `width` |
+| `com.foo.Bar.properties.width.type` | type FQN of the width property |
 
 ### Implicit Default Aggregation
 

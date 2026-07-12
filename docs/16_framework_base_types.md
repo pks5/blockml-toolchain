@@ -166,7 +166,7 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 ```text
 org.blockml.core.Block
   org.blockml.core.Definition                    ← abstract; bml:xml placement allowed
-    org.blockml.definition.BlockDefinition       ← shape of every <block> document
+    org.blockml.definition.BlockDefinition       ← shape of every <block> document; generic BlockDefinition<B>
     org.blockml.definition.PropertyDefinition
     org.blockml.definition.AggregationDefinition
     org.blockml.definition.AssociationDefinition
@@ -200,6 +200,31 @@ Exactly one of `block`, `file`, or `url` must be set. Authoring: list only targe
 Each Definition block may declare **`bml:xml`** — how instances serialize to canonical BML XML (root element name, member as attribute/element/text/cdata). The meta-model is **work in progress**; full specification in `19_definition_blocks_and_bml_xml.md`.
 
 `org.blockml.core.Block` itself carries `<bml:xml>${ bml:Self }</bml:xml>` — composable instances render under their declared type tag. Definition blocks describe the grammar; ordinary domain blocks consume it.
+
+### Definition Addressing
+
+Definition elements are addressed via **canonical structural paths** within the Block FQN. The path mirrors the BML document structure:
+
+```text
+com.foo.Bar.name                    →  Block metadata
+com.foo.Bar.documentation           →  inherited from org.blockml.core.Definition
+com.foo.Bar.version                 →  Block version
+com.foo.Bar.properties.width        →  PropertyDefinition
+com.foo.Bar.aggregations.children   →  AggregationDefinition
+com.foo.Bar.associations.parent     →  AssociationDefinition
+com.foo.Bar.capabilities.render     →  CapabilityDefinition
+com.foo.Bar.genericTypes.T          →  GenericTypeDefinition (described Block's type parameter)
+com.foo.Bar.subBlocks.Inner         →  nested BlockDefinition
+com.foo.Bar.contracts               →  contract references
+```
+
+`org.blockml.definition.BlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter.
+
+No special definition-reference constructs (`bml:Def`, flat `com.foo.Bar.memberName`) are used. `bml:Self` remains available for **type references** only (`type="bml:Self"`), not for definition navigation.
+
+BML member containers map to a flat `members: MemberDefinition[]` in the BOM (tagged by `kind`). Reflection resolves canonical paths via the structural containers at query time.
+
+Definition blocks may declare their own Capabilities — enabling domain-specific definition types with additional behaviour (for example `validateDefinition()`, `generateDocumentation()`) without core changes.
 
 ---
 

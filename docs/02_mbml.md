@@ -1535,7 +1535,17 @@ Block[1..1]     →  exactly 1 required
 
 **`#this`** — refers to the current Block instance in expression context. Unqualified member references are shorthand for `#this` (`width` ≡ `#this.width`).
 
-**`bml:Def`** — refers to the current Block definition. `bml:Self.width` and `bml:Def.properties.width` reference the same Property definition.
+**Definition paths** — every definition element is addressable via its canonical structural path within the Block FQN. The path matches the BML document structure and encodes the definition kind:
+
+```text
+com.foo.Bar.properties.width        →  PropertyDefinition for width
+com.foo.Bar.aggregations.children   →  AggregationDefinition for children
+com.foo.Bar.capabilities.render     →  CapabilityDefinition for render
+com.foo.Bar.name                    →  Block metadata
+com.foo.Bar.documentation           →  Block documentation
+```
+
+No special definition-reference constructs are required — the path itself carries all type information. See `00_bom_core.md` — § Canonical definition paths.
 
 **Service Aggregations** bind named service beans into the Block. Once declared, the bean is accessible in Expressions via `@beanName`. The `scope` attribute controls visibility to child Blocks:
 

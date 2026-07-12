@@ -19,10 +19,14 @@
 
   <documentation>Meta-model type for any block document — root blocks and nested Sub-Blocks.
     Semantically a Class: declarative type shape without instance state. Parsed into
-    BomDocument.block and BlockDefinition.subBlocks[]. Declares identity (name, type, baseType),
-    type modifiers (abstract, final), generic parameters, contracts, allowed Sub-Blocks and
-    languages, and member declaration containers. Member declaration order in BML is preserved
-    in BOM and is significant for StructType positional mapping and render targets.</documentation>
+    BomDocument.block and BlockDefinition.subBlocks[]. Generic type parameter B binds this
+    definition to the Block type it describes — conceptually BlockDefinition of com.foo.Bar when
+    B resolves to com.foo.Bar. Declares identity (idea, name, type, baseType, version), type
+    modifiers (abstract, final), generic parameters, contracts, allowed Sub-Blocks and languages,
+    and member declaration containers (properties, aggregations, associations, capabilities).
+    Every definition element is addressable via its canonical structural path within the Block FQN
+    (for example com.foo.Bar.properties.width). Member declaration order in BML is preserved in
+    BOM and is significant for StructType positional mapping and render targets.</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
@@ -32,7 +36,7 @@
       Block definition authoring format.
     </see>
     <see file="16_framework_base_types.md">
-      genericTypes aggregation on Block definitions.
+      Definition Addressing and genericTypes aggregation.
     </see>
     <see block="core:Block">
       Sole inheritance root — omits baseType on root blocks.
@@ -47,10 +51,26 @@
   <bml:xml>block</bml:xml>
 
   <!--
+    Type parameter of BlockDefinition itself — not the described Block's genericTypes aggregation.
+    Binds this definition to the Block type it describes. Defaults to org.blockml.core.Block.
+  -->
+  <genericTypes>
+    <genericType name="B" baseType="core:Block">
+      <documentation>The Block type this BlockDefinition describes. Conceptually
+        BlockDefinition of com.foo.Bar when B binds to com.foo.Bar.</documentation>
+    </genericType>
+  </genericTypes>
+
+  <!--
     Scalar Block metadata. Each property renders as a direct XML child element
-    named after the property (for example <name>, <type>, or <baseType>).
+    named after the property (for example <idea>, <name>, <type>, or <version>).
   -->
   <properties>
+    <idea type="Text" bml:xml="element">
+      <documentation>Short semantic description — what this Block represents in meaning. Required
+        first child on every Block definition (root blocks and Sub-Blocks). Addressable as
+        com.foo.Bar.idea.</documentation>
+    </idea>
     <name type="Text">
       <documentation>Short class name (PascalCase). Required on every Block definition.</documentation>
     </name>
@@ -72,6 +92,10 @@
       <documentation>When true, the type is final — cannot be used as baseType on other
         definitions. Default false.</documentation>
     </final>
+    <version type="btype:Version">
+      <documentation>Semantic version of this Block definition. Required on root blocks.
+        Addressable as com.foo.Bar.version.</documentation>
+    </version>
   </properties>
 
   <!--
@@ -109,6 +133,10 @@
       <documentation>Association member declarations — loose references without composition
         ownership. Mapped to members[] in XML document order.</documentation>
     </associations>
+    <capabilities type="def:CapabilityDefinition[]">
+      <documentation>Capability member declarations — communication endpoints (inbound, outbound,
+        transformation). Mapped to members[] in XML document order.</documentation>
+    </capabilities>
     <subBlocks type="def:BlockDefinition[]">
       <documentation>Nested Sub-Block definitions within the same BomDocument. Each Sub-Block is
         a full BlockDefinition; FQN is derived from the parent chain when type is omitted.</documentation>

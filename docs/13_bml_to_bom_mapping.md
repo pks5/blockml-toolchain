@@ -58,6 +58,18 @@ MAY omit empty sections (<properties> absent → skip)
 
 Ordinal = index in `members[]` after mapping. Used by renderers when interpreting StructType array literals against field declaration order and by FunctionMapping for positional capability parameters. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
 
+### Canonical definition paths
+
+BML member containers are preserved structurally in the meta-model (`org.blockml.definition.BlockDefinition`). The BOM stores members in a flat `members[]` array tagged by `kind` (`property`, `aggregation`, `association`, `capability`). Reflection and expression evaluation resolve canonical paths via the structural containers:
+
+```text
+com.foo.Bar.properties.width   →  members[] entry where kind="property" and name="width"
+com.foo.Bar.aggregations.parts →  members[] entry where kind="aggregation" and name="parts"
+com.foo.Bar.capabilities.render → members[] entry where kind="capability" and name="render"
+```
+
+Block metadata (`name`, `idea`, `documentation`, `version`, `baseType`, …) maps to top-level `BlockDefinition` fields — addressable directly under the Block FQN without a container segment. See `00_bom_core.md` — § Canonical definition paths · `16_framework_base_types.md` — § Definition Addressing.
+
 ---
 
 ## Design Decisions
@@ -291,6 +303,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
                                              → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
 <type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
+<version>…</version>                         → block.version
 <abstract />                                 → block.abstract = true  (equivalent: <abstract>true</abstract>)
 <final />                                    → block.final = true     (equivalent: <final>true</final>)
 <visibility>…</visibility>                   → block.visibility (Sub-Block only; root → BML_VISIBILITY_ON_ROOT_BLOCK)
