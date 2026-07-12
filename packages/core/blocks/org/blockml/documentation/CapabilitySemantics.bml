@@ -1,0 +1,79 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.documentation.CapabilitySemantics
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:cap="org.blockml.capability"
+  xmlns:core="org.blockml.core"
+  xmlns:doc="org.blockml.documentation"
+  xmlns:lang="org.blockml.language">
+
+  <idea>Semantics are described via Capabilities — not via compiler code.</idea>
+
+  <documentation>
+    BlockML describes semantics only. There are no special language concepts for constructor,
+    getter, setter, or render — all behaviour is expressed as ordinary Capabilities: init(),
+    getValue(), setValue(), render(), and domain-specific operations.
+
+    Capability kinds describe intent — they are not compiler rules or runtime objects:
+    • Inbound — receives input from outside (setValue, configure)
+    • Outbound — produces output to outside (getValue, emit)
+    • Transformation — maps input to output (compute, format, render)
+
+    Each Capability may carry an implementation whose type attribute references a Language FQN
+    (org.blockml.language.*). The renderer decides how to realise each Capability in the
+    target system:
+
+    init()     → Java constructor · UI5 onInit() · React useEffect()
+    getValue() → direct field access · generated getter · reflection
+    setValue() → direct field assignment · generated setter
+    render()   → SCAD module · JSX component · may be ignored
+
+    Interpretation happens only in the renderer — by reading Capability definitions and member
+    values from the immutable BOM. The BOM never contains implementation concepts such as
+    constructors, getters, setters, runtime values, or executable behaviour.
+
+    A Block's public surface is Capabilities — internal structure (Properties, Aggregations)
+    is not the outward API; the renderer decides concrete manifestation.
+  </documentation>
+
+  <references>
+    <see file="00_bom_core.md">
+      Semantics remain in BML — Capability interpretation in renderers.
+    </see>
+    <see file="08_managed_object.md">
+      Managed object model — Capabilities as the behavioural surface.
+    </see>
+    <see file="16_framework_base_types.md">
+      languages aggregation — permitted implementation languages on Block definitions.
+    </see>
+    <see block="core:Capability">
+      Capability branch — implementation member and input/output type rules.
+    </see>
+    <see block="cap:Inbound">
+      Inbound capability kind — receives external input.
+    </see>
+    <see block="cap:Outbound">
+      Outbound capability kind — produces external output.
+    </see>
+    <see block="cap:Transformation">
+      Transformation capability kind — maps input to output.
+    </see>
+    <see block="lang:PseudoCode">
+      Free-form pseudocode — preferred for semantic descriptions readable by LLMs.
+    </see>
+    <see block="doc:Expressions">
+      Next reading step — dynamic values and bean calls in expressions.
+    </see>
+  </references>
+
+  <name>CapabilitySemantics</name>
+  <type>doc:CapabilitySemantics</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

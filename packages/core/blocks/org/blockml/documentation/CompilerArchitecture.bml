@@ -1,0 +1,71 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.documentation.CompilerArchitecture
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:doc="org.blockml.documentation">
+
+  <idea>Parser → Canonical BOM → Validator → Renderer — the compiler pipeline.</idea>
+
+  <documentation>
+    The BOM Compiler follows a three-layer architecture with immutable Canonical BOM at the center:
+
+    BML → Parser (@blockml/parser) → Canonical BOM (immutable, lossless SSOT)
+
+    Framework Utilities (@blockml/core) — optional, composable; never mutate Canonical BOM:
+    resolveInheritance, resolveEffectiveMembers, parseExpression, expandComposition,
+    validateTypes, validateConstraints, …
+
+    Renderer Pipeline (target-specific) — orchestrates utilities, owns working model, emits output.
+
+    Validation pipeline — three independent stages:
+    Stage 1 — XML (Parser): syntax, namespaces, XSD. No semantics.
+    Stage 2 — Validator: inheritance, contracts, types, constraints, references, valueRequired,
+              expression correctness. Expressions are NOT evaluated.
+    Stage 3 — Renderer: expression evaluation, optional handling, capability interpretation,
+              code generation, runtime behaviour.
+
+    The parser makes no semantic decisions. It parses XML, resolves namespaces and type references
+    syntactically, and transfers the BML tree into a canonical object structure. All BML information
+    must be fully preserved. Resolved inheritance, effective properties, expanded composition, and
+    evaluated expressions must never be written back into the Canonical BOM.
+
+    Self-hosting bootstrap: before processing user projects, the CLI bootstraps a TypeRegistry
+    from framework BML in @blockml/core and domain packages.
+  </documentation>
+
+  <references>
+    <see file="06_compiler.md">
+      Compiler pipeline — stages, packages, error handling, testing strategy.
+    </see>
+    <see file="00_bom_core.md">
+      Fundamental architecture principles — immutable BOM, utilities, validation pipeline.
+    </see>
+    <see file="01_system.md">
+      Three-layer system architecture and package overview.
+    </see>
+    <see file="13_bml_to_bom_mapping.md">
+      BML → BOM mapping algorithm — parser implementation contract.
+    </see>
+    <see file="12_bom_object_model.md">
+      Formal BOM data structures — BomDocument, BlockDefinition.
+    </see>
+    <see file="14_compiler_runtime.md">
+      Compiler runtime — bootstrap, RenderContext, compile I/O model.
+    </see>
+    <see block="doc:RendererFreedom">
+      Next reading step — renderer decides manifestation, not BlockML.
+    </see>
+  </references>
+
+  <name>CompilerArchitecture</name>
+  <type>doc:CompilerArchitecture</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

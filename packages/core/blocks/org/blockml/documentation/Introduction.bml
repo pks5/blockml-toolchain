@@ -1,0 +1,58 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.documentation.Introduction
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:doc="org.blockml.documentation">
+
+  <idea>Short introduction to BlockML — goals and core idea.</idea>
+
+  <documentation>
+    BlockML is a universal declarative language for describing parametric, composable semantic
+    units called Blocks. BML (Block Markup Language) is the human- and editor-friendly authoring
+    format; the BOM (Block Object Model) is its canonical, immutable, lossless representation.
+
+    The BOM Compiler is domain-agnostic. It understands BML and the BOM object model. Domain-specific
+    knowledge lives exclusively in Render Targets — MachineBlocks (SCAD) is the reference
+    implementation, not the only possible World.
+
+    Key goals:
+    • One grammar for types, domain blocks, languages, services, and documentation
+    • Semantics in BML — behaviour as Capabilities, not compiler special cases
+    • Lossless BML ↔ BOM — the parser makes no semantic decisions
+    • Renderer freedom — each target decides how to manifest Blocks in its output
+    • Self-hosting bootstrap — the compiler loads framework BML before user content
+
+    BML file extension is .bml. XML is the V1 canonical authoring format. The root element
+    determines document type; the primary root is block for Block definitions.
+  </documentation>
+
+  <references>
+    <see file="01_system.md">
+      System architecture, packages, monorepo structure, and design principles.
+    </see>
+    <see file="00_bom_core.md">
+      BOM Core — abstract object model and fundamental architecture principles.
+    </see>
+    <see file="02_mbml.md">
+      BML format overview — document types, namespaces, and serialization.
+    </see>
+    <see block="core:Block">
+      Universal semantic unit — sole inheritance root of the BlockML grammar.
+    </see>
+    <see block="doc:EverythingIsABlock">
+      Next reading step — the central ontological principle of BlockML.
+    </see>
+  </references>
+
+  <name>Introduction</name>
+  <type>doc:Introduction</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

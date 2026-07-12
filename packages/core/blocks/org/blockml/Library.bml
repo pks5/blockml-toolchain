@@ -19,6 +19,7 @@
   xmlns:cap="org.blockml.capability"
   xmlns:constraint="org.blockml.constraint"
   xmlns:def="org.blockml.definition"
+  xmlns:doc="org.blockml.documentation"
   xmlns:lang="org.blockml.language"
   xmlns:mapping="org.blockml.mapping"
   xmlns:service="org.blockml.service"
@@ -31,7 +32,8 @@
     Publishable BlockML core library (org.blockml.Library). Exports the framework grammar:
     core branches (Block, ValueType, Language, Status, Constraint, Capability, Definition),
     concrete value types and constraints, implementation languages, built-in services, lifecycle
-    status blocks, and the Definition meta-model branch (org.blockml.definition.*).
+    status blocks, the Definition meta-model branch (org.blockml.definition.*), and bootstrap
+    documentation blocks (org.blockml.documentation.*).
 
     Membership is defined exclusively by this file's _blocks list — not by directory layout.
     Version 3.0.0 applies to all exported blocks (framework convention: version only on
@@ -163,6 +165,22 @@
         <btype:URLEntity />
         <btype:Version />
         <btype:VersionEntity />
+        <doc:Introduction />
+        <doc:EverythingIsABlock />
+        <doc:BlockAndInstance />
+        <doc:DefinitionModel />
+        <doc:TypeSystemOverview />
+        <doc:ValueTypeConfiguration />
+        <doc:CapabilitySemantics />
+        <doc:Expressions />
+        <doc:CompilerArchitecture />
+        <doc:RendererFreedom />
+        <doc:LibrarySystem />
+        <doc:DocumentationModel />
+        <doc:BootstrapModel />
+        <doc:ModelingGuidelines />
+        <doc:PseudoCode />
+        <doc:WOTFoundation />
       </composition>
     </_blocks>
   </aggregations>

@@ -1,0 +1,76 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.documentation.Expressions
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:doc="org.blockml.documentation"
+  xmlns:mapping="org.blockml.mapping"
+  xmlns:service="org.blockml.service">
+
+  <idea>How ${...} works — property access, bean calls, bindings, and FunctionMapping.</idea>
+
+  <documentation>
+    The BML Expression Language is extended JSON inside ${ } delimiters. It appears wherever
+    a Block member value needs to be dynamic — derived, computed, or bound to a service.
+
+    Four additions beyond JSON:
+    • Property references — myProp, myProp.x (StructType members by name only; no size[0])
+    • Model bindings — @model:/path, @model:relativeAttr
+    • Bean calls — @bean.capa(...), @bean.capa (linking when no parentheses)
+    • Built-in calls — #math.min(a, b), #strings.trim(s)
+
+    Expression vs BOM data layer (separate layers):
+    • BOM stores LiteralValue and ExpressionValue.raw — immutable, authored form
+    • parseExpression() produces AST and type inference — utility output, not BOM mutation
+    • evaluateExpression() resolves values — renderer working model only
+
+    The Validator checks expression correctness (referenced members, visibility, types,
+    valid capabilities) but never executes expressions. Evaluation belongs exclusively to
+    the Renderer (Stage 3).
+
+    Bean calls resolve context-scoped beans declared as Aggregations with beanName. Capability
+    call argument mapping uses FunctionMapping — positional order follows inputType field
+    declaration order. Named and positional arguments must not be mixed in one call.
+
+    Model bindings use @model: with : separator. Absolute paths start with /; relative paths
+    resolve against the binding context of the nearest parent Model-bound Aggregation.
+  </documentation>
+
+  <references>
+    <see file="10_expression_language.md">
+      Authoritative expression language reference — grammar, AST, bean calls, bindings.
+    </see>
+    <see file="00_bom_core.md">
+      Expression layer vs BOM data layer — validation vs evaluation stages.
+    </see>
+    <see file="18_function_mapping.md">
+      FunctionMapping — positional and named capability call argument mapping.
+    </see>
+    <see block="mapping:FunctionMapping">
+      Default function mapping rules for capability calls and positional StructType access.
+    </see>
+    <see block="service:Math">
+      Built-in #math.* expression utilities.
+    </see>
+    <see block="service:Strings">
+      Built-in #strings.* expression utilities.
+    </see>
+    <see block="core:Capability">
+      Bean calls target Capability definitions on context-scoped beans.
+    </see>
+    <see block="doc:CompilerArchitecture">
+      Next reading step — parser, BOM, validator, renderer pipeline.
+    </see>
+  </references>
+
+  <name>Expressions</name>
+  <type>doc:Expressions</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

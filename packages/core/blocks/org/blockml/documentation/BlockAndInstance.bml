@@ -1,0 +1,79 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.documentation.BlockAndInstance
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.core"
+  xmlns:def="org.blockml.definition"
+  xmlns:doc="org.blockml.documentation">
+
+  <idea>Definition, Block, Block instance, and composition — the core mental model.</idea>
+
+  <documentation>
+    The closest familiar model: a Block is a declarative semantic Class; a Block Instance is an
+    Object. This is a semantic analogy — not a mandate for runtime OOP. The compiler may represent
+    definitions and instances as plain data; the parser nonetheless distinguishes block documents
+    (classes) from composition children (objects).
+
+    Block (definition):
+    • .bml file · BlockDefinition
+    • FQN · members · composition schema
+    • Describes shape and behaviour
+    • No runtime · no address
+
+    Block Instance (in composition):
+    • Element such as ac:Wall with bml:id and member values
+    • typeFqn + bml:id + member values
+    • One concrete occurrence
+    • May become a Thing in Runtime (WOT vocabulary)
+
+    Composition:
+    • Aggregations hold Block Instances as children
+    • Instance identity uses bml:id (not the type FQN)
+    • Nested paths compose with :: (wall::bottom::inner)
+    • bml:version pins external references to exact library versions
+
+    Context-dependent interpretation:
+    • ValueTypes as type-classes for Property values and Capability input/output
+    • Languages as meta-classes for implementation contracts
+    • Sub-Blocks in the same .bml file as nested classes (derived types, inner scope)
+    • Presets as named default bindings on a class
+
+    Relationships: Library contains Blocks; Block has Members, Presets, Compositions; Catalog
+    contains top-level composite Blocks.
+  </documentation>
+
+  <references>
+    <see file="00_bom_core.md">
+      Block and Block Instance — Class and Object; instance identity; qualified references.
+    </see>
+    <see file="17_type_system_bml.md">
+      Class vs Object; context-dependent interpretation of ValueTypes and Languages.
+    </see>
+    <see file="02_mbml.md">
+      Block Instances — composition children, bml:id, bml:version.
+    </see>
+    <see file="12_bom_object_model.md">
+      BlockDefinition vs CompositionNode — formal BOM shapes.
+    </see>
+    <see block="core:Block">
+      Root type — abstract definition; not used directly as composition instance type.
+    </see>
+    <see block="def:BlockDefinition">
+      Meta-model for block definition documents.
+    </see>
+    <see block="doc:DefinitionModel">
+      Next reading step — how definitions describe types and support reflection.
+    </see>
+  </references>
+
+  <name>BlockAndInstance</name>
+  <type>doc:BlockAndInstance</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

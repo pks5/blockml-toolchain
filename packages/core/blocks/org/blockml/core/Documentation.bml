@@ -1,7 +1,7 @@
 <!--
-  BlockML Core — Language branch (capability implementation contract)
+  BlockML Core — abstract documentation block base type
 
-  FQN: org.blockml.core.Language
+  FQN: org.blockml.core.Documentation
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -10,14 +10,27 @@
                       "
   xmlns:core="org.blockml.core">
 
-  <idea>Abstract base type for all Documentation blocks.</idea>
+  <idea>Abstract base type for narrative documentation blocks in the BlockML core library.</idea>
 
-  <documentation>Abstract base type for all Documentation blocks.</documentation>
+  <documentation>
+    Abstract base for org.blockml.documentation.* blocks — curated reading material that
+    explains BlockML concepts in mental learning order. Each concrete documentation block
+    carries idea, documentation, and references; cross-links belong in references, not in
+    documentation prose. Listed via Bootstrap.readFirst on README blocks.
+  </documentation>
+
+  <references>
+    <see block="core:Bootstrap">
+      readFirst aggregation that orders documentation blocks for first-time readers.
+    </see>
+    <see file="02_mbml.md">
+      Block documentation model — idea, documentation, references, examples.
+    </see>
+  </references>
+
   <name>Documentation</name>
   <type>core:Documentation</type>
   <baseType>core:Block</baseType>
   <abstract />
-
-  
 
 </block>
