@@ -18,12 +18,12 @@
     defines build order.</documentation>
 
   <references>
-    <reference block="com.machineblocks.core.Set">
+    <see block="com.machineblocks.core.Set">
       Used as children of Set's _steps aggregation.
-    </reference>
-    <reference block="com.machineblocks.core.Block">
+    </see>
+    <see block="com.machineblocks.core.Block">
       part association references a placed instance by bml:id in _parts.
-    </reference>
+    </see>
   </references>
 
   <name>Step</name>

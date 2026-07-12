@@ -51,27 +51,27 @@
   </documentation>
 
   <references>
-    <reference file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md">
       StructType branch and struct property access rules.
-    </reference>
-    <reference file="18_function_mapping.md">
+    </see>
+    <see file="18_function_mapping.md">
       Positional function-parameter syntax at call sites.
-    </reference>
-    <reference file="12_bom_object_model.md">
+    </see>
+    <see file="12_bom_object_model.md">
       Member declaration order and type descriptors.
-    </reference>
-    <reference file="16_framework_base_types.md">
+    </see>
+    <see file="16_framework_base_types.md">
       ValueType branch.
-    </reference>
-    <reference file="02_mbml.md">
+    </see>
+    <see file="02_mbml.md">
       Member declaration order authoring rules.
-    </reference>
-    <reference file="04_types.md">
+    </see>
+    <see file="04_types.md">
       Anonymous Object inputType (MBOM).
-    </reference>
-    <reference block="org.blockml.mapping.FunctionMapping">
+    </see>
+    <see block="org.blockml.mapping.FunctionMapping">
       Positional parameter mapping at capability call sites.
-    </reference>
+    </see>
   </references>
 
   <name>StructType</name>

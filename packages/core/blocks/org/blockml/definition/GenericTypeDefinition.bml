@@ -24,15 +24,15 @@
     mismatch). Parameter name must differ from the Block name and every Sub-Block name.</documentation>
 
   <references>
-    <reference file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md">
       genericTypes aggregation on Block definitions.
-    </reference>
-    <reference file="17_type_system_bml.md">
+    </see>
+    <see file="17_type_system_bml.md">
       Generic type parameters and constraints.
-    </reference>
-    <reference file="12_bom_object_model.md">
+    </see>
+    <see file="12_bom_object_model.md">
       GenericType BOM structure.
-    </reference>
+    </see>
   </references>
 
   <name>GenericTypeDefinition</name>

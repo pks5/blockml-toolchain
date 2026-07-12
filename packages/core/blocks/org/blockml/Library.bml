@@ -39,18 +39,18 @@
   </documentation>
 
   <references>
-    <reference file="02_mbml.md">
+    <see file="02_mbml.md">
       Library format and publishable catalog rules.
-    </reference>
-    <reference file="16_framework_base_types.md">
+    </see>
+    <see file="16_framework_base_types.md">
       Bootstrap order for framework base types.
-    </reference>
-    <reference file="12_bom_object_model.md">
+    </see>
+    <see file="12_bom_object_model.md">
       Library BOM data structure.
-    </reference>
-    <reference block="org.blockml.core.BlockLibrary">
+    </see>
+    <see block="org.blockml.core.BlockLibrary">
       Framework base type — not exported from this catalog.
-    </reference>
+    </see>
   </references>
 
   <name>Library</name>

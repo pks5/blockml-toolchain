@@ -284,9 +284,9 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <examples>                                   → block.examples[]
   <example title="…" language="…">           → { title, content: CDATA body, language? }
 <references>                                 → block.references[]
-  <reference block="…">…</reference>         → { block, context: trimmed body }
-  <reference file="…">…</reference>          → { file, context: trimmed body }
-  <reference url="…">…</reference>           → { url, context: trimmed body }
+  <see block="…">…</see>         → { block, context: trimmed body }
+  <see file="…">…</see>          → { file, context: trimmed body }
+  <see url="…">…</see>           → { url, context: trimmed body }
 <status>status:Draft</status>                → member.statusFqn or block.statusFqn (when declared)
                                              → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
@@ -309,8 +309,8 @@ Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <changelog> entries out of version order → BML_CHANGELOG_VERSION_ORDER (warning V1)
 <example> without title attribute        → BML_EXAMPLE_MISSING_TITLE (error)
 <example> body not CDATA                 → BML_EXAMPLE_NOT_CDATA (error)
-<reference> without block, file, or url     → BML_REFERENCE_MISSING_TARGET (error)
-<reference> with more than one target attr  → BML_REFERENCE_AMBIGUOUS_TARGET (error)
+<see> without block, file, or url          → BML_REFERENCE_MISSING_TARGET (error)
+<see> with more than one target attr       → BML_REFERENCE_AMBIGUOUS_TARGET (error)
 Omitted abstract/final                 → false
 Omitted <visibility> on Sub-Block      → derive from <name> (__ → private, _ → protected, else public)
 <visibility> on root Block               → BML_VISIBILITY_ON_ROOT_BLOCK (error)

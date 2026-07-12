@@ -22,12 +22,12 @@
     oldest first (BML_CHANGELOG_VERSION_ORDER when out of order).</documentation>
 
   <references>
-    <reference file="02_mbml.md">
+    <see file="02_mbml.md">
       Changelog documentation extension authoring.
-    </reference>
-    <reference file="12_bom_object_model.md">
+    </see>
+    <see file="12_bom_object_model.md">
       ChangelogEntry BOM structure.
-    </reference>
+    </see>
   </references>
 
   <name>ChangeDefinition</name> 

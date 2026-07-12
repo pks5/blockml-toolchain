@@ -16,12 +16,12 @@
     and assembly order. Top-level catalog unit in MachineBlocks.</documentation>
 
   <references>
-    <reference block="com.machineblocks.core.CompositeBlock">
+    <see block="com.machineblocks.core.CompositeBlock">
       Extends CompositeBlock — inherits _parts for placed instances and presets for block palette.
-    </reference>
-    <reference block="com.machineblocks.core.Step">
+    </see>
+    <see block="com.machineblocks.core.Step">
       Assembly steps in _steps reference placed parts via part association.
-    </reference>
+    </see>
   </references>
 
   <name>Set</name>

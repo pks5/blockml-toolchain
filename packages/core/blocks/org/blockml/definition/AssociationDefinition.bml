@@ -23,12 +23,12 @@
     MachineBlocks Block types.</documentation>
 
   <references>
-    <reference file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md">
       AssociationDefinition BOM structure.
-    </reference>
-    <reference file="02_mbml.md">
+    </see>
+    <see file="02_mbml.md">
       Associations authoring rules.
-    </reference>
+    </see>
   </references>
 
   <name>AssociationDefinition</name>

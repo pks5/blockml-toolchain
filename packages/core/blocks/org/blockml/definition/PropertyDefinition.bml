@@ -25,15 +25,15 @@
     and Capability parameter order.</documentation>
 
   <references>
-    <reference file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md">
       PropertyDefinition BOM structure.
-    </reference>
-    <reference file="02_mbml.md">
+    </see>
+    <see file="02_mbml.md">
       Members and properties authoring rules.
-    </reference>
-    <reference block="org.blockml.core.ValueType">
+    </see>
+    <see block="org.blockml.core.ValueType">
       Required branch for property payload types.
-    </reference>
+    </see>
   </references>
 
   <name>PropertyDefinition</name>

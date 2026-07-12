@@ -53,21 +53,21 @@
   </documentation>
 
   <references>
-    <reference file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md">
       EnumType branch and value declaration rules.
-    </reference>
-    <reference file="02_mbml.md">
+    </see>
+    <see file="02_mbml.md">
       Enum types and enum value reference syntax.
-    </reference>
-    <reference file="04_types.md">
+    </see>
+    <see file="04_types.md">
       Enum types and enum value references (MBOM).
-    </reference>
-    <reference file="00_bom_core.md">
+    </see>
+    <see file="00_bom_core.md">
       EnumType property values.
-    </reference>
-    <reference file="16_framework_base_types.md">
+    </see>
+    <see file="16_framework_base_types.md">
       ValueType branch.
-    </reference>
+    </see>
   </references>
 
   <name>EnumType</name>

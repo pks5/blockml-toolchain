@@ -19,18 +19,18 @@
     output is render-target logic.</documentation>
 
   <references>
-    <reference block="org.blockml.core.Entity">
+    <see block="org.blockml.core.Entity">
       Domain branch base — Entity instances with composition identity.
-    </reference>
-    <reference block="com.machineblocks.core.CompositeBlock">
+    </see>
+    <see block="com.machineblocks.core.CompositeBlock">
       Composable sub-type with default _parts aggregation for child block instances.
-    </reference>
-    <reference block="com.machineblocks.core.NativeBlock">
+    </see>
+    <see block="com.machineblocks.core.NativeBlock">
       Final leaf sub-type rendered directly as mb_block() SCAD primitive.
-    </reference>
-    <reference block="com.machineblocks.core.Set">
+    </see>
+    <see block="com.machineblocks.core.Set">
       LEGO-style build sub-type with palette, placed parts, and assembly steps.
-    </reference>
+    </see>
   </references>
 
   <name>Block</name>

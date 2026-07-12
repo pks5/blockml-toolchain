@@ -20,12 +20,12 @@
     composition.</documentation>
 
   <references>
-    <reference block="com.machineblocks.core.Block">
+    <see block="com.machineblocks.core.Block">
       Domain base type — inherits presets and basePresets for preset resolution.
-    </reference>
-    <reference block="com.machineblocks.core.Set">
+    </see>
+    <see block="com.machineblocks.core.Set">
       Set specialization uses _parts for placed instances in a LEGO-style build.
-    </reference>
+    </see>
   </references>
 
   <name>CompositeBlock</name>

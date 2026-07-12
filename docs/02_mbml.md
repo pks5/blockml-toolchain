@@ -240,9 +240,9 @@ Examples:
 <documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
   resolves via the type namespace.</documentation>
 <references>
-  <reference file="17_type_system_bml.md">
+  <see file="17_type_system_bml.md">
     PrimitiveType — float number payload rules.
-  </reference>
+  </see>
 </references>
 ```
 
@@ -273,7 +273,7 @@ Wherever `<documentation>` is permitted, these **optional** siblings are also al
 <since>       — version from which the element is available
 <changelog>   — version history (container of <change> entries)
 <examples>    — usage examples (container of <example> entries)
-<references>  — cross-references (container of <reference> entries)
+<references>  — cross-references (container of <see> entries)
 ```
 
 Applies to all definition elements that carry documentation:
@@ -348,7 +348,7 @@ A future optional `language` attribute (e.g. `OpenSCAD`, `TypeScript`) may disti
 
 #### `<references>`
 
-Container for cross-references to related Blocks, definition elements, repository documentation files, or external URLs. Each `<reference>` requires **exactly one** target attribute — `block`, `file`, or `url`. The text body explains why or how the referenced element relates to the **current** definition.
+Container for cross-references to related Blocks, definition elements, repository documentation files, or external URLs. Each `<see>` requires **exactly one** target attribute — `block`, `file`, or `url`. The text body explains why or how the referenced element relates to the **current** definition.
 
 **Target attributes (exactly one required):**
 
@@ -361,31 +361,31 @@ url="https://blockml.org/schemas/…"  — external URL
 **Authoring rules:**
 
 - Include only targets with a **direct relationship** to the current definition.
-- Every `<reference>` **must** include a text body describing the relationship.
+- Every `<see>` **must** include a text body describing the relationship.
 - Do **not** repeat cross-links in `<documentation>`; use `<references>` instead.
 
 ```xml
 <references>
 
-    <reference block="com.machineblocks.core.CompositeBlock">
+    <see block="com.machineblocks.core.CompositeBlock">
         Composable sub-type — owns child instances via default _parts aggregation.
-    </reference>
+    </see>
 
-    <reference block="org.blockml.core.ValueType">
+    <see block="org.blockml.core.ValueType">
         Branch sub-type — payload types for properties and capabilities.
-    </reference>
+    </see>
 
-    <reference block="org.blockml.definition.PropertyDefinition">
+    <see block="org.blockml.definition.PropertyDefinition">
         Meta-model member shape for property declarations on Block definitions.
-    </reference>
+    </see>
 
-    <reference file="02_mbml.md">
+    <see file="02_mbml.md">
         Block Definition — idea, documentation, and documentation extensions.
-    </reference>
+    </see>
 
-    <reference url="https://blockml.org/schemas/core/block.xsd">
+    <see url="https://blockml.org/schemas/core/block.xsd">
         XML schema for block definition documents.
-    </reference>
+    </see>
 
 </references>
 ```

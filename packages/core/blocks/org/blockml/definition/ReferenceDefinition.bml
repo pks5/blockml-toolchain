@@ -17,23 +17,23 @@
   <idea>A cross-reference to a related Block, definition element, or documentation source.</idea>
 
   <documentation>Records a link from documentation metadata to another Block, definition element,
-    repository markdown file, or external URL. Rendered as a reference element inside the references
+    repository markdown file, or external URL. Rendered as a see element inside the references
     container on any org.blockml.core.Definition (alongside changelog and examples).</documentation>
 
   <references>
-    <reference file="02_mbml.md">
-      Authoring rules for reference elements — block, file, and url attributes.
-    </reference>
-    <reference file="16_framework_base_types.md">
+    <see file="02_mbml.md">
+      Authoring rules for see elements — block, file, and url attributes.
+    </see>
+    <see file="16_framework_base_types.md">
       Definition branch — ReferenceDefinition meta-model shape.
-    </reference>
+    </see>
   </references>
 
   <name>ReferenceDefinition</name>
   <type>def:ReferenceDefinition</type>
   <baseType>core:Definition</baseType>
-  <!-- Cross-references render as <reference> elements inside <references>. -->
-  <bml:xml>reference</bml:xml>
+  <!-- Cross-references render as <see> elements inside <references>. -->
+  <bml:xml>see</bml:xml>
 
   <properties>
     <block type="btype:FullyQualifiedName(core:Block, core:Definition)" bml:xml="attribute">
@@ -50,7 +50,7 @@
     </url>
     <context type="Text" bml:xml="text">
       <documentation>Human-readable explanation of why or how the referenced element relates to
-        this definition. Required on every reference.</documentation>
+        this definition. Required on every see entry.</documentation>
     </context>
   </properties>
 </block>

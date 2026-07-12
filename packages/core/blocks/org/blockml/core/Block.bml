@@ -45,42 +45,42 @@
   </documentation>
 
   <references>
-    <reference block="org.blockml.core.ValueType">
+    <see block="org.blockml.core.ValueType">
       Property and capability payload types.
-    </reference>
-    <reference block="org.blockml.core.Language">
+    </see>
+    <see block="org.blockml.core.Language">
       Implementation language bindings.
-    </reference>
-    <reference block="org.blockml.core.Status">
+    </see>
+    <see block="org.blockml.core.Status">
       Lifecycle status references.
-    </reference>
-    <reference block="org.blockml.core.Constraint">
+    </see>
+    <see block="org.blockml.core.Constraint">
       Property validation constraints.
-    </reference>
-    <reference block="org.blockml.core.Capability">
+    </see>
+    <see block="org.blockml.core.Capability">
       Capability implementation contracts.
-    </reference>
-    <reference block="org.blockml.core.Definition">
+    </see>
+    <see block="org.blockml.core.Definition">
       Meta-model for block structure (WIP).
-    </reference>
-    <reference block="com.machineblocks.core.Block">
+    </see>
+    <see block="com.machineblocks.core.Block">
       Example domain base — domain-specific branches extend Block.
-    </reference>
-    <reference file="00_bom_core.md">
+    </see>
+    <see file="00_bom_core.md">
       Block and Block Instance — fundamental architecture principles.
-    </reference>
-    <reference file="02_mbml.md">
+    </see>
+    <see file="02_mbml.md">
       Block Definition — idea, documentation, and documentation extensions.
-    </reference>
-    <reference file="16_framework_base_types.md">
+    </see>
+    <see file="16_framework_base_types.md">
       Root Type Exception and Definition Branch.
-    </reference>
-    <reference file="17_type_system_bml.md">
+    </see>
+    <see file="17_type_system_bml.md">
       Everything is a Block — type system overview.
-    </reference>
-    <reference file="19_definition_blocks_and_bml_xml.md">
+    </see>
+    <see file="19_definition_blocks_and_bml_xml.md">
       Definition branch bml:xml serialization rules.
-    </reference>
+    </see>
   </references>
 
   <name>Block</name>

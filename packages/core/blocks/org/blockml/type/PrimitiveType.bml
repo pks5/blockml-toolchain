@@ -28,18 +28,18 @@
     Valid: &lt;property name="count" type="Integer"&gt;&lt;value&gt;5&lt;/value&gt;&lt;/property&gt;</documentation>
 
   <references>
-    <reference file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md">
       PrimitiveType branch and PrimitiveEntity wrappers.
-    </reference>
-    <reference block="org.blockml.type.Number">
+    </see>
+    <see block="org.blockml.type.Number">
       Numeric primitive branch.
-    </reference>
-    <reference block="org.blockml.type.Text">
+    </see>
+    <see block="org.blockml.type.Text">
       Textual primitive branch.
-    </reference>
-    <reference block="org.blockml.type.IntegerEntity">
+    </see>
+    <see block="org.blockml.type.IntegerEntity">
       Example concrete Entity wrapper for primitive values.
-    </reference>
+    </see>
   </references>
 
   <name>PrimitiveType</name>

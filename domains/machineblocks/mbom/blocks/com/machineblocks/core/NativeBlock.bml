@@ -20,12 +20,12 @@
   </documentation>
 
   <references>
-    <reference block="com.machineblocks.core.Block">
+    <see block="com.machineblocks.core.Block">
       Extends Block directly — not CompositeBlock.
-    </reference>
-    <reference block="com.machineblocks.core.CompositeBlock">
+    </see>
+    <see block="com.machineblocks.core.CompositeBlock">
       Contrasts with CompositeBlock which uses _parts for composition children.
-    </reference>
+    </see>
   </references>
 
   <name>NativeBlock</name>

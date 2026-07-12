@@ -29,12 +29,12 @@
   </documentation>
 
   <references>
-    <reference file="18_function_mapping.md">
+    <see file="18_function_mapping.md">
       Function parameter mapping rules and component responsibilities.
-    </reference>
-    <reference block="org.blockml.mapping.FunctionMapping">
+    </see>
+    <see block="org.blockml.mapping.FunctionMapping">
       Concrete mapping for function-like call syntax.
-    </reference>
+    </see>
   </references>
 
   <name>Mapping</name>

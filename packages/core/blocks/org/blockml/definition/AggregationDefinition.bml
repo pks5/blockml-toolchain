@@ -25,12 +25,12 @@
     aggregation.</documentation>
 
   <references>
-    <reference file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md">
       AggregationDefinition BOM structure.
-    </reference>
-    <reference file="02_mbml.md">
+    </see>
+    <see file="02_mbml.md">
       Aggregations and composition authoring rules.
-    </reference>
+    </see>
   </references>
 
   <name>AggregationDefinition</name>

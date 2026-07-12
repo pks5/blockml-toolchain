@@ -25,18 +25,18 @@
     in BOM and is significant for StructType positional mapping and render targets.</documentation>
 
   <references>
-    <reference file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md">
       BlockDefinition BOM structure.
-    </reference>
-    <reference file="02_mbml.md">
+    </see>
+    <see file="02_mbml.md">
       Block definition authoring format.
-    </reference>
-    <reference file="16_framework_base_types.md">
+    </see>
+    <see file="16_framework_base_types.md">
       genericTypes aggregation on Block definitions.
-    </reference>
-    <reference block="org.blockml.core.Block">
+    </see>
+    <see block="org.blockml.core.Block">
       Sole inheritance root — omits baseType on root blocks.
-    </reference>
+    </see>
   </references>
 
   <name>BlockDefinition</name>

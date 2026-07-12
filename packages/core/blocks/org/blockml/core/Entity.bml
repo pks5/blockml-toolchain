@@ -17,15 +17,15 @@
     Entity. Entity is not a ValueType; use Property with a ValueType for typed payloads.</documentation>
 
   <references>
-    <reference file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md">
       Entity branch and PrimitiveEntity wrappers.
-    </reference>
-    <reference block="com.machineblocks.core.Block">
+    </see>
+    <see block="com.machineblocks.core.Block">
       Example domain Entity base type.
-    </reference>
-    <reference block="org.blockml.core.PrimitiveEntity">
+    </see>
+    <see block="org.blockml.core.PrimitiveEntity">
       Primitive value wrappers as Entity instances.
-    </reference>
+    </see>
   </references>
 
   <name>Entity</name>

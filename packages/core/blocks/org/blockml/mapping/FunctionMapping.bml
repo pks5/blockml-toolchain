@@ -50,9 +50,9 @@
   </documentation>
 
   <references>
-    <reference file="18_function_mapping.md">
+    <see file="18_function_mapping.md">
       Function parameter mapping rules and default behavior.
-    </reference>
+    </see>
   </references>
 
   <name>FunctionMapping</name>

@@ -23,27 +23,27 @@
     use TypeExpression syntax and must resolve to ValueTypes.</documentation>
 
   <references>
-    <reference file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md">
       CapabilityDefinition BOM structure.
-    </reference>
-    <reference file="02_mbml.md">
+    </see>
+    <see file="02_mbml.md">
       Capabilities authoring rules.
-    </reference>
-    <reference block="org.blockml.capability.Inbound">
+    </see>
+    <see block="org.blockml.capability.Inbound">
       Capability typeFqn — requires inputType.
-    </reference>
-    <reference block="org.blockml.capability.Outbound">
+    </see>
+    <see block="org.blockml.capability.Outbound">
       Capability typeFqn — requires outputType.
-    </reference>
-    <reference block="org.blockml.capability.Transformation">
+    </see>
+    <see block="org.blockml.capability.Transformation">
       Capability typeFqn — requires inputType and outputType.
-    </reference>
-    <reference block="org.blockml.core.Language">
+    </see>
+    <see block="org.blockml.core.Language">
       Implementation language bindings.
-    </reference>
-    <reference block="org.blockml.core.ValueType">
+    </see>
+    <see block="org.blockml.core.ValueType">
       inputType and outputType payload types.
-    </reference>
+    </see>
   </references>
 
   <name>CapabilityDefinition</name>

@@ -174,7 +174,7 @@ org.blockml.core.Block
     org.blockml.definition.GenericTypeDefinition
     org.blockml.definition.ChangeDefinition      ← one <change> in <changelog>
     org.blockml.definition.ExampleDefinition     ← one <example> in <examples>
-    org.blockml.definition.ReferenceDefinition   ← one <reference> in <references>
+    org.blockml.definition.ReferenceDefinition   ← one <see> in <references>
     …
 ```
 
@@ -188,7 +188,7 @@ Aggregations:  changelog (ChangeDefinition[]) · examples (ExampleDefinition[]) 
 `org.blockml.definition.ReferenceDefinition` — cross-reference to a related Block, definition element, or documentation source:
 
 ```text
-bml:xml         reference          — renders as <reference> inside <references>
+bml:xml         see                — renders as <see> inside <references>
 block           FullyQualifiedName — Block or Definition FQN; XML block attribute
 file            String             — repository markdown file; XML file attribute
 url             String             — external URL; XML url attribute
