@@ -46,22 +46,37 @@
     Serialization:
     • bml:xml ${ bml:Self } — composable instances render under their declared type tag
       (for example &lt;core:Block&gt;, &lt;myns:Wall&gt;)
-    • Definition branch types (org.blockml.core.Definition and sub-types) describe block
-      structure and carry their own bml:xml rules — see 19_definition_blocks_and_bml_xml.md
-
-    Branch overview (all extend Block):
-    • org.blockml.core.ValueType — property and capability payload types
-    • org.blockml.core.Language — implementation language bindings
-    • org.blockml.core.Status — lifecycle status references
-    • org.blockml.core.Constraint — property validation constraints
-    • org.blockml.core.Capability — capability implementation contracts
-    • org.blockml.core.Definition — meta-model for block structure (WIP)
-    • Domain bases (for example com.machineblocks.core.Block) — domain-specific branches
+    • Definition branch types describe block structure and carry their own bml:xml rules —
+      see 19_definition_blocks_and_bml_xml.md
 
     See 00_bom_core.md — Block and Block Instance · 02_mbml.md — Block Definition ·
     16_framework_base_types.md — Root Type Exception · 17_type_system_bml.md.
   </documentation>
-  
+
+  <references>
+    <reference type="org.blockml.core.ValueType">
+      Property and capability payload types.
+    </reference>
+    <reference type="org.blockml.core.Language">
+      Implementation language bindings.
+    </reference>
+    <reference type="org.blockml.core.Status">
+      Lifecycle status references.
+    </reference>
+    <reference type="org.blockml.core.Constraint">
+      Property validation constraints.
+    </reference>
+    <reference type="org.blockml.core.Capability">
+      Capability implementation contracts.
+    </reference>
+    <reference type="org.blockml.core.Definition">
+      Meta-model for block structure (WIP).
+    </reference>
+    <reference type="com.machineblocks.core.Block">
+      Example domain base — domain-specific branches extend Block.
+    </reference>
+  </references>
+
   <name>Block</name>
   <type>core:Block</type>
   <!-- Root block has no base type -->

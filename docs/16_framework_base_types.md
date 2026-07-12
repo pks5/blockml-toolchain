@@ -190,10 +190,10 @@ Aggregations:  changelog (ChangeDefinition[]) · examples (ExampleDefinition[]) 
 ```text
 bml:xml         reference          — renders as <reference> inside <references>
 type (required) FullyQualifiedName — FQN of referenced Block or Definition; XML type attribute
-context         String (optional)  — human-readable relation note; XML text content
+context         String (required*)  — relationship note; XML text content (*authoring rule — see below)
 ```
 
-See `02_mbml.md` — Documentation extensions · `<references>`.
+Authoring: list only types **relevant to the current definition**; text body describes the relationship. Block cross-links never belong in `<documentation>` — markdown doc pointers do. See `02_mbml.md` — `<documentation>` · `<references>`.
 
 Each Definition block may declare **`bml:xml`** — how instances serialize to canonical BML XML (root element name, member as attribute/element/text/cdata). The meta-model is **work in progress**; full specification in `19_definition_blocks_and_bml_xml.md`.
 

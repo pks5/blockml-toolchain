@@ -17,6 +17,22 @@
   <documentation>MachineBlocks domain base Block. Carries presets aggregation and basePresets
     association for domain-specific preset resolution. Preset merge is compiler logic; Customizer
     output is render-target logic.</documentation>
+
+  <references>
+    <reference type="org.blockml.core.Entity">
+      Domain branch base — Entity instances with composition identity.
+    </reference>
+    <reference type="com.machineblocks.core.CompositeBlock">
+      Composable sub-type with default _parts aggregation for child block instances.
+    </reference>
+    <reference type="com.machineblocks.core.NativeBlock">
+      Final leaf sub-type rendered directly as mb_block() SCAD primitive.
+    </reference>
+    <reference type="com.machineblocks.core.Set">
+      LEGO-style build sub-type with palette, placed parts, and assembly steps.
+    </reference>
+  </references>
+
   <name>Block</name>
   <type>core:Block</type>
   <baseType>bcore:Entity</baseType>

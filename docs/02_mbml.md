@@ -237,7 +237,8 @@ Examples:
 
 ```xml
 <idea>Primitive BlockML property type capable of holding a float number.</idea>
-<documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float resolves to org.blockml.type.Float.</documentation>
+<documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
+  resolves via the type namespace. See 17_type_system_bml.md — PrimitiveType.</documentation>
 ```
 
 `<idea>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IDEA` (warning in V1, error in a later release). The idea is primary input for editors, LLMs, and documentation navigation — it answers *what is this?* before *how does it work?*
@@ -247,6 +248,11 @@ WOT alignment: the Idea is the stable semantic constant; documentation describes
 ### `<documentation>`
 
 `<documentation>` follows `<idea>`, still before `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+
+**Cross-references in prose:**
+
+- **Markdown docs** — pointers to repository documentation files always belong in `<documentation>` (e.g. `See 02_mbml.md — Block Definition · 16_framework_base_types.md — Definition Branch`).
+- **Other Blocks** — do **not** name Block or Definition FQNs in `<documentation>` prose. Link related types exclusively via `<references>` (see below).
 
 ```xml
 <block ...>
@@ -279,6 +285,8 @@ and to any future definition element with `<documentation>`.
 On root `<block>` definitions, optional documentation extensions follow `<documentation>` and precede `<name>`. On members and Sub-Blocks, they appear alongside `<documentation>` among definition metadata children (before `<value>`, `<composition>`, or other content containers).
 
 Goal: keep API documentation, version history, examples, and related-type links at the definition site — a single source of truth inside BML files.
+
+**Authoring split:** `<documentation>` carries technical prose and **markdown doc** pointers; `<references>` carries **Block/Definition** cross-links with an explicit relationship note. Never duplicate the same Block links in both places.
 
 #### `<since>`
 
@@ -338,19 +346,27 @@ A future optional `language` attribute (e.g. `OpenSCAD`, `TypeScript`) may disti
 
 #### `<references>`
 
-Container for cross-references to related Blocks or definition elements. Each `<reference>` requires a `type` attribute — the FQN of the referenced Block or Definition. Optional text body explains why or how the referenced element relates:
+Container for cross-references to related Blocks or definition elements. Each `<reference>` requires a `type` attribute — the FQN of the referenced Block or Definition. The text body explains why or how the referenced element relates to the **current** definition.
+
+**Authoring rules:**
+
+- Include only Blocks or Definitions with a **direct relationship** to the current definition (inheritance branch, sub-types, contracts, sibling types in the same model area, …).
+- Every `<reference>` **must** include a text body describing the relationship — what the linked type is and why it matters here.
+- Do **not** repeat these Block links in `<documentation>`; use `<references>` instead.
 
 ```xml
 <references>
 
     <reference type="com.machineblocks.core.CompositeBlock">
-        Base type when this Block owns child instances in composition.
+        Composable sub-type — owns child instances via default _parts aggregation.
     </reference>
 
-    <reference type="org.blockml.core.ValueType" />
+    <reference type="org.blockml.core.ValueType">
+        Branch sub-type — payload types for properties and capabilities.
+    </reference>
 
     <reference type="org.blockml.definition.PropertyDefinition">
-        See PropertyDefinition for member documentation shape.
+        Meta-model member shape for property declarations on Block definitions.
     </reference>
 
 </references>
