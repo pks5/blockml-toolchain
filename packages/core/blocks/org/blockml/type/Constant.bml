@@ -53,7 +53,7 @@
   <baseType>btype:StructType</baseType>
 
   <genericTypes>
-    <genericType name="T" baseType="core:ValueType" />
+    <T baseType="core:ValueType" />
   </genericTypes>
 
   <properties>

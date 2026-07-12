@@ -16,12 +16,14 @@
 
   <idea>A type parameter declared on a Block definition (e.g. T on Box of T).</idea>
 
-  <documentation>Declares one generic type parameter on a root Block definition. Rendered as
-    genericType inside the genericTypes container (root block only). Maps to BOM GenericType
-    { name, baseType }. The name is substituted in type references within this Block (e.g.
-    type="T" → GenericParameterReference). baseType is the FQN constraint — each concrete type
-    argument at reference sites must inherit from that branch (BML_GENERIC_CONSTRAINT_VIOLATION on
-    mismatch). Parameter name must differ from the Block name and every Sub-Block name.</documentation>
+  <documentation>Declares one generic type parameter on a root Block definition. Rendered inside
+    the genericTypes container as an element whose local name is the parameter identifier (root
+    block only). Maps to BOM GenericType { name, baseType } — name is derived from the XML element
+    name, not from a child or attribute. The name is substituted in type references within this
+    Block (e.g. type="T" → GenericParameterReference). baseType is the FQN constraint — each
+    concrete type argument at reference sites must inherit from that branch
+    (BML_GENERIC_CONSTRAINT_VIOLATION on mismatch). Parameter name must differ from the Block name
+    and every Sub-Block name.</documentation>
 
   <references>
     <see file="16_framework_base_types.md">
@@ -38,14 +40,15 @@
   <name>GenericTypeDefinition</name>
   <type>def:GenericTypeDefinition</type>
   <baseType>core:Definition</baseType>
-  <bml:xml>genericType</bml:xml>
+  <bml:xml>${ #this.name }</bml:xml>
 
   <properties>
     <name type="Text">
-      <documentation>Parameter identifier used in type references within this Block (e.g. T).
-        Must not collide with the Block name or any Sub-Block name in the same document.</documentation>
+      <documentation>Parameter identifier — derived from the XML element name at parse time (e.g.
+        &lt;T baseType="…"/&gt; → name = "T"). Must not collide with the Block name or any
+        Sub-Block name in the same document. Not authored as an attribute or child element.</documentation>
     </name>
-    <baseType type="btype:FullyQualifiedName(def:BlockDefinition)">
+    <baseType type="btype:FullyQualifiedName(def:BlockDefinition)" bml:xml="attribute">
       <documentation>FQN constraint for concrete type arguments. Each supplied type argument at
         reference sites (e.g. Box of Integer) must inherit from this baseType branch.</documentation>
     </baseType>

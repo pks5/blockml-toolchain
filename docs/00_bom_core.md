@@ -599,14 +599,14 @@ A Block references contracts via `<contracts>`:
 
 ```xml
 <contracts>
-  <contract type="com.foo.IIdentifiable" />
-  <contract type="com.foo.IPlaceable" />
+  <com.foo:IIdentifiable />
+  <com.foo:IPlaceable />
 </contracts>
 ```
 
 ```text
 Declared on:       root <block> only (not on Sub-Blocks)
-Attribute:         type — FQN of the contract Block (required)
+Child element:     direct Block reference (element name = FQN via xmlns prefix)
 Contract target:   any Block definition usable as a partial definition (typically abstract)
 Member scope:      Properties, Aggregations, Associations, Capabilities, Constraints,
                    Suggestions, documentation, examples, references, optional Capability defaults
@@ -641,7 +641,7 @@ Same member kind required for overrides        → BML_CONTRACT_MEMBER_KIND_MISM
 
 <!-- com.foo.MyEntity.bml — concrete Block -->
 <contracts>
-  <contract type="com.foo.IIdentifiable"/>
+  <com.foo:IIdentifiable/>
 </contracts>
 <properties>
   <id>

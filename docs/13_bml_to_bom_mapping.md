@@ -309,8 +309,8 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <visibility>…</visibility>                   → block.visibility (Sub-Block only; root → BML_VISIBILITY_ON_ROOT_BLOCK)
 <core:Block />                               → block.subTypes[] (direct Block reference in <subTypes>)
 <lang:OpenSCAD />                            → block.languages[] (direct Language reference in <languages>)
-<contract type="…"/>                        → block.contracts[]   (root block only)
-<genericType name="…" baseType="…"/>            → block.genericTypes[]    (root block only)
+<ac:Wall />                                  → block.contracts[]   (direct Block reference in <contracts>; root block only)
+<T baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType } (root block only)
 ```
 
 ```text
@@ -338,11 +338,11 @@ Empty <subTypes/>                        → block.subTypes = [] (explicit overr
 Omitted languages / contracts          → inherit from baseType at validate
 Omitted genericTypes                 → none — generic parameters are not inherited; bind or forward via baseType
 <contracts> on Sub-Block                 → BML_CONTRACT_NOT_ON_ROOT (error)
-Duplicate contract type                → BML_DUPLICATE_CONTRACT (error)
+Duplicate contract reference           → BML_DUPLICATE_CONTRACT (error)
 <genericTypes> on Sub-Block                  → BML_GENERIC_NOT_ON_ROOT (error)
-Duplicate genericType name                   → BML_DUPLICATE_GENERIC (error)
-genericType name equals Block <name>         → BML_GENERIC_BLOCK_NAME_COLLISION (error)
-genericType name equals Sub-Block <name>     → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
+Duplicate generic parameter name             → BML_DUPLICATE_GENERIC (error)
+generic parameter element name equals Block <name>         → BML_GENERIC_BLOCK_NAME_COLLISION (error)
+generic parameter element name equals Sub-Block <name>     → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
 Unqualified Sub-Block reference outside file → BML_SUBBLOCK_UNQUALIFIED_REFERENCE (error)
 Ambiguous Sub-Block short name (same as root) → BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED (error)
 org.blockml.core.Block                   → omits <baseType> (sole inheritance root)
@@ -647,8 +647,8 @@ The `composition aggregation="…"` attribute is **removed** — aggregations ar
 ### Contract merge (stage [8])
 
 ```text
-<contract type="com.foo.IIdentifiable"/>
-  → Parser stores FQN in block.contracts[] (stage [5])
+<ac:IIdentifiable/>
+  → Parser resolves element name via xmlns prefix → FQN stored in block.contracts[] (stage [5])
   → Validator resolves contract BlockDefinition (stage [8])
   → resolveContractMembers(contractFqn) — declared members only;
     subBlocks[] and compositions[] on contract type ignored

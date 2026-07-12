@@ -37,7 +37,7 @@
   <abstract />
 
   <genericTypes>
-    <genericType name="T" baseType="btype:PrimitiveType" />
+    <T baseType="btype:PrimitiveType" />
   </genericTypes>
 
   <properties>

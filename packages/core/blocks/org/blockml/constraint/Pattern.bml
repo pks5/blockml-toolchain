@@ -21,7 +21,7 @@
   <type>constraint:Pattern</type>
   <baseType>core:Constraint</baseType>
   <genericTypes>
-    <genericType name="T" baseType="String"/>
+    <T baseType="String"/>
   </genericTypes>
 
   <properties>

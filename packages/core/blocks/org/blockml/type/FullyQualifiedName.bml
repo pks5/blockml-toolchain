@@ -44,7 +44,7 @@
     • FullyQualifiedName(core:Block, core:Definition) → both parameters explicit
     • FullyQualifiedName(def:BlockDefinition) → B = def.BlockDefinition, D = default
 
-    Each parenthesized argument binds one genericType parameter in declaration order (B, then D).
+    Each parenthesized argument binds one generic type parameter in declaration order (B, then D).
     With multiple parameters, the label matches the generic name and qualifies the type argument
     as a namespace prefix (abc:A → abc.A). With a single argument, only B is supplied and D
     uses defaultType. Concrete type arguments must satisfy each parameter's baseType constraint
@@ -81,17 +81,14 @@
     <see block="def:GenericTypeDefinition">
       parameter baseType constraint attribute.
     </see>
-    <see block="def:ContractDefinition">
-      contract Block type attribute.
-    </see>
     <see block="def:ReferenceDefinition">
       cross-reference block attribute.
     </see>
   </references>
 
   <genericTypes>
-    <genericType name="B" baseType="core:Block" />
-    <genericType name="D" baseType="core:Definition" defaultType="def:BlockDefinition" />
+    <B baseType="core:Block" />
+    <D baseType="core:Definition" defaultType="def:BlockDefinition" />
   </genericTypes>
 
   <name>FullyQualifiedName</name>

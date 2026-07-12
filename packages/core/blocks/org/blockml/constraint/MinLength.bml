@@ -21,7 +21,7 @@
   <type>constraint:MinLength</type>
   <baseType>core:Constraint</baseType>
   <genericTypes>
-    <genericType name="T" baseType="core:ValueType"/>
+    <T baseType="core:ValueType"/>
   </genericTypes>
 
   <properties>

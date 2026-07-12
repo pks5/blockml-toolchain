@@ -1198,7 +1198,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  bml:each elements have explicit id (literal or Expression)
 ✓  Sub-Block baseType ∈ parent's subTypes (domain rule)
 ✓  Sub-Block unqualified reference only within same BomDocument
-✓  genericType name ≠ Block name; genericType name ≠ any Sub-Block name in same document
+✓  generic parameter name ≠ Block name; generic parameter name ≠ any Sub-Block name in same document
 ✓  Sub-Block same name as root Block → qualified reference required at use sites
 ✓  Sub-Block visibility derived from name or explicit <visibility>; root Block must not declare visibility
 ✓  Member access respects visibility (private / protected / public) — formal access rule
@@ -1208,7 +1208,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Preset block instance properties exist on referenced block type
 ✓  Property value cycles (topological sort)
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
-✓  contract types resolve and merge into effective members (declaration order; later wins)
+✓  contract Block references resolve and merge into effective members (declaration order; later wins)
 ✓  valueRequired — after resolveEffectiveMembers() and instance value binding: every effective Property with valueRequired=true has an authored value (BML_VALUE_REQUIRED)
 ✓  readOnly — after resolveEffectiveMembers(): Block instances must not set members with readOnly=true (BML_READONLY_MEMBER_WRITE)
 ✓  Library _blocks entries resolve to registered Block definitions (FQN + effectiveBlockVersion)

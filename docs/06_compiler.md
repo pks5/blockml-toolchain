@@ -518,9 +518,9 @@ BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=tru
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — namespace attribute references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular dependency in basePresets chain
-BML_UNKNOWN_CONTRACT          — contract type FQN not in TypeRegistry
+BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
 BML_CONTRACT_NOT_ON_ROOT      — <contracts> declared on a Sub-Block
-BML_DUPLICATE_CONTRACT        — same contract type declared twice
+BML_DUPLICATE_CONTRACT        — same contract Block referenced twice
 BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
 BML_CONSTRAINT_UNKNOWN        — constraint Block type not in TypeRegistry or not a Constraint sub-type
@@ -555,9 +555,9 @@ BML_FUNCTION_MISSING_MAIN     — no function named after the Capability found i
 BML_FUNCTION_DUPLICATE_MAIN   — more than one function matches the Capability name
 BML_IMPLEMENTATION_UNKNOWN_TYPE — <implementation type="..."> is not a known org.blockml.language.* FQN
 BML_FUNCTION_NO_RUNTIME_IMPL  — Transformation Capability called with non-literal args but no runtime impl
-BML_DUPLICATE_GENERIC           — duplicate genericType name on root Block
-BML_GENERIC_BLOCK_NAME_COLLISION — genericType name equals the Block's <name>
-BML_GENERIC_SUBBLOCK_NAME_COLLISION — genericType name equals a Sub-Block <name> in the same file
+BML_DUPLICATE_GENERIC           — duplicate generic parameter name on root Block
+BML_GENERIC_BLOCK_NAME_COLLISION — generic parameter element name equals the Block's <name>
+BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a Sub-Block <name> in the same file
 BML_SUBBLOCK_UNQUALIFIED_REFERENCE — bare Sub-Block short name used outside the defining BML file
 BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED — Sub-Block shares root Block name; bare short tag is ambiguous
 BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation type="..."> not listed in baseType languages

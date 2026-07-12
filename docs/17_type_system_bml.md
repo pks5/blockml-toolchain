@@ -956,7 +956,7 @@ Generic type parameters are declared on **StructType** (or other Block) definiti
   <baseType>org.blockml.core.StructType</baseType>
 
   <genericTypes>
-    <genericType name="T" baseType="org.blockml.core.ValueType"/>
+    <T baseType="org.blockml.core.ValueType"/>
   </genericTypes>
 
   <properties>
@@ -986,7 +986,7 @@ mynamespace:MyBlock(abc:A, xyz:B)  →  com.mynamespace.MyBlock<abc.A, xyz.B>
 core:FullyQualifiedName(core:Block) → org.blockml.core.FullyQualifiedName<core.Block>
 ```
 
-Each parenthesized argument binds one `<genericType>` parameter (in declaration order). When multiple parameters are present, the argument label (`abc`, `xyz`, …) matches the generic parameter name and qualifies the type argument as a namespace prefix (`abc:A` → `abc.A`). With a single generic parameter, the label may be omitted — only the type reference is written.
+Each parenthesized argument binds one generic type parameter (in declaration order). When multiple parameters are present, the argument label (`abc`, `xyz`, …) matches the generic parameter name (the XML element name inside `<genericTypes>`) and qualifies the type argument as a namespace prefix (`abc:A` → `abc.A`). With a single generic parameter, the label may be omitted — only the type reference is written.
 
 #### ValueType instance configuration
 
@@ -1038,7 +1038,7 @@ Generic parameter names are declared on the root Block only (`<genericTypes>` on
 ```text
 <name>Box</name>
 <genericTypes>
-  <genericType name="Box" …/>     → BML_GENERIC_BLOCK_NAME_COLLISION
+  <Box baseType="…"/>     → BML_GENERIC_BLOCK_NAME_COLLISION
 </genericTypes>
 
 <name>Library</name>
@@ -1046,17 +1046,17 @@ Generic parameter names are declared on the root Block only (`<genericTypes>` on
   <block><name>Schema</name>…</block>
 </subBlocks>
 <genericTypes>
-  <genericType name="Schema" …/>  → BML_GENERIC_SUBBLOCK_NAME_COLLISION
+  <Schema baseType="…"/>  → BML_GENERIC_SUBBLOCK_NAME_COLLISION
 </genericTypes>
 ```
 
 ```text
-BML_GENERIC_BLOCK_NAME_COLLISION    — genericType name equals the Block's <name>
-BML_GENERIC_SUBBLOCK_NAME_COLLISION — genericType name equals a Sub-Block <name> in the same file
-BML_DUPLICATE_GENERIC               — duplicate genericType name (existing)
+BML_GENERIC_BLOCK_NAME_COLLISION    — generic parameter element name equals the Block's <name>
+BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a Sub-Block <name> in the same file
+BML_DUPLICATE_GENERIC               — duplicate generic parameter element name
 ```
 
-A generic parameter name must be a distinct identifier — not the Block name, not any Sub-Block name in the same document, and not duplicated among `<genericType>` entries.
+A generic parameter name must be a distinct identifier — not the Block name, not any Sub-Block name in the same document, and not duplicated among `<genericTypes>` entries.
 
 ---
 
@@ -1066,8 +1066,8 @@ Blocks may compose zero or more **contracts** — reusable partial Block definit
 
 ```xml
 <contracts>
-  <contract type="com.foo.IIdentifiable"/>
-  <contract type="com.foo.IPlaceable"/>
+  <com.foo:IIdentifiable/>
+  <com.foo:IPlaceable/>
 </contracts>
 ```
 

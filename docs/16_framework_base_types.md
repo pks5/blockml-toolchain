@@ -131,16 +131,16 @@ Unknown type on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 
 ```xml
 <genericTypes>
-  <genericType name="T" baseType="org.blockml.core.ValueType"/>
+  <T baseType="org.blockml.core.ValueType"/>
 </genericTypes>
 ```
 
 ```text
 Declares type parameters on this Block (root block only)
-name      — parameter identifier used in type references (e.g. type="T")
-baseType  — FQN constraint; concrete type arguments must inherit from this branch
-Usage     — com.foo.Box<org.blockml.type.Integer> at reference sites
-Validator — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
+Element name  — parameter identifier used in type references (e.g. type="T")
+baseType      — FQN constraint; concrete type arguments must inherit from this branch
+Usage         — com.foo.Box<org.blockml.type.Integer> at reference sites
+Validator     — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
 
 Generic parameters belong exclusively to the declaring Block — they are never inherited
 implicitly. When a generic Block is used as baseType, the derived Block must bind or forward
@@ -149,10 +149,10 @@ Resolution substitutes bound parameters in the inherited definition during valid
 See 17_type_system_bml.md — § Generic resolution through inheritance.
 
 Naming (parse time):
-  name must differ from the Block's <name>           → BML_GENERIC_BLOCK_NAME_COLLISION
-  name must differ from every Sub-Block <name>       → BML_GENERIC_SUBBLOCK_NAME_COLLISION
-  duplicate name among genericType entries           → BML_DUPLICATE_GENERIC
-  <genericTypes> on Sub-Block                        → BML_GENERIC_NOT_ON_ROOT
+  element name must differ from the Block's <name>           → BML_GENERIC_BLOCK_NAME_COLLISION
+  element name must differ from every Sub-Block <name>       → BML_GENERIC_SUBBLOCK_NAME_COLLISION
+  duplicate element name among genericTypes entries          → BML_DUPLICATE_GENERIC
+  <genericTypes> on Sub-Block                                → BML_GENERIC_NOT_ON_ROOT
 ```
 
 See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — GenericType.

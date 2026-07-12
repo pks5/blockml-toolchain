@@ -139,17 +139,28 @@ Example: `org.blockml.core.Block` — composable instances render under their de
 ```text
 #this.name = size        →  <size>…</size>
 #this.name = properties  →  <properties>…</properties>
+#this.name = T           →  <T baseType="…"/>   (GenericTypeDefinition — name derived from element)
 ```
 
-Examples: `PropertyDefinition`, `AggregationDefinition`, `AssociationDefinition`, `CapabilityDefinition`.
+Examples: `PropertyDefinition`, `AggregationDefinition`, `AssociationDefinition`, `CapabilityDefinition`, `GenericTypeDefinition`.
 
-**Other literals**
+**Direct Block reference — effective Block type as element name**
 
-```xml
-<bml:xml>genericType</bml:xml>
+Same pattern as `org.blockml.core.Block` (`${ bml:Self }`) and Language references in `<languages>`:
+
+```text
+<contracts>
+  <ac:Wall/>          → contract reference (element name = FQN via xmlns prefix)
+</contracts>
+<languages>
+  <lang:OpenSCAD/>    → language reference
+</languages>
+<subTypes>
+  <core:Block/>       → allowed Sub-Block baseType reference
+</subTypes>
 ```
 
-→ fixed element name `<genericType>` regardless of instance fields. Example: `GenericTypeDefinition`.
+The container defines context; the child element is the Block reference — no wrapper elements (`contract`, `genericType`) when context is already unambiguous.
 
 The element body may contain only:
 

@@ -150,7 +150,7 @@ After steps 1–4 fail in document scope:
 6. TypeRegistry         — global FQN lookup
 ```
 
-**Naming mutual exclusion:** A `genericType` name must differ from the root Block `<name>` and from every Sub-Block `<name>` in the same document (`BML_GENERIC_BLOCK_NAME_COLLISION`, `BML_GENERIC_SUBBLOCK_NAME_COLLISION`). Sub-Blocks and generic parameters therefore never compete for the same identifier — steps 2 and 3 are disjoint in practice.
+**Naming mutual exclusion:** A generic parameter name (the XML element name inside `<genericTypes>`) must differ from the root Block `<name>` and from every Sub-Block `<name>` in the same document (`BML_GENERIC_BLOCK_NAME_COLLISION`, `BML_GENERIC_SUBBLOCK_NAME_COLLISION`). Sub-Blocks and generic parameters therefore never compete for the same identifier — steps 2 and 3 are disjoint in practice.
 
 **Own Block name (step 1):** When an unqualified reference matches the root Block's `<name>`, it resolves to that Block's declared `<type>` FQN — a self-type reference within the same definition. For inheritance-aware self-reference at validate time, `bml:Self` remains available (see § Members — `bml:Self`).
 
@@ -579,13 +579,13 @@ Blocks may declare `<contracts>` at root level to compose one or more **contract
 
 ```xml
 <contracts>
-  <contract type="com.foo.IIdentifiable" />
-  <contract type="com.foo.IPlaceable" />
+  <com.foo:IIdentifiable />
+  <com.foo:IPlaceable />
 </contracts>
 ```
 
 ```text
-type    — FQN of a contract Block whose partial definition is merged (required)
+Child element — direct Block reference (element name = FQN via xmlns prefix)
 ```
 
 **Semantics:**
@@ -628,8 +628,8 @@ Validation      — merge resolution at stage [8] via resolveEffectiveMembers()
   <baseType>org.blockml.core.Entity</baseType>
   <version>1.0.0</version>
   <contracts>
-    <contract type="com.foo.IIdentifiable" />
-    <contract type="com.foo.IPlaceable" />
+    <com.foo:IIdentifiable />
+    <com.foo:IPlaceable />
   </contracts>
   <properties>
     <id>

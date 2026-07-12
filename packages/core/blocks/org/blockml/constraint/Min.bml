@@ -22,7 +22,7 @@
   <type>constraint:Min</type>
   <baseType>core:Constraint</baseType>
   <genericTypes>
-    <genericType name="T" baseType="btype:Number"/>
+    <T baseType="btype:Number"/>
   </genericTypes>
 
   <properties>

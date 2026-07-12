@@ -55,10 +55,10 @@
     Binds this definition to the Block type it describes. Defaults to org.blockml.core.Block.
   -->
   <genericTypes>
-    <genericType name="B" baseType="core:Block">
+    <B baseType="core:Block">
       <documentation>The Block type this BlockDefinition describes. Conceptually
         BlockDefinition of com.foo.Bar when B binds to com.foo.Bar.</documentation>
-    </genericType>
+    </B>
   </genericTypes>
 
   <!--
@@ -116,10 +116,11 @@
       <documentation>Block FQNs allowed in subBlocks[]. Omitted = inherit effective subTypes from
         baseType chain; explicit empty list = override to forbid Sub-Blocks.</documentation>
     </subTypes>
-    <contracts type="def:ContractDefinition[]">
-      <documentation>Contract Block FQNs merged into this Block after the baseType chain (root
-        block only). Declaration order is significant — later contracts override earlier ones;
-        local Block declarations override all contracts.</documentation>
+    <contracts type="core:Block[]">
+      <documentation>Contract Block references merged into this Block after the baseType chain
+        (root block only). Each child is a direct Block reference (element name = FQN via xmlns
+        prefix) — same pattern as languages and subTypes. Declaration order is significant —
+        later contracts override earlier ones; local Block declarations override all contracts.</documentation>
     </contracts>
     <properties type="def:PropertyDefinition[]">
       <documentation>Property member declarations. Mapped to members[] in XML document order.
