@@ -178,7 +178,7 @@ Declare `<aggregations>` explicitly when **adding** aggregations beyond the inhe
 Wall  (baseType: com.machineblocks.bml.core.CompositeBlock)
   _presets:  com.machineblocks.bml.core.Block[] (inherited)
   _parts:    com.machineblocks.bml.core.Block[] (inherited, default)
-  _myModel:  org.blockml.bml.service.JSONModel (protected, beanName="myModel", declared)
+  _myModel:  org.blockml.bml.service.JSONModel (protected, declared)
 ```
 
 ### Aggregation Metadata
@@ -186,14 +186,13 @@ Wall  (baseType: com.machineblocks.bml.core.CompositeBlock)
 ```text
 name          — member name (unique within the Block's member namespace)
 type          — FQN of the child type, optionally with occurrence brackets (see 02_mbml.md — Type Notation)
-default       — boolean; marks the default aggregation for bare <composition>
-beanName      — optional; marks this Aggregation as a service binding
+default       — boolean; marks the primary aggregation (tooling / render targets)
 documentation — human-readable description
 ```
 
 Member visibility follows the three-level naming convention in `02_mbml.md` — § Member Visibility (`__` private, `_` protected, plain public). Visibility is a BlockML access rule only; renderers have full BOM access. Protected members are accessible in derived Blocks and by the direct composition owner.
 
-When `beanName` is set, the Aggregation is a service binding. The bean is accessible in Expressions via `@beanName`.
+Service beans are registered on Block instances via `bml:bean` (see `02_mbml.md` — Service beans). The bean is accessible in Expressions via `@beanName`.
 
 ---
 
@@ -334,6 +333,8 @@ Each child instance:
 type          — FQN of the Block class
 bml:id        — composition instance identity. Required when referenced or on bml:each.
                 Anonymous static children receive auto-ID after directive expansion.
+bml:bean      — optional; registers this instance as a named service bean
+bml:scope     — optional; "local" | "context" (service instances only; default: "local")
 renderGroup   — render group name (optional, fallback = resolved bml:id)
 namespace     — parameter filter namespace (optional, fallback = resolved bml:id)
 bml:version   — version pin when type refers to an external block (required for external references only)
@@ -439,7 +440,7 @@ Ternary:      condition ? valueIfTrue : valueIfFalse
 - No access to parent, grandparent, or sibling Block properties
 - Direction is always parent → child (top-down only)
 - Registry scope is per Composition — initialized on entry, not accessible outside
-- @bean references: resolved by walking up Composition hierarchy (scope="context" beans)
+- @bean references: resolved by walking up Composition hierarchy (`bml:scope="context"` beans)
 - #built-in references: always available (inherited via baseType)
 - Model binding context: inherited from parent Aggregation
 ```

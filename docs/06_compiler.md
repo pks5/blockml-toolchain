@@ -515,7 +515,7 @@ BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritanc
 BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT — members differ only by visibility prefix (normalized name collision)
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
-BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
+BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
 BML_OUTSIDE_BML_NAMESPACE — Block FQN, xmlns binding, or Library export is outside <domain>.bml.*
 BML_DEPRECATED_MEMBER_NAMESPACE_ATTR — legacy namespace="…" attribute on member element

@@ -814,9 +814,7 @@ An Aggregation describes an ownership relationship: a Block can contain zero or 
 ```text
 name          — member name (unique within namespace)
 type          — FQN of the child type, optionally with occurrence brackets (see Type Notation below)
-default       — boolean; marks the default aggregation for bare <composition>
-beanName      — optional; marks this Aggregation as a service binding
-scope         — optional; "local" | "context" (service bindings only)
+default       — boolean; marks the primary aggregation (tooling / render targets)
 documentation — human-readable description
 since         — optional; semantic version from which this member is available
 changelog     — optional; version history (oldest first)
@@ -966,21 +964,21 @@ Built-in services are defined in `org.blockml.bml.service.*` and accessible via 
 #strings  — built-in string utilities (format, trim, ...)
 ```
 
-User-defined services are declared as Aggregations and given a bean name:
+User-defined services are registered as Block instances in a Composition and given a bean name via `bml:bean`:
 
 ```text
-@myModel   — user-defined JSONModel, bound as bean "myModel"
-@myService — user-defined service Block, bound as bean "myService"
+@myModel   — user-defined JSONModel instance with bml:bean="myModel"
+@myService — user-defined service Block instance with bml:bean="myService"
 ```
 
 The distinction between `#` (built-in) and `@` (user-defined) is enforced at parse time. `#`-prefixed names are reserved and cannot be used as bean names.
 
 ### Bean Scope
 
-Every service Aggregation declares a `scope` that controls visibility to child Blocks:
+Every service instance declares a `bml:scope` that controls visibility to child Blocks:
 
 ```text
-scope   — "local" | "context"    default: "local"
+bml:scope   — "local" | "context"    default: "local"
 ```
 
 `local` — the bean is only accessible within the Block that declares it. Child Blocks in Compositions cannot see it.
@@ -992,24 +990,24 @@ scope   — "local" | "context"    default: "local"
 When an Expression references `@myBean`, the resolver walks up the Composition hierarchy:
 
 ```text
-1. Current Block — has a bean named "myBean" with scope="context"? → use it
+1. Current Block — has a bean named "myBean" with `bml:scope="context"`? → use it
 2. Not found → go one level up
 3. Repeat until root
 4. Not found → parse-time error: bean "myBean" not in scope
 ```
 
-A bean with `scope="local"` is invisible to children — it is skipped during the upward walk.
+A bean with `bml:scope="local"` is invisible to children — it is skipped during the upward walk.
 
 **Override example:**
 
 ```text
-App       @data scope="context"  ← ODataModel (visible to all descendants)
-  View    @data scope="context"  ← JSONModel  (overrides App @data for this View and its children)
+App       @data (bml:scope="context")  ← ODataModel (visible to all descendants)
+  View    @data (bml:scope="context")  ← JSONModel  (overrides App @data for this View and its children)
     Table                        ← sees JSONModel via @data
   Sidebar                        ← sees ODataModel via @data (no override here)
 ```
 
-This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) — but scope is declared on the Aggregation, not on the service type itself. The same service type can have different scopes in different contexts.
+This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) — but scope is declared on the instance (`bml:scope`), not on the service type itself. The same service type can have different scopes in different contexts.
 
 ---
 
@@ -1250,9 +1248,10 @@ children      — ordered list of child Block instances (each may contain nested
 **Placement rules:**
 
 ```text
-Single effective default aggregation  → bare <composition> permitted (sugar)
-Multiple aggregations                 → each opened explicitly by member element name
-Ambiguous bare <composition>          → BML_AMBIGUOUS_COMPOSITION
+<composition> must always be nested inside an aggregation member element — never standalone.
+New aggregation declaration     → type required on the aggregation element
+Inherited aggregation override  → type omitted; aggregation element + <composition> only
+Standalone <composition>        → BML_STANDALONE_COMPOSITION (validation error)
 ```
 
 Each child instance carries:
@@ -1804,7 +1803,7 @@ ${ #strings.format(tpl, v) }
 
 ### User Bean Calls (`@`)
 
-The referenced bean must be declared as an Aggregation with a `beanName` on the current Block. Only `Transformation` Capabilities are callable in Expressions. The output value is used as the expression result.
+The referenced bean must be registered on a Block instance via `bml:bean` in the current Block or an ancestor Composition. Only `Transformation` Capabilities are callable in Expressions. The output value is used as the expression result.
 
 ```text
 Object input — two equivalent forms:

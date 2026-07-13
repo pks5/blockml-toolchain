@@ -445,7 +445,7 @@ Array/collection index access (`items[0]`) remains valid for collection-typed me
 
 ## Bean Calls (`@`)
 
-User-defined Beans are declared as Aggregations with a `beanName` on the current Block. Beans are resolved by walking up the Composition hierarchy — context-scoped beans (`scope="context"`) are visible to all descendants.
+User-defined Beans are registered on Block instances via `bml:bean`. Beans are resolved by walking up the Composition hierarchy — context-scoped beans (`bml:scope="context"`) are visible to all descendants.
 
 ### Transformation Capability Call
 
@@ -516,13 +516,19 @@ ${ @utils.formatValue(valueStart + i * valueStep) }
 
 > **V1 scope:** utility Sub-Block calls use `@bean` syntax and are **not implemented in V1**. The example above illustrates the complete language.
 
-The utility Sub-Block is declared as a Sub-Block and bound via a context-scoped Aggregation:
+The utility Sub-Block is declared as a Sub-Block and bound via a context-scoped instance:
 
 ```xml
-<!-- Aggregation on parent Block: -->
-<_utils type="com.machineblocks.bml.calibration.Calibrator.Utils"
-        beanName="utils"
-        scope="context" />
+<!-- Aggregation on parent Block (structural + instance): -->
+<aggregations>
+  <_utils type="com.machineblocks.bml.calibration.Calibrator.Utils">
+    <composition>
+      <com.machineblocks.bml.calibration.Calibrator.Utils
+          bml:bean="utils"
+          bml:scope="context" />
+    </composition>
+  </_utils>
+</aggregations>
 
 <!-- utility Sub-Block: -->
 <block>
@@ -972,8 +978,8 @@ Property access (no prefix):
 
 @bean Transformation Capability calls:
   — resolved by walking up the Composition hierarchy
-  — context-scoped beans (scope="context") visible to all descendants
-  — local beans (scope="local") visible only in declaring Block
+  — context-scoped beans (bml:scope="context") visible to all descendants
+  — local beans (bml:scope="local") visible only in declaring Block
   — utility Sub-Block beans follow the same scoping rules
 
 #built-in references:

@@ -543,8 +543,8 @@ PascalCase ensures composition instance tags with `xmlns:` prefixes are unambigu
 <capabilities>  — Capability declarations.
 <contracts>     — Contract references (reusable partial definitions). Root block only.
 <subBlocks>     — Sub-Block definitions (see Sub-Blocks section).
-<composition>   — internal structure inside the default aggregation. Omit for Leaf Blocks.
-                — equivalent to <{defaultAggregation}><composition>…</composition></{defaultAggregation}>
+<aggregations>  — Aggregation declarations and definition-level compositions. Omit when inherited aggregations from baseType suffice.
+                — <composition> must be nested inside an aggregation member element (never standalone).
 ```
 
 Framework base types (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.Block`, …) are **BML files** in `@blockml/core` and `@machineblocks/mbom` — not code or YAML. See `16_framework_base_types.md`.
@@ -750,15 +750,15 @@ _parts (CompositeBlock):
   default: true
 ```
 
-**Composition placement** — a Composition fills an Aggregation. It may appear:
+**Composition placement** — a Composition always fills an Aggregation and must be nested inside the aggregation member element:
 
 ```text
-1. Nested inside <aggregation> on a Block definition (preferred when multiple aggregations exist)
-2. As a top-level <composition> element — sugar when exactly one effective default aggregation exists
-3. On Block instances — opening a specific aggregation inline (see § Composition)
+1. Inside <aggregations> on a Block definition — preferred when declaring or filling multiple aggregations
+2. As a top-level aggregation member element on a Block definition — when filling one inherited aggregation (type omitted)
+3. On Block instances — opening a specific aggregation inline (see § Composition); no <composition> wrapper
 ```
 
-For CompositeBlocks the default aggregation is typically inherited `_parts`. Sets and Libraries have multiple aggregations — each must be opened explicitly via `<{aggregationName}><composition>…</composition></{aggregationName}>` on the definition, or directly by member name on instances.
+For CompositeBlocks the default aggregation is typically inherited `_parts`. Sets and Libraries have multiple aggregations — each composition must be nested in its aggregation member element.
 
 ### Minimal Block Example
 
@@ -768,10 +768,12 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 
   <name>Wall</name>
   <type>com.martianmicro.anyclosure.Wall</type>
-  <baseType>com.machineblocks.bml.core.Block</baseType>
+  <baseType>com.machineblocks.bml.core.CompositeBlock</baseType>
   <version>1.0.0</version>
 
-  <composition>
+  <aggregations>
+    <_parts>
+      <composition>
     <bricks:StandardBrick
         bml:id="bottom"
         bml:version="1.0.0"
@@ -787,7 +789,9 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
         offset="${ [0, 0, size.z - 1] }"
         recessWallGaps="x+"
         baseCutoutType="groove" />
-  </composition>
+      </composition>
+    </_parts>
+  </aggregations>
 
 </block>
 ```
@@ -1517,11 +1521,11 @@ For MachineBlocks Blocks, `_presets` and `_parts` are inherited from the base ty
 </aggregations>
 ```
 
-When overriding an inherited aggregation, `type` is required only for **new** declarations. When filling an inherited aggregation, only `<composition>` needs to be specified.
+When overriding an inherited aggregation, `type` is required only on **new** declarations. Sub-Blocks and derived Blocks filling an inherited aggregation specify only the aggregation member element and nested `<composition>` — no `type` attribute.
 
 ```text
-type         — child type (required on new declarations; inherited on overrides)
-default      — boolean; marks the default aggregation for bare <composition>
+type         — child type (required on new declarations; omitted when filling inherited aggregations)
+default      — boolean; marks the primary aggregation (tooling / render targets)
 readOnly     — when true, instance authoring is forbidden (validator-enforced)
 final        — prevents override in child Blocks
 visibility   — optional; must match naming convention
@@ -1569,23 +1573,35 @@ com.foo.Bar.documentation           →  Block documentation
 
 No special definition-reference constructs are required — the path itself carries all type information. See `00_bom_core.md` — § Canonical definition paths.
 
-**Service Aggregations** bind named service beans into the Block. Once declared, the bean is accessible in Expressions via `@beanName`. The `scope` attribute controls visibility to child Blocks:
+**Service beans** register named service instances in a Composition. Once registered via `bml:bean`, the bean is accessible in Expressions via `@beanName`. The `bml:scope` attribute controls visibility to child Blocks:
 
 ```xml
 <aggregations>
-  <!-- local: only accessible in this Block (default) -->
-  <_fmt type="org.blockml.bml.service.Formatter"
-        beanName="fmt"
-        scope="local" />
-
-  <!-- context: passed down to all child Blocks in Compositions, overridable -->
-  <_data type="org.blockml.bml.service.JSONModel"
-         beanName="data"
-         scope="context" />
+  <_fmt type="org.blockml.bml.service.Formatter">
+    <composition>
+      <org.blockml.bml.service.Formatter
+          bml:bean="fmt"
+          bml:scope="local" />
+    </composition>
+  </_fmt>
+  <_data type="org.blockml.bml.service.JSONModel">
+    <composition>
+      <org.blockml.bml.service.JSONModel
+          bml:bean="data"
+          bml:scope="context" />
+    </composition>
+  </_data>
 </aggregations>
 ```
 
-`scope="context"` beans are resolved by walking up the Composition hierarchy — a child Block sees the nearest `@data` with `scope="context"` in any ancestor.
+Multiple instances of the same type with different bean names are possible:
+
+```xml
+<Utils bml:bean="math" bml:scope="context" />
+<Utils bml:bean="format" bml:scope="context" />
+```
+
+`bml:scope="context"` beans are resolved by walking up the Composition hierarchy — a child Block sees the nearest `@data` with `bml:scope="context"` in any ancestor.
 
 ### Associations
 
@@ -1683,19 +1699,30 @@ Both support the same directives: `bml:if`, `bml:each`, `bml:with`, `bml:exportI
 ### Placement Rules
 
 ```text
-Block definition — single default aggregation:
-  <composition>…</composition>
-  → sugar for <{defaultAggregation}><composition>…</composition></{defaultAggregation}>
+Block definition — inherited default aggregation (_parts on CompositeBlock):
+  <aggregations>
+    <_parts>
+      <composition>…</composition>
+    </_parts>
+  </aggregations>
+  → type omitted on _parts when inherited
+
+Block definition — Sub-Block filling inherited _parts:
+  <_parts>
+    <composition>…</composition>
+  </_parts>
+  → top-level aggregation member on the Sub-Block; type omitted
 
 Block definition — multiple aggregations:
   <aggregations>
-    <_presets>
+    <_presets type="…">
       <composition>…</composition>
     </_presets>
     <_parts>
       <composition>…</composition>
     </_parts>
   </aggregations>
+  → type required only on new declarations; inherited members omit type
 
 Block instance — multiple aggregations:
   <house:Room bml:id="kitchen">
@@ -1714,7 +1741,16 @@ Block instance — recursive inner structure:
       <bricks:Standard/>
     </_parts>
   </walls:Wall>
-  → valid when Wall has exactly one effective default aggregation
+  → Block instances open aggregations directly — no <composition> wrapper
+```
+
+**Rules:**
+
+```text
+<composition> must always be nested inside an aggregation member element — never standalone
+New aggregation declaration     → type required
+Inherited aggregation override  → type omitted
+Standalone <composition>        → BML_STANDALONE_COMPOSITION (validation error)
 ```
 
 ### `bml:exportIds`
@@ -1738,14 +1774,6 @@ Block instances   — on the instance element itself
 ```
 
 All static IDs within the container are exported. The value is inherited recursively by child instances and may be overridden at deeper levels.
-
-**Rules:**
-
-```text
-Single default aggregation  → bare <composition> permitted (on definitions only)
-Multiple aggregations       → each must be opened explicitly by member name
-Ambiguous bare <composition> → validation error when no unique default aggregation exists
-```
 
 ### Recursive Composition
 
@@ -1772,6 +1800,8 @@ bml:version     — optional on external block references; exact-version assert 
                   Omitted → resolve effective version from TypeRegistry context.
                   Forbidden inside Library files → BML_VERSION_NOT_ALLOWED_IN_LIBRARY.
                   Same-document Sub-Block references omit bml:version.
+bml:bean        — optional; registers this instance as a named service bean (accessible via @bean in Expressions)
+bml:scope       — optional; "local" | "context" (service instances only; default: "local")
 renderGroup     — optional, fallback = resolved bml:id
 namespace       — optional, fallback = resolved bml:id
 (attributes)    — any Member value of the referenced Block type (camelCase) — property namespace is free
@@ -1862,13 +1892,15 @@ Flow-control directives follow the **Thymeleaf model** — attributes on the ele
 |---|---|---|
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
 | `bml:version` | Block instances | External block reference version (required when type is from another file) |
+| `bml:bean` | Block instances | Service bean name — accessible via `@bean` in Expressions |
+| `bml:scope` | Block instances | Bean visibility: `"local"` (default) or `"context"` |
 | `bml:with` | `<composition>`, `<bml:container>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
 | `<bml:xml>…</bml:xml>` | `org.blockml.bml.core.Block`, Definition blocks | XML root element for this type — `19_definition_blocks_and_bml_xml.md` |
 | `bml:xml="attribute\|element\|text\|cdata"` | Members on Definition blocks | Member serialization shape — `19_definition_blocks_and_bml_xml.md` |
 
-Bare `id=` or `version=` on composition instances are **member values** — same as any other attribute. Use `bml:id` / `bml:version` for composition meta.
+Bare `id=` or `version=` on composition instances are **member values** — same as any other attribute. Use `bml:id` / `bml:version` / `bml:bean` / `bml:scope` for composition meta.
 
 ### `bml:xml` — XML Serialization (Definition blocks)
 
@@ -2971,10 +3003,9 @@ There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping 
 ```text
 baseType missing              → BML_MISSING_BASE_TYPE (no default)
 <aggregations> missing        → no parser action; inherited members resolved at validate (e.g. _presets, _parts from MachineBlocks base types)
-bare <composition> on definition or instance
-  + single default aggregation in effective members → fills that aggregation (typically _parts for MB Blocks)
-  + multiple aggregations, no unique default        → BML_AMBIGUOUS_COMPOSITION (validation error)
+standalone <composition>      → BML_STANDALONE_COMPOSITION (validation error)
 <aggregation> without type on new declaration       → BML_MISSING_AGGREGATION_TYPE
+<aggregation> with type when filling inherited member → type ignored or BML_REDUNDANT_AGGREGATION_TYPE (implementation choice)
 partial member override       → merge with parent member at validate; private/final violations → errors
 visibility mismatch           → BML_VISIBILITY_MISMATCH
 private member access         → BML_PRIVATE_MEMBER_ACCESS

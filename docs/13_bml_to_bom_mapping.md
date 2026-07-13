@@ -116,6 +116,8 @@ xsi:schemaLocation="..."                  → ignored
 |---|---|
 | `bml:id` | `BlockInstance.id` (`MemberValue`) |
 | `bml:version` | `BlockInstance.version` (`MemberValue`) |
+| `bml:bean` | `BlockInstance.bean` (`MemberValue`) |
+| `bml:scope` | `BlockInstance.scope` (`"local"` \| `"context"`) |
 | `bml:status` | `statusFqn` on the element when declared (deviation from inherited effective status) |
 
 **Flow-control directives** — stored in `directives[]` on the same element (Thymeleaf model):
@@ -650,7 +652,8 @@ Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against
   </_parts>
 </aggregations>
 
-bare <composition> on definition            → CompositionTemplate for default aggregation
+bare <composition> on definition            → BML_STANDALONE_COMPOSITION (error)
+<{aggregationName}><composition>…           → CompositionTemplate for that aggregation
 <memberName> on instance                    → BlockInstance.aggregationCompositions[]
 ```
 

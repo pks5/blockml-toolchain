@@ -56,7 +56,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Member inheritance** | **Utility lookup only.** BOM stores **declared** members per Block. `resolveEffectiveMembers()` returns `EffectiveMemberSet` — a separate structure, never flattened into BOM. |
 | **Capabilities** | Authored Capabilities stored in BOM. No synthetic getter/setter generation. Renderer interprets all Capabilities. See `08_managed_object.md`. |
 | **Member identity** | Uniqueness by resolved **`(namespace, name)`**. Namespace from member element QName prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
-| **Composition** | Nested inside `<aggregation>` on definitions and instances. Bare `<composition>` is sugar for the single default aggregation. `composition aggregation="…"` removed. |
+| **Composition** | Nested inside `<aggregation>` on definitions only — never standalone. Block instances open aggregations directly (no `<composition>` wrapper). `composition aggregation="…"` removed. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | `bml:*` on composition elements — flow-control in `directives[]`; composition meta (`bml:id`, `bml:version`) on `BlockInstance` fields. **Not expanded** at parse time. |
@@ -207,8 +207,7 @@ interface BlockDefinition {
   subBlocks: BlockDefinition[]
 
   /**
-   * Composition templates — derived from nested <composition> inside <aggregation>
-   * and from bare <composition> (sugar for default aggregation).
+   * Composition templates — derived from nested <composition> inside <aggregation> member elements.
    * May contain BlockInstanceNode and VirtualContainerNode children.
    */
   compositions: CompositionTemplate[]
@@ -446,9 +445,6 @@ interface AggregationDefinition extends MemberDefinitionBase {
   defaultAggregation?: boolean
   /** Nested composition filling this aggregation (may be omitted on override declarations) */
   composition?: CompositionTemplate
-  /** service binding */
-  beanName?: string
-  scope?: "local" | "context"
 }
 
 interface AssociationDefinition extends MemberDefinitionBase {
@@ -689,13 +685,15 @@ interface VirtualContainerNode {
 |---|---|---|
 | `bml:id` | Block instances | Composition instance identity — literal or `${ expr }` |
 | `bml:version` | Block instances | External block reference version |
+| `bml:bean` | Block instances | Service bean name |
+| `bml:scope` | Block instances | Bean visibility: `"local"` or `"context"` |
 | `bml:with` | `<composition>`, `<aggregation>`, `<bml:container>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional inclusion |
 
 Directives are **never expanded** at parse time. Expansion (if any) is a downstream concern.
 
-**Composition meta** (`bml:id`, `bml:version`) is parsed from the `bml:` namespace but stored on **`BlockInstance` fields** — not in `directives[]` and not in `memberValues`.
+**Composition meta** (`bml:id`, `bml:version`, `bml:bean`, `bml:scope`) is parsed from the `bml:` namespace but stored on **`BlockInstance` fields** — not in `directives[]` and not in `memberValues`.
 
 ```typescript
 type DirectiveAttribute =
@@ -883,6 +881,18 @@ interface BlockInstance {
    */
   version?: MemberValue
 
+  /**
+   * From bml:bean — registers this instance as a named service bean.
+   * Accessible in Expressions via @beanName.
+   */
+  bean?: MemberValue
+
+  /**
+   * From bml:scope — bean visibility: "local" (default) or "context".
+   * Context-scoped beans are visible to all descendant Blocks in Compositions.
+   */
+  scope?: "local" | "context"
+
   /** Preset reference: {PresetsDocumentFQN}::{preset-id} */
   basePresets?: string
 
@@ -898,8 +908,8 @@ interface BlockInstance {
 
   /**
    * Nested aggregation compositions on this instance.
-   * Parsed from <{aggregationName}><composition>…</composition></{aggregationName}>
-   * or bare <composition> when the referenced Block has a unique default aggregation.
+   * Parsed from <{aggregationName}><composition>…</composition></{aggregationName}>.
+   * Standalone <composition> → BML_STANDALONE_COMPOSITION.
    */
   aggregationCompositions?: InstanceAggregationComposition[]
 
@@ -1116,14 +1126,15 @@ BomDocument
   block: BlockDefinition
     name: Calibrator
     type: com.machineblocks.bml.calibration.Calibrator
-    baseType: com.machineblocks.bml.core.Block
+    baseType: com.machineblocks.bml.core.CompositeBlock
     version: "1.0.0"
 
     members: (declared only — NOT including inherited size, offset, baseColor, ...)
       - PropertyDefinition numberOfSamples
       - PropertyDefinition font
       - PropertyDefinition size (computed value → ExpressionValue)
-      - AggregationDefinition utils → typeFqn: ...Calibrator.Utils, beanName: "utils"
+      - AggregationDefinition _utils → typeFqn: ...Calibrator.Utils, composition with Utils instance (bml:bean="utils", bml:scope="context")
+      - AggregationDefinition _parts → composition with 4 calibration rows
 
     subBlocks:
       - BlockDefinition Utils (utility Sub-Blocks, capabilities with OpenSCAD implementation)
@@ -1134,6 +1145,9 @@ BomDocument
       - BlockDefinition PinDiameter
 
     compositions:
+      - aggregationName: "_utils"
+        children:
+          - BlockInstanceNode Utils (bml:bean="utils", bml:scope="context")
       - aggregationName: "_parts" (inherited from com.machineblocks.bml.core.CompositeBlock)
         children:
           - BlockInstanceNode Base (no version — same document)
@@ -1250,7 +1264,7 @@ BML_PRIVATE_SUBBLOCK_ACCESS   — private Sub-Block referenced outside declaring
 BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritance context
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
-BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
+BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular basePresets chain
 BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
