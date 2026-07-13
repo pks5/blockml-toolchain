@@ -17,10 +17,10 @@
 
   <documentation>Describes one usage example in an examples container on any definition element
     (block, property, aggregation, …). Rendered as an example element with a required title
-    attribute and a CDATA body. Maps to BOM DocumentationExample { title, content, language? }.
-    Body content must be CDATA (BML_EXAMPLE_NOT_CDATA otherwise). A future optional language
-    attribute may distinguish example dialects (OpenSCAD, TypeScript); omitted defaults to
-    BML/MBML source.</documentation>
+    attribute and a CDATA body. Maps to BOM DocumentationExample { title, content, languageFqn? }.
+    Body content must be CDATA (BML_EXAMPLE_NOT_CDATA otherwise). An optional language attribute
+    references a Language FQN when the example is written in a specific dialect (OpenSCAD,
+    TypeScript, …); omitted when content is BML/MBML source.</documentation>
 
   <references>
     <see file="02_mbml.md">
@@ -28,6 +28,9 @@
     </see>
     <see file="12_bom_object_model.md">
       DocumentationExample BOM structure.
+    </see>
+    <see block="core:Language">
+      Optional language attribute on example elements.
     </see>
   </references>
 
@@ -44,10 +47,15 @@
       <documentation>Short title identifying this example. Required attribute on every example
         element (BML_EXAMPLE_MISSING_TITLE when omitted).</documentation>
     </title>
+    <language type="FullyQualifiedName(core:Language)" bml:xml="attribute">
+      <documentation>Optional Language FQN (org.blockml.bml.language.*) when the example body is
+        written in a specific implementation or markup dialect. Omitted when content is BML/MBML
+        source.</documentation>
+    </language>
     <!-- bml:xml="text|cdata" renders content as character data; renderer may use CDATA. -->
     <content type="Text" bml:xml="text|cdata">
-      <documentation>BML or MBML source text demonstrating usage. Stored as CDATA body in BOM
-        DocumentationExample.content.</documentation>
+      <documentation>BML, MBML, or target-language source text demonstrating usage. Stored as CDATA
+        body in BOM DocumentationExample.content.</documentation>
     </content>
   </properties>
 </block>

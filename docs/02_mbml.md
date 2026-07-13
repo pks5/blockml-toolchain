@@ -324,7 +324,7 @@ Entries must be ordered chronologically by version — **oldest first**. Out-of-
 
 #### `<examples>`
 
-Container for usage examples. Each `<example>` requires a `title` attribute; body content is **CDATA only**:
+Container for usage examples. Each `<example>` requires a `title` attribute; body content is **CDATA only**. An optional `language` attribute references an `org.blockml.bml.core.Language` FQN when the example is written in a specific dialect:
 
 ```xml
 <examples>
@@ -339,10 +339,16 @@ Container for usage examples. Each `<example>` requires a `title` attribute; bod
     holes="true" />
     ]]></example>
 
+    <example title="OpenSCAD render"
+        language="org.blockml.bml.language.OpenSCAD"><![CDATA[
+module brick(size) = cube(size);
+brick([2, 4, 3]);
+    ]]></example>
+
 </examples>
 ```
 
-A future optional `language` attribute (e.g. `OpenSCAD`, `TypeScript`) may distinguish example dialects. Omitted → BML source (MBML/BML).
+Omitted `language` → BML/MBML source.
 
 #### `<references>`
 

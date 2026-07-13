@@ -281,7 +281,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <changelog>                                  → block.changelog[]
   <change version="…">…</change>             → { version, text: trimmed body }
 <examples>                                   → block.examples[]
-  <example title="…" language="…">           → { title, content: CDATA body, language? }
+  <example title="…" language="…">           → { title, content: CDATA body, languageFqn? }
 <references>                                 → block.references[]
   <see block="…">…</see>         → { block, context: trimmed body }
   <see file="…">…</see>          → { file, context: trimmed body }
@@ -309,6 +309,7 @@ Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <changelog> entries out of version order → BML_CHANGELOG_VERSION_ORDER (warning V1)
 <example> without title attribute        → BML_EXAMPLE_MISSING_TITLE (error)
 <example> body not CDATA                 → BML_EXAMPLE_NOT_CDATA (error)
+<example language="…"> unknown Language FQN → BML_EXAMPLE_UNKNOWN_LANGUAGE (error)
 <see> without block, file, or url          → BML_REFERENCE_MISSING_TARGET (error)
 <see> with more than one target attr       → BML_REFERENCE_AMBIGUOUS_TARGET (error)
 Omitted abstract/final                 → false

@@ -217,6 +217,15 @@ context         String (required)  — relationship note; XML text content
 
 Exactly one of `block`, `file`, or `url` must be set. Authoring: list only targets **relevant to the current definition**; text body describes the relationship. All cross-links belong in `<references>` — never in `<documentation>`. See `02_mbml.md` — `<documentation>` · `<references>`.
 
+`org.blockml.bml.definition.ExampleDefinition` — one usage example in an `<examples>` container:
+
+```text
+bml:xml         example            — renders as <example> inside <examples>
+title           String (required)  — XML title attribute
+language        Language FQN       — optional; org.blockml.bml.language.* when body is not BML/MBML
+content         String (required)  — CDATA body
+```
+
 Each Definition block may declare **`bml:xml`** — how instances serialize to canonical BML XML (root element name, member as attribute/element/text/cdata). The meta-model is **work in progress**; full specification in `19_definition_blocks_and_bml_xml.md`.
 
 `org.blockml.bml.core.Block` itself carries `<bml:xml>${ bml:Self }</bml:xml>` — composable instances render under their declared type tag. Definition blocks describe the grammar; ordinary domain blocks consume it.

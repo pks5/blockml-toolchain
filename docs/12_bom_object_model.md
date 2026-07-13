@@ -384,8 +384,8 @@ interface DocumentationExample {
   title: string
   /** CDATA body — BML/MBML source text */
   content: string
-  /** Reserved — example dialect (e.g. OpenSCAD, TypeScript). Omitted = BML. */
-  language?: string
+  /** Language FQN (org.blockml.bml.language.*). Omitted when content is BML/MBML source. */
+  languageFqn?: string
   source?: SourceLocation
 }
 
@@ -1232,6 +1232,7 @@ BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version
 BML_CHANGELOG_VERSION_ORDER   — <changelog> entries not ordered oldest-first (warning V1)
 BML_EXAMPLE_MISSING_TITLE     — <example> lacks required title attribute
 BML_EXAMPLE_NOT_CDATA         — <example> body is not CDATA
+BML_EXAMPLE_UNKNOWN_LANGUAGE  — <example> language attribute is not a known Language FQN
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
 BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library bootstrap / _dependencies / _subLibraries / _blocks
