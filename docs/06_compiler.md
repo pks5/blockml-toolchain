@@ -518,7 +518,7 @@ BML_OVERRIDE_WITHOUT_PARENT   — override="true" but no same-named parent membe
 BML_IMPLEMENTATION_WITHOUT_PARENT — implementation="true" but no same-named parent member
 BML_IMPLEMENTATION_PARENT_NOT_ABSTRACT — implementation="true" but parent member is not abstract
 BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE — implementation="true" with explicit override="false"
-BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — abstract member on a concrete block without implementation="true"
+BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — abstract member on a concrete block without implementation="true" (includes partial implementation: implementation="true" with abstract="true" keeps the member abstract)
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix

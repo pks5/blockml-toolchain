@@ -217,8 +217,9 @@ Sub-blocks:    Documentation · Change · Example · Reference
 declarations, `abstract` allows an incomplete definition. `override="true"` requires a same-named
 parent member; abstract on the override is optional — refining an abstract parent without
 `implementation="true"` keeps the member abstract for descendants. `implementation="true"` requires
-a same-named abstract parent member and implies override. Concrete blocks must implement inherited
-abstract members. `final` prevents override in child Blocks.
+a same-named abstract parent member, implies override, and implies `abstract=false` unless
+`abstract="true"` is also set (partial implementation — descendants must implement again). Concrete
+blocks must implement inherited abstract members. `final` prevents override in child Blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 

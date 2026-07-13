@@ -28,8 +28,9 @@
     • override="true" — refines or replaces a same-named parent member (abstract or concrete).
       abstract on the override is optional; refining an abstract parent without implementation
       keeps the member abstract for descendants
-    • implementation="true" — completes a same-named abstract parent member (implies override;
-      override="true" not required)
+    • implementation="true" — implements a same-named abstract parent member (implies override;
+      override="true" not required). Implies abstract="false" unless abstract="true" is also set —
+      then the member stays abstract and a deriving block must implement again
 
     org.blockml.bml.definition.CapabilityDefinition will specialize implementation later. Maps to BOM
     MemberDefinitionBase fields shared by all member kinds.</documentation>
@@ -69,12 +70,13 @@
     </override>
     <implementation type="Boolean" bml:xml="attribute">
       <value>false</value>
-      <documentation>When true, this member fully implements a same-named abstract parent member.
-        Implies override — omit override or set override="true"; do not set override="false"
-        (BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE). The validator requires a matching
-        abstract parent member (BML_IMPLEMENTATION_WITHOUT_PARENT,
-        BML_IMPLEMENTATION_PARENT_NOT_ABSTRACT). The declaring block must supply the missing parts;
-        usual member checks then apply (type present, value set where required, and so on). Emits
+      <documentation>When true, this member implements a same-named abstract parent member. Implies
+        override — omit override or set override="true"; do not set override="false"
+        (BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE). Implies abstract="false" unless abstract="true" is
+        also set on this declaration — partial implementation: supply the refined attributes but keep
+        the contract open; descendants must set implementation="true" again. The validator requires a
+        matching abstract parent member (BML_IMPLEMENTATION_WITHOUT_PARENT,
+        BML_IMPLEMENTATION_PARENT_NOT_ABSTRACT). Usual member checks apply to supplied parts. Emits
         BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED when an abstract member on a concrete block remains
         unimplemented. org.blockml.bml.definition.CapabilityDefinition overrides this property with
         a full Implementation value type for capability members.</documentation>

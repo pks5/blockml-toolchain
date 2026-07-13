@@ -55,8 +55,10 @@
         instance type. When true on a member declaration, the member is abstract — its definition
         may be incomplete (for example a property without type or without value). The member becomes
         usable only after a deriving block sets implementation="true" and supplies the missing
-        parts. Default false. On block definitions rendered as a child element; on members as an
-        optional attribute.</documentation>
+        parts. On members, implementation="true" implies abstract="false" unless abstract="true" is
+        also set — then partial implementation keeps the member abstract for descendants. Default
+        false. On block definitions rendered as a child element; on members as an optional
+        attribute.</documentation>
     </abstract>
     <final type="Boolean" bml:xml="element|attribute">
       <value>false</value>

@@ -1229,9 +1229,11 @@ override="true|false"   — when true, this declaration overrides a same-named p
                           parent may be abstract or concrete. Does not require abstract="true" on
                           this declaration. Default: false.
 implementation="true|false"
-                        — when true, this declaration fully implements a same-named abstract parent
-                          member. Implies override — omit override or set override="true"; do not set
-                          override="false" (BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE). Default: false.
+                        — when true, this declaration implements a same-named abstract parent member.
+                          Implies override — omit override or set override="true"; do not set
+                          override="false" (BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE). Implies
+                          abstract="false" unless abstract="true" is also set (partial
+                          implementation — descendants must implement again). Default: false.
 final="true|false"      — when true, child Blocks cannot override this member. Validator-enforced.
                           Default: false.
 ```
@@ -1244,27 +1246,47 @@ Three orthogonal member attributes with simple validator rules:
 |---|---|
 | `abstract="true"` | Member must be implemented by concrete blocks |
 | `override="true"` | A same-named parent member must exist (abstract or concrete) |
-| `implementation="true"` | A same-named **abstract** parent member must exist; `override="false"` is forbidden |
+| `implementation="true"` | A same-named **abstract** parent member must exist; `override="false"` is forbidden; implies `abstract="false"` unless `abstract="true"` is also set |
 
 A member declaration is exactly one of:
 
 ```text
 new            — neither override nor implementation
 override       — refines or replaces an inherited member
-implementation — completes an inherited abstract member (implies override)
+implementation — implements an inherited abstract member (implies override; implies abstract=false
+               unless abstract=true is also set)
 ```
 
 **Abstract → implementation**
 
 An `abstract="true"` member may omit required parts on the declaring block (for example a property
-without `type` or without `<value>`). A deriving block completes it with `implementation="true"` and
-the missing parts. Only then do the normal completeness rules apply in full.
+without `type` or without `<value>`). A deriving block implements it with `implementation="true"` and
+the missing parts. `implementation="true"` implies `abstract="false"` — the effective member is
+concrete unless this declaration also sets `abstract="true"`. With both flags, partial
+implementation refines the inherited member but keeps it abstract; the next deriving block must set
+`implementation="true"` again. Only when the effective member is concrete do the normal
+completeness rules apply in full.
 
 ```text
 abstract without implementation on a concrete block  →  BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED
 implementation without parent member                 →  BML_IMPLEMENTATION_WITHOUT_PARENT
 implementation when parent is not abstract           →  BML_IMPLEMENTATION_PARENT_NOT_ABSTRACT
 implementation="true" with override="false"          →  BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE
+```
+
+Partial implementation — `implementation="true"` with `abstract="true"`:
+
+```xml
+<!-- Parent -->
+<width abstract="true" type="Length"/>
+
+<!-- Child: refines type, stays abstract — implementation implies abstract=false unless set -->
+<width implementation="true" abstract="true" type="Millimeter"/>
+
+<!-- Grandchild must implement again -->
+<width implementation="true" type="Millimeter">
+  <value>100</value>
+</width>
 ```
 
 **Concrete or abstract → override**
@@ -1346,8 +1368,9 @@ The check runs after `resolveEffectiveMembers()` on every `BlockInstance` — co
 `readOnly` is independent of `final`, `abstract`, `override`, and `implementation`: a child Block
 may override the **value** of a `readOnly` member in its definition, but cannot override a `final`
 member at all. An `abstract` member must be completed with `implementation="true"` on a deriving
-block before the enclosing block is concrete. Use `override="true"` to refine an inherited member
-without completing it.
+block before the enclosing block is concrete — unless `implementation="true"` is combined with
+`abstract="true"` (partial implementation), in which case a further deriving block must implement
+again. Use `override="true"` to refine an inherited member without completing it.
 
 ### Member Namespace (Element QName)
 
@@ -1441,10 +1464,11 @@ Child Blocks override inherited members with `override="true"` or complete abstr
 `implementation="true"`. Only the **member name**, the mode flag, and **changed attributes** need
 to be specified — all other attributes are inherited from the parent definition.
 
-To refine an inherited abstract member while keeping it abstract, use `override="true"`. To complete
-an inherited abstract member, use `implementation="true"` and supply the missing parts (for example
-`type` and `<value>` on a property). On capabilities, supply a full `<implementation>` child
-element (see Capabilities).
+To refine an inherited abstract member while keeping it abstract, use `override="true"`, or
+`implementation="true"` with `abstract="true"` when also supplying refined attributes. To complete
+an inherited abstract member, use `implementation="true"` (implies `abstract="false"`) and supply
+the missing parts (for example `type` and `<value>` on a property). On capabilities, supply a full
+`<implementation>` child element (see Capabilities).
 
 Parent:
 
