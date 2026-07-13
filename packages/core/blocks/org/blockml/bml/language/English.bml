@@ -8,10 +8,11 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
 
-  <idea>English prose as an implementation language for capabilities.</idea>
+  <idea>English prose — documentation and natural-language capability implementations.</idea>
 
-  <documentation>Language for natural-language capability implementations in English.</documentation>
+  <documentation>Natural language for documentation prose, example titles, and English
+    natural-language capability implementations.</documentation>
   <name>English</name>
   <type>lang:English</type>
-  <baseType>core:Language</baseType>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

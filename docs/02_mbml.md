@@ -133,6 +133,11 @@ There is **no multi-stage search**, no global TypeRegistry fallback, and no docu
 | Capability `inputType` | `org.blockml.bml.type.*` | ValueType |
 | Capability `outputType` | `org.blockml.bml.type.*` | ValueType |
 | `<implementation language="…">` | `org.blockml.bml.language.*` | Language |
+| `<language>` element child | `org.blockml.bml.language.*` | NaturalLanguage |
+| `language` attribute on `<documentation>` | `org.blockml.bml.language.*` | NaturalLanguage |
+| `language` attribute on `<change>` | `org.blockml.bml.language.*` | NaturalLanguage |
+| `language` attribute on `<see>` | `org.blockml.bml.language.*` | NaturalLanguage |
+| `language` attribute on `<example>` | `org.blockml.bml.language.*` | Language |
 | `<status>` element content · `bml:status` attribute | `org.blockml.bml.status.*` | Status |
 | Capability `type` | `org.blockml.bml.capability.*` | Capability branch |
 | Constraint `validation` attribute | `org.blockml.bml.validation.*` | Validation |
@@ -142,6 +147,11 @@ There is **no multi-stage search**, no global TypeRegistry fallback, and no docu
 ```text
 <width type="Integer" />                    →  org.blockml.bml.type.Integer
 <implementation language="TypeScript">      →  org.blockml.bml.language.TypeScript
+<language><English /></language>              →  org.blockml.bml.language.English
+<documentation language="German">…           →  org.blockml.bml.language.German
+<change version="2.0.0" language="German">…   →  org.blockml.bml.language.German
+<see block="core:Block" language="English">… →  org.blockml.bml.language.English
+<example language="OpenSCAD" …>              →  org.blockml.bml.language.OpenSCAD
 <status>Draft</status>                        →  org.blockml.bml.status.Draft
 <resize type="Transformation" …>             →  org.blockml.bml.capability.Transformation
 <constraint:Min validation="Error" …/>       →  org.blockml.bml.validation.Error
@@ -248,9 +258,61 @@ Examples:
 
 WOT alignment: the Idea is the stable semantic constant; documentation describes how a World interprets and uses it. See `WOT_Reference_v26.md` — The Idea.
 
+### `<language>` — natural language for documentation prose
+
+`<language>` is an optional child on Block definitions and Library descriptors. It declares the **natural language** for documentation prose and example titles on that definition and its members. Value is a **Block reference** to `org.blockml.bml.language.NaturalLanguage` — not a free string. Unqualified names inside `<language>` resolve via implicit namespace `org.blockml.bml.language.*` — no `xmlns:` prefix required.
+
+**Inheritance chain:**
+
+```text
+org.blockml.bml.core.Block default     →  English (org.blockml.bml.language.English)
+Library.language                     →  catalogue default for all exported blocks
+Block.language                       →  per-definition override
+<documentation language="…">         →  per-element override when prose deviates
+<change language="…">                →  per-entry override for changelog text
+<see language="…">                     →  per-entry override for relationship text
+```
+
+Authors declare `<language>` or a `language` attribute on `<documentation>`, `<change>`, or `<see>` **only when deviating** from the effective inherited language — same deviation pattern as `<status>`.
+
+```xml
+<block ...>
+  <idea>Parametric wall segment for AnyClosure enclosures.</idea>
+  <language>
+    <German />
+  </language>
+  <documentation>Wall block with thickness, height, and opening properties.</documentation>
+  <name>Wall</name>
+  ...
+</block>
+```
+
+Library descriptors set the catalogue default:
+
+```xml
+<name>Library</name>
+<baseType>bcore:BlockLibrary</baseType>
+<version>3.0.0</version>
+<language>
+  <English />
+</language>
+```
+
+Core library defines:
+
+```text
+org.blockml.bml.language.NaturalLanguage   — abstract base; all locale blocks extend this branch
+org.blockml.bml.language.English           — root default on org.blockml.bml.core.Block
+org.blockml.bml.language.German · French · Spanish · Chinese · Japanese · Russian
+```
+
+Natural languages are distinct from **implementation languages** (`ProgrammingLanguage`, `MarkupLanguage`) used in `<implementation language="…">` and example CDATA bodies.
+
 ### `<documentation>`
 
-`<documentation>` follows `<idea>`, still before `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+`<documentation>` follows `<idea>` and optional `<language>`, still before `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+
+An optional **`language`** attribute on `<documentation>` references a `org.blockml.bml.language.NaturalLanguage` when the prose is written in a language other than the effective language of the enclosing definition element. Unqualified names resolve via implicit namespace `org.blockml.bml.language.*`. Omitted → inherit effective language from Block or Library.
 
 **Cross-references:** Do **not** name Block or Definition FQNs, markdown files, or external URLs in `<documentation>` prose. Link all related types and documentation sources exclusively via `<references>` (see below).
 
@@ -261,6 +323,12 @@ WOT alignment: the Idea is the stable semantic constant; documentation describes
   <name>Wall</name>
   ...
 </block>
+```
+
+```xml
+<documentation language="German">
+  Wandblock mit Dicken-, Höhen- und Öffnungseigenschaften.
+</documentation>
 ```
 
 ### Documentation extensions
@@ -300,7 +368,7 @@ Value is a semantic version string (same rules as `<version>` on Block definitio
 
 #### `<changelog>`
 
-Container for version history. Each entry is a `<change>` with a required `version` attribute and text body:
+Container for version history. Each entry is a `<change>` with a required `version` attribute and text body. An optional `language` attribute overrides the effective natural language for the change description — unqualified names resolve via `org.blockml.bml.language.*`:
 
 ```xml
 <changelog>
@@ -309,8 +377,8 @@ Container for version history. Each entry is a `<change>` with a required `versi
         Added support for edgeRadius.
     </change>
 
-    <change version="1.3.2">
-        Changed stud generation behaviour.
+    <change version="1.3.2" language="German">
+        Verhalten der Noppen-Generierung geändert.
     </change>
 
     <change version="2.0.0">
@@ -324,7 +392,7 @@ Entries must be ordered chronologically by version — **oldest first**. Out-of-
 
 #### `<examples>`
 
-Container for usage examples. Each `<example>` requires a `title` attribute; body content is **CDATA only**. An optional `language` attribute references an `org.blockml.bml.core.Language` FQN when the example is written in a specific dialect:
+Container for usage examples. Each `<example>` requires a `title` attribute; body content is **CDATA only**. The **title** is always written in the effective natural language of the enclosing block definition. An optional `language` attribute on `<example>` references an **implementation** Language when the CDATA body is not BML/MBML source (OpenSCAD, TypeScript, …) — unqualified names resolve via `org.blockml.bml.language.*`; distinct from `NaturalLanguage` used for prose:
 
 ```xml
 <examples>
@@ -340,7 +408,7 @@ Container for usage examples. Each `<example>` requires a `title` attribute; bod
     ]]></example>
 
     <example title="OpenSCAD render"
-        language="org.blockml.bml.language.OpenSCAD"><![CDATA[
+        language="OpenSCAD"><![CDATA[
 module brick(size) = cube(size);
 brick([2, 4, 3]);
     ]]></example>
@@ -348,11 +416,11 @@ brick([2, 4, 3]);
 </examples>
 ```
 
-Omitted `language` → BML/MBML source.
+Omitted `language` on `<example>` → BML/MBML source. Example titles never carry a language attribute — they inherit the block's natural language.
 
 #### `<references>`
 
-Container for cross-references to related Blocks, definition elements, repository documentation files, or external URLs. Each `<see>` requires **exactly one** target attribute — `block`, `file`, or `url`. The text body explains why or how the referenced element relates to the **current** definition.
+Container for cross-references to related Blocks, definition elements, repository documentation files, or external URLs. Each `<see>` requires **exactly one** target attribute — `block`, `file`, or `url`. The text body explains why or how the referenced element relates to the **current** definition. An optional `language` attribute overrides the effective natural language for the relationship text — unqualified names resolve via `org.blockml.bml.language.*`.
 
 **Target attributes (exactly one required):**
 
@@ -384,8 +452,8 @@ url="https://blockml.org/schemas/…"  — external URL
         Meta-model member shape for property declarations on Block definitions.
     </see>
 
-    <see file="02_mbml.md">
-        Block Definition — idea, documentation, and documentation extensions.
+    <see file="02_mbml.md" language="German">
+        Block-Definition — Idea, Dokumentation und Dokumentations-Erweiterungen.
     </see>
 
     <see url="https://blockml.org/schemas/core/block.xsd">

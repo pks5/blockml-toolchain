@@ -11,6 +11,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:btype="org.blockml.bml.type"
   xmlns:bml="http://blockml.org/schema/bml">
 
@@ -18,7 +19,9 @@
 
   <documentation>Records a link from documentation metadata to another Block, definition element,
     repository markdown file, or external URL. Rendered as a see element inside the references
-    container on any org.blockml.bml.core.Definition (alongside changelog and examples).</documentation>
+    container on any org.blockml.bml.core.Definition (alongside changelog and examples). Maps to BOM
+    DocumentationReference { block?, file?, url?, context, languageFqn? }. Optional language
+    attribute overrides the effective natural language for the relationship text body.</documentation>
 
   <references>
     <see file="02_mbml.md">
@@ -49,6 +52,12 @@
       <documentation>External URL. Mutually exclusive with block and file — exactly one target
         attribute must be set.</documentation>
     </url>
+    <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+      <documentation>Optional NaturalLanguage when the relationship text is written in a language
+        other than the effective language of the enclosing definition element. Unqualified names
+        resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit effective
+        language from Block or Library.</documentation>
+    </language>
     <context type="Text" bml:xml="text">
       <documentation>Human-readable explanation of why or how the referenced element relates to
         this definition. Required on every see entry.</documentation>

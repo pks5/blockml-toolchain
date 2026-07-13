@@ -31,11 +31,11 @@
     </_hasOutput>
     <implementation>
       <language type="FullyQualifiedName(core:Language)" bml:xml="attribute">
-        <documentation>Language FQN (org.blockml.bml.language.*). Required on every implementation
-          element.</documentation>
+        <documentation>Language (org.blockml.bml.language.*). Required on every implementation
+          element. Unqualified names resolve via implicit namespace org.blockml.bml.language.*.</documentation>
       </language>
       <documentation>Capability implementation body. The language attribute must reference a
-        Language FQN (org.blockml.bml.language.*).</documentation>
+        Language from org.blockml.bml.language.* — unqualified names permitted.</documentation>
     </implementation>
   </properties>
 </block>

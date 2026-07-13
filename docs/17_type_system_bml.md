@@ -191,7 +191,11 @@ All definitions use the BML `<block>` element, register in the same TypeRegistry
 ```text
 org.blockml.bml.core.Block                         abstract root · omits baseType
   ├── org.blockml.bml.core.ValueType               value blocks — Property types · Capability input/output (Size3D, Integer, …)
-  ├── org.blockml.bml.core.Language                capability implementation contract (OpenSCAD, English, …)
+  ├── org.blockml.bml.core.Language                capability implementation contract
+  │     ├── org.blockml.bml.language.NaturalLanguage   documentation prose · example titles
+  │     │     ├── org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
+  │     ├── org.blockml.bml.language.ProgrammingLanguage   TypeScript · OpenSCAD · PseudoCode · …
+  │     └── org.blockml.bml.language.MarkupLanguage        XML · JSON · YML
   ├── org.blockml.bml.core.Entity                general entities — built-in services, domain blocks
   ├── com.machineblocks.bml.core.Block             domain base
   └── … user and domain Blocks
@@ -199,7 +203,7 @@ org.blockml.bml.core.Block                         abstract root · omits baseTy
 
 **One root · one registry · one parser.** Branch-specific rules come from the `baseType` chain — not from parallel ontologies. There is no separate ComposableBlock — all Blocks inherit directly from `org.blockml.bml.core.Block` (or via domain/service branches).
 
-Every sub-type is free to declare its own members — `org.blockml.bml.core.Block` declares **none**. Composition instance identity uses **`bml:id`** (may be empty); external references may use optional **`bml:version`** as an exact-version assert (forbidden inside Library files). Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **ValueType** only (Property `type` · Capability `inputType` · Capability `outputType`).
+Every sub-type is free to declare its own members — `org.blockml.bml.core.Block` declares `language` (NaturalLanguage, default English). Composition instance identity uses **`bml:id`** (may be empty); external references may use optional **`bml:version`** as an exact-version assert (forbidden inside Library files). Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **ValueType** only (Property `type` · Capability `inputType` · Capability `outputType`).
 
 ### Literally everything — including the compiler's grammar
 
@@ -1111,15 +1115,16 @@ Implementation languages inherit from `org.blockml.bml.core.Block` via `org.bloc
 ```text
 org.blockml.bml.core.Block
   └── org.blockml.bml.core.Language                    abstract
-        ├── org.blockml.bml.core.ProgrammingLanguage   abstract
+        ├── org.blockml.bml.language.NaturalLanguage   abstract — documentation prose · example titles
+        │     ├── org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
+        ├── org.blockml.bml.language.ProgrammingLanguage   abstract
         │     ├── org.blockml.bml.language.TypeScript · OpenSCAD · PseudoCode · JavaScript · Python · …
         │     └── org.blockml.bml.language.CSharp
         │           └── org.blockml.bml.language.Unity
-        ├── org.blockml.bml.core.MarkupLanguage          abstract
+        ├── org.blockml.bml.language.MarkupLanguage          abstract
         │     ├── org.blockml.bml.language.XML
         │     ├── org.blockml.bml.language.JSON
         │     └── org.blockml.bml.language.YML
-        ├── org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
 ```
 
 ```xml

@@ -202,8 +202,13 @@ org.blockml.bml.core.Block
 
 ```text
 Properties:    documentation · since · status
+               documentation.language (NaturalLanguage attribute) · content (text body)
 Aggregations:  changelog (ChangeDefinition[]) · examples (ExampleDefinition[]) · references (ReferenceDefinition[])
 ```
+
+`org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
+
+`org.blockml.bml.definition.BlockDefinition` declares `language` (NaturalLanguage element) — per-block override.
 
 `org.blockml.bml.definition.ReferenceDefinition` — cross-reference to a related Block, definition element, or documentation source:
 
@@ -212,17 +217,27 @@ bml:xml         see                — renders as <see> inside <references>
 block           QName (prefix:Name) — Block or Definition via xmlns prefix; XML block attribute
 file            String             — repository markdown file; XML file attribute
 url             String             — external URL; XML url attribute
+language        NaturalLanguage    — optional; prose language override for context text
 context         String (required)  — relationship note; XML text content
 ```
 
 Exactly one of `block`, `file`, or `url` must be set. Authoring: list only targets **relevant to the current definition**; text body describes the relationship. All cross-links belong in `<references>` — never in `<documentation>`. See `02_mbml.md` — `<documentation>` · `<references>`.
 
+`org.blockml.bml.definition.ChangeDefinition` — one changelog entry in a `<changelog>` container:
+
+```text
+bml:xml         change             — renders as <change> inside <changelog>
+version         Version (required) — XML version attribute
+language        NaturalLanguage    — optional; prose language override for description text
+description     String (required)  — trimmed text body
+```
+
 `org.blockml.bml.definition.ExampleDefinition` — one usage example in an `<examples>` container:
 
 ```text
 bml:xml         example            — renders as <example> inside <examples>
-title           String (required)  — XML title attribute
-language        Language FQN       — optional; org.blockml.bml.language.* when body is not BML/MBML
+title           String (required)  — XML title attribute; always in block natural language
+language        Language FQN       — optional; implementation dialect for CDATA content only
 content         String (required)  — CDATA body
 ```
 
@@ -285,7 +300,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/type/Version.bml · URL.bml · URI.bml · FilePath.bml · MimeType.bml
      org/blockml/bml/core/PrimitiveEntity.bml
      org/blockml/bml/type/IntegerEntity.bml · TextEntity.bml · …
-     org/blockml/bml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
+     org/blockml/bml/language/NaturalLanguage.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …
      org/blockml/bml/core/BlockLibrary.bml   ← bootstrap / _dependencies / _subLibraries / _blocks as Block references; _schemas as FilePathEntity
      org/blockml/bml/core/Definition.bml     ← meta-model base (WIP)

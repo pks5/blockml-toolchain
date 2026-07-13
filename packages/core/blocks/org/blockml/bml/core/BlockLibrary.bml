@@ -12,6 +12,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:btype="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:bml="http://blockml.org/schema/bml">
@@ -73,6 +74,12 @@
     <description type="Text">
       <documentation>Human-readable summary of what this library provides.</documentation>
     </description>
+    <language type="lang:NaturalLanguage">
+      <documentation>Default natural language for documentation prose on all blocks exported
+        from this library catalogue. Inherited by block definitions unless overridden on the root
+        block element. Unqualified child names resolve via implicit namespace
+        org.blockml.bml.language.*.</documentation>
+    </language>
   </properties>
 
   <aggregations>

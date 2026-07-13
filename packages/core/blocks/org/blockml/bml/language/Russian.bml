@@ -8,10 +8,11 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
 
-  <idea>Russian prose as an implementation language for capabilities.</idea>
+  <idea>Russian prose — documentation and natural-language capability implementations.</idea>
 
-  <documentation>Language for natural-language capability implementations in Russian.</documentation>
+  <documentation>Natural language for documentation prose, example titles, and Russian
+    natural-language capability implementations.</documentation>
   <name>Russian</name>
   <type>lang:Russian</type>
-  <baseType>core:Language</baseType>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

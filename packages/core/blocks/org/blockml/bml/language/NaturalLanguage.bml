@@ -1,0 +1,27 @@
+<!--
+  BlockML Core — NaturalLanguage branch (human documentation prose)
+
+  FQN: org.blockml.bml.language.NaturalLanguage
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language">
+
+  <idea>Natural human language for documentation prose and example titles.</idea>
+
+  <documentation>Abstract branch for natural languages used in documentation text, example
+    titles, and natural-language capability implementations. All locale-specific language blocks
+    (English, German, French, Spanish, Chinese, Japanese, Russian, …) must extend this branch —
+    not org.blockml.bml.core.Language directly. Distinct from implementation languages
+    (ProgrammingLanguage, MarkupLanguage) used in capability bodies and example content.</documentation>
+
+  <name>NaturalLanguage</name>
+  <type>lang:NaturalLanguage</type>
+  <baseType>core:Language</baseType>
+  <abstract />
+
+</block>

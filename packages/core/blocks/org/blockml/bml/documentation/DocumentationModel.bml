@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:doc="org.blockml.bml.documentation">
 
   <idea>Block documentation model — idea, documentation, references, examples, README, documentation blocks.</idea>
@@ -19,14 +20,25 @@
     source of truth inside BML files:
 
     idea (required, first child) — semantic meaning of the Block; the stable constant (WOT: Idea).
-    documentation (required, second child) — technical description of the Block definition itself.
+    language (optional) — natural language for documentation prose; inherits Library → Block
+      default (English on org.blockml.bml.core.Block).
+    documentation (required, second child) — technical description of the Block definition itself;
+      optional language attribute when prose deviates from effective block language.
     Member elements carry their own documentation for individual Properties, Aggregations, etc.
 
     Optional extensions (wherever documentation is permitted):
     since — version from which the element is available
     changelog — container of change entries (oldest first)
-    examples — container of example entries (title + CDATA body)
+    examples — container of example entries (title in block natural language + CDATA body)
     references — container of see entries (block, file, or url + relationship text)
+
+    Natural language inheritance (documentation prose and example titles):
+    Library.language → Block.language → documentation / change / see language attribute
+    Unqualified names inside &lt;language&gt; and on documentation, change, and see language=
+    resolve via org.blockml.bml.language.*. Authors declare language only when deviating from
+    the effective inherited language. Example title language always follows the enclosing block — example
+    language attribute applies to CDATA content only (implementation dialect: OpenSCAD,
+    TypeScript, …) and also resolves via org.blockml.bml.language.*.
 
     Authoring split:
     • documentation carries technical prose only
@@ -57,8 +69,11 @@
     <see file="01_system.md">
       V2 documentation migration — Markdown vs BML roles.
     </see>
+    <see block="lang:NaturalLanguage">
+      Natural language branch — documentation prose and example titles.
+    </see>
     <see block="core:Block">
-      Root block — documents idea, documentation, references on every definition.
+      Root block — documents idea, language, documentation, references on every definition.
     </see>
     <see block="core:Definition">
       Definition branch — shared documentation aggregations.

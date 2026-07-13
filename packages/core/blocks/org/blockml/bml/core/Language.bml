@@ -13,7 +13,9 @@
   <idea>A target implementation language for capability code.</idea>
 
   <documentation>Language branch of BlockML. Declares an implementation language permitted on
-    Capability implementations (OpenSCAD, TypeScript, English, …).</documentation>
+    Capability implementations (OpenSCAD, TypeScript, English, …). Natural languages for
+    documentation prose extend org.blockml.bml.language.NaturalLanguage; formal code and markup
+    languages extend ProgrammingLanguage and MarkupLanguage.</documentation>
   <name>Language</name>
   <type>core:Language</type>
   <baseType>core:Block</baseType>

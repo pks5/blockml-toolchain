@@ -8,10 +8,11 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
 
-  <idea>Chinese prose as an implementation language for capabilities.</idea>
+  <idea>Chinese prose — documentation and natural-language capability implementations.</idea>
 
-  <documentation>Language for natural-language capability implementations in Chinese.</documentation>
+  <documentation>Natural language for documentation prose, example titles, and Chinese
+    natural-language capability implementations.</documentation>
   <name>Chinese</name>
   <type>lang:Chinese</type>
-  <baseType>core:Language</baseType>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

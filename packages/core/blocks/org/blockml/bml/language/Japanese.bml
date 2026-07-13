@@ -8,10 +8,11 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
 
-  <idea>Japanese prose as an implementation language for capabilities.</idea>
+  <idea>Japanese prose — documentation and natural-language capability implementations.</idea>
 
-  <documentation>Language for natural-language capability implementations in Japanese.</documentation>
+  <documentation>Natural language for documentation prose, example titles, and Japanese
+    natural-language capability implementations.</documentation>
   <name>Japanese</name>
   <type>lang:Japanese</type>
-  <baseType>core:Language</baseType>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

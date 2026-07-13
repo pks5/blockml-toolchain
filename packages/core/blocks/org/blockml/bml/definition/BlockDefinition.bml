@@ -12,6 +12,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:btype="org.blockml.bml.type"
   xmlns:bml="http://blockml.org/schema/bml">
 
@@ -71,6 +72,12 @@
         first child on every Block definition (root blocks and Sub-Blocks). Addressable as
         com.foo.Bar.idea.</documentation>
     </idea>
+    <language type="lang:NaturalLanguage" bml:xml="element">
+      <documentation>Natural language for documentation prose on this Block definition and its
+        members. Omitted = inherit from enclosing Library, then org.blockml.bml.core.Block default
+        (English). Unqualified child names resolve via implicit namespace org.blockml.bml.language.*.
+        Example titles always use this effective language.</documentation>
+    </language>
     <name type="Text">
       <documentation>Short class name (PascalCase). Required on every Block definition.</documentation>
     </name>

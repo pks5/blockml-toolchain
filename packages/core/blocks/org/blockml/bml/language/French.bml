@@ -8,10 +8,11 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
 
-  <idea>French prose as an implementation language for capabilities.</idea>
+  <idea>French prose — documentation and natural-language capability implementations.</idea>
 
-  <documentation>Language for natural-language capability implementations in French.</documentation>
+  <documentation>Natural language for documentation prose, example titles, and French
+    natural-language capability implementations.</documentation>
   <name>French</name>
   <type>lang:French</type>
-  <baseType>core:Language</baseType>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

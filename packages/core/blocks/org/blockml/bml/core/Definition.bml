@@ -15,6 +15,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>
@@ -38,8 +39,16 @@
   property itself (for example <documentation> or <since>).
 -->
   <properties>
-    <documentation type="Text" bml:xml="element">
-      <documentation>The documentation of the definition.</documentation>
+    <documentation bml:xml="element">
+      <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+        <documentation>Optional NaturalLanguage when this documentation text is written in a
+          language other than the effective language of the enclosing definition element. Unqualified
+          names resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit
+          effective language from Block or Library.</documentation>
+      </language>
+      <content type="Text" bml:xml="text">
+        <documentation>The documentation text of the definition.</documentation>
+      </content>
     </documentation>
     <since type="Version" bml:xml="element">
       <documentation>The version in which this definition became available.</documentation>

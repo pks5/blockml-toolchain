@@ -61,6 +61,10 @@
   <baseType>bcore:BlockLibrary</baseType>
   <version>3.0.0</version>
 
+  <language>
+    <English />
+  </language>
+
   <properties>
     <description>
       <value>BlockML core library</value>
@@ -117,6 +121,7 @@
         <lang:C />
         <lang:CPP />
         <lang:MarkupLanguage />
+        <lang:NaturalLanguage />
         <lang:CSharp />
         <lang:Chinese />
         <lang:English />

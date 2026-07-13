@@ -9,11 +9,16 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
 
+  <language>
+    <English />
+  </language>
+  
   <documentation>
     Root semantic unit of BlockML — the sole inheritance root for all Block definitions.
     Every concept in the grammar is a Block: composable domain types, ValueTypes, Languages,
@@ -22,19 +27,23 @@
 
     Role and constraints:
     • Sole inheritance root — omits baseType; all other definitions must declare one
+    • Declares language (NaturalLanguage) — default English for documentation prose
     • Abstract — not used directly as a composition instance type
-    • Declares no members — sub-types define their own Properties, Aggregations,
+    • Further members defined by sub-types — Properties, Aggregations,
       Associations, and Capabilities via the baseType chain
     • Composition instance identity uses bml:id and bml:version (not member attributes)
 
     Type reference rules:
     • Any Block FQN may appear in aggregation and association member types
     • Property and Capability payload types must resolve to a ValueType
-    • Capability implementation language attributes must reference language.* FQNs
+    • Capability implementation language attributes reference org.blockml.bml.language.* — unqualified names permitted
 
     Documentation model (on every root block definition):
     • &lt;idea&gt; — required first child; semantic meaning of the Block
-    • &lt;documentation&gt; — required second child; technical description
+    • &lt;language&gt; — optional; natural language for documentation prose (inherits from Library,
+      then org.blockml.bml.core.Block default English)
+    • &lt;documentation&gt; — required second child; technical description; optional language
+      attribute when prose deviates from effective block language
     • Optional extensions: &lt;since&gt;, &lt;changelog&gt;, &lt;examples&gt;, &lt;references&gt;
     Omitted idea or documentation on root blocks → BML_MISSING_IDEA / BML_MISSING_DOCUMENTATION
     (warning V1).
@@ -50,7 +59,7 @@
       Property and capability payload types.
     </see>
     <see block="core:Language">
-      Implementation language bindings.
+      Implementation language bindings and NaturalLanguage branch.
     </see>
     <see block="core:Status">
       Lifecycle status references.
@@ -94,5 +103,15 @@
   
   <!-- Root block is abstract -->
   <abstract />
-  
+
+  <properties>
+    <language type="lang:NaturalLanguage">
+      <documentation>Effective natural language for documentation prose on this Block definition
+        and its members. Inherited downward unless a child documentation element or nested
+        definition declares a deviation via its own language attribute or element. Root default on
+        org.blockml.bml.core.Block is English. Unqualified child names resolve via implicit
+        namespace org.blockml.bml.language.*.</documentation>
+    </language>
+  </properties>
+
 </block>

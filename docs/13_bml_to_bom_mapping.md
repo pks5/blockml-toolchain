@@ -276,16 +276,17 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 ```text
 ```text
 <idea>…</idea>                               → block.idea (trimmed text)
-<documentation>…</documentation>             → block.documentation (trimmed text)
+<language>…</language>                       → block.languageFqn (NaturalLanguage FQN)
+<documentation language="…">…</documentation> → block.documentation (trimmed text); documentationLanguageFqn when attribute present
 <since>…</since>                             → block.since (trimmed text)
 <changelog>                                  → block.changelog[]
-  <change version="…">…</change>             → { version, text: trimmed body }
+  <change version="…" language="…">…</change> → { version, text: trimmed body, languageFqn? }
 <examples>                                   → block.examples[]
-  <example title="…" language="…">           → { title, content: CDATA body, languageFqn? }
+  <example title="…" language="…">           → { title, content: CDATA body, contentLanguageFqn? }
 <references>                                 → block.references[]
-  <see block="…">…</see>         → { block, context: trimmed body }
-  <see file="…">…</see>          → { file, context: trimmed body }
-  <see url="…">…</see>           → { url, context: trimmed body }
+  <see block="…" language="…">…</see>         → { block, context: trimmed body, languageFqn? }
+  <see file="…" language="…">…</see>          → { file, context: trimmed body, languageFqn? }
+  <see url="…" language="…">…</see>           → { url, context: trimmed body, languageFqn? }
 <status>Draft</status>                → member.statusFqn or block.statusFqn (when declared)
                                              → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
@@ -310,6 +311,7 @@ Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <example> without title attribute        → BML_EXAMPLE_MISSING_TITLE (error)
 <example> body not CDATA                 → BML_EXAMPLE_NOT_CDATA (error)
 <example language="…"> unknown Language FQN → BML_EXAMPLE_UNKNOWN_LANGUAGE (error)
+<language> or documentation language="…" unknown NaturalLanguage FQN → BML_UNKNOWN_NATURAL_LANGUAGE (error)
 <see> without block, file, or url          → BML_REFERENCE_MISSING_TARGET (error)
 <see> with more than one target attr       → BML_REFERENCE_AMBIGUOUS_TARGET (error)
 Omitted abstract/final                 → false

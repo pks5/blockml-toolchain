@@ -150,8 +150,14 @@ interface BlockDefinition {
   /** Short semantic description — what this Block represents in meaning. Required. */
   idea?: string
 
+  /** Natural language FQN for documentation prose and example titles. Omitted = inherit Library, then Block default (English). */
+  languageFqn?: string
+
   /** Human-readable technical description of what this Block is. Required on root definitions. */
   documentation?: string
+
+  /** NaturalLanguage FQN when documentation prose deviates from effective block language. Omitted = inherit. */
+  documentationLanguageFqn?: string
 
   /** Semantic version from which this definition is available. Omitted = since initial release. */
   since?: string
@@ -376,16 +382,18 @@ interface ChangelogEntry {
   version: string
   /** Change description (trimmed text body of <change>) */
   text: string
+  /** NaturalLanguage FQN when change text deviates from effective block language. Omitted = inherit. */
+  languageFqn?: string
   source?: SourceLocation
 }
 
 interface DocumentationExample {
-  /** Required title attribute on <example> */
+  /** Required title attribute on <example> — always in enclosing block's natural language */
   title: string
-  /** CDATA body — BML/MBML source text */
+  /** CDATA body — BML/MBML or target-language source text */
   content: string
-  /** Language FQN (org.blockml.bml.language.*). Omitted when content is BML/MBML source. */
-  languageFqn?: string
+  /** Implementation Language FQN for CDATA content (org.blockml.bml.language.OpenSCAD, …). Omitted when content is BML/MBML. */
+  contentLanguageFqn?: string
   source?: SourceLocation
 }
 
@@ -398,12 +406,16 @@ interface DocumentationReference {
   url?: string
   /** Required text body — why or how the referenced element relates */
   context: string
+  /** NaturalLanguage FQN when relationship text deviates from effective block language. Omitted = inherit. */
+  languageFqn?: string
   source?: SourceLocation
 }
 
 interface MemberDefinitionBase {
   name: string
   documentation?: string
+  /** NaturalLanguage FQN when member documentation prose deviates from effective block language. */
+  documentationLanguageFqn?: string
   since?: string
   changelog?: ChangelogEntry[]
   examples?: DocumentationExample[]
@@ -1044,6 +1056,7 @@ Inner libraries usually declare the outer library in `_dependencies`. The outer 
 ```text
 org.blockml.bml.core.BlockLibrary
   property     description     String
+  property     language        org.blockml.bml.language.NaturalLanguage
   aggregation  bootstrap       0..1  org.blockml.bml.core.Bootstrap
   aggregation  _dependencies   0..n  org.blockml.bml.core.BlockLibrary
   aggregation  _subLibraries   0..n  org.blockml.bml.core.BlockLibrary
@@ -1233,6 +1246,7 @@ BML_CHANGELOG_VERSION_ORDER   — <changelog> entries not ordered oldest-first (
 BML_EXAMPLE_MISSING_TITLE     — <example> lacks required title attribute
 BML_EXAMPLE_NOT_CDATA         — <example> body is not CDATA
 BML_EXAMPLE_UNKNOWN_LANGUAGE  — <example> language attribute is not a known Language FQN
+BML_UNKNOWN_NATURAL_LANGUAGE  — <language> or documentation language attribute is not a NaturalLanguage FQN
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
 BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library bootstrap / _dependencies / _subLibraries / _blocks

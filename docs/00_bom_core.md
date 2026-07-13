@@ -1355,6 +1355,11 @@ At specialized reference sites, unqualified names resolve to a fixed implicit na
 ```text
 Property.type / Capability.inputType / outputType  →  org.blockml.bml.type.*
 Implementation.language                           →  org.blockml.bml.language.*
+<language> element child                          →  org.blockml.bml.language.* (NaturalLanguage)
+documentation language attribute                  →  org.blockml.bml.language.* (NaturalLanguage)
+change language attribute                         →  org.blockml.bml.language.* (NaturalLanguage)
+see language attribute                            →  org.blockml.bml.language.* (NaturalLanguage)
+example language attribute                        →  org.blockml.bml.language.* (Language)
 <status> / bml:status                               →  org.blockml.bml.status.*
 Capability.type                                     →  org.blockml.bml.capability.*
 Constraint.validation                               →  org.blockml.bml.validation.*
@@ -1364,6 +1369,8 @@ Constraint.validation                               →  org.blockml.bml.validat
 Draft        →  org.blockml.bml.status.Draft   (at <status> / bml:status site)
 Integer      →  org.blockml.bml.type.Integer     (at Property.type site)
 TypeScript   →  org.blockml.bml.language.TypeScript (at language= site)
+English      →  org.blockml.bml.language.English   (at <language> / documentation / change / see language= site)
+OpenSCAD     →  org.blockml.bml.language.OpenSCAD  (at example language= site)
 Error        →  org.blockml.bml.validation.Error (at validation= site)
 ```
 

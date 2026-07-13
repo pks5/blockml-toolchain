@@ -11,6 +11,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>One version history entry for a definition element.</idea>
@@ -18,8 +19,9 @@
   <documentation>Describes a single changelog entry in a changelog container on any definition
     element (block, property, aggregation, …). Rendered as a change element with a required
     version attribute and a trimmed text body describing what changed. Maps to BOM
-    ChangelogEntry { version, text }. Entries must be ordered chronologically by version —
-    oldest first (BML_CHANGELOG_VERSION_ORDER when out of order).</documentation>
+    ChangelogEntry { version, text, languageFqn? }. Entries must be ordered chronologically by
+    version — oldest first (BML_CHANGELOG_VERSION_ORDER when out of order). Optional language
+    attribute overrides the effective natural language for this entry's text body.</documentation>
 
   <references>
     <see file="02_mbml.md">
@@ -43,6 +45,12 @@
       <documentation>Semantic version this change applies to. Required attribute on every change
         entry.</documentation>
     </version>
+    <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+      <documentation>Optional NaturalLanguage when this change description is written in a
+        language other than the effective language of the enclosing definition element. Unqualified
+        names resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit
+        effective language from Block or Library.</documentation>
+    </language>
     <!-- bml:xml="text" renders the description as character content of <change>. -->
     <description type="Text" bml:xml="text">
       <documentation>Human-readable description of what changed at this version. Stored as trimmed
