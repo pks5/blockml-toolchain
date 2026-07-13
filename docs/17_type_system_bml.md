@@ -1129,7 +1129,7 @@ org.blockml.bml.core.Block
 </block>
 ```
 
-Every Capability inherits an optional `<implementation>` member from `org.blockml.bml.core.CapabilityType`. The element **`type`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<languages>` — see `16_framework_base_types.md`.
+Every Capability inherits an optional `<implementation>` member from `org.blockml.bml.core.CapabilityType`. The element **`language`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<languages>` — see `16_framework_base_types.md`.
 
 **PseudoCode** is free-form program code that must be internally consistent but is otherwise unconstrained — an LLM may interpret it.
 
@@ -1172,7 +1172,7 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 | Used as Constraint `validation` property | forbidden | forbidden | forbidden | yes (Validation sub-type) | forbidden |
 | Used as property `<suggestions>` child | yes (same type as property) | yes | forbidden | forbidden | forbidden |
 | Used as Capability input/output type | forbidden | yes (+ generic substitution) | forbidden | forbidden | forbidden |
-| Used as `<implementation type>` | forbidden | forbidden | forbidden | forbidden | yes |
+| Used as `<implementation language>` | forbidden | forbidden | forbidden | forbidden | yes |
 
 Wrong branch usage → `BML_INVALID_DEFINITION_BRANCH`.
 
@@ -1187,7 +1187,7 @@ type="Integer"                              → org.blockml.bml.type.Integer
 type="type:Size3d"                          → com.machineblocks.bml.type.Size3d
 type="com.foo.Box(org.blockml.bml.type.Integer)"  → generic substitution at validate time
 inputType="{ a: Float, b: Float }"        → AnonymousStructType (inline)
-capability implementation type="org.blockml.bml.language.TypeScript"  → registry lookup
+capability implementation language="org.blockml.bml.language.TypeScript"  → registry lookup
 ```
 
 ```text

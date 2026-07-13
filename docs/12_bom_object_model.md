@@ -466,7 +466,7 @@ interface CapabilityDefinition extends MemberDefinitionBase {
 }
 
 interface ImplementationBlock {
-  typeFqn: string          // org.blockml.bml.language.TypeScript | org.blockml.bml.language.OpenSCAD
+  languageFqn: string      // org.blockml.bml.language.TypeScript | org.blockml.bml.language.OpenSCAD
   source: string            // CDATA body
   sourceLocation?: SourceLocation
 }

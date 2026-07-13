@@ -558,14 +558,14 @@ BML_NO_TARGET                 — no registered target supports the block's base
 BML_UNKNOWN_TARGET            — requested target name not registered
 BML_FUNCTION_MISSING_MAIN     — no function named after the Capability found in CDATA
 BML_FUNCTION_DUPLICATE_MAIN   — more than one function matches the Capability name
-BML_IMPLEMENTATION_UNKNOWN_TYPE — <implementation type="..."> is not a known org.blockml.bml.language.* FQN
+BML_IMPLEMENTATION_UNKNOWN_LANGUAGE — <implementation language="..."> is not a known org.blockml.bml.language.* FQN
 BML_FUNCTION_NO_RUNTIME_IMPL  — Transformation Capability called with non-literal args but no runtime impl
 BML_DUPLICATE_GENERIC           — duplicate generic parameter name on root Block
 BML_GENERIC_BLOCK_NAME_COLLISION — generic parameter element name equals the Block's <name>
 BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a Sub-Block <name> in the same file
 BML_SUBBLOCK_UNQUALIFIED_REFERENCE — bare Sub-Block short name used outside the defining BML file
 BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED — Sub-Block shares root Block name; bare short tag is ambiguous
-BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation type="..."> not listed in baseType languages
+BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation language="..."> not listed in baseType languages
 ```
 
 ### Warnings
@@ -585,13 +585,13 @@ BML_DEPRECATED_TYPE    — referenced type is deprecated
 
 ## Capability Implementation Transpilation
 
-A `utility Sub-Block` Sub-Block binds target-language implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.bml.language.*`** FQNs.
+A `utility Sub-Block` Sub-Block binds target-language implementations to Transformation Capabilities via `<implementation language="...">` — using **`org.blockml.bml.language.*`** FQNs.
 
-Two implementation types are supported in V1:
+Two implementation languages are supported in V1:
 
-**`type="org.blockml.bml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. The compiler prefixes all function names with the block FQN.
+**`language="org.blockml.bml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. The compiler prefixes all function names with the block FQN.
 
-**`type="org.blockml.bml.language.TypeScript"`** — TypeScript arrow function. Compile-time execution only (V1): when all arguments at the call site are literals, the compiler executes the TS function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred (requires LLM or dedicated transpiler).
+**`language="org.blockml.bml.language.TypeScript"`** — TypeScript arrow function. Compile-time execution only (V1): when all arguments at the call site are literals, the compiler executes the TS function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred (requires LLM or dedicated transpiler).
 
 ### SCAD Implementation Rules
 
@@ -632,7 +632,7 @@ function mb__...__Utils__formatValue(x) =
             type="org.blockml.bml.capability.Transformation"
             inputType="org.blockml.bml.type.Float"
             outputType="org.blockml.bml.type.Text">
-  <implementation type="org.blockml.bml.language.OpenSCAD"><![CDATA[
+  <implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[
 // Main function — name matches capability name
 function formatValue(x) =
     replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
@@ -658,7 +658,7 @@ function strSuffix(s, k, i = 0) =
 ```text
 BML_FUNCTION_MISSING_MAIN    — no function named after the Capability found in CDATA
 BML_FUNCTION_DUPLICATE_MAIN  — more than one function matches the Capability name
-BML_IMPLEMENTATION_UNKNOWN_TYPE — type attribute is not a known org.blockml.bml.language.* FQN
+BML_IMPLEMENTATION_UNKNOWN_LANGUAGE — language attribute is not a known org.blockml.bml.language.* FQN
 ```
 
 ### Built-in Services — No Processor Needed
@@ -685,7 +685,7 @@ The ScadBlockProcessor automatically adds `use` imports for each service file th
 
 ### Future: LLM-Based Implementation
 
-In V1, an Entity Sub-Block without a matching `<implementation type="org.blockml.bml.language.OpenSCAD">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
+In V1, an Entity Sub-Block without a matching `<implementation language="org.blockml.bml.language.OpenSCAD">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
 
 The natural next step is the LLM Engine: given the Capability signature (name, inputType, outputType) and its `<documentation>`, the LLM generates a correct target-language implementation. No `<implementation>` block needed:
 
@@ -703,7 +703,7 @@ The natural next step is the LLM Engine: given the Capability signature (name, i
 </capability>
 ```
 
-This also applies to `org.blockml.bml.language.TypeScript` → target transpilation: TS → OpenSCAD, TS → Python, TS → Java are all LLM tasks. The `<implementation type="org.blockml.bml.language.TypeScript">` then becomes the LLM's input spec rather than a directly executable artifact.
+This also applies to `org.blockml.bml.language.TypeScript` → target transpilation: TS → OpenSCAD, TS → Python, TS → Java are all LLM tasks. The `<implementation language="org.blockml.bml.language.TypeScript">` then becomes the LLM's input spec rather than a directly executable artifact.
 
 The Capability documentation is therefore not just for humans — it is a primary input for the LLM compiler. Well-written documentation directly improves generated implementation quality.
 

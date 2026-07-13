@@ -490,7 +490,7 @@ Elements that are **not** definitions do not carry a `<status>` child. Use `bml:
 
 <!-- Draft property; implementation inherits Draft — omit bml:status -->
 <capability name="formatValue" …>
-  <implementation type="lang:TypeScript"><![CDATA[…]]></implementation>
+  <implementation language="lang:TypeScript"><![CDATA[…]]></implementation>
 </capability>
 
 <!-- Draft property; one child doc reviewed early — explicit deviation -->
@@ -535,7 +535,7 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
                               — self-closing <final /> is equivalent to true (preferred at root)
 <visibility>                  — Sub-Blocks only: private | protected | public; must match <name>
 <subTypes>          — override: permitted Sub-Block baseTypes (omit to inherit — see Framework Base Types)
-<languages>         — Language references for <implementation type="...">
+<languages>         — Language references for <implementation language="...">
 <properties>    — Property declarations. Omit if no custom properties or default overrides needed.
 <aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice.
 <associations>  — Association declarations.
@@ -1527,7 +1527,7 @@ final        — prevents override in child Blocks
 visibility   — optional; must match naming convention
 ```
 
-**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `_dependencies` / `_blocks` on `org.blockml.bml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation type="…">`). See also `00_bom_core.md` — Aggregations.
+**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `_dependencies` / `_blocks` on `org.blockml.bml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation language="…">`). See also `00_bom_core.md` — Aggregations.
 
 Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block.
 
@@ -2241,11 +2241,11 @@ xmlns:cal="com.machineblocks.bml.calibration"
 
 ### utility Sub-Blocks
 
-A Sub-Block with `baseType="org.blockml.bml.core.Entity"` binds target-language function implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.bml.language.*`** FQNs, not a `language` attribute.
+A Sub-Block with `baseType="org.blockml.bml.core.Entity"` binds target-language function implementations to Transformation Capabilities via `<implementation language="...">` — using **`org.blockml.bml.language.*`** FQNs.
 
-Two implementation types are supported in V1:
+Two implementation languages are supported in V1:
 
-**`type="org.blockml.bml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. Each Capability has exactly one main function (whose name matches the Capability name) and zero or more helper functions. The compiler automatically prefixes all function names with the block FQN — so names are written short and clean in the BML:
+**`language="org.blockml.bml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. Each Capability has exactly one main function (whose name matches the Capability name) and zero or more helper functions. The compiler automatically prefixes all function names with the block FQN — so names are written short and clean in the BML:
 
 ```xml
 <block>
@@ -2259,7 +2259,7 @@ Two implementation types are supported in V1:
                 inputType="org.blockml.bml.type.Float"
                 outputType="org.blockml.bml.type.Text">
       <documentation>Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>
-      <implementation type="org.blockml.bml.language.OpenSCAD"><![CDATA[
+      <implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[
 // Main function — name must match capability name
 function formatValue(x) =
     replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
@@ -2282,9 +2282,9 @@ function strSuffix(s, k, i = 0) =
 </block>
 ```
 
-**`type="org.blockml.bml.language.TypeScript"`** — TypeScript arrow function. In V1, compile-time execution only: when all call arguments are literals, the compiler executes the function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred.
+**`language="org.blockml.bml.language.TypeScript"`** — TypeScript arrow function. In V1, compile-time execution only: when all call arguments are literals, the compiler executes the function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred.
 
-The `<implementation>` element is a child of `<capability>`. One `<implementation>` per Capability. The **`type`** attribute is required and must be an `org.blockml.bml.language.*` FQN.
+The `<implementation>` element is a child of `<capability>`. One `<implementation>` per Capability. The **`language`** attribute is required and must be an `org.blockml.bml.language.*` FQN.
 
 ### Visibility
 

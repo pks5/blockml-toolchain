@@ -42,7 +42,7 @@
 
   <references>
     <see file="17_type_system_bml.md">
-      Language branch — PseudoCode as bootstrap language; capability implementation type attribute.
+      Language branch — PseudoCode as bootstrap language; capability implementation language attribute.
     </see>
     <see file="16_framework_base_types.md">
       languages aggregation — permitted implementation languages on Block definitions.

@@ -37,7 +37,7 @@
         #bools.isTrue(true) → true
         #bools.isTrue(1) → false
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (x: boolean): boolean => x === true
       ]]></implementation>
     </isTrue>
@@ -53,7 +53,7 @@
         #bools.isFalse(false) → true
         #bools.isFalse(0) → false
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (x: boolean): boolean => x === false
       ]]></implementation>
     </isFalse>

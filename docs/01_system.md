@@ -217,7 +217,7 @@ All Transformation Capabilities use structured Object `inputType` with named key
 #numbers.formatDecimal → inputType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }, outputType: String
 ```
 
-Each Capability has a TypeScript implementation in `<implementation type="org.blockml.bml.language.TypeScript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/bml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
+Each Capability has a TypeScript implementation in `<implementation language="org.blockml.bml.language.TypeScript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/bml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
 
 ### Delegate-Only Targets
 

@@ -30,7 +30,7 @@
     Type reference rules:
     • Any Block FQN may appear in aggregation and association member types
     • Property and Capability payload types must resolve to a ValueType
-    • Capability implementation type attributes must reference language.* FQNs
+    • Capability implementation language attributes must reference language.* FQNs
 
     Documentation model (on every root block definition):
     • &lt;idea&gt; — required first child; semantic meaning of the Block

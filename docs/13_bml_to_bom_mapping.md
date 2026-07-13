@@ -248,9 +248,9 @@ Parse failure → `BML_UNKNOWN_TYPE`.
 Child of `<capability>`. Maps to `CapabilityDefinition.implementation`:
 
 ```text
-<implementation type="org.blockml.bml.language.TypeScript"><![CDATA[ ... ]]></implementation>
+<implementation language="org.blockml.bml.language.TypeScript"><![CDATA[ ... ]]></implementation>
   → ImplementationBlock {
-       typeFqn: "org.blockml.bml.language.TypeScript",
+       languageFqn: "org.blockml.bml.language.TypeScript",
        source: CDATA body (trimmed)
      }
 ```
@@ -258,13 +258,13 @@ Child of `<capability>`. Maps to `CapabilityDefinition.implementation`:
 Rules:
 
 ```text
-type attribute   — required; must be org.blockml.bml.language.* FQN (not a language= shorthand)
-Missing type     → BML_MISSING_IMPLEMENTATION_TYPE (error)
-Unknown type FQN → BML_IMPLEMENTATION_UNKNOWN_TYPE (error)
-Unsupported type → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseType languages)
+language attribute   — required; must be org.blockml.bml.language.* FQN
+Missing language     → BML_MISSING_IMPLEMENTATION_LANGUAGE (error)
+Unknown language FQN → BML_IMPLEMENTATION_UNKNOWN_LANGUAGE (error)
+Unsupported language → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseType languages)
 ```
 
-V1 known types: `org.blockml.bml.language.TypeScript`, `org.blockml.bml.language.OpenSCAD`.
+V1 known languages: `org.blockml.bml.language.TypeScript`, `org.blockml.bml.language.OpenSCAD`.
 
 ### Type modifiers
 

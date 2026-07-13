@@ -14,7 +14,7 @@
   <idea>Representation of a capability.</idea>
 
   <documentation>Capability branch of BlockML. Declares a capability type. Every capability may
-    carry an implementation whose type attribute references a Language FQN.</documentation>
+    carry an implementation whose language attribute references a Language FQN.</documentation>
   <name>Capability</name>
   <type>core:Capability</type>
   <baseType>core:Block</baseType>
@@ -29,8 +29,12 @@
       <value>false</value>
       <documentation>Whether the capabality has an output and thus requires a specified outputType.</documentation>
     </_hasOutput>
-    <implementation type="btype:String">
-      <documentation>Capability implementation body. The element type attribute must reference a
+    <implementation>
+      <language type="btype:FullyQualifiedName(core:Language)" bml:xml="attribute">
+        <documentation>Language FQN (org.blockml.bml.language.*). Required on every implementation
+          element.</documentation>
+      </language>
+      <documentation>Capability implementation body. The language attribute must reference a
         Language FQN (org.blockml.bml.language.*).</documentation>
     </implementation>
   </properties>

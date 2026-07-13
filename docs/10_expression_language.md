@@ -331,7 +331,7 @@ The utility Sub-Block is declared as a Sub-Block and bound via a context-scoped 
                 type="org.blockml.bml.capability.Transformation"
                 inputType="org.blockml.bml.type.Float"
                 outputType="org.blockml.bml.type.Text">
-      <implementation type="org.blockml.bml.language.TypeScript"><![CDATA[
+      <implementation language="org.blockml.bml.language.TypeScript"><![CDATA[
         (x: number): string => {
             const rounded = Math.round(x * 10) / 10
             return String(rounded)
@@ -344,7 +344,7 @@ The utility Sub-Block is declared as a Sub-Block and bound via a context-scoped 
 </block>
 ```
 
-The `<implementation>` element is a child of the capability member element. The **`type`** attribute identifies the implementation language as an `org.blockml.bml.language.*` FQN (V1: `org.blockml.bml.language.TypeScript`, `org.blockml.bml.language.OpenSCAD`). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
+The `<implementation>` element is a child of the capability member element. The **`language`** attribute identifies the implementation language as an `org.blockml.bml.language.*` FQN (V1: `org.blockml.bml.language.TypeScript`, `org.blockml.bml.language.OpenSCAD`). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
 
 utility Sub-Block calls follow the same syntax as regular `@bean` Transformation Capability calls — there is no special syntax. The utility Sub-Block pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
 

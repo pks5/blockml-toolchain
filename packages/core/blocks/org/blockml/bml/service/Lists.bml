@@ -36,7 +36,7 @@
         Examples:
         #lists.size([1, 2, 3]) → 3
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (list: unknown[]): number => list.length
       ]]></implementation>
     </size>
@@ -51,7 +51,7 @@
         Examples:
         #lists.isEmpty([]) → true
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (list: unknown[]): boolean => list.length === 0
       ]]></implementation>
     </isEmpty>
@@ -66,7 +66,7 @@
         Examples:
         #lists.contains([1, 2, 3], 2) → true
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (list: unknown[], element: unknown): boolean => list.includes(element)
       ]]></implementation>
     </contains>
@@ -82,7 +82,7 @@
         Examples:
         #lists.first([10, 20, 30]) → 10
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (list: unknown[]): unknown => list[0]
       ]]></implementation>
     </first>
@@ -98,7 +98,7 @@
         Examples:
         #lists.last([10, 20, 30]) → 30
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (list: unknown[]): unknown => list[list.length - 1]
       ]]></implementation>
     </last>
@@ -114,7 +114,7 @@
         Examples:
         #lists.get([10, 20, 30], 1) → 20
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (list: unknown[], index: number): unknown => list[index]
       ]]></implementation>
     </get>
@@ -129,7 +129,7 @@
         Examples:
         #lists.concat([1, 2], [3, 4]) → [1, 2, 3, 4]
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (...lists: unknown[][]): unknown[] => lists.flat()
       ]]></implementation>
     </concat>
@@ -151,7 +151,7 @@
         #lists.sequence(0, 10, 2) → [0, 2, 4, 6, 8, 10]
         #lists.sequence(5, 1) → [5, 4, 3, 2, 1]
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (start: number, end: number, step?: number): number[] => {
           const s = step ?? (start <= end ? 1 : -1);
           const result: number[] = [];

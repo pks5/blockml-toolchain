@@ -957,7 +957,7 @@ org.blockml.bml.core.Block
 
 **`org.blockml.bml.service.ModelBlock`** — provides data access via path-based Transformation Capabilities. Specializations: `org.blockml.bml.service.JSONModel`, `org.blockml.bml.service.ODataModel`, `org.blockml.bml.service.XMLModel`.
 
-Every Capability inherits an optional `<implementation>` from `org.blockml.bml.core.CapabilityType`. The element **`type`** attribute must reference a Language FQN — e.g. `<implementation type="org.blockml.bml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is removed and the call site is updated to a `#built-in` call while the Capability signature remains unchanged.
+Every Capability inherits an optional `<implementation>` from `org.blockml.bml.core.CapabilityType`. The element **`language`** attribute must reference a Language FQN — e.g. `<implementation language="org.blockml.bml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is removed and the call site is updated to a `#built-in` call while the Capability signature remains unchanged.
 
 Built-in services are defined in `org.blockml.bml.service.*` and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
 
@@ -1187,7 +1187,7 @@ baseType declares:
     — e.g. org.blockml.bml.core.Entity
 ```
 
-If a Block carries `<implementation type="org.blockml.bml.language.OpenSCAD">` but its `baseType` does not list that type in `languages`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
+If a Block carries `<implementation language="org.blockml.bml.language.OpenSCAD">` but its `baseType` does not list that type in `languages`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
 
 A Transformation Capability implementation can live directly on any Block whose `baseType` supports it — not only on `utility Sub-Block` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
 
@@ -1195,7 +1195,7 @@ A Transformation Capability implementation can live directly on any Block whose 
 <!-- Direct on Block — valid if baseType supports OpenSCAD -->
 <capabilities>
   <formatValue type="org.blockml.bml.capability.Transformation" ...>
-    <implementation type="org.blockml.bml.language.OpenSCAD"><![CDATA[
+    <implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[
 function formatValue(x) = ...;
     ]]></implementation>
   </formatValue>

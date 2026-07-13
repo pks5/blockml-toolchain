@@ -36,7 +36,7 @@
         Examples:
         #strings.trim(' hello ') → "hello"
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string): string => s.trim()
       ]]></implementation>
     </trim>
@@ -51,7 +51,7 @@
         Examples:
         #strings.toUpperCase('abc') → "ABC"
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string): string => s.toUpperCase()
       ]]></implementation>
     </toUpperCase>
@@ -66,7 +66,7 @@
         Examples:
         #strings.toLowerCase('ABC') → "abc"
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string): string => s.toLowerCase()
       ]]></implementation>
     </toLowerCase>
@@ -81,7 +81,7 @@
         Examples:
         #strings.concat('a', 'b', 'c') → "abc"
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (...parts: string[]): string => parts.join('')
       ]]></implementation>
     </concat>
@@ -96,7 +96,7 @@
         Examples:
         #strings.length('hello') → 5
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string): number => s.length
       ]]></implementation>
     </length>
@@ -111,7 +111,7 @@
         Examples:
         #strings.contains('hello', 'ell') → true
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string, fragment: string): boolean => s.includes(fragment)
       ]]></implementation>
     </contains>
@@ -126,7 +126,7 @@
         Examples:
         #strings.startsWith('hello', 'he') → true
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string, prefix: string): boolean => s.startsWith(prefix)
       ]]></implementation>
     </startsWith>
@@ -141,7 +141,7 @@
         Examples:
         #strings.endsWith('hello', 'lo') → true
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string, suffix: string): boolean => s.endsWith(suffix)
       ]]></implementation>
     </endsWith>
@@ -156,7 +156,7 @@
         Examples:
         #strings.indexOf('hello', 'll') → 2
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string, fragment: string): number => s.indexOf(fragment)
       ]]></implementation>
     </indexOf>
@@ -171,7 +171,7 @@
         Examples:
         #strings.substring('hello', 1, 4) → "ell"
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string, start: number, end: number): string => s.substring(start, end)
       ]]></implementation>
     </substring>
@@ -186,7 +186,7 @@
         Examples:
         #strings.replace('a-b-c', '-', '_') → "a_b-c"
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string, target: string, replacement: string): string =>
             s.replace(target, replacement)
       ]]></implementation>
@@ -202,7 +202,7 @@
         Examples:
         #strings.replaceAll('a-b-c', '-', '_') → "a_b_c"
       </documentation>
-      <implementation type="lang:TypeScript"><![CDATA[
+      <implementation language="lang:TypeScript"><![CDATA[
         (s: string, target: string, replacement: string): string =>
             s.split(target).join(replacement)
       ]]></implementation>
