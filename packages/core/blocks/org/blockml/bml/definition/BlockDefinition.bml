@@ -1,0 +1,146 @@
+<!--
+  BlockML Definition — Block definition meta-model type
+
+  FQN: org.blockml.bml.definition.BlockDefinition
+  Describes the parse-time shape of every <block> document.
+  See docs/12_bom_object_model.md — BlockDefinition.
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea>The structural shape of every Block definition document in BlockML.</idea>
+
+  <documentation>Meta-model type for any block document — root blocks and nested Sub-Blocks.
+    Semantically a Class: declarative type shape without instance state. Parsed into
+    BomDocument.block and BlockDefinition.subBlocks[]. Generic type parameter B binds this
+    definition to the Block type it describes — conceptually BlockDefinition of com.foo.Bar when
+    B resolves to com.foo.Bar. Declares identity (idea, name, type, baseType, version), type
+    modifiers (abstract, final), generic parameters, contracts, allowed Sub-Blocks and languages,
+    and member declaration containers (properties, aggregations, associations, capabilities).
+    Every definition element is addressable via its canonical structural path within the Block FQN
+    (for example com.foo.Bar.properties.width). Member declaration order in BML is preserved in
+    BOM and is significant for StructType positional mapping and render targets.</documentation>
+
+  <references>
+    <see file="12_bom_object_model.md">
+      BlockDefinition BOM structure.
+    </see>
+    <see file="02_mbml.md">
+      Block definition authoring format.
+    </see>
+    <see file="16_framework_base_types.md">
+      Definition Addressing and genericTypes aggregation.
+    </see>
+    <see block="core:Block">
+      Sole inheritance root — omits baseType on root blocks.
+    </see>
+  </references>
+
+  <name>BlockDefinition</name>
+  <type>def:BlockDefinition</type>
+  <baseType>core:Definition</baseType>
+
+  <!-- Block definitions render as the root <block> element. -->
+  <bml:xml>block</bml:xml>
+
+  <!--
+    Type parameter of BlockDefinition itself — not the described Block's genericTypes aggregation.
+    Binds this definition to the Block type it describes. Defaults to org.blockml.bml.core.Block.
+  -->
+  <genericTypes>
+    <B baseType="core:Block">
+      <documentation>The Block type this BlockDefinition describes. Conceptually
+        BlockDefinition of com.foo.Bar when B binds to com.foo.Bar.</documentation>
+    </B>
+  </genericTypes>
+
+  <!--
+    Scalar Block metadata. Each property renders as a direct XML child element
+    named after the property (for example <idea>, <name>, <type>, or <version>).
+  -->
+  <properties>
+    <idea type="Text" bml:xml="element">
+      <documentation>Short semantic description — what this Block represents in meaning. Required
+        first child on every Block definition (root blocks and Sub-Blocks). Addressable as
+        com.foo.Bar.idea.</documentation>
+    </idea>
+    <name type="Text">
+      <documentation>Short class name (PascalCase). Required on every Block definition.</documentation>
+    </name>
+    <type type="btype:FullyQualifiedName(core:Block)">
+      <documentation>Globally unique FQN. Required on root blocks (authored in BML). On Sub-Blocks
+        derived as parentFqn + "." + name when omitted in source.</documentation>
+    </type>
+    <baseType type="btype:FullyQualifiedName(core:Block)">
+      <documentation>Parent type FQN. Required on all definitions except the sole inheritance root.
+        No default — validator resolves effective members via the baseType chain.</documentation>
+    </baseType>
+    <abstract type="Boolean">
+      <value>false</value>
+      <documentation>When true, the type is abstract — not usable as a composition instance type.
+        Default false.</documentation>
+    </abstract>
+    <final type="Boolean">
+      <value>false</value>
+      <documentation>When true, the type is final — cannot be used as baseType on other
+        definitions. Default false.</documentation>
+    </final>
+    <version type="btype:Version">
+      <documentation>Semantic version of this Block definition. Required on root blocks.
+        Addressable as com.foo.Bar.version.</documentation>
+    </version>
+  </properties>
+
+  <!--
+    Block-level collections and member declaration containers. Each aggregation
+    renders as a direct XML child element named after the aggregation
+    (for example <genericTypes>, <properties>, or <subBlocks>).
+  -->
+  <aggregations>
+    <genericTypes type="def:GenericTypeDefinition[]">
+      <documentation>Generic type parameters declared on this Block (root block only). Each entry
+        has a name and a baseType constraint for concrete type arguments at reference sites.</documentation>
+    </genericTypes>
+    <languages type="core:Language[]">
+      <documentation>Language FQNs permitted on capability implementation bindings for this Block.
+        Omitted = inherit from baseType chain.</documentation>
+    </languages>
+    <subTypes type="core:Block[]">
+      <documentation>Block FQNs allowed in subBlocks[]. Omitted = inherit effective subTypes from
+        baseType chain; explicit empty list = override to forbid Sub-Blocks.</documentation>
+    </subTypes>
+    <contracts type="core:Block[]">
+      <documentation>Contract Block references merged into this Block after the baseType chain
+        (root block only). Each child is a direct Block reference (element name = FQN via xmlns
+        prefix) — same pattern as languages and subTypes. Declaration order is significant —
+        later contracts override earlier ones; local Block declarations override all contracts.</documentation>
+    </contracts>
+    <properties type="def:PropertyDefinition[]">
+      <documentation>Property member declarations. Mapped to members[] in XML document order.
+        Order is significant for StructType field indices and positional array literals.</documentation>
+    </properties>
+    <aggregations type="def:AggregationDefinition[]">
+      <documentation>Aggregation member declarations — owned collections that may hold composition
+        children. Mapped to members[] in XML document order.</documentation>
+    </aggregations>
+    <associations type="def:AssociationDefinition[]">
+      <documentation>Association member declarations — loose references without composition
+        ownership. Mapped to members[] in XML document order.</documentation>
+    </associations>
+    <capabilities type="def:CapabilityDefinition[]">
+      <documentation>Capability member declarations — communication endpoints (inbound, outbound,
+        transformation). Mapped to members[] in XML document order.</documentation>
+    </capabilities>
+    <subBlocks type="def:BlockDefinition[]">
+      <documentation>Nested Sub-Block definitions within the same BomDocument. Each Sub-Block is
+        a full BlockDefinition; FQN is derived from the parent chain when type is omitted.</documentation>
+    </subBlocks>
+  </aggregations>
+</block>

@@ -4,7 +4,7 @@ version: 0.1.0
 
 ## Purpose of this Document
 
-This document specifies how **framework base types** (`org.blockml.core.Block`, `com.machineblocks.core.Block`, `org.blockml.core.Entity`, …) are defined — as **BML files**, not code or YAML.
+This document specifies how **framework base types** (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.Block`, `org.blockml.bml.core.Entity`, …) are defined — as **BML files**, not code or YAML.
 
 For BML block syntax see `02_mbml.md`.
 For MBOM hierarchy see `03_mbom.md`.
@@ -30,8 +30,8 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **Block idea** | Every `<block>` carries `<idea>` as first child — what this Block semantically represents |
 | **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description; optional `<since>`, `<changelog>`, `<examples>`, `<references>` follow |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
-| **ValueType branch** | `org.blockml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; four kinds: PrimitiveType · StructType · EnumType · ConstantType |
-| **Namespace separation** | Block FQNs under `<domain>.*`; manifestations and toolchain code under `<domain>.impl.*` — see `00_bom_core.md` |
+| **ValueType branch** | `org.blockml.bml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; four kinds: PrimitiveType · StructType · EnumType · ConstantType |
+| **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` — see `00_bom_core.md` |
 | **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `01_system.md` |
 
 ```text
@@ -64,7 +64,7 @@ false  — default when omitted; concrete derivable type
 
 Prefer the self-closing form for root flags set once and not overridable by children.
 
-Framework types `org.blockml.core.Block`, `org.blockml.service.*` (abstract bases), `com.machineblocks.core.Block` are `abstract=true`.
+Framework types `org.blockml.bml.core.Block`, `org.blockml.bml.service.*` (abstract bases), `com.machineblocks.bml.core.Block` are `abstract=true`.
 
 Concrete blocks (`Wall`, `StandardBrick`, `Math`) omit `<abstract>` or set `false`.
 
@@ -84,7 +84,7 @@ false  — default when omitted
 
 Prefer the self-closing form for root flags set once and not overridable by children.
 
-`com.machineblocks.core.NativeBlock` is `final=true`.
+`com.machineblocks.bml.core.NativeBlock` is `final=true`.
 
 ### `<subTypes>`
 
@@ -151,7 +151,7 @@ See `02_mbml.md` — Contracts · `00_bom_core.md` — Contracts.
 
 ```xml
 <genericTypes>
-  <T baseType="org.blockml.core.ValueType"/>
+  <T baseType="org.blockml.bml.core.ValueType"/>
 </genericTypes>
 ```
 
@@ -159,7 +159,7 @@ See `02_mbml.md` — Contracts · `00_bom_core.md` — Contracts.
 Declares type parameters on this Block (root block only)
 Element name  — parameter identifier used in type references (e.g. type="T")
 baseType      — FQN constraint; concrete type arguments must inherit from this branch
-Usage         — com.foo.Box<org.blockml.type.Integer> at reference sites
+Usage         — com.foo.Box<org.blockml.bml.type.Integer> at reference sites
 Validator     — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
 
 Generic parameters belong exclusively to the declaring Block — they are never inherited
@@ -181,31 +181,31 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 
 ## Definition Branch (Meta-Model)
 
-**FQN:** `org.blockml.core.Definition` — abstract base for blocks that describe **block structure** in BlockML's own language.
+**FQN:** `org.blockml.bml.core.Definition` — abstract base for blocks that describe **block structure** in BlockML's own language.
 
 ```text
-org.blockml.core.Block
-  org.blockml.core.Definition                    ← abstract; bml:xml placement allowed
-    org.blockml.definition.BlockDefinition       ← shape of every <block> document; generic BlockDefinition<B>
-    org.blockml.definition.PropertyDefinition
-    org.blockml.definition.AggregationDefinition
-    org.blockml.definition.AssociationDefinition
-    org.blockml.definition.CapabilityDefinition
-    org.blockml.definition.GenericTypeDefinition
-    org.blockml.definition.ChangeDefinition      ← one <change> in <changelog>
-    org.blockml.definition.ExampleDefinition     ← one <example> in <examples>
-    org.blockml.definition.ReferenceDefinition   ← one <see> in <references>
+org.blockml.bml.core.Block
+  org.blockml.bml.core.Definition                    ← abstract; bml:xml placement allowed
+    org.blockml.bml.definition.BlockDefinition       ← shape of every <block> document; generic BlockDefinition<B>
+    org.blockml.bml.definition.PropertyDefinition
+    org.blockml.bml.definition.AggregationDefinition
+    org.blockml.bml.definition.AssociationDefinition
+    org.blockml.bml.definition.CapabilityDefinition
+    org.blockml.bml.definition.GenericTypeDefinition
+    org.blockml.bml.definition.ChangeDefinition      ← one <change> in <changelog>
+    org.blockml.bml.definition.ExampleDefinition     ← one <example> in <examples>
+    org.blockml.bml.definition.ReferenceDefinition   ← one <see> in <references>
     …
 ```
 
-`org.blockml.core.Definition` declares the shared documentation model as properties and aggregations:
+`org.blockml.bml.core.Definition` declares the shared documentation model as properties and aggregations:
 
 ```text
 Properties:    documentation · since · status
 Aggregations:  changelog (ChangeDefinition[]) · examples (ExampleDefinition[]) · references (ReferenceDefinition[])
 ```
 
-`org.blockml.definition.ReferenceDefinition` — cross-reference to a related Block, definition element, or documentation source:
+`org.blockml.bml.definition.ReferenceDefinition` — cross-reference to a related Block, definition element, or documentation source:
 
 ```text
 bml:xml         see                — renders as <see> inside <references>
@@ -219,7 +219,7 @@ Exactly one of `block`, `file`, or `url` must be set. Authoring: list only targe
 
 Each Definition block may declare **`bml:xml`** — how instances serialize to canonical BML XML (root element name, member as attribute/element/text/cdata). The meta-model is **work in progress**; full specification in `19_definition_blocks_and_bml_xml.md`.
 
-`org.blockml.core.Block` itself carries `<bml:xml>${ bml:Self }</bml:xml>` — composable instances render under their declared type tag. Definition blocks describe the grammar; ordinary domain blocks consume it.
+`org.blockml.bml.core.Block` itself carries `<bml:xml>${ bml:Self }</bml:xml>` — composable instances render under their declared type tag. Definition blocks describe the grammar; ordinary domain blocks consume it.
 
 ### Definition Addressing
 
@@ -227,7 +227,7 @@ Definition elements are addressed via **canonical structural paths** within the 
 
 ```text
 com.foo.Bar.name                    →  Block metadata
-com.foo.Bar.documentation           →  inherited from org.blockml.core.Definition
+com.foo.Bar.documentation           →  inherited from org.blockml.bml.core.Definition
 com.foo.Bar.version                 →  Block version
 com.foo.Bar.properties.width        →  PropertyDefinition
 com.foo.Bar.aggregations.children   →  AggregationDefinition
@@ -238,7 +238,7 @@ com.foo.Bar.subBlocks.Inner         →  nested BlockDefinition
 com.foo.Bar.contracts               →  contract references
 ```
 
-`org.blockml.definition.BlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter.
+`org.blockml.bml.definition.BlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter.
 
 No special definition-reference constructs (`bml:Def`, flat `com.foo.Bar.memberName`) are used. `bml:Self` remains available for **type references** only (`type="bml:Self"`), not for definition navigation.
 
@@ -250,9 +250,9 @@ Definition blocks may declare their own Capabilities — enabling domain-specifi
 
 ## Root Type Exception
 
-`org.blockml.core.Block` is the **sole inheritance root**. It **omits `<baseType>`** — the only definition allowed to do so.
+`org.blockml.bml.core.Block` is the **sole inheritance root**. It **omits `<baseType>`** — the only definition allowed to do so.
 
-All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.core.ValueType`, `org.blockml.core.Language`, or domain bases — all ultimately extend `org.blockml.core.Block`. See `17_type_system_bml.md`.
+All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.bml.core.ValueType`, `org.blockml.bml.core.Language`, or domain bases — all ultimately extend `org.blockml.bml.core.Block`. See `17_type_system_bml.md`.
 
 ---
 
@@ -262,28 +262,28 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
 
 ```text
 1. @blockml/core BML                    ← BlockML describes BlockML
-     org/blockml/core/Block.bml
-     org/blockml/core/Status.bml
-     org/blockml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
-     org/blockml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
-     org/blockml/core/Constraint.bml
-     org/blockml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
-     org/blockml/core/Validation.bml
-     org/blockml/validation/Error.bml · Warning.bml · Information.bml · …
-     org/blockml/core/
-     org/blockml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
-     org/blockml/type/Number.bml · Integer.bml · Decimal.bml · Float.bml · Text.bml · Boolean.bml · Constant.bml · …
-     org/blockml/type/Version.bml · URL.bml · URI.bml · FilePath.bml · MimeType.bml
-     org/blockml/core/PrimitiveEntity.bml
-     org/blockml/type/IntegerEntity.bml · TextEntity.bml · …
-     org/blockml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
-     org/blockml/service/Math.bml · Strings.bml · …
-     org/blockml/core/BlockLibrary.bml   ← includes Schema as subBlock; _dependencies / _blocks as Block references
-     org/blockml/core/Definition.bml     ← meta-model base (WIP)
-     org/blockml/definition/*.bml        ← BlockDefinition, PropertyDefinition, … (WIP)
+     org/blockml/bml/core/Block.bml
+     org/blockml/bml/core/Status.bml
+     org/blockml/bml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
+     org/blockml/bml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
+     org/blockml/bml/core/Constraint.bml
+     org/blockml/bml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · …
+     org/blockml/bml/core/Validation.bml
+     org/blockml/bml/validation/Error.bml · Warning.bml · Information.bml · …
+     org/blockml/bml/core/
+     org/blockml/bml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
+     org/blockml/bml/type/Number.bml · Integer.bml · Decimal.bml · Float.bml · Text.bml · Boolean.bml · Constant.bml · …
+     org/blockml/bml/type/Version.bml · URL.bml · URI.bml · FilePath.bml · MimeType.bml
+     org/blockml/bml/core/PrimitiveEntity.bml
+     org/blockml/bml/type/IntegerEntity.bml · TextEntity.bml · …
+     org/blockml/bml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
+     org/blockml/bml/service/Math.bml · Strings.bml · …
+     org/blockml/bml/core/BlockLibrary.bml   ← includes Schema as subBlock; _dependencies / _blocks as Block references
+     org/blockml/bml/core/Definition.bml     ← meta-model base (WIP)
+     org/blockml/bml/definition/*.bml        ← BlockDefinition, PropertyDefinition, … (WIP)
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
-     com/machineblocks/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
+     com/machineblocks/bml/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
      …
 
 3. Project srcDir + libraries
@@ -293,13 +293,13 @@ Each file is parsed and `registerBlockDefinition(doc)` — **identical path** to
 
 ### What is defined in BML vs code
 
-| In BML (Blocks under `<domain>.*`) | In code (Manifestation under `<domain>.impl.*`) |
+| In BML (under `<domain>.bml.*`) | In TypeScript (npm packages) |
 |---|---|
-| `org.blockml.core.Block`, branches, primitives | `org.blockml.impl.*` — parser, validator, renderer |
-| `org.blockml.compiler.parser.Parser` | `org.blockml.impl.frontend.XmlFrontend` (example) |
-| `com.machineblocks.core.Set`, `Step` | `com.machineblocks.impl.*` — SCAD emission, processors |
-| `org.blockml.language.OpenSCAD` | branch-specific validation rules |
-| `org.blockml.service.Math` capabilities | render/processor dispatch |
+| `org.blockml.bml.core.Block`, branches, primitives | `@blockml/parser` — parser, validator, BOM interfaces |
+| `org.blockml.bml.compiler.parser.Parser` | `@blockml/compiler` — compile pipeline |
+| `com.machineblocks.bml.core.Set`, `Step` | render targets — SCAD emission, processors |
+| `org.blockml.bml.language.OpenSCAD` | branch-specific validation rules |
+| `org.blockml.bml.service.Math` capabilities | render/processor dispatch |
 | User Walls, Sets, Bricks | cache, CLI, target runtime |
 
 No framework FQN should exist only in TypeScript — if it is part of the grammar, it has a `.bml` file with `<documentation>`.
@@ -308,7 +308,7 @@ No framework FQN should exist only in TypeScript — if it is part of the gramma
 
 ## Native Properties Migration
 
-Native MB properties (`size`, `offset`, …) are declared on **concrete MachineBlocks block types** (e.g. `com.machineblocks.bricks.Standard`) — not on the abstract `com.machineblocks.core.Block` base.
+Native MB properties (`size`, `offset`, …) are declared on **concrete MachineBlocks block types** (e.g. `com.machineblocks.bml.bricks.Standard`) — not on the abstract `com.machineblocks.bml.core.Block` base.
 
 `09_mbom_properties.yml` retains **SCAD render hints** keyed by property name:
 
@@ -331,18 +331,18 @@ Membership is defined by each `Library.bml` `_blocks` list — not by directory.
 
 ```text
 packages/core/blocks/
-  org/blockml/
-    Library.bml                             ← org.blockml.Library (concrete library)
-  org/blockml/core/
+  org/blockml/bml/
+    Library.bml                             ← org.blockml.bml.Library (concrete library)
+  org/blockml/bml/core/
     BlockLibrary.bml · Block.bml · …        ← BlockLibrary = framework base type, not in Library _blocks
-  org/blockml/compiler/                     ← example nested library (future)
-    Library.bml                             ← org.blockml.compiler.Library
-  org/blockml/status/ · type/ · constraint/ · validation/ · service/ · …
+  org/blockml/bml/compiler/                     ← example nested library (future)
+    Library.bml                             ← org.blockml.bml.compiler.Library
+  org/blockml/bml/status/ · type/ · constraint/ · validation/ · service/ · …
 
 domains/machineblocks/mbom/blocks/
-  com/machineblocks/core/
+  com/machineblocks/bml/core/
     Step.bml · Block.bml · …
-  com/machineblocks/bricks/
+  com/machineblocks/bml/bricks/
     Library.bml · presets/StandardPresets.bml
 ```
 

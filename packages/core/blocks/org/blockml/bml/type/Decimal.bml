@@ -1,0 +1,29 @@
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core">
+
+  <idea>Primitive BlockML property type for fixed-precision decimal numbers.</idea>
+
+  <documentation>BOM Core primitive ValueType for decimal numbers — the default type for all
+    non-integer numeric values (3.5, 12.75, 0.1). Unqualified name Decimal resolves to
+    org.blockml.bml.type.Decimal. Extends org.blockml.bml.type.Number. Represents mathematical decimal
+    numbers; the renderer decides target representation (BigDecimal, decimal, number, …).
+    Payload values are stored on Properties — not on the Decimal type itself.
+
+    Optional configuration Properties (precision, scale) configure a Property's owned Decimal
+    instance via inline type syntax — Decimal{precision=10, scale=2} or Decimal{10, 2}.
+    Positional order: precision, scale. See 20_value_type_instance_configuration.md.</documentation>
+  <name>Decimal</name>
+  <type>btype:Decimal</type>
+  <baseType>btype:Number</baseType>
+
+  <properties>
+    <precision type="Integer">
+      <documentation>Total number of significant digits. Configured via Decimal{precision=n}.</documentation>
+    </precision>
+    <scale type="Integer">
+      <documentation>Number of digits after the decimal point. Configured via Decimal{scale=n}.</documentation>
+    </scale>
+  </properties>
+</block>

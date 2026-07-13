@@ -160,7 +160,7 @@ Reads the root element name to determine the document type:
 <block>   → Block Definition (all block types)
 ```
 
-V1 has a single root element. Preset blocks use `<block baseType="com.machineblocks.core.Block">` with `_presets` composition.
+V1 has a single root element. Preset blocks use `<block baseType="com.machineblocks.bml.core.Block">` with `_presets` composition.
 
 Selects the appropriate BML→BOM mapping rule for this root type. Extension root types register their mapping rule via the root type registry.
 
@@ -517,7 +517,7 @@ BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_AMBIGUOUS_COMPOSITION     — bare <composition> when no unique default aggregation
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
-BML_RESERVED_IMPLEMENTATION_NAMESPACE — Block FQN, xmlns binding, or Library export uses <domain>.impl.*
+BML_OUTSIDE_BML_NAMESPACE — Block FQN, xmlns binding, or Library export is outside <domain>.bml.*
 BML_DEPRECATED_MEMBER_NAMESPACE_ATTR — legacy namespace="…" attribute on member element
 BML_PRESET_CYCLE              — circular dependency in basePresets chain
 BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
@@ -558,7 +558,7 @@ BML_NO_TARGET                 — no registered target supports the block's base
 BML_UNKNOWN_TARGET            — requested target name not registered
 BML_FUNCTION_MISSING_MAIN     — no function named after the Capability found in CDATA
 BML_FUNCTION_DUPLICATE_MAIN   — more than one function matches the Capability name
-BML_IMPLEMENTATION_UNKNOWN_TYPE — <implementation type="..."> is not a known org.blockml.language.* FQN
+BML_IMPLEMENTATION_UNKNOWN_TYPE — <implementation type="..."> is not a known org.blockml.bml.language.* FQN
 BML_FUNCTION_NO_RUNTIME_IMPL  — Transformation Capability called with non-literal args but no runtime impl
 BML_DUPLICATE_GENERIC           — duplicate generic parameter name on root Block
 BML_GENERIC_BLOCK_NAME_COLLISION — generic parameter element name equals the Block's <name>
@@ -585,13 +585,13 @@ BML_DEPRECATED_TYPE    — referenced type is deprecated
 
 ## Capability Implementation Transpilation
 
-A `utility Sub-Block` Sub-Block binds target-language implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs.
+A `utility Sub-Block` Sub-Block binds target-language implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.bml.language.*`** FQNs.
 
 Two implementation types are supported in V1:
 
-**`type="org.blockml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. The compiler prefixes all function names with the block FQN.
+**`type="org.blockml.bml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. The compiler prefixes all function names with the block FQN.
 
-**`type="org.blockml.language.TypeScript"`** — TypeScript arrow function. Compile-time execution only (V1): when all arguments at the call site are literals, the compiler executes the TS function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred (requires LLM or dedicated transpiler).
+**`type="org.blockml.bml.language.TypeScript"`** — TypeScript arrow function. Compile-time execution only (V1): when all arguments at the call site are literals, the compiler executes the TS function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred (requires LLM or dedicated transpiler).
 
 ### SCAD Implementation Rules
 
@@ -622,17 +622,17 @@ function formatValue(x) =
 // Compiler emits:
 function mb__...__Utils__formatValue(x) =
     mb__...__Utils__replaceZeroDot(str(bom__org__blockml__service__Math__round_n(x, 1)));
-// + adds: use <.../blocks/org/blockml/service/Math.scad>
+// + adds: use <.../blocks/org/blockml/bml/service/Math.scad>
 ```
 
 **Example:**
 
 ```xml
 <capability name="formatValue"
-            type="org.blockml.capability.Transformation"
-            inputType="org.blockml.type.Float"
-            outputType="org.blockml.type.Text">
-  <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
+            type="org.blockml.bml.capability.Transformation"
+            inputType="org.blockml.bml.type.Float"
+            outputType="org.blockml.bml.type.Text">
+  <implementation type="org.blockml.bml.language.OpenSCAD"><![CDATA[
 // Main function — name matches capability name
 function formatValue(x) =
     replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
@@ -658,15 +658,15 @@ function strSuffix(s, k, i = 0) =
 ```text
 BML_FUNCTION_MISSING_MAIN    — no function named after the Capability found in CDATA
 BML_FUNCTION_DUPLICATE_MAIN  — more than one function matches the Capability name
-BML_IMPLEMENTATION_UNKNOWN_TYPE — type attribute is not a known org.blockml.language.* FQN
+BML_IMPLEMENTATION_UNKNOWN_TYPE — type attribute is not a known org.blockml.bml.language.* FQN
 ```
 
 ### Built-in Services — No Processor Needed
 
-Built-in Services (`#math`, `#strings`, etc.) are defined as BML service Blocks in `@blockml/core` (SSOT). Their SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` as pre-rendered artifacts:
+Built-in Services (`#math`, `#strings`, etc.) are defined as BML service Blocks in `@blockml/core` (SSOT). Their SCAD equivalents live in `scad-lib/blocks/org/blockml/bml/service/` as pre-rendered artifacts:
 
 ```text
-FQN:  org.blockml.service.Math  →  scad-lib/blocks/org/blockml/service/Math.scad
+FQN:  org.blockml.bml.service.Math  →  scad-lib/blocks/org/blockml/bml/service/Math.scad
 ```
 
 `Math.scad` example:
@@ -685,16 +685,16 @@ The ScadBlockProcessor automatically adds `use` imports for each service file th
 
 ### Future: LLM-Based Implementation
 
-In V1, an Entity Sub-Block without a matching `<implementation type="org.blockml.language.OpenSCAD">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
+In V1, an Entity Sub-Block without a matching `<implementation type="org.blockml.bml.language.OpenSCAD">` for the SCAD target produces a `BML_FUNCTION_NO_RUNTIME_IMPL` error if called with non-literal arguments.
 
 The natural next step is the LLM Engine: given the Capability signature (name, inputType, outputType) and its `<documentation>`, the LLM generates a correct target-language implementation. No `<implementation>` block needed:
 
 ```xml
 <!-- Future: LLM generates implementation from signature + documentation -->
 <capability name="formatValue"
-            type="org.blockml.capability.Transformation"
-            inputType="org.blockml.type.Float"
-            outputType="org.blockml.type.Text">
+            type="org.blockml.bml.capability.Transformation"
+            inputType="org.blockml.bml.type.Float"
+            outputType="org.blockml.bml.type.Text">
   <documentation>
     Formats a float by removing the leading zero before the decimal point.
     Examples: 0.1 → ".1"   -0.2 → "-.2"   3.0 → "3.0"
@@ -703,7 +703,7 @@ The natural next step is the LLM Engine: given the Capability signature (name, i
 </capability>
 ```
 
-This also applies to `org.blockml.language.TypeScript` → target transpilation: TS → OpenSCAD, TS → Python, TS → Java are all LLM tasks. The `<implementation type="org.blockml.language.TypeScript">` then becomes the LLM's input spec rather than a directly executable artifact.
+This also applies to `org.blockml.bml.language.TypeScript` → target transpilation: TS → OpenSCAD, TS → Python, TS → Java are all LLM tasks. The `<implementation type="org.blockml.bml.language.TypeScript">` then becomes the LLM's input spec rather than a directly executable artifact.
 
 The Capability documentation is therefore not just for humans — it is a primary input for the LLM compiler. Well-written documentation directly improves generated implementation quality.
 

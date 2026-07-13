@@ -1,0 +1,34 @@
+<!--
+  BlockML Core — maximum value constraint
+
+  FQN: org.blockml.bml.constraint.Max
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+  "
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:btype="org.blockml.bml.type">
+
+  <idea>Upper bound for a numeric property value.</idea>
+
+  <documentation>Scalar constraint: T binds to the property type. Compatible with Integer, Float,
+    and Decimal properties. The value property must match T.</documentation>
+  <name>Max</name>
+  <type>constraint:Max</type>
+  <baseType>core:Constraint</baseType>
+  <genericTypes>
+    <T baseType="btype:Number"/>
+  </genericTypes>
+
+  <properties>
+    <value type="T">
+      <documentation>Maximum allowed value (inclusive).</documentation>
+    </value>
+  </properties>
+
+</block>

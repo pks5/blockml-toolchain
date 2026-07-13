@@ -1,0 +1,32 @@
+<!--
+  MachineBlocks — Size3d struct type
+
+  FQN: com.machineblocks.bml.type.Size3d
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="com.machineblocks.bml.type">
+
+  <idea>Three-dimensional size in MachineBlocks grid units.</idea>
+
+  <documentation>Struct ValueType for three-dimensional size [x, y, z] in grid units.</documentation>
+  <name>Size3d</name>
+  <type>type:Size3d</type>
+  <baseType>btype:StructType</baseType>
+  <properties>
+    <x type="Float">
+      <documentation>Size in X direction.</documentation>
+    </x>
+    <y type="Float">
+      <documentation>Size in Y direction.</documentation>
+    </y>
+    <z type="Float">
+      <documentation>Size in Z direction.</documentation>
+    </z>
+  </properties>
+
+</block>

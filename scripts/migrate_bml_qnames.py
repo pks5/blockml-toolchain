@@ -9,17 +9,17 @@ from pathlib import Path
 PRIMITIVES = {"Boolean", "Integer", "Float", "String"}
 
 DEFAULT_PREFIX = {
-    "com.machineblocks.core": "core",
-    "com.machineblocks.type": "type",
-    "com.machineblocks.bricks": "bricks",
-    "com.machineblocks.calibration": "calibration",
-    "com.machineblocks.examples": "examples",
-    "org.blockml.core": "bcore",
-    "org.blockml.type": "btype",
-    "org.blockml.constraint": "constraint",
-    "org.blockml.service": "service",
-    "org.blockml.capability": "cap",
-    "org.blockml.language": "lang",
+    "com.machineblocks.bml.core": "core",
+    "com.machineblocks.bml.type": "type",
+    "com.machineblocks.bml.bricks": "bricks",
+    "com.machineblocks.bml.calibration": "calibration",
+    "com.machineblocks.bml.examples": "examples",
+    "org.blockml.bml.core": "bcore",
+    "org.blockml.bml.type": "btype",
+    "org.blockml.bml.constraint": "constraint",
+    "org.blockml.bml.service": "service",
+    "org.blockml.bml.capability": "cap",
+    "org.blockml.bml.language": "lang",
 }
 
 TYPE_REF_ATTRS = frozenset({
@@ -35,7 +35,7 @@ def namespace_for_fqn(fqn: str) -> str | None:
     parts = fqn.split(".")
     for length in range(len(parts) - 1, 1, -1):
         ns = ".".join(parts[:length])
-        if ns.startswith(("org.blockml.", "com.machineblocks.")):
+        if ns.startswith(("org.blockml.bml.", "com.machineblocks.bml.")):
             return ns
     return None
 
@@ -64,19 +64,19 @@ def collect_namespaces(content: str) -> set[str]:
 
 def assign_prefixes(namespaces: set[str]) -> dict[str, str]:
     prefixes: dict[str, str] = {}
-    pure_blockml = namespaces and all(ns.startswith("org.blockml.") for ns in namespaces)
+    pure_blockml = namespaces and all(ns.startswith("org.blockml.bml.") for ns in namespaces)
 
     for ns in namespaces:
-        if ns == "org.blockml.core" and pure_blockml:
+        if ns == "org.blockml.bml.core" and pure_blockml:
             prefixes[ns] = "core"
         elif ns in DEFAULT_PREFIX:
             prefixes[ns] = DEFAULT_PREFIX[ns]
         else:
             prefixes[ns] = ns.split(".")[-1].lower()
 
-    if "com.machineblocks.core" in namespaces and "org.blockml.core" in namespaces:
-        prefixes["com.machineblocks.core"] = "core"
-        prefixes["org.blockml.core"] = "bcore"
+    if "com.machineblocks.bml.core" in namespaces and "org.blockml.bml.core" in namespaces:
+        prefixes["com.machineblocks.bml.core"] = "core"
+        prefixes["org.blockml.bml.core"] = "bcore"
 
     return prefixes
 
@@ -87,7 +87,7 @@ def fqn_to_qname(fqn: str, array_suffix: str, prefixes: dict[str, str]) -> str:
         return fqn + array_suffix
 
     simple = fqn[len(ns) + 1 :]
-    if ns == "org.blockml.type" and simple in PRIMITIVES:
+    if ns == "org.blockml.bml.type" and simple in PRIMITIVES:
         return simple + array_suffix
     return f"{prefixes[ns]}:{simple}" + array_suffix
 

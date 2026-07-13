@@ -185,9 +185,9 @@ Core primitive ValueTypes declare optional configuration Properties:
 
 | ValueType | Configuration Properties | Positional order |
 |---|---|---|
-| `org.blockml.type.Text` | `minLength`, `maxLength` | `minLength`, `maxLength` |
-| `org.blockml.type.Decimal` | `precision`, `scale` | `precision`, `scale` |
-| `org.blockml.type.Integer` | `min`, `max` | `min`, `max` |
+| `org.blockml.bml.type.Text` | `minLength`, `maxLength` | `minLength`, `maxLength` |
+| `org.blockml.bml.type.Decimal` | `precision`, `scale` | `precision`, `scale` |
+| `org.blockml.bml.type.Integer` | `min`, `max` | `min`, `max` |
 
 Sub-types inherit configuration Properties from their baseType chain. A configured instance applies values only to Properties declared on the effective ValueType definition.
 

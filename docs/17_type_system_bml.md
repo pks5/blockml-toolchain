@@ -31,7 +31,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — EnumType is a specialized StructType |
 | **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `18_function_mapping.md` |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
-| **Namespace separation** | Block FQNs under `<domain>.*` (e.g. `org.blockml.core.*`, `org.blockml.compiler.*`); parse-time / toolchain types under `<domain>.impl.*` (e.g. `org.blockml.impl.bom.*`) — see `00_bom_core.md` |
+| **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `org.blockml.bml.compiler.*`); TypeScript BOM interfaces in `@blockml/parser` — see `00_bom_core.md` |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
 | **Domain XSD enums** | Deprecated as type SSOT — migrate to BML `EnumType` |
 
@@ -186,20 +186,20 @@ BOM Core defines Block as **„a parametric, reusable unit (definition / type)�
 
 **Class vs Object:** In familiar terms, every `<block>` document is a **Class** (declarative, semantic type). Every element in a `<composition>` is a **Block Instance** — an **Object** referencing that class by FQN. ValueTypes (`Integer`, `Size3d`) are type-classes that may also appear as Block instances — interpretation is context-dependent. See `00_bom_core.md` — Block and Block Instance · Context-Dependent Interpretation (below).
 
-All definitions use the BML `<block>` element, register in the same TypeRegistry, and inherit from **`org.blockml.core.Block`** — the sole inheritance root.
+All definitions use the BML `<block>` element, register in the same TypeRegistry, and inherit from **`org.blockml.bml.core.Block`** — the sole inheritance root.
 
 ```text
-org.blockml.core.Block                         abstract root · omits baseType
-  ├── org.blockml.core.ValueType               value blocks — Property types · Capability input/output (Size3D, Integer, …)
-  ├── org.blockml.core.Language                capability implementation contract (OpenSCAD, English, …)
-  ├── org.blockml.core.Entity                general entities — built-in services, domain blocks
-  ├── com.machineblocks.core.Block             domain base
+org.blockml.bml.core.Block                         abstract root · omits baseType
+  ├── org.blockml.bml.core.ValueType               value blocks — Property types · Capability input/output (Size3D, Integer, …)
+  ├── org.blockml.bml.core.Language                capability implementation contract (OpenSCAD, English, …)
+  ├── org.blockml.bml.core.Entity                general entities — built-in services, domain blocks
+  ├── com.machineblocks.bml.core.Block             domain base
   └── … user and domain Blocks
 ```
 
-**One root · one registry · one parser.** Branch-specific rules come from the `baseType` chain — not from parallel ontologies. There is no separate ComposableBlock — all Blocks inherit directly from `org.blockml.core.Block` (or via domain/service branches).
+**One root · one registry · one parser.** Branch-specific rules come from the `baseType` chain — not from parallel ontologies. There is no separate ComposableBlock — all Blocks inherit directly from `org.blockml.bml.core.Block` (or via domain/service branches).
 
-Every sub-type is free to declare its own members — `org.blockml.core.Block` declares **none**. Composition instance identity uses **`bml:id`** (may be empty); external references may use optional **`bml:version`** as an exact-version assert (forbidden inside Library files). Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **ValueType** only (Property `type` · Capability `inputType` · Capability `outputType`).
+Every sub-type is free to declare its own members — `org.blockml.bml.core.Block` declares **none**. Composition instance identity uses **`bml:id`** (may be empty); external references may use optional **`bml:version`** as an exact-version assert (forbidden inside Library files). Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **ValueType** only (Property `type` · Capability `inputType` · Capability `outputType`).
 
 ### Literally everything — including the compiler's grammar
 
@@ -212,8 +212,8 @@ OpenSCAD          →  Block  (Language branch)
 Step              →  Block  (Set meta block)
 IPlaceable        →  Block  (abstract — typical contract / partial definition)
 Library           →  Block  (publishable package descriptor; entry types as subBlocks)
-Math · #strings   →  Block  (org.blockml.service.* · baseType Entity)
-org.blockml.core.Block itself  →  Block  (root)
+Math · #strings   →  Block  (org.blockml.bml.service.* · baseType Entity)
+org.blockml.bml.core.Block itself  →  Block  (root)
 ```
 
 There is no parallel type system in code, no hidden XSD ontology for framework concepts, no hardcoded list of „allowed languages“ outside BML. **The grammar describes itself in the same language it describes user content.**
@@ -240,7 +240,7 @@ Property
 
 A `ValueType` never stores data. All concrete values are stored exclusively in **Properties**. The type describes the nature of the value; the Property owns the value. There is no Java-style `new BigDecimal(5)` in BlockML.
 
-When a primitive value must exist as an **Entity** inside composition or aggregation, use a concrete `*Entity` type (for example `org.blockml.type.IntegerEntity`) — not by adding a `value` member to the PrimitiveType.
+When a primitive value must exist as an **Entity** inside composition or aggregation, use a concrete `*Entity` type (for example `org.blockml.bml.type.IntegerEntity`) — not by adding a `value` member to the PrimitiveType.
 
 ### Capabilities — no special lifecycle types
 
@@ -275,31 +275,31 @@ Internally the compiler may represent definitions as plain data (`BlockDefinitio
 
 ### Flat hierarchy under Block
 
-`org.blockml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.core.Block` directly (or via intermediate branches like `ValueType`, `Entity`, `com.machineblocks.core.Block`):
+`org.blockml.bml.core.ComposableBlock` is **removed**. All framework and domain Blocks extend `org.blockml.bml.core.Block` directly (or via intermediate branches like `ValueType`, `Entity`, `com.machineblocks.bml.core.Block`):
 
 ```text
-org.blockml.core.Block           root · declares no members · bml:id / bml:version on composition instances
-org.blockml.core.Entity          baseType: Block · built-in services · utility Sub-Blocks
-com.machineblocks.core.Block     baseType: Entity · _presets · basePresets
-com.machineblocks.core.CompositeBlock baseType: Block · _parts (default)
-org.blockml.core.ValueType         baseType: Block · primitives · structs · enums
-org.blockml.core.Language          baseType: Block (meta — no extra members in V1)
-org.blockml.core.ProgrammingLanguage baseType: Language
-org.blockml.core.MarkupLanguage    baseType: Language
+org.blockml.bml.core.Block           root · declares no members · bml:id / bml:version on composition instances
+org.blockml.bml.core.Entity          baseType: Block · built-in services · utility Sub-Blocks
+com.machineblocks.bml.core.Block     baseType: Entity · _presets · basePresets
+com.machineblocks.bml.core.CompositeBlock baseType: Block · _parts (default)
+org.blockml.bml.core.ValueType         baseType: Block · primitives · structs · enums
+org.blockml.bml.core.Language          baseType: Block (meta — no extra members in V1)
+org.blockml.bml.core.ProgrammingLanguage baseType: Language
+org.blockml.bml.core.MarkupLanguage    baseType: Language
 ```
 
 ```text
-com.machineblocks.core.Block     baseType: org.blockml.core.Entity
-org.blockml.service.Math         baseType: org.blockml.core.Entity
-com.machineblocks.type.Size3d    baseType: StructType → … → ValueType → Block
-org.blockml.language.OpenSCAD    baseType: ProgrammingLanguage → Language → Block
+com.machineblocks.bml.core.Block     baseType: org.blockml.bml.core.Entity
+org.blockml.bml.service.Math         baseType: org.blockml.bml.core.Entity
+com.machineblocks.bml.type.Size3d    baseType: StructType → … → ValueType → Block
+org.blockml.bml.language.OpenSCAD    baseType: ProgrammingLanguage → Language → Block
 ```
 
 **Member usage rules:**
 
 ```text
 Aggregation / association type     — any Block FQN (composable Blocks, ValueTypes, meta Blocks)
-Property type                      — ValueType only (baseType chain includes org.blockml.core.ValueType)
+Property type                      — ValueType only (baseType chain includes org.blockml.bml.core.ValueType)
 Capability inputType/outputType  — ValueType only (generic arguments substituted at validate time)
 Meta property id                   — every Block instance; not declarable as <property name="id">
 ```
@@ -309,7 +309,7 @@ Meta property id                   — every Block instance; not declarable as <
 The WOT Relativität Principle applies to types as well:
 
 ```text
-com.machineblocks.type.Size3D   →  ValueType in MachineBlocks
+com.machineblocks.bml.type.Size3D   →  ValueType in MachineBlocks
                                 →  input struct in Expression signatures
                                 →  serializer input in SCAD Renderer
                                 →  layout constraint in ScreenMachine (future)
@@ -321,7 +321,7 @@ Same FQN · different role · one BML definition.
 
 ## ValueType Hierarchy
 
-**`org.blockml.core.ValueType`** is the abstract branch for all **value blocks** — Blocks whose `baseType` chain includes ValueType and that may appear wherever a typed payload is required: Property `type`, Capability `inputType`, and Capability `outputType`. Composable Blocks, built-in services, and other general Blocks are **not** ValueTypes; they may appear in aggregations and associations, but not as property or Capability payload types.
+**`org.blockml.bml.core.ValueType`** is the abstract branch for all **value blocks** — Blocks whose `baseType` chain includes ValueType and that may appear wherever a typed payload is required: Property `type`, Capability `inputType`, and Capability `outputType`. Composable Blocks, built-in services, and other general Blocks are **not** ValueTypes; they may appear in aggregations and associations, but not as property or Capability payload types.
 
 ### Design Principles
 
@@ -341,28 +341,28 @@ Semantics are decided by `baseType` and usage context — not by parallel XSD or
 
 ---
 
-All types inherit from **`org.blockml.core.ValueType`**. Types are not a separate language construct — they are normal BlockML Blocks. Meaning comes from `baseType` and usage context.
+All types inherit from **`org.blockml.bml.core.ValueType`**. Types are not a separate language construct — they are normal BlockML Blocks. Meaning comes from `baseType` and usage context.
 
 ```text
-org.blockml.core.ValueType              abstract — never stores data
-  ├── org.blockml.type.PrimitiveType    abstract
-  │     ├── org.blockml.type.Text         abstract — textual primitives
-  │     │     ├── org.blockml.type.FullyQualifiedName
-  │     │     ├── org.blockml.type.Version
-  │     │     ├── org.blockml.type.URL
-  │     │     ├── org.blockml.type.URI
-  │     │     ├── org.blockml.type.FilePath
-  │     │     ├── org.blockml.type.MimeType
+org.blockml.bml.core.ValueType              abstract — never stores data
+  ├── org.blockml.bml.type.PrimitiveType    abstract
+  │     ├── org.blockml.bml.type.Text         abstract — textual primitives
+  │     │     ├── org.blockml.bml.type.FullyQualifiedName
+  │     │     ├── org.blockml.bml.type.Version
+  │     │     ├── org.blockml.bml.type.URL
+  │     │     ├── org.blockml.bml.type.URI
+  │     │     ├── org.blockml.bml.type.FilePath
+  │     │     ├── org.blockml.bml.type.MimeType
   │     │     └── …
-  │     ├── org.blockml.type.Number       abstract — numeric primitives
-  │     │     ├── org.blockml.type.Integer
-  │     │     ├── org.blockml.type.Decimal   — default for non-integer numbers
-  │     │     └── org.blockml.type.Float     — binary float — special-purpose only
-  │     └── org.blockml.type.Boolean      — neither textual nor numeric
-  ├── org.blockml.type.StructType         Size3D · Color · Address · …
-  ├── org.blockml.type.EnumType           extends StructType — BaseCutoutType · Direction · …
-  └── org.blockml.type.ConstantType       singleton value domains
-        └── org.blockml.type.Constant     Constant(T){value=…}
+  │     ├── org.blockml.bml.type.Number       abstract — numeric primitives
+  │     │     ├── org.blockml.bml.type.Integer
+  │     │     ├── org.blockml.bml.type.Decimal   — default for non-integer numbers
+  │     │     └── org.blockml.bml.type.Float     — binary float — special-purpose only
+  │     └── org.blockml.bml.type.Boolean      — neither textual nor numeric
+  ├── org.blockml.bml.type.StructType         Size3D · Color · Address · …
+  ├── org.blockml.bml.type.EnumType           extends StructType — BaseCutoutType · Direction · …
+  └── org.blockml.bml.type.ConstantType       singleton value domains
+        └── org.blockml.bml.type.Constant     Constant(T){value=…}
 ```
 
 **BlockML knows four ValueType kinds at language level** — each names a semantic meaning:
@@ -406,7 +406,7 @@ T                   — generic parameter reference
 
 In **`type="..."` XML attributes**, generic applications use **round parentheses** — not angle brackets — so values stay valid XML without escaping. See § Generics — BML attribute syntax.
 
-The compiler may build internal structures in `org.blockml.impl.bom.*` (e.g. `UnionTypeDescriptor`, `CollectionTypeDescriptor`, `GenericApplicationDescriptor`, `SelfTypeReference`, `GenericParameterReference`). **BML does not define these as Block classes.**
+The compiler may build internal structures in `org.blockml.bml.bom.*` (e.g. `UnionTypeDescriptor`, `CollectionTypeDescriptor`, `GenericApplicationDescriptor`, `SelfTypeReference`, `GenericParameterReference`). **BML does not define these as Block classes.**
 
 ### Obsolete wrapper types — write unions directly
 
@@ -440,7 +440,7 @@ Integer[1..]    → at least one Integer (1..n)
 Integer[1..1]   → exactly one Integer (explicit)
 ```
 
-The FQN (`Integer`, `com.machineblocks.core.Block`, …) is unchanged. Bracket notation describes only the allowed instance count.
+The FQN (`Integer`, `com.machineblocks.bml.core.Block`, …) is unchanged. Bracket notation describes only the allowed instance count.
 
 ### Semantics, not implementation
 
@@ -467,7 +467,7 @@ BlockML states what a collection *means*. The concrete data structure is part of
 ### Where multiplicity applies
 
 ```text
-Aggregation type=     com.machineblocks.core.Step[]
+Aggregation type=     com.machineblocks.bml.core.Step[]
 Association type=     bml:Self[]
 Property type=        (bare — exactly one value; collections rare on properties)
 Capability inputType=  { items: String[0..n] }   — named field with multiplicity
@@ -503,33 +503,33 @@ Until that shorthand is enabled, author the explicit Constant form. Legacy liter
 Only ValueTypes may be used where a **bare type name** is required (Property `type`, Capability `inputType` / `outputType`). Type expressions (multiplicity, unions, generic application) extend those references. Any Block FQN is valid in aggregation and association `type` attributes — including ValueTypes when used as composition children.
 
 ```text
-Allowed:     type="org.blockml.type.Integer"
+Allowed:     type="org.blockml.bml.type.Integer"
              type="Boolean | Constant(Text){value=&quot;auto&quot;}"
              type="Integer[]"
              type="Text{maxLength=100}"
              type="Decimal{precision=10, scale=2}"
              inputType="com.foo.Request"
              outputType="com.foo.Response"
-Not allowed: type="com.machineblocks.core.NativeBlock"   → BML_INVALID_PROPERTY_TYPE
+Not allowed: type="com.machineblocks.bml.core.NativeBlock"   → BML_INVALID_PROPERTY_TYPE
 ```
 
 ---
 
 ### PrimitiveType
 
-Primitive types inherit from `org.blockml.type.PrimitiveType`. They are **pure type definitions** — no `value` property.
+Primitive types inherit from `org.blockml.bml.type.PrimitiveType`. They are **pure type definitions** — no `value` property.
 
 ```text
-org.blockml.type.PrimitiveType
-  org.blockml.type.Text           — abstract
-    org.blockml.type.FullyQualifiedName
-    org.blockml.type.Version
-    org.blockml.type.URL · URI · FilePath · MimeType · …
-  org.blockml.type.Number         — abstract
-    org.blockml.type.Integer      — whole numbers
-    org.blockml.type.Decimal      — default for non-integer numeric values
-    org.blockml.type.Float        — binary float — special-purpose only
-  org.blockml.type.Boolean        — neither textual nor numeric
+org.blockml.bml.type.PrimitiveType
+  org.blockml.bml.type.Text           — abstract
+    org.blockml.bml.type.FullyQualifiedName
+    org.blockml.bml.type.Version
+    org.blockml.bml.type.URL · URI · FilePath · MimeType · …
+  org.blockml.bml.type.Number         — abstract
+    org.blockml.bml.type.Integer      — whole numbers
+    org.blockml.bml.type.Decimal      — default for non-integer numeric values
+    org.blockml.bml.type.Float        — binary float — special-purpose only
+  org.blockml.bml.type.Boolean        — neither textual nor numeric
 ```
 
 **Invalid:**
@@ -559,7 +559,7 @@ On Block instances, primitive values are inline literals on Properties or attrib
 
 #### Text replaces String
 
-The public BlockML text primitive is **`Text`** (FQN `org.blockml.type.Text`), not `String`. BlockML describes semantic types, not implementation data structures. Renderers map `Text` to Java `String`, TypeScript `string`, Python `str`, etc.
+The public BlockML text primitive is **`Text`** (FQN `org.blockml.bml.type.Text`), not `String`. BlockML describes semantic types, not implementation data structures. Renderers map `Text` to Java `String`, TypeScript `string`, Python `str`, etc.
 
 #### Decimal vs Float
 
@@ -567,7 +567,7 @@ The public BlockML text primitive is **`Text`** (FQN `org.blockml.type.Text`), n
 
 #### PrimitiveEntity
 
-`org.blockml.core.PrimitiveEntity(T)` is an **abstract generic** Block — it follows the general rule in § Generic resolution through inheritance. It cannot be instantiated directly; concrete `*Entity` types bind `T` via `baseType`.
+`org.blockml.bml.core.PrimitiveEntity(T)` is an **abstract generic** Block — it follows the general rule in § Generic resolution through inheritance. It cannot be instantiated directly; concrete `*Entity` types bind `T` via `baseType`.
 
 It defines the common structure for primitive value Entities:
 
@@ -746,11 +746,11 @@ Complex values are described by **normal Properties** — no special struct synt
 
 ```xml
 <block xmlns="http://blockml.org/schema/block"
-       xmlns:type="com.machineblocks.type" ...>
+       xmlns:type="com.machineblocks.bml.type" ...>
 
   <name>Size3d</name>
-  <type>com.machineblocks.type.Size3d</type>
-  <baseType>org.blockml.core.StructType</baseType>
+  <type>com.machineblocks.bml.type.Size3d</type>
+  <baseType>org.blockml.bml.core.StructType</baseType>
   <version>1.0.0</version>
 
   <properties>
@@ -767,7 +767,7 @@ StructType properties follow **Struct Property Access** and **Declaration Order*
 **As type reference:**
 
 ```xml
-<property name="size" type="com.machineblocks.type.Size3d"/>
+<property name="size" type="com.machineblocks.bml.type.Size3d"/>
 ```
 
 **As Block instance:**
@@ -797,7 +797,7 @@ and the configured constant value.
 
 EnumType is a **specialized StructType** — it adds a finite list of allowed values. It is not a separate top-level ValueType category alongside PrimitiveType, StructType, and ConstantType; the four categories remain PrimitiveType, StructType, EnumType, and ConstantType.
 
-Enums are normal ValueTypes extending `org.blockml.type.StructType`. The branch declares a default aggregation for enum values:
+Enums are normal ValueTypes extending `org.blockml.bml.type.StructType`. The branch declares a default aggregation for enum values:
 
 ```xml
 <aggregation name="_values" type="bml:Self[]" default="true"/>
@@ -808,8 +808,8 @@ Enum values are **Block instances** in `<composition aggregation="_values">` —
 ```xml
 <block ...>
   <name>BaseCutoutType</name>
-  <type>com.machineblocks.type.BaseCutoutType</type>
-  <baseType>org.blockml.type.EnumType</baseType>
+  <type>com.machineblocks.bml.type.BaseCutoutType</type>
+  <baseType>org.blockml.bml.type.EnumType</baseType>
   <version>1.0.0</version>
 
   <composition aggregation="_values">
@@ -828,9 +828,9 @@ Properties typed with an EnumType **must not** carry `<suggestions>` — valid v
 When the property `type` is an EnumType, a qualified enum instance reference may omit the `{EnumTypeFQN}::` prefix:
 
 ```text
-Property type:  com.machineblocks.type.BaseCutoutType
+Property type:  com.machineblocks.bml.type.BaseCutoutType
 
-Qualified:      com.machineblocks.type.BaseCutoutType::STANDARD
+Qualified:      com.machineblocks.bml.type.BaseCutoutType::STANDARD
 Short:          STANDARD                              ← equivalent (type known from property)
 
 Qualified form references the enum value's id (from _values composition).
@@ -839,13 +839,13 @@ Qualified form references the enum value's id (from _values composition).
 ```xml
 <!-- NativeBlock.bml — property type is BaseCutoutType -->
 <property name="baseCutoutType"
-          type="com.machineblocks.type.BaseCutoutType"
+          type="com.machineblocks.bml.type.BaseCutoutType"
           defaultValue="STANDARD" />
 
 <!-- equivalent explicit form -->
 <property name="baseCutoutType"
-          type="com.machineblocks.type.BaseCutoutType"
-          defaultValue="com.machineblocks.type.BaseCutoutType::STANDARD" />
+          type="com.machineblocks.bml.type.BaseCutoutType"
+          defaultValue="com.machineblocks.bml.type.BaseCutoutType::STANDARD" />
 ```
 
 The short form is valid only when the expected type is known from the property (or capability input field) declaration — not for untyped strings. The validator resolves the token against `_values` by `id`.
@@ -862,10 +862,10 @@ A ValueType may appear in different roles:
 
 | Context | Example | Role |
 |---|---|---|
-| Property type | `type="org.blockml.type.Integer"` | type reference — value stored on Property |
+| Property type | `type="org.blockml.bml.type.Integer"` | type reference — value stored on Property |
 | Property value on instance | `columns="5"` | inline literal on Property |
 | Suggestion | Block instance in `<suggestions>` | metadata — same type as property |
-| Aggregation type | `type="org.blockml.type.IntegerEntity[]"` | collection of integer Entities |
+| Aggregation type | `type="org.blockml.bml.type.IntegerEntity[]"` | collection of integer Entities |
 | Composition child | `<Size3d x="10" y="5" z="2"/>` | StructType Block instance |
 
 **Primitive values in composition:** use `IntegerEntity`, `TextEntity`, or another concrete `*Entity` type when a primitive must be an Entity — not `<Integer value="5"/>`. Properties always store values directly.
@@ -962,10 +962,10 @@ Generic type parameters are declared on **StructType** (or other Block) definiti
 <block ...>
   <name>Box</name>
   <type>com.foo.Box</type>
-  <baseType>org.blockml.core.StructType</baseType>
+  <baseType>org.blockml.bml.core.StructType</baseType>
 
   <genericTypes>
-    <T baseType="org.blockml.core.ValueType"/>
+    <T baseType="org.blockml.bml.core.ValueType"/>
   </genericTypes>
 
   <properties>
@@ -978,12 +978,12 @@ Multiple parameters:
 
 ```xml
 <genericTypes>
-  <T baseType="org.blockml.core.ValueType"/>
-  <D baseType="org.blockml.core.Definition" defaultType="def:BlockDefinition"/>
+  <T baseType="org.blockml.bml.core.ValueType"/>
+  <D baseType="org.blockml.bml.core.Definition" defaultType="def:BlockDefinition"/>
 </genericTypes>
 ```
 
-The parameter name is derived from the XML element name — `<T baseType="…"/>` maps internally to `{ name: "T", baseType: "org.blockml.core.ValueType" }`. The internal BOM `GenericType` shape is unchanged; only the BML syntax is simplified.
+The parameter name is derived from the XML element name — `<T baseType="…"/>` maps internally to `{ name: "T", baseType: "org.blockml.bml.core.ValueType" }`. The internal BOM `GenericType` shape is unchanged; only the BML syntax is simplified.
 
 **Generic application** (`Box<Integer>`) is a **type expression** — not a ValueType.
 
@@ -1003,7 +1003,7 @@ Resolution rules:
 
 ```text
 mynamespace:MyBlock(abc:A, xyz:B)  →  com.mynamespace.MyBlock<abc.A, xyz.B>
-core:FullyQualifiedName(core:Block) → org.blockml.core.FullyQualifiedName<core.Block>
+core:FullyQualifiedName(core:Block) → org.blockml.bml.core.FullyQualifiedName<core.Block>
 ```
 
 Each parenthesized argument binds one generic type parameter (in declaration order). When multiple parameters are present, the argument label (`abc`, `xyz`, …) matches the generic parameter name (the XML element name inside `<genericTypes>`) and qualifies the type argument as a namespace prefix (`abc:A` → `abc.A`). With a single generic parameter, the label may be omitted — only the type reference is written.
@@ -1034,14 +1034,14 @@ Examples from core Block definitions:
 At reference sites:
 
 ```xml
-<property name="values" type="com.foo.Box(org.blockml.type.Integer)"/>
+<property name="values" type="com.foo.Box(org.blockml.bml.type.Integer)"/>
 ```
 
 At validate time the compiler substitutes each placeholder (`T`) with the concrete type argument. Each argument must satisfy the parameter's `baseType` constraint (`BML_GENERIC_CONSTRAINT_VIOLATION` on mismatch).
 
 Generic parameters (`T`) and `bml:Self` in type positions are type-expression references — resolved from the defining Block's `<genericTypes>` or effective Block type respectively.
 
-**Constraint generic binding** — `org.blockml.core.Constraint` and its sub-types also declare `<genericTypes>`. Unlike StructType generics, constraint type arguments are **never authored** — the compiler binds `T` from the enclosing property's type context at validate time:
+**Constraint generic binding** — `org.blockml.bml.core.Constraint` and its sub-types also declare `<genericTypes>`. Unlike StructType generics, constraint type arguments are **never authored** — the compiler binds `T` from the enclosing property's type context at validate time:
 
 ```text
 Scalar property (Integer)     → Min/Max: T = Integer
@@ -1051,7 +1051,7 @@ Collection property (String[]) → MinItems/MaxItems: T = Text[]
 
 Binding rules per constraint FQN are defined in each constraint Block's `<documentation>`. See `18_constraints_and_suggestions.md`.
 
-**Constraint vs Validation** — `org.blockml.core.Constraint` describes the condition; `org.blockml.core.Validation` describes how BlockML enforces it. Every constraint carries an optional `validation` property referencing a Validation block. When omitted, the BlockML validator ignores value enforcement — the constraint remains metadata. Standard Validation blocks: `org.blockml.validation.Error`, `Warning`, `Information`.
+**Constraint vs Validation** — `org.blockml.bml.core.Constraint` describes the condition; `org.blockml.bml.core.Validation` describes how BlockML enforces it. Every constraint carries an optional `validation` property referencing a Validation block. When omitted, the BlockML validator ignores value enforcement — the constraint remains metadata. Standard Validation blocks: `org.blockml.bml.validation.Error`, `Warning`, `Information`.
 
 ### Generic parameter naming
 
@@ -1103,33 +1103,33 @@ See `00_bom_core.md` — Contracts.
 
 ## Language
 
-Implementation languages inherit from `org.blockml.core.Block` via `org.blockml.core.Language`:
+Implementation languages inherit from `org.blockml.bml.core.Block` via `org.blockml.bml.core.Language`:
 
 ```text
-org.blockml.core.Block
-  └── org.blockml.core.Language                    abstract
-        ├── org.blockml.core.ProgrammingLanguage   abstract
-        │     ├── org.blockml.language.TypeScript · OpenSCAD · PseudoCode · JavaScript · Python · …
-        │     └── org.blockml.language.CSharp
-        │           └── org.blockml.language.Unity
-        ├── org.blockml.core.MarkupLanguage          abstract
-        │     ├── org.blockml.language.XML
-        │     ├── org.blockml.language.JSON
-        │     └── org.blockml.language.YML
-        ├── org.blockml.language.English · German · French · Spanish · Chinese · Japanese · Russian
+org.blockml.bml.core.Block
+  └── org.blockml.bml.core.Language                    abstract
+        ├── org.blockml.bml.core.ProgrammingLanguage   abstract
+        │     ├── org.blockml.bml.language.TypeScript · OpenSCAD · PseudoCode · JavaScript · Python · …
+        │     └── org.blockml.bml.language.CSharp
+        │           └── org.blockml.bml.language.Unity
+        ├── org.blockml.bml.core.MarkupLanguage          abstract
+        │     ├── org.blockml.bml.language.XML
+        │     ├── org.blockml.bml.language.JSON
+        │     └── org.blockml.bml.language.YML
+        ├── org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
 ```
 
 ```xml
 <block ...>
   <name>OpenSCAD</name>
-  <type>org.blockml.language.OpenSCAD</type>
-  <baseType>org.blockml.core.ProgrammingLanguage</baseType>
+  <type>org.blockml.bml.language.OpenSCAD</type>
+  <baseType>org.blockml.bml.core.ProgrammingLanguage</baseType>
   <version>1.0.0</version>
   <abstract />
 </block>
 ```
 
-Every Capability inherits an optional `<implementation>` member from `org.blockml.core.CapabilityType`. The element **`type`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<languages>` — see `16_framework_base_types.md`.
+Every Capability inherits an optional `<implementation>` member from `org.blockml.bml.core.CapabilityType`. The element **`type`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<languages>` — see `16_framework_base_types.md`.
 
 **PseudoCode** is free-form program code that must be internally consistent but is otherwise unconstrained — an LLM may interpret it.
 
@@ -1139,7 +1139,7 @@ V1 bootstrap languages in `@blockml/core`: TypeScript, OpenSCAD, English, German
 
 ## Root Exception
 
-Only **`org.blockml.core.Block`** omits `<baseType>`. Every other definition must declare `<baseType>` — including `ValueType` and `Language`.
+Only **`org.blockml.bml.core.Block`** omits `<baseType>`. Every other definition must declare `<baseType>` — including `ValueType` and `Language`.
 
 ---
 
@@ -1183,11 +1183,11 @@ Wrong branch usage → `BML_INVALID_DEFINITION_BRANCH`.
 At validate time, every `TypeDescriptor` named reference resolves against the registry:
 
 ```text
-type="Integer"                              → org.blockml.type.Integer
-type="type:Size3d"                          → com.machineblocks.type.Size3d
-type="com.foo.Box(org.blockml.type.Integer)"  → generic substitution at validate time
+type="Integer"                              → org.blockml.bml.type.Integer
+type="type:Size3d"                          → com.machineblocks.bml.type.Size3d
+type="com.foo.Box(org.blockml.bml.type.Integer)"  → generic substitution at validate time
 inputType="{ a: Float, b: Float }"        → AnonymousStructType (inline)
-capability implementation type="org.blockml.language.TypeScript"  → registry lookup
+capability implementation type="org.blockml.bml.language.TypeScript"  → registry lookup
 ```
 
 ```text
@@ -1207,18 +1207,18 @@ Type definitions bootstrap **before** composable Blocks that reference them:
 
 ```text
 1. @blockml/core — root + branches + bootstrap types
-     org/blockml/core/Block.bml
-     org/blockml/core/ValueType.bml · StructType.bml · EnumType.bml · Constraint.bml · Validation.bml · …
-     org/blockml/constraint/Min.bml · Max.bml · …
-     org/blockml/validation/Error.bml · Warning.bml · Information.bml · …
-     org/blockml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
-     org/blockml/type/Integer.bml · …
-     org/blockml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
-     org/blockml/service/Math.bml · Strings.bml · …
+     org/blockml/bml/core/Block.bml
+     org/blockml/bml/core/ValueType.bml · StructType.bml · EnumType.bml · Constraint.bml · Validation.bml · …
+     org/blockml/bml/constraint/Min.bml · Max.bml · …
+     org/blockml/bml/validation/Error.bml · Warning.bml · Information.bml · …
+     org/blockml/bml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
+     org/blockml/bml/type/Integer.bml · …
+     org/blockml/bml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
+     org/blockml/bml/service/Math.bml · Strings.bml · …
 
 2. @machineblocks/mbom
-     com/machineblocks/type/Size3D.bml · …
-     com/machineblocks/core/Block.bml                             ← baseType: Block
+     com/machineblocks/bml/type/Size3D.bml · …
+     com/machineblocks/bml/core/Block.bml                             ← baseType: Block
      …
 ```
 
@@ -1232,7 +1232,7 @@ Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType`
 
 ```text
 Phase 1 (this document)   Spec + bootstrap primitives + Language BML
-Phase 2                   Migrate com.machineblocks.type.* from 04_types.md → BML
+Phase 2                   Migrate com.machineblocks.bml.type.* from 04_types.md → BML
 Phase 3                   Remove enum SSOT from domain XSD files
 Phase 4                   04_types.md becomes parse/serialize reference only
 ```
@@ -1247,19 +1247,19 @@ Property declarations on composable Blocks migrate from `09_mbom_properties.yml`
 
 ```text
 packages/core/blocks/
-  org/blockml/core/
+  org/blockml/bml/core/
     Block.bml · ValueType.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · …
-  org/blockml/type/
+  org/blockml/bml/type/
     Integer.bml · Float.bml · Decimal.bml · Number.bml · Text.bml · Boolean.bml · …
-  org/blockml/language/
+  org/blockml/bml/language/
     TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml · XML.bml · …
-  org/blockml/service/
+  org/blockml/bml/service/
     Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 
 domains/machineblocks/mbom/blocks/
-  com/machineblocks/type/
+  com/machineblocks/bml/type/
     Size3D.bml · Direction.bml · Color.bml · Face.bml · …
-  com/machineblocks/core/
+  com/machineblocks/bml/core/
     Block.bml · NativeBlock.bml · Set.bml · …
 ```
 
@@ -1277,7 +1277,7 @@ The validator derives `definitionBranch` by walking the `baseType` chain:
 type DefinitionBranch = "composable" | "typeBlock" | "languageBlock" | "definitionBlock"
 ```
 
-Blocks under `org.blockml.core.Definition` (`org.blockml.definition.*`) are **definitionBlock** — meta-model for BML structure and `bml:xml` serialization. See `19_definition_blocks_and_bml_xml.md`.
+Blocks under `org.blockml.bml.core.Definition` (`org.blockml.bml.definition.*`) are **definitionBlock** — meta-model for BML structure and `bml:xml` serialization. See `19_definition_blocks_and_bml_xml.md`.
 
 Implementation is free to:
 
@@ -1299,7 +1299,7 @@ never expose „Block“ outside parser/BOM types
 | Topic | Document |
 |---|---|
 | V1/V2/V3 scope · BML vs Markdown | `01_system.md` — BML Self-Description Roadmap |
-| FQN namespaces | `00_bom_core.md` — Domain-Scoped Namespace Separation |
+| FQN namespaces | `00_bom_core.md` — Mandatory BML namespace |
 | Composable Block base types | `16_framework_base_types.md` |
 | Definition blocks · bml:xml | `19_definition_blocks_and_bml_xml.md` |
 | BML block syntax | `02_mbml.md` |

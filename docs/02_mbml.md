@@ -38,7 +38,7 @@ The root XML element determines the document type — not the filename suffix. (
 Specific XML capabilities that make it irreplaceable for BML:
 
 ```text
-Namespaces          xmlns:bricks="com.machineblocks.bricks"
+Namespaces          xmlns:bricks="com.machineblocks.bml.bricks"
                     → Block types used directly as element names: <bricks:StandardBrick />
                     → No need for explicit type="..." attributes
 
@@ -75,7 +75,7 @@ BML defines one core document root:
 
 Property presets are **not** a BlockML core feature. MachineBlocks models presets as Block instances in `_presets` with `basePresets` associations — see § Presets (MachineBlocks) and `03_mbom.md`.
 
-Library packages use `<block baseType="org.blockml.core.BlockLibrary">` — see § Library Format.
+Library packages use `<block baseType="org.blockml.bml.core.BlockLibrary">` — see § Library Format.
 
 Extension document types (defined in domain packages, not in core):
 
@@ -93,11 +93,11 @@ Extension types register their own BML→BOM mapping rule with the parser. The c
 
 BML uses XML namespaces to resolve Block type references. Namespace prefixes map to FQN package prefixes.
 
-**Blocks vs. implementation:** Each root domain splits into `<domain>.*` (BML Blocks) and `<domain>.impl.*` (manifestations / toolchain code). All Block FQNs and xmlns bindings live under the domain root — never under `.impl`. See `00_bom_core.md` — Domain-Scoped Namespace Separation · Reservation rule (`BML_RESERVED_IMPLEMENTATION_NAMESPACE`).
+**Mandatory BML namespace:** All Block FQNs and xmlns bindings must live under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `com.machineblocks.bml.core.*`). See `00_bom_core.md` — Mandatory BML namespace · `BML_OUTSIDE_BML_NAMESPACE`.
 
 ```xml
-xmlns:core="com.machineblocks.core"
-xmlns:bricks="com.machineblocks.bricks"
+xmlns:core="com.machineblocks.bml.core"
+xmlns:bricks="com.machineblocks.bml.bricks"
 xmlns:ac="com.martianmicro.anyclosure"
 ```
 
@@ -121,11 +121,11 @@ The BOM always uses the full FQN. Namespace prefixes are a BML authoring conveni
 
 Property `type` attributes and unqualified composition tags use **namespace-prefixed names** for domain types. **Unqualified** PascalCase names are resolved in a fixed order within the current BML document — see § Unqualified Block Resolution below.
 
-**Domain types** require the `type:` namespace prefix (declared via `xmlns:type="com.machineblocks.type"`):
+**Domain types** require the `type:` namespace prefix (declared via `xmlns:type="com.machineblocks.bml.type"`):
 
 ```text
-type="type:Size3D"   →  com.machineblocks.type.Size3D
-type="type:Color"    →  com.machineblocks.type.Color
+type="type:Size3D"   →  com.machineblocks.bml.type.Size3D
+type="type:Color"    →  com.machineblocks.bml.type.Color
 ```
 
 There is no implicit fallback to the domain namespace. Explicit FQNs are always supported.
@@ -139,7 +139,7 @@ Unqualified PascalCase identifiers — on composition element names, `type="..."
 2. SubBlocks            — subBlocks[] of innermost enclosing Block, walk up parent chain,
                           then Sub-Blocks inherited via baseType chain
 3. Generic parameters   — genericTypes[] of the root BlockDefinition (e.g. type="T")
-4. Core primitives      — whitelist only (→ org.blockml.type.*):
+4. Core primitives      — whitelist only (→ org.blockml.bml.type.*):
                           Text · Float · Integer · Decimal · Boolean
 ```
 
@@ -154,33 +154,33 @@ After steps 1–4 fail in document scope:
 
 **Own Block name (step 1):** When an unqualified reference matches the root Block's `<name>`, it resolves to that Block's declared `<type>` FQN — a self-type reference within the same definition. For inheritance-aware self-reference at validate time, `bml:Self` remains available (see § Members — `bml:Self`).
 
-**Core primitives (step 4):** Only the five whitelist names above resolve without prefix. Abstract branches such as `org.blockml.type.Number` or `org.blockml.type.PrimitiveType` are **not** in the whitelist — use `Integer`, `Decimal`, or `Float` for numeric properties.
+**Core primitives (step 4):** Only the five whitelist names above resolve without prefix. Abstract branches such as `org.blockml.bml.type.Number` or `org.blockml.bml.type.PrimitiveType` are **not** in the whitelist — use `Integer`, `Decimal`, or `Float` for numeric properties.
 
 ```text
-type="Integer"   →  org.blockml.type.Integer
-type="Float"     →  org.blockml.type.Float
-type="Decimal"   →  org.blockml.type.Decimal
-type="Text"    →  org.blockml.type.Text
-type="Boolean"   →  org.blockml.type.Boolean
+type="Integer"   →  org.blockml.bml.type.Integer
+type="Float"     →  org.blockml.bml.type.Float
+type="Decimal"   →  org.blockml.bml.type.Decimal
+type="Text"    →  org.blockml.bml.type.Text
+type="Boolean"   →  org.blockml.bml.type.Boolean
 type="Number"    →  ✗  not whitelisted — use Integer, Float, or Decimal
 ```
 
 ### Status Namespace Shorthand
 
-Status references use the `status:` namespace prefix (declared via `xmlns:status="org.blockml.status"`):
+Status references use the `status:` namespace prefix (declared via `xmlns:status="org.blockml.bml.status"`):
 
 ```text
-status:Stable       →  org.blockml.status.Stable
-status:Draft        →  org.blockml.status.Draft
-status:Stub         →  org.blockml.status.Stub
-status:Deprecated   →  org.blockml.status.Deprecated
+status:Stable       →  org.blockml.bml.status.Stable
+status:Draft        →  org.blockml.bml.status.Draft
+status:Stub         →  org.blockml.bml.status.Stub
+status:Deprecated   →  org.blockml.bml.status.Deprecated
 ```
 
-There is **no implicit resolution** of bare status names. `Draft` alone is invalid — always use `status:Draft` or the full FQN `org.blockml.status.Draft`. Domain libraries may define additional status blocks under their own namespace.
+There is **no implicit resolution** of bare status names. `Draft` alone is invalid — always use `status:Draft` or the full FQN `org.blockml.bml.status.Draft`. Domain libraries may define additional status blocks under their own namespace.
 
-**Property and Capability types** must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.core.ValueType`. Non-ValueType FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability input/output types → `BML_INVALID_PROPERTY_TYPE`.
+**Property and Capability types** must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.bml.core.ValueType`. Non-ValueType FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability input/output types → `BML_INVALID_PROPERTY_TYPE`.
 
-**Member namespace:** `org.blockml.core.Block` declares **no members**. Every sub-type chooses its own Properties, Aggregations, Associations, and Capabilities — including names like `id` or `version` if a domain needs them. On composition instances, **instance identity** uses `bml:id` and **external reference version** uses `bml:version` — not bare attributes (see Composition section).
+**Member namespace:** `org.blockml.bml.core.Block` declares **no members**. Every sub-type chooses its own Properties, Aggregations, Associations, and Capabilities — including names like `id` or `version` if a domain needs them. On composition instances, **instance identity** uses `bml:id` and **external reference version** uses `bml:version` — not bare attributes (see Composition section).
 
 **Aggregation and association types** may reference any Block FQN — not limited to ValueTypes.
 
@@ -212,7 +212,7 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 <documentation>     — human-readable technical description of the Block (second child element).
 <name>              — short class name (PascalCase). See naming convention below.
 <type>              — FQN (e.g. com.martianmicro.anyclosure.Wall)
-<baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.core.Block.
+<baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.bml.core.Block.
 <version>           — semantic version of this Block definition
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to status:Stable)
 ```
@@ -393,7 +393,7 @@ url="https://blockml.org/schemas/…"  — external URL
 
 `block` accepts any Block or Definition reference via xmlns prefix. Resolved to FQN at parse time — same rules as `type` and `baseType`. Unknown FQN at validate time → `BML_UNKNOWN_TYPE` (error). Omitted target attribute → `BML_REFERENCE_MISSING_TARGET` (error). More than one target attribute → `BML_REFERENCE_AMBIGUOUS_TARGET` (error).
 
-Maps to BOM `DocumentationReference { block?, file?, url?, context }`. Meta-model: `org.blockml.definition.ReferenceDefinition` on `org.blockml.core.Definition.references` — see `16_framework_base_types.md` — Definition Branch.
+Maps to BOM `DocumentationReference { block?, file?, url?, context }`. Meta-model: `org.blockml.bml.definition.ReferenceDefinition` on `org.blockml.bml.core.Definition.references` — see `16_framework_base_types.md` — Definition Branch.
 
 Example with documentation extensions on a member:
 
@@ -420,7 +420,7 @@ Non-definition elements (`<documentation>`, `<since>`, `<changelog>`, `<examples
 
 Status expresses the maturity or lifecycle of a definition. Status is a **Block reference**, not a string or boolean — following Everything-is-a-Block.
 
-**Implicit default:** When no status is declared, the effective status is **`status:Stable`** (`org.blockml.status.Stable`). At the document root this applies directly; on child elements the effective status is inherited from the parent — which is Stable unless an ancestor declared a deviation.
+**Implicit default:** When no status is declared, the effective status is **`status:Stable`** (`org.blockml.bml.status.Stable`). At the document root this applies directly; on child elements the effective status is inherited from the parent — which is Stable unless an ancestor declared a deviation.
 
 #### Inheritance and defaults
 
@@ -447,11 +447,11 @@ On a **Draft** property, nested `<documentation>`, `<since>`, `<changelog>`, `<e
 Core library defines:
 
 ```text
-org.blockml.core.Status          — abstract base
-org.blockml.status.Stable        — implicit default at document root
-org.blockml.status.Draft
-org.blockml.status.Stub
-org.blockml.status.Deprecated
+org.blockml.bml.core.Status          — abstract base
+org.blockml.bml.status.Stable        — implicit default at document root
+org.blockml.bml.status.Draft
+org.blockml.bml.status.Stub
+org.blockml.bml.status.Deprecated
 ```
 
 Domain libraries may define additional status blocks.
@@ -511,7 +511,7 @@ Status values are always explicit when declared:
 <status>Draft</status>
 ```
 
-The sole existing shorthand exception remains Core primitives (`Integer` → `org.blockml.type.Integer`).
+The sole existing shorthand exception remains Core primitives (`Integer` → `org.blockml.bml.type.Integer`).
 
 ### Block Name Convention
 
@@ -546,7 +546,7 @@ PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous 
                 — equivalent to <{defaultAggregation}><composition>…</composition></{defaultAggregation}>
 ```
 
-Framework base types (`org.blockml.core.Block`, `com.machineblocks.core.Block`, …) are **BML files** in `@blockml/core` and `@machineblocks/mbom` — not code or YAML. See `16_framework_base_types.md`.
+Framework base types (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.Block`, …) are **BML files** in `@blockml/core` and `@machineblocks/mbom` — not code or YAML. See `16_framework_base_types.md`.
 
 ### Type Modifiers
 
@@ -570,7 +570,7 @@ Omitted <subTypes>            — inherit effective subTypes from baseType chain
 Explicit <subTypes>…          — override (enable or restrict Sub-Blocks)
 Explicit empty <subTypes/>    — override: forbid Sub-Blocks even when parent allowed them
 Omitted other modifiers       — inherit from baseType where applicable (validator walks chain)
-org.blockml.core.Block        — sole type that omits <baseType> (inheritance root); effective subTypes []
+org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritance root); effective subTypes []
 ```
 
 **Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous:
@@ -621,7 +621,7 @@ Validation      — merge resolution at stage [8] via resolveEffectiveMembers()
 <block xmlns="http://blockml.org/schema/block" …>
   <name>IIdentifiable</name>
   <type>com.foo.IIdentifiable</type>
-  <baseType>org.blockml.core.Block</baseType>
+  <baseType>org.blockml.bml.core.Block</baseType>
   <version>1.0.0</version>
   <abstract />
   <properties>
@@ -636,7 +636,7 @@ Validation      — merge resolution at stage [8] via resolveEffectiveMembers()
 <block xmlns="http://blockml.org/schema/block" …>
   <name>MyEntity</name>
   <type>com.foo.MyEntity</type>
-  <baseType>org.blockml.core.Entity</baseType>
+  <baseType>org.blockml.bml.core.Entity</baseType>
   <version>1.0.0</version>
   <contracts>
     <com.foo:IIdentifiable />
@@ -667,8 +667,8 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
-  xmlns:core="com.machineblocks.core"
-  xmlns:type="com.machineblocks.type"
+  xmlns:core="com.machineblocks.bml.core"
+  xmlns:type="com.machineblocks.bml.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
     http://blockml.org/schema/block
@@ -686,18 +686,18 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 BlockML Core (Sprach-Namespaces):
   http://blockml.org/schema/block    ← Dokument-Root (default xmlns)
   http://blockml.org/schema/bml      ← bml: Direktiven
-  http://blockml.org/schema/service  ← org.blockml.service.*
+  http://blockml.org/schema/service  ← org.blockml.bml.service.*
 
 MachineBlocks (Domain-Namespaces):
   http://machineblocks.com/schema/core        ← MB Core, NativeBlock, Set
-  http://machineblocks.com/schema/bricks      ← com.machineblocks.bricks.*
-  http://machineblocks.com/schema/calibration ← com.machineblocks.calibration.*
+  http://machineblocks.com/schema/bricks      ← com.machineblocks.bml.bricks.*
+  http://machineblocks.com/schema/calibration ← com.machineblocks.bml.calibration.*
 
 FQN-Referenz-Namespaces:
-  xmlns:core="com.machineblocks.core"         ← <core:NativeBlock />
-  xmlns:type="com.machineblocks.type"         ← type="type:Size3D"
-  xmlns:bricks="com.machineblocks.bricks"     ← <bricks:Standard />
-  xmlns:cal="com.machineblocks.calibration"   ← <cal:Calibrator />
+  xmlns:core="com.machineblocks.bml.core"         ← <core:NativeBlock />
+  xmlns:type="com.machineblocks.bml.type"         ← type="type:Size3D"
+  xmlns:bricks="com.machineblocks.bml.bricks"     ← <bricks:Standard />
+  xmlns:cal="com.machineblocks.bml.calibration"   ← <cal:Calibrator />
 ```
 
 **catalog.xml für lokale XSD-Auflösung:**
@@ -736,16 +736,16 @@ The member namespace is supplied exclusively by the **XML element QName** — se
 
 **`<aggregations>`** — Domain base types declare inherited aggregations in BML (e.g. `_presets` on `Block.bml`, `_parts` on `CompositeBlock.bml`). The parser stores **declared** members only; inherited members resolve at validate via `baseType` chain. Omit `<aggregations>` on user blocks when the inherited set suffices.
 
-`_presets` on `com.machineblocks.core.Block` and `_parts` on `com.machineblocks.core.CompositeBlock` (declared in framework BML):
+`_presets` on `com.machineblocks.bml.core.Block` and `_parts` on `com.machineblocks.bml.core.CompositeBlock` (declared in framework BML):
 
 ```text
 _presets (Block):
   name:    _presets
-  type:    com.machineblocks.core.Block[]
+  type:    com.machineblocks.bml.core.Block[]
 
 _parts (CompositeBlock):
   name:    _parts
-  type:    com.machineblocks.core.Block[]
+  type:    com.machineblocks.bml.core.Block[]
   default: true
 ```
 
@@ -763,11 +763,11 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 
 ```xml
 <block xmlns="http://blockml.org/schema/block"
-       xmlns:bricks="com.machineblocks.bricks">
+       xmlns:bricks="com.machineblocks.bml.bricks">
 
   <name>Wall</name>
   <type>com.martianmicro.anyclosure.Wall</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <baseType>com.machineblocks.bml.core.Block</baseType>
   <version>1.0.0</version>
 
   <composition>
@@ -795,15 +795,15 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 
 ```xml
 <block xmlns="http://blockml.org/schema/block"
-       xmlns:bricks="com.machineblocks.bricks"
-       xmlns:status="org.blockml.status">
+       xmlns:bricks="com.machineblocks.bml.bricks"
+       xmlns:status="org.blockml.bml.status">
 
   <idea>Parametric enclosure wall.</idea>
   <documentation>Wall block with native and custom properties.</documentation>
 
   <name>Wall</name>
   <type>com.martianmicro.anyclosure.Wall</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <baseType>com.machineblocks.bml.core.Block</baseType>
   <version>1.0.0</version>
 
   <properties>
@@ -874,7 +874,7 @@ The member name is the **XML element name**. The `name="..."` attribute is remov
 </associations>
 
 <capabilities>
-    <print type="org.blockml.capability.Outbound"/>
+    <print type="org.blockml.bml.capability.Outbound"/>
 </capabilities>
 ```
 
@@ -926,7 +926,7 @@ Properties may be written as **attributes** (short form) or **elements** (long f
 
 When both forms exist, the **long form replaces the short form entirely**.
 
-**Primitive properties:** Properties typed with `org.blockml.type.PrimitiveType` (Integer, Decimal, Float, Text, Boolean) store values directly on the Property — inline literals on Block instances. PrimitiveTypes never carry values themselves. Use a concrete `*Entity` type (for example `org.blockml.type.IntegerEntity`) when a primitive must appear as an Entity in composition. PropertyDefinitions may declare `valueRequired`. See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity · Properties are always Optional.
+**Primitive properties:** Properties typed with `org.blockml.bml.type.PrimitiveType` (Integer, Decimal, Float, Text, Boolean) store values directly on the Property — inline literals on Block instances. PrimitiveTypes never carry values themselves. Use a concrete `*Entity` type (for example `org.blockml.bml.type.IntegerEntity`) when a primitive must appear as an Entity in composition. PropertyDefinitions may declare `valueRequired`. See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity · Properties are always Optional.
 
 Aggregations are filled directly by member name:
 
@@ -1312,9 +1312,9 @@ The parser stores override declarations in `members[]`; `resolveEffectiveMembers
 
 Properties are typed parameters of the Block. Three kinds exist:
 
-**System properties** are defined on `org.blockml.core.Block` — notably `id` (instance identity). System-relevant: dedicated compiler/validator/renderer handling. Not custom properties. See `00_bom_core.md` — System Properties.
+**System properties** are defined on `org.blockml.bml.core.Block` — notably `id` (instance identity). System-relevant: dedicated compiler/validator/renderer handling. Not custom properties. See `00_bom_core.md` — System Properties.
 
-**Domain native properties** are defined in `com.machineblocks.core.Block` and its base types. They have dedicated SCAD getters (`mb_param_size()`, etc.) and are listed in `09_mbom_properties.yml`.
+**Domain native properties** are defined in `com.machineblocks.bml.core.Block` and its base types. They have dedicated SCAD getters (`mb_param_size()`, etc.) and are listed in `09_mbom_properties.yml`.
 
 **Custom properties** are defined inline in the Block definition. They generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
 
@@ -1336,13 +1336,13 @@ On **Block instances**, property values use the short form (attribute) or long f
 
 ### Type Resolution
 
-Unqualified type names (no namespace prefix) resolve to `org.blockml.type.*` — the BOM Core primitives:
+Unqualified type names (no namespace prefix) resolve to `org.blockml.bml.type.*` — the BOM Core primitives:
 
 ```text
-Float    → org.blockml.type.Float
-Integer  → org.blockml.type.Integer
-Text     → org.blockml.type.Text
-Boolean  → org.blockml.type.Boolean
+Float    → org.blockml.bml.type.Float
+Integer  → org.blockml.bml.type.Integer
+Text     → org.blockml.bml.type.Text
+Boolean  → org.blockml.bml.type.Boolean
 ```
 
 There is no `Null` primitive — see `17_type_system_bml.md` — EMPTY.
@@ -1362,7 +1362,7 @@ See `17_type_system_bml.md` — Type Expressions.
 Domain-specific types require an explicit namespace prefix declared via `xmlns`:
 
 ```xml
-xmlns:type="com.machineblocks.type"
+xmlns:type="com.machineblocks.bml.type"
 
 <size type="type:Size3D">
   <value>[1, 1, 3]</value>
@@ -1406,7 +1406,7 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 <!-- equivalent qualified id reference -->
 <baseCutoutType type="type:BaseCutoutType">
-  <value>com.machineblocks.type.BaseCutoutType::STANDARD</value>
+  <value>com.machineblocks.bml.type.BaseCutoutType::STANDARD</value>
 </baseCutoutType>
 <!-- No <suggestions> allowed → BML_SUGGESTIONS_ON_ENUM -->
 ```
@@ -1426,7 +1426,7 @@ When the property `type` is an EnumType, `value` and instance attribute values m
 </textFont>
 ```
 
-**Constraints** describe semantic restrictions on a property — each entry is a Block instance extending `org.blockml.core.Constraint`. The compiler binds the constraint generic to the property type automatically. Whether BlockML enforces a constraint depends on its optional `validation` property referencing `org.blockml.core.Validation`:
+**Constraints** describe semantic restrictions on a property — each entry is a Block instance extending `org.blockml.bml.core.Constraint`. The compiler binds the constraint generic to the property type automatically. Whether BlockML enforces a constraint depends on its optional `validation` property referencing `org.blockml.bml.core.Validation`:
 
 ```xml
 <textSize type="Integer">
@@ -1495,12 +1495,12 @@ For MachineBlocks Blocks, `_presets` and `_parts` are inherited from the base ty
 ```xml
 <!-- Set: _steps beyond inherited _presets and _parts -->
 <aggregations>
-  <_steps type="com.machineblocks.core.Step[]" />
+  <_steps type="com.machineblocks.bml.core.Step[]" />
 </aggregations>
 
 <!-- Fill inherited _parts on the Block definition -->
 <aggregations>
-  <_parts type="com.machineblocks.core.Block[]">
+  <_parts type="com.machineblocks.bml.core.Block[]">
     <composition>
       <bricks:Standard bml:id="base" size="[2, 4, 3]" />
     </composition>
@@ -1527,7 +1527,7 @@ final        — prevents override in child Blocks
 visibility   — optional; must match naming convention
 ```
 
-**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `_dependencies` / `_blocks` on `org.blockml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation type="…">`). See also `00_bom_core.md` — Aggregations.
+**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `_dependencies` / `_blocks` on `org.blockml.bml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation type="…">`). See also `00_bom_core.md` — Aggregations.
 
 Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block.
 
@@ -1574,12 +1574,12 @@ No special definition-reference constructs are required — the path itself carr
 ```xml
 <aggregations>
   <!-- local: only accessible in this Block (default) -->
-  <_fmt type="org.blockml.service.Formatter"
+  <_fmt type="org.blockml.bml.service.Formatter"
         beanName="fmt"
         scope="local" />
 
   <!-- context: passed down to all child Blocks in Compositions, overridable -->
-  <_data type="org.blockml.service.JSONModel"
+  <_data type="org.blockml.bml.service.JSONModel"
          beanName="data"
          scope="context" />
 </aggregations>
@@ -1601,24 +1601,24 @@ Associations describe loose references without ownership. Defined for future use
 
 Capabilities describe how a Block communicates. Like Properties, they are declared with a name and a type (FQN). Their value in a Composition is the address or binding — set as an attribute on the child Block instance, just like a Property value.
 
-> **Capability package TBD** — placeholder `org.blockml.capability.*`. Candidate: `bom.foundation`.
+> **Capability package TBD** — placeholder `org.blockml.bml.capability.*`. Candidate: `bom.foundation`.
 
 ```xml
 <capabilities>
 
   <!-- Inbound: receives data/messages asynchronously -->
-  <resize type="org.blockml.capability.Inbound"
+  <resize type="org.blockml.bml.capability.Inbound"
           inputType="com.myDomain.ResizePayload">
     <documentation>Resize the block to the given dimensions.</documentation>
   </resize>
 
   <!-- Outbound: sends/emits data/messages asynchronously -->
-  <resized type="org.blockml.capability.Outbound"
+  <resized type="org.blockml.bml.capability.Outbound"
            outputType="com.myDomain.ResizedPayload">
   </resized>
 
   <!-- Transformation: synchronously callable; inputType → outputType -->
-  <computeArea type="org.blockml.capability.Transformation"
+  <computeArea type="org.blockml.bml.capability.Transformation"
                inputType="{ width: Integer, height: Integer }"
                outputType="Integer">
     <documentation>Returns width * height.</documentation>
@@ -1630,7 +1630,7 @@ Capabilities describe how a Block communicates. Like Properties, they are declar
 **Type descriptor forms:**
 
 ```text
-org.blockml.type.Integer            — primitive
+org.blockml.bml.type.Integer            — primitive
 com.myDomain.MyClass             — Object (named fields)
 { values: Integer[0..n] }        — collection field (multiplicity on reference)
 { items: com.myDomain.MyClass[] } — collection of domain objects
@@ -1865,14 +1865,14 @@ Flow-control directives follow the **Thymeleaf model** — attributes on the ele
 | `bml:with` | `<composition>`, `<bml:container>`, Block instances | Local variable scope |
 | `bml:each` | `<bml:container>`, Block instances | Loop |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
-| `<bml:xml>…</bml:xml>` | `org.blockml.core.Block`, Definition blocks | XML root element for this type — `19_definition_blocks_and_bml_xml.md` |
+| `<bml:xml>…</bml:xml>` | `org.blockml.bml.core.Block`, Definition blocks | XML root element for this type — `19_definition_blocks_and_bml_xml.md` |
 | `bml:xml="attribute\|element\|text\|cdata"` | Members on Definition blocks | Member serialization shape — `19_definition_blocks_and_bml_xml.md` |
 
 Bare `id=` or `version=` on composition instances are **member values** — same as any other attribute. Use `bml:id` / `bml:version` for composition meta.
 
 ### `bml:xml` — XML Serialization (Definition blocks)
 
-Declares how a block type or member renders to canonical BML XML. Allowed only on `org.blockml.core.Block` and blocks whose `baseType` chain includes `org.blockml.core.Definition`.
+Declares how a block type or member renders to canonical BML XML. Allowed only on `org.blockml.bml.core.Block` and blocks whose `baseType` chain includes `org.blockml.bml.core.Definition`.
 
 ```xml
 <!-- Root element name for block documents -->
@@ -2035,7 +2035,7 @@ Sub-Blocks use the same format as the parent Block — all fields as child eleme
 <subBlocks>
   <block>
     <name>Base</name>
-    <baseType>com.machineblocks.core.Block</baseType>
+    <baseType>com.machineblocks.bml.core.Block</baseType>
     <version>1.0.0</version>
     <properties>...</properties>
     <composition>...</composition>
@@ -2043,7 +2043,7 @@ Sub-Blocks use the same format as the parent Block — all fields as child eleme
   <block>
     <name>_Utils</name>
     <visibility>protected</visibility>
-    <baseType>org.blockml.core.Entity</baseType>
+    <baseType>org.blockml.bml.core.Entity</baseType>
     <version>1.0.0</version>
     <capabilities>...</capabilities>
   </block>
@@ -2122,18 +2122,18 @@ BML_PROTECTED_SUBBLOCK_ACCESS  — protected Sub-Block outside allowed inheritan
 ### FQN Auto-Resolution
 
 ```text
-Parent FQN:  com.machineblocks.calibration.Calibrator
+Parent FQN:  com.machineblocks.bml.calibration.Calibrator
 Sub-Block:   <name>Base</name>
-→ FQN:       com.machineblocks.calibration.Calibrator.Base
+→ FQN:       com.machineblocks.bml.calibration.Calibrator.Base
 
 Sub-Block:   <name>StudDiameter</name>
-→ FQN:       com.machineblocks.calibration.Calibrator.StudDiameter
+→ FQN:       com.machineblocks.bml.calibration.Calibrator.StudDiameter
 ```
 
 `<type>` is never declared on Sub-Blocks — it is always derived. Sub-Blocks can be nested recursively:
 
 ```text
-com.machineblocks.calibration.Calibrator.Base.Strip
+com.machineblocks.bml.calibration.Calibrator.Base.Strip
 ```
 
 ### Short-Name Reference in Compositions
@@ -2149,7 +2149,7 @@ When a composition child element has **no namespace prefix** (PascalCase tag nam
 6. TypeRegistry
 ```
 
-Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.calibration.Calibrator.Base`). Authors may write the short name in BML when the type is in scope per the order above.
+Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.bml.calibration.Calibrator.Base`). Authors may write the short name in BML when the type is in scope per the order above.
 
 **Same document — aggregation example (`BlockLibrary.bml`):**
 
@@ -2168,10 +2168,10 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.c
 <StudDiameter bml:id="samples_stud" ... />
 ```
 
-**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.core.BlockLibrary` hold empty Block instances as type references — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
+**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.bml.core.BlockLibrary` hold empty Block instances as type references — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
 
 ```xml
-<!-- com/machineblocks/bricks/Library.bml -->
+<!-- com/machineblocks/bml/bricks/Library.bml -->
 <aggregations>
   <_dependencies>
     <composition>
@@ -2187,7 +2187,7 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.c
 </aggregations>
 ```
 
-**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.core.BlockLibrary"` (e.g. `Library`) still resolves `Schema` by short name — it is a Sub-Block of `org.blockml.core.BlockLibrary`, inherited via the baseType chain.
+**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.bml.core.BlockLibrary"` (e.g. `Library`) still resolves `Schema` by short name — it is a Sub-Block of `org.blockml.bml.core.BlockLibrary`, inherited via the baseType chain.
 
 ### Sub-Block reference scope
 
@@ -2202,7 +2202,7 @@ Other file (Set.bml composes Calibrator internals):
   <Base ... />                               ✗  BML_SUBBLOCK_UNQUALIFIED_REFERENCE
   <cal:Calibrator.Base ... />                ✓  parent Block namespace + qualified name
   <cal:Calibrator.Base.Strip ... />          ✓  nested Sub-Block
-  xmlns + full FQN on element                ✓  com.machineblocks.calibration.Calibrator.Base
+  xmlns + full FQN on element                ✓  com.machineblocks.bml.calibration.Calibrator.Base
 ```
 
 **Rule:** From outside the defining file — including child Block instances in other documents — Sub-Blocks must be referenced with the **parent Block's namespace prefix** and a **qualified name** (`RootBlock.SubBlock`), or with the full FQN. A bare Sub-Block short name is never resolved across files.
@@ -2211,7 +2211,7 @@ Accepted qualified forms:
 
 ```text
 Calibrator.Base                              — RootBlock.SubBlock (same package context)
-com.machineblocks.calibration.Calibrator.Base — full FQN
+com.machineblocks.bml.calibration.Calibrator.Base — full FQN
 cal:Calibrator.Base                          — xmlns prefix of parent Block + qualified name
 ```
 
@@ -2234,32 +2234,32 @@ When the Sub-Block name differs from the root Block name, the short name remains
 When referencing a Sub-Block from **outside** the parent Block, use the full FQN:
 
 ```xml
-xmlns:cal="com.machineblocks.calibration"
+xmlns:cal="com.machineblocks.bml.calibration"
 ...
 <cal:Calibrator.Base ... />
 ```
 
 ### utility Sub-Blocks
 
-A Sub-Block with `baseType="org.blockml.core.Entity"` binds target-language function implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.language.*`** FQNs, not a `language` attribute.
+A Sub-Block with `baseType="org.blockml.bml.core.Entity"` binds target-language function implementations to Transformation Capabilities via `<implementation type="...">` — using **`org.blockml.bml.language.*`** FQNs, not a `language` attribute.
 
 Two implementation types are supported in V1:
 
-**`type="org.blockml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. Each Capability has exactly one main function (whose name matches the Capability name) and zero or more helper functions. The compiler automatically prefixes all function names with the block FQN — so names are written short and clean in the BML:
+**`type="org.blockml.bml.language.OpenSCAD"`** — OpenSCAD function(s) written directly in the BML. Each Capability has exactly one main function (whose name matches the Capability name) and zero or more helper functions. The compiler automatically prefixes all function names with the block FQN — so names are written short and clean in the BML:
 
 ```xml
 <block>
   <name>Utils</name>
-  <baseType>org.blockml.core.Entity</baseType>
+  <baseType>org.blockml.bml.core.Entity</baseType>
   <version>1.0.0</version>
 
   <capabilities>
     <formatValue
-                type="org.blockml.capability.Transformation"
-                inputType="org.blockml.type.Float"
-                outputType="org.blockml.type.Text">
+                type="org.blockml.bml.capability.Transformation"
+                inputType="org.blockml.bml.type.Float"
+                outputType="org.blockml.bml.type.Text">
       <documentation>Removes leading zero: 0.1 → ".1", -0.2 → "-.2"</documentation>
-      <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
+      <implementation type="org.blockml.bml.language.OpenSCAD"><![CDATA[
 // Main function — name must match capability name
 function formatValue(x) =
     replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
@@ -2282,9 +2282,9 @@ function strSuffix(s, k, i = 0) =
 </block>
 ```
 
-**`type="org.blockml.language.TypeScript"`** — TypeScript arrow function. In V1, compile-time execution only: when all call arguments are literals, the compiler executes the function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred.
+**`type="org.blockml.bml.language.TypeScript"`** — TypeScript arrow function. In V1, compile-time execution only: when all call arguments are literals, the compiler executes the function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred.
 
-The `<implementation>` element is a child of `<capability>`. One `<implementation>` per Capability. The **`type`** attribute is required and must be an `org.blockml.language.*` FQN.
+The `<implementation>` element is a child of `<capability>`. One `<implementation>` per Capability. The **`type`** attribute is required and must be an `org.blockml.bml.language.*` FQN.
 
 ### Visibility
 
@@ -2296,8 +2296,8 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
 <block xmlns="http://blockml.org/schema/block">
 
   <name>Calibrator</name>
-  <type>com.machineblocks.calibration.Calibrator</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>com.machineblocks.bml.calibration.Calibrator</type>
+  <baseType>com.machineblocks.bml.core.Block</baseType>
   <version>1.0.0</version>
 
   <properties>
@@ -2324,7 +2324,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
   <subBlocks>
 
     <!-- Sub-Block: Calibrator.Base -->
-    <!-- FQN: com.machineblocks.calibration.Calibrator.Base -->
+    <!-- FQN: com.machineblocks.bml.calibration.Calibrator.Base -->
     <block name="Base">
       <properties>
         <label           type="Text"  >
@@ -2383,7 +2383,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
     </block>
 
     <!-- Sub-Block: Calibrator.StudDiameter -->
-    <!-- FQN: com.machineblocks.calibration.Calibrator.StudDiameter -->
+    <!-- FQN: com.machineblocks.bml.calibration.Calibrator.StudDiameter -->
     <block name="StudDiameter">
       <properties>
         <numberOfSamples type="Integer" >
@@ -2442,7 +2442,7 @@ Sub-Blocks have their own FQN and can be referenced from outside the parent Bloc
 
 ## MachineBlocks Set Definition
 
-A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`. It uses the standard `<block>` document type — there is no separate root element for Sets.
+A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.bml.core.Set`. It uses the standard `<block>` document type — there is no separate root element for Sets.
 
 A Set uses three conventional Aggregations — `_presets` and `_parts` inherited from the base type chain, `_steps` declared on Set:
 
@@ -2456,12 +2456,12 @@ _steps      — assembly order (optional; defaults to document order of _parts)
 
 ```xml
 <block xmlns="http://blockml.org/schema/block"
-       xmlns:core="com.machineblocks.core"
+       xmlns:core="com.machineblocks.bml.core"
        xmlns:ac="com.martianmicro.anyclosure">
 
   <name>DefaultEnclosure</name>
   <type>com.martianmicro.anyclosure.DefaultEnclosure</type>
-  <baseType>com.machineblocks.core.Set</baseType>
+  <baseType>com.machineblocks.bml.core.Set</baseType>
   <version>1.0.0</version>
 
   <properties>
@@ -2518,7 +2518,7 @@ _steps      — assembly order (optional; defaults to document order of _parts)
 
 ### Step
 
-`com.machineblocks.core.Step` is a **framework Block** (`Step.bml`) — it extends `org.blockml.core.Block`. Used as composition children on Sets:
+`com.machineblocks.bml.core.Step` is a **framework Block** (`Step.bml`) — it extends `org.blockml.bml.core.Block`. Used as composition children on Sets:
 
 ```text
 aggregation _presets + <composition>  →  block palette (Floor, Wall, …)
@@ -2577,7 +2577,7 @@ Option 3 — Preset + inline override:
 
 ### SCAD Set Output
 
-The SCAD Renderer detects `baseType = com.machineblocks.core.Set` and generates four view submodules:
+The SCAD Renderer detects `baseType = com.machineblocks.bml.core.Set` and generates four view submodules:
 
 ```text
 total     — all instances assembled at their positions
@@ -2594,19 +2594,19 @@ Presets are **not** a BlockML core feature. MachineBlocks models them as ordinar
 
 Preset merge is compiler logic (`resolveBasePresets`, block merge helpers). Customizer JSON output is render-target logic (machineblocks-v3-scad).
 
-A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<block>` with `baseType="com.machineblocks.core.Block"` whose composition fills `_presets` with Block instances of the target type.
+A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a normal `<block>` with `baseType="com.machineblocks.bml.core.Block"` whose composition fills `_presets` with Block instances of the target type.
 
 ### Structure
 
 ```xml
 <!--
-  FQN: com.machineblocks.bricks.StandardPresets
+  FQN: com.machineblocks.bml.bricks.StandardPresets
 -->
 <block
   xmlns:bml="http://blockml.org/schema/bml"
   xmlns="http://blockml.org/schema/block"
-  xmlns:type="com.machineblocks.type"
-  xmlns:bricks="com.machineblocks.bricks"
+  xmlns:type="com.machineblocks.bml.type"
+  xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
     http://blockml.org/schema/block
@@ -2617,8 +2617,8 @@ A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a normal `<b
   <documentation>Standard brick presets for MachineBlocks Standard block.</documentation>
 
   <name>StandardPresets</name>
-  <type>com.machineblocks.bricks.StandardPresets</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>com.machineblocks.bml.bricks.StandardPresets</type>
+  <baseType>com.machineblocks.bml.core.Block</baseType>
   <version>3.0.0</version>
 
   <aggregations>
@@ -2673,7 +2673,7 @@ Presets can reference other presets — preset instances in `_presets` may thems
 {BlockFQN}::{preset-id}
 
 Example:
-  com.machineblocks.bricks.StandardPresets::brick-2x4
+  com.machineblocks.bml.bricks.StandardPresets::brick-2x4
 ```
 
 Requirements for qualified references:
@@ -2691,11 +2691,11 @@ Diagnostics: `BML_UNEXPORTED_INSTANCE_REF` · `BML_NON_STATIC_INSTANCE_REF`
 ```xml
 <!-- Preset only -->
 <bricks:Standard bml:version="3.0.0"
-    basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />
+    basePresets="com.machineblocks.bml.bricks.StandardPresets::brick-2x4" />
 
 <!-- Preset + inline override -->
 <bricks:Standard bml:version="3.0.0"
-    basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4"
+    basePresets="com.machineblocks.bml.bricks.StandardPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
 
@@ -2706,7 +2706,7 @@ Merge order: `configProfile < basePresets chain < inline property`
 Different authors or packages can contribute preset blocks for the same Block type:
 
 ```text
-com.machineblocks.bricks.StandardPresets   ← from @machineblocks/bricks library
+com.machineblocks.bml.bricks.StandardPresets   ← from @machineblocks/bricks library
 com.myproject.presets.MyBrickPresets       ← own additions
 ```
 
@@ -2727,8 +2727,8 @@ Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 The render target may produce a `.json` file in OpenSCAD Customizer format when compiling a preset block:
 
 ```text
-BML:   blocks/com/machineblocks/bricks/presets/StandardPresets.bml
-JSON:  scad/com/machineblocks/bricks/Standard.json
+BML:   blocks/com/machineblocks/bml/bricks/presets/StandardPresets.bml
+JSON:  scad/com/machineblocks/bml/bricks/Standard.json
 ```
 
 The Customizer JSON uses the preset **name** as the key — the human-readable label shown in the OpenSCAD UI.
@@ -2737,7 +2737,7 @@ The Customizer JSON uses the preset **name** as the key — the human-readable l
 
 ## Config Profiles
 
-Config profiles are MachineBlocks preset blocks (`baseType="com.machineblocks.core.Block"`) that define project-wide hardware or rendering defaults. Each preset instance in `_presets` carries a project ConfigBlock instance (or inherits via `basePresets`).
+Config profiles are MachineBlocks preset blocks (`baseType="com.machineblocks.bml.core.Block"`) that define project-wide hardware or rendering defaults. Each preset instance in `_presets` carries a project ConfigBlock instance (or inherits via `basePresets`).
 
 ```text
 src/config/prusa_pla.bml   — printer + filament profile
@@ -2752,11 +2752,11 @@ configProfile < basePresets chain < inline property
 
 ---
 
-## Library Format (`org.blockml.core.BlockLibrary`)
+## Library Format (`org.blockml.bml.core.BlockLibrary`)
 
 A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and ValueType definitions are exported via `_blocks`. **Library membership is defined exclusively by `Library.bml`** — not by directory layout. If absent, all BML source files in a directory are treated as public.
 
-**Name (required):** `<name>Library</name>`. Filename is always `Library.bml`. FQN = `{package}.Library` (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`, `org.blockml.compiler.Library`).
+**Name (required):** `<name>Library</name>`. Filename is always `Library.bml`. FQN = `{package}.Library` (e.g. `com.machineblocks.bml.bricks.Library`, `org.blockml.bml.Library`, `org.blockml.bml.compiler.Library`).
 
 ### Nested libraries
 
@@ -2767,7 +2767,7 @@ Typical pattern:
   inner Library  →  _dependencies includes outer Library
   outer Library  →  must NOT list inner-library blocks in _blocks
 
-Violation: outer _blocks references a Block exported by org.blockml.compiler.Library
+Violation: outer _blocks references a Block exported by org.blockml.bml.compiler.Library
            → BML_LIBRARY_NESTING_VIOLATION
 ```
 
@@ -2777,7 +2777,7 @@ Physical directories and overlapping package prefixes do not define membership. 
 
 ```xml
 <!--
-  FQN: com.machineblocks.bricks.Library
+  FQN: com.machineblocks.bml.bricks.Library
   Filename: Library.bml
 -->
 <block xmlns="http://blockml.org/schema/block"
@@ -2836,15 +2836,15 @@ Physical directories and overlapping package prefixes do not define membership. 
 **Directory structure (illustrative — membership comes from `_blocks`, not paths):**
 
 ```text
-org/blockml/
-  Library.bml              ← org.blockml.Library
-  core/Block.bml           ← member iff in org.blockml.Library _blocks
+org/blockml/bml/
+  Library.bml              ← org.blockml.bml.Library
+  core/Block.bml           ← member iff in org.blockml.bml.Library _blocks
   compiler/
-    Library.bml            ← org.blockml.compiler.Library (separate unit)
-    Parser.bml             ← member iff in org.blockml.compiler.Library _blocks only
+    Library.bml            ← org.blockml.bml.compiler.Library (separate unit)
+    Parser.bml             ← member iff in org.blockml.bml.compiler.Library _blocks only
 
-com/machineblocks/bricks/
-  Library.bml              ← com.machineblocks.bricks.Library
+com/machineblocks/bml/bricks/
+  Library.bml              ← com.machineblocks.bml.bricks.Library
   bricks.xsd               ← optional legacy XSD
   types/
     Size3D.bml · Direction.bml · …
@@ -2899,7 +2899,7 @@ The examples below are **illustrative drafts only** — not valid V1 input.
     {
       "children": [
         {
-          "type": "com.machineblocks.bricks.StandardBrick",
+          "type": "com.machineblocks.bml.bricks.StandardBrick",
           "id": "bottom",
           "size": "${ [size.x, size.y, size.z - 1] }",
           "recess": true,
@@ -2907,7 +2907,7 @@ The examples below are **illustrative drafts only** — not valid V1 input.
           "recessWallGaps": "x+"
         },
         {
-          "type": "com.machineblocks.bricks.StandardBrick",
+          "type": "com.machineblocks.bml.bricks.StandardBrick",
           "id": "top",
           "size": "${ [size.x, size.y, 1] }",
           "offset": "${ [0, 0, size.z - 1] }",
@@ -2927,7 +2927,7 @@ The examples below are **illustrative drafts only** — not valid V1 input.
   "type": "block",
   "name": "DefaultEnclosure",
   "type": "com.martianmicro.anyclosure.DefaultEnclosure",
-  "baseType": "com.machineblocks.core.Set",
+  "baseType": "com.machineblocks.bml.core.Set",
   "version": "1.0.0",
   "properties": [
     { "name": "baseColor",      "type": "Color",        "value": "#EAC645" },
@@ -2935,7 +2935,7 @@ The examples below are **illustrative drafts only** — not valid V1 input.
     { "name": "assembly",       "type": "AssemblyMode", "value": "Merged"  }
   ],
   "aggregations": [
-    { "name": "_steps", "type": "com.machineblocks.core.Step[]" }
+    { "name": "_steps", "type": "com.machineblocks.bml.core.Step[]" }
   ],
   "compositions": [
     {
@@ -2972,7 +2972,7 @@ The BML→BOM mapping is defined once per root type and applies uniformly to all
 
 Mapping rules are not hardcoded in the parser — they are registered per root type. The algorithmic rules are specified in `13_bml_to_bom_mapping.md`.
 
-There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping rule handles them identically to any other Block. The SCAD Renderer detects `baseType = com.machineblocks.core.Set` and switches to STEPS-based output.
+There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping rule handles them identically to any other Block. The SCAD Renderer detects `baseType = com.machineblocks.bml.core.Set` and switches to STEPS-based output.
 
 ### Default Resolution
 

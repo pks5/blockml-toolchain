@@ -1,0 +1,1600 @@
+<!--
+  MachineBlocks MBOM — NativeBlock (mb_block primitive)
+
+  FQN: com.machineblocks.bml.core.NativeBlock
+  Final — cannot be used as baseType on Block definitions
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:type="com.machineblocks.bml.type"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="com.machineblocks.bml.core">
+
+  <idea>Leaf geometry primitive rendered directly as mb_block() in SCAD.</idea>
+
+  <documentation>Final leaf Block mapped directly to SCAD mb_block() — the native geometry primitive
+    at render time. Uses children aggregation for mb_block() sub-geometry instead of _parts.
+  </documentation>
+
+  <references>
+    <see block="core:Block">
+      Extends Block directly — not CompositeBlock.
+    </see>
+    <see block="core:CompositeBlock">
+      Contrasts with CompositeBlock which uses _parts for composition children.
+    </see>
+  </references>
+
+  <name>NativeBlock</name>
+  <type>core:NativeBlock</type>
+  <baseType>core:Block</baseType>
+  <final />
+
+  <!-- Native MB properties — all mb_block() parameters from 09_api_parameters.yml (v3.0.5) -->
+  <properties>
+    <align type="type:AxisXYZ<AlignValue>">
+      <documentation>Alignment relative to the origin, per axis.
+        "start" = toward x-/y-/z-, "end" = toward x+/y+/z+.
+        Origin is [0,0,0] globally, or defined by parent's alignChildren.
+        Alignment is based strictly on the bounding box.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">mb_param_align() now always resolves to a 3-element array.</change>
+      </changelog>
+      <value>start</value>
+    </align>
+
+    <alignChildren type="type:AxisXYZ<AlignValue>">
+      <documentation>Defines the origin inside a parent brick for child positioning.
+        Same convention as align. Children use this as their reference point.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">mb_param_alignChildren() now always resolves to a 3-element array.</change>
+      </changelog>
+      <value>start</value>
+    </alignChildren>
+
+    <base type="Boolean">
+      <documentation>Whether the base body is drawn. Purely visual — no effect on
+        bounding box, align, size, or calculations. Other features (studs,
+        text, etc.) are controlled separately.
+      </documentation>
+      <value>true</value>
+    </base>
+
+    <baseAdjustment type="type:FaceMap<FloatMm>">
+      <documentation>Per-side calibration adjustment in mm. Extends or reduces specific sides
+        of a block. Never scales with the scale parameter.
+
+        PRIMARY PURPOSE — Per-side fine-tuning:
+        While sizeAdjustment provides global calibration, baseAdjustment
+        allows per-side overrides including z- and z+ (which sizeAdjustment
+        cannot address individually).
+
+        z- SPECIAL BEHAVIOUR: A z- value does not reduce block height from below.
+        Instead it shifts the brick downward by the z- amount (independent of
+        offset), and extends z+ by the same amount. This means the brick gains
+        a downward protrusion while the top side expands correspondingly.
+        Same applies to sizeMod z-.
+
+        Difference to sizeMod: baseAdjustment is for printer calibration and
+        gap closing in composite blocks. sizeMod is a semantic geometry change.
+
+        IN CONFIG — typically empty or used for global z+/z- adjustments.
+
+        IN COMPOSITE BLOCKS — use namespaced entries to pass side-specific
+        adjustments to child composite blocks. The child uses mb_params_filter()
+        to extract its namespace:
+          // In outer block:
+          ["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
+          // In inner composite block (pbx part):
+          ["baseAdjustment", mb_params_filter(baseAdjustment, "pbx")]
+          // Result: [["x+", 0.01]]
+
+        mb_params_filter(param, namespace, overrides?):
+          Filters a pseudo-map by namespace prefix, removes the prefix from keys.
+          Ignores entries without a namespace and entries with numeric keys.
+          Optional third argument applies fixed overrides after filtering.
+          Universal — can be applied to any [[string, value]] pseudo-map parameter.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">Renamed from baseSideAdjustment. Format changed from float/2-element/
+          4-element array to pseudo-map [[side, value]] format. Now supports all
+          6 sides (including z-) and namespace-prefixed keys for composite patterns.
+          z- now has a special downward-shift behaviour (not a plain height reduction).
+          Default changed from -0.1 to [] (empty).
+        </change>
+      </changelog>
+      <value></value>
+    </baseAdjustment>
+
+    <baseClampHeight type="Decimal">
+      <documentation>Height of the base clamp lip.</documentation>
+      <value>0.5</value>
+    </baseClampHeight>
+
+    <baseClampOffset type="Decimal">
+      <documentation>Distance from the bottom edge of the block to the base clamp lip.
+        The base clamp is a small lip on the inner wall of the underside
+        opening, around tubes, and in stud holes (baseCutoutType=studs)
+        that increases clamping force.
+      </documentation>
+      <value>0.25</value>
+    </baseClampOffset>
+
+    <baseClampOuter type="Boolean">
+      <documentation>Whether a clamp lip is also placed on the outer side of the block.
+        Not useful for normal bricks. Useful in composite blocks where an
+        outer surface of a sub-brick becomes an inner surface in the
+        overall block.
+      </documentation>
+      <value>false</value>
+    </baseClampOuter>
+
+    <baseClampThickness type="Decimal">
+      <documentation>Thickness of the base clamp lip.</documentation>
+      <value>0.1</value>
+    </baseClampThickness>
+
+    <baseColor type="type:Color">
+      <documentation>Color of the brick body, studs, and all other parts.
+        Does NOT apply to text (use textColor separately).
+      </documentation>
+      <value>#EAC645</value>
+    </baseColor>
+
+    <baseCrop type="type:FaceVector6<FloatUnitGrid>">
+      <documentation>Hard cut or extension per side (0-3 only, no Z-axis crop).
+        Positive = cut geometry, negative = extend geometry.
+        The cut is applied brutally — without regard to grid compatibility,
+        walls, tubes, or other structural features.
+        Does NOT affect bounding box or positioning.
+        For semantic size modification that keeps the brick structurally intact,
+        use sizeMod instead. baseCrop is intended for cross-sections, screenshots,
+        or helper bricks — not for normal size adjustment.
+        Same functionality as crop in V2, renamed only.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0</value>
+    </baseCrop>
+
+    <baseCutoutMaxDepth type="Decimal">
+      <documentation>Maximum depth of the underside opening (baseCutoutType=standard only).
+        Default 5 mbu ≈ 8 mm. Limits underside depth; if the limit applies,
+        the topPlateHeight grows accordingly. When recess is defined, the
+        baseCutoutDepth shrinks to the minimum (1 mbu) and topPlateHeight
+        shrinks to its minimum value.
+      </documentation>
+      <value>5</value>
+    </baseCutoutMaxDepth>
+
+    <baseCutoutType type="type:BaseCutoutType">
+      <documentation>Type of underside opening.
+        standard: Classic LEGO underside with tubes/pins.
+        studs: Alternative with only stud holes, no tube structure.
+          Grid-compatible but only fits exactly on studs.
+        groove: Counterpart to tongue — a groove that the tongue fits into.
+        none: Solid underside, no opening. For solid structures in composite
+          blocks, e.g. embedded blocks without their own underside.
+      </documentation>
+      <value>standard</value>
+    </baseCutoutType>
+
+    <baseRoundingRadius type="type:RoundingRadius">
+      <documentation>Rounding radius of the block corners.</documentation>
+      <value>0.0</value>
+    </baseRoundingRadius>
+
+    <baseWallGaps type="type:WallGapList">
+      <documentation>Gaps in the underside wall (baseCutoutType=standard).
+        Used to restore grid compatibility in composite blocks where blocks cross.
+        Replaces baseWallGapsX and baseWallGapsY from V2.
+        Each entry specifies one side, a position, and optionally a length.
+        To open both sides at a position, add two separate entries.
+      </documentation>
+      <since>3.0.0</since>
+      <value>[]</value>
+    </baseWallGaps>
+
+    <baseWallThickness type="Decimal">
+      <documentation>Wall thickness of the underside opening (baseCutoutType=standard).
+        Automatically calculated. Usually does not need adjustment.
+      </documentation>
+      <value>auto</value>
+    </baseWallThickness>
+
+    <baseWallThicknessAdjustment type="Decimal">
+      <documentation>Calibration adjustment for baseWallThickness.
+        Only for calibration. Not for AI in settings.
+      </documentation>
+      <value>-0.1</value>
+    </baseWallThicknessAdjustment>
+
+    <bevel type="type:PerSide4<AxisXY<FloatUnitGrid>>">
+      <documentation>Creates wedges by shifting Z-axis corners (0-3) in XY space.
+        Each corner gets an [x,y] displacement value.
+        The resulting shape is intersected with the bounding box.
+        Can be used together with slope.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">Can now be combined with slope.</change>
+      </changelog>
+      <value>[[0,0], [0,0], [0,0], [0,0]]</value>
+    </bevel>
+
+    <connectorDepth type="Decimal">
+      <documentation>How far the connector triangles protrude.</documentation>
+      <value>0.75</value>
+    </connectorDepth>
+
+    <connectorLength type="Decimal">
+      <documentation>Length of the connector run on the face. At "auto" equals the
+        available space (brick height for x/y faces, width/depth for z faces).
+      </documentation>
+      <since>3.0.0</since>
+      <value>auto</value>
+    </connectorLength>
+
+    <connectorLengthClearance type="Decimal">
+      <documentation>Clearance of the recess depth relative to the triangle depth.
+        Ensures male and female connectors fit together.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.2</value>
+    </connectorLengthClearance>
+
+    <connectorSideClearance type="Decimal">
+      <documentation>Clearance of the recess width relative to the triangle width.
+        Ensures male and female connectors fit together.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.1</value>
+    </connectorSideClearance>
+
+    <connectorWidth type="Decimal">
+      <documentation>Width of the connector triangles.</documentation>
+      <value>2.25</value>
+    </connectorWidth>
+
+    <connectors type="type:FalseOr<ConnectorList>">
+      <documentation>Side connection system using triangular wedges. Alternative to tongue/groove.
+        Enables side-by-side (0°) and angled (90°) connections.
+        Padding skips connectors at start/end — important when connecting
+        bricks of different sizes.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">Completely new format: [face, direction, gender, align?, paddingStart?, paddingEnd?]
+          per connector. The old [[side, arrangement]] format is no longer valid.
+          Padding is now per-connector; the separate connectorPadding parameter is removed.
+        </change>
+      </changelog>
+      <value>false</value>
+    </connectors>
+
+    <cutouts type="type:FalseOr<CutoutList>">
+      <documentation>Defines one or more void volumes to subtract from the block body.
+        Each entry in the array is a settings array describing one cutout.
+        The subtraction is applied brutally — it ignores walls, recess,
+        tongue, and all structural features. The cutout cuts through everything.
+      </documentation>
+      <since>3.0.0</since>
+      <value>false</value>
+    </cutouts>
+
+    <debug type="Boolean">
+      <documentation>Enables debug output to the console. Has no effect on geometry.
+        Used for development and troubleshooting.
+      </documentation>
+      <since>3.0.0</since>
+      <value>false</value>
+    </debug>
+
+    <debugShowOnly type="Text">
+      <documentation>Debug-only filter. When set to a string, only that part of the block
+        is shown (e.g. "studs"), all other geometry is hidden. Has no effect
+        on geometry semantics — for debugging/inspection only.
+      </documentation>
+      <since>3.0.0</since>
+      <value></value>
+    </debugShowOnly>
+
+    <direction type="type:Direction">
+      <documentation>Semantic grid-aligned rotation. Applied before align.
+        west=0°, north=90°, east=180°, south=270° (clockwise).
+        All internal values (size, side numbering, etc.) always refer to
+        "west" orientation. Direction only changes placement/display.
+        Before align is applied the brick is centered on its body center.
+      </documentation>
+      <value>west</value>
+    </direction>
+
+    <grille type="type:GrilleType">
+      <documentation>Whether the top plate is rendered as a grille with regular openings.
+        "x" or "y" defines the direction of the grille bars.
+      </documentation>
+      <value>none</value>
+    </grille>
+
+    <grilleCount type="Integer">
+      <documentation>Number of grille bars across the entire surface.</documentation>
+      <value>5</value>
+    </grilleCount>
+
+    <grilleDepth type="Decimal">
+      <documentation>Depth of the grille openings.</documentation>
+      <value>1</value>
+    </grilleDepth>
+
+    <grilleInverted type="Boolean">
+      <documentation>Whether the grille starts with an opening instead of a solid bar.</documentation>
+      <value>false</value>
+    </grilleInverted>
+
+    <holeX type="type:SelectiveGrid<BooleanOr<HoleType>>">
+      <documentation>Whether LEGO Technic holes are drawn along the X-axis.
+        Multiple rows possible depending on block height.
+      </documentation>
+      <value>false</value>
+    </holeX>
+
+    <holeXYGridOffsetZ type="type:AxisXY<FloatMbu>">
+      <documentation>Distance from the block bottom to the center of the first row
+        of Technic holes in X- and Y-direction.
+        Each parameter can independently be a single value or a 2-element array.
+      </documentation>
+      <since>3.0.0</since>
+      <value>3.625</value>
+    </holeXYGridOffsetZ>
+
+    <holeXYGridOffsetZAdjustment type="type:AxisXY<FloatMm>">
+      <documentation>Calibration adjustment for holeXYGridOffsetZ.</documentation>
+      <since>3.0.0</since>
+      <value>0.0</value>
+    </holeXYGridOffsetZAdjustment>
+
+    <holeXYGridSizeZ type="type:AxisXY<FloatMbu>">
+      <documentation>Center-to-center distance between two rows of Technic holes
+        in X- and Y-direction.
+      </documentation>
+      <since>3.0.0</since>
+      <value>6</value>
+    </holeXYGridSizeZ>
+
+    <holeXYGridSizeZAdjustment type="type:AxisXY<FloatMm>">
+      <documentation>Calibration adjustment for holeXYGridSizeZ.</documentation>
+      <since>3.0.0</since>
+      <value>0.0</value>
+    </holeXYGridSizeZAdjustment>
+
+    <holeXYMinTopMargin type="type:AxisXY<FloatMbu>">
+      <documentation>Minimum distance between the block top and the topmost row of
+        Technic holes in X- and Y-direction. Determines whether a row is drawn.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.5</value>
+    </holeXYMinTopMargin>
+
+    <holeXYZAxleThickness type="type:AxisXYZ<FloatMbu>">
+      <documentation>Thickness of one strut of the cross axle for holeXYZType="axle".
+        Follows the 1/2/3-value array rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>1</value>
+    </holeXYZAxleThickness>
+
+    <holeXYZAxleThicknessAdjustment type="type:AxisXYZ<FloatMm>">
+      <documentation>Calibration adjustment for holeXYZAxleThickness, in mm.
+        Follows the 1/2/3-value array rule.
+        Analog to other Adjustment parameters for printer compensation.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.0</value>
+    </holeXYZAxleThicknessAdjustment>
+
+    <holeXYZDiameter type="type:AutoOr<AxisXYZ<FloatMbu>>">
+      <documentation>Diameter of Technic holes per axis. Automatically calculated.
+        Follows the 1/2/3-value array rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>auto</value>
+    </holeXYZDiameter>
+
+    <holeXYZDiameterAdjustment type="type:AxisXYZ<FloatMm>">
+      <documentation>Calibration adjustment for holeXYZDiameter per axis.
+        Follows the 1/2/3-value array rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.3</value>
+    </holeXYZDiameterAdjustment>
+
+    <holeXYZEdgeMode type="type:HoleXYZEdgeMode">
+      <documentation>Controls whether partial (half) Technic holes are drawn at the edges
+        of the block for X, Y, and Z direction holes.
+
+        Applies to all three hole axes (X, Y, Z) using the 3-value array rule.
+        Each axis entry resolves to an inner 2-element list [otherAxis1, otherAxis2]:
+          X-entry: [Y-edge, Z-edge]
+          Y-entry: [X-edge, Z-edge]
+          Z-entry: [X-edge, Y-edge]
+
+        Allowed values per position:
+          "none"  — no partial hole (default)
+          "start" — half hole at the negative-direction edge
+          "end"   — half hole at the positive-direction edge
+          "all"   — half holes at both edges
+
+        Restriction: The Z-edge position (2nd element) within X and Y inner
+        list entries does not support "start". Allowed: "none", "end", "all".
+      </documentation>
+      <since>3.0.0</since>
+      <value>none</value>
+    </holeXYZEdgeMode>
+
+    <holeXYZInsetDepth type="type:AxisXYZ<FloatMbu>">
+      <documentation>Depth of the inset ring around Technic holes, per axis.
+        Follows the 1/2/3-value array rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.5</value>
+    </holeXYZInsetDepth>
+
+    <holeXYZInsetDepthAdjustment type="type:AxisXYZ<FloatMm>">
+      <documentation>Calibration adjustment for holeXYZInsetDepth per axis.
+        Follows the 1/2/3-value array rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.0</value>
+    </holeXYZInsetDepthAdjustment>
+
+    <holeXYZInsetThickness type="type:AxisXYZ<FloatMbu>">
+      <documentation>Width of the inset ring around Technic holes, per axis.
+        In V2, insets existed only for x and y holes. Z holes now also
+        support insets.
+        Follows the 1/2/3-value array rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.375</value>
+    </holeXYZInsetThickness>
+
+    <holeXYZInsetThicknessAdjustment type="type:AxisXYZ<FloatMm>">
+      <documentation>Calibration adjustment for holeXYZInsetThickness per axis.
+        Follows the 1/2/3-value array rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.0</value>
+    </holeXYZInsetThicknessAdjustment>
+
+    <holeXYZShift type="type:BooleanOr<Boolean>">
+      <documentation>Whether Technic holes per axis are shifted by 1/2 stud.
+        true: holes align with studs. false: holes sit between two studs.
+        Follows the 1/2/3-value array rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>false</value>
+    </holeXYZShift>
+
+    <holeXYZType type="type:AxisXYZ<HoleType>">
+      <documentation>Type of Technic holes per axis.
+        pin: round holes. axle: cross-shaped holes.
+        Follows the 1/2/3-value array rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>pin</value>
+    </holeXYZType>
+
+    <holeY type="type:SelectiveGrid<BooleanOr<HoleType>>">
+      <documentation>Whether LEGO Technic holes are drawn along the Y-axis.
+        Multiple rows possible depending on block height.
+        Type, shift, diameter, inset, and grid parameters are shared with
+        holeX and holeZ via the holeXYZ* and holeXY* unified parameters.
+      </documentation>
+      <value>false</value>
+    </holeY>
+
+    <holeZ type="type:SelectiveGrid<BooleanOr<HoleType>>">
+      <documentation>Whether LEGO Technic holes are drawn along the Z-axis.
+        Type, shift, diameter, and inset parameters are shared with holeX
+        and holeY via the holeXYZ* unified parameters.
+        Z holes now also support insets (holeXYZInsetThickness/Depth).
+      </documentation>
+      <value>false</value>
+    </holeZ>
+
+    <id type="Text">
+      <documentation>Unique identifier of the block or part within a block tree. Used primarily
+        for debug output in mb_block() so that console messages can be clearly
+        attributed to a specific block or part. May gain additional functions in
+        the future.
+
+        At undef, a random ID is generated.
+
+        In composite blocks, blockId is resolved via mb_param_id() and then
+        assigned to the wrapper block and all parts:
+
+          blockId = mb_param_id(config, settings, "mm.my.package");
+          // Wrapper block:
+          ["id", blockId]
+          // Part:
+          ["id", mb_block_id(blockId, part_bottom)]
+
+        mb_block_id(blockId, partName) produces a combined ID in the form
+        "blockId/partName". Since blockId can be overridden from outside, this
+        creates traceable, hierarchical ID chains across composite block trees.
+
+        Example: if blockId = "mm.anyclosure.wall" and partName = "bottom",
+        the resulting part ID is "mm.anyclosure.wall/bottom".
+      </documentation>
+      <since>3.0.0</since>
+      <value></value>
+    </id>
+
+    <offset type="type:AxisXYZ<FloatUnitGrid>">
+      <documentation>Final displacement of the brick. Applied last in the transformation
+        chain. Same unit as size (grid units / multiples of a 1x1 plate).
+        Origin depends on whether the brick is global or a child.
+      </documentation>
+      <value>[0, 0, 0]</value>
+    </offset>
+
+    <pcb type="type:FalseOr<PcbMountingType>">
+      <documentation>PCB mounting mode. Combines the former pcb (bool) and pcbMountingType into one.
+        false or "none": no PCB mounting features.
+        "clips": frame for clipping in the PCB.
+        "sockets": screw sockets for socket/screw mounting.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">Now accepts mounting type values directly: false/"none", "clips", "sockets".
+          Merges the former pcb (bool) and pcbMountingType ("clips"|"screws") parameters.
+        </change>
+      </changelog>
+      <value>false</value>
+    </pcb>
+
+    <pcbDimensions type="type:AxisXYZ<FloatMm>">
+      <documentation>Dimensions of the PCB in mm. Refers to the board size,
+        especially relevant for pcb="clips".
+      </documentation>
+      <value>[20, 30, 3]</value>
+    </pcbDimensions>
+
+    <pcbOffset type="type:AxisXY<FloatUnitGrid>">
+      <documentation>Offset of the PCB from the center of the brick.</documentation>
+      <value>[0, 0]</value>
+    </pcbOffset>
+
+    <pcbSocketDiameter type="Decimal">
+      <documentation>Diameter of screw sockets.</documentation>
+      <since>3.0.0</since>
+      <value>5</value>
+    </pcbSocketDiameter>
+
+    <pcbSocketHeight type="Decimal">
+      <documentation>Height of the screw sockets.</documentation>
+      <since>3.0.0</since>
+      <value>3</value>
+    </pcbSocketHeight>
+
+    <pcbSocketHoleDiameter type="Decimal">
+      <documentation>Diameter of the screw hole inside the socket.</documentation>
+      <since>3.0.0</since>
+      <value>2.2</value>
+    </pcbSocketHoleDiameter>
+
+    <pcbSockets type="type:PcbSocketList">
+      <documentation>Positions of screw sockets. Each entry gives the distance of the
+        socket center from the brick center in mm.
+      </documentation>
+      <since>3.0.0</since>
+      <value>[]</value>
+    </pcbSockets>
+
+    <pillarGapAutoConfig type="type:AxisXY<Integer>">
+      <documentation>Configures how pillars are placed when pillars = "auto". Used to
+        avoid a full pillar grid on large plates, which would otherwise sit
+        too tightly on other bricks — only the corners and a middle cross
+        remain filled.
+
+        cornerLength: length of the two legs of the pillar triangle at each
+        corner (in grid units). The corner is filled with a triangular
+        arrangement of pillars whose leg length is this value; the remaining
+        corner pillars follow from the triangle shape.
+
+        middleWidth: width of a pillar cross in the middle of the plate, in
+        both X and Y direction. Each arm extends middleWidth / 2 from the
+        center in both directions, forming a cross of pillars in the middle.
+
+        Combines the V2 parameters pillarGapCornerLength and pillarGapMiddle
+        into a single array.
+      </documentation>
+      <since>3.0.0</since>
+      <value>[2, 10]</value>
+    </pillarGapAutoConfig>
+
+    <pillarInnerClampThickness type="Decimal">
+      <documentation>Thickness of the clamp inside Z-direction tubes.
+        A constriction of the inner hole so studs grip inside the tube.
+        Usually does not need adjustment.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.1</value>
+    </pillarInnerClampThickness>
+
+    <pillarOriginalWallThickness type="Decimal">
+      <documentation>Fixed constant used for automatic tube diameter calculation.
+        Do not modify.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.53125</value>
+    </pillarOriginalWallThickness>
+
+    <pillars type="type:SelectiveGrid<Boolean>">
+      <documentation>Whether tubes/pins are drawn on the underside (baseCutoutType=standard).</documentation>
+      <value>true</value>
+    </pillars>
+
+    <pinDiameter type="Decimal">
+      <documentation>Diameter of pins (small tubes) for bricks with size.x or size.y = 1.
+        Automatically calculated.
+      </documentation>
+      <value>auto</value>
+    </pinDiameter>
+
+    <pinDiameterAdjustment type="Decimal">
+      <documentation>Calibration adjustment for pin diameter.</documentation>
+      <value>0.0</value>
+    </pinDiameterAdjustment>
+
+    <ports type="type:PortList">
+      <documentation>Cutouts on a face for connectors such as USB, screw terminals, etc.
+        Each port is placed on a face using anchor + offset, then filled with
+        one or more shapes (rect/circle) that are subtracted from the body.
+      </documentation>
+      <since>3.0.0</since>
+      <value>false</value>
+    </ports>
+
+    <printerLayerHeight type="Decimal">
+      <documentation>Layer height of the 3D printer in mm. Typically set once in the
+        global config. Used as the default value for other parameters when
+        those parameters are set to "auto".
+
+        Current auto-resolution rules:
+          topPlateHelperHeight = "auto"  →  printerLayerHeight
+          stabilizerLayerOffset = "auto"  →  printerLayerHeight
+          screwHoleZHelperLayerOffset = "auto"  →  printerLayerHeight
+          tongueGrooveDepthClearance = "auto"  →  printerLayerHeight
+          tongueGrooveClampOffsetClearance = "auto"  →  printerLayerHeight
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.2</value>
+    </printerLayerHeight>
+
+    <printerNozzleDiameter type="Decimal">
+      <documentation>Nozzle diameter of the 3D printer in mm. Typically set once in the
+        global config. Used as the default value for other parameters when
+        those parameters are set to "auto".
+
+        Current auto-resolution rules:
+          topPlateHelperThickness = "auto"  →  0.5 * printerNozzleDiameter (min 0.1 mm)
+          tongueGrooveThicknessClearance = "auto"  →  0.25 * printerNozzleDiameter (min 0.1 mm)
+          Any future *NozzleDiameter-based "auto" parameter follows the same min 0.1 mm rule.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.4</value>
+    </printerNozzleDiameter>
+
+    <quality type="type:QualityPreset">
+      <documentation>User-level quality preset. Controls overall rendering quality
+        independent of renderer implementation.
+        "preview"  — fast, reduced quality for interactive preview
+        "normal"   — balanced quality for general use
+        "print"    — high quality for 3D print export
+        "render"   — maximum quality for final renders
+      </documentation>
+      <value>normal</value>
+    </quality>
+
+    <recess type="Boolean">
+      <documentation>Whether a top-down cavity is created, forming a box with four walls
+        and no lid. When active with baseCutoutType=standard, the baseCutout
+        depth is reduced to minimum (1 mbu) if recessDepth=auto.
+      </documentation>
+      <value>false</value>
+    </recess>
+
+    <recessAdjustment type="type:AutoOr<FaceMap<FloatMm>>">
+      <documentation>Per-side calibration adjustment for the inner recess walls and floor.
+        Applied to the interior surfaces of the recess (the inner box).
+
+        At "auto", uses the same values as baseAdjustment (except z+, which
+        is not applicable to the recess).
+
+        IMPORTANT — z- behaviour differs from baseAdjustment:
+        The z- value is applied to the recess floor height (moves the floor).
+        No downward shift or z+ extension occurs — it is a direct floor adjustment.
+
+        Sign convention: negative values enlarge the recess (shrink the inner
+        walls inward in x/y, and lower the floor in z-). Positive values
+        shrink the recess.
+      </documentation>
+      <since>3.0.0</since>
+      <value>auto</value>
+    </recessAdjustment>
+
+    <recessDepth type="Decimal">
+      <documentation>Depth of the recess cavity, expressed as multiples of one plate (unitGrid[1] = 2 mbu).
+        At "auto" depth is maximized.
+        When set to an absolute value, the baseCutout (standard) goes up to
+        baseCutoutMaxDepth and the remainder is filled with the top plate
+        wall between baseCutout and recess.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">Unit clarified: unitGrid[1] (plates), not raw mbu.</change>
+      </changelog>
+      <value>auto</value>
+    </recessDepth>
+
+    <recessRoundingRadius type="type:AutoOr<RoundingRadius>">
+      <documentation>Rounding radius of the recess cavity. Derived from the block's
+        rounding radius. Usually does not need adjustment.
+      </documentation>
+      <value>auto</value>
+    </recessRoundingRadius>
+
+    <recessStudPadding type="type:PerSide4<FloatUnitGrid>">
+      <documentation>Padding from the recess wall inward. Determines whether outer studs
+        in the recess are hidden. Studs whose center is closer to the recess
+        wall than this padding value are not drawn.
+      </documentation>
+      <value>0.2</value>
+    </recessStudPadding>
+
+    <recessStudShift type="Boolean">
+      <documentation>Whether recess floor studs are shifted by 1/2 stud in X and Y.
+        false: studs sit at standard positions.
+        true: studs are shifted by half a stud in both directions.
+      </documentation>
+      <value>false</value>
+    </recessStudShift>
+
+    <recessStudType type="type:StudType">
+      <documentation>Type of studs on the recess floor.
+        solid: massive studs. hollow: studs with a hole in the center.
+      </documentation>
+      <value>solid</value>
+    </recessStudType>
+
+    <recessStuds type="Boolean">
+      <documentation>Whether studs are drawn on the recess floor. Studs are at the same
+        X/Y position as without recess. Only drawn if a 1x1 brick fits —
+        studs too close to the recess wall are hidden.
+      </documentation>
+      <value>true</value>
+    </recessStuds>
+
+    <recessWallGapStuds type="Boolean">
+      <documentation>Whether studs are shown inside openings created by recessWallGaps.
+        Only effective in combination with recessStuds = true.
+      </documentation>
+      <since>3.0.0</since>
+      <value>false</value>
+    </recessWallGapStuds>
+
+    <recessWallGaps type="type:WallGapList">
+      <documentation>Openings in recess walls. Each entry specifies a side and optional
+        left/right offsets to create partial or full wall openings.
+        Also creates matching openings in tongue and groove.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">Short form input added; sides can now be specified as strings.</change>
+      </changelog>
+      <value>[]</value>
+    </recessWallGaps>
+
+    <recessWallStuds type="Boolean">
+      <documentation>Whether studs are drawn on the recess wall (the vertical wall of the
+        recess cavity). Only active when studs = true and the recess wall is
+        thick enough to fit studs.
+      </documentation>
+      <since>3.0.0</since>
+      <value>true</value>
+    </recessWallStuds>
+
+    <recessWallThickness type="type:PerSide4<FloatUnitGrid>">
+      <documentation>Wall thickness of the recess cavity (box wall thickness).</documentation>
+      <value>0.333</value>
+    </recessWallThickness>
+
+    <reliefCut type="Boolean">
+      <documentation>Whether a relief cut is applied at the outer bottom edge of the block.
+        Cuts a portion of the outer wall, resulting in a thinner outer wall
+        in the lower area. The inner wall is not affected (baseCutoutType=standard).
+      </documentation>
+      <since>3.0.0</since>
+      <value>false</value>
+    </reliefCut>
+
+    <reliefCutHeight type="Decimal">
+      <documentation>Height of the relief cut.</documentation>
+      <since>3.0.0</since>
+      <value>0.375</value>
+    </reliefCutHeight>
+
+    <reliefCutThickness type="Decimal">
+      <documentation>Thickness of the cut-away portion.</documentation>
+      <since>3.0.0</since>
+      <value>0.375</value>
+    </reliefCutThickness>
+
+    <render type="Boolean">
+      <documentation>Whether the block is rendered at all. When false, the block and all
+        its children produce no geometry. Used in composite blocks to
+        conditionally show or hide individual parts based on assemblyParts.
+      </documentation>
+      <since>3.0.0</since>
+      <value>true</value>
+    </render>
+
+    <rotation type="type:AxisXYZ<FloatDeg>">
+      <documentation>Free geometric rotation applied after align. Not grid-safe —
+        can break alignment and connectivity. The pivot is the relative
+        zero point which varies depending on align. Children are rotated
+        along with the parent.
+      </documentation>
+      <value>[0, 0, 0]</value>
+    </rotation>
+
+    <rotationOffset type="type:AxisXYZ<FloatUnitGrid>">
+      <documentation>Shifts the rotation pivot before rotation is applied.</documentation>
+      <value>[0, 0, 0]</value>
+    </rotationOffset>
+
+    <rotationOffsetRevert type="Boolean">
+      <documentation>Whether the rotationOffset is reversed after rotation.</documentation>
+      <value>true</value>
+    </rotationOffsetRevert>
+
+    <scadPreviewMaxMult type="Decimal">
+      <documentation>Maximum preview segment length multiplier.
+        Used together with scadPreviewQuality.
+        Higher values allow more aggressive quality reduction during preview.
+      </documentation>
+      <value>2.5</value>
+    </scadPreviewMaxMult>
+
+    <scadPreviewPreRender type="Boolean">
+      <documentation>Whether the block is rendered as mesh in OpenSCAD preview mode
+        instead of CSG.
+      </documentation>
+      <value>true</value>
+    </scadPreviewPreRender>
+
+    <scadPreviewPreRenderConvexity type="Integer">
+      <documentation>Convexity parameter passed to OpenSCAD render() function.
+        Used with scadPreviewPreRender.
+      </documentation>
+      <value>25</value>
+    </scadPreviewPreRenderConvexity>
+
+    <scadPreviewQuality type="Decimal">
+      <documentation>Additional OpenSCAD preview quality reduction factor.
+        1.0 = disabled. 0.0 = strongest preview reduction.
+        Only applied when $preview is true.
+      </documentation>
+      <value>1.0</value>
+    </scadPreviewQuality>
+
+    <scadQualityClassFactors type="type:AxisXYZ<Float>">
+      <documentation>Per quality-class segment length multipliers.
+        Higher values reduce quality and improve render performance.
+      </documentation>
+      <value>[1.00, 1.35, 2.25]</value>
+    </scadQualityClassFactors>
+
+    <scadQualityClassMinSegments type="type:AxisXYZ<Integer>">
+      <documentation>Minimum full-circle segment count per quality class.
+        Prevents small radii from becoming overly coarse.
+      </documentation>
+      <value>[16, 12, 8]</value>
+    </scadQualityClassMinSegments>
+
+    <scadQualityProfile type="type:ScadQualityProfile">
+      <documentation>OpenSCAD quality profile mapping. Maps each quality preset to
+        segment length (mm) and maximum segment count.
+        Smaller segmentLengthMm increases quality.
+        maxSegments limits the maximum full-circle resolution.
+      </documentation>
+      <value>[[0.55, 32], [0.38, 48], [0.28, 64], [0.16, 120]]</value>
+    </scadQualityProfile>
+
+    <scadQualitySegmentMultiplier type="Decimal">
+      <documentation>Global segment length multiplier. Applied after quality preset
+        and class factor calculation.
+        &gt; 1.0: lower quality, faster rendering.
+        &lt; 1.0: higher quality, slower rendering.
+        Useful for global tuning without modifying quality profiles.
+      </documentation>
+      <value>1</value>
+    </scadQualitySegmentMultiplier>
+
+    <scale type="Decimal">
+      <documentation>Global scaling factor. Scales all mbu-based values.
+        mbu values themselves remain unchanged; only the resulting
+        physical dimensions change. Adjustments (mm) do NOT scale.
+      </documentation>
+      <value>1.0</value>
+    </scale>
+
+    <screwHoleDepth type="Decimal">
+      <documentation>Default depth of screw holes. Can be overridden per hole in screwHoles.</documentation>
+      <since>3.0.0</since>
+      <value>4</value>
+    </screwHoleDepth>
+
+    <screwHoleDiameter type="Decimal">
+      <documentation>Default diameter of screw holes. Can be overridden per hole in screwHoles.</documentation>
+      <since>3.0.0</since>
+      <value>1.6</value>
+    </screwHoleDiameter>
+
+    <screwHoleInsetDepth type="Decimal">
+      <documentation>Default inset ring depth for screw holes. 0 = no inset.
+        Can be overridden per hole in screwHoles.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.8</value>
+    </screwHoleInsetDepth>
+
+    <screwHoleInsetThickness type="Decimal">
+      <documentation>Default inset ring thickness around screw holes. 0 = no inset.
+        Can be overridden per hole in screwHoles.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.6</value>
+    </screwHoleInsetThickness>
+
+    <screwHoleZHelperHeight type="Decimal">
+      <documentation>Height of the helper layers for Z-face screw holes.</documentation>
+      <value>0.2</value>
+    </screwHoleZHelperHeight>
+
+    <screwHoleZHelperLayerOffset type="Decimal">
+      <documentation>Offset between the two helper layers for Z-face screw holes.
+        "auto" uses printerLayerHeight.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.2</value>
+    </screwHoleZHelperLayerOffset>
+
+    <screwHoleZHelperThickness type="Decimal">
+      <documentation>Thickness of print helpers for Z-face screw holes on the underside.
+        Required for baseCutoutType=standard to avoid needing print support.
+      </documentation>
+      <value>0.8</value>
+    </screwHoleZHelperThickness>
+
+    <screwHoles type="type:ScrewHoleList">
+      <documentation>Mounting screw holes on any face of the brick. Each entry defines one hole
+        with a face, a grid position, and optional per-hole size overrides.
+        Global defaults for diameter, depth, and inset are set via the
+        screwHoleDiameter, screwHoleDepth, screwHoleInsetThickness, screwHoleInsetDepth
+        parameters.
+      </documentation>
+      <since>3.0.0</since>
+      <value>[]</value>
+    </screwHoles>
+
+    <size type="type:Size3D">
+      <documentation>Size of the bounding box in grid units. Defines the brick body;
+        studs are excluded from the bounding box. For simple bricks the
+        bounding box matches the body exactly.
+        X/Y count in studs, Z counts in plates.
+        Must contain integer values only. Fractional values are not permitted.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">Values must be integers. Fractional values are no longer permitted.</change>
+      </changelog>
+      <value>[1, 1, 1]</value>
+    </size>
+
+    <sizeAdjustment type="type:AxisXY<FloatMm>">
+      <documentation>Global calibration adjustment for block size, applied uniformly.
+        sideXYAdj is applied to all four horizontal sides (x-, x+, y-, y+).
+        heightAdj is applied to the top face (z+) only.
+
+        Typically set once in the global config and applies to all blocks.
+        For per-block or per-side overrides, use baseAdjustment.
+
+        Example: [-0.1, 0] reduces x-, x+, y-, y+ by 0.1mm each, no height change.
+
+        Never scales with the scale parameter.
+      </documentation>
+      <since>3.0.0</since>
+      <changelog>
+        <change version="3.0.0">Now also accepts a single number (applies to XY only, Z = 0), in addition
+          to the previous 2-element array [XYAdj, ZAdj].
+        </change>
+      </changelog>
+      <value>[-0.1, 0]</value>
+    </sizeAdjustment>
+
+    <sizeMod type="type:FaceVector6<FloatUnitGrid>">
+      <documentation>Semantic size modification per side, in grid units. Adjusts the
+        brick geometry while keeping it structurally intact (walls, studs,
+        connectors remain consistent). Unlike crop, sizeMod does not brutally
+        cut geometry — it semantically shifts where the brick starts/ends on
+        each side.
+
+        Example: sizeMod = [0.5, 0, 0, 0, 0, 0] shifts the x- side inward
+        by 0.5 grid units, producing a half-brick that starts at 0.5 grid
+        units from the original x- edge.
+
+        z- behaviour: negative z- values shift the brick downward by the
+        same amount (like a downward offset), independent of the regular
+        offset parameter. The z+ side is extended correspondingly.
+
+        Difference to baseAdjustment: sizeMod is a semantic geometry change
+        (half-bricks, partial bricks). baseAdjustment is for printer
+        calibration and gap closing in composite blocks.
+      </documentation>
+      <since>3.0.0</since>
+      <value>[]</value>
+    </sizeMod>
+
+    <slope type="type:FalseOr<PerSide4<FloatUnitGrid>>">
+      <documentation>Defines slopes per side (0-3).
+        Positive values: slope on top surface (z+), starting at slopeBaseHeightBottom
+        and going the specified number of plates toward the center upward.
+        Negative values: inverted slope on bottom surface (z-), starting at
+        blockHeight - slopeBaseHeightTop going down to the floor.
+        Slope and bevel can be used together.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">Can now be combined with bevel. The conflicts_with constraint has been removed.</change>
+      </changelog>
+      <value>false</value>
+    </slope>
+
+    <slopeBaseHeightBottom type="Decimal">
+      <documentation>Start height of the slope on the respective side for positive slopes.
+        Usually does not need adjustment.
+      </documentation>
+      <since>3.0.0</since>
+      <value>1.333</value>
+    </slopeBaseHeightBottom>
+
+    <slopeBaseHeightInner type="Decimal">
+      <documentation>Start height of the slope on the inner wall of the brick.
+        Usually does not need adjustment.
+      </documentation>
+      <since>3.0.0</since>
+      <value>1.125</value>
+    </slopeBaseHeightInner>
+
+    <slopeBaseHeightTop type="Decimal">
+      <documentation>Height subtracted from block height for inverted (negative) slopes.
+        Usually does not need adjustment.
+      </documentation>
+      <since>3.0.0</since>
+      <value>1</value>
+    </slopeBaseHeightTop>
+
+    <stabilizerExpansion type="Integer">
+      <documentation>If &gt; 0, every n-th grid element is taller and extends down to
+        stabilizerExpansionOffset from the bottom edge.
+      </documentation>
+      <value>2</value>
+    </stabilizerExpansion>
+
+    <stabilizerExpansionOffset type="Decimal">
+      <documentation>Distance of expanded grid elements from the bottom edge.</documentation>
+      <value>1</value>
+    </stabilizerExpansionOffset>
+
+    <stabilizerHeight type="Decimal">
+      <documentation>Height of the stabilizer grid.</documentation>
+      <since>3.0.0</since>
+      <value>0.5</value>
+    </stabilizerHeight>
+
+    <stabilizerLayerOffset type="Decimal">
+      <documentation>Offset between the first and subsequent grid layers.
+        Ensures subsequent layers have a surface to print on.
+        "auto" uses printerLayerHeight.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.2</value>
+    </stabilizerLayerOffset>
+
+    <stabilizerThickness type="Decimal">
+      <documentation>Width of a single grid strut.</documentation>
+      <since>3.0.0</since>
+      <value>0.5</value>
+    </stabilizerThickness>
+
+    <stabilizers type="Boolean">
+      <documentation>Whether a stabilizer grid connecting tubes to side walls is printed
+        (baseCutoutType=standard). Provides stability and improves
+        printability of the top plate. Usually does not need adjustment.
+      </documentation>
+      <since>3.0.0</since>
+      <value>true</value>
+    </stabilizers>
+
+    <studBaseOverlap type="Decimal">
+      <documentation>How deeply the stud is sunk into the block body (overlap with base).
+        Ensures the stud is geometrically connected to the body (no floating geometry).
+        Also prevents gaps when grille or surfacePattern is active.
+        Can be set to 0 when a block has base=false but still renders studs
+        (e.g. stud-only decorative layers in composite blocks).
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.25</value>
+    </studBaseOverlap>
+
+    <studClampHeight type="Decimal">
+      <documentation>Height of the stud clamp ring at the upper stud edge.
+        Creates a near-permanent connection between two bricks.
+        Only active when studClampThickness &gt; 0.
+      </documentation>
+      <value>0.5</value>
+    </studClampHeight>
+
+    <studClampOffset type="Decimal">
+      <documentation>Distance from the stud clamp ring to the base body.
+        "auto" = studHeight - studClampHeight, so the clamp sits as high
+        as possible, flush with the top of the stud.
+      </documentation>
+      <since>3.0.0</since>
+      <value>auto</value>
+    </studClampOffset>
+
+    <studClampThickness type="Decimal">
+      <documentation>Thickness of the stud clamp ring. At 0 no clamp is active.</documentation>
+      <value>0.0</value>
+    </studClampThickness>
+
+    <studCutoutDiameterAdjustment type="Decimal">
+      <documentation>Calibration adjustment for stud cutout diameter.
+        Affects cutouts for studs in baseCutoutType=studs and outer wall
+        cutouts in round bricks for grid compatibility. Calibration only.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.2</value>
+    </studCutoutDiameterAdjustment>
+
+    <studCutoutHeightAdjustment type="Decimal">
+      <documentation>Calibration adjustment for stud cutout height.
+        Affects cutouts for studs in baseCutoutType=studs and outer wall
+        cutouts in round bricks for grid compatibility. Calibration only.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.4</value>
+    </studCutoutHeightAdjustment>
+
+    <studDiameter type="Decimal">
+      <documentation>Diameter of studs. Usually does not need adjustment.</documentation>
+      <value>3</value>
+    </studDiameter>
+
+    <studDiameterAdjustment type="Decimal">
+      <documentation>Calibration adjustment for studDiameter.</documentation>
+      <value>0.2</value>
+    </studDiameterAdjustment>
+
+    <studHeight type="Decimal">
+      <documentation>Height of studs. Usually does not need adjustment.</documentation>
+      <value>1</value>
+    </studHeight>
+
+    <studHeightAdjustment type="Decimal">
+      <documentation>Calibration adjustment for studHeight.</documentation>
+      <value>0.0</value>
+    </studHeightAdjustment>
+
+    <studHoleClampThickness type="Decimal">
+      <documentation>Thickness of the clamp inside the stud hole (studType=hollow).
+        A constriction of the inner hole so pins/axles grip in the stud.
+      </documentation>
+      <value>0.1</value>
+    </studHoleClampThickness>
+
+    <studHoleDiameter type="Decimal">
+      <documentation>Diameter of the hole in studs (studType=hollow).
+        Automatically calculated.
+      </documentation>
+      <value>auto</value>
+    </studHoleDiameter>
+
+    <studHoleDiameterAdjustment type="Decimal">
+      <documentation>Calibration adjustment for studHoleDiameter.</documentation>
+      <value>0.3</value>
+    </studHoleDiameterAdjustment>
+
+    <studIcon type="Text">
+      <documentation>SVG file engraved into each stud.</documentation>
+      <value>../../pattern/bolt-solid-full.svg</value>
+    </studIcon>
+
+    <studIconColor type="type:ColorOrInherit">
+      <documentation>Color of the stud icon. "inherit" uses baseColor.
+        Only visually relevant when studIconDepth &gt; 0.
+      </documentation>
+      <value>inherit</value>
+    </studIconColor>
+
+    <studIconDepth type="Decimal">
+      <documentation>Depth of the icon engraving. Negative = engraved into the stud.
+        Positive = raised above the stud.
+      </documentation>
+      <value>-0.2</value>
+    </studIconDepth>
+
+    <studIconDimensions type="type:AxisXY<FloatPt>">
+      <documentation>Dimensions of the stud icon SVG in mm (from the SVG file).
+        Default values match all standard icons in the /patterns directory.
+      </documentation>
+      <value>[169.333, 169.333]</value>
+    </studIconDimensions>
+
+    <studIconScale type="Decimal">
+      <documentation>Effective scale factor for the stud icon.</documentation>
+      <value>0.8</value>
+    </studIconScale>
+
+    <studMaxOverhang type="Decimal">
+      <documentation>Maximum allowed stud overhang beyond the outer edge.
+        Studs exceeding this are not drawn.
+      </documentation>
+      <value>0.3</value>
+    </studMaxOverhang>
+
+    <studPadding type="type:PerSide4<FloatUnitGrid>">
+      <documentation>Padding from sides 0-3 inward. Shifts the outer wall for the decision
+        whether studs are drawn, allowing outer studs to be hidden.
+      </documentation>
+      <value>0</value>
+    </studPadding>
+
+    <studRounding type="Decimal">
+      <documentation>Rounding radius of the upper stud edge.</documentation>
+      <value>0.0625</value>
+    </studRounding>
+
+    <studShift type="Boolean">
+      <documentation>Whether studs are shifted by 1/2 stud in X and Y.
+        false: studs sit between pillars.
+        true: studs sit directly above pillars.
+      </documentation>
+      <value>false</value>
+    </studShift>
+
+    <studType type="type:StudType">
+      <documentation>Type of studs. solid: massive. hollow: with a hole in the center.</documentation>
+      <value>solid</value>
+    </studType>
+
+    <studs type="type:SelectiveGrid<BooleanOr<StudType>>">
+      <documentation>Whether studs are drawn. Selective array allows per-region control
+        including stud type override.
+      </documentation>
+      <value>true</value>
+    </studs>
+
+    <surfacePattern type="Text">
+      <documentation>SVG file for a pattern on the brick surface. Applied to the brick
+        body surface as a repeating or single pattern.
+      </documentation>
+      <value>none</value>
+    </surfacePattern>
+
+    <surfacePatternColor type="type:ColorOrInherit">
+      <documentation>Color of the surface pattern. "inherit" uses baseColor.
+        Only visually relevant when surfacePatternDepth &gt; 0.
+      </documentation>
+      <value>inherit</value>
+    </surfacePatternColor>
+
+    <surfacePatternDepth type="Decimal">
+      <documentation>Depth of the surface pattern. Negative = engraved. Positive = raised.</documentation>
+      <value>-0.0625</value>
+    </surfacePatternDepth>
+
+    <surfacePatternDimensions type="type:AxisXY<FloatPt>">
+      <documentation>Dimensions of the surface pattern SVG in mm (from the SVG file).</documentation>
+      <value>[451.556, 451.556]</value>
+    </surfacePatternDimensions>
+
+    <surfacePatternOffset type="type:AxisXY<FloatUnitGrid>">
+      <documentation>Offset of the surface pattern.</documentation>
+      <value>[0, 0]</value>
+    </surfacePatternOffset>
+
+    <surfacePatternPadding type="type:PerSide4<FloatUnitGrid>">
+      <documentation>Distance from the edges of the surface pattern area, forming a smooth
+        (pattern-free) border around the structure. At 0, the pattern extends
+        to the edges. Each edge can be configured individually via the
+        4-element array form.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0</value>
+    </surfacePatternPadding>
+
+    <surfacePatternScale type="Decimal">
+      <documentation>Scale factor for the surface pattern.</documentation>
+      <value>1</value>
+    </surfacePatternScale>
+
+    <svg type="Text">
+      <documentation>SVG file to draw on a brick side. Placed on the side specified
+        by svgFace.
+      </documentation>
+      <value></value>
+    </svg>
+
+    <svgColor type="type:Color">
+      <documentation>Color of the SVG.</documentation>
+      <value>#2c3e50</value>
+    </svgColor>
+
+    <svgDepth type="Decimal">
+      <documentation>Depth/height of the SVG. Negative = engraved. Positive = raised.</documentation>
+      <value>0.4</value>
+    </svgDepth>
+
+    <svgDimensions type="type:AxisXY<FloatPt>">
+      <documentation>Dimensions of the SVG in mm (from the SVG file).</documentation>
+      <value>[100, 100]</value>
+    </svgDimensions>
+
+    <svgFace type="type:Face">
+      <documentation>Side on which the SVG is drawn (0-5 or string "x-" etc.).</documentation>
+      <since>3.0.0</since>
+      <value>5</value>
+    </svgFace>
+
+    <svgOffset type="type:AxisXY<FloatUnitGrid>">
+      <documentation>Offset of the SVG from its default position.</documentation>
+      <value>[0, 0]</value>
+    </svgOffset>
+
+    <svgScale type="Decimal">
+      <documentation>Scale factor for the SVG.</documentation>
+      <value>1.0</value>
+    </svgScale>
+
+    <text type="Text">
+      <documentation>Text to draw on the brick. If not empty, rendered on the side
+        specified by textFace.
+      </documentation>
+      <value></value>
+    </text>
+
+    <textAlign type="type:AxisXYZ<AlignValue>">
+      <documentation>Alignment of the text on the brick surface, using the same
+        format as align and alignChildren.
+      </documentation>
+      <since>3.0.0</since>
+      <value>center</value>
+    </textAlign>
+
+    <textColor type="type:Color">
+      <documentation>Color of the text. Independent from baseColor.</documentation>
+      <value>#2c3e50</value>
+    </textColor>
+
+    <textDepth type="Decimal">
+      <documentation>Depth/height of the text. Negative = engraved. Positive = raised.</documentation>
+      <value>-0.25</value>
+    </textDepth>
+
+    <textFace type="type:Face">
+      <documentation>Side of the brick on which text is displayed (0-5 or string "x-" etc.).</documentation>
+      <since>3.0.0</since>
+      <value>x-</value>
+    </textFace>
+
+    <textFont type="Text">
+      <documentation>Font family for the text.</documentation>
+      <value>Liberation Sans</value>
+    </textFont>
+
+    <textOffset type="type:AxisXY<FloatUnitGrid>">
+      <documentation>Offset of the text from its normal position.</documentation>
+      <value>[0, 0]</value>
+    </textOffset>
+
+    <textSize type="Decimal">
+      <documentation>Font size of the text.</documentation>
+      <value>4</value>
+    </textSize>
+
+    <textSpacing type="Decimal">
+      <documentation>Letter spacing of the text.</documentation>
+      <value>1</value>
+    </textSpacing>
+
+    <tongue type="Boolean">
+      <documentation>Whether a tongue (ridge) is drawn. Counterpart to baseCutoutType=groove.
+        Tongue and groove are an alternative attachment system for joining two
+        bricks, typically to create a solid block from two separate parts.
+        The tongue wraps around the outermost ring of studs and is compatible
+        with a plate of the same size, but typically used with a groove brick.
+        Can be used with or without recess.
+      </documentation>
+      <value>false</value>
+    </tongue>
+
+    <tongueClampHeight type="Decimal">
+      <documentation>Height of the tongue clamp lip. Affects both the lip on the tongue
+        and the matching recess in the groove for snapping together.
+      </documentation>
+      <value>0.5</value>
+    </tongueClampHeight>
+
+    <tongueClampOffset type="Decimal">
+      <documentation>Distance from the lower edge of the tongue to the lower edge of
+        the tongue clamp lip. Also affects the groove's clamp recess position.
+      </documentation>
+      <changelog>
+        <change version="3.0.0">Measurement changed from upper-edge-to-upper-edge to lower-edge-to-lower-edge.
+          This avoids needing to calculate groove depth when positioning the clamp.
+        </change>
+      </changelog>
+      <value>0.5</value>
+    </tongueClampOffset>
+
+    <tongueClampThickness type="Decimal">
+      <documentation>Thickness of the tongue clamp lip / groove recess.</documentation>
+      <value>0.1</value>
+    </tongueClampThickness>
+
+    <tongueGrooveClampOffsetClearance type="Decimal">
+      <documentation>Extra clearance in the groove before the clamp recess. In the groove,
+        both tongueClampOffset and tongueClampHeight are increased by this value,
+        so the clamp snaps more easily into the groove recess.
+        "auto" uses printerLayerHeight.
+      </documentation>
+      <since>3.0.0</since>
+      <value>0</value>
+    </tongueGrooveClampOffsetClearance>
+
+    <tongueGrooveDepthClearance type="Decimal">
+      <documentation>Additional depth clearance above the tongue inside the groove.
+        The effective groove depth = tongueHeight + tongueGrooveDepthClearance.
+        Replaces the old tongueGrooveDepth parameter.
+        "auto" uses printerLayerHeight.
+      </documentation>
+      <since>3.0.0</since>
+      <value>auto</value>
+    </tongueGrooveDepthClearance>
+
+    <tongueGrooveThicknessClearance type="Decimal">
+      <documentation>Clearance added to the groove width to allow the tongue to fit.
+        Applied to both the groove wall thickness and tongueClampThickness
+        inside the groove. Unlike tongueThicknessAdjustment (which only adjusts
+        the tongue itself and not the clamp), this parameter adjusts the groove side
+        including the clamp recess.
+        "auto" uses 0.25 * printerNozzleDiameter (minimum 0.1 mm).
+      </documentation>
+      <since>3.0.0</since>
+      <value>0.1</value>
+    </tongueGrooveThicknessClearance>
+
+    <tongueHeight type="Decimal">
+      <documentation>Height of the tongue.</documentation>
+      <value>1.25</value>
+    </tongueHeight>
+
+    <tongueOffset type="Decimal">
+      <documentation>Distance of the tongue from the side edge.
+        Corresponds to the distance of studs from the side edge.
+      </documentation>
+      <value>1</value>
+    </tongueOffset>
+
+    <tongueRoundingRadius type="type:AutoOr<RoundingRadius>">
+      <documentation>Rounding radius of the tongue. Typically derived from the block's
+        rounding radius. Usually does not need adjustment.
+      </documentation>
+      <value>auto</value>
+    </tongueRoundingRadius>
+
+    <tongueThickness type="Decimal">
+      <documentation>Thickness of the tongue.</documentation>
+      <value>0.666</value>
+    </tongueThickness>
+
+    <tongueThicknessAdjustment type="Decimal">
+      <documentation>Calibration adjustment for tongue thickness. Adjusts the thickness
+        of the tongue only (not the groove). Used when using a tongue with
+        a non-groove partner brick. Does not affect tongueClampThickness.
+        For groove clearance, use tongueGrooveThicknessClearance instead.
+      </documentation>
+      <value>0</value>
+    </tongueThicknessAdjustment>
+
+    <topPlateHeight type="Decimal">
+      <documentation>Preferred height of the top plate (upper ceiling of the base body).
+        Actual height may differ depending on baseCutoutMaxDepth and
+        recess depth. Usually does not need adjustment.
+      </documentation>
+      <since>3.0.0</since>
+      <value>1</value>
+    </topPlateHeight>
+
+    <topPlateHeightAdjustment type="Decimal">
+      <documentation>Calibration adjustment for topPlateHeight.
+        Only for calibration/printer compensation.
+      </documentation>
+      <since>3.0.0</since>
+      <value>-0.6</value>
+    </topPlateHeightAdjustment>
+
+    <topPlateHelperHeight type="Decimal">
+      <documentation>Height of one top plate helper layer. Typically matches the 3D print
+        layer height. The horizontal layer is effectively 2× this value as
+        it is printed first.
+        "auto" uses printerLayerHeight.
+      </documentation>
+      <value>0.2</value>
+    </topPlateHelperHeight>
+
+    <topPlateHelperThickness type="Decimal">
+      <documentation>Thickness of the top plate helpers in X/Y direction.
+        "auto" uses 0.5 * printerNozzleDiameter (minimum 0.1 mm).
+      </documentation>
+      <value>0.2</value>
+    </topPlateHelperThickness>
+
+    <topPlateHelpers type="Boolean">
+      <documentation>Whether top plate helpers are active. A small frame that slightly
+        widens the inner walls of the underside opening (baseCutoutType=standard).
+        Improves adhesion when printing the ceiling (top plate).
+        Two layers: horizontal (X-axis) then vertical (Y-axis).
+        Usually active, does not need adjustment.
+      </documentation>
+      <value>true</value>
+    </topPlateHelpers>
+
+    <tubeDiameter type="Decimal">
+      <documentation>Diameter of outer tubes for LEGO Technic holes.
+        Automatically calculated per axis.
+      </documentation>
+      <since>3.0.0</since>
+      <value>auto</value>
+    </tubeDiameter>
+
+    <tubeDiameterAdjustment type="type:AxisXYZ<FloatMm>">
+      <documentation>Calibration adjustment for tubeDiameter.</documentation>
+      <since>3.0.0</since>
+      <value>-0.1</value>
+    </tubeDiameterAdjustment>
+
+    <unitGridToMbu type="type:UnitGridToMbu">
+      <documentation>Grid size in mbu, representing a 1x1 plate.
+        X and Y share the first value, Z uses the second.
+        A 1x1 plate = 5×5×2 mbu = 8×8×3.2 mm at default settings.
+      </documentation>
+      <value>[5, 2]</value>
+    </unitGridToMbu>
+
+    <unitMbuToMm type="Decimal">
+      <documentation>Base unit of the MachineBlocks system in millimeters.
+        All grid-based size values are multiples of this unit.
+        Adjustment parameters are exempt (always in mm).
+      </documentation>
+      <value>1.6</value>
+    </unitMbuToMm>
+  </properties>
+
+  <aggregations>
+    <children
+      type="core:Block[]"
+      default="true" />
+  </aggregations>
+
+</block>

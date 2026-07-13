@@ -1,0 +1,83 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.bml.documentation.DefinitionModel
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <idea>Definitions describe types — the Definition branch, reflection, and definitions as Blocks.</idea>
+
+  <documentation>
+    Block definitions describe types. The Definition branch (org.blockml.bml.core.Definition) is the
+    meta-model for describing block structure in BlockML's own language — definitions are normal
+    Blocks that inherit from org.blockml.bml.core.Block like everything else.
+
+    Definition branch hierarchy:
+    • org.blockml.bml.core.Definition — abstract base; shared documentation model
+    • org.blockml.bml.definition.BlockDefinition — shape of every block document
+    • PropertyDefinition, AggregationDefinition, AssociationDefinition, CapabilityDefinition
+    • GenericTypeDefinition, ChangeDefinition, ExampleDefinition, ReferenceDefinition
+
+    org.blockml.bml.core.Definition declares:
+    • Properties: documentation, since, status
+    • Aggregations: changelog, examples, references
+
+    Definition addressing uses canonical structural paths within the Block FQN:
+    com.foo.Bar.properties.width → PropertyDefinition
+    com.foo.Bar.capabilities.render → CapabilityDefinition
+    com.foo.Bar.references → ReferenceDefinition entries
+
+    Reflection resolves these paths via structural containers at query time — no special
+    definition-reference syntax. Definition blocks may declare bml:xml for how instances
+    serialize to canonical BML XML.
+
+    Definitions as Blocks means the same parser, TypeRegistry, and validation rules apply.
+    Domain-specific definition types can extend the branch with additional Capabilities
+    (validateDefinition(), generateDocumentation()) without core changes.
+  </documentation>
+
+  <references>
+    <see file="16_framework_base_types.md">
+      Definition Branch — meta-model hierarchy, addressing, and bml:xml.
+    </see>
+    <see file="19_definition_blocks_and_bml_xml.md">
+      Definition blocks and bml:xml self-description rules (WIP).
+    </see>
+    <see file="02_mbml.md">
+      Block Definition — idea, documentation, references, examples on root blocks and members.
+    </see>
+    <see file="12_bom_object_model.md">
+      MemberDefinition, DocumentationReference — BOM reflection shapes.
+    </see>
+    <see block="core:Definition">
+      Abstract base of the Definition branch.
+    </see>
+    <see block="def:BlockDefinition">
+      Generic meta-model for block definition documents.
+    </see>
+    <see block="def:PropertyDefinition">
+      Meta-model member shape for property declarations.
+    </see>
+    <see block="def:ReferenceDefinition">
+      Meta-model for see entries inside references.
+    </see>
+    <see block="core:Block">
+      Sole inheritance root — definitions inherit like all other Blocks.
+    </see>
+    <see block="doc:TypeSystemOverview">
+      Next reading step — ValueType kinds and type expressions.
+    </see>
+  </references>
+
+  <name>DefinitionModel</name>
+  <type>doc:DefinitionModel</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

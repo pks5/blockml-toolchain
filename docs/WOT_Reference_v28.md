@@ -742,13 +742,13 @@ What a Thing can do. Every Block can have Capabilities — they are native to ev
 A Capability may have one or more implementations — in any language:
 
 ```xml
-<max type="org.blockml.capability.Transformation"
+<max type="org.blockml.bml.capability.Transformation"
      inputType="{ a: Float, b: Float }"
      outputType="Float">
-  <implementation language="org.blockml.language.TypeScript">
+  <implementation language="org.blockml.bml.language.TypeScript">
     return a > b ? a : b;
   </implementation>
-  <implementation language="org.blockml.language.English">
+  <implementation language="org.blockml.bml.language.English">
     Return the greater of a and b.
   </implementation>
 </max>
@@ -1350,7 +1350,7 @@ OOP formalised these patterns for software. BlockML formalises them for Ideas �
 
 **BlockML positions itself between natural language and programming languages** — semantically rich enough to describe Ideas precisely, structured enough to be processed deterministically by compilers. It is the shared language of humans, LLMs, and machines.
 
-*Namespace: org.blockml.* — all BlockML Core Blocks*
+*Namespace: org.blockml.bml.* — all BlockML Core Blocks*
 *Domain: blockml.org*
 
 **Two BlockML formats:**
@@ -1907,7 +1907,7 @@ Virtual      →  WorldMachine     (MBML+ → Unity/Three.js → UnityMachine)
 Knowledge    →  WCMS in Maker    (Knowledge BOM → Website/AI Context/PDF)
 ```
 
-All are based on the same BOM concept (world.wot.core.* + org.blockml.*). All have Properties · Aggregations · Associations · Capabilities. The dialect changes. The model does not.
+All are based on the same BOM concept (world.wot.core.* + org.blockml.bml.*). All have Properties · Aggregations · Associations · Capabilities. The dialect changes. The model does not.
 
 Capabilities are native to every Block — there is no separate "Service Block" type. A Block whose primary purpose is to expose Capabilities is a domain convention, not a WOT category.
 
@@ -2043,8 +2043,8 @@ MBML was developed by MachineBlocks and contributed to the Maker Universe — li
 
 MBML is a BOM dialect with its own:
 ```
-BaseTypes    →  com.machineblocks.core.Block
-Types        →  com.machineblocks.types.Size3D · Direction · Color · ...
+BaseTypes    →  com.machineblocks.bml.core.Block
+Types        →  com.machineblocks.bml.types.Size3D · Direction · Color · ...
 Block Library →  Brick · Plate · Tile · Connector · Channel · ...
 ```
 

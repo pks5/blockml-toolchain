@@ -60,7 +60,7 @@ Ordinal = index in `members[]` after mapping. Used by renderers when interpretin
 
 ### Canonical definition paths
 
-BML member containers are preserved structurally in the meta-model (`org.blockml.definition.BlockDefinition`). The BOM stores members in a flat `members[]` array tagged by `kind` (`property`, `aggregation`, `association`, `capability`). Reflection and expression evaluation resolve canonical paths via the structural containers:
+BML member containers are preserved structurally in the meta-model (`org.blockml.bml.definition.BlockDefinition`). The BOM stores members in a flat `members[]` array tagged by `kind` (`property`, `aggregation`, `association`, `capability`). Reflection and expression evaluation resolve canonical paths via the structural containers:
 
 ```text
 com.foo.Bar.properties.width   →  members[] entry where kind="property" and name="width"
@@ -104,7 +104,7 @@ When mapping an XML element to a BOM node, every attribute is classified using t
 ### Rule 1 — XML infrastructure
 
 ```text
-xmlns:bricks="com.machineblocks.bricks"   → namespaceBindings["bricks"]
+xmlns:bricks="com.machineblocks.bml.bricks"   → namespaceBindings["bricks"]
 xsi:schemaLocation="..."                  → ignored
 ```
 
@@ -186,7 +186,7 @@ Output (`BlockInstanceNode`):
 
 ```text
 instance:
-  typeFqn:     com.machineblocks.bricks.StandardBrick
+  typeFqn:     com.machineblocks.bml.bricks.StandardBrick
   version:     LiteralValue("3.0.0")
   renderGroup: "calibration"
   id:          ExpressionValue
@@ -200,7 +200,7 @@ directives:
 
 ## Type Descriptor Parsing
 
-Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`org.blockml.impl.bom.*`** — not in `org.blockml.type.*`. See `00_bom_core.md` — Implementation namespace · `17_type_system_bml.md` — Type Expressions.
+Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`@blockml/parser`** BOM interfaces — not in `org.blockml.bml.type.*`. See `00_bom_core.md` — Mandatory BML namespace · `17_type_system_bml.md` — Type Expressions.
 
 Unqualified PascalCase names on `type="..."` (properties, aggregations, capabilities) and unqualified composition tags use the **Unqualified Block Resolution** order (see `02_mbml.md` — § Unqualified Block Resolution):
 
@@ -208,17 +208,17 @@ Unqualified PascalCase names on `type="..."` (properties, aggregations, capabili
 1. Own Block name → root BlockDefinition.type FQN
 2. SubBlocks (document scope + baseType-inherited)
 3. genericTypes[] of root BlockDefinition
-4. Core primitives whitelist: Text · Float · Integer · Decimal · Boolean → org.blockml.type.*
+4. Core primitives whitelist: Text · Float · Integer · Decimal · Boolean → org.blockml.bml.type.*
 5. xmlns prefix
 6. TypeRegistry NamedTypeReference
 ```
 
 ```text
-<aggregation type="bcore:BlockLibrary[]" .../>   on org.blockml.core.BlockLibrary
-  → NamedTypeReference { fqn: "org.blockml.core.BlockLibrary" }
+<aggregation type="bcore:BlockLibrary[]" .../>   on org.blockml.bml.core.BlockLibrary
+  → NamedTypeReference { fqn: "org.blockml.bml.core.BlockLibrary" }
 
 inputType="Float"
-  → NamedTypeReference { fqn: "org.blockml.type.Float" }
+  → NamedTypeReference { fqn: "org.blockml.bml.type.Float" }
 
 inputType="{ a: Float, b: Float }"
   → AnonymousStructType {
@@ -248,9 +248,9 @@ Parse failure → `BML_UNKNOWN_TYPE`.
 Child of `<capability>`. Maps to `CapabilityDefinition.implementation`:
 
 ```text
-<implementation type="org.blockml.language.TypeScript"><![CDATA[ ... ]]></implementation>
+<implementation type="org.blockml.bml.language.TypeScript"><![CDATA[ ... ]]></implementation>
   → ImplementationBlock {
-       typeFqn: "org.blockml.language.TypeScript",
+       typeFqn: "org.blockml.bml.language.TypeScript",
        source: CDATA body (trimmed)
      }
 ```
@@ -258,13 +258,13 @@ Child of `<capability>`. Maps to `CapabilityDefinition.implementation`:
 Rules:
 
 ```text
-type attribute   — required; must be org.blockml.language.* FQN (not a language= shorthand)
+type attribute   — required; must be org.blockml.bml.language.* FQN (not a language= shorthand)
 Missing type     → BML_MISSING_IMPLEMENTATION_TYPE (error)
 Unknown type FQN → BML_IMPLEMENTATION_UNKNOWN_TYPE (error)
 Unsupported type → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseType languages)
 ```
 
-V1 known types: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`.
+V1 known types: `org.blockml.bml.language.TypeScript`, `org.blockml.bml.language.OpenSCAD`.
 
 ### Type modifiers
 
@@ -329,7 +329,7 @@ generic parameter element name equals Block <name>         → BML_GENERIC_BLOCK
 generic parameter element name equals Sub-Block <name>     → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
 Unqualified Sub-Block reference outside file → BML_SUBBLOCK_UNQUALIFIED_REFERENCE (error)
 Ambiguous Sub-Block short name (same as root) → BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED (error)
-org.blockml.core.Block                   → omits <baseType> (sole inheritance root)
+org.blockml.bml.core.Block                   → omits <baseType> (sole inheritance root)
 ```
 
 ValueType BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<_values><composition>…</composition></_values>`; generic Blocks declare parameters via `<genericTypes>`. Branch-specific validation — see `17_type_system_bml.md`.
@@ -360,14 +360,14 @@ Legacy `namespace="…"` attribute on member elements → **`BML_DEPRECATED_MEMB
 
 ```text
 Implicit default (no declaration anywhere in chain from root):
-  effective status = org.blockml.status.Stable
+  effective status = org.blockml.bml.status.Stable
 
 Walk element tree depth-first.
-Root (no parent) effective status     →  org.blockml.status.Stable (when omitted)
+Root (no parent) effective status     →  org.blockml.bml.status.Stable (when omitted)
 Element with declared statusFqn         →  declared value becomes effective for subtree
 Element without declaration             →  effective status = parent's effective status
 
-Authored:  <status>status:Draft</status>     xmlns:status="org.blockml.status"
+Authored:  <status>status:Draft</status>     xmlns:status="org.blockml.bml.status"
            bml:status="status:Deprecated"    (only when ≠ inherited)
 
 BOM:       statusFqn on node (explicit only) + resolved effectiveStatusFqn at validate
@@ -427,10 +427,10 @@ valueRequired="true|false" → valueRequired (boolean; default false)
 Each child element inside `<constraints>` is mapped as a `BlockInstance`. The element name resolves to a Block FQN via namespace prefix (same rules as composition children). Stage [8] validates:
 
 ```text
-instance.typeFqn baseType chain includes org.blockml.core.Constraint
+instance.typeFqn baseType chain includes org.blockml.bml.core.Constraint
 generic T bound to property type (or element/collection type per constraint definition)
 constraint instance member values match bound generic T
-validation reference (when present) resolves to org.blockml.core.Validation sub-type
+validation reference (when present) resolves to org.blockml.bml.core.Validation sub-type
 property value satisfies constraint semantics only when validation is present and understood
 ```
 
@@ -550,8 +550,8 @@ Before validating or compiling a file that references external types, the orches
 
 ```text
 1. Pre-register framework BML (fixed paths — see 16_framework_base_types.md)
-     @blockml/core/blocks        →  org.blockml.core.*, org.blockml.service.*
-     @machineblocks/mbom/blocks  →  com.machineblocks.core.*
+     @blockml/core/blocks        →  org.blockml.bml.core.*, org.blockml.bml.service.*
+     @machineblocks/mbom/blocks  →  com.machineblocks.bml.core.*
 
 2. Discover BML sources
      Project srcDir scan     →  all *.bml
@@ -576,7 +576,7 @@ Stage [5] output — no file load:
 
 ```text
 BlockInstance:
-  typeFqn:  com.machineblocks.bricks.StandardBrick
+  typeFqn:  com.machineblocks.bml.bricks.StandardBrick
   version:  undefined | "3.0.0"   ← optional; omitted = resolve from registry context at stage [8]
   memberValues: { id, size }
 ```
@@ -585,11 +585,11 @@ Stage [8] lookup:
 
 ```typescript
 // version omitted — resolve from registry context (library bootstrap)
-registry.getBlockDefinition("com.machineblocks.bricks.StandardBrick")
+registry.getBlockDefinition("com.machineblocks.bml.bricks.StandardBrick")
   → BlockDefinition | undefined
 
 // version present — exact assert
-registry.getBlockDefinition("com.machineblocks.bricks.StandardBrick", "3.0.0")
+registry.getBlockDefinition("com.machineblocks.bml.bricks.StandardBrick", "3.0.0")
   → BlockDefinition | undefined
   → undefined → BML_UNKNOWN_VERSION
 ```
@@ -662,13 +662,13 @@ BML_READONLY_MEMBER_WRITE         — Block instance sets a member with readOnly
 
 ### Library blocks
 
-Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.core.BlockLibrary`. Composition children:
+Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.bml.core.BlockLibrary`. Composition children:
 
 ```text
-<blockml:Library />                        → BlockInstance { typeFqn: "org.blockml.Library" }  — no bml:version
-<Schema ref="bricks.xsd"/>                 → org.blockml.core.BlockLibrary.Schema (short name)
-<type:Size3d />                             → BlockInstance { typeFqn: "com.machineblocks.type.Size3d" }
-<bricks:Wall />                             → BlockInstance { typeFqn: "com.machineblocks.bricks.Wall" }
+<blockml:Library />                        → BlockInstance { typeFqn: "org.blockml.bml.Library" }  — no bml:version
+<Schema ref="bricks.xsd"/>                 → org.blockml.bml.core.BlockLibrary.Schema (short name)
+<type:Size3d />                             → BlockInstance { typeFqn: "com.machineblocks.bml.type.Size3d" }
+<bricks:Wall />                             → BlockInstance { typeFqn: "com.machineblocks.bml.bricks.Wall" }
 <bricks:WallPresets />                      → preset block via _blocks
 ```
 

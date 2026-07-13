@@ -1,0 +1,68 @@
+<!--
+  BlockML Core — README / bootstrap entry point
+
+  FQN: org.blockml.bml.README
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <idea>README block for the BlockML core library — bootstrap entry point for humans and LLMs.</idea>
+
+  <documentation>
+    README block for the BlockML core library. Start with readFirst — seventeen documentation
+    blocks in mental learning order. The first ten blocks form the BlockML bootstrap: after
+    reading them, most of the core library can be derived from Block definitions themselves.
+    Later blocks cover conventions, organisation, and background knowledge.
+  </documentation>
+
+  <references>
+    <see block="core:Bootstrap">
+      Abstract base — readFirst aggregation for bootstrap README blocks.
+    </see>
+    <see block="blockml:Library">
+      Published catalog of exported framework blocks, types, and services.
+    </see>
+    <see block="doc:Introduction">
+      First readFirst entry — goals and overview of BlockML.
+    </see>
+    <see file="01_system.md">
+      System architecture and package overview.
+    </see>
+  </references>
+
+  <name>README</name>
+  <type>blockml:README</type>
+  <baseType>core:Bootstrap</baseType>
+  <abstract />
+
+  <aggregations>
+    <readFirst>
+      <composition>
+        <doc:Introduction />
+        <doc:EverythingIsABlock />
+        <doc:BlockAndInstance />
+        <doc:DefinitionModel />
+        <doc:TypeSystemOverview />
+        <doc:ValueTypeConfiguration />
+        <doc:CapabilitySemantics />
+        <doc:Expressions />
+        <doc:CompilerArchitecture />
+        <doc:RendererFreedom />
+        <doc:LibrarySystem />
+        <doc:BmlNamespace />
+        <doc:DocumentationModel />
+        <doc:BootstrapModel />
+        <doc:ModelingGuidelines />
+        <doc:PseudoCode />
+        <doc:WOTFoundation />
+      </composition>
+    </readFirst>
+  </aggregations>
+
+</block>

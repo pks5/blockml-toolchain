@@ -1,0 +1,21 @@
+<!--
+  BlockML Core — error validation
+
+  FQN: org.blockml.bml.validation.Error
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:validation="org.blockml.bml.validation">
+
+  <idea>Constraint violation must fail compilation.</idea>
+
+  <documentation>When a constraint with validation="validation:Error" is violated, the BlockML
+    validator emits BML_CONSTRAINT_VIOLATION and compilation fails.</documentation>
+  <name>Error</name>
+  <type>validation:Error</type>
+  <baseType>core:Validation</baseType>
+</block>

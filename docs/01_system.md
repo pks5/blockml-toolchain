@@ -115,7 +115,7 @@ See `15_dev_setup.md` for workspace configuration, build scripts, and implementa
 ```text
 bom-compiler/
   packages/
-    core/              — @blockml/core (framework BML: org.blockml.core.*, org.blockml.service.*)
+    core/              — @blockml/core (framework BML: org.blockml.bml.core.*, org.blockml.bml.service.*)
     parser/            — @blockml/parser
     compiler/          — @blockml/compiler (Rahmen + Target Registry)
     cli-tools/         — @blockml/cli
@@ -125,8 +125,8 @@ bom-compiler/
 
   domains/
     machineblocks/
-      mbom/            — @machineblocks/mbom (framework BML: com.machineblocks.core.*)
-        blocks/com/machineblocks/core/
+      mbom/            — @machineblocks/mbom (framework BML: com.machineblocks.bml.core.*)
+        blocks/com/machineblocks/bml/core/
       machineblocks-v3-scad-target/
         src/
           target.ts
@@ -172,36 +172,36 @@ New engines can always be built as independent packages. Each implements the Com
 
 ### Built-in service Definitions
 
-Built-in services (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML service files in `@blockml/core` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
+Built-in services (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML service files in `@blockml/core` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/bml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 The library follows Thymeleaf's `#` utility object naming — plural for utilities (`#strings`, `#lists`, …), extended with `#math` which Thymeleaf does not provide.
 
 ```text
 packages/core/
   blocks/
-    org/blockml/core/
-      Entity.bml         ← org.blockml.core.Entity
-      Language.bml       ← org.blockml.core.Language
-      ProgrammingLanguage.bml ← org.blockml.core.ProgrammingLanguage
-    org/blockml/language/
+    org/blockml/bml/core/
+      Entity.bml         ← org.blockml.bml.core.Entity
+      Language.bml       ← org.blockml.bml.core.Language
+      ProgrammingLanguage.bml ← org.blockml.bml.core.ProgrammingLanguage
+    org/blockml/bml/language/
       TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
-    org/blockml/service/
-      Math.bml           ← org.blockml.service.Math      — #math.*
-      Strings.bml        ← org.blockml.service.Strings   — #strings.*
-      Numbers.bml        ← org.blockml.service.Numbers   — #numbers.*
-      Lists.bml          ← org.blockml.service.Lists     — #lists.*
-      Bools.bml          ← org.blockml.service.Bools     — #bools.*
+    org/blockml/bml/service/
+      Math.bml           ← org.blockml.bml.service.Math      — #math.*
+      Strings.bml        ← org.blockml.bml.service.Strings   — #strings.*
+      Numbers.bml        ← org.blockml.bml.service.Numbers   — #numbers.*
+      Lists.bml          ← org.blockml.bml.service.Lists     — #lists.*
+      Bools.bml          ← org.blockml.bml.service.Bools     — #bools.*
 ```
 
 **Naming mapping** (package segment `.service` is singular; utility names follow Thymeleaf):
 
 ```text
 # prefix (authoring)     Service FQN                  BML file
-#math.*                  org.blockml.service.Math           Math.bml
-#strings.*               org.blockml.service.Strings        Strings.bml
-#numbers.*               org.blockml.service.Numbers        Numbers.bml
-#lists.*                 org.blockml.service.Lists          Lists.bml
-#bools.*                 org.blockml.service.Bools          Bools.bml
+#math.*                  org.blockml.bml.service.Math           Math.bml
+#strings.*               org.blockml.bml.service.Strings        Strings.bml
+#numbers.*               org.blockml.bml.service.Numbers        Numbers.bml
+#lists.*                 org.blockml.bml.service.Lists          Lists.bml
+#bools.*                 org.blockml.bml.service.Bools          Bools.bml
 ```
 
 BML files are **SSOT**. SCAD files in scad-lib are pre-rendered compile artifacts — not hand-edited.
@@ -217,7 +217,7 @@ All Transformation Capabilities use structured Object `inputType` with named key
 #numbers.formatDecimal → inputType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }, outputType: String
 ```
 
-Each Capability has a TypeScript implementation in `<implementation type="org.blockml.language.TypeScript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
+Each Capability has a TypeScript implementation in `<implementation type="org.blockml.bml.language.TypeScript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/bml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
 
 ### Delegate-Only Targets
 
@@ -254,12 +254,12 @@ BML uses XSD schemas for IDE validation, autocomplete, and Enum enforcement. Sch
 BlockML Core (blockml.org):
   http://blockml.org/schema/block      ← default xmlns for <block> documents
   http://blockml.org/schema/bml        ← bml: directives namespace
-  http://blockml.org/schema/service    ← org.blockml.service.*
+  http://blockml.org/schema/service    ← org.blockml.bml.service.*
 
 MachineBlocks (machineblocks.com):
   http://machineblocks.com/schema/core        ← MB Core, NativeBlock, Set
-  http://machineblocks.com/schema/bricks      ← com.machineblocks.bricks.*
-  http://machineblocks.com/schema/calibration ← com.machineblocks.calibration.*
+  http://machineblocks.com/schema/bricks      ← com.machineblocks.bml.bricks.*
+  http://machineblocks.com/schema/calibration ← com.machineblocks.bml.calibration.*
 ```
 
 ### Schema Files
@@ -268,14 +268,14 @@ MachineBlocks (machineblocks.com):
 blockml.org schemas (in @blockml/core package):
   schemas/core/
     block.xsd          ← BML document structure (all <block> roots: composable, types, Library, …)
-    types.xsd          ← org.blockml.type.* primitives (filename plural; maps to singular .type package)
-    service.xsd        ← org.blockml.service.* hierarchy
+    types.xsd          ← org.blockml.bml.type.* primitives (filename plural; maps to singular .type package)
+    service.xsd        ← org.blockml.bml.service.* hierarchy
 
 machineblocks.com schemas (in @machineblocks/mbom package):
   schemas/machineblocks/
     core.xsd           ← MB Core Block, NativeBlock, Set, native properties
-    bricks.xsd         ← com.machineblocks.bricks.* + Enum types
-    calibration.xsd    ← com.machineblocks.calibration.*
+    bricks.xsd         ← com.machineblocks.bml.bricks.* + Enum types
+    calibration.xsd    ← com.machineblocks.bml.calibration.*
     anyclosure.xsd     ← com.martianmicro.anyclosure.*
 ```
 
@@ -371,7 +371,7 @@ The MachineBlocks domain BOM. Browser and Node compatible.
 - MBOM Block class (extends BOM Core Block)
 - MachineBlocks-specific member types (Size3D, Direction, WallGap, Color, ...)
 - Native property definitions (from 09_mbom_properties.yml)
-- `com.machineblocks.core.Block` type definition — including inherited `_parts` aggregation
+- `com.machineblocks.bml.core.Block` type definition — including inherited `_parts` aggregation
 - No SCAD logic, no Node-only APIs
 ```
 
@@ -380,7 +380,7 @@ The MachineBlocks domain BOM. Browser and Node compatible.
 The MachineBlocks V3 SCAD Render Target. Browser and Node compatible. Registers under the name `"machineblocks-v3-scad"`.
 
 ```text
-- Atomic Target: registers for com.machineblocks.core.Block and com.machineblocks.core.Set
+- Atomic Target: registers for com.machineblocks.bml.core.Block and com.machineblocks.bml.core.Set
 - Block Renderer: MBOM Block → SCAD module (V1: one generic renderer for all MB Blocks)
 - Set Renderer: MBOM Set → STEPS array + view submodules
 - Module name resolver (FQN → mb__com__...)
@@ -397,29 +397,32 @@ The MachineBlocks V3 SCAD Render Target. Browser and Node compatible. Registers 
 
 ## Naming Conventions
 
-### FQN Namespaces — Blocks vs. Implementation
+### FQN Namespaces — Mandatory `bml` package
 
-Each root domain defines two clearly separated roots: `<domain>.*` for BML Blocks and `<domain>.impl.*` for manifestations and toolchain code. See `00_bom_core.md` — Domain-Scoped Namespace Separation.
+Every BML definition must reside under `<domain>.bml.*`. See `00_bom_core.md` — Mandatory BML namespace.
 
 ```text
-Block namespace:            org.blockml.* · com.machineblocks.* · …
-Implementation namespace:   org.blockml.impl.* · com.machineblocks.impl.* · …
+org.blockml.bml.*           — BlockML framework and compiler Blocks
+com.machineblocks.bml.*     — MachineBlocks domain Blocks
+com.example.bml.*           — any domain's BML definitions
 
-Examples (org.blockml):
-  Blocks:           org.blockml.core.Block · org.blockml.compiler.parser.Parser
-  Implementation:   org.blockml.impl.bom.BlockDefinition · org.blockml.impl.frontend.XmlFrontend
+Examples:
+  org.blockml.bml.core.Block
+  org.blockml.bml.compiler.parser.Parser
+  com.machineblocks.bml.core.Block
+  com.machineblocks.bml.bricks.StandardBrick
 ```
 
-No Block FQN, xmlns binding, or Library export may use `<domain>.impl.*` → `BML_RESERVED_IMPLEMENTATION_NAMESPACE`.
+Block FQN, xmlns binding, or Library export outside `<domain>.bml.*` → `BML_OUTSIDE_BML_NAMESPACE`.
 
 ### FQN (Fully Qualified Name)
 
 All BOM types use Java-style reverse-domain FQNs with dot separators:
 
 ```text
-org.blockml.core.Block
-com.machineblocks.core.Block
-com.machineblocks.bricks.StandardBrick
+org.blockml.bml.core.Block
+com.machineblocks.bml.core.Block
+com.machineblocks.bml.bricks.StandardBrick
 com.martianmicro.anyclosure.Wall
 com.electronics.core.Component
 ```
@@ -496,14 +499,14 @@ src/                          — BML source files (configurable via srcDir)
     Wall.bml                    — block definition (.bml = standard)
     WallPresets.bml             — block presets
 
-  com/machineblocks/bricks/     — MachineBlocks library
+  com/machineblocks/bml/bricks/     — MachineBlocks library
     StandardBrick.bml
     StandardBrickSet.bml
     StandardBrickPresets.bml
 ```
 
 scad/                         — SCAD output files (configurable via outDir)
-  com/machineblocks/bricks/
+  com/machineblocks/bml/bricks/
     StandardBrick.scad        — compiled block
     StandardBrick.scad.map    — source map
     StandardBrick.json        — compiled presets (OpenSCAD Customizer format)
@@ -531,9 +534,9 @@ The root element of the BML file determines the document type — not the filena
                            scad/com/.../ReferencedBlock__{preset-id}.webp  (one thumbnail per preset)
 ```
 
-Compiling a preset block (`baseType = com.machineblocks.core.Block` with `_presets` composition) is a standard entry point when generating Customizer output. It triggers implicit compilation of referenced block types and produces all artifacts in one step.
+Compiling a preset block (`baseType = com.machineblocks.bml.core.Block` with `_presets` composition) is a standard entry point when generating Customizer output. It triggers implicit compilation of referenced block types and produces all artifacts in one step.
 
-A MachineBlocks Set is a `<block>` document with `baseType = com.machineblocks.core.Set`. The SCAD Renderer detects this and produces STEPS-based output.
+A MachineBlocks Set is a `<block>` document with `baseType = com.machineblocks.bml.core.Set`. The SCAD Renderer detects this and produces STEPS-based output.
 
 ---
 
@@ -600,7 +603,7 @@ This resolution is implemented in `@blockml/cli` as `resolveMbLib.ts`.
 
 Config profiles are project-wide property presets that define hardware-specific or rendering-specific defaults (printer calibration, filament shrinkage, scale, etc.).
 
-They are preset blocks (`baseType="com.machineblocks.core.Block"` with `_presets` composition) and share the same property namespace as block properties.
+They are preset blocks (`baseType="com.machineblocks.bml.core.Block"` with `_presets` composition) and share the same property namespace as block properties.
 
 ```text
 config/prusa_pla.bml    — printer + filament profile
@@ -677,7 +680,7 @@ Rules:
 ```text
 Pipeline · Stage · Validator · Diagnostic · RenderTarget
 BlockProcessor · RenderEngine · CliCommand
-org.blockml.definition.* · bml:xml meta-serializer   ← see 19_definition_blocks_and_bml_xml.md
+org.blockml.bml.definition.* · bml:xml meta-serializer   ← see 19_definition_blocks_and_bml_xml.md
 ```
 
 During migration, content is classified as: stays prose · becomes BML · removed from Markdown (link only) · temporarily duplicated.
@@ -730,7 +733,7 @@ domains/machineblocks/runtimes/scad-lib/
   config/              — mb_config.scad
   docs/                — SCAD API reference (used by machineblocks-v3-scad-target)
   blocks/              — pre-rendered reference Blocks
-    com/machineblocks/
+    com/machineblocks/bml/
       bricks/          — StandardBrick.scad, StandardBrick.json, thumbnails, ...
       ...
 ```

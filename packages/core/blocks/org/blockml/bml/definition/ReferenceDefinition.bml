@@ -1,0 +1,57 @@
+<!--
+  BlockML Definition — cross-reference meta-model type
+
+  FQN: org.blockml.bml.definition.ReferenceDefinition
+  Declared on org.blockml.bml.core.Definition as the references aggregation.
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea>A cross-reference to a related Block, definition element, or documentation source.</idea>
+
+  <documentation>Records a link from documentation metadata to another Block, definition element,
+    repository markdown file, or external URL. Rendered as a see element inside the references
+    container on any org.blockml.bml.core.Definition (alongside changelog and examples).</documentation>
+
+  <references>
+    <see file="02_mbml.md">
+      Authoring rules for see elements — block, file, and url attributes.
+    </see>
+    <see file="16_framework_base_types.md">
+      Definition branch — ReferenceDefinition meta-model shape.
+    </see>
+  </references>
+
+  <name>ReferenceDefinition</name>
+  <type>def:ReferenceDefinition</type>
+  <baseType>core:Definition</baseType>
+  <!-- Cross-references render as <see> elements inside <references>. -->
+  <bml:xml>see</bml:xml>
+
+  <properties>
+    <block type="btype:FullyQualifiedName(core:Block, core:Definition)" bml:xml="attribute">
+      <documentation>Block or Definition reference via xmlns prefix (e.g. core:Block). Resolved to
+        FQN at parse time. Mutually exclusive with file and url — exactly one target attribute must
+        be set.</documentation>
+    </block>
+    <file type="Text" bml:xml="attribute">
+      <documentation>Repository documentation file (e.g. 02_mbml.md). Mutually exclusive with block
+        and url — exactly one target attribute must be set.</documentation>
+    </file>
+    <url type="Text" bml:xml="attribute">
+      <documentation>External URL. Mutually exclusive with block and file — exactly one target
+        attribute must be set.</documentation>
+    </url>
+    <context type="Text" bml:xml="text">
+      <documentation>Human-readable explanation of why or how the referenced element relates to
+        this definition. Required on every see entry.</documentation>
+    </context>
+  </properties>
+</block>

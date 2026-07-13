@@ -1,0 +1,39 @@
+<!--
+  BlockML Core — constraint branch
+
+  FQN: org.blockml.bml.core.Constraint
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core">
+
+  <idea>Semantic restriction or recommendation attached to a property.</idea>
+
+  <documentation>Abstract branch for property constraints. Each concrete constraint extends this
+    type and declares its own properties. Generic parameter T is bound automatically to the property
+    type (or element type for collection constraints) at validate time — authors never specify the
+    type argument in BML. Constraints describe the condition only. Whether BlockML enforces a
+    constraint is controlled by the optional validation property, which references an
+    org.blockml.bml.core.Validation block. When validation is omitted, the BlockML validator ignores the
+    constraint — it remains metadata for renderers, editors, runtimes, and custom validators.</documentation>
+  <name>Constraint</name>
+  <type>core:Constraint</type>
+  <baseType>core:Block</baseType>
+  <abstract />
+
+  <genericTypes>
+    <T baseType="core:ValueType" />
+  </genericTypes>
+
+  <properties>
+    <validation type="core:Validation">
+      <documentation>How the BlockML validator should report a violation of this constraint.
+        When omitted, the validator ignores the constraint. The constraint remains part of the BOM
+        and is available to renderers, editors, runtimes, and custom validators.</documentation>
+    </validation>
+  </properties>
+
+</block>

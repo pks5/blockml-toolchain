@@ -9,7 +9,7 @@ This document specifies how function-parameter syntax maps to Capability `inputT
 For StructType definition see `17_type_system_bml.md` — StructType.
 For expression syntax see `10_expression_language.md`.
 For BOM representation see `12_bom_object_model.md`.
-For framework BML types see `packages/core/blocks/org/blockml/core/Mapping.bml` and `org/blockml/mapping/FunctionMapping.bml`.
+For framework BML types see `packages/core/blocks/org/blockml/bml/core/Mapping.bml` and `org/blockml/bml/mapping/FunctionMapping.bml`.
 
 ---
 
@@ -32,8 +32,8 @@ For cases where an ordered external parameter representation must map onto a Blo
 
 | Block | FQN | Role |
 |---|---|---|
-| **Mapping** | `org.blockml.core.Mapping` | Abstract base — describes value transfer between representations |
-| **FunctionMapping** | `org.blockml.mapping.FunctionMapping` | Concrete mapping between function parameters and Capability types |
+| **Mapping** | `org.blockml.bml.core.Mapping` | Abstract base — describes value transfer between representations |
+| **FunctionMapping** | `org.blockml.bml.mapping.FunctionMapping` | Concrete mapping between function parameters and Capability types |
 
 Mapping is **not** a property of StructType. It belongs at the site where a function-like representation is used.
 
@@ -174,7 +174,7 @@ BlockML Collection  → variadic function parameters
 
 When default FunctionMapping rules are insufficient, the implementation must declare an explicit `FunctionMapping` child. Missing mapping when required: `BML_MISSING_FUNCTION_MAPPING`.
 
-Built-in services (`org.blockml.service.Math`, etc.) use the default FunctionMapping unless overridden.
+Built-in services (`org.blockml.bml.service.Math`, etc.) use the default FunctionMapping unless overridden.
 
 ---
 

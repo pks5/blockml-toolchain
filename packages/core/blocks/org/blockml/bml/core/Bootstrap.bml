@@ -1,0 +1,27 @@
+<!--
+  BlockML Core — Language branch (capability implementation contract)
+
+  FQN: org.blockml.bml.core.Language
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core">
+
+  <idea>Abstract base type for all BootstrapBase blocks.</idea>
+
+  <documentation>Abstract base type for all BootstrapBase blocks.</documentation>
+  <name>Bootstrap</name>
+  <type>core:Bootstrap</type>
+  <baseType>core:Block</baseType>
+  <abstract />
+
+  <aggregations>
+    <readFirst type="core:Documentation[]">
+      <documentation>A list of documentation blocks that are read first.</documentation>
+    </readFirst>
+  </aggregations>
+
+</block>

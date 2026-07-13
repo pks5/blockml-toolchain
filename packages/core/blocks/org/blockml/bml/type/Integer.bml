@@ -1,0 +1,27 @@
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core">
+
+  <idea>Primitive BlockML property type capable of holding a whole number.</idea>
+
+  <documentation>BOM Core primitive ValueType for whole numbers. Unqualified name Integer resolves
+    to org.blockml.bml.type.Integer. Extends org.blockml.bml.type.Number. Payload values are stored on
+    Properties — not on the Integer type itself.
+
+    Optional configuration Properties (min, max) configure a Property's owned Integer instance via
+    inline type syntax — Integer{min=0, max=100}. Positional order: min, max. See
+    20_value_type_instance_configuration.md.</documentation>
+  <name>Integer</name>
+  <type>Integer</type>
+  <baseType>btype:Number</baseType>
+
+  <properties>
+    <min type="Integer">
+      <documentation>Minimum allowed value (inclusive). Configured via Integer{min=n}.</documentation>
+    </min>
+    <max type="Integer">
+      <documentation>Maximum allowed value (inclusive). Configured via Integer{max=n}.</documentation>
+    </max>
+  </properties>
+</block>

@@ -1,0 +1,18 @@
+<!--
+  BlockML Core — PseudoCode implementation language
+
+  FQN: org.blockml.bml.language.PseudoCode
+-->
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language">
+
+  <idea>Free-form pseudocode as an implementation language for capabilities.</idea>
+
+  <documentation>ProgrammingLanguage for free-form pseudocode implementations. The code must be
+    internally consistent but is otherwise unconstrained — an LLM may interpret it.</documentation>
+  <name>PseudoCode</name>
+  <type>lang:PseudoCode</type>
+  <baseType>lang:ProgrammingLanguage</baseType>
+</block>

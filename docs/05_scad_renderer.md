@@ -24,11 +24,11 @@ The target uses `@blockml/engine-maker` (**MakerEngine**) as its CompilerEngine 
 The MachineBlocks V3 SCAD Target V1 supports exactly two base types:
 
 ```text
-com.machineblocks.core.Block  →  ScadBlockProcessor  (standard SCAD block module)
-com.machineblocks.core.Set    →  ScadSetProcessor    (STEPS-based set with view submodules)
+com.machineblocks.bml.core.Block  →  ScadBlockProcessor  (standard SCAD block module)
+com.machineblocks.bml.core.Set    →  ScadSetProcessor    (STEPS-based set with view submodules)
 ```
 
-All user-defined Block types that inherit from `com.machineblocks.core.Block` or `com.machineblocks.core.Set` are handled by the same two processors respectively.
+All user-defined Block types that inherit from `com.machineblocks.bml.core.Block` or `com.machineblocks.bml.core.Set` are handled by the same two processors respectively.
 
 ### Renderer output — MachineBlocks convention
 
@@ -60,14 +60,14 @@ class MachineBlocksV3ScadTarget implements RenderTarget {
 
   processors = [
     new ScadSetProcessor(),    // checked first — more specific
-    new ScadBlockProcessor()   // fallback for all com.machineblocks.core.Block
+    new ScadBlockProcessor()   // fallback for all com.machineblocks.bml.core.Block
   ]
 
   delegates = []
 }
 ```
 
-`isSubtypeOf` traverses the `baseType` chain in the BOM type registry. A Block whose `baseType` chain does not include `com.machineblocks.core.Block` is not supported by this Target — the compiler emits `BML_NO_TARGET` for that Block.
+`isSubtypeOf` traverses the `baseType` chain in the BOM type registry. A Block whose `baseType` chain does not include `com.machineblocks.bml.core.Block` is not supported by this Target — the compiler emits `BML_NO_TARGET` for that Block.
 
 ---
 
@@ -162,7 +162,7 @@ include <{relative_path_to_scad-lib}/config/mb_config.scad>;
 
 Ordinary Composite Block compositions render leaf instances as **`mb_block()`** (NativeBlock) — no `use` import of dependency block SCAD files. See `14_compiler_runtime.md` — NativeBlock Render Model.
 
-For **Sets** (`com.machineblocks.core.Set`), `_parts` palette entries may reference typed block modules by `blockId`. In that case the Set renderer generates `use` imports for the referenced block SCAD files:
+For **Sets** (`com.machineblocks.bml.core.Set`), `_parts` palette entries may reference typed block modules by `blockId`. In that case the Set renderer generates `use` imports for the referenced block SCAD files:
 
 ```scad
 use <../wall/Wall.scad>;
@@ -176,14 +176,14 @@ Set `_parts` dispatch is specified separately when Set MBML examples are availab
 When a Block's expressions reference `#built-in` calls, the processor automatically adds `use` imports for the required service files. The import is only added when the service is actually used:
 
 ```scad
-use <{relative_path_to_scad-lib}/blocks/org/blockml/service/Math.scad>;
-use <{relative_path_to_scad-lib}/blocks/org/blockml/service/Strings.scad>;
+use <{relative_path_to_scad-lib}/blocks/org/blockml/bml/service/Math.scad>;
+use <{relative_path_to_scad-lib}/blocks/org/blockml/bml/service/Strings.scad>;
 ```
 
-Built-in service files live under `scad-lib/blocks/org/blockml/service/` — the same `blocks/` structure as all other pre-rendered blocks, following the FQN package convention:
+Built-in service files live under `scad-lib/blocks/org/blockml/bml/service/` — the same `blocks/` structure as all other pre-rendered blocks, following the FQN package convention:
 
 ```text
-scad-lib/blocks/org/blockml/service/
+scad-lib/blocks/org/blockml/bml/service/
   Math.scad
   Math.scad
   Strings.scad
@@ -210,7 +210,7 @@ machineblocks-v3-scad-target/
 
 ```json
 {
-  "org.blockml.service.Math": {
+  "org.blockml.bml.service.Math": {
     "min":     { "native": "min",   "arity": 2 },
     "max":     { "native": "max",   "arity": 2 },
     "floor":   { "native": "floor", "arity": 1 },
@@ -222,7 +222,7 @@ machineblocks-v3-scad-target/
     "round_n": { "native": null },
     "clamp":   { "native": null }
   },
-  "org.blockml.service.Strings": {
+  "org.blockml.bml.service.Strings": {
     "length":  { "native": "len",   "arity": 1 },
     "concat":  { "native": "str",   "arity": -1 }
   }
@@ -244,7 +244,7 @@ For each `#built-in` call in a Block's expressions or SCAD implementations:
 #math.round_n(x, 1)
   → native: null
   → emit: bom__org__blockml__service__Math__round_n(x, 1)
-  → add:  use <.../blocks/org/blockml/service/Math.scad>
+  → add:  use <.../blocks/org/blockml/bml/service/Math.scad>
 
 #strings.length(s)
   → native mapping found: len(s)        → emit directly, no import needed
@@ -531,7 +531,7 @@ These are emitted as SCAD local variables inside the wrapper `mb_block()` childr
 
 ## ScadBlockRenderer — Leaf-Only Block Optimization
 
-Some Block types are effectively a **single NativeBlock** — all properties map 1:1 to native MB settings, no Sub-Blocks, no multi-child composition (e.g. `com.machineblocks.bricks.Standard`).
+Some Block types are effectively a **single NativeBlock** — all properties map 1:1 to native MB settings, no Sub-Blocks, no multi-child composition (e.g. `com.machineblocks.bml.bricks.Standard`).
 
 For **standalone compile** of such blocks, the processor emits a **direct `mb_block()` main call** with Customizer variables as settings — no typed wrapper module, no `mb_param_*` extraction layer:
 
@@ -632,7 +632,7 @@ module mb__com__martianmicro__anyclosure__Wall(config = undef, settings = undef)
 
 ## ScadSetRenderer — Set Rendering
 
-A MBOM Block whose `baseType` chain includes `com.machineblocks.core.Set` is rendered by `ScadSetRenderer` as a SCAD file with a STEPS array and four view submodules.
+A MBOM Block whose `baseType` chain includes `com.machineblocks.bml.core.Set` is rendered by `ScadSetRenderer` as a SCAD file with a STEPS array and four view submodules.
 
 A MachineBlocks Set uses three conventional Aggregations — `_presets` and `_parts` inherited from the base type chain, `_steps` declared on Set:
 
@@ -811,7 +811,7 @@ Nested NativeBlocks or other Blocks within a Composition are true instances — 
 
 ## Preset Block Rendering (MachineBlocks)
 
-A preset block (e.g. `com.machineblocks.bricks.StandardPresets` with `_presets` composition) may be rendered to an OpenSCAD Customizer JSON file by the render target. The compiler merges `appliedPresets` chains before serialization. The Customizer JSON uses the preset **name** as the key — the human-readable label shown in the OpenSCAD UI:
+A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets` with `_presets` composition) may be rendered to an OpenSCAD Customizer JSON file by the render target. The compiler merges `appliedPresets` chains before serialization. The Customizer JSON uses the preset **name** as the key — the human-readable label shown in the OpenSCAD UI:
 
 ```json
 {

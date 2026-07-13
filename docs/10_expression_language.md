@@ -317,21 +317,21 @@ The utility Sub-Block is declared as a Sub-Block and bound via a context-scoped 
 
 ```xml
 <!-- Aggregation on parent Block: -->
-<_utils type="com.machineblocks.calibration.Calibrator.Utils"
+<_utils type="com.machineblocks.bml.calibration.Calibrator.Utils"
         beanName="utils"
         scope="context" />
 
 <!-- utility Sub-Block: -->
 <block>
   <name>Utils</name>
-  <baseType>org.blockml.core.Entity</baseType>
+  <baseType>org.blockml.bml.core.Entity</baseType>
   <version>1.0.0</version>
   <capabilities>
     <formatValue
-                type="org.blockml.capability.Transformation"
-                inputType="org.blockml.type.Float"
-                outputType="org.blockml.type.Text">
-      <implementation type="org.blockml.language.TypeScript"><![CDATA[
+                type="org.blockml.bml.capability.Transformation"
+                inputType="org.blockml.bml.type.Float"
+                outputType="org.blockml.bml.type.Text">
+      <implementation type="org.blockml.bml.language.TypeScript"><![CDATA[
         (x: number): string => {
             const rounded = Math.round(x * 10) / 10
             return String(rounded)
@@ -344,7 +344,7 @@ The utility Sub-Block is declared as a Sub-Block and bound via a context-scoped 
 </block>
 ```
 
-The `<implementation>` element is a child of the capability member element. The **`type`** attribute identifies the implementation language as an `org.blockml.language.*` FQN (V1: `org.blockml.language.TypeScript`, `org.blockml.language.OpenSCAD`). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
+The `<implementation>` element is a child of the capability member element. The **`type`** attribute identifies the implementation language as an `org.blockml.bml.language.*` FQN (V1: `org.blockml.bml.language.TypeScript`, `org.blockml.bml.language.OpenSCAD`). The BlockProcessor transpiles the TypeScript to the target language, or executes it at compile time when all arguments are literals.
 
 utility Sub-Block calls follow the same syntax as regular `@bean` Transformation Capability calls — there is no special syntax. The utility Sub-Block pattern is the recommended replacement for the old `<functions>` section (which is now removed from the spec).
 
@@ -724,7 +724,7 @@ Syntax:  bml:with="var = ${ expression }"
 Allowed on:
   <composition>
   <bml:container>
-  <? extends org.blockml.core.Block>
+  <? extends org.blockml.bml.core.Block>
 ```
 
 Defines local variables visible only within the element and its descendants. Variables are evaluated left-to-right — later variables can reference earlier ones in the same `bml:with`. Own Properties can be overridden within the local scope.
@@ -900,7 +900,7 @@ type ExpressionNode =
 interface StringLiteral extends ExpressionNodeBase {
   kind: "stringLiteral"
   value: string
-  resultTypeFqn: "org.blockml.type.Text"
+  resultTypeFqn: "org.blockml.bml.type.Text"
 }
 
 interface NumberLiteral extends ExpressionNodeBase {
@@ -908,13 +908,13 @@ interface NumberLiteral extends ExpressionNodeBase {
   value: number
   /** integer when source has no decimal point; float otherwise */
   numericKind: "integer" | "float"
-  resultTypeFqn: "org.blockml.type.Integer" | "org.blockml.type.Float"
+  resultTypeFqn: "org.blockml.bml.type.Integer" | "org.blockml.bml.type.Float"
 }
 
 interface BooleanLiteral extends ExpressionNodeBase {
   kind: "booleanLiteral"
   value: boolean
-  resultTypeFqn: "org.blockml.type.Boolean"
+  resultTypeFqn: "org.blockml.bml.type.Boolean"
 }
 
 // No NullLiteral — BML has no null. Absent/empty is not an expression node; see EMPTY in 17_type_system_bml.md.
@@ -922,7 +922,7 @@ interface BooleanLiteral extends ExpressionNodeBase {
 interface ArrayLiteral extends ExpressionNodeBase {
   kind: "arrayLiteral"
   elements: ExpressionNode[]
-  /** org.blockml.type.List<T> — T inferred from elements (must be compatible) */
+  /** org.blockml.bml.type.List<T> — T inferred from elements (must be compatible) */
   resultTypeFqn: string
 }
 
@@ -1098,7 +1098,7 @@ interface BuiltinCall extends ExpressionNodeBase {
   namespace: string          // e.g. "math"
   name: string               // e.g. "max"
   arguments: CallArgument[]
-  /** FQN e.g. org.blockml.service.Math — from built-in registry */
+  /** FQN e.g. org.blockml.bml.service.Math — from built-in registry */
   serviceFqn?: string
   capabilityName?: string
 }
@@ -1221,7 +1221,7 @@ AST (abbreviated):
 ```text
 ExpressionValue
   raw: "[#math.max(2 * numberOfSamples + 1, labelSize), 12, 2]"
-  resultTypeFqn: "com.machineblocks.type.Size3D"
+  resultTypeFqn: "com.machineblocks.bml.type.Size3D"
   ast: ArrayLiteral
     elements:
       [0] BuiltinCall { namespace:"math", name:"max",
@@ -1316,7 +1316,7 @@ Built-ins:       #math.min/max/abs/floor/ceil/round/round(x,n)/pow/sqrt/clamp
                  #lists.size/get/first/last/sequence
 bml: directives: bml:each (numeric + collection), bml:if, bml:unless,
                  bml:container, bml:with
-utility Sub-Block:   Sub-Blocks with type="org.blockml.language.OpenSCAD" implementations (specified;
+utility Sub-Block:   Sub-Blocks with type="org.blockml.bml.language.OpenSCAD" implementations (specified;
                  callable via @bean — deferred in V1)
 ```
 

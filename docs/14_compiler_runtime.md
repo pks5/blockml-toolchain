@@ -18,7 +18,7 @@ For pipeline stages see `06_compiler.md`.
 | Topic | Decision |
 |---|---|
 | **Compile I/O (C4)** | **BlockML:** no mandatory input↔output mapping; targets define cardinality (0..n files, side effects). **MachineBlocks convention:** 1 BML → 1 primary SCAD (+ side artifacts) |
-| **NativeBlock = mb_block** | **MachineBlocks convention:** `com.machineblocks.core.NativeBlock` maps to SCAD `mb_block()` — not a global BlockML rule; other targets need not emit blocks |
+| **NativeBlock = mb_block** | **MachineBlocks convention:** `com.machineblocks.bml.core.NativeBlock` maps to SCAD `mb_block()` — not a global BlockML rule; other targets need not emit blocks |
 | **Composition leaves** | **MachineBlocks convention:** leaf geometry → `mb_block()` — authored as `<core:NativeBlock>` or lowered from domain instances |
 | **Sub-Blocks** | Same-document Sub-Blocks → sub-modules embedded in the parent output SCAD file |
 | **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.bml` is compiled |
@@ -38,7 +38,7 @@ For pipeline stages see `06_compiler.md`.
 
 ### Core rule
 
-In the MachineBlocks SCAD library, **`mb_block()` is the native geometry primitive** (`lib/block.scad`). In MBOM this is modeled as **`com.machineblocks.core.NativeBlock`**.
+In the MachineBlocks SCAD library, **`mb_block()` is the native geometry primitive** (`lib/block.scad`). In MBOM this is modeled as **`com.machineblocks.bml.core.NativeBlock`**.
 
 ```text
 MBML:  <core:NativeBlock size="[2, 4, 3]" studs="true" ... />
@@ -49,7 +49,7 @@ SCAD:  mb_block(config, settings = [ ["size", [2, 4, 3]], ["studs", true], ... ]
 
 ### Domain blocks → NativeBlock at render time
 
-Composite Block **types** (e.g. `com.machineblocks.bricks.Standard`, `com.martianmicro.anyclosure.Wall`) are Block **definitions** with properties, Sub-Blocks, and composition structure.
+Composite Block **types** (e.g. `com.machineblocks.bml.bricks.Standard`, `com.martianmicro.anyclosure.Wall`) are Block **definitions** with properties, Sub-Blocks, and composition structure.
 
 When a composition needs **leaf brick geometry**, it is always rendered through **NativeBlock / `mb_block()`** — not through a typed `mb__…__Standard()` module call and not through `use <Standard.scad>`.
 
@@ -74,7 +74,7 @@ Typed block modules (e.g. `mb__com__machineblocks__bricks__Standard`) exist for 
 
 ### Leaf-only blocks — optimize to direct `mb_block()`
 
-Some Block types are **semantically** Composite Blocks but **effectively** a single NativeBlock — all properties map 1:1 to native MB settings with no inner composition structure (e.g. `com.machineblocks.bricks.Standard`).
+Some Block types are **semantically** Composite Blocks but **effectively** a single NativeBlock — all properties map 1:1 to native MB settings with no inner composition structure (e.g. `com.machineblocks.bml.bricks.Standard`).
 
 For **standalone compile** of such blocks, the ScadBlockProcessor **optimizes internally to `mb_block()`** — emitting a direct main call:
 
@@ -246,7 +246,7 @@ bom compile src/.../Standard.bml machineblocks-v3-scad
 See Thumbnails (C6) for the full split between compiler and CLI.
 
 ```text
-WallPresets.bml  (baseType = com.machineblocks.core.Block, _presets composition)
+WallPresets.bml  (baseType = com.machineblocks.bml.core.Block, _presets composition)
   ── @blockml/compiler (preset block render) ──
   → implicit compile of referenced Wall block → Wall.scad + Wall.scad.map
   → Wall.json (OpenSCAD Customizer)
@@ -276,7 +276,7 @@ include <{mbLibPath}/config/mb_config.scad>;
 Additionally when needed:
 
 ```scad
-use <{mbLibPath}/blocks/org/blockml/service/Math.scad>;   // #built-in, when not native-mapped
+use <{mbLibPath}/blocks/org/blockml/bml/service/Math.scad>;   // #built-in, when not native-mapped
 ```
 
 **Not generated** for composition children:
@@ -798,7 +798,7 @@ The compiler Facade is unaware of caching. Browser hosts never use `.bom-cache`.
   kind: "scad-block",
   sourceContentHash: sha256(Wall.bml),           // input file bytes
   externalRefs: [                                // sorted by typeFqn
-    { typeFqn: "com.machineblocks.bricks.StandardBrick", version: "3.0.0" },
+    { typeFqn: "com.machineblocks.bml.bricks.StandardBrick", version: "3.0.0" },
     …
   ],
   activeConfigHash: sha256(configProfile.bml) | null,

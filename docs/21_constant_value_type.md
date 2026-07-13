@@ -77,8 +77,8 @@ Its defining characteristic is the validation rule, not serialization shape.
 
 ## Definition
 
-**FQN:** `org.blockml.type.Constant`  
-**Branch:** `org.blockml.type.ConstantType`
+**FQN:** `org.blockml.bml.type.Constant`  
+**Branch:** `org.blockml.bml.type.ConstantType`
 
 Constant is the standard **ConstantType** implementation:
 

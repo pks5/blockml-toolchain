@@ -1,0 +1,23 @@
+<!--
+  BlockML Core — MarkupLanguage branch (structured markup languages)
+
+  FQN: org.blockml.bml.language.MarkupLanguage
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language">
+
+  <idea>A structured markup language for capability implementations.</idea>
+
+  <documentation>Abstract branch for markup languages — XML and other structured document formats
+    used as capability implementation bodies.</documentation>
+  <name>MarkupLanguage</name>
+  <type>lang:MarkupLanguage</type>
+  <baseType>core:Language</baseType>
+  <abstract />
+
+</block>

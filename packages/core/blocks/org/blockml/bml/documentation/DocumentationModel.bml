@@ -1,0 +1,87 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.bml.documentation.DocumentationModel
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <idea>Block documentation model — idea, documentation, references, examples, README, documentation blocks.</idea>
+
+  <documentation>
+    Every root block definition carries a documentation model at the definition site — single
+    source of truth inside BML files:
+
+    idea (required, first child) — semantic meaning of the Block; the stable constant (WOT: Idea).
+    documentation (required, second child) — technical description of the Block definition itself.
+    Member elements carry their own documentation for individual Properties, Aggregations, etc.
+
+    Optional extensions (wherever documentation is permitted):
+    since — version from which the element is available
+    changelog — container of change entries (oldest first)
+    examples — container of example entries (title + CDATA body)
+    references — container of see entries (block, file, or url + relationship text)
+
+    Authoring split:
+    • documentation carries technical prose only
+    • references carries all cross-links — Blocks, Definition elements, repository markdown
+      files, and external URLs — each with an explicit relationship note
+    • Do not repeat cross-links in documentation prose
+
+    see target attributes (exactly one required):
+    block="core:ValueType" — Block or Definition via xmlns prefix
+    file="02_mbml.md" — repository documentation file
+    url="https://…" — external URL
+
+    README blocks (baseType org.blockml.bml.core.Bootstrap) expose readFirst — an ordered list of
+    Documentation block instances for mental bootstrap reading order. Documentation blocks
+    (org.blockml.bml.documentation.*) inherit from org.blockml.bml.core.Documentation.
+  </documentation>
+
+  <references>
+    <see file="02_mbml.md">
+      idea, documentation, since, changelog, examples, references — authoring rules.
+    </see>
+    <see file="16_framework_base_types.md">
+      Definition branch documentation model — ReferenceDefinition meta-model.
+    </see>
+    <see file="12_bom_object_model.md">
+      DocumentationExample, DocumentationReference — BOM documentation shapes.
+    </see>
+    <see file="01_system.md">
+      V2 documentation migration — Markdown vs BML roles.
+    </see>
+    <see block="core:Block">
+      Root block — documents idea, documentation, references on every definition.
+    </see>
+    <see block="core:Definition">
+      Definition branch — shared documentation aggregations.
+    </see>
+    <see block="def:ReferenceDefinition">
+      Meta-model for see entries inside references.
+    </see>
+    <see block="def:ExampleDefinition">
+      Meta-model for example entries inside examples.
+    </see>
+    <see block="core:Documentation">
+      Abstract base for narrative documentation blocks in readFirst lists.
+    </see>
+    <see block="core:Bootstrap">
+      Bootstrap base — readFirst aggregation for README blocks.
+    </see>
+    <see block="doc:BootstrapModel">
+      Next reading step — README.bml, readFirst, bootstrap context.
+    </see>
+  </references>
+
+  <name>DocumentationModel</name>
+  <type>doc:DocumentationModel</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

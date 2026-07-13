@@ -155,7 +155,7 @@ The generated file contains the minimum required structure:
 
   <name>Wall</name>
   <type>com.martianmicro.anyclosure.Wall</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <baseType>com.machineblocks.bml.core.Block</baseType>
   <version>1.0.0</version>
 
   <properties>
@@ -209,7 +209,7 @@ src/com/martianmicro/anyclosure/Wall.bml
 
 No thumbnails are generated when compiling a block definition directly.
 
-**Preset block** (`baseType="com.machineblocks.core.Block"` with `_presets` composition):
+**Preset block** (`baseType="com.machineblocks.bml.core.Block"` with `_presets` composition):
 
 ```text
 src/com/martianmicro/anyclosure/WallPresets.bml
@@ -511,8 +511,8 @@ src/config/scale_2x.bml
 <block xmlns="http://blockml.org/schema/block" ...>
 
   <name>PrusaPla</name>
-  <type>com.machineblocks.config.PrusaPla</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>com.machineblocks.bml.config.PrusaPla</type>
+  <baseType>com.machineblocks.bml.core.Block</baseType>
   <version>1.0.0</version>
 
   <composition aggregation="_presets">
@@ -582,7 +582,7 @@ The CLI prints diagnostics to stdout in a human-readable format:
 
 ```text
 ERROR  [BML_UNKNOWN_TYPE]  src/com/martianmicro/anyclosure/Wall.bml:12:5
-  Referenced type 'com.machineblocks.bricks.UnknownBrick' not found.
+  Referenced type 'com.machineblocks.bml.bricks.UnknownBrick' not found.
 
 WARNING  [BML_UNKNOWN_PROPERTY]  src/com/martianmicro/anyclosure/Wall.bml:18:3
   Property 'myCustomProp' not found in type definition. Treating as custom property.

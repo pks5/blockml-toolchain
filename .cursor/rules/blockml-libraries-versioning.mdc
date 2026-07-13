@@ -6,9 +6,19 @@ alwaysApply: false
 
 # BlockML Libraries & Versioning
 
+## Mandatory BML namespace
+
+Every BML definition must reside under the owning domain's `bml` package:
+
+```text
+<domain>.bml.*     e.g. org.blockml.bml.* · com.machineblocks.bml.*
+```
+
+No Block, Library, Type, Language, Service, Capability, or other BlockML definition may exist outside `<domain>.bml.*`. Physical paths mirror FQNs: `blocks/org/blockml/bml/core/Block.bml` → `org.blockml.bml.core.Block`.
+
 ## Library structure
 
-- Abstract base type: `org.blockml.core.BlockLibrary` in `packages/core/blocks/org/blockml/core/BlockLibrary.bml`
+- Abstract base type: `org.blockml.bml.core.BlockLibrary` in `packages/core/blocks/org/blockml/bml/core/BlockLibrary.bml`
 - Framework base type — **not** exported via any Library `_blocks`
 - Concrete libraries: `<name>Library</name>`, filename **`Library.bml`**, `baseType="bcore:BlockLibrary"`
 - FQN = `{package}.Library` from the file's package path
@@ -16,7 +26,7 @@ alwaysApply: false
 
 ## Nested libraries
 
-Multiple `Library.bml` files may exist at different package levels (e.g. `org.blockml.Library` + `org.blockml.compiler.Library`).
+Multiple `Library.bml` files may exist at different package levels (e.g. `org.blockml.bml.Library` + `org.blockml.bml.compiler.Library`).
 
 ```text
 Typical:  inner _dependencies → outer Library
@@ -33,7 +43,7 @@ effectiveBlockVersion =
   else error → BML_MISSING_VERSION
 ```
 
-- **Framework blocks** (`org.blockml.*`, `com.machineblocks.*`): version only on `Library.bml`
+- **Framework blocks** (`org.blockml.bml.*`, `com.machineblocks.bml.*`): version only on `Library.bml`
 - **Block in library** with own `<version>`: must be `>= library.version`
 - **Standalone block**: `<version>` mandatory
 

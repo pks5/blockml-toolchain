@@ -8,7 +8,7 @@ This document defines **parse and serialize behaviour** for MBOM types — how B
 
 **Type definitions (SSOT)** are BML files — see `17_type_system_bml.md`. This document describes behaviour per type; it does not define type shape.
 
-For native property declarations (names, types, defaults) see `com/machineblocks/core/Block.bml` (migrating from `09_mbom_properties.yml`).
+For native property declarations (names, types, defaults) see `com/machineblocks/bml/core/Block.bml` (migrating from `09_mbom_properties.yml`).
 For the MBOM object model see `03_mbom.md`.
 For the SCAD render target see `docs/scad-reference/05_types_and_mapping.md`.
 For the target Capability interpretation model see `08_managed_object.md`.
@@ -32,7 +32,7 @@ See `00_bom_core.md` — Fundamental Architecture Principles.
 
 **Type equivalence** (e.g. `[4,2,3]` and `{x:4,y:2,z:3}` both valid for `Size3D`) is a **validation rule** — not a mandate to rewrite stored values. Each authored form is preserved in `LiteralValue.value`.
 
-All MBOM types are defined in the **`com.machineblocks.type`** namespace (singular `.type` segment — see `00_bom_core.md` — FQN Convention).
+All MBOM types are defined in the **`com.machineblocks.bml.type`** namespace (singular `.type` segment — see `00_bom_core.md` — FQN Convention).
 
 ---
 
@@ -43,35 +43,35 @@ Type names in BML `<property type="...">` declarations are resolved as follows:
 **No namespace prefix → core primitives whitelist only** (see `02_mbml.md` — § Unqualified Block Resolution):
 
 ```text
-Text     → org.blockml.type.Text
-Boolean  → org.blockml.type.Boolean
-Integer  → org.blockml.type.Integer
-Float    → org.blockml.type.Float
-Decimal  → org.blockml.type.Decimal
+Text     → org.blockml.bml.type.Text
+Boolean  → org.blockml.bml.type.Boolean
+Integer  → org.blockml.bml.type.Integer
+Float    → org.blockml.bml.type.Float
+Decimal  → org.blockml.bml.type.Decimal
 ```
 
-`org.blockml.type.Number` is the abstract numeric branch — not whitelisted for unqualified resolution.
+`org.blockml.bml.type.Number` is the abstract numeric branch — not whitelisted for unqualified resolution.
 
 Collections use multiplicity on the type reference — not `Array<T>`. See `17_type_system_bml.md` — Type Expressions.
 
 Generic applications in `type="..."` attributes use **round parentheses** — not angle brackets — e.g. `type="core:FullyQualifiedName(core:Block)"` instead of `FullyQualifiedName<core.Block>`. See `17_type_system_bml.md` — Generics — BML attribute syntax.
 
 ```text
-Integer[]   → org.blockml.type.Integer with multiplicity 0..n
+Integer[]   → org.blockml.bml.type.Integer with multiplicity 0..n
 ```
 
 **With namespace prefix → resolved via `xmlns` declaration:**
 
 ```xml
-xmlns:type="com.machineblocks.type"
+xmlns:type="com.machineblocks.bml.type"
 
-type="type:Size3D"          → com.machineblocks.type.Size3D
-type="type:Color"           → com.machineblocks.type.Color
-type="type:BaseCutoutType"  → com.machineblocks.type.BaseCutoutType
+type="type:Size3D"          → com.machineblocks.bml.type.Size3D
+type="type:Color"           → com.machineblocks.bml.type.Color
+type="type:BaseCutoutType"  → com.machineblocks.bml.type.BaseCutoutType
 type='"auto" | Float'      → union type expression (replaces type:AutoOr_Float)
 ```
 
-Legacy `type:AutoOr_Float` → `com.machineblocks.type.AutoOr<Float>` is **deprecated** — use `"auto" | Float`. See `17_type_system_bml.md` — Type Expressions.
+Legacy `type:AutoOr_Float` → `com.machineblocks.bml.type.AutoOr<Float>` is **deprecated** — use `"auto" | Float`. See `17_type_system_bml.md` — Type Expressions.
 
 There is no implicit fallback to the baseType's namespace. If a type cannot be resolved the compiler emits `BML_UNKNOWN_TYPE`.
 
@@ -79,8 +79,8 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 On a property typed with an EnumType, enum values may be written as:
 - **value literal** — `standard` (matches `value` on the `_values` instance)
-- **short id** — `STANDARD` (omits `com.machineblocks.type.BaseCutoutType::` because the property type is known)
-- **qualified id** — `com.machineblocks.type.BaseCutoutType::STANDARD`
+- **short id** — `STANDARD` (omits `com.machineblocks.bml.type.BaseCutoutType::` because the property type is known)
+- **qualified id** — `com.machineblocks.bml.type.BaseCutoutType::STANDARD`
 
 **Anonymous Object inputType for Capability:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Field order defines positional parameter order — same **Ordered Struct Fields** rule as named StructTypes (see `17_type_system_bml.md`). Both positional and named call syntax are valid:
 
@@ -122,14 +122,14 @@ Domain libraries may define additional status blocks (e.g. domain-specific WIP m
 # 1. Primitive Types
 
 ```text
-org.blockml.type.Boolean
-org.blockml.type.Integer
-org.blockml.type.Float
-org.blockml.type.Decimal
-org.blockml.type.Text
+org.blockml.bml.type.Boolean
+org.blockml.bml.type.Integer
+org.blockml.bml.type.Float
+org.blockml.bml.type.Decimal
+org.blockml.bml.type.Text
 ```
 
-Numeric branch: `org.blockml.type.Number` (abstract) — `Integer`, `Float`, and `Decimal` extend `Number`.
+Numeric branch: `org.blockml.bml.type.Number` (abstract) — `Integer`, `Float`, and `Decimal` extend `Number`.
 
 MBML serialization:
 
@@ -148,7 +148,7 @@ String:   "west"
 ## Direction
 
 ```text
-com.machineblocks.type.Direction
+com.machineblocks.bml.type.Direction
 
 Values:  West | North | East | South
 
@@ -160,7 +160,7 @@ SCAD:  "west"
 ## Face
 
 ```text
-com.machineblocks.type.Face
+com.machineblocks.bml.type.Face
 
 Values:  x- | x+ | y- | y+ | z- | z+
 
@@ -172,7 +172,7 @@ SCAD:  "x+"
 ## Axis
 
 ```text
-com.machineblocks.type.Axis
+com.machineblocks.bml.type.Axis
 
 Values:  X | Y | Z
 
@@ -184,7 +184,7 @@ SCAD:  "x"
 ## AlignValue
 
 ```text
-com.machineblocks.type.AlignValue
+com.machineblocks.bml.type.AlignValue
 
 Values:  Start | Center | End
 
@@ -196,7 +196,7 @@ SCAD:  "start"
 ## StudType
 
 ```text
-com.machineblocks.type.StudType
+com.machineblocks.bml.type.StudType
 
 Values:  Solid | Hollow
 
@@ -208,7 +208,7 @@ SCAD:  "solid"
 ## HoleType
 
 ```text
-com.machineblocks.type.HoleType
+com.machineblocks.bml.type.HoleType
 
 Values:  Pin | Axle
 
@@ -220,7 +220,7 @@ SCAD:  "pin"
 ## AssemblyMode
 
 ```text
-com.machineblocks.type.AssemblyMode
+com.machineblocks.bml.type.AssemblyMode
 
 Values:  Unassembled | Assembled | Merged
 
@@ -232,7 +232,7 @@ SCAD:  "merged"
 ## Color
 
 ```text
-com.machineblocks.type.Color
+com.machineblocks.bml.type.Color
 
 Values:  "#RRGGBB" | "#RRGGBBAA" | [r, g, b] | [r, g, b, a]
 
@@ -244,7 +244,7 @@ SCAD:  "#EAC645"
 ## ColorOrInherit
 
 ```text
-com.machineblocks.type.ColorOrInherit
+com.machineblocks.bml.type.ColorOrInherit
 
 Values:  Color | "inherit"
 ```
@@ -255,11 +255,11 @@ Values:  Color | "inherit"
 
 | Type                                  | Description                   |
 |---------------------------------------|-------------------------------|
-| `com.machineblocks.type.FloatMm`     | Length in millimeters         |
-| `com.machineblocks.type.FloatMbu`    | Length in MachineBlocks units |
-| `com.machineblocks.type.FloatGrid`   | Length in grid units          |
-| `com.machineblocks.type.FloatPt`     | Text size unit                |
-| `com.machineblocks.type.FloatDeg`    | Angle in degrees              |
+| `com.machineblocks.bml.type.FloatMm`     | Length in millimeters         |
+| `com.machineblocks.bml.type.FloatMbu`    | Length in MachineBlocks units |
+| `com.machineblocks.bml.type.FloatGrid`   | Length in grid units          |
+| `com.machineblocks.bml.type.FloatPt`     | Text size unit                |
+| `com.machineblocks.bml.type.FloatDeg`    | Angle in degrees              |
 
 ---
 
@@ -312,7 +312,7 @@ SCAD:  "none"  or  serialized T
 Boolean | T
 ```
 
-During migration, legacy `com.machineblocks.type.AutoOr_*` XSD/BML names may still resolve with `BML_LEGACY_TYPE_SOURCE` warning. New authoring uses union syntax only. See `17_type_system_bml.md` — Type Expressions.
+During migration, legacy `com.machineblocks.bml.type.AutoOr_*` XSD/BML names may still resolve with `BML_LEGACY_TYPE_SOURCE` warning. New authoring uses union syntax only. See `17_type_system_bml.md` — Type Expressions.
 
 ---
 
@@ -321,7 +321,7 @@ During migration, legacy `com.machineblocks.type.AutoOr_*` XSD/BML names may sti
 ## AxisXY\<T\>
 
 ```text
-com.machineblocks.type.AxisXY
+com.machineblocks.bml.type.AxisXY
 
 MBOM:  { x: T, y: T }
 
@@ -337,7 +337,7 @@ SCAD serialization:
 ## AxisXYZ\<T\>
 
 ```text
-com.machineblocks.type.AxisXYZ
+com.machineblocks.bml.type.AxisXYZ
 
 MBOM:  { x: T, y: T, z: T }
 
@@ -361,7 +361,7 @@ SCAD serialization:
 Covers the four lateral faces: `x-`, `x+`, `y-`, `y+`
 
 ```text
-com.machineblocks.type.PerSide4
+com.machineblocks.bml.type.PerSide4
 
 MBOM:  { "x-": T, "x+": T, "y-": T, "y+": T }
 
@@ -381,7 +381,7 @@ SCAD serialization:
 Covers all six faces: `x-`, `x+`, `y-`, `y+`, `z-`, `z+`
 
 ```text
-com.machineblocks.type.FaceVector6
+com.machineblocks.bml.type.FaceVector6
 
 MBOM:  { "x-": T, "x+": T, "y-": T, "y+": T, "z-": T, "z+": T }
 
@@ -394,7 +394,7 @@ SCAD serialization:  always full 6-element array
 Sparse face map — only present faces are set.
 
 ```text
-com.machineblocks.type.FaceMap
+com.machineblocks.bml.type.FaceMap
 
 MBOM:  { face: T, ... }  (partial)
 
@@ -412,7 +412,7 @@ Supports namespace-qualified keys for composite block forwarding:
 ## Size3D
 
 ```text
-com.machineblocks.type.Size3D
+com.machineblocks.bml.type.Size3D
 
 BOM (authored):  [4, 2, 3]  or  { x: 4, y: 2, z: 3 }  — preserved as authored
 Type check:      both forms valid against Size3D field order (x, y, z)
@@ -424,7 +424,7 @@ Integer grid dimensions. Defines the block's spatial contract. Array literals ma
 ## GridPosition3D
 
 ```text
-com.machineblocks.type.GridPosition3D
+com.machineblocks.bml.type.GridPosition3D
 
 MBOM:  { x: Integer, y: Integer, z: Integer }
 
@@ -435,7 +435,7 @@ SCAD:  ["offset", [0, 4, 1]]
 ## SelectiveGrid\<T\>
 
 ```text
-com.machineblocks.type.SelectiveGrid
+com.machineblocks.bml.type.SelectiveGrid
 
 MBOM:
 {
@@ -457,7 +457,7 @@ SCAD serialization:
 ## WallGap
 
 ```text
-com.machineblocks.type.WallGap
+com.machineblocks.bml.type.WallGap
 
 MBOM:  { face: Face, position: Integer, length: Integer | "full" }
 
@@ -471,7 +471,7 @@ SCAD:  ["x+"]                          →  position 0, full length
 ## WallGapList
 
 ```text
-com.machineblocks.type.WallGapList
+com.machineblocks.bml.type.WallGapList
 
 List of WallGap entries.
 
@@ -485,7 +485,7 @@ SCAD:
 ## Connector
 
 ```text
-com.machineblocks.type.Connector
+com.machineblocks.bml.type.Connector
 
 MBOM:  { face, axis, gender, align, paddingStart, paddingEnd }
 
@@ -499,7 +499,7 @@ SCAD:
 ## ScrewHole
 
 ```text
-com.machineblocks.type.ScrewHole
+com.machineblocks.bml.type.ScrewHole
 
 MBOM:  { face, position: {x,y}, diameter, depth, insetThickness, insetDepth }
 
@@ -516,7 +516,7 @@ SCAD:
 > implementation status.
 
 ```text
-com.machineblocks.type.RoundingRadius
+com.machineblocks.bml.type.RoundingRadius
 
 MBOM canonical:  8 corners × 6 radii per corner
 Corners:         sw-  nw-  ne-  se-  (lower Z)
@@ -565,7 +565,7 @@ Map values are always wrapped in `${ }` because they are object literals in the 
 # 10. Expression Type
 
 ```text
-org.blockml.type.Expression
+org.blockml.bml.type.Expression
 
 An expression is a typed value wrapped in ${ }.
 It is parsed into an ExpressionValue { ast: ExpressionNode, ... } at compile stage [7].
@@ -573,7 +573,7 @@ It is not evaluated at parse time — renderers serialize the AST.
 See `10_expression_language.md` — Expression AST.
 
 BML:   size="${ [size[0], size[1], size[2] - 1] }"
-BOM:   ExpressionValue { ast: ArrayLiteral(...), resultTypeFqn: "com.machineblocks.type.Size3D" }
+BOM:   ExpressionValue { ast: ArrayLiteral(...), resultTypeFqn: "com.machineblocks.bml.type.Size3D" }
 SCAD:  serialized as the expression result or as a SCAD expression
        depending on whether it can be statically resolved
 ```

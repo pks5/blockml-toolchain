@@ -36,36 +36,36 @@ This follows the BlockML philosophy that semantic information should be represen
 
 ## Constraint Branch
 
-**FQN:** `org.blockml.core.Constraint` — abstract base for property constraints.
+**FQN:** `org.blockml.bml.core.Constraint` — abstract base for property constraints.
 
 ```text
-org.blockml.core.Block
-  org.blockml.core.Constraint                    ← abstract; generic Constraint<T>
-    org.blockml.constraint.Min
-    org.blockml.constraint.Max
-    org.blockml.constraint.MinLength
-    org.blockml.constraint.MaxLength
-    org.blockml.constraint.Pattern
-    org.blockml.constraint.MinItems
-    org.blockml.constraint.MaxItems
+org.blockml.bml.core.Block
+  org.blockml.bml.core.Constraint                    ← abstract; generic Constraint<T>
+    org.blockml.bml.constraint.Min
+    org.blockml.bml.constraint.Max
+    org.blockml.bml.constraint.MinLength
+    org.blockml.bml.constraint.MaxLength
+    org.blockml.bml.constraint.Pattern
+    org.blockml.bml.constraint.MinItems
+    org.blockml.bml.constraint.MaxItems
     …
 ```
 
-Each concrete constraint extends `org.blockml.core.Constraint` and declares its own properties. The generic parameter `T` is bound automatically to the property type (or element type for collection constraints) at validate time — authors never specify the type argument in BML.
+Each concrete constraint extends `org.blockml.bml.core.Constraint` and declares its own properties. The generic parameter `T` is bound automatically to the property type (or element type for collection constraints) at validate time — authors never specify the type argument in BML.
 
 ### Standard constraints
 
 | FQN | Compatible property types | Properties |
 |---|---|---|
-| `org.blockml.constraint.Min` | `Number` sub-types | `value` |
-| `org.blockml.constraint.Max` | `Number` sub-types | `value` |
-| `org.blockml.constraint.MinLength` | `Text` | `value` |
-| `org.blockml.constraint.MaxLength` | `Text` | `value` |
-| `org.blockml.constraint.Pattern` | `Text` | `value` (regex) |
-| `org.blockml.constraint.MinItems` | collection types (`T[]`) | `value` |
-| `org.blockml.constraint.MaxItems` | collection types (`T[]`) | `value` |
+| `org.blockml.bml.constraint.Min` | `Number` sub-types | `value` |
+| `org.blockml.bml.constraint.Max` | `Number` sub-types | `value` |
+| `org.blockml.bml.constraint.MinLength` | `Text` | `value` |
+| `org.blockml.bml.constraint.MaxLength` | `Text` | `value` |
+| `org.blockml.bml.constraint.Pattern` | `Text` | `value` (regex) |
+| `org.blockml.bml.constraint.MinItems` | collection types (`T[]`) | `value` |
+| `org.blockml.bml.constraint.MaxItems` | collection types (`T[]`) | `value` |
 
-Domain libraries may define additional constraint types (for example `com.machineblocks.constraint.PreferredRange`).
+Domain libraries may define additional constraint types (for example `com.machineblocks.bml.constraint.PreferredRange`).
 
 ### Authoring
 
@@ -87,10 +87,10 @@ Constraint instance properties serialize as attributes on the constraint element
 
 ## Validation Property
 
-Every `org.blockml.core.Constraint` receives an optional property:
+Every `org.blockml.bml.core.Constraint` receives an optional property:
 
 ```text
-validation : org.blockml.core.Validation
+validation : org.blockml.bml.core.Validation
 ```
 
 This is a normal Block reference (not an enum).
@@ -122,23 +122,23 @@ When `validation` is present, the BlockML validator still validates the constrai
 
 ## Validation Branch
 
-**FQN:** `org.blockml.core.Validation` — abstract base for enforcement semantics.
+**FQN:** `org.blockml.bml.core.Validation` — abstract base for enforcement semantics.
 
 ```text
-org.blockml.core.Block
-  org.blockml.core.Validation                    ← abstract
-    org.blockml.validation.Error
-    org.blockml.validation.Warning
-    org.blockml.validation.Information
+org.blockml.bml.core.Block
+  org.blockml.bml.core.Validation                    ← abstract
+    org.blockml.bml.validation.Error
+    org.blockml.bml.validation.Warning
+    org.blockml.bml.validation.Information
 ```
 
 The validator interprets the referenced Validation block to determine how a violated constraint should be reported:
 
 | FQN | Semantics | Diagnostic |
 |---|---|---|
-| `org.blockml.validation.Error` | Compilation must fail | `BML_CONSTRAINT_VIOLATION` |
-| `org.blockml.validation.Warning` | Compilation succeeds; warning emitted | `BML_CONSTRAINT_WARNING` |
-| `org.blockml.validation.Information` | Compilation succeeds; informational diagnostic | `BML_CONSTRAINT_INFORMATION` |
+| `org.blockml.bml.validation.Error` | Compilation must fail | `BML_CONSTRAINT_VIOLATION` |
+| `org.blockml.bml.validation.Warning` | Compilation succeeds; warning emitted | `BML_CONSTRAINT_WARNING` |
+| `org.blockml.bml.validation.Information` | Compilation succeeds; informational diagnostic | `BML_CONSTRAINT_INFORMATION` |
 
 Examples:
 
@@ -157,7 +157,7 @@ Examples:
 Because Validation is a normal Block hierarchy, libraries may define their own validation semantics:
 
 ```text
-com.machineblocks.validation.ManufacturingWarning
+com.machineblocks.bml.validation.ManufacturingWarning
 com.enterprise.validation.ComplianceError
 com.ui.validation.EditorHint
 com.production.validation.RuntimeOnly
@@ -169,7 +169,7 @@ The BlockML validator only interprets the Validation types it understands. Const
 
 ## Generic Binding
 
-`org.blockml.core.Constraint` and its sub-types declare `<genericTypes>`. Unlike StructType generics, constraint type arguments are **never authored** — the compiler binds `T` from the enclosing property's type context at validate time:
+`org.blockml.bml.core.Constraint` and its sub-types declare `<genericTypes>`. Unlike StructType generics, constraint type arguments are **never authored** — the compiler binds `T` from the enclosing property's type context at validate time:
 
 ```text
 Scalar property (Integer)       → Min/Max: T = Integer

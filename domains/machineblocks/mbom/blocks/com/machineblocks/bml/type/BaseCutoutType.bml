@@ -1,0 +1,38 @@
+<!--
+  MachineBlocks — BaseCutoutType enum
+
+  FQN: com.machineblocks.bml.type.BaseCutoutType
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="com.machineblocks.bml.type">
+
+  <idea>Shape variant of the underside cutout on a brick base.</idea>
+
+  <documentation>Enum ValueType for base cutout variants on MachineBlocks bricks.</documentation>
+  <name>BaseCutoutType</name>
+  <type>type:BaseCutoutType</type>
+  <baseType>btype:EnumType</baseType>
+  <properties>
+    <value type="Text">
+      <documentation>Enum literal used in property values and expressions.</documentation>
+    </value>
+  </properties>
+
+  <aggregations>
+    <values>
+      <composition>
+        <BaseCutoutType bml:id="NONE" value="none" />
+        <BaseCutoutType bml:id="STANDARD" value="standard" />
+        <BaseCutoutType bml:id="GROOVE" value="groove" />
+        <BaseCutoutType bml:id="STUDS" value="studs" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

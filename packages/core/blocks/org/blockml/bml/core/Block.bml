@@ -1,0 +1,98 @@
+<!--
+  BlockML Core — root Block type
+
+  FQN: org.blockml.bml.core.Block
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea>The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
+
+  <documentation>
+    Root semantic unit of BlockML — the sole inheritance root for all Block definitions.
+    Every concept in the grammar is a Block: composable domain types, ValueTypes, Languages,
+    Status values, Constraints, Capabilities, Services, Libraries, and Definition meta-model
+    types. Unqualified name Block resolves to this type.
+
+    Role and constraints:
+    • Sole inheritance root — omits baseType; all other definitions must declare one
+    • Abstract — not used directly as a composition instance type
+    • Declares no members — sub-types define their own Properties, Aggregations,
+      Associations, and Capabilities via the baseType chain
+    • Composition instance identity uses bml:id and bml:version (not member attributes)
+
+    Type reference rules:
+    • Any Block FQN may appear in aggregation and association member types
+    • Property and Capability payload types must resolve to a ValueType
+    • Capability implementation type attributes must reference language.* FQNs
+
+    Documentation model (on every root block definition):
+    • &lt;idea&gt; — required first child; semantic meaning of the Block
+    • &lt;documentation&gt; — required second child; technical description
+    • Optional extensions: &lt;since&gt;, &lt;changelog&gt;, &lt;examples&gt;, &lt;references&gt;
+    Omitted idea or documentation on root blocks → BML_MISSING_IDEA / BML_MISSING_DOCUMENTATION
+    (warning V1).
+
+    Serialization:
+    • bml:xml ${ bml:Self } — composable instances render under their declared type tag
+      (for example &lt;core:Block&gt;, &lt;myns:Wall&gt;)
+    • Definition branch types describe block structure and carry their own bml:xml rules
+  </documentation>
+
+  <references>
+    <see block="core:ValueType">
+      Property and capability payload types.
+    </see>
+    <see block="core:Language">
+      Implementation language bindings.
+    </see>
+    <see block="core:Status">
+      Lifecycle status references.
+    </see>
+    <see block="core:Constraint">
+      Property validation constraints.
+    </see>
+    <see block="core:Capability">
+      Capability implementation contracts.
+    </see>
+    <see block="core:Definition">
+      Meta-model for block structure (WIP).
+    </see>
+    <see block="mbcore:Block">
+      Example domain base — domain-specific branches extend Block.
+    </see>
+    <see file="00_bom_core.md">
+      Block and Block Instance — fundamental architecture principles.
+    </see>
+    <see file="02_mbml.md">
+      Block Definition — idea, documentation, and documentation extensions.
+    </see>
+    <see file="16_framework_base_types.md">
+      Root Type Exception and Definition Branch.
+    </see>
+    <see file="17_type_system_bml.md">
+      Everything is a Block — type system overview.
+    </see>
+    <see file="19_definition_blocks_and_bml_xml.md">
+      Definition branch bml:xml serialization rules.
+    </see>
+  </references>
+
+  <name>Block</name>
+  <type>core:Block</type>
+  <!-- Root block has no base type -->
+  <baseType />
+  
+  <!-- Blocks are rendered as xml elements with the name of the block type -->
+  <bml:xml>${ bml:Self }</bml:xml>
+  
+  <!-- Root block is abstract -->
+  <abstract />
+  
+</block>

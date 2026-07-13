@@ -1,0 +1,74 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.bml.documentation.BootstrapModel
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <idea>README.bml, Bootstrap, readFirst, and interpretation context.</idea>
+
+  <documentation>
+    Self-hosting bootstrap: the compiler loads framework BML from @blockml/core (and domain
+    packages) before user content — TypeRegistry bootstrap, not special-cased type semantics
+    in code.
+
+    Bootstrap order (summary):
+    1. Core branches — Block, ValueType, Language, Status, Constraint, Capability, Definition
+    2. Concrete types — Integer, Decimal, languages, services, constraints
+    3. BlockLibrary — library descriptor base with Schema subBlock
+    4. org.blockml.bml.Library — published catalog via _blocks
+    5. Domain framework BML (e.g. com.machineblocks.bml.core.*)
+
+    README.bml blocks inherit from org.blockml.bml.core.Bootstrap. They serve as library entry
+    points for humans and LLMs — not as composable domain types. The readFirst aggregation
+    lists Documentation block instances in mental learning order; read these before exploring
+    the rest of the library catalog.
+
+    Interpretation context:
+    • Framework BML defines what types ARE — TypeRegistry SSOT
+    • Renderers interpret what types MEAN for their target — free manifestation
+    • README + readFirst establish shared vocabulary before diving into definitions
+    • After the first ten bootstrap documentation blocks, most of the core library can be
+      derived directly from Block definitions themselves
+
+    Each registered BlockDefinition from bootstrap is an immutable BomDocument parse result.
+  </documentation>
+
+  <references>
+    <see file="16_framework_base_types.md">
+      Bootstrap Order — framework BML load sequence for TypeRegistry.
+    </see>
+    <see file="13_bml_to_bom_mapping.md">
+      TypeRegistry bootstrap — BML registration algorithm.
+    </see>
+    <see file="14_compiler_runtime.md">
+      CLI bootstrap — loading framework BML before user projects.
+    </see>
+    <see file="01_system.md">
+      Self-hosting bootstrap and BML self-description roadmap (V1/V2/V3).
+    </see>
+    <see block="core:Bootstrap">
+      Abstract base for README blocks with readFirst aggregation.
+    </see>
+    <see block="core:Documentation">
+      Base type for entries in readFirst documentation lists.
+    </see>
+    <see block="doc:Introduction">
+      First readFirst entry — BlockML goals and overview.
+    </see>
+    <see block="doc:ModelingGuidelines">
+      Next reading step — recommended patterns for modeling Blocks.
+    </see>
+  </references>
+
+  <name>BootstrapModel</name>
+  <type>doc:BootstrapModel</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

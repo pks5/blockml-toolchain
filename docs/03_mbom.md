@@ -56,8 +56,8 @@ Every MBOM object has a globally unique identity based on its FQN.
 ### Class Identity (FQN)
 
 ```text
-com.machineblocks.core.Block
-com.machineblocks.bricks.StandardBrick
+com.machineblocks.bml.core.Block
+com.machineblocks.bml.bricks.StandardBrick
 com.martianmicro.anyclosure.Wall
 com.martianmicro.anyclosure.Corner
 ```
@@ -71,7 +71,7 @@ Class name:        PascalCase
 Full FQN:          <reverse-domain-package>.<ClassName>
 ```
 
-`com.machineblocks.bricks` is a **documented exception** — plural library package for the brick Block family. See `00_bom_core.md` — FQN Convention.
+`com.machineblocks.bml.bricks` is a **documented exception** — plural library package for the brick Block family. See `00_bom_core.md` — FQN Convention.
 
 ### Instance Identity
 
@@ -113,9 +113,9 @@ Properties are typed parameters of a Block. Every Property has a name, a type, a
 
 ### Native vs. Custom Properties
 
-**System properties** are defined on `org.blockml.core.Block` and inherited by all Blocks — notably `id` (instance identity). They are system-relevant: the compiler, validator, and renderer treat them with dedicated logic. In MachineBlocks, `id` is also listed in `09_mbom_properties.yml` for SCAD serialization (`mb_block_id`). See `00_bom_core.md` — System Properties.
+**System properties** are defined on `org.blockml.bml.core.Block` and inherited by all Blocks — notably `id` (instance identity). They are system-relevant: the compiler, validator, and renderer treat them with dedicated logic. In MachineBlocks, `id` is also listed in `09_mbom_properties.yml` for SCAD serialization (`mb_block_id`). See `00_bom_core.md` — System Properties.
 
-**Domain native properties** are defined in `com.machineblocks.core.Block` and its base types. They are listed in `09_mbom_properties.yml` and have dedicated SCAD getters in the render target (`mb_param_size()`, `mb_param_baseColor()`, etc.).
+**Domain native properties** are defined in `com.machineblocks.bml.core.Block` and its base types. They are listed in `09_mbom_properties.yml` and have dedicated SCAD getters in the render target (`mb_param_size()`, `mb_param_baseColor()`, etc.).
 
 Domain native properties include (non-exhaustive): `size`, `offset`, `direction`, `align`, `baseColor`, `studs`, `base`, `recess`, `tongue`, `baseCutoutType`, `rotation`, `alignChildren`, `sizeMod`, `baseCrop`, `baseAdjustment`, `baseWallThickness`, `topPlateHelpers`, `render`, `debug`. See `09_mbom_properties.yml` for the full authoritative list. (`id` is a system property — listed there for SCAD mapping, not a domain-native geometry parameter.)
 
@@ -127,13 +127,13 @@ The compiler determines native vs. custom by checking `09_mbom_properties.yml`. 
 
 ```text
 name          — camelCase member name (unique within the Block's member namespace)
-type          — MBOM type FQN (e.g. com.machineblocks.type.Size3D)
+type          — MBOM type FQN (e.g. com.machineblocks.bml.type.Size3D)
 value  — typed defined value (literal or expression)
 group         — optional grouping for editor display
 documentation — human-readable description
 ```
 
-Unqualified type names in BML are resolved against `com.machineblocks.type` by the parser before being stored in MBOM as full FQNs.
+Unqualified type names in BML are resolved against `com.machineblocks.bml.type` by the parser before being stored in MBOM as full FQNs.
 
 **Computed values:** `value` may be an Expression referencing other Properties of the same Block. See `10_expression_language.md` — Expressions in `value`.
 
@@ -152,15 +152,15 @@ Aggregations describe ownership relationships. An Aggregation defines that a Blo
 MachineBlocks declares two domain aggregations on the base type chain:
 
 ```text
-com.machineblocks.core.Block  (extends org.blockml.core.Block)
+com.machineblocks.bml.core.Block  (extends org.blockml.bml.core.Block)
   _presets:
-    type:    com.machineblocks.core.Block[]
+    type:    com.machineblocks.bml.core.Block[]
   basePresets:
     type:    bml:Self[]   (association — references ids in enclosing Block's _presets)
 
-com.machineblocks.core.CompositeBlock  (extends Block)
+com.machineblocks.bml.core.CompositeBlock  (extends Block)
   _parts:
-    type:    com.machineblocks.core.Block[]
+    type:    com.machineblocks.bml.core.Block[]
     default: true
 ```
 
@@ -168,17 +168,17 @@ Every MachineBlocks Block inherits `_presets` and `basePresets`. Composite block
 
 **Presets are not a BlockML core feature.** Preset instances are ordinary Block instances in `_presets`. The `basePresets` association references preset ids (local or `{BlockFQN}::{id}`). Preset merge is compiler logic; Customizer JSON is render-target logic.
 
-When a Block's `baseType` chain includes `com.machineblocks.core.CompositeBlock` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited members appear via `resolveEffectiveMembers()`.
+When a Block's `baseType` chain includes `com.machineblocks.bml.core.CompositeBlock` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited members appear via `resolveEffectiveMembers()`.
 
 Declare `<aggregations>` explicitly when **adding** aggregations beyond the inherited set (e.g. `_steps` on `Set`), when **overriding** inherited aggregations (partial override — type inherited), or when filling an aggregation with a nested `<composition>`.
 
 ### Example
 
 ```text
-Wall  (baseType: com.machineblocks.core.CompositeBlock)
-  _presets:  com.machineblocks.core.Block[] (inherited)
-  _parts:    com.machineblocks.core.Block[] (inherited, default)
-  _myModel:  org.blockml.service.JSONModel (protected, beanName="myModel", declared)
+Wall  (baseType: com.machineblocks.bml.core.CompositeBlock)
+  _presets:  com.machineblocks.bml.core.Block[] (inherited)
+  _parts:    com.machineblocks.bml.core.Block[] (inherited, default)
+  _myModel:  org.blockml.bml.service.JSONModel (protected, beanName="myModel", declared)
 ```
 
 ### Aggregation Metadata
@@ -201,7 +201,7 @@ When `beanName` is set, the Aggregation is a service binding. The bean is access
 
 Associations describe loose references to other objects without ownership.
 
-MachineBlocks uses `basePresets` on `com.machineblocks.core.Block` — an association (`bml:Self[]`) referencing preset ids in the enclosing Block's `_presets` aggregation. Local ids resolve within the same Block; cross-file entries use `{BlockFQN}::{id}`.
+MachineBlocks uses `basePresets` on `com.machineblocks.bml.core.Block` — an association (`bml:Self[]`) referencing preset ids in the enclosing Block's `_presets` aggregation. Local ids resolve within the same Block; cross-file entries use `{BlockFQN}::{id}`.
 
 Other planned use cases in MachineBlocks:
 
@@ -225,7 +225,7 @@ Capabilities describe how a Block communicates — externally via async messagin
 
 Like Properties, Capabilities are declared with a name and a type (FQN). Their value in a Composition is the address or binding — set as an attribute on the child instance, exactly like a Property value.
 
-> **Capability package TBD** — placeholder `org.blockml.capability.*`. Candidate: `bom.foundation`.
+> **Capability package TBD** — placeholder `org.blockml.bml.capability.*`. Candidate: `bom.foundation`.
 
 ### Inbound
 
@@ -233,7 +233,7 @@ Receives data/messages from an external sender. Asynchronous.
 
 ```text
 name         — camelCase member name (unique within the Block's member namespace)
-type         — org.blockml.capability.Inbound
+type         — org.blockml.bml.capability.Inbound
 inputType    — required; declared input type (see Type Descriptors)
 documentation
 ```
@@ -246,7 +246,7 @@ Sends/emits data/messages to an external receiver. Triggered by the Block in res
 
 ```text
 name         — camelCase member name
-type         — org.blockml.capability.Outbound
+type         — org.blockml.bml.capability.Outbound
 outputType   — required; declared output type
 documentation
 ```
@@ -259,7 +259,7 @@ Called directly within an Expression. Transforms `inputType` to `outputType`. No
 
 ```text
 name         — camelCase member name
-type         — org.blockml.capability.Transformation
+type         — org.blockml.bml.capability.Transformation
 inputType    — required; declared input type
 outputType   — required; declared output type
 documentation
@@ -270,13 +270,13 @@ Member visibility: see `02_mbml.md` — § Member Visibility.
 ### Type Descriptors
 
 ```text
-org.blockml.type.Integer            — primitive
-org.blockml.type.Text             — primitive
+org.blockml.bml.type.Integer            — primitive
+org.blockml.bml.type.Text             — primitive
 com.myDomain.MyClass             — Object (named fields)
-{ items: org.blockml.type.Integer[0..n] }  — collection field
+{ items: org.blockml.bml.type.Integer[0..n] }  — collection field
 ```
 
-Unqualified names resolve against the domain's default type namespace (determined by the Block's `baseType`). For MachineBlocks that is `com.machineblocks.type.*`; for primitives `org.blockml.type.*`.
+Unqualified names resolve against the domain's default type namespace (determined by the Block's `baseType`). For MachineBlocks that is `com.machineblocks.bml.type.*`; for primitives `org.blockml.bml.type.*`.
 
 ### Payload Call Syntax
 
@@ -306,7 +306,7 @@ Capabilities are inherited via `baseType`, identical to Properties and Aggregati
 
 ### MachineBlocks Built-in services
 
-Built-in services are defined in `com.machineblocks.core.Block` and accessible in all MachineBlocks Blocks via the `#` prefix:
+Built-in services are defined in `com.machineblocks.bml.core.Block` and accessible in all MachineBlocks Blocks via the `#` prefix:
 
 ```text
 #math    — Transformation capabilities: min, max, ceil, floor, abs, round, ...
@@ -359,7 +359,7 @@ Namespace-qualified parameter keys follow the pattern `<namespace>.<face>`:
 
 ```text
 Wall._parts:
-  [0] com.machineblocks.bricks.StandardBrick
+  [0] com.machineblocks.bml.bricks.StandardBrick
       id:          "bottom"
       renderGroup: "bottom"
       namespace:   "bottom"
@@ -369,7 +369,7 @@ Wall._parts:
         tongue:         true
         recessWallGaps: "x+"
 
-  [1] com.machineblocks.bricks.StandardBrick
+  [1] com.machineblocks.bml.bricks.StandardBrick
       id:          "top"
       renderGroup: "top"
       namespace:   "top"
@@ -456,7 +456,7 @@ Sibling child Blocks within the same Composition share computed values via **`bm
 
 ## MachineBlocks Set Model
 
-A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.core.Set`. It is not a separate MBOM class — it is a Block that the SCAD Renderer dispatches to `ScadSetRenderer` based on its base type.
+A MachineBlocks Set is a Block whose `baseType` is `com.machineblocks.bml.core.Set`. It is not a separate MBOM class — it is a Block that the SCAD Renderer dispatches to `ScadSetRenderer` based on its base type.
 
 A Set uses three conventional Aggregations — `_presets` and `_parts` inherited from the base type chain, `_steps` declared on Set:
 
@@ -468,15 +468,15 @@ _steps      — assembly order (optional; defaults to document order of _parts)
 
 There is no separate Placement meta-block. Placed instances are real Block instances in `_parts` with `basePresets`, `direction`, and `offset` as properties.
 
-### com.machineblocks.core.Step
+### com.machineblocks.bml.core.Step
 
-Framework BML: `com/machineblocks/core/Step.bml`. Extends `org.blockml.core.Block` — a framework Block for Set assembly order.
+Framework BML: `com/machineblocks/bml/core/Step.bml`. Extends `org.blockml.bml.core.Block` — a framework Block for Set assembly order.
 
 ```text
-Extends:        org.blockml.core.Block
+Extends:        org.blockml.bml.core.Block
 Final:          true
 Members:
-  part           — association com.machineblocks.core.Block: references bml:id of a placed instance in _parts
+  part           — association com.machineblocks.bml.core.Block: references bml:id of a placed instance in _parts
   description    — optional human-readable step label
 Composition:    none — leaf meta Block
 ```
@@ -492,53 +492,53 @@ When `_steps` is absent or empty, assembly order equals the document order of `_
 Framework types are **BML files** — see `16_framework_base_types.md`. Interpretation (SCAD mapping, processors) lives in render targets only.
 
 ```text
-org.blockml.core.Block                                  ← packages/core/…/Block.bml (abstract, root)
-    com.machineblocks.core.Step                         ← mbom/…/Step.bml (final)
-  org.blockml.core.ValueType                            ← ValueType.bml (abstract)
-  org.blockml.core.Language                             ← Language.bml (abstract)
-    org.blockml.core.ProgrammingLanguage                ← ProgrammingLanguage.bml (abstract)
-      org.blockml.language.TypeScript · OpenSCAD · PseudoCode · …
-    org.blockml.core.MarkupLanguage                       ← MarkupLanguage.bml (abstract)
-      org.blockml.language.XML · JSON · YML
-    org.blockml.language.English · German · French · Spanish · Chinese · Japanese · Russian
-  org.blockml.core.Entity                               ← Entity.bml (abstract)
-      org.blockml.service.Math                          ← core/…/service/Math.bml
-  com.machineblocks.core.Block                          ← mbom/…/Block.bml (abstract)
-    com.machineblocks.core.CompositeBlock               ← CompositeBlock.bml (abstract)
-      com.machineblocks.core.Set                        ← Set.bml (abstract)
+org.blockml.bml.core.Block                                  ← packages/core/…/Block.bml (abstract, root)
+    com.machineblocks.bml.core.Step                         ← mbom/…/Step.bml (final)
+  org.blockml.bml.core.ValueType                            ← ValueType.bml (abstract)
+  org.blockml.bml.core.Language                             ← Language.bml (abstract)
+    org.blockml.bml.core.ProgrammingLanguage                ← ProgrammingLanguage.bml (abstract)
+      org.blockml.bml.language.TypeScript · OpenSCAD · PseudoCode · …
+    org.blockml.bml.core.MarkupLanguage                       ← MarkupLanguage.bml (abstract)
+      org.blockml.bml.language.XML · JSON · YML
+    org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
+  org.blockml.bml.core.Entity                               ← Entity.bml (abstract)
+      org.blockml.bml.service.Math                          ← core/…/service/Math.bml
+  com.machineblocks.bml.core.Block                          ← mbom/…/Block.bml (abstract)
+    com.machineblocks.bml.core.CompositeBlock               ← CompositeBlock.bml (abstract)
+      com.machineblocks.bml.core.Set                        ← Set.bml (abstract)
         com.martianmicro.anyclosure.DefaultEnclosure   ← user BML
-      com.machineblocks.bricks.StandardPresets          ← preset block (_presets)
-    com.machineblocks.core.NativeBlock                  ← NativeBlock.bml (final)
-    com.machineblocks.bricks.Standard                   ← user BML
+      com.machineblocks.bml.bricks.StandardPresets          ← preset block (_presets)
+    com.machineblocks.bml.core.NativeBlock                  ← NativeBlock.bml (final)
+    com.machineblocks.bml.bricks.Standard                   ← user BML
     com.martianmicro.anyclosure.Wall
     …
 ```
 
-### com.machineblocks.core.Block
+### com.machineblocks.bml.core.Block
 
-MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/blocks/com/machineblocks/core/Block.bml`. Extends `org.blockml.core.Entity`.
+MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/Block.bml`. Extends `org.blockml.bml.core.Entity`.
 
 ```text
-Extends:        org.blockml.core.Entity
+Extends:        org.blockml.bml.core.Entity
 Properties:     name (String)
 Associations:   basePresets (bml:Self[] — references ids in _presets)
-Aggregations:   _presets (type: com.machineblocks.core.Block[])
+Aggregations:   _presets (type: com.machineblocks.bml.core.Block[])
 ```
 
-Domain native properties (size, offset, direction, …) are declared on concrete block types (e.g. `com.machineblocks.bricks.Standard`), not on the abstract base. SCAD mapping in `09_mbom_properties.yml` (render only).
+Domain native properties (size, offset, direction, …) are declared on concrete block types (e.g. `com.machineblocks.bml.bricks.Standard`), not on the abstract base. SCAD mapping in `09_mbom_properties.yml` (render only).
 
-### com.machineblocks.core.CompositeBlock
+### com.machineblocks.bml.core.CompositeBlock
 
 Defined in `CompositeBlock.bml`. Extends `Block`. Adds `_parts` as the default composition aggregation.
 
 ```text
-Extends:        com.machineblocks.core.Block
-Aggregations:   _parts (type: com.machineblocks.core.Block[], default)
+Extends:        com.machineblocks.bml.core.Block
+Aggregations:   _parts (type: com.machineblocks.bml.core.Block[], default)
 subTypes: Block
 languages: OpenSCAD
 ```
 
-### com.machineblocks.core.NativeBlock
+### com.machineblocks.bml.core.NativeBlock
 
 `NativeBlock` is the direct BML representation of a raw `mb_block()` call. It is **final** — it cannot be used as `baseType` in any Block definition. It can only appear as a child element in Compositions.
 
@@ -546,26 +546,26 @@ languages: OpenSCAD
 Properties:     native MB properties (declared on concrete types or via basePresets)
                 no custom properties allowed — BML_NATIVE_BLOCK_CUSTOM_PROPERTY
 Capabilities:   none
-Aggregations:   children (type: com.machineblocks.core.Block[], default — mb_block() sub-geometry)
+Aggregations:   children (type: com.machineblocks.bml.core.Block[], default — mb_block() sub-geometry)
 Composition:    allowed — children become mb_block() children
-Final:          baseType = com.machineblocks.core.NativeBlock → BML_FINAL_BASE_TYPE
+Final:          baseType = com.machineblocks.bml.core.NativeBlock → BML_FINAL_BASE_TYPE
 ```
 
 The ScadBlockProcessor renders `NativeBlock` directly as `mb_block()` with all declared settings. V1 emits settings as pseudo-map `[["key", value], …]` — see `05_scad_renderer.md` — Settings Format.
 
 **All leaf geometry in compositions renders as `mb_block()`.** Domain-typed composition children (e.g. `bricks:StandardBrick`) are **lowered** to the same `mb_block()` settings — they are not rendered via typed block modules or `use` imports of dependency SCAD files.
 
-For **standalone compile**, leaf-only Block types (e.g. `com.machineblocks.bricks.Standard` — effectively one NativeBlock) are **optimized to a direct `mb_block()` main call**, skipping typed module indirection and duplicate `mb_param_*` extraction. See `14_compiler_runtime.md` — Leaf-only blocks.
+For **standalone compile**, leaf-only Block types (e.g. `com.machineblocks.bml.bricks.Standard` — effectively one NativeBlock) are **optimized to a direct `mb_block()` main call**, skipping typed module indirection and duplicate `mb_param_*` extraction. See `14_compiler_runtime.md` — Leaf-only blocks.
 
-### com.machineblocks.core.Set
+### com.machineblocks.bml.core.Set
 
-`Set` extends `com.machineblocks.core.CompositeBlock` and inherits `_presets` (palette) and `_parts` (placed instances). Unlike `NativeBlock`, `Set` is derivable:
+`Set` extends `com.machineblocks.bml.core.CompositeBlock` and inherits `_presets` (palette) and `_parts` (placed instances). Unlike `NativeBlock`, `Set` is derivable:
 
 ```text
-Aggregations:   _presets (type: com.machineblocks.core.Block[] — inherited from Block)
-                _parts  (type: com.machineblocks.core.Block[], default — inherited from CompositeBlock)
-                _steps  (type: com.machineblocks.core.Step[] — declared on Set.bml)
-Derivable:      baseType = com.machineblocks.core.Set  ✓
+Aggregations:   _presets (type: com.machineblocks.bml.core.Block[] — inherited from Block)
+                _parts  (type: com.machineblocks.bml.core.Block[], default — inherited from CompositeBlock)
+                _steps  (type: com.machineblocks.bml.core.Step[] — declared on Set.bml)
+Derivable:      baseType = com.machineblocks.bml.core.Set  ✓
 Processor:      ScadSetProcessor → STEPS array + 4 view submodules
 ```
 
@@ -584,12 +584,12 @@ Declared on `CompositeBlock.bml` (enables Sub-Blocks for composites):
 ```
 
 ```text
-org.blockml.core.Block                — omitted → effective []
-com.machineblocks.core.Block          — omitted → inherits []
-com.machineblocks.core.CompositeBlock — explicit → Block
-com.machineblocks.core.Set            — omitted → inherits CompositeBlock
-com.machineblocks.core.NativeBlock    — omitted → inherits [] (final leaf)
-org.blockml.service.Math              — baseType: org.blockml.core.Entity
+org.blockml.bml.core.Block                — omitted → effective []
+com.machineblocks.bml.core.Block          — omitted → inherits []
+com.machineblocks.bml.core.CompositeBlock — explicit → Block
+com.machineblocks.bml.core.Set            — omitted → inherits CompositeBlock
+com.machineblocks.bml.core.NativeBlock    — omitted → inherits [] (final leaf)
+org.blockml.bml.service.Math              — baseType: org.blockml.bml.core.Entity
 ```
 
 To close Sub-Blocks on a type whose parent enabled them: `<subTypes/>` (explicit empty override).
@@ -605,8 +605,8 @@ Declared on `CompositeBlock.bml`:
 ```
 
 ```text
-com.machineblocks.core.CompositeBlock — OpenSCAD
-org.blockml.service.*                 — TypeScript on Transformation capabilities
+com.machineblocks.bml.core.CompositeBlock — OpenSCAD
+org.blockml.bml.service.*                 — TypeScript on Transformation capabilities
 ```
 
 ### Validation
@@ -619,7 +619,7 @@ MB_EMPTY_BLOCK                  — Block has no Composition and no registered c
                                    (MB_* prefix = MachineBlocks-specific, not BML Core)
 ```
 
-Note: `com.machineblocks.core.Step` is a framework Block extending `org.blockml.core.Block`. The SCAD Set renderer interprets its `part` association for STEPS assembly output.
+Note: `com.machineblocks.bml.core.Step` is a framework Block extending `org.blockml.bml.core.Block`. The SCAD Set renderer interprets its `part` association for STEPS assembly output.
 
 ---
 

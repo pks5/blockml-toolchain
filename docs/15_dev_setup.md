@@ -221,13 +221,12 @@ npm workspace names (`@blockml/core`, `@blockml/parser`, `@blockml/compiler`, �
 
 ```text
 @blockml/core npm package may contain:
-  blocks/org/blockml/core/*.bml       →  Block FQNs (org.blockml.core.Block, …)
-  blocks/org/blockml/compiler/*.bml   →  compiler domain Blocks (org.blockml.compiler.*, …)
-  src/org/blockml/impl/bom/*.ts       →  BOM interfaces (org.blockml.impl.bom.BlockDefinition, …)
-  src/org/blockml/impl/**/*.ts        →  other toolchain code under org.blockml.impl.*
+  blocks/org/blockml/bml/core/*.bml       →  Block FQNs (org.blockml.bml.core.Block, …)
+  blocks/org/blockml/bml/compiler/*.bml   →  compiler domain Blocks (org.blockml.bml.compiler.*, …)
+  src/**/*.ts                             →  TypeScript toolchain (parser BOM interfaces, utilities)
 ```
 
-Each root domain splits into `<domain>.*` (BML Blocks) and `<domain>.impl.*` (manifestations / toolchain). No Block FQN or xmlns may use `.impl`. See `00_bom_core.md` — Domain-Scoped Namespace Separation.
+Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may exist outside the domain's `bml` namespace. See `00_bom_core.md` — Mandatory BML namespace.
 
 ### Standard library package
 
@@ -260,9 +259,9 @@ No TypeScript build. Package contains BML source files only:
 packages/core/
   package.json          — name: @blockml/core, private: true
   blocks/
-    org/blockml/core/
+    org/blockml/bml/core/
       Block.bml · …
-    org/blockml/service/
+    org/blockml/bml/service/
       Math.bml
       Strings.bml
       …
@@ -273,7 +272,7 @@ Consumed by:
 
 - TypeRegistry bootstrap (CLI scans workspace + scad-lib)
 - Correctness tests (expression builtins)
-- Pre-rendered SCAD artifacts in `scad-lib/blocks/org/blockml/service/`
+- Pre-rendered SCAD artifacts in `scad-lib/blocks/org/blockml/bml/service/`
 
 ### `@blockml/cli` (Node-only)
 
@@ -517,8 +516,8 @@ jobs:
 Recommended first coding milestones:
 
 ```text
-1. @blockml/core BML          — org.blockml.core.*, org.blockml.service.*
-2. @machineblocks/mbom BML    — com.machineblocks.core.*
+1. @blockml/core BML          — org.blockml.bml.core.*, org.blockml.bml.service.*
+2. @machineblocks/mbom BML    — com.machineblocks.bml.core.*
 3. @blockml/core              — types from 12_bom_object_model.md + Diagnostic
 4. @blockml/parser            — stage [5] mapper skeleton + tests
 5. @blockml/core              — TypeRegistry + validate (stages 6–8)

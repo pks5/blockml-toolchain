@@ -1,0 +1,79 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.bml.documentation.BmlNamespace
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <idea>Mandatory domain.bml namespace for every BML definition.</idea>
+
+  <documentation>
+    Every BML definition — Blocks, Libraries, Types, Languages, Services, Capabilities, and all
+    other BlockML definitions — must reside below the owning domain's bml package.
+
+    General form:
+    • &lt;domain&gt;.bml.*
+
+    Examples:
+    • org.blockml.bml.*
+    • com.machineblocks.bml.*
+    • com.example.bml.*
+
+    No BML Block, Library, or other BlockML definition may exist outside the domain's bml
+    namespace. Physical source layout mirrors the FQN: blocks/org/blockml/bml/core/Block.bml
+    defines org.blockml.bml.core.Block.
+
+    Typical BlockML branches (all under org.blockml.bml.*):
+    • org.blockml.bml.core.* — framework base types (Block, ValueType, Status, Library, …)
+    • org.blockml.bml.type.* — bootstrap ValueTypes
+    • org.blockml.bml.service.* — built-in expression services (#math, #strings, …)
+    • org.blockml.bml.language.* — implementation language types
+    • org.blockml.bml.capability.* — Capability type branches
+    • org.blockml.bml.definition.* — Definition meta-model
+    • org.blockml.bml.documentation.* — bootstrap documentation blocks
+
+    Domain libraries follow the same rule:
+    • com.machineblocks.bml.core.*
+    • com.machineblocks.bml.bricks.*
+    • com.machineblocks.bml.type.*
+
+    npm workspace packages (@blockml/core, @blockml/parser, …) are deployment units — not
+    identical to FQN namespaces. TypeScript toolchain code ships in package src/ directories;
+    it is not a BML definition and does not receive a domain.bml FQN.
+  </documentation>
+
+  <references>
+    <see file="00_bom_core.md">
+      Mandatory BML namespace — authoritative rules and examples.
+    </see>
+    <see file="01_system.md">
+      FQN Namespaces — system-level summary.
+    </see>
+    <see file="02_mbml.md">
+      Namespaces — xmlns bindings and Block FQN resolution.
+    </see>
+    <see file="15_dev_setup.md">
+      Package Conventions — npm packages vs. FQN namespaces.
+    </see>
+    <see file="06_compiler.md">
+      BML_OUTSIDE_BML_NAMESPACE — validation error code.
+    </see>
+    <see block="doc:LibrarySystem">
+      Libraries, packages, and namespace membership — related reading.
+    </see>
+    <see block="doc:DocumentationModel">
+      Next reading step — idea, documentation, references on Block definitions.
+    </see>
+  </references>
+
+  <name>BmlNamespace</name>
+  <type>doc:BmlNamespace</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

@@ -270,13 +270,13 @@ Class:    PascalCase
 **Package segments are singular** for infrastructure namespaces:
 
 ```text
-org.blockml.core.*         ✓
-org.blockml.type.*         ✓   (not .types)
-org.blockml.language.*     ✓   — implementation language types (TypeScript, OpenSCAD, …)
-org.blockml.service.*      ✓   (not .services)
-org.blockml.capability.*   ✓   (not .capabilities)
-com.machineblocks.type.*   ✓
-com.machineblocks.core.*   ✓
+org.blockml.bml.core.*         ✓
+org.blockml.bml.type.*         ✓   (not .types)
+org.blockml.bml.language.*     ✓   — implementation language types (TypeScript, OpenSCAD, …)
+org.blockml.bml.service.*      ✓   (not .services)
+org.blockml.bml.capability.*   ✓   (not .capabilities)
+com.machineblocks.bml.type.*   ✓
+com.machineblocks.bml.core.*   ✓
 com.electronics.type.*     ✓
 com.ui.type.*              ✓
 ```
@@ -284,150 +284,75 @@ com.ui.type.*              ✓
 **Documented exception — domain library packages:** collective/plural segment names are allowed when the package denotes a **family of related Block types**, not an infrastructure concern. These are stable, intentional FQNs — not typos.
 
 ```text
-com.machineblocks.bricks.*       ✓   — StandardBrick, Plate, Tile, … (MachineBlocks brick library)
-com.machineblocks.calibration.*  ✓   — Calibrator, …
+com.machineblocks.bml.bricks.*       ✓   — StandardBrick, Plate, Tile, … (MachineBlocks brick library)
+com.machineblocks.bml.calibration.*  ✓   — Calibrator, …
 ```
 
 Do not infer from `bricks` that other packages may freely use plural segments. New infrastructure namespaces (`.type`, `.service`, `.core`, `.capability`) are always singular. New domain libraries may choose a collective name deliberately — document the decision in the domain spec.
 
-### Domain-Scoped Namespace Separation
+### Mandatory BML namespace (`<domain>.bml.*`)
 
-Each **root domain** defines exactly two clearly separated roots:
+Every BML definition — Blocks, Libraries, Types, Languages, Services, Capabilities, and all other BlockML definitions — must reside below the owning domain's **`bml`** package:
 
 ```text
-<domain>.*         → BML / Block namespace (semantic model)
-<domain>.impl.*    → Manifestations / technical implementation (reserved)
+General form:  <domain>.bml.*
+
+Examples:
+  org.blockml.bml.*
+  com.machineblocks.bml.*
+  com.example.bml.*
 ```
 
-**Principle:** A domain owns one semantic namespace and one reserved implementation namespace. Blocks describe **what exists**. Implementations describe **how it is manifested**.
-
-The implementation root is **domain-wide** — not per library or sub-library. Implementation structure may be organized independently of Block structure; structural mirroring is allowed but not required.
+No BML Block, Library, or other BlockML definition may exist outside the domain's `bml` namespace. Violation → **`BML_OUTSIDE_BML_NAMESPACE`** (validation error).
 
 ```text
-Domain examples:
-  org.blockml.*              → BlockML Blocks
-  org.blockml.impl.*         → BlockML implementations / manifestations
-  com.machineblocks.*        → MachineBlocks Blocks
-  com.machineblocks.impl.*   → MachineBlocks manifestations
-  com.martianmicro.*         → Martian Micro Blocks
-  com.martianmicro.impl.*    → Martian Micro implementations
+Correct:
+  org.blockml.bml.core.Block
+  org.blockml.bml.type.Integer
+  org.blockml.bml.compiler.parser.Parser
+  com.machineblocks.bml.core.Block
+  com.machineblocks.bml.bricks.StandardBrick
+
+Wrong:
+  org.blockml.core.Block                         — missing .bml segment
+  com.machineblocks.core.Block                   — missing .bml segment
+  xmlns:core="org.blockml.core"                  — xmlns binding outside .bml
+  Library _blocks exports org.blockml.core.*     — export outside .bml
 ```
 
-No separate manifestation library, mapping layer, or artificial mirroring of Block packages is required.
+Physical source layout mirrors the FQN: `blocks/org/blockml/bml/core/Block.bml` defines `org.blockml.bml.core.Block`.
 
-### Block namespace (`<domain>.*`)
-
-All BML Block FQNs live under the domain root — **never** under the reserved implementation root:
+Typical BlockML language branches (all under `org.blockml.bml.*`):
 
 ```text
-org.blockml.core.Block
-org.blockml.type.Integer
-org.blockml.compiler.parser.Parser
-org.blockml.compiler.validator.Validator
-org.blockml.compiler.serializer.Serializer
-com.machineblocks.core.Block
-com.machineblocks.bricks.StandardBrick
-```
-
-Typical BlockML language branches (all under the Block root, not under `.impl`):
-
-```text
-org.blockml.core.*         — framework base types (Block, ValueType, Status, Library, …)
-org.blockml.type.*         — bootstrap ValueTypes (Integer, Decimal, Float, Text, Boolean, Number, …)
-org.blockml.status.*       — standard maturity status blocks (Stable, Draft, Stub, Deprecated)
-org.blockml.service.*      — built-in services (#math, #strings, …)
-org.blockml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
-org.blockml.language.*     — Languages (TypeScript, OpenSCAD, …)
-org.blockml.compiler.*     — compiler domain Blocks (Parser, Validator, Serializer, …)
-org.blockml.bom.*          — BOM meta-model Blocks (BlockDefinition, CompositionNode, …)
+org.blockml.bml.core.*         — framework base types (Block, ValueType, Status, Library, …)
+org.blockml.bml.type.*         — bootstrap ValueTypes (Integer, Decimal, Float, Text, Boolean, Number, …)
+org.blockml.bml.status.*       — standard maturity status blocks (Stable, Draft, Stub, Deprecated)
+org.blockml.bml.service.*      — built-in services (#math, #strings, …)
+org.blockml.bml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
+org.blockml.bml.language.*     — Languages (TypeScript, OpenSCAD, …)
+org.blockml.bml.compiler.*     — compiler domain Blocks (Parser, Validator, Serializer, …)
+org.blockml.bml.definition.*   — Definition meta-model Blocks (BlockDefinition, PropertyDefinition, …)
+org.blockml.bml.documentation.* — bootstrap documentation blocks
 ```
 
 These namespaces contain BML-defined Blocks, ValueTypes, Capability types, and Languages. They are part of the public BlockML grammar.
 
-**Independent implementation layout** — the same Block namespace may be manifested in many ways under `.impl`:
+npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. A single npm package may ship BML files under `blocks/org/blockml/bml/` and TypeScript toolchain code under `src/`. TypeScript interfaces (parser BOM shapes, render processors, CLI utilities) are **not** BML definitions and do not receive `<domain>.bml.*` FQNs. See `15_dev_setup.md` — Package Conventions.
 
-```text
-Blocks:
-  org.blockml.compiler.parser.Parser
-  org.blockml.compiler.parser.NamespaceResolver
-  org.blockml.compiler.validator.Validator
-
-Valid implementations (no 1:1 mapping required):
-  org.blockml.impl.frontend.XmlFrontend
-  org.blockml.impl.analysis.ValidationEngine
-  org.blockml.impl.io.BmlWriter
-
-Also valid (structural mirroring — optional):
-  org.blockml.compiler.parser.Parser
-    → org.blockml.impl.compiler.parser.DefaultParser
-```
-
-### Implementation namespace (`<domain>.impl.*`)
-
-Concrete manifestations and implementation types live **exclusively** under the domain's reserved implementation root:
-
-```text
-org.blockml.impl.parser.XmlParser
-org.blockml.impl.validation.DefaultValidator
-org.blockml.impl.serialization.BmlSerializer
-org.blockml.impl.renderer.ScadRenderTarget
-org.blockml.impl.bom.BlockDefinition          — parse-time transport shape (TypeScript)
-org.blockml.impl.compiler.TypeRegistry
-com.machineblocks.impl.renderer.ScadBlockProcessor
-```
-
-`impl` is **not** a manifestation model — it is simply a reserved technical space.
-
-### Reservation rule
-
-The package branch `<domain>.impl` is reserved **exclusively** for manifestations and technical implementation.
-
-Within BML:
-
-```text
-No Block may have an FQN under <domain>.impl
-No BML namespace (xmlns) may point to <domain>.impl
-No Library may export Blocks from <domain>.impl
-```
-
-Violation → **`BML_RESERVED_IMPLEMENTATION_NAMESPACE`** (validation error).
-
-```text
-Correct:
-  org.blockml.core.Block                        — BML-defined language Block
-  org.blockml.bom.BlockDefinition               — BML meta-model Block (if defined)
-  org.blockml.impl.bom.BlockDefinition            — internal BOM parse shape (TypeScript)
-  org.blockml.compiler.parser.Parser              — BML-defined compiler domain Block
-  org.blockml.impl.frontend.XmlFrontend           — parser implementation
-
-Wrong:
-  org.blockml.impl.parser.Parser                  — Block FQN under .impl
-  xmlns:parser="org.blockml.impl.parser"          — namespace binding to .impl
-  Library _blocks exports org.blockml.impl.*      — implementation exported as Block
-```
-
-**Separation goal:**
-
-```text
-org.blockml.* · com.machineblocks.* · …     →  Blocks (semantic model)
-org.blockml.impl.* · com.machineblocks.impl.*  →  manifestations / toolchain code
-```
-
-npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. A single npm package may ship both BML files under `org/blockml/core/` and TypeScript under `org/blockml/impl/bom/`. See `15_dev_setup.md` — Package Conventions.
-
-Built-in services live in `org.blockml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
+Built-in services live in `org.blockml.bml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
 
 ```text
 Examples:
-  org.blockml.core.Block
-  org.blockml.service.Math
-  org.blockml.service.Strings
-  org.blockml.language.TypeScript
-  org.blockml.language.OpenSCAD
-  org.blockml.type.Integer
-  com.machineblocks.core.Block
-  com.machineblocks.type.Size3D
-  com.machineblocks.bricks.StandardBrick   ← domain library (documented plural exception)
+  org.blockml.bml.core.Block
+  org.blockml.bml.service.Math
+  org.blockml.bml.service.Strings
+  org.blockml.bml.language.TypeScript
+  org.blockml.bml.language.OpenSCAD
+  org.blockml.bml.type.Integer
+  com.machineblocks.bml.core.Block
+  com.machineblocks.bml.type.Size3D
+  com.machineblocks.bml.bricks.StandardBrick   ← domain library (documented plural exception)
   com.electronics.core.Component
   com.ui.core.Control
 ```
@@ -475,7 +400,7 @@ A Block instance in another document is referenced by **`{BlockFQN}::{id}`** —
 Format:     {EnclosingBlockFQN}::{instanceId}
 
 Examples:
-  com.machineblocks.bricks.StandardPresets::brick-2x4
+  com.machineblocks.bml.bricks.StandardPresets::brick-2x4
   com.myproject.enclosures.DefaultEnclosure::floor
 ```
 
@@ -493,7 +418,7 @@ A qualified reference is valid **only when both** conditions hold:
 </_presets>
 ```
 
-Without `bml:exportIds="true"` on that composition, `com.machineblocks.bricks.StandardPresets::brick-2x4` is invalid → `BML_UNEXPORTED_INSTANCE_REF`.
+Without `bml:exportIds="true"` on that composition, `com.machineblocks.bml.bricks.StandardPresets::brick-2x4` is invalid → `BML_UNEXPORTED_INSTANCE_REF`.
 
 **2. Static target.** The target instance must be statically resolvable at validate time:
 
@@ -560,15 +485,15 @@ PascalCase is required because:
 
 ### Inheritance
 
-Blocks inherit from other Blocks via `baseType`. Inheritance is single — each Block has exactly one base type. The root of all inheritance is `org.blockml.core.Block`.
+Blocks inherit from other Blocks via `baseType`. Inheritance is single — each Block has exactly one base type. The root of all inheritance is `org.blockml.bml.core.Block`.
 
-`baseType` is mandatory on every Block definition **except** `org.blockml.core.Block` (inheritance root — omits `<baseType>`). Omitting it elsewhere is a parse-time error (`BML_MISSING_BASE_TYPE`). There is no implicit default — the author must always make an explicit choice about which domain the Block belongs to.
+`baseType` is mandatory on every Block definition **except** `org.blockml.bml.core.Block` (inheritance root — omits `<baseType>`). Omitting it elsewhere is a parse-time error (`BML_MISSING_BASE_TYPE`). There is no implicit default — the author must always make an explicit choice about which domain the Block belongs to.
 
 Domain-specific specializations extend this root:
 
 ```text
-org.blockml.core.Block
-  com.machineblocks.core.Block   — adds size, color, offset, direction, _parts aggregation, ...
+org.blockml.bml.core.Block
+  com.machineblocks.bml.core.Block   — adds size, color, offset, direction, _parts aggregation, ...
   com.electronics.core.Component — adds footprint, schematic symbol, ...
   com.ui.core.Control            — adds layout, style, events, ...
   com.service.core.Bean          — adds lifecycle, dependencies, ...
@@ -733,7 +658,7 @@ Properties are typed parameters of a Block. Every Property has a name, a type, a
 
 ### Composition Meta (`bml:id`, `bml:version`)
 
-`org.blockml.core.Block` declares **no members**. The property namespace on every sub-type is **completely free** — domains may declare Properties named `id`, `version`, or anything else.
+`org.blockml.bml.core.Block` declares **no members**. The property namespace on every sub-type is **completely free** — domains may declare Properties named `id`, `version`, or anything else.
 
 Composition **instance identity** and **external reference version** are not member attributes. They use the `bml:` namespace on Block instance elements:
 
@@ -744,7 +669,7 @@ bml:version  — semantic version pin when typeFqn refers to an external block (
 
 ```text
 Authored as:     bml:id="…" and bml:version="…" on composition instances
-Not on Block:    org.blockml.core.Block declares no members — no reserved property names
+Not on Block:    org.blockml.bml.core.Block declares no members — no reserved property names
 Bare id=/version= on instances → memberValues if the referenced Block type declares such Properties
 Special semantics: identity paths (parent::child), reference validation,
                    auto-ID rules, render identity (mb_block_id)
@@ -756,7 +681,7 @@ Do not confuse `bml:id` (composition meta) with a domain Property named `id`. Th
 
 ```text
 name          — camelCase property name (unique within namespace — see Member Namespace)
-type          — FQN of a ValueType (baseType chain includes org.blockml.core.ValueType)
+type          — FQN of a ValueType (baseType chain includes org.blockml.bml.core.ValueType)
 value         — typed defined value (literal or Expression). Formerly defaultValue.
 group         — optional grouping hint (for editors)
 documentation — human-readable description
@@ -774,18 +699,18 @@ visibility    — optional; must match naming convention
 
 **Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order defines array literal authoring, FunctionMapping positional parameters, and compatibility — see `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md`.
 
-**EnumType property values:** when the property `type` is an EnumType, enum instance references may omit the `{EnumTypeFQN}::` prefix — `STANDARD` is equivalent to `com.machineblocks.type.BaseCutoutType::STANDARD` on a `BaseCutoutType` property. See `17_type_system_bml.md` — EnumType.
+**EnumType property values:** when the property `type` is an EnumType, enum instance references may omit the `{EnumTypeFQN}::` prefix — `STANDARD` is equivalent to `com.machineblocks.bml.type.BaseCutoutType::STANDARD` on a `BaseCutoutType` property. See `17_type_system_bml.md` — EnumType.
 
 **Property value semantics:** property values are **never linked** to other instances — always deep copies. Enum `FQN::id` tokens are resolution keys, not live references to `_values` composition entries. See `12_bom_object_model.md` — Property Value Semantics.
 
 ### Property and Capability Value Types
 
-Property `type` attributes must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.core.ValueType` (primitives, structs, enums, generics). Non-ValueType Blocks (Wall, Entity, NativeBlock, …) are not valid property types. The same rule applies to Capability `inputType` and `outputType`.
+Property `type` attributes must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.bml.core.ValueType` (primitives, structs, enums, generics). Non-ValueType Blocks (Wall, Entity, NativeBlock, …) are not valid property types. The same rule applies to Capability `inputType` and `outputType`.
 
 ```text
-type="Integer"              →  org.blockml.type.Integer        ✓  (Number → PrimitiveType → ValueType)
-type="Decimal"              →  org.blockml.type.Decimal        ✓
-type="type:Size3d"            →  com.machineblocks.type.Size3d ✓  (StructType → ValueType)
+type="Integer"              →  org.blockml.bml.type.Integer        ✓  (Number → PrimitiveType → ValueType)
+type="Decimal"              →  org.blockml.bml.type.Decimal        ✓
+type="type:Size3d"            →  com.machineblocks.bml.type.Size3d ✓  (StructType → ValueType)
 type="com.foo.Wall"           →  ✗  BML_INVALID_PROPERTY_TYPE (not a ValueType)
 ```
 
@@ -796,16 +721,16 @@ Generic type arguments must satisfy each parameter's `baseType` constraint — s
 Aggregation and association `type` attributes may reference **any Block FQN** — including composable Blocks, ValueTypes, and meta Blocks:
 
 ```text
-type="com.machineblocks.core.Block[]"     ✓
-type="com.machineblocks.type.Size3d[]"    ✓
-type="org.blockml.type.Integer[]"         ✓
+type="com.machineblocks.bml.core.Block[]"     ✓
+type="com.machineblocks.bml.type.Size3d[]"    ✓
+type="org.blockml.bml.type.Integer[]"         ✓
 ```
 
-ValueTypes appear as type references on Properties — values are stored on the Property, not on the ValueType. When a primitive must appear as a Block instance in composition, use a concrete `*Entity` type (for example `org.blockml.type.TextEntity`). See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity.
+ValueTypes appear as type references on Properties — values are stored on the Property, not on the ValueType. When a primitive must appear as a Block instance in composition, use a concrete `*Entity` type (for example `org.blockml.bml.type.TextEntity`). See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity.
 
 ### Constraints
 
-A Property may declare a list of constraints. Each constraint is a Block instance whose `baseType` chain includes `org.blockml.core.Constraint`. The compiler binds each constraint's generic parameter `T` to the property type (or element type for collection constraints) and validates the constraint instance. **Value enforcement** depends on the optional `validation` property — when omitted, the BlockML validator ignores the constraint and it remains metadata.
+A Property may declare a list of constraints. Each constraint is a Block instance whose `baseType` chain includes `org.blockml.bml.core.Constraint`. The compiler binds each constraint's generic parameter `T` to the property type (or element type for collection constraints) and validates the constraint instance. **Value enforcement** depends on the optional `validation` property — when omitted, the BlockML validator ignores the constraint and it remains metadata.
 
 ```xml
 <width type="Float">
@@ -995,7 +920,7 @@ Within the Block being defined, the Block's own FQN serves as the definition roo
 com.foo.Bar.properties.width        ≡  (current definition).properties.width
 ```
 
-`org.blockml.definition.BlockDefinition` carries generic type parameter `B extends org.blockml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`.
+`org.blockml.bml.definition.BlockDefinition` carries generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`.
 
 #### BOM internal representation
 
@@ -1022,19 +947,19 @@ A service Block provides named, reusable logic — such as data models, math uti
 ### Service Class Hierarchy
 
 ```text
-org.blockml.core.Block
-  org.blockml.core.Entity              — base for built-in services and utility Sub-Blocks
-    org.blockml.service.*              — built-in expression utilities (#math, #strings, …)
-    org.blockml.service.ModelBlock     — holds data (JSONModel, ODataModel, XMLModel)
+org.blockml.bml.core.Block
+  org.blockml.bml.core.Entity              — base for built-in services and utility Sub-Blocks
+    org.blockml.bml.service.*              — built-in expression utilities (#math, #strings, …)
+    org.blockml.bml.service.ModelBlock     — holds data (JSONModel, ODataModel, XMLModel)
 ```
 
-**`org.blockml.core.Entity`** — abstract base for addressable logic units. Built-in services in `org.blockml.service.*` extend Entity directly.
+**`org.blockml.bml.core.Entity`** — abstract base for addressable logic units. Built-in services in `org.blockml.bml.service.*` extend Entity directly.
 
-**`org.blockml.service.ModelBlock`** — provides data access via path-based Transformation Capabilities. Specializations: `org.blockml.service.JSONModel`, `org.blockml.service.ODataModel`, `org.blockml.service.XMLModel`.
+**`org.blockml.bml.service.ModelBlock`** — provides data access via path-based Transformation Capabilities. Specializations: `org.blockml.bml.service.JSONModel`, `org.blockml.bml.service.ODataModel`, `org.blockml.bml.service.XMLModel`.
 
-Every Capability inherits an optional `<implementation>` from `org.blockml.core.CapabilityType`. The element **`type`** attribute must reference a Language FQN — e.g. `<implementation type="org.blockml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is removed and the call site is updated to a `#built-in` call while the Capability signature remains unchanged.
+Every Capability inherits an optional `<implementation>` from `org.blockml.bml.core.CapabilityType`. The element **`type`** attribute must reference a Language FQN — e.g. `<implementation type="org.blockml.bml.language.TypeScript">`. The BlockProcessor transpiles to the target language or executes at compile time when all arguments are literals. This is the pragmatic escape hatch for logic that no built-in covers yet — and a natural transition path: once a built-in is available, the `<implementation>` is removed and the call site is updated to a `#built-in` call while the Capability signature remains unchanged.
 
-Built-in services are defined in `org.blockml.service.*` and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
+Built-in services are defined in `org.blockml.bml.service.*` and accessible via the `#` prefix. They are shared across all Blocks in the same domain and cannot be overridden.
 
 ```text
 #math    — built-in math service (min, max, ceil, floor, ...)
@@ -1116,12 +1041,12 @@ Like Properties, Capabilities are declared with a name and a type (FQN). Like Pr
 
 Capabilities use FQN type values. The type determines the communication pattern.
 
-> **Package TBD** — placeholder `org.blockml.capability.*`. Candidate: `bom.foundation` (domain to be confirmed).
+> **Package TBD** — placeholder `org.blockml.bml.capability.*`. Candidate: `bom.foundation` (domain to be confirmed).
 
 ```text
-org.blockml.capability.Inbound         — receives data/messages asynchronously
-org.blockml.capability.Outbound        — sends/emits data/messages asynchronously
-org.blockml.capability.Transformation  — synchronously callable; transforms inputType to outputType
+org.blockml.bml.capability.Inbound         — receives data/messages asynchronously
+org.blockml.bml.capability.Outbound        — sends/emits data/messages asynchronously
+org.blockml.bml.capability.Transformation  — synchronously callable; transforms inputType to outputType
 ```
 
 ### Capability Metadata
@@ -1153,11 +1078,11 @@ Async reply via `replyTo` is a runtime/message pattern — not modeled via Capab
 Capabilities declare typed data via `inputType` and/or `outputType` (see validation rules above). Values are `TypeDescriptor` expressions that resolve to ValueTypes — same parsing rules as Property `type`.
 
 ```text
-org.blockml.type.Integer          — primitive (NamedTypeReference)
-org.blockml.type.Text           — primitive
+org.blockml.bml.type.Integer          — primitive (NamedTypeReference)
+org.blockml.bml.type.Text           — primitive
 { a: Float, b: Float }            — anonymous struct (AnonymousStructType)
 com.myDomain.MyClass              — named type (NamedTypeReference)
-{ items: org.blockml.type.Integer[0..n] }  — collection field (multiplicity on reference)
+{ items: org.blockml.bml.type.Integer[0..n] }  — collection field (multiplicity on reference)
 ```
 
 See `12_bom_object_model.md` — Type Descriptors for the formal BOM representation.
@@ -1251,26 +1176,26 @@ Whether Capability linking in Presets is permitted is to be defined.
 A `Transformation` Capability may carry an `<implementation>` element that provides a target-language function body. This is only permitted when the Block's `baseType` declares support for that implementation type.
 
 ```text
-Implementation language types (org.blockml.language.*):
-  org.blockml.language.TypeScript   — TypeScript arrow function (compile-time / transpile)
-  org.blockml.language.OpenSCAD     — OpenSCAD function(s) in CDATA
+Implementation language types (org.blockml.bml.language.*):
+  org.blockml.bml.language.TypeScript   — TypeScript arrow function (compile-time / transpile)
+  org.blockml.bml.language.OpenSCAD     — OpenSCAD function(s) in CDATA
 
 baseType declares:
-  languages: [org.blockml.language.OpenSCAD]
-    — e.g. com.machineblocks.core.Block
-  languages: [org.blockml.language.OpenSCAD, org.blockml.language.TypeScript]
-    — e.g. org.blockml.core.Entity
+  languages: [org.blockml.bml.language.OpenSCAD]
+    — e.g. com.machineblocks.bml.core.Block
+  languages: [org.blockml.bml.language.OpenSCAD, org.blockml.bml.language.TypeScript]
+    — e.g. org.blockml.bml.core.Entity
 ```
 
-If a Block carries `<implementation type="org.blockml.language.OpenSCAD">` but its `baseType` does not list that type in `languages`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
+If a Block carries `<implementation type="org.blockml.bml.language.OpenSCAD">` but its `baseType` does not list that type in `languages`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
 
 A Transformation Capability implementation can live directly on any Block whose `baseType` supports it — not only on `utility Sub-Block` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
 
 ```xml
 <!-- Direct on Block — valid if baseType supports OpenSCAD -->
 <capabilities>
-  <formatValue type="org.blockml.capability.Transformation" ...>
-    <implementation type="org.blockml.language.OpenSCAD"><![CDATA[
+  <formatValue type="org.blockml.bml.capability.Transformation" ...>
+    <implementation type="org.blockml.bml.language.OpenSCAD"><![CDATA[
 function formatValue(x) = ...;
     ]]></implementation>
   </formatValue>
@@ -1377,11 +1302,11 @@ Status expresses the **maturity or lifecycle** of a BML element. Status is not a
 ### Core status blocks
 
 ```text
-org.blockml.core.Status          — abstract base (in @blockml/core)
-org.blockml.status.Stable        — complete, tested, reliable
-org.blockml.status.Draft         — defined; implementation or mapping incomplete
-org.blockml.status.Stub          — placeholder; behaviour not yet specified
-org.blockml.status.Deprecated    — retained for compatibility; do not use in new work
+org.blockml.bml.core.Status          — abstract base (in @blockml/core)
+org.blockml.bml.status.Stable        — complete, tested, reliable
+org.blockml.bml.status.Draft         — defined; implementation or mapping incomplete
+org.blockml.bml.status.Stub          — placeholder; behaviour not yet specified
+org.blockml.bml.status.Deprecated    — retained for compatibility; do not use in new work
 ```
 
 Domain libraries may define additional status blocks (e.g. domain-specific WIP markers).
@@ -1420,16 +1345,16 @@ bml:status on non-definition element      →  only when deviating from inherite
 
 ### Status namespace shorthand
 
-Status values use the `status:` prefix (declared via `xmlns:status="org.blockml.status"`):
+Status values use the `status:` prefix (declared via `xmlns:status="org.blockml.bml.status"`):
 
 ```text
-status:Stable       →  org.blockml.status.Stable
-status:Draft        →  org.blockml.status.Draft
-status:Stub         →  org.blockml.status.Stub
-status:Deprecated   →  org.blockml.status.Deprecated
+status:Stable       →  org.blockml.bml.status.Stable
+status:Draft        →  org.blockml.bml.status.Draft
+status:Stub         →  org.blockml.bml.status.Stub
+status:Deprecated   →  org.blockml.bml.status.Deprecated
 ```
 
-There is **no implicit resolution** of bare names (`Draft` → `org.blockml.status.Draft` is invalid). The only existing shorthand exception remains Core primitives (`Integer` → `org.blockml.type.Integer`).
+There is **no implicit resolution** of bare names (`Draft` → `org.blockml.bml.status.Draft` is invalid). The only existing shorthand exception remains Core primitives (`Integer` → `org.blockml.bml.type.Integer`).
 
 See `02_mbml.md` — § Status for full authoring rules and examples.
 
@@ -1441,7 +1366,7 @@ BML Directives are special attributes and elements in the `bml:` namespace. They
 
 The `bml:` prefix is the canonical namespace for language directives. Flow-control `bml:*` attributes follow the **Thymeleaf model** — they sit on the element they apply to, not in wrapper elements.
 
-**Serialization directives:** `bml:xml` declares how Definition blocks and `org.blockml.core.Block` map to canonical BML XML (root element name, member as attribute/element/text/cdata). This is separate from composition flow control — see `19_definition_blocks_and_bml_xml.md`.
+**Serialization directives:** `bml:xml` declares how Definition blocks and `org.blockml.bml.core.Block` map to canonical BML XML (root element name, member as attribute/element/text/cdata). This is separate from composition flow control — see `19_definition_blocks_and_bml_xml.md`.
 
 ### Directive Placement
 
@@ -1453,7 +1378,7 @@ The `bml:` prefix is the canonical namespace for language directives. Flow-contr
 | `bml:version` | Block instances | External block reference version (required when type is from another file) |
 | `bml:status` | Non-definition elements | Maturity marker — only when deviating from inherited status |
 | `bml:if`, `bml:unless` | `<bml:container>`, Block instances | Conditional |
-| `<bml:xml>…</bml:xml>` | `org.blockml.core.Block`, Definition blocks only | XML root element name for this type — see `19_definition_blocks_and_bml_xml.md` |
+| `<bml:xml>…</bml:xml>` | `org.blockml.bml.core.Block`, Definition blocks only | XML root element name for this type — see `19_definition_blocks_and_bml_xml.md` |
 | `bml:xml="attribute\|element\|text\|cdata"` | Members on Definition blocks | How member values serialize to XML — see `19_definition_blocks_and_bml_xml.md` |
 
 Bare `id=` / `version=` on instances are member values when the Block type declares such Properties.
@@ -1552,23 +1477,23 @@ Sub-Blocks are declared in a `<subBlocks>` section within the parent Block defin
 The `baseType` chain defines which Sub-Block base types are permitted via **effective `subTypes`**. By default every Block has **no** permitted Sub-Block base types (`[]`). A type must **explicitly** declare `<subTypes>` to enable Sub-Blocks — or omit `<subTypes>` to inherit from its parent type.
 
 ```text
-org.blockml.core.Block
+org.blockml.bml.core.Block
   → subTypes omitted → effective [] (default)
 
-com.machineblocks.core.Block
-  → subTypes omitted → inherits [] from org.blockml.core.Block
+com.machineblocks.bml.core.Block
+  → subTypes omitted → inherits [] from org.blockml.bml.core.Block
 
-com.machineblocks.core.CompositeBlock
+com.machineblocks.bml.core.CompositeBlock
   → subTypes declared explicitly:
-    [com.machineblocks.core.Block]
+    [com.machineblocks.bml.core.Block]
 
-com.machineblocks.core.Set
+com.machineblocks.bml.core.Set
   → subTypes omitted → inherits CompositeBlock chain
 
-org.blockml.service.Math
-  → baseType: org.blockml.core.Entity
+org.blockml.bml.service.Math
+  → baseType: org.blockml.bml.core.Entity
 
-com.machineblocks.core.NativeBlock
+com.machineblocks.bml.core.NativeBlock
   → subTypes omitted → inherits [] (final leaf — no Sub-Blocks)
 ```
 
@@ -1581,15 +1506,15 @@ Sub-Blocks follow the same visibility naming convention as members (`__` private
 ### FQN Convention
 
 ```text
-Parent:    com.machineblocks.calibration.Calibrator
-Sub-Block: com.machineblocks.calibration.Calibrator.Base
-           com.machineblocks.calibration.Calibrator.StudDiameter
+Parent:    com.machineblocks.bml.calibration.Calibrator
+Sub-Block: com.machineblocks.bml.calibration.Calibrator.Base
+           com.machineblocks.bml.calibration.Calibrator.StudDiameter
 ```
 
 The Sub-Block `<type>` is never declared — it is always derived from the parent FQN + `<name>`. Sub-Blocks can be nested recursively:
 
 ```text
-com.machineblocks.calibration.Calibrator.Base.Strip
+com.machineblocks.bml.calibration.Calibrator.Base.Strip
 ```
 
 ### Short-Name Reference
@@ -1608,7 +1533,7 @@ If a Sub-Block shares the root Block's `<name>`, bare short tags are ambiguous �
 ### SCAD Mapping
 
 ```text
-com.machineblocks.calibration.Calibrator.Base
+com.machineblocks.bml.calibration.Calibrator.Base
 →  mb__com__machineblocks__calibration__Calibrator__Base
 ```
 
@@ -1626,10 +1551,10 @@ Presets apply only to Properties — not to Aggregations, Associations, or Capab
 
 ### Preset Block
 
-A preset block (e.g. `com.machineblocks.bricks.StandardPresets`) is a Block definition with `baseType="com.machineblocks.core.Block"`:
+A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a Block definition with `baseType="com.machineblocks.bml.core.Block"`:
 
 ```text
-type — FQN of this preset block (e.g. com.machineblocks.bricks.StandardPresets)
+type — FQN of this preset block (e.g. com.machineblocks.bml.bricks.StandardPresets)
 version           — semantic version
 composition       — Block instances in aggregation _presets; use bml:exportIds="true" for cross-file {FQN}::{id} references
 ```
@@ -1653,7 +1578,7 @@ Multiple preset blocks can target the same Block type — from different authors
 {BlockFQN}::{preset-id}
 
 Example:
-  com.machineblocks.bricks.StandardPresets::brick-2x4
+  com.machineblocks.bml.bricks.StandardPresets::brick-2x4
 ```
 
 Qualified references require `bml:exportIds="true"` on the target composition and a **literal static `id`** on the target instance — see Instance Identity → Qualified Block Instance References.
@@ -1662,10 +1587,10 @@ Qualified references require `bml:exportIds="true"` on the target composition an
 
 ```xml
 <bricks:Standard
-    basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4" />
+    basePresets="com.machineblocks.bml.bricks.StandardPresets::brick-2x4" />
 
 <bricks:Standard
-    basePresets="com.machineblocks.bricks.StandardPresets::brick-2x4"
+    basePresets="com.machineblocks.bml.bricks.StandardPresets::brick-2x4"
     baseColor="#303D4E" />
 ```
 
@@ -1679,46 +1604,46 @@ configProfile < basePresets chain < inline property
 
 ## Library
 
-A Library is a **Block** with `baseType="org.blockml.core.BlockLibrary"`. It groups exported Block and ValueType definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
+A Library is a **Block** with `baseType="org.blockml.bml.core.BlockLibrary"`. It groups exported Block and ValueType definitions, optional XSD schemas, and dependencies on other libraries into one publishable unit. Replaces the legacy `library.xml` descriptor.
 
-`org.blockml.core.BlockLibrary` is a **framework base type** in core — like `Block` or `ValueType`. It is **not** exported via any Library `_blocks` catalog. Concrete `Library.bml` files inherit from it.
+`org.blockml.bml.core.BlockLibrary` is a **framework base type** in core — like `Block` or `ValueType`. It is **not** exported via any Library `_blocks` catalog. Concrete `Library.bml` files inherit from it.
 
 ```text
-org.blockml.core.BlockLibrary           abstract composable Block
+org.blockml.bml.core.BlockLibrary           abstract composable Block
   property     description   String
   subBlocks    Schema
   aggregation  _dependencies  BlockLibrary[]
   aggregation  _schemas       Schema[]         (optional — legacy XSD)
   aggregation  _blocks        Block[]
 
-org.blockml.core.BlockLibrary.Schema       ref (relative .xsd path)
+org.blockml.bml.core.BlockLibrary.Schema       ref (relative .xsd path)
 ```
 
 `_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the Library role — no aggregation attribute is required.
 
-The Library block is always named `Library.bml`. Its FQN is `{package}.Library` where `{package}` is derived from the file's package path (e.g. `com.machineblocks.bricks.Library`, `org.blockml.Library`, `org.blockml.compiler.Library`).
+The Library block is always named `Library.bml`. Its FQN is `{package}.Library` where `{package}` is derived from the file's package path (e.g. `com.machineblocks.bml.bricks.Library`, `org.blockml.bml.Library`, `org.blockml.bml.compiler.Library`).
 
 **Name (required):** `<name>Library</name>`. Filename is always `Library.bml`.
 
-**Membership is defined only by `Library.bml` — not by directories.** A Block belongs to exactly the Library whose `_blocks` lists it. Physical file location and package-prefix overlap do not imply inclusion. Two libraries may share a package prefix (e.g. `org.blockml` and `org.blockml.compiler`) without one automatically exporting the other's blocks.
+**Membership is defined only by `Library.bml` — not by directories.** A Block belongs to exactly the Library whose `_blocks` lists it. Physical file location and package-prefix overlap do not imply inclusion. Two libraries may share a package prefix (e.g. `org.blockml` and `org.blockml.bml.compiler`) without one automatically exporting the other's blocks.
 
 ### Nested libraries
 
-Libraries may be **nested by package**. Example: `org.blockml/Library.bml` and `org.blockml.compiler/Library.bml` are **separate** publishable units — the inner library does not merge into the outer one.
+Libraries may be **nested by package**. Example: `org.blockml/Library.bml` and `org.blockml.bml.compiler/Library.bml` are **separate** publishable units — the inner library does not merge into the outer one.
 
 ```text
-org/blockml/
-  Library.bml                 → org.blockml.Library
-  core/Block.bml              → member iff listed in org.blockml.Library _blocks
+org/blockml/bml/
+  Library.bml                 → org.blockml.bml.Library
+  core/Block.bml              → member iff listed in org.blockml.bml.Library _blocks
   compiler/
-    Library.bml               → org.blockml.compiler.Library  (own library)
-    Parser.bml                → member iff listed in org.blockml.compiler.Library _blocks only
+    Library.bml               → org.blockml.bml.compiler.Library  (own library)
+    Parser.bml                → member iff listed in org.blockml.bml.compiler.Library _blocks only
 ```
 
 **Typical pattern:** inner library depends on outer via `_dependencies`; outer does **not** depend on inner.
 
 ```xml
-<!-- org/blockml/compiler/Library.bml -->
+<!-- org/blockml/bml/compiler/Library.bml -->
 <_dependencies>
   <composition>
     <blockml:Library />        <!-- outer library as dependency -->
@@ -1942,12 +1867,12 @@ BOM Core defines a minimal set of primitive types. Domain specializations extend
 ### BOM Core Primitive Types
 
 ```text
-org.blockml.type.Boolean
-org.blockml.type.Text
-org.blockml.type.Number          — abstract numeric branch
-  org.blockml.type.Integer
-  org.blockml.type.Float
-  org.blockml.type.Decimal
+org.blockml.bml.type.Boolean
+org.blockml.bml.type.Text
+org.blockml.bml.type.Number          — abstract numeric branch
+  org.blockml.bml.type.Integer
+  org.blockml.bml.type.Float
+  org.blockml.bml.type.Decimal
 ```
 
 Unqualified resolution whitelist (step 4): `String`, `Boolean`, `Integer`, `Float`, `Decimal` only — see `02_mbml.md` — § Unqualified Block Resolution.
@@ -1970,12 +1895,12 @@ Legacy wrapper types (`AutoOr<T>`, `NoneOr<T>`, `Array<T>`, …) are **obsolete*
 Each domain BOM defines its own type namespace:
 
 ```text
-com.machineblocks.type.*   — Size3D, Direction, WallGap, Color, ...
+com.machineblocks.bml.type.*   — Size3D, Direction, WallGap, Color, ...
 com.electronics.type.*     — Voltage, Resistance, Footprint, ...
 com.ui.type.*              — Color, Length, FontSize, ...
 ```
 
-Types are never shared across domain namespaces unless explicitly defined in `org.blockml.type`. This is intentional — domain-specific types carry domain-specific semantics even when they share a name.
+Types are never shared across domain namespaces unless explicitly defined in `org.blockml.bml.type`. This is intentional — domain-specific types carry domain-specific semantics even when they share a name.
 
 ### Type Resolution Shorthand
 
@@ -1999,7 +1924,7 @@ bml:version="1.0.0" on instance — optional exact-version assert (not a mandato
 bml:version inside Library files — forbidden (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
 ```
 
-**Framework convention (`org.blockml.*`, `com.machineblocks.*`):** version only on `Library.bml`, not on individual block files.
+**Framework convention (`org.blockml.bml.*`, `com.machineblocks.bml.*`):** version only on `Library.bml`, not on individual block files.
 
 See `12_bom_object_model.md` — Version Rules.
 
@@ -2087,7 +2012,7 @@ A BlockProcessor chooses its rendering strategy by calling the appropriate engin
 
 ```typescript
 class ScadBlockProcessor implements BlockProcessor {
-  baseType = "com.machineblocks.core.Block"
+  baseType = "com.machineblocks.bml.core.Block"
   process(block: Block, engine: RenderEngine): RenderOutput {
     return engine.compile(block, this, context)
   }
@@ -2109,7 +2034,7 @@ class NfcPlayerProcessor implements BlockProcessor {
 
 ```typescript
 class MathBuiltInProcessor implements BlockProcessor {
-  baseType = "org.blockml.service.Math"
+  baseType = "org.blockml.bml.service.Math"
   process(block: Block, engine: RenderEngine): RenderOutput {
     return engine.copyTemplate("lib/math_service.scad", "lib/math_service.scad")
   }
@@ -2120,25 +2045,25 @@ class MathBuiltInProcessor implements BlockProcessor {
 
 ```text
 machineblocks-v3-scad-target
-  ScadBlockProcessor      → compile strategy    (com.machineblocks.core.Block)
-  ScadSetProcessor        → compile strategy    (com.machineblocks.core.Set)
-  MathBuiltInProcessor    → copy strategy       (org.blockml.service.Math)
-  CapabilityImplementationProcessor  → compile strategy    (org.blockml.core.Entity)
+  ScadBlockProcessor      → compile strategy    (com.machineblocks.bml.core.Block)
+  ScadSetProcessor        → compile strategy    (com.machineblocks.bml.core.Set)
+  MathBuiltInProcessor    → copy strategy       (org.blockml.bml.service.Math)
+  CapabilityImplementationProcessor  → compile strategy    (org.blockml.bml.core.Entity)
 ```
 
 ### Built-in services as BML
 
-Built-in services (`#math`, `#strings`, etc.) are defined as BML BML service files in `@blockml/core` — **SSOT**. SCAD equivalents in `scad-lib/blocks/org/blockml/service/` are pre-rendered build artifacts. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
+Built-in services (`#math`, `#strings`, etc.) are defined as BML BML service files in `@blockml/core` — **SSOT**. SCAD equivalents in `scad-lib/blocks/org/blockml/bml/service/` are pre-rendered build artifacts. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 ```text
 @blockml/core/
   src/
-    org/blockml/service/
-      Math.bml            — org.blockml.service.Math      — #math.*
-      Strings.bml         — org.blockml.service.Strings   — #strings.*
-      Numbers.bml         — org.blockml.service.Numbers   — #numbers.*
-      Lists.bml           — org.blockml.service.Lists     — #lists.*
-      Bools.bml           — org.blockml.service.Bools     — #bools.*
+    org/blockml/bml/service/
+      Math.bml            — org.blockml.bml.service.Math      — #math.*
+      Strings.bml         — org.blockml.bml.service.Strings   — #strings.*
+      Numbers.bml         — org.blockml.bml.service.Numbers   — #numbers.*
+      Lists.bml           — org.blockml.bml.service.Lists     — #lists.*
+      Bools.bml           — org.blockml.bml.service.Bools     — #bools.*
 ```
 
 Each domain target registers a corresponding BlockProcessor that renders these services into the target-appropriate form (e.g. `MathBuiltInProcessor` for SCAD copies or generates the required SCAD helper functions).
