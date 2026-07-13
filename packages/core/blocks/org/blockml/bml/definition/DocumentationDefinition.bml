@@ -1,0 +1,59 @@
+<!--
+  BlockML Definition — documentation prose meta-model type
+
+  FQN: org.blockml.bml.definition.DocumentationDefinition
+  See docs/02_mbml.md — Documentation · 12_bom_object_model.md — MemberDefinitionBase.documentation.
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea>Technical documentation prose attached to a definition element.</idea>
+
+  <documentation>Describes the documentation element on any org.blockml.bml.core.Definition (block,
+    property, aggregation, …). Rendered as a documentation element with optional language attribute
+    and a trimmed text body. Maps to BOM documentation string with optional documentationLanguageFqn
+    when language deviates from the effective natural language of the enclosing definition element.
+    Declared as an aggregation on org.blockml.bml.core.Definition — not a scalar property.</documentation>
+
+  <references>
+    <see file="02_mbml.md">
+      Documentation authoring rules and natural-language inheritance.
+    </see>
+    <see file="12_bom_object_model.md">
+      BlockDefinition.documentation and documentationLanguageFqn.
+    </see>
+    <see block="lang:NaturalLanguage">
+      Optional language attribute on documentation elements.
+    </see>
+    <see block="core:Definition">
+      Parent type — documentation aggregation on Definition branch.
+    </see>
+  </references>
+
+  <name>DocumentationDefinition</name>
+  <type>def:DocumentationDefinition</type>
+  <baseType>core:Definition</baseType>
+
+  <!-- Documentation renders as <documentation> on definition elements. -->
+  <bml:xml>documentation</bml:xml>
+
+  <properties>
+    <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+      <documentation>Optional NaturalLanguage when this documentation text is written in a
+        language other than the effective language of the enclosing definition element. Unqualified
+        names resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit
+        effective language from Block or Library.</documentation>
+    </language>
+    <content type="Text" bml:xml="text">
+      <documentation>Technical description text. Stored as trimmed body in BOM documentation on the
+        enclosing definition element.</documentation>
+    </content>
+  </properties>
+</block>

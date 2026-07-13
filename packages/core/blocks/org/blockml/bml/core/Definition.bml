@@ -36,20 +36,9 @@
   <!--
   Property definitions are grouped inside the <properties> element.
   Each property is rendered as a direct XML child element named after the
-  property itself (for example <documentation> or <since>).
+  property itself (for example <since> or <status>).
 -->
   <properties>
-    <documentation bml:xml="element">
-      <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
-        <documentation>Optional NaturalLanguage when this documentation text is written in a
-          language other than the effective language of the enclosing definition element. Unqualified
-          names resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit
-          effective language from Block or Library.</documentation>
-      </language>
-      <content type="Text" bml:xml="text">
-        <documentation>The documentation text of the definition.</documentation>
-      </content>
-    </documentation>
     <since type="Version" bml:xml="element">
       <documentation>The version in which this definition became available.</documentation>
     </since>
@@ -61,9 +50,12 @@
   <!--
   Aggregation definitions are grouped inside the <aggregations> element.
   Each aggregation is rendered as a direct XML child element named after the
-  aggregation itself (for example <changelog>, <examples>, or <references>).
+  aggregation itself (for example <documentation>, <changelog>, or <references>).
 -->
   <aggregations>
+    <documentation type="def:DocumentationDefinition">
+      <documentation>Technical documentation prose for this definition element.</documentation>
+    </documentation>
     <changelog type="def:ChangeDefinition[]">
       <documentation>The changelog of the definition.</documentation>
     </changelog>

@@ -1990,8 +1990,8 @@ Declares how a block type or member renders to canonical BML XML. Allowed only o
 <!-- Member element from instance name -->
 <bml:xml>${ #this.name }</bml:xml>
 
-<!-- Member value placement on Definition properties -->
-<documentation type="Text" bml:xml="element">…</documentation>
+<!-- Documentation aggregation on Definition branch (DocumentationDefinition) -->
+<documentation language="German">…</documentation>
 ```
 
 Full specification: `19_definition_blocks_and_bml_xml.md`. Implementation status: **WIP**.

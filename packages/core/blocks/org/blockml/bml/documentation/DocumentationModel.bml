@@ -78,6 +78,9 @@
     <see block="core:Definition">
       Definition branch — shared documentation aggregations.
     </see>
+    <see block="def:DocumentationDefinition">
+      Meta-model for documentation elements on Definition branch types.
+    </see>
     <see block="def:ReferenceDefinition">
       Meta-model for see entries inside references.
     </see>

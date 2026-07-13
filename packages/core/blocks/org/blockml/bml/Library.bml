@@ -103,6 +103,7 @@
         <def:BlockDefinition />
         <def:CapabilityDefinition />
         <def:ChangeDefinition />
+        <def:DocumentationDefinition />
         <def:ExampleDefinition />
         <def:GenericTypeDefinition />
         <def:PropertyDefinition />

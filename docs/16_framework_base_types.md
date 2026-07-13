@@ -193,6 +193,7 @@ org.blockml.bml.core.Block
     org.blockml.bml.definition.CapabilityDefinition
     org.blockml.bml.definition.GenericTypeDefinition
     org.blockml.bml.definition.ChangeDefinition      ← one <change> in <changelog>
+    org.blockml.bml.definition.DocumentationDefinition ← <documentation> on Definition elements
     org.blockml.bml.definition.ExampleDefinition     ← one <example> in <examples>
     org.blockml.bml.definition.ReferenceDefinition   ← one <see> in <references>
     …
@@ -201,9 +202,17 @@ org.blockml.bml.core.Block
 `org.blockml.bml.core.Definition` declares the shared documentation model as properties and aggregations:
 
 ```text
-Properties:    documentation · since · status
-               documentation.language (NaturalLanguage attribute) · content (text body)
-Aggregations:  changelog (ChangeDefinition[]) · examples (ExampleDefinition[]) · references (ReferenceDefinition[])
+Properties:    since · status
+Aggregations:  documentation (DocumentationDefinition) · changelog (ChangeDefinition[])
+               · examples (ExampleDefinition[]) · references (ReferenceDefinition[])
+```
+
+`org.blockml.bml.definition.DocumentationDefinition` — technical documentation on any definition element:
+
+```text
+bml:xml         documentation      — renders as <documentation> on definition elements
+language        NaturalLanguage    — optional; prose language override
+content         String (required)  — trimmed text body
 ```
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
