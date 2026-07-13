@@ -14,6 +14,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
   xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
   xmlns:bml="http://blockml.org/schema/bml">
@@ -97,7 +98,7 @@
         Declared as a property on org.blockml.bml.definition.StructuralDefinition.</documentation>
 
       <name>Documentation</name>
-      <baseType>core:ValueType</baseType>
+      <baseType>type:StructType</baseType>
       <bml:xml>documentation</bml:xml>
 
       <properties>
