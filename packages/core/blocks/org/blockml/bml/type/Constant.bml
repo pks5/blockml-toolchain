@@ -9,7 +9,9 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
-  xmlns:core="org.blockml.bml.core">
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:validation="org.blockml.bml.validation">
 
   <idea>A ValueType that permits exactly one configured literal value.</idea>
 
@@ -69,7 +71,9 @@
         instance configuration — Constant(T){value=…}. Validated against the bound type T at
         compile time. This Property configures the internal ValueType instance — it does not
         define the external representation of property values.</documentation>
-      <valueRequired>true</valueRequired>
+      <constraints>
+        <constraint:ValuePresent validation="Error"/>
+      </constraints>
     </value>
   </properties>
 </block>

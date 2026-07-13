@@ -26,7 +26,7 @@
 
     Validation pipeline — three independent stages:
     Stage 1 — XML (Parser): syntax, namespaces, XSD. No semantics.
-    Stage 2 — Validator: inheritance, contracts, types, constraints, references, valueRequired,
+    Stage 2 — Validator: inheritance, contracts, types, constraints, references,
               expression correctness. Expressions are NOT evaluated.
     Stage 3 — Renderer: expression evaluation, optional handling, capability interpretation,
               code generation, runtime behaviour.

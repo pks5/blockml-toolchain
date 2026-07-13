@@ -605,29 +605,32 @@ V1 bootstrap: `IntegerEntity`, `DecimalEntity`, `FloatEntity`, `TextEntity`, `Bo
 
 Every Property behaves as an **Optional** — it has a value or has no value. There is no `null`. Internally the BOM represents `Optional<Value>` instead of `Value | null`.
 
-PropertyDefinitions may declare `valueRequired`:
+Required values are declared via the `org.blockml.bml.constraint.ValuePresent` constraint:
 
 ```xml
-<property name="count" type="Integer" valueRequired="true">
+<count type="Integer">
   <value>5</value>
-</property>
+  <constraints>
+    <constraint:ValuePresent validation="Error"/>
+  </constraints>
+</count>
 ```
 
-When `valueRequired=true`, the Property must contain a value in BlockML — otherwise the Validator reports an error. When `valueRequired=false`, the Property may remain empty; the Renderer decides how to interpret missing values.
+When a Property carries `ValuePresent` with `validation="Error"`, the Property must contain an authored value in BlockML — otherwise the Validator reports `BML_CONSTRAINT_VIOLATION`. When no ValuePresent constraint is enforced, the Property may remain empty; the Renderer decides how to interpret missing values.
 
-**Validation timing:** `valueRequired` is checked only in **Stage 2 (Validator)** — never in Stage 1 (Parser / XSD). The check runs **after** the Block is fully resolved:
+**Validation timing:** `ValuePresent` is checked only in **Stage 2 (Validator)** — never in Stage 1 (Parser / XSD). Enforcement runs **after** the Block is fully resolved, as part of `validateConstraints()`:
 
 ```text
 1. baseType chain merge        — resolveEffectiveMembers() · generic substitution
 2. contract merge              — contracts[] in declaration order
 3. local member merge          — Block declarations override all
 4. instance value resolution   — definition <value> · instance attribute · <property><value>
-5. valueRequired check         — for each effective Property with valueRequired=true
+5. constraint validation       — validateConstraints() · including ValuePresent
 ```
 
-The validator reads `valueRequired` from the **effective** `PropertyDefinition` (merged result), not from a single declaration layer in isolation. A contract or baseType may declare `valueRequired="true"`; a child override may supply the `<value>` — the merged effective member satisfies the check.
+The validator reads constraints from the **effective** `PropertyDefinition` (merged result), not from a single declaration layer in isolation. A contract or baseType may declare `ValuePresent`; a child override may supply the `<value>` — the merged effective member satisfies the check.
 
-When no value is present after merge and instance binding → `BML_VALUE_REQUIRED` (error). Expression evaluation does not satisfy `valueRequired` — only authored values count (Stage 2 does not evaluate expressions).
+When no value is present after merge and instance binding → `BML_CONSTRAINT_VIOLATION`. Expression evaluation does not satisfy `ValuePresent` — only authored values count (Stage 2 does not evaluate expressions).
 
 ### EMPTY — not a type
 

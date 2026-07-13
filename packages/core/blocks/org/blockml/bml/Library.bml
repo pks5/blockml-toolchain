@@ -107,6 +107,7 @@
         <constraint:MinItems />
         <constraint:MinLength />
         <constraint:Pattern />
+        <constraint:ValuePresent />
         <lang:C />
         <lang:CPP />
         <lang:MarkupLanguage />

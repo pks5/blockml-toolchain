@@ -47,7 +47,7 @@ Stage 1 — XML (Parser)
 Stage 2 — Validator
   Creates immutable Canonical BOM + mutable default Working Model.
   Checks: inheritance · contracts · type compatibility · visibility ·
-          constraints · references · valueRequired · expression correctness
+          constraints · references · expression correctness
   Expressions are NOT evaluated.
 
 Stage 3 — Renderer / Runtime
@@ -217,7 +217,7 @@ Recognized forms: property access, attribute access, built-in/bean calls, capabi
 validateConstraints(bom, registry) → Diagnostic[]
 ```
 
-Semantic checks: cross-instance references, capability linking, aggregation cardinality, expression type compatibility (via `parseExpression()`). Returns diagnostics only.
+Semantic checks: constraint type compatibility, generic binding, validation references, and value enforcement (including `org.blockml.bml.constraint.ValuePresent` after full model resolution). Also: cross-instance references, capability linking, aggregation cardinality, expression type compatibility (via `parseExpression()`). Returns diagnostics only.
 
 The CLI typically calls these after parse. Renderers may call them during their pipeline.
 

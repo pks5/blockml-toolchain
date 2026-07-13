@@ -136,7 +136,7 @@ Validation consists of three independent stages:
 ```text
 Stage 1 — XML          syntax · namespaces · XSD (no semantics)
 Stage 2 — Validator    inheritance · contracts · type compatibility · visibility ·
-                       constraints · references · valueRequired · expression correctness
+                       constraints · references · expression correctness
                        (expressions are NOT evaluated)
 Stage 3 — Renderer     expression evaluation · optional handling · capability interpretation ·
                        code generation · runtime behaviour
@@ -146,9 +146,9 @@ The Validator creates the immutable Canonical BOM and a mutable **default Workin
 
 ### Properties are Optional
 
-Every Property behaves as an **Optional** — it has a value or has no value. There is no `null`. The BOM represents `Optional<Value>` instead of `Value | null`. PropertyDefinitions may declare `valueRequired` — when `true`, the Validator requires a value in BlockML; when `false`, the Renderer decides how to interpret missing values.
+Every Property behaves as an **Optional** — it has a value or has no value. There is no `null`. The BOM represents `Optional<Value>` instead of `Value | null`. When a value is required in BlockML, declare a `org.blockml.bml.constraint.ValuePresent` constraint on the Property (with `validation="Error"`). When no ValuePresent constraint is enforced, the Property may remain empty; the Renderer decides how to interpret missing values.
 
-The `valueRequired` check runs in Stage 2 **after** full Block resolution (baseType chain, generic substitution, contract merge, local overrides) via `resolveEffectiveMembers()`. Only then does the Validator verify that each effective Property with `valueRequired=true` has an authored value on the definition or instance. Missing value → `BML_VALUE_REQUIRED`.
+`ValuePresent` is checked in Stage 2 **after** full Block resolution (baseType chain, generic substitution, contract merge, local overrides) via `resolveEffectiveMembers()` and instance value binding — as part of `validateConstraints()`. Missing value → `BML_CONSTRAINT_VIOLATION`.
 
 The `readOnly` check runs in the same stage on every `BlockInstance`. After `resolveEffectiveMembers()` for the instance's `typeFqn`, any authored `memberValues` entry or aggregation/association child element that targets a member with `readOnly=true` → `BML_READONLY_MEMBER_WRITE`. Block definitions and child Block overrides are not instances — they may set or override readOnly members via `<value>` or `<composition>`. Expressions may read readOnly members.
 

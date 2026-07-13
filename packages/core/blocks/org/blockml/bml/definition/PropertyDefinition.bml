@@ -23,7 +23,7 @@
     BOM namespace; unprefixed elements belong to the default namespace (empty string). The prefix
     itself is never stored. Member identity is (resolvedNamespace, localName). Maps to BOM
     PropertyDefinition (kind: "property") with typeFqn, value,
-    valueRequired, and optional constraints and suggestions. Property type must resolve to a
+    and optional constraints and suggestions. Property type must resolve to a
     ValueType branch. Every Property behaves as Optional — it has a value or has no value; there
     is no null. Declaration order among properties is significant for StructType positional mapping
     and Capability parameter order.</documentation>
@@ -60,10 +60,5 @@
         same member is set directly without a value wrapper element. May be a literal or a
         ${ … } expression. Absent value means Optional.empty — not null.</documentation>
     </value>
-    <valueRequired type="Boolean" bml:xml="attribute">
-      <documentation>When true, the Property must contain a value in BlockML — otherwise the
-        Validator reports an error. When false, the Property may remain empty; the Renderer decides
-        how to interpret missing values (compile error, Optional.empty(), undefined, omit, …).</documentation>
-    </valueRequired>
   </properties>
 </block>

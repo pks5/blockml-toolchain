@@ -931,7 +931,7 @@ Properties may be written as **attributes** (short form) or **elements** (long f
 
 When both forms exist, the **long form replaces the short form entirely**.
 
-**Primitive properties:** Properties typed with `org.blockml.bml.type.PrimitiveType` (Integer, Decimal, Float, Text, Boolean) store values directly on the Property — inline literals on Block instances. PrimitiveTypes never carry values themselves. Use a concrete `*Entity` type (for example `org.blockml.bml.type.IntegerEntity`) when a primitive must appear as an Entity in composition. PropertyDefinitions may declare `valueRequired`. See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity · Properties are always Optional.
+**Primitive properties:** Properties typed with `org.blockml.bml.type.PrimitiveType` (Integer, Decimal, Float, Text, Boolean) store values directly on the Property — inline literals on Block instances. PrimitiveTypes never carry values themselves. Use a concrete `*Entity` type (for example `org.blockml.bml.type.IntegerEntity`) when a primitive must appear as an Entity in composition. Required values are declared via `org.blockml.bml.constraint.ValuePresent`. See `17_type_system_bml.md` — § PrimitiveType · PrimitiveEntity · Properties are always Optional.
 
 Aggregations are filled directly by member name:
 

@@ -429,8 +429,6 @@ interface PropertyDefinition extends MemberDefinitionBase {
   typeFqn: string
   /** Optional — absent means no value (not null) */
   value?: MemberValue
-  /** When true, Validator requires a value in BlockML */
-  valueRequired?: boolean
   group?: string
   /** Constraint Block instances — each typeFqn must extend org.blockml.bml.core.Constraint */
   constraints?: BlockInstance[]
@@ -1195,7 +1193,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Property value cycles (topological sort)
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
 ✓  contract Block references resolve and merge into effective members (declaration order; later wins)
-✓  valueRequired — after resolveEffectiveMembers() and instance value binding: every effective Property with valueRequired=true has an authored value (BML_VALUE_REQUIRED)
+✓  constraints — after resolveEffectiveMembers() and instance value binding: validateConstraints() enforces each effective constraint with an understood validation reference (including ValuePresent → BML_CONSTRAINT_VIOLATION)
 ✓  readOnly — after resolveEffectiveMembers(): Block instances must not set members with readOnly=true (BML_READONLY_MEMBER_WRITE)
 ✓  Library _blocks entries resolve to registered Block definitions (FQN + effectiveBlockVersion)
 ✓  Outer library _blocks does not re-export blocks from a nested inner library (BML_LIBRARY_NESTING_VIOLATION)
@@ -1272,7 +1270,6 @@ BML_CONTRACT_NOT_ON_ROOT      — <contracts> on Sub-Block
 BML_DUPLICATE_CONTRACT        — same type listed twice in block.contracts[]
 BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
 BML_EXPR_UNKNOWN_PROPERTY     — property reference not in effective members
-BML_VALUE_REQUIRED            — effective Property has valueRequired=true but no authored value after merge
 ```
 
 See `06_compiler.md` for the full diagnostic catalog.

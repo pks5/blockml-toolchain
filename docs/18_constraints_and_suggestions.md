@@ -48,6 +48,7 @@ org.blockml.bml.core.Block
     org.blockml.bml.constraint.Pattern
     org.blockml.bml.constraint.MinItems
     org.blockml.bml.constraint.MaxItems
+    org.blockml.bml.constraint.ValuePresent
     …
 ```
 
@@ -64,8 +65,23 @@ Each concrete constraint extends `org.blockml.bml.core.Constraint` and declares 
 | `org.blockml.bml.constraint.Pattern` | `Text` | `value` (regex) |
 | `org.blockml.bml.constraint.MinItems` | collection types (`T[]`) | `value` |
 | `org.blockml.bml.constraint.MaxItems` | collection types (`T[]`) | `value` |
+| `org.blockml.bml.constraint.ValuePresent` | any `ValueType` | — |
 
 Domain libraries may define additional constraint types (for example `com.machineblocks.bml.constraint.PreferredRange`).
+
+### Required values — ValuePresent
+
+`org.blockml.bml.constraint.ValuePresent` is the sole mechanism for requiring an authored property value. It declares no own properties — only the inherited optional `validation` reference.
+
+```xml
+<count type="Integer">
+  <constraints>
+    <constraint:ValuePresent validation="Error"/>
+  </constraints>
+</count>
+```
+
+ValuePresent is enforced by `validateConstraints()` at Stage 2 **after** full model resolution (`resolveEffectiveMembers()`, contract merge, instance value binding). Only authored values count — expression evaluation does not satisfy ValuePresent. Violations with `validation="Error"` → `BML_CONSTRAINT_VIOLATION`.
 
 ### Authoring
 

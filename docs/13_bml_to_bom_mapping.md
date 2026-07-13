@@ -418,11 +418,10 @@ Property-specific:
 ```text
 type="…"                 → typeFqn (resolved)
 value="…"                → value (LiteralValue or ExpressionValue). Absent → Optional.empty.
-valueRequired="true|false" → valueRequired (boolean; default false)
+<constraints>            → constraints[] (BlockInstance[], document order)
                            → Validator checks at stage [8] only after resolveEffectiveMembers()
                              (baseType + contracts + local) and instance value binding;
-                             missing value → BML_VALUE_REQUIRED
-<constraints>            → constraints[] (BlockInstance[], document order)
+                             ValuePresent violations → BML_CONSTRAINT_VIOLATION
 <suggestions>            → suggestions[] (BlockInstance[], document order)
 ```
 
