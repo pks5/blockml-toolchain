@@ -24,7 +24,7 @@
     • org.blockml.bml.definition.StructuralDefinition — shared documentation model for structural definitions
     • org.blockml.bml.definition.BlockDefinition — shape of every block document
     • org.blockml.bml.definition.MemberDefinition — abstract base for block member declarations;
-      override and implementation modes (implementation specialized on CapabilityDefinition)
+      override and boolean implementation; CapabilityDefinition overrides implementation
     • PropertyDefinition, AggregationDefinition, AssociationDefinition, CapabilityDefinition
     • GenericTypeDefinition
 

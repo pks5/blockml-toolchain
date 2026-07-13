@@ -1296,8 +1296,9 @@ without changing abstractness — the effective member remains concrete unless t
 
 `override="true"` without a matching parent member → `BML_OVERRIDE_WITHOUT_PARENT`.
 
-`implementation` on `org.blockml.bml.definition.CapabilityDefinition` will be specialized later:
-capabilities express completion with a full `<implementation>` element instead of a boolean flag.
+On capabilities, `implementation` is a child element (type
+`org.blockml.bml.definition.CapabilityDefinition.Implementation`) — not the boolean attribute from
+`MemberDefinition`. It overrides the inherited boolean `implementation` property in the meta-model.
 
 ### readOnly Members
 
@@ -1442,8 +1443,8 @@ to be specified — all other attributes are inherited from the parent definitio
 
 To refine an inherited abstract member while keeping it abstract, use `override="true"`. To complete
 an inherited abstract member, use `implementation="true"` and supply the missing parts (for example
-`type` and `<value>` on a property). On capabilities, completion is expressed with a full
-`<implementation>` element instead (see Capabilities).
+`type` and `<value>` on a property). On capabilities, supply a full `<implementation>` child
+element (see Capabilities).
 
 Parent:
 

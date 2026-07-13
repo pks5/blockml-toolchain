@@ -76,9 +76,8 @@
         BML_IMPLEMENTATION_PARENT_NOT_ABSTRACT). The declaring block must supply the missing parts;
         usual member checks then apply (type present, value set where required, and so on). Emits
         BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED when an abstract member on a concrete block remains
-        unimplemented. org.blockml.bml.definition.CapabilityDefinition specializes this property
-        later — capability members use a full implementation element with language binding and source
-        body instead of a boolean flag.</documentation>
+        unimplemented. org.blockml.bml.definition.CapabilityDefinition overrides this property with
+        a full Implementation value type for capability members.</documentation>
     </implementation>
   </properties>
 

@@ -12,6 +12,8 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:cap="org.blockml.bml.capability"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:type="org.blockml.bml.type"
   xmlns:bml="http://blockml.org/schema/bml">
 
   <idea>A communication endpoint on a Block — inbound, outbound, or transformation.</idea>
@@ -21,13 +23,11 @@
     (bml:xml="${ #this.name }"). An optional XML prefix on the element name supplies the member
     namespace — resolved via xmlns to BOM namespace; unprefixed elements use the default namespace
     (empty string). Member identity is (resolvedNamespace, localName). Maps to BOM
-    CapabilityDefinition (kind: "capability") with typeFqn,
-    inputType, outputType, and optional implementation binding to a Language Block.
-    org.blockml.bml.definition.MemberDefinition declares implementation as a boolean completion
-    flag and override as an explicit override flag; CapabilityDefinition will specialize
-    implementation later with a full implementation member. Inbound requires
-    inputType; Outbound requires outputType; Transformation requires both. inputType and outputType
-    use TypeExpression syntax and must resolve to ValueTypes.</documentation>
+    CapabilityDefinition (kind: "capability") with typeFqn, inputType, outputType, and optional
+    implementation binding. Overrides org.blockml.bml.definition.MemberDefinition.implementation
+    (boolean) with a full Implementation value type. Inbound requires inputType; Outbound requires
+    outputType; Transformation requires both. inputType and outputType use TypeExpression syntax and
+    must resolve to ValueTypes.</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
@@ -51,10 +51,67 @@
     <see block="core:ValueType">
       inputType and outputType payload types.
     </see>
+    <see block="def:MemberDefinition">
+      Parent type — boolean implementation overridden by Implementation property here.
+    </see>
   </references>
 
   <name>CapabilityDefinition</name>
   <type>def:CapabilityDefinition</type>
   <baseType>def:MemberDefinition</baseType>
+
+  <properties>
+    <type type="FullyQualifiedName(core:Capability)" bml:xml="attribute">
+      <documentation>Capability kind FQN — org.blockml.bml.capability.Inbound, Outbound, or
+        Transformation. Unqualified names resolve via implicit namespace org.blockml.bml.capability.*.
+        Rendered as the type attribute on the capability element.</documentation>
+    </type>
+    <inputType type="FullyQualifiedName(type:ValueType)" bml:xml="attribute">
+      <documentation>TypeExpression for the inbound payload. Required on Inbound and Transformation;
+        forbidden on Outbound. Must resolve to a ValueType branch. Parsed into BOM inputType
+        TypeDescriptor.</documentation>
+    </inputType>
+    <outputType type="FullyQualifiedName(type:ValueType)" bml:xml="attribute">
+      <documentation>TypeExpression for the outbound payload. Required on Outbound and Transformation;
+        forbidden on Inbound. Must resolve to a ValueType branch. Parsed into BOM outputType
+        TypeDescriptor.</documentation>
+    </outputType>
+    <implementation type="Implementation" override="true" bml:xml="element">
+      <documentation>Optional target-language implementation binding for this capability. Overrides
+        the boolean implementation property on org.blockml.bml.definition.MemberDefinition. Rendered
+        as an implementation child element with required language attribute and CDATA body. Maps to
+        BOM ImplementationBlock.</documentation>
+    </implementation>
+  </properties>
+
+  <subBlocks>
+    <block>
+      <idea>Target-language implementation body for a capability member.</idea>
+
+      <documentation>Describes the implementation element on a capability member. Rendered as
+        implementation with a required language attribute referencing org.blockml.bml.language.*
+        and a CDATA source body. Maps to BOM ImplementationBlock { languageFqn, source,
+        embeddedExpressions }. Capability references inside the body use BML Embedded Expression
+        syntax (&lt;$ … $&gt;). Declared as the implementation property on
+        org.blockml.bml.definition.CapabilityDefinition — overrides MemberDefinition.implementation
+        (boolean).</documentation>
+
+      <name>Implementation</name>
+      <baseType>core:ValueType</baseType>
+      <bml:xml>implementation</bml:xml>
+
+      <properties>
+        <language type="FullyQualifiedName(core:Language)" bml:xml="attribute">
+          <documentation>Required implementation Language FQN (org.blockml.bml.language.TypeScript,
+            OpenSCAD, …). Unqualified names resolve via implicit namespace org.blockml.bml.language.*.
+            Must be permitted on the enclosing Block's languages aggregation.</documentation>
+        </language>
+        <content type="Text" bml:xml="text|cdata">
+          <documentation>Target-language source body. Stored as CDATA in BOM ImplementationBlock.source.
+            May contain embedded BlockML expressions between &lt;$ and $&gt; delimiters.</documentation>
+        </content>
+      </properties>
+    </block>
+  </subBlocks>
 
 </block>
