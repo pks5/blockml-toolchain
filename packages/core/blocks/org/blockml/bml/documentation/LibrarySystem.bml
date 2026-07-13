@@ -24,6 +24,7 @@
     all .bml source files in the directory are public.
 
     Structure:
+    • bootstrap — library entry point (Bootstrap block, typically README with readFirst)
     • _dependencies — other Library blocks (typical: inner library depends on outer)
     • _subLibraries — nested child Library blocks grouped under this library
     • _blocks — exported Block and ValueType definitions
@@ -43,7 +44,7 @@
     Version resolution:
     effectiveBlockVersion = own version if present, else library.version if exported via _blocks,
     else error BML_MISSING_VERSION. bml:version on instance references is optional exact-version
-    assert; forbidden inside Library _dependencies, _subLibraries, and _blocks.
+    assert; forbidden inside Library bootstrap, _dependencies, _subLibraries, and _blocks.
   </documentation>
 
   <references>

@@ -21,14 +21,15 @@
     Bootstrap order (summary):
     1. Core branches — Block, ValueType, Language, Status, Constraint, Capability, Definition
     2. Concrete types — Integer, Decimal, languages, services, constraints
-    3. BlockLibrary — library descriptor base with Schema subBlock
-    4. org.blockml.bml.Library — published catalog via _blocks
+    3. BlockLibrary — library descriptor base (bootstrap, _dependencies, _subLibraries, _schemas, _blocks)
+    4. org.blockml.bml.Library — published catalog via _blocks; bootstrap → README
     5. Domain framework BML (e.g. com.machineblocks.bml.core.*)
 
-    README.bml blocks inherit from org.blockml.bml.core.Bootstrap. They serve as library entry
-    points for humans and LLMs — not as composable domain types. The readFirst aggregation
-    lists Documentation block instances in mental learning order; read these before exploring
-    the rest of the library catalog.
+    README.bml blocks inherit from org.blockml.bml.core.Bootstrap. Library.bml declares the
+    library entry point via the bootstrap aggregation (typically &lt;blockml:README /&gt;).
+    README blocks serve as library entry points for humans and LLMs — not as composable domain
+    types. The readFirst aggregation lists Documentation block instances in mental learning
+    order; read these before exploring the rest of the library catalog.
 
     Interpretation context:
     • Framework BML defines what types ARE — TypeRegistry SSOT
@@ -52,6 +53,9 @@
     </see>
     <see file="01_system.md">
       Self-hosting bootstrap and BML self-description roadmap (V1/V2/V3).
+    </see>
+    <see block="core:BlockLibrary">
+      Library descriptor base — bootstrap aggregation links to README.
     </see>
     <see block="core:Bootstrap">
       Abstract base for README blocks with readFirst aggregation.

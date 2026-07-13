@@ -1624,15 +1624,19 @@ A Library is a **Block** with `baseType="org.blockml.bml.core.BlockLibrary"`. It
 ```text
 org.blockml.bml.core.BlockLibrary           abstract composable Block
   property     description   String
+  aggregation  bootstrap     Bootstrap        (library entry point — typically README)
   aggregation  _dependencies  BlockLibrary[]
   aggregation  _subLibraries  BlockLibrary[]
   aggregation  _schemas       FilePathEntity[] (optional — legacy XSD)
   aggregation  _blocks        Block[]
 
 org.blockml.bml.type.FilePathEntity            value (relative .xsd path)
+org.blockml.bml.core.Bootstrap                 readFirst (Documentation[])
 ```
 
-`_dependencies`, `_subLibraries`, and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the Library role — no aggregation attribute is required.
+`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the Library role — no aggregation attribute is required.
+
+`bootstrap` references a `Bootstrap` block (typically `README`) — the library entry point for humans and LLMs with a `readFirst` documentation list. See `doc:BootstrapModel`.
 
 `_schemas` holds `FilePathEntity` composition children; **`value`** is the relative `.xsd` path from the library package root (directory containing `Library.bml`).
 
@@ -1682,7 +1686,7 @@ org/blockml/bml/
 
 Violation → `BML_LIBRARY_NESTING_VIOLATION`.
 
-**Bootstrap:** the CLI/orchestrator discovers all `Library.bml` files, resolves `_dependencies`, `_subLibraries`, and `_blocks` by FQN (effective version from library context), and registers referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Bootstrap:** the CLI/orchestrator discovers all `Library.bml` files, resolves `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` by FQN (effective version from library context), and registers referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
 **Types:** ValueType definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** holds optional legacy XSD paths as `FilePathEntity` instances — omit when types are BML-only.
 

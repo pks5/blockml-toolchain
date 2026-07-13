@@ -1531,7 +1531,7 @@ final        — prevents override in child Blocks
 visibility   — optional; must match naming convention
 ```
 
-**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `_dependencies` / `_subLibraries` / `_blocks` on `org.blockml.bml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation language="…">`). See also `00_bom_core.md` — Aggregations.
+**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `bootstrap` / `_dependencies` / `_subLibraries` / `_blocks` on `org.blockml.bml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation language="…">`). See also `00_bom_core.md` — Aggregations.
 
 Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block.
 
@@ -2189,6 +2189,7 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 
 ```xml
 <aggregations>
+  <bootstrap type="core:Bootstrap" />
   <_dependencies type="core:BlockLibrary[]" />
   <_subLibraries type="core:BlockLibrary[]" />
   <_schemas type="btype:FilePathEntity[]" />
@@ -2196,7 +2197,7 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 </aggregations>
 ```
 
-**Library reference aggregations:** `_dependencies`, `_subLibraries`, and `_blocks` on `org.blockml.bml.core.BlockLibrary` hold empty Block instances as type references — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed. **`_schemas`** holds `FilePathEntity` composition children.
+**Library reference aggregations:** `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` on `org.blockml.bml.core.BlockLibrary` hold empty Block instances as type references — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed. **`bootstrap`** typically references a `README` block (`org.blockml.bml.core.Bootstrap`). **`_schemas`** holds `FilePathEntity` composition children.
 
 ```xml
 <!-- com/machineblocks/bml/bricks/Library.bml -->
@@ -2853,7 +2854,17 @@ Physical directories and overlapping package prefixes do not define membership. 
 </block>
 ```
 
-**`_dependencies`, `_subLibraries`, and `_blocks`** use Block instances as type references — the element name resolves to the Block FQN. **`bml:version` is forbidden** — effective version is resolved from library context.
+**`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`** use Block instances as type references — the element name resolves to the Block FQN. **`bml:version` is forbidden** — effective version is resolved from library context.
+
+**`bootstrap`** points to the library entry point — typically a `README` block with a `readFirst` documentation list (see `doc:BootstrapModel`). Example on `org.blockml.bml.Library`:
+
+```xml
+<bootstrap>
+  <composition>
+    <blockml:README />
+  </composition>
+</bootstrap>
+```
 
 **`value` paths** on `_schemas` `FilePathEntity` entries are relative to the **library package root** (directory containing `Library.bml`).
 

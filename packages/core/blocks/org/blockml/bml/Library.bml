@@ -68,6 +68,12 @@
   </properties>
 
   <aggregations>
+    <bootstrap>
+      <composition>
+        <blockml:README />
+      </composition>
+    </bootstrap>
+
     <!-- Optional legacy XSD — omit when all types are exported via _blocks -->
     <_schemas>
       <composition>

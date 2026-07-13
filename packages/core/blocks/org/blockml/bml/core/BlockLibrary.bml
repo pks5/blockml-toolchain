@@ -27,12 +27,14 @@
     Concrete Library.bml files inherit from BlockLibrary and declare aggregations explicitly.
 
     Aggregations (each aggregation= attribute is required; none is default):
+    • bootstrap — library entry point (Bootstrap block, typically README)
     • _dependencies — other Library blocks this library depends on (typical: inner library
       depends on outer)
     • _subLibraries — nested child Library blocks grouped under this library
     • _schemas — optional legacy XSD paths as FilePathEntity instances
     • _blocks — exported Block and ValueType definitions (membership SSOT)
 
+    bootstrap holds a Bootstrap block instance as type reference — element name resolves to FQN.
     _dependencies, _subLibraries, and _blocks hold empty Block instances as type references —
     element name resolves to FQN. bml:version is forbidden on these children.
     _schemas holds FilePathEntity composition children; value is the relative .xsd path from
@@ -51,6 +53,9 @@
     </see>
     <see block="btype:FilePathEntity">
       Entity wrapper used for _schemas entries.
+    </see>
+    <see block="core:Bootstrap">
+      Abstract base for library bootstrap entry points (README blocks).
     </see>
   </references>
 
@@ -71,6 +76,11 @@
   </properties>
 
   <aggregations>
+    <bootstrap type="core:Bootstrap">
+      <documentation>Library bootstrap entry point — typically a README block with a readFirst
+        documentation list. Holds a Bootstrap block instance as type reference — element name
+        resolves to FQN. bml:version is forbidden.</documentation>
+    </bootstrap>
     <_dependencies type="core:BlockLibrary[]">
       <documentation>Other Library blocks this library depends on. Typical pattern: an inner
         library lists the outer library here. Holds empty Block instances as type references —
