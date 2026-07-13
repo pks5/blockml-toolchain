@@ -13,7 +13,7 @@
 
   <idea>Constraint violation must fail compilation.</idea>
 
-  <documentation>When a constraint with validation="validation:Error" is violated, the BlockML
+  <documentation>When a constraint with validation="Error" is violated, the BlockML
     validator emits BML_CONSTRAINT_VIOLATION and compilation fails.</documentation>
   <name>Error</name>
   <type>validation:Error</type>

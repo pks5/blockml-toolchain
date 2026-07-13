@@ -133,7 +133,7 @@ group         — optional grouping for editor display
 documentation — human-readable description
 ```
 
-Unqualified type names in BML are resolved against `com.machineblocks.bml.type` by the parser before being stored in MBOM as full FQNs.
+Unqualified type names on Property `type` resolve via context-bound implicit namespace `org.blockml.bml.type.*` — see `02_mbml.md` — § Context-Bound Implicit Namespace. Domain types require `type:` prefix or full FQN.
 
 **Computed values:** `value` may be an Expression referencing other Properties of the same Block. See `10_expression_language.md` — Expressions in `value`.
 
@@ -276,7 +276,7 @@ com.myDomain.MyClass             — Object (named fields)
 { items: org.blockml.bml.type.Integer[0..n] }  — collection field
 ```
 
-Unqualified names resolve against the domain's default type namespace (determined by the Block's `baseType`). For MachineBlocks that is `com.machineblocks.bml.type.*`; for primitives `org.blockml.bml.type.*`.
+On Property `type` reference sites, unqualified primitives resolve to `org.blockml.bml.type.*`. Domain types require `type:` prefix (`com.machineblocks.bml.type.*`) or full FQN — see `02_mbml.md` — § Context-Bound Implicit Namespace.
 
 ### Payload Call Syntax
 

@@ -117,66 +117,64 @@ The BOM always uses the full FQN. Namespace prefixes are a BML authoring conveni
 
 **General rule:** XML prefixes have no semantic meaning. During parsing, every prefix is resolved via the document's `xmlns:` declarations. The BOM stores **canonical namespace identifiers only** (FQN or URI) — never XML aliases. This applies to Block type references, member element QNames, `type:` shorthand, and all other namespaced BML syntax. See § Member Namespace (Element QName).
 
-### Type Namespace Shorthand
+### Context-Bound Implicit Namespace
 
-Property `type` attributes and unqualified composition tags use **namespace-prefixed names** for domain types. **Unqualified** PascalCase names are resolved in a fixed order within the current BML document — see § Unqualified Block Resolution below.
-
-**Domain types** require the `type:` namespace prefix (declared via `xmlns:type="com.machineblocks.bml.type"`):
+Unqualified block references are supported **only at specialized, semantically unambiguous reference sites**. Each such site defines exactly one implicit namespace. The name is expanded directly:
 
 ```text
+<Name>  →  <implicitNamespace>.<Name>
+```
+
+There is **no multi-stage search**, no global TypeRegistry fallback, and no document-scope heuristics. If the expanded FQN does not exist or the referenced Block does not satisfy the expected base type for that site, the compiler emits an error.
+
+| Reference site | Implicit namespace | Expected base type |
+|---|---|---|
+| Property `type` | `org.blockml.bml.type.*` | ValueType |
+| Capability `inputType` | `org.blockml.bml.type.*` | ValueType |
+| Capability `outputType` | `org.blockml.bml.type.*` | ValueType |
+| `<implementation language="…">` | `org.blockml.bml.language.*` | Language |
+| `<status>` element content · `bml:status` attribute | `org.blockml.bml.status.*` | Status |
+| Capability `type` | `org.blockml.bml.capability.*` | Capability branch |
+| Constraint `validation` attribute | `org.blockml.bml.validation.*` | Validation |
+
+**Examples:**
+
+```text
+<width type="Integer" />                    →  org.blockml.bml.type.Integer
+<implementation language="TypeScript">      →  org.blockml.bml.language.TypeScript
+<status>Draft</status>                        →  org.blockml.bml.status.Draft
+<resize type="Transformation" …>             →  org.blockml.bml.capability.Transformation
+<constraint:Min validation="Error" …/>       →  org.blockml.bml.validation.Error
+```
+
+**General block references have no implicit namespace.** These require a full FQN or an explicit `xmlns:` prefix:
+
+```text
+<baseType>Block</baseType>                    ✗  Block could come from many libraries
+<aggregation type="Wall" />                   ✗  no implicit namespace
+<association type="Foo" />                    ✗  no implicit namespace
+<Base bml:id="base" …/>                       ✗  composition tags require prefix or FQN
+```
+
+```xml
+<!-- correct -->
+<baseType>core:Block</baseType>
+<aggregation type="core:Block[]" />
+<core:Step bml:id="step1" … />
+
+<!-- domain types on Property.type — prefix required -->
+xmlns:type="com.machineblocks.bml.type"
 type="type:Size3D"   →  com.machineblocks.bml.type.Size3D
 type="type:Color"    →  com.machineblocks.bml.type.Color
 ```
 
-There is no implicit fallback to the domain namespace. Explicit FQNs are always supported.
+Explicit FQNs and `xmlns:` prefixes remain valid **everywhere** — including at specialized reference sites (`status:Draft`, `lang:TypeScript`, `validation:Error` are equivalent to bare names at those sites).
 
-### Unqualified Block Resolution
+**Generic parameters** (e.g. `type="T"` on a property) are not block references — they refer to `genericTypes[]` entries in the enclosing Block definition.
 
-Unqualified PascalCase identifiers — on composition element names, `type="..."` attributes, and related member declarations — resolve in this **fixed order** within the current BML document:
+**Naming mutual exclusion:** A generic parameter name must differ from the root Block `<name>` and from every Sub-Block `<name>` in the same document (`BML_GENERIC_BLOCK_NAME_COLLISION`, `BML_GENERIC_SUBBLOCK_NAME_COLLISION`).
 
-```text
-1. Own Block name       — matches root <name> of the enclosing BlockDefinition
-2. SubBlocks            — subBlocks[] of innermost enclosing Block, walk up parent chain,
-                          then Sub-Blocks inherited via baseType chain
-3. Generic parameters   — genericTypes[] of the root BlockDefinition (e.g. type="T")
-4. Core primitives      — whitelist only (→ org.blockml.bml.type.*):
-                          Text · Float · Integer · Decimal · Boolean
-```
-
-After steps 1–4 fail in document scope:
-
-```text
-5. xmlns prefix         — bricks:Standard, type:Size3D, …
-6. TypeRegistry         — global FQN lookup
-```
-
-**Naming mutual exclusion:** A generic parameter name (the XML element name inside `<genericTypes>`) must differ from the root Block `<name>` and from every Sub-Block `<name>` in the same document (`BML_GENERIC_BLOCK_NAME_COLLISION`, `BML_GENERIC_SUBBLOCK_NAME_COLLISION`). Sub-Blocks and generic parameters therefore never compete for the same identifier — steps 2 and 3 are disjoint in practice.
-
-**Own Block name (step 1):** When an unqualified reference matches the root Block's `<name>`, it resolves to that Block's declared `<type>` FQN — a self-type reference within the same definition. For inheritance-aware self-reference at validate time, `bml:Self` remains available (see § Members — `bml:Self`).
-
-**Core primitives (step 4):** Only the five whitelist names above resolve without prefix. Abstract branches such as `org.blockml.bml.type.Number` or `org.blockml.bml.type.PrimitiveType` are **not** in the whitelist — use `Integer`, `Decimal`, or `Float` for numeric properties.
-
-```text
-type="Integer"   →  org.blockml.bml.type.Integer
-type="Float"     →  org.blockml.bml.type.Float
-type="Decimal"   →  org.blockml.bml.type.Decimal
-type="Text"    →  org.blockml.bml.type.Text
-type="Boolean"   →  org.blockml.bml.type.Boolean
-type="Number"    →  ✗  not whitelisted — use Integer, Float, or Decimal
-```
-
-### Status Namespace Shorthand
-
-Status references use the `status:` namespace prefix (declared via `xmlns:status="org.blockml.bml.status"`):
-
-```text
-status:Stable       →  org.blockml.bml.status.Stable
-status:Draft        →  org.blockml.bml.status.Draft
-status:Stub         →  org.blockml.bml.status.Stub
-status:Deprecated   →  org.blockml.bml.status.Deprecated
-```
-
-There is **no implicit resolution** of bare status names. `Draft` alone is invalid — always use `status:Draft` or the full FQN `org.blockml.bml.status.Draft`. Domain libraries may define additional status blocks under their own namespace.
+For inheritance-aware self-reference at validate time, `bml:Self` remains available (see § Members — `bml:Self`).
 
 **Property and Capability types** must resolve to a **ValueType** — a Block whose `baseType` chain includes `org.blockml.bml.core.ValueType`. Non-ValueType FQNs (e.g. `com.foo.Wall`) are invalid as property or Capability input/output types → `BML_INVALID_PROPERTY_TYPE`.
 
@@ -214,7 +212,7 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 <type>              — FQN (e.g. com.martianmicro.anyclosure.Wall)
 <baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.bml.core.Block.
 <version>           — semantic version of this Block definition
-<status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to status:Stable)
+<status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
 ```
 
 Definition elements (`<property>`, `<aggregation>`, …) carry `<status>` only when deviating from the inherited status — see § `<status>`.
@@ -414,20 +412,20 @@ Example with documentation extensions on a member:
 </wallThickness>
 ```
 
-Non-definition elements (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<implementation>`, Block instances, …) may carry `bml:status="status:Draft"` when deviating from inherited status — same rules as `<documentation>`.
+Non-definition elements (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<implementation>`, Block instances, …) may carry `bml:status="Draft"` when deviating from inherited status — same rules as `<documentation>`.
 
 ### `<status>` — maturity marker
 
 Status expresses the maturity or lifecycle of a definition. Status is a **Block reference**, not a string or boolean — following Everything-is-a-Block.
 
-**Implicit default:** When no status is declared, the effective status is **`status:Stable`** (`org.blockml.bml.status.Stable`). At the document root this applies directly; on child elements the effective status is inherited from the parent — which is Stable unless an ancestor declared a deviation.
+**Implicit default:** When no status is declared, the effective status is **`Stable`** (`org.blockml.bml.status.Stable`). At the document root this applies directly; on child elements the effective status is inherited from the parent — which is Stable unless an ancestor declared a deviation.
 
 #### Inheritance and defaults
 
 Status is **inherited downward** through the element tree. Authors declare status **only when it deviates** from the effective status of the parent element.
 
 ```text
-Document root (no parent)     →  effective status: status:Stable
+Document root (no parent)     →  effective status: Stable
 Child element (no declaration) →  inherits parent effective status
 Child with <status> or bml:status →  sets local effective status for its subtree
 ```
@@ -437,12 +435,12 @@ Examples:
 ```text
 <block> (omit status)                    → Stable; all children inherit Stable
   <property> (omit status)               → Stable (inherited)
-  <property><status>status:Draft</status> → Draft; <documentation> inside inherits Draft
-  <idea bml:status="status:Stub">        → Stub (deviates from block's Stable)
-  <bricks:Wall bml:status="status:Deprecated"> → Deprecated instance under Stable block
+  <property><status>Draft</status> → Draft; <documentation> inside inherits Draft
+  <idea bml:status="Stub">        → Stub (deviates from block's Stable)
+  <bricks:Wall bml:status="Deprecated"> → Deprecated instance under Stable block
 ```
 
-On a **Draft** property, nested `<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<constraints>`, and composition children inherit **Draft** — no attribute needed. To mark a child as **Stable** inside a Draft property, set `bml:status="status:Stable"` explicitly.
+On a **Draft** property, nested `<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<constraints>`, and composition children inherit **Draft** — no attribute needed. To mark a child as **Stable** inside a Draft property, set `bml:status="Stable"` explicitly.
 
 Core library defines:
 
@@ -466,7 +464,7 @@ Only elements that **define** something may carry a `<status>` child — and **o
 
 ```xml
 <property name="width" type="Float">
-    <status>status:Draft</status>
+    <status>Draft</status>
     <documentation>Target width in grid units — mapping incomplete.</documentation>
     <value>4</value>
 </property>
@@ -478,40 +476,43 @@ Elements that are **not** definitions do not carry a `<status>` child. Use `bml:
 
 ```xml
 <!-- Block is Stable (default); idea deviates to Stub -->
-<idea bml:status="status:Stub">
+<idea bml:status="Stub">
   Reserved for future multi-material support.
 </idea>
 
 <!-- Stable block; deprecated composition instance -->
 <bricks:StandardBrick
-    bml:status="status:Deprecated"
+    bml:status="Deprecated"
     bml:id="legacy"
     size="[2, 4, 3]" />
 
 <!-- Draft property; implementation inherits Draft — omit bml:status -->
 <capability name="formatValue" …>
-  <implementation language="lang:TypeScript"><![CDATA[…]]></implementation>
+  <implementation language="TypeScript"><![CDATA[…]]></implementation>
 </capability>
 
 <!-- Draft property; one child doc reviewed early — explicit deviation -->
-<documentation bml:status="status:Stable">
+<documentation bml:status="Stable">
   Reviewed description text (property itself remains Draft).
 </documentation>
 ```
 
-#### No implicit namespace resolution
+#### Implicit namespace at status reference sites
 
-Status values are always explicit when declared:
+At `<status>` and `bml:status` reference sites, unqualified names resolve to `org.blockml.bml.status.*`:
 
 ```xml
-<!-- correct -->
-<status>status:Draft</status>
-
-<!-- invalid — no bare-name resolution -->
+<!-- correct — bare name at specialized reference site -->
 <status>Draft</status>
-```
+<bml:status="Deprecated" … />
 
-The sole existing shorthand exception remains Core primitives (`Integer` → `org.blockml.bml.type.Integer`).
+<!-- also valid — explicit prefix or FQN -->
+<status>Draft</status>
+<status>org.blockml.bml.status.Draft</status>
+
+<!-- invalid — bare name outside a specialized reference site -->
+<type>Draft</type>
+```
 
 ### Block Name Convention
 
@@ -524,7 +525,7 @@ Invalid: my-wall, wall_v2, 2Wall, My Wall
 Error:   BML_INVALID_BLOCK_NAME
 ```
 
-PascalCase ensures Sub-Block short-name references (`<Base />`) are unambiguous — no Property or member name starts with an uppercase letter.
+PascalCase ensures composition instance tags with `xmlns:` prefixes are unambiguous — no Property or member name starts with an uppercase letter.
 
 ### Optional Fields
 
@@ -576,7 +577,7 @@ org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritan
 **Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous:
 
 ```text
-<languages>    →  <lang:OpenSCAD/>           direct Language reference
+<languages>    →  <lang:OpenSCAD/>           Language reference (composition element — prefix required)
 <subTypes>     →  <core:Block/>              direct Block reference
 <contracts>    →  <ac:Wall/>                 direct contract Block reference
 <genericTypes> →  <T baseType="…"/>          element name = generic parameter name
@@ -820,7 +821,7 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 
     <!-- Custom property — deviates to Draft -->
     <wallThickness type="Integer">
-      <status>status:Draft</status>
+      <status>Draft</status>
       <documentation>Thickness of the wall in grid units.</documentation>
       <value>1</value>
     </wallThickness>
@@ -1336,13 +1337,12 @@ On **Block instances**, property values use the short form (attribute) or long f
 
 ### Type Resolution
 
-Unqualified type names (no namespace prefix) resolve to `org.blockml.bml.type.*` — the BOM Core primitives:
+On Property `type`, Capability `inputType`, and Capability `outputType` reference sites, unqualified names resolve to `org.blockml.bml.type.*` — see § Context-Bound Implicit Namespace. Domain types require the `type:` prefix or a full FQN:
 
 ```text
-Float    → org.blockml.bml.type.Float
-Integer  → org.blockml.bml.type.Integer
-Text     → org.blockml.bml.type.Text
-Boolean  → org.blockml.bml.type.Boolean
+type="Integer"   → org.blockml.bml.type.Integer   (Property.type site)
+type="Float"     → org.blockml.bml.type.Float
+type="type:Size3D" → com.machineblocks.bml.type.Size3D   (domain — prefix required)
 ```
 
 There is no `Null` primitive — see `17_type_system_bml.md` — EMPTY.
@@ -1432,8 +1432,8 @@ When the property `type` is an EnumType, `value` and instance attribute values m
 <textSize type="Integer">
   <value>9</value>
   <constraints>
-    <constraint:Min value="1" validation="validation:Error"/>
-    <constraint:Max value="72" validation="validation:Error"/>
+    <constraint:Min value="1" validation="Error"/>
+    <constraint:Max value="72" validation="Error"/>
   </constraints>
 </textSize>
 ```
@@ -1636,7 +1636,7 @@ com.myDomain.MyClass             — Object (named fields)
 { items: com.myDomain.MyClass[] } — collection of domain objects
 ```
 
-Unqualified type names resolve against the domain's default type namespace (determined by the Block's `baseType`).
+On Capability `type`, unqualified names resolve to `org.blockml.bml.capability.*`. On `inputType` / `outputType`, unqualified names resolve to `org.blockml.bml.type.*` — see § Context-Bound Implicit Namespace. General block references (aggregation type, association type, `baseType`) have no implicit namespace.
 
 **Validation:** `Inbound` requires `inputType` (no `outputType`). `Outbound` requires `outputType` (no `inputType`). `Transformation` requires both. Async reply via `replyTo` is a runtime/message pattern — not modeled on the Capability.
 
@@ -2136,36 +2136,30 @@ Sub-Block:   <name>StudDiameter</name>
 com.machineblocks.bml.calibration.Calibrator.Base.Strip
 ```
 
-### Short-Name Reference in Compositions
+### Composition Block References
 
-When a composition child element has **no namespace prefix** (PascalCase tag name only), the parser resolves `typeFqn` using § Unqualified Block Resolution — same order as unqualified `type="..."` on member declarations.
+Composition child elements are **general block references** — they have **no implicit namespace**. Every composition instance tag requires an `xmlns:` prefix or a full FQN:
 
-```text
-1. Own Block name
-2. SubBlocks (innermost → parent chain → baseType-inherited)
-3. Generic parameters
-4. Core primitives (Text · Float · Integer · Decimal · Boolean)
-5. xmlns prefix
-6. TypeRegistry
+```xml
+<!-- correct -->
+<core:Step bml:id="step1" … />
+<cal:Calibrator.Base bml:id="base_stud" … />
+<cal:Calibrator.StudDiameter bml:id="samples_stud" … />
+
+<!-- invalid — bare PascalCase tag without prefix -->
+<Base bml:id="base_stud" … />
+<StudDiameter bml:id="samples_stud" … />
 ```
 
-Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.bml.calibration.Calibrator.Base`). Authors may write the short name in BML when the type is in scope per the order above.
+The parser resolves the element QName via the document's `xmlns:` declarations and stores the **resolved FQN** on the BOM node.
 
-**Same document — aggregation example (`BlockLibrary.bml`):**
+**Aggregation type example (`BlockLibrary.bml`):**
 
 ```xml
 <aggregations>
   <_dependencies type="core:BlockLibrary[]" />
   <_blocks type="core:Block[]" />
 </aggregations>
-```
-
-**Same document — composition example:**
-
-```xml
-<!-- Inside Calibrator's composition: -->
-<Base bml:id="base_stud" offset="[0, 0, 0]" ... />
-<StudDiameter bml:id="samples_stud" ... />
 ```
 
 **Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.bml.core.BlockLibrary` hold empty Block instances as type references — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
@@ -2187,25 +2181,23 @@ Stage [5] stores the **resolved FQN** on the BOM node (e.g. `com.machineblocks.b
 </aggregations>
 ```
 
-**Inherited framework Sub-Blocks:** A block with `baseType="org.blockml.bml.core.BlockLibrary"` (e.g. `Library`) still resolves `Schema` by short name — it is a Sub-Block of `org.blockml.bml.core.BlockLibrary`, inherited via the baseType chain.
-
 ### Sub-Block reference scope
 
-Unqualified Sub-Block references (PascalCase tag without prefix, or unqualified `type="SubBlockName"`) are permitted **only within the same BML file** where the Sub-Block is defined. The parser resolves them against `subBlocks[]` in that document — not against external files.
+Sub-Blocks must always be referenced with an **`xmlns:` prefix** and a **qualified name** (`RootBlock.SubBlock`), or with the full FQN. Bare Sub-Block short names are never resolved — not even within the same BML file.
 
 ```text
 Same file (Calibrator.bml defines Sub-Block Base):
-  <Base bml:id="base_stud" ... />          ✓
-  type="Base" on a member in same file     ✓
+  <cal:Calibrator.Base bml:id="base_stud" … />     ✓
+  <Base bml:id="base_stud" … />                    ✗  BML_UNQUALIFIED_BLOCK_REFERENCE
 
 Other file (Set.bml composes Calibrator internals):
-  <Base ... />                               ✗  BML_SUBBLOCK_UNQUALIFIED_REFERENCE
-  <cal:Calibrator.Base ... />                ✓  parent Block namespace + qualified name
-  <cal:Calibrator.Base.Strip ... />          ✓  nested Sub-Block
-  xmlns + full FQN on element                ✓  com.machineblocks.bml.calibration.Calibrator.Base
+  <cal:Calibrator.Base … />                        ✓  parent Block namespace + qualified name
+  <cal:Calibrator.Base.Strip … />                  ✓  nested Sub-Block
+  <Base … />                                       ✗  BML_UNQUALIFIED_BLOCK_REFERENCE
+  xmlns + full FQN on element                      ✓  com.machineblocks.bml.calibration.Calibrator.Base
 ```
 
-**Rule:** From outside the defining file — including child Block instances in other documents — Sub-Blocks must be referenced with the **parent Block's namespace prefix** and a **qualified name** (`RootBlock.SubBlock`), or with the full FQN. A bare Sub-Block short name is never resolved across files.
+**Rule:** Sub-Blocks are always referenced with the **parent Block's namespace prefix** and a **qualified name** (`RootBlock.SubBlock`), or with the full FQN.
 
 Accepted qualified forms:
 
@@ -2993,7 +2985,8 @@ protected Sub-Block reference → BML_PROTECTED_SUBBLOCK_ACCESS
 BML_UNKNOWN_NAMESPACE_PREFIX  → member element prefix references undeclared xmlns: prefix
 final member override         → BML_FINAL_MEMBER_OVERRIDE
 readOnly member on instance   → BML_READONLY_MEMBER_WRITE
-type="Foo" (unqualified)      → § Unqualified Block Resolution (own name · SubBlocks · generics · primitives whitelist)
+type="Foo" (unqualified at general site)  →  BML_UNKNOWN_TYPE (no implicit namespace)
+type="Integer" (Property.type)          →  org.blockml.bml.type.Integer
 bml:version omitted on external instance → resolve effective version from TypeRegistry context
 bml:version present on external instance  → exact-version assert → BML_UNKNOWN_VERSION if no match
 bml:version inside Library file           → BML_VERSION_NOT_ALLOWED_IN_LIBRARY (error)

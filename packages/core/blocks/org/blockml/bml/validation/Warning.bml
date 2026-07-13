@@ -13,7 +13,7 @@
 
   <idea>Constraint violation emits a warning; compilation succeeds.</idea>
 
-  <documentation>When a constraint with validation="validation:Warning" is violated, the BlockML
+  <documentation>When a constraint with validation="Warning" is violated, the BlockML
     validator emits BML_CONSTRAINT_WARNING. Compilation continues.</documentation>
   <name>Warning</name>
   <type>validation:Warning</type>

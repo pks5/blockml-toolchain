@@ -71,7 +71,7 @@
     <!-- Optional legacy XSD — omit when all types are exported via _blocks -->
     <_schemas>
       <composition>
-        <Schema ref="blockml-library.xsd" />
+        <bcore:BlockLibrary.Schema ref="blockml-library.xsd" />
       </composition>
     </_schemas>
 
@@ -182,6 +182,7 @@
         <doc:RendererFreedom />
         <doc:LibrarySystem />
         <doc:BmlNamespace />
+        <doc:ImplicitNamespaceResolution />
         <doc:DocumentationModel />
         <doc:BootstrapModel />
         <doc:ModelingGuidelines />

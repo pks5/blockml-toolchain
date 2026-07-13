@@ -39,7 +39,7 @@
 
   <properties>
     <!-- bml:xml="attribute" renders version as an XML attribute on <change>. -->
-    <version type="btype:Version" bml:xml="attribute">
+    <version type="Version" bml:xml="attribute">
       <documentation>Semantic version this change applies to. Required attribute on every change
         entry.</documentation>
     </version>

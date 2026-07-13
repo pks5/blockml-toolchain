@@ -56,7 +56,7 @@
       FQN Namespaces — system-level summary.
     </see>
     <see file="02_mbml.md">
-      Namespaces — xmlns bindings and Block FQN resolution.
+      Namespaces — xmlns bindings, context-bound implicit namespace, and Block FQN resolution.
     </see>
     <see file="15_dev_setup.md">
       Package Conventions — npm packages vs. FQN namespaces.
@@ -67,8 +67,8 @@
     <see block="doc:LibrarySystem">
       Libraries, packages, and namespace membership — related reading.
     </see>
-    <see block="doc:DocumentationModel">
-      Next reading step — idea, documentation, references on Block definitions.
+    <see block="doc:ImplicitNamespaceResolution">
+      Context-bound implicit namespace — unqualified references at specialized sites.
     </see>
   </references>
 

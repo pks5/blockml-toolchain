@@ -202,16 +202,17 @@ directives:
 
 Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`@blockml/parser`** BOM interfaces — not in `org.blockml.bml.type.*`. See `00_bom_core.md` — Mandatory BML namespace · `17_type_system_bml.md` — Type Expressions.
 
-Unqualified PascalCase names on `type="..."` (properties, aggregations, capabilities) and unqualified composition tags use the **Unqualified Block Resolution** order (see `02_mbml.md` — § Unqualified Block Resolution):
+Unqualified names at **specialized reference sites** resolve via context-bound implicit namespace — see `02_mbml.md` — § Context-Bound Implicit Namespace:
 
 ```text
-1. Own Block name → root BlockDefinition.type FQN
-2. SubBlocks (document scope + baseType-inherited)
-3. genericTypes[] of root BlockDefinition
-4. Core primitives whitelist: Text · Float · Integer · Decimal · Boolean → org.blockml.bml.type.*
-5. xmlns prefix
-6. TypeRegistry NamedTypeReference
+Property.type / Capability.inputType / outputType  →  org.blockml.bml.type.*
+Implementation.language                           →  org.blockml.bml.language.*
+<status> / bml:status                               →  org.blockml.bml.status.*
+Capability.type                                     →  org.blockml.bml.capability.*
+Constraint.validation                               →  org.blockml.bml.validation.*
 ```
+
+General block references (aggregation type, association type, composition tags, baseType) have no implicit namespace — require FQN or `xmlns:` prefix.
 
 ```text
 <aggregation type="bcore:BlockLibrary[]" .../>   on org.blockml.bml.core.BlockLibrary
@@ -283,7 +284,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
   <see block="…">…</see>         → { block, context: trimmed body }
   <see file="…">…</see>          → { file, context: trimmed body }
   <see url="…">…</see>           → { url, context: trimmed body }
-<status>status:Draft</status>                → member.statusFqn or block.statusFqn (when declared)
+<status>Draft</status>                → member.statusFqn or block.statusFqn (when declared)
                                              → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
 <type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
@@ -327,7 +328,7 @@ Duplicate contract reference           → BML_DUPLICATE_CONTRACT (error)
 Duplicate generic parameter name             → BML_DUPLICATE_GENERIC (error)
 generic parameter element name equals Block <name>         → BML_GENERIC_BLOCK_NAME_COLLISION (error)
 generic parameter element name equals Sub-Block <name>     → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
-Unqualified Sub-Block reference outside file → BML_SUBBLOCK_UNQUALIFIED_REFERENCE (error)
+Unqualified block reference without FQN or xmlns prefix → BML_UNQUALIFIED_BLOCK_REFERENCE (error)
 Ambiguous Sub-Block short name (same as root) → BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED (error)
 org.blockml.bml.core.Block                   → omits <baseType> (sole inheritance root)
 ```
@@ -349,12 +350,12 @@ final="true"               → final
 <changelog>…               → changelog[]
 <examples>…                → examples[]
 <references>…              → references[]
-<status>status:Draft</status>  → statusFqn (when declared; omitted → inherit from parent)
+<status>Draft</status>  → statusFqn (when declared; omitted → inherit from parent)
 ```
 
 Legacy `namespace="…"` attribute on member elements → **`BML_DEPRECATED_MEMBER_NAMESPACE_ATTR` (error)** at map time. Namespace is supplied exclusively by the element QName.
 
-**Non-definition elements** (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<idea>`, `<implementation>`, Block instances, …) may carry `bml:status="status:Draft"` — mapped to `statusFqn` on the same BOM node **only when deviating** from inherited status. No `<status>` child on these elements.
+**Non-definition elements** (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<idea>`, `<implementation>`, Block instances, …) may carry `bml:status="Draft"` — mapped to `statusFqn` on the same BOM node **only when deviating** from inherited status. No `<status>` child on these elements.
 
 **Effective status resolution (stage [5] / validate [8]):**
 
@@ -367,13 +368,14 @@ Root (no parent) effective status     →  org.blockml.bml.status.Stable (when o
 Element with declared statusFqn         →  declared value becomes effective for subtree
 Element without declaration             →  effective status = parent's effective status
 
-Authored:  <status>status:Draft</status>     xmlns:status="org.blockml.bml.status"
-           bml:status="status:Deprecated"    (only when ≠ inherited)
+Authored:  <status>Draft</status>     → org.blockml.bml.status.Draft (implicit namespace at status site)
+           bml:status="Deprecated"    (only when ≠ inherited)
 
 BOM:       statusFqn on node (explicit only) + resolved effectiveStatusFqn at validate
 
-Bare name "Draft" (no status: prefix)  →  BML_UNKNOWN_STATUS (parse error)
-Unknown status FQN                     →  BML_UNKNOWN_STATUS (validate)
+Bare name "Draft" at <status> / bml:status site  →  org.blockml.bml.status.Draft
+Bare name outside specialized site               →  BML_UNKNOWN_TYPE (parse error)
+Unknown status FQN                               →  BML_UNKNOWN_STATUS (validate)
 Redundant status (= inherited)         →  BML_REDUNDANT_STATUS (warning V1)
 ```
 

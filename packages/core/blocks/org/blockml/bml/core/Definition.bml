@@ -41,7 +41,7 @@
     <documentation type="Text" bml:xml="element">
       <documentation>The documentation of the definition.</documentation>
     </documentation>
-    <since type="btype:Version" bml:xml="element">
+    <since type="Version" bml:xml="element">
       <documentation>The version in which this definition became available.</documentation>
     </since>
     <status type="core:Status" bml:xml="element">

@@ -38,9 +38,7 @@ All MBOM types are defined in the **`com.machineblocks.bml.type`** namespace (si
 
 ## Type Resolution in BML
 
-Type names in BML `<property type="...">` declarations are resolved as follows:
-
-**No namespace prefix → core primitives whitelist only** (see `02_mbml.md` — § Unqualified Block Resolution):
+Type names on **specialized reference sites** (Property `type`, Capability `inputType` / `outputType`) resolve via the context-bound implicit namespace `org.blockml.bml.type.*` — see `02_mbml.md` — § Context-Bound Implicit Namespace:
 
 ```text
 Text     → org.blockml.bml.type.Text
@@ -50,7 +48,7 @@ Float    → org.blockml.bml.type.Float
 Decimal  → org.blockml.bml.type.Decimal
 ```
 
-`org.blockml.bml.type.Number` is the abstract numeric branch — not whitelisted for unqualified resolution.
+`org.blockml.bml.type.Number` is the abstract numeric branch — use `Integer`, `Decimal`, or `Float` for numeric properties.
 
 Collections use multiplicity on the type reference — not `Array<T>`. See `17_type_system_bml.md` — Type Expressions.
 
@@ -104,18 +102,18 @@ Core status blocks:
 
 ```text
 status:Stable       — defined, MBML parsing complete, SCAD mapping complete
-status:Draft        — defined; MBML parsing or SCAD mapping incomplete or untested
+Draft        — defined; MBML parsing or SCAD mapping incomplete or untested
 status:Stub         — placeholder; shape declared, behaviour not yet specified
 status:Deprecated   — retained for compatibility; do not use in new work
 ```
 
-Definition elements carry `<status>status:Draft</status>` only when deviating from inherited status. Prose annotations in this document use inline block references where the effective status differs from Stable:
+Definition elements carry `<status>Draft</status>` only when deviating from inherited status. Prose annotations in this document use inline block references where the effective status differs from Stable:
 
 ```text
-Status: status:Draft — known gap; explicit note describes what is missing.
+Status: Draft — known gap; explicit note describes what is missing.
 ```
 
-Domain libraries may define additional status blocks (e.g. domain-specific WIP markers). There is no implicit resolution of bare names — always use the `status:` prefix.
+Domain libraries may define additional status blocks (e.g. domain-specific WIP markers). At `<status>` and `bml:status` reference sites, unqualified names resolve to `org.blockml.bml.status.*`.
 
 ---
 
@@ -510,7 +508,7 @@ SCAD:
 
 ## RoundingRadius
 
-> **Status: `status:Draft`**
+> **Status: `Draft`**
 > The MBOM canonical form is defined. The SCAD mapping is partially implemented.
 > See `docs/scad-reference/05_types_and_mapping.md` for full details and current
 > implementation status.

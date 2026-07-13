@@ -13,7 +13,7 @@
 
   <idea>Constraint violation emits an informational diagnostic; compilation succeeds.</idea>
 
-  <documentation>When a constraint with validation="validation:Information" is violated, the BlockML
+  <documentation>When a constraint with validation="Information" is violated, the BlockML
     validator emits BML_CONSTRAINT_INFORMATION. Compilation continues.</documentation>
   <name>Information</name>
   <type>validation:Information</type>

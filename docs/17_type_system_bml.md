@@ -643,7 +643,7 @@ Optional association           — no target id set
 
 Union sentinels like `"none" | T` or `false | T` are typed alternatives — not null.
 
-Unqualified names in BML (`type="Integer"`) resolve via the core-primitives whitelist — see `02_mbml.md` — § Unqualified Block Resolution.
+Unqualified names in BML (`type="Integer"` on Property.type) resolve via context-bound implicit namespace — see `02_mbml.md` — § Context-Bound Implicit Namespace.
 
 ---
 

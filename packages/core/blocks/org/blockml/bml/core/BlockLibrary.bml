@@ -39,7 +39,7 @@
 
   <aggregations>
     <_dependencies type="core:BlockLibrary[]" />
-    <_schemas type="Schema[]" />
+    <_schemas type="core:BlockLibrary.Schema[]" />
     <_blocks type="core:Block[]" />
   </aggregations>
 

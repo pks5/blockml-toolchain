@@ -8,7 +8,7 @@
   <documentation>Abstract numeric primitive branch under org.blockml.bml.type.PrimitiveType.
     Concrete types: Integer (whole numbers), Decimal (default for non-integer numeric values),
     Float (binary floating-point — only when IEEE754 semantics are explicitly required).
-    Not in the unqualified-name whitelist — use Integer, Decimal, or Float explicitly.
+    Abstract numeric branch — not resolvable via Property.type implicit namespace; use Integer, Decimal, or Float explicitly.
     Numeric types describe semantics only; values are stored in Properties.</documentation>
   <name>Number</name>
   <type>btype:Number</type>

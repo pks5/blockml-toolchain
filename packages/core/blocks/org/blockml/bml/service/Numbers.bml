@@ -32,7 +32,7 @@
       SCAD: no native — Processor emits custom formatting logic.
     -->
     <formatDecimal
-      type="cap:Transformation"
+      type="Transformation"
       inputType="{ x: Float, minInt: Integer, decPoint: String, minFrac: Integer }"
       outputType="String">
       <documentation>
@@ -44,7 +44,7 @@
         #numbers.formatDecimal(0.1, 0, '.', 1) → ".1"
         #numbers.formatDecimal(3.14159, 1, '.', 2) → "3.14"
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (x: number, minInt: number, decPoint: string, minFrac: number): string => {
           const rounded = Math.round(x * Math.pow(10, minFrac)) / Math.pow(10, minFrac);
           let s = rounded.toFixed(minFrac);

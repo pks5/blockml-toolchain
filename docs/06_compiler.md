@@ -529,7 +529,7 @@ BML_CONSTRAINT_UNKNOWN        — constraint Block type not in TypeRegistry or n
 BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with property or element type
 BML_CONSTRAINT_VALUE_MISMATCH — constraint instance property value incompatible with bound generic T
 BML_VALIDATION_UNKNOWN        — validation Block type not in TypeRegistry or not a Validation sub-type
-BML_CONSTRAINT_VIOLATION      — property value fails a constraint with validation:Error (Min, Max, MinLength, …)
+BML_CONSTRAINT_VIOLATION      — property value fails a constraint with validation="Error" (Min, Max, MinLength, …)
 BML_CONSTRAINT_WARNING        — property value fails a constraint with validation:Warning
 BML_CONSTRAINT_INFORMATION    — property value fails a constraint with validation:Information
 BML_SUGGESTION_TYPE_MISMATCH  — suggestion Block instance type incompatible with property type
@@ -563,7 +563,7 @@ BML_FUNCTION_NO_RUNTIME_IMPL  — Transformation Capability called with non-lite
 BML_DUPLICATE_GENERIC           — duplicate generic parameter name on root Block
 BML_GENERIC_BLOCK_NAME_COLLISION — generic parameter element name equals the Block's <name>
 BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a Sub-Block <name> in the same file
-BML_SUBBLOCK_UNQUALIFIED_REFERENCE — bare Sub-Block short name used outside the defining BML file
+BML_UNQUALIFIED_BLOCK_REFERENCE — bare block reference without FQN or xmlns prefix at a general reference site (composition tag, baseType, aggregation/association type)
 BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED — Sub-Block shares root Block name; bare short tag is ambiguous
 BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation language="..."> not listed in baseType languages
 ```

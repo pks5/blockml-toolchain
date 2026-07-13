@@ -74,11 +74,11 @@
     <name type="Text">
       <documentation>Short class name (PascalCase). Required on every Block definition.</documentation>
     </name>
-    <type type="btype:FullyQualifiedName(core:Block)">
+    <type type="FullyQualifiedName(core:Block)">
       <documentation>Globally unique FQN. Required on root blocks (authored in BML). On Sub-Blocks
         derived as parentFqn + "." + name when omitted in source.</documentation>
     </type>
-    <baseType type="btype:FullyQualifiedName(core:Block)">
+    <baseType type="FullyQualifiedName(core:Block)">
       <documentation>Parent type FQN. Required on all definitions except the sole inheritance root.
         No default — validator resolves effective members via the baseType chain.</documentation>
     </baseType>
@@ -92,7 +92,7 @@
       <documentation>When true, the type is final — cannot be used as baseType on other
         definitions. Default false.</documentation>
     </final>
-    <version type="btype:Version">
+    <version type="Version">
       <documentation>Semantic version of this Block definition. Required on root blocks.
         Addressable as com.foo.Bar.version.</documentation>
     </version>

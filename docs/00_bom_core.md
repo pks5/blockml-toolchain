@@ -736,8 +736,8 @@ A Property may declare a list of constraints. Each constraint is a Block instanc
 <width type="Float">
   <value>50</value>
   <constraints>
-    <constraint:Min value="0" validation="validation:Error"/>
-    <constraint:Max value="100" validation="validation:Error"/>
+    <constraint:Min value="0" validation="Error"/>
+    <constraint:Max value="100" validation="Error"/>
   </constraints>
 </width>
 ```
@@ -1317,7 +1317,7 @@ Status is **inherited downward**. The document root defaults to `status:Stable`.
 
 ```text
 Omitted status on block/property/member   →  inherit from parent (root → Stable)
-<status>status:Draft</status> on property →  Draft for property and its subtree
+<status>Draft</status> on property →  Draft for property and its subtree
 bml:status on non-definition element      →  only when deviating from inherited status
 ```
 
@@ -1331,7 +1331,7 @@ bml:status on non-definition element      →  only when deviating from inherite
 
 ```xml
 <property name="width" type="Float">
-    <status>status:Draft</status>
+    <status>Draft</status>
     …
 </property>
 ```
@@ -1339,22 +1339,30 @@ bml:status on non-definition element      →  only when deviating from inherite
 **Non-definition elements** — `bml:status` attribute **only when deviating**:
 
 ```xml
-<idea bml:status="status:Stub">…</idea>
-<bricks:StandardBrick bml:status="status:Deprecated" … />
+<idea bml:status="Stub">…</idea>
+<bricks:StandardBrick bml:status="Deprecated" … />
 ```
 
-### Status namespace shorthand
+### Context-bound implicit namespace
 
-Status values use the `status:` prefix (declared via `xmlns:status="org.blockml.bml.status"`):
+At specialized reference sites, unqualified names resolve to a fixed implicit namespace — see `02_mbml.md` — § Context-Bound Implicit Namespace:
 
 ```text
-status:Stable       →  org.blockml.bml.status.Stable
-status:Draft        →  org.blockml.bml.status.Draft
-status:Stub         →  org.blockml.bml.status.Stub
-status:Deprecated   →  org.blockml.bml.status.Deprecated
+Property.type / Capability.inputType / outputType  →  org.blockml.bml.type.*
+Implementation.language                           →  org.blockml.bml.language.*
+<status> / bml:status                               →  org.blockml.bml.status.*
+Capability.type                                     →  org.blockml.bml.capability.*
+Constraint.validation                               →  org.blockml.bml.validation.*
 ```
 
-There is **no implicit resolution** of bare names (`Draft` → `org.blockml.bml.status.Draft` is invalid). The only existing shorthand exception remains Core primitives (`Integer` → `org.blockml.bml.type.Integer`).
+```text
+Draft        →  org.blockml.bml.status.Draft   (at <status> / bml:status site)
+Integer      →  org.blockml.bml.type.Integer     (at Property.type site)
+TypeScript   →  org.blockml.bml.language.TypeScript (at language= site)
+Error        →  org.blockml.bml.validation.Error (at validation= site)
+```
+
+General block references (`baseType`, aggregation type, association type, composition tags) have **no implicit namespace** — use FQN or `xmlns:` prefix.
 
 See `02_mbml.md` — § Status for full authoring rules and examples.
 
@@ -1526,7 +1534,7 @@ Within the parent Block's own Composition, Sub-Blocks are referenced by short na
 <StudDiameter bml:id="samples_stud" ... />
 ```
 
-From other files or child instances, use the parent Block's namespace and a qualified name (`RootBlock.SubBlock`), full FQN, or prefixed qualified form (`cal:Calibrator.Base`). Bare Sub-Block short names are not resolved across files → `BML_SUBBLOCK_UNQUALIFIED_REFERENCE`.
+Sub-Blocks must always be referenced with the parent Block's namespace and a qualified name (`RootBlock.SubBlock`), full FQN, or prefixed qualified form (`cal:Calibrator.Base`). Bare Sub-Block short names are never resolved → `BML_UNQUALIFIED_BLOCK_REFERENCE`.
 
 If a Sub-Block shares the root Block's `<name>`, bare short tags are ambiguous → `BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED`; use `Calibrator.Calibrator`, `cal:Calibrator.Calibrator`, or the full FQN.
 
@@ -1875,7 +1883,7 @@ org.blockml.bml.type.Number          — abstract numeric branch
   org.blockml.bml.type.Decimal
 ```
 
-Unqualified resolution whitelist (step 4): `String`, `Boolean`, `Integer`, `Float`, `Decimal` only — see `02_mbml.md` — § Unqualified Block Resolution.
+Context-bound implicit namespace at specialized reference sites — see `02_mbml.md` — § Context-Bound Implicit Namespace. No global unqualified resolution.
 
 ### Type Expressions (not ValueTypes)
 

@@ -60,15 +60,15 @@
   <baseType>core:Mapping</baseType>
 
   <properties>
-    <supportsPositional type="btype:Boolean">
+    <supportsPositional type="Boolean">
       <value>true</value>
       <documentation>Allow positional function parameters mapped by property declaration order.</documentation>
     </supportsPositional>
-    <supportsNamed type="btype:Boolean">
+    <supportsNamed type="Boolean">
       <value>true</value>
       <documentation>Allow named function parameters mapped by StructType property names.</documentation>
     </supportsNamed>
-    <supportsMixed type="btype:Boolean">
+    <supportsMixed type="Boolean">
       <value>false</value>
       <documentation>Allow mixing positional and named parameters in one call. Default false.</documentation>
     </supportsMixed>

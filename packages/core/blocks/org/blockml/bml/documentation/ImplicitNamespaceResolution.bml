@@ -1,0 +1,62 @@
+<!--
+  BlockML Core — bootstrap documentation
+
+  FQN: org.blockml.bml.documentation.ImplicitNamespaceResolution
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <idea>Context-bound implicit namespace for unqualified block references.</idea>
+
+  <documentation>
+    Unqualified block references are supported only at specialized, semantically unambiguous
+    reference sites. Each site defines exactly one implicit namespace. The name expands directly:
+
+    &lt;Name&gt; → &lt;implicitNamespace&gt;.&lt;Name&gt;
+
+    There is no multi-stage search, no global TypeRegistry fallback, and no document-scope
+    heuristics. If the expanded FQN does not exist or the Block does not satisfy the expected
+    base type for that site, the compiler emits an error.
+
+    Reference sites and implicit namespaces:
+    • Property type → org.blockml.bml.type.*
+    • Capability inputType / outputType → org.blockml.bml.type.*
+    • Implementation language attribute → org.blockml.bml.language.*
+    • status element content · bml:status attribute → org.blockml.bml.status.*
+    • Capability type → org.blockml.bml.capability.*
+    • Constraint validation attribute → org.blockml.bml.validation.*
+
+    Examples:
+    • &lt;width type="Integer" /&gt; → org.blockml.bml.type.Integer
+    • &lt;implementation language="TypeScript"&gt; → org.blockml.bml.language.TypeScript
+    • &lt;status&gt;Draft&lt;/status&gt; → org.blockml.bml.status.Draft
+    • type="Transformation" on Capability → org.blockml.bml.capability.Transformation
+    • validation="Error" on constraint → org.blockml.bml.validation.Error
+
+    General block references have no implicit namespace — baseType, aggregation type,
+    association type, and composition instance tags require a full FQN or xmlns prefix.
+    Explicit FQNs and xmlns prefixes remain valid everywhere, including at specialized sites.
+  </documentation>
+
+  <references>
+    <see file="02_mbml.md">
+      Context-Bound Implicit Namespace — authoritative authoring rules.
+    </see>
+    <see file="00_bom_core.md">
+      Context-bound implicit namespace summary.
+    </see>
+    <see block="doc:BmlNamespace">
+      Mandatory domain.bml namespace — FQN layout.
+    </see>
+  </references>
+
+  <name>ImplicitNamespaceResolution</name>
+  <type>doc:ImplicitNamespaceResolution</type>
+  <baseType>core:Documentation</baseType>
+
+</block>

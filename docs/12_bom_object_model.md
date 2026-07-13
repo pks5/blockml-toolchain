@@ -900,17 +900,9 @@ interface BlockInstance {
 
 ### Type Reference Resolution
 
-When parsing a composition child element, the parser resolves `typeFqn` for unqualified PascalCase tag names:
+Composition child elements are **general block references** — they have no implicit namespace. The parser resolves the element QName via `xmlns:` declarations or full FQN. Bare PascalCase tags without prefix → `BML_UNQUALIFIED_BLOCK_REFERENCE`.
 
-```text
-1. subBlocks[] of innermost containing BlockDefinition (same BomDocument)
-2. Walk up parent BlockDefinition chain (nested Sub-Block → root)
-3. Inherited subBlocks from baseType chain (e.g. org.blockml.bml.core.BlockLibrary.* for Library-typed blocks)
-4. Prefixed name (bricks:Standard) → Namespace Resolver
-5. Full FQN or TypeRegistry lookup
-```
-
-Steps 1–3 are **same-document / inheritance scope** — no `bml:version` required on instances. Unqualified PascalCase Sub-Block names are valid **only** in steps 1–3 (same BML file). Step 4–5 are external references — `bml:version` required when from another file; Sub-Blocks must use qualified names (`RootBlock.SubBlock`) or prefixed form (`cal:Calibrator.Base`), not bare short names → `BML_SUBBLOCK_UNQUALIFIED_REFERENCE`.
+Sub-Blocks must use qualified names (`RootBlock.SubBlock`) or prefixed form (`cal:Calibrator.Base`), never bare short names.
 
 ---
 
@@ -1168,7 +1160,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Qualified FQN::id references target bml:exportIds="true" compositions with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
 ✓  Sub-Block baseType ∈ parent's subTypes (domain rule)
-✓  Sub-Block unqualified reference only within same BomDocument
+✓  Sub-Block references use qualified name or FQN — no bare short names
 ✓  generic parameter name ≠ Block name; generic parameter name ≠ any Sub-Block name in same document
 ✓  Sub-Block same name as root Block → qualified reference required at use sites
 ✓  Sub-Block visibility derived from name or explicit <visibility>; root Block must not declare visibility

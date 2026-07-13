@@ -28,7 +28,7 @@
 
     <!-- #math.min(a, b) — SCAD: native min(a, b) -->
     <min
-      type="cap:Transformation"
+      type="Transformation"
       inputType="{ a: Float, b: Float }"
       outputType="Float">
       <documentation>
@@ -37,14 +37,14 @@
         #math.min(3, 5) → 3
         #math.min(size.x, 10) → min(size.x, 10)
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (a: number, b: number): number => Math.min(a, b)
       ]]></implementation>
     </min>
 
     <!-- #math.max(a, b) — SCAD: native max(a, b) -->
     <max
-      type="cap:Transformation"
+      type="Transformation"
       inputType="{ a: Float, b: Float }"
       outputType="Float">
       <documentation>
@@ -53,14 +53,14 @@
         #math.max(3, 5) → 5
         #math.max(size.x, 10) → max(size.x, 10)
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (a: number, b: number): number => Math.max(a, b)
       ]]></implementation>
     </max>
 
     <!-- #math.abs(x) — SCAD: native abs(x) -->
     <abs
-      type="cap:Transformation"
+      type="Transformation"
       inputType="Float"
       outputType="Float">
       <documentation>
@@ -68,14 +68,14 @@
         Examples:
         #math.abs(-3) → 3
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (x: number): number => Math.abs(x)
       ]]></implementation>
     </abs>
 
     <!-- #math.floor(x) — SCAD: native floor(x) -->
     <floor
-      type="cap:Transformation"
+      type="Transformation"
       inputType="Float"
       outputType="Integer">
       <documentation>
@@ -83,14 +83,14 @@
         Examples:
         #math.floor(3.7) → 3
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (x: number): number => Math.floor(x)
       ]]></implementation>
     </floor>
 
     <!-- #math.ceil(x) — SCAD: native ceil(x) -->
     <ceil
-      type="cap:Transformation"
+      type="Transformation"
       inputType="Float"
       outputType="Integer">
       <documentation>
@@ -98,14 +98,14 @@
         Examples:
         #math.ceil(3.2) → 4
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (x: number): number => Math.ceil(x)
       ]]></implementation>
     </ceil>
 
     <!-- #math.round(x) — SCAD: native round(x) -->
     <round
-      type="cap:Transformation"
+      type="Transformation"
       inputType="Float"
       outputType="Integer">
       <documentation>
@@ -114,14 +114,14 @@
         #math.round(3.4) → 3
         #math.round(3.6) → 4
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (x: number): number => Math.round(x)
       ]]></implementation>
     </round>
 
     <!-- #math.round_n(x, n) — SCAD: round(x * pow(10, n)) / pow(10, n) -->
     <round_n
-      type="cap:Transformation"
+      type="Transformation"
       inputType="{ x: Float, n: Integer }"
       outputType="Float">
       <documentation>
@@ -130,7 +130,7 @@
         #math.round_n(3.14159, 2) → 3.14
         #math.round_n(0.1 + 0.2, 1) → 0.3
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (x: number, n: number): number =>
             Math.round(x * Math.pow(10, n)) / Math.pow(10, n)
       ]]></implementation>
@@ -138,7 +138,7 @@
 
     <!-- #math.pow(base, exp) — SCAD: native pow(base, exp) -->
     <pow
-      type="cap:Transformation"
+      type="Transformation"
       inputType="{ base: Float, exp: Float }"
       outputType="Float">
       <documentation>
@@ -146,14 +146,14 @@
         Examples:
         #math.pow(2, 10) → 1024
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (base: number, exp: number): number => Math.pow(base, exp)
       ]]></implementation>
     </pow>
 
     <!-- #math.sqrt(x) — SCAD: native sqrt(x) -->
     <sqrt
-      type="cap:Transformation"
+      type="Transformation"
       inputType="Float"
       outputType="Float">
       <documentation>
@@ -161,14 +161,14 @@
         Examples:
         #math.sqrt(9) → 3
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (x: number): number => Math.sqrt(x)
       ]]></implementation>
     </sqrt>
 
     <!-- #math.clamp(x, lo, hi) — SCAD: min(max(x, lo), hi) -->
     <clamp
-      type="cap:Transformation"
+      type="Transformation"
       inputType="{ x: Float, lo: Float, hi: Float }"
       outputType="Float">
       <documentation>
@@ -178,7 +178,7 @@
         #math.clamp(-1, 0, 1) → 0
         #math.clamp(0.5, 0, 1) → 0.5
       </documentation>
-      <implementation language="lang:TypeScript"><![CDATA[
+      <implementation language="TypeScript"><![CDATA[
         (x: number, lo: number, hi: number): number =>
             Math.min(Math.max(x, lo), hi)
       ]]></implementation>

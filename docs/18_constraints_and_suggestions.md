@@ -75,8 +75,8 @@ Constraints are declared as child elements inside `<constraints>` on a Property:
 <textSize type="Integer">
   <value>9</value>
   <constraints>
-    <constraint:Min value="1" validation="validation:Error"/>
-    <constraint:Max value="72" validation="validation:Error"/>
+    <constraint:Min value="1" validation="Error"/>
+    <constraint:Max value="72" validation="Error"/>
   </constraints>
 </textSize>
 ```
@@ -98,7 +98,7 @@ This is a normal Block reference (not an enum).
 ```xml
 <constraint:Min
     value="0"
-    validation="validation:Error"/>
+    validation="Error"/>
 ```
 
 ```xml
@@ -145,11 +145,11 @@ Examples:
 ```xml
 <constraint:Min
     value="0"
-    validation="validation:Error"/>
+    validation="Error"/>
 <constraint:PreferredRange
     min="5"
     max="10"
-    validation="validation:Warning"/>
+    validation="Warning"/>
 ```
 
 ### Extensibility
@@ -209,9 +209,9 @@ Properties typed with an EnumType **must not** carry `<suggestions>` — valid v
 | `BML_CONSTRAINT_TYPE_MISMATCH` | constraint generic T incompatible with property or element type |
 | `BML_CONSTRAINT_VALUE_MISMATCH` | constraint instance property value incompatible with bound generic T |
 | `BML_VALIDATION_UNKNOWN` | validation Block type not in TypeRegistry or not a Validation sub-type |
-| `BML_CONSTRAINT_VIOLATION` | property value fails a constraint with `validation:Error` |
-| `BML_CONSTRAINT_WARNING` | property value fails a constraint with `validation:Warning` |
-| `BML_CONSTRAINT_INFORMATION` | property value fails a constraint with `validation:Information` |
+| `BML_CONSTRAINT_VIOLATION` | property value fails a constraint with `validation="Error"` |
+| `BML_CONSTRAINT_WARNING` | property value fails a constraint with `validation="Warning"` |
+| `BML_CONSTRAINT_INFORMATION` | property value fails a constraint with `validation="Information"` |
 | `BML_SUGGESTION_TYPE_MISMATCH` | suggestion Block instance type incompatible with property type |
 
 Constraints without a `validation` reference produce no value-enforcement diagnostics.
