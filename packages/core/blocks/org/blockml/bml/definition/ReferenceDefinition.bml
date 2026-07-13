@@ -2,7 +2,7 @@
   BlockML Definition — cross-reference meta-model type
 
   FQN: org.blockml.bml.definition.ReferenceDefinition
-  Declared on org.blockml.bml.core.Definition as the references aggregation.
+  Declared on org.blockml.bml.definition.StructuralDefinition as the references aggregation.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -19,7 +19,7 @@
 
   <documentation>Records a link from documentation metadata to another Block, definition element,
     repository markdown file, or external URL. Rendered as a see element inside the references
-    container on any org.blockml.bml.core.Definition (alongside changelog and examples). Maps to BOM
+    container on any org.blockml.bml.definition.StructuralDefinition (alongside changelog and examples). Maps to BOM
     DocumentationReference { block?, file?, url?, context, languageFqn? }. Optional language
     attribute overrides the effective natural language for the relationship text body.</documentation>
 

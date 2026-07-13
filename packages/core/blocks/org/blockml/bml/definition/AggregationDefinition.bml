@@ -38,6 +38,5 @@
 
   <name>AggregationDefinition</name>
   <type>def:AggregationDefinition</type>
-  <baseType>core:Definition</baseType>
-  <bml:xml>${ #this.name }</bml:xml>
+  <baseType>def:MemberDefinition</baseType>
 </block>

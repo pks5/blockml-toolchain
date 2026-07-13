@@ -1,12 +1,9 @@
 <!--
-  BlockML Core — Definition metadata
+  BlockML Core — Definition base type
 
   FQN: org.blockml.bml.core.Definition
 
   Abstract base type for all BlockML definition elements.
-  Defines the common documentation model shared by blocks,
-  properties, aggregations, associations, capabilities, and
-  future definition elements.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -14,56 +11,18 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition"
-  xmlns:lang="org.blockml.bml.language"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>
-    Represents a reusable BlockML definition that documents another language element.
-  </idea>
+  <idea>Abstract base type for BlockML definition elements.</idea>
 
   <documentation>
-    Abstract base type for all BlockML definition elements. It provides the common
-    documentation model consisting of documentation text, version information,
-    change history, examples, and references. Concrete definition types inherit
-    these members to describe themselves consistently.
+    Abstract base type for the Definition branch. Structural definition elements that describe
+    block structure in BlockML's own language inherit from org.blockml.bml.definition.StructuralDefinition.
   </documentation>
+
   <name>Definition</name>
   <type>core:Definition</type>
   <baseType>core:Block</baseType>
   <abstract />
 
-  <!--
-  Property definitions are grouped inside the <properties> element.
-  Each property is rendered as a direct XML child element named after the
-  property itself (for example <since> or <status>).
--->
-  <properties>
-    <since type="Version" bml:xml="element">
-      <documentation>The version in which this definition became available.</documentation>
-    </since>
-    <status type="core:Status" bml:xml="element">
-      <documentation>The status of the definition.</documentation>
-    </status>
-  </properties>
-
-  <!--
-  Aggregation definitions are grouped inside the <aggregations> element.
-  Each aggregation is rendered as a direct XML child element named after the
-  aggregation itself (for example <documentation>, <changelog>, or <references>).
--->
-  <aggregations>
-    <documentation type="def:DocumentationDefinition">
-      <documentation>Technical documentation prose for this definition element.</documentation>
-    </documentation>
-    <changelog type="def:ChangeDefinition[]">
-      <documentation>The changelog of the definition.</documentation>
-    </changelog>
-    <examples type="def:ExampleDefinition[]">
-      <documentation>The examples of the definition.</documentation>
-    </examples>
-    <references type="def:ReferenceDefinition[]">
-      <documentation>The references of the definition.</documentation>
-    </references>
-  </aggregations>
 </block>

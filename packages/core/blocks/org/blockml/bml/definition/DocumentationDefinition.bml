@@ -16,11 +16,11 @@
 
   <idea>Technical documentation prose attached to a definition element.</idea>
 
-  <documentation>Describes the documentation element on any org.blockml.bml.core.Definition (block,
+  <documentation>Describes the documentation element on any org.blockml.bml.definition.StructuralDefinition (block,
     property, aggregation, …). Rendered as a documentation element with optional language attribute
     and a trimmed text body. Maps to BOM documentation string with optional documentationLanguageFqn
     when language deviates from the effective natural language of the enclosing definition element.
-    Declared as an aggregation on org.blockml.bml.core.Definition — not a scalar property.</documentation>
+    Declared as an aggregation on org.blockml.bml.definition.StructuralDefinition — not a scalar property.</documentation>
 
   <references>
     <see file="02_mbml.md">
@@ -33,7 +33,7 @@
       Optional language attribute on documentation elements.
     </see>
     <see block="core:Definition">
-      Parent type — documentation aggregation on Definition branch.
+      Parent type — documentation aggregation on StructuralDefinition branch.
     </see>
   </references>
 

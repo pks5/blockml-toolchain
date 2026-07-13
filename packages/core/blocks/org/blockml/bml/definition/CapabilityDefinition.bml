@@ -52,7 +52,6 @@
 
   <name>CapabilityDefinition</name>
   <type>def:CapabilityDefinition</type>
-  <baseType>core:Definition</baseType>
-  <bml:xml>${ #this.name }</bml:xml>
+  <baseType>def:MemberDefinition</baseType>
 
 </block>

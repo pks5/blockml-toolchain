@@ -20,12 +20,14 @@
     Blocks that inherit from org.blockml.bml.core.Block like everything else.
 
     Definition branch hierarchy:
-    • org.blockml.bml.core.Definition — abstract base; shared documentation model
+    • org.blockml.bml.core.Definition — abstract base of the Definition branch
+    • org.blockml.bml.definition.StructuralDefinition — shared documentation model for structural definitions
     • org.blockml.bml.definition.BlockDefinition — shape of every block document
+    • org.blockml.bml.definition.MemberDefinition — abstract base for block member declarations
     • PropertyDefinition, AggregationDefinition, AssociationDefinition, CapabilityDefinition
     • GenericTypeDefinition, ChangeDefinition, ExampleDefinition, ReferenceDefinition
 
-    org.blockml.bml.core.Definition declares:
+    org.blockml.bml.definition.StructuralDefinition declares:
     • Properties: documentation, since, status
     • Aggregations: changelog, examples, references
 
@@ -59,8 +61,14 @@
     <see block="core:Definition">
       Abstract base of the Definition branch.
     </see>
+    <see block="def:StructuralDefinition">
+      Shared documentation model for structural definition elements.
+    </see>
     <see block="def:BlockDefinition">
       Generic meta-model for block definition documents.
+    </see>
+    <see block="def:MemberDefinition">
+      Abstract base for property, aggregation, association, and capability declarations.
     </see>
     <see block="def:PropertyDefinition">
       Meta-model member shape for property declarations.

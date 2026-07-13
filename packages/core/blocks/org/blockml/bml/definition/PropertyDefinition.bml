@@ -42,8 +42,7 @@
 
   <name>PropertyDefinition</name>
   <type>def:PropertyDefinition</type>
-  <baseType>core:Definition</baseType>
-  <bml:xml>${ #this.name }</bml:xml>
+  <baseType>def:MemberDefinition</baseType>
 
   <properties>
     <!-- Without bml:xml, type renders as an XML attribute on the property element. -->

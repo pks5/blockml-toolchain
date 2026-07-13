@@ -46,7 +46,7 @@
 
   <name>BlockDefinition</name>
   <type>def:BlockDefinition</type>
-  <baseType>core:Definition</baseType>
+  <baseType>def:StructuralDefinition</baseType>
 
   <!-- Block definitions render as the root <block> element. -->
   <bml:xml>block</bml:xml>

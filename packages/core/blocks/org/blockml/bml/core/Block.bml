@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:bml="http://blockml.org/schema/bml">
@@ -72,6 +73,9 @@
     </see>
     <see block="core:Definition">
       Meta-model for block structure (WIP).
+    </see>
+    <see block="def:StructuralDefinition">
+      Shared documentation model for structural definition elements.
     </see>
     <see block="mbcore:Block">
       Example domain base — domain-specific branches extend Block.

@@ -1,0 +1,47 @@
+<!--
+  BlockML Definition — block member meta-model base type
+
+  FQN: org.blockml.bml.definition.MemberDefinition
+  See docs/12_bom_object_model.md — MemberDefinitionBase · 02_mbml.md — Members.
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea>Abstract base for a declared member on a Block definition.</idea>
+
+  <documentation>Abstract base type for Block member declarations — properties, aggregations,
+    associations, and capabilities. Rendered as a child element inside the corresponding member
+    container on BlockDefinition; the XML element name is the member name (bml:xml="${ #this.name }").
+    An optional XML prefix on the element name supplies the member namespace — resolved via xmlns to
+    BOM namespace; unprefixed elements use the default namespace (empty string). Member identity is
+    (resolvedNamespace, localName). Maps to BOM MemberDefinitionBase fields shared by all member
+    kinds.</documentation>
+
+  <references>
+    <see file="12_bom_object_model.md">
+      MemberDefinitionBase and member kind unions in the BOM.
+    </see>
+    <see file="02_mbml.md">
+      Member containers and authoring rules.
+    </see>
+    <see block="def:BlockDefinition">
+      Parent block shape — properties, aggregations, associations, capabilities containers.
+    </see>
+    <see block="def:StructuralDefinition">
+      Parent type — shared documentation model for definition elements.
+    </see>
+  </references>
+
+  <name>MemberDefinition</name>
+  <type>def:MemberDefinition</type>
+  <baseType>def:StructuralDefinition</baseType>
+  <abstract />
+  <bml:xml>${ #this.name }</bml:xml>
+
+</block>

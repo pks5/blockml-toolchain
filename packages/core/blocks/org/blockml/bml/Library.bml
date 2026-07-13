@@ -106,8 +106,10 @@
         <def:DocumentationDefinition />
         <def:ExampleDefinition />
         <def:GenericTypeDefinition />
+        <def:MemberDefinition />
         <def:PropertyDefinition />
         <def:ReferenceDefinition />
+        <def:StructuralDefinition />
         <cap:Inbound />
         <cap:Outbound />
         <cap:Transformation />

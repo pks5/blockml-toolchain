@@ -1,0 +1,69 @@
+<!--
+  BlockML Definition — structural definition metadata
+
+  FQN: org.blockml.bml.definition.StructuralDefinition
+
+  Abstract base type for BlockML definition elements that describe block structure.
+  Defines the common documentation model shared by blocks,
+  properties, aggregations, associations, capabilities, and
+  future structural definition elements.
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea>
+    Represents a reusable BlockML structural definition that documents another language element.
+  </idea>
+
+  <documentation>
+    Abstract base type for BlockML structural definition elements. It provides the common
+    documentation model consisting of documentation text, version information,
+    change history, examples, and references. Concrete structural definition types inherit
+    these members to describe themselves consistently.
+  </documentation>
+  <name>StructuralDefinition</name>
+  <type>def:StructuralDefinition</type>
+  <baseType>core:Definition</baseType>
+  <abstract />
+
+  <!--
+  Property definitions are grouped inside the <properties> element.
+  Each property is rendered as a direct XML child element named after the
+  property itself (for example <since> or <status>).
+-->
+  <properties>
+    <since type="Version" bml:xml="element">
+      <documentation>The version in which this definition became available.</documentation>
+    </since>
+    <status type="core:Status" bml:xml="element">
+      <documentation>The status of the definition.</documentation>
+    </status>
+  </properties>
+
+  <!--
+  Aggregation definitions are grouped inside the <aggregations> element.
+  Each aggregation is rendered as a direct XML child element named after the
+  aggregation itself (for example <documentation>, <changelog>, or <references>).
+-->
+  <aggregations>
+    <documentation type="def:DocumentationDefinition">
+      <documentation>Technical documentation prose for this definition element.</documentation>
+    </documentation>
+    <changelog type="def:ChangeDefinition[]">
+      <documentation>The changelog of the definition.</documentation>
+    </changelog>
+    <examples type="def:ExampleDefinition[]">
+      <documentation>The examples of the definition.</documentation>
+    </examples>
+    <references type="def:ReferenceDefinition[]">
+      <documentation>The references of the definition.</documentation>
+    </references>
+  </aggregations>
+</block>
