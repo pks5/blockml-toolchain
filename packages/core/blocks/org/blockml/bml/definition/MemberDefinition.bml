@@ -20,15 +20,26 @@
     container on BlockDefinition; the XML element name is the member name (bml:xml="${ #this.name }").
     An optional XML prefix on the element name supplies the member namespace — resolved via xmlns to
     BOM namespace; unprefixed elements use the default namespace (empty string). Member identity is
-    (resolvedNamespace, localName). Maps to BOM MemberDefinitionBase fields shared by all member
-    kinds.</documentation>
+    (resolvedNamespace, localName). Inherits abstract and final modifiers from
+    org.blockml.bml.definition.StructuralDefinition.
+
+    Member declaration modes are orthogonal:
+    • new — neither override nor implementation
+    • override="true" — refines or replaces a same-named parent member (abstract or concrete).
+      abstract on the override is optional; refining an abstract parent without implementation
+      keeps the member abstract for descendants
+    • implementation="true" — completes a same-named abstract parent member (implies override;
+      override="true" not required)
+
+    org.blockml.bml.definition.CapabilityDefinition will specialize implementation later. Maps to BOM
+    MemberDefinitionBase fields shared by all member kinds.</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
       MemberDefinitionBase and member kind unions in the BOM.
     </see>
     <see file="02_mbml.md">
-      Member containers and authoring rules.
+      Member containers, abstract, override, and implementation rules.
     </see>
     <see block="def:BlockDefinition">
       Parent block shape — properties, aggregations, associations, capabilities containers.
@@ -43,5 +54,32 @@
   <baseType>def:StructuralDefinition</baseType>
   <abstract />
   <bml:xml>${ #this.name }</bml:xml>
+
+  <properties>
+    <override type="Boolean" bml:xml="attribute">
+      <value>false</value>
+      <documentation>When true, this member declaration overrides a same-named parent member. The
+        validator requires a matching parent member in the baseType chain (BML_OVERRIDE_WITHOUT_PARENT).
+        The parent may be abstract or concrete. abstract on this declaration is optional — when
+        overriding an abstract parent without implementation="true", the effective member stays
+        abstract and descendants see the refined shape. Use to change inherited attributes (for
+        example narrowing type) while keeping the contract open, or to replace attributes and values
+        on a concrete member. Do not set override="false" together with implementation="true" (BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE).
+        implementation already implies override.</documentation>
+    </override>
+    <implementation type="Boolean" bml:xml="attribute">
+      <value>false</value>
+      <documentation>When true, this member fully implements a same-named abstract parent member.
+        Implies override — omit override or set override="true"; do not set override="false"
+        (BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE). The validator requires a matching
+        abstract parent member (BML_IMPLEMENTATION_WITHOUT_PARENT,
+        BML_IMPLEMENTATION_PARENT_NOT_ABSTRACT). The declaring block must supply the missing parts;
+        usual member checks then apply (type present, value set where required, and so on). Emits
+        BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED when an abstract member on a concrete block remains
+        unimplemented. org.blockml.bml.definition.CapabilityDefinition specializes this property
+        later — capability members use a full implementation element with language binding and source
+        body instead of a boolean flag.</documentation>
+    </implementation>
+  </properties>
 
 </block>

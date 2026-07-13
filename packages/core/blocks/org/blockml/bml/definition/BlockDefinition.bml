@@ -22,9 +22,10 @@
     Semantically a Class: declarative type shape without instance state. Parsed into
     BomDocument.block and BlockDefinition.subBlocks[]. Generic type parameter B binds this
     definition to the Block type it describes — conceptually BlockDefinition of com.foo.Bar when
-    B resolves to com.foo.Bar. Declares identity (idea, name, type, baseType, version), type
-    modifiers (abstract, final), generic parameters, contracts, allowed Sub-Blocks and languages,
-    and member declaration containers (properties, aggregations, associations, capabilities).
+    B resolves to com.foo.Bar. Declares identity (idea, name, type, baseType, version), generic
+    parameters, contracts, allowed Sub-Blocks and languages, and member declaration containers
+    (properties, aggregations, associations, capabilities). Type modifiers abstract and final are
+    inherited from org.blockml.bml.definition.StructuralDefinition.
     Every definition element is addressable via its canonical structural path within the Block FQN
     (for example com.foo.Bar.properties.width). Member declaration order in BML is preserved in
     BOM and is significant for StructType positional mapping and render targets.</documentation>
@@ -89,16 +90,6 @@
       <documentation>Parent type FQN. Required on all definitions except the sole inheritance root.
         No default — validator resolves effective members via the baseType chain.</documentation>
     </baseType>
-    <abstract type="Boolean">
-      <value>false</value>
-      <documentation>When true, the type is abstract — not usable as a composition instance type.
-        Default false.</documentation>
-    </abstract>
-    <final type="Boolean">
-      <value>false</value>
-      <documentation>When true, the type is final — cannot be used as baseType on other
-        definitions. Default false.</documentation>
-    </final>
     <version type="Version">
       <documentation>Semantic version of this Block definition. Required on root blocks.
         Addressable as com.foo.Bar.version.</documentation>

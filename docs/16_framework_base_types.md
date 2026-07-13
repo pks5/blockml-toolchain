@@ -46,7 +46,13 @@ BlockProcessor (when/how        →  Render pipeline
 
 ## Type Modifiers (BML)
 
-Optional elements on any `<block>` definition (framework or user):
+Optional elements on any `<block>` definition and on member declarations (properties, aggregations,
+associations, capabilities). Declared in the meta-model on
+`org.blockml.bml.definition.StructuralDefinition` and inherited by `BlockDefinition` and
+`MemberDefinition`.
+
+On **block definitions**, render as child elements (`<abstract>`, `<final>`). On **members**,
+render as optional attributes (`abstract="…"`, `final="…"`).
 
 ### `<abstract>`
 
@@ -199,21 +205,20 @@ org.blockml.bml.core.Block
     …
 ```
 
-`org.blockml.bml.core.Definition` declares the shared documentation model as properties and aggregations:
+`org.blockml.bml.definition.StructuralDefinition` declares the shared documentation model and type modifiers:
 
 ```text
-Properties:    since · status
-Aggregations:  documentation (DocumentationDefinition) · changelog (ChangeDefinition[])
-               · examples (ExampleDefinition[]) · references (ReferenceDefinition[])
+Properties:    since · status · documentation · abstract · final
+Aggregations:  changelog (Change[]) · examples (Example[]) · references (Reference[])
+Sub-blocks:    Documentation · Change · Example · Reference
 ```
 
-`org.blockml.bml.definition.DocumentationDefinition` — technical documentation on any definition element:
-
-```text
-bml:xml         documentation      — renders as <documentation> on definition elements
-language        NaturalLanguage    — optional; prose language override
-content         String (required)  — trimmed text body
-```
+`abstract` and `final` on block definitions control type instantiability and extensibility. On member
+declarations, `abstract` allows an incomplete definition. `override="true"` requires a same-named
+parent member; abstract on the override is optional — refining an abstract parent without
+`implementation="true"` keeps the member abstract for descendants. `implementation="true"` requires
+a same-named abstract parent member and implies override. Concrete blocks must implement inherited
+abstract members. `final` prevents override in child Blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 

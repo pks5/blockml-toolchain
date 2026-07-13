@@ -23,12 +23,13 @@
     • org.blockml.bml.core.Definition — abstract base of the Definition branch
     • org.blockml.bml.definition.StructuralDefinition — shared documentation model for structural definitions
     • org.blockml.bml.definition.BlockDefinition — shape of every block document
-    • org.blockml.bml.definition.MemberDefinition — abstract base for block member declarations
+    • org.blockml.bml.definition.MemberDefinition — abstract base for block member declarations;
+      override and implementation modes (implementation specialized on CapabilityDefinition)
     • PropertyDefinition, AggregationDefinition, AssociationDefinition, CapabilityDefinition
     • GenericTypeDefinition
 
     org.blockml.bml.definition.StructuralDefinition declares:
-    • Properties: documentation, since, status
+    • Properties: documentation, since, status, abstract, final
     • Aggregations: changelog, examples, references
 
     Definition addressing uses canonical structural paths within the Block FQN:

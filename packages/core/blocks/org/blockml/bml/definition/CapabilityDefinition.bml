@@ -22,7 +22,10 @@
     namespace — resolved via xmlns to BOM namespace; unprefixed elements use the default namespace
     (empty string). Member identity is (resolvedNamespace, localName). Maps to BOM
     CapabilityDefinition (kind: "capability") with typeFqn,
-    inputType, outputType, and optional implementation binding to a Language Block. Inbound requires
+    inputType, outputType, and optional implementation binding to a Language Block.
+    org.blockml.bml.definition.MemberDefinition declares implementation as a boolean completion
+    flag and override as an explicit override flag; CapabilityDefinition will specialize
+    implementation later with a full implementation member. Inbound requires
     inputType; Outbound requires outputType; Transformation requires both. inputType and outputType
     use TypeExpression syntax and must resolve to ValueTypes.</documentation>
 

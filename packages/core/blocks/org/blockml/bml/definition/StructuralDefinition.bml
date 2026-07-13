@@ -25,7 +25,8 @@
   <documentation>
     Abstract base type for BlockML structural definition elements. It provides the common
     documentation model consisting of documentation text, version information,
-    change history, examples, and references. Concrete structural definition types inherit
+    change history, examples, and references, plus type modifiers (abstract, final) shared by
+    block definitions and member declarations. Concrete structural definition types inherit
     these members to describe themselves consistently.
   </documentation>
   <name>StructuralDefinition</name>
@@ -36,7 +37,7 @@
   <!--
   Property definitions are grouped inside the <properties> element.
   Each property is rendered as a direct XML child element named after the
-  property itself (for example <since>, <status>, or <documentation>).
+  property itself (for example <since>, <status>, <documentation>, <abstract>, or <final>).
 -->
   <properties>
     <since type="Version" bml:xml="element">
@@ -48,6 +49,22 @@
     <documentation type="Documentation" bml:xml="element">
       <documentation>Technical documentation prose for this definition element.</documentation>
     </documentation>
+    <abstract type="Boolean" bml:xml="element|attribute">
+      <value>false</value>
+      <documentation>When true on a block definition, the type is abstract — not usable as a composition
+        instance type. When true on a member declaration, the member is abstract — its definition
+        may be incomplete (for example a property without type or without value). The member becomes
+        usable only after a deriving block sets implementation="true" and supplies the missing
+        parts. Default false. On block definitions rendered as a child element; on members as an
+        optional attribute.</documentation>
+    </abstract>
+    <final type="Boolean" bml:xml="element|attribute">
+      <value>false</value>
+      <documentation>When true on a block definition, the type is final — cannot be used as baseType on
+        other definitions (BML_FINAL_BASE_TYPE). When true on a member declaration, child Blocks
+        cannot override this member (BML_FINAL_MEMBER_OVERRIDE). Default false. On block definitions
+        rendered as a child element; on members as an optional attribute.</documentation>
+    </final>
   </properties>
 
   <!--

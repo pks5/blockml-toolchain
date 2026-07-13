@@ -74,7 +74,7 @@ Each member kind in the block grammar has a corresponding Definition block. Exam
 | `org.blockml.bml.definition.CapabilityDefinition` | `<capabilities>` child members |
 | `org.blockml.bml.definition.GenericTypeDefinition` | `<genericTypes>` entries |
 
-`BlockDefinition` is the central meta-type: it declares the members that every block definition document may carry (`name`, `type`, `baseType`, `abstract`, `final`, aggregations for `properties`, `aggregations`, `subBlocks`, …). See `packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml`.
+`BlockDefinition` is the central meta-type: it declares the members that every block definition document may carry (`name`, `type`, `baseType`, aggregations for `properties`, `aggregations`, `subBlocks`, …). Type modifiers `abstract` and `final` are inherited from `org.blockml.bml.definition.StructuralDefinition` and apply to block definitions and member declarations. See `packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml`.
 
 **Distinction from BOM `BlockDefinition`:** The TypeScript interface `org.blockml.bml.bom.BlockDefinition` is the **parse result** for any `<block>` document. The BML block `org.blockml.bml.definition.BlockDefinition` is the **meta-model** that describes what a block document means. Same word, different layers — see `12_bom_object_model.md`.
 
