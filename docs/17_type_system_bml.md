@@ -1131,6 +1131,8 @@ org.blockml.bml.core.Block
 
 Every Capability inherits an optional `<implementation>` member from `org.blockml.bml.core.CapabilityType`. The element **`language`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<languages>` — see `16_framework_base_types.md`.
 
+Capability references inside an `<implementation>` body use **BML Embedded Expression** syntax (`<$ … $>`) — see `10_expression_language.md` — BML Embedded Expressions.
+
 **PseudoCode** is free-form program code that must be internally consistent but is otherwise unconstrained — an LLM may interpret it.
 
 V1 bootstrap languages in `@blockml/core`: TypeScript, OpenSCAD, English, German, French, Spanish, Chinese, Japanese, Russian, PseudoCode, XML, JSON, YML, JavaScript, Python, CSharp, Unity, CPP, C, Java. Extensibility: domains register new Language BML files.

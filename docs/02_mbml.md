@@ -2254,7 +2254,7 @@ Two implementation languages are supported in V1:
       <implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[
 // Main function — name must match capability name
 function formatValue(x) =
-    replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
+    replaceZeroDot(str(<$ #math.round_n(x, 1) $>));
 
 // Helper functions — any names, also prefixed by compiler
 function replaceZeroDot(s, i = 0) =
@@ -2276,7 +2276,7 @@ function strSuffix(s, k, i = 0) =
 
 **`language="org.blockml.bml.language.TypeScript"`** — TypeScript arrow function. In V1, compile-time execution only: when all call arguments are literals, the compiler executes the function in Node.js and emits the result as a literal. Runtime transpilation to OpenSCAD is deferred.
 
-The `<implementation>` element is a child of `<capability>`. One `<implementation>` per Capability. The **`language`** attribute is required and must be an `org.blockml.bml.language.*` FQN.
+The `<implementation>` element is a child of `<capability>`. One `<implementation>` per Capability. The **`language`** attribute is required and must be an `org.blockml.bml.language.*` FQN. Capability references inside the CDATA body use **BML Embedded Expression** syntax (`<$ … $>`) — see `10_expression_language.md`.
 
 ### Visibility
 

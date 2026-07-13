@@ -566,6 +566,10 @@ BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a 
 BML_UNQUALIFIED_BLOCK_REFERENCE — bare block reference without FQN or xmlns prefix at a general reference site (composition tag, baseType, aggregation/association type)
 BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED — Sub-Block shares root Block name; bare short tag is ambiguous
 BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation language="..."> not listed in baseType languages
+BML_UNCLOSED_EMBEDDED_EXPRESSION — <$ in implementation CDATA without matching $>
+BML_INVALID_EMBEDDED_EXPRESSION — nested or malformed <$ $> region in implementation
+BML_UNKNOWN_CAPABILITY — Capability referenced in embedded expression does not exist
+BML_UNKNOWN_SERVICE — #namespace in embedded expression is not a registered built-in service
 ```
 
 ### Warnings
@@ -600,26 +604,27 @@ Each Capability has exactly one `<implementation>` block. The implementation con
 ```text
 - Exactly one main function whose name matches the Capability name
 - Zero or more helper functions with any names
+- Optional BML Embedded Expressions (<$ … $>) for language-neutral Capability references
 - All function names are replaced by the compiler with the block-FQN-prefixed form
 ```
 
-**Name replacement:** The processor scans the CDATA for all `function <name>(` declarations — these are the names to replace. All occurrences (declarations + calls) are replaced via regex:
+**BML Embedded Expressions:** BlockML Capability calls inside implementation source use `<$ … $>` delimiters — not raw `#built-in` or FQN-prefixed target calls in author source. See `10_expression_language.md` — BML Embedded Expressions.
+
+**Name replacement:** The processor scans the CDATA for all `function <name>(` declarations — these are the names to replace. All occurrences (declarations + calls) are replaced via regex. Embedded expression regions are resolved **before** name replacement on the surrounding target-language text:
 
 ```text
 formatValue    → mb__com__machineblocks__calibration__Calibrator__Utils__formatValue
 replaceZeroDot → mb__com__machineblocks__calibration__Calibrator__Utils__replaceZeroDot
-strPrefix      → mb__com__machineblocks__calibration__Calibrator__Utils__strPrefix
-strSuffix      → mb__com__machineblocks__calibration__Calibrator__Utils__strSuffix
 ```
 
-**`#built-in` calls in SCAD CDATA:** `#math.*`, `#strings.*` etc. are resolved inside CDATA blocks using the same native mapping logic as in BML expressions. The author never writes raw SCAD FQN calls:
+**Embedded expression resolution in SCAD CDATA:** `#math.*`, `#strings.*`, `#this.*`, and `@bean.*` inside `<$ $>` are parsed as BlockML expressions and mapped to SCAD by the renderer. The author never writes raw SCAD FQN calls or service import paths:
 
 ```scad
 // Author writes:
 function formatValue(x) =
-    replaceZeroDot(str(#math.round_n(x, 1)));
+    replaceZeroDot(str(<$ #math.round_n(x, 1) $>));
 
-// Compiler emits:
+// Renderer emits (after embedded substitution + FQN prefixing):
 function mb__...__Utils__formatValue(x) =
     mb__...__Utils__replaceZeroDot(str(bom__org__blockml__service__Math__round_n(x, 1)));
 // + adds: use <.../blocks/org/blockml/bml/service/Math.scad>
@@ -635,7 +640,7 @@ function mb__...__Utils__formatValue(x) =
   <implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[
 // Main function — name matches capability name
 function formatValue(x) =
-    replaceZeroDot(str(bom__com__bom__service__Math__round_n(x, 1)));
+    replaceZeroDot(str(<$ #math.round_n(x, 1) $>));
 
 // Helper functions
 function replaceZeroDot(s, i = 0) =

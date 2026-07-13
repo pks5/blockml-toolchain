@@ -1196,11 +1196,17 @@ A Transformation Capability implementation can live directly on any Block whose 
 <capabilities>
   <formatValue type="org.blockml.bml.capability.Transformation" ...>
     <implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[
-function formatValue(x) = ...;
+function formatValue(x) =
+    <$ #strings.concat(
+        #this.prefix(),
+        #math.round_n(x, 1)
+    ) $>;
     ]]></implementation>
   </formatValue>
 </capabilities>
 ```
+
+**Embedded Expressions:** Capability references inside `<implementation>` use **BML Embedded Expression** syntax (`<$ … $>`) — not raw target-language calls to generated names. The implementation body remains target-language source; embedded regions are BlockML Expression Language. The renderer substitutes each region with target-language syntax. See `10_expression_language.md` — BML Embedded Expressions.
 
 ### Address Schemes
 

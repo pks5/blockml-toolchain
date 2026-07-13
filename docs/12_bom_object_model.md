@@ -467,8 +467,17 @@ interface CapabilityDefinition extends MemberDefinitionBase {
 
 interface ImplementationBlock {
   languageFqn: string      // org.blockml.bml.language.TypeScript | org.blockml.bml.language.OpenSCAD
-  source: string            // CDATA body
+  source: string            // CDATA body — full original text including <$ $> regions
+  embeddedExpressions: EmbeddedExpression[]
   sourceLocation?: SourceLocation
+}
+
+interface EmbeddedExpression {
+  raw: string               // expression text between delimiters (for parsing)
+  start: number             // byte/char offset of opening <$ in source
+  end: number               // offset immediately after closing $>
+  /** AST from parseExpression() — utility output; optional on Canonical BOM */
+  ast?: ExpressionNode
 }
 ```
 
@@ -1188,6 +1197,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 | Topic | Document |
 |---|---|
 | Expression AST node union | `10_expression_language.md` — Expression AST |
+| Embedded expressions in implementations | `10_expression_language.md` — BML Embedded Expressions |
 | BML → BOM mapping algorithm | `13_bml_to_bom_mapping.md` |
 | Framework base types (BML) | `16_framework_base_types.md` |
 | ValueType · Language (BML) | `17_type_system_bml.md` |

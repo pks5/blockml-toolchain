@@ -498,6 +498,24 @@ Directive values (e.g. `bml:each="i : ${ numberOfSamples }"`) are split structur
 
 Stage [5] does **not** build AST nodes and does **not** resolve property references.
 
+`<implementation language="…">` CDATA is stored verbatim on `ImplementationBlock.source`. During stage [5], the mapper scans for `<$ … $>` pairs and appends each to `ImplementationBlock.embeddedExpressions`:
+
+```text
+<implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[
+function clamp(v) = <$ #math.max(#this.minimum(), v) $>;
+]]></implementation>
+
+→ ImplementationBlock {
+     languageFqn: "org.blockml.bml.language.OpenSCAD",
+     source: "function clamp(v) = <$ #math.max(#this.minimum(), v) $>;\n",
+     embeddedExpressions: [
+       { raw: "#math.max(#this.minimum(), v)", start: 20, end: 58 }
+     ]
+   }
+```
+
+Validation (stage [8]) runs `parseExpression()` on each `embeddedExpressions[].raw` and applies the same semantic checks as member-value expressions, plus `#this` resolution against `resolveEffectiveMembers()`. See `10_expression_language.md` — BML Embedded Expressions.
+
 ### parseExpression() — AST construction
 
 The utility receives `ExpressionValue.raw` and `ParseContext` (built from enclosing Block, directive scope, target member):
@@ -718,5 +736,6 @@ See `02_mbml.md` — Serialization Formats for the design rationale.
 |---|---|
 | BOM object model | `12_bom_object_model.md` |
 | Expression AST | `10_expression_language.md` |
+| Embedded expressions in implementations | `10_expression_language.md` — BML Embedded Expressions |
 | Directive placement rules | `12_bom_object_model.md` — Directive Placement Rules |
 | Default resolution shortcuts | `02_mbml.md` — BML→BOM Mapping |

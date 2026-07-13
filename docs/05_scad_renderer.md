@@ -235,7 +235,7 @@ machineblocks-v3-scad-target/
 
 ### Resolution Logic
 
-For each `#built-in` call in a Block's expressions or SCAD implementations:
+For each `#built-in` call in a Block's `${ }` expressions or in **embedded expressions** (`<$ #built-in … $>`) inside SCAD implementations:
 
 ```text
 #math.min(a, b)

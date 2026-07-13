@@ -1,10 +1,10 @@
 # BOM Compiler — Expression Language
 
-version: 1.1.0
+version: 1.2.0
 
 ## Purpose of this Document
 
-This document is the authoritative reference for the BML Expression Language — the dynamic value system used within `${ }` in BML documents.
+This document is the authoritative reference for the BML Expression Language — the dynamic value system used within `${ }` in BML documents and within `<$ $>` in Capability `<implementation>` bodies.
 
 For the BOM object model (`ExpressionValue`, `MemberValue`) see `12_bom_object_model.md`.
 For MBOM-specific types and properties see `03_mbom.md`.
@@ -27,6 +27,209 @@ The language is **extended JSON**: standard JSON syntax with four additions:
 ```
 
 Everything else follows JSON subset rules: strings in double quotes, numbers, booleans `true`/`false`, arrays `[...]`, objects `{...}`. **`null` is not a BML literal** — absent/empty values are not typed as null; see `17_type_system_bml.md` — EMPTY.
+
+---
+
+## BML Embedded Expressions
+
+**BML Embedded Expression** — language-neutral Capability references inside a Capability `<implementation>` body.
+
+| Delimiter | Role |
+|---|---|
+| Opening | `<$` |
+| Closing | `$>` |
+
+The `<implementation>` CDATA body is **source text of the language named by `language`** — e.g. OpenSCAD, TypeScript. Regions wrapped in `<$ … $>` are **BlockML Expression Language** fragments. The renderer replaces each embedded region (including delimiters) with an equivalent expression in the target language; the surrounding implementation text is copied unchanged.
+
+Embedded Expressions are **not** a separate implementation language and **not** a replacement for `<implementation>`. They are semantic embeds inside a concrete implementation:
+
+```text
+Implementation language  →  outer syntax (OpenSCAD, TypeScript, …)
+BlockML Expression       →  referenced Capability semantics
+Renderer                 →  resolution into target-language syntax
+```
+
+### Example
+
+```xml
+<implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[
+function clamp(value) =
+    <$ #math.max(
+        #this.minimum(),
+        #math.min(value, #this.maximum())
+    ) $>;
+]]></implementation>
+```
+
+After rendering to OpenSCAD, the embedded region may become:
+
+```scad
+function clamp(value) =
+    max(minimum(), min(value, maximum()));
+```
+
+The author does not write renderer-specific function names, import paths, or FQN prefixes — only BlockML Expression references.
+
+### Supported References
+
+Embedded Expressions support at least these call forms:
+
+```text
+#this.someCapability(...)   — Capability on the Block that owns this implementation
+#math.max(...)              — built-in service Capability
+#strings.concat(...)        — built-in service Capability
+@bean.someCapability(...)   — Capability on a bean bound in the current scope
+```
+
+| Form | Resolves to | Notes |
+|---|---|---|
+| `#this.foo(...)` | own Block Capability `foo` | **required** for self-references inside implementations; unqualified `foo(...)` is not supported here |
+| `#math.foo(...)` | built-in service `#math` | same registry as `${ }` expressions |
+| `@bean.foo(...)` | Transformation Capability on bound bean | same scope rules as `${ @bean.foo(...) }` |
+
+Property access, operators, literals, and nested calls follow the same rules as `${ }` expressions unless noted otherwise.
+
+### Delimiter Rules
+
+```text
+- Zero, one, or many embedded regions per implementation body
+- Multiline expressions are supported; whitespace immediately after <$ and before $> is ignored
+- Delimiters must not be nested: <$ … <$ … $> … $> is invalid
+- An unclosed <$ without a matching $> is a parse/validation error
+- Literal <$ or $> in implementation source must not appear outside a valid pair
+```
+
+Examples:
+
+```text
+return <$ #this.normalize(value) $>;
+const min = <$ #this.minimum() $>;
+const max = <$ #this.maximum() $>;
+
+<$
+    #math.max(
+        #this.minimum(),
+        value
+    )
+$>
+```
+
+### Parsing
+
+The implementation body is stored as **complete original text**. The parser additionally extracts every embedded region:
+
+```typescript
+interface EmbeddedExpression {
+  raw: string       // expression text between delimiters (trimmed for parsing)
+  start: number     // start offset of opening <$ in source
+  end: number       // end offset after closing $>
+  ast?: ExpressionNode   // populated by parseExpression() utility — not Canonical BOM
+}
+```
+
+Extraction runs during BML → BOM mapping (stage [5]). Each `raw` span is parsed with the same expression grammar as `${ }` values, extended with `#this` calls (see below). AST construction uses `parseExpression()` — same utility contract as member-value expressions.
+
+### Embedded Expression Grammar Extension
+
+Inside `<$ $>`, own Capability calls use the explicit `#this` prefix:
+
+```ebnf
+thisCall       ::= '#this' '.' identifier '(' argList? ')'
+```
+
+All other productions are identical to the main Expression Language grammar (see Formal Grammar). Embedded regions do **not** use `${ }` wrappers.
+
+`#this.normalize(value)` parses as **`ThisCapabilityCall`** (embedded-only AST node) — semantically equivalent to `OwnSyncCall` in `${ }` context, but requiring the explicit prefix to avoid ambiguity with target-language identifiers in the surrounding source.
+
+### Validation
+
+Each embedded expression is validated with the same expression infrastructure as `${ }` values. **Capability existence is mandatory**; further checks may be added incrementally.
+
+**`#this.foo(...)`** — validator resolves `foo` against the **effective member set** of the Block that owns the implementation:
+
+```text
+1. local Capabilities
+2. inherited Capabilities (baseType chain)
+3. Capabilities merged from contracts
+```
+
+If no Transformation (or callable) Capability named `foo` exists → `BML_UNKNOWN_CAPABILITY`.
+
+**`#math.max(a, b)`** — validator checks:
+
+```text
+1. service namespace math resolves (#math → org.blockml.bml.service.Math)
+2. Capability max exists on that service
+```
+
+Errors: `BML_UNKNOWN_SERVICE`, `BML_UNKNOWN_CAPABILITY`.
+
+**`@formatter.format(value)`** — validator checks:
+
+```text
+1. bean formatter is in scope (Composition hierarchy, scope rules)
+2. bean type declares Capability format
+```
+
+Errors: `BML_UNKNOWN_BEAN`, `BML_UNKNOWN_CAPABILITY`.
+
+**Additional checks** (when expression/type infrastructure allows — may be phased in):
+
+```text
+- Capability kind permits invocation (Transformation vs Inbound/Outbound)
+- argument count matches inputType (FunctionMapping)
+- named parameters exist on inputType
+- argument types compatible with inputType
+- result type acceptable in surrounding implementation context
+```
+
+### Renderer Behaviour
+
+The renderer receives:
+
+```text
+- original implementation source (full CDATA)
+- embeddedExpressions[] with offsets and parsed AST
+- resolved Capability references (from validation)
+```
+
+For each embedded region it **replaces the full span** `<$ … $>` with target-language syntax. Mapping is renderer-specific:
+
+```text
+<$ #math.max(a, b) $>     →  OpenSCAD: max(a, b)
+                           →  TypeScript: Math.max(a, b)
+
+<$ #this.minimum() $>     →  OpenSCAD: mb__…__minimum()  (FQN-prefixed per target rules)
+                           →  TypeScript: this.minimum()
+```
+
+The parser and validator **never** emit target-specific names. Only the renderer produces final identifiers, imports, and call syntax.
+
+See `06_compiler.md` — Capability Implementation Transpilation · `05_scad_renderer.md` — Built-in Service Resolution.
+
+### Error Codes
+
+```text
+BML_UNCLOSED_EMBEDDED_EXPRESSION  — <$ without matching $>
+BML_INVALID_EMBEDDED_EXPRESSION   — nested delimiters or malformed embedded region
+BML_UNKNOWN_CAPABILITY            — referenced Capability not found on #this, service, or bean type
+BML_UNKNOWN_SERVICE               — #namespace not a registered built-in service
+BML_UNKNOWN_BEAN                  — @bean not in scope
+```
+
+Expression parse/type errors inside an embedded region reuse existing `BML_EXPR_*` and FunctionMapping diagnostics with source location mapped to the embedded span.
+
+### Contrast with `${ }` Expressions
+
+| Aspect | `${ }` (member values) | `<$ $>` (implementations) |
+|---|---|---|
+| Host context | BML attributes, `<value>`, directives | `<implementation>` CDATA body |
+| Surrounding syntax | BML / JSON-like | Target language (OpenSCAD, TS, …) |
+| Own Capability call | `myCapa(...)` or linking without prefix | `#this.myCapa(...)` only |
+| Property access | yes (Block Properties) | only where valid in implementation context |
+| `@bean` / `#built-in` | yes (with `${ }` scope rules) | yes |
+| Evaluation | render-time / compile-time | render-time substitution into source |
+| Stored in BOM | `ExpressionValue { raw }` on member | `EmbeddedExpression { raw, start, end }` on `ImplementationBlock` |
 
 ---
 
@@ -333,10 +536,11 @@ The utility Sub-Block is declared as a Sub-Block and bound via a context-scoped 
                 outputType="org.blockml.bml.type.Text">
       <implementation language="org.blockml.bml.language.TypeScript"><![CDATA[
         (x: number): string => {
-            const rounded = Math.round(x * 10) / 10
-            return String(rounded)
-                .replace(/^0\./, '.')
-                .replace(/^-0\./, '-.')
+            const rounded = <$ #math.round_n(x, 1) $>
+            return <$ #strings.concat(
+                #this.formatLeadingZero(rounded),
+                String(rounded)
+            ) $>
         }
       ]]></implementation>
     </formatValue>
@@ -889,6 +1093,7 @@ type ExpressionNode =
   | BeanCapabilityLink
   | OwnSyncCall
   | OwnCapabilityLink
+  | ThisCapabilityCall       // embedded implementation only — #this.capa(...)
   | ModelBinding
 ```
 
@@ -1131,6 +1336,14 @@ interface OwnCapabilityLink extends ExpressionNodeBase {
   inputTypeFqn: string
 }
 
+/** Embedded implementation only — #this.capa(...) inside <$ $> */
+interface ThisCapabilityCall extends ExpressionNodeBase {
+  kind: "thisCapabilityCall"
+  capabilityName: string
+  arguments: CallArgument[]
+  outputTypeFqn: string
+}
+
 interface ModelBinding extends ExpressionNodeBase {
   kind: "modelBinding"
   beanName: string
@@ -1143,6 +1356,7 @@ interface ModelBinding extends ExpressionNodeBase {
 **Parse disambiguation** (see Distinguishing Call vs. Link):
 
 ```text
+#this.minimum()          → ThisCapabilityCall   (embedded <$ $> only)
 #math.max(a, b)           → BuiltinCall
 @utils.formatValue(x)     → BeanSyncCall
 @utils.myOutbound         → BeanCapabilityLink
@@ -1193,12 +1407,15 @@ Utilities **never mutate** Canonical BOM. Diagnostics are returned separately.
 ```text
 @blockml/core
   - ExpressionNode union and ParsedExpression interface
+  - EmbeddedExpression interface on ImplementationBlock
   - parseExpression(raw, context) → ParsedExpression
+  - parseEmbeddedExpressions(source) → EmbeddedExpression[]  (delimiter scan + parseExpression per region)
   - validateExpression(ast, context): Diagnostic[]
   - evaluateExpression(ast, context) → value (renderer/working model)
 
 @blockml/parser
   - Stage [5]: capture ExpressionValue { raw } during BML → BOM mapping
+  - Stage [5]: extract EmbeddedExpression { raw, start, end } from ImplementationBlock.source
   - Does NOT parse or evaluate expressions
 
 @blockml/compiler / render targets
