@@ -615,7 +615,7 @@ registry.getBlockDefinition("com.machineblocks.bml.bricks.StandardBrick", "3.0.0
   → undefined → BML_UNKNOWN_VERSION
 ```
 
-Inside Library files: `bml:version` on `_dependencies` / `_blocks` children → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`.
+Inside Library files: `bml:version` on `_dependencies` / `_subLibraries` / `_blocks` children → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`.
 
 Same-document Sub-Block references omit `version` — resolved against `subBlocks[]` in the same `BomDocument`.
 
@@ -688,17 +688,18 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.b
 
 ```text
 <blockml:Library />                        → BlockInstance { typeFqn: "org.blockml.bml.Library" }  — no bml:version
-<Schema ref="bricks.xsd"/>                 → org.blockml.bml.core.BlockLibrary.Schema (short name)
+<compiler:Library />                       → BlockInstance { typeFqn: "org.blockml.bml.compiler.Library" }  — _subLibraries
+<btype:FilePathEntity value="bricks.xsd"/> → BlockInstance { typeFqn: "org.blockml.bml.type.FilePathEntity", value: "bricks.xsd" }
 <type:Size3d />                             → BlockInstance { typeFqn: "com.machineblocks.bml.type.Size3d" }
 <bricks:Wall />                             → BlockInstance { typeFqn: "com.machineblocks.bml.bricks.Wall" }
 <bricks:WallPresets />                      → preset block via _blocks
 ```
 
-`_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation is context-driven (Library role) — not declared on the aggregation.
+`_dependencies`, `_subLibraries`, and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation is context-driven (Library role) — not declared on the aggregation.
 
-Each child requires explicit aggregation members (`_dependencies`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
+Each child requires explicit aggregation members (`_dependencies`, `_subLibraries`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
 
-**Orchestrator (not parser):** after parsing a Library block, resolve each `_dependencies` and `_blocks` entry by FQN, load the referenced definitions using effective block versions, and `registerBlockDefinition`. Validate that outer libraries do not re-export blocks from nested inner libraries (`BML_LIBRARY_NESTING_VIOLATION`).
+**Orchestrator (not parser):** after parsing a Library block, resolve each `_dependencies`, `_subLibraries`, and `_blocks` entry by FQN, load the referenced definitions using effective block versions, and `registerBlockDefinition`. Validate that outer libraries do not re-export blocks from nested inner libraries (`BML_LIBRARY_NESTING_VIOLATION`).
 
 ### Incremental builds
 

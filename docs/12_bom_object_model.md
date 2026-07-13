@@ -874,7 +874,7 @@ interface BlockInstance {
   /**
    * From bml:version — optional exact-version assert on external block references.
    * Omitted → resolve effective version from TypeRegistry context at validate time.
-   * Forbidden inside Library _dependencies / _blocks → BML_VERSION_NOT_ALLOWED_IN_LIBRARY.
+   * Forbidden inside Library _dependencies / _subLibraries / _blocks → BML_VERSION_NOT_ALLOWED_IN_LIBRARY.
    * See "Version Rules" below.
    */
   version?: MemberValue
@@ -956,7 +956,7 @@ External reference (type from another BML file — `.bml`):
   → bml:version present  → target must be exactly that version
                            → no match → BML_UNKNOWN_VERSION (error)
 
-Inside Library files (_dependencies / _blocks):
+Inside Library files (_dependencies / _subLibraries / _blocks):
   → bml:version FORBIDDEN on composition children
   → present → BML_VERSION_NOT_ALLOWED_IN_LIBRARY (error)
 ```
@@ -1035,31 +1035,30 @@ Multiple `Library.bml` files may exist at different package levels (e.g. `org.bl
 
 ```text
 Typical dependency:   inner _dependencies → outer Library
+Typical grouping:     outer _subLibraries → inner Library
 Forbidden:            outer _blocks → Block exported by inner Library
 ```
 
-Inner libraries usually declare the outer library in `_dependencies`. The outer library must **not** re-export inner-library blocks in `_blocks` — consumers depend on the inner library directly. Violation → `BML_LIBRARY_NESTING_VIOLATION`.
+Inner libraries usually declare the outer library in `_dependencies`. The outer library declares inner libraries in `_subLibraries` and must **not** re-export inner-library blocks in `_blocks` — consumers depend on the inner library directly. Violation → `BML_LIBRARY_NESTING_VIOLATION`.
 
 ```text
 org.blockml.bml.core.BlockLibrary
   property     description     String
-  subBlocks      Schema
   aggregation  _dependencies   0..n  org.blockml.bml.core.BlockLibrary
-  aggregation  _schemas        0..n  org.blockml.bml.core.BlockLibrary.Schema
+  aggregation  _subLibraries   0..n  org.blockml.bml.core.BlockLibrary
+  aggregation  _schemas        0..n  org.blockml.bml.type.FilePathEntity
   aggregation  _blocks         0..n  org.blockml.bml.core.Block
 
-org.blockml.bml.core.BlockLibrary.Schema       property:  ref (relative .xsd path)
+org.blockml.bml.type.FilePathEntity            property:  value (relative .xsd path)
 ```
 
-`_dependencies` and `_blocks` use empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children; effective version is resolved from library context. Type-reference interpretation follows from the Library role (orchestrator / render target) — not from an aggregation attribute.
+`_dependencies`, `_subLibraries`, and `_blocks` use empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children; effective version is resolved from library context. Type-reference interpretation follows from the Library role (orchestrator / render target) — not from an aggregation attribute.
 
-`Schema` is a **Sub-Block of `org.blockml.bml.core.BlockLibrary`** — defined in `BlockLibrary.bml`. Library-typed blocks resolve `<Schema>` by short name via inherited Sub-Blocks (see `02_mbml.md` — Short-Name Reference).
+Composition children in `_dependencies`, `_subLibraries`, and `_blocks` are Block instances (`<blockml:Library />`, `<compiler:Library />`, `<bricks:Standard />`). `_schemas` holds `FilePathEntity` composition children (`<btype:FilePathEntity value="bricks.xsd" />`). Each `aggregation=` attribute is required (BlockLibrary has four aggregations, none is default).
 
-Composition children in `_dependencies` and `_blocks` are Block instances (`<blockml:Library />`, `<bricks:Standard />`). `_schemas` uses `<Schema ref="…" />`. Each `aggregation=` attribute is required (BlockLibrary has three aggregations, none is default).
+The orchestrator resolves `_dependencies`, `_subLibraries`, and `_blocks` entries by FQN, loads referenced definitions into the TypeRegistry using effective block versions, and validates library membership.
 
-The orchestrator resolves `_dependencies` and `_blocks` entries by FQN, loads referenced definitions into the TypeRegistry using effective block versions, and validates library membership.
-
-`_schemas` is optional legacy XSD. `_blocks` lists exported Block and ValueType BML — primary SSOT as types migrate from XSD.
+`_schemas` is optional legacy XSD (`FilePathEntity` paths). `_blocks` lists exported Block and ValueType BML — primary SSOT as types migrate from XSD.
 
 ---
 
@@ -1093,7 +1092,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ```text
 1. Built-in services     — @blockml/core (org.blockml.bml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
-3. Library blocks             — org.blockml.bml.core.BlockLibrary → resolve _dependencies / _blocks by FQN (no bml:version)
+3. Library blocks             — org.blockml.bml.core.BlockLibrary → resolve _dependencies / _subLibraries / _blocks by FQN (no bml:version)
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
 5. Declared dependencies      — Library _dependencies entries + bom.config.json paths
 ```
@@ -1176,7 +1175,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Block definitions have effective version (BML_MISSING_VERSION if standalone and no <version>)
 ✓  Library member block.version >= library.version when both declared
 ✓  External instance references resolve via registry context; optional bml:version is exact assert (BML_UNKNOWN_VERSION)
-✓  Library _dependencies / _blocks children have no bml:version (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
+✓  Library _dependencies / _subLibraries / _blocks children have no bml:version (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
 ✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
 ✓  Qualified FQN::id references target bml:exportIds="true" compositions with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
@@ -1233,7 +1232,7 @@ BML_EXAMPLE_MISSING_TITLE     — <example> lacks required title attribute
 BML_EXAMPLE_NOT_CDATA         — <example> body is not CDATA
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
-BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library _dependencies / _blocks
+BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library _dependencies / _subLibraries / _blocks
 BML_VERSION_BELOW_LIBRARY     — block.version < library.version when both declared (error)
 BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.version (warning — best practice: patch only)
 BML_LIBRARY_NESTING_VIOLATION  — outer library _blocks re-exports a Block exported by a nested inner library

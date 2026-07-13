@@ -71,7 +71,7 @@
     <!-- Optional legacy XSD — omit when all types are exported via _blocks -->
     <_schemas>
       <composition>
-        <bcore:BlockLibrary.Schema ref="blockml-library.xsd" />
+        <btype:FilePathEntity value="blockml-library.xsd" />
       </composition>
     </_schemas>
 

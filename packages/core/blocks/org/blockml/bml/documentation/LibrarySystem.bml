@@ -25,13 +25,15 @@
 
     Structure:
     • _dependencies — other Library blocks (typical: inner library depends on outer)
+    • _subLibraries — nested child Library blocks grouped under this library
     • _blocks — exported Block and ValueType definitions
-    • _schemas — optional legacy XSD during migration
+    • _schemas — optional legacy XSD paths as FilePathEntity instances during migration
     • version on Library.bml — framework convention: version only on Library for org.blockml.bml.*
 
     Nested libraries may coexist at different package levels (org.blockml.bml.Library and
-    org.blockml.bml.compiler.Library are separate units). Violation: outer _blocks referencing a
-    Block exported by an inner library → BML_LIBRARY_NESTING_VIOLATION.
+    org.blockml.bml.compiler.Library are separate units). Typical pattern: inner library lists
+    outer in _dependencies; outer lists inner in _subLibraries. Violation: outer _blocks
+    referencing a Block exported by an inner library → BML_LIBRARY_NESTING_VIOLATION.
 
     Namespaces: xmlns prefixes map to FQN package prefixes. BOM stores canonical FQNs only —
     prefixes are authoring convenience. Every BML definition must reside under
@@ -41,7 +43,7 @@
     Version resolution:
     effectiveBlockVersion = own version if present, else library.version if exported via _blocks,
     else error BML_MISSING_VERSION. bml:version on instance references is optional exact-version
-    assert; forbidden inside Library _dependencies and _blocks.
+    assert; forbidden inside Library _dependencies, _subLibraries, and _blocks.
   </documentation>
 
   <references>

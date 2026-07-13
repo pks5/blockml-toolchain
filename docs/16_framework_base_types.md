@@ -278,7 +278,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/type/IntegerEntity.bml · TextEntity.bml · …
      org/blockml/bml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …
-     org/blockml/bml/core/BlockLibrary.bml   ← includes Schema as subBlock; _dependencies / _blocks as Block references
+     org/blockml/bml/core/BlockLibrary.bml   ← _dependencies / _subLibraries / _blocks as Block references; _schemas as FilePathEntity
      org/blockml/bml/core/Definition.bml     ← meta-model base (WIP)
      org/blockml/bml/definition/*.bml        ← BlockDefinition, PropertyDefinition, … (WIP)
 

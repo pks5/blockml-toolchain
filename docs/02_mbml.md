@@ -1531,7 +1531,7 @@ final        — prevents override in child Blocks
 visibility   — optional; must match naming convention
 ```
 
-**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `_dependencies` / `_blocks` on `org.blockml.bml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation language="…">`). See also `00_bom_core.md` — Aggregations.
+**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `_dependencies` / `_subLibraries` / `_blocks` on `org.blockml.bml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation language="…">`). See also `00_bom_core.md` — Aggregations.
 
 Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block.
 
@@ -2190,11 +2190,13 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 ```xml
 <aggregations>
   <_dependencies type="core:BlockLibrary[]" />
+  <_subLibraries type="core:BlockLibrary[]" />
+  <_schemas type="btype:FilePathEntity[]" />
   <_blocks type="core:Block[]" />
 </aggregations>
 ```
 
-**Library reference aggregations:** `_dependencies` and `_blocks` on `org.blockml.bml.core.BlockLibrary` hold empty Block instances as type references — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed.
+**Library reference aggregations:** `_dependencies`, `_subLibraries`, and `_blocks` on `org.blockml.bml.core.BlockLibrary` hold empty Block instances as type references — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed. **`_schemas`** holds `FilePathEntity` composition children.
 
 ```xml
 <!-- com/machineblocks/bml/bricks/Library.bml -->
@@ -2789,7 +2791,7 @@ Multiple libraries may coexist at different package levels. Example: `org.blockm
 ```text
 Typical pattern:
   inner Library  →  _dependencies includes outer Library
-  outer Library  →  must NOT list inner-library blocks in _blocks
+  outer Library  →  _subLibraries lists inner Library; must NOT list inner-library blocks in _blocks
 
 Violation: outer _blocks references a Block exported by org.blockml.bml.compiler.Library
            → BML_LIBRARY_NESTING_VIOLATION
@@ -2832,7 +2834,7 @@ Physical directories and overlapping package prefixes do not define membership. 
     <!-- Optional legacy XSD -->
     <_schemas>
       <composition>
-        <Schema ref="bricks.xsd" />
+        <btype:FilePathEntity value="bricks.xsd" />
       </composition>
     </_schemas>
 
@@ -2851,11 +2853,11 @@ Physical directories and overlapping package prefixes do not define membership. 
 </block>
 ```
 
-**`_dependencies` and `_blocks`** use Block instances as type references — the element name resolves to the Block FQN. **`bml:version` is forbidden** — effective version is resolved from library context.
+**`_dependencies`, `_subLibraries`, and `_blocks`** use Block instances as type references — the element name resolves to the Block FQN. **`bml:version` is forbidden** — effective version is resolved from library context.
 
-**`ref` paths** on `Schema` are relative to the **library package root** (directory containing `Library.bml`).
+**`value` paths** on `_schemas` `FilePathEntity` entries are relative to the **library package root** (directory containing `Library.bml`).
 
-**`_blocks`** lists exported Block and ValueType definitions (composable Blocks, StructType, EnumType, presets, …). **`_schemas`** is optional legacy XSD during migration; omit when all types are in BML.
+**`_blocks`** lists exported Block and ValueType definitions (composable Blocks, StructType, EnumType, presets, …). **`_schemas`** holds optional legacy XSD paths as `FilePathEntity` instances during migration; omit when all types are in BML.
 
 **Directory structure (illustrative — membership comes from `_blocks`, not paths):**
 

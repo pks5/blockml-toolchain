@@ -1624,15 +1624,17 @@ A Library is a **Block** with `baseType="org.blockml.bml.core.BlockLibrary"`. It
 ```text
 org.blockml.bml.core.BlockLibrary           abstract composable Block
   property     description   String
-  subBlocks    Schema
   aggregation  _dependencies  BlockLibrary[]
-  aggregation  _schemas       Schema[]         (optional — legacy XSD)
+  aggregation  _subLibraries  BlockLibrary[]
+  aggregation  _schemas       FilePathEntity[] (optional — legacy XSD)
   aggregation  _blocks        Block[]
 
-org.blockml.bml.core.BlockLibrary.Schema       ref (relative .xsd path)
+org.blockml.bml.type.FilePathEntity            value (relative .xsd path)
 ```
 
-`_dependencies` and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the Library role — no aggregation attribute is required.
+`_dependencies`, `_subLibraries`, and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the Library role — no aggregation attribute is required.
+
+`_schemas` holds `FilePathEntity` composition children; **`value`** is the relative `.xsd` path from the library package root (directory containing `Library.bml`).
 
 The Library block is always named `Library.bml`. Its FQN is `{package}.Library` where `{package}` is derived from the file's package path (e.g. `com.machineblocks.bml.bricks.Library`, `org.blockml.bml.Library`, `org.blockml.bml.compiler.Library`).
 
@@ -1653,10 +1655,17 @@ org/blockml/bml/
     Parser.bml                → member iff listed in org.blockml.bml.compiler.Library _blocks only
 ```
 
-**Typical pattern:** inner library depends on outer via `_dependencies`; outer does **not** depend on inner.
+**Typical pattern:** inner library depends on outer via `_dependencies`; outer declares the inner library in `_subLibraries` (not in `_blocks`).
 
 ```xml
-<!-- org/blockml/bml/compiler/Library.bml -->
+<!-- org/blockml/bml/Library.bml (outer) -->
+<_subLibraries>
+  <composition>
+    <compiler:Library />       <!-- nested child library -->
+  </composition>
+</_subLibraries>
+
+<!-- org/blockml/bml/compiler/Library.bml (inner) -->
 <_dependencies>
   <composition>
     <blockml:Library />        <!-- outer library as dependency -->
@@ -1673,9 +1682,9 @@ org/blockml/bml/
 
 Violation → `BML_LIBRARY_NESTING_VIOLATION`.
 
-**Bootstrap:** the CLI/orchestrator discovers all `Library.bml` files, resolves `_dependencies` and `_blocks` by FQN (effective version from library context), and registers referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Bootstrap:** the CLI/orchestrator discovers all `Library.bml` files, resolves `_dependencies`, `_subLibraries`, and `_blocks` by FQN (effective version from library context), and registers referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
-**Types:** ValueType definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** is optional legacy XSD — omit when types are BML-only.
+**Types:** ValueType definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** holds optional legacy XSD paths as `FilePathEntity` instances — omit when types are BML-only.
 
 A Library answers: *"What Block types, presets, and types does this package export?"*
 
