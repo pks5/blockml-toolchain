@@ -74,7 +74,7 @@
     <!-- #strings.concat(a, b, ...) -->
     <concat
       type="Transformation"
-      inputType="Array<String>"
+      inputType="String[]"
       outputType="String">
       <documentation>
         Concatenates all string arguments.
