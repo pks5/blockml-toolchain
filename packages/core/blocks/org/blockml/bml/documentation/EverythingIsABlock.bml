@@ -25,7 +25,7 @@
     • Composable domain types (Wall, StandardBrick, Set) are Blocks
     • ValueTypes (Integer, Size3D, Decimal) are Blocks — type definitions, not runtime values
     • Languages (TypeScript, OpenSCAD, PseudoCode) are Blocks — capability implementation contracts
-    • Definition meta-model types (PropertyDefinition, ReferenceDefinition) are Blocks
+    • Definition meta-model types (PropertyDefinition, StructuralDefinition sub-blocks) are Blocks
     • Documentation blocks (this branch) are Blocks
     • Libraries, Services, Constraints, Capabilities — all Blocks
 

@@ -5,7 +5,7 @@
   See docs/00_bom_core.md — Object Identity · FQN Convention
        docs/01_system.md — FQN (Fully Qualified Name)
        docs/17_type_system_bml.md — Generics · BML attribute syntax
-       docs/16_framework_base_types.md — Definition Branch · ReferenceDefinition
+       docs/16_framework_base_types.md — Definition Branch · StructuralDefinition
        docs/02_mbml.md — Namespace resolution · Block Definition
 -->
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -64,7 +64,7 @@
       Generics and BML attribute syntax for type parameters.
     </see>
     <see file="16_framework_base_types.md">
-      Definition branch and ReferenceDefinition.
+      Definition branch and StructuralDefinition Reference sub-block.
     </see>
     <see file="02_mbml.md">
       Namespace resolution and Block definition authoring.
@@ -81,8 +81,8 @@
     <see block="def:GenericTypeDefinition">
       parameter baseType constraint attribute.
     </see>
-    <see block="def:ReferenceDefinition">
-      cross-reference block attribute.
+    <see block="def:StructuralDefinition">
+      Cross-reference block attribute on Reference sub-block.
     </see>
   </references>
 

@@ -36,7 +36,7 @@
   <!--
   Property definitions are grouped inside the <properties> element.
   Each property is rendered as a direct XML child element named after the
-  property itself (for example <since> or <status>).
+  property itself (for example <since>, <status>, or <documentation>).
 -->
   <properties>
     <since type="Version" bml:xml="element">
@@ -45,25 +45,161 @@
     <status type="core:Status" bml:xml="element">
       <documentation>The status of the definition.</documentation>
     </status>
+    <documentation type="Documentation" bml:xml="element">
+      <documentation>Technical documentation prose for this definition element.</documentation>
+    </documentation>
   </properties>
 
   <!--
   Aggregation definitions are grouped inside the <aggregations> element.
   Each aggregation is rendered as a direct XML child element named after the
-  aggregation itself (for example <documentation>, <changelog>, or <references>).
+  aggregation itself (for example <changelog> or <references>).
 -->
   <aggregations>
-    <documentation type="def:DocumentationDefinition">
-      <documentation>Technical documentation prose for this definition element.</documentation>
-    </documentation>
-    <changelog type="def:ChangeDefinition[]">
+    <changelog type="Change[]">
       <documentation>The changelog of the definition.</documentation>
     </changelog>
-    <examples type="def:ExampleDefinition[]">
+    <examples type="Example[]">
       <documentation>The examples of the definition.</documentation>
     </examples>
-    <references type="def:ReferenceDefinition[]">
+    <references type="Reference[]">
       <documentation>The references of the definition.</documentation>
     </references>
   </aggregations>
+
+  <subBlocks>
+    <block>
+      <idea>Technical documentation prose attached to a definition element.</idea>
+
+      <documentation>Describes the documentation element on any org.blockml.bml.definition.StructuralDefinition (block,
+        property, aggregation, …). Rendered as a documentation element with optional language attribute
+        and a trimmed text body. Maps to BOM documentation string with optional documentationLanguageFqn
+        when language deviates from the effective natural language of the enclosing definition element.
+        Declared as a property on org.blockml.bml.definition.StructuralDefinition.</documentation>
+
+      <name>Documentation</name>
+      <baseType>core:ValueType</baseType>
+      <bml:xml>documentation</bml:xml>
+
+      <properties>
+        <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+          <documentation>Optional NaturalLanguage when this documentation text is written in a
+            language other than the effective language of the enclosing definition element. Unqualified
+            names resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit
+            effective language from Block or Library.</documentation>
+        </language>
+        <content type="Text" bml:xml="text">
+          <documentation>Technical description text. Stored as trimmed body in BOM documentation on the
+            enclosing definition element.</documentation>
+        </content>
+      </properties>
+    </block>
+
+    <block>
+      <idea>One version history entry for a definition element.</idea>
+
+      <documentation>Describes a single changelog entry in a changelog container on any definition
+        element (block, property, aggregation, …). Rendered as a change element with a required
+        version attribute and a trimmed text body describing what changed. Maps to BOM
+        ChangelogEntry { version, text, languageFqn? }. Entries must be ordered chronologically by
+        version — oldest first (BML_CHANGELOG_VERSION_ORDER when out of order). Optional language
+        attribute overrides the effective natural language for this entry's text body.</documentation>
+
+      <name>Change</name>
+      <baseType>core:Entity</baseType>
+      <bml:xml>change</bml:xml>
+
+      <properties>
+        <version type="Version" bml:xml="attribute">
+          <documentation>Semantic version this change applies to. Required attribute on every change
+            entry.</documentation>
+        </version>
+        <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+          <documentation>Optional NaturalLanguage when this change description is written in a
+            language other than the effective language of the enclosing definition element. Unqualified
+            names resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit
+            effective language from Block or Library.</documentation>
+        </language>
+        <description type="Text" bml:xml="text">
+          <documentation>Human-readable description of what changed at this version. Stored as trimmed
+            text body in BOM ChangelogEntry.text.</documentation>
+        </description>
+      </properties>
+    </block>
+
+    <block>
+      <idea>A titled usage example attached to a definition element.</idea>
+
+      <documentation>Describes one usage example in an examples container on any definition element
+        (block, property, aggregation, …). Rendered as an example element with a required title
+        attribute and a CDATA body. Maps to BOM DocumentationExample { title, content, contentLanguageFqn? }.
+        Body content must be CDATA (BML_EXAMPLE_NOT_CDATA otherwise). The title is always written in
+        the effective natural language of the enclosing block definition. An optional language attribute
+        on the example element references an implementation Language FQN (OpenSCAD, TypeScript, …) when
+        the CDATA body is not BML/MBML source — distinct from NaturalLanguage used for prose.</documentation>
+
+      <name>Example</name>
+      <baseType>core:Entity</baseType>
+      <bml:xml>example</bml:xml>
+
+      <properties>
+        <title type="Text" bml:xml="attribute">
+          <documentation>Short title identifying this example. Required attribute on every example
+            element (BML_EXAMPLE_MISSING_TITLE when omitted). Always written in the effective natural
+            language of the enclosing block definition — no separate language attribute on title.</documentation>
+        </title>
+        <language type="FullyQualifiedName(core:Language)" bml:xml="attribute">
+          <documentation>Optional implementation Language when the CDATA body is written in a
+            target-language dialect (OpenSCAD, TypeScript, …). Unqualified names resolve via implicit
+            namespace org.blockml.bml.language.*. Omitted when content is BML/MBML source. Not a
+            NaturalLanguage — titles and documentation prose use NaturalLanguage; this attribute
+            applies to content only.</documentation>
+        </language>
+        <content type="Text" bml:xml="text|cdata">
+          <documentation>BML, MBML, or target-language source text demonstrating usage. Stored as CDATA
+            body in BOM DocumentationExample.content.</documentation>
+        </content>
+      </properties>
+    </block>
+
+    <block>
+      <idea>A cross-reference to a related Block, definition element, or documentation source.</idea>
+
+      <documentation>Records a link from documentation metadata to another Block, definition element,
+        repository markdown file, or external URL. Rendered as a see element inside the references
+        container on any org.blockml.bml.definition.StructuralDefinition (alongside changelog and examples). Maps to BOM
+        DocumentationReference { block?, file?, url?, context, languageFqn? }. Optional language
+        attribute overrides the effective natural language for the relationship text body.</documentation>
+
+      <name>Reference</name>
+      <baseType>core:Entity</baseType>
+      <bml:xml>see</bml:xml>
+
+      <properties>
+        <block type="FullyQualifiedName(core:Block, core:Definition)" bml:xml="attribute">
+          <documentation>Block or Definition reference via xmlns prefix (e.g. core:Block). Resolved to
+            FQN at parse time. Mutually exclusive with file and url — exactly one target attribute must
+            be set.</documentation>
+        </block>
+        <file type="Text" bml:xml="attribute">
+          <documentation>Repository documentation file (e.g. 02_mbml.md). Mutually exclusive with block
+            and url — exactly one target attribute must be set.</documentation>
+        </file>
+        <url type="Text" bml:xml="attribute">
+          <documentation>External URL. Mutually exclusive with block and file — exactly one target
+            attribute must be set.</documentation>
+        </url>
+        <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+          <documentation>Optional NaturalLanguage when the relationship text is written in a language
+            other than the effective language of the enclosing definition element. Unqualified names
+            resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit effective
+            language from Block or Library.</documentation>
+        </language>
+        <context type="Text" bml:xml="text">
+          <documentation>Human-readable explanation of why or how the referenced element relates to
+            this definition. Required on every see entry.</documentation>
+        </context>
+      </properties>
+    </block>
+  </subBlocks>
 </block>

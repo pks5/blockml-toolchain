@@ -25,7 +25,7 @@
     • org.blockml.bml.definition.BlockDefinition — shape of every block document
     • org.blockml.bml.definition.MemberDefinition — abstract base for block member declarations
     • PropertyDefinition, AggregationDefinition, AssociationDefinition, CapabilityDefinition
-    • GenericTypeDefinition, ChangeDefinition, ExampleDefinition, ReferenceDefinition
+    • GenericTypeDefinition
 
     org.blockml.bml.definition.StructuralDefinition declares:
     • Properties: documentation, since, status
@@ -34,7 +34,7 @@
     Definition addressing uses canonical structural paths within the Block FQN:
     com.foo.Bar.properties.width → PropertyDefinition
     com.foo.Bar.capabilities.render → CapabilityDefinition
-    com.foo.Bar.references → ReferenceDefinition entries
+    com.foo.Bar.references → Reference entries
 
     Reflection resolves these paths via structural containers at query time — no special
     definition-reference syntax. Definition blocks may declare bml:xml for how instances
@@ -62,7 +62,7 @@
       Abstract base of the Definition branch.
     </see>
     <see block="def:StructuralDefinition">
-      Shared documentation model for structural definition elements.
+      Shared documentation model; sub-blocks Documentation, Change, Example, and Reference.
     </see>
     <see block="def:BlockDefinition">
       Generic meta-model for block definition documents.
@@ -72,9 +72,6 @@
     </see>
     <see block="def:PropertyDefinition">
       Meta-model member shape for property declarations.
-    </see>
-    <see block="def:ReferenceDefinition">
-      Meta-model for see entries inside references.
     </see>
     <see block="core:Block">
       Sole inheritance root — definitions inherit like all other Blocks.

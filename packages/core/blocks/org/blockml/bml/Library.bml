@@ -102,13 +102,9 @@
         <def:AssociationDefinition />
         <def:BlockDefinition />
         <def:CapabilityDefinition />
-        <def:ChangeDefinition />
-        <def:DocumentationDefinition />
-        <def:ExampleDefinition />
         <def:GenericTypeDefinition />
         <def:MemberDefinition />
         <def:PropertyDefinition />
-        <def:ReferenceDefinition />
         <def:StructuralDefinition />
         <cap:Inbound />
         <cap:Outbound />

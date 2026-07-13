@@ -61,7 +61,7 @@
       idea, documentation, since, changelog, examples, references — authoring rules.
     </see>
     <see file="16_framework_base_types.md">
-      Definition branch documentation model — ReferenceDefinition meta-model.
+      Definition branch documentation model — StructuralDefinition sub-blocks.
     </see>
     <see file="12_bom_object_model.md">
       DocumentationExample, DocumentationReference — BOM documentation shapes.
@@ -78,14 +78,8 @@
     <see block="core:Definition">
       Definition branch — shared documentation aggregations.
     </see>
-    <see block="def:DocumentationDefinition">
-      Meta-model for documentation elements on Definition branch types.
-    </see>
-    <see block="def:ReferenceDefinition">
-      Meta-model for see entries inside references.
-    </see>
-    <see block="def:ExampleDefinition">
-      Meta-model for example entries inside examples.
+    <see block="def:StructuralDefinition">
+      Documentation property and Change, Example, Reference sub-blocks on StructuralDefinition.
     </see>
     <see block="core:Documentation">
       Abstract base for narrative documentation blocks in readFirst lists.
