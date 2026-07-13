@@ -3201,9 +3201,6 @@ protected Sub-Block reference → BML_PROTECTED_SUBBLOCK_ACCESS
 BML_UNKNOWN_NAMESPACE_PREFIX  → member element prefix references undeclared xmlns: prefix
 final member override         → BML_FINAL_MEMBER_OVERRIDE
 override without parent       → BML_OVERRIDE_WITHOUT_PARENT
-implementation without parent → BML_IMPLEMENTATION_WITHOUT_PARENT
-implementation parent not abstract → BML_IMPLEMENTATION_PARENT_NOT_ABSTRACT
-implementation with override="false" → BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE
 abstract member not implemented → BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED
 readOnly member on instance   → BML_READONLY_MEMBER_WRITE
 type="Foo" (unqualified at general site)  →  BML_UNKNOWN_TYPE (no implicit namespace)
