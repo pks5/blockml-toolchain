@@ -53,20 +53,38 @@
     <abstract type="Boolean" bml:xml="element|attribute">
       <value>false</value>
       <documentation>When true on a block definition, the type is abstract — not usable as a composition
-        instance type. When true on a member declaration, the member is abstract — its definition
-        may be incomplete (for example a property without type or without value). The member becomes
-        usable only after a deriving block sets implementation="true" and supplies the missing
-        parts. On members, implementation="true" implies abstract="false" unless abstract="true" is
-        also set — then partial implementation keeps the member abstract for descendants. Default
-        false. On block definitions rendered as a child element; on members as an optional
+        instance type.
+
+        When true on a member declaration, the member is abstract — it is semantically incomplete and
+        must be explicitly implemented by a descendant before it can appear on a concrete Block.
+        abstract is inherited effectively along the baseType chain. An inherited abstract="true" is
+        lifted only by explicitly setting abstract="false" on a local redeclaration; override="true"
+        and setting unrelated fields never change abstract implicitly.
+
+        The transition abstract: true → false is the explicit implementation event for this member.
+        The implementing redeclaration must be immediately complete locally for the member kind:
+        - Property: must set type
+        - Aggregation: must set type
+        - Association: must set type
+        - Capability: must set type and provide implementation binding
+
+        Default false. On block definitions rendered as a child element; on members as an optional
         attribute.</documentation>
     </abstract>
     <final type="Boolean" bml:xml="element|attribute">
       <value>false</value>
       <documentation>When true on a block definition, the type is final — cannot be used as baseType on
-        other definitions (BML_FINAL_BASE_TYPE). When true on a member declaration, child Blocks
-        cannot override this member (BML_FINAL_MEMBER_OVERRIDE). Default false. On block definitions
-        rendered as a child element; on members as an optional attribute.</documentation>
+        other definitions.
+
+        When true on a member declaration, child Blocks cannot redeclare this member (regardless of
+        whether they would change type, constraints, documentation, or implementation). final is
+        inherited effectively and cannot be lifted by setting final="false" on a descendant.
+
+        An abstract member must not be final, because it would become impossible to implement it
+        (abstract="true" && final="true" is invalid).
+
+        Default false. On block definitions rendered as a child element; on members as an optional
+        attribute.</documentation>
     </final>
   </properties>
 

@@ -24,8 +24,7 @@
     namespace — resolved via xmlns to BOM namespace; unprefixed elements use the default namespace
     (empty string). Member identity is (resolvedNamespace, localName). Maps to BOM
     CapabilityDefinition (kind: "capability") with typeFqn, inputType, outputType, and optional
-    implementation binding. Overrides org.blockml.bml.definition.MemberDefinition.implementation
-    (boolean) with a full Implementation value type. Inbound requires inputType; Outbound requires
+    implementation binding. Inbound requires inputType; Outbound requires
     outputType; Transformation requires both. inputType and outputType use TypeExpression syntax and
     must resolve to ValueTypes.</documentation>
 
@@ -52,7 +51,8 @@
       inputType and outputType payload types.
     </see>
     <see block="def:MemberDefinition">
-      Parent type — boolean implementation overridden by Implementation property here.
+      Parent type — override/abstract/final semantics are inherited; capability adds an optional
+      implementation binding element.
     </see>
   </references>
 
@@ -76,11 +76,10 @@
         forbidden on Inbound. Must resolve to a ValueType branch. Parsed into BOM outputType
         TypeDescriptor.</documentation>
     </outputType>
-    <implementation type="Implementation" override="true" bml:xml="element">
-      <documentation>Optional target-language implementation binding for this capability. Overrides
-        the boolean implementation property on org.blockml.bml.definition.MemberDefinition. Rendered
-        as an implementation child element with required language attribute and CDATA body. Maps to
-        BOM ImplementationBlock.</documentation>
+    <implementation type="Implementation" bml:xml="element">
+      <documentation>Optional target-language implementation binding for this capability. Rendered as
+        an implementation child element with required language attribute and CDATA body. Maps to BOM
+        ImplementationBlock.</documentation>
     </implementation>
   </properties>
 
@@ -93,8 +92,7 @@
         and a CDATA source body. Maps to BOM ImplementationBlock { languageFqn, source,
         embeddedExpressions }. Capability references inside the body use BML Embedded Expression
         syntax (&lt;$ … $&gt;). Declared as the implementation property on
-        org.blockml.bml.definition.CapabilityDefinition — overrides MemberDefinition.implementation
-        (boolean).</documentation>
+        org.blockml.bml.definition.CapabilityDefinition.</documentation>
 
       <name>Implementation</name>
       <baseType>core:ValueType</baseType>

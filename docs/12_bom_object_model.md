@@ -530,7 +530,7 @@ Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" 
 3. Block local      — declared members on this Block (override all)
 ```
 
-Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` prevents override. `readOnly="true"` prevents instance authoring only — child Block definitions may still override the value/composition. An `override="true"` on an abstract parent without `implementation="true"` keeps the effective member abstract; unspecified `abstract` on the override inherits abstractness from the parent. `implementation="true"` implies `abstract=false` unless `abstract=true` is also set — partial implementation keeps the effective member abstract for descendants.
+Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` prevents any redeclaration. `readOnly="true"` prevents instance authoring only — child Block definitions may still override the value/composition. An `override="true"` on an abstract parent keeps the effective member abstract unless the child explicitly lifts it to `abstract="false"`. The transition `abstract: true → false` is the explicit implementation event; the implementing redeclaration must be locally complete for the member kind.
 
 ```text
 Parser / mapper     MUST NOT reorder declared members
@@ -1288,10 +1288,7 @@ BML_PRIVATE_SUBBLOCK_ACCESS   — private Sub-Block referenced outside declaring
 BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritance context
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_OVERRIDE_WITHOUT_PARENT   — override="true" but no same-named parent member
-BML_IMPLEMENTATION_WITHOUT_PARENT — implementation="true" but no same-named parent member
-BML_IMPLEMENTATION_PARENT_NOT_ABSTRACT — implementation="true" but parent member is not abstract
-BML_IMPLEMENTATION_WITH_OVERRIDE_FALSE — implementation="true" with explicit override="false"
-BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — abstract member on a concrete block without implementation="true" (includes partial implementation: implementation="true" with abstract="true" keeps the member abstract)
+BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — abstract member on a concrete block (must be explicitly implemented via abstract="false")
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
