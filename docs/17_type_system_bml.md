@@ -1034,9 +1034,18 @@ Named and positional configuration must not be mixed in one `{...}` block. Posit
 Examples from core Block definitions:
 
 ```xml
+<!-- FullyQualifiedName<B, D>: B = Block branch, D = Definition branch (default def:BlockDefinition) -->
 <type type="core:FullyQualifiedName(core:Block)"/>
+<baseType type="core:FullyQualifiedName(core:Block, core:Definition)"/>
 <baseType type="core:FullyQualifiedName(def:BlockDefinition)"/>
+
+<!-- genericTypes on a meta-model Block: D constrained to core.Definition -->
+<genericTypes>
+  <D baseType="org.blockml.bml.core.Definition" defaultType="def:RootBlockDefinition"/>
+</genericTypes>
 ```
+
+`org.blockml.bml.core.Definition` itself declares no members — it identifies the Definition branch. `FullyQualifiedName`'s generic `D` uses `baseType="core:Definition"` so definition-element FQNs (e.g. `def:PropertyDefinition`, `def:BlockDefinition`) satisfy the constraint. See `16_framework_base_types.md` — Definition Branch · `packages/core/blocks/org/blockml/bml/type/FullyQualifiedName.bml`.
 
 At reference sites:
 
@@ -1292,7 +1301,7 @@ The validator derives `definitionBranch` by walking the `baseType` chain:
 type DefinitionBranch = "composable" | "typeBlock" | "languageBlock" | "definitionBlock"
 ```
 
-Blocks under `org.blockml.bml.core.Definition` (`org.blockml.bml.definition.*`) are **definitionBlock** — meta-model for BML structure and `bml:xml` serialization. See `19_definition_blocks_and_bml_xml.md`.
+Blocks whose `baseType` chain includes `org.blockml.bml.core.Definition` (`org.blockml.bml.definition.*`) are **definitionBlock** — meta-model for BML structure and `bml:xml` serialization. `core.Definition` is an empty identification marker; concrete shapes are on subtypes. See `19_definition_blocks_and_bml_xml.md`.
 
 Implementation is free to:
 

@@ -190,11 +190,33 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 
 ## Definition Branch (Meta-Model)
 
-**FQN:** `org.blockml.bml.core.Definition` — abstract base for blocks that describe **block structure** in BlockML's own language.
+**FQN:** `org.blockml.bml.core.Definition` — abstract **identification marker** for all Definition meta-model blocks.
+
+### `org.blockml.bml.core.Definition` — identification, not shape
+
+`org.blockml.bml.core.Definition` is intentionally **empty** — no properties, aggregations, or Sub-Blocks. It declares only `name`, `type`, `baseType: org.blockml.bml.core.Block`, and `abstract`.
+
+**Role:** branch identification. Any block whose `baseType` chain includes `org.blockml.bml.core.Definition` is a **Definition meta-model block** (`org.blockml.bml.definition.*`) — distinct from composable domain blocks, ValueTypes, Languages, Constraints, and services. The **concrete shape** lives on subtypes (`StructuralDefinition`, `BlockDefinition`, `PropertyDefinition`, `GenericTypeDefinition`, …); `core.Definition` itself does not model members.
+
+**Uses in the meta-model:**
+
+```text
+Inheritance marker     — org.blockml.bml.definition.* blocks extend core.Definition (directly or via StructuralDefinition)
+FullyQualifiedName<D>  — generic parameter D on org.blockml.bml.type.FullyQualifiedName:
+                           baseType core:Definition, defaultType def:BlockDefinition
+                         constrains which definition-element branch an FQN may reference
+genericTypes           — e.g. <D baseType="org.blockml.bml.core.Definition" defaultType="def:RootBlockDefinition"/>
+Validator              — definitionBranch = "definitionBlock" when baseType chain includes core.Definition
+bml:xml                — permitted on all blocks whose baseType chain includes core.Definition
+```
+
+**Future note:** Core branch types may migrate from `baseType` inheritance to interface-style identification. Today, `baseType` chains remain normative — `core.Definition` is the Definition-branch root marker under `core.Block`.
+
+Source: `packages/core/blocks/org/blockml/bml/core/Definition.bml`
 
 ```text
 org.blockml.bml.core.Block
-  org.blockml.bml.core.Definition                    ← abstract shell (WIP)
+  org.blockml.bml.core.Definition                    ← empty identification marker (complete)
     org.blockml.bml.definition.StructuralDefinition
       org.blockml.bml.definition.ConstrainableDefinition  ← abstract; <constraints> container
         org.blockml.bml.definition.BlockDefinition
@@ -354,7 +376,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/language/NaturalLanguage.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …
      org/blockml/bml/core/BlockLibrary.bml   ← bootstrap / _dependencies / _subLibraries / _blocks as Block references; _schemas as FilePathEntity
-     org/blockml/bml/core/Definition.bml     ← meta-model base (WIP)
+     org/blockml/bml/core/Definition.bml     ← empty Definition-branch identification marker
      org/blockml/bml/definition/*.bml        ← StructuralDefinition (inline Documentation/Change/Example/Reference), BlockDefinition, MemberDefinition, …
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar

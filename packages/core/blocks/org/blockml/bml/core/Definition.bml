@@ -13,12 +13,19 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>Abstract base type for BlockML definition elements.</idea>
+  <idea>Identification marker for all Definition meta-model blocks — intentionally empty.</idea>
 
   <documentation>
-    Abstract base type for the Definition branch. Structural definition elements that describe
-    block structure in BlockML's own language inherit from org.blockml.bml.definition.StructuralDefinition.
-  </documentation>
+    Abstract identification marker for the Definition branch under org.blockml.bml.core.Block.
+    Intentionally empty — no properties, aggregations, or Sub-Blocks. Any block whose baseType
+    chain includes org.blockml.bml.core.Definition is a Definition meta-model block
+    (org.blockml.bml.definition.*). Concrete grammar lives on subtypes such as
+    org.blockml.bml.definition.StructuralDefinition and org.blockml.bml.definition.BlockDefinition.
+
+    Used as a generic constraint — for example parameter D on org.blockml.bml.type.FullyQualifiedName
+    (baseType core:Definition, defaultType def:BlockDefinition) and in genericTypes entries that
+    constrain definition-element references. Core branch types may later migrate from baseType
+    inheritance to interface-style identification; today baseType chains remain normative.</documentation>
 
   <name>Definition</name>
   <type>core:Definition</type>

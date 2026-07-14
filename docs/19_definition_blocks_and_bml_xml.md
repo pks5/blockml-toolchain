@@ -6,7 +6,7 @@ version: 0.1.0 · **Draft / work in progress**
 
 This document specifies the **meta-model** for BlockML self-description: how BlockML describes its own block structure in BML, and how the **`bml:xml`** directive declares the canonical XML rendering of any block type.
 
-The BML sources under `packages/core/blocks/org/blockml/bml/core/Definition.bml` and `packages/core/blocks/org/blockml/bml/definition/*` describe the **meta-model in progress**. Block and member Definition blocks are largely specified; `org.blockml.bml.core.Definition` and documentation Sub-Block extraction remain WIP. This document captures the **design intent** so parser, validator, and serializer work can proceed against a stable concept.
+The BML sources under `packages/core/blocks/org/blockml/bml/core/Definition.bml` and `packages/core/blocks/org/blockml/bml/definition/*` describe the **Definition meta-model**. `core.Definition` is complete as an empty identification marker; concrete shapes live on `org.blockml.bml.definition.*` subtypes. This document captures the **design intent** so parser, validator, and serializer work can proceed against a stable concept.
 
 For framework base types see `16_framework_base_types.md`.
 For BML authoring syntax see `02_mbml.md`.
@@ -41,13 +41,26 @@ This is a step toward **BML self-hosting** (Phase 2/3 in `01_system.md`): BlockM
 
 **FQN:** `org.blockml.bml.core.Definition`  
 **Base type:** `org.blockml.bml.core.Block`  
-**Role:** Abstract base for all blocks whose purpose is to **describe block structure** — not domain composable units, ValueTypes, or services.
+**Role:** Abstract **identification marker** for the Definition branch — not a shape-bearing type.
 
-Definition blocks live in the `org.blockml.bml.definition.*` package branch. They inherit from `Definition`, not directly from composable domain bases.
+`org.blockml.bml.core.Definition` is intentionally **empty** (no members). It exists so tooling can recognize Definition meta-model blocks by `baseType` chain membership. All concrete grammar — documentation model, block shape, member kinds, `bml:xml` — is declared on `org.blockml.bml.definition.*` subtypes.
+
+**Identification uses:**
+
+| Site | How `core.Definition` appears |
+|---|---|
+| `baseType` chain | `org.blockml.bml.definition.*` blocks inherit from `core.Definition` (directly or via `StructuralDefinition`) |
+| `FullyQualifiedName<B, D>` | Generic `D` on `org.blockml.bml.type.FullyQualifiedName` has `baseType="core:Definition"`, `defaultType="def:BlockDefinition"` — constrains definition-element FQN references |
+| `<genericTypes>` | Meta-model generic parameters may use `baseType="org.blockml.bml.core.Definition"` (e.g. parameter `D` on a Block that describes definition elements) |
+| Validator | `definitionBranch === "definitionBlock"` when `baseType` chain includes `core.Definition` |
+
+**Future note:** Core branch types may later shift from `baseType` inheritance toward interface-style markers. Today, inheritance via `baseType` remains normative.
+
+Definition blocks live in the `org.blockml.bml.definition.*` package branch.
 
 ```text
 org.blockml.bml.core.Block              — universal root (composable, ValueType, Language, …)
-  org.blockml.bml.core.Definition       — abstract; meta-model for block structure
+  org.blockml.bml.core.Definition       — empty identification marker; subtypes carry shape
     org.blockml.bml.definition.StructuralDefinition
       inline Sub-Blocks (StructuralDefinition.bml): Documentation · Change · Example · Reference
       org.blockml.bml.definition.ConstrainableDefinition
@@ -71,7 +84,7 @@ An ordinary **composable block** (e.g. `com.machineblocks.bml.bricks.StandardBri
 
 ## Definition Block Branch (`org.blockml.bml.definition.*`)
 
-Each member kind in the block grammar has a corresponding Definition block. Examples (WIP sources in `@blockml/core`):
+Each member kind in the block grammar has a corresponding Definition block. Sources in `@blockml/core`:
 
 | Definition block | Describes |
 |---|---|
@@ -303,7 +316,7 @@ Until the meta-serializer exists:
 
 | Item | Status |
 |---|---|
-| `org.blockml.bml.core.Definition` BML | WIP — minimal shell |
+| `org.blockml.bml.core.Definition` BML | Done — empty identification marker (by design) |
 | `org.blockml.bml.definition.StructuralDefinition` BML | Done — documentation Sub-Blocks inline |
 | `org.blockml.bml.definition.*` member surfaces | Done — Property, Aggregation, Association, Capability, MemberDefinition |
 | `bml:xml` in parser / BOM model | Not implemented |
