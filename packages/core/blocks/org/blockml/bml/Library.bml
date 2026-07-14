@@ -88,18 +88,27 @@
     <_blocks>
       <composition>
         <bcore:Block />
+        <bcore:BlockConstraint />
         <bcore:Capability />
+        <bcore:CapabilityConstraint />
         <bcore:Constraint />
         <bcore:Definition />
         <bcore:Entity />
+        <bcore:MemberConstraint />
         <bcore:PrimitiveEntity />
+        <bcore:PropertyConstraint />
+        <bcore:AggregationConstraint />
+        <bcore:AssociationConstraint />
         <bcore:Language />
         <bcore:Mapping />
         <bcore:Status />
+        <bcore:StructuralConstraint />
         <bcore:Validation />
+        <bcore:ValueConstraint />
         <bcore:ValueType />
         <def:AggregationDefinition />
         <def:AssociationDefinition />
+        <def:ConstrainableDefinition />
         <def:SubBlockDefinition />
         <def:RootBlockDefinition />
         <def:CapabilityDefinition />
@@ -110,13 +119,18 @@
         <cap:Inbound />
         <cap:Outbound />
         <cap:Transformation />
+        <constraint:AllowedChildType />
         <constraint:Max />
         <constraint:MaxItems />
         <constraint:MaxLength />
         <constraint:Min />
         <constraint:MinItems />
         <constraint:MinLength />
+        <constraint:MustBeReadOnly />
+        <constraint:NoSelfReference />
         <constraint:Pattern />
+        <constraint:RequiresImplementation />
+        <constraint:RequiresMember />
         <constraint:ValuePresent />
         <lang:C />
         <lang:CPP />

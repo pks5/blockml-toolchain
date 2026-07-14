@@ -1,0 +1,81 @@
+# Constraint model test specification
+# Consumed by @blockml/core validateConstraints() tests (when implemented).
+# Fixtures: packages/core/test/constraints/fixtures/
+
+version: 1.0.0
+
+cases:
+  - id: min-on-numeric-property
+    fixture: fixtures/valid-min-on-property.bml
+    expect: pass
+    notes: ValueConstraint (Min) on Integer property with validation
+
+  - id: value-present-on-property
+    fixture: fixtures/valid-value-present-on-property.bml
+    expect: pass
+    notes: ValuePresent after member resolution
+
+  - id: block-constraint-on-root
+    fixture: fixtures/valid-block-constraint-on-root.bml
+    expect: pass
+    notes: BlockConstraint (RequiresMember) on document root block
+
+  - id: property-constraint-on-property
+    fixture: fixtures/valid-property-constraint-on-property.bml
+    expect: pass
+    notes: PropertyConstraint (MustBeReadOnly) on property definition
+
+  - id: aggregation-constraint-on-aggregation
+    fixture: fixtures/valid-aggregation-constraint.bml
+    expect: pass
+    notes: AggregationConstraint (AllowedChildType)
+
+  - id: association-constraint-on-association
+    fixture: fixtures/valid-association-constraint.bml
+    expect: pass
+    notes: AssociationConstraint (NoSelfReference)
+
+  - id: capability-constraint-on-capability
+    fixture: fixtures/valid-capability-constraint.bml
+    expect: pass
+    notes: CapabilityConstraint (RequiresImplementation)
+
+  - id: value-constraint-on-capability
+    fixture: fixtures/invalid-value-constraint-on-capability.bml
+    expect: fail
+    diagnostic: BML_CONSTRAINT_TARGET_MISMATCH
+    notes: Min (ValueConstraint) under Capability — forbidden
+
+  - id: capability-constraint-on-property
+    fixture: fixtures/invalid-capability-constraint-on-property.bml
+    expect: fail
+    diagnostic: BML_CONSTRAINT_TARGET_MISMATCH
+    notes: RequiresImplementation under Property — forbidden
+
+  - id: block-constraint-on-aggregation
+    fixture: fixtures/invalid-block-constraint-on-aggregation.bml
+    expect: fail
+    diagnostic: BML_CONSTRAINT_TARGET_MISMATCH
+    notes: RequiresMember under Aggregation — forbidden
+
+  - id: constraint-without-validation-metadata
+    fixture: fixtures/valid-constraint-metadata-only.bml
+    expect: pass
+    notes: No validation — metadata only, no rule enforcement diagnostic
+
+  - id: constraint-with-validation-enforced
+    fixture: fixtures/invalid-constraint-violation.bml
+    expect: fail
+    diagnostic: BML_CONSTRAINT_VIOLATION
+    notes: Min violation with validation Error
+
+  - id: roundtrip-preserves-constraints
+    fixture: fixtures/valid-roundtrip-constraints.bml
+    expect: pass
+    roundtrip: true
+    notes: BML→BOM→BML preserves constraints[] on block and members
+
+  - id: inherited-constraints-effective
+    fixture: fixtures/valid-inherited-constraints.bml
+    expect: pass
+    notes: Contract-declared ValuePresent merged into effective property definition

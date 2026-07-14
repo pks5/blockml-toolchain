@@ -20,7 +20,7 @@
     and Decimal properties. The value property must match T.</documentation>
   <name>Min</name>
   <type>constraint:Min</type>
-  <baseType>core:Constraint</baseType>
+  <baseType>core:ValueConstraint</baseType>
   <genericTypes>
     <T baseType="btype:Number"/>
   </genericTypes>

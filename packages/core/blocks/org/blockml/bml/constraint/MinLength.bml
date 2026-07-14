@@ -19,7 +19,7 @@
   <documentation>T binds to the property type for scalar String properties, or to the element type when the property is a collection (e.g. String[]). The value property is always Integer — the minimum length threshold.</documentation>
   <name>MinLength</name>
   <type>constraint:MinLength</type>
-  <baseType>core:Constraint</baseType>
+  <baseType>core:ValueConstraint</baseType>
   <genericTypes>
     <T baseType="core:ValueType"/>
   </genericTypes>

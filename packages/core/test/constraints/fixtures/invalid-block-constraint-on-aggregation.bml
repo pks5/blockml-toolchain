@@ -1,0 +1,22 @@
+<!--
+  Test fixture — invalid BlockConstraint on Aggregation (BML_CONSTRAINT_TARGET_MISMATCH)
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation">
+
+  <idea>Constraint test — RequiresMember under aggregation (invalid)</idea>
+  <type>com.blockml.test.constraints.InvalidBlockOnAggregation</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <aggregations>
+    <items type="core:Block[]">
+      <constraints>
+        <constraint:RequiresMember name="width" validation="validation:Error"/>
+      </constraints>
+    </items>
+  </aggregations>
+</block>

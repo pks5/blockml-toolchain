@@ -208,6 +208,9 @@ interface BlockDefinition {
    */
   definitionFqn?: string
 
+  /** Constraint Block instances on this Block definition — BlockConstraint branch only. */
+  constraints?: BlockInstance[]
+
   /**
    * Members declared in THIS block only — not inherited.
    * Validator resolves effective members via baseType chain.
@@ -459,6 +462,11 @@ interface DocumentationReference {
   source?: SourceLocation
 }
 
+interface ConstrainableDefinition {
+  /** Constraint Block instances — document order preserved. Target binding resolved at validate time only. */
+  constraints?: BlockInstance[]
+}
+
 interface MemberDefinitionBase {
   name: string
   documentation?: string
@@ -490,6 +498,8 @@ interface MemberDefinitionBase {
   final?: boolean
   /** When true, this declaration overrides a same-named parent member */
   override?: boolean
+  /** Constraint Block instances — document order preserved. Target binding resolved at validate time. */
+  constraints?: BlockInstance[]
   source?: SourceLocation
 }
 
@@ -499,9 +509,7 @@ interface PropertyDefinition extends MemberDefinitionBase {
   /** Optional — absent means no value (not null) */
   value?: MemberValue
   group?: string
-  /** Constraint Block instances — each typeFqn must extend org.blockml.bml.core.Constraint */
-  constraints?: BlockInstance[]
-  /** Block instances of the same type as typeFqn — metadata only */
+  /** Block instances of the same type as typeFqn — metadata only (Property-only) */
   suggestions?: BlockInstance[]
 }
 
@@ -1267,7 +1275,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Property value cycles (topological sort)
 ✓  basePresets resolve (local id or FQN::id) and have no cycles
 ✓  contract Block references resolve and merge into effective members (declaration order; later wins)
-✓  constraints — after resolveEffectiveMembers() and instance value binding: validateConstraints() enforces each effective constraint with an understood validation reference (including ValuePresent → BML_CONSTRAINT_VIOLATION)
+✓  constraints — validateConstraints() on Block and all member kinds after resolveEffectiveMembers(); branch compatibility (BML_CONSTRAINT_TARGET_MISMATCH); rule enforcement only when validation is set (including ValuePresent → BML_CONSTRAINT_VIOLATION)
 ✓  readOnly — after resolveEffectiveMembers(): Block instances must not set members with readOnly=true (BML_READONLY_MEMBER_WRITE)
 ✓  Library _blocks entries resolve to registered Block definitions (FQN + effectiveBlockVersion)
 ✓  Outer library _blocks does not re-export blocks from a nested inner library (BML_LIBRARY_NESTING_VIOLATION)
@@ -1308,6 +1316,10 @@ BML_DEFINITION_TYPE_MISMATCH  — <definition> FQN incompatible with block role 
 BML_MISSING_EMBEDDED_BLOCK_TYPE — embedded block lacks required type
 BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE — embedded block type is not fully qualified
 BML_AMBIGUOUS_TYPE            — unqualified type name resolves to multiple candidates
+BML_CONSTRAINT_UNKNOWN        — constraint type not a Constraint sub-type
+BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with bound target
+BML_CONSTRAINT_TARGET_MISMATCH — constraint branch incompatible with embedding context
+BML_CONSTRAINT_VIOLATION      — constraint rule fails with validation Error
 BML_MISSING_IDEA              — root <block> lacks <idea> (warning V1)
 BML_MISSING_DOCUMENTATION     — root <block> lacks <documentation> (warning V1)
 BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version

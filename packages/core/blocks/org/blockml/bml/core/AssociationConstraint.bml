@@ -1,0 +1,31 @@
+<!--
+  BlockML Core — association structural constraint branch
+
+  FQN: org.blockml.bml.core.AssociationConstraint
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition">
+
+  <idea>Constraint that validates an AssociationDefinition or its targets.</idea>
+
+  <documentation>Abstract branch for constraints on Association members. Generic T binds to the
+    effective AssociationDefinition. Valid only under an Association's &lt;constraints&gt; container
+    (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
+
+  <name>AssociationConstraint</name>
+  <type>core:AssociationConstraint</type>
+  <baseType>core:MemberConstraint</baseType>
+  <abstract />
+
+  <genericTypes>
+    <T baseType="def:AssociationDefinition">
+      <documentation>Bound to the effective AssociationDefinition of the enclosing Association member.</documentation>
+    </T>
+  </genericTypes>
+
+</block>

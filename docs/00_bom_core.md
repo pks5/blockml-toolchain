@@ -730,19 +730,26 @@ ValueTypes appear as type references on Properties — values are stored on the 
 
 ### Constraints
 
-A Property may declare a list of constraints. Each constraint is a Block instance whose `baseType` chain includes `org.blockml.bml.core.Constraint`. The compiler binds each constraint's generic parameter `T` to the property type (or element type for collection constraints) and validates the constraint instance. **Value enforcement** depends on the optional `validation` property — when omitted, the BlockML validator ignores the constraint and it remains metadata.
+Blocks and members may declare constraints via a shared `<constraints>` container. Each constraint is a Block instance whose `baseType` chain includes `org.blockml.bml.core.Constraint`. The **embedding context** (Block, Property, Aggregation, Association, or Capability) determines the constraint target and automatic generic binding. **Rule enforcement** depends on the optional `validation` property — when omitted, the BlockML validator does not enforce the rule; the instance remains metadata.
 
 ```xml
-<width type="Float">
-  <value>50</value>
+<block>
   <constraints>
-    <constraint:Min value="0" validation="Error"/>
-    <constraint:Max value="100" validation="Error"/>
+    <constraint:RequiresMember name="width" validation="Error"/>
   </constraints>
-</width>
+  <properties>
+    <width type="Float">
+      <value>50</value>
+      <constraints>
+        <constraint:Min value="0" validation="Error"/>
+        <constraint:Max value="100" validation="Error"/>
+      </constraints>
+    </width>
+  </properties>
+</block>
 ```
 
-Constraints without `validation` are purely descriptive — available to renderers, editors, runtimes, and custom validators. See `18_constraints_and_suggestions.md`.
+Wrong constraint branch for context → `BML_CONSTRAINT_TARGET_MISMATCH`. Intrinsic language rules (invalid types, visibility, …) are **not** modeled as constraints. See `18_constraints_and_suggestions.md`.
 
 ### Suggestions
 

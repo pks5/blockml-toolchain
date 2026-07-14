@@ -1,0 +1,25 @@
+<!--
+  Test fixture — valid Min on numeric Property
+  See packages/core/test/constraints/constraints.test-spec.yaml
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation"
+  xmlns:btype="org.blockml.bml.type">
+
+  <idea>Constraint test — Min on Integer property</idea>
+  <type>com.blockml.test.constraints.MinOnProperty</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <properties>
+    <count type="btype:Integer">
+      <value>5</value>
+      <constraints>
+        <constraint:Min value="1" validation="validation:Error"/>
+      </constraints>
+    </count>
+  </properties>
+</block>

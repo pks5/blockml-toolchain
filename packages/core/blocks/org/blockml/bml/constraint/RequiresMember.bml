@@ -1,0 +1,35 @@
+<!--
+  BlockML Core — requires member block constraint
+
+  FQN: org.blockml.bml.constraint.RequiresMember
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition">
+
+  <idea>Requires a named member on the enclosing Block definition.</idea>
+
+  <documentation>Block-level structural constraint. T binds to the effective block definition type.
+    When validation is set, the validator requires a member with the given local name in the
+    effective member set of the Block. Reference implementation for BlockConstraint branch.</documentation>
+
+  <name>RequiresMember</name>
+  <type>constraint:RequiresMember</type>
+  <baseType>core:BlockConstraint</baseType>
+
+  <genericTypes>
+    <T baseType="def:SubBlockDefinition"/>
+  </genericTypes>
+
+  <properties>
+    <name type="Text">
+      <documentation>Required member local name (namespace + localName identity).</documentation>
+    </name>
+  </properties>
+
+</block>

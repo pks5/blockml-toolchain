@@ -1,0 +1,23 @@
+<!--
+  Test fixture — invalid ValueConstraint on Capability (BML_CONSTRAINT_TARGET_MISMATCH)
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation">
+
+  <idea>Constraint test — Min under capability (invalid)</idea>
+  <type>com.blockml.test.constraints.InvalidValueOnCapability</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <capabilities>
+    <render type="cap:Transformation">
+      <constraints>
+        <constraint:Min value="1" validation="validation:Error"/>
+      </constraints>
+    </render>
+  </capabilities>
+</block>

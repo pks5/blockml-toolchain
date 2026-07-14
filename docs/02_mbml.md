@@ -1764,19 +1764,26 @@ When the property `type` is an EnumType, `value` and instance attribute values m
 </textFont>
 ```
 
-**Constraints** describe semantic restrictions on a property — each entry is a Block instance extending `org.blockml.bml.core.Constraint`. The compiler binds the constraint generic to the property type automatically. Whether BlockML enforces a constraint depends on its optional `validation` property referencing `org.blockml.bml.core.Validation`:
+**Constraints** describe semantic restrictions — each entry is a Block instance extending `org.blockml.bml.core.Constraint`. The same `<constraints>` container is used on **Blocks**, **Properties**, **Aggregations**, **Associations**, and **Capabilities**. The embedding context determines the constraint target and automatic generic binding — no `target` property.
 
 ```xml
-<textSize type="Integer">
-  <value>9</value>
+<block>
   <constraints>
-    <constraint:Min value="1" validation="Error"/>
-    <constraint:Max value="72" validation="Error"/>
+    <constraint:RequiresMember name="width" validation="Error"/>
   </constraints>
-</textSize>
+  <properties>
+    <textSize type="Integer">
+      <value>9</value>
+      <constraints>
+        <constraint:Min value="1" validation="Error"/>
+        <constraint:Max value="72" validation="Error"/>
+      </constraints>
+    </textSize>
+  </properties>
+</block>
 ```
 
-Constraints without `validation` are metadata only — the BlockML validator ignores them. See `18_constraints_and_suggestions.md` for the full constraint and validation hierarchy, generic binding rules, and collection constraints.
+Whether BlockML enforces a constraint depends on its optional `validation` property referencing `org.blockml.bml.core.Validation`. Constraints without `validation` are metadata only — the validator still checks type, branch compatibility, and generic binding. Wrong branch for context → `BML_CONSTRAINT_TARGET_MISMATCH`. See `18_constraints_and_suggestions.md` for the full hierarchy (ValueConstraint vs StructuralConstraint branches).
 
 For struct properties, suggestions are typed Block instances:
 

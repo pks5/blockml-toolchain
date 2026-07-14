@@ -1,0 +1,23 @@
+<!--
+  Test fixture — constraint without validation (metadata only)
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:btype="org.blockml.bml.type">
+
+  <idea>Constraint test — metadata-only Min</idea>
+  <type>com.blockml.test.constraints.MetadataOnlyConstraint</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <properties>
+    <count type="btype:Integer">
+      <value>0</value>
+      <constraints>
+        <constraint:Min value="1"/>
+      </constraints>
+    </count>
+  </properties>
+</block>

@@ -1048,15 +1048,18 @@ At validate time the compiler substitutes each placeholder (`T`) with the concre
 
 Generic parameters (`T`) and `bml:Self` in type positions are type-expression references — resolved from the defining Block's `<genericTypes>` or effective Block type respectively.
 
-**Constraint generic binding** — `org.blockml.bml.core.Constraint` and its sub-types also declare `<genericTypes>`. Unlike StructType generics, constraint type arguments are **never authored** — the compiler binds `T` from the enclosing property's type context at validate time:
+**Constraint generic binding** — `org.blockml.bml.core.Constraint` branches declare `<genericTypes>`. Unlike StructType generics, type arguments are **never authored** — the compiler binds `T` from the `<constraints>` embedding context at validate time:
 
 ```text
-Scalar property (Integer)     → Min/Max: T = Integer
-Collection property (String[]) → MinItems/MaxItems: T = Text[]
-                               → MinLength/MaxLength: T = Text (element type)
+ValueConstraint on Property           → T = effective ValueType
+PropertyConstraint on Property        → T = effective PropertyDefinition
+AggregationConstraint on Aggregation  → T = effective AggregationDefinition
+AssociationConstraint on Association  → T = effective AssociationDefinition
+CapabilityConstraint on Capability    → T = effective CapabilityDefinition
+BlockConstraint on Block              → T = effective block definition type
 ```
 
-Binding rules per constraint FQN are defined in each constraint Block's `<documentation>`. See `18_constraints_and_suggestions.md`.
+Branch ↔ context mismatch → `BML_CONSTRAINT_TARGET_MISMATCH`. Binding rules per constraint FQN are defined in each constraint Block's `<documentation>`. See `18_constraints_and_suggestions.md`.
 
 **Constraint vs Validation** — `org.blockml.bml.core.Constraint` describes the condition; `org.blockml.bml.core.Validation` describes how BlockML enforces it. Every constraint carries an optional `validation` property referencing a Validation block. When omitted, the BlockML validator ignores value enforcement — the constraint remains metadata. Standard Validation blocks: `org.blockml.bml.validation.Error`, `Warning`, `Information`.
 
@@ -1179,6 +1182,7 @@ Branch is derived by walking the `baseType` chain until a branch marker is found
 | Used as aggregation/association `type` | any Block FQN | any Block FQN | any Block FQN | any Block FQN | — |
 | Used as property `type` | forbidden | yes (+ generic substitution) | forbidden | forbidden | forbidden |
 | Used as property `<constraints>` child | forbidden | forbidden | yes (Constraint sub-type) | forbidden | forbidden |
+| Used as Block / member `<constraints>` child | yes (BlockConstraint on Block; member branches on members) | — | yes | forbidden | forbidden |
 | Used as Constraint `validation` property | forbidden | forbidden | forbidden | yes (Validation sub-type) | forbidden |
 | Used as property `<suggestions>` child | yes (same type as property) | yes | forbidden | forbidden | forbidden |
 | Used as Capability input/output type | forbidden | yes (+ generic substitution) | forbidden | forbidden | forbidden |

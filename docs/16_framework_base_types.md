@@ -193,12 +193,14 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 org.blockml.bml.core.Block
   org.blockml.bml.core.Definition                    ← abstract; bml:xml placement allowed
     org.blockml.bml.definition.StructuralDefinition
-      org.blockml.bml.definition.SubBlockDefinition  ← shared <block> shape; definition, subBlocks; generic SubBlockDefinition<B>
-        org.blockml.bml.definition.RootBlockDefinition  ← root/embedded <block>; overrides definition, embeddedBlocks
-    org.blockml.bml.definition.PropertyDefinition
-    org.blockml.bml.definition.AggregationDefinition
-    org.blockml.bml.definition.AssociationDefinition
-    org.blockml.bml.definition.CapabilityDefinition
+      org.blockml.bml.definition.ConstrainableDefinition  ← abstract; <constraints> container
+        org.blockml.bml.definition.SubBlockDefinition
+          org.blockml.bml.definition.RootBlockDefinition
+        org.blockml.bml.definition.MemberDefinition
+          org.blockml.bml.definition.PropertyDefinition
+          org.blockml.bml.definition.AggregationDefinition
+          org.blockml.bml.definition.AssociationDefinition
+          org.blockml.bml.definition.CapabilityDefinition
     org.blockml.bml.definition.GenericTypeDefinition
     org.blockml.bml.definition.ChangeDefinition      ← one <change> in <changelog>
     org.blockml.bml.definition.DocumentationDefinition ← <documentation> on Definition elements
@@ -315,8 +317,10 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/core/Status.bml
      org/blockml/bml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
      org/blockml/bml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
-     org/blockml/bml/core/Constraint.bml
-     org/blockml/bml/constraint/Min.bml · Max.bml · MinLength.bml · MaxLength.bml · Pattern.bml · MinItems.bml · MaxItems.bml · ValuePresent.bml · …
+     org/blockml/bml/core/Constraint.bml · ValueConstraint.bml · StructuralConstraint.bml
+     org/blockml/bml/core/BlockConstraint.bml · MemberConstraint.bml · PropertyConstraint.bml
+     org/blockml/bml/core/AggregationConstraint.bml · AssociationConstraint.bml · CapabilityConstraint.bml
+     org/blockml/bml/constraint/Min.bml · Max.bml · … · RequiresMember.bml · MustBeReadOnly.bml · AllowedChildType.bml · NoSelfReference.bml · RequiresImplementation.bml
      org/blockml/bml/core/Validation.bml
      org/blockml/bml/validation/Error.bml · Warning.bml · Information.bml · …
      org/blockml/bml/core/
@@ -329,7 +333,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/service/Math.bml · Strings.bml · …
      org/blockml/bml/core/BlockLibrary.bml   ← bootstrap / _dependencies / _subLibraries / _blocks as Block references; _schemas as FilePathEntity
      org/blockml/bml/core/Definition.bml     ← meta-model base (WIP)
-     org/blockml/bml/definition/*.bml        ← SubBlockDefinition, RootBlockDefinition, PropertyDefinition, … (WIP)
+     org/blockml/bml/definition/*.bml        ← ConstrainableDefinition, SubBlockDefinition, RootBlockDefinition, … (WIP)
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/bml/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml

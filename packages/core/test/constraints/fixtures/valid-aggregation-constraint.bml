@@ -1,0 +1,22 @@
+<!--
+  Test fixture — valid AggregationConstraint
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation">
+
+  <idea>Constraint test — AllowedChildType on aggregation</idea>
+  <type>com.blockml.test.constraints.AggregationConstraint</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <aggregations>
+    <children type="core:Block[]">
+      <constraints>
+        <constraint:AllowedChildType type="core:Block" validation="validation:Error"/>
+      </constraints>
+    </children>
+  </aggregations>
+</block>

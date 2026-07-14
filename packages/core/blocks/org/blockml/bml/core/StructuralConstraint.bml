@@ -1,0 +1,31 @@
+<!--
+  BlockML Core — structural constraint branch
+
+  FQN: org.blockml.bml.core.StructuralConstraint
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core">
+
+  <idea>Constraint that validates a Block or member definition shape.</idea>
+
+  <documentation>Abstract branch for structural constraints on definition elements (Blocks and
+    members). Generic parameter T binds automatically to the effective definition type of the
+    embedding context at validate time. Separates definition-shape rules from value-level rules
+    (ValueConstraint).</documentation>
+
+  <name>StructuralConstraint</name>
+  <type>core:StructuralConstraint</type>
+  <baseType>core:Constraint</baseType>
+  <abstract />
+
+  <genericTypes>
+    <T baseType="core:Definition">
+      <documentation>Bound automatically from the &lt;constraints&gt; embedding context.</documentation>
+    </T>
+  </genericTypes>
+
+</block>

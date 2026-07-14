@@ -47,14 +47,14 @@
     <see block="def:SubBlockDefinition">
       Parent block shape — properties, aggregations, associations, capabilities containers.
     </see>
-    <see block="def:StructuralDefinition">
-      Parent type — shared documentation model for definition elements.
+    <see block="def:ConstrainableDefinition">
+      Shared constraints container for Block and member definitions.
     </see>
   </references>
 
   <name>MemberDefinition</name>
   <type>def:MemberDefinition</type>
-  <baseType>def:StructuralDefinition</baseType>
+  <baseType>def:ConstrainableDefinition</baseType>
   <abstract />
   <bml:xml>${ #this.name }</bml:xml>
 

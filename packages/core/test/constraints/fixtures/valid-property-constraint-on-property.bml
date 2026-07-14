@@ -1,0 +1,24 @@
+<!--
+  Test fixture — valid PropertyConstraint on property
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation"
+  xmlns:btype="org.blockml.bml.type">
+
+  <idea>Constraint test — MustBeReadOnly on property</idea>
+  <type>com.blockml.test.constraints.PropertyConstraintOnProperty</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <properties>
+    <token type="btype:Text" readOnly="true">
+      <value>fixed</value>
+      <constraints>
+        <constraint:MustBeReadOnly validation="validation:Error"/>
+      </constraints>
+    </token>
+  </properties>
+</block>

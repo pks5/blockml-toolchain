@@ -1,0 +1,27 @@
+<!--
+  Test fixture — valid CapabilityConstraint
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation"
+  xmlns:lang="org.blockml.bml.language">
+
+  <idea>Constraint test — RequiresImplementation on capability</idea>
+  <type>com.blockml.test.constraints.CapabilityConstraint</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <capabilities>
+    <render type="cap:Transformation">
+      <constraints>
+        <constraint:RequiresImplementation validation="validation:Error"/>
+      </constraints>
+      <implementation language="lang:PseudoCode">
+        <![CDATA[/* stub */]]>
+      </implementation>
+    </render>
+  </capabilities>
+</block>

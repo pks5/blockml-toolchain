@@ -23,7 +23,7 @@
     BOM namespace; unprefixed elements belong to the default namespace (empty string). The prefix
     itself is never stored. Member identity is (resolvedNamespace, localName). Maps to BOM
     PropertyDefinition (kind: "property") with typeFqn, value,
-    and optional constraints and suggestions. Property type must resolve to a
+    and optional constraints (via ConstrainableDefinition) and suggestions. Property type must resolve to a
     ValueType branch. Every Property behaves as Optional — it has a value or has no value; there
     is no null. Declaration order among properties is significant for StructType positional mapping
     and Capability parameter order.</documentation>

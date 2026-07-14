@@ -82,7 +82,7 @@
 
   <name>SubBlockDefinition</name>
   <type>def:SubBlockDefinition</type>
-  <baseType>def:StructuralDefinition</baseType>
+  <baseType>def:ConstrainableDefinition</baseType>
 
   <!-- Block definitions render as the root <block> element. -->
   <bml:xml>block</bml:xml>

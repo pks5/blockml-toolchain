@@ -1,0 +1,31 @@
+<!--
+  BlockML Core — value constraint branch
+
+  FQN: org.blockml.bml.core.ValueConstraint
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core">
+
+  <idea>Constraint that validates a concrete property value or ValueType content.</idea>
+
+  <documentation>Abstract branch for value-level constraints. Generic parameter T binds automatically
+    to the effective ValueType of the enclosing Property at validate time — authors never specify T
+    in BML. Valid only under a Property member's &lt;constraints&gt; container
+    (BML_CONSTRAINT_TARGET_MISMATCH otherwise). Examples: Min, Max, Pattern, ValuePresent.</documentation>
+
+  <name>ValueConstraint</name>
+  <type>core:ValueConstraint</type>
+  <baseType>core:Constraint</baseType>
+  <abstract />
+
+  <genericTypes>
+    <T baseType="core:ValueType">
+      <documentation>Bound automatically to the effective ValueType of the enclosing Property.</documentation>
+    </T>
+  </genericTypes>
+
+</block>

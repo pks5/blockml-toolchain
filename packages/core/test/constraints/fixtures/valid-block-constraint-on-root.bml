@@ -1,0 +1,25 @@
+<!--
+  Test fixture — valid BlockConstraint on root block
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation"
+  xmlns:btype="org.blockml.bml.type">
+
+  <idea>Constraint test — RequiresMember on block</idea>
+  <type>com.blockml.test.constraints.BlockConstraintOnRoot</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <constraints>
+    <constraint:RequiresMember name="width" validation="validation:Error"/>
+  </constraints>
+
+  <properties>
+    <width type="btype:Integer">
+      <value>10</value>
+    </width>
+  </properties>
+</block>

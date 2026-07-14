@@ -1,0 +1,24 @@
+<!--
+  Test fixture — Min violation with validation (BML_CONSTRAINT_VIOLATION)
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation"
+  xmlns:btype="org.blockml.bml.type">
+
+  <idea>Constraint test — Min violation</idea>
+  <type>com.blockml.test.constraints.ConstraintViolation</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <properties>
+    <count type="btype:Integer">
+      <value>0</value>
+      <constraints>
+        <constraint:Min value="1" validation="validation:Error"/>
+      </constraints>
+    </count>
+  </properties>
+</block>

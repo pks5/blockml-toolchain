@@ -1,5 +1,5 @@
 <!--
-  BlockML Core — constraint branch
+  BlockML Core — constraint branch root
 
   FQN: org.blockml.bml.core.Constraint
 -->
@@ -10,29 +10,29 @@
                       "
   xmlns:core="org.blockml.bml.core">
 
-  <idea>Semantic restriction or recommendation attached to a property.</idea>
+  <idea>Universal root for semantic restrictions on Blocks and their members.</idea>
 
-  <documentation>Abstract branch for property constraints. Each concrete constraint extends this
-    type and declares its own properties. Generic parameter T is bound automatically to the property
-    type (or element type for collection constraints) at validate time — authors never specify the
-    type argument in BML. Constraints describe the condition only. Whether BlockML enforces a
+  <documentation>Abstract universal root for all constraint types. Specialized by ValueConstraint
+    (property value rules) and StructuralConstraint (definition-shape rules on Blocks and members).
+    Every concrete constraint extends one of the branch types; the &lt;constraints&gt; embedding
+    context determines the target and automatic generic binding — authors never specify target or
+    type arguments in BML. Constraints describe the condition only. Whether BlockML enforces a
     constraint is controlled by the optional validation property, which references an
-    org.blockml.bml.core.Validation block. When validation is omitted, the BlockML validator ignores the
-    constraint — it remains metadata for renderers, editors, runtimes, and custom validators.</documentation>
+    org.blockml.bml.core.Validation block. When validation is omitted, validateConstraints() does not
+    enforce the rule — the constraint remains metadata for renderers, editors, runtimes, and custom
+    validators. The constraint instance itself is still validated (type, properties, generic
+    binding, branch compatibility).</documentation>
+
   <name>Constraint</name>
   <type>core:Constraint</type>
   <baseType>core:Block</baseType>
   <abstract />
 
-  <genericTypes>
-    <T baseType="core:ValueType" />
-  </genericTypes>
-
   <properties>
     <validation type="core:Validation">
       <documentation>How the BlockML validator should report a violation of this constraint.
-        When omitted, the validator ignores the constraint. The constraint remains part of the BOM
-        and is available to renderers, editors, runtimes, and custom validators.</documentation>
+        When omitted, the validator ignores the constraint rule — the instance remains part of the
+        BOM as semantic metadata.</documentation>
     </validation>
   </properties>
 

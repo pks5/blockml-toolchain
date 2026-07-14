@@ -217,7 +217,19 @@ Recognized forms: property access, attribute access, built-in/bean calls, capabi
 validateConstraints(bom, registry) → Diagnostic[]
 ```
 
-Semantic checks: constraint type compatibility, generic binding, validation references, and value enforcement (including `org.blockml.bml.constraint.ValuePresent` after full model resolution). Also: cross-instance references, capability linking, aggregation cardinality, expression type compatibility (via `parseExpression()`). Returns diagnostics only.
+Semantic checks in seven phases (see `18_constraints_and_suggestions.md`):
+
+```text
+1. Resolve constraint instance typeFqn
+2. Determine constraint branch via baseType chain
+3. Determine embedding context (Block / Property / Aggregation / Association / Capability)
+4. Check branch ↔ context compatibility (BML_CONSTRAINT_TARGET_MISMATCH)
+5. Bind generic T automatically from context
+6. Validate constraint instance (properties, validation reference)
+7. If validation is set and understood → evaluate the constraint rule
+```
+
+Also: cross-instance references, capability linking, aggregation cardinality, expression type compatibility (via `parseExpression()`). ValuePresent and inherited constraints use effective member resolution. Returns diagnostics only.
 
 The CLI typically calls these after parse. Renderers may call them during their pipeline.
 
@@ -537,12 +549,13 @@ BML_DUPLICATE_CONTRACT        — same contract Block referenced twice
 BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
 BML_CONSTRAINT_UNKNOWN        — constraint Block type not in TypeRegistry or not a Constraint sub-type
-BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with property or element type
+BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with bound target type
+BML_CONSTRAINT_TARGET_MISMATCH — constraint branch incompatible with embedding context
 BML_CONSTRAINT_VALUE_MISMATCH — constraint instance property value incompatible with bound generic T
 BML_VALIDATION_UNKNOWN        — validation Block type not in TypeRegistry or not a Validation sub-type
-BML_CONSTRAINT_VIOLATION      — property value fails a constraint with validation="Error" (Min, Max, MinLength, …)
-BML_CONSTRAINT_WARNING        — property value fails a constraint with validation:Warning
-BML_CONSTRAINT_INFORMATION    — property value fails a constraint with validation:Information
+BML_CONSTRAINT_VIOLATION      — constraint rule fails with validation="Error"
+BML_CONSTRAINT_WARNING        — constraint rule fails with validation:Warning
+BML_CONSTRAINT_INFORMATION    — constraint rule fails with validation:Information
 BML_SUGGESTION_TYPE_MISMATCH  — suggestion Block instance type incompatible with property type
 BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfied (type notation)
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block

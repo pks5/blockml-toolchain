@@ -1,0 +1,24 @@
+<!--
+  Test fixture — valid ValuePresent on Property
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation"
+  xmlns:btype="org.blockml.bml.type">
+
+  <idea>Constraint test — ValuePresent</idea>
+  <type>com.blockml.test.constraints.ValuePresentOnProperty</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <properties>
+    <label type="btype:Text">
+      <value>hello</value>
+      <constraints>
+        <constraint:ValuePresent validation="validation:Error"/>
+      </constraints>
+    </label>
+  </properties>
+</block>

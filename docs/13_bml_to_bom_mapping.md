@@ -423,33 +423,44 @@ Child  (xmlns:design="com.sap.ui5"): <design:width value="42"/>
 → same key (com.sap.ui5, width) → override merges
 ```
 
+Member containers map common fields to `MemberDefinitionBase` (including `constraints[]` on all member kinds):
+
+```text
+element localName          → name
+...
+<constraints>            → constraints[] (BlockInstance[], document order) — all member kinds
+```
+
 Property-specific:
 
 ```text
 type="…"                 → typeFqn (resolved)
 value="…"                → value (LiteralValue or ExpressionValue). Absent → Optional.empty.
-<constraints>            → constraints[] (BlockInstance[], document order)
-                           → Validator checks at stage [8] only after resolveEffectiveMembers()
-                             (baseType + contracts + local) and instance value binding;
-                             ValuePresent violations → BML_CONSTRAINT_VIOLATION
-<suggestions>            → suggestions[] (BlockInstance[], document order)
+<suggestions>            → suggestions[] (BlockInstance[], document order) — Property only
 ```
 
-**`<constraints>` mapping:**
+Block-level:
+
+```text
+<constraints>            → block.constraints[] (BlockInstance[], document order)
+```
+
+**`<constraints>` mapping (Block and all member kinds):**
 
 Each child element inside `<constraints>` is mapped as a `BlockInstance`. The element name resolves to a Block FQN via namespace prefix (same rules as composition children). Stage [8] validates:
 
 ```text
 instance.typeFqn baseType chain includes org.blockml.bml.core.Constraint
-generic T bound to property type (or element/collection type per constraint definition)
+constraint branch compatible with embedding context (BML_CONSTRAINT_TARGET_MISMATCH)
+generic T bound automatically from context (property ValueType, member definition type, or Block definition type)
 constraint instance member values match bound generic T
 validation reference (when present) resolves to org.blockml.bml.core.Validation sub-type
-property value satisfies constraint semantics only when validation is present and understood
+rule evaluated only when validation is present and understood
 ```
 
-Constraints without a `validation` reference are not value-enforced by the BlockML validator.
+Constraints without a `validation` reference are not rule-enforced by the BlockML validator. Target binding and resolved generics are not stored in the Canonical BOM.
 
-**`<suggestions>` mapping:**
+**`<suggestions>` mapping (Property only):**
 
 Each child element inside `<suggestions>` is mapped as a `BlockInstance`. Stage [8] validates:
 

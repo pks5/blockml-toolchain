@@ -1,0 +1,46 @@
+<!--
+  Test fixture — roundtrip: constraints on block and multiple member kinds
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:validation="org.blockml.bml.validation"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:lang="org.blockml.bml.language">
+
+  <idea>Constraint test — roundtrip preservation</idea>
+  <type>com.blockml.test.constraints.RoundtripConstraints</type>
+  <baseType>core:Block</baseType>
+  <version>1.0.0</version>
+
+  <constraints>
+    <constraint:RequiresMember name="width" validation="validation:Warning"/>
+  </constraints>
+
+  <properties>
+    <width type="btype:Integer">
+      <value>1</value>
+      <constraints>
+        <constraint:Min value="0" validation="validation:Error"/>
+      </constraints>
+    </width>
+  </properties>
+
+  <aggregations>
+    <children type="core:Block[]">
+      <constraints>
+        <constraint:AllowedChildType type="core:Block"/>
+      </constraints>
+    </children>
+  </aggregations>
+
+  <capabilities>
+    <ping type="cap:Inbound">
+      <constraints>
+        <constraint:RequiresImplementation/>
+      </constraints>
+    </ping>
+  </capabilities>
+</block>
