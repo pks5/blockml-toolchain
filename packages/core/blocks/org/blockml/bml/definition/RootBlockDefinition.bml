@@ -17,9 +17,9 @@
   <idea>The structural shape of root Block definition documents in BlockML.</idea>
 
   <documentation>Meta-model type for root block documents. Extends
-    org.blockml.bml.definition.SubBlockDefinition with the definition property and the
-    embeddedBlocks aggregation for inline Block documents under the root block of a BomDocument.
-    subBlocks is inherited from SubBlockDefinition.
+    org.blockml.bml.definition.SubBlockDefinition (and thus org.blockml.bml.definition.BlockDefinition)
+    with the definition property override and the embeddedBlocks aggregation for inline Block
+    documents under the root block of a BomDocument. subBlocks is inherited from SubBlockDefinition.
 
     The definition property (inherited from SubBlockDefinition, overridden here for root blocks
     and embedded blocks) selects which Definition meta-model type shapes this Block's definition
@@ -44,8 +44,11 @@
     <see file="02_mbml.md">
       Block definition authoring format and Sub-Block rules.
     </see>
-    <see block="def:SubBlockDefinition">
+    <see block="def:BlockDefinition">
       Shared block definition shape — identity, members, and metadata.
+    </see>
+    <see block="def:SubBlockDefinition">
+      Nested Sub-Block shape — definition default and subBlocks aggregation.
     </see>
   </references>
 
