@@ -1,6 +1,6 @@
 # Definition Blocks and `bml:xml` — Self-Describing BML
 
-version: 0.1.0 · **Draft / work in progress**
+version: 0.1.0 · **BML meta-model specified; parser/serializer WIP**
 
 ## Purpose of this Document
 
@@ -214,11 +214,11 @@ Block instances (composition)  element | attribute allowed — prefer attribute 
 Structured children            always elements (constraints, suggestions, composition, implementation, …)
 ```
 
-Example (from WIP `org.blockml.bml.core.Definition`):
+Example (from `org.blockml.bml.definition.StructuralDefinition` — `Documentation` Sub-Block shape):
 
 ```xml
-<documentation type="Text" bml:xml="element">
-  <documentation>The documentation of the definition.</documentation>
+<documentation bml:xml="element">
+  <documentation>Technical description prose for this definition element.</documentation>
 </documentation>
 ```
 

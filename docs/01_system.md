@@ -654,6 +654,7 @@ V1 does **not** model the full compiler in BML. V1 pulls into BML only what you 
 | Suggestions / customizer metadata | Runtime and bootstrap internals |
 | Built-in services used in expressions | Full replacement of existing docs |
 | Framework base types for validation and authoring | Self-hosting of the entire toolchain |
+| Definition meta-model (`org.blockml.bml.definition.*`, `core.Definition`) | Meta-driven `bml:xml` parser and BOM → XML serializer |
 
 Markdown remains **authoritative** in V1 for architecture, pipeline, runtime, CLI, implementation details, and design rationale.
 
@@ -680,7 +681,7 @@ Rules:
 ```text
 Pipeline · Stage · Validator · Diagnostic · RenderTarget
 BlockProcessor · RenderEngine · CliCommand
-org.blockml.bml.definition.* · bml:xml meta-serializer   ← see 19_definition_blocks_and_bml_xml.md
+bml:xml meta-serializer (not implemented)   ← BML meta-model specified in 19_definition_blocks_and_bml_xml.md
 ```
 
 During migration, content is classified as: stays prose · becomes BML · removed from Markdown (link only) · temporarily duplicated.
@@ -725,7 +726,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 16_framework_base_types.md — framework base types as BML (abstract, final, subTypes)
 17_type_system_bml.md  — ValueType, Language, Block hierarchy
 18_constraints_and_suggestions.md — property constraints and suggestions
-19_definition_blocks_and_bml_xml.md — Definition meta-model, bml:xml serialization (WIP)
+19_definition_blocks_and_bml_xml.md — Definition meta-model BML (specified); bml:xml meta-serializer (not implemented)
 09_mbom_properties.yml — MBOM native property SCAD mapping (render only)
 
 domains/machineblocks/runtimes/scad-lib/
