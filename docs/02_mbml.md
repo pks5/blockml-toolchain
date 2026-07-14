@@ -194,6 +194,148 @@ For inheritance-aware self-reference at validate time, `bml:Self` remains availa
 
 ---
 
+## Type References and Block Identity
+
+Every type reference in BML — element names on composition instances, `type` and `baseType` on definitions, member `type` attributes — may be written in one of four forms. All forms normalize to a canonical FQN during type resolution:
+
+```text
+1. Fully qualified name (FQN)     com.foo.Bar
+2. QName (xmlns prefix)           foo:Bar   with xmlns:foo="com.foo"
+3. Unqualified fallback           Integer   at a context-bound reference site (see table above)
+4. Sub-Block-relative name      MySubBlock or foo:Bar.MySubBlock
+```
+
+### Type references in attributes and element values
+
+The same rules apply inside definition metadata:
+
+```xml
+<myProperty type="Integer" />
+<myProperty type="org.blockml.bml.type.Integer" />
+<myProperty type="type:Integer" />
+```
+
+All three denote `org.blockml.bml.type.Integer` when `type` maps to `org.blockml.bml.type` and Property `type` is a context-bound site.
+
+General block references (`baseType`, aggregation `type`, composition tags outside specialized sites) require an explicit FQN or `xmlns:` prefix — no implicit fallback. Unresolvable reference → `BML_UNKNOWN_TYPE`. Ambiguous unqualified fallback → `BML_AMBIGUOUS_TYPE`. Undeclared QName prefix → `BML_UNKNOWN_NAMESPACE_PREFIX`.
+
+### Sub-Block type references
+
+Sub-Blocks are types declared inside a parent Block. They may be referenced unqualified, as FQN, or as QName:
+
+```text
+<MySubBlock … />                      →  com.foo.Bar.MySubBlock   (in com.foo.Bar context)
+<com.foo.Bar.MySubBlock … />          →  com.foo.Bar.MySubBlock
+<foo:Bar.MySubBlock … />              →  com.foo.Bar.MySubBlock   (xmlns:foo="com.foo")
+```
+
+The local part of a QName may include a relative Sub-Block path (`foo:Bar.MySubBlock`), not only the root Block name.
+
+### Root Block identity
+
+On the document root `<block>`:
+
+```text
+type     — required (BML_MISSING_BLOCK_TYPE)
+name     — optional; when omitted, effectiveName = lastSegment(resolve(type))
+         — when present, must equal lastSegment(resolve(type)) (BML_BLOCK_NAME_TYPE_MISMATCH)
+```
+
+```xml
+<!-- valid — name derived from type -->
+<block>
+  <type>foo:MyBlock</type>
+  …
+</block>
+
+<!-- valid — name matches resolved type -->
+<block>
+  <name>MyBlock</name>
+  <type>com.foo.MyBlock</type>
+  …
+</block>
+
+<!-- invalid -->
+<block>
+  <name>OtherBlock</name>
+  <type>foo:MyBlock</type>
+  …
+</block>
+```
+
+Formal rule when `name` is explicit: `name == lastSegment(resolve(type))`.
+
+**Design principle:** On root blocks, `type` is the canonical identity. `name` is an optional, redundant short form of the last type segment for readability.
+
+### Sub-Block identity
+
+Sub-Blocks use the opposite convention:
+
+```text
+name     — required (BML_MISSING_SUBBLOCK_NAME)
+type     — normally omitted; derived as resolve(parent.type) + "." + name
+         — when present, must equal that expected value (BML_SUBBLOCK_TYPE_MISMATCH)
+subBlocks — forbidden (BML_SUBBLOCKS_ON_SUBBLOCK)
+```
+
+Preferred form:
+
+```xml
+<block>
+  <name>MyBlock</name>
+  <type>foo:MyBlock</type>
+  <subBlocks>
+    <block>
+      <name>MySubBlock</name>
+      …
+    </block>
+  </subBlocks>
+</block>
+```
+
+→ Sub-Block type `com.foo.MyBlock.MySubBlock` (with `xmlns:foo="com.foo"`).
+
+Explicit Sub-Block type is allowed when it matches:
+
+```xml
+<block>
+  <name>MySubBlock</name>
+  <type>foo:MyBlock.MySubBlock</type>
+  …
+</block>
+```
+
+Invalid when the explicit type's parent segment does not match the enclosing root Block, even if the last segment equals `name`:
+
+```xml
+<!-- invalid — type belongs to a different parent Block -->
+<block>
+  <name>MySubBlock</name>
+  <type>foo:OtherBlock.MySubBlock</type>
+</block>
+```
+
+The validator checks the full expected type `resolve(parent.type) + "." + name`, not the last segment alone — otherwise a same-named Sub-Block of another parent could be accepted.
+
+Sub-Blocks are declared only on the **root** block of a document. A Sub-Block must not contain `<subBlocks>`.
+
+### Canonical derivation summary
+
+```text
+Root block:
+  canonicalType  = resolve(type)
+  effectiveName  = name ?? lastSegment(canonicalType)
+  if name present: name == lastSegment(canonicalType)
+
+Sub-Block:
+  effectiveName  = name
+  expectedType   = canonicalParentType + "." + name
+  canonicalType  = type ? resolve(type) : expectedType
+  canonicalType == expectedType
+```
+
+---
+
 ## Schema Validation
 
 Each document type has its own schema:
@@ -218,10 +360,13 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 ```text
 <idea>              — short semantic description: what this Block represents in meaning (first child element).
 <documentation>     — human-readable technical description of the Block (second child element).
-<name>              — short class name (PascalCase). See naming convention below.
-<type>              — FQN (e.g. com.martianmicro.anyclosure.Wall)
+<type>              — canonical Block type identity (required on root block). FQN, QName, or unqualified
+                      name when a context fallback applies. See § Type References and Block Identity.
+<name>              — short class name (PascalCase). Optional on root blocks — derived from the last
+                      segment of resolve(type) when omitted. When present, must match that segment.
+                      Required on Sub-Blocks. See naming convention below.
 <baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.bml.core.Block.
-<version>           — semantic version of this Block definition
+<version>           — semantic version of this Block definition (root block only)
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
 ```
 
@@ -2231,9 +2376,9 @@ Sub-Blocks are Block definitions nested inside a parent Block. They are analogou
 
 ### Format
 
-Sub-Blocks use the same format as the parent Block — all fields as child elements. The only difference: `<type>` is omitted. The FQN is resolved automatically from the parent Block's FQN + the Sub-Block's `<name>`.
+Sub-Blocks use the same format as the root Block — all fields as child elements. The preferred difference: `<type>` is omitted and the FQN is derived from the parent Block's type + the Sub-Block's `<name>`. An explicit `<type>` is allowed when it matches the derived value (see § Type References and Block Identity).
 
-`<baseType>` is required on Sub-Blocks, just like on the parent Block.
+`<baseType>` is required on Sub-Blocks, just like on the root Block. Sub-Blocks must not declare `<subBlocks>` (`BML_SUBBLOCKS_ON_SUBBLOCK`).
 
 ```xml
 <subBlocks>
@@ -2301,14 +2446,11 @@ Calibrator.bml — root Block:
 Calibrator.bml — Sub-Block _Utils:
   <visibility>protected</visibility>  ✓  matches _Utils
 
-Calibrator.bml — composition in same file:
-  <Base ... />                        ✓  public Sub-Block
-  <_Utils ... />                      ✓  protected — same Block
-  <__Helper ... />                    ✓  private — same Block only
-
-Calibrator.Base composition (nested Sub-Block):
-  <_Utils ... />                      ✓  protected — derived Sub-Block
-  <__Helper ... />                    ✗  BML_PRIVATE_SUBBLOCK_ACCESS — private
+Calibrator.bml — composition in same file (parent Block context):
+  <MySubBlock … />                    ✓  unqualified Sub-Block in parent context
+  <cal:Calibrator.Base … />           ✓  qualified Sub-Block reference
+  <_Utils … />                        ✓  protected — same Block
+  <__Helper … />                      ✓  private — same Block only
 
 OtherFile.bml:
   <cal:Calibrator.Base ... />         ✓  public Sub-Block, qualified ref
@@ -2334,28 +2476,28 @@ Sub-Block:   <name>StudDiameter</name>
 → FQN:       com.machineblocks.bml.calibration.Calibrator.StudDiameter
 ```
 
-`<type>` is never declared on Sub-Blocks — it is always derived. Sub-Blocks can be nested recursively:
-
-```text
-com.machineblocks.bml.calibration.Calibrator.Base.Strip
-```
+`<type>` is normally omitted on Sub-Blocks — it is derived as `resolve(parent.type) + "." + name`. When explicitly authored, it must match that expected value (`BML_SUBBLOCK_TYPE_MISMATCH`). Sub-Blocks are flat — only the root block of a document may declare `<subBlocks>`; Sub-Blocks must not nest other Sub-Blocks (`BML_SUBBLOCKS_ON_SUBBLOCK`).
 
 ### Composition Block References
 
-Composition child elements are **general block references** — they have **no implicit namespace**. Every composition instance tag requires an `xmlns:` prefix or a full FQN:
+Composition child element names are type references. Domain Blocks and ValueTypes require an `xmlns:` prefix or full FQN. **Sub-Blocks** declared on the enclosing root Block may additionally be referenced by **unqualified local name** within that Block's composition — resolved as `resolve(parent.type) + "." + localName`:
 
 ```xml
-<!-- correct -->
+<!-- correct — domain / library types -->
 <core:Step bml:id="step1" … />
 <cal:Calibrator.Base bml:id="base_stud" … />
-<cal:Calibrator.StudDiameter bml:id="samples_stud" … />
 
-<!-- invalid — bare PascalCase tag without prefix -->
+<!-- correct — unqualified Sub-Block in parent Block composition (Calibrator.bml) -->
 <Base bml:id="base_stud" … />
 <StudDiameter bml:id="samples_stud" … />
+
+<!-- invalid — unqualified domain Block outside Sub-Block context -->
+<Wall bml:id="wall" … />
 ```
 
-The parser resolves the element QName via the document's `xmlns:` declarations and stores the **resolved FQN** on the BOM node.
+Outside the declaring Block's composition context, Sub-Blocks require a qualified name (`RootBlock.SubBlock`), `xmlns:` prefix + qualified name, or full FQN → otherwise `BML_UNQUALIFIED_BLOCK_REFERENCE`.
+
+The parser resolves the element QName via the document's `xmlns:` declarations and Sub-Block context rules, storing the **resolved FQN** on the BOM node.
 
 **Aggregation type example (`BlockLibrary.bml`):**
 
@@ -2390,21 +2532,19 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 
 ### Sub-Block reference scope
 
-Sub-Blocks must always be referenced with an **`xmlns:` prefix** and a **qualified name** (`RootBlock.SubBlock`), or with the full FQN. Bare Sub-Block short names are never resolved — not even within the same BML file.
+Within the **declaring root Block's composition**, Sub-Blocks may be referenced by unqualified local name (`<Base … />`). Everywhere else they require a qualified name, `xmlns:` prefix + qualified name, or full FQN:
 
 ```text
 Same file (Calibrator.bml defines Sub-Block Base):
-  <cal:Calibrator.Base bml:id="base_stud" … />     ✓
-  <Base bml:id="base_stud" … />                    ✗  BML_UNQUALIFIED_BLOCK_REFERENCE
+  <Base bml:id="base_stud" … />                    ✓  parent Block context
+  <cal:Calibrator.Base bml:id="base_stud" … />     ✓  qualified
+  com.machineblocks…Calibrator.Base on element     ✓  full FQN
 
 Other file (Set.bml composes Calibrator internals):
   <cal:Calibrator.Base … />                        ✓  parent Block namespace + qualified name
-  <cal:Calibrator.Base.Strip … />                  ✓  nested Sub-Block
-  <Base … />                                       ✗  BML_UNQUALIFIED_BLOCK_REFERENCE
+  <Base … />                                       ✗  BML_UNQUALIFIED_BLOCK_REFERENCE (outside parent context)
   xmlns + full FQN on element                      ✓  com.machineblocks.bml.calibration.Calibrator.Base
 ```
-
-**Rule:** Sub-Blocks are always referenced with the **parent Block's namespace prefix** and a **qualified name** (`RootBlock.SubBlock`), or with the full FQN.
 
 Accepted qualified forms:
 
@@ -3187,6 +3327,13 @@ There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping 
 
 ```text
 baseType missing              → BML_MISSING_BASE_TYPE (no default)
+root block without type       → BML_MISSING_BLOCK_TYPE
+root name ≠ last type segment → BML_BLOCK_NAME_TYPE_MISMATCH
+Sub-Block without name        → BML_MISSING_SUBBLOCK_NAME
+Sub-Block explicit type mismatch → BML_SUBBLOCK_TYPE_MISMATCH
+Sub-Block declares subBlocks  → BML_SUBBLOCKS_ON_SUBBLOCK
+unresolvable type reference   → BML_UNKNOWN_TYPE
+ambiguous unqualified fallback → BML_AMBIGUOUS_TYPE
 <aggregations> missing        → no parser action; inherited members resolved at validate (e.g. _presets, _parts from MachineBlocks base types)
 standalone <composition>      → BML_STANDALONE_COMPOSITION (validation error)
 <aggregation> without type on new declaration       → BML_MISSING_AGGREGATION_TYPE

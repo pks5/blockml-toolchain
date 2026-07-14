@@ -1531,22 +1531,26 @@ Sub-Block: com.machineblocks.bml.calibration.Calibrator.Base
            com.machineblocks.bml.calibration.Calibrator.StudDiameter
 ```
 
-The Sub-Block `<type>` is never declared — it is always derived from the parent FQN + `<name>`. Sub-Blocks can be nested recursively:
+The Sub-Block `<type>` is normally omitted — it is derived as `resolve(parent.type) + "." + name`. An explicit `<type>` must match that expected value (`BML_SUBBLOCK_TYPE_MISMATCH`). Sub-Blocks are declared only on the root block of a document; a Sub-Block must not contain `<subBlocks>` (`BML_SUBBLOCKS_ON_SUBBLOCK`).
 
 ```text
-com.machineblocks.bml.calibration.Calibrator.Base.Strip
+Parent:    com.machineblocks.bml.calibration.Calibrator
+Sub-Block: com.machineblocks.bml.calibration.Calibrator.Base
+           com.machineblocks.bml.calibration.Calibrator.StudDiameter
 ```
+
+Root blocks require `<type>` (`BML_MISSING_BLOCK_TYPE`). `<name>` is optional on root blocks — when omitted, `effectiveName = lastSegment(resolve(type))`; when present, it must match that segment (`BML_BLOCK_NAME_TYPE_MISMATCH`). On Sub-Blocks, `<name>` is required (`BML_MISSING_SUBBLOCK_NAME`).
 
 ### Short-Name Reference
 
-Within the parent Block's own Composition, Sub-Blocks are referenced by short name without namespace prefix — **same BML file only**:
+Within the parent Block's own Composition, Sub-Blocks may be referenced by unqualified local name — **same BML file, parent Block context only**:
 
 ```xml
 <Base bml:id="base_stud" ... />
 <StudDiameter bml:id="samples_stud" ... />
 ```
 
-Sub-Blocks must always be referenced with the parent Block's namespace and a qualified name (`RootBlock.SubBlock`), full FQN, or prefixed qualified form (`cal:Calibrator.Base`). Bare Sub-Block short names are never resolved → `BML_UNQUALIFIED_BLOCK_REFERENCE`.
+Outside that context, Sub-Blocks require the parent Block's namespace and a qualified name (`RootBlock.SubBlock`), full FQN, or prefixed qualified form (`cal:Calibrator.Base`). Bare Sub-Block short names outside parent context → `BML_UNQUALIFIED_BLOCK_REFERENCE`.
 
 If a Sub-Block shares the root Block's `<name>`, bare short tags are ambiguous → `BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED`; use `Calibrator.Calibrator`, `cal:Calibrator.Calibrator`, or the full FQN.
 

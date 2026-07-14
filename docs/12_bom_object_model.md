@@ -207,8 +207,8 @@ interface BlockDefinition {
   members: MemberDefinition[]
 
   /**
-   * Sub-Block definitions nested in this block.
-   * Sub-Blocks are full BlockDefinitions (recursive structure).
+   * Sub-Block definitions on the root block of this BomDocument.
+   * Sub-Blocks are full BlockDefinitions but must not declare their own subBlocks.
    */
   subBlocks: BlockDefinition[]
 
@@ -234,18 +234,19 @@ interface GenericType {
 
 ### Sub-Block FQN Derivation
 
-Sub-Blocks omit `<type>` in BML. The parser derives:
+Sub-Blocks omit `<type>` in BML by convention. The parser derives:
 
 ```text
 Parent FQN:  com.machineblocks.bml.calibration.Calibrator
 Sub-Block:   <name>Base</name>
 → FQN:       com.machineblocks.bml.calibration.Calibrator.Base
 
-Nested:      Calibrator.Base.Strip
-→ FQN:       com.machineblocks.bml.calibration.Calibrator.Base.Strip
+expectedType = resolve(parent.type) + "." + subBlock.name
+canonicalType = subBlock.type ? resolve(subBlock.type) : expectedType
+→ must satisfy canonicalType == expectedType (BML_SUBBLOCK_TYPE_MISMATCH)
 ```
 
-Sub-Blocks are **part of the same `BomDocument`** as their parent root block.
+Sub-Blocks are **part of the same `BomDocument`** as their parent root block. Only the root block may declare `subBlocks[]`.
 
 ---
 
@@ -1251,6 +1252,12 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 
 ```text
 BML_MISSING_BASE_TYPE         — baseType absent on BlockDefinition
+BML_MISSING_BLOCK_TYPE        — root block lacks required type
+BML_BLOCK_NAME_TYPE_MISMATCH  — root block name ≠ last segment of resolve(type)
+BML_MISSING_SUBBLOCK_NAME     — Sub-Block lacks required name
+BML_SUBBLOCK_TYPE_MISMATCH    — explicit Sub-Block type ≠ resolve(parent.type) + "." + name
+BML_SUBBLOCKS_ON_SUBBLOCK     — Sub-Block declares subBlocks (root block only)
+BML_AMBIGUOUS_TYPE            — unqualified type name resolves to multiple candidates
 BML_MISSING_IDEA              — root <block> lacks <idea> (warning V1)
 BML_MISSING_DOCUMENTATION     — root <block> lacks <documentation> (warning V1)
 BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version

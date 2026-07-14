@@ -28,14 +28,27 @@
     inherited from org.blockml.bml.definition.StructuralDefinition.
     Every definition element is addressable via its canonical structural path within the Block FQN
     (for example com.foo.Bar.properties.width). Member declaration order in BML is preserved in
-    BOM and is significant for StructType positional mapping and render targets.</documentation>
+    BOM and is significant for StructType positional mapping and render targets.
+
+    Block identity conventions (see 02_mbml.md — Type References and Block Identity):
+    • Root block: type is the canonical identity (required). name is optional — when omitted,
+      effectiveName = lastSegment(resolve(type)); when present, name must equal that segment
+      (BML_BLOCK_NAME_TYPE_MISMATCH).
+    • Sub-Block: name is the local identity (required). type is normally omitted and derived as
+      canonicalParentType + "." + name. An explicit type must match that expected value
+      (BML_SUBBLOCK_TYPE_MISMATCH). Sub-Blocks must not declare subBlocks
+      (BML_SUBBLOCKS_ON_SUBBLOCK).
+    • Type references (type, baseType, composition tags, member type attributes) accept FQN,
+      xmlns QName, context-bound unqualified fallback, or Sub-Block-relative names — all normalized
+      to a canonical FQN during resolution (BML_UNKNOWN_TYPE, BML_AMBIGUOUS_TYPE,
+      BML_UNKNOWN_NAMESPACE_PREFIX).</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
       BlockDefinition BOM structure.
     </see>
     <see file="02_mbml.md">
-      Block definition authoring format.
+      Block definition authoring format and type reference rules.
     </see>
     <see file="16_framework_base_types.md">
       Definition Addressing and genericTypes aggregation.
@@ -80,11 +93,17 @@
         Example titles always use this effective language.</documentation>
     </language>
     <name type="Text">
-      <documentation>Short class name (PascalCase). Required on every Block definition.</documentation>
+      <documentation>Short class name (PascalCase). Required on Sub-Blocks. Optional on root blocks —
+        when omitted, derived as lastSegment(resolve(type)). When present on a root block, must
+        equal lastSegment(resolve(type)) (BML_BLOCK_NAME_TYPE_MISMATCH). Format: [A-Z][a-zA-Z0-9]*
+        (BML_INVALID_BLOCK_NAME).</documentation>
     </name>
     <type type="FullyQualifiedName(core:Block)">
-      <documentation>Globally unique FQN. Required on root blocks (authored in BML). On Sub-Blocks
-        derived as parentFqn + "." + name when omitted in source.</documentation>
+      <documentation>Canonical Block type identity. Required on root blocks (BML_MISSING_BLOCK_TYPE).
+        Authored as FQN, xmlns QName, or unqualified name when a context fallback namespace applies.
+        Optional on Sub-Blocks — when omitted, derived as resolve(parent.type) + "." + name; when
+        present, must equal that expected value (BML_SUBBLOCK_TYPE_MISMATCH). Sub-Block QNames may
+        use a relative path in the local part (foo:Bar.MySubBlock).</documentation>
     </type>
     <baseType type="FullyQualifiedName(core:Block)">
       <documentation>Parent type FQN. Required on all definitions except the sole inheritance root.
@@ -137,8 +156,11 @@
         transformation). Mapped to members[] in XML document order.</documentation>
     </capabilities>
     <subBlocks type="def:BlockDefinition[]">
-      <documentation>Nested Sub-Block definitions within the same BomDocument. Each Sub-Block is
-        a full BlockDefinition; FQN is derived from the parent chain when type is omitted.</documentation>
+      <documentation>Sub-Block definitions nested under the root block of this BomDocument (root block
+        only — forbidden on Sub-Blocks, BML_SUBBLOCKS_ON_SUBBLOCK). Each Sub-Block is a full
+        BlockDefinition except it must not declare its own subBlocks. Canonical type is derived from
+        parent type + Sub-Block name when type is omitted; explicit type must match
+        (BML_SUBBLOCK_TYPE_MISMATCH). Sub-Block name is required (BML_MISSING_SUBBLOCK_NAME).</documentation>
     </subBlocks>
   </aggregations>
 </block>

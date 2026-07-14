@@ -491,8 +491,14 @@ Examples:
 
 ```text
 BML_UNKNOWN_TYPE              — referenced block type not found
+BML_AMBIGUOUS_TYPE            — unqualified type name resolves to multiple candidates
 BML_INVALID_PROPERTY          — property value does not match declared type
 BML_MISSING_BASE_TYPE         — baseType not declared on a Block definition
+BML_MISSING_BLOCK_TYPE        — root block lacks required type
+BML_BLOCK_NAME_TYPE_MISMATCH  — root block name ≠ last segment of resolve(type)
+BML_MISSING_SUBBLOCK_NAME     — Sub-Block lacks required name
+BML_SUBBLOCK_TYPE_MISMATCH    — explicit Sub-Block type ≠ resolve(parent.type) + "." + name
+BML_SUBBLOCKS_ON_SUBBLOCK     — Sub-Block declares subBlocks (root block only)
 BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
