@@ -22,10 +22,11 @@
     namespace — for example ui5:width resolves via xmlns:ui5 to the canonical namespace stored in
     BOM namespace; unprefixed elements belong to the default namespace (empty string). The prefix
     itself is never stored. Member identity is (resolvedNamespace, localName). Maps to BOM
-    PropertyDefinition (kind: "property") with typeFqn, value,
+    PropertyDefinition (kind: "property") with typeFqn, value, optional group,
     and optional constraints (via ConstrainableDefinition) and suggestions. Property type must resolve to a
-    ValueType branch. Scalar member fields (type, value) follow org.blockml.bml.definition.MemberDefinition
-    placement rules — element preferred on definitions, attribute preferred on Block instances. Every
+    ValueType branch. Scalar member fields (type, value, group) follow
+    org.blockml.bml.definition.MemberDefinition placement rules — element preferred on definitions,
+    attribute preferred on Block instances. Structured suggestions remain a child element. Every
     Property behaves as Optional — it has a value or has no value; there
     is no null. Declaration order among properties is significant for StructType positional mapping
     and Capability parameter order.</documentation>
@@ -39,6 +40,9 @@
     </see>
     <see block="core:ValueType">
       Required branch for property payload types.
+    </see>
+    <see file="18_constraints_and_suggestions.md">
+      Suggestions authoring rules and BML_SUGGESTIONS_ON_ENUM.
     </see>
   </references>
 
@@ -60,5 +64,23 @@
         preferred (&lt;value&gt;…&lt;/value&gt;); on Block instances, attribute form is preferred
         (value="…" on the property element). Absent value means Optional.empty — not null.</documentation>
     </value>
+    <group type="Text" bml:xml="element|attribute">
+      <documentation>Optional editor grouping hint — organizes properties in UI display only; no
+        compiler or validator effect. On definitions, element form is preferred
+        (&lt;group&gt;Dimensions&lt;/group&gt;); on Block instances, attribute form is preferred
+        (group="Dimensions" on the property element). Maps to BOM PropertyDefinition.group.</documentation>
+    </group>
   </properties>
+
+  <aggregations>
+    <suggestions type="core:ValueType[]" bml:xml="element">
+      <documentation>Property-only metadata — suggested values for editors and renderers. Each child
+        element is a Block instance of the same type as this property's typeFqn (Stage [8] validates
+        compatibility — BML_SUGGESTION_TYPE_MISMATCH). Document order preserved in BOM
+        suggestions[]. Must not appear on properties typed with an EnumType (BML_SUGGESTIONS_ON_ENUM).
+        Suggestions are not enforced — authors may enter any compatible value. Always rendered as a
+        suggestions child element; children use their declared type tag (same pattern as composition
+        instances).</documentation>
+    </suggestions>
+  </aggregations>
 </block>

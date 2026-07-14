@@ -16,27 +16,88 @@
   <idea>An owned collection member that may hold composition children.</idea>
 
   <documentation>Describes a Block member representing composition ownership — a typed collection
-    that may contain nested Block instances via a composition child. Rendered as a child element
-    inside the aggregations container; the XML element name is the aggregation name
+    that may contain nested Block instances via a nested composition element. Rendered as a child
+    element inside the aggregations container; the XML element name is the aggregation name
     (bml:xml="${ #this.name }"). An optional XML prefix on the element name supplies the member
     namespace — resolved via xmlns to BOM namespace; unprefixed elements use the default namespace
     (empty string). Member identity is (resolvedNamespace, localName). Maps to BOM
-    AggregationDefinition (kind: "aggregation") with typeFqn,
-    cardinality (from type multiplicity), optional defaultAggregation flag, nested composition
-    template, and optional service binding (beanName, scope). Any Block FQN is valid as aggregation
-    type — not limited to ValueTypes. Bare top-level composition is sugar for the single default
-    aggregation.</documentation>
+    AggregationDefinition (kind: "aggregation") with typeFqn, cardinality (from type multiplicity),
+    optional default flag, and optional nested composition template. Any Block FQN is valid as
+    aggregation type — not limited to ValueTypes. When exactly one aggregation on a Block is marked
+    default="true", bare top-level composition on the Block definition is sugar for filling that
+    aggregation. Scalar member fields (type, default) follow org.blockml.bml.definition.MemberDefinition
+    placement rules — element preferred on definitions, attribute preferred on Block instances.
+    Structured composition remains a child element. Service binding on composition children uses
+    bml:bean and bml:scope on Block instances — not aggregation member fields.</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
-      AggregationDefinition BOM structure.
+      AggregationDefinition BOM structure and CompositionTemplate.
     </see>
     <see file="02_mbml.md">
-      Aggregations and composition authoring rules.
+      Aggregations, composition placement, and default aggregation rules.
+    </see>
+    <see block="core:Block">
+      Required branch for aggregation payload types.
     </see>
   </references>
 
   <name>AggregationDefinition</name>
   <type>def:AggregationDefinition</type>
   <baseType>def:MemberDefinition</baseType>
+
+  <properties>
+    <type type="FullyQualifiedName(core:Block)" bml:xml="element|attribute">
+      <documentation>FQN of the child Block type (TypeExpression). Multiplicity in the type string
+        defines cardinality — e.g. core:Block[], core:Block[0..n], core:Block[1..1]. Non-Block FQNs
+        are invalid. Required on new aggregation declarations; may be omitted when filling an
+        inherited aggregation (partial override — type inherited from baseType chain). On
+        definitions, element form is preferred (&lt;type&gt;core:Block[]&lt;/type&gt;); on Block
+        instances, attribute form is preferred (type="core:Block[]" on the aggregation element).</documentation>
+    </type>
+    <default bml:xml="element|attribute">
+      <value>false</value>
+      <documentation>When true, marks this aggregation as the primary/default composition target for
+        the enclosing Block — tooling and render targets may use it when composition placement is
+        ambiguous. At most one default="true" aggregation per Block. On definitions, element form is
+        preferred (&lt;default&gt;true&lt;/default&gt;); on Block instances, attribute form is
+        preferred (default="true" on the aggregation element). Maps to BOM
+        AggregationDefinition.default. Default false.</documentation>
+    </default>
+    <composition type="Composition" bml:xml="element">
+      <documentation>Optional nested composition template filling this aggregation on the Block
+        definition. Rendered as a composition child element inside the aggregation member element.
+        Maps to BOM AggregationDefinition.composition (CompositionTemplate). May be omitted on
+        override declarations that only refine metadata. On Block instances, aggregation content is
+        opened inline without a composition wrapper — see docs/02_mbml.md — Composition.</documentation>
+    </composition>
+  </properties>
+
+  <subBlocks>
+    <block>
+      <idea>Composition template nested inside an aggregation member on a Block definition.</idea>
+
+      <documentation>Describes the composition element on an aggregation member declaration.
+        Rendered as composition with optional bml:exportIds and bml:with directives and a tree of
+        composition child nodes (Block instances and bml:container virtual containers). Maps to BOM
+        CompositionTemplate { aggregationName (from enclosing aggregation member name), exportIds,
+        directives, children }. Standalone composition outside an aggregation member element is
+        invalid (BML_STANDALONE_COMPOSITION). Declared as the composition property on
+        org.blockml.bml.definition.AggregationDefinition.</documentation>
+
+      <name>Composition</name>
+      <baseType>core:Entity</baseType>
+      <bml:xml>composition</bml:xml>
+
+      <properties>
+        <exportIds bml:xml="attribute">
+          <value>false</value>
+          <documentation>When true, children with explicit static bml:id values are exportable via
+            {EnclosingBlockFQN}::{id} from other documents. Authored as bml:exportIds="true" on the
+            composition element. Maps to BOM CompositionTemplate.exportIds. Default false.</documentation>
+        </exportIds>
+      </properties>
+    </block>
+  </subBlocks>
+
 </block>

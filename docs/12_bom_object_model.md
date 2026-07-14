@@ -517,7 +517,7 @@ interface AggregationDefinition extends MemberDefinitionBase {
   kind: "aggregation"
   typeFqn: string
   cardinality: "0..1" | "0..n" | "1..1" | "1..n"
-  defaultAggregation?: boolean
+  default?: boolean
   /** Nested composition filling this aggregation (may be omitted on override declarations) */
   composition?: CompositionTemplate
 }

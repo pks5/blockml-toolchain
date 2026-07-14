@@ -665,8 +665,9 @@ Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against
 
 ```text
 <aggregations>
-  <_parts type="…">                        → AggregationDefinition (+ typeFqn)
-    <composition bml:exportIds="true">     → AggregationDefinition.composition OR CompositionTemplate
+  <_parts type="…">                        → AggregationDefinition (+ typeFqn, cardinality from multiplicity)
+    default="true"                           → AggregationDefinition.default (boolean; at most one per Block)
+    <composition bml:exportIds="true">     → AggregationDefinition.composition (CompositionTemplate)
       …children…
     </composition>
   </_parts>
