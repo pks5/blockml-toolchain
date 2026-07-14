@@ -50,7 +50,7 @@
     <documentation type="Documentation" bml:xml="element">
       <documentation>Technical documentation prose for this definition element.</documentation>
     </documentation>
-    <abstract type="Boolean" bml:xml="element|attribute">
+    <abstract type="Boolean" bml:xml="element">
       <value>false</value>
       <documentation>When true on a block definition, the type is abstract — not usable as a composition
         instance type.
@@ -68,10 +68,11 @@
         - Association: must set type
         - Capability: must set type and provide implementation binding
 
-        Default false. On block definitions rendered as a child element; on members as an optional
-        attribute.</documentation>
+        Default false. On block definitions rendered as a child element (&lt;abstract/&gt; or
+        &lt;abstract&gt;false&lt;/abstract&gt;). On member declarations rendered as an optional
+        attribute or child element — see org.blockml.bml.definition.MemberDefinition.</documentation>
     </abstract>
-    <final type="Boolean" bml:xml="element|attribute">
+    <final type="Boolean" bml:xml="element">
       <value>false</value>
       <documentation>When true on a block definition, the type is final — cannot be used as baseType on
         other definitions.
@@ -81,10 +82,11 @@
         inherited effectively and cannot be lifted by setting final="false" on a descendant.
 
         An abstract member must not be final, because it would become impossible to implement it
-        (abstract="true" && final="true" is invalid).
+        (abstract="true" &amp;&amp; final="true" is invalid).
 
-        Default false. On block definitions rendered as a child element; on members as an optional
-        attribute.</documentation>
+        Default false. On block definitions rendered as a child element (&lt;final/&gt; or
+        &lt;final&gt;false&lt;/final&gt;). On member declarations rendered as an optional attribute
+        or child element — see org.blockml.bml.definition.MemberDefinition.</documentation>
     </final>
   </properties>
 

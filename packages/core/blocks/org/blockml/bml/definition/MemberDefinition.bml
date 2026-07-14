@@ -59,7 +59,21 @@
   <bml:xml>${ #this.name }</bml:xml>
 
   <properties>
-    <override type="Boolean" bml:xml="attribute">
+    <abstract bml:xml="element|attribute">
+      <value>false</value>
+      <documentation>Overrides org.blockml.bml.definition.StructuralDefinition.abstract for member
+        declarations. Rendered as optional attribute (abstract="true") or child element
+        (&lt;abstract/&gt;). Semantics inherited from StructuralDefinition — member abstract marks
+        an incomplete declaration that must be implemented by a descendant.</documentation>
+    </abstract>
+    <final bml:xml="element|attribute">
+      <value>false</value>
+      <documentation>Overrides org.blockml.bml.definition.StructuralDefinition.final for member
+        declarations. Rendered as optional attribute (final="true") or child element (&lt;final/&gt;).
+        Semantics inherited from StructuralDefinition — final members cannot be redeclared in child
+        Blocks.</documentation>
+    </final>
+    <override bml:xml="attribute">
       <value>false</value>
       <documentation>When true, this member declaration overrides an inherited member of the same
         identity (namespace + localName). override is a local declaration statement and is not
