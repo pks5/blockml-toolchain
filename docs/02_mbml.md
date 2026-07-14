@@ -378,7 +378,7 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 <name>              — short class name (PascalCase). Optional on root blocks — derived from the last
                       segment of resolve(type) when omitted. When present, must match that segment.
                       Required on Sub-Blocks. See naming convention below.
-<baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.bml.core.Block.
+<baseType>          — FQN of the parent type. Mandatory — no default. Empty `<baseType />` only on org.blockml.bml.core.Block.
 <version>           — semantic version of this Block definition (root block only)
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
 ```
@@ -623,7 +623,7 @@ url="https://blockml.org/schemas/…"  — external URL
 
 `block` accepts any Block or Definition reference via xmlns prefix. Resolved to FQN at parse time — same rules as `type` and `baseType`. Unknown FQN at validate time → `BML_UNKNOWN_TYPE` (error). Omitted target attribute → `BML_REFERENCE_MISSING_TARGET` (error). More than one target attribute → `BML_REFERENCE_AMBIGUOUS_TARGET` (error).
 
-Maps to BOM `DocumentationReference { block?, file?, url?, context }`. Meta-model: `org.blockml.bml.definition.ReferenceDefinition` on `org.blockml.bml.core.Definition.references` — see `16_framework_base_types.md` — Definition Branch.
+Maps to BOM `DocumentationReference { block?, file?, url?, context }`. Meta-model: inline Sub-Block `StructuralDefinition.Reference` on `StructuralDefinition.references` — see `16_framework_base_types.md` — Definition Branch.
 
 Example with documentation extensions on a member:
 
@@ -809,7 +809,7 @@ Omitted <subTypes>            — inherit effective subTypes from baseType chain
 Explicit <subTypes>…          — override (enable or restrict Sub-Blocks)
 Explicit empty <subTypes/>    — override: forbid Sub-Blocks even when parent allowed them
 Omitted other modifiers       — inherit from baseType where applicable (validator walks chain)
-org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritance root); effective subTypes []
+org.blockml.bml.core.Block        — sole type with empty <baseType /> (inheritance root); effective subTypes []
 ```
 
 **Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous:
@@ -2249,7 +2249,7 @@ Declares how a block type or member renders to canonical BML XML. Allowed only o
 <!-- Member element from instance name -->
 <bml:xml>${ #this.name }</bml:xml>
 
-<!-- Documentation aggregation on Definition branch (DocumentationDefinition) -->
+<!-- Documentation element — StructuralDefinition.Documentation Sub-Block shape -->
 <documentation language="German">…</documentation>
 ```
 

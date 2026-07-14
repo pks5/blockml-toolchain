@@ -6,7 +6,7 @@ version: 0.1.0 · **Draft / work in progress**
 
 This document specifies the **meta-model** for BlockML self-description: how BlockML describes its own block structure in BML, and how the **`bml:xml`** directive declares the canonical XML rendering of any block type.
 
-The BML sources under `packages/core/blocks/org/blockml/bml/core/Definition.bml` and `packages/core/blocks/org/blockml/bml/definition/*` are **not yet complete**. This document captures the **design intent** so parser, validator, and serializer work can proceed against a stable concept.
+The BML sources under `packages/core/blocks/org/blockml/bml/core/Definition.bml` and `packages/core/blocks/org/blockml/bml/definition/*` describe the **meta-model in progress**. Block and member Definition blocks are largely specified; `org.blockml.bml.core.Definition` and documentation Sub-Block extraction remain WIP. This document captures the **design intent** so parser, validator, and serializer work can proceed against a stable concept.
 
 For framework base types see `16_framework_base_types.md`.
 For BML authoring syntax see `02_mbml.md`.
@@ -49,6 +49,7 @@ Definition blocks live in the `org.blockml.bml.definition.*` package branch. The
 org.blockml.bml.core.Block              — universal root (composable, ValueType, Language, …)
   org.blockml.bml.core.Definition       — abstract; meta-model for block structure
     org.blockml.bml.definition.StructuralDefinition
+      inline Sub-Blocks (StructuralDefinition.bml): Documentation · Change · Example · Reference
       org.blockml.bml.definition.ConstrainableDefinition
         org.blockml.bml.definition.BlockDefinition
           org.blockml.bml.definition.SubBlockDefinition
@@ -74,6 +75,7 @@ Each member kind in the block grammar has a corresponding Definition block. Exam
 
 | Definition block | Describes |
 |---|---|
+| `org.blockml.bml.definition.StructuralDefinition` | Shared documentation model — `since`, `status`, `documentation`, `abstract`, `final`, `changelog`, `examples`, `references`; inline Sub-Blocks Documentation · Change · Example · Reference |
 | `org.blockml.bml.definition.BlockDefinition` | Shared `<block>` document shape (identity, members, metadata, member containers) |
 | `org.blockml.bml.definition.SubBlockDefinition` | Nested Sub-Block documents — adds `definition` (default SubBlockDefinition), `subBlocks` |
 | `org.blockml.bml.definition.RootBlockDefinition` | Root/embedded `<block>` document — overrides `definition` (default RootBlockDefinition), adds `embeddedBlocks` |
@@ -301,8 +303,9 @@ Until the meta-serializer exists:
 
 | Item | Status |
 |---|---|
-| `org.blockml.bml.core.Definition` BML | WIP — properties incomplete |
-| `org.blockml.bml.definition.*` BML set | WIP — member surfaces incomplete |
+| `org.blockml.bml.core.Definition` BML | WIP — minimal shell |
+| `org.blockml.bml.definition.StructuralDefinition` BML | Done — documentation Sub-Blocks inline |
+| `org.blockml.bml.definition.*` member surfaces | Done — Property, Aggregation, Association, Capability, MemberDefinition |
 | `bml:xml` in parser / BOM model | Not implemented |
 | Meta-driven BOM → XML serializer | Not implemented |
 | Validator rules for placement | Specified here; codes TBD |
@@ -311,15 +314,20 @@ Source files live under:
 
 ```text
 packages/core/blocks/org/blockml/bml/core/Definition.bml
+packages/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
+packages/core/blocks/org/blockml/bml/definition/ConstrainableDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/SubBlockDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/RootBlockDefinition.bml
+packages/core/blocks/org/blockml/bml/definition/MemberDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/PropertyDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/AggregationDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/AssociationDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/CapabilityDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/GenericTypeDefinition.bml
 ```
+
+Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are declared **inline** in `StructuralDefinition.bml` — not as separate top-level `*Definition.bml` library exports.
 
 ---
 

@@ -189,7 +189,7 @@ BOM Core defines Block as **„a parametric, reusable unit (definition / type)�
 All definitions use the BML `<block>` element, register in the same TypeRegistry, and inherit from **`org.blockml.bml.core.Block`** — the sole inheritance root.
 
 ```text
-org.blockml.bml.core.Block                         abstract root · omits baseType
+org.blockml.bml.core.Block                         abstract root · empty baseType (<baseType />)
   ├── org.blockml.bml.core.ValueType               value blocks — Property types · Capability input/output (Size3D, Integer, …)
   ├── org.blockml.bml.core.Language                capability implementation contract
   │     ├── org.blockml.bml.language.NaturalLanguage   documentation prose · example titles
@@ -1153,7 +1153,7 @@ V1 bootstrap languages in `@blockml/core`: TypeScript, OpenSCAD, English, German
 
 ## Root Exception
 
-Only **`org.blockml.bml.core.Block`** omits `<baseType>`. Every other definition must declare `<baseType>` — including `ValueType` and `Language`.
+Only **`org.blockml.bml.core.Block`** declares an empty `<baseType />`. Every other definition must declare a non-empty `<baseType>` — including `ValueType` and `Language`.
 
 ---
 

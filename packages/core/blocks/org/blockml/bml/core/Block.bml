@@ -27,7 +27,7 @@
     types. Unqualified name Block resolves to this type.
 
     Role and constraints:
-    • Sole inheritance root — omits baseType; all other definitions must declare one
+    • Sole inheritance root — declares empty &lt;baseType /&gt; only; all other definitions must declare a non-empty parent FQN
     • Declares language (NaturalLanguage) — default English for documentation prose
     • Abstract — not used directly as a composition instance type
     • Further members defined by sub-types — Properties, Aggregations,
@@ -99,7 +99,7 @@
 
   <name>Block</name>
   <type>core:Block</type>
-  <!-- Root block has no base type -->
+  <!-- Sole inheritance root — empty baseType only -->
   <baseType />
   
   <!-- Blocks are rendered as xml elements with the name of the block type -->

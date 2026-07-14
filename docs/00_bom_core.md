@@ -499,7 +499,7 @@ PascalCase is required because:
 
 Blocks inherit from other Blocks via `baseType`. Inheritance is single — each Block has exactly one base type. The root of all inheritance is `org.blockml.bml.core.Block`.
 
-`baseType` is mandatory on every Block definition **except** `org.blockml.bml.core.Block` (inheritance root — omits `<baseType>`). Omitting it elsewhere is a parse-time error (`BML_MISSING_BASE_TYPE`). There is no implicit default — the author must always make an explicit choice about which domain the Block belongs to.
+`baseType` is mandatory on every Block definition **except** `org.blockml.bml.core.Block` (inheritance root — declares an empty `<baseType />` only). An empty or omitted `<baseType>` elsewhere is a parse-time error (`BML_MISSING_BASE_TYPE`). There is no implicit default — the author must always make an explicit choice about which domain the Block belongs to.
 
 Domain-specific specializations extend this root:
 

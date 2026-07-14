@@ -194,7 +194,7 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 
 ```text
 org.blockml.bml.core.Block
-  org.blockml.bml.core.Definition                    ← abstract; bml:xml placement allowed
+  org.blockml.bml.core.Definition                    ← abstract shell (WIP)
     org.blockml.bml.definition.StructuralDefinition
       org.blockml.bml.definition.ConstrainableDefinition  ← abstract; <constraints> container
         org.blockml.bml.definition.BlockDefinition
@@ -205,20 +205,22 @@ org.blockml.bml.core.Block
           org.blockml.bml.definition.AggregationDefinition
           org.blockml.bml.definition.AssociationDefinition
           org.blockml.bml.definition.CapabilityDefinition
+      inline Sub-Blocks (declared in StructuralDefinition.bml — not separate library exports):
+        StructuralDefinition.Documentation             ← <documentation> element (StructType branch)
+        StructuralDefinition.Change                    ← one <change> in <changelog>
+        StructuralDefinition.Example                   ← one <example> in <examples>
+        StructuralDefinition.Reference                 ← one <see> in <references>
     org.blockml.bml.definition.GenericTypeDefinition
-    org.blockml.bml.definition.ChangeDefinition      ← one <change> in <changelog>
-    org.blockml.bml.definition.DocumentationDefinition ← <documentation> on Definition elements
-    org.blockml.bml.definition.ExampleDefinition     ← one <example> in <examples>
-    org.blockml.bml.definition.ReferenceDefinition   ← one <see> in <references>
     …
 ```
 
 `org.blockml.bml.definition.StructuralDefinition` declares the shared documentation model and type modifiers:
 
 ```text
-Properties:    since · status · documentation · abstract · final
+Properties:    since · status · documentation (Documentation) · abstract · final
 Aggregations:  changelog (Change[]) · examples (Example[]) · references (Reference[])
-Sub-blocks:    Documentation · Change · Example · Reference
+Sub-blocks:    Documentation · Change · Example · Reference   ← inline in StructuralDefinition.bml
+Source:        packages/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
 ```
 
 `abstract` and `final` on block definitions control type instantiability and extensibility. On member
@@ -237,9 +239,11 @@ locally complete for the member kind. Concrete blocks must implement inherited a
 
 `org.blockml.bml.definition.RootBlockDefinition` overrides `definition` (default `org.blockml.bml.definition.RootBlockDefinition` on root and embedded blocks) and declares `embeddedBlocks` (Inline Library). `subBlocks` is inherited from `SubBlockDefinition` and may nest to arbitrary depth on root blocks and embedded blocks.
 
-`org.blockml.bml.definition.ReferenceDefinition` — cross-reference to a related Block, definition element, or documentation source:
+`org.blockml.bml.definition.StructuralDefinition.Reference` — inline Sub-Block; cross-reference to a related Block, definition element, or documentation source:
 
 ```text
+FQN             org.blockml.bml.definition.StructuralDefinition.Reference (Sub-Block — not a top-level library export)
+baseType        org.blockml.bml.core.Entity
 bml:xml         see                — renders as <see> inside <references>
 block           QName (prefix:Name) — Block or Definition via xmlns prefix; XML block attribute
 file            String             — repository markdown file; XML file attribute
@@ -250,22 +254,36 @@ context         String (required)  — relationship note; XML text content
 
 Exactly one of `block`, `file`, or `url` must be set. Authoring: list only targets **relevant to the current definition**; text body describes the relationship. All cross-links belong in `<references>` — never in `<documentation>`. See `02_mbml.md` — `<documentation>` · `<references>`.
 
-`org.blockml.bml.definition.ChangeDefinition` — one changelog entry in a `<changelog>` container:
+`org.blockml.bml.definition.StructuralDefinition.Change` — inline Sub-Block; one changelog entry in a `<changelog>` container:
 
 ```text
+FQN             org.blockml.bml.definition.StructuralDefinition.Change (Sub-Block)
+baseType        org.blockml.bml.core.Entity
 bml:xml         change             — renders as <change> inside <changelog>
 version         Version (required) — XML version attribute
 language        NaturalLanguage    — optional; prose language override for description text
 description     String (required)  — trimmed text body
 ```
 
-`org.blockml.bml.definition.ExampleDefinition` — one usage example in an `<examples>` container:
+`org.blockml.bml.definition.StructuralDefinition.Example` — inline Sub-Block; one usage example in an `<examples>` container:
 
 ```text
+FQN             org.blockml.bml.definition.StructuralDefinition.Example (Sub-Block)
+baseType        org.blockml.bml.core.Entity
 bml:xml         example            — renders as <example> inside <examples>
 title           String (required)  — XML title attribute; always in block natural language
 language        Language FQN       — optional; implementation dialect for CDATA content only
 content         String (required)  — CDATA body
+```
+
+`org.blockml.bml.definition.StructuralDefinition.Documentation` — inline Sub-Block; technical prose on any StructuralDefinition element:
+
+```text
+FQN             org.blockml.bml.definition.StructuralDefinition.Documentation (Sub-Block)
+baseType        org.blockml.bml.type.StructType
+bml:xml         documentation      — renders as <documentation> element
+language        NaturalLanguage    — optional; prose language override
+content         String (required)  — trimmed text body
 ```
 
 Each Definition block may declare **`bml:xml`** — how instances serialize to canonical BML XML (root element name, member as attribute/element/text/cdata). The meta-model is **work in progress**; full specification in `19_definition_blocks_and_bml_xml.md`.
@@ -278,7 +296,7 @@ Definition elements are addressed via **canonical structural paths** within the 
 
 ```text
 com.foo.Bar.name                    →  Block metadata
-com.foo.Bar.documentation           →  inherited from org.blockml.bml.core.Definition
+com.foo.Bar.documentation           →  StructuralDefinition.documentation (Documentation Sub-Block shape)
 com.foo.Bar.version                 →  Block version
 com.foo.Bar.properties.width        →  PropertyDefinition
 com.foo.Bar.aggregations.children   →  AggregationDefinition
@@ -307,7 +325,7 @@ Definition blocks may declare their own Capabilities — enabling domain-specifi
 
 ## Root Type Exception
 
-`org.blockml.bml.core.Block` is the **sole inheritance root**. It **omits `<baseType>`** — the only definition allowed to do so.
+`org.blockml.bml.core.Block` is the **sole inheritance root**. It declares an **empty** `<baseType />` — the only definition allowed to do so. All other definitions must declare a non-empty parent FQN in `<baseType>`.
 
 All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.bml.core.ValueType`, `org.blockml.bml.core.Language`, or domain bases — all ultimately extend `org.blockml.bml.core.Block`. See `17_type_system_bml.md`.
 
@@ -337,7 +355,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/service/Math.bml · Strings.bml · …
      org/blockml/bml/core/BlockLibrary.bml   ← bootstrap / _dependencies / _subLibraries / _blocks as Block references; _schemas as FilePathEntity
      org/blockml/bml/core/Definition.bml     ← meta-model base (WIP)
-     org/blockml/bml/definition/*.bml        ← ConstrainableDefinition, BlockDefinition, SubBlockDefinition, RootBlockDefinition, … (WIP)
+     org/blockml/bml/definition/*.bml        ← StructuralDefinition (inline Documentation/Change/Example/Reference), BlockDefinition, MemberDefinition, …
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/bml/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
