@@ -186,8 +186,18 @@ On property (and member) definitions inside Definition blocks, `bml:xml` selects
 |---|---|
 | `attribute` | XML attribute on the parent element |
 | `element` | Child XML element |
+| `element\|attribute` | Element or attribute — both valid; preference depends on context (see below) |
 | `text` | Text node child |
 | `cdata` | CDATA section child |
+
+**Member value placement** — for scalar fields on member declarations (`PropertyDefinition`,
+`CapabilityDefinition`, shared `MemberDefinition` fields):
+
+```text
+Block definition documents   element | attribute allowed — prefer element when serializing
+Block instances (composition)  element | attribute allowed — prefer attribute when serializing
+Structured children            always elements (constraints, suggestions, composition, implementation, …)
+```
 
 Example (from WIP `org.blockml.bml.core.Definition`):
 
@@ -199,7 +209,9 @@ Example (from WIP `org.blockml.bml.core.Definition`):
 
 → the `documentation` value renders as `<documentation>…</documentation>`, not as `documentation="…"`.
 
-**Default (TBD):** when `bml:xml` is omitted on a member, the serializer falls back to rules inferred from member kind and BML conventions (e.g. property values often as attributes on block instances, structured children as elements). Explicit `bml:xml` overrides defaults.
+When `bml:xml="element|attribute"` is declared, the parser accepts both forms; the meta-driven
+serializer chooses element vs attribute using the preference rules above unless the authored
+BML form is preserved losslessly in BOM.
 
 Member-level `bml:xml` is declared on **Definition block properties** — it describes serialization for all instances of the described member kind, not on every user-authored Wall or Brick.
 
@@ -315,7 +327,7 @@ packages/core/blocks/org/blockml/bml/definition/GenericTypeDefinition.bml
 
 | ID | Topic | Notes |
 |---|---|---|
-| D1 | Default `bml:xml` when omitted on members | Likely differ by member kind and context (definition vs instance) |
+| D1 | Default `bml:xml` when omitted on members | Member scalars: `element\|attribute`; prefer element on definitions, attribute on instances — see § Attribute Form |
 | D2 | `${ bml:Self }` prefix resolution at serialize time | Reuse xmlns bindings from BOM `SourceInfo.namespaceBindings` |
 | D3 | BOM storage shape for `<bml:xml>` element | `xmlRendering` on BlockDefinition vs `directives[]` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | Probably forbidden except via Definition branch |

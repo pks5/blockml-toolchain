@@ -51,8 +51,11 @@ associations, capabilities). Declared in the meta-model on
 `org.blockml.bml.definition.StructuralDefinition` and inherited by `BlockDefinition`,
 `SubBlockDefinition`, `RootBlockDefinition`, and `MemberDefinition`.
 
-On **block definitions**, render as child elements (`<abstract>`, `<final>`). On **members**,
-render as optional attributes (`abstract="…"`, `final="…"`).
+On **block definitions**, render as child elements (`<abstract>`, `<final>`). On **member
+declarations**, render as element or attribute (`bml:xml="element|attribute"`) — element form
+preferred when serializing definitions; attribute form preferred on Block instances. See
+`org.blockml.bml.definition.MemberDefinition` and `19_definition_blocks_and_bml_xml.md` — Member
+value placement.
 
 ### `<abstract>`
 

@@ -26,7 +26,9 @@
     CapabilityDefinition (kind: "capability") with typeFqn, inputType, outputType, and optional
     implementation binding. Inbound requires inputType; Outbound requires
     outputType; Transformation requires both. inputType and outputType use TypeExpression syntax and
-    must resolve to ValueTypes.</documentation>
+    must resolve to ValueTypes. Scalar capability fields (type, inputType, outputType) follow
+    org.blockml.bml.definition.MemberDefinition placement rules — element preferred on definitions,
+    attribute preferred on Block instances. Structured implementation remains a child element.</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
@@ -61,20 +63,20 @@
   <baseType>def:MemberDefinition</baseType>
 
   <properties>
-    <type type="FullyQualifiedName(core:Capability)" bml:xml="attribute">
-      <documentation>Capability kind FQN — org.blockml.bml.capability.Inbound, Outbound, or
-        Transformation. Unqualified names resolve via implicit namespace org.blockml.bml.capability.*.
-        Rendered as the type attribute on the capability element.</documentation>
+    <type type="FullyQualifiedName(core:Capability)" bml:xml="element|attribute">
+      <documentation>Capability kind FQN — Inbound, Outbound, or Transformation. Unqualified names
+        resolve via org.blockml.bml.capability.*. On definitions, element preferred; on Block
+        instances, attribute preferred.</documentation>
     </type>
-    <inputType type="FullyQualifiedName(type:ValueType)" bml:xml="attribute">
+    <inputType type="FullyQualifiedName(core:ValueType)" bml:xml="element|attribute">
       <documentation>TypeExpression for the inbound payload. Required on Inbound and Transformation;
-        forbidden on Outbound. Must resolve to a ValueType branch. Parsed into BOM inputType
-        TypeDescriptor.</documentation>
+        forbidden on Outbound. Must resolve to a ValueType branch. On definitions, element preferred;
+        on Block instances, attribute preferred.</documentation>
     </inputType>
-    <outputType type="FullyQualifiedName(type:ValueType)" bml:xml="attribute">
+    <outputType type="FullyQualifiedName(core:ValueType)" bml:xml="element|attribute">
       <documentation>TypeExpression for the outbound payload. Required on Outbound and Transformation;
-        forbidden on Inbound. Must resolve to a ValueType branch. Parsed into BOM outputType
-        TypeDescriptor.</documentation>
+        forbidden on Inbound. Must resolve to a ValueType branch. On definitions, element preferred;
+        on Block instances, attribute preferred.</documentation>
     </outputType>
     <implementation type="Implementation" bml:xml="element">
       <documentation>Optional target-language implementation binding for this capability. Rendered as

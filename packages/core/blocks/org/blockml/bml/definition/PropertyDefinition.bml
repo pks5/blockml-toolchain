@@ -24,7 +24,9 @@
     itself is never stored. Member identity is (resolvedNamespace, localName). Maps to BOM
     PropertyDefinition (kind: "property") with typeFqn, value,
     and optional constraints (via ConstrainableDefinition) and suggestions. Property type must resolve to a
-    ValueType branch. Every Property behaves as Optional — it has a value or has no value; there
+    ValueType branch. Scalar member fields (type, value) follow org.blockml.bml.definition.MemberDefinition
+    placement rules — element preferred on definitions, attribute preferred on Block instances. Every
+    Property behaves as Optional — it has a value or has no value; there
     is no null. Declaration order among properties is significant for StructType positional mapping
     and Capability parameter order.</documentation>
 
@@ -45,19 +47,18 @@
   <baseType>def:MemberDefinition</baseType>
 
   <properties>
-    <!-- Without bml:xml, type renders as an XML attribute on the property element. -->
-    <type type="FullyQualifiedName(core:Block)">
-      <documentation>FQN of the property's ValueType. Non-ValueType FQNs are invalid here
+    <type type="FullyQualifiedName(core:ValueType)" bml:xml="element|attribute">
+      <documentation>FQN of the property's ValueType (TypeExpression). Non-ValueType FQNs are invalid
         (BML_INVALID_PROPERTY_TYPE). Multiplicity, unions, generic applications, and instance
-        configuration are expressed in the type attribute string as TypeExpressions — for example
-        Text{maxLength=100} or Decimal{precision=10, scale=2}. See
-        20_value_type_instance_configuration.md.</documentation>
+        configuration are expressed in the type string — e.g. Text{maxLength=100}. On definitions,
+        element form is preferred (&lt;type&gt;Integer&lt;/type&gt;); on Block instances, attribute
+        form is preferred (type="Integer" on the property element).</documentation>
     </type>
-    <!-- Rendered as <value> element or inline attribute depending on bml:xml placement. -->
     <value type="Text" bml:xml="element|attribute">
-      <documentation>Default or computed member value on the Block definition. On instances, the
-        same member is set directly without a value wrapper element. May be a literal or a
-        ${ … } expression. Absent value means Optional.empty — not null.</documentation>
+      <documentation>Default or computed value on the Block definition, or inline value on Block
+        instances. May be a literal or a ${ … } expression. On definitions, element form is
+        preferred (&lt;value&gt;…&lt;/value&gt;); on Block instances, attribute form is preferred
+        (value="…" on the property element). Absent value means Optional.empty — not null.</documentation>
     </value>
   </properties>
 </block>

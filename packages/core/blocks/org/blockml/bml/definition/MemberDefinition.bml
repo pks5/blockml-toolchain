@@ -23,6 +23,16 @@
     (resolvedNamespace, localName). Inherits abstract and final modifiers from
     org.blockml.bml.definition.StructuralDefinition.
 
+    Member value placement (scalar members on PropertyDefinition, CapabilityDefinition, and shared
+    MemberDefinition fields):
+    • On member declarations (Block definition documents): each member field may render as a child
+      element or as an attribute on the member element — both are valid; element form is preferred
+      when serializing definitions (e.g. &lt;type&gt;Integer&lt;/type&gt; over type="Integer").
+    • On Block instances (composition): the same fields may also render as element or attribute —
+      both are valid; attribute form is preferred when serializing instances (e.g. width="50" over
+      &lt;width&gt;50&lt;/width&gt;).
+    Structured children (constraints, suggestions, composition, implementation) remain elements.
+
     Member declaration modes are orthogonal:
     • new — introduces a new member; must not set override="true"
     • override="true" — refines an inherited member of the same identity (namespace + localName).
@@ -35,7 +45,8 @@
       In that local redeclaration, the required member-specific fields must be present locally
       (Property: type; Aggregation: type; Association: type; Capability: type + implementation).
 
-    Maps to BOM MemberDefinitionBase fields shared by all member kinds.</documentation>
+    Maps to BOM MemberDefinitionBase fields shared by all member kinds — including visibility and
+    readOnly attributes on member elements.</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
@@ -62,27 +73,44 @@
     <abstract bml:xml="element|attribute">
       <value>false</value>
       <documentation>Overrides org.blockml.bml.definition.StructuralDefinition.abstract for member
-        declarations. Rendered as optional attribute (abstract="true") or child element
-        (&lt;abstract/&gt;). Semantics inherited from StructuralDefinition — member abstract marks
-        an incomplete declaration that must be implemented by a descendant.</documentation>
+        declarations (bml:xml="element|attribute"). On definitions, element form is preferred; on
+        Block instances, attribute form is preferred. Semantics inherited from StructuralDefinition —
+        member abstract marks an incomplete declaration that must be implemented by a descendant.</documentation>
     </abstract>
     <final bml:xml="element|attribute">
       <value>false</value>
       <documentation>Overrides org.blockml.bml.definition.StructuralDefinition.final for member
-        declarations. Rendered as optional attribute (final="true") or child element (&lt;final/&gt;).
-        Semantics inherited from StructuralDefinition — final members cannot be redeclared in child
-        Blocks.</documentation>
+        declarations (bml:xml="element|attribute"). On definitions, element form is preferred; on
+        Block instances, attribute form is preferred. Semantics inherited from StructuralDefinition —
+        final members cannot be redeclared in child Blocks.</documentation>
     </final>
-    <override bml:xml="attribute">
+    <override bml:xml="element|attribute">
       <value>false</value>
       <documentation>When true, this member declaration overrides an inherited member of the same
-        identity (namespace + localName). override is a local declaration statement and is not
-        inherited. The validator requires a matching parent member in the baseType chain.
-        A new member must not set override="true".
+        identity (namespace + localName). bml:xml="element|attribute" — on definitions, element
+        form is preferred; on Block instances, attribute form is preferred. override is a local
+        declaration statement and is not inherited. The validator requires a matching parent member
+        in the baseType chain. A new member must not set override="true".
 
         override does not modify abstract or final. It may be used to change documentation or other
         optional metadata without implementing an abstract member.</documentation>
     </override>
+    <visibility bml:xml="element|attribute">
+      <documentation>Optional BlockML access visibility — private, protected, or public. Omitted =
+        derived from the member element name: __ prefix → private, _ prefix → protected, otherwise
+        public (BML_VISIBILITY_MISMATCH when explicit visibility does not match the naming
+        convention). bml:xml="element|attribute" — on definitions, element form is preferred; on
+        Block instances, attribute form is preferred. Controls BlockML authoring access only — not
+        renderer BOM access. Maps to BOM MemberDefinitionBase.visibility.</documentation>
+    </visibility>
+    <readOnly bml:xml="element|attribute">
+      <value>false</value>
+      <documentation>When true, Block instances must not set this member (BML_READONLY_MEMBER_WRITE).
+        Default false. bml:xml="element|attribute" — on definitions, element form is preferred; on
+        Block instances, attribute form is preferred. Definition and child override may still supply
+        values on the member declaration; readOnly forbids instance authoring only. Maps to BOM
+        MemberDefinitionBase.readOnly.</documentation>
+    </readOnly>
   </properties>
 
 </block>
