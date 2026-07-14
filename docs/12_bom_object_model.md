@@ -431,18 +431,17 @@ interface MemberDefinitionBase {
   visibility?: "private" | "protected" | "public"
   /** When true, Block instances must not set this member. Definition and child override allowed. */
   readOnly?: boolean
-  /** When true, member is abstract — definition may be incomplete until implementation is set */
+  /**
+   * When true, member is abstract — its effective definition is semantically incomplete and must be
+   * explicitly implemented by a descendant before the enclosing Block can be concrete.
+   * abstract is inherited effectively; it is lifted only by explicitly setting abstract=false on a
+   * local redeclaration (override does not change abstract implicitly).
+   */
   abstract?: boolean
   /** When true, child Blocks cannot override this member */
   final?: boolean
   /** When true, this declaration overrides a same-named parent member */
   override?: boolean
-  /**
-   * When true, this declaration implements a same-named abstract parent member.
-   * Implies override. Implies abstract=false unless abstract=true is also set on this declaration.
-   * CapabilityDefinition specializes this with ImplementationBlock.
-   */
-  implementation?: boolean
   source?: SourceLocation
 }
 
@@ -531,6 +530,9 @@ Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" 
 ```
 
 Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` prevents any redeclaration. `readOnly="true"` prevents instance authoring only — child Block definitions may still override the value/composition. An `override="true"` on an abstract parent keeps the effective member abstract unless the child explicitly lifts it to `abstract="false"`. The transition `abstract: true → false` is the explicit implementation event; the implementing redeclaration must be locally complete for the member kind.
+
+An override that keeps the member concrete (`abstract: false → false`) is not an implementation event
+and may omit required fields locally — they may be inherited from the effective parent member.
 
 ```text
 Parser / mapper     MUST NOT reorder declared members
