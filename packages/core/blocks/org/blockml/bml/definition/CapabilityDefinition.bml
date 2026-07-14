@@ -52,6 +52,9 @@
     <see block="core:ValueType">
       inputType and outputType payload types.
     </see>
+    <see block="core:Entity">
+      Implementation sub-block branch — structured language binding, not a ValueType.
+    </see>
     <see block="def:MemberDefinition">
       Parent type — override/abstract/final semantics are inherited; capability adds an optional
       implementation binding element.
@@ -92,12 +95,12 @@
       <documentation>Describes the implementation element on a capability member. Rendered as
         implementation with a required language attribute referencing org.blockml.bml.language.*
         and a CDATA source body. Maps to BOM ImplementationBlock { languageFqn, source,
-        embeddedExpressions }. Capability references inside the body use BML Embedded Expression
-        syntax (&lt;$ … $&gt;). Declared as the implementation property on
-        org.blockml.bml.definition.CapabilityDefinition.</documentation>
+        embeddedExpressions }. Not a ValueType — structured metadata on the Entity branch. Capability
+        references inside the body use BML Embedded Expression syntax (&lt;$ … $&gt;). Declared as
+        the implementation property on org.blockml.bml.definition.CapabilityDefinition.</documentation>
 
       <name>Implementation</name>
-      <baseType>core:ValueType</baseType>
+      <baseType>core:Entity</baseType>
       <bml:xml>implementation</bml:xml>
 
       <properties>

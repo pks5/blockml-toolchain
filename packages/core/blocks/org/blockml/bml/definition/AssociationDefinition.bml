@@ -7,7 +7,7 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schema/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
@@ -16,13 +16,18 @@
   <idea>A loose reference member without composition ownership.</idea>
 
   <documentation>Describes a Block member for non-owning references to other Blocks — semantically
-    loose links without lifecycle ownership (WOT: Associations). Rendered as a child element inside
-    the associations container; the XML element name is the association name (bml:xml="${ #this.name }").
-    An optional XML prefix on the element name supplies the member namespace — resolved via xmlns to
-    BOM namespace; unprefixed elements use the default namespace (empty string). Member identity is
+    loose links without lifecycle ownership. Rendered as a child element inside the associations
+    container; the XML element name is the association name (bml:xml="${ #this.name }"). An optional
+    XML prefix on the element name supplies the member namespace — resolved via xmlns to BOM
+    namespace; unprefixed elements use the default namespace (empty string). Member identity is
     (resolvedNamespace, localName). Maps to BOM AssociationDefinition (kind: "association") with
-    typeFqn and cardinality 0..1 or 0..n. Any Block FQN is valid as association type. Domain
-    examples include basePresets on MachineBlocks Block types.</documentation>
+    typeFqn and cardinality (from type multiplicity). Any Block FQN is valid as association type —
+    not limited to ValueTypes. Instance values are authored on Block instances as member attributes
+    or elements (space-separated id tokens, {BlockFQN}::{id} qualified references, or expressions).
+    Associations do not own composition children. Scalar member field type follows
+    org.blockml.bml.definition.MemberDefinition placement rules — element preferred on definitions,
+    attribute preferred on Block instances. Domain examples include basePresets on MachineBlocks
+    Block types (type bml:Self[]).</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
@@ -31,9 +36,30 @@
     <see file="02_mbml.md">
       Associations authoring rules.
     </see>
+    <see file="00_bom_core.md">
+      Qualified Block Instance References for association values.
+    </see>
+    <see block="core:Block">
+      Required branch for association payload types.
+    </see>
   </references>
 
   <name>AssociationDefinition</name>
   <type>def:AssociationDefinition</type>
   <baseType>def:MemberDefinition</baseType>
+
+  <properties>
+    <type type="FullyQualifiedName(core:Block)" bml:xml="element|attribute">
+      <documentation>FQN of the referenced Block type (TypeExpression). Multiplicity in the type
+        string defines cardinality — 0..1 (single optional, e.g. bml:Self) or 0..n (collection,
+        e.g. bml:Self[]). Association cardinality is limited to 0..1 and 0..n — required-single
+        notations (1..1, 1..n) are invalid on associations. Non-Block FQNs are invalid. Required
+        on new association declarations; may be omitted when overriding an inherited association
+        (partial override — type inherited from baseType chain). On definitions, element form is
+        preferred (&lt;type&gt;bml:Self[]&lt;/type&gt;); on Block instances, attribute form is
+        preferred (type="bml:Self[]" on the association element). General block references require
+        FQN or xmlns prefix — no implicit namespace fallback.</documentation>
+    </type>
+  </properties>
+
 </block>
