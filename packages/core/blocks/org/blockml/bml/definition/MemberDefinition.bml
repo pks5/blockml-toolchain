@@ -100,8 +100,12 @@
         derived from the member element name: __ prefix → private, _ prefix → protected, otherwise
         public (BML_VISIBILITY_MISMATCH when explicit visibility does not match the naming
         convention). bml:xml="element|attribute" — on definitions, element form is preferred; on
-        Block instances, attribute form is preferred. Controls BlockML authoring access only — not
-        renderer BOM access. Maps to BOM MemberDefinitionBase.visibility.</documentation>
+        Block instances, attribute form is preferred. Controls BlockML authoring access — not
+        renderer BOM access. On aggregations, visibility additionally controls composition instance
+        ID reachability: public — bml:id values referencable via {EnclosingBlockFQN}::{id} from other
+        documents; protected — ids reachable within the declaring Block and its child Blocks only;
+        private — ids reachable within the declaring Block only. Maps to BOM
+        MemberDefinitionBase.visibility.</documentation>
     </visibility>
     <readOnly bml:xml="element|attribute">
       <value>false</value>

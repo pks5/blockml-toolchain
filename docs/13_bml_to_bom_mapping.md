@@ -656,10 +656,10 @@ Preset instances in `_presets` composition map like any other Block instance. Th
 
 ```text
 <_presets>
-  <composition bml:exportIds="true">  →  CompositionTemplate.exportIds = true
+  <composition>  →  CompositionTemplate for _presets (instance ID reachability from aggregation visibility)
 ```
 
-Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against exported compositions with static target ids — see `00_bom_core.md` — Qualified Block Instance References.
+Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against instances in **public** target aggregations with static target ids — see `00_bom_core.md` — Qualified Block Instance References.
 
 **Aggregation + composition mapping:**
 
@@ -667,7 +667,8 @@ Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against
 <aggregations>
   <_parts type="…">                        → AggregationDefinition (+ typeFqn, cardinality from multiplicity)
     default="true"                           → AggregationDefinition.default (boolean; at most one per Block)
-    <composition bml:exportIds="true">     → AggregationDefinition.composition (CompositionTemplate)
+    visibility="public"                      → AggregationDefinition.visibility (controls instance ID reachability)
+    <composition>                            → AggregationDefinition.composition (CompositionTemplate)
       …children…
     </composition>
   </_parts>

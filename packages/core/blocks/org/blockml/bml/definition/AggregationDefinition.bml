@@ -27,7 +27,11 @@
     default="true", bare top-level composition on the Block definition is sugar for filling that
     aggregation. Scalar member fields (type, default) follow org.blockml.bml.definition.MemberDefinition
     placement rules — element preferred on definitions, attribute preferred on Block instances.
-    Structured composition remains a child element. Service binding on composition children uses
+    Structured composition remains a child element. Composition instance ID reachability for
+    bml:id references is controlled by this aggregation member's visibility (inherited from
+    org.blockml.bml.definition.MemberDefinition) — public aggregations export ids for cross-document
+    {EnclosingBlockFQN}::{id} references; protected limits reach to the declaring Block and its child
+    Blocks; private limits reach to the declaring Block only. Service binding on composition children
     bml:bean and bml:scope on Block instances — not aggregation member fields.</documentation>
 
   <references>
@@ -78,25 +82,17 @@
       <idea>Composition template nested inside an aggregation member on a Block definition.</idea>
 
       <documentation>Describes the composition element on an aggregation member declaration.
-        Rendered as composition with optional bml:exportIds and bml:with directives and a tree of
-        composition child nodes (Block instances and bml:container virtual containers). Maps to BOM
-        CompositionTemplate { aggregationName (from enclosing aggregation member name), exportIds,
-        directives, children }. Standalone composition outside an aggregation member element is
-        invalid (BML_STANDALONE_COMPOSITION). Declared as the composition property on
-        org.blockml.bml.definition.AggregationDefinition.</documentation>
+        Rendered as composition with optional bml:with directives and a tree of composition child
+        nodes (Block instances and bml:container virtual containers). Maps to BOM
+        CompositionTemplate { aggregationName (from enclosing aggregation member name), directives,
+        children }. Instance ID reachability is determined by the enclosing aggregation member's
+        visibility — not by attributes on the composition element. Standalone composition outside an
+        aggregation member element is invalid (BML_STANDALONE_COMPOSITION). Declared as the
+        composition property on org.blockml.bml.definition.AggregationDefinition.</documentation>
 
       <name>Composition</name>
       <baseType>core:Entity</baseType>
       <bml:xml>composition</bml:xml>
-
-      <properties>
-        <exportIds bml:xml="attribute">
-          <value>false</value>
-          <documentation>When true, children with explicit static bml:id values are exportable via
-            {EnclosingBlockFQN}::{id} from other documents. Authored as bml:exportIds="true" on the
-            composition element. Maps to BOM CompositionTemplate.exportIds. Default false.</documentation>
-        </exportIds>
-      </properties>
     </block>
   </subBlocks>
 

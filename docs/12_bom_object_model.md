@@ -717,11 +717,6 @@ A Composition fills an Aggregation with a tree of nodes. `bml:*` directives foll
 interface CompositionTemplate {
   /** Target aggregation name — e.g. "_parts", "_blocks", "_presets" */
   aggregationName: string
-  /**
-   * bml:exportIds="true" on <composition> or <bml:container> — children with explicit static id
-   * are referencable via {EnclosingBlockFQN}::{id} from other documents.
-   */
-  exportIds?: boolean
   /** bml:with on <composition> */
   directives?: DirectiveAttribute[]
   children: CompositionNode[]
@@ -891,28 +886,32 @@ com.machineblocks.bml.bricks.StandardPresets::brick-2x4
 Valid only when:
 
 ```text
-1. Target composition has bml:exportIds="true"
+1. Target aggregation member is public (visibility public)
 2. Target instance has explicit literal bml:id (no Expression, not bml:each-only)
 3. Reference attribute value is a literal token (not ${ … })
 ```
 
 ```text
-<!-- Target document: StandardPresets.bml -->
-<_presets>
-  <composition bml:exportIds="true">
-    <bricks:Standard bml:id="brick-2x4" … />     ← referencable
-  </composition>
-</_presets>
+<!-- Target document: StandardPresets.bml — public presets aggregation -->
+<aggregations>
+  <presets type="core:Block[]">
+    <composition>
+      <bricks:Standard bml:id="brick-2x4" … />     ← referencable cross-document
+    </composition>
+  </presets>
+</aggregations>
 
 <!-- Referencing document -->
 <bricks:Standard basePresets="com.machineblocks.bml.bricks.StandardPresets::brick-2x4" />  ✓
 
-<!-- Aggregation without export -->
-<_presets>
-  <composition>
-    <bricks:Standard bml:id="brick-2x4" … />
-  </composition>
-</_presets>
+<!-- Protected or private aggregation -->
+<aggregations>
+  <_presets>
+    <composition>
+      <bricks:Standard bml:id="brick-2x4" … />
+    </composition>
+  </_presets>
+</aggregations>
 → com.machineblocks.bml.bricks.StandardPresets::brick-2x4  ✗  BML_UNEXPORTED_INSTANCE_REF
 
 <!-- Dynamic target or reference -->
@@ -920,7 +919,7 @@ Valid only when:
 <bricks:Standard basePresets="${ ref }" … />                      ✗  BML_NON_STATIC_INSTANCE_REF
 ```
 
-Same-document unqualified ids (`basePresets="brick-2x4"`) do not require `bml:exportIds="true"`.
+Same-document unqualified ids (`basePresets="brick-2x4"`) resolve within aggregations visible to the referencing context per visibility rules — public-aggregation requirement applies to cross-document `{BlockFQN}::{id}` only.
 
 Local validation examples:
 
@@ -1260,7 +1259,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  External instance references resolve via registry context; optional bml:version is exact assert (BML_UNKNOWN_VERSION)
 ✓  Library bootstrap / _dependencies / _subLibraries / _blocks children have no bml:version (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
 ✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
-✓  Qualified FQN::id references target bml:exportIds="true" compositions with static literal ids
+✓  Qualified FQN::id references target public aggregations with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
 ✓  Sub-Block baseType ∈ parent's subTypes (domain rule)
 ✓  Sub-Block references use qualified name or FQN — no bare short names
@@ -1336,7 +1335,7 @@ BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.versi
 BML_LIBRARY_NESTING_VIOLATION  — outer library _blocks re-exports a Block exported by a nested inner library
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit bml:id
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
-BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without bml:exportIds="true"
+BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets an instance in a non-public aggregation
 BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
 BML_DUPLICATE_MEMBER_NAME     — member name collision in declared members (same normalized name and visibility)
 BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT — members differ only by visibility prefix

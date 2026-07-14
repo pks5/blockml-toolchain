@@ -408,17 +408,29 @@ Used in **association** member values that reference other instances — e.g. `b
 
 A qualified reference is valid **only when both** conditions hold:
 
-**1. Export on the target composition.** The composition that contains the target instance must declare `bml:exportIds="true"`. Only instances in an exported composition are visible for qualified references.
+**1. Public target aggregation.** The aggregation member that contains the target instance must be **public** (`visibility="public"` or unprefixed name). Only instances in a public aggregation are visible for qualified cross-document references.
 
 ```xml
-<_presets>
-  <composition bml:exportIds="true">
-    <bricks:Standard bml:id="brick-2x4" bml:version="3.0.0" size="[2, 4, 3]" />
-  </composition>
-</_presets>
+<aggregations>
+  <presets type="core:Block[]">
+    <composition>
+      <bricks:Standard bml:id="brick-2x4" bml:version="3.0.0" size="[2, 4, 3]" />
+    </composition>
+  </presets>
+</aggregations>
 ```
 
-Without `bml:exportIds="true"` on that composition, `com.machineblocks.bml.bricks.StandardPresets::brick-2x4` is invalid → `BML_UNEXPORTED_INSTANCE_REF`.
+When the target aggregation is **protected** or **private**, `com.machineblocks.bml.bricks.StandardPresets::brick-2x4` is invalid → `BML_UNEXPORTED_INSTANCE_REF`.
+
+**Aggregation visibility and instance IDs:**
+
+| Visibility | `bml:id` reachability |
+|---|---|
+| `public` | Cross-document `{EnclosingBlockFQN}::{id}` references; unqualified ids within permitted BlockML access |
+| `protected` | Declaring Block and its **child Blocks** (derived types / Sub-Blocks) — not arbitrary external documents |
+| `private` | Declaring Block definition only |
+
+There is no separate export flag on `<composition>` — reachability follows the aggregation member's visibility.
 
 **2. Static target.** The target instance must be statically resolvable at validate time:
 
@@ -438,7 +450,7 @@ Reference     — literal token in the attribute value (not wrapped in ${ … })
 
 Dynamic references → `BML_NON_STATIC_INSTANCE_REF`.
 
-Same-document references (unqualified id only, e.g. `basePresets="brick-2x4"` within the same Block) resolve within the enclosing Block's aggregations and do not require `bml:exportIds="true"`. The export rule applies to **`{BlockFQN}::{id}`** references only.
+Same-document references (unqualified id only, e.g. `basePresets="brick-2x4"` within the same Block) resolve within aggregations visible to the referencing context per normal visibility rules. The public-aggregation rule applies to **`{BlockFQN}::{id}`** cross-document references only.
 
 **BOM storage:** the parser stores `bml:id` only when authored. Auto-IDs are not written into `BomDocument` — see `12_bom_object_model.md` — Instance ID Rules.
 
@@ -831,12 +843,12 @@ composition   — optional nested Composition filling this aggregation
 readOnly      — when true, instance authoring forbidden; definition and child override allowed
 final         — prevents override in child Blocks
 namespace     — resolved canonical namespace identifier (empty = default namespace)
-visibility    — optional; must match naming convention
+visibility    — optional; must match naming convention; on aggregations controls composition instance ID reachability (public → cross-document {FQN}::{id}; protected → declaring Block and child Blocks; private → declaring Block only)
 ```
 
 `<aggregation>` and `<association>` child order within their containers is preserved by the parser (same rules as properties). Render targets may use aggregation order for UI or output sequencing.
 
-**Member visibility** follows § Member Visibility. Private aggregations (`__name`) are confined to the declaring Block. Protected aggregations (`_name`) follow the formal access rule — derived Blocks and the direct composition owner may access them.
+**Member visibility** follows § Member Visibility. Private aggregations (`__name`) are confined to the declaring Block. Protected aggregations (`_name`) follow the formal access rule — derived Blocks and the direct composition owner may access them. Cross-document `{BlockFQN}::{id}` references require a **public** target aggregation.
 
 ### Type Notation
 
@@ -1257,7 +1269,7 @@ Compositions may appear on Block definitions (filling declared or inherited aggr
 
 ```text
 aggregation   — opened by aggregation member element name on definitions and instances
-export        — optional on <composition>; bml:exportIds="true" marks instances as referencable via {EnclosingBlockFQN}::{id}
+visibility    — on the aggregation member; controls composition instance ID reachability (see Member Visibility)
 children      — ordered list of child Block instances (each may contain nested compositions)
 ```
 
@@ -1638,7 +1650,7 @@ A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a Block 
 ```text
 type — FQN of this preset block (e.g. com.machineblocks.bml.bricks.StandardPresets)
 version           — semantic version
-composition       — Block instances in aggregation _presets; use bml:exportIds="true" for cross-file {FQN}::{id} references
+composition       — Block instances in a public aggregation (e.g. presets); cross-file {FQN}::{id} requires public visibility
 ```
 
 Each preset instance in `_presets`:
@@ -1663,7 +1675,7 @@ Example:
   com.machineblocks.bml.bricks.StandardPresets::brick-2x4
 ```
 
-Qualified references require `bml:exportIds="true"` on the target composition and a **literal static `id`** on the target instance — see Instance Identity → Qualified Block Instance References.
+Qualified cross-document references require a **public** target aggregation and a **literal static `bml:id`** on the target instance — see Instance Identity → Qualified Block Instance References.
 
 ### Preset in Compositions
 

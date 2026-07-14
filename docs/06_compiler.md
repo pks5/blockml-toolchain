@@ -523,7 +523,7 @@ BML_LIBRARY_NESTING_VIOLATION  — outer library _blocks re-exports a Block expo
 BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.version (warning — best practice: patch only)
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit id
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
-BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets a composition without export="true"
+BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets an instance in a non-public aggregation
 BML_NON_STATIC_INSTANCE_REF   — qualified reference or export target uses Expression instead of literal id/token
 BML_EXPRESSION_TYPE_ERROR     — expression result type mismatch
 BML_PROPERTY_CYCLE            — circular dependency in computed property value expressions

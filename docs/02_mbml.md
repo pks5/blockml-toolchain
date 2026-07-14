@@ -1352,6 +1352,20 @@ Then:
 
 Only the immediate composition owner grants protected configuration access on children.
 
+#### Composition instance IDs (aggregations)
+
+For **aggregation** members, visibility additionally controls which **`bml:id` values** may be referenced in instance references (`basePresets`, `Step.part`, `{BlockFQN}::{id}`, …):
+
+| Visibility | Instance ID reachability |
+| ---------- | ------------------------ |
+| **public** | Cross-document `{EnclosingBlockFQN}::{id}` references; unqualified ids within permitted BlockML access |
+| **protected** | Declaring Block and its **child Blocks** (derived types / Sub-Blocks in the same definition tree) — not from arbitrary external documents |
+| **private** | Declaring Block definition only |
+
+There is **no** separate export flag on `<composition>` or `<bml:container>`. Reachability follows the **aggregation member's** visibility.
+
+Qualified cross-document `{BlockFQN}::{id}` references require a **public** target aggregation and a **literal static `bml:id`** on the target instance — see § Qualified references and `00_bom_core.md` — Qualified Block Instance References.
+
 #### Optional `visibility` attribute
 
 Members may optionally declare an explicit visibility that must match the naming convention:
@@ -1869,14 +1883,12 @@ type         — child type (required on new declarations; omitted when filling 
 default      — boolean; marks the primary aggregation (tooling / render targets)
 readOnly     — when true, instance authoring is forbidden (validator-enforced)
 final        — prevents override in child Blocks
-visibility   — optional; must match naming convention
+visibility   — optional; must match naming convention; on aggregations also controls composition instance ID reachability (see § Composition instance IDs)
 ```
 
 **Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `bootstrap` / `_dependencies` / `_subLibraries` / `_blocks` on `org.blockml.bml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation language="…">`). See also `00_bom_core.md` — Aggregations.
 
-Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block.
-
-`bml:exportIds` on `<composition>` controls static ID export — see § `bml:exportIds` below.
+Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block. Cross-document `{BlockFQN}::{id}` references require a **public** target aggregation.
 
 **Type notation** — multiplicity is part of the type reference, not a separate attribute. BlockML has no `Array` type — see `17_type_system_bml.md` — Collections and Multiplicity.
 
@@ -2017,7 +2029,7 @@ Container
 └── bml:container    — general container everywhere else (Block instances)
 ```
 
-Both support the same directives: `bml:if`, `bml:each`, `bml:with`, `bml:exportIds`, and future container directives.
+Both support the same directives: `bml:if`, `bml:each`, `bml:with`, and future container directives.
 
 ```xml
 <!-- Definition: composition inside aggregation member -->
@@ -2094,27 +2106,7 @@ Inherited aggregation override  → type omitted
 Standalone <composition>        → BML_STANDALONE_COMPOSITION (validation error)
 ```
 
-### `bml:exportIds`
-
-Static instance ID visibility is controlled by `bml:exportIds`. Permitted on:
-
-```text
-<composition>     — inside aggregation definitions
-<bml:container>    — inside Block instances
-Block instances   — on the instance element itself
-```
-
-```xml
-<composition bml:exportIds="true">
-  <ac:Wall bml:id="wall">
-    <items>
-      <ac:Corner bml:id="corner"/>
-    </items>
-  </ac:Wall>
-</composition>
-```
-
-All static IDs within the container are exported. The value is inherited recursively by child instances and may be overridden at deeper levels.
+Composition instance ID reachability is controlled by the **aggregation member's visibility** — see § Member Visibility — Composition instance IDs (aggregations). There is no `bml:exportIds` attribute.
 
 ### Recursive Composition
 
@@ -3050,8 +3042,8 @@ A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a normal
   <version>3.0.0</version>
 
   <aggregations>
-    <_presets>
-      <composition bml:exportIds="true">
+    <presets type="core:Block[]">
+      <composition>
 
         <bricks:Standard bml:id="brick-1x1" name="Brick 1x1" bml:version="3.0.0" size="[1, 1, 3]" />
 
@@ -3079,19 +3071,19 @@ A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a normal
                          textColor="#EDF0F1" />
 
       </composition>
-    </_presets>
+    </presets>
   </aggregations>
 
 </block>
 ```
 
-**`bml:id`** — stable kebab-case identifier. Used for references via `basePresets` and thumbnail filenames. Must be unique within the enclosing Block's `_presets`. Never changes once published.
+**`bml:id`** — stable kebab-case identifier. Used for references via `basePresets` and thumbnail filenames. Must be unique within the enclosing Block's `presets` aggregation. Never changes once published.
 
 **`name`** — human-readable display name. Used in the SCAD Customizer JSON and editor UI. May be renamed without breaking references.
 
 **`basePresets`** — space-separated preset ids on any MachineBlocks Block instance. Local ids resolve within the enclosing Block's `_presets`; cross-file entries use `{BlockFQN}::{id}`. Applied left-to-right; later entries override earlier. Own instance properties override all base presets.
 
-Qualified `{BlockFQN}::{id}` references require the target composition to declare `bml:exportIds="true"` and the target instance to have a **literal static `bml:id`** — see `00_bom_core.md` — Qualified Block Instance References.
+Qualified `{BlockFQN}::{id}` references require the target instance in a **public** aggregation and a **literal static `bml:id`** — see `00_bom_core.md` — Qualified Block Instance References.
 
 Presets can reference other presets — preset instances in `_presets` may themselves carry `basePresets`, forming an inheritance chain.
 
@@ -3104,10 +3096,10 @@ Example:
   com.machineblocks.bml.bricks.StandardPresets::brick-2x4
 ```
 
-Requirements for qualified references:
+Requirements for qualified cross-document references:
 
 ```text
-1. Target `<{aggregationName}><composition bml:exportIds="true">`
+1. Target aggregation member is public (unprefixed name or visibility="public")
 2. Target instance: literal bml:id (no ${ … }, not bml:each-only)
 3. Reference: literal attribute value (not ${ … })
 ```
@@ -3452,7 +3444,7 @@ same-document Sub-Block instance          → bml:version not required
 bml:id missing on referenced instance     → BML_MISSING_ID
 bml:id missing on bml:each element        → BML_MISSING_ID
 basePresets / Step.part unresolvable     → BML_UNRESOLVABLE_INSTANCE_REF
-qualified FQN::id without bml:exportIds="true"     → BML_UNEXPORTED_INSTANCE_REF
+qualified FQN::id targeting non-public aggregation  → BML_UNEXPORTED_INSTANCE_REF
 qualified FQN::id with Expression id/ref    → BML_NON_STATIC_INSTANCE_REF
 anonymous static child without bml:id     → auto-ID after directive expansion (not stored in BOM)
 _steps missing or empty       → assembly order = document order of _parts
