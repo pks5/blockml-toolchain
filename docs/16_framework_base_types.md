@@ -48,8 +48,8 @@ BlockProcessor (when/how        →  Render pipeline
 
 Optional elements on any `<block>` definition and on member declarations (properties, aggregations,
 associations, capabilities). Declared in the meta-model on
-`org.blockml.bml.definition.StructuralDefinition` and inherited by `SubBlockDefinition`,
-`RootBlockDefinition`, and `MemberDefinition`.
+`org.blockml.bml.definition.StructuralDefinition` and inherited by `BlockDefinition`,
+`SubBlockDefinition`, `RootBlockDefinition`, and `MemberDefinition`.
 
 On **block definitions**, render as child elements (`<abstract>`, `<final>`). On **members**,
 render as optional attributes (`abstract="…"`, `final="…"`).
@@ -194,8 +194,9 @@ org.blockml.bml.core.Block
   org.blockml.bml.core.Definition                    ← abstract; bml:xml placement allowed
     org.blockml.bml.definition.StructuralDefinition
       org.blockml.bml.definition.ConstrainableDefinition  ← abstract; <constraints> container
-        org.blockml.bml.definition.SubBlockDefinition
-          org.blockml.bml.definition.RootBlockDefinition
+        org.blockml.bml.definition.BlockDefinition
+          org.blockml.bml.definition.SubBlockDefinition
+            org.blockml.bml.definition.RootBlockDefinition
         org.blockml.bml.definition.MemberDefinition
           org.blockml.bml.definition.PropertyDefinition
           org.blockml.bml.definition.AggregationDefinition
@@ -227,7 +228,9 @@ locally complete for the member kind. Concrete blocks must implement inherited a
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 
-`org.blockml.bml.definition.SubBlockDefinition` declares `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.SubBlockDefinition` on Sub-Blocks) and `language` (NaturalLanguage element) — per-block override.
+`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`idea`, `name`, `type`, `baseType`, `version`), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
+
+`org.blockml.bml.definition.SubBlockDefinition` adds `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy).
 
 `org.blockml.bml.definition.RootBlockDefinition` overrides `definition` (default `org.blockml.bml.definition.RootBlockDefinition` on root and embedded blocks) and declares `embeddedBlocks` (Inline Library). `subBlocks` is inherited from `SubBlockDefinition` and may nest to arbitrary depth on root blocks and embedded blocks.
 
@@ -289,7 +292,7 @@ com.foo.internal.Physics.properties.width →  PropertyDefinition on embedded bl
 com.foo.Bar.contracts               →  contract references
 ```
 
-`org.blockml.bml.definition.SubBlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `SubBlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter. `SubBlockDefinition` declares `definition` (default on Sub-Blocks) and `subBlocks`. Root blocks and embedded blocks use `org.blockml.bml.definition.RootBlockDefinition`, which overrides `definition` (default RootBlockDefinition) and adds `embeddedBlocks`.
+`org.blockml.bml.definition.BlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter. `SubBlockDefinition` adds `definition` (default on Sub-Blocks) and `subBlocks`. Root blocks and embedded blocks use `org.blockml.bml.definition.RootBlockDefinition`, which overrides `definition` (default RootBlockDefinition) and adds `embeddedBlocks`.
 
 No special definition-reference constructs (`bml:Def`, flat `com.foo.Bar.memberName`) are used. `bml:Self` remains available for **type references** only (`type="bml:Self"`), not for definition navigation.
 
@@ -331,7 +334,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/service/Math.bml · Strings.bml · …
      org/blockml/bml/core/BlockLibrary.bml   ← bootstrap / _dependencies / _subLibraries / _blocks as Block references; _schemas as FilePathEntity
      org/blockml/bml/core/Definition.bml     ← meta-model base (WIP)
-     org/blockml/bml/definition/*.bml        ← ConstrainableDefinition, SubBlockDefinition, RootBlockDefinition, … (WIP)
+     org/blockml/bml/definition/*.bml        ← ConstrainableDefinition, BlockDefinition, SubBlockDefinition, RootBlockDefinition, … (WIP)
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/bml/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml

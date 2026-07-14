@@ -1035,7 +1035,7 @@ Examples from core Block definitions:
 
 ```xml
 <type type="core:FullyQualifiedName(core:Block)"/>
-<baseType type="core:FullyQualifiedName(def:SubBlockDefinition)"/>
+<baseType type="core:FullyQualifiedName(def:BlockDefinition)"/>
 ```
 
 At reference sites:
@@ -1056,7 +1056,8 @@ PropertyConstraint on Property        → T = effective PropertyDefinition
 AggregationConstraint on Aggregation  → T = effective AggregationDefinition
 AssociationConstraint on Association  → T = effective AssociationDefinition
 CapabilityConstraint on Capability    → T = effective CapabilityDefinition
-BlockConstraint on Block              → T = effective block definition type
+BlockConstraint on Block              → T = effective org.blockml.bml.definition.BlockDefinition type
+                                          (including SubBlockDefinition and RootBlockDefinition subtypes)
 ```
 
 Branch ↔ context mismatch → `BML_CONSTRAINT_TARGET_MISMATCH`. Binding rules per constraint FQN are defined in each constraint Block's `<documentation>`. See `18_constraints_and_suggestions.md`.

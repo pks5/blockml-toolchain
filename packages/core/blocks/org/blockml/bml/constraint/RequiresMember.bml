@@ -23,7 +23,7 @@
   <baseType>constraint:BlockConstraint</baseType>
 
   <genericTypes>
-    <T baseType="def:SubBlockDefinition"/>
+    <T baseType="def:BlockDefinition"/>
   </genericTypes>
 
   <properties>

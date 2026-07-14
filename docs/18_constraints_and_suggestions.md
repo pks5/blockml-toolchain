@@ -57,7 +57,7 @@ org.blockml.bml.core.Constraint
 │
 └── org.blockml.bml.constraint.StructuralConstraint<T extends Definition>
       │
-      ├── org.blockml.bml.constraint.BlockConstraint<T extends SubBlockDefinition>
+      ├── org.blockml.bml.constraint.BlockConstraint<T extends BlockDefinition>
       │     org.blockml.bml.constraint.RequiresMember
       │
       └── org.blockml.bml.constraint.MemberConstraint<T extends MemberDefinition>
@@ -167,7 +167,8 @@ PropertyConstraint under Property       → T = effective PropertyDefinition
 AggregationConstraint under Aggregation → T = effective AggregationDefinition
 AssociationConstraint under Association → T = effective AssociationDefinition
 CapabilityConstraint under Capability   → T = effective CapabilityDefinition
-BlockConstraint under Block             → T = effective SubBlockDefinition or RootBlockDefinition type
+BlockConstraint under Block             → T = effective org.blockml.bml.definition.BlockDefinition type
+                                          (including SubBlockDefinition and RootBlockDefinition subtypes)
 ```
 
 Binding rules and branch compatibility are resolved at validate time. **Resolved generics and target types are not stored in the Canonical BOM.**

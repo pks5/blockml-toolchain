@@ -15,8 +15,9 @@
 
   <documentation>Abstract branch for Block-level structural constraints. May express cross-member
     rules (RequiresMember, MutuallyExclusive, …). Generic T binds to the effective
-    SubBlockDefinition or RootBlockDefinition type of the enclosing Block. Valid only under a
-    Block's &lt;constraints&gt; container (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
+    org.blockml.bml.definition.BlockDefinition type of the enclosing Block (including
+    SubBlockDefinition and RootBlockDefinition subtypes). Valid only under a Block's
+    &lt;constraints&gt; container (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
   <name>BlockConstraint</name>
   <type>constraint:BlockConstraint</type>
@@ -24,9 +25,9 @@
   <abstract />
 
   <genericTypes>
-    <T baseType="def:SubBlockDefinition">
-      <documentation>Bound to the effective block definition meta-model type (SubBlockDefinition or
-        RootBlockDefinition subtype).</documentation>
+    <T baseType="def:BlockDefinition">
+      <documentation>Bound to the effective block definition meta-model type (BlockDefinition and its
+        SubBlockDefinition or RootBlockDefinition subtypes).</documentation>
     </T>
   </genericTypes>
 

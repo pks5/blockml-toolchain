@@ -332,7 +332,7 @@ org.blockml.bml.service.*      — built-in services (#math, #strings, …)
 org.blockml.bml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
 org.blockml.bml.language.*     — Languages (TypeScript, OpenSCAD, …)
 org.blockml.bml.compiler.*     — compiler domain Blocks (Parser, Validator, Serializer, …)
-org.blockml.bml.definition.*   — Definition meta-model Blocks (SubBlockDefinition, RootBlockDefinition, PropertyDefinition, …)
+org.blockml.bml.definition.*   — Definition meta-model Blocks (BlockDefinition, SubBlockDefinition, RootBlockDefinition, PropertyDefinition, …)
 org.blockml.bml.documentation.* — bootstrap documentation blocks
 ```
 
@@ -930,7 +930,7 @@ Within the Block being defined, the Block's own FQN serves as the definition roo
 com.foo.Bar.properties.width        ≡  (current definition).properties.width
 ```
 
-`org.blockml.bml.definition.SubBlockDefinition` carries generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `SubBlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. It declares `definition` (default `SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy). Root blocks and embedded blocks use `org.blockml.bml.definition.RootBlockDefinition`, which overrides `definition` (default `RootBlockDefinition`) and adds `embeddedBlocks`.
+`org.blockml.bml.definition.BlockDefinition` carries generic meta-type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. It declares the shared block definition shape (identity, member containers, `language`). `SubBlockDefinition` adds `definition` (default `SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy). Root blocks and embedded blocks use `org.blockml.bml.definition.RootBlockDefinition`, which overrides `definition` (default `RootBlockDefinition`) and adds `embeddedBlocks`.
 
 #### BOM internal representation
 

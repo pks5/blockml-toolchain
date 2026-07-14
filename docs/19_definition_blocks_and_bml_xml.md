@@ -20,8 +20,9 @@ For BOM parse shapes see `12_bom_object_model.md`.
 BlockML blocks are authored as XML (`.bml`). The **structure of a block document** — root element name, member element names, attribute vs element vs text placement — is not hardcoded in the parser forever. Instead, it is declared in **Definition blocks**: BML blocks that describe how other blocks are built and serialized.
 
 ```text
-org.blockml.bml.definition.SubBlockDefinition  — shared shape of nested <block> documents (includes subBlocks)
-org.blockml.bml.definition.RootBlockDefinition    — root <block> document (definition, embeddedBlocks)
+org.blockml.bml.definition.BlockDefinition     — shared shape of all <block> definition documents
+org.blockml.bml.definition.SubBlockDefinition  — nested Sub-Blocks (definition, subBlocks)
+org.blockml.bml.definition.RootBlockDefinition   — root/embedded <block> document (embeddedBlocks)
 org.blockml.bml.definition.PropertyDefinition — describes how a <property> member renders
 …
 
@@ -48,12 +49,15 @@ Definition blocks live in the `org.blockml.bml.definition.*` package branch. The
 org.blockml.bml.core.Block              — universal root (composable, ValueType, Language, …)
   org.blockml.bml.core.Definition       — abstract; meta-model for block structure
     org.blockml.bml.definition.StructuralDefinition
-      org.blockml.bml.definition.SubBlockDefinition
-        org.blockml.bml.definition.RootBlockDefinition
-    org.blockml.bml.definition.PropertyDefinition
-    org.blockml.bml.definition.AggregationDefinition
-    org.blockml.bml.definition.AssociationDefinition
-    org.blockml.bml.definition.CapabilityDefinition
+      org.blockml.bml.definition.ConstrainableDefinition
+        org.blockml.bml.definition.BlockDefinition
+          org.blockml.bml.definition.SubBlockDefinition
+            org.blockml.bml.definition.RootBlockDefinition
+        org.blockml.bml.definition.MemberDefinition
+          org.blockml.bml.definition.PropertyDefinition
+          org.blockml.bml.definition.AggregationDefinition
+          org.blockml.bml.definition.AssociationDefinition
+          org.blockml.bml.definition.CapabilityDefinition
     org.blockml.bml.definition.GenericTypeDefinition
     …
 ```
@@ -70,7 +74,8 @@ Each member kind in the block grammar has a corresponding Definition block. Exam
 
 | Definition block | Describes |
 |---|---|
-| `org.blockml.bml.definition.SubBlockDefinition` | Shared `<block>` document shape (identity, members, metadata, `definition`, recursive `subBlocks`) |
+| `org.blockml.bml.definition.BlockDefinition` | Shared `<block>` document shape (identity, members, metadata, member containers) |
+| `org.blockml.bml.definition.SubBlockDefinition` | Nested Sub-Block documents — adds `definition` (default SubBlockDefinition), `subBlocks` |
 | `org.blockml.bml.definition.RootBlockDefinition` | Root/embedded `<block>` document — overrides `definition` (default RootBlockDefinition), adds `embeddedBlocks` |
 | `org.blockml.bml.definition.PropertyDefinition` | `<properties>` child members |
 | `org.blockml.bml.definition.AggregationDefinition` | `<aggregations>` child members |
@@ -78,9 +83,9 @@ Each member kind in the block grammar has a corresponding Definition block. Exam
 | `org.blockml.bml.definition.CapabilityDefinition` | `<capabilities>` child members |
 | `org.blockml.bml.definition.GenericTypeDefinition` | `<genericTypes>` entries |
 
-`SubBlockDefinition` and `RootBlockDefinition` declare the members that block definition documents may carry (`name`, `type`, `baseType`, aggregations for `properties`, `aggregations`, …). `SubBlockDefinition` adds `definition` (default `SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy). `RootBlockDefinition` overrides `definition` (default `RootBlockDefinition` on root and embedded blocks) and adds `embeddedBlocks` (Inline Library — full root-block-shaped embedded documents). Type modifiers `abstract` and `final` are inherited from `org.blockml.bml.definition.StructuralDefinition` and apply to block definitions and member declarations. See `packages/core/blocks/org/blockml/bml/definition/SubBlockDefinition.bml` and `RootBlockDefinition.bml`.
+`BlockDefinition`, `SubBlockDefinition`, and `RootBlockDefinition` together describe block definition documents. `BlockDefinition` declares the shared members (`name`, `type`, `baseType`, aggregations for `properties`, `aggregations`, …). `SubBlockDefinition` adds `definition` (default `SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy). `RootBlockDefinition` overrides `definition` (default `RootBlockDefinition` on root and embedded blocks) and adds `embeddedBlocks` (Inline Library — full root-block-shaped embedded documents). Type modifiers `abstract` and `final` are inherited from `org.blockml.bml.definition.StructuralDefinition` and apply to block definitions and member declarations. See `packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml`, `SubBlockDefinition.bml`, and `RootBlockDefinition.bml`.
 
-**Distinction from BOM `BlockDefinition`:** The TypeScript interface `org.blockml.bml.bom.BlockDefinition` is the **parse result** for any `<block>` document. The BML blocks `org.blockml.bml.definition.SubBlockDefinition` and `RootBlockDefinition` are the **meta-model** that describes what a block document means. Same word, different layers — see `12_bom_object_model.md`.
+**Distinction from BOM `BlockDefinition`:** The TypeScript interface `org.blockml.bml.bom.BlockDefinition` is the **parse result** for any `<block>` document. The BML blocks `org.blockml.bml.definition.BlockDefinition`, `SubBlockDefinition`, and `RootBlockDefinition` are the **meta-model** that describes what a block document means. Same word, different layers — see `12_bom_object_model.md`.
 
 ---
 
@@ -115,7 +120,7 @@ Child of the block definition. Defines the **local name** (and optionally namesp
 
 → instances render as `<block>…</block>`.
 
-Example: `org.blockml.bml.definition.SubBlockDefinition` — every block document uses `<block>` as root.
+Example: `org.blockml.bml.definition.BlockDefinition` — every block document uses `<block>` as root.
 
 **Expression — effective Block type as element name**
 
@@ -205,13 +210,17 @@ Member-level `bml:xml` is declared on **Definition block properties** — it des
 Meta-model (simplified):
 
 ```text
-org.blockml.bml.definition.SubBlockDefinition
+org.blockml.bml.definition.BlockDefinition
   bml:xml element:  block
-  properties:       name, type, baseType, definition (default SubBlockDefinition), …
+  properties:       idea, name, type, baseType, version, …
   aggregations:     properties → PropertyDefinition[]
                     aggregations → AggregationDefinition[]
-                    subBlocks → SubBlockDefinition[]   (recursive)
                     …
+
+org.blockml.bml.definition.SubBlockDefinition
+  baseType:         BlockDefinition
+  properties:       definition (default SubBlockDefinition)
+  aggregations:     subBlocks → SubBlockDefinition[]   (recursive)
 
 org.blockml.bml.definition.RootBlockDefinition
   baseType:         SubBlockDefinition
@@ -247,7 +256,7 @@ Serialization path (conceptual):
 1. Lookup block role → org.blockml.bml.definition.SubBlockDefinition (Sub-Block) or
    org.blockml.bml.definition.RootBlockDefinition (document root / embedded block); honor
    block.definitionFqn when explicitly set
-2. Root element name from SubBlockDefinition.bml:xml → "block"
+2. Root element name from BlockDefinition.bml:xml → "block"
 3. Each aggregation child resolved via its Definition block's bml:xml
 4. Property "width" → PropertyDefinition.bml:xml → element name from #this.name → <width>
 5. Member values placed per bml:xml="attribute|element|text|cdata" on PropertyDefinition fields
@@ -290,6 +299,7 @@ Source files live under:
 
 ```text
 packages/core/blocks/org/blockml/bml/core/Definition.bml
+packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/SubBlockDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/RootBlockDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/PropertyDefinition.bml
@@ -307,7 +317,7 @@ packages/core/blocks/org/blockml/bml/definition/GenericTypeDefinition.bml
 |---|---|---|
 | D1 | Default `bml:xml` when omitted on members | Likely differ by member kind and context (definition vs instance) |
 | D2 | `${ bml:Self }` prefix resolution at serialize time | Reuse xmlns bindings from BOM `SourceInfo.namespaceBindings` |
-| D3 | BOM storage shape for `<bml:xml>` element | `xmlRendering` on SubBlockDefinition vs `directives[]` |
+| D3 | BOM storage shape for `<bml:xml>` element | `xmlRendering` on BlockDefinition vs `directives[]` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | Probably forbidden except via Definition branch |
 | D5 | XSD generation from Definition blocks | Future; replaces hand-maintained schemas long-term |
 

@@ -60,7 +60,7 @@ Ordinal = index in `members[]` after mapping. Used by renderers when interpretin
 
 ### Canonical definition paths
 
-BML member containers are preserved structurally in the meta-model (`org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). The BOM stores members in a flat `members[]` array tagged by `kind` (`property`, `aggregation`, `association`, `capability`). Reflection and expression evaluation resolve canonical paths via the structural containers:
+BML member containers are preserved structurally in the meta-model (`org.blockml.bml.definition.BlockDefinition`, `org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). The BOM stores members in a flat `members[]` array tagged by `kind` (`property`, `aggregation`, `association`, `capability`). Reflection and expression evaluation resolve canonical paths via the structural containers:
 
 ```text
 com.foo.Bar.properties.width   →  members[] entry where kind="property" and name="width"
