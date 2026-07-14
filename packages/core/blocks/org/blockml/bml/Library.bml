@@ -101,6 +101,7 @@
         <def:AggregationDefinition />
         <def:AssociationDefinition />
         <def:ConstrainableDefinition />
+        <def:BlockDefinition />
         <def:SubBlockDefinition />
         <def:RootBlockDefinition />
         <def:CapabilityDefinition />
