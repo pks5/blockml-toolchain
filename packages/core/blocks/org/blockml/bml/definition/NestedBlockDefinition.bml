@@ -1,8 +1,8 @@
 <!--
-  BlockML Definition — Block definition meta-model type
+  BlockML Definition — nested block definition meta-model type
 
-  FQN: org.blockml.bml.definition.BlockDefinition
-  Describes the parse-time shape of every <block> document.
+  FQN: org.blockml.bml.definition.NestedBlockDefinition
+  Describes the parse-time shape of nested <block> documents and the shared base for root blocks.
   See docs/12_bom_object_model.md — BlockDefinition.
 -->
 <block
@@ -16,12 +16,12 @@
   xmlns:btype="org.blockml.bml.type"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>The structural shape of every Block definition document in BlockML.</idea>
+  <idea>The structural shape of nested Block definition documents in BlockML.</idea>
 
-  <documentation>Meta-model type for any block document — root blocks and nested Sub-Blocks.
+  <documentation>Meta-model type for nested block documents and shared base for root block definitions.
     Semantically a Class: declarative type shape without instance state. Parsed into
-    BomDocument.block and BlockDefinition.subBlocks[]. Generic type parameter B binds this
-    definition to the Block type it describes — conceptually BlockDefinition of com.foo.Bar when
+    BomDocument.block and RootBlockDefinition.subBlocks[]. Generic type parameter B binds this
+    definition to the Block type it describes — conceptually NestedBlockDefinition of com.foo.Bar when
     B resolves to com.foo.Bar. Declares identity (idea, name, type, baseType, version), generic
     parameters, contracts, allowed Sub-Blocks and languages, and member declaration containers
     (properties, aggregations, associations, capabilities). Type modifiers abstract and final are
@@ -33,11 +33,22 @@
     Block identity conventions (see 02_mbml.md — Type References and Block Identity):
     • Root block: type is the canonical identity (required). name is optional — when omitted,
       effectiveName = lastSegment(resolve(type)); when present, name must equal that segment
-      (BML_BLOCK_NAME_TYPE_MISMATCH).
+      (BML_BLOCK_NAME_TYPE_MISMATCH). Root blocks extend org.blockml.bml.definition.RootBlockDefinition.
+      The definition property (on RootBlockDefinition) selects the Definition meta-model type —
+      default org.blockml.bml.definition.RootBlockDefinition.
     • Sub-Block: name is the local identity (required). type is normally omitted and derived as
       canonicalParentType + "." + name. An explicit type must match that expected value
       (BML_SUBBLOCK_TYPE_MISMATCH). Sub-Blocks must not declare subBlocks
-      (BML_SUBBLOCKS_ON_SUBBLOCK).
+      (BML_SUBBLOCKS_ON_SUBBLOCK) or embeddedBlocks (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK).
+    • Embedded block: additional Block document inlined via embeddedBlocks on the root block only.
+      Equivalent to a separate BML file in the same source document — may use any package namespace.
+      type is required and must be fully qualified (BML_MISSING_EMBEDDED_BLOCK_TYPE,
+      BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE). FQN = resolve(type) — not nested under the root block
+      (com.other.ForeignBlock, not com.foo.Bar.embeddedBlocks.com.other.ForeignBlock). Shadows the
+      corresponding library or file-based definition within the enclosing document only; invisible
+      externally. Must not declare subBlocks (BML_SUBBLOCKS_ON_EMBEDDED_BLOCK) or embeddedBlocks
+      (BML_EMBEDDED_BLOCKS_ON_EMBEDDED_BLOCK). Composition references must use the fully qualified
+      Block type.
     • Type references (type, baseType, composition tags, member type attributes) accept FQN,
       xmlns QName, context-bound unqualified fallback, or Sub-Block-relative names — all normalized
       to a canonical FQN during resolution (BML_UNKNOWN_TYPE, BML_AMBIGUOUS_TYPE,
@@ -56,23 +67,26 @@
     <see block="core:Block">
       Sole inheritance root — omits baseType on root blocks.
     </see>
+    <see block="def:RootBlockDefinition">
+      Root block shape — adds subBlocks and embeddedBlocks aggregations.
+    </see>
   </references>
 
-  <name>BlockDefinition</name>
-  <type>def:BlockDefinition</type>
+  <name>NestedBlockDefinition</name>
+  <type>def:NestedBlockDefinition</type>
   <baseType>def:StructuralDefinition</baseType>
 
   <!-- Block definitions render as the root <block> element. -->
   <bml:xml>block</bml:xml>
 
   <!--
-    Type parameter of BlockDefinition itself — not the described Block's genericTypes aggregation.
+    Type parameter of NestedBlockDefinition itself — not the described Block's genericTypes aggregation.
     Binds this definition to the Block type it describes. Defaults to org.blockml.bml.core.Block.
   -->
   <genericTypes>
     <B baseType="core:Block">
-      <documentation>The Block type this BlockDefinition describes. Conceptually
-        BlockDefinition of com.foo.Bar when B binds to com.foo.Bar.</documentation>
+      <documentation>The Block type this NestedBlockDefinition describes. Conceptually
+        NestedBlockDefinition of com.foo.Bar when B binds to com.foo.Bar.</documentation>
     </B>
   </genericTypes>
 
@@ -155,12 +169,5 @@
       <documentation>Capability member declarations — communication endpoints (inbound, outbound,
         transformation). Mapped to members[] in XML document order.</documentation>
     </capabilities>
-    <subBlocks type="def:BlockDefinition[]">
-      <documentation>Sub-Block definitions nested under the root block of this BomDocument (root block
-        only — forbidden on Sub-Blocks, BML_SUBBLOCKS_ON_SUBBLOCK). Each Sub-Block is a full
-        BlockDefinition except it must not declare its own subBlocks. Canonical type is derived from
-        parent type + Sub-Block name when type is omitted; explicit type must match
-        (BML_SUBBLOCK_TYPE_MISMATCH). Sub-Block name is required (BML_MISSING_SUBBLOCK_NAME).</documentation>
-    </subBlocks>
   </aggregations>
 </block>

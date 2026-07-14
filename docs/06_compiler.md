@@ -499,6 +499,11 @@ BML_BLOCK_NAME_TYPE_MISMATCH  — root block name ≠ last segment of resolve(ty
 BML_MISSING_SUBBLOCK_NAME     — Sub-Block lacks required name
 BML_SUBBLOCK_TYPE_MISMATCH    — explicit Sub-Block type ≠ resolve(parent.type) + "." + name
 BML_SUBBLOCKS_ON_SUBBLOCK     — Sub-Block declares subBlocks (root block only)
+BML_EMBEDDED_BLOCKS_ON_SUBBLOCK — Sub-Block declares embeddedBlocks (root block only)
+BML_SUBBLOCKS_ON_EMBEDDED_BLOCK — embedded block declares subBlocks
+BML_EMBEDDED_BLOCKS_ON_EMBEDDED_BLOCK — embedded block declares embeddedBlocks
+BML_MISSING_EMBEDDED_BLOCK_TYPE — embedded block lacks required type
+BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE — embedded block type is not fully qualified
 BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry

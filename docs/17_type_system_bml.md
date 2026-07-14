@@ -986,7 +986,7 @@ Multiple parameters:
 ```xml
 <genericTypes>
   <T baseType="org.blockml.bml.core.ValueType"/>
-  <D baseType="org.blockml.bml.core.Definition" defaultType="def:BlockDefinition"/>
+  <D baseType="org.blockml.bml.core.Definition" defaultType="def:RootBlockDefinition"/>
 </genericTypes>
 ```
 
@@ -1035,7 +1035,7 @@ Examples from core Block definitions:
 
 ```xml
 <type type="core:FullyQualifiedName(core:Block)"/>
-<baseType type="core:FullyQualifiedName(def:BlockDefinition)"/>
+<baseType type="core:FullyQualifiedName(def:NestedBlockDefinition)"/>
 ```
 
 At reference sites:
@@ -1102,7 +1102,7 @@ Blocks may compose zero or more **contracts** — reusable partial Block definit
 
 A contract Block may declare any subset of Properties, Aggregations, Associations, Capabilities, Constraints, Suggestions, documentation, examples, references, and optional default Capability implementations. Members may be **partial** — e.g. a contract supplies only `type`, and the concrete Block adds defaults, constraints, and documentation.
 
-Effective members are resolved by merging in order: `baseType` chain → contracts (declaration order) → local Block declarations. Later contracts override earlier ones; the Block overrides all. Only explicitly specified attributes are replaced; `final` members cannot be overridden. `subBlocks` and `compositions` on contract types are ignored.
+Effective members are resolved by merging in order: `baseType` chain → contracts (declaration order) → local Block declarations. Later contracts override earlier ones; the Block overrides all. Only explicitly specified attributes are replaced; `final` members cannot be overridden. `subBlocks`, `embeddedBlocks`, and `compositions` on contract types are ignored.
 
 See `00_bom_core.md` — Contracts.
 

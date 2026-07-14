@@ -60,7 +60,7 @@ Ordinal = index in `members[]` after mapping. Used by renderers when interpretin
 
 ### Canonical definition paths
 
-BML member containers are preserved structurally in the meta-model (`org.blockml.bml.definition.BlockDefinition`). The BOM stores members in a flat `members[]` array tagged by `kind` (`property`, `aggregation`, `association`, `capability`). Reflection and expression evaluation resolve canonical paths via the structural containers:
+BML member containers are preserved structurally in the meta-model (`org.blockml.bml.definition.NestedBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). The BOM stores members in a flat `members[]` array tagged by `kind` (`property`, `aggregation`, `association`, `capability`). Reflection and expression evaluation resolve canonical paths via the structural containers:
 
 ```text
 com.foo.Bar.properties.width   →  members[] entry where kind="property" and name="width"
@@ -68,7 +68,7 @@ com.foo.Bar.aggregations.parts →  members[] entry where kind="aggregation" and
 com.foo.Bar.capabilities.render → members[] entry where kind="capability" and name="render"
 ```
 
-Block metadata (`name`, `idea`, `documentation`, `version`, `baseType`, …) maps to top-level `BlockDefinition` fields — addressable directly under the Block FQN without a container segment. See `00_bom_core.md` — § Canonical definition paths · `16_framework_base_types.md` — § Definition Addressing.
+Block metadata (`name`, `idea`, `documentation`, `version`, `baseType`, `definitionFqn`, …) maps to top-level `BlockDefinition` fields — addressable directly under the Block FQN without a container segment. See `00_bom_core.md` — § Canonical definition paths · `16_framework_base_types.md` — § Definition Addressing.
 
 ---
 
@@ -298,8 +298,11 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <core:Block />                               → block.subTypes[] (direct Block reference in <subTypes>)
 <lang:OpenSCAD />                            → block.languages[] (direct Language reference in <languages>)
 <ac:Wall />                                  → block.contracts[]   (direct Block reference in <contracts>; root block only)
+<definition>RootBlockDefinition</definition> → block.definitionFqn (root block only; default org.blockml.bml.definition.RootBlockDefinition)
 <baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType, defaultType? } (root block only)
 ```
+
+`<subBlocks>` and `<embeddedBlocks>` map to `block.subBlocks[]` and `block.embeddedBlocks[]` respectively — each child `<block>` parsed as a nested `BlockDefinition`. Sub-Block FQN is derived from the parent; embedded block FQN is `resolve(type)` (the `<type>` element value). See `12_bom_object_model.md`.
 
 ```text
 ```text
@@ -668,7 +671,7 @@ The `composition aggregation="…"` attribute is **removed** — aggregations ar
   → Parser resolves element name via xmlns prefix → FQN stored in block.contracts[] (stage [5])
   → Validator resolves contract BlockDefinition (stage [8])
   → resolveContractMembers(contractFqn) — declared members only;
-    subBlocks[] and compositions[] on contract type ignored
+    subBlocks[], embeddedBlocks[], and compositions[] on contract type ignored
   → resolveEffectiveMembers(implementingBlock) merges:
        baseType chain members
      → contract members (in block.contracts[] order; later overrides earlier)

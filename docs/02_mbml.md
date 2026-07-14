@@ -141,6 +141,7 @@ There is **no multi-stage search**, no global TypeRegistry fallback, and no docu
 | `<status>` element content · `bml:status` attribute | `org.blockml.bml.status.*` | Status |
 | Capability `type` | `org.blockml.bml.capability.*` | Capability branch |
 | Constraint `validation` attribute | `org.blockml.bml.validation.*` | Validation |
+| `<definition>` element content | `org.blockml.bml.definition.*` | RootBlockDefinition (extends NestedBlockDefinition) |
 
 **Examples:**
 
@@ -155,6 +156,7 @@ There is **no multi-stage search**, no global TypeRegistry fallback, and no docu
 <status>Draft</status>                        →  org.blockml.bml.status.Draft
 <resize type="Transformation" …>             →  org.blockml.bml.capability.Transformation
 <constraint:Min validation="Error" …/>       →  org.blockml.bml.validation.Error
+<definition>RootBlockDefinition</definition>  →  org.blockml.bml.definition.RootBlockDefinition
 ```
 
 **General block references have no implicit namespace.** These require a full FQN or an explicit `xmlns:` prefix:
@@ -236,9 +238,11 @@ The local part of a QName may include a relative Sub-Block path (`foo:Bar.MySubB
 On the document root `<block>`:
 
 ```text
-type     — required (BML_MISSING_BLOCK_TYPE)
-name     — optional; when omitted, effectiveName = lastSegment(resolve(type))
-         — when present, must equal lastSegment(resolve(type)) (BML_BLOCK_NAME_TYPE_MISMATCH)
+type        — required (BML_MISSING_BLOCK_TYPE)
+name        — optional; when omitted, effectiveName = lastSegment(resolve(type))
+            — when present, must equal lastSegment(resolve(type)) (BML_BLOCK_NAME_TYPE_MISMATCH)
+definition  — optional; Definition meta-model type FQN (default org.blockml.bml.definition.RootBlockDefinition)
+            — unqualified names resolve via implicit namespace org.blockml.bml.definition.*
 ```
 
 ```xml
@@ -276,6 +280,7 @@ name     — required (BML_MISSING_SUBBLOCK_NAME)
 type     — normally omitted; derived as resolve(parent.type) + "." + name
          — when present, must equal that expected value (BML_SUBBLOCK_TYPE_MISMATCH)
 subBlocks — forbidden (BML_SUBBLOCKS_ON_SUBBLOCK)
+embeddedBlocks — forbidden (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK)
 ```
 
 Preferred form:
@@ -763,7 +768,9 @@ PascalCase ensures composition instance tags with `xmlns:` prefixes are unambigu
 <associations>  — Association declarations.
 <capabilities>  — Capability declarations.
 <contracts>     — Contract references (reusable partial definitions). Root block only.
+<definition>    — Definition meta-model type FQN (root block only; default RootBlockDefinition).
 <subBlocks>     — Sub-Block definitions (see Sub-Blocks section).
+<embeddedBlocks> — Embedded foreign Block definitions (see Embedded Blocks section). Root block only.
 <aggregations>  — Aggregation declarations and definition-level compositions. Omit when inherited aggregations from baseType suffice.
                 — <composition> must be nested inside an aggregation member element (never standalone).
 ```
@@ -827,7 +834,7 @@ Child element — direct Block reference (element name = FQN via xmlns prefix)
 Role            — reusable partial Block definition (replaces interfaces, traits, mixins)
 Scope           — Properties, Aggregations, Associations, Capabilities, Constraints,
                   Suggestions, documentation, examples, references, optional Capability defaults
-Ignored         — subBlocks and compositions on the contract Block
+Ignored         — subBlocks, embeddedBlocks, and compositions on the contract Block
 Partial members — contracts may declare incomplete members; the Block completes them
 Merge order     — baseType chain → contracts (in declaration order) → Block
 Conflict rule   — later contract wins; Block overrides all contracts
@@ -2378,7 +2385,7 @@ Sub-Blocks are Block definitions nested inside a parent Block. They are analogou
 
 Sub-Blocks use the same format as the root Block — all fields as child elements. The preferred difference: `<type>` is omitted and the FQN is derived from the parent Block's type + the Sub-Block's `<name>`. An explicit `<type>` is allowed when it matches the derived value (see § Type References and Block Identity).
 
-`<baseType>` is required on Sub-Blocks, just like on the root Block. Sub-Blocks must not declare `<subBlocks>` (`BML_SUBBLOCKS_ON_SUBBLOCK`).
+`<baseType>` is required on Sub-Blocks, just like on the root Block. Sub-Blocks must not declare `<subBlocks>` (`BML_SUBBLOCKS_ON_SUBBLOCK`) or `<embeddedBlocks>` (`BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`).
 
 ```xml
 <subBlocks>
@@ -2476,7 +2483,40 @@ Sub-Block:   <name>StudDiameter</name>
 → FQN:       com.machineblocks.bml.calibration.Calibrator.StudDiameter
 ```
 
-`<type>` is normally omitted on Sub-Blocks — it is derived as `resolve(parent.type) + "." + name`. When explicitly authored, it must match that expected value (`BML_SUBBLOCK_TYPE_MISMATCH`). Sub-Blocks are flat — only the root block of a document may declare `<subBlocks>`; Sub-Blocks must not nest other Sub-Blocks (`BML_SUBBLOCKS_ON_SUBBLOCK`).
+`<type>` is normally omitted on Sub-Blocks — it is derived as `resolve(parent.type) + "." + name`. When explicitly authored, it must match that expected value (`BML_SUBBLOCK_TYPE_MISMATCH`). Sub-Blocks are flat — only the root block of a document may declare `<subBlocks>` or `<embeddedBlocks>`; Sub-Blocks must not nest either (`BML_SUBBLOCKS_ON_SUBBLOCK`, `BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`).
+
+### Embedded Blocks
+
+Embedded blocks let authors define **multiple BML files inline** in a single source document — including Blocks from packages that do not belong to the root block's namespace. Unlike Sub-Blocks, an embedded block's **FQN is the value of its `<type>` element** (e.g. `com.other.ForeignBlock`) — not nested under the root block.
+
+```text
+type            — required; must be fully qualified (BML_MISSING_EMBEDDED_BLOCK_TYPE,
+                  BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE)
+FQN             — resolve(type); definition paths use the embedded block's own FQN
+subBlocks       — forbidden (BML_SUBBLOCKS_ON_EMBEDDED_BLOCK)
+embeddedBlocks  — forbidden (BML_EMBEDDED_BLOCKS_ON_EMBEDDED_BLOCK)
+```
+
+```xml
+<embeddedBlocks>
+  <block>
+    <idea>Inline — equivalent to a separate .bml file</idea>
+    <type>com.other.ForeignBlock</type>
+    <baseType>org.blockml.bml.core.Block</baseType>
+    <version>1.0.0</version>
+    <properties>…</properties>
+  </block>
+  <block>
+    <idea>Block from another package</idea>
+    <type>com.thirdparty.Helper</type>
+    <baseType>org.blockml.bml.core.Block</baseType>
+    <version>1.0.0</version>
+    …
+  </block>
+</embeddedBlocks>
+```
+
+Within the enclosing document, an embedded definition **shadows** the corresponding library or file-based Block definition. Externally, embedded blocks are **invisible**. Composition references from within the same document must use the **fully qualified** Block type — never an unqualified or Sub-Block-relative name.
 
 ### Composition Block References
 
@@ -3332,6 +3372,11 @@ root name ≠ last type segment → BML_BLOCK_NAME_TYPE_MISMATCH
 Sub-Block without name        → BML_MISSING_SUBBLOCK_NAME
 Sub-Block explicit type mismatch → BML_SUBBLOCK_TYPE_MISMATCH
 Sub-Block declares subBlocks  → BML_SUBBLOCKS_ON_SUBBLOCK
+Sub-Block declares embeddedBlocks → BML_EMBEDDED_BLOCKS_ON_SUBBLOCK
+embedded block declares subBlocks → BML_SUBBLOCKS_ON_EMBEDDED_BLOCK
+embedded block declares embeddedBlocks → BML_EMBEDDED_BLOCKS_ON_EMBEDDED_BLOCK
+embedded block without type   → BML_MISSING_EMBEDDED_BLOCK_TYPE
+embedded block unqualified type → BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE
 unresolvable type reference   → BML_UNKNOWN_TYPE
 ambiguous unqualified fallback → BML_AMBIGUOUS_TYPE
 <aggregations> missing        → no parser action; inherited members resolved at validate (e.g. _presets, _parts from MachineBlocks base types)

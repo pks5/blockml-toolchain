@@ -48,8 +48,8 @@ BlockProcessor (when/how        →  Render pipeline
 
 Optional elements on any `<block>` definition and on member declarations (properties, aggregations,
 associations, capabilities). Declared in the meta-model on
-`org.blockml.bml.definition.StructuralDefinition` and inherited by `BlockDefinition` and
-`MemberDefinition`.
+`org.blockml.bml.definition.StructuralDefinition` and inherited by `NestedBlockDefinition`,
+`RootBlockDefinition`, and `MemberDefinition`.
 
 On **block definitions**, render as child elements (`<abstract>`, `<final>`). On **members**,
 render as optional attributes (`abstract="…"`, `final="…"`).
@@ -192,7 +192,9 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 ```text
 org.blockml.bml.core.Block
   org.blockml.bml.core.Definition                    ← abstract; bml:xml placement allowed
-    org.blockml.bml.definition.BlockDefinition       ← shape of every <block> document; generic BlockDefinition<B>
+    org.blockml.bml.definition.StructuralDefinition
+      org.blockml.bml.definition.NestedBlockDefinition  ← shared <block> shape; generic NestedBlockDefinition<B>
+        org.blockml.bml.definition.RootBlockDefinition  ← root <block>; definition, subBlocks, embeddedBlocks
     org.blockml.bml.definition.PropertyDefinition
     org.blockml.bml.definition.AggregationDefinition
     org.blockml.bml.definition.AssociationDefinition
@@ -223,7 +225,9 @@ locally complete for the member kind. Concrete blocks must implement inherited a
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 
-`org.blockml.bml.definition.BlockDefinition` declares `language` (NaturalLanguage element) — per-block override.
+`org.blockml.bml.definition.NestedBlockDefinition` declares `language` (NaturalLanguage element) — per-block override.
+
+`org.blockml.bml.definition.RootBlockDefinition` declares `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.RootBlockDefinition`), `subBlocks`, and `embeddedBlocks`.
 
 `org.blockml.bml.definition.ReferenceDefinition` — cross-reference to a related Block, definition element, or documentation source:
 
@@ -273,11 +277,14 @@ com.foo.Bar.aggregations.children   →  AggregationDefinition
 com.foo.Bar.associations.parent     →  AssociationDefinition
 com.foo.Bar.capabilities.render     →  CapabilityDefinition
 com.foo.Bar.genericTypes.T          →  GenericTypeDefinition (described Block's type parameter)
-com.foo.Bar.subBlocks.Inner         →  nested BlockDefinition
+com.foo.Bar.definition              →  Definition meta-model type FQN (root block only)
+com.foo.Bar.subBlocks.Inner         →  nested BlockDefinition (FQN derived from parent)
+com.other.ForeignBlock              →  embedded BlockDefinition (FQN = embedded block &lt;type&gt;)
+com.other.ForeignBlock.properties.width →  PropertyDefinition on embedded block
 com.foo.Bar.contracts               →  contract references
 ```
 
-`org.blockml.bml.definition.BlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter.
+`org.blockml.bml.definition.NestedBlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `NestedBlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter. Root blocks use `org.blockml.bml.definition.RootBlockDefinition`, which adds `definition`, `subBlocks`, and `embeddedBlocks`.
 
 No special definition-reference constructs (`bml:Def`, flat `com.foo.Bar.memberName`) are used. `bml:Self` remains available for **type references** only (`type="bml:Self"`), not for definition navigation.
 
@@ -319,7 +326,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/service/Math.bml · Strings.bml · …
      org/blockml/bml/core/BlockLibrary.bml   ← bootstrap / _dependencies / _subLibraries / _blocks as Block references; _schemas as FilePathEntity
      org/blockml/bml/core/Definition.bml     ← meta-model base (WIP)
-     org/blockml/bml/definition/*.bml        ← BlockDefinition, PropertyDefinition, … (WIP)
+     org/blockml/bml/definition/*.bml        ← NestedBlockDefinition, RootBlockDefinition, PropertyDefinition, … (WIP)
 
 2. @machineblocks/mbom BML              ← MBOM framework grammar
      com/machineblocks/bml/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml

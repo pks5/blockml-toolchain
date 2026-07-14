@@ -332,7 +332,7 @@ org.blockml.bml.service.*      — built-in services (#math, #strings, …)
 org.blockml.bml.capability.*   — Capability type branches (Inbound, Outbound, Transformation)
 org.blockml.bml.language.*     — Languages (TypeScript, OpenSCAD, …)
 org.blockml.bml.compiler.*     — compiler domain Blocks (Parser, Validator, Serializer, …)
-org.blockml.bml.definition.*   — Definition meta-model Blocks (BlockDefinition, PropertyDefinition, …)
+org.blockml.bml.definition.*   — Definition meta-model Blocks (NestedBlockDefinition, RootBlockDefinition, PropertyDefinition, …)
 org.blockml.bml.documentation.* — bootstrap documentation blocks
 ```
 
@@ -605,7 +605,7 @@ Child element:     direct Block reference (element name = FQN via xmlns prefix)
 Contract target:   any Block definition usable as a partial definition (typically abstract)
 Member scope:      Properties, Aggregations, Associations, Capabilities, Constraints,
                    Suggestions, documentation, examples, references, optional Capability defaults
-Ignored on target: subBlocks[], compositions[] on the contract Block
+Ignored on target: subBlocks[], embeddedBlocks[], compositions[] on the contract Block
 Partial members:   a contract may declare incomplete members — e.g. only <id type="Text"/>
                    without default, constraints, or documentation; the Block completes them
 ```
@@ -901,12 +901,14 @@ com.foo.Bar.documentation           →  <documentation>…</documentation>
 com.foo.Bar.type                    →  <type>com.foo.Bar</type>
 com.foo.Bar.baseType                →  <baseType>…</baseType>
 com.foo.Bar.version                 →  <version>1.0.0</version>
+com.foo.Bar.definition              →  Definition meta-model type FQN (root block only)
 com.foo.Bar.properties.width        →  PropertyDefinition for width
 com.foo.Bar.aggregations.children   →  AggregationDefinition for children
 com.foo.Bar.associations.parent     →  AssociationDefinition for parent
 com.foo.Bar.capabilities.render     →  CapabilityDefinition for render
 com.foo.Bar.genericTypes.T          →  GenericTypeDefinition for T
-com.foo.Bar.subBlocks.Inner         →  nested BlockDefinition
+com.foo.Bar.subBlocks.Inner         →  nested BlockDefinition (FQN derived from parent)
+com.other.ForeignBlock              →  embedded BlockDefinition (FQN = embedded block &lt;type&gt;)
 com.foo.Bar.contracts               →  contracts aggregation
 ```
 
@@ -918,7 +920,7 @@ Within the Block being defined, the Block's own FQN serves as the definition roo
 com.foo.Bar.properties.width        ≡  (current definition).properties.width
 ```
 
-`org.blockml.bml.definition.BlockDefinition` carries generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`.
+`org.blockml.bml.definition.NestedBlockDefinition` carries generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `NestedBlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. Root blocks use `org.blockml.bml.definition.RootBlockDefinition`, which adds `definition` (selects the Definition meta-model for `bml:Self` reflection), `subBlocks`, and `embeddedBlocks`.
 
 #### BOM internal representation
 
@@ -930,6 +932,9 @@ BML member containers (`<properties>`, `<aggregations>`, `<associations>`, `<cap
 | `#this.width` | value of the Property on the current Block instance |
 | `bml:Self` | current effective Block type (type reference only) |
 | `com.foo.Bar` | BlockDefinition for com.foo.Bar |
+| `com.foo.Bar.definition` | Definition meta-model type FQN (root block only) |
+| `com.other.ForeignBlock` | embedded BlockDefinition (FQN = &lt;type&gt; of embedded block) |
+| `com.other.ForeignBlock.properties.width` | PropertyDefinition on embedded block |
 | `com.foo.Bar.name` | `<name>` metadata of the Block definition |
 | `com.foo.Bar.properties.width` | PropertyDefinition for `width` |
 | `com.foo.Bar.properties.width.type` | type FQN of the width property |
@@ -1531,7 +1536,7 @@ Sub-Block: com.machineblocks.bml.calibration.Calibrator.Base
            com.machineblocks.bml.calibration.Calibrator.StudDiameter
 ```
 
-The Sub-Block `<type>` is normally omitted — it is derived as `resolve(parent.type) + "." + name`. An explicit `<type>` must match that expected value (`BML_SUBBLOCK_TYPE_MISMATCH`). Sub-Blocks are declared only on the root block of a document; a Sub-Block must not contain `<subBlocks>` (`BML_SUBBLOCKS_ON_SUBBLOCK`).
+The Sub-Block `<type>` is normally omitted — it is derived as `resolve(parent.type) + "." + name`. An explicit `<type>` must match that expected value (`BML_SUBBLOCK_TYPE_MISMATCH`). Sub-Blocks are declared only on the root block of a document; a Sub-Block must not contain `<subBlocks>` (`BML_SUBBLOCKS_ON_SUBBLOCK`) or `<embeddedBlocks>` (`BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`).
 
 ```text
 Parent:    com.machineblocks.bml.calibration.Calibrator
@@ -1553,6 +1558,39 @@ Within the parent Block's own Composition, Sub-Blocks may be referenced by unqua
 Outside that context, Sub-Blocks require the parent Block's namespace and a qualified name (`RootBlock.SubBlock`), full FQN, or prefixed qualified form (`cal:Calibrator.Base`). Bare Sub-Block short names outside parent context → `BML_UNQUALIFIED_BLOCK_REFERENCE`.
 
 If a Sub-Block shares the root Block's `<name>`, bare short tags are ambiguous → `BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED`; use `Calibrator.Calibrator`, `cal:Calibrator.Calibrator`, or the full FQN.
+
+### Embedded Blocks
+
+Embedded blocks let authors define **multiple BML files inline** in a single source document — including Blocks from packages that do not belong to the root block's namespace. Each embedded block's **FQN is the value of its `<type>` element** (e.g. `com.other.ForeignBlock`) — not nested under the root block.
+
+```text
+type required     — BML_MISSING_EMBEDDED_BLOCK_TYPE
+type must be FQN  — BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE (no derivation, no unqualified names)
+FQN               — resolve(type), e.g. com.other.ForeignBlock
+no subBlocks      — BML_SUBBLOCKS_ON_EMBEDDED_BLOCK
+no embeddedBlocks — BML_EMBEDDED_BLOCKS_ON_EMBEDDED_BLOCK
+```
+
+Within the enclosing document, an embedded definition **shadows** the corresponding library or file-based `BlockDefinition` for resolution. Externally, embedded blocks are **invisible**. Composition references from within the same document must use the **fully qualified** Block type — never an unqualified or Sub-Block-relative name.
+
+```xml
+<embeddedBlocks>
+  <block>
+    <idea>Inline definition — would normally live in its own .bml file</idea>
+    <type>com.other.ForeignBlock</type>
+    <baseType>org.blockml.bml.core.Block</baseType>
+    <version>1.0.0</version>
+    …
+  </block>
+  <block>
+    <idea>Another package inline</idea>
+    <type>com.thirdparty.Helper</type>
+    <baseType>org.blockml.bml.core.Block</baseType>
+    <version>1.0.0</version>
+    …
+  </block>
+</embeddedBlocks>
+```
 
 ### SCAD Mapping
 
