@@ -100,7 +100,7 @@
         <bcore:ValueType />
         <def:AggregationDefinition />
         <def:AssociationDefinition />
-        <def:NestedBlockDefinition />
+        <def:SubBlockDefinition />
         <def:RootBlockDefinition />
         <def:CapabilityDefinition />
         <def:GenericTypeDefinition />

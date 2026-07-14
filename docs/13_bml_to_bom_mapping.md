@@ -60,7 +60,7 @@ Ordinal = index in `members[]` after mapping. Used by renderers when interpretin
 
 ### Canonical definition paths
 
-BML member containers are preserved structurally in the meta-model (`org.blockml.bml.definition.NestedBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). The BOM stores members in a flat `members[]` array tagged by `kind` (`property`, `aggregation`, `association`, `capability`). Reflection and expression evaluation resolve canonical paths via the structural containers:
+BML member containers are preserved structurally in the meta-model (`org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). The BOM stores members in a flat `members[]` array tagged by `kind` (`property`, `aggregation`, `association`, `capability`). Reflection and expression evaluation resolve canonical paths via the structural containers:
 
 ```text
 com.foo.Bar.properties.width   →  members[] entry where kind="property" and name="width"
@@ -298,13 +298,12 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <core:Block />                               → block.subTypes[] (direct Block reference in <subTypes>)
 <lang:OpenSCAD />                            → block.languages[] (direct Language reference in <languages>)
 <ac:Wall />                                  → block.contracts[]   (direct Block reference in <contracts>; root block only)
-<definition>RootBlockDefinition</definition> → block.definitionFqn (root block only; default org.blockml.bml.definition.RootBlockDefinition)
+`<definition>RootBlockDefinition</definition>` → `block.definitionFqn`. Default depends on parse context: Sub-Blocks → `org.blockml.bml.definition.SubBlockDefinition`; document root and embedded blocks → `org.blockml.bml.definition.RootBlockDefinition`. Explicit `<definition>` must be compatible with block role (`BML_DEFINITION_TYPE_MISMATCH`).
 <baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType, defaultType? } (root block only)
 ```
 
-`<subBlocks>` and `<embeddedBlocks>` (Inline Library) map to `block.subBlocks[]` and `block.embeddedBlocks[]` respectively — each child `<block>` parsed as a nested `BlockDefinition`. Sub-Block FQN is derived from the parent; embedded block FQN is `resolve(type)` (the `<type>` element value). See `12_bom_object_model.md`.
+`<subBlocks>` and `<embeddedBlocks>` (Inline Library) map to `block.subBlocks[]` and `block.embeddedBlocks[]` respectively — each child `<block>` parsed recursively as a nested `BlockDefinition`. Sub-Block FQN is derived from the immediate enclosing block as `resolve(parent.type) + "." + name`; embedded block FQN is `resolve(type)` (the `<type>` element value). Embedded blocks are parsed as full root-block-shaped trees including nested `subBlocks[]` and `embeddedBlocks[]`. See `12_bom_object_model.md`.
 
-```text
 ```text
 Omitted <idea> on root block            → BML_MISSING_IDEA (warning V1)
 Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1)
@@ -335,9 +334,14 @@ Duplicate contract reference           → BML_DUPLICATE_CONTRACT (error)
 <genericTypes> on Sub-Block                  → BML_GENERIC_NOT_ON_ROOT (error)
 Duplicate generic parameter name             → BML_DUPLICATE_GENERIC (error)
 generic parameter element name equals Block <name>         → BML_GENERIC_BLOCK_NAME_COLLISION (error)
-generic parameter element name equals Sub-Block <name>     → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
+generic parameter element name equals Sub-Block <name> (any depth in document tree) → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
 Unqualified block reference without FQN or xmlns prefix → BML_UNQUALIFIED_BLOCK_REFERENCE (error)
 Ambiguous Sub-Block short name (same as root) → BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED (error)
+Sub-Block explicit type ≠ resolve(parent.type) + "." + name → BML_SUBBLOCK_TYPE_MISMATCH (error)
+Sub-Block declares <embeddedBlocks> → BML_EMBEDDED_BLOCKS_ON_SUBBLOCK (error)
+Embedded block without <type> → BML_MISSING_EMBEDDED_BLOCK_TYPE (error)
+Embedded block type not fully qualified → BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE (error)
+<definition> incompatible with block role → BML_DEFINITION_TYPE_MISMATCH (error)
 org.blockml.bml.core.Block                   → omits <baseType> (sole inheritance root)
 ```
 
@@ -623,7 +627,7 @@ registry.getBlockDefinition("com.machineblocks.bml.bricks.StandardBrick", "3.0.0
 
 Inside Library files: `bml:version` on `bootstrap` / `_dependencies` / `_subLibraries` / `_blocks` children → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`.
 
-Same-document Sub-Block references omit `version` — resolved against `subBlocks[]` in the same `BomDocument`.
+Same-document Sub-Block references omit `version` — resolved against the `subBlocks[]` tree in the same `BomDocument`.
 
 ### Preset cross-file references (MachineBlocks)
 

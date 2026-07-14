@@ -498,10 +498,8 @@ BML_MISSING_BLOCK_TYPE        — root block lacks required type
 BML_BLOCK_NAME_TYPE_MISMATCH  — root block name ≠ last segment of resolve(type)
 BML_MISSING_SUBBLOCK_NAME     — Sub-Block lacks required name
 BML_SUBBLOCK_TYPE_MISMATCH    — explicit Sub-Block type ≠ resolve(parent.type) + "." + name
-BML_SUBBLOCKS_ON_SUBBLOCK     — Sub-Block declares subBlocks (root block only)
-BML_EMBEDDED_BLOCKS_ON_SUBBLOCK — Sub-Block declares embeddedBlocks (root block only)
-BML_SUBBLOCKS_ON_EMBEDDED_BLOCK — embedded block declares subBlocks
-BML_EMBEDDED_BLOCKS_ON_EMBEDDED_BLOCK — embedded block declares embeddedBlocks
+BML_EMBEDDED_BLOCKS_ON_SUBBLOCK — Sub-Block declares embeddedBlocks (forbidden on all Sub-Blocks)
+BML_DEFINITION_TYPE_MISMATCH  — <definition> FQN incompatible with block role (Sub-Block vs root/embedded)
 BML_MISSING_EMBEDDED_BLOCK_TYPE — embedded block lacks required type
 BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE — embedded block type is not fully qualified
 BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*

@@ -1035,7 +1035,7 @@ Examples from core Block definitions:
 
 ```xml
 <type type="core:FullyQualifiedName(core:Block)"/>
-<baseType type="core:FullyQualifiedName(def:NestedBlockDefinition)"/>
+<baseType type="core:FullyQualifiedName(def:SubBlockDefinition)"/>
 ```
 
 At reference sites:
