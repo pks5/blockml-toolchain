@@ -26,9 +26,10 @@
   <documentation>
     Abstract base type for BlockML structural definition elements. It provides the common
     documentation model consisting of documentation text, version information,
-    change history, examples, and references, plus type modifiers (abstract, final) shared by
-    block definitions and member declarations. Concrete structural definition types inherit
-    these members to describe themselves consistently.
+    change history, examples, and references, plus local declaration properties (abstract, final)
+    for block definitions. Concrete structural definition types inherit these members to describe
+    themselves consistently. Member declarations declare abstract, final, and override locally via
+    org.blockml.bml.definition.MemberDefinition.
   </documentation>
   <name>StructuralDefinition</name>
   <type>def:StructuralDefinition</type>
@@ -52,41 +53,43 @@
     </documentation>
     <abstract type="Boolean" bml:xml="element">
       <value>false</value>
-      <documentation>When true on a block definition, the type is abstract — not usable as a composition
-        instance type.
+      <documentation>Local declaration property — not inherited. Describes only the block or member on
+        which it is declared. Semantic effects (implementation obligations) propagate to descendants.
 
-        When true on a member declaration, the member is abstract — it is semantically incomplete and
-        must be explicitly implemented by a descendant before it can appear on a concrete Block.
-        abstract is inherited effectively along the baseType chain. An inherited abstract="true" is
-        lifted only by explicitly setting abstract="false" on a local redeclaration; override="true"
-        and setting unrelated fields never change abstract implicitly.
+        When true on a block definition, the type is abstract — not usable as a composition instance
+        type. Abstract block types create implementation obligations for concrete descendants. A child
+        block of an abstract type is concrete by default unless it explicitly declares
+        &lt;abstract&gt;true&lt;/abstract&gt;.
 
-        The transition abstract: true → false is the explicit implementation event for this member.
-        The implementing redeclaration must be immediately complete locally for the member kind:
-        - Property: must set type
-        - Aggregation: must set type
-        - Association: must set type
-        - Capability: must set type and provide implementation binding
+        When true on a member declaration, the member is semantically incomplete and must be implemented
+        by a descendant before the enclosing block can be concrete. See
+        org.blockml.bml.definition.MemberDefinition for member placement.
 
-        Default false. On block definitions rendered as a child element (&lt;abstract/&gt; or
-        &lt;abstract&gt;false&lt;/abstract&gt;). On member declarations rendered as an optional
-        attribute or child element — see org.blockml.bml.definition.MemberDefinition.</documentation>
+        Boolean property with explicit true or false. Empty elements (&lt;abstract/&gt;) and attribute
+        shorthand without value are not permitted. Default false when omitted — do not write false
+        explicitly unless documenting intent. On block definitions rendered as a child element
+        (&lt;abstract&gt;true&lt;/abstract&gt;). On member declarations rendered as element or attribute
+        — see org.blockml.bml.definition.MemberDefinition.</documentation>
     </abstract>
     <final type="Boolean" bml:xml="element">
       <value>false</value>
-      <documentation>When true on a block definition, the type is final — cannot be used as baseType on
-        other definitions.
+      <documentation>Local declaration property — not inherited. Describes only the block or member on
+        which it is declared. Semantic effects (extension and override prohibitions) are enforced by
+        the validator across the inheritance chain.
 
-        When true on a member declaration, child Blocks cannot redeclare this member (regardless of
-        whether they would change type, constraints, documentation, or implementation). final is
-        inherited effectively and cannot be lifted by setting final="false" on a descendant.
+        When true on a block definition, the type is final — cannot be used as baseType on other
+        definitions.
+
+        When true on a member declaration, child blocks cannot redeclare this member (regardless of
+        whether they would change type, constraints, documentation, or implementation).
 
         An abstract member must not be final, because it would become impossible to implement it
         (abstract="true" &amp;&amp; final="true" is invalid).
 
-        Default false. On block definitions rendered as a child element (&lt;final/&gt; or
-        &lt;final&gt;false&lt;/final&gt;). On member declarations rendered as an optional attribute
-        or child element — see org.blockml.bml.definition.MemberDefinition.</documentation>
+        Boolean property with explicit true or false. Empty elements (&lt;final/&gt;) and attribute
+        shorthand without value are not permitted. Default false when omitted. On block definitions
+        rendered as a child element (&lt;final&gt;true&lt;/final&gt;). On member declarations rendered
+        as element or attribute — see org.blockml.bml.definition.MemberDefinition.</documentation>
     </final>
   </properties>
 

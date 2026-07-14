@@ -1146,7 +1146,7 @@ org.blockml.bml.core.Block
   <type>org.blockml.bml.language.OpenSCAD</type>
   <baseType>org.blockml.bml.core.ProgrammingLanguage</baseType>
   <version>1.0.0</version>
-  <abstract />
+  <abstract>true</abstract>
 </block>
 ```
 

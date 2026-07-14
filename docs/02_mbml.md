@@ -763,11 +763,12 @@ PascalCase ensures composition instance tags with `xmlns:` prefixes are unambigu
 
 ```text
 <abstract>                    — true | false (default false). Abstract types are not instantiable.
-                              — self-closing <abstract /> is equivalent to true (preferred at root)
-                              — declared on StructuralDefinition; inherited by block definitions
+                              — local declaration property; not inherited. Child blocks are concrete
+                                by default unless they declare abstract=true.
+                              — declared on StructuralDefinition; applies to block definitions
 <final>                       — true | false (default false). Final types cannot be used as baseType.
-                              — self-closing <final /> is equivalent to true (preferred at root)
-                              — declared on StructuralDefinition; inherited by block definitions
+                              — local declaration property; not inherited. Validator enforces effect.
+                              — declared on StructuralDefinition; applies to block definitions
 <visibility>                  — Sub-Blocks only: private | protected | public; must match <name>
 <subTypes>          — override: permitted Sub-Block baseTypes (omit to inherit — see Framework Base Types)
 <languages>         — Language references for <implementation language="...">
@@ -790,8 +791,8 @@ Framework base types (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.
 ### Type Modifiers
 
 ```xml
-<abstract />
-<final />
+<abstract>true</abstract>
+<final>true</final>
 
 <subTypes>
   <core:Block />
@@ -808,7 +809,8 @@ Framework base types (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.
 Omitted <subTypes>            — inherit effective subTypes from baseType chain
 Explicit <subTypes>…          — override (enable or restrict Sub-Blocks)
 Explicit empty <subTypes/>    — override: forbid Sub-Blocks even when parent allowed them
-Omitted other modifiers       — inherit from baseType where applicable (validator walks chain)
+Omitted abstract/final          — false (local declaration properties; not inherited from baseType)
+Omitted languages / contracts   — inherit from baseType at validate
 org.blockml.bml.core.Block        — sole type with empty <baseType /> (inheritance root); effective subTypes []
 ```
 
@@ -862,7 +864,7 @@ Validation      — merge resolution at stage [8] via resolveEffectiveMembers()
   <type>com.foo.IIdentifiable</type>
   <baseType>org.blockml.bml.core.Block</baseType>
   <version>1.0.0</version>
-  <abstract />
+  <abstract>true</abstract>
   <properties>
     <id type="Text" />
   </properties>
@@ -1398,84 +1400,87 @@ All member kinds support these optional attributes:
 ```text
 readOnly="true|false"   — when true, the member cannot be written on Block instances. Validator-enforced.
                           Default: false. See § readOnly Members below.
-abstract="true|false"   — when true, the member is abstract — its definition may be incomplete (for
-                          example a property without type or without value). Concrete blocks must
-                          implement inherited abstract members. Default: false.
-override="true|false"   — when true, this declaration overrides a same-named parent member. The
-                          parent may be abstract or concrete. Does not require abstract="true" on
-                          this declaration. Default: false.
-final="true|false"      — when true, child Blocks cannot override this member. Validator-enforced.
+abstract="true|false"   — local declaration property; not inherited. When true, this declaration is
+                          semantically incomplete and creates an implementation obligation for concrete
+                          descendants. Default: false.
+override="true|false"   — local declaration property; not inherited. When true, this declaration
+                          redefines an inherited member. Must be set on every redeclaration layer.
                           Default: false.
+final="true|false"      — local declaration property; not inherited. When true on this declaration,
+                          child blocks cannot override this member. Validator-enforced. Default: false.
 ```
 
-### Abstract and override
+Empty elements (`<abstract/>`) and attribute shorthand without value (`abstract` without `="true"`) are not permitted. Boolean properties require an explicit `true` or `false` value.
 
-Two orthogonal member attributes with simple validator rules:
+### Abstract, final, and override
 
-| Attribute | Validator rule |
-|---|---|
-| `abstract="true"` | Member must be implemented by concrete blocks |
-| `override="true"` | A same-named parent member must exist (abstract or concrete) |
+`abstract`, `final`, and `override` are **local declaration properties**. They describe only the block or member on which they are declared and are **never inherited**. Only their semantic effects propagate:
+
+```text
+abstract=true  — creates an implementation obligation for concrete descendants
+final=true     — prevents extension (blocks) or redeclaration (members) in descendants
+override=true  — confirms a deliberate redefinition of an inherited member
+```
+
+| Attribute | Local meaning | Semantic effect |
+|---|---|---|
+| `abstract="true"` | This declaration is incomplete | Concrete descendants must implement |
+| `final="true"` | This declaration is sealed | Descendants cannot override |
+| `override="true"` | This declaration replaces an inherited member | Parent member must exist |
 
 A member declaration is exactly one of:
 
 ```text
 new            — no override
-override       — refines or replaces an inherited member
+override       — refines or replaces an inherited member (override="true" required)
 ```
 
-**Abstract → implementation (explicit)**
+**Abstract → implementation**
 
 An `abstract="true"` member may omit required parts on the declaring block (for example a property
-without `type` or without `<value>`). A deriving block implements it by explicitly lifting
-`abstract="true"` to `abstract="false"` and supplying the missing required parts locally. The
-abstract status is inherited effectively; an inherited `abstract="true"` is lifted **only** by an
-explicit `abstract="false"` on the local redeclaration — neither `override="true"` nor setting
-unrelated fields change abstract implicitly.
+without `type` or without `<value>`). A deriving block implements it with `override="true"` and a
+locally complete declaration. Because `abstract` defaults to `false`, a redeclaration without
+`abstract="true"` is locally concrete and satisfies the implementation obligation when complete for
+the member kind.
 
 ```text
 abstract member on a concrete block                  →  BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED
 ```
 
-Explicit implementation — `abstract="false"` with required fields present locally:
+Example — parent declares abstract member, child implements:
 
 ```xml
 <!-- Parent -->
 <width abstract="true" type="Length"/>
 
-<!-- Child: explicit implementation; must be locally complete -->
-<width override="true" abstract="false" type="Millimeter">
+<!-- Child: locally concrete (abstract defaults to false); must be complete -->
+<width override="true" type="Millimeter">
   <value>100</value>
 </width>
 ```
 
-**Concrete or abstract → override**
+**Keeping a member abstract in a child block**
 
-Use `override="true"` to refine an inherited member. `abstract` on the overriding declaration is
-optional — when the parent member is abstract and the child does not explicitly lift it to
-`abstract="false"`, the effective member stays abstract. The child may change attributes (for example
-`type`); the next
-deriving block sees the refined abstract member.
+To refine an inherited abstract member while keeping it abstract, explicitly declare
+`abstract="true"` on the redeclaration:
 
 ```xml
 <!-- Parent -->
 <width abstract="true" type="Length"/>
 
-<!-- Child: stays abstract, type is refined — abstract may be omitted on the override -->
-<width override="true" type="Millimeter"/>
+<!-- Child: stays abstract; type is refined -->
+<width override="true" abstract="true" type="Millimeter"/>
 
-<!-- Grandchild still sees an abstract Millimeter width until explicitly implemented -->
+<!-- Grandchild must implement with a locally complete override -->
+<width override="true" type="Millimeter">
+  <value>100</value>
+</width>
 ```
 
-To state abstract explicitly on the override (equivalent when the parent is abstract):
+**Concrete parent → override**
 
-```xml
-<width abstract="true" override="true" type="Millimeter"/>
-```
-
-`override="true"` on a concrete parent member replaces or narrows inherited attributes and values
-without changing abstractness — the effective member remains concrete unless the override declares
-`abstract="true"`.
+`override="true"` on a concrete parent member replaces or narrows inherited attributes and values.
+The redeclaration is locally concrete unless it explicitly declares `abstract="true"`.
 
 `override="true"` without a matching parent member → `BML_OVERRIDE_WITHOUT_PARENT`.
 
@@ -1528,8 +1533,9 @@ The check runs after `resolveEffectiveMembers()` on every `BlockInstance` — co
 
 `readOnly` is independent of `final`, `abstract`, and `override`: a child Block
 may override the **value** of a `readOnly` member in its definition, but cannot override a `final`
-member at all. An `abstract` member must be completed (explicitly lifted to `abstract="false"`) on a deriving
-block before the enclosing block is concrete. Use `override="true"` to refine an inherited member
+member at all. An abstract member obligation must be satisfied with a locally complete override on a
+deriving block before the enclosing block is concrete. Use `override="true"` to refine an inherited
+member — each redeclaration layer must set it again.
 without completing it.
 
 ### Member Namespace (Element QName)
@@ -1620,14 +1626,15 @@ A legacy `namespace="…"` attribute on a member element → parse error.
 
 ### Partial Member Overrides
 
-Child Blocks override inherited members with `override="true"` or complete abstract members by
-explicitly setting `abstract="false"`. Only the **member name**, the mode flag, and **changed attributes** need
-to be specified — all other attributes are inherited from the parent definition.
+Child Blocks override inherited members with `override="true"` or satisfy abstract implementation
+obligations with a locally complete override. Only the **member name**, the mode flag, and **changed
+attributes** need to be specified — all other attributes are inherited from the parent definition.
 
-To refine an inherited abstract member while keeping it abstract, use `override="true"` (and do not
-lift it to `abstract="false"`). To complete an inherited abstract member, explicitly set
-`abstract="false"` and supply the missing required parts locally (for example `type` and `<value>` on
-a property). On capabilities, supply a full `<implementation>` child element (see Capabilities).
+To refine an inherited abstract member while keeping it abstract, use `override="true"` with
+`abstract="true"`. To implement an inherited abstract member, use `override="true"` without
+`abstract="true"` (defaults to locally concrete) and supply the missing required parts locally
+(for example `type` and `<value>` on a property). On capabilities, supply a full `<implementation>`
+child element (see Capabilities).
 
 Parent:
 

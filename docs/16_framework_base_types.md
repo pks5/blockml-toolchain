@@ -48,8 +48,9 @@ BlockProcessor (when/how        →  Render pipeline
 
 Optional elements on any `<block>` definition and on member declarations (properties, aggregations,
 associations, capabilities). Declared in the meta-model on
-`org.blockml.bml.definition.StructuralDefinition` and inherited by `BlockDefinition`,
-`SubBlockDefinition`, `RootBlockDefinition`, and `MemberDefinition`.
+`org.blockml.bml.definition.StructuralDefinition` (blocks) and
+`org.blockml.bml.definition.MemberDefinition` (members, including `override`). Local declaration
+properties — not inherited; only semantic effects propagate.
 
 On **block definitions**, render as child elements (`<abstract>`, `<final>`). On **member
 declarations**, render as element or attribute (`bml:xml="element|attribute"`) — element form
@@ -60,18 +61,17 @@ value placement.
 ### `<abstract>`
 
 ```xml
-<abstract />
+<abstract>true</abstract>
 ```
 
-Equivalent to `<abstract>true</abstract>`. Omit or use `<abstract>false</abstract>` for concrete types.
+Local declaration property — not inherited. When true, the type exists for inheritance and validation but must not be used as a composition instance typeFqn (except as baseType on definitions). A child block of an abstract type is concrete by default unless it explicitly declares `abstract="true"`.
 
 ```text
-true   — type exists for inheritance and validation; must not be used as
-         composition instance typeFqn (except as baseType on definitions)
+true   — abstract type; creates implementation obligations for concrete descendants
 false  — default when omitted; concrete derivable type
 ```
 
-Prefer the self-closing form for root flags set once and not overridable by children.
+Empty elements (`<abstract/>`) are not permitted — use `<abstract>true</abstract>` explicitly.
 
 Framework types `org.blockml.bml.core.Block`, `org.blockml.bml.service.*` (abstract bases), `com.machineblocks.bml.core.Block` are `abstract=true`.
 
@@ -80,10 +80,10 @@ Concrete blocks (`Wall`, `StandardBrick`, `Math`) omit `<abstract>` or set `fals
 ### `<final>`
 
 ```xml
-<final />
+<final>true</final>
 ```
 
-Equivalent to `<final>true</final>`. Omit or use `<final>false</final>` when the type may be extended.
+Local declaration property — not inherited. When true, no Block definition may use this type as baseType (BML_FINAL_BASE_TYPE).
 
 ```text
 true   — no Block definition may use this type as baseType
@@ -91,7 +91,7 @@ true   — no Block definition may use this type as baseType
 false  — default when omitted
 ```
 
-Prefer the self-closing form for root flags set once and not overridable by children.
+Empty elements (`<final/>`) are not permitted — use `<final>true</final>` explicitly.
 
 `com.machineblocks.bml.core.NativeBlock` is `final=true`.
 
@@ -245,13 +245,14 @@ Sub-blocks:    Documentation · Change · Example · Reference   ← inline in S
 Source:        packages/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
 ```
 
-`abstract` and `final` on block definitions control type instantiability and extensibility. On member
-declarations, `abstract` allows an incomplete definition. `override="true"` requires a same-named
-parent member; abstract on the override is optional — refining an abstract parent without explicitly
-lifting it to `abstract="false"` keeps the member abstract for descendants. A transition
-`abstract: true → false` on a local redeclaration is the explicit implementation event and must be
-locally complete for the member kind. Concrete blocks must implement inherited abstract members.
-`final` prevents any redeclaration in child Blocks.
+`abstract`, `final`, and `override` are local declaration properties — not inherited. On block
+definitions, `abstract` and `final` control type instantiability and extensibility. On member
+declarations, `abstract="true"` marks an incomplete local declaration that creates an implementation
+obligation for concrete descendants. `override="true"` must be set on every redeclaration layer.
+A locally concrete override (abstract defaults to false) satisfies an abstract implementation obligation
+when complete for the member kind. To keep a member abstract in a child block, explicitly declare
+`abstract="true"` on that redeclaration. `final="true"` on any declaring layer prevents redeclaration
+in child blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 

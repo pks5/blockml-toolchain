@@ -292,8 +292,8 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <name>…</name>                               → block.name
 <type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
 <version>…</version>                         → block.version
-<abstract />                                 → block.abstract = true  (equivalent: <abstract>true</abstract>)
-<final />                                    → block.final = true     (equivalent: <final>true</final>)
+<abstract>true</abstract>                    → block.abstract = true
+<final>true</final>                          → block.final = true
 <visibility>…</visibility>                   → block.visibility (Sub-Block only; root → BML_VISIBILITY_ON_ROOT_BLOCK)
 <core:Block />                               → block.subTypes[] (direct Block reference in <subTypes>)
 <lang:OpenSCAD />                            → block.languages[] (direct Language reference in <languages>)
@@ -316,7 +316,9 @@ Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <language> or documentation language="…" unknown NaturalLanguage FQN → BML_UNKNOWN_NATURAL_LANGUAGE (error)
 <see> without block, file, or url          → BML_REFERENCE_MISSING_TARGET (error)
 <see> with more than one target attr       → BML_REFERENCE_AMBIGUOUS_TARGET (error)
-Omitted abstract/final                 → false
+Omitted abstract/final/override          → false
+<abstract/> / <final/> / empty boolean   → parse error (explicit true or false required)
+Attribute shorthand without value        → parse error (e.g. abstract without ="true")
 Omitted <visibility> on Sub-Block      → derive from <name> (__ → private, _ → protected, else public)
 <visibility> on root Block               → BML_VISIBILITY_ON_ROOT_BLOCK (error)
 <visibility> mismatches <name>           → BML_VISIBILITY_MISMATCH (error)
@@ -356,7 +358,9 @@ element localName          → name
 element prefix (if any)    → namespace (resolved — see below)
 visibility="protected"     → visibility (optional; derived from name when omitted)
 readOnly="true"            → readOnly (validator-enforced on instances — see 02_mbml.md § readOnly Members)
-final="true"               → final
+abstract="true"            → abstract (local declaration property — not inherited)
+final="true"               → final (local declaration property — not inherited)
+override="true"            → override (local declaration property — not inherited; required on each redeclaration)
 <documentation>…           → documentation
 <since>…                   → since
 <changelog>…               → changelog[]

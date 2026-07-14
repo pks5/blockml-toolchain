@@ -20,8 +20,9 @@
     container on BlockDefinition; the XML element name is the member name (bml:xml="${ #this.name }").
     An optional XML prefix on the element name supplies the member namespace — resolved via xmlns to
     BOM namespace; unprefixed elements use the default namespace (empty string). Member identity is
-    (resolvedNamespace, localName). Inherits abstract and final modifiers from
-    org.blockml.bml.definition.StructuralDefinition.
+    (resolvedNamespace, localName). Declaration properties abstract, final, and override are local to
+    each member declaration — not inherited. Only their semantic effects propagate (implementation
+    obligations, override prohibitions).
 
     Member value placement (scalar members on PropertyDefinition, CapabilityDefinition, and shared
     MemberDefinition fields):
@@ -36,14 +37,18 @@
     Member declaration modes are orthogonal:
     • new — introduces a new member; must not set override="true"
     • override="true" — refines an inherited member of the same identity (namespace + localName).
-      override is local-only (not inherited) and does not change abstract/final semantics.
+      Each redeclaration must set override="true" again — override is not inherited.
 
-    Member completeness is expressed exclusively via the inherited abstract modifier:
-    - abstract is inherited effectively; an inherited abstract="true" is lifted only by explicitly
-      setting abstract="false" on a local redeclaration.
-    - A transition abstract: true → false is the explicit implementation event of this member.
-      In that local redeclaration, the required member-specific fields must be present locally
-      (Property: type; Aggregation: type; Association: type; Capability: type + implementation).
+    Declaration properties abstract, final, and override are boolean properties local to the current
+    declaration (default false). They are never inherited; only semantic effects apply across layers:
+    - abstract="true" creates an implementation obligation for concrete descendants
+    - final="true" prevents redeclaration in child blocks (validator checks all declaring layers)
+    - override="true" confirms a deliberate redefinition of an inherited member
+
+    A locally concrete redeclaration (abstract=false, the default) with override="true" satisfies an
+    inherited implementation obligation when it is complete for the member kind (Property: type;
+    Aggregation: type; Association: type; Capability: type + implementation). To keep a member
+    abstract in a child block, explicitly declare abstract="true" on that redeclaration.
 
     Maps to BOM MemberDefinitionBase fields shared by all member kinds — including visibility and
     readOnly attributes on member elements.</documentation>
@@ -70,30 +75,35 @@
   <bml:xml>${ #this.name }</bml:xml>
 
   <properties>
-    <abstract bml:xml="element|attribute">
+    <abstract type="Boolean" bml:xml="element|attribute">
       <value>false</value>
-      <documentation>Overrides org.blockml.bml.definition.StructuralDefinition.abstract for member
-        declarations (bml:xml="element|attribute"). On definitions, element form is preferred; on
-        Block instances, attribute form is preferred. Semantics inherited from StructuralDefinition —
-        member abstract marks an incomplete declaration that must be implemented by a descendant.</documentation>
+      <documentation>Local declaration property — not inherited. When true, this member declaration is
+        semantically incomplete and creates an implementation obligation for concrete descendants.
+        bml:xml="element|attribute" — on definitions, element form is preferred; on Block instances,
+        attribute form is preferred. Boolean with explicit true or false; empty elements and attribute
+        shorthand without value are not permitted. Default false when omitted.</documentation>
     </abstract>
-    <final bml:xml="element|attribute">
+    <final type="Boolean" bml:xml="element|attribute">
       <value>false</value>
-      <documentation>Overrides org.blockml.bml.definition.StructuralDefinition.final for member
-        declarations (bml:xml="element|attribute"). On definitions, element form is preferred; on
-        Block instances, attribute form is preferred. Semantics inherited from StructuralDefinition —
-        final members cannot be redeclared in child Blocks.</documentation>
+      <documentation>Local declaration property — not inherited. When true on this declaration, child
+        blocks cannot redeclare this member. The validator enforces this effect regardless of whether
+        final is set on descendant declarations. bml:xml="element|attribute" — on definitions, element
+        form is preferred; on Block instances, attribute form is preferred. Boolean with explicit true
+        or false; empty elements and attribute shorthand without value are not permitted. Default false
+        when omitted.</documentation>
     </final>
-    <override bml:xml="element|attribute">
+    <override type="Boolean" bml:xml="element|attribute">
       <value>false</value>
-      <documentation>When true, this member declaration overrides an inherited member of the same
-        identity (namespace + localName). bml:xml="element|attribute" — on definitions, element
-        form is preferred; on Block instances, attribute form is preferred. override is a local
-        declaration statement and is not inherited. The validator requires a matching parent member
-        in the baseType chain. A new member must not set override="true".
+      <documentation>Local declaration property — not inherited. When true, this member declaration
+        deliberately redefines an inherited member of the same identity (namespace + localName). Each
+        redeclaration in the chain must set override="true" again. bml:xml="element|attribute" — on
+        definitions, element form is preferred; on Block instances, attribute form is preferred. The
+        validator requires a matching parent member in the baseType chain. A new member must not set
+        override="true". Boolean with explicit true or false; empty elements and attribute shorthand
+        without value are not permitted. Default false when omitted.
 
-        override does not modify abstract or final. It may be used to change documentation or other
-        optional metadata without implementing an abstract member.</documentation>
+        override does not modify abstract or final on other layers. It may be used to change
+        documentation or other optional metadata without implementing an abstract member.</documentation>
     </override>
     <visibility bml:xml="element|attribute">
       <documentation>Optional BlockML access visibility — private, protected, or public. Omitted =

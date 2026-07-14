@@ -56,8 +56,8 @@
       Implementation sub-block branch — structured language binding, not a ValueType.
     </see>
     <see block="def:MemberDefinition">
-      Parent type — override/abstract/final semantics are inherited; capability adds an optional
-      implementation binding element.
+      Parent type — override/abstract/final are local declaration properties on MemberDefinition;
+      capability adds an optional implementation binding element.
     </see>
   </references>
 

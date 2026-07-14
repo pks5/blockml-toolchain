@@ -488,15 +488,14 @@ interface MemberDefinitionBase {
   /** When true, Block instances must not set this member. Definition and child override allowed. */
   readOnly?: boolean
   /**
-   * When true, member is abstract — its effective definition is semantically incomplete and must be
-   * explicitly implemented by a descendant before the enclosing Block can be concrete.
-   * abstract is inherited effectively; it is lifted only by explicitly setting abstract=false on a
-   * local redeclaration (override does not change abstract implicitly).
+   * Local declaration property — not inherited. When true on this declaration, the member is
+   * semantically incomplete and creates an implementation obligation for concrete descendants.
+   * Effective abstractness is derived from unsatisfied obligations, not from property inheritance.
    */
   abstract?: boolean
-  /** When true, child Blocks cannot override this member */
+  /** Local declaration property — not inherited. When true on this declaration, child blocks cannot override this member. Validator checks all declaring layers. */
   final?: boolean
-  /** When true, this declaration overrides a same-named parent member */
+  /** Local declaration property — not inherited. When true, this declaration overrides a same-named parent member. Must be set on every redeclaration layer. */
   override?: boolean
   /** Constraint Block instances — document order preserved. Target binding resolved at validate time. */
   constraints?: BlockInstance[]
@@ -585,10 +584,11 @@ Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" 
 3. Block local      — declared members on this Block (override all)
 ```
 
-Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` prevents any redeclaration. `readOnly="true"` prevents instance authoring only — child Block definitions may still override the value/composition. An `override="true"` on an abstract parent keeps the effective member abstract unless the child explicitly lifts it to `abstract="false"`. The transition `abstract: true → false` is the explicit implementation event; the implementing redeclaration must be locally complete for the member kind.
+Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` on any declaring layer prevents redeclaration. `readOnly="true"` prevents instance authoring only — child Block definitions may still override the value/composition.
 
-An override that keeps the member concrete (`abstract: false → false`) is not an implementation event
-and may omit required fields locally — they may be inherited from the effective parent member.
+`abstract`, `final`, and `override` are local declaration properties stored on each declaration layer — not merged or inherited. Semantic effects propagate: an `abstract="true"` declaration creates an implementation obligation until a descendant provides a locally complete concrete override (`abstract` defaults to false). To keep a member abstract in a child block, explicitly declare `abstract="true"` on that redeclaration. Each redeclaration must set `override="true"` again.
+
+An override that is locally concrete and complete for the member kind satisfies an abstract implementation obligation. An override that keeps the member abstract declares `abstract="true"` explicitly and may omit required fields locally — obligation passes to descendants.
 
 ```text
 Parser / mapper     MUST NOT reorder declared members
@@ -1358,7 +1358,7 @@ BML_PRIVATE_SUBBLOCK_ACCESS   — private Sub-Block referenced outside declaring
 BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritance context
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_OVERRIDE_WITHOUT_PARENT   — override="true" but no same-named parent member
-BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — abstract member on a concrete block (must be explicitly implemented via abstract="false")
+BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — unsatisfied abstract implementation obligation on a concrete block
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
