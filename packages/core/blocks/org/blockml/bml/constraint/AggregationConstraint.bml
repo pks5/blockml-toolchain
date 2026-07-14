@@ -20,7 +20,7 @@
   <name>AggregationConstraint</name>
   <type>constraint:AggregationConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <genericTypes>
     <T baseType="def:AggregationDefinition">

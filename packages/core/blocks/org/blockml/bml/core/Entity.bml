@@ -32,6 +32,6 @@
   <name>Entity</name>
   <type>core:Entity</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

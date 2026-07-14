@@ -21,7 +21,7 @@
   <name>ValueConstraint</name>
   <type>constraint:ValueConstraint</type>
   <baseType>core:Constraint</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <genericTypes>
     <T baseType="core:ValueType">

@@ -74,7 +74,7 @@
   <name>EnumType</name>
   <type>btype:EnumType</type>
   <baseType>btype:StructType</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <aggregations>
     <values

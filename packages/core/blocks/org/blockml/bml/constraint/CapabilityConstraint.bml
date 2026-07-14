@@ -20,7 +20,7 @@
   <name>CapabilityConstraint</name>
   <type>constraint:CapabilityConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <genericTypes>
     <T baseType="def:CapabilityDefinition">

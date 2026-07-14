@@ -18,7 +18,7 @@
   <name>Capability</name>
   <type>core:Capability</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <properties>
     <_hasInput type="Boolean" readOnly="true">

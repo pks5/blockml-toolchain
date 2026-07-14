@@ -22,6 +22,6 @@
   <name>NaturalLanguage</name>
   <type>lang:NaturalLanguage</type>
   <baseType>core:Language</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

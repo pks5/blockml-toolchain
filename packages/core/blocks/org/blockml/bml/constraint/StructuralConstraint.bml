@@ -21,7 +21,7 @@
   <name>StructuralConstraint</name>
   <type>constraint:StructuralConstraint</type>
   <baseType>core:Constraint</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <genericTypes>
     <T baseType="core:Definition">

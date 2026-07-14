@@ -45,6 +45,6 @@
   <name>PrimitiveType</name>
   <type>btype:PrimitiveType</type>
   <baseType>core:ValueType</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

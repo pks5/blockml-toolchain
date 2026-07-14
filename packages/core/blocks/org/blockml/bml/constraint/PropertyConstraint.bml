@@ -21,7 +21,7 @@
   <name>PropertyConstraint</name>
   <type>constraint:PropertyConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <genericTypes>
     <T baseType="def:PropertyDefinition">

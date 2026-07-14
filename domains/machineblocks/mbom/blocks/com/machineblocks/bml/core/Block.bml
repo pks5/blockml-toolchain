@@ -36,7 +36,7 @@
   <name>Block</name>
   <type>core:Block</type>
   <baseType>bcore:Entity</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <properties>
     <name type="Text">

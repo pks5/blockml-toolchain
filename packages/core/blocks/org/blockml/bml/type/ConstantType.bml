@@ -60,6 +60,6 @@
   <name>ConstantType</name>
   <type>btype:ConstantType</type>
   <baseType>core:ValueType</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

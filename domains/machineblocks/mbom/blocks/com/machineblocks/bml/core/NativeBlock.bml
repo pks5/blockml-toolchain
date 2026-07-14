@@ -31,7 +31,7 @@
   <name>NativeBlock</name>
   <type>core:NativeBlock</type>
   <baseType>core:Block</baseType>
-  <final />
+  <final>true</final>
 
   <!-- Native MB properties — all mb_block() parameters from 09_api_parameters.yml (v3.0.5) -->
   <properties>

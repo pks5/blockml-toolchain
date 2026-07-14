@@ -27,7 +27,7 @@
   <name>Constraint</name>
   <type>core:Constraint</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <properties>
     <validation type="core:Validation">

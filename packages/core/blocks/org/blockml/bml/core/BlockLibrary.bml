@@ -64,7 +64,7 @@
   <type>core:BlockLibrary</type>
   <baseType>core:Block</baseType>
 
-  <abstract />
+  <abstract>true</abstract>
 
   <subTypes>
     <core:Block />

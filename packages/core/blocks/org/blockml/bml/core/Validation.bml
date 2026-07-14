@@ -23,6 +23,6 @@
   <name>Validation</name>
   <type>core:Validation</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

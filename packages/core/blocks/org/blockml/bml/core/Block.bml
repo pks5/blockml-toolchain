@@ -106,7 +106,7 @@
   <bml:xml>${ bml:Self }</bml:xml>
   
   <!-- Root block is abstract -->
-  <abstract />
+  <abstract>true</abstract>
 
   <properties>
     <language type="lang:NaturalLanguage">

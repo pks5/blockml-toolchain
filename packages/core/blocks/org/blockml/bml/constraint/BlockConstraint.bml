@@ -22,7 +22,7 @@
   <name>BlockConstraint</name>
   <type>constraint:BlockConstraint</type>
   <baseType>constraint:StructuralConstraint</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <genericTypes>
     <T baseType="def:BlockDefinition">

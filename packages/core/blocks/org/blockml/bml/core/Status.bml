@@ -20,6 +20,6 @@
   <name>Status</name>
   <type>core:Status</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

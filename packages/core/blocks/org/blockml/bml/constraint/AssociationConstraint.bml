@@ -20,7 +20,7 @@
   <name>AssociationConstraint</name>
   <type>constraint:AssociationConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <genericTypes>
     <T baseType="def:AssociationDefinition">

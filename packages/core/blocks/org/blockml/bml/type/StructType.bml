@@ -79,6 +79,6 @@
   <name>StructType</name>
   <type>btype:StructType</type>
   <baseType>core:ValueType</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

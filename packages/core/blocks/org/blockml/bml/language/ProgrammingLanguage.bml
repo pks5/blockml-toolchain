@@ -18,6 +18,6 @@
   <name>ProgrammingLanguage</name>
   <type>lang:ProgrammingLanguage</type>
   <baseType>core:Language</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

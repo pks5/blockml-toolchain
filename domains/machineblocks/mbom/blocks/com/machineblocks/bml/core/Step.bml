@@ -29,7 +29,7 @@
   <name>Step</name>
   <type>core:Step</type>
   <baseType>bcore:Block</baseType>
-  <final />
+  <final>true</final>
 
   <associations>
     <part type="core:Block"></part>

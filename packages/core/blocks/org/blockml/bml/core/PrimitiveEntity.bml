@@ -34,7 +34,7 @@
   <name>PrimitiveEntity</name>
   <type>core:PrimitiveEntity</type>
   <baseType>core:Entity</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <genericTypes>
     <T baseType="btype:PrimitiveType" />

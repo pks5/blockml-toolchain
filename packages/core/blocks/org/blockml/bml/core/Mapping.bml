@@ -41,6 +41,6 @@
   <name>Mapping</name>
   <type>core:Mapping</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

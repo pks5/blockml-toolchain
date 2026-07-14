@@ -13,5 +13,5 @@
   <name>Number</name>
   <type>btype:Number</type>
   <baseType>btype:PrimitiveType</baseType>
-  <abstract />
+  <abstract>true</abstract>
 </block>

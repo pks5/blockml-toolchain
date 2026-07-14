@@ -63,7 +63,7 @@
   <name>BlockDefinition</name>
   <type>def:BlockDefinition</type>
   <baseType>def:ConstrainableDefinition</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <!-- Block definitions render as the root <block> element. -->
   <bml:xml>block</bml:xml>

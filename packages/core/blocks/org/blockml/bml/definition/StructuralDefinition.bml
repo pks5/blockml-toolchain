@@ -34,7 +34,7 @@
   <name>StructuralDefinition</name>
   <type>def:StructuralDefinition</type>
   <baseType>core:Definition</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <!--
   Property definitions are grouped inside the <properties> element.

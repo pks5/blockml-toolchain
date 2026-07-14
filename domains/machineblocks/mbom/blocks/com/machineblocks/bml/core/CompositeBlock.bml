@@ -31,7 +31,7 @@
   <name>CompositeBlock</name>
   <type>core:CompositeBlock</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <subTypes>
     <core:Block />

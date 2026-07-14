@@ -71,7 +71,7 @@
   <name>MemberDefinition</name>
   <type>def:MemberDefinition</type>
   <baseType>def:ConstrainableDefinition</baseType>
-  <abstract />
+  <abstract>true</abstract>
   <bml:xml>${ #this.name }</bml:xml>
 
   <properties>

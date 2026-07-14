@@ -31,6 +31,6 @@
   <name>Documentation</name>
   <type>core:Documentation</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

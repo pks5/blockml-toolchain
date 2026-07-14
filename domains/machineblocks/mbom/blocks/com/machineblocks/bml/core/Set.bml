@@ -27,7 +27,7 @@
   <name>Set</name>
   <type>core:Set</type>
   <baseType>core:CompositeBlock</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <aggregations>
     <_steps type="core:Step[]" />

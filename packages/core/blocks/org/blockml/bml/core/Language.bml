@@ -19,6 +19,6 @@
   <name>Language</name>
   <type>core:Language</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

@@ -24,7 +24,7 @@
   <name>ConstrainableDefinition</name>
   <type>def:ConstrainableDefinition</type>
   <baseType>def:StructuralDefinition</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <aggregations>
     <constraints type="core:Constraint[]" bml:xml="element">

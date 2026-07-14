@@ -30,6 +30,6 @@
   <name>Definition</name>
   <type>core:Definition</type>
   <baseType>core:Block</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
 </block>

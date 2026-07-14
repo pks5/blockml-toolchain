@@ -20,7 +20,7 @@
   <name>MemberConstraint</name>
   <type>constraint:MemberConstraint</type>
   <baseType>constraint:StructuralConstraint</baseType>
-  <abstract />
+  <abstract>true</abstract>
 
   <genericTypes>
     <T baseType="def:MemberDefinition">
