@@ -302,7 +302,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType, defaultType? } (root block only)
 ```
 
-`<subBlocks>` and `<embeddedBlocks>` map to `block.subBlocks[]` and `block.embeddedBlocks[]` respectively — each child `<block>` parsed as a nested `BlockDefinition`. Sub-Block FQN is derived from the parent; embedded block FQN is `resolve(type)` (the `<type>` element value). See `12_bom_object_model.md`.
+`<subBlocks>` and `<embeddedBlocks>` (Inline Library) map to `block.subBlocks[]` and `block.embeddedBlocks[]` respectively — each child `<block>` parsed as a nested `BlockDefinition`. Sub-Block FQN is derived from the parent; embedded block FQN is `resolve(type)` (the `<type>` element value). See `12_bom_object_model.md`.
 
 ```text
 ```text

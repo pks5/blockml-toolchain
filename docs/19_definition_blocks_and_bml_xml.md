@@ -71,14 +71,14 @@ Each member kind in the block grammar has a corresponding Definition block. Exam
 | Definition block | Describes |
 |---|---|
 | `org.blockml.bml.definition.NestedBlockDefinition` | Shared `<block>` document shape (identity, members, metadata) |
-| `org.blockml.bml.definition.RootBlockDefinition` | Root `<block>` document — adds `definition`, `subBlocks`, `embeddedBlocks` |
+| `org.blockml.bml.definition.RootBlockDefinition` | Root `<block>` document — adds `definition`, `subBlocks`, `embeddedBlocks` (Inline Library) |
 | `org.blockml.bml.definition.PropertyDefinition` | `<properties>` child members |
 | `org.blockml.bml.definition.AggregationDefinition` | `<aggregations>` child members |
 | `org.blockml.bml.definition.AssociationDefinition` | `<associations>` child members |
 | `org.blockml.bml.definition.CapabilityDefinition` | `<capabilities>` child members |
 | `org.blockml.bml.definition.GenericTypeDefinition` | `<genericTypes>` entries |
 
-`NestedBlockDefinition` and `RootBlockDefinition` declare the members that block definition documents may carry (`name`, `type`, `baseType`, aggregations for `properties`, `aggregations`, …). `RootBlockDefinition` adds root-only members: `definition` (selects the Definition meta-model type for definition reflection via `bml:Self`), `subBlocks`, and `embeddedBlocks`. Type modifiers `abstract` and `final` are inherited from `org.blockml.bml.definition.StructuralDefinition` and apply to block definitions and member declarations. See `packages/core/blocks/org/blockml/bml/definition/NestedBlockDefinition.bml` and `RootBlockDefinition.bml`.
+`NestedBlockDefinition` and `RootBlockDefinition` declare the members that block definition documents may carry (`name`, `type`, `baseType`, aggregations for `properties`, `aggregations`, …). `RootBlockDefinition` adds root-only members: `definition` (selects the Definition meta-model type for definition reflection via `bml:Self`), `subBlocks`, and `embeddedBlocks` (Inline Library — Gedankenstütze: a library co-located within a single Block document). Type modifiers `abstract` and `final` are inherited from `org.blockml.bml.definition.StructuralDefinition` and apply to block definitions and member declarations. See `packages/core/blocks/org/blockml/bml/definition/NestedBlockDefinition.bml` and `RootBlockDefinition.bml`.
 
 **Distinction from BOM `BlockDefinition`:** The TypeScript interface `org.blockml.bml.bom.BlockDefinition` is the **parse result** for any `<block>` document. The BML blocks `org.blockml.bml.definition.NestedBlockDefinition` and `RootBlockDefinition` are the **meta-model** that describes what a block document means. Same word, different layers — see `12_bom_object_model.md`.
 
@@ -216,7 +216,7 @@ org.blockml.bml.definition.RootBlockDefinition
   baseType:         NestedBlockDefinition
   properties:       definition (default RootBlockDefinition)
   aggregations:     subBlocks → NestedBlockDefinition[]
-                    embeddedBlocks → NestedBlockDefinition[]
+                    embeddedBlocks → NestedBlockDefinition[]   (Inline Library)
 
 org.blockml.bml.definition.PropertyDefinition
   bml:xml element:  ${ #this.name }

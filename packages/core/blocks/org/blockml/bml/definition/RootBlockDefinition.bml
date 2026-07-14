@@ -27,12 +27,13 @@
     custom definition model. Blocks may supply a specialized definition model (extending
     RootBlockDefinition) to store domain-specific metadata alongside the standard block shape.
 
-    embeddedBlocks holds inline definitions of additional Block documents within the same
-    BomDocument — equivalent to multiple separate BML files co-located in one source file.
-    Embedded blocks may belong to any package namespace, not only the root block's package.
-    Each embedded block's FQN is the fully qualified value of its mandatory &lt;type&gt; element.
-    Within this document's resolution scope, an embedded definition shadows the corresponding
-    library or file-based BlockDefinition; externally it remains invisible.</documentation>
+    embeddedBlocks holds an Inline Library — inline definitions of additional Block documents
+    within the same BomDocument. Think of embeddedBlocks as a library co-located within a single
+    Block: multiple BML files in one source document, including Blocks from packages that do not
+    belong to the root block's package. Each embedded block's FQN is the fully qualified value of
+    its mandatory &lt;type&gt; element. Within this document's resolution scope, an embedded
+    definition shadows the corresponding library or file-based BlockDefinition; externally it
+    remains invisible.</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
@@ -75,18 +76,19 @@
         name is required (BML_MISSING_SUBBLOCK_NAME).</documentation>
     </subBlocks>
     <embeddedBlocks type="def:NestedBlockDefinition[]">
-      <documentation>Inline Block definitions embedded in this BomDocument (root block only —
-        forbidden on Sub-Blocks and embedded blocks, BML_EMBEDDED_BLOCKS_ON_SUBBLOCK,
-        BML_EMBEDDED_BLOCKS_ON_EMBEDDED_BLOCK). Allows multiple BML files to be defined inline in
-        one source document — including Blocks from packages that do not belong to the root block's
-        namespace. Each entry is a NestedBlockDefinition with a mandatory, fully qualified
-        &lt;type&gt; (BML_MISSING_EMBEDDED_BLOCK_TYPE, BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE). The
-        embedded block's FQN is exactly resolve(type) — not nested under the root block's FQN (for
-        example com.other.ForeignBlock, not com.foo.Bar.embeddedBlocks.com.other.ForeignBlock).
-        Within this document, the embedded definition shadows the corresponding library or
-        file-based BlockDefinition; externally it remains invisible. Embedded blocks must not
-        declare subBlocks (BML_SUBBLOCKS_ON_EMBEDDED_BLOCK) or embeddedBlocks. Composition
-        references from within this document must use the fully qualified Block type. Addressable as
+      <documentation>Inline Library — inline Block definitions embedded in this BomDocument (root
+        block only — forbidden on Sub-Blocks and embedded blocks, BML_EMBEDDED_BLOCKS_ON_SUBBLOCK,
+        BML_EMBEDDED_BLOCKS_ON_EMBEDDED_BLOCK). Gedankenstütze: embeddedBlocks is a library
+        co-located within a single Block document — multiple BML files in one source file,
+        including Blocks from packages outside the root block's namespace. Each entry is a
+        NestedBlockDefinition with a mandatory, fully qualified &lt;type&gt;
+        (BML_MISSING_EMBEDDED_BLOCK_TYPE, BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE). The embedded
+        block's FQN is exactly resolve(type) — not nested under the root block's FQN (for example
+        com.other.ForeignBlock, not com.foo.Bar.embeddedBlocks.com.other.ForeignBlock). Within this
+        document, the embedded definition shadows the corresponding library or file-based
+        BlockDefinition; externally it remains invisible. Embedded blocks must not declare
+        subBlocks (BML_SUBBLOCKS_ON_EMBEDDED_BLOCK) or embeddedBlocks. Composition references from
+        within this document must use the fully qualified Block type. Addressable as
         com.other.ForeignBlock.* (canonical paths of the embedded Block itself).</documentation>
     </embeddedBlocks>
   </aggregations>

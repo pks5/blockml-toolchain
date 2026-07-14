@@ -40,9 +40,9 @@
       canonicalParentType + "." + name. An explicit type must match that expected value
       (BML_SUBBLOCK_TYPE_MISMATCH). Sub-Blocks must not declare subBlocks
       (BML_SUBBLOCKS_ON_SUBBLOCK) or embeddedBlocks (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK).
-    • Embedded block: additional Block document inlined via embeddedBlocks on the root block only.
-      Equivalent to a separate BML file in the same source document — may use any package namespace.
-      type is required and must be fully qualified (BML_MISSING_EMBEDDED_BLOCK_TYPE,
+    • Embedded block (Inline Library): additional Block document inlined via embeddedBlocks on the
+      root block only. Gedankenstütze: a library co-located within a single Block — may use any
+      package namespace. type is required and must be fully qualified (BML_MISSING_EMBEDDED_BLOCK_TYPE,
       BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE). FQN = resolve(type) — not nested under the root block
       (com.other.ForeignBlock, not com.foo.Bar.embeddedBlocks.com.other.ForeignBlock). Shadows the
       corresponding library or file-based definition within the enclosing document only; invisible

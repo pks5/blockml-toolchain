@@ -1559,9 +1559,11 @@ Outside that context, Sub-Blocks require the parent Block's namespace and a qual
 
 If a Sub-Block shares the root Block's `<name>`, bare short tags are ambiguous → `BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED`; use `Calibrator.Calibrator`, `cal:Calibrator.Calibrator`, or the full FQN.
 
-### Embedded Blocks
+### Embedded Blocks (Inline Library)
 
-Embedded blocks let authors define **multiple BML files inline** in a single source document — including Blocks from packages that do not belong to the root block's namespace. Each embedded block's **FQN is the value of its `<type>` element** (e.g. `com.other.ForeignBlock`) — not nested under the root block.
+**Gedankenstütze:** `embeddedBlocks` is an **Inline Library** — a library co-located within a single Block document. Multiple BML files in one source file, including Blocks from packages outside the root block's namespace.
+
+Each embedded block's **FQN is the value of its `<type>` element** (e.g. `com.other.ForeignBlock`) — not nested under the root block.
 
 ```text
 type required     — BML_MISSING_EMBEDDED_BLOCK_TYPE

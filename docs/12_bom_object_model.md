@@ -58,7 +58,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Member identity** | Uniqueness by resolved **`(namespace, name)`**. Namespace from member element QName prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
 | **Composition** | Nested inside `<aggregation>` on definitions only — never standalone. Block instances open aggregations directly (no `<composition>` wrapper). `composition aggregation="…"` removed. |
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]`. One BML file → one root `BlockDefinition` with embedded sub-block definitions. |
-| **Embedded Blocks** | **Inlined** in `BlockDefinition.embeddedBlocks[]` on the root block only. Additional Block documents in the same source file — FQN = `<type>`; may use any package namespace. Shadow library/file definitions within the enclosing document's scope; invisible externally. |
+| **Embedded Blocks (Inline Library)** | **Inlined** in `BlockDefinition.embeddedBlocks[]` on the root block only. Gedankenstütze: a library co-located within a single Block document — additional Block definitions (FQN = `<type>`) from any package namespace. Shadow library/file definitions within the enclosing document's scope; invisible externally. |
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | `bml:*` on composition elements — flow-control in `directives[]`; composition meta (`bml:id`, `bml:version`) on `BlockInstance` fields. **Not expanded** at parse time. |
 | **Instance `version`** | From **`bml:version`** — optional on external block references. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert (`BML_UNKNOWN_VERSION` if no match). Forbidden inside Library files → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`. Same-document Sub-Blocks exempt. |
@@ -221,12 +221,10 @@ interface BlockDefinition {
   subBlocks: BlockDefinition[]
 
   /**
-   * Inline Block definitions embedded in this BomDocument (root block only).
-   * Equivalent to multiple separate BML files in one source document — may use any package
-   * namespace. Each entry's FQN is resolve(type), not nested under the root block's FQN.
-   * Shadows the corresponding library or file-based BlockDefinition within this document's
-   * resolution scope only; invisible externally. Embedded blocks must not declare subBlocks or
-   * embeddedBlocks. type is required and must be fully qualified.
+   * Inline Library — inline Block definitions embedded in this BomDocument (root block only).
+   * Gedankenstütze: a library co-located within a single Block document. Each entry's FQN is
+   * resolve(type), not nested under the root block's FQN. Shadows the corresponding library or
+   * file-based BlockDefinition within this document's resolution scope only; invisible externally.
    */
   embeddedBlocks: BlockDefinition[]
 
@@ -266,9 +264,11 @@ canonicalType = subBlock.type ? resolve(subBlock.type) : expectedType
 
 Sub-Blocks are **part of the same `BomDocument`** as their parent root block. Only the root block may declare `subBlocks[]` and `embeddedBlocks[]`.
 
-### Embedded Block Scope
+### Embedded Blocks (Inline Library)
 
-Embedded blocks let authors define **multiple BML files inline** in a single source document — including Blocks from packages that do not belong to the root block's namespace. Each embedded block is a full `BlockDefinition` whose **FQN is exactly the value of its `<type>` element** (e.g. `com.other.ForeignBlock`) — not nested under the root block (not `com.foo.Bar.embeddedBlocks.com.other.ForeignBlock`).
+**Gedankenstütze:** `embeddedBlocks` is an **Inline Library** — a library co-located within a single Block document. Authors can define multiple BML files inline in one source file, including Blocks from packages that do not belong to the root block's namespace.
+
+Each embedded block is a full `BlockDefinition` whose **FQN is exactly the value of its `<type>` element** (e.g. `com.other.ForeignBlock`) — not nested under the root block (not `com.foo.Bar.embeddedBlocks.com.other.ForeignBlock`).
 
 `<type>` is required and must be fully qualified (`BML_MISSING_EMBEDDED_BLOCK_TYPE`, `BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE`).
 

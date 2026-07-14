@@ -227,7 +227,7 @@ locally complete for the member kind. Concrete blocks must implement inherited a
 
 `org.blockml.bml.definition.NestedBlockDefinition` declares `language` (NaturalLanguage element) — per-block override.
 
-`org.blockml.bml.definition.RootBlockDefinition` declares `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.RootBlockDefinition`), `subBlocks`, and `embeddedBlocks`.
+`org.blockml.bml.definition.RootBlockDefinition` declares `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.RootBlockDefinition`), `subBlocks`, and `embeddedBlocks` (Inline Library — a library co-located within a single Block document).
 
 `org.blockml.bml.definition.ReferenceDefinition` — cross-reference to a related Block, definition element, or documentation source:
 

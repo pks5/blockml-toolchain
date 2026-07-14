@@ -770,7 +770,7 @@ PascalCase ensures composition instance tags with `xmlns:` prefixes are unambigu
 <contracts>     — Contract references (reusable partial definitions). Root block only.
 <definition>    — Definition meta-model type FQN (root block only; default RootBlockDefinition).
 <subBlocks>     — Sub-Block definitions (see Sub-Blocks section).
-<embeddedBlocks> — Embedded foreign Block definitions (see Embedded Blocks section). Root block only.
+<embeddedBlocks> — Inline Library: embedded Block definitions (see Embedded Blocks section). Root block only.
 <aggregations>  — Aggregation declarations and definition-level compositions. Omit when inherited aggregations from baseType suffice.
                 — <composition> must be nested inside an aggregation member element (never standalone).
 ```
@@ -2485,9 +2485,9 @@ Sub-Block:   <name>StudDiameter</name>
 
 `<type>` is normally omitted on Sub-Blocks — it is derived as `resolve(parent.type) + "." + name`. When explicitly authored, it must match that expected value (`BML_SUBBLOCK_TYPE_MISMATCH`). Sub-Blocks are flat — only the root block of a document may declare `<subBlocks>` or `<embeddedBlocks>`; Sub-Blocks must not nest either (`BML_SUBBLOCKS_ON_SUBBLOCK`, `BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`).
 
-### Embedded Blocks
+### Embedded Blocks (Inline Library)
 
-Embedded blocks let authors define **multiple BML files inline** in a single source document — including Blocks from packages that do not belong to the root block's namespace. Unlike Sub-Blocks, an embedded block's **FQN is the value of its `<type>` element** (e.g. `com.other.ForeignBlock`) — not nested under the root block.
+**Gedankenstütze:** `embeddedBlocks` is an **Inline Library** — a library co-located within a single Block document. Unlike Sub-Blocks, embedded blocks may use any package namespace; each embedded block's **FQN is the value of its `<type>` element** (e.g. `com.other.ForeignBlock`) — not nested under the root block.
 
 ```text
 type            — required; must be fully qualified (BML_MISSING_EMBEDDED_BLOCK_TYPE,
