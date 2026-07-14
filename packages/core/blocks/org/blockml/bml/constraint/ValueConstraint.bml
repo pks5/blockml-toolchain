@@ -1,13 +1,14 @@
 <!--
-  BlockML Core — value constraint branch
+  BlockML Constraint — value constraint branch
 
-  FQN: org.blockml.bml.core.ValueConstraint
+  FQN: org.blockml.bml.constraint.ValueConstraint
 -->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core">
 
   <idea>Constraint that validates a concrete property value or ValueType content.</idea>
@@ -18,7 +19,7 @@
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise). Examples: Min, Max, Pattern, ValuePresent.</documentation>
 
   <name>ValueConstraint</name>
-  <type>core:ValueConstraint</type>
+  <type>constraint:ValueConstraint</type>
   <baseType>core:Constraint</baseType>
   <abstract />
 

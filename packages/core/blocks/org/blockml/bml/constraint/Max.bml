@@ -20,7 +20,7 @@
     and Decimal properties. The value property must match T.</documentation>
   <name>Max</name>
   <type>constraint:Max</type>
-  <baseType>core:ValueConstraint</baseType>
+  <baseType>constraint:ValueConstraint</baseType>
   <genericTypes>
     <T baseType="btype:Number"/>
   </genericTypes>

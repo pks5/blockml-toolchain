@@ -12,8 +12,9 @@
 
   <idea>Universal root for semantic restrictions on Blocks and their members.</idea>
 
-  <documentation>Abstract universal root for all constraint types. Specialized by ValueConstraint
-    (property value rules) and StructuralConstraint (definition-shape rules on Blocks and members).
+  <documentation>Abstract universal root for all constraint types. Specialized by
+    org.blockml.bml.constraint.ValueConstraint (property value rules) and
+    org.blockml.bml.constraint.StructuralConstraint (definition-shape rules on Blocks and members).
     Every concrete constraint extends one of the branch types; the &lt;constraints&gt; embedding
     context determines the target and automatic generic binding — authors never specify target or
     type arguments in BML. Constraints describe the condition only. Whether BlockML enforces a

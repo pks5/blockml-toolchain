@@ -1,14 +1,14 @@
 <!--
-  BlockML Core — property structural constraint branch
+  BlockML Constraint — property structural constraint branch
 
-  FQN: org.blockml.bml.core.PropertyConstraint
+  FQN: org.blockml.bml.constraint.PropertyConstraint
 -->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
 
   <idea>Constraint that validates a PropertyDefinition shape.</idea>
@@ -19,8 +19,8 @@
     constraint extends PropertyConstraint (not ValueConstraint).</documentation>
 
   <name>PropertyConstraint</name>
-  <type>core:PropertyConstraint</type>
-  <baseType>core:MemberConstraint</baseType>
+  <type>constraint:PropertyConstraint</type>
+  <baseType>constraint:MemberConstraint</baseType>
   <abstract />
 
   <genericTypes>

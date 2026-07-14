@@ -1,14 +1,14 @@
 <!--
-  BlockML Core — association structural constraint branch
+  BlockML Constraint — association structural constraint branch
 
-  FQN: org.blockml.bml.core.AssociationConstraint
+  FQN: org.blockml.bml.constraint.AssociationConstraint
 -->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
 
   <idea>Constraint that validates an AssociationDefinition or its targets.</idea>
@@ -18,8 +18,8 @@
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
   <name>AssociationConstraint</name>
-  <type>core:AssociationConstraint</type>
-  <baseType>core:MemberConstraint</baseType>
+  <type>constraint:AssociationConstraint</type>
+  <baseType>constraint:MemberConstraint</baseType>
   <abstract />
 
   <genericTypes>

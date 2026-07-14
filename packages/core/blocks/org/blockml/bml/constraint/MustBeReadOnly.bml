@@ -20,7 +20,7 @@
 
   <name>MustBeReadOnly</name>
   <type>constraint:MustBeReadOnly</type>
-  <baseType>core:PropertyConstraint</baseType>
+  <baseType>constraint:PropertyConstraint</baseType>
 
   <genericTypes>
     <T baseType="def:PropertyDefinition"/>

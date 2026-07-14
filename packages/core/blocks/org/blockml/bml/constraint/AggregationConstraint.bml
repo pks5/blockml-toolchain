@@ -1,14 +1,14 @@
 <!--
-  BlockML Core — aggregation structural constraint branch
+  BlockML Constraint — aggregation structural constraint branch
 
-  FQN: org.blockml.bml.core.AggregationConstraint
+  FQN: org.blockml.bml.constraint.AggregationConstraint
 -->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
 
   <idea>Constraint that validates an AggregationDefinition or its children.</idea>
@@ -18,8 +18,8 @@
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
   <name>AggregationConstraint</name>
-  <type>core:AggregationConstraint</type>
-  <baseType>core:MemberConstraint</baseType>
+  <type>constraint:AggregationConstraint</type>
+  <baseType>constraint:MemberConstraint</baseType>
   <abstract />
 
   <genericTypes>

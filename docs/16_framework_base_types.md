@@ -317,10 +317,8 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/core/Status.bml
      org/blockml/bml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
      org/blockml/bml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
-     org/blockml/bml/core/Constraint.bml · ValueConstraint.bml · StructuralConstraint.bml
-     org/blockml/bml/core/BlockConstraint.bml · MemberConstraint.bml · PropertyConstraint.bml
-     org/blockml/bml/core/AggregationConstraint.bml · AssociationConstraint.bml · CapabilityConstraint.bml
-     org/blockml/bml/constraint/Min.bml · Max.bml · … · RequiresMember.bml · MustBeReadOnly.bml · AllowedChildType.bml · NoSelfReference.bml · RequiresImplementation.bml
+     org/blockml/bml/core/Constraint.bml
+     org/blockml/bml/constraint/*.bml        ← ValueConstraint, StructuralConstraint, BlockConstraint, Min, …
      org/blockml/bml/core/Validation.bml
      org/blockml/bml/validation/Error.bml · Warning.bml · Information.bml · …
      org/blockml/bml/core/

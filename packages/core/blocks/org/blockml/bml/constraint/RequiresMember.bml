@@ -20,7 +20,7 @@
 
   <name>RequiresMember</name>
   <type>constraint:RequiresMember</type>
-  <baseType>core:BlockConstraint</baseType>
+  <baseType>constraint:BlockConstraint</baseType>
 
   <genericTypes>
     <T baseType="def:SubBlockDefinition"/>

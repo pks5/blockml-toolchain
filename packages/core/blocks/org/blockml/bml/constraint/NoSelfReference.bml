@@ -20,7 +20,7 @@
 
   <name>NoSelfReference</name>
   <type>constraint:NoSelfReference</type>
-  <baseType>core:AssociationConstraint</baseType>
+  <baseType>constraint:AssociationConstraint</baseType>
 
   <genericTypes>
     <T baseType="def:AssociationDefinition"/>

@@ -45,7 +45,7 @@ Intrinsic language rules (missing baseType, invalid member override, visibility 
 ```text
 org.blockml.bml.core.Constraint
 │
-├── org.blockml.bml.core.ValueConstraint<T extends ValueType>
+├── org.blockml.bml.constraint.ValueConstraint<T extends ValueType>
 │     org.blockml.bml.constraint.Min
 │     org.blockml.bml.constraint.Max
 │     org.blockml.bml.constraint.MinLength
@@ -55,19 +55,19 @@ org.blockml.bml.core.Constraint
 │     org.blockml.bml.constraint.MaxItems
 │     org.blockml.bml.constraint.ValuePresent
 │
-└── org.blockml.bml.core.StructuralConstraint<T extends Definition>
+└── org.blockml.bml.constraint.StructuralConstraint<T extends Definition>
       │
-      ├── org.blockml.bml.core.BlockConstraint<T extends SubBlockDefinition>
+      ├── org.blockml.bml.constraint.BlockConstraint<T extends SubBlockDefinition>
       │     org.blockml.bml.constraint.RequiresMember
       │
-      └── org.blockml.bml.core.MemberConstraint<T extends MemberDefinition>
-            ├── org.blockml.bml.core.PropertyConstraint<T extends PropertyDefinition>
+      └── org.blockml.bml.constraint.MemberConstraint<T extends MemberDefinition>
+            ├── org.blockml.bml.constraint.PropertyConstraint<T extends PropertyDefinition>
             │     org.blockml.bml.constraint.MustBeReadOnly
-            ├── org.blockml.bml.core.AggregationConstraint<T extends AggregationDefinition>
+            ├── org.blockml.bml.constraint.AggregationConstraint<T extends AggregationDefinition>
             │     org.blockml.bml.constraint.AllowedChildType
-            ├── org.blockml.bml.core.AssociationConstraint<T extends AssociationDefinition>
+            ├── org.blockml.bml.constraint.AssociationConstraint<T extends AssociationDefinition>
             │     org.blockml.bml.constraint.NoSelfReference
-            └── org.blockml.bml.core.CapabilityConstraint<T extends CapabilityDefinition>
+            └── org.blockml.bml.constraint.CapabilityConstraint<T extends CapabilityDefinition>
                   org.blockml.bml.constraint.RequiresImplementation
 ```
 

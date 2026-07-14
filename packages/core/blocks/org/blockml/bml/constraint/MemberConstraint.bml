@@ -1,14 +1,14 @@
 <!--
-  BlockML Core — member structural constraint branch
+  BlockML Constraint — member structural constraint branch
 
-  FQN: org.blockml.bml.core.MemberConstraint
+  FQN: org.blockml.bml.constraint.MemberConstraint
 -->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.bml.core"
+  xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
 
   <idea>Constraint that validates a Block member definition.</idea>
@@ -18,8 +18,8 @@
     AggregationConstraint, AssociationConstraint, and CapabilityConstraint.</documentation>
 
   <name>MemberConstraint</name>
-  <type>core:MemberConstraint</type>
-  <baseType>core:StructuralConstraint</baseType>
+  <type>constraint:MemberConstraint</type>
+  <baseType>constraint:StructuralConstraint</baseType>
   <abstract />
 
   <genericTypes>

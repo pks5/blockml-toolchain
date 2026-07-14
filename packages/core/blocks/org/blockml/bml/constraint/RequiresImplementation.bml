@@ -20,7 +20,7 @@
 
   <name>RequiresImplementation</name>
   <type>constraint:RequiresImplementation</type>
-  <baseType>core:CapabilityConstraint</baseType>
+  <baseType>constraint:CapabilityConstraint</baseType>
 
   <genericTypes>
     <T baseType="def:CapabilityDefinition"/>

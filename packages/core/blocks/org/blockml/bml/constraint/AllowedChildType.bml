@@ -20,7 +20,7 @@
 
   <name>AllowedChildType</name>
   <type>constraint:AllowedChildType</type>
-  <baseType>core:AggregationConstraint</baseType>
+  <baseType>constraint:AggregationConstraint</baseType>
 
   <genericTypes>
     <T baseType="def:AggregationDefinition"/>
