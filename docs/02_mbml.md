@@ -378,7 +378,7 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 <name>              — short class name (PascalCase). Optional on root blocks — derived from the last
                       segment of resolve(type) when omitted. When present, must match that segment.
                       Required on Sub-Blocks. See naming convention below.
-<baseType>          — FQN of the parent type. Mandatory — no default. Empty `<baseType />` only on org.blockml.bml.core.Block.
+<baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.bml.core.Block.
 <version>           — semantic version of this Block definition (root block only)
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
 ```
@@ -811,7 +811,7 @@ Explicit <subTypes>…          — override (enable or restrict Sub-Blocks)
 Explicit empty <subTypes/>    — override: forbid Sub-Blocks even when parent allowed them
 Omitted abstract/final          — false (local declaration properties; not inherited from baseType)
 Omitted languages / contracts   — inherit from baseType at validate
-org.blockml.bml.core.Block        — sole type with empty <baseType /> (inheritance root); effective subTypes []
+org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritance root); effective subTypes []
 ```
 
 **Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous:
@@ -3414,7 +3414,7 @@ There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping 
 ### Default Resolution
 
 ```text
-baseType missing              → BML_MISSING_BASE_TYPE (no default)
+baseType missing              → BML_MISSING_BASE_TYPE (no default; except org.blockml.bml.core.Block — omits baseType)
 root block without type       → BML_MISSING_BLOCK_TYPE
 root name ≠ last type segment → BML_BLOCK_NAME_TYPE_MISMATCH
 Sub-Block without name        → BML_MISSING_SUBBLOCK_NAME

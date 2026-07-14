@@ -344,7 +344,7 @@ Sub-Block declares <embeddedBlocks> → BML_EMBEDDED_BLOCKS_ON_SUBBLOCK (error)
 Embedded block without <type> → BML_MISSING_EMBEDDED_BLOCK_TYPE (error)
 Embedded block type not fully qualified → BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE (error)
 <definition> incompatible with block role → BML_DEFINITION_TYPE_MISMATCH (error)
-org.blockml.bml.core.Block                   → empty <baseType /> (sole inheritance root)
+org.blockml.bml.core.Block                   → omits <baseType> (sole inheritance root)
 ```
 
 ValueType BML uses the same `BlockDefinition` shape as all Blocks — StructTypes declare members via `<properties>`; EnumTypes declare values via `<_values><composition>…</composition></_values>`; generic Blocks declare parameters via `<genericTypes>`. Branch-specific validation — see `17_type_system_bml.md`.

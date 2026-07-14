@@ -348,7 +348,7 @@ Definition blocks may declare their own Capabilities — enabling domain-specifi
 
 ## Root Type Exception
 
-`org.blockml.bml.core.Block` is the **sole inheritance root**. It declares an **empty** `<baseType />` — the only definition allowed to do so. All other definitions must declare a non-empty parent FQN in `<baseType>`.
+`org.blockml.bml.core.Block` is the **sole inheritance root**. It **omits** `<baseType>` — the only definition allowed to do so. All other definitions must declare a non-empty parent FQN in `<baseType>`.
 
 All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.bml.core.ValueType`, `org.blockml.bml.core.Language`, or domain bases — all ultimately extend `org.blockml.bml.core.Block`. See `17_type_system_bml.md`.
 
