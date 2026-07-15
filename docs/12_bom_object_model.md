@@ -1189,7 +1189,9 @@ org.blockml.bml.core.BlockLibrary
 
 org.blockml.bml.type.FilePathEntity            property:  value (relative .xsd path)
 org.blockml.bml.core.Bootstrap                 abstract role marker — no members
-org.blockml.bml.README                         extends Bootstrap — references with relation=ReadFirst
+org.blockml.bml.README                         extends Bootstrap — ReadFirst + TaskIndex on references
+org.blockml.bml.core.TaskGuide                 abstract — org.blockml.bml.task.* procedural blocks
+org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diagnostic.* error codes
 ```
 
 `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN (type reference, not a Block instance). **`bml:version` is forbidden** on these children; effective version is resolved from library context. Meta-model types: `TypeReference(core:Bootstrap)`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`. See `17_type_system_bml.md` — Empty child elements.
@@ -1198,7 +1200,7 @@ On library **instances**, children are authored inside `<composition>` as the ag
 
 The orchestrator resolves `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` entries by FQN, loads referenced definitions into the TypeRegistry using effective block versions, and validates library membership.
 
-`bootstrap` points to the library entry point — typically a `README` block (`org.blockml.bml.README`). Curated reading order is expressed via `<references>` with `relation=ReadFirst` on the Bootstrap block — not via a separate `readFirst` aggregation. `_schemas` is optional legacy XSD (`FilePathEntity` paths). `_blocks` lists exported Block and ValueType BML — primary SSOT as types migrate from XSD.
+`bootstrap` points to the library entry point — typically a `README` block (`org.blockml.bml.README`). Curated reading order uses `<references>` with `relation=ReadFirst`; available tasks use `relation=TaskIndex` — not via separate aggregations. `_schemas` is optional legacy XSD (`FilePathEntity` paths). `_blocks` lists exported Block and ValueType BML — primary SSOT as types migrate from XSD.
 
 ---
 

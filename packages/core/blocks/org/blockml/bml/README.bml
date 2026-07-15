@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:blockml="org.blockml.bml"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:relation="org.blockml.bml.relation"
+  xmlns:task="org.blockml.bml.task">
 
   <idea>README block for the BlockML core library — bootstrap entry point for humans and LLMs.</idea>
 
@@ -21,7 +23,8 @@
     themselves. Later entries cover conventions, organisation, and background knowledge.
 
     Library.bml points here via the bootstrap aggregation (&lt;blockml:README /&gt;). Tooling filters
-    references where relation=ReadFirst to build a curated context bundle for humans and LLMs.
+    references where relation=ReadFirst to build a curated learning context bundle; relation=TaskIndex
+    lists accomplishable procedural tasks for humans, agents, and CI.
   </documentation>
 
   <references>
@@ -92,6 +95,22 @@
 
     <see block="doc:WOTFoundation" relation="ReadFirst">
       Optional background — Idea, Manifestation, Grammar, World (Web of Things).
+    </see>
+
+    <see block="task:AuthorNewBlock" relation="TaskIndex">
+      Author a new Block definition from scratch.
+    </see>
+
+    <see block="task:AddConstraint" relation="TaskIndex">
+      Attach a Constraint to a Block or member definition.
+    </see>
+
+    <see block="task:DebugUnknownType" relation="TaskIndex">
+      Fix BML_UNKNOWN_TYPE — unresolved type reference.
+    </see>
+
+    <see block="doc:TaskGuideModel" relation="SeeAlso">
+      TaskGuide blocks, task relations, and error-driven fix paths.
     </see>
 
     <see block="core:Bootstrap" relation="Defines">

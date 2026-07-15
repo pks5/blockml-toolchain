@@ -16,9 +16,10 @@
     Relation values are Block references following the Everything-is-a-Block principle.
     Standard implementations live in org.blockml.bml.relation.*; domain libraries may define
     additional relation blocks. Implicit default when omitted on &lt;see&gt;:
-    org.blockml.bml.relation.SeeAlso. The relation attribute encodes relationship kind at the
-    read site — orthogonal to target attributes block, file, and url. Unqualified names on
-    relation= resolve via implicit namespace org.blockml.bml.relation.*.</documentation>
+    org.blockml.bml.relation.SeeAlso. Standard relations include ReadFirst (learning path),
+    TaskIndex (task catalog), TaskStep and Prerequisite (procedural guides), and Resolves
+    (diagnostic to fix task). Unqualified names on relation= resolve via implicit namespace
+    org.blockml.bml.relation.*.</documentation>
 
   <name>Relation</name>
   <type>

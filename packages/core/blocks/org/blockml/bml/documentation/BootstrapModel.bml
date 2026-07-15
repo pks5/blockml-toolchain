@@ -33,9 +33,16 @@
     follow for agents, CI pipelines, or TypeRegistry loaders.
 
     Curated reading order lives in &lt;references&gt; on the concrete Bootstrap block — each entry
-    uses relation=ReadFirst with a context note. One mechanism for all cross-links; tooling
-    filters ReadFirst entries to build a context bundle. No separate readFirst aggregation on
-    Bootstrap.
+    uses relation=ReadFirst with a context note. Available tasks use relation=TaskIndex on the
+    same references container. One mechanism for all cross-links; tooling filters by relation.
+    No separate readFirst or tasks aggregation on Bootstrap.
+
+    Task-oriented paths:
+    • org.blockml.bml.core.TaskGuide — procedural org.blockml.bml.task.* blocks
+    • relation=TaskStep — ordered steps inside a TaskGuide (document order)
+    • relation=Prerequisite — before starting a task
+    • org.blockml.bml.core.Diagnostic — org.blockml.bml.diagnostic.* validator codes
+    • relation=Resolves — Diagnostic → TaskGuide fix procedure
 
     Interpretation context:
     • Framework BML defines what types ARE — TypeRegistry SSOT
@@ -74,6 +81,12 @@
     </see>
     <see block="relation:ReadFirst" relation="Defines">
       Relation block for curated bootstrap reading path entries on references.
+    </see>
+    <see block="relation:TaskIndex" relation="Defines">
+      Relation block for task catalog entries on README and Bootstrap blocks.
+    </see>
+    <see block="doc:TaskGuideModel" relation="SeeAlso">
+      TaskGuide blocks, task relations, and diagnostic fix paths.
     </see>
     <see block="doc:Introduction" relation="ReadFirst">
       First ReadFirst entry on org.blockml.bml.README — BlockML goals and overview.

@@ -219,6 +219,25 @@ bml:xml                — permitted on all blocks whose baseType chain includes
 
 **Design note:** Framework core branch types remain **`baseType` markers** (`ValueType`, `Entity`, `Language`, …). Domain interface-style polymorphism uses **`<contracts>`** and **`satisfiesTypeBound`** — see `17_type_system_bml.md` — baseType vs contracts. Core branch types are not duplicated as interface contracts in `@blockml/core`.
 
+### Task guides and diagnostics
+
+```text
+org.blockml.bml.core.Documentation     abstract — concept docs (org.blockml.bml.documentation.*)
+org.blockml.bml.core.TaskGuide         abstract — procedural tasks (org.blockml.bml.task.*)
+org.blockml.bml.core.Diagnostic        abstract — validator codes (org.blockml.bml.diagnostic.*)
+```
+
+Task navigation uses `<references>` with task relations — same mechanism as ReadFirst:
+
+```text
+relation=TaskIndex      on README — catalog available tasks
+relation=TaskStep       on TaskGuide — ordered procedure steps
+relation=Prerequisite   on TaskGuide — before starting
+relation=Resolves       on Diagnostic — link to fix TaskGuide
+```
+
+See `02_mbml.md` — Task guides · `doc:TaskGuideModel`.
+
 Source: `packages/core/blocks/org/blockml/bml/core/Definition.bml`
 
 ```text
@@ -291,7 +310,7 @@ context         String (required)  — relationship note; XML text content
 
 Exactly one target kind among `block` (standalone), `file`, `url`, `property`, `aggregation`, `association`, and `capability` must be set. Split form: `block=` + one member attribute resolves to a canonical member path — `block` is not stored as a type target. `relation` is optional — omitted → `org.blockml.bml.relation.SeeAlso`. Unqualified names on `relation=` resolve via `org.blockml.bml.relation.*`.
 
-Standard relation blocks (`org.blockml.bml.relation.*`): `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`. Abstract base: `org.blockml.bml.core.Relation`.
+Standard relation blocks (`org.blockml.bml.relation.*`): `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Abstract base: `org.blockml.bml.core.Relation`.
 
 **Design note:** Seven mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see block="…">` (type), `<see file="…">` (doc), `<see url="…">` (web), `<see property="…">` (member). Member values are canonical definition paths in the BOM. See `02_mbml.md` — `<references>` — Why separate target attributes.
 
@@ -390,7 +409,8 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/core/Status.bml
      org/blockml/bml/core/Relation.bml
      org/blockml/bml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
-     org/blockml/bml/relation/SeeAlso.bml · ReadFirst.bml · Extends.bml · Requires.bml · ContrastsWith.bml · AuthoringGuide.bml · Defines.bml · DeepDive.bml
+     org/blockml/bml/relation/SeeAlso.bml · ReadFirst.bml · Extends.bml · Requires.bml · ContrastsWith.bml · AuthoringGuide.bml · Defines.bml · DeepDive.bml · TaskIndex.bml · TaskStep.bml · Prerequisite.bml · Resolves.bml
+     org/blockml/bml/core/Documentation.bml · TaskGuide.bml · Diagnostic.bml
      org/blockml/bml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
      org/blockml/bml/core/Constraint.bml
      org/blockml/bml/constraint/*.bml        ← ValueConstraint, StructuralConstraint, BlockConstraint, Min, …

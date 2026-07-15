@@ -18,9 +18,9 @@
     follow for other scenarios (for example agent bootstrap or CI pipeline bootstrap).
 
     Bootstrap blocks carry the normal documentation model (idea, documentation, references). Curated
-    reading or load order is expressed via &lt;references&gt; with relation=ReadFirst — not via a
-    separate readFirst aggregation. Concrete Bootstrap subtypes add scenario-specific members when
-    needed; the abstract base declares no aggregations.</documentation>
+    reading order is expressed via &lt;references&gt; with relation=ReadFirst; available tasks via
+    relation=TaskIndex — not via separate aggregations. Concrete Bootstrap subtypes add
+    scenario-specific members when needed; the abstract base declares no aggregations.</documentation>
 
   <name>Bootstrap</name>
   <type>

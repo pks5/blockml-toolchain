@@ -67,12 +67,14 @@
     relation attribute (optional) — Block reference to org.blockml.bml.relation.*; unqualified
     names resolve via implicit namespace org.blockml.bml.relation.*. Omitted =
     org.blockml.bml.relation.SeeAlso. Standard blocks: SeeAlso, ReadFirst, Extends, Requires,
-    ContrastsWith, AuthoringGuide, Defines, DeepDive.
+    ContrastsWith, AuthoringGuide, Defines, DeepDive, TaskIndex, TaskStep, Prerequisite, Resolves.
 
     README blocks (baseType org.blockml.bml.core.Bootstrap) are library entry points for humans
-    and LLMs. Curated reading order is expressed via references with relation=ReadFirst — not via
-    a separate readFirst aggregation on Bootstrap. Documentation blocks
+    and LLMs. Curated reading order is expressed via references with relation=ReadFirst; available
+    tasks via relation=TaskIndex — not via separate aggregations on Bootstrap. Documentation blocks
     (org.blockml.bml.documentation.*) inherit from org.blockml.bml.core.Documentation.
+    TaskGuide blocks (org.blockml.bml.task.*) inherit from org.blockml.bml.core.TaskGuide.
+    Diagnostic blocks (org.blockml.bml.diagnostic.*) inherit from org.blockml.bml.core.Diagnostic.
   </documentation>
 
   <references>
@@ -116,7 +118,10 @@
       Relation block for curated bootstrap reading path entries.
     </see>
     <see block="doc:BootstrapModel">
-      Next reading step — README.bml, readFirst, bootstrap context.
+      Next reading step — README.bml, ReadFirst, TaskIndex, bootstrap context.
+    </see>
+    <see block="doc:TaskGuideModel" relation="SeeAlso">
+      Task-oriented paths — TaskGuide blocks and task relations.
     </see>
   </references>
 

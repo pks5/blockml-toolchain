@@ -584,6 +584,63 @@ Goal: keep API documentation, version history, examples, and related-type links 
 
 **Authoring split:** `<documentation>` carries technical prose only; `<references>` carries all cross-links — Blocks, Definition elements, repository markdown files (`file`), and external URLs (`url`) — each with an explicit relationship note.
 
+### Task guides and diagnostics
+
+Task-oriented paths use the same `<references>` mechanism as learning paths — no separate task aggregation.
+
+| Branch | FQN pattern | Role |
+|---|---|---|
+| `TaskGuide` | `org.blockml.bml.task.*` | Procedural how-to — accomplish one task |
+| `Diagnostic` | `org.blockml.bml.diagnostic.*` | Documented validator code → fix navigation |
+
+| Relation | Used on | Meaning |
+|---|---|---|
+| `TaskIndex` | README, Bootstrap | Catalog entry — this task is available |
+| `TaskStep` | TaskGuide | Ordered procedure step (document order = step order) |
+| `Prerequisite` | TaskGuide | Understand before starting the task |
+| `Resolves` | Diagnostic | Links error code to fix TaskGuide |
+
+**README pattern** — ReadFirst entries first (learning), then TaskIndex entries (tasks):
+
+```xml
+<see block="doc:Introduction" relation="ReadFirst">…</see>
+…
+<see block="task:AuthorNewBlock" relation="TaskIndex">
+  Author a new Block definition from scratch.
+</see>
+```
+
+**TaskGuide pattern** — prerequisites, then TaskStep entries in order:
+
+```xml
+<block …>
+  <idea>Author a new Block definition document from scratch.</idea>
+  <summary>…</summary>
+  <keywords>author, new block, create type</keywords>
+  <documentation>…</documentation>
+  <references>
+    <see block="doc:DefinitionModel" relation="Prerequisite">…</see>
+    <see block="def:RootBlockDefinition" relation="TaskStep">Step 1 — …</see>
+    <see file="02_mbml.md" relation="TaskStep">Step 2 — …</see>
+  </references>
+  <name>AuthorNewBlock</name>
+  <type><task:AuthorNewBlock /></type>
+  <baseType><core:TaskGuide /></baseType>
+</block>
+```
+
+**Diagnostic pattern** — Resolves links to fix task:
+
+```xml
+<see block="task:DebugUnknownType" relation="Resolves">
+  Step-by-step fix for unresolved type references.
+</see>
+```
+
+Future tooling: `bom context export --mode learn` filters `ReadFirst`; `--mode task --task AuthorNewBlock` follows TaskStep chain; `--diagnostic BML_UNKNOWN_TYPE` loads Diagnostic → Resolves → TaskGuide.
+
+See `doc:TaskGuideModel` · `16_framework_base_types.md` — Task guides.
+
 #### `<since>`
 
 Declares the version from which the element is available:
@@ -679,7 +736,7 @@ relation="Extends"        — Block reference via org.blockml.bml.relation.* (un
                           — omitted → org.blockml.bml.relation.SeeAlso
 ```
 
-Standard relation blocks: `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`. Domain libraries may define additional relation blocks extending `org.blockml.bml.core.Relation`.
+Standard relation blocks: `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Domain libraries may define additional relation blocks extending `org.blockml.bml.core.Relation`.
 
 **Why separate target attributes instead of one `target`?**
 

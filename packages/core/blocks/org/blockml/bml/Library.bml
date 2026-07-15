@@ -25,6 +25,8 @@
   xmlns:service="org.blockml.bml.service"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:status="org.blockml.bml.status"
+  xmlns:task="org.blockml.bml.task"
+  xmlns:diag="org.blockml.bml.diagnostic"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:btype="org.blockml.bml.type">
 
@@ -34,8 +36,9 @@
     Publishable BlockML core library (org.blockml.bml.Library). Exports the framework grammar:
     core branches (Block, ValueType, Language, Status, Relation, Constraint, Validation, Capability, Definition),
     concrete value types and constraints, implementation languages, built-in services, lifecycle
-    status blocks, the Definition meta-model branch (org.blockml.bml.definition.*), and bootstrap
-    documentation blocks (org.blockml.bml.documentation.*).
+    status blocks, the Definition meta-model branch (org.blockml.bml.definition.*), bootstrap
+    documentation blocks (org.blockml.bml.documentation.*), task guides (org.blockml.bml.task.*),
+    and diagnostic blocks (org.blockml.bml.diagnostic.*).
 
     Membership is defined exclusively by this file's _blocks list — not by directory layout.
     Version 3.0.0 applies to all exported blocks (framework convention: version only on
@@ -88,6 +91,10 @@
 
     <_blocks>
       <bcore:Block />
+      <bcore:Bootstrap />
+      <bcore:Documentation />
+      <bcore:TaskGuide />
+      <bcore:Diagnostic />
       <bcore:Capability />
       <bcore:Constraint />
       <bcore:Definition />
@@ -168,9 +175,13 @@
       <relation:DeepDive />
       <relation:Defines />
       <relation:Extends />
+      <relation:Prerequisite />
       <relation:ReadFirst />
       <relation:Requires />
+      <relation:Resolves />
       <relation:SeeAlso />
+      <relation:TaskIndex />
+      <relation:TaskStep />
       <status:Deprecated />
       <status:Draft />
       <status:Stable />
@@ -223,7 +234,12 @@
       <doc:BootstrapModel />
       <doc:ModelingGuidelines />
       <doc:PseudoCode />
+      <doc:TaskGuideModel />
       <doc:WOTFoundation />
+      <task:AuthorNewBlock />
+      <task:AddConstraint />
+      <task:DebugUnknownType />
+      <diag:BML_UNKNOWN_TYPE />
     </_blocks>
   </aggregations>
 

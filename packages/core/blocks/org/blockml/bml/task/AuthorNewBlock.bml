@@ -1,0 +1,63 @@
+<!--
+  BlockML Core — author new block task
+
+  FQN: org.blockml.bml.task.AuthorNewBlock
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:relation="org.blockml.bml.relation"
+  xmlns:task="org.blockml.bml.task">
+
+  <idea>Author a new Block definition document from scratch.</idea>
+
+  <summary>Create a root .bml file with idea, documentation, type, baseType, version, and member
+    containers as needed. Register the block FQN in Library _blocks when publishing a library
+    catalogue.</summary>
+
+  <keywords>author, new block, create type, scaffold, root block</keywords>
+
+  <documentation>
+    Procedure for a new domain Block type:
+    1. Choose baseType from the framework or domain branch.
+    2. Declare identity and documentation metadata (idea, documentation, optional summary).
+    3. Add properties, aggregations, associations, or capabilities.
+    4. Add constraints, capabilities, and examples as needed.
+    5. Export via Library.bml _blocks when the type belongs to a published catalogue.
+  </documentation>
+
+  <references>
+    <see block="doc:DefinitionModel" relation="Prerequisite">
+      Understand idea, members, and documentation extensions before authoring.
+    </see>
+    <see block="def:RootBlockDefinition" relation="TaskStep">
+      Step 1 — inspect the root block definition meta-model shape.
+    </see>
+    <see file="02_mbml.md" relation="TaskStep">
+      Step 2 — follow block authoring rules (child order, type references, required fields).
+    </see>
+    <see block="core:Block" relation="TaskStep">
+      Step 3 — pick baseType and declare member containers.
+    </see>
+    <see block="doc:ModelingGuidelines" relation="TaskStep">
+      Step 4 — choose baseType vs contracts and model members consistently.
+    </see>
+    <see block="blockml:Library" relation="TaskStep">
+      Step 5 — add the block FQN to Library _blocks for export.
+    </see>
+  </references>
+
+  <name>AuthorNewBlock</name>
+  <type>
+    <task:AuthorNewBlock />
+  </type>
+  <baseType>
+    <core:TaskGuide />
+  </baseType>
+</block>
