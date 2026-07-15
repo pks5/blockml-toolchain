@@ -24,7 +24,7 @@
     (org.blockml.bml.definition.*). Concrete grammar lives on subtypes such as
     org.blockml.bml.definition.StructuralDefinition and org.blockml.bml.definition.BlockDefinition.
 
-    Used as a generic constraint — for example parameter D on org.blockml.bml.type.FullyQualifiedName
+    Used as a generic constraint — for example parameter D on org.blockml.bml.type.TypeReference
     (baseType core:Definition, defaultType def:BlockDefinition) and in genericTypes entries that
     constrain definition-element references. Framework core branch types remain baseType markers;
     domain interface-style type bounds use contracts and satisfiesTypeBound — see 17_type_system_bml.md.</documentation>

@@ -18,7 +18,7 @@
   <documentation>Abstract branch for built-in scalar ValueTypes. PrimitiveTypes describe semantics
     only — they never store concrete values. All values are stored exclusively in Properties.
 
-    Numeric branch: Number (Integer, Decimal, Float). Textual branch: Text (FullyQualifiedName,
+    Numeric branch: Number (Integer, Decimal, Float). Textual branch: Text (TypeReference,
     Version, URL, URI, FilePath, MimeType, …). Boolean is its own branch — neither textual nor
     numeric.
 

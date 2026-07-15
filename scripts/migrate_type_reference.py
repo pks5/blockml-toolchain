@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Migrate BML files to TypeReference container form for type/baseType/language."""
+"""Legacy migration helper (pre-TypeReference ValueType rename).
+
+Historical: moved identity type/baseType/language toward child-element forms and listed
+type-reference aggregation tags. Current design uses scalar TypeReference text for identity
+and TypeReferenceEntity aggregations for contracts/languages/Library lists — do not re-apply
+blindly.
+"""
 
 from __future__ import annotations
 

@@ -45,7 +45,7 @@
         <constraint:ValuePresent validation="Error"/>
       </constraints>
     </_name>
-    <_language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="element">
+    <_language type="TypeReference(lang:NaturalLanguage)" bml:xml="element">
       <documentation>Optional NaturalLanguage when this alias is written in a language other than the
         effective language of blocks that reference it. Set on the alias block definition. Unqualified
         names resolve via org.blockml.bml.language.*. Omitted = inherit effective language at

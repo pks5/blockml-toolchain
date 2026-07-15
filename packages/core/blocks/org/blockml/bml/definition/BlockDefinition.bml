@@ -39,8 +39,8 @@
 
     Specialized by org.blockml.bml.definition.SubBlockDefinition (nested Sub-Blocks, default
     definition meta-model) and org.blockml.bml.definition.RootBlockDefinition (document root and
-    embedded blocks with embeddedBlocks). Identity properties type and baseType are FullyQualifiedName
-    strings (not TypeReference aggregations) — type names the Block being declared; baseType carries
+    embedded blocks with embeddedBlocks).     Identity properties type and baseType are TypeReference
+    strings (not TypeReferenceEntity aggregations) — type names the Block being declared; baseType carries
     the parent TypeExpression including generic applications. Other type references (composition tags,
     member type attributes, contracts) accept FQN, xmlns QName, context-bound unqualified fallback, or
     Sub-Block-relative names — all normalized to a canonical FQN during resolution
@@ -65,10 +65,11 @@
     <see block="def:RootBlockDefinition">
       Root and embedded block shape — extends SubBlockDefinition.
     </see>
-    <see block="core:TypeReference">
-      Marker for contracts, languages, language, and subTypes aggregations — not type/baseType.
+    <see block="btype:TypeReferenceEntity">
+      Entity payload for contracts, languages, language, and subTypes aggregations — not
+      type/baseType (those stay scalar TypeReference text).
     </see>
-    <see block="btype:FullyQualifiedName">
+    <see block="btype:TypeReference">
       ValueType for identity type and baseType properties (FQN / TypeExpression text).
     </see>
   </references>
@@ -103,23 +104,24 @@
         (BML_INVALID_BLOCK_NAME). First child of every Block definition document (with type /
         baseType) — definition identity comes before idea.</documentation>
     </name>
-    <type type="FullyQualifiedName(core:Block)" bml:xml="element">
-      <documentation>Canonical Block type identity — a FullyQualifiedName string, not a TypeReference
-        aggregation. Required on root blocks (BML_MISSING_BLOCK_TYPE). Authored as element text —
-        FQN, xmlns QName, or Sub-Block-relative name (for example foo:MyBlock or com.foo.MyBlock).
-        The named type need not exist yet — this property declares identity for the Block being
-        defined. Optional on Sub-Blocks — when omitted, derived as resolve(parent.type) + "." + name;
-        when present, must equal that expected value (BML_SUBBLOCK_TYPE_MISMATCH). Stored in BOM as
-        block.type (FQN string). Immediately after name, before idea.</documentation>
+    <type type="TypeReference(core:Block)" bml:xml="element">
+      <documentation>Canonical Block type identity — scalar TypeReference (FQN) text, not a
+        TypeReferenceEntity aggregation. Required on root blocks (BML_MISSING_BLOCK_TYPE). Authored
+        as element text — FQN, xmlns QName, or Sub-Block-relative name (for example foo:MyBlock or
+        com.foo.MyBlock). The named type need not exist yet — this property declares identity for the
+        Block being defined. Optional on Sub-Blocks — when omitted, derived as
+        resolve(parent.type) + "." + name; when present, must equal that expected value
+        (BML_SUBBLOCK_TYPE_MISMATCH). Stored in BOM as block.type (FQN string). Immediately after
+        name, before idea.</documentation>
     </type>
-    <baseType type="FullyQualifiedName(core:Block)" bml:xml="element">
-      <documentation>Parent type FullyQualifiedName / TypeExpression. Required on all definitions
+    <baseType type="TypeReference(core:Block)" bml:xml="element">
+      <documentation>Parent type TypeReference / TypeExpression. Required on all definitions
         except the sole inheritance root (org.blockml.bml.core.Block), which omits &lt;baseType&gt;
         entirely (BML_MISSING_BASE_TYPE elsewhere). Authored as element text — FQN or xmlns QName,
         including generic applications that bind type parameters (for example core:Entity or
-        core:PrimitiveEntity(btype:FullyQualifiedName(core:Block))). This is the site where generic
-        applications on the parent are resolved. Stored in BOM as block.baseType (FQN string).
-        Immediately after type, before idea.</documentation>
+        core:PrimitiveEntity(btype:Integer)). This is the site where generic applications on the
+        parent are resolved. Stored in BOM as block.baseType (FQN string). Immediately after type,
+        before idea.</documentation>
     </baseType>
     <idea type="Text" bml:xml="element">
       <documentation>Short semantic description — what this Block represents in meaning. Required
@@ -155,32 +157,36 @@
         on &lt;aliases&gt; is shorthand that expands to FreeTextAlias instances only. Addressable as
         com.foo.Bar.aliases.</documentation>
     </aliases>
-    <language type="core:TypeReference(lang:NaturalLanguage)">
+    <language type="btype:TypeReferenceEntity(lang:NaturalLanguage)">
       <documentation>Natural language for documentation prose on this Block definition and its
-        members. Singular TypeReference aggregation — one child (for example &lt;German/&gt;).
-        Omitted = inherit from enclosing Library, then org.blockml.bml.core.Block default (English).
-        Unqualified child names resolve via implicit namespace org.blockml.bml.language.*. Stored in
-        BOM as block.languageFqn. Bare TypeReference(T) = optional single (0..1).</documentation>
+        members. Singular TypeReferenceEntity aggregation — one child (for example &lt;German/&gt;
+        sugar for &lt;btype:TypeReferenceEntity value="lang:German" /&gt;). Omitted = inherit from
+        enclosing Library, then org.blockml.bml.core.Block default (English). Unqualified child
+        names resolve via implicit namespace org.blockml.bml.language.*. Stored in BOM as
+        block.language (TypeReferenceEntity instance); languageFqn is the resolved value string.
+        Bare TypeReferenceEntity(T) = optional single (0..1).</documentation>
     </language>
     <genericTypes type="def:GenericTypeDefinition[]">
       <documentation>Generic type parameters declared on this Block (root block only). Each entry
         has a name and a baseType constraint for concrete type arguments at reference sites.</documentation>
     </genericTypes>
-    <languages type="core:TypeReference(core:Language)[]">
+    <languages type="btype:TypeReferenceEntity(core:Language)[]">
       <documentation>Language types permitted on capability implementation bindings for this Block.
-      Each child is a direct Language reference (element name = FQN via xmlns prefix). Omitted =
-      inherit from baseType chain. Stored in BOM as block.languages[].</documentation>
+      Each child is a TypeReferenceEntity instance (empty QName sugar or explicit value). Omitted =
+      inherit from baseType chain. Stored in BOM as block.languages[] (Entity instances).</documentation>
     </languages>
-    <subTypes type="core:TypeReference(core:Block)[]">
+    <subTypes type="btype:TypeReferenceEntity(core:Block)[]">
       <documentation>Block types allowed as baseType on Sub-Blocks in subBlocks[]. Each child is a
-      direct Block reference. Omitted = inherit effective subTypes from baseType chain; explicit
-      empty list = override to forbid Sub-Blocks. Stored in BOM as block.subTypes[].</documentation>
+      TypeReferenceEntity instance. Omitted = inherit effective subTypes from baseType chain;
+      explicit empty list = override to forbid Sub-Blocks. Stored in BOM as block.subTypes[].
+      </documentation>
     </subTypes>
-    <contracts type="core:TypeReference(core:Block)[]">
+    <contracts type="btype:TypeReferenceEntity(core:Block)[]">
       <documentation>Contract Block references merged into this Block after the baseType chain
-      (root block only). Each child is a direct Block reference (element name = FQN via xmlns
-      prefix). Declaration order is significant — later contracts override earlier ones; local
-      Block declarations override all contracts. Stored in BOM as block.contracts[].</documentation>
+      (root block only). Each child is a TypeReferenceEntity instance — for example
+      &lt;ac:Wall /&gt; expands to &lt;btype:TypeReferenceEntity value="ac:Wall" /&gt;. Declaration
+      order is significant — later contracts override earlier ones; local Block declarations
+      override all contracts. Stored in BOM as block.contracts[].</documentation>
     </contracts>
     <properties type="def:PropertyDefinition[]">
       <documentation>Property member declarations. Mapped to members[] in XML document order.

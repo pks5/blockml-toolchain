@@ -107,9 +107,8 @@ Empty elements (`<final/>`) are not permitted — use `<final>true</final>` expl
 
 ```text
 Lists Block type references permitted as baseType on Sub-Blocks in <subBlocks>.
-Meta-model type: core:TypeReference(core:Block)[]. Each child element is a direct Block
-reference (element name = FQN via xmlns prefix) — type reference only, not a Block instance.
-See 17_type_system_bml.md — Empty child elements.
+Meta-model type: btype:TypeReferenceEntity(core:Block)[]. Each child is a TypeReferenceEntity instance — empty QName sugar or explicit value.
+See 17_type_system_bml.md — TypeReference and TypeReferenceEntity.
 
 Default (no declaration on this block):  [] — Sub-Blocks forbidden until explicitly enabled
 Omitted <subTypes>:                      inherit effective subTypes from baseType chain
@@ -133,8 +132,8 @@ Sub-Block baseType not in effective subTypes → BML_INVALID_SUBBLOCK_TYPE
 
 ```text
 Lists Language references permitted on <implementation language="...">.
-Meta-model type: core:TypeReference(core:Language)[]. Each child element is a direct Language
-reference (element name = FQN via xmlns prefix) — type reference only, not a Block instance.
+Meta-model type: btype:TypeReferenceEntity(core:Language)[]. Each child is a TypeReferenceEntity
+instance — empty QName sugar or explicit value.
 Type-reference interpretation follows from the Block-definition role — same pattern as Library _blocks.
 Omitted = inherit from baseType
 Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
@@ -151,10 +150,9 @@ Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 
 ```text
 Lists contract Block references merged into this Block (root block only).
-Meta-model type: core:TypeReference(core:Block)[]. Each child element is a direct Block
-reference (element name = FQN via xmlns prefix) — type reference only, not a Block instance.
+Meta-model type: btype:TypeReferenceEntity(core:Block)[]. Each child is a TypeReferenceEntity instance — empty QName sugar or explicit value.
 Same container pattern as <languages> and <subTypes> — no wrapper <contract> element.
-See 17_type_system_bml.md — Empty child elements.
+See 17_type_system_bml.md — TypeReference and TypeReferenceEntity.
 Role            — member merge + type-bound identification (satisfiesTypeBound); see 17_type_system_bml.md
 Omitted = inherit from baseType at validate
 Duplicate reference → BML_DUPLICATE_CONTRACT
@@ -210,7 +208,7 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 
 ```text
 Inheritance marker     — org.blockml.bml.definition.* blocks extend core.Definition (directly or via StructuralDefinition)
-FullyQualifiedName<D>  — generic parameter D on org.blockml.bml.type.FullyQualifiedName:
+TypeReference<D>  — generic parameter D on org.blockml.bml.type.TypeReference:
                            baseType core:Definition, defaultType def:BlockDefinition
                          constrains which definition-element branch an FQN may reference
 genericTypes           — e.g. <D baseType="org.blockml.bml.core.Definition" defaultType="def:RootBlockDefinition"/>
@@ -436,7 +434,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/type/Number.bml · Integer.bml · Decimal.bml · Float.bml · Text.bml · Boolean.bml · Constant.bml · …
      org/blockml/bml/type/Version.bml · URL.bml · URI.bml · FilePath.bml · MimeType.bml
      org/blockml/bml/core/PrimitiveEntity.bml
-     org/blockml/bml/core/TypeReference.bml
+     org/blockml/bml/type/TypeReference.bml · TypeReferenceEntity.bml
      org/blockml/bml/type/IntegerEntity.bml · TextEntity.bml · …
      org/blockml/bml/language/NaturalLanguage.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …

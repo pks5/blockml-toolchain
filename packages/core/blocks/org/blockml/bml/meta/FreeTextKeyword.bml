@@ -33,7 +33,7 @@
       <documentation>Required search tag text. Stored in BOM KeywordEntry.term when typeFqn is
         org.blockml.bml.meta.FreeTextKeyword.</documentation>
     </term>
-    <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+    <language type="TypeReference(lang:NaturalLanguage)" bml:xml="attribute">
       <documentation>Optional NaturalLanguage when this tag is written in a language other than the
         effective language of the enclosing definition element. Unqualified names resolve via
         org.blockml.bml.language.*. Omitted = inherit effective language from Block or Library.</documentation>

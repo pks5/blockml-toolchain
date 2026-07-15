@@ -25,7 +25,7 @@
   </genericTypes>
 
   <properties>
-    <type type="FullyQualifiedName(core:Block)">
+    <type type="TypeReference(core:Block)">
       <documentation>Allowed Block type FQN for composition children.</documentation>
     </type>
   </properties>

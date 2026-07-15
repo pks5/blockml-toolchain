@@ -38,9 +38,10 @@
     • _schemas — optional legacy XSD paths as FilePathEntity instances
     • _blocks — exported Block and ValueType definitions (membership SSOT)
 
-    bootstrap holds a Bootstrap block instance as type reference — element name resolves to FQN.
-    _dependencies, _subLibraries, and _blocks hold empty Block instances as type references —
-    element name resolves to FQN. bml:version is forbidden on these children.
+    bootstrap holds a TypeReferenceEntity pointing at a Bootstrap block (typically
+    org.blockml.bml.README) — empty child QName sugar sets value to that FQN.
+    _dependencies, _subLibraries, and _blocks hold TypeReferenceEntity instances the same way.
+    bml:version is forbidden on sugar children (version comes from library context).
     _schemas holds FilePathEntity composition children; value is the relative .xsd path from
     the library package root (directory containing Library.bml).
   </documentation>
@@ -61,14 +62,14 @@
     <see block="core:Bootstrap">
       Abstract base for library bootstrap entry points (README blocks).
     </see>
-    <see block="core:TypeReference">
-      Type-reference marker for bootstrap, _dependencies, _subLibraries, and _blocks.
+    <see block="btype:TypeReferenceEntity">
+      Entity payload for bootstrap, _dependencies, _subLibraries, and _blocks.
     </see>
   </references>
 
   <abstract>true</abstract>
 
-  <subTypes type="core:TypeReference(core:Block)[]">
+  <subTypes type="btype:TypeReferenceEntity(core:Block)[]">
     <core:Block />
   </subTypes>
   <properties>
@@ -78,37 +79,37 @@
   </properties>
 
   <aggregations>
-    <language type="core:TypeReference(lang:NaturalLanguage)">
+    <language type="btype:TypeReferenceEntity(lang:NaturalLanguage)">
       <documentation>Default natural language for documentation prose on all blocks exported
-        from this library catalogue. Singular TypeReference aggregation — one child (for example
-        &lt;English/&gt;). Inherited by block definitions unless overridden. Unqualified child
-        names resolve via implicit namespace org.blockml.bml.language.*.</documentation>
+        from this library catalogue. Singular TypeReferenceEntity aggregation — one child (for
+        example &lt;English/&gt;). Inherited by block definitions unless overridden. Unqualified
+        child names resolve via implicit namespace org.blockml.bml.language.*.</documentation>
     </language>
-    <bootstrap type="core:TypeReference(core:Bootstrap)">
+    <bootstrap type="btype:TypeReferenceEntity(core:Bootstrap)">
       <documentation>Library bootstrap entry point — typically a README block with a readFirst
-      documentation list. Type-reference aggregation — child element name resolves to FQN.
-      bml:version is forbidden.</documentation>
+      documentation list. TypeReferenceEntity aggregation — empty QName sugar sets value to the
+      child FQN. bml:version is forbidden on sugar children.</documentation>
     </bootstrap>
-    <_dependencies type="core:TypeReference(core:BlockLibrary)[]">
+    <_dependencies type="btype:TypeReferenceEntity(core:BlockLibrary)[]">
       <documentation>Other Library blocks this library depends on. Typical pattern: an inner
-      library lists the outer library here. Holds empty Block instances as type references —
-      element name resolves to FQN. bml:version is forbidden.</documentation>
+      library lists the outer library here. TypeReferenceEntity instances (QName sugar or explicit
+      value). bml:version is forbidden on sugar children.</documentation>
     </_dependencies>
-    <_subLibraries type="core:TypeReference(core:BlockLibrary)[]">
+    <_subLibraries type="btype:TypeReferenceEntity(core:BlockLibrary)[]">
       <documentation>Nested child Library blocks grouped under this library. A library may declare
-      sub-libraries alongside _blocks. Holds empty Block instances as type references — element
-      name resolves to FQN. bml:version is forbidden. The outer library must not re-export inner
-      library blocks in _blocks — consumers depend on the inner library directly.</documentation>
+      sub-libraries alongside _blocks. TypeReferenceEntity instances. bml:version is forbidden on
+      sugar children. The outer library must not re-export inner library blocks in _blocks —
+      consumers depend on the inner library directly.</documentation>
     </_subLibraries>
     <_schemas type="btype:FilePathEntity[]">
       <documentation>Optional legacy XSD schema paths during migration. Each entry is a
         FilePathEntity composition child; value is the relative .xsd path from the library package
         root. Omit when all types are exported via _blocks.</documentation>
     </_schemas>
-    <_blocks type="core:TypeReference(core:Block)[]">
+    <_blocks type="btype:TypeReferenceEntity(core:Block)[]">
       <documentation>Exported Block and ValueType definitions. Membership is defined exclusively by
-      this list — not by directory layout. Holds empty Block instances as type references —
-      element name resolves to FQN. bml:version is forbidden.</documentation>
+      this list — not by directory layout. TypeReferenceEntity instances naming each export.
+      bml:version is forbidden on sugar children.</documentation>
     </_blocks>
   </aggregations>
 

@@ -145,7 +145,7 @@
       <bml:xml>documentation</bml:xml>
 
       <properties>
-        <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+        <language type="TypeReference(lang:NaturalLanguage)" bml:xml="attribute">
           <documentation>Optional NaturalLanguage when this documentation text is written in a
             language other than the effective language of the enclosing definition element. Unqualified
             names resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit
@@ -178,7 +178,7 @@
           <documentation>Semantic version this change applies to. Required attribute on every change
             entry.</documentation>
         </version>
-        <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+        <language type="TypeReference(lang:NaturalLanguage)" bml:xml="attribute">
           <documentation>Optional NaturalLanguage when this change description is written in a
             language other than the effective language of the enclosing definition element. Unqualified
             names resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit
@@ -213,7 +213,7 @@
             element (BML_EXAMPLE_MISSING_TITLE when omitted). Always written in the effective natural
             language of the enclosing block definition — no separate language attribute on title.</documentation>
         </title>
-        <language type="FullyQualifiedName(core:Language)" bml:xml="attribute">
+        <language type="TypeReference(core:Language)" bml:xml="attribute">
           <documentation>Optional implementation Language when the CDATA body is written in a
             target-language dialect (OpenSCAD, TypeScript, …). Unqualified names resolve via implicit
             namespace org.blockml.bml.language.*. Omitted when content is BML/MBML source. Not a
@@ -256,7 +256,7 @@
       <bml:xml>see</bml:xml>
 
       <properties>
-        <block type="FullyQualifiedName(core:Block, core:Definition)" bml:xml="attribute">
+        <block type="TypeReference(core:Block, core:Definition)" bml:xml="attribute">
           <documentation>Block or Definition type reference via xmlns prefix (e.g. core:Block) — or
             Block FQN qualifier when paired with property, aggregation, association, or capability.
             Standalone block= resolves to FQN at parse time. With a member attribute, block= supplies
@@ -293,12 +293,12 @@
             or local member name when paired with block=. Stored in BOM as canonical definition path.
             Mutually exclusive with all other target kinds.</documentation>
         </capability>
-        <relation type="FullyQualifiedName(core:Relation)" bml:xml="attribute">
+        <relation type="TypeReference(core:Relation)" bml:xml="attribute">
           <documentation>Relation block describing how the target relates to the current definition.
             Block reference to org.blockml.bml.relation.* — unqualified names resolve via implicit
             namespace org.blockml.bml.relation.*. Omitted = org.blockml.bml.relation.SeeAlso.</documentation>
         </relation>
-        <language type="FullyQualifiedName(lang:NaturalLanguage)" bml:xml="attribute">
+        <language type="TypeReference(lang:NaturalLanguage)" bml:xml="attribute">
           <documentation>Optional NaturalLanguage when the relationship text is written in a language
             other than the effective language of the enclosing definition element. Unqualified names
             resolve via implicit namespace org.blockml.bml.language.*. Omitted = inherit effective

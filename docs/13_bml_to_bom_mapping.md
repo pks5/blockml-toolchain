@@ -302,7 +302,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <status>Draft</status>                → member.statusFqn or block.statusFqn (when declared)
                                              → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
-<type>foo:MyBlock</type>                     → block.type (FQN; FullyQualifiedName property text;
+<type>foo:MyBlock</type>                     → block.type (FQN; TypeReference property text;
                                                root block only — derived on Sub-Blocks)
 <baseType>core:Block</baseType>              → block.baseType (FQN / TypeExpression string;
                                                generics allowed, e.g. PrimitiveEntity(Integer))
@@ -711,49 +711,46 @@ bare <composition> on definition            → BML_STANDALONE_COMPOSITION (erro
 
 The `composition aggregation="…"` attribute is **removed** — aggregations are opened by member element name.
 
-### TypeReference aggregation (stage [8])
+### TypeReferenceEntity aggregation (stage [8])
 
-**Empty child elements:** identical XML (`<foo:Bar />`) can denote a type reference or a real empty instance — the aggregation `type` decides. See `17_type_system_bml.md` — Empty child elements.
+**Empty child sugar:** when the aggregation payload type is a `TypeReferenceEntity` application,
+`<foo:Bar />` expands to `<btype:TypeReferenceEntity value="foo:Bar" />` — a real Entity instance.
+See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 ```text
-Aggregation type is TypeReference(T)  →  type-reference mode
-  Parser: child element name → FQN; store in contracts[] / languages[] / subTypes[] / languageFqn
-  Validator: satisfiesTypeBound(childFqn, T) for each child
-  Forbidden: bml:id, bml:version, member values on children, <composition> on definition sites, default="true"
-  Semantics: empty child is syntactic sugar for the FQN — not a BlockInstance
+Aggregation type is TypeReferenceEntity(B)[/…/]  →  TypeReferenceEntity instances
+  Parser: empty non-TypeReferenceEntity QName child → expand sugar → Entity { value: resolved FQN }
+  Explicit <btype:TypeReferenceEntity value="…" /> is equivalent
+  Store Entity instances in contracts[] / languages[] / subTypes[] / language / Library lists
+  Validator: satisfiesTypeBound(resolve(value), B) for each child
+  FQN projections (e.g. languageFqn, contract FQN sets) derive from .value
 
-Aggregation type is plain Block[]       →  instance mode (composition ownership)
-  Parser: children → BlockInstance trees
-  Validator: standard composition and aggregation rules
-  Semantics: empty child is a real BlockInstance with no authored member values
+Aggregation type is plain Block[] (domain)       →  domain BlockInstance trees
+  Parser: children → BlockInstance of the child element type
+  Empty child = real BlockInstance with no authored member values
 
-Identity properties type / baseType     →  FullyQualifiedName(core:Block) text
+Identity properties type / baseType               →  TypeReference(core:Block) text
   Parser: element text → resolve QName/FQN / TypeExpression → block.type / block.baseType
   Child-element form inside <type> / <baseType> → BML_IDENTITY_TYPE_CHILD_ELEMENT (error)
 
-unwrapTypeReference(typeExpr):
-  fqn === org.blockml.bml.core.TypeReference && one typeArgument  →  return T
-  else  →  null (instance aggregation)
+unwrapTypeReferenceEntity(typeExpr):
+  fqn === org.blockml.bml.type.TypeReferenceEntity  →  return B (bound payload constraint)
+  else  →  null
+```
 
 ```text
-Plain core:Block[] on type-reference aggregations     → BML_TYPE_REFERENCE_REQUIRED (error; use TypeReference(T)[])
-<type>/<baseType> child-element form on identity        → BML_IDENTITY_TYPE_CHILD_ELEMENT (error)
-
 BML_IDENTITY_TYPE_CHILD_ELEMENT — identity <type> or <baseType> uses a child element instead of text
-BML_TYPE_REFERENCE_REQUIRED         — type-reference site uses plain Block[] without TypeReference(T)
-BML_TYPE_REFERENCE_CHILD_VALUE      — member value on child of TypeReference aggregation
-BML_TYPE_REFERENCE_COMPOSITION      — <composition> on a definition-site TypeReference container (e.g. inside <contracts>)
-BML_TYPE_REFERENCE_DEFAULT          — default="true" on TypeReference aggregation
-BML_TYPE_REFERENCE_CONSTRAINT       — child FQN fails satisfiesTypeBound(child, T)
+BML_TYPE_REFERENCE_CONSTRAINT       — resolve(value) fails satisfiesTypeBound(value, B)
 BML_TYPE_REFERENCE_MULTIPLICITY     — wrong child count (bare = 0..1, [1..1] = required single)
+BML_TYPE_REFERENCE_CHILD_VALUE      — domain members authored on QName-sugar child (instance is TypeReferenceEntity)
 ```
 
 ### Contract merge (stage [8])
 
 ```text
 <ac:IIdentifiable/>
-  → Parser resolves element name via xmlns prefix → FQN stored in block.contracts[] (stage [5])
-  → Validator resolves contract BlockDefinition (stage [8])
+  → Parser expands sugar → TypeReferenceEntity { value: "…IIdentifiable" } in block.contracts[]
+  → Validator resolves contract BlockDefinition from resolve(value) (stage [8])
   → resolveContractMembers(contractFqn) — declared members only;
     subBlocks[], embeddedBlocks[], and compositions[] on contract type ignored
   → resolveEffectiveMembers(implementingBlock) merges:
@@ -766,9 +763,9 @@ BML_TYPE_REFERENCE_MULTIPLICITY     — wrong child count (bare = 0..1, [1..1] =
 ```
 
 ```text
-BML_UNKNOWN_CONTRACT              — type FQN not in TypeRegistry
+BML_UNKNOWN_CONTRACT              — resolve(value) not in TypeRegistry
 BML_CONTRACT_NOT_ON_ROOT          — <contracts> on Sub-Block
-BML_DUPLICATE_CONTRACT            — same type listed twice in block.contracts[]
+BML_DUPLICATE_CONTRACT            — same type listed twice in block.contracts[] (by resolve(value))
 BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
 BML_FINAL_MEMBER_OVERRIDE         — override attempted on final member (from contract or baseType)
 BML_OVERRIDE_REQUIRED             — local redeclaration merges with baseType or contract member but override omitted
@@ -780,26 +777,29 @@ BML_READONLY_MEMBER_WRITE         — Block instance sets a member with readOnly
 
 ### Library blocks
 
-Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.bml.core.BlockLibrary`. On library **instances**, aggregation children are authored inside `<composition>`. Interpretation depends on the aggregation `type` — see `17_type_system_bml.md` — Empty child elements.
+Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.bml.core.BlockLibrary`. On library **instances**, aggregation children are authored inside `<composition>`. Interpretation depends on the aggregation `type` — see `17_type_system_bml.md` — TypeReferenceEntity.
 
 ```text
-<!-- TypeReference aggregations — child = type reference (FQN), not BlockInstance -->
-<blockml:README />                         →  bootstrap entry FQN: "org.blockml.bml.README"
-<blockml:Library />                        →  _dependencies entry FQN: "org.blockml.bml.Library"  — no bml:version
-<compiler:Library />                       →  _subLibraries entry FQN: "org.blockml.bml.compiler.Library"
-<type:Size3d />                             →  _blocks entry FQN: "com.machineblocks.bml.type.Size3d"
-<bricks:Wall />                             →  _blocks entry FQN: "com.machineblocks.bml.bricks.Wall"
-<bricks:WallPresets />                      →  _blocks entry FQN: preset block
+<!-- TypeReferenceEntity aggregations — QName sugar → Entity { value: FQN } -->
+<blockml:README />                         →  bootstrap: TypeReferenceEntity value="org.blockml.bml.README"
+<blockml:Library />                        →  _dependencies entry — no bml:version on sugar
+<compiler:Library />                       →  _subLibraries entry
+<type:Size3d />                             →  _blocks entry
+<bricks:Wall />                             →  _blocks entry
+<bricks:WallPresets />                      →  _blocks entry
 
-<!-- Instance aggregation (_schemas) — child = real BlockInstance -->
-<btype:FilePathEntity value="bricks.xsd"/> →  BlockInstance { typeFqn: "org.blockml.bml.type.FilePathEntity", value: "bricks.xsd" }
+<!-- Instance aggregation (_schemas) — child = FilePathEntity -->
+<btype:FilePathEntity value="bricks.xsd"/> →  BlockInstance { typeFqn: "…FilePathEntity", value: "bricks.xsd" }
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN. **`bml:version` is forbidden** on these children. Meta-model types: `TypeReference(core:Bootstrap)`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`.
+`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use `TypeReferenceEntity` aggregations —
+empty QName sugar expands to Entity instances. **`bml:version` is forbidden** on sugar children.
+Meta-model types: `TypeReferenceEntity(core:Bootstrap)`, `TypeReferenceEntity(core:BlockLibrary)[]`,
+`TypeReferenceEntity(core:Block)[]`.
 
 Each child requires explicit aggregation members (`bootstrap`, `_dependencies`, `_subLibraries`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
 
-**Orchestrator (not parser):** after parsing a Library block, resolve each `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` entry by FQN, load the referenced definitions using effective block versions, and `registerBlockDefinition`. Validate that outer libraries do not re-export blocks from nested inner libraries (`BML_LIBRARY_NESTING_VIOLATION`).
+**Orchestrator (not parser):** after parsing a Library block, resolve each `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` entry by `resolve(value)`, load the referenced definitions using effective block versions, and `registerBlockDefinition`. Validate that outer libraries do not re-export blocks from nested inner libraries (`BML_LIBRARY_NESTING_VIOLATION`).
 
 ### Incremental builds
 

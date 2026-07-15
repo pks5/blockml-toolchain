@@ -49,7 +49,7 @@
   </references>
 
   <properties>
-    <type type="FullyQualifiedName(core:ValueType)" bml:xml="element|attribute">
+    <type type="TypeReference(core:ValueType)" bml:xml="element|attribute">
       <documentation>FQN of the property's ValueType (TypeExpression). Non-ValueType FQNs are invalid
         (BML_INVALID_PROPERTY_TYPE). Multiplicity, unions, generic applications, and instance
         configuration are expressed in the type string — e.g. Text{maxLength=100}. On definitions,

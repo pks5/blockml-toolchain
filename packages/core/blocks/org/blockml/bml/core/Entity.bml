@@ -29,8 +29,8 @@
     <see block="core:PrimitiveEntity">
       Primitive value wrappers as Entity instances.
     </see>
-    <see block="core:TypeReference">
-      Type-reference marker for aggregation payloads listing Block types.
+    <see block="btype:TypeReferenceEntity">
+      TypeReference value as Entity — used for contracts, languages, Library lists.
     </see>
   </references>
 

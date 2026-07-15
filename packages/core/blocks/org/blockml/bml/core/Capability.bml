@@ -29,7 +29,7 @@
       <documentation>Whether the capabality has an output and thus requires a specified outputType.</documentation>
     </_hasOutput>
     <implementation>
-      <language type="FullyQualifiedName(core:Language)" bml:xml="attribute">
+      <language type="TypeReference(core:Language)" bml:xml="attribute">
         <documentation>Language (org.blockml.bml.language.*). Required on every implementation
           element. Unqualified names resolve via implicit namespace org.blockml.bml.language.*.</documentation>
       </language>

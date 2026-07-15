@@ -352,7 +352,7 @@ All types inherit from **`org.blockml.bml.core.ValueType`**. Types are not a sep
 org.blockml.bml.core.ValueType              abstract — never stores data
   ├── org.blockml.bml.type.PrimitiveType    abstract
   │     ├── org.blockml.bml.type.Text         abstract — textual primitives
-  │     │     ├── org.blockml.bml.type.FullyQualifiedName
+  │     │     ├── org.blockml.bml.type.TypeReference
   │     │     ├── org.blockml.bml.type.Version
   │     │     ├── org.blockml.bml.type.URL
   │     │     ├── org.blockml.bml.type.URI
@@ -527,7 +527,7 @@ Primitive types inherit from `org.blockml.bml.type.PrimitiveType`. They are **pu
 ```text
 org.blockml.bml.type.PrimitiveType
   org.blockml.bml.type.Text           — abstract
-    org.blockml.bml.type.FullyQualifiedName
+    org.blockml.bml.type.TypeReference
     org.blockml.bml.type.Version
     org.blockml.bml.type.URL · URI · FilePath · MimeType · …
   org.blockml.bml.type.Number         — abstract
@@ -604,58 +604,60 @@ When a primitive must appear as a Block instance in composition or aggregation:
 
 Properties continue to store primitive values directly (`width : Integer`) — `*Entity` types exist only when the primitive value itself must become an identifiable Block instance (ordered collections, referencable values, metadata-bearing primitives).
 
-V1 bootstrap: `IntegerEntity`, `DecimalEntity`, `FloatEntity`, `TextEntity`, `BooleanEntity`, `VersionEntity`, `URLEntity`, `URIEntity`, `FilePathEntity`, `MimeTypeEntity`, `FullyQualifiedNameEntity` in `@blockml/core`.
+V1 bootstrap: `IntegerEntity`, `DecimalEntity`, `FloatEntity`, `TextEntity`, `BooleanEntity`, `VersionEntity`, `URLEntity`, `URIEntity`, `FilePathEntity`, `MimeTypeEntity`, `TypeReferenceEntity` in `@blockml/core`.
 
-#### TypeReference
+#### TypeReference and TypeReferenceEntity
 
-`org.blockml.bml.core.TypeReference(T)` is an **abstract generic marker** — the inverse of `PrimitiveEntity(T)`:
+`org.blockml.bml.type.TypeReference(B, D)` is a **Text ValueType** for FQN / TypeExpression strings
+formerly `FullyQualifiedName`). Use it on scalar properties such as identity `type` / `baseType`
+and member `type` attributes.
+
+`org.blockml.bml.type.TypeReferenceEntity(B, D)` is the **PrimitiveEntity** wrapper — open generic,
+forwards `B`/`D` onto `PrimitiveEntity(TypeReference(B, D))`. Use it when a type reference must
+appear as an Entity in composition or aggregation (contracts, languages, Library lists, …).
 
 ```text
-PrimitiveEntity<T>   — primitive value must appear as Entity instance in composition
-TypeReference<T>     — Block type must appear as direct element reference in aggregation
+TypeReference(B, D)        — scalar FQN / TypeExpression text on properties
+TypeReferenceEntity(B, D)  — Entity with value : TypeReference(B, D)
 ```
 
-```text
-TypeReference<T extends Block>
-  abstract
-  (no properties — pure marker, like core.Definition as branch identifier)
-```
+There is **no** separate aggregation marker. Type-reference aggregations are ordinary Entity
+aggregations whose payload type is a `TypeReferenceEntity` application.
 
-**Detection:** aggregation `type` is a generic application `TypeReference(T)` with exactly one type argument. Validator unwraps `T` for `satisfiesTypeBound` checks on each child element name.
-
-#### Empty child elements — same syntax, two semantics
-
-A central BlockML principle: **an empty child element looks identical in XML, but its meaning depends entirely on the aggregation `type` — not on the element shape.**
+#### Empty child sugar for TypeReferenceEntity aggregations
 
 ```xml
-<contracts>
+<contracts type="btype:TypeReferenceEntity(core:Block)[]">
   <con:MyContract />
 </contracts>
 ```
 
-The same surface pattern — a self-closing element whose QName resolves to a Block FQN — can mean one of two things:
+is **syntactic sugar** for an equivalent explicit Entity instance:
+
+```xml
+<contracts type="btype:TypeReferenceEntity(core:Block)[]">
+  <btype:TypeReferenceEntity value="con:MyContract" />
+</contracts>
+```
+
+Both produce a real `TypeReferenceEntity` instance in the BOM — not a bare string, and not an
+instance of `MyContract`. The sugar expands beforehand; afterwards normal Entity aggregation rules
+apply.
 
 | Aggregation `type` | What `<con:MyContract />` means | BOM |
 |---|---|---|
-| `TypeReference(T)[]` (or bare `TypeReference(T)`) | **Type reference only** — syntactic sugar for the FQN `com.foo.MyContract`. **Not** an instance of that Block. | `contracts[]` / `languages[]` / `subTypes[]` / `languageFqn` — `string` FQNs |
-| Plain `Block[]` (instance aggregation) | **Real empty instance** — a `BlockInstance` of type `MyContract` with no authored member values (defaults / absent). | `BlockInstance { typeFqn: "com.foo.MyContract" }` in a composition tree |
+| `TypeReferenceEntity(T)[]` (or bare) | Sugar for `TypeReferenceEntity` with `value` = that QName | Entity instance(s); projections may expose `.value` as FQN |
+| Plain `Block[]` (e.g. `bricks:Brick[]`) | Real empty instance of that Block type | `BlockInstance { typeFqn: "com.foo.MyContract" }` |
 
 ```text
-Rule:  aggregation type attribute  →  determines interpretation
-       identical empty XML element  →  NOT sufficient to decide
-
-TypeReference mode:
-  child element name IS the reference (FQN via xmlns prefix)
-  empty element is the canonical XML spelling — not a "leeres Entity"
-  no BlockInstance is created; no member values; no bml:id; no nested <composition> on definition sites
-
-Instance mode:
-  child element IS a BlockInstance (Object) in the composition tree
-  empty element = valid instance with all properties absent / at defaults
-  bml:id, member values, nested composition on children are allowed
+Rule:  aggregation type attribute  →  decides sugar vs domain-Block instance
+       sugar applies only when the payload type is a TypeReferenceEntity application
+       and the child element QName is not TypeReferenceEntity itself
 ```
 
-**Definition sites** (`<contracts>`, `<languages>`, `<subTypes>`, `<language>`) are always TypeReference containers — children are direct element references, never wrapped in `<composition>`:
+**Definition sites** (`<contracts>`, `<languages>`, `<subTypes>`, `<language>`) declare
+`TypeReferenceEntity` aggregations — children are Entity instances (sugar or explicit), never wrapped
+in `<composition>` at the definition site:
 
 ```xml
 <contracts>
@@ -663,29 +665,33 @@ Instance mode:
 </contracts>
 ```
 
-**Identity properties** `type` and `baseType` are **not** TypeReference aggregations — they are `FullyQualifiedName(core:Block)` properties authored as element text (including generic applications on `baseType`). See below.
+**Identity properties** `type` and `baseType` are **scalar** `TypeReference(core:Block)` properties
+authored as element text — not `TypeReferenceEntity` aggregations.
 
-**Instance fill sites** open an aggregation member and use `<composition>` as the fill container. For **instance** aggregations, children inside `<composition>` are owned `BlockInstance` trees. For **TypeReference** aggregations (e.g. `bootstrap`, `_dependencies`, `_subLibraries`, `_blocks` on `org.blockml.bml.core.BlockLibrary`), children inside `<composition>` are still **type references** — the `<composition>` wrapper is the instance-side fill mechanism for the aggregation member, not evidence of composition ownership on the child:
+**Instance fill sites** open an aggregation member and use `<composition>` as the fill container.
+Children inside `<composition>` are owned instances of the aggregation payload type — including
+`TypeReferenceEntity` for Library lists:
 
 ```xml
-<!-- instance aggregation — real empty instance -->
+<!-- domain Block aggregation -->
 <_parts>
   <composition>
     <con:MyContract bml:id="main" />
   </composition>
 </_parts>
 
-<!-- TypeReference aggregation — still a type reference, not an instance -->
+<!-- TypeReferenceEntity aggregation — sugar or explicit Entity -->
 <_blocks>
   <composition>
     <con:MyContract />
+    <!-- equivalent: <btype:TypeReferenceEntity value="con:MyContract" /> -->
   </composition>
 </_blocks>
 ```
 
-See `02_mbml.md` — § Aggregations · `13_bml_to_bom_mapping.md` — TypeReference aggregation (stage [8]).
+See `02_mbml.md` — § Aggregations · `13_bml_to_bom_mapping.md` — TypeReferenceEntity aggregation.
 
-**Instance aggregation** (composition ownership):
+**Instance aggregation** (domain Blocks):
 
 ```xml
 <parts type="bricks:Brick[]">
@@ -695,63 +701,61 @@ See `02_mbml.md` — § Aggregations · `13_bml_to_bom_mapping.md` — TypeRefer
 </parts>
 ```
 
-**Type-reference aggregation** (types only):
+**Type-reference aggregation** (`TypeReferenceEntity`):
 
 ```xml
-<contracts type="core:TypeReference(core:Block)[]">
+<contracts type="btype:TypeReferenceEntity(core:Block)[]">
   <com.foo:IIdentifiable />
   <com.foo:IPlaceable />
 </contracts>
 ```
 
-**Identity properties** (FullyQualifiedName text — not TypeReference):
+**Identity properties** (scalar `TypeReference` text):
 
 ```xml
 <type>foo:MyBlock</type>
 <baseType>core:Entity</baseType>
 
 <!-- generic application on baseType -->
-<baseType>core:PrimitiveEntity(btype:FullyQualifiedName(core:Block))</baseType>
+<baseType>core:PrimitiveEntity(btype:Integer)</baseType>
 ```
 
 ```text
-Allowed on TypeReference aggregations:
-  child element name → FQN via xmlns prefix
-  multiplicity: bare TypeReference(T) = 0..1; [] = 0..n; [1..1] = required single
+Allowed on TypeReferenceEntity aggregations:
+  empty QName sugar → expands to TypeReferenceEntity { value }
+  explicit <btype:TypeReferenceEntity value="…" />
+  multiplicity: bare TypeReferenceEntity(T) = 0..1; [] = 0..n; [1..1] = required single
 
-Forbidden on TypeReference aggregations:
-  member values on children
-  bml:id
-  bml:version (unless a specific aggregation documents an exception)
-  <composition> on definition sites (e.g. inside <contracts> — children must be direct)
-  default="true"
+On sugar children (empty non-TypeReferenceEntity QName):
+  bml:version is forbidden unless a specific aggregation documents an exception
+  nested domain members of the named type are forbidden (the instance type is TypeReferenceEntity)
+
+value must satisfy satisfiesTypeBound(resolve(value), B)
 ```
 
 ```text
-TypeReference(T)         →  0..1 optional single type reference (Block aggregations — omit brackets)
-TypeReference(T)[]       →  0..n type references
-TypeReference(T)[1..1]   →  exactly one required type reference (rare; prefer [] or bare)
+TypeReferenceEntity(T)         →  0..1 optional single (omit brackets)
+TypeReferenceEntity(T)[]       →  0..n
+TypeReferenceEntity(T)[1..1]   →  exactly one required (rare; prefer [] or bare)
 ```
 
 ```text
-block.type      → FullyQualifiedName(core:Block) property — required on root (BML_MISSING_BLOCK_TYPE)
-block.baseType  → FullyQualifiedName(core:Block) property — TypeExpression text; generics allowed
+block.type      → TypeReference(core:Block) property — required on root (BML_MISSING_BLOCK_TYPE)
+block.baseType  → TypeReference(core:Block) property — TypeExpression text; generics allowed
                   omitted only on org.blockml.bml.core.Block (BML_MISSING_BASE_TYPE elsewhere)
 ```
 
-**Contrast with `TypeReference(T)`:** identity `type` / `baseType` use scalar FQN / TypeExpression text — same ValueType family as Property `type` attributes. TypeReference remains for contracts, languages, subTypes, language, and Library list aggregations.
+**Forbidden authoring:** Child-element form inside identity `<type>` / `<baseType>` is a parse error
+→ `BML_IDENTITY_TYPE_CHILD_ELEMENT`.
 
-**Forbidden authoring:** Child-element form inside identity `<type>` / `<baseType>` (legacy TypeReference spelling) is a parse error → `BML_IDENTITY_TYPE_CHILD_ELEMENT`.
-
-**Optional aliases:** concrete blocks may bind `T` for shorter authoring (for example `BlockReference = TypeReference(core:Block)`) — not required in V1.
-
-V1 bootstrap: `org.blockml.bml.core.TypeReference` in `@blockml/core`.
+V1 bootstrap: `org.blockml.bml.type.TypeReference` and `org.blockml.bml.type.TypeReferenceEntity`
+in `@blockml/core`.
 
 ```typescript
 /** @blockml/core — not part of BomDocument */
-function isTypeReferenceAggregation(type: TypeExpression): boolean
-function unwrapTypeReference(type: TypeExpression): TypeExpression | null
-// returns T when outer fqn is org.blockml.bml.core.TypeReference with one argument; else null
+function isTypeReferenceEntityAggregation(type: TypeExpression): boolean
+function unwrapTypeReferenceEntity(type: TypeExpression): TypeExpression | null
+// returns B (payload bound) when outer fqn is org.blockml.bml.type.TypeReferenceEntity; else null
 ```
 
 ### Properties are always Optional
@@ -1096,7 +1100,7 @@ forwarded parameters are declared on the derived Block
 
 An **abstract generic Block** cannot be instantiated directly. If a generic Block should appear as a concrete XML element, a derived Block must first **bind all open generic parameters**.
 
-`PrimitiveEntity<T>` is one instance of this rule — not the only one. It applies to **all** generic Blocks (`Box<T>`, `Constraint<T>`, `FullyQualifiedName<B, D>`, …):
+`PrimitiveEntity<T>` is one instance of this rule — not the only one. It applies to **all** generic Blocks (`Box<T>`, `Constraint<T>`, `TypeReference<B, D>`, …):
 
 ```text
 PrimitiveEntity<T>     abstract — not instantiable
@@ -1151,7 +1155,7 @@ In `type="..."` attributes, write generic applications with **round parentheses*
 Conceptual / internal     BML attribute (type="...")
 ─────────────────────     ───────────────────────────
 Box<Integer>              Box(Integer)
-FullyQualifiedName<T>     FullyQualifiedName(core:Block)
+TypeReference<B>          TypeReference(core:Block)
 MyBlock<abc.A, xyz.B>     mynamespace:MyBlock(abc:A, xyz:B)
 ```
 
@@ -1159,7 +1163,7 @@ Resolution rules:
 
 ```text
 mynamespace:MyBlock(abc:A, xyz:B)  →  com.mynamespace.MyBlock<abc.A, xyz.B>
-core:FullyQualifiedName(core:Block) → org.blockml.bml.core.FullyQualifiedName<core.Block>
+btype:TypeReference(core:Block) → org.blockml.bml.type.TypeReference<core.Block>
 ```
 
 Each parenthesized argument binds one generic type parameter (in declaration order). When multiple parameters are present, the argument label (`abc`, `xyz`, …) matches the generic parameter name (the XML element name inside `<genericTypes>`) and qualifies the type argument as a namespace prefix (`abc:A` → `abc.A`). With a single generic parameter, the label may be omitted — only the type reference is written.
@@ -1183,10 +1187,10 @@ Named and positional configuration must not be mixed in one `{...}` block. Posit
 Examples from core Block definitions:
 
 ```xml
-<!-- FullyQualifiedName<B, D>: B = Block branch, D = Definition branch (default def:BlockDefinition) -->
-<type type="core:FullyQualifiedName(core:Block)"/>
-<baseType type="core:FullyQualifiedName(core:Block, core:Definition)"/>
-<baseType type="core:FullyQualifiedName(def:BlockDefinition)"/>
+<!-- TypeReference<B, D>: B = Block branch, D = Definition branch (default def:BlockDefinition) -->
+<type type="btype:TypeReference(core:Block)"/>
+<baseType type="btype:TypeReference(core:Block, core:Definition)"/>
+<baseType type="btype:TypeReference(def:BlockDefinition)"/>
 
 <!-- genericTypes on a meta-model Block: D constrained to core.Definition -->
 <genericTypes>
@@ -1194,7 +1198,7 @@ Examples from core Block definitions:
 </genericTypes>
 ```
 
-`org.blockml.bml.core.Definition` itself declares no members — it identifies the Definition branch. `FullyQualifiedName`'s generic `D` uses `baseType="core:Definition"` so definition-element FQNs (e.g. `def:PropertyDefinition`, `def:BlockDefinition`) satisfy the constraint. See `16_framework_base_types.md` — Definition Branch · `packages/core/blocks/org/blockml/bml/type/FullyQualifiedName.bml`.
+`org.blockml.bml.core.Definition` itself declares no members — it identifies the Definition branch. `TypeReference`'s generic `D` uses `baseType="core:Definition"` so definition-element FQNs (e.g. `def:PropertyDefinition`, `def:BlockDefinition`) satisfy the constraint. See `16_framework_base_types.md` — Definition Branch · `packages/core/blocks/org/blockml/bml/type/TypeReference.bml`.
 
 At reference sites:
 
@@ -1307,8 +1311,8 @@ V1: only **direct** `contracts[]` entries count — no transitive closure throug
 
 ```text
 <genericTypes> parameter baseType="…" constraints
-Generic type arguments at reference sites (Box(Integer), FullyQualifiedName(…), …)
-FullyQualifiedName(B) / FullyQualifiedName(B, D) — parameter B and D
+Generic type arguments at reference sites (Box(Integer), TypeReference(…), …)
+TypeReference(B) / TypeReference(B, D) — parameter B and D
 ```
 
 **Uses `inBranch` (baseType chain only — contracts ignored):**

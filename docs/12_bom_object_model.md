@@ -130,7 +130,18 @@ interface SourceInfo {
 
 A Block definition is the abstract representation of a `<block>` document (or a Sub-Block within one). Semantically: a **Class** — type shape without instance state.
 
+`TypeReferenceEntity` aggregations (`contracts`, `languages`, `subTypes`, `language`, Library lists) store real Entity instances. FQN membership checks use `resolve(value)`.
+
 ```typescript
+/** BOM shape for org.blockml.bml.type.TypeReferenceEntity(B[, D]) instances */
+interface TypeReferenceEntityInstance {
+  typeFqn: "org.blockml.bml.type.TypeReferenceEntity"
+  /** Authored / resolved TypeReference (FQN or TypeExpression) */
+  value: string
+  /** Bound B from the aggregation type application (when recorded) */
+  boundB?: string
+}
+
 interface BlockDefinition {
   /** Short class name (PascalCase). Required. */
   name: string
@@ -157,7 +168,10 @@ interface BlockDefinition {
   /** Optional search/discovery tags — core.Keyword Entity instances (KeywordEntry[]). */
   keywords?: KeywordEntry[]
 
-  /** Natural language FQN for documentation prose and example titles. Omitted = inherit Library, then Block default (English). */
+  /** Natural language for documentation prose — TypeReferenceEntity instance. Omitted = inherit Library, then Block default (English). */
+  language?: TypeReferenceEntityInstance
+
+  /** Resolved FQN projection of language.value — retained for addressability and tooling. */
   languageFqn?: string
 
   /** Human-readable technical description of what this Block is. Required on root definitions. */
@@ -194,17 +208,17 @@ interface BlockDefinition {
   visibility?: "private" | "protected" | "public"
 
   /** Sub-Block baseTypes permitted in subBlocks[]. undefined = inherit from baseType chain; explicit [] = override to forbid */
-  subTypes?: string[]
+  subTypes?: TypeReferenceEntityInstance[]
 
-  /** org.blockml.bml.language.* FQNs allowed on capability implementations. Default: inherit. */
-  languages?: string[]
+  /** Language TypeReferenceEntity instances allowed on capability implementations. Default: inherit. */
+  languages?: TypeReferenceEntityInstance[]
 
-  /** Contract Block FQNs merged into this Block after the baseType chain.
+  /** Contract TypeReferenceEntity instances merged into this Block after the baseType chain.
    * Root block only. Order is significant — later contracts override earlier ones;
-   * local Block declarations override all contracts.
+   * local Block declarations override all contracts. Compare / project via resolve(value).
    * subBlocks, embeddedBlocks, and compositions on contract types are ignored.
    */
-  contracts?: string[]
+  contracts?: TypeReferenceEntityInstance[]
 
   /**
    * Generic type parameters declared on this Block (e.g. T on Box<T>).
@@ -564,7 +578,7 @@ interface PropertyDefinition extends MemberDefinitionBase {
 
 interface AggregationDefinition extends MemberDefinitionBase {
   kind: "aggregation"
-  /** Full TypeExpression — plain Block[] for instances, TypeReference(T)[] for type-reference lists */
+  /** Full TypeExpression — plain Block[] for domain instances, TypeReferenceEntity(T)[] for type refs */
   type: TypeExpression
   cardinality: "0..1" | "0..n" | "1..1" | "1..n"
   default?: boolean
@@ -717,7 +731,7 @@ function satisfiesTypeBound(
 
 ```text
 inBranch            — Property/Capability ValueType branch, Definition branch, branch rule table
-satisfiesTypeBound  — genericTypes baseType constraints, generic type arguments, FullyQualifiedName(B)
+satisfiesTypeBound  — genericTypes baseType constraints, generic type arguments, TypeReference(B)
 ```
 
 Framework core branch FQNs (`org.blockml.bml.core.ValueType`, `Entity`, `Language`, …) are satisfied via **`inBranch`** / baseType chain only — they are not duplicated as interface contracts in `@blockml/core`.
@@ -1218,9 +1232,16 @@ org.blockml.bml.core.TaskGuide                 abstract — org.blockml.bml.task
 org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diagnostic.* error codes
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN (type reference, not a Block instance). **`bml:version` is forbidden** on these children; effective version is resolved from library context. Meta-model types: `TypeReference(core:Bootstrap)`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`. See `17_type_system_bml.md` — Empty child elements.
+`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use `TypeReferenceEntity` aggregations —
+QName sugar expands to Entity instances (not instances of the named Block). **`bml:version` is
+forbidden** on sugar children; effective version is resolved from library context. Meta-model types:
+`TypeReferenceEntity(core:Bootstrap)`, `TypeReferenceEntity(core:BlockLibrary)[]`,
+`TypeReferenceEntity(core:Block)[]`. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
-On library **instances**, children are authored inside `<composition>` as the aggregation-fill container. For these TypeReference aggregations, each child is still interpreted as a **type reference** (FQN), not as a composition-owned entity. `_schemas` is an instance aggregation — its `FilePathEntity` children are real Block instances.
+On library **instances**, children are authored inside `<composition>` as the aggregation-fill
+container. For these aggregations, each child is a **TypeReferenceEntity** instance (sugar or
+explicit). `_schemas` remains a `FilePathEntity[]` aggregation — its children are FilePathEntity
+instances.
 
 The orchestrator resolves `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` entries by FQN, loads referenced definitions into the TypeRegistry using effective block versions, and validates library membership.
 

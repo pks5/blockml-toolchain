@@ -29,7 +29,7 @@
     Rules:
     • Named and positional configuration must not be mixed in one {...} block
     • Positional mapping follows declaration order — same rules as FunctionMapping
-    • Generic application uses round parentheses: Box(Integer), FullyQualifiedName(core:Block)
+    • Generic application uses round parentheses: Box(Integer), TypeReference(core:Block)
     • Constant(T){value=…} — generic (...) binds T; {value=…} supplies the singleton literal
 
     ValueType definitions declare configuration Properties on the type block (e.g. precision and

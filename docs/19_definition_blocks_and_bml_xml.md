@@ -50,7 +50,7 @@ This is a step toward **BML self-hosting** (Phase 2/3 in `01_system.md`): BlockM
 | Site | How `core.Definition` appears |
 |---|---|
 | `baseType` chain | `org.blockml.bml.definition.*` blocks inherit from `core.Definition` (directly or via `StructuralDefinition`) |
-| `FullyQualifiedName<B, D>` | Generic `D` on `org.blockml.bml.type.FullyQualifiedName` has `baseType="core:Definition"`, `defaultType="def:BlockDefinition"` — constrains definition-element FQN references |
+| `TypeReference<B, D>` | Generic `D` on `org.blockml.bml.type.TypeReference` has `baseType="core:Definition"`, `defaultType="def:BlockDefinition"` — constrains definition-element FQN references |
 | `<genericTypes>` | Meta-model generic parameters may use `baseType="org.blockml.bml.core.Definition"` (e.g. parameter `D` on a Block that describes definition elements) |
 | Validator | `definitionBranch === "definitionBlock"` when `baseType` chain includes `core.Definition` |
 
@@ -170,7 +170,7 @@ Examples: `PropertyDefinition`, `AggregationDefinition`, `AssociationDefinition`
 
 **Direct Block reference — effective Block type as element name**
 
-Same pattern as `org.blockml.bml.core.Block` (`${ bml:Self }`) and Language references in `<languages>`. On these **definition containers**, every empty child element is a **type reference** (FQN via element name) — not a Block instance. See `17_type_system_bml.md` — Empty child elements.
+Same pattern as `org.blockml.bml.core.Block` (`${ bml:Self }`) and Language references in `<languages>`. On these **definition containers**, every empty child element is **TypeReferenceEntity sugar** (QName → value) — not an instance of the named Block. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 ```text
 <contracts>
@@ -239,14 +239,14 @@ Meta-model (simplified):
 ```text
 org.blockml.bml.definition.BlockDefinition
   bml:xml element:  block
-  properties:       name, type → FullyQualifiedName(core:Block),
-                    baseType → FullyQualifiedName(core:Block), idea, not, version, …
-  aggregations:     language → TypeReference(NaturalLanguage)
+  properties:       name, type → TypeReference(core:Block),
+                    baseType → TypeReference(core:Block), idea, not, version, …
+  aggregations:     language → TypeReferenceEntity(NaturalLanguage)
                     aliases → Alias[]
                     genericTypes → GenericTypeDefinition[]
-                    languages → TypeReference(Language)[]
-                    subTypes → TypeReference(Block)[]
-                    contracts → TypeReference(Block)[]
+                    languages → TypeReferenceEntity(Language)[]
+                    subTypes → TypeReferenceEntity(Block)[]
+                    contracts → TypeReferenceEntity(Block)[]
                     properties → PropertyDefinition[]
                     aggregations → AggregationDefinition[]
                     …
@@ -326,7 +326,7 @@ Until the meta-serializer exists:
 | `org.blockml.bml.core.Definition` BML | Done — empty identification marker (by design) |
 | `org.blockml.bml.definition.StructuralDefinition` BML | Done — documentation Sub-Blocks inline |
 | `org.blockml.bml.definition.*` member surfaces | Done — Property, Aggregation, Association, Capability, MemberDefinition |
-| `org.blockml.bml.core.TypeReference` BML | Specified — abstract generic type-reference marker |
+| `org.blockml.bml.type.TypeReference` / `TypeReferenceEntity` BML | Specified — ValueType + Entity (replaces core marker) |
 | Meta-driven BOM → XML serializer | Not implemented |
 | Validator rules for placement | Specified here; codes TBD |
 
@@ -335,7 +335,7 @@ Source files live under:
 ```text
 packages/core/blocks/org/blockml/bml/core/Definition.bml
 packages/core/blocks/org/blockml/bml/core/PrimitiveEntity.bml
-packages/core/blocks/org/blockml/bml/core/TypeReference.bml
+packages/core/blocks/org/blockml/bml/type/TypeReferenceEntity.bml
 packages/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/ConstrainableDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml

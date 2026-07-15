@@ -53,7 +53,7 @@
   </references>
 
   <properties>
-    <definition type="FullyQualifiedName(def:SubBlockDefinition)">
+    <definition type="TypeReference(def:SubBlockDefinition)">
       <value>def:SubBlockDefinition</value>
       <documentation>Definition meta-model type for this Sub-Block's definition document. Selects
         which fields exist when accessing the definition via bml:Self in definition reflection —

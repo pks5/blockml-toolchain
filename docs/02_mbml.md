@@ -377,11 +377,11 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
                       segment of resolve(type) when omitted. When present, must match that segment.
                       Required on Sub-Blocks. First child of the definition document (with type /
                       baseType) — definition identity comes before idea.
-<type>              — canonical Block type identity (required on root block). FullyQualifiedName
+<type>              — canonical Block type identity (required on root block). TypeReference
                       property — element text is an FQN / xmlns QName (for example foo:MyBlock).
                       Declares identity for the Block being defined (the type need not exist yet).
                       Immediately after name, before idea. Child-element TypeReference form is invalid.
-<baseType>          — parent FullyQualifiedName / TypeExpression. Mandatory — no default. Element
+<baseType>          — parent TypeReference / TypeExpression. Mandatory — no default. Element
                       text (for example core:Block or core:PrimitiveEntity(btype:Integer)).
                       Generic applications on the parent are authored and resolved here.
                       Omitted only on org.blockml.bml.core.Block. Immediately after type, before idea.
@@ -406,8 +406,8 @@ Definition elements (`<property>`, `<aggregation>`, …) carry `<status>` only w
 
 ```text
 <name>          — short class name (optional on root; required on Sub-Blocks)
-<type>          — FullyQualifiedName identity (required on root; usually omitted on Sub-Blocks)
-<baseType>      — parent FullyQualifiedName / TypeExpression (omitted only on org.blockml.bml.core.Block)
+<type>          — TypeReference identity (required on root; usually omitted on Sub-Blocks)
+<baseType>      — parent TypeReference / TypeExpression (omitted only on org.blockml.bml.core.Block)
 <idea>          — meaning     what this Block semantically represents (one short sentence)
 <summary>       — scope       optional middle tier — three to five sentences of scope and boundaries
 <keywords>      — discovery   optional search tags for RAG and colloquial lookup
@@ -1065,15 +1065,18 @@ org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritan
 
 **Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous.
 
-On these **definition containers**, every empty child element is a **type reference** (FQN via element name) — never a Block instance. The same empty-element XML pattern on an **instance** aggregation (`Block[]`) denotes a real empty instance instead. See `17_type_system_bml.md` — Empty child elements.
+On these **definition containers**, every empty child element is **TypeReferenceEntity sugar**
+(QName → `value`) — never an instance of the named Block. The same empty-element XML pattern on a
+domain `Block[]` aggregation denotes a real empty instance of that Block instead. See
+`17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 ```text
-<languages>    →  <lang:OpenSCAD/>           TypeReference(core:Language)[] child — type ref, not instance
-<subTypes>     →  <core:Block/>              TypeReference(core:Block)[] child — type ref, not instance
-<contracts>    →  <ac:Wall/>                 TypeReference(core:Block)[] child — type ref, not instance
-<language>     →  <German/>                  TypeReference(NaturalLanguage) child — optional single (bare)
-<type>         →  foo:MyBlock                FullyQualifiedName property text — required on root
-<baseType>     →  core:Block                 FullyQualifiedName property text — optional; generics allowed
+<languages>    →  <lang:OpenSCAD/>           TypeReferenceEntity(core:Language)[] — Entity sugar
+<subTypes>     →  <core:Block/>              TypeReferenceEntity(core:Block)[] — Entity sugar
+<contracts>    →  <ac:Wall/>                 TypeReferenceEntity(core:Block)[] — Entity sugar
+<language>     →  <German/>                  TypeReferenceEntity(NaturalLanguage) — optional single
+<type>         →  foo:MyBlock                TypeReference property text — required on root
+<baseType>     →  core:Block                 TypeReference property text — optional; generics allowed
 <genericTypes> →  <T baseType="…"/>          element name = generic parameter name
 ```
 
@@ -1092,8 +1095,8 @@ Blocks may declare `<contracts>` at root level to compose one or more **contract
 
 ```text
 Child element — direct Block reference (element name = FQN via xmlns prefix)
-              empty element = type reference only — not a Block instance
-              see 17_type_system_bml.md — Empty child elements
+              empty element = TypeReferenceEntity sugar — not an instance of the named Block
+              see 17_type_system_bml.md — TypeReference and TypeReferenceEntity
 ```
 
 **Semantics:**
@@ -2166,11 +2169,11 @@ visibility   — optional; must match naming convention; on aggregations also co
 **Type-reference vs instance aggregations** — determined by the aggregation `type` attribute, not by the XML shape of child elements. An empty child element such as `<con:MyContract />` is **ambiguous on the surface** — the aggregation `type` decides:
 
 ```text
-TypeReference(T)[]  →  type reference only (element name = FQN; syntactic sugar — not an instance)
+TypeReferenceEntity(T)[]  →  TypeReferenceEntity instances (QName sugar or explicit value)
 plain Block[]       →  real BlockInstance (empty = valid instance with no authored values)
 ```
 
-Examples: `bootstrap` / `_blocks` on `org.blockml.bml.core.BlockLibrary` use `TypeReference(...)`; `<contracts>` / `<languages>` on Block definitions use `TypeReference(core:Block)[]` / `TypeReference(core:Language)[]`. See `17_type_system_bml.md` — TypeReference · Empty child elements.
+Examples: `bootstrap` / `_blocks` on `org.blockml.bml.core.BlockLibrary` use `TypeReferenceEntity(...)`; `<contracts>` / `<languages>` on Block definitions use `TypeReferenceEntity(core:Block)[]` / `TypeReferenceEntity(core:Language)[]`. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block. Cross-document `{BlockFQN}::{id}` references require a **public** target aggregation.
 
@@ -2850,7 +2853,7 @@ EmbeddedBlock  = full, locally embedded Block document
 
 ### Composition Block References
 
-Composition child element names are type references. **Whether an empty child element denotes a type reference or a real empty instance depends on the parent aggregation `type`** — see `17_type_system_bml.md` — Empty child elements. Domain Blocks and ValueTypes require an `xmlns:` prefix or full FQN. **Sub-Blocks** declared on the enclosing root Block may additionally be referenced by **unqualified local name** within that Block's composition — resolved as `resolve(parent.type) + "." + localName`:
+Composition child element names are type references. **Whether an empty child element denotes a type reference or a real empty instance depends on the parent aggregation `type`** — see `17_type_system_bml.md` — TypeReference and TypeReferenceEntity. Domain Blocks and ValueTypes require an `xmlns:` prefix or full FQN. **Sub-Blocks** declared on the enclosing root Block may additionally be referenced by **unqualified local name** within that Block's composition — resolved as `resolve(parent.type) + "." + localName`:
 
 ```xml
 <!-- correct — domain / library types -->
@@ -3536,7 +3539,10 @@ Physical directories and overlapping package prefixes do not define membership. 
 </block>
 ```
 
-**`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`** are TypeReference aggregations — each child element name resolves to a Block FQN (type reference, not an instance). **`bml:version` is forbidden** — effective version is resolved from library context. See `17_type_system_bml.md` — Empty child elements.
+**`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`** are `TypeReferenceEntity`
+aggregations — QName sugar expands to Entity instances. **`bml:version` is forbidden** on sugar
+children — effective version is resolved from library context. See `17_type_system_bml.md` —
+TypeReference and TypeReferenceEntity.
 
 **`bootstrap`** points to the library entry point — typically a `README` block (`org.blockml.bml.README`). Curated reading order lives in `<references>` with `relation=ReadFirst` (see `doc:BootstrapModel`). Example on `org.blockml.bml.Library`:
 
@@ -3698,7 +3704,7 @@ There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping 
 ```text
 baseType missing              → BML_MISSING_BASE_TYPE (no default; except org.blockml.bml.core.Block — omits baseType)
 root block without type       → BML_MISSING_BLOCK_TYPE
-identity type/baseType child element → BML_IDENTITY_TYPE_CHILD_ELEMENT (use FullyQualifiedName text)
+identity type/baseType child element → BML_IDENTITY_TYPE_CHILD_ELEMENT (use TypeReference text)
 root name ≠ last type segment → BML_BLOCK_NAME_TYPE_MISMATCH
 Sub-Block without name        → BML_MISSING_SUBBLOCK_NAME
 Sub-Block explicit type mismatch → BML_SUBBLOCK_TYPE_MISMATCH

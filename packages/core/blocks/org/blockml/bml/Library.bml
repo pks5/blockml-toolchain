@@ -205,8 +205,8 @@
       <btype:FilePathEntity />
       <btype:Float />
       <btype:FloatEntity />
-      <btype:FullyQualifiedName />
-      <btype:FullyQualifiedNameEntity />
+      <btype:TypeReference />
+      <btype:TypeReferenceEntity />
       <btype:Integer />
       <btype:IntegerEntity />
       <btype:MimeType />

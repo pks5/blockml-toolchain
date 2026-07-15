@@ -622,8 +622,8 @@ A Block references contracts via `<contracts>`:
 
 ```text
 Declared on:       root <block> only (not on Sub-Blocks)
-Child element:     direct Block reference (element name = FQN via xmlns prefix)
-                   empty element = type reference only — not a Block instance (see 17_type_system_bml.md — Empty child elements)
+Child element:     TypeReferenceEntity instance — empty QName sugar or explicit value
+                   (see 17_type_system_bml.md — TypeReference and TypeReferenceEntity)
 Contract target:   any Block definition usable as a partial definition (typically abstract)
 Member scope:      Properties, Aggregations, Associations, Capabilities, Constraints,
                    Suggestions, documentation, examples, references, optional Capability defaults
@@ -680,7 +680,7 @@ A Block **implements** each FQN in its `<contracts>` list for **type-bound** val
 satisfiesTypeBound(T, G)  ⇔  G on T's baseType chain  OR  G ∈ T.contracts[]  (direct only in V1)
 ```
 
-**`satisfiesTypeBound`** applies to generic parameter constraints, `FullyQualifiedName(B)` bounds, and other type-bound reference sites. **`inBranch`** (framework branch rules — Property types, Definition branch, branch table in `17_type_system_bml.md`) walks the **`baseType` chain only** — contracts do not substitute for core branch markers.
+**`satisfiesTypeBound`** applies to generic parameter constraints, `TypeReference(B)` bounds, and other type-bound reference sites. **`inBranch`** (framework branch rules — Property types, Definition branch, branch table in `17_type_system_bml.md`) walks the **`baseType` chain only** — contracts do not substitute for core branch markers.
 
 ```text
 org.blockml.bml.type.Integer  →  inBranch(Integer, core:ValueType)           via baseType chain
@@ -1751,7 +1751,7 @@ org.blockml.bml.core.TaskGuide                 abstract — org.blockml.bml.task
 org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diagnostic.* error codes
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` are **TypeReference** aggregations — each empty child element is a **type reference** (element name → FQN), not a Block instance. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the aggregation `type` (`TypeReference(T)`). See `17_type_system_bml.md` — Empty child elements.
+`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` are **TypeReferenceEntity** aggregations — each empty QName child expands to a TypeReferenceEntity instance. **`bml:version` is forbidden** on sugar children. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 `bootstrap` references a `Bootstrap` block (typically `README`) — the library entry point for humans and LLMs. Curated reading order uses `<references>` with `relation=ReadFirst`; available tasks use `relation=TaskIndex` — see `doc:BootstrapModel` and `doc:TaskGuideModel`.
 

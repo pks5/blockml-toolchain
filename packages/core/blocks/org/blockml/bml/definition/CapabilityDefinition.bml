@@ -64,17 +64,17 @@
   </references>
 
   <properties>
-    <type type="FullyQualifiedName(core:Capability)" bml:xml="element|attribute">
+    <type type="TypeReference(core:Capability)" bml:xml="element|attribute">
       <documentation>Capability kind FQN — Inbound, Outbound, or Transformation. Unqualified names
         resolve via org.blockml.bml.capability.*. On definitions, element preferred; on Block
         instances, attribute preferred.</documentation>
     </type>
-    <inputType type="FullyQualifiedName(core:ValueType)" bml:xml="element|attribute">
+    <inputType type="TypeReference(core:ValueType)" bml:xml="element|attribute">
       <documentation>TypeExpression for the inbound payload. Required on Inbound and Transformation;
         forbidden on Outbound. Must resolve to a ValueType branch. On definitions, element preferred;
         on Block instances, attribute preferred.</documentation>
     </inputType>
-    <outputType type="FullyQualifiedName(core:ValueType)" bml:xml="element|attribute">
+    <outputType type="TypeReference(core:ValueType)" bml:xml="element|attribute">
       <documentation>TypeExpression for the outbound payload. Required on Outbound and Transformation;
         forbidden on Inbound. Must resolve to a ValueType branch. On definitions, element preferred;
         on Block instances, attribute preferred.</documentation>
@@ -102,7 +102,7 @@
       <bml:xml>implementation</bml:xml>
 
       <properties>
-        <language type="FullyQualifiedName(core:Language)" bml:xml="attribute">
+        <language type="TypeReference(core:Language)" bml:xml="attribute">
           <documentation>Required implementation Language FQN (org.blockml.bml.language.TypeScript,
             OpenSCAD, …). Unqualified names resolve via implicit namespace org.blockml.bml.language.*.
             Must be permitted on the enclosing Block's languages aggregation.</documentation>

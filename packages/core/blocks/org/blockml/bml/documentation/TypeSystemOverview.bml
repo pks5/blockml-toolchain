@@ -20,7 +20,7 @@
     BlockML knows four ValueType kinds at language level — each names a semantic meaning:
 
     PrimitiveType — atomic scalar semantics; no stored values on the type itself.
-    Examples: Boolean, Integer, Decimal, Float, Text, URL, Version, FullyQualifiedName.
+    Examples: Boolean, Integer, Decimal, Float, Text, URL, Version, TypeReference.
 
     StructType — custom value objects; structure via properties.
     Examples: Size3D, Color, Address, Transform. Parameterized types (Box(T)) are StructTypes

@@ -61,7 +61,7 @@ Two orthogonal mechanisms may appear on a named type reference:
 
 | Syntax | Purpose | Example |
 |---|---|---|
-| `(...)` | Generic type arguments | `Box(Integer)` · `FullyQualifiedName(core:Block)` |
+| `(...)` | Generic type arguments | `Box(Integer)` · `TypeReference(core:Block)` |
 | `{...}` | ValueType instance configuration | `Text{maxLength=100}` · `Decimal{10, 2}` |
 
 Both may coexist when a generic ValueType also accepts instance configuration:
