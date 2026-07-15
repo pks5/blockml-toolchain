@@ -17,8 +17,12 @@
     documentation prose extend org.blockml.bml.language.NaturalLanguage; formal code and markup
     languages extend ProgrammingLanguage and MarkupLanguage.</documentation>
   <name>Language</name>
-  <type>core:Language</type>
-  <baseType>core:Block</baseType>
+  <type>
+    <core:Language />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
   <abstract>true</abstract>
 
 </block>

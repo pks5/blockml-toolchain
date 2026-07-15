@@ -13,6 +13,10 @@
   <documentation>MarkupLanguage for XML document implementations on Capabilities — templates,
     configuration, or structured markup.</documentation>
   <name>XML</name>
-  <type>lang:XML</type>
-  <baseType>lang:MarkupLanguage</baseType>
+  <type>
+    <lang:XML />
+  </type>
+  <baseType>
+    <lang:MarkupLanguage />
+  </baseType>
 </block>

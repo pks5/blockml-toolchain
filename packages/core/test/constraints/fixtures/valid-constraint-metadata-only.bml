@@ -5,11 +5,16 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:core="org.blockml.bml.core"
   xmlns:constraint="org.blockml.bml.constraint"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:test="com.blockml.test.constraints">
 
   <idea>Constraint test — metadata-only Min</idea>
-  <type>com.blockml.test.constraints.MetadataOnlyConstraint</type>
-  <baseType>core:Block</baseType>
+  <type>
+    <test:MetadataOnlyConstraint />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
   <version>1.0.0</version>
 
   <properties>

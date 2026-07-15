@@ -32,8 +32,12 @@
   </references>
 
   <name>PrimitiveEntity</name>
-  <type>core:PrimitiveEntity</type>
-  <baseType>core:Entity</baseType>
+  <type>
+    <core:PrimitiveEntity />
+  </type>
+  <baseType>
+    <core:Entity />
+  </baseType>
   <abstract>true</abstract>
 
   <genericTypes>

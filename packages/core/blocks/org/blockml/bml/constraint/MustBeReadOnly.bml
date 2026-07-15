@@ -19,9 +19,12 @@
     derived). Reference implementation for PropertyConstraint branch.</documentation>
 
   <name>MustBeReadOnly</name>
-  <type>constraint:MustBeReadOnly</type>
-  <baseType>constraint:PropertyConstraint</baseType>
-
+  <type>
+    <constraint:MustBeReadOnly />
+  </type>
+  <baseType>
+    <constraint:PropertyConstraint />
+  </baseType>
   <genericTypes>
     <T baseType="def:PropertyDefinition"/>
   </genericTypes>

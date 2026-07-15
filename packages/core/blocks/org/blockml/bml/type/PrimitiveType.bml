@@ -43,8 +43,12 @@
   </references>
 
   <name>PrimitiveType</name>
-  <type>btype:PrimitiveType</type>
-  <baseType>core:ValueType</baseType>
+  <type>
+    <btype:PrimitiveType />
+  </type>
+  <baseType>
+    <core:ValueType />
+  </baseType>
   <abstract>true</abstract>
 
 </block>

@@ -19,7 +19,6 @@
   <language>
     <English />
   </language>
-  
   <documentation>
     Root semantic unit of BlockML — the sole inheritance root for all Block definitions.
     Every concept in the grammar is a Block: composable domain types, ValueTypes, Languages,
@@ -98,8 +97,9 @@
   </references>
 
   <name>Block</name>
-  <type>core:Block</type>
-  
+  <type>
+    <core:Block />
+  </type>
   <!-- Blocks are rendered as xml elements with the name of the block type -->
   <bml:xml>${ bml:Self }</bml:xml>
   

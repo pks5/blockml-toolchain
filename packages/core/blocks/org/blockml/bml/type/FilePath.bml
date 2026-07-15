@@ -7,6 +7,10 @@
   <documentation>Textual primitive subtype for file path values. Unqualified name FilePath resolves
     to org.blockml.bml.type.FilePath.</documentation>
   <name>FilePath</name>
-  <type>FilePath</type>
-  <baseType>btype:Text</baseType>
+  <type>
+    <btype:FilePath />
+  </type>
+  <baseType>
+    <btype:Text />
+  </baseType>
 </block>

@@ -70,7 +70,10 @@
   </references>
 
   <name>Expressions</name>
-  <type>doc:Expressions</type>
-  <baseType>core:Documentation</baseType>
-
+  <type>
+    <doc:Expressions />
+  </type>
+  <baseType>
+    <core:Documentation />
+  </baseType>
 </block>

@@ -63,7 +63,10 @@
   </references>
 
   <name>ValueTypeConfiguration</name>
-  <type>doc:ValueTypeConfiguration</type>
-  <baseType>core:Documentation</baseType>
-
+  <type>
+    <doc:ValueTypeConfiguration />
+  </type>
+  <baseType>
+    <core:Documentation />
+  </baseType>
 </block>

@@ -18,8 +18,12 @@
 
   <documentation>T binds to the property collection type (e.g. String[]). The value property is Integer — the maximum item count.</documentation>
   <name>MaxItems</name>
-  <type>constraint:MaxItems</type>
-  <baseType>constraint:ValueConstraint</baseType>
+  <type>
+    <constraint:MaxItems />
+  </type>
+  <baseType>
+    <constraint:ValueConstraint />
+  </baseType>
   <genericTypes>
     <T baseType="core:ValueType"/>
   </genericTypes>

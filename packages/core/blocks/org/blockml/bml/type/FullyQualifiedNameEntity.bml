@@ -9,6 +9,10 @@
     D = BlockDefinition (default). Binds T = FullyQualifiedName(core:Block) on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>
   <name>FullyQualifiedNameEntity</name>
-  <type>btype:FullyQualifiedNameEntity</type>
-  <baseType>core:PrimitiveEntity(btype:FullyQualifiedName(core:Block))</baseType>
+  <type>
+    <btype:FullyQualifiedNameEntity />
+  </type>
+  <baseType>
+    <core:PrimitiveEntity(btype:FullyQualifiedName(core:Block)) />
+  </baseType>
 </block>

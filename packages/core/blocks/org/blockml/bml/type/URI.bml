@@ -7,6 +7,10 @@
   <documentation>Textual primitive subtype for URI values. Unqualified name URI resolves to
     org.blockml.bml.type.URI.</documentation>
   <name>URI</name>
-  <type>URI</type>
-  <baseType>btype:Text</baseType>
+  <type>
+    <btype:URI />
+  </type>
+  <baseType>
+    <btype:Text />
+  </baseType>
 </block>

@@ -72,7 +72,10 @@
   </references>
 
   <name>BootstrapModel</name>
-  <type>doc:BootstrapModel</type>
-  <baseType>core:Documentation</baseType>
-
+  <type>
+    <doc:BootstrapModel />
+  </type>
+  <baseType>
+    <core:Documentation />
+  </baseType>
 </block>

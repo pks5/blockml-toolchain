@@ -9,6 +9,10 @@
     resolves to org.blockml.bml.type.Boolean. Boolean is neither textual nor numeric — its own
     primitive branch. Values are stored in Properties — not on the Boolean type itself.</documentation>
   <name>Boolean</name>
-  <type>Boolean</type>
-  <baseType>btype:PrimitiveType</baseType>
+  <type>
+    <btype:Boolean />
+  </type>
+  <baseType>
+    <btype:PrimitiveType />
+  </baseType>
 </block>

@@ -641,11 +641,11 @@ TypeReference<T extends Block>
   <com.foo:IPlaceable />
 </contracts>
 
-<baseType type="core:TypeReference(core:Block)[1..1]">
+<baseType>
   <core:Entity />
 </baseType>
 
-<type type="core:TypeReference(core:Block)[1..1]">
+<type>
   <foo:MyBlock />
 </type>
 ```
@@ -653,7 +653,7 @@ TypeReference<T extends Block>
 ```text
 Allowed on TypeReference aggregations:
   child element name → FQN via xmlns prefix
-  multiplicity on TypeReference(T) — [1..1] for type/baseType/language
+  multiplicity: bare TypeReference(T) = 0..1; [] = 0..n; [1..1] = required single
 
 Forbidden on TypeReference aggregations:
   member values on children
@@ -663,9 +663,29 @@ Forbidden on TypeReference aggregations:
   default="true"
 ```
 
+```text
+TypeReference(T)         →  0..1 optional single type reference (Block aggregations — omit brackets)
+TypeReference(T)[]       →  0..n type references
+TypeReference(T)[1..1]   →  exactly one required type reference (root block <type> only)
+```
+
+On Block-definition identity fields, bare `TypeReference(T)` replaces the verbose `[0..1]` form — consistent with `Block` meaning optional single reference in aggregation/association notation (see § Collections and Multiplicity).
+
+```xml
+<baseType>
+  <core:Entity />
+</baseType>
+
+<type>
+  <foo:MyBlock />
+</type>
+```
+
+Root block `<type>` requires exactly one child — validator enforces `[1..1]` semantics even when multiplicity is not written on the meta-model declaration.
+
 **Contrast with `FullyQualifiedName(B)`:** scalar ValueType for a single FQN on Property `type` attributes — text or attribute value, not the container element-name pattern.
 
-**Contrast with Library role heuristic (legacy):** V1 parser may still accept plain `core:Block[]` on Library `_blocks` with context-driven type-reference interpretation. Target architecture: explicit `core:TypeReference(core:Block)[]` — no role-based special case.
+**Mandatory authoring:** Text content in `<type>` or `<baseType>` (legacy form) is a parse error → `BML_TYPE_REFERENCE_TEXT_FORM`.
 
 **Optional aliases:** concrete blocks may bind `T` for shorter authoring (for example `BlockReference = TypeReference(core:Block)`) — not required in V1.
 

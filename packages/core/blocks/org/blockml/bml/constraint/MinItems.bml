@@ -18,8 +18,12 @@
 
   <documentation>T binds to the property collection type (e.g. String[]). The value property is Integer — the minimum item count.</documentation>
   <name>MinItems</name>
-  <type>constraint:MinItems</type>
-  <baseType>constraint:ValueConstraint</baseType>
+  <type>
+    <constraint:MinItems />
+  </type>
+  <baseType>
+    <constraint:ValueConstraint />
+  </baseType>
   <genericTypes>
     <T baseType="core:ValueType"/>
   </genericTypes>

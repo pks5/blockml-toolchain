@@ -16,8 +16,12 @@
   <documentation>Capability branch of BlockML. Declares a capability type. Every capability may
     carry an implementation whose language attribute references a Language FQN.</documentation>
   <name>Capability</name>
-  <type>core:Capability</type>
-  <baseType>core:Block</baseType>
+  <type>
+    <core:Capability />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
   <abstract>true</abstract>
 
   <properties>

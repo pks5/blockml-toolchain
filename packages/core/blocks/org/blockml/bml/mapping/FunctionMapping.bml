@@ -56,9 +56,12 @@
   </references>
 
   <name>FunctionMapping</name>
-  <type>mapping:FunctionMapping</type>
-  <baseType>core:Mapping</baseType>
-
+  <type>
+    <mapping:FunctionMapping />
+  </type>
+  <baseType>
+    <core:Mapping />
+  </baseType>
   <properties>
     <supportsPositional type="Boolean">
       <value>true</value>

@@ -22,8 +22,12 @@
   <documentation>Built-in lists service. Expression prefix #lists.* — list construction,
     indexing, and aggregation utilities.</documentation>
   <name>Lists</name>
-  <type>service:Lists</type>
-  <baseType>core:Entity</baseType>
+  <type>
+    <service:Lists />
+  </type>
+  <baseType>
+    <core:Entity />
+  </baseType>
   <capabilities>
 
     <!-- #lists.size(list) -->

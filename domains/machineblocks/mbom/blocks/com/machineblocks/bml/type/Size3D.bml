@@ -15,8 +15,12 @@
 
   <documentation>Struct ValueType for three-dimensional size [x, y, z] in grid units.</documentation>
   <name>Size3d</name>
-  <type>type:Size3d</type>
-  <baseType>btype:StructType</baseType>
+  <type>
+    <type:Size3d />
+  </type>
+  <baseType>
+    <btype:StructType />
+  </baseType>
   <properties>
     <x type="Float">
       <documentation>Size in X direction.</documentation>

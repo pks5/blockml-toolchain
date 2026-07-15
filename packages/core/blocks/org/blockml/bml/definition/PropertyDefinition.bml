@@ -47,9 +47,12 @@
   </references>
 
   <name>PropertyDefinition</name>
-  <type>def:PropertyDefinition</type>
-  <baseType>def:MemberDefinition</baseType>
-
+  <type>
+    <def:PropertyDefinition />
+  </type>
+  <baseType>
+    <def:MemberDefinition />
+  </baseType>
   <properties>
     <type type="FullyQualifiedName(core:ValueType)" bml:xml="element|attribute">
       <documentation>FQN of the property's ValueType (TypeExpression). Non-ValueType FQNs are invalid

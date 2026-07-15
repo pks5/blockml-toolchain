@@ -19,8 +19,12 @@
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise). Examples: Min, Max, Pattern, ValuePresent.</documentation>
 
   <name>ValueConstraint</name>
-  <type>constraint:ValueConstraint</type>
-  <baseType>core:Constraint</baseType>
+  <type>
+    <constraint:ValueConstraint />
+  </type>
+  <baseType>
+    <core:Constraint />
+  </baseType>
   <abstract>true</abstract>
 
   <genericTypes>

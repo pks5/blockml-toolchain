@@ -13,6 +13,10 @@
   <documentation>Natural language for documentation prose, example titles, and Chinese
     natural-language capability implementations.</documentation>
   <name>Chinese</name>
-  <type>lang:Chinese</type>
-  <baseType>lang:NaturalLanguage</baseType>
+  <type>
+    <lang:Chinese />
+  </type>
+  <baseType>
+    <lang:NaturalLanguage />
+  </baseType>
 </block>

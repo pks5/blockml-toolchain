@@ -22,8 +22,12 @@
     preserved in BOM. Target binding and generic resolution are not stored in the Canonical BOM.</documentation>
 
   <name>ConstrainableDefinition</name>
-  <type>def:ConstrainableDefinition</type>
-  <baseType>def:StructuralDefinition</baseType>
+  <type>
+    <def:ConstrainableDefinition />
+  </type>
+  <baseType>
+    <def:StructuralDefinition />
+  </baseType>
   <abstract>true</abstract>
 
   <aggregations>

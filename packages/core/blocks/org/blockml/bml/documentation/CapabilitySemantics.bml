@@ -73,7 +73,10 @@
   </references>
 
   <name>CapabilitySemantics</name>
-  <type>doc:CapabilitySemantics</type>
-  <baseType>core:Documentation</baseType>
-
+  <type>
+    <doc:CapabilitySemantics />
+  </type>
+  <baseType>
+    <core:Documentation />
+  </baseType>
 </block>

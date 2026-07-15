@@ -92,6 +92,10 @@
   </genericTypes>
 
   <name>FullyQualifiedName</name>
-  <type>btype:FullyQualifiedName</type>
-  <baseType>btype:Text</baseType>
+  <type>
+    <btype:FullyQualifiedName />
+  </type>
+  <baseType>
+    <btype:Text />
+  </baseType>
 </block>

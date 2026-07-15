@@ -16,8 +16,12 @@
 
   <documentation>Enum ValueType for base cutout variants on MachineBlocks bricks.</documentation>
   <name>BaseCutoutType</name>
-  <type>type:BaseCutoutType</type>
-  <baseType>btype:EnumType</baseType>
+  <type>
+    <type:BaseCutoutType />
+  </type>
+  <baseType>
+    <btype:EnumType />
+  </baseType>
   <properties>
     <value type="Text">
       <documentation>Enum literal used in property values and expressions.</documentation>

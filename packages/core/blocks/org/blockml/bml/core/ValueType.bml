@@ -17,8 +17,12 @@
     value. All concrete values are stored exclusively in Properties. Only ValueTypes may appear as
     property type or Capability inputType/outputType.</documentation>
   <name>ValueType</name>
-  <type>core:ValueType</type>
-  <baseType>core:Block</baseType>
+  <type>
+    <core:ValueType />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
   <abstract>true</abstract>
 
 </block>

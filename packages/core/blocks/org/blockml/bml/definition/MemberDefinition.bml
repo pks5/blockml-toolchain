@@ -72,8 +72,12 @@
   </references>
 
   <name>MemberDefinition</name>
-  <type>def:MemberDefinition</type>
-  <baseType>def:ConstrainableDefinition</baseType>
+  <type>
+    <def:MemberDefinition />
+  </type>
+  <baseType>
+    <def:ConstrainableDefinition />
+  </baseType>
   <abstract>true</abstract>
   <bml:xml>${ #this.name }</bml:xml>
 

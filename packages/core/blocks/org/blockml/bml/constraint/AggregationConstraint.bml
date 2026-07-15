@@ -18,8 +18,12 @@
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
   <name>AggregationConstraint</name>
-  <type>constraint:AggregationConstraint</type>
-  <baseType>constraint:MemberConstraint</baseType>
+  <type>
+    <constraint:AggregationConstraint />
+  </type>
+  <baseType>
+    <constraint:MemberConstraint />
+  </baseType>
   <abstract>true</abstract>
 
   <genericTypes>

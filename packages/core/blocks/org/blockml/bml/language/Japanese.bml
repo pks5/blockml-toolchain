@@ -13,6 +13,10 @@
   <documentation>Natural language for documentation prose, example titles, and Japanese
     natural-language capability implementations.</documentation>
   <name>Japanese</name>
-  <type>lang:Japanese</type>
-  <baseType>lang:NaturalLanguage</baseType>
+  <type>
+    <lang:Japanese />
+  </type>
+  <baseType>
+    <lang:NaturalLanguage />
+  </baseType>
 </block>

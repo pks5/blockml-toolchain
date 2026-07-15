@@ -39,8 +39,12 @@
   </references>
 
   <name>Mapping</name>
-  <type>core:Mapping</type>
-  <baseType>core:Block</baseType>
+  <type>
+    <core:Mapping />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
   <abstract>true</abstract>
 
 </block>

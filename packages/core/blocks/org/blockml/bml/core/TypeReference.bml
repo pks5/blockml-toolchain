@@ -60,8 +60,12 @@
   </references>
 
   <name>TypeReference</name>
-  <type>core:TypeReference</type>
-  <baseType>core:Entity</baseType>
+  <type>
+    <core:TypeReference />
+  </type>
+  <baseType>
+    <core:Entity />
+  </baseType>
   <abstract>true</abstract>
 
   <genericTypes>

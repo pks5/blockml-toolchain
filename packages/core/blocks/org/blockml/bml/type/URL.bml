@@ -7,6 +7,10 @@
   <documentation>Textual primitive subtype for URL values. Unqualified name URL resolves to
     org.blockml.bml.type.URL.</documentation>
   <name>URL</name>
-  <type>URL</type>
-  <baseType>btype:Text</baseType>
+  <type>
+    <btype:URL />
+  </type>
+  <baseType>
+    <btype:Text />
+  </baseType>
 </block>

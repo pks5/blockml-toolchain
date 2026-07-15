@@ -17,9 +17,12 @@
     instance via inline type syntax — Text{maxLength=100}. Positional order: minLength, maxLength.
     See 20_value_type_instance_configuration.md.</documentation>
   <name>Text</name>
-  <type>Text</type>
-  <baseType>btype:PrimitiveType</baseType>
-
+  <type>
+    <btype:Text />
+  </type>
+  <baseType>
+    <btype:PrimitiveType />
+  </baseType>
   <properties>
     <minLength type="Integer">
       <documentation>Minimum allowed text length (inclusive). Configured via Text{minLength=n}.</documentation>

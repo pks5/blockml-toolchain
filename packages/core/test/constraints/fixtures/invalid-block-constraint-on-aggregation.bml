@@ -5,11 +5,16 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:core="org.blockml.bml.core"
   xmlns:constraint="org.blockml.bml.constraint"
-  xmlns:validation="org.blockml.bml.validation">
+  xmlns:validation="org.blockml.bml.validation"
+  xmlns:test="com.blockml.test.constraints">
 
   <idea>Constraint test — RequiresMember under aggregation (invalid)</idea>
-  <type>com.blockml.test.constraints.InvalidBlockOnAggregation</type>
-  <baseType>core:Block</baseType>
+  <type>
+    <test:InvalidBlockOnAggregation />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
   <version>1.0.0</version>
 
   <aggregations>

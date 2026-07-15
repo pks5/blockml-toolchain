@@ -58,8 +58,12 @@
   </references>
 
   <name>ConstantType</name>
-  <type>btype:ConstantType</type>
-  <baseType>core:ValueType</baseType>
+  <type>
+    <btype:ConstantType />
+  </type>
+  <baseType>
+    <core:ValueType />
+  </baseType>
   <abstract>true</abstract>
 
 </block>

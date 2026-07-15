@@ -19,9 +19,12 @@
     enclosing Block's own type. Reference implementation for AssociationConstraint branch.</documentation>
 
   <name>NoSelfReference</name>
-  <type>constraint:NoSelfReference</type>
-  <baseType>constraint:AssociationConstraint</baseType>
-
+  <type>
+    <constraint:NoSelfReference />
+  </type>
+  <baseType>
+    <constraint:AssociationConstraint />
+  </baseType>
   <genericTypes>
     <T baseType="def:AssociationDefinition"/>
   </genericTypes>

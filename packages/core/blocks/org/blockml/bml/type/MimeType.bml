@@ -7,6 +7,10 @@
   <documentation>Textual primitive subtype for MIME type values (for example text/plain,
     application/json). Unqualified name MimeType resolves to org.blockml.bml.type.MimeType.</documentation>
   <name>MimeType</name>
-  <type>MimeType</type>
-  <baseType>btype:Text</baseType>
+  <type>
+    <btype:MimeType />
+  </type>
+  <baseType>
+    <btype:Text />
+  </baseType>
 </block>

@@ -20,8 +20,12 @@
     &lt;constraints&gt; container (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
   <name>BlockConstraint</name>
-  <type>constraint:BlockConstraint</type>
-  <baseType>constraint:StructuralConstraint</baseType>
+  <type>
+    <constraint:BlockConstraint />
+  </type>
+  <baseType>
+    <constraint:StructuralConstraint />
+  </baseType>
   <abstract>true</abstract>
 
   <genericTypes>

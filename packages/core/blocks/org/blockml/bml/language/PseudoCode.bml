@@ -13,6 +13,10 @@
   <documentation>ProgrammingLanguage for free-form pseudocode implementations. The code must be
     internally consistent but is otherwise unconstrained — an LLM may interpret it.</documentation>
   <name>PseudoCode</name>
-  <type>lang:PseudoCode</type>
-  <baseType>lang:ProgrammingLanguage</baseType>
+  <type>
+    <lang:PseudoCode />
+  </type>
+  <baseType>
+    <lang:ProgrammingLanguage />
+  </baseType>
 </block>

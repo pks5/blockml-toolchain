@@ -8,6 +8,10 @@
   <documentation>Concrete Entity wrapping a MimeType primitive. Binds T = MimeType on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>
   <name>MimeTypeEntity</name>
-  <type>btype:MimeTypeEntity</type>
-  <baseType>core:PrimitiveEntity(btype:MimeType)</baseType>
+  <type>
+    <btype:MimeTypeEntity />
+  </type>
+  <baseType>
+    <core:PrimitiveEntity(btype:MimeType) />
+  </baseType>
 </block>

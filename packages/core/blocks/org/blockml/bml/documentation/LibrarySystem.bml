@@ -75,7 +75,10 @@
   </references>
 
   <name>LibrarySystem</name>
-  <type>doc:LibrarySystem</type>
-  <baseType>core:Documentation</baseType>
-
+  <type>
+    <doc:LibrarySystem />
+  </type>
+  <baseType>
+    <core:Documentation />
+  </baseType>
 </block>

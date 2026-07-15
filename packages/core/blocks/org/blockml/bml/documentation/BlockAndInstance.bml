@@ -73,7 +73,10 @@
   </references>
 
   <name>BlockAndInstance</name>
-  <type>doc:BlockAndInstance</type>
-  <baseType>core:Documentation</baseType>
-
+  <type>
+    <doc:BlockAndInstance />
+  </type>
+  <baseType>
+    <core:Documentation />
+  </baseType>
 </block>

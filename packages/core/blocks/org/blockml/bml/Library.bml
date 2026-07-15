@@ -57,14 +57,17 @@
   </references>
 
   <name>Library</name>
-  <type>blockml:Library</type>
-  <baseType>bcore:BlockLibrary</baseType>
+  <type>
+    <blockml:Library />
+  </type>
+  <baseType>
+    <bcore:BlockLibrary />
+  </baseType>
   <version>3.0.0</version>
 
   <language>
     <English />
   </language>
-
   <properties>
     <description>
       <value>BlockML core library</value>
@@ -73,11 +76,8 @@
 
   <aggregations>
     <bootstrap>
-      <composition>
-        <blockml:README />
-      </composition>
+      <blockml:README />
     </bootstrap>
-
     <!-- Optional legacy XSD — omit when all types are exported via _blocks -->
     <_schemas>
       <composition>
@@ -86,136 +86,134 @@
     </_schemas>
 
     <_blocks>
-      <composition>
-        <bcore:Block />
-        <bcore:Capability />
-        <bcore:Constraint />
-        <bcore:Definition />
-        <bcore:Entity />
-        <bcore:PrimitiveEntity />
-        <bcore:Language />
-        <bcore:Mapping />
-        <bcore:Status />
-        <bcore:Validation />
-        <bcore:ValueType />
-        <def:AggregationDefinition />
-        <def:AssociationDefinition />
-        <def:ConstrainableDefinition />
-        <def:BlockDefinition />
-        <def:SubBlockDefinition />
-        <def:RootBlockDefinition />
-        <def:CapabilityDefinition />
-        <def:GenericTypeDefinition />
-        <def:MemberDefinition />
-        <def:PropertyDefinition />
-        <def:StructuralDefinition />
-        <cap:Inbound />
-        <cap:Outbound />
-        <cap:Transformation />
-        <constraint:AllowedChildType />
-        <constraint:AggregationConstraint />
-        <constraint:AssociationConstraint />
-        <constraint:BlockConstraint />
-        <constraint:CapabilityConstraint />
-        <constraint:Max />
-        <constraint:MaxItems />
-        <constraint:MaxLength />
-        <constraint:Min />
-        <constraint:MinItems />
-        <constraint:MinLength />
-        <constraint:MemberConstraint />
-        <constraint:MustBeReadOnly />
-        <constraint:NoSelfReference />
-        <constraint:Pattern />
-        <constraint:PropertyConstraint />
-        <constraint:RequiresImplementation />
-        <constraint:RequiresMember />
-        <constraint:StructuralConstraint />
-        <constraint:ValueConstraint />
-        <constraint:ValuePresent />
-        <lang:C />
-        <lang:CPP />
-        <lang:MarkupLanguage />
-        <lang:NaturalLanguage />
-        <lang:CSharp />
-        <lang:Chinese />
-        <lang:English />
-        <lang:French />
-        <lang:German />
-        <lang:JSON />
-        <lang:Japanese />
-        <lang:Java />
-        <lang:JavaScript />
-        <lang:OpenSCAD />
-        <lang:PseudoCode />
-        <lang:ProgrammingLanguage />
-        <lang:Python />
-        <lang:Russian />
-        <lang:Spanish />
-        <lang:TypeScript />
-        <lang:Unity />
-        <lang:XML />
-        <lang:YML />
-        <mapping:FunctionMapping />
-        <service:Bools />
-        <service:Lists />
-        <service:Math />
-        <service:Numbers />
-        <service:Strings />
-        <status:Deprecated />
-        <status:Draft />
-        <status:Stable />
-        <status:Stub />
-        <validation:Error />
-        <validation:Information />
-        <validation:Warning />
-        <btype:Boolean />
-        <btype:BooleanEntity />
-        <btype:Constant />
-        <btype:ConstantType />
-        <btype:Decimal />
-        <btype:DecimalEntity />
-        <btype:EnumType />
-        <btype:FilePath />
-        <btype:FilePathEntity />
-        <btype:Float />
-        <btype:FloatEntity />
-        <btype:FullyQualifiedName />
-        <btype:FullyQualifiedNameEntity />
-        <btype:Integer />
-        <btype:IntegerEntity />
-        <btype:MimeType />
-        <btype:MimeTypeEntity />
-        <btype:Number />
-        <btype:PrimitiveType />
-        <btype:StructType />
-        <btype:Text />
-        <btype:TextEntity />
-        <btype:URI />
-        <btype:URIEntity />
-        <btype:URL />
-        <btype:URLEntity />
-        <btype:Version />
-        <btype:VersionEntity />
-        <doc:Introduction />
-        <doc:EverythingIsABlock />
-        <doc:BlockAndInstance />
-        <doc:DefinitionModel />
-        <doc:TypeSystemOverview />
-        <doc:ValueTypeConfiguration />
-        <doc:CapabilitySemantics />
-        <doc:Expressions />
-        <doc:CompilerArchitecture />
-        <doc:RendererFreedom />
-        <doc:LibrarySystem />
-        <doc:BmlNamespace />
-        <doc:ImplicitNamespaceResolution />
-        <doc:DocumentationModel />
-        <doc:BootstrapModel />
-        <doc:ModelingGuidelines />
-        <doc:PseudoCode />
-        <doc:WOTFoundation />
-      </composition>
+      <bcore:Block />
+      <bcore:Capability />
+      <bcore:Constraint />
+      <bcore:Definition />
+      <bcore:Entity />
+      <bcore:PrimitiveEntity />
+      <bcore:Language />
+      <bcore:Mapping />
+      <bcore:Status />
+      <bcore:Validation />
+      <bcore:ValueType />
+      <def:AggregationDefinition />
+      <def:AssociationDefinition />
+      <def:ConstrainableDefinition />
+      <def:BlockDefinition />
+      <def:SubBlockDefinition />
+      <def:RootBlockDefinition />
+      <def:CapabilityDefinition />
+      <def:GenericTypeDefinition />
+      <def:MemberDefinition />
+      <def:PropertyDefinition />
+      <def:StructuralDefinition />
+      <cap:Inbound />
+      <cap:Outbound />
+      <cap:Transformation />
+      <constraint:AllowedChildType />
+      <constraint:AggregationConstraint />
+      <constraint:AssociationConstraint />
+      <constraint:BlockConstraint />
+      <constraint:CapabilityConstraint />
+      <constraint:Max />
+      <constraint:MaxItems />
+      <constraint:MaxLength />
+      <constraint:Min />
+      <constraint:MinItems />
+      <constraint:MinLength />
+      <constraint:MemberConstraint />
+      <constraint:MustBeReadOnly />
+      <constraint:NoSelfReference />
+      <constraint:Pattern />
+      <constraint:PropertyConstraint />
+      <constraint:RequiresImplementation />
+      <constraint:RequiresMember />
+      <constraint:StructuralConstraint />
+      <constraint:ValueConstraint />
+      <constraint:ValuePresent />
+      <lang:C />
+      <lang:CPP />
+      <lang:MarkupLanguage />
+      <lang:NaturalLanguage />
+      <lang:CSharp />
+      <lang:Chinese />
+      <lang:English />
+      <lang:French />
+      <lang:German />
+      <lang:JSON />
+      <lang:Japanese />
+      <lang:Java />
+      <lang:JavaScript />
+      <lang:OpenSCAD />
+      <lang:PseudoCode />
+      <lang:ProgrammingLanguage />
+      <lang:Python />
+      <lang:Russian />
+      <lang:Spanish />
+      <lang:TypeScript />
+      <lang:Unity />
+      <lang:XML />
+      <lang:YML />
+      <mapping:FunctionMapping />
+      <service:Bools />
+      <service:Lists />
+      <service:Math />
+      <service:Numbers />
+      <service:Strings />
+      <status:Deprecated />
+      <status:Draft />
+      <status:Stable />
+      <status:Stub />
+      <validation:Error />
+      <validation:Information />
+      <validation:Warning />
+      <btype:Boolean />
+      <btype:BooleanEntity />
+      <btype:Constant />
+      <btype:ConstantType />
+      <btype:Decimal />
+      <btype:DecimalEntity />
+      <btype:EnumType />
+      <btype:FilePath />
+      <btype:FilePathEntity />
+      <btype:Float />
+      <btype:FloatEntity />
+      <btype:FullyQualifiedName />
+      <btype:FullyQualifiedNameEntity />
+      <btype:Integer />
+      <btype:IntegerEntity />
+      <btype:MimeType />
+      <btype:MimeTypeEntity />
+      <btype:Number />
+      <btype:PrimitiveType />
+      <btype:StructType />
+      <btype:Text />
+      <btype:TextEntity />
+      <btype:URI />
+      <btype:URIEntity />
+      <btype:URL />
+      <btype:URLEntity />
+      <btype:Version />
+      <btype:VersionEntity />
+      <doc:Introduction />
+      <doc:EverythingIsABlock />
+      <doc:BlockAndInstance />
+      <doc:DefinitionModel />
+      <doc:TypeSystemOverview />
+      <doc:ValueTypeConfiguration />
+      <doc:CapabilitySemantics />
+      <doc:Expressions />
+      <doc:CompilerArchitecture />
+      <doc:RendererFreedom />
+      <doc:LibrarySystem />
+      <doc:BmlNamespace />
+      <doc:ImplicitNamespaceResolution />
+      <doc:DocumentationModel />
+      <doc:BootstrapModel />
+      <doc:ModelingGuidelines />
+      <doc:PseudoCode />
+      <doc:WOTFoundation />
     </_blocks>
   </aggregations>
 

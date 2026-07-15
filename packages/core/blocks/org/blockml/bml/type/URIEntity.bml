@@ -8,6 +8,10 @@
   <documentation>Concrete Entity wrapping a URI primitive. Binds T = URI on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>
   <name>URIEntity</name>
-  <type>btype:URIEntity</type>
-  <baseType>core:PrimitiveEntity(btype:URI)</baseType>
+  <type>
+    <btype:URIEntity />
+  </type>
+  <baseType>
+    <core:PrimitiveEntity(btype:URI) />
+  </baseType>
 </block>

@@ -249,21 +249,27 @@ definition  — optional; Definition meta-model type FQN (default org.blockml.bm
 ```xml
 <!-- valid — name derived from type -->
 <block>
-  <type>foo:MyBlock</type>
+  <type>
+    <foo:MyBlock />
+  </type>
   …
 </block>
 
 <!-- valid — name matches resolved type -->
 <block>
   <name>MyBlock</name>
-  <type>com.foo.MyBlock</type>
+  <type>
+    <com.foo:MyBlock />
+  </type>
   …
 </block>
 
 <!-- invalid -->
 <block>
   <name>OtherBlock</name>
-  <type>foo:MyBlock</type>
+  <type>
+    <foo:MyBlock />
+  </type>
   …
 </block>
 ```
@@ -373,12 +379,16 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 ```text
 <idea>              — short semantic description: what this Block represents in meaning (first child element).
 <documentation>     — human-readable technical description of the Block (second child element).
-<type>              — canonical Block type identity (required on root block). FQN, QName, or unqualified
-                      name when a context fallback applies. See § Type References and Block Identity.
+<type>              — canonical Block type identity (required on root block). TypeReference
+                      aggregation — one child element whose name resolves to the Block FQN
+                      (for example &lt;foo:MyBlock/&gt;). Text content is forbidden
+                      (BML_TYPE_REFERENCE_TEXT_FORM).
 <name>              — short class name (PascalCase). Optional on root blocks — derived from the last
                       segment of resolve(type) when omitted. When present, must match that segment.
                       Required on Sub-Blocks. See naming convention below.
-<baseType>          — FQN of the parent type. Mandatory — no default. Omitted only on org.blockml.bml.core.Block.
+<baseType>          — parent type reference. Mandatory — no default. TypeReference aggregation —
+                      one child element (for example &lt;core:Block/&gt;). Omitted only on
+                      org.blockml.bml.core.Block. Text content forbidden (BML_TYPE_REFERENCE_TEXT_FORM).
 <version>           — semantic version of this Block definition (root block only)
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
 ```
@@ -820,9 +830,9 @@ org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritan
 <languages>    →  <lang:OpenSCAD/>           TypeReference(core:Language)[] child
 <subTypes>     →  <core:Block/>              TypeReference(core:Block)[] child
 <contracts>    →  <ac:Wall/>                 TypeReference(core:Block)[] child
-<type>         →  <foo:MyBlock/>             TypeReference(core:Block)[1..1] child
-<baseType>     →  <core:Block/>              TypeReference(core:Block)[0..1] child
-<language>     →  <German/>                  TypeReference(NaturalLanguage)[0..1] child
+<type>         →  <foo:MyBlock/>             TypeReference(core:Block) child — required on root ([1..1])
+<baseType>     →  <core:Block/>              TypeReference(core:Block) child — optional single (bare)
+<language>     →  <German/>                  TypeReference(NaturalLanguage) child — optional single (bare)
 <genericTypes> →  <T baseType="…"/>          element name = generic parameter name
 ```
 
@@ -1910,7 +1920,7 @@ final        — prevents override in child Blocks
 visibility   — optional; must match naming convention; on aggregations also controls composition instance ID reachability (see § Composition instance IDs)
 ```
 
-**Context interpretation** — whether composition children are full Block instances or **type references** is determined by the aggregation's role and the enclosing Block type — not by an aggregation attribute. The parser stores Block instances as authored; the orchestrator and render targets apply the appropriate semantics from context. Examples: `bootstrap` / `_dependencies` / `_subLibraries` / `_blocks` on `org.blockml.bml.core.BlockLibrary` (empty instances — element name resolves to FQN); `<languages>` on Block definitions (Language references for `<implementation language="…">`). See also `00_bom_core.md` — Aggregations.
+**Type-reference vs instance aggregations** — determined by the aggregation `type` attribute: `TypeReference(T)` lists type references (child element name = FQN); plain `Block[]` holds composition instances. Examples: `bootstrap` / `_blocks` on `org.blockml.bml.core.BlockLibrary` use `TypeReference(...)`; `<contracts>` / `<languages>` on Block definitions use `TypeReference(core:Block)[]` / `TypeReference(core:Language)[]`. See `17_type_system_bml.md` — TypeReference.
 
 Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block. Cross-document `{BlockFQN}::{id}` references require a **public** target aggregation.
 

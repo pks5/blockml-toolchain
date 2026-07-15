@@ -19,8 +19,12 @@
     (ValueConstraint).</documentation>
 
   <name>StructuralConstraint</name>
-  <type>constraint:StructuralConstraint</type>
-  <baseType>core:Constraint</baseType>
+  <type>
+    <constraint:StructuralConstraint />
+  </type>
+  <baseType>
+    <core:Constraint />
+  </baseType>
   <abstract>true</abstract>
 
   <genericTypes>

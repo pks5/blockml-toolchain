@@ -705,17 +705,18 @@ unwrapTypeReference(typeExpr):
   fqn === org.blockml.bml.core.TypeReference && one typeArgument  →  return T
   else  →  null (instance aggregation)
 
-Legacy (V1 transitional):
-  Plain core:Block[] on Library _blocks / _dependencies  →  still type-reference mode via Library role
-  Text content <type>com.foo.Bar</type> on Block definitions  →  still accepted; maps to block.type FQN
-```
-
 ```text
+<type>…</type> text content on Block definitions     → BML_TYPE_REFERENCE_TEXT_FORM (error)
+<baseType>…</baseType> text content                  → BML_TYPE_REFERENCE_TEXT_FORM (error)
+Plain core:Block[] on type-reference aggregations     → BML_TYPE_REFERENCE_REQUIRED (error; use TypeReference(T)[])
+
+BML_TYPE_REFERENCE_TEXT_FORM        — <type> or <baseType> uses text content instead of child element
+BML_TYPE_REFERENCE_REQUIRED         — type-reference site uses plain Block[] without TypeReference(T)
 BML_TYPE_REFERENCE_CHILD_VALUE      — member value on child of TypeReference aggregation
 BML_TYPE_REFERENCE_COMPOSITION      — <composition> inside TypeReference aggregation
 BML_TYPE_REFERENCE_DEFAULT          — default="true" on TypeReference aggregation
 BML_TYPE_REFERENCE_CONSTRAINT       — child FQN fails satisfiesTypeBound(child, T)
-BML_TYPE_REFERENCE_MULTIPLICITY     — wrong child count for TypeReference(T)[1..1] or [0..1]
+BML_TYPE_REFERENCE_MULTIPLICITY     — wrong child count (bare = 0..1, [1..1] = required single)
 ```
 
 ### Contract merge (stage [8])
@@ -762,7 +763,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.b
 <bricks:WallPresets />                      → preset block via _blocks
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN. **`bml:version` is forbidden** on these children. Meta-model types: `TypeReference(core:Bootstrap)[0..1]`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`. Legacy V1: plain `core:Block[]` on Library aggregations may still be accepted with context-driven type-reference interpretation until migration completes.
+`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN. **`bml:version` is forbidden** on these children. Meta-model types: `TypeReference(core:Bootstrap)`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`.
 
 Each child requires explicit aggregation members (`bootstrap`, `_dependencies`, `_subLibraries`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
 

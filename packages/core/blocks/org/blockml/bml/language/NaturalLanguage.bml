@@ -20,8 +20,12 @@
     (ProgrammingLanguage, MarkupLanguage) used in capability bodies and example content.</documentation>
 
   <name>NaturalLanguage</name>
-  <type>lang:NaturalLanguage</type>
-  <baseType>core:Language</baseType>
+  <type>
+    <lang:NaturalLanguage />
+  </type>
+  <baseType>
+    <core:Language />
+  </baseType>
   <abstract>true</abstract>
 
 </block>

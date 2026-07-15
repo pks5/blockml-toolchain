@@ -78,7 +78,10 @@
   </references>
 
   <name>EverythingIsABlock</name>
-  <type>doc:EverythingIsABlock</type>
-  <baseType>core:Documentation</baseType>
-
+  <type>
+    <doc:EverythingIsABlock />
+  </type>
+  <baseType>
+    <core:Documentation />
+  </baseType>
 </block>

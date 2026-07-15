@@ -13,9 +13,12 @@
     inline type syntax — Integer{min=0, max=100}. Positional order: min, max. See
     20_value_type_instance_configuration.md.</documentation>
   <name>Integer</name>
-  <type>Integer</type>
-  <baseType>btype:Number</baseType>
-
+  <type>
+    <btype:Integer />
+  </type>
+  <baseType>
+    <btype:Number />
+  </baseType>
   <properties>
     <min type="Integer">
       <documentation>Minimum allowed value (inclusive). Configured via Integer{min=n}.</documentation>

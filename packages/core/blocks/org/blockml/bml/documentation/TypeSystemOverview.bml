@@ -80,7 +80,10 @@
   </references>
 
   <name>TypeSystemOverview</name>
-  <type>doc:TypeSystemOverview</type>
-  <baseType>core:Documentation</baseType>
-
+  <type>
+    <doc:TypeSystemOverview />
+  </type>
+  <baseType>
+    <core:Documentation />
+  </baseType>
 </block>

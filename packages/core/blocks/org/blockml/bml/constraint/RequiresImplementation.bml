@@ -19,9 +19,12 @@
     binding on concrete Blocks. Reference implementation for CapabilityConstraint branch.</documentation>
 
   <name>RequiresImplementation</name>
-  <type>constraint:RequiresImplementation</type>
-  <baseType>constraint:CapabilityConstraint</baseType>
-
+  <type>
+    <constraint:RequiresImplementation />
+  </type>
+  <baseType>
+    <constraint:CapabilityConstraint />
+  </baseType>
   <genericTypes>
     <T baseType="def:CapabilityDefinition"/>
   </genericTypes>

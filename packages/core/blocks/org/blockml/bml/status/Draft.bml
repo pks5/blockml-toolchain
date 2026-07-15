@@ -17,6 +17,10 @@
     without deprecation notice. Use when a known gap exists between target and canonical form —
     add an explicit note in &lt;documentation&gt; or sibling prose.</documentation>
   <name>Draft</name>
-  <type>status:Draft</type>
-  <baseType>core:Status</baseType>
+  <type>
+    <status:Draft />
+  </type>
+  <baseType>
+    <core:Status />
+  </baseType>
 </block>

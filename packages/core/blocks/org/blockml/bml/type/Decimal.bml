@@ -15,9 +15,12 @@
     instance via inline type syntax — Decimal{precision=10, scale=2} or Decimal{10, 2}.
     Positional order: precision, scale. See 20_value_type_instance_configuration.md.</documentation>
   <name>Decimal</name>
-  <type>btype:Decimal</type>
-  <baseType>btype:Number</baseType>
-
+  <type>
+    <btype:Decimal />
+  </type>
+  <baseType>
+    <btype:Number />
+  </baseType>
   <properties>
     <precision type="Integer">
       <documentation>Total number of significant digits. Configured via Decimal{precision=n}.</documentation>

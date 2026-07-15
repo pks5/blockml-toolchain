@@ -16,8 +16,12 @@
   <documentation>Abstract branch for markup languages — XML and other structured document formats
     used as capability implementation bodies.</documentation>
   <name>MarkupLanguage</name>
-  <type>lang:MarkupLanguage</type>
-  <baseType>core:Language</baseType>
+  <type>
+    <lang:MarkupLanguage />
+  </type>
+  <baseType>
+    <core:Language />
+  </baseType>
   <abstract>true</abstract>
 
 </block>

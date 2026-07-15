@@ -32,8 +32,12 @@
     org.blockml.bml.definition.MemberDefinition.
   </documentation>
   <name>StructuralDefinition</name>
-  <type>def:StructuralDefinition</type>
-  <baseType>core:Definition</baseType>
+  <type>
+    <def:StructuralDefinition />
+  </type>
+  <baseType>
+    <core:Definition />
+  </baseType>
   <abstract>true</abstract>
 
   <!--
@@ -121,7 +125,9 @@
         Declared as a property on org.blockml.bml.definition.StructuralDefinition.</documentation>
 
       <name>Documentation</name>
-      <baseType>type:StructType</baseType>
+      <baseType>
+        <type:StructType />
+      </baseType>
       <bml:xml>documentation</bml:xml>
 
       <properties>
@@ -149,7 +155,9 @@
         attribute overrides the effective natural language for this entry's text body.</documentation>
 
       <name>Change</name>
-      <baseType>core:Entity</baseType>
+      <baseType>
+        <core:Entity />
+      </baseType>
       <bml:xml>change</bml:xml>
 
       <properties>
@@ -182,7 +190,9 @@
         the CDATA body is not BML/MBML source — distinct from NaturalLanguage used for prose.</documentation>
 
       <name>Example</name>
-      <baseType>core:Entity</baseType>
+      <baseType>
+        <core:Entity />
+      </baseType>
       <bml:xml>example</bml:xml>
 
       <properties>
@@ -215,7 +225,9 @@
         attribute overrides the effective natural language for the relationship text body.</documentation>
 
       <name>Reference</name>
-      <baseType>core:Entity</baseType>
+      <baseType>
+        <core:Entity />
+      </baseType>
       <bml:xml>see</bml:xml>
 
       <properties>

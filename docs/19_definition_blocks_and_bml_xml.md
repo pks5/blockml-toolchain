@@ -240,9 +240,9 @@ Meta-model (simplified):
 org.blockml.bml.definition.BlockDefinition
   bml:xml element:  block
   properties:       idea, name, version, …
-  aggregations:     type → TypeReference(core:Block)[1..1]
-                    baseType → TypeReference(core:Block)[0..1]
-                    language → TypeReference(NaturalLanguage)[0..1]
+  aggregations:     type → TypeReference(core:Block)     — required single child on root ([1..1])
+                    baseType → TypeReference(core:Block) — optional single (bare = 0..1)
+                    language → TypeReference(NaturalLanguage)
                     genericTypes → GenericTypeDefinition[]
                     languages → TypeReference(Language)[]
                     subTypes → TypeReference(Block)[]
@@ -274,10 +274,10 @@ Authoring instance:
 ```xml
 <block xmlns:core="org.blockml.bml.core" …>
   <name>Wall</name>
-  <type type="core:TypeReference(core:Block)[1..1]">
+  <type>
     <com.example:Wall />
   </type>
-  <baseType type="core:TypeReference(core:Block)[1..1]">
+  <baseType>
     <core:Block />
   </baseType>
   <properties>

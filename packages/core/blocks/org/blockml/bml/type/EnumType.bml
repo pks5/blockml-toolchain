@@ -72,8 +72,12 @@
   </references>
 
   <name>EnumType</name>
-  <type>btype:EnumType</type>
-  <baseType>btype:StructType</baseType>
+  <type>
+    <btype:EnumType />
+  </type>
+  <baseType>
+    <btype:StructType />
+  </baseType>
   <abstract>true</abstract>
 
   <aggregations>

@@ -12,6 +12,10 @@
 
   <documentation>ProgrammingLanguage for JavaScript function implementations on Capabilities.</documentation>
   <name>JavaScript</name>
-  <type>lang:JavaScript</type>
-  <baseType>lang:ProgrammingLanguage</baseType>
+  <type>
+    <lang:JavaScript />
+  </type>
+  <baseType>
+    <lang:ProgrammingLanguage />
+  </baseType>
 </block>

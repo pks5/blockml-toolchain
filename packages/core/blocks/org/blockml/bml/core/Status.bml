@@ -18,8 +18,12 @@
     org.blockml.bml.status.Stable. Status is inherited downward — declare &lt;status&gt; or bml:status
     only when deviating from the effective inherited status.</documentation>
   <name>Status</name>
-  <type>core:Status</type>
-  <baseType>core:Block</baseType>
+  <type>
+    <core:Status />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
   <abstract>true</abstract>
 
 </block>

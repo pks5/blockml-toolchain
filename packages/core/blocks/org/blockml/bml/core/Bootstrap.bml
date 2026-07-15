@@ -14,8 +14,12 @@
 
   <documentation>Abstract base type for all BootstrapBase blocks.</documentation>
   <name>Bootstrap</name>
-  <type>core:Bootstrap</type>
-  <baseType>core:Block</baseType>
+  <type>
+    <core:Bootstrap />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
   <abstract>true</abstract>
 
   <aggregations>

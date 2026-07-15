@@ -21,8 +21,12 @@
     com.machineblocks.bml.validation.ManufacturingWarning). The BlockML validator only interprets
     Validation types it understands; other tools may interpret additional Validation blocks.</documentation>
   <name>Validation</name>
-  <type>core:Validation</type>
-  <baseType>core:Block</baseType>
+  <type>
+    <core:Validation />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
   <abstract>true</abstract>
 
 </block>

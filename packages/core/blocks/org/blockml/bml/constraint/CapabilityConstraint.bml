@@ -18,8 +18,12 @@
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
   <name>CapabilityConstraint</name>
-  <type>constraint:CapabilityConstraint</type>
-  <baseType>constraint:MemberConstraint</baseType>
+  <type>
+    <constraint:CapabilityConstraint />
+  </type>
+  <baseType>
+    <constraint:MemberConstraint />
+  </baseType>
   <abstract>true</abstract>
 
   <genericTypes>

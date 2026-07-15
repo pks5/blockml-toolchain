@@ -19,9 +19,12 @@
     effective member set of the Block. Reference implementation for BlockConstraint branch.</documentation>
 
   <name>RequiresMember</name>
-  <type>constraint:RequiresMember</type>
-  <baseType>constraint:BlockConstraint</baseType>
-
+  <type>
+    <constraint:RequiresMember />
+  </type>
+  <baseType>
+    <constraint:BlockConstraint />
+  </baseType>
   <genericTypes>
     <T baseType="def:BlockDefinition"/>
   </genericTypes>

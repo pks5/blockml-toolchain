@@ -15,8 +15,12 @@
 
   <documentation>Inbound capability.</documentation>
   <name>Inbound</name>
-  <type>cap:Inbound</type>
-  <baseType>core:Capability</baseType>
+  <type>
+    <cap:Inbound />
+  </type>
+  <baseType>
+    <core:Capability />
+  </baseType>
   <properties>
     <_hasInput override="true">
       <value>true</value>

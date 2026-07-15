@@ -34,8 +34,12 @@
   </references>
 
   <name>Block</name>
-  <type>core:Block</type>
-  <baseType>bcore:Entity</baseType>
+  <type>
+    <core:Block />
+  </type>
+  <baseType>
+    <bcore:Entity />
+  </baseType>
   <abstract>true</abstract>
 
   <properties>
