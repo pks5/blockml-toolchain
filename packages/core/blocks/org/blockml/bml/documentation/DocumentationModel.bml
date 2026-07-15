@@ -73,12 +73,13 @@
     org.blockml.bml.relation.SeeAlso. Standard blocks: SeeAlso, ReadFirst, Extends, Requires,
     ContrastsWith, AuthoringGuide, Defines, DeepDive, TaskIndex, TaskStep, Prerequisite, Resolves.
 
-    README blocks (baseType org.blockml.bml.core.Bootstrap) are library entry points for humans
-    and LLMs. Curated reading order is expressed via references with relation=ReadFirst; available
-    tasks via relation=TaskIndex — not via separate aggregations on Bootstrap. Documentation blocks
-    (org.blockml.bml.documentation.*) inherit from org.blockml.bml.core.Documentation.
-    TaskGuide blocks (org.blockml.bml.task.*) inherit from org.blockml.bml.core.TaskGuide.
-    Diagnostic blocks (org.blockml.bml.diagnostic.*) inherit from org.blockml.bml.core.Diagnostic.
+    README / ReadMe blocks (baseType org.blockml.bml.core.ReadMe) are library reading entry points
+    for humans and LLMs (Library.readFirst). Curated reading order is expressed via references with
+    relation=ReadFirst; available tasks via relation=TaskIndex — not via separate aggregations on
+    ReadMe. Documentation blocks (org.blockml.bml.documentation.*) inherit from
+    org.blockml.bml.core.Documentation. TaskGuide blocks (org.blockml.bml.task.*) inherit from
+    org.blockml.bml.core.TaskGuide. Diagnostic blocks (org.blockml.bml.diagnostic.*) inherit from
+    org.blockml.bml.core.Diagnostic.
   </documentation>
 
   <references>

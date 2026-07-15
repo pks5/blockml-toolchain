@@ -18,13 +18,13 @@
     Abstract base for org.blockml.bml.documentation.* blocks — curated reading material that
     explains BlockML concepts in mental learning order. Each concrete documentation block
     carries idea, documentation, and references; cross-links belong in references, not in
-    documentation prose. Listed via relation=ReadFirst on README and other Bootstrap blocks.
+    documentation prose. Listed via relation=ReadFirst on README and other ReadMe blocks.
     Procedural how-to blocks extend org.blockml.bml.core.TaskGuide instead.
   </documentation>
 
   <references>
-    <see block="core:Bootstrap">
-      Bootstrap entry points — ReadFirst and TaskIndex on references.
+    <see block="core:ReadMe">
+      Library reading entry — ReadFirst and TaskIndex on references.
     </see>
     <see block="core:TaskGuide">
       Procedural task guides — org.blockml.bml.task.* blocks.

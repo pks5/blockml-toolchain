@@ -1738,22 +1738,24 @@ A Library is a **Block** with `baseType="org.blockml.bml.core.BlockLibrary"`. It
 ```text
 org.blockml.bml.core.BlockLibrary           abstract composable Block
   property     description   String
-  aggregation  bootstrap     Bootstrap        (library entry point — typically README)
+  aggregation  readFirst     ReadMe[1..1]     (human/LLM reading entry — typically README)
+  aggregation  bootstrap     Bootstrap        (optional automation SPOE, 0..1)
   aggregation  _dependencies  BlockLibrary[]
   aggregation  _subLibraries  BlockLibrary[]
   aggregation  _schemas       FilePathEntity[] (optional — legacy XSD)
   aggregation  _blocks        Block[]
 
 org.blockml.bml.type.FilePathEntity            value (relative .xsd path)
-org.blockml.bml.core.Bootstrap                 abstract role marker — no members
-org.blockml.bml.README                         extends Bootstrap — ReadFirst + TaskIndex on references
+org.blockml.bml.core.ReadMe                    abstract role marker — human/LLM reading entry
+org.blockml.bml.README                         extends ReadMe — ReadFirst + TaskIndex on references
+org.blockml.bml.core.Bootstrap                 abstract role marker — automation SPOE (empty)
 org.blockml.bml.core.TaskGuide                 abstract — org.blockml.bml.task.* procedural blocks
 org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diagnostic.* error codes
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` are **TypeReferenceEntity** aggregations — each empty QName child expands to a TypeReferenceEntity instance. **`bml:version` is forbidden** on sugar children. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
+`readFirst`, `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` are **TypeReferenceEntity** aggregations — each empty QName child expands to a TypeReferenceEntity instance. **`bml:version` is forbidden** on sugar children. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
-`bootstrap` references a `Bootstrap` block (typically `README`) — the library entry point for humans and LLMs. Curated reading order uses `<references>` with `relation=ReadFirst`; available tasks use `relation=TaskIndex` — see `doc:BootstrapModel` and `doc:TaskGuideModel`.
+`readFirst` references a `ReadMe` block (typically `README`) — required human/LLM reading entry. Curated reading order uses `<references>` with `relation=ReadFirst`; available tasks use `relation=TaskIndex`. `bootstrap` is the optional automation SPOE — see `doc:BootstrapModel` and `doc:TaskGuideModel`.
 
 `_schemas` holds `FilePathEntity` composition children; **`value`** is the relative `.xsd` path from the library package root (directory containing `Library.bml`).
 
@@ -1803,7 +1805,7 @@ org/blockml/bml/
 
 Violation → `BML_LIBRARY_NESTING_VIOLATION`.
 
-**Bootstrap:** the CLI/orchestrator discovers all `Library.bml` files, resolves `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` by FQN (effective version from library context), and registers referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Bootstrap:** the CLI/orchestrator discovers all `Library.bml` files, resolves `readFirst`, `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` by FQN (effective version from library context), and registers referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
 **Types:** ValueType definitions (StructType, EnumType, …) are exported via `_blocks` alongside composable Blocks. **`_schemas`** holds optional legacy XSD paths as `FilePathEntity` instances — omit when types are BML-only.
 

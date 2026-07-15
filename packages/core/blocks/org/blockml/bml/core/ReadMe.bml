@@ -1,0 +1,45 @@
+<!--
+  BlockML Core — library reading entry-point role
+
+  FQN: org.blockml.bml.core.ReadMe
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:blockml="org.blockml.bml">
+  <name>ReadMe</name>
+  <type>core:ReadMe</type>
+  <baseType>core:Block</baseType>
+  <idea>Abstract role marker — human and LLM reading entry point for a library.</idea>
+
+  <documentation>Abstract branch for ReadMe blocks. A ReadMe declares where humans and LLMs start
+    reading a library — curated learning order, vocabulary, and orientation. Distinct from
+    org.blockml.bml.core.Bootstrap, which is the optional single point of entry (SPOE) for automated
+    startup (tasks, agents, CI pipelines).
+
+    org.blockml.bml.README is the standard ReadMe for the core library. Library descriptors point
+    here via the required readFirst aggregation (1..1).
+
+    ReadMe blocks carry the normal documentation model (idea, documentation, references). Curated
+    reading order is expressed via &lt;references&gt; with relation=ReadFirst; available task
+    catalog entries via relation=TaskIndex — not via separate aggregations on ReadMe itself. The
+    abstract base declares no members.</documentation>
+
+  <references>
+    <see block="core:Bootstrap">
+      Automation SPOE branch — separate from human/LLM reading entry.
+    </see>
+    <see block="core:BlockLibrary">
+      readFirst aggregation requires a ReadMe reference.
+    </see>
+    <see block="blockml:README">
+      Concrete ReadMe for the BlockML core library.
+    </see>
+  </references>
+
+  <abstract>true</abstract>
+
+</block>

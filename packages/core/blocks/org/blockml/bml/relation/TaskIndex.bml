@@ -13,11 +13,11 @@
   <name>TaskIndex</name>
   <type>relation:TaskIndex</type>
   <baseType>core:Relation</baseType>
-  <idea>Catalog entry — this TaskGuide is available from the current Bootstrap or entry point.</idea>
+  <idea>Catalog entry — this TaskGuide is available from the current ReadMe entry point.</idea>
 
-  <documentation>Use on &lt;see&gt; entries in README blocks and other Bootstrap entry points to
-    list accomplishable tasks. Distinct from ReadFirst (mental learning order) and SeeAlso (optional
-    peer link). Tooling filters relation=TaskIndex to build a task menu for humans, agents, or CI.
-    Target should reference an org.blockml.bml.task.* TaskGuide block.</documentation>
+  <documentation>Use on &lt;see&gt; entries in README / ReadMe blocks to list accomplishable tasks.
+    Distinct from ReadFirst (mental learning order) and SeeAlso (optional peer link). Tooling
+    filters relation=TaskIndex to build a task menu for humans, agents, or CI. Target should
+    reference an org.blockml.bml.task.* TaskGuide block.</documentation>
 
 </block>

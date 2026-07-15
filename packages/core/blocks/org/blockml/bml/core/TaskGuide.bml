@@ -18,7 +18,7 @@
     distinct from org.blockml.bml.documentation.* concept blocks. TaskGuide blocks carry the normal
     documentation model (idea, summary, keywords, documentation, references). Ordered procedure
     steps use relation=TaskStep on &lt;see&gt; entries; prerequisites use relation=Prerequisite.
-    Task catalogs on README or other Bootstrap blocks list available tasks via relation=TaskIndex.
+    Task catalogs on README / ReadMe blocks list available tasks via relation=TaskIndex.
     Tooling filters by relation to build learn paths (ReadFirst), task paths (TaskStep), or error
     fix paths (Diagnostic blocks with relation=Resolves).</documentation>
 
@@ -26,8 +26,8 @@
     <see block="core:Documentation">
       Concept documentation blocks — mental model; TaskGuide blocks are procedural complements.
     </see>
-    <see block="core:Bootstrap">
-      Library entry points — TaskIndex entries on README list available tasks.
+    <see block="core:ReadMe">
+      Library reading entry — TaskIndex entries on README list available tasks.
     </see>
   </references>
 

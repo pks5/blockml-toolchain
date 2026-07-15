@@ -438,7 +438,9 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/type/IntegerEntity.bml · TextEntity.bml · …
      org/blockml/bml/language/NaturalLanguage.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …
-     org/blockml/bml/core/BlockLibrary.bml   ← bootstrap / _dependencies / _subLibraries / _blocks as Block references; _schemas as FilePathEntity
+     org/blockml/bml/core/BlockLibrary.bml   ← readFirst / bootstrap / _dependencies / _subLibraries / _blocks as TypeReferenceEntity; _schemas as FilePathEntity
+     org/blockml/bml/core/ReadMe.bml · Bootstrap.bml
+     org/blockml/bml/README.bml              ← extends ReadMe
      org/blockml/bml/core/Definition.bml     ← empty Definition-branch identification marker
      org/blockml/bml/definition/*.bml        ← StructuralDefinition (inline Documentation/Change/Example/Reference), BlockDefinition, MemberDefinition, …
 

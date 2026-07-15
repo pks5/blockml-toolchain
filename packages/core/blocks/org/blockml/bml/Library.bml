@@ -78,9 +78,9 @@
   </properties>
 
   <aggregations>
-    <bootstrap>
+    <readFirst>
       <blockml:README />
-    </bootstrap>
+    </readFirst>
     <!-- Optional legacy XSD — omit when all types are exported via _blocks -->
     <_schemas>
       <composition>
@@ -91,6 +91,7 @@
     <_blocks>
       <bcore:Block />
       <bcore:Bootstrap />
+      <bcore:ReadMe />
       <bcore:Documentation />
       <bcore:Keyword />
       <bcore:Alias />

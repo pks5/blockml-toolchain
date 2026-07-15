@@ -26,7 +26,8 @@
     all .bml source files in the directory are public.
 
     Structure:
-    • bootstrap — library entry point (Bootstrap block, typically README with readFirst)
+    • readFirst — required human/LLM reading entry (ReadMe, 1..1; typically README)
+    • bootstrap — optional automation SPOE (Bootstrap, 0..1)
     • _dependencies — other Library blocks (typical: inner library depends on outer)
     • _subLibraries — nested child Library blocks grouped under this library
     • _blocks — exported Block and ValueType definitions
@@ -46,7 +47,7 @@
     Version resolution:
     effectiveBlockVersion = own version if present, else library.version if exported via _blocks,
     else error BML_MISSING_VERSION. bml:version on instance references is optional exact-version
-    assert; forbidden inside Library bootstrap, _dependencies, _subLibraries, and _blocks.
+    assert; forbidden inside Library readFirst, bootstrap, _dependencies, _subLibraries, and _blocks.
   </documentation>
 
   <references>
@@ -67,6 +68,12 @@
     </see>
     <see block="core:BlockLibrary">
       Abstract base for publishable library descriptors — not exported via _blocks.
+    </see>
+    <see block="core:ReadMe">
+      Required readFirst target branch.
+    </see>
+    <see block="core:Bootstrap">
+      Optional bootstrap SPOE branch.
     </see>
     <see block="doc:BmlNamespace">
       Mandatory domain.bml namespace for all BML definitions.

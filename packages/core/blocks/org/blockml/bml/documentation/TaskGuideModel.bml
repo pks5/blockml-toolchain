@@ -18,10 +18,10 @@
   <idea>TaskGuide blocks, task relations, and error-driven fix paths.</idea>
 
   <documentation>
-    Task-oriented paths complement ReadFirst learning paths on Bootstrap entry points:
+    Task-oriented paths complement ReadFirst learning paths on ReadMe entry points:
 
-    ReadFirst (relation)     — mental learning order on README and Bootstrap blocks
-    TaskIndex (relation)   — catalog of accomplishable tasks on README
+    ReadFirst (relation)     — mental learning order on ReadMe / README blocks
+    TaskIndex (relation)   — catalog of accomplishable tasks on ReadMe
     TaskGuide (branch)     — org.blockml.bml.task.* procedural how-to blocks
     TaskStep (relation)    — ordered steps inside a TaskGuide (document order = step order)
     Prerequisite (relation)— understand before starting a TaskGuide
@@ -29,7 +29,8 @@
     Resolves (relation)    — Diagnostic → TaskGuide fix procedure
 
     One mechanism: all navigation uses &lt;references&gt; and &lt;see&gt; with typed relation
-    attributes — no separate task aggregation on Bootstrap.
+    attributes — no separate task aggregation on ReadMe. Automated process SPOE uses
+    Library.bootstrap (core:Bootstrap), separate from reading/task catalog on ReadMe.
 
     Tooling (future):
     • filter relation=ReadFirst → learn context bundle
@@ -37,7 +38,7 @@
     • load Diagnostic by code → follow Resolves → TaskStep chain
 
     org.blockml.bml.README lists TaskIndex entries after ReadFirst entries. Future Bootstrap
-    subtypes (AgentBootstrap, TaskCatalog) may emphasize tasks over learning paths.
+    subtypes (AgentBootstrap, CIBootstrap) supply automation SPOE members — not reading paths.
   </documentation>
 
   <references>

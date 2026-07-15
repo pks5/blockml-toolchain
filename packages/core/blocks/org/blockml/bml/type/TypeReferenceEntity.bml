@@ -21,7 +21,8 @@
     • btype:TypeReferenceEntity(core:Block)[] — contracts, subTypes, Library _blocks
     • btype:TypeReferenceEntity(lang:NaturalLanguage) — language (singular, 0..1)
     • btype:TypeReferenceEntity(core:Language)[] — languages
-    • btype:TypeReferenceEntity(core:Bootstrap) — Library bootstrap
+    • btype:TypeReferenceEntity(core:ReadMe)[1..1] — Library readFirst
+    • btype:TypeReferenceEntity(core:Bootstrap) — Library bootstrap (0..1 SPOE)
     • btype:TypeReferenceEntity(core:BlockLibrary)[] — _dependencies, _subLibraries
 
     Authored empty child whose element QName is not TypeReferenceEntity is syntactic sugar for a
@@ -53,7 +54,7 @@
       contracts, languages, subTypes, language aggregations.
     </see>
     <see block="core:BlockLibrary">
-      bootstrap, _dependencies, _subLibraries, _blocks aggregations.
+      readFirst, bootstrap, _dependencies, _subLibraries, _blocks aggregations.
     </see>
   </references>
 

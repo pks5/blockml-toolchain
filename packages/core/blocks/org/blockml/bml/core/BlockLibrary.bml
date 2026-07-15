@@ -29,21 +29,20 @@
     Framework base type in org.blockml.bml.core — not exported via Library _blocks.
     Concrete Library.bml files inherit from BlockLibrary and declare aggregations explicitly.
 
-    Aggregations (each aggregation= attribute is required; none is default):
-    • bootstrap — library entry point (Bootstrap block, typically org.blockml.bml.README).
-      Curated reading order on the concrete Bootstrap block uses references with relation=ReadFirst.
+    Aggregations (each aggregation member is opened by name; none is default):
+    • readFirst — required human/LLM reading entry (ReadMe block, 1..1)
+    • bootstrap — optional automation SPOE (Bootstrap block, 0..1)
     • _dependencies — other Library blocks this library depends on (typical: inner library
       depends on outer)
     • _subLibraries — nested child Library blocks grouped under this library
     • _schemas — optional legacy XSD paths as FilePathEntity instances
     • _blocks — exported Block and ValueType definitions (membership SSOT)
 
-    bootstrap holds a TypeReferenceEntity pointing at a Bootstrap block (typically
-    org.blockml.bml.README) — empty child QName sugar sets value to that FQN.
-    _dependencies, _subLibraries, and _blocks hold TypeReferenceEntity instances the same way.
-    bml:version is forbidden on sugar children (version comes from library context).
-    _schemas holds FilePathEntity composition children; value is the relative .xsd path from
-    the library package root (directory containing Library.bml).
+    readFirst and bootstrap hold TypeReferenceEntity children — empty QName sugar sets value to
+    that FQN. _dependencies, _subLibraries, and _blocks use the same pattern. bml:version is
+    forbidden on sugar children (version comes from library context). _schemas holds FilePathEntity
+    composition children; value is the relative .xsd path from the library package root (directory
+    containing Library.bml).
   </documentation>
 
   <references>
@@ -59,11 +58,14 @@
     <see block="btype:FilePathEntity">
       Entity wrapper used for _schemas entries.
     </see>
+    <see block="core:ReadMe">
+      Required readFirst target — human/LLM reading entry.
+    </see>
     <see block="core:Bootstrap">
-      Abstract base for library bootstrap entry points (README blocks).
+      Optional bootstrap target — automation SPOE (0..1).
     </see>
     <see block="btype:TypeReferenceEntity">
-      Entity payload for bootstrap, _dependencies, _subLibraries, and _blocks.
+      Entity payload for readFirst, bootstrap, _dependencies, _subLibraries, and _blocks.
     </see>
   </references>
 
@@ -85,10 +87,17 @@
         example &lt;English/&gt;). Inherited by block definitions unless overridden. Unqualified
         child names resolve via implicit namespace org.blockml.bml.language.*.</documentation>
     </language>
+    <readFirst type="btype:TypeReferenceEntity(core:ReadMe)[1..1]">
+      <documentation>Required human/LLM reading entry for this library. Exactly one ReadMe
+        TypeReferenceEntity — empty QName sugar or explicit value. Typically
+        &lt;blockml:README /&gt; on the core library. Missing or duplicate →
+        BML_TYPE_REFERENCE_MULTIPLICITY. bml:version is forbidden on sugar children.</documentation>
+    </readFirst>
     <bootstrap type="btype:TypeReferenceEntity(core:Bootstrap)">
-      <documentation>Library bootstrap entry point — typically a README block with a readFirst
-      documentation list. TypeReferenceEntity aggregation — empty QName sugar sets value to the
-      child FQN. bml:version is forbidden on sugar children.</documentation>
+      <documentation>Optional single point of entry (SPOE) for automated startup — tasks, agents,
+        CI pipelines. Bare TypeReferenceEntity = 0..1. At most one Bootstrap; omit when the library
+        has no automation entry. Not the human reading entry (use readFirst). bml:version is
+        forbidden on sugar children.</documentation>
     </bootstrap>
     <_dependencies type="btype:TypeReferenceEntity(core:BlockLibrary)[]">
       <documentation>Other Library blocks this library depends on. Typical pattern: an inner

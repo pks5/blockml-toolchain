@@ -13,11 +13,11 @@
   <name>ReadFirst</name>
   <type>relation:ReadFirst</type>
   <baseType>core:Relation</baseType>
-  <idea>Curated entry in a bootstrap or learning reading path — read before exploring further.</idea>
+  <idea>Curated entry in a ReadMe learning path — read before exploring further.</idea>
 
-  <documentation>Use on &lt;see&gt; entries in Bootstrap README blocks and other library entry points
-    to declare mental learning order. ReadFirst entries should appear first in &lt;references&gt;,
-    in reading order. Replaces a separate readFirst aggregation — one references mechanism for
-    all cross-links.</documentation>
+  <documentation>Use on &lt;see&gt; entries in README / ReadMe blocks to declare mental learning
+    order. ReadFirst entries should appear first in &lt;references&gt;, in reading order. Distinct
+    from Library.readFirst (which names the ReadMe block itself). One references mechanism for all
+    cross-links inside the ReadMe.</documentation>
 
 </block>

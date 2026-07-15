@@ -659,7 +659,7 @@ Task-oriented paths use the same `<references>` mechanism as learning paths — 
 
 | Relation | Used on | Meaning |
 |---|---|---|
-| `TaskIndex` | README, Bootstrap | Catalog entry — this task is available |
+| `TaskIndex` | README / ReadMe | Catalog entry — this task is available |
 | `TaskStep` | TaskGuide | Ordered procedure step (document order = step order) |
 | `Prerequisite` | TaskGuide | Understand before starting the task |
 | `Resolves` | Diagnostic | Links error code to fix TaskGuide |
@@ -2173,7 +2173,10 @@ TypeReferenceEntity(T)[]  →  TypeReferenceEntity instances (QName sugar or exp
 plain Block[]       →  real BlockInstance (empty = valid instance with no authored values)
 ```
 
-Examples: `bootstrap` / `_blocks` on `org.blockml.bml.core.BlockLibrary` use `TypeReferenceEntity(...)`; `<contracts>` / `<languages>` on Block definitions use `TypeReferenceEntity(core:Block)[]` / `TypeReferenceEntity(core:Language)[]`. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
+Examples: `readFirst` / `bootstrap` / `_blocks` on `org.blockml.bml.core.BlockLibrary` use
+`TypeReferenceEntity(...)`; `<contracts>` / `<languages>` on Block definitions use
+`TypeReferenceEntity(core:Block)[]` / `TypeReferenceEntity(core:Language)[]`. See
+`17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block. Cross-document `{BlockFQN}::{id}` references require a **public** target aggregation.
 
@@ -2876,15 +2879,22 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 
 ```xml
 <aggregations>
-  <bootstrap type="core:Bootstrap" />
-  <_dependencies type="core:BlockLibrary[]" />
-  <_subLibraries type="core:BlockLibrary[]" />
+  <readFirst type="btype:TypeReferenceEntity(core:ReadMe)[1..1]" />
+  <bootstrap type="btype:TypeReferenceEntity(core:Bootstrap)" />
+  <_dependencies type="btype:TypeReferenceEntity(core:BlockLibrary)[]" />
+  <_subLibraries type="btype:TypeReferenceEntity(core:BlockLibrary)[]" />
   <_schemas type="btype:FilePathEntity[]" />
-  <_blocks type="core:Block[]" />
+  <_blocks type="btype:TypeReferenceEntity(core:Block)[]" />
 </aggregations>
 ```
 
-**Library reference aggregations:** `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` on `org.blockml.bml.core.BlockLibrary` are **TypeReference** aggregations — each empty child element (e.g. `<blockml:Library />`) is a **type reference** (element name → FQN), not a Block instance. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed. **`bootstrap`** typically references a `README` block (`org.blockml.bml.core.Bootstrap`). **`_schemas`** is an **instance** aggregation and holds real `FilePathEntity` composition children.
+**Library reference aggregations:** `readFirst`, `bootstrap`, `_dependencies`, `_subLibraries`, and
+`_blocks` on `org.blockml.bml.core.BlockLibrary` are **TypeReferenceEntity** aggregations — each empty
+child element (e.g. `<blockml:Library />`) expands to a TypeReferenceEntity (not an instance of the
+named Block). **`bml:version` is forbidden** on sugar children. **`readFirst`** (1..1) references a
+`ReadMe` (typically `README`). **`bootstrap`** (0..1) is the optional automation SPOE
+(`core:Bootstrap`). **`_schemas`** is an **instance** aggregation and holds real `FilePathEntity`
+composition children.
 
 ```xml
 <!-- com/machineblocks/bml/bricks/Library.bml -->
@@ -3539,19 +3549,20 @@ Physical directories and overlapping package prefixes do not define membership. 
 </block>
 ```
 
-**`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`** are `TypeReferenceEntity`
-aggregations — QName sugar expands to Entity instances. **`bml:version` is forbidden** on sugar
-children — effective version is resolved from library context. See `17_type_system_bml.md` —
-TypeReference and TypeReferenceEntity.
+**`readFirst`, `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`** are
+`TypeReferenceEntity` aggregations — QName sugar expands to Entity instances. **`bml:version` is
+forbidden** on sugar children — effective version is resolved from library context. See
+`17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
-**`bootstrap`** points to the library entry point — typically a `README` block (`org.blockml.bml.README`). Curated reading order lives in `<references>` with `relation=ReadFirst` (see `doc:BootstrapModel`). Example on `org.blockml.bml.Library`:
+**`readFirst`** (1..1) points to the human/LLM reading entry — a `ReadMe` block (typically
+`org.blockml.bml.README`). Curated reading order lives in `<references>` with `relation=ReadFirst`
+(see `doc:BootstrapModel`). **`bootstrap`** (0..1) is the optional automation SPOE (`core:Bootstrap`).
+Example on `org.blockml.bml.Library`:
 
 ```xml
-<bootstrap>
-  <composition>
-    <blockml:README />
-  </composition>
-</bootstrap>
+<readFirst>
+  <blockml:README />
+</readFirst>
 ```
 
 **`value` paths** on `_schemas` `FilePathEntity` entries are relative to the **library package root** (directory containing `Library.bml`).

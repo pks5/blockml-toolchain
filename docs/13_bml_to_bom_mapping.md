@@ -781,7 +781,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.b
 
 ```text
 <!-- TypeReferenceEntity aggregations — QName sugar → Entity { value: FQN } -->
-<blockml:README />                         →  bootstrap: TypeReferenceEntity value="org.blockml.bml.README"
+<blockml:README />                         →  readFirst: TypeReferenceEntity value="org.blockml.bml.README"
 <blockml:Library />                        →  _dependencies entry — no bml:version on sugar
 <compiler:Library />                       →  _subLibraries entry
 <type:Size3d />                             →  _blocks entry
@@ -792,14 +792,19 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.b
 <btype:FilePathEntity value="bricks.xsd"/> →  BlockInstance { typeFqn: "…FilePathEntity", value: "bricks.xsd" }
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use `TypeReferenceEntity` aggregations —
-empty QName sugar expands to Entity instances. **`bml:version` is forbidden** on sugar children.
-Meta-model types: `TypeReferenceEntity(core:Bootstrap)`, `TypeReferenceEntity(core:BlockLibrary)[]`,
+`readFirst`, `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use `TypeReferenceEntity`
+aggregations — empty QName sugar expands to Entity instances. **`bml:version` is forbidden** on sugar
+children. Meta-model types: `TypeReferenceEntity(core:ReadMe)[1..1]`,
+`TypeReferenceEntity(core:Bootstrap)`, `TypeReferenceEntity(core:BlockLibrary)[]`,
 `TypeReferenceEntity(core:Block)[]`.
 
-Each child requires explicit aggregation members (`bootstrap`, `_dependencies`, `_subLibraries`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
+Each child requires explicit aggregation members (`readFirst`, `bootstrap`, `_dependencies`,
+`_subLibraries`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
 
-**Orchestrator (not parser):** after parsing a Library block, resolve each `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` entry by `resolve(value)`, load the referenced definitions using effective block versions, and `registerBlockDefinition`. Validate that outer libraries do not re-export blocks from nested inner libraries (`BML_LIBRARY_NESTING_VIOLATION`).
+**Orchestrator (not parser):** after parsing a Library block, resolve each `readFirst`, `bootstrap`,
+`_dependencies`, `_subLibraries`, and `_blocks` entry by `resolve(value)`, load the referenced
+definitions using effective block versions, and `registerBlockDefinition`. Validate that outer
+libraries do not re-export blocks from nested inner libraries (`BML_LIBRARY_NESTING_VIOLATION`).
 
 ### Incremental builds
 
