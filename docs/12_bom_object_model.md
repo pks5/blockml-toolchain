@@ -154,6 +154,9 @@ interface BlockDefinition {
   /** Optional short prose expansion — typically three to five sentences between idea and documentation. */
   summary?: string
 
+  /** Optional comma-separated search/discovery tags — trimmed tokens in BOM. */
+  keywords?: string[]
+
   /** Natural language FQN for documentation prose and example titles. Omitted = inherit Library, then Block default (English). */
   languageFqn?: string
 
@@ -165,6 +168,9 @@ interface BlockDefinition {
 
   /** What this Block is not — block-level disambiguation from similar concepts. Optional. */
   not?: string
+
+  /** Alternative names for this Block type — block-level only. Comma-separated in BML; trimmed tokens in BOM. */
+  aliases?: string[]
 
   /** Semantic version from which this definition is available. Omitted = since initial release. */
   since?: string
@@ -487,6 +493,8 @@ interface MemberDefinitionBase {
   name: string
   /** Optional short prose expansion between idea-level meaning and full documentation. */
   summary?: string
+  /** Optional comma-separated search/discovery tags — trimmed tokens in BOM. */
+  keywords?: string[]
   documentation?: string
   /** NaturalLanguage FQN when member documentation prose deviates from effective block language. */
   documentationLanguageFqn?: string

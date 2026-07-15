@@ -24,11 +24,12 @@
     binds this definition to the Block type it describes — conceptually BlockDefinition of
     com.foo.Bar when B resolves to com.foo.Bar.
 
-    Declares identity (idea, not, name, type, baseType, version), generic parameters, contracts,
+    Declares identity (idea, not, aliases, name, type, baseType, version), generic parameters, contracts,
     allowed Sub-Blocks and languages, and member declaration containers (properties, aggregations,
-    associations, capabilities). Inherits summary from org.blockml.bml.definition.StructuralDefinition
-    (optional middle tier between idea and documentation). not is block-level only — disambiguation
-    from similar concepts; omitted when unnecessary. Type modifiers abstract and final are inherited from
+    associations, capabilities). Inherits summary and keywords from
+    org.blockml.bml.definition.StructuralDefinition. not and aliases are block-level only — not
+    declares explicit disambiguation from similar concepts; aliases lists alternative names for the
+    Block type (not member identity). Omitted when unnecessary. Type modifiers abstract and final are inherited from
     org.blockml.bml.definition.StructuralDefinition. Every definition element is addressable via
     its canonical structural path within the Block FQN (for example com.foo.Bar.properties.width).
     Member declaration order in BML is preserved in BOM and is significant for StructType
@@ -90,7 +91,7 @@
 
   <!--
     Scalar Block metadata. Each property renders as a direct XML child element
-    named after the property (for example <idea>, <summary>, <not>, <name>, <type>, or <version>).
+    named after the property (for example <idea>, <summary>, <keywords>, <not>, <aliases>, <name>, <type>, or <version>).
   -->
   <properties>
     <idea type="Text" bml:xml="element">
@@ -106,6 +107,15 @@
         Prefer relation=ContrastsWith on references when pointing at a specific confusing type; not
         states the negation inline on the current definition.</documentation>
     </not>
+    <aliases type="Text" bml:xml="element">
+      <documentation>Alternative names for this Block type — colloquial or legacy terms readers and
+        LLMs may use when searching (for example Sub-Block, nested type, local type). Optional;
+        block-level only — member identity is fixed by (namespace, name) and must not carry alternate
+        names. Comma-separated plain text body; parser stores trimmed tokens in BOM aliases[].
+        Not to be confused with XML namespace prefix aliases (document syntax only, never stored in
+        BOM) or with keywords (search tags on StructuralDefinition). Addressable as
+        com.foo.Bar.aliases.</documentation>
+    </aliases>
     <name type="Text" bml:xml="element">
       <documentation>Short class name (PascalCase). Required on Sub-Blocks. Optional on root blocks —
         when omitted, derived as lastSegment(resolve(type)). When present on a root block, must

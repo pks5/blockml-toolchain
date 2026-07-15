@@ -24,12 +24,15 @@
     idea (required, first child) — semantic meaning of the Block; the stable constant (WOT: Idea).
     summary (optional) — short prose expansion between idea and documentation; inherited from
       StructuralDefinition on blocks and members.
+    keywords (optional) — comma-separated search/discovery tags; inherited from StructuralDefinition
+      on blocks and members.
     language (optional) — natural language for documentation prose; inherits Library → Block
       default (English on org.blockml.bml.core.Block).
     documentation (required on root blocks) — technical description of the Block definition itself;
       optional language attribute when prose deviates from effective block language.
     not (optional, blocks only) — what this Block is not; block-level disambiguation from similar concepts.
-    Member elements carry their own summary and documentation for individual Properties, Aggregations, etc.
+    aliases (optional, blocks only) — alternative names for this Block type; comma-separated plain text.
+    Member elements carry their own summary, keywords, and documentation for individual Properties, Aggregations, etc.
 
     Optional extensions (wherever documentation is permitted):
     since — version from which the element is available
@@ -74,7 +77,7 @@
 
   <references>
     <see file="02_mbml.md">
-      idea, summary, not, documentation, since, changelog, examples, references — authoring rules.
+      idea, summary, keywords, not, aliases, documentation, since, changelog, examples, references — authoring rules.
     </see>
     <see file="16_framework_base_types.md">
       Definition branch documentation model — StructuralDefinition sub-blocks.

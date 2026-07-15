@@ -381,8 +381,10 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 ```text
 <idea>              — short semantic description: what this Block represents in meaning (first child element).
 <summary>           — optional short prose expansion — typically three to five sentences between idea and documentation.
+<keywords>          — optional comma-separated search/discovery tags (blocks and members via StructuralDefinition).
 <documentation>     — human-readable technical description of the Block (required on root blocks).
 <not>               — optional block-level disambiguation — what this Block is not (blocks only, not members).
+<aliases>           — optional comma-separated alternative names for this Block type (blocks only, not members).
 <type>              — canonical Block type identity (required on root block). TypeReference
                       aggregation — one child element whose name resolves to the Block FQN
                       (for example &lt;foo:MyBlock/&gt;). Text content is forbidden
@@ -401,13 +403,15 @@ Definition elements (`<property>`, `<aggregation>`, …) carry `<status>` only w
 
 ### `<idea>` — semantic meaning
 
-`<idea>` is placed **directly under the root `<block>` element**, as the **first child**, before optional `<summary>`, `<language>`, `<documentation>`, optional `<not>`, and `<name>`. It states how to **interpret** the Block — what it means in the domain, not how it is implemented.
+`<idea>` is placed **directly under the root `<block>` element**, as the **first child**, before optional `<summary>`, `<keywords>`, `<language>`, `<documentation>`, optional `<not>`, optional `<aliases>`, and `<name>`. It states how to **interpret** the Block — what it means in the domain, not how it is implemented.
 
 ```text
 <idea>          — meaning     what this Block semantically represents (one short sentence)
 <summary>       — scope       optional middle tier — three to five sentences of scope and boundaries
+<keywords>      — discovery   optional search tags for RAG and colloquial lookup
 <documentation> — detail      technical description, behaviour, constraints, examples
 <not>           — negative    optional block-level disambiguation — what this Block is not
+<aliases>       — names       optional alternative names for this Block type (blocks only)
 ```
 
 Examples:
@@ -445,6 +449,18 @@ documentation → full technical prose
 Omitted when `<idea>` and `<documentation>` suffice. Plain trimmed text body stored in BOM `summary` on the enclosing definition element. Addressable as `com.foo.Bar.summary` on blocks and `com.foo.Bar.properties.width.summary` on members.
 
 Optional **`language`** attribute follows the same deviation pattern as `<documentation>` when a Summary struct is not required.
+
+### `<keywords>` — search and discovery tags
+
+`<keywords>` is an optional child on all **StructuralDefinition** elements — root blocks, Sub-Blocks, and members. On Block definitions it follows `<summary>` and optional `<language>`, before `<documentation>`. Value is **comma-separated plain text** — domain terms, related concepts, and colloquial search phrases for RAG indexing and LLM retrieval.
+
+```xml
+<keywords>inheritance, nesting, FQN derivation</keywords>
+```
+
+Omitted when `idea`, `summary`, and `documentation` suffice for discovery. Parser stores trimmed tokens in BOM `keywords[]` on the enclosing definition element. Addressable as `com.foo.Bar.keywords` on blocks and `com.foo.Bar.properties.width.keywords` on members.
+
+**Not** XML namespace prefix aliases (document syntax only, never stored in BOM). **Not** alternative type names — use `<aliases>` on Block definitions for those.
 
 ### `<language>` — natural language for documentation prose
 
@@ -498,7 +514,7 @@ Natural languages are distinct from **implementation languages** (`ProgrammingLa
 
 ### `<documentation>`
 
-`<documentation>` follows `<idea>`, optional `<summary>`, and optional `<language>`, still before optional `<not>` and `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+`<documentation>` follows `<idea>`, optional `<summary>`, optional `<keywords>`, and optional `<language>`, still before optional `<not>`, optional `<aliases>`, and `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
 
 An optional **`language`** attribute on `<documentation>` references a `org.blockml.bml.language.NaturalLanguage` when the prose is written in a language other than the effective language of the enclosing definition element. Unqualified names resolve via implicit namespace `org.blockml.bml.language.*`. Omitted → inherit effective language from Block or Library.
 
@@ -529,6 +545,18 @@ Plain trimmed text body stored in BOM `block.not`. Addressable as `com.foo.Bar.n
 <not>Not a runtime Block instance — this is a type definition document.</not>
 ```
 
+### `<aliases>` — alternative type names (blocks only)
+
+`<aliases>` is an optional child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It lists **alternative names** for this Block type — colloquial, legacy, or domain terms readers may use when searching (`Sub-Block`, `nested type`, `local type`). Comma-separated plain text; parser stores trimmed tokens in BOM `aliases[]`. Addressable as `com.foo.Bar.aliases`.
+
+Member identity is fixed by `(namespace, name)` — members do not carry alternate names. Use `<keywords>` on members for search tags without implying a second identity.
+
+**Not** XML namespace prefix aliases. **Not** search tags — use `<keywords>` for RAG-oriented discovery terms.
+
+```xml
+<aliases>Sub-Block, nested type, local type</aliases>
+```
+
 ### Documentation extensions
 
 Wherever `<documentation>` is permitted, these **optional** siblings are also allowed:
@@ -546,7 +574,7 @@ Applies to all definition elements that carry documentation:
 <block>  <property>  <aggregation>  <association>  <capability>  <constraint>  <suggestion>
 ```
 
-`<summary>` applies to the same StructuralDefinition elements. `<not>` is block-level only.
+`<summary>` and `<keywords>` apply to the same StructuralDefinition elements. `<not>` and `<aliases>` are block-level only.
 
 and to any future definition element with `<documentation>`.
 
@@ -2058,8 +2086,10 @@ com.foo.Bar.capabilities.render     →  CapabilityDefinition for render
 com.foo.Bar.name                    →  Block metadata
 com.foo.Bar.idea                    →  Block idea
 com.foo.Bar.summary                 →  Block summary
+com.foo.Bar.keywords                →  Block keywords
 com.foo.Bar.documentation           →  Block documentation
 com.foo.Bar.not                     →  Block not (disambiguation)
+com.foo.Bar.aliases                 →  Block aliases (alternative type names)
 ```
 
 No special definition-reference constructs are required — the path itself carries all type information. See `00_bom_core.md` — § Canonical definition paths.

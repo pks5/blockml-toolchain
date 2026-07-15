@@ -25,7 +25,7 @@
 
   <documentation>
     Abstract base type for BlockML structural definition elements. It provides the common
-    documentation model consisting of summary, documentation text, version information,
+    documentation model consisting of summary, keywords, documentation text, version information,
     change history, examples, and references, plus local declaration properties (abstract, final)
     for block definitions. Concrete structural definition types inherit these members to describe
     themselves consistently. Member declarations declare abstract, final, and override locally via
@@ -43,7 +43,7 @@
   <!--
   Property definitions are grouped inside the <properties> element.
   Each property is rendered as a direct XML child element named after the
-  property itself (for example <since>, <status>, <summary>, <documentation>, <abstract>, or <final>).
+  property itself (for example <since>, <status>, <summary>, <keywords>, <documentation>, <abstract>, or <final>).
 -->
   <properties>
     <since type="Version" bml:xml="element">
@@ -62,6 +62,16 @@
         element. Addressable on blocks as com.foo.Bar.summary and on members as
         com.foo.Bar.properties.width.summary.</documentation>
     </summary>
+    <keywords type="Text" bml:xml="element">
+      <documentation>Optional comma-separated search and discovery tags for RAG indexing and
+        colloquial lookup — domain terms, synonyms, and related concepts that are not alternative
+        names (use aliases on BlockDefinition for those). Applies to all StructuralDefinition
+        elements: blocks, Sub-Blocks, and members. Omitted when idea, summary, and documentation
+        suffice for discovery. Body is comma-separated plain text; parser stores trimmed tokens in
+        BOM keywords[] on the enclosing definition element. Not to be confused with XML namespace
+        prefix aliases — those are document syntax only and never stored in the BOM. Addressable on
+        blocks as com.foo.Bar.keywords and on members as com.foo.Bar.properties.width.keywords.</documentation>
+    </keywords>
     <documentation type="Documentation" bml:xml="element">
       <documentation>Technical documentation prose for this definition element.</documentation>
     </documentation>
