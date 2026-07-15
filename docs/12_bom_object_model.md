@@ -449,12 +449,22 @@ interface DocumentationExample {
 }
 
 interface DocumentationReference {
-  /** Block or Definition reference (xmlns prefix:Name) — XML block attribute on <see>. Three target fields (block, file, url) instead of one generic target: attribute name encodes kind at the read site for humans and LLMs — see 02_mbml.md — references. */
+  /** Block or Definition type reference (xmlns prefix:Name) — XML block attribute on <see>. Standalone block= only; when paired with a member attribute, block= qualifies the member and is not stored here. Seven target kinds (block, file, url, property, aggregation, association, capability) instead of one generic target — see 02_mbml.md — references. */
   block?: string
   /** Repository markdown file — XML file attribute on <see> */
   file?: string
   /** External URL — XML url attribute on <see> */
   url?: string
+  /** PropertyDefinition canonical path — XML property attribute on <see> (e.g. com.foo.Bar.properties.width) */
+  property?: string
+  /** AggregationDefinition canonical path — XML aggregation attribute on <see> */
+  aggregation?: string
+  /** AssociationDefinition canonical path — XML association attribute on <see> */
+  association?: string
+  /** CapabilityDefinition canonical path — XML capability attribute on <see> */
+  capability?: string
+  /** Relation FQN (org.blockml.bml.relation.*) — XML relation attribute on <see>. Omitted = org.blockml.bml.relation.SeeAlso. */
+  relationFqn?: string
   /** Required text body — why or how the referenced element relates */
   context: string
   /** NaturalLanguage FQN when relationship text deviates from effective block language. Omitted = inherit. */

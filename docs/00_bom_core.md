@@ -468,7 +468,7 @@ documentation      — human-readable technical description
 since              — optional; semantic version from which this Block is available
 changelog          — optional; version history (oldest first)
 examples           — optional; usage examples (title + CDATA body)
-references         — optional; cross-references to related Blocks or Definitions (type + optional context)
+references         — optional; cross-references via `<see>` (`block`, `file`, `url`, `property`, `aggregation`, `association`, or `capability`; optional `relation` from `org.blockml.bml.relation.*`)
 name               — short class name (PascalCase). Required. See naming convention below.
 type               — globally unique FQN
 baseType           — FQN of the parent Block. Required — no default.

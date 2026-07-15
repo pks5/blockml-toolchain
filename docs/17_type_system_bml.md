@@ -26,7 +26,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
-| **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail only); optional `<since>`, `<changelog>`, `<examples>`, `<references>` with `<see>` entries (`block`, `file`, or `url`) — see `02_mbml.md` |
+| **Block metadata** | Every `<block>` carries `<idea>` (semantic meaning) and `<documentation>` (technical detail only); optional `<since>`, `<changelog>`, `<examples>`, `<references>` with `<see>` entries (`block`, `file`, `url`, `property`, `aggregation`, `association`, or `capability`; optional `relation` from `org.blockml.bml.relation.*`) — see `02_mbml.md` |
 | **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — EnumType is a specialized StructType |
 | **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `18_function_mapping.md` |

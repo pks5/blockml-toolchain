@@ -1,0 +1,28 @@
+<!--
+  BlockML Core — read-first relation
+
+  FQN: org.blockml.bml.relation.ReadFirst
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:relation="org.blockml.bml.relation">
+
+  <idea>Curated entry in a bootstrap or learning reading path — read before exploring further.</idea>
+
+  <documentation>Use on &lt;see&gt; entries in Bootstrap README blocks and other library entry points
+    to declare mental learning order. ReadFirst entries should appear first in &lt;references&gt;,
+    in reading order. Replaces a separate readFirst aggregation — one references mechanism for
+    all cross-links.</documentation>
+
+  <name>ReadFirst</name>
+  <type>
+    <relation:ReadFirst />
+  </type>
+  <baseType>
+    <core:Relation />
+  </baseType>
+</block>

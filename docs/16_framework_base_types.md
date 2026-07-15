@@ -277,16 +277,23 @@ in child blocks.
 FQN             org.blockml.bml.definition.StructuralDefinition.Reference (Sub-Block — not a top-level library export)
 baseType        org.blockml.bml.core.Entity
 bml:xml         see                — renders as <see> inside <references>
-block           QName (prefix:Name) — Block or Definition via xmlns prefix; XML block attribute
+block           QName (prefix:Name) — Block or Definition type via xmlns prefix; XML block attribute; or Block FQN qualifier with member attribute
 file            String             — repository markdown file; XML file attribute
 url             String             — external URL; XML url attribute
+property        String             — PropertyDefinition canonical path; XML property attribute
+aggregation     String             — AggregationDefinition canonical path; XML aggregation attribute
+association     String             — AssociationDefinition canonical path; XML association attribute
+capability      String             — CapabilityDefinition canonical path; XML capability attribute
+relation        Relation           — optional; relationship category; XML relation attribute; default SeeAlso
 language        NaturalLanguage    — optional; prose language override for context text
 context         String (required)  — relationship note; XML text content
 ```
 
-Exactly one of `block`, `file`, or `url` must be set.
+Exactly one target kind among `block` (standalone), `file`, `url`, `property`, `aggregation`, `association`, and `capability` must be set. Split form: `block=` + one member attribute resolves to a canonical member path — `block` is not stored as a type target. `relation` is optional — omitted → `org.blockml.bml.relation.SeeAlso`. Unqualified names on `relation=` resolve via `org.blockml.bml.relation.*`.
 
-**Design note:** Three mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see block="…">` (type reference), `<see file="…">` (repository doc), `<see url="…">` (web address). Humans and LLMs classify each reference from element shape alone without inferring kind from value syntax. See `02_mbml.md` — `<references>` — Why three attributes.
+Standard relation blocks (`org.blockml.bml.relation.*`): `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`. Abstract base: `org.blockml.bml.core.Relation`.
+
+**Design note:** Seven mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see block="…">` (type), `<see file="…">` (doc), `<see url="…">` (web), `<see property="…">` (member). Member values are canonical definition paths in the BOM. See `02_mbml.md` — `<references>` — Why separate target attributes.
 
 Authoring: list only targets **relevant to the current definition**; text body describes the relationship. All cross-links belong in `<references>` — never in `<documentation>`. See `02_mbml.md` — `<documentation>` · `<references>`.
 
@@ -375,8 +382,10 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
 1. @blockml/core BML                    ← BlockML describes BlockML
      org/blockml/bml/core/Block.bml
      org/blockml/bml/core/Status.bml
-     org/blockml/bml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
+     org/blockml/bml/core/Relation.bml
      org/blockml/bml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
+     org/blockml/bml/relation/SeeAlso.bml · ReadFirst.bml · Extends.bml · Requires.bml · ContrastsWith.bml · AuthoringGuide.bml · Defines.bml · DeepDive.bml
+     org/blockml/bml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
      org/blockml/bml/core/Constraint.bml
      org/blockml/bml/constraint/*.bml        ← ValueConstraint, StructuralConstraint, BlockConstraint, Min, …
      org/blockml/bml/core/Validation.bml

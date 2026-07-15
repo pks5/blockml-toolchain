@@ -1,0 +1,27 @@
+<!--
+  BlockML Core — deep-dive relation
+
+  FQN: org.blockml.bml.relation.DeepDive
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:relation="org.blockml.bml.relation">
+
+  <idea>Target provides extended background — optional depth beyond the current documentation.</idea>
+
+  <documentation>Use for file= or url= targets with long-form prose the reader may skip on first
+    pass. Distinct from Requires (mandatory) and AuthoringGuide (procedural). Typical for architecture
+    documents, WOT foundation, or specification deep-dives.</documentation>
+
+  <name>DeepDive</name>
+  <type>
+    <relation:DeepDive />
+  </type>
+  <baseType>
+    <core:Relation />
+  </baseType>
+</block>

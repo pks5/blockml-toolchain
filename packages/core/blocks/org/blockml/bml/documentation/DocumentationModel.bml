@@ -46,10 +46,20 @@
       files, and external URLs — each with an explicit relationship note
     • Do not repeat cross-links in documentation prose
 
-    see target attributes (exactly one required):
-    block="core:ValueType" — Block or Definition via xmlns prefix
+    see target attributes — exactly one target kind:
+    block="core:ValueType" — Block or Definition type via xmlns prefix
     file="02_mbml.md" — repository documentation file
     url="https://…" — external URL
+    property="com.foo.Bar.properties.width" — PropertyDefinition canonical path
+    aggregation="com.foo.Bar.aggregations.parts" — AggregationDefinition canonical path
+    association="com.foo.Bar.associations.parent" — AssociationDefinition canonical path
+    capability="com.foo.Bar.capabilities.render" — CapabilityDefinition canonical path
+    Split form: block="com.foo.Bar" property="width" → com.foo.Bar.properties.width in BOM.
+
+    relation attribute (optional) — Block reference to org.blockml.bml.relation.*; unqualified
+    names resolve via implicit namespace org.blockml.bml.relation.*. Omitted =
+    org.blockml.bml.relation.SeeAlso. Standard blocks: SeeAlso, ReadFirst, Extends, Requires,
+    ContrastsWith, AuthoringGuide, Defines, DeepDive.
 
     README blocks (baseType org.blockml.bml.core.Bootstrap) expose readFirst — an ordered list of
     Documentation block instances for mental bootstrap reading order. Documentation blocks
@@ -78,8 +88,11 @@
     <see block="core:Definition">
       Definition branch — shared documentation aggregations.
     </see>
-    <see block="def:StructuralDefinition">
+    <see block="def:StructuralDefinition" relation="Defines">
       Documentation property and Change, Example, Reference sub-blocks on StructuralDefinition.
+    </see>
+    <see block="core:Relation" relation="Defines">
+      Relation branch — optional relation attribute on see entries.
     </see>
     <see block="core:Documentation">
       Abstract base for narrative documentation blocks in readFirst lists.

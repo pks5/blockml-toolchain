@@ -1,0 +1,32 @@
+<!--
+  BlockML Core — documentation reference relation branch
+
+  FQN: org.blockml.bml.core.Relation
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core">
+
+  <idea>Semantic category of a cross-reference — how the target relates to the current definition.</idea>
+
+  <documentation>Abstract branch for relation blocks on &lt;see&gt; entries in &lt;references&gt;.
+    Relation values are Block references following the Everything-is-a-Block principle.
+    Standard implementations live in org.blockml.bml.relation.*; domain libraries may define
+    additional relation blocks. Implicit default when omitted on &lt;see&gt;:
+    org.blockml.bml.relation.SeeAlso. The relation attribute encodes relationship kind at the
+    read site — orthogonal to target attributes block, file, and url. Unqualified names on
+    relation= resolve via implicit namespace org.blockml.bml.relation.*.</documentation>
+
+  <name>Relation</name>
+  <type>
+    <core:Relation />
+  </type>
+  <baseType>
+    <core:Block />
+  </baseType>
+  <abstract>true</abstract>
+
+</block>

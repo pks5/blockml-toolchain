@@ -57,7 +57,11 @@
     readOnly attributes on member elements.</documentation>
 
   <references>
-    <see file="12_bom_object_model.md">
+    <see block="core:Block" property="language" relation="Defines">
+      Example property member reference — split form resolves to
+      org.blockml.bml.core.Block.properties.language.
+    </see>
+    <see file="12_bom_object_model.md" relation="AuthoringGuide">
       MemberDefinitionBase and member kind unions in the BOM.
     </see>
     <see file="02_mbml.md">

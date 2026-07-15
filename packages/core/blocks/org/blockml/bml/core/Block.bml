@@ -55,43 +55,49 @@
   </documentation>
 
   <references>
-    <see block="core:ValueType">
+    <see block="core:ValueType" relation="Extends">
       Property and capability payload types.
     </see>
-    <see block="core:Language">
+    <see block="core:Language" relation="Extends">
       Implementation language bindings and NaturalLanguage branch.
     </see>
-    <see block="core:Status">
+    <see block="core:Status" relation="Extends">
       Lifecycle status references.
     </see>
-    <see block="core:Constraint">
+    <see block="core:Relation" relation="Extends">
+      Cross-reference relationship categories on see entries.
+    </see>
+    <see block="core:Constraint" relation="Extends">
       Property validation constraints.
     </see>
-    <see block="core:Capability">
+    <see block="core:Capability" relation="Extends">
       Capability implementation contracts.
     </see>
-    <see block="core:Definition">
+    <see block="core:Definition" relation="Extends">
       Meta-model for block structure (WIP).
     </see>
-    <see block="def:StructuralDefinition">
+    <see block="core:Block" property="language" relation="Defines">
+      NaturalLanguage property — documentation prose default on every block.
+    </see>
+    <see block="def:StructuralDefinition" relation="Defines">
       Shared documentation model for structural definition elements.
     </see>
-    <see block="mbcore:Block">
+    <see block="mbcore:Block" relation="SeeAlso">
       Example domain base — domain-specific branches extend Block.
     </see>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Block and Block Instance — fundamental architecture principles.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Block Definition — idea, documentation, and documentation extensions.
     </see>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Root Type Exception and Definition Branch.
     </see>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Everything is a Block — type system overview.
     </see>
-    <see file="19_definition_blocks_and_bml_xml.md">
+    <see file="19_definition_blocks_and_bml_xml.md" relation="AuthoringGuide">
       Definition branch bml:xml serialization rules.
     </see>
   </references>
