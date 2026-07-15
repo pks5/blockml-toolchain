@@ -54,7 +54,7 @@ This is a step toward **BML self-hosting** (Phase 2/3 in `01_system.md`): BlockM
 | `<genericTypes>` | Meta-model generic parameters may use `baseType="org.blockml.bml.core.Definition"` (e.g. parameter `D` on a Block that describes definition elements) |
 | Validator | `definitionBranch === "definitionBlock"` when `baseType` chain includes `core.Definition` |
 
-**Future note:** Core branch types may later shift from `baseType` inheritance toward interface-style markers. Today, inheritance via `baseType` remains normative.
+**Design note:** Framework core branch types (`core.Definition`, `core.ValueType`, …) remain **`baseType` markers**. Domain interface-style bounds use `<contracts>` and `satisfiesTypeBound` — see `17_type_system_bml.md` — baseType vs contracts.
 
 Definition blocks live in the `org.blockml.bml.definition.*` package branch.
 

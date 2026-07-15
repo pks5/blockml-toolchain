@@ -149,9 +149,11 @@ Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 Lists contract Block references merged into this Block (root block only).
 Each child element is a direct Block reference (element name = FQN via xmlns prefix).
 Same container pattern as <languages> and <subTypes> — no wrapper <contract> element.
+Role            — member merge + type-bound identification (satisfiesTypeBound); see 17_type_system_bml.md
 Omitted = inherit from baseType at validate
 Duplicate reference → BML_DUPLICATE_CONTRACT
 <contracts> on Sub-Block → BML_CONTRACT_NOT_ON_ROOT
+Core branch types (ValueType, Entity, Language, …) are baseType markers — not duplicated as interface contracts
 ```
 
 See `02_mbml.md` — Contracts · `00_bom_core.md` — Contracts.
@@ -167,7 +169,7 @@ See `02_mbml.md` — Contracts · `00_bom_core.md` — Contracts.
 ```text
 Declares type parameters on this Block (root block only)
 Element name  — parameter identifier used in type references (e.g. type="T")
-baseType      — FQN constraint; concrete type arguments must inherit from this branch
+baseType      — FQN constraint; concrete type arguments must satisfy this bound via satisfiesTypeBound
 Usage         — com.foo.Box<org.blockml.bml.type.Integer> at reference sites
 Validator     — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
 
@@ -210,7 +212,7 @@ Validator              — definitionBranch = "definitionBlock" when baseType ch
 bml:xml                — permitted on all blocks whose baseType chain includes core.Definition
 ```
 
-**Future note:** Core branch types may migrate from `baseType` inheritance to interface-style identification. Today, `baseType` chains remain normative — `core.Definition` is the Definition-branch root marker under `core.Block`.
+**Design note:** Framework core branch types remain **`baseType` markers** (`ValueType`, `Entity`, `Language`, …). Domain interface-style polymorphism uses **`<contracts>`** and **`satisfiesTypeBound`** — see `17_type_system_bml.md` — baseType vs contracts. Core branch types are not duplicated as interface contracts in `@blockml/core`.
 
 Source: `packages/core/blocks/org/blockml/bml/core/Definition.bml`
 
@@ -248,7 +250,9 @@ Source:        packages/core/blocks/org/blockml/bml/definition/StructuralDefinit
 `abstract`, `final`, and `override` are local declaration properties — not inherited. On block
 definitions, `abstract` and `final` control type instantiability and extensibility. On member
 declarations, `abstract="true"` marks an incomplete local declaration that creates an implementation
-obligation for concrete descendants. `override="true"` must be set on every redeclaration layer.
+obligation for concrete descendants. `override="true"` must be set on every local redeclaration
+that merges with a baseType or contract member — including contract completion. Omission →
+`BML_OVERRIDE_REQUIRED`.
 A locally concrete override (abstract defaults to false) satisfies an abstract implementation obligation
 when complete for the member kind. To keep a member abstract in a child block, explicitly declare
 `abstract="true"` on that redeclaration. `final="true"` on any declaring layer prevents redeclaration

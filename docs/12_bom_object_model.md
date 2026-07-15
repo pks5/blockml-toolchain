@@ -196,7 +196,7 @@ interface BlockDefinition {
 
   /**
    * Generic type parameters declared on this Block (e.g. T on Box<T>).
-   * Each parameter has a name and a baseType constraint (must inherit from that ValueType branch).
+   * Each parameter has a name and a baseType constraint (must satisfy via satisfiesTypeBound).
    */
   genericTypes?: GenericType[]
 
@@ -251,7 +251,7 @@ interface BlockDefinition {
 interface GenericType {
   /** Parameter name (e.g. T) — substituted in type references within this Block */
   name: string
-  /** FQN constraint — each concrete type argument must inherit from this baseType */
+  /** FQN constraint — each concrete type argument must satisfy this bound via satisfiesTypeBound */
   baseType: string
 }
 ```
@@ -586,7 +586,7 @@ Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" 
 
 Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` on any declaring layer prevents redeclaration. `readOnly="true"` prevents instance authoring only — child Block definitions may still override the value/composition.
 
-`abstract`, `final`, and `override` are local declaration properties stored on each declaration layer — not merged or inherited. Semantic effects propagate: an `abstract="true"` declaration creates an implementation obligation until a descendant provides a locally complete concrete override (`abstract` defaults to false). To keep a member abstract in a child block, explicitly declare `abstract="true"` on that redeclaration. Each redeclaration must set `override="true"` again.
+`abstract`, `final`, and `override` are local declaration properties stored on each declaration layer — not merged or inherited. Semantic effects propagate: an `abstract="true"` declaration creates an implementation obligation until a descendant provides a locally complete concrete override (`abstract` defaults to false). To keep a member abstract in a child block, explicitly declare `abstract="true"` on that redeclaration. Each redeclaration must set `override="true"` again when merging with a baseType or contract member — including contract completion. Omission → `BML_OVERRIDE_REQUIRED`.
 
 An override that is locally concrete and complete for the member kind satisfies an abstract implementation obligation. An override that keeps the member abstract declares `abstract="true"` explicitly and may omit required fields locally — obligation passes to descendants.
 
@@ -640,6 +640,36 @@ function resolveContractMembers(
 ```
 
 For each FQN in `block.contracts[]`, declared members are merged in order. The Block's own declared members are merged last. Merge semantics match `baseType` partial overrides — same member kind required; only specified attributes replace prior values.
+
+### Type bounds — satisfiesTypeBound (not stored in BOM)
+
+Type-bound checks are separate from member merge and branch detection. See `17_type_system_bml.md` — baseType vs contracts.
+
+```typescript
+/** @blockml/core — not part of BomDocument */
+function inBranch(blockFqn: string, branchFqn: string, registry: TypeRegistry): boolean
+// Walk blockFqn's baseType chain toward org.blockml.bml.core.Block.
+// Return true when branchFqn appears on the chain.
+// contracts[] is NOT consulted.
+
+/** @blockml/core — not part of BomDocument */
+function satisfiesTypeBound(
+  blockFqn: string,
+  boundFqn: string,
+  registry: TypeRegistry
+): boolean
+// Return true when:
+//   boundFqn is on blockFqn's baseType chain, OR
+//   boundFqn is listed directly in block.contracts[] on blockFqn's BlockDefinition.
+// V1: no transitive closure through a contract Block's own contracts[].
+```
+
+```text
+inBranch            — Property/Capability ValueType branch, Definition branch, branch rule table
+satisfiesTypeBound  — genericTypes baseType constraints, generic type arguments, FullyQualifiedName(B)
+```
+
+Framework core branch FQNs (`org.blockml.bml.core.ValueType`, `Entity`, `Language`, …) are satisfied via **`inBranch`** / baseType chain only — they are not duplicated as interface contracts in `@blockml/core`.
 
 ---
 
@@ -1358,11 +1388,14 @@ BML_PRIVATE_SUBBLOCK_ACCESS   — private Sub-Block referenced outside declaring
 BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritance context
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_OVERRIDE_WITHOUT_PARENT   — override="true" but no same-named parent member
+BML_OVERRIDE_REQUIRED         — local redeclaration merges with baseType or contract member but override omitted
 BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — unsatisfied abstract implementation obligation on a concrete block
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular basePresets chain
+BML_GENERIC_CONSTRAINT_VIOLATION — generic type argument fails satisfiesTypeBound
+BML_TYPE_BOUND_NOT_SATISFIED    — type reference fails satisfiesTypeBound (non-generic bound site)
 BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
 BML_CONTRACT_NOT_ON_ROOT      — <contracts> on Sub-Block
 BML_DUPLICATE_CONTRACT        — same type listed twice in block.contracts[]

@@ -360,7 +360,8 @@ visibility="protected"     → visibility (optional; derived from name when omit
 readOnly="true"            → readOnly (validator-enforced on instances — see 02_mbml.md § readOnly Members)
 abstract="true"            → abstract (local declaration property — not inherited)
 final="true"               → final (local declaration property — not inherited)
-override="true"            → override (local declaration property — not inherited; required on each redeclaration)
+override="true"            → override (local declaration property — not inherited; required on each
+                             redeclaration that merges with a baseType or contract member)
 <documentation>…           → documentation
 <since>…                   → since
 <changelog>…               → changelog[]
@@ -697,7 +698,9 @@ The `composition aggregation="…"` attribute is **removed** — aggregations ar
        baseType chain members
      → contract members (in block.contracts[] order; later overrides earlier)
      → Block local declarations (override all)
-     Same partial-override rules as baseType inheritance
+     Same partial-override rules as baseType inheritance; override="true" required on every local
+     redeclaration that merges with a baseType or contract member → BML_OVERRIDE_REQUIRED
+  → satisfiesTypeBound checks on generic constraints and other type-bound sites (stage [8])
 ```
 
 ```text
@@ -706,6 +709,10 @@ BML_CONTRACT_NOT_ON_ROOT          — <contracts> on Sub-Block
 BML_DUPLICATE_CONTRACT            — same type listed twice in block.contracts[]
 BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
 BML_FINAL_MEMBER_OVERRIDE         — override attempted on final member (from contract or baseType)
+BML_OVERRIDE_REQUIRED             — local redeclaration merges with baseType or contract member but override omitted
+BML_OVERRIDE_WITHOUT_PARENT       — override="true" but no same-named parent member
+BML_GENERIC_CONSTRAINT_VIOLATION  — generic type argument fails satisfiesTypeBound
+BML_TYPE_BOUND_NOT_SATISFIED      — type reference fails satisfiesTypeBound
 BML_READONLY_MEMBER_WRITE         — Block instance sets a member with readOnly=true
 ```
 

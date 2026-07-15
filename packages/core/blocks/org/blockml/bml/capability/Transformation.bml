@@ -18,10 +18,10 @@
   <type>cap:Transformation</type>
   <baseType>core:Capability</baseType>
   <properties>
-    <_hasInput>
+    <_hasInput override="true">
       <value>true</value>
     </_hasInput>
-    <_hasOutput>
+    <_hasOutput override="true">
       <value>true</value>
     </_hasOutput>
   </properties>

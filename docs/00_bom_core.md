@@ -593,6 +593,15 @@ A Block is a **semantic definition**, not a runtime class. Its internal structur
 
 A **contract** is a **reusable partial definition** of a Block — not a pure interface, but a fragment that can be composed into concrete Blocks. Contracts replace the separate concepts of interfaces, traits, and mixins in classical OOP.
 
+BlockML uses **two complementary mechanisms** (Option 2 — see `17_type_system_bml.md` — baseType vs contracts):
+
+```text
+baseType chain   — framework taxonomy, structural inheritance, branch detection (inBranch)
+contracts[]      — domain cross-cutting definitions, member mixin, type-bound identification (satisfiesTypeBound)
+```
+
+Framework core branch types (`org.blockml.bml.core.ValueType`, `Entity`, `Language`, …) are **`baseType` markers only** — not duplicated as interface contracts in `@blockml/core`. Domain libraries introduce contract Blocks (e.g. `com.foo.IIdentifiable`) where cross-cutting behaviour or polymorphic type bounds are needed.
+
 A contract Block may define any subset of:
 
 ```text
@@ -634,6 +643,8 @@ Merge rules (identical to `baseType` partial overrides):
 Later contracts override earlier ones          — last contract wins on conflicts
 The Block overrides all contracts              — local declarations win always
 Only explicitly specified attributes override  — omitted attributes are preserved
+Local redeclarations merging with a baseType or contract member must declare
+  override="true" (including contract completion) → BML_OVERRIDE_REQUIRED
 final="true" members cannot be overridden      → BML_FINAL_MEMBER_OVERRIDE
 Same member kind required for overrides        → BML_CONTRACT_MEMBER_KIND_MISMATCH
 ```
@@ -651,7 +662,7 @@ Same member kind required for overrides        → BML_CONTRACT_MEMBER_KIND_MISM
   <com.foo:IIdentifiable/>
 </contracts>
 <properties>
-  <id>
+  <id override="true">
     <documentation>Unique identifier</documentation>
     <constraints>…</constraints>
   </id>
@@ -659,6 +670,23 @@ Same member kind required for overrides        → BML_CONTRACT_MEMBER_KIND_MISM
 ```
 
 Effective member `id`: `type` from the contract; `documentation` and `constraints` from the Block.
+
+### Contracts as type-bound identifiers
+
+A Block **implements** each FQN in its `<contracts>` list for **type-bound** validation — in addition to member merge. The validator resolves bounds via **`satisfiesTypeBound(T, G)`**:
+
+```text
+satisfiesTypeBound(T, G)  ⇔  G on T's baseType chain  OR  G ∈ T.contracts[]  (direct only in V1)
+```
+
+**`satisfiesTypeBound`** applies to generic parameter constraints, `FullyQualifiedName(B)` bounds, and other type-bound reference sites. **`inBranch`** (framework branch rules — Property types, Definition branch, branch table in `17_type_system_bml.md`) walks the **`baseType` chain only** — contracts do not substitute for core branch markers.
+
+```text
+org.blockml.bml.type.Integer  →  inBranch(Integer, core:ValueType)           via baseType chain
+com.foo.Money                 →  satisfiesTypeBound(Money, com.foo:IValueType)  via contracts[]
+```
+
+Mismatch → `BML_GENERIC_CONSTRAINT_VIOLATION` or `BML_TYPE_BOUND_NOT_SATISFIED`. See `17_type_system_bml.md` — Contracts as type-bound identifiers · `12_bom_object_model.md`.
 
 Contract members are **merged into** the effective member set by `resolveEffectiveMembers()` — they are not validated as a separate superset check. Merge resolution runs at stage [8] (semantic validation), after the contract Block definitions themselves are resolved.
 
@@ -1278,7 +1306,7 @@ children      — ordered list of child Block instances (each may contain nested
 ```text
 <composition> must always be nested inside an aggregation member element — never standalone.
 New aggregation declaration     → type required on the aggregation element
-Inherited aggregation override  → type omitted; aggregation element + <composition> only
+Inherited aggregation override  → override="true" required; type may be omitted; aggregation element + <composition> only
 Standalone <composition>        → BML_STANDALONE_COMPOSITION (validation error)
 ```
 

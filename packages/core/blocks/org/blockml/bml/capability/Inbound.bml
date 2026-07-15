@@ -18,7 +18,7 @@
   <type>cap:Inbound</type>
   <baseType>core:Capability</baseType>
   <properties>
-    <_hasInput>
+    <_hasInput override="true">
       <value>true</value>
     </_hasInput>
   </properties>

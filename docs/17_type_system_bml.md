@@ -336,7 +336,8 @@ Types are Blocks          — no separate type language construct
 Primitives are pure types — semantics only; no value member on PrimitiveType
 StructTypes describe layout — properties define data structure; values live in Properties
 Enums are StructTypes     — _values aggregation adds finite allowed values
-Contracts are Blocks      — reusable partial definitions merged via <contracts>
+baseType vs contracts     — baseType: framework taxonomy (extends); contracts: domain cross-cutting (implements)
+Contracts are Blocks      — reusable partial definitions merged via <contracts>; also type-bound identifiers
 Generics parametrize Blocks — `<genericTypes>` + type arguments at reference sites
 PrimitiveEntity defines the abstract generic base — concrete *Entity types wrap primitives in composition
 ```
@@ -1053,7 +1054,7 @@ At reference sites:
 <property name="values" type="com.foo.Box(org.blockml.bml.type.Integer)"/>
 ```
 
-At validate time the compiler substitutes each placeholder (`T`) with the concrete type argument. Each argument must satisfy the parameter's `baseType` constraint (`BML_GENERIC_CONSTRAINT_VIOLATION` on mismatch).
+At validate time the compiler substitutes each placeholder (`T`) with the concrete type argument. Each argument must satisfy the parameter's `baseType` constraint via **`satisfiesTypeBound`** (`BML_GENERIC_CONSTRAINT_VIOLATION` on mismatch).
 
 Generic parameters (`T`) and `bml:Self` in type positions are type-expression references — resolved from the defining Block's `<genericTypes>` or effective Block type respectively.
 
@@ -1102,6 +1103,31 @@ A generic parameter name must be a distinct identifier — not the Block name, n
 
 ---
 
+## baseType vs contracts
+
+BlockML uses **two complementary mechanisms** — analogous to Java `extends` and `implements`:
+
+```text
+<baseType>     — exactly one inheritance chain (is-a, framework taxonomy, structural inheritance)
+<contracts>    — zero or more contract references (domain cross-cutting, member mixin, type bounds)
+```
+
+| Mechanism | Role | Java analogue |
+|---|---|---|
+| **`baseType` chain** | Framework branches (`ValueType`, `Entity`, `Language`, …), shared definition structure, **`inBranch()`** checks | `extends AbstractBaseClass` |
+| **`<contracts>`** | Reusable partial definitions, optional Capability defaults, **`satisfiesTypeBound()`** checks | `implements Interface` |
+
+**Authoring rule:**
+
+```text
+Framework taxonomy and branch classification     →  baseType
+Domain cross-cutting contracts and polymorphic bounds  →  contracts
+```
+
+Framework core branch types (`org.blockml.bml.core.ValueType`, `Entity`, `Language`, `Constraint`, …) remain **`baseType` markers only**. They are **not** duplicated as separate interface contracts in `@blockml/core`. Domain libraries define their own contract Blocks (e.g. `com.foo.IIdentifiable`, `com.foo.IRender`) where cross-cutting behaviour or polymorphic bounds are needed.
+
+---
+
 ## Contracts
 
 Blocks may compose zero or more **contracts** — reusable partial Block definitions whose member fragments are merged into the effective definition:
@@ -1113,11 +1139,78 @@ Blocks may compose zero or more **contracts** — reusable partial Block definit
 </contracts>
 ```
 
-A contract Block may declare any subset of Properties, Aggregations, Associations, Capabilities, Constraints, Suggestions, documentation, examples, references, and optional default Capability implementations. Members may be **partial** — e.g. a contract supplies only `type`, and the concrete Block adds defaults, constraints, and documentation.
+A contract Block may declare any subset of Properties, Aggregations, Associations, Capabilities, Constraints, Suggestions, documentation, examples, references, and optional default Capability implementations. Members may be **partial** — e.g. a contract supplies only `type`, and the concrete Block adds defaults, constraints, and documentation. Local redeclarations that complete or refine contract members must declare `override="true"` — same rule as baseType partial overrides (`BML_OVERRIDE_REQUIRED` when omitted).
 
 Effective members are resolved by merging in order: `baseType` chain → contracts (declaration order) → local Block declarations. Later contracts override earlier ones; the Block overrides all. Only explicitly specified attributes are replaced; `final` members cannot be overridden. `subBlocks`, `embeddedBlocks`, and `compositions` on contract types are ignored.
 
-See `00_bom_core.md` — Contracts.
+### Contracts as type-bound identifiers
+
+In addition to member merge, a Block **implements** each contract listed in its `<contracts>` container for **type-bound** checks. A concrete type argument or reference satisfies a bound **G** when **`satisfiesTypeBound(T, G)`** is true:
+
+```text
+satisfiesTypeBound(T, G)  ⇔
+  G appears on the baseType chain of T
+  OR  G appears directly in T.contracts[]
+```
+
+V1: only **direct** `contracts[]` entries count — no transitive closure through a contract Block's own `contracts[]`.
+
+**Uses `satisfiesTypeBound`:**
+
+```text
+<genericTypes> parameter baseType="…" constraints
+Generic type arguments at reference sites (Box(Integer), FullyQualifiedName(…), …)
+FullyQualifiedName(B) / FullyQualifiedName(B, D) — parameter B and D
+```
+
+**Uses `inBranch` (baseType chain only — contracts ignored):**
+
+```text
+Property type must resolve to ValueType branch
+Capability inputType / outputType must resolve to ValueType branch
+Definition branch (core:Definition) detection
+Validation Rules by Branch table (composition forbidden on Language, …)
+Framework branch classification in TypeRegistry
+```
+
+```typescript
+/** @blockml/core — not part of BomDocument */
+function inBranch(blockFqn: string, branchFqn: string): boolean
+// true when branchFqn appears on blockFqn's baseType chain (walk toward core:Block)
+
+function satisfiesTypeBound(blockFqn: string, boundFqn: string): boolean
+// true when boundFqn is on the baseType chain OR listed directly in block.contracts[]
+```
+
+**Example — domain type bound via contract:**
+
+```xml
+<!-- com.foo.IValueType.bml — domain contract (not a core branch duplicate) -->
+<block>
+  <name>IValueType</name>
+  <type>com.foo.IValueType</type>
+  <baseType>org.blockml.bml.core.Block</baseType>
+  <abstract>true</abstract>
+</block>
+
+<!-- com.foo.Money.bml — Entity outside the ValueType hierarchy, but bound-satisfying -->
+<block>
+  <name>Money</name>
+  <baseType>org.blockml.bml.core.Entity</baseType>
+  <contracts><com.foo:IValueType/></contracts>
+</block>
+
+<!-- Generic bound -->
+<genericTypes>
+  <T baseType="com.foo:IValueType"/>
+</genericTypes>
+```
+
+`org.blockml.bml.type.Integer` satisfies `core:ValueType` via **`inBranch`** (baseType chain). `com.foo.Money` satisfies `com.foo.IValueType` via **`contracts[]`**. Both satisfy their respective bounds through **`satisfiesTypeBound`**.
+
+Mismatch at a bound reference site → `BML_GENERIC_CONSTRAINT_VIOLATION` (generic arguments) or `BML_TYPE_BOUND_NOT_SATISFIED` (other bound checks).
+
+See `00_bom_core.md` — Contracts · `12_bom_object_model.md` — satisfiesTypeBound.
 
 ---
 
@@ -1168,7 +1261,7 @@ Only **`org.blockml.bml.core.Block`** omits `<baseType>`. Every other definition
 
 ## Validation Rules by Branch
 
-Branch is derived by walking the `baseType` chain until a branch marker is found:
+Branch is derived by walking the **`baseType` chain only** — `contracts[]` does not participate in branch detection. Walk until a branch marker is found:
 
 ```text
 … → ValueType → Block           value type branch

@@ -18,7 +18,7 @@
   <type>cap:Outbound</type>
   <baseType>core:Capability</baseType>
   <properties>
-    <_hasOutput>
+    <_hasOutput override="true">
       <value>true</value>
     </_hasOutput>
   </properties>

@@ -24,8 +24,8 @@
 
     Used as a generic constraint — for example parameter D on org.blockml.bml.type.FullyQualifiedName
     (baseType core:Definition, defaultType def:BlockDefinition) and in genericTypes entries that
-    constrain definition-element references. Core branch types may later migrate from baseType
-    inheritance to interface-style identification; today baseType chains remain normative.</documentation>
+    constrain definition-element references. Framework core branch types remain baseType markers;
+    domain interface-style type bounds use contracts and satisfiesTypeBound — see 17_type_system_bml.md.</documentation>
 
   <name>Definition</name>
   <type>core:Definition</type>

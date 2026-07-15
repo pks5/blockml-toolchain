@@ -85,6 +85,8 @@ resolveEffectiveMembers(block, registry)  → EffectiveMemberSet
 resolveType(typeFqn, registry)          → TypeDescriptor
 resolveReference(ref, bom, registry)    → ResolvedReference
 resolveContracts(block, registry)       → EffectiveMemberSet  (contract merge slice; used by resolveEffectiveMembers)
+inBranch(blockFqn, branchFqn, registry) → boolean  (baseType chain only — branch rules)
+satisfiesTypeBound(blockFqn, boundFqn, registry) → boolean  (baseType chain OR direct contracts[])
 resolveGenerics(typeExpr, registry)     → ResolvedTypeExpr
 parseExpression(raw, context)           → ExpressionNode + resultTypeFqn
 evaluateExpression(ast, context)        → evaluated value (working model)
@@ -536,6 +538,7 @@ BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritanc
 BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT — members differ only by visibility prefix (normalized name collision)
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
 BML_OVERRIDE_WITHOUT_PARENT   — override="true" but no same-named parent member
+BML_OVERRIDE_REQUIRED         — local redeclaration merges with baseType or contract member but override omitted
 BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — abstract member on a concrete block (must be explicitly implemented via abstract="false")
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
@@ -547,6 +550,8 @@ BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
 BML_CONTRACT_NOT_ON_ROOT      — <contracts> declared on a Sub-Block
 BML_DUPLICATE_CONTRACT        — same contract Block referenced twice
 BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
+BML_GENERIC_CONSTRAINT_VIOLATION  — generic type argument fails satisfiesTypeBound
+BML_TYPE_BOUND_NOT_SATISFIED      — type reference fails satisfiesTypeBound
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
 BML_CONSTRAINT_UNKNOWN        — constraint Block type not in TypeRegistry or not a Constraint sub-type
 BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with bound target type

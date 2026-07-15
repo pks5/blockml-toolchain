@@ -57,7 +57,7 @@
   <baseType>def:SubBlockDefinition</baseType>
 
   <properties>
-    <definition type="FullyQualifiedName(def:RootBlockDefinition)">
+    <definition override="true" type="FullyQualifiedName(def:RootBlockDefinition)">
       <value>def:RootBlockDefinition</value>
       <documentation>Definition meta-model type for this Block's definition document (root block
         and embedded blocks). Selects which fields exist when accessing the definition via bml:Self

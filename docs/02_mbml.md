@@ -844,16 +844,23 @@ Child element — direct Block reference (element name = FQN via xmlns prefix)
 
 ```text
 Role            — reusable partial Block definition (replaces interfaces, traits, mixins)
+                  + type-bound identifier (implements) via satisfiesTypeBound
+baseType role   — framework taxonomy and branch detection (extends) — see 17_type_system_bml.md
 Scope           — Properties, Aggregations, Associations, Capabilities, Constraints,
                   Suggestions, documentation, examples, references, optional Capability defaults
 Ignored         — subBlocks, embeddedBlocks, and compositions on the contract Block
 Partial members — contracts may declare incomplete members; the Block completes them
 Merge order     — baseType chain → contracts (in declaration order) → Block
+Type bounds     — satisfiesTypeBound(T, G): G on baseType chain OR G ∈ T.contracts[] (direct, V1)
+Branch rules    — inBranch() uses baseType chain only; core branch types are not interface duplicates
 Conflict rule   — later contract wins; Block overrides all contracts
 Override rule   — only explicitly specified attributes replace inherited/merged values
+                  local redeclarations that merge with a baseType or contract member must
+                  declare override="true" (including contract completion) → BML_OVERRIDE_REQUIRED
 final           — final members from any layer cannot be overridden
 Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
 Validation      — merge resolution at stage [8] via resolveEffectiveMembers()
+                  type-bound checks at stage [8] via satisfiesTypeBound()
 ```
 
 **Example — contract Block (partial definition):**
@@ -884,14 +891,14 @@ Validation      — merge resolution at stage [8] via resolveEffectiveMembers()
     <com.foo:IPlaceable />
   </contracts>
   <properties>
-    <id>
+    <id override="true">
       <documentation>Unique identifier</documentation>
       <constraints>…</constraints>
     </id>
-    <offset type="type:Vector3D">
+    <offset override="true" type="type:Vector3D">
       <value>[0, 0, 0]</value>
     </offset>
-    <direction type="type:Direction">
+    <direction override="true" type="type:Direction">
       <value>north</value>
     </direction>
   </properties>
@@ -1426,7 +1433,9 @@ override=true  — confirms a deliberate redefinition of an inherited member
 |---|---|---|
 | `abstract="true"` | This declaration is incomplete | Concrete descendants must implement |
 | `final="true"` | This declaration is sealed | Descendants cannot override |
-| `override="true"` | This declaration replaces an inherited member | Parent member must exist |
+| `override="true"` | This declaration replaces an inherited member | Parent member must exist in baseType chain or contracts |
+
+Every local redeclaration that merges with an existing member from the **baseType chain** or from **contracts[]** must declare `override="true"` — including contract member completion. Omission → `BML_OVERRIDE_REQUIRED`. A genuinely new member must not set `override="true"` → `BML_OVERRIDE_WITHOUT_PARENT`.
 
 A member declaration is exactly one of:
 
@@ -1627,8 +1636,11 @@ A legacy `namespace="…"` attribute on a member element → parse error.
 ### Partial Member Overrides
 
 Child Blocks override inherited members with `override="true"` or satisfy abstract implementation
-obligations with a locally complete override. Only the **member name**, the mode flag, and **changed
-attributes** need to be specified — all other attributes are inherited from the parent definition.
+obligations with a locally complete override. The flag is required whenever a local member
+redeclaration merges with an existing member from the **baseType chain** or from **contracts[]** —
+contract completion uses the same rule as baseType refinement. Only the **member name**, the mode
+flag, and **changed attributes** need to be specified — all other attributes are inherited from the
+parent definition.
 
 To refine an inherited abstract member while keeping it abstract, use `override="true"` with
 `abstract="true"`. To implement an inherited abstract member, use `override="true"` without
@@ -1659,14 +1671,16 @@ The effective definition is the **merge** of both declarations. Override matchin
 ```text
 Same member kind required     — property overrides property, aggregation overrides aggregation, …
 Only specified attrs replaced — unspecified attrs inherited from parent
-override="true" required      — for any redeclaration of an inherited member
+override="true" required      — for any local redeclaration merging with a baseType or contract member
+Inherited aggregation override  → override="true" required; type may be omitted
 Private members               — cannot be overridden
 final="true" on parent        — prevents override in child Blocks → BML_FINAL_MEMBER_OVERRIDE
 override without parent       — BML_OVERRIDE_WITHOUT_PARENT
+override omitted on merge     — BML_OVERRIDE_REQUIRED
 abstract member on concrete block → BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED
 ```
 
-The parser stores override declarations in `members[]`; `resolveEffectiveMembers()` merges along the `baseType` chain.
+The parser stores override declarations in `members[]`; `resolveEffectiveMembers()` merges along the `baseType` chain, then contracts, then local declarations.
 
 ### Properties
 
@@ -2109,7 +2123,7 @@ Block instance — recursive inner structure:
 ```text
 <composition> must always be nested inside an aggregation member element — never standalone
 New aggregation declaration     → type required
-Inherited aggregation override  → type omitted
+Inherited aggregation override  → override="true" required; type may be omitted
 Standalone <composition>        → BML_STANDALONE_COMPOSITION (validation error)
 ```
 
@@ -3439,6 +3453,7 @@ protected Sub-Block reference → BML_PROTECTED_SUBBLOCK_ACCESS
 BML_UNKNOWN_NAMESPACE_PREFIX  → member element prefix references undeclared xmlns: prefix
 final member override         → BML_FINAL_MEMBER_OVERRIDE
 override without parent       → BML_OVERRIDE_WITHOUT_PARENT
+override omitted on merge     → BML_OVERRIDE_REQUIRED
 abstract member not implemented → BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED
 readOnly member on instance   → BML_READONLY_MEMBER_WRITE
 type="Foo" (unqualified at general site)  →  BML_UNKNOWN_TYPE (no implicit namespace)
