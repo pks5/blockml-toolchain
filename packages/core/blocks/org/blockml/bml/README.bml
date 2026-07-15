@@ -15,25 +15,97 @@
   <idea>README block for the BlockML core library — bootstrap entry point for humans and LLMs.</idea>
 
   <documentation>
-    README block for the BlockML core library. Start with readFirst — seventeen documentation
-    blocks in mental learning order. The first ten blocks form the BlockML bootstrap: after
-    reading them, most of the core library can be derived from Block definitions themselves.
-    Later blocks cover conventions, organisation, and background knowledge.
+    README block for the BlockML core library. Start with references marked relation=ReadFirst —
+    seventeen documentation blocks in mental learning order. The first ten form the BlockML
+    bootstrap: after reading them, most of the core library can be derived from Block definitions
+    themselves. Later entries cover conventions, organisation, and background knowledge.
+
+    Library.bml points here via the bootstrap aggregation (&lt;blockml:README /&gt;). Tooling filters
+    references where relation=ReadFirst to build a curated context bundle for humans and LLMs.
   </documentation>
 
   <references>
-    <see block="core:Bootstrap" relation="Defines">
-      Abstract base — readFirst aggregation for bootstrap README blocks.
+
+    <see block="doc:Introduction" relation="ReadFirst">
+      Start here — BlockML goals and overview.
     </see>
+
+    <see block="doc:EverythingIsABlock" relation="ReadFirst">
+      Core principle — one root, one registry, one parser; everything is a Block.
+    </see>
+
+    <see block="doc:BlockAndInstance" relation="ReadFirst">
+      Definition, Block, Block instance, and composition — the core mental model.
+    </see>
+
+    <see block="doc:DefinitionModel" relation="ReadFirst">
+      Definition meta-model — idea, members, documentation extensions on block definitions.
+    </see>
+
+    <see block="doc:TypeSystemOverview" relation="ReadFirst">
+      ValueTypes, generics, collections, baseType vs contracts.
+    </see>
+
+    <see block="doc:ValueTypeConfiguration" relation="ReadFirst">
+      ValueType instance configuration on Property type references.
+    </see>
+
+    <see block="doc:CapabilitySemantics" relation="ReadFirst">
+      Inbound, Outbound, Transformation — all behaviour as Capabilities.
+    </see>
+
+    <see block="doc:Expressions" relation="ReadFirst">
+      Expression language, FunctionMapping, and capability call syntax.
+    </see>
+
+    <see block="doc:CompilerArchitecture" relation="ReadFirst">
+      Parser, validator, renderer pipeline — stages and responsibilities.
+    </see>
+
+    <see block="doc:RendererFreedom" relation="ReadFirst">
+      Manifestation is target-defined — BlockML prescribes grammar, not output.
+    </see>
+
+    <see block="doc:LibrarySystem" relation="ReadFirst">
+      Libraries, packages, namespaces, versioning, and _blocks membership.
+    </see>
+
+    <see block="doc:BmlNamespace" relation="ReadFirst">
+      org.blockml.bml.* namespace layout and domain package conventions.
+    </see>
+
+    <see block="doc:DocumentationModel" relation="ReadFirst">
+      idea, documentation, references, examples — the block documentation model.
+    </see>
+
+    <see block="doc:BootstrapModel" relation="ReadFirst">
+      README, Bootstrap role, TypeRegistry bootstrap, and interpretation context.
+    </see>
+
+    <see block="doc:ModelingGuidelines" relation="ReadFirst">
+      Recommended patterns — baseType, contracts, capabilities, constraints.
+    </see>
+
+    <see block="doc:PseudoCode" relation="ReadFirst">
+      PseudoCode as semantic capability implementation dialect.
+    </see>
+
+    <see block="doc:WOTFoundation" relation="ReadFirst">
+      Optional background — Idea, Manifestation, Grammar, World (Web of Things).
+    </see>
+
+    <see block="core:Bootstrap" relation="Defines">
+      Abstract bootstrap role marker — README is one Bootstrap scenario for humans and LLMs.
+    </see>
+
     <see block="blockml:Library" relation="SeeAlso">
       Published catalog of exported framework blocks, types, and services.
     </see>
-    <see block="doc:Introduction" relation="ReadFirst">
-      First readFirst entry — goals and overview of BlockML.
-    </see>
+
     <see file="01_system.md" relation="DeepDive">
-      System architecture and package overview.
+      System architecture and package overview — authoritative prose in V1.
     </see>
+
   </references>
 
   <name>README</name>
@@ -43,30 +115,5 @@
   <baseType>
     <core:Bootstrap />
   </baseType>
-  <abstract>true</abstract>
-
-  <aggregations>
-    <readFirst>
-      <composition>
-        <doc:Introduction />
-        <doc:EverythingIsABlock />
-        <doc:BlockAndInstance />
-        <doc:DefinitionModel />
-        <doc:TypeSystemOverview />
-        <doc:ValueTypeConfiguration />
-        <doc:CapabilitySemantics />
-        <doc:Expressions />
-        <doc:CompilerArchitecture />
-        <doc:RendererFreedom />
-        <doc:LibrarySystem />
-        <doc:BmlNamespace />
-        <doc:DocumentationModel />
-        <doc:BootstrapModel />
-        <doc:ModelingGuidelines />
-        <doc:PseudoCode />
-        <doc:WOTFoundation />
-      </composition>
-    </readFirst>
-  </aggregations>
 
 </block>

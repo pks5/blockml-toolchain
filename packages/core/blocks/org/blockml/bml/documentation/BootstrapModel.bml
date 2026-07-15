@@ -9,9 +9,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:blockml="org.blockml.bml"
+  xmlns:relation="org.blockml.bml.relation"
   xmlns:doc="org.blockml.bml.documentation">
 
-  <idea>README.bml, Bootstrap, readFirst, and interpretation context.</idea>
+  <idea>README.bml, Bootstrap role, references with ReadFirst, and interpretation context.</idea>
 
   <documentation>
     Self-hosting bootstrap: the compiler loads framework BML from @blockml/core (and domain
@@ -19,55 +21,65 @@
     in code.
 
     Bootstrap order (summary):
-    1. Core branches — Block, ValueType, Language, Status, Constraint, Capability, Definition
-    2. Concrete types — Integer, Decimal, languages, services, constraints
+    1. Core branches — Block, ValueType, Language, Status, Relation, Constraint, Capability, Definition
+    2. Concrete types — Integer, Decimal, languages, services, constraints, relations
     3. BlockLibrary — library descriptor base (bootstrap, _dependencies, _subLibraries, _schemas, _blocks)
     4. org.blockml.bml.Library — published catalog via _blocks; bootstrap → README
     5. Domain framework BML (e.g. com.machineblocks.bml.core.*)
 
-    README.bml blocks inherit from org.blockml.bml.core.Bootstrap. Library.bml declares the
-    library entry point via the bootstrap aggregation (typically &lt;blockml:README /&gt;).
-    README blocks serve as library entry points for humans and LLMs — not as composable domain
-    types. The readFirst aggregation lists Documentation block instances in mental learning
-    order; read these before exploring the rest of the library catalog.
+    org.blockml.bml.core.Bootstrap is an abstract role marker — a library or process entry point.
+    org.blockml.bml.README is the standard human/LLM subtype. Library.bml declares the entry via
+    the bootstrap aggregation (typically &lt;blockml:README /&gt;). Other Bootstrap subtypes may
+    follow for agents, CI pipelines, or TypeRegistry loaders.
+
+    Curated reading order lives in &lt;references&gt; on the concrete Bootstrap block — each entry
+    uses relation=ReadFirst with a context note. One mechanism for all cross-links; tooling
+    filters ReadFirst entries to build a context bundle. No separate readFirst aggregation on
+    Bootstrap.
 
     Interpretation context:
     • Framework BML defines what types ARE — TypeRegistry SSOT
     • Renderers interpret what types MEAN for their target — free manifestation
-    • README + readFirst establish shared vocabulary before diving into definitions
-    • After the first ten bootstrap documentation blocks, most of the core library can be
-      derived directly from Block definitions themselves
+    • README references with ReadFirst establish shared vocabulary before diving into definitions
+    • After the first ten ReadFirst documentation blocks, most of the core library can be derived
+      directly from Block definitions themselves
 
     Each registered BlockDefinition from bootstrap is an immutable BomDocument parse result.
   </documentation>
 
   <references>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Bootstrap Order — framework BML load sequence for TypeRegistry.
     </see>
-    <see file="13_bml_to_bom_mapping.md">
+    <see file="13_bml_to_bom_mapping.md" relation="AuthoringGuide">
       TypeRegistry bootstrap — BML registration algorithm.
     </see>
-    <see file="14_compiler_runtime.md">
+    <see file="14_compiler_runtime.md" relation="AuthoringGuide">
       CLI bootstrap — loading framework BML before user projects.
     </see>
-    <see file="01_system.md">
+    <see file="01_system.md" relation="DeepDive">
       Self-hosting bootstrap and BML self-description roadmap (V1/V2/V3).
     </see>
-    <see block="core:BlockLibrary">
+    <see block="core:BlockLibrary" relation="Defines">
       Library descriptor base — bootstrap aggregation links to README.
     </see>
-    <see block="core:Bootstrap">
-      Abstract base for README blocks with readFirst aggregation.
+    <see block="core:Bootstrap" relation="Defines">
+      Abstract bootstrap role marker — no readFirst aggregation.
     </see>
-    <see block="core:Documentation">
-      Base type for entries in readFirst documentation lists.
+    <see block="blockml:README" relation="SeeAlso">
+      Standard human/LLM library entry point — ReadFirst references in mental learning order.
     </see>
-    <see block="doc:Introduction">
-      First readFirst entry — BlockML goals and overview.
+    <see block="core:Documentation" relation="Defines">
+      Base type for documentation blocks listed with relation=ReadFirst.
     </see>
-    <see block="doc:ModelingGuidelines">
-      Next reading step — recommended patterns for modeling Blocks.
+    <see block="relation:ReadFirst" relation="Defines">
+      Relation block for curated bootstrap reading path entries on references.
+    </see>
+    <see block="doc:Introduction" relation="ReadFirst">
+      First ReadFirst entry on org.blockml.bml.README — BlockML goals and overview.
+    </see>
+    <see block="doc:ModelingGuidelines" relation="SeeAlso">
+      Recommended patterns for modeling Blocks — later in the ReadFirst path.
     </see>
   </references>
 

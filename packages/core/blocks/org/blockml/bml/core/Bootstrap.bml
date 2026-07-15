@@ -1,7 +1,7 @@
 <!--
-  BlockML Core — Language branch (capability implementation contract)
+  BlockML Core — library bootstrap entry-point role
 
-  FQN: org.blockml.bml.core.Language
+  FQN: org.blockml.bml.core.Bootstrap
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -10,9 +10,18 @@
                       "
   xmlns:core="org.blockml.bml.core">
 
-  <idea>Abstract base type for all BootstrapBase blocks.</idea>
+  <idea>Abstract role marker — this Block is a library or process entry point.</idea>
 
-  <documentation>Abstract base type for all BootstrapBase blocks.</documentation>
+  <documentation>Abstract branch for bootstrap entry-point blocks. A Bootstrap block declares where
+    a consumer starts — humans, LLMs, TypeRegistry loaders, agents, or automated pipelines.
+    org.blockml.bml.README is the standard human/LLM entry point for libraries; other subtypes may
+    follow for other scenarios (for example agent bootstrap or CI pipeline bootstrap).
+
+    Bootstrap blocks carry the normal documentation model (idea, documentation, references). Curated
+    reading or load order is expressed via &lt;references&gt; with relation=ReadFirst — not via a
+    separate readFirst aggregation. Concrete Bootstrap subtypes add scenario-specific members when
+    needed; the abstract base declares no aggregations.</documentation>
+
   <name>Bootstrap</name>
   <type>
     <core:Bootstrap />
@@ -21,11 +30,5 @@
     <core:Block />
   </baseType>
   <abstract>true</abstract>
-
-  <aggregations>
-    <readFirst type="core:Documentation[]">
-      <documentation>A list of documentation blocks that are read first.</documentation>
-    </readFirst>
-  </aggregations>
 
 </block>

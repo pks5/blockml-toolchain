@@ -9,8 +9,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:blockml="org.blockml.bml"
   xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
+  xmlns:relation="org.blockml.bml.relation"
   xmlns:doc="org.blockml.bml.documentation">
 
   <idea>Block documentation model — idea, documentation, references, examples, README, documentation blocks.</idea>
@@ -61,8 +63,9 @@
     org.blockml.bml.relation.SeeAlso. Standard blocks: SeeAlso, ReadFirst, Extends, Requires,
     ContrastsWith, AuthoringGuide, Defines, DeepDive.
 
-    README blocks (baseType org.blockml.bml.core.Bootstrap) expose readFirst — an ordered list of
-    Documentation block instances for mental bootstrap reading order. Documentation blocks
+    README blocks (baseType org.blockml.bml.core.Bootstrap) are library entry points for humans
+    and LLMs. Curated reading order is expressed via references with relation=ReadFirst — not via
+    a separate readFirst aggregation on Bootstrap. Documentation blocks
     (org.blockml.bml.documentation.*) inherit from org.blockml.bml.core.Documentation.
   </documentation>
 
@@ -97,8 +100,14 @@
     <see block="core:Documentation">
       Abstract base for narrative documentation blocks in readFirst lists.
     </see>
-    <see block="core:Bootstrap">
-      Bootstrap base — readFirst aggregation for README blocks.
+    <see block="core:Bootstrap" relation="Defines">
+      Abstract bootstrap role marker — ReadFirst lives on references, not on Bootstrap.
+    </see>
+    <see block="blockml:README" relation="SeeAlso">
+      Standard README entry point — references with relation=ReadFirst in learning order.
+    </see>
+    <see block="relation:ReadFirst" relation="Defines">
+      Relation block for curated bootstrap reading path entries.
     </see>
     <see block="doc:BootstrapModel">
       Next reading step — README.bml, readFirst, bootstrap context.

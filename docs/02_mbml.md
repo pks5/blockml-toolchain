@@ -3354,7 +3354,7 @@ Physical directories and overlapping package prefixes do not define membership. 
 
 **`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`** are TypeReference aggregations — each child element name resolves to a Block FQN (type reference, not an instance). **`bml:version` is forbidden** — effective version is resolved from library context. See `17_type_system_bml.md` — Empty child elements.
 
-**`bootstrap`** points to the library entry point — typically a `README` block with a `readFirst` documentation list (see `doc:BootstrapModel`). Example on `org.blockml.bml.Library`:
+**`bootstrap`** points to the library entry point — typically a `README` block (`org.blockml.bml.README`). Curated reading order lives in `<references>` with `relation=ReadFirst` (see `doc:BootstrapModel`). Example on `org.blockml.bml.Library`:
 
 ```xml
 <bootstrap>

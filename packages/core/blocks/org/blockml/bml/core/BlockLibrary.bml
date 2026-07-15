@@ -28,7 +28,8 @@
     Concrete Library.bml files inherit from BlockLibrary and declare aggregations explicitly.
 
     Aggregations (each aggregation= attribute is required; none is default):
-    • bootstrap — library entry point (Bootstrap block, typically README)
+    • bootstrap — library entry point (Bootstrap block, typically org.blockml.bml.README).
+      Curated reading order on the concrete Bootstrap block uses references with relation=ReadFirst.
     • _dependencies — other Library blocks this library depends on (typical: inner library
       depends on outer)
     • _subLibraries — nested child Library blocks grouped under this library

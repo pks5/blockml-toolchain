@@ -1741,12 +1741,13 @@ org.blockml.bml.core.BlockLibrary           abstract composable Block
   aggregation  _blocks        Block[]
 
 org.blockml.bml.type.FilePathEntity            value (relative .xsd path)
-org.blockml.bml.core.Bootstrap                 readFirst (Documentation[])
+org.blockml.bml.core.Bootstrap                 abstract role marker — no members
+org.blockml.bml.README                         extends Bootstrap — references with relation=ReadFirst
 ```
 
 `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` are **TypeReference** aggregations — each empty child element is a **type reference** (element name → FQN), not a Block instance. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the aggregation `type` (`TypeReference(T)`). See `17_type_system_bml.md` — Empty child elements.
 
-`bootstrap` references a `Bootstrap` block (typically `README`) — the library entry point for humans and LLMs with a `readFirst` documentation list. See `doc:BootstrapModel`.
+`bootstrap` references a `Bootstrap` block (typically `README`) — the library entry point for humans and LLMs. Curated reading order lives in `<references>` with `relation=ReadFirst` on the concrete Bootstrap block — see `doc:BootstrapModel`.
 
 `_schemas` holds `FilePathEntity` composition children; **`value`** is the relative `.xsd` path from the library package root (directory containing `Library.bml`).
 
