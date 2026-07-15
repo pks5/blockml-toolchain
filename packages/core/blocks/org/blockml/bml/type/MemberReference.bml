@@ -1,0 +1,73 @@
+<!--
+  BlockML Core — member definition path reference value type
+
+  FQN: org.blockml.bml.type.MemberReference
+  See docs/16_framework_base_types.md — Definition Addressing · references
+       docs/17_type_system_bml.md — TypeReference · MemberReference
+-->
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition">
+  <name>MemberReference</name>
+  <type>btype:MemberReference</type>
+  <baseType>btype:TypeReference(B)</baseType>
+  <idea>A path naming a member definition owned by a Block.</idea>
+
+  <documentation>Abstract ValueType for references to Block member definitions — properties,
+    aggregations, associations, and capabilities. Extends TypeReference(B); adds D to constrain
+    which MemberDefinition branch the path may target.
+
+    Value forms:
+    • Canonical definition path — for example com.foo.Bar.properties.width
+    • Local member name when paired with a Block qualifier (for example see block="com.foo:Bar"
+      property="width" → com.foo.Bar.properties.width)
+
+    Generic parameters:
+    • B (from TypeReference) — owning Block branch for the member's enclosing type
+    • D (baseType def:MemberDefinition) — member definition kind constraint
+
+    Concrete specializations bind D:
+    • PropertyReference     → D = def:PropertyDefinition
+    • AggregationReference  → D = def:AggregationDefinition
+    • AssociationReference  → D = def:AssociationDefinition
+    • CapabilityReference   → D = def:CapabilityDefinition
+
+    Primary use — StructuralDefinition Reference (see) member target attributes. Not for Block type
+    identity (use TypeReference) or type-reference aggregations (use TypeReferenceEntity).</documentation>
+
+  <references>
+    <see file="16_framework_base_types.md">
+      Definition addressing and see target attributes.
+    </see>
+    <see file="02_mbml.md">
+      references — Why separate target attributes.
+    </see>
+    <see block="btype:TypeReference">
+      Parent ValueType — Block type FQNs only.
+    </see>
+    <see block="def:MemberDefinition">
+      Abstract member meta-model branch bound by D.
+    </see>
+    <see block="def:StructuralDefinition">
+      Reference sub-block — property / aggregation / association / capability attributes.
+    </see>
+    <see block="btype:PropertyReference">
+      Concrete specialization for PropertyDefinition paths.
+    </see>
+  </references>
+
+  <abstract>true</abstract>
+
+  <genericTypes>
+    <B baseType="core:Block" defaultType="core:Block">
+      <documentation>Owning Block branch — forwarded from TypeReference.B. Defaults to core:Block.
+      </documentation>
+    </B>
+    <D baseType="def:MemberDefinition">
+      <documentation>Member definition kind. Bound by concrete children (PropertyReference, …).
+      </documentation>
+    </D>
+  </genericTypes>
+</block>

@@ -7,17 +7,15 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
-  xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition">
+  xmlns:core="org.blockml.bml.core">
   <name>TypeReferenceEntity</name>
   <type>btype:TypeReferenceEntity</type>
-  <baseType>core:PrimitiveEntity(btype:TypeReference(B, D))</baseType>
+  <baseType>core:PrimitiveEntity(btype:TypeReference(B))</baseType>
   <idea>TypeReference primitive value as an Entity in composition or aggregation.</idea>
 
   <documentation>Open generic Entity wrapping a TypeReference (FQN / TypeExpression) primitive.
-    Forwards B and D from org.blockml.bml.type.TypeReference onto
-    org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically
-    as value : TypeReference(B, D).
+    Forwards B from org.blockml.bml.type.TypeReference onto org.blockml.bml.core.PrimitiveEntity via
+    baseType — inherits the value property automatically as value : TypeReference(B).
 
     Use on aggregation type attributes when children are type references stored as Entity instances:
     • btype:TypeReferenceEntity(core:Block)[] — contracts, subTypes, Library _blocks
@@ -32,7 +30,8 @@
     aggregation type). Explicit TypeReferenceEntity authoring is always valid and equivalent.
 
     Contrast with scalar TypeReference(B) on properties (identity type / baseType, member type
-    attributes) — those remain plain text, not Entity instances.
+    attributes) — those remain plain text, not Entity instances. Member path references use
+    MemberReference / PropertyReference / … — not this Entity.
 
     Replaces the former abstract org.blockml.bml.core.TypeReference aggregation marker and
     FullyQualifiedNameEntity.</documentation>
@@ -64,9 +63,5 @@
         TypeReference.B — each instance value must name a type that satisfies
         satisfiesTypeBound(resolve(value), B).</documentation>
     </B>
-    <D baseType="core:Definition" defaultType="def:BlockDefinition">
-      <documentation>Definition-element branch constraint. Mirrored from TypeReference.D —
-        defaults to BlockDefinition when omitted.</documentation>
-    </D>
   </genericTypes>
 </block>

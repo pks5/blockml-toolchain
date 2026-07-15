@@ -16,13 +16,12 @@
   <name>TypeReference</name>
   <type>btype:TypeReference</type>
   <baseType>btype:Text</baseType>
-  <idea>A globally unique name referencing a Block or a definition element owned by a Block.</idea>
+  <idea>A globally unique name referencing a Block type.</idea>
 
   <documentation>
     ValueType for type references — fully qualified names (FQNs) and TypeExpressions that name a
-    Block or definition element. Unqualified name TypeReference resolves to
-    org.blockml.bml.type.TypeReference. Formerly FullyQualifiedName; the FQN string format is
-    unchanged.
+    Block. Unqualified name TypeReference resolves to org.blockml.bml.type.TypeReference. Formerly
+    FullyQualifiedName; the FQN string format is unchanged.
 
     FQN format (Java-style reverse-domain, dot-separated):
     • Package segments — lowercase, reverse-domain (for example org.blockml.bml.core,
@@ -36,26 +35,22 @@
     Resolver stores the resolved FQN string in BOM typeFqn fields. Unknown FQN at validate time
     → BML_UNKNOWN_TYPE.
 
-    Generic parameters constrain which Block or definition branch a reference may target:
-    • B (baseType core:Block) — owning Block branch for the referenced type
-    • D (baseType core:Definition, default def:BlockDefinition) — definition element branch;
-      defaults to org.blockml.bml.definition.BlockDefinition when the second argument is omitted
+    Generic parameter:
+    • B (baseType core:Block) — Block branch constraint for the referenced type
 
     In type="..." attributes, write generic applications with round parentheses — not angle
     brackets (XML-safe, readable):
-    • TypeReference(core:Block) → B = core.Block, D = def.BlockDefinition (default)
-    • TypeReference(core:Block, core:Definition) → both parameters explicit
-    • TypeReference(def:BlockDefinition) → B = def.BlockDefinition, D = default
+    • TypeReference(core:Block) → B = core.Block
+    • TypeReference(core:Language) → B = core.Language
 
-    Each parenthesized argument binds one generic type parameter in declaration order (B, then D).
-    With multiple parameters, the label matches the generic name and qualifies the type argument
-    as a namespace prefix (abc:A → abc.A). With a single argument, only B is supplied and D
-    uses defaultType. Concrete type arguments must satisfy each parameter's baseType constraint
-    → BML_GENERIC_CONSTRAINT_VIOLATION.
+    Concrete type arguments must satisfy B's baseType constraint → BML_GENERIC_CONSTRAINT_VIOLATION.
 
     Primary use — Block-definition identity (`type`, `baseType`) and definition metadata where a
-    type attribute or property holds an FQN / TypeExpression string. When a type reference must
+    type attribute or property holds a Block FQN / TypeExpression string. When a type reference must
     appear as an Entity in composition or aggregation, use org.blockml.bml.type.TypeReferenceEntity.
+
+    Member definition paths (property, aggregation, association, capability) use the
+    org.blockml.bml.type.MemberReference branch — not TypeReference.
   </documentation>
 
   <references>
@@ -66,7 +61,7 @@
       FQN (Fully Qualified Name) system overview.
     </see>
     <see file="17_type_system_bml.md">
-      Generics and BML attribute syntax for type parameters · TypeReferenceEntity.
+      Generics and BML attribute syntax for type parameters · TypeReferenceEntity · MemberReference.
     </see>
     <see file="16_framework_base_types.md">
       Definition branch and StructuralDefinition Reference sub-block.
@@ -86,8 +81,8 @@
     <see block="def:GenericTypeDefinition">
       parameter baseType constraint attribute.
     </see>
-    <see block="def:StructuralDefinition">
-      Cross-reference block attribute on Reference sub-block.
+    <see block="btype:MemberReference">
+      Member definition path references — PropertyReference and siblings.
     </see>
     <see block="btype:TypeReferenceEntity">
       Entity wrapper for TypeReference values in composition or aggregation.
@@ -95,7 +90,9 @@
   </references>
 
   <genericTypes>
-    <B baseType="core:Block" />
-    <D baseType="core:Definition" defaultType="def:BlockDefinition" />
+    <B baseType="core:Block">
+      <documentation>Block branch constraint for the referenced type. Concrete arguments must
+        satisfy satisfiesTypeBound(resolve(value), B).</documentation>
+    </B>
   </genericTypes>
 </block>

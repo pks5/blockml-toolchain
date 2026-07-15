@@ -1,0 +1,37 @@
+<!--
+  BlockML Core — CapabilityDefinition path reference
+
+  FQN: org.blockml.bml.type.CapabilityReference
+-->
+<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition">
+  <name>CapabilityReference</name>
+  <type>btype:CapabilityReference</type>
+  <baseType>btype:MemberReference(B, def:CapabilityDefinition)</baseType>
+  <idea>A path naming a CapabilityDefinition on a Block.</idea>
+
+  <documentation>Concrete MemberReference binding D = CapabilityDefinition. Value is a canonical
+    capability path (com.foo.Bar.capabilities.render) or a local capability name when paired with a
+    Block qualifier. Used as the type of see capability=.</documentation>
+
+  <references>
+    <see block="btype:MemberReference">
+      Abstract member path ValueType.
+    </see>
+    <see block="def:CapabilityDefinition">
+      Target member meta-model type.
+    </see>
+    <see block="def:StructuralDefinition">
+      see capability attribute.
+    </see>
+  </references>
+
+  <genericTypes>
+    <B baseType="core:Block" defaultType="core:Block">
+      <documentation>Owning Block branch. Defaults to core:Block.</documentation>
+    </B>
+  </genericTypes>
+</block>

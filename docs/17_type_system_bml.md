@@ -352,7 +352,10 @@ All types inherit from **`org.blockml.bml.core.ValueType`**. Types are not a sep
 org.blockml.bml.core.ValueType              abstract — never stores data
   ├── org.blockml.bml.type.PrimitiveType    abstract
   │     ├── org.blockml.bml.type.Text         abstract — textual primitives
-  │     │     ├── org.blockml.bml.type.TypeReference
+  │     │     ├── org.blockml.bml.type.TypeReference(B)
+  │     │     │     └── org.blockml.bml.type.MemberReference(B, D)  — abstract
+  │     │     │           ├── PropertyReference · AggregationReference
+  │     │     │           ├── AssociationReference · CapabilityReference
   │     │     ├── org.blockml.bml.type.Version
   │     │     ├── org.blockml.bml.type.URL
   │     │     ├── org.blockml.bml.type.URI
@@ -527,7 +530,9 @@ Primitive types inherit from `org.blockml.bml.type.PrimitiveType`. They are **pu
 ```text
 org.blockml.bml.type.PrimitiveType
   org.blockml.bml.type.Text           — abstract
-    org.blockml.bml.type.TypeReference
+    org.blockml.bml.type.TypeReference(B)
+      org.blockml.bml.type.MemberReference(B, D)  — abstract
+        PropertyReference · AggregationReference · AssociationReference · CapabilityReference
     org.blockml.bml.type.Version
     org.blockml.bml.type.URL · URI · FilePath · MimeType · …
   org.blockml.bml.type.Number         — abstract
@@ -606,19 +611,27 @@ Properties continue to store primitive values directly (`width : Integer`) — `
 
 V1 bootstrap: `IntegerEntity`, `DecimalEntity`, `FloatEntity`, `TextEntity`, `BooleanEntity`, `VersionEntity`, `URLEntity`, `URIEntity`, `FilePathEntity`, `MimeTypeEntity`, `TypeReferenceEntity` in `@blockml/core`.
 
-#### TypeReference and TypeReferenceEntity
+#### TypeReference, TypeReferenceEntity, and MemberReference
 
-`org.blockml.bml.type.TypeReference(B, D)` is a **Text ValueType** for FQN / TypeExpression strings
-formerly `FullyQualifiedName`). Use it on scalar properties such as identity `type` / `baseType`
-and member `type` attributes.
+`org.blockml.bml.type.TypeReference(B)` is a **Text ValueType** for Block FQN / TypeExpression
+strings (formerly `FullyQualifiedName`). Use it on scalar properties such as identity `type` /
+`baseType` and member `type` attributes that name Block types.
 
-`org.blockml.bml.type.TypeReferenceEntity(B, D)` is the **PrimitiveEntity** wrapper — open generic,
-forwards `B`/`D` onto `PrimitiveEntity(TypeReference(B, D))`. Use it when a type reference must
-appear as an Entity in composition or aggregation (contracts, languages, Library lists, …).
+`org.blockml.bml.type.TypeReferenceEntity(B)` is the **PrimitiveEntity** wrapper — open generic,
+forwards `B` onto `PrimitiveEntity(TypeReference(B))`. Use it when a type reference must appear as
+an Entity in composition or aggregation (contracts, languages, Library lists, …).
+
+`org.blockml.bml.type.MemberReference(B, D)` extends `TypeReference(B)` and adds `D` (baseType
+`MemberDefinition`) for **member definition paths**. Concrete children bind `D`:
 
 ```text
-TypeReference(B, D)        — scalar FQN / TypeExpression text on properties
-TypeReferenceEntity(B, D)  — Entity with value : TypeReference(B, D)
+TypeReference(B)                 — Block type FQN / TypeExpression text
+TypeReferenceEntity(B)           — Entity with value : TypeReference(B)
+MemberReference(B, D)            — abstract — member definition paths
+  PropertyReference(B)           — D = PropertyDefinition   (see property=)
+  AggregationReference(B)        — D = AggregationDefinition (see aggregation=)
+  AssociationReference(B)        — D = AssociationDefinition (see association=)
+  CapabilityReference(B)         — D = CapabilityDefinition  (see capability=)
 ```
 
 There is **no** separate aggregation marker. Type-reference aggregations are ordinary Entity
@@ -748,7 +761,8 @@ block.baseType  → TypeReference(core:Block) property — TypeExpression text; 
 **Forbidden authoring:** Child-element form inside identity `<type>` / `<baseType>` is a parse error
 → `BML_IDENTITY_TYPE_CHILD_ELEMENT`.
 
-V1 bootstrap: `org.blockml.bml.type.TypeReference` and `org.blockml.bml.type.TypeReferenceEntity`
+V1 bootstrap: `org.blockml.bml.type.TypeReference`, `TypeReferenceEntity`, `MemberReference`,
+`PropertyReference`, `AggregationReference`, `AssociationReference`, `CapabilityReference`
 in `@blockml/core`.
 
 ```typescript
@@ -1187,10 +1201,13 @@ Named and positional configuration must not be mixed in one `{...}` block. Posit
 Examples from core Block definitions:
 
 ```xml
-<!-- TypeReference<B, D>: B = Block branch, D = Definition branch (default def:BlockDefinition) -->
+<!-- TypeReference(B): Block type FQNs -->
 <type type="btype:TypeReference(core:Block)"/>
-<baseType type="btype:TypeReference(core:Block, core:Definition)"/>
-<baseType type="btype:TypeReference(def:BlockDefinition)"/>
+<baseType type="btype:TypeReference(core:Entity)"/>
+
+<!-- MemberReference children: definition paths on see -->
+<see property="com.foo.Bar.properties.width" …/>   <!-- PropertyReference -->
+<see aggregation="com.foo.Bar.aggregations.parts" …/>
 
 <!-- genericTypes on a meta-model Block: D constrained to core.Definition -->
 <genericTypes>
@@ -1198,7 +1215,10 @@ Examples from core Block definitions:
 </genericTypes>
 ```
 
-`org.blockml.bml.core.Definition` itself declares no members — it identifies the Definition branch. `TypeReference`'s generic `D` uses `baseType="core:Definition"` so definition-element FQNs (e.g. `def:PropertyDefinition`, `def:BlockDefinition`) satisfy the constraint. See `16_framework_base_types.md` — Definition Branch · `packages/core/blocks/org/blockml/bml/type/TypeReference.bml`.
+`org.blockml.bml.core.Definition` itself declares no members — it identifies the Definition branch.
+`MemberReference.D` uses `baseType="def:MemberDefinition"` so only member meta-model FQNs satisfy
+the constraint. See `16_framework_base_types.md` — Definition Branch ·
+`packages/core/blocks/org/blockml/bml/type/MemberReference.bml`.
 
 At reference sites:
 
@@ -1312,7 +1332,7 @@ V1: only **direct** `contracts[]` entries count — no transitive closure throug
 ```text
 <genericTypes> parameter baseType="…" constraints
 Generic type arguments at reference sites (Box(Integer), TypeReference(…), …)
-TypeReference(B) / TypeReference(B, D) — parameter B and D
+TypeReference(B) / MemberReference(B, D) / PropertyReference(B) — parameter bounds
 ```
 
 **Uses `inBranch` (baseType chain only — contracts ignored):**

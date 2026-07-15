@@ -208,9 +208,8 @@ See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — Generic
 
 ```text
 Inheritance marker     — org.blockml.bml.definition.* blocks extend core.Definition (directly or via StructuralDefinition)
-TypeReference<D>  — generic parameter D on org.blockml.bml.type.TypeReference:
-                           baseType core:Definition, defaultType def:BlockDefinition
-                         constrains which definition-element branch an FQN may reference
+MemberReference.D      — generic parameter D on org.blockml.bml.type.MemberReference:
+                           baseType def:MemberDefinition; bound by PropertyReference / …
 genericTypes           — e.g. <D baseType="org.blockml.bml.core.Definition" defaultType="def:RootBlockDefinition"/>
 Validator              — definitionBranch = "definitionBlock" when baseType chain includes core.Definition
 bml:xml                — permitted on all blocks whose baseType chain includes core.Definition
@@ -323,7 +322,7 @@ Exactly one target kind among `block` (standalone), `file`, `url`, `property`, `
 
 Standard relation blocks (`org.blockml.bml.relation.*`): `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Abstract base: `org.blockml.bml.core.Relation`.
 
-**Design note:** Seven mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see block="…">` (type), `<see file="…">` (doc), `<see url="…">` (web), `<see property="…">` (member). Member values are canonical definition paths in the BOM. See `02_mbml.md` — `<references>` — Why separate target attributes.
+**Design note:** Seven mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see block="…">` (`TypeReference`), `<see property="…">` (`PropertyReference`), `<see aggregation="…">` / `<see association="…">` / `<see capability="…">` (matching MemberReference children), `<see file="…">` (doc), `<see url="…">` (web). Member values are canonical definition paths in the BOM. See `02_mbml.md` — `<references>` — Why separate target attributes.
 
 Authoring: list only targets **relevant to the current definition**; text body describes the relationship. All cross-links belong in `<references>` — never in `<documentation>`. See `02_mbml.md` — `<documentation>` · `<references>`.
 
@@ -435,6 +434,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/type/Version.bml · URL.bml · URI.bml · FilePath.bml · MimeType.bml
      org/blockml/bml/core/PrimitiveEntity.bml
      org/blockml/bml/type/TypeReference.bml · TypeReferenceEntity.bml
+     org/blockml/bml/type/MemberReference.bml · PropertyReference.bml · AggregationReference.bml · AssociationReference.bml · CapabilityReference.bml
      org/blockml/bml/type/IntegerEntity.bml · TextEntity.bml · …
      org/blockml/bml/language/NaturalLanguage.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …

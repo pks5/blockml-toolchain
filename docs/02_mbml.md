@@ -807,11 +807,11 @@ Standard relation blocks: `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires
 The attribute name encodes the target **kind** at the read site — before parsing or resolving the value. Humans and LLMs scanning BML can classify each reference from the element shape alone:
 
 ```text
-<see block="core:ValueType">…</see>                    → see · block · type reference
+<see block="core:ValueType">…</see>                    → see · block · TypeReference
 <see file="02_mbml.md">…</see>                         → see · file · repository documentation
 <see url="https://…">…</see>                           → see · url · web address
-<see property="com.foo.Bar.properties.width">…</see>   → see · property · member path
-<see capability="com.foo.Bar.capabilities.render">…</see> → see · capability · member path
+<see property="com.foo.Bar.properties.width">…</see>   → see · property · PropertyReference
+<see capability="com.foo.Bar.capabilities.render">…</see> → see · capability · CapabilityReference
 ```
 
 A single generic `target` attribute would force readers to infer kind from value syntax (FQN vs filename vs URL vs member path). Separate attributes keep the documentation reading flow linear: verb (`see`) → target kind → target → relation → relationship text.

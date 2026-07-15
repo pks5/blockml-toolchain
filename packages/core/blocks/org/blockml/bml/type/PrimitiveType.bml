@@ -19,8 +19,8 @@
     only — they never store concrete values. All values are stored exclusively in Properties.
 
     Numeric branch: Number (Integer, Decimal, Float). Textual branch: Text (TypeReference,
-    Version, URL, URI, FilePath, MimeType, …). Boolean is its own branch — neither textual nor
-    numeric.
+    MemberReference / PropertyReference / …, Version, URL, URI, FilePath, MimeType, …). Boolean is
+    its own branch — neither textual nor numeric.
 
     When a primitive value must exist as an Entity inside a composition or aggregation, use a
     concrete Entity specialization (for example IntegerEntity) — not by adding a value member to

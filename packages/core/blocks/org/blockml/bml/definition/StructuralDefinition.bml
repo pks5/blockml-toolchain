@@ -243,22 +243,23 @@
         text body.
 
         Seven mutually exclusive target attributes (block, file, url, property, aggregation,
-        association, capability) instead of one generic target. Member targets (property,
-        aggregation, association, capability) store the canonical definition path in the BOM
-        (for example com.foo.Bar.properties.width). Split authoring block="com.foo.Bar"
-        property="width" resolves to that path — block qualifies the member name and is not stored
-        as a separate type target.
-        The attribute name encodes the target kind at the read site — see block (type reference),
-        see file (repository documentation), see url (web address). Humans and LLMs classify each
-        reference from element shape alone without inferring kind from value syntax. See 02_mbml.md
-        — references — Why separate target attributes.</documentation>
+        association, capability) instead of one generic target. Member targets use typed
+        MemberReference specializations — property : PropertyReference, aggregation :
+        AggregationReference, association : AssociationReference, capability : CapabilityReference —
+        and store the canonical definition path in the BOM (for example com.foo.Bar.properties.width).
+        Split authoring block="com.foo.Bar" property="width" resolves to that path — block qualifies
+        the member name and is not stored as a separate type target.
+        The attribute name encodes the target kind at the read site — see block (TypeReference),
+        see property (PropertyReference), see file (repository documentation), see url (web address).
+        Humans and LLMs classify each reference from element shape alone without inferring kind from
+        value syntax. See 02_mbml.md — references — Why separate target attributes.</documentation>
 
       <bml:xml>see</bml:xml>
 
       <properties>
-        <block type="TypeReference(core:Block, core:Definition)" bml:xml="attribute">
-          <documentation>Block or Definition type reference via xmlns prefix (e.g. core:Block) — or
-            Block FQN qualifier when paired with property, aggregation, association, or capability.
+        <block type="TypeReference(core:Block)" bml:xml="attribute">
+          <documentation>Block type reference via xmlns prefix (e.g. core:Block) — or Block FQN
+            qualifier when paired with property, aggregation, association, or capability.
             Standalone block= resolves to FQN at parse time. With a member attribute, block= supplies
             the enclosing Block FQN and is not stored as a separate type target. Mutually exclusive
             with file, url, and standalone member targets — exactly one target kind must be set.</documentation>
@@ -270,28 +271,30 @@
         <url type="Text" bml:xml="attribute">
           <documentation>External URL. Mutually exclusive with all other target attributes.</documentation>
         </url>
-        <property type="Text" bml:xml="attribute">
-          <documentation>PropertyDefinition canonical path (e.g. com.foo.Bar.properties.width) — or
-            local member name when paired with block= (block property="width" →
-            com.foo.Bar.properties.width). Stored in BOM as canonical definition path. Mutually
-            exclusive with file, url, block (standalone), aggregation, association, and
-            capability.</documentation>
+        <property type="PropertyReference" bml:xml="attribute">
+          <documentation>PropertyDefinition path (PropertyReference) — canonical path (e.g.
+            com.foo.Bar.properties.width) or local member name when paired with block= (block
+            property="width" → com.foo.Bar.properties.width). Stored in BOM as canonical definition
+            path. Mutually exclusive with file, url, block (standalone), aggregation, association,
+            and capability.</documentation>
         </property>
-        <aggregation type="Text" bml:xml="attribute">
-          <documentation>AggregationDefinition canonical path (e.g. com.foo.Bar.aggregations.children)
-            — or local member name when paired with block=. Stored in BOM as canonical definition
-            path. Mutually exclusive with all other target kinds.</documentation>
+        <aggregation type="AggregationReference" bml:xml="attribute">
+          <documentation>AggregationDefinition path (AggregationReference) — canonical path (e.g.
+            com.foo.Bar.aggregations.children) or local member name when paired with block=. Stored
+            in BOM as canonical definition path. Mutually exclusive with all other target kinds.
+          </documentation>
         </aggregation>
-        <association type="Text" bml:xml="attribute">
-          <documentation>AssociationDefinition canonical path (e.g.
-            com.foo.Bar.associations.basePresets) — or local member name when paired with block=.
+        <association type="AssociationReference" bml:xml="attribute">
+          <documentation>AssociationDefinition path (AssociationReference) — canonical path (e.g.
+            com.foo.Bar.associations.basePresets) or local member name when paired with block=.
             Stored in BOM as canonical definition path. Mutually exclusive with all other target
             kinds.</documentation>
         </association>
-        <capability type="Text" bml:xml="attribute">
-          <documentation>CapabilityDefinition canonical path (e.g. com.foo.Bar.capabilities.render) —
-            or local member name when paired with block=. Stored in BOM as canonical definition path.
-            Mutually exclusive with all other target kinds.</documentation>
+        <capability type="CapabilityReference" bml:xml="attribute">
+          <documentation>CapabilityDefinition path (CapabilityReference) — canonical path (e.g.
+            com.foo.Bar.capabilities.render) or local member name when paired with block=. Stored in
+            BOM as canonical definition path. Mutually exclusive with all other target kinds.
+          </documentation>
         </capability>
         <relation type="TypeReference(core:Relation)" bml:xml="attribute">
           <documentation>Relation block describing how the target relates to the current definition.

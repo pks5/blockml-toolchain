@@ -50,7 +50,7 @@ This is a step toward **BML self-hosting** (Phase 2/3 in `01_system.md`): BlockM
 | Site | How `core.Definition` appears |
 |---|---|
 | `baseType` chain | `org.blockml.bml.definition.*` blocks inherit from `core.Definition` (directly or via `StructuralDefinition`) |
-| `TypeReference<B, D>` | Generic `D` on `org.blockml.bml.type.TypeReference` has `baseType="core:Definition"`, `defaultType="def:BlockDefinition"` — constrains definition-element FQN references |
+| `MemberReference<B, D>` | Generic `D` on `org.blockml.bml.type.MemberReference` has `baseType="def:MemberDefinition"` — bound by PropertyReference / AggregationReference / AssociationReference / CapabilityReference |
 | `<genericTypes>` | Meta-model generic parameters may use `baseType="org.blockml.bml.core.Definition"` (e.g. parameter `D` on a Block that describes definition elements) |
 | Validator | `definitionBranch === "definitionBlock"` when `baseType` chain includes `core.Definition` |
 
@@ -326,7 +326,7 @@ Until the meta-serializer exists:
 | `org.blockml.bml.core.Definition` BML | Done — empty identification marker (by design) |
 | `org.blockml.bml.definition.StructuralDefinition` BML | Done — documentation Sub-Blocks inline |
 | `org.blockml.bml.definition.*` member surfaces | Done — Property, Aggregation, Association, Capability, MemberDefinition |
-| `org.blockml.bml.type.TypeReference` / `TypeReferenceEntity` BML | Specified — ValueType + Entity (replaces core marker) |
+| `org.blockml.bml.type.TypeReference` / `TypeReferenceEntity` / `MemberReference` (+ children) BML | Specified — ValueType hierarchy for type + member path refs |
 | Meta-driven BOM → XML serializer | Not implemented |
 | Validator rules for placement | Specified here; codes TBD |
 
@@ -335,7 +335,13 @@ Source files live under:
 ```text
 packages/core/blocks/org/blockml/bml/core/Definition.bml
 packages/core/blocks/org/blockml/bml/core/PrimitiveEntity.bml
+packages/core/blocks/org/blockml/bml/type/TypeReference.bml
 packages/core/blocks/org/blockml/bml/type/TypeReferenceEntity.bml
+packages/core/blocks/org/blockml/bml/type/MemberReference.bml
+packages/core/blocks/org/blockml/bml/type/PropertyReference.bml
+packages/core/blocks/org/blockml/bml/type/AggregationReference.bml
+packages/core/blocks/org/blockml/bml/type/AssociationReference.bml
+packages/core/blocks/org/blockml/bml/type/CapabilityReference.bml
 packages/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/ConstrainableDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml

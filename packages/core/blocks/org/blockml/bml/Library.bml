@@ -207,6 +207,11 @@
       <btype:FloatEntity />
       <btype:TypeReference />
       <btype:TypeReferenceEntity />
+      <btype:MemberReference />
+      <btype:PropertyReference />
+      <btype:AggregationReference />
+      <btype:AssociationReference />
+      <btype:CapabilityReference />
       <btype:Integer />
       <btype:IntegerEntity />
       <btype:MimeType />
