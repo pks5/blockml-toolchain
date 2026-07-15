@@ -246,7 +246,7 @@ org.blockml.bml.core.Block
 `org.blockml.bml.definition.StructuralDefinition` declares the shared documentation model and type modifiers:
 
 ```text
-Properties:    since · status · documentation (Documentation) · abstract · final
+Properties:    since · status · summary · documentation (Documentation) · abstract · final
 Aggregations:  changelog (Change[]) · examples (Example[]) · references (Reference[])
 Sub-blocks:    Documentation · Change · Example · Reference   ← inline in StructuralDefinition.bml
 Source:        packages/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
@@ -265,7 +265,7 @@ in child blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 
-`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`idea`, `name`, `type`, `baseType`, `version`), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
+`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`idea`, `not`, `name`, `type`, `baseType`, `version`), `summary` (inherited from StructuralDefinition), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
 
 `org.blockml.bml.definition.SubBlockDefinition` adds `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy).
 
@@ -340,6 +340,9 @@ Definition elements are addressed via **canonical structural paths** within the 
 ```text
 com.foo.Bar.name                    →  Block metadata
 com.foo.Bar.documentation           →  StructuralDefinition.documentation (Documentation Sub-Block shape)
+com.foo.Bar.summary                 →  StructuralDefinition.summary
+com.foo.Bar.not                     →  BlockDefinition.not (block-level only)
+com.foo.Bar.properties.width.summary → PropertyDefinition.summary
 com.foo.Bar.version                 →  Block version
 com.foo.Bar.properties.width        →  PropertyDefinition
 com.foo.Bar.aggregations.children   →  AggregationDefinition

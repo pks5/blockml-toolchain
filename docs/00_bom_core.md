@@ -945,7 +945,9 @@ A `BlockDefinition` is a regular Block. Every definition element is addressable 
 ```text
 com.foo.Bar.name                    →  <name>Wall</name>
 com.foo.Bar.idea                    →  <idea>…</idea>
+com.foo.Bar.summary                 →  <summary>…</summary>
 com.foo.Bar.documentation           →  <documentation>…</documentation>
+com.foo.Bar.not                     →  <not>…</not>
 com.foo.Bar.type                    →  <type>com.foo.Bar</type>
 com.foo.Bar.baseType                →  <baseType>…</baseType>
 com.foo.Bar.version                 →  <version>1.0.0</version>

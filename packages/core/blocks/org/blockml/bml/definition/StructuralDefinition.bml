@@ -25,7 +25,7 @@
 
   <documentation>
     Abstract base type for BlockML structural definition elements. It provides the common
-    documentation model consisting of documentation text, version information,
+    documentation model consisting of summary, documentation text, version information,
     change history, examples, and references, plus local declaration properties (abstract, final)
     for block definitions. Concrete structural definition types inherit these members to describe
     themselves consistently. Member declarations declare abstract, final, and override locally via
@@ -43,7 +43,7 @@
   <!--
   Property definitions are grouped inside the <properties> element.
   Each property is rendered as a direct XML child element named after the
-  property itself (for example <since>, <status>, <documentation>, <abstract>, or <final>).
+  property itself (for example <since>, <status>, <summary>, <documentation>, <abstract>, or <final>).
 -->
   <properties>
     <since type="Version" bml:xml="element">
@@ -52,6 +52,16 @@
     <status type="core:Status" bml:xml="element">
       <documentation>The status of the definition.</documentation>
     </status>
+    <summary type="Text" bml:xml="element">
+      <documentation>Optional short prose expansion of semantic meaning — typically three to five
+        sentences between idea and full documentation. Primary input for LLM context bundles and
+        quick human orientation; idea answers what is this in one sentence, summary adds scope and
+        boundaries without full technical detail. Omitted when idea and documentation suffice.
+        Optional language deviation uses the same pattern as documentation when a Summary struct is
+        not required — plain trimmed text body stored in BOM summary on the enclosing definition
+        element. Addressable on blocks as com.foo.Bar.summary and on members as
+        com.foo.Bar.properties.width.summary.</documentation>
+    </summary>
     <documentation type="Documentation" bml:xml="element">
       <documentation>Technical documentation prose for this definition element.</documentation>
     </documentation>

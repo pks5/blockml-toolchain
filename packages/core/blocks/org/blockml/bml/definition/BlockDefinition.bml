@@ -24,9 +24,11 @@
     binds this definition to the Block type it describes — conceptually BlockDefinition of
     com.foo.Bar when B resolves to com.foo.Bar.
 
-    Declares identity (idea, name, type, baseType, version), generic parameters, contracts,
+    Declares identity (idea, not, name, type, baseType, version), generic parameters, contracts,
     allowed Sub-Blocks and languages, and member declaration containers (properties, aggregations,
-    associations, capabilities). Type modifiers abstract and final are inherited from
+    associations, capabilities). Inherits summary from org.blockml.bml.definition.StructuralDefinition
+    (optional middle tier between idea and documentation). not is block-level only — disambiguation
+    from similar concepts; omitted when unnecessary. Type modifiers abstract and final are inherited from
     org.blockml.bml.definition.StructuralDefinition. Every definition element is addressable via
     its canonical structural path within the Block FQN (for example com.foo.Bar.properties.width).
     Member declaration order in BML is preserved in BOM and is significant for StructType
@@ -88,7 +90,7 @@
 
   <!--
     Scalar Block metadata. Each property renders as a direct XML child element
-    named after the property (for example <idea>, <name>, <type>, or <version>).
+    named after the property (for example <idea>, <summary>, <not>, <name>, <type>, or <version>).
   -->
   <properties>
     <idea type="Text" bml:xml="element">
@@ -96,13 +98,21 @@
         first child on every Block definition (root blocks and Sub-Blocks). Addressable as
         com.foo.Bar.idea.</documentation>
     </idea>
-    <name type="Text">
+    <not type="Text" bml:xml="element">
+      <documentation>What this Block is not — explicit disambiguation from easily confused concepts
+        (for example Sub-Block vs embedded Block, contract vs baseType). Optional; use when idea and
+        summary alone do not prevent misinterpretation. Block-level only — not declared on member
+        definitions. Plain trimmed text body stored in BOM block.not. Addressable as com.foo.Bar.not.
+        Prefer relation=ContrastsWith on references when pointing at a specific confusing type; not
+        states the negation inline on the current definition.</documentation>
+    </not>
+    <name type="Text" bml:xml="element">
       <documentation>Short class name (PascalCase). Required on Sub-Blocks. Optional on root blocks —
         when omitted, derived as lastSegment(resolve(type)). When present on a root block, must
         equal lastSegment(resolve(type)) (BML_BLOCK_NAME_TYPE_MISMATCH). Format: [A-Z][a-zA-Z0-9]*
         (BML_INVALID_BLOCK_NAME).</documentation>
     </name>
-    <version type="Version">
+    <version type="Version" bml:xml="element">
       <documentation>Semantic version of this Block definition. Required on root blocks.
         Addressable as com.foo.Bar.version.</documentation>
     </version>

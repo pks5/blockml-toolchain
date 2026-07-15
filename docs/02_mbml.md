@@ -380,7 +380,9 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 
 ```text
 <idea>              — short semantic description: what this Block represents in meaning (first child element).
-<documentation>     — human-readable technical description of the Block (second child element).
+<summary>           — optional short prose expansion — typically three to five sentences between idea and documentation.
+<documentation>     — human-readable technical description of the Block (required on root blocks).
+<not>               — optional block-level disambiguation — what this Block is not (blocks only, not members).
 <type>              — canonical Block type identity (required on root block). TypeReference
                       aggregation — one child element whose name resolves to the Block FQN
                       (for example &lt;foo:MyBlock/&gt;). Text content is forbidden
@@ -399,11 +401,13 @@ Definition elements (`<property>`, `<aggregation>`, …) carry `<status>` only w
 
 ### `<idea>` — semantic meaning
 
-`<idea>` is placed **directly under the root `<block>` element**, as the **first child**, before `<documentation>` and `<name>`. It states how to **interpret** the Block — what it means in the domain, not how it is implemented.
+`<idea>` is placed **directly under the root `<block>` element**, as the **first child**, before optional `<summary>`, `<language>`, `<documentation>`, optional `<not>`, and `<name>`. It states how to **interpret** the Block — what it means in the domain, not how it is implemented.
 
 ```text
-<idea>       — meaning     what this Block semantically represents (one short sentence)
-<documentation> — detail     technical description, behaviour, constraints, examples
+<idea>          — meaning     what this Block semantically represents (one short sentence)
+<summary>       — scope       optional middle tier — three to five sentences of scope and boundaries
+<documentation> — detail      technical description, behaviour, constraints, examples
+<not>           — negative    optional block-level disambiguation — what this Block is not
 ```
 
 Examples:
@@ -427,6 +431,20 @@ Examples:
 `<idea>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IDEA` (warning in V1, error in a later release). The idea is primary input for editors, LLMs, and documentation navigation — it answers *what is this?* before *how does it work?*
 
 WOT alignment: the Idea is the stable semantic constant; documentation describes how a World interprets and uses it. See `WOT_Reference_v26.md` — The Idea.
+
+### `<summary>` — short prose expansion
+
+`<summary>` is an optional child on all **StructuralDefinition** elements — root blocks, Sub-Blocks, and members (`<property>`, `<aggregation>`, …). On Block definitions it follows `<idea>` and optional `<language>`, before `<documentation>`. It expands semantic meaning in **three to five sentences** — scope, boundaries, and orientation without full technical detail.
+
+```text
+idea      →  one sentence: what is this?
+summary   →  short paragraph: scope and boundaries (LLM context bundles, quick human scan)
+documentation → full technical prose
+```
+
+Omitted when `<idea>` and `<documentation>` suffice. Plain trimmed text body stored in BOM `summary` on the enclosing definition element. Addressable as `com.foo.Bar.summary` on blocks and `com.foo.Bar.properties.width.summary` on members.
+
+Optional **`language`** attribute follows the same deviation pattern as `<documentation>` when a Summary struct is not required.
 
 ### `<language>` — natural language for documentation prose
 
@@ -480,7 +498,7 @@ Natural languages are distinct from **implementation languages** (`ProgrammingLa
 
 ### `<documentation>`
 
-`<documentation>` follows `<idea>` and optional `<language>`, still before `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+`<documentation>` follows `<idea>`, optional `<summary>`, and optional `<language>`, still before optional `<not>` and `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
 
 An optional **`language`** attribute on `<documentation>` references a `org.blockml.bml.language.NaturalLanguage` when the prose is written in a language other than the effective language of the enclosing definition element. Unqualified names resolve via implicit namespace `org.blockml.bml.language.*`. Omitted → inherit effective language from Block or Library.
 
@@ -501,6 +519,16 @@ An optional **`language`** attribute on `<documentation>` references a `org.bloc
 </documentation>
 ```
 
+### `<not>` — negative space (blocks only)
+
+`<not>` is an optional child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It states **what this Block is not** — explicit disambiguation from easily confused concepts (for example Sub-Block vs embedded Block, contract vs baseType). Place after `<documentation>` (and optional documentation extensions) or immediately after `<documentation>` before `<since>` / `<name>` when extensions are absent.
+
+Plain trimmed text body stored in BOM `block.not`. Addressable as `com.foo.Bar.not`. Prefer `relation=ContrastsWith` on `<see>` when pointing at a specific confusing type; `<not>` states the negation inline on the current definition.
+
+```xml
+<not>Not a runtime Block instance — this is a type definition document.</not>
+```
+
 ### Documentation extensions
 
 Wherever `<documentation>` is permitted, these **optional** siblings are also allowed:
@@ -517,6 +545,8 @@ Applies to all definition elements that carry documentation:
 ```text
 <block>  <property>  <aggregation>  <association>  <capability>  <constraint>  <suggestion>
 ```
+
+`<summary>` applies to the same StructuralDefinition elements. `<not>` is block-level only.
 
 and to any future definition element with `<documentation>`.
 
@@ -2026,7 +2056,10 @@ com.foo.Bar.properties.width        →  PropertyDefinition for width
 com.foo.Bar.aggregations.children   →  AggregationDefinition for children
 com.foo.Bar.capabilities.render     →  CapabilityDefinition for render
 com.foo.Bar.name                    →  Block metadata
+com.foo.Bar.idea                    →  Block idea
+com.foo.Bar.summary                 →  Block summary
 com.foo.Bar.documentation           →  Block documentation
+com.foo.Bar.not                     →  Block not (disambiguation)
 ```
 
 No special definition-reference constructs are required — the path itself carries all type information. See `00_bom_core.md` — § Canonical definition paths.

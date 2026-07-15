@@ -68,7 +68,7 @@ com.foo.Bar.aggregations.parts →  members[] entry where kind="aggregation" and
 com.foo.Bar.capabilities.render → members[] entry where kind="capability" and name="render"
 ```
 
-Block metadata (`name`, `idea`, `documentation`, `version`, `baseType`, `definitionFqn`, …) maps to top-level `BlockDefinition` fields — addressable directly under the Block FQN without a container segment. See `00_bom_core.md` — § Canonical definition paths · `16_framework_base_types.md` — § Definition Addressing.
+Block metadata (`name`, `idea`, `summary`, `documentation`, `not`, `version`, `baseType`, `definitionFqn`, …) maps to top-level `BlockDefinition` fields — addressable directly under the Block FQN without a container segment. See `00_bom_core.md` — § Canonical definition paths · `16_framework_base_types.md` — § Definition Addressing.
 
 ---
 
@@ -276,6 +276,8 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 ```text
 ```text
 <idea>…</idea>                               → block.idea (trimmed text)
+<summary>…</summary>                         → block.summary (trimmed text); members: member.summary
+<not>…</not>                                 → block.not (trimmed text); block definitions only
 <language>…</language>                       → block.languageFqn (NaturalLanguage FQN)
 <documentation language="…">…</documentation> → block.documentation (trimmed text); documentationLanguageFqn when attribute present
 <since>…</since>                             → block.since (trimmed text)

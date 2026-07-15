@@ -22,11 +22,14 @@
     source of truth inside BML files:
 
     idea (required, first child) — semantic meaning of the Block; the stable constant (WOT: Idea).
+    summary (optional) — short prose expansion between idea and documentation; inherited from
+      StructuralDefinition on blocks and members.
     language (optional) — natural language for documentation prose; inherits Library → Block
       default (English on org.blockml.bml.core.Block).
-    documentation (required, second child) — technical description of the Block definition itself;
+    documentation (required on root blocks) — technical description of the Block definition itself;
       optional language attribute when prose deviates from effective block language.
-    Member elements carry their own documentation for individual Properties, Aggregations, etc.
+    not (optional, blocks only) — what this Block is not; block-level disambiguation from similar concepts.
+    Member elements carry their own summary and documentation for individual Properties, Aggregations, etc.
 
     Optional extensions (wherever documentation is permitted):
     since — version from which the element is available
@@ -71,7 +74,7 @@
 
   <references>
     <see file="02_mbml.md">
-      idea, documentation, since, changelog, examples, references — authoring rules.
+      idea, summary, not, documentation, since, changelog, examples, references — authoring rules.
     </see>
     <see file="16_framework_base_types.md">
       Definition branch documentation model — StructuralDefinition sub-blocks.

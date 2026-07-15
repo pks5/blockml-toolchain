@@ -151,6 +151,9 @@ interface BlockDefinition {
   /** Short semantic description — what this Block represents in meaning. Required. */
   idea?: string
 
+  /** Optional short prose expansion — typically three to five sentences between idea and documentation. */
+  summary?: string
+
   /** Natural language FQN for documentation prose and example titles. Omitted = inherit Library, then Block default (English). */
   languageFqn?: string
 
@@ -159,6 +162,9 @@ interface BlockDefinition {
 
   /** NaturalLanguage FQN when documentation prose deviates from effective block language. Omitted = inherit. */
   documentationLanguageFqn?: string
+
+  /** What this Block is not — block-level disambiguation from similar concepts. Optional. */
+  not?: string
 
   /** Semantic version from which this definition is available. Omitted = since initial release. */
   since?: string
@@ -479,6 +485,8 @@ interface ConstrainableDefinition {
 
 interface MemberDefinitionBase {
   name: string
+  /** Optional short prose expansion between idea-level meaning and full documentation. */
+  summary?: string
   documentation?: string
   /** NaturalLanguage FQN when member documentation prose deviates from effective block language. */
   documentationLanguageFqn?: string
