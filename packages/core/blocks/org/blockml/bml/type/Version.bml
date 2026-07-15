@@ -23,10 +23,10 @@
     type itself.</documentation>
 
   <references>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Version attribute on Block and Library definitions.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       Version comparison and reference rules.
     </see>
   </references>

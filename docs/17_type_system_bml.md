@@ -194,8 +194,10 @@ org.blockml.bml.core.Block                         abstract root · omits baseTy
   ├── org.blockml.bml.core.Language                capability implementation contract
   │     ├── org.blockml.bml.language.NaturalLanguage   documentation prose · example titles
   │     │     ├── org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
-  │     ├── org.blockml.bml.language.ProgrammingLanguage   TypeScript · OpenSCAD · PseudoCode · …
-  │     └── org.blockml.bml.language.MarkupLanguage        XML · JSON · YML
+  │     ├── org.blockml.bml.language.ProgrammingLanguage(L)   TypeScript · OpenSCAD · PseudoCode · …
+  │     │     L : NaturalLanguage (default English) — optional content/text language
+  │     └── org.blockml.bml.language.MarkupLanguage(L)        XML · JSON · YML
+  │           L : NaturalLanguage (default English) — optional content/text language
   ├── org.blockml.bml.core.Entity                general entities — built-in services, domain blocks
   ├── com.machineblocks.bml.core.Block             domain base
   └── … user and domain Blocks
@@ -288,8 +290,8 @@ com.machineblocks.bml.core.Block     baseType: Entity · _presets · basePresets
 com.machineblocks.bml.core.CompositeBlock baseType: Block · _parts (default)
 org.blockml.bml.core.ValueType         baseType: Block · primitives · structs · enums
 org.blockml.bml.core.Language          baseType: Block (meta — no extra members in V1)
-org.blockml.bml.core.ProgrammingLanguage baseType: Language
-org.blockml.bml.core.MarkupLanguage    baseType: Language
+org.blockml.bml.language.ProgrammingLanguage(L) baseType: Language · L : NaturalLanguage (default English)
+org.blockml.bml.language.MarkupLanguage(L)      baseType: Language · L : NaturalLanguage (default English)
 ```
 
 ```text
@@ -1400,31 +1402,46 @@ org.blockml.bml.core.Block
   └── org.blockml.bml.core.Language                    abstract
         ├── org.blockml.bml.language.NaturalLanguage   abstract — documentation prose · example titles
         │     ├── org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
-        ├── org.blockml.bml.language.ProgrammingLanguage   abstract
+        ├── org.blockml.bml.language.ProgrammingLanguage(L)   abstract
+        │     L : NaturalLanguage (default English) — optional content/text language of formal code
         │     ├── org.blockml.bml.language.TypeScript · OpenSCAD · PseudoCode · JavaScript · Python · …
         │     └── org.blockml.bml.language.CSharp
         │           └── org.blockml.bml.language.Unity
-        ├── org.blockml.bml.language.MarkupLanguage          abstract
-        │     ├── org.blockml.bml.language.XML
-        │     ├── org.blockml.bml.language.JSON
-        │     └── org.blockml.bml.language.YML
+        ├── org.blockml.bml.language.MarkupLanguage(L)          abstract
+              L : NaturalLanguage (default English) — optional content/text language inside markup
+              ├── org.blockml.bml.language.XML
+              ├── org.blockml.bml.language.JSON
+              └── org.blockml.bml.language.YML
 ```
 
 ```xml
 <block ...>
   <name>OpenSCAD</name>
   <type>org.blockml.bml.language.OpenSCAD</type>
-  <baseType>org.blockml.bml.core.ProgrammingLanguage</baseType>
+  <baseType>org.blockml.bml.language.ProgrammingLanguage</baseType>
   <version>1.0.0</version>
   <abstract>true</abstract>
 </block>
 ```
 
+`ProgrammingLanguage` and `MarkupLanguage` declare optional generic **`L`** (`NaturalLanguage`, **`defaultType` English**). Concrete languages omit `L` and inherit English. Supply `L` only when the content/text language of the formal body must be declared:
+
+```xml
+<!-- Branch application — content language German -->
+ProgrammingLanguage(German)
+MarkupLanguage(lang:German)
+
+<!-- Specialized concrete block -->
+<baseType>lang:ProgrammingLanguage(lang:German)</baseType>
+```
+
+Bare `lang:TypeScript`, `language="OpenSCAD"`, and `baseType>lang:ProgrammingLanguage</baseType>` remain valid — `L` defaults to English.
+
 Every Capability inherits an optional `<implementation>` member from `org.blockml.bml.core.CapabilityType`. The element **`language`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<languages>` — see `16_framework_base_types.md`.
 
 Capability references inside an `<implementation>` body use **BML Embedded Expression** syntax (`<$ … $>`) — see `10_expression_language.md` — BML Embedded Expressions.
 
-**PseudoCode** is free-form program code that must be internally consistent but is otherwise unconstrained — an LLM may interpret it.
+**PseudoCode** is free-form program code that must be internally consistent but is otherwise unconstrained — an LLM may interpret it. Its prose language follows `ProgrammingLanguage.L` (default English).
 
 V1 bootstrap languages in `@blockml/core`: TypeScript, OpenSCAD, English, German, French, Spanish, Chinese, Japanese, Russian, PseudoCode, XML, JSON, YML, JavaScript, Python, CSharp, Unity, CPP, C, Java. Extensibility: domains register new Language BML files.
 

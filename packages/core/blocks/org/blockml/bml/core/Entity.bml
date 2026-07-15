@@ -20,16 +20,16 @@
     Entity. Entity is not a ValueType; use Property with a ValueType for typed payloads.</documentation>
 
   <references>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Entity branch and PrimitiveEntity wrappers.
     </see>
-    <see type="mbcore:Block">
+    <see type="mbcore:Block" relation="Extends">
       Example domain Entity base type.
     </see>
-    <see type="core:PrimitiveEntity">
+    <see type="core:PrimitiveEntity" relation="SeeAlso">
       Primitive value wrappers as Entity instances.
     </see>
-    <see type="btype:TypeReferenceEntity">
+    <see type="btype:TypeReferenceEntity" relation="SeeAlso">
       TypeReference value as Entity — used for contracts, languages, Library lists.
     </see>
   </references>

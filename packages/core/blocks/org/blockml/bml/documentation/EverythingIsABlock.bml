@@ -41,40 +41,40 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       One Root: Everything is a Block — type system and semantic vs compiler layers.
     </see>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Core concepts — Block as parametric reusable unit (definition / type).
     </see>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Definition Branch — meta-model blocks that describe block structure.
     </see>
-    <see type="core:Block">
+    <see type="core:Block" relation="Extends">
       Sole inheritance root for all Block definitions.
     </see>
-    <see type="core:ValueType">
+    <see type="core:ValueType" relation="Extends">
       ValueType branch — Property and Capability payload types.
     </see>
-    <see type="core:Language">
+    <see type="core:Language" relation="Extends">
       Language branch — implementation language bindings for Capabilities.
     </see>
-    <see type="core:Definition">
+    <see type="core:Definition" relation="Extends">
       Definition branch — blocks that describe block structure in BlockML's own language.
     </see>
-    <see type="def:BlockDefinition">
+    <see type="def:BlockDefinition" relation="Defines">
       Meta-model shape of every block document.
     </see>
-    <see type="core:Documentation">
+    <see type="core:Documentation" relation="Extends">
       Abstract base for narrative documentation blocks.
     </see>
-    <see type="btype:Integer">
+    <see type="btype:Integer" relation="SeeAlso">
       Example ValueType block — primitive type definition.
     </see>
-    <see type="lang:TypeScript">
+    <see type="lang:TypeScript" relation="SeeAlso">
       Example Language block — programming language implementation contract.
     </see>
-    <see type="doc:BlockAndInstance">
+    <see type="doc:BlockAndInstance" relation="ReadNext">
       Next reading step — definition vs instance vs composition.
     </see>
   </references>

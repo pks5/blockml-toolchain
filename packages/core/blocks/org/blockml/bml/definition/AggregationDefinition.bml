@@ -46,16 +46,16 @@
     instances — not aggregation member fields.</documentation>
 
   <references>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       AggregationDefinition BOM structure and CompositionTemplate.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Aggregations, composition placement, and default aggregation rules.
     </see>
-    <see type="core:Block">
+    <see type="core:Block" relation="Requires">
       Required branch for aggregation payload types.
     </see>
-    <see type="btype:TypeReferenceEntity">
+    <see type="btype:TypeReferenceEntity" relation="Requires">
       Entity payload for type-reference aggregations (contracts, languages, Library lists).
     </see>
   </references>

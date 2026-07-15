@@ -29,13 +29,13 @@
     abstract base declares no members.</documentation>
 
   <references>
-    <see type="core:Bootstrap">
+    <see type="core:Bootstrap" relation="ContrastsWith">
       Automation SPOE branch — separate from human/LLM reading entry.
     </see>
-    <see type="core:BlockLibrary">
+    <see type="core:BlockLibrary" relation="Requires">
       readFirst aggregation requires a ReadMe reference.
     </see>
-    <see type="blockml:README">
+    <see type="blockml:README" relation="SeeAlso">
       Concrete ReadMe for the BlockML core library.
     </see>
   </references>

@@ -54,34 +54,34 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Library Format — structure, nested libraries, blocks membership rules.
     </see>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       FQN convention, domain-scoped namespace separation, instance identity.
     </see>
-    <see file="13_bml_to_bom_mapping.md">
+    <see file="13_bml_to_bom_mapping.md" relation="AuthoringGuide">
       Library discovery and TypeRegistry bootstrap from library manifests.
     </see>
-    <see file="15_dev_setup.md">
+    <see file="15_dev_setup.md" relation="AuthoringGuide">
       Monorepo package conventions and workspace layout.
     </see>
-    <see type="blockml:Library">
+    <see type="blockml:Library" relation="SeeAlso">
       Published catalog of the BlockML core library.
     </see>
-    <see type="core:BlockLibrary">
+    <see type="core:BlockLibrary" relation="Extends">
       Abstract base for publishable library descriptors — not exported via blocks.
     </see>
-    <see type="core:ReadMe">
+    <see type="core:ReadMe" relation="Requires">
       Required readFirst target branch.
     </see>
-    <see type="core:Bootstrap">
+    <see type="core:Bootstrap" relation="SeeAlso">
       Optional bootstrap SPOE branch.
     </see>
-    <see type="doc:BmlNamespace">
+    <see type="doc:BmlNamespace" relation="SeeAlso">
       Mandatory domain.bml namespace for all BML definitions.
     </see>
-    <see type="doc:DocumentationModel">
+    <see type="doc:DocumentationModel" relation="ReadNext">
       Next reading step — idea, documentation, references on Block definitions.
     </see>
   </references>

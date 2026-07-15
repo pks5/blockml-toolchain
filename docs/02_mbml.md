@@ -570,7 +570,7 @@ org.blockml.bml.language.English           — root default on org.blockml.bml.c
 org.blockml.bml.language.German · French · Spanish · Chinese · Japanese · Russian
 ```
 
-Natural languages are distinct from **implementation languages** (`ProgrammingLanguage`, `MarkupLanguage`) used in `<implementation language="…">` and example CDATA bodies.
+Natural languages are distinct from **implementation languages** (`ProgrammingLanguage`, `MarkupLanguage`) used in `<implementation language="…">` and example CDATA bodies. Formal languages declare optional generic `L` (NaturalLanguage, default English) for the content/text language of the body — omit unless the content language must be declared.
 
 ### `<documentation>`
 
@@ -835,7 +835,7 @@ relation="Extends"        — Block reference via org.blockml.bml.relation.* (un
                           — omitted → org.blockml.bml.relation.SeeAlso
 ```
 
-Standard relation blocks: `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Domain libraries may define additional relation blocks extending `org.blockml.bml.core.Relation`.
+Standard relation blocks: `SeeAlso` (default when omitted), `ReadFirst`, `ReadNext`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Domain libraries may define additional relation blocks extending `org.blockml.bml.core.Relation`.
 
 **Why separate target attributes instead of one `target`?**
 

@@ -36,19 +36,19 @@
   </documentation>
 
   <references>
-    <see file="01_system.md">
+    <see file="01_system.md" relation="DeepDive">
       System architecture, packages, monorepo structure, and design principles.
     </see>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       BOM Core — abstract object model and fundamental architecture principles.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       BML format overview — document types, namespaces, and serialization.
     </see>
-    <see type="core:Block">
+    <see type="core:Block" relation="Extends">
       Universal semantic unit — sole inheritance root of the BlockML grammar.
     </see>
-    <see type="doc:EverythingIsABlock">
+    <see type="doc:EverythingIsABlock" relation="ReadNext">
       Next reading step — the central ontological principle of BlockML.
     </see>
   </references>

@@ -45,28 +45,28 @@
   </documentation>
 
   <references>
-    <see file="10_expression_language.md">
+    <see file="10_expression_language.md" relation="AuthoringGuide">
       Authoritative expression language reference — grammar, AST, bean calls, bindings.
     </see>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Expression layer vs BOM data layer — validation vs evaluation stages.
     </see>
-    <see file="18_function_mapping.md">
+    <see file="18_function_mapping.md" relation="AuthoringGuide">
       FunctionMapping — positional and named capability call argument mapping.
     </see>
-    <see type="mapping:FunctionMapping">
+    <see type="mapping:FunctionMapping" relation="SeeAlso">
       Default function mapping rules for capability calls and positional StructType access.
     </see>
-    <see type="service:Math">
+    <see type="service:Math" relation="SeeAlso">
       Built-in #math.* expression utilities.
     </see>
-    <see type="service:Strings">
+    <see type="service:Strings" relation="SeeAlso">
       Built-in #strings.* expression utilities.
     </see>
-    <see type="core:Capability">
+    <see type="core:Capability" relation="SeeAlso">
       Bean calls target Capability definitions on context-scoped beans.
     </see>
-    <see type="doc:CompilerArchitecture">
+    <see type="doc:CompilerArchitecture" relation="ReadNext">
       Next reading step — parser, BOM, validator, renderer pipeline.
     </see>
   </references>

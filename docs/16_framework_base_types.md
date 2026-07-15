@@ -323,7 +323,7 @@ context         String (required)  — relationship note; XML text content
 
 Exactly one target kind among `type` (standalone), `instance`, `file`, `url`, `property`, `aggregation`, `association`, and `capability` must be set. Split form: `type=` + one member attribute resolves to a canonical member path — `type` is not stored as a type target. Split form: `type=` + `instance=` resolves to `{FQN}::{id}`. `relation` is optional — omitted → `org.blockml.bml.relation.SeeAlso`. Unqualified names on `relation=` resolve via `org.blockml.bml.relation.*`.
 
-Standard relation blocks (`org.blockml.bml.relation.*`): `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Abstract base: `org.blockml.bml.core.Relation`.
+Standard relation blocks (`org.blockml.bml.relation.*`): `SeeAlso` (default when omitted), `ReadFirst`, `ReadNext`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Abstract base: `org.blockml.bml.core.Relation`.
 
 **Design note:** Eight mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see type="…">` (`TypeReference`), `<see instance="…">` (`InstanceReference`), `<see property="…">` (`PropertyReference`), `<see aggregation="…">` / `<see association="…">` / `<see capability="…">` (matching MemberReference children), `<see file="…">` (doc), `<see url="…">` (web). Member values are canonical definition paths in the BOM. See `02_mbml.md` — `<references>` — Why separate target attributes.
 
@@ -422,7 +422,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/core/Status.bml
      org/blockml/bml/core/Relation.bml
      org/blockml/bml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
-     org/blockml/bml/relation/SeeAlso.bml · ReadFirst.bml · Extends.bml · Requires.bml · ContrastsWith.bml · AuthoringGuide.bml · Defines.bml · DeepDive.bml · TaskIndex.bml · TaskStep.bml · Prerequisite.bml · Resolves.bml
+     org/blockml/bml/relation/SeeAlso.bml · ReadFirst.bml · ReadNext.bml · Extends.bml · Requires.bml · ContrastsWith.bml · AuthoringGuide.bml · Defines.bml · DeepDive.bml · TaskIndex.bml · TaskStep.bml · Prerequisite.bml · Resolves.bml
      org/blockml/bml/core/Documentation.bml · TaskGuide.bml · Diagnostic.bml
      org/blockml/bml/core/Keyword.bml · Alias.bml
      org/blockml/bml/meta/FixedKeyword.bml · FixedAlias.bml

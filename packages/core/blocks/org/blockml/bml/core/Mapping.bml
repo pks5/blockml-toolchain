@@ -32,10 +32,10 @@
   </documentation>
 
   <references>
-    <see file="18_function_mapping.md">
+    <see file="18_function_mapping.md" relation="AuthoringGuide">
       Function parameter mapping rules and component responsibilities.
     </see>
-    <see type="mapping:FunctionMapping">
+    <see type="mapping:FunctionMapping" relation="SeeAlso">
       Concrete mapping for function-like call syntax.
     </see>
   </references>

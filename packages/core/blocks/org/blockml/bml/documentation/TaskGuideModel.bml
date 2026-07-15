@@ -42,7 +42,7 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Task guides — authoring rules for TaskGuide blocks and task relations.
     </see>
     <see type="core:TaskGuide" relation="Defines">

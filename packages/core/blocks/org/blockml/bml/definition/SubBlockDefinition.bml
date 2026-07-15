@@ -38,16 +38,16 @@
     see RootBlockDefinition.</documentation>
 
   <references>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       BlockDefinition BOM structure.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Block definition authoring format and Sub-Block rules.
     </see>
-    <see type="def:BlockDefinition">
+    <see type="def:BlockDefinition" relation="Defines">
       Shared block definition shape — identity, members, and metadata.
     </see>
-    <see type="def:RootBlockDefinition">
+    <see type="def:RootBlockDefinition" relation="Defines">
       Root and embedded block shape — adds embeddedBlocks aggregation.
     </see>
   </references>

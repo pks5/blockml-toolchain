@@ -47,37 +47,37 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Authoritative type system specification — four kinds, type expressions, generics.
     </see>
-    <see file="04_types.md">
+    <see file="04_types.md" relation="AuthoringGuide">
       MBOM parse/serialize rules per type — migration companion.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       TypeDescriptor AST — formal type expression structures.
     </see>
-    <see type="core:ValueType">
+    <see type="core:ValueType" relation="Extends">
       Abstract base for all value blocks used in Property and Capability types.
     </see>
-    <see type="btype:PrimitiveType">
+    <see type="btype:PrimitiveType" relation="SeeAlso">
       Branch base for atomic scalar types.
     </see>
-    <see type="btype:StructType">
+    <see type="btype:StructType" relation="SeeAlso">
       Branch base for custom value objects.
     </see>
-    <see type="btype:EnumType">
+    <see type="btype:EnumType" relation="Extends">
       Branch base for finite value sets — extends StructType.
     </see>
-    <see type="btype:ConstantType">
+    <see type="btype:ConstantType" relation="SeeAlso">
       Branch base for singleton value domains.
     </see>
-    <see type="btype:Constant">
+    <see type="btype:Constant" relation="SeeAlso">
       Generic Constant(T){value=…} for union singleton alternatives.
     </see>
-    <see type="btype:Decimal">
+    <see type="btype:Decimal" relation="SeeAlso">
       Default primitive for non-integer numeric values.
     </see>
-    <see type="doc:ValueTypeConfiguration">
+    <see type="doc:ValueTypeConfiguration" relation="ReadNext">
       Next reading step — inline ValueType instance configuration syntax.
     </see>
   </references>

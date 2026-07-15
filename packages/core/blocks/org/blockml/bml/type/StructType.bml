@@ -55,25 +55,25 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       StructType branch and struct property access rules.
     </see>
-    <see file="18_function_mapping.md">
+    <see file="18_function_mapping.md" relation="AuthoringGuide">
       Positional function-parameter syntax at call sites.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       Member declaration order and type descriptors.
     </see>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       ValueType branch.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Member declaration order authoring rules.
     </see>
-    <see file="04_types.md">
+    <see file="04_types.md" relation="AuthoringGuide">
       Anonymous Object inputType (MBOM).
     </see>
-    <see type="mapping:FunctionMapping">
+    <see type="mapping:FunctionMapping" relation="SeeAlso">
       Positional parameter mapping at capability call sites.
     </see>
   </references>

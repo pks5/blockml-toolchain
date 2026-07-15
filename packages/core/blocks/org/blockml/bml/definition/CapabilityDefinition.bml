@@ -33,31 +33,31 @@
     attribute preferred on Block instances. Structured implementation remains a child element.</documentation>
 
   <references>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       CapabilityDefinition BOM structure.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Capabilities authoring rules.
     </see>
-    <see type="cap:Inbound">
+    <see type="cap:Inbound" relation="Requires">
       Capability typeFqn — requires inputType.
     </see>
-    <see type="cap:Outbound">
+    <see type="cap:Outbound" relation="Requires">
       Capability typeFqn — requires outputType.
     </see>
-    <see type="cap:Transformation">
+    <see type="cap:Transformation" relation="Requires">
       Capability typeFqn — requires inputType and outputType.
     </see>
-    <see type="core:Language">
+    <see type="core:Language" relation="SeeAlso">
       Implementation language bindings.
     </see>
-    <see type="core:ValueType">
+    <see type="core:ValueType" relation="SeeAlso">
       inputType and outputType payload types.
     </see>
-    <see type="core:Entity">
+    <see type="core:Entity" relation="ContrastsWith">
       Implementation sub-block branch — structured language binding, not a ValueType.
     </see>
-    <see type="def:MemberDefinition">
+    <see type="def:MemberDefinition" relation="Extends">
       Parent type — override/abstract/final are local declaration properties on MemberDefinition;
       capability adds an optional implementation binding element.
     </see>

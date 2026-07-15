@@ -13,5 +13,8 @@
   <is>The PseudoCode programming language</is>
 
   <documentation>ProgrammingLanguage for free-form pseudocode implementations. The code must be
-    internally consistent but is otherwise unconstrained — an LLM may interpret it.</documentation>
+    internally consistent but is otherwise unconstrained — an LLM may interpret it. Inherits
+    ProgrammingLanguage.L (NaturalLanguage, default English) — declare a content language only when
+    the pseudocode prose is not English (for example a specialised block with baseType
+    ProgrammingLanguage(lang:German)).</documentation>
 </block>

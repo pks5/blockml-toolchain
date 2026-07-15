@@ -43,25 +43,25 @@
   </documentation>
 
   <references>
-    <see file="06_compiler.md">
+    <see file="06_compiler.md" relation="DeepDive">
       Compiler pipeline — stages, packages, error handling, testing strategy.
     </see>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Fundamental architecture principles — immutable BOM, utilities, validation pipeline.
     </see>
-    <see file="01_system.md">
+    <see file="01_system.md" relation="DeepDive">
       Three-layer system architecture and package overview.
     </see>
-    <see file="13_bml_to_bom_mapping.md">
+    <see file="13_bml_to_bom_mapping.md" relation="AuthoringGuide">
       BML → BOM mapping algorithm — parser implementation contract.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       Formal BOM data structures — BomDocument, BlockDefinition.
     </see>
-    <see file="14_compiler_runtime.md">
+    <see file="14_compiler_runtime.md" relation="DeepDive">
       Compiler runtime — bootstrap, RenderContext, compile I/O model.
     </see>
-    <see type="doc:RendererFreedom">
+    <see type="doc:RendererFreedom" relation="ReadNext">
       Next reading step — renderer decides manifestation, not BlockML.
     </see>
   </references>

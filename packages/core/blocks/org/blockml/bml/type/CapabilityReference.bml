@@ -18,13 +18,13 @@
     type qualifier. Used as the type of see capability=.</documentation>
 
   <references>
-    <see type="btype:MemberReference">
+    <see type="btype:MemberReference" relation="SeeAlso">
       Abstract member path ValueType.
     </see>
-    <see type="def:CapabilityDefinition">
+    <see type="def:CapabilityDefinition" relation="Defines">
       Target member meta-model type.
     </see>
-    <see type="def:StructuralDefinition">
+    <see type="def:StructuralDefinition" relation="SeeAlso">
       see capability attribute.
     </see>
   </references>

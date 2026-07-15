@@ -19,7 +19,9 @@
   <documentation>
     PseudoCode (org.blockml.bml.language.PseudoCode) is a ProgrammingLanguage for free-form
     pseudocode Capability implementations. The code must be internally consistent but is
-    otherwise unconstrained — an LLM may interpret it.
+    otherwise unconstrained — an LLM may interpret it. Content/text language follows
+    ProgrammingLanguage.L (NaturalLanguage, default English) — declare L only when the prose
+    is not English.
 
     Why PseudoCode exists:
     • BlockML describes semantics, not a single target language
@@ -43,28 +45,28 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Language branch — PseudoCode as bootstrap language; capability implementation language attribute.
     </see>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       languages aggregation — permitted implementation languages on Block definitions.
     </see>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Semantics remain in BML — no constructor/getter/setter special cases.
     </see>
-    <see type="lang:PseudoCode">
+    <see type="lang:PseudoCode" relation="SeeAlso">
       Free-form pseudocode implementation language block.
     </see>
-    <see type="lang:ProgrammingLanguage">
+    <see type="lang:ProgrammingLanguage" relation="Extends">
       Abstract base for programming language implementations.
     </see>
-    <see type="core:Capability">
+    <see type="core:Capability" relation="Extends">
       Capability branch — implementation member references Language FQN.
     </see>
-    <see type="doc:CapabilitySemantics">
+    <see type="doc:CapabilitySemantics" relation="SeeAlso">
       Capability semantics — behaviour expressed as Capabilities, interpreted by renderers.
     </see>
-    <see type="doc:WOTFoundation">
+    <see type="doc:WOTFoundation" relation="ReadNext">
       Next reading step — optional philosophical foundation (Idea, Manifestation, Grammar, World).
     </see>
   </references>

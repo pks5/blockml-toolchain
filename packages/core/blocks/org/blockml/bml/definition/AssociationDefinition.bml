@@ -36,19 +36,19 @@
     Block types (type InstanceReference(bml:Self)[]).</documentation>
 
   <references>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       AssociationDefinition BOM structure.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Associations authoring rules; Associations vs References.
     </see>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Qualified Block Instance References for association values.
     </see>
-    <see type="btype:InstanceReference">
+    <see type="btype:InstanceReference" relation="Requires">
       Required type shape for association payload — InstanceReference(T) or InstanceReference(T)[].
     </see>
-    <see type="core:Block">
+    <see type="core:Block" relation="Requires">
       Required branch for InstanceReference type argument T.
     </see>
     <see type="def:StructuralDefinition" relation="ContrastsWith">

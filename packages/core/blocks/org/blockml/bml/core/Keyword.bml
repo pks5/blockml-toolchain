@@ -25,10 +25,10 @@
     Distinct from org.blockml.bml.core.Alias (alternative Block type names on BlockDefinition).</documentation>
 
   <references>
-    <see type="core:Entity">
+    <see type="core:Entity" relation="SeeAlso">
       Keyword instances are Entity children inside keywords aggregations.
     </see>
-    <see type="core:Alias">
+    <see type="core:Alias" relation="ContrastsWith">
       Parallel branch for alternative Block type names — not search tags.
     </see>
   </references>

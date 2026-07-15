@@ -23,13 +23,13 @@
   </documentation>
 
   <references>
-    <see type="core:ReadMe">
+    <see type="core:ReadMe" relation="SeeAlso">
       Library reading entry — ReadFirst and TaskIndex on references.
     </see>
-    <see type="core:TaskGuide">
+    <see type="core:TaskGuide" relation="SeeAlso">
       Procedural task guides — org.blockml.bml.task.* blocks.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Block documentation model — idea, documentation, references, examples.
     </see>
   </references>

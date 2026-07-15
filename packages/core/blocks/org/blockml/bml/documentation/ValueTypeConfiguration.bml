@@ -41,25 +41,25 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       ValueType instance configuration — syntax, positional order, Constant form.
     </see>
-    <see file="20_value_type_instance_configuration.md">
+    <see file="20_value_type_instance_configuration.md" relation="AuthoringGuide">
       Detailed configuration rules for ValueType instances on Properties.
     </see>
-    <see file="18_function_mapping.md">
+    <see file="18_function_mapping.md" relation="AuthoringGuide">
       Positional parameter order — shared rules with FunctionMapping.
     </see>
-    <see type="btype:Decimal">
+    <see type="btype:Decimal" relation="SeeAlso">
       Primitive with precision and scale configuration Properties.
     </see>
-    <see type="btype:Constant">
+    <see type="btype:Constant" relation="SeeAlso">
       Constant(T){value=…} — configured singleton for union alternatives.
     </see>
-    <see type="core:ValueType">
+    <see type="core:ValueType" relation="Extends">
       ValueType branch — types describe nature; Properties own values.
     </see>
-    <see type="doc:CapabilitySemantics">
+    <see type="doc:CapabilitySemantics" relation="ReadNext">
       Next reading step — semantics via Capabilities.
     </see>
   </references>

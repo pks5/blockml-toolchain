@@ -17,7 +17,8 @@
 
   <documentation>Use on &lt;see&gt; entries in README / ReadMe blocks to declare mental learning
     order. ReadFirst entries should appear first in &lt;references&gt;, in reading order. Distinct
-    from Library.readFirst (which names the ReadMe block itself). One references mechanism for all
+    from Library.readFirst (which names the ReadMe block itself) and from ReadNext (forward edge
+    between documentation blocks outside the README catalog). One references mechanism for all
     cross-links inside the ReadMe.</documentation>
 
 </block>

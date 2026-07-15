@@ -29,13 +29,13 @@
     name must differ from the Block name and every Sub-Block name.</documentation>
 
   <references>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       genericTypes aggregation on Block definitions.
     </see>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Generic type parameters and constraints.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       GenericType BOM structure.
     </see>
   </references>

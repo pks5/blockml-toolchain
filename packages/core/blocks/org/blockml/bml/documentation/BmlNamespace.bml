@@ -51,25 +51,25 @@
   </documentation>
 
   <references>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Mandatory BML namespace — authoritative rules and examples.
     </see>
-    <see file="01_system.md">
+    <see file="01_system.md" relation="DeepDive">
       FQN Namespaces — system-level summary.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Namespaces — xmlns bindings, context-bound implicit namespace, and Block FQN resolution.
     </see>
-    <see file="15_dev_setup.md">
+    <see file="15_dev_setup.md" relation="AuthoringGuide">
       Package Conventions — npm packages vs. FQN namespaces.
     </see>
-    <see file="06_compiler.md">
+    <see file="06_compiler.md" relation="DeepDive">
       BML_OUTSIDE_BML_NAMESPACE — validation error code.
     </see>
-    <see type="doc:LibrarySystem">
+    <see type="doc:LibrarySystem" relation="SeeAlso">
       Libraries, packages, and namespace membership — related reading.
     </see>
-    <see type="doc:ImplicitNamespaceResolution">
+    <see type="doc:ImplicitNamespaceResolution" relation="SeeAlso">
       Context-bound implicit namespace — unqualified references at specialized sites.
     </see>
   </references>

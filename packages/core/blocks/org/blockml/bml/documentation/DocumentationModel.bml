@@ -80,8 +80,9 @@
 
     relation attribute (optional) — Block reference to org.blockml.bml.relation.*; unqualified
     names resolve via implicit namespace org.blockml.bml.relation.*. Omitted =
-    org.blockml.bml.relation.SeeAlso. Standard blocks: SeeAlso, ReadFirst, Extends, Requires,
-    ContrastsWith, AuthoringGuide, Defines, DeepDive, TaskIndex, TaskStep, Prerequisite, Resolves.
+    org.blockml.bml.relation.SeeAlso. Standard blocks: SeeAlso, ReadFirst, ReadNext, Extends,
+    Requires, ContrastsWith, AuthoringGuide, Defines, DeepDive, TaskIndex, TaskStep, Prerequisite,
+    Resolves. README curates with ReadFirst; documentation blocks chain with ReadNext.
 
     README / ReadMe blocks (baseType org.blockml.bml.core.ReadMe) are library reading entry points
     for humans and LLMs (Library.readFirst). Curated reading order is expressed via references with
@@ -93,25 +94,25 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       idea, summary, keywords, not, aliases, documentation, since, changelog, examples, references — authoring rules.
     </see>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Definition branch documentation model — StructuralDefinition sub-blocks.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       DocumentationExample, DocumentationReference — BOM documentation shapes.
     </see>
-    <see file="01_system.md">
+    <see file="01_system.md" relation="DeepDive">
       V2 documentation migration — Markdown vs BML roles.
     </see>
-    <see type="lang:NaturalLanguage">
+    <see type="lang:NaturalLanguage" relation="Extends">
       Natural language branch — documentation prose and example titles.
     </see>
-    <see type="core:Block">
+    <see type="core:Block" relation="SeeAlso">
       Root block — documents idea, language, documentation, references on every definition.
     </see>
-    <see type="core:Definition">
+    <see type="core:Definition" relation="Extends">
       Definition branch — shared documentation aggregations.
     </see>
     <see type="def:StructuralDefinition" relation="Defines">
@@ -120,19 +121,22 @@
     <see type="core:Relation" relation="Defines">
       Relation branch — optional relation attribute on see entries.
     </see>
-    <see type="core:Documentation">
+    <see type="core:Documentation" relation="Extends">
       Abstract base for narrative documentation blocks in readFirst lists.
     </see>
-    <see type="core:Bootstrap" relation="Defines">
+    <see type="core:Bootstrap" relation="ContrastsWith">
       Abstract bootstrap role marker — ReadFirst lives on references, not on Bootstrap.
     </see>
     <see type="blockml:README" relation="SeeAlso">
       Standard README entry point — references with relation=ReadFirst in learning order.
     </see>
     <see type="relation:ReadFirst" relation="Defines">
-      Relation block for curated bootstrap reading path entries.
+      Relation block for curated README reading path entries.
     </see>
-    <see type="doc:BootstrapModel">
+    <see type="relation:ReadNext" relation="Defines">
+      Relation block for forward links between documentation blocks (Next reading step).
+    </see>
+    <see type="doc:BootstrapModel" relation="ReadNext">
       Next reading step — README.bml, ReadFirst, TaskIndex, bootstrap context.
     </see>
     <see type="doc:TaskGuideModel" relation="SeeAlso">

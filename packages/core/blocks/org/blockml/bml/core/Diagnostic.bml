@@ -21,10 +21,10 @@
     procedural resolution path without searching documentation prose.</documentation>
 
   <references>
-    <see type="core:TaskGuide">
+    <see type="core:TaskGuide" relation="SeeAlso">
       Procedural fix guides linked via relation=Resolves.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       Diagnostic code catalogue — BML_* error and warning codes.
     </see>
   </references>

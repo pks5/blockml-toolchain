@@ -55,40 +55,40 @@
   </documentation>
 
   <references>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Object identity and FQN convention.
     </see>
-    <see file="01_system.md">
+    <see file="01_system.md" relation="DeepDive">
       FQN (Fully Qualified Name) system overview.
     </see>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Generics and BML attribute syntax for type parameters · TypeReferenceEntity · MemberReference.
     </see>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Definition branch and StructuralDefinition Reference sub-block.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Namespace resolution and Block definition authoring.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       typeFqn fields in BOM structures.
     </see>
-    <see type="def:BlockDefinition">
+    <see type="def:BlockDefinition" relation="Defines">
       type and baseType TypeReference properties (Block FQN / TypeExpression text).
     </see>
-    <see type="def:PropertyDefinition">
+    <see type="def:PropertyDefinition" relation="SeeAlso">
       property type attribute (ValueType FQN).
     </see>
-    <see type="def:GenericTypeDefinition">
+    <see type="def:GenericTypeDefinition" relation="Defines">
       parameter baseType constraint attribute.
     </see>
-    <see type="btype:InstanceReference">
+    <see type="btype:InstanceReference" relation="SeeAlso">
       Sibling ValueType for Block instance pointers — association types and see instance=.
     </see>
-    <see type="btype:MemberReference">
+    <see type="btype:MemberReference" relation="SeeAlso">
       Member definition path references — PropertyReference and siblings.
     </see>
-    <see type="btype:TypeReferenceEntity">
+    <see type="btype:TypeReferenceEntity" relation="SeeAlso">
       Entity wrapper for TypeReference values in composition or aggregation.
     </see>
   </references>

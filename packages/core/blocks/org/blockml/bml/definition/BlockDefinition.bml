@@ -47,29 +47,29 @@
     (BML_UNKNOWN_TYPE, BML_AMBIGUOUS_TYPE, BML_UNKNOWN_NAMESPACE_PREFIX).</documentation>
 
   <references>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       BlockDefinition BOM structure.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Block definition authoring format and type reference rules.
     </see>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Definition Addressing and genericTypes aggregation.
     </see>
-    <see type="core:Block">
+    <see type="core:Block" relation="Extends">
       Sole inheritance root — empty &lt;baseType /&gt; only (org.blockml.bml.core.Block).
     </see>
-    <see type="def:SubBlockDefinition">
+    <see type="def:SubBlockDefinition" relation="Extends">
       Nested Sub-Block definition shape — extends this type.
     </see>
-    <see type="def:RootBlockDefinition">
+    <see type="def:RootBlockDefinition" relation="Extends">
       Root and embedded block shape — extends SubBlockDefinition.
     </see>
-    <see type="btype:TypeReferenceEntity">
+    <see type="btype:TypeReferenceEntity" relation="Defines">
       Entity payload for contracts, languages, language, and subTypes aggregations — not
       type/baseType (those stay scalar TypeReference text).
     </see>
-    <see type="btype:TypeReference">
+    <see type="btype:TypeReference" relation="Defines">
       ValueType for identity type and baseType properties (FQN / TypeExpression text).
     </see>
   </references>

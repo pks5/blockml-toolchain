@@ -30,16 +30,16 @@
     Valid: &lt;property name="count" type="Integer"&gt;&lt;value&gt;5&lt;/value&gt;&lt;/property&gt;</documentation>
 
   <references>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       PrimitiveType branch and PrimitiveEntity wrappers.
     </see>
-    <see type="btype:Number">
+    <see type="btype:Number" relation="SeeAlso">
       Numeric primitive branch.
     </see>
-    <see type="btype:Text">
+    <see type="btype:Text" relation="SeeAlso">
       Textual primitive branch.
     </see>
-    <see type="btype:IntegerEntity">
+    <see type="btype:IntegerEntity" relation="SeeAlso">
       Example concrete Entity wrapper for primitive values.
     </see>
   </references>

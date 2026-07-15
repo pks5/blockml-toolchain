@@ -42,22 +42,22 @@
     FullyQualifiedNameEntity.</documentation>
 
   <references>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       TypeReferenceEntity, sugar for empty children, and PrimitiveEntity pattern.
     </see>
-    <see file="13_bml_to_bom_mapping.md">
+    <see file="13_bml_to_bom_mapping.md" relation="AuthoringGuide">
       TypeReferenceEntity aggregation mapping.
     </see>
-    <see type="btype:TypeReference">
+    <see type="btype:TypeReference" relation="SeeAlso">
       Scalar FQN / TypeExpression ValueType wrapped by this Entity.
     </see>
-    <see type="core:PrimitiveEntity">
+    <see type="core:PrimitiveEntity" relation="SeeAlso">
       Abstract generic base — value property inherited after binding T.
     </see>
-    <see type="def:BlockDefinition">
+    <see type="def:BlockDefinition" relation="Defines">
       contracts, languages, subTypes, language aggregations.
     </see>
-    <see type="core:BlockLibrary">
+    <see type="core:BlockLibrary" relation="SeeAlso">
       readFirst, bootstrap, dependencies, subLibraries, blocks aggregations.
     </see>
   </references>

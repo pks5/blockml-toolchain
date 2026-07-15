@@ -45,16 +45,16 @@
   </documentation>
 
   <references>
-    <see file="21_constant_value_type.md">
+    <see file="21_constant_value_type.md" relation="AuthoringGuide">
       Constant ValueType — syntax, validation, and external representation.
     </see>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       ValueType branch hierarchy.
     </see>
-    <see file="20_value_type_instance_configuration.md">
+    <see file="20_value_type_instance_configuration.md" relation="AuthoringGuide">
       ValueType instance configuration via {…} on type references.
     </see>
-    <see type="btype:Constant">
+    <see type="btype:Constant" relation="SeeAlso">
       Standard ConstantType implementation.
     </see>
   </references>

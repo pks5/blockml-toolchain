@@ -52,25 +52,25 @@
   </documentation>
 
   <references>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Block and Block Instance — Class and Object; instance identity; qualified references.
     </see>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Class vs Object; context-dependent interpretation of ValueTypes and Languages.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Block Instances — composition children, bml:id, bml:version.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       BlockDefinition vs CompositionNode — formal BOM shapes.
     </see>
-    <see type="core:Block">
+    <see type="core:Block" relation="Extends">
       Root type — abstract definition; not used directly as composition instance type.
     </see>
-    <see type="def:BlockDefinition">
+    <see type="def:BlockDefinition" relation="Defines">
       Meta-model for block definition documents.
     </see>
-    <see type="doc:DefinitionModel">
+    <see type="doc:DefinitionModel" relation="ReadNext">
       Next reading step — how definitions describe types and support reflection.
     </see>
   </references>

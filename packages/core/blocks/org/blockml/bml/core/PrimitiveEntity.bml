@@ -28,7 +28,7 @@
     primitive value itself must become an Entity with identity, documentation, or metadata.</documentation>
 
   <references>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       PrimitiveEntity and generic resolution through inheritance.
     </see>
   </references>

@@ -51,31 +51,31 @@
   </documentation>
 
   <references>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Contracts, inheritance, Properties, Capabilities — core modeling rules.
     </see>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       abstract, final, subTypes, languages, contracts, genericTypes modifiers.
     </see>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Contracts section; validation rules by branch.
     </see>
-    <see file="18_constraints_and_suggestions.md">
+    <see file="18_constraints_and_suggestions.md" relation="AuthoringGuide">
       Property constraints and editor suggestions.
     </see>
-    <see type="core:Capability">
+    <see type="core:Capability" relation="Extends">
       Capability branch — behaviour as the public semantic surface.
     </see>
-    <see type="core:Constraint">
+    <see type="core:Constraint" relation="Extends">
       Constraint branch — reusable validation rules on Properties.
     </see>
-    <see type="cap:Inbound">
+    <see type="cap:Inbound" relation="Defines">
       Inbound capability — when external input is received.
     </see>
-    <see type="constraint:Min">
+    <see type="constraint:Min" relation="SeeAlso">
       Example scalar constraint — binds T from enclosing property type.
     </see>
-    <see type="doc:PseudoCode">
+    <see type="doc:PseudoCode" relation="ReadNext">
       Next reading step — why pseudocode exists for semantic descriptions.
     </see>
   </references>

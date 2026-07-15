@@ -39,22 +39,22 @@
     aggregations (use TypeReferenceEntity).</documentation>
 
   <references>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Definition addressing and see target attributes.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       references — Why separate target attributes.
     </see>
-    <see type="btype:TypeReference">
+    <see type="btype:TypeReference" relation="SeeAlso">
       Parent ValueType — Block type FQNs only.
     </see>
-    <see type="def:MemberDefinition">
+    <see type="def:MemberDefinition" relation="Defines">
       Abstract member meta-model branch bound by D.
     </see>
-    <see type="def:StructuralDefinition">
+    <see type="def:StructuralDefinition" relation="SeeAlso">
       Reference sub-block — property / aggregation / association / capability attributes.
     </see>
-    <see type="btype:PropertyReference">
+    <see type="btype:PropertyReference" relation="SeeAlso">
       Concrete specialization for PropertyDefinition paths.
     </see>
   </references>

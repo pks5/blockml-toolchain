@@ -45,25 +45,25 @@
   </documentation>
 
   <references>
-    <see file="00_bom_core.md">
+    <see file="00_bom_core.md" relation="DeepDive">
       Qualified Block Instance References — lexical form and visibility.
     </see>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       TypeReference · InstanceReference · MemberReference hierarchy.
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Associations authoring and see instance= target.
     </see>
-    <see type="btype:TypeReference">
+    <see type="btype:TypeReference" relation="SeeAlso">
       Sibling ValueType for Block type FQNs — not instance pointers.
     </see>
-    <see type="btype:AssociationReference">
+    <see type="btype:AssociationReference" relation="ContrastsWith">
       Path to an AssociationDefinition — not an instance pointer.
     </see>
-    <see type="def:AssociationDefinition">
+    <see type="def:AssociationDefinition" relation="SeeAlso">
       Association member type must be InstanceReference(T) or InstanceReference(T)[].
     </see>
-    <see type="def:StructuralDefinition">
+    <see type="def:StructuralDefinition" relation="SeeAlso">
       see instance attribute typed as InstanceReference.
     </see>
   </references>

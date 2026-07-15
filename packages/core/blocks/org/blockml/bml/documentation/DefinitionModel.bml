@@ -53,37 +53,37 @@
   </documentation>
 
   <references>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Definition Branch — meta-model hierarchy, addressing, and bml:xml.
     </see>
-    <see file="19_definition_blocks_and_bml_xml.md">
+    <see file="19_definition_blocks_and_bml_xml.md" relation="AuthoringGuide">
       Definition blocks and bml:xml self-description rules (WIP).
     </see>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Block Definition — idea, documentation, references, examples on root blocks and members.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       MemberDefinition, DocumentationReference — BOM reflection shapes.
     </see>
-    <see type="core:Definition">
+    <see type="core:Definition" relation="Extends">
       Abstract base of the Definition branch.
     </see>
-    <see type="def:StructuralDefinition">
+    <see type="def:StructuralDefinition" relation="Defines">
       Shared documentation model; sub-blocks Documentation, Change, Example, and Reference.
     </see>
-    <see type="def:BlockDefinition">
+    <see type="def:BlockDefinition" relation="Defines">
       Generic meta-model for block definition documents.
     </see>
-    <see type="def:MemberDefinition">
+    <see type="def:MemberDefinition" relation="Extends">
       Abstract base for property, aggregation, association, and capability declarations.
     </see>
-    <see type="def:PropertyDefinition">
+    <see type="def:PropertyDefinition" relation="Defines">
       Meta-model member shape for property declarations.
     </see>
-    <see type="core:Block">
+    <see type="core:Block" relation="Extends">
       Sole inheritance root — definitions inherit like all other Blocks.
     </see>
-    <see type="doc:TypeSystemOverview">
+    <see type="doc:TypeSystemOverview" relation="ReadNext">
       Next reading step — ValueType kinds and type expressions.
     </see>
   </references>

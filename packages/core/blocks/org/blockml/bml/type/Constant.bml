@@ -45,16 +45,16 @@
   </documentation>
 
   <references>
-    <see file="21_constant_value_type.md">
+    <see file="21_constant_value_type.md" relation="AuthoringGuide">
       Constant ValueType — syntax, validation, and future literal sugar.
     </see>
-    <see file="20_value_type_instance_configuration.md">
+    <see file="20_value_type_instance_configuration.md" relation="AuthoringGuide">
       ValueType instance configuration via {…} on type references.
     </see>
-    <see file="17_type_system_bml.md">
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Union type expressions and generic application syntax.
     </see>
-    <see type="btype:ConstantType">
+    <see type="btype:ConstantType" relation="Extends">
       ConstantType branch — singleton value domain semantics.
     </see>
   </references>

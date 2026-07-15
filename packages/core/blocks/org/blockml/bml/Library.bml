@@ -53,16 +53,16 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md">
+    <see file="02_mbml.md" relation="AuthoringGuide">
       Library format and publishable catalog rules.
     </see>
-    <see file="16_framework_base_types.md">
+    <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Bootstrap order for framework base types.
     </see>
-    <see file="12_bom_object_model.md">
+    <see file="12_bom_object_model.md" relation="DeepDive">
       Library BOM data structure.
     </see>
-    <see type="bcore:BlockLibrary">
+    <see type="bcore:BlockLibrary" relation="Extends">
       Framework base type — not exported from this catalog.
     </see>
   </references>
@@ -184,6 +184,7 @@
       <relation:Extends />
       <relation:Prerequisite />
       <relation:ReadFirst />
+      <relation:ReadNext />
       <relation:Requires />
       <relation:Resolves />
       <relation:SeeAlso />

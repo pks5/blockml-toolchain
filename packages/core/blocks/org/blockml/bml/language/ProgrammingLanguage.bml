@@ -16,7 +16,35 @@
   <is>A formal programming language</is>
 
   <documentation>Abstract branch for programming languages — TypeScript, OpenSCAD, PseudoCode, and
-    other languages with defined or interpretable syntax.</documentation>
+    other languages with defined or interpretable syntax. Generic parameter L (NaturalLanguage,
+    default English) names the optional content/text language of the formal code — for example
+    Pseudocode prose, identifiers, or LLM-oriented wording. Bare ProgrammingLanguage and concrete
+    sub-types (TypeScript, PseudoCode, …) omit L and resolve to English; declare
+    ProgrammingLanguage(German) or baseType ProgrammingLanguage(lang:German) only when the content
+    language matters.</documentation>
+
+  <genericTypes>
+    <L baseType="lang:NaturalLanguage" defaultType="lang:English"/>
+  </genericTypes>
+
   <abstract>true</abstract>
+
+  <references>
+    <see type="lang:NaturalLanguage" relation="Defines">
+      L bound — content/text language of formal code (default English).
+    </see>
+    <see type="lang:English" relation="Defines">
+      DefaultType for L when the content language is omitted.
+    </see>
+    <see type="lang:MarkupLanguage" relation="SeeAlso">
+      Parallel formal-language branch with the same L parameter.
+    </see>
+    <see type="lang:PseudoCode" relation="SeeAlso">
+      Typical consumer — free-form code whose prose language may be declared via L.
+    </see>
+    <see file="17_type_system_bml.md" relation="AuthoringGuide">
+      Language branch and generic type parameters.
+    </see>
+  </references>
 
 </block>
