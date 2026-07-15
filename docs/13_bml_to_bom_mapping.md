@@ -517,7 +517,7 @@ otherwise              →  public
 
 Mismatch between derived and explicit `visibility` → `BML_VISIBILITY_MISMATCH` at validate.
 
-Partial overrides: a child Block may declare a member with only the logical name and changed attributes. Unspecified fields inherit from the parent member at `resolveEffectiveMembers()`. Override key is resolved `(namespace, normalizedLogicalName)` — visibility prefixes stripped; not the XML xmlns prefix. Visibility may widen (`_name` → `name`); narrowing → `BML_VISIBILITY_NARROWING`.
+Partial overrides: a child Block may declare a member with only the logical name and changed attributes. Unspecified fields inherit from the parent member at `resolveEffectiveMembers()`. **Unchanged `type` should be omitted** — restate `type` only when refining it. Override key is resolved `(namespace, normalizedLogicalName)` — visibility prefixes stripped; not the XML xmlns prefix. Visibility may widen (`_name` → `name`); narrowing → `BML_VISIBILITY_NARROWING`.
 
 **General namespace rule:** all XML prefixes in BML (Block type tags, member element QNames, `type:` shorthand, `bml:*`) are resolved during parsing. The BOM stores canonical namespace identifiers only. See `02_mbml.md` — Namespaces · § Member Namespace (Element QName).
 

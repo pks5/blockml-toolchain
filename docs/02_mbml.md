@@ -1540,8 +1540,8 @@ Override matching uses the **normalized logical name** (visibility prefixes stri
 <!-- Parent: protected catalogue member -->
 <_name abstract="true" type="Text" bml:xml="element"/>
 
-<!-- Child: widen to public and change serialization shape -->
-<name override="true" type="Text" bml:xml="attribute"/>
+<!-- Child: widen to public and change serialization shape; type unchanged → omit -->
+<name override="true" bml:xml="attribute"/>
 ```
 
 Effective visibility and authored name come from the **child** declaration. Member-level `bml:xml` may change on the same override (e.g. `element` → `attribute`). Same-Block duplicates that differ only by prefix remain invalid (`BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT`).
@@ -1947,6 +1947,12 @@ contract completion uses the same rule as baseType refinement. Only the **member
 flag, and **changed attributes** need to be specified — all other attributes are inherited from the
 parent definition.
 
+**Omit unchanged `type`:** when the override does not change the member type, do **not** restate
+`type` — it is inherited. Restating an identical type is allowed but discouraged (noise). Declare
+`type` on an override only when refining or replacing the inherited type. The same omit-unchanged
+rule applies to other unchanged attributes (`bml:xml`, defaults, …) — only differences belong on the
+override.
+
 To refine an inherited abstract member while keeping it abstract, use `override="true"` with
 `abstract="true"`. To implement an inherited abstract member, use `override="true"` without
 `abstract="true"` (defaults to locally concrete) and supply the missing required parts locally
@@ -1976,11 +1982,12 @@ The effective definition is the **merge** of both declarations. Override matchin
 ```text
 Same member kind required     — property overrides property, aggregation overrides aggregation, …
 Only specified attrs replaced — unspecified attrs inherited from parent
+Omit unchanged type           — do not restate type when it is the same as the parent (should omit)
 override="true" required      — for any local redeclaration merging with a baseType or contract member
 Inherited aggregation override  → override="true" required; type may be omitted
-Private members               — cannot be overridden
 Visibility may widen          — e.g. `_name` → `name` (protected → public); narrowing → BML_VISIBILITY_NARROWING
 Member bml:xml may change     — e.g. element → attribute on the same override
+Private members               — cannot be overridden
 final="true" on parent        — prevents override in child Blocks → BML_FINAL_MEMBER_OVERRIDE
 override without parent       — BML_OVERRIDE_WITHOUT_PARENT
 override omitted on merge     — BML_OVERRIDE_REQUIRED

@@ -117,10 +117,11 @@
         false when omitted.
 
         Visibility may widen on override (e.g. protected `_name` → public `name`); narrowing →
-        BML_VISIBILITY_NARROWING. Member-level bml:xml may change on the same override. Private
-        members cannot be overridden → BML_FINAL_MEMBER_OVERRIDE. override does not modify abstract
-        or final on other layers. It may be used to change documentation or other optional metadata
-        without implementing an abstract member.</documentation>
+        BML_VISIBILITY_NARROWING. Member-level bml:xml may change on the same override. Unchanged
+        type should be omitted (inherited) — restate type only when refining it. Private members
+        cannot be overridden → BML_FINAL_MEMBER_OVERRIDE. override does not modify abstract or final
+        on other layers. It may be used to change documentation or other optional metadata without
+        implementing an abstract member.</documentation>
     </override>
     <visibility bml:xml="element|attribute">
       <documentation>Optional BlockML access visibility — private, protected, or public. Omitted =

@@ -576,11 +576,12 @@ final      — when true, child Blocks cannot override this member. Validator-en
 
 ### Member Inheritance and Overrides
 
-Members are inherited via `baseType`. Derived Blocks inherit all Members of their base type and may add their own. **Partial overrides** are permitted — a child Block may redeclare an inherited member with only the attributes that change; unspecified attributes are inherited from the parent definition.
+Members are inherited via `baseType`. Derived Blocks inherit all Members of their base type and may add their own. **Partial overrides** are permitted — a child Block may redeclare an inherited member with only the attributes that change; unspecified attributes are inherited from the parent definition. **Unchanged `type` should be omitted** on the override (inherited); restate `type` only when refining it.
 
 ```text
 Same member kind required
 Only specified attributes replaced
+Omit unchanged type on override (should omit; identical restatement discouraged)
 Override key: resolved (namespace, normalizedLogicalName) — visibility prefixes stripped; not XML xmlns prefix
 Private members cannot be overridden
 Visibility may widen on override (protected → public); narrowing → BML_VISIBILITY_NARROWING
