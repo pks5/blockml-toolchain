@@ -1,0 +1,36 @@
+<!--
+  MachineBlocks — Align enum
+
+  FQN: com.machineblocks.bml.type.Align
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="com.machineblocks.bml.type">
+  <name>Align</name>
+  <type>type:Align</type>
+  <baseType>btype:EnumType</baseType>
+  <is>An alignment along an axis</is>
+
+  <documentation>Enum ValueType for start / center / end alignment on MachineBlocks bricks.</documentation>
+  <properties>
+    <value type="Text">
+      <documentation>Enum literal used in property values and expressions.</documentation>
+    </value>
+  </properties>
+
+  <aggregations>
+    <values>
+      <composition>
+        <Align bml:id="Start" value="start" />
+        <Align bml:id="Center" value="center" />
+        <Align bml:id="End" value="end" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

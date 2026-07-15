@@ -744,7 +744,7 @@ visibility    — optional; must match naming convention
 
 **Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order defines array literal authoring, FunctionMapping positional parameters, and compatibility — see `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md`.
 
-**EnumType property values:** when the property `type` is an EnumType, enum instance references may omit the `{EnumTypeFQN}::` prefix — `STANDARD` is equivalent to `com.machineblocks.bml.type.BaseCutoutType::STANDARD` on a `BaseCutoutType` property. See `17_type_system_bml.md` — EnumType.
+**EnumType property values:** when the property `type` is an EnumType, enum instance references may omit the `{EnumTypeFQN}::` prefix — `Standard` is equivalent to `com.machineblocks.bml.type.BaseCutout::Standard` on a `BaseCutout` property. See `17_type_system_bml.md` — EnumType.
 
 **Property value semantics:** property values are **never linked** to other instances — always deep copies. Enum `FQN::id` tokens are resolution keys, not live references to `_values` composition entries. See `12_bom_object_model.md` — Property Value Semantics.
 

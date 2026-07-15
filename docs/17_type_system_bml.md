@@ -371,7 +371,7 @@ org.blockml.bml.core.ValueType              abstract — never stores data
   │     │     └── org.blockml.bml.type.Float     — binary float — special-purpose only
   │     └── org.blockml.bml.type.Boolean      — neither textual nor numeric
   ├── org.blockml.bml.type.StructType         Size3D · Color · Address · …
-  ├── org.blockml.bml.type.EnumType           extends StructType — BaseCutoutType · Direction · …
+  ├── org.blockml.bml.type.EnumType           extends StructType — BaseCutout · Direction · …
   └── org.blockml.bml.type.ConstantType       singleton value domains
         └── org.blockml.bml.type.Constant     Constant(T){value=…}
 ```
@@ -382,7 +382,7 @@ org.blockml.bml.core.ValueType              abstract — never stores data
 |---|---|---|
 | **PrimitiveType** | Atomic scalar semantics — no stored values | `Boolean`, `Integer`, `Decimal`, `Float`, `Text`, `URL`, `Version` |
 | **StructType** | Custom value objects — structure via properties | `Size3D`, `Color`, `Address`, `Transform` |
-| **EnumType** | StructType + finite allowed values | `Direction`, `Face`, `StudType`, `BaseCutoutType` |
+| **EnumType** | StructType + finite allowed values | `Direction`, `Face`, `StudType`, `BaseCutout` |
 | **ConstantType** | Singleton value domain — one configured literal | `Constant(Text){value="auto"}`, `Constant(Integer){value=5}` |
 
 `StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate ValueType branch.
@@ -988,15 +988,15 @@ Enum values are **Block instances** in `<composition aggregation="_values">` —
 
 ```xml
 <block ...>
-  <name>BaseCutoutType</name>
-  <type>com.machineblocks.bml.type.BaseCutoutType</type>
+  <name>BaseCutout</name>
+  <type>com.machineblocks.bml.type.BaseCutout</type>
   <baseType>org.blockml.bml.type.EnumType</baseType>
   <version>1.0.0</version>
 
   <composition aggregation="_values">
-    <BaseCutoutType id="NONE"     value="none"     />
-    <BaseCutoutType id="STANDARD" value="standard" />
-    <BaseCutoutType id="GROOVE"   value="groove"   />
+    <BaseCutout id="None"     value="none"     />
+    <BaseCutout id="Standard" value="standard" />
+    <BaseCutout id="Groove"   value="groove"   />
   </composition>
 
 </block>
@@ -1009,31 +1009,31 @@ Properties typed with an EnumType **must not** carry `<suggestions>` — valid v
 When the property `type` is an EnumType, a qualified enum instance reference may omit the `{EnumTypeFQN}::` prefix:
 
 ```text
-Property type:  com.machineblocks.bml.type.BaseCutoutType
+Property type:  com.machineblocks.bml.type.BaseCutout
 
-Qualified:      com.machineblocks.bml.type.BaseCutoutType::STANDARD
-Short:          STANDARD                              ← equivalent (type known from property)
+Qualified:      com.machineblocks.bml.type.BaseCutout::Standard
+Short:          Standard                              ← equivalent (type known from property)
 
 Qualified form references the enum value's id (from _values composition).
 ```
 
 ```xml
-<!-- NativeBlock.bml — property type is BaseCutoutType -->
+<!-- NativeBlock.bml — property type is BaseCutout -->
 <property name="baseCutoutType"
-          type="com.machineblocks.bml.type.BaseCutoutType"
-          defaultValue="STANDARD" />
+          type="com.machineblocks.bml.type.BaseCutout"
+          defaultValue="Standard" />
 
 <!-- equivalent explicit form -->
 <property name="baseCutoutType"
-          type="com.machineblocks.bml.type.BaseCutoutType"
-          defaultValue="com.machineblocks.bml.type.BaseCutoutType::STANDARD" />
+          type="com.machineblocks.bml.type.BaseCutout"
+          defaultValue="com.machineblocks.bml.type.BaseCutout::Standard" />
 ```
 
 The short form is valid only when the expected type is known from the property (or capability input field) declaration — not for untyped strings. The validator resolves the token against `_values` by `id`.
 
 **Resolution semantics:** the token is a **resolution key**, not a link to the `_values` entry. The effective property value is materialized as a **deep copy** of the enum instance's properties (e.g. `value="standard"`) — never as a reference to another instance. See `12_bom_object_model.md` — Property Value Semantics.
 
-**Value literal:** enum instances also carry a `value` property (e.g. `value="standard"` on id `STANDARD`). The runtime/serialization literal `standard` remains valid where a string enum literal is expected — see `04_types.md` · MBML examples. Id reference (`STANDARD` / `FQN::STANDARD`) and value literal (`standard`) are distinct surface forms; both must match a declared `_values` entry.
+**Value literal:** enum instances also carry a `value` property (e.g. `value="standard"` on id `Standard`). The runtime/serialization literal `standard` remains valid where a string enum literal is expected — see `04_types.md` · MBML examples. Id reference (`Standard` / `FQN::Standard`) and value literal (`standard`) are distinct surface forms; both must match a declared `_values` entry.
 
 ---
 

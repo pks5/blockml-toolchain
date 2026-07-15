@@ -64,7 +64,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Instance `version`** | From **`bml:version`** — optional on external block references and Library TypeReferenceEntity sugar. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert against the referenced type (`BML_UNKNOWN_VERSION` if no match). Same-document Sub-Blocks exempt. |
 | **Definition `version`** | Every Block definition has an **effective version**: own `<version>` if present, else library version if the block is exported via a Library, else error (`BML_MISSING_VERSION`). |
 | **Instance `id`** | From **`bml:id`** — authored in BOM only on `BlockInstance.id`; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `bml:id`. No FQN fallback. |
-| **Property values** | **Deep copy only — never linked.** A property value must never point to another instance by reference. Enum tokens (`STANDARD`, `FQN::id`) are resolution keys — resolved values are materialized as inline copies. Cross-instance `FQN::id` references are valid only on **associations** (e.g. `basePresets`, `Step.part`), not on property values. See § Member Values — Property Value Semantics. |
+| **Property values** | **Deep copy only — never linked.** A property value must never point to another instance by reference. Enum tokens (`Standard`, `FQN::id`) are resolution keys — resolved values are materialized as inline copies. Cross-instance `FQN::id` references are valid only on **associations** (e.g. `basePresets`, `Step.part`), not on property values. See § Member Values — Property Value Semantics. |
 
 ---
 
@@ -751,7 +751,7 @@ Values on Block instances and property defaults use a common value model.
 
 Cross-instance references via `FQN::id` exist only on **associations** — `basePresets`, `Step.part`, and similar members whose semantics explicitly model instance identity. Properties typed with ValueTypes always store inline values.
 
-**EnumType:** an authored token such as `STANDARD` or `com.machineblocks.bml.type.BaseCutoutType::STANDARD` is **not** a link to the `_values` composition entry. The validator resolves the token against `_values` by `id` and materializes the result as an inline value copy (e.g. `value="standard"`). Changes to the EnumType definition do not affect already-stored property values. See `17_type_system_bml.md` — EnumType.
+**EnumType:** an authored token such as `Standard` or `com.machineblocks.bml.type.BaseCutout::Standard` is **not** a link to the `_values` composition entry. The validator resolves the token against `_values` by `id` and materializes the result as an inline value copy (e.g. `value="standard"`). Changes to the EnumType definition do not affect already-stored property values. See `17_type_system_bml.md` — EnumType.
 
 **StructType and primitives:** authored literals remain inline in Canonical BOM — `[1, 1, 1]`, `{x:1, y:1, z:1}`, or a nested StructType element are self-contained copies, not references to other instances.
 

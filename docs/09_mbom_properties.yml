@@ -266,10 +266,10 @@ properties:
 
   - name: align
     group: positioning
-    type: com.machineblocks.bml.type.AlignValue
+    type: com.machineblocks.bml.type.Align
     default: Start
     scad_name: align
-    serializer: AlignValue
+    serializer: Align
     ai_usage: yes
     description: |
       Alignment of the block relative to its parent. Start | Center | End.
@@ -743,13 +743,13 @@ properties:
 
   - name: textAlign
     group: surface
-    type: com.machineblocks.bml.type.AlignValue
+    type: com.machineblocks.bml.type.Align
     default: Center
     scad_name: textAlign
-    serializer: AlignValue
+    serializer: Align
     ai_usage: yes
     description: |
-      Text alignment on the face.
+      Text alignment on the face. Start | Center | End.
 
   - name: textSpacing
     group: surface

@@ -34,7 +34,7 @@
 
   <!-- Native MB properties — all mb_block() parameters from 09_api_parameters.yml (v3.0.5) -->
   <properties>
-    <align type="type:AxisXYZ<AlignValue>">
+    <align type="type:AxisXYZ<Align>">
       <documentation>Alignment relative to the origin, per axis.
         "start" = toward x-/y-/z-, "end" = toward x+/y+/z+.
         Origin is [0,0,0] globally, or defined by parent's alignChildren.
@@ -46,7 +46,7 @@
       <value>start</value>
     </align>
 
-    <alignChildren type="type:AxisXYZ<AlignValue>">
+    <alignChildren type="type:AxisXYZ<Align>">
       <documentation>Defines the origin inside a parent brick for child positioning.
         Same convention as align. Children use this as their reference point.
       </documentation>
@@ -170,7 +170,7 @@
       <value>5</value>
     </baseCutoutMaxDepth>
 
-    <baseCutoutType type="type:BaseCutoutType">
+    <baseCutoutType type="type:BaseCutout">
       <documentation>Type of underside opening.
         standard: Classic LEGO underside with tubes/pins.
         studs: Alternative with only stud holes, no tube structure.
@@ -1372,7 +1372,7 @@
       <value></value>
     </text>
 
-    <textAlign type="type:AxisXYZ<AlignValue>">
+    <textAlign type="type:AxisXYZ<Align>">
       <documentation>Alignment of the text on the brick surface, using the same
         format as align and alignChildren.
       </documentation>

@@ -1,7 +1,7 @@
 <!--
-  MachineBlocks — BaseCutoutType enum
+  MachineBlocks — BaseCutout enum
 
-  FQN: com.machineblocks.bml.type.BaseCutoutType
+  FQN: com.machineblocks.bml.type.BaseCutout
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -11,8 +11,8 @@
                       "
   xmlns:btype="org.blockml.bml.type"
   xmlns:type="com.machineblocks.bml.type">
-  <name>BaseCutoutType</name>
-  <type>type:BaseCutoutType</type>
+  <name>BaseCutout</name>
+  <type>type:BaseCutout</type>
   <baseType>btype:EnumType</baseType>
   <is>An underside brick cutout shape</is>
 
@@ -26,10 +26,10 @@
   <aggregations>
     <values>
       <composition>
-        <BaseCutoutType bml:id="NONE" value="none" />
-        <BaseCutoutType bml:id="STANDARD" value="standard" />
-        <BaseCutoutType bml:id="GROOVE" value="groove" />
-        <BaseCutoutType bml:id="STUDS" value="studs" />
+        <BaseCutout bml:id="None" value="none" />
+        <BaseCutout bml:id="Standard" value="standard" />
+        <BaseCutout bml:id="Groove" value="groove" />
+        <BaseCutout bml:id="Studs" value="studs" />
       </composition>
     </values>
   </aggregations>

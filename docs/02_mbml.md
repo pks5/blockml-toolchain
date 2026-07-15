@@ -2070,7 +2070,7 @@ xmlns:type="com.machineblocks.bml.type"
 <baseColor type="type:Color">
   <value>#EAC645</value>
 </baseColor>
-<cutout type="type:BaseCutoutType">
+<cutout type="type:BaseCutout">
   <value>standard</value>
 </cutout>
 
@@ -2094,19 +2094,19 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 ```xml
 <!-- Enum type — SelectBox, validated -->
-<baseCutoutType type="type:BaseCutoutType">
+<baseCutoutType type="type:BaseCutout">
   <value>standard</value>
 </baseCutoutType>
-<!-- value literal (matches enum instance value="standard" / id STANDARD) -->
+<!-- value literal (matches enum instance value="standard" / id Standard) -->
 
-<baseCutoutType type="type:BaseCutoutType">
-  <value>STANDARD</value>
+<baseCutoutType type="type:BaseCutout">
+  <value>Standard</value>
 </baseCutoutType>
-<!-- short id form — FQN:: prefix omitted because property type is BaseCutoutType -->
+<!-- short id form — FQN:: prefix omitted because property type is BaseCutout -->
 
 <!-- equivalent qualified id reference -->
-<baseCutoutType type="type:BaseCutoutType">
-  <value>com.machineblocks.bml.type.BaseCutoutType::STANDARD</value>
+<baseCutoutType type="type:BaseCutout">
+  <value>com.machineblocks.bml.type.BaseCutout::Standard</value>
 </baseCutoutType>
 <!-- No <suggestions> allowed → BML_SUGGESTIONS_ON_ENUM -->
 ```

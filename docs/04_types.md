@@ -65,7 +65,7 @@ xmlns:type="com.machineblocks.bml.type"
 
 type="type:Size3D"          → com.machineblocks.bml.type.Size3D
 type="type:Color"           → com.machineblocks.bml.type.Color
-type="type:BaseCutoutType"  → com.machineblocks.bml.type.BaseCutoutType
+type="type:BaseCutout"  → com.machineblocks.bml.type.BaseCutout
 type='"auto" | Float'      → union type expression (replaces type:AutoOr_Float)
 ```
 
@@ -77,8 +77,8 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 On a property typed with an EnumType, enum values may be written as:
 - **value literal** — `standard` (matches `value` on the `_values` instance)
-- **short id** — `STANDARD` (omits `com.machineblocks.bml.type.BaseCutoutType::` because the property type is known)
-- **qualified id** — `com.machineblocks.bml.type.BaseCutoutType::STANDARD`
+- **short id** — `Standard` (omits `com.machineblocks.bml.type.BaseCutout::` because the property type is known)
+- **qualified id** — `com.machineblocks.bml.type.BaseCutout::Standard`
 
 **Anonymous Object inputType for Capability:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Field order defines positional parameter order — same **Ordered Struct Fields** rule as named StructTypes (see `17_type_system_bml.md`). Both positional and named call syntax are valid:
 
@@ -179,15 +179,15 @@ MBOM:  Axis.X
 SCAD:  "x"
 ```
 
-## AlignValue
+## Align
 
 ```text
-com.machineblocks.bml.type.AlignValue
+com.machineblocks.bml.type.Align
 
 Values:  Start | Center | End
 
-MBML:  align="Start"
-MBOM:  AlignValue.Start
+MBML:  align="Start"  (or value literal "start")
+MBOM:  Align.Start
 SCAD:  "start"
 ```
 
