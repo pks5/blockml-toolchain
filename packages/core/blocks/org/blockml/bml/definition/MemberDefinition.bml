@@ -22,9 +22,10 @@
     container on BlockDefinition; the XML element name is the member name (bml:xml="${ #this.name }").
     An optional XML prefix on the element name supplies the member namespace — resolved via xmlns to
     BOM namespace; unprefixed elements use the default namespace (empty string). Member identity is
-    (resolvedNamespace, localName). Declaration properties abstract, final, and override are local to
-    each member declaration — not inherited. Only their semantic effects propagate (implementation
-    obligations, override prohibitions).
+    (resolvedNamespace, normalizedLogicalName) — visibility prefixes (_ / __) are stripped from the
+    element localName before match or collision checks. Declaration properties abstract, final, and
+    override are local to each member declaration — not inherited. Only their semantic effects
+    propagate (implementation obligations, override prohibitions).
 
     Member value placement (scalar members on PropertyDefinition, CapabilityDefinition, and shared
     MemberDefinition fields):
@@ -38,11 +39,13 @@
 
     Member declaration modes are orthogonal:
     • new — introduces a new member; must not set override="true"
-    • override="true" — refines an inherited member of the same identity (namespace + localName).
-      Required on every local redeclaration that merges with an existing member from the baseType
-      chain or from contracts[] — including contract member completion. Each redeclaration layer
-      must set override="true" again — override is not inherited. Omission when a parent member
-      exists → BML_OVERRIDE_REQUIRED.
+    • override="true" — refines an inherited member of the same identity (namespace +
+      normalizedLogicalName). Required on every local redeclaration that merges with an existing
+      member from the baseType chain or from contracts[] — including contract member completion. Each
+      redeclaration layer must set override="true" again — override is not inherited. Omission when a
+      parent member exists → BML_OVERRIDE_REQUIRED. Visibility may widen on override (e.g. protected
+      `_name` → public `name`); narrowing → BML_VISIBILITY_NARROWING. Member-level bml:xml may change
+      on the same override. Private members cannot be overridden → BML_FINAL_MEMBER_OVERRIDE.
 
     Declaration properties abstract, final, and override are boolean properties local to the current
     declaration (default false). They are never inherited; only semantic effects apply across layers:
@@ -101,30 +104,35 @@
     <override type="Boolean" bml:xml="element|attribute">
       <value>false</value>
       <documentation>Local declaration property — not inherited. When true, this member declaration
-        deliberately redefines an inherited member of the same identity (namespace + localName) from
-        the baseType chain or from a merged contract. Required on every local redeclaration that
-        merges with such a parent member — including contract member completion. Each redeclaration
-        in the chain must set override="true" again. Omission when a parent member exists →
-        BML_OVERRIDE_REQUIRED. bml:xml="element|attribute" — on definitions, element form is
-        preferred; on Block instances, attribute form is preferred. The validator requires a matching
-        parent member in the accumulated effective set (baseType chain and contracts, before local
-        declarations). A new member must not set override="true" → BML_OVERRIDE_WITHOUT_PARENT.
-        Boolean with explicit true or false; empty elements and attribute shorthand without value are
-        not permitted. Default false when omitted.
+        deliberately redefines an inherited member of the same identity (namespace +
+        normalizedLogicalName; visibility prefixes stripped) from the baseType chain or from a merged
+        contract. Required on every local redeclaration that merges with such a parent member —
+        including contract member completion. Each redeclaration in the chain must set
+        override="true" again. Omission when a parent member exists → BML_OVERRIDE_REQUIRED.
+        bml:xml="element|attribute" — on definitions, element form is preferred; on Block instances,
+        attribute form is preferred. The validator requires a matching parent member in the
+        accumulated effective set (baseType chain and contracts, before local declarations). A new
+        member must not set override="true" → BML_OVERRIDE_WITHOUT_PARENT. Boolean with explicit true
+        or false; empty elements and attribute shorthand without value are not permitted. Default
+        false when omitted.
 
-        override does not modify abstract or final on other layers. It may be used to change
-        documentation or other optional metadata without implementing an abstract member.</documentation>
+        Visibility may widen on override (e.g. protected `_name` → public `name`); narrowing →
+        BML_VISIBILITY_NARROWING. Member-level bml:xml may change on the same override. Private
+        members cannot be overridden → BML_FINAL_MEMBER_OVERRIDE. override does not modify abstract
+        or final on other layers. It may be used to change documentation or other optional metadata
+        without implementing an abstract member.</documentation>
     </override>
     <visibility bml:xml="element|attribute">
       <documentation>Optional BlockML access visibility — private, protected, or public. Omitted =
         derived from the member element name: __ prefix → private, _ prefix → protected, otherwise
         public (BML_VISIBILITY_MISMATCH when explicit visibility does not match the naming
-        convention). bml:xml="element|attribute" — on definitions, element form is preferred; on
-        Block instances, attribute form is preferred. Controls BlockML authoring access — not
-        renderer BOM access. On aggregations, visibility additionally controls composition instance
-        ID reachability: public — bml:id values referencable via {EnclosingBlockFQN}::{id} from other
-        documents; protected — ids reachable within the declaring Block and its child Blocks only;
-        private — ids reachable within the declaring Block only. Maps to BOM
+        convention). On override, visibility may widen (protected → public) but not narrow
+        (BML_VISIBILITY_NARROWING). bml:xml="element|attribute" — on definitions, element form is
+        preferred; on Block instances, attribute form is preferred. Controls BlockML authoring access
+        — not renderer BOM access. On aggregations, visibility additionally controls composition
+        instance ID reachability: public — bml:id values referencable via {EnclosingBlockFQN}::{id}
+        from other documents; protected — ids reachable within the declaring Block and its child
+        Blocks only; private — ids reachable within the declaring Block only. Maps to BOM
         MemberDefinitionBase.visibility.</documentation>
     </visibility>
     <readOnly bml:xml="element|attribute">

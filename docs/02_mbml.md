@@ -498,7 +498,7 @@ Optional **`language`** attribute follows the same deviation pattern as `<docume
 
 Parser expands each trimmed token to `{ typeFqn: org.blockml.bml.meta.FreeTextKeyword, term }`. Omitted when `is`, `summary`, and `documentation` suffice. Stored in BOM `keywords[]` as `KeywordEntry`. Type-reference form: `FreeTextKeyword{term="inheritance"}`.
 
-Requires `xmlns:meta="org.blockml.bml.meta"` for FreeTextKeyword children; domain keywords use their package prefix. Catalogue keywords extend **`org.blockml.bml.meta.FixedKeyword`** — protected members (`_term`, optional `_language`, `_weight`) are set on the keyword block definition; references are empty fixed blocks:
+Catalogue keywords extend **`org.blockml.bml.meta.FixedKeyword`** — protected members (`_term`, optional `_language`, `_weight`) are set on the keyword block definition; references are empty fixed blocks. **`org.blockml.bml.meta.FreeTextKeyword`** extends FixedKeyword and widens those members to public attributes (`_term` → `term`, …) via visibility widening:
 
 ```xml
 <!-- vocab/Inheritance.bml — catalogue keyword definition -->
@@ -638,7 +638,7 @@ Stored in BOM `aliases[]` as `AliasEntry`. Member identity is fixed by `(namespa
 
 **Not** XML namespace prefix aliases. **Not** search tags — use `<keywords>`.
 
-Catalogue aliases extend **`org.blockml.bml.meta.FixedAlias`** — protected members (`_name`, optional `_language`, `_legacy`) are set on the alias block definition; references are empty fixed blocks (same pattern as FixedKeyword above).
+Catalogue aliases extend **`org.blockml.bml.meta.FixedAlias`** — protected members (`_name`, optional `_language`, `_legacy`) are set on the alias block definition; references are empty fixed blocks (same pattern as FixedKeyword above). **`org.blockml.bml.meta.FreeTextAlias`** extends FixedAlias and widens those members to public attributes (`_name` → `name`, …) via visibility widening — see § Member Visibility — Visibility on override.
 
 ### Documentation extensions
 
@@ -1525,6 +1525,27 @@ Members that differ only by visibility prefix **must not coexist** in the same B
 
 Multiple members with the same normalized name → `BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT`. A logical member exists exactly once with exactly one visibility.
 
+#### Visibility on override
+
+Override matching uses the **normalized logical name** (visibility prefixes stripped). A child may redeclare an inherited member with a **different visibility prefix** when the change **widens** access — same idea as Java allowing `protected` to be overridden as `public`:
+
+| Parent | Child override | Result |
+| ------ | -------------- | ------ |
+| `_myVar` (protected) | `myVar` (public) | allowed — widens |
+| `__myVar` (private) | any | forbidden — private cannot be overridden → `BML_FINAL_MEMBER_OVERRIDE` |
+| `myVar` (public) | `_myVar` / `__myVar` | forbidden — narrowing → `BML_VISIBILITY_NARROWING` |
+| `_myVar` (protected) | `__myVar` (private) | forbidden — narrowing → `BML_VISIBILITY_NARROWING` |
+
+```xml
+<!-- Parent: protected catalogue member -->
+<_name abstract="true" type="Text" bml:xml="element"/>
+
+<!-- Child: widen to public and change serialization shape -->
+<name override="true" type="Text" bml:xml="attribute"/>
+```
+
+Effective visibility and authored name come from the **child** declaration. Member-level `bml:xml` may change on the same override (e.g. `element` → `attribute`). Same-Block duplicates that differ only by prefix remain invalid (`BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT`).
+
 #### Public members
 
 A public member may be read and set from any BlockML definition, subject to type and structural rules.
@@ -1681,6 +1702,7 @@ BML_PRIVATE_MEMBER_ACCESS              — private member used outside declaring
 BML_PROTECTED_MEMBER_ACCESS              — protected member outside allowed inheritance/composition context
 BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT  — members differ only by visibility prefix
 BML_VISIBILITY_MISMATCH                  — explicit visibility does not match naming convention
+BML_VISIBILITY_NARROWING                 — override reduces visibility (e.g. public → protected)
 ```
 
 ### Common Member Attributes
@@ -1889,7 +1911,7 @@ xmlns:sap="com.sap.ui5"
 
 Both store `namespace = "com.sap.ui5"`, `name = "width"`. Different documents may use different prefixes without changing member meaning. Using both in the same document for the same member → duplicate-member error.
 
-**Member identity:** `(resolvedNamespace, localName)` — for example `width` (default namespace) ≠ `ui5:width` (when `ui5` resolves to a non-empty namespace), and `ui5:width` ≠ `abc:width` when the prefixes resolve to different namespaces.
+**Member identity:** `(resolvedNamespace, normalizedLogicalName)` — visibility prefixes are stripped from the element localName (`_width` / `__width` → `width`). For example `width` (default namespace) ≠ `ui5:width` (when `ui5` resolves to a non-empty namespace), and `ui5:width` ≠ `abc:width` when the prefixes resolve to different namespaces.
 
 **Scope:** the prefix must be declared in the **same document** where it is used. Each Block definition may declare its own `xmlns:` aliases.
 
@@ -1949,7 +1971,7 @@ Child:
 </size>
 ```
 
-The effective definition is the **merge** of both declarations. Override matching uses the resolved `(namespace, name)` key — see § Member Namespace (Element QName).
+The effective definition is the **merge** of both declarations. Override matching uses the resolved `(namespace, normalizedLogicalName)` key — visibility prefixes (`_` / `__`) are stripped before match; see § Member Visibility — Visibility on override · § Member Namespace (Element QName).
 
 ```text
 Same member kind required     — property overrides property, aggregation overrides aggregation, …
@@ -1957,6 +1979,8 @@ Only specified attrs replaced — unspecified attrs inherited from parent
 override="true" required      — for any local redeclaration merging with a baseType or contract member
 Inherited aggregation override  → override="true" required; type may be omitted
 Private members               — cannot be overridden
+Visibility may widen          — e.g. `_name` → `name` (protected → public); narrowing → BML_VISIBILITY_NARROWING
+Member bml:xml may change     — e.g. element → attribute on the same override
 final="true" on parent        — prevents override in child Blocks → BML_FINAL_MEMBER_OVERRIDE
 override without parent       — BML_OVERRIDE_WITHOUT_PARENT
 override omitted on merge     — BML_OVERRIDE_REQUIRED
@@ -3764,6 +3788,7 @@ standalone <composition>      → BML_STANDALONE_COMPOSITION (validation error)
 <aggregation> with type when filling inherited member → type ignored or BML_REDUNDANT_AGGREGATION_TYPE (implementation choice)
 partial member override       → merge with parent member at validate; private/final violations → errors
 visibility mismatch           → BML_VISIBILITY_MISMATCH
+visibility narrowing on override → BML_VISIBILITY_NARROWING
 private member access         → BML_PRIVATE_MEMBER_ACCESS
 protected member access       → BML_PROTECTED_MEMBER_ACCESS
 visibility prefix collision   → BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT

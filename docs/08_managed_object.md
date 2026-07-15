@@ -81,6 +81,7 @@ PropertyAccessExpression
 BML_PRIVATE_MEMBER_ACCESS              — private member used outside declaring Block
 BML_PROTECTED_MEMBER_ACCESS              — protected member outside allowed context
 BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT  — members differ only by visibility prefix
+BML_VISIBILITY_NARROWING                 — override reduces visibility (e.g. public → protected)
 ```
 
 How a Property access becomes direct field access, a getter call, reflection, or target-specific lookup is purely renderer behaviour — not governed by BlockML visibility rules.

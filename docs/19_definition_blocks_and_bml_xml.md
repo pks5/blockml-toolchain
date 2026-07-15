@@ -366,7 +366,7 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 | D1 | Default `bml:xml` when omitted on members | Member scalars: `element\|attribute`; prefer element on definitions, attribute on instances — see § Attribute Form |
 | D2 | `${ bml:Self }` prefix resolution at serialize time | Reuse xmlns bindings from BOM `SourceInfo.namespaceBindings` |
 | D3 | BOM storage shape for `<bml:xml>` element | `xmlRendering` on BlockDefinition vs `directives[]` |
-| D4 | Whether composable blocks may override inherited `bml:xml` | Probably forbidden except via Definition branch |
+| D4 | Whether composable blocks may override inherited `bml:xml` | **Member-level:** allowed on `override="true"` redeclarations (e.g. FixedAlias `_name` element → FreeTextAlias `name` attribute). **Block-level** `<bml:xml>` root element: still TBD / prefer Definition branch only |
 | D5 | XSD generation from Definition blocks | Future; replaces hand-maintained schemas long-term |
 
 ---

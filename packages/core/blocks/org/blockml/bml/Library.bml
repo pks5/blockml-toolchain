@@ -42,9 +42,10 @@
     status blocks, the Definition meta-model branch (org.blockml.bml.definition.*), bootstrap
     documentation blocks (org.blockml.bml.documentation.*), task guides (org.blockml.bml.task.*),
     diagnostic blocks (org.blockml.bml.diagnostic.*), and definition metadata entities
-    (org.blockml.bml.meta.FreeTextKeyword, org.blockml.bml.meta.FreeTextAlias,
-    org.blockml.bml.meta.FixedKeyword, org.blockml.bml.meta.FixedAlias). Domain libraries extend
-    FixedKeyword and FixedAlias for catalogue-controlled tags and alternative names.
+    (org.blockml.bml.meta.FixedKeyword, org.blockml.bml.meta.FixedAlias,
+    org.blockml.bml.meta.FreeTextKeyword, org.blockml.bml.meta.FreeTextAlias). FreeText* extends
+    Fixed* and widens protected members to public attributes. Domain libraries extend FixedKeyword
+    and FixedAlias for catalogue-controlled tags and alternative names.
 
     Membership is defined exclusively by this file's blocks list — not by directory layout.
     Version 3.0.0 applies to all exported blocks (framework convention: version only on
@@ -167,10 +168,10 @@
       <lang:XML />
       <lang:YML />
       <mapping:FunctionMapping />
-      <meta:FreeTextKeyword />
-      <meta:FreeTextAlias />
       <meta:FixedKeyword />
       <meta:FixedAlias />
+      <meta:FreeTextKeyword />
+      <meta:FreeTextAlias />
       <service:Bools />
       <service:Lists />
       <service:Math />

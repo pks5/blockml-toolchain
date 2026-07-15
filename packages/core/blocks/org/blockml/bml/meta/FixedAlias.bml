@@ -26,11 +26,12 @@
     (for example &lt;vocab:SubBlockAlias /&gt;) — type FQN is the catalogue identity; name,
     language, and legacy resolve from the alias definition.
 
-    Contrast org.blockml.bml.meta.FreeTextAlias: ad-hoc names configured per reference via public
-    attributes (name, language, legacy). FixedAlias members use the protected naming convention (_*)
-    and are set only on derived alias block definitions — not on composition instances in
-    &lt;aliases&gt;. Comma-separated shorthand on &lt;aliases&gt; does not expand to FixedAlias
-    instances.</documentation>
+    org.blockml.bml.meta.FreeTextAlias extends FixedAlias and widens the same members to public
+    attributes (`_name` → `name`, …) for ad-hoc names configured per &lt;aliases&gt; reference —
+    visibility widening on override; see 02_mbml.md — Member Visibility — Visibility on override.
+    FixedAlias members use the protected naming convention (_*) and are set only on derived alias
+    block definitions — not on composition instances in &lt;aliases&gt;. Comma-separated shorthand on
+    &lt;aliases&gt; does not expand to FixedAlias instances.</documentation>
 
   <abstract>true</abstract>
 

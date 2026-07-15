@@ -551,7 +551,7 @@ All member kinds share the same visibility rules. Visibility is determined prima
 | `_myVar`   | protected  |
 | `__myVar`  | private    |
 
-The prefix is not the logical member identity. For collision checking, normalize by stripping visibility prefixes (`myVar`, `_myVar`, `__myVar` → `myVar`). Members differing only by prefix → `BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT`.
+The prefix is not the logical member identity. For collision checking and override matching, normalize by stripping visibility prefixes (`myVar`, `_myVar`, `__myVar` → `myVar`). Members differing only by prefix in the same Block → `BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT`. On override, visibility may **widen** (`_myVar` → `myVar`); narrowing → `BML_VISIBILITY_NARROWING`. Private members cannot be overridden.
 
 **private** — usable only within the declaring Block's definition (`C = D`). Composition ownership does not grant private access to child instances.
 
@@ -581,8 +581,9 @@ Members are inherited via `baseType`. Derived Blocks inherit all Members of thei
 ```text
 Same member kind required
 Only specified attributes replaced
-Override key: resolved (namespace, name) — not XML prefix
+Override key: resolved (namespace, normalizedLogicalName) — visibility prefixes stripped; not XML xmlns prefix
 Private members cannot be overridden
+Visibility may widen on override (protected → public); narrowing → BML_VISIBILITY_NARROWING
 final="true" on parent prevents override → BML_FINAL_MEMBER_OVERRIDE
 readOnly="true" prevents instance authoring only — child Block definitions may override value/composition
 ```

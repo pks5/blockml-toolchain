@@ -452,7 +452,7 @@ namespace="…" attribute       →  BML_DEPRECATED_MEMBER_NAMESPACE_ATTR (parse
 
 The parser treats absence of a prefix as `namespace = ""` — independent of the document default `xmlns`.
 
-**Override matching:** `resolveEffectiveMembers()` compares members by **resolved `(namespace, name)`**. A child Block may use a different XML prefix for the same namespace URI — the override still matches.
+**Override matching:** `resolveEffectiveMembers()` compares members by **resolved `(namespace, normalizedLogicalName)`** — visibility prefixes (`_` / `__`) are stripped from the element localName before match. A child may widen visibility (`_name` → `name`); narrowing → `BML_VISIBILITY_NARROWING`. A child Block may use a different XML xmlns prefix for the same namespace URI — the override still matches.
 
 ```text
 Parent (xmlns:ui5="com.sap.ui5"):   <ui5:width …/>
@@ -517,7 +517,7 @@ otherwise              →  public
 
 Mismatch between derived and explicit `visibility` → `BML_VISIBILITY_MISMATCH` at validate.
 
-Partial overrides: a child Block may declare a member with only `name` and changed attributes. Unspecified fields inherit from the parent member at `resolveEffectiveMembers()`. Override key is resolved `(namespace, name)` — not the XML prefix.
+Partial overrides: a child Block may declare a member with only the logical name and changed attributes. Unspecified fields inherit from the parent member at `resolveEffectiveMembers()`. Override key is resolved `(namespace, normalizedLogicalName)` — visibility prefixes stripped; not the XML xmlns prefix. Visibility may widen (`_name` → `name`); narrowing → `BML_VISIBILITY_NARROWING`.
 
 **General namespace rule:** all XML prefixes in BML (Block type tags, member element QNames, `type:` shorthand, `bml:*`) are resolved during parsing. The BOM stores canonical namespace identifiers only. See `02_mbml.md` — Namespaces · § Member Namespace (Element QName).
 

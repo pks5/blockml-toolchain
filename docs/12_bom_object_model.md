@@ -644,7 +644,7 @@ Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" 
 
 **Function argument mapping:** handled by FunctionMapping — see `18_function_mapping.md` · `10_expression_language.md` — Capability Input Types and Function Parameters.
 
-**Effective members:** `resolveEffectiveMembers()` merges by `(namespace, name)` in this order:
+**Effective members:** `resolveEffectiveMembers()` merges by `(namespace, normalizedLogicalName)` in this order (visibility prefixes `_` / `__` stripped from element localName before match):
 
 ```text
 1. baseType chain   — walk from root Block to direct baseType
@@ -652,7 +652,7 @@ Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" 
 3. Block local      — declared members on this Block (override all)
 ```
 
-Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; `final="true"` on any declaring layer prevents redeclaration. `readOnly="true"` prevents instance authoring only — child Block definitions may still override the value/composition.
+Child and contract override declarations merge with accumulated members — only specified attributes replace inherited or merged values. Private members cannot be overridden; visibility may **widen** on override (`_name` → `name`); narrowing → `BML_VISIBILITY_NARROWING`. `final="true"` on any declaring layer prevents redeclaration. `readOnly="true"` prevents instance authoring only — child Block definitions may still override the value/composition.
 
 `abstract`, `final`, and `override` are local declaration properties stored on each declaration layer — not merged or inherited. Semantic effects propagate: an `abstract="true"` declaration creates an implementation obligation until a descendant provides a locally complete concrete override (`abstract` defaults to false). To keep a member abstract in a child block, explicitly declare `abstract="true"` on that redeclaration. Each redeclaration must set `override="true"` again when merging with a baseType or contract member — including contract completion. Omission → `BML_OVERRIDE_REQUIRED`.
 
@@ -1474,12 +1474,13 @@ BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent
 BML_PROPERTY_CYCLE            — circular property value dependencies
 BML_VISIBILITY_MISMATCH       — visibility attribute or <visibility> does not match naming convention
 BML_VISIBILITY_ON_ROOT_BLOCK  — <visibility> on root Block
+BML_VISIBILITY_NARROWING      — override reduces visibility (e.g. public → protected)
 BML_PRIVATE_MEMBER_ACCESS     — private member used outside declaring Block
 BML_PROTECTED_MEMBER_ACCESS   — protected member outside allowed inheritance/composition context
 BML_PRIVATE_SUBBLOCK_ACCESS   — private Sub-Block referenced outside declaring Block
 BML_PROTECTED_SUBBLOCK_ACCESS — protected Sub-Block outside allowed inheritance context
 BML_FINAL_MEMBER_OVERRIDE     — override attempted on final or private member
-BML_OVERRIDE_WITHOUT_PARENT   — override="true" but no same-named parent member
+BML_OVERRIDE_WITHOUT_PARENT   — override="true" but no same-named parent member (normalized logical name)
 BML_OVERRIDE_REQUIRED         — local redeclaration merges with baseType or contract member but override omitted
 BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — unsatisfied abstract implementation obligation on a concrete block
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true

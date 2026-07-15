@@ -222,12 +222,14 @@ bml:xml                — permitted on all blocks whose baseType chain includes
 ```text
 org.blockml.bml.core.Entity
   org.blockml.bml.core.Keyword          abstract branch — domain vocabulary + free text
-    org.blockml.bml.meta.FreeTextKeyword   ad-hoc term (shorthand target)
+    org.blockml.bml.meta.FixedKeyword      catalogue base (protected members on definition)
+      org.blockml.bml.meta.FreeTextKeyword   ad-hoc term — widens members to public (shorthand target)
   org.blockml.bml.core.Alias            abstract branch — domain catalogue + free text
-    org.blockml.bml.meta.FreeTextAlias     ad-hoc name (shorthand target)
+    org.blockml.bml.meta.FixedAlias        catalogue base (protected members on definition)
+      org.blockml.bml.meta.FreeTextAlias     ad-hoc name — widens members to public (shorthand target)
 ```
 
-Domain libraries define concrete blocks extending `core.Keyword` or `core.Alias` for controlled vocabulary. Comma-separated shorthand on `<keywords>` / `<aliases>` expands to **FreeTextKeyword** / **FreeTextAlias** instances only. See `02_mbml.md` — keywords · aliases.
+Domain libraries define concrete blocks extending `FixedKeyword` / `FixedAlias` for controlled vocabulary. `FreeTextKeyword` / `FreeTextAlias` extend the Fixed bases and override protected members as public attributes (`_term` → `term`, `_name` → `name`) via visibility widening. Comma-separated shorthand on `<keywords>` / `<aliases>` expands to **FreeTextKeyword** / **FreeTextAlias** instances only. See `02_mbml.md` — keywords · aliases · Member Visibility — Visibility on override.
 
 ### Task guides and diagnostics
 
@@ -423,7 +425,8 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/relation/SeeAlso.bml · ReadFirst.bml · Extends.bml · Requires.bml · ContrastsWith.bml · AuthoringGuide.bml · Defines.bml · DeepDive.bml · TaskIndex.bml · TaskStep.bml · Prerequisite.bml · Resolves.bml
      org/blockml/bml/core/Documentation.bml · TaskGuide.bml · Diagnostic.bml
      org/blockml/bml/core/Keyword.bml · Alias.bml
-     org/blockml/bml/meta/FreeTextKeyword.bml · FreeTextAlias.bml
+     org/blockml/bml/meta/FixedKeyword.bml · FixedAlias.bml
+     org/blockml/bml/meta/FreeTextKeyword.bml · FreeTextAlias.bml   ← extend Fixed*; widen to public
      org/blockml/bml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
      org/blockml/bml/core/Constraint.bml
      org/blockml/bml/constraint/*.bml        ← ValueConstraint, StructuralConstraint, BlockConstraint, Min, …
