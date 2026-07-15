@@ -1,0 +1,19 @@
+<!--
+  BlockML Core — dimensionless / no unit
+
+  FQN: org.blockml.bml.unit.None
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:unit="org.blockml.bml.unit">
+  <name>None</name>
+  <type>unit:None</type>
+  <baseType>btype:Unit</baseType>
+  <is>No unit of measure</is>
+
+  <documentation>Dimensionless Unit — use when a value has no associated unit of measure.</documentation>
+</block>

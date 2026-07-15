@@ -1,0 +1,22 @@
+<!--
+  BlockML Core — measurement unit branch
+
+  FQN: org.blockml.bml.type.Unit
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core">
+  <name>Unit</name>
+  <type>btype:Unit</type>
+  <baseType>core:ValueType</baseType>
+  <is>A measurement unit</is>
+
+  <documentation>Abstract branch for measurement units. Unit blocks describe a unit of measure —
+    they never store concrete magnitudes. Standard implementations live in org.blockml.bml.unit.*;
+    domain libraries may define additional unit blocks.</documentation>
+  <abstract>true</abstract>
+</block>

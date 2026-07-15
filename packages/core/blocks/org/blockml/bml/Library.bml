@@ -29,7 +29,8 @@
   xmlns:diag="org.blockml.bml.diagnostic"
   xmlns:meta="org.blockml.bml.meta"
   xmlns:validation="org.blockml.bml.validation"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:unit="org.blockml.bml.unit">
   <name>Library</name>
   <type>blockml:Library</type>
   <baseType>bcore:BlockLibrary</baseType>
@@ -226,12 +227,18 @@
       <btype:StructType />
       <btype:Text />
       <btype:TextEntity />
+      <btype:Unit />
       <btype:URI />
       <btype:URIEntity />
       <btype:URL />
       <btype:URLEntity />
       <btype:Version />
       <btype:VersionEntity />
+      <unit:None />
+      <unit:Millimeter />
+      <unit:Centimeter />
+      <unit:Meter />
+      <unit:Inch />
       <doc:Introduction />
       <doc:EverythingIsABlock />
       <doc:BlockAndInstance />

@@ -1,7 +1,8 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
-  xmlns:core="org.blockml.bml.core">
+  xmlns:core="org.blockml.bml.core"
+  xmlns:unit="org.blockml.bml.unit">
   <name>Number</name>
   <type>btype:Number</type>
   <baseType>btype:PrimitiveType</baseType>
@@ -11,6 +12,14 @@
     Concrete types: Integer (whole numbers), Decimal (default for non-integer numeric values),
     Float (binary floating-point — only when IEEE754 semantics are explicitly required).
     Abstract numeric branch — not resolvable via Property.type implicit namespace; use Integer, Decimal, or Float explicitly.
-    Numeric types describe semantics only; values are stored in Properties.</documentation>
+    Numeric types describe semantics only; values are stored in Properties.
+
+    Generic parameter N constrains the measurement unit (extends org.blockml.bml.type.Unit).
+    Default is org.blockml.bml.unit.None — bare Number / Integer / Decimal / Float are dimensionless.
+    Supply N at reference sites when a unit is required, e.g. Integer(unit:Millimeter).</documentation>
   <abstract>true</abstract>
+
+  <genericTypes>
+    <N baseType="btype:Unit" defaultType="unit:None"/>
+  </genericTypes>
 </block>
