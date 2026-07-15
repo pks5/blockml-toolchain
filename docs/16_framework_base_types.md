@@ -134,7 +134,7 @@ Sub-Block baseType not in effective subTypes → BML_INVALID_SUBBLOCK_TYPE
 Lists Language references permitted on <implementation language="...">.
 Meta-model type: btype:TypeReferenceEntity(core:Language)[]. Each child is a TypeReferenceEntity
 instance — empty QName sugar or explicit value.
-Type-reference interpretation follows from the Block-definition role — same pattern as Library _blocks.
+Type-reference interpretation follows from the Block-definition role — same pattern as Library blocks.
 Omitted = inherit from baseType
 Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 ```
@@ -439,7 +439,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/type/IntegerEntity.bml · TextEntity.bml · …
      org/blockml/bml/language/NaturalLanguage.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …
-     org/blockml/bml/core/BlockLibrary.bml   ← readFirst / bootstrap / _dependencies / _subLibraries / _blocks as TypeReferenceEntity; _schemas as FilePathEntity
+     org/blockml/bml/core/BlockLibrary.bml   ← readFirst / bootstrap / dependencies / subLibraries / blocks as TypeReferenceEntity; schemas as FilePathEntity
      org/blockml/bml/core/ReadMe.bml · Bootstrap.bml
      org/blockml/bml/README.bml              ← extends ReadMe
      org/blockml/bml/core/Definition.bml     ← empty Definition-branch identification marker
@@ -490,14 +490,14 @@ Full property migration from YAML → BML proceeds incrementally; structure and 
 
 ## Package Layout
 
-Membership is defined by each `Library.bml` `_blocks` list — not by directory. Nested libraries are independent units:
+Membership is defined by each `Library.bml` `blocks` list — not by directory. Nested libraries are independent units:
 
 ```text
 packages/core/blocks/
   org/blockml/bml/
     Library.bml                             ← org.blockml.bml.Library (concrete library)
   org/blockml/bml/core/
-    BlockLibrary.bml · Block.bml · …        ← BlockLibrary = framework base type, not in Library _blocks
+    BlockLibrary.bml · Block.bml · …        ← BlockLibrary = framework base type, not in Library blocks
   org/blockml/bml/compiler/                     ← example nested library (future)
     Library.bml                             ← org.blockml.bml.compiler.Library
   org/blockml/bml/status/ · type/ · constraint/ · validation/ · service/ · …

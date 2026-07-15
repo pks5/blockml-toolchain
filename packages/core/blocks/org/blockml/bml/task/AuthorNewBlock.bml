@@ -21,7 +21,7 @@
   <is>A how-to for authoring a new Block</is>
 
   <summary>Create a root .bml file with idea, documentation, type, baseType, version, and member
-    containers as needed. Register the block FQN in Library _blocks when publishing a library
+    containers as needed. Register the block FQN in Library blocks when publishing a library
     catalogue.</summary>
 
   <keywords>
@@ -38,7 +38,7 @@
     2. Declare identity and documentation metadata (idea, documentation, optional summary).
     3. Add properties, aggregations, associations, or capabilities.
     4. Add constraints, capabilities, and examples as needed.
-    5. Export via Library.bml _blocks when the type belongs to a published catalogue.
+    5. Export via Library.bml blocks when the type belongs to a published catalogue.
   </documentation>
 
   <references>
@@ -58,7 +58,7 @@
       Step 4 — choose baseType vs contracts and model members consistently.
     </see>
     <see type="blockml:Library" relation="TaskStep">
-      Step 5 — add the block FQN to Library _blocks for export.
+      Step 5 — add the block FQN to Library blocks for export.
     </see>
   </references>
 

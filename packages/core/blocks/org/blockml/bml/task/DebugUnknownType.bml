@@ -19,7 +19,7 @@
   <baseType>core:TaskGuide</baseType>
   <is>A how-to for fixing unknown types</is>
 
-  <summary>Verify FQN spelling, xmlns prefix resolution, Library _blocks membership, and bootstrap
+  <summary>Verify FQN spelling, xmlns prefix resolution, Library blocks membership, and bootstrap
     load order so the referenced type is registered in TypeRegistry before validation.</summary>
 
   <keywords>BML_UNKNOWN_TYPE, unknown type, unresolved FQN, TypeRegistry, bootstrap</keywords>
@@ -29,7 +29,7 @@
     1. Locate the failing type reference site (type, baseType, member type, contract, language).
     2. Confirm the expanded FQN matches a registered BlockDefinition.
     3. Check xmlns prefix maps to the intended namespace on this document.
-    4. Confirm the defining block is listed in Library _blocks when loaded via a library.
+    4. Confirm the defining block is listed in Library blocks when loaded via a library.
     5. Verify dependency libraries and bootstrap order load the defining catalogue first.
   </documentation>
 
@@ -41,7 +41,7 @@
       Step 1 — verify xmlns prefix and implicit namespace resolution at the reference site.
     </see>
     <see type="doc:LibrarySystem" relation="TaskStep">
-      Step 2 — confirm Library _blocks exports the defining type.
+      Step 2 — confirm Library blocks exports the defining type.
     </see>
     <see file="16_framework_base_types.md" relation="TaskStep">
       Step 3 — review bootstrap order — framework BML before project content.

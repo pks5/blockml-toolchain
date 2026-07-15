@@ -21,22 +21,23 @@
     libraries use name Library, filename Library.bml, baseType org.blockml.bml.core.BlockLibrary.
     FQN = {package}.Library from the file's package path.
 
-    Membership is defined exclusively by Library.bml _blocks — not by directory layout. A .bml
-    file is a library member only if listed in that library's _blocks. Without a Library block,
+    Membership is defined exclusively by Library.bml blocks — not by directory layout. A .bml
+    file is a library member only if listed in that library's blocks. Without a Library block,
     all .bml source files in the directory are public.
 
-    Structure:
+    Structure (catalog aggregations are public and readOnly — inspectable from foreign Blocks;
+    authored only on the Library definition):
     • readFirst — required human/LLM reading entry (ReadMe, 1..1; typically README)
     • bootstrap — optional automation SPOE (Bootstrap, 0..1)
-    • _dependencies — other Library blocks (typical: inner library depends on outer)
-    • _subLibraries — nested child Library blocks grouped under this library
-    • _blocks — exported Block and ValueType definitions
-    • _schemas — optional legacy XSD paths as FilePathEntity instances during migration
+    • dependencies — other Library blocks (typical: inner library depends on outer)
+    • subLibraries — nested child Library blocks grouped under this library
+    • blocks — exported Block and ValueType definitions
+    • schemas — optional legacy XSD paths as FilePathEntity instances during migration
     • version on Library.bml — framework convention: version only on Library for org.blockml.bml.*
 
     Nested libraries may coexist at different package levels (org.blockml.bml.Library and
     org.blockml.bml.compiler.Library are separate units). Typical pattern: inner library lists
-    outer in _dependencies; outer lists inner in _subLibraries. Violation: outer _blocks
+    outer in dependencies; outer lists inner in subLibraries. Violation: outer blocks
     referencing a Block exported by an inner library → BML_LIBRARY_NESTING_VIOLATION.
 
     Namespaces: xmlns prefixes map to FQN package prefixes. BOM stores canonical FQNs only —
@@ -45,14 +46,14 @@
     the domain's bml namespace. See doc:BmlNamespace.
 
     Version resolution:
-    effectiveBlockVersion = own version if present, else library.version if exported via _blocks,
+    effectiveBlockVersion = own version if present, else library.version if exported via blocks,
     else error BML_MISSING_VERSION. bml:version on instance references is optional exact-version
-    assert; forbidden inside Library readFirst, bootstrap, _dependencies, _subLibraries, and _blocks.
+    assert; forbidden inside Library readFirst, bootstrap, dependencies, subLibraries, and blocks.
   </documentation>
 
   <references>
     <see file="02_mbml.md">
-      Library Format — structure, nested libraries, _blocks membership rules.
+      Library Format — structure, nested libraries, blocks membership rules.
     </see>
     <see file="00_bom_core.md">
       FQN convention, domain-scoped namespace separation, instance identity.
@@ -67,7 +68,7 @@
       Published catalog of the BlockML core library.
     </see>
     <see type="core:BlockLibrary">
-      Abstract base for publishable library descriptors — not exported via _blocks.
+      Abstract base for publishable library descriptors — not exported via blocks.
     </see>
     <see type="core:ReadMe">
       Required readFirst target branch.

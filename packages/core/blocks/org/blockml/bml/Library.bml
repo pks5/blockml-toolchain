@@ -46,7 +46,7 @@
     org.blockml.bml.meta.FixedKeyword, org.blockml.bml.meta.FixedAlias). Domain libraries extend
     FixedKeyword and FixedAlias for catalogue-controlled tags and alternative names.
 
-    Membership is defined exclusively by this file's _blocks list — not by directory layout.
+    Membership is defined exclusively by this file's blocks list — not by directory layout.
     Version 3.0.0 applies to all exported blocks (framework convention: version only on
     Library.bml).
   </documentation>
@@ -81,14 +81,14 @@
     <readFirst>
       <blockml:README />
     </readFirst>
-    <!-- Optional legacy XSD — omit when all types are exported via _blocks -->
-    <_schemas>
+    <!-- Optional legacy XSD — omit when all types are exported via blocks -->
+    <schemas>
       <composition>
         <btype:FilePathEntity value="blockml-library.xsd" />
       </composition>
-    </_schemas>
+    </schemas>
 
-    <_blocks>
+    <blocks>
       <bcore:Block />
       <bcore:Bootstrap />
       <bcore:ReadMe />
@@ -252,7 +252,7 @@
       <task:AddConstraint />
       <task:DebugUnknownType />
       <diag:BML_UNKNOWN_TYPE />
-    </_blocks>
+    </blocks>
   </aggregations>
 
 </block>

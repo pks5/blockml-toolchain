@@ -813,7 +813,7 @@ A Composition fills an Aggregation with a tree of nodes. `bml:*` directives foll
 
 ```typescript
 interface CompositionTemplate {
-  /** Target aggregation name — e.g. "_parts", "_blocks", "_presets" */
+  /** Target aggregation name — e.g. "_parts", "blocks", "_presets" */
   aggregationName: string
   /** bml:with on <composition> */
   directives?: DirectiveAttribute[]
@@ -1051,7 +1051,7 @@ interface BlockInstance {
   /**
    * From bml:version — optional exact-version assert on external block references.
    * Omitted → resolve effective version from TypeRegistry context at validate time.
-   * Forbidden inside Library readFirst / bootstrap / _dependencies / _subLibraries / _blocks → BML_VERSION_NOT_ALLOWED_IN_LIBRARY.
+   * Forbidden inside Library readFirst / bootstrap / dependencies / subLibraries / blocks → BML_VERSION_NOT_ALLOWED_IN_LIBRARY.
    * See "Version Rules" below.
    */
   version?: MemberValue
@@ -1109,7 +1109,7 @@ Every Block definition has an **effective version**:
 ```text
 effectiveBlockVersion =
   own <version>,           if present on the Block definition
-  else library.version,    if the Block is exported via a Library (_blocks)
+  else library.version,    if the Block is exported via a Library (blocks)
   else error               → BML_MISSING_VERSION
 ```
 
@@ -1133,7 +1133,7 @@ External reference (type from another BML file — `.bml`):
   → bml:version present  → target must be exactly that version
                            → no match → BML_UNKNOWN_VERSION (error)
 
-Inside Library files (readFirst / bootstrap / _dependencies / _subLibraries / _blocks):
+Inside Library files (readFirst / bootstrap / dependencies / subLibraries / blocks):
   → bml:version FORBIDDEN on composition children
   → present → BML_VERSION_NOT_ALLOWED_IN_LIBRARY (error)
 ```
@@ -1200,34 +1200,34 @@ Cycles in `basePresets` → `BML_PRESET_CYCLE`.
 
 Library descriptors are ordinary `BlockDefinition` documents with `baseType="org.blockml.bml.core.BlockLibrary"`.
 
-`org.blockml.bml.core.BlockLibrary` is a framework base type in `core/` — not exported via Library `_blocks`. All concrete `Library.bml` files inherit from it.
+`org.blockml.bml.core.BlockLibrary` is a framework base type in `core/` — not exported via Library `blocks`. All concrete `Library.bml` files inherit from it.
 
 **Naming (required):** every real library block is named `Library` (`<name>Library</name>`), filename is always `Library.bml`. FQN = package + `Library` (e.g. `com.machineblocks.bml.bricks.Library`, `org.blockml.bml.Library`, `org.blockml.bml.compiler.Library`).
 
-**Membership is defined only by `Library.bml` — not by directories.** A Block belongs to the Library whose `_blocks` lists it. Package-prefix overlap does not imply inclusion.
+**Membership is defined only by `Library.bml` — not by directories.** A Block belongs to the Library whose `blocks` lists it. Package-prefix overlap does not imply inclusion.
 
 ### Nested libraries
 
 Multiple `Library.bml` files may exist at different package levels (e.g. `org.blockml.bml.Library` and `org.blockml.bml.compiler.Library`). Each is an independent publishable unit.
 
 ```text
-Typical dependency:   inner _dependencies → outer Library
-Typical grouping:     outer _subLibraries → inner Library
-Forbidden:            outer _blocks → Block exported by inner Library
+Typical dependency:   inner dependencies → outer Library
+Typical grouping:     outer subLibraries → inner Library
+Forbidden:            outer blocks → Block exported by inner Library
 ```
 
-Inner libraries usually declare the outer library in `_dependencies`. The outer library declares inner libraries in `_subLibraries` and must **not** re-export inner-library blocks in `_blocks` — consumers depend on the inner library directly. Violation → `BML_LIBRARY_NESTING_VIOLATION`.
+Inner libraries usually declare the outer library in `dependencies`. The outer library declares inner libraries in `subLibraries` and must **not** re-export inner-library blocks in `blocks` — consumers depend on the inner library directly. Violation → `BML_LIBRARY_NESTING_VIOLATION`.
 
 ```text
 org.blockml.bml.core.BlockLibrary
-  property     description     String
-  property     language        org.blockml.bml.language.NaturalLanguage
-  aggregation  readFirst       1..1  org.blockml.bml.core.ReadMe
-  aggregation  bootstrap       0..1  org.blockml.bml.core.Bootstrap
-  aggregation  _dependencies   0..n  org.blockml.bml.core.BlockLibrary
-  aggregation  _subLibraries   0..n  org.blockml.bml.core.BlockLibrary
-  aggregation  _schemas        0..n  org.blockml.bml.type.FilePathEntity
-  aggregation  _blocks         0..n  org.blockml.bml.core.Block
+  property     description     String                         (public, readOnly)
+  aggregation  language        org.blockml.bml.language.NaturalLanguage  (public, readOnly)
+  aggregation  readFirst       1..1  org.blockml.bml.core.ReadMe         (public, readOnly)
+  aggregation  bootstrap       0..1  org.blockml.bml.core.Bootstrap      (public, readOnly)
+  aggregation  dependencies    0..n  org.blockml.bml.core.BlockLibrary   (public, readOnly)
+  aggregation  subLibraries    0..n  org.blockml.bml.core.BlockLibrary   (public, readOnly)
+  aggregation  schemas         0..n  org.blockml.bml.type.FilePathEntity (public, readOnly)
+  aggregation  blocks          0..n  org.blockml.bml.core.Block          (public, readOnly)
 
 org.blockml.bml.type.FilePathEntity            property:  value (relative .xsd path)
 org.blockml.bml.core.ReadMe                   abstract role marker — human/LLM reading entry
@@ -1237,7 +1237,9 @@ org.blockml.bml.core.TaskGuide                 abstract — org.blockml.bml.task
 org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diagnostic.* error codes
 ```
 
-`readFirst`, `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use `TypeReferenceEntity`
+Catalog members are **public** and **`readOnly`**: foreign Blocks may inspect a library descriptor; only the Library definition authors the catalog (instances → `BML_READONLY_MEMBER_WRITE`).
+
+`readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` use `TypeReferenceEntity`
 aggregations — QName sugar expands to Entity instances (not instances of the named Block).
 **`bml:version` is forbidden** on sugar children; effective version is resolved from library context.
 Meta-model types: `TypeReferenceEntity(core:ReadMe)[1..1]`, `TypeReferenceEntity(core:Bootstrap)`,
@@ -1246,17 +1248,17 @@ Meta-model types: `TypeReferenceEntity(core:ReadMe)[1..1]`, `TypeReferenceEntity
 
 On library **instances**, children are authored inside `<composition>` as the aggregation-fill
 container where required by instance fill rules. For these aggregations, each child is a
-**TypeReferenceEntity** instance (sugar or explicit). `_schemas` remains a `FilePathEntity[]`
+**TypeReferenceEntity** instance (sugar or explicit). `schemas` remains a `FilePathEntity[]`
 aggregation — its children are FilePathEntity instances.
 
-The orchestrator resolves `readFirst`, `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`
+The orchestrator resolves `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks`
 entries by FQN, loads referenced definitions into the TypeRegistry using effective block versions,
 and validates library membership.
 
 `readFirst` is the required human/LLM reading entry (exactly one ReadMe — typically
 `org.blockml.bml.README`). Curated reading order uses `<references>` with `relation=ReadFirst`;
 available tasks use `relation=TaskIndex`. `bootstrap` is the optional automation SPOE (at most one
-Bootstrap). `_schemas` is optional legacy XSD (`FilePathEntity` paths). `_blocks` lists exported
+Bootstrap). `schemas` is optional legacy XSD (`FilePathEntity` paths). `blocks` lists exported
 Block and ValueType BML — primary SSOT as types migrate from XSD.
 ---
 
@@ -1290,9 +1292,9 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ```text
 1. Built-in services     — @blockml/core (org.blockml.bml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
-3. Library blocks             — org.blockml.bml.core.BlockLibrary → resolve readFirst / bootstrap / _dependencies / _subLibraries / _blocks by FQN (no bml:version)
+3. Library blocks             — org.blockml.bml.core.BlockLibrary → resolve readFirst / bootstrap / dependencies / subLibraries / blocks by FQN (no bml:version)
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
-5. Declared dependencies      — Library _dependencies entries + bom.config.json paths
+5. Declared dependencies      — Library dependencies entries + bom.config.json paths
 ```
 
 Each discovered file is parsed independently (stages [5–7]) and registered via `registerBlockDefinition(doc)`.
@@ -1373,7 +1375,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Block definitions have effective version (BML_MISSING_VERSION if standalone and no <version>)
 ✓  Library member block.version >= library.version when both declared
 ✓  External instance references resolve via registry context; optional bml:version is exact assert (BML_UNKNOWN_VERSION)
-✓  Library readFirst / bootstrap / _dependencies / _subLibraries / _blocks children have no bml:version (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
+✓  Library readFirst / bootstrap / dependencies / subLibraries / blocks children have no bml:version (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
 ✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
 ✓  Qualified FQN::id references target public aggregations with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
@@ -1392,9 +1394,9 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  contract Block references resolve and merge into effective members (declaration order; later wins)
 ✓  constraints — validateConstraints() on Block and all member kinds after resolveEffectiveMembers(); branch compatibility (BML_CONSTRAINT_TARGET_MISMATCH); rule enforcement only when validation is set (including ValuePresent → BML_CONSTRAINT_VIOLATION)
 ✓  readOnly — after resolveEffectiveMembers(): Block instances must not set members with readOnly=true (BML_READONLY_MEMBER_WRITE)
-✓  Library _blocks entries resolve to registered Block definitions (FQN + effectiveBlockVersion)
-✓  Outer library _blocks does not re-export blocks from a nested inner library (BML_LIBRARY_NESTING_VIOLATION)
-✓  Library _dependencies entries resolve to registered BlockLibrary definitions (FQN + effectiveBlockVersion)
+✓  Library blocks entries resolve to registered Block definitions (FQN + effectiveBlockVersion)
+✓  Outer library blocks does not re-export blocks from a nested inner library (BML_LIBRARY_NESTING_VIOLATION)
+✓  Library dependencies entries resolve to registered BlockLibrary definitions (FQN + effectiveBlockVersion)
 ```
 
 The validator does **not** expand directives, assign auto-IDs, or interpret aggregations.
@@ -1447,10 +1449,10 @@ BML_EXAMPLE_UNKNOWN_LANGUAGE  — <example> language attribute is not a known La
 BML_UNKNOWN_NATURAL_LANGUAGE  — <language> or documentation language attribute is not a NaturalLanguage FQN
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
-BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library readFirst / bootstrap / _dependencies / _subLibraries / _blocks
+BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library readFirst / bootstrap / dependencies / subLibraries / blocks
 BML_VERSION_BELOW_LIBRARY     — block.version < library.version when both declared (error)
 BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.version (warning — best practice: patch only)
-BML_LIBRARY_NESTING_VIOLATION  — outer library _blocks re-exports a Block exported by a nested inner library
+BML_LIBRARY_NESTING_VIOLATION  — outer library blocks re-exports a Block exported by a nested inner library
 BML_MISSING_ID                — referenced instance or bml:each element lacks explicit bml:id
 BML_UNRESOLVABLE_INSTANCE_REF — blockId / placeId / FQN::id does not match any explicit id in target aggregation
 BML_UNEXPORTED_INSTANCE_REF   — qualified {BlockFQN}::{id} targets an instance in a non-public aggregation

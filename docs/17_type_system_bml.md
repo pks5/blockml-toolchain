@@ -698,12 +698,12 @@ Children inside `<composition>` are owned instances of the aggregation payload t
 </_parts>
 
 <!-- TypeReferenceEntity aggregation — sugar or explicit Entity -->
-<_blocks>
+<blocks>
   <composition>
     <con:MyContract />
     <!-- equivalent: <btype:TypeReferenceEntity value="con:MyContract" /> -->
   </composition>
-</_blocks>
+</blocks>
 ```
 
 See `02_mbml.md` — § Aggregations · `13_bml_to_bom_mapping.md` — TypeReferenceEntity aggregation.

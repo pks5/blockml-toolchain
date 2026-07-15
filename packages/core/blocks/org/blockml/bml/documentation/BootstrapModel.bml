@@ -25,9 +25,9 @@
     Bootstrap order (summary):
     1. Core branches — Block, ValueType, Language, Status, Relation, Constraint, Capability, Definition
     2. Concrete types — Integer, Decimal, languages, services, constraints, relations
-    3. BlockLibrary — library descriptor base (readFirst, bootstrap, _dependencies, _subLibraries,
-       _schemas, _blocks)
-    4. org.blockml.bml.Library — published catalog via _blocks; readFirst → README
+    3. BlockLibrary — library descriptor base (readFirst, bootstrap, dependencies, subLibraries,
+       schemas, blocks)
+    4. org.blockml.bml.Library — published catalog via blocks; readFirst → README
     5. Domain framework BML (e.g. com.machineblocks.bml.core.*)
 
     Two library entry roles (do not conflate):

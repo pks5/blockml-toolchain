@@ -19,18 +19,19 @@ No Block, Library, Type, Language, Service, Capability, or other BlockML definit
 ## Library structure
 
 - Abstract base type: `org.blockml.bml.core.BlockLibrary` in `packages/core/blocks/org/blockml/bml/core/BlockLibrary.bml`
-- Framework base type — **not** exported via any Library `_blocks`
+- Framework base type — **not** exported via any Library `blocks`
 - Concrete libraries: `<name>Library</name>`, filename **`Library.bml`**, `baseType="bcore:BlockLibrary"`
 - FQN = `{package}.Library` from the file's package path
-- **Membership is defined only by `Library.bml` `_blocks`** — not by directories
+- **Membership is defined only by `Library.bml` `blocks`** — not by directories
+- Catalog members (`description`, `language`, `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, `schemas`, `blocks`) are **public** and **`readOnly`** — inspectable from foreign Blocks; authored only on the Library definition
 
 ## Nested libraries
 
 Multiple `Library.bml` files may exist at different package levels (e.g. `org.blockml.bml.Library` + `org.blockml.bml.compiler.Library`).
 
 ```text
-Typical:  inner _dependencies → outer Library
-Forbidden: outer _blocks → Block exported by inner Library
+Typical:  inner dependencies → outer Library
+Forbidden: outer blocks → Block exported by inner Library
 Error:    BML_LIBRARY_NESTING_VIOLATION
 ```
 
@@ -39,7 +40,7 @@ Error:    BML_LIBRARY_NESTING_VIOLATION
 ```text
 effectiveBlockVersion =
   own <version>       if present
-  else library.version if exported via Library _blocks
+  else library.version if exported via Library blocks
   else error → BML_MISSING_VERSION
 ```
 
@@ -51,7 +52,7 @@ effectiveBlockVersion =
 
 - **Optional** on external references — omitted = resolve from TypeRegistry context
 - **Present** = exact-version assert → `BML_UNKNOWN_VERSION` if no match
-- **Forbidden** inside Library `_dependencies` / `_blocks` → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`
+- **Forbidden** inside Library `dependencies` / `blocks` → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`
 
 ## Library file pattern
 
@@ -59,10 +60,10 @@ effectiveBlockVersion =
 <name>Library</name>
 <baseType>bcore:BlockLibrary</baseType>
 <version>3.0.0</version>
-<_dependencies>
+<dependencies>
   <composition><blockml:Library /></composition>
-</_dependencies>
-<_blocks>
+</dependencies>
+<blocks>
   <composition><bcore:Block /></composition>   <!-- export blocks, NOT BlockLibrary -->
-</_blocks>
+</blocks>
 ```

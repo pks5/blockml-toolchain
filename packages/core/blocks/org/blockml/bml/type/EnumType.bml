@@ -52,7 +52,7 @@
     • Property &lt;type&gt; references (for example type="com.machineblocks.bml.type.BaseCutoutType")
     • defaultValue and instance attribute values on EnumType properties
     • Expression enum literals where the expected EnumType is known from context
-    • Library _blocks export alongside other ValueType definitions
+    • Library blocks export alongside other ValueType definitions
   </documentation>
 
   <references>

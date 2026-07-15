@@ -18,12 +18,12 @@
     baseType — inherits the value property automatically as value : TypeReference(B).
 
     Use on aggregation type attributes when children are type references stored as Entity instances:
-    • btype:TypeReferenceEntity(core:Block)[] — contracts, subTypes, Library _blocks
+    • btype:TypeReferenceEntity(core:Block)[] — contracts, subTypes, Library blocks
     • btype:TypeReferenceEntity(lang:NaturalLanguage) — language (singular, 0..1)
     • btype:TypeReferenceEntity(core:Language)[] — languages
     • btype:TypeReferenceEntity(core:ReadMe)[1..1] — Library readFirst
     • btype:TypeReferenceEntity(core:Bootstrap) — Library bootstrap (0..1 SPOE)
-    • btype:TypeReferenceEntity(core:BlockLibrary)[] — _dependencies, _subLibraries
+    • btype:TypeReferenceEntity(core:BlockLibrary)[] — dependencies, subLibraries
 
     Authored empty child whose element QName is not TypeReferenceEntity is syntactic sugar for a
     TypeReferenceEntity instance with value set to that QName (resolved to FQN) — for example
@@ -54,7 +54,7 @@
       contracts, languages, subTypes, language aggregations.
     </see>
     <see type="core:BlockLibrary">
-      readFirst, bootstrap, _dependencies, _subLibraries, _blocks aggregations.
+      readFirst, bootstrap, dependencies, subLibraries, blocks aggregations.
     </see>
   </references>
 

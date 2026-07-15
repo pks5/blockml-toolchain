@@ -73,7 +73,7 @@
     </see>
 
     <see type="doc:LibrarySystem" relation="ReadFirst">
-      Libraries, packages, namespaces, versioning, and _blocks membership.
+      Libraries, packages, namespaces, versioning, and blocks membership.
     </see>
 
     <see type="doc:BmlNamespace" relation="ReadFirst">

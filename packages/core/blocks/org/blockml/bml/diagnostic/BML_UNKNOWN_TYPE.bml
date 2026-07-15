@@ -26,13 +26,13 @@
   <documentation>
     The validator expands the authored type reference to a canonical FQN and looks up the
     BlockDefinition in TypeRegistry. Failure means the type is not registered at validation time.
-    Common causes: typo in FQN or xmlns prefix, missing Library _blocks entry, unloaded dependency
+    Common causes: typo in FQN or xmlns prefix, missing Library blocks entry, unloaded dependency
     library, or reference to a Sub-Block type without the full parent-qualified path where required.
   </documentation>
 
   <references>
     <see type="task:DebugUnknownType" relation="Resolves">
-      Step-by-step fix — namespace, Library _blocks, bootstrap order.
+      Step-by-step fix — namespace, Library blocks, bootstrap order.
     </see>
     <see type="doc:LibrarySystem" relation="Prerequisite">
       How libraries register blocks in TypeRegistry.

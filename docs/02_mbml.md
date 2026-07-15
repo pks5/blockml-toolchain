@@ -2197,7 +2197,7 @@ TypeReferenceEntity(T)[]  →  TypeReferenceEntity instances (QName sugar or exp
 plain Block[]       →  real BlockInstance (empty = valid instance with no authored values)
 ```
 
-Examples: `readFirst` / `bootstrap` / `_blocks` on `org.blockml.bml.core.BlockLibrary` use
+Examples: `readFirst` / `bootstrap` / `blocks` on `org.blockml.bml.core.BlockLibrary` use
 `TypeReferenceEntity(...)`; `<contracts>` / `<languages>` on Block definitions use
 `TypeReferenceEntity(core:Block)[]` / `TypeReferenceEntity(core:Language)[]`. See
 `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
@@ -2906,37 +2906,40 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 
 ```xml
 <aggregations>
-  <readFirst type="btype:TypeReferenceEntity(core:ReadMe)[1..1]" />
-  <bootstrap type="btype:TypeReferenceEntity(core:Bootstrap)" />
-  <_dependencies type="btype:TypeReferenceEntity(core:BlockLibrary)[]" />
-  <_subLibraries type="btype:TypeReferenceEntity(core:BlockLibrary)[]" />
-  <_schemas type="btype:FilePathEntity[]" />
-  <_blocks type="btype:TypeReferenceEntity(core:Block)[]" />
+  <readFirst type="btype:TypeReferenceEntity(core:ReadMe)[1..1]" readOnly="true" />
+  <bootstrap type="btype:TypeReferenceEntity(core:Bootstrap)" readOnly="true" />
+  <dependencies type="btype:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true" />
+  <subLibraries type="btype:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true" />
+  <schemas type="btype:FilePathEntity[]" readOnly="true" />
+  <blocks type="btype:TypeReferenceEntity(core:Block)[]" readOnly="true" />
 </aggregations>
 ```
 
-**Library reference aggregations:** `readFirst`, `bootstrap`, `_dependencies`, `_subLibraries`, and
-`_blocks` on `org.blockml.bml.core.BlockLibrary` are **TypeReferenceEntity** aggregations — each empty
+**Library reference aggregations:** `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and
+`blocks` on `org.blockml.bml.core.BlockLibrary` are **TypeReferenceEntity** aggregations — each empty
 child element (e.g. `<blockml:Library />`) expands to a TypeReferenceEntity (not an instance of the
-named Block). **`bml:version` is forbidden** on sugar children. **`readFirst`** (1..1) references a
+named Block). Catalog members (`description`, `language`, `readFirst`, `bootstrap`, `dependencies`,
+`subLibraries`, `schemas`, `blocks`) are **public** and **`readOnly`** — foreign Blocks may inspect
+a library; only the Library definition authors the catalog. **`bml:version` is forbidden** on sugar
+children. **`readFirst`** (1..1) references a
 `ReadMe` (typically `README`). **`bootstrap`** (0..1) is the optional automation SPOE
-(`core:Bootstrap`). **`_schemas`** is an **instance** aggregation and holds real `FilePathEntity`
+(`core:Bootstrap`). **`schemas`** is an **instance** aggregation and holds real `FilePathEntity`
 composition children.
 
 ```xml
 <!-- com/machineblocks/bml/bricks/Library.bml -->
 <aggregations>
-  <_dependencies>
+  <dependencies>
     <composition>
       <blockml:Library />
     </composition>
-  </_dependencies>
-  <_blocks>
+  </dependencies>
+  <blocks>
     <composition>
       <type:Size3d />
       <bricks:Standard />
     </composition>
-  </_blocks>
+  </blocks>
 </aggregations>
 ```
 
@@ -3503,7 +3506,7 @@ configProfile < basePresets chain < inline property
 
 ## Library Format (`org.blockml.bml.core.BlockLibrary`)
 
-A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and ValueType definitions are exported via `_blocks`. **Library membership is defined exclusively by `Library.bml`** — not by directory layout. If absent, all BML source files in a directory are treated as public.
+A Library groups related Blocks, optional XSD schemas, and dependencies into a publishable unit. Block and ValueType definitions are exported via `blocks`. **Library membership is defined exclusively by `Library.bml`** — not by directory layout. If absent, all BML source files in a directory are treated as public.
 
 **Name (required):** `<name>Library</name>`. Filename is always `Library.bml`. FQN = `{package}.Library` (e.g. `com.machineblocks.bml.bricks.Library`, `org.blockml.bml.Library`, `org.blockml.bml.compiler.Library`).
 
@@ -3513,14 +3516,14 @@ Multiple libraries may coexist at different package levels. Example: `org.blockm
 
 ```text
 Typical pattern:
-  inner Library  →  _dependencies includes outer Library
-  outer Library  →  _subLibraries lists inner Library; must NOT list inner-library blocks in _blocks
+  inner Library  →  dependencies includes outer Library
+  outer Library  →  subLibraries lists inner Library; must NOT list inner-library blocks in blocks
 
-Violation: outer _blocks references a Block exported by org.blockml.bml.compiler.Library
+Violation: outer blocks references a Block exported by org.blockml.bml.compiler.Library
            → BML_LIBRARY_NESTING_VIOLATION
 ```
 
-Physical directories and overlapping package prefixes do not define membership. A `.bml` file is a library member **only** if listed in that library's `_blocks`.
+Physical directories and overlapping package prefixes do not define membership. A `.bml` file is a library member **only** if listed in that library's `blocks`.
 
 ### Structure
 
@@ -3548,20 +3551,20 @@ Physical directories and overlapping package prefixes do not define membership. 
   </properties>
 
   <aggregations>
-    <_dependencies>
+    <dependencies>
       <composition>
         <blockml:Library />
       </composition>
-    </_dependencies>
+    </dependencies>
 
     <!-- Optional legacy XSD -->
-    <_schemas>
+    <schemas>
       <composition>
         <btype:FilePathEntity value="bricks.xsd" />
       </composition>
-    </_schemas>
+    </schemas>
 
-    <_blocks>
+    <blocks>
       <composition>
         <type:Size3d />
         <type:Direction />
@@ -3570,16 +3573,17 @@ Physical directories and overlapping package prefixes do not define membership. 
         <bricks:Tile />
         <bricks:StandardPresets />
       </composition>
-    </_blocks>
+    </blocks>
   </aggregations>
 
 </block>
 ```
 
-**`readFirst`, `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`** are
+**`readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks`** are
 `TypeReferenceEntity` aggregations — QName sugar expands to Entity instances. **`bml:version` is
-forbidden** on sugar children — effective version is resolved from library context. See
-`17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
+forbidden** on sugar children — effective version is resolved from library context. Catalog members
+are **public** and **`readOnly`** (inspectable from foreign Blocks; authored on the Library
+definition only). See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 **`readFirst`** (1..1) points to the human/LLM reading entry — a `ReadMe` block (typically
 `org.blockml.bml.README`). Curated reading order lives in `<references>` with `relation=ReadFirst`
@@ -3592,19 +3596,19 @@ Example on `org.blockml.bml.Library`:
 </readFirst>
 ```
 
-**`value` paths** on `_schemas` `FilePathEntity` entries are relative to the **library package root** (directory containing `Library.bml`).
+**`value` paths** on `schemas` `FilePathEntity` entries are relative to the **library package root** (directory containing `Library.bml`).
 
-**`_blocks`** lists exported Block and ValueType definitions (composable Blocks, StructType, EnumType, presets, …). **`_schemas`** holds optional legacy XSD paths as `FilePathEntity` instances during migration; omit when all types are in BML.
+**`blocks`** lists exported Block and ValueType definitions (composable Blocks, StructType, EnumType, presets, …). **`schemas`** holds optional legacy XSD paths as `FilePathEntity` instances during migration; omit when all types are in BML.
 
-**Directory structure (illustrative — membership comes from `_blocks`, not paths):**
+**Directory structure (illustrative — membership comes from `blocks`, not paths):**
 
 ```text
 org/blockml/bml/
   Library.bml              ← org.blockml.bml.Library
-  core/Block.bml           ← member iff in org.blockml.bml.Library _blocks
+  core/Block.bml           ← member iff in org.blockml.bml.Library blocks
   compiler/
     Library.bml            ← org.blockml.bml.compiler.Library (separate unit)
-    Parser.bml             ← member iff in org.blockml.bml.compiler.Library _blocks only
+    Parser.bml             ← member iff in org.blockml.bml.compiler.Library blocks only
 
 com/machineblocks/bml/bricks/
   Library.bml              ← com.machineblocks.bml.bricks.Library
