@@ -83,10 +83,6 @@
   </references>
 
   <name>DefinitionModel</name>
-  <type>
-    <doc:DefinitionModel />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:DefinitionModel</type>
+  <baseType>core:Documentation</baseType>
 </block>

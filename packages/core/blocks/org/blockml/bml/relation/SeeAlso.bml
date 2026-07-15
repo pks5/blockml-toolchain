@@ -18,10 +18,6 @@
     require, or define it. Omitted relation= on &lt;see&gt; resolves to this block.</documentation>
 
   <name>SeeAlso</name>
-  <type>
-    <relation:SeeAlso />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:SeeAlso</type>
+  <baseType>core:Relation</baseType>
 </block>

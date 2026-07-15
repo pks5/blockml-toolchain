@@ -18,12 +18,8 @@
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
   <name>AssociationConstraint</name>
-  <type>
-    <constraint:AssociationConstraint />
-  </type>
-  <baseType>
-    <constraint:MemberConstraint />
-  </baseType>
+  <type>constraint:AssociationConstraint</type>
+  <baseType>constraint:MemberConstraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

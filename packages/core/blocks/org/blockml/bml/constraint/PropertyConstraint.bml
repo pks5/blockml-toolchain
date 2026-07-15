@@ -19,12 +19,8 @@
     constraint extends PropertyConstraint (not ValueConstraint).</documentation>
 
   <name>PropertyConstraint</name>
-  <type>
-    <constraint:PropertyConstraint />
-  </type>
-  <baseType>
-    <constraint:MemberConstraint />
-  </baseType>
+  <type>constraint:PropertyConstraint</type>
+  <baseType>constraint:MemberConstraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

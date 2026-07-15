@@ -16,10 +16,6 @@
   <documentation>Structural placeholder only. Documents intent or reserves a member slot without
     committing to behaviour, types, or mapping. Stronger signal than Draft for incomplete ideas.</documentation>
   <name>Stub</name>
-  <type>
-    <status:Stub />
-  </type>
-  <baseType>
-    <core:Status />
-  </baseType>
+  <type>status:Stub</type>
+  <baseType>core:Status</baseType>
 </block>

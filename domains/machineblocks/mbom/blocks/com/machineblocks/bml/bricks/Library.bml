@@ -25,12 +25,8 @@
   <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
     preset blocks.</documentation>
   <name>Library</name>
-  <type>
-    <bricks:Library />
-  </type>
-  <baseType>
-    <bcore:BlockLibrary />
-  </baseType>
+  <type>bricks:Library</type>
+  <baseType>bcore:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>

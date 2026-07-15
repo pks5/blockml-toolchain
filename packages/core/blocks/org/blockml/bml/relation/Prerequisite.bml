@@ -18,10 +18,6 @@
     ReadFirst (library-wide learning path). Prerequisite scopes to one task procedure.</documentation>
 
   <name>Prerequisite</name>
-  <type>
-    <relation:Prerequisite />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:Prerequisite</type>
+  <baseType>core:Relation</baseType>
 </block>

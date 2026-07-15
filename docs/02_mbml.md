@@ -251,27 +251,21 @@ definition  — optional; Definition meta-model type FQN (default org.blockml.bm
 ```xml
 <!-- valid — name derived from type -->
 <block>
-  <type>
-    <foo:MyBlock />
-  </type>
+  <type>foo:MyBlock</type>
   …
 </block>
 
 <!-- valid — name matches resolved type -->
 <block>
   <name>MyBlock</name>
-  <type>
-    <com.foo:MyBlock />
-  </type>
+  <type>com.foo:MyBlock</type>
   …
 </block>
 
 <!-- invalid -->
 <block>
   <name>OtherBlock</name>
-  <type>
-    <foo:MyBlock />
-  </type>
+  <type>foo:MyBlock</type>
   …
 </block>
 ```
@@ -385,16 +379,17 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 <documentation>     — human-readable technical description of the Block (required on root blocks).
 <not>               — optional block-level disambiguation — what this Block is not (blocks only, not members).
 <aliases>           — optional alternative Block type names — core.Alias Entity aggregation (blocks only).
-<type>              — canonical Block type identity (required on root block). TypeReference
-                      aggregation — one child element whose name resolves to the Block FQN
-                      (for example &lt;foo:MyBlock/&gt;). Text content is forbidden
-                      (BML_TYPE_REFERENCE_TEXT_FORM).
 <name>              — short class name (PascalCase). Optional on root blocks — derived from the last
                       segment of resolve(type) when omitted. When present, must match that segment.
                       Required on Sub-Blocks. See naming convention below.
-<baseType>          — parent type reference. Mandatory — no default. TypeReference aggregation —
-                      one child element (for example &lt;core:Block/&gt;). Omitted only on
-                      org.blockml.bml.core.Block. Text content forbidden (BML_TYPE_REFERENCE_TEXT_FORM).
+<type>              — canonical Block type identity (required on root block). FullyQualifiedName
+                      property — element text is an FQN / xmlns QName (for example foo:MyBlock).
+                      Declares identity for the Block being defined (the type need not exist yet).
+                      Place early after name. Child-element TypeReference form is invalid.
+<baseType>          — parent FullyQualifiedName / TypeExpression. Mandatory — no default. Element
+                      text (for example core:Block or core:PrimitiveEntity(btype:Integer)).
+                      Generic applications on the parent are authored and resolved here.
+                      Omitted only on org.blockml.bml.core.Block. Place immediately after type.
 <version>           — semantic version of this Block definition (root block only)
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
 ```
@@ -484,9 +479,8 @@ Requires `xmlns:meta="org.blockml.bml.meta"` for FreeTextKeyword children; domai
   <idea>Search tag for inheritance and baseType chains.</idea>
   <documentation>Controlled vocabulary keyword for inheritance-related blocks.</documentation>
   <name>Inheritance</name>
-  <baseType>
-    <meta:FixedKeyword />
-  </baseType>
+  <type>vocab:Inheritance</type>
+  <baseType>meta:FixedKeyword</baseType>
   <properties>
     <_term>inheritance</_term>
     <_weight>2</_weight>
@@ -678,8 +672,8 @@ Task-oriented paths use the same `<references>` mechanism as learning paths — 
     <see file="02_mbml.md" relation="TaskStep">Step 2 — …</see>
   </references>
   <name>AuthorNewBlock</name>
-  <type><task:AuthorNewBlock /></type>
-  <baseType><core:TaskGuide /></baseType>
+  <type>task:AuthorNewBlock</type>
+  <baseType>core:TaskGuide</baseType>
 </block>
 ```
 
@@ -1061,9 +1055,9 @@ On these **definition containers**, every empty child element is a **type refere
 <languages>    →  <lang:OpenSCAD/>           TypeReference(core:Language)[] child — type ref, not instance
 <subTypes>     →  <core:Block/>              TypeReference(core:Block)[] child — type ref, not instance
 <contracts>    →  <ac:Wall/>                 TypeReference(core:Block)[] child — type ref, not instance
-<type>         →  <foo:MyBlock/>             TypeReference(core:Block) child — required on root ([1..1])
-<baseType>     →  <core:Block/>              TypeReference(core:Block) child — optional single (bare)
 <language>     →  <German/>                  TypeReference(NaturalLanguage) child — optional single (bare)
+<type>         →  foo:MyBlock                FullyQualifiedName property text — required on root
+<baseType>     →  core:Block                 FullyQualifiedName property text — optional; generics allowed
 <genericTypes> →  <T baseType="…"/>          element name = generic parameter name
 ```
 
@@ -3688,6 +3682,7 @@ There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping 
 ```text
 baseType missing              → BML_MISSING_BASE_TYPE (no default; except org.blockml.bml.core.Block — omits baseType)
 root block without type       → BML_MISSING_BLOCK_TYPE
+identity type/baseType child element → BML_IDENTITY_TYPE_CHILD_ELEMENT (use FullyQualifiedName text)
 root name ≠ last type segment → BML_BLOCK_NAME_TYPE_MISMATCH
 Sub-Block without name        → BML_MISSING_SUBBLOCK_NAME
 Sub-Block explicit type mismatch → BML_SUBBLOCK_TYPE_MISMATCH

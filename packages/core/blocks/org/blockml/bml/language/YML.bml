@@ -13,10 +13,6 @@
   <documentation>MarkupLanguage for YAML document implementations on Capabilities — configuration,
     structured data, or templates.</documentation>
   <name>YML</name>
-  <type>
-    <lang:YML />
-  </type>
-  <baseType>
-    <lang:MarkupLanguage />
-  </baseType>
+  <type>lang:YML</type>
+  <baseType>lang:MarkupLanguage</baseType>
 </block>

@@ -19,10 +19,6 @@
     Target should reference an org.blockml.bml.task.* TaskGuide block.</documentation>
 
   <name>TaskIndex</name>
-  <type>
-    <relation:TaskIndex />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:TaskIndex</type>
+  <baseType>core:Relation</baseType>
 </block>

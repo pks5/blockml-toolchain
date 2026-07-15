@@ -31,12 +31,8 @@
     instances.</documentation>
 
   <name>FixedKeyword</name>
-  <type>
-    <meta:FixedKeyword />
-  </type>
-  <baseType>
-    <core:Keyword />
-  </baseType>
+  <type>meta:FixedKeyword</type>
+  <baseType>core:Keyword</baseType>
   <abstract>true</abstract>
 
   <properties>

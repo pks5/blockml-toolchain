@@ -13,10 +13,6 @@
   <documentation>Natural language for documentation prose, example titles, and Russian
     natural-language capability implementations.</documentation>
   <name>Russian</name>
-  <type>
-    <lang:Russian />
-  </type>
-  <baseType>
-    <lang:NaturalLanguage />
-  </baseType>
+  <type>lang:Russian</type>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

@@ -18,12 +18,8 @@
     AggregationConstraint, AssociationConstraint, and CapabilityConstraint.</documentation>
 
   <name>MemberConstraint</name>
-  <type>
-    <constraint:MemberConstraint />
-  </type>
-  <baseType>
-    <constraint:StructuralConstraint />
-  </baseType>
+  <type>constraint:MemberConstraint</type>
+  <baseType>constraint:StructuralConstraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

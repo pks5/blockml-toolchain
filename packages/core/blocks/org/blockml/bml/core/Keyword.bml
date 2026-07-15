@@ -32,12 +32,8 @@
   </references>
 
   <name>Keyword</name>
-  <type>
-    <core:Keyword />
-  </type>
-  <baseType>
-    <core:Entity />
-  </baseType>
+  <type>core:Keyword</type>
+  <baseType>core:Entity</baseType>
   <abstract>true</abstract>
 
 </block>

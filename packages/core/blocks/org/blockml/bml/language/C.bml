@@ -12,10 +12,6 @@
 
   <documentation>ProgrammingLanguage for C function implementations on Capabilities.</documentation>
   <name>C</name>
-  <type>
-    <lang:C />
-  </type>
-  <baseType>
-    <lang:ProgrammingLanguage />
-  </baseType>
+  <type>lang:C</type>
+  <baseType>lang:ProgrammingLanguage</baseType>
 </block>

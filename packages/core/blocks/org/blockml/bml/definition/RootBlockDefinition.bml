@@ -53,12 +53,8 @@
   </references>
 
   <name>RootBlockDefinition</name>
-  <type>
-    <def:RootBlockDefinition />
-  </type>
-  <baseType>
-    <def:SubBlockDefinition />
-  </baseType>
+  <type>def:RootBlockDefinition</type>
+  <baseType>def:SubBlockDefinition</baseType>
   <properties>
     <definition override="true" type="FullyQualifiedName(def:RootBlockDefinition)">
       <value>def:RootBlockDefinition</value>

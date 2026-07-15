@@ -68,10 +68,6 @@
   </references>
 
   <name>WOTFoundation</name>
-  <type>
-    <doc:WOTFoundation />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:WOTFoundation</type>
+  <baseType>core:Documentation</baseType>
 </block>

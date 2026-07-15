@@ -62,12 +62,8 @@
   </references>
 
   <name>CapabilityDefinition</name>
-  <type>
-    <def:CapabilityDefinition />
-  </type>
-  <baseType>
-    <def:MemberDefinition />
-  </baseType>
+  <type>def:CapabilityDefinition</type>
+  <baseType>def:MemberDefinition</baseType>
   <properties>
     <type type="FullyQualifiedName(core:Capability)" bml:xml="element|attribute">
       <documentation>Capability kind FQN — Inbound, Outbound, or Transformation. Unqualified names
@@ -103,9 +99,7 @@
         the implementation property on org.blockml.bml.definition.CapabilityDefinition.</documentation>
 
       <name>Implementation</name>
-      <baseType>
-        <core:Entity />
-      </baseType>
+      <baseType>core:Entity</baseType>
       <bml:xml>implementation</bml:xml>
 
       <properties>

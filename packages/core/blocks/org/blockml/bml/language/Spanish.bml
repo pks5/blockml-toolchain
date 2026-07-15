@@ -13,10 +13,6 @@
   <documentation>Natural language for documentation prose, example titles, and Spanish
     natural-language capability implementations.</documentation>
   <name>Spanish</name>
-  <type>
-    <lang:Spanish />
-  </type>
-  <baseType>
-    <lang:NaturalLanguage />
-  </baseType>
+  <type>lang:Spanish</type>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

@@ -65,12 +65,8 @@
   </references>
 
   <name>Library</name>
-  <type>
-    <blockml:Library />
-  </type>
-  <baseType>
-    <bcore:BlockLibrary />
-  </baseType>
+  <type>blockml:Library</type>
+  <baseType>bcore:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <language>

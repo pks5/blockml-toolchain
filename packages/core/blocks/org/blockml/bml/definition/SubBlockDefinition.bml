@@ -51,12 +51,8 @@
   </references>
 
   <name>SubBlockDefinition</name>
-  <type>
-    <def:SubBlockDefinition />
-  </type>
-  <baseType>
-    <def:BlockDefinition />
-  </baseType>
+  <type>def:SubBlockDefinition</type>
+  <baseType>def:BlockDefinition</baseType>
   <properties>
     <definition type="FullyQualifiedName(def:SubBlockDefinition)">
       <value>def:SubBlockDefinition</value>

@@ -68,10 +68,6 @@
   </references>
 
   <name>PseudoCode</name>
-  <type>
-    <doc:PseudoCode />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:PseudoCode</type>
+  <baseType>core:Documentation</baseType>
 </block>

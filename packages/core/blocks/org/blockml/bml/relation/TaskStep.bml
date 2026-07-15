@@ -19,10 +19,6 @@
     (before starting the task) and Requires (hard dependency on the current definition).</documentation>
 
   <name>TaskStep</name>
-  <type>
-    <relation:TaskStep />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:TaskStep</type>
+  <baseType>core:Relation</baseType>
 </block>

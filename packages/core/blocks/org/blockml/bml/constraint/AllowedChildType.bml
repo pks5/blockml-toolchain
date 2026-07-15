@@ -19,12 +19,8 @@
     resolve to the given Block type FQN. Reference implementation for AggregationConstraint branch.</documentation>
 
   <name>AllowedChildType</name>
-  <type>
-    <constraint:AllowedChildType />
-  </type>
-  <baseType>
-    <constraint:AggregationConstraint />
-  </baseType>
+  <type>constraint:AllowedChildType</type>
+  <baseType>constraint:AggregationConstraint</baseType>
   <genericTypes>
     <T baseType="def:AggregationDefinition"/>
   </genericTypes>

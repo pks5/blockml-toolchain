@@ -45,12 +45,8 @@
   </references>
 
   <name>AssociationDefinition</name>
-  <type>
-    <def:AssociationDefinition />
-  </type>
-  <baseType>
-    <def:MemberDefinition />
-  </baseType>
+  <type>def:AssociationDefinition</type>
+  <baseType>def:MemberDefinition</baseType>
   <properties>
     <type type="FullyQualifiedName(core:Block)" bml:xml="element|attribute">
       <documentation>FQN of the referenced Block type (TypeExpression). Multiplicity in the type

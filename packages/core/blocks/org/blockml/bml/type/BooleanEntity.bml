@@ -8,10 +8,6 @@
   <documentation>Concrete Entity wrapping a Boolean primitive. Binds T = Boolean on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>
   <name>BooleanEntity</name>
-  <type>
-    <btype:BooleanEntity />
-  </type>
-  <baseType>
-    <core:PrimitiveEntity(btype:Boolean) />
-  </baseType>
+  <type>btype:BooleanEntity</type>
+  <baseType>core:PrimitiveEntity(btype:Boolean)</baseType>
 </block>

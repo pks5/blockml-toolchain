@@ -11,11 +11,7 @@
     Abstract numeric branch — not resolvable via Property.type implicit namespace; use Integer, Decimal, or Float explicitly.
     Numeric types describe semantics only; values are stored in Properties.</documentation>
   <name>Number</name>
-  <type>
-    <btype:Number />
-  </type>
-  <baseType>
-    <btype:PrimitiveType />
-  </baseType>
+  <type>btype:Number</type>
+  <baseType>btype:PrimitiveType</baseType>
   <abstract>true</abstract>
 </block>

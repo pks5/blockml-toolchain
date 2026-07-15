@@ -17,10 +17,6 @@
     validators and editors should warn on new usage. Document the replacement in
     &lt;documentation&gt;.</documentation>
   <name>Deprecated</name>
-  <type>
-    <status:Deprecated />
-  </type>
-  <baseType>
-    <core:Status />
-  </baseType>
+  <type>status:Deprecated</type>
+  <baseType>core:Status</baseType>
 </block>

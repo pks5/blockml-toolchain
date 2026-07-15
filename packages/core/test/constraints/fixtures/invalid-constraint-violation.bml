@@ -10,12 +10,8 @@
   xmlns:test="com.blockml.test.constraints">
 
   <idea>Constraint test — Min violation</idea>
-  <type>
-    <test:ConstraintViolation />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>test:ConstraintViolation</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <properties>

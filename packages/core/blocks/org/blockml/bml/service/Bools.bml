@@ -22,12 +22,8 @@
   <documentation>Built-in booleans service. Expression prefix #bools.* — logical and boolean
     conversion utilities.</documentation>
   <name>Bools</name>
-  <type>
-    <service:Bools />
-  </type>
-  <baseType>
-    <core:Entity />
-  </baseType>
+  <type>service:Bools</type>
+  <baseType>core:Entity</baseType>
   <capabilities>
 
     <!-- #bools.isTrue(x) -->

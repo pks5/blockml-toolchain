@@ -28,12 +28,8 @@
     domain interface-style type bounds use contracts and satisfiesTypeBound — see 17_type_system_bml.md.</documentation>
 
   <name>Definition</name>
-  <type>
-    <core:Definition />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>core:Definition</type>
+  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

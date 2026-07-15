@@ -17,10 +17,6 @@
     or runtime must know first. Distinct from ReadFirst (curated path) and SeeAlso (optional peer link).</documentation>
 
   <name>Requires</name>
-  <type>
-    <relation:Requires />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:Requires</type>
+  <baseType>core:Relation</baseType>
 </block>

@@ -27,12 +27,8 @@
   </references>
 
   <name>Step</name>
-  <type>
-    <core:Step />
-  </type>
-  <baseType>
-    <bcore:Block />
-  </baseType>
+  <type>core:Step</type>
+  <baseType>bcore:Block</baseType>
   <final>true</final>
 
   <associations>

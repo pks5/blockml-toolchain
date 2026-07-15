@@ -22,12 +22,8 @@
     org.blockml.bml.relation.*.</documentation>
 
   <name>Relation</name>
-  <type>
-    <core:Relation />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>core:Relation</type>
+  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

@@ -17,10 +17,6 @@
     current type belongs to. Typical block= targets only — not for file or url references.</documentation>
 
   <name>Extends</name>
-  <type>
-    <relation:Extends />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:Extends</type>
+  <baseType>core:Relation</baseType>
 </block>

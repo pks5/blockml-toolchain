@@ -29,12 +29,8 @@
   </references>
 
   <name>CompositeBlock</name>
-  <type>
-    <core:CompositeBlock />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>core:CompositeBlock</type>
+  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
   <subTypes>

@@ -9,10 +9,6 @@
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.
     Use when an integer must appear as an identifiable Block instance.</documentation>
   <name>IntegerEntity</name>
-  <type>
-    <btype:IntegerEntity />
-  </type>
-  <baseType>
-    <core:PrimitiveEntity(btype:Integer) />
-  </baseType>
+  <type>btype:IntegerEntity</type>
+  <baseType>core:PrimitiveEntity(btype:Integer)</baseType>
 </block>

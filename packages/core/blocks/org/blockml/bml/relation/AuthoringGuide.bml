@@ -18,10 +18,6 @@
     (Extends) or optional background (SeeAlso).</documentation>
 
   <name>AuthoringGuide</name>
-  <type>
-    <relation:AuthoringGuide />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:AuthoringGuide</type>
+  <baseType>core:Relation</baseType>
 </block>

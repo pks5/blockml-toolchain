@@ -17,10 +17,6 @@
     depended on by downstream definitions and tooling. Implicit default when no status is declared
     on an element — omit &lt;status&gt; and bml:status on Stable content.</documentation>
   <name>Stable</name>
-  <type>
-    <status:Stable />
-  </type>
-  <baseType>
-    <core:Status />
-  </baseType>
+  <type>status:Stable</type>
+  <baseType>core:Status</baseType>
 </block>

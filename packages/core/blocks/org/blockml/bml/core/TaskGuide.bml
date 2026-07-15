@@ -30,12 +30,8 @@
   </references>
 
   <name>TaskGuide</name>
-  <type>
-    <core:TaskGuide />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>core:TaskGuide</type>
+  <baseType>core:Documentation</baseType>
   <abstract>true</abstract>
 
 </block>

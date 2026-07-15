@@ -8,10 +8,6 @@
   <documentation>Concrete Entity wrapping a Float primitive. Binds T = Float on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>
   <name>FloatEntity</name>
-  <type>
-    <btype:FloatEntity />
-  </type>
-  <baseType>
-    <core:PrimitiveEntity(btype:Float) />
-  </baseType>
+  <type>btype:FloatEntity</type>
+  <baseType>core:PrimitiveEntity(btype:Float)</baseType>
 </block>

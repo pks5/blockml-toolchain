@@ -19,10 +19,6 @@
     Resolves → TaskGuide with TaskStep entries.</documentation>
 
   <name>Resolves</name>
-  <type>
-    <relation:Resolves />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:Resolves</type>
+  <baseType>core:Relation</baseType>
 </block>

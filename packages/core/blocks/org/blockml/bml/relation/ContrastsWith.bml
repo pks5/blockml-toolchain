@@ -18,10 +18,6 @@
     difference explicitly.</documentation>
 
   <name>ContrastsWith</name>
-  <type>
-    <relation:ContrastsWith />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:ContrastsWith</type>
+  <baseType>core:Relation</baseType>
 </block>

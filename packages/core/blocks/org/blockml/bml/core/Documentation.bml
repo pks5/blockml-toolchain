@@ -33,12 +33,8 @@
   </references>
 
   <name>Documentation</name>
-  <type>
-    <core:Documentation />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>core:Documentation</type>
+  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

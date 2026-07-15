@@ -302,10 +302,10 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <status>Draft</status>                → member.statusFqn or block.statusFqn (when declared)
                                              → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
-<type>                                       → block.type (FQN; root block only — derived on Sub-Blocks)
-  <foo:MyBlock/>                             →   TypeReference(core:Block)[1..1] child; FQN stored in block.type
-<baseType>                                   → block.baseType (FQN string)
-  <core:Block/>                              →   TypeReference(core:Block)[0..1] child; FQN stored in block.baseType
+<type>foo:MyBlock</type>                     → block.type (FQN; FullyQualifiedName property text;
+                                               root block only — derived on Sub-Blocks)
+<baseType>core:Block</baseType>              → block.baseType (FQN / TypeExpression string;
+                                               generics allowed, e.g. PrimitiveEntity(Integer))
 <version>…</version>                         → block.version
 <abstract>true</abstract>                    → block.abstract = true
 <final>true</final>                          → block.final = true
@@ -717,7 +717,7 @@ The `composition aggregation="…"` attribute is **removed** — aggregations ar
 
 ```text
 Aggregation type is TypeReference(T)  →  type-reference mode
-  Parser: child element name → FQN; store in contracts[] / languages[] / subTypes[] / block.type / block.baseType
+  Parser: child element name → FQN; store in contracts[] / languages[] / subTypes[] / languageFqn
   Validator: satisfiesTypeBound(childFqn, T) for each child
   Forbidden: bml:id, bml:version, member values on children, <composition> on definition sites, default="true"
   Semantics: empty child is syntactic sugar for the FQN — not a BlockInstance
@@ -727,16 +727,19 @@ Aggregation type is plain Block[]       →  instance mode (composition ownershi
   Validator: standard composition and aggregation rules
   Semantics: empty child is a real BlockInstance with no authored member values
 
+Identity properties type / baseType     →  FullyQualifiedName(core:Block) text
+  Parser: element text → resolve QName/FQN / TypeExpression → block.type / block.baseType
+  Child-element form inside <type> / <baseType> → BML_IDENTITY_TYPE_CHILD_ELEMENT (error)
+
 unwrapTypeReference(typeExpr):
   fqn === org.blockml.bml.core.TypeReference && one typeArgument  →  return T
   else  →  null (instance aggregation)
 
 ```text
-<type>…</type> text content on Block definitions     → BML_TYPE_REFERENCE_TEXT_FORM (error)
-<baseType>…</baseType> text content                  → BML_TYPE_REFERENCE_TEXT_FORM (error)
 Plain core:Block[] on type-reference aggregations     → BML_TYPE_REFERENCE_REQUIRED (error; use TypeReference(T)[])
+<type>/<baseType> child-element form on identity        → BML_IDENTITY_TYPE_CHILD_ELEMENT (error)
 
-BML_TYPE_REFERENCE_TEXT_FORM        — <type> or <baseType> uses text content instead of child element
+BML_IDENTITY_TYPE_CHILD_ELEMENT — identity <type> or <baseType> uses a child element instead of text
 BML_TYPE_REFERENCE_REQUIRED         — type-reference site uses plain Block[] without TypeReference(T)
 BML_TYPE_REFERENCE_CHILD_VALUE      — member value on child of TypeReference aggregation
 BML_TYPE_REFERENCE_COMPOSITION      — <composition> on a definition-site TypeReference container (e.g. inside <contracts>)

@@ -9,12 +9,8 @@
   xmlns:test="com.blockml.test.constraints">
 
   <idea>Constraint test — NoSelfReference on association</idea>
-  <type>
-    <test:AssociationConstraint />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>test:AssociationConstraint</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <associations>

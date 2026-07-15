@@ -64,10 +64,6 @@
   </references>
 
   <name>RendererFreedom</name>
-  <type>
-    <doc:RendererFreedom />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:RendererFreedom</type>
+  <baseType>core:Documentation</baseType>
 </block>

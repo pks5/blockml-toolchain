@@ -13,10 +13,6 @@
   <documentation>Natural language for documentation prose, example titles, and English
     natural-language capability implementations.</documentation>
   <name>English</name>
-  <type>
-    <lang:English />
-  </type>
-  <baseType>
-    <lang:NaturalLanguage />
-  </baseType>
+  <type>lang:English</type>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

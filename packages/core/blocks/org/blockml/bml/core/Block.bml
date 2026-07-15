@@ -103,9 +103,7 @@
   </references>
 
   <name>Block</name>
-  <type>
-    <core:Block />
-  </type>
+  <type>core:Block</type>
   <!-- Blocks are rendered as xml elements with the name of the block type -->
   <bml:xml>${ bml:Self }</bml:xml>
   

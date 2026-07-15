@@ -10,12 +10,8 @@
   xmlns:test="com.blockml.test.constraints">
 
   <idea>Constraint test — Min under capability (invalid)</idea>
-  <type>
-    <test:InvalidValueOnCapability />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>test:InvalidValueOnCapability</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <capabilities>

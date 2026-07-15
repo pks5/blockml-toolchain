@@ -8,10 +8,6 @@
   <documentation>Concrete Entity wrapping a Version primitive. Binds T = Version on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>
   <name>VersionEntity</name>
-  <type>
-    <btype:VersionEntity />
-  </type>
-  <baseType>
-    <core:PrimitiveEntity(btype:Version) />
-  </baseType>
+  <type>btype:VersionEntity</type>
+  <baseType>core:PrimitiveEntity(btype:Version)</baseType>
 </block>

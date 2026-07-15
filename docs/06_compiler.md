@@ -519,6 +519,7 @@ BML_AMBIGUOUS_TYPE            — unqualified type name resolves to multiple can
 BML_INVALID_PROPERTY          — property value does not match declared type
 BML_MISSING_BASE_TYPE         — baseType not declared on a Block definition
 BML_MISSING_BLOCK_TYPE        — root block lacks required type
+BML_IDENTITY_TYPE_CHILD_ELEMENT — identity <type> or <baseType> uses child element instead of FQN text
 BML_BLOCK_NAME_TYPE_MISMATCH  — root block name ≠ last segment of resolve(type)
 BML_MISSING_SUBBLOCK_NAME     — Sub-Block lacks required name
 BML_SUBBLOCK_TYPE_MISMATCH    — explicit Sub-Block type ≠ resolve(parent.type) + "." + name

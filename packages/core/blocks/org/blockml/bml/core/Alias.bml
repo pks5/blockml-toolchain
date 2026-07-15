@@ -31,12 +31,8 @@
   </references>
 
   <name>Alias</name>
-  <type>
-    <core:Alias />
-  </type>
-  <baseType>
-    <core:Entity />
-  </baseType>
+  <type>core:Alias</type>
+  <baseType>core:Entity</baseType>
   <abstract>true</abstract>
 
 </block>

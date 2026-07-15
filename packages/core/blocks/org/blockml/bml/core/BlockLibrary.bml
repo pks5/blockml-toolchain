@@ -65,12 +65,8 @@
   </references>
 
   <name>BlockLibrary</name>
-  <type>
-    <core:BlockLibrary />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>core:BlockLibrary</type>
+  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
   <subTypes type="core:TypeReference(core:Block)[]">

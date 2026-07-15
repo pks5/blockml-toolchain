@@ -61,10 +61,6 @@
   </references>
 
   <name>AuthorNewBlock</name>
-  <type>
-    <task:AuthorNewBlock />
-  </type>
-  <baseType>
-    <core:TaskGuide />
-  </baseType>
+  <type>task:AuthorNewBlock</type>
+  <baseType>core:TaskGuide</baseType>
 </block>

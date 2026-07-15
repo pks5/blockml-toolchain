@@ -128,11 +128,7 @@
   </references>
 
   <name>README</name>
-  <type>
-    <blockml:README />
-  </type>
-  <baseType>
-    <core:Bootstrap />
-  </baseType>
+  <type>blockml:README</type>
+  <baseType>core:Bootstrap</baseType>
 
 </block>

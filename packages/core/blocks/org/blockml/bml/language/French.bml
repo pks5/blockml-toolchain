@@ -13,10 +13,6 @@
   <documentation>Natural language for documentation prose, example titles, and French
     natural-language capability implementations.</documentation>
   <name>French</name>
-  <type>
-    <lang:French />
-  </type>
-  <baseType>
-    <lang:NaturalLanguage />
-  </baseType>
+  <type>lang:French</type>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

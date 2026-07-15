@@ -18,12 +18,8 @@
 
   <documentation>T binds to org.blockml.bml.type.Text. The value property holds the regex pattern.</documentation>
   <name>Pattern</name>
-  <type>
-    <constraint:Pattern />
-  </type>
-  <baseType>
-    <constraint:ValueConstraint />
-  </baseType>
+  <type>constraint:Pattern</type>
+  <baseType>constraint:ValueConstraint</baseType>
   <genericTypes>
     <T baseType="String"/>
   </genericTypes>

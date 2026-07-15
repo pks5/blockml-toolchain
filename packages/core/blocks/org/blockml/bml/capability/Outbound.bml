@@ -15,12 +15,8 @@
 
   <documentation>Outbound capability.</documentation>
   <name>Outbound</name>
-  <type>
-    <cap:Outbound />
-  </type>
-  <baseType>
-    <core:Capability />
-  </baseType>
+  <type>cap:Outbound</type>
+  <baseType>core:Capability</baseType>
   <properties>
     <_hasOutput override="true">
       <value>true</value>

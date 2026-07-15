@@ -31,12 +31,8 @@
     instances.</documentation>
 
   <name>FixedAlias</name>
-  <type>
-    <meta:FixedAlias />
-  </type>
-  <baseType>
-    <core:Alias />
-  </baseType>
+  <type>meta:FixedAlias</type>
+  <baseType>core:Alias</baseType>
   <abstract>true</abstract>
 
   <properties>

@@ -18,10 +18,6 @@
     documents, WOT foundation, or specification deep-dives.</documentation>
 
   <name>DeepDive</name>
-  <type>
-    <relation:DeepDive />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:DeepDive</type>
+  <baseType>core:Relation</baseType>
 </block>

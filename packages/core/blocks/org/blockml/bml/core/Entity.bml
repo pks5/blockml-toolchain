@@ -33,12 +33,8 @@
   </references>
 
   <name>Entity</name>
-  <type>
-    <core:Entity />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>core:Entity</type>
+  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

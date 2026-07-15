@@ -39,12 +39,8 @@
   </references>
 
   <name>GenericTypeDefinition</name>
-  <type>
-    <def:GenericTypeDefinition />
-  </type>
-  <baseType>
-    <core:Definition />
-  </baseType>
+  <type>def:GenericTypeDefinition</type>
+  <baseType>core:Definition</baseType>
   <bml:xml>${ #this.name }</bml:xml>
 
   <properties>

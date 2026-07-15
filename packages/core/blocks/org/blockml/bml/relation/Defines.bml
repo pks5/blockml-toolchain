@@ -18,10 +18,6 @@
     core:Bootstrap on a README block.</documentation>
 
   <name>Defines</name>
-  <type>
-    <relation:Defines />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:Defines</type>
+  <baseType>core:Relation</baseType>
 </block>

@@ -75,10 +75,6 @@
   </references>
 
   <name>TaskGuideModel</name>
-  <type>
-    <doc:TaskGuideModel />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:TaskGuideModel</type>
+  <baseType>core:Documentation</baseType>
 </block>

@@ -13,10 +13,6 @@
   <documentation>Natural language for documentation prose, example titles, and German
     natural-language capability implementations.</documentation>
   <name>German</name>
-  <type>
-    <lang:German />
-  </type>
-  <baseType>
-    <lang:NaturalLanguage />
-  </baseType>
+  <type>lang:German</type>
+  <baseType>lang:NaturalLanguage</baseType>
 </block>

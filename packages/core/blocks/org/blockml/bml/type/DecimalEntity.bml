@@ -8,10 +8,6 @@
   <documentation>Concrete Entity wrapping a Decimal primitive. Binds T = Decimal on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>
   <name>DecimalEntity</name>
-  <type>
-    <btype:DecimalEntity />
-  </type>
-  <baseType>
-    <core:PrimitiveEntity(btype:Decimal) />
-  </baseType>
+  <type>btype:DecimalEntity</type>
+  <baseType>core:PrimitiveEntity(btype:Decimal)</baseType>
 </block>

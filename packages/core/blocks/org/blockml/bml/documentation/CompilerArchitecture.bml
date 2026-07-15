@@ -65,10 +65,6 @@
   </references>
 
   <name>CompilerArchitecture</name>
-  <type>
-    <doc:CompilerArchitecture />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:CompilerArchitecture</type>
+  <baseType>core:Documentation</baseType>
 </block>

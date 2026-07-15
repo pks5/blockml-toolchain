@@ -10,10 +10,6 @@
     (GPU, OpenGL, native C APIs, binary protocols). Unqualified name Float resolves to
     org.blockml.bml.type.Float. Extends org.blockml.bml.type.Number. Values are stored in Properties.</documentation>
   <name>Float</name>
-  <type>
-    <btype:Float />
-  </type>
-  <baseType>
-    <btype:Number />
-  </baseType>
+  <type>btype:Float</type>
+  <baseType>btype:Number</baseType>
 </block>

@@ -16,12 +16,8 @@
   <documentation>Abstract branch for programming languages — TypeScript, OpenSCAD, PseudoCode, and
     other languages with defined or interpretable syntax.</documentation>
   <name>ProgrammingLanguage</name>
-  <type>
-    <lang:ProgrammingLanguage />
-  </type>
-  <baseType>
-    <core:Language />
-  </baseType>
+  <type>lang:ProgrammingLanguage</type>
+  <baseType>core:Language</baseType>
   <abstract>true</abstract>
 
 </block>

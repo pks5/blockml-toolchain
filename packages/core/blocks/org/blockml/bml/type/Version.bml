@@ -29,10 +29,6 @@
   </references>
 
   <name>Version</name>
-  <type>
-    <btype:Version />
-  </type>
-  <baseType>
-    <btype:Text />
-  </baseType>
+  <type>btype:Version</type>
+  <baseType>btype:Text</baseType>
 </block>

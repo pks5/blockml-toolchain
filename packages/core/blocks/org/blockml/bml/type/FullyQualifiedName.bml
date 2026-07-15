@@ -50,7 +50,8 @@
     uses defaultType. Concrete type arguments must satisfy each parameter's baseType constraint
     → BML_GENERIC_CONSTRAINT_VIOLATION.
 
-    Primary use — meta-model and definition metadata where a type attribute holds an FQN.
+    Primary use — Block-definition identity (`type`, `baseType`) and definition metadata where a
+    type attribute or property holds an FQN / TypeExpression string.
   </documentation>
 
   <references>
@@ -73,7 +74,7 @@
       typeFqn fields in BOM structures.
     </see>
     <see block="def:BlockDefinition">
-      type and baseType TypeReference aggregations (Block FQN).
+      type and baseType FullyQualifiedName properties (Block FQN / TypeExpression text).
     </see>
     <see block="def:PropertyDefinition">
       property type attribute (ValueType FQN).
@@ -86,16 +87,12 @@
     </see>
   </references>
 
+  <name>FullyQualifiedName</name>
+  <type>btype:FullyQualifiedName</type>
+  <baseType>btype:Text</baseType>
+
   <genericTypes>
     <B baseType="core:Block" />
     <D baseType="core:Definition" defaultType="def:BlockDefinition" />
   </genericTypes>
-
-  <name>FullyQualifiedName</name>
-  <type>
-    <btype:FullyQualifiedName />
-  </type>
-  <baseType>
-    <btype:Text />
-  </baseType>
 </block>

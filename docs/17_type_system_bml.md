@@ -637,7 +637,7 @@ The same surface pattern — a self-closing element whose QName resolves to a Bl
 
 | Aggregation `type` | What `<con:MyContract />` means | BOM |
 |---|---|---|
-| `TypeReference(T)[]` (or bare `TypeReference(T)`) | **Type reference only** — syntactic sugar for the FQN `com.foo.MyContract`. **Not** an instance of that Block. | `contracts[]` / `languages[]` / `subTypes[]` / `block.type` / `block.baseType` — `string` FQNs |
+| `TypeReference(T)[]` (or bare `TypeReference(T)`) | **Type reference only** — syntactic sugar for the FQN `com.foo.MyContract`. **Not** an instance of that Block. | `contracts[]` / `languages[]` / `subTypes[]` / `languageFqn` — `string` FQNs |
 | Plain `Block[]` (instance aggregation) | **Real empty instance** — a `BlockInstance` of type `MyContract` with no authored member values (defaults / absent). | `BlockInstance { typeFqn: "com.foo.MyContract" }` in a composition tree |
 
 ```text
@@ -655,13 +655,15 @@ Instance mode:
   bml:id, member values, nested composition on children are allowed
 ```
 
-**Definition sites** (`<contracts>`, `<languages>`, `<subTypes>`, `<type>`, `<baseType>`, `<language>`) are always TypeReference containers — children are direct element references, never wrapped in `<composition>`:
+**Definition sites** (`<contracts>`, `<languages>`, `<subTypes>`, `<language>`) are always TypeReference containers — children are direct element references, never wrapped in `<composition>`:
 
 ```xml
 <contracts>
   <con:MyContract />
 </contracts>
 ```
+
+**Identity properties** `type` and `baseType` are **not** TypeReference aggregations — they are `FullyQualifiedName(core:Block)` properties authored as element text (including generic applications on `baseType`). See below.
 
 **Instance fill sites** open an aggregation member and use `<composition>` as the fill container. For **instance** aggregations, children inside `<composition>` are owned `BlockInstance` trees. For **TypeReference** aggregations (e.g. `bootstrap`, `_dependencies`, `_subLibraries`, `_blocks` on `org.blockml.bml.core.BlockLibrary`), children inside `<composition>` are still **type references** — the `<composition>` wrapper is the instance-side fill mechanism for the aggregation member, not evidence of composition ownership on the child:
 
@@ -700,14 +702,16 @@ See `02_mbml.md` — § Aggregations · `13_bml_to_bom_mapping.md` — TypeRefer
   <com.foo:IIdentifiable />
   <com.foo:IPlaceable />
 </contracts>
+```
 
-<baseType>
-  <core:Entity />
-</baseType>
+**Identity properties** (FullyQualifiedName text — not TypeReference):
 
-<type>
-  <foo:MyBlock />
-</type>
+```xml
+<type>foo:MyBlock</type>
+<baseType>core:Entity</baseType>
+
+<!-- generic application on baseType -->
+<baseType>core:PrimitiveEntity(btype:FullyQualifiedName(core:Block))</baseType>
 ```
 
 ```text
@@ -726,26 +730,18 @@ Forbidden on TypeReference aggregations:
 ```text
 TypeReference(T)         →  0..1 optional single type reference (Block aggregations — omit brackets)
 TypeReference(T)[]       →  0..n type references
-TypeReference(T)[1..1]   →  exactly one required type reference (root block <type> only)
+TypeReference(T)[1..1]   →  exactly one required type reference (rare; prefer [] or bare)
 ```
 
-On Block-definition identity fields, bare `TypeReference(T)` replaces the verbose `[0..1]` form — consistent with `Block` meaning optional single reference in aggregation/association notation (see § Collections and Multiplicity).
-
-```xml
-<baseType>
-  <core:Entity />
-</baseType>
-
-<type>
-  <foo:MyBlock />
-</type>
+```text
+block.type      → FullyQualifiedName(core:Block) property — required on root (BML_MISSING_BLOCK_TYPE)
+block.baseType  → FullyQualifiedName(core:Block) property — TypeExpression text; generics allowed
+                  omitted only on org.blockml.bml.core.Block (BML_MISSING_BASE_TYPE elsewhere)
 ```
 
-Root block `<type>` requires exactly one child — validator enforces `[1..1]` semantics even when multiplicity is not written on the meta-model declaration.
+**Contrast with `TypeReference(T)`:** identity `type` / `baseType` use scalar FQN / TypeExpression text — same ValueType family as Property `type` attributes. TypeReference remains for contracts, languages, subTypes, language, and Library list aggregations.
 
-**Contrast with `FullyQualifiedName(B)`:** scalar ValueType for a single FQN on Property `type` attributes — text or attribute value, not the container element-name pattern.
-
-**Mandatory authoring:** Text content in `<type>` or `<baseType>` (legacy form) is a parse error → `BML_TYPE_REFERENCE_TEXT_FORM`.
+**Forbidden authoring:** Child-element form inside identity `<type>` / `<baseType>` (legacy TypeReference spelling) is a parse error → `BML_IDENTITY_TYPE_CHILD_ELEMENT`.
 
 **Optional aliases:** concrete blocks may bind `T` for shorter authoring (for example `BlockReference = TypeReference(core:Block)`) — not required in V1.
 

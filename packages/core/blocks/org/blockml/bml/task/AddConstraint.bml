@@ -51,10 +51,6 @@
   </references>
 
   <name>AddConstraint</name>
-  <type>
-    <task:AddConstraint />
-  </type>
-  <baseType>
-    <core:TaskGuide />
-  </baseType>
+  <type>task:AddConstraint</type>
+  <baseType>core:TaskGuide</baseType>
 </block>

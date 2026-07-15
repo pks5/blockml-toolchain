@@ -53,10 +53,6 @@
   </references>
 
   <name>DebugUnknownType</name>
-  <type>
-    <task:DebugUnknownType />
-  </type>
-  <baseType>
-    <core:TaskGuide />
-  </baseType>
+  <type>task:DebugUnknownType</type>
+  <baseType>core:TaskGuide</baseType>
 </block>

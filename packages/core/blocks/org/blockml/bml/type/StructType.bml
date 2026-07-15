@@ -77,12 +77,8 @@
   </references>
 
   <name>StructType</name>
-  <type>
-    <btype:StructType />
-  </type>
-  <baseType>
-    <core:ValueType />
-  </baseType>
+  <type>btype:StructType</type>
+  <baseType>core:ValueType</baseType>
   <abstract>true</abstract>
 
 </block>

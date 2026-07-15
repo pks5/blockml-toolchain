@@ -125,10 +125,6 @@
   </references>
 
   <name>DocumentationModel</name>
-  <type>
-    <doc:DocumentationModel />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:DocumentationModel</type>
+  <baseType>core:Documentation</baseType>
 </block>

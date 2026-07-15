@@ -79,10 +79,6 @@
   </references>
 
   <name>ModelingGuidelines</name>
-  <type>
-    <doc:ModelingGuidelines />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:ModelingGuidelines</type>
+  <baseType>core:Documentation</baseType>
 </block>

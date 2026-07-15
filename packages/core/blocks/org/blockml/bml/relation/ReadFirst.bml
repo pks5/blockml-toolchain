@@ -19,10 +19,6 @@
     all cross-links.</documentation>
 
   <name>ReadFirst</name>
-  <type>
-    <relation:ReadFirst />
-  </type>
-  <baseType>
-    <core:Relation />
-  </baseType>
+  <type>relation:ReadFirst</type>
+  <baseType>core:Relation</baseType>
 </block>

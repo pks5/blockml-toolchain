@@ -27,12 +27,8 @@
     aliases. Not XML namespace prefix aliases.</documentation>
 
   <name>FreeTextAlias</name>
-  <type>
-    <meta:FreeTextAlias />
-  </type>
-  <baseType>
-    <core:Alias />
-  </baseType>
+  <type>meta:FreeTextAlias</type>
+  <baseType>core:Alias</baseType>
 
   <properties>
     <name type="Text" bml:xml="attribute">

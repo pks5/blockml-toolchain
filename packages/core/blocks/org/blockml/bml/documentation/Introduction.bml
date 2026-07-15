@@ -52,10 +52,6 @@
   </references>
 
   <name>Introduction</name>
-  <type>
-    <doc:Introduction />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:Introduction</type>
+  <baseType>core:Documentation</baseType>
 </block>

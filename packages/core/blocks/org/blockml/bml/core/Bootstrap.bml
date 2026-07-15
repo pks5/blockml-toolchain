@@ -23,12 +23,8 @@
     scenario-specific members when needed; the abstract base declares no aggregations.</documentation>
 
   <name>Bootstrap</name>
-  <type>
-    <core:Bootstrap />
-  </type>
-  <baseType>
-    <core:Block />
-  </baseType>
+  <type>core:Bootstrap</type>
+  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

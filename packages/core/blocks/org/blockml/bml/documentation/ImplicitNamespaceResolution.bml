@@ -68,10 +68,6 @@
   </references>
 
   <name>ImplicitNamespaceResolution</name>
-  <type>
-    <doc:ImplicitNamespaceResolution />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:ImplicitNamespaceResolution</type>
+  <baseType>core:Documentation</baseType>
 </block>

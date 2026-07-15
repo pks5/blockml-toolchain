@@ -73,10 +73,6 @@
   </references>
 
   <name>BmlNamespace</name>
-  <type>
-    <doc:BmlNamespace />
-  </type>
-  <baseType>
-    <core:Documentation />
-  </baseType>
+  <type>doc:BmlNamespace</type>
+  <baseType>core:Documentation</baseType>
 </block>

@@ -41,10 +41,6 @@
   </references>
 
   <name>BML_UNKNOWN_TYPE</name>
-  <type>
-    <diag:BML_UNKNOWN_TYPE />
-  </type>
-  <baseType>
-    <core:Diagnostic />
-  </baseType>
+  <type>diag:BML_UNKNOWN_TYPE</type>
+  <baseType>core:Diagnostic</baseType>
 </block>

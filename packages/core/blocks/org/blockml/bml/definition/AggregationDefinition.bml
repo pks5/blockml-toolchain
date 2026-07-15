@@ -58,12 +58,8 @@
   </references>
 
   <name>AggregationDefinition</name>
-  <type>
-    <def:AggregationDefinition />
-  </type>
-  <baseType>
-    <def:MemberDefinition />
-  </baseType>
+  <type>def:AggregationDefinition</type>
+  <baseType>def:MemberDefinition</baseType>
   <properties>
     <type type="FullyQualifiedName(core:Block, core:TypeReference)" bml:xml="element|attribute">
       <documentation>Aggregation payload type (TypeExpression). Instance collections use a plain Block
@@ -107,9 +103,7 @@
         composition property on org.blockml.bml.definition.AggregationDefinition.</documentation>
 
       <name>Composition</name>
-      <baseType>
-        <core:Entity />
-      </baseType>
+      <baseType>core:Entity</baseType>
       <bml:xml>composition</bml:xml>
     </block>
   </subBlocks>
