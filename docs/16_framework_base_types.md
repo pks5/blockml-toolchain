@@ -106,7 +106,8 @@ Empty elements (`<final/>`) are not permitted — use `<final>true</final>` expl
 
 ```text
 Lists Block type references permitted as baseType on Sub-Blocks in <subBlocks>.
-Each child element is a direct Block reference (element name = FQN via xmlns prefix).
+Meta-model type: core:TypeReference(core:Block)[]. Each child element is a direct Block
+reference (element name = FQN via xmlns prefix).
 
 Default (no declaration on this block):  [] — Sub-Blocks forbidden until explicitly enabled
 Omitted <subTypes>:                      inherit effective subTypes from baseType chain
@@ -130,7 +131,8 @@ Sub-Block baseType not in effective subTypes → BML_INVALID_SUBBLOCK_TYPE
 
 ```text
 Lists Language references permitted on <implementation language="...">.
-Each child element is a direct Language reference (element name = FQN via xmlns prefix).
+Meta-model type: core:TypeReference(core:Language)[]. Each child element is a direct Language
+reference (element name = FQN via xmlns prefix).
 Type-reference interpretation follows from the Block-definition role — same pattern as Library _blocks.
 Omitted = inherit from baseType
 Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
@@ -147,7 +149,8 @@ Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 
 ```text
 Lists contract Block references merged into this Block (root block only).
-Each child element is a direct Block reference (element name = FQN via xmlns prefix).
+Meta-model type: core:TypeReference(core:Block)[]. Each child element is a direct Block
+reference (element name = FQN via xmlns prefix).
 Same container pattern as <languages> and <subTypes> — no wrapper <contract> element.
 Role            — member merge + type-bound identification (satisfiesTypeBound); see 17_type_system_bml.md
 Omitted = inherit from baseType at validate
@@ -377,6 +380,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/type/Number.bml · Integer.bml · Decimal.bml · Float.bml · Text.bml · Boolean.bml · Constant.bml · …
      org/blockml/bml/type/Version.bml · URL.bml · URI.bml · FilePath.bml · MimeType.bml
      org/blockml/bml/core/PrimitiveEntity.bml
+     org/blockml/bml/core/TypeReference.bml
      org/blockml/bml/type/IntegerEntity.bml · TextEntity.bml · …
      org/blockml/bml/language/NaturalLanguage.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …

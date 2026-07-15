@@ -606,6 +606,78 @@ Properties continue to store primitive values directly (`width : Integer`) — `
 
 V1 bootstrap: `IntegerEntity`, `DecimalEntity`, `FloatEntity`, `TextEntity`, `BooleanEntity`, `VersionEntity`, `URLEntity`, `URIEntity`, `FilePathEntity`, `MimeTypeEntity`, `FullyQualifiedNameEntity` in `@blockml/core`.
 
+#### TypeReference
+
+`org.blockml.bml.core.TypeReference(T)` is an **abstract generic marker** — the inverse of `PrimitiveEntity(T)`:
+
+```text
+PrimitiveEntity<T>   — primitive value must appear as Entity instance in composition
+TypeReference<T>     — Block type must appear as direct element reference in aggregation
+```
+
+```text
+TypeReference<T extends Block>
+  abstract
+  (no properties — pure marker, like core.Definition as branch identifier)
+```
+
+**Detection:** aggregation `type` is a generic application `TypeReference(T)` with exactly one type argument. Validator unwraps `T` for `satisfiesTypeBound` checks on each child element name.
+
+**Instance aggregation** (composition ownership):
+
+```xml
+<parts type="bricks:Brick[]">
+  <composition>
+    <bricks:StandardBrick bml:id="wall" size="[2,4,3]" />
+  </composition>
+</parts>
+```
+
+**Type-reference aggregation** (types only):
+
+```xml
+<contracts type="core:TypeReference(core:Block)[]">
+  <com.foo:IIdentifiable />
+  <com.foo:IPlaceable />
+</contracts>
+
+<baseType type="core:TypeReference(core:Block)[1..1]">
+  <core:Entity />
+</baseType>
+
+<type type="core:TypeReference(core:Block)[1..1]">
+  <foo:MyBlock />
+</type>
+```
+
+```text
+Allowed on TypeReference aggregations:
+  child element name → FQN via xmlns prefix
+  multiplicity on TypeReference(T) — [1..1] for type/baseType/language
+
+Forbidden on TypeReference aggregations:
+  member values on children
+  bml:id
+  bml:version (unless a specific aggregation documents an exception)
+  nested <composition>
+  default="true"
+```
+
+**Contrast with `FullyQualifiedName(B)`:** scalar ValueType for a single FQN on Property `type` attributes — text or attribute value, not the container element-name pattern.
+
+**Contrast with Library role heuristic (legacy):** V1 parser may still accept plain `core:Block[]` on Library `_blocks` with context-driven type-reference interpretation. Target architecture: explicit `core:TypeReference(core:Block)[]` — no role-based special case.
+
+**Optional aliases:** concrete blocks may bind `T` for shorter authoring (for example `BlockReference = TypeReference(core:Block)`) — not required in V1.
+
+V1 bootstrap: `org.blockml.bml.core.TypeReference` in `@blockml/core`.
+
+```typescript
+/** @blockml/core — not part of BomDocument */
+function isTypeReferenceAggregation(type: TypeExpression): boolean
+function unwrapTypeReference(type: TypeExpression): TypeExpression | null
+// returns T when outer fqn is org.blockml.bml.core.TypeReference with one argument; else null
+```
+
 ### Properties are always Optional
 
 Every Property behaves as an **Optional** — it has a value or has no value. There is no `null`. Internally the BOM represents `Optional<Value>` instead of `Value | null`.

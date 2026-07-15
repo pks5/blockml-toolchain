@@ -58,6 +58,9 @@
     <see block="core:Bootstrap">
       Abstract base for library bootstrap entry points (README blocks).
     </see>
+    <see block="core:TypeReference">
+      Type-reference marker for bootstrap, _dependencies, _subLibraries, and _blocks.
+    </see>
   </references>
 
   <name>BlockLibrary</name>
@@ -66,7 +69,7 @@
 
   <abstract>true</abstract>
 
-  <subTypes>
+  <subTypes type="core:TypeReference(core:Block)[]">
     <core:Block />
   </subTypes>
 
@@ -74,26 +77,26 @@
     <description type="Text">
       <documentation>Human-readable summary of what this library provides.</documentation>
     </description>
-    <language type="lang:NaturalLanguage">
-      <documentation>Default natural language for documentation prose on all blocks exported
-        from this library catalogue. Inherited by block definitions unless overridden on the root
-        block element. Unqualified child names resolve via implicit namespace
-        org.blockml.bml.language.*.</documentation>
-    </language>
   </properties>
 
   <aggregations>
-    <bootstrap type="core:Bootstrap">
+    <language type="core:TypeReference(lang:NaturalLanguage)[0..1]">
+      <documentation>Default natural language for documentation prose on all blocks exported
+        from this library catalogue. Singular TypeReference aggregation — one child (for example
+        &lt;English/&gt;). Inherited by block definitions unless overridden. Unqualified child
+        names resolve via implicit namespace org.blockml.bml.language.*.</documentation>
+    </language>
+    <bootstrap type="core:TypeReference(core:Bootstrap)[0..1]">
       <documentation>Library bootstrap entry point — typically a README block with a readFirst
-        documentation list. Holds a Bootstrap block instance as type reference — element name
-        resolves to FQN. bml:version is forbidden.</documentation>
+        documentation list. Type-reference aggregation — child element name resolves to FQN.
+        bml:version is forbidden.</documentation>
     </bootstrap>
-    <_dependencies type="core:BlockLibrary[]">
+    <_dependencies type="core:TypeReference(core:BlockLibrary)[]">
       <documentation>Other Library blocks this library depends on. Typical pattern: an inner
         library lists the outer library here. Holds empty Block instances as type references —
         element name resolves to FQN. bml:version is forbidden.</documentation>
     </_dependencies>
-    <_subLibraries type="core:BlockLibrary[]">
+    <_subLibraries type="core:TypeReference(core:BlockLibrary)[]">
       <documentation>Nested child Library blocks grouped under this library. A library may declare
         sub-libraries alongside _blocks. Holds empty Block instances as type references — element
         name resolves to FQN. bml:version is forbidden. The outer library must not re-export inner
@@ -104,7 +107,7 @@
         FilePathEntity composition child; value is the relative .xsd path from the library package
         root. Omit when all types are exported via _blocks.</documentation>
     </_schemas>
-    <_blocks type="core:Block[]">
+    <_blocks type="core:TypeReference(core:Block)[]">
       <documentation>Exported Block and ValueType definitions. Membership is defined exclusively by
         this list — not by directory layout. Holds empty Block instances as type references —
         element name resolves to FQN. bml:version is forbidden.</documentation>

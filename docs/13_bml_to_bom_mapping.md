@@ -290,14 +290,17 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <status>Draft</status>                → member.statusFqn or block.statusFqn (when declared)
                                              → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
-<type>…</type>                               → block.type (FQN; root block only — derived on Sub-Blocks)
+<type>                                       → block.type (FQN; root block only — derived on Sub-Blocks)
+  <foo:MyBlock/>                             →   TypeReference(core:Block)[1..1] child; FQN stored in block.type
+<baseType>                                   → block.baseType (FQN string)
+  <core:Block/>                              →   TypeReference(core:Block)[0..1] child; FQN stored in block.baseType
 <version>…</version>                         → block.version
 <abstract>true</abstract>                    → block.abstract = true
 <final>true</final>                          → block.final = true
 <visibility>…</visibility>                   → block.visibility (Sub-Block only; root → BML_VISIBILITY_ON_ROOT_BLOCK)
-<core:Block />                               → block.subTypes[] (direct Block reference in <subTypes>)
-<lang:OpenSCAD />                            → block.languages[] (direct Language reference in <languages>)
-<ac:Wall />                                  → block.contracts[]   (direct Block reference in <contracts>; root block only)
+<core:Block />                               → block.subTypes[] (TypeReference(core:Block)[] child)
+<lang:OpenSCAD />                            → block.languages[] (TypeReference(core:Language)[] child)
+<ac:Wall />                                  → block.contracts[]   (TypeReference(core:Block)[] child; root block only)
 `<definition>RootBlockDefinition</definition>` → `block.definitionFqn`. Default depends on parse context: Sub-Blocks → `org.blockml.bml.definition.SubBlockDefinition`; document root and embedded blocks → `org.blockml.bml.definition.RootBlockDefinition`. Explicit `<definition>` must be compatible with block role (`BML_DEFINITION_TYPE_MISMATCH`).
 <baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType, defaultType? } (root block only)
 ```
@@ -686,6 +689,35 @@ bare <composition> on definition            → BML_STANDALONE_COMPOSITION (erro
 
 The `composition aggregation="…"` attribute is **removed** — aggregations are opened by member element name.
 
+### TypeReference aggregation (stage [8])
+
+```text
+Aggregation type is TypeReference(T)  →  type-reference mode
+  Parser: child element name → FQN; store in contracts[] / languages[] / subTypes[] / block.type / block.baseType
+  Validator: satisfiesTypeBound(childFqn, T) for each child
+  Forbidden: bml:id, bml:version, member values on children, <composition>, default="true"
+
+Aggregation type is plain Block[]       →  instance mode (composition ownership)
+  Parser: children → BlockInstance trees
+  Validator: standard composition and aggregation rules
+
+unwrapTypeReference(typeExpr):
+  fqn === org.blockml.bml.core.TypeReference && one typeArgument  →  return T
+  else  →  null (instance aggregation)
+
+Legacy (V1 transitional):
+  Plain core:Block[] on Library _blocks / _dependencies  →  still type-reference mode via Library role
+  Text content <type>com.foo.Bar</type> on Block definitions  →  still accepted; maps to block.type FQN
+```
+
+```text
+BML_TYPE_REFERENCE_CHILD_VALUE      — member value on child of TypeReference aggregation
+BML_TYPE_REFERENCE_COMPOSITION      — <composition> inside TypeReference aggregation
+BML_TYPE_REFERENCE_DEFAULT          — default="true" on TypeReference aggregation
+BML_TYPE_REFERENCE_CONSTRAINT       — child FQN fails satisfiesTypeBound(child, T)
+BML_TYPE_REFERENCE_MULTIPLICITY     — wrong child count for TypeReference(T)[1..1] or [0..1]
+```
+
 ### Contract merge (stage [8])
 
 ```text
@@ -730,7 +762,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.b
 <bricks:WallPresets />                      → preset block via _blocks
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation is context-driven (Library role) — not declared on the aggregation.
+`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN. **`bml:version` is forbidden** on these children. Meta-model types: `TypeReference(core:Bootstrap)[0..1]`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`. Legacy V1: plain `core:Block[]` on Library aggregations may still be accepted with context-driven type-reference interpretation until migration completes.
 
 Each child requires explicit aggregation members (`bootstrap`, `_dependencies`, `_subLibraries`, `_schemas`, `_blocks`) — BlockLibrary has no default aggregation.
 

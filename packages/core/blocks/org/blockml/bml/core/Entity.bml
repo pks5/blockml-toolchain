@@ -27,6 +27,9 @@
     <see block="core:PrimitiveEntity">
       Primitive value wrappers as Entity instances.
     </see>
+    <see block="core:TypeReference">
+      Type-reference marker for aggregation payloads listing Block types.
+    </see>
   </references>
 
   <name>Entity</name>

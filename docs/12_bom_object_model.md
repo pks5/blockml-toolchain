@@ -514,10 +514,11 @@ interface PropertyDefinition extends MemberDefinitionBase {
 
 interface AggregationDefinition extends MemberDefinitionBase {
   kind: "aggregation"
-  typeFqn: string
+  /** Full TypeExpression — plain Block[] for instances, TypeReference(T)[] for type-reference lists */
+  type: TypeExpression
   cardinality: "0..1" | "0..n" | "1..1" | "1..n"
   default?: boolean
-  /** Nested composition filling this aggregation (may be omitted on override declarations) */
+  /** Nested composition filling this aggregation — instance aggregations only */
   composition?: CompositionTemplate
 }
 
@@ -1164,7 +1165,7 @@ org.blockml.bml.type.FilePathEntity            property:  value (relative .xsd p
 org.blockml.bml.core.Bootstrap                 aggregation:  readFirst (Documentation[])
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children; effective version is resolved from library context. Type-reference interpretation follows from the Library role (orchestrator / render target) — not from an aggregation attribute.
+`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN. **`bml:version` is forbidden** on these children; effective version is resolved from library context. Meta-model types: `TypeReference(core:Bootstrap)[0..1]`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`.
 
 Composition children in `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` are Block instances (`<blockml:README />`, `<blockml:Library />`, `<compiler:Library />`, `<bricks:Standard />`). `_schemas` holds `FilePathEntity` composition children (`<btype:FilePathEntity value="bricks.xsd" />`). Each `aggregation=` attribute is required (BlockLibrary has five aggregations, none is default).
 

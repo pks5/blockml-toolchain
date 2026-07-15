@@ -1,0 +1,74 @@
+<!--
+  BlockML Core — type reference marker for aggregation payloads
+
+  FQN: org.blockml.bml.core.TypeReference
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:bml="http://blockml.org/schema/bml">
+
+  <idea>Marks an aggregation whose children are Block type references, not Block instances.</idea>
+
+  <documentation>Abstract generic marker for aggregation payloads that list Block types by direct
+    element reference — the child element name resolves to an FQN via xmlns prefix. Analogous to
+    org.blockml.bml.core.PrimitiveEntity(T) for primitive values in composition: TypeReference(T)
+    is never instantiated directly; children reference T, not TypeReference itself.
+
+    Use on aggregation type attributes to distinguish type-reference collections from instance
+    collections:
+    • core:TypeReference(core:Block)[]     — contracts, subTypes, Library _blocks
+    • core:TypeReference(core:Block)[1..1] — type, baseType identity on Block definitions
+    • core:TypeReference(core:Language)[]  — languages
+    • core:TypeReference(core:Capability)[] — when listing capability types only
+
+    Validator detection: aggregation type is a generic application of org.blockml.bml.core.TypeReference
+    with exactly one type argument T. Each child element name must resolve to an FQN that satisfies
+    satisfiesTypeBound(fqn, T). Forbidden on TypeReference aggregations: member values on children,
+    bml:id, bml:version (except where a specific aggregation documents an exception), nested
+    composition, and default="true".
+
+    Contrast with org.blockml.bml.type.FullyQualifiedName(B) — a ValueType for a single scalar FQN
+    on Property type attributes. TypeReference(T) describes the XML container pattern where the
+    referenced type appears as the child element name.
+
+    Optional concrete aliases (for example BlockReference = TypeReference(core:Block)) may bind T
+    via baseType for shorter authoring — not required in V1.</documentation>
+
+  <references>
+    <see file="17_type_system_bml.md">
+      TypeReference marker, validator rules, and contrast with FullyQualifiedName.
+    </see>
+    <see file="16_framework_base_types.md">
+      contracts, subTypes, languages container pattern.
+    </see>
+    <see block="core:PrimitiveEntity">
+      Inverse pattern — wraps primitive values as Entity instances in composition.
+    </see>
+    <see block="def:BlockDefinition">
+      type, baseType, contracts, languages, subTypes aggregations.
+    </see>
+    <see block="def:AggregationDefinition">
+      Member aggregation type attribute — TypeReference(T) vs plain Block[].
+    </see>
+    <see block="btype:FullyQualifiedName">
+      Scalar FQN ValueType — not a type-reference container.
+    </see>
+  </references>
+
+  <name>TypeReference</name>
+  <type>core:TypeReference</type>
+  <baseType>core:Entity</baseType>
+  <abstract>true</abstract>
+
+  <genericTypes>
+    <T baseType="core:Block">
+      <documentation>Block branch constraint for child element references. Each child element name
+        must resolve to an FQN that satisfies satisfiesTypeBound(fqn, T).</documentation>
+    </T>
+  </genericTypes>
+
+</block>

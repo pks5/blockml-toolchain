@@ -73,7 +73,7 @@
       typeFqn fields in BOM structures.
     </see>
     <see block="def:BlockDefinition">
-      type and baseType attributes (Block FQN).
+      type and baseType TypeReference aggregations (Block FQN).
     </see>
     <see block="def:PropertyDefinition">
       property type attribute (ValueType FQN).

@@ -239,8 +239,15 @@ Meta-model (simplified):
 ```text
 org.blockml.bml.definition.BlockDefinition
   bml:xml element:  block
-  properties:       idea, name, type, baseType, version, …
-  aggregations:     properties → PropertyDefinition[]
+  properties:       idea, name, version, …
+  aggregations:     type → TypeReference(core:Block)[1..1]
+                    baseType → TypeReference(core:Block)[0..1]
+                    language → TypeReference(NaturalLanguage)[0..1]
+                    genericTypes → GenericTypeDefinition[]
+                    languages → TypeReference(Language)[]
+                    subTypes → TypeReference(Block)[]
+                    contracts → TypeReference(Block)[]
+                    properties → PropertyDefinition[]
                     aggregations → AggregationDefinition[]
                     …
 
@@ -267,8 +274,12 @@ Authoring instance:
 ```xml
 <block xmlns:core="org.blockml.bml.core" …>
   <name>Wall</name>
-  <type>com.example.Wall</type>
-  <baseType>core:Block</baseType>
+  <type type="core:TypeReference(core:Block)[1..1]">
+    <com.example:Wall />
+  </type>
+  <baseType type="core:TypeReference(core:Block)[1..1]">
+    <core:Block />
+  </baseType>
   <properties>
     <width type="Float">
       <value>50</value>
@@ -319,7 +330,7 @@ Until the meta-serializer exists:
 | `org.blockml.bml.core.Definition` BML | Done — empty identification marker (by design) |
 | `org.blockml.bml.definition.StructuralDefinition` BML | Done — documentation Sub-Blocks inline |
 | `org.blockml.bml.definition.*` member surfaces | Done — Property, Aggregation, Association, Capability, MemberDefinition |
-| `bml:xml` in parser / BOM model | Not implemented |
+| `org.blockml.bml.core.TypeReference` BML | Specified — abstract generic type-reference marker |
 | Meta-driven BOM → XML serializer | Not implemented |
 | Validator rules for placement | Specified here; codes TBD |
 
@@ -327,6 +338,8 @@ Source files live under:
 
 ```text
 packages/core/blocks/org/blockml/bml/core/Definition.bml
+packages/core/blocks/org/blockml/bml/core/PrimitiveEntity.bml
+packages/core/blocks/org/blockml/bml/core/TypeReference.bml
 packages/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/ConstrainableDefinition.bml
 packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml

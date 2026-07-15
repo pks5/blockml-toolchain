@@ -817,9 +817,12 @@ org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritan
 **Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous:
 
 ```text
-<languages>    →  <lang:OpenSCAD/>           Language reference (composition element — prefix required)
-<subTypes>     →  <core:Block/>              direct Block reference
-<contracts>    →  <ac:Wall/>                 direct contract Block reference
+<languages>    →  <lang:OpenSCAD/>           TypeReference(core:Language)[] child
+<subTypes>     →  <core:Block/>              TypeReference(core:Block)[] child
+<contracts>    →  <ac:Wall/>                 TypeReference(core:Block)[] child
+<type>         →  <foo:MyBlock/>             TypeReference(core:Block)[1..1] child
+<baseType>     →  <core:Block/>              TypeReference(core:Block)[0..1] child
+<language>     →  <German/>                  TypeReference(NaturalLanguage)[0..1] child
 <genericTypes> →  <T baseType="…"/>          element name = generic parameter name
 ```
 

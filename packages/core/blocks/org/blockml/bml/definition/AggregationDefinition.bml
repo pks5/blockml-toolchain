@@ -13,21 +13,29 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
 
-  <idea>An owned collection member that may hold composition children.</idea>
+  <idea>An owned collection member — Block instances or type references depending on aggregation type.</idea>
 
-  <documentation>Describes a Block member representing composition ownership — a typed collection
-    that may contain nested Block instances via a nested composition element. Rendered as a child
-    element inside the aggregations container; the XML element name is the aggregation name
-    (bml:xml="${ #this.name }"). An optional XML prefix on the element name supplies the member
-    namespace — resolved via xmlns to BOM namespace; unprefixed elements use the default namespace
-    (empty string). Member identity is (resolvedNamespace, localName). Maps to BOM
-    AggregationDefinition (kind: "aggregation") with typeFqn, cardinality (from type multiplicity),
-    optional default flag, and optional nested composition template. Any Block FQN is valid as
-    aggregation type — not limited to ValueTypes. When exactly one aggregation on a Block is marked
-    default="true", bare top-level composition on the Block definition is sugar for filling that
-    aggregation. Scalar member fields (type, default) follow org.blockml.bml.definition.MemberDefinition
-    placement rules — element preferred on definitions, attribute preferred on Block instances.
-    Structured composition remains a child element. Composition instance ID reachability for
+  <documentation>Describes a Block member representing an owned collection. The aggregation type
+    attribute selects payload semantics:
+
+    • Plain Block type (for example core:Block[]) — composition ownership. Children are Block
+      instances with optional nested composition element, member values, and bml:id.
+    • TypeReference(T) (for example core:TypeReference(core:Block)[]) — type-reference list.
+      Children are direct Block references (element name = FQN via xmlns prefix). No member values,
+      bml:id, bml:version (unless documented otherwise), composition, or default="true".
+
+    See org.blockml.bml.core.TypeReference. Rendered as a child element inside the aggregations
+    container; the XML element name is the aggregation name (bml:xml="${ #this.name }"). An optional
+    XML prefix on the element name supplies the member namespace — resolved via xmlns to BOM
+    namespace; unprefixed elements use the default namespace (empty string). Member identity is
+    (resolvedNamespace, localName). Maps to BOM AggregationDefinition (kind: "aggregation") with
+    type expression (including TypeReference applications), cardinality (from type multiplicity),
+    optional default flag (instance aggregations only), and optional nested composition template.
+    When exactly one instance aggregation on a Block is marked default="true", bare top-level
+    composition on the Block definition is sugar for filling that aggregation. Scalar member fields
+    (type, default) follow org.blockml.bml.definition.MemberDefinition placement rules — element
+    preferred on definitions, attribute preferred on Block instances. Structured composition remains
+    a child element on instance aggregations only. Composition instance ID reachability for
     bml:id references is controlled by this aggregation member's visibility (inherited from
     org.blockml.bml.definition.MemberDefinition) — public aggregations export ids for cross-document
     {EnclosingBlockFQN}::{id} references; protected limits reach to the declaring Block and its child
@@ -44,6 +52,9 @@
     <see block="core:Block">
       Required branch for aggregation payload types.
     </see>
+    <see block="core:TypeReference">
+      Type-reference aggregation marker — TypeReference(T) vs instance Block[].
+    </see>
   </references>
 
   <name>AggregationDefinition</name>
@@ -51,29 +62,31 @@
   <baseType>def:MemberDefinition</baseType>
 
   <properties>
-    <type type="FullyQualifiedName(core:Block)" bml:xml="element|attribute">
-      <documentation>FQN of the child Block type (TypeExpression). Multiplicity in the type string
-        defines cardinality — e.g. core:Block[], core:Block[0..n], core:Block[1..1]. Non-Block FQNs
-        are invalid. Required on new aggregation declarations; may be omitted when filling an
-        inherited aggregation (partial override — type inherited from baseType chain). On
-        definitions, element form is preferred (&lt;type&gt;core:Block[]&lt;/type&gt;); on Block
-        instances, attribute form is preferred (type="core:Block[]" on the aggregation element).</documentation>
+    <type type="FullyQualifiedName(core:Block, core:TypeReference)" bml:xml="element|attribute">
+      <documentation>Aggregation payload type (TypeExpression). Instance collections use a plain Block
+        FQN with multiplicity — for example core:Block[], core:Block[0..n], core:Block[1..1].
+        Type-reference collections wrap the payload constraint in TypeReference — for example
+        core:TypeReference(core:Block)[], core:TypeReference(core:Language)[1..1]. The validator
+        unwraps TypeReference(T) to detect type-reference mode; each child must satisfy
+        satisfiesTypeBound(fqn, T). Required on new aggregation declarations; may be omitted when
+        filling an inherited aggregation (partial override). On definitions, element form is
+        preferred; on Block instances, attribute form is preferred.</documentation>
     </type>
     <default bml:xml="element|attribute">
       <value>false</value>
       <documentation>When true, marks this aggregation as the primary/default composition target for
-        the enclosing Block — tooling and render targets may use it when composition placement is
-        ambiguous. At most one default="true" aggregation per Block. On definitions, element form is
-        preferred (&lt;default&gt;true&lt;/default&gt;); on Block instances, attribute form is
-        preferred (default="true" on the aggregation element). Maps to BOM
-        AggregationDefinition.default. Default false.</documentation>
+        the enclosing Block — instance aggregations only (forbidden when type is TypeReference(T)).
+        Tooling and render targets may use it when composition placement is ambiguous. At most one
+        default="true" aggregation per Block. Maps to BOM AggregationDefinition.default.
+        Default false.</documentation>
     </default>
     <composition type="Composition" bml:xml="element">
-      <documentation>Optional nested composition template filling this aggregation on the Block
-        definition. Rendered as a composition child element inside the aggregation member element.
-        Maps to BOM AggregationDefinition.composition (CompositionTemplate). May be omitted on
-        override declarations that only refine metadata. On Block instances, aggregation content is
-        opened inline without a composition wrapper — see docs/02_mbml.md — Composition.</documentation>
+      <documentation>Optional nested composition template filling this instance aggregation on the
+        Block definition. Forbidden when aggregation type is TypeReference(T). Rendered as a
+        composition child element inside the aggregation member element. Maps to BOM
+        AggregationDefinition.composition (CompositionTemplate). May be omitted on override
+        declarations that only refine metadata. On Block instances, aggregation content is opened
+        inline without a composition wrapper — see docs/02_mbml.md — Composition.</documentation>
     </composition>
   </properties>
 
