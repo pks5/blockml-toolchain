@@ -12,7 +12,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core">
-
+  <name>EnumType</name>
+  <type>btype:EnumType</type>
+  <baseType>btype:StructType</baseType>
   <idea>Branch for closed sets of named literal values.</idea>
 
   <documentation>
@@ -71,9 +73,6 @@
     </see>
   </references>
 
-  <name>EnumType</name>
-  <type>btype:EnumType</type>
-  <baseType>btype:StructType</baseType>
   <abstract>true</abstract>
 
   <aggregations>

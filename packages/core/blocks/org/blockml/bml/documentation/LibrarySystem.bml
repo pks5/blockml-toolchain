@@ -11,7 +11,9 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>LibrarySystem</name>
+  <type>doc:LibrarySystem</type>
+  <baseType>core:Documentation</baseType>
   <idea>Libraries, packages, namespaces, versioning, and imports.</idea>
 
   <documentation>
@@ -74,7 +76,4 @@
     </see>
   </references>
 
-  <name>LibrarySystem</name>
-  <type>doc:LibrarySystem</type>
-  <baseType>core:Documentation</baseType>
 </block>

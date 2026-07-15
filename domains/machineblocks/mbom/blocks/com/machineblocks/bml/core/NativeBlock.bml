@@ -12,7 +12,9 @@
                       "
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="com.machineblocks.bml.core">
-
+  <name>NativeBlock</name>
+  <type>core:NativeBlock</type>
+  <baseType>core:Block</baseType>
   <idea>Leaf geometry primitive rendered directly as mb_block() in SCAD.</idea>
 
   <documentation>Final leaf Block mapped directly to SCAD mb_block() — the native geometry primitive
@@ -28,9 +30,6 @@
     </see>
   </references>
 
-  <name>NativeBlock</name>
-  <type>core:NativeBlock</type>
-  <baseType>core:Block</baseType>
   <final>true</final>
 
   <!-- Native MB properties — all mb_block() parameters from 09_api_parameters.yml (v3.0.5) -->

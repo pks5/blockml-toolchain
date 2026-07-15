@@ -373,34 +373,41 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 ### Required Fields
 
 ```text
-<idea>              — short semantic description: what this Block represents in meaning (first child element).
+<name>              — short class name (PascalCase). Optional on root blocks — derived from the last
+                      segment of resolve(type) when omitted. When present, must match that segment.
+                      Required on Sub-Blocks. First child of the definition document (with type /
+                      baseType) — definition identity comes before idea.
+<type>              — canonical Block type identity (required on root block). FullyQualifiedName
+                      property — element text is an FQN / xmlns QName (for example foo:MyBlock).
+                      Declares identity for the Block being defined (the type need not exist yet).
+                      Immediately after name, before idea. Child-element TypeReference form is invalid.
+<baseType>          — parent FullyQualifiedName / TypeExpression. Mandatory — no default. Element
+                      text (for example core:Block or core:PrimitiveEntity(btype:Integer)).
+                      Generic applications on the parent are authored and resolved here.
+                      Omitted only on org.blockml.bml.core.Block. Immediately after type, before idea.
+<idea>              — short semantic description: what this Block represents in meaning. Required;
+                      follows name / type / baseType (never first).
 <summary>           — optional short prose expansion — typically three to five sentences between idea and documentation.
 <keywords>          — optional search/discovery tags — core.Keyword Entity aggregation (StructuralDefinition).
 <documentation>     — human-readable technical description of the Block (required on root blocks).
 <not>               — optional block-level disambiguation — what this Block is not (blocks only, not members).
 <aliases>           — optional alternative Block type names — core.Alias Entity aggregation (blocks only).
-<name>              — short class name (PascalCase). Optional on root blocks — derived from the last
-                      segment of resolve(type) when omitted. When present, must match that segment.
-                      Required on Sub-Blocks. See naming convention below.
-<type>              — canonical Block type identity (required on root block). FullyQualifiedName
-                      property — element text is an FQN / xmlns QName (for example foo:MyBlock).
-                      Declares identity for the Block being defined (the type need not exist yet).
-                      Place early after name. Child-element TypeReference form is invalid.
-<baseType>          — parent FullyQualifiedName / TypeExpression. Mandatory — no default. Element
-                      text (for example core:Block or core:PrimitiveEntity(btype:Integer)).
-                      Generic applications on the parent are authored and resolved here.
-                      Omitted only on org.blockml.bml.core.Block. Place immediately after type.
 <version>           — semantic version of this Block definition (root block only)
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
 ```
 
 Definition elements (`<property>`, `<aggregation>`, …) carry `<status>` only when deviating from the inherited status — see § `<status>`.
 
-### `<idea>` — semantic meaning
+### Definition identity first — then `<idea>`
 
-`<idea>` is placed **directly under the root `<block>` element**, as the **first child**, before optional `<summary>`, `<keywords>`, `<language>`, `<documentation>`, optional `<not>`, optional `<aliases>`, and `<name>`. It states how to **interpret** the Block — what it means in the domain, not how it is implemented.
+**Rule:** Every Block definition document (root, Sub-Block, embedded) starts with **definition identity** — `<name>`, `<type>`, `<baseType>` — **before** `<idea>` and all prose. The type system answers *what is this definition?* before the Idea answers *what does it mean?*
+
+`<idea>` follows identity, before optional `<summary>`, `<keywords>`, `<language>`, `<documentation>`, optional `<not>`, and optional `<aliases>`. It states how to **interpret** the Block — what it means in the domain, not how it is implemented.
 
 ```text
+<name>          — short class name (optional on root; required on Sub-Blocks)
+<type>          — FullyQualifiedName identity (required on root; usually omitted on Sub-Blocks)
+<baseType>      — parent FullyQualifiedName / TypeExpression (omitted only on org.blockml.bml.core.Block)
 <idea>          — meaning     what this Block semantically represents (one short sentence)
 <summary>       — scope       optional middle tier — three to five sentences of scope and boundaries
 <keywords>      — discovery   optional search tags for RAG and colloquial lookup
@@ -412,11 +419,17 @@ Definition elements (`<property>`, `<aggregation>`, …) carry `<status>` only w
 Examples:
 
 ```xml
+<name>StandardBrick</name>
+<type>bricks:StandardBrick</type>
+<baseType>core:NativeBlock</baseType>
 <idea>Lego compatible standard building block.</idea>
 <documentation>Parametric MachineBlocks brick with size, studs, holes, and style properties.</documentation>
 ```
 
 ```xml
+<name>Float</name>
+<type>btype:Float</type>
+<baseType>btype:Number</baseType>
 <idea>Primitive BlockML property type capable of holding a float number.</idea>
 <documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
   resolves via the type namespace.</documentation>
@@ -427,7 +440,7 @@ Examples:
 </references>
 ```
 
-`<idea>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IDEA` (warning in V1, error in a later release). The idea is primary input for editors, LLMs, and documentation navigation — it answers *what is this?* before *how does it work?*
+`<idea>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IDEA` (warning in V1, error in a later release). The idea is primary input for editors, LLMs, and documentation navigation — it answers *what does it mean?* after FQN identity is established.
 
 WOT alignment: the Idea is the stable semantic constant; documentation describes how a World interprets and uses it. See `WOT_Reference_v26.md` — The Idea.
 
@@ -545,7 +558,7 @@ Natural languages are distinct from **implementation languages** (`ProgrammingLa
 
 ### `<documentation>`
 
-`<documentation>` follows `<idea>`, optional `<summary>`, optional `<keywords>`, and optional `<language>`, still before optional `<not>`, optional `<aliases>`, and `<name>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+`<documentation>` follows definition identity (`name` / `type` / `baseType`), `<idea>`, optional `<summary>`, optional `<keywords>`, and optional `<language>`, still before optional `<not>` and optional `<aliases>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
 
 An optional **`language`** attribute on `<documentation>` references a `org.blockml.bml.language.NaturalLanguage` when the prose is written in a language other than the effective language of the enclosing definition element. Unqualified names resolve via implicit namespace `org.blockml.bml.language.*`. Omitted → inherit effective language from Block or Library.
 
@@ -553,6 +566,9 @@ An optional **`language`** attribute on `<documentation>` references a `org.bloc
 
 ```xml
 <block ...>
+  <name>Wall</name>
+  <type>ac:Wall</type>
+  <baseType>core:Block</baseType>
   <idea>Parametric wall segment for AnyClosure enclosures.</idea>
   <documentation>Wall block with thickness, height, and opening properties for enclosure design.</documentation>
   <name>Wall</name>
@@ -568,7 +584,7 @@ An optional **`language`** attribute on `<documentation>` references a `org.bloc
 
 ### `<not>` — negative space (blocks only)
 
-`<not>` is an optional child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It states **what this Block is not** — explicit disambiguation from easily confused concepts (for example Sub-Block vs embedded Block, contract vs baseType). Place after `<documentation>` (and optional documentation extensions) or immediately after `<documentation>` before `<since>` / `<name>` when extensions are absent.
+`<not>` is an optional child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It states **what this Block is not** — explicit disambiguation from easily confused concepts (for example Sub-Block vs embedded Block, contract vs baseType). Place after `<documentation>` (and optional documentation extensions) or immediately after `<documentation>` before `<since>` when extensions are absent. Definition identity (`name` / `type` / `baseType`) always remains at the top of the document.
 
 Plain trimmed text body stored in BOM `block.not`. Addressable as `com.foo.Bar.not`. Prefer `relation=ContrastsWith` on `<see>` when pointing at a specific confusing type; `<not>` states the negation inline on the current definition.
 

@@ -10,16 +10,15 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>MemberConstraint</name>
+  <type>constraint:MemberConstraint</type>
+  <baseType>constraint:StructuralConstraint</baseType>
   <idea>Constraint that validates a Block member definition.</idea>
 
   <documentation>Abstract branch for member-level structural constraints. Generic T binds to the
     effective MemberDefinition subtype of the embedding context. Specialized by PropertyConstraint,
     AggregationConstraint, AssociationConstraint, and CapabilityConstraint.</documentation>
 
-  <name>MemberConstraint</name>
-  <type>constraint:MemberConstraint</type>
-  <baseType>constraint:StructuralConstraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

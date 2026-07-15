@@ -10,13 +10,12 @@
                       "
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core">
-
-  <idea>Representation of an Inbound capability.</idea>
-
-  <documentation>Inbound capability.</documentation>
   <name>Inbound</name>
   <type>cap:Inbound</type>
   <baseType>core:Capability</baseType>
+  <idea>Representation of an Inbound capability.</idea>
+
+  <documentation>Inbound capability.</documentation>
   <properties>
     <_hasInput override="true">
       <value>true</value>

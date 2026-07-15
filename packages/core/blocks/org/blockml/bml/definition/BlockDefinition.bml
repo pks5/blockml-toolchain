@@ -15,7 +15,9 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:btype="org.blockml.bml.type"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>BlockDefinition</name>
+  <type>def:BlockDefinition</type>
+  <baseType>def:ConstrainableDefinition</baseType>
   <idea>The shared structural shape of Block definition documents in BlockML.</idea>
 
   <documentation>Abstract meta-model base for all Block definition documents — root blocks,
@@ -24,9 +26,10 @@
     binds this definition to the Block type it describes — conceptually BlockDefinition of
     com.foo.Bar when B resolves to com.foo.Bar.
 
-    Declares identity (idea, not, aliases, name, type, baseType, version), generic parameters, contracts,
-    allowed Sub-Blocks and languages, and member declaration containers (properties, aggregations,
-    associations, capabilities). Inherits summary and keywords aggregation (core.Keyword[]) from
+    Declares identity first (name, type, baseType, version), then semantic and discovery fields
+    (idea, not, aliases), generic parameters, contracts, allowed Sub-Blocks and languages, and
+    member declaration containers (properties, aggregations, associations, capabilities). Inherits
+    summary and keywords aggregation (core.Keyword[]) from
     org.blockml.bml.definition.StructuralDefinition. not is block-level only; aliases aggregation
     (core.Alias[]) lists domain Alias blocks or org.blockml.bml.meta.FreeTextAlias instances. Omitted when unnecessary. Type modifiers abstract and final are inherited from
     org.blockml.bml.definition.StructuralDefinition. Every definition element is addressable via
@@ -70,9 +73,6 @@
     </see>
   </references>
 
-  <name>BlockDefinition</name>
-  <type>def:BlockDefinition</type>
-  <baseType>def:ConstrainableDefinition</baseType>
   <abstract>true</abstract>
 
   <!-- Block definitions render as the root <block> element. -->
@@ -91,14 +91,40 @@
 
   <!--
     Scalar Block metadata. Each property renders as a direct XML child element
-    named after the property (for example <idea>, <summary>, <not>, <name>, <type>,
-    <baseType>, or <version>). Authored identity order: name → type → baseType → version.
+    named after the property. Authored document order (mandatory):
+    name → type → baseType first (definition identity, before idea), then idea / not / version
+    and the rest of the document.
   -->
   <properties>
+    <name type="Text" bml:xml="element">
+      <documentation>Short class name (PascalCase). Required on Sub-Blocks. Optional on root blocks —
+        when omitted, derived as lastSegment(resolve(type)). When present on a root block, must
+        equal lastSegment(resolve(type)) (BML_BLOCK_NAME_TYPE_MISMATCH). Format: [A-Z][a-zA-Z0-9]*
+        (BML_INVALID_BLOCK_NAME). First child of every Block definition document (with type /
+        baseType) — definition identity comes before idea.</documentation>
+    </name>
+    <type type="FullyQualifiedName(core:Block)" bml:xml="element">
+      <documentation>Canonical Block type identity — a FullyQualifiedName string, not a TypeReference
+        aggregation. Required on root blocks (BML_MISSING_BLOCK_TYPE). Authored as element text —
+        FQN, xmlns QName, or Sub-Block-relative name (for example foo:MyBlock or com.foo.MyBlock).
+        The named type need not exist yet — this property declares identity for the Block being
+        defined. Optional on Sub-Blocks — when omitted, derived as resolve(parent.type) + "." + name;
+        when present, must equal that expected value (BML_SUBBLOCK_TYPE_MISMATCH). Stored in BOM as
+        block.type (FQN string). Immediately after name, before idea.</documentation>
+    </type>
+    <baseType type="FullyQualifiedName(core:Block)" bml:xml="element">
+      <documentation>Parent type FullyQualifiedName / TypeExpression. Required on all definitions
+        except the sole inheritance root (org.blockml.bml.core.Block), which omits &lt;baseType&gt;
+        entirely (BML_MISSING_BASE_TYPE elsewhere). Authored as element text — FQN or xmlns QName,
+        including generic applications that bind type parameters (for example core:Entity or
+        core:PrimitiveEntity(btype:FullyQualifiedName(core:Block))). This is the site where generic
+        applications on the parent are resolved. Stored in BOM as block.baseType (FQN string).
+        Immediately after type, before idea.</documentation>
+    </baseType>
     <idea type="Text" bml:xml="element">
       <documentation>Short semantic description — what this Block represents in meaning. Required
-        first child on every Block definition (root blocks and Sub-Blocks). Addressable as
-        com.foo.Bar.idea.</documentation>
+        on every Block definition (root blocks and Sub-Blocks). Follows definition identity
+        (name / type / baseType) — never before them. Addressable as com.foo.Bar.idea.</documentation>
     </idea>
     <not type="Text" bml:xml="element">
       <documentation>What this Block is not — explicit disambiguation from easily confused concepts
@@ -108,30 +134,6 @@
         Prefer relation=ContrastsWith on references when pointing at a specific confusing type; not
         states the negation inline on the current definition.</documentation>
     </not>
-    <name type="Text" bml:xml="element">
-      <documentation>Short class name (PascalCase). Required on Sub-Blocks. Optional on root blocks —
-        when omitted, derived as lastSegment(resolve(type)). When present on a root block, must
-        equal lastSegment(resolve(type)) (BML_BLOCK_NAME_TYPE_MISMATCH). Format: [A-Z][a-zA-Z0-9]*
-        (BML_INVALID_BLOCK_NAME).</documentation>
-    </name>
-    <type type="FullyQualifiedName(core:Block)" bml:xml="element">
-      <documentation>Canonical Block type identity — a FullyQualifiedName string, not a TypeReference
-        aggregation. Required on root blocks (BML_MISSING_BLOCK_TYPE). Authored as element text —
-        FQN, xmlns QName, or Sub-Block-relative name (for example foo:MyBlock or com.foo.MyBlock).
-        The named type need not exist yet — this property declares identity for the Block being
-        defined. Optional on Sub-Blocks — when omitted, derived as resolve(parent.type) + "." + name;
-        when present, must equal that expected value (BML_SUBBLOCK_TYPE_MISMATCH). Stored in BOM as
-        block.type (FQN string). Place early in the definition document (after name).</documentation>
-    </type>
-    <baseType type="FullyQualifiedName(core:Block)" bml:xml="element">
-      <documentation>Parent type FullyQualifiedName / TypeExpression. Required on all definitions
-        except the sole inheritance root (org.blockml.bml.core.Block), which omits &lt;baseType&gt;
-        entirely (BML_MISSING_BASE_TYPE elsewhere). Authored as element text — FQN or xmlns QName,
-        including generic applications that bind type parameters (for example core:Entity or
-        core:PrimitiveEntity(btype:FullyQualifiedName(core:Block))). This is the site where generic
-        applications on the parent are resolved. Stored in BOM as block.baseType (FQN string).
-        Place early in the definition document (immediately after type).</documentation>
-    </baseType>
     <version type="Version" bml:xml="element">
       <documentation>Semantic version of this Block definition. Required on root blocks.
         Addressable as com.foo.Bar.version.</documentation>

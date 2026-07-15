@@ -13,7 +13,9 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:lang="org.blockml.bml.language"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>EverythingIsABlock</name>
+  <type>doc:EverythingIsABlock</type>
+  <baseType>core:Documentation</baseType>
   <idea>The most important concept — everything in BlockML is a Block.</idea>
 
   <documentation>
@@ -77,7 +79,4 @@
     </see>
   </references>
 
-  <name>EverythingIsABlock</name>
-  <type>doc:EverythingIsABlock</type>
-  <baseType>core:Documentation</baseType>
 </block>

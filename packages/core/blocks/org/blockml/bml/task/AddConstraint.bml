@@ -14,7 +14,9 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:task="org.blockml.bml.task">
-
+  <name>AddConstraint</name>
+  <type>task:AddConstraint</type>
+  <baseType>core:TaskGuide</baseType>
   <idea>Attach a Constraint Block instance to a Block or member definition.</idea>
 
   <summary>Declare a constraints container on a ConstrainableDefinition element and add a Constraint
@@ -50,7 +52,4 @@
     </see>
   </references>
 
-  <name>AddConstraint</name>
-  <type>task:AddConstraint</type>
-  <baseType>core:TaskGuide</baseType>
 </block>

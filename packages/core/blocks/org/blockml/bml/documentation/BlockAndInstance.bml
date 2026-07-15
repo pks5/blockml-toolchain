@@ -11,7 +11,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>BlockAndInstance</name>
+  <type>doc:BlockAndInstance</type>
+  <baseType>core:Documentation</baseType>
   <idea>Definition, Block, Block instance, and composition — the core mental model.</idea>
 
   <documentation>
@@ -72,7 +74,4 @@
     </see>
   </references>
 
-  <name>BlockAndInstance</name>
-  <type>doc:BlockAndInstance</type>
-  <baseType>core:Documentation</baseType>
 </block>

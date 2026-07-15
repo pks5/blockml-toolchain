@@ -16,14 +16,13 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:service="org.blockml.bml.service">
-
+  <name>Numbers</name>
+  <type>service:Numbers</type>
+  <baseType>core:Entity</baseType>
   <idea>Built-in number formatting and sequence utilities callable as #numbers in expressions.</idea>
 
   <documentation>Built-in numbers service. Expression prefix #numbers.* — sequence,
     formatting, and numeric conversion utilities.</documentation>
-  <name>Numbers</name>
-  <type>service:Numbers</type>
-  <baseType>core:Entity</baseType>
   <capabilities>
 
     <!--

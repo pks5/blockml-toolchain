@@ -12,7 +12,9 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:mapping="org.blockml.bml.mapping"
   xmlns:service="org.blockml.bml.service">
-
+  <name>Expressions</name>
+  <type>doc:Expressions</type>
+  <baseType>core:Documentation</baseType>
   <idea>How ${...} works — property access, bean calls, bindings, and FunctionMapping.</idea>
 
   <documentation>
@@ -69,7 +71,4 @@
     </see>
   </references>
 
-  <name>Expressions</name>
-  <type>doc:Expressions</type>
-  <baseType>core:Documentation</baseType>
 </block>

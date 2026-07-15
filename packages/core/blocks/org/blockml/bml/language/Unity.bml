@@ -7,12 +7,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>Unity</name>
+  <type>lang:Unity</type>
+  <baseType>lang:CSharp</baseType>
   <idea>Unity C# as an implementation language for capabilities.</idea>
 
   <documentation>C# dialect for Unity script implementations on Capabilities — MonoBehaviour methods,
     UnityEngine APIs, and game-logic code.</documentation>
-  <name>Unity</name>
-  <type>lang:Unity</type>
-  <baseType>lang:CSharp</baseType>
 </block>

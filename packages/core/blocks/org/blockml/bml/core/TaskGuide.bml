@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core">
-
+  <name>TaskGuide</name>
+  <type>core:TaskGuide</type>
+  <baseType>core:Documentation</baseType>
   <idea>Abstract base for procedural how-to blocks — accomplish a concrete BlockML task.</idea>
 
   <documentation>Abstract branch for org.blockml.bml.task.* blocks — step-by-step procedures
@@ -29,9 +31,6 @@
     </see>
   </references>
 
-  <name>TaskGuide</name>
-  <type>core:TaskGuide</type>
-  <baseType>core:Documentation</baseType>
   <abstract>true</abstract>
 
 </block>

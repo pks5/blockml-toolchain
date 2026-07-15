@@ -12,7 +12,9 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:meta="org.blockml.bml.meta"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>FreeTextKeyword</name>
+  <type>meta:FreeTextKeyword</type>
+  <baseType>core:Keyword</baseType>
   <idea>Ad-hoc search tag — free-text term on a definition element.</idea>
 
   <documentation>Standard free-text implementation of org.blockml.bml.core.Keyword for ad-hoc RAG and
@@ -25,10 +27,6 @@
 
     Instance configuration at type reference sites: FreeTextKeyword{term="inheritance"}. Not to be
     confused with XML namespace prefix aliases.</documentation>
-
-  <name>FreeTextKeyword</name>
-  <type>meta:FreeTextKeyword</type>
-  <baseType>core:Keyword</baseType>
 
   <properties>
     <term type="Text" bml:xml="attribute">

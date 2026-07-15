@@ -2,7 +2,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core">
-
+  <name>Text</name>
+  <type>btype:Text</type>
+  <baseType>btype:PrimitiveType</baseType>
   <idea>Primitive BlockML type for textual values — implementation-independent.</idea>
 
   <documentation>BOM Core primitive ValueType for text. Unqualified name Text resolves to
@@ -16,9 +18,6 @@
     Optional configuration Properties (minLength, maxLength) configure a Property's owned Text
     instance via inline type syntax — Text{maxLength=100}. Positional order: minLength, maxLength.
     See 20_value_type_instance_configuration.md.</documentation>
-  <name>Text</name>
-  <type>btype:Text</type>
-  <baseType>btype:PrimitiveType</baseType>
   <properties>
     <minLength type="Integer">
       <documentation>Minimum allowed text length (inclusive). Configured via Text{minLength=n}.</documentation>

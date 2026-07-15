@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="com.machineblocks.bml.core">
-
+  <name>Set</name>
+  <type>core:Set</type>
+  <baseType>core:CompositeBlock</baseType>
   <idea>A LEGO-style build — palette, placed parts, and assembly steps.</idea>
 
   <documentation>Abstract composable Block for LEGO-style Sets — block palette, placed instances,
@@ -24,9 +26,6 @@
     </see>
   </references>
 
-  <name>Set</name>
-  <type>core:Set</type>
-  <baseType>core:CompositeBlock</baseType>
   <abstract>true</abstract>
 
   <aggregations>

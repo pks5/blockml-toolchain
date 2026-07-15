@@ -10,14 +10,13 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:relation="org.blockml.bml.relation">
-
+  <name>Prerequisite</name>
+  <type>relation:Prerequisite</type>
+  <baseType>core:Relation</baseType>
   <idea>Understand or complete this before starting the current TaskGuide.</idea>
 
   <documentation>Use on &lt;see&gt; entries at the start of a TaskGuide &lt;references&gt; container
     — before TaskStep entries. Distinct from Requires (dependency of the current definition) and
     ReadFirst (library-wide learning path). Prerequisite scopes to one task procedure.</documentation>
 
-  <name>Prerequisite</name>
-  <type>relation:Prerequisite</type>
-  <baseType>core:Relation</baseType>
 </block>

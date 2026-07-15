@@ -8,10 +8,9 @@
   xmlns:validation="org.blockml.bml.validation"
   xmlns:btype="org.blockml.bml.type"
   xmlns:test="com.blockml.test.constraints">
-
-  <idea>Constraint test — inherited constraints via contract</idea>
   <type>test:InheritedConstraints</type>
   <baseType>core:Block</baseType>
+  <idea>Constraint test — inherited constraints via contract</idea>
   <version>1.0.0</version>
 
   <contracts>

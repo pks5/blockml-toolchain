@@ -13,7 +13,9 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:task="org.blockml.bml.task">
-
+  <name>README</name>
+  <type>blockml:README</type>
+  <baseType>core:Bootstrap</baseType>
   <idea>README block for the BlockML core library — bootstrap entry point for humans and LLMs.</idea>
 
   <documentation>
@@ -126,9 +128,5 @@
     </see>
 
   </references>
-
-  <name>README</name>
-  <type>blockml:README</type>
-  <baseType>core:Bootstrap</baseType>
 
 </block>

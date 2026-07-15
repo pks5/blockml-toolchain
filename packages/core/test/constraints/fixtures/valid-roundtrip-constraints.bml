@@ -10,10 +10,9 @@
   xmlns:btype="org.blockml.bml.type"
   xmlns:lang="org.blockml.bml.language"
   xmlns:test="com.blockml.test.constraints">
-
-  <idea>Constraint test — roundtrip preservation</idea>
   <type>test:RoundtripConstraints</type>
   <baseType>core:Block</baseType>
+  <idea>Constraint test — roundtrip preservation</idea>
   <version>1.0.0</version>
 
   <constraints>

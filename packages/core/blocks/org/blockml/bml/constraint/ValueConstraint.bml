@@ -10,7 +10,9 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core">
-
+  <name>ValueConstraint</name>
+  <type>constraint:ValueConstraint</type>
+  <baseType>core:Constraint</baseType>
   <idea>Constraint that validates a concrete property value or ValueType content.</idea>
 
   <documentation>Abstract branch for value-level constraints. Generic parameter T binds automatically
@@ -18,9 +20,6 @@
     in BML. Valid only under a Property member's &lt;constraints&gt; container
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise). Examples: Min, Max, Pattern, ValuePresent.</documentation>
 
-  <name>ValueConstraint</name>
-  <type>constraint:ValueConstraint</type>
-  <baseType>core:Constraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

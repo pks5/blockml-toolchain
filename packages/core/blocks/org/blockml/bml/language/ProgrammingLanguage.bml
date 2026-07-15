@@ -10,14 +10,13 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>ProgrammingLanguage</name>
+  <type>lang:ProgrammingLanguage</type>
+  <baseType>core:Language</baseType>
   <idea>A formal programming language for capability implementations.</idea>
 
   <documentation>Abstract branch for programming languages — TypeScript, OpenSCAD, PseudoCode, and
     other languages with defined or interpretable syntax.</documentation>
-  <name>ProgrammingLanguage</name>
-  <type>lang:ProgrammingLanguage</type>
-  <baseType>core:Language</baseType>
   <abstract>true</abstract>
 
 </block>

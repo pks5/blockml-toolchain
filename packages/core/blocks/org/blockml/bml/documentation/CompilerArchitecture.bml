@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>CompilerArchitecture</name>
+  <type>doc:CompilerArchitecture</type>
+  <baseType>core:Documentation</baseType>
   <idea>Parser → Canonical BOM → Validator → Renderer — the compiler pipeline.</idea>
 
   <documentation>
@@ -64,7 +66,4 @@
     </see>
   </references>
 
-  <name>CompilerArchitecture</name>
-  <type>doc:CompilerArchitecture</type>
-  <baseType>core:Documentation</baseType>
 </block>

@@ -7,12 +7,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>German</name>
+  <type>lang:German</type>
+  <baseType>lang:NaturalLanguage</baseType>
   <idea>German prose — documentation and natural-language capability implementations.</idea>
 
   <documentation>Natural language for documentation prose, example titles, and German
     natural-language capability implementations.</documentation>
-  <name>German</name>
-  <type>lang:German</type>
-  <baseType>lang:NaturalLanguage</baseType>
 </block>

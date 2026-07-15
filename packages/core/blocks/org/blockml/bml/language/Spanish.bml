@@ -7,12 +7,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>Spanish</name>
+  <type>lang:Spanish</type>
+  <baseType>lang:NaturalLanguage</baseType>
   <idea>Spanish prose — documentation and natural-language capability implementations.</idea>
 
   <documentation>Natural language for documentation prose, example titles, and Spanish
     natural-language capability implementations.</documentation>
-  <name>Spanish</name>
-  <type>lang:Spanish</type>
-  <baseType>lang:NaturalLanguage</baseType>
 </block>

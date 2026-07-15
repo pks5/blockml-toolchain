@@ -13,14 +13,13 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>Max</name>
+  <type>constraint:Max</type>
+  <baseType>constraint:ValueConstraint</baseType>
   <idea>Upper bound for a numeric property value.</idea>
 
   <documentation>Scalar constraint: T binds to the property type. Compatible with Integer, Float,
     and Decimal properties. The value property must match T.</documentation>
-  <name>Max</name>
-  <type>constraint:Max</type>
-  <baseType>constraint:ValueConstraint</baseType>
   <genericTypes>
     <T baseType="btype:Number"/>
   </genericTypes>

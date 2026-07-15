@@ -13,7 +13,9 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:task="org.blockml.bml.task">
-
+  <name>BML_UNKNOWN_TYPE</name>
+  <type>diag:BML_UNKNOWN_TYPE</type>
+  <baseType>core:Diagnostic</baseType>
   <idea>Referenced type FQN could not be resolved in TypeRegistry.</idea>
 
   <summary>Emitted when type, baseType, contract, language, or member type references an unknown or
@@ -40,7 +42,4 @@
     </see>
   </references>
 
-  <name>BML_UNKNOWN_TYPE</name>
-  <type>diag:BML_UNKNOWN_TYPE</type>
-  <baseType>core:Diagnostic</baseType>
 </block>

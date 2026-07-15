@@ -15,7 +15,9 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:type="org.blockml.bml.type"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>CapabilityDefinition</name>
+  <type>def:CapabilityDefinition</type>
+  <baseType>def:MemberDefinition</baseType>
   <idea>A communication endpoint on a Block — inbound, outbound, or transformation.</idea>
 
   <documentation>Describes a Block member defining how the Block communicates. Rendered as a child
@@ -61,9 +63,6 @@
     </see>
   </references>
 
-  <name>CapabilityDefinition</name>
-  <type>def:CapabilityDefinition</type>
-  <baseType>def:MemberDefinition</baseType>
   <properties>
     <type type="FullyQualifiedName(core:Capability)" bml:xml="element|attribute">
       <documentation>Capability kind FQN — Inbound, Outbound, or Transformation. Unqualified names
@@ -89,6 +88,8 @@
 
   <subBlocks>
     <block>
+      <name>Implementation</name>
+      <baseType>core:Entity</baseType>
       <idea>Target-language implementation body for a capability member.</idea>
 
       <documentation>Describes the implementation element on a capability member. Rendered as
@@ -98,8 +99,6 @@
         references inside the body use BML Embedded Expression syntax (&lt;$ … $&gt;). Declared as
         the implementation property on org.blockml.bml.definition.CapabilityDefinition.</documentation>
 
-      <name>Implementation</name>
-      <baseType>core:Entity</baseType>
       <bml:xml>implementation</bml:xml>
 
       <properties>
@@ -113,7 +112,8 @@
             May contain embedded BlockML expressions between &lt;$ and $&gt; delimiters.</documentation>
         </content>
       </properties>
-    </block>
+    
+</block>
   </subBlocks>
 
 </block>

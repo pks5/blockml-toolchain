@@ -12,7 +12,9 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:meta="org.blockml.bml.meta"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>FreeTextAlias</name>
+  <type>meta:FreeTextAlias</type>
+  <baseType>core:Alias</baseType>
   <idea>Ad-hoc alternative name for a Block type — free-text label.</idea>
 
   <documentation>Standard free-text implementation of org.blockml.bml.core.Alias for colloquial or
@@ -25,10 +27,6 @@
 
     Instance configuration: FreeTextAlias{name="Sub-Block"}. Block-level only — members do not carry
     aliases. Not XML namespace prefix aliases.</documentation>
-
-  <name>FreeTextAlias</name>
-  <type>meta:FreeTextAlias</type>
-  <baseType>core:Alias</baseType>
 
   <properties>
     <name type="Text" bml:xml="attribute">

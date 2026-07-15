@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>PrimitiveEntity</name>
+  <type>core:PrimitiveEntity</type>
+  <baseType>core:Entity</baseType>
   <idea>Wraps a primitive value when it must exist as an Entity in composition or aggregation.</idea>
 
   <documentation>Abstract generic Entity for primitive values that must appear as Block instances
@@ -31,9 +33,6 @@
     </see>
   </references>
 
-  <name>PrimitiveEntity</name>
-  <type>core:PrimitiveEntity</type>
-  <baseType>core:Entity</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

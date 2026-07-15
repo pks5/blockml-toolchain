@@ -18,7 +18,9 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>StructuralDefinition</name>
+  <type>def:StructuralDefinition</type>
+  <baseType>core:Definition</baseType>
   <idea>
     Represents a reusable BlockML structural definition that documents another language element.
   </idea>
@@ -31,9 +33,6 @@
     themselves consistently. Member declarations declare abstract, final, and override locally via
     org.blockml.bml.definition.MemberDefinition.
   </documentation>
-  <name>StructuralDefinition</name>
-  <type>def:StructuralDefinition</type>
-  <baseType>core:Definition</baseType>
   <abstract>true</abstract>
 
   <!--
@@ -133,6 +132,8 @@
 
   <subBlocks>
     <block>
+      <name>Documentation</name>
+      <baseType>type:StructType</baseType>
       <idea>Technical documentation prose attached to a definition element.</idea>
 
       <documentation>Describes the documentation element on any org.blockml.bml.definition.StructuralDefinition (block,
@@ -141,8 +142,6 @@
         when language deviates from the effective natural language of the enclosing definition element.
         Declared as a property on org.blockml.bml.definition.StructuralDefinition.</documentation>
 
-      <name>Documentation</name>
-      <baseType>type:StructType</baseType>
       <bml:xml>documentation</bml:xml>
 
       <properties>
@@ -157,9 +156,12 @@
             enclosing definition element.</documentation>
         </content>
       </properties>
-    </block>
+    
+</block>
 
     <block>
+      <name>Change</name>
+      <baseType>core:Entity</baseType>
       <idea>One version history entry for a definition element.</idea>
 
       <documentation>Describes a single changelog entry in a changelog container on any definition
@@ -169,8 +171,6 @@
         version — oldest first (BML_CHANGELOG_VERSION_ORDER when out of order). Optional language
         attribute overrides the effective natural language for this entry's text body.</documentation>
 
-      <name>Change</name>
-      <baseType>core:Entity</baseType>
       <bml:xml>change</bml:xml>
 
       <properties>
@@ -189,9 +189,12 @@
             text body in BOM ChangelogEntry.text.</documentation>
         </description>
       </properties>
-    </block>
+    
+</block>
 
     <block>
+      <name>Example</name>
+      <baseType>core:Entity</baseType>
       <idea>A titled usage example attached to a definition element.</idea>
 
       <documentation>Describes one usage example in an examples container on any definition element
@@ -202,8 +205,6 @@
         on the example element references an implementation Language FQN (OpenSCAD, TypeScript, …) when
         the CDATA body is not BML/MBML source — distinct from NaturalLanguage used for prose.</documentation>
 
-      <name>Example</name>
-      <baseType>core:Entity</baseType>
       <bml:xml>example</bml:xml>
 
       <properties>
@@ -224,9 +225,12 @@
             body in BOM DocumentationExample.content.</documentation>
         </content>
       </properties>
-    </block>
+    
+</block>
 
     <block>
+      <name>Reference</name>
+      <baseType>core:Entity</baseType>
       <idea>A cross-reference to a related Block, definition element, or documentation source.</idea>
 
       <documentation>Records a link from documentation metadata to another Block, definition element,
@@ -249,8 +253,6 @@
         reference from element shape alone without inferring kind from value syntax. See 02_mbml.md
         — references — Why separate target attributes.</documentation>
 
-      <name>Reference</name>
-      <baseType>core:Entity</baseType>
       <bml:xml>see</bml:xml>
 
       <properties>
@@ -307,6 +309,7 @@
             this definition. Required on every see entry.</documentation>
         </context>
       </properties>
-    </block>
+    
+</block>
   </subBlocks>
 </block>

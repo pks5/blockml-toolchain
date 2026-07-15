@@ -10,12 +10,11 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:validation="org.blockml.bml.validation">
-
+  <name>Warning</name>
+  <type>validation:Warning</type>
+  <baseType>core:Validation</baseType>
   <idea>Constraint violation emits a warning; compilation succeeds.</idea>
 
   <documentation>When a constraint with validation="Warning" is violated, the BlockML
     validator emits BML_CONSTRAINT_WARNING. Compilation continues.</documentation>
-  <name>Warning</name>
-  <type>validation:Warning</type>
-  <baseType>core:Validation</baseType>
 </block>

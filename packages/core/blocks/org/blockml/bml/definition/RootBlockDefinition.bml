@@ -13,7 +13,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>RootBlockDefinition</name>
+  <type>def:RootBlockDefinition</type>
+  <baseType>def:SubBlockDefinition</baseType>
   <idea>The structural shape of root Block definition documents in BlockML.</idea>
 
   <documentation>Meta-model type for root block documents. Extends
@@ -52,9 +54,6 @@
     </see>
   </references>
 
-  <name>RootBlockDefinition</name>
-  <type>def:RootBlockDefinition</type>
-  <baseType>def:SubBlockDefinition</baseType>
   <properties>
     <definition override="true" type="FullyQualifiedName(def:RootBlockDefinition)">
       <value>def:RootBlockDefinition</value>

@@ -10,16 +10,15 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>CapabilityConstraint</name>
+  <type>constraint:CapabilityConstraint</type>
+  <baseType>constraint:MemberConstraint</baseType>
   <idea>Constraint that validates a CapabilityDefinition or its implementation.</idea>
 
   <documentation>Abstract branch for constraints on Capability members. Generic T binds to the
     effective CapabilityDefinition. Valid only under a Capability's &lt;constraints&gt; container
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
-  <name>CapabilityConstraint</name>
-  <type>constraint:CapabilityConstraint</type>
-  <baseType>constraint:MemberConstraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

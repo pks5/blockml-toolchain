@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>Introduction</name>
+  <type>doc:Introduction</type>
+  <baseType>core:Documentation</baseType>
   <idea>Short introduction to BlockML — goals and core idea.</idea>
 
   <documentation>
@@ -51,7 +53,4 @@
     </see>
   </references>
 
-  <name>Introduction</name>
-  <type>doc:Introduction</type>
-  <baseType>core:Documentation</baseType>
 </block>

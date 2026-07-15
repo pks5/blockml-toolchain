@@ -12,7 +12,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>CapabilitySemantics</name>
+  <type>doc:CapabilitySemantics</type>
+  <baseType>core:Documentation</baseType>
   <idea>Semantics are described via Capabilities — not via compiler code.</idea>
 
   <documentation>
@@ -72,7 +74,4 @@
     </see>
   </references>
 
-  <name>CapabilitySemantics</name>
-  <type>doc:CapabilitySemantics</type>
-  <baseType>core:Documentation</baseType>
 </block>

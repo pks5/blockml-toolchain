@@ -11,7 +11,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:btype="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>ValueTypeConfiguration</name>
+  <type>doc:ValueTypeConfiguration</type>
+  <baseType>core:Documentation</baseType>
   <idea>Inline ValueType instance configuration — Decimal{precision=10, scale=2} and related syntax.</idea>
 
   <documentation>
@@ -62,7 +64,4 @@
     </see>
   </references>
 
-  <name>ValueTypeConfiguration</name>
-  <type>doc:ValueTypeConfiguration</type>
-  <baseType>core:Documentation</baseType>
 </block>

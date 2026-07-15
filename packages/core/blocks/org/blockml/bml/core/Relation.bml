@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core">
-
+  <name>Relation</name>
+  <type>core:Relation</type>
+  <baseType>core:Block</baseType>
   <idea>Semantic category of a cross-reference — how the target relates to the current definition.</idea>
 
   <documentation>Abstract branch for relation blocks on &lt;see&gt; entries in &lt;references&gt;.
@@ -21,9 +23,6 @@
     (diagnostic to fix task). Unqualified names on relation= resolve via implicit namespace
     org.blockml.bml.relation.*.</documentation>
 
-  <name>Relation</name>
-  <type>core:Relation</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

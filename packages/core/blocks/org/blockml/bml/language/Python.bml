@@ -7,11 +7,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
-  <idea>Python as an implementation language for capabilities.</idea>
-
-  <documentation>ProgrammingLanguage for Python function implementations on Capabilities.</documentation>
   <name>Python</name>
   <type>lang:Python</type>
   <baseType>lang:ProgrammingLanguage</baseType>
+  <idea>Python as an implementation language for capabilities.</idea>
+
+  <documentation>ProgrammingLanguage for Python function implementations on Capabilities.</documentation>
 </block>

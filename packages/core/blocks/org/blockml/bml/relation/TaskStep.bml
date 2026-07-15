@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:relation="org.blockml.bml.relation">
-
+  <name>TaskStep</name>
+  <type>relation:TaskStep</type>
+  <baseType>core:Relation</baseType>
   <idea>Ordered step within a TaskGuide procedure — do this next.</idea>
 
   <documentation>Use on &lt;see&gt; entries inside org.blockml.bml.task.* TaskGuide blocks.
@@ -18,7 +20,4 @@
     Target may be a Block, repository markdown file, or external URL. Distinct from Prerequisite
     (before starting the task) and Requires (hard dependency on the current definition).</documentation>
 
-  <name>TaskStep</name>
-  <type>relation:TaskStep</type>
-  <baseType>core:Relation</baseType>
 </block>

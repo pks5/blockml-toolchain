@@ -13,7 +13,9 @@
   xmlns:meta="org.blockml.bml.meta"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>FixedAlias</name>
+  <type>meta:FixedAlias</type>
+  <baseType>core:Alias</baseType>
   <idea>Catalogue-controlled alternative Block type name — fixed in the alias block definition.</idea>
 
   <documentation>Protected base for domain catalogue Alias blocks. Extends org.blockml.bml.core.Alias
@@ -30,9 +32,6 @@
     &lt;aliases&gt;. Comma-separated shorthand on &lt;aliases&gt; does not expand to FixedAlias
     instances.</documentation>
 
-  <name>FixedAlias</name>
-  <type>meta:FixedAlias</type>
-  <baseType>core:Alias</baseType>
   <abstract>true</abstract>
 
   <properties>

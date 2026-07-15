@@ -30,7 +30,9 @@
   xmlns:meta="org.blockml.bml.meta"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>Library</name>
+  <type>blockml:Library</type>
+  <baseType>bcore:BlockLibrary</baseType>
   <idea>Published catalog of the BlockML core library — framework blocks, value types, and services.</idea>
 
   <documentation>
@@ -64,9 +66,6 @@
     </see>
   </references>
 
-  <name>Library</name>
-  <type>blockml:Library</type>
-  <baseType>bcore:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <language>

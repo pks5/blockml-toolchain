@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>WOTFoundation</name>
+  <type>doc:WOTFoundation</type>
+  <baseType>core:Documentation</baseType>
   <idea>Optional philosophical foundation — Idea, Manifestation, Grammar, World.</idea>
 
   <documentation>
@@ -67,7 +69,4 @@
     </see>
   </references>
 
-  <name>WOTFoundation</name>
-  <type>doc:WOTFoundation</type>
-  <baseType>core:Documentation</baseType>
 </block>

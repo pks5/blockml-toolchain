@@ -7,12 +7,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>Chinese</name>
+  <type>lang:Chinese</type>
+  <baseType>lang:NaturalLanguage</baseType>
   <idea>Chinese prose — documentation and natural-language capability implementations.</idea>
 
   <documentation>Natural language for documentation prose, example titles, and Chinese
     natural-language capability implementations.</documentation>
-  <name>Chinese</name>
-  <type>lang:Chinese</type>
-  <baseType>lang:NaturalLanguage</baseType>
 </block>

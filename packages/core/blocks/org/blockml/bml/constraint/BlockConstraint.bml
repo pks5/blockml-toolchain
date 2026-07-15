@@ -10,7 +10,9 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>BlockConstraint</name>
+  <type>constraint:BlockConstraint</type>
+  <baseType>constraint:StructuralConstraint</baseType>
   <idea>Constraint that validates a Block definition as a whole.</idea>
 
   <documentation>Abstract branch for Block-level structural constraints. May express cross-member
@@ -19,9 +21,6 @@
     SubBlockDefinition and RootBlockDefinition subtypes). Valid only under a Block's
     &lt;constraints&gt; container (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
-  <name>BlockConstraint</name>
-  <type>constraint:BlockConstraint</type>
-  <baseType>constraint:StructuralConstraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

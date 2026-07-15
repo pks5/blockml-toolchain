@@ -14,7 +14,9 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:task="org.blockml.bml.task">
-
+  <name>DebugUnknownType</name>
+  <type>task:DebugUnknownType</type>
+  <baseType>core:TaskGuide</baseType>
   <idea>Fix BML_UNKNOWN_TYPE — unresolved type, baseType, or member type reference.</idea>
 
   <summary>Verify FQN spelling, xmlns prefix resolution, Library _blocks membership, and bootstrap
@@ -52,7 +54,4 @@
     </see>
   </references>
 
-  <name>DebugUnknownType</name>
-  <type>task:DebugUnknownType</type>
-  <baseType>core:TaskGuide</baseType>
 </block>

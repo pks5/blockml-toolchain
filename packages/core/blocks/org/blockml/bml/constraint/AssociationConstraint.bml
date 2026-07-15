@@ -10,16 +10,15 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>AssociationConstraint</name>
+  <type>constraint:AssociationConstraint</type>
+  <baseType>constraint:MemberConstraint</baseType>
   <idea>Constraint that validates an AssociationDefinition or its targets.</idea>
 
   <documentation>Abstract branch for constraints on Association members. Generic T binds to the
     effective AssociationDefinition. Valid only under an Association's &lt;constraints&gt; container
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
-  <name>AssociationConstraint</name>
-  <type>constraint:AssociationConstraint</type>
-  <baseType>constraint:MemberConstraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

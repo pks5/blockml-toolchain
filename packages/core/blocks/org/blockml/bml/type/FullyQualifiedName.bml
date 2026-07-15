@@ -13,7 +13,9 @@
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>FullyQualifiedName</name>
+  <type>btype:FullyQualifiedName</type>
+  <baseType>btype:Text</baseType>
   <idea>A globally unique name referencing a Block or a definition element owned by a Block.</idea>
 
   <documentation>
@@ -86,10 +88,6 @@
       Cross-reference block attribute on Reference sub-block.
     </see>
   </references>
-
-  <name>FullyQualifiedName</name>
-  <type>btype:FullyQualifiedName</type>
-  <baseType>btype:Text</baseType>
 
   <genericTypes>
     <B baseType="core:Block" />

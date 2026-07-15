@@ -7,11 +7,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
-  <idea>JavaScript as an implementation language for capabilities.</idea>
-
-  <documentation>ProgrammingLanguage for JavaScript function implementations on Capabilities.</documentation>
   <name>JavaScript</name>
   <type>lang:JavaScript</type>
   <baseType>lang:ProgrammingLanguage</baseType>
+  <idea>JavaScript as an implementation language for capabilities.</idea>
+
+  <documentation>ProgrammingLanguage for JavaScript function implementations on Capabilities.</documentation>
 </block>

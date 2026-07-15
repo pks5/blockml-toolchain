@@ -10,7 +10,9 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>PropertyConstraint</name>
+  <type>constraint:PropertyConstraint</type>
+  <baseType>constraint:MemberConstraint</baseType>
   <idea>Constraint that validates a PropertyDefinition shape.</idea>
 
   <documentation>Abstract branch for constraints on Property definitions (not property values —
@@ -18,9 +20,6 @@
     the enclosing Property. Valid only under a Property's &lt;constraints&gt; container when the
     constraint extends PropertyConstraint (not ValueConstraint).</documentation>
 
-  <name>PropertyConstraint</name>
-  <type>constraint:PropertyConstraint</type>
-  <baseType>constraint:MemberConstraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

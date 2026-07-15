@@ -12,7 +12,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>Definition</name>
+  <type>core:Definition</type>
+  <baseType>core:Block</baseType>
   <idea>Identification marker for all Definition meta-model blocks — intentionally empty.</idea>
 
   <documentation>
@@ -27,9 +29,6 @@
     constrain definition-element references. Framework core branch types remain baseType markers;
     domain interface-style type bounds use contracts and satisfiesTypeBound — see 17_type_system_bml.md.</documentation>
 
-  <name>Definition</name>
-  <type>core:Definition</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

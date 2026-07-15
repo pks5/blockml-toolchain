@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core">
-
+  <name>Diagnostic</name>
+  <type>core:Diagnostic</type>
+  <baseType>core:Block</baseType>
   <idea>Abstract base for documented validator diagnostic codes — error to fix navigation.</idea>
 
   <documentation>Abstract branch for org.blockml.bml.diagnostic.* blocks. Each concrete diagnostic
@@ -27,9 +29,6 @@
     </see>
   </references>
 
-  <name>Diagnostic</name>
-  <type>core:Diagnostic</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

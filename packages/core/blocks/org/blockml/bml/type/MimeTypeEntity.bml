@@ -2,12 +2,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core">
-
+  <name>MimeTypeEntity</name>
+  <type>btype:MimeTypeEntity</type>
+  <baseType>core:PrimitiveEntity(btype:MimeType)</baseType>
   <idea>MimeType primitive value as an Entity in composition or aggregation.</idea>
 
   <documentation>Concrete Entity wrapping a MimeType primitive. Binds T = MimeType on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>
-  <name>MimeTypeEntity</name>
-  <type>btype:MimeTypeEntity</type>
-  <baseType>core:PrimitiveEntity(btype:MimeType)</baseType>
 </block>

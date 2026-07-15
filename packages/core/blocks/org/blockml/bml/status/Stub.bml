@@ -10,12 +10,11 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:status="org.blockml.bml.status">
-
+  <name>Stub</name>
+  <type>status:Stub</type>
+  <baseType>core:Status</baseType>
   <idea>Placeholder definition — shape declared, behaviour not yet specified.</idea>
 
   <documentation>Structural placeholder only. Documents intent or reserves a member slot without
     committing to behaviour, types, or mapping. Stronger signal than Draft for incomplete ideas.</documentation>
-  <name>Stub</name>
-  <type>status:Stub</type>
-  <baseType>core:Status</baseType>
 </block>

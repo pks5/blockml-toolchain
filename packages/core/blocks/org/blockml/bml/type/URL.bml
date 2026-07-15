@@ -1,12 +1,11 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>URL</name>
+  <type>btype:URL</type>
+  <baseType>btype:Text</baseType>
   <idea>Uniform Resource Locator — web address text.</idea>
 
   <documentation>Textual primitive subtype for URL values. Unqualified name URL resolves to
     org.blockml.bml.type.URL.</documentation>
-  <name>URL</name>
-  <type>btype:URL</type>
-  <baseType>btype:Text</baseType>
 </block>

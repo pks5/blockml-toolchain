@@ -10,14 +10,13 @@
                       "
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core">
-
+  <name>Capability</name>
+  <type>core:Capability</type>
+  <baseType>core:Block</baseType>
   <idea>Representation of a capability.</idea>
 
   <documentation>Capability branch of BlockML. Declares a capability type. Every capability may
     carry an implementation whose language attribute references a Language FQN.</documentation>
-  <name>Capability</name>
-  <type>core:Capability</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
   <properties>

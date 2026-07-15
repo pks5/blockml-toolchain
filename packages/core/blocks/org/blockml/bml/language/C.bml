@@ -7,11 +7,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
-  <idea>C as an implementation language for capabilities.</idea>
-
-  <documentation>ProgrammingLanguage for C function implementations on Capabilities.</documentation>
   <name>C</name>
   <type>lang:C</type>
   <baseType>lang:ProgrammingLanguage</baseType>
+  <idea>C as an implementation language for capabilities.</idea>
+
+  <documentation>ProgrammingLanguage for C function implementations on Capabilities.</documentation>
 </block>

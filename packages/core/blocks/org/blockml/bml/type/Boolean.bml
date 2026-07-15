@@ -2,13 +2,12 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core">
-
+  <name>Boolean</name>
+  <type>btype:Boolean</type>
+  <baseType>btype:PrimitiveType</baseType>
   <idea>Primitive BlockML property type capable of holding true or false.</idea>
 
   <documentation>BOM Core primitive ValueType for true/false values. Unqualified name Boolean
     resolves to org.blockml.bml.type.Boolean. Boolean is neither textual nor numeric — its own
     primitive branch. Values are stored in Properties — not on the Boolean type itself.</documentation>
-  <name>Boolean</name>
-  <type>btype:Boolean</type>
-  <baseType>btype:PrimitiveType</baseType>
 </block>

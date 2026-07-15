@@ -16,14 +16,13 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:service="org.blockml.bml.service">
-
+  <name>Math</name>
+  <type>service:Math</type>
+  <baseType>core:Entity</baseType>
   <idea>Built-in numeric utilities callable as #math in expressions.</idea>
 
   <documentation>Built-in math service. Expression prefix #math.* — min, max, abs, floor,
     round, and related numeric utilities.</documentation>
-  <name>Math</name>
-  <type>service:Math</type>
-  <baseType>core:Entity</baseType>
   <capabilities>
 
     <!-- #math.min(a, b) — SCAD: native min(a, b) -->

@@ -13,7 +13,9 @@
   xmlns:meta="org.blockml.bml.meta"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>FixedKeyword</name>
+  <type>meta:FixedKeyword</type>
+  <baseType>core:Keyword</baseType>
   <idea>Catalogue-controlled search tag — fixed in the keyword block definition.</idea>
 
   <documentation>Protected base for domain catalogue Keyword blocks. Extends org.blockml.bml.core.Keyword
@@ -30,9 +32,6 @@
     &lt;keywords&gt;. Comma-separated shorthand on &lt;keywords&gt; does not expand to FixedKeyword
     instances.</documentation>
 
-  <name>FixedKeyword</name>
-  <type>meta:FixedKeyword</type>
-  <baseType>core:Keyword</baseType>
   <abstract>true</abstract>
 
   <properties>

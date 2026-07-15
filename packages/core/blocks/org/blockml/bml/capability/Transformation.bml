@@ -10,13 +10,12 @@
                       "
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core">
-
-  <idea>Representation of an Transformation capability.</idea>
-
-  <documentation>Transformation capability.</documentation>
   <name>Transformation</name>
   <type>cap:Transformation</type>
   <baseType>core:Capability</baseType>
+  <idea>Representation of an Transformation capability.</idea>
+
+  <documentation>Transformation capability.</documentation>
   <properties>
     <_hasInput override="true">
       <value>true</value>
@@ -25,6 +24,5 @@
       <value>true</value>
     </_hasOutput>
   </properties>
-
 
 </block>

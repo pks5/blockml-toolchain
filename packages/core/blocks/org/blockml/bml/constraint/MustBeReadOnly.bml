@@ -11,16 +11,15 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>MustBeReadOnly</name>
+  <type>constraint:MustBeReadOnly</type>
+  <baseType>constraint:PropertyConstraint</baseType>
   <idea>Requires the enclosing Property definition to be read-only.</idea>
 
   <documentation>Property-level structural constraint. T binds to the effective PropertyDefinition.
     When validation is set, the validator requires readOnly=true on the Property (authored or
     derived). Reference implementation for PropertyConstraint branch.</documentation>
 
-  <name>MustBeReadOnly</name>
-  <type>constraint:MustBeReadOnly</type>
-  <baseType>constraint:PropertyConstraint</baseType>
   <genericTypes>
     <T baseType="def:PropertyDefinition"/>
   </genericTypes>

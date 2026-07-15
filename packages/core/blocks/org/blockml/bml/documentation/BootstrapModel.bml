@@ -12,7 +12,9 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>BootstrapModel</name>
+  <type>doc:BootstrapModel</type>
+  <baseType>core:Documentation</baseType>
   <idea>README.bml, Bootstrap role, references with ReadFirst, and interpretation context.</idea>
 
   <documentation>
@@ -96,7 +98,4 @@
     </see>
   </references>
 
-  <name>BootstrapModel</name>
-  <type>doc:BootstrapModel</type>
-  <baseType>core:Documentation</baseType>
 </block>

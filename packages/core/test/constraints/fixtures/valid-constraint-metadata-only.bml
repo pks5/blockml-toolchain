@@ -7,10 +7,9 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:btype="org.blockml.bml.type"
   xmlns:test="com.blockml.test.constraints">
-
-  <idea>Constraint test — metadata-only Min</idea>
   <type>test:MetadataOnlyConstraint</type>
   <baseType>core:Block</baseType>
+  <idea>Constraint test — metadata-only Min</idea>
   <version>1.0.0</version>
 
   <properties>

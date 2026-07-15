@@ -10,7 +10,9 @@
                       "
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core">
-
+  <name>PrimitiveType</name>
+  <type>btype:PrimitiveType</type>
+  <baseType>core:ValueType</baseType>
   <idea>Branch for atomic scalar value types — pure type semantics, no stored data.</idea>
 
   <documentation>Abstract branch for built-in scalar ValueTypes. PrimitiveTypes describe semantics
@@ -42,9 +44,6 @@
     </see>
   </references>
 
-  <name>PrimitiveType</name>
-  <type>btype:PrimitiveType</type>
-  <baseType>core:ValueType</baseType>
   <abstract>true</abstract>
 
 </block>

@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>BmlNamespace</name>
+  <type>doc:BmlNamespace</type>
+  <baseType>core:Documentation</baseType>
   <idea>Mandatory domain.bml namespace for every BML definition.</idea>
 
   <documentation>
@@ -72,7 +74,4 @@
     </see>
   </references>
 
-  <name>BmlNamespace</name>
-  <type>doc:BmlNamespace</type>
-  <baseType>core:Documentation</baseType>
 </block>

@@ -7,7 +7,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core">
-
+  <name>Version</name>
+  <type>btype:Version</type>
+  <baseType>btype:Text</baseType>
   <idea>Semantic version text — MAJOR.MINOR.PATCH form.</idea>
 
   <documentation>Textual primitive subtype for semantic version numbers (semver). Values use
@@ -28,7 +30,4 @@
     </see>
   </references>
 
-  <name>Version</name>
-  <type>btype:Version</type>
-  <baseType>btype:Text</baseType>
 </block>

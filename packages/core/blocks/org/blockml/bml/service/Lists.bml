@@ -16,14 +16,13 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:service="org.blockml.bml.service">
-
+  <name>Lists</name>
+  <type>service:Lists</type>
+  <baseType>core:Entity</baseType>
   <idea>Built-in list utilities callable as #lists in expressions.</idea>
 
   <documentation>Built-in lists service. Expression prefix #lists.* — list construction,
     indexing, and aggregation utilities.</documentation>
-  <name>Lists</name>
-  <type>service:Lists</type>
-  <baseType>core:Entity</baseType>
   <capabilities>
 
     <!-- #lists.size(list) -->

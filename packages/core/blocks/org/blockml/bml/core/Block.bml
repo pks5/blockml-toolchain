@@ -13,7 +13,8 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>Block</name>
+  <type>core:Block</type>
   <idea>The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
 
   <language>
@@ -39,10 +40,11 @@
     • Capability implementation language attributes reference org.blockml.bml.language.* — unqualified names permitted
 
     Documentation model (on every root block definition):
-    • &lt;idea&gt; — required first child; semantic meaning of the Block
+    • Definition identity first — &lt;name&gt;, &lt;type&gt;, &lt;baseType&gt; (baseType omitted only here)
+    • &lt;idea&gt; — required after identity; semantic meaning of the Block
     • &lt;language&gt; — optional; natural language for documentation prose (inherits from Library,
       then org.blockml.bml.core.Block default English)
-    • &lt;documentation&gt; — required second child; technical description; optional language
+    • &lt;documentation&gt; — required after idea; technical description; optional language
       attribute when prose deviates from effective block language
     • Optional extensions: &lt;since&gt;, &lt;changelog&gt;, &lt;examples&gt;, &lt;references&gt;
     Omitted idea or documentation on root blocks → BML_MISSING_IDEA / BML_MISSING_DOCUMENTATION
@@ -102,8 +104,6 @@
     </see>
   </references>
 
-  <name>Block</name>
-  <type>core:Block</type>
   <!-- Blocks are rendered as xml elements with the name of the block type -->
   <bml:xml>${ bml:Self }</bml:xml>
   

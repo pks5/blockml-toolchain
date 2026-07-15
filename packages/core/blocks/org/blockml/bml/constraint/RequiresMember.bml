@@ -11,16 +11,15 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>RequiresMember</name>
+  <type>constraint:RequiresMember</type>
+  <baseType>constraint:BlockConstraint</baseType>
   <idea>Requires a named member on the enclosing Block definition.</idea>
 
   <documentation>Block-level structural constraint. T binds to the effective block definition type.
     When validation is set, the validator requires a member with the given local name in the
     effective member set of the Block. Reference implementation for BlockConstraint branch.</documentation>
 
-  <name>RequiresMember</name>
-  <type>constraint:RequiresMember</type>
-  <baseType>constraint:BlockConstraint</baseType>
   <genericTypes>
     <T baseType="def:BlockDefinition"/>
   </genericTypes>

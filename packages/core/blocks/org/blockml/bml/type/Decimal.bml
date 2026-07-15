@@ -2,7 +2,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core">
-
+  <name>Decimal</name>
+  <type>btype:Decimal</type>
+  <baseType>btype:Number</baseType>
   <idea>Primitive BlockML property type for fixed-precision decimal numbers.</idea>
 
   <documentation>BOM Core primitive ValueType for decimal numbers — the default type for all
@@ -14,9 +16,6 @@
     Optional configuration Properties (precision, scale) configure a Property's owned Decimal
     instance via inline type syntax — Decimal{precision=10, scale=2} or Decimal{10, 2}.
     Positional order: precision, scale. See 20_value_type_instance_configuration.md.</documentation>
-  <name>Decimal</name>
-  <type>btype:Decimal</type>
-  <baseType>btype:Number</baseType>
   <properties>
     <precision type="Integer">
       <documentation>Total number of significant digits. Configured via Decimal{precision=n}.</documentation>

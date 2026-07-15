@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:relation="org.blockml.bml.relation">
-
+  <name>ReadFirst</name>
+  <type>relation:ReadFirst</type>
+  <baseType>core:Relation</baseType>
   <idea>Curated entry in a bootstrap or learning reading path — read before exploring further.</idea>
 
   <documentation>Use on &lt;see&gt; entries in Bootstrap README blocks and other library entry points
@@ -18,7 +20,4 @@
     in reading order. Replaces a separate readFirst aggregation — one references mechanism for
     all cross-links.</documentation>
 
-  <name>ReadFirst</name>
-  <type>relation:ReadFirst</type>
-  <baseType>core:Relation</baseType>
 </block>

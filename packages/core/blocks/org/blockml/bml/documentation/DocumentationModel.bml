@@ -14,14 +14,19 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>DocumentationModel</name>
+  <type>doc:DocumentationModel</type>
+  <baseType>core:Documentation</baseType>
   <idea>Block documentation model — idea, documentation, references, examples, README, documentation blocks.</idea>
 
   <documentation>
     Every root block definition carries a documentation model at the definition site — single
     source of truth inside BML files:
 
-    idea (required, first child) — semantic meaning of the Block; the stable constant (WOT: Idea).
+    Definition identity first (required at top of every Block document):
+    name / type / baseType — FQN identity before prose (baseType omitted only on org.blockml.bml.core.Block).
+
+    idea (required, after identity) — semantic meaning of the Block; the stable constant (WOT: Idea).
     summary (optional) — short prose expansion between idea and documentation; inherited from
       StructuralDefinition on blocks and members.
     keywords aggregation (optional) — core.Keyword[]; domain FixedKeyword catalogue blocks, meta.FreeTextKeyword; shorthand → FreeTextKeyword only.
@@ -124,7 +129,4 @@
     </see>
   </references>
 
-  <name>DocumentationModel</name>
-  <type>doc:DocumentationModel</type>
-  <baseType>core:Documentation</baseType>
 </block>

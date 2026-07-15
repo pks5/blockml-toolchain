@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>TypeReference</name>
+  <type>core:TypeReference</type>
+  <baseType>core:Entity</baseType>
   <idea>Marks an aggregation whose children are Block type references, not Block instances.</idea>
 
   <documentation>Abstract generic marker for aggregation payloads that list Block types by direct
@@ -59,9 +61,6 @@
     </see>
   </references>
 
-  <name>TypeReference</name>
-  <type>core:TypeReference</type>
-  <baseType>core:Entity</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

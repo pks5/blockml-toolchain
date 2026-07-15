@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core">
-
+  <name>Validation</name>
+  <type>core:Validation</type>
+  <baseType>core:Block</baseType>
   <idea>How a constraint violation should be reported — separate from the constraint condition itself.</idea>
 
   <documentation>Abstract branch for validation semantics. A Validation block describes whether and
@@ -20,9 +22,6 @@
     domain libraries may define additional Validation blocks (for example
     com.machineblocks.bml.validation.ManufacturingWarning). The BlockML validator only interprets
     Validation types it understands; other tools may interpret additional Validation blocks.</documentation>
-  <name>Validation</name>
-  <type>core:Validation</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

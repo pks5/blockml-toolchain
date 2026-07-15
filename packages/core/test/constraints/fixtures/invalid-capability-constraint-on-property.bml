@@ -8,10 +8,9 @@
   xmlns:validation="org.blockml.bml.validation"
   xmlns:btype="org.blockml.bml.type"
   xmlns:test="com.blockml.test.constraints">
-
-  <idea>Constraint test — RequiresImplementation under property (invalid)</idea>
   <type>test:InvalidCapabilityOnProperty</type>
   <baseType>core:Block</baseType>
+  <idea>Constraint test — RequiresImplementation under property (invalid)</idea>
   <version>1.0.0</version>
 
   <properties>

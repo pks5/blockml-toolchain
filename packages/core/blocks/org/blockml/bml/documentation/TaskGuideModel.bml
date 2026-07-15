@@ -12,7 +12,9 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:task="org.blockml.bml.task">
-
+  <name>TaskGuideModel</name>
+  <type>doc:TaskGuideModel</type>
+  <baseType>core:Documentation</baseType>
   <idea>TaskGuide blocks, task relations, and error-driven fix paths.</idea>
 
   <documentation>
@@ -74,7 +76,4 @@
     </see>
   </references>
 
-  <name>TaskGuideModel</name>
-  <type>doc:TaskGuideModel</type>
-  <baseType>core:Documentation</baseType>
 </block>

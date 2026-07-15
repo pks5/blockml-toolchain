@@ -16,14 +16,13 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:service="org.blockml.bml.service">
-
+  <name>Strings</name>
+  <type>service:Strings</type>
+  <baseType>core:Entity</baseType>
   <idea>Built-in text utilities callable as #strings in expressions.</idea>
 
   <documentation>Built-in strings service. Expression prefix #strings.* — concat, length,
     substring, and related text utilities.</documentation>
-  <name>Strings</name>
-  <type>service:Strings</type>
-  <baseType>core:Entity</baseType>
   <capabilities>
 
     <!-- #strings.trim(s) -->

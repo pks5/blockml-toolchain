@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core">
-
+  <name>ConstantType</name>
+  <type>btype:ConstantType</type>
+  <baseType>core:ValueType</baseType>
   <idea>Branch for singleton value domains — exactly one configured literal value.</idea>
 
   <documentation>
@@ -57,9 +59,6 @@
     </see>
   </references>
 
-  <name>ConstantType</name>
-  <type>btype:ConstantType</type>
-  <baseType>core:ValueType</baseType>
   <abstract>true</abstract>
 
 </block>

@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>ImplicitNamespaceResolution</name>
+  <type>doc:ImplicitNamespaceResolution</type>
+  <baseType>core:Documentation</baseType>
   <idea>Context-bound implicit namespace for unqualified block references.</idea>
 
   <documentation>
@@ -67,7 +69,4 @@
     </see>
   </references>
 
-  <name>ImplicitNamespaceResolution</name>
-  <type>doc:ImplicitNamespaceResolution</type>
-  <baseType>core:Documentation</baseType>
 </block>

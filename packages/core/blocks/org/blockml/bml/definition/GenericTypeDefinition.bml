@@ -13,7 +13,9 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:btype="org.blockml.bml.type"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>GenericTypeDefinition</name>
+  <type>def:GenericTypeDefinition</type>
+  <baseType>core:Definition</baseType>
   <idea>A type parameter declared on a Block definition (e.g. T on Box of T).</idea>
 
   <documentation>Declares one generic type parameter on a root Block definition. Rendered inside
@@ -38,9 +40,6 @@
     </see>
   </references>
 
-  <name>GenericTypeDefinition</name>
-  <type>def:GenericTypeDefinition</type>
-  <baseType>core:Definition</baseType>
   <bml:xml>${ #this.name }</bml:xml>
 
   <properties>

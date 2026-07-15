@@ -19,14 +19,13 @@
   xmlns:core="com.machineblocks.bml.core"
   xmlns:type="com.machineblocks.bml.type"
   xmlns:bricks="com.machineblocks.bml.bricks">
-
+  <name>Library</name>
+  <type>bricks:Library</type>
+  <baseType>bcore:BlockLibrary</baseType>
   <idea>Published catalog of MachineBlocks standard brick definitions.</idea>
 
   <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
     preset blocks.</documentation>
-  <name>Library</name>
-  <type>bricks:Library</type>
-  <baseType>bcore:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>

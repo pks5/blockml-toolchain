@@ -12,7 +12,9 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:validation="org.blockml.bml.validation">
-
+  <name>Constant</name>
+  <type>btype:Constant</type>
+  <baseType>btype:ConstantType</baseType>
   <idea>A ValueType that permits exactly one configured literal value.</idea>
 
   <documentation>
@@ -57,9 +59,6 @@
     </see>
   </references>
 
-  <name>Constant</name>
-  <type>btype:Constant</type>
-  <baseType>btype:ConstantType</baseType>
   <genericTypes>
     <T baseType="core:ValueType" />
   </genericTypes>

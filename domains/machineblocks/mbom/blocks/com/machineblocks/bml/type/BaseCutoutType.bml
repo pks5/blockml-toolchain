@@ -11,13 +11,12 @@
                       "
   xmlns:btype="org.blockml.bml.type"
   xmlns:type="com.machineblocks.bml.type">
-
-  <idea>Shape variant of the underside cutout on a brick base.</idea>
-
-  <documentation>Enum ValueType for base cutout variants on MachineBlocks bricks.</documentation>
   <name>BaseCutoutType</name>
   <type>type:BaseCutoutType</type>
   <baseType>btype:EnumType</baseType>
+  <idea>Shape variant of the underside cutout on a brick base.</idea>
+
+  <documentation>Enum ValueType for base cutout variants on MachineBlocks bricks.</documentation>
   <properties>
     <value type="Text">
       <documentation>Enum literal used in property values and expressions.</documentation>

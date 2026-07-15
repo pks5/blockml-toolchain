@@ -11,16 +11,15 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>AllowedChildType</name>
+  <type>constraint:AllowedChildType</type>
+  <baseType>constraint:AggregationConstraint</baseType>
   <idea>Restricts composition children of an Aggregation to a Block type.</idea>
 
   <documentation>Aggregation-level structural constraint. T binds to the effective
     AggregationDefinition. When validation is set, each composition child under the aggregation must
     resolve to the given Block type FQN. Reference implementation for AggregationConstraint branch.</documentation>
 
-  <name>AllowedChildType</name>
-  <type>constraint:AllowedChildType</type>
-  <baseType>constraint:AggregationConstraint</baseType>
   <genericTypes>
     <T baseType="def:AggregationDefinition"/>
   </genericTypes>

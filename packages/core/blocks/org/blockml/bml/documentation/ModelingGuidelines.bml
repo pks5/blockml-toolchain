@@ -12,7 +12,9 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>ModelingGuidelines</name>
+  <type>doc:ModelingGuidelines</type>
+  <baseType>core:Documentation</baseType>
   <idea>Recommended modeling patterns — when to use contracts, inheritance, capabilities, constraints.</idea>
 
   <documentation>
@@ -78,7 +80,4 @@
     </see>
   </references>
 
-  <name>ModelingGuidelines</name>
-  <type>doc:ModelingGuidelines</type>
-  <baseType>core:Documentation</baseType>
 </block>

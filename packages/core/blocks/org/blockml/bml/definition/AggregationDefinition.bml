@@ -12,7 +12,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>AggregationDefinition</name>
+  <type>def:AggregationDefinition</type>
+  <baseType>def:MemberDefinition</baseType>
   <idea>An owned collection member — Block instances or type references depending on aggregation type.</idea>
 
   <documentation>Describes a Block member representing an owned collection. The aggregation type
@@ -57,9 +59,6 @@
     </see>
   </references>
 
-  <name>AggregationDefinition</name>
-  <type>def:AggregationDefinition</type>
-  <baseType>def:MemberDefinition</baseType>
   <properties>
     <type type="FullyQualifiedName(core:Block, core:TypeReference)" bml:xml="element|attribute">
       <documentation>Aggregation payload type (TypeExpression). Instance collections use a plain Block
@@ -91,6 +90,8 @@
 
   <subBlocks>
     <block>
+      <name>Composition</name>
+      <baseType>core:Entity</baseType>
       <idea>Composition template nested inside an aggregation member on a Block definition.</idea>
 
       <documentation>Describes the composition element on an aggregation member declaration.
@@ -102,10 +103,9 @@
         aggregation member element is invalid (BML_STANDALONE_COMPOSITION). Declared as the
         composition property on org.blockml.bml.definition.AggregationDefinition.</documentation>
 
-      <name>Composition</name>
-      <baseType>core:Entity</baseType>
       <bml:xml>composition</bml:xml>
-    </block>
+    
+</block>
   </subBlocks>
 
 </block>

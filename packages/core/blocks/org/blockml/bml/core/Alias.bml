@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core">
-
+  <name>Alias</name>
+  <type>core:Alias</type>
+  <baseType>core:Entity</baseType>
   <idea>Abstract branch for alternative Block type names on Block definitions.</idea>
 
   <documentation>Abstract branch marker for alias Entity instances in an aliases aggregation on
@@ -30,9 +32,6 @@
     </see>
   </references>
 
-  <name>Alias</name>
-  <type>core:Alias</type>
-  <baseType>core:Entity</baseType>
   <abstract>true</abstract>
 
 </block>

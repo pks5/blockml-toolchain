@@ -11,7 +11,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>PseudoCode</name>
+  <type>doc:PseudoCode</type>
+  <baseType>core:Documentation</baseType>
   <idea>Why PseudoCode exists — semantics should be described there whenever possible.</idea>
 
   <documentation>
@@ -67,7 +69,4 @@
     </see>
   </references>
 
-  <name>PseudoCode</name>
-  <type>doc:PseudoCode</type>
-  <baseType>core:Documentation</baseType>
 </block>

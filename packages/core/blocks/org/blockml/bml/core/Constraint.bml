@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core">
-
+  <name>Constraint</name>
+  <type>core:Constraint</type>
+  <baseType>core:Block</baseType>
   <idea>Universal root for semantic restrictions on Blocks and their members.</idea>
 
   <documentation>Abstract universal root for all constraint types. Specialized by
@@ -24,9 +26,6 @@
     validators. The constraint instance itself is still validated (type, properties, generic
     binding, branch compatibility).</documentation>
 
-  <name>Constraint</name>
-  <type>core:Constraint</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
   <properties>

@@ -9,10 +9,9 @@
   xmlns:validation="org.blockml.bml.validation"
   xmlns:btype="org.blockml.bml.type"
   xmlns:test="com.blockml.test.constraints">
-
-  <idea>Constraint test — Min on Integer property</idea>
   <type>test:MinOnProperty</type>
   <baseType>core:Block</baseType>
+  <idea>Constraint test — Min on Integer property</idea>
   <version>1.0.0</version>
 
   <properties>

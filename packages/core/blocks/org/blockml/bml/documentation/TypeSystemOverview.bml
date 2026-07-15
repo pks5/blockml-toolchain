@@ -11,7 +11,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:btype="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation">
-
+  <name>TypeSystemOverview</name>
+  <type>doc:TypeSystemOverview</type>
+  <baseType>core:Documentation</baseType>
   <idea>Overview of ValueType kinds, generics, and type expressions.</idea>
 
   <documentation>
@@ -79,7 +81,4 @@
     </see>
   </references>
 
-  <name>TypeSystemOverview</name>
-  <type>doc:TypeSystemOverview</type>
-  <baseType>core:Documentation</baseType>
 </block>

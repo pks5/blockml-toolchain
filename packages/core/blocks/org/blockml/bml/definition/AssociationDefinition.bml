@@ -12,7 +12,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>AssociationDefinition</name>
+  <type>def:AssociationDefinition</type>
+  <baseType>def:MemberDefinition</baseType>
   <idea>A loose reference member without composition ownership.</idea>
 
   <documentation>Describes a Block member for non-owning references to other Blocks — semantically
@@ -44,9 +46,6 @@
     </see>
   </references>
 
-  <name>AssociationDefinition</name>
-  <type>def:AssociationDefinition</type>
-  <baseType>def:MemberDefinition</baseType>
   <properties>
     <type type="FullyQualifiedName(core:Block)" bml:xml="element|attribute">
       <documentation>FQN of the referenced Block type (TypeExpression). Multiplicity in the type

@@ -16,7 +16,9 @@
   xmlns:btype="org.blockml.bml.type"
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>BlockLibrary</name>
+  <type>core:BlockLibrary</type>
+  <baseType>core:Block</baseType>
   <idea>Abstract base for publishable library descriptors.</idea>
 
   <documentation>
@@ -64,9 +66,6 @@
     </see>
   </references>
 
-  <name>BlockLibrary</name>
-  <type>core:BlockLibrary</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
   <subTypes type="core:TypeReference(core:Block)[]">

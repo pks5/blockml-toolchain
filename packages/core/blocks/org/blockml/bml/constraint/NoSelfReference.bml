@@ -11,16 +11,15 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>NoSelfReference</name>
+  <type>constraint:NoSelfReference</type>
+  <baseType>constraint:AssociationConstraint</baseType>
   <idea>Forbids an Association from referencing the enclosing Block type.</idea>
 
   <documentation>Association-level structural constraint. T binds to the effective
     AssociationDefinition. When validation is set, association targets must not reference the
     enclosing Block's own type. Reference implementation for AssociationConstraint branch.</documentation>
 
-  <name>NoSelfReference</name>
-  <type>constraint:NoSelfReference</type>
-  <baseType>constraint:AssociationConstraint</baseType>
   <genericTypes>
     <T baseType="def:AssociationDefinition"/>
   </genericTypes>

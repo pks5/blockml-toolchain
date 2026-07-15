@@ -239,8 +239,8 @@ Meta-model (simplified):
 ```text
 org.blockml.bml.definition.BlockDefinition
   bml:xml element:  block
-  properties:       idea, not, name, type → FullyQualifiedName(core:Block),
-                    baseType → FullyQualifiedName(core:Block), version, …
+  properties:       name, type → FullyQualifiedName(core:Block),
+                    baseType → FullyQualifiedName(core:Block), idea, not, version, …
   aggregations:     language → TypeReference(NaturalLanguage)
                     aliases → Alias[]
                     genericTypes → GenericTypeDefinition[]

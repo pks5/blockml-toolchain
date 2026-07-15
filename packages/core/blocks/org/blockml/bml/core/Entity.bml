@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:mbcore="com.machineblocks.bml.core">
-
+  <name>Entity</name>
+  <type>core:Entity</type>
+  <baseType>core:Block</baseType>
   <idea>General entity branch — composable domain blocks, services, and primitive wrappers.</idea>
 
   <documentation>Abstract branch for Entities — Blocks that represent instances with identity in
@@ -32,9 +34,6 @@
     </see>
   </references>
 
-  <name>Entity</name>
-  <type>core:Entity</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

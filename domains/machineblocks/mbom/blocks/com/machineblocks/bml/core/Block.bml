@@ -11,7 +11,9 @@
                       "
   xmlns:bcore="org.blockml.bml.core"
   xmlns:core="com.machineblocks.bml.core">
-
+  <name>Block</name>
+  <type>core:Block</type>
+  <baseType>bcore:Entity</baseType>
   <idea>Any MachineBlocks domain object — bricks, sets, presets, and compositions.</idea>
 
   <documentation>MachineBlocks domain base Block. Carries presets aggregation and basePresets
@@ -33,9 +35,6 @@
     </see>
   </references>
 
-  <name>Block</name>
-  <type>core:Block</type>
-  <baseType>bcore:Entity</baseType>
   <abstract>true</abstract>
 
   <properties>

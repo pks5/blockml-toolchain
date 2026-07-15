@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:mapping="org.blockml.bml.mapping">
-
+  <name>Mapping</name>
+  <type>core:Mapping</type>
+  <baseType>core:Block</baseType>
   <idea>Describes how values transfer between two representations.</idea>
 
   <documentation>
@@ -38,9 +40,6 @@
     </see>
   </references>
 
-  <name>Mapping</name>
-  <type>core:Mapping</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

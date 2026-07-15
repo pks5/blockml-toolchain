@@ -12,7 +12,9 @@
   "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core">
-
+  <name>ValuePresent</name>
+  <type>constraint:ValuePresent</type>
+  <baseType>constraint:ValueConstraint</baseType>
   <idea>Requires a property value to be present after full model resolution.</idea>
 
   <documentation>Scalar constraint: T binds to the property type. The property value must be present
@@ -21,9 +23,6 @@
     (Stage 2 does not evaluate expressions). Enforced by validateConstraints() at Stage 2 only when
     validation references an understood Validation block (typically validation:Error). Declares no
     own properties beyond the inherited validation reference.</documentation>
-  <name>ValuePresent</name>
-  <type>constraint:ValuePresent</type>
-  <baseType>constraint:ValueConstraint</baseType>
   <genericTypes>
     <T baseType="core:ValueType"/>
   </genericTypes>

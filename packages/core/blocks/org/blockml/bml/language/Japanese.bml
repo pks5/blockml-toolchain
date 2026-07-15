@@ -7,12 +7,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>Japanese</name>
+  <type>lang:Japanese</type>
+  <baseType>lang:NaturalLanguage</baseType>
   <idea>Japanese prose — documentation and natural-language capability implementations.</idea>
 
   <documentation>Natural language for documentation prose, example titles, and Japanese
     natural-language capability implementations.</documentation>
-  <name>Japanese</name>
-  <type>lang:Japanese</type>
-  <baseType>lang:NaturalLanguage</baseType>
 </block>

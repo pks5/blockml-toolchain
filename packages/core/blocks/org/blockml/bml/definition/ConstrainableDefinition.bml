@@ -12,7 +12,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>ConstrainableDefinition</name>
+  <type>def:ConstrainableDefinition</type>
+  <baseType>def:StructuralDefinition</baseType>
   <idea>Definition element that may carry Constraint Block instances.</idea>
 
   <documentation>Abstract base for Block and member definitions that support a &lt;constraints&gt;
@@ -21,9 +23,6 @@
     the constraint baseType chain (BML_CONSTRAINT_TARGET_MISMATCH). Constraint order in BML is
     preserved in BOM. Target binding and generic resolution are not stored in the Canonical BOM.</documentation>
 
-  <name>ConstrainableDefinition</name>
-  <type>def:ConstrainableDefinition</type>
-  <baseType>def:StructuralDefinition</baseType>
   <abstract>true</abstract>
 
   <aggregations>

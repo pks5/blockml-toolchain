@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core">
-
+  <name>Status</name>
+  <type>core:Status</type>
+  <baseType>core:Block</baseType>
   <idea>Maturity or lifecycle marker for BlockML definitions — not a string or boolean flag.</idea>
 
   <documentation>Abstract branch for status blocks. Status values are Block references following the
@@ -17,9 +19,6 @@
     domain libraries may define additional status blocks. Implicit default when omitted:
     org.blockml.bml.status.Stable. Status is inherited downward — declare &lt;status&gt; or bml:status
     only when deviating from the effective inherited status.</documentation>
-  <name>Status</name>
-  <type>core:Status</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

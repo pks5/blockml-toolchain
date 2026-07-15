@@ -13,7 +13,9 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:bml="http://blockml.org/schema/bml">
-
+  <name>SubBlockDefinition</name>
+  <type>def:SubBlockDefinition</type>
+  <baseType>def:BlockDefinition</baseType>
   <idea>The structural shape of nested Sub-Block definition documents in BlockML.</idea>
 
   <documentation>Meta-model type for nested Sub-Block documents within a BomDocument. Extends
@@ -50,9 +52,6 @@
     </see>
   </references>
 
-  <name>SubBlockDefinition</name>
-  <type>def:SubBlockDefinition</type>
-  <baseType>def:BlockDefinition</baseType>
   <properties>
     <definition type="FullyQualifiedName(def:SubBlockDefinition)">
       <value>def:SubBlockDefinition</value>

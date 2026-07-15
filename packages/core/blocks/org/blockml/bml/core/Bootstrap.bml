@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core">
-
+  <name>Bootstrap</name>
+  <type>core:Bootstrap</type>
+  <baseType>core:Block</baseType>
   <idea>Abstract role marker — this Block is a library or process entry point.</idea>
 
   <documentation>Abstract branch for bootstrap entry-point blocks. A Bootstrap block declares where
@@ -22,9 +24,6 @@
     relation=TaskIndex — not via separate aggregations. Concrete Bootstrap subtypes add
     scenario-specific members when needed; the abstract base declares no aggregations.</documentation>
 
-  <name>Bootstrap</name>
-  <type>core:Bootstrap</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
 </block>

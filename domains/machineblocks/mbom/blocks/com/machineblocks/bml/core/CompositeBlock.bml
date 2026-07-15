@@ -12,7 +12,9 @@
   xmlns:bcore="org.blockml.bml.core"
   xmlns:core="com.machineblocks.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>CompositeBlock</name>
+  <type>core:CompositeBlock</type>
+  <baseType>core:Block</baseType>
   <idea>MachineBlocks object composed of child block instances.</idea>
 
   <documentation>Composable MachineBlocks Block with default _parts aggregation. _parts holds
@@ -28,9 +30,6 @@
     </see>
   </references>
 
-  <name>CompositeBlock</name>
-  <type>core:CompositeBlock</type>
-  <baseType>core:Block</baseType>
   <abstract>true</abstract>
 
   <subTypes>

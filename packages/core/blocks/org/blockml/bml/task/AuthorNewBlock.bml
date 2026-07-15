@@ -15,7 +15,9 @@
   xmlns:relation="org.blockml.bml.relation"
   xmlns:meta="org.blockml.bml.meta"
   xmlns:task="org.blockml.bml.task">
-
+  <name>AuthorNewBlock</name>
+  <type>task:AuthorNewBlock</type>
+  <baseType>core:TaskGuide</baseType>
   <idea>Author a new Block definition document from scratch.</idea>
 
   <summary>Create a root .bml file with idea, documentation, type, baseType, version, and member
@@ -60,7 +62,4 @@
     </see>
   </references>
 
-  <name>AuthorNewBlock</name>
-  <type>task:AuthorNewBlock</type>
-  <baseType>core:TaskGuide</baseType>
 </block>

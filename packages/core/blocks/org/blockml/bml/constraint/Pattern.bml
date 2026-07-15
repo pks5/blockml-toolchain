@@ -13,13 +13,12 @@
   xmlns:btype="org.blockml.bml.type"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core">
-
-  <idea>Regular-expression pattern for a string property value.</idea>
-
-  <documentation>T binds to org.blockml.bml.type.Text. The value property holds the regex pattern.</documentation>
   <name>Pattern</name>
   <type>constraint:Pattern</type>
   <baseType>constraint:ValueConstraint</baseType>
+  <idea>Regular-expression pattern for a string property value.</idea>
+
+  <documentation>T binds to org.blockml.bml.type.Text. The value property holds the regex pattern.</documentation>
   <genericTypes>
     <T baseType="String"/>
   </genericTypes>

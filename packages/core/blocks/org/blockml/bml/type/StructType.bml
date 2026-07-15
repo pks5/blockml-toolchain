@@ -14,7 +14,9 @@
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core"
   xmlns:mapping="org.blockml.bml.mapping">
-
+  <name>StructType</name>
+  <type>btype:StructType</type>
+  <baseType>core:ValueType</baseType>
   <idea>Branch for product types — composite values with named fields.</idea>
 
   <documentation>
@@ -76,9 +78,6 @@
     </see>
   </references>
 
-  <name>StructType</name>
-  <type>btype:StructType</type>
-  <baseType>core:ValueType</baseType>
   <abstract>true</abstract>
 
 </block>

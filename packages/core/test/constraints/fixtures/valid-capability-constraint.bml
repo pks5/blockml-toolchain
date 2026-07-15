@@ -9,10 +9,9 @@
   xmlns:validation="org.blockml.bml.validation"
   xmlns:lang="org.blockml.bml.language"
   xmlns:test="com.blockml.test.constraints">
-
-  <idea>Constraint test — RequiresImplementation on capability</idea>
   <type>test:CapabilityConstraint</type>
   <baseType>core:Block</baseType>
+  <idea>Constraint test — RequiresImplementation on capability</idea>
   <version>1.0.0</version>
 
   <capabilities>

@@ -1,12 +1,11 @@
 <block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type">
-
+  <name>MimeType</name>
+  <type>btype:MimeType</type>
+  <baseType>btype:Text</baseType>
   <idea>MIME media type identifier text.</idea>
 
   <documentation>Textual primitive subtype for MIME type values (for example text/plain,
     application/json). Unqualified name MimeType resolves to org.blockml.bml.type.MimeType.</documentation>
-  <name>MimeType</name>
-  <type>btype:MimeType</type>
-  <baseType>btype:Text</baseType>
 </block>

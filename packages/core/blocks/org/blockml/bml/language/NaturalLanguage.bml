@@ -10,7 +10,9 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
-
+  <name>NaturalLanguage</name>
+  <type>lang:NaturalLanguage</type>
+  <baseType>core:Language</baseType>
   <idea>Natural human language for documentation prose and example titles.</idea>
 
   <documentation>Abstract branch for natural languages used in documentation text, example
@@ -19,9 +21,6 @@
     not org.blockml.bml.core.Language directly. Distinct from implementation languages
     (ProgrammingLanguage, MarkupLanguage) used in capability bodies and example content.</documentation>
 
-  <name>NaturalLanguage</name>
-  <type>lang:NaturalLanguage</type>
-  <baseType>core:Language</baseType>
   <abstract>true</abstract>
 
 </block>

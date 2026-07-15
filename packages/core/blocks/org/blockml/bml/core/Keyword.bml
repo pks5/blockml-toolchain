@@ -9,7 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core">
-
+  <name>Keyword</name>
+  <type>core:Keyword</type>
+  <baseType>core:Entity</baseType>
   <idea>Abstract branch for search and discovery tags on definition elements.</idea>
 
   <documentation>Abstract branch marker for keyword Entity instances in a keywords aggregation on
@@ -31,9 +33,6 @@
     </see>
   </references>
 
-  <name>Keyword</name>
-  <type>core:Keyword</type>
-  <baseType>core:Entity</baseType>
   <abstract>true</abstract>
 
 </block>

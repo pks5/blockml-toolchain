@@ -10,16 +10,15 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
-
+  <name>AggregationConstraint</name>
+  <type>constraint:AggregationConstraint</type>
+  <baseType>constraint:MemberConstraint</baseType>
   <idea>Constraint that validates an AggregationDefinition or its children.</idea>
 
   <documentation>Abstract branch for constraints on Aggregation members. Generic T binds to the
     effective AggregationDefinition. Valid only under an Aggregation's &lt;constraints&gt; container
     (BML_CONSTRAINT_TARGET_MISMATCH otherwise).</documentation>
 
-  <name>AggregationConstraint</name>
-  <type>constraint:AggregationConstraint</type>
-  <baseType>constraint:MemberConstraint</baseType>
   <abstract>true</abstract>
 
   <genericTypes>

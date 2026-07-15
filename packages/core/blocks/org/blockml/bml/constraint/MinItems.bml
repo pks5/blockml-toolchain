@@ -13,13 +13,12 @@
   xmlns:btype="org.blockml.bml.type"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core">
-
-  <idea>Minimum number of elements in a collection property.</idea>
-
-  <documentation>T binds to the property collection type (e.g. String[]). The value property is Integer — the minimum item count.</documentation>
   <name>MinItems</name>
   <type>constraint:MinItems</type>
   <baseType>constraint:ValueConstraint</baseType>
+  <idea>Minimum number of elements in a collection property.</idea>
+
+  <documentation>T binds to the property collection type (e.g. String[]). The value property is Integer — the minimum item count.</documentation>
   <genericTypes>
     <T baseType="core:ValueType"/>
   </genericTypes>
