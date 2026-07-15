@@ -61,7 +61,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Embedded Blocks (Inline Library)** | **Inlined** in `BlockDefinition.embeddedBlocks[]` on root blocks and embedded blocks (forbidden on Sub-Blocks). Full root-block-shaped documents (FQN = `<type>`) from any package namespace. Shadow library/file definitions within the enclosing document's scope; invisible externally. |
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | `bml:*` on composition elements — flow-control in `directives[]`; composition meta (`bml:id`, `bml:version`) on `BlockInstance` fields. **Not expanded** at parse time. |
-| **Instance `version`** | From **`bml:version`** — optional on external block references. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert (`BML_UNKNOWN_VERSION` if no match). Forbidden inside Library files → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`. Same-document Sub-Blocks exempt. |
+| **Instance `version`** | From **`bml:version`** — optional on external block references and Library TypeReferenceEntity sugar. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert against the referenced type (`BML_UNKNOWN_VERSION` if no match). Same-document Sub-Blocks exempt. |
 | **Definition `version`** | Every Block definition has an **effective version**: own `<version>` if present, else library version if the block is exported via a Library, else error (`BML_MISSING_VERSION`). |
 | **Instance `id`** | From **`bml:id`** — authored in BOM only on `BlockInstance.id`; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `bml:id`. No FQN fallback. |
 | **Property values** | **Deep copy only — never linked.** A property value must never point to another instance by reference. Enum tokens (`STANDARD`, `FQN::id`) are resolution keys — resolved values are materialized as inline copies. Cross-instance `FQN::id` references are valid only on **associations** (e.g. `basePresets`, `Step.part`), not on property values. See § Member Values — Property Value Semantics. |
@@ -1049,10 +1049,10 @@ interface BlockInstance {
   id?: MemberValue
 
   /**
-   * From bml:version — optional exact-version assert on external block references.
-   * Omitted → resolve effective version from TypeRegistry context at validate time.
-   * Forbidden inside Library readFirst / bootstrap / dependencies / subLibraries / blocks → BML_VERSION_NOT_ALLOWED_IN_LIBRARY.
-   * See "Version Rules" below.
+   * From bml:version — optional exact-version assert on external block references and on
+   * TypeReferenceEntity sugar (Library catalog aggregations). Asserts against the referenced
+   * type FQN (for sugar: value). Omitted → resolve effective version from TypeRegistry context.
+   * No match → BML_UNKNOWN_VERSION. See "Version Rules" below.
    */
   version?: MemberValue
 
@@ -1134,8 +1134,10 @@ External reference (type from another BML file — `.bml`):
                            → no match → BML_UNKNOWN_VERSION (error)
 
 Inside Library files (readFirst / bootstrap / dependencies / subLibraries / blocks):
-  → bml:version FORBIDDEN on composition children
-  → present → BML_VERSION_NOT_ALLOWED_IN_LIBRARY (error)
+  → bml:version optional on TypeReferenceEntity sugar / explicit Entity children
+  → present → exact-version assert against referenced type (value)
+  → no match → BML_UNKNOWN_VERSION (error)
+  → omitted → resolve from TypeRegistry / library context
 ```
 
 Examples from `Calibrator.bml`:
@@ -1241,7 +1243,8 @@ Catalog members are **public** and **`readOnly`**: foreign Blocks may inspect a 
 
 `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` use `TypeReferenceEntity`
 aggregations — QName sugar expands to Entity instances (not instances of the named Block).
-**`bml:version` is forbidden** on sugar children; effective version is resolved from library context.
+Optional **`bml:version`** on sugar children is an exact-version assert against the referenced type
+(`value`); effective version when omitted is resolved from library / TypeRegistry context.
 Meta-model types: `TypeReferenceEntity(core:ReadMe)[1..1]`, `TypeReferenceEntity(core:Bootstrap)`,
 `TypeReferenceEntity(core:BlockLibrary)[]`, `TypeReferenceEntity(core:Block)[]`. See
 `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
@@ -1292,7 +1295,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ```text
 1. Built-in services     — @blockml/core (org.blockml.bml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
-3. Library blocks             — org.blockml.bml.core.BlockLibrary → resolve readFirst / bootstrap / dependencies / subLibraries / blocks by FQN (no bml:version)
+3. Library blocks             — org.blockml.bml.core.BlockLibrary → resolve readFirst / bootstrap / dependencies / subLibraries / blocks by FQN (optional bml:version assert against value)
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
 5. Declared dependencies      — Library dependencies entries + bom.config.json paths
 ```
@@ -1375,7 +1378,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Block definitions have effective version (BML_MISSING_VERSION if standalone and no <version>)
 ✓  Library member block.version >= library.version when both declared
 ✓  External instance references resolve via registry context; optional bml:version is exact assert (BML_UNKNOWN_VERSION)
-✓  Library readFirst / bootstrap / dependencies / subLibraries / blocks children have no bml:version (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
+✓  Library readFirst / bootstrap / dependencies / subLibraries / blocks sugar bml:version asserts match when present (BML_UNKNOWN_VERSION)
 ✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
 ✓  Qualified FQN::id references target public aggregations with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
@@ -1448,8 +1451,7 @@ BML_EXAMPLE_NOT_CDATA         — <example> body is not CDATA
 BML_EXAMPLE_UNKNOWN_LANGUAGE  — <example> language attribute is not a known Language FQN
 BML_UNKNOWN_NATURAL_LANGUAGE  — <language> or documentation language attribute is not a NaturalLanguage FQN
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
-BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
-BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library readFirst / bootstrap / dependencies / subLibraries / blocks
+BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry (includes Library TypeReferenceEntity sugar)
 BML_VERSION_BELOW_LIBRARY     — block.version < library.version when both declared (error)
 BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.version (warning — best practice: patch only)
 BML_LIBRARY_NESTING_VIOLATION  — outer library blocks re-exports a Block exported by a nested inner library

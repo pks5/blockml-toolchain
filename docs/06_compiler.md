@@ -530,7 +530,6 @@ BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE — embedded block type is not fully qualifi
 BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry
-BML_VERSION_NOT_ALLOWED_IN_LIBRARY — bml:version present on BlockInstance inside Library readFirst / bootstrap / dependencies / subLibraries / blocks
 BML_VERSION_BELOW_LIBRARY     — block.version < library.version when both declared (error)
 BML_LIBRARY_NESTING_VIOLATION  — outer library blocks re-exports a Block exported by a nested inner library
 BML_VERSION_MINOR_DRIFT       — block.version minor differs from library.version (warning — best practice: patch only)

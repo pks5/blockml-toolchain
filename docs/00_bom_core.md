@@ -1755,7 +1755,7 @@ org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diag
 
 `description`, `language`, `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, `schemas`, and `blocks` are **public** and **`readOnly`**: foreign Blocks and tools may inspect a library catalog in expressions; only the Library definition (and child overrides) may author these members — instances must not rewrite them (`BML_READONLY_MEMBER_WRITE`).
 
-`readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` are **TypeReferenceEntity** aggregations — each empty QName child expands to a TypeReferenceEntity instance. **`bml:version` is forbidden** on sugar children. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
+`readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` are **TypeReferenceEntity** aggregations — each empty QName child expands to a TypeReferenceEntity instance. Optional **`bml:version`** on sugar (or explicit Entity) children is an exact-version assert against the referenced type (`value`) — omitted → TypeRegistry / library context; no match → `BML_UNKNOWN_VERSION`. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 `readFirst` references a `ReadMe` block (typically `README`) — required human/LLM reading entry. Curated reading order uses `<references>` with `relation=ReadFirst`; available tasks use `relation=TaskIndex`. `bootstrap` is the optional automation SPOE — see `doc:BootstrapModel` and `doc:TaskGuideModel`.
 
@@ -2068,7 +2068,7 @@ Block in library: <version> optional — inherits library.version; if set, must 
 Standalone block: <version> mandatory
 
 bml:version="1.0.0" on instance — optional exact-version assert (not a mandatory pin)
-bml:version inside Library files — forbidden (BML_VERSION_NOT_ALLOWED_IN_LIBRARY)
+bml:version on TypeReferenceEntity sugar — optional exact-version assert against referenced type (value); no match → BML_UNKNOWN_VERSION
 ```
 
 **Framework convention (`org.blockml.bml.*`, `com.machineblocks.bml.*`):** version only on `Library.bml`, not on individual block files.

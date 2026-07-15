@@ -50,9 +50,12 @@ effectiveBlockVersion =
 
 ## Instance references (`bml:version`)
 
-- **Optional** on external references — omitted = resolve from TypeRegistry context
-- **Present** = exact-version assert → `BML_UNKNOWN_VERSION` if no match
-- **Forbidden** inside Library `dependencies` / `blocks` → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`
+- **Optional** on external references and Library TypeReferenceEntity sugar (`dependencies`,
+  `subLibraries`, `blocks`, `readFirst`, `bootstrap`, `language`) — omitted = resolve from
+  TypeRegistry / library context
+- **Present** = exact-version assert against the **referenced** type (`value` for sugar) →
+  `BML_UNKNOWN_VERSION` if no match
+- Example dependency pin: `<blockml:Library bml:version="3.0.0" />`
 
 ## Library file pattern
 
@@ -61,7 +64,7 @@ effectiveBlockVersion =
 <baseType>bcore:BlockLibrary</baseType>
 <version>3.0.0</version>
 <dependencies>
-  <composition><blockml:Library /></composition>
+  <composition><blockml:Library bml:version="3.0.0" /></composition>
 </dependencies>
 <blocks>
   <composition><bcore:Block /></composition>   <!-- export blocks, NOT BlockLibrary -->

@@ -203,7 +203,7 @@ org.blockml.bml.core.Block                         abstract root · omits baseTy
 
 **One root · one registry · one parser.** Branch-specific rules come from the `baseType` chain — not from parallel ontologies. There is no separate ComposableBlock — all Blocks inherit directly from `org.blockml.bml.core.Block` (or via domain/service branches).
 
-Every sub-type is free to declare its own members — `org.blockml.bml.core.Block` declares `language` (NaturalLanguage, default English). Composition instance identity uses **`bml:id`** (may be empty); external references may use optional **`bml:version`** as an exact-version assert (forbidden inside Library files). Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **ValueType** only (Property `type` · Capability `inputType` · Capability `outputType`).
+Every sub-type is free to declare its own members — `org.blockml.bml.core.Block` declares `language` (NaturalLanguage, default English). Composition instance identity uses **`bml:id`** (may be empty); external references and TypeReferenceEntity sugar may use optional **`bml:version`** as an exact-version assert against the referenced type. Aggregation and association `type` attributes may reference **any Block FQN**. Property and Capability types must resolve to **ValueType** only (Property `type` · Capability `inputType` · Capability `outputType`).
 
 ### Literally everything — including the compiler's grammar
 
@@ -744,7 +744,8 @@ Allowed on TypeReferenceEntity aggregations:
   multiplicity: bare TypeReferenceEntity(T) = 0..1; [] = 0..n; [1..1] = required single
 
 On sugar children (empty non-TypeReferenceEntity QName):
-  bml:version is forbidden unless a specific aggregation documents an exception
+  optional bml:version → exact-version assert against the referenced type (value);
+    mismatch → BML_UNKNOWN_VERSION (same semantics as external composition references)
   nested domain members of the named type are forbidden (the instance type is TypeReferenceEntity)
 
 value must satisfy satisfiesTypeBound(resolve(value), B)

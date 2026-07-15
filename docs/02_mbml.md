@@ -2451,9 +2451,10 @@ Child elements inside `<composition>` are Block instances. Each instance:
 Tag name        — class name (with namespace prefix)
 bml:id          — composition instance identity (part ID). Required when referenced or on bml:each (literal or Expression).
                   Omitted on anonymous static children → auto-ID after directive expansion.
-bml:version     — optional on external block references; exact-version assert when present.
-                  Omitted → resolve effective version from TypeRegistry context.
-                  Forbidden inside Library files → BML_VERSION_NOT_ALLOWED_IN_LIBRARY.
+bml:version     — optional on external block references and Library TypeReferenceEntity sugar;
+                  exact-version assert against the referenced type when present.
+                  Omitted → resolve effective version from TypeRegistry / library context.
+                  No match → BML_UNKNOWN_VERSION.
                   Same-document Sub-Block references omit bml:version.
 bml:bean        — optional; registers this instance as a named service bean (accessible via @bean in Expressions)
 bml:scope       — optional; "local" | "context" (service instances only; default: "local")
@@ -2920,8 +2921,8 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 child element (e.g. `<blockml:Library />`) expands to a TypeReferenceEntity (not an instance of the
 named Block). Catalog members (`description`, `language`, `readFirst`, `bootstrap`, `dependencies`,
 `subLibraries`, `schemas`, `blocks`) are **public** and **`readOnly`** — foreign Blocks may inspect
-a library; only the Library definition authors the catalog. **`bml:version` is forbidden** on sugar
-children. **`readFirst`** (1..1) references a
+a library; only the Library definition authors the catalog. Optional **`bml:version`** on sugar
+children is an exact-version assert against the referenced type (`value`). **`readFirst`** (1..1) references a
 `ReadMe` (typically `README`). **`bootstrap`** (0..1) is the optional automation SPOE
 (`core:Bootstrap`). **`schemas`** is an **instance** aggregation and holds real `FilePathEntity`
 composition children.
@@ -2931,7 +2932,7 @@ composition children.
 <aggregations>
   <dependencies>
     <composition>
-      <blockml:Library />
+      <blockml:Library bml:version="3.0.0" />
     </composition>
   </dependencies>
   <blocks>
@@ -3580,8 +3581,9 @@ Physical directories and overlapping package prefixes do not define membership. 
 ```
 
 **`readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks`** are
-`TypeReferenceEntity` aggregations — QName sugar expands to Entity instances. **`bml:version` is
-forbidden** on sugar children — effective version is resolved from library context. Catalog members
+`TypeReferenceEntity` aggregations — QName sugar expands to Entity instances. Optional
+**`bml:version`** on sugar children is an exact-version assert against the referenced type
+(`value`); omitted → library / TypeRegistry context. Catalog members
 are **public** and **`readOnly`** (inspectable from foreign Blocks; authored on the Library
 definition only). See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
@@ -3777,7 +3779,7 @@ type="Foo" (unqualified at general site)  →  BML_UNKNOWN_TYPE (no implicit nam
 type="Integer" (Property.type)          →  org.blockml.bml.type.Integer
 bml:version omitted on external instance → resolve effective version from TypeRegistry context
 bml:version present on external instance  → exact-version assert → BML_UNKNOWN_VERSION if no match
-bml:version inside Library file           → BML_VERSION_NOT_ALLOWED_IN_LIBRARY (error)
+bml:version exact-version mismatch        → BML_UNKNOWN_VERSION (error)
 Block definition without effective version → BML_MISSING_VERSION (error)
 same-document Sub-Block instance          → bml:version not required
 bml:id missing on referenced instance     → BML_MISSING_ID

@@ -28,7 +28,10 @@
     Authored empty child whose element QName is not TypeReferenceEntity is syntactic sugar for a
     TypeReferenceEntity instance with value set to that QName (resolved to FQN) — for example
     &lt;foo:Bar /&gt; expands to &lt;btype:TypeReferenceEntity value="foo:Bar" /&gt; (B bound by the
-    aggregation type). Explicit TypeReferenceEntity authoring is always valid and equivalent.
+    aggregation type). Optional bml:version on the sugar child is an exact-version assert against
+    the referenced type (value), not against TypeReferenceEntity itself — e.g.
+    &lt;blockml:Library bml:version="3.0.0" /&gt;. Explicit TypeReferenceEntity authoring is always
+    valid and equivalent.
 
     Contrast with scalar TypeReference(B) on properties (identity type / baseType, member type
     attributes) — those remain plain text, not Entity instances. Member path references use

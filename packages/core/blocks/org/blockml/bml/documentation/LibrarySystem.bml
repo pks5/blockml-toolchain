@@ -47,8 +47,9 @@
 
     Version resolution:
     effectiveBlockVersion = own version if present, else library.version if exported via blocks,
-    else error BML_MISSING_VERSION. bml:version on instance references is optional exact-version
-    assert; forbidden inside Library readFirst, bootstrap, dependencies, subLibraries, and blocks.
+    else error BML_MISSING_VERSION. bml:version on TypeReferenceEntity sugar (readFirst, bootstrap,
+    dependencies, subLibraries, blocks) is an optional exact-version assert against the referenced
+    type (value); omitted → TypeRegistry / library context; no match → BML_UNKNOWN_VERSION.
   </documentation>
 
   <references>

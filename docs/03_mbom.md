@@ -634,4 +634,4 @@ Every Block definition has an effective version (own `<version>` or library inhe
 <Base bml:id="base_stud" offset="[0, 0, 0]" ... />   <!-- no bml:version — Sub-Block, same file -->
 ```
 
-Standalone block without `<version>` and not in a Library → `BML_MISSING_VERSION`. Unknown `bml:version` assert → `BML_UNKNOWN_VERSION`. `bml:version` inside Library files → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`.
+Standalone block without `<version>` and not in a Library → `BML_MISSING_VERSION`. Unknown `bml:version` assert → `BML_UNKNOWN_VERSION`. Library TypeReferenceEntity sugar may carry optional `bml:version` (exact-version assert against the referenced type).

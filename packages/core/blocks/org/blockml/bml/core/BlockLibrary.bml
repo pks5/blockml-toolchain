@@ -43,10 +43,12 @@
     • blocks — exported Block and ValueType definitions (membership SSOT)
 
     readFirst and bootstrap hold TypeReferenceEntity children — empty QName sugar sets value to
-    that FQN. dependencies, subLibraries, and blocks use the same pattern. bml:version is
-    forbidden on sugar children (version comes from library context). schemas holds FilePathEntity
-    composition children; value is the relative .xsd path from the library package root (directory
-    containing Library.bml).
+    that FQN. dependencies, subLibraries, and blocks use the same pattern. Optional bml:version on
+    sugar (or explicit TypeReferenceEntity) children is an exact-version assert against the
+    referenced type (value) — same semantics as external composition references; omitted → resolve
+    from TypeRegistry / library context; no match → BML_UNKNOWN_VERSION. schemas holds
+    FilePathEntity composition children; value is the relative .xsd path from the library package
+    root (directory containing Library.bml).
   </documentation>
 
   <references>
@@ -91,34 +93,38 @@
         from this library catalogue. Singular TypeReferenceEntity aggregation — one child (for
         example &lt;English/&gt;). Inherited by block definitions unless overridden. Unqualified
         child names resolve via implicit namespace org.blockml.bml.language.*. Public readOnly —
-        inspectable from foreign Blocks; authored on the Library definition only.</documentation>
+        inspectable from foreign Blocks; authored on the Library definition only. Optional
+        bml:version on the sugar child is an exact-version assert against the referenced
+        language type.</documentation>
     </language>
     <readFirst type="btype:TypeReferenceEntity(core:ReadMe)[1..1]" readOnly="true">
       <documentation>Required human/LLM reading entry for this library. Exactly one ReadMe
         TypeReferenceEntity — empty QName sugar or explicit value. Typically
         &lt;blockml:README /&gt; on the core library. Missing or duplicate →
-        BML_TYPE_REFERENCE_MULTIPLICITY. bml:version is forbidden on sugar children. Public
-        readOnly — inspectable from foreign Blocks; authored on the Library definition only.</documentation>
+        BML_TYPE_REFERENCE_MULTIPLICITY. Optional bml:version is an exact-version assert against
+        the referenced ReadMe type. Public readOnly — inspectable from foreign Blocks; authored on
+        the Library definition only.</documentation>
     </readFirst>
     <bootstrap type="btype:TypeReferenceEntity(core:Bootstrap)" readOnly="true">
       <documentation>Optional single point of entry (SPOE) for automated startup — tasks, agents,
         CI pipelines. Bare TypeReferenceEntity = 0..1. At most one Bootstrap; omit when the library
-        has no automation entry. Not the human reading entry (use readFirst). bml:version is
-        forbidden on sugar children. Public readOnly — inspectable from foreign Blocks; authored on
-        the Library definition only.</documentation>
+        has no automation entry. Not the human reading entry (use readFirst). Optional bml:version
+        is an exact-version assert against the referenced Bootstrap type. Public readOnly —
+        inspectable from foreign Blocks; authored on the Library definition only.</documentation>
     </bootstrap>
     <dependencies type="btype:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true">
       <documentation>Other Library blocks this library depends on. Typical pattern: an inner
       library lists the outer library here. TypeReferenceEntity instances (QName sugar or explicit
-      value). bml:version is forbidden on sugar children. Public readOnly — foreign tools may read
+      value). Optional bml:version pins or asserts an exact Library version (e.g.
+      &lt;blockml:Library bml:version="3.0.0" /&gt;). Public readOnly — foreign tools may read
       the dependency list; only the Library definition may author it.</documentation>
     </dependencies>
     <subLibraries type="btype:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true">
       <documentation>Nested child Library blocks grouped under this library. A library may declare
-      sub-libraries alongside blocks. TypeReferenceEntity instances. bml:version is forbidden on
-      sugar children. The outer library must not re-export inner library blocks in blocks —
-      consumers depend on the inner library directly. Public readOnly — inspectable from foreign
-      Blocks; authored on the Library definition only.</documentation>
+      sub-libraries alongside blocks. TypeReferenceEntity instances. Optional bml:version is an
+      exact-version assert against the referenced Library. The outer library must not re-export
+      inner library blocks in blocks — consumers depend on the inner library directly. Public
+      readOnly — inspectable from foreign Blocks; authored on the Library definition only.</documentation>
     </subLibraries>
     <schemas type="btype:FilePathEntity[]" readOnly="true">
       <documentation>Optional legacy XSD schema paths during migration. Each entry is a
@@ -129,9 +135,10 @@
     <blocks type="btype:TypeReferenceEntity(core:Block)[]" readOnly="true">
       <documentation>Exported Block and ValueType definitions. Membership is defined exclusively by
       this list — not by directory layout. TypeReferenceEntity instances naming each export.
-      bml:version is forbidden on sugar children. Public readOnly — the publishable catalog is
-      inspectable from foreign Blocks (e.g. library-management tools); only the Library definition
-      may author membership.</documentation>
+      Optional bml:version is an exact-version assert against the exported type when that type
+      declares its own version. Public readOnly — the publishable catalog is inspectable from
+      foreign Blocks (e.g. library-management tools); only the Library definition may author
+      membership.</documentation>
     </blocks>
   </aggregations>
 

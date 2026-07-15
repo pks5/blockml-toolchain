@@ -673,7 +673,7 @@ registry.getBlockDefinition("com.machineblocks.bml.bricks.StandardBrick", "3.0.0
   → undefined → BML_UNKNOWN_VERSION
 ```
 
-Inside Library files: `bml:version` on `bootstrap` / `dependencies` / `subLibraries` / `blocks` children → `BML_VERSION_NOT_ALLOWED_IN_LIBRARY`.
+Inside Library files: optional `bml:version` on `bootstrap` / `dependencies` / `subLibraries` / `blocks` / `readFirst` TypeReferenceEntity sugar — exact-version assert against `value`; no match → `BML_UNKNOWN_VERSION`.
 
 Same-document Sub-Block references omit `version` — resolved against the `subBlocks[]` tree in the same `BomDocument`.
 
@@ -789,7 +789,8 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.b
 ```text
 <!-- TypeReferenceEntity aggregations — QName sugar → Entity { value: FQN } -->
 <blockml:README />                         →  readFirst: TypeReferenceEntity value="org.blockml.bml.README"
-<blockml:Library />                        →  dependencies entry — no bml:version on sugar
+<blockml:Library />                        →  dependencies entry (context version)
+<blockml:Library bml:version="3.0.0" />     →  dependencies entry — exact-version assert on value
 <compiler:Library />                       →  subLibraries entry
 <type:Size3d />                             →  blocks entry
 <bricks:Wall />                             →  blocks entry
@@ -800,8 +801,10 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.b
 ```
 
 `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` use `TypeReferenceEntity`
-aggregations — empty QName sugar expands to Entity instances. **`bml:version` is forbidden** on sugar
-children. Meta-model types: `TypeReferenceEntity(core:ReadMe)[1..1]`,
+aggregations — empty QName sugar expands to Entity instances. Optional **`bml:version`** on sugar
+is an exact-version assert against the referenced type (`value`) — stored on the expanded
+TypeReferenceEntity instance like other composition `bml:version` asserts. Meta-model types:
+`TypeReferenceEntity(core:ReadMe)[1..1]`,
 `TypeReferenceEntity(core:Bootstrap)`, `TypeReferenceEntity(core:BlockLibrary)[]`,
 `TypeReferenceEntity(core:Block)[]`.
 
@@ -809,7 +812,8 @@ Each child requires explicit aggregation members (`readFirst`, `bootstrap`, `dep
 `subLibraries`, `schemas`, `blocks`) — BlockLibrary has no default aggregation.
 
 **Orchestrator (not parser):** after parsing a Library block, resolve each `readFirst`, `bootstrap`,
-`dependencies`, `subLibraries`, and `blocks` entry by `resolve(value)`, load the referenced
+`dependencies`, `subLibraries`, and `blocks` entry by `resolve(value)` (honouring optional
+`bml:version`), load the referenced
 definitions using effective block versions, and `registerBlockDefinition`. Validate that outer
 libraries do not re-export blocks from nested inner libraries (`BML_LIBRARY_NESTING_VIOLATION`).
 
