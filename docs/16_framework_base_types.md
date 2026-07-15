@@ -284,7 +284,11 @@ language        NaturalLanguage    — optional; prose language override for con
 context         String (required)  — relationship note; XML text content
 ```
 
-Exactly one of `block`, `file`, or `url` must be set. Authoring: list only targets **relevant to the current definition**; text body describes the relationship. All cross-links belong in `<references>` — never in `<documentation>`. See `02_mbml.md` — `<documentation>` · `<references>`.
+Exactly one of `block`, `file`, or `url` must be set.
+
+**Design note:** Three mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see block="…">` (type reference), `<see file="…">` (repository doc), `<see url="…">` (web address). Humans and LLMs classify each reference from element shape alone without inferring kind from value syntax. See `02_mbml.md` — `<references>` — Why three attributes.
+
+Authoring: list only targets **relevant to the current definition**; text body describes the relationship. All cross-links belong in `<references>` — never in `<documentation>`. See `02_mbml.md` — `<documentation>` · `<references>`.
 
 `org.blockml.bml.definition.StructuralDefinition.Change` — inline Sub-Block; one changelog entry in a `<changelog>` container:
 

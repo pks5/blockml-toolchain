@@ -449,7 +449,7 @@ interface DocumentationExample {
 }
 
 interface DocumentationReference {
-  /** Block or Definition reference (xmlns prefix:Name) — XML block attribute on <see> */
+  /** Block or Definition reference (xmlns prefix:Name) — XML block attribute on <see>. Three target fields (block, file, url) instead of one generic target: attribute name encodes kind at the read site for humans and LLMs — see 02_mbml.md — references. */
   block?: string
   /** Repository markdown file — XML file attribute on <see> */
   file?: string

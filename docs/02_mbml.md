@@ -598,6 +598,18 @@ file="02_mbml.md"                    — repository documentation file
 url="https://blockml.org/schemas/…"  — external URL
 ```
 
+**Why three attributes instead of one `target`?**
+
+The attribute name encodes the target **kind** at the read site — before parsing or resolving the value. Humans and LLMs scanning BML can classify each reference from the element shape alone:
+
+```text
+<see block="core:ValueType">…</see>   → see · block · type reference
+<see file="02_mbml.md">…</see>       → see · file · repository documentation
+<see url="https://…">…</see>        → see · url · web address
+```
+
+A single generic `target` attribute would force readers to infer kind from value syntax (FQN vs filename vs URL). Three explicit attributes keep the documentation reading flow linear: verb (`see`) → kind → target → relationship text.
+
 **Authoring rules:**
 
 - Include only targets with a **direct relationship** to the current definition.
