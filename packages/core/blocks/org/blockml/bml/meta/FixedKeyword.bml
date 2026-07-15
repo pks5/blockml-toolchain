@@ -12,7 +12,8 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:meta="org.blockml.bml.meta"
   xmlns:constraint="org.blockml.bml.constraint"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:bml="http://blockml.org/schema/bml">
   <name>FixedKeyword</name>
   <type>meta:FixedKeyword</type>
   <baseType>core:Keyword</baseType>

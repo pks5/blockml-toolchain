@@ -9,7 +9,8 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:btype="org.blockml.bml.type"
-  xmlns:core="org.blockml.bml.core">
+  xmlns:core="org.blockml.bml.core"
+  xmlns:bml="http://blockml.org/schema/bml">
   <name>Capability</name>
   <type>core:Capability</type>
   <baseType>core:Block</baseType>

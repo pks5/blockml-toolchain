@@ -10,7 +10,8 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition">
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:bml="http://blockml.org/schema/bml">
   <name>InstanceReference</name>
   <type>btype:InstanceReference</type>
   <baseType>btype:Text</baseType>

@@ -9,7 +9,8 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:bml="http://blockml.org/schema/bml">
   <name>WOTFoundation</name>
   <type>doc:WOTFoundation</type>
   <baseType>core:Documentation</baseType>

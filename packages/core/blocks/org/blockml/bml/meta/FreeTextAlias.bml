@@ -8,7 +8,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:meta="org.blockml.bml.meta">
+  xmlns:meta="org.blockml.bml.meta"
+  xmlns:bml="http://blockml.org/schema/bml">
   <name>FreeTextAlias</name>
   <type>meta:FreeTextAlias</type>
   <baseType>meta:FixedAlias</baseType>
