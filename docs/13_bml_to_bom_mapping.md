@@ -274,12 +274,14 @@ V1 known languages: `org.blockml.bml.language.TypeScript`, `org.blockml.bml.lang
 Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_framework_base_types.md`.
 
 ```text
-```text
 <idea>…</idea>                               → block.idea (trimmed text)
 <summary>…</summary>                         → block.summary (trimmed text); members: member.summary
-<keywords>…</keywords>                       → keywords[] (comma-separated, trim each token); members: member.keywords[]
+<keywords>                                   → keywords[] KeywordEntry; shorthand → FreeTextKeyword only
+  <meta:FreeTextKeyword term="…" />          → { typeFqn: FreeTextKeyword, term, languageFqn?, weight? }
+  <domain:Inheritance />                     → { typeFqn: domain keyword block }  (example)
 <not>…</not>                                 → block.not (trimmed text); block definitions only
-<aliases>…</aliases>                         → aliases[] (comma-separated, trim each token); block definitions only
+<aliases>                                    → aliases[] AliasEntry; shorthand → FreeTextAlias only
+  <meta:FreeTextAlias name="…" />            → { typeFqn: FreeTextAlias, name, languageFqn?, legacy? }
 <language>…</language>                       → block.languageFqn (NaturalLanguage FQN)
 <documentation language="…">…</documentation> → block.documentation (trimmed text); documentationLanguageFqn when attribute present
 <since>…</since>                             → block.since (trimmed text)

@@ -219,6 +219,18 @@ bml:xml                — permitted on all blocks whose baseType chain includes
 
 **Design note:** Framework core branch types remain **`baseType` markers** (`ValueType`, `Entity`, `Language`, …). Domain interface-style polymorphism uses **`<contracts>`** and **`satisfiesTypeBound`** — see `17_type_system_bml.md` — baseType vs contracts. Core branch types are not duplicated as interface contracts in `@blockml/core`.
 
+### Keyword and Alias branches
+
+```text
+org.blockml.bml.core.Entity
+  org.blockml.bml.core.Keyword          abstract branch — domain vocabulary + free text
+    org.blockml.bml.meta.FreeTextKeyword   ad-hoc term (shorthand target)
+  org.blockml.bml.core.Alias            abstract branch — domain catalogue + free text
+    org.blockml.bml.meta.FreeTextAlias     ad-hoc name (shorthand target)
+```
+
+Domain libraries define concrete blocks extending `core.Keyword` or `core.Alias` for controlled vocabulary. Comma-separated shorthand on `<keywords>` / `<aliases>` expands to **FreeTextKeyword** / **FreeTextAlias** instances only. See `02_mbml.md` — keywords · aliases.
+
 ### Task guides and diagnostics
 
 ```text
@@ -265,8 +277,8 @@ org.blockml.bml.core.Block
 `org.blockml.bml.definition.StructuralDefinition` declares the shared documentation model and type modifiers:
 
 ```text
-Properties:    since · status · summary · keywords · documentation (Documentation) · abstract · final
-Aggregations:  changelog (Change[]) · examples (Example[]) · references (Reference[])
+Properties:    since · status · summary · documentation (Documentation) · abstract · final
+Aggregations:  keywords (core:Keyword[]) · changelog (Change[]) · examples (Example[]) · references (Reference[])
 Sub-blocks:    Documentation · Change · Example · Reference   ← inline in StructuralDefinition.bml
 Source:        packages/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
 ```
@@ -284,7 +296,7 @@ in child blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 
-`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`idea`, `not`, `aliases`, `name`, `type`, `baseType`, `version`), `summary` and `keywords` (inherited from StructuralDefinition), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
+`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`idea`, `not`, `name`, `type`, `baseType`, `version`), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
 
 `org.blockml.bml.definition.SubBlockDefinition` adds `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy).
 
@@ -360,9 +372,9 @@ Definition elements are addressed via **canonical structural paths** within the 
 com.foo.Bar.name                    →  Block metadata
 com.foo.Bar.documentation           →  StructuralDefinition.documentation (Documentation Sub-Block shape)
 com.foo.Bar.summary                 →  StructuralDefinition.summary
-com.foo.Bar.keywords                →  StructuralDefinition.keywords
-com.foo.Bar.not                     →  BlockDefinition.not (block-level only)
-com.foo.Bar.aliases                 →  BlockDefinition.aliases (block-level only)
+com.foo.Bar.keywords                 →  StructuralDefinition.keywords (KeywordEntry[])
+com.foo.Bar.not                      →  BlockDefinition.not (block-level only)
+com.foo.Bar.aliases                  →  BlockDefinition.aliases (AliasEntry[]; block-level only)
 com.foo.Bar.properties.width.summary → PropertyDefinition.summary
 com.foo.Bar.properties.width.keywords → PropertyDefinition.keywords
 com.foo.Bar.version                 →  Block version
@@ -411,6 +423,8 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/status/Stable.bml · Draft.bml · Stub.bml · Deprecated.bml
      org/blockml/bml/relation/SeeAlso.bml · ReadFirst.bml · Extends.bml · Requires.bml · ContrastsWith.bml · AuthoringGuide.bml · Defines.bml · DeepDive.bml · TaskIndex.bml · TaskStep.bml · Prerequisite.bml · Resolves.bml
      org/blockml/bml/core/Documentation.bml · TaskGuide.bml · Diagnostic.bml
+     org/blockml/bml/core/Keyword.bml · Alias.bml
+     org/blockml/bml/meta/FreeTextKeyword.bml · FreeTextAlias.bml
      org/blockml/bml/core/ValueType.bml · PrimitiveType.bml · StructType.bml · EnumType.bml · ConstantType.bml · …
      org/blockml/bml/core/Constraint.bml
      org/blockml/bml/constraint/*.bml        ← ValueConstraint, StructuralConstraint, BlockConstraint, Min, …

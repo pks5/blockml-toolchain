@@ -13,6 +13,7 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:relation="org.blockml.bml.relation"
+  xmlns:meta="org.blockml.bml.meta"
   xmlns:task="org.blockml.bml.task">
 
   <idea>Author a new Block definition document from scratch.</idea>
@@ -21,7 +22,13 @@
     containers as needed. Register the block FQN in Library _blocks when publishing a library
     catalogue.</summary>
 
-  <keywords>author, new block, create type, scaffold, root block</keywords>
+  <keywords>
+    <meta:FreeTextKeyword term="author" />
+    <meta:FreeTextKeyword term="new block" />
+    <meta:FreeTextKeyword term="create type" />
+    <meta:FreeTextKeyword term="scaffold" />
+    <meta:FreeTextKeyword term="root block" />
+  </keywords>
 
   <documentation>
     Procedure for a new domain Block type:

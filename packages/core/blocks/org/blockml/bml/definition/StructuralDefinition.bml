@@ -43,7 +43,8 @@
   <!--
   Property definitions are grouped inside the <properties> element.
   Each property is rendered as a direct XML child element named after the
-  property itself (for example <since>, <status>, <summary>, <keywords>, <documentation>, <abstract>, or <final>).
+  property itself (for example <since>, <status>, <summary>, <documentation>, <abstract>, or <final>).
+  Keyword and Alias entries live in <keywords> and <aliases> aggregations — not as scalar properties.
 -->
   <properties>
     <since type="Version" bml:xml="element">
@@ -62,16 +63,6 @@
         element. Addressable on blocks as com.foo.Bar.summary and on members as
         com.foo.Bar.properties.width.summary.</documentation>
     </summary>
-    <keywords type="Text" bml:xml="element">
-      <documentation>Optional comma-separated search and discovery tags for RAG indexing and
-        colloquial lookup — domain terms, synonyms, and related concepts that are not alternative
-        names (use aliases on BlockDefinition for those). Applies to all StructuralDefinition
-        elements: blocks, Sub-Blocks, and members. Omitted when idea, summary, and documentation
-        suffice for discovery. Body is comma-separated plain text; parser stores trimmed tokens in
-        BOM keywords[] on the enclosing definition element. Not to be confused with XML namespace
-        prefix aliases — those are document syntax only and never stored in the BOM. Addressable on
-        blocks as com.foo.Bar.keywords and on members as com.foo.Bar.properties.width.keywords.</documentation>
-    </keywords>
     <documentation type="Documentation" bml:xml="element">
       <documentation>Technical documentation prose for this definition element.</documentation>
     </documentation>
@@ -120,9 +111,18 @@
   <!--
   Aggregation definitions are grouped inside the <aggregations> element.
   Each aggregation is rendered as a direct XML child element named after the
-  aggregation itself (for example <changelog> or <references>).
+  aggregation itself (for example <keywords>, <changelog>, <references>).
 -->
   <aggregations>
+    <keywords type="core:Keyword[]">
+      <documentation>Optional search and discovery tags for RAG indexing. Each child is a
+        org.blockml.bml.core.Keyword Entity instance — domain vocabulary blocks extending the Keyword
+        branch, or org.blockml.bml.meta.FreeTextKeyword for ad-hoc terms (for example
+        &lt;meta:FreeTextKeyword term="inheritance" /&gt;). Comma-separated plain text on
+        &lt;keywords&gt; is shorthand that expands to FreeTextKeyword instances only — one term per
+        trimmed token. Addressable as com.foo.Bar.keywords on blocks and
+        com.foo.Bar.properties.width.keywords on members.</documentation>
+    </keywords>
     <changelog type="Change[]">
       <documentation>The changelog of the definition.</documentation>
     </changelog>

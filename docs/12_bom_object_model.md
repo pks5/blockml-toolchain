@@ -154,8 +154,8 @@ interface BlockDefinition {
   /** Optional short prose expansion — typically three to five sentences between idea and documentation. */
   summary?: string
 
-  /** Optional comma-separated search/discovery tags — trimmed tokens in BOM. */
-  keywords?: string[]
+  /** Optional search/discovery tags — core.Keyword Entity instances (KeywordEntry[]). */
+  keywords?: KeywordEntry[]
 
   /** Natural language FQN for documentation prose and example titles. Omitted = inherit Library, then Block default (English). */
   languageFqn?: string
@@ -169,8 +169,8 @@ interface BlockDefinition {
   /** What this Block is not — block-level disambiguation from similar concepts. Optional. */
   not?: string
 
-  /** Alternative names for this Block type — block-level only. Comma-separated in BML; trimmed tokens in BOM. */
-  aliases?: string[]
+  /** Alternative names for this Block type — core.Alias Entity instances (AliasEntry[]). Block-level only. */
+  aliases?: AliasEntry[]
 
   /** Semantic version from which this definition is available. Omitted = since initial release. */
   since?: string
@@ -440,6 +440,30 @@ type MemberDefinition =
   | AssociationDefinition
   | CapabilityDefinition
 
+interface KeywordEntry {
+  /** Keyword Entity type FQN — org.blockml.bml.meta.FreeTextKeyword or domain Keyword branch block */
+  typeFqn: string
+  /** Free-text term — present when typeFqn is org.blockml.bml.meta.FreeTextKeyword */
+  term?: string
+  /** NaturalLanguage FQN when tag deviates from effective block language. Omitted = inherit. */
+  languageFqn?: string
+  /** Optional RAG ranking hint — FreeTextKeyword only. Omitted = default weight. */
+  weight?: number
+  source?: SourceLocation
+}
+
+interface AliasEntry {
+  /** Alias Entity type FQN — org.blockml.bml.meta.FreeTextAlias or domain Alias branch block */
+  typeFqn: string
+  /** Free-text alternative name — present when typeFqn is org.blockml.bml.meta.FreeTextAlias */
+  name?: string
+  /** NaturalLanguage FQN when alias deviates from effective block language. Omitted = inherit. */
+  languageFqn?: string
+  /** Legacy or deprecated alternative name — FreeTextAlias only. Default false. */
+  legacy?: boolean
+  source?: SourceLocation
+}
+
 interface ChangelogEntry {
   /** Semantic version this change applies to */
   version: string
@@ -493,8 +517,8 @@ interface MemberDefinitionBase {
   name: string
   /** Optional short prose expansion between idea-level meaning and full documentation. */
   summary?: string
-  /** Optional comma-separated search/discovery tags — trimmed tokens in BOM. */
-  keywords?: string[]
+  /** Optional search/discovery tags — core.Keyword Entity instances (KeywordEntry[]). */
+  keywords?: KeywordEntry[]
   documentation?: string
   /** NaturalLanguage FQN when member documentation prose deviates from effective block language. */
   documentationLanguageFqn?: string

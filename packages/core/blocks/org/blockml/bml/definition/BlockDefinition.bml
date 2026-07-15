@@ -26,10 +26,9 @@
 
     Declares identity (idea, not, aliases, name, type, baseType, version), generic parameters, contracts,
     allowed Sub-Blocks and languages, and member declaration containers (properties, aggregations,
-    associations, capabilities). Inherits summary and keywords from
-    org.blockml.bml.definition.StructuralDefinition. not and aliases are block-level only — not
-    declares explicit disambiguation from similar concepts; aliases lists alternative names for the
-    Block type (not member identity). Omitted when unnecessary. Type modifiers abstract and final are inherited from
+    associations, capabilities). Inherits summary and keywords aggregation (core.Keyword[]) from
+    org.blockml.bml.definition.StructuralDefinition. not is block-level only; aliases aggregation
+    (core.Alias[]) lists domain Alias blocks or org.blockml.bml.meta.FreeTextAlias instances. Omitted when unnecessary. Type modifiers abstract and final are inherited from
     org.blockml.bml.definition.StructuralDefinition. Every definition element is addressable via
     its canonical structural path within the Block FQN (for example com.foo.Bar.properties.width).
     Member declaration order in BML is preserved in BOM and is significant for StructType
@@ -91,7 +90,7 @@
 
   <!--
     Scalar Block metadata. Each property renders as a direct XML child element
-    named after the property (for example <idea>, <summary>, <keywords>, <not>, <aliases>, <name>, <type>, or <version>).
+    named after the property     (for example <idea>, <summary>, <not>, <name>, <type>, or <version>).
   -->
   <properties>
     <idea type="Text" bml:xml="element">
@@ -107,15 +106,6 @@
         Prefer relation=ContrastsWith on references when pointing at a specific confusing type; not
         states the negation inline on the current definition.</documentation>
     </not>
-    <aliases type="Text" bml:xml="element">
-      <documentation>Alternative names for this Block type — colloquial or legacy terms readers and
-        LLMs may use when searching (for example Sub-Block, nested type, local type). Optional;
-        block-level only — member identity is fixed by (namespace, name) and must not carry alternate
-        names. Comma-separated plain text body; parser stores trimmed tokens in BOM aliases[].
-        Not to be confused with XML namespace prefix aliases (document syntax only, never stored in
-        BOM) or with keywords (search tags on StructuralDefinition). Addressable as
-        com.foo.Bar.aliases.</documentation>
-    </aliases>
     <name type="Text" bml:xml="element">
       <documentation>Short class name (PascalCase). Required on Sub-Blocks. Optional on root blocks —
         when omitted, derived as lastSegment(resolve(type)). When present on a root block, must
@@ -134,6 +124,14 @@
     (for example <genericTypes>, <properties>, or <subBlocks>).
   -->
   <aggregations>
+    <aliases type="core:Alias[]">
+      <documentation>Alternative names for this Block type. Each child is a org.blockml.bml.core.Alias
+        Entity instance — domain catalogue blocks extending the Alias branch, or
+        org.blockml.bml.meta.FreeTextAlias for ad-hoc names (for example
+        &lt;meta:FreeTextAlias name="Sub-Block" /&gt;). Block-level only. Comma-separated plain text
+        on &lt;aliases&gt; is shorthand that expands to FreeTextAlias instances only. Addressable as
+        com.foo.Bar.aliases.</documentation>
+    </aliases>
     <type type="core:TypeReference(core:Block)[1..1]">
       <documentation>Canonical Block type identity. Required on root blocks (BML_MISSING_BLOCK_TYPE).
         Singular TypeReference aggregation — exactly one child element whose name resolves to the

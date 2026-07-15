@@ -27,6 +27,7 @@
   xmlns:status="org.blockml.bml.status"
   xmlns:task="org.blockml.bml.task"
   xmlns:diag="org.blockml.bml.diagnostic"
+  xmlns:meta="org.blockml.bml.meta"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:btype="org.blockml.bml.type">
 
@@ -38,7 +39,9 @@
     concrete value types and constraints, implementation languages, built-in services, lifecycle
     status blocks, the Definition meta-model branch (org.blockml.bml.definition.*), bootstrap
     documentation blocks (org.blockml.bml.documentation.*), task guides (org.blockml.bml.task.*),
-    and diagnostic blocks (org.blockml.bml.diagnostic.*).
+    diagnostic blocks (org.blockml.bml.diagnostic.*), and definition metadata entities
+    (org.blockml.bml.meta.FreeTextKeyword, org.blockml.bml.meta.FreeTextAlias). Domain libraries
+    extend org.blockml.bml.core.Keyword and org.blockml.bml.core.Alias for controlled vocabulary.
 
     Membership is defined exclusively by this file's _blocks list — not by directory layout.
     Version 3.0.0 applies to all exported blocks (framework convention: version only on
@@ -93,6 +96,8 @@
       <bcore:Block />
       <bcore:Bootstrap />
       <bcore:Documentation />
+      <bcore:Keyword />
+      <bcore:Alias />
       <bcore:TaskGuide />
       <bcore:Diagnostic />
       <bcore:Capability />
@@ -165,6 +170,8 @@
       <lang:XML />
       <lang:YML />
       <mapping:FunctionMapping />
+      <meta:FreeTextKeyword />
+      <meta:FreeTextAlias />
       <service:Bools />
       <service:Lists />
       <service:Math />

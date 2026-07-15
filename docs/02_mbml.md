@@ -381,10 +381,10 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 ```text
 <idea>              — short semantic description: what this Block represents in meaning (first child element).
 <summary>           — optional short prose expansion — typically three to five sentences between idea and documentation.
-<keywords>          — optional comma-separated search/discovery tags (blocks and members via StructuralDefinition).
+<keywords>          — optional search/discovery tags — core.Keyword Entity aggregation (StructuralDefinition).
 <documentation>     — human-readable technical description of the Block (required on root blocks).
 <not>               — optional block-level disambiguation — what this Block is not (blocks only, not members).
-<aliases>           — optional comma-separated alternative names for this Block type (blocks only, not members).
+<aliases>           — optional alternative Block type names — core.Alias Entity aggregation (blocks only).
 <type>              — canonical Block type identity (required on root block). TypeReference
                       aggregation — one child element whose name resolves to the Block FQN
                       (for example &lt;foo:MyBlock/&gt;). Text content is forbidden
@@ -452,15 +452,31 @@ Optional **`language`** attribute follows the same deviation pattern as `<docume
 
 ### `<keywords>` — search and discovery tags
 
-`<keywords>` is an optional child on all **StructuralDefinition** elements — root blocks, Sub-Blocks, and members. On Block definitions it follows `<summary>` and optional `<language>`, before `<documentation>`. Value is **comma-separated plain text** — domain terms, related concepts, and colloquial search phrases for RAG indexing and LLM retrieval.
+`<keywords>` is an optional aggregation typed **`core:Keyword[]`** on all **StructuralDefinition** elements. Each child is a **Keyword branch Entity** — either a domain vocabulary block (extends `org.blockml.bml.core.Keyword`) or a free-text tag:
+
+```xml
+<!-- domain controlled vocabulary — block FQN is the tag identity -->
+<keywords>
+  <vocab:Inheritance />
+  <vocab:Composition />
+</keywords>
+
+<!-- ad-hoc free text — org.blockml.bml.meta.FreeTextKeyword -->
+<keywords>
+  <meta:FreeTextKeyword term="inheritance" />
+  <meta:FreeTextKeyword term="Vererbung" language="German" weight="2" />
+</keywords>
+```
+
+**Shorthand** (syntactic sugar for **FreeTextKeyword only** — not for domain keyword blocks):
 
 ```xml
 <keywords>inheritance, nesting, FQN derivation</keywords>
 ```
 
-Omitted when `idea`, `summary`, and `documentation` suffice for discovery. Parser stores trimmed tokens in BOM `keywords[]` on the enclosing definition element. Addressable as `com.foo.Bar.keywords` on blocks and `com.foo.Bar.properties.width.keywords` on members.
+Parser expands each trimmed token to `{ typeFqn: org.blockml.bml.meta.FreeTextKeyword, term }`. Omitted when `idea`, `summary`, and `documentation` suffice. Stored in BOM `keywords[]` as `KeywordEntry`. Type-reference form: `FreeTextKeyword{term="inheritance"}`.
 
-**Not** XML namespace prefix aliases (document syntax only, never stored in BOM). **Not** alternative type names — use `<aliases>` on Block definitions for those.
+Requires `xmlns:meta="org.blockml.bml.meta"` for FreeTextKeyword children; domain keywords use their package prefix.
 
 ### `<language>` — natural language for documentation prose
 
@@ -547,15 +563,30 @@ Plain trimmed text body stored in BOM `block.not`. Addressable as `com.foo.Bar.n
 
 ### `<aliases>` — alternative type names (blocks only)
 
-`<aliases>` is an optional child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It lists **alternative names** for this Block type — colloquial, legacy, or domain terms readers may use when searching (`Sub-Block`, `nested type`, `local type`). Comma-separated plain text; parser stores trimmed tokens in BOM `aliases[]`. Addressable as `com.foo.Bar.aliases`.
+`<aliases>` is an optional aggregation typed **`core:Alias[]`** on **Block definitions only**. Each child is an **Alias branch Entity** — domain catalogue block or free-text name:
 
-Member identity is fixed by `(namespace, name)` — members do not carry alternate names. Use `<keywords>` on members for search tags without implying a second identity.
+```xml
+<!-- domain catalogue alias -->
+<aliases>
+  <vocab:SubBlockAlias />
+</aliases>
 
-**Not** XML namespace prefix aliases. **Not** search tags — use `<keywords>` for RAG-oriented discovery terms.
+<!-- ad-hoc free text — org.blockml.bml.meta.FreeTextAlias -->
+<aliases>
+  <meta:FreeTextAlias name="Sub-Block" />
+  <meta:FreeTextAlias name="Unterblock" language="German" legacy="true" />
+</aliases>
+```
+
+**Shorthand** (syntactic sugar for **FreeTextAlias only**):
 
 ```xml
 <aliases>Sub-Block, nested type, local type</aliases>
 ```
+
+Stored in BOM `aliases[]` as `AliasEntry`. Member identity is fixed by `(namespace, name)`.
+
+**Not** XML namespace prefix aliases. **Not** search tags — use `<keywords>`.
 
 ### Documentation extensions
 
