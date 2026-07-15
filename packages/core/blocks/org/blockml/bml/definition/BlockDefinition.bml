@@ -126,9 +126,10 @@
   <aggregations>
     <aliases type="core:Alias[]">
       <documentation>Alternative names for this Block type. Each child is a org.blockml.bml.core.Alias
-        Entity instance — domain catalogue blocks extending the Alias branch, or
-        org.blockml.bml.meta.FreeTextAlias for ad-hoc names (for example
-        &lt;meta:FreeTextAlias name="Sub-Block" /&gt;). Block-level only. Comma-separated plain text
+        Entity instance — domain catalogue blocks extending org.blockml.bml.meta.FixedAlias (fixed
+        block reference, for example &lt;vocab:SubBlockAlias /&gt;), or org.blockml.bml.meta.FreeTextAlias
+        for ad-hoc names (for example &lt;meta:FreeTextAlias name="Sub-Block" /&gt;). Block-level only.
+        Comma-separated plain text
         on &lt;aliases&gt; is shorthand that expands to FreeTextAlias instances only. Addressable as
         com.foo.Bar.aliases.</documentation>
     </aliases>

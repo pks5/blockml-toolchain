@@ -24,13 +24,13 @@
     idea (required, first child) — semantic meaning of the Block; the stable constant (WOT: Idea).
     summary (optional) — short prose expansion between idea and documentation; inherited from
       StructuralDefinition on blocks and members.
-    keywords aggregation (optional) — core.Keyword[]; domain blocks or meta.FreeTextKeyword; shorthand → FreeTextKeyword only.
+    keywords aggregation (optional) — core.Keyword[]; domain FixedKeyword catalogue blocks, meta.FreeTextKeyword; shorthand → FreeTextKeyword only.
     language (optional) — natural language for documentation prose; inherits Library → Block
       default (English on org.blockml.bml.core.Block).
     documentation (required on root blocks) — technical description of the Block definition itself;
       optional language attribute when prose deviates from effective block language.
     not (optional, blocks only) — what this Block is not; block-level disambiguation from similar concepts.
-    aliases aggregation (optional, blocks only) — core.Alias[]; domain blocks or meta.FreeTextAlias; shorthand → FreeTextAlias only.
+    aliases aggregation (optional, blocks only) — core.Alias[]; domain FixedAlias catalogue blocks, meta.FreeTextAlias; shorthand → FreeTextAlias only.
     Member elements carry their own summary, keywords, and documentation for individual Properties, Aggregations, etc.
 
     Optional extensions (wherever documentation is permitted):

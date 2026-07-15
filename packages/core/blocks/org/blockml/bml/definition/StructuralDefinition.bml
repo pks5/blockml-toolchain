@@ -116,9 +116,10 @@
   <aggregations>
     <keywords type="core:Keyword[]">
       <documentation>Optional search and discovery tags for RAG indexing. Each child is a
-        org.blockml.bml.core.Keyword Entity instance — domain vocabulary blocks extending the Keyword
-        branch, or org.blockml.bml.meta.FreeTextKeyword for ad-hoc terms (for example
-        &lt;meta:FreeTextKeyword term="inheritance" /&gt;). Comma-separated plain text on
+        org.blockml.bml.core.Keyword Entity instance — domain catalogue blocks extending
+        org.blockml.bml.meta.FixedKeyword (fixed block reference, for example
+        &lt;vocab:Inheritance /&gt;), or org.blockml.bml.meta.FreeTextKeyword for ad-hoc terms
+        (for example &lt;meta:FreeTextKeyword term="inheritance" /&gt;). Comma-separated plain text on
         &lt;keywords&gt; is shorthand that expands to FreeTextKeyword instances only — one term per
         trimmed token. Addressable as com.foo.Bar.keywords on blocks and
         com.foo.Bar.properties.width.keywords on members.</documentation>

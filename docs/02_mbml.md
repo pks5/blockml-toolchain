@@ -455,7 +455,7 @@ Optional **`language`** attribute follows the same deviation pattern as `<docume
 `<keywords>` is an optional aggregation typed **`core:Keyword[]`** on all **StructuralDefinition** elements. Each child is a **Keyword branch Entity** — either a domain vocabulary block (extends `org.blockml.bml.core.Keyword`) or a free-text tag:
 
 ```xml
-<!-- domain controlled vocabulary — block FQN is the tag identity -->
+<!-- domain controlled vocabulary — FixedKeyword catalogue block -->
 <keywords>
   <vocab:Inheritance />
   <vocab:Composition />
@@ -476,7 +476,28 @@ Optional **`language`** attribute follows the same deviation pattern as `<docume
 
 Parser expands each trimmed token to `{ typeFqn: org.blockml.bml.meta.FreeTextKeyword, term }`. Omitted when `idea`, `summary`, and `documentation` suffice. Stored in BOM `keywords[]` as `KeywordEntry`. Type-reference form: `FreeTextKeyword{term="inheritance"}`.
 
-Requires `xmlns:meta="org.blockml.bml.meta"` for FreeTextKeyword children; domain keywords use their package prefix.
+Requires `xmlns:meta="org.blockml.bml.meta"` for FreeTextKeyword children; domain keywords use their package prefix. Catalogue keywords extend **`org.blockml.bml.meta.FixedKeyword`** — protected members (`_term`, optional `_language`, `_weight`) are set on the keyword block definition; references are empty fixed blocks:
+
+```xml
+<!-- vocab/Inheritance.bml — catalogue keyword definition -->
+<block ...>
+  <idea>Search tag for inheritance and baseType chains.</idea>
+  <documentation>Controlled vocabulary keyword for inheritance-related blocks.</documentation>
+  <name>Inheritance</name>
+  <baseType>
+    <meta:FixedKeyword />
+  </baseType>
+  <properties>
+    <_term>inheritance</_term>
+    <_weight>2</_weight>
+  </properties>
+</block>
+
+<!-- usage on any StructuralDefinition -->
+<keywords>
+  <vocab:Inheritance />
+</keywords>
+```
 
 ### `<language>` — natural language for documentation prose
 
@@ -566,7 +587,7 @@ Plain trimmed text body stored in BOM `block.not`. Addressable as `com.foo.Bar.n
 `<aliases>` is an optional aggregation typed **`core:Alias[]`** on **Block definitions only**. Each child is an **Alias branch Entity** — domain catalogue block or free-text name:
 
 ```xml
-<!-- domain catalogue alias -->
+<!-- domain catalogue alias — FixedAlias catalogue block -->
 <aliases>
   <vocab:SubBlockAlias />
 </aliases>
@@ -587,6 +608,8 @@ Plain trimmed text body stored in BOM `block.not`. Addressable as `com.foo.Bar.n
 Stored in BOM `aliases[]` as `AliasEntry`. Member identity is fixed by `(namespace, name)`.
 
 **Not** XML namespace prefix aliases. **Not** search tags — use `<keywords>`.
+
+Catalogue aliases extend **`org.blockml.bml.meta.FixedAlias`** — protected members (`_name`, optional `_language`, `_legacy`) are set on the alias block definition; references are empty fixed blocks (same pattern as FixedKeyword above).
 
 ### Documentation extensions
 

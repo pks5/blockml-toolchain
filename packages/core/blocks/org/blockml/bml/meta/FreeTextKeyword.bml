@@ -19,8 +19,9 @@
     discovery tags. Rendered as a direct child inside &lt;keywords&gt; (for example
     &lt;meta:FreeTextKeyword term="inheritance" /&gt;). Comma-separated plain text on
     &lt;keywords&gt; is shorthand that expands to FreeTextKeyword instances — one term per trimmed
-    token. For controlled vocabulary tags, domain libraries define concrete Keyword blocks extending
-    org.blockml.bml.core.Keyword instead (for example an empty block whose FQN is the tag identity).
+    token.     For controlled vocabulary tags, domain libraries define concrete Keyword blocks extending
+    org.blockml.bml.meta.FixedKeyword (catalogue, members on definition) or org.blockml.bml.core.Keyword
+    directly for empty identity-only tags.
 
     Instance configuration at type reference sites: FreeTextKeyword{term="inheritance"}. Not to be
     confused with XML namespace prefix aliases.</documentation>

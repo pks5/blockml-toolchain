@@ -15,8 +15,10 @@
   <documentation>Abstract branch marker for alias Entity instances in an aliases aggregation on
     org.blockml.bml.definition.BlockDefinition only (root blocks and Sub-Blocks). Domain libraries
     define concrete alias blocks extending this branch for catalogue-controlled alternative names.
-    The core library provides org.blockml.bml.meta.FreeTextAlias for ad-hoc text names;
-    comma-separated shorthand on &lt;aliases&gt; expands to FreeTextAlias instances only. Not XML
+    The core library provides org.blockml.bml.meta.FreeTextAlias for ad-hoc text names and
+    org.blockml.bml.meta.FixedAlias as the protected base for catalogue aliases whose members are
+    set on derived alias block definitions; comma-separated shorthand on &lt;aliases&gt; expands to
+    FreeTextAlias instances only. Not XML
     namespace prefix aliases. Not search tags — use org.blockml.bml.core.Keyword branch for those.</documentation>
 
   <references>

@@ -19,7 +19,9 @@
     legacy alternative names on Block definitions. Rendered as a direct child inside &lt;aliases&gt;
     (for example &lt;meta:FreeTextAlias name="Sub-Block" /&gt;). Comma-separated plain text on
     &lt;aliases&gt; is shorthand that expands to FreeTextAlias instances only. For catalogue-controlled
-    alternative names, domain libraries define concrete Alias blocks extending org.blockml.bml.core.Alias.
+    alternative names, domain libraries define concrete Alias blocks extending
+    org.blockml.bml.meta.FixedAlias (catalogue, members on definition) or org.blockml.bml.core.Alias
+    directly for empty identity-only aliases.
 
     Instance configuration: FreeTextAlias{name="Sub-Block"}. Block-level only — members do not carry
     aliases. Not XML namespace prefix aliases.</documentation>

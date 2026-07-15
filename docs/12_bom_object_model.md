@@ -441,25 +441,25 @@ type MemberDefinition =
   | CapabilityDefinition
 
 interface KeywordEntry {
-  /** Keyword Entity type FQN — org.blockml.bml.meta.FreeTextKeyword or domain Keyword branch block */
+  /** Keyword Entity type FQN — org.blockml.bml.meta.FreeTextKeyword, FixedKeyword descendant, or domain Keyword branch block */
   typeFqn: string
-  /** Free-text term — present when typeFqn is org.blockml.bml.meta.FreeTextKeyword */
+  /** Search tag text — present when typeFqn is org.blockml.bml.meta.FreeTextKeyword; resolved from FixedKeyword descendant definition when applicable */
   term?: string
   /** NaturalLanguage FQN when tag deviates from effective block language. Omitted = inherit. */
   languageFqn?: string
-  /** Optional RAG ranking hint — FreeTextKeyword only. Omitted = default weight. */
+  /** Optional RAG ranking hint — FreeTextKeyword or resolved FixedKeyword weight. Omitted = default weight. */
   weight?: number
   source?: SourceLocation
 }
 
 interface AliasEntry {
-  /** Alias Entity type FQN — org.blockml.bml.meta.FreeTextAlias or domain Alias branch block */
+  /** Alias Entity type FQN — org.blockml.bml.meta.FreeTextAlias, FixedAlias descendant, or domain Alias branch block */
   typeFqn: string
-  /** Free-text alternative name — present when typeFqn is org.blockml.bml.meta.FreeTextAlias */
+  /** Alternative name — present when typeFqn is org.blockml.bml.meta.FreeTextAlias; resolved from FixedAlias descendant definition when applicable */
   name?: string
   /** NaturalLanguage FQN when alias deviates from effective block language. Omitted = inherit. */
   languageFqn?: string
-  /** Legacy or deprecated alternative name — FreeTextAlias only. Default false. */
+  /** Legacy or deprecated alternative name — FreeTextAlias or resolved FixedAlias. Default false. */
   legacy?: boolean
   source?: SourceLocation
 }
