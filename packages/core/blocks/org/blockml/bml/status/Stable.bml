@@ -13,7 +13,7 @@
   <name>Stable</name>
   <type>status:Stable</type>
   <baseType>core:Status</baseType>
-  <is>Definition is complete, tested, and reliable.</is>
+  <is>A complete-and-reliable Status</is>
 
   <documentation>Implemented, validated, and mapping complete. Behavior is reliable and may be
     depended on by downstream definitions and tooling. Implicit default when no status is declared

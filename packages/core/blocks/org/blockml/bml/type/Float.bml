@@ -5,7 +5,7 @@
   <name>Float</name>
   <type>btype:Float</type>
   <baseType>btype:Number</baseType>
-  <is>Binary floating-point numeric type — special-purpose only.</is>
+  <is>A binary floating-point number</is>
 
   <documentation>BOM Core primitive ValueType for binary floating-point numbers. Not the default
     floating-point type — use Decimal unless binary IEEE754 semantics are explicitly required

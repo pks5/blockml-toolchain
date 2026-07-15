@@ -14,7 +14,7 @@
   <name>BlockAndInstance</name>
   <type>doc:BlockAndInstance</type>
   <baseType>core:Documentation</baseType>
-  <is>Definition, Block, Block instance, and composition — the core mental model.</is>
+  <is>A guide to Block vs instance</is>
 
   <documentation>
     The closest familiar model: a Block is a declarative semantic Class; a Block Instance is an

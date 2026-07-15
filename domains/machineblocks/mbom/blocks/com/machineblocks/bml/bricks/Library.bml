@@ -22,7 +22,7 @@
   <name>Library</name>
   <type>bricks:Library</type>
   <baseType>bcore:BlockLibrary</baseType>
-  <is>Published catalog of MachineBlocks standard brick definitions.</is>
+  <is>A MachineBlocks brick catalog</is>
 
   <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
     preset blocks.</documentation>

@@ -385,12 +385,13 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
                       text (for example core:Block or core:PrimitiveEntity(btype:Integer)).
                       Generic applications on the parent are authored and resolved here.
                       Omitted only on org.blockml.bml.core.Block. Immediately after type, before is.
-<is>                — ultra-short designation: what this Block is, as a noun phrase (required;
-                      follows name / type / baseType — never first). Prefer two to six words.
-<isnot>             — optional block-level disambiguation — what this Block is not (blocks only, not members).
-<summary>           — optional short prose expansion — typically three to five sentences between is and documentation.
+<is>                — required: clear designation of the Urbild — what this Block semantically
+                      represents (noun phrase; may be several words — more than bare name/type).
+<isnot>             — required when confusion risk exists — what this Block is not (blocks only).
+<summary>           — required when <documentation> is too long — short middle tier (scope /
+                      boundaries) between is and documentation.
 <keywords>          — optional search/discovery tags — core.Keyword Entity aggregation (StructuralDefinition).
-<documentation>     — human-readable technical description of the Block (required on root blocks).
+<documentation>     — always required — technical description of the Block (root and Sub-Blocks).
 <aliases>           — optional alternative Block type names — core.Alias Entity aggregation (blocks only).
 <version>           — semantic version of this Block definition (root block only)
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
@@ -398,22 +399,37 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 
 Definition elements (`<property>`, `<aggregation>`, …) carry `<status>` only when deviating from the inherited status — see § `<status>`.
 
+### Documentation prose rules (blocks)
+
+```text
+is              — ALWAYS required. Names the Urbild clearly: what the Block semantically represents.
+                  Noun phrase; several words allowed/expected when name/type alone would be too thin
+                  (for example "A version number", not merely "A version").
+isnot           — REQUIRED when readers could confuse this Block with a nearby concept.
+                  Optional only when no realistic confusion risk exists.
+summary         — REQUIRED when documentation is too long for a quick scan.
+                  Optional only when documentation stays short enough to read without a middle tier.
+documentation   — ALWAYS required on every Block definition (root and Sub-Blocks).
+```
+
+Diagnostics: omitted `<is>` → `BML_MISSING_IS`; omitted `<documentation>` → `BML_MISSING_DOCUMENTATION`; missing `<isnot>` despite clear confusion risk → `BML_MISSING_ISNOT` (warning); missing `<summary>` despite long documentation → `BML_MISSING_SUMMARY` (warning). Warnings in V1; errors in a later release.
+
 ### Definition identity first — then `<is>`
 
-**Rule:** Every Block definition document (root, Sub-Block, embedded) starts with **definition identity** — `<name>`, `<type>`, `<baseType>` — **before** `<is>` and all prose. The type system answers *what is this definition?* (FQN); `<is>` answers *what is this thing?* in everyday words.
+**Rule:** Every Block definition document (root, Sub-Block, embedded) starts with **definition identity** — `<name>`, `<type>`, `<baseType>` — **before** `<is>` and all prose. The type system answers *what is this definition?* (FQN); `<is>` answers *what does this Block semantically represent?*
 
-`<is>` follows identity, before optional `<summary>`, `<keywords>`, `<language>`, `<documentation>`, optional `<isnot>`, and optional `<aliases>`. It is an **ultra-short noun phrase** — not a purpose clause and not a technical explanation. Prefer two to six words. Reflection: `bml:Self.is`. Motto fit: *as simple as Lego* at the label; *as powerful as SAP* in documentation and the model beneath.
+`<is>` follows identity, before conditional `<summary>`, optional `<keywords>`, optional `<language>`, required `<documentation>`, conditional `<isnot>`, and optional `<aliases>`. It must clearly describe the **Urbild** — a noun phrase that conveys semantic meaning, not purpose and not full technical detail. It may (and often should) use several words; it must say more than repeating `<name>` / `<type>` when those alone are ambiguous. Reflection: `bml:Self.is`. Motto: *as simple as Lego* at the designation; *as powerful as SAP* in documentation and the model beneath.
 
 ```text
 <name>          — short class name (optional on root; required on Sub-Blocks)
 <type>          — TypeReference identity (required on root; usually omitted on Sub-Blocks)
 <baseType>      — parent TypeReference / TypeExpression (omitted only on org.blockml.bml.core.Block)
-<is>            — designation  what this Block is (noun phrase: "A Lego brick", "An integer", "A chair")
-<summary>       — scope       optional middle tier — three to five sentences of scope and boundaries
-<keywords>      — discovery   optional search tags for RAG and colloquial lookup
-<documentation> — detail      technical description, behaviour, constraints, examples
-<isnot>         — negative    optional block-level disambiguation — what this Block is not
-<aliases>       — names       optional alternative names for this Block type (blocks only)
+<is>            — Urbild     what this Block semantically represents (clear noun phrase)
+<summary>       — scope      middle tier when documentation is long — three to five sentences
+<keywords>      — discovery  optional search tags for RAG and colloquial lookup
+<documentation> — detail     technical description — always required
+<isnot>         — negative   required when confusion risk exists — what this Block is not
+<aliases>       — names      optional alternative names for this Block type (blocks only)
 ```
 
 Examples:
@@ -427,34 +443,31 @@ Examples:
 ```
 
 ```xml
-<name>Float</name>
-<type>btype:Float</type>
-<baseType>btype:Number</baseType>
-<is>A floating-point number</is>
-<documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
+<name>Version</name>
+<type>btype:Version</type>
+<baseType>btype:Text</baseType>
+<is>A version number</is>
+<documentation>Semantic version text — MAJOR.MINOR.PATCH form. Unqualified name Version
   resolves via the type namespace.</documentation>
-<references>
-  <see file="17_type_system_bml.md">
-    PrimitiveType — float number payload rules.
-  </see>
-</references>
 ```
 
-`<is>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IS` (warning in V1, error in a later release). Primary input for editors, LLMs, and documentation navigation — after FQN identity is established.
+`<is>` is required on every Block definition (root blocks and Sub-Blocks). Omitted → `BML_MISSING_IS` (warning in V1, error in a later release). Primary input for editors, LLMs, and documentation navigation — after FQN identity is established.
 
-**WOT:** The Block itself is the Idea (stable semantic constant). `<is>` only **names** that Idea in prose — it is not the Idea. See `WOTFoundation` and `WOT_Reference` — The Idea.
+**WOT:** The Block itself is the Idea (stable semantic constant). `<is>` **names** that Idea in prose — it is not the Idea. See `WOTFoundation` and `WOT_Reference` — The Idea.
 
 ### `<summary>` — short prose expansion
 
-`<summary>` is an optional child on all **StructuralDefinition** elements — root blocks, Sub-Blocks, and members (`<property>`, `<aggregation>`, …). On Block definitions it follows `<is>` and optional `<language>`, before `<documentation>`. It expands the designation in **three to five sentences** — scope, boundaries, and orientation without full technical detail.
+`<summary>` is a child on **StructuralDefinition** elements — root blocks, Sub-Blocks, and members (`<property>`, `<aggregation>`, …). On Block definitions it follows `<is>` and optional `<language>`, before `<documentation>`. It expands the designation in **three to five sentences** — scope, boundaries, and orientation without full technical detail.
+
+**Required when `<documentation>` is too long** for a quick human or LLM scan — typically when documentation exceeds a short paragraph or mixes many concerns. Optional only when documentation alone remains easy to scan. Missing when required → `BML_MISSING_SUMMARY` (warning V1).
 
 ```text
-is            →  noun phrase: what is this?
+is            →  noun phrase: what does this Block semantically represent?
 summary       →  short paragraph: scope and boundaries (LLM context bundles, quick human scan)
-documentation →  full technical prose
+documentation →  full technical prose — always present
 ```
 
-Omitted when `<is>` and `<documentation>` suffice. Plain trimmed text body stored in BOM `summary` on the enclosing definition element. Addressable as `com.foo.Bar.summary` on blocks and `com.foo.Bar.properties.width.summary` on members.
+Plain trimmed text body stored in BOM `summary` on the enclosing definition element. Addressable as `com.foo.Bar.summary` on blocks and `com.foo.Bar.properties.width.summary` on members.
 
 Optional **`language`** attribute follows the same deviation pattern as `<documentation>` when a Summary struct is not required.
 
@@ -560,7 +573,9 @@ Natural languages are distinct from **implementation languages** (`ProgrammingLa
 
 ### `<documentation>`
 
-`<documentation>` follows definition identity (`name` / `type` / `baseType`), `<is>`, optional `<summary>`, optional `<keywords>`, and optional `<language>`, still before optional `<isnot>` and optional `<aliases>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+`<documentation>` follows definition identity (`name` / `type` / `baseType`), `<is>`, conditional `<summary>`, optional `<keywords>`, and optional `<language>`, still before conditional `<isnot>` and optional `<aliases>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`).
+
+**Always required** on every Block definition (root blocks and Sub-Blocks). Omitted → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release). When documentation grows too long for a quick scan, add `<summary>` (see above).
 
 An optional **`language`** attribute on `<documentation>` references a `org.blockml.bml.language.NaturalLanguage` when the prose is written in a language other than the effective language of the enclosing definition element. Unqualified names resolve via implicit namespace `org.blockml.bml.language.*`. Omitted → inherit effective language from Block or Library.
 
@@ -585,7 +600,9 @@ An optional **`language`** attribute on `<documentation>` references a `org.bloc
 
 ### `<isnot>` — negative space (blocks only)
 
-`<isnot>` is an optional child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It states **what this Block is not** — explicit disambiguation from easily confused concepts (for example Sub-Block vs embedded Block, contract vs baseType). Place after `<documentation>` (and optional documentation extensions) or immediately after `<documentation>` before `<since>` when extensions are absent. Definition identity (`name` / `type` / `baseType`) always remains at the top of the document.
+`<isnot>` is a child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It states **what this Block is not** — explicit disambiguation from easily confused concepts (for example Sub-Block vs embedded Block, contract vs baseType, Alias vs Keyword).
+
+**Required when confusion risk exists.** Optional only when there is no realistic nearby concept a reader might confuse with this Block. Missing when required → `BML_MISSING_ISNOT` (warning V1). Place after `<documentation>` (and optional documentation extensions) or immediately after `<documentation>` before `<since>` when extensions are absent. Definition identity (`name` / `type` / `baseType`) always remains at the top of the document.
 
 Plain trimmed text body stored in BOM `block.isnot`. Addressable as `com.foo.Bar.isnot`. Definition reflection: `bml:Self.isnot`. Prefer `relation=ContrastsWith` on `<see>` when pointing at a specific confusing type; `<isnot>` states the negation inline on the current definition.
 
@@ -639,7 +656,7 @@ Applies to all definition elements that carry documentation:
 <block>  <property>  <aggregation>  <association>  <capability>  <constraint>  <suggestion>
 ```
 
-`<summary>` and `<keywords>` apply to the same StructuralDefinition elements. `<isnot>` and `<aliases>` are block-level only.
+`<summary>` and `<keywords>` apply to the same StructuralDefinition elements. `<isnot>` (when confusion risk exists) and `<aliases>` are block-level only.
 
 and to any future definition element with `<documentation>`.
 

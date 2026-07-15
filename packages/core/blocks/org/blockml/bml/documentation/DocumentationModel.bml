@@ -17,7 +17,7 @@
   <name>DocumentationModel</name>
   <type>doc:DocumentationModel</type>
   <baseType>core:Documentation</baseType>
-  <is>Block documentation model — is, documentation, references, examples, README.</is>
+  <is>A guide to Block documentation</is>
 
   <documentation>
     Every root block definition carries a documentation model at the definition site — single
@@ -26,18 +26,21 @@
     Definition identity first (required at top of every Block document):
     name / type / baseType — FQN identity before prose (baseType omitted only on org.blockml.bml.core.Block).
 
-    is (required, after identity) — ultra-short noun phrase naming what this Block is
-      (for example &quot;A Lego brick&quot;, &quot;An integer&quot;). Distinct from WOT Idea — WOT Idea is the
-      Block itself; &lt;is&gt; names it in prose. Definition reflection: bml:Self.is.
-    summary (optional) — short prose expansion between is and documentation; inherited from
-      StructuralDefinition on blocks and members.
+    is (always required, after identity) — clear designation of the Urbild: what this Block
+      semantically represents (noun phrase; several words when name/type alone is too thin).
+      Distinct from WOT Idea — WOT Idea is the Block itself; &lt;is&gt; names it in prose.
+      Definition reflection: bml:Self.is. Omitted → BML_MISSING_IS.
+    summary (required when documentation is too long) — short prose expansion between is and
+      documentation; inherited from StructuralDefinition on blocks and members. Missing when
+      required → BML_MISSING_SUMMARY.
     keywords aggregation (optional) — core.Keyword[]; domain FixedKeyword catalogue blocks, meta.FreeTextKeyword; shorthand → FreeTextKeyword only.
     language (optional) — natural language for documentation prose; inherits Library → Block
       default (English on org.blockml.bml.core.Block).
-    documentation (required on root blocks) — technical description of the Block definition itself;
-      optional language attribute when prose deviates from effective block language.
-    isnot (optional, blocks only) — what this Block is not; block-level disambiguation. Reflection:
-      bml:Self.isnot.
+    documentation (always required on every Block definition) — technical description of the Block
+      definition itself; optional language attribute when prose deviates from effective block
+      language. Omitted → BML_MISSING_DOCUMENTATION.
+    isnot (required when confusion risk exists, blocks only) — what this Block is not; block-level
+      disambiguation. Reflection: bml:Self.isnot. Missing when required → BML_MISSING_ISNOT.
     aliases aggregation (optional, blocks only) — core.Alias[]; domain FixedAlias catalogue blocks, meta.FreeTextAlias; shorthand → FreeTextAlias only.
     Member elements carry their own summary, keywords, and documentation for individual Properties, Aggregations, etc.
 

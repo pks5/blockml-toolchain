@@ -16,7 +16,7 @@
   <name>MinItems</name>
   <type>constraint:MinItems</type>
   <baseType>constraint:ValueConstraint</baseType>
-  <is>Minimum number of elements in a collection property.</is>
+  <is>A lower bound on item count</is>
 
   <documentation>T binds to the property collection type (e.g. String[]). The value property is Integer — the minimum item count.</documentation>
   <genericTypes>

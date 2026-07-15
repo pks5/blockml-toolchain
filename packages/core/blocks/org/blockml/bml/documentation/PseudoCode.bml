@@ -14,7 +14,7 @@
   <name>PseudoCode</name>
   <type>doc:PseudoCode</type>
   <baseType>core:Documentation</baseType>
-  <is>Why PseudoCode exists — semantics should be described there whenever possible.</is>
+  <is>A guide to PseudoCode semantics</is>
 
   <documentation>
     PseudoCode (org.blockml.bml.language.PseudoCode) is a ProgrammingLanguage for free-form

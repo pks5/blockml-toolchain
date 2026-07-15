@@ -15,7 +15,7 @@
   xmlns:bml="http://blockml.org/schema/bml">
   <name>Block</name>
   <type>core:Block</type>
-  <is>The universal semantic unit of BlockML — every definable concept in the grammar.</is>
+  <is>A semantic building block</is>
 
   <language>
     <English />
@@ -41,14 +41,16 @@
 
     Documentation model (on every root block definition):
     • Definition identity first — &lt;name&gt;, &lt;type&gt;, &lt;baseType&gt; (baseType omitted only here)
-    • &lt;is&gt; — required after identity; ultra-short noun phrase naming what this Block is
+    • &lt;is&gt; — always required after identity; clear Urbild designation (what the Block semantically represents)
+    • &lt;summary&gt; — required when documentation is too long for a quick scan
     • &lt;language&gt; — optional; natural language for documentation prose (inherits from Library,
       then org.blockml.bml.core.Block default English)
-    • &lt;documentation&gt; — required after is; technical description; optional language
+    • &lt;documentation&gt; — always required; technical description; optional language
       attribute when prose deviates from effective block language
+    • &lt;isnot&gt; — required when confusion risk exists
     • Optional extensions: &lt;since&gt;, &lt;changelog&gt;, &lt;examples&gt;, &lt;references&gt;
-    Omitted is or documentation on root blocks → BML_MISSING_IS / BML_MISSING_DOCUMENTATION
-    (warning V1).
+    Omitted is or documentation → BML_MISSING_IS / BML_MISSING_DOCUMENTATION; missing isnot or
+    summary when required → BML_MISSING_ISNOT / BML_MISSING_SUMMARY (warning V1).
 
     Serialization:
     • bml:xml ${ bml:Self } — composable instances render under their declared type tag

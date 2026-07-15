@@ -13,7 +13,7 @@
   <name>Introduction</name>
   <type>doc:Introduction</type>
   <baseType>core:Documentation</baseType>
-  <is>Short introduction to BlockML — goals and core idea.</is>
+  <is>A short introduction to BlockML</is>
 
   <documentation>
     BlockML is a universal declarative language for describing parametric, composable semantic

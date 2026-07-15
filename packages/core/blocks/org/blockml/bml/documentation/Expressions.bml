@@ -15,7 +15,7 @@
   <name>Expressions</name>
   <type>doc:Expressions</type>
   <baseType>core:Documentation</baseType>
-  <is>How ${...} works — property access, bean calls, bindings, and FunctionMapping.</is>
+  <is>A guide to BlockML expressions</is>
 
   <documentation>
     The BML Expression Language is extended JSON inside ${ } delimiters. It appears wherever

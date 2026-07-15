@@ -13,7 +13,7 @@
   <name>DeepDive</name>
   <type>relation:DeepDive</type>
   <baseType>core:Relation</baseType>
-  <is>Target provides extended background — optional depth beyond the current documentation.</is>
+  <is>An extended-background Relation</is>
 
   <documentation>Use for file= or url= targets with long-form prose the reader may skip on first
     pass. Distinct from Requires (mandatory) and AuthoringGuide (procedural). Typical for architecture

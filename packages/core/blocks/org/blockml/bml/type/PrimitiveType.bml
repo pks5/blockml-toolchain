@@ -13,7 +13,7 @@
   <name>PrimitiveType</name>
   <type>btype:PrimitiveType</type>
   <baseType>core:ValueType</baseType>
-  <is>Branch for atomic scalar value types — pure type semantics, no stored data.</is>
+  <is>An atomic scalar ValueType</is>
 
   <documentation>Abstract branch for built-in scalar ValueTypes. PrimitiveTypes describe semantics
     only — they never store concrete values. All values are stored exclusively in Properties.

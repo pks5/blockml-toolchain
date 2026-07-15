@@ -4,7 +4,7 @@
   <name>FilePath</name>
   <type>btype:FilePath</type>
   <baseType>btype:Text</baseType>
-  <is>File system path text.</is>
+  <is>A filesystem path string</is>
 
   <documentation>Textual primitive subtype for file path values. Unqualified name FilePath resolves
     to org.blockml.bml.type.FilePath.</documentation>

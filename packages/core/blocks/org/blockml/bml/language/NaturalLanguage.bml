@@ -13,7 +13,7 @@
   <name>NaturalLanguage</name>
   <type>lang:NaturalLanguage</type>
   <baseType>core:Language</baseType>
-  <is>Natural human language for documentation prose and example titles.</is>
+  <is>A human natural language</is>
 
   <documentation>Abstract branch for natural languages used in documentation text, example
     titles, and natural-language capability implementations. All locale-specific language blocks

@@ -10,7 +10,7 @@
   xmlns:test="com.blockml.test.constraints">
   <type>test:BlockConstraintOnRoot</type>
   <baseType>core:Block</baseType>
-  <is>Constraint test — RequiresMember on block</is>
+  <is>A constraint test fixture</is>
   <version>1.0.0</version>
 
   <constraints>

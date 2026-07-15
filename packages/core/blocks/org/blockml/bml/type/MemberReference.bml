@@ -13,7 +13,7 @@
   <name>MemberReference</name>
   <type>btype:MemberReference</type>
   <baseType>btype:TypeReference(B)</baseType>
-  <is>A path naming a member definition owned by a Block.</is>
+  <is>A path to a Block member</is>
 
   <documentation>Abstract ValueType for references to Block member definitions — properties,
     aggregations, associations, and capabilities. Extends TypeReference(B); adds D to constrain

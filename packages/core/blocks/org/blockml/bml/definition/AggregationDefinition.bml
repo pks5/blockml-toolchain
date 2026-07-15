@@ -16,7 +16,7 @@
   <name>AggregationDefinition</name>
   <type>def:AggregationDefinition</type>
   <baseType>def:MemberDefinition</baseType>
-  <is>An owned collection member — Block instances, including TypeReferenceEntity type refs.</is>
+  <is>An owned collection member</is>
 
   <documentation>Describes a Block member representing an owned collection. Children are always
     Block instances; the aggregation type attribute selects the payload type:
@@ -93,7 +93,7 @@
     <block>
       <name>Composition</name>
       <baseType>core:Entity</baseType>
-      <is>Composition template nested inside an aggregation member on a Block definition.</is>
+      <is>A nested composition template</is>
 
       <documentation>Describes the composition element on an aggregation member declaration.
         Rendered as composition with optional bml:with directives and a tree of composition child

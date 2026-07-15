@@ -4,7 +4,7 @@
   <name>URL</name>
   <type>btype:URL</type>
   <baseType>btype:Text</baseType>
-  <is>Uniform Resource Locator — web address text.</is>
+  <is>A web address string</is>
 
   <documentation>Textual primitive subtype for URL values. Unqualified name URL resolves to
     org.blockml.bml.type.URL.</documentation>

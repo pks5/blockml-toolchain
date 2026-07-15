@@ -16,7 +16,7 @@
   <name>GenericTypeDefinition</name>
   <type>def:GenericTypeDefinition</type>
   <baseType>core:Definition</baseType>
-  <is>A type parameter declared on a Block definition (e.g. T on Box of T).</is>
+  <is>A generic type parameter</is>
 
   <documentation>Declares one generic type parameter on a root Block definition. Rendered inside
     the genericTypes container as an element whose local name is the parameter identifier (root

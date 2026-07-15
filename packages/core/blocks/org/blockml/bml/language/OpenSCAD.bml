@@ -10,7 +10,7 @@
   <name>OpenSCAD</name>
   <type>lang:OpenSCAD</type>
   <baseType>lang:ProgrammingLanguage</baseType>
-  <is>OpenSCAD as an implementation language for capabilities.</is>
+  <is>The OpenSCAD programming language</is>
 
   <documentation>ProgrammingLanguage for OpenSCAD function implementations on Capabilities.
     Emitted by the MachineBlocks SCAD renderer with FQN-prefixed function names.</documentation>

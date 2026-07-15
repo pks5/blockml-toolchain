@@ -15,7 +15,7 @@
   <name>MemberDefinition</name>
   <type>def:MemberDefinition</type>
   <baseType>def:ConstrainableDefinition</baseType>
-  <is>Abstract base for a declared member on a Block definition.</is>
+  <is>A declared Block member</is>
 
   <documentation>Abstract base type for Block member declarations — properties, aggregations,
     associations, and capabilities. Rendered as a child element inside the corresponding member

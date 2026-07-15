@@ -10,7 +10,7 @@
   <name>Russian</name>
   <type>lang:Russian</type>
   <baseType>lang:NaturalLanguage</baseType>
-  <is>Russian prose — documentation and natural-language capability implementations.</is>
+  <is>The Russian natural language</is>
 
   <documentation>Natural language for documentation prose, example titles, and Russian
     natural-language capability implementations.</documentation>

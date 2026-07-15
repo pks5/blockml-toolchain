@@ -16,7 +16,7 @@
   <name>RootBlockDefinition</name>
   <type>def:RootBlockDefinition</type>
   <baseType>def:SubBlockDefinition</baseType>
-  <is>The structural shape of root Block definition documents in BlockML.</is>
+  <is>The shape of a root Block document</is>
 
   <documentation>Meta-model type for root block documents. Extends
     org.blockml.bml.definition.SubBlockDefinition (and thus org.blockml.bml.definition.BlockDefinition)

@@ -13,7 +13,7 @@
   <name>WOTFoundation</name>
   <type>doc:WOTFoundation</type>
   <baseType>core:Documentation</baseType>
-  <is>Optional philosophical foundation — Idea, Manifestation, Grammar, World.</is>
+  <is>A guide to the WOT foundation</is>
 
   <documentation>
     The Web of Things (WOT) provides the philosophical foundation for BlockML. Optional reading

@@ -19,7 +19,7 @@
   <name>Math</name>
   <type>service:Math</type>
   <baseType>core:Entity</baseType>
-  <is>Built-in numeric utilities callable as #math in expressions.</is>
+  <is>A numeric expression service</is>
 
   <documentation>Built-in math service. Expression prefix #math.* — min, max, abs, floor,
     round, and related numeric utilities.</documentation>

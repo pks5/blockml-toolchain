@@ -18,7 +18,7 @@
   <name>BlockDefinition</name>
   <type>def:BlockDefinition</type>
   <baseType>def:ConstrainableDefinition</baseType>
-  <is>The shared structural shape of Block definition documents in BlockML.</is>
+  <is>The shape of a Block document</is>
 
   <documentation>Abstract meta-model base for all Block definition documents — root blocks,
     Sub-Blocks, and embedded blocks. Semantically a Class: declarative type shape without instance
@@ -124,22 +124,25 @@
         before is.</documentation>
     </baseType>
     <is type="Text" bml:xml="element">
-      <documentation>Ultra-short designation — what this Block is, as a noun phrase (for example
-        &quot;A Lego brick&quot;, &quot;An integer&quot;, &quot;A chair&quot;). Required on every
-        Block definition (root blocks and Sub-Blocks). Prefer two to six words; no purpose clause
-        and no technical explanation — use summary and documentation for those. Follows definition
-        identity (name / type / baseType) — never before them. Stored in BOM block.is. Addressable as
-        com.foo.Bar.is. Definition reflection: bml:Self.is. Distinct from the WOT Idea concept —
-        WOT Idea is the Block itself; &lt;is&gt; names it in prose for humans and LLMs.</documentation>
+      <documentation>Required designation of the Urbild — what this Block semantically represents.
+        Noun phrase that clearly conveys meaning; may be several words and must say more than bare
+        name or type when those alone are ambiguous (for example &quot;A version number&quot;, not merely
+        &quot;A version&quot;). Not a purpose clause and not full technical detail — use summary and
+        documentation for those. Required on every Block definition (root blocks and Sub-Blocks).
+        Follows definition identity (name / type / baseType) — never before them. Stored in BOM
+        block.is. Addressable as com.foo.Bar.is. Definition reflection: bml:Self.is. Distinct from
+        the WOT Idea concept — WOT Idea is the Block itself; &lt;is&gt; names it in prose for humans
+        and LLMs. Omitted → BML_MISSING_IS.</documentation>
     </is>
     <isnot type="Text" bml:xml="element">
       <documentation>What this Block is not — explicit disambiguation from easily confused concepts
-        (for example Sub-Block vs embedded Block, contract vs baseType). Optional; use when is and
-        summary alone do not prevent misinterpretation. Block-level only — not declared on member
-        definitions. Plain trimmed text body stored in BOM block.isnot. Addressable as
-        com.foo.Bar.isnot. Definition reflection: bml:Self.isnot. Prefer relation=ContrastsWith on
-        references when pointing at a specific confusing type; isnot states the negation inline on
-        the current definition.</documentation>
+        (for example Sub-Block vs embedded Block, contract vs baseType, Alias vs Keyword). Required
+        when confusion risk exists; optional only when no realistic nearby concept invites
+        misreading. Block-level only — not declared on member definitions. Plain trimmed text body
+        stored in BOM block.isnot. Addressable as com.foo.Bar.isnot. Definition reflection:
+        bml:Self.isnot. Prefer relation=ContrastsWith on references when pointing at a specific
+        confusing type; isnot states the negation inline on the current definition. Missing when
+        required → BML_MISSING_ISNOT.</documentation>
     </isnot>
     <version type="Version" bml:xml="element">
       <documentation>Semantic version of this Block definition. Required on root blocks.

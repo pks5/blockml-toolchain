@@ -10,7 +10,7 @@
   <name>French</name>
   <type>lang:French</type>
   <baseType>lang:NaturalLanguage</baseType>
-  <is>French prose — documentation and natural-language capability implementations.</is>
+  <is>The French natural language</is>
 
   <documentation>Natural language for documentation prose, example titles, and French
     natural-language capability implementations.</documentation>

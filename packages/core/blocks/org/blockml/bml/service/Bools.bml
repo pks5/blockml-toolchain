@@ -19,7 +19,7 @@
   <name>Bools</name>
   <type>service:Bools</type>
   <baseType>core:Entity</baseType>
-  <is>Built-in boolean utilities callable as #bools in expressions.</is>
+  <is>A boolean expression service</is>
 
   <documentation>Built-in booleans service. Expression prefix #bools.* — logical and boolean
     conversion utilities.</documentation>

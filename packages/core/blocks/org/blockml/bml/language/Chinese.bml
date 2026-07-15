@@ -10,7 +10,7 @@
   <name>Chinese</name>
   <type>lang:Chinese</type>
   <baseType>lang:NaturalLanguage</baseType>
-  <is>Chinese prose — documentation and natural-language capability implementations.</is>
+  <is>The Chinese natural language</is>
 
   <documentation>Natural language for documentation prose, example titles, and Chinese
     natural-language capability implementations.</documentation>

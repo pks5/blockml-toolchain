@@ -21,9 +21,7 @@
   <name>StructuralDefinition</name>
   <type>def:StructuralDefinition</type>
   <baseType>core:Definition</baseType>
-  <is>
-    Represents a reusable BlockML structural definition that documents another language element.
-  </is>
+  <is>A reusable structural definition</is>
 
   <documentation>
     Abstract base type for BlockML structural definition elements. It provides the common
@@ -49,17 +47,20 @@
       <documentation>The status of the definition.</documentation>
     </status>
     <summary type="Text" bml:xml="element">
-      <documentation>Optional short prose expansion of semantic meaning — typically three to five
-        sentences between is and full documentation. Primary input for LLM context bundles and
-        quick human orientation; is answers what is this as a noun phrase, summary adds scope and
-        boundaries without full technical detail. Omitted when is and documentation suffice.
+      <documentation>Short prose expansion of semantic meaning — typically three to five sentences
+        between is and full documentation. Primary input for LLM context bundles and quick human
+        orientation; is names the Urbild, summary adds scope and boundaries without full technical
+        detail. Required when documentation is too long for a quick scan; optional only when
+        documentation alone remains easy to read. Missing when required → BML_MISSING_SUMMARY.
         Optional language deviation uses the same pattern as documentation when a Summary struct is
         not required — plain trimmed text body stored in BOM summary on the enclosing definition
         element. Addressable on blocks as com.foo.Bar.summary and on members as
         com.foo.Bar.properties.width.summary.</documentation>
     </summary>
     <documentation type="Documentation" bml:xml="element">
-      <documentation>Technical documentation prose for this definition element.</documentation>
+      <documentation>Technical documentation prose for this definition element. Always required on
+        every Block definition (root and Sub-Blocks). Omitted → BML_MISSING_DOCUMENTATION. When the
+        prose grows too long for a quick scan, authors must also supply summary.</documentation>
     </documentation>
     <abstract type="Boolean" bml:xml="element">
       <value>false</value>
@@ -134,7 +135,7 @@
     <block>
       <name>Documentation</name>
       <baseType>type:StructType</baseType>
-      <is>Technical documentation prose attached to a definition element.</is>
+      <is>A documentation prose field</is>
 
       <documentation>Describes the documentation element on any org.blockml.bml.definition.StructuralDefinition (block,
         property, aggregation, …). Rendered as a documentation element with optional language attribute
@@ -162,7 +163,7 @@
     <block>
       <name>Change</name>
       <baseType>core:Entity</baseType>
-      <is>One version history entry for a definition element.</is>
+      <is>A single changelog entry</is>
 
       <documentation>Describes a single changelog entry in a changelog container on any definition
         element (block, property, aggregation, …). Rendered as a change element with a required
@@ -195,7 +196,7 @@
     <block>
       <name>Example</name>
       <baseType>core:Entity</baseType>
-      <is>A titled usage example attached to a definition element.</is>
+      <is>A titled usage example</is>
 
       <documentation>Describes one usage example in an examples container on any definition element
         (block, property, aggregation, …). Rendered as an example element with a required title
@@ -231,7 +232,7 @@
     <block>
       <name>Reference</name>
       <baseType>core:Entity</baseType>
-      <is>A cross-reference to a related Block, definition element, or documentation source.</is>
+      <is>A related-item cross-reference</is>
 
       <documentation>Records a link from documentation metadata to another Block, definition element,
         repository markdown file, or external URL. Rendered as a see element inside the references

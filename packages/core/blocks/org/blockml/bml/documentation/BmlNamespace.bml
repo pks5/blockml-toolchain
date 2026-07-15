@@ -13,7 +13,7 @@
   <name>BmlNamespace</name>
   <type>doc:BmlNamespace</type>
   <baseType>core:Documentation</baseType>
-  <is>Mandatory domain.bml namespace for every BML definition.</is>
+  <is>A guide to the BML namespace</is>
 
   <documentation>
     Every BML definition — Blocks, Libraries, Types, Languages, Services, Capabilities, and all

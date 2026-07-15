@@ -12,7 +12,7 @@
   <name>Constraint</name>
   <type>core:Constraint</type>
   <baseType>core:Block</baseType>
-  <is>Universal root for semantic restrictions on Blocks and their members.</is>
+  <is>A semantic validation rule</is>
 
   <documentation>Abstract universal root for all constraint types. Specialized by
     org.blockml.bml.constraint.ValueConstraint (property value rules) and

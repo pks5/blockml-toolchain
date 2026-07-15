@@ -14,7 +14,7 @@
   <name>RequiresMember</name>
   <type>constraint:RequiresMember</type>
   <baseType>constraint:BlockConstraint</baseType>
-  <is>Requires a named member on the enclosing Block definition.</is>
+  <is>A rule that a member must exist</is>
 
   <documentation>Block-level structural constraint. T binds to the effective block definition type.
     When validation is set, the validator requires a member with the given local name in the

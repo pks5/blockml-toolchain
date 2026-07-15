@@ -16,7 +16,7 @@
   <name>Pattern</name>
   <type>constraint:Pattern</type>
   <baseType>constraint:ValueConstraint</baseType>
-  <is>Regular-expression pattern for a string property value.</is>
+  <is>A text pattern rule</is>
 
   <documentation>T binds to org.blockml.bml.type.Text. The value property holds the regex pattern.</documentation>
   <genericTypes>

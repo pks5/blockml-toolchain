@@ -12,7 +12,7 @@
   <name>Keyword</name>
   <type>core:Keyword</type>
   <baseType>core:Entity</baseType>
-  <is>Abstract branch for search and discovery tags on definition elements.</is>
+  <is>A search and discovery tag</is>
 
   <documentation>Abstract branch marker for keyword Entity instances in a keywords aggregation on
     org.blockml.bml.definition.StructuralDefinition elements. Follows Everything-is-a-Block —

@@ -15,7 +15,7 @@
   <name>AssociationDefinition</name>
   <type>def:AssociationDefinition</type>
   <baseType>def:MemberDefinition</baseType>
-  <is>A loose reference member without composition ownership.</is>
+  <is>A loose reference member</is>
 
   <documentation>Describes a Block member for non-owning references to other Blocks — semantically
     loose links without lifecycle ownership. Rendered as a child element inside the associations

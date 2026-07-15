@@ -5,7 +5,7 @@
   <name>Integer</name>
   <type>btype:Integer</type>
   <baseType>btype:Number</baseType>
-  <is>Primitive BlockML property type capable of holding a whole number.</is>
+  <is>A whole number</is>
 
   <documentation>BOM Core primitive ValueType for whole numbers. Unqualified name Integer resolves
     to org.blockml.bml.type.Integer. Extends org.blockml.bml.type.Number. Payload values are stored on

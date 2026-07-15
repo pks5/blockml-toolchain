@@ -16,7 +16,7 @@
   <name>SubBlockDefinition</name>
   <type>def:SubBlockDefinition</type>
   <baseType>def:BlockDefinition</baseType>
-  <is>The structural shape of nested Sub-Block definition documents in BlockML.</is>
+  <is>The shape of a nested Sub-Block</is>
 
   <documentation>Meta-model type for nested Sub-Block documents within a BomDocument. Extends
     org.blockml.bml.definition.BlockDefinition with the definition property (default

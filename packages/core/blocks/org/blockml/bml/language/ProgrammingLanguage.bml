@@ -13,7 +13,7 @@
   <name>ProgrammingLanguage</name>
   <type>lang:ProgrammingLanguage</type>
   <baseType>core:Language</baseType>
-  <is>A formal programming language for capability implementations.</is>
+  <is>A formal programming language</is>
 
   <documentation>Abstract branch for programming languages — TypeScript, OpenSCAD, PseudoCode, and
     other languages with defined or interpretable syntax.</documentation>

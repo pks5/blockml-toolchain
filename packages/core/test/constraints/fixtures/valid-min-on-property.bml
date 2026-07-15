@@ -11,7 +11,7 @@
   xmlns:test="com.blockml.test.constraints">
   <type>test:MinOnProperty</type>
   <baseType>core:Block</baseType>
-  <is>Constraint test — Min on Integer property</is>
+  <is>A constraint test fixture</is>
   <version>1.0.0</version>
 
   <properties>

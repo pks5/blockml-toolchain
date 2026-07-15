@@ -463,9 +463,10 @@ A Block is the fundamental unit of BOM Core. It is a parametric, typed, reusable
 ### Metadata
 
 ```text
-is                 — ultra-short designation: what this Block is (noun phrase); reflection bml:Self.is
-isnot              — optional; what this Block is not; reflection bml:Self.isnot
-documentation      — human-readable technical description
+is                 — required Urbild designation: what this Block semantically represents; reflection bml:Self.is
+isnot              — required when confusion risk exists; reflection bml:Self.isnot
+summary            — required when documentation is too long for a quick scan
+documentation      — always required; human-readable technical description
 since              — optional; semantic version from which this Block is available
 changelog          — optional; version history (oldest first)
 examples           — optional; usage examples (title + CDATA body)

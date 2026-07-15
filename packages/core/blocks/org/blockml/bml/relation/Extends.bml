@@ -13,7 +13,7 @@
   <name>Extends</name>
   <type>relation:Extends</type>
   <baseType>core:Relation</baseType>
-  <is>Target type extends, specializes, or is a baseType ancestor of the current definition.</is>
+  <is>An inheritance Relation</is>
 
   <documentation>Use when the referenced Block is in the baseType chain or represents a branch the
     current type belongs to. Typical block= targets only — not for file or url references.</documentation>

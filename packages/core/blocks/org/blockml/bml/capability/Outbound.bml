@@ -13,7 +13,7 @@
   <name>Outbound</name>
   <type>cap:Outbound</type>
   <baseType>core:Capability</baseType>
-  <is>Representation of an Outbound capability.</is>
+  <is>An outbound behaviour endpoint</is>
 
   <documentation>Outbound capability.</documentation>
   <properties>

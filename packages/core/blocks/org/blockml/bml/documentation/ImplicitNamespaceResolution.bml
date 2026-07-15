@@ -13,7 +13,7 @@
   <name>ImplicitNamespaceResolution</name>
   <type>doc:ImplicitNamespaceResolution</type>
   <baseType>core:Documentation</baseType>
-  <is>Context-bound implicit namespace for unqualified block references.</is>
+  <is>A guide to implicit namespaces</is>
 
   <documentation>
     Unqualified block references are supported only at specialized, semantically unambiguous

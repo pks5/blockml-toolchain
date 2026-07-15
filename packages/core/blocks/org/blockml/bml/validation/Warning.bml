@@ -13,7 +13,7 @@
   <name>Warning</name>
   <type>validation:Warning</type>
   <baseType>core:Validation</baseType>
-  <is>Constraint violation emits a warning; compilation succeeds.</is>
+  <is>A warning Validation severity</is>
 
   <documentation>When a constraint with validation="Warning" is violated, the BlockML
     validator emits BML_CONSTRAINT_WARNING. Compilation continues.</documentation>

@@ -16,7 +16,7 @@
   <name>README</name>
   <type>blockml:README</type>
   <baseType>core:ReadMe</baseType>
-  <is>README block for the BlockML core library — reading entry point for humans and LLMs.</is>
+  <is>A library reading entry point</is>
 
   <documentation>
     README block for the BlockML core library. Start with references marked relation=ReadFirst —

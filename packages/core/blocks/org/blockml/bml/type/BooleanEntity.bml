@@ -5,7 +5,7 @@
   <name>BooleanEntity</name>
   <type>btype:BooleanEntity</type>
   <baseType>core:PrimitiveEntity(btype:Boolean)</baseType>
-  <is>Boolean primitive value as an Entity in composition or aggregation.</is>
+  <is>A true-or-false value as an Entity</is>
 
   <documentation>Concrete Entity wrapping a Boolean primitive. Binds T = Boolean on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>

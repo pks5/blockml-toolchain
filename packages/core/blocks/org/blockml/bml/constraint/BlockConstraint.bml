@@ -13,7 +13,7 @@
   <name>BlockConstraint</name>
   <type>constraint:BlockConstraint</type>
   <baseType>constraint:StructuralConstraint</baseType>
-  <is>Constraint that validates a Block definition as a whole.</is>
+  <is>A rule for a whole Block</is>
 
   <documentation>Abstract branch for Block-level structural constraints. May express cross-member
     rules (RequiresMember, MutuallyExclusive, …). Generic T binds to the effective

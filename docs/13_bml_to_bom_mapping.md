@@ -320,8 +320,10 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 `<subBlocks>` and `<embeddedBlocks>` (Inline Library) map to `block.subBlocks[]` and `block.embeddedBlocks[]` respectively — each child `<block>` parsed recursively as a nested `BlockDefinition`. Sub-Block FQN is derived from the immediate enclosing block as `resolve(parent.type) + "." + name`; embedded block FQN is `resolve(type)` (the `<type>` element value). Embedded blocks are parsed as full root-block-shaped trees including nested `subBlocks[]` and `embeddedBlocks[]`. See `12_bom_object_model.md`.
 
 ```text
-Omitted <is> on root block            → BML_MISSING_IS (warning V1)
-Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1)
+Omitted <is> on Block definition         → BML_MISSING_IS (warning V1)
+Omitted <documentation> on Block definition → BML_MISSING_DOCUMENTATION (warning V1)
+Missing <isnot> when confusion risk      → BML_MISSING_ISNOT (warning V1)
+Missing <summary> when documentation long → BML_MISSING_SUMMARY (warning V1)
 Omitted <since> / <changelog> / <examples> / <references> → undefined (optional)
 Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <changelog> entries out of version order → BML_CHANGELOG_VERSION_ORDER (warning V1)

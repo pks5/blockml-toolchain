@@ -16,7 +16,7 @@
   <name>EverythingIsABlock</name>
   <type>doc:EverythingIsABlock</type>
   <baseType>core:Documentation</baseType>
-  <is>The most important concept — everything in BlockML is a Block.</is>
+  <is>A guide to Everything-is-a-Block</is>
 
   <documentation>
     BlockML describes everything that belongs to a World's grammar as Blocks. There is one root

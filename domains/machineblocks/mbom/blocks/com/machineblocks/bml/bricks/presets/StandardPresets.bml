@@ -22,7 +22,7 @@
   <name>StandardPresets</name>
   <type>bricks:StandardPresets</type>
   <baseType>core:Block</baseType>
-  <is>Named size and color shortcuts for the Standard brick.</is>
+  <is>A named brick preset catalog</is>
 
   <documentation>Named property presets for the MachineBlocks Standard brick — sizes, colors, and
     composite combinations for Customizer and basePresets references.</documentation>

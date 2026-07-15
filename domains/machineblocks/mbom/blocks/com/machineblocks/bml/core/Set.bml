@@ -12,7 +12,7 @@
   <name>Set</name>
   <type>core:Set</type>
   <baseType>core:CompositeBlock</baseType>
-  <is>A LEGO-style build — palette, placed parts, and assembly steps.</is>
+  <is>A LEGO-style build set</is>
 
   <documentation>Abstract composable Block for LEGO-style Sets — block palette, placed instances,
     and assembly order. Top-level catalog unit in MachineBlocks.</documentation>

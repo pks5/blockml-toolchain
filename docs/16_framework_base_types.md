@@ -28,8 +28,8 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **09_mbom_properties.yml** | **Render mapping only** (serializer, scad_name, customizer) — not type SSOT |
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
 | **Block identity** | Every `<block>` starts with definition identity — `<name>`, `<type>`, `<baseType>` (before `<is>`) |
-| **Block is** | Every `<block>` carries `<is>` after identity — ultra-short noun phrase naming what this Block is |
-| **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description; optional `<since>`, `<changelog>`, `<examples>`, `<references>` follow |
+| **Block is** | Every `<block>` carries required `<is>` after identity — clear Urbild designation of what this Block semantically represents |
+| **Block documentation** | Every Block definition carries required `<documentation>`; `<summary>` when documentation is long; `<isnot>` when confusion risk exists |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
 | **ValueType branch** | `org.blockml.bml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; four kinds: PrimitiveType · StructType · EnumType · ConstantType |
 | **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` — see `00_bom_core.md` |

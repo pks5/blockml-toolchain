@@ -10,7 +10,7 @@
   <name>English</name>
   <type>lang:English</type>
   <baseType>lang:NaturalLanguage</baseType>
-  <is>English prose — documentation and natural-language capability implementations.</is>
+  <is>The English natural language</is>
 
   <documentation>Natural language for documentation prose, example titles, and English
     natural-language capability implementations.</documentation>

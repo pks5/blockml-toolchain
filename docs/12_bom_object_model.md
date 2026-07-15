@@ -159,10 +159,10 @@ interface BlockDefinition {
   /** Semantic version of this definition. Required. */
   version: string
 
-  /** Ultra-short designation — what this Block is (noun phrase). Required. Reflection: bml:Self.is */
+  /** Required Urbild designation — what this Block semantically represents. Reflection: bml:Self.is */
   is?: string
 
-  /** Optional short prose expansion — typically three to five sentences between is and documentation. */
+  /** Short prose expansion when documentation is too long. Required in that case. */
   summary?: string
 
   /** Optional search/discovery tags — core.Keyword Entity instances (KeywordEntry[]). */
@@ -174,13 +174,13 @@ interface BlockDefinition {
   /** Resolved FQN projection of language.value — retained for addressability and tooling. */
   languageFqn?: string
 
-  /** Human-readable technical description of what this Block is. Required on root definitions. */
+  /** Human-readable technical description of what this Block is. Always required on Block definitions. */
   documentation?: string
 
   /** NaturalLanguage FQN when documentation prose deviates from effective block language. Omitted = inherit. */
   documentationLanguageFqn?: string
 
-  /** What this Block is not — block-level disambiguation from similar concepts. Optional. Reflection: bml:Self.isnot */
+  /** What this Block is not — required when confusion risk exists. Reflection: bml:Self.isnot */
   isnot?: string
 
   /** Alternative names for this Block type — core.Alias Entity instances (AliasEntry[]). Block-level only. */
@@ -1432,8 +1432,10 @@ BML_CONSTRAINT_UNKNOWN        — constraint type not a Constraint sub-type
 BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with bound target
 BML_CONSTRAINT_TARGET_MISMATCH — constraint branch incompatible with embedding context
 BML_CONSTRAINT_VIOLATION      — constraint rule fails with validation Error
-BML_MISSING_IS              — root <block> lacks <is> (warning V1)
-BML_MISSING_DOCUMENTATION     — root <block> lacks <documentation> (warning V1)
+BML_MISSING_IS              — Block definition lacks <is> (warning V1)
+BML_MISSING_DOCUMENTATION     — Block definition lacks <documentation> (warning V1)
+BML_MISSING_ISNOT             — confusion risk but <isnot> omitted (warning V1)
+BML_MISSING_SUMMARY           — documentation too long but <summary> omitted (warning V1)
 BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version
 BML_CHANGELOG_VERSION_ORDER   — <changelog> entries not ordered oldest-first (warning V1)
 BML_EXAMPLE_MISSING_TITLE     — <example> lacks required title attribute

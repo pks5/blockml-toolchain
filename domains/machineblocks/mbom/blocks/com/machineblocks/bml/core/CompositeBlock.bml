@@ -15,7 +15,7 @@
   <name>CompositeBlock</name>
   <type>core:CompositeBlock</type>
   <baseType>core:Block</baseType>
-  <is>MachineBlocks object composed of child block instances.</is>
+  <is>A Block made of child Blocks</is>
 
   <documentation>Composable MachineBlocks Block with default _parts aggregation. _parts holds
     placed block instances (direction, offset, appliedPresets) or child blocks for SCAD

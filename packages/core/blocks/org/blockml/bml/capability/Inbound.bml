@@ -13,7 +13,7 @@
   <name>Inbound</name>
   <type>cap:Inbound</type>
   <baseType>core:Capability</baseType>
-  <is>Representation of an Inbound capability.</is>
+  <is>An inbound behaviour endpoint</is>
 
   <documentation>Inbound capability.</documentation>
   <properties>

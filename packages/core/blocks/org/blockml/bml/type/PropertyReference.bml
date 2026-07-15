@@ -11,7 +11,7 @@
   <name>PropertyReference</name>
   <type>btype:PropertyReference</type>
   <baseType>btype:MemberReference(B, def:PropertyDefinition)</baseType>
-  <is>A path naming a PropertyDefinition on a Block.</is>
+  <is>A path to a Property member</is>
 
   <documentation>Concrete MemberReference binding D = PropertyDefinition. Value is a canonical
     property path (com.foo.Bar.properties.width) or a local property name when paired with a Block

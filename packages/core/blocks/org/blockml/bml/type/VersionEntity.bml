@@ -5,7 +5,7 @@
   <name>VersionEntity</name>
   <type>btype:VersionEntity</type>
   <baseType>core:PrimitiveEntity(btype:Version)</baseType>
-  <is>Version primitive value as an Entity in composition or aggregation.</is>
+  <is>A version number as an Entity</is>
 
   <documentation>Concrete Entity wrapping a Version primitive. Binds T = Version on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>

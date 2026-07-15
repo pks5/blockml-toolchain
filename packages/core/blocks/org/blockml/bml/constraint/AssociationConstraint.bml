@@ -13,7 +13,7 @@
   <name>AssociationConstraint</name>
   <type>constraint:AssociationConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>
-  <is>Constraint that validates an AssociationDefinition or its targets.</is>
+  <is>A rule for Association members</is>
 
   <documentation>Abstract branch for constraints on Association members. Generic T binds to the
     effective AssociationDefinition. Valid only under an Association's &lt;constraints&gt; container

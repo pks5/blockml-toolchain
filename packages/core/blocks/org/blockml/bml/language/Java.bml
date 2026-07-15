@@ -10,7 +10,7 @@
   <name>Java</name>
   <type>lang:Java</type>
   <baseType>lang:ProgrammingLanguage</baseType>
-  <is>Java as an implementation language for capabilities.</is>
+  <is>The Java programming language</is>
 
   <documentation>ProgrammingLanguage for Java method implementations on Capabilities.</documentation>
 </block>

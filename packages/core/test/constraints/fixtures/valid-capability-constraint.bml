@@ -11,7 +11,7 @@
   xmlns:test="com.blockml.test.constraints">
   <type>test:CapabilityConstraint</type>
   <baseType>core:Block</baseType>
-  <is>Constraint test — RequiresImplementation on capability</is>
+  <is>A constraint test fixture</is>
   <version>1.0.0</version>
 
   <capabilities>

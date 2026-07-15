@@ -19,7 +19,7 @@
   <name>Strings</name>
   <type>service:Strings</type>
   <baseType>core:Entity</baseType>
-  <is>Built-in text utilities callable as #strings in expressions.</is>
+  <is>A text expression service</is>
 
   <documentation>Built-in strings service. Expression prefix #strings.* — concat, length,
     substring, and related text utilities.</documentation>

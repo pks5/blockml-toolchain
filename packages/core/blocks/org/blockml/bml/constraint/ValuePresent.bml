@@ -15,7 +15,7 @@
   <name>ValuePresent</name>
   <type>constraint:ValuePresent</type>
   <baseType>constraint:ValueConstraint</baseType>
-  <is>Requires a property value to be present after full model resolution.</is>
+  <is>A rule that a value must be set</is>
 
   <documentation>Scalar constraint: T binds to the property type. The property value must be present
     after all model resolution is complete — inheritance, contracts, default values, and instance

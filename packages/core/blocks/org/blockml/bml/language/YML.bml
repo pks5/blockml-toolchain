@@ -10,7 +10,7 @@
   <name>YML</name>
   <type>lang:YML</type>
   <baseType>lang:MarkupLanguage</baseType>
-  <is>YML as an implementation language for capabilities.</is>
+  <is>The YAML markup language</is>
 
   <documentation>MarkupLanguage for YAML document implementations on Capabilities — configuration,
     structured data, or templates.</documentation>

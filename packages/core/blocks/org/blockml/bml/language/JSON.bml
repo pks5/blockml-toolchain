@@ -10,7 +10,7 @@
   <name>JSON</name>
   <type>lang:JSON</type>
   <baseType>lang:MarkupLanguage</baseType>
-  <is>JSON as an implementation language for capabilities.</is>
+  <is>The JSON markup language</is>
 
   <documentation>MarkupLanguage for JSON document implementations on Capabilities — configuration,
     structured data, or templates.</documentation>

@@ -15,7 +15,7 @@
   <name>ModelingGuidelines</name>
   <type>doc:ModelingGuidelines</type>
   <baseType>core:Documentation</baseType>
-  <is>Recommended modeling patterns — when to use contracts, inheritance, capabilities, constraints.</is>
+  <is>A guide to modeling patterns</is>
 
   <documentation>
     Inheritance (baseType):

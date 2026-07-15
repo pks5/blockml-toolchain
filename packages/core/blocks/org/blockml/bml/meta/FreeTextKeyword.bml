@@ -15,7 +15,7 @@
   <name>FreeTextKeyword</name>
   <type>meta:FreeTextKeyword</type>
   <baseType>core:Keyword</baseType>
-  <is>Ad-hoc search tag — free-text term on a definition element.</is>
+  <is>An ad-hoc free-text search tag</is>
 
   <documentation>Standard free-text implementation of org.blockml.bml.core.Keyword for ad-hoc RAG and
     discovery tags. Rendered as a direct child inside &lt;keywords&gt; (for example

@@ -13,7 +13,7 @@
   <name>Transformation</name>
   <type>cap:Transformation</type>
   <baseType>core:Capability</baseType>
-  <is>Representation of an Transformation capability.</is>
+  <is>A value-transforming Capability</is>
 
   <documentation>Transformation capability.</documentation>
   <properties>

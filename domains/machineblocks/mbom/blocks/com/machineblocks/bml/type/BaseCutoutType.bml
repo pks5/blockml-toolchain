@@ -14,7 +14,7 @@
   <name>BaseCutoutType</name>
   <type>type:BaseCutoutType</type>
   <baseType>btype:EnumType</baseType>
-  <is>Shape variant of the underside cutout on a brick base.</is>
+  <is>An underside brick cutout shape</is>
 
   <documentation>Enum ValueType for base cutout variants on MachineBlocks bricks.</documentation>
   <properties>

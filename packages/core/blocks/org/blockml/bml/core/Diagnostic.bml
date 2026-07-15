@@ -12,7 +12,7 @@
   <name>Diagnostic</name>
   <type>core:Diagnostic</type>
   <baseType>core:Block</baseType>
-  <is>Abstract base for documented validator diagnostic codes — error to fix navigation.</is>
+  <is>A validator diagnostic code</is>
 
   <documentation>Abstract branch for org.blockml.bml.diagnostic.* blocks. Each concrete diagnostic
     block documents one validator or parser code (for example BML_UNKNOWN_TYPE) with idea, summary,

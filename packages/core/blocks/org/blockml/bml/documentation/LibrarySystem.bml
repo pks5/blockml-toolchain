@@ -14,7 +14,7 @@
   <name>LibrarySystem</name>
   <type>doc:LibrarySystem</type>
   <baseType>core:Documentation</baseType>
-  <is>Libraries, packages, namespaces, versioning, and imports.</is>
+  <is>A guide to libraries and packages</is>
 
   <documentation>
     A Library groups related Block and ValueType definitions into a publishable unit. Concrete
