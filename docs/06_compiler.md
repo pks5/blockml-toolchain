@@ -21,13 +21,17 @@ The compiler is implemented across these packages:
 
 ```text
 @blockml/parser                              — parse BML → BOM
-@blockml/core                                — BOM object model, validation, framework + built-in service BML
+@blockml/serializer                          — serialize BOM → BML (roundtrip; V1 before compiler)
+@blockml/validator                           — validate BOM (Stage 2; after roundtrip gate)
+@blockml/core                                — BOM object model, TypeRegistry, framework + built-in service BML
 @blockml/compiler                            — Facade + Target Registry
 @blockml/engine-maker                        — V1 CompilerEngine implementation (MakerEngine)
 @machineblocks/machineblocks-v3-scad-target  — RenderTarget + BlockProcessors
 ```
 
-`@blockml/parser`, `@blockml/core`, `@blockml/compiler`, and `@blockml/engine-maker` are browser and Node compatible. No Node-only APIs in any of these packages. RenderTarget packages follow the same constraint.
+`@blockml/parser`, `@blockml/serializer`, `@blockml/validator`, `@blockml/core`, `@blockml/compiler`, and `@blockml/engine-maker` are browser and Node compatible. No Node-only APIs in any of these packages. RenderTarget packages follow the same constraint.
+
+> **V1 build order:** Parser and serializer ship first; roundtrip tests against the BML corpus gate further work. Compiler and render targets follow only after the language loop is stable. See `15_dev_setup.md` — V1 Implementation Strategy.
 
 ---
 
@@ -75,9 +79,15 @@ BML Source (.bml)                   — V1: XML only; JSON BML deferred (TBD)
 Canonical BOM (immutable)
 ```
 
-### Layer 2 — Validator / Framework Utilities (`@blockml/core`) — Stage 2
+### Roundtrip — Serializer (`@blockml/serializer`)
 
-Optional, composable functions. **Never mutate** the Canonical BOM. Return derived views, diagnostics, or new structures.
+Inverse of the parser mapping: **BOM → canonical BML XML**. Enables lossless roundtrip (`BML → BOM → BML`). Not a render target emitter.
+
+**V1:** Implemented and tested together with the parser, before validator and compiler. See `15_dev_setup.md` — V1 Implementation Strategy.
+
+### Layer 2 — Validator (`@blockml/validator`) + Framework Utilities (`@blockml/core`) — Stage 2
+
+The validator orchestrates semantic checks. Framework utilities live in `@blockml/core`; the validator package exposes the Stage 2 entry point (e.g. `validateBom()`). Optional, composable. **Never mutate** the Canonical BOM. Return derived views, diagnostics, or new structures.
 
 ```text
 resolveInheritance(bom, registry)       → EffectiveMemberSet
@@ -854,6 +864,30 @@ registerTarget(new DeviceTarget());
 
 ## Testing Strategy
 
+> **V1 gate (before compiler):** Roundtrip tests (`parse → serialize → parse`) against the existing BML corpus are the first integration milestone. See `15_dev_setup.md` — V1 Implementation Strategy.
+
+### Stage 0 — Roundtrip Tests (V1 gate)
+
+Prove the language layer before validator, compiler, or render targets exist.
+
+```text
+Input:    BML source files from repository corpus (T0–T3 tiers)
+Test:     parse → serialize → parse; BomDocument deep equality
+Tool:     Vitest — tests/roundtrip/
+Gate:     Phase C (compiler, targets, CLI compile) must not start until roundtrip passes
+```
+
+Coverage:
+
+```text
+  - Lossless BML → BOM mapping (structure, members, raw expression text)
+  - Document-order preservation in members[]
+  - Namespace and FQN resolution stored correctly
+  - Serializer inverse of 13_bml_to_bom_mapping.md (V1 hardcoded; meta-serializer deferred)
+```
+
+Does **not** require: TypeRegistry bootstrap, validator, SCAD output, or compiler facade.
+
 ### Stage 1 — Correctness Tests
 
 Manual verification tests that ensure the compiler produces semantically correct output.
@@ -896,6 +930,7 @@ Behavior:
 
 ```text
 tests/
+  roundtrip/                 — V1 gate: parse → serialize → parse (see 15_dev_setup.md)
   correctness/
     wall/
       Wall.bml            — input
@@ -922,7 +957,8 @@ tests/
 ### Test Execution Order
 
 ```text
-1. Correctness tests run first
+0. Roundtrip tests run first (V1 gate — before compiler exists)
+1. Correctness tests run first (after compiler + targets exist)
 2. If all correctness tests pass, snapshot tests run
 3. A failing correctness test blocks snapshot comparison
 ```

@@ -623,6 +623,66 @@ TypeReference<T extends Block>
 
 **Detection:** aggregation `type` is a generic application `TypeReference(T)` with exactly one type argument. Validator unwraps `T` for `satisfiesTypeBound` checks on each child element name.
 
+#### Empty child elements — same syntax, two semantics
+
+A central BlockML principle: **an empty child element looks identical in XML, but its meaning depends entirely on the aggregation `type` — not on the element shape.**
+
+```xml
+<contracts>
+  <con:MyContract />
+</contracts>
+```
+
+The same surface pattern — a self-closing element whose QName resolves to a Block FQN — can mean one of two things:
+
+| Aggregation `type` | What `<con:MyContract />` means | BOM |
+|---|---|---|
+| `TypeReference(T)[]` (or bare `TypeReference(T)`) | **Type reference only** — syntactic sugar for the FQN `com.foo.MyContract`. **Not** an instance of that Block. | `contracts[]` / `languages[]` / `subTypes[]` / `block.type` / `block.baseType` — `string` FQNs |
+| Plain `Block[]` (instance aggregation) | **Real empty instance** — a `BlockInstance` of type `MyContract` with no authored member values (defaults / absent). | `BlockInstance { typeFqn: "com.foo.MyContract" }` in a composition tree |
+
+```text
+Rule:  aggregation type attribute  →  determines interpretation
+       identical empty XML element  →  NOT sufficient to decide
+
+TypeReference mode:
+  child element name IS the reference (FQN via xmlns prefix)
+  empty element is the canonical XML spelling — not a "leeres Entity"
+  no BlockInstance is created; no member values; no bml:id; no nested <composition> on definition sites
+
+Instance mode:
+  child element IS a BlockInstance (Object) in the composition tree
+  empty element = valid instance with all properties absent / at defaults
+  bml:id, member values, nested composition on children are allowed
+```
+
+**Definition sites** (`<contracts>`, `<languages>`, `<subTypes>`, `<type>`, `<baseType>`, `<language>`) are always TypeReference containers — children are direct element references, never wrapped in `<composition>`:
+
+```xml
+<contracts>
+  <con:MyContract />
+</contracts>
+```
+
+**Instance fill sites** open an aggregation member and use `<composition>` as the fill container. For **instance** aggregations, children inside `<composition>` are owned `BlockInstance` trees. For **TypeReference** aggregations (e.g. `bootstrap`, `_dependencies`, `_subLibraries`, `_blocks` on `org.blockml.bml.core.BlockLibrary`), children inside `<composition>` are still **type references** — the `<composition>` wrapper is the instance-side fill mechanism for the aggregation member, not evidence of composition ownership on the child:
+
+```xml
+<!-- instance aggregation — real empty instance -->
+<_parts>
+  <composition>
+    <con:MyContract bml:id="main" />
+  </composition>
+</_parts>
+
+<!-- TypeReference aggregation — still a type reference, not an instance -->
+<_blocks>
+  <composition>
+    <con:MyContract />
+  </composition>
+</_blocks>
+```
+
+See `02_mbml.md` — § Aggregations · `13_bml_to_bom_mapping.md` — TypeReference aggregation (stage [8]).
+
 **Instance aggregation** (composition ownership):
 
 ```xml
@@ -659,7 +719,7 @@ Forbidden on TypeReference aggregations:
   member values on children
   bml:id
   bml:version (unless a specific aggregation documents an exception)
-  nested <composition>
+  <composition> on definition sites (e.g. inside <contracts> — children must be direct)
   default="true"
 ```
 

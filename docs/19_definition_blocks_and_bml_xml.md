@@ -170,17 +170,17 @@ Examples: `PropertyDefinition`, `AggregationDefinition`, `AssociationDefinition`
 
 **Direct Block reference — effective Block type as element name**
 
-Same pattern as `org.blockml.bml.core.Block` (`${ bml:Self }`) and Language references in `<languages>`:
+Same pattern as `org.blockml.bml.core.Block` (`${ bml:Self }`) and Language references in `<languages>`. On these **definition containers**, every empty child element is a **type reference** (FQN via element name) — not a Block instance. See `17_type_system_bml.md` — Empty child elements.
 
 ```text
 <contracts>
-  <ac:Wall/>          → contract reference (element name = FQN via xmlns prefix)
+  <ac:Wall/>          → contract reference (element name = FQN via xmlns prefix) — type ref, not instance
 </contracts>
 <languages>
-  <lang:OpenSCAD/>    → language reference
+  <lang:OpenSCAD/>    → language reference — type ref, not instance
 </languages>
 <subTypes>
-  <core:Block/>       → allowed Sub-Block baseType reference
+  <core:Block/>       → allowed Sub-Block baseType reference — type ref, not instance
 </subTypes>
 ```
 

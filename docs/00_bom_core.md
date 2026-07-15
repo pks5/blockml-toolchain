@@ -623,6 +623,7 @@ A Block references contracts via `<contracts>`:
 ```text
 Declared on:       root <block> only (not on Sub-Blocks)
 Child element:     direct Block reference (element name = FQN via xmlns prefix)
+                   empty element = type reference only — not a Block instance (see 17_type_system_bml.md — Empty child elements)
 Contract target:   any Block definition usable as a partial definition (typically abstract)
 Member scope:      Properties, Aggregations, Associations, Capabilities, Constraints,
                    Suggestions, documentation, examples, references, optional Capability defaults
@@ -1743,7 +1744,7 @@ org.blockml.bml.type.FilePathEntity            value (relative .xsd path)
 org.blockml.bml.core.Bootstrap                 readFirst (Documentation[])
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` hold empty Block instances as type references — element name resolves to FQN. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the Library role — no aggregation attribute is required.
+`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` are **TypeReference** aggregations — each empty child element is a **type reference** (element name → FQN), not a Block instance. **`bml:version` is forbidden** on these children. Type-reference interpretation follows from the aggregation `type` (`TypeReference(T)`). See `17_type_system_bml.md` — Empty child elements.
 
 `bootstrap` references a `Bootstrap` block (typically `README`) — the library entry point for humans and LLMs with a `readFirst` documentation list. See `doc:BootstrapModel`.
 

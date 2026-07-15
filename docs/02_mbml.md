@@ -824,12 +824,14 @@ Omitted languages / contracts   — inherit from baseType at validate
 org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritance root); effective subTypes []
 ```
 
-**Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous:
+**Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous.
+
+On these **definition containers**, every empty child element is a **type reference** (FQN via element name) — never a Block instance. The same empty-element XML pattern on an **instance** aggregation (`Block[]`) denotes a real empty instance instead. See `17_type_system_bml.md` — Empty child elements.
 
 ```text
-<languages>    →  <lang:OpenSCAD/>           TypeReference(core:Language)[] child
-<subTypes>     →  <core:Block/>              TypeReference(core:Block)[] child
-<contracts>    →  <ac:Wall/>                 TypeReference(core:Block)[] child
+<languages>    →  <lang:OpenSCAD/>           TypeReference(core:Language)[] child — type ref, not instance
+<subTypes>     →  <core:Block/>              TypeReference(core:Block)[] child — type ref, not instance
+<contracts>    →  <ac:Wall/>                 TypeReference(core:Block)[] child — type ref, not instance
 <type>         →  <foo:MyBlock/>             TypeReference(core:Block) child — required on root ([1..1])
 <baseType>     →  <core:Block/>              TypeReference(core:Block) child — optional single (bare)
 <language>     →  <German/>                  TypeReference(NaturalLanguage) child — optional single (bare)
@@ -851,6 +853,8 @@ Blocks may declare `<contracts>` at root level to compose one or more **contract
 
 ```text
 Child element — direct Block reference (element name = FQN via xmlns prefix)
+              empty element = type reference only — not a Block instance
+              see 17_type_system_bml.md — Empty child elements
 ```
 
 **Semantics:**
@@ -1920,7 +1924,14 @@ final        — prevents override in child Blocks
 visibility   — optional; must match naming convention; on aggregations also controls composition instance ID reachability (see § Composition instance IDs)
 ```
 
-**Type-reference vs instance aggregations** — determined by the aggregation `type` attribute: `TypeReference(T)` lists type references (child element name = FQN); plain `Block[]` holds composition instances. Examples: `bootstrap` / `_blocks` on `org.blockml.bml.core.BlockLibrary` use `TypeReference(...)`; `<contracts>` / `<languages>` on Block definitions use `TypeReference(core:Block)[]` / `TypeReference(core:Language)[]`. See `17_type_system_bml.md` — TypeReference.
+**Type-reference vs instance aggregations** — determined by the aggregation `type` attribute, not by the XML shape of child elements. An empty child element such as `<con:MyContract />` is **ambiguous on the surface** — the aggregation `type` decides:
+
+```text
+TypeReference(T)[]  →  type reference only (element name = FQN; syntactic sugar — not an instance)
+plain Block[]       →  real BlockInstance (empty = valid instance with no authored values)
+```
+
+Examples: `bootstrap` / `_blocks` on `org.blockml.bml.core.BlockLibrary` use `TypeReference(...)`; `<contracts>` / `<languages>` on Block definitions use `TypeReference(core:Block)[]` / `TypeReference(core:Language)[]`. See `17_type_system_bml.md` — TypeReference · Empty child elements.
 
 Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block. Cross-document `{BlockFQN}::{id}` references require a **public** target aggregation.
 
@@ -2595,7 +2606,7 @@ EmbeddedBlock  = full, locally embedded Block document
 
 ### Composition Block References
 
-Composition child element names are type references. Domain Blocks and ValueTypes require an `xmlns:` prefix or full FQN. **Sub-Blocks** declared on the enclosing root Block may additionally be referenced by **unqualified local name** within that Block's composition — resolved as `resolve(parent.type) + "." + localName`:
+Composition child element names are type references. **Whether an empty child element denotes a type reference or a real empty instance depends on the parent aggregation `type`** — see `17_type_system_bml.md` — Empty child elements. Domain Blocks and ValueTypes require an `xmlns:` prefix or full FQN. **Sub-Blocks** declared on the enclosing root Block may additionally be referenced by **unqualified local name** within that Block's composition — resolved as `resolve(parent.type) + "." + localName`:
 
 ```xml
 <!-- correct — domain / library types -->
@@ -2626,7 +2637,7 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 </aggregations>
 ```
 
-**Library reference aggregations:** `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` on `org.blockml.bml.core.BlockLibrary` hold empty Block instances as type references — the element name (with xmlns prefix) resolves to the referenced type FQN. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed. **`bootstrap`** typically references a `README` block (`org.blockml.bml.core.Bootstrap`). **`_schemas`** holds `FilePathEntity` composition children.
+**Library reference aggregations:** `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` on `org.blockml.bml.core.BlockLibrary` are **TypeReference** aggregations — each empty child element (e.g. `<blockml:Library />`) is a **type reference** (element name → FQN), not a Block instance. **`bml:version` is forbidden** on these children. No separate reference Sub-Blocks (`Dependency`, `BlockRef`) are needed. **`bootstrap`** typically references a `README` block (`org.blockml.bml.core.Bootstrap`). **`_schemas`** is an **instance** aggregation and holds real `FilePathEntity` composition children.
 
 ```xml
 <!-- com/machineblocks/bml/bricks/Library.bml -->
@@ -3281,7 +3292,7 @@ Physical directories and overlapping package prefixes do not define membership. 
 </block>
 ```
 
-**`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`** use Block instances as type references — the element name resolves to the Block FQN. **`bml:version` is forbidden** — effective version is resolved from library context.
+**`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks`** are TypeReference aggregations — each child element name resolves to a Block FQN (type reference, not an instance). **`bml:version` is forbidden** — effective version is resolved from library context. See `17_type_system_bml.md` — Empty child elements.
 
 **`bootstrap`** points to the library entry point — typically a `README` block with a `readFirst` documentation list (see `doc:BootstrapModel`). Example on `org.blockml.bml.Library`:
 

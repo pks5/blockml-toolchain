@@ -85,6 +85,8 @@ blockml/
   packages/
     core/                      — @blockml/core (framework + built-in service BML)
     parser/                    — @blockml/parser
+    serializer/                — @blockml/serializer
+    validator/                 — @blockml/validator
     compiler/                  — @blockml/compiler
     cli-tools/                 — @blockml/cli          (Node-only)
 
@@ -101,7 +103,8 @@ blockml/
 
   tests/
     unit/                      — per-package unit tests (colocated or mirrored)
-    correctness/               — hand-verified reference outputs
+    roundtrip/                 — parse → serialize → parse against BML corpus (V1 gate)
+    correctness/               — hand-verified reference outputs (after compiler exists)
     snapshots/                 — Vitest snapshot output
 
   docs/                        — specifications (authoritative)
@@ -133,6 +136,7 @@ Root `package.json`:
     "clean": "tsc --build --clean",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:roundtrip": "vitest run tests/roundtrip",
     "test:correctness": "vitest run tests/correctness",
     "lint": "eslint .",
     "typecheck": "tsc --build --emitDeclarationOnly"
@@ -186,6 +190,8 @@ Build order encoded in references:
   "references": [
     { "path": "packages/core" },
     { "path": "packages/parser" },
+    { "path": "packages/serializer" },
+    { "path": "packages/validator" },
     { "path": "packages/compiler" },
     { "path": "engines/maker-engine" },
     { "path": "domains/machineblocks/mbom" },
@@ -314,20 +320,24 @@ src/
 ```text
 @blockml/core (BML files — no TS deps)
 
-@blockml/core
+@blockml/core (TS: BomDocument types, TypeRegistry, framework utilities)
   ↑
-@blockml/parser
-  ↑
-@blockml/compiler ──→ @blockml/engine-maker
-  ↑                         ↑
-@machineblocks/mbom         │
-  ↑                         │
-@machineblocks/machineblocks-v3-scad-target
-  ↑
-@blockml/cli
+@blockml/parser          @blockml/serializer
+  ↑                            ↑
+  └──────── @blockml/validator ─┘
+                  ↑
+           @blockml/compiler ──→ @blockml/engine-maker
+                  ↑                    ↑
+           @machineblocks/mbom        │
+                  ↑                    │
+           @machineblocks/machineblocks-v3-scad-target
+                  ↑
+           @blockml/cli
 ```
 
 Implement packages **bottom-up**. Each package's first milestone: export types/interfaces from spec (`12_bom_object_model.md`, etc.) with passing empty or smoke tests.
+
+See **V1 Implementation Strategy** below — parser and serializer (with roundtrip tests) ship **before** validator and compiler.
 
 ---
 
@@ -353,6 +363,8 @@ npm run build -w @blockml/parser
 |---|---|
 | `@blockml/core` | Yes |
 | `@blockml/parser` | Yes |
+| `@blockml/serializer` | Yes |
+| `@blockml/validator` | Yes |
 | `@blockml/compiler` | Yes |
 | `@blockml/engine-maker` | Yes |
 | `@machineblocks/mbom` | Yes |
@@ -384,9 +396,12 @@ export default defineConfig({
 
 ```text
 1. Unit tests          — per package, colocated src/**/*.test.ts
-2. Correctness tests   — tests/correctness/<fixture>/input + .expected.*
-3. Snapshot tests      — tests/snapshots/ (after correctness baseline)
+2. Roundtrip tests     — tests/roundtrip/ (V1 gate — before compiler)
+3. Correctness tests   — tests/correctness/<fixture>/input + .expected.*
+4. Snapshot tests      — tests/snapshots/ (after correctness baseline)
 ```
+
+**V1 priority:** Roundtrip tests are the first integration gate. See **V1 Implementation Strategy** below.
 
 Correctness fixtures may reference scad-lib examples:
 
@@ -404,7 +419,8 @@ Run:
 
 ```bash
 npm test                      # all
-npm run test:correctness      # correctness only
+npm run test:roundtrip        # roundtrip only (V1 gate)
+npm run test:correctness      # correctness only (after compiler)
 npm test -- -u                # update snapshots (intentional changes)
 ```
 
@@ -421,6 +437,8 @@ Thumbnail / OpenSCAD tests: **optional** integration suite — skipped in CI whe
 | `npm run clean` | Remove build outputs |
 | `npm test` | Vitest — unit + integration |
 | `npm run test:watch` | Vitest watch mode |
+| `npm run test:roundtrip` | Roundtrip tests only (V1 gate) |
+| `npm run test:correctness` | SCAD/JSON correctness tests (after compiler) |
 | `npm link -w @blockml/cli` | Global `bom` command |
 | `npm run lint` | ESLint (when configured) |
 
@@ -511,22 +529,107 @@ jobs:
 
 ---
 
+## V1 Implementation Strategy
+
+> **Decision (V1):** Implement **parser and serializer first**, prove correctness via **roundtrip tests** against the existing BML corpus, **before** validator, compiler, targets, or CLI compile paths.
+
+This follows the core principle **BML → BOM → BML must always be possible** (`00_bom_core.md`, `13_bml_to_bom_mapping.md`). The roundtrip loop validates the language layer in isolation — without render targets, engines, or SCAD output.
+
+### Package roles (input / output split)
+
+```text
+INPUT (BML-centric)
+  @blockml/parser       — BML → Canonical BOM (Stage 1, no semantics)
+  @blockml/validator    — BOM → diagnostics + working model (Stage 2) — after roundtrip gate
+
+OUTPUT (roundtrip)
+  @blockml/serializer   — BOM → canonical BML XML (lossless inverse of parser mapping)
+
+ORCHESTRATION (later)
+  @blockml/compiler     — Facade + Target Registry + render pipeline
+```
+
+The serializer is **not** a render target emitter (SCAD, JSON, …). Target output stays in `@blockml/compiler` and domain target packages.
+
+**V1 serializer note:** The meta-driven serializer from `19_definition_blocks_and_bml_xml.md` is the long-term target. V1 ships a **hardcoded inverse mapper** aligned with `13_bml_to_bom_mapping.md` — same approach as the V1 parser. Roundtrip tests still catch mapping gaps and information loss.
+
+### Build phases
+
+```text
+Phase A — Language loop (V1 gate)
+  1. BOM types + Diagnostic          — @blockml/core TS (12_bom_object_model.md)
+  2. Parser                          — @blockml/parser (stages [1]–[5])
+  3. Serializer                      — @blockml/serializer (inverse mapping)
+  4. Roundtrip tests                 — tests/roundtrip/ against BML corpus
+
+Phase B — Semantic layer
+  5. Validator                       — @blockml/validator (TypeRegistry + stages [6]–[8])
+
+Phase C — Compile pipeline
+  6. Compiler facade                 — @blockml/compiler (C2, C3)
+  7. Engine + SCAD target + CLI      — @blockml/engine-maker, scad-target, @blockml/cli
+  8. Correctness + snapshot tests    — tests/correctness/, tests/snapshots/
+```
+
+**Do not start Phase C until Phase A roundtrip tests pass** for the agreed corpus tiers (see below).
+
+### Roundtrip test contract
+
+```text
+original.bml
+  → parse()      → BomDocument
+  → serialize()  → reserialized.bml
+  → parse()      → BomDocument'
+  → deepEqual(BomDocument, BomDocument')
+```
+
+Optional secondary check: normalized XML diff of `serialize(parse(original))` vs. `original` — BOM equality is the authoritative assertion.
+
+Parser is **single-file scoped** — roundtrip tests do not require TypeRegistry bootstrap (`13_bml_to_bom_mapping.md`).
+
+### BML test corpus (fixture tiers)
+
+Run roundtrip tests against files already in the repository — grow tiers as parser coverage expands:
+
+| Tier | Source | Examples |
+|---|---|---|
+| **T0 — Minimal** | `packages/core/src/`, `packages/core-services/src/` | `TypeScript.bml`, `Math.bml` |
+| **T1 — Framework** | `packages/core/blocks/` | `Block.bml`, `BlockDefinition.bml`, `MemberDefinition.bml` |
+| **T2 — Domain** | `domains/machineblocks/mbom/src/` | `NativeBlock.bml`, `CompositeBlock.bml`, `Set.bml` |
+| **T3 — Real-world** | `scad-lib/blocks/` | `Calibrator.bml`, `Standard.bml`, `Cross.bml` |
+
+Add new framework BML to T1 as it lands — the Definition meta-model corpus is the highest-value roundtrip fixture set.
+
+### What is explicitly deferred
+
+| Concern | When |
+|---|---|
+| Cross-file reference resolution | Phase B (validator + TypeRegistry bootstrap) |
+| Constraint / inheritance validation | Phase B |
+| SCAD / JSON render output | Phase C |
+| Meta-driven `bml:xml` serializer | Post-V1 (see `19_definition_blocks_and_bml_xml.md`) |
+| CLI `bom compile` | Phase C |
+
+---
+
 ## Implementation Order
 
-Recommended first coding milestones:
+Recommended first coding milestones (aligned with **V1 Implementation Strategy** above):
 
 ```text
 1. @blockml/core BML          — org.blockml.bml.core.*, org.blockml.bml.service.*
 2. @machineblocks/mbom BML    — com.machineblocks.bml.core.*
-3. @blockml/core              — types from 12_bom_object_model.md + Diagnostic
-4. @blockml/parser            — stage [5] mapper skeleton + tests
-5. @blockml/core              — TypeRegistry + validate (stages 6–8)
-6. @blockml/compiler          — Facade + Target Registry (C2, C3)
-7. @blockml/engine-maker      — RenderEngine stub
-8. @machineblocks/mbom        — domain types + property registry from 09_mbom_properties.yml
-9. @machineblocks/...-scad-target — ScadBlockProcessor MVP
-9. @blockml/cli         — bom validate, then bom compile
-10. Correctness tests   — Calibrator, Standard, Cross from scad-lib
+3. @blockml/core TS           — types from 12_bom_object_model.md + Diagnostic
+4. @blockml/parser            — stages [1]–[5] + unit tests
+5. @blockml/serializer        — BOM → BML (V1 hardcoded inverse map)
+6. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers)
+7. @blockml/validator         — TypeRegistry + validate (stages [6]–[8])
+8. @blockml/compiler          — Facade + Target Registry (C2, C3)
+9. @blockml/engine-maker       — RenderEngine stub
+10. @machineblocks/mbom        — domain types + property registry from 09_mbom_properties.yml
+11. @machineblocks/...-scad-target — ScadBlockProcessor MVP
+12. @blockml/cli               — bom validate, then bom compile
+13. Correctness tests         — Calibrator, Standard, Cross from scad-lib
 ```
 
 Specs dependency:

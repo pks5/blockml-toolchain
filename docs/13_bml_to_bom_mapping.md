@@ -691,15 +691,19 @@ The `composition aggregation="…"` attribute is **removed** — aggregations ar
 
 ### TypeReference aggregation (stage [8])
 
+**Empty child elements:** identical XML (`<foo:Bar />`) can denote a type reference or a real empty instance — the aggregation `type` decides. See `17_type_system_bml.md` — Empty child elements.
+
 ```text
 Aggregation type is TypeReference(T)  →  type-reference mode
   Parser: child element name → FQN; store in contracts[] / languages[] / subTypes[] / block.type / block.baseType
   Validator: satisfiesTypeBound(childFqn, T) for each child
-  Forbidden: bml:id, bml:version, member values on children, <composition>, default="true"
+  Forbidden: bml:id, bml:version, member values on children, <composition> on definition sites, default="true"
+  Semantics: empty child is syntactic sugar for the FQN — not a BlockInstance
 
 Aggregation type is plain Block[]       →  instance mode (composition ownership)
   Parser: children → BlockInstance trees
   Validator: standard composition and aggregation rules
+  Semantics: empty child is a real BlockInstance with no authored member values
 
 unwrapTypeReference(typeExpr):
   fqn === org.blockml.bml.core.TypeReference && one typeArgument  →  return T
@@ -713,7 +717,7 @@ Plain core:Block[] on type-reference aggregations     → BML_TYPE_REFERENCE_REQ
 BML_TYPE_REFERENCE_TEXT_FORM        — <type> or <baseType> uses text content instead of child element
 BML_TYPE_REFERENCE_REQUIRED         — type-reference site uses plain Block[] without TypeReference(T)
 BML_TYPE_REFERENCE_CHILD_VALUE      — member value on child of TypeReference aggregation
-BML_TYPE_REFERENCE_COMPOSITION      — <composition> inside TypeReference aggregation
+BML_TYPE_REFERENCE_COMPOSITION      — <composition> on a definition-site TypeReference container (e.g. inside <contracts>)
 BML_TYPE_REFERENCE_DEFAULT          — default="true" on TypeReference aggregation
 BML_TYPE_REFERENCE_CONSTRAINT       — child FQN fails satisfiesTypeBound(child, T)
 BML_TYPE_REFERENCE_MULTIPLICITY     — wrong child count (bare = 0..1, [1..1] = required single)
@@ -751,16 +755,19 @@ BML_READONLY_MEMBER_WRITE         — Block instance sets a member with readOnly
 
 ### Library blocks
 
-Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.bml.core.BlockLibrary`. Composition children:
+Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.bml.core.BlockLibrary`. On library **instances**, aggregation children are authored inside `<composition>`. Interpretation depends on the aggregation `type` — see `17_type_system_bml.md` — Empty child elements.
 
 ```text
-<blockml:README />                         → BlockInstance { typeFqn: "org.blockml.bml.README" }  — bootstrap
-<blockml:Library />                        → BlockInstance { typeFqn: "org.blockml.bml.Library" }  — no bml:version
-<compiler:Library />                       → BlockInstance { typeFqn: "org.blockml.bml.compiler.Library" }  — _subLibraries
-<btype:FilePathEntity value="bricks.xsd"/> → BlockInstance { typeFqn: "org.blockml.bml.type.FilePathEntity", value: "bricks.xsd" }
-<type:Size3d />                             → BlockInstance { typeFqn: "com.machineblocks.bml.type.Size3d" }
-<bricks:Wall />                             → BlockInstance { typeFqn: "com.machineblocks.bml.bricks.Wall" }
-<bricks:WallPresets />                      → preset block via _blocks
+<!-- TypeReference aggregations — child = type reference (FQN), not BlockInstance -->
+<blockml:README />                         →  bootstrap entry FQN: "org.blockml.bml.README"
+<blockml:Library />                        →  _dependencies entry FQN: "org.blockml.bml.Library"  — no bml:version
+<compiler:Library />                       →  _subLibraries entry FQN: "org.blockml.bml.compiler.Library"
+<type:Size3d />                             →  _blocks entry FQN: "com.machineblocks.bml.type.Size3d"
+<bricks:Wall />                             →  _blocks entry FQN: "com.machineblocks.bml.bricks.Wall"
+<bricks:WallPresets />                      →  _blocks entry FQN: preset block
+
+<!-- Instance aggregation (_schemas) — child = real BlockInstance -->
+<btype:FilePathEntity value="bricks.xsd"/> →  BlockInstance { typeFqn: "org.blockml.bml.type.FilePathEntity", value: "bricks.xsd" }
 ```
 
 `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN. **`bml:version` is forbidden** on these children. Meta-model types: `TypeReference(core:Bootstrap)`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`.

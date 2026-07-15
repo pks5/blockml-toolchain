@@ -42,11 +42,13 @@ Emitter
 Target Output (SCAD, Java, JSX, JSON, …)
 ```
 
+**V1 build order:** Parser and serializer prove BML ↔ BOM roundtrip first (`@blockml/parser`, `@blockml/serializer`); validator and compiler follow. See `15_dev_setup.md` — V1 Implementation Strategy.
+
 **BML** (Block Markup Language) is the universal declarative authoring format. File extension **`.bml`**. Content-type `bml`. **XML is the V1 reference format.** JSON as an alternate BML authoring serialization is **deferred (TBD — not V1)** due to namespace and directive constraints.
 
 **BOM** (Block Object Model) is the **canonical, immutable, lossless representation of BML** — not a pre-interpreted object model. BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific type definitions declared in BML.
 
-**Framework Utilities** (`@blockml/core`) provide reusable analysis and transformation algorithms. They read the immutable BOM and return derived views or diagnostics — they never write back to the Canonical BOM.
+**Framework Utilities** (`@blockml/core`) provide reusable analysis and transformation algorithms. They read the immutable BOM and return derived views or diagnostics — they never write back to the Canonical BOM. Semantic validation (Stage 2) is orchestrated by `@blockml/validator`.
 
 **Render Target** is the domain-specific output backend. Each target defines its own pipeline: which utilities to call, in what order, and how to build its working model. A Target declares which `baseType` FQNs it supports and contains Block Processors that emit target-specific results.
 
@@ -117,6 +119,8 @@ bom-compiler/
   packages/
     core/              — @blockml/core (framework BML: org.blockml.bml.core.*, org.blockml.bml.service.*)
     parser/            — @blockml/parser
+    serializer/        — @blockml/serializer
+    validator/         — @blockml/validator
     compiler/          — @blockml/compiler (Rahmen + Target Registry)
     cli-tools/         — @blockml/cli
 
@@ -331,6 +335,33 @@ The universal BML parser and BOM builder. Browser and Node compatible.
 - Diagnostics and error reporting
 - No render output
 ```
+
+**V1:** Implemented and tested **before** compiler. See `15_dev_setup.md` — V1 Implementation Strategy.
+
+### `@blockml/serializer`
+
+BOM → canonical BML XML. Browser and Node compatible. Inverse of the parser mapping — enables the **BML → BOM → BML** roundtrip.
+
+```text
+- BOM → BML XML (V1: hardcoded inverse of 13_bml_to_bom_mapping.md)
+- Meta-driven output via Definition blocks + bml:xml — deferred (19_definition_blocks_and_bml_xml.md)
+- No semantic validation, no render output
+```
+
+**V1:** Ships together with `@blockml/parser`; roundtrip tests gate validator and compiler work.
+
+### `@blockml/validator`
+
+Semantic validation (Stage 2). Browser and Node compatible.
+
+```text
+- TypeRegistry integration
+- Inheritance, contracts, constraints, references, expression correctness
+- Creates immutable Canonical BOM view + mutable default Working Model
+- Never mutates Canonical BOM
+```
+
+**V1:** Implemented **after** parser + serializer roundtrip tests pass.
 
 ### `@blockml/compiler`
 

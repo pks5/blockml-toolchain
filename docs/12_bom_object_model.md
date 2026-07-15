@@ -1165,9 +1165,9 @@ org.blockml.bml.type.FilePathEntity            property:  value (relative .xsd p
 org.blockml.bml.core.Bootstrap                 aggregation:  readFirst (Documentation[])
 ```
 
-`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN. **`bml:version` is forbidden** on these children; effective version is resolved from library context. Meta-model types: `TypeReference(core:Bootstrap)`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`.
+`bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` use TypeReference aggregations — child element name resolves to FQN (type reference, not a Block instance). **`bml:version` is forbidden** on these children; effective version is resolved from library context. Meta-model types: `TypeReference(core:Bootstrap)`, `TypeReference(core:BlockLibrary)[]`, `TypeReference(core:Block)[]`. See `17_type_system_bml.md` — Empty child elements.
 
-Composition children in `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` are Block instances (`<blockml:README />`, `<blockml:Library />`, `<compiler:Library />`, `<bricks:Standard />`). `_schemas` holds `FilePathEntity` composition children (`<btype:FilePathEntity value="bricks.xsd" />`). Each `aggregation=` attribute is required (BlockLibrary has five aggregations, none is default).
+On library **instances**, children are authored inside `<composition>` as the aggregation-fill container. For these TypeReference aggregations, each child is still interpreted as a **type reference** (FQN), not as a composition-owned entity. `_schemas` is an instance aggregation — its `FilePathEntity` children are real Block instances.
 
 The orchestrator resolves `bootstrap`, `_dependencies`, `_subLibraries`, and `_blocks` entries by FQN, loads referenced definitions into the TypeRegistry using effective block versions, and validates library membership.
 
