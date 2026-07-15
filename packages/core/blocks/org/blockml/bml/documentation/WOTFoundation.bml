@@ -59,13 +59,13 @@
     <see file="00_bom_core.md">
       Block and Block Instance — WOT vocabulary for grammar, template, and Thing.
     </see>
-    <see block="core:Block">
+    <see type="core:Block">
       Universal semantic unit — grammar element of a World.
     </see>
-    <see block="doc:RendererFreedom">
+    <see type="doc:RendererFreedom">
       Renderer freedom — Manifestation is target-defined, not prescribed by BlockML.
     </see>
-    <see block="doc:EverythingIsABlock">
+    <see type="doc:EverythingIsABlock">
       Everything is a Block — grammar includes types, languages, and documentation.
     </see>
   </references>

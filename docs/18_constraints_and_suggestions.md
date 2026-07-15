@@ -113,7 +113,7 @@ The **embedding context** determines the constraint target. No `target` property
     </children>
   </aggregations>
   <associations>
-    <owner type="core:Block">
+    <owner type="InstanceReference(core:Block)">
       <constraints>
         <constraint:NoSelfReference validation="Error"/>
       </constraints>

@@ -55,28 +55,28 @@
     <see file="12_bom_object_model.md">
       TypeDescriptor AST — formal type expression structures.
     </see>
-    <see block="core:ValueType">
+    <see type="core:ValueType">
       Abstract base for all value blocks used in Property and Capability types.
     </see>
-    <see block="btype:PrimitiveType">
+    <see type="btype:PrimitiveType">
       Branch base for atomic scalar types.
     </see>
-    <see block="btype:StructType">
+    <see type="btype:StructType">
       Branch base for custom value objects.
     </see>
-    <see block="btype:EnumType">
+    <see type="btype:EnumType">
       Branch base for finite value sets — extends StructType.
     </see>
-    <see block="btype:ConstantType">
+    <see type="btype:ConstantType">
       Branch base for singleton value domains.
     </see>
-    <see block="btype:Constant">
+    <see type="btype:Constant">
       Generic Constant(T){value=…} for union singleton alternatives.
     </see>
-    <see block="btype:Decimal">
+    <see type="btype:Decimal">
       Default primitive for non-integer numeric values.
     </see>
-    <see block="doc:ValueTypeConfiguration">
+    <see type="doc:ValueTypeConfiguration">
       Next reading step — inline ValueType instance configuration syntax.
     </see>
   </references>

@@ -31,10 +31,10 @@
   </documentation>
 
   <references>
-    <see block="task:DebugUnknownType" relation="Resolves">
+    <see type="task:DebugUnknownType" relation="Resolves">
       Step-by-step fix — namespace, Library _blocks, bootstrap order.
     </see>
-    <see block="doc:LibrarySystem" relation="Prerequisite">
+    <see type="doc:LibrarySystem" relation="Prerequisite">
       How libraries register blocks in TypeRegistry.
     </see>
     <see file="12_bom_object_model.md" relation="SeeAlso">

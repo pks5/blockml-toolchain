@@ -234,37 +234,47 @@
       <baseType>core:Entity</baseType>
       <is>A related-item cross-reference</is>
 
-      <documentation>Records a link from documentation metadata to another Block, definition element,
-        repository markdown file, or external URL. Rendered as a see element inside the references
-        container on any org.blockml.bml.definition.StructuralDefinition (alongside changelog and examples). Maps to BOM
-        DocumentationReference { block?, file?, url?, property?, aggregation?, association?,
-        capability?, relationFqn?, context, languageFqn? }. Optional relation attribute references
-        org.blockml.bml.relation.* — default org.blockml.bml.relation.SeeAlso when omitted.
-        Optional language attribute overrides the effective natural language for the relationship
-        text body.
+      <documentation>Records a link from documentation metadata to another Block type, Block
+        instance, definition element, repository markdown file, or external URL. Rendered as a see
+        element inside the references container on any org.blockml.bml.definition.StructuralDefinition
+        (alongside changelog and examples). Maps to BOM DocumentationReference { type?, instance?,
+        file?, url?, property?, aggregation?, association?, capability?, relationFqn?, context,
+        languageFqn? }. Optional relation attribute references org.blockml.bml.relation.* — default
+        org.blockml.bml.relation.SeeAlso when omitted. Optional language attribute overrides the
+        effective natural language for the relationship text body.
 
-        Seven mutually exclusive target attributes (block, file, url, property, aggregation,
-        association, capability) instead of one generic target. Member targets use typed
-        MemberReference specializations — property : PropertyReference, aggregation :
-        AggregationReference, association : AssociationReference, capability : CapabilityReference —
-        and store the canonical definition path in the BOM (for example com.foo.Bar.properties.width).
-        Split authoring block="com.foo.Bar" property="width" resolves to that path — block qualifies
-        the member name and is not stored as a separate type target.
-        The attribute name encodes the target kind at the read site — see block (TypeReference),
-        see property (PropertyReference), see file (repository documentation), see url (web address).
-        Humans and LLMs classify each reference from element shape alone without inferring kind from
-        value syntax. See 02_mbml.md — references — Why separate target attributes.</documentation>
+        Eight mutually exclusive target attributes (type, instance, file, url, property, aggregation,
+        association, capability) instead of one generic target. Type targets use TypeReference;
+        instance targets use InstanceReference; member targets use typed MemberReference
+        specializations — property : PropertyReference, aggregation : AggregationReference,
+        association : AssociationReference, capability : CapabilityReference — and store the
+        canonical definition path in the BOM (for example com.foo.Bar.properties.width).
+        Split authoring type="com.foo.Bar" property="width" resolves to that path — type qualifies
+        the member name and is not stored as a separate type target. Split authoring
+        type="com.foo.Bar" instance="myId" resolves to com.foo.Bar::myId.
+        The attribute name encodes the target kind at the read site — see type (TypeReference),
+        see instance (InstanceReference), see property (PropertyReference), see file (repository
+        documentation), see url (web address). Humans and LLMs classify each reference from element
+        shape alone without inferring kind from value syntax. See 02_mbml.md — references — Why
+        separate target attributes.</documentation>
 
       <bml:xml>see</bml:xml>
 
       <properties>
-        <block type="TypeReference(core:Block)" bml:xml="attribute">
+        <type type="TypeReference(core:Block)" bml:xml="attribute">
           <documentation>Block type reference via xmlns prefix (e.g. core:Block) — or Block FQN
-            qualifier when paired with property, aggregation, association, or capability.
-            Standalone block= resolves to FQN at parse time. With a member attribute, block= supplies
-            the enclosing Block FQN and is not stored as a separate type target. Mutually exclusive
-            with file, url, and standalone member targets — exactly one target kind must be set.</documentation>
-        </block>
+            qualifier when paired with property, aggregation, association, capability, or instance.
+            Standalone type= resolves to FQN at parse time. With a member attribute, type= supplies
+            the enclosing Block FQN and is not stored as a separate type target. With instance=,
+            type= qualifies the local id into {FQN}::{id}. Mutually exclusive with file, url, and
+            standalone member/instance targets — exactly one target kind must be set.</documentation>
+        </type>
+        <instance type="InstanceReference" bml:xml="attribute">
+          <documentation>Block instance pointer (InstanceReference) — local id (myId), qualified
+            {FQN}::{id}, or xmlns form (foo:Bar::myId). When paired with type=, type= supplies the
+            enclosing Block FQN and the value is stored as FQN::id. Mutually exclusive with file,
+            url, type (standalone), and member targets.</documentation>
+        </instance>
         <file type="Text" bml:xml="attribute">
           <documentation>Repository documentation file (e.g. 02_mbml.md). Mutually exclusive with all
             other target attributes.</documentation>
@@ -274,26 +284,26 @@
         </url>
         <property type="PropertyReference" bml:xml="attribute">
           <documentation>PropertyDefinition path (PropertyReference) — canonical path (e.g.
-            com.foo.Bar.properties.width) or local member name when paired with block= (block
+            com.foo.Bar.properties.width) or local member name when paired with type= (type
             property="width" → com.foo.Bar.properties.width). Stored in BOM as canonical definition
-            path. Mutually exclusive with file, url, block (standalone), aggregation, association,
-            and capability.</documentation>
+            path. Mutually exclusive with file, url, type (standalone), instance, aggregation,
+            association, and capability.</documentation>
         </property>
         <aggregation type="AggregationReference" bml:xml="attribute">
           <documentation>AggregationDefinition path (AggregationReference) — canonical path (e.g.
-            com.foo.Bar.aggregations.children) or local member name when paired with block=. Stored
+            com.foo.Bar.aggregations.children) or local member name when paired with type=. Stored
             in BOM as canonical definition path. Mutually exclusive with all other target kinds.
           </documentation>
         </aggregation>
         <association type="AssociationReference" bml:xml="attribute">
           <documentation>AssociationDefinition path (AssociationReference) — canonical path (e.g.
-            com.foo.Bar.associations.basePresets) or local member name when paired with block=.
+            com.foo.Bar.associations.basePresets) or local member name when paired with type=.
             Stored in BOM as canonical definition path. Mutually exclusive with all other target
             kinds.</documentation>
         </association>
         <capability type="CapabilityReference" bml:xml="attribute">
           <documentation>CapabilityDefinition path (CapabilityReference) — canonical path (e.g.
-            com.foo.Bar.capabilities.render) or local member name when paired with block=. Stored in
+            com.foo.Bar.capabilities.render) or local member name when paired with type=. Stored in
             BOM as canonical definition path. Mutually exclusive with all other target kinds.
           </documentation>
         </capability>

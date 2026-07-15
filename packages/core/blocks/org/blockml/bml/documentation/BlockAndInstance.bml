@@ -63,13 +63,13 @@
     <see file="12_bom_object_model.md">
       BlockDefinition vs CompositionNode — formal BOM shapes.
     </see>
-    <see block="core:Block">
+    <see type="core:Block">
       Root type — abstract definition; not used directly as composition instance type.
     </see>
-    <see block="def:BlockDefinition">
+    <see type="def:BlockDefinition">
       Meta-model for block definition documents.
     </see>
-    <see block="doc:DefinitionModel">
+    <see type="doc:DefinitionModel">
       Next reading step — how definitions describe types and support reflection.
     </see>
   </references>

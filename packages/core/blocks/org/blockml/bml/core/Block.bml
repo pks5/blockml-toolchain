@@ -35,7 +35,8 @@
     • Composition instance identity uses bml:id and bml:version (not member attributes)
 
     Type reference rules:
-    • Any Block FQN may appear in aggregation and association member types
+    • Aggregation member types may be any Block FQN
+    • Association member types must be InstanceReference(T) or InstanceReference(T)[]
     • Property and Capability payload types must resolve to a ValueType
     • Capability implementation language attributes reference org.blockml.bml.language.* — unqualified names permitted
 
@@ -59,34 +60,34 @@
   </documentation>
 
   <references>
-    <see block="core:ValueType" relation="Extends">
+    <see type="core:ValueType" relation="Extends">
       Property and capability payload types.
     </see>
-    <see block="core:Language" relation="Extends">
+    <see type="core:Language" relation="Extends">
       Implementation language bindings and NaturalLanguage branch.
     </see>
-    <see block="core:Status" relation="Extends">
+    <see type="core:Status" relation="Extends">
       Lifecycle status references.
     </see>
-    <see block="core:Relation" relation="Extends">
+    <see type="core:Relation" relation="Extends">
       Cross-reference relationship categories on see entries.
     </see>
-    <see block="core:Constraint" relation="Extends">
+    <see type="core:Constraint" relation="Extends">
       Property validation constraints.
     </see>
-    <see block="core:Capability" relation="Extends">
+    <see type="core:Capability" relation="Extends">
       Capability implementation contracts.
     </see>
-    <see block="core:Definition" relation="Extends">
+    <see type="core:Definition" relation="Extends">
       Meta-model for block structure (WIP).
     </see>
-    <see block="core:Block" property="language" relation="Defines">
+    <see type="core:Block" property="language" relation="Defines">
       NaturalLanguage property — documentation prose default on every block.
     </see>
-    <see block="def:StructuralDefinition" relation="Defines">
+    <see type="def:StructuralDefinition" relation="Defines">
       Shared documentation model for structural definition elements.
     </see>
-    <see block="mbcore:Block" relation="SeeAlso">
+    <see type="mbcore:Block" relation="SeeAlso">
       Example domain base — domain-specific branches extend Block.
     </see>
     <see file="00_bom_core.md" relation="DeepDive">

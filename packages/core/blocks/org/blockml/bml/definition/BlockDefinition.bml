@@ -56,20 +56,20 @@
     <see file="16_framework_base_types.md">
       Definition Addressing and genericTypes aggregation.
     </see>
-    <see block="core:Block">
+    <see type="core:Block">
       Sole inheritance root — empty &lt;baseType /&gt; only (org.blockml.bml.core.Block).
     </see>
-    <see block="def:SubBlockDefinition">
+    <see type="def:SubBlockDefinition">
       Nested Sub-Block definition shape — extends this type.
     </see>
-    <see block="def:RootBlockDefinition">
+    <see type="def:RootBlockDefinition">
       Root and embedded block shape — extends SubBlockDefinition.
     </see>
-    <see block="btype:TypeReferenceEntity">
+    <see type="btype:TypeReferenceEntity">
       Entity payload for contracts, languages, language, and subTypes aggregations — not
       type/baseType (those stay scalar TypeReference text).
     </see>
-    <see block="btype:TypeReference">
+    <see type="btype:TypeReference">
       ValueType for identity type and baseType properties (FQN / TypeExpression text).
     </see>
   </references>

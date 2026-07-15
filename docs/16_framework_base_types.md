@@ -306,7 +306,8 @@ in child blocks.
 FQN             org.blockml.bml.definition.StructuralDefinition.Reference (Sub-Block — not a top-level library export)
 baseType        org.blockml.bml.core.Entity
 bml:xml         see                — renders as <see> inside <references>
-block           QName (prefix:Name) — Block or Definition type via xmlns prefix; XML block attribute; or Block FQN qualifier with member attribute
+type            QName (prefix:Name) — Block or Definition type via xmlns prefix; XML type attribute; or Block FQN qualifier with member/instance attribute
+instance        String             — InstanceReference token (myId or FQN::id); XML instance attribute
 file            String             — repository markdown file; XML file attribute
 url             String             — external URL; XML url attribute
 property        String             — PropertyDefinition canonical path; XML property attribute
@@ -318,11 +319,11 @@ language        NaturalLanguage    — optional; prose language override for con
 context         String (required)  — relationship note; XML text content
 ```
 
-Exactly one target kind among `block` (standalone), `file`, `url`, `property`, `aggregation`, `association`, and `capability` must be set. Split form: `block=` + one member attribute resolves to a canonical member path — `block` is not stored as a type target. `relation` is optional — omitted → `org.blockml.bml.relation.SeeAlso`. Unqualified names on `relation=` resolve via `org.blockml.bml.relation.*`.
+Exactly one target kind among `type` (standalone), `instance`, `file`, `url`, `property`, `aggregation`, `association`, and `capability` must be set. Split form: `type=` + one member attribute resolves to a canonical member path — `type` is not stored as a type target. Split form: `type=` + `instance=` resolves to `{FQN}::{id}`. `relation` is optional — omitted → `org.blockml.bml.relation.SeeAlso`. Unqualified names on `relation=` resolve via `org.blockml.bml.relation.*`.
 
 Standard relation blocks (`org.blockml.bml.relation.*`): `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Abstract base: `org.blockml.bml.core.Relation`.
 
-**Design note:** Seven mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see block="…">` (`TypeReference`), `<see property="…">` (`PropertyReference`), `<see aggregation="…">` / `<see association="…">` / `<see capability="…">` (matching MemberReference children), `<see file="…">` (doc), `<see url="…">` (web). Member values are canonical definition paths in the BOM. See `02_mbml.md` — `<references>` — Why separate target attributes.
+**Design note:** Eight mutually exclusive target attributes instead of one generic `target`. The attribute name encodes the target kind at the read site — `<see type="…">` (`TypeReference`), `<see instance="…">` (`InstanceReference`), `<see property="…">` (`PropertyReference`), `<see aggregation="…">` / `<see association="…">` / `<see capability="…">` (matching MemberReference children), `<see file="…">` (doc), `<see url="…">` (web). Member values are canonical definition paths in the BOM. See `02_mbml.md` — `<references>` — Why separate target attributes.
 
 Authoring: list only targets **relevant to the current definition**; text body describes the relationship. All cross-links belong in `<references>` — never in `<documentation>`. See `02_mbml.md` — `<documentation>` · `<references>`.
 
@@ -434,7 +435,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/type/Version.bml · URL.bml · URI.bml · FilePath.bml · MimeType.bml
      org/blockml/bml/core/PrimitiveEntity.bml
      org/blockml/bml/type/TypeReference.bml · TypeReferenceEntity.bml
-     org/blockml/bml/type/MemberReference.bml · PropertyReference.bml · AggregationReference.bml · AssociationReference.bml · CapabilityReference.bml
+     org/blockml/bml/type/MemberReference.bml · PropertyReference.bml · AggregationReference.bml · AssociationReference.bml · CapabilityReference.bml · InstanceReference.bml
      org/blockml/bml/type/IntegerEntity.bml · TextEntity.bml · …
      org/blockml/bml/language/NaturalLanguage.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …

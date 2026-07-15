@@ -499,8 +499,10 @@ interface DocumentationExample {
 }
 
 interface DocumentationReference {
-  /** Block type reference (TypeReference) — XML block attribute on <see>. Standalone block= only; when paired with a member attribute, block= qualifies the member and is not stored here. Seven target kinds (block, file, url, property, aggregation, association, capability) instead of one generic target — see 02_mbml.md — references. */
-  block?: string
+  /** Block type reference (TypeReference) — XML type attribute on <see>. Standalone type= only; when paired with a member or instance attribute, type= qualifies the target and is not stored here. Eight target kinds (type, instance, file, url, property, aggregation, association, capability) instead of one generic target — see 02_mbml.md — references. */
+  type?: string
+  /** Block instance pointer (InstanceReference) — XML instance attribute on <see>. Local id, FQN::id, or resolved from type= + instance=. */
+  instance?: string
   /** Repository markdown file — XML file attribute on <see> */
   file?: string
   /** External URL — XML url attribute on <see> */
@@ -588,7 +590,8 @@ interface AggregationDefinition extends MemberDefinitionBase {
 
 interface AssociationDefinition extends MemberDefinitionBase {
   kind: "association"
-  typeFqn: string
+  /** TypeExpression — must be InstanceReference(T) or InstanceReference(T)[] with T extending Block */
+  type: TypeExpression
   cardinality: "0..1" | "0..n"
 }
 

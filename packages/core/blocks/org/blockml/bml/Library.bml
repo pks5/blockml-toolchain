@@ -61,7 +61,7 @@
     <see file="12_bom_object_model.md">
       Library BOM data structure.
     </see>
-    <see block="bcore:BlockLibrary">
+    <see type="bcore:BlockLibrary">
       Framework base type — not exported from this catalog.
     </see>
   </references>
@@ -208,6 +208,7 @@
       <btype:FloatEntity />
       <btype:TypeReference />
       <btype:TypeReferenceEntity />
+      <btype:InstanceReference />
       <btype:MemberReference />
       <btype:PropertyReference />
       <btype:AggregationReference />

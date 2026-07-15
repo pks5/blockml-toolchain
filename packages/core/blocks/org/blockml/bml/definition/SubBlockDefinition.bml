@@ -44,10 +44,10 @@
     <see file="02_mbml.md">
       Block definition authoring format and Sub-Block rules.
     </see>
-    <see block="def:BlockDefinition">
+    <see type="def:BlockDefinition">
       Shared block definition shape — identity, members, and metadata.
     </see>
-    <see block="def:RootBlockDefinition">
+    <see type="def:RootBlockDefinition">
       Root and embedded block shape — adds embeddedBlocks aggregation.
     </see>
   </references>

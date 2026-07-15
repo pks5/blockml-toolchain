@@ -21,7 +21,7 @@
 
     Value forms:
     • Canonical definition path — for example com.foo.Bar.properties.width
-    • Local member name when paired with a Block qualifier (for example see block="com.foo:Bar"
+    • Local member name when paired with a type qualifier (for example see type="com.foo.Bar"
       property="width" → com.foo.Bar.properties.width)
 
     Generic parameters:
@@ -35,7 +35,8 @@
     • CapabilityReference   → D = def:CapabilityDefinition
 
     Primary use — StructuralDefinition Reference (see) member target attributes. Not for Block type
-    identity (use TypeReference) or type-reference aggregations (use TypeReferenceEntity).</documentation>
+    identity (use TypeReference), instance pointers (use InstanceReference), or type-reference
+    aggregations (use TypeReferenceEntity).</documentation>
 
   <references>
     <see file="16_framework_base_types.md">
@@ -44,16 +45,16 @@
     <see file="02_mbml.md">
       references — Why separate target attributes.
     </see>
-    <see block="btype:TypeReference">
+    <see type="btype:TypeReference">
       Parent ValueType — Block type FQNs only.
     </see>
-    <see block="def:MemberDefinition">
+    <see type="def:MemberDefinition">
       Abstract member meta-model branch bound by D.
     </see>
-    <see block="def:StructuralDefinition">
+    <see type="def:StructuralDefinition">
       Reference sub-block — property / aggregation / association / capability attributes.
     </see>
-    <see block="btype:PropertyReference">
+    <see type="btype:PropertyReference">
       Concrete specialization for PropertyDefinition paths.
     </see>
   </references>

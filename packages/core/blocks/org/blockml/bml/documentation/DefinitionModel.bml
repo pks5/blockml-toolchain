@@ -61,25 +61,25 @@
     <see file="12_bom_object_model.md">
       MemberDefinition, DocumentationReference — BOM reflection shapes.
     </see>
-    <see block="core:Definition">
+    <see type="core:Definition">
       Abstract base of the Definition branch.
     </see>
-    <see block="def:StructuralDefinition">
+    <see type="def:StructuralDefinition">
       Shared documentation model; sub-blocks Documentation, Change, Example, and Reference.
     </see>
-    <see block="def:BlockDefinition">
+    <see type="def:BlockDefinition">
       Generic meta-model for block definition documents.
     </see>
-    <see block="def:MemberDefinition">
+    <see type="def:MemberDefinition">
       Abstract base for property, aggregation, association, and capability declarations.
     </see>
-    <see block="def:PropertyDefinition">
+    <see type="def:PropertyDefinition">
       Meta-model member shape for property declarations.
     </see>
-    <see block="core:Block">
+    <see type="core:Block">
       Sole inheritance root — definitions inherit like all other Blocks.
     </see>
-    <see block="doc:TypeSystemOverview">
+    <see type="doc:TypeSystemOverview">
       Next reading step — ValueType kinds and type expressions.
     </see>
   </references>

@@ -52,19 +52,19 @@
     <see file="12_bom_object_model.md">
       BlockLibrary BOM structure and nested-library rules.
     </see>
-    <see block="doc:LibrarySystem">
+    <see type="doc:LibrarySystem">
       Libraries, packages, namespaces, versioning, and imports.
     </see>
-    <see block="btype:FilePathEntity">
+    <see type="btype:FilePathEntity">
       Entity wrapper used for _schemas entries.
     </see>
-    <see block="core:ReadMe">
+    <see type="core:ReadMe">
       Required readFirst target — human/LLM reading entry.
     </see>
-    <see block="core:Bootstrap">
+    <see type="core:Bootstrap">
       Optional bootstrap target — automation SPOE (0..1).
     </see>
-    <see block="btype:TypeReferenceEntity">
+    <see type="btype:TypeReferenceEntity">
       Entity payload for readFirst, bootstrap, _dependencies, _subLibraries, and _blocks.
     </see>
   </references>

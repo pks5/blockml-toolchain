@@ -39,25 +39,25 @@
     <see file="02_mbml.md">
       Capabilities authoring rules.
     </see>
-    <see block="cap:Inbound">
+    <see type="cap:Inbound">
       Capability typeFqn — requires inputType.
     </see>
-    <see block="cap:Outbound">
+    <see type="cap:Outbound">
       Capability typeFqn — requires outputType.
     </see>
-    <see block="cap:Transformation">
+    <see type="cap:Transformation">
       Capability typeFqn — requires inputType and outputType.
     </see>
-    <see block="core:Language">
+    <see type="core:Language">
       Implementation language bindings.
     </see>
-    <see block="core:ValueType">
+    <see type="core:ValueType">
       inputType and outputType payload types.
     </see>
-    <see block="core:Entity">
+    <see type="core:Entity">
       Implementation sub-block branch — structured language binding, not a ValueType.
     </see>
-    <see block="def:MemberDefinition">
+    <see type="def:MemberDefinition">
       Parent type — override/abstract/final are local declaration properties on MemberDefinition;
       capability adds an optional implementation binding element.
     </see>

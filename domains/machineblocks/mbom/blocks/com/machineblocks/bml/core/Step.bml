@@ -20,10 +20,10 @@
     defines build order.</documentation>
 
   <references>
-    <see block="core:Set">
+    <see type="core:Set">
       Used as children of Set's _steps aggregation.
     </see>
-    <see block="core:Block">
+    <see type="core:Block">
       part association references a placed instance by bml:id in _parts.
     </see>
   </references>
@@ -31,7 +31,7 @@
   <final>true</final>
 
   <associations>
-    <part type="core:Block"></part>
+    <part type="InstanceReference(core:Block)"></part>
   </associations>
 
   <properties>

@@ -21,7 +21,7 @@
     procedural resolution path without searching documentation prose.</documentation>
 
   <references>
-    <see block="core:TaskGuide">
+    <see type="core:TaskGuide">
       Procedural fix guides linked via relation=Resolves.
     </see>
     <see file="12_bom_object_model.md">

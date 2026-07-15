@@ -23,10 +23,10 @@
   </documentation>
 
   <references>
-    <see block="core:ReadMe">
+    <see type="core:ReadMe">
       Library reading entry — ReadFirst and TaskIndex on references.
     </see>
-    <see block="core:TaskGuide">
+    <see type="core:TaskGuide">
       Procedural task guides — org.blockml.bml.task.* blocks.
     </see>
     <see file="02_mbml.md">

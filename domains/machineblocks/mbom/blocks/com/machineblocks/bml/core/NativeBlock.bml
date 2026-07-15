@@ -22,10 +22,10 @@
   </documentation>
 
   <references>
-    <see block="core:Block">
+    <see type="core:Block">
       Extends Block directly — not CompositeBlock.
     </see>
-    <see block="core:CompositeBlock">
+    <see type="core:CompositeBlock">
       Contrasts with CompositeBlock which uses _parts for composition children.
     </see>
   </references>

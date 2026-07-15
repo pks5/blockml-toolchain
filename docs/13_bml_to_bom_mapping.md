@@ -290,15 +290,17 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <examples>                                   → block.examples[]
   <example title="…" language="…">           → { title, content: CDATA body, contentLanguageFqn? }
 <references>                                 → block.references[]
-  <see block="…" relation="…" language="…">…</see>         → { block, relationFqn?, context, languageFqn? }
+  <see type="…" relation="…" language="…">…</see>         → { type, relationFqn?, context, languageFqn? }
+  <see instance="…" relation="…" language="…">…</see>      → { instance, relationFqn?, context, languageFqn? }
   <see file="…" relation="…" language="…">…</see>          → { file, relationFqn?, context, languageFqn? }
   <see url="…" relation="…" language="…">…</see>           → { url, relationFqn?, context, languageFqn? }
   <see property="…" relation="…" language="…">…</see>      → { property: canonicalPath, relationFqn?, context, languageFqn? }
   <see aggregation="…" …>…</see>                           → { aggregation: canonicalPath, … }
   <see association="…" …>…</see>                           → { association: canonicalPath, … }
   <see capability="…" …>…</see>                            → { capability: canonicalPath, … }
-  <see block="…" property="…" …>…</see>                     → { property: resolve(block)+".properties."+name, … }  (block not stored)
-  <see block="…" capability="…" …>…</see>                   → { capability: resolve(block)+".capabilities."+name, … }
+  <see type="…" property="…" …>…</see>                     → { property: resolve(type)+".properties."+name, … }  (type not stored)
+  <see type="…" capability="…" …>…</see>                   → { capability: resolve(type)+".capabilities."+name, … }
+  <see type="…" instance="…" …>…</see>                     → { instance: resolve(type)+"::"+id, … }  (type not stored)
 <status>Draft</status>                → member.statusFqn or block.statusFqn (when declared)
                                              → omitted: inherit effective status from parent
 <name>…</name>                               → block.name
@@ -331,17 +333,20 @@ Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <example> body not CDATA                 → BML_EXAMPLE_NOT_CDATA (error)
 <example language="…"> unknown Language FQN → BML_EXAMPLE_UNKNOWN_LANGUAGE (error)
 <language> or documentation language="…" unknown NaturalLanguage FQN → BML_UNKNOWN_NATURAL_LANGUAGE (error)
-<see> without block, file, url, property, aggregation, association, or capability → BML_REFERENCE_MISSING_TARGET (error)
+<see> without type, instance, file, url, property, aggregation, association, or capability → BML_REFERENCE_MISSING_TARGET (error)
 <see> with more than one target kind                    → BML_REFERENCE_AMBIGUOUS_TARGET (error)
-<see block="…" property="…"> (split member form)         → one member target; block qualifies member name
+<see type="…" property="…"> (split member form)         → one member target; type qualifies member name
+<see type="…" instance="…"> (split instance form)       → one instance target; type qualifies local id → FQN::id
 <see relation="…"> unknown Relation FQN                  → BML_UNKNOWN_RELATION (error)
 <see property|aggregation|association|capability="…"> unknown member path at validate time → BML_REFERENCE_UNKNOWN_MEMBER (error)
+<see instance="…"> unresolvable / unexported / non-static → BML_UNRESOLVABLE_INSTANCE_REF / BML_UNEXPORTED_INSTANCE_REF / BML_NON_STATIC_INSTANCE_REF
 <see> omitted relation                                    → relationFqn = org.blockml.bml.relation.SeeAlso
 Member canonical path resolution (split form):
-  block="com.foo.Bar" property="width"      → com.foo.Bar.properties.width
-  block="com.foo.Bar" aggregation="parts"   → com.foo.Bar.aggregations.parts
-  block="com.foo.Bar" association="parent"  → com.foo.Bar.associations.parent
-  block="com.foo.Bar" capability="render"   → com.foo.Bar.capabilities.render
+  type="com.foo.Bar" property="width"      → com.foo.Bar.properties.width
+  type="com.foo.Bar" aggregation="parts"   → com.foo.Bar.aggregations.parts
+  type="com.foo.Bar" association="parent"  → com.foo.Bar.associations.parent
+  type="com.foo.Bar" capability="render"   → com.foo.Bar.capabilities.render
+  type="com.foo.Bar" instance="myId"       → com.foo.Bar::myId
 Full-path form: attribute value stored as-is when it already contains the container segment (.properties., .capabilities., …).
 Omitted abstract/final/override          → false
 <abstract/> / <final/> / empty boolean   → parse error (explicit true or false required)

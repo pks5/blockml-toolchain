@@ -19,13 +19,13 @@
   </documentation>
 
   <references>
-    <see block="btype:MemberReference">
+    <see type="btype:MemberReference">
       Abstract member path ValueType.
     </see>
-    <see block="def:PropertyDefinition">
+    <see type="def:PropertyDefinition">
       Target member meta-model type.
     </see>
-    <see block="def:StructuralDefinition">
+    <see type="def:StructuralDefinition">
       see property attribute.
     </see>
   </references>

@@ -54,7 +54,7 @@
     <see file="17_type_system_bml.md">
       Union type expressions and generic application syntax.
     </see>
-    <see block="btype:ConstantType">
+    <see type="btype:ConstantType">
       ConstantType branch — singleton value domain semantics.
     </see>
   </references>

@@ -35,19 +35,19 @@
   </documentation>
 
   <references>
-    <see block="doc:DefinitionModel" relation="Prerequisite">
+    <see type="doc:DefinitionModel" relation="Prerequisite">
       Understand member containers and definition metadata first.
     </see>
-    <see block="def:ConstrainableDefinition" relation="TaskStep">
+    <see type="def:ConstrainableDefinition" relation="TaskStep">
       Step 1 — confirm the target element supports a constraints container.
     </see>
     <see file="18_constraints_and_suggestions.md" relation="TaskStep">
       Step 2 — choose constraint branch and target binding rules.
     </see>
-    <see block="constraint:Min" relation="TaskStep">
+    <see type="constraint:Min" relation="TaskStep">
       Step 3 — pick a concrete constraint block (Min, Max, Pattern, RequiresMember, …).
     </see>
-    <see block="core:Validation" relation="TaskStep">
+    <see type="core:Validation" relation="TaskStep">
       Step 4 — optionally wire validation for enforced rules.
     </see>
   </references>

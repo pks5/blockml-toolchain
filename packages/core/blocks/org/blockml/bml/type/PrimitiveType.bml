@@ -33,13 +33,13 @@
     <see file="17_type_system_bml.md">
       PrimitiveType branch and PrimitiveEntity wrappers.
     </see>
-    <see block="btype:Number">
+    <see type="btype:Number">
       Numeric primitive branch.
     </see>
-    <see block="btype:Text">
+    <see type="btype:Text">
       Textual primitive branch.
     </see>
-    <see block="btype:IntegerEntity">
+    <see type="btype:IntegerEntity">
       Example concrete Entity wrapper for primitive values.
     </see>
   </references>

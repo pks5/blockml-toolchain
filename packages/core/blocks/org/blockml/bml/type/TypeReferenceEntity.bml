@@ -44,16 +44,16 @@
     <see file="13_bml_to_bom_mapping.md">
       TypeReferenceEntity aggregation mapping.
     </see>
-    <see block="btype:TypeReference">
+    <see type="btype:TypeReference">
       Scalar FQN / TypeExpression ValueType wrapped by this Entity.
     </see>
-    <see block="core:PrimitiveEntity">
+    <see type="core:PrimitiveEntity">
       Abstract generic base — value property inherited after binding T.
     </see>
-    <see block="def:BlockDefinition">
+    <see type="def:BlockDefinition">
       contracts, languages, subTypes, language aggregations.
     </see>
-    <see block="core:BlockLibrary">
+    <see type="core:BlockLibrary">
       readFirst, bootstrap, _dependencies, _subLibraries, _blocks aggregations.
     </see>
   </references>

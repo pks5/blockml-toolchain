@@ -356,6 +356,7 @@ org.blockml.bml.core.ValueType              abstract — never stores data
   │     │     │     └── org.blockml.bml.type.MemberReference(B, D)  — abstract
   │     │     │           ├── PropertyReference · AggregationReference
   │     │     │           ├── AssociationReference · CapabilityReference
+  │     │     ├── org.blockml.bml.type.InstanceReference(T)  — Block instance pointer
   │     │     ├── org.blockml.bml.type.Version
   │     │     ├── org.blockml.bml.type.URL
   │     │     ├── org.blockml.bml.type.URI
@@ -533,6 +534,7 @@ org.blockml.bml.type.PrimitiveType
     org.blockml.bml.type.TypeReference(B)
       org.blockml.bml.type.MemberReference(B, D)  — abstract
         PropertyReference · AggregationReference · AssociationReference · CapabilityReference
+    org.blockml.bml.type.InstanceReference(T)  — Block instance pointer
     org.blockml.bml.type.Version
     org.blockml.bml.type.URL · URI · FilePath · MimeType · …
   org.blockml.bml.type.Number         — abstract
@@ -627,6 +629,7 @@ an Entity in composition or aggregation (contracts, languages, Library lists, �
 ```text
 TypeReference(B)                 — Block type FQN / TypeExpression text
 TypeReferenceEntity(B)           — Entity with value : TypeReference(B)
+InstanceReference(T)             — Block instance pointer (bml:id / FQN::id); association type; see instance=
 MemberReference(B, D)            — abstract — member definition paths
   PropertyReference(B)           — D = PropertyDefinition   (see property=)
   AggregationReference(B)        — D = AggregationDefinition (see aggregation=)
@@ -635,7 +638,8 @@ MemberReference(B, D)            — abstract — member definition paths
 ```
 
 There is **no** separate aggregation marker. Type-reference aggregations are ordinary Entity
-aggregations whose payload type is a `TypeReferenceEntity` application.
+aggregations whose payload type is a `TypeReferenceEntity` application. Association types must be
+`InstanceReference(T)` or `InstanceReference(T)[]` — not bare Block FQNs.
 
 #### Empty child sugar for TypeReferenceEntity aggregations
 

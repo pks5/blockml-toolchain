@@ -45,34 +45,34 @@
     <see file="02_mbml.md">
       Task guides — authoring rules for TaskGuide blocks and task relations.
     </see>
-    <see block="core:TaskGuide" relation="Defines">
+    <see type="core:TaskGuide" relation="Defines">
       Abstract base for org.blockml.bml.task.* procedural blocks.
     </see>
-    <see block="core:Diagnostic" relation="Defines">
+    <see type="core:Diagnostic" relation="Defines">
       Abstract base for org.blockml.bml.diagnostic.* error code blocks.
     </see>
-    <see block="relation:TaskIndex" relation="Defines">
+    <see type="relation:TaskIndex" relation="Defines">
       Catalog relation on README — lists available tasks.
     </see>
-    <see block="relation:TaskStep" relation="Defines">
+    <see type="relation:TaskStep" relation="Defines">
       Ordered step relation inside TaskGuide references.
     </see>
-    <see block="relation:Prerequisite" relation="Defines">
+    <see type="relation:Prerequisite" relation="Defines">
       Before-you-start relation on TaskGuide blocks.
     </see>
-    <see block="relation:Resolves" relation="Defines">
+    <see type="relation:Resolves" relation="Defines">
       Diagnostic → TaskGuide fix link.
     </see>
-    <see block="task:AuthorNewBlock" relation="SeeAlso">
+    <see type="task:AuthorNewBlock" relation="SeeAlso">
       Example task — author a new Block definition.
     </see>
-    <see block="diag:BML_UNKNOWN_TYPE" relation="SeeAlso">
+    <see type="diag:BML_UNKNOWN_TYPE" relation="SeeAlso">
       Example diagnostic — links to DebugUnknownType task via Resolves.
     </see>
-    <see block="doc:BootstrapModel" relation="SeeAlso">
+    <see type="doc:BootstrapModel" relation="SeeAlso">
       Bootstrap role, README, and ReadFirst learning paths.
     </see>
-    <see block="blockml:README" relation="SeeAlso">
+    <see type="blockml:README" relation="SeeAlso">
       Standard entry point — TaskIndex entries list available tasks.
     </see>
   </references>

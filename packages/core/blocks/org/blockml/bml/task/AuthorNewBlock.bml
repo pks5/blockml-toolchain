@@ -42,22 +42,22 @@
   </documentation>
 
   <references>
-    <see block="doc:DefinitionModel" relation="Prerequisite">
+    <see type="doc:DefinitionModel" relation="Prerequisite">
       Understand idea, members, and documentation extensions before authoring.
     </see>
-    <see block="def:RootBlockDefinition" relation="TaskStep">
+    <see type="def:RootBlockDefinition" relation="TaskStep">
       Step 1 — inspect the root block definition meta-model shape.
     </see>
     <see file="02_mbml.md" relation="TaskStep">
       Step 2 — follow block authoring rules (child order, type references, required fields).
     </see>
-    <see block="core:Block" relation="TaskStep">
+    <see type="core:Block" relation="TaskStep">
       Step 3 — pick baseType and declare member containers.
     </see>
-    <see block="doc:ModelingGuidelines" relation="TaskStep">
+    <see type="doc:ModelingGuidelines" relation="TaskStep">
       Step 4 — choose baseType vs contracts and model members consistently.
     </see>
-    <see block="blockml:Library" relation="TaskStep">
+    <see type="blockml:Library" relation="TaskStep">
       Step 5 — add the block FQN to Library _blocks for export.
     </see>
   </references>

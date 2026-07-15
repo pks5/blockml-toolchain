@@ -73,7 +73,7 @@
     <see file="04_types.md">
       Anonymous Object inputType (MBOM).
     </see>
-    <see block="mapping:FunctionMapping">
+    <see type="mapping:FunctionMapping">
       Positional parameter mapping at capability call sites.
     </see>
   </references>

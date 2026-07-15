@@ -46,10 +46,10 @@
     <see file="02_mbml.md">
       Block definition authoring format and Sub-Block rules.
     </see>
-    <see block="def:BlockDefinition">
+    <see type="def:BlockDefinition">
       Shared block definition shape — identity, members, and metadata.
     </see>
-    <see block="def:SubBlockDefinition">
+    <see type="def:SubBlockDefinition">
       Nested Sub-Block shape — definition default and subBlocks aggregation.
     </see>
   </references>

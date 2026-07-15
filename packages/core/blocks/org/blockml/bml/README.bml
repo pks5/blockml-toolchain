@@ -32,99 +32,99 @@
 
   <references>
 
-    <see block="doc:Introduction" relation="ReadFirst">
+    <see type="doc:Introduction" relation="ReadFirst">
       Start here — BlockML goals and overview.
     </see>
 
-    <see block="doc:EverythingIsABlock" relation="ReadFirst">
+    <see type="doc:EverythingIsABlock" relation="ReadFirst">
       Core principle — one root, one registry, one parser; everything is a Block.
     </see>
 
-    <see block="doc:BlockAndInstance" relation="ReadFirst">
+    <see type="doc:BlockAndInstance" relation="ReadFirst">
       Definition, Block, Block instance, and composition — the core mental model.
     </see>
 
-    <see block="doc:DefinitionModel" relation="ReadFirst">
+    <see type="doc:DefinitionModel" relation="ReadFirst">
       Definition meta-model — idea, members, documentation extensions on block definitions.
     </see>
 
-    <see block="doc:TypeSystemOverview" relation="ReadFirst">
+    <see type="doc:TypeSystemOverview" relation="ReadFirst">
       ValueTypes, generics, collections, baseType vs contracts.
     </see>
 
-    <see block="doc:ValueTypeConfiguration" relation="ReadFirst">
+    <see type="doc:ValueTypeConfiguration" relation="ReadFirst">
       ValueType instance configuration on Property type references.
     </see>
 
-    <see block="doc:CapabilitySemantics" relation="ReadFirst">
+    <see type="doc:CapabilitySemantics" relation="ReadFirst">
       Inbound, Outbound, Transformation — all behaviour as Capabilities.
     </see>
 
-    <see block="doc:Expressions" relation="ReadFirst">
+    <see type="doc:Expressions" relation="ReadFirst">
       Expression language, FunctionMapping, and capability call syntax.
     </see>
 
-    <see block="doc:CompilerArchitecture" relation="ReadFirst">
+    <see type="doc:CompilerArchitecture" relation="ReadFirst">
       Parser, validator, renderer pipeline — stages and responsibilities.
     </see>
 
-    <see block="doc:RendererFreedom" relation="ReadFirst">
+    <see type="doc:RendererFreedom" relation="ReadFirst">
       Manifestation is target-defined — BlockML prescribes grammar, not output.
     </see>
 
-    <see block="doc:LibrarySystem" relation="ReadFirst">
+    <see type="doc:LibrarySystem" relation="ReadFirst">
       Libraries, packages, namespaces, versioning, and _blocks membership.
     </see>
 
-    <see block="doc:BmlNamespace" relation="ReadFirst">
+    <see type="doc:BmlNamespace" relation="ReadFirst">
       org.blockml.bml.* namespace layout and domain package conventions.
     </see>
 
-    <see block="doc:DocumentationModel" relation="ReadFirst">
+    <see type="doc:DocumentationModel" relation="ReadFirst">
       idea, documentation, references, examples — the block documentation model.
     </see>
 
-    <see block="doc:BootstrapModel" relation="ReadFirst">
+    <see type="doc:BootstrapModel" relation="ReadFirst">
       README / ReadMe, Bootstrap SPOE, TypeRegistry bootstrap, and interpretation context.
     </see>
 
-    <see block="doc:ModelingGuidelines" relation="ReadFirst">
+    <see type="doc:ModelingGuidelines" relation="ReadFirst">
       Recommended patterns — baseType, contracts, capabilities, constraints.
     </see>
 
-    <see block="doc:PseudoCode" relation="ReadFirst">
+    <see type="doc:PseudoCode" relation="ReadFirst">
       PseudoCode as semantic capability implementation dialect.
     </see>
 
-    <see block="doc:WOTFoundation" relation="ReadFirst">
+    <see type="doc:WOTFoundation" relation="ReadFirst">
       Optional background — Idea, Manifestation, Grammar, World (Web of Things).
     </see>
 
-    <see block="task:AuthorNewBlock" relation="TaskIndex">
+    <see type="task:AuthorNewBlock" relation="TaskIndex">
       Author a new Block definition from scratch.
     </see>
 
-    <see block="task:AddConstraint" relation="TaskIndex">
+    <see type="task:AddConstraint" relation="TaskIndex">
       Attach a Constraint to a Block or member definition.
     </see>
 
-    <see block="task:DebugUnknownType" relation="TaskIndex">
+    <see type="task:DebugUnknownType" relation="TaskIndex">
       Fix BML_UNKNOWN_TYPE — unresolved type reference.
     </see>
 
-    <see block="doc:TaskGuideModel" relation="SeeAlso">
+    <see type="doc:TaskGuideModel" relation="SeeAlso">
       TaskGuide blocks, task relations, and error-driven fix paths.
     </see>
 
-    <see block="core:ReadMe" relation="Defines">
+    <see type="core:ReadMe" relation="Defines">
       Abstract ReadMe role marker — README is the core-library reading entry.
     </see>
 
-    <see block="core:Bootstrap" relation="ContrastsWith">
+    <see type="core:Bootstrap" relation="ContrastsWith">
       Automation SPOE branch — Library.bootstrap, not readFirst.
     </see>
 
-    <see block="blockml:Library" relation="SeeAlso">
+    <see type="blockml:Library" relation="SeeAlso">
       Published catalog of exported framework blocks, types, and services.
     </see>
 

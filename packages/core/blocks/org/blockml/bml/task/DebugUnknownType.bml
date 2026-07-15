@@ -34,13 +34,13 @@
   </documentation>
 
   <references>
-    <see block="diag:BML_UNKNOWN_TYPE" relation="SeeAlso">
+    <see type="diag:BML_UNKNOWN_TYPE" relation="SeeAlso">
       Diagnostic block for this error code — entry point from validator output.
     </see>
-    <see block="doc:ImplicitNamespaceResolution" relation="TaskStep">
+    <see type="doc:ImplicitNamespaceResolution" relation="TaskStep">
       Step 1 — verify xmlns prefix and implicit namespace resolution at the reference site.
     </see>
-    <see block="doc:LibrarySystem" relation="TaskStep">
+    <see type="doc:LibrarySystem" relation="TaskStep">
       Step 2 — confirm Library _blocks exports the defining type.
     </see>
     <see file="16_framework_base_types.md" relation="TaskStep">
@@ -49,7 +49,7 @@
     <see file="17_type_system_bml.md" relation="TaskStep">
       Step 4 — check type reference forms (FQN, QName, context-bound unqualified names).
     </see>
-    <see block="doc:BootstrapModel" relation="TaskStep">
+    <see type="doc:BootstrapModel" relation="TaskStep">
       Step 5 — confirm TypeRegistry bootstrap loaded dependencies before this document.
     </see>
   </references>

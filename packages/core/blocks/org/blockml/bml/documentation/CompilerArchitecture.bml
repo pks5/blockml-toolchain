@@ -61,7 +61,7 @@
     <see file="14_compiler_runtime.md">
       Compiler runtime — bootstrap, RenderContext, compile I/O model.
     </see>
-    <see block="doc:RendererFreedom">
+    <see type="doc:RendererFreedom">
       Next reading step — renderer decides manifestation, not BlockML.
     </see>
   </references>

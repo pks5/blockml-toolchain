@@ -404,7 +404,7 @@ Examples:
   com.myproject.enclosures.DefaultEnclosure::floor
 ```
 
-Used in **association** member values that reference other instances — e.g. `basePresets`, `Step.part`. **Not** valid on property values — properties always store inline deep copies. See `12_bom_object_model.md` — Property Value Semantics.
+Used in **association** member values that reference other instances — e.g. `basePresets`, `Step.part`. Association declaration `type` must be `InstanceReference(T)` or `InstanceReference(T)[]`. Values are InstanceReference tokens. **Not** valid on property values — properties always store inline deep copies. Also authorable on `<see instance="…">`. See `12_bom_object_model.md` — Property Value Semantics · AssociationDefinition.
 
 A qualified reference is valid **only when both** conditions hold:
 
@@ -922,20 +922,17 @@ calculate()    ≡  #this.calculate()
 `bml:Self` is a context-dependent **type reference**. It resolves to the effective current Block type after inheritance has been resolved — not at parse time.
 
 ```xml
-<association name="next" type="bml:Self"/>
+<association name="next" type="InstanceReference(bml:Self)"/>
 ```
 
-On `com.foo.Node` → `next : com.foo.Node`. On `com.bar.SpecialNode extends com.foo.Node` → `next : com.bar.SpecialNode`.
+On `com.foo.Node` → `next : InstanceReference(com.foo.Node)`. On `com.bar.SpecialNode extends com.foo.Node` → `next : InstanceReference(com.bar.SpecialNode)`.
 
-Collection forms: `bml:Self[]`, `bml:Self[1..3]`, etc. `bml:Self` is especially useful for Associations (parent, children, connectedTo) but is also valid on Aggregations.
-
-`bml:Self` can be used anywhere a normal type reference is allowed:
+Collection forms: `InstanceReference(bml:Self)[]`, etc. Associations require the `InstanceReference` wrapper — bare `bml:Self` / `bml:Self[]` are invalid on association `type`. `bml:Self` remains valid on Aggregations and elsewhere a type reference is allowed:
 
 ```xml
 <property type="bml:Self"/>
 <aggregation type="bml:Self"/>
 <inputType>bml:Self</inputType>
-<reference type="bml:Self"/>
 ```
 
 `bml:Self` is **not** used for definition navigation. Member definition references use canonical structural paths (see below).

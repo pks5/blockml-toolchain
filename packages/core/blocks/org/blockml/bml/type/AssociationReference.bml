@@ -15,16 +15,16 @@
 
   <documentation>Concrete MemberReference binding D = AssociationDefinition. Value is a canonical
     association path (com.foo.Bar.associations.basePresets) or a local association name when paired
-    with a Block qualifier. Used as the type of see association=.</documentation>
+    with a type qualifier. Used as the type of see association=.</documentation>
 
   <references>
-    <see block="btype:MemberReference">
+    <see type="btype:MemberReference">
       Abstract member path ValueType.
     </see>
-    <see block="def:AssociationDefinition">
+    <see type="def:AssociationDefinition">
       Target member meta-model type.
     </see>
-    <see block="def:StructuralDefinition">
+    <see type="def:StructuralDefinition">
       see association attribute.
     </see>
   </references>

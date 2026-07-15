@@ -23,10 +23,10 @@
     fix paths (Diagnostic blocks with relation=Resolves).</documentation>
 
   <references>
-    <see block="core:Documentation">
+    <see type="core:Documentation">
       Concept documentation blocks — mental model; TaskGuide blocks are procedural complements.
     </see>
-    <see block="core:ReadMe">
+    <see type="core:ReadMe">
       Library reading entry — TaskIndex entries on README list available tasks.
     </see>
   </references>

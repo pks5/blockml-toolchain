@@ -63,22 +63,22 @@
     <see file="15_dev_setup.md">
       Monorepo package conventions and workspace layout.
     </see>
-    <see block="blockml:Library">
+    <see type="blockml:Library">
       Published catalog of the BlockML core library.
     </see>
-    <see block="core:BlockLibrary">
+    <see type="core:BlockLibrary">
       Abstract base for publishable library descriptors — not exported via _blocks.
     </see>
-    <see block="core:ReadMe">
+    <see type="core:ReadMe">
       Required readFirst target branch.
     </see>
-    <see block="core:Bootstrap">
+    <see type="core:Bootstrap">
       Optional bootstrap SPOE branch.
     </see>
-    <see block="doc:BmlNamespace">
+    <see type="doc:BmlNamespace">
       Mandatory domain.bml namespace for all BML definitions.
     </see>
-    <see block="doc:DocumentationModel">
+    <see type="doc:DocumentationModel">
       Next reading step — idea, documentation, references on Block definitions.
     </see>
   </references>

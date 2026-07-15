@@ -60,7 +60,7 @@
     <see file="06_compiler.md">
       Example renderer pipelines — SCAD vs Documentation renderer flows.
     </see>
-    <see block="doc:LibrarySystem">
+    <see type="doc:LibrarySystem">
       Next reading step — libraries, packages, namespaces, versioning.
     </see>
   </references>

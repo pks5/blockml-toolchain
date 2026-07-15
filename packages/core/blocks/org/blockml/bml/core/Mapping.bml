@@ -35,7 +35,7 @@
     <see file="18_function_mapping.md">
       Function parameter mapping rules and component responsibilities.
     </see>
-    <see block="mapping:FunctionMapping">
+    <see type="mapping:FunctionMapping">
       Concrete mapping for function-like call syntax.
     </see>
   </references>

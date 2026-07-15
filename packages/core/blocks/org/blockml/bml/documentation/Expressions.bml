@@ -54,19 +54,19 @@
     <see file="18_function_mapping.md">
       FunctionMapping — positional and named capability call argument mapping.
     </see>
-    <see block="mapping:FunctionMapping">
+    <see type="mapping:FunctionMapping">
       Default function mapping rules for capability calls and positional StructType access.
     </see>
-    <see block="service:Math">
+    <see type="service:Math">
       Built-in #math.* expression utilities.
     </see>
-    <see block="service:Strings">
+    <see type="service:Strings">
       Built-in #strings.* expression utilities.
     </see>
-    <see block="core:Capability">
+    <see type="core:Capability">
       Bean calls target Capability definitions on context-scoped beans.
     </see>
-    <see block="doc:CompilerArchitecture">
+    <see type="doc:CompilerArchitecture">
       Next reading step — parser, BOM, validator, renderer pipeline.
     </see>
   </references>

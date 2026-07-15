@@ -52,19 +52,19 @@
     <see file="00_bom_core.md">
       Semantics remain in BML — no constructor/getter/setter special cases.
     </see>
-    <see block="lang:PseudoCode">
+    <see type="lang:PseudoCode">
       Free-form pseudocode implementation language block.
     </see>
-    <see block="lang:ProgrammingLanguage">
+    <see type="lang:ProgrammingLanguage">
       Abstract base for programming language implementations.
     </see>
-    <see block="core:Capability">
+    <see type="core:Capability">
       Capability branch — implementation member references Language FQN.
     </see>
-    <see block="doc:CapabilitySemantics">
+    <see type="doc:CapabilitySemantics">
       Capability semantics — behaviour expressed as Capabilities, interpreted by renderers.
     </see>
-    <see block="doc:WOTFoundation">
+    <see type="doc:WOTFoundation">
       Next reading step — optional philosophical foundation (Idea, Manifestation, Grammar, World).
     </see>
   </references>

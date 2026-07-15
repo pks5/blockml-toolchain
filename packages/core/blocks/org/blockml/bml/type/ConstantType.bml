@@ -54,7 +54,7 @@
     <see file="20_value_type_instance_configuration.md">
       ValueType instance configuration via {…} on type references.
     </see>
-    <see block="btype:Constant">
+    <see type="btype:Constant">
       Standard ConstantType implementation.
     </see>
   </references>

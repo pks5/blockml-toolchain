@@ -49,7 +49,8 @@
     type attribute or property holds a Block FQN / TypeExpression string. When a type reference must
     appear as an Entity in composition or aggregation, use org.blockml.bml.type.TypeReferenceEntity.
 
-    Member definition paths (property, aggregation, association, capability) use the
+    Instance pointers (bml:id / FQN::id) use org.blockml.bml.type.InstanceReference — not
+    TypeReference. Member definition paths (property, aggregation, association, capability) use the
     org.blockml.bml.type.MemberReference branch — not TypeReference.
   </documentation>
 
@@ -72,19 +73,22 @@
     <see file="12_bom_object_model.md">
       typeFqn fields in BOM structures.
     </see>
-    <see block="def:BlockDefinition">
+    <see type="def:BlockDefinition">
       type and baseType TypeReference properties (Block FQN / TypeExpression text).
     </see>
-    <see block="def:PropertyDefinition">
+    <see type="def:PropertyDefinition">
       property type attribute (ValueType FQN).
     </see>
-    <see block="def:GenericTypeDefinition">
+    <see type="def:GenericTypeDefinition">
       parameter baseType constraint attribute.
     </see>
-    <see block="btype:MemberReference">
+    <see type="btype:InstanceReference">
+      Sibling ValueType for Block instance pointers — association types and see instance=.
+    </see>
+    <see type="btype:MemberReference">
       Member definition path references — PropertyReference and siblings.
     </see>
-    <see block="btype:TypeReferenceEntity">
+    <see type="btype:TypeReferenceEntity">
       Entity wrapper for TypeReference values in composition or aggregation.
     </see>
   </references>

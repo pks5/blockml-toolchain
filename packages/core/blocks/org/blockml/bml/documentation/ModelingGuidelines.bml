@@ -63,19 +63,19 @@
     <see file="18_constraints_and_suggestions.md">
       Property constraints and editor suggestions.
     </see>
-    <see block="core:Capability">
+    <see type="core:Capability">
       Capability branch — behaviour as the public semantic surface.
     </see>
-    <see block="core:Constraint">
+    <see type="core:Constraint">
       Constraint branch — reusable validation rules on Properties.
     </see>
-    <see block="cap:Inbound">
+    <see type="cap:Inbound">
       Inbound capability — when external input is received.
     </see>
-    <see block="constraint:Min">
+    <see type="constraint:Min">
       Example scalar constraint — binds T from enclosing property type.
     </see>
-    <see block="doc:PseudoCode">
+    <see type="doc:PseudoCode">
       Next reading step — why pseudocode exists for semantic descriptions.
     </see>
   </references>

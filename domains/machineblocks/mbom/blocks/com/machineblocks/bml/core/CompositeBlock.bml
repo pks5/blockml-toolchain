@@ -22,10 +22,10 @@
     composition.</documentation>
 
   <references>
-    <see block="core:Block">
+    <see type="core:Block">
       Domain base type — inherits presets and basePresets for preset resolution.
     </see>
-    <see block="core:Set">
+    <see type="core:Set">
       Set specialization uses _parts for placed instances in a LEGO-style build.
     </see>
   </references>

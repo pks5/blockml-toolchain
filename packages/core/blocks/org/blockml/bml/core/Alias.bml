@@ -24,10 +24,10 @@
     namespace prefix aliases. Not search tags — use org.blockml.bml.core.Keyword branch for those.</documentation>
 
   <references>
-    <see block="core:Entity">
+    <see type="core:Entity">
       Alias instances are Entity children inside aliases aggregations.
     </see>
-    <see block="core:Keyword">
+    <see type="core:Keyword">
       Parallel branch for search and discovery tags — not alternative type names.
     </see>
   </references>

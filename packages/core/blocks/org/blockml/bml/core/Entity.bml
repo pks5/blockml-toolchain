@@ -23,13 +23,13 @@
     <see file="17_type_system_bml.md">
       Entity branch and PrimitiveEntity wrappers.
     </see>
-    <see block="mbcore:Block">
+    <see type="mbcore:Block">
       Example domain Entity base type.
     </see>
-    <see block="core:PrimitiveEntity">
+    <see type="core:PrimitiveEntity">
       Primitive value wrappers as Entity instances.
     </see>
-    <see block="btype:TypeReferenceEntity">
+    <see type="btype:TypeReferenceEntity">
       TypeReference value as Entity — used for contracts, languages, Library lists.
     </see>
   </references>

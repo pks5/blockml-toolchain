@@ -73,34 +73,34 @@
     <see file="01_system.md" relation="DeepDive">
       Self-hosting bootstrap and BML self-description roadmap (V1/V2/V3).
     </see>
-    <see block="core:BlockLibrary" relation="Defines">
+    <see type="core:BlockLibrary" relation="Defines">
       Library descriptor — readFirst (ReadMe, 1..1) and bootstrap (Bootstrap, 0..1).
     </see>
-    <see block="core:ReadMe" relation="Defines">
+    <see type="core:ReadMe" relation="Defines">
       Abstract ReadMe role — required Library reading entry.
     </see>
-    <see block="core:Bootstrap" relation="Defines">
+    <see type="core:Bootstrap" relation="Defines">
       Abstract Bootstrap role — optional automation SPOE.
     </see>
-    <see block="blockml:README" relation="SeeAlso">
+    <see type="blockml:README" relation="SeeAlso">
       Standard human/LLM library ReadMe — ReadFirst references in mental learning order.
     </see>
-    <see block="core:Documentation" relation="Defines">
+    <see type="core:Documentation" relation="Defines">
       Base type for documentation blocks listed with relation=ReadFirst.
     </see>
-    <see block="relation:ReadFirst" relation="Defines">
+    <see type="relation:ReadFirst" relation="Defines">
       Relation block for curated reading path entries on ReadMe references.
     </see>
-    <see block="relation:TaskIndex" relation="Defines">
+    <see type="relation:TaskIndex" relation="Defines">
       Relation block for task catalog entries on ReadMe blocks.
     </see>
-    <see block="doc:TaskGuideModel" relation="SeeAlso">
+    <see type="doc:TaskGuideModel" relation="SeeAlso">
       TaskGuide blocks, task relations, and diagnostic fix paths.
     </see>
-    <see block="doc:Introduction" relation="ReadFirst">
+    <see type="doc:Introduction" relation="ReadFirst">
       First ReadFirst entry on org.blockml.bml.README — BlockML goals and overview.
     </see>
-    <see block="doc:ModelingGuidelines" relation="SeeAlso">
+    <see type="doc:ModelingGuidelines" relation="SeeAlso">
       Recommended patterns for modeling Blocks — later in the ReadFirst path.
     </see>
   </references>

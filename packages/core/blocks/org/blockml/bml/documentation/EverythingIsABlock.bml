@@ -50,31 +50,31 @@
     <see file="16_framework_base_types.md">
       Definition Branch — meta-model blocks that describe block structure.
     </see>
-    <see block="core:Block">
+    <see type="core:Block">
       Sole inheritance root for all Block definitions.
     </see>
-    <see block="core:ValueType">
+    <see type="core:ValueType">
       ValueType branch — Property and Capability payload types.
     </see>
-    <see block="core:Language">
+    <see type="core:Language">
       Language branch — implementation language bindings for Capabilities.
     </see>
-    <see block="core:Definition">
+    <see type="core:Definition">
       Definition branch — blocks that describe block structure in BlockML's own language.
     </see>
-    <see block="def:BlockDefinition">
+    <see type="def:BlockDefinition">
       Meta-model shape of every block document.
     </see>
-    <see block="core:Documentation">
+    <see type="core:Documentation">
       Abstract base for narrative documentation blocks.
     </see>
-    <see block="btype:Integer">
+    <see type="btype:Integer">
       Example ValueType block — primitive type definition.
     </see>
-    <see block="lang:TypeScript">
+    <see type="lang:TypeScript">
       Example Language block — programming language implementation contract.
     </see>
-    <see block="doc:BlockAndInstance">
+    <see type="doc:BlockAndInstance">
       Next reading step — definition vs instance vs composition.
     </see>
   </references>

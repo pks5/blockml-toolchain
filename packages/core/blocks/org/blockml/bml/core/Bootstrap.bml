@@ -28,13 +28,13 @@
     blocks — not on Bootstrap.</documentation>
 
   <references>
-    <see block="core:ReadMe">
+    <see type="core:ReadMe">
       Human/LLM reading entry — Library.readFirst, not bootstrap.
     </see>
-    <see block="core:BlockLibrary">
+    <see type="core:BlockLibrary">
       Optional bootstrap aggregation (0..1 SPOE).
     </see>
-    <see block="doc:BootstrapModel">
+    <see type="doc:BootstrapModel">
       TypeRegistry bootstrap vs library ReadMe / Bootstrap roles.
     </see>
   </references>

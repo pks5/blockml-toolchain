@@ -11,6 +11,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:btype="org.blockml.bml.type"
   xmlns:bml="http://blockml.org/schema/bml">
   <name>AssociationDefinition</name>
   <type>def:AssociationDefinition</type>
@@ -23,13 +24,14 @@
     XML prefix on the element name supplies the member namespace — resolved via xmlns to BOM
     namespace; unprefixed elements use the default namespace (empty string). Member identity is
     (resolvedNamespace, localName). Maps to BOM AssociationDefinition (kind: "association") with
-    typeFqn and cardinality (from type multiplicity). Any Block FQN is valid as association type —
-    not limited to ValueTypes. Instance values are authored on Block instances as member attributes
-    or elements (space-separated id tokens, {BlockFQN}::{id} qualified references, or expressions).
-    Associations do not own composition children. Scalar member field type follows
+    type (InstanceReference TypeExpression) and cardinality (from type multiplicity). Association
+    type must be InstanceReference(T) or InstanceReference(T)[] with T extending core:Block — bare
+    Block FQNs (e.g. core:Block, bml:Self[]) are invalid. Instance values are authored on Block
+    instances as member attributes or elements (space-separated InstanceReference tokens, or
+    expressions). Associations do not own composition children. Scalar member field type follows
     org.blockml.bml.definition.MemberDefinition placement rules — element preferred on definitions,
     attribute preferred on Block instances. Domain examples include basePresets on MachineBlocks
-    Block types (type bml:Self[]).</documentation>
+    Block types (type InstanceReference(bml:Self)[]).</documentation>
 
   <references>
     <see file="12_bom_object_model.md">
@@ -41,22 +43,28 @@
     <see file="00_bom_core.md">
       Qualified Block Instance References for association values.
     </see>
-    <see block="core:Block">
-      Required branch for association payload types.
+    <see type="btype:InstanceReference">
+      Required type shape for association payload — InstanceReference(T) or InstanceReference(T)[].
+    </see>
+    <see type="core:Block">
+      Required branch for InstanceReference type argument T.
     </see>
   </references>
 
   <properties>
-    <type type="TypeReference(core:Block)" bml:xml="element|attribute">
-      <documentation>FQN of the referenced Block type (TypeExpression). Multiplicity in the type
-        string defines cardinality — 0..1 (single optional, e.g. bml:Self) or 0..n (collection,
-        e.g. bml:Self[]). Association cardinality is limited to 0..1 and 0..n — required-single
-        notations (1..1, 1..n) are invalid on associations. Non-Block FQNs are invalid. Required
-        on new association declarations; may be omitted when overriding an inherited association
-        (partial override — type inherited from baseType chain). On definitions, element form is
-        preferred (&lt;type&gt;bml:Self[]&lt;/type&gt;); on Block instances, attribute form is
-        preferred (type="bml:Self[]" on the association element). General block references require
-        FQN or xmlns prefix — no implicit namespace fallback.</documentation>
+    <type type="TypeReference(btype:InstanceReference)" bml:xml="element|attribute">
+      <documentation>TypeExpression InstanceReference(T) or InstanceReference(T)[] where T extends
+        core:Block. Multiplicity in the type string defines cardinality — 0..1 (single optional,
+        e.g. InstanceReference(core:Block)) or 0..n (collection, e.g.
+        InstanceReference(bml:Self)[]). Association cardinality is limited to 0..1 and 0..n —
+        required-single notations (1..1, 1..n) are invalid on associations. Bare Block FQNs
+        without InstanceReference wrapper are invalid. Required on new association declarations;
+        may be omitted when overriding an inherited association (partial override — type inherited
+        from baseType chain). On definitions, element form is preferred
+        (&lt;type&gt;InstanceReference(bml:Self)[]&lt;/type&gt;); on Block instances, attribute
+        form is preferred (type="InstanceReference(bml:Self)[]" on the association element).
+        General type arguments require FQN or xmlns prefix — no implicit namespace fallback.
+      </documentation>
     </type>
   </properties>
 

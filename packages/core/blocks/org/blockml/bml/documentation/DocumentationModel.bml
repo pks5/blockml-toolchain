@@ -101,37 +101,37 @@
     <see file="01_system.md">
       V2 documentation migration — Markdown vs BML roles.
     </see>
-    <see block="lang:NaturalLanguage">
+    <see type="lang:NaturalLanguage">
       Natural language branch — documentation prose and example titles.
     </see>
-    <see block="core:Block">
+    <see type="core:Block">
       Root block — documents idea, language, documentation, references on every definition.
     </see>
-    <see block="core:Definition">
+    <see type="core:Definition">
       Definition branch — shared documentation aggregations.
     </see>
-    <see block="def:StructuralDefinition" relation="Defines">
+    <see type="def:StructuralDefinition" relation="Defines">
       Documentation property and Change, Example, Reference sub-blocks on StructuralDefinition.
     </see>
-    <see block="core:Relation" relation="Defines">
+    <see type="core:Relation" relation="Defines">
       Relation branch — optional relation attribute on see entries.
     </see>
-    <see block="core:Documentation">
+    <see type="core:Documentation">
       Abstract base for narrative documentation blocks in readFirst lists.
     </see>
-    <see block="core:Bootstrap" relation="Defines">
+    <see type="core:Bootstrap" relation="Defines">
       Abstract bootstrap role marker — ReadFirst lives on references, not on Bootstrap.
     </see>
-    <see block="blockml:README" relation="SeeAlso">
+    <see type="blockml:README" relation="SeeAlso">
       Standard README entry point — references with relation=ReadFirst in learning order.
     </see>
-    <see block="relation:ReadFirst" relation="Defines">
+    <see type="relation:ReadFirst" relation="Defines">
       Relation block for curated bootstrap reading path entries.
     </see>
-    <see block="doc:BootstrapModel">
+    <see type="doc:BootstrapModel">
       Next reading step — README.bml, ReadFirst, TaskIndex, bootstrap context.
     </see>
-    <see block="doc:TaskGuideModel" relation="SeeAlso">
+    <see type="doc:TaskGuideModel" relation="SeeAlso">
       Task-oriented paths — TaskGuide blocks and task relations.
     </see>
   </references>

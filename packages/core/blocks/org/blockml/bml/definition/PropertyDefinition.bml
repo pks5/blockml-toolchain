@@ -40,7 +40,7 @@
     <see file="02_mbml.md">
       Members and properties authoring rules.
     </see>
-    <see block="core:ValueType">
+    <see type="core:ValueType">
       Required branch for property payload types.
     </see>
     <see file="18_constraints_and_suggestions.md">

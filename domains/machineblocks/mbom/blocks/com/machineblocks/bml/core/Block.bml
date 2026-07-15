@@ -21,16 +21,16 @@
     output is render-target logic.</documentation>
 
   <references>
-    <see block="bcore:Entity">
+    <see type="bcore:Entity">
       Domain branch base — Entity instances with composition identity.
     </see>
-    <see block="core:CompositeBlock">
+    <see type="core:CompositeBlock">
       Composable sub-type with default _parts aggregation for child block instances.
     </see>
-    <see block="core:NativeBlock">
+    <see type="core:NativeBlock">
       Final leaf sub-type rendered directly as mb_block() SCAD primitive.
     </see>
-    <see block="core:Set">
+    <see type="core:Set">
       LEGO-style build sub-type with palette, placed parts, and assembly steps.
     </see>
   </references>
@@ -44,7 +44,7 @@
   </properties>
 
   <associations>
-    <basePresets type="bml:Self[]"></basePresets>
+    <basePresets type="InstanceReference(bml:Self)[]"></basePresets>
   </associations>
 
   <aggregations>

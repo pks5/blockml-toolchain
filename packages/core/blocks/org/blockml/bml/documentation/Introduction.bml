@@ -45,10 +45,10 @@
     <see file="02_mbml.md">
       BML format overview — document types, namespaces, and serialization.
     </see>
-    <see block="core:Block">
+    <see type="core:Block">
       Universal semantic unit — sole inheritance root of the BlockML grammar.
     </see>
-    <see block="doc:EverythingIsABlock">
+    <see type="doc:EverythingIsABlock">
       Next reading step — the central ontological principle of BlockML.
     </see>
   </references>

@@ -66,10 +66,10 @@
     <see file="06_compiler.md">
       BML_OUTSIDE_BML_NAMESPACE — validation error code.
     </see>
-    <see block="doc:LibrarySystem">
+    <see type="doc:LibrarySystem">
       Libraries, packages, and namespace membership — related reading.
     </see>
-    <see block="doc:ImplicitNamespaceResolution">
+    <see type="doc:ImplicitNamespaceResolution">
       Context-bound implicit namespace — unqualified references at specialized sites.
     </see>
   </references>

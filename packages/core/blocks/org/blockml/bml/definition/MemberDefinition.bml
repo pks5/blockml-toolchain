@@ -59,7 +59,7 @@
     readOnly attributes on member elements.</documentation>
 
   <references>
-    <see block="core:Block" property="language" relation="Defines">
+    <see type="core:Block" property="language" relation="Defines">
       Example property member reference — split form resolves to
       org.blockml.bml.core.Block.properties.language.
     </see>
@@ -69,10 +69,10 @@
     <see file="02_mbml.md">
       Member containers, abstract/override/final rules.
     </see>
-    <see block="def:BlockDefinition">
+    <see type="def:BlockDefinition">
       Parent block shape — properties, aggregations, associations, capabilities containers.
     </see>
-    <see block="def:ConstrainableDefinition">
+    <see type="def:ConstrainableDefinition">
       Shared constraints container for Block and member definitions.
     </see>
   </references>

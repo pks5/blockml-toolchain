@@ -50,16 +50,16 @@
     <see file="18_function_mapping.md">
       Positional parameter order — shared rules with FunctionMapping.
     </see>
-    <see block="btype:Decimal">
+    <see type="btype:Decimal">
       Primitive with precision and scale configuration Properties.
     </see>
-    <see block="btype:Constant">
+    <see type="btype:Constant">
       Constant(T){value=…} — configured singleton for union alternatives.
     </see>
-    <see block="core:ValueType">
+    <see type="core:ValueType">
       ValueType branch — types describe nature; Properties own values.
     </see>
-    <see block="doc:CapabilitySemantics">
+    <see type="doc:CapabilitySemantics">
       Next reading step — semantics via Capabilities.
     </see>
   </references>

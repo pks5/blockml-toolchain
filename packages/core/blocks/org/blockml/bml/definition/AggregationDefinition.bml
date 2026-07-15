@@ -52,10 +52,10 @@
     <see file="02_mbml.md">
       Aggregations, composition placement, and default aggregation rules.
     </see>
-    <see block="core:Block">
+    <see type="core:Block">
       Required branch for aggregation payload types.
     </see>
-    <see block="btype:TypeReferenceEntity">
+    <see type="btype:TypeReferenceEntity">
       Entity payload for type-reference aggregations (contracts, languages, Library lists).
     </see>
   </references>

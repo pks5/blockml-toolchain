@@ -152,8 +152,8 @@ There is **no multi-stage search**, no global TypeRegistry fallback, and no docu
 <language><English /></language>              →  org.blockml.bml.language.English
 <documentation language="German">…           →  org.blockml.bml.language.German
 <change version="2.0.0" language="German">…   →  org.blockml.bml.language.German
-<see block="core:Block" language="English">… →  org.blockml.bml.language.English
-<see block="core:Block" relation="Extends">… →  org.blockml.bml.relation.Extends
+<see type="core:Block" language="English">… →  org.blockml.bml.language.English
+<see type="core:Block" relation="Extends">… →  org.blockml.bml.relation.Extends
 <example language="OpenSCAD" …>              →  org.blockml.bml.language.OpenSCAD
 <status>Draft</status>                        →  org.blockml.bml.status.Draft
 <resize type="Transformation" …>             →  org.blockml.bml.capability.Transformation
@@ -194,7 +194,8 @@ For inheritance-aware self-reference at validate time, `bml:Self` remains availa
 
 **Member namespace:** `org.blockml.bml.core.Block` declares **no members**. Every sub-type chooses its own Properties, Aggregations, Associations, and Capabilities — including names like `id` or `version` if a domain needs them. On composition instances, **instance identity** uses `bml:id` and **external reference version** uses `bml:version` — not bare attributes (see Composition section).
 
-**Aggregation and association types** may reference any Block FQN — not limited to ValueTypes.
+**Aggregation types** may reference any Block FQN — not limited to ValueTypes. **Association types**
+must be `InstanceReference(T)` or `InstanceReference(T)[]` with `T` extending `core:Block`.
 
 ---
 
@@ -685,9 +686,9 @@ Task-oriented paths use the same `<references>` mechanism as learning paths — 
 **README pattern** — ReadFirst entries first (learning), then TaskIndex entries (tasks):
 
 ```xml
-<see block="doc:Introduction" relation="ReadFirst">…</see>
+<see type="doc:Introduction" relation="ReadFirst">…</see>
 …
-<see block="task:AuthorNewBlock" relation="TaskIndex">
+<see type="task:AuthorNewBlock" relation="TaskIndex">
   Author a new Block definition from scratch.
 </see>
 ```
@@ -701,8 +702,8 @@ Task-oriented paths use the same `<references>` mechanism as learning paths — 
   <keywords>author, new block, create type</keywords>
   <documentation>…</documentation>
   <references>
-    <see block="doc:DefinitionModel" relation="Prerequisite">…</see>
-    <see block="def:RootBlockDefinition" relation="TaskStep">Step 1 — …</see>
+    <see type="doc:DefinitionModel" relation="Prerequisite">…</see>
+    <see type="def:RootBlockDefinition" relation="TaskStep">Step 1 — …</see>
     <see file="02_mbml.md" relation="TaskStep">Step 2 — …</see>
   </references>
   <name>AuthorNewBlock</name>
@@ -714,7 +715,7 @@ Task-oriented paths use the same `<references>` mechanism as learning paths — 
 **Diagnostic pattern** — Resolves links to fix task:
 
 ```xml
-<see block="task:DebugUnknownType" relation="Resolves">
+<see type="task:DebugUnknownType" relation="Resolves">
   Step-by-step fix for unresolved type references.
 </see>
 ```
@@ -787,12 +788,14 @@ Omitted `language` on `<example>` → BML/MBML source. Example titles never carr
 
 #### `<references>`
 
-Container for cross-references to related Blocks, definition elements, repository documentation files, or external URLs. Each `<see>` requires **exactly one target kind** — `block`, `file`, `url`, `property`, `aggregation`, `association`, or `capability`. An optional **`relation`** attribute classifies **how** the target relates to the current definition — Block reference to `org.blockml.bml.relation.*` (default `SeeAlso` when omitted). The text body explains why or how the referenced element relates to the **current** definition. An optional `language` attribute overrides the effective natural language for the relationship text — unqualified names resolve via `org.blockml.bml.language.*`.
+Container for cross-references to related Block types, Block instances, definition elements, repository documentation files, or external URLs. Each `<see>` requires **exactly one target kind** — `type`, `instance`, `file`, `url`, `property`, `aggregation`, `association`, or `capability`. An optional **`relation`** attribute classifies **how** the target relates to the current definition — Block reference to `org.blockml.bml.relation.*` (default `SeeAlso` when omitted). The text body explains why or how the referenced element relates to the **current** definition. An optional `language` attribute overrides the effective natural language for the relationship text — unqualified names resolve via `org.blockml.bml.language.*`.
 
 **Target attributes (exactly one kind required):**
 
 ```text
-block="core:ValueType"              — Block or Definition type reference via xmlns prefix
+type="core:ValueType"               — Block or Definition type reference via xmlns prefix (TypeReference)
+instance="myId"                     — Block instance pointer (InstanceReference); local id or FQN::id
+instance="foo:Bar::myId"            — qualified InstanceReference (enclosing Block QName/FQN + :: + bml:id)
 file="02_mbml.md"                   — repository documentation file
 url="https://blockml.org/schemas/…" — external URL
 property="com.foo.Bar.properties.width"     — PropertyDefinition (canonical path)
@@ -801,15 +804,16 @@ association="com.foo.Bar.associations.basePresets" — AssociationDefinition (ca
 capability="com.foo.Bar.capabilities.render" — CapabilityDefinition (canonical path)
 ```
 
-**Split member authoring** — `block=` qualifies a local member name (not stored as a separate type target):
+**Split member authoring** — `type=` qualifies a local member name (not stored as a separate type target):
 
 ```text
-block="com.foo.Bar" property="width"           →  com.foo.Bar.properties.width
-block="com.foo.Bar" capability="render"        →  com.foo.Bar.capabilities.render
-block="core:Block" property="language"         →  org.blockml.bml.core.Block.properties.language
+type="com.foo.Bar" property="width"           →  com.foo.Bar.properties.width
+type="com.foo.Bar" capability="render"        →  com.foo.Bar.capabilities.render
+type="core:Block" property="language"         →  org.blockml.bml.core.Block.properties.language
+type="com.foo.Bar" instance="myId"            →  com.foo.Bar::myId
 ```
 
-`block=` with a member attribute is **one** member target — not ambiguous with a standalone `block=` type reference.
+`type=` with a member or `instance=` attribute is **one** target — not ambiguous with a standalone `type=` type reference.
 
 **Relation attribute (optional):**
 
@@ -825,24 +829,26 @@ Standard relation blocks: `SeeAlso` (default), `ReadFirst`, `Extends`, `Requires
 The attribute name encodes the target **kind** at the read site — before parsing or resolving the value. Humans and LLMs scanning BML can classify each reference from the element shape alone:
 
 ```text
-<see block="core:ValueType">…</see>                    → see · block · TypeReference
+<see type="core:ValueType">…</see>                    → see · type · TypeReference
+<see instance="foo:Bar::myId">…</see>                 → see · instance · InstanceReference
 <see file="02_mbml.md">…</see>                         → see · file · repository documentation
 <see url="https://…">…</see>                           → see · url · web address
 <see property="com.foo.Bar.properties.width">…</see>   → see · property · PropertyReference
 <see capability="com.foo.Bar.capabilities.render">…</see> → see · capability · CapabilityReference
 ```
 
-A single generic `target` attribute would force readers to infer kind from value syntax (FQN vs filename vs URL vs member path). Separate attributes keep the documentation reading flow linear: verb (`see`) → target kind → target → relation → relationship text.
+A single generic `target` attribute would force readers to infer kind from value syntax (FQN vs filename vs URL vs member path vs instance id). Separate attributes keep the documentation reading flow linear: verb (`see`) → target kind → target → relation → relationship text.
 
 Member targets always resolve to **canonical definition paths** in the BOM (`com.foo.Bar.properties.width`) — the container segment (`.properties.`, `.capabilities.`, …) is part of the technical address. See § Definition paths · `16_framework_base_types.md` — Definition Addressing.
 
 **Reading flow with relation:**
 
 ```text
-<see block="core:ValueType" relation="Extends">…</see>   → see · block · type · Extends
+<see type="core:ValueType" relation="Extends">…</see>   → see · type · TypeReference · Extends
 <see file="02_mbml.md" relation="AuthoringGuide">…</see> → see · file · doc · AuthoringGuide
 <see url="https://…" relation="DeepDive">…</see>        → see · url · web · DeepDive
-<see block="core:Block" property="language" relation="Defines">…</see> → see · block · Block · property · language · Defines
+<see type="core:Block" property="language" relation="Defines">…</see> → see · type · Block · property · language · Defines
+<see instance="foo:Bar::myId" relation="SeeAlso">…</see> → see · instance · InstanceReference · SeeAlso
 ```
 
 Relation is a **Block reference** — not a free string — following Everything-is-a-Block. Each relation block carries its own `is` and `documentation` explaining when to use it.
@@ -852,24 +858,24 @@ Relation is a **Block reference** — not a free string — following Everything
 - Include only targets with a **direct relationship** to the current definition.
 - Every `<see>` **must** include a text body describing the relationship.
 - Do **not** repeat cross-links in `<documentation>`; use `<references>` instead.
-- `block` values use **namespace prefixes** from the document's `xmlns:` declarations — same rules as `type`, `baseType`, and composition references (e.g. `core:Block`, `def:PropertyDefinition`, `bcore:Entity`).
+- `type` values use **namespace prefixes** from the document's `xmlns:` declarations — same rules as Block identity `type`, `baseType`, and composition references (e.g. `core:Block`, `def:PropertyDefinition`, `bcore:Entity`).
 
 ```xml
 <references>
 
-    <see block="core:CompositeBlock" relation="Extends">
+    <see type="core:CompositeBlock" relation="Extends">
         Composable sub-type — owns child instances via default _parts aggregation.
     </see>
 
-    <see block="core:ValueType" relation="Extends">
+    <see type="core:ValueType" relation="Extends">
         Branch sub-type — payload types for properties and capabilities.
     </see>
 
-    <see block="def:PropertyDefinition" relation="Defines">
+    <see type="def:PropertyDefinition" relation="Defines">
         Meta-model member shape for property declarations on Block definitions.
     </see>
 
-    <see block="core:Block" property="language" relation="Defines">
+    <see type="core:Block" property="language" relation="Defines">
         NaturalLanguage property — documentation prose default on every block.
     </see>
 
@@ -888,9 +894,9 @@ Relation is a **Block reference** — not a free string — following Everything
 </references>
 ```
 
-`block` accepts any Block or Definition reference via xmlns prefix. Member attributes store the **canonical definition path** — resolved at parse time from a full path or from `block=` + local member name. Unknown Block FQN at validate time → `BML_UNKNOWN_TYPE` (error). Unknown member path → `BML_REFERENCE_UNKNOWN_MEMBER` (error). Omitted target → `BML_REFERENCE_MISSING_TARGET` (error). More than one target kind → `BML_REFERENCE_AMBIGUOUS_TARGET` (error). `block=` with exactly one member attribute is one member target — not ambiguous.
+`type` accepts any Block or Definition reference via xmlns prefix. Member attributes store the **canonical definition path** — resolved at parse time from a full path or from `type=` + local member name. `instance` accepts an InstanceReference token (local id or `{FQN}::{id}`); with `type=` + `instance=` the BOM stores `FQN::id`. Unknown Block FQN at validate time → `BML_UNKNOWN_TYPE` (error). Unresolvable instance pointer → `BML_UNRESOLVABLE_INSTANCE_REF` (error). Unknown member path → `BML_REFERENCE_UNKNOWN_MEMBER` (error). Omitted target → `BML_REFERENCE_MISSING_TARGET` (error). More than one target kind → `BML_REFERENCE_AMBIGUOUS_TARGET` (error). `type=` with exactly one member or `instance=` attribute is one target — not ambiguous.
 
-Maps to BOM `DocumentationReference { block?, file?, url?, property?, aggregation?, association?, capability?, relationFqn?, context, languageFqn? }`. Omitted `relation` → `org.blockml.bml.relation.SeeAlso`. Unknown relation FQN at validate time → `BML_UNKNOWN_RELATION` (error). Meta-model: inline Sub-Block `StructuralDefinition.Reference` on `StructuralDefinition.references` — see `16_framework_base_types.md` — Definition Branch.
+Maps to BOM `DocumentationReference { type?, instance?, file?, url?, property?, aggregation?, association?, capability?, relationFqn?, context, languageFqn? }`. Omitted `relation` → `org.blockml.bml.relation.SeeAlso`. Unknown relation FQN at validate time → `BML_UNKNOWN_RELATION` (error). Meta-model: inline Sub-Block `StructuralDefinition.Reference` on `StructuralDefinition.references` — see `16_framework_base_types.md` — Definition Branch.
 
 Example with documentation extensions on a member:
 
@@ -1399,7 +1405,7 @@ The member name is the **XML element name**. The `name="..."` attribute is remov
 </aggregations>
 
 <associations>
-    <parent type="com.foo.Block"/>
+    <parent type="InstanceReference(com.foo.Block)"/>
 </associations>
 
 <capabilities>
@@ -1847,7 +1853,7 @@ Properties, Aggregations, Associations, and Capabilities receive their namespace
   </aggregations>
 
   <associations>
-    <aria:labelledBy type="ui:Control[]"/>
+    <aria:labelledBy type="InstanceReference(ui:Control)[]"/>
   </associations>
 
   <capabilities>
@@ -2216,8 +2222,8 @@ Block[1..1]     →  exactly 1 required
 **`bml:Self`** — refers to the current effective Block type, resolved after inheritance:
 
 ```xml
-<association type="bml:Self" />
-<association type="bml:Self[]" />
+<association type="InstanceReference(bml:Self)" />
+<association type="InstanceReference(bml:Self)[]" />
 ```
 
 **`#this`** — refers to the current Block instance in expression context. Unqualified member references are shorthand for `#this` (`width` ≡ `#this.width`).
@@ -2271,11 +2277,14 @@ Multiple instances of the same type with different bean names are possible:
 
 ### Associations
 
-Associations describe loose references without ownership. Defined for future use.
+Associations describe loose references without ownership. Association `type` must be
+`InstanceReference(T)` or `InstanceReference(T)[]` with `T` extending `core:Block` — bare Block
+FQNs are invalid. Instance values are InstanceReference tokens (local `bml:id` or `{FQN}::{id}`).
 
 ```xml
 <associations>
-  <targetDevice type="com.electronics.core.Component" />
+  <targetDevice type="InstanceReference(com.electronics.core.Component)" />
+  <basePresets type="InstanceReference(bml:Self)[]" />
 </associations>
 ```
 
