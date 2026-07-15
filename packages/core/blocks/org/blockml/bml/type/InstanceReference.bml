@@ -37,7 +37,8 @@
     • InstanceReference(bml:Self)[] → 0..n pointers to instances of the effective Block type
 
     Primary use — AssociationDefinition type (associations may only declare InstanceReference(T)
-    or InstanceReference(T)[]). Also the type of see instance= on StructuralDefinition.Reference.
+    or InstanceReference(T)[] — instance-to-instance model links). Also the type of see instance=
+    on StructuralDefinition.Reference (documentation type→instance links — not Associations).
 
     Resolution and visibility rules: docs/00_bom_core.md — Qualified Block Instance References
     (public aggregation, static authored bml:id, BML_UNRESOLVABLE_INSTANCE_REF, …).

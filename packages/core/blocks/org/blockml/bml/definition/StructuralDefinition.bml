@@ -127,7 +127,10 @@
       <documentation>The examples of the definition.</documentation>
     </examples>
     <references type="Reference[]">
-      <documentation>The references of the definition.</documentation>
+      <documentation>Documentation cross-references of the definition. Connects types to types or
+        types to instances (also definition members, files, URLs) — documentation metadata only,
+        not instance-to-instance model links. For instance graph edges use Association members
+        instead.</documentation>
     </references>
   </aggregations>
 
@@ -232,16 +235,19 @@
     <block>
       <name>Reference</name>
       <baseType>core:Entity</baseType>
-      <is>A related-item cross-reference</is>
+      <is>A documentation cross-reference</is>
 
-      <documentation>Records a link from documentation metadata to another Block type, Block
-        instance, definition element, repository markdown file, or external URL. Rendered as a see
-        element inside the references container on any org.blockml.bml.definition.StructuralDefinition
-        (alongside changelog and examples). Maps to BOM DocumentationReference { type?, instance?,
-        file?, url?, property?, aggregation?, association?, capability?, relationFqn?, context,
-        languageFqn? }. Optional relation attribute references org.blockml.bml.relation.* — default
-        org.blockml.bml.relation.SeeAlso when omitted. Optional language attribute overrides the
-        effective natural language for the relationship text body.
+      <documentation>Records a documentation link from the current definition to another Block type,
+        Block instance, definition element, repository markdown file, or external URL. References
+        connect types to types or types to instances for documentation purposes — they are not
+        instance-to-instance model links (those are Associations / AssociationDefinition). Rendered
+        as a see element inside the references container on any
+        org.blockml.bml.definition.StructuralDefinition (alongside changelog and examples). Maps to
+        BOM DocumentationReference { type?, instance?, file?, url?, property?, aggregation?,
+        association?, capability?, relationFqn?, context, languageFqn? }. Optional relation attribute
+        references org.blockml.bml.relation.* — default org.blockml.bml.relation.SeeAlso when omitted.
+        Optional language attribute overrides the effective natural language for the relationship
+        text body.
 
         Eight mutually exclusive target attributes (type, instance, file, url, property, aggregation,
         association, capability) instead of one generic target. Type targets use TypeReference;
@@ -255,8 +261,8 @@
         The attribute name encodes the target kind at the read site — see type (TypeReference),
         see instance (InstanceReference), see property (PropertyReference), see file (repository
         documentation), see url (web address). Humans and LLMs classify each reference from element
-        shape alone without inferring kind from value syntax. See 02_mbml.md — references — Why
-        separate target attributes.</documentation>
+        shape alone without inferring kind from value syntax. See 02_mbml.md — Associations vs
+        References · references — Why separate target attributes.</documentation>
 
       <bml:xml>see</bml:xml>
 

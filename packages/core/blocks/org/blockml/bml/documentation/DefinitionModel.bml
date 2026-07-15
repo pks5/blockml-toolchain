@@ -28,12 +28,15 @@
     • org.blockml.bml.definition.BlockDefinition — shape of every block document
     • org.blockml.bml.definition.MemberDefinition — abstract base for block member declarations;
       override and boolean implementation; CapabilityDefinition overrides implementation
-    • PropertyDefinition, AggregationDefinition, AssociationDefinition, CapabilityDefinition
+    • AssociationDefinition — instance-to-instance model links (not documentation References)
+    • PropertyDefinition, AggregationDefinition, CapabilityDefinition
     • GenericTypeDefinition
 
     org.blockml.bml.definition.StructuralDefinition declares:
     • Properties: documentation, since, status, abstract, final
     • Aggregations: changelog, examples, references
+      (References connect types to types or types to instances for documentation —
+      distinct from Associations)
 
     Definition addressing uses canonical structural paths within the Block FQN:
     com.foo.Bar.properties.width → PropertyDefinition

@@ -61,8 +61,11 @@
 
     Authoring split:
     • documentation carries technical prose only
-    • references carries all cross-links — Blocks, Definition elements, repository markdown
-      files, and external URLs — each with an explicit relationship note
+    • references carries all documentation cross-links — types to types or types to instances
+      (also Definition members, repository markdown files, and external URLs) — each with an
+      explicit relationship note
+    • Associations connect instances to instances (model links); References do not form the
+      instance graph — use associations for that
     • Do not repeat cross-links in documentation prose
 
     see target attributes — exactly one target kind:

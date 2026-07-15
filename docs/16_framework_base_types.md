@@ -302,7 +302,7 @@ in child blocks.
 
 `org.blockml.bml.definition.RootBlockDefinition` overrides `definition` (default `org.blockml.bml.definition.RootBlockDefinition` on root and embedded blocks) and declares `embeddedBlocks` (Inline Library). `subBlocks` is inherited from `SubBlockDefinition` and may nest to arbitrary depth on root blocks and embedded blocks.
 
-`org.blockml.bml.definition.StructuralDefinition.Reference` — inline Sub-Block; cross-reference to a related Block, definition element, or documentation source:
+`org.blockml.bml.definition.StructuralDefinition.Reference` — inline Sub-Block; **documentation** cross-reference connecting **types to types** or **types to instances** (also definition members, files, URLs). Not an instance-to-instance model link — those are Associations. See `02_mbml.md` — Associations vs References.
 
 ```text
 FQN             org.blockml.bml.definition.StructuralDefinition.Reference (Sub-Block — not a top-level library export)

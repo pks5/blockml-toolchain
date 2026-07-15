@@ -667,6 +667,17 @@ Goal: keep API documentation, version history, examples, and related-type links 
 
 **Authoring split:** `<documentation>` carries technical prose only; `<references>` carries all cross-links — Blocks, Definition elements, repository markdown files (`file`), and external URLs (`url`) — each with an explicit relationship note.
 
+**Associations vs References:**
+
+| | Associations | References (`<see>`) |
+|---|---|---|
+| Purpose | Model / runtime member links | Documentation metadata only |
+| Connects | **Instance ↔ instance** | **Type ↔ type** or **type ↔ instance** (also definition members, files, URLs) |
+| Declared on | Block members (`<associations>`) | Definition metadata (`<references>`) |
+| Payload | `InstanceReference(T)` values | TypeReference, InstanceReference, member paths, `file`, `url` |
+
+Associations are not documentation links. References are not instance graph edges.
+
 ### Task guides and diagnostics
 
 Task-oriented paths use the same `<references>` mechanism as learning paths — no separate task aggregation.
@@ -788,7 +799,9 @@ Omitted `language` on `<example>` → BML/MBML source. Example titles never carr
 
 #### `<references>`
 
-Container for cross-references to related Block types, Block instances, definition elements, repository documentation files, or external URLs. Each `<see>` requires **exactly one target kind** — `type`, `instance`, `file`, `url`, `property`, `aggregation`, `association`, or `capability`. An optional **`relation`** attribute classifies **how** the target relates to the current definition — Block reference to `org.blockml.bml.relation.*` (default `SeeAlso` when omitted). The text body explains why or how the referenced element relates to the **current** definition. An optional `language` attribute overrides the effective natural language for the relationship text — unqualified names resolve via `org.blockml.bml.language.*`.
+Container for **documentation** cross-references. References connect **types to types** or **types to instances** (and optionally definition members, repository files, or external URLs) — they do **not** form the instance graph. For instance-to-instance model links, use **Associations** instead (see § Associations).
+
+Each `<see>` requires **exactly one target kind** — `type`, `instance`, `file`, `url`, `property`, `aggregation`, `association`, or `capability`. An optional **`relation`** attribute classifies **how** the target relates to the current definition — Block reference to `org.blockml.bml.relation.*` (default `SeeAlso` when omitted). The text body explains why or how the referenced element relates to the **current** definition. An optional `language` attribute overrides the effective natural language for the relationship text — unqualified names resolve via `org.blockml.bml.language.*`.
 
 **Target attributes (exactly one kind required):**
 
@@ -2308,9 +2321,13 @@ Multiple instances of the same type with different bean names are possible:
 
 ### Associations
 
-Associations describe loose references without ownership. Association `type` must be
-`InstanceReference(T)` or `InstanceReference(T)[]` with `T` extending `core:Block` — bare Block
-FQNs are invalid. Instance values are InstanceReference tokens (local `bml:id` or `{FQN}::{id}`).
+Associations connect **instances to instances** — non-owning model links between concrete Block
+instances. They are not documentation links; documentation type↔type and type↔instance links use
+`<references>` / `<see>` instead (see § `<references>`).
+
+Associations carry no composition ownership. Association `type` must be `InstanceReference(T)` or
+`InstanceReference(T)[]` with `T` extending `core:Block` — bare Block FQNs are invalid. Instance
+values are InstanceReference tokens (local `bml:id` or `{FQN}::{id}`).
 
 ```xml
 <associations>

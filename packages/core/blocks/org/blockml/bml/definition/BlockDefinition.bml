@@ -205,8 +205,9 @@
         children. Mapped to members[] in XML document order.</documentation>
     </aggregations>
     <associations type="def:AssociationDefinition[]">
-      <documentation>Association member declarations — loose references without composition
-        ownership. Mapped to members[] in XML document order.</documentation>
+      <documentation>Association member declarations — instance-to-instance links without
+        composition ownership. Distinct from documentation References (type↔type / type↔instance).
+        Mapped to members[] in XML document order.</documentation>
     </associations>
     <capabilities type="def:CapabilityDefinition[]">
       <documentation>Capability member declarations — communication endpoints (inbound, outbound,

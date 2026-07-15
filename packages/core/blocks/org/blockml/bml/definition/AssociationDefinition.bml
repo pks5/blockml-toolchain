@@ -16,10 +16,12 @@
   <name>AssociationDefinition</name>
   <type>def:AssociationDefinition</type>
   <baseType>def:MemberDefinition</baseType>
-  <is>A loose reference member</is>
+  <is>An instance-to-instance link member</is>
 
-  <documentation>Describes a Block member for non-owning references to other Blocks — semantically
-    loose links without lifecycle ownership. Rendered as a child element inside the associations
+  <documentation>Describes a Block member that connects instances to instances — non-owning model
+    links between concrete Block instances, without lifecycle ownership. Distinct from documentation
+    References (&lt;see&gt; on StructuralDefinition.references), which connect types to types or
+    types to instances for documentation only. Rendered as a child element inside the associations
     container; the XML element name is the association name (bml:xml="${ #this.name }"). An optional
     XML prefix on the element name supplies the member namespace — resolved via xmlns to BOM
     namespace; unprefixed elements use the default namespace (empty string). Member identity is
@@ -38,7 +40,7 @@
       AssociationDefinition BOM structure.
     </see>
     <see file="02_mbml.md">
-      Associations authoring rules.
+      Associations authoring rules; Associations vs References.
     </see>
     <see file="00_bom_core.md">
       Qualified Block Instance References for association values.
@@ -48,6 +50,10 @@
     </see>
     <see type="core:Block">
       Required branch for InstanceReference type argument T.
+    </see>
+    <see type="def:StructuralDefinition" relation="ContrastsWith">
+      Documentation References (&lt;see&gt;) connect types to types or types to instances — not
+      instance-to-instance Association edges.
     </see>
   </references>
 

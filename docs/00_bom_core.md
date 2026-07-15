@@ -1075,19 +1075,22 @@ This is analogous to Spring Bean scoping (`@ApplicationScope`, `@RequestScope`) 
 
 ## Associations
 
-Associations describe loose references between objects without ownership. They are defined for future use across all BOM specializations.
+Associations connect **instances to instances** — loose, non-owning model links between concrete Block instances. They are not documentation links: documentation **References** (`<see>` on `<references>`) connect **types to types** or **types to instances** (and optionally definition members, files, or URLs). See `02_mbml.md` — Associations vs References.
+
+Associations carry no composition ownership. They are defined for use across all BOM specializations.
 
 ```text
 name          — member name (unique within the Block's member namespace)
-type          — FQN of the referenced type, optionally with occurrence brackets (see Type Notation)
+type          — InstanceReference(T) or InstanceReference(T)[] (T extends core:Block)
 documentation — human-readable description
 since         — optional; semantic version from which this member is available
 changelog     — optional; version history (oldest first)
 examples      — optional; usage examples (title + CDATA body)
-references    — optional; cross-references to related Blocks or Definitions (type + optional context)
+references    — optional; documentation cross-references (type↔type / type↔instance via `<see>`)
 ```
 
-Associations carry no ownership and do not affect rendering.
+Associations carry no ownership and do not affect rendering. Association `type` must be
+`InstanceReference(T)` or `InstanceReference(T)[]` — bare Block FQNs are invalid.
 
 ---
 
