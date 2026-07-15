@@ -18,7 +18,7 @@
   <name>AuthorNewBlock</name>
   <type>task:AuthorNewBlock</type>
   <baseType>core:TaskGuide</baseType>
-  <idea>Author a new Block definition document from scratch.</idea>
+  <is>Author a new Block definition document from scratch.</is>
 
   <summary>Create a root .bml file with idea, documentation, type, baseType, version, and member
     containers as needed. Register the block FQN in Library _blocks when publishing a library

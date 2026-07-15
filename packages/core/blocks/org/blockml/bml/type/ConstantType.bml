@@ -12,7 +12,7 @@
   <name>ConstantType</name>
   <type>btype:ConstantType</type>
   <baseType>core:ValueType</baseType>
-  <idea>Branch for singleton value domains — exactly one configured literal value.</idea>
+  <is>Branch for singleton value domains — exactly one configured literal value.</is>
 
   <documentation>
     Abstract ValueType branch for constant (singleton) value types. Unqualified name ConstantType

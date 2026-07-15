@@ -19,7 +19,7 @@
   <name>Numbers</name>
   <type>service:Numbers</type>
   <baseType>core:Entity</baseType>
-  <idea>Built-in number formatting and sequence utilities callable as #numbers in expressions.</idea>
+  <is>Built-in number formatting and sequence utilities callable as #numbers in expressions.</is>
 
   <documentation>Built-in numbers service. Expression prefix #numbers.* — sequence,
     formatting, and numeric conversion utilities.</documentation>

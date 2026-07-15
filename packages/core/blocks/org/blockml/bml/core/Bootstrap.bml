@@ -13,7 +13,7 @@
   <name>Bootstrap</name>
   <type>core:Bootstrap</type>
   <baseType>core:Block</baseType>
-  <idea>Abstract role marker — single point of entry for automated library or process startup.</idea>
+  <is>Abstract role marker — single point of entry for automated library or process startup.</is>
 
   <documentation>Abstract empty branch for Bootstrap blocks — the optional single point of entry
     (SPOE) for automated startup: tasks, agents, CI pipelines, and similar process logic. Intentionally

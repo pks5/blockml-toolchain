@@ -12,7 +12,7 @@
   <name>Relation</name>
   <type>core:Relation</type>
   <baseType>core:Block</baseType>
-  <idea>Semantic category of a cross-reference — how the target relates to the current definition.</idea>
+  <is>Semantic category of a cross-reference — how the target relates to the current definition.</is>
 
   <documentation>Abstract branch for relation blocks on &lt;see&gt; entries in &lt;references&gt;.
     Relation values are Block references following the Everything-is-a-Block principle.

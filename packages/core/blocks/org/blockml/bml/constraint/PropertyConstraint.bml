@@ -13,7 +13,7 @@
   <name>PropertyConstraint</name>
   <type>constraint:PropertyConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>
-  <idea>Constraint that validates a PropertyDefinition shape.</idea>
+  <is>Constraint that validates a PropertyDefinition shape.</is>
 
   <documentation>Abstract branch for constraints on Property definitions (not property values —
     see ValueConstraint for value rules). Generic T binds to the effective PropertyDefinition of

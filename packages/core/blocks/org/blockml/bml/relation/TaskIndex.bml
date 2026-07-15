@@ -13,7 +13,7 @@
   <name>TaskIndex</name>
   <type>relation:TaskIndex</type>
   <baseType>core:Relation</baseType>
-  <idea>Catalog entry — this TaskGuide is available from the current ReadMe entry point.</idea>
+  <is>Catalog entry — this TaskGuide is available from the current ReadMe entry point.</is>
 
   <documentation>Use on &lt;see&gt; entries in README / ReadMe blocks to list accomplishable tasks.
     Distinct from ReadFirst (mental learning order) and SeeAlso (optional peer link). Tooling

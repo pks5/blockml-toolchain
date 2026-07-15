@@ -15,7 +15,7 @@
   xmlns:bml="http://blockml.org/schema/bml">
   <name>Block</name>
   <type>core:Block</type>
-  <idea>The universal semantic unit of BlockML — every definable concept in the grammar.</idea>
+  <is>The universal semantic unit of BlockML — every definable concept in the grammar.</is>
 
   <language>
     <English />
@@ -41,13 +41,13 @@
 
     Documentation model (on every root block definition):
     • Definition identity first — &lt;name&gt;, &lt;type&gt;, &lt;baseType&gt; (baseType omitted only here)
-    • &lt;idea&gt; — required after identity; semantic meaning of the Block
+    • &lt;is&gt; — required after identity; ultra-short noun phrase naming what this Block is
     • &lt;language&gt; — optional; natural language for documentation prose (inherits from Library,
       then org.blockml.bml.core.Block default English)
-    • &lt;documentation&gt; — required after idea; technical description; optional language
+    • &lt;documentation&gt; — required after is; technical description; optional language
       attribute when prose deviates from effective block language
     • Optional extensions: &lt;since&gt;, &lt;changelog&gt;, &lt;examples&gt;, &lt;references&gt;
-    Omitted idea or documentation on root blocks → BML_MISSING_IDEA / BML_MISSING_DOCUMENTATION
+    Omitted is or documentation on root blocks → BML_MISSING_IS / BML_MISSING_DOCUMENTATION
     (warning V1).
 
     Serialization:
@@ -91,7 +91,7 @@
       Block and Block Instance — fundamental architecture principles.
     </see>
     <see file="02_mbml.md" relation="AuthoringGuide">
-      Block Definition — idea, documentation, and documentation extensions.
+      Block Definition — is, documentation, and documentation extensions.
     </see>
     <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Root Type Exception and Definition Branch.

@@ -12,7 +12,7 @@
   <name>Validation</name>
   <type>core:Validation</type>
   <baseType>core:Block</baseType>
-  <idea>How a constraint violation should be reported — separate from the constraint condition itself.</idea>
+  <is>How a constraint violation should be reported — separate from the constraint condition itself.</is>
 
   <documentation>Abstract branch for validation semantics. A Validation block describes whether and
     how BlockML itself should enforce an attached constraint. Constraints reference Validation via

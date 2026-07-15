@@ -5,7 +5,7 @@
   <name>Text</name>
   <type>btype:Text</type>
   <baseType>btype:PrimitiveType</baseType>
-  <idea>Primitive BlockML type for textual values — implementation-independent.</idea>
+  <is>Primitive BlockML type for textual values — implementation-independent.</is>
 
   <documentation>BOM Core primitive ValueType for text. Unqualified name Text resolves to
     org.blockml.bml.type.Text. Replaces the former String type — BlockML describes semantic types, not

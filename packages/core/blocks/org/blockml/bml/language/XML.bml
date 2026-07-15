@@ -10,7 +10,7 @@
   <name>XML</name>
   <type>lang:XML</type>
   <baseType>lang:MarkupLanguage</baseType>
-  <idea>XML as an implementation language for capabilities.</idea>
+  <is>XML as an implementation language for capabilities.</is>
 
   <documentation>MarkupLanguage for XML document implementations on Capabilities — templates,
     configuration, or structured markup.</documentation>

@@ -13,7 +13,7 @@
   <name>AuthoringGuide</name>
   <type>relation:AuthoringGuide</type>
   <baseType>core:Relation</baseType>
-  <idea>Target explains how to author or use the current definition in practice.</idea>
+  <is>Target explains how to author or use the current definition in practice.</is>
 
   <documentation>Typical file= targets — repository markdown with authoring rules, examples, or
     migration notes. Use when the link is procedural (&quot;how to write…&quot;) rather than structural

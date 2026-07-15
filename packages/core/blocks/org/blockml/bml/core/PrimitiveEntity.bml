@@ -13,7 +13,7 @@
   <name>PrimitiveEntity</name>
   <type>core:PrimitiveEntity</type>
   <baseType>core:Entity</baseType>
-  <idea>Wraps a primitive value when it must exist as an Entity in composition or aggregation.</idea>
+  <is>Wraps a primitive value when it must exist as an Entity in composition or aggregation.</is>
 
   <documentation>Abstract generic Entity for primitive values that must appear as Block instances
     inside a composition or aggregation. Follows the general generic resolution rule: T belongs

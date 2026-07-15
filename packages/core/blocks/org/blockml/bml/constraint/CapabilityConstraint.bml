@@ -13,7 +13,7 @@
   <name>CapabilityConstraint</name>
   <type>constraint:CapabilityConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>
-  <idea>Constraint that validates a CapabilityDefinition or its implementation.</idea>
+  <is>Constraint that validates a CapabilityDefinition or its implementation.</is>
 
   <documentation>Abstract branch for constraints on Capability members. Generic T binds to the
     effective CapabilityDefinition. Valid only under a Capability's &lt;constraints&gt; container

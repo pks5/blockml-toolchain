@@ -13,7 +13,7 @@
   <name>Draft</name>
   <type>status:Draft</type>
   <baseType>core:Status</baseType>
-  <idea>Definition exists but implementation or mapping is incomplete or untested.</idea>
+  <is>Definition exists but implementation or mapping is incomplete or untested.</is>
 
   <documentation>Declared in BML but not yet fully implemented, validated, or mapped. May change
     without deprecation notice. Use when a known gap exists between target and canonical form —

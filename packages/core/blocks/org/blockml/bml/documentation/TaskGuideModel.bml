@@ -15,7 +15,7 @@
   <name>TaskGuideModel</name>
   <type>doc:TaskGuideModel</type>
   <baseType>core:Documentation</baseType>
-  <idea>TaskGuide blocks, task relations, and error-driven fix paths.</idea>
+  <is>TaskGuide blocks, task relations, and error-driven fix paths.</is>
 
   <documentation>
     Task-oriented paths complement ReadFirst learning paths on ReadMe entry points:

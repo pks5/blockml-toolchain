@@ -13,7 +13,7 @@
   <name>AggregationConstraint</name>
   <type>constraint:AggregationConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>
-  <idea>Constraint that validates an AggregationDefinition or its children.</idea>
+  <is>Constraint that validates an AggregationDefinition or its children.</is>
 
   <documentation>Abstract branch for constraints on Aggregation members. Generic T binds to the
     effective AggregationDefinition. Valid only under an Aggregation's &lt;constraints&gt; container

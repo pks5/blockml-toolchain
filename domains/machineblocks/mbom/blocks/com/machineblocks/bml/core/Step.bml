@@ -14,7 +14,7 @@
   <name>Step</name>
   <type>core:Step</type>
   <baseType>bcore:Block</baseType>
-  <idea>One assembly instruction in a Set build sequence.</idea>
+  <is>One assembly instruction in a Set build sequence.</is>
 
   <documentation>Framework Block defining one assembly instruction step. Document order in _steps
     defines build order.</documentation>

@@ -17,7 +17,7 @@
   <name>DocumentationModel</name>
   <type>doc:DocumentationModel</type>
   <baseType>core:Documentation</baseType>
-  <idea>Block documentation model — idea, documentation, references, examples, README, documentation blocks.</idea>
+  <is>Block documentation model — is, documentation, references, examples, README.</is>
 
   <documentation>
     Every root block definition carries a documentation model at the definition site — single
@@ -26,15 +26,18 @@
     Definition identity first (required at top of every Block document):
     name / type / baseType — FQN identity before prose (baseType omitted only on org.blockml.bml.core.Block).
 
-    idea (required, after identity) — semantic meaning of the Block; the stable constant (WOT: Idea).
-    summary (optional) — short prose expansion between idea and documentation; inherited from
+    is (required, after identity) — ultra-short noun phrase naming what this Block is
+      (for example &quot;A Lego brick&quot;, &quot;An integer&quot;). Distinct from WOT Idea — WOT Idea is the
+      Block itself; &lt;is&gt; names it in prose. Definition reflection: bml:Self.is.
+    summary (optional) — short prose expansion between is and documentation; inherited from
       StructuralDefinition on blocks and members.
     keywords aggregation (optional) — core.Keyword[]; domain FixedKeyword catalogue blocks, meta.FreeTextKeyword; shorthand → FreeTextKeyword only.
     language (optional) — natural language for documentation prose; inherits Library → Block
       default (English on org.blockml.bml.core.Block).
     documentation (required on root blocks) — technical description of the Block definition itself;
       optional language attribute when prose deviates from effective block language.
-    not (optional, blocks only) — what this Block is not; block-level disambiguation from similar concepts.
+    isnot (optional, blocks only) — what this Block is not; block-level disambiguation. Reflection:
+      bml:Self.isnot.
     aliases aggregation (optional, blocks only) — core.Alias[]; domain FixedAlias catalogue blocks, meta.FreeTextAlias; shorthand → FreeTextAlias only.
     Member elements carry their own summary, keywords, and documentation for individual Properties, Aggregations, etc.
 

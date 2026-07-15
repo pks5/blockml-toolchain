@@ -463,7 +463,8 @@ A Block is the fundamental unit of BOM Core. It is a parametric, typed, reusable
 ### Metadata
 
 ```text
-idea               — short semantic description: what this Block represents in meaning
+is                 — ultra-short designation: what this Block is (noun phrase); reflection bml:Self.is
+isnot              — optional; what this Block is not; reflection bml:Self.isnot
 documentation      — human-readable technical description
 since              — optional; semantic version from which this Block is available
 changelog          — optional; version history (oldest first)
@@ -944,11 +945,11 @@ A `BlockDefinition` is a regular Block. Every definition element is addressable 
 
 ```text
 com.foo.Bar.name                    →  <name>Wall</name>
-com.foo.Bar.idea                    →  <idea>…</idea>
+com.foo.Bar.is                    →  <is>…</is>
 com.foo.Bar.summary                 →  <summary>…</summary>
 com.foo.Bar.keywords                →  <keywords>…</keywords> (Keyword Entity children or shorthand)
 com.foo.Bar.documentation           →  <documentation>…</documentation>
-com.foo.Bar.not                     →  <not>…</not>
+com.foo.Bar.isnot                     →  <isnot>…</isnot>
 com.foo.Bar.aliases                 →  <aliases>…</aliases> (Alias Entity children or shorthand)
 com.foo.Bar.type                    →  <type>com.foo.Bar</type>
 com.foo.Bar.baseType                →  <baseType>…</baseType>
@@ -1405,7 +1406,7 @@ bml:status on non-definition element      →  only when deviating from inherite
 **Non-definition elements** — `bml:status` attribute **only when deviating**:
 
 ```xml
-<idea bml:status="Stub">…</idea>
+<is bml:status="Stub">…</is>
 <bricks:StandardBrick bml:status="Deprecated" … />
 ```
 
@@ -1634,7 +1635,7 @@ Within the enclosing document, an embedded definition and all its descendants **
 ```xml
 <embeddedBlocks>
   <block>
-    <idea>Inline definition — would normally live in its own .bml file</idea>
+    <is>Inline definition — would normally live in its own .bml file</is>
     <type>com.foo.internal.Physics</type>
     <baseType>org.blockml.bml.core.Block</baseType>
     <version>1.0.0</version>
@@ -1647,7 +1648,7 @@ Within the enclosing document, an embedded definition and all its descendants **
     </subBlocks>
     <embeddedBlocks>
       <block>
-        <idea>Nested inline library entry</idea>
+        <is>Nested inline library entry</is>
         <type>com.foo.internal.Math</type>
         <baseType>org.blockml.bml.core.Block</baseType>
         <version>1.0.0</version>

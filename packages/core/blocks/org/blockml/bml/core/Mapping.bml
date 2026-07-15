@@ -13,7 +13,7 @@
   <name>Mapping</name>
   <type>core:Mapping</type>
   <baseType>core:Block</baseType>
-  <idea>Describes how values transfer between two representations.</idea>
+  <is>Describes how values transfer between two representations.</is>
 
   <documentation>
     Abstract branch for explicit value mapping between representations. Mapping is not a property

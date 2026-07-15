@@ -14,7 +14,7 @@
   <name>DefinitionModel</name>
   <type>doc:DefinitionModel</type>
   <baseType>core:Documentation</baseType>
-  <idea>Definitions describe types — the Definition branch, reflection, and definitions as Blocks.</idea>
+  <is>Definitions describe types — the Definition branch, reflection, and definitions as Blocks.</is>
 
   <documentation>
     Block definitions describe types. The Definition branch (org.blockml.bml.core.Definition) is the

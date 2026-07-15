@@ -5,7 +5,7 @@
   <name>Boolean</name>
   <type>btype:Boolean</type>
   <baseType>btype:PrimitiveType</baseType>
-  <idea>Primitive BlockML property type capable of holding true or false.</idea>
+  <is>Primitive BlockML property type capable of holding true or false.</is>
 
   <documentation>BOM Core primitive ValueType for true/false values. Unqualified name Boolean
     resolves to org.blockml.bml.type.Boolean. Boolean is neither textual nor numeric — its own

@@ -13,7 +13,7 @@
   <name>Outbound</name>
   <type>cap:Outbound</type>
   <baseType>core:Capability</baseType>
-  <idea>Representation of an Outbound capability.</idea>
+  <is>Representation of an Outbound capability.</is>
 
   <documentation>Outbound capability.</documentation>
   <properties>

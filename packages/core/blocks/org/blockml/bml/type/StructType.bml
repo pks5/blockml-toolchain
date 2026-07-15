@@ -17,7 +17,7 @@
   <name>StructType</name>
   <type>btype:StructType</type>
   <baseType>core:ValueType</baseType>
-  <idea>Branch for product types — composite values with named fields.</idea>
+  <is>Branch for product types — composite values with named fields.</is>
 
   <documentation>
     Abstract ValueType branch for composite value objects — complex values described by normal

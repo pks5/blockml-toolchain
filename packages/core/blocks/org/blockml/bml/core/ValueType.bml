@@ -12,7 +12,7 @@
   <name>ValueType</name>
   <type>core:ValueType</type>
   <baseType>core:Block</baseType>
-  <idea>A type in the BlockML grammar — values that properties and capabilities may carry.</idea>
+  <is>A type in the BlockML grammar — values that properties and capabilities may carry.</is>
 
   <documentation>ValueType branch of BlockML. Semantic unit for property and Capability types
     (primitives, structs, enums). A ValueType never stores data — it describes the nature of a

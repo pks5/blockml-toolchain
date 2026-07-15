@@ -13,7 +13,7 @@
   <name>ValueConstraint</name>
   <type>constraint:ValueConstraint</type>
   <baseType>core:Constraint</baseType>
-  <idea>Constraint that validates a concrete property value or ValueType content.</idea>
+  <is>Constraint that validates a concrete property value or ValueType content.</is>
 
   <documentation>Abstract branch for value-level constraints. Generic parameter T binds automatically
     to the effective ValueType of the enclosing Property at validate time — authors never specify T

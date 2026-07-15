@@ -13,7 +13,7 @@
   <name>ReadMe</name>
   <type>core:ReadMe</type>
   <baseType>core:Block</baseType>
-  <idea>Abstract role marker — human and LLM reading entry point for a library.</idea>
+  <is>Abstract role marker — human and LLM reading entry point for a library.</is>
 
   <documentation>Abstract branch for ReadMe blocks. A ReadMe declares where humans and LLMs start
     reading a library — curated learning order, vocabulary, and orientation. Distinct from

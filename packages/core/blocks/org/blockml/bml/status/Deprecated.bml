@@ -13,7 +13,7 @@
   <name>Deprecated</name>
   <type>status:Deprecated</type>
   <baseType>core:Status</baseType>
-  <idea>Definition is retained for compatibility but must not be used in new work.</idea>
+  <is>Definition is retained for compatibility but must not be used in new work.</is>
 
   <documentation>Superseded by another definition. Existing references may remain during migration;
     validators and editors should warn on new usage. Document the replacement in

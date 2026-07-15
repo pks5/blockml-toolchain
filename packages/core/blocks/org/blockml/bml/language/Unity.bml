@@ -10,7 +10,7 @@
   <name>Unity</name>
   <type>lang:Unity</type>
   <baseType>lang:CSharp</baseType>
-  <idea>Unity C# as an implementation language for capabilities.</idea>
+  <is>Unity C# as an implementation language for capabilities.</is>
 
   <documentation>C# dialect for Unity script implementations on Capabilities — MonoBehaviour methods,
     UnityEngine APIs, and game-logic code.</documentation>

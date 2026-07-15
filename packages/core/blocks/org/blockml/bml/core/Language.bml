@@ -12,7 +12,7 @@
   <name>Language</name>
   <type>core:Language</type>
   <baseType>core:Block</baseType>
-  <idea>A target implementation language for capability code.</idea>
+  <is>A target implementation language for capability code.</is>
 
   <documentation>Language branch of BlockML. Declares an implementation language permitted on
     Capability implementations (OpenSCAD, TypeScript, English, …). Natural languages for

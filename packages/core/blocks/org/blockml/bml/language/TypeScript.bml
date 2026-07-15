@@ -10,7 +10,7 @@
   <name>TypeScript</name>
   <type>lang:TypeScript</type>
   <baseType>lang:ProgrammingLanguage</baseType>
-  <idea>TypeScript as an implementation language for capabilities.</idea>
+  <is>TypeScript as an implementation language for capabilities.</is>
 
   <documentation>ProgrammingLanguage for TypeScript arrow-function implementations on Capabilities.
     V1: compile-time execution when all arguments are literals.</documentation>

@@ -13,7 +13,7 @@
   <name>Size3d</name>
   <type>type:Size3d</type>
   <baseType>btype:StructType</baseType>
-  <idea>Three-dimensional size in MachineBlocks grid units.</idea>
+  <is>Three-dimensional size in MachineBlocks grid units.</is>
 
   <documentation>Struct ValueType for three-dimensional size [x, y, z] in grid units.</documentation>
   <properties>

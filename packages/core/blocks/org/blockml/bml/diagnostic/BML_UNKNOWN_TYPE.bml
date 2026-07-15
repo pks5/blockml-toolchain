@@ -16,7 +16,7 @@
   <name>BML_UNKNOWN_TYPE</name>
   <type>diag:BML_UNKNOWN_TYPE</type>
   <baseType>core:Diagnostic</baseType>
-  <idea>Referenced type FQN could not be resolved in TypeRegistry.</idea>
+  <is>Referenced type FQN could not be resolved in TypeRegistry.</is>
 
   <summary>Emitted when type, baseType, contract, language, or member type references an unknown or
     misspelled FQN — or when bootstrap order has not yet loaded the library that defines the type.</summary>

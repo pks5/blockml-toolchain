@@ -12,7 +12,7 @@
   <name>Status</name>
   <type>core:Status</type>
   <baseType>core:Block</baseType>
-  <idea>Maturity or lifecycle marker for BlockML definitions — not a string or boolean flag.</idea>
+  <is>Maturity or lifecycle marker for BlockML definitions — not a string or boolean flag.</is>
 
   <documentation>Abstract branch for status blocks. Status values are Block references following the
     Everything-is-a-Block principle. Standard implementations live in org.blockml.bml.status.*;

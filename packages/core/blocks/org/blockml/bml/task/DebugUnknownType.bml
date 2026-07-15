@@ -17,7 +17,7 @@
   <name>DebugUnknownType</name>
   <type>task:DebugUnknownType</type>
   <baseType>core:TaskGuide</baseType>
-  <idea>Fix BML_UNKNOWN_TYPE — unresolved type, baseType, or member type reference.</idea>
+  <is>Fix BML_UNKNOWN_TYPE — unresolved type, baseType, or member type reference.</is>
 
   <summary>Verify FQN spelling, xmlns prefix resolution, Library _blocks membership, and bootstrap
     load order so the referenced type is registered in TypeRegistry before validation.</summary>

@@ -27,8 +27,8 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **Compiler internals** | Parser **must** know `<block>` as input concept; internal representation **free** — see `17_type_system_bml.md` |
 | **09_mbom_properties.yml** | **Render mapping only** (serializer, scad_name, customizer) — not type SSOT |
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
-| **Block identity** | Every `<block>` starts with definition identity — `<name>`, `<type>`, `<baseType>` (before `<idea>`) |
-| **Block idea** | Every `<block>` carries `<idea>` after identity — what this Block semantically represents |
+| **Block identity** | Every `<block>` starts with definition identity — `<name>`, `<type>`, `<baseType>` (before `<is>`) |
+| **Block is** | Every `<block>` carries `<is>` after identity — ultra-short noun phrase naming what this Block is |
 | **Block documentation** | Every root `<block>` carries `<documentation>` as second child — technical description; optional `<since>`, `<changelog>`, `<examples>`, `<references>` follow |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
 | **ValueType branch** | `org.blockml.bml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; four kinds: PrimitiveType · StructType · EnumType · ConstantType |
@@ -294,7 +294,7 @@ in child blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 
-`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`idea`, `not`, `name`, `type`, `baseType`, `version`), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
+`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`name`, `type`, `baseType`, `version`), designation (`is`, `isnot`), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
 
 `org.blockml.bml.definition.SubBlockDefinition` adds `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy).
 
@@ -371,7 +371,7 @@ com.foo.Bar.name                    →  Block metadata
 com.foo.Bar.documentation           →  StructuralDefinition.documentation (Documentation Sub-Block shape)
 com.foo.Bar.summary                 →  StructuralDefinition.summary
 com.foo.Bar.keywords                 →  StructuralDefinition.keywords (KeywordEntry[])
-com.foo.Bar.not                      →  BlockDefinition.not (block-level only)
+com.foo.Bar.isnot                      →  BlockDefinition.not (block-level only)
 com.foo.Bar.aliases                  →  BlockDefinition.aliases (AliasEntry[]; block-level only)
 com.foo.Bar.properties.width.summary → PropertyDefinition.summary
 com.foo.Bar.properties.width.keywords → PropertyDefinition.keywords

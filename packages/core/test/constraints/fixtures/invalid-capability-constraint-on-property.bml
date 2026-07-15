@@ -10,7 +10,7 @@
   xmlns:test="com.blockml.test.constraints">
   <type>test:InvalidCapabilityOnProperty</type>
   <baseType>core:Block</baseType>
-  <idea>Constraint test — RequiresImplementation under property (invalid)</idea>
+  <is>Constraint test — RequiresImplementation under property (invalid)</is>
   <version>1.0.0</version>
 
   <properties>

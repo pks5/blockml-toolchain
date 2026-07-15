@@ -19,7 +19,7 @@
   <name>BlockLibrary</name>
   <type>core:BlockLibrary</type>
   <baseType>core:Block</baseType>
-  <idea>Abstract base for publishable library descriptors.</idea>
+  <is>Abstract base for publishable library descriptors.</is>
 
   <documentation>
     Abstract publishable library unit — groups exported Block and ValueType definitions,

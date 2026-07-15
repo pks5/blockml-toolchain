@@ -16,7 +16,7 @@
   <name>RootBlockDefinition</name>
   <type>def:RootBlockDefinition</type>
   <baseType>def:SubBlockDefinition</baseType>
-  <idea>The structural shape of root Block definition documents in BlockML.</idea>
+  <is>The structural shape of root Block definition documents in BlockML.</is>
 
   <documentation>Meta-model type for root block documents. Extends
     org.blockml.bml.definition.SubBlockDefinition (and thus org.blockml.bml.definition.BlockDefinition)
@@ -59,7 +59,7 @@
       <value>def:RootBlockDefinition</value>
       <documentation>Definition meta-model type for this Block's definition document (root block
         and embedded blocks). Selects which fields exist when accessing the definition via bml:Self
-        in definition reflection — for example com.foo.Bar.idea or additional properties on a custom
+        in definition reflection — for example com.foo.Bar.is or additional properties on a custom
         definition model. Omitted on root blocks and embedded blocks =
         org.blockml.bml.definition.RootBlockDefinition.
 

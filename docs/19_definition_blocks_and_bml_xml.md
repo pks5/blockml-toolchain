@@ -240,7 +240,7 @@ Meta-model (simplified):
 org.blockml.bml.definition.BlockDefinition
   bml:xml element:  block
   properties:       name, type → TypeReference(core:Block),
-                    baseType → TypeReference(core:Block), idea, not, version, …
+                    baseType → TypeReference(core:Block), is, isnot, version, …
   aggregations:     language → TypeReferenceEntity(NaturalLanguage)
                     aliases → Alias[]
                     genericTypes → GenericTypeDefinition[]

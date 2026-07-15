@@ -26,7 +26,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
-| **Block metadata** | Every `<block>` carries `<idea>`, optional `<summary>`, optional `<keywords>` (`core:Keyword[]` aggregation), `<documentation>`, optional `<not>`, optional `<aliases>` (`core:Alias[]` aggregation); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
+| **Block metadata** | Every `<block>` carries `<is>`, optional `<summary>`, optional `<keywords>` (`core:Keyword[]` aggregation), `<documentation>`, optional `<isnot>`, optional `<aliases>` (`core:Alias[]` aggregation); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
 | **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — EnumType is a specialized StructType |
 | **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `18_function_mapping.md` |
@@ -141,7 +141,7 @@ BML Block (Idea)          →  ScadBlockProcessor
 Set                       →  STEPS array + view submodules
 ```
 
-The SCAD renderer **re-creates Blocks in the target language** — `mb_block()` is SCAD’s manifestation of the BML Block idea. That **blocks-beget-blocks** pattern may repeat in other Worlds (React components, Unity prefabs, firmware modules) — but each renderer chooses its own mapping.
+The SCAD renderer **re-creates Blocks in the target language** — `mb_block()` is SCAD’s manifestation of the BML Block. That **blocks-beget-blocks** pattern may repeat in other Worlds (React components, Unity prefabs, firmware modules) — but each renderer chooses its own mapping.
 
 ```text
 ScreenMachine (example)   →  React JSX · no mb_block · no SCAD blocks
@@ -225,7 +225,7 @@ There is no parallel type system in code, no hidden XSD ontology for framework c
 Implications:
 
 ```text
-LLM target structure     one shape — always <block> with FQN + baseType + idea + documentation
+LLM target structure     one shape — always <block> with FQN + baseType + is + documentation
 TypeRegistry bootstrap   framework .bml loaded before user .bml — same registerDefinition()
 New primitive / language add a .bml file — not a compiler patch (V1 bootstrap set is fixed; mechanism is open)
 WCMS / Blockiverse       framework Blocks are first-class publishable definitions

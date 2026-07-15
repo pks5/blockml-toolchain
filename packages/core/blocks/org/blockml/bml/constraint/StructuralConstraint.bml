@@ -13,7 +13,7 @@
   <name>StructuralConstraint</name>
   <type>constraint:StructuralConstraint</type>
   <baseType>core:Constraint</baseType>
-  <idea>Constraint that validates a Block or member definition shape.</idea>
+  <is>Constraint that validates a Block or member definition shape.</is>
 
   <documentation>Abstract branch for structural constraints on definition elements (Blocks and
     members). Generic parameter T binds automatically to the effective definition type of the

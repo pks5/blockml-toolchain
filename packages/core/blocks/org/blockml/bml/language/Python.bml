@@ -10,7 +10,7 @@
   <name>Python</name>
   <type>lang:Python</type>
   <baseType>lang:ProgrammingLanguage</baseType>
-  <idea>Python as an implementation language for capabilities.</idea>
+  <is>Python as an implementation language for capabilities.</is>
 
   <documentation>ProgrammingLanguage for Python function implementations on Capabilities.</documentation>
 </block>

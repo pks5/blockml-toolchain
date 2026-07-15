@@ -12,7 +12,7 @@
   <name>Documentation</name>
   <type>core:Documentation</type>
   <baseType>core:Block</baseType>
-  <idea>Abstract base type for narrative documentation blocks in the BlockML core library.</idea>
+  <is>Abstract base type for narrative documentation blocks in the BlockML core library.</is>
 
   <documentation>
     Abstract base for org.blockml.bml.documentation.* blocks — curated reading material that

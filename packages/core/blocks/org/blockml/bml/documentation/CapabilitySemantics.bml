@@ -15,7 +15,7 @@
   <name>CapabilitySemantics</name>
   <type>doc:CapabilitySemantics</type>
   <baseType>core:Documentation</baseType>
-  <idea>Semantics are described via Capabilities — not via compiler code.</idea>
+  <is>Semantics are described via Capabilities — not via compiler code.</is>
 
   <documentation>
     BlockML describes semantics only. There are no special language concepts for constructor,

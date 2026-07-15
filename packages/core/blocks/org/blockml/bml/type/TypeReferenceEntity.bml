@@ -11,7 +11,7 @@
   <name>TypeReferenceEntity</name>
   <type>btype:TypeReferenceEntity</type>
   <baseType>core:PrimitiveEntity(btype:TypeReference(B))</baseType>
-  <idea>TypeReference primitive value as an Entity in composition or aggregation.</idea>
+  <is>TypeReference primitive value as an Entity in composition or aggregation.</is>
 
   <documentation>Open generic Entity wrapping a TypeReference (FQN / TypeExpression) primitive.
     Forwards B from org.blockml.bml.type.TypeReference onto org.blockml.bml.core.PrimitiveEntity via

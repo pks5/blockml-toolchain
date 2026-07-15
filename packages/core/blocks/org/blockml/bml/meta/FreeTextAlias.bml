@@ -15,7 +15,7 @@
   <name>FreeTextAlias</name>
   <type>meta:FreeTextAlias</type>
   <baseType>core:Alias</baseType>
-  <idea>Ad-hoc alternative name for a Block type — free-text label.</idea>
+  <is>Ad-hoc alternative name for a Block type — free-text label.</is>
 
   <documentation>Standard free-text implementation of org.blockml.bml.core.Alias for colloquial or
     legacy alternative names on Block definitions. Rendered as a direct child inside &lt;aliases&gt;

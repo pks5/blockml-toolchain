@@ -14,7 +14,7 @@
   <name>Block</name>
   <type>core:Block</type>
   <baseType>bcore:Entity</baseType>
-  <idea>Any MachineBlocks domain object — bricks, sets, presets, and compositions.</idea>
+  <is>Any MachineBlocks domain object — bricks, sets, presets, and compositions.</is>
 
   <documentation>MachineBlocks domain base Block. Carries presets aggregation and basePresets
     association for domain-specific preset resolution. Preset merge is compiler logic; Customizer

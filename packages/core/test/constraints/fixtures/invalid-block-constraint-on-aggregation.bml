@@ -9,7 +9,7 @@
   xmlns:test="com.blockml.test.constraints">
   <type>test:InvalidBlockOnAggregation</type>
   <baseType>core:Block</baseType>
-  <idea>Constraint test — RequiresMember under aggregation (invalid)</idea>
+  <is>Constraint test — RequiresMember under aggregation (invalid)</is>
   <version>1.0.0</version>
 
   <aggregations>

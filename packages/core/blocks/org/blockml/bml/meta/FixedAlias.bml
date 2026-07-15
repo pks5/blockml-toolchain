@@ -16,7 +16,7 @@
   <name>FixedAlias</name>
   <type>meta:FixedAlias</type>
   <baseType>core:Alias</baseType>
-  <idea>Catalogue-controlled alternative Block type name — fixed in the alias block definition.</idea>
+  <is>Catalogue-controlled alternative Block type name — fixed in the alias block definition.</is>
 
   <documentation>Protected base for domain catalogue Alias blocks. Extends org.blockml.bml.core.Alias
     for controlled alternative names whose payload is authored once on the alias Block definition —

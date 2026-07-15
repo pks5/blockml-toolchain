@@ -13,7 +13,7 @@
   <name>SeeAlso</name>
   <type>relation:SeeAlso</type>
   <baseType>core:Relation</baseType>
-  <idea>General related reference — peer cross-link without a stronger semantic tie.</idea>
+  <is>General related reference — peer cross-link without a stronger semantic tie.</is>
 
   <documentation>Default relation when relation is omitted on &lt;see&gt;. Use for related Blocks,
     documentation files, or URLs that help understand the current definition but do not extend,

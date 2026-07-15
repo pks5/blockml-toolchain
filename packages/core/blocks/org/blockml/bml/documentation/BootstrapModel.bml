@@ -15,7 +15,7 @@
   <name>BootstrapModel</name>
   <type>doc:BootstrapModel</type>
   <baseType>core:Documentation</baseType>
-  <idea>ReadMe / README, Bootstrap SPOE, TypeRegistry bootstrap, and interpretation context.</idea>
+  <is>ReadMe / README, Bootstrap SPOE, TypeRegistry bootstrap, and interpretation context.</is>
 
   <documentation>
     Self-hosting bootstrap: the compiler loads framework BML from @blockml/core (and domain

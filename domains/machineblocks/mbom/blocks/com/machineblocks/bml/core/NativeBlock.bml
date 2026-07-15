@@ -15,7 +15,7 @@
   <name>NativeBlock</name>
   <type>core:NativeBlock</type>
   <baseType>core:Block</baseType>
-  <idea>Leaf geometry primitive rendered directly as mb_block() in SCAD.</idea>
+  <is>Leaf geometry primitive rendered directly as mb_block() in SCAD.</is>
 
   <documentation>Final leaf Block mapped directly to SCAD mb_block() — the native geometry primitive
     at render time. Uses children aggregation for mb_block() sub-geometry instead of _parts.

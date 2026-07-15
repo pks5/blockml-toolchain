@@ -68,7 +68,7 @@ com.foo.Bar.aggregations.parts →  members[] entry where kind="aggregation" and
 com.foo.Bar.capabilities.render → members[] entry where kind="capability" and name="render"
 ```
 
-Block metadata (`name`, `idea`, `summary`, `keywords`, `documentation`, `not`, `aliases`, `version`, `baseType`, `definitionFqn`, …) maps to top-level `BlockDefinition` fields — addressable directly under the Block FQN without a container segment. See `00_bom_core.md` — § Canonical definition paths · `16_framework_base_types.md` — § Definition Addressing.
+Block metadata (`name`, `is`, `summary`, `keywords`, `documentation`, `isnot`, `aliases`, `version`, `baseType`, `definitionFqn`, …) maps to top-level `BlockDefinition` fields — addressable directly under the Block FQN without a container segment. See `00_bom_core.md` — § Canonical definition paths · `16_framework_base_types.md` — § Definition Addressing.
 
 ---
 
@@ -274,12 +274,12 @@ V1 known languages: `org.blockml.bml.language.TypeScript`, `org.blockml.bml.lang
 Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_framework_base_types.md`.
 
 ```text
-<idea>…</idea>                               → block.idea (trimmed text)
+<is>…</is>                               → block.is (trimmed text)
 <summary>…</summary>                         → block.summary (trimmed text); members: member.summary
 <keywords>                                   → keywords[] KeywordEntry; shorthand → FreeTextKeyword only
   <meta:FreeTextKeyword term="…" />          → { typeFqn: FreeTextKeyword, term, languageFqn?, weight? }
   <domain:Inheritance />                     → { typeFqn: domain keyword block }  (example)
-<not>…</not>                                 → block.not (trimmed text); block definitions only
+<isnot>…</isnot>                                 → block.isnot (trimmed text); block definitions only
 <aliases>                                    → aliases[] AliasEntry; shorthand → FreeTextAlias only
   <meta:FreeTextAlias name="…" />            → { typeFqn: FreeTextAlias, name, languageFqn?, legacy? }
 <language>…</language>                       → block.languageFqn (NaturalLanguage FQN)
@@ -320,7 +320,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 `<subBlocks>` and `<embeddedBlocks>` (Inline Library) map to `block.subBlocks[]` and `block.embeddedBlocks[]` respectively — each child `<block>` parsed recursively as a nested `BlockDefinition`. Sub-Block FQN is derived from the immediate enclosing block as `resolve(parent.type) + "." + name`; embedded block FQN is `resolve(type)` (the `<type>` element value). Embedded blocks are parsed as full root-block-shaped trees including nested `subBlocks[]` and `embeddedBlocks[]`. See `12_bom_object_model.md`.
 
 ```text
-Omitted <idea> on root block            → BML_MISSING_IDEA (warning V1)
+Omitted <is> on root block            → BML_MISSING_IS (warning V1)
 Omitted <documentation> on root block  → BML_MISSING_DOCUMENTATION (warning V1)
 Omitted <since> / <changelog> / <examples> / <references> → undefined (optional)
 Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
@@ -397,7 +397,7 @@ override="true"            → override (local declaration property — not inhe
 
 Legacy `namespace="…"` attribute on member elements → **`BML_DEPRECATED_MEMBER_NAMESPACE_ATTR` (error)** at map time. Namespace is supplied exclusively by the element QName.
 
-**Non-definition elements** (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<idea>`, `<implementation>`, Block instances, …) may carry `bml:status="Draft"` — mapped to `statusFqn` on the same BOM node **only when deviating** from inherited status. No `<status>` child on these elements.
+**Non-definition elements** (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<is>`, `<implementation>`, Block instances, …) may carry `bml:status="Draft"` — mapped to `statusFqn` on the same BOM node **only when deviating** from inherited status. No `<status>` child on these elements.
 
 **Effective status resolution (stage [5] / validate [8]):**
 

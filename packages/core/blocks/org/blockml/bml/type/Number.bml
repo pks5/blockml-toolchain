@@ -5,7 +5,7 @@
   <name>Number</name>
   <type>btype:Number</type>
   <baseType>btype:PrimitiveType</baseType>
-  <idea>Abstract branch for numeric primitive ValueTypes.</idea>
+  <is>Abstract branch for numeric primitive ValueTypes.</is>
 
   <documentation>Abstract numeric primitive branch under org.blockml.bml.type.PrimitiveType.
     Concrete types: Integer (whole numbers), Decimal (default for non-integer numeric values),

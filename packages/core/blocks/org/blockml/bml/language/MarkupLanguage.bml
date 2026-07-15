@@ -13,7 +13,7 @@
   <name>MarkupLanguage</name>
   <type>lang:MarkupLanguage</type>
   <baseType>core:Language</baseType>
-  <idea>A structured markup language for capability implementations.</idea>
+  <is>A structured markup language for capability implementations.</is>
 
   <documentation>Abstract branch for markup languages — XML and other structured document formats
     used as capability implementation bodies.</documentation>

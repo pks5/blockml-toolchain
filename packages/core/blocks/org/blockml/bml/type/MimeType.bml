@@ -4,7 +4,7 @@
   <name>MimeType</name>
   <type>btype:MimeType</type>
   <baseType>btype:Text</baseType>
-  <idea>MIME media type identifier text.</idea>
+  <is>MIME media type identifier text.</is>
 
   <documentation>Textual primitive subtype for MIME type values (for example text/plain,
     application/json). Unqualified name MimeType resolves to org.blockml.bml.type.MimeType.</documentation>

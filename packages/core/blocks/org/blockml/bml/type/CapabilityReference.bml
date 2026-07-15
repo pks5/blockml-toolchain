@@ -11,7 +11,7 @@
   <name>CapabilityReference</name>
   <type>btype:CapabilityReference</type>
   <baseType>btype:MemberReference(B, def:CapabilityDefinition)</baseType>
-  <idea>A path naming a CapabilityDefinition on a Block.</idea>
+  <is>A path naming a CapabilityDefinition on a Block.</is>
 
   <documentation>Concrete MemberReference binding D = CapabilityDefinition. Value is a canonical
     capability path (com.foo.Bar.capabilities.render) or a local capability name when paired with a

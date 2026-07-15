@@ -14,7 +14,7 @@
   <name>NoSelfReference</name>
   <type>constraint:NoSelfReference</type>
   <baseType>constraint:AssociationConstraint</baseType>
-  <idea>Forbids an Association from referencing the enclosing Block type.</idea>
+  <is>Forbids an Association from referencing the enclosing Block type.</is>
 
   <documentation>Association-level structural constraint. T binds to the effective
     AssociationDefinition. When validation is set, association targets must not reference the

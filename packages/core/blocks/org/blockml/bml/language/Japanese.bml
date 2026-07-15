@@ -10,7 +10,7 @@
   <name>Japanese</name>
   <type>lang:Japanese</type>
   <baseType>lang:NaturalLanguage</baseType>
-  <idea>Japanese prose — documentation and natural-language capability implementations.</idea>
+  <is>Japanese prose — documentation and natural-language capability implementations.</is>
 
   <documentation>Natural language for documentation prose, example titles, and Japanese
     natural-language capability implementations.</documentation>

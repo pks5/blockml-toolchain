@@ -13,7 +13,7 @@
   <name>Entity</name>
   <type>core:Entity</type>
   <baseType>core:Block</baseType>
-  <idea>General entity branch — composable domain blocks, services, and primitive wrappers.</idea>
+  <is>General entity branch — composable domain blocks, services, and primitive wrappers.</is>
 
   <documentation>Abstract branch for Entities — Blocks that represent instances with identity in
     composition or aggregation. Domain blocks, built-in services, and PrimitiveEntity wrappers extend

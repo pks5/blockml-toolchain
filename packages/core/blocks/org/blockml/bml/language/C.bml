@@ -10,7 +10,7 @@
   <name>C</name>
   <type>lang:C</type>
   <baseType>lang:ProgrammingLanguage</baseType>
-  <idea>C as an implementation language for capabilities.</idea>
+  <is>C as an implementation language for capabilities.</is>
 
   <documentation>ProgrammingLanguage for C function implementations on Capabilities.</documentation>
 </block>

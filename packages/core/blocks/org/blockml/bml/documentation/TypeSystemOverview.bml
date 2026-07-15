@@ -14,7 +14,7 @@
   <name>TypeSystemOverview</name>
   <type>doc:TypeSystemOverview</type>
   <baseType>core:Documentation</baseType>
-  <idea>Overview of ValueType kinds, generics, and type expressions.</idea>
+  <is>Overview of ValueType kinds, generics, and type expressions.</is>
 
   <documentation>
     BlockML knows four ValueType kinds at language level — each names a semantic meaning:

@@ -9,7 +9,7 @@
   xmlns:test="com.blockml.test.constraints">
   <type>test:AggregationConstraint</type>
   <baseType>core:Block</baseType>
-  <idea>Constraint test — AllowedChildType on aggregation</idea>
+  <is>Constraint test — AllowedChildType on aggregation</is>
   <version>1.0.0</version>
 
   <aggregations>

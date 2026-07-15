@@ -16,7 +16,7 @@
   <name>TypeReference</name>
   <type>btype:TypeReference</type>
   <baseType>btype:Text</baseType>
-  <idea>A globally unique name referencing a Block type.</idea>
+  <is>A globally unique name referencing a Block type.</is>
 
   <documentation>
     ValueType for type references — fully qualified names (FQNs) and TypeExpressions that name a

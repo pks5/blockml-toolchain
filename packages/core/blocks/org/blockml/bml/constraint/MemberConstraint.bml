@@ -13,7 +13,7 @@
   <name>MemberConstraint</name>
   <type>constraint:MemberConstraint</type>
   <baseType>constraint:StructuralConstraint</baseType>
-  <idea>Constraint that validates a Block member definition.</idea>
+  <is>Constraint that validates a Block member definition.</is>
 
   <documentation>Abstract branch for member-level structural constraints. Generic T binds to the
     effective MemberDefinition subtype of the embedding context. Specialized by PropertyConstraint,

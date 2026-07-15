@@ -11,7 +11,7 @@
   <name>AggregationReference</name>
   <type>btype:AggregationReference</type>
   <baseType>btype:MemberReference(B, def:AggregationDefinition)</baseType>
-  <idea>A path naming an AggregationDefinition on a Block.</idea>
+  <is>A path naming an AggregationDefinition on a Block.</is>
 
   <documentation>Concrete MemberReference binding D = AggregationDefinition. Value is a canonical
     aggregation path (com.foo.Bar.aggregations.children) or a local aggregation name when paired

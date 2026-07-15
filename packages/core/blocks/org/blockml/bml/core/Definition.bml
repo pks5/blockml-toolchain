@@ -15,7 +15,7 @@
   <name>Definition</name>
   <type>core:Definition</type>
   <baseType>core:Block</baseType>
-  <idea>Identification marker for all Definition meta-model blocks — intentionally empty.</idea>
+  <is>Identification marker for all Definition meta-model blocks — intentionally empty.</is>
 
   <documentation>
     Abstract identification marker for the Definition branch under org.blockml.bml.core.Block.

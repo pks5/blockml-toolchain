@@ -19,7 +19,7 @@
   <name>Lists</name>
   <type>service:Lists</type>
   <baseType>core:Entity</baseType>
-  <idea>Built-in list utilities callable as #lists in expressions.</idea>
+  <is>Built-in list utilities callable as #lists in expressions.</is>
 
   <documentation>Built-in lists service. Expression prefix #lists.* — list construction,
     indexing, and aggregation utilities.</documentation>

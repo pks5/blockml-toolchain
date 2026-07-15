@@ -14,7 +14,7 @@
   <name>ValueTypeConfiguration</name>
   <type>doc:ValueTypeConfiguration</type>
   <baseType>core:Documentation</baseType>
-  <idea>Inline ValueType instance configuration — Decimal{precision=10, scale=2} and related syntax.</idea>
+  <is>Inline ValueType instance configuration — Decimal{precision=10, scale=2} and related syntax.</is>
 
   <documentation>
     Curly braces configure the Property's owned ValueType instance — orthogonal to generic (...)

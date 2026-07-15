@@ -14,7 +14,7 @@
   <name>MustBeReadOnly</name>
   <type>constraint:MustBeReadOnly</type>
   <baseType>constraint:PropertyConstraint</baseType>
-  <idea>Requires the enclosing Property definition to be read-only.</idea>
+  <is>Requires the enclosing Property definition to be read-only.</is>
 
   <documentation>Property-level structural constraint. T binds to the effective PropertyDefinition.
     When validation is set, the validator requires readOnly=true on the Property (authored or

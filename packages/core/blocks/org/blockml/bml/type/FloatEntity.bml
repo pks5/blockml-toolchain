@@ -5,7 +5,7 @@
   <name>FloatEntity</name>
   <type>btype:FloatEntity</type>
   <baseType>core:PrimitiveEntity(btype:Float)</baseType>
-  <idea>Float primitive value as an Entity in composition or aggregation.</idea>
+  <is>Float primitive value as an Entity in composition or aggregation.</is>
 
   <documentation>Concrete Entity wrapping a Float primitive. Binds T = Float on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>

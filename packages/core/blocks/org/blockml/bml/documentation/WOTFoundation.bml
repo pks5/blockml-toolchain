@@ -13,7 +13,7 @@
   <name>WOTFoundation</name>
   <type>doc:WOTFoundation</type>
   <baseType>core:Documentation</baseType>
-  <idea>Optional philosophical foundation — Idea, Manifestation, Grammar, World.</idea>
+  <is>Optional philosophical foundation — Idea, Manifestation, Grammar, World.</is>
 
   <documentation>
     The Web of Things (WOT) provides the philosophical foundation for BlockML. Optional reading
@@ -22,8 +22,9 @@
     Idea (Plato):
     The only true constant. Exists independently of Universes, Worlds, Technologies, and
     Manifestations. An Idea does not change. In BlockML: Block, ValueType, Language, FQN —
-    describable without any render target. BML holds the Idea stable; idea on every block
-    definition names this semantic constant.
+    describable without any render target. BML holds the Idea stable. The Block definition
+    itself is the Idea; the authoring field &lt;is&gt; (BOM block.is, reflection bml:Self.is)
+    names that Idea in an ultra-short noun phrase for humans and LLMs — it is not the Idea.
 
     Manifestation:
     The entire process from Idea to Thing — not a single step. Manifestor (compiler) produces

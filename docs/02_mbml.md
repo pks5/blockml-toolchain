@@ -376,21 +376,21 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 <name>              — short class name (PascalCase). Optional on root blocks — derived from the last
                       segment of resolve(type) when omitted. When present, must match that segment.
                       Required on Sub-Blocks. First child of the definition document (with type /
-                      baseType) — definition identity comes before idea.
+                      baseType) — definition identity comes before is.
 <type>              — canonical Block type identity (required on root block). TypeReference
                       property — element text is an FQN / xmlns QName (for example foo:MyBlock).
                       Declares identity for the Block being defined (the type need not exist yet).
-                      Immediately after name, before idea. Child-element TypeReference form is invalid.
+                      Immediately after name, before is. Child-element TypeReference form is invalid.
 <baseType>          — parent TypeReference / TypeExpression. Mandatory — no default. Element
                       text (for example core:Block or core:PrimitiveEntity(btype:Integer)).
                       Generic applications on the parent are authored and resolved here.
-                      Omitted only on org.blockml.bml.core.Block. Immediately after type, before idea.
-<idea>              — short semantic description: what this Block represents in meaning. Required;
-                      follows name / type / baseType (never first).
-<summary>           — optional short prose expansion — typically three to five sentences between idea and documentation.
+                      Omitted only on org.blockml.bml.core.Block. Immediately after type, before is.
+<is>                — ultra-short designation: what this Block is, as a noun phrase (required;
+                      follows name / type / baseType — never first). Prefer two to six words.
+<isnot>             — optional block-level disambiguation — what this Block is not (blocks only, not members).
+<summary>           — optional short prose expansion — typically three to five sentences between is and documentation.
 <keywords>          — optional search/discovery tags — core.Keyword Entity aggregation (StructuralDefinition).
 <documentation>     — human-readable technical description of the Block (required on root blocks).
-<not>               — optional block-level disambiguation — what this Block is not (blocks only, not members).
 <aliases>           — optional alternative Block type names — core.Alias Entity aggregation (blocks only).
 <version>           — semantic version of this Block definition (root block only)
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
@@ -398,21 +398,21 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 
 Definition elements (`<property>`, `<aggregation>`, …) carry `<status>` only when deviating from the inherited status — see § `<status>`.
 
-### Definition identity first — then `<idea>`
+### Definition identity first — then `<is>`
 
-**Rule:** Every Block definition document (root, Sub-Block, embedded) starts with **definition identity** — `<name>`, `<type>`, `<baseType>` — **before** `<idea>` and all prose. The type system answers *what is this definition?* before the Idea answers *what does it mean?*
+**Rule:** Every Block definition document (root, Sub-Block, embedded) starts with **definition identity** — `<name>`, `<type>`, `<baseType>` — **before** `<is>` and all prose. The type system answers *what is this definition?* (FQN); `<is>` answers *what is this thing?* in everyday words.
 
-`<idea>` follows identity, before optional `<summary>`, `<keywords>`, `<language>`, `<documentation>`, optional `<not>`, and optional `<aliases>`. It states how to **interpret** the Block — what it means in the domain, not how it is implemented.
+`<is>` follows identity, before optional `<summary>`, `<keywords>`, `<language>`, `<documentation>`, optional `<isnot>`, and optional `<aliases>`. It is an **ultra-short noun phrase** — not a purpose clause and not a technical explanation. Prefer two to six words. Reflection: `bml:Self.is`. Motto fit: *as simple as Lego* at the label; *as powerful as SAP* in documentation and the model beneath.
 
 ```text
 <name>          — short class name (optional on root; required on Sub-Blocks)
 <type>          — TypeReference identity (required on root; usually omitted on Sub-Blocks)
 <baseType>      — parent TypeReference / TypeExpression (omitted only on org.blockml.bml.core.Block)
-<idea>          — meaning     what this Block semantically represents (one short sentence)
+<is>            — designation  what this Block is (noun phrase: "A Lego brick", "An integer", "A chair")
 <summary>       — scope       optional middle tier — three to five sentences of scope and boundaries
 <keywords>      — discovery   optional search tags for RAG and colloquial lookup
 <documentation> — detail      technical description, behaviour, constraints, examples
-<not>           — negative    optional block-level disambiguation — what this Block is not
+<isnot>         — negative    optional block-level disambiguation — what this Block is not
 <aliases>       — names       optional alternative names for this Block type (blocks only)
 ```
 
@@ -422,7 +422,7 @@ Examples:
 <name>StandardBrick</name>
 <type>bricks:StandardBrick</type>
 <baseType>core:NativeBlock</baseType>
-<idea>Lego compatible standard building block.</idea>
+<is>A Lego brick</is>
 <documentation>Parametric MachineBlocks brick with size, studs, holes, and style properties.</documentation>
 ```
 
@@ -430,7 +430,7 @@ Examples:
 <name>Float</name>
 <type>btype:Float</type>
 <baseType>btype:Number</baseType>
-<idea>Primitive BlockML property type capable of holding a float number.</idea>
+<is>A floating-point number</is>
 <documentation>BOM Core primitive ValueType for floating-point numbers. Unqualified name Float
   resolves via the type namespace.</documentation>
 <references>
@@ -440,21 +440,21 @@ Examples:
 </references>
 ```
 
-`<idea>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IDEA` (warning in V1, error in a later release). The idea is primary input for editors, LLMs, and documentation navigation — it answers *what does it mean?* after FQN identity is established.
+`<is>` is required on every Block definition (root blocks and Sub-Blocks). Omitted on root blocks → `BML_MISSING_IS` (warning in V1, error in a later release). Primary input for editors, LLMs, and documentation navigation — after FQN identity is established.
 
-WOT alignment: the Idea is the stable semantic constant; documentation describes how a World interprets and uses it. See `WOT_Reference_v26.md` — The Idea.
+**WOT:** The Block itself is the Idea (stable semantic constant). `<is>` only **names** that Idea in prose — it is not the Idea. See `WOTFoundation` and `WOT_Reference` — The Idea.
 
 ### `<summary>` — short prose expansion
 
-`<summary>` is an optional child on all **StructuralDefinition** elements — root blocks, Sub-Blocks, and members (`<property>`, `<aggregation>`, …). On Block definitions it follows `<idea>` and optional `<language>`, before `<documentation>`. It expands semantic meaning in **three to five sentences** — scope, boundaries, and orientation without full technical detail.
+`<summary>` is an optional child on all **StructuralDefinition** elements — root blocks, Sub-Blocks, and members (`<property>`, `<aggregation>`, …). On Block definitions it follows `<is>` and optional `<language>`, before `<documentation>`. It expands the designation in **three to five sentences** — scope, boundaries, and orientation without full technical detail.
 
 ```text
-idea      →  one sentence: what is this?
-summary   →  short paragraph: scope and boundaries (LLM context bundles, quick human scan)
-documentation → full technical prose
+is            →  noun phrase: what is this?
+summary       →  short paragraph: scope and boundaries (LLM context bundles, quick human scan)
+documentation →  full technical prose
 ```
 
-Omitted when `<idea>` and `<documentation>` suffice. Plain trimmed text body stored in BOM `summary` on the enclosing definition element. Addressable as `com.foo.Bar.summary` on blocks and `com.foo.Bar.properties.width.summary` on members.
+Omitted when `<is>` and `<documentation>` suffice. Plain trimmed text body stored in BOM `summary` on the enclosing definition element. Addressable as `com.foo.Bar.summary` on blocks and `com.foo.Bar.properties.width.summary` on members.
 
 Optional **`language`** attribute follows the same deviation pattern as `<documentation>` when a Summary struct is not required.
 
@@ -482,18 +482,18 @@ Optional **`language`** attribute follows the same deviation pattern as `<docume
 <keywords>inheritance, nesting, FQN derivation</keywords>
 ```
 
-Parser expands each trimmed token to `{ typeFqn: org.blockml.bml.meta.FreeTextKeyword, term }`. Omitted when `idea`, `summary`, and `documentation` suffice. Stored in BOM `keywords[]` as `KeywordEntry`. Type-reference form: `FreeTextKeyword{term="inheritance"}`.
+Parser expands each trimmed token to `{ typeFqn: org.blockml.bml.meta.FreeTextKeyword, term }`. Omitted when `is`, `summary`, and `documentation` suffice. Stored in BOM `keywords[]` as `KeywordEntry`. Type-reference form: `FreeTextKeyword{term="inheritance"}`.
 
 Requires `xmlns:meta="org.blockml.bml.meta"` for FreeTextKeyword children; domain keywords use their package prefix. Catalogue keywords extend **`org.blockml.bml.meta.FixedKeyword`** — protected members (`_term`, optional `_language`, `_weight`) are set on the keyword block definition; references are empty fixed blocks:
 
 ```xml
 <!-- vocab/Inheritance.bml — catalogue keyword definition -->
 <block ...>
-  <idea>Search tag for inheritance and baseType chains.</idea>
-  <documentation>Controlled vocabulary keyword for inheritance-related blocks.</documentation>
   <name>Inheritance</name>
   <type>vocab:Inheritance</type>
   <baseType>meta:FixedKeyword</baseType>
+  <is>A search tag for inheritance</is>
+  <documentation>Controlled vocabulary keyword for inheritance-related blocks.</documentation>
   <properties>
     <_term>inheritance</_term>
     <_weight>2</_weight>
@@ -525,12 +525,14 @@ Authors declare `<language>` or a `language` attribute on `<documentation>`, `<c
 
 ```xml
 <block ...>
-  <idea>Parametric wall segment for AnyClosure enclosures.</idea>
+  <name>Wall</name>
+  <type>ac:Wall</type>
+  <baseType>core:Block</baseType>
+  <is>A parametric wall segment</is>
   <language>
     <German />
   </language>
   <documentation>Wall block with thickness, height, and opening properties.</documentation>
-  <name>Wall</name>
   ...
 </block>
 ```
@@ -558,7 +560,7 @@ Natural languages are distinct from **implementation languages** (`ProgrammingLa
 
 ### `<documentation>`
 
-`<documentation>` follows definition identity (`name` / `type` / `baseType`), `<idea>`, optional `<summary>`, optional `<keywords>`, and optional `<language>`, still before optional `<not>` and optional `<aliases>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
+`<documentation>` follows definition identity (`name` / `type` / `baseType`), `<is>`, optional `<summary>`, optional `<keywords>`, and optional `<language>`, still before optional `<isnot>` and optional `<aliases>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`). Omitted on root blocks → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release).
 
 An optional **`language`** attribute on `<documentation>` references a `org.blockml.bml.language.NaturalLanguage` when the prose is written in a language other than the effective language of the enclosing definition element. Unqualified names resolve via implicit namespace `org.blockml.bml.language.*`. Omitted → inherit effective language from Block or Library.
 
@@ -569,9 +571,8 @@ An optional **`language`** attribute on `<documentation>` references a `org.bloc
   <name>Wall</name>
   <type>ac:Wall</type>
   <baseType>core:Block</baseType>
-  <idea>Parametric wall segment for AnyClosure enclosures.</idea>
+  <is>A parametric wall segment</is>
   <documentation>Wall block with thickness, height, and opening properties for enclosure design.</documentation>
-  <name>Wall</name>
   ...
 </block>
 ```
@@ -582,14 +583,14 @@ An optional **`language`** attribute on `<documentation>` references a `org.bloc
 </documentation>
 ```
 
-### `<not>` — negative space (blocks only)
+### `<isnot>` — negative space (blocks only)
 
-`<not>` is an optional child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It states **what this Block is not** — explicit disambiguation from easily confused concepts (for example Sub-Block vs embedded Block, contract vs baseType). Place after `<documentation>` (and optional documentation extensions) or immediately after `<documentation>` before `<since>` when extensions are absent. Definition identity (`name` / `type` / `baseType`) always remains at the top of the document.
+`<isnot>` is an optional child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It states **what this Block is not** — explicit disambiguation from easily confused concepts (for example Sub-Block vs embedded Block, contract vs baseType). Place after `<documentation>` (and optional documentation extensions) or immediately after `<documentation>` before `<since>` when extensions are absent. Definition identity (`name` / `type` / `baseType`) always remains at the top of the document.
 
-Plain trimmed text body stored in BOM `block.not`. Addressable as `com.foo.Bar.not`. Prefer `relation=ContrastsWith` on `<see>` when pointing at a specific confusing type; `<not>` states the negation inline on the current definition.
+Plain trimmed text body stored in BOM `block.isnot`. Addressable as `com.foo.Bar.isnot`. Definition reflection: `bml:Self.isnot`. Prefer `relation=ContrastsWith` on `<see>` when pointing at a specific confusing type; `<isnot>` states the negation inline on the current definition.
 
 ```xml
-<not>Not a runtime Block instance — this is a type definition document.</not>
+<isnot>A runtime Block instance</isnot>
 ```
 
 ### `<aliases>` — alternative type names (blocks only)
@@ -638,7 +639,7 @@ Applies to all definition elements that carry documentation:
 <block>  <property>  <aggregation>  <association>  <capability>  <constraint>  <suggestion>
 ```
 
-`<summary>` and `<keywords>` apply to the same StructuralDefinition elements. `<not>` and `<aliases>` are block-level only.
+`<summary>` and `<keywords>` apply to the same StructuralDefinition elements. `<isnot>` and `<aliases>` are block-level only.
 
 and to any future definition element with `<documentation>`.
 
@@ -678,7 +679,7 @@ Task-oriented paths use the same `<references>` mechanism as learning paths — 
 
 ```xml
 <block …>
-  <idea>Author a new Block definition document from scratch.</idea>
+  <is>Author a new Block definition document from scratch.</is>
   <summary>…</summary>
   <keywords>author, new block, create type</keywords>
   <documentation>…</documentation>
@@ -827,7 +828,7 @@ Member targets always resolve to **canonical definition paths** in the BOM (`com
 <see block="core:Block" property="language" relation="Defines">…</see> → see · block · Block · property · language · Defines
 ```
 
-Relation is a **Block reference** — not a free string — following Everything-is-a-Block. Each relation block carries its own `idea` and `documentation` explaining when to use it.
+Relation is a **Block reference** — not a free string — following Everything-is-a-Block. Each relation block carries its own `is` and `documentation` explaining when to use it.
 
 **Authoring rules:**
 
@@ -917,7 +918,7 @@ Examples:
 <block> (omit status)                    → Stable; all children inherit Stable
   <property> (omit status)               → Stable (inherited)
   <property><status>Draft</status> → Draft; <documentation> inside inherits Draft
-  <idea bml:status="Stub">        → Stub (deviates from block's Stable)
+  <is bml:status="Stub">        → Stub (deviates from block's Stable)
   <bricks:Wall bml:status="Deprecated"> → Deprecated instance under Stable block
 ```
 
@@ -956,10 +957,10 @@ Only elements that **define** something may carry a `<status>` child — and **o
 Elements that are **not** definitions do not carry a `<status>` child. Use `bml:status` **only when deviating** from the inherited status:
 
 ```xml
-<!-- Block is Stable (default); idea deviates to Stub -->
-<idea bml:status="Stub">
+<!-- Block is Stable (default); is designation may deviate to Stub -->
+<is bml:status="Stub">
   Reserved for future multi-material support.
-</idea>
+</is>
 
 <!-- Stable block; deprecated composition instance -->
 <bricks:StandardBrick
@@ -1309,7 +1310,7 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
        xmlns:bricks="com.machineblocks.bml.bricks"
        xmlns:status="org.blockml.bml.status">
 
-  <idea>Parametric enclosure wall.</idea>
+  <is>Parametric enclosure wall.</is>
   <documentation>Wall block with native and custom properties.</documentation>
 
   <name>Wall</name>
@@ -2211,11 +2212,11 @@ com.foo.Bar.properties.width        →  PropertyDefinition for width
 com.foo.Bar.aggregations.children   →  AggregationDefinition for children
 com.foo.Bar.capabilities.render     →  CapabilityDefinition for render
 com.foo.Bar.name                    →  Block metadata
-com.foo.Bar.idea                    →  Block idea
+com.foo.Bar.is                    →  Block is (designation)
 com.foo.Bar.summary                 →  Block summary
 com.foo.Bar.keywords                →  Block keywords
 com.foo.Bar.documentation           →  Block documentation
-com.foo.Bar.not                     →  Block not (disambiguation)
+com.foo.Bar.isnot                     →  Block isnot (disambiguation)
 com.foo.Bar.aliases                 →  Block aliases (alternative type names)
 ```
 
@@ -2822,7 +2823,7 @@ embeddedBlocks  — allowed (nested inline libraries)
   </subBlocks>
   <embeddedBlocks>
     <block>
-      <idea>Inline — equivalent to a separate .bml file</idea>
+      <is>Inline — equivalent to a separate .bml file</is>
       <type>com.foo.internal.Physics</type>
       <baseType>org.blockml.bml.core.Block</baseType>
       <version>1.0.0</version>
@@ -3335,7 +3336,7 @@ A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a normal
         https://blockml.org/schemas/core/block.xsd
   ">
 
-  <idea>Named size and color shortcuts for the Standard brick.</idea>
+  <is>Named size and color shortcuts for the Standard brick.</is>
   <documentation>Standard brick presets for MachineBlocks Standard block.</documentation>
 
   <name>StandardPresets</name>
@@ -3505,7 +3506,7 @@ Physical directories and overlapping package prefixes do not define membership. 
 <block xmlns="http://blockml.org/schema/block"
        ...>
 
-  <idea>Published catalog of MachineBlocks standard brick definitions.</idea>
+  <is>Published catalog of MachineBlocks standard brick definitions.</is>
   <documentation>MachineBlocks standard brick library.</documentation>
 
   <name>Library</name>

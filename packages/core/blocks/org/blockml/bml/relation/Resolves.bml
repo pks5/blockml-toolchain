@@ -13,7 +13,7 @@
   <name>Resolves</name>
   <type>relation:Resolves</type>
   <baseType>core:Relation</baseType>
-  <idea>Target TaskGuide resolves or fixes the diagnostic described by the current definition.</idea>
+  <is>Target TaskGuide resolves or fixes the diagnostic described by the current definition.</is>
 
   <documentation>Use on &lt;see&gt; entries in org.blockml.bml.diagnostic.* blocks to link a
     validator code to a procedural fix guide. Target should reference an org.blockml.bml.task.*

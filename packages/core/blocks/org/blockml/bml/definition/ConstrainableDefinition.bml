@@ -15,7 +15,7 @@
   <name>ConstrainableDefinition</name>
   <type>def:ConstrainableDefinition</type>
   <baseType>def:StructuralDefinition</baseType>
-  <idea>Definition element that may carry Constraint Block instances.</idea>
+  <is>Definition element that may carry Constraint Block instances.</is>
 
   <documentation>Abstract base for Block and member definitions that support a &lt;constraints&gt;
     container. The embedding context determines the constraint target and binds the generic type

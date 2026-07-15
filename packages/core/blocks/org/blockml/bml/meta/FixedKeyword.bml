@@ -16,7 +16,7 @@
   <name>FixedKeyword</name>
   <type>meta:FixedKeyword</type>
   <baseType>core:Keyword</baseType>
-  <idea>Catalogue-controlled search tag — fixed in the keyword block definition.</idea>
+  <is>Catalogue-controlled search tag — fixed in the keyword block definition.</is>
 
   <documentation>Protected base for domain catalogue Keyword blocks. Extends org.blockml.bml.core.Keyword
     for controlled vocabulary tags whose payload is authored once on the keyword Block definition —

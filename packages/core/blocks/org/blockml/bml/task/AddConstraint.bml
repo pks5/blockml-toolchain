@@ -17,7 +17,7 @@
   <name>AddConstraint</name>
   <type>task:AddConstraint</type>
   <baseType>core:TaskGuide</baseType>
-  <idea>Attach a Constraint Block instance to a Block or member definition.</idea>
+  <is>Attach a Constraint Block instance to a Block or member definition.</is>
 
   <summary>Declare a constraints container on a ConstrainableDefinition element and add a Constraint
     reference as a direct child. The embedding context binds the constraint target automatically —

@@ -10,7 +10,7 @@
   <name>German</name>
   <type>lang:German</type>
   <baseType>lang:NaturalLanguage</baseType>
-  <idea>German prose — documentation and natural-language capability implementations.</idea>
+  <is>German prose — documentation and natural-language capability implementations.</is>
 
   <documentation>Natural language for documentation prose, example titles, and German
     natural-language capability implementations.</documentation>

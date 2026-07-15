@@ -10,7 +10,7 @@
   xmlns:test="com.blockml.test.constraints">
   <type>test:ValuePresentOnProperty</type>
   <baseType>core:Block</baseType>
-  <idea>Constraint test — ValuePresent</idea>
+  <is>Constraint test — ValuePresent</is>
   <version>1.0.0</version>
 
   <properties>

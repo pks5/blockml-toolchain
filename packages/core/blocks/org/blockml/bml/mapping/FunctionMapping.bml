@@ -14,7 +14,7 @@
   <name>FunctionMapping</name>
   <type>mapping:FunctionMapping</type>
   <baseType>core:Mapping</baseType>
-  <idea>Maps function-parameter syntax to and from Capability inputType / outputType.</idea>
+  <is>Maps function-parameter syntax to and from Capability inputType / outputType.</is>
 
   <documentation>
     Concrete Mapping for function-like call syntax. Describes translation between a

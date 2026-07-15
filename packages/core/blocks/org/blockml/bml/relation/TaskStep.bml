@@ -13,7 +13,7 @@
   <name>TaskStep</name>
   <type>relation:TaskStep</type>
   <baseType>core:Relation</baseType>
-  <idea>Ordered step within a TaskGuide procedure — do this next.</idea>
+  <is>Ordered step within a TaskGuide procedure — do this next.</is>
 
   <documentation>Use on &lt;see&gt; entries inside org.blockml.bml.task.* TaskGuide blocks.
     Document order in &lt;references&gt; is step order — same convention as ReadFirst on README.

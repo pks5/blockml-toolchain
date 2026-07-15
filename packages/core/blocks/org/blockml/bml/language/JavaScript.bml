@@ -10,7 +10,7 @@
   <name>JavaScript</name>
   <type>lang:JavaScript</type>
   <baseType>lang:ProgrammingLanguage</baseType>
-  <idea>JavaScript as an implementation language for capabilities.</idea>
+  <is>JavaScript as an implementation language for capabilities.</is>
 
   <documentation>ProgrammingLanguage for JavaScript function implementations on Capabilities.</documentation>
 </block>

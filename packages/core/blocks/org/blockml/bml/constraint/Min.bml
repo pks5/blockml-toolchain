@@ -16,7 +16,7 @@
   <name>Min</name>
   <type>constraint:Min</type>
   <baseType>constraint:ValueConstraint</baseType>
-  <idea>Lower bound for a numeric property value.</idea>
+  <is>Lower bound for a numeric property value.</is>
 
   <documentation>Scalar constraint: T binds to the property type. Compatible with Integer, Float,
     and Decimal properties. The value property must match T.</documentation>

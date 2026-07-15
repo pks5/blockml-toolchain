@@ -13,7 +13,7 @@
   <name>Defines</name>
   <type>relation:Defines</type>
   <baseType>core:Relation</baseType>
-  <idea>Target defines the shape, rules, or meta-model of the current definition.</idea>
+  <is>Target defines the shape, rules, or meta-model of the current definition.</is>
 
   <documentation>Use when the referenced Block or Definition element is the formal specification
     the current type conforms to — for example def:PropertyDefinition on a property member, or

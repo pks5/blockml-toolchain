@@ -10,7 +10,7 @@
   <name>CSharp</name>
   <type>lang:CSharp</type>
   <baseType>lang:ProgrammingLanguage</baseType>
-  <idea>C# as an implementation language for capabilities.</idea>
+  <is>C# as an implementation language for capabilities.</is>
 
   <documentation>ProgrammingLanguage for C# method implementations on Capabilities.</documentation>
 </block>

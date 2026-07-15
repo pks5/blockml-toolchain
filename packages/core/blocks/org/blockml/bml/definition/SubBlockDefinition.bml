@@ -16,7 +16,7 @@
   <name>SubBlockDefinition</name>
   <type>def:SubBlockDefinition</type>
   <baseType>def:BlockDefinition</baseType>
-  <idea>The structural shape of nested Sub-Block definition documents in BlockML.</idea>
+  <is>The structural shape of nested Sub-Block definition documents in BlockML.</is>
 
   <documentation>Meta-model type for nested Sub-Block documents within a BomDocument. Extends
     org.blockml.bml.definition.BlockDefinition with the definition property (default
@@ -57,7 +57,7 @@
       <value>def:SubBlockDefinition</value>
       <documentation>Definition meta-model type for this Sub-Block's definition document. Selects
         which fields exist when accessing the definition via bml:Self in definition reflection —
-        for example com.foo.Bar.Engine.idea. Omitted on Sub-Blocks =
+        for example com.foo.Bar.Engine.is. Omitted on Sub-Blocks =
         org.blockml.bml.definition.SubBlockDefinition.
 
         Authored as FQN, xmlns QName, or unqualified name — unqualified names at this site resolve

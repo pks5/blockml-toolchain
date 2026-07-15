@@ -12,7 +12,7 @@
   <name>TaskGuide</name>
   <type>core:TaskGuide</type>
   <baseType>core:Documentation</baseType>
-  <idea>Abstract base for procedural how-to blocks — accomplish a concrete BlockML task.</idea>
+  <is>Abstract base for procedural how-to blocks — accomplish a concrete BlockML task.</is>
 
   <documentation>Abstract branch for org.blockml.bml.task.* blocks — step-by-step procedures
     distinct from org.blockml.bml.documentation.* concept blocks. TaskGuide blocks carry the normal

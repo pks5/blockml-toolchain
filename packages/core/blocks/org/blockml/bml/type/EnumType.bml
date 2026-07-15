@@ -15,7 +15,7 @@
   <name>EnumType</name>
   <type>btype:EnumType</type>
   <baseType>btype:StructType</baseType>
-  <idea>Branch for closed sets of named literal values.</idea>
+  <is>Branch for closed sets of named literal values.</is>
 
   <documentation>
     Abstract ValueType branch for closed enum ValueTypes — finite sets of named literal values.

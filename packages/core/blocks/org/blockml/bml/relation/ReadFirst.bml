@@ -13,7 +13,7 @@
   <name>ReadFirst</name>
   <type>relation:ReadFirst</type>
   <baseType>core:Relation</baseType>
-  <idea>Curated entry in a ReadMe learning path — read before exploring further.</idea>
+  <is>Curated entry in a ReadMe learning path — read before exploring further.</is>
 
   <documentation>Use on &lt;see&gt; entries in README / ReadMe blocks to declare mental learning
     order. ReadFirst entries should appear first in &lt;references&gt;, in reading order. Distinct

@@ -13,7 +13,7 @@
   <name>Requires</name>
   <type>relation:Requires</type>
   <baseType>core:Relation</baseType>
-  <idea>Target must be understood or present before the current definition can be used correctly.</idea>
+  <is>Target must be understood or present before the current definition can be used correctly.</is>
 
   <documentation>Use for hard dependencies — types, documentation, or external resources the reader
     or runtime must know first. Distinct from ReadFirst (curated path) and SeeAlso (optional peer link).</documentation>

@@ -33,7 +33,7 @@
   <name>Library</name>
   <type>blockml:Library</type>
   <baseType>bcore:BlockLibrary</baseType>
-  <idea>Published catalog of the BlockML core library — framework blocks, value types, and services.</idea>
+  <is>Published catalog of the BlockML core library — framework blocks, value types, and services.</is>
 
   <documentation>
     Publishable BlockML core library (org.blockml.bml.Library). Exports the framework grammar:

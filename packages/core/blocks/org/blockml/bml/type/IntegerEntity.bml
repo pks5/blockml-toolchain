@@ -5,7 +5,7 @@
   <name>IntegerEntity</name>
   <type>btype:IntegerEntity</type>
   <baseType>core:PrimitiveEntity(btype:Integer)</baseType>
-  <idea>Integer primitive value as an Entity in composition or aggregation.</idea>
+  <is>Integer primitive value as an Entity in composition or aggregation.</is>
 
   <documentation>Concrete Entity wrapping an Integer primitive. Binds T = Integer on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.

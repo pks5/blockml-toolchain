@@ -16,7 +16,7 @@
   <name>MaxItems</name>
   <type>constraint:MaxItems</type>
   <baseType>constraint:ValueConstraint</baseType>
-  <idea>Maximum number of elements in a collection property.</idea>
+  <is>Maximum number of elements in a collection property.</is>
 
   <documentation>T binds to the property collection type (e.g. String[]). The value property is Integer — the maximum item count.</documentation>
   <genericTypes>

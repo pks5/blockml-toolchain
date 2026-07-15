@@ -4,7 +4,7 @@
   <name>URI</name>
   <type>btype:URI</type>
   <baseType>btype:Text</baseType>
-  <idea>Uniform Resource Identifier — general resource identifier text.</idea>
+  <is>Uniform Resource Identifier — general resource identifier text.</is>
 
   <documentation>Textual primitive subtype for URI values. Unqualified name URI resolves to
     org.blockml.bml.type.URI.</documentation>

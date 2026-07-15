@@ -13,7 +13,7 @@
   <name>RendererFreedom</name>
   <type>doc:RendererFreedom</type>
   <baseType>core:Documentation</baseType>
-  <idea>The renderer decides manifestation — not BlockML.</idea>
+  <is>The renderer decides manifestation — not BlockML.</is>
 
   <documentation>
     The Render Target is free in what it produces and how it maps BML to output. No global rule

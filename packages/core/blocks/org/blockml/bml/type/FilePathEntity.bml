@@ -5,7 +5,7 @@
   <name>FilePathEntity</name>
   <type>btype:FilePathEntity</type>
   <baseType>core:PrimitiveEntity(btype:FilePath)</baseType>
-  <idea>FilePath primitive value as an Entity in composition or aggregation.</idea>
+  <is>FilePath primitive value as an Entity in composition or aggregation.</is>
 
   <documentation>Concrete Entity wrapping a FilePath primitive. Binds T = FilePath on
     org.blockml.bml.core.PrimitiveEntity via baseType — inherits the value property automatically.</documentation>

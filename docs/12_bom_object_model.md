@@ -159,10 +159,10 @@ interface BlockDefinition {
   /** Semantic version of this definition. Required. */
   version: string
 
-  /** Short semantic description — what this Block represents in meaning. Required. */
-  idea?: string
+  /** Ultra-short designation — what this Block is (noun phrase). Required. Reflection: bml:Self.is */
+  is?: string
 
-  /** Optional short prose expansion — typically three to five sentences between idea and documentation. */
+  /** Optional short prose expansion — typically three to five sentences between is and documentation. */
   summary?: string
 
   /** Optional search/discovery tags — core.Keyword Entity instances (KeywordEntry[]). */
@@ -180,8 +180,8 @@ interface BlockDefinition {
   /** NaturalLanguage FQN when documentation prose deviates from effective block language. Omitted = inherit. */
   documentationLanguageFqn?: string
 
-  /** What this Block is not — block-level disambiguation from similar concepts. Optional. */
-  not?: string
+  /** What this Block is not — block-level disambiguation from similar concepts. Optional. Reflection: bml:Self.isnot */
+  isnot?: string
 
   /** Alternative names for this Block type — core.Alias Entity instances (AliasEntry[]). Block-level only. */
   aliases?: AliasEntry[]
@@ -529,7 +529,7 @@ interface ConstrainableDefinition {
 
 interface MemberDefinitionBase {
   name: string
-  /** Optional short prose expansion between idea-level meaning and full documentation. */
+  /** Optional short prose expansion between is (designation) and full documentation. */
   summary?: string
   /** Optional search/discovery tags — core.Keyword Entity instances (KeywordEntry[]). */
   keywords?: KeywordEntry[]
@@ -1432,7 +1432,7 @@ BML_CONSTRAINT_UNKNOWN        — constraint type not a Constraint sub-type
 BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with bound target
 BML_CONSTRAINT_TARGET_MISMATCH — constraint branch incompatible with embedding context
 BML_CONSTRAINT_VIOLATION      — constraint rule fails with validation Error
-BML_MISSING_IDEA              — root <block> lacks <idea> (warning V1)
+BML_MISSING_IS              — root <block> lacks <is> (warning V1)
 BML_MISSING_DOCUMENTATION     — root <block> lacks <documentation> (warning V1)
 BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version
 BML_CHANGELOG_VERSION_ORDER   — <changelog> entries not ordered oldest-first (warning V1)

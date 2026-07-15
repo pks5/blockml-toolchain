@@ -10,7 +10,7 @@
   xmlns:test="com.blockml.test.constraints">
   <type>test:PropertyConstraintOnProperty</type>
   <baseType>core:Block</baseType>
-  <idea>Constraint test — MustBeReadOnly on property</idea>
+  <is>Constraint test — MustBeReadOnly on property</is>
   <version>1.0.0</version>
 
   <properties>

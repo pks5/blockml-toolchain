@@ -18,7 +18,7 @@
   <name>BlockDefinition</name>
   <type>def:BlockDefinition</type>
   <baseType>def:ConstrainableDefinition</baseType>
-  <idea>The shared structural shape of Block definition documents in BlockML.</idea>
+  <is>The shared structural shape of Block definition documents in BlockML.</is>
 
   <documentation>Abstract meta-model base for all Block definition documents — root blocks,
     Sub-Blocks, and embedded blocks. Semantically a Class: declarative type shape without instance
@@ -27,10 +27,10 @@
     com.foo.Bar when B resolves to com.foo.Bar.
 
     Declares identity first (name, type, baseType, version), then semantic and discovery fields
-    (idea, not, aliases), generic parameters, contracts, allowed Sub-Blocks and languages, and
+    (is, isnot, aliases), generic parameters, contracts, allowed Sub-Blocks and languages, and
     member declaration containers (properties, aggregations, associations, capabilities). Inherits
     summary and keywords aggregation (core.Keyword[]) from
-    org.blockml.bml.definition.StructuralDefinition. not is block-level only; aliases aggregation
+    org.blockml.bml.definition.StructuralDefinition. isnot is block-level only; aliases aggregation
     (core.Alias[]) lists domain Alias blocks or org.blockml.bml.meta.FreeTextAlias instances. Omitted when unnecessary. Type modifiers abstract and final are inherited from
     org.blockml.bml.definition.StructuralDefinition. Every definition element is addressable via
     its canonical structural path within the Block FQN (for example com.foo.Bar.properties.width).
@@ -93,7 +93,7 @@
   <!--
     Scalar Block metadata. Each property renders as a direct XML child element
     named after the property. Authored document order (mandatory):
-    name → type → baseType first (definition identity, before idea), then idea / not / version
+    name → type → baseType first (definition identity, before is), then is / isnot / version
     and the rest of the document.
   -->
   <properties>
@@ -102,7 +102,7 @@
         when omitted, derived as lastSegment(resolve(type)). When present on a root block, must
         equal lastSegment(resolve(type)) (BML_BLOCK_NAME_TYPE_MISMATCH). Format: [A-Z][a-zA-Z0-9]*
         (BML_INVALID_BLOCK_NAME). First child of every Block definition document (with type /
-        baseType) — definition identity comes before idea.</documentation>
+        baseType) — definition identity comes before is.</documentation>
     </name>
     <type type="TypeReference(core:Block)" bml:xml="element">
       <documentation>Canonical Block type identity — scalar TypeReference (FQN) text, not a
@@ -112,7 +112,7 @@
         Block being defined. Optional on Sub-Blocks — when omitted, derived as
         resolve(parent.type) + "." + name; when present, must equal that expected value
         (BML_SUBBLOCK_TYPE_MISMATCH). Stored in BOM as block.type (FQN string). Immediately after
-        name, before idea.</documentation>
+        name, before is.</documentation>
     </type>
     <baseType type="TypeReference(core:Block)" bml:xml="element">
       <documentation>Parent type TypeReference / TypeExpression. Required on all definitions
@@ -121,21 +121,26 @@
         including generic applications that bind type parameters (for example core:Entity or
         core:PrimitiveEntity(btype:Integer)). This is the site where generic applications on the
         parent are resolved. Stored in BOM as block.baseType (FQN string). Immediately after type,
-        before idea.</documentation>
+        before is.</documentation>
     </baseType>
-    <idea type="Text" bml:xml="element">
-      <documentation>Short semantic description — what this Block represents in meaning. Required
-        on every Block definition (root blocks and Sub-Blocks). Follows definition identity
-        (name / type / baseType) — never before them. Addressable as com.foo.Bar.idea.</documentation>
-    </idea>
-    <not type="Text" bml:xml="element">
+    <is type="Text" bml:xml="element">
+      <documentation>Ultra-short designation — what this Block is, as a noun phrase (for example
+        &quot;A Lego brick&quot;, &quot;An integer&quot;, &quot;A chair&quot;). Required on every
+        Block definition (root blocks and Sub-Blocks). Prefer two to six words; no purpose clause
+        and no technical explanation — use summary and documentation for those. Follows definition
+        identity (name / type / baseType) — never before them. Stored in BOM block.is. Addressable as
+        com.foo.Bar.is. Definition reflection: bml:Self.is. Distinct from the WOT Idea concept —
+        WOT Idea is the Block itself; &lt;is&gt; names it in prose for humans and LLMs.</documentation>
+    </is>
+    <isnot type="Text" bml:xml="element">
       <documentation>What this Block is not — explicit disambiguation from easily confused concepts
-        (for example Sub-Block vs embedded Block, contract vs baseType). Optional; use when idea and
+        (for example Sub-Block vs embedded Block, contract vs baseType). Optional; use when is and
         summary alone do not prevent misinterpretation. Block-level only — not declared on member
-        definitions. Plain trimmed text body stored in BOM block.not. Addressable as com.foo.Bar.not.
-        Prefer relation=ContrastsWith on references when pointing at a specific confusing type; not
-        states the negation inline on the current definition.</documentation>
-    </not>
+        definitions. Plain trimmed text body stored in BOM block.isnot. Addressable as
+        com.foo.Bar.isnot. Definition reflection: bml:Self.isnot. Prefer relation=ContrastsWith on
+        references when pointing at a specific confusing type; isnot states the negation inline on
+        the current definition.</documentation>
+    </isnot>
     <version type="Version" bml:xml="element">
       <documentation>Semantic version of this Block definition. Required on root blocks.
         Addressable as com.foo.Bar.version.</documentation>

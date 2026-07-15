@@ -10,7 +10,7 @@
   xmlns:test="com.blockml.test.constraints">
   <type>test:InheritedConstraints</type>
   <baseType>core:Block</baseType>
-  <idea>Constraint test — inherited constraints via contract</idea>
+  <is>Constraint test — inherited constraints via contract</is>
   <version>1.0.0</version>
 
   <contracts>

@@ -12,7 +12,7 @@
   <name>Alias</name>
   <type>core:Alias</type>
   <baseType>core:Entity</baseType>
-  <idea>Abstract branch for alternative Block type names on Block definitions.</idea>
+  <is>Abstract branch for alternative Block type names on Block definitions.</is>
 
   <documentation>Abstract branch marker for alias Entity instances in an aliases aggregation on
     org.blockml.bml.definition.BlockDefinition only (root blocks and Sub-Blocks). Domain libraries

@@ -5,7 +5,7 @@
   <name>Decimal</name>
   <type>btype:Decimal</type>
   <baseType>btype:Number</baseType>
-  <idea>Primitive BlockML property type for fixed-precision decimal numbers.</idea>
+  <is>Primitive BlockML property type for fixed-precision decimal numbers.</is>
 
   <documentation>BOM Core primitive ValueType for decimal numbers — the default type for all
     non-integer numeric values (3.5, 12.75, 0.1). Unqualified name Decimal resolves to

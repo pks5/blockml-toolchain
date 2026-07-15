@@ -13,7 +13,7 @@
   <name>Prerequisite</name>
   <type>relation:Prerequisite</type>
   <baseType>core:Relation</baseType>
-  <idea>Understand or complete this before starting the current TaskGuide.</idea>
+  <is>Understand or complete this before starting the current TaskGuide.</is>
 
   <documentation>Use on &lt;see&gt; entries at the start of a TaskGuide &lt;references&gt; container
     — before TaskStep entries. Distinct from Requires (dependency of the current definition) and

@@ -15,7 +15,7 @@
   <name>Constant</name>
   <type>btype:Constant</type>
   <baseType>btype:ConstantType</baseType>
-  <idea>A ValueType that permits exactly one configured literal value.</idea>
+  <is>A ValueType that permits exactly one configured literal value.</is>
 
   <documentation>
     Standard ConstantType implementation for singleton (constant) values in type expressions —

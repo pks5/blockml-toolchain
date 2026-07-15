@@ -13,7 +13,7 @@
   <name>CompilerArchitecture</name>
   <type>doc:CompilerArchitecture</type>
   <baseType>core:Documentation</baseType>
-  <idea>Parser → Canonical BOM → Validator → Renderer — the compiler pipeline.</idea>
+  <is>Parser → Canonical BOM → Validator → Renderer — the compiler pipeline.</is>
 
   <documentation>
     The BOM Compiler follows a three-layer architecture with immutable Canonical BOM at the center:

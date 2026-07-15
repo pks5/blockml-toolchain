@@ -1385,7 +1385,7 @@ Content-Type: application/bml+xml
 --msg--
 ```
 
-The LLM reads all Blocks as a coherent context. Each `<idea>` element gives the immediate essence. `<properties>` give the details. Together they form a complete, structured prompt — without natural language ambiguity.
+The LLM reads all Blocks as a coherent context. Each `<is>` element gives the immediate essence. `<properties>` give the details. Together they form a complete, structured prompt — without natural language ambiguity.
 
 BMLM can also serve as: a Wish (Actor context + Idea), a ThingKit (Manifestor output), an AI Context (World knowledge for a Manifestor), or a Message between Things via stud://.
 
