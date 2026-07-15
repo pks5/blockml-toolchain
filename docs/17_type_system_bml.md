@@ -196,7 +196,7 @@ org.blockml.bml.core.Block                         abstract root · omits baseTy
   │     │     ├── org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
   │     ├── org.blockml.bml.language.ProgrammingLanguage(L)   TypeScript · OpenSCAD · PseudoCode · …
   │     │     L : NaturalLanguage (default English) — optional content/text language
-  │     └── org.blockml.bml.language.MarkupLanguage(L)        XML · JSON · YML
+  │     └── org.blockml.bml.language.MarkupLanguage(L)        XML · JSON · YML · Markdown
   │           L : NaturalLanguage (default English) — optional content/text language
   ├── org.blockml.bml.core.Entity                general entities — built-in services, domain blocks
   ├── com.machineblocks.bml.core.Block             domain base
@@ -1411,7 +1411,8 @@ org.blockml.bml.core.Block
               L : NaturalLanguage (default English) — optional content/text language inside markup
               ├── org.blockml.bml.language.XML
               ├── org.blockml.bml.language.JSON
-              └── org.blockml.bml.language.YML
+              ├── org.blockml.bml.language.YML
+              └── org.blockml.bml.language.Markdown
 ```
 
 ```xml
@@ -1443,7 +1444,7 @@ Capability references inside an `<implementation>` body use **BML Embedded Expre
 
 **PseudoCode** is free-form program code that must be internally consistent but is otherwise unconstrained — an LLM may interpret it. Its prose language follows `ProgrammingLanguage.L` (default English).
 
-V1 bootstrap languages in `@blockml/core`: TypeScript, OpenSCAD, English, German, French, Spanish, Chinese, Japanese, Russian, PseudoCode, XML, JSON, YML, JavaScript, Python, CSharp, Unity, CPP, C, Java. Extensibility: domains register new Language BML files.
+V1 bootstrap languages in `@blockml/core`: TypeScript, OpenSCAD, English, German, French, Spanish, Chinese, Japanese, Russian, PseudoCode, XML, JSON, YML, Markdown, JavaScript, Python, CSharp, Unity, CPP, C, Java. Extensibility: domains register new Language BML files.
 
 ---
 

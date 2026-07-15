@@ -500,7 +500,7 @@ org.blockml.bml.core.Block                                  ← packages/core/�
     org.blockml.bml.core.ProgrammingLanguage                ← ProgrammingLanguage.bml (abstract)
       org.blockml.bml.language.TypeScript · OpenSCAD · PseudoCode · …
     org.blockml.bml.core.MarkupLanguage                       ← MarkupLanguage.bml (abstract)
-      org.blockml.bml.language.XML · JSON · YML
+      org.blockml.bml.language.XML · JSON · YML · Markdown
     org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
   org.blockml.bml.core.Entity                               ← Entity.bml (abstract)
       org.blockml.bml.service.Math                          ← core/…/service/Math.bml
