@@ -16,10 +16,12 @@
   <baseType>btype:EnumType</baseType>
   <is>An underside brick cutout shape</is>
 
-  <documentation>Enum ValueType for base cutout variants on MachineBlocks bricks.</documentation>
+  <documentation>Enum ValueType for base cutout variants on MachineBlocks bricks.
+    Declares an optional value catalog property for SCAD serialization literals — BOM property
+    values store only the member id plus this EnumType.</documentation>
   <properties>
     <value type="Text">
-      <documentation>Enum literal used in property values and expressions.</documentation>
+      <documentation>Optional SCAD serialization literal for this member (MachineBlocks convention).</documentation>
     </value>
   </properties>
 

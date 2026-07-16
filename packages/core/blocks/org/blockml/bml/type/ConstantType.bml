@@ -19,10 +19,11 @@
     resolves to org.blockml.bml.type.ConstantType.
 
     One of four language-level ValueType kinds (PrimitiveType · StructType · EnumType ·
-    ConstantType). ConstantType is neither a PrimitiveType nor a StructType:
+    ConstantType). ConstantType is neither a PrimitiveType, StructType, nor EnumType:
 
     • A PrimitiveType defines a value domain (Text → all text values; Integer → all integers).
     • A StructType defines the shape of the external value via its properties.
+    • An EnumType defines a closed set of named members; BOM stores id + typeFqn only.
     • A ConstantType defines a singleton value domain — a value is valid if and only if it
       conforms to the underlying generic ValueType and equals the configured constant value.
 

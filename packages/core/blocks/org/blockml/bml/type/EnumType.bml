@@ -15,7 +15,7 @@
   xmlns:bml="http://blockml.org/schema/bml">
   <name>EnumType</name>
   <type>btype:EnumType</type>
-  <baseType>btype:StructType</baseType>
+  <baseType>core:ValueType</baseType>
   <is>A closed set of named values</is>
 
   <documentation>
@@ -23,14 +23,29 @@
     Unqualified name EnumType resolves to org.blockml.bml.type.EnumType.
 
     One of four language-level ValueType kinds (PrimitiveType · StructType · EnumType ·
-    ConstantType). EnumType
-    is a specialized StructType — it adds a finite list of allowed values via the default values
-    aggregation. Concrete EnumTypes declare their allowed values as Block instances in values — no
-    special enum syntax. Examples: Direction, Face, StudType, BaseCutoutType.
+    ConstantType). EnumType is its own ValueType branch — not a StructType and not a
+    PrimitiveType:
 
-    Each enum value is a Block instance of the EnumType with an id (bml:id) and a value property
-    holding the runtime/serialization literal. The editor renders EnumType properties as a
-    SelectBox; the compiler validates values against values.
+    • A PrimitiveType defines an open value domain (Text → all text values).
+    • A StructType defines the shape of the external value via its properties.
+    • An EnumType defines a closed set of named members; the external property value is the
+      member identity (id + EnumType), not a struct payload.
+    • A ConstantType defines a singleton value domain.
+
+    Concrete EnumTypes declare allowed members as Block instances in the default values
+    aggregation — no special enum syntax. Examples: Direction, Face, StudType, BaseCutout,
+    Align.
+
+    Each catalog member is a Block instance of the EnumType with a mandatory bml:id (the
+    reference token). An EnumType may declare arbitrary properties on the type — filled per
+    member in values — analogous to private fields on a Java enum constant. Those properties
+    are catalog metadata on the type definition (for example a MachineBlocks value string for
+    SCAD). They are not part of the stored property value when an EnumType is used.
+
+    BOM storage for a property typed with an EnumType is only id + typeFqn (the EnumType).
+    Catalog properties are looked up from the EnumType definition when a renderer or tool needs
+    them. The editor renders EnumType properties as a SelectBox; the compiler validates authored
+    tokens against values by id.
 
     Properties typed with an EnumType must not carry &lt;suggestions&gt; — valid values come
     exclusively from values → BML_SUGGESTIONS_ON_ENUM. Properties may still carry
@@ -38,19 +53,16 @@
 
     Enum value references in property values (defaultValue, composition attributes, expressions):
     when the property type is an EnumType, qualified references may omit the {EnumTypeFQN}::
-    prefix — STANDARD is equivalent to com.machineblocks.bml.type.BaseCutoutType::STANDARD when the
+    prefix — Standard is equivalent to com.machineblocks.bml.type.BaseCutout::Standard when the
     expected type is known from the property declaration. The short form is invalid for untyped
     strings. The validator resolves tokens against values by id; unknown values → validation
     error.
-
-    Id reference (STANDARD / FQN::STANDARD) and value literal (standard) are distinct surface
-    forms; both must match a declared values entry.
 
     Domain XSD enums remain accepted during migration with BML_LEGACY_TYPE_SOURCE warning — new
     enums should be defined as BML EnumType blocks.
 
     Used wherever BlockML declares or validates closed value sets:
-    • Property &lt;type&gt; references (for example type="com.machineblocks.bml.type.BaseCutoutType")
+    • Property &lt;type&gt; references (for example type="com.machineblocks.bml.type.BaseCutout")
     • defaultValue and instance attribute values on EnumType properties
     • Expression enum literals where the expected EnumType is known from context
     • Library blocks export alongside other ValueType definitions
@@ -69,8 +81,17 @@
     <see file="00_bom_core.md" relation="DeepDive">
       EnumType property values.
     </see>
+    <see file="12_bom_object_model.md" relation="DeepDive">
+      BOM stores enum property values as id + typeFqn only.
+    </see>
     <see file="16_framework_base_types.md" relation="AuthoringGuide">
       ValueType branch.
+    </see>
+    <see type="btype:StructType" relation="ContrastsWith">
+      StructType shapes external values via properties; EnumType stores only member identity.
+    </see>
+    <see type="btype:ConstantType" relation="SeeAlso">
+      Parallel dedicated ValueType branch for singleton literals.
     </see>
   </references>
 
@@ -81,11 +102,12 @@
       type="bml:Self[]"
       default="true">
       <documentation>
-        Default composition aggregation for enum literal Block instances. Each child is a Block
-        instance of this EnumType with bml:id (reference token) and value (serialization
-        literal). Valid values for properties typed with this EnumType come exclusively from
-        values — authored in &lt;composition aggregation="values"&gt; with no special enum
-        syntax.</documentation>
+        Default composition aggregation for enum member Block instances. Each child is a Block
+        instance of this EnumType with mandatory bml:id (the reference token stored in BOM).
+        Optional properties declared on the EnumType may be set per member — catalog metadata,
+        analogous to fields on a Java enum constant. Valid property values for this EnumType come
+        exclusively from values — authored in &lt;composition&gt; under values with no special
+        enum syntax.</documentation>
     </values>
   </aggregations>
 </block>

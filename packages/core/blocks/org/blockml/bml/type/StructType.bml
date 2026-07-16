@@ -24,7 +24,8 @@
     Properties. Unqualified name StructType resolves to org.blockml.bml.type.StructType.
 
     One of four language-level ValueType kinds (PrimitiveType · StructType · EnumType ·
-    ConstantType).
+    ConstantType). StructType is a dedicated branch — EnumType is a sibling under ValueType,
+    not a subtype of StructType.
     StructTypes describe the structure of a value — their properties define the data layout.
     StructTypes usually contain no values themselves; Property values remain stored in the owning
     Property. Default values on StructType property definitions are allowed. Concrete StructTypes

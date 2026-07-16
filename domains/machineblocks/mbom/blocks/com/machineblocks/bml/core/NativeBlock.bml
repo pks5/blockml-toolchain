@@ -138,7 +138,7 @@
       <value>0.1</value>
     </baseClampThickness>
 
-    <baseColor type="type:Color">
+    <baseColor type="btype:Color">
       <documentation>Color of the brick body, studs, and all other parts.
         Does NOT apply to text (use textColor separately).
       </documentation>

@@ -2090,15 +2090,10 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 ### Enum Types vs. Suggestions
 
-**Enum types** are formally defined EnumType blocks with a fixed set of values in `_values`. The editor renders them as a **SelectBox**. The compiler validates values against the enum definition. `<suggestions>` on an enum property is an error:
+**Enum types** are formally defined EnumType blocks with a fixed set of members in `values`. The editor renders them as a **SelectBox**. The compiler validates values against the enum definition by `bml:id`. `<suggestions>` on an enum property is an error:
 
 ```xml
-<!-- Enum type — SelectBox, validated -->
-<baseCutoutType type="type:BaseCutout">
-  <value>standard</value>
-</baseCutoutType>
-<!-- value literal (matches enum instance value="standard" / id Standard) -->
-
+<!-- Enum type — SelectBox, validated by id -->
 <baseCutoutType type="type:BaseCutout">
   <value>Standard</value>
 </baseCutoutType>
@@ -2111,7 +2106,7 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 <!-- No <suggestions> allowed → BML_SUGGESTIONS_ON_ENUM -->
 ```
 
-When the property `type` is an EnumType, `value` and instance attribute values may use `{EnumTypeFQN}::{valueId}` or the short form `{valueId}` only. See `17_type_system_bml.md` — EnumType.
+When the property `type` is an EnumType, `value` and instance attribute values use `{EnumTypeFQN}::{valueId}` or the short form `{valueId}` only. BOM stores id + typeFqn — not a copy of catalog properties. See `17_type_system_bml.md` — EnumType.
 
 **Suggestions** are hints for free-text properties — the author can enter any value. The editor renders them as a **Combobox**. Each suggestion is a Block instance of the property type (not a special element):
 

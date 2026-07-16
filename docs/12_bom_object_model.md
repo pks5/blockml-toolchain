@@ -751,7 +751,7 @@ Values on Block instances and property defaults use a common value model.
 
 Cross-instance references via `FQN::id` exist only on **associations** — `basePresets`, `Step.part`, and similar members whose semantics explicitly model instance identity. Properties typed with ValueTypes always store inline values.
 
-**EnumType:** an authored token such as `Standard` or `com.machineblocks.bml.type.BaseCutout::Standard` is **not** a link to the `_values` composition entry. The validator resolves the token against `_values` by `id` and materializes the result as an inline value copy (e.g. `value="standard"`). Changes to the EnumType definition do not affect already-stored property values. See `17_type_system_bml.md` — EnumType.
+**EnumType:** an authored token such as `Standard` or `com.machineblocks.bml.type.BaseCutout::Standard` is **not** a link to the `values` catalog entry. The validator resolves the token against `values` by `id`. The BOM stores **only id + typeFqn** (the EnumType) — catalog properties on the member (for example an optional `value` string) are **not** copied into the property value. Tools look up catalog metadata from the EnumType definition when needed. See `17_type_system_bml.md` — EnumType.
 
 **StructType and primitives:** authored literals remain inline in Canonical BOM — `[1, 1, 1]`, `{x:1, y:1, z:1}`, or a nested StructType element are self-contained copies, not references to other instances.
 

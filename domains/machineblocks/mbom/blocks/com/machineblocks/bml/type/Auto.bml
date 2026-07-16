@@ -1,0 +1,34 @@
+<!--
+  MachineBlocks — Auto constant sentinel
+
+  FQN: com.machineblocks.bml.type.Auto
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="com.machineblocks.bml.type">
+  <name>Auto</name>
+  <type>type:Auto</type>
+  <baseType>btype:Constant(Text)</baseType>
+  <is>The literal Auto sentinel</is>
+
+  <documentation>Named Constant(Text) for the singleton value "Auto". Use as a union
+    alternative — for example Auto | Float — instead of writing Constant(Text){value="Auto"}
+    at every reference site. The external value is "Auto" (identical to Text).</documentation>
+
+  <references>
+    <see type="btype:Constant" relation="Extends">
+      Constant(Text) with value fixed to "Auto".
+    </see>
+  </references>
+
+  <properties>
+    <value override="true" type="Text">
+      <value>Auto</value>
+    </value>
+  </properties>
+
+</block>

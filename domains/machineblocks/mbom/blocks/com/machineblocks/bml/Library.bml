@@ -57,9 +57,10 @@
     </subLibraries>
 
     <blocks>
-      <type:Size3d />
       <type:Align />
+      <type:Auto />
       <type:BaseCutout />
+      <type:Size3d />
       <unit:MBU />
       <unit:GridUnit />
     </blocks>

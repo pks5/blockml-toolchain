@@ -28,7 +28,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **09_mbom_properties.yml** | Render mapping only — not type SSOT |
 | **Block metadata** | Every `<block>` carries required `<is>`, required `<documentation>`, conditional `<summary>` (when documentation is long), conditional `<isnot>` (when confusion risk exists), optional `<keywords>` (`core:Keyword[]`), optional `<aliases>` (`core:Alias[]`); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
 | **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
-| **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — EnumType is a specialized StructType |
+| **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — four sibling branches under ValueType |
 | **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `18_function_mapping.md` |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
 | **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `org.blockml.bml.compiler.*`); TypeScript BOM interfaces in `@blockml/parser` — see `00_bom_core.md` |
@@ -337,7 +337,7 @@ The type system follows one metamodel — **everything is a Block**:
 Types are Blocks          — no separate type language construct
 Primitives are pure types — semantics only; no value member on PrimitiveType
 StructTypes describe layout — properties define data structure; values live in Properties
-Enums are StructTypes     — _values aggregation adds finite allowed values
+Enums are ValueTypes      — own branch; values aggregation lists members; BOM stores id + typeFqn
 baseType vs contracts     — baseType: framework taxonomy (extends); contracts: domain cross-cutting (implements)
 Contracts are Blocks      — reusable partial definitions merged via <contracts>; also type-bound identifiers
 Generics parametrize Blocks — `<genericTypes>` + type arguments at reference sites
@@ -371,7 +371,7 @@ org.blockml.bml.core.ValueType              abstract — never stores data
   │     │     └── org.blockml.bml.type.Float     — binary float — special-purpose only
   │     └── org.blockml.bml.type.Boolean      — neither textual nor numeric
   ├── org.blockml.bml.type.StructType         Size3D · Color · Address · …
-  ├── org.blockml.bml.type.EnumType           extends StructType — BaseCutout · Direction · …
+  ├── org.blockml.bml.type.EnumType           BaseCutout · Direction · Align · …
   └── org.blockml.bml.type.ConstantType       singleton value domains
         └── org.blockml.bml.type.Constant     Constant(T){value=…}
 ```
@@ -382,10 +382,10 @@ org.blockml.bml.core.ValueType              abstract — never stores data
 |---|---|---|
 | **PrimitiveType** | Atomic scalar semantics — no stored values | `Boolean`, `Integer`, `Decimal`, `Float`, `Text`, `URL`, `Version` |
 | **StructType** | Custom value objects — structure via properties | `Size3D`, `Color`, `Address`, `Transform` |
-| **EnumType** | StructType + finite allowed values | `Direction`, `Face`, `StudType`, `BaseCutout` |
+| **EnumType** | Closed set of named members — BOM stores id + typeFqn | `Direction`, `Face`, `StudType`, `BaseCutout`, `Align` |
 | **ConstantType** | Singleton value domain — one configured literal | `Constant(Text){value="auto"}`, `Constant(Integer){value=5}` |
 
-`StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate ValueType branch.
+`StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate ValueType branch. **EnumType** is a sibling branch under ValueType — not a subtype of StructType.
 
 There is **no** `GenericType`, `UnionType`, `Array<T>`, `AutoOr<T>`, or similar as language-level ValueType branches.
 
@@ -976,15 +976,15 @@ and the configured constant value.
 
 ### EnumType
 
-EnumType is a **specialized StructType** — it adds a finite list of allowed values. It is not a separate top-level ValueType category alongside PrimitiveType, StructType, and ConstantType; the four categories remain PrimitiveType, StructType, EnumType, and ConstantType.
+EnumType is a **dedicated ValueType branch** under `org.blockml.bml.core.ValueType` — a sibling of PrimitiveType, StructType, and ConstantType. It is not a StructType.
 
-Enums are normal ValueTypes extending `org.blockml.bml.type.StructType`. The branch declares a default aggregation for enum values:
+An EnumType defines a **closed set of named members**. The branch declares a default aggregation for enum members:
 
 ```xml
-<aggregation name="_values" type="bml:Self[]" default="true"/>
+<aggregation name="values" type="bml:Self[]" default="true"/>
 ```
 
-Enum values are **Block instances** in `<composition aggregation="_values">` — no special enum syntax:
+Enum members are **Block instances** in composition under `values` — no special enum syntax:
 
 ```xml
 <block ...>
@@ -993,20 +993,33 @@ Enum values are **Block instances** in `<composition aggregation="_values">` —
   <baseType>org.blockml.bml.type.EnumType</baseType>
   <version>1.0.0</version>
 
-  <composition aggregation="_values">
-    <BaseCutout id="None"     value="none"     />
-    <BaseCutout id="Standard" value="standard" />
-    <BaseCutout id="Groove"   value="groove"   />
-  </composition>
+  <!-- optional catalog properties — like private fields on a Java enum constant -->
+  <properties>
+    <value type="Text">
+      <documentation>Optional SCAD serialization literal — MachineBlocks convention.</documentation>
+    </value>
+  </properties>
+
+  <aggregations>
+    <values>
+      <composition>
+        <BaseCutout bml:id="None"     value="none"     />
+        <BaseCutout bml:id="Standard" value="standard" />
+        <BaseCutout bml:id="Groove"   value="groove"   />
+      </composition>
+    </values>
+  </aggregations>
 
 </block>
 ```
 
-Properties typed with an EnumType **must not** carry `<suggestions>` — valid values come from `_values` (`BML_SUGGESTIONS_ON_ENUM` unchanged). Properties may carry `<constraints>` on any type where a compatible Constraint sub-type exists — see `18_constraints_and_suggestions.md`.
+An EnumType **may** declare arbitrary properties. Those properties are **catalog metadata** on the type definition — filled per member in `values` (analogous to private fields on a Java enum constant). Declaring a `value` property (as MachineBlocks enums do for SCAD) is a domain choice, not a framework requirement.
+
+Properties typed with an EnumType **must not** carry `<suggestions>` — valid values come from `values` (`BML_SUGGESTIONS_ON_ENUM` unchanged). Properties may carry `<constraints>` on any type where a compatible Constraint sub-type exists — see `18_constraints_and_suggestions.md`.
 
 **Enum value references in property values** (`defaultValue`, composition attributes, expressions):
 
-When the property `type` is an EnumType, a qualified enum instance reference may omit the `{EnumTypeFQN}::` prefix:
+When the property `type` is an EnumType, a qualified enum member reference may omit the `{EnumTypeFQN}::` prefix:
 
 ```text
 Property type:  com.machineblocks.bml.type.BaseCutout
@@ -1014,7 +1027,7 @@ Property type:  com.machineblocks.bml.type.BaseCutout
 Qualified:      com.machineblocks.bml.type.BaseCutout::Standard
 Short:          Standard                              ← equivalent (type known from property)
 
-Qualified form references the enum value's id (from _values composition).
+Qualified form references the enum member's bml:id (from values composition).
 ```
 
 ```xml
@@ -1029,11 +1042,11 @@ Qualified form references the enum value's id (from _values composition).
           defaultValue="com.machineblocks.bml.type.BaseCutout::Standard" />
 ```
 
-The short form is valid only when the expected type is known from the property (or capability input field) declaration — not for untyped strings. The validator resolves the token against `_values` by `id`.
+The short form is valid only when the expected type is known from the property (or capability input field) declaration — not for untyped strings. The validator resolves the token against `values` by `id`.
 
-**Resolution semantics:** the token is a **resolution key**, not a link to the `_values` entry. The effective property value is materialized as a **deep copy** of the enum instance's properties (e.g. `value="standard"`) — never as a reference to another instance. See `12_bom_object_model.md` — Property Value Semantics.
+**BOM storage:** a property typed with an EnumType stores **only id + typeFqn** (the EnumType). Catalog properties on the member (for example `value="standard"`) are **not** copied into the property value. Tools and renderers look them up from the EnumType definition when needed. The authored token is a resolution key against `values` — not a live link to the catalog entry. See `12_bom_object_model.md` — Property Value Semantics.
 
-**Value literal:** enum instances also carry a `value` property (e.g. `value="standard"` on id `Standard`). The runtime/serialization literal `standard` remains valid where a string enum literal is expected — see `04_types.md` · MBML examples. Id reference (`Standard` / `FQN::Standard`) and value literal (`standard`) are distinct surface forms; both must match a declared `_values` entry.
+**External representation:** the property value is the member identity — not a struct payload `{ value: "standard" }` and not a deep copy of catalog properties.
 
 ---
 
@@ -1468,11 +1481,11 @@ Branch is derived by walking the **`baseType` chain only** — `contracts[]` doe
 
 | Rule | General Block | ValueType | Constraint | Validation | Language |
 |---|---|---|---|---|---|
-| `<composition>` | allowed | EnumType: `_values` only; others: definition-level only | forbidden | forbidden | forbidden |
+| `<composition>` | allowed | EnumType: `values` only; others: definition-level only | forbidden | forbidden | forbidden |
 | `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden | forbidden | forbidden |
 | `<subTypes>` | allowed | allowed | forbidden | forbidden | forbidden |
 | `<genericTypes>` | allowed | allowed | allowed | forbidden | forbidden |
-| `<properties>` | allowed | StructType + PrimitiveType branch | allowed | forbidden | forbidden |
+| `<properties>` | allowed | StructType · PrimitiveType · EnumType (catalog metadata) | allowed | forbidden | forbidden |
 | `<languages>` | allowed | forbidden | forbidden | forbidden | forbidden |
 | Meta property `id` on instances | yes (always) | yes (always) | yes (always) | yes (always) | yes (always) |
 | `<property name="id">` | forbidden | forbidden | forbidden | forbidden | forbidden |
@@ -1509,7 +1522,7 @@ Generic constraint → BML_GENERIC_CONSTRAINT_VIOLATION
 Version mismatch   → BML_UNKNOWN_VERSION         (external type refs — same rules as Blocks)
 ```
 
-Effective type members (StructType properties, EnumType `_values`) are resolved via `baseType` chain — same lookup model as Block member inheritance. Generic parameters are **not** inherited; each is bound or forwarded explicitly through `baseType` (see § Generic resolution through inheritance).
+Effective type members (StructType properties, EnumType `values` / catalog properties) are resolved via `baseType` chain — same lookup model as Block member inheritance. Generic parameters are **not** inherited; each is bound or forwarded explicitly through `baseType` (see § Generic resolution through inheritance).
 
 ---
 
@@ -1551,7 +1564,7 @@ Phase 4                   04_types.md becomes parse/serialize reference only
 
 During migration, the validator accepts types from **either** registry BML **or** legacy XSD. BML wins on conflict. Legacy-only types emit `BML_LEGACY_TYPE_SOURCE` warning.
 
-Property declarations on composable Blocks migrate from `09_mbom_properties.yml` → BML `<properties>` per `16_framework_base_types.md`. Type shape (StructType properties, EnumType `_values`) migrates from `04_types.md` → BML. YAML retains SCAD serializer hints keyed by property name.
+Property declarations on composable Blocks migrate from `09_mbom_properties.yml` → BML `<properties>` per `16_framework_base_types.md`. Type shape (StructType properties, EnumType `values`) migrates from `04_types.md` → BML. YAML retains SCAD serializer hints keyed by property name.
 
 ---
 
