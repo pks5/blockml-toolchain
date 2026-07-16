@@ -1,0 +1,20 @@
+<!--
+  MachineBlocks — MachineBlocks Unit
+
+  FQN: com.machineblocks.bml.unit.MBU
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:unit="com.machineblocks.bml.unit">
+  <name>MBU</name>
+  <type>unit:MBU</type>
+  <baseType>btype:Unit</baseType>
+  <is>MachineBlocks Unit (mbu)</is>
+
+  <documentation>Base geometric unit of the MachineBlocks system. Idealized block geometry is
+    expressed in mbu; conversion to millimeters uses unitMbuToMm (default 1.6 mm per mbu).</documentation>
+</block>

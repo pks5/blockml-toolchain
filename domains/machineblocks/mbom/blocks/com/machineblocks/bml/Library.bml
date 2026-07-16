@@ -1,0 +1,68 @@
+<!--
+  MachineBlocks Root Library Descriptor
+
+  Name: Library
+  Filename: Library.bml
+  FQN: com.machineblocks.bml.Library
+
+  MachineBlocks root library — exports domain types and units; nests brick sub-libraries.
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bcore="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:mb="com.machineblocks.bml"
+  xmlns:type="com.machineblocks.bml.type"
+  xmlns:unit="com.machineblocks.bml.unit"
+  xmlns:bricks="com.machineblocks.bml.bricks">
+  <name>Library</name>
+  <type>mb:Library</type>
+  <baseType>bcore:BlockLibrary</baseType>
+  <is>A MachineBlocks root library catalog</is>
+
+  <documentation>
+    Publishable MachineBlocks root library (com.machineblocks.bml.Library). Exports shared domain
+    ValueTypes and Units. Brick catalogs are nested via subLibraries — consumers that need bricks
+    depend on com.machineblocks.bml.bricks.Library directly. Membership is defined exclusively by
+    this file's blocks list — not by directory layout.
+  </documentation>
+
+  <version>3.0.0</version>
+
+  <language>
+    <English />
+  </language>
+  <properties>
+    <description>
+      <value>MachineBlocks root library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readFirst>
+      <mb:README />
+    </readFirst>
+
+    <dependencies>
+      <blockml:Library />
+    </dependencies>
+
+    <subLibraries>
+      <bricks:Library />
+    </subLibraries>
+
+    <blocks>
+      <type:Size3d />
+      <type:Align />
+      <type:BaseCutout />
+      <unit:MBU />
+      <unit:GridUnit />
+    </blocks>
+  </aggregations>
+
+</block>

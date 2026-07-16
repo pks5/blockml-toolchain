@@ -1,0 +1,20 @@
+<!--
+  MachineBlocks — grid unit
+
+  FQN: com.machineblocks.bml.unit.GridUnit
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:unit="com.machineblocks.bml.unit">
+  <name>GridUnit</name>
+  <type>unit:GridUnit</type>
+  <baseType>btype:Unit</baseType>
+  <is>MachineBlocks grid unit</is>
+
+  <documentation>Plate-grid unit of the MachineBlocks system. A 1×1 plate is one grid unit in X/Y
+    and Z; size is defined in mbu via unitGridToMbu (default [5, 2] — 5 mbu XY, 2 mbu Z).</documentation>
+</block>

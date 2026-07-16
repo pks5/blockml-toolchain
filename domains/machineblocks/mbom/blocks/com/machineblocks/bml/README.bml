@@ -1,0 +1,22 @@
+<!--
+  MachineBlocks — README / library reading entry point
+
+  FQN: com.machineblocks.bml.README
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mb="com.machineblocks.bml">
+  <name>README</name>
+  <type>mb:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>A library reading entry point</is>
+
+  <documentation>
+    README block for the MachineBlocks root library (com.machineblocks.bml.Library).
+    Library.bml points here via the required readFirst aggregation (&lt;mb:README /&gt;).
+  </documentation>
+</block>

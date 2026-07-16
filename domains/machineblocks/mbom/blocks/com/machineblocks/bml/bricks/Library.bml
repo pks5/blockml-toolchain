@@ -5,8 +5,8 @@
   Filename: Library.bml
   FQN: com.machineblocks.bml.bricks.Library
 
-  MachineBlocks brick library — exports block definitions and optional XSD.
-  Block .bml sources live under blocks/ (scad-lib submodule in full deployment).
+  MachineBlocks brick sub-library — exports brick block definitions.
+  Nested under com.machineblocks.bml.Library via subLibraries.
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -16,8 +16,8 @@
                       "
   xmlns:blockml="org.blockml.bml"
   xmlns:bcore="org.blockml.bml.core"
-  xmlns:core="com.machineblocks.bml.core"
-  xmlns:type="com.machineblocks.bml.type"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:mb="com.machineblocks.bml"
   xmlns:bricks="com.machineblocks.bml.bricks">
   <name>Library</name>
   <type>bricks:Library</type>
@@ -25,9 +25,13 @@
   <is>A MachineBlocks brick catalog</is>
 
   <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
-    preset blocks.</documentation>
+    preset blocks. Sub-library of com.machineblocks.bml.Library; depends on the root library for
+    shared types and units.</documentation>
   <version>3.0.0</version>
 
+  <language>
+    <English />
+  </language>
   <properties>
     <description>
       <value>Standard brick types for MachineBlocks</value>
@@ -35,25 +39,27 @@
   </properties>
 
   <aggregations>
-    <_dependencies>
-      <blockml:Library />
-    </_dependencies>
-    <!-- Optional legacy XSD — omit when all types are exported via _blocks -->
-    <_schemas>
+    <readFirst>
+      <mb:README />
+    </readFirst>
+
+    <dependencies>
+      <mb:Library />
+    </dependencies>
+
+    <!-- Optional legacy XSD — omit when all types are exported via blocks -->
+    <schemas>
       <composition>
         <bcore:BlockLibrary.Schema ref="bricks.xsd" />
       </composition>
-    </_schemas>
+    </schemas>
 
-    <_blocks>
-      <type:Size3d />
-      <type:Direction />
-      <type:Color />
+    <blocks>
       <bricks:Standard />
       <bricks:Plate />
       <bricks:Tile />
       <bricks:StandardPresets />
-    </_blocks>
+    </blocks>
   </aggregations>
 
 </block>
