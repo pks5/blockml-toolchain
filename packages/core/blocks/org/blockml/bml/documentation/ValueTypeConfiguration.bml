@@ -9,8 +9,8 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:btype="org.blockml.bml.type">
   <name>ValueTypeConfiguration</name>
   <type>doc:ValueTypeConfiguration</type>
   <baseType>core:Documentation</baseType>

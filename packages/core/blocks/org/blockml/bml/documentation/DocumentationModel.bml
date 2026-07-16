@@ -8,13 +8,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="org.blockml.bml.core"
   xmlns:blockml="org.blockml.bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:lang="org.blockml.bml.language"
-  xmlns:relation="org.blockml.bml.relation"
   xmlns:doc="org.blockml.bml.documentation"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:relation="org.blockml.bml.relation">
   <name>DocumentationModel</name>
   <type>doc:DocumentationModel</type>
   <baseType>core:Documentation</baseType>

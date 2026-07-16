@@ -8,11 +8,13 @@
        docs/16_framework_base_types.md — Definition Branch · StructuralDefinition
        docs/02_mbml.md — Namespace resolution · Block Definition
 -->
-<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
-  xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition">
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:btype="org.blockml.bml.type">
   <name>TypeReference</name>
   <type>btype:TypeReference</type>
   <baseType>btype:Text</baseType>

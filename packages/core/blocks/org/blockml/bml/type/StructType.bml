@@ -9,11 +9,13 @@
        docs/02_mbml.md — Member declaration order
        docs/04_types.md — Anonymous Object inputType
 -->
-<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
-  xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core"
-  xmlns:mapping="org.blockml.bml.mapping">
+  xmlns:mapping="org.blockml.bml.mapping"
+  xmlns:btype="org.blockml.bml.type">
   <name>StructType</name>
   <type>btype:StructType</type>
   <baseType>core:ValueType</baseType>

@@ -10,28 +10,28 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:blockml="org.blockml.bml"
-  xmlns:bcore="org.blockml.bml.core"
   xmlns:ann="org.blockml.bml.annotation"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:bcore="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:diag="org.blockml.bml.diagnostic"
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mapping="org.blockml.bml.mapping"
-  xmlns:service="org.blockml.bml.service"
+  xmlns:meta="org.blockml.bml.meta"
   xmlns:relation="org.blockml.bml.relation"
+  xmlns:service="org.blockml.bml.service"
   xmlns:status="org.blockml.bml.status"
   xmlns:task="org.blockml.bml.task"
-  xmlns:diag="org.blockml.bml.diagnostic"
-  xmlns:meta="org.blockml.bml.meta"
-  xmlns:validation="org.blockml.bml.validation"
   xmlns:btype="org.blockml.bml.type"
-  xmlns:unit="org.blockml.bml.unit">
+  xmlns:unit="org.blockml.bml.unit"
+  xmlns:validation="org.blockml.bml.validation">
   <name>Library</name>
   <type>blockml:Library</type>
   <baseType>bcore:BlockLibrary</baseType>

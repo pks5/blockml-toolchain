@@ -9,9 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:blockml="org.blockml.bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
-  xmlns:doc="org.blockml.bml.documentation"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
+  xmlns:doc="org.blockml.bml.documentation">
   <name>LibrarySystem</name>
   <type>doc:LibrarySystem</type>
   <baseType>core:Documentation</baseType>

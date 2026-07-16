@@ -1,7 +1,9 @@
-<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
-  xmlns:btype="org.blockml.bml.type"
-  xmlns:core="org.blockml.bml.core">
+  xmlns:core="org.blockml.bml.core"
+  xmlns:btype="org.blockml.bml.type">
   <name>FilePathEntity</name>
   <type>btype:FilePathEntity</type>
   <baseType>core:PrimitiveEntity(btype:FilePath)</baseType>

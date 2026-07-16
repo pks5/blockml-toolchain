@@ -3,10 +3,10 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:core="org.blockml.bml.core"
   xmlns:constraint="org.blockml.bml.constraint"
-  xmlns:validation="org.blockml.bml.validation"
+  xmlns:core="org.blockml.bml.core"
   xmlns:btype="org.blockml.bml.type"
+  xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
   <type>test:ConstraintViolation</type>
   <baseType>core:Block</baseType>

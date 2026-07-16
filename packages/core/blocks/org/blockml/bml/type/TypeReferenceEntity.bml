@@ -4,11 +4,13 @@
   FQN: org.blockml.bml.type.TypeReferenceEntity
   See docs/17_type_system_bml.md — TypeReferenceEntity · Empty child sugar
 -->
-<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
+  xmlns:btype="org.blockml.bml.type">
   <name>TypeReferenceEntity</name>
   <type>btype:TypeReferenceEntity</type>
   <baseType>core:PrimitiveEntity(btype:TypeReference(B))</baseType>

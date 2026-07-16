@@ -9,18 +9,18 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:blockml="org.blockml.bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:bcore="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mb="com.machineblocks.bml"
   xmlns:mbann="com.machineblocks.bml.annotation"
+  xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:mbtype="com.machineblocks.bml.type"
-  xmlns:mbunit="com.machineblocks.bml.unit"
-  xmlns:bricks="com.machineblocks.bml.bricks">
+  xmlns:mbunit="com.machineblocks.bml.unit">
   <name>Library</name>
   <type>mb:Library</type>
   <baseType>bcore:BlockLibrary</baseType>

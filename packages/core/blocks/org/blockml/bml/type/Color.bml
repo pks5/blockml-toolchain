@@ -3,10 +3,12 @@
 
   FQN: org.blockml.bml.type.Color
 -->
-<block xmlns="http://blockml.org/schema/block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
-  xmlns:btype="org.blockml.bml.type"
-  xmlns:lang="org.blockml.bml.language">
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:btype="org.blockml.bml.type">
   <name>Color</name>
   <type>btype:Color</type>
   <baseType>btype:Text</baseType>

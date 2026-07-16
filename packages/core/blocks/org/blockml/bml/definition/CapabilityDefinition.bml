@@ -9,12 +9,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:cap="org.blockml.bml.capability"
   xmlns:lang="org.blockml.bml.language"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
+  xmlns:type="org.blockml.bml.type">
   <name>CapabilityDefinition</name>
   <type>def:CapabilityDefinition</type>
   <baseType>def:MemberDefinition</baseType>

@@ -5,13 +5,13 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:type="com.machineblocks.bml.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:bcore="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:core="com.machineblocks.bml.core"
-  xmlns:lang="org.blockml.bml.language">
+  xmlns:type="com.machineblocks.bml.type">
   <name>CompositeBlock</name>
   <type>core:CompositeBlock</type>
   <baseType>core:Block</baseType>

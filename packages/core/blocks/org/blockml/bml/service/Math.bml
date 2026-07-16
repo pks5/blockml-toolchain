@@ -11,11 +11,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:btype="org.blockml.bml.type"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
-  xmlns:service="org.blockml.bml.service">
+  xmlns:service="org.blockml.bml.service"
+  xmlns:btype="org.blockml.bml.type">
   <name>Math</name>
   <type>service:Math</type>
   <baseType>core:Entity</baseType>

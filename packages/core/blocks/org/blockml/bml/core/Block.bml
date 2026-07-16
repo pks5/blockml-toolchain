@@ -8,11 +8,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
-  xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
+  xmlns:mbcore="com.machineblocks.bml.core">
   <name>Block</name>
   <type>core:Block</type>
   <is>A semantic building block</is>

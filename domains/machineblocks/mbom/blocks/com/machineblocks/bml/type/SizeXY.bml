@@ -9,8 +9,8 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:btype="org.blockml.bml.type"
-  xmlns:mbunit="com.machineblocks.bml.unit"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:type="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
   <name>SizeXY</name>
   <type>type:SizeXY</type>
   <baseType>type:AxisXY(N)</baseType>

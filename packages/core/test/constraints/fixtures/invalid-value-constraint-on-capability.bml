@@ -3,9 +3,9 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:core="org.blockml.bml.core"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:core="org.blockml.bml.core"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
   <type>test:InvalidValueOnCapability</type>

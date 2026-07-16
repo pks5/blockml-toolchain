@@ -10,9 +10,9 @@
     http://blockml.org/schema/block
         https://blockml.org/schemas/core/block.xsd
   "
-  xmlns:btype="org.blockml.bml.type"
   xmlns:constraint="org.blockml.bml.constraint"
-  xmlns:core="org.blockml.bml.core">
+  xmlns:core="org.blockml.bml.core"
+  xmlns:btype="org.blockml.bml.type">
   <name>MaxItems</name>
   <type>constraint:MaxItems</type>
   <baseType>constraint:ValueConstraint</baseType>

@@ -10,11 +10,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:btype="org.blockml.bml.type"
+  xmlns:unit="org.blockml.bml.unit"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbtype="com.machineblocks.bml.type"
-  xmlns:unit="org.blockml.bml.unit"
-  xmlns:mbunit="com.machineblocks.bml.unit"
-  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation">
+  xmlns:mbunit="com.machineblocks.bml.unit">
   <name>NativeBlock</name>
   <type>mbcore:NativeBlock</type>
   <baseType>mbcore:Block</baseType>

@@ -8,10 +8,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:doc="org.blockml.bml.documentation"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
+  xmlns:doc="org.blockml.bml.documentation">
   <name>DefinitionModel</name>
   <type>doc:DefinitionModel</type>
   <baseType>core:Documentation</baseType>

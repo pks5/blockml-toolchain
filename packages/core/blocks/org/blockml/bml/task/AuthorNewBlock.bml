@@ -8,12 +8,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
+  xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:blockml="org.blockml.bml"
   xmlns:doc="org.blockml.bml.documentation"
-  xmlns:relation="org.blockml.bml.relation"
   xmlns:meta="org.blockml.bml.meta"
+  xmlns:relation="org.blockml.bml.relation"
   xmlns:task="org.blockml.bml.task">
   <name>AuthorNewBlock</name>
   <type>task:AuthorNewBlock</type>
