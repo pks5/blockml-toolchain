@@ -116,7 +116,7 @@ TypeRegistry + TypeIndex    →  split internal indexes per branch if that is si
 ScadBlockProcessor          →  knows property serializers · not „what is a Block philosophically“
 ```
 
-**Interpretation is free.** A World’s renderer decides what a `Wall` or a `Size3D` *means* for its output. BML only ensures the description is **complete, typed, and addressable** — the WOT contract at the grammar level.
+**Interpretation is free.** A World’s renderer decides what a `Wall` or a `SizeXYZ` *means* for its output. BML only ensures the description is **complete, typed, and addressable** — the WOT contract at the grammar level.
 
 ### Renderer freedom
 
@@ -184,13 +184,13 @@ See `WOT_Reference_v26.md` §1 · The Idea · Manifestation.
 
 BOM Core defines Block as **„a parametric, reusable unit (definition / type)“** — not only as a composable physical object. ValueTypes and Languages are type definitions. They **are Blocks**.
 
-**Class vs Object:** In familiar terms, every `<block>` document is a **Class** (declarative, semantic type). Every element in a `<composition>` is a **Block Instance** — an **Object** referencing that class by FQN. ValueTypes (`Integer`, `Size3d`) are type-classes that may also appear as Block instances — interpretation is context-dependent. See `00_bom_core.md` — Block and Block Instance · Context-Dependent Interpretation (below).
+**Class vs Object:** In familiar terms, every `<block>` document is a **Class** (declarative, semantic type). Every element in a `<composition>` is a **Block Instance** — an **Object** referencing that class by FQN. ValueTypes (`Integer`, `SizeXYZ`) are type-classes that may also appear as Block instances — interpretation is context-dependent. See `00_bom_core.md` — Block and Block Instance · Context-Dependent Interpretation (below).
 
 All definitions use the BML `<block>` element, register in the same TypeRegistry, and inherit from **`org.blockml.bml.core.Block`** — the sole inheritance root.
 
 ```text
 org.blockml.bml.core.Block                         abstract root · omits baseType
-  ├── org.blockml.bml.core.ValueType               value blocks — Property types · Capability input/output (Size3D, Integer, …)
+  ├── org.blockml.bml.core.ValueType               value blocks — Property types · Capability input/output (SizeXYZ, Integer, …)
   ├── org.blockml.bml.core.Language                capability implementation contract
   │     ├── org.blockml.bml.language.NaturalLanguage   documentation prose · example titles
   │     │     ├── org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
@@ -297,7 +297,7 @@ org.blockml.bml.language.MarkupLanguage(L)      baseType: Language · L : Natura
 ```text
 com.machineblocks.bml.core.Block     baseType: org.blockml.bml.core.Entity
 org.blockml.bml.service.Math         baseType: org.blockml.bml.core.Entity
-com.machineblocks.bml.type.Size3d    baseType: StructType → … → ValueType → Block
+com.machineblocks.bml.type.SizeXYZ    baseType: StructType → … → ValueType → Block
 org.blockml.bml.language.OpenSCAD    baseType: ProgrammingLanguage → Language → Block
 ```
 
@@ -315,7 +315,7 @@ Meta property id                   — every Block instance; not declarable as <
 The WOT Relativität Principle applies to types as well:
 
 ```text
-com.machineblocks.bml.type.Size3D   →  ValueType in MachineBlocks
+com.machineblocks.bml.type.SizeXYZ   →  ValueType in MachineBlocks
                                 →  input struct in Expression signatures
                                 →  serializer input in SCAD Renderer
                                 →  layout constraint in ScreenMachine (future)
@@ -370,7 +370,7 @@ org.blockml.bml.core.ValueType              abstract — never stores data
   │     │     ├── org.blockml.bml.type.Decimal   — default for non-integer numbers
   │     │     └── org.blockml.bml.type.Float     — binary float — special-purpose only
   │     └── org.blockml.bml.type.Boolean      — neither textual nor numeric
-  ├── org.blockml.bml.type.StructType         Size3D · Color · Address · …
+  ├── org.blockml.bml.type.StructType         SizeXYZ · Color · Address · …
   ├── org.blockml.bml.type.EnumType           BaseCutout · Direction · Align · …
   └── org.blockml.bml.type.ConstantType       singleton value domains
         └── org.blockml.bml.type.Constant     Constant(T){value=…}
@@ -381,7 +381,7 @@ org.blockml.bml.core.ValueType              abstract — never stores data
 | Branch | Role | Examples |
 |---|---|---|
 | **PrimitiveType** | Atomic scalar semantics — no stored values | `Boolean`, `Integer`, `Decimal`, `Float`, `Text`, `URL`, `Version` |
-| **StructType** | Custom value objects — structure via properties | `Size3D`, `Color`, `Address`, `Transform` |
+| **StructType** | Custom value objects — structure via properties | `SizeXYZ`, `Color`, `Address`, `Transform` |
 | **EnumType** | Closed set of named members — BOM stores id + typeFqn | `Direction`, `Face`, `StudType`, `BaseCutout`, `Align` |
 | **ConstantType** | Singleton value domain — one configured literal | `Constant(Text){value="auto"}`, `Constant(Integer){value=5}` |
 
@@ -406,10 +406,10 @@ TypeExpression   = usage or combination       (multiplicity · union · generic 
 Integer[]           — collection / multiplicity
 Integer[3]
 Integer[0..n]
-Size3D[1..3]
+SizeXYZ[1..3]
 Boolean | Integer   — union
 "auto" | Float
-false | Size3D
+false | SizeXYZ
 Box<Integer>        — generic application (Box is a StructType with <genericTypes>)
 bml:Self
 T                   — generic parameter reference
@@ -494,7 +494,7 @@ Union type expressions combine alternatives with `|`:
 ```text
 Boolean | Constant(Text){value="auto"}   — boolean or singleton "auto" (canonical)
 Float | Constant(Text){value="auto"}     — float or auto sentinel
-false | Size3D                           — false or struct
+false | SizeXYZ                           — false or struct
 Boolean | StudType                       — boolean or enum
 Integer | Text                           — primitive union
 ```
@@ -874,7 +874,7 @@ Struct values may be authored in multiple equivalent forms. **Each form is prese
 ```text
 Authored as array:   size="[4, 2, 3]"              → BOM: [4, 2, 3]
 Authored as object:  size="{ x: 4, y: 2, z: 3 }"    → BOM: { x: 4, y: 2, z: 3 }
-Authored as element: <Size3d x="4" y="2" z="3"/>   → BOM: nested BlockInstance
+Authored as element: <SizeXYZ x="4" y="2" z="3"/>   → BOM: nested BlockInstance
 ```
 
 All three are **type-equivalent** for validation. Renderers use field-order metadata to emit target form (e.g. SCAD `[4, 2, 3]`). The validator does **not** normalize one form into another.
@@ -915,7 +915,7 @@ Because declaration order is part of the **public contract** of a struct type:
 * New fields may be appended **only at the end** to preserve backward compatibility.
 * Removing or reordering fields is an **incompatible breaking change** (requires a new type FQN or major version bump).
 
-This applies to named StructTypes (`Size3d`, `Color`, …) and to anonymous struct signatures on Capabilities.
+This applies to named StructTypes (`SizeXYZ`, `Color`, …) and to anonymous struct signatures on Capabilities.
 
 ---
 
@@ -929,8 +929,8 @@ Complex values are described by **normal Properties** — no special struct synt
 <block xmlns="http://blockml.org/schema/block"
        xmlns:type="com.machineblocks.bml.type" ...>
 
-  <name>Size3d</name>
-  <type>com.machineblocks.bml.type.Size3d</type>
+  <name>SizeXYZ</name>
+  <type>com.machineblocks.bml.type.SizeXYZ</type>
   <baseType>org.blockml.bml.core.StructType</baseType>
   <version>1.0.0</version>
 
@@ -948,13 +948,13 @@ StructType properties follow **Struct Property Access** and **Declaration Order*
 **As type reference:**
 
 ```xml
-<property name="size" type="com.machineblocks.bml.type.Size3d"/>
+<property name="size" type="com.machineblocks.bml.type.SizeXYZ"/>
 ```
 
 **As Block instance:**
 
 ```xml
-<Size3d x="10" y="5" z="2"/>
+<SizeXYZ x="10" y="5" z="2"/>
 ```
 
 Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) follows the same declaration-order contract for FunctionMapping. The validator may suggest promoting repeated anonymous structs to named StructTypes. See `18_function_mapping.md`.
@@ -995,17 +995,17 @@ Enum members are **Block instances** in composition under `values` — no specia
 
   <!-- optional catalog properties — like private fields on a Java enum constant -->
   <properties>
-    <value type="Text">
-      <documentation>Optional SCAD serialization literal — MachineBlocks convention.</documentation>
-    </value>
+    <scadValue type="Text">
+      <documentation>SCAD serialization literal — MachineBlocks MBEnum convention.</documentation>
+    </scadValue>
   </properties>
 
   <aggregations>
     <values>
       <composition>
-        <BaseCutout bml:id="None"     value="none"     />
-        <BaseCutout bml:id="Standard" value="standard" />
-        <BaseCutout bml:id="Groove"   value="groove"   />
+        <BaseCutout bml:id="None"     scadValue="none"     />
+        <BaseCutout bml:id="Standard" scadValue="standard" />
+        <BaseCutout bml:id="Groove"   scadValue="groove"   />
       </composition>
     </values>
   </aggregations>
@@ -1013,7 +1013,7 @@ Enum members are **Block instances** in composition under `values` — no specia
 </block>
 ```
 
-An EnumType **may** declare arbitrary properties. Those properties are **catalog metadata** on the type definition — filled per member in `values` (analogous to private fields on a Java enum constant). Declaring a `value` property (as MachineBlocks enums do for SCAD) is a domain choice, not a framework requirement.
+An EnumType **may** declare arbitrary properties. Those properties are **catalog metadata** on the type definition — filled per member in `values` (analogous to private fields on a Java enum constant). MachineBlocks enums extend `MBEnum(T)` and use `scadValue` for SCAD literals — a domain choice, not a framework requirement.
 
 Properties typed with an EnumType **must not** carry `<suggestions>` — valid values come from `values` (`BML_SUGGESTIONS_ON_ENUM` unchanged). Properties may carry `<constraints>` on any type where a compatible Constraint sub-type exists — see `18_constraints_and_suggestions.md`.
 
@@ -1044,9 +1044,9 @@ Qualified form references the enum member's bml:id (from values composition).
 
 The short form is valid only when the expected type is known from the property (or capability input field) declaration — not for untyped strings. The validator resolves the token against `values` by `id`.
 
-**BOM storage:** a property typed with an EnumType stores **only id + typeFqn** (the EnumType). Catalog properties on the member (for example `value="standard"`) are **not** copied into the property value. Tools and renderers look them up from the EnumType definition when needed. The authored token is a resolution key against `values` — not a live link to the catalog entry. See `12_bom_object_model.md` — Property Value Semantics.
+**BOM storage:** a property typed with an EnumType stores **only id + typeFqn** (the EnumType). Catalog properties on the member (for example `scadValue="standard"`) are **not** copied into the property value. Tools and renderers look them up from the EnumType definition when needed. The authored token is a resolution key against `values` — not a live link to the catalog entry. See `12_bom_object_model.md` — Property Value Semantics.
 
-**External representation:** the property value is the member identity — not a struct payload `{ value: "standard" }` and not a deep copy of catalog properties.
+**External representation:** the property value is the member identity — not a struct payload `{ scadValue: "standard" }` and not a deep copy of catalog properties.
 
 ---
 
@@ -1060,7 +1060,7 @@ A ValueType may appear in different roles:
 | Property value on instance | `columns="5"` | inline literal on Property |
 | Suggestion | Block instance in `<suggestions>` | metadata — same type as property |
 | Aggregation type | `type="org.blockml.bml.type.IntegerEntity[]"` | collection of integer Entities |
-| Composition child | `<Size3d x="10" y="5" z="2"/>` | StructType Block instance |
+| Composition child | `<SizeXYZ x="10" y="5" z="2"/>` | StructType Block instance |
 
 **Primitive values in composition:** use `IntegerEntity`, `TextEntity`, or another concrete `*Entity` type when a primitive must be an Entity — not `<Integer value="5"/>`. Properties always store values directly.
 
@@ -1509,7 +1509,7 @@ At validate time, every `TypeDescriptor` named reference resolves against the re
 
 ```text
 type="Integer"                              → org.blockml.bml.type.Integer
-type="type:Size3d"                          → com.machineblocks.bml.type.Size3d
+type="type:SizeXYZ"                          → com.machineblocks.bml.type.SizeXYZ
 type="com.foo.Box(org.blockml.bml.type.Integer)"  → generic substitution at validate time
 inputType="{ a: Float, b: Float }"        → AnonymousStructType (inline)
 capability implementation language="org.blockml.bml.language.TypeScript"  → registry lookup
@@ -1537,17 +1537,19 @@ Type definitions bootstrap **before** composable Blocks that reference them:
      org/blockml/bml/constraint/Min.bml · Max.bml · …
      org/blockml/bml/validation/Error.bml · Warning.bml · Information.bml · …
      org/blockml/bml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
+     org/blockml/bml/core/Unit.bml
+     org/blockml/bml/unit/None.bml · Millimeter.bml · …
      org/blockml/bml/type/Integer.bml · …
      org/blockml/bml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …
 
 2. @machineblocks/mbom
-     com/machineblocks/bml/type/Size3D.bml · …
+     com/machineblocks/bml/type/SizeXYZ.bml · …
      com/machineblocks/bml/core/Block.bml                             ← baseType: Block
      …
 ```
 
-Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType` chain to index Block vs ValueType vs Language vs Constraint vs Validation.
+Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType` chain to index Block vs ValueType vs Language vs Unit vs Constraint vs Validation.
 
 ---
 
@@ -1583,7 +1585,7 @@ packages/core/blocks/
 
 domains/machineblocks/mbom/blocks/
   com/machineblocks/bml/type/
-    Size3D.bml · Direction.bml · Color.bml · Face.bml · …
+    SizeXYZ.bml · Direction.bml · Color.bml · Face.bml · …
   com/machineblocks/bml/core/
     Block.bml · NativeBlock.bml · Set.bml · …
 ```

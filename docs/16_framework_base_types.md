@@ -32,6 +32,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **Block documentation** | Every Block definition carries required `<documentation>`; `<summary>` when documentation is long; `<isnot>` when confusion risk exists |
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
 | **ValueType branch** | `org.blockml.bml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; four kinds: PrimitiveType · StructType · EnumType · ConstantType |
+| **Unit branch** | `org.blockml.bml.core.Unit` — measurement-unit taxonomy (like Language/Status), not a ValueType; used as generic type arguments on Number (e.g. `Decimal(unit:Millimeter)`); concrete units in `org.blockml.bml.unit.*` |
 | **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` — see `00_bom_core.md` |
 | **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `01_system.md` |
 
@@ -408,7 +409,7 @@ Definition blocks may declare their own Capabilities — enabling domain-specifi
 
 `org.blockml.bml.core.Block` is the **sole inheritance root**. It **omits** `<baseType>` — the only definition allowed to do so. All other definitions must declare a non-empty parent FQN in `<baseType>`.
 
-All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.bml.core.ValueType`, `org.blockml.bml.core.Language`, or domain bases — all ultimately extend `org.blockml.bml.core.Block`. See `17_type_system_bml.md`.
+All other definitions must declare `<baseType>`. Framework branches inherit via `org.blockml.bml.core.ValueType`, `org.blockml.bml.core.Language`, `org.blockml.bml.core.Unit`, or domain bases — all ultimately extend `org.blockml.bml.core.Block`. See `17_type_system_bml.md`.
 
 ---
 
@@ -434,6 +435,8 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/validation/Error.bml · Warning.bml · Information.bml · …
      org/blockml/bml/core/
      org/blockml/bml/core/Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml
+     org/blockml/bml/core/Unit.bml
+     org/blockml/bml/unit/None.bml · Millimeter.bml · Centimeter.bml · Meter.bml · Inch.bml
      org/blockml/bml/type/Number.bml · Integer.bml · Decimal.bml · Float.bml · Text.bml · Boolean.bml · Constant.bml · …
      org/blockml/bml/type/Version.bml · URL.bml · URI.bml · FilePath.bml · MimeType.bml
      org/blockml/bml/core/PrimitiveEntity.bml
@@ -481,7 +484,7 @@ Native MB properties (`size`, `offset`, …) are declared on **concrete MachineB
 ```yaml
 - name: size
   scad_name: size
-  serializer: Size3D
+  serializer: SizeXYZ
   scad_customizer: …
 ```
 

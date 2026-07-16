@@ -17,6 +17,6 @@
     Float(unit:Millimeter). Bare Float is dimensionless.</documentation>
 
   <genericTypes>
-    <N baseType="btype:Unit" defaultType="unit:None"/>
+    <N baseType="core:Unit" defaultType="unit:None"/>
   </genericTypes>
 </block>

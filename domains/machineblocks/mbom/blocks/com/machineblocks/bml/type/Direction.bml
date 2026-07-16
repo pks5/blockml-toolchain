@@ -1,0 +1,33 @@
+<!--
+  MachineBlocks — Direction enum
+
+  FQN: com.machineblocks.bml.type.Direction
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:type="com.machineblocks.bml.type">
+  <name>Direction</name>
+  <type>type:Direction</type>
+  <baseType>type:MBEnum(Text)</baseType>
+  <is>A cardinal direction</is>
+
+  <documentation>Enum ValueType for west / north / east / south on MachineBlocks bricks.
+    Extends MBEnum(Text). BOM property values store only the member id plus this EnumType;
+    scadValue holds the SCAD serialization literal.</documentation>
+
+  <aggregations>
+    <values>
+      <composition>
+        <Direction bml:id="West" scadValue="west" />
+        <Direction bml:id="North" scadValue="north" />
+        <Direction bml:id="East" scadValue="east" />
+        <Direction bml:id="South" scadValue="south" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

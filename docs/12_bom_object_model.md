@@ -417,7 +417,7 @@ Parsed from `inputType` / `outputType` / `type` attribute strings at map time:
 ```text
 Float                              → NamedTypeReference { fqn: "org.blockml.bml.type.Float" }
 org.blockml.bml.type.Float             → NamedTypeReference { fqn: "org.blockml.bml.type.Float" }
-type:Size3D                        → NamedTypeReference { fqn: "com.machineblocks.bml.type.Size3D" }
+type:SizeXYZ                        → NamedTypeReference { fqn: "com.machineblocks.bml.type.SizeXYZ" }
 Integer[0..n]                      → NamedTypeReference { fqn: Integer, multiplicity: { min: 0, max: "*" } }
 Integer[]                          → same as Integer[0..n]
 Integer[3]                         → NamedTypeReference { fqn: Integer, multiplicity: { min: 3, max: 3 } }
@@ -429,7 +429,7 @@ Text{maxLength=50}[0..n]           → NamedTypeReference { fqn: Text, instanceC
 Constant(Text){value="auto"}       → NamedTypeReference { fqn: Constant, typeArguments: [Text], instanceConfiguration: { named: { value: "auto" } } }
 Boolean | Constant(Text){value="auto"} → UnionTypeExpression { alternatives: [Boolean, Constant(…)] }
 "auto" | Float                     → UnionTypeExpression { alternatives: [literal "auto", Float] } — legacy; normalize to Constant form
-false | Size3D                     → UnionTypeExpression { alternatives: [literal false, Size3D] }
+false | SizeXYZ                     → UnionTypeExpression { alternatives: [literal false, SizeXYZ] }
 Boolean | Integer                  → UnionTypeExpression { alternatives: [Boolean, Integer] }
 T                                  → GenericParameterReference { name: "T" }
 bml:Self                           → SelfTypeReference
@@ -633,10 +633,10 @@ Mapping sequence (append to members[] in this order):
 
 The position of each entry in `BlockDefinition.members[]` is the **declaration ordinal** for that block. Render targets may use this order (e.g. Customizer parameter sequence, UI field layout). The compiler must not reorder declared members when writing BOM or when passing definitions to processors.
 
-**StructType array literals:** for a StructType defined via `<properties>` (e.g. `Size3d` with `x`, `y`, `z`), property **declaration order** defines positional array literal mapping. Member access in expressions uses property names only. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md`.
+**StructType array literals:** for a StructType defined via `<properties>` (e.g. `SizeXYZ` with `x`, `y`, `z`), property **declaration order** defines positional array literal mapping. Member access in expressions uses property names only. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md`.
 
 ```text
-size="[4, 2, 3]"   →  index 0 = x, index 1 = y, index 2 = z  (order in Size3d.bml)
+size="[4, 2, 3]"   →  index 0 = x, index 1 = y, index 2 = z  (order in SizeXYZ.bml)
 size="${ [size.x, size.y, size.z - 1] }"
 ```
 
@@ -751,7 +751,7 @@ Values on Block instances and property defaults use a common value model.
 
 Cross-instance references via `FQN::id` exist only on **associations** — `basePresets`, `Step.part`, and similar members whose semantics explicitly model instance identity. Properties typed with ValueTypes always store inline values.
 
-**EnumType:** an authored token such as `Standard` or `com.machineblocks.bml.type.BaseCutout::Standard` is **not** a link to the `values` catalog entry. The validator resolves the token against `values` by `id`. The BOM stores **only id + typeFqn** (the EnumType) — catalog properties on the member (for example an optional `value` string) are **not** copied into the property value. Tools look up catalog metadata from the EnumType definition when needed. See `17_type_system_bml.md` — EnumType.
+**EnumType:** an authored token such as `Standard` or `com.machineblocks.bml.type.BaseCutout::Standard` is **not** a link to the `values` catalog entry. The validator resolves the token against `values` by `id`. The BOM stores **only id + typeFqn** (the EnumType) — catalog properties on the member (for example an optional `scadValue` string) are **not** copied into the property value. Tools look up catalog metadata from the EnumType definition when needed. See `17_type_system_bml.md` — EnumType.
 
 **StructType and primitives:** authored literals remain inline in Canonical BOM — `[1, 1, 1]`, `{x:1, y:1, z:1}`, or a nested StructType element are self-contained copies, not references to other instances.
 
@@ -769,7 +769,7 @@ interface LiteralValue {
    * Authored value exactly as in BML — preserved for lossless BML ↔ BOM round-trip.
    * MUST NOT be normalized to a canonical internal form at parse/validate time.
    * Examples: [5,5,6] stays an array; {x:5,y:5,z:6} stays an object;
-   * <Size3d x="5" …/> stays a nested BlockInstance.
+   * <SizeXYZ x="5" …/> stays a nested BlockInstance.
    * Type compatibility is checked against typeFqn — the stored shape is not rewritten.
    */
   value: unknown

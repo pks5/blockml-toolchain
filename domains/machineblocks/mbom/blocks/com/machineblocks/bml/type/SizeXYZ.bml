@@ -1,7 +1,7 @@
 <!--
-  MachineBlocks — Size3d struct type
+  MachineBlocks — SizeXYZ struct type
 
-  FQN: com.machineblocks.bml.type.Size3d
+  FQN: com.machineblocks.bml.type.SizeXYZ
 -->
 <block
   xmlns="http://blockml.org/schema/block"
@@ -10,12 +10,13 @@
                       "
   xmlns:btype="org.blockml.bml.type"
   xmlns:type="com.machineblocks.bml.type">
-  <name>Size3d</name>
-  <type>type:Size3d</type>
+  <name>SizeXYZ</name>
+  <type>type:SizeXYZ</type>
   <baseType>btype:StructType</baseType>
-  <is>A 3D size in grid units</is>
+  <is>A size along X, Y, and Z</is>
 
-  <documentation>Struct ValueType for three-dimensional size [x, y, z] in grid units.</documentation>
+  <documentation>Struct ValueType for size [x, y, z] in grid units. Named SizeXYZ (not Size3D) —
+    MachineBlocks axis-keyed types use XYZ / XY, not 3D / 2D.</documentation>
   <properties>
     <x type="Float">
       <documentation>Size in X direction.</documentation>

@@ -8,11 +8,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core"
   xmlns:unit="com.machineblocks.bml.unit">
   <name>GridUnit</name>
   <type>unit:GridUnit</type>
-  <baseType>btype:Unit</baseType>
+  <baseType>core:Unit</baseType>
   <is>MachineBlocks grid unit</is>
 
   <documentation>Plate-grid unit of the MachineBlocks system. A 1×1 plate is one grid unit in X/Y

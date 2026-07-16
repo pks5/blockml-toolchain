@@ -22,7 +22,7 @@
     Positional order: precision, scale. See 20_value_type_instance_configuration.md.</documentation>
 
   <genericTypes>
-    <N baseType="btype:Unit" defaultType="unit:None"/>
+    <N baseType="core:Unit" defaultType="unit:None"/>
   </genericTypes>
 
   <properties>

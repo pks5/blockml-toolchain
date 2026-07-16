@@ -14,12 +14,12 @@
     Abstract numeric branch — not resolvable via Property.type implicit namespace; use Integer, Decimal, or Float explicitly.
     Numeric types describe semantics only; values are stored in Properties.
 
-    Generic parameter N constrains the measurement unit (extends org.blockml.bml.type.Unit).
+    Generic parameter N constrains the measurement unit (extends org.blockml.bml.core.Unit).
     Default is org.blockml.bml.unit.None — bare Number / Integer / Decimal / Float are dimensionless.
     Supply N at reference sites when a unit is required, e.g. Integer(unit:Millimeter).</documentation>
   <abstract>true</abstract>
 
   <genericTypes>
-    <N baseType="btype:Unit" defaultType="unit:None"/>
+    <N baseType="core:Unit" defaultType="unit:None"/>
   </genericTypes>
 </block>

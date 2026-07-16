@@ -30,9 +30,20 @@ Renderers interpret authored Property values using type metadata and field order
 
 See `00_bom_core.md` — Fundamental Architecture Principles.
 
-**Type equivalence** (e.g. `[4,2,3]` and `{x:4,y:2,z:3}` both valid for `Size3D`) is a **validation rule** — not a mandate to rewrite stored values. Each authored form is preserved in `LiteralValue.value`.
+**Type equivalence** (e.g. `[4,2,3]` and `{x:4,y:2,z:3}` both valid for `SizeXYZ`) is a **validation rule** — not a mandate to rewrite stored values. Each authored form is preserved in `LiteralValue.value`.
 
 All MBOM types are defined in the **`com.machineblocks.bml.type`** namespace (singular `.type` segment — see `00_bom_core.md` — FQN Convention).
+
+### Naming convention — XYZ / XY (not 3D / 2D)
+
+Axis-keyed compound types are named by **which axes they cover**, not by spatial-dimension metaphors:
+
+```text
+XYZ  — X, Y, and Z     SizeXYZ · AxisXYZ<T> · GridPositionXYZ
+XY   — X and Y only    AxisXY<T>
+```
+
+Do **not** use `3D` / `2D` type-name suffixes (`Size3D`, `Axis2D`, …). Prefer `XYZ` / `XY` so names align with property keys `x` / `y` / `z` and with the `Axis` / `Face` enums.
 
 ---
 
@@ -63,7 +74,7 @@ Integer[]   → org.blockml.bml.type.Integer with multiplicity 0..n
 ```xml
 xmlns:type="com.machineblocks.bml.type"
 
-type="type:Size3D"          → com.machineblocks.bml.type.Size3D
+type="type:SizeXYZ"          → com.machineblocks.bml.type.SizeXYZ
 type="type:Color"           → com.machineblocks.bml.type.Color
 type="type:BaseCutout"  → com.machineblocks.bml.type.BaseCutout
 type='"auto" | Float'      → union type expression (replaces type:AutoOr_Float)
@@ -79,7 +90,7 @@ On a property typed with an EnumType, enum values are written by **member id**:
 - **short id** — `Standard` (omits `com.machineblocks.bml.type.BaseCutout::` because the property type is known)
 - **qualified id** — `com.machineblocks.bml.type.BaseCutout::Standard`
 
-BOM stores **id + typeFqn** only. Optional catalog properties on the enum member (for example MachineBlocks `value="standard"` for SCAD) live on the type definition and are looked up by tools — they are not a second authoring form for the property value.
+BOM stores **id + typeFqn** only. Optional catalog properties on the enum member (for example MachineBlocks `scadValue="standard"` for SCAD via `MBEnum`) live on the type definition and are looked up by tools — they are not a second authoring form for the property value.
 
 **Anonymous Object inputType for Capability:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Field order defines positional parameter order — same **Ordered Struct Fields** rule as named StructTypes (see `17_type_system_bml.md`). Both positional and named call syntax are valid:
 
@@ -189,7 +200,7 @@ Values:  Start | Center | End
 
 MBML:  align="Start"
 MBOM:  Align.Start   (id + typeFqn)
-SCAD:  "start"       (from catalog property value, if declared)
+SCAD:  "start"       (from catalog property scadValue)
 ```
 
 ## StudType
@@ -408,22 +419,22 @@ Supports namespace-qualified keys for composite block forwarding:
 
 # 7. Grid Types
 
-## Size3D
+## SizeXYZ
 
 ```text
-com.machineblocks.bml.type.Size3D
+com.machineblocks.bml.type.SizeXYZ
 
 BOM (authored):  [4, 2, 3]  or  { x: 4, y: 2, z: 3 }  — preserved as authored
-Type check:      both forms valid against Size3D field order (x, y, z)
+Type check:      both forms valid against SizeXYZ field order (x, y, z)
 SCAD (render):   ["size", [4, 2, 3]]                    — renderer serialization
 ```
 
 Integer grid dimensions. Defines the block's spatial contract. Array literals map by **StructType property declaration order** — see `17_type_system_bml.md` — Ordered Struct Fields.
 
-## GridPosition3D
+## GridPositionXYZ
 
 ```text
-com.machineblocks.bml.type.GridPosition3D
+com.machineblocks.bml.type.GridPositionXYZ
 
 MBOM:  { x: Integer, y: Integer, z: Integer }
 
@@ -572,7 +583,7 @@ It is not evaluated at parse time — renderers serialize the AST.
 See `10_expression_language.md` — Expression AST.
 
 BML:   size="${ [size[0], size[1], size[2] - 1] }"
-BOM:   ExpressionValue { ast: ArrayLiteral(...), resultTypeFqn: "com.machineblocks.bml.type.Size3D" }
+BOM:   ExpressionValue { ast: ArrayLiteral(...), resultTypeFqn: "com.machineblocks.bml.type.SizeXYZ" }
 SCAD:  serialized as the expression result or as a SCAD expression
        depending on whether it can be statically resolved
 ```
@@ -600,7 +611,7 @@ See `05_scad_renderer.md` — Settings Format for the pseudo-map vs. OpenSCAD `o
 
 ## Serialization Examples
 
-### Size3D
+### SizeXYZ
 
 ```text
 MBOM: { x:4, y:2, z:3 }

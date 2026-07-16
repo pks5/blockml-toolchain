@@ -59,9 +59,15 @@
     <blocks>
       <type:Align />
       <type:Auto />
+      <type:Axis />
+      <type:AxisXY />
+      <type:AxisXYZ />
       <type:BaseCutout />
+      <type:Direction />
+      <type:Face />
       <type:MBEnum />
-      <type:Size3d />
+      <type:MultiAxis />
+      <type:SizeXYZ />
       <unit:MBU />
       <unit:GridUnit />
     </blocks>

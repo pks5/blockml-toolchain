@@ -18,7 +18,7 @@ For native property definitions see `09_mbom_properties.yml`.
 
 MBOM is the renderer-independent domain model layered on BOM Core. It has no knowledge of SCAD syntax, parameters, or file formats. Validation operates on the lossless BOM; rendering interprets it for the target.
 
-MBOM specializes BOM Core for the MachineBlocks domain — adding MB-specific property types (`Size3D`, `WallGap`, `Direction`, ...), the native property set (`09_mbom_properties.yml`), and the SCAD render target interface.
+MBOM specializes BOM Core for the MachineBlocks domain — adding MB-specific property types (`SizeXYZ`, `WallGap`, `Direction`, ...), the native property set (`09_mbom_properties.yml`), and the SCAD render target interface.
 
 MBOM is strongly inspired by the SAPUI5 object model. Existing SAPUI5 concepts are adopted where they fit. Deviations are documented explicitly.
 
@@ -127,7 +127,7 @@ The compiler determines native vs. custom by checking `09_mbom_properties.yml`. 
 
 ```text
 name          — camelCase member name (unique within the Block's member namespace)
-type          — MBOM type FQN (e.g. com.machineblocks.bml.type.Size3D)
+type          — MBOM type FQN (e.g. com.machineblocks.bml.type.SizeXYZ)
 value  — typed defined value (literal or expression)
 group         — optional grouping for editor display
 documentation — human-readable description

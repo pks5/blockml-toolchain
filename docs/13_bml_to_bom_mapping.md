@@ -550,7 +550,7 @@ size="${ [size.x, size.y, size.z - 1] }"
      }
 
 size="[1, 8, 9]"
-  → LiteralValue { value: [1, 8, 9], typeFqn: "…Size3D" }   (authored form; type-checked by validateTypes() utility)
+  → LiteralValue { value: [1, 8, 9], typeFqn: "…SizeXYZ" }   (authored form; type-checked by validateTypes() utility)
 ```
 
 Directive values (e.g. `bml:each="i : ${ numberOfSamples }"`) are split structurally in stage [5]: loop variables parsed from the prefix; the `${ }` portion stored as `ExpressionValue { raw }` on the directive node.
@@ -792,7 +792,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.b
 <blockml:Library />                        →  dependencies entry (context version)
 <blockml:Library bml:version="3.0.0" />     →  dependencies entry — exact-version assert on value
 <compiler:Library />                       →  subLibraries entry
-<type:Size3d />                             →  blocks entry
+<type:SizeXYZ />                             →  blocks entry
 <bricks:Wall />                             →  blocks entry
 <bricks:WallPresets />                      →  blocks entry
 

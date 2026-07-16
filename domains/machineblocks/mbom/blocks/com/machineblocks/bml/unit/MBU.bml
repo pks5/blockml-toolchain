@@ -8,11 +8,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core"
   xmlns:unit="com.machineblocks.bml.unit">
   <name>MBU</name>
   <type>unit:MBU</type>
-  <baseType>btype:Unit</baseType>
+  <baseType>core:Unit</baseType>
   <is>MachineBlocks Unit (mbu)</is>
 
   <documentation>Base geometric unit of the MachineBlocks system. Idealized block geometry is

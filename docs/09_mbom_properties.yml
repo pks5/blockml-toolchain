@@ -181,10 +181,10 @@ properties:
 
   - name: size
     group: core_geometry
-    type: com.machineblocks.bml.type.Size3D
+    type: com.machineblocks.bml.type.SizeXYZ
     default: { x: 1, y: 1, z: 1 }
     scad_name: size
-    serializer: Size3D
+    serializer: SizeXYZ
     ai_usage: yes
     description: |
       Size of the bounding box in grid units (integer values only).
@@ -243,10 +243,10 @@ properties:
 
   - name: offset
     group: positioning
-    type: com.machineblocks.bml.type.GridPosition3D
+    type: com.machineblocks.bml.type.GridPositionXYZ
     default: { x: 0, y: 0, z: 0 }
     scad_name: offset
-    serializer: GridPosition3D
+    serializer: GridPositionXYZ
     assembly_pattern: mb_assembly_offset
     ai_usage: yes
     description: |
@@ -286,10 +286,10 @@ properties:
 
   - name: rotationOffset
     group: positioning
-    type: com.machineblocks.bml.type.GridPosition3D
+    type: com.machineblocks.bml.type.GridPositionXYZ
     default: { x: 0, y: 0, z: 0 }
     scad_name: rotationOffset
-    serializer: GridPosition3D
+    serializer: GridPositionXYZ
     ai_usage: rarely
     description: |
       Offset applied before rotation, reverted after.

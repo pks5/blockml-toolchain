@@ -400,7 +400,7 @@ The MachineBlocks domain BOM. Browser and Node compatible.
 
 ```text
 - MBOM Block class (extends BOM Core Block)
-- MachineBlocks-specific member types (Size3D, Direction, WallGap, Color, ...)
+- MachineBlocks-specific member types (SizeXYZ, Direction, WallGap, Color, ...)
 - Native property definitions (from 09_mbom_properties.yml)
 - `com.machineblocks.bml.core.Block` type definition — including inherited `_parts` aggregation
 - No SCAD logic, no Node-only APIs

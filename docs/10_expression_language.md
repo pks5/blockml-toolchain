@@ -247,7 +247,7 @@ Property and member access in `${ }` (`size.x`) are **expression semantics** —
 
 ```text
 BML attribute:  size="[5, 5, 6]"
-BOM storage:    LiteralValue { value: [5,5,6], typeFqn: "…Size3D" }   ← array stays array
+BOM storage:    LiteralValue { value: [5,5,6], typeFqn: "…SizeXYZ" }   ← array stays array
 
 BML attribute:  offset="${ size.x }"
 Utility:        parseExpression("size.x") → { ast: MemberAccess(...), resultTypeFqn: "…" }
@@ -256,7 +256,7 @@ BOM storage:    ExpressionValue { raw: "size.x" }   ← raw only; AST is utility
 
 The StructType definition (field names, declaration order) is **type metadata** consulted by the expression type checker (stage [8]) and by the renderer at evaluation/serialization time. It is not applied to rewrite `LiteralValue.value` at parse time.
 
-**Validation** checks that `size.x` is a valid member access on a `Size3D`-typed `size` member. **Evaluation** (resolving `size.x` to `5`) happens at render time only.
+**Validation** checks that `size.x` is a valid member access on a `SizeXYZ`-typed `size` member. **Evaluation** (resolving `size.x` to `5`) happens at render time only.
 
 ---
 
@@ -425,7 +425,7 @@ StructType property values are accessed **by property name only**. Numeric index
 This applies to **expression evaluation and type checking** — not to BOM storage. A `size` member authored as `[5,5,6]` remains `[5,5,6]` in `LiteralValue.value`; `${ size.x }` addresses the `x` field at evaluation time via type metadata.
 
 ```text
-${ size }             — property value (e.g. Size3D [1, 8, 9])
+${ size }             — property value (e.g. SizeXYZ [1, 8, 9])
 ${ size.x }           — named member access (x component)
 ${ size.y }           — named member access (y component)
 ${ baseColor }        — string property
@@ -573,7 +573,7 @@ Property `<value>` may contain a static literal or an Expression. When an Expres
 <labelSize type="Integer">
   <value>5</value>
 </labelSize>
-<size type="Size3D">
+<size type="SizeXYZ">
   <value>${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }</value>
 </size>
 ```
@@ -1444,7 +1444,7 @@ AST (abbreviated):
 ```text
 ExpressionValue
   raw: "[#math.max(2 * numberOfSamples + 1, labelSize), 12, 2]"
-  resultTypeFqn: "com.machineblocks.bml.type.Size3D"
+  resultTypeFqn: "com.machineblocks.bml.type.SizeXYZ"
   ast: ArrayLiteral
     elements:
       [0] BuiltinCall { namespace:"math", name:"max",

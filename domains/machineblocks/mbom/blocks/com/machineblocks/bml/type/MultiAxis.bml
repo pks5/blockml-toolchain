@@ -1,0 +1,41 @@
+<!--
+  MachineBlocks — MultiAxis abstract struct base
+
+  FQN: com.machineblocks.bml.type.MultiAxis
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:unit="org.blockml.bml.unit"
+  xmlns:type="com.machineblocks.bml.type">
+  <name>MultiAxis</name>
+  <type>type:MultiAxis</type>
+  <baseType>btype:StructType</baseType>
+  <is>An axis-keyed multi-component value</is>
+
+  <documentation>Abstract StructType base for MachineBlocks axis-keyed maps (AxisXY, AxisXYZ).
+    Generic N (Number, default Decimal) is the per-axis value type. Generic U (Unit, default
+    unit:None) is the measurement unit applied as N(U) on concrete axis properties.
+    Bare MultiAxis / AxisXY / AxisXYZ resolve to Decimal and dimensionless.</documentation>
+
+  <abstract>true</abstract>
+
+  <genericTypes>
+    <N baseType="btype:Number" defaultType="btype:Decimal"/>
+    <U baseType="core:Unit" defaultType="unit:None"/>
+  </genericTypes>
+
+  <references>
+    <see type="type:AxisXY" relation="SeeAlso">
+      Two-axis map — x, y.
+    </see>
+    <see type="type:AxisXYZ" relation="SeeAlso">
+      Three-axis map — x, y, z (extends AxisXY).
+    </see>
+  </references>
+
+</block>

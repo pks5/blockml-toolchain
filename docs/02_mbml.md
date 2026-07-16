@@ -178,7 +178,7 @@ There is **no multi-stage search**, no global TypeRegistry fallback, and no docu
 
 <!-- domain types on Property.type — prefix required -->
 xmlns:type="com.machineblocks.bml.type"
-type="type:Size3D"   →  com.machineblocks.bml.type.Size3D
+type="type:SizeXYZ"   →  com.machineblocks.bml.type.SizeXYZ
 type="type:Color"    →  com.machineblocks.bml.type.Color
 ```
 
@@ -1239,7 +1239,7 @@ MachineBlocks (Domain-Namespaces):
 
 FQN-Referenz-Namespaces:
   xmlns:core="com.machineblocks.bml.core"         ← <core:NativeBlock />
-  xmlns:type="com.machineblocks.bml.type"         ← type="type:Size3D"
+  xmlns:type="com.machineblocks.bml.type"         ← type="type:SizeXYZ"
   xmlns:bricks="com.machineblocks.bml.bricks"     ← <bricks:Standard />
   xmlns:cal="com.machineblocks.bml.calibration"   ← <cal:Calibrator />
 ```
@@ -1264,7 +1264,7 @@ XSD-Dateien werden als Teil der npm-Packages ausgeliefert.
 
 ```text
 xmlns:bml   — required when using bml:* directives
-xmlns:type  — required when using domain-specific types (e.g. type:Size3D)
+xmlns:type  — required when using domain-specific types (e.g. type:SizeXYZ)
 xmlns:*     — domain namespaces for Block type references and member element prefixes
 ```
 
@@ -1356,7 +1356,7 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 
   <properties>
     <!-- Native properties — inherit Stable from block (no status needed) -->
-    <size type="Size3D">
+    <size type="SizeXYZ">
       <value>[1, 8, 8]</value>
     </size>
     <baseColor type="Color">
@@ -1410,7 +1410,7 @@ The member name is the **XML element name**. The `name="..."` attribute is remov
 
 ```xml
 <properties>
-    <size type="Size3D"/>
+    <size type="SizeXYZ"/>
 </properties>
 
 <aggregations>
@@ -1434,7 +1434,7 @@ Block definitions describe the entire member — not just its value. Each member
 
 ```xml
 <properties>
-    <size type="Size3D">
+    <size type="SizeXYZ">
         <documentation>Final outer dimensions.</documentation>
         <value>${[width, height, depth]}</value>
     </size>
@@ -1976,7 +1976,7 @@ Parent:
 
 ```xml
 <size
-    type="type:Size3D">
+    type="type:SizeXYZ">
   <value>[1,1,1]</value>
   <documentation>Default size</documentation>
 </size>
@@ -2026,7 +2026,7 @@ Native and custom properties use the same element syntax — the member name is 
 Block definitions store property values in a `<value>` child element — not as a `value="..."` attribute:
 
 ```xml
-<size type="type:Size3D">
+<size type="type:SizeXYZ">
   <value>[1, 1, 3]</value>
 </size>
 ```
@@ -2042,7 +2042,7 @@ On Property `type`, Capability `inputType`, and Capability `outputType` referenc
 ```text
 type="Integer"   → org.blockml.bml.type.Integer   (Property.type site)
 type="Float"     → org.blockml.bml.type.Float
-type="type:Size3D" → com.machineblocks.bml.type.Size3D   (domain — prefix required)
+type="type:SizeXYZ" → com.machineblocks.bml.type.SizeXYZ   (domain — prefix required)
 ```
 
 There is no `Null` primitive — see `17_type_system_bml.md` — EMPTY.
@@ -2064,7 +2064,7 @@ Domain-specific types require an explicit namespace prefix declared via `xmlns`:
 ```xml
 xmlns:type="com.machineblocks.bml.type"
 
-<size type="type:Size3D">
+<size type="type:SizeXYZ">
   <value>[1, 1, 3]</value>
 </size>
 <baseColor type="type:Color">
@@ -2145,11 +2145,11 @@ Whether BlockML enforces a constraint depends on its optional `validation` prope
 For struct properties, suggestions are typed Block instances:
 
 ```xml
-<size type="type:Size3D">
+<size type="type:SizeXYZ">
   <value>[1, 1, 3]</value>
   <suggestions>
-    <type:Size3D x="1" y="1" z="3"/>
-    <type:Size3D x="2" y="4" z="3"/>
+    <type:SizeXYZ x="1" y="1" z="3"/>
+    <type:SizeXYZ x="2" y="4" z="3"/>
   </suggestions>
 </size>
 ```
@@ -2163,7 +2163,7 @@ For struct properties, suggestions are typed Block instances:
 <labelSize type="Integer">
   <value>5</value>
 </labelSize>
-<size type="type:Size3D">
+<size type="type:SizeXYZ">
   <value>${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }</value>
 </size>
 ```
@@ -2980,7 +2980,7 @@ composition children.
   </dependencies>
   <blocks>
     <composition>
-      <type:Size3d />
+      <type:SizeXYZ />
       <bricks:Standard />
     </composition>
   </blocks>
@@ -3610,7 +3610,7 @@ Physical directories and overlapping package prefixes do not define membership. 
 
     <blocks>
       <composition>
-        <type:Size3d />
+        <type:SizeXYZ />
         <type:Direction />
         <bricks:Standard />
         <bricks:Plate />
@@ -3659,7 +3659,7 @@ com/machineblocks/bml/bricks/
   Library.bml              ← com.machineblocks.bml.bricks.Library
   bricks.xsd               ← optional legacy XSD
   types/
-    Size3D.bml · Direction.bml · …
+    SizeXYZ.bml · Direction.bml · …
   blocks/
     Standard.bml
     Plate.bml
@@ -3702,7 +3702,7 @@ The examples below are **illustrative drafts only** — not valid V1 input.
   "type": "com.martianmicro.anyclosure.Wall",
   "version": "1.0.0",
   "properties": [
-    { "name": "size",          "type": "Size3D",  "value": [1, 8, 8] },
+    { "name": "size",          "type": "SizeXYZ",  "value": [1, 8, 8] },
     { "name": "baseColor",     "type": "Color",   "value": "#303D4E" },
     { "name": "wallThickness", "type": "Integer", "value": 1,
       "documentation": "Thickness of the wall in grid units." }

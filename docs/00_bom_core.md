@@ -232,7 +232,7 @@ Block (definition)              Block Instance (in composition)
 This is a **semantic** analogy — not a mandate for runtime OOP. The compiler may represent definitions and instances as plain data; the parser nonetheless distinguishes `<block>` documents (classes) from composition children (objects). See `17_type_system_bml.md`.
 
 ```text
-ValueType (Integer, Size3D)     →  semantic value class for Property values and Capability input/output
+ValueType (Integer, SizeXYZ)     →  semantic value class for Property values and Capability input/output
 Language (OpenSCAD)        →  semantic meta-class for implementation contract
 Sub-Block in same .bml file     →  nested class (derived type, inner scope)
 Preset                          →  named default binding on a class (partial object factory)
@@ -351,7 +351,7 @@ Examples:
   org.blockml.bml.language.OpenSCAD
   org.blockml.bml.type.Integer
   com.machineblocks.bml.core.Block
-  com.machineblocks.bml.type.Size3D
+  com.machineblocks.bml.type.SizeXYZ
   com.machineblocks.bml.bricks.StandardBrick   ← domain library (documented plural exception)
   com.electronics.core.Component
   com.ui.core.Control
@@ -755,7 +755,7 @@ Property `type` attributes must resolve to a **ValueType** — a Block whose `ba
 ```text
 type="Integer"              →  org.blockml.bml.type.Integer        ✓  (Number → PrimitiveType → ValueType)
 type="Decimal"              →  org.blockml.bml.type.Decimal        ✓
-type="type:Size3d"            →  com.machineblocks.bml.type.Size3d ✓  (StructType → ValueType)
+type="type:SizeXYZ"            →  com.machineblocks.bml.type.SizeXYZ ✓  (StructType → ValueType)
 type="com.foo.Wall"           →  ✗  BML_INVALID_PROPERTY_TYPE (not a ValueType)
 ```
 
@@ -767,7 +767,7 @@ Aggregation and association `type` attributes may reference **any Block FQN** �
 
 ```text
 type="com.machineblocks.bml.core.Block[]"     ✓
-type="com.machineblocks.bml.type.Size3d[]"    ✓
+type="com.machineblocks.bml.type.SizeXYZ[]"    ✓
 type="org.blockml.bml.type.Integer[]"         ✓
 ```
 
@@ -824,7 +824,7 @@ A `value` may be a static literal or an Expression. Expressions in `value` allow
 <labelSize type="Integer">
   <value>5</value>
 </labelSize>
-<size type="Size3D">
+<size type="SizeXYZ">
   <value>${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }</value>
 </size>
 ```
@@ -2035,7 +2035,7 @@ BlockML has four ValueType kinds: **Primitive**, **Enum**, **Struct**, **Constan
 
 ```text
 Union:        "auto" | Float · false | T · Boolean | StudType
-Collection:   Integer[] · Size3D[1..3]
+Collection:   Integer[] · SizeXYZ[1..3]
 Generic use:  Box<Integer>   (Box is a StructType with <genericTypes>)
               In BML type="..." attributes write Box(Integer) — see 17_type_system_bml.md
 ```
@@ -2047,7 +2047,7 @@ Legacy wrapper types (`AutoOr<T>`, `NoneOr<T>`, `Array<T>`, …) are **obsolete*
 Each domain BOM defines its own type namespace:
 
 ```text
-com.machineblocks.bml.type.*   — Size3D, Direction, WallGap, Color, ...
+com.machineblocks.bml.type.*   — SizeXYZ, Direction, WallGap, Color, ...
 com.electronics.type.*     — Voltage, Resistance, Footprint, ...
 com.ui.type.*              — Color, Length, FontSize, ...
 ```

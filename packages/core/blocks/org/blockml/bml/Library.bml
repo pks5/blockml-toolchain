@@ -110,6 +110,7 @@
       <bcore:Relation />
       <bcore:Validation />
       <bcore:ValueType />
+      <bcore:Unit />
       <def:AggregationDefinition />
       <def:AssociationDefinition />
       <def:ConstrainableDefinition />
@@ -229,7 +230,6 @@
       <btype:StructType />
       <btype:Text />
       <btype:TextEntity />
-      <btype:Unit />
       <btype:URI />
       <btype:URIEntity />
       <btype:URL />
