@@ -290,6 +290,8 @@ com.machineblocks.bml.calibration.*  ✓   — Calibrator, …
 
 Do not infer from `bricks` that other packages may freely use plural segments. New infrastructure namespaces (`.type`, `.service`, `.core`, `.capability`) are always singular. New domain libraries may choose a collective name deliberately — document the decision in the domain spec.
 
+**XML xmlns prefixes (authoring best practice):** reserve short aliases `core`, `type`, `unit`, `lang`, … for `org.blockml.bml.*`. Domain mirrors use a domain token — MachineBlocks: `mbcore`, `mbtype`, `mbunit`. See `02_mbml.md` — § XML prefix best practice.
+
 ### Mandatory BML namespace (`<domain>.bml.*`)
 
 Every BML definition — Blocks, Libraries, Types, Languages, Services, Capabilities, and all other BlockML definitions — must reside below the owning domain's **`bml`** package:

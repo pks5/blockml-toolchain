@@ -9,25 +9,22 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:btype="org.blockml.bml.type"
-  xmlns:core="org.blockml.bml.core"
-  xmlns:unit="org.blockml.bml.unit"
   xmlns:type="com.machineblocks.bml.type">
   <name>AxisXYZ</name>
   <type>type:AxisXYZ</type>
-  <baseType>type:AxisXY(N, U)</baseType>
+  <baseType>type:AxisXY(N)</baseType>
   <is>A value triple along X, Y, and Z</is>
 
-  <documentation>Struct ValueType for axis-keyed { x, y, z }. Extends AxisXY(N, U) and adds z.
-    Inherits x and y. Bare AxisXYZ is Decimal / dimensionless. Supply N and U when needed —
-    e.g. AxisXYZ(Integer, unit:Millimeter).</documentation>
+  <documentation>Struct ValueType for axis-keyed { x, y, z }. Extends AxisXY(N) and adds z.
+    Inherits x and y. Bare AxisXYZ is Decimal (dimensionless). Supply a unit via N — e.g.
+    AxisXYZ(Decimal(unit:Millimeter)).</documentation>
 
   <genericTypes>
     <N baseType="btype:Number" defaultType="btype:Decimal"/>
-    <U baseType="core:Unit" defaultType="unit:None"/>
   </genericTypes>
 
   <properties>
-    <z type="N(U)">
+    <z type="N">
       <documentation>Value along the Z axis.</documentation>
     </z>
   </properties>
@@ -37,7 +34,7 @@
       Two-axis parent — x, y inherited; z declared here.
     </see>
     <see type="type:MultiAxis" relation="SeeAlso">
-      Abstract axis-map base — N and U.
+      Abstract axis-map base — N.
     </see>
   </references>
 

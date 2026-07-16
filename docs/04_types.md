@@ -322,7 +322,22 @@ SCAD:  "none"  or  serialized T
 Boolean | T
 ```
 
-During migration, legacy `com.machineblocks.bml.type.AutoOr_*` XSD/BML names may still resolve with `BML_LEGACY_TYPE_SOURCE` warning. New authoring uses union syntax only. See `17_type_system_bml.md` — Type Expressions.
+When `Boolean | T` is itself a **generic type argument**, write the union inside the parentheses:
+
+```text
+Was:  type="type:SelectiveGrid(BooleanOr(HoleType))"
+Now:  type="type:SelectiveGrid(Boolean | type:HoleType)"
+```
+
+```xml
+<holeX type="type:SelectiveGrid(Boolean | type:HoleType)">
+  <value>false</value>
+</holeX>
+```
+
+See `17_type_system_bml.md` — Type Expressions · Generics — BML attribute syntax.
+
+During migration, legacy `com.machineblocks.bml.type.AutoOr_*` XSD/BML names may still resolve with `BML_LEGACY_TYPE_SOURCE` warning. New authoring uses union syntax only.
 
 ---
 

@@ -17,8 +17,8 @@
   xmlns:bcore="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mb="com.machineblocks.bml"
-  xmlns:type="com.machineblocks.bml.type"
-  xmlns:unit="com.machineblocks.bml.unit"
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit"
   xmlns:bricks="com.machineblocks.bml.bricks">
   <name>Library</name>
   <type>mb:Library</type>
@@ -57,19 +57,19 @@
     </subLibraries>
 
     <blocks>
-      <type:Align />
-      <type:Auto />
-      <type:Axis />
-      <type:AxisXY />
-      <type:AxisXYZ />
-      <type:BaseCutout />
-      <type:Direction />
-      <type:Face />
-      <type:MBEnum />
-      <type:MultiAxis />
-      <type:SizeXYZ />
-      <unit:MBU />
-      <unit:GridUnit />
+      <mbtype:Align />
+      <mbtype:Auto />
+      <mbtype:Axis />
+      <mbtype:AxisXY />
+      <mbtype:AxisXYZ />
+      <mbtype:BaseCutout />
+      <mbtype:Direction />
+      <mbtype:Face />
+      <mbtype:MBEnum />
+      <mbtype:MultiAxis />
+      <mbtype:SizeXYZ />
+      <mbunit:MBU />
+      <mbunit:GridUnit />
     </blocks>
   </aggregations>
 

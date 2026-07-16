@@ -96,7 +96,7 @@ BML uses XML namespaces to resolve Block type references. Namespace prefixes map
 **Mandatory BML namespace:** All Block FQNs and xmlns bindings must live under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `com.machineblocks.bml.core.*`). See `00_bom_core.md` — Mandatory BML namespace · `BML_OUTSIDE_BML_NAMESPACE`.
 
 ```xml
-xmlns:core="com.machineblocks.bml.core"
+xmlns:mbcore="com.machineblocks.bml.core"
 xmlns:bricks="com.machineblocks.bml.bricks"
 xmlns:ac="com.martianmicro.anyclosure"
 ```
@@ -116,6 +116,51 @@ com.martianmicro.anyclosure.Wall
 The BOM always uses the full FQN. Namespace prefixes are a BML authoring convenience only.
 
 **General rule:** XML prefixes have no semantic meaning. During parsing, every prefix is resolved via the document's `xmlns:` declarations. The BOM stores **canonical namespace identifiers only** (FQN or URI) — never XML aliases. This applies to Block type references, member element QNames, `type:` shorthand, and all other namespaced BML syntax. See § Member Namespace (Element QName).
+
+### XML prefix best practice — reserve framework aliases
+
+Short aliases such as `core`, `type`, `unit`, `lang`, `status`, `constraint`, `validation`, `def`, `btype`, `bcore` should **preferentially bind to BlockML framework packages** (`org.blockml.bml.*`). Domain packages that mirror the same segment names should use a **domain-qualified prefix** so every document shares a recognizable alias vocabulary and framework vs domain stays obvious at a glance.
+
+```text
+Framework (org.blockml.bml.*) — keep short aliases free for these:
+  xmlns:core="org.blockml.bml.core"
+  xmlns:btype="org.blockml.bml.type"      — or type= only when no domain .type is imported
+  xmlns:unit="org.blockml.bml.unit"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:status="org.blockml.bml.status"
+  xmlns:def="org.blockml.bml.definition"
+  …
+
+Domain pendants — prefix with a short domain token (MachineBlocks → mb):
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit"
+  xmlns:bricks="com.machineblocks.bml.bricks"   — already distinct; no mb required
+```
+
+```xml
+<!-- Preferred in MachineBlocks documents -->
+xmlns:btype="org.blockml.bml.type"
+xmlns:unit="org.blockml.bml.unit"
+xmlns:mbcore="com.machineblocks.bml.core"
+xmlns:mbtype="com.machineblocks.bml.type"
+xmlns:mbunit="com.machineblocks.bml.unit"
+
+<baseType>mbcore:Block</baseType>
+<holeXY type="mbtype:AxisXY(Decimal(mbunit:MBU))" />
+<sizeAdj type="mbtype:AxisXY(Decimal(unit:Millimeter))" />
+```
+
+```text
+Avoid (ambiguous / steals framework aliases):
+  xmlns:core="com.machineblocks.bml.core"    ✗  — core should mean org.blockml.bml.core
+  xmlns:type="com.machineblocks.bml.type"    ✗  — clashes with framework type mental model
+  xmlns:unit="com.machineblocks.bml.unit"    ✗  — unit should mean org.blockml.bml.unit
+```
+
+Other domains follow the same pattern with their own short token (`ac` / `acore` / `atype`, …). Collective library packages (`bricks`, `calibration`) may keep a descriptive alias when they do not collide with framework segment names.
+
+Prefixes remain authoring-only — the BOM always stores FQNs. This convention is **best practice for readability and consistency**, not a compiler-enforced rule.
 
 ### Context-Bound Implicit Namespace
 
@@ -1211,8 +1256,11 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
-  xmlns:core="com.machineblocks.bml.core"
-  xmlns:type="com.machineblocks.bml.type"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:unit="org.blockml.bml.unit"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
     http://blockml.org/schema/block
@@ -1237,9 +1285,12 @@ MachineBlocks (Domain-Namespaces):
   http://machineblocks.com/schema/bricks      ← com.machineblocks.bml.bricks.*
   http://machineblocks.com/schema/calibration ← com.machineblocks.bml.calibration.*
 
-FQN-Referenz-Namespaces:
-  xmlns:core="com.machineblocks.bml.core"         ← <core:NativeBlock />
-  xmlns:type="com.machineblocks.bml.type"         ← type="type:SizeXYZ"
+FQN-Referenz-Namespaces (prefix best practice — see § XML prefix best practice):
+  xmlns:btype="org.blockml.bml.type"              ← Decimal, Boolean, …
+  xmlns:unit="org.blockml.bml.unit"               ← Millimeter, …
+  xmlns:mbcore="com.machineblocks.bml.core"       ← <mbcore:NativeBlock />
+  xmlns:mbtype="com.machineblocks.bml.type"       ← type="mbtype:SizeXYZ"
+  xmlns:mbunit="com.machineblocks.bml.unit"       ← MBU, GridUnit
   xmlns:bricks="com.machineblocks.bml.bricks"     ← <bricks:Standard />
   xmlns:cal="com.machineblocks.bml.calibration"   ← <cal:Calibrator />
 ```
@@ -1263,9 +1314,10 @@ IDEs nutzen eine Catalog-Datei im Projekt-Root für offline XSD-Auflösung statt
 XSD-Dateien werden als Teil der npm-Packages ausgeliefert.
 
 ```text
-xmlns:bml   — required when using bml:* directives
-xmlns:type  — required when using domain-specific types (e.g. type:SizeXYZ)
-xmlns:*     — domain namespaces for Block type references and member element prefixes
+xmlns:bml     — required when using bml:* directives
+xmlns:btype   — BlockML framework types (org.blockml.bml.type.*)
+xmlns:mbtype  — domain types (e.g. mbtype:SizeXYZ) — do not reuse type= for domain
+xmlns:*       — other namespaces for Block type references and member element prefixes
 ```
 
 ### Member Namespace

@@ -410,12 +410,24 @@ SizeXYZ[1..3]
 Boolean | Integer   — union
 "auto" | Float
 false | SizeXYZ
-Box<Integer>        — generic application (Box is a StructType with <genericTypes>)
+Box(Integer)        — generic application (parentheses in type="..." attributes)
+SelectiveGrid(Boolean | HoleType)  — union as generic type argument (allowed)
 bml:Self
 T                   — generic parameter reference
 ```
 
 In **`type="..."` XML attributes**, generic applications use **round parentheses** — not angle brackets — so values stay valid XML without escaping. See § Generics — BML attribute syntax.
+
+**Generic type arguments may be full type expressions** — including unions, multiplicity, nested generic applications, and instance configuration — not only bare named types. Parentheses bind the argument: `SelectiveGrid(Boolean | HoleType)` means `T = Boolean | HoleType`, not `SelectiveGrid(Boolean) | HoleType`.
+
+```xml
+<!-- BooleanOr&lt;HoleType&gt; inside a generic — write the union as the type argument -->
+<holeX type="type:SelectiveGrid(Boolean | type:HoleType)">
+  <value>false</value>
+</holeX>
+```
+
+When a generic parameter constrains `baseType` to `ValueType` (or another branch), a union argument is valid if **every alternative** satisfies that bound via `satisfiesTypeBound` (`BML_GENERIC_CONSTRAINT_VIOLATION` otherwise).
 
 The compiler may build internal structures in `org.blockml.bml.bom.*` (e.g. `UnionTypeDescriptor`, `CollectionTypeDescriptor`, `GenericApplicationDescriptor`, `SelfTypeReference`, `GenericParameterReference`). **BML does not define these as Block classes.**
 
@@ -1191,6 +1203,7 @@ Conceptual / internal     BML attribute (type="...")
 Box<Integer>              Box(Integer)
 TypeReference<B>          TypeReference(core:Block)
 MyBlock<abc.A, xyz.B>     mynamespace:MyBlock(abc:A, xyz:B)
+SelectiveGrid<Boolean|T>  SelectiveGrid(Boolean | type:HoleType)
 ```
 
 Resolution rules:
@@ -1202,6 +1215,15 @@ btype:TypeReference(core:Block) → org.blockml.bml.type.TypeReference<core.Bloc
 
 Each parenthesized argument binds one generic type parameter (in declaration order). When multiple parameters are present, the argument label (`abc`, `xyz`, …) matches the generic parameter name (the XML element name inside `<genericTypes>`) and qualifies the type argument as a namespace prefix (`abc:A` → `abc.A`). With a single generic parameter, the label may be omitted — only the type reference is written.
 
+**Type-expression arguments:** each `(...)` argument is a **TypeExpression**, not only a named FQN. Unions, multiplicity, nested generics, and `{…}` instance configuration are allowed inside the argument list:
+
+```text
+SelectiveGrid(Boolean | type:HoleType)
+AxisXYZ(Constant(Text){value="auto"} | Float)
+Box(Integer[])
+```
+
+`satisfiesTypeBound` applies to union arguments **per alternative** — see § Type Expressions.
 #### ValueType instance configuration
 
 Curly braces configure the Property's owned ValueType instance — orthogonal to generic `(...)` binding:
