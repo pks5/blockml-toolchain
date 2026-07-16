@@ -358,8 +358,9 @@ Member canonical path resolution (split form):
   type="com.foo.Bar" instance="myId"       → com.foo.Bar::myId
 Full-path form: attribute value stored as-is when it already contains the container segment (.properties., .capabilities., …).
 Omitted abstract/final/override          → false
-<abstract/> / <final/> / empty boolean   → parse error (explicit true or false required)
+<abstract/> / <final/> / empty boolean   → parse error (explicit true/false required; case variants True/TRUE/False/FALSE accepted)
 Attribute shorthand without value        → parse error (e.g. abstract without ="true")
+Boolean authored True/TRUE/False/FALSE   → BOM canonical lowercase true/false
 Omitted <visibility> on Sub-Block      → derive from <name> (__ → private, _ → protected, else public)
 <visibility> on root Block               → BML_VISIBILITY_ON_ROOT_BLOCK (error)
 <visibility> mismatches <name>           → BML_VISIBILITY_MISMATCH (error)

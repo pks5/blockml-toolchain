@@ -1338,7 +1338,8 @@ members       — member values for Properties and Capabilities (see below)
 ```text
 "groove"              — String literal
 2                     — Number literal
-true                  — Boolean literal
+true / True / TRUE    — Boolean literal (case-insensitive; preferred lowercase; BOM stores canonical)
+false / False / FALSE — Boolean literal (case-insensitive; preferred lowercase; BOM stores canonical)
 [1, 8, 9]             — Array literal (pure literals only outside ${ })
 {x: 1, y: 0}         — Object literal (pure literals only outside ${ })
 ${ size[0] + 1 }      — Expression

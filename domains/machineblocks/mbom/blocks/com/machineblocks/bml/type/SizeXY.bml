@@ -1,0 +1,40 @@
+<!--
+  MachineBlocks — SizeXY struct type
+
+  FQN: com.machineblocks.bml.type.SizeXY
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="com.machineblocks.bml.type">
+  <name>SizeXY</name>
+  <type>type:SizeXY</type>
+  <baseType>type:AxisXY(N)</baseType>
+  <is>A size along X and Y</is>
+
+  <documentation>Semantic Struct ValueType for a size pair { x, y }. Extends AxisXY(N) —
+    inherits x and y; adds size semantics (extent / footprint). Bare SizeXY is Decimal
+    (dimensionless). Supply a unit via N — e.g. SizeXY(Decimal(mbunit:GridUnit)) or
+    SizeXY(Decimal(unit:Millimeter)). Named SizeXY (not Size2D) — MachineBlocks axis-keyed
+    types use XY / XYZ, not 2D / 3D.</documentation>
+
+  <genericTypes>
+    <N baseType="btype:Number" defaultType="btype:Decimal"/>
+  </genericTypes>
+
+  <references>
+    <see type="type:AxisXY" relation="Extends">
+      Structural { x, y } map — SizeXY adds size semantics.
+    </see>
+    <see type="type:SizeXYZ" relation="SeeAlso">
+      Three-axis size map on AxisXYZ.
+    </see>
+    <see type="type:OffsetXY" relation="SeeAlso">
+      Parallel offset semantics on AxisXY.
+    </see>
+  </references>
+
+</block>

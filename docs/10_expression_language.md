@@ -26,7 +26,7 @@ The language is **extended JSON**: standard JSON syntax with four additions:
 4. Built-in calls         #math.min(a, b), #strings.trim(s)
 ```
 
-Everything else follows JSON subset rules: strings in double quotes, numbers, booleans `true`/`false`, arrays `[...]`, objects `{...}`. **`null` is not a BML literal** — absent/empty values are not typed as null; see `17_type_system_bml.md` — EMPTY.
+Everything else follows JSON subset rules: strings in double quotes, numbers, booleans, arrays `[...]`, objects `{...}`. Boolean literals in BML authoring and Expression Language accept case variants `true` / `True` / `TRUE` and `false` / `False` / `FALSE` (preferred lowercase). The BOM / AST always stores the canonical lowercase boolean. **`null` is not a BML literal** — absent/empty values are not typed as null; see `17_type_system_bml.md` — EMPTY.
 
 ---
 
@@ -295,7 +295,9 @@ string         ::= '"' [^"]* '"'
 
 number         ::= '-'? [0-9]+ ('.' [0-9]+)?
 
-boolean        ::= 'true' | 'false'
+boolean        ::= 'true' | 'True' | 'TRUE' | 'false' | 'False' | 'FALSE'
+                 — case variants of true/false; preferred lowercase; AST stores canonical lowercase
+
 
 array          ::= '[' ( expression (',' expression)* )? ']'
 
@@ -388,8 +390,8 @@ Whitespace (space, tab, newline) is ignored everywhere inside `${ }` except with
 42              — integer
 3.14            — float
 -0.5            — negative float
-true            — boolean
-false           — boolean
+true            — boolean (also True, TRUE)
+false           — boolean (also False, FALSE; preferred lowercase)
 ```
 
 Absent or empty values are not expressed as `null` — omit the attribute, use `""` for empty String, or use a union sentinel (`"none"`, `false`, …). See `17_type_system_bml.md` — EMPTY.

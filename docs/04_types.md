@@ -141,15 +141,18 @@ org.blockml.bml.type.Text
 
 Numeric branch: `org.blockml.bml.type.Number` (abstract) — `Integer`, `Float`, and `Decimal` extend `Number`.
 
-MBML serialization:
+MBML / BML serialization:
 
 ```text
-Boolean:  "true" | "false"
+Boolean:  true | True | TRUE | false | False | FALSE
+          (preferred: lowercase true / false; BOM stores canonical lowercase)
 Integer:  "4"
 Float:    "0.5"
 Decimal:  "0.5"
 String:   "west"
 ```
+
+Boolean literals are **case-insensitive** at authoring time. Empty boolean elements and attribute shorthand without an explicit value are not permitted.
 
 ---
 

@@ -13,7 +13,8 @@
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbtype="com.machineblocks.bml.type"
   xmlns:unit="org.blockml.bml.unit"
-  xmlns:mbunit="com.machineblocks.bml.unit">
+  xmlns:mbunit="com.machineblocks.bml.unit"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation">
   <name>NativeBlock</name>
   <type>mbcore:NativeBlock</type>
   <baseType>mbcore:Block</baseType>
@@ -36,7 +37,7 @@
 
   <!-- Native MB properties — all mb_block() parameters from 09_api_parameters.yml (v3.0.5) -->
   <properties>
-    <align type="mbtype:AxisXYZ(mbtype:Align)">
+    <align type="mbtype:Align | mbtype:AxisXYZ(mbtype:Align)">
       <documentation>Alignment relative to the origin, per axis.
         "start" = toward x-/y-/z-, "end" = toward x+/y+/z+.
         Origin is [0,0,0] globally, or defined by parent's alignChildren.
@@ -45,17 +46,19 @@
       <changelog>
         <change version="3.0.0">mb_param_align() now always resolves to a 3-element array.</change>
       </changelog>
-      <value>start</value>
+      <value>Start</value>
+      <scad:value>start</scad:value>
     </align>
 
-    <alignChildren type="mbtype:AxisXYZ(mbtype:Align)">
+    <alignChildren type="mbtype:Align | mbtype:AxisXYZ(mbtype:Align)">
       <documentation>Defines the origin inside a parent brick for child positioning.
         Same convention as align. Children use this as their reference point.
       </documentation>
       <changelog>
         <change version="3.0.0">mb_param_alignChildren() now always resolves to a 3-element array.</change>
       </changelog>
-      <value>start</value>
+      <value>Start</value>
+      <scad:value>start</scad:value>
     </alignChildren>
 
     <base type="Boolean">
@@ -64,6 +67,7 @@
         text, etc.) are controlled separately.
       </documentation>
       <value>true</value>
+      <scad:value>true</scad:value>
     </base>
 
     <baseAdjustment type="mbtype:FaceMapXYZ(Decimal(unit:Millimeter))">
@@ -110,11 +114,13 @@
         </change>
       </changelog>
       <value></value>
+      <scad:value></scad:value>
     </baseAdjustment>
 
     <baseClampHeight type="Decimal">
       <documentation>Height of the base clamp lip.</documentation>
       <value>0.5</value>
+      <scad:value>0.5</scad:value>
     </baseClampHeight>
 
     <baseClampOffset type="Decimal">
@@ -124,6 +130,7 @@
         that increases clamping force.
       </documentation>
       <value>0.25</value>
+      <scad:value>0.25</scad:value>
     </baseClampOffset>
 
     <baseClampOuter type="Boolean">
@@ -133,11 +140,13 @@
         overall block.
       </documentation>
       <value>false</value>
+      <scad:value>false</scad:value>
     </baseClampOuter>
 
     <baseClampThickness type="Decimal">
       <documentation>Thickness of the base clamp lip.</documentation>
       <value>0.1</value>
+      <scad:value>0.1</scad:value>
     </baseClampThickness>
 
     <baseColor type="btype:Color">
@@ -145,6 +154,7 @@
         Does NOT apply to text (use textColor separately).
       </documentation>
       <value>#EAC645</value>
+      <scad:value>#EAC645</scad:value>
     </baseColor>
 
     <baseCrop type="mbtype:FaceMapXYZ(Decimal(mbunit:GridUnit))">
@@ -160,6 +170,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0</value>
+      <scad:value>0</scad:value>
     </baseCrop>
 
     <baseCutoutMaxDepth type="Decimal">
@@ -170,6 +181,7 @@
         shrinks to its minimum value.
       </documentation>
       <value>5</value>
+      <scad:value>5</scad:value>
     </baseCutoutMaxDepth>
 
     <baseCutoutType type="mbtype:BaseCutout">
@@ -181,12 +193,14 @@
         none: Solid underside, no opening. For solid structures in composite
           blocks, e.g. embedded blocks without their own underside.
       </documentation>
-      <value>standard</value>
+      <value>Standard</value>
+      <scad:value>standard</scad:value>
     </baseCutoutType>
 
     <baseRoundingRadius type="mbtype:RoundingRadius">
       <documentation>Rounding radius of the block corners.</documentation>
       <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </baseRoundingRadius>
 
     <baseWallGaps type="mbtype:WallGap[]">
@@ -198,13 +212,15 @@
       </documentation>
       <since>3.0.0</since>
       <value>[]</value>
+      <scad:value>[]</scad:value>
     </baseWallGaps>
 
-    <baseWallThickness type="Decimal">
+    <baseWallThickness type="mbtype:Auto | Decimal">
       <documentation>Wall thickness of the underside opening (baseCutoutType=standard).
         Automatically calculated. Usually does not need adjustment.
       </documentation>
-      <value>auto</value>
+      <value>Auto</value>
+      <scad:value>auto</scad:value>
     </baseWallThickness>
 
     <baseWallThicknessAdjustment type="Decimal">
@@ -212,6 +228,7 @@
         Only for calibration. Not for AI in settings.
       </documentation>
       <value>-0.1</value>
+      <scad:value>-0.1</scad:value>
     </baseWallThicknessAdjustment>
 
     <bevel type="mbtype:PerSide4(AxisXY(Decimal(mbunit:GridUnit)))">
@@ -224,19 +241,22 @@
         <change version="3.0.0">Can now be combined with slope.</change>
       </changelog>
       <value>[[0,0], [0,0], [0,0], [0,0]]</value>
+      <scad:value>[[0,0], [0,0], [0,0], [0,0]]</scad:value>
     </bevel>
 
     <connectorDepth type="Decimal">
       <documentation>How far the connector triangles protrude.</documentation>
       <value>0.75</value>
+      <scad:value>0.75</scad:value>
     </connectorDepth>
 
-    <connectorLength type="Decimal">
+    <connectorLength type="mbtype:Auto | Decimal">
       <documentation>Length of the connector run on the face. At "auto" equals the
         available space (brick height for x/y faces, width/depth for z faces).
       </documentation>
       <since>3.0.0</since>
-      <value>auto</value>
+      <value>Auto</value>
+      <scad:value>auto</scad:value>
     </connectorLength>
 
     <connectorLengthClearance type="Decimal">
@@ -245,6 +265,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </connectorLengthClearance>
 
     <connectorSideClearance type="Decimal">
@@ -253,11 +274,13 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.1</value>
+      <scad:value>0.1</scad:value>
     </connectorSideClearance>
 
     <connectorWidth type="Decimal">
       <documentation>Width of the connector triangles.</documentation>
       <value>2.25</value>
+      <scad:value>2.25</scad:value>
     </connectorWidth>
 
     <connectors type="Constant(Boolean){false} | mbtype:Connector[]">
@@ -273,6 +296,7 @@
         </change>
       </changelog>
       <value>false</value>
+      <scad:value>false</scad:value>
     </connectors>
 
     <cutouts type="Constant(Boolean){false} | mbtype:Cutout[]">
@@ -283,6 +307,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>false</value>
+      <scad:value>false</scad:value>
     </cutouts>
 
     <debug type="Boolean">
@@ -291,6 +316,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>false</value>
+      <scad:value>false</scad:value>
     </debug>
 
     <debugShowOnly type="Text">
@@ -299,7 +325,6 @@
         on geometry semantics — for debugging/inspection only.
       </documentation>
       <since>3.0.0</since>
-      <value></value>
     </debugShowOnly>
 
     <direction type="mbtype:Direction">
@@ -309,29 +334,34 @@
         "west" orientation. Direction only changes placement/display.
         Before align is applied the brick is centered on its body center.
       </documentation>
-      <value>west</value>
+      <value>West</value>
+      <scad:value>west</scad:value>
     </direction>
 
     <grille type="mbtype:Grille">
       <documentation>Whether the top plate is rendered as a grille with regular openings.
         "x" or "y" defines the direction of the grille bars.
       </documentation>
-      <value>none</value>
+      <value>None</value>
+      <scad:value>none</scad:value>
     </grille>
 
     <grilleCount type="Integer">
       <documentation>Number of grille bars across the entire surface.</documentation>
       <value>5</value>
+      <scad:value>5</scad:value>
     </grilleCount>
 
     <grilleDepth type="Decimal">
       <documentation>Depth of the grille openings.</documentation>
       <value>1</value>
+      <scad:value>1</scad:value>
     </grilleDepth>
 
     <grilleInverted type="Boolean">
       <documentation>Whether the grille starts with an opening instead of a solid bar.</documentation>
       <value>false</value>
+      <scad:value>false</scad:value>
     </grilleInverted>
 
     <holeX type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
@@ -339,6 +369,7 @@
         Multiple rows possible depending on block height.
       </documentation>
       <value>false</value>
+      <scad:value>false</scad:value>
     </holeX>
     
     <holeY type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
@@ -348,6 +379,7 @@
         holeX and holeZ via the holeXYZ* and holeXY* unified parameters.
       </documentation>
       <value>false</value>
+      <scad:value>false</scad:value>
     </holeY>
 
     <holeZ type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
@@ -357,6 +389,7 @@
         Z holes now also support insets (holeXYZInsetThickness/Depth).
       </documentation>
       <value>false</value>
+      <scad:value>false</scad:value>
     </holeZ>
 
     <holeXYGridOffsetZ type="mbtype:AxisXY(Decimal(mbunit:MBU))">
@@ -366,12 +399,14 @@
       </documentation>
       <since>3.0.0</since>
       <value>3.625</value>
+      <scad:value>3.625</scad:value>
     </holeXYGridOffsetZ>
 
     <holeXYGridOffsetZAdjustment type="mbtype:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYGridOffsetZ.</documentation>
       <since>3.0.0</since>
       <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </holeXYGridOffsetZAdjustment>
 
     <holeXYGridSizeZ type="mbtype:AxisXY(Decimal(mbunit:MBU))">
@@ -380,12 +415,14 @@
       </documentation>
       <since>3.0.0</since>
       <value>6</value>
+      <scad:value>6</scad:value>
     </holeXYGridSizeZ>
 
     <holeXYGridSizeZAdjustment type="mbtype:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYGridSizeZ.</documentation>
       <since>3.0.0</since>
       <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </holeXYGridSizeZAdjustment>
 
     <holeXYMinTopMargin type="mbtype:AxisXY(Decimal(mbunit:MBU))">
@@ -394,6 +431,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.5</value>
+      <scad:value>0.5</scad:value>
     </holeXYMinTopMargin>
 
     <holeXYZAxleThickness type="mbtype:AxisXYZ(Decimal(mbunit:MBU))">
@@ -402,6 +440,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>1</value>
+      <scad:value>1</scad:value>
     </holeXYZAxleThickness>
 
     <holeXYZAxleThicknessAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
@@ -411,6 +450,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </holeXYZAxleThicknessAdjustment>
 
     <holeXYZDiameter type="mbtype:Auto | mbtype:AxisXYZ(Decimal(mbunit:MBU))">
@@ -418,7 +458,8 @@
         Follows the 1/2/3-value array rule.
       </documentation>
       <since>3.0.0</since>
-      <value>auto</value>
+      <value>Auto</value>
+      <scad:value>auto</scad:value>
     </holeXYZDiameter>
 
     <holeXYZDiameterAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
@@ -427,9 +468,10 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.3</value>
+      <scad:value>0.3</scad:value>
     </holeXYZDiameterAdjustment>
 
-    <holeXYZEdgeMode type="mbtype:AxisXYZ(mbtype:HoleEdgeMode)">
+    <holeXYZEdgeMode type="mbtype:HoleEdgeMode | mbtype:AxisXYZ(mbtype:HoleEdgeMode)">
       <documentation>Controls whether partial (half) Technic holes are drawn at the edges
         of the block for X, Y, and Z direction holes.
 
@@ -449,7 +491,8 @@
         list entries does not support "start". Allowed: "none", "end", "all".
       </documentation>
       <since>3.0.0</since>
-      <value>none</value>
+      <value>None</value>
+      <scad:value>none</scad:value>
     </holeXYZEdgeMode>
 
     <holeXYZInsetDepth type="mbtype:AxisXYZ(Decimal(mbunit:MBU))">
@@ -458,6 +501,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.5</value>
+      <scad:value>0.5</scad:value>
     </holeXYZInsetDepth>
 
     <holeXYZInsetDepthAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
@@ -466,6 +510,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </holeXYZInsetDepthAdjustment>
 
     <holeXYZInsetThickness type="mbtype:AxisXYZ(Decimal(mbunit:MBU))">
@@ -476,6 +521,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.375</value>
+      <scad:value>0.375</scad:value>
     </holeXYZInsetThickness>
 
     <holeXYZInsetThicknessAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
@@ -484,6 +530,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </holeXYZInsetThicknessAdjustment>
 
     <holeXYZShift type="Boolean | mbtype:AxisXYZ(Boolean)">
@@ -493,6 +540,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>false</value>
+      <scad:value>false</scad:value>
     </holeXYZShift>
 
     <holeXYZType type="mbtype:AxisXYZ(mbtype:HoleType)">
@@ -501,7 +549,8 @@
         Follows the 1/2/3-value array rule.
       </documentation>
       <since>3.0.0</since>
-      <value>pin</value>
+      <value>Pin</value>
+      <scad:value>pin</scad:value>
     </holeXYZType>
 
     
@@ -532,6 +581,7 @@
       </documentation>
       <since>3.0.0</since>
       <value></value>
+      <scad:value></scad:value>
     </id>
 
     <offset type="mbtype:AxisXYZ(Decimal(mbunit:GridUnit))">
@@ -540,6 +590,7 @@
         Origin depends on whether the brick is global or a child.
       </documentation>
       <value>[0, 0, 0]</value>
+      <scad:value>[0, 0, 0]</scad:value>
     </offset>
 
     <pcb type="Constant(Boolean){false} | mbtype:PcbMountingType">
@@ -554,6 +605,7 @@
         </change>
       </changelog>
       <value>false</value>
+      <scad:value>false</scad:value>
     </pcb>
 
     <pcbDimensions type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
@@ -561,29 +613,34 @@
         especially relevant for pcb="clips".
       </documentation>
       <value>[20, 30, 3]</value>
+      <scad:value>[20, 30, 3]</scad:value>
     </pcbDimensions>
 
     <pcbOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
       <documentation>Offset of the PCB from the center of the brick.</documentation>
       <value>[0, 0]</value>
+      <scad:value>[0, 0]</scad:value>
     </pcbOffset>
 
     <pcbSocketDiameter type="Decimal">
       <documentation>Diameter of screw sockets.</documentation>
       <since>3.0.0</since>
       <value>5</value>
+      <scad:value>5</scad:value>
     </pcbSocketDiameter>
 
     <pcbSocketHeight type="Decimal">
       <documentation>Height of the screw sockets.</documentation>
       <since>3.0.0</since>
       <value>3</value>
+      <scad:value>3</scad:value>
     </pcbSocketHeight>
 
     <pcbSocketHoleDiameter type="Decimal">
       <documentation>Diameter of the screw hole inside the socket.</documentation>
       <since>3.0.0</since>
       <value>2.2</value>
+      <scad:value>2.2</scad:value>
     </pcbSocketHoleDiameter>
 
     <pcbSockets type="mbtype:PcbSocket[]">
@@ -592,6 +649,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>[]</value>
+      <scad:value>[]</scad:value>
     </pcbSockets>
 
     <pillarGapAutoConfig type="mbtype:AxisXY(Integer)">
@@ -614,6 +672,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>[2, 10]</value>
+      <scad:value>[2, 10]</scad:value>
     </pillarGapAutoConfig>
 
     <pillarInnerClampThickness type="Decimal">
@@ -623,6 +682,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.1</value>
+      <scad:value>0.1</scad:value>
     </pillarInnerClampThickness>
 
     <pillarOriginalWallThickness type="Decimal">
@@ -631,11 +691,13 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.53125</value>
+      <scad:value>0.53125</scad:value>
     </pillarOriginalWallThickness>
 
     <pillars type="mbtype:SelectiveGrid(Boolean)">
       <documentation>Whether tubes/pins are drawn on the underside (baseCutoutType=standard).</documentation>
       <value>true</value>
+      <scad:value>true</scad:value>
     </pillars>
 
     <pinDiameter type="Decimal">
@@ -643,11 +705,13 @@
         Automatically calculated.
       </documentation>
       <value>auto</value>
+      <scad:value>auto</scad:value>
     </pinDiameter>
 
     <pinDiameterAdjustment type="Decimal">
       <documentation>Calibration adjustment for pin diameter.</documentation>
       <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </pinDiameterAdjustment>
 
     <ports type="mbtype:Port[]">
@@ -657,6 +721,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>false</value>
+      <scad:value>false</scad:value>
     </ports>
 
     <printerLayerHeight type="Decimal">
@@ -673,6 +738,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </printerLayerHeight>
 
     <printerNozzleDiameter type="Decimal">
@@ -687,6 +753,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.4</value>
+      <scad:value>0.4</scad:value>
     </printerNozzleDiameter>
 
     <quality type="mbtype:QualityPreset">
@@ -697,7 +764,8 @@
         "print"    — high quality for 3D print export
         "render"   — maximum quality for final renders
       </documentation>
-      <value>normal</value>
+      <value>Normal</value>
+      <scad:value>normal</scad:value>
     </quality>
 
     <recess type="Boolean">
@@ -706,6 +774,7 @@
         depth is reduced to minimum (1 mbu) if recessDepth=auto.
       </documentation>
       <value>false</value>
+      <scad:value>false</scad:value>
     </recess>
 
     <recessAdjustment type="mbtype:Auto | mbtype:FaceMapXYZ(Decimal(unit:Millimeter))">
@@ -725,9 +794,10 @@
       </documentation>
       <since>3.0.0</since>
       <value>auto</value>
+      <scad:value>auto</scad:value>
     </recessAdjustment>
 
-    <recessDepth type="Decimal">
+    <recessDepth type="mbtype:Auto | Decimal">
       <documentation>Depth of the recess cavity, expressed as multiples of one plate (unitGrid[1] = 2 mbu).
         At "auto" depth is maximized.
         When set to an absolute value, the baseCutout (standard) goes up to
@@ -737,7 +807,8 @@
       <changelog>
         <change version="3.0.0">Unit clarified: unitGrid[1] (plates), not raw mbu.</change>
       </changelog>
-      <value>auto</value>
+      <value>Auto</value>
+      <scad:value>auto</scad:value>
     </recessDepth>
 
     <recessRoundingRadius type="mbtype:Auto | mbtype:RoundingRadius">
@@ -745,6 +816,7 @@
         rounding radius. Usually does not need adjustment.
       </documentation>
       <value>auto</value>
+      <scad:value>auto</scad:value>
     </recessRoundingRadius>
 
     <recessStudPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
@@ -753,6 +825,7 @@
         wall than this padding value are not drawn.
       </documentation>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </recessStudPadding>
 
     <recessStudShift type="Boolean">
@@ -761,6 +834,7 @@
         true: studs are shifted by half a stud in both directions.
       </documentation>
       <value>false</value>
+      <scad:value>false</scad:value>
     </recessStudShift>
 
     <recessStudType type="mbtype:StudType">
@@ -768,6 +842,7 @@
         solid: massive studs. hollow: studs with a hole in the center.
       </documentation>
       <value>solid</value>
+      <scad:value>solid</scad:value>
     </recessStudType>
 
     <recessStuds type="Boolean">
@@ -776,6 +851,7 @@
         studs too close to the recess wall are hidden.
       </documentation>
       <value>true</value>
+      <scad:value>true</scad:value>
     </recessStuds>
 
     <recessWallGapStuds type="Boolean">
@@ -784,6 +860,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>false</value>
+      <scad:value>false</scad:value>
     </recessWallGapStuds>
 
     <recessWallGaps type="mbtype:WallGap[]">
@@ -795,6 +872,7 @@
         <change version="3.0.0">Short form input added; sides can now be specified as strings.</change>
       </changelog>
       <value>[]</value>
+      <scad:value>[]</scad:value>
     </recessWallGaps>
 
     <recessWallStuds type="Boolean">
@@ -804,11 +882,13 @@
       </documentation>
       <since>3.0.0</since>
       <value>true</value>
+      <scad:value>true</scad:value>
     </recessWallStuds>
 
     <recessWallThickness type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
       <documentation>Wall thickness of the recess cavity (box wall thickness).</documentation>
       <value>0.333</value>
+      <scad:value>0.333</scad:value>
     </recessWallThickness>
 
     <reliefCut type="Boolean">
@@ -818,18 +898,21 @@
       </documentation>
       <since>3.0.0</since>
       <value>false</value>
+      <scad:value>false</scad:value>
     </reliefCut>
 
     <reliefCutHeight type="Decimal">
       <documentation>Height of the relief cut.</documentation>
       <since>3.0.0</since>
       <value>0.375</value>
+      <scad:value>0.375</scad:value>
     </reliefCutHeight>
 
     <reliefCutThickness type="Decimal">
       <documentation>Thickness of the cut-away portion.</documentation>
       <since>3.0.0</since>
       <value>0.375</value>
+      <scad:value>0.375</scad:value>
     </reliefCutThickness>
 
     <render type="Boolean">
@@ -839,6 +922,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>true</value>
+      <scad:value>true</scad:value>
     </render>
 
     <rotation type="mbtype:AxisXYZ(FloatDeg)">
@@ -848,16 +932,19 @@
         along with the parent.
       </documentation>
       <value>[0, 0, 0]</value>
+      <scad:value>[0, 0, 0]</scad:value>
     </rotation>
 
     <rotationOffset type="mbtype:AxisXYZ(Decimal(mbunit:GridUnit))">
       <documentation>Shifts the rotation pivot before rotation is applied.</documentation>
       <value>[0, 0, 0]</value>
+      <scad:value>[0, 0, 0]</scad:value>
     </rotationOffset>
 
     <rotationOffsetRevert type="Boolean">
       <documentation>Whether the rotationOffset is reversed after rotation.</documentation>
       <value>true</value>
+      <scad:value>true</scad:value>
     </rotationOffsetRevert>
 
     <scadPreviewMaxMult type="Decimal">
@@ -866,6 +953,7 @@
         Higher values allow more aggressive quality reduction during preview.
       </documentation>
       <value>2.5</value>
+      <scad:value>2.5</scad:value>
     </scadPreviewMaxMult>
 
     <scadPreviewPreRender type="Boolean">
@@ -873,6 +961,7 @@
         instead of CSG.
       </documentation>
       <value>true</value>
+      <scad:value>true</scad:value>
     </scadPreviewPreRender>
 
     <scadPreviewPreRenderConvexity type="Integer">
@@ -880,6 +969,7 @@
         Used with scadPreviewPreRender.
       </documentation>
       <value>25</value>
+      <scad:value>25</scad:value>
     </scadPreviewPreRenderConvexity>
 
     <scadPreviewQuality type="Decimal">
@@ -888,6 +978,7 @@
         Only applied when $preview is true.
       </documentation>
       <value>1.0</value>
+      <scad:value>1.0</scad:value>
     </scadPreviewQuality>
 
     <scadQualityClassFactors type="mbtype:AxisXYZ(Float)">
@@ -895,6 +986,7 @@
         Higher values reduce quality and improve render performance.
       </documentation>
       <value>[1.00, 1.35, 2.25]</value>
+      <scad:value>[1.00, 1.35, 2.25]</scad:value>
     </scadQualityClassFactors>
 
     <scadQualityClassMinSegments type="mbtype:AxisXYZ(Integer)">
@@ -902,6 +994,7 @@
         Prevents small radii from becoming overly coarse.
       </documentation>
       <value>[16, 12, 8]</value>
+      <scad:value>[16, 12, 8]</scad:value>
     </scadQualityClassMinSegments>
 
     <scadQualityProfile type="mbtype:ScadQualityProfile">
@@ -911,6 +1004,7 @@
         maxSegments limits the maximum full-circle resolution.
       </documentation>
       <value>[[0.55, 32], [0.38, 48], [0.28, 64], [0.16, 120]]</value>
+      <scad:value>[[0.55, 32], [0.38, 48], [0.28, 64], [0.16, 120]]</scad:value>
     </scadQualityProfile>
 
     <scadQualitySegmentMultiplier type="Decimal">
@@ -921,6 +1015,7 @@
         Useful for global tuning without modifying quality profiles.
       </documentation>
       <value>1</value>
+      <scad:value>1</scad:value>
     </scadQualitySegmentMultiplier>
 
     <scale type="Decimal">
@@ -929,18 +1024,21 @@
         physical dimensions change. Adjustments (mm) do NOT scale.
       </documentation>
       <value>1.0</value>
+      <scad:value>1.0</scad:value>
     </scale>
 
     <screwHoleDepth type="Decimal">
       <documentation>Default depth of screw holes. Can be overridden per hole in screwHoles.</documentation>
       <since>3.0.0</since>
       <value>4</value>
+      <scad:value>4</scad:value>
     </screwHoleDepth>
 
     <screwHoleDiameter type="Decimal">
       <documentation>Default diameter of screw holes. Can be overridden per hole in screwHoles.</documentation>
       <since>3.0.0</since>
       <value>1.6</value>
+      <scad:value>1.6</scad:value>
     </screwHoleDiameter>
 
     <screwHoleInsetDepth type="Decimal">
@@ -949,6 +1047,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.8</value>
+      <scad:value>0.8</scad:value>
     </screwHoleInsetDepth>
 
     <screwHoleInsetThickness type="Decimal">
@@ -957,11 +1056,13 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.6</value>
+      <scad:value>0.6</scad:value>
     </screwHoleInsetThickness>
 
     <screwHoleZHelperHeight type="Decimal">
       <documentation>Height of the helper layers for Z-face screw holes.</documentation>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </screwHoleZHelperHeight>
 
     <screwHoleZHelperLayerOffset type="Decimal">
@@ -970,6 +1071,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </screwHoleZHelperLayerOffset>
 
     <screwHoleZHelperThickness type="Decimal">
@@ -977,6 +1079,7 @@
         Required for baseCutoutType=standard to avoid needing print support.
       </documentation>
       <value>0.8</value>
+      <scad:value>0.8</scad:value>
     </screwHoleZHelperThickness>
 
     <screwHoles type="mbtype:ScrewHole[]">
@@ -988,6 +1091,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>[]</value>
+      <scad:value>[]</scad:value>
     </screwHoles>
 
     <size type="mbtype:SizeXYZ">
@@ -1001,6 +1105,7 @@
         <change version="3.0.0">Values must be integers. Fractional values are no longer permitted.</change>
       </changelog>
       <value>[1, 1, 1]</value>
+      <scad:value>[1, 1, 1]</scad:value>
     </size>
 
     <sizeAdjustment type="mbtype:FaceMapXYZ(Decimal(unit:Millimeter))">
@@ -1022,6 +1127,7 @@
         </change>
       </changelog>
       <value>[-0.1, 0]</value>
+      <scad:value>[-0.1, 0]</scad:value>
     </sizeAdjustment>
 
     <sizeMod type="mbtype:FaceMapXYZ(Decimal(mbunit:GridUnit))">
@@ -1045,6 +1151,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>[]</value>
+      <scad:value>[]</scad:value>
     </sizeMod>
 
     <slope type="Constant(Boolean){false} | mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
@@ -1059,6 +1166,7 @@
         <change version="3.0.0">Can now be combined with bevel. The conflicts_with constraint has been removed.</change>
       </changelog>
       <value>false</value>
+      <scad:value>false</scad:value>
     </slope>
 
     <slopeBaseHeightBottom type="Decimal">
@@ -1067,6 +1175,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>1.333</value>
+      <scad:value>1.333</scad:value>
     </slopeBaseHeightBottom>
 
     <slopeBaseHeightInner type="Decimal">
@@ -1075,6 +1184,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>1.125</value>
+      <scad:value>1.125</scad:value>
     </slopeBaseHeightInner>
 
     <slopeBaseHeightTop type="Decimal">
@@ -1083,6 +1193,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>1</value>
+      <scad:value>1</scad:value>
     </slopeBaseHeightTop>
 
     <stabilizerExpansion type="Integer">
@@ -1090,17 +1201,20 @@
         stabilizerExpansionOffset from the bottom edge.
       </documentation>
       <value>2</value>
+      <scad:value>2</scad:value>
     </stabilizerExpansion>
 
     <stabilizerExpansionOffset type="Decimal">
       <documentation>Distance of expanded grid elements from the bottom edge.</documentation>
       <value>1</value>
+      <scad:value>1</scad:value>
     </stabilizerExpansionOffset>
 
     <stabilizerHeight type="Decimal">
       <documentation>Height of the stabilizer grid.</documentation>
       <since>3.0.0</since>
       <value>0.5</value>
+      <scad:value>0.5</scad:value>
     </stabilizerHeight>
 
     <stabilizerLayerOffset type="Decimal">
@@ -1110,12 +1224,14 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </stabilizerLayerOffset>
 
     <stabilizerThickness type="Decimal">
       <documentation>Width of a single grid strut.</documentation>
       <since>3.0.0</since>
       <value>0.5</value>
+      <scad:value>0.5</scad:value>
     </stabilizerThickness>
 
     <stabilizers type="Boolean">
@@ -1125,6 +1241,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>true</value>
+      <scad:value>true</scad:value>
     </stabilizers>
 
     <studBaseOverlap type="Decimal">
@@ -1136,6 +1253,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.25</value>
+      <scad:value>0.25</scad:value>
     </studBaseOverlap>
 
     <studClampHeight type="Decimal">
@@ -1144,6 +1262,7 @@
         Only active when studClampThickness &gt; 0.
       </documentation>
       <value>0.5</value>
+      <scad:value>0.5</scad:value>
     </studClampHeight>
 
     <studClampOffset type="Decimal">
@@ -1153,11 +1272,13 @@
       </documentation>
       <since>3.0.0</since>
       <value>auto</value>
+      <scad:value>auto</scad:value>
     </studClampOffset>
 
     <studClampThickness type="Decimal">
       <documentation>Thickness of the stud clamp ring. At 0 no clamp is active.</documentation>
       <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </studClampThickness>
 
     <studCutoutDiameterAdjustment type="Decimal">
@@ -1167,6 +1288,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </studCutoutDiameterAdjustment>
 
     <studCutoutHeightAdjustment type="Decimal">
@@ -1176,26 +1298,31 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.4</value>
+      <scad:value>0.4</scad:value>
     </studCutoutHeightAdjustment>
 
     <studDiameter type="Decimal">
       <documentation>Diameter of studs. Usually does not need adjustment.</documentation>
       <value>3</value>
+      <scad:value>3</scad:value>
     </studDiameter>
 
     <studDiameterAdjustment type="Decimal">
       <documentation>Calibration adjustment for studDiameter.</documentation>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </studDiameterAdjustment>
 
     <studHeight type="Decimal">
       <documentation>Height of studs. Usually does not need adjustment.</documentation>
       <value>1</value>
+      <scad:value>1</scad:value>
     </studHeight>
 
     <studHeightAdjustment type="Decimal">
       <documentation>Calibration adjustment for studHeight.</documentation>
       <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </studHeightAdjustment>
 
     <studHoleClampThickness type="Decimal">
@@ -1203,6 +1330,7 @@
         A constriction of the inner hole so pins/axles grip in the stud.
       </documentation>
       <value>0.1</value>
+      <scad:value>0.1</scad:value>
     </studHoleClampThickness>
 
     <studHoleDiameter type="Decimal">
@@ -1210,16 +1338,19 @@
         Automatically calculated.
       </documentation>
       <value>auto</value>
+      <scad:value>auto</scad:value>
     </studHoleDiameter>
 
     <studHoleDiameterAdjustment type="Decimal">
       <documentation>Calibration adjustment for studHoleDiameter.</documentation>
       <value>0.3</value>
+      <scad:value>0.3</scad:value>
     </studHoleDiameterAdjustment>
 
     <studIcon type="Text">
       <documentation>SVG file engraved into each stud.</documentation>
       <value>../../pattern/bolt-solid-full.svg</value>
+      <scad:value>../../pattern/bolt-solid-full.svg</scad:value>
     </studIcon>
 
     <studIconColor type="mtype:Inherit | mbtype:Color">
@@ -1227,6 +1358,7 @@
         Only visually relevant when studIconDepth &gt; 0.
       </documentation>
       <value>inherit</value>
+      <scad:value>inherit</scad:value>
     </studIconColor>
 
     <studIconDepth type="Decimal">
@@ -1234,6 +1366,7 @@
         Positive = raised above the stud.
       </documentation>
       <value>-0.2</value>
+      <scad:value>-0.2</scad:value>
     </studIconDepth>
 
     <studIconDimensions type="mbtype:AxisXY(FloatPt)">
@@ -1241,11 +1374,13 @@
         Default values match all standard icons in the /patterns directory.
       </documentation>
       <value>[169.333, 169.333]</value>
+      <scad:value>[169.333, 169.333]</scad:value>
     </studIconDimensions>
 
     <studIconScale type="Decimal">
       <documentation>Effective scale factor for the stud icon.</documentation>
       <value>0.8</value>
+      <scad:value>0.8</scad:value>
     </studIconScale>
 
     <studMaxOverhang type="Decimal">
@@ -1253,6 +1388,7 @@
         Studs exceeding this are not drawn.
       </documentation>
       <value>0.3</value>
+      <scad:value>0.3</scad:value>
     </studMaxOverhang>
 
     <studPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
@@ -1260,11 +1396,13 @@
         whether studs are drawn, allowing outer studs to be hidden.
       </documentation>
       <value>0</value>
+      <scad:value>0</scad:value>
     </studPadding>
 
     <studRounding type="Decimal">
       <documentation>Rounding radius of the upper stud edge.</documentation>
       <value>0.0625</value>
+      <scad:value>0.0625</scad:value>
     </studRounding>
 
     <studShift type="Boolean">
@@ -1273,11 +1411,13 @@
         true: studs sit directly above pillars.
       </documentation>
       <value>false</value>
+      <scad:value>false</scad:value>
     </studShift>
 
     <studType type="mbtype:StudType">
       <documentation>Type of studs. solid: massive. hollow: with a hole in the center.</documentation>
       <value>solid</value>
+      <scad:value>solid</scad:value>
     </studType>
 
     <studs type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:StudType)">
@@ -1285,6 +1425,7 @@
         including stud type override.
       </documentation>
       <value>true</value>
+      <scad:value>true</scad:value>
     </studs>
 
     <surfacePattern type="Text">
@@ -1292,6 +1433,7 @@
         body surface as a repeating or single pattern.
       </documentation>
       <value>none</value>
+      <scad:value>none</scad:value>
     </surfacePattern>
 
     <surfacePatternColor type="mtype:Inherit | mbtype:Color">
@@ -1299,21 +1441,25 @@
         Only visually relevant when surfacePatternDepth &gt; 0.
       </documentation>
       <value>inherit</value>
+      <scad:value>inherit</scad:value>
     </surfacePatternColor>
 
     <surfacePatternDepth type="Decimal">
       <documentation>Depth of the surface pattern. Negative = engraved. Positive = raised.</documentation>
       <value>-0.0625</value>
+      <scad:value>-0.0625</scad:value>
     </surfacePatternDepth>
 
     <surfacePatternDimensions type="mbtype:AxisXY(FloatPt)">
       <documentation>Dimensions of the surface pattern SVG in mm (from the SVG file).</documentation>
       <value>[451.556, 451.556]</value>
+      <scad:value>[451.556, 451.556]</scad:value>
     </surfacePatternDimensions>
 
     <surfacePatternOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
       <documentation>Offset of the surface pattern.</documentation>
       <value>[0, 0]</value>
+      <scad:value>[0, 0]</scad:value>
     </surfacePatternOffset>
 
     <surfacePatternPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
@@ -1324,11 +1470,13 @@
       </documentation>
       <since>3.0.0</since>
       <value>0</value>
+      <scad:value>0</scad:value>
     </surfacePatternPadding>
 
     <surfacePatternScale type="Decimal">
       <documentation>Scale factor for the surface pattern.</documentation>
       <value>1</value>
+      <scad:value>1</scad:value>
     </surfacePatternScale>
 
     <svg type="Text">
@@ -1336,37 +1484,44 @@
         by svgFace.
       </documentation>
       <value></value>
+      <scad:value></scad:value>
     </svg>
 
     <svgColor type="mbtype:Color">
       <documentation>Color of the SVG.</documentation>
       <value>#2c3e50</value>
+      <scad:value>#2c3e50</scad:value>
     </svgColor>
 
     <svgDepth type="Decimal">
       <documentation>Depth/height of the SVG. Negative = engraved. Positive = raised.</documentation>
       <value>0.4</value>
+      <scad:value>0.4</scad:value>
     </svgDepth>
 
     <svgDimensions type="mbtype:AxisXY(FloatPt)">
       <documentation>Dimensions of the SVG in mm (from the SVG file).</documentation>
       <value>[100, 100]</value>
+      <scad:value>[100, 100]</scad:value>
     </svgDimensions>
 
     <svgFace type="mbtype:Face">
       <documentation>Side on which the SVG is drawn (0-5 or string "x-" etc.).</documentation>
       <since>3.0.0</since>
       <value>5</value>
+      <scad:value>5</scad:value>
     </svgFace>
 
     <svgOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
       <documentation>Offset of the SVG from its default position.</documentation>
       <value>[0, 0]</value>
+      <scad:value>[0, 0]</scad:value>
     </svgOffset>
 
     <svgScale type="Decimal">
       <documentation>Scale factor for the SVG.</documentation>
       <value>1.0</value>
+      <scad:value>1.0</scad:value>
     </svgScale>
 
     <text type="Text">
@@ -1374,6 +1529,7 @@
         specified by textFace.
       </documentation>
       <value></value>
+      <scad:value></scad:value>
     </text>
 
     <textAlign type="mbtype:AxisXYZ(Align)">
@@ -1382,42 +1538,50 @@
       </documentation>
       <since>3.0.0</since>
       <value>center</value>
+      <scad:value>center</scad:value>
     </textAlign>
 
     <textColor type="mbtype:Color">
       <documentation>Color of the text. Independent from baseColor.</documentation>
       <value>#2c3e50</value>
+      <scad:value>#2c3e50</scad:value>
     </textColor>
 
     <textDepth type="Decimal">
       <documentation>Depth/height of the text. Negative = engraved. Positive = raised.</documentation>
       <value>-0.25</value>
+      <scad:value>-0.25</scad:value>
     </textDepth>
 
     <textFace type="mbtype:Face">
       <documentation>Side of the brick on which text is displayed (0-5 or string "x-" etc.).</documentation>
       <since>3.0.0</since>
       <value>x-</value>
+      <scad:value>x-</scad:value>
     </textFace>
 
     <textFont type="Text">
       <documentation>Font family for the text.</documentation>
       <value>Liberation Sans</value>
+      <scad:value>Liberation Sans</scad:value>
     </textFont>
 
     <textOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
       <documentation>Offset of the text from its normal position.</documentation>
       <value>[0, 0]</value>
+      <scad:value>[0, 0]</scad:value>
     </textOffset>
 
     <textSize type="Decimal">
       <documentation>Font size of the text.</documentation>
       <value>4</value>
+      <scad:value>4</scad:value>
     </textSize>
 
     <textSpacing type="Decimal">
       <documentation>Letter spacing of the text.</documentation>
       <value>1</value>
+      <scad:value>1</scad:value>
     </textSpacing>
 
     <tongue type="Boolean">
@@ -1429,6 +1593,7 @@
         Can be used with or without recess.
       </documentation>
       <value>false</value>
+      <scad:value>false</scad:value>
     </tongue>
 
     <tongueClampHeight type="Decimal">
@@ -1436,6 +1601,7 @@
         and the matching recess in the groove for snapping together.
       </documentation>
       <value>0.5</value>
+      <scad:value>0.5</scad:value>
     </tongueClampHeight>
 
     <tongueClampOffset type="Decimal">
@@ -1448,11 +1614,13 @@
         </change>
       </changelog>
       <value>0.5</value>
+      <scad:value>0.5</scad:value>
     </tongueClampOffset>
 
     <tongueClampThickness type="Decimal">
       <documentation>Thickness of the tongue clamp lip / groove recess.</documentation>
       <value>0.1</value>
+      <scad:value>0.1</scad:value>
     </tongueClampThickness>
 
     <tongueGrooveClampOffsetClearance type="Decimal">
@@ -1463,6 +1631,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>0</value>
+      <scad:value>0</scad:value>
     </tongueGrooveClampOffsetClearance>
 
     <tongueGrooveDepthClearance type="Decimal">
@@ -1473,6 +1642,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>auto</value>
+      <scad:value>auto</scad:value>
     </tongueGrooveDepthClearance>
 
     <tongueGrooveThicknessClearance type="Decimal">
@@ -1485,11 +1655,13 @@
       </documentation>
       <since>3.0.0</since>
       <value>0.1</value>
+      <scad:value>0.1</scad:value>
     </tongueGrooveThicknessClearance>
 
     <tongueHeight type="Decimal">
       <documentation>Height of the tongue.</documentation>
       <value>1.25</value>
+      <scad:value>1.25</scad:value>
     </tongueHeight>
 
     <tongueOffset type="Decimal">
@@ -1497,6 +1669,7 @@
         Corresponds to the distance of studs from the side edge.
       </documentation>
       <value>1</value>
+      <scad:value>1</scad:value>
     </tongueOffset>
 
     <tongueRoundingRadius type="mbtype:Auto | mbtype:RoundingRadius">
@@ -1504,11 +1677,13 @@
         rounding radius. Usually does not need adjustment.
       </documentation>
       <value>auto</value>
+      <scad:value>auto</scad:value>
     </tongueRoundingRadius>
 
     <tongueThickness type="Decimal">
       <documentation>Thickness of the tongue.</documentation>
       <value>0.666</value>
+      <scad:value>0.666</scad:value>
     </tongueThickness>
 
     <tongueThicknessAdjustment type="Decimal">
@@ -1518,6 +1693,7 @@
         For groove clearance, use tongueGrooveThicknessClearance instead.
       </documentation>
       <value>0</value>
+      <scad:value>0</scad:value>
     </tongueThicknessAdjustment>
 
     <topPlateHeight type="Decimal">
@@ -1527,6 +1703,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>1</value>
+      <scad:value>1</scad:value>
     </topPlateHeight>
 
     <topPlateHeightAdjustment type="Decimal">
@@ -1535,6 +1712,7 @@
       </documentation>
       <since>3.0.0</since>
       <value>-0.6</value>
+      <scad:value>-0.6</scad:value>
     </topPlateHeightAdjustment>
 
     <topPlateHelperHeight type="Decimal">
@@ -1544,6 +1722,7 @@
         "auto" uses printerLayerHeight.
       </documentation>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </topPlateHelperHeight>
 
     <topPlateHelperThickness type="Decimal">
@@ -1551,6 +1730,7 @@
         "auto" uses 0.5 * printerNozzleDiameter (minimum 0.1 mm).
       </documentation>
       <value>0.2</value>
+      <scad:value>0.2</scad:value>
     </topPlateHelperThickness>
 
     <topPlateHelpers type="Boolean">
@@ -1561,6 +1741,7 @@
         Usually active, does not need adjustment.
       </documentation>
       <value>true</value>
+      <scad:value>true</scad:value>
     </topPlateHelpers>
 
     <tubeDiameter type="Decimal">
@@ -1569,12 +1750,14 @@
       </documentation>
       <since>3.0.0</since>
       <value>auto</value>
+      <scad:value>auto</scad:value>
     </tubeDiameter>
 
     <tubeDiameterAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for tubeDiameter.</documentation>
       <since>3.0.0</since>
       <value>-0.1</value>
+      <scad:value>-0.1</scad:value>
     </tubeDiameterAdjustment>
 
     <unitGridToMbu type="mbtype:UnitGridToMbu">
@@ -1583,6 +1766,7 @@
         A 1x1 plate = 5×5×2 mbu = 8×8×3.2 mm at default settings.
       </documentation>
       <value>[5, 2]</value>
+      <scad:value>[5, 2]</scad:value>
     </unitGridToMbu>
 
     <unitMbuToMm type="Decimal">
@@ -1591,6 +1775,7 @@
         Adjustment parameters are exempt (always in mm).
       </documentation>
       <value>1.6</value>
+      <scad:value>1.6</scad:value>
     </unitMbuToMm>
   </properties>
 

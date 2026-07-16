@@ -36,6 +36,12 @@
     <see type="type:MultiAxis" relation="SeeAlso">
       Abstract axis-map base — N.
     </see>
+    <see type="type:SizeXYZ" relation="SeeAlso">
+      Size semantics on AxisXYZ.
+    </see>
+    <see type="type:OffsetXYZ" relation="SeeAlso">
+      Offset semantics on AxisXYZ.
+    </see>
   </references>
 
 </block>

@@ -2036,7 +2036,14 @@ final="true|false"      — local declaration property; not inherited. When true
                           child blocks cannot override this member. Validator-enforced. Default: false.
 ```
 
-Empty elements (`<abstract/>`) and attribute shorthand without value (`abstract` without `="true"`) are not permitted. Boolean properties require an explicit `true` or `false` value.
+Empty elements (`<abstract/>`) and attribute shorthand without value (`abstract` without `="true"`) are not permitted. Boolean properties require an explicit value. Accepted literals (case-insensitive):
+
+```text
+true   True   TRUE
+false  False  FALSE
+```
+
+Preferred authoring form is lowercase `true` / `false`. The BOM always stores the canonical lowercase boolean.
 
 ### Abstract, final, and override
 

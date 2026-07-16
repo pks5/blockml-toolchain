@@ -76,6 +76,10 @@
       <mbtype:MBEnum />
       <mbtype:MultiAxis />
       <mbtype:None />
+      <mbtype:OffsetXY />
+      <mbtype:OffsetXYZ />
+      <mbtype:QualityPreset />
+      <mbtype:SizeXY />
       <mbtype:SizeXYZ />
       <mbunit:MBU />
       <mbunit:GridUnit />

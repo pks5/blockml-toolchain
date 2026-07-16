@@ -12,21 +12,28 @@
   xmlns:type="com.machineblocks.bml.type">
   <name>SizeXYZ</name>
   <type>type:SizeXYZ</type>
-  <baseType>btype:StructType</baseType>
+  <baseType>type:AxisXYZ(N)</baseType>
   <is>A size along X, Y, and Z</is>
 
-  <documentation>Struct ValueType for size [x, y, z] in grid units. Named SizeXYZ (not Size3D) —
-    MachineBlocks axis-keyed types use XYZ / XY, not 3D / 2D.</documentation>
-  <properties>
-    <x type="Float">
-      <documentation>Size in X direction.</documentation>
-    </x>
-    <y type="Float">
-      <documentation>Size in Y direction.</documentation>
-    </y>
-    <z type="Float">
-      <documentation>Size in Z direction.</documentation>
-    </z>
-  </properties>
+  <documentation>Semantic Struct ValueType for a size triple { x, y, z }. Extends AxisXYZ(N) —
+    inherits x, y, and z; adds size semantics (extent / brick footprint). Bare SizeXYZ is Decimal
+    (dimensionless). Supply a unit via N — e.g. SizeXYZ(Decimal(mbunit:GridUnit)). Named SizeXYZ
+    (not Size3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
+
+  <genericTypes>
+    <N baseType="btype:Number" defaultType="btype:Decimal"/>
+  </genericTypes>
+
+  <references>
+    <see type="type:AxisXYZ" relation="Extends">
+      Structural { x, y, z } map — SizeXYZ adds size semantics.
+    </see>
+    <see type="type:SizeXY" relation="SeeAlso">
+      Two-axis size map on AxisXY.
+    </see>
+    <see type="type:OffsetXYZ" relation="SeeAlso">
+      Parallel offset semantics on AxisXYZ.
+    </see>
+  </references>
 
 </block>

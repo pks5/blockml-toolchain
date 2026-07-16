@@ -39,6 +39,12 @@
     <see type="type:AxisXYZ" relation="SeeAlso">
       Adds Z — extends this type.
     </see>
+    <see type="type:SizeXY" relation="SeeAlso">
+      Size semantics on AxisXY.
+    </see>
+    <see type="type:OffsetXY" relation="SeeAlso">
+      Offset semantics on AxisXY.
+    </see>
   </references>
 
 </block>
