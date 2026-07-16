@@ -9,7 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:meta="org.blockml.bml.meta"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>FreeTextKeyword</name>
   <type>meta:FreeTextKeyword</type>
   <baseType>meta:FixedKeyword</baseType>

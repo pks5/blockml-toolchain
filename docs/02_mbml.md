@@ -91,17 +91,38 @@ Extension types register their own BML→BOM mapping rule with the parser. The c
 
 ## Namespaces
 
-BML uses XML namespaces to resolve Block type references. Namespace prefixes map to FQN package prefixes.
+BML uses XML namespaces for two distinct binding targets. Every **BML-semantic** `xmlns:` prefix **must** resolve to exactly one of:
 
-**Mandatory BML namespace:** All Block FQNs and xmlns bindings must live under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `com.machineblocks.bml.core.*`). See `00_bom_core.md` — Mandatory BML namespace · `BML_OUTSIDE_BML_NAMESPACE`.
+| Target | What it is | What the prefix is for |
+|---|---|---|
+| **Package** | FQN package prefix under `<domain>.bml.*` where types live | Block type references (`mbcore:NativeBlock`) |
+| **Annotation** | Concrete `org.blockml.bml.core.Annotation` FQN | Directives (`bml:each`, `scad:value`, `scad:document`) |
+
+```text
+resolve(xmlns value) →
+  Annotation  →  Directive-Namespace
+  Package     →  Type-Namespace
+  otherwise   →  BML_INVALID_NAMESPACE_TARGET
+```
+
+There is **no third category**. Orphan namespace strings and language-directive schema URIs are not valid BML xmlns targets.
+
+**Infrastructure exceptions** (not BML-semantic prefixes): document default `xmlns="http://blockml.org/schema/block"`, `xmlns:xsi`, and other XSD/catalog URIs.
+
+**Mandatory BML namespace:** All Block FQNs and Package xmlns bindings must live under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `com.machineblocks.bml.core.*`). See `00_bom_core.md` — Mandatory BML namespace · `BML_OUTSIDE_BML_NAMESPACE`.
 
 ```xml
+<!-- Packages → types -->
 xmlns:mbcore="com.machineblocks.bml.core"
 xmlns:bricks="com.machineblocks.bml.bricks"
 xmlns:ac="com.martianmicro.anyclosure"
+
+<!-- Annotations → directives -->
+xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
 ```
 
-A type reference using a prefix:
+A type reference using a package prefix:
 
 ```xml
 <ac:Wall bml:id="wall" size="[1, 8, 9]" />
@@ -113,9 +134,54 @@ is resolved by the Namespace Resolver to the FQN:
 com.martianmicro.anyclosure.Wall
 ```
 
-The BOM always uses the full FQN. Namespace prefixes are a BML authoring convenience only.
+The BOM always uses the full FQN (or Annotation FQN for directive namespaces). Namespace prefixes are a BML authoring convenience only.
 
-**General rule:** XML prefixes have no semantic meaning. During parsing, every prefix is resolved via the document's `xmlns:` declarations. The BOM stores **canonical namespace identifiers only** (FQN or URI) — never XML aliases. This applies to Block type references, member element QNames, `type:` shorthand, and all other namespaced BML syntax. See § Member Namespace (Element QName).
+**General rule:** XML prefixes have no semantic meaning. During parsing, every prefix is resolved via the document's `xmlns:` declarations. The BOM stores **canonical namespace identifiers only** (Package FQN or Annotation FQN) — never XML aliases. This applies to Block type references, member element QNames, `type:` shorthand, and all other namespaced BML syntax. See § Member Namespace (Element QName) · § Annotations.
+
+### Annotations
+
+**FQN branch:** `org.blockml.bml.core.Annotation`
+
+Annotations formalize directive namespaces. They are **orthogonal to the Definition meta-model** (`org.blockml.bml.definition.*`) — they do not describe block structure, members, or constraints. Naming overlap (`Property`, `Aggregation`, …) classifies **directive form only**; `Annotation.Property` is not `def:PropertyDefinition`.
+
+```text
+core:Annotation
+  preferredAlias : Text          ← authoring convention (bml, scad); never stored in BOM
+  directives : Directive[]
+
+  Directive                     ← name = directive local name
+    Member                      ← name = "*" (wildcard member QNames)
+      Property | Aggregation | Association | Capability
+    Element
+      Document                  ← name = "document"
+      Summary                   ← name = "summary"
+    Attribute                   ← fixed names: id, each, with, …
+```
+
+**Concrete annotations:**
+
+| Annotation | preferredAlias | Role |
+|---|---|---|
+| `org.blockml.bml.annotation.BmlAnnotation` | `bml` | Language directives (`id`, `each`, `if`, `with`, `xml`, `container`, …) |
+| `com.machineblocks.bml.annotation.ScadAnnotation` | `scad` | SCAD member facets (`scad:value`) and prose facets (`scad:document`, `scad:summary`) |
+
+```xml
+xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+
+<bricks:Standard bml:id="w1" bml:with="half = ${ size.x / 2 }" … />
+<scad:value>start</scad:value>
+<scad:document>SCAD literal is the lowercase token.</scad:document>
+```
+
+**Directive match rules:**
+
+| Kind | `name` | Match |
+|---|---|---|
+| Attribute / Element (incl. Document, Summary) | fixed local name | `localName == directive.name` |
+| Member (Property / Aggregation / Association / Capability) | `"*"` | any local name under the annotation; kind from the Member subtype |
+
+The legacy schema URI `http://blockml.org/schema/bml` remains an **XSD/catalog** identifier only — BML-semantic `xmlns:bml` must target `BmlAnnotation`.
 
 ### XML prefix best practice — reserve framework aliases
 
@@ -646,7 +712,7 @@ Natural languages are distinct from **implementation languages** (`ProgrammingLa
 **Multiplicity:** authors may place **several** `<documentation>` (and `<summary>`) siblings. Two independent axes apply — see § Documentation facets and i18n:
 
 1. **i18n** — same QName, different `language=` (NaturalLanguage)
-2. **Facets** — different element QName / namespace (e.g. `scad:documentation`) — **not** for locales
+2. **Facets** — different element QName / namespace (e.g. `scad:document`) — **not** for locales
 
 An optional **`language`** attribute references a `org.blockml.bml.language.NaturalLanguage`. Unqualified names resolve via implicit namespace `org.blockml.bml.language.*`. Omitted → that entry uses the effective language from Block or Library. Stored in BOM `documentations[]` as `DocumentationProseEntry` with resolved `languageFqn` always set.
 
@@ -679,8 +745,8 @@ An optional **`language`** attribute references a `org.blockml.bml.language.Natu
 (namespace, localName, languageFqn)
 ```
 
-- `localName` is `documentation` or `summary` (from the element local name after visibility stripping — not applicable to these prose elements today)
-- `namespace` is resolved from the element QName via `xmlns:` (empty string for unprefixed / canonical facet)
+- `localName` is `documentation` or `summary` for default-namespace Definition prose; Annotation Element facets use the directive name (`document` / `summary` from `Annotation.Document` / `Annotation.Summary`)
+- `namespace` is resolved from the element QName via `xmlns:` (empty string for unprefixed / canonical facet; Annotation FQN for prefixed facets)
 - `languageFqn` is the explicit `language=` attribute or the effective inherited NaturalLanguage
 
 **Axis 1 — i18n (NaturalLanguage):** repeat the **same** element QName with different `language=` values. Do **not** encode locales as XML prefixes (`english:documentation` is invalid authoring).
@@ -694,16 +760,16 @@ An optional **`language`** attribute references a `org.blockml.bml.language.Natu
 <summary language="German">…</summary>
 ```
 
-**Axis 2 — facets (member / prose namespace):** optional QNames such as `scad:documentation` or `scad:summary` attach domain- or target-specific prose beside the canonical slot. **QName namespaces are not for i18n** — they name a facet (OpenSCAD notes, UI toolkit hints, …), not a spoken language. Facets may themselves be multilingual:
+**Axis 2 — facets (annotation prose namespace):** optional QNames such as `scad:document` or `scad:summary` attach domain- or target-specific prose beside the canonical slot. The prefix must resolve to an **Annotation** (e.g. `ScadAnnotation`). **Annotation namespaces are not for i18n** — they name a facet (OpenSCAD notes, UI toolkit hints, …), not a spoken language. Facets may themselves be multilingual:
 
 ```xml
-xmlns:scad="com.machineblocks.bml.scad"
+xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
 
 <documentation>Canonical type documentation.</documentation>
 <documentation language="German">Kanonische Typdokumentation.</documentation>
 
-<scad:documentation>SCAD literal is the lowercase token; faces use x- / x+ …</scad:documentation>
-<scad:documentation language="German">SCAD-Literal ist der Kleinbuchstaben-Token; Faces nutzen x- / x+ …</scad:documentation>
+<scad:document>SCAD literal is the lowercase token; faces use x- / x+ …</scad:document>
+<scad:document language="German">SCAD-Literal ist der Kleinbuchstaben-Token; Faces nutzen x- / x+ …</scad:document>
 ```
 
 **Rules:**
@@ -712,7 +778,7 @@ xmlns:scad="com.machineblocks.bml.scad"
 |---|---|
 | Canonical required | ≥1 default-namespace `<documentation>` on every Block definition |
 | Summary required | default-namespace `<summary>` when canonical documentation is too long |
-| Facets optional | namespaced `*:documentation` / `*:summary` never satisfy the required slots |
+| Facets optional | namespaced Annotation Element directives (`*:document` / `*:summary`) never satisfy the required slots |
 | Unique key | at most one entry per `(namespace, localName, languageFqn)` → else `BML_DUPLICATE_DOCUMENTATION` / `BML_DUPLICATE_SUMMARY` |
 | Summary pairing | long facet documentation may have a matching-facet summary; no cross-facet obligation |
 | `<is>` / `<isnot>` | remain singular — not multi-language / not QName-faceted in V1 |
@@ -1330,7 +1396,7 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 ```xml
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:btype="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:mbcore="com.machineblocks.bml.core"
@@ -1350,17 +1416,19 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 **Namespace URL Konventionen:**
 
 ```text
-BlockML Core (Sprach-Namespaces):
-  http://blockml.org/schema/block    ← Dokument-Root (default xmlns)
-  http://blockml.org/schema/bml      ← bml: Direktiven
-  http://blockml.org/schema/service  ← org.blockml.bml.service.*
+BlockML Core:
+  http://blockml.org/schema/block                  ← Dokument-Root (default xmlns)
+  org.blockml.bml.annotation.BmlAnnotation         ← bml: Annotation (Direktiven)
+  http://blockml.org/schema/bml                    ← nur XSD/catalog (kein xmlns-Ziel)
+  http://blockml.org/schema/service                ← org.blockml.bml.service.*
 
-MachineBlocks (Domain-Namespaces):
-  http://machineblocks.com/schema/core        ← MB Core, NativeBlock, Set
-  http://machineblocks.com/schema/bricks      ← com.machineblocks.bml.bricks.*
-  http://machineblocks.com/schema/calibration ← com.machineblocks.bml.calibration.*
+MachineBlocks (Domain):
+  http://machineblocks.com/schema/core             ← MB Core, NativeBlock, Set
+  http://machineblocks.com/schema/bricks           ← com.machineblocks.bml.bricks.*
+  http://machineblocks.com/schema/calibration      ← com.machineblocks.bml.calibration.*
+  com.machineblocks.bml.annotation.ScadAnnotation  ← scad: Annotation
 
-FQN-Referenz-Namespaces (prefix best practice — see § XML prefix best practice):
+FQN-Referenz-Namespaces (prefix best practice — see § XML prefix best practice · § Annotations):
   xmlns:btype="org.blockml.bml.type"              ← Decimal, Boolean, …
   xmlns:unit="org.blockml.bml.unit"               ← Millimeter, …
   xmlns:mbcore="com.machineblocks.bml.core"       ← <mbcore:NativeBlock />
@@ -1368,6 +1436,8 @@ FQN-Referenz-Namespaces (prefix best practice — see § XML prefix best practic
   xmlns:mbunit="com.machineblocks.bml.unit"       ← MBU, GridUnit
   xmlns:bricks="com.machineblocks.bml.bricks"     ← <bricks:Standard />
   xmlns:cal="com.machineblocks.bml.calibration"   ← <cal:Calibrator />
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
 ```
 
 **catalog.xml für lokale XSD-Auflösung:**
@@ -1389,15 +1459,16 @@ IDEs nutzen eine Catalog-Datei im Projekt-Root für offline XSD-Auflösung statt
 XSD-Dateien werden als Teil der npm-Packages ausgeliefert.
 
 ```text
-xmlns:bml     — required when using bml:* directives
-xmlns:btype   — BlockML framework types (org.blockml.bml.type.*)
-xmlns:mbtype  — domain types (e.g. mbtype:SizeXYZ) — do not reuse type= for domain
-xmlns:*       — other namespaces for Block type references and member element prefixes
+xmlns:bml     — org.blockml.bml.annotation.BmlAnnotation (required when using bml:* directives)
+xmlns:btype   — BlockML framework Package (org.blockml.bml.type.*)
+xmlns:mbtype  — domain Package (e.g. mbtype:SizeXYZ) — do not reuse type= for domain
+xmlns:scad    — com.machineblocks.bml.annotation.ScadAnnotation (SCAD member/prose facets)
+xmlns:*       — other Package or Annotation targets only
 ```
 
 ### Member Namespace
 
-All Members — Properties, Aggregations, Associations, and Capabilities — share a single member namespace per Block. Logical uniqueness is determined by **`(namespace, name)`** — not by name alone. Unprefixed member elements belong to the **default namespace** (empty string). A validation error is raised for duplicates within the same resolved namespace.
+All Members — Properties, Aggregations, Associations, and Capabilities — share a single member namespace per Block. Logical uniqueness is determined by **`(namespace, name)`** — not by name alone. Unprefixed member elements belong to the **default namespace** (empty string). Prefixed member namespaces resolve to an **Annotation** FQN. A validation error is raised for duplicates within the same resolved namespace.
 
 The member namespace is supplied exclusively by the **XML element QName** — see § Member Namespace (Element QName). The parser resolves any prefix via the document's `xmlns:` table and stores the canonical identifier in the BOM; the prefix itself is never stored.
 
@@ -1994,7 +2065,7 @@ without completing it.
 
 ### Member Namespace (Element QName)
 
-Properties, Aggregations, Associations, and Capabilities receive their namespace **exclusively via the XML element QName**. There is no `namespace` attribute on member elements. The same QName mechanism applies to **prose facet** elements `<documentation>` / `<summary>` (and namespaced variants such as `scad:documentation`) — see § Documentation facets and i18n. **Do not** use prose-element namespaces for NaturalLanguage / i18n.
+Properties, Aggregations, Associations, and Capabilities receive their namespace **exclusively via the XML element QName**. There is no `namespace` attribute on member elements. Prefixed member QNames must resolve via `xmlns:` to an **Annotation** (Member directive with `name="*"`, e.g. `scad:value` under `ScadAnnotation`) — not to an arbitrary string. The same QName mechanism applies to **prose facet** elements `<documentation>` / `<summary>` (default namespace) and Annotation Element directives such as `scad:document` / `scad:summary` — see § Documentation facets and i18n · § Annotations. **Do not** use prose-element namespaces for NaturalLanguage / i18n.
 
 ```xml
 <block
@@ -2073,10 +2144,11 @@ xmlns:design="com.sap.ui5"
 
 Both resolve to key `(com.sap.ui5, width)` — the override merges correctly.
 
-**`bml` prefix:** using `xmlns:bml` for member namespaces is permitted but **not recommended** — the `bml:` prefix is reserved for language directives (`bml:id`, `bml:each`, …). Prefer domain-specific prefixes (e.g. `ui5`, `html`, `aria`).
+**`bml` prefix:** reserved for `BmlAnnotation` language directives (`bml:id`, `bml:each`, …). Do **not** bind `xmlns:bml` to a Package or use it as a member Annotation. Prefer domain-specific Annotation prefixes (e.g. `scad`, `ui5`, `html`, `aria`).
 
 Undeclared prefix on a member element → `BML_UNKNOWN_NAMESPACE_PREFIX`.
 A legacy `namespace="…"` attribute on a member element → parse error.
+xmlns target that is neither Package nor Annotation → `BML_INVALID_NAMESPACE_TARGET`.
 
 ### Partial Member Overrides
 
@@ -2710,7 +2782,11 @@ Variables from `bml:with` are visible to the element and all descendants. There 
 
 ## BML Directives
 
-BML Directives are special attributes and elements in the `bml:` namespace. **Flow-control** directives control structure and flow within a Composition. **Serialization** directives (`bml:xml`) declare how Definition blocks map to canonical BML XML — see `19_definition_blocks_and_bml_xml.md`.
+BML Directives are special attributes and elements in the `bml:` namespace, formalized by
+`org.blockml.bml.annotation.BmlAnnotation` (`xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"`).
+See § Annotations. **Flow-control** directives control structure and flow within a Composition.
+**Serialization** directives (`bml:xml`) declare how Definition blocks map to canonical BML XML —
+see `19_definition_blocks_and_bml_xml.md`.
 
 Flow-control directives follow the **Thymeleaf model** — attributes on the element they apply to. Whether a directive is pre-processed at compile time or translated into target-specific constructs is the BlockProcessor's decision.
 
@@ -3528,7 +3604,7 @@ A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a normal
   FQN: com.machineblocks.bml.bricks.StandardPresets
 -->
 <block
-  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns="http://blockml.org/schema/block"
   xmlns:type="com.machineblocks.bml.type"
   xmlns:bricks="com.machineblocks.bml.bricks"

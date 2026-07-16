@@ -10,7 +10,7 @@
                       "
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>Capability</name>
   <type>core:Capability</type>
   <baseType>core:Block</baseType>

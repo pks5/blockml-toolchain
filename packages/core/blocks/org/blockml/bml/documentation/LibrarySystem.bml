@@ -11,7 +11,7 @@
   xmlns:blockml="org.blockml.bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>LibrarySystem</name>
   <type>doc:LibrarySystem</type>
   <baseType>core:Documentation</baseType>

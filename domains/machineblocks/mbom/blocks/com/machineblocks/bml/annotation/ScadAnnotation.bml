@@ -1,0 +1,93 @@
+<!--
+  MachineBlocks — OpenSCAD annotation namespace
+
+  FQN: com.machineblocks.bml.annotation.ScadAnnotation
+
+  Preferred authoring binding:
+    xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbann="com.machineblocks.bml.annotation"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
+  <name>ScadAnnotation</name>
+  <type>mbann:ScadAnnotation</type>
+  <baseType>core:Annotation</baseType>
+  <is>The MachineBlocks OpenSCAD annotation namespace</is>
+
+  <documentation>
+    Concrete Annotation for OpenSCAD-oriented member and prose facets in MachineBlocks.
+    preferredAlias is scad. Authoring documents bind xmlns:scad to this FQN.
+
+    Directives:
+    • Property (name="*") — member QNames such as scad:value (SCAD serialization literals)
+    • Document (name="document") — scad:document prose facets
+    • Summary (name="summary") — scad:summary prose facets
+
+    Replaces the former orphan namespace id com.machineblocks.bml.scad. Orthogonal to Definition —
+    does not alter MBEnum or StructuralDefinition shape; it only formalizes the annotation
+    namespace those QNames resolve through.
+  </documentation>
+
+  <references>
+    <see type="core:Annotation" relation="Extends">
+      Annotation branch — Package vs Annotation xmlns rule.
+    </see>
+    <see type="core:Annotation.Property" relation="SeeAlso">
+      Wildcard property member directive used for scad:value and similar.
+    </see>
+    <see file="02_mbml.md" relation="AuthoringGuide">
+      Documentation facets and annotation namespaces.
+    </see>
+  </references>
+
+  <properties>
+    <preferredAlias override="true" type="Text">
+      <value>scad</value>
+      <documentation>Preferred xmlns prefix for OpenSCAD annotation directives.</documentation>
+    </preferredAlias>
+  </properties>
+
+  <aggregations>
+    <directives override="true">
+      <mbann:ScadAnnotation.Property />
+      <mbann:ScadAnnotation.Document />
+      <mbann:ScadAnnotation.Summary />
+    </directives>
+  </aggregations>
+
+  <subBlocks>
+    <block>
+      <name>Property</name>
+      <baseType>core:Annotation.Property</baseType>
+      <is>An OpenSCAD property member annotation directive</is>
+
+      <documentation>Property-shaped member directive (name="*") under scad. Authoring QNames such
+        as scad:value are property members in this annotation namespace — catalog metadata for SCAD
+        render, not Definition meta-model types.</documentation>
+    </block>
+
+    <block>
+      <name>Document</name>
+      <baseType>core:Annotation.Document</baseType>
+      <is>An OpenSCAD document prose facet directive</is>
+
+      <documentation>Element directive scad:document — OpenSCAD-specific document prose facet.
+        Does not satisfy the required default-namespace documentation slot on Definitions.</documentation>
+    </block>
+
+    <block>
+      <name>Summary</name>
+      <baseType>core:Annotation.Summary</baseType>
+      <is>An OpenSCAD summary prose facet directive</is>
+
+      <documentation>Element directive scad:summary — OpenSCAD-specific summary prose facet.
+        Does not satisfy the required default-namespace summary slot on Definitions.</documentation>
+    </block>
+  </subBlocks>
+
+</block>

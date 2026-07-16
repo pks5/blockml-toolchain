@@ -32,18 +32,24 @@
     defines org.blockml.bml.core.Block.
 
     Typical BlockML branches (all under org.blockml.bml.*):
-    • org.blockml.bml.core.* — framework base types (Block, ValueType, Status, Library, …)
+    • org.blockml.bml.core.* — framework base types (Block, Annotation, ValueType, Status, Library, …)
+    • org.blockml.bml.annotation.* — concrete Annotations (BmlAnnotation)
     • org.blockml.bml.type.* — bootstrap ValueTypes
     • org.blockml.bml.service.* — built-in expression services (#math, #strings, …)
     • org.blockml.bml.language.* — implementation language types
     • org.blockml.bml.capability.* — Capability type branches
-    • org.blockml.bml.definition.* — Definition meta-model
+    • org.blockml.bml.definition.* — Definition meta-model (orthogonal to Annotations)
     • org.blockml.bml.documentation.* — bootstrap documentation blocks
+
+    xmlns prefixes are BML-semantic only when they target a Package or an Annotation:
+    • Package — type addressing (xmlns:bcore="org.blockml.bml.core")
+    • Annotation — directives (xmlns:bml="org.blockml.bml.annotation.BmlAnnotation")
 
     Domain libraries follow the same rule:
     • com.machineblocks.bml.core.*
     • com.machineblocks.bml.bricks.*
     • com.machineblocks.bml.type.*
+    • com.machineblocks.bml.annotation.* (e.g. ScadAnnotation)
 
     npm workspace packages (@blockml/core, @blockml/parser, …) are deployment units — not
     identical to FQN namespaces. TypeScript toolchain code ships in package src/ directories;

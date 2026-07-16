@@ -11,7 +11,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>Definition</name>
   <type>core:Definition</type>
   <baseType>core:Block</baseType>

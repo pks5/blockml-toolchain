@@ -12,7 +12,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>EnumType</name>
   <type>btype:EnumType</type>
   <baseType>core:ValueType</baseType>

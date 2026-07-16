@@ -11,7 +11,7 @@
   xmlns:btype="org.blockml.bml.type"
   xmlns:core="org.blockml.bml.core"
   xmlns:mbtype="com.machineblocks.bml.type"
-  xmlns:scad="com.machineblocks.bml.scad">
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation">
   <name>MBEnum</name>
   <type>mbtype:MBEnum</type>
   <baseType>btype:EnumType</baseType>
@@ -19,9 +19,10 @@
 
   <documentation>Abstract base for MachineBlocks EnumTypes. Extends org.blockml.bml.type.EnumType
     and declares catalog property scad:value : T — the SCAD serialization literal for each enum
-    member (member namespace com.machineblocks.bml.scad). Concrete enums bind T (typically Text)
-    and set scad:value on values composition members. BOM property values still store only member
-    id + EnumType; scad:value is catalog metadata looked up at render time.</documentation>
+    member (annotation namespace com.machineblocks.bml.annotation.ScadAnnotation). Concrete enums
+    bind T (typically Text) and set scad:value on values composition members. BOM property values
+    still store only member id + EnumType; scad:value is catalog metadata looked up at render
+    time.</documentation>
 
   <abstract>true</abstract>
 

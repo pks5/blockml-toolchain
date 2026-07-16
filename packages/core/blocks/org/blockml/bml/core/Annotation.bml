@@ -1,0 +1,228 @@
+<!--
+  BlockML Core — Annotation branch
+
+  FQN: org.blockml.bml.core.Annotation
+
+  Formalizes annotation namespaces (xmlns targets that are not packages).
+  Orthogonal to the Definition meta-model — Annotations do not define block structure.
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core">
+  <name>Annotation</name>
+  <type>core:Annotation</type>
+  <baseType>core:Block</baseType>
+  <is>A declared annotation namespace with typed directives</is>
+
+  <documentation>
+    Abstract branch for annotation namespaces. Every BML-semantic xmlns prefix must resolve to
+    either a Package (FQN prefix under which types live) or a concrete Annotation. Annotations are
+    orthogonal to the Definition meta-model (org.blockml.bml.definition.*): they do not describe
+    block structure, members, or constraints. They declare which directive QNames are legal under
+    a preferred authoring alias (e.g. bml, scad).
+
+    preferredAlias is authoring convention only — the BOM stores the Annotation FQN, never the
+    XML prefix. directives lists the concrete Directive kinds this annotation exposes.
+
+    Directive taxonomy (SubBlocks — not Definition member kinds):
+    • Directive — base; property name is the directive local name
+    • Member (name="*") — wildcard member directives under this namespace
+      → Property · Aggregation · Association · Capability
+    • Element — element-form directives
+      → Document (name="document") · Summary (name="summary")
+    • Attribute — attribute-form directives (id, with, each, …)
+
+    Naming overlap with Definition (Property, Aggregation, …) is classification of directive form
+    only — Annotation.Property is not def:PropertyDefinition.
+  </documentation>
+
+  <abstract>true</abstract>
+
+  <references>
+    <see type="core:Definition" relation="ContrastsWith">
+      Definition meta-model describes block structure — Annotations do not.
+    </see>
+    <see file="02_mbml.md" relation="AuthoringGuide">
+      Namespaces — Package vs Annotation xmlns targets.
+    </see>
+  </references>
+
+  <subTypes>
+    <core:Annotation.Directive />
+    <core:Annotation.Member />
+    <core:Annotation.Property />
+    <core:Annotation.Aggregation />
+    <core:Annotation.Association />
+    <core:Annotation.Capability />
+    <core:Annotation.Element />
+    <core:Annotation.Attribute />
+    <core:Annotation.Document />
+    <core:Annotation.Summary />
+  </subTypes>
+
+  <properties>
+    <preferredAlias abstract="true" type="Text">
+      <documentation>Preferred xmlns prefix for this annotation (e.g. bml, scad). Authoring
+        convention only — never stored in the BOM. Concrete annotations must supply a value.</documentation>
+    </preferredAlias>
+  </properties>
+
+  <aggregations>
+    <directives type="core:Annotation.Directive[]">
+      <documentation>Concrete directives exposed by this annotation. Attribute and Element
+        directives match by fixed name; Member directives match any local name (name="*").</documentation>
+    </directives>
+  </aggregations>
+
+  <subBlocks>
+    <block>
+      <name>Directive</name>
+      <baseType>core:Block</baseType>
+      <is>A typed annotation directive</is>
+
+      <documentation>Abstract base for all annotation directives. The name property is the
+        directive local name under the annotation namespace (e.g. id, with, document). Member
+        directives fix name to "*"; Document and Summary fix document / summary; Attribute and
+        Element concretes set an explicit local name.</documentation>
+
+      <abstract>true</abstract>
+
+      <properties>
+        <name abstract="true" type="Text">
+          <documentation>Directive local name in the annotation namespace. "*" on Member means any
+            local name. Fixed on Document ("document") and Summary ("summary").</documentation>
+        </name>
+      </properties>
+    </block>
+
+    <block>
+      <name>Member</name>
+      <baseType>core:Annotation.Directive</baseType>
+      <is>A wildcard member annotation directive</is>
+
+      <documentation>Member-shaped directive under an annotation namespace. name is fixed to "*"
+        — the concrete local name comes from the authoring QName (e.g. scad:value). Specialized by
+        Property, Aggregation, Association, and Capability. Not a Definition member type.</documentation>
+
+      <abstract>true</abstract>
+
+      <properties>
+        <name override="true" final="true" type="Text">
+          <value>*</value>
+          <documentation>Wildcard — any local name under this annotation is a candidate member
+            directive of this kind.</documentation>
+        </name>
+      </properties>
+    </block>
+
+    <block>
+      <name>Property</name>
+      <baseType>core:Annotation.Member</baseType>
+      <is>A property-shaped member annotation directive</is>
+
+      <documentation>Classifies annotation QNames as property-shaped member directives (name="*").
+        Orthogonal to org.blockml.bml.definition.PropertyDefinition.</documentation>
+
+      <abstract>true</abstract>
+    </block>
+
+    <block>
+      <name>Aggregation</name>
+      <baseType>core:Annotation.Member</baseType>
+      <is>An aggregation-shaped member annotation directive</is>
+
+      <documentation>Classifies annotation QNames as aggregation-shaped member directives
+        (name="*"). Orthogonal to org.blockml.bml.definition.AggregationDefinition.</documentation>
+
+      <abstract>true</abstract>
+    </block>
+
+    <block>
+      <name>Association</name>
+      <baseType>core:Annotation.Member</baseType>
+      <is>An association-shaped member annotation directive</is>
+
+      <documentation>Classifies annotation QNames as association-shaped member directives
+        (name="*"). Orthogonal to org.blockml.bml.definition.AssociationDefinition.</documentation>
+
+      <abstract>true</abstract>
+    </block>
+
+    <block>
+      <name>Capability</name>
+      <baseType>core:Annotation.Member</baseType>
+      <is>A capability-shaped member annotation directive</is>
+
+      <documentation>Classifies annotation QNames as capability-shaped member directives
+        (name="*"). Orthogonal to org.blockml.bml.core.Capability and
+        org.blockml.bml.definition.CapabilityDefinition.</documentation>
+
+      <abstract>true</abstract>
+    </block>
+
+    <block>
+      <name>Element</name>
+      <baseType>core:Annotation.Directive</baseType>
+      <is>An element-form annotation directive</is>
+
+      <documentation>Directive that appears as an XML element under the annotation namespace
+        (e.g. bml:container, scad:document). Concrete directives set name; Document and Summary
+        are standard element kinds with fixed names.</documentation>
+
+      <abstract>true</abstract>
+    </block>
+
+    <block>
+      <name>Attribute</name>
+      <baseType>core:Annotation.Directive</baseType>
+      <is>An attribute-form annotation directive</is>
+
+      <documentation>Directive that appears as an XML attribute under the annotation namespace
+        (e.g. bml:id, bml:each, bml:with). Concrete directives set name to the attribute local
+        name.</documentation>
+
+      <abstract>true</abstract>
+    </block>
+
+    <block>
+      <name>Document</name>
+      <baseType>core:Annotation.Element</baseType>
+      <is>A document prose facet directive</is>
+
+      <documentation>Standard element directive for namespaced document prose facets. name is
+        fixed to "document" (e.g. scad:document). Distinct from the default-namespace
+        Definition property documentation — Annotation facets never satisfy required canonical
+        documentation slots.</documentation>
+
+      <properties>
+        <name override="true" final="true" type="Text">
+          <value>document</value>
+          <documentation>Fixed local name for document prose facets under an annotation
+            namespace.</documentation>
+        </name>
+      </properties>
+    </block>
+
+    <block>
+      <name>Summary</name>
+      <baseType>core:Annotation.Element</baseType>
+      <is>A summary prose facet directive</is>
+
+      <documentation>Standard element directive for namespaced summary prose facets. name is
+        fixed to "summary" (e.g. scad:summary). Distinct from the default-namespace Definition
+        property summary.</documentation>
+
+      <properties>
+        <name override="true" final="true" type="Text">
+          <value>summary</value>
+          <documentation>Fixed local name for summary prose facets under an annotation
+            namespace.</documentation>
+        </name>
+      </properties>
+    </block>
+  </subBlocks>
+
+</block>

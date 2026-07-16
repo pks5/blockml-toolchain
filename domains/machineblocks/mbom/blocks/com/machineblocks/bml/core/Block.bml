@@ -11,7 +11,7 @@
                       "
   xmlns:bcore="org.blockml.bml.core"
   xmlns:core="com.machineblocks.bml.core"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>Block</name>
   <type>core:Block</type>
   <baseType>bcore:Entity</baseType>

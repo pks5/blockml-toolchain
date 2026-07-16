@@ -11,7 +11,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>ConstrainableDefinition</name>
   <type>def:ConstrainableDefinition</type>
   <baseType>def:StructuralDefinition</baseType>

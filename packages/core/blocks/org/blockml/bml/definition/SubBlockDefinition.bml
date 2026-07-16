@@ -12,7 +12,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>SubBlockDefinition</name>
   <type>def:SubBlockDefinition</type>
   <baseType>def:BlockDefinition</baseType>

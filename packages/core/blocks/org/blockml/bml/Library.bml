@@ -10,12 +10,13 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:blockml="org.blockml.bml"
   xmlns:bcore="org.blockml.bml.core"
+  xmlns:ann="org.blockml.bml.annotation"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition"
@@ -38,9 +39,10 @@
 
   <documentation>
     Publishable BlockML core library (org.blockml.bml.Library). Exports the framework grammar:
-    core branches (Block, ValueType, Language, Status, Relation, Constraint, Validation, Capability, Definition),
+    core branches (Block, Annotation, ValueType, Language, Status, Relation, Constraint, Validation, Capability, Definition),
     concrete value types and constraints, implementation languages, built-in services, lifecycle
-    status blocks, the Definition meta-model branch (org.blockml.bml.definition.*), bootstrap
+    status blocks, the Definition meta-model branch (org.blockml.bml.definition.*), the language
+    annotation (org.blockml.bml.annotation.BmlAnnotation), bootstrap
     documentation blocks (org.blockml.bml.documentation.*), task guides (org.blockml.bml.task.*),
     diagnostic blocks (org.blockml.bml.diagnostic.*), and definition metadata entities
     (org.blockml.bml.meta.FixedKeyword, org.blockml.bml.meta.FixedAlias,
@@ -92,6 +94,7 @@
 
     <blocks>
       <bcore:Block />
+      <bcore:Annotation />
       <bcore:Bootstrap />
       <bcore:ReadMe />
       <bcore:Documentation />
@@ -111,6 +114,7 @@
       <bcore:Validation />
       <bcore:ValueType />
       <bcore:Unit />
+      <ann:BmlAnnotation />
       <def:AggregationDefinition />
       <def:AssociationDefinition />
       <def:ConstrainableDefinition />

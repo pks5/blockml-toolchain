@@ -17,7 +17,7 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>StructuralDefinition</name>
   <type>def:StructuralDefinition</type>
   <baseType>core:Definition</baseType>
@@ -52,7 +52,7 @@
         between is and full documentation. Primary input for LLM context bundles and quick human
         orientation; is names the Idea (Urbild), summary adds scope and boundaries without full technical
         detail. May repeat for i18n (language=) and optional QName facets (e.g. scad:summary) —
-        namespaces are not NaturalLanguage. Required: default-namespace entry when canonical
+        facet namespaces resolve to Annotations (not NaturalLanguage). Required: default-namespace entry when canonical
         documentation is too long; optional only when that documentation alone remains easy to read.
         Missing when required → BML_MISSING_SUMMARY. Duplicate (namespace, languageFqn) →
         BML_DUPLICATE_SUMMARY. Stored in BOM summaries[] as DocumentationProseEntry. Primary path
@@ -60,12 +60,12 @@
     </summary>
     <documentation type="Documentation" bml:xml="element">
       <documentation>Technical documentation prose for this definition element. May repeat for i18n
-        (language= NaturalLanguage) and optional QName facets (e.g. scad:documentation) — facet
-        namespaces are not for locales. Always required: ≥1 default-namespace documentation on every
+        (language= NaturalLanguage) and optional QName facets (e.g. scad:document) — facet
+        namespaces resolve to Annotations (org.blockml.bml.core.Annotation), not locales. Always required: ≥1 default-namespace documentation on every
         Block definition (root and Sub-Blocks). Omitted → BML_MISSING_DOCUMENTATION. When canonical
         prose grows too long for a quick scan, authors must also supply default-namespace summary.
         Duplicate (namespace, languageFqn) → BML_DUPLICATE_DOCUMENTATION. See 02_mbml.md —
-        Documentation facets and i18n.</documentation>
+        Documentation facets and i18n · Annotations.</documentation>
     </documentation>
     <abstract type="Boolean" bml:xml="element">
       <value>false</value>
@@ -147,10 +147,10 @@
 
       <documentation>Describes one documentation prose entry on any
         org.blockml.bml.definition.StructuralDefinition (block, property, aggregation, …). Rendered
-        as a documentation element (optionally QName-prefixed for facets) with optional language
+        as a documentation element (optionally QName-prefixed for Annotation facets) with optional language
         attribute and a trimmed text body. Authors may place multiple siblings: i18n via language=
-        (NaturalLanguage); facets via element namespace (e.g. scad:documentation). Facet namespaces
-        are not locales. Maps to BOM documentations[] DocumentationProseEntry
+        (NaturalLanguage); facets via annotation element namespace (e.g. scad:document from
+        Annotation.Document). Facet namespaces are Annotations, not locales. Maps to BOM documentations[] DocumentationProseEntry
         { namespace, text, languageFqn }. Identity (namespace, languageFqn) within documentations[] —
         duplicate → BML_DUPLICATE_DOCUMENTATION. Declared as a repeatable property shape on
         org.blockml.bml.definition.StructuralDefinition.</documentation>

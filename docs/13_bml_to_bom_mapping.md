@@ -288,7 +288,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <language>…</language>                       → block.languageFqn (NaturalLanguage FQN)
 <documentation language="…">…</documentation> → documentations[] DocumentationProseEntry
                                            { namespace: "" | resolved QName NS, text, languageFqn }
-  <scad:documentation>…</scad:documentation> → facet entry; namespace from xmlns — not for locales
+  <scad:document>…</scad:document> → facet entry; namespace from xmlns — not for locales
 <since>…</since>                             → block.since (trimmed text)
 <changelog>                                  → block.changelog[]
   <change version="…" language="…">…</change> → { version, text: trimmed body, languageFqn? }

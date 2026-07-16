@@ -6,11 +6,11 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:mbtype="com.machineblocks.bml.type"
-  xmlns:scad="com.machineblocks.bml.scad">
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation">
   <name>Align</name>
   <type>mbtype:Align</type>
   <baseType>mbtype:MBEnum(Text)</baseType>

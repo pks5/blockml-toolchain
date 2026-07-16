@@ -14,7 +14,7 @@
   xmlns:cap="org.blockml.bml.capability"
   xmlns:lang="org.blockml.bml.language"
   xmlns:type="org.blockml.bml.type"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>CapabilityDefinition</name>
   <type>def:CapabilityDefinition</type>
   <baseType>def:MemberDefinition</baseType>

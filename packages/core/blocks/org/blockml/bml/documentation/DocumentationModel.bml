@@ -14,7 +14,7 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:doc="org.blockml.bml.documentation"
-  xmlns:bml="http://blockml.org/schema/bml">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
   <name>DocumentationModel</name>
   <type>doc:DocumentationModel</type>
   <baseType>core:Documentation</baseType>

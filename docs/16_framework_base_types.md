@@ -216,7 +216,27 @@ Validator              — definitionBranch = "definitionBlock" when baseType ch
 bml:xml                — permitted on all blocks whose baseType chain includes core.Definition
 ```
 
-**Design note:** Framework core branch types remain **`baseType` markers** (`ValueType`, `Entity`, `Language`, …). Domain interface-style polymorphism uses **`<contracts>`** and **`satisfiesTypeBound`** — see `17_type_system_bml.md` — baseType vs contracts. Core branch types are not duplicated as interface contracts in `@blockml/core`.
+**Design note:** Framework core branch types remain **`baseType` markers** (`ValueType`, `Entity`, `Language`, `Annotation`, …). Domain interface-style polymorphism uses **`<contracts>`** and **`satisfiesTypeBound`** — see `17_type_system_bml.md` — baseType vs contracts. Core branch types are not duplicated as interface contracts in `@blockml/core`.
+
+### Annotation branch
+
+**FQN:** `org.blockml.bml.core.Annotation` — abstract branch for annotation namespaces.
+
+Annotations are **orthogonal to Definition**. They formalize BML-semantic `xmlns` targets that are not Packages: language directives (`BmlAnnotation`) and domain facets (`ScadAnnotation`). See `02_mbml.md` — § Annotations.
+
+```text
+org.blockml.bml.core.Block
+  org.blockml.bml.core.Annotation
+    preferredAlias · directives[]
+    SubBlocks: Directive → Member(*) | Element | Attribute
+               Member → Property | Aggregation | Association | Capability
+               Element → Document(document) | Summary(summary)
+
+org.blockml.bml.annotation.BmlAnnotation          preferredAlias=bml
+com.machineblocks.bml.annotation.ScadAnnotation   preferredAlias=scad
+```
+
+Source: `packages/core/blocks/org/blockml/bml/core/Annotation.bml`
 
 ### Keyword and Alias branches
 
@@ -352,7 +372,7 @@ language        Language FQN       — optional; implementation dialect for CDAT
 content         String (required)  — CDATA body
 ```
 
-`org.blockml.bml.definition.StructuralDefinition.Documentation` — inline Sub-Block; one technical prose entry on any StructuralDefinition element. Authors may repeat the element for **i18n** (`language=`) and for **QName facets** (`scad:documentation`, …). Facet namespaces are **not** NaturalLanguage / i18n.
+`org.blockml.bml.definition.StructuralDefinition.Documentation` — inline Sub-Block; one technical prose entry on any StructuralDefinition element. Authors may repeat the element for **i18n** (`language=`) and for **QName facets** (`scad:document`, …). Facet namespaces are **not** NaturalLanguage / i18n.
 
 ```text
 FQN             org.blockml.bml.definition.StructuralDefinition.Documentation (Sub-Block)

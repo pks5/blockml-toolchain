@@ -257,7 +257,8 @@ BML uses XSD schemas for IDE validation, autocomplete, and Enum enforcement. Sch
 ```text
 BlockML Core (blockml.org):
   http://blockml.org/schema/block      ← default xmlns for <block> documents
-  http://blockml.org/schema/bml        ← bml: directives namespace
+  org.blockml.bml.annotation.BmlAnnotation  ← bml: Annotation (directives)
+  http://blockml.org/schema/bml        ← XSD/catalog only (not xmlns target)
   http://blockml.org/schema/service    ← org.blockml.bml.service.*
 
 MachineBlocks (machineblocks.com):

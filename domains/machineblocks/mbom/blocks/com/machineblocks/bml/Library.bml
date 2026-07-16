@@ -9,7 +9,7 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
@@ -17,6 +17,7 @@
   xmlns:bcore="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mb="com.machineblocks.bml"
+  xmlns:mbann="com.machineblocks.bml.annotation"
   xmlns:mbtype="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit"
   xmlns:bricks="com.machineblocks.bml.bricks">
@@ -27,9 +28,9 @@
 
   <documentation>
     Publishable MachineBlocks root library (com.machineblocks.bml.Library). Exports shared domain
-    ValueTypes and Units. Brick catalogs are nested via subLibraries — consumers that need bricks
-    depend on com.machineblocks.bml.bricks.Library directly. Membership is defined exclusively by
-    this file's blocks list — not by directory layout.
+    ValueTypes, Units, and ScadAnnotation. Brick catalogs are nested via subLibraries — consumers
+    that need bricks depend on com.machineblocks.bml.bricks.Library directly. Membership is defined
+    exclusively by this file's blocks list — not by directory layout.
   </documentation>
 
   <version>3.0.0</version>
@@ -57,6 +58,7 @@
     </subLibraries>
 
     <blocks>
+      <mbann:ScadAnnotation />
       <mbtype:Align />
       <mbtype:Auto />
       <mbtype:Axis />
