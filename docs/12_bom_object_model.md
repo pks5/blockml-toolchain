@@ -159,7 +159,7 @@ interface BlockDefinition {
   /** Semantic version of this definition. Required. */
   version: string
 
-  /** Required Urbild designation — what this Block semantically represents. Reflection: bml:Self.is */
+  /** Required: names the Idea (Urbild). Reflection: bml:Self.is — see 02_mbml.md § Terminology — Urbild */
   is?: string
 
   /**

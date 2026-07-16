@@ -50,7 +50,7 @@
     <summary type="Text" bml:xml="element">
       <documentation>Short prose expansion of semantic meaning — typically three to five sentences
         between is and full documentation. Primary input for LLM context bundles and quick human
-        orientation; is names the Urbild, summary adds scope and boundaries without full technical
+        orientation; is names the Idea (Urbild), summary adds scope and boundaries without full technical
         detail. May repeat for i18n (language=) and optional QName facets (e.g. scad:summary) —
         namespaces are not NaturalLanguage. Required: default-namespace entry when canonical
         documentation is too long; optional only when that documentation alone remains easy to read.

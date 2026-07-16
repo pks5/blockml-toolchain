@@ -431,8 +431,9 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
                       text (for example core:Block or core:PrimitiveEntity(btype:Integer)).
                       Generic applications on the parent are authored and resolved here.
                       Omitted only on org.blockml.bml.core.Block. Immediately after type, before is.
-<is>                — required: clear designation of the Urbild — what this Block semantically
+<is>                — required: names the Idea (Urbild) — what this Block semantically
                       represents (noun phrase; may be several words — more than bare name/type).
+                      See § Terminology — Urbild.
 <isnot>             — required when confusion risk exists — what this Block is not (blocks only).
 <summary>           — required when canonical <documentation> is too long — short middle tier (scope /
                       boundaries) between is and documentation. May repeat for i18n and QName facets.
@@ -446,10 +447,27 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 
 Definition elements (`<property>`, `<aggregation>`, …) carry `<status>` only when deviating from the inherited status — see § `<status>`.
 
+### Terminology — Urbild
+
+**Urbild** is a fixed BlockML term for what `<is>` names — the stable semantic figure of the Block (WOT: the Idea; Plato: the archetype that instances resemble). Keep the German word **explicit** in docs and meta-prose; do not replace it with a silent translation.
+
+**Authoring pattern in documentation prose:** write a gloss in the natural language of the document, then **`(Urbild)`** in parentheses:
+
+```text
+English docs:   <is> names the Idea (Urbild)
+German docs:    <is> benennt das Urbild          (Urbild is already the document language —
+                                                no extra gloss required)
+French docs:    <is> nomme l'Idée (Urbild)
+```
+
+Wrong: English running text that drops Urbild (`"names the archetype"` alone) or that uses a locale prefix / QName for the term. Right: **local gloss + `(Urbild)`**.
+
+The **value** of `<is>` itself remains ordinary prose in the effective NaturalLanguage of the Block (e.g. `<is>A Lego brick</is>`) — this rule governs how specs and meta-documentation *talk about* `<is>`, not the `<is>` body text.
+
 ### Documentation prose rules (blocks)
 
 ```text
-is              — ALWAYS required. Names the Urbild clearly: what the Block semantically represents.
+is              — ALWAYS required. Names the Idea (Urbild): what the Block semantically represents.
                   Noun phrase; several words allowed/expected when name/type alone would be too thin
                   (for example "A version number", not merely "A version").
 isnot           — REQUIRED when readers could confuse this Block with a nearby concept.
@@ -465,15 +483,15 @@ Diagnostics: omitted `<is>` → `BML_MISSING_IS`; missing default-namespace `<do
 
 ### Definition identity first — then `<is>`
 
-**Rule:** Every Block definition document (root, Sub-Block, embedded) starts with **definition identity** — `<name>`, `<type>`, `<baseType>` — **before** `<is>` and all prose. The type system answers *what is this definition?* (FQN); `<is>` answers *what does this Block semantically represent?*
+**Rule:** Every Block definition document (root, Sub-Block, embedded) starts with **definition identity** — `<name>`, `<type>`, `<baseType>` — **before** `<is>` and all prose. The type system answers *what is this definition?* (FQN); `<is>` answers *what does this Block semantically represent?* — it names the Idea (Urbild).
 
-`<is>` follows identity, before conditional `<summary>`, optional `<keywords>`, optional `<language>`, required `<documentation>`, conditional `<isnot>`, and optional `<aliases>`. It must clearly describe the **Urbild** — a noun phrase that conveys semantic meaning, not purpose and not full technical detail. It may (and often should) use several words; it must say more than repeating `<name>` / `<type>` when those alone are ambiguous. Reflection: `bml:Self.is`. Motto: *as simple as Lego* at the designation; *as powerful as SAP* in documentation and the model beneath.
+`<is>` follows identity, before conditional `<summary>`, optional `<keywords>`, optional `<language>`, required `<documentation>`, conditional `<isnot>`, and optional `<aliases>`. It must clearly name the **Idea (Urbild)** — a noun phrase that conveys semantic meaning, not purpose and not full technical detail. It may (and often should) use several words; it must say more than repeating `<name>` / `<type>` when those alone are ambiguous. Reflection: `bml:Self.is`. Motto: *as simple as Lego* at the designation; *as powerful as SAP* in documentation and the model beneath.
 
 ```text
 <name>          — short class name (optional on root; required on Sub-Blocks)
 <type>          — TypeReference identity (required on root; usually omitted on Sub-Blocks)
 <baseType>      — parent TypeReference / TypeExpression (omitted only on org.blockml.bml.core.Block)
-<is>            — Urbild     what this Block semantically represents (clear noun phrase)
+<is>            — Idea (Urbild)  what this Block semantically represents (clear noun phrase)
 <summary>       — scope      middle tier when documentation is long — three to five sentences
 <keywords>      — discovery  optional search tags for RAG and colloquial lookup
 <documentation> — detail     technical description — always required
@@ -502,7 +520,7 @@ Examples:
 
 `<is>` is required on every Block definition (root blocks and Sub-Blocks). Omitted → `BML_MISSING_IS` (warning in V1, error in a later release). Primary input for editors, LLMs, and documentation navigation — after FQN identity is established.
 
-**WOT:** The Block itself is the Idea (stable semantic constant). `<is>` **names** that Idea in prose — it is not the Idea. See `WOTFoundation` and `WOT_Reference` — The Idea.
+**WOT:** The Block itself is the Idea (Urbild) — the stable semantic constant. `<is>` **names** that Idea (Urbild) in prose — it is not the Idea. See `WOTFoundation` and `WOT_Reference` — The Idea. Spec prose uses the English gloss **Idea** plus **`(Urbild)`** per § Terminology — Urbild.
 
 ### `<summary>` — short prose expansion
 
@@ -511,7 +529,7 @@ Examples:
 **Required when canonical (default-namespace) `<documentation>` is too long** for a quick human or LLM scan — typically when that documentation exceeds a short paragraph or mixes many concerns. Optional only when canonical documentation alone remains easy to scan. Missing when required → `BML_MISSING_SUMMARY` (warning V1). The required summary is the **default-namespace** entry (optionally with `language=` for a non-primary translation); namespaced facet summaries are always optional.
 
 ```text
-is            →  noun phrase: what does this Block semantically represent?
+is            →  noun phrase: names the Idea (Urbild)
 summary       →  short paragraph: scope and boundaries (LLM context bundles, quick human scan)
 documentation →  full technical prose — always present (canonical facet)
 ```
@@ -2383,7 +2401,7 @@ com.foo.Bar.properties.width        →  PropertyDefinition for width
 com.foo.Bar.aggregations.children   →  AggregationDefinition for children
 com.foo.Bar.capabilities.render     →  CapabilityDefinition for render
 com.foo.Bar.name                    →  Block metadata
-com.foo.Bar.is                    →  Block is (designation)
+com.foo.Bar.is                    →  Block is — names the Idea (Urbild)
 com.foo.Bar.summary                 →  primary Block summary (default NS + effective language)
 com.foo.Bar.summaries               →  all summary entries (i18n + facets)
 com.foo.Bar.keywords                →  Block keywords

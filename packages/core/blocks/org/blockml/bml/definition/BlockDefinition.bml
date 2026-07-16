@@ -124,15 +124,15 @@
         before is.</documentation>
     </baseType>
     <is type="Text" bml:xml="element">
-      <documentation>Required designation of the Urbild — what this Block semantically represents.
+      <documentation>Required: names the Idea (Urbild) — what this Block semantically represents.
         Noun phrase that clearly conveys meaning; may be several words and must say more than bare
         name or type when those alone are ambiguous (for example &quot;A version number&quot;, not merely
         &quot;A version&quot;). Not a purpose clause and not full technical detail — use summary and
         documentation for those. Required on every Block definition (root blocks and Sub-Blocks).
         Follows definition identity (name / type / baseType) — never before them. Stored in BOM
-        block.is. Addressable as com.foo.Bar.is. Definition reflection: bml:Self.is. Distinct from
-        the WOT Idea concept — WOT Idea is the Block itself; &lt;is&gt; names it in prose for humans
-        and LLMs. Omitted → BML_MISSING_IS.</documentation>
+        block.is. Addressable as com.foo.Bar.is. Definition reflection: bml:Self.is. The Block itself
+        is the WOT Idea (Urbild); &lt;is&gt; names that Idea (Urbild) in prose for humans and LLMs —
+        see 02_mbml.md § Terminology — Urbild. Omitted → BML_MISSING_IS.</documentation>
     </is>
     <isnot type="Text" bml:xml="element">
       <documentation>What this Block is not — explicit disambiguation from easily confused concepts

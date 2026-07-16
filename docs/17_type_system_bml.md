@@ -157,24 +157,24 @@ This matches WOT §0.5 pragmatism: ontological unity at the language layer, engi
 
 ### Platonic mapping (Idea · Manifestation)
 
-The split is the WOT architecture applied to BlockML:
+The split is the WOT architecture applied to BlockML. English specs name the stable semantic figure as the **Idea (Urbild)** — see `02_mbml.md` § Terminology — Urbild (`<is>` names that Idea (Urbild) in prose).
 
 ```text
-Idea (Plato)              BML / semantic layer
-  Urbild · unveränderlich   Block · ValueType · Language · FQN
-  existiert vor der Welt    beschreibbar ohne Render Target
-  keine Substanz            keine SCAD · kein Python · kein 3D-Druck
+Idea (Urbild) · Plato         BML / semantic layer
+  unveränderlich                Block · ValueType · Language · FQN
+  existiert vor der Welt        beschreibbar ohne Render Target
+  keine Substanz                keine SCAD · kein Python · kein 3D-Druck
 
-Manifestation             Compiler · Renderer · Runtime
-  Abbild · konkret          TypeScript-Interfaces · SCAD · ThingKit · Thing
-  World liefert Deutung     MachineBlocks → SCAD mb_block() · ScreenMachine → React
-  Runtime vervollständigt   Compiler übersetzt · Drucker druckt
-  Renderer (optional)       may emit „blocks“ again in target grammar — not required
+Manifestation                 Compiler · Renderer · Runtime
+  Abbild · konkret              TypeScript-Interfaces · SCAD · ThingKit · Thing
+  World liefert Deutung         MachineBlocks → SCAD mb_block() · ScreenMachine → React
+  Runtime vervollständigt       Compiler übersetzt · Drucker druckt
+  Renderer (optional)           may emit „blocks“ again in target grammar — not required
 ```
 
 > *„Die Ideen stehen wie Urbilder da. Die anderen Dinge gleichen ihnen und sind Abbilder."* — Platon
 
-BML hält die Idee stabil. Der Compiler ist Manifestor-Werkzeug — er darf die Idee intern beliebig repräsentieren, solange die Beschreibungssprache intakt bleibt. Die vollständige Manifestation kennt der Compiler nicht; das ist Sache des Renderers und der Runtime.
+BML hält die Idee (Urbild) stabil. Der Compiler ist Manifestor-Werkzeug — er darf die Idee intern beliebig repräsentieren, solange die Beschreibungssprache intakt bleibt. Die vollständige Manifestation kennt der Compiler nicht; das ist Sache des Renderers und der Runtime.
 
 See `WOT_Reference_v26.md` §1 · The Idea · Manifestation.
 
