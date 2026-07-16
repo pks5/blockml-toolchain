@@ -714,11 +714,11 @@
       <scad:value>true</scad:value>
     </pillars>
 
-    <pinDiameter type="Decimal(mbunit:MBU)">
+    <pinDiameter type="mbtype:Auto | Decimal(mbunit:MBU)">
       <documentation>Diameter of pins (small tubes) for bricks with size.x or size.y = 1.
         Automatically calculated.
       </documentation>
-      <value>auto</value>
+      <value>Auto</value>
       <scad:value>auto</scad:value>
     </pinDiameter>
 

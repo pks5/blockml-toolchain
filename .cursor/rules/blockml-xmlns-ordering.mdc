@@ -1,0 +1,53 @@
+---
+description: Ordering of xmlns / schemaLocation attributes on Block root elements
+globs: "**/*.bml"
+alwaysApply: false
+---
+
+# Block `xmlns` attribute order
+
+On every `<block>` root, declare attributes in this order — nothing interleaved.
+
+## 1. URIs and schemaLocation
+
+```xml
+xmlns="http://blockml.org/schema/block"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                    "
+```
+
+Only HTTP(S) XML namespace URIs and `xsi:schemaLocation` belong here.
+
+## 2. Package xmlns bindings
+
+After the URI block, declare every `xmlns:<prefix>="<package.fqn>"` binding:
+
+1. **BlockML packages** (`org.blockml.*`) first
+2. **Domain packages** next — one group per domain root (e.g. all `com.machineblocks.*`, then any other domain)
+
+Within each group, sort by package FQN (hierarchical / alphabetical).
+
+```xml
+<!-- ❌ BAD — package before schemaLocation; BlockML and domain interleaved -->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:unit="org.blockml.bml.unit"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation">
+
+<!-- ✅ GOOD -->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:unit="org.blockml.bml.unit"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+  xmlns:mbtype="com.machineblocks.bml.type">
+```
