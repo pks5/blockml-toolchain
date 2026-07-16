@@ -27,17 +27,20 @@
 
     Block identity conventions for Sub-Blocks (see 02_mbml.md — Type References and Block Identity):
     • Sub-Block: semantically nested type within the same BomDocument as the root block — does not
-      open its own document or library scope. Uses org.blockml.bml.definition.SubBlockDefinition
+      open its own document or library scope. Analogous to a Java static nested class: may declare
+      own &lt;genericTypes&gt;; does not see enclosing Block generics (forward with applications).
+      Uses org.blockml.bml.definition.SubBlockDefinition
       as definition meta-model — default org.blockml.bml.definition.SubBlockDefinition when
       &lt;definition&gt; is omitted. name is the local identity (required). type is normally
       omitted and derived recursively from the immediate enclosing block as
       resolve(parent.type) + "." + name (BML_SUBBLOCK_TYPE_MISMATCH when an explicit type does not
       match). Sub-Blocks may declare further Sub-Blocks to any depth (for example
-      com.foo.Vehicle.Engine.Cylinder). Sub-Blocks must not declare embeddedBlocks
+      com.foo.Vehicle.Engine.Cylinder). Unqualified nested names resolve enclosing-chain first
+      (02_mbml.md — Unqualified nested type resolution). Sub-Blocks must not declare embeddedBlocks
       (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK).
 
-    Root blocks and embedded blocks use org.blockml.bml.definition.RootBlockDefinition instead —
-    see RootBlockDefinition.</documentation>
+    Root blocks use org.blockml.bml.definition.RootBlockDefinition; embedded virtual files use
+    org.blockml.bml.definition.EmbeddedBlockDefinition — see those types.</documentation>
 
   <references>
     <see file="12_bom_object_model.md" relation="DeepDive">
@@ -50,7 +53,10 @@
       Shared block definition shape — identity, members, and metadata.
     </see>
     <see type="def:RootBlockDefinition" relation="Defines">
-      Root and embedded block shape — adds embeddedBlocks aggregation.
+      Document root shape — adds embeddedBlocks aggregation.
+    </see>
+    <see type="def:EmbeddedBlockDefinition" relation="Defines">
+      Virtual .bml entries under root embeddedBlocks.
     </see>
   </references>
 
@@ -66,7 +72,8 @@
         via implicit namespace org.blockml.bml.definition.* (for example SubBlockDefinition or
         definition:SubBlockDefinition). The referenced type must extend
         org.blockml.bml.definition.SubBlockDefinition and must not extend
-        org.blockml.bml.definition.RootBlockDefinition (BML_DEFINITION_TYPE_MISMATCH). Addressable
+        org.blockml.bml.definition.RootBlockDefinition or
+        org.blockml.bml.definition.EmbeddedBlockDefinition (BML_DEFINITION_TYPE_MISMATCH). Addressable
         as com.foo.Bar.Engine.definition.</documentation>
     </definition>
   </properties>
@@ -78,8 +85,7 @@
         is derived from resolve(parent.type) + "." + name when type is omitted; explicit type must
         match (BML_SUBBLOCK_TYPE_MISMATCH). Sub-Block name is required (BML_MISSING_SUBBLOCK_NAME).
         Sub-Blocks must not declare embeddedBlocks (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK). Allowed on
-        root blocks and embedded blocks; forbidden on Sub-Blocks only for embeddedBlocks, not for
-        subBlocks.</documentation>
+        root blocks and embedded blocks.</documentation>
     </subBlocks>
   </aggregations>
 </block>

@@ -318,7 +318,7 @@ There is **no multi-stage search**, no global TypeRegistry fallback, and no docu
 | `<status>` element content · `bml:status` attribute | `org.blockml.bml.status.*` | Status |
 | Capability `type` | `org.blockml.bml.capability.*` | Capability branch |
 | Constraint `validation` attribute | `org.blockml.bml.validation.*` | Validation |
-| `<definition>` element content | `org.blockml.bml.definition.*` | SubBlockDefinition on Sub-Blocks; RootBlockDefinition on root and embedded blocks |
+| `<definition>` element content | `org.blockml.bml.definition.*` | SubBlockDefinition on Sub-Blocks; RootBlockDefinition on document root; EmbeddedBlockDefinition on embedded virtual files |
 
 **Examples:**
 
@@ -360,9 +360,9 @@ type="type:Color"    →  com.machineblocks.bml.type.Color
 
 Explicit FQNs and `xmlns:` prefixes remain valid **everywhere** — including at specialized reference sites (`status:Draft`, `lang:TypeScript`, `validation:Error`, `relation:Extends` are equivalent to bare names at those sites).
 
-**Generic parameters** (e.g. `type="T"` on a property) are not block references — they refer to `genericTypes[]` entries in the enclosing Block definition.
+**Generic parameters** (e.g. `type="T"` on a property) are not block references — they refer to `genericTypes[]` entries on the **declaring Block** (the Block that owns the member). Sub-Blocks do not see enclosing generics — forward with an application (`Selector(T)`). See § Unqualified nested type resolution · `17_type_system_bml.md` — Generic parameter naming.
 
-**Naming mutual exclusion:** A generic parameter name must differ from the root Block `<name>` and from every Sub-Block `<name>` in the same document (`BML_GENERIC_BLOCK_NAME_COLLISION`, `BML_GENERIC_SUBBLOCK_NAME_COLLISION`).
+**Naming mutual exclusion (per declaring Block):** A generic parameter name must differ from that Block's `<name>` and from every **direct** Sub-Block `<name>` of that Block (`BML_GENERIC_BLOCK_NAME_COLLISION`, `BML_GENERIC_SUBBLOCK_NAME_COLLISION`). Nested Sub-Blocks may reuse the same letter (`T`) for their own parameters.
 
 For inheritance-aware self-reference at validate time, `bml:Self` remains available (see § Members — `bml:Self`).
 
@@ -402,15 +402,48 @@ General block references (`baseType`, aggregation `type`, composition tags outsi
 
 ### Sub-Block type references
 
-Sub-Blocks are types declared inside a parent Block. They may be referenced unqualified, as FQN, or as QName:
+Sub-Blocks are types declared inside a parent Block — **Java static nested classes**: own FQN prefix, own optional `<genericTypes>`, no enclosing-instance and **no** outer type-parameter scope. They may be referenced unqualified (when in scope), as FQN, or as QName:
 
 ```text
 <MySubBlock … />                      →  com.foo.Bar.MySubBlock   (in com.foo.Bar context)
 <com.foo.Bar.MySubBlock … />          →  com.foo.Bar.MySubBlock
 <foo:Bar.MySubBlock … />              →  com.foo.Bar.MySubBlock   (xmlns:foo="com.foo")
+selectors type="Selector(T)[]"        →  forward outer T into Sub-Block Selector's own T
 ```
 
 The local part of a QName may include a relative Sub-Block path (`foo:Bar.MySubBlock`), not only the root Block name.
+
+### Unqualified nested type resolution
+
+Unqualified simple names in a Block definition scope (member `type=`, `baseType`, composition tags in that definition) resolve like Java nested types — **innermost scope first**, then walk the enclosing chain:
+
+On the **current** Block, in order:
+
+1. **Own Block name** (`<name>` of this definition) — wins over nested types of the same spelling
+2. **Own generic parameters** (`genericTypes[]`)
+3. **Own direct Sub-Blocks** (`subBlocks[]` local names)
+
+Then repeat for the **immediate enclosing Block**, then its enclosing Block, up to the document root:
+
+4. Enclosing Block name → its generics → its direct Sub-Blocks  
+5. … until the root Block
+
+**Grandchildren are never unqualified.** From `Grid`, `Range` does not resolve to `Grid.Selector.Range` — write `Selector.Range` or `Grid.Selector.Range` / `mbtype:SelectiveGrid.Selector.Range`.
+
+```text
+Scope = SelectiveGrid.Selector.Range
+
+1. Range
+2. generics of Range
+3. direct Sub-Blocks of Range
+4. Selector → generics of Selector → direct Sub-Blocks of Selector (e.g. Range siblings)
+5. SelectiveGrid → generics of SelectiveGrid → direct Sub-Blocks (e.g. Selector)
+✗  bare name of a Sub-Block of Selector when looking only for a grandchild from SelectiveGrid
+```
+
+After the nested walk fails, normal rules apply (context-bound implicit namespace at specialized sites, then FQN / `xmlns:` — see § Context-Bound Implicit Namespace). Ambiguous match → `BML_AMBIGUOUS_TYPE`. Unknown → `BML_UNKNOWN_TYPE` or `BML_UNQUALIFIED_BLOCK_REFERENCE` as applicable.
+
+Generic / Sub-Block name collisions on the **same** declaring Block remain errors (`BML_GENERIC_*_COLLISION`) so steps 2 and 3 never compete for one identifier.
 
 ### Root Block identity
 
@@ -461,6 +494,7 @@ type     — normally omitted; derived as resolve(parent.type) + "." + name
          — when present, must equal that expected value (BML_SUBBLOCK_TYPE_MISMATCH)
 definition — optional; default org.blockml.bml.definition.SubBlockDefinition
            — must extend SubBlockDefinition, not RootBlockDefinition (BML_DEFINITION_TYPE_MISMATCH)
+genericTypes — allowed (own parameters; no enclosing-generic scope — forward explicitly)
 subBlocks — allowed (arbitrary nesting depth)
 embeddedBlocks — forbidden (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK)
 ```
@@ -1351,11 +1385,11 @@ PascalCase ensures composition instance tags with `xmlns:` prefixes are unambigu
 <associations>  — Association declarations.
 <capabilities>  — Capability declarations.
 <contracts>     — Contract references (reusable partial definitions). Root block only.
-<definition>    — Definition meta-model type FQN. Default: RootBlockDefinition on document root and
-                embedded blocks; SubBlockDefinition on Sub-Blocks (BML_DEFINITION_TYPE_MISMATCH
-                when incompatible with block role).
+<definition>    — Definition meta-model type FQN. Default: RootBlockDefinition on document root;
+                EmbeddedBlockDefinition on embedded virtual files; SubBlockDefinition on Sub-Blocks
+                (BML_DEFINITION_TYPE_MISMATCH when incompatible with block role).
 <subBlocks>     — Sub-Block definitions (see Sub-Blocks section; may nest recursively).
-<embeddedBlocks> — Inline Library: embedded Block definitions (see Embedded Blocks section). Root block and embedded blocks only.
+<embeddedBlocks> — Inline Library: virtual .bml files (see Embedded Blocks). Document root only.
 <aggregations>  — Aggregation declarations and definition-level compositions. Omit when inherited aggregations from baseType suffice.
                 — <composition> must be nested inside an aggregation member element (never standalone).
 ```
@@ -3069,7 +3103,9 @@ Block instances   — scope for that instance only (properties on the element)
 
 ## Sub-Blocks
 
-Sub-Blocks are Block definitions nested inside a parent Block. They are analogous to static inner classes in Java — they belong to the parent Block conceptually and share its FQN prefix. Sub-Blocks form a semantic type hierarchy within a single root document and may nest to arbitrary depth. Sub-Blocks are declared in a `<subBlocks>` section within the parent `<block>` document (root block, parent Sub-Block, or embedded block).
+Sub-Blocks are Block definitions nested inside a parent Block. They are analogous to **Java static nested classes** — they belong to the parent conceptually, share its FQN prefix, may declare their own `<genericTypes>`, and have **no** enclosing-instance / outer-generic scope. Forward type parameters explicitly (`type="Selector(T)"`). Sub-Blocks form a semantic type hierarchy within a single root document and may nest to arbitrary depth. Declared in a `<subBlocks>` section within the parent `<block>` document (root block, parent Sub-Block, or embedded block).
+
+Unqualified nested names resolve per § Unqualified nested type resolution (own name → own generics → own Sub-Blocks, then walk enclosing levels).
 
 ### Format
 
@@ -3174,18 +3210,21 @@ Sub-Block:   <name>Cylinder</name>
 → FQN:       com.foo.Vehicle.Engine.Cylinder
 ```
 
-`<type>` is normally omitted on Sub-Blocks — it is derived recursively as `resolve(parent.type) + "." + name` from the immediate enclosing block. When explicitly authored, it must match that expected value (`BML_SUBBLOCK_TYPE_MISMATCH`). Sub-Blocks may nest `<subBlocks>` to arbitrary depth. Sub-Blocks must not declare `<embeddedBlocks>` (`BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`). Root blocks and embedded blocks may declare both `<subBlocks>` and `<embeddedBlocks>`.
+`<type>` is normally omitted on Sub-Blocks — it is derived recursively as `resolve(parent.type) + "." + name` from the immediate enclosing block. When explicitly authored, it must match that expected value (`BML_SUBBLOCK_TYPE_MISMATCH`). Sub-Blocks may nest `<subBlocks>` to arbitrary depth. Sub-Blocks must not declare `<embeddedBlocks>` (`BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`). The document root may declare `<subBlocks>` and `<embeddedBlocks>`; embedded virtual files may declare `<subBlocks>` only.
 
 ### Embedded Blocks (Inline Library)
 
-**Gedankenstütze:** `embeddedBlocks` is an **Inline Library** — a library co-located within a single Block document. Unlike Sub-Blocks, embedded blocks are **full Block documents** structurally equivalent to root blocks. Each embedded block's **FQN is the value of its `<type>` element** (e.g. `com.foo.internal.Physics`) — not nested under the enclosing block. Sub-Blocks on an embedded block derive their FQNs from the embedded block's type.
+**Gedankenstütze:** `embeddedBlocks` is an **Inline Library** of **virtual `.bml` files** co-located in one BomDocument — primary use: fat single-file artifacts. Unlike Sub-Blocks, each embedded block is a full Block document. Meta-model: `org.blockml.bml.definition.EmbeddedBlockDefinition`. Each embedded block's **FQN is the value of its `<type>` element** (e.g. `com.foo.internal.Physics`) — not nested under the root. Sub-Blocks on an embedded block derive their FQNs from the embedded block's type.
+
+**Root-only:** `<embeddedBlocks>` is allowed **only on the document root** (`RootBlockDefinition`). Forbidden on Sub-Blocks (`BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`) and on embedded entries themselves (`BML_NESTED_EMBEDDED_BLOCKS`). Nesting would suggest false ownership to readers/LLMs; compose artifacts by listing virtual files **flat** at the root (bundlers flatten when merging packages).
 
 ```text
 type            — required; must be fully qualified (BML_MISSING_EMBEDDED_BLOCK_TYPE,
                   BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE)
 FQN             — resolve(type); definition paths use the embedded block's own FQN
+definition      — default EmbeddedBlockDefinition
 subBlocks       — allowed (Sub-Block FQNs derive from embedded block type)
-embeddedBlocks  — allowed (nested inline libraries)
+embeddedBlocks  — forbidden (BML_NESTED_EMBEDDED_BLOCKS)
 ```
 
 ```xml
@@ -3195,12 +3234,7 @@ embeddedBlocks  — allowed (nested inline libraries)
   <subBlocks>
     <block>
       <name>Engine</name>
-      <subBlocks>
-        <block>
-          <name>Cylinder</name>
-          …
-        </block>
-      </subBlocks>
+      …
       <!-- not allowed on Sub-Blocks:
       <embeddedBlocks>…</embeddedBlocks>
       -->
@@ -3208,7 +3242,7 @@ embeddedBlocks  — allowed (nested inline libraries)
   </subBlocks>
   <embeddedBlocks>
     <block>
-      <is>Inline — equivalent to a separate .bml file</is>
+      <is>Virtual file — equivalent to a separate .bml</is>
       <type>com.foo.internal.Physics</type>
       <baseType>org.blockml.bml.core.Block</baseType>
       <version>1.0.0</version>
@@ -3219,25 +3253,27 @@ embeddedBlocks  — allowed (nested inline libraries)
           <version>1.0.0</version>
         </block>
       </subBlocks>
-      <embeddedBlocks>
-        <block>
-          <type>com.foo.internal.Math</type>
-          <baseType>org.blockml.bml.core.Block</baseType>
-          <version>1.0.0</version>
-        </block>
-      </embeddedBlocks>
+      <!-- not allowed on embeds:
+      <embeddedBlocks>…</embeddedBlocks>
+      -->
+    </block>
+    <block>
+      <type>com.foo.internal.Math</type>
+      <baseType>org.blockml.bml.core.Block</baseType>
+      <version>1.0.0</version>
     </block>
   </embeddedBlocks>
 </block>
 ```
 
-Within the enclosing document, an embedded definition and all its descendants **shadow** the corresponding library or file-based Block definition. Externally, embedded blocks and their Sub-Blocks are **invisible**. Composition references from within the same document must use the **fully qualified** Block type — never an unqualified or Sub-Block-relative name.
+Within the enclosing document, each embedded FQN **shadows** the corresponding library or file-based Block definition. Duplicate FQNs among embeds → `BML_DUPLICATE_EMBEDDED_BLOCK`. Externally, embedded blocks and their Sub-Blocks are **invisible**. Composition references from within the same document must use the **fully qualified** Block type — never an unqualified or Sub-Block-relative name.
 
 **Central distinction:**
 
 ```text
-SubBlock       = semantically nested type within a root document
-EmbeddedBlock  = full, locally embedded Block document
+SubBlock                    = semantically nested type (Java static nested)
+EmbeddedBlockDefinition     = virtual .bml file in root embeddedBlocks
+RootBlockDefinition         = document root — sole owner of embeddedBlocks
 ```
 
 ### Composition Block References
@@ -4112,6 +4148,8 @@ Sub-Block without name        → BML_MISSING_SUBBLOCK_NAME
 Sub-Block explicit type mismatch → BML_SUBBLOCK_TYPE_MISMATCH
 Sub-Block declares embeddedBlocks → BML_EMBEDDED_BLOCKS_ON_SUBBLOCK
 <definition> incompatible with block role → BML_DEFINITION_TYPE_MISMATCH
+embedded declares embeddedBlocks → BML_NESTED_EMBEDDED_BLOCKS
+duplicate embedded FQN         → BML_DUPLICATE_EMBEDDED_BLOCK
 embedded block without type   → BML_MISSING_EMBEDDED_BLOCK_TYPE
 embedded block unqualified type → BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE
 unresolvable type reference   → BML_UNKNOWN_TYPE

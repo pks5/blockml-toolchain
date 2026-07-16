@@ -524,7 +524,9 @@ BML_BLOCK_NAME_TYPE_MISMATCH  — root block name ≠ last segment of resolve(ty
 BML_MISSING_SUBBLOCK_NAME     — Sub-Block lacks required name
 BML_SUBBLOCK_TYPE_MISMATCH    — explicit Sub-Block type ≠ resolve(parent.type) + "." + name
 BML_EMBEDDED_BLOCKS_ON_SUBBLOCK — Sub-Block declares embeddedBlocks (forbidden on all Sub-Blocks)
-BML_DEFINITION_TYPE_MISMATCH  — <definition> FQN incompatible with block role (Sub-Block vs root/embedded)
+BML_NESTED_EMBEDDED_BLOCKS — EmbeddedBlockDefinition declares embeddedBlocks (root-only)
+BML_DUPLICATE_EMBEDDED_BLOCK — same FQN appears twice among root embeddedBlocks
+BML_DEFINITION_TYPE_MISMATCH  — <definition> FQN incompatible with block role (Sub-Block vs root vs embed)
 BML_MISSING_EMBEDDED_BLOCK_TYPE — embedded block lacks required type
 BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE — embedded block type is not fully qualified
 BML_INVALID_BLOCK_NAME        — Block name does not match [A-Z][a-zA-Z0-9]*
@@ -605,8 +607,8 @@ BML_FUNCTION_DUPLICATE_MAIN   — more than one function matches the Capability 
 BML_IMPLEMENTATION_UNKNOWN_LANGUAGE — <implementation language="..."> is not a known org.blockml.bml.language.* FQN
 BML_FUNCTION_NO_RUNTIME_IMPL  — Transformation Capability called with non-literal args but no runtime impl
 BML_DUPLICATE_GENERIC           — duplicate generic parameter name on root Block
-BML_GENERIC_BLOCK_NAME_COLLISION — generic parameter element name equals the Block's <name>
-BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a Sub-Block <name> in the same file
+BML_GENERIC_BLOCK_NAME_COLLISION — generic parameter element name equals the declaring Block's <name>
+BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a direct Sub-Block <name> of the declaring Block
 BML_GENERIC_DEFAULT_FORWARD_REF — defaultType names a later or unknown generic parameter
 BML_GENERIC_DEFAULT_CYCLE — defaultType reference graph contains a cycle
 BML_GENERIC_DEFAULT_UNRESOLVED — defaultType chain does not ground to a concrete type

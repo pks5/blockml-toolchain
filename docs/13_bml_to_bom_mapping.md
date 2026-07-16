@@ -322,11 +322,11 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <core:Block />                               → block.subTypes[] (TypeReference(core:Block)[] child)
 <lang:OpenSCAD />                            → block.languages[] (TypeReference(core:Language)[] child)
 <ac:Wall />                                  → block.contracts[]   (TypeReference(core:Block)[] child; root block only)
-`<definition>RootBlockDefinition</definition>` → `block.definitionFqn`. Default depends on parse context: Sub-Blocks → `org.blockml.bml.definition.SubBlockDefinition`; document root and embedded blocks → `org.blockml.bml.definition.RootBlockDefinition`. Explicit `<definition>` must be compatible with block role (`BML_DEFINITION_TYPE_MISMATCH`).
-<baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType, defaultType? } (root block only)
+`<definition>RootBlockDefinition</definition>` → `block.definitionFqn`. Default depends on parse context: Sub-Blocks → `SubBlockDefinition`; document root → `RootBlockDefinition`; embedded virtual files → `EmbeddedBlockDefinition`. Explicit `<definition>` must be compatible with block role (`BML_DEFINITION_TYPE_MISMATCH`).
+<baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType, defaultType? } (any Block definition — root, Sub-Block, embedded)
 ```
 
-`<subBlocks>` and `<embeddedBlocks>` (Inline Library) map to `block.subBlocks[]` and `block.embeddedBlocks[]` respectively — each child `<block>` parsed recursively as a nested `BlockDefinition`. Sub-Block FQN is derived from the immediate enclosing block as `resolve(parent.type) + "." + name`; embedded block FQN is `resolve(type)` (the `<type>` element value). Embedded blocks are parsed as full root-block-shaped trees including nested `subBlocks[]` and `embeddedBlocks[]`. See `12_bom_object_model.md`.
+`<subBlocks>` and `<embeddedBlocks>` (Inline Library) map to `block.subBlocks[]` and `block.embeddedBlocks[]` respectively — each child `<block>` parsed recursively as a nested `BlockDefinition`. Sub-Block FQN is derived from the immediate enclosing block as `resolve(parent.type) + "." + name`; embedded block FQN is `resolve(type)` (the `<type>` element value). `embeddedBlocks` is parsed only on the document root; children are `EmbeddedBlockDefinition` (no nested `embeddedBlocks`). See `12_bom_object_model.md`.
 
 ```text
 Omitted <is> on Block definition         → BML_MISSING_IS (warning V1)
@@ -372,13 +372,12 @@ Duplicate members by visibility prefix   → BML_DUPLICATE_MEMBER_VISIBILITY_VAR
 Omitted <subTypes>                     → undefined — inherit effective subTypes from baseType chain
 Empty <subTypes/>                        → block.subTypes = [] (explicit override — forbid Sub-Blocks)
 Omitted languages / contracts          → inherit from baseType at validate
-Omitted genericTypes                 → none — generic parameters are not inherited; bind or forward via baseType
+Omitted genericTypes                 → none — generic parameters are not inherited; bind or forward via baseType / Sub-Block application
 <contracts> on Sub-Block                 → BML_CONTRACT_NOT_ON_ROOT (error)
 Duplicate contract reference           → BML_DUPLICATE_CONTRACT (error)
-<genericTypes> on Sub-Block                  → BML_GENERIC_NOT_ON_ROOT (error)
 Duplicate generic parameter name             → BML_DUPLICATE_GENERIC (error)
-generic parameter element name equals Block <name>         → BML_GENERIC_BLOCK_NAME_COLLISION (error)
-generic parameter element name equals Sub-Block <name> (any depth in document tree) → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
+generic parameter element name equals declaring Block <name> → BML_GENERIC_BLOCK_NAME_COLLISION (error)
+generic parameter element name equals a direct Sub-Block <name> of the declaring Block → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
 defaultType names later/unknown generic parameter          → BML_GENERIC_DEFAULT_FORWARD_REF (error)
 defaultType cycle                                          → BML_GENERIC_DEFAULT_CYCLE (error)
 defaultType chain does not ground to concrete type         → BML_GENERIC_DEFAULT_UNRESOLVED (error)
@@ -386,6 +385,8 @@ Unqualified block reference without FQN or xmlns prefix → BML_UNQUALIFIED_BLOC
 Ambiguous Sub-Block short name (same as root) → BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED (error)
 Sub-Block explicit type ≠ resolve(parent.type) + "." + name → BML_SUBBLOCK_TYPE_MISMATCH (error)
 Sub-Block declares <embeddedBlocks> → BML_EMBEDDED_BLOCKS_ON_SUBBLOCK (error)
+Embedded declares <embeddedBlocks> → BML_NESTED_EMBEDDED_BLOCKS (error)
+Duplicate FQN among root embeds → BML_DUPLICATE_EMBEDDED_BLOCK (error)
 Embedded block without <type> → BML_MISSING_EMBEDDED_BLOCK_TYPE (error)
 Embedded block type not fully qualified → BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE (error)
 <definition> incompatible with block role → BML_DEFINITION_TYPE_MISMATCH (error)

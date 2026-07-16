@@ -172,7 +172,7 @@ See `02_mbml.md` — Contracts · `00_bom_core.md` — Contracts.
 ```
 
 ```text
-Declares type parameters on this Block (root block only)
+Declares type parameters on this Block (root, Sub-Block, or embedded — Java static nested model)
 Element name  — parameter identifier used in type references (e.g. type="T")
 baseType      — FQN constraint; concrete type arguments must satisfy this bound via satisfiesTypeBound
 defaultType   — optional default when the type argument is omitted:
@@ -183,16 +183,17 @@ Usage         — com.foo.Box<org.blockml.bml.type.Integer> at reference sites
 Validator     — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
 
 Generic parameters belong exclusively to the declaring Block — they are never inherited
-implicitly. When a generic Block is used as baseType, the derived Block must bind or forward
+implicitly and never visible on nested Sub-Blocks (no enclosing-instance / outer-T scope).
+Forward explicitly: Outer(T) member type="Selector(T)" where Selector declares its own T.
+When a generic Block is used as baseType, the derived Block must bind or forward
 each parameter explicitly (for example baseType = PrimitiveEntity(Integer) binds T = Integer).
 Resolution substitutes bound parameters in the inherited definition during validate time.
-See 17_type_system_bml.md — § Generic resolution through inheritance.
+See 17_type_system_bml.md — § Generic resolution through inheritance · Generic parameter naming.
 
-Naming (parse time):
+Naming (parse time, per declaring Block):
   element name must differ from the Block's <name>           → BML_GENERIC_BLOCK_NAME_COLLISION
-  element name must differ from every Sub-Block <name>       → BML_GENERIC_SUBBLOCK_NAME_COLLISION
+  element name must differ from every direct Sub-Block <name> → BML_GENERIC_SUBBLOCK_NAME_COLLISION
   duplicate element name among genericTypes entries          → BML_DUPLICATE_GENERIC
-  <genericTypes> on Sub-Block                                → BML_GENERIC_NOT_ON_ROOT
   defaultType names later/unknown parameter                  → BML_GENERIC_DEFAULT_FORWARD_REF
   defaultType cycle                                          → BML_GENERIC_DEFAULT_CYCLE
   default chain does not ground                              → BML_GENERIC_DEFAULT_UNRESOLVED
@@ -328,7 +329,7 @@ in child blocks.
 
 `org.blockml.bml.definition.SubBlockDefinition` adds `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy).
 
-`org.blockml.bml.definition.RootBlockDefinition` overrides `definition` (default `org.blockml.bml.definition.RootBlockDefinition` on root and embedded blocks) and declares `embeddedBlocks` (Inline Library). `subBlocks` is inherited from `SubBlockDefinition` and may nest to arbitrary depth on root blocks and embedded blocks.
+`org.blockml.bml.definition.RootBlockDefinition` overrides `definition` (default `RootBlockDefinition` on the document root) and declares `embeddedBlocks` (`EmbeddedBlockDefinition[]` — virtual files, root-only). `org.blockml.bml.definition.EmbeddedBlockDefinition` overrides `definition` for those entries (no nested embeds). `subBlocks` is inherited from `SubBlockDefinition` and may nest to arbitrary depth on roots and embeds.
 
 `org.blockml.bml.definition.StructuralDefinition.Reference` — inline Sub-Block; **documentation** cross-reference connecting **types to types** or **types to instances** (also definition members, files, URLs). Not an instance-to-instance model link — those are Associations. See `02_mbml.md` — Associations vs References.
 
@@ -427,12 +428,13 @@ com.foo.Bar.subBlocks.Inner.definition → Definition meta-model type FQN (defau
 com.foo.Bar.subBlocks.Inner         →  nested BlockDefinition (FQN = com.foo.Bar.Inner)
 com.foo.Bar.subBlocks.Outer.subBlocks.Inner → nested Sub-Block at arbitrary depth
 com.foo.internal.Physics            →  embedded BlockDefinition (FQN = embedded block &lt;type&gt;)
+com.foo.internal.Physics.definition →  Definition meta-model type FQN (default EmbeddedBlockDefinition)
 com.foo.internal.Physics.subBlocks.Force → Sub-Block on embedded block (FQN = com.foo.internal.Physics.Force)
 com.foo.internal.Physics.properties.width →  PropertyDefinition on embedded block
 com.foo.Bar.contracts               →  contract references
 ```
 
-`org.blockml.bml.definition.BlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter. `SubBlockDefinition` adds `definition` (default on Sub-Blocks) and `subBlocks`. Root blocks and embedded blocks use `org.blockml.bml.definition.RootBlockDefinition`, which overrides `definition` (default RootBlockDefinition) and adds `embeddedBlocks`.
+`org.blockml.bml.definition.BlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter. `SubBlockDefinition` adds `definition` (default on Sub-Blocks) and `subBlocks`. Document roots use `RootBlockDefinition` (adds `embeddedBlocks`). Virtual files use `EmbeddedBlockDefinition`.
 
 No special definition-reference constructs (`bml:Def`, flat `com.foo.Bar.memberName`) are used. `bml:Self` remains available for **type references** only (`type="bml:Self"`), not for definition navigation.
 

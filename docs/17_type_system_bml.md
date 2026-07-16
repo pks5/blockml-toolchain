@@ -1390,7 +1390,9 @@ Branch ↔ context mismatch → `BML_CONSTRAINT_TARGET_MISMATCH`. Binding rules 
 
 ### Generic parameter naming
 
-Generic parameter names are declared on the root Block only (`<genericTypes>` on Sub-Blocks → `BML_GENERIC_NOT_ON_ROOT`). The parser rejects name collisions:
+Every Block definition — **root, Sub-Block, or embedded** — may declare `<genericTypes>`. Sub-Blocks follow the **Java static nested class** model: they declare their own parameters and **do not** see the enclosing Block's generics. Bindings must be forwarded explicitly (e.g. `selectors type="Selector(T)[]"` where `T` is the outer parameter and `Selector` declares its own `T`).
+
+The parser rejects name collisions **on the declaring Block** (same scope — not nested scopes):
 
 ```text
 <name>Box</name>
@@ -1398,22 +1400,24 @@ Generic parameter names are declared on the root Block only (`<genericTypes>` on
   <Box baseType="…"/>     → BML_GENERIC_BLOCK_NAME_COLLISION
 </genericTypes>
 
-<name>Library</name>
+<name>SelectiveGrid</name>
 <subBlocks>
-  <block><name>Schema</name>…</block>
+  <block><name>Selector</name>…</block>
 </subBlocks>
 <genericTypes>
-  <Schema baseType="…"/>  → BML_GENERIC_SUBBLOCK_NAME_COLLISION
+  <Selector baseType="…"/>  → BML_GENERIC_SUBBLOCK_NAME_COLLISION
 </genericTypes>
 ```
 
+Nested scopes may reuse the same parameter letter — `SelectiveGrid` and `SelectiveGrid.Selector` may each declare `T` independently (outer `T` is not in scope on the Sub-Block).
+
 ```text
-BML_GENERIC_BLOCK_NAME_COLLISION    — generic parameter element name equals the Block's <name>
-BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a Sub-Block <name> in the same file
-BML_DUPLICATE_GENERIC               — duplicate generic parameter element name
+BML_GENERIC_BLOCK_NAME_COLLISION    — generic parameter element name equals the declaring Block's <name>
+BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a direct Sub-Block <name> of the declaring Block
+BML_DUPLICATE_GENERIC               — duplicate generic parameter element name on the same Block
 ```
 
-A generic parameter name must be a distinct identifier — not the Block name, not any Sub-Block name in the same document, and not duplicated among `<genericTypes>` entries.
+A generic parameter name must be a distinct identifier on that Block — not the Block's own `<name>`, not any **direct** Sub-Block `<name>` of that Block, and not duplicated among that Block's `<genericTypes>` entries.
 
 ---
 

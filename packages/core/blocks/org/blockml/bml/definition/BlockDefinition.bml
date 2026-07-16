@@ -23,7 +23,7 @@
   <is>The shape of a Block document</is>
 
   <documentation>Abstract meta-model base for all Block definition documents — root blocks,
-    Sub-Blocks, and embedded blocks. Semantically a Class: declarative type shape without instance
+    Sub-Blocks, and embedded virtual files. Semantically a Class: declarative type shape without instance
     state. Parsed into BomDocument.block and nested block definition trees. Generic type parameter B
     binds this definition to the Block type it describes — conceptually BlockDefinition of
     com.foo.Bar when B resolves to com.foo.Bar.
@@ -177,8 +177,11 @@
         Bare TypeReferenceEntity(T) = optional single (0..1).</documentation>
     </language>
     <genericTypes type="def:GenericTypeDefinition[]">
-      <documentation>Generic type parameters declared on this Block (root block only). Each entry
-        has a name and a baseType constraint for concrete type arguments at reference sites.</documentation>
+      <documentation>Generic type parameters declared on this Block (root, Sub-Block, or embedded —
+        Java static nested model). Each entry has a name and a baseType constraint for concrete type
+        arguments at reference sites. Sub-Blocks do not see enclosing generics — forward explicitly
+        (e.g. type="Selector(T)"). Name must not equal this Block's name or a direct Sub-Block name
+        (BML_GENERIC_BLOCK_NAME_COLLISION / BML_GENERIC_SUBBLOCK_NAME_COLLISION).</documentation>
     </genericTypes>
     <languages type="type:TypeReferenceEntity(core:Language)[]">
       <documentation>Language types permitted on capability implementation bindings for this Block.

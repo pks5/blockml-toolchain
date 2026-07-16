@@ -22,8 +22,8 @@
   <documentation>Struct ValueType for a plate-grid of cell values. baseValue is the default for
     every cell; selectors overlays rectangular ranges (from/to in GridUnitXY) with an override
     value. Generic T is the cell value type — e.g. SelectiveGrid(Boolean) or
-    SelectiveGrid(Boolean | mbtype:HoleType). Sub-Block Selector shares T from this Block
-    (generics are root-only — BML_GENERIC_NOT_ON_ROOT).</documentation>
+    SelectiveGrid(Boolean | mbtype:HoleType). Sub-Block Selector is a Java-style static nested
+    type with its own T — forward via selectors type="Selector(T)[]".</documentation>
 
   <genericTypes>
     <T baseType="core:ValueType"/>
@@ -33,9 +33,10 @@
     <baseValue type="T">
       <documentation>Default value for all grid cells not covered by a selector.</documentation>
     </baseValue>
-    <selectors type="mbtype:SelectiveGrid.Selector[]">
+    <selectors type="Selector(T)[]">
       <documentation>Rectangular range overrides. Later selectors win on overlap (authoring
-        order). Each Selector carries from, to, and value (T).</documentation>
+        order). Forwards this Block's T into Selector(T). Each Selector carries from, to, and
+        value.</documentation>
     </selectors>
   </properties>
 
@@ -46,9 +47,13 @@
       <baseType>type:StructType</baseType>
       <is>A rectangular grid range override</is>
 
-      <documentation>Inclusive axis-aligned range on the plate grid. from/to are AxisXY in
-        Integer(GridUnitXY). value uses SelectiveGrid's generic T.
+      <documentation>Inclusive axis-aligned range on the plate grid. Static nested StructType with
+        its own generic T (no outer-T scope). from/to are AxisXY in Integer(GridUnitXY).
         FQN: com.machineblocks.bml.type.SelectiveGrid.Selector.</documentation>
+
+      <genericTypes>
+        <T baseType="core:ValueType"/>
+      </genericTypes>
 
       <properties>
         <from type="mbtype:AxisXY(Integer(mbunit:GridUnitXY))">
@@ -58,7 +63,7 @@
           <documentation>Inclusive end corner of the selection (x, y) in GridUnitXY.</documentation>
         </to>
         <value type="T">
-          <documentation>Override value for cells in [from, to] — same T as SelectiveGrid.</documentation>
+          <documentation>Override value for cells in [from, to] — Selector's own T.</documentation>
         </value>
       </properties>
     </block>

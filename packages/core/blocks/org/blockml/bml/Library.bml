@@ -121,6 +121,7 @@
       <def:ConstrainableDefinition />
       <def:BlockDefinition />
       <def:SubBlockDefinition />
+      <def:EmbeddedBlockDefinition />
       <def:RootBlockDefinition />
       <def:CapabilityDefinition />
       <def:GenericTypeDefinition />
