@@ -79,6 +79,8 @@
       <mbtype:OffsetXY />
       <mbtype:OffsetXYZ />
       <mbtype:QualityPreset />
+      <mbtype:RotationXY />
+      <mbtype:RotationXYZ />
       <mbtype:SizeXY />
       <mbtype:SizeXYZ />
       <mbunit:MBU />

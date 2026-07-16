@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core"
   xmlns:type="com.machineblocks.bml.type">
   <name>AxisXY</name>
   <type>type:AxisXY</type>
@@ -16,11 +17,12 @@
   <is>A value pair along X and Y</is>
 
   <documentation>Struct ValueType for axis-keyed { x, y }. Extends MultiAxis(N).
-    Bare AxisXY is Decimal (dimensionless). Supply a unit via N — e.g.
-    AxisXY(Decimal(unit:Millimeter)) or AxisXY(Integer(unit:MBU)).</documentation>
+    N is any ValueType (default Decimal) — numbers, structs, enums, etc. Bare AxisXY is Decimal
+    (dimensionless). Supply a unit via N — e.g. AxisXY(Decimal(unit:Millimeter)) or
+    AxisXY(Integer(unit:MBU)).</documentation>
 
   <genericTypes>
-    <N baseType="btype:Number" defaultType="btype:Decimal"/>
+    <N baseType="core:ValueType" defaultType="btype:Decimal"/>
   </genericTypes>
 
   <properties>
@@ -44,6 +46,9 @@
     </see>
     <see type="type:OffsetXY" relation="SeeAlso">
       Offset semantics on AxisXY.
+    </see>
+    <see type="type:RotationXY" relation="SeeAlso">
+      Rotation semantics — AxisXY with N closed to Decimal(unit:Degree).
     </see>
   </references>
 

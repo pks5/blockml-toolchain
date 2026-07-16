@@ -18,8 +18,8 @@
     or Status, not a ValueType. Unit blocks describe a unit of measure; they never store concrete
     magnitudes and are not valid as Property type or Capability inputType/outputType. They appear
     as generic type arguments on Number (and domain types such as MultiAxis) — e.g.
-    Decimal(unit:Millimeter). Standard implementations live in org.blockml.bml.unit.*; domain
-    libraries may define additional unit blocks.</documentation>
+    Decimal(unit:Millimeter), Float(unit:Degree). Standard implementations live in
+    org.blockml.bml.unit.*; domain libraries may define additional unit blocks.</documentation>
   <abstract>true</abstract>
 
   <references>

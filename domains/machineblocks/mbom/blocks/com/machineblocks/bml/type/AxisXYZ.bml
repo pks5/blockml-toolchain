@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core"
   xmlns:type="com.machineblocks.bml.type">
   <name>AxisXYZ</name>
   <type>type:AxisXYZ</type>
@@ -16,11 +17,11 @@
   <is>A value triple along X, Y, and Z</is>
 
   <documentation>Struct ValueType for axis-keyed { x, y, z }. Extends AxisXY(N) and adds z.
-    Inherits x and y. Bare AxisXYZ is Decimal (dimensionless). Supply a unit via N — e.g.
-    AxisXYZ(Decimal(unit:Millimeter)).</documentation>
+    Inherits x and y. N is any ValueType (default Decimal). Bare AxisXYZ is Decimal
+    (dimensionless). Supply a unit via N — e.g. AxisXYZ(Decimal(unit:Millimeter)).</documentation>
 
   <genericTypes>
-    <N baseType="btype:Number" defaultType="btype:Decimal"/>
+    <N baseType="core:ValueType" defaultType="btype:Decimal"/>
   </genericTypes>
 
   <properties>
@@ -41,6 +42,9 @@
     </see>
     <see type="type:OffsetXYZ" relation="SeeAlso">
       Offset semantics on AxisXYZ.
+    </see>
+    <see type="type:RotationXYZ" relation="SeeAlso">
+      Rotation semantics — AxisXYZ with N closed to Decimal(unit:Degree).
     </see>
   </references>
 

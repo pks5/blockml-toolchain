@@ -1,0 +1,20 @@
+<!--
+  BlockML Core — angular degree unit
+
+  FQN: org.blockml.bml.unit.Degree
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:unit="org.blockml.bml.unit">
+  <name>Degree</name>
+  <type>unit:Degree</type>
+  <baseType>core:Unit</baseType>
+  <is>Degree (°)</is>
+
+  <documentation>Angular unit — degree of arc (°). Use for rotation and orientation angles,
+    e.g. Decimal(unit:Degree) or Float(unit:Degree).</documentation>
+</block>

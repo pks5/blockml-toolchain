@@ -245,6 +245,7 @@
       <unit:Centimeter />
       <unit:Meter />
       <unit:Inch />
+      <unit:Degree />
       <doc:Introduction />
       <doc:EverythingIsABlock />
       <doc:BlockAndInstance />
