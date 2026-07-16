@@ -18,7 +18,7 @@
   <documentation>Struct ValueType for a sparse face map on all six faces
     { xMinus, xPlus, yMinus, yPlus, zMinus, zPlus }. Extends FaceMapXY(T) and adds zMinus / zPlus.
     Inherits the four lateral face properties. Bind T explicitly — e.g.
-    FaceMapXYZ(Decimal(unit:Millimeter)) or FaceMapXYZ(Decimal(mbunit:GridUnit)).
+    FaceMapXYZ(Decimal(unit:Millimeter)) or FaceMapXYZ(Decimal(mbunit:GridUnitXY)).
     Preferred type for NativeBlock face maps (baseAdjustment, sizeMod, …). Named FaceMapXYZ
     (not FaceMap3D) — MachineBlocks face/axis types use XY / XYZ, not 2D / 3D.</documentation>
 

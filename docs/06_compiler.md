@@ -562,6 +562,9 @@ BML_CONTRACT_NOT_ON_ROOT      — <contracts> declared on a Sub-Block
 BML_DUPLICATE_CONTRACT        — same contract Block referenced twice
 BML_CONTRACT_MEMBER_KIND_MISMATCH — override uses a different member kind than merged member
 BML_GENERIC_CONSTRAINT_VIOLATION  — generic type argument fails satisfiesTypeBound
+BML_GENERIC_DEFAULT_FORWARD_REF   — defaultType names a later or unknown generic parameter
+BML_GENERIC_DEFAULT_CYCLE         — defaultType reference graph contains a cycle
+BML_GENERIC_DEFAULT_UNRESOLVED    — defaultType chain does not ground to a concrete type
 BML_TYPE_BOUND_NOT_SATISFIED      — type reference fails satisfiesTypeBound
 BML_SUGGESTIONS_ON_ENUM       — <suggestions> declared on an enum-type property
 BML_CONSTRAINT_UNKNOWN        — constraint Block type not in TypeRegistry or not a Constraint sub-type
@@ -604,6 +607,9 @@ BML_FUNCTION_NO_RUNTIME_IMPL  — Transformation Capability called with non-lite
 BML_DUPLICATE_GENERIC           — duplicate generic parameter name on root Block
 BML_GENERIC_BLOCK_NAME_COLLISION — generic parameter element name equals the Block's <name>
 BML_GENERIC_SUBBLOCK_NAME_COLLISION — generic parameter element name equals a Sub-Block <name> in the same file
+BML_GENERIC_DEFAULT_FORWARD_REF — defaultType names a later or unknown generic parameter
+BML_GENERIC_DEFAULT_CYCLE — defaultType reference graph contains a cycle
+BML_GENERIC_DEFAULT_UNRESOLVED — defaultType chain does not ground to a concrete type
 BML_UNQUALIFIED_BLOCK_REFERENCE — bare block reference without FQN or xmlns prefix at a general reference site (composition tag, baseType, aggregation/association type)
 BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED — Sub-Block shares root Block name; bare short tag is ambiguous
 BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation language="..."> not listed in baseType languages

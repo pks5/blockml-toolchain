@@ -84,7 +84,8 @@
       <mbtype:SizeXY />
       <mbtype:SizeXYZ />
       <mbunit:MBU />
-      <mbunit:GridUnit />
+      <mbunit:GridUnitXY />
+      <mbunit:GridUnitZ />
     </blocks>
   </aggregations>
 

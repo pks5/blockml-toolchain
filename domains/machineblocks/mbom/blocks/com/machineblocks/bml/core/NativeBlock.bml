@@ -117,13 +117,13 @@
       <scad:value></scad:value>
     </baseAdjustment>
 
-    <baseClampHeight type="Decimal">
+    <baseClampHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of the base clamp lip.</documentation>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
     </baseClampHeight>
 
-    <baseClampOffset type="Decimal">
+    <baseClampOffset type="Decimal(mbunit:MBU)">
       <documentation>Distance from the bottom edge of the block to the base clamp lip.
         The base clamp is a small lip on the inner wall of the underside
         opening, around tubes, and in stud holes (baseCutoutType=studs)
@@ -143,7 +143,7 @@
       <scad:value>false</scad:value>
     </baseClampOuter>
 
-    <baseClampThickness type="Decimal">
+    <baseClampThickness type="Decimal(unit:Millimeter)">
       <documentation>Thickness of the base clamp lip.</documentation>
       <value>0.1</value>
       <scad:value>0.1</scad:value>
@@ -157,7 +157,7 @@
       <scad:value>#EAC645</scad:value>
     </baseColor>
 
-    <baseCrop type="mbtype:FaceMapXYZ(Decimal(mbunit:GridUnit))">
+    <baseCrop type="mbtype:FaceMapXYZ(Decimal(mbunit:GridUnitXY))">
       <documentation>Hard cut or extension per side (0-3 only, no Z-axis crop).
         Positive = cut geometry, negative = extend geometry.
         The cut is applied brutally — without regard to grid compatibility,
@@ -173,7 +173,7 @@
       <scad:value>0</scad:value>
     </baseCrop>
 
-    <baseCutoutMaxDepth type="Decimal">
+    <baseCutoutMaxDepth type="Decimal(mbunit:MBU)">
       <documentation>Maximum depth of the underside opening (baseCutoutType=standard only).
         Default 5 mbu ≈ 8 mm. Limits underside depth; if the limit applies,
         the topPlateHeight grows accordingly. When recess is defined, the
@@ -215,7 +215,7 @@
       <scad:value>[]</scad:value>
     </baseWallGaps>
 
-    <baseWallThickness type="mbtype:Auto | Decimal">
+    <baseWallThickness type="mbtype:Auto | Decimal(mbunit:MBU)">
       <documentation>Wall thickness of the underside opening (baseCutoutType=standard).
         Automatically calculated. Usually does not need adjustment.
       </documentation>
@@ -223,7 +223,7 @@
       <scad:value>auto</scad:value>
     </baseWallThickness>
 
-    <baseWallThicknessAdjustment type="Decimal">
+    <baseWallThicknessAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for baseWallThickness.
         Only for calibration. Not for AI in settings.
       </documentation>
@@ -231,7 +231,7 @@
       <scad:value>-0.1</scad:value>
     </baseWallThicknessAdjustment>
 
-    <bevel type="mbtype:PerSide4(AxisXY(Decimal(mbunit:GridUnit)))">
+    <bevel type="mbtype:PerSide4(AxisXY(Decimal(mbunit:GridUnitXY)))">
       <documentation>Creates wedges by shifting Z-axis corners (0-3) in XY space.
         Each corner gets an [x,y] displacement value.
         The resulting shape is intersected with the bounding box.
@@ -244,13 +244,13 @@
       <scad:value>[[0,0], [0,0], [0,0], [0,0]]</scad:value>
     </bevel>
 
-    <connectorDepth type="Decimal">
+    <connectorDepth type="Decimal(mbunit:MBU)">
       <documentation>How far the connector triangles protrude.</documentation>
       <value>0.75</value>
       <scad:value>0.75</scad:value>
     </connectorDepth>
 
-    <connectorLength type="mbtype:Auto | Decimal">
+    <connectorLength type="mbtype:Auto | Decimal(mbunit:MBU)">
       <documentation>Length of the connector run on the face. At "auto" equals the
         available space (brick height for x/y faces, width/depth for z faces).
       </documentation>
@@ -259,7 +259,7 @@
       <scad:value>auto</scad:value>
     </connectorLength>
 
-    <connectorLengthClearance type="Decimal">
+    <connectorLengthClearance type="Decimal(unit:Millimeter)">
       <documentation>Clearance of the recess depth relative to the triangle depth.
         Ensures male and female connectors fit together.
       </documentation>
@@ -268,7 +268,7 @@
       <scad:value>0.2</scad:value>
     </connectorLengthClearance>
 
-    <connectorSideClearance type="Decimal">
+    <connectorSideClearance type="Decimal(unit:Millimeter)">
       <documentation>Clearance of the recess width relative to the triangle width.
         Ensures male and female connectors fit together.
       </documentation>
@@ -277,7 +277,7 @@
       <scad:value>0.1</scad:value>
     </connectorSideClearance>
 
-    <connectorWidth type="Decimal">
+    <connectorWidth type="Decimal(mbunit:MBU)">
       <documentation>Width of the connector triangles.</documentation>
       <value>2.25</value>
       <scad:value>2.25</scad:value>
@@ -352,7 +352,7 @@
       <scad:value>5</scad:value>
     </grilleCount>
 
-    <grilleDepth type="Decimal">
+    <grilleDepth type="Decimal(mbunit:MBU)">
       <documentation>Depth of the grille openings.</documentation>
       <value>1</value>
       <scad:value>1</scad:value>
@@ -584,7 +584,7 @@
       <scad:value></scad:value>
     </id>
 
-    <offset type="mbtype:AxisXYZ(Decimal(mbunit:GridUnit))">
+    <offset type="mbtype:AxisXYZ(Decimal(mbunit:GridUnitXY))">
       <documentation>Final displacement of the brick. Applied last in the transformation
         chain. Same unit as size (grid units / multiples of a 1x1 plate).
         Origin depends on whether the brick is global or a child.
@@ -616,27 +616,27 @@
       <scad:value>[20, 30, 3]</scad:value>
     </pcbDimensions>
 
-    <pcbOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
+    <pcbOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Offset of the PCB from the center of the brick.</documentation>
       <value>[0, 0]</value>
       <scad:value>[0, 0]</scad:value>
     </pcbOffset>
 
-    <pcbSocketDiameter type="Decimal">
+    <pcbSocketDiameter type="Decimal(unit:Millimeter)">
       <documentation>Diameter of screw sockets.</documentation>
       <since>3.0.0</since>
       <value>5</value>
       <scad:value>5</scad:value>
     </pcbSocketDiameter>
 
-    <pcbSocketHeight type="Decimal">
+    <pcbSocketHeight type="Decimal(unit:Millimeter)">
       <documentation>Height of the screw sockets.</documentation>
       <since>3.0.0</since>
       <value>3</value>
       <scad:value>3</scad:value>
     </pcbSocketHeight>
 
-    <pcbSocketHoleDiameter type="Decimal">
+    <pcbSocketHoleDiameter type="Decimal(unit:Millimeter)">
       <documentation>Diameter of the screw hole inside the socket.</documentation>
       <since>3.0.0</since>
       <value>2.2</value>
@@ -675,7 +675,7 @@
       <scad:value>[2, 10]</scad:value>
     </pillarGapAutoConfig>
 
-    <pillarInnerClampThickness type="Decimal">
+    <pillarInnerClampThickness type="Decimal(unit:Millimeter)">
       <documentation>Thickness of the clamp inside Z-direction tubes.
         A constriction of the inner hole so studs grip inside the tube.
         Usually does not need adjustment.
@@ -685,7 +685,7 @@
       <scad:value>0.1</scad:value>
     </pillarInnerClampThickness>
 
-    <pillarOriginalWallThickness type="Decimal">
+    <pillarOriginalWallThickness type="Decimal(mbunit:MBU)">
       <documentation>Fixed constant used for automatic tube diameter calculation.
         Do not modify.
       </documentation>
@@ -700,7 +700,7 @@
       <scad:value>true</scad:value>
     </pillars>
 
-    <pinDiameter type="Decimal">
+    <pinDiameter type="Decimal(mbunit:MBU)">
       <documentation>Diameter of pins (small tubes) for bricks with size.x or size.y = 1.
         Automatically calculated.
       </documentation>
@@ -708,7 +708,7 @@
       <scad:value>auto</scad:value>
     </pinDiameter>
 
-    <pinDiameterAdjustment type="Decimal">
+    <pinDiameterAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for pin diameter.</documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
@@ -724,7 +724,7 @@
       <scad:value>false</scad:value>
     </ports>
 
-    <printerLayerHeight type="Decimal">
+    <printerLayerHeight type="Decimal(unit:Millimeter)">
       <documentation>Layer height of the 3D printer in mm. Typically set once in the
         global config. Used as the default value for other parameters when
         those parameters are set to "auto".
@@ -741,7 +741,7 @@
       <scad:value>0.2</scad:value>
     </printerLayerHeight>
 
-    <printerNozzleDiameter type="Decimal">
+    <printerNozzleDiameter type="Decimal(unit:Millimeter)">
       <documentation>Nozzle diameter of the 3D printer in mm. Typically set once in the
         global config. Used as the default value for other parameters when
         those parameters are set to "auto".
@@ -797,7 +797,7 @@
       <scad:value>auto</scad:value>
     </recessAdjustment>
 
-    <recessDepth type="mbtype:Auto | Decimal">
+    <recessDepth type="mbtype:Auto | Decimal(mbunit:GridUnitZ)">
       <documentation>Depth of the recess cavity, expressed as multiples of one plate (unitGrid[1] = 2 mbu).
         At "auto" depth is maximized.
         When set to an absolute value, the baseCutout (standard) goes up to
@@ -819,7 +819,7 @@
       <scad:value>auto</scad:value>
     </recessRoundingRadius>
 
-    <recessStudPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
+    <recessStudPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Padding from the recess wall inward. Determines whether outer studs
         in the recess are hidden. Studs whose center is closer to the recess
         wall than this padding value are not drawn.
@@ -885,7 +885,7 @@
       <scad:value>true</scad:value>
     </recessWallStuds>
 
-    <recessWallThickness type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
+    <recessWallThickness type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Wall thickness of the recess cavity (box wall thickness).</documentation>
       <value>0.333</value>
       <scad:value>0.333</scad:value>
@@ -1130,7 +1130,7 @@
       <scad:value>[-0.1, 0]</scad:value>
     </sizeAdjustment>
 
-    <sizeMod type="mbtype:FaceMapXYZ(Decimal(mbunit:GridUnit))">
+    <sizeMod type="mbtype:FaceMapXYZ(Decimal(mbunit:GridUnitXY))">
       <documentation>Semantic size modification per side, in grid units. Adjusts the
         brick geometry while keeping it structurally intact (walls, studs,
         connectors remain consistent). Unlike crop, sizeMod does not brutally
@@ -1150,11 +1150,11 @@
         calibration and gap closing in composite blocks.
       </documentation>
       <since>3.0.0</since>
-      <value>{}</value>
-      <scad:value>[]</scad:value>
+      <value>{xMinus: 0, xPlus: 0, yMinus: 0, yPlus: 0, zMinus: 0, zPlus: 0}</value>
+      <scad:value>[0, 0, 0, 0, 0, 0]</scad:value>
     </sizeMod>
 
-    <slope type="Constant(Boolean){false} | mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
+    <slope type="Constant(Boolean){false} | mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Defines slopes per side (0-3).
         Positive values: slope on top surface (z+), starting at slopeBaseHeightBottom
         and going the specified number of plates toward the center upward.
@@ -1281,7 +1281,7 @@
       <scad:value>0.0</scad:value>
     </studClampThickness>
 
-    <studCutoutDiameterAdjustment type="Decimal">
+    <studCutoutDiameterAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for stud cutout diameter.
         Affects cutouts for studs in baseCutoutType=studs and outer wall
         cutouts in round bricks for grid compatibility. Calibration only.
@@ -1291,7 +1291,7 @@
       <scad:value>0.2</scad:value>
     </studCutoutDiameterAdjustment>
 
-    <studCutoutHeightAdjustment type="Decimal">
+    <studCutoutHeightAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for stud cutout height.
         Affects cutouts for studs in baseCutoutType=studs and outer wall
         cutouts in round bricks for grid compatibility. Calibration only.
@@ -1307,7 +1307,7 @@
       <scad:value>3</scad:value>
     </studDiameter>
 
-    <studDiameterAdjustment type="Decimal">
+    <studDiameterAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for studDiameter.</documentation>
       <value>0.2</value>
       <scad:value>0.2</scad:value>
@@ -1319,7 +1319,7 @@
       <scad:value>1</scad:value>
     </studHeight>
 
-    <studHeightAdjustment type="Decimal">
+    <studHeightAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for studHeight.</documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
@@ -1341,7 +1341,7 @@
       <scad:value>auto</scad:value>
     </studHoleDiameter>
 
-    <studHoleDiameterAdjustment type="Decimal">
+    <studHoleDiameterAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for studHoleDiameter.</documentation>
       <value>0.3</value>
       <scad:value>0.3</scad:value>
@@ -1391,7 +1391,7 @@
       <scad:value>0.3</scad:value>
     </studMaxOverhang>
 
-    <studPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
+    <studPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Padding from sides 0-3 inward. Shifts the outer wall for the decision
         whether studs are drawn, allowing outer studs to be hidden.
       </documentation>
@@ -1456,13 +1456,13 @@
       <scad:value>[451.556, 451.556]</scad:value>
     </surfacePatternDimensions>
 
-    <surfacePatternOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
+    <surfacePatternOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Offset of the surface pattern.</documentation>
       <value>[0, 0]</value>
       <scad:value>[0, 0]</scad:value>
     </surfacePatternOffset>
 
-    <surfacePatternPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
+    <surfacePatternPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Distance from the edges of the surface pattern area, forming a smooth
         (pattern-free) border around the structure. At 0, the pattern extends
         to the edges. Each edge can be configured individually via the
@@ -1512,7 +1512,7 @@
       <scad:value>5</scad:value>
     </svgFace>
 
-    <svgOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
+    <svgOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Offset of the SVG from its default position.</documentation>
       <value>[0, 0]</value>
       <scad:value>[0, 0]</scad:value>
@@ -1566,7 +1566,7 @@
       <scad:value>Liberation Sans</scad:value>
     </textFont>
 
-    <textOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
+    <textOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Offset of the text from its normal position.</documentation>
       <value>[0, 0]</value>
       <scad:value>[0, 0]</scad:value>
@@ -1623,7 +1623,7 @@
       <scad:value>0.1</scad:value>
     </tongueClampThickness>
 
-    <tongueGrooveClampOffsetClearance type="Decimal">
+    <tongueGrooveClampOffsetClearance type="Decimal(unit:Millimeter)">
       <documentation>Extra clearance in the groove before the clamp recess. In the groove,
         both tongueClampOffset and tongueClampHeight are increased by this value,
         so the clamp snaps more easily into the groove recess.
@@ -1634,7 +1634,7 @@
       <scad:value>0</scad:value>
     </tongueGrooveClampOffsetClearance>
 
-    <tongueGrooveDepthClearance type="Decimal">
+    <tongueGrooveDepthClearance type="Decimal(unit:Millimeter)">
       <documentation>Additional depth clearance above the tongue inside the groove.
         The effective groove depth = tongueHeight + tongueGrooveDepthClearance.
         Replaces the old tongueGrooveDepth parameter.
@@ -1645,7 +1645,7 @@
       <scad:value>auto</scad:value>
     </tongueGrooveDepthClearance>
 
-    <tongueGrooveThicknessClearance type="Decimal">
+    <tongueGrooveThicknessClearance type="Decimal(unit:Millimeter)">
       <documentation>Clearance added to the groove width to allow the tongue to fit.
         Applied to both the groove wall thickness and tongueClampThickness
         inside the groove. Unlike tongueThicknessAdjustment (which only adjusts
@@ -1686,7 +1686,7 @@
       <scad:value>0.666</scad:value>
     </tongueThickness>
 
-    <tongueThicknessAdjustment type="Decimal">
+    <tongueThicknessAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for tongue thickness. Adjusts the thickness
         of the tongue only (not the groove). Used when using a tongue with
         a non-groove partner brick. Does not affect tongueClampThickness.
@@ -1706,7 +1706,7 @@
       <scad:value>1</scad:value>
     </topPlateHeight>
 
-    <topPlateHeightAdjustment type="Decimal">
+    <topPlateHeightAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for topPlateHeight.
         Only for calibration/printer compensation.
       </documentation>

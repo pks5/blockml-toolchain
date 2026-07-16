@@ -19,11 +19,11 @@
   <documentation>Semantic Struct ValueType for a size triple { x, y, z }. Extends AxisXYZ(N) —
     inherits x, y, and z; adds size semantics (extent / brick footprint). N is constrained to
     Number (AxisXYZ remains ValueType-universal). Bare SizeXYZ defaults N to
-    Decimal(mbunit:GridUnit). Override via N — e.g. SizeXYZ(Decimal(unit:Millimeter)). Named
+    Decimal(mbunit:GridUnitXY). Override via N — e.g. SizeXYZ(Decimal(unit:Millimeter)). Named
     SizeXYZ (not Size3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
-    <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnit)"/>
+    <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnitXY)"/>
   </genericTypes>
 
   <references>

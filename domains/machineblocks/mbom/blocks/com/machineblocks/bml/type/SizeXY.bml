@@ -18,12 +18,12 @@
 
   <documentation>Semantic Struct ValueType for a size pair { x, y }. Extends AxisXY(N) —
     inherits x and y; adds size semantics (extent / footprint). N is constrained to Number
-    (AxisXY remains ValueType-universal). Bare SizeXY defaults N to Decimal(mbunit:GridUnit).
+    (AxisXY remains ValueType-universal). Bare SizeXY defaults N to Decimal(mbunit:GridUnitXY).
     Override via N — e.g. SizeXY(Decimal(unit:Millimeter)). Named SizeXY (not Size2D) —
     MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
-    <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnit)"/>
+    <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnitXY)"/>
   </genericTypes>
 
   <references>

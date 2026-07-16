@@ -24,9 +24,11 @@
     the XML element name, not from a child or attribute. The name is substituted in type references
     within this Block (e.g. type="T" → GenericParameterReference). baseType is the FQN constraint —
     each concrete type argument at reference sites must inherit from that branch
-    (BML_GENERIC_CONSTRAINT_VIOLATION on mismatch). Optional defaultType supplies the FQN used when
-    a generic application omits the corresponding type argument — must satisfy baseType. Parameter
-    name must differ from the Block name and every Sub-Block name.</documentation>
+    (BML_GENERIC_CONSTRAINT_VIOLATION on mismatch). Optional defaultType supplies the binding when
+    a generic application omits the corresponding type argument: a concrete TypeExpression, or the
+    name of an earlier sibling generic parameter (declaration-order only; cycles and forward
+    references forbidden). Must satisfy baseType after resolution. See 17_type_system_bml.md —
+    defaultType. Parameter name must differ from the Block name and every Sub-Block name.</documentation>
 
   <references>
     <see file="16_framework_base_types.md" relation="AuthoringGuide">
@@ -53,10 +55,15 @@
         reference sites (e.g. Box(Integer)) must inherit from this baseType branch.</documentation>
     </baseType>
     <defaultType type="TypeReference(core:Block)" bml:xml="attribute">
-      <documentation>Optional default FQN when a generic application omits this parameter's type
-        argument. Must satisfy baseType. Authored as the defaultType attribute on the genericTypes
-        entry element (e.g. &lt;D baseType="core:Definition" defaultType="def:BlockDefinition"/&gt;).
-        Omitted when every reference site must supply an explicit type argument.</documentation>
+      <documentation>Optional default when a generic application omits this parameter's type
+        argument. Either a concrete TypeExpression (FQN / configured type) that satisfies baseType,
+        or the bare name of an earlier sibling generic parameter (e.g. defaultType="N"). Sibling
+        references are declaration-order only — forward refs and cycles are errors
+        (BML_GENERIC_DEFAULT_FORWARD_REF / BML_GENERIC_DEFAULT_CYCLE). After resolution the
+        effective binding must satisfy baseType. Authored as the defaultType attribute on the
+        genericTypes entry element (e.g. &lt;Q baseType="core:ValueType" defaultType="N"/&gt;).
+        See 17_type_system_bml.md — defaultType. Omitted when every reference site must supply an
+        explicit type argument.</documentation>
     </defaultType>
   </properties>
 </block>

@@ -1536,7 +1536,7 @@ FQN-Referenz-Namespaces (prefix best practice — see § XML prefix best practic
   xmlns:unit="org.blockml.bml.unit"               ← Millimeter, …
   xmlns:mbcore="com.machineblocks.bml.core"       ← <mbcore:NativeBlock />
   xmlns:mbtype="com.machineblocks.bml.type"       ← type="mbtype:SizeXYZ"
-  xmlns:mbunit="com.machineblocks.bml.unit"       ← MBU, GridUnit
+  xmlns:mbunit="com.machineblocks.bml.unit"       ← MBU, GridUnitXY, GridUnitZ
   xmlns:bricks="com.machineblocks.bml.bricks"     ← <bricks:Standard />
   xmlns:cal="com.machineblocks.bml.calibration"   ← <cal:Calibrator />
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"

@@ -282,6 +282,12 @@ interface GenericType {
   name: string
   /** FQN constraint — each concrete type argument must satisfy this bound via satisfiesTypeBound */
   baseType: string
+  /**
+   * Optional default when a generic application omits this argument.
+   * Concrete TypeExpression, or the name of an earlier sibling generic parameter
+   * (declaration-order only — see 17_type_system_bml.md — defaultType).
+   */
+  defaultType?: string
 }
 ```
 
@@ -1532,6 +1538,9 @@ BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregatio
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
 BML_PRESET_CYCLE              — circular basePresets chain
 BML_GENERIC_CONSTRAINT_VIOLATION — generic type argument fails satisfiesTypeBound
+BML_GENERIC_DEFAULT_FORWARD_REF — defaultType names a later or unknown generic parameter
+BML_GENERIC_DEFAULT_CYCLE — defaultType reference graph contains a cycle
+BML_GENERIC_DEFAULT_UNRESOLVED — defaultType chain does not ground to a concrete type
 BML_TYPE_BOUND_NOT_SATISFIED    — type reference fails satisfiesTypeBound (non-generic bound site)
 BML_UNKNOWN_CONTRACT          — contract Block FQN not in TypeRegistry
 BML_CONTRACT_NOT_ON_ROOT      — <contracts> on Sub-Block

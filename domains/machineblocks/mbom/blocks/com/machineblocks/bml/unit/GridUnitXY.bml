@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — plate-grid unit in X/Y
+
+  FQN: com.machineblocks.bml.unit.GridUnitXY
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:unit="com.machineblocks.bml.unit">
+  <name>GridUnitXY</name>
+  <type>unit:GridUnitXY</type>
+  <baseType>core:Unit</baseType>
+  <is>MachineBlocks grid unit (X/Y)</is>
+
+  <documentation>Plate-grid unit along X and Y. A 1×1 plate footprint is one GridUnitXY in each
+    horizontal axis. Size in mbu via unitGridToMbu[0] (default 5 mbu per GridUnitXY).
+    Distinct from GridUnitZ — vertical plate height uses a different mbu scale.</documentation>
+</block>

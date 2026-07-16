@@ -175,6 +175,10 @@ See `02_mbml.md` — Contracts · `00_bom_core.md` — Contracts.
 Declares type parameters on this Block (root block only)
 Element name  — parameter identifier used in type references (e.g. type="T")
 baseType      — FQN constraint; concrete type arguments must satisfy this bound via satisfiesTypeBound
+defaultType   — optional default when the type argument is omitted:
+                  concrete TypeExpression (e.g. btype:Decimal), or the name of an
+                  earlier sibling parameter (e.g. defaultType="N") — declaration-order
+                  only; cycles / forward refs forbidden. See 17_type_system_bml.md — defaultType.
 Usage         — com.foo.Box<org.blockml.bml.type.Integer> at reference sites
 Validator     — substitutes parameters at validate time; BML_GENERIC_CONSTRAINT_VIOLATION on mismatch
 
@@ -189,6 +193,9 @@ Naming (parse time):
   element name must differ from every Sub-Block <name>       → BML_GENERIC_SUBBLOCK_NAME_COLLISION
   duplicate element name among genericTypes entries          → BML_DUPLICATE_GENERIC
   <genericTypes> on Sub-Block                                → BML_GENERIC_NOT_ON_ROOT
+  defaultType names later/unknown parameter                  → BML_GENERIC_DEFAULT_FORWARD_REF
+  defaultType cycle                                          → BML_GENERIC_DEFAULT_CYCLE
+  default chain does not ground                              → BML_GENERIC_DEFAULT_UNRESOLVED
 ```
 
 See `17_type_system_bml.md` — Generics · `12_bom_object_model.md` — GenericType.

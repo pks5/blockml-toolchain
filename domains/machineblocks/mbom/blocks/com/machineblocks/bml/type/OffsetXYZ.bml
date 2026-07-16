@@ -19,11 +19,11 @@
   <documentation>Semantic Struct ValueType for an offset triple { x, y, z }. Extends AxisXYZ(N) —
     inherits x, y, and z; adds offset / translation semantics (may be negative). N is constrained
     to Number (AxisXYZ remains ValueType-universal). Bare OffsetXYZ defaults N to
-    Decimal(mbunit:GridUnit). Override via N — e.g. OffsetXYZ(Decimal(unit:Millimeter)). Named
+    Decimal(mbunit:GridUnitXY). Override via N — e.g. OffsetXYZ(Decimal(unit:Millimeter)). Named
     OffsetXYZ (not Offset3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
-    <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnit)"/>
+    <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnitXY)"/>
   </genericTypes>
 
   <references>

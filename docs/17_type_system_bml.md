@@ -1225,6 +1225,70 @@ Multiple parameters:
 
 The parameter name is derived from the XML element name — `<T baseType="…"/>` maps internally to `{ name: "T", baseType: "org.blockml.bml.core.ValueType" }`. The internal BOM `GenericType` shape is unchanged; only the BML syntax is simplified.
 
+#### `defaultType`
+
+Optional `defaultType` supplies the binding used when a generic application **omits** the corresponding type argument. Two forms are allowed:
+
+```text
+1. Concrete type expression   defaultType="btype:Decimal"
+                              defaultType="btype:Decimal(unit:Millimeter)"
+                              defaultType="def:RootBlockDefinition"
+
+2. Earlier sibling parameter  defaultType="N"   — only a previously declared generic parameter name
+```
+
+**Sibling-parameter defaults** (form 2) — `defaultType` may reference another parameter of the **same** `<genericTypes>` list if and only if that parameter is declared **earlier** (declaration order). This makes default chains a DAG by construction and forbids cycles:
+
+```xml
+<!-- allowed — Q defaults to the effective binding of N -->
+<genericTypes>
+  <N baseType="core:ValueType" defaultType="btype:Decimal"/>
+  <Q baseType="core:ValueType" defaultType="N"/>
+</genericTypes>
+
+<!-- forbidden — cycle / forward reference -->
+<genericTypes>
+  <N baseType="core:ValueType" defaultType="Q"/>
+  <Q baseType="core:ValueType" defaultType="N"/>
+</genericTypes>
+```
+
+Resolution at a reference site (e.g. bare `AxisXYZ` or partial `Foo(Integer)`):
+
+```text
+1. Apply authored type arguments (positional / named) — they win.
+2. For each still-unbound parameter, in declaration order:
+     - concrete defaultType → bind that TypeExpression
+     - defaultType = earlier parameter P → bind P's effective binding
+3. Every unbound parameter must resolve to a concrete TypeExpression
+   (chain must terminate; no dangling parameter-only defaults without an anchor).
+4. Each effective binding must satisfy the parameter's baseType (satisfiesTypeBound).
+```
+
+```text
+Foo with N default Decimal, Q default N
+
+Foo                  →  N = Decimal, Q = Decimal
+Foo(Integer)         →  N = Integer, Q = Integer   (Q follows N)
+Foo(N: Integer)      →  same
+Foo(Q: Text)         →  N = Decimal, Q = Text      (Q authored; N uses own default)
+Foo(Integer, Text)   →  N = Integer, Q = Text
+```
+
+Use case: shared component type with an optional override — e.g. `AxisXYZ(N, Z=N)` so bare applications keep one binding while `Z` may differ when authored.
+
+Diagnostics:
+
+```text
+BML_GENERIC_DEFAULT_FORWARD_REF   — defaultType names a later or unknown parameter
+BML_GENERIC_DEFAULT_CYCLE         — defaultType graph contains a cycle (defense in depth;
+                                    declaration-order rule already prevents sibling cycles)
+BML_GENERIC_DEFAULT_UNRESOLVED    — default chain does not ground to a concrete type
+BML_GENERIC_CONSTRAINT_VIOLATION  — defaultType / effective binding fails baseType
+```
+
+At use sites, type arguments remain **concrete TypeExpressions** — not parameter names from the callee. `defaultType="N"` is declaration-side sugar only.
+
 **Generic application** (`Box<Integer>`) is a **type expression** — not a ValueType.
 
 #### BML attribute syntax

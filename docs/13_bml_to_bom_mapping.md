@@ -379,6 +379,9 @@ Duplicate contract reference           → BML_DUPLICATE_CONTRACT (error)
 Duplicate generic parameter name             → BML_DUPLICATE_GENERIC (error)
 generic parameter element name equals Block <name>         → BML_GENERIC_BLOCK_NAME_COLLISION (error)
 generic parameter element name equals Sub-Block <name> (any depth in document tree) → BML_GENERIC_SUBBLOCK_NAME_COLLISION (error)
+defaultType names later/unknown generic parameter          → BML_GENERIC_DEFAULT_FORWARD_REF (error)
+defaultType cycle                                          → BML_GENERIC_DEFAULT_CYCLE (error)
+defaultType chain does not ground to concrete type         → BML_GENERIC_DEFAULT_UNRESOLVED (error)
 Unqualified block reference without FQN or xmlns prefix → BML_UNQUALIFIED_BLOCK_REFERENCE (error)
 Ambiguous Sub-Block short name (same as root) → BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED (error)
 Sub-Block explicit type ≠ resolve(parent.type) + "." + name → BML_SUBBLOCK_TYPE_MISMATCH (error)
@@ -794,6 +797,9 @@ BML_FINAL_MEMBER_OVERRIDE         — override attempted on final member (from c
 BML_OVERRIDE_REQUIRED             — local redeclaration merges with baseType or contract member but override omitted
 BML_OVERRIDE_WITHOUT_PARENT       — override="true" but no same-named parent member
 BML_GENERIC_CONSTRAINT_VIOLATION  — generic type argument fails satisfiesTypeBound
+BML_GENERIC_DEFAULT_FORWARD_REF   — defaultType names a later or unknown generic parameter
+BML_GENERIC_DEFAULT_CYCLE         — defaultType reference graph contains a cycle
+BML_GENERIC_DEFAULT_UNRESOLVED    — defaultType chain does not ground to a concrete type
 BML_TYPE_BOUND_NOT_SATISFIED      — type reference fails satisfiesTypeBound
 BML_READONLY_MEMBER_WRITE         — Block instance sets a member with readOnly=true
 ```
