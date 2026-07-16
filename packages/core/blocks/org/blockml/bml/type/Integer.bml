@@ -16,7 +16,7 @@
     Integer(unit:Millimeter). Bare Integer is dimensionless.
 
     Optional configuration Properties (min, max) configure a Property's owned Integer instance via
-    inline type syntax — Integer{min=0, max=100}. Positional order: min, max. See
+    inline type syntax — Integer{min: 0, max: 100}. Positional order: min, max. See
     20_value_type_instance_configuration.md.</documentation>
 
   <genericTypes>
@@ -25,10 +25,10 @@
 
   <properties>
     <min type="Integer">
-      <documentation>Minimum allowed value (inclusive). Configured via Integer{min=n}.</documentation>
+      <documentation>Minimum allowed value (inclusive). Configured via Integer{min: n}.</documentation>
     </min>
     <max type="Integer">
-      <documentation>Maximum allowed value (inclusive). Configured via Integer{max=n}.</documentation>
+      <documentation>Maximum allowed value (inclusive). Configured via Integer{max: n}.</documentation>
     </max>
   </properties>
 </block>

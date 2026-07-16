@@ -17,14 +17,14 @@
     Concrete payload values are stored on Properties — not on the Text type itself.
 
     Optional configuration Properties (minLength, maxLength) configure a Property's owned Text
-    instance via inline type syntax — Text{maxLength=100}. Positional order: minLength, maxLength.
+    instance via inline type syntax — Text{maxLength: 100}. Positional order: minLength, maxLength.
     See 20_value_type_instance_configuration.md.</documentation>
   <properties>
     <minLength type="Integer">
-      <documentation>Minimum allowed text length (inclusive). Configured via Text{minLength=n}.</documentation>
+      <documentation>Minimum allowed text length (inclusive). Configured via Text{minLength: n}.</documentation>
     </minLength>
     <maxLength type="Integer">
-      <documentation>Maximum allowed text length (inclusive). Configured via Text{maxLength=n}.</documentation>
+      <documentation>Maximum allowed text length (inclusive). Configured via Text{maxLength: n}.</documentation>
     </maxLength>
   </properties>
 </block>

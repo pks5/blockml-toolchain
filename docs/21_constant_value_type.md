@@ -22,7 +22,7 @@ false | Size3D          — false or struct
 Boolean | StudType      — boolean or enum
 ```
 
-Instead of treating literal values as a separate language feature, BlockML models each singleton alternative as a **configured ValueType instance** — the same mechanism as `Text{maxLength=100}` or `Decimal{precision=10, scale=2}`.
+Instead of treating literal values as a separate language feature, BlockML models each singleton alternative as a **configured ValueType instance** — the same mechanism as `Text{maxLength: 100}` or `Decimal{precision: 10, scale: 2}`.
 
 ---
 
@@ -52,7 +52,7 @@ would mean the external value is:
 { "value": "auto" }
 ```
 
-This is not the desired behavior. The external value of `Constant(Text){value="auto"}` is simply `"auto"`. The configured `value` Property belongs to the internal ValueType instance on the Property definition — not to the property's external representation.
+This is not the desired behavior. The external value of `Constant(Text){value: "auto"}` is simply `"auto"`. The configured `value` Property belongs to the internal ValueType instance on the Property definition — not to the property's external representation.
 
 ### Why not PrimitiveType?
 
@@ -67,8 +67,8 @@ Boolean  → true | false
 Constant defines a **singleton value domain**:
 
 ```text
-Constant(Text){value="auto"}   → accepts exactly "auto"
-Constant(Integer){value=5}     → accepts exactly 5
+Constant(Text){value: "auto"}   → accepts exactly "auto"
+Constant(Integer){value: 5}     → accepts exactly 5
 ```
 
 Its defining characteristic is the validation rule, not serialization shape.
@@ -101,16 +101,19 @@ The generic type parameter **T is mandatory** at every reference site. Constant 
 Constant combines generic application `(...)` with instance configuration `{...}`:
 
 ```text
-Constant(Text){value="auto"}
-Constant(Integer){value=5}
-Constant(Decimal){value=5.5}
-Constant(Boolean){value=true}
+Constant(Text){value: "auto"}
+Constant(Integer){value: 5}
+Constant(Decimal){value: 5.5}
+Constant(Boolean){value: true}
+Constant(type:SizeXY){value: {x: 1, y: 2}}   — nested struct literal (T = StructType)
 ```
+
+Named configuration uses `key: value` (not `key=value`) — see `20_value_type_instance_configuration.md`.
 
 In union type attributes:
 
 ```xml
-<mode type="Boolean | Constant(Text){value=&quot;auto&quot;}"/>
+<mode type="Boolean | Constant(Text){value: &quot;auto&quot;}"/>
 ```
 
 Semantically:
@@ -139,15 +142,15 @@ Validation proceeds in two steps:
 
 | Expression | Supplied value | Result |
 |---|---|---|
-| `Constant(Text){value="auto"}` | `"auto"` | ✓ |
-| `Constant(Text){value="auto"}` | `"manual"` | ✗ |
-| `Constant(Text){value="auto"}` | `5` | ✗ |
-| `Constant(Integer){value=5}` | `5` | ✓ |
-| `Constant(Integer){value=5}` | `6` | ✗ |
-| `Constant(Integer){value="auto"}` | — | ✗ — configured value does not match Integer |
-| `Constant{value="auto"}` | — | ✗ — missing generic type argument |
+| `Constant(Text){value: "auto"}` | `"auto"` | ✓ |
+| `Constant(Text){value: "auto"}` | `"manual"` | ✗ |
+| `Constant(Text){value: "auto"}` | `5` | ✗ |
+| `Constant(Integer){value: 5}` | `5` | ✓ |
+| `Constant(Integer){value: 5}` | `6` | ✗ |
+| `Constant(Integer){value: "auto"}` | — | ✗ — configured value does not match Integer |
+| `Constant{value: "auto"}` | — | ✗ — missing generic type argument |
 | `Constant(Text)` | — | ✗ — missing required `value` configuration |
-| `Constant(Text){value="auto", value="x"}` | — | ✗ — duplicate configuration |
+| `Constant(Text){value: "auto", value: "x"}` | — | ✗ — duplicate configuration |
 
 The validator:
 
@@ -166,9 +169,9 @@ The external representation is always **identical to the representation of the u
 
 | Type reference | External value | Not |
 |---|---|---|
-| `Constant(Text){value="auto"}` | `"auto"` | `{ "value": "auto" }` |
-| `Constant(Integer){value=5}` | `5` | `{ "value": 5 }` |
-| `Constant(Boolean){value=true}` | `true` | `{ "value": true }` |
+| `Constant(Text){value: "auto"}` | `"auto"` | `{ "value": "auto" }` |
+| `Constant(Integer){value: 5}` | `5` | `{ "value": 5 }` |
+| `Constant(Boolean){value: true}` | `true` | `{ "value": true }` |
 
 The configured `value` Property exists only on the internal ValueType instance that belongs to the Property definition.
 
@@ -179,9 +182,9 @@ The configured `value` Property exists only on the internal ValueType instance t
 Constant alternatives appear as ordinary union members:
 
 ```text
-Boolean | Constant(Text){value="auto"}
-Float | Constant(Text){value="auto"}
-Integer | Text | Constant(Integer){value=0}
+Boolean | Constant(Text){value: "auto"}
+Float | Constant(Text){value: "auto"}
+Integer | Text | Constant(Integer){value: 0}
 ```
 
 At validate time, union alternatives are tested **left to right**; the **first** alternative that accepts the authored value wins (not merely “at least one”). A value `"auto"` matches a leading Constant alternative; `true` matches Boolean when Boolean appears before Text. Overlapping alternatives are resolved by author order — see `17_type_system_bml.md` — Unions · Match order. Unreachable later alternatives → `BML_UNREACHABLE_UNION_ALTERNATIVE`.
@@ -191,7 +194,7 @@ At validate time, union alternatives are tested **left to right**; the **first**
 **Canonical (V1):** every singleton alternative is an explicit Constant application:
 
 ```text
-Boolean | Constant(Text){value="auto"}
+Boolean | Constant(Text){value: "auto"}
 ```
 
 **Literal shorthand (future):** JSON literals in union positions desugar to Constant:
@@ -199,17 +202,17 @@ Boolean | Constant(Text){value="auto"}
 ```text
 Boolean | "auto"
 
-  ≡  Boolean | Constant(Text){value="auto"}
+  ≡  Boolean | Constant(Text){value: "auto"}
 ```
 
 Desugaring table:
 
 | Literal shorthand | Desugars to |
 |---|---|
-| `"auto"` | `Constant(Text){value="auto"}` |
-| `5` | `Constant(Integer){value=5}` |
-| `5.5` | `Constant(Decimal){value=5.5}` |
-| `true` / `false` | `Constant(Boolean){value=true}` / `{value=false}` |
+| `"auto"` | `Constant(Text){value: "auto"}` |
+| `5` | `Constant(Integer){value: 5}` |
+| `5.5` | `Constant(Decimal){value: 5.5}` |
+| `true` / `false` | `Constant(Boolean){value: true}` / `{value: false}` |
 
 The BOM may store either the authored literal form or the normalized Constant form. Normalization is recommended at map time so downstream validation uses one representation.
 
@@ -223,9 +226,9 @@ Legacy wrapper types map to union + Constant:
 
 ```text
 Obsolete              Canonical replacement
-AutoOr<T>             Constant(Text){value="auto"} | T     — when sentinel is "auto"
-FalseOr<T>            Constant(Boolean){value=false} | T
-NoneOr<T>             Constant(Text){value="none"} | T
+AutoOr<T>             Constant(Text){value: "auto"} | T     — when sentinel is "auto"
+FalseOr<T>            Constant(Boolean){value: false} | T
+NoneOr<T>             Constant(Text){value: "none"} | T
 BooleanOr<T>          Boolean | T
 ```
 
@@ -236,7 +239,7 @@ Sentinel string choice follows domain convention; Constant makes the allowed lit
 ## BOM Representation
 
 ```text
-Boolean | Constant(Text){value="auto"}
+Boolean | Constant(Text){value: "auto"}
 
   →  UnionTypeExpression {
        alternatives: [
@@ -267,7 +270,7 @@ Boolean | "auto"
 | Code | Condition |
 |---|---|
 | `BML_MISSING_GENERIC_TYPE_ARGUMENT` | Constant reference without mandatory `(T)` |
-| `BML_MISSING_CONSTANT_VALUE` | Constant(T) without required `{value=…}` |
+| `BML_MISSING_CONSTANT_VALUE` | Constant(T) without required `{value: …}` |
 | `BML_CONSTANT_VALUE_MISMATCH` | Supplied value does not equal configured constant, or incompatible with T |
 | `BML_PREFER_CONSTANT_TYPE` | Union literal alternative should use Constant form (hint) |
 | `BML_UNREACHABLE_UNION_ALTERNATIVE` | Later union alternative subsumed by an earlier one (warning) |

@@ -16,7 +16,7 @@
   <is>The literal Inherit sentinel</is>
 
   <documentation>Named Constant(Text) for the singleton value "Inherit". Use as a union
-    alternative — for example Inherit | Float — instead of writing Constant(Text){value="Inherit"}
+    alternative — for example Inherit | Float — instead of writing Constant(Text){value: "Inherit"}
     at every reference site. The external value is "Inherit" (identical to Text). Signals that a
     property should take its effective value from the parent / surrounding context.</documentation>
 

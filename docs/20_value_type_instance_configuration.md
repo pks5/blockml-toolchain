@@ -40,8 +40,8 @@ A Property internally owns an **instance** of its referenced ValueType. Configur
 The inline syntax is a compact representation of configuring the ValueType Block:
 
 ```xml
-<name type="Text{maxLength=100}"/>
-<price type="Decimal{precision=10, scale=2}"/>
+<name type="Text{maxLength: 100}"/>
+<price type="Decimal{precision: 10, scale: 2}"/>
 ```
 
 Semantically equivalent to configuring the ValueType instance directly:
@@ -62,33 +62,41 @@ Two orthogonal mechanisms may appear on a named type reference:
 | Syntax | Purpose | Example |
 |---|---|---|
 | `(...)` | Generic type arguments | `Box(Integer)` · `TypeReference(core:Block)` |
-| `{...}` | ValueType instance configuration | `Text{maxLength=100}` · `Decimal{10, 2}` |
+| `{...}` | ValueType instance configuration | `Text{maxLength: 100}` · `Decimal{10, 2}` |
 
 Both may coexist when a generic ValueType also accepts instance configuration:
 
 ```text
-com.foo.Box(Integer){minItems=1}
+com.foo.Box(Integer){minItems: 1}
 ```
 
 Multiplicity brackets apply after configuration:
 
 ```text
-Text{maxLength=50}[0..n]
-Decimal{precision=10, scale=2}
-Integer{min=0, max=100}[1..5]
+Text{maxLength: 50}[0..n]
+Decimal{precision: 10, scale: 2}
+Integer{min: 0, max: 100}[1..5]
 ```
 
 ### Named configuration
 
-Named arguments map to effective Properties of the referenced ValueType by name:
+Named arguments use **JSON-like `key: value` object syntax** (same separator as expression object literals and anonymous struct types). They map to effective Properties of the referenced ValueType by name:
 
 ```text
-Decimal{precision=10, scale=2}
+Decimal{precision: 10, scale: 2}
 
   →  precision = 10
      scale = 2
 ```
 
+Configuration values may be nested object / array literals when the Property type is a StructType (or other compound ValueType):
+
+```text
+Constant(type:SizeXY){value: {x: 1, y: 2}}
+SomeType{origin: {x: 0, y: 0}, size: {x: 4, y: 2}}
+```
+
+Do **not** use `key=value` in `{…}` instance configuration. Expression-language named call arguments still use `=` (`@bean.f(a = 1)`); that is parameter binding, not type-instance configuration.
 ### Positional configuration
 
 Positional arguments map by **effective Property declaration order** on the ValueType — the same principle as FunctionMapping:
@@ -127,7 +135,7 @@ Generics and ValueType configuration solve different problems:
 
 ```text
 Reference(Block)              — binds generic type parameters
-Decimal{precision=10, scale=2} — configures the instantiated ValueType
+Decimal{precision: 10, scale: 2} — configures the instantiated ValueType
 ```
 
 Round parentheses bind generics. Curly braces configure the instance. The mechanisms are orthogonal.
@@ -140,7 +148,7 @@ BlockML has no separate `List` ValueType. Collection bounds belong on the type r
 
 ```text
 Prefer:   Text[1..10]
-Not:      List{minItems=1, maxItems=10}
+Not:      List{minItems: 1, maxItems: 10}
 ```
 
 `MinItems` / `MaxItems` constraints on collection properties remain valid but are redundant when multiplicity is already expressed on the `type` attribute.
@@ -154,10 +162,10 @@ Not:      List{minItems=1, maxItems=10}
 Settings that define how the referenced type behaves:
 
 ```text
-Text{maxLength=100}
-Text{minLength=3}
-Decimal{precision=10, scale=2}
-Integer{min=0, max=100}
+Text{maxLength: 100}
+Text{minLength: 3}
+Decimal{precision: 10, scale: 2}
+Integer{min: 0, max: 100}
 Text[1..10]                    — collection bounds via multiplicity
 ```
 
@@ -175,7 +183,7 @@ custom validators
 renderer-independent semantic validation
 ```
 
-When the same threshold could be expressed either way (for example `constraint:MaxLength` vs `Text{maxLength=100}`), prefer the inline ValueType configuration for type-specific behavior. Constraints remain appropriate when the rule is contextual, composable, or not intrinsic to the ValueType definition.
+When the same threshold could be expressed either way (for example `constraint:MaxLength` vs `Text{maxLength: 100}`), prefer the inline ValueType configuration for type-specific behavior. Constraints remain appropriate when the rule is contextual, composable, or not intrinsic to the ValueType definition.
 
 ---
 
@@ -217,11 +225,11 @@ interface NamedTypeReference {
 ### BML surface syntax → `TypeExpression`
 
 ```text
-Text{maxLength=100}                         → NamedTypeReference { fqn: Text, instanceConfiguration: { named: { maxLength: 100 } } }
-Decimal{precision=10, scale=2}              → NamedTypeReference { fqn: Decimal, instanceConfiguration: { named: { precision: 10, scale: 2 } } }
+Text{maxLength: 100}                         → NamedTypeReference { fqn: Text, instanceConfiguration: { named: { maxLength: 100 } } }
+Decimal{precision: 10, scale: 2}              → NamedTypeReference { fqn: Decimal, instanceConfiguration: { named: { precision: 10, scale: 2 } } }
 Decimal{10, 2}                              → NamedTypeReference { fqn: Decimal, instanceConfiguration: { positional: [10, 2] } }
-Text{maxLength=50}[0..n]                    → NamedTypeReference { fqn: Text, instanceConfiguration: { … }, multiplicity: { min: 0, max: "*" } }
-Box(Integer){minItems=1}                    → generic application + instance configuration on resolved type
+Text{maxLength: 50}[0..n]                    → NamedTypeReference { fqn: Text, instanceConfiguration: { … }, multiplicity: { min: 0, max: "*" } }
+Box(Integer){minItems: 1}                    → generic application + instance configuration on resolved type
 ```
 
 ---
@@ -246,7 +254,7 @@ Constraint equivalents (`constraint:MaxLength`, etc.) remain supported for migra
 - ValueTypes expose configuration through their own Properties.
 - Frequently used constraints become concise and readable.
 - Constraints focus on semantic validation instead of basic type configuration.
-- Inline syntax mirrors XML instance configuration: `<Decimal precision="10" scale="2"/>` → `Decimal{precision=10, scale=2}`.
+- Inline syntax uses JSON-like named fields: `<Decimal precision="10" scale="2"/>` → `Decimal{precision: 10, scale: 2}` (nested values use the same `:` separator).
 
 ---
 
@@ -255,9 +263,9 @@ Constraint equivalents (`constraint:MaxLength`, etc.) remain supported for migra
 **Constant** is a **ConstantType** — a dedicated ValueType branch for singleton value domains. It reuses instance configuration for singleton union alternatives — no separate literal-type mechanism:
 
 ```text
-Boolean | Constant(Text){value="auto"}
+Boolean | Constant(Text){value: "auto"}
 ```
 
-The external value is `"auto"` — not `{ value: "auto" }`. Generic `(...)` binds `T`; `{value=…}` configures the single allowed value on the internal ValueType instance. Future union literal shorthand (`Boolean | "auto"`) desugars to the same form.
+The external value is `"auto"` — not `{ value: "auto" }`. Generic `(...)` binds `T`; `{value: …}` configures the single allowed value on the internal ValueType instance. Future union literal shorthand (`Boolean | "auto"`) desugars to the same form.
 
 See `21_constant_value_type.md`.

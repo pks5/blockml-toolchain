@@ -23,13 +23,13 @@
     org.blockml.bml.type.Constant.
 
     Constant(T) binds the generic parameter T to any ValueType. Instance configuration supplies
-    the single allowed value via the value Property — for example Constant(Text){value="auto"} or
-    Constant(Integer){value=5}. The generic type argument is mandatory; bare Constant or
-    Constant{value="auto"} without (T) is invalid.
+    the single allowed value via the value Property — for example Constant(Text){value: "auto"} or
+    Constant(Integer){value: 5}. The generic type argument is mandatory; bare Constant or
+    Constant{value: "auto"} without (T) is invalid.
 
     The configured value Property belongs to the internal ValueType instance on the Property
     definition. The external representation is always identical to the representation of the
-    underlying generic type T — Constant(Text){value="auto"} accepts the external value "auto",
+    underlying generic type T — Constant(Text){value: "auto"} accepts the external value "auto",
     not { value: "auto" }.
 
     Validation proceeds in two steps: first against the bound type T, then equality with the
@@ -38,7 +38,7 @@
 
     Used primarily as a union alternative alongside ordinary ValueTypes:
 
-    Boolean | Constant(Text){value="auto"}
+    Boolean | Constant(Text){value: "auto"}
 
     Future literal union syntax (Boolean | "auto") desugars to this form. See
     21_constant_value_type.md.
@@ -66,7 +66,7 @@
   <properties>
     <value type="T">
       <documentation>The single allowed value. Required on every Constant(T) reference via
-        instance configuration — Constant(T){value=…}. Validated against the bound type T at
+        instance configuration — Constant(T){value: …}. Validated against the bound type T at
         compile time. This Property configures the internal ValueType instance — it does not
         define the external representation of property values.</documentation>
       <constraints>

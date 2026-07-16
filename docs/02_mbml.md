@@ -692,7 +692,7 @@ documentation →  full technical prose — always present (canonical facet)
 <keywords>inheritance, nesting, FQN derivation</keywords>
 ```
 
-Parser expands each trimmed token to `{ typeFqn: org.blockml.bml.meta.FreeTextKeyword, term }`. Omitted when `is`, `summary`, and `documentation` suffice. Stored in BOM `keywords[]` as `KeywordEntry`. Type-reference form: `FreeTextKeyword{term="inheritance"}`.
+Parser expands each trimmed token to `{ typeFqn: org.blockml.bml.meta.FreeTextKeyword, term }`. Omitted when `is`, `summary`, and `documentation` suffice. Stored in BOM `keywords[]` as `KeywordEntry`. Type-reference form: `FreeTextKeyword{term: "inheritance"}`.
 
 Catalogue keywords extend **`org.blockml.bml.meta.FixedKeyword`** — protected members (`_term`, optional `_language`, `_weight`) are set on the keyword block definition; references are empty fixed blocks. **`org.blockml.bml.meta.FreeTextKeyword`** extends FixedKeyword and widens those members to public attributes (`_term` → `term`, …) via visibility widening:
 
@@ -2842,7 +2842,7 @@ config="${ {mode: baseCutoutType, label: @myModel:/config/label} }"
 size="${ [size.x, size.y, #math.max(size.z - 1, 0)] }"
 
 <!-- Expression: bean call, named parameters (Object payload) -->
-label="${ @myFormatter.format(value = size.x, unit = 'mm') }"
+label="${ @myFormatter.format(value: size.x, unit: 'mm') }"
 
 <!-- Expression: bean call, object literal (equivalent) -->
 label="${ @myFormatter.format({value: size.x, unit: 'mm'}) }"

@@ -16,7 +16,7 @@
   <is>The literal None sentinel</is>
 
   <documentation>Named Constant(Text) for the singleton value "None". Use as a union
-    alternative — for example None | Float — instead of writing Constant(Text){value="None"}
+    alternative — for example None | Float — instead of writing Constant(Text){value: "None"}
     at every reference site. The external value is "None" (identical to Text). Distinct from
     org.blockml.bml.unit.None (the dimensionless unit) — this type lives under
     com.machineblocks.bml.type.</documentation>

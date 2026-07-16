@@ -374,17 +374,17 @@ For each Block:
 
 ```typescript
 class MachineBlocksV3ScadTarget implements RenderTarget {
-  name = "machineblocks-v3-scad"
-  engine = new MakerEngine()
+  name: "machineblocks-v3-scad"
+  engine: new MakerEngine()
 
-  processors = [
+  processors: [
     new ScadSetProcessor(),           // compile strategy — more specific
     new ScadBlockProcessor(),         // compile strategy — baseType fallback
     new MathBuiltInProcessor(),       // copy strategy
     new CapabilityImplementationProcessor()      // compile strategy (TS → SCAD)
   ]
 
-  delegates = []
+  delegates: []
 }
 ```
 
@@ -392,10 +392,10 @@ class MachineBlocksV3ScadTarget implements RenderTarget {
 
 ```typescript
 class MartianMicroAnyclosureTarget implements RenderTarget {
-  name = "martianmicro-anyclosure"
-  engine = undefined                  // no engine needed
-  processors = []                     // no own processors
-  delegates = [machineBlocksV3ScadTarget]  // full delegation
+  name: "martianmicro-anyclosure"
+  engine: undefined                  // no engine needed
+  processors: []                     // no own processors
+  delegates: [machineBlocksV3ScadTarget]  // full delegation
 }
 ```
 
@@ -472,9 +472,9 @@ const result = compileBmlToOutput(
 );
 
 if (result.success) {
-  const scad = (result.output as ScadRenderOutput).files[0].content;
+  const scad: (result.output as ScadRenderOutput).files[0].content;
 } else {
-  result.diagnostics.forEach(d => console.error(d));
+  result.diagnostics.forEach(d: > console.error(d));
 }
 ```
 
@@ -589,9 +589,9 @@ BML_TYPE_CONFIGURATION_VIOLATION — configuration value incompatible with targe
 BML_DUPLICATE_TYPE_CONFIGURATION — same ValueType Property configured twice
 BML_PREFER_TYPE_CONFIGURATION    — constraint duplicates an available ValueType configuration Property (hint)
 BML_MISSING_GENERIC_TYPE_ARGUMENT — generic application missing required type argument (e.g. bare Constant)
-BML_MISSING_CONSTANT_VALUE       — Constant(T) reference without required {value=…} configuration
+BML_MISSING_CONSTANT_VALUE       — Constant(T) reference without required {value: …} configuration
 BML_CONSTANT_VALUE_MISMATCH      — Constant configured value incompatible with bound type T
-BML_PREFER_CONSTANT_TYPE         — union literal alternative should desugar to Constant(T){value=…} (hint)
+BML_PREFER_CONSTANT_TYPE         — union literal alternative should desugar to Constant(T){value: …} (hint)
 BML_UNREACHABLE_UNION_ALTERNATIVE — union alternative subsumed by an earlier alternative under left-to-right match (warning)
 BML_MISSING_FUNCTION_MAPPING   — implementation requires FunctionMapping but none declared
 BML_AMBIGUOUS_FUNCTION_MAPPING — capability call form maps ambiguously to inputType

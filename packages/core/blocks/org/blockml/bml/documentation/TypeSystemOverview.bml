@@ -31,13 +31,13 @@
     Examples: Direction, Face, StudType.
 
     ConstantType — singleton value domain; one configured literal.
-    Example: Constant(Text){value="auto"} for union alternatives.
+    Example: Constant(Text){value: "auto"} for union alternatives.
 
     Type expressions combine named types — they are not new BlockML type classes:
     • Multiplicity: Integer[], Integer[3], Text[0..n]
-    • Unions: Boolean | Integer, Constant(Text){value="auto"} | Float
+    • Unions: Boolean | Integer, Constant(Text){value: "auto"} | Float
     • Generic application: Box(Integer) — round parentheses in type attributes
-    • Instance configuration: Text{maxLength=100}, Decimal{precision=10, scale=2}
+    • Instance configuration: Text{maxLength: 100}, Decimal{precision: 10, scale: 2}
     • bml:Self — resolves to effective current Block type after inheritance
     • T — generic parameter reference from declaring Block's genericTypes
 
@@ -72,7 +72,7 @@
       Branch base for singleton value domains.
     </see>
     <see type="btype:Constant" relation="SeeAlso">
-      Generic Constant(T){value=…} for union singleton alternatives.
+      Generic Constant(T){value: …} for union singleton alternatives.
     </see>
     <see type="btype:Decimal" relation="SeeAlso">
       Default primitive for non-integer numeric values.

@@ -59,7 +59,7 @@
     <type type="TypeReference(core:ValueType)" bml:xml="element|attribute">
       <documentation>FQN of the property's ValueType (TypeExpression). Non-ValueType FQNs are invalid
         (BML_INVALID_PROPERTY_TYPE). Multiplicity, unions, generic applications, and instance
-        configuration are expressed in the type string — e.g. Text{maxLength=100}. On definitions,
+        configuration are expressed in the type string — e.g. Text{maxLength: 100}. On definitions,
         element form is preferred (&lt;type&gt;Integer&lt;/type&gt;); on Block instances, attribute
         form is preferred (type="Integer" on the property element).</documentation>
     </type>

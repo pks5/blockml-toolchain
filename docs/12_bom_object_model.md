@@ -171,7 +171,7 @@ interface BlockDefinition {
   /** Optional search/discovery tags — core.Keyword Entity instances (KeywordEntry[]). */
   keywords?: KeywordEntry[]
 
-  /** Natural language for documentation prose — TypeReferenceEntity instance. Omitted = inherit Library, then Block default (English). */
+  /** Natural language for documentation prose — TypeReferenceEntity instance. Omitted: inherit Library, then Block default (English). */
   language?: TypeReferenceEntityInstance
 
   /** Resolved FQN projection of language.value — retained for addressability and tooling. */
@@ -189,7 +189,7 @@ interface BlockDefinition {
   /** Alternative names for this Block type — core.Alias Entity instances (AliasEntry[]). Block-level only. */
   aliases?: AliasEntry[]
 
-  /** Semantic version from which this definition is available. Omitted = since initial release. */
+  /** Semantic version from which this definition is available. Omitted: since initial release. */
   since?: string
 
   /** Version history entries — oldest first. */
@@ -210,7 +210,7 @@ interface BlockDefinition {
   /** BlockML access visibility — Sub-Blocks only. Derived from name when omitted. Forbidden on root Blocks. Does not restrict renderer BOM access. */
   visibility?: "private" | "protected" | "public"
 
-  /** Sub-Block baseTypes permitted in subBlocks[]. undefined = inherit from baseType chain; explicit [] = override to forbid */
+  /** Sub-Block baseTypes permitted in subBlocks[]. undefined: inherit from baseType chain; explicit [] = override to forbid */
   subTypes?: TypeReferenceEntityInstance[]
 
   /** Language TypeReferenceEntity instances allowed on capability implementations. Default: inherit. */
@@ -425,12 +425,12 @@ Integer[0..n]                      → NamedTypeReference { fqn: Integer, multip
 Integer[]                          → same as Integer[0..n]
 Integer[3]                         → NamedTypeReference { fqn: Integer, multiplicity: { min: 3, max: 3 } }
 com.foo.Box<Integer>               → NamedTypeReference { fqn: "com.foo.Box", typeArguments: [Integer] }
-Text{maxLength=100}                → NamedTypeReference { fqn: Text, instanceConfiguration: { named: { maxLength: 100 } } }
-Decimal{precision=10, scale=2}     → NamedTypeReference { fqn: Decimal, instanceConfiguration: { named: { precision: 10, scale: 2 } } }
+Text{maxLength: 100}                → NamedTypeReference { fqn: Text, instanceConfiguration: { named: { maxLength: 100 } } }
+Decimal{precision: 10, scale: 2}     → NamedTypeReference { fqn: Decimal, instanceConfiguration: { named: { precision: 10, scale: 2 } } }
 Decimal{10, 2}                     → NamedTypeReference { fqn: Decimal, instanceConfiguration: { positional: [10, 2] } }
-Text{maxLength=50}[0..n]           → NamedTypeReference { fqn: Text, instanceConfiguration: { … }, multiplicity: { min: 0, max: "*" } }
-Constant(Text){value="auto"}       → NamedTypeReference { fqn: Constant, typeArguments: [Text], instanceConfiguration: { named: { value: "auto" } } }
-Boolean | Constant(Text){value="auto"} → UnionTypeExpression { alternatives: [Boolean, Constant(…)] }
+Text{maxLength: 50}[0..n]           → NamedTypeReference { fqn: Text, instanceConfiguration: { … }, multiplicity: { min: 0, max: "*" } }
+Constant(Text){value: "auto"}       → NamedTypeReference { fqn: Constant, typeArguments: [Text], instanceConfiguration: { named: { value: "auto" } } }
+Boolean | Constant(Text){value: "auto"} → UnionTypeExpression { alternatives: [Boolean, Constant(…)] }
 "auto" | Float                     → UnionTypeExpression { alternatives: [literal "auto", Float] } — legacy; normalize to Constant form
 false | SizeXYZ                     → UnionTypeExpression { alternatives: [literal false, SizeXYZ] }
 Boolean | Integer                  → UnionTypeExpression { alternatives: [Boolean, Integer] }
@@ -462,9 +462,9 @@ interface KeywordEntry {
   typeFqn: string
   /** Search tag text — present when typeFqn is org.blockml.bml.meta.FreeTextKeyword; resolved from FixedKeyword descendant definition when applicable */
   term?: string
-  /** NaturalLanguage FQN when tag deviates from effective block language. Omitted = inherit. */
+  /** NaturalLanguage FQN when tag deviates from effective block language. Omitted: inherit. */
   languageFqn?: string
-  /** Optional RAG ranking hint — FreeTextKeyword or resolved FixedKeyword weight. Omitted = default weight. */
+  /** Optional RAG ranking hint — FreeTextKeyword or resolved FixedKeyword weight. Omitted: default weight. */
   weight?: number
   source?: SourceLocation
 }
@@ -476,7 +476,7 @@ interface KeywordEntry {
  */
 interface DocumentationProseEntry {
   /**
-   * Resolved namespace from the element QName (xmlns:). Empty string = canonical / default facet.
+   * Resolved namespace from the element QName (xmlns:). Empty string: canonical / default facet.
    * Never stores the XML prefix alias. Facet namespaces (e.g. com.machineblocks.bml.scad) are
    * optional domain/target slots — not NaturalLanguage.
    */
@@ -484,7 +484,7 @@ interface DocumentationProseEntry {
   /** Trimmed prose body */
   text: string
   /**
-   * Resolved NaturalLanguage FQN — always set after parse (explicit language= or effective
+   * Resolved NaturalLanguage FQN — always set after parse (explicit language: or effective
    * Block/Library language when the attribute is omitted).
    */
   languageFqn: string
@@ -496,7 +496,7 @@ interface AliasEntry {
   typeFqn: string
   /** Alternative name — present when typeFqn is org.blockml.bml.meta.FreeTextAlias; resolved from FixedAlias descendant definition when applicable */
   name?: string
-  /** NaturalLanguage FQN when alias deviates from effective block language. Omitted = inherit. */
+  /** NaturalLanguage FQN when alias deviates from effective block language. Omitted: inherit. */
   languageFqn?: string
   /** Legacy or deprecated alternative name — FreeTextAlias or resolved FixedAlias. Default false. */
   legacy?: boolean
@@ -508,7 +508,7 @@ interface ChangelogEntry {
   version: string
   /** Change description (trimmed text body of <change>) */
   text: string
-  /** NaturalLanguage FQN when change text deviates from effective block language. Omitted = inherit. */
+  /** NaturalLanguage FQN when change text deviates from effective block language. Omitted: inherit. */
   languageFqn?: string
   source?: SourceLocation
 }
@@ -522,15 +522,15 @@ interface DocumentationExample {
   contentLanguageFqn?: string
   /** When true, body is an illustrative fragment — skip syntax / well-formedness checks. Default false. */
   snippet?: boolean
-  /** Resolved Annotation FQN when inside a faceted examples container (e.g. scad:examples); "" / omitted = canonical */
+  /** Resolved Annotation FQN when inside a faceted examples container (e.g. scad:examples); "" / omitted: canonical */
   namespace?: string
   source?: SourceLocation
 }
 
 interface DocumentationReference {
-  /** Documentation cross-link only (types↔types or types↔instances; also members/files/URLs) — not an Association. Block type reference (TypeReference) — XML type attribute on <see>. Standalone type= only; when paired with a member or instance attribute, type= qualifies the target and is not stored here. Eight target kinds — see 02_mbml.md — Associations vs References · references. */
+  /** Documentation cross-link only (types↔types or types↔instances; also members/files/URLs) — not an Association. Block type reference (TypeReference) — XML type attribute on <see>. Standalone type: only; when paired with a member or instance attribute, type: qualifies the target and is not stored here. Eight target kinds — see 02_mbml.md — Associations vs References · references. */
   type?: string
-  /** Block instance pointer (InstanceReference) — XML instance attribute on <see>. Local id, FQN::id, or resolved from type= + instance=. */
+  /** Block instance pointer (InstanceReference) — XML instance attribute on <see>. Local id, FQN::id, or resolved from type: + instance: . */
   instance?: string
   /** Repository markdown file — XML file attribute on <see> */
   file?: string
@@ -544,11 +544,11 @@ interface DocumentationReference {
   association?: string
   /** CapabilityReference value — XML capability attribute on <see> */
   capability?: string
-  /** Relation FQN (org.blockml.bml.relation.*) — XML relation attribute on <see>. Omitted = org.blockml.bml.relation.SeeAlso. */
+  /** Relation FQN (org.blockml.bml.relation.*) — XML relation attribute on <see>. Omitted: org.blockml.bml.relation.SeeAlso. */
   relationFqn?: string
   /** Required text body — why or how the referenced element relates */
   context: string
-  /** NaturalLanguage FQN when relationship text deviates from effective block language. Omitted = inherit. */
+  /** NaturalLanguage FQN when relationship text deviates from effective block language. Omitted: inherit. */
   languageFqn?: string
   source?: SourceLocation
 }
@@ -605,7 +605,7 @@ interface PropertyDefinition extends MemberDefinitionBase {
    * Duplicate namespace → BML_DUPLICATE_PROPERTY_VALUE.
    */
   values?: PropertyValueEntry[]
-  /** Convenience — default-namespace entry from values[] (absent = Optional.empty, not null) */
+  /** Convenience — default-namespace entry from values[] (absent: Optional.empty, not null) */
   value?: MemberValue
   group?: string
   /** Block instances of the same type as typeFqn — metadata only (Property-only) */

@@ -22,15 +22,15 @@
     the ValueType definition block itself.
 
     Syntax examples:
-    • Text{maxLength=100} — named configuration property
-    • Decimal{precision=10, scale=2} — named precision and scale
+    • Text{maxLength: 100} — named configuration property
+    • Decimal{precision: 10, scale: 2} — named precision and scale
     • Decimal{10, 2} — positional by ValueType property declaration order (precision, scale)
 
     Rules:
     • Named and positional configuration must not be mixed in one {...} block
     • Positional mapping follows declaration order — same rules as FunctionMapping
     • Generic application uses round parentheses: Box(Integer), TypeReference(core:Block)
-    • Constant(T){value=…} — generic (...) binds T; {value=…} supplies the singleton literal
+    • Constant(T){value: …} — generic (...) binds T; {value: …} supplies the singleton literal
 
     ValueType definitions declare configuration Properties on the type block (e.g. precision and
     scale on Decimal). Values live on Properties of Block instances — never on the ValueType
@@ -54,7 +54,7 @@
       Primitive with precision and scale configuration Properties.
     </see>
     <see type="btype:Constant" relation="SeeAlso">
-      Constant(T){value=…} — configured singleton for union alternatives.
+      Constant(T){value: …} — configured singleton for union alternatives.
     </see>
     <see type="core:ValueType" relation="Extends">
       ValueType branch — types describe nature; Properties own values.

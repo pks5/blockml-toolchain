@@ -29,12 +29,12 @@
 
     The standard implementation is Constant&lt;T extends ValueType&gt; with a single Property
     value : T. The generic type parameter is mandatory. Instance configuration supplies the
-    allowed value — for example Constant(Text){value="auto"} or Constant(Integer){value=5}.
+    allowed value — for example Constant(Text){value: "auto"} or Constant(Integer){value: 5}.
 
     The configured value Property belongs to the internal ValueType instance on the Property
     definition — not to the property's external representation. The external value is always
     identical to the representation of the underlying generic type T. For
-    Constant(Text){value="auto"}, the external value is "auto" — not { value: "auto" }.
+    Constant(Text){value: "auto"}, the external value is "auto" — not { value: "auto" }.
 
     Validation proceeds in two steps:
     1. Validate the supplied value against the generic ValueType T.
@@ -42,7 +42,7 @@
 
     Used primarily as a union alternative alongside ordinary ValueTypes:
 
-    Boolean | Constant(Text){value="auto"}
+    Boolean | Constant(Text){value: "auto"}
   </documentation>
 
   <references>

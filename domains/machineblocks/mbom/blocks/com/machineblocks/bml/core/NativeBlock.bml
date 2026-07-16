@@ -935,7 +935,7 @@
       <scad:value>[0, 0, 0]</scad:value>
     </rotation>
 
-    <rotationOffset type="mbtype:AxisXYZ(Decimal(mbunit:GridUnit))">
+    <rotationOffset type="mbtype:OffsetXYZ">
       <documentation>Shifts the rotation pivot before rotation is applied.</documentation>
       <value>[0, 0, 0]</value>
       <scad:value>[0, 0, 0]</scad:value>
@@ -1150,7 +1150,7 @@
         calibration and gap closing in composite blocks.
       </documentation>
       <since>3.0.0</since>
-      <value>[]</value>
+      <value>{}</value>
       <scad:value>[]</scad:value>
     </sizeMod>
 

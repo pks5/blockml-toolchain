@@ -26,7 +26,7 @@
     stay protected on the definition) or org.blockml.bml.core.Alias directly for empty identity-only
     aliases.
 
-    Instance configuration: FreeTextAlias{name="Sub-Block"}. Block-level only — members do not carry
+    Instance configuration: FreeTextAlias{name: "Sub-Block"}. Block-level only — members do not carry
     aliases. Not XML namespace prefix aliases.</documentation>
 
   <properties>

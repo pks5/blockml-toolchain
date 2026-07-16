@@ -16,7 +16,7 @@
   <is>The literal Auto sentinel</is>
 
   <documentation>Named Constant(Text) for the singleton value "Auto". Use as a union
-    alternative — for example Auto | Float — instead of writing Constant(Text){value="Auto"}
+    alternative — for example Auto | Float — instead of writing Constant(Text){value: "Auto"}
     at every reference site. The external value is "Auto" (identical to Text).</documentation>
 
   <references>

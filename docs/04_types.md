@@ -285,9 +285,9 @@ BlockML has four ValueType kinds: **Primitive**, **Enum**, **Struct**, **Constan
 Canonical singleton alternatives use **Constant** — see `21_constant_value_type.md`:
 
 ```text
-AutoOr<T>      →  Constant(Text){value="auto"} | T
-FalseOr<T>     →  Constant(Boolean){value=false} | T
-NoneOr<T>      →  Constant(Text){value="none"} | T
+AutoOr<T>      →  Constant(Text){value: "auto"} | T
+FalseOr<T>     →  Constant(Boolean){value: false} | T
+NoneOr<T>      →  Constant(Text){value: "none"} | T
 BooleanOr<T>   →  Boolean | T
 ```
 
@@ -295,27 +295,27 @@ Legacy literal union syntax (`"auto" | T`) remains parseable; normalization to C
 
 Union match is **left to right, first hit wins**. Overlapping alternatives are resolved by author order (narrower / sentinels on the left). Unreachable later alternatives → `BML_UNREACHABLE_UNION_ALTERNATIVE`. See `17_type_system_bml.md` — Unions · Match order.
 
-### AutoOr — migrate to `Constant(Text){value="auto"} | T`
+### AutoOr — migrate to `Constant(Text){value: "auto"} | T`
 
 ```text
 Was:  type="type:AutoOr_Float"   value="auto" | value="1.5"
-Now:  type='Constant(Text){value="auto"} | Float'   value="auto" | value="1.5"
+Now:  type='Constant(Text){value: "auto"} | Float'   value="auto" | value="1.5"
 
 MBOM:  "auto"  or  T
 SCAD:  "auto"  or  serialized T
 ```
 
-### FalseOr — migrate to `Constant(Boolean){value=false} | T`
+### FalseOr — migrate to `Constant(Boolean){value: false} | T`
 
 ```text
-Constant(Boolean){value=false} | T
+Constant(Boolean){value: false} | T
 ```
 
-### NoneOr — migrate to `Constant(Text){value="none"} | T`
+### NoneOr — migrate to `Constant(Text){value: "none"} | T`
 
 ```text
 Was:  type="type:NoneOr_…"   value="none"
-Now:  type='Constant(Text){value="none"} | T'
+Now:  type='Constant(Text){value: "none"} | T'
 
 MBOM:  "none"  or  T
 SCAD:  "none"  or  serialized T

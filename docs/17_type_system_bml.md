@@ -373,7 +373,7 @@ org.blockml.bml.core.ValueType              abstract — never stores data
   ├── org.blockml.bml.type.StructType         SizeXYZ · Color · Address · …
   ├── org.blockml.bml.type.EnumType           BaseCutout · Direction · Align · …
   └── org.blockml.bml.type.ConstantType       singleton value domains
-        └── org.blockml.bml.type.Constant     Constant(T){value=…}
+        └── org.blockml.bml.type.Constant     Constant(T){value: …}
 ```
 
 **BlockML knows four ValueType kinds at language level** — each names a semantic meaning:
@@ -383,7 +383,7 @@ org.blockml.bml.core.ValueType              abstract — never stores data
 | **PrimitiveType** | Atomic scalar semantics — no stored values | `Boolean`, `Integer`, `Decimal`, `Float`, `Text`, `URL`, `Version` |
 | **StructType** | Custom value objects — structure via properties | `SizeXYZ`, `Color`, `Address`, `Transform` |
 | **EnumType** | Closed set of named members — BOM stores id + typeFqn | `Direction`, `Face`, `StudType`, `BaseCutout`, `Align` |
-| **ConstantType** | Singleton value domain — one configured literal | `Constant(Text){value="auto"}`, `Constant(Integer){value=5}` |
+| **ConstantType** | Singleton value domain — one configured literal | `Constant(Text){value: "auto"}`, `Constant(Integer){value: 5}` |
 
 `StructType` is the basis for all complex custom value objects. Parameterized value types (e.g. `Box<T>`) are **StructTypes** that declare `<genericTypes>` — not a separate ValueType branch. **EnumType** is a sibling branch under ValueType — not a subtype of StructType.
 
@@ -437,9 +437,9 @@ Legacy domain wrapper types are replaced by union syntax:
 
 ```text
 Obsolete                    Write instead
-AutoOr<T>                   Constant(Text){value="auto"} | T
-FalseOr<T>                  Constant(Boolean){value=false} | T
-NoneOr<T>                   Constant(Text){value="none"} | T
+AutoOr<T>                   Constant(Text){value: "auto"} | T
+FalseOr<T>                  Constant(Boolean){value: false} | T
+NoneOr<T>                   Constant(Text){value: "none"} | T
 BooleanOr<T>                Boolean | T
 Array<T>                    T[]
 UnionType                   A | B | C
@@ -504,20 +504,20 @@ See `00_bom_core.md` — Type Notation · `02_mbml.md` — Type notation · `12_
 Union type expressions combine alternatives with `|`:
 
 ```text
-Boolean | Constant(Text){value="auto"}   — boolean or singleton "auto" (canonical)
-Float | Constant(Text){value="auto"}     — float or auto sentinel
+Boolean | Constant(Text){value: "auto"}   — boolean or singleton "auto" (canonical)
+Float | Constant(Text){value: "auto"}     — float or auto sentinel
 false | SizeXYZ                           — false or struct
 Boolean | StudType                       — boolean or enum
 Integer | Text                           — primitive union
 mbtype:Auto | mbtype:AxisXYZ(Decimal)    — sentinel before struct
 ```
 
-Singleton alternatives use **Constant** — a generic configured ValueType (`21_constant_value_type.md`). Each Constant application binds `T` via `(...)` and supplies the allowed value via `{value=…}`.
+Singleton alternatives use **Constant** — a generic configured ValueType (`21_constant_value_type.md`). Each Constant application binds `T` via `(...)` and supplies the allowed value via `{value: …}`.
 
 **Future literal shorthand** — JSON literals in union positions desugar to Constant:
 
 ```text
-Boolean | "auto"    ≡    Boolean | Constant(Text){value="auto"}
+Boolean | "auto"    ≡    Boolean | Constant(Text){value: "auto"}
 ```
 
 Until that shorthand is enabled, author the explicit Constant form. Legacy literal union syntax (`"auto" | Float`) remains parseable; normalization to Constant is recommended at map time.
@@ -537,7 +537,7 @@ StructB | StructA    + same payload        → StructB
 
 ```text
 Preferred:   Boolean | Text
-             Constant(Boolean){value=false} | Connector[]
+             Constant(Boolean){value: false} | Connector[]
              mbtype:Auto | mbtype:AxisXYZ(…)
 Avoid:       Text | Boolean          — Boolean typically unreachable
 ```
@@ -561,10 +561,10 @@ Only ValueTypes may be used where a **bare type name** is required (Property `ty
 
 ```text
 Allowed:     type="org.blockml.bml.type.Integer"
-             type="Boolean | Constant(Text){value=&quot;auto&quot;}"
+             type="Boolean | Constant(Text){value: &quot;auto&quot;}"
              type="Integer[]"
-             type="Text{maxLength=100}"
-             type="Decimal{precision=10, scale=2}"
+             type="Text{maxLength: 100}"
+             type="Decimal{precision: 10, scale: 2}"
              inputType="com.foo.Request"
              outputType="com.foo.Response"
 Not allowed: type="com.machineblocks.bml.core.NativeBlock"   → BML_INVALID_PROPERTY_TYPE
@@ -1009,8 +1009,8 @@ Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) foll
 
 ```text
 Constant<T extends ValueType>   —  value : T   (internal configuration only)
-Constant(Text){value="auto"}    —  external value: "auto"  (not { value: "auto" })
-                                —  used in Boolean | Constant(Text){value="auto"}
+Constant(Text){value: "auto"}    —  external value: "auto"  (not { value: "auto" })
+                                —  used in Boolean | Constant(Text){value: "auto"}
 ```
 
 ConstantType is a dedicated ValueType branch — not a StructType and not a PrimitiveType. A
@@ -1253,7 +1253,7 @@ Each parenthesized argument binds one generic type parameter (in declaration ord
 
 ```text
 SelectiveGrid(Boolean | type:HoleType)
-AxisXYZ(Constant(Text){value="auto"} | Float)
+AxisXYZ(Constant(Text){value: "auto"} | Float)
 Box(Integer[])
 ```
 
@@ -1265,14 +1265,16 @@ Curly braces configure the Property's owned ValueType instance — orthogonal to
 ```text
 Conceptual              BML attribute (type="...")
 ────────────────        ───────────────────────────
-Text maxLength=100      Text{maxLength=100}
-Decimal p=10, s=2       Decimal{precision=10, scale=2}
+Text maxLength=100      Text{maxLength: 100}
+Decimal p=10, s=2       Decimal{precision: 10, scale: 2}
 Decimal 10, 2           Decimal{10, 2}     — positional by ValueType property order
 ```
 
+Named configuration uses JSON-like `key: value` (same as object literals) so nested StructType values nest cleanly — e.g. `Constant(SizeXY){value: {x: 1, y: 2}}`. See `20_value_type_instance_configuration.md`.
+
 Named and positional configuration must not be mixed in one `{...}` block. Positional mapping follows the same declaration-order rules as FunctionMapping — see `18_function_mapping.md` · `20_value_type_instance_configuration.md`.
 
-**Constant** — `Constant(T){value=…}` configures a singleton ValueType for union alternatives. Generic `(...)` binds `T`; `{…}` supplies the required `value`. See `21_constant_value_type.md`.
+**Constant** — `Constant(T){value: …}` configures a singleton ValueType for union alternatives. Generic `(...)` binds `T`; `{…}` supplies the required `value`. See `21_constant_value_type.md`.
 
 Examples from core Block definitions:
 
