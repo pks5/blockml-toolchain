@@ -201,6 +201,8 @@
       <validation:Warning />
       <btype:Boolean />
       <btype:BooleanEntity />
+      <btype:Color />
+      <btype:ColorEntity />
       <btype:Constant />
       <btype:ConstantType />
       <btype:Decimal />
