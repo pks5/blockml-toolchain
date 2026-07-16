@@ -692,7 +692,7 @@ aggregations whose payload type is a `TypeReferenceEntity` application. Associat
 #### Empty child sugar for TypeReferenceEntity aggregations
 
 ```xml
-<contracts type="btype:TypeReferenceEntity(core:Block)[]">
+<contracts type="type:TypeReferenceEntity(core:Block)[]">
   <con:MyContract />
 </contracts>
 ```
@@ -700,8 +700,8 @@ aggregations whose payload type is a `TypeReferenceEntity` application. Associat
 is **syntactic sugar** for an equivalent explicit Entity instance:
 
 ```xml
-<contracts type="btype:TypeReferenceEntity(core:Block)[]">
-  <btype:TypeReferenceEntity value="con:MyContract" />
+<contracts type="type:TypeReferenceEntity(core:Block)[]">
+  <type:TypeReferenceEntity value="con:MyContract" />
 </contracts>
 ```
 
@@ -749,7 +749,7 @@ Children inside `<composition>` are owned instances of the aggregation payload t
 <blocks>
   <composition>
     <con:MyContract />
-    <!-- equivalent: <btype:TypeReferenceEntity value="con:MyContract" /> -->
+    <!-- equivalent: <type:TypeReferenceEntity value="con:MyContract" /> -->
   </composition>
 </blocks>
 ```
@@ -769,7 +769,7 @@ See `02_mbml.md` — § Aggregations · `13_bml_to_bom_mapping.md` — TypeRefer
 **Type-reference aggregation** (`TypeReferenceEntity`):
 
 ```xml
-<contracts type="btype:TypeReferenceEntity(core:Block)[]">
+<contracts type="type:TypeReferenceEntity(core:Block)[]">
   <com.foo:IIdentifiable />
   <com.foo:IPlaceable />
 </contracts>
@@ -782,13 +782,13 @@ See `02_mbml.md` — § Aggregations · `13_bml_to_bom_mapping.md` — TypeRefer
 <baseType>core:Entity</baseType>
 
 <!-- generic application on baseType -->
-<baseType>core:PrimitiveEntity(btype:Integer)</baseType>
+<baseType>core:PrimitiveEntity(type:Integer)</baseType>
 ```
 
 ```text
 Allowed on TypeReferenceEntity aggregations:
   empty QName sugar → expands to TypeReferenceEntity { value }
-  explicit <btype:TypeReferenceEntity value="…" />
+  explicit <type:TypeReferenceEntity value="…" />
   multiplicity: bare TypeReferenceEntity(T) = 0..1; [] = 0..n; [1..1] = required single
 
 On sugar children (empty non-TypeReferenceEntity QName):
@@ -1230,8 +1230,8 @@ The parameter name is derived from the XML element name — `<T baseType="…"/>
 Optional `defaultType` supplies the binding used when a generic application **omits** the corresponding type argument. Two forms are allowed:
 
 ```text
-1. Concrete type expression   defaultType="btype:Decimal"
-                              defaultType="btype:Decimal(unit:Millimeter)"
+1. Concrete type expression   defaultType="type:Decimal"
+                              defaultType="type:Decimal(unit:Millimeter)"
                               defaultType="def:RootBlockDefinition"
 
 2. Earlier sibling parameter  defaultType="N"   — only a previously declared generic parameter name
@@ -1242,7 +1242,7 @@ Optional `defaultType` supplies the binding used when a generic application **om
 ```xml
 <!-- allowed — Q defaults to the effective binding of N -->
 <genericTypes>
-  <N baseType="core:ValueType" defaultType="btype:Decimal"/>
+  <N baseType="core:ValueType" defaultType="type:Decimal"/>
   <Q baseType="core:ValueType" defaultType="N"/>
 </genericTypes>
 
@@ -1308,7 +1308,7 @@ Resolution rules:
 
 ```text
 mynamespace:MyBlock(abc:A, xyz:B)  →  com.mynamespace.MyBlock<abc.A, xyz.B>
-btype:TypeReference(core:Block) → org.blockml.bml.type.TypeReference<core.Block>
+type:TypeReference(core:Block) → org.blockml.bml.type.TypeReference<core.Block>
 ```
 
 Each parenthesized argument binds one generic type parameter (in declaration order). When multiple parameters are present, the argument label (`abc`, `xyz`, …) matches the generic parameter name (the XML element name inside `<genericTypes>`) and qualifies the type argument as a namespace prefix (`abc:A` → `abc.A`). With a single generic parameter, the label may be omitted — only the type reference is written.
@@ -1344,8 +1344,8 @@ Examples from core Block definitions:
 
 ```xml
 <!-- TypeReference(B): Block type FQNs -->
-<type type="btype:TypeReference(core:Block)"/>
-<baseType type="btype:TypeReference(core:Entity)"/>
+<type type="type:TypeReference(core:Block)"/>
+<baseType type="type:TypeReference(core:Entity)"/>
 
 <!-- MemberReference children: definition paths on see -->
 <see property="com.foo.Bar.properties.width" …/>   <!-- PropertyReference -->

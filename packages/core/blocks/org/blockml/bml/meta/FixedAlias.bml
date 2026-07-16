@@ -13,7 +13,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:meta="org.blockml.bml.meta"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>FixedAlias</name>
   <type>meta:FixedAlias</type>
   <baseType>core:Alias</baseType>

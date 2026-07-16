@@ -63,7 +63,7 @@ Decimal  → org.blockml.bml.type.Decimal
 
 Collections use multiplicity on the type reference — not `Array<T>`. See `17_type_system_bml.md` — Type Expressions.
 
-Generic applications in `type="..."` attributes use **round parentheses** — not angle brackets — e.g. `type="btype:TypeReference(core:Block)"` instead of `TypeReference<core.Block>`. See `17_type_system_bml.md` — Generics — BML attribute syntax.
+Generic applications in `type="..."` attributes use **round parentheses** — not angle brackets — e.g. `type="type:TypeReference(core:Block)"` instead of `TypeReference<core.Block>`. See `17_type_system_bml.md` — Generics — BML attribute syntax.
 
 ```text
 Integer[]   → org.blockml.bml.type.Integer with multiplicity 0..n

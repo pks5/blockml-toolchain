@@ -9,9 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>PrimitiveType</name>
-  <type>btype:PrimitiveType</type>
+  <type>type:PrimitiveType</type>
   <baseType>core:ValueType</baseType>
   <is>An atomic scalar ValueType</is>
 
@@ -33,13 +33,13 @@
     <see file="17_type_system_bml.md" relation="AuthoringGuide">
       PrimitiveType branch and PrimitiveEntity wrappers.
     </see>
-    <see type="btype:Number" relation="SeeAlso">
+    <see type="type:Number" relation="SeeAlso">
       Numeric primitive branch.
     </see>
-    <see type="btype:Text" relation="SeeAlso">
+    <see type="type:Text" relation="SeeAlso">
       Textual primitive branch.
     </see>
-    <see type="btype:IntegerEntity" relation="SeeAlso">
+    <see type="type:IntegerEntity" relation="SeeAlso">
       Example concrete Entity wrapper for primitive values.
     </see>
   </references>

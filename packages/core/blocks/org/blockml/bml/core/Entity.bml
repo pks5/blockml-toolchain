@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
   xmlns:mbcore="com.machineblocks.bml.core">
   <name>Entity</name>
   <type>core:Entity</type>
@@ -29,7 +30,7 @@
     <see type="core:PrimitiveEntity" relation="SeeAlso">
       Primitive value wrappers as Entity instances.
     </see>
-    <see type="btype:TypeReferenceEntity" relation="SeeAlso">
+    <see type="type:TypeReferenceEntity" relation="SeeAlso">
       TypeReference value as Entity — used for contracts, languages, Library lists.
     </see>
   </references>

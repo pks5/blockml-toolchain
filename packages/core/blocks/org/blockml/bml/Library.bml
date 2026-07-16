@@ -18,7 +18,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:constraint="org.blockml.bml.constraint"
-  xmlns:bcore="org.blockml.bml.core"
+  xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:diag="org.blockml.bml.diagnostic"
   xmlns:doc="org.blockml.bml.documentation"
@@ -29,12 +29,12 @@
   xmlns:service="org.blockml.bml.service"
   xmlns:status="org.blockml.bml.status"
   xmlns:task="org.blockml.bml.task"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:validation="org.blockml.bml.validation">
   <name>Library</name>
   <type>blockml:Library</type>
-  <baseType>bcore:BlockLibrary</baseType>
+  <baseType>core:BlockLibrary</baseType>
   <is>A BlockML core library catalog</is>
 
   <documentation>
@@ -65,7 +65,7 @@
     <see file="12_bom_object_model.md" relation="DeepDive">
       Library BOM data structure.
     </see>
-    <see type="bcore:BlockLibrary" relation="Extends">
+    <see type="core:BlockLibrary" relation="Extends">
       Framework base type — not exported from this catalog.
     </see>
   </references>
@@ -88,32 +88,32 @@
     <!-- Optional legacy XSD — omit when all types are exported via blocks -->
     <schemas>
       <composition>
-        <btype:FilePathEntity value="blockml-library.xsd" />
+        <type:FilePathEntity value="blockml-library.xsd" />
       </composition>
     </schemas>
 
     <blocks>
-      <bcore:Block />
-      <bcore:Annotation />
-      <bcore:Bootstrap />
-      <bcore:ReadMe />
-      <bcore:Documentation />
-      <bcore:Keyword />
-      <bcore:Alias />
-      <bcore:TaskGuide />
-      <bcore:Diagnostic />
-      <bcore:Capability />
-      <bcore:Constraint />
-      <bcore:Definition />
-      <bcore:Entity />
-      <bcore:PrimitiveEntity />
-      <bcore:Language />
-      <bcore:Mapping />
-      <bcore:Status />
-      <bcore:Relation />
-      <bcore:Validation />
-      <bcore:ValueType />
-      <bcore:Unit />
+      <core:Block />
+      <core:Annotation />
+      <core:Bootstrap />
+      <core:ReadMe />
+      <core:Documentation />
+      <core:Keyword />
+      <core:Alias />
+      <core:TaskGuide />
+      <core:Diagnostic />
+      <core:Capability />
+      <core:Constraint />
+      <core:Definition />
+      <core:Entity />
+      <core:PrimitiveEntity />
+      <core:Language />
+      <core:Mapping />
+      <core:Status />
+      <core:Relation />
+      <core:Validation />
+      <core:ValueType />
+      <core:Unit />
       <ann:BmlAnnotation />
       <def:AggregationDefinition />
       <def:AssociationDefinition />
@@ -204,42 +204,42 @@
       <validation:Error />
       <validation:Information />
       <validation:Warning />
-      <btype:Boolean />
-      <btype:BooleanEntity />
-      <btype:Color />
-      <btype:ColorEntity />
-      <btype:Constant />
-      <btype:ConstantType />
-      <btype:Decimal />
-      <btype:DecimalEntity />
-      <btype:EnumType />
-      <btype:FilePath />
-      <btype:FilePathEntity />
-      <btype:Float />
-      <btype:FloatEntity />
-      <btype:TypeReference />
-      <btype:TypeReferenceEntity />
-      <btype:InstanceReference />
-      <btype:MemberReference />
-      <btype:PropertyReference />
-      <btype:AggregationReference />
-      <btype:AssociationReference />
-      <btype:CapabilityReference />
-      <btype:Integer />
-      <btype:IntegerEntity />
-      <btype:MimeType />
-      <btype:MimeTypeEntity />
-      <btype:Number />
-      <btype:PrimitiveType />
-      <btype:StructType />
-      <btype:Text />
-      <btype:TextEntity />
-      <btype:URI />
-      <btype:URIEntity />
-      <btype:URL />
-      <btype:URLEntity />
-      <btype:Version />
-      <btype:VersionEntity />
+      <type:Boolean />
+      <type:BooleanEntity />
+      <type:Color />
+      <type:ColorEntity />
+      <type:Constant />
+      <type:ConstantType />
+      <type:Decimal />
+      <type:DecimalEntity />
+      <type:EnumType />
+      <type:FilePath />
+      <type:FilePathEntity />
+      <type:Float />
+      <type:FloatEntity />
+      <type:TypeReference />
+      <type:TypeReferenceEntity />
+      <type:InstanceReference />
+      <type:MemberReference />
+      <type:PropertyReference />
+      <type:AggregationReference />
+      <type:AssociationReference />
+      <type:CapabilityReference />
+      <type:Integer />
+      <type:IntegerEntity />
+      <type:MimeType />
+      <type:MimeTypeEntity />
+      <type:Number />
+      <type:PrimitiveType />
+      <type:StructType />
+      <type:Text />
+      <type:TextEntity />
+      <type:URI />
+      <type:URIEntity />
+      <type:URL />
+      <type:URLEntity />
+      <type:Version />
+      <type:VersionEntity />
       <unit:None />
       <unit:Millimeter />
       <unit:Centimeter />

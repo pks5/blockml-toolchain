@@ -249,30 +249,26 @@ xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
 
 BOM: `values[]` as `PropertyValueEntry { namespace, value }`; convenience `value` is the default-namespace entry. Duplicate namespace → `BML_DUPLICATE_PROPERTY_VALUE`; same-namespace self-faceting (`<scad:value>...<scad:value>...`) → invalid. Facets do not satisfy or replace the canonical value for BML instance semantics unless a renderer explicitly prefers an Annotation facet.
 
-### XML prefix best practice — reserve framework aliases
+### XML prefix convention — short = BlockML, domain token = domain
 
-Short aliases such as `core`, `type`, `unit`, `lang`, `status`, `constraint`, `validation`, `def`, `btype`, `bcore` should **preferentially bind to BlockML framework packages** (`org.blockml.bml.*`). Domain packages that mirror the same segment names should use a **domain-qualified prefix** so every document shares a recognizable alias vocabulary and framework vs domain stays obvious at a glance.
+**Rule of thumb:** a bare short prefix always means BlockML. If you read `core:`, `type:`, `unit:`, or `lang:` you are looking at `org.blockml.bml.*` — no lookup required. Domain mirrors of the same segment use a **domain token** in front (MachineBlocks → `mb`).
 
-```text
-Framework (org.blockml.bml.*) — keep short aliases free for these:
-  xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"      — or type= only when no domain .type is imported
-  xmlns:unit="org.blockml.bml.unit"
-  xmlns:lang="org.blockml.bml.language"
-  xmlns:status="org.blockml.bml.status"
-  xmlns:def="org.blockml.bml.definition"
-  …
-
-Domain pendants — prefix with a short domain token (MachineBlocks → mb):
-  xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:mbtype="com.machineblocks.bml.type"
-  xmlns:mbunit="com.machineblocks.bml.unit"
-  xmlns:bricks="com.machineblocks.bml.bricks"   — already distinct; no mb required
-```
+| Prefix | Package | Role |
+|--------|---------|------|
+| `core` | `org.blockml.bml.core` | BlockML |
+| `type` | `org.blockml.bml.type` | BlockML |
+| `unit` | `org.blockml.bml.unit` | BlockML |
+| `lang` | `org.blockml.bml.language` | BlockML |
+| `status` / `def` / `constraint` / `validation` / … | matching `org.blockml.bml.*` | BlockML |
+| `mbcore` | `com.machineblocks.bml.core` | Domain |
+| `mbtype` | `com.machineblocks.bml.type` | Domain |
+| `mbunit` | `com.machineblocks.bml.unit` | Domain |
+| `bricks` / `cal` / `scad` | collective / annotation packages | Domain (descriptive OK) |
 
 ```xml
-<!-- Preferred in MachineBlocks documents -->
-xmlns:btype="org.blockml.bml.type"
+<!-- ✓ Correct — short prefixes are BlockML; domain uses mb* -->
+xmlns:core="org.blockml.bml.core"
+xmlns:type="org.blockml.bml.type"
 xmlns:unit="org.blockml.bml.unit"
 xmlns:mbcore="com.machineblocks.bml.core"
 xmlns:mbtype="com.machineblocks.bml.type"
@@ -284,15 +280,18 @@ xmlns:mbunit="com.machineblocks.bml.unit"
 ```
 
 ```text
-Avoid (ambiguous / steals framework aliases):
-  xmlns:core="com.machineblocks.bml.core"    ✗  — core should mean org.blockml.bml.core
-  xmlns:type="com.machineblocks.bml.type"    ✗  — clashes with framework type mental model
-  xmlns:unit="com.machineblocks.bml.unit"    ✗  — unit should mean org.blockml.bml.unit
+✗ Stealing framework aliases (ambiguous):
+  xmlns:core="com.machineblocks.bml.core"   — core must mean org.blockml.bml.core
+  xmlns:type="com.machineblocks.bml.type"   — type must mean org.blockml.bml.type
+  xmlns:unit="com.machineblocks.bml.unit"   — unit must mean org.blockml.bml.unit
+
+✗ Legacy aliases (do not use in new authoring):
+  bcore / btype  — use core / type instead
 ```
 
-Other domains follow the same pattern with their own short token (`ac` / `acore` / `atype`, …). Collective library packages (`bricks`, `calibration`) may keep a descriptive alias when they do not collide with framework segment names.
+Other domains follow the same pattern with their own short token (`ac` → `acore` / `atype` / `aunit`, …). Collective library packages (`bricks`, `cal`) may keep a descriptive alias when they do not collide with framework segment names.
 
-Prefixes remain authoring-only — the BOM always stores FQNs. This convention is **best practice for readability and consistency**, not a compiler-enforced rule.
+Prefixes remain authoring-only — the BOM always stores FQNs. This convention is **required authoring practice** for readability; the compiler does not rewrite aliases.
 
 ### Context-Bound Implicit Namespace
 
@@ -560,7 +559,7 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
                       Declares identity for the Block being defined (the type need not exist yet).
                       Immediately after name, before is. Child-element TypeReference form is invalid.
 <baseType>          — parent TypeReference / TypeExpression. Mandatory — no default. Element
-                      text (for example core:Block or core:PrimitiveEntity(btype:Integer)).
+                      text (for example core:Block or core:PrimitiveEntity(type:Integer)).
                       Generic applications on the parent are authored and resolved here.
                       Omitted only on org.blockml.bml.core.Block. Immediately after type, before is.
 <is>                — required: names the Idea (Urbild) — what this Block semantically
@@ -643,8 +642,8 @@ Examples:
 
 ```xml
 <name>Version</name>
-<type>btype:Version</type>
-<baseType>btype:Text</baseType>
+<type>type:Version</type>
+<baseType>type:Text</baseType>
 <is>A version number</is>
 <documentation>Semantic version text — MAJOR.MINOR.PATCH form. Unqualified name Version
   resolves via the type namespace.</documentation>
@@ -752,7 +751,7 @@ Library descriptors set the catalogue default:
 
 ```xml
 <name>Library</name>
-<baseType>bcore:BlockLibrary</baseType>
+<baseType>core:BlockLibrary</baseType>
 <version>3.0.0</version>
 <language>
   <English />
@@ -1160,7 +1159,7 @@ Relation is a **Block reference** — not a free string — following Everything
 - Include only targets with a **direct relationship** to the current definition.
 - Every `<see>` **must** include a text body describing the relationship.
 - Do **not** repeat cross-links in `<documentation>`; use `<references>` instead.
-- `type` values use **namespace prefixes** from the document's `xmlns:` declarations — same rules as Block identity `type`, `baseType`, and composition references (e.g. `core:Block`, `def:PropertyDefinition`, `bcore:Entity`).
+- `type` values use **namespace prefixes** from the document's `xmlns:` declarations — same rules as Block identity `type`, `baseType`, and composition references (e.g. `core:Block`, `def:PropertyDefinition`, `core:Entity`).
 
 ```xml
 <references>
@@ -1371,7 +1370,7 @@ Framework base types (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.
 
 <subTypes>
   <core:Block />
-  <bcore:Entity />
+  <core:Entity />
 </subTypes>
 
 <languages>
@@ -1500,7 +1499,7 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbtype="com.machineblocks.bml.type"
@@ -1531,8 +1530,9 @@ MachineBlocks (Domain):
   http://machineblocks.com/schema/calibration      ← com.machineblocks.bml.calibration.*
   com.machineblocks.bml.annotation.ScadAnnotation  ← scad: Annotation
 
-FQN-Referenz-Namespaces (prefix best practice — see § XML prefix best practice · § Annotations):
-  xmlns:btype="org.blockml.bml.type"              ← Decimal, Boolean, …
+FQN-Referenz-Namespaces (prefix convention — see § XML prefix convention · § Annotations):
+  xmlns:core="org.blockml.bml.core"               ← Block, Entity, …
+  xmlns:type="org.blockml.bml.type"               ← Decimal, Boolean, …
   xmlns:unit="org.blockml.bml.unit"               ← Millimeter, …
   xmlns:mbcore="com.machineblocks.bml.core"       ← <mbcore:NativeBlock />
   xmlns:mbtype="com.machineblocks.bml.type"       ← type="mbtype:SizeXYZ"
@@ -1563,7 +1563,7 @@ XSD-Dateien werden als Teil der npm-Packages ausgeliefert.
 
 ```text
 xmlns:bml     — org.blockml.bml.annotation.BmlAnnotation (required when using bml:* directives)
-xmlns:btype   — BlockML framework Package (org.blockml.bml.type.*)
+xmlns:type   — BlockML framework Package (org.blockml.bml.type.*)
 xmlns:mbtype  — domain Package (e.g. mbtype:SizeXYZ) — do not reuse type= for domain
 xmlns:scad    — com.machineblocks.bml.annotation.ScadAnnotation (SCAD member/prose facets)
 xmlns:*       — other Package or Annotation targets only
@@ -3265,12 +3265,12 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 
 ```xml
 <aggregations>
-  <readFirst type="btype:TypeReferenceEntity(core:ReadMe)[1..1]" readOnly="true" />
-  <bootstrap type="btype:TypeReferenceEntity(core:Bootstrap)" readOnly="true" />
-  <dependencies type="btype:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true" />
-  <subLibraries type="btype:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true" />
-  <schemas type="btype:FilePathEntity[]" readOnly="true" />
-  <blocks type="btype:TypeReferenceEntity(core:Block)[]" readOnly="true" />
+  <readFirst type="type:TypeReferenceEntity(core:ReadMe)[1..1]" readOnly="true" />
+  <bootstrap type="type:TypeReferenceEntity(core:Bootstrap)" readOnly="true" />
+  <dependencies type="type:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true" />
+  <subLibraries type="type:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true" />
+  <schemas type="type:FilePathEntity[]" readOnly="true" />
+  <blocks type="type:TypeReferenceEntity(core:Block)[]" readOnly="true" />
 </aggregations>
 ```
 
@@ -3899,7 +3899,7 @@ Physical directories and overlapping package prefixes do not define membership. 
 
   <name>Library</name>
   <type>bricks:Library</type>
-  <baseType>bcore:BlockLibrary</baseType>
+  <baseType>core:BlockLibrary</baseType>
   <version>3.0.0</version>
 
   <properties>
@@ -3919,7 +3919,7 @@ Physical directories and overlapping package prefixes do not define membership. 
     <!-- Optional legacy XSD -->
     <schemas>
       <composition>
-        <btype:FilePathEntity value="bricks.xsd" />
+        <type:FilePathEntity value="bricks.xsd" />
       </composition>
     </schemas>
 

@@ -8,10 +8,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:lang="org.blockml.bml.language"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>Color</name>
-  <type>btype:Color</type>
-  <baseType>btype:Text</baseType>
+  <type>type:Color</type>
+  <baseType>type:Text</baseType>
   <is>A color value string</is>
 
   <documentation>Textual primitive subtype for color values. Unqualified name Color resolves to
@@ -40,7 +40,7 @@
     <see type="lang:English" relation="Defines">
       DefaultType for L when the color-name language is omitted.
     </see>
-    <see type="btype:Text" relation="Extends">
+    <see type="type:Text" relation="Extends">
       Color is a textual primitive subtype.
     </see>
   </references>

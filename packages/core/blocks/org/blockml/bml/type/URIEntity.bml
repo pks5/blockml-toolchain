@@ -3,10 +3,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>URIEntity</name>
-  <type>btype:URIEntity</type>
-  <baseType>core:PrimitiveEntity(btype:URI)</baseType>
+  <type>type:URIEntity</type>
+  <baseType>core:PrimitiveEntity(type:URI)</baseType>
   <is>A resource identifier as an Entity</is>
 
   <documentation>Concrete Entity wrapping a URI primitive. Binds T = URI on

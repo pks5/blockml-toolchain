@@ -9,10 +9,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>CapabilityReference</name>
-  <type>btype:CapabilityReference</type>
-  <baseType>btype:MemberReference(B, def:CapabilityDefinition)</baseType>
+  <type>type:CapabilityReference</type>
+  <baseType>type:MemberReference(B, def:CapabilityDefinition)</baseType>
   <is>A path to a Capability member</is>
 
   <documentation>Concrete MemberReference binding D = CapabilityDefinition. Value is a canonical
@@ -20,7 +20,7 @@
     type qualifier. Used as the type of see capability=.</documentation>
 
   <references>
-    <see type="btype:MemberReference" relation="SeeAlso">
+    <see type="type:MemberReference" relation="SeeAlso">
       Abstract member path ValueType.
     </see>
     <see type="def:CapabilityDefinition" relation="Defines">

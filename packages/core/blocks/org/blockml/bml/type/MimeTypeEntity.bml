@@ -3,10 +3,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>MimeTypeEntity</name>
-  <type>btype:MimeTypeEntity</type>
-  <baseType>core:PrimitiveEntity(btype:MimeType)</baseType>
+  <type>type:MimeTypeEntity</type>
+  <baseType>core:PrimitiveEntity(type:MimeType)</baseType>
   <is>A MIME type as an Entity</is>
 
   <documentation>Concrete Entity wrapping a MimeType primitive. Binds T = MimeType on

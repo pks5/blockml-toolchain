@@ -3,10 +3,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>VersionEntity</name>
-  <type>btype:VersionEntity</type>
-  <baseType>core:PrimitiveEntity(btype:Version)</baseType>
+  <type>type:VersionEntity</type>
+  <baseType>core:PrimitiveEntity(type:Version)</baseType>
   <is>A version number as an Entity</is>
 
   <documentation>Concrete Entity wrapping a Version primitive. Binds T = Version on

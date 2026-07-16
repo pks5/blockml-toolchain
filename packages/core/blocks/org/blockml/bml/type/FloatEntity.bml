@@ -3,10 +3,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>FloatEntity</name>
-  <type>btype:FloatEntity</type>
-  <baseType>core:PrimitiveEntity(btype:Float)</baseType>
+  <type>type:FloatEntity</type>
+  <baseType>core:PrimitiveEntity(type:Float)</baseType>
   <is>A floating-point number as an Entity</is>
 
   <documentation>Concrete Entity wrapping a Float primitive. Binds T = Float on

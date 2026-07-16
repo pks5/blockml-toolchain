@@ -9,7 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>PrimitiveEntity</name>
   <type>core:PrimitiveEntity</type>
   <baseType>core:Entity</baseType>
@@ -36,7 +36,7 @@
   <abstract>true</abstract>
 
   <genericTypes>
-    <T baseType="btype:PrimitiveType" />
+    <T baseType="type:PrimitiveType" />
   </genericTypes>
 
   <properties>

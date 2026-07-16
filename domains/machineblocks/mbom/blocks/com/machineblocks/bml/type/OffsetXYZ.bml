@@ -8,12 +8,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:btype="org.blockml.bml.type"
-  xmlns:type="com.machineblocks.bml.type"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
   <name>OffsetXYZ</name>
-  <type>type:OffsetXYZ</type>
-  <baseType>type:AxisXYZ(N, Z)</baseType>
+  <type>mbtype:OffsetXYZ</type>
+  <baseType>mbtype:AxisXYZ(N, Z)</baseType>
   <is>An offset along X, Y, and Z</is>
 
   <documentation>Semantic Struct ValueType for an offset triple { x, y, z }. Extends AxisXYZ(N, Z) —
@@ -24,18 +24,18 @@
     OffsetXYZ (not Offset3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
-    <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnitXY)"/>
-    <Z baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnitZ)"/>
+    <N baseType="type:Number" defaultType="type:Decimal(mbunit:GridUnitXY)"/>
+    <Z baseType="type:Number" defaultType="type:Decimal(mbunit:GridUnitZ)"/>
   </genericTypes>
 
   <references>
-    <see type="type:AxisXYZ" relation="Extends">
+    <see type="mbtype:AxisXYZ" relation="Extends">
       Structural { x, y, z } map — OffsetXYZ adds offset semantics; forwards N and Z.
     </see>
-    <see type="type:OffsetXY" relation="SeeAlso">
+    <see type="mbtype:OffsetXY" relation="SeeAlso">
       Two-axis offset map on AxisXY.
     </see>
-    <see type="type:SizeXYZ" relation="SeeAlso">
+    <see type="mbtype:SizeXYZ" relation="SeeAlso">
       Parallel size semantics on AxisXYZ.
     </see>
   </references>

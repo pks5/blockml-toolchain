@@ -9,12 +9,12 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:bcore="org.blockml.bml.core"
-  xmlns:core="com.machineblocks.bml.core"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>Block</name>
-  <type>core:Block</type>
-  <baseType>bcore:Entity</baseType>
+  <type>mbcore:Block</type>
+  <baseType>core:Entity</baseType>
   <is>A MachineBlocks domain Block</is>
 
   <documentation>MachineBlocks domain base Block. Carries presets aggregation and basePresets
@@ -22,16 +22,16 @@
     output is render-target logic.</documentation>
 
   <references>
-    <see type="bcore:Entity">
+    <see type="core:Entity">
       Domain branch base — Entity instances with composition identity.
     </see>
-    <see type="core:CompositeBlock">
+    <see type="mbcore:CompositeBlock">
       Composable sub-type with default _parts aggregation for child block instances.
     </see>
-    <see type="core:NativeBlock">
+    <see type="mbcore:NativeBlock">
       Final leaf sub-type rendered directly as mb_block() SCAD primitive.
     </see>
-    <see type="core:Set">
+    <see type="mbcore:Set">
       LEGO-style build sub-type with palette, placed parts, and assembly steps.
     </see>
   </references>
@@ -49,7 +49,7 @@
   </associations>
 
   <aggregations>
-    <presets type="core:Block[]" />
+    <presets type="mbcore:Block[]" />
   </aggregations>
 
 </block>

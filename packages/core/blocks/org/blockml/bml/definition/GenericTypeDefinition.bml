@@ -12,7 +12,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>GenericTypeDefinition</name>
   <type>def:GenericTypeDefinition</type>
   <baseType>core:Definition</baseType>

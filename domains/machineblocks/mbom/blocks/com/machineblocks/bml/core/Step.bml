@@ -9,22 +9,22 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:bcore="org.blockml.bml.core"
-  xmlns:core="com.machineblocks.bml.core"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>Step</name>
-  <type>core:Step</type>
-  <baseType>bcore:Block</baseType>
+  <type>mbcore:Step</type>
+  <baseType>core:Block</baseType>
   <is>A single assembly instruction</is>
 
   <documentation>Framework Block defining one assembly instruction step. Document order in _steps
     defines build order.</documentation>
 
   <references>
-    <see type="core:Set">
+    <see type="mbcore:Set">
       Used as children of Set's _steps aggregation.
     </see>
-    <see type="core:Block">
+    <see type="mbcore:Block">
       part association references a placed instance by bml:id in _parts.
     </see>
   </references>
@@ -32,7 +32,7 @@
   <final>true</final>
 
   <associations>
-    <part type="InstanceReference(core:Block)"></part>
+    <part type="InstanceReference(mbcore:Block)"></part>
   </associations>
 
   <properties>

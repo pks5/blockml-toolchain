@@ -9,11 +9,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>AxisXYZ</name>
-  <type>type:AxisXYZ</type>
-  <baseType>type:AxisXY(N)</baseType>
+  <type>mbtype:AxisXYZ</type>
+  <baseType>mbtype:AxisXY(N)</baseType>
   <is>A value triple along X, Y, and Z</is>
 
   <documentation>Struct ValueType for axis-keyed { x, y, z }. Extends AxisXY(N) and adds z.
@@ -23,7 +23,7 @@
     (default Decimal).</documentation>
 
   <genericTypes>
-    <N baseType="core:ValueType" defaultType="btype:Decimal"/>
+    <N baseType="core:ValueType" defaultType="type:Decimal"/>
     <Z baseType="core:ValueType" defaultType="N"/>
   </genericTypes>
 
@@ -34,19 +34,19 @@
   </properties>
 
   <references>
-    <see type="type:AxisXY" relation="Extends">
+    <see type="mbtype:AxisXY" relation="Extends">
       Two-axis parent — x, y inherited; z declared here.
     </see>
-    <see type="type:MultiAxis" relation="SeeAlso">
+    <see type="mbtype:MultiAxis" relation="SeeAlso">
       Abstract axis-map base — N.
     </see>
-    <see type="type:SizeXYZ" relation="SeeAlso">
+    <see type="mbtype:SizeXYZ" relation="SeeAlso">
       Size semantics on AxisXYZ — N = GridUnitXY, Z = GridUnitZ by default.
     </see>
-    <see type="type:OffsetXYZ" relation="SeeAlso">
+    <see type="mbtype:OffsetXYZ" relation="SeeAlso">
       Offset semantics on AxisXYZ — same grid-unit defaults as SizeXYZ.
     </see>
-    <see type="type:RotationXYZ" relation="SeeAlso">
+    <see type="mbtype:RotationXYZ" relation="SeeAlso">
       Rotation semantics — AxisXYZ with N (and Z via default) closed to Decimal(unit:Degree).
     </see>
   </references>

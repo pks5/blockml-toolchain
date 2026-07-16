@@ -14,9 +14,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>EnumType</name>
-  <type>btype:EnumType</type>
+  <type>type:EnumType</type>
   <baseType>core:ValueType</baseType>
   <is>A closed set of named values</is>
 
@@ -89,10 +89,10 @@
     <see file="16_framework_base_types.md" relation="AuthoringGuide">
       ValueType branch.
     </see>
-    <see type="btype:StructType" relation="ContrastsWith">
+    <see type="type:StructType" relation="ContrastsWith">
       StructType shapes external values via properties; EnumType stores only member identity.
     </see>
-    <see type="btype:ConstantType" relation="SeeAlso">
+    <see type="type:ConstantType" relation="SeeAlso">
       Parallel dedicated ValueType branch for singleton literals.
     </see>
   </references>

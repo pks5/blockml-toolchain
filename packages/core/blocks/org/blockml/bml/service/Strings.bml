@@ -15,7 +15,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:service="org.blockml.bml.service"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>Strings</name>
   <type>service:Strings</type>
   <baseType>core:Entity</baseType>

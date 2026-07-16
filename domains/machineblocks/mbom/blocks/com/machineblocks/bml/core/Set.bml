@@ -8,20 +8,20 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:core="com.machineblocks.bml.core">
+  xmlns:mbcore="com.machineblocks.bml.core">
   <name>Set</name>
-  <type>core:Set</type>
-  <baseType>core:CompositeBlock</baseType>
+  <type>mbcore:Set</type>
+  <baseType>mbcore:CompositeBlock</baseType>
   <is>A LEGO-style build set</is>
 
   <documentation>Abstract composable Block for LEGO-style Sets — block palette, placed instances,
     and assembly order. Top-level catalog unit in MachineBlocks.</documentation>
 
   <references>
-    <see type="core:CompositeBlock">
+    <see type="mbcore:CompositeBlock">
       Extends CompositeBlock — inherits _parts for placed instances and presets for block palette.
     </see>
-    <see type="core:Step">
+    <see type="mbcore:Step">
       Assembly steps in _steps reference placed parts via part association.
     </see>
   </references>
@@ -29,7 +29,7 @@
   <abstract>true</abstract>
 
   <aggregations>
-    <_steps type="core:Step[]" />
+    <_steps type="mbcore:Step[]" />
   </aggregations>
 
 </block>

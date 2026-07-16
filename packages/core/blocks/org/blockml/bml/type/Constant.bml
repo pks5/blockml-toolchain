@@ -12,11 +12,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation">
   <name>Constant</name>
-  <type>btype:Constant</type>
-  <baseType>btype:ConstantType</baseType>
+  <type>type:Constant</type>
+  <baseType>type:ConstantType</baseType>
   <is>A single allowed literal value</is>
 
   <documentation>
@@ -56,7 +56,7 @@
     <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Union type expressions and generic application syntax.
     </see>
-    <see type="btype:ConstantType" relation="Extends">
+    <see type="type:ConstantType" relation="Extends">
       ConstantType branch — singleton value domain semantics.
     </see>
   </references>

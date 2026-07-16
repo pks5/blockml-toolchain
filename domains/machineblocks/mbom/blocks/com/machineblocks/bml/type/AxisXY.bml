@@ -9,20 +9,20 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>AxisXY</name>
-  <type>type:AxisXY</type>
-  <baseType>type:MultiAxis(N)</baseType>
+  <type>mbtype:AxisXY</type>
+  <baseType>mbtype:MultiAxis(N)</baseType>
   <is>A value pair along X and Y</is>
 
   <documentation>Struct ValueType for axis-keyed { x, y }. Extends MultiAxis(N).
     N is any ValueType (default Decimal) — numbers, structs, enums, etc. Bare AxisXY is Decimal
     (dimensionless). Supply a unit via N — e.g. AxisXY(Decimal(unit:Millimeter)) or
-    AxisXY(Integer(unit:MBU)).</documentation>
+    AxisXY(Integer(mbunit:MBU)).</documentation>
 
   <genericTypes>
-    <N baseType="core:ValueType" defaultType="btype:Decimal"/>
+    <N baseType="core:ValueType" defaultType="type:Decimal"/>
   </genericTypes>
 
   <properties>
@@ -35,19 +35,19 @@
   </properties>
 
   <references>
-    <see type="type:MultiAxis" relation="Extends">
+    <see type="mbtype:MultiAxis" relation="Extends">
       Abstract axis-map base — N.
     </see>
-    <see type="type:AxisXYZ" relation="SeeAlso">
+    <see type="mbtype:AxisXYZ" relation="SeeAlso">
       Adds Z — extends this type.
     </see>
-    <see type="type:SizeXY" relation="SeeAlso">
+    <see type="mbtype:SizeXY" relation="SeeAlso">
       Size semantics on AxisXY.
     </see>
-    <see type="type:OffsetXY" relation="SeeAlso">
+    <see type="mbtype:OffsetXY" relation="SeeAlso">
       Offset semantics on AxisXY.
     </see>
-    <see type="type:RotationXY" relation="SeeAlso">
+    <see type="mbtype:RotationXY" relation="SeeAlso">
       Rotation semantics — AxisXY with N closed to Decimal(unit:Degree).
     </see>
   </references>

@@ -14,7 +14,7 @@
                       "
   xmlns:blockml="org.blockml.bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:bcore="org.blockml.bml.core"
+  xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mb="com.machineblocks.bml"
   xmlns:mbann="com.machineblocks.bml.annotation"
@@ -23,7 +23,7 @@
   xmlns:mbunit="com.machineblocks.bml.unit">
   <name>Library</name>
   <type>mb:Library</type>
-  <baseType>bcore:BlockLibrary</baseType>
+  <baseType>core:BlockLibrary</baseType>
   <is>A MachineBlocks root library catalog</is>
 
   <documentation>

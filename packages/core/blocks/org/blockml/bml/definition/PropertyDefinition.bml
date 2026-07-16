@@ -12,7 +12,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>PropertyDefinition</name>
   <type>def:PropertyDefinition</type>
   <baseType>def:MemberDefinition</baseType>

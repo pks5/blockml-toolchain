@@ -3,11 +3,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit">
   <name>Number</name>
-  <type>btype:Number</type>
-  <baseType>btype:PrimitiveType</baseType>
+  <type>type:Number</type>
+  <baseType>type:PrimitiveType</baseType>
   <is>A numeric value</is>
 
   <documentation>Abstract numeric primitive branch under org.blockml.bml.type.PrimitiveType.

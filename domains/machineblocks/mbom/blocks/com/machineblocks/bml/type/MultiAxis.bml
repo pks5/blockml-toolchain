@@ -9,11 +9,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>MultiAxis</name>
-  <type>type:MultiAxis</type>
-  <baseType>btype:StructType</baseType>
+  <type>mbtype:MultiAxis</type>
+  <baseType>type:StructType</baseType>
   <is>An axis-keyed multi-component value</is>
 
   <documentation>Abstract StructType base for MachineBlocks axis-keyed maps (AxisXY, AxisXYZ).
@@ -25,14 +25,14 @@
   <abstract>true</abstract>
 
   <genericTypes>
-    <N baseType="core:ValueType" defaultType="btype:Decimal"/>
+    <N baseType="core:ValueType" defaultType="type:Decimal"/>
   </genericTypes>
 
   <references>
-    <see type="type:AxisXY" relation="SeeAlso">
+    <see type="mbtype:AxisXY" relation="SeeAlso">
       Two-axis map — x, y.
     </see>
-    <see type="type:AxisXYZ" relation="SeeAlso">
+    <see type="mbtype:AxisXYZ" relation="SeeAlso">
       Three-axis map — x, y, z (extends AxisXY).
     </see>
   </references>

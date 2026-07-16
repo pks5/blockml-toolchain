@@ -47,6 +47,7 @@ Within each group, sort by package FQN (hierarchical / alphabetical).
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbtype="com.machineblocks.bml.type">

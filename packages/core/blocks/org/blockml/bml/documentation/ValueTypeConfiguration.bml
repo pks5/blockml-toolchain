@@ -10,7 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>ValueTypeConfiguration</name>
   <type>doc:ValueTypeConfiguration</type>
   <baseType>core:Documentation</baseType>
@@ -50,10 +50,10 @@
     <see file="18_function_mapping.md" relation="AuthoringGuide">
       Positional parameter order — shared rules with FunctionMapping.
     </see>
-    <see type="btype:Decimal" relation="SeeAlso">
+    <see type="type:Decimal" relation="SeeAlso">
       Primitive with precision and scale configuration Properties.
     </see>
-    <see type="btype:Constant" relation="SeeAlso">
+    <see type="type:Constant" relation="SeeAlso">
       Constant(T){value: …} — configured singleton for union alternatives.
     </see>
     <see type="core:ValueType" relation="Extends">

@@ -3,10 +3,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>DecimalEntity</name>
-  <type>btype:DecimalEntity</type>
-  <baseType>core:PrimitiveEntity(btype:Decimal)</baseType>
+  <type>type:DecimalEntity</type>
+  <baseType>core:PrimitiveEntity(type:Decimal)</baseType>
   <is>A decimal number as an Entity</is>
 
   <documentation>Concrete Entity wrapping a Decimal primitive. Binds T = Decimal on

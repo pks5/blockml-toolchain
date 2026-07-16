@@ -3,10 +3,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>Boolean</name>
-  <type>btype:Boolean</type>
-  <baseType>btype:PrimitiveType</baseType>
+  <type>type:Boolean</type>
+  <baseType>type:PrimitiveType</baseType>
   <is>A true-or-false value</is>
 
   <documentation>BOM Core primitive ValueType for true/false values. Unqualified name Boolean

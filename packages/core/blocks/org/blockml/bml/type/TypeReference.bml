@@ -14,10 +14,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>TypeReference</name>
-  <type>btype:TypeReference</type>
-  <baseType>btype:Text</baseType>
+  <type>type:TypeReference</type>
+  <baseType>type:Text</baseType>
   <is>A Block type name reference</is>
 
   <documentation>
@@ -33,7 +33,7 @@
       com.machineblocks.bml.core.Block)
     Sub-Block FQNs derive as parentFqn + "." + name when omitted in source.
 
-    Namespace prefixes in BML (core:, btype:, def:, …) map to package segments; the Namespace
+    Namespace prefixes in BML (core:, type:, def:, …) map to package segments; the Namespace
     Resolver stores the resolved FQN string in BOM typeFqn fields. Unknown FQN at validate time
     → BML_UNKNOWN_TYPE.
 
@@ -84,13 +84,13 @@
     <see type="def:GenericTypeDefinition" relation="Defines">
       parameter baseType constraint attribute.
     </see>
-    <see type="btype:InstanceReference" relation="SeeAlso">
+    <see type="type:InstanceReference" relation="SeeAlso">
       Sibling ValueType for Block instance pointers — association types and see instance=.
     </see>
-    <see type="btype:MemberReference" relation="SeeAlso">
+    <see type="type:MemberReference" relation="SeeAlso">
       Member definition path references — PropertyReference and siblings.
     </see>
-    <see type="btype:TypeReferenceEntity" relation="SeeAlso">
+    <see type="type:TypeReferenceEntity" relation="SeeAlso">
       Entity wrapper for TypeReference values in composition or aggregation.
     </see>
   </references>

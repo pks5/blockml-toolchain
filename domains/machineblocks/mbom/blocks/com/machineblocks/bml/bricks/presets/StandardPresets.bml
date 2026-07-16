@@ -17,11 +17,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:bricks="com.machineblocks.bml.bricks"
-  xmlns:core="com.machineblocks.bml.core"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>StandardPresets</name>
   <type>bricks:StandardPresets</type>
-  <baseType>core:Block</baseType>
+  <baseType>mbcore:Block</baseType>
   <is>A named brick preset catalog</is>
 
   <documentation>Named property presets for the MachineBlocks Standard brick — sizes, colors, and

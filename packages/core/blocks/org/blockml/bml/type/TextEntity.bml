@@ -3,10 +3,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>TextEntity</name>
-  <type>btype:TextEntity</type>
-  <baseType>core:PrimitiveEntity(btype:Text)</baseType>
+  <type>type:TextEntity</type>
+  <baseType>core:PrimitiveEntity(type:Text)</baseType>
   <is>A text string as an Entity</is>
 
   <documentation>Concrete Entity wrapping a Text primitive. Binds T = Text on

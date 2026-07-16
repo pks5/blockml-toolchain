@@ -9,10 +9,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>PropertyReference</name>
-  <type>btype:PropertyReference</type>
-  <baseType>btype:MemberReference(B, def:PropertyDefinition)</baseType>
+  <type>type:PropertyReference</type>
+  <baseType>type:MemberReference(B, def:PropertyDefinition)</baseType>
   <is>A path to a Property member</is>
 
   <documentation>Concrete MemberReference binding D = PropertyDefinition. Value is a canonical
@@ -21,7 +21,7 @@
   </documentation>
 
   <references>
-    <see type="btype:MemberReference" relation="SeeAlso">
+    <see type="type:MemberReference" relation="SeeAlso">
       Abstract member path ValueType.
     </see>
     <see type="def:PropertyDefinition" relation="Defines">

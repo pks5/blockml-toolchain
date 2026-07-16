@@ -15,13 +15,13 @@
                       "
   xmlns:blockml="org.blockml.bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:bcore="org.blockml.bml.core"
+  xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mb="com.machineblocks.bml"
   xmlns:bricks="com.machineblocks.bml.bricks">
   <name>Library</name>
   <type>bricks:Library</type>
-  <baseType>bcore:BlockLibrary</baseType>
+  <baseType>core:BlockLibrary</baseType>
   <is>A MachineBlocks brick catalog</is>
 
   <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
@@ -50,7 +50,7 @@
     <!-- Optional legacy XSD — omit when all types are exported via blocks -->
     <schemas>
       <composition>
-        <bcore:BlockLibrary.Schema ref="bricks.xsd" />
+        <core:BlockLibrary.Schema ref="bricks.xsd" />
       </composition>
     </schemas>
 

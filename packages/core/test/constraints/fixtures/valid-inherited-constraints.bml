@@ -5,7 +5,7 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
   <type>test:InheritedConstraints</type>
@@ -17,7 +17,7 @@
     <core:Entity />
   </contracts>
   <properties>
-    <id type="btype:Text">
+    <id type="type:Text">
       <value>entity-1</value>
     </id>
   </properties>

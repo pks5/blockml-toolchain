@@ -10,10 +10,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>TypeReferenceEntity</name>
-  <type>btype:TypeReferenceEntity</type>
-  <baseType>core:PrimitiveEntity(btype:TypeReference(B))</baseType>
+  <type>type:TypeReferenceEntity</type>
+  <baseType>core:PrimitiveEntity(type:TypeReference(B))</baseType>
   <is>A type name reference as an Entity</is>
 
   <documentation>Open generic Entity wrapping a TypeReference (FQN / TypeExpression) primitive.
@@ -21,16 +21,16 @@
     baseType — inherits the value property automatically as value : TypeReference(B).
 
     Use on aggregation type attributes when children are type references stored as Entity instances:
-    • btype:TypeReferenceEntity(core:Block)[] — contracts, subTypes, Library blocks
-    • btype:TypeReferenceEntity(lang:NaturalLanguage) — language (singular, 0..1)
-    • btype:TypeReferenceEntity(core:Language)[] — languages
-    • btype:TypeReferenceEntity(core:ReadMe)[1..1] — Library readFirst
-    • btype:TypeReferenceEntity(core:Bootstrap) — Library bootstrap (0..1 SPOE)
-    • btype:TypeReferenceEntity(core:BlockLibrary)[] — dependencies, subLibraries
+    • type:TypeReferenceEntity(core:Block)[] — contracts, subTypes, Library blocks
+    • type:TypeReferenceEntity(lang:NaturalLanguage) — language (singular, 0..1)
+    • type:TypeReferenceEntity(core:Language)[] — languages
+    • type:TypeReferenceEntity(core:ReadMe)[1..1] — Library readFirst
+    • type:TypeReferenceEntity(core:Bootstrap) — Library bootstrap (0..1 SPOE)
+    • type:TypeReferenceEntity(core:BlockLibrary)[] — dependencies, subLibraries
 
     Authored empty child whose element QName is not TypeReferenceEntity is syntactic sugar for a
     TypeReferenceEntity instance with value set to that QName (resolved to FQN) — for example
-    &lt;foo:Bar /&gt; expands to &lt;btype:TypeReferenceEntity value="foo:Bar" /&gt; (B bound by the
+    &lt;foo:Bar /&gt; expands to &lt;type:TypeReferenceEntity value="foo:Bar" /&gt; (B bound by the
     aggregation type). Optional bml:version on the sugar child is an exact-version assert against
     the referenced type (value), not against TypeReferenceEntity itself — e.g.
     &lt;blockml:Library bml:version="3.0.0" /&gt;. Explicit TypeReferenceEntity authoring is always
@@ -50,7 +50,7 @@
     <see file="13_bml_to_bom_mapping.md" relation="AuthoringGuide">
       TypeReferenceEntity aggregation mapping.
     </see>
-    <see type="btype:TypeReference" relation="SeeAlso">
+    <see type="type:TypeReference" relation="SeeAlso">
       Scalar FQN / TypeExpression ValueType wrapped by this Entity.
     </see>
     <see type="core:PrimitiveEntity" relation="SeeAlso">

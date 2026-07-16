@@ -7,7 +7,7 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
   <type>test:RoundtripConstraints</type>
@@ -20,7 +20,7 @@
   </constraints>
 
   <properties>
-    <width type="btype:Integer">
+    <width type="type:Integer">
       <value>1</value>
       <constraints>
         <constraint:Min value="0" validation="validation:Error"/>

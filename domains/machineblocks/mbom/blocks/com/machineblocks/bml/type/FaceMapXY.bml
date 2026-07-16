@@ -9,11 +9,11 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>FaceMapXY</name>
-  <type>type:FaceMapXY</type>
-  <baseType>btype:StructType</baseType>
+  <type>mbtype:FaceMapXY</type>
+  <baseType>type:StructType</baseType>
   <is>A face-keyed value map on X and Y</is>
 
   <documentation>Struct ValueType for a sparse face map on the four lateral faces
@@ -42,13 +42,13 @@
   </properties>
 
   <references>
-    <see type="btype:StructType" relation="Extends">
+    <see type="type:StructType" relation="Extends">
       Struct ValueType branch — named face fields.
     </see>
-    <see type="type:FaceMapXYZ" relation="SeeAlso">
+    <see type="mbtype:FaceMapXYZ" relation="SeeAlso">
       Adds Z faces (generic Z, defaultType T) — extends this type.
     </see>
-    <see type="type:Face" relation="SeeAlso">
+    <see type="mbtype:Face" relation="SeeAlso">
       Face enum — XNeg / XPos / YNeg / YPos / ZNeg / ZPos.
     </see>
   </references>

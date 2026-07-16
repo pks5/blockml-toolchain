@@ -12,7 +12,7 @@
   "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>Min</name>
   <type>constraint:Min</type>
   <baseType>constraint:ValueConstraint</baseType>
@@ -21,7 +21,7 @@
   <documentation>Scalar constraint: T binds to the property type. Compatible with Integer, Float,
     and Decimal properties. The value property must match T.</documentation>
   <genericTypes>
-    <T baseType="btype:Number"/>
+    <T baseType="type:Number"/>
   </genericTypes>
 
   <properties>

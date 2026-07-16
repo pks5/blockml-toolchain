@@ -102,13 +102,13 @@ Empty elements (`<final/>`) are not permitted — use `<final>true</final>` expl
 ```xml
 <subTypes>
   <core:Block />
-  <bcore:Entity />
+  <core:Entity />
 </subTypes>
 ```
 
 ```text
 Lists Block type references permitted as baseType on Sub-Blocks in <subBlocks>.
-Meta-model type: btype:TypeReferenceEntity(core:Block)[]. Each child is a TypeReferenceEntity instance — empty QName sugar or explicit value.
+Meta-model type: type:TypeReferenceEntity(core:Block)[]. Each child is a TypeReferenceEntity instance — empty QName sugar or explicit value.
 See 17_type_system_bml.md — TypeReference and TypeReferenceEntity.
 
 Default (no declaration on this block):  [] — Sub-Blocks forbidden until explicitly enabled
@@ -133,7 +133,7 @@ Sub-Block baseType not in effective subTypes → BML_INVALID_SUBBLOCK_TYPE
 
 ```text
 Lists Language references permitted on <implementation language="...">.
-Meta-model type: btype:TypeReferenceEntity(core:Language)[]. Each child is a TypeReferenceEntity
+Meta-model type: type:TypeReferenceEntity(core:Language)[]. Each child is a TypeReferenceEntity
 instance — empty QName sugar or explicit value.
 Type-reference interpretation follows from the Block-definition role — same pattern as Library blocks.
 Omitted = inherit from baseType
@@ -151,7 +151,7 @@ Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 
 ```text
 Lists contract Block references merged into this Block (root block only).
-Meta-model type: btype:TypeReferenceEntity(core:Block)[]. Each child is a TypeReferenceEntity instance — empty QName sugar or explicit value.
+Meta-model type: type:TypeReferenceEntity(core:Block)[]. Each child is a TypeReferenceEntity instance — empty QName sugar or explicit value.
 Same container pattern as <languages> and <subTypes> — no wrapper <contract> element.
 See 17_type_system_bml.md — TypeReference and TypeReferenceEntity.
 Role            — member merge + type-bound identification (satisfiesTypeBound); see 17_type_system_bml.md
@@ -176,7 +176,7 @@ Declares type parameters on this Block (root block only)
 Element name  — parameter identifier used in type references (e.g. type="T")
 baseType      — FQN constraint; concrete type arguments must satisfy this bound via satisfiesTypeBound
 defaultType   — optional default when the type argument is omitted:
-                  concrete TypeExpression (e.g. btype:Decimal), or the name of an
+                  concrete TypeExpression (e.g. type:Decimal), or the name of an
                   earlier sibling parameter (e.g. defaultType="N") — declaration-order
                   only; cycles / forward refs forbidden. See 17_type_system_bml.md — defaultType.
 Usage         — com.foo.Box<org.blockml.bml.type.Integer> at reference sites

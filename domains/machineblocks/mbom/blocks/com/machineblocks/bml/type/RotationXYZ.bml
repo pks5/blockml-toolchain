@@ -8,12 +8,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>RotationXYZ</name>
-  <type>type:RotationXYZ</type>
-  <baseType>type:AxisXYZ(btype:Decimal(unit:Degree))</baseType>
+  <type>mbtype:RotationXYZ</type>
+  <baseType>mbtype:AxisXYZ(type:Decimal(unit:Degree))</baseType>
   <is>A rotation about X, Y, and Z in degrees</is>
 
   <documentation>Semantic Struct ValueType for a rotation triple { x, y, z } in degrees. Extends
@@ -22,10 +22,10 @@
     Rotation3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <references>
-    <see type="type:AxisXYZ" relation="Extends">
+    <see type="mbtype:AxisXYZ" relation="Extends">
       Structural { x, y, z } map — N closed to Decimal(unit:Degree); Z defaults to N.
     </see>
-    <see type="type:RotationXY" relation="SeeAlso">
+    <see type="mbtype:RotationXY" relation="SeeAlso">
       Two-axis rotation map on AxisXY.
     </see>
     <see type="unit:Degree" relation="SeeAlso">

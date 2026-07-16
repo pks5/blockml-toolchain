@@ -5,7 +5,7 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:test="com.blockml.test.constraints">
   <type>test:MetadataOnlyConstraint</type>
   <baseType>core:Block</baseType>
@@ -13,7 +13,7 @@
   <version>1.0.0</version>
 
   <properties>
-    <count type="btype:Integer">
+    <count type="type:Integer">
       <value>0</value>
       <constraints>
         <constraint:Min value="1"/>

@@ -9,7 +9,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbcore="com.machineblocks.bml.core"
@@ -149,7 +149,7 @@
       <scad:value>0.1</scad:value>
     </baseClampThickness>
 
-    <baseColor type="btype:Color">
+    <baseColor type="type:Color">
       <documentation>Color of the brick body, studs, and all other parts.
         Does NOT apply to text (use textColor separately).
       </documentation>
@@ -1367,7 +1367,7 @@
       <scad:value>../../pattern/bolt-solid-full.svg</scad:value>
     </studIcon>
 
-    <studIconColor type="mtype:Inherit | mbtype:Color">
+    <studIconColor type="mbtype:Inherit | mbtype:Color">
       <documentation>Color of the stud icon. "inherit" uses baseColor.
         Only visually relevant when studIconDepth &gt; 0.
       </documentation>
@@ -1450,7 +1450,7 @@
       <scad:value>none</scad:value>
     </surfacePattern>
 
-    <surfacePatternColor type="mtype:Inherit | mbtype:Color">
+    <surfacePatternColor type="mbtype:Inherit | mbtype:Color">
       <documentation>Color of the surface pattern. "inherit" uses baseColor.
         Only visually relevant when surfacePatternDepth &gt; 0.
       </documentation>

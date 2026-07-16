@@ -11,10 +11,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>MemberReference</name>
-  <type>btype:MemberReference</type>
-  <baseType>btype:TypeReference(B)</baseType>
+  <type>type:MemberReference</type>
+  <baseType>type:TypeReference(B)</baseType>
   <is>A path to a Block member</is>
 
   <documentation>Abstract ValueType for references to Block member definitions — properties,
@@ -47,7 +47,7 @@
     <see file="02_mbml.md" relation="AuthoringGuide">
       references — Why separate target attributes.
     </see>
-    <see type="btype:TypeReference" relation="SeeAlso">
+    <see type="type:TypeReference" relation="SeeAlso">
       Parent ValueType — Block type FQNs only.
     </see>
     <see type="def:MemberDefinition" relation="Defines">
@@ -56,7 +56,7 @@
     <see type="def:StructuralDefinition" relation="SeeAlso">
       Reference sub-block — property / aggregation / association / capability attributes.
     </see>
-    <see type="btype:PropertyReference" relation="SeeAlso">
+    <see type="type:PropertyReference" relation="SeeAlso">
       Concrete specialization for PropertyDefinition paths.
     </see>
   </references>

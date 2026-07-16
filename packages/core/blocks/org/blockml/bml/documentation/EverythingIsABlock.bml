@@ -12,7 +12,7 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:lang="org.blockml.bml.language"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>EverythingIsABlock</name>
   <type>doc:EverythingIsABlock</type>
   <baseType>core:Documentation</baseType>
@@ -68,7 +68,7 @@
     <see type="core:Documentation" relation="Extends">
       Abstract base for narrative documentation blocks.
     </see>
-    <see type="btype:Integer" relation="SeeAlso">
+    <see type="type:Integer" relation="SeeAlso">
       Example ValueType block — primitive type definition.
     </see>
     <see type="lang:TypeScript" relation="SeeAlso">

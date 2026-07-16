@@ -9,9 +9,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:unit="com.machineblocks.bml.unit">
+  xmlns:mbunit="com.machineblocks.bml.unit">
   <name>GridUnitZ</name>
-  <type>unit:GridUnitZ</type>
+  <type>mbunit:GridUnitZ</type>
   <baseType>core:Unit</baseType>
   <is>MachineBlocks grid unit (Z)</is>
 

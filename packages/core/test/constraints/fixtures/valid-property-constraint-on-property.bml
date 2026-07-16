@@ -5,7 +5,7 @@
   xmlns="http://blockml.org/schema/block"
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
   <type>test:PropertyConstraintOnProperty</type>
@@ -14,7 +14,7 @@
   <version>1.0.0</version>
 
   <properties>
-    <token type="btype:Text" readOnly="true">
+    <token type="type:Text" readOnly="true">
       <value>fixed</value>
       <constraints>
         <constraint:MustBeReadOnly validation="validation:Error"/>

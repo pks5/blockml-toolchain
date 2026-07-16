@@ -217,7 +217,7 @@ Constraint.validation                               →  org.blockml.bml.validat
 General block references (aggregation type, association type, composition tags, baseType) have no implicit namespace — require FQN or `xmlns:` prefix.
 
 ```text
-<aggregation type="bcore:BlockLibrary[]" .../>   on org.blockml.bml.core.BlockLibrary
+<aggregation type="core:BlockLibrary[]" .../>   on org.blockml.bml.core.BlockLibrary
   → NamedTypeReference { fqn: "org.blockml.bml.core.BlockLibrary" }
 
 inputType="Float"
@@ -740,13 +740,13 @@ The `composition aggregation="…"` attribute is **removed** — aggregations ar
 ### TypeReferenceEntity aggregation (stage [8])
 
 **Empty child sugar:** when the aggregation payload type is a `TypeReferenceEntity` application,
-`<foo:Bar />` expands to `<btype:TypeReferenceEntity value="foo:Bar" />` — a real Entity instance.
+`<foo:Bar />` expands to `<type:TypeReferenceEntity value="foo:Bar" />` — a real Entity instance.
 See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 ```text
 Aggregation type is TypeReferenceEntity(B)[/…/]  →  TypeReferenceEntity instances
   Parser: empty non-TypeReferenceEntity QName child → expand sugar → Entity { value: resolved FQN }
-  Explicit <btype:TypeReferenceEntity value="…" /> is equivalent
+  Explicit <type:TypeReferenceEntity value="…" /> is equivalent
   Store Entity instances in contracts[] / languages[] / subTypes[] / language / Library lists
   Validator: satisfiesTypeBound(resolve(value), B) for each child
   FQN projections (e.g. languageFqn, contract FQN sets) derive from .value
@@ -819,7 +819,7 @@ Library descriptors map like any `BlockDefinition` with `baseType: org.blockml.b
 <bricks:WallPresets />                      →  blocks entry
 
 <!-- Instance aggregation (schemas) — child = FilePathEntity -->
-<btype:FilePathEntity value="bricks.xsd"/> →  BlockInstance { typeFqn: "…FilePathEntity", value: "bricks.xsd" }
+<type:FilePathEntity value="bricks.xsd"/> →  BlockInstance { typeFqn: "…FilePathEntity", value: "bricks.xsd" }
 ```
 
 `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` use `TypeReferenceEntity`

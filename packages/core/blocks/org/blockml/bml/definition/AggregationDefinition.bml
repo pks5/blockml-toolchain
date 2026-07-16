@@ -12,7 +12,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>AggregationDefinition</name>
   <type>def:AggregationDefinition</type>
   <baseType>def:MemberDefinition</baseType>
@@ -23,10 +23,10 @@
 
     • Plain Block type (for example core:Block[], bricks:Brick[]) — composition ownership of those
       Block types. Children may carry nested composition, member values, and bml:id.
-    • TypeReferenceEntity application (for example btype:TypeReferenceEntity(core:Block)[]) —
+    • TypeReferenceEntity application (for example type:TypeReferenceEntity(core:Block)[]) —
       owned TypeReferenceEntity instances whose value holds an FQN / TypeExpression. Empty children
       whose element QName is not TypeReferenceEntity are syntactic sugar for
-      &lt;btype:TypeReferenceEntity value="…QName…" /&gt; (B/D bound by the aggregation type).
+      &lt;type:TypeReferenceEntity value="…QName…" /&gt; (B/D bound by the aggregation type).
 
     Rendered as a child element inside the aggregations container; the XML element name is the
     aggregation name (bml:xml="${ #this.name }"). An optional XML prefix on the element name supplies
@@ -55,7 +55,7 @@
     <see type="core:Block" relation="Requires">
       Required branch for aggregation payload types.
     </see>
-    <see type="btype:TypeReferenceEntity" relation="Requires">
+    <see type="type:TypeReferenceEntity" relation="Requires">
       Entity payload for type-reference aggregations (contracts, languages, Library lists).
     </see>
   </references>
@@ -65,8 +65,8 @@
       <documentation>Aggregation payload type (TypeExpression). Collections of domain Blocks use a
         plain Block FQN with multiplicity — for example core:Block[], core:Block[0..n],
         bricks:Brick[1..1]. Type-reference collections use a TypeReferenceEntity application — for
-        example btype:TypeReferenceEntity(core:Block)[],
-        btype:TypeReferenceEntity(core:Language)[1..1]. Each child is a TypeReferenceEntity instance
+        example type:TypeReferenceEntity(core:Block)[],
+        type:TypeReferenceEntity(core:Language)[1..1]. Each child is a TypeReferenceEntity instance
         (or empty-QName sugar); value must satisfy satisfiesTypeBound(resolve(value), B). Required on
         new aggregation declarations; may be omitted when filling an inherited aggregation (partial
         override). On definitions, element form is preferred; on Block instances, attribute form is

@@ -3,11 +3,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit">
   <name>Integer</name>
-  <type>btype:Integer</type>
-  <baseType>btype:Number(N)</baseType>
+  <type>type:Integer</type>
+  <baseType>type:Number(N)</baseType>
   <is>A whole number</is>
 
   <documentation>BOM Core primitive ValueType for whole numbers. Unqualified name Integer resolves

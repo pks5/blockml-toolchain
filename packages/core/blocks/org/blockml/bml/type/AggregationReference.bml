@@ -9,10 +9,10 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>AggregationReference</name>
-  <type>btype:AggregationReference</type>
-  <baseType>btype:MemberReference(B, def:AggregationDefinition)</baseType>
+  <type>type:AggregationReference</type>
+  <baseType>type:MemberReference(B, def:AggregationDefinition)</baseType>
   <is>A path to an Aggregation member</is>
 
   <documentation>Concrete MemberReference binding D = AggregationDefinition. Value is a canonical
@@ -20,7 +20,7 @@
     with a type qualifier. Used as the type of see aggregation=.</documentation>
 
   <references>
-    <see type="btype:MemberReference" relation="SeeAlso">
+    <see type="type:MemberReference" relation="SeeAlso">
       Abstract member path ValueType.
     </see>
     <see type="def:AggregationDefinition" relation="Defines">

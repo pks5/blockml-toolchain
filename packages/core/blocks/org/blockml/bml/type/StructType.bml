@@ -15,9 +15,9 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:mapping="org.blockml.bml.mapping"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>StructType</name>
-  <type>btype:StructType</type>
+  <type>type:StructType</type>
   <baseType>core:ValueType</baseType>
   <is>A composite named-field ValueType</is>
 

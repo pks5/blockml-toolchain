@@ -10,9 +10,9 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type">
   <name>ConstantType</name>
-  <type>btype:ConstantType</type>
+  <type>type:ConstantType</type>
   <baseType>core:ValueType</baseType>
   <is>A singleton literal ValueType</is>
 
@@ -57,7 +57,7 @@
     <see file="20_value_type_instance_configuration.md" relation="AuthoringGuide">
       ValueType instance configuration via {…} on type references.
     </see>
-    <see type="btype:Constant" relation="SeeAlso">
+    <see type="type:Constant" relation="SeeAlso">
       Standard ConstantType implementation.
     </see>
   </references>

@@ -42,7 +42,7 @@
     • org.blockml.bml.documentation.* — bootstrap documentation blocks
 
     xmlns prefixes are BML-semantic only when they target a Package or an Annotation:
-    • Package — type addressing (xmlns:bcore="org.blockml.bml.core")
+    • Package — type addressing (xmlns:core="org.blockml.bml.core")
     • Annotation — directives (xmlns:bml="org.blockml.bml.annotation.BmlAnnotation")
 
     Domain libraries follow the same rule:
