@@ -147,7 +147,7 @@
       <value>#EAC645</value>
     </baseColor>
 
-    <baseCrop type="mbtype:FaceVector6(Decimal(mbunit:GridUnit))">
+    <baseCrop type="mbtype:FaceMap(Decimal(mbunit:GridUnit))">
       <documentation>Hard cut or extension per side (0-3 only, no Z-axis crop).
         Positive = cut geometry, negative = extend geometry.
         The cut is applied brutally — without regard to grid compatibility,
@@ -312,7 +312,7 @@
       <value>west</value>
     </direction>
 
-    <grille type="mbtype:GrilleType">
+    <grille type="mbtype:Grille">
       <documentation>Whether the top plate is rendered as a grille with regular openings.
         "x" or "y" defines the direction of the grille bars.
       </documentation>
@@ -395,7 +395,7 @@
       <value>0.0</value>
     </holeXYZAxleThicknessAdjustment>
 
-    <holeXYZDiameter type="mbtype:AutoOr(AxisXYZ(Decimal(mbunit:MBU)))">
+    <holeXYZDiameter type="mbtype:Auto | mbtype:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Diameter of Technic holes per axis. Automatically calculated.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -706,7 +706,7 @@
       <value>false</value>
     </recess>
 
-    <recessAdjustment type="mbtype:AutoOr(FaceMap(Decimal(unit:Millimeter)))">
+    <recessAdjustment type="mbtype:Auto | mbtype:FaceMap(Decimal(unit:Millimeter))">
       <documentation>Per-side calibration adjustment for the inner recess walls and floor.
         Applied to the interior surfaces of the recess (the inner box).
 
@@ -738,7 +738,7 @@
       <value>auto</value>
     </recessDepth>
 
-    <recessRoundingRadius type="mbtype:AutoOr(RoundingRadius)">
+    <recessRoundingRadius type="mbtype:Auto | mbtype:RoundingRadius">
       <documentation>Rounding radius of the recess cavity. Derived from the block's
         rounding radius. Usually does not need adjustment.
       </documentation>
@@ -988,7 +988,7 @@
       <value>[]</value>
     </screwHoles>
 
-    <size type="mbtype:Size3D">
+    <size type="mbtype:SizeXYZ">
       <documentation>Size of the bounding box in grid units. Defines the brick body;
         studs are excluded from the bounding box. For simple bricks the
         bounding box matches the body exactly.
@@ -1022,7 +1022,7 @@
       <value>[-0.1, 0]</value>
     </sizeAdjustment>
 
-    <sizeMod type="mbtype:FaceVector6(Decimal(mbunit:GridUnit))">
+    <sizeMod type="mbtype:FaceMap(Decimal(mbunit:GridUnit))">
       <documentation>Semantic size modification per side, in grid units. Adjusts the
         brick geometry while keeping it structurally intact (walls, studs,
         connectors remain consistent). Unlike crop, sizeMod does not brutally
@@ -1497,7 +1497,7 @@
       <value>1</value>
     </tongueOffset>
 
-    <tongueRoundingRadius type="mbtype:AutoOr(RoundingRadius)">
+    <tongueRoundingRadius type="mbtype:Auto | mbtype:RoundingRadius">
       <documentation>Rounding radius of the tongue. Typically derived from the block's
         rounding radius. Usually does not need adjustment.
       </documentation>

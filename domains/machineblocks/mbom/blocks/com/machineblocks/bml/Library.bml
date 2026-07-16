@@ -65,6 +65,7 @@
       <mbtype:BaseCutout />
       <mbtype:Direction />
       <mbtype:Face />
+      <mbtype:Grille />
       <mbtype:MBEnum />
       <mbtype:MultiAxis />
       <mbtype:SizeXYZ />

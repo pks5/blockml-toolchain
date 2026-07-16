@@ -184,7 +184,7 @@ Float | Constant(Text){value="auto"}
 Integer | Text | Constant(Integer){value=0}
 ```
 
-At validate time, a property value must satisfy **at least one** alternative. A value `"auto"` matches the Constant alternative; `true` matches Boolean.
+At validate time, union alternatives are tested **left to right**; the **first** alternative that accepts the authored value wins (not merely “at least one”). A value `"auto"` matches a leading Constant alternative; `true` matches Boolean when Boolean appears before Text. Overlapping alternatives are resolved by author order — see `17_type_system_bml.md` — Unions · Match order. Unreachable later alternatives → `BML_UNREACHABLE_UNION_ALTERNATIVE`.
 
 ### Canonical vs literal union syntax
 
@@ -270,6 +270,7 @@ Boolean | "auto"
 | `BML_MISSING_CONSTANT_VALUE` | Constant(T) without required `{value=…}` |
 | `BML_CONSTANT_VALUE_MISMATCH` | Supplied value does not equal configured constant, or incompatible with T |
 | `BML_PREFER_CONSTANT_TYPE` | Union literal alternative should use Constant form (hint) |
+| `BML_UNREACHABLE_UNION_ALTERNATIVE` | Later union alternative subsumed by an earlier one (warning) |
 
 See also instance-configuration codes in `06_compiler.md` and `20_value_type_instance_configuration.md`.
 

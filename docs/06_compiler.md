@@ -592,6 +592,7 @@ BML_MISSING_GENERIC_TYPE_ARGUMENT — generic application missing required type 
 BML_MISSING_CONSTANT_VALUE       — Constant(T) reference without required {value=…} configuration
 BML_CONSTANT_VALUE_MISMATCH      — Constant configured value incompatible with bound type T
 BML_PREFER_CONSTANT_TYPE         — union literal alternative should desugar to Constant(T){value=…} (hint)
+BML_UNREACHABLE_UNION_ALTERNATIVE — union alternative subsumed by an earlier alternative under left-to-right match (warning)
 BML_MISSING_FUNCTION_MAPPING   — implementation requires FunctionMapping but none declared
 BML_AMBIGUOUS_FUNCTION_MAPPING — capability call form maps ambiguously to inputType
 BML_NO_TARGET                 — no registered target supports the block's baseType
@@ -623,6 +624,7 @@ BML_UNKNOWN_PROPERTY   — property not defined on block type (custom property a
 BML_UNKNOWN_DIRECTIVE  — unrecognized bml:* attribute name (always error)
 BML_DIRECTIVE_NOT_ALLOWED — known bml:* directive on disallowed element (always error)
 BML_DEPRECATED_TYPE    — referenced type is deprecated
+BML_UNREACHABLE_UNION_ALTERNATIVE — later union alternative subsumed under left-to-right match
 ```
 
 ---

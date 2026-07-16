@@ -290,6 +290,8 @@ BooleanOr<T>   →  Boolean | T
 
 Legacy literal union syntax (`"auto" | T`) remains parseable; normalization to Constant is recommended.
 
+Union match is **left to right, first hit wins**. Overlapping alternatives are resolved by author order (narrower / sentinels on the left). Unreachable later alternatives → `BML_UNREACHABLE_UNION_ALTERNATIVE`. See `17_type_system_bml.md` — Unions · Match order.
+
 ### AutoOr — migrate to `Constant(Text){value="auto"} | T`
 
 ```text

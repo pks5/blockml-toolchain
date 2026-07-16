@@ -509,6 +509,7 @@ Float | Constant(Text){value="auto"}     — float or auto sentinel
 false | SizeXYZ                           — false or struct
 Boolean | StudType                       — boolean or enum
 Integer | Text                           — primitive union
+mbtype:Auto | mbtype:AxisXYZ(Decimal)    — sentinel before struct
 ```
 
 Singleton alternatives use **Constant** — a generic configured ValueType (`21_constant_value_type.md`). Each Constant application binds `T` via `(...)` and supplies the allowed value via `{value=…}`.
@@ -520,6 +521,39 @@ Boolean | "auto"    ≡    Boolean | Constant(Text){value="auto"}
 ```
 
 Until that shorthand is enabled, author the explicit Constant form. Legacy literal union syntax (`"auto" | Float`) remains parseable; normalization to Constant is recommended at map time.
+
+#### Match order — left to right, first hit wins
+
+At validate time, union alternatives are tested **from left to right**. The **first** alternative that accepts the authored value wins. There is no second pass, no “best” match, and no special kind matrix (e.g. Boolean vs Text).
+
+```text
+Boolean | Text     + true      → Boolean
+Text | Boolean       + true      → Text          — Text accepts first; Boolean never tried
+StructA | StructB    + overlapping payload → StructA
+StructB | StructA    + same payload        → StructB
+```
+
+**Overlap is intentional control.** When two alternatives can accept the same value (broad primitives, overlapping StructTypes, …), **author order selects the winner**. Prefer narrower / sentinel alternatives on the left:
+
+```text
+Preferred:   Boolean | Text
+             Constant(Boolean){value=false} | Connector[]
+             mbtype:Auto | mbtype:AxisXYZ(…)
+Avoid:       Text | Boolean          — Boolean typically unreachable
+```
+
+#### Unreachable alternatives
+
+If a later alternative cannot win for any authored value because an earlier alternative already accepts every value the later one would accept, the validator emits **`BML_UNREACHABLE_UNION_ALTERNATIVE`** (warning — compile succeeds):
+
+```text
+Text | Boolean     → warning on Boolean (unreachable under left-to-right match)
+Text | Integer     → warning on Integer when Integer values are also accepted as Text
+A | A              → warning on the duplicate
+Boolean | HoleType → no warning (partition / non-subsuming overlap)
+```
+
+The warning is advisory — like unreachable code. Authors may still keep overlapping StructTypes in a deliberate order without a warning when neither alternative subsumes the other for all values.
 
 ---
 
