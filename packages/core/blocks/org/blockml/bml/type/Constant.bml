@@ -14,6 +14,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation">
+
   <name>Constant</name>
   <type>type:Constant</type>
   <baseType>type:ConstantType</baseType>

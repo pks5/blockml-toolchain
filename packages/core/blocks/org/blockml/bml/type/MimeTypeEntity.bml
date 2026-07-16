@@ -4,6 +4,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type">
+
   <name>MimeTypeEntity</name>
   <type>type:MimeTypeEntity</type>
   <baseType>core:PrimitiveEntity(type:MimeType)</baseType>

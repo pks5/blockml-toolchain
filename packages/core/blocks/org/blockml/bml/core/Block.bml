@@ -13,6 +13,7 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mbcore="com.machineblocks.bml.core">
+
   <name>Block</name>
   <type>core:Block</type>
   <is>A semantic building block</is>

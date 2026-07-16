@@ -5,6 +5,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit">
+
   <name>Float</name>
   <type>type:Float</type>
   <baseType>type:Number(N)</baseType>

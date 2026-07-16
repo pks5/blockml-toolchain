@@ -5,6 +5,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit">
+
   <name>Number</name>
   <type>type:Number</type>
   <baseType>type:PrimitiveType</baseType>

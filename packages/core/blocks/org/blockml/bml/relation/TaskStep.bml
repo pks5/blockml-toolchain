@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:relation="org.blockml.bml.relation">
+
   <name>TaskStep</name>
   <type>relation:TaskStep</type>
   <baseType>core:Relation</baseType>

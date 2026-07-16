@@ -11,6 +11,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type">
+
   <name>ValueTypeConfiguration</name>
   <type>doc:ValueTypeConfiguration</type>
   <baseType>core:Documentation</baseType>

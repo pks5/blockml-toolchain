@@ -21,6 +21,7 @@
   xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:mbtype="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
+
   <name>Library</name>
   <type>mb:Library</type>
   <baseType>core:BlockLibrary</baseType>

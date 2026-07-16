@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:relation="org.blockml.bml.relation">
+
   <name>AuthoringGuide</name>
   <type>relation:AuthoringGuide</type>
   <baseType>core:Relation</baseType>

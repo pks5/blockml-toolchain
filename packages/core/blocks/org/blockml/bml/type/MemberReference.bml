@@ -12,6 +12,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
+
   <name>MemberReference</name>
   <type>type:MemberReference</type>
   <baseType>type:TypeReference(B)</baseType>

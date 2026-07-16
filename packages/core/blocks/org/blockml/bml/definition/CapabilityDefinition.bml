@@ -15,6 +15,7 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
   xmlns:type="org.blockml.bml.type">
+
   <name>CapabilityDefinition</name>
   <type>def:CapabilityDefinition</type>
   <baseType>def:MemberDefinition</baseType>

@@ -14,6 +14,7 @@
   xmlns:ann="org.blockml.bml.annotation"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core">
+
   <name>BmlAnnotation</name>
   <type>ann:BmlAnnotation</type>
   <baseType>core:Annotation</baseType>

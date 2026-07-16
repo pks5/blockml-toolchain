@@ -13,6 +13,7 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type">
+
   <name>MaxItems</name>
   <type>constraint:MaxItems</type>
   <baseType>constraint:ValueConstraint</baseType>

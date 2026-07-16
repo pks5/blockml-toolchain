@@ -16,6 +16,7 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:service="org.blockml.bml.service"
   xmlns:type="org.blockml.bml.type">
+
   <name>Bools</name>
   <type>service:Bools</type>
   <baseType>core:Entity</baseType>

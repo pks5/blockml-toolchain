@@ -15,6 +15,7 @@
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbtype="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
+
   <name>NativeBlock</name>
   <type>mbcore:NativeBlock</type>
   <baseType>mbcore:Block</baseType>

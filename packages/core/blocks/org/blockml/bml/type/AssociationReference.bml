@@ -10,6 +10,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
+
   <name>AssociationReference</name>
   <type>type:AssociationReference</type>
   <baseType>type:MemberReference(B, def:AssociationDefinition)</baseType>

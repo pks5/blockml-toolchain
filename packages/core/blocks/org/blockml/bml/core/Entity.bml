@@ -11,6 +11,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:mbcore="com.machineblocks.bml.core">
+
   <name>Entity</name>
   <type>core:Entity</type>
   <baseType>core:Block</baseType>

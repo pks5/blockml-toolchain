@@ -8,6 +8,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:validation="org.blockml.bml.validation"
   xmlns:test="com.blockml.test.constraints">
+
   <type>test:InvalidValueOnCapability</type>
   <baseType>core:Block</baseType>
   <is>A constraint test fixture</is>

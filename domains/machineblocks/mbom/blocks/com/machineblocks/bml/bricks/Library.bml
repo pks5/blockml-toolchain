@@ -19,6 +19,7 @@
   xmlns:lang="org.blockml.bml.language"
   xmlns:mb="com.machineblocks.bml"
   xmlns:bricks="com.machineblocks.bml.bricks">
+
   <name>Library</name>
   <type>bricks:Library</type>
   <baseType>core:BlockLibrary</baseType>

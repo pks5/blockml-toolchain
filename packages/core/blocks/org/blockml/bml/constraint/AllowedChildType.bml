@@ -11,6 +11,7 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition">
+
   <name>AllowedChildType</name>
   <type>constraint:AllowedChildType</type>
   <baseType>constraint:AggregationConstraint</baseType>

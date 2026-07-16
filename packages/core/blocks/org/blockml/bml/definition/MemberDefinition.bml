@@ -12,6 +12,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition">
+
   <name>MemberDefinition</name>
   <type>def:MemberDefinition</type>
   <baseType>def:ConstrainableDefinition</baseType>

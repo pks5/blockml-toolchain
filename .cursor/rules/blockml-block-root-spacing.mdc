@@ -1,0 +1,28 @@
+---
+description: Blank line between Block root open tag and first child elements
+globs: "**/*.bml"
+alwaysApply: false
+---
+
+# Block root body spacing
+
+After the `<block …>` opening tag, leave **one blank line** before the first child (`<name>`, `<type>`, …).
+
+```xml
+<!-- ❌ BAD -->
+<block
+  xmlns="http://blockml.org/schema/block"
+  …>
+  <name>Face</name>
+  <type>mbtype:Face</type>
+
+<!-- ✅ GOOD -->
+<block
+  xmlns="http://blockml.org/schema/block"
+  …>
+
+  <name>Face</name>
+  <type>mbtype:Face</type>
+```
+
+Separates the xmlns header from the identity block. Do not insert extra blank lines.

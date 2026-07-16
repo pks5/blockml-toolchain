@@ -11,6 +11,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbtype="com.machineblocks.bml.type">
+
   <name>HoleType</name>
   <type>mbtype:HoleType</type>
   <baseType>mbmbtype:MBEnum(Text)</baseType>

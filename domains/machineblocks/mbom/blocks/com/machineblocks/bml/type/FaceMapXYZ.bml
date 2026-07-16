@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:mbtype="com.machineblocks.bml.type">
+
   <name>FaceMapXYZ</name>
   <type>mbtype:FaceMapXYZ</type>
   <baseType>mbtype:FaceMapXY(T)</baseType>

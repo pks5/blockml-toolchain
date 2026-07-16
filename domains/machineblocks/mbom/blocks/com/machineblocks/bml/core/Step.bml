@@ -12,6 +12,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbtype="com.machineblocks.bml.type">
+
   <name>Step</name>
   <type>mbcore:Step</type>
   <baseType>core:Block</baseType>

@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:relation="org.blockml.bml.relation">
+
   <name>ContrastsWith</name>
   <type>relation:ContrastsWith</type>
   <baseType>core:Relation</baseType>

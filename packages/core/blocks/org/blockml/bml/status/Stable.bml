@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:status="org.blockml.bml.status">
+
   <name>Stable</name>
   <type>status:Stable</type>
   <baseType>core:Status</baseType>

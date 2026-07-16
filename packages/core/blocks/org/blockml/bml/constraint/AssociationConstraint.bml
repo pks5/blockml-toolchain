@@ -10,6 +10,7 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
+
   <name>AssociationConstraint</name>
   <type>constraint:AssociationConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>

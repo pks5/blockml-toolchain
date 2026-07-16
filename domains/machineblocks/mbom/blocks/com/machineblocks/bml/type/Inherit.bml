@@ -10,6 +10,7 @@
                       "
   xmlns:type="org.blockml.bml.type"
   xmlns:mbtype="com.machineblocks.bml.type">
+
   <name>Inherit</name>
   <type>mbtype:Inherit</type>
   <baseType>type:Constant(Text)</baseType>

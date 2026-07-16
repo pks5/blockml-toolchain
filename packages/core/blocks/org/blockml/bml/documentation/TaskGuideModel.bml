@@ -12,6 +12,7 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:task="org.blockml.bml.task">
+
   <name>TaskGuideModel</name>
   <type>doc:TaskGuideModel</type>
   <baseType>core:Documentation</baseType>

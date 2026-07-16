@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:validation="org.blockml.bml.validation">
+
   <name>Information</name>
   <type>validation:Information</type>
   <baseType>core:Validation</baseType>

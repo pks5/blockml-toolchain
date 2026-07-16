@@ -12,6 +12,7 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation">
+
   <name>ModelingGuidelines</name>
   <type>doc:ModelingGuidelines</type>
   <baseType>core:Documentation</baseType>

@@ -10,6 +10,7 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:meta="org.blockml.bml.meta">
+
   <name>FreeTextAlias</name>
   <type>meta:FreeTextAlias</type>
   <baseType>meta:FixedAlias</baseType>

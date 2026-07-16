@@ -14,6 +14,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
+
   <name>InstanceReference</name>
   <type>type:InstanceReference</type>
   <baseType>type:Text</baseType>

@@ -10,6 +10,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type">
+
   <name>Version</name>
   <type>type:Version</type>
   <baseType>type:Text</baseType>

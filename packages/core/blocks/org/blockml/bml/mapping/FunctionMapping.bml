@@ -11,6 +11,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:mapping="org.blockml.bml.mapping"
   xmlns:type="org.blockml.bml.type">
+
   <name>FunctionMapping</name>
   <type>mapping:FunctionMapping</type>
   <baseType>core:Mapping</baseType>

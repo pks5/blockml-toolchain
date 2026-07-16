@@ -15,6 +15,7 @@
   xmlns:meta="org.blockml.bml.meta"
   xmlns:relation="org.blockml.bml.relation"
   xmlns:task="org.blockml.bml.task">
+
   <name>AuthorNewBlock</name>
   <type>task:AuthorNewBlock</type>
   <baseType>core:TaskGuide</baseType>

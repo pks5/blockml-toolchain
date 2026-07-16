@@ -18,6 +18,7 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
   xmlns:type="org.blockml.bml.type">
+
   <name>StructuralDefinition</name>
   <type>def:StructuralDefinition</type>
   <baseType>core:Definition</baseType>

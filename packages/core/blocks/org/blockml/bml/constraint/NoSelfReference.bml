@@ -11,6 +11,7 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition">
+
   <name>NoSelfReference</name>
   <type>constraint:NoSelfReference</type>
   <baseType>constraint:AssociationConstraint</baseType>

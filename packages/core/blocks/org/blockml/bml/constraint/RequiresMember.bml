@@ -11,6 +11,7 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition">
+
   <name>RequiresMember</name>
   <type>constraint:RequiresMember</type>
   <baseType>constraint:BlockConstraint</baseType>

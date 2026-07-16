@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:lang="org.blockml.bml.language"
   xmlns:type="org.blockml.bml.type">
+
   <name>Color</name>
   <type>type:Color</type>
   <baseType>type:Text</baseType>

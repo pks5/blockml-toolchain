@@ -10,6 +10,7 @@
                       "
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core">
+
   <name>Outbound</name>
   <type>cap:Outbound</type>
   <baseType>core:Capability</baseType>

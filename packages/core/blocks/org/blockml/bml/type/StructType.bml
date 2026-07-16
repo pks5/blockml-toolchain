@@ -16,6 +16,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:mapping="org.blockml.bml.mapping"
   xmlns:type="org.blockml.bml.type">
+
   <name>StructType</name>
   <type>type:StructType</type>
   <baseType>core:ValueType</baseType>

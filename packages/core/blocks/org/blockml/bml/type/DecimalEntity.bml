@@ -4,6 +4,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type">
+
   <name>DecimalEntity</name>
   <type>type:DecimalEntity</type>
   <baseType>core:PrimitiveEntity(type:Decimal)</baseType>

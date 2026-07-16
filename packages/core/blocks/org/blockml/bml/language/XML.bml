@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language">
+
   <name>XML</name>
   <type>lang:XML</type>
   <baseType>lang:MarkupLanguage</baseType>

@@ -11,6 +11,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type">
+
   <name>Capability</name>
   <type>core:Capability</type>
   <baseType>core:Block</baseType>

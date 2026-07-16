@@ -11,6 +11,7 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:mbtype="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
+
   <name>SizeXY</name>
   <type>mbtype:SizeXY</type>
   <baseType>mbtype:AxisXY(N)</baseType>

@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:relation="org.blockml.bml.relation">
+
   <name>SeeAlso</name>
   <type>relation:SeeAlso</type>
   <baseType>core:Relation</baseType>

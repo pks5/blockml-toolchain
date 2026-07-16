@@ -3,6 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd"
   xmlns:type="org.blockml.bml.type">
+
   <name>URI</name>
   <type>type:URI</type>
   <baseType>type:Text</baseType>

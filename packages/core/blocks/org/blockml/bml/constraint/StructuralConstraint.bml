@@ -10,6 +10,7 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core">
+
   <name>StructuralConstraint</name>
   <type>constraint:StructuralConstraint</type>
   <baseType>core:Constraint</baseType>

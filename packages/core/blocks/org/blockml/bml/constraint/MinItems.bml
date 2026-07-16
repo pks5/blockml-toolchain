@@ -13,6 +13,7 @@
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type">
+
   <name>MinItems</name>
   <type>constraint:MinItems</type>
   <baseType>constraint:ValueConstraint</baseType>

@@ -11,6 +11,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type">
+
   <name>TypeReferenceEntity</name>
   <type>type:TypeReferenceEntity</type>
   <baseType>core:PrimitiveEntity(type:TypeReference(B))</baseType>

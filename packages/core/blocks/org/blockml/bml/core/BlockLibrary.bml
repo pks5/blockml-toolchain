@@ -16,6 +16,7 @@
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:lang="org.blockml.bml.language"
   xmlns:type="org.blockml.bml.type">
+
   <name>BlockLibrary</name>
   <type>core:BlockLibrary</type>
   <baseType>core:Block</baseType>

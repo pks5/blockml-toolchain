@@ -2,7 +2,9 @@
   BlockML Definition — block definition meta-model base type
 
   FQN: org.blockml.bml.definition.BlockDefinition
-  Describes the shared parse-time shape of all <block> definition documents.
+  Describes the shared parse-time shape of all <block>
+
+ definition documents.
   See docs/12_bom_object_model.md — BlockDefinition · 16_framework_base_types.md — Definition Branch.
 -->
 <block

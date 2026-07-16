@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type">
+
   <name>PrimitiveEntity</name>
   <type>core:PrimitiveEntity</type>
   <baseType>core:Entity</baseType>

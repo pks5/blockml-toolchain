@@ -10,6 +10,7 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
+
   <name>PropertyConstraint</name>
   <type>constraint:PropertyConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>

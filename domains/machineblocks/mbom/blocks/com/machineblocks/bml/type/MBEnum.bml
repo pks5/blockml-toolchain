@@ -12,6 +12,7 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbtype="com.machineblocks.bml.type">
+
   <name>MBEnum</name>
   <type>mbtype:MBEnum</type>
   <baseType>type:EnumType</baseType>

@@ -14,6 +14,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:mbann="com.machineblocks.bml.annotation">
+
   <name>ScadAnnotation</name>
   <type>mbann:ScadAnnotation</type>
   <baseType>core:Annotation</baseType>

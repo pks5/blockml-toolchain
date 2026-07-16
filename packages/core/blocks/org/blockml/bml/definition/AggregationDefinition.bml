@@ -13,6 +13,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
+
   <name>AggregationDefinition</name>
   <type>def:AggregationDefinition</type>
   <baseType>def:MemberDefinition</baseType>

@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation">
+
   <name>RendererFreedom</name>
   <type>doc:RendererFreedom</type>
   <baseType>core:Documentation</baseType>

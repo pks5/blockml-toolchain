@@ -10,6 +10,7 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:def="org.blockml.bml.definition">
+
   <name>AggregationConstraint</name>
   <type>constraint:AggregationConstraint</type>
   <baseType>constraint:MemberConstraint</baseType>

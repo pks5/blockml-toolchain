@@ -10,6 +10,7 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:meta="org.blockml.bml.meta">
+
   <name>FreeTextKeyword</name>
   <type>meta:FreeTextKeyword</type>
   <baseType>meta:FixedKeyword</baseType>

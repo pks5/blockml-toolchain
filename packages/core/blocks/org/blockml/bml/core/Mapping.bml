@@ -10,6 +10,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:mapping="org.blockml.bml.mapping">
+
   <name>Mapping</name>
   <type>core:Mapping</type>
   <baseType>core:Block</baseType>
