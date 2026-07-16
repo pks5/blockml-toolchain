@@ -17,9 +17,9 @@
   <is>An axis-keyed multi-component value</is>
 
   <documentation>Abstract StructType base for MachineBlocks axis-keyed maps (AxisXY, AxisXYZ).
-    Generic N (ValueType, default Decimal) is the per-axis value type — any ValueType may be
-    bound (Number, PrimitiveType, StructType, Enum, …). Units travel with N —
-    e.g. AxisXY(Decimal(unit:Millimeter)) — not as a separate MultiAxis generic.
+    Generic N (ValueType, default Decimal) is the per-axis value type on XY. AxisXYZ adds Z
+    (ValueType, defaultType N) so the Z component may differ. Units travel with N / Z —
+    e.g. AxisXY(Decimal(unit:Millimeter)), AxisXYZ(Decimal(mbunit:GridUnitXY), Decimal(mbunit:GridUnitZ)).
     Bare MultiAxis / AxisXY / AxisXYZ resolve to Decimal (dimensionless).</documentation>
 
   <abstract>true</abstract>

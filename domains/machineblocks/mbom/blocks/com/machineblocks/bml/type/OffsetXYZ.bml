@@ -13,22 +13,24 @@
   xmlns:type="com.machineblocks.bml.type">
   <name>OffsetXYZ</name>
   <type>type:OffsetXYZ</type>
-  <baseType>type:AxisXYZ(N)</baseType>
+  <baseType>type:AxisXYZ(N, Z)</baseType>
   <is>An offset along X, Y, and Z</is>
 
-  <documentation>Semantic Struct ValueType for an offset triple { x, y, z }. Extends AxisXYZ(N) —
-    inherits x, y, and z; adds offset / translation semantics (may be negative). N is constrained
-    to Number (AxisXYZ remains ValueType-universal). Bare OffsetXYZ defaults N to
-    Decimal(mbunit:GridUnitXY). Override via N — e.g. OffsetXYZ(Decimal(unit:Millimeter)). Named
+  <documentation>Semantic Struct ValueType for an offset triple { x, y, z }. Extends AxisXYZ(N, Z) —
+    inherits x, y (N) and z (Z); adds offset / translation semantics (may be negative). N and Z are
+    constrained to Number. Bare OffsetXYZ defaults N to Decimal(mbunit:GridUnitXY) and Z to
+    Decimal(mbunit:GridUnitZ) — distinct plate-grid scales. Uniform override requires both
+    arguments — e.g. OffsetXYZ(Decimal(unit:Millimeter), Decimal(unit:Millimeter)). Named
     OffsetXYZ (not Offset3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
     <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnitXY)"/>
+    <Z baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnitZ)"/>
   </genericTypes>
 
   <references>
     <see type="type:AxisXYZ" relation="Extends">
-      Structural { x, y, z } map — OffsetXYZ adds offset semantics.
+      Structural { x, y, z } map — OffsetXYZ adds offset semantics; forwards N and Z.
     </see>
     <see type="type:OffsetXY" relation="SeeAlso">
       Two-axis offset map on AxisXY.

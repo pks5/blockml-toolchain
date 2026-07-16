@@ -17,13 +17,13 @@
   <is>A rotation about X, Y, and Z in degrees</is>
 
   <documentation>Semantic Struct ValueType for a rotation triple { x, y, z } in degrees. Extends
-    AxisXYZ with N closed to Decimal(unit:Degree) — not re-opened as a generic. Rotation about
-    X, Y, and Z (degrees of arc). Named RotationXYZ (not Rotation3D) — MachineBlocks axis-keyed
-    types use XY / XYZ, not 2D / 3D.</documentation>
+    AxisXYZ with N closed to Decimal(unit:Degree); Z is omitted at the baseType application and
+    defaults to N (same degree type). Not re-opened as a generic. Named RotationXYZ (not
+    Rotation3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <references>
     <see type="type:AxisXYZ" relation="Extends">
-      Structural { x, y, z } map — RotationXYZ closes N to Decimal(unit:Degree).
+      Structural { x, y, z } map — N closed to Decimal(unit:Degree); Z defaults to N.
     </see>
     <see type="type:RotationXY" relation="SeeAlso">
       Two-axis rotation map on AxisXY.

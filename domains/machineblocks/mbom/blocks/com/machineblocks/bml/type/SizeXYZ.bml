@@ -13,22 +13,24 @@
   xmlns:type="com.machineblocks.bml.type">
   <name>SizeXYZ</name>
   <type>type:SizeXYZ</type>
-  <baseType>type:AxisXYZ(N)</baseType>
+  <baseType>type:AxisXYZ(N, Z)</baseType>
   <is>A size along X, Y, and Z</is>
 
-  <documentation>Semantic Struct ValueType for a size triple { x, y, z }. Extends AxisXYZ(N) —
-    inherits x, y, and z; adds size semantics (extent / brick footprint). N is constrained to
-    Number (AxisXYZ remains ValueType-universal). Bare SizeXYZ defaults N to
-    Decimal(mbunit:GridUnitXY). Override via N — e.g. SizeXYZ(Decimal(unit:Millimeter)). Named
-    SizeXYZ (not Size3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
+  <documentation>Semantic Struct ValueType for a size triple { x, y, z }. Extends AxisXYZ(N, Z) —
+    inherits x, y (N) and z (Z); adds size semantics (extent / brick footprint). N and Z are
+    constrained to Number. Bare SizeXYZ defaults N to Decimal(mbunit:GridUnitXY) and Z to
+    Decimal(mbunit:GridUnitZ) — distinct plate-grid scales. Uniform override requires both
+    arguments — e.g. SizeXYZ(Decimal(unit:Millimeter), Decimal(unit:Millimeter)). Named SizeXYZ
+    (not Size3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
     <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnitXY)"/>
+    <Z baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnitZ)"/>
   </genericTypes>
 
   <references>
     <see type="type:AxisXYZ" relation="Extends">
-      Structural { x, y, z } map — SizeXYZ adds size semantics.
+      Structural { x, y, z } map — SizeXYZ adds size semantics; forwards N and Z.
     </see>
     <see type="type:SizeXY" relation="SeeAlso">
       Two-axis size map on AxisXY.

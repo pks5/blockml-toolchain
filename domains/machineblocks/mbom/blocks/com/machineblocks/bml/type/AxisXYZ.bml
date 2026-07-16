@@ -17,16 +17,19 @@
   <is>A value triple along X, Y, and Z</is>
 
   <documentation>Struct ValueType for axis-keyed { x, y, z }. Extends AxisXY(N) and adds z.
-    Inherits x and y. N is any ValueType (default Decimal). Bare AxisXYZ is Decimal
-    (dimensionless). Supply a unit via N — e.g. AxisXYZ(Decimal(unit:Millimeter)).</documentation>
+    Inherits x and y typed as N. Z is a separate generic (defaultType N) so the Z component may
+    differ from X/Y — e.g. AxisXYZ(Decimal(mbunit:GridUnitXY), Decimal(mbunit:GridUnitZ)).
+    Bare AxisXYZ / AxisXYZ(T) binds Z to the same effective type as N. N and Z are any ValueType
+    (default Decimal).</documentation>
 
   <genericTypes>
     <N baseType="core:ValueType" defaultType="btype:Decimal"/>
+    <Z baseType="core:ValueType" defaultType="N"/>
   </genericTypes>
 
   <properties>
-    <z type="N">
-      <documentation>Value along the Z axis.</documentation>
+    <z type="Z">
+      <documentation>Value along the Z axis — type Z (defaults to N).</documentation>
     </z>
   </properties>
 
@@ -38,13 +41,13 @@
       Abstract axis-map base — N.
     </see>
     <see type="type:SizeXYZ" relation="SeeAlso">
-      Size semantics on AxisXYZ.
+      Size semantics on AxisXYZ — N = GridUnitXY, Z = GridUnitZ by default.
     </see>
     <see type="type:OffsetXYZ" relation="SeeAlso">
-      Offset semantics on AxisXYZ.
+      Offset semantics on AxisXYZ — same grid-unit defaults as SizeXYZ.
     </see>
     <see type="type:RotationXYZ" relation="SeeAlso">
-      Rotation semantics — AxisXYZ with N closed to Decimal(unit:Degree).
+      Rotation semantics — AxisXYZ with N (and Z via default) closed to Decimal(unit:Degree).
     </see>
   </references>
 
