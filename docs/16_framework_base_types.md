@@ -352,15 +352,20 @@ language        Language FQN       — optional; implementation dialect for CDAT
 content         String (required)  — CDATA body
 ```
 
-`org.blockml.bml.definition.StructuralDefinition.Documentation` — inline Sub-Block; technical prose on any StructuralDefinition element:
+`org.blockml.bml.definition.StructuralDefinition.Documentation` — inline Sub-Block; one technical prose entry on any StructuralDefinition element. Authors may repeat the element for **i18n** (`language=`) and for **QName facets** (`scad:documentation`, …). Facet namespaces are **not** NaturalLanguage / i18n.
 
 ```text
 FQN             org.blockml.bml.definition.StructuralDefinition.Documentation (Sub-Block)
 baseType        org.blockml.bml.type.StructType
-bml:xml         documentation      — renders as <documentation> element
-language        NaturalLanguage    — optional; prose language override
+bml:xml         documentation      — renders as <documentation> or prefixed localName documentation
+namespace       from element QName — "" = canonical facet; never a locale
+language        NaturalLanguage    — optional attribute; omitted → effective Block/Library language
 content         String (required)  — trimmed text body
+BOM             documentations[] DocumentationProseEntry { namespace, text, languageFqn }
+identity        (namespace, "documentation", languageFqn) — duplicate → BML_DUPLICATE_DOCUMENTATION
 ```
+
+`org.blockml.bml.definition.StructuralDefinition.summary` follows the same multiplicity: BOM `summaries[]` as `DocumentationProseEntry`, identity `(namespace, "summary", languageFqn)`, duplicate → `BML_DUPLICATE_SUMMARY`. See `02_mbml.md` — Documentation facets and i18n.
 
 Each Definition block may declare **`bml:xml`** — how instances serialize to canonical BML XML (root element name, member as attribute/element/text/cdata). The meta-model is **work in progress**; full specification in `19_definition_blocks_and_bml_xml.md`.
 
@@ -372,13 +377,17 @@ Definition elements are addressed via **canonical structural paths** within the 
 
 ```text
 com.foo.Bar.name                    →  Block metadata
-com.foo.Bar.documentation           →  StructuralDefinition.documentation (Documentation Sub-Block shape)
-com.foo.Bar.summary                 →  StructuralDefinition.summary
+com.foo.Bar.documentation           →  primary documentation (default NS + effective language)
+com.foo.Bar.documentations          →  StructuralDefinition.documentations[] (DocumentationProseEntry)
+com.foo.Bar.summary                 →  primary summary (default NS + effective language)
+com.foo.Bar.summaries               →  StructuralDefinition.summaries[] (DocumentationProseEntry)
 com.foo.Bar.keywords                 →  StructuralDefinition.keywords (KeywordEntry[])
 com.foo.Bar.isnot                      →  BlockDefinition.not (block-level only)
 com.foo.Bar.aliases                  →  BlockDefinition.aliases (AliasEntry[]; block-level only)
-com.foo.Bar.properties.width.summary → PropertyDefinition.summary
+com.foo.Bar.properties.width.summary → primary PropertyDefinition summary
+com.foo.Bar.properties.width.summaries → PropertyDefinition.summaries[]
 com.foo.Bar.properties.width.keywords → PropertyDefinition.keywords
+com.foo.Bar.properties.width.documentations → PropertyDefinition.documentations[]
 com.foo.Bar.version                 →  Block version
 com.foo.Bar.properties.width        →  PropertyDefinition
 com.foo.Bar.aggregations.children   →  AggregationDefinition

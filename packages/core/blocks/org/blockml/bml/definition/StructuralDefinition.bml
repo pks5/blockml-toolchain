@@ -25,10 +25,11 @@
 
   <documentation>
     Abstract base type for BlockML structural definition elements. It provides the common
-    documentation model consisting of summary, keywords, documentation text, version information,
-    change history, examples, and references, plus local declaration properties (abstract, final)
-    for block definitions. Concrete structural definition types inherit these members to describe
-    themselves consistently. Member declarations declare abstract, final, and override locally via
+    documentation model consisting of summaries[], keywords, documentations[] (i18n via language=
+    and optional QName facets — facets are not for locales), version information, change history,
+    examples, and references, plus local declaration properties (abstract, final) for block
+    definitions. Concrete structural definition types inherit these members to describe themselves
+    consistently. Member declarations declare abstract, final, and override locally via
     org.blockml.bml.definition.MemberDefinition.
   </documentation>
   <abstract>true</abstract>
@@ -50,17 +51,21 @@
       <documentation>Short prose expansion of semantic meaning — typically three to five sentences
         between is and full documentation. Primary input for LLM context bundles and quick human
         orientation; is names the Urbild, summary adds scope and boundaries without full technical
-        detail. Required when documentation is too long for a quick scan; optional only when
-        documentation alone remains easy to read. Missing when required → BML_MISSING_SUMMARY.
-        Optional language deviation uses the same pattern as documentation when a Summary struct is
-        not required — plain trimmed text body stored in BOM summary on the enclosing definition
-        element. Addressable on blocks as com.foo.Bar.summary and on members as
-        com.foo.Bar.properties.width.summary.</documentation>
+        detail. May repeat for i18n (language=) and optional QName facets (e.g. scad:summary) —
+        namespaces are not NaturalLanguage. Required: default-namespace entry when canonical
+        documentation is too long; optional only when that documentation alone remains easy to read.
+        Missing when required → BML_MISSING_SUMMARY. Duplicate (namespace, languageFqn) →
+        BML_DUPLICATE_SUMMARY. Stored in BOM summaries[] as DocumentationProseEntry. Primary path
+        com.foo.Bar.summary (default NS + effective language); collection com.foo.Bar.summaries.</documentation>
     </summary>
     <documentation type="Documentation" bml:xml="element">
-      <documentation>Technical documentation prose for this definition element. Always required on
-        every Block definition (root and Sub-Blocks). Omitted → BML_MISSING_DOCUMENTATION. When the
-        prose grows too long for a quick scan, authors must also supply summary.</documentation>
+      <documentation>Technical documentation prose for this definition element. May repeat for i18n
+        (language= NaturalLanguage) and optional QName facets (e.g. scad:documentation) — facet
+        namespaces are not for locales. Always required: ≥1 default-namespace documentation on every
+        Block definition (root and Sub-Blocks). Omitted → BML_MISSING_DOCUMENTATION. When canonical
+        prose grows too long for a quick scan, authors must also supply default-namespace summary.
+        Duplicate (namespace, languageFqn) → BML_DUPLICATE_DOCUMENTATION. See 02_mbml.md —
+        Documentation facets and i18n.</documentation>
     </documentation>
     <abstract type="Boolean" bml:xml="element">
       <value>false</value>
@@ -140,11 +145,15 @@
       <baseType>type:StructType</baseType>
       <is>A documentation prose field</is>
 
-      <documentation>Describes the documentation element on any org.blockml.bml.definition.StructuralDefinition (block,
-        property, aggregation, …). Rendered as a documentation element with optional language attribute
-        and a trimmed text body. Maps to BOM documentation string with optional documentationLanguageFqn
-        when language deviates from the effective natural language of the enclosing definition element.
-        Declared as a property on org.blockml.bml.definition.StructuralDefinition.</documentation>
+      <documentation>Describes one documentation prose entry on any
+        org.blockml.bml.definition.StructuralDefinition (block, property, aggregation, …). Rendered
+        as a documentation element (optionally QName-prefixed for facets) with optional language
+        attribute and a trimmed text body. Authors may place multiple siblings: i18n via language=
+        (NaturalLanguage); facets via element namespace (e.g. scad:documentation). Facet namespaces
+        are not locales. Maps to BOM documentations[] DocumentationProseEntry
+        { namespace, text, languageFqn }. Identity (namespace, languageFqn) within documentations[] —
+        duplicate → BML_DUPLICATE_DOCUMENTATION. Declared as a repeatable property shape on
+        org.blockml.bml.definition.StructuralDefinition.</documentation>
 
       <bml:xml>documentation</bml:xml>
 
@@ -156,8 +165,8 @@
             effective language from Block or Library.</documentation>
         </language>
         <content type="Text" bml:xml="text">
-          <documentation>Technical description text. Stored as trimmed body in BOM documentation on the
-            enclosing definition element.</documentation>
+          <documentation>Technical description text. Stored as trimmed body in BOM
+            DocumentationProseEntry.text on the enclosing definition element's documentations[].</documentation>
         </content>
       </properties>
     

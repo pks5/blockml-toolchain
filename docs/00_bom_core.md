@@ -948,9 +948,11 @@ A `BlockDefinition` is a regular Block. Every definition element is addressable 
 ```text
 com.foo.Bar.name                    →  <name>Wall</name>
 com.foo.Bar.is                    →  <is>…</is>
-com.foo.Bar.summary                 →  <summary>…</summary>
+com.foo.Bar.summary                 →  primary <summary>…</summary> (default NS + effective language)
+com.foo.Bar.summaries               →  all <summary> / facet summary entries
 com.foo.Bar.keywords                →  <keywords>…</keywords> (Keyword Entity children or shorthand)
-com.foo.Bar.documentation           →  <documentation>…</documentation>
+com.foo.Bar.documentation           →  primary <documentation>…</documentation>
+com.foo.Bar.documentations          →  all <documentation> / facet documentation entries (i18n + QName)
 com.foo.Bar.isnot                     →  <isnot>…</isnot>
 com.foo.Bar.aliases                 →  <aliases>…</aliases> (Alias Entity children or shorthand)
 com.foo.Bar.type                    →  <type>com.foo.Bar</type>

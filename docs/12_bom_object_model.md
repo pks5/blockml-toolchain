@@ -162,8 +162,11 @@ interface BlockDefinition {
   /** Required Urbild designation — what this Block semantically represents. Reflection: bml:Self.is */
   is?: string
 
-  /** Short prose expansion when documentation is too long. Required in that case. */
-  summary?: string
+  /**
+   * Short prose expansions (i18n + optional QName facets). Required: default-namespace entry when
+   * canonical documentation is too long. See DocumentationProseEntry.
+   */
+  summaries?: DocumentationProseEntry[]
 
   /** Optional search/discovery tags — core.Keyword Entity instances (KeywordEntry[]). */
   keywords?: KeywordEntry[]
@@ -174,11 +177,11 @@ interface BlockDefinition {
   /** Resolved FQN projection of language.value — retained for addressability and tooling. */
   languageFqn?: string
 
-  /** Human-readable technical description of what this Block is. Always required on Block definitions. */
-  documentation?: string
-
-  /** NaturalLanguage FQN when documentation prose deviates from effective block language. Omitted = inherit. */
-  documentationLanguageFqn?: string
+  /**
+   * Technical prose entries (i18n + optional QName facets). Required: ≥1 default-namespace entry
+   * on every Block definition. Primary convenience path uses default NS + effective languageFqn.
+   */
+  documentations?: DocumentationProseEntry[]
 
   /** What this Block is not — required when confusion risk exists. Reflection: bml:Self.isnot */
   isnot?: string
@@ -466,6 +469,28 @@ interface KeywordEntry {
   source?: SourceLocation
 }
 
+/**
+ * One <documentation> or <summary> prose entry on a StructuralDefinition.
+ * Identity: (namespace, kind, languageFqn) where kind is implied by which array holds the entry
+ * (documentations[] vs summaries[]). Namespace is never used for i18n — locales use languageFqn.
+ */
+interface DocumentationProseEntry {
+  /**
+   * Resolved namespace from the element QName (xmlns:). Empty string = canonical / default facet.
+   * Never stores the XML prefix alias. Facet namespaces (e.g. com.machineblocks.bml.scad) are
+   * optional domain/target slots — not NaturalLanguage.
+   */
+  namespace: string
+  /** Trimmed prose body */
+  text: string
+  /**
+   * Resolved NaturalLanguage FQN — always set after parse (explicit language= or effective
+   * Block/Library language when the attribute is omitted).
+   */
+  languageFqn: string
+  source?: SourceLocation
+}
+
 interface AliasEntry {
   /** Alias Entity type FQN — org.blockml.bml.meta.FreeTextAlias, FixedAlias descendant, or domain Alias branch block */
   typeFqn: string
@@ -531,13 +556,12 @@ interface ConstrainableDefinition {
 
 interface MemberDefinitionBase {
   name: string
-  /** Optional short prose expansion between is (designation) and full documentation. */
-  summary?: string
+  /** Short prose expansions (i18n + optional QName facets). See DocumentationProseEntry. */
+  summaries?: DocumentationProseEntry[]
   /** Optional search/discovery tags — core.Keyword Entity instances (KeywordEntry[]). */
   keywords?: KeywordEntry[]
-  documentation?: string
-  /** NaturalLanguage FQN when member documentation prose deviates from effective block language. */
-  documentationLanguageFqn?: string
+  /** Technical prose entries (i18n + optional QName facets). See DocumentationProseEntry. */
+  documentations?: DocumentationProseEntry[]
   since?: string
   changelog?: ChangelogEntry[]
   examples?: DocumentationExample[]
@@ -751,7 +775,7 @@ Values on Block instances and property defaults use a common value model.
 
 Cross-instance references via `FQN::id` exist only on **associations** — `basePresets`, `Step.part`, and similar members whose semantics explicitly model instance identity. Properties typed with ValueTypes always store inline values.
 
-**EnumType:** an authored token such as `Standard` or `com.machineblocks.bml.type.BaseCutout::Standard` is **not** a link to the `values` catalog entry. The validator resolves the token against `values` by `id`. The BOM stores **only id + typeFqn** (the EnumType) — catalog properties on the member (for example an optional `scadValue` string) are **not** copied into the property value. Tools look up catalog metadata from the EnumType definition when needed. See `17_type_system_bml.md` — EnumType.
+**EnumType:** an authored token such as `Standard` or `com.machineblocks.bml.type.BaseCutout::Standard` is **not** a link to the `values` catalog entry. The validator resolves the token against `values` by `id`. The BOM stores **only id + typeFqn** (the EnumType) — catalog properties on the member (for example an optional `scad:value` string) are **not** copied into the property value. Tools look up catalog metadata from the EnumType definition when needed. See `17_type_system_bml.md` — EnumType.
 
 **StructType and primitives:** authored literals remain inline in Canonical BOM — `[1, 1, 1]`, `{x:1, y:1, z:1}`, or a nested StructType element are self-contained copies, not references to other instances.
 
@@ -1441,15 +1465,17 @@ BML_CONSTRAINT_TYPE_MISMATCH  — constraint generic T incompatible with bound t
 BML_CONSTRAINT_TARGET_MISMATCH — constraint branch incompatible with embedding context
 BML_CONSTRAINT_VIOLATION      — constraint rule fails with validation Error
 BML_MISSING_IS              — Block definition lacks <is> (warning V1)
-BML_MISSING_DOCUMENTATION     — Block definition lacks <documentation> (warning V1)
+BML_MISSING_DOCUMENTATION     — Block definition lacks default-namespace <documentation> (warning V1)
 BML_MISSING_ISNOT             — confusion risk but <isnot> omitted (warning V1)
-BML_MISSING_SUMMARY           — documentation too long but <summary> omitted (warning V1)
+BML_MISSING_SUMMARY           — canonical documentation too long but default-namespace <summary> omitted (warning V1)
+BML_DUPLICATE_DOCUMENTATION   — two <documentation> entries share the same (namespace, languageFqn)
+BML_DUPLICATE_SUMMARY         — two <summary> entries share the same (namespace, languageFqn)
 BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version
 BML_CHANGELOG_VERSION_ORDER   — <changelog> entries not ordered oldest-first (warning V1)
 BML_EXAMPLE_MISSING_TITLE     — <example> lacks required title attribute
 BML_EXAMPLE_NOT_CDATA         — <example> body is not CDATA
 BML_EXAMPLE_UNKNOWN_LANGUAGE  — <example> language attribute is not a known Language FQN
-BML_UNKNOWN_NATURAL_LANGUAGE  — <language> or documentation language attribute is not a NaturalLanguage FQN
+BML_UNKNOWN_NATURAL_LANGUAGE  — <language> or documentation/summary language attribute is not a NaturalLanguage FQN
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)
 BML_UNKNOWN_VERSION           — bml:version assert or lookup failed — no matching BlockDefinition in TypeRegistry (includes Library TypeReferenceEntity sugar)
 BML_VERSION_BELOW_LIBRARY     — block.version < library.version when both declared (error)

@@ -9,23 +9,24 @@
   xmlns:bml="http://blockml.org/schema/bml"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:scad="com.machineblocks.bml.scad">
   <name>BaseCutout</name>
-  <type>type:BaseCutout</type>
-  <baseType>type:MBEnum(Text)</baseType>
+  <type>mbtype:BaseCutout</type>
+  <baseType>mbtype:MBEnum(Text)</baseType>
   <is>An underside brick cutout shape</is>
 
   <documentation>Enum ValueType for base cutout variants on MachineBlocks bricks.
     Extends MBEnum(Text). BOM property values store only the member id plus this EnumType;
-    scadValue holds the SCAD serialization literal.</documentation>
+    scad:value holds the SCAD serialization literal.</documentation>
 
   <aggregations>
     <values>
       <composition>
-        <BaseCutout bml:id="None" scadValue="none" />
-        <BaseCutout bml:id="Standard" scadValue="standard" />
-        <BaseCutout bml:id="Groove" scadValue="groove" />
-        <BaseCutout bml:id="Studs" scadValue="studs" />
+        <BaseCutout bml:id="None" scad:value="none" />
+        <BaseCutout bml:id="Standard" scad:value="standard" />
+        <BaseCutout bml:id="Groove" scad:value="groove" />
+        <BaseCutout bml:id="Studs" scad:value="studs" />
       </composition>
     </values>
   </aggregations>

@@ -66,6 +66,7 @@
       <mbtype:Direction />
       <mbtype:Face />
       <mbtype:Grille />
+      <mbtype:HoleType />
       <mbtype:MBEnum />
       <mbtype:MultiAxis />
       <mbtype:SizeXYZ />

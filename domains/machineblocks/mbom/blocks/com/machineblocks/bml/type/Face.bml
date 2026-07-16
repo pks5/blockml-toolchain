@@ -9,25 +9,26 @@
   xmlns:bml="http://blockml.org/schema/bml"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:scad="com.machineblocks.bml.scad">
   <name>Face</name>
-  <type>type:Face</type>
-  <baseType>type:MBEnum(Text)</baseType>
+  <type>mbtype:Face</type>
+  <baseType>mbtype:MBEnum(Text)</baseType>
   <is>A directed face on a brick</is>
 
   <documentation>Enum ValueType for the six axis-directed faces on MachineBlocks bricks.
     Extends MBEnum(Text). BOM property values store only the member id plus this EnumType;
-    scadValue holds the SCAD serialization literal (x- / x+ / …).</documentation>
+    scad:value holds the SCAD serialization literal (x- / x+ / …).</documentation>
 
   <aggregations>
     <values>
       <composition>
-        <Face bml:id="XMinus" scadValue="x-" />
-        <Face bml:id="XPlus" scadValue="x+" />
-        <Face bml:id="YMinus" scadValue="y-" />
-        <Face bml:id="YPlus" scadValue="y+" />
-        <Face bml:id="ZMinus" scadValue="z-" />
-        <Face bml:id="ZPlus" scadValue="z+" />
+        <Face bml:id="XMinus" scad:value="x-" />
+        <Face bml:id="XPlus" scad:value="x+" />
+        <Face bml:id="YMinus" scad:value="y-" />
+        <Face bml:id="YPlus" scad:value="y+" />
+        <Face bml:id="ZMinus" scad:value="z-" />
+        <Face bml:id="ZPlus" scad:value="z+" />
       </composition>
     </values>
   </aggregations>

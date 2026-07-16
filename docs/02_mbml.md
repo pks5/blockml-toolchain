@@ -434,10 +434,11 @@ Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **
 <is>                — required: clear designation of the Urbild — what this Block semantically
                       represents (noun phrase; may be several words — more than bare name/type).
 <isnot>             — required when confusion risk exists — what this Block is not (blocks only).
-<summary>           — required when <documentation> is too long — short middle tier (scope /
-                      boundaries) between is and documentation.
+<summary>           — required when canonical <documentation> is too long — short middle tier (scope /
+                      boundaries) between is and documentation. May repeat for i18n and QName facets.
 <keywords>          — optional search/discovery tags — core.Keyword Entity aggregation (StructuralDefinition).
-<documentation>     — always required — technical description of the Block (root and Sub-Blocks).
+<documentation>     — always required (canonical default-namespace facet) — technical description.
+                      May repeat for i18n and QName facets — see § Documentation facets and i18n.
 <aliases>           — optional alternative Block type names — core.Alias Entity aggregation (blocks only).
 <version>           — semantic version of this Block definition (root block only)
 <status>            — optional; Block reference. Omitted = inherit from parent (document root defaults to Stable)
@@ -453,12 +454,14 @@ is              — ALWAYS required. Names the Urbild clearly: what the Block se
                   (for example "A version number", not merely "A version").
 isnot           — REQUIRED when readers could confuse this Block with a nearby concept.
                   Optional only when no realistic confusion risk exists.
-summary         — REQUIRED when documentation is too long for a quick scan.
-                  Optional only when documentation stays short enough to read without a middle tier.
-documentation   — ALWAYS required on every Block definition (root and Sub-Blocks).
+summary         — REQUIRED when canonical (default-namespace) documentation is too long for a quick scan.
+                  Optional only when that documentation stays short enough to read without a middle tier.
+                  Same i18n + QName multiplicity rules as documentation.
+documentation   — ALWAYS required: at least one default-namespace <documentation> on every Block
+                  definition (root and Sub-Blocks). Additional language and facet entries are optional.
 ```
 
-Diagnostics: omitted `<is>` → `BML_MISSING_IS`; omitted `<documentation>` → `BML_MISSING_DOCUMENTATION`; missing `<isnot>` despite clear confusion risk → `BML_MISSING_ISNOT` (warning); missing `<summary>` despite long documentation → `BML_MISSING_SUMMARY` (warning). Warnings in V1; errors in a later release.
+Diagnostics: omitted `<is>` → `BML_MISSING_IS`; missing default-namespace `<documentation>` → `BML_MISSING_DOCUMENTATION`; missing `<isnot>` despite clear confusion risk → `BML_MISSING_ISNOT` (warning); missing default-namespace `<summary>` despite long canonical documentation → `BML_MISSING_SUMMARY` (warning); duplicate `(namespace, languageFqn)` for documentation or summary → `BML_DUPLICATE_DOCUMENTATION` / `BML_DUPLICATE_SUMMARY`. Warnings in V1; errors in a later release (duplicates are errors).
 
 ### Definition identity first — then `<is>`
 
@@ -505,17 +508,15 @@ Examples:
 
 `<summary>` is a child on **StructuralDefinition** elements — root blocks, Sub-Blocks, and members (`<property>`, `<aggregation>`, …). On Block definitions it follows `<is>` and optional `<language>`, before `<documentation>`. It expands the designation in **three to five sentences** — scope, boundaries, and orientation without full technical detail.
 
-**Required when `<documentation>` is too long** for a quick human or LLM scan — typically when documentation exceeds a short paragraph or mixes many concerns. Optional only when documentation alone remains easy to scan. Missing when required → `BML_MISSING_SUMMARY` (warning V1).
+**Required when canonical (default-namespace) `<documentation>` is too long** for a quick human or LLM scan — typically when that documentation exceeds a short paragraph or mixes many concerns. Optional only when canonical documentation alone remains easy to scan. Missing when required → `BML_MISSING_SUMMARY` (warning V1). The required summary is the **default-namespace** entry (optionally with `language=` for a non-primary translation); namespaced facet summaries are always optional.
 
 ```text
 is            →  noun phrase: what does this Block semantically represent?
 summary       →  short paragraph: scope and boundaries (LLM context bundles, quick human scan)
-documentation →  full technical prose — always present
+documentation →  full technical prose — always present (canonical facet)
 ```
 
-Plain trimmed text body stored in BOM `summary` on the enclosing definition element. Addressable as `com.foo.Bar.summary` on blocks and `com.foo.Bar.properties.width.summary` on members.
-
-Optional **`language`** attribute follows the same deviation pattern as `<documentation>` when a Summary struct is not required.
+**Multiplicity:** same two axes as `<documentation>` — i18n via `language=` and optional QName facets (e.g. `scad:summary`). See § Documentation facets and i18n. Stored in BOM `summaries[]` as `DocumentationProseEntry`. Addressable as `com.foo.Bar.summaries` (collection) / primary convenience path `com.foo.Bar.summary` on blocks and `com.foo.Bar.properties.width.summary` on members (primary = default namespace + effective language).
 
 ### `<keywords>` — search and discovery tags
 
@@ -575,12 +576,13 @@ Catalogue keywords extend **`org.blockml.bml.meta.FixedKeyword`** — protected 
 org.blockml.bml.core.Block default     →  English (org.blockml.bml.language.English)
 Library.language                     →  catalogue default for all exported blocks
 Block.language                       →  per-definition override
-<documentation language="…">         →  per-element override when prose deviates
+<documentation language="…">         →  NaturalLanguage of that prose entry (i18n)
+<summary language="…">               →  NaturalLanguage of that summary entry (i18n)
 <change language="…">                →  per-entry override for changelog text
 <see language="…">                     →  per-entry override for relationship text
 ```
 
-Authors declare `<language>` or a `language` attribute on `<documentation>`, `<change>`, or `<see>` **only when deviating** from the effective inherited language — same deviation pattern as `<status>`.
+Authors declare Block/Library `<language>` for the **primary** prose language of the definition. On individual `<documentation>` / `<summary>` entries, omit `language=` when the body is in that effective language; set `language=` on **additional translations** (and on a single entry only when that one passage deliberately uses another NaturalLanguage). Same deviation pattern as `<status>` for single-entry overrides; for full i18n see § Documentation facets and i18n.
 
 ```xml
 <block ...>
@@ -621,9 +623,14 @@ Natural languages are distinct from **implementation languages** (`ProgrammingLa
 
 `<documentation>` follows definition identity (`name` / `type` / `baseType`), `<is>`, conditional `<summary>`, optional `<keywords>`, and optional `<language>`, still before conditional `<isnot>` and optional `<aliases>`. It describes the Block definition itself — not individual members (those carry their own `<documentation>`).
 
-**Always required** on every Block definition (root blocks and Sub-Blocks). Omitted → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release). When documentation grows too long for a quick scan, add `<summary>` (see above).
+**Always required (canonical facet):** every Block definition (root and Sub-Blocks) must carry at least one **default-namespace** `<documentation>` (unprefixed local name `documentation`). Omitted → `BML_MISSING_DOCUMENTATION` (warning in V1, error in a later release). When that canonical documentation grows too long for a quick scan, add a default-namespace `<summary>` (see above).
 
-An optional **`language`** attribute on `<documentation>` references a `org.blockml.bml.language.NaturalLanguage` when the prose is written in a language other than the effective language of the enclosing definition element. Unqualified names resolve via implicit namespace `org.blockml.bml.language.*`. Omitted → inherit effective language from Block or Library.
+**Multiplicity:** authors may place **several** `<documentation>` (and `<summary>`) siblings. Two independent axes apply — see § Documentation facets and i18n:
+
+1. **i18n** — same QName, different `language=` (NaturalLanguage)
+2. **Facets** — different element QName / namespace (e.g. `scad:documentation`) — **not** for locales
+
+An optional **`language`** attribute references a `org.blockml.bml.language.NaturalLanguage`. Unqualified names resolve via implicit namespace `org.blockml.bml.language.*`. Omitted → that entry uses the effective language from Block or Library. Stored in BOM `documentations[]` as `DocumentationProseEntry` with resolved `languageFqn` always set.
 
 **Cross-references:** Do **not** name Block or Definition FQNs, markdown files, or external URLs in `<documentation>` prose. Link all related types and documentation sources exclusively via `<references>` (see below).
 
@@ -639,16 +646,66 @@ An optional **`language`** attribute on `<documentation>` references a `org.bloc
 ```
 
 ```xml
+<!-- i18n: additional translation of the canonical facet -->
+<documentation>Wall block with thickness, height, and opening properties for enclosure design.</documentation>
 <documentation language="German">
   Wandblock mit Dicken-, Höhen- und Öffnungseigenschaften.
 </documentation>
 ```
 
+### Documentation facets and i18n
+
+`<documentation>` and `<summary>` share the same multiplicity model on every **StructuralDefinition** (blocks, Sub-Blocks, and members). Entry identity in the BOM:
+
+```text
+(namespace, localName, languageFqn)
+```
+
+- `localName` is `documentation` or `summary` (from the element local name after visibility stripping — not applicable to these prose elements today)
+- `namespace` is resolved from the element QName via `xmlns:` (empty string for unprefixed / canonical facet)
+- `languageFqn` is the explicit `language=` attribute or the effective inherited NaturalLanguage
+
+**Axis 1 — i18n (NaturalLanguage):** repeat the **same** element QName with different `language=` values. Do **not** encode locales as XML prefixes (`english:documentation` is invalid authoring).
+
+```xml
+<documentation>…English primary…</documentation>
+<documentation language="German">…</documentation>
+<documentation language="French">…</documentation>
+
+<summary>…</summary>
+<summary language="German">…</summary>
+```
+
+**Axis 2 — facets (member / prose namespace):** optional QNames such as `scad:documentation` or `scad:summary` attach domain- or target-specific prose beside the canonical slot. **QName namespaces are not for i18n** — they name a facet (OpenSCAD notes, UI toolkit hints, …), not a spoken language. Facets may themselves be multilingual:
+
+```xml
+xmlns:scad="com.machineblocks.bml.scad"
+
+<documentation>Canonical type documentation.</documentation>
+<documentation language="German">Kanonische Typdokumentation.</documentation>
+
+<scad:documentation>SCAD literal is the lowercase token; faces use x- / x+ …</scad:documentation>
+<scad:documentation language="German">SCAD-Literal ist der Kleinbuchstaben-Token; Faces nutzen x- / x+ …</scad:documentation>
+```
+
+**Rules:**
+
+| Rule | Detail |
+|---|---|
+| Canonical required | ≥1 default-namespace `<documentation>` on every Block definition |
+| Summary required | default-namespace `<summary>` when canonical documentation is too long |
+| Facets optional | namespaced `*:documentation` / `*:summary` never satisfy the required slots |
+| Unique key | at most one entry per `(namespace, localName, languageFqn)` → else `BML_DUPLICATE_DOCUMENTATION` / `BML_DUPLICATE_SUMMARY` |
+| Summary pairing | long facet documentation may have a matching-facet summary; no cross-facet obligation |
+| `<is>` / `<isnot>` | remain singular — not multi-language / not QName-faceted in V1 |
+
+Primary tooling path (LLM context, quick scan): default namespace + effective Block/Library language. Other entries are translations or facet attachments.
+
 ### `<isnot>` — negative space (blocks only)
 
 `<isnot>` is a child on **Block definitions only** — root blocks and Sub-Blocks, not on members. It states **what this Block is not** — explicit disambiguation from easily confused concepts (for example Sub-Block vs embedded Block, contract vs baseType, Alias vs Keyword).
 
-**Required when confusion risk exists.** Optional only when there is no realistic nearby concept a reader might confuse with this Block. Missing when required → `BML_MISSING_ISNOT` (warning V1). Place after `<documentation>` (and optional documentation extensions) or immediately after `<documentation>` before `<since>` when extensions are absent. Definition identity (`name` / `type` / `baseType`) always remains at the top of the document.
+**Required when confusion risk exists.** Optional only when there is no realistic nearby concept a reader might confuse with this Block. Missing when required → `BML_MISSING_ISNOT` (warning V1). Place after `<documentation>` entries (and optional documentation extensions) or immediately after the documentation group before `<since>` when extensions are absent. Definition identity (`name` / `type` / `baseType`) always remains at the top of the document.
 
 Plain trimmed text body stored in BOM `block.isnot`. Addressable as `com.foo.Bar.isnot`. Definition reflection: `bml:Self.isnot`. Prefer `relation=ContrastsWith` on `<see>` when pointing at a specific confusing type; `<isnot>` states the negation inline on the current definition.
 
@@ -706,11 +763,11 @@ Applies to all definition elements that carry documentation:
 
 and to any future definition element with `<documentation>`.
 
-On root `<block>` definitions, optional documentation extensions follow `<documentation>` and precede `<name>`. On members and Sub-Blocks, they appear alongside `<documentation>` among definition metadata children (before `<value>`, `<composition>`, or other content containers).
+On root `<block>` definitions, optional documentation extensions follow the `<documentation>` / facet documentation group and precede other structural sections as today. On members and Sub-Blocks, they appear alongside documentation among definition metadata children (before `<value>`, `<composition>`, or other content containers).
 
 Goal: keep API documentation, version history, examples, and related-type links at the definition site — a single source of truth inside BML files.
 
-**Authoring split:** `<documentation>` carries technical prose only; `<references>` carries all cross-links — Blocks, Definition elements, repository markdown files (`file`), and external URLs (`url`) — each with an explicit relationship note.
+**Authoring split:** `<documentation>` (and facet / translation siblings) carry technical prose only; `<references>` carries all cross-links — Blocks, Definition elements, repository markdown files (`file`), and external URLs (`url`) — each with an explicit relationship note.
 
 **Associations vs References:**
 
@@ -1919,7 +1976,7 @@ without completing it.
 
 ### Member Namespace (Element QName)
 
-Properties, Aggregations, Associations, and Capabilities receive their namespace **exclusively via the XML element QName**. There is no `namespace` attribute on member elements.
+Properties, Aggregations, Associations, and Capabilities receive their namespace **exclusively via the XML element QName**. There is no `namespace` attribute on member elements. The same QName mechanism applies to **prose facet** elements `<documentation>` / `<summary>` (and namespaced variants such as `scad:documentation`) — see § Documentation facets and i18n. **Do not** use prose-element namespaces for NaturalLanguage / i18n.
 
 ```xml
 <block
@@ -2327,9 +2384,11 @@ com.foo.Bar.aggregations.children   →  AggregationDefinition for children
 com.foo.Bar.capabilities.render     →  CapabilityDefinition for render
 com.foo.Bar.name                    →  Block metadata
 com.foo.Bar.is                    →  Block is (designation)
-com.foo.Bar.summary                 →  Block summary
+com.foo.Bar.summary                 →  primary Block summary (default NS + effective language)
+com.foo.Bar.summaries               →  all summary entries (i18n + facets)
 com.foo.Bar.keywords                →  Block keywords
-com.foo.Bar.documentation           →  Block documentation
+com.foo.Bar.documentation           →  primary Block documentation (default NS + effective language)
+com.foo.Bar.documentations          →  all documentation entries (i18n + facets)
 com.foo.Bar.isnot                     →  Block isnot (disambiguation)
 com.foo.Bar.aliases                 →  Block aliases (alternative type names)
 ```

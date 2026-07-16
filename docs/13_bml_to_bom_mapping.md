@@ -275,7 +275,10 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 
 ```text
 <is>…</is>                               → block.is (trimmed text)
-<summary>…</summary>                         → block.summary (trimmed text); members: member.summary
+<summary>…</summary>                     → summaries[] DocumentationProseEntry
+                                           { namespace: "" | resolved QName NS, text, languageFqn }
+  <summary language="…">                 → languageFqn from attribute; else effective Block/Library language
+  <scad:summary>…</scad:summary>         → namespace from xmlns:scad (facet — not i18n)
 <keywords>                                   → keywords[] KeywordEntry; shorthand → FreeTextKeyword only
   <meta:FreeTextKeyword term="…" />          → { typeFqn: FreeTextKeyword, term, languageFqn?, weight? }
   <domain:Inheritance />                     → { typeFqn: domain keyword block }  (example)
@@ -283,7 +286,9 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <aliases>                                    → aliases[] AliasEntry; shorthand → FreeTextAlias only
   <meta:FreeTextAlias name="…" />            → { typeFqn: FreeTextAlias, name, languageFqn?, legacy? }
 <language>…</language>                       → block.languageFqn (NaturalLanguage FQN)
-<documentation language="…">…</documentation> → block.documentation (trimmed text); documentationLanguageFqn when attribute present
+<documentation language="…">…</documentation> → documentations[] DocumentationProseEntry
+                                           { namespace: "" | resolved QName NS, text, languageFqn }
+  <scad:documentation>…</scad:documentation> → facet entry; namespace from xmlns — not for locales
 <since>…</since>                             → block.since (trimmed text)
 <changelog>                                  → block.changelog[]
   <change version="…" language="…">…</change> → { version, text: trimmed body, languageFqn? }
@@ -323,16 +328,18 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 
 ```text
 Omitted <is> on Block definition         → BML_MISSING_IS (warning V1)
-Omitted <documentation> on Block definition → BML_MISSING_DOCUMENTATION (warning V1)
+Omitted default-namespace <documentation> → BML_MISSING_DOCUMENTATION (warning V1)
 Missing <isnot> when confusion risk      → BML_MISSING_ISNOT (warning V1)
-Missing <summary> when documentation long → BML_MISSING_SUMMARY (warning V1)
+Missing default-namespace <summary> when canonical documentation long → BML_MISSING_SUMMARY (warning V1)
+Duplicate (namespace, languageFqn) on documentation → BML_DUPLICATE_DOCUMENTATION (error)
+Duplicate (namespace, languageFqn) on summary → BML_DUPLICATE_SUMMARY (error)
 Omitted <since> / <changelog> / <examples> / <references> → undefined (optional)
 Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <changelog> entries out of version order → BML_CHANGELOG_VERSION_ORDER (warning V1)
 <example> without title attribute        → BML_EXAMPLE_MISSING_TITLE (error)
 <example> body not CDATA                 → BML_EXAMPLE_NOT_CDATA (error)
 <example language="…"> unknown Language FQN → BML_EXAMPLE_UNKNOWN_LANGUAGE (error)
-<language> or documentation language="…" unknown NaturalLanguage FQN → BML_UNKNOWN_NATURAL_LANGUAGE (error)
+<language> or documentation/summary language="…" unknown NaturalLanguage FQN → BML_UNKNOWN_NATURAL_LANGUAGE (error)
 <see> without type, instance, file, url, property, aggregation, association, or capability → BML_REFERENCE_MISSING_TARGET (error)
 <see> with more than one target kind                    → BML_REFERENCE_AMBIGUOUS_TARGET (error)
 <see type="…" property="…"> (split member form)         → one member target; type qualifies member name

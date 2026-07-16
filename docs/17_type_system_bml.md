@@ -1041,17 +1041,17 @@ Enum members are **Block instances** in composition under `values` — no specia
 
   <!-- optional catalog properties — like private fields on a Java enum constant -->
   <properties>
-    <scadValue type="Text">
+    <scad:value type="Text">
       <documentation>SCAD serialization literal — MachineBlocks MBEnum convention.</documentation>
-    </scadValue>
+    </scad:value>
   </properties>
 
   <aggregations>
     <values>
       <composition>
-        <BaseCutout bml:id="None"     scadValue="none"     />
-        <BaseCutout bml:id="Standard" scadValue="standard" />
-        <BaseCutout bml:id="Groove"   scadValue="groove"   />
+        <BaseCutout bml:id="None"     scad:value="none"     />
+        <BaseCutout bml:id="Standard" scad:value="standard" />
+        <BaseCutout bml:id="Groove"   scad:value="groove"   />
       </composition>
     </values>
   </aggregations>
@@ -1059,7 +1059,7 @@ Enum members are **Block instances** in composition under `values` — no specia
 </block>
 ```
 
-An EnumType **may** declare arbitrary properties. Those properties are **catalog metadata** on the type definition — filled per member in `values` (analogous to private fields on a Java enum constant). MachineBlocks enums extend `MBEnum(T)` and use `scadValue` for SCAD literals — a domain choice, not a framework requirement.
+An EnumType **may** declare arbitrary properties. Those properties are **catalog metadata** on the type definition — filled per member in `values` (analogous to private fields on a Java enum constant). MachineBlocks enums extend `MBEnum(T)` and use `scad:value` for SCAD literals — a domain choice, not a framework requirement.
 
 Properties typed with an EnumType **must not** carry `<suggestions>` — valid values come from `values` (`BML_SUGGESTIONS_ON_ENUM` unchanged). Properties may carry `<constraints>` on any type where a compatible Constraint sub-type exists — see `18_constraints_and_suggestions.md`.
 
@@ -1090,9 +1090,9 @@ Qualified form references the enum member's bml:id (from values composition).
 
 The short form is valid only when the expected type is known from the property (or capability input field) declaration — not for untyped strings. The validator resolves the token against `values` by `id`.
 
-**BOM storage:** a property typed with an EnumType stores **only id + typeFqn** (the EnumType). Catalog properties on the member (for example `scadValue="standard"`) are **not** copied into the property value. Tools and renderers look them up from the EnumType definition when needed. The authored token is a resolution key against `values` — not a live link to the catalog entry. See `12_bom_object_model.md` — Property Value Semantics.
+**BOM storage:** a property typed with an EnumType stores **only id + typeFqn** (the EnumType). Catalog properties on the member (for example `scad:value="standard"`) are **not** copied into the property value. Tools and renderers look them up from the EnumType definition when needed. The authored token is a resolution key against `values` — not a live link to the catalog entry. See `12_bom_object_model.md` — Property Value Semantics.
 
-**External representation:** the property value is the member identity — not a struct payload `{ scadValue: "standard" }` and not a deep copy of catalog properties.
+**External representation:** the property value is the member identity — not a struct payload `{ scad:value: "standard" }` and not a deep copy of catalog properties.
 
 ---
 

@@ -260,7 +260,7 @@
       <value>2.25</value>
     </connectorWidth>
 
-    <connectors type="Constant(Boolean){value=false} | mbtype:Connector[]">
+    <connectors type="Constant(Boolean){false} | mbtype:Connector[]">
       <documentation>Side connection system using triangular wedges. Alternative to tongue/groove.
         Enables side-by-side (0°) and angled (90°) connections.
         Padding skips connectors at start/end — important when connecting
@@ -275,7 +275,7 @@
       <value>false</value>
     </connectors>
 
-    <cutouts type="Constant(Boolean){value=false} | mbtype:Cutout[]">
+    <cutouts type="Constant(Boolean){false} | mbtype:Cutout[]">
       <documentation>Defines one or more void volumes to subtract from the block body.
         Each entry in the array is a settings array describing one cutout.
         The subtraction is applied brutally — it ignores walls, recess,
@@ -334,7 +334,7 @@
       <value>false</value>
     </grilleInverted>
 
-    <holeX type="mbtype:SelectiveGrid(Boolean | HoleType)">
+    <holeX type="mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
       <documentation>Whether LEGO Technic holes are drawn along the X-axis.
         Multiple rows possible depending on block height.
       </documentation>
@@ -540,7 +540,7 @@
       <value>[0, 0, 0]</value>
     </offset>
 
-    <pcb type="Constant(Boolean){value=false} | mbtype:PcbMountingType">
+    <pcb type="Constant(Boolean){false} | mbtype:PcbMountingType">
       <documentation>PCB mounting mode. Combines the former pcb (bool) and pcbMountingType into one.
         false or "none": no PCB mounting features.
         "clips": frame for clipping in the PCB.
@@ -1045,7 +1045,7 @@
       <value>[]</value>
     </sizeMod>
 
-    <slope type="Constant(Boolean){value=false} | mbtype:PerSide4(Decimal(mbunit:GridUnit))">
+    <slope type="Constant(Boolean){false} | mbtype:PerSide4(Decimal(mbunit:GridUnit))">
       <documentation>Defines slopes per side (0-3).
         Positive values: slope on top surface (z+), starting at slopeBaseHeightBottom
         and going the specified number of plates toward the center upward.

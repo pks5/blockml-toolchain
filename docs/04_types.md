@@ -90,7 +90,7 @@ On a property typed with an EnumType, enum values are written by **member id**:
 - **short id** — `Standard` (omits `com.machineblocks.bml.type.BaseCutout::` because the property type is known)
 - **qualified id** — `com.machineblocks.bml.type.BaseCutout::Standard`
 
-BOM stores **id + typeFqn** only. Optional catalog properties on the enum member (for example MachineBlocks `scadValue="standard"` for SCAD via `MBEnum`) live on the type definition and are looked up by tools — they are not a second authoring form for the property value.
+BOM stores **id + typeFqn** only. Optional catalog properties on the enum member (for example MachineBlocks `scad:value="standard"` for SCAD via `MBEnum`) live on the type definition and are looked up by tools — they are not a second authoring form for the property value.
 
 **Anonymous Object inputType for Capability:** `{ a: Float, b: Float }` is shorthand for an **anonymous struct type** — conceptually an inline class with private typed fields (`a`, `b`). Stored in BOM as `AnonymousStructType` (see `12_bom_object_model.md` — Type Descriptors). Field order defines positional parameter order — same **Ordered Struct Fields** rule as named StructTypes (see `17_type_system_bml.md`). Both positional and named call syntax are valid:
 
@@ -200,7 +200,7 @@ Values:  Start | Center | End
 
 MBML:  align="Start"
 MBOM:  Align.Start   (id + typeFqn)
-SCAD:  "start"       (from catalog property scadValue)
+SCAD:  "start"       (from catalog property scad:value)
 ```
 
 ## StudType

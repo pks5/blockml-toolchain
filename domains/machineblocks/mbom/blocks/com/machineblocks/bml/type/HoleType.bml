@@ -1,0 +1,33 @@
+<!--
+  MachineBlocks — HoleType enum
+
+  FQN: com.machineblocks.bml.type.HoleType
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:scad="com.machineblocks.bml.scad">
+  <name>HoleType</name>
+  <type>mbtype:HoleType</type>
+  <baseType>mbmbtype:MBEnum(Text)</baseType>
+  <is>A Technic hole shape</is>
+
+  <documentation>Enum ValueType for LEGO Technic hole shapes on MachineBlocks bricks.
+    Extends MBEnum(Text). Pin is a round hole; Axle is a cross-shaped hole.
+    BOM property values store only the member id plus this EnumType; scad:value holds the
+    SCAD serialization literal.</documentation>
+
+  <aggregations>
+    <values>
+      <composition>
+        <HoleType bml:id="Axle" scad:value="axle" />
+        <HoleType bml:id="Pin" scad:value="pin" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>
