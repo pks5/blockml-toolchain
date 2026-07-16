@@ -230,7 +230,7 @@ org.blockml.bml.core.Block
     preferredAlias · directives[]
     SubBlocks: Directive → Member(*) | Element | Attribute
                Member → Property | Aggregation | Association | Capability
-               Element → Document(document) | Summary(summary) | Examples(examples)
+               Element → Document(document) | Summary(summary) | Examples(examples) | Value(value)
 
 org.blockml.bml.annotation.BmlAnnotation          preferredAlias=bml
 com.machineblocks.bml.annotation.ScadAnnotation   preferredAlias=scad

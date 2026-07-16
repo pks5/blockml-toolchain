@@ -19,10 +19,12 @@
 
   <documentation>Abstract base for MachineBlocks EnumTypes. Extends org.blockml.bml.type.EnumType
     and declares catalog property scad:value : T — the SCAD serialization literal for each enum
-    member (annotation namespace com.machineblocks.bml.annotation.ScadAnnotation). Concrete enums
-    bind T (typically Text) and set scad:value on values composition members. BOM property values
-    still store only member id + EnumType; scad:value is catalog metadata looked up at render
-    time.</documentation>
+    member (annotation member QName under ScadAnnotation.Property, name="*"). This is a top-level
+    namespaced member on the enum type — not a PropertyDefinition value facet
+    (&lt;myProp&gt;&lt;scad:value&gt;…&lt;/scad:value&gt;&lt;/myProp&gt; uses Annotation.Value).
+    Concrete enums bind T (typically Text) and set scad:value on values composition members. BOM
+    property values still store only member id + EnumType; scad:value is catalog metadata looked
+    up at render time.</documentation>
 
   <abstract>true</abstract>
 
@@ -32,9 +34,11 @@
 
   <properties>
     <scad:value abstract="true" type="T">
-      <documentation>SCAD serialization literal for this enum member. Abstract on MBEnum —
-        concrete enums bind T and set scad:value on each values composition entry. Not part of
-        the BOM property value (id + typeFqn only).</documentation>
+      <documentation>SCAD serialization literal for this enum member — catalog property member
+        (ScadAnnotation.Property). Abstract on MBEnum — concrete enums bind T and set scad:value
+        on each values composition entry. Not part of the BOM property value (id + typeFqn only).
+        Distinct from nested PropertyDefinition value facets
+        (&lt;myProp&gt;&lt;scad:value&gt;…&lt;/scad:value&gt;&lt;/myProp&gt; → Annotation.Value).</documentation>
     </scad:value>
   </properties>
 

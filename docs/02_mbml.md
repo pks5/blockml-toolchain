@@ -156,6 +156,7 @@ core:Annotation
       Document                  ← name = "document"
       Summary                   ← name = "summary"
       Examples                  ← name = "examples"
+      Value                     ← name = "value" (PropertyDefinition value-field facets)
     Attribute                   ← fixed names: id, each, with, …
 ```
 
@@ -164,14 +165,20 @@ core:Annotation
 | Annotation | preferredAlias | Role |
 |---|---|---|
 | `org.blockml.bml.annotation.BmlAnnotation` | `bml` | Language directives (`id`, `each`, `if`, `with`, `xml`, `container`, …) |
-| `com.machineblocks.bml.annotation.ScadAnnotation` | `scad` | SCAD member facets (`scad:value`) and container/prose facets (`scad:document`, `scad:summary`, `scad:examples`) |
+| `com.machineblocks.bml.annotation.ScadAnnotation` | `scad` | Members (`scad:value` catalog), value facets (nested `scad:value`), prose/examples (`scad:document`, `scad:summary`, `scad:examples`) |
 
 ```xml
 xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
 xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
 
 <bricks:Standard bml:id="w1" bml:with="half = ${ size.x / 2 }" … />
+<!-- catalog member on an EnumType (Annotation.Property) -->
 <scad:value>start</scad:value>
+<!-- value-field facet on property holeDiameter (Annotation.Value) -->
+<holeDiameter type="Decimal(unit:Millimeter)">
+  <value>1.6</value>
+  <scad:value>1.6</scad:value>
+</holeDiameter>
 <scad:document>SCAD literal is the lowercase token.</scad:document>
 <scad:examples>
   <example title="SCAD call" language="OpenSCAD"><![CDATA[
@@ -184,10 +191,63 @@ brick([2, 4, 3]);
 
 | Kind | `name` | Match |
 |---|---|---|
-| Attribute / Element (incl. Document, Summary) | fixed local name | `localName == directive.name` |
+| Attribute / Element (incl. Document, Summary, Examples, Value) | fixed local name | `localName == directive.name` |
 | Member (Property / Aggregation / Association / Capability) | `"*"` | any local name under the annotation; kind from the Member subtype |
 
+**Parent context for `*:value`:** direct child of `<properties>` → Member (`Annotation.Property`) when declared; nested under a property element → Value facet (`Annotation.Value`). Never means member `scad:myProp`.
+
+**Namespace interaction rule for value facets:** cross-namespace faceting is valid; same-namespace self-faceting is forbidden.
+
+```xml
+<!-- valid: member namespace "something", value facet namespace "scad" -->
+<something:myProp>
+  <value>Regular Value</value>
+  <scad:value>Facet Value</scad:value>
+</something:myProp>
+
+<!-- invalid: member namespace "scad" faceted again by "scad" -->
+<scad:value>
+  <value>Regular Value</value>
+  <scad:value>Facet Value</scad:value>
+</scad:value>
+```
+
+Rule:
+
+```text
+Inside a property member with namespace N,
+a nested value facet with the same namespace N is not allowed.
+```
+
 The legacy schema URI `http://blockml.org/schema/bml` remains an **XSD/catalog** identifier only — BML-semantic `xmlns:bml` must target `BmlAnnotation`.
+
+### Property value facets
+
+`PropertyDefinition.value` multiplies along the Annotation namespace axis — same pattern as documentation facets:
+
+```text
+myProp.value  ×  namespace ("" | Annotation FQN)
+```
+
+```xml
+xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+
+<properties>
+  <holeDiameter type="Decimal(unit:Millimeter)">
+    <value>1.6</value>                 <!-- canonical BML default -->
+    <scad:value>1.6</scad:value>       <!-- same property; SCAD-context value facet -->
+  </holeDiameter>
+</properties>
+```
+
+| Form | Meaning |
+|---|---|
+| `<value>…</value>` | Canonical default-namespace value of **this** property |
+| `<scad:value>…</scad:value>` nested under the property | Value facet for Annotation `ScadAnnotation` — still **this** property |
+| `<scad:holeDiameter>` | Different member identity — **not** a value facet |
+| `<properties><scad:value/></properties>` | Catalog **member** named `value` (e.g. MBEnum) — **not** a value facet |
+
+BOM: `values[]` as `PropertyValueEntry { namespace, value }`; convenience `value` is the default-namespace entry. Duplicate namespace → `BML_DUPLICATE_PROPERTY_VALUE`; same-namespace self-faceting (`<scad:value>...<scad:value>...`) → invalid. Facets do not satisfy or replace the canonical value for BML instance semantics unless a renderer explicitly prefers an Annotation facet.
 
 ### XML prefix best practice — reserve framework aliases
 

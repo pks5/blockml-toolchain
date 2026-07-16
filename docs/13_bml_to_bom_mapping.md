@@ -481,7 +481,13 @@ Property-specific:
 
 ```text
 type="…"                 → typeFqn (resolved)
-value="…"                → value (LiteralValue or ExpressionValue). Absent → Optional.empty.
+value="…" / <value>…     → values[] entry { namespace: "", value } + convenience value
+  <scad:value>…</scad:value> nested under the property element
+                         → values[] entry { namespace: resolved Annotation FQN, value }
+                         → Annotation.Value facet — same property identity; not member scad:myProp
+                         → not top-level <properties><scad:value/> (that is Annotation.Property member)
+  duplicate namespace     → BML_DUPLICATE_PROPERTY_VALUE
+  absent canonical value → Optional.empty (not null); facets may still exist
 <suggestions>            → suggestions[] (BlockInstance[], document order) — Property only
 ```
 

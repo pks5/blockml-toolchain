@@ -24,14 +24,21 @@
     namespace — for example ui5:width resolves via xmlns:ui5 to the canonical namespace stored in
     BOM namespace; unprefixed elements belong to the default namespace (empty string). The prefix
     itself is never stored. Member identity is (resolvedNamespace, localName). Maps to BOM
-    PropertyDefinition (kind: "property") with typeFqn, value, optional group,
-    and optional constraints (via ConstrainableDefinition) and suggestions. Property type must resolve to a
-    ValueType branch. Scalar member fields (type, value, group) follow
+    PropertyDefinition (kind: "property") with typeFqn, values[] (value-field entries with
+    namespace), optional group, and optional constraints (via ConstrainableDefinition) and
+    suggestions. Convenience path value is the default-namespace entry. Property type must resolve
+    to a ValueType branch. Scalar member fields (type, value, group) follow
     org.blockml.bml.definition.MemberDefinition placement rules — element preferred on definitions,
     attribute preferred on Block instances. Structured suggestions remain a child element. Every
     Property behaves as Optional — it has a value or has no value; there
     is no null. Declaration order among properties is significant for StructType positional mapping
-    and Capability parameter order.</documentation>
+    and Capability parameter order.
+
+    Value-field Annotation facets: nested under this property element, an Annotation-prefixed
+    value element (e.g. scad:value from Annotation.Value) multiplies the value field along the
+    Annotation namespace axis — same property identity, not a member QName and not scad:myProp.
+    Parent context disambiguates from top-level &lt;properties&gt;&lt;scad:value/&gt; members.
+    See 02_mbml.md — Annotations · Property value facets.</documentation>
 
   <references>
     <see file="12_bom_object_model.md" relation="DeepDive">
@@ -60,7 +67,17 @@
       <documentation>Default or computed value on the Block definition, or inline value on Block
         instances. May be a literal or a ${ … } expression. On definitions, element form is
         preferred (&lt;value&gt;…&lt;/value&gt;); on Block instances, attribute form is preferred
-        (value="…" on the property element). Absent value means Optional.empty — not null.</documentation>
+        (value="…" on the property element). Absent value means Optional.empty — not null.
+
+        Multiplicity: the value field may repeat along the Annotation namespace axis — canonical
+        &lt;value&gt; (default namespace) plus optional Annotation Element facets such as
+        &lt;scad:value&gt;…&lt;/scad:value&gt; (Annotation.Value, name="value") nested under this
+        property element. Stored in BOM values[] as PropertyValueEntry { namespace, value };
+        convenience path value is the default-namespace entry. Facets do not change member
+        identity (still this property's name) and are not the same as a top-level member
+        &lt;scad:value/&gt; under &lt;properties&gt;. Cross-namespace faceting is valid; same-namespace
+        self-faceting is forbidden. Duplicate (namespace) → BML_DUPLICATE_PROPERTY_VALUE.
+        See 02_mbml.md — Property value facets.</documentation>
     </value>
     <group type="Text" bml:xml="element|attribute">
       <documentation>Optional editor grouping hint — organizes properties in UI display only; no

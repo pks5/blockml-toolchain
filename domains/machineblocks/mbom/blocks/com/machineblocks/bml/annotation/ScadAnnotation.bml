@@ -20,18 +20,21 @@
   <is>The MachineBlocks OpenSCAD annotation namespace</is>
 
   <documentation>
-    Concrete Annotation for OpenSCAD-oriented member and prose facets in MachineBlocks.
+    Concrete Annotation for OpenSCAD-oriented member and facet directives in MachineBlocks.
     preferredAlias is scad. Authoring documents bind xmlns:scad to this FQN.
 
     Directives:
-    • Property (name="*") — member QNames such as scad:value (SCAD serialization literals)
+    • Property (name="*") — member QNames such as &lt;properties&gt;&lt;scad:value/&gt; (catalog metadata)
+    • Value (name="value") — PropertyDefinition value-field facets nested under a property
+      (&lt;myProp&gt;&lt;scad:value&gt;…&lt;/scad:value&gt;&lt;/myProp&gt;) — not a member scad:myProp
     • Document (name="document") — scad:document prose facets
     • Summary (name="summary") — scad:summary prose facets
     • Examples (name="examples") — scad:examples containers (OpenSCAD usage samples)
 
-    Replaces the former orphan namespace id com.machineblocks.bml.scad. Orthogonal to Definition —
-    does not alter MBEnum or StructuralDefinition shape; it only formalizes the annotation
-    namespace those QNames resolve through.
+    Parent context disambiguates &lt;scad:value&gt;: under &lt;properties&gt; → Property member;
+    nested under a property element → Value facet. Orthogonal to Definition — does not alter
+    MBEnum or StructuralDefinition shape; it formalizes the annotation namespace those QNames
+    resolve through.
   </documentation>
 
   <references>
@@ -39,10 +42,13 @@
       Annotation branch — Package vs Annotation xmlns rule.
     </see>
     <see type="core:Annotation.Property" relation="SeeAlso">
-      Wildcard property member directive used for scad:value and similar.
+      Wildcard property member directive used for catalog scad:value on enum members.
+    </see>
+    <see type="core:Annotation.Value" relation="SeeAlso">
+      Value-field facet directive for nested scad:value under a property declaration.
     </see>
     <see file="02_mbml.md" relation="AuthoringGuide">
-      Documentation facets and annotation namespaces.
+      Annotations · value facets · documentation facets.
     </see>
   </references>
 
@@ -56,6 +62,7 @@
   <aggregations>
     <directives override="true">
       <mbann:ScadAnnotation.Property />
+      <mbann:ScadAnnotation.Value />
       <mbann:ScadAnnotation.Document />
       <mbann:ScadAnnotation.Summary />
       <mbann:ScadAnnotation.Examples />
@@ -69,8 +76,20 @@
       <is>An OpenSCAD property member annotation directive</is>
 
       <documentation>Property-shaped member directive (name="*") under scad. Authoring QNames such
-        as scad:value are property members in this annotation namespace — catalog metadata for SCAD
-        render, not Definition meta-model types.</documentation>
+        as &lt;properties&gt;&lt;scad:value/&gt;&lt;/properties&gt; are property members in this
+        annotation namespace — catalog metadata for SCAD render (e.g. MBEnum), not Definition
+        meta-model types and not nested value facets.</documentation>
+    </block>
+
+    <block>
+      <name>Value</name>
+      <baseType>core:Annotation.Value</baseType>
+      <is>An OpenSCAD property value-field facet directive</is>
+
+      <documentation>Element directive for nested scad:value under a property declaration —
+        multiplies that property's value field along the scad Annotation axis. Same property
+        identity (e.g. myProp); not member scad:myProp and not top-level catalog scad:value.
+        Example: &lt;holeDiameter&gt;&lt;value&gt;1.6&lt;/value&gt;&lt;scad:value&gt;1.6&lt;/scad:value&gt;&lt;/holeDiameter&gt;.</documentation>
     </block>
 
     <block>

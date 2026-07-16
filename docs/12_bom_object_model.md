@@ -599,11 +599,24 @@ interface MemberDefinitionBase {
 interface PropertyDefinition extends MemberDefinitionBase {
   kind: "property"
   typeFqn: string
-  /** Optional — absent means no value (not null) */
+  /**
+   * Value-field entries — multiplicity along Annotation namespace ("" = canonical).
+   * Nested <scad:value> under this property → facet entry; not a member QName.
+   * Duplicate namespace → BML_DUPLICATE_PROPERTY_VALUE.
+   */
+  values?: PropertyValueEntry[]
+  /** Convenience — default-namespace entry from values[] (absent = Optional.empty, not null) */
   value?: MemberValue
   group?: string
   /** Block instances of the same type as typeFqn — metadata only (Property-only) */
   suggestions?: BlockInstance[]
+}
+
+/** One PropertyDefinition value-field entry (canonical or Annotation facet) */
+interface PropertyValueEntry {
+  /** "" = canonical <value>; else resolved Annotation FQN (e.g. ScadAnnotation) */
+  namespace: string
+  value: MemberValue
 }
 
 interface AggregationDefinition extends MemberDefinitionBase {
@@ -1474,6 +1487,7 @@ BML_MISSING_ISNOT             — confusion risk but <isnot> omitted (warning V1
 BML_MISSING_SUMMARY           — canonical documentation too long but default-namespace <summary> omitted (warning V1)
 BML_DUPLICATE_DOCUMENTATION   — two <documentation> entries share the same (namespace, languageFqn)
 BML_DUPLICATE_SUMMARY         — two <summary> entries share the same (namespace, languageFqn)
+BML_DUPLICATE_PROPERTY_VALUE  — two PropertyDefinition value-field entries share the same namespace
 BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version
 BML_CHANGELOG_VERSION_ORDER   — <changelog> entries not ordered oldest-first (warning V1)
 BML_EXAMPLE_MISSING_TITLE     — <example> lacks required title attribute
