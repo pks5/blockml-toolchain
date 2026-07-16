@@ -157,7 +157,7 @@
       <scad:value>#EAC645</scad:value>
     </baseColor>
 
-    <baseCrop type="mbtype:FaceMapXYZ(Decimal(mbunit:GridUnitXY))">
+    <baseCrop type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Hard cut or extension per side (0-3 only, no Z-axis crop).
         Positive = cut geometry, negative = extend geometry.
         The cut is applied brutally — without regard to grid compatibility,
@@ -231,7 +231,7 @@
       <scad:value>-0.1</scad:value>
     </baseWallThicknessAdjustment>
 
-    <bevel type="mbtype:PerSide4(AxisXY(Decimal(mbunit:GridUnitXY)))">
+    <bevel type="mbtype:LocalCorner(mbtype:AxisXY(Decimal(mbunit:GridUnitXY)))">
       <documentation>Creates wedges by shifting Z-axis corners (0-3) in XY space.
         Each corner gets an [x,y] displacement value.
         The resulting shape is intersected with the bounding box.
@@ -240,8 +240,22 @@
       <changelog>
         <change version="3.0.0">Can now be combined with slope.</change>
       </changelog>
-      <value>[[0,0], [0,0], [0,0], [0,0]]</value>
-      <scad:value>[[0,0], [0,0], [0,0], [0,0]]</scad:value>
+      <value>
+        { 
+          sw: {x: 0, y: 0}, 
+          nw: {x: 0, y: 0}, 
+          ne: {x: 0, y: 0}, 
+          se: {x: 0, y: 0} 
+        }
+      </value>
+      <scad:value>
+        [
+          [0,0], 
+          [0,0], 
+          [0,0], 
+          [0,0]
+        ]
+      </scad:value>
     </bevel>
 
     <connectorDepth type="Decimal(mbunit:MBU)">

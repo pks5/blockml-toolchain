@@ -18,7 +18,8 @@
 
   <documentation>Struct ValueType for a sparse face map on the four lateral faces
     { xMinus, xPlus, yMinus, yPlus }. Generic T is the per-face value type — e.g.
-    FaceMapXY(Decimal(unit:Millimeter)). FaceMapXYZ extends this type and adds zMinus / zPlus.
+    FaceMapXY(Decimal(unit:Millimeter)). FaceMapXYZ extends this type and adds zMinus / zPlus
+    (generic Z, defaultType T).
     Named FaceMapXY (not FaceMap2D) — MachineBlocks face/axis types use XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
@@ -45,7 +46,7 @@
       Struct ValueType branch — named face fields.
     </see>
     <see type="type:FaceMapXYZ" relation="SeeAlso">
-      Adds Z faces — extends this type.
+      Adds Z faces (generic Z, defaultType T) — extends this type.
     </see>
     <see type="type:Face" relation="SeeAlso">
       Face enum — XMinus / XPlus / YMinus / YPlus / ZMinus / ZPlus.

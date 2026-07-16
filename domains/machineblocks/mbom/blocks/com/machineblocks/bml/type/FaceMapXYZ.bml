@@ -16,22 +16,25 @@
   <is>A face-keyed value map on X, Y, and Z</is>
 
   <documentation>Struct ValueType for a sparse face map on all six faces
-    { xMinus, xPlus, yMinus, yPlus, zMinus, zPlus }. Extends FaceMapXY(T) and adds zMinus / zPlus.
-    Inherits the four lateral face properties. Bind T explicitly — e.g.
-    FaceMapXYZ(Decimal(unit:Millimeter)) or FaceMapXYZ(Decimal(mbunit:GridUnitXY)).
-    Preferred type for NativeBlock face maps (baseAdjustment, sizeMod, …). Named FaceMapXYZ
-    (not FaceMap3D) — MachineBlocks face/axis types use XY / XYZ, not 2D / 3D.</documentation>
+    { xMinus, xPlus, yMinus, yPlus, zMinus, zPlus }. Extends FaceMapXY(T) and adds zMinus / zPlus
+    typed as Z. Z defaults to T (declaration-order sibling default) so FaceMapXYZ(T) keeps one
+    binding; supply both when Z faces differ — e.g.
+    FaceMapXYZ(Decimal(mbunit:GridUnitXY), Decimal(mbunit:GridUnitZ)).
+    Preferred type for NativeBlock face maps with Z (baseAdjustment, sizeMod, …). Lateral-only
+    maps use FaceMapXY. Named FaceMapXYZ (not FaceMap3D) — MachineBlocks face/axis types use
+    XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
     <T baseType="core:ValueType"/>
+    <Z baseType="core:ValueType" defaultType="T"/>
   </genericTypes>
 
   <properties>
-    <zMinus type="T">
-      <documentation>Value on the Z- face (negative Z).</documentation>
+    <zMinus type="Z">
+      <documentation>Value on the Z- face (negative Z) — type Z (defaults to T).</documentation>
     </zMinus>
-    <zPlus type="T">
-      <documentation>Value on the Z+ face (positive Z).</documentation>
+    <zPlus type="Z">
+      <documentation>Value on the Z+ face (positive Z) — type Z (defaults to T).</documentation>
     </zPlus>
   </properties>
 
@@ -41,6 +44,9 @@
     </see>
     <see type="type:Face" relation="SeeAlso">
       Face enum — six axis-directed faces.
+    </see>
+    <see type="type:AxisXYZ" relation="SeeAlso">
+      Parallel pattern — AxisXYZ(N, Z) with Z defaulting to N.
     </see>
   </references>
 

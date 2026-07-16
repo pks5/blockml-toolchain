@@ -1,0 +1,55 @@
+<!--
+  MachineBlocks — LocalCorner struct type
+
+  FQN: com.machineblocks.bml.type.LocalCorner
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="com.machineblocks.bml.type">
+  <name>LocalCorner</name>
+  <type>type:LocalCorner</type>
+  <baseType>btype:StructType</baseType>
+  <is>A value map on the four local corners</is>
+
+  <documentation>Struct ValueType for a corner-keyed map on the local horizontal plane
+    { sw, nw, ne, se }. Generic T is the per-corner value type — any ValueType; no defaultType —
+    bind T explicitly, e.g. LocalCorner(Boolean) or LocalCorner(Decimal(unit:Millimeter)).
+    Short keys map to south-west / north-west / north-east / south-east in the local brick frame.</documentation>
+
+  <genericTypes>
+    <T baseType="core:ValueType"/>
+  </genericTypes>
+
+  <properties>
+    <sw type="T">
+      <documentation>Value at the south-west local corner (sw).</documentation>
+    </sw>
+    <nw type="T">
+      <documentation>Value at the north-west local corner (nw).</documentation>
+    </nw>
+    <ne type="T">
+      <documentation>Value at the north-east local corner (ne).</documentation>
+    </ne>
+    <se type="T">
+      <documentation>Value at the south-east local corner (se).</documentation>
+    </se>
+  </properties>
+
+  <references>
+    <see type="btype:StructType" relation="Extends">
+      Struct ValueType branch — named corner fields.
+    </see>
+    <see type="type:FaceMapXY" relation="SeeAlso">
+      Face-keyed lateral map — parallel sparse map pattern.
+    </see>
+    <see type="type:Direction" relation="SeeAlso">
+      Cardinal directions abbreviated in corner keys.
+    </see>
+  </references>
+
+</block>
