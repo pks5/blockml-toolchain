@@ -1,0 +1,79 @@
+<!--
+  MachineBlocks — SelectiveGrid struct type
+
+  FQN: com.machineblocks.bml.type.SelectiveGrid
+  Sub-Block: com.machineblocks.bml.type.SelectiveGrid.Selector
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>SelectiveGrid</name>
+  <type>mbtype:SelectiveGrid</type>
+  <baseType>type:StructType</baseType>
+  <is>A grid of values with rectangular selectors</is>
+
+  <documentation>Struct ValueType for a plate-grid of cell values. baseValue is the default for
+    every cell; selectors overlays rectangular ranges (from/to in GridUnitXY) with an override
+    value. Generic T is the cell value type — e.g. SelectiveGrid(Boolean) or
+    SelectiveGrid(Boolean | mbtype:HoleType). Sub-Block Selector shares T from this Block
+    (generics are root-only — BML_GENERIC_NOT_ON_ROOT).</documentation>
+
+  <genericTypes>
+    <T baseType="core:ValueType"/>
+  </genericTypes>
+
+  <properties>
+    <baseValue type="T">
+      <documentation>Default value for all grid cells not covered by a selector.</documentation>
+    </baseValue>
+    <selectors type="mbtype:SelectiveGrid.Selector[]">
+      <documentation>Rectangular range overrides. Later selectors win on overlap (authoring
+        order). Each Selector carries from, to, and value (T).</documentation>
+    </selectors>
+  </properties>
+
+  <subBlocks>
+    <block>
+
+      <name>Selector</name>
+      <baseType>type:StructType</baseType>
+      <is>A rectangular grid range override</is>
+
+      <documentation>Inclusive axis-aligned range on the plate grid. from/to are AxisXY in
+        Integer(GridUnitXY). value uses SelectiveGrid's generic T.
+        FQN: com.machineblocks.bml.type.SelectiveGrid.Selector.</documentation>
+
+      <properties>
+        <from type="mbtype:AxisXY(Integer(mbunit:GridUnitXY))">
+          <documentation>Inclusive start corner of the selection (x, y) in GridUnitXY.</documentation>
+        </from>
+        <to type="mbtype:AxisXY(Integer(mbunit:GridUnitXY))">
+          <documentation>Inclusive end corner of the selection (x, y) in GridUnitXY.</documentation>
+        </to>
+        <value type="T">
+          <documentation>Override value for cells in [from, to] — same T as SelectiveGrid.</documentation>
+        </value>
+      </properties>
+    </block>
+  </subBlocks>
+
+  <references>
+    <see type="type:StructType" relation="Extends">
+      Struct ValueType branch — baseValue + selectors.
+    </see>
+    <see type="mbtype:AxisXY" relation="SeeAlso">
+      from / to range corners.
+    </see>
+    <see type="mbunit:GridUnitXY" relation="SeeAlso">
+      Plate-grid unit on from / to Integer components.
+    </see>
+  </references>
+
+</block>

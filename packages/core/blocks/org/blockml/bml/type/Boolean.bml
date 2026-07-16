@@ -1,3 +1,8 @@
+<!--
+  BlockML Core — boolean primitive
+
+  FQN: org.blockml.bml.type.Boolean
+-->
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,5 +21,33 @@
 
     Authoring accepts case variants of the literals: true / True / TRUE and false / False / FALSE.
     Preferred form is lowercase true and false. The BOM always stores the canonical boolean
-    (lowercase true or false) — never the authored casing.</documentation>
+    (lowercase true or false) — never the authored casing.
+
+    Sub-Blocks True and False are Constant(Boolean) singletons — use type:Boolean.True /
+    type:Boolean.False (or Boolean.True / Boolean.False) as named alternatives to
+    Constant(Boolean){true} / Constant(Boolean){false} in type expressions.</documentation>
+
+  <subBlocks>
+    <block>
+
+      <name>True</name>
+      <baseType>type:Constant(Boolean){true}</baseType>
+      <is>The boolean constant true</is>
+
+      <documentation>Singleton Constant for the literal true.
+        FQN: org.blockml.bml.type.Boolean.True.
+        Equivalent to Constant(Boolean){true} / Constant(Boolean){value: true}.</documentation>
+    </block>
+    <block>
+
+      <name>False</name>
+      <baseType>type:Constant(Boolean){false}</baseType>
+      <is>The boolean constant false</is>
+
+      <documentation>Singleton Constant for the literal false.
+        FQN: org.blockml.bml.type.Boolean.False.
+        Equivalent to Constant(Boolean){false} / Constant(Boolean){value: false}.</documentation>
+    </block>
+  </subBlocks>
+
 </block>

@@ -114,8 +114,8 @@
           Default changed from -0.1 to [] (empty).
         </change>
       </changelog>
-      <value></value>
-      <scad:value></scad:value>
+      <value>{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0}</value>
+      <scad:value>[0, 0, 0, 0, 0, 0]</scad:value>
     </baseAdjustment>
 
     <baseClampHeight type="Decimal(mbunit:MBU)">
@@ -170,8 +170,8 @@
         Same functionality as crop in V2, renamed only.
       </documentation>
       <since>3.0.0</since>
-      <value>0</value>
-      <scad:value>0</scad:value>
+      <value>{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0}</value>
+      <scad:value>[0, 0, 0, 0]</scad:value>
     </baseCrop>
 
     <baseCutoutMaxDepth type="Decimal(mbunit:MBU)">
@@ -298,7 +298,7 @@
       <scad:value>2.25</scad:value>
     </connectorWidth>
 
-    <connectors type="Constant(Boolean){false} | mbtype:Connector[]">
+    <connectors type="Boolean.False | mbtype:Connector[]">
       <documentation>Side connection system using triangular wedges. Alternative to tongue/groove.
         Enables side-by-side (0°) and angled (90°) connections.
         Padding skips connectors at start/end — important when connecting
@@ -314,7 +314,7 @@
       <scad:value>false</scad:value>
     </connectors>
 
-    <cutouts type="Constant(Boolean){false} | mbtype:Cutout[]">
+    <cutouts type="Boolean.False | mbtype:Cutout[]">
       <documentation>Defines one or more void volumes to subtract from the block body.
         Each entry in the array is a settings array describing one cutout.
         The subtraction is applied brutally — it ignores walls, recess,
@@ -608,7 +608,7 @@
       <scad:value>[0, 0, 0]</scad:value>
     </offset>
 
-    <pcb type="Constant(Boolean){false} | mbtype:PcbMountingType">
+    <pcb type="Boolean.False | mbtype:PcbMountingType">
       <documentation>PCB mounting mode. Combines the former pcb (bool) and pcbMountingType into one.
         false or "none": no PCB mounting features.
         "clips": frame for clipping in the PCB.
@@ -1169,7 +1169,7 @@
       <scad:value>[0, 0, 0, 0, 0, 0]</scad:value>
     </sizeMod>
 
-    <slope type="Constant(Boolean){false} | mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
+    <slope type="Boolean.False | mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Defines slopes per side (0-3).
         Positive values: slope on top surface (z+), starting at slopeBaseHeightBottom
         and going the specified number of plates toward the center upward.

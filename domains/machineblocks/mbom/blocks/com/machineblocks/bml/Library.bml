@@ -84,6 +84,7 @@
       <mbtype:QualityPreset />
       <mbtype:RotationXY />
       <mbtype:RotationXYZ />
+      <mbtype:SelectiveGrid />
       <mbtype:SizeXY />
       <mbtype:SizeXYZ />
       <mbunit:MBU />
