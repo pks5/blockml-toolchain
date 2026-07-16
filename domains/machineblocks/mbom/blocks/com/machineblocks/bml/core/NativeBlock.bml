@@ -925,7 +925,7 @@
       <scad:value>true</scad:value>
     </render>
 
-    <rotation type="mbtype:AxisXYZ(FloatDeg)">
+    <rotation type="mbtype:RotationXYZ">
       <documentation>Free geometric rotation applied after align. Not grid-safe —
         can break alignment and connectivity. The pivot is the relative
         zero point which varies depending on align. Children are rotated

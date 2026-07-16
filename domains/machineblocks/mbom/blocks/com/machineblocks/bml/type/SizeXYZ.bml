@@ -9,7 +9,7 @@
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
   xmlns:btype="org.blockml.bml.type"
-  xmlns:core="org.blockml.bml.core"
+  xmlns:mbunit="com.machineblocks.bml.unit"
   xmlns:type="com.machineblocks.bml.type">
   <name>SizeXYZ</name>
   <type>type:SizeXYZ</type>
@@ -17,12 +17,13 @@
   <is>A size along X, Y, and Z</is>
 
   <documentation>Semantic Struct ValueType for a size triple { x, y, z }. Extends AxisXYZ(N) —
-    inherits x, y, and z; adds size semantics (extent / brick footprint). Bare SizeXYZ is Decimal
-    (dimensionless). Supply a unit via N — e.g. SizeXYZ(Decimal(mbunit:GridUnit)). Named SizeXYZ
-    (not Size3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
+    inherits x, y, and z; adds size semantics (extent / brick footprint). N is constrained to
+    Number (AxisXYZ remains ValueType-universal). Bare SizeXYZ defaults N to
+    Decimal(mbunit:GridUnit). Override via N — e.g. SizeXYZ(Decimal(unit:Millimeter)). Named
+    SizeXYZ (not Size3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
-    <N baseType="core:ValueType" defaultType="btype:Decimal"/>
+    <N baseType="btype:Number" defaultType="btype:Decimal(mbunit:GridUnit)"/>
   </genericTypes>
 
   <references>
