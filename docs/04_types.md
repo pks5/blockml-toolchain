@@ -175,11 +175,11 @@ SCAD:  "west"
 ```text
 com.machineblocks.bml.type.Face
 
-Values:  x- | x+ | y- | y+ | z- | z+
+Values:  XNeg | XPos | YNeg | YPos | ZNeg | ZPos
 
-MBML:  face="x+"
-MBOM:  Face.XPlus
-SCAD:  "x+"
+MBML:  face="XPos"   (or scad literal via catalog)
+MBOM:  Face.XPos
+SCAD:  "x+"           (from catalog property scad:value)
 ```
 
 ## Axis
@@ -385,6 +385,24 @@ SCAD serialization:
 ---
 
 # 6. Per-Face Types
+
+## FaceMapXY\<T\> / FaceMapXYZ\<T, Z\>
+
+Canonical BML/BOM face keys (signed axis — not min/max ranges):
+
+```text
+com.machineblocks.bml.type.FaceMapXY
+  { xNeg, xPos, yNeg, yPos }           — T on each face
+
+com.machineblocks.bml.type.FaceMapXYZ
+  { xNeg, xPos, yNeg, yPos, zNeg, zPos }
+  — lateral T; zNeg/zPos use Z (defaultType T)
+
+MBOM:  { xNeg: T, xPos: T, ... }       — authored property names
+SCAD:  "x-" / "x+" / …                 — via Face scad:value / renderer map
+```
+
+Legacy PerSide4 / FaceVector6 / FaceMap names below remain for older docs; prefer FaceMapXY / FaceMapXYZ.
 
 ## PerSide4\<T\>
 

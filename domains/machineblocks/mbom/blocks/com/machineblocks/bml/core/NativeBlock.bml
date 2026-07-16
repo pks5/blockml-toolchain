@@ -1164,7 +1164,7 @@
         calibration and gap closing in composite blocks.
       </documentation>
       <since>3.0.0</since>
-      <value>{xMinus: 0, xPlus: 0, yMinus: 0, yPlus: 0, zMinus: 0, zPlus: 0}</value>
+      <value>{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0}</value>
       <scad:value>[0, 0, 0, 0, 0, 0]</scad:value>
     </sizeMod>
 

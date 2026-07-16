@@ -17,28 +17,28 @@
   <is>A face-keyed value map on X and Y</is>
 
   <documentation>Struct ValueType for a sparse face map on the four lateral faces
-    { xMinus, xPlus, yMinus, yPlus }. Generic T is the per-face value type — e.g.
-    FaceMapXY(Decimal(unit:Millimeter)). FaceMapXYZ extends this type and adds zMinus / zPlus
-    (generic Z, defaultType T).
-    Named FaceMapXY (not FaceMap2D) — MachineBlocks face/axis types use XY / XYZ, not 2D / 3D.</documentation>
+    { xNeg, xPos, yNeg, yPos }. Generic T is the per-face value type — e.g.
+    FaceMapXY(Decimal(unit:Millimeter)). FaceMapXYZ extends this type and adds zNeg / zPos
+    (generic Z, defaultType T). Keys are signed-axis faces (not min/max ranges); SCAD literals
+    remain x- / x+ via Face / scad:value. Named FaceMapXY (not FaceMap2D).</documentation>
 
   <genericTypes>
     <T baseType="core:ValueType"/>
   </genericTypes>
 
   <properties>
-    <xMinus type="T">
+    <xNeg type="T">
       <documentation>Value on the X- face (negative X).</documentation>
-    </xMinus>
-    <xPlus type="T">
+    </xNeg>
+    <xPos type="T">
       <documentation>Value on the X+ face (positive X).</documentation>
-    </xPlus>
-    <yMinus type="T">
+    </xPos>
+    <yNeg type="T">
       <documentation>Value on the Y- face (negative Y).</documentation>
-    </yMinus>
-    <yPlus type="T">
+    </yNeg>
+    <yPos type="T">
       <documentation>Value on the Y+ face (positive Y).</documentation>
-    </yPlus>
+    </yPos>
   </properties>
 
   <references>
@@ -49,7 +49,7 @@
       Adds Z faces (generic Z, defaultType T) — extends this type.
     </see>
     <see type="type:Face" relation="SeeAlso">
-      Face enum — XMinus / XPlus / YMinus / YPlus / ZMinus / ZPlus.
+      Face enum — XNeg / XPos / YNeg / YPos / ZNeg / ZPos.
     </see>
   </references>
 

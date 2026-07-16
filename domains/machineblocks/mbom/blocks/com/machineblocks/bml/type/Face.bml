@@ -23,12 +23,12 @@
   <aggregations>
     <values>
       <composition>
-        <Face bml:id="XMinus" scad:value="x-" />
-        <Face bml:id="XPlus" scad:value="x+" />
-        <Face bml:id="YMinus" scad:value="y-" />
-        <Face bml:id="YPlus" scad:value="y+" />
-        <Face bml:id="ZMinus" scad:value="z-" />
-        <Face bml:id="ZPlus" scad:value="z+" />
+        <Face bml:id="XNeg" scad:value="x-" />
+        <Face bml:id="XPos" scad:value="x+" />
+        <Face bml:id="YNeg" scad:value="y-" />
+        <Face bml:id="YPos" scad:value="y+" />
+        <Face bml:id="ZNeg" scad:value="z-" />
+        <Face bml:id="ZPos" scad:value="z+" />
       </composition>
     </values>
   </aggregations>
