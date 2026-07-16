@@ -60,6 +60,7 @@
       <type:Align />
       <type:Auto />
       <type:BaseCutout />
+      <type:MBEnum />
       <type:Size3d />
       <unit:MBU />
       <unit:GridUnit />

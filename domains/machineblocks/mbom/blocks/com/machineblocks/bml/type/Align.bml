@@ -9,28 +9,22 @@
   xmlns:bml="http://blockml.org/schema/bml"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       "
-  xmlns:btype="org.blockml.bml.type"
   xmlns:type="com.machineblocks.bml.type">
   <name>Align</name>
   <type>type:Align</type>
-  <baseType>btype:EnumType</baseType>
+  <baseType>type:MBEnum(Text)</baseType>
   <is>An alignment along an axis</is>
 
   <documentation>Enum ValueType for start / center / end alignment on MachineBlocks bricks.
-    Declares an optional value catalog property for SCAD serialization literals — BOM property
-    values store only the member id (Start / Center / End) plus this EnumType.</documentation>
-  <properties>
-    <value type="Text">
-      <documentation>Optional SCAD serialization literal for this member (MachineBlocks convention).</documentation>
-    </value>
-  </properties>
+    Extends MBEnum(Text). BOM property values store only the member id (Start / Center / End)
+    plus this EnumType; scadValue holds the SCAD serialization literal.</documentation>
 
   <aggregations>
     <values>
       <composition>
-        <Align bml:id="Start" value="start" />
-        <Align bml:id="Center" value="center" />
-        <Align bml:id="End" value="end" />
+        <Align bml:id="Start" scadValue="start" />
+        <Align bml:id="Center" scadValue="center" />
+        <Align bml:id="End" scadValue="end" />
       </composition>
     </values>
   </aggregations>

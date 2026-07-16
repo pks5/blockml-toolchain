@@ -1,0 +1,51 @@
+<!--
+  MachineBlocks — abstract enum base with SCAD catalog property
+
+  FQN: com.machineblocks.bml.type.MBEnum
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="com.machineblocks.bml.type">
+  <name>MBEnum</name>
+  <type>type:MBEnum</type>
+  <baseType>btype:EnumType</baseType>
+  <is>A MachineBlocks enum with a SCAD serialization literal</is>
+
+  <documentation>Abstract base for MachineBlocks EnumTypes. Extends org.blockml.bml.type.EnumType
+    and declares catalog property scadValue : T — the SCAD serialization literal for each enum
+    member. Concrete enums bind T (typically Text) and fill scadValue on values composition
+    members. BOM property values still store only member id + EnumType; scadValue is catalog
+    metadata looked up at render time.</documentation>
+
+  <abstract>true</abstract>
+
+  <genericTypes>
+    <T baseType="core:ValueType"/>
+  </genericTypes>
+
+  <properties>
+    <scadValue abstract="true" type="T">
+      <documentation>SCAD serialization literal for this enum member. Abstract on MBEnum —
+        concrete enums bind T and set scadValue on each values composition entry. Not part of
+        the BOM property value (id + typeFqn only).</documentation>
+    </scadValue>
+  </properties>
+
+  <references>
+    <see type="btype:EnumType" relation="Extends">
+      Framework EnumType branch — closed member set via values aggregation.
+    </see>
+    <see type="type:Align" relation="SeeAlso">
+      Concrete MBEnum(Text) — alignment literals.
+    </see>
+    <see type="type:BaseCutout" relation="SeeAlso">
+      Concrete MBEnum(Text) — base cutout literals.
+    </see>
+  </references>
+
+</block>
