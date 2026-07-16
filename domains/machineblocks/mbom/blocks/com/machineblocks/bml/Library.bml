@@ -79,6 +79,7 @@
       <mbtype:None />
       <mbtype:OffsetXY />
       <mbtype:OffsetXYZ />
+      <mbtype:PillarGapAutoConfig />
       <mbtype:QualityPreset />
       <mbtype:RotationXY />
       <mbtype:RotationXYZ />

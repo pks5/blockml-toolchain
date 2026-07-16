@@ -598,7 +598,7 @@
       <scad:value></scad:value>
     </id>
 
-    <offset type="mbtype:AxisXYZ(Decimal(mbunit:GridUnitXY))">
+    <offset type="mbtype:OffsetXYZ">
       <documentation>Final displacement of the brick. Applied last in the transformation
         chain. Same unit as size (grid units / multiples of a 1x1 plate).
         Origin depends on whether the brick is global or a child.
@@ -630,7 +630,7 @@
       <scad:value>[20, 30, 3]</scad:value>
     </pcbDimensions>
 
-    <pcbOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
+    <pcbOffset type="mbtype:OffsetXY">
       <documentation>Offset of the PCB from the center of the brick.</documentation>
       <value>[0, 0]</value>
       <scad:value>[0, 0]</scad:value>
@@ -666,7 +666,7 @@
       <scad:value>[]</scad:value>
     </pcbSockets>
 
-    <pillarGapAutoConfig type="mbtype:AxisXY(Integer)">
+    <pillarGapAutoConfig type="mbtype:PillarGapAutoConfig">
       <documentation>Configures how pillars are placed when pillars = "auto". Used to
         avoid a full pillar grid on large plates, which would otherwise sit
         too tightly on other bricks — only the corners and a middle cross
@@ -682,10 +682,10 @@
         center in both directions, forming a cross of pillars in the middle.
 
         Combines the V2 parameters pillarGapCornerLength and pillarGapMiddle
-        into a single array.
+        into a single struct.
       </documentation>
       <since>3.0.0</since>
-      <value>[2, 10]</value>
+      <value>{ cornerLength: 2, middleWidth: 10 }</value>
       <scad:value>[2, 10]</scad:value>
     </pillarGapAutoConfig>
 
