@@ -980,7 +980,7 @@ Within the Block being defined, the Block's own FQN serves as the definition roo
 com.foo.Bar.properties.width        ≡  (current definition).properties.width
 ```
 
-`org.blockml.bml.definition.BlockDefinition` carries generic meta-type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. It declares the shared block definition shape (identity, member containers, `language`). `SubBlockDefinition` adds `definition` (default `SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy). Document roots use `org.blockml.bml.definition.RootBlockDefinition` (adds `embeddedBlocks`). Virtual files in that aggregation use `org.blockml.bml.definition.EmbeddedBlockDefinition` (no nested embeds).
+`org.blockml.bml.definition.BlockDefinition` carries generic meta-type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. It declares the shared block definition shape (identity, abstract `definition`, `subBlocks`, member containers, `language`). `SubBlockDefinition`, `RootBlockDefinition`, and `EmbeddedBlockDefinition` are sibling specializations that each override `definition` with a role-specific default. Document roots use `RootBlockDefinition` (adds `embeddedBlocks`). Virtual files in that aggregation use `EmbeddedBlockDefinition` (no nested embeds). Nested types use `SubBlockDefinition`.
 
 #### BOM internal representation
 

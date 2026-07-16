@@ -288,7 +288,8 @@ org.blockml.bml.core.Block
       org.blockml.bml.definition.ConstrainableDefinition  ← abstract; <constraints> container
         org.blockml.bml.definition.BlockDefinition
           org.blockml.bml.definition.SubBlockDefinition
-            org.blockml.bml.definition.RootBlockDefinition
+          org.blockml.bml.definition.EmbeddedBlockDefinition
+          org.blockml.bml.definition.RootBlockDefinition
         org.blockml.bml.definition.MemberDefinition
           org.blockml.bml.definition.PropertyDefinition
           org.blockml.bml.definition.AggregationDefinition
@@ -325,11 +326,9 @@ in child blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 
-`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`name`, `type`, `baseType`, `version`), designation (`is`, `isnot`), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
+`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`name`, `type`, `baseType`, `version`), designation (`is`, `isnot`), abstract `definition` (meta-model role selector), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), `subBlocks` (recursive Sub-Block hierarchy), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
 
-`org.blockml.bml.definition.SubBlockDefinition` adds `definition` (Definition meta-model type FQN; default `org.blockml.bml.definition.SubBlockDefinition` on Sub-Blocks) and `subBlocks` (recursive Sub-Block hierarchy).
-
-`org.blockml.bml.definition.RootBlockDefinition` overrides `definition` (default `RootBlockDefinition` on the document root) and declares `embeddedBlocks` (`EmbeddedBlockDefinition[]` — virtual files, root-only). `org.blockml.bml.definition.EmbeddedBlockDefinition` overrides `definition` for those entries (no nested embeds). `subBlocks` is inherited from `SubBlockDefinition` and may nest to arbitrary depth on roots and embeds.
+`org.blockml.bml.definition.SubBlockDefinition`, `RootBlockDefinition`, and `EmbeddedBlockDefinition` are **sibling** specializations of `BlockDefinition` that each override `definition` with a tighter TypeReference and default (`SubBlockDefinition` / `RootBlockDefinition` / `EmbeddedBlockDefinition`). `RootBlockDefinition` additionally declares `embeddedBlocks` (`EmbeddedBlockDefinition[]` — virtual files, root-only). `EmbeddedBlockDefinition` has no nested embeds. `subBlocks` is inherited from `BlockDefinition` and may nest to arbitrary depth on roots, embeds, and Sub-Blocks.
 
 `org.blockml.bml.definition.StructuralDefinition.Reference` — inline Sub-Block; **documentation** cross-reference connecting **types to types** or **types to instances** (also definition members, files, URLs). Not an instance-to-instance model link — those are Associations. See `02_mbml.md` — Associations vs References.
 
@@ -434,7 +433,7 @@ com.foo.internal.Physics.properties.width →  PropertyDefinition on embedded bl
 com.foo.Bar.contracts               →  contract references
 ```
 
-`org.blockml.bml.definition.BlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter. `SubBlockDefinition` adds `definition` (default on Sub-Blocks) and `subBlocks`. Document roots use `RootBlockDefinition` (adds `embeddedBlocks`). Virtual files use `EmbeddedBlockDefinition`.
+`org.blockml.bml.definition.BlockDefinition` is itself a Block with generic type parameter `B extends org.blockml.bml.core.Block` — conceptually `BlockDefinition<com.foo.Bar>` when describing `com.foo.Bar`. The described Block's own `<genericTypes>` aggregation (e.g. `T` on `Box<T>`) is separate from this meta-type parameter. `BlockDefinition` declares abstract `definition` and `subBlocks`. `SubBlockDefinition`, `RootBlockDefinition`, and `EmbeddedBlockDefinition` are sibling specializations that each override `definition`. Document roots use `RootBlockDefinition` (adds `embeddedBlocks`). Virtual files use `EmbeddedBlockDefinition`.
 
 No special definition-reference constructs (`bml:Def`, flat `com.foo.Bar.memberName`) are used. `bml:Self` remains available for **type references** only (`type="bml:Self"`), not for definition navigation.
 

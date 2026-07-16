@@ -16,12 +16,12 @@
 
   <name>EmbeddedBlockDefinition</name>
   <type>def:EmbeddedBlockDefinition</type>
-  <baseType>def:SubBlockDefinition</baseType>
+  <baseType>def:BlockDefinition</baseType>
   <is>The shape of an embedded Block document</is>
 
   <documentation>Meta-model type for embedded Block documents — virtual .bml files inlined under
     the document root's &lt;embeddedBlocks&gt; aggregation. Extends
-    org.blockml.bml.definition.SubBlockDefinition (subBlocks, identity, members) and overrides
+    org.blockml.bml.definition.BlockDefinition (subBlocks, identity, members) and overrides
     definition to default EmbeddedBlockDefinition.
 
     Embedded blocks are full Block documents: mandatory fully qualified &lt;type&gt; is the FQN
@@ -41,11 +41,14 @@
     <see file="02_mbml.md" relation="AuthoringGuide">
       Embedded Blocks authoring — root-only.
     </see>
-    <see type="def:SubBlockDefinition" relation="Extends">
-      Shared nested-document shape — subBlocks without embeddedBlocks.
+    <see type="def:BlockDefinition" relation="Extends">
+      Shared block definition shape — identity, members, definition, and subBlocks.
     </see>
     <see type="def:RootBlockDefinition" relation="SeeAlso">
       Document root — sole owner of the embeddedBlocks aggregation.
+    </see>
+    <see type="def:SubBlockDefinition" relation="SeeAlso">
+      Nested Sub-Block shape — sibling specialization.
     </see>
   </references>
 

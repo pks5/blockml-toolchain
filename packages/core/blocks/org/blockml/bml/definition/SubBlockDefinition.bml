@@ -2,9 +2,7 @@
   BlockML Definition — Sub-Block definition meta-model type
 
   FQN: org.blockml.bml.definition.SubBlockDefinition
-  Describes the parse-time shape of nested Sub-Block <block>
-
- documents.
+  Describes the parse-time shape of nested Sub-Block <block> documents.
   See docs/12_bom_object_model.md — BlockDefinition.
 -->
 <block
@@ -15,15 +13,16 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
+
   <name>SubBlockDefinition</name>
   <type>def:SubBlockDefinition</type>
   <baseType>def:BlockDefinition</baseType>
   <is>The shape of a nested Sub-Block</is>
 
   <documentation>Meta-model type for nested Sub-Block documents within a BomDocument. Extends
-    org.blockml.bml.definition.BlockDefinition with the definition property (default
-    SubBlockDefinition) and the subBlocks aggregation for recursive Sub-Block hierarchies.
-    Shared block identity and member containers are inherited from BlockDefinition.
+    org.blockml.bml.definition.BlockDefinition and overrides definition (default SubBlockDefinition).
+    Shared identity, members, and subBlocks are inherited from BlockDefinition — Sub-Block-specific
+    identity rules live here.
 
     Block identity conventions for Sub-Blocks (see 02_mbml.md — Type References and Block Identity):
     • Sub-Block: semantically nested type within the same BomDocument as the root block — does not
@@ -40,7 +39,8 @@
       (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK).
 
     Root blocks use org.blockml.bml.definition.RootBlockDefinition; embedded virtual files use
-    org.blockml.bml.definition.EmbeddedBlockDefinition — see those types.</documentation>
+    org.blockml.bml.definition.EmbeddedBlockDefinition — sibling specializations of
+    BlockDefinition.</documentation>
 
   <references>
     <see file="12_bom_object_model.md" relation="DeepDive">
@@ -49,19 +49,19 @@
     <see file="02_mbml.md" relation="AuthoringGuide">
       Block definition authoring format and Sub-Block rules.
     </see>
-    <see type="def:BlockDefinition" relation="Defines">
-      Shared block definition shape — identity, members, and metadata.
+    <see type="def:BlockDefinition" relation="Extends">
+      Shared block definition shape — identity, members, definition, and subBlocks.
     </see>
-    <see type="def:RootBlockDefinition" relation="Defines">
-      Document root shape — adds embeddedBlocks aggregation.
+    <see type="def:RootBlockDefinition" relation="SeeAlso">
+      Document root shape — sibling specialization; adds embeddedBlocks.
     </see>
-    <see type="def:EmbeddedBlockDefinition" relation="Defines">
-      Virtual .bml entries under root embeddedBlocks.
+    <see type="def:EmbeddedBlockDefinition" relation="SeeAlso">
+      Virtual .bml entries under root embeddedBlocks — sibling specialization.
     </see>
   </references>
 
   <properties>
-    <definition type="TypeReference(def:SubBlockDefinition)">
+    <definition override="true" type="TypeReference(def:SubBlockDefinition)">
       <value>def:SubBlockDefinition</value>
       <documentation>Definition meta-model type for this Sub-Block's definition document. Selects
         which fields exist when accessing the definition via bml:Self in definition reflection —
@@ -78,14 +78,4 @@
     </definition>
   </properties>
 
-  <aggregations>
-    <subBlocks type="def:SubBlockDefinition[]">
-      <documentation>Sub-Block definitions nested under this block. Each Sub-Block is a full
-        SubBlockDefinition that may declare its own subBlocks to arbitrary depth. Canonical type
-        is derived from resolve(parent.type) + "." + name when type is omitted; explicit type must
-        match (BML_SUBBLOCK_TYPE_MISMATCH). Sub-Block name is required (BML_MISSING_SUBBLOCK_NAME).
-        Sub-Blocks must not declare embeddedBlocks (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK). Allowed on
-        root blocks and embedded blocks.</documentation>
-    </subBlocks>
-  </aggregations>
 </block>

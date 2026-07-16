@@ -39,14 +39,16 @@
     Member declaration order in BML is preserved in BOM and is significant for StructType
     positional mapping and render targets.
 
-    Specialized by org.blockml.bml.definition.SubBlockDefinition (nested Sub-Blocks, default
-    definition meta-model) and org.blockml.bml.definition.RootBlockDefinition (document root and
-    embedded blocks with embeddedBlocks).     Identity properties type and baseType are TypeReference
-    strings (not TypeReferenceEntity aggregations) — type names the Block being declared; baseType carries
-    the parent TypeExpression including generic applications. Other type references (composition tags,
-    member type attributes, contracts) accept FQN, xmlns QName, context-bound unqualified fallback, or
-    Sub-Block-relative names — all normalized to a canonical FQN during resolution
-    (BML_UNKNOWN_TYPE, BML_AMBIGUOUS_TYPE, BML_UNKNOWN_NAMESPACE_PREFIX).</documentation>
+    Declares definition (meta-model role selector) and subBlocks (recursive nested type hierarchy).
+    Specialized as three sibling kinds that each override definition with a tighter TypeReference and
+    default: SubBlockDefinition (nested), RootBlockDefinition (document root + embeddedBlocks),
+    EmbeddedBlockDefinition (virtual .bml under root embeddedBlocks). Identity properties type and
+    baseType are TypeReference strings (not TypeReferenceEntity aggregations) — type names the Block
+    being declared; baseType carries the parent TypeExpression including generic applications. Other
+    type references (composition tags, member type attributes, contracts) accept FQN, xmlns QName,
+    context-bound unqualified fallback, or Sub-Block-relative names — all normalized to a canonical
+    FQN during resolution (BML_UNKNOWN_TYPE, BML_AMBIGUOUS_TYPE, BML_UNKNOWN_NAMESPACE_PREFIX).
+  </documentation>
 
   <references>
     <see file="12_bom_object_model.md" relation="DeepDive">
@@ -62,10 +64,13 @@
       Sole inheritance root — empty &lt;baseType /&gt; only (org.blockml.bml.core.Block).
     </see>
     <see type="def:SubBlockDefinition" relation="Extends">
-      Nested Sub-Block definition shape — extends this type.
+      Nested Sub-Block definition shape — overrides definition.
     </see>
     <see type="def:RootBlockDefinition" relation="Extends">
-      Root and embedded block shape — extends SubBlockDefinition.
+      Document root — overrides definition; adds embeddedBlocks.
+    </see>
+    <see type="def:EmbeddedBlockDefinition" relation="Extends">
+      Virtual .bml under root embeddedBlocks — overrides definition.
     </see>
     <see type="type:TypeReferenceEntity" relation="Defines">
       Entity payload for contracts, languages, language, and subTypes aggregations — not
@@ -150,6 +155,14 @@
       <documentation>Semantic version of this Block definition. Required on root blocks.
         Addressable as com.foo.Bar.version.</documentation>
     </version>
+    <definition abstract="true" type="TypeReference(def:BlockDefinition)">
+      <documentation>Definition meta-model type for this Block document. Selects which fields exist
+        when accessing the definition via bml:Self. Abstract on BlockDefinition — each concrete
+        specialization (SubBlockDefinition, RootBlockDefinition, EmbeddedBlockDefinition) must
+        override with a tighter TypeReference bound and a default value. Authored as FQN, xmlns
+        QName, or unqualified name — unqualified names resolve via implicit namespace
+        org.blockml.bml.definition.*. Addressable as &lt;blockFQN&gt;.definition.</documentation>
+    </definition>
   </properties>
 
   <!--
@@ -218,5 +231,13 @@
       <documentation>Capability member declarations — communication endpoints (inbound, outbound,
         transformation). Mapped to members[] in XML document order.</documentation>
     </capabilities>
+    <subBlocks type="def:SubBlockDefinition[]">
+      <documentation>Sub-Block definitions nested under this block. Each Sub-Block is a
+        SubBlockDefinition that may declare its own subBlocks to arbitrary depth. Canonical type is
+        derived from resolve(parent.type) + "." + name when type is omitted; explicit type must match
+        (BML_SUBBLOCK_TYPE_MISMATCH). Sub-Block name is required (BML_MISSING_SUBBLOCK_NAME).
+        Sub-Blocks must not declare embeddedBlocks (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK). Allowed on
+        root blocks, embedded blocks, and nested Sub-Blocks.</documentation>
+    </subBlocks>
   </aggregations>
 </block>

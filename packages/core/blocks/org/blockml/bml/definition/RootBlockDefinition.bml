@@ -16,18 +16,18 @@
 
   <name>RootBlockDefinition</name>
   <type>def:RootBlockDefinition</type>
-  <baseType>def:SubBlockDefinition</baseType>
+  <baseType>def:BlockDefinition</baseType>
   <is>The shape of a root Block document</is>
 
   <documentation>Meta-model type for document-root block documents. Extends
-    org.blockml.bml.definition.SubBlockDefinition with the definition property override and the
-    embeddedBlocks aggregation (Inline Library — virtual .bml files co-located in one BomDocument).
-    subBlocks is inherited from SubBlockDefinition.
+    org.blockml.bml.definition.BlockDefinition, overrides definition (default RootBlockDefinition),
+    and adds the embeddedBlocks aggregation (Inline Library — virtual .bml files co-located in one
+    BomDocument). subBlocks is inherited from BlockDefinition.
 
     The definition property defaults to org.blockml.bml.definition.RootBlockDefinition when
     &lt;definition&gt; is omitted on the document root. Embedded entries use
     org.blockml.bml.definition.EmbeddedBlockDefinition (see EmbeddedBlockDefinition) — they are not
-    RootBlockDefinition instances.
+    RootBlockDefinition instances. Sub-Blocks use SubBlockDefinition — sibling specialization.
 
     embeddedBlocks is allowed only on the document root. Each child is an EmbeddedBlockDefinition
     (virtual file): own FQN from mandatory &lt;type&gt;, own members and subBlocks, no nested
@@ -42,13 +42,13 @@
     <see file="02_mbml.md" relation="AuthoringGuide">
       Block definition authoring format and Embedded Blocks.
     </see>
-    <see type="def:BlockDefinition" relation="Defines">
-      Shared block definition shape — identity, members, and metadata.
+    <see type="def:BlockDefinition" relation="Extends">
+      Shared block definition shape — identity, members, definition, and subBlocks.
     </see>
-    <see type="def:SubBlockDefinition" relation="Defines">
-      Nested Sub-Block shape — definition default and subBlocks aggregation.
+    <see type="def:SubBlockDefinition" relation="SeeAlso">
+      Nested Sub-Block shape — sibling specialization.
     </see>
-    <see type="def:EmbeddedBlockDefinition" relation="Defines">
+    <see type="def:EmbeddedBlockDefinition" relation="SeeAlso">
       Virtual .bml entries in embeddedBlocks — no nested embeds.
     </see>
   </references>
