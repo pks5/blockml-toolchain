@@ -155,6 +155,7 @@ core:Annotation
     Element
       Document                  ← name = "document"
       Summary                   ← name = "summary"
+      Examples                  ← name = "examples"
     Attribute                   ← fixed names: id, each, with, …
 ```
 
@@ -163,7 +164,7 @@ core:Annotation
 | Annotation | preferredAlias | Role |
 |---|---|---|
 | `org.blockml.bml.annotation.BmlAnnotation` | `bml` | Language directives (`id`, `each`, `if`, `with`, `xml`, `container`, …) |
-| `com.machineblocks.bml.annotation.ScadAnnotation` | `scad` | SCAD member facets (`scad:value`) and prose facets (`scad:document`, `scad:summary`) |
+| `com.machineblocks.bml.annotation.ScadAnnotation` | `scad` | SCAD member facets (`scad:value`) and container/prose facets (`scad:document`, `scad:summary`, `scad:examples`) |
 
 ```xml
 xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
@@ -172,6 +173,11 @@ xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
 <bricks:Standard bml:id="w1" bml:with="half = ${ size.x / 2 }" … />
 <scad:value>start</scad:value>
 <scad:document>SCAD literal is the lowercase token.</scad:document>
+<scad:examples>
+  <example title="SCAD call" language="OpenSCAD"><![CDATA[
+brick([2, 4, 3]);
+  ]]></example>
+</scad:examples>
 ```
 
 **Directive match rules:**
@@ -745,7 +751,7 @@ An optional **`language`** attribute references a `org.blockml.bml.language.Natu
 (namespace, localName, languageFqn)
 ```
 
-- `localName` is `documentation` or `summary` for default-namespace Definition prose; Annotation Element facets use the directive name (`document` / `summary` from `Annotation.Document` / `Annotation.Summary`)
+- `localName` is `documentation` or `summary` for default-namespace Definition prose; Annotation Element facets use the directive name (`document` / `summary` / `examples` from `Annotation.Document` / `Annotation.Summary` / `Annotation.Examples`)
 - `namespace` is resolved from the element QName via `xmlns:` (empty string for unprefixed / canonical facet; Annotation FQN for prefixed facets)
 - `languageFqn` is the explicit `language=` attribute or the effective inherited NaturalLanguage
 
@@ -760,7 +766,7 @@ An optional **`language`** attribute references a `org.blockml.bml.language.Natu
 <summary language="German">…</summary>
 ```
 
-**Axis 2 — facets (annotation prose namespace):** optional QNames such as `scad:document` or `scad:summary` attach domain- or target-specific prose beside the canonical slot. The prefix must resolve to an **Annotation** (e.g. `ScadAnnotation`). **Annotation namespaces are not for i18n** — they name a facet (OpenSCAD notes, UI toolkit hints, …), not a spoken language. Facets may themselves be multilingual:
+**Axis 2 — facets (annotation prose / examples namespace):** optional QNames such as `scad:document`, `scad:summary`, or `scad:examples` attach domain- or target-specific content beside the canonical slot. The prefix must resolve to an **Annotation** (e.g. `ScadAnnotation`). **Annotation namespaces are not for i18n** — they name a facet (OpenSCAD notes, UI toolkit hints, …), not a spoken language. Prose facets may themselves be multilingual; `*:examples` is a container of `<example>` children (same shape as canonical `<examples>`):
 
 ```xml
 xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
@@ -770,6 +776,18 @@ xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
 
 <scad:document>SCAD literal is the lowercase token; faces use x- / x+ …</scad:document>
 <scad:document language="German">SCAD-Literal ist der Kleinbuchstaben-Token; Faces nutzen x- / x+ …</scad:document>
+
+<examples>
+  <example title="BML usage"><![CDATA[
+<bricks:Standard size="[2,4,3]" />
+  ]]></example>
+</examples>
+
+<scad:examples>
+  <example title="OpenSCAD call" language="OpenSCAD"><![CDATA[
+brick([2, 4, 3]);
+  ]]></example>
+</scad:examples>
 ```
 
 **Rules:**
@@ -778,9 +796,10 @@ xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
 |---|---|
 | Canonical required | ≥1 default-namespace `<documentation>` on every Block definition |
 | Summary required | default-namespace `<summary>` when canonical documentation is too long |
-| Facets optional | namespaced Annotation Element directives (`*:document` / `*:summary`) never satisfy the required slots |
-| Unique key | at most one entry per `(namespace, localName, languageFqn)` → else `BML_DUPLICATE_DOCUMENTATION` / `BML_DUPLICATE_SUMMARY` |
+| Facets optional | namespaced Annotation Element directives (`*:document` / `*:summary` / `*:examples`) never satisfy required documentation/summary slots or replace canonical `<examples>` |
+| Unique key | at most one prose entry per `(namespace, localName, languageFqn)` → else `BML_DUPLICATE_DOCUMENTATION` / `BML_DUPLICATE_SUMMARY` |
 | Summary pairing | long facet documentation may have a matching-facet summary; no cross-facet obligation |
+| Examples facets | each Annotation-prefixed examples container is a separate facet set; `<example>` children inherit the container namespace |
 | `<is>` / `<isnot>` | remain singular — not multi-language / not QName-faceted in V1 |
 
 Primary tooling path (LLM context, quick scan): default namespace + effective Block/Library language. Other entries are translations or facet attachments.
@@ -957,7 +976,9 @@ Entries must be ordered chronologically by version — **oldest first**. Out-of-
 
 #### `<examples>`
 
-Container for usage examples. Each `<example>` requires a `title` attribute; body content is **CDATA only**. The **title** is always written in the effective natural language of the enclosing block definition. An optional `language` attribute on `<example>` references an **implementation** Language when the CDATA body is not BML/MBML source (OpenSCAD, TypeScript, …) — unqualified names resolve via `org.blockml.bml.language.*`; distinct from `NaturalLanguage` used for prose:
+Container for usage examples. Each `<example>` requires a `title` attribute; body content is **CDATA only**. The **title** is always written in the effective natural language of the enclosing block definition. An optional `language` attribute on `<example>` references an **implementation** Language when the CDATA body is not BML/MBML source (OpenSCAD, TypeScript, …) — unqualified names resolve via `org.blockml.bml.language.*`; distinct from `NaturalLanguage` used for prose.
+
+Default-namespace `<examples>` is the canonical container. Optional **Annotation facets** use the same local name under an Annotation prefix — e.g. `scad:examples` when `xmlns:scad` binds `ScadAnnotation` (`Annotation.Examples`, name=`examples`). Facet containers hold target-specific samples beside the canonical set and never replace it. See § Documentation facets and i18n · § Annotations.
 
 ```xml
 <examples>
@@ -979,6 +1000,12 @@ brick([2, 4, 3]);
     ]]></example>
 
 </examples>
+
+<scad:examples>
+    <example title="SCAD module call" language="OpenSCAD"><![CDATA[
+brick([2, 4, 3]);
+    ]]></example>
+</scad:examples>
 ```
 
 Omitted `language` on `<example>` → BML/MBML source. Example titles never carry a language attribute — they inherit the block's natural language.
@@ -2065,7 +2092,7 @@ without completing it.
 
 ### Member Namespace (Element QName)
 
-Properties, Aggregations, Associations, and Capabilities receive their namespace **exclusively via the XML element QName**. There is no `namespace` attribute on member elements. Prefixed member QNames must resolve via `xmlns:` to an **Annotation** (Member directive with `name="*"`, e.g. `scad:value` under `ScadAnnotation`) — not to an arbitrary string. The same QName mechanism applies to **prose facet** elements `<documentation>` / `<summary>` (default namespace) and Annotation Element directives such as `scad:document` / `scad:summary` — see § Documentation facets and i18n · § Annotations. **Do not** use prose-element namespaces for NaturalLanguage / i18n.
+Properties, Aggregations, Associations, and Capabilities receive their namespace **exclusively via the XML element QName**. There is no `namespace` attribute on member elements. Prefixed member QNames must resolve via `xmlns:` to an **Annotation** (Member directive with `name="*"`, e.g. `scad:value` under `ScadAnnotation`) — not to an arbitrary string. The same QName mechanism applies to **prose / examples facet** elements `<documentation>` / `<summary>` / `<examples>` (default namespace) and Annotation Element directives such as `scad:document` / `scad:summary` / `scad:examples` — see § Documentation facets and i18n · § Annotations. **Do not** use prose-element namespaces for NaturalLanguage / i18n.
 
 ```xml
 <block

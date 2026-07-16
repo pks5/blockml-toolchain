@@ -67,10 +67,13 @@
       <mbtype:BaseCutout />
       <mbtype:Direction />
       <mbtype:Face />
+      <mbtype:FaceMapXY />
+      <mbtype:FaceMapXYZ />
       <mbtype:Grille />
       <mbtype:HoleType />
       <mbtype:MBEnum />
       <mbtype:MultiAxis />
+      <mbtype:None />
       <mbtype:SizeXYZ />
       <mbunit:MBU />
       <mbunit:GridUnit />

@@ -27,6 +27,7 @@
     • Property (name="*") — member QNames such as scad:value (SCAD serialization literals)
     • Document (name="document") — scad:document prose facets
     • Summary (name="summary") — scad:summary prose facets
+    • Examples (name="examples") — scad:examples containers (OpenSCAD usage samples)
 
     Replaces the former orphan namespace id com.machineblocks.bml.scad. Orthogonal to Definition —
     does not alter MBEnum or StructuralDefinition shape; it only formalizes the annotation
@@ -57,6 +58,7 @@
       <mbann:ScadAnnotation.Property />
       <mbann:ScadAnnotation.Document />
       <mbann:ScadAnnotation.Summary />
+      <mbann:ScadAnnotation.Examples />
     </directives>
   </aggregations>
 
@@ -87,6 +89,16 @@
 
       <documentation>Element directive scad:summary — OpenSCAD-specific summary prose facet.
         Does not satisfy the required default-namespace summary slot on Definitions.</documentation>
+    </block>
+
+    <block>
+      <name>Examples</name>
+      <baseType>core:Annotation.Examples</baseType>
+      <is>An OpenSCAD examples container facet directive</is>
+
+      <documentation>Element directive scad:examples — OpenSCAD-specific examples container.
+        Holds &lt;example&gt; entries (typically language="OpenSCAD") beside the canonical
+        default-namespace &lt;examples&gt; aggregation. Does not replace canonical examples.</documentation>
     </block>
   </subBlocks>
 

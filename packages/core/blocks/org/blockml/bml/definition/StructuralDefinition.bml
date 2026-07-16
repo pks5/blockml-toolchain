@@ -129,7 +129,12 @@
       <documentation>The changelog of the definition.</documentation>
     </changelog>
     <examples type="Example[]">
-      <documentation>The examples of the definition.</documentation>
+      <documentation>Usage examples for this definition. Default-namespace &lt;examples&gt; is the
+        canonical container. Optional Annotation QName facets (e.g. scad:examples from
+        Annotation.Examples) hold target-specific example sets beside the canonical slot — facet
+        namespaces resolve to Annotations, not locales. Each container holds &lt;example&gt;
+        children (StructuralDefinition.Example). Facet containers never replace the canonical
+        examples aggregation.</documentation>
     </examples>
     <references type="Reference[]">
       <documentation>Documentation cross-references of the definition. Connects types to types or
@@ -212,11 +217,13 @@
 
       <documentation>Describes one usage example in an examples container on any definition element
         (block, property, aggregation, …). Rendered as an example element with a required title
-        attribute and a CDATA body. Maps to BOM DocumentationExample { title, content, contentLanguageFqn? }.
-        Body content must be CDATA (BML_EXAMPLE_NOT_CDATA otherwise). The title is always written in
-        the effective natural language of the enclosing block definition. An optional language attribute
-        on the example element references an implementation Language FQN (OpenSCAD, TypeScript, …) when
-        the CDATA body is not BML/MBML source — distinct from NaturalLanguage used for prose.</documentation>
+        attribute and a CDATA body. The enclosing container may be default-namespace
+        &lt;examples&gt; or an Annotation facet (e.g. scad:examples). Maps to BOM DocumentationExample
+        { title, content, contentLanguageFqn?, namespace? }. Body content must be CDATA
+        (BML_EXAMPLE_NOT_CDATA otherwise). The title is always written in the effective natural
+        language of the enclosing block definition. An optional language attribute on the example
+        element references an implementation Language FQN (OpenSCAD, TypeScript, …) when the CDATA
+        body is not BML/MBML source — distinct from NaturalLanguage used for prose.</documentation>
 
       <bml:xml>example</bml:xml>
 

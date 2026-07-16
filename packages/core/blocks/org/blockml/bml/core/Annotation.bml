@@ -32,7 +32,7 @@
     • Member (name="*") — wildcard member directives under this namespace
       → Property · Aggregation · Association · Capability
     • Element — element-form directives
-      → Document (name="document") · Summary (name="summary")
+      → Document (name="document") · Summary (name="summary") · Examples (name="examples")
     • Attribute — attribute-form directives (id, with, each, …)
 
     Naming overlap with Definition (Property, Aggregation, …) is classification of directive form
@@ -61,6 +61,7 @@
     <core:Annotation.Attribute />
     <core:Annotation.Document />
     <core:Annotation.Summary />
+    <core:Annotation.Examples />
   </subTypes>
 
   <properties>
@@ -84,16 +85,17 @@
       <is>A typed annotation directive</is>
 
       <documentation>Abstract base for all annotation directives. The name property is the
-        directive local name under the annotation namespace (e.g. id, with, document). Member
-        directives fix name to "*"; Document and Summary fix document / summary; Attribute and
-        Element concretes set an explicit local name.</documentation>
+        directive local name under the annotation namespace (e.g. id, with, document, examples).
+        Member directives fix name to "*"; Document, Summary, and Examples fix document / summary /
+        examples; Attribute and Element concretes set an explicit local name.</documentation>
 
       <abstract>true</abstract>
 
       <properties>
         <name abstract="true" type="Text">
           <documentation>Directive local name in the annotation namespace. "*" on Member means any
-            local name. Fixed on Document ("document") and Summary ("summary").</documentation>
+            local name. Fixed on Document ("document"), Summary ("summary"), and Examples
+            ("examples").</documentation>
         </name>
       </properties>
     </block>
@@ -169,8 +171,8 @@
       <is>An element-form annotation directive</is>
 
       <documentation>Directive that appears as an XML element under the annotation namespace
-        (e.g. bml:container, scad:document). Concrete directives set name; Document and Summary
-        are standard element kinds with fixed names.</documentation>
+        (e.g. bml:container, scad:document, scad:examples). Concrete directives set name; Document,
+        Summary, and Examples are standard element kinds with fixed names.</documentation>
 
       <abstract>true</abstract>
     </block>
@@ -219,6 +221,26 @@
         <name override="true" final="true" type="Text">
           <value>summary</value>
           <documentation>Fixed local name for summary prose facets under an annotation
+            namespace.</documentation>
+        </name>
+      </properties>
+    </block>
+
+    <block>
+      <name>Examples</name>
+      <baseType>core:Annotation.Element</baseType>
+      <is>An examples container facet directive</is>
+
+      <documentation>Standard element directive for namespaced examples containers. name is fixed
+        to "examples" (e.g. scad:examples). Parallel to Document and Summary facets: the default-
+        namespace &lt;examples&gt; aggregation on StructuralDefinition remains the canonical slot;
+        Annotation-prefixed containers (scad:examples, …) hold facet-specific &lt;example&gt;
+        entries and never replace the canonical examples aggregation.</documentation>
+
+      <properties>
+        <name override="true" final="true" type="Text">
+          <value>examples</value>
+          <documentation>Fixed local name for examples container facets under an annotation
             namespace.</documentation>
         </name>
       </properties>
