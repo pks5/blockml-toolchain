@@ -219,11 +219,12 @@
         (block, property, aggregation, …). Rendered as an example element with a required title
         attribute and a CDATA body. The enclosing container may be default-namespace
         &lt;examples&gt; or an Annotation facet (e.g. scad:examples). Maps to BOM DocumentationExample
-        { title, content, contentLanguageFqn?, namespace? }. Body content must be CDATA
+        { title, content, contentLanguageFqn?, namespace?, snippet }. Body content must be CDATA
         (BML_EXAMPLE_NOT_CDATA otherwise). The title is always written in the effective natural
         language of the enclosing block definition. An optional language attribute on the example
-        element references an implementation Language FQN (OpenSCAD, TypeScript, …) when the CDATA
-        body is not BML/MBML source — distinct from NaturalLanguage used for prose.</documentation>
+        element references a Language FQN — implementation languages (OpenSCAD, TypeScript, …) for
+        code samples, or NaturalLanguage (English, German, …) for prose bodies. Optional snippet
+        marks illustrative fragments that are not complete / not to be syntax-checked.</documentation>
 
       <bml:xml>example</bml:xml>
 
@@ -234,15 +235,25 @@
             language of the enclosing block definition — no separate language attribute on title.</documentation>
         </title>
         <language type="TypeReference(core:Language)" bml:xml="attribute">
-          <documentation>Optional implementation Language when the CDATA body is written in a
-            target-language dialect (OpenSCAD, TypeScript, …). Unqualified names resolve via implicit
-            namespace org.blockml.bml.language.*. Omitted when content is BML/MBML source. Not a
-            NaturalLanguage — titles and documentation prose use NaturalLanguage; this attribute
-            applies to content only.</documentation>
+          <documentation>Optional Language for the CDATA body. Unqualified names resolve via implicit
+            namespace org.blockml.bml.language.*. Use an implementation Language (OpenSCAD, TypeScript,
+            …) for code samples, or a NaturalLanguage (English, German, …) for prose. Omitted when
+            content is BML/MBML source. Applies to content only — titles always use the enclosing
+            block's natural language.</documentation>
         </language>
+        <snippet type="Boolean" bml:xml="attribute">
+          <value>false</value>
+          <documentation>When true, the body is an illustrative fragment — incomplete, with ellipsis,
+            or otherwise not a complete artifact in the declared language. Validators and tooling
+            must not require well-formed / parseable syntax. Applies to code samples
+            (language="OpenSCAD") and prose (language="English") alike. Default false when omitted
+            — do not write false explicitly unless documenting intent. Boolean with explicit true or
+            false; empty elements and attribute shorthand without value are not permitted.</documentation>
+        </snippet>
         <content type="Text" bml:xml="text|cdata">
-          <documentation>BML, MBML, or target-language source text demonstrating usage. Stored as CDATA
-            body in BOM DocumentationExample.content.</documentation>
+          <documentation>BML, MBML, target-language source, or prose demonstrating usage. Stored as
+            CDATA body in BOM DocumentationExample.content. When snippet is true, content need not
+            be complete or syntactically valid.</documentation>
         </content>
       </properties>
     

@@ -1,0 +1,41 @@
+<!--
+  MachineBlocks — Inherit constant sentinel
+
+  FQN: com.machineblocks.bml.type.Inherit
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      "
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="com.machineblocks.bml.type">
+  <name>Inherit</name>
+  <type>type:Inherit</type>
+  <baseType>btype:Constant(Text)</baseType>
+  <is>The literal Inherit sentinel</is>
+
+  <documentation>Named Constant(Text) for the singleton value "Inherit". Use as a union
+    alternative — for example Inherit | Float — instead of writing Constant(Text){value="Inherit"}
+    at every reference site. The external value is "Inherit" (identical to Text). Signals that a
+    property should take its effective value from the parent / surrounding context.</documentation>
+
+  <references>
+    <see type="btype:Constant" relation="Extends">
+      Constant(Text) with value fixed to "Inherit".
+    </see>
+    <see type="type:Auto" relation="SeeAlso">
+      Parallel Auto sentinel Constant.
+    </see>
+    <see type="type:None" relation="SeeAlso">
+      Parallel None sentinel Constant.
+    </see>
+  </references>
+
+  <properties>
+    <value override="true" type="Text">
+      <value>Inherit</value>
+    </value>
+  </properties>
+
+</block>

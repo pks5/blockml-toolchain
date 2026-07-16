@@ -293,7 +293,7 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <changelog>                                  → block.changelog[]
   <change version="…" language="…">…</change> → { version, text: trimmed body, languageFqn? }
 <examples>                                   → block.examples[] (namespace: "" canonical)
-  <example title="…" language="…">           → { title, content: CDATA body, contentLanguageFqn?, namespace: "" }
+  <example title="…" language="…" snippet="…"> → { title, content, contentLanguageFqn?, snippet?, namespace: "" }
   <scad:examples>…</scad:examples>           → same shape; namespace from xmlns:scad (Annotation facet)
     <example …>                              → { …, namespace: resolved Annotation FQN }
 <references>                                 → block.references[]

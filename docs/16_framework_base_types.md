@@ -368,7 +368,8 @@ FQN             org.blockml.bml.definition.StructuralDefinition.Example (Sub-Blo
 baseType        org.blockml.bml.core.Entity
 bml:xml         example            — renders as <example> inside <examples>
 title           String (required)  — XML title attribute; always in block natural language
-language        Language FQN       — optional; implementation dialect for CDATA content only
+language        Language FQN       — optional; implementation dialect or NaturalLanguage for content
+snippet         Boolean            — optional; default false — illustrative fragment, skip syntax checks
 content         String (required)  — CDATA body
 ```
 

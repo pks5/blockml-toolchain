@@ -976,7 +976,9 @@ Entries must be ordered chronologically by version — **oldest first**. Out-of-
 
 #### `<examples>`
 
-Container for usage examples. Each `<example>` requires a `title` attribute; body content is **CDATA only**. The **title** is always written in the effective natural language of the enclosing block definition. An optional `language` attribute on `<example>` references an **implementation** Language when the CDATA body is not BML/MBML source (OpenSCAD, TypeScript, …) — unqualified names resolve via `org.blockml.bml.language.*`; distinct from `NaturalLanguage` used for prose.
+Container for usage examples. Each `<example>` requires a `title` attribute; body content is **CDATA only**. The **title** is always written in the effective natural language of the enclosing block definition. An optional `language` attribute on `<example>` references a **Language** for the body — an implementation Language (OpenSCAD, TypeScript, …) for code, or a NaturalLanguage (English, German, …) for prose — unqualified names resolve via `org.blockml.bml.language.*`.
+
+Optional **`snippet="true"`** marks an illustrative fragment (ellipsis, partial listing, or a single prose sentence) that tooling must **not** treat as a complete, syntax-checkable artifact. Default `false` when omitted. Valid for code and natural-language bodies alike.
 
 Default-namespace `<examples>` is the canonical container. Optional **Annotation facets** use the same local name under an Annotation prefix — e.g. `scad:examples` when `xmlns:scad` binds `ScadAnnotation` (`Annotation.Examples`, name=`examples`). Facet containers hold target-specific samples beside the canonical set and never replace it. See § Documentation facets and i18n · § Annotations.
 
@@ -999,6 +1001,20 @@ module brick(size) = cube(size);
 brick([2, 4, 3]);
     ]]></example>
 
+    <example title="studs parameter (snippet)"
+        language="OpenSCAD"
+        snippet="true"><![CDATA[
+...
+["studs", false]
+...
+    ]]></example>
+
+    <example title="Short prose"
+        language="English"
+        snippet="true"><![CDATA[
+Just a sentence
+    ]]></example>
+
 </examples>
 
 <scad:examples>
@@ -1008,7 +1024,7 @@ brick([2, 4, 3]);
 </scad:examples>
 ```
 
-Omitted `language` on `<example>` → BML/MBML source. Example titles never carry a language attribute — they inherit the block's natural language.
+Omitted `language` on `<example>` → BML/MBML source. Example titles never carry a language attribute — they inherit the block's natural language. `snippet="true"` skips well-formedness / parse checks on the body.
 
 #### `<references>`
 

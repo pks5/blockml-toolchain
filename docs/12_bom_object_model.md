@@ -516,10 +516,14 @@ interface ChangelogEntry {
 interface DocumentationExample {
   /** Required title attribute on <example> — always in enclosing block's natural language */
   title: string
-  /** CDATA body — BML/MBML or target-language source text */
+  /** CDATA body — BML/MBML, target-language source, or prose */
   content: string
-  /** Implementation Language FQN for CDATA content (org.blockml.bml.language.OpenSCAD, …). Omitted when content is BML/MBML. */
+  /** Language FQN for CDATA content (implementation Language or NaturalLanguage). Omitted when content is BML/MBML. */
   contentLanguageFqn?: string
+  /** When true, body is an illustrative fragment — skip syntax / well-formedness checks. Default false. */
+  snippet?: boolean
+  /** Resolved Annotation FQN when inside a faceted examples container (e.g. scad:examples); "" / omitted = canonical */
+  namespace?: string
   source?: SourceLocation
 }
 

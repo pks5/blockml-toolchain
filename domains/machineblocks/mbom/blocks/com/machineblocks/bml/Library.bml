@@ -70,7 +70,9 @@
       <mbtype:FaceMapXY />
       <mbtype:FaceMapXYZ />
       <mbtype:Grille />
+      <mbtype:HoleEdgeMode />
       <mbtype:HoleType />
+      <mbtype:Inherit />
       <mbtype:MBEnum />
       <mbtype:MultiAxis />
       <mbtype:None />

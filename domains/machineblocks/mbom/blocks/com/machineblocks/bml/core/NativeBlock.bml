@@ -334,12 +334,30 @@
       <value>false</value>
     </grilleInverted>
 
-    <holeX type="mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
+    <holeX type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
       <documentation>Whether LEGO Technic holes are drawn along the X-axis.
         Multiple rows possible depending on block height.
       </documentation>
       <value>false</value>
     </holeX>
+    
+    <holeY type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
+      <documentation>Whether LEGO Technic holes are drawn along the Y-axis.
+        Multiple rows possible depending on block height.
+        Type, shift, diameter, inset, and grid parameters are shared with
+        holeX and holeZ via the holeXYZ* and holeXY* unified parameters.
+      </documentation>
+      <value>false</value>
+    </holeY>
+
+    <holeZ type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
+      <documentation>Whether LEGO Technic holes are drawn along the Z-axis.
+        Type, shift, diameter, and inset parameters are shared with holeX
+        and holeY via the holeXYZ* unified parameters.
+        Z holes now also support insets (holeXYZInsetThickness/Depth).
+      </documentation>
+      <value>false</value>
+    </holeZ>
 
     <holeXYGridOffsetZ type="mbtype:AxisXY(Decimal(mbunit:MBU))">
       <documentation>Distance from the block bottom to the center of the first row
@@ -411,7 +429,7 @@
       <value>0.3</value>
     </holeXYZDiameterAdjustment>
 
-    <holeXYZEdgeMode type="mbtype:HoleXYZEdgeMode">
+    <holeXYZEdgeMode type="mbtype:AxisXYZ(mbtype:HoleEdgeMode)">
       <documentation>Controls whether partial (half) Technic holes are drawn at the edges
         of the block for X, Y, and Z direction holes.
 
@@ -468,7 +486,7 @@
       <value>0.0</value>
     </holeXYZInsetThicknessAdjustment>
 
-    <holeXYZShift type="mbtype:BooleanOr(Boolean)">
+    <holeXYZShift type="Boolean | mbtype:AxisXYZ(Boolean)">
       <documentation>Whether Technic holes per axis are shifted by 1/2 stud.
         true: holes align with studs. false: holes sit between two studs.
         Follows the 1/2/3-value array rule.
@@ -477,7 +495,7 @@
       <value>false</value>
     </holeXYZShift>
 
-    <holeXYZType type="mbtype:AxisXYZ(HoleType)">
+    <holeXYZType type="mbtype:AxisXYZ(mbtype:HoleType)">
       <documentation>Type of Technic holes per axis.
         pin: round holes. axle: cross-shaped holes.
         Follows the 1/2/3-value array rule.
@@ -486,23 +504,7 @@
       <value>pin</value>
     </holeXYZType>
 
-    <holeY type="mbtype:SelectiveGrid(BooleanOr(HoleType))">
-      <documentation>Whether LEGO Technic holes are drawn along the Y-axis.
-        Multiple rows possible depending on block height.
-        Type, shift, diameter, inset, and grid parameters are shared with
-        holeX and holeZ via the holeXYZ* and holeXY* unified parameters.
-      </documentation>
-      <value>false</value>
-    </holeY>
-
-    <holeZ type="mbtype:SelectiveGrid(BooleanOr(HoleType))">
-      <documentation>Whether LEGO Technic holes are drawn along the Z-axis.
-        Type, shift, diameter, and inset parameters are shared with holeX
-        and holeY via the holeXYZ* unified parameters.
-        Z holes now also support insets (holeXYZInsetThickness/Depth).
-      </documentation>
-      <value>false</value>
-    </holeZ>
+    
 
     <id type="Text">
       <documentation>Unique identifier of the block or part within a block tree. Used primarily
@@ -745,7 +747,7 @@
       <value>auto</value>
     </recessRoundingRadius>
 
-    <recessStudPadding type="mbtype:PerSide4(Decimal(mbunit:GridUnit))">
+    <recessStudPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
       <documentation>Padding from the recess wall inward. Determines whether outer studs
         in the recess are hidden. Studs whose center is closer to the recess
         wall than this padding value are not drawn.
@@ -804,7 +806,7 @@
       <value>true</value>
     </recessWallStuds>
 
-    <recessWallThickness type="mbtype:PerSide4(Decimal(mbunit:GridUnit))">
+    <recessWallThickness type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
       <documentation>Wall thickness of the recess cavity (box wall thickness).</documentation>
       <value>0.333</value>
     </recessWallThickness>
@@ -1001,7 +1003,7 @@
       <value>[1, 1, 1]</value>
     </size>
 
-    <sizeAdjustment type="mbtype:AxisXY(Decimal(unit:Millimeter))">
+    <sizeAdjustment type="mbtype:FaceMapXYZ(Decimal(unit:Millimeter))">
       <documentation>Global calibration adjustment for block size, applied uniformly.
         sideXYAdj is applied to all four horizontal sides (x-, x+, y-, y+).
         heightAdj is applied to the top face (z+) only.
@@ -1045,7 +1047,7 @@
       <value>[]</value>
     </sizeMod>
 
-    <slope type="Constant(Boolean){false} | mbtype:PerSide4(Decimal(mbunit:GridUnit))">
+    <slope type="Constant(Boolean){false} | mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
       <documentation>Defines slopes per side (0-3).
         Positive values: slope on top surface (z+), starting at slopeBaseHeightBottom
         and going the specified number of plates toward the center upward.
@@ -1220,7 +1222,7 @@
       <value>../../pattern/bolt-solid-full.svg</value>
     </studIcon>
 
-    <studIconColor type="mbtype:ColorOrInherit">
+    <studIconColor type="mtype:Inherit | mbtype:Color">
       <documentation>Color of the stud icon. "inherit" uses baseColor.
         Only visually relevant when studIconDepth &gt; 0.
       </documentation>
@@ -1253,7 +1255,7 @@
       <value>0.3</value>
     </studMaxOverhang>
 
-    <studPadding type="mbtype:PerSide4(Decimal(mbunit:GridUnit))">
+    <studPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
       <documentation>Padding from sides 0-3 inward. Shifts the outer wall for the decision
         whether studs are drawn, allowing outer studs to be hidden.
       </documentation>
@@ -1278,7 +1280,7 @@
       <value>solid</value>
     </studType>
 
-    <studs type="mbtype:SelectiveGrid(BooleanOr(StudType))">
+    <studs type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:StudType)">
       <documentation>Whether studs are drawn. Selective array allows per-region control
         including stud type override.
       </documentation>
@@ -1292,7 +1294,7 @@
       <value>none</value>
     </surfacePattern>
 
-    <surfacePatternColor type="mbtype:ColorOrInherit">
+    <surfacePatternColor type="mtype:Inherit | mbtype:Color">
       <documentation>Color of the surface pattern. "inherit" uses baseColor.
         Only visually relevant when surfacePatternDepth &gt; 0.
       </documentation>
@@ -1314,7 +1316,7 @@
       <value>[0, 0]</value>
     </surfacePatternOffset>
 
-    <surfacePatternPadding type="mbtype:PerSide4(Decimal(mbunit:GridUnit))">
+    <surfacePatternPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnit))">
       <documentation>Distance from the edges of the surface pattern area, forming a smooth
         (pattern-free) border around the structure. At 0, the pattern extends
         to the edges. Each edge can be configured individually via the
