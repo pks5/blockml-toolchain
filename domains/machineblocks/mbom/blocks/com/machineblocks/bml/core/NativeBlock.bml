@@ -36,7 +36,7 @@
 
   <!-- Native MB properties — all mb_block() parameters from 09_api_parameters.yml (v3.0.5) -->
   <properties>
-    <align type="mbtype:Align[3..3]">
+    <align type="mbtype:AxisXYZ(mbtype:Align)">
       <documentation>Alignment relative to the origin, per axis.
         "start" = toward x-/y-/z-, "end" = toward x+/y+/z+.
         Origin is [0,0,0] globally, or defined by parent's alignChildren.
@@ -48,7 +48,7 @@
       <value>start</value>
     </align>
 
-    <alignChildren type="mbtype:Align[3..3]">
+    <alignChildren type="mbtype:AxisXYZ(mbtype:Align)">
       <documentation>Defines the origin inside a parent brick for child positioning.
         Same convention as align. Children use this as their reference point.
       </documentation>
@@ -147,7 +147,7 @@
       <value>#EAC645</value>
     </baseColor>
 
-    <baseCrop type="mbtype:FaceVector6(FloatUnitGrid)">
+    <baseCrop type="mbtype:FaceVector6(Decimal(mbunit:GridUnit))">
       <documentation>Hard cut or extension per side (0-3 only, no Z-axis crop).
         Positive = cut geometry, negative = extend geometry.
         The cut is applied brutally — without regard to grid compatibility,
@@ -214,7 +214,7 @@
       <value>-0.1</value>
     </baseWallThicknessAdjustment>
 
-    <bevel type="mbtype:PerSide4(AxisXY(FloatUnitGrid))">
+    <bevel type="mbtype:PerSide4(AxisXY(Decimal(mbunit:GridUnit)))">
       <documentation>Creates wedges by shifting Z-axis corners (0-3) in XY space.
         Each corner gets an [x,y] displacement value.
         The resulting shape is intersected with the bounding box.
@@ -532,7 +532,7 @@
       <value></value>
     </id>
 
-    <offset type="mbtype:AxisXYZ(FloatUnitGrid)">
+    <offset type="mbtype:AxisXYZ(Decimal(mbunit:GridUnit))">
       <documentation>Final displacement of the brick. Applied last in the transformation
         chain. Same unit as size (grid units / multiples of a 1x1 plate).
         Origin depends on whether the brick is global or a child.
@@ -561,7 +561,7 @@
       <value>[20, 30, 3]</value>
     </pcbDimensions>
 
-    <pcbOffset type="mbtype:AxisXY(FloatUnitGrid)">
+    <pcbOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
       <documentation>Offset of the PCB from the center of the brick.</documentation>
       <value>[0, 0]</value>
     </pcbOffset>
@@ -745,7 +745,7 @@
       <value>auto</value>
     </recessRoundingRadius>
 
-    <recessStudPadding type="mbtype:PerSide4(FloatUnitGrid)">
+    <recessStudPadding type="mbtype:PerSide4(Decimal(mbunit:GridUnit))">
       <documentation>Padding from the recess wall inward. Determines whether outer studs
         in the recess are hidden. Studs whose center is closer to the recess
         wall than this padding value are not drawn.
@@ -804,7 +804,7 @@
       <value>true</value>
     </recessWallStuds>
 
-    <recessWallThickness type="mbtype:PerSide4(FloatUnitGrid)">
+    <recessWallThickness type="mbtype:PerSide4(Decimal(mbunit:GridUnit))">
       <documentation>Wall thickness of the recess cavity (box wall thickness).</documentation>
       <value>0.333</value>
     </recessWallThickness>
@@ -848,7 +848,7 @@
       <value>[0, 0, 0]</value>
     </rotation>
 
-    <rotationOffset type="mbtype:AxisXYZ(FloatUnitGrid)">
+    <rotationOffset type="mbtype:AxisXYZ(Decimal(mbunit:GridUnit))">
       <documentation>Shifts the rotation pivot before rotation is applied.</documentation>
       <value>[0, 0, 0]</value>
     </rotationOffset>
@@ -1022,7 +1022,7 @@
       <value>[-0.1, 0]</value>
     </sizeAdjustment>
 
-    <sizeMod type="mbtype:FaceVector6(FloatUnitGrid)">
+    <sizeMod type="mbtype:FaceVector6(Decimal(mbunit:GridUnit))">
       <documentation>Semantic size modification per side, in grid units. Adjusts the
         brick geometry while keeping it structurally intact (walls, studs,
         connectors remain consistent). Unlike crop, sizeMod does not brutally
@@ -1045,7 +1045,7 @@
       <value>[]</value>
     </sizeMod>
 
-    <slope type="Constant(Boolean){value=false} | mbtype:PerSide4(FloatUnitGrid)">
+    <slope type="Constant(Boolean){value=false} | mbtype:PerSide4(Decimal(mbunit:GridUnit))">
       <documentation>Defines slopes per side (0-3).
         Positive values: slope on top surface (z+), starting at slopeBaseHeightBottom
         and going the specified number of plates toward the center upward.
@@ -1253,7 +1253,7 @@
       <value>0.3</value>
     </studMaxOverhang>
 
-    <studPadding type="mbtype:PerSide4(FloatUnitGrid)">
+    <studPadding type="mbtype:PerSide4(Decimal(mbunit:GridUnit))">
       <documentation>Padding from sides 0-3 inward. Shifts the outer wall for the decision
         whether studs are drawn, allowing outer studs to be hidden.
       </documentation>
@@ -1309,12 +1309,12 @@
       <value>[451.556, 451.556]</value>
     </surfacePatternDimensions>
 
-    <surfacePatternOffset type="mbtype:AxisXY(FloatUnitGrid)">
+    <surfacePatternOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
       <documentation>Offset of the surface pattern.</documentation>
       <value>[0, 0]</value>
     </surfacePatternOffset>
 
-    <surfacePatternPadding type="mbtype:PerSide4(FloatUnitGrid)">
+    <surfacePatternPadding type="mbtype:PerSide4(Decimal(mbunit:GridUnit))">
       <documentation>Distance from the edges of the surface pattern area, forming a smooth
         (pattern-free) border around the structure. At 0, the pattern extends
         to the edges. Each edge can be configured individually via the
@@ -1357,7 +1357,7 @@
       <value>5</value>
     </svgFace>
 
-    <svgOffset type="mbtype:AxisXY(FloatUnitGrid)">
+    <svgOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
       <documentation>Offset of the SVG from its default position.</documentation>
       <value>[0, 0]</value>
     </svgOffset>
@@ -1403,7 +1403,7 @@
       <value>Liberation Sans</value>
     </textFont>
 
-    <textOffset type="mbtype:AxisXY(FloatUnitGrid)">
+    <textOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnit))">
       <documentation>Offset of the text from its normal position.</documentation>
       <value>[0, 0]</value>
     </textOffset>
