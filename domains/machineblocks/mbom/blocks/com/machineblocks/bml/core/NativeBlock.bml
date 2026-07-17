@@ -878,7 +878,7 @@
       <scad:value>false</scad:value>
     </recessWallGapStuds>
 
-    <recessWallGaps type="mbtype:WallGap[]">
+    <recessWallGaps type="mbtype:RecessWallGap[]">
       <documentation>Openings in recess walls. Each entry specifies a side and optional
         left/right offsets to create partial or full wall openings.
         Also creates matching openings in tongue and groove.
@@ -1042,21 +1042,21 @@
       <scad:value>1.0</scad:value>
     </scale>
 
-    <screwHoleDepth type="Decimal">
+    <screwHoleDepth type="Decimal(unit:Millimeter)">
       <documentation>Default depth of screw holes. Can be overridden per hole in screwHoles.</documentation>
       <since>3.0.0</since>
       <value>4</value>
       <scad:value>4</scad:value>
     </screwHoleDepth>
 
-    <screwHoleDiameter type="Decimal">
+    <screwHoleDiameter type="Decimal(unit:Millimeter)">
       <documentation>Default diameter of screw holes. Can be overridden per hole in screwHoles.</documentation>
       <since>3.0.0</since>
       <value>1.6</value>
       <scad:value>1.6</scad:value>
     </screwHoleDiameter>
 
-    <screwHoleInsetDepth type="Decimal">
+    <screwHoleInsetDepth type="Decimal(unit:Millimeter)">
       <documentation>Default inset ring depth for screw holes. 0 = no inset.
         Can be overridden per hole in screwHoles.
       </documentation>
@@ -1065,7 +1065,7 @@
       <scad:value>0.8</scad:value>
     </screwHoleInsetDepth>
 
-    <screwHoleInsetThickness type="Decimal">
+    <screwHoleInsetThickness type="Decimal(unit:Millimeter)">
       <documentation>Default inset ring thickness around screw holes. 0 = no inset.
         Can be overridden per hole in screwHoles.
       </documentation>
@@ -1074,13 +1074,13 @@
       <scad:value>0.6</scad:value>
     </screwHoleInsetThickness>
 
-    <screwHoleZHelperHeight type="Decimal">
+    <screwHoleZHelperHeight type="Decimal(unit:Millimeter)">
       <documentation>Height of the helper layers for Z-face screw holes.</documentation>
       <value>0.2</value>
       <scad:value>0.2</scad:value>
     </screwHoleZHelperHeight>
 
-    <screwHoleZHelperLayerOffset type="Decimal">
+    <screwHoleZHelperLayerOffset type="Decimal(unit:Millimeter)">
       <documentation>Offset between the two helper layers for Z-face screw holes.
         "auto" uses printerLayerHeight.
       </documentation>
@@ -1089,7 +1089,7 @@
       <scad:value>0.2</scad:value>
     </screwHoleZHelperLayerOffset>
 
-    <screwHoleZHelperThickness type="Decimal">
+    <screwHoleZHelperThickness type="Decimal(unit:Millimeter)">
       <documentation>Thickness of print helpers for Z-face screw holes on the underside.
         Required for baseCutoutType=standard to avoid needing print support.
       </documentation>
