@@ -1007,19 +1007,31 @@
       <scad:value>1.0</scad:value>
     </scadPreviewQuality>
 
-    <scadQualityClassFactors type="mbtype:AxisXYZ(Float)">
+    <scadQualityClassFactors type="mbtype:ScadQualityClassFactors">
       <documentation>Per quality-class segment length multipliers.
         Higher values reduce quality and improve render performance.
       </documentation>
-      <value>[1.00, 1.35, 2.25]</value>
+      <value>
+        {
+          functional: 1.00, 
+          visual: 1.35, 
+          hidden: 2.25
+        }
+      </value>
       <scad:value>[1.00, 1.35, 2.25]</scad:value>
     </scadQualityClassFactors>
 
-    <scadQualityClassMinSegments type="mbtype:AxisXYZ(Integer)">
+    <scadQualityClassMinSegments type="mbtype:ScadQualityClassMinSegments">
       <documentation>Minimum full-circle segment count per quality class.
         Prevents small radii from becoming overly coarse.
       </documentation>
-      <value>[16, 12, 8]</value>
+      <value>
+        {
+          functional: 16, 
+          visual: 12, 
+          hidden: 8
+        }
+      </value>
       <scad:value>[16, 12, 8]</scad:value>
     </scadQualityClassMinSegments>
 
