@@ -1157,7 +1157,7 @@ relation="Extends"        — Block reference via org.blockml.bml.relation.* (un
                           — omitted → org.blockml.bml.relation.SeeAlso
 ```
 
-Standard relation blocks: `SeeAlso` (default when omitted), `ReadFirst`, `ReadNext`, `ThenExecute`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Domain libraries may define additional relation blocks extending `org.blockml.bml.core.Relation`.
+Standard relation blocks: `SeeAlso` (default when omitted), `ReadFirst`, `ReadNext`, `ThenContinueWith`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Abstract bases: `org.blockml.bml.core.Relation` (any target kind); `org.blockml.bml.core.TypeRelation(T)` — only `see type=`, and the referenced type must satisfy `satisfiesTypeBound(…, T)` (default `T = core:Block`). `ThenContinueWith` binds `T = core:Bootstrap`. Domain libraries may define additional relation blocks extending `Relation` or `TypeRelation`.
 
 **Why separate target attributes instead of one `target`?**
 
@@ -3988,7 +3988,7 @@ definition only). See `17_type_system_bml.md` — TypeReference and TypeReferenc
 **Concrete Library `<references>` rule** — at most two `<see>` entries on the catalog descriptor:
 
 1. **Required:** `relation=ReadFirst` targeting the same ReadMe named in `readMe`
-2. **Optional:** `relation=ThenExecute` targeting the Bootstrap named in `bootstrap` (only when
+2. **Optional:** `relation=ThenContinueWith` targeting the Bootstrap named in `bootstrap` (only when
    present) — after reading, continue by executing the automation SPOE
 
 No AuthoringGuide / DeepDive / Extends / SeeAlso (or other) entries on concrete `Library.bml` —
@@ -4011,7 +4011,7 @@ Example with bootstrap:
 ```xml
 <references>
   <see type="blockml:README" relation="ReadFirst">…</see>
-  <see type="blockml:MyBootstrap" relation="ThenExecute">
+  <see type="blockml:MyBootstrap" relation="ThenContinueWith">
     After reading, execute the library automation SPOE.
   </see>
 </references>

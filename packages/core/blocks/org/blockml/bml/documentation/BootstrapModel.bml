@@ -41,7 +41,7 @@
     Concrete Library.bml &lt;references&gt; — at most two &lt;see&gt; entries on the catalog
     descriptor (not on documentation blocks):
     1. Required relation=ReadFirst → the ReadMe named in readMe
-    2. Optional relation=ThenExecute → the Bootstrap named in bootstrap (only when present)
+    2. Optional relation=ThenContinueWith → the Bootstrap named in bootstrap (only when present)
     Signals: after reading, continue by executing the automation SPOE. No AuthoringGuide /
     DeepDive / Extends / SeeAlso on concrete Libraries.
 
@@ -90,7 +90,7 @@
     <see type="core:Bootstrap" relation="Defines">
       Abstract Bootstrap role — optional automation SPOE.
     </see>
-    <see type="relation:ThenExecute" relation="SeeAlso">
+    <see type="relation:ThenContinueWith" relation="SeeAlso">
       Library &lt;see&gt; after ReadFirst when bootstrap is present.
     </see>
     <see type="blockml:README" relation="SeeAlso">

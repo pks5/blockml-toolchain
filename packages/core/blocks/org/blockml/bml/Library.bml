@@ -103,6 +103,7 @@
       <core:Mapping />
       <core:Status />
       <core:Relation />
+      <core:TypeRelation />
       <core:Validation />
       <core:ValueType />
       <core:Unit />
@@ -190,7 +191,7 @@
       <relation:SeeAlso />
       <relation:TaskIndex />
       <relation:TaskStep />
-      <relation:ThenExecute />
+      <relation:ThenContinueWith />
       <status:Deprecated />
       <status:Draft />
       <status:Stable />

@@ -1898,7 +1898,7 @@ org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diag
 
 `readMe` references a `ReadMe` block (typically `README`) — required human/LLM reading entry. Curated reading order uses `<references>` with `relation=ReadFirst`; available tasks use `relation=TaskIndex`. `bootstrap` is the optional automation SPOE — see `doc:BootstrapModel` and `doc:TaskGuideModel`.
 
-**Concrete Library `<references>`:** at most two `<see>` entries — required `ReadFirst` → the `readMe` target; optional `ThenExecute` → the `bootstrap` target when present (after reading, execute the automation SPOE). No other relations on the catalog descriptor.
+**Concrete Library `<references>`:** at most two `<see>` entries — required `ReadFirst` → the `readMe` target; optional `ThenContinueWith` → the `bootstrap` target when present (after reading, execute the automation SPOE). No other relations on the catalog descriptor.
 `schemas` holds `FilePathEntity` composition children; **`value`** is the relative `.xsd` path from the library package root (directory containing `Library.bml`).
 
 The Library block is always named `Library.bml`. Its FQN is `{package}.Library` where `{package}` is derived from the file's package path (e.g. `com.machineblocks.bml.bricks.Library`, `org.blockml.bml.Library`, `org.blockml.bml.compiler.Library`).

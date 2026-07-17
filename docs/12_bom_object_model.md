@@ -1319,7 +1319,7 @@ and validates library membership.
 `org.blockml.bml.README`). Curated reading order uses `<references>` with `relation=ReadFirst`;
 available tasks use `relation=TaskIndex`. `bootstrap` is the optional automation SPOE (at most one
 Bootstrap). Concrete Library `<references>`: required `ReadFirst` → readMe target; optional
-`ThenExecute` → bootstrap target when present. `schemas` is optional legacy XSD (`FilePathEntity`
+`ThenContinueWith` → bootstrap target when present. `schemas` is optional legacy XSD (`FilePathEntity`
 paths). `blocks` lists exported Block and ValueType BML — primary SSOT as types migrate from XSD.
 ---
 

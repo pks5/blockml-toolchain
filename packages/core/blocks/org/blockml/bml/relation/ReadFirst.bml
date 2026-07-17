@@ -18,7 +18,7 @@
 
   <documentation>Two uses:
     1. Concrete Library.bml — required single ReadFirst &lt;see&gt; targeting the ReadMe named in
-       the readMe aggregation (catalog entry point). May be followed by ThenExecute → Bootstrap
+       the readMe aggregation (catalog entry point). May be followed by ThenContinueWith → Bootstrap
        when bootstrap is present; no other &lt;see&gt; relations on concrete Libraries.
     2. README / ReadMe blocks — curated mental learning order. ReadFirst entries should appear
        first in &lt;references&gt;, in reading order.
