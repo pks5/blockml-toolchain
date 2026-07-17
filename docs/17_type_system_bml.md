@@ -720,7 +720,7 @@ Rule:  aggregation type attribute  →  decides sugar vs domain-Block instance
        and the child element QName is not TypeReferenceEntity itself
 ```
 
-**Definition sites** (`<contracts>`, `<languages>`, `<subTypes>`, `<language>`) declare
+**Definition sites** (`<contracts>`, `<languages>`, `<language>`) declare
 `TypeReferenceEntity` aggregations — children are Entity instances (sugar or explicit), never wrapped
 in `<composition>` at the definition site:
 
@@ -1609,7 +1609,6 @@ Branch is derived by walking the **`baseType` chain only** — `contracts[]` doe
 |---|---|---|---|---|---|
 | `<composition>` | allowed | EnumType: `values` only; others: definition-level only | forbidden | forbidden | forbidden |
 | `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden | forbidden | forbidden |
-| `<subTypes>` | allowed | allowed | forbidden | forbidden | forbidden |
 | `<genericTypes>` | allowed | allowed | allowed | forbidden | forbidden |
 | `<properties>` | allowed | StructType · PrimitiveType · EnumType (catalog metadata) | allowed | forbidden | forbidden |
 | `<languages>` | allowed | forbidden | forbidden | forbidden | forbidden |

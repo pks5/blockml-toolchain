@@ -141,7 +141,7 @@ interface SourceInfo {
 
 A Block definition is the abstract representation of a `<block>` document (or a Sub-Block within one). Semantically: a **Class** — type shape without instance state.
 
-`TypeReferenceEntity` aggregations (`contracts`, `languages`, `subTypes`, `language`, Library lists) store real Entity instances. FQN membership checks use `resolve(value)`.
+`TypeReferenceEntity` aggregations (`contracts`, `languages`, `language`, Library lists) store real Entity instances. FQN membership checks use `resolve(value)`.
 
 ```typescript
 /** BOM shape for org.blockml.bml.type.TypeReferenceEntity(B[, D]) instances */
@@ -220,9 +220,6 @@ interface BlockDefinition {
 
   /** BlockML access visibility — Sub-Blocks only. Derived from name when omitted. Forbidden on root Blocks. Does not restrict renderer BOM access. */
   visibility?: "private" | "protected" | "public"
-
-  /** Sub-Block baseTypes permitted in subBlocks[]. undefined: inherit from baseType chain; explicit [] = override to forbid */
-  subTypes?: TypeReferenceEntityInstance[]
 
   /** Language TypeReferenceEntity instances allowed on capability implementations. Default: inherit. */
   languages?: TypeReferenceEntityInstance[]
@@ -1440,7 +1437,6 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
 ✓  Qualified FQN::id references target public aggregations with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)
-✓  Sub-Block baseType ∈ parent's subTypes (domain rule)
 ✓  Sub-Block references use qualified name or FQN — no bare short names
 ✓  generic parameter name ≠ declaring Block name; generic parameter name ≠ any direct Sub-Block name of that Block
 ✓  Sub-Block same name as root Block → qualified reference required at use sites
@@ -1534,7 +1530,6 @@ BML_UNKNOWN_PROPERTY          — instance attribute not in effective members (w
 BML_UNKNOWN_DIRECTIVE         — unrecognized bml:* attribute (error)
 BML_DIRECTIVE_NOT_ALLOWED     — bml:* on disallowed element (error)
 BML_DEPRECATED_MEMBER_NAMESPACE_ATTR — legacy namespace="…" attribute on member element (error)
-BML_INVALID_SUBBLOCK_TYPE     — Sub-Block baseType not allowed on parent
 BML_PROPERTY_CYCLE            — circular property value dependencies
 BML_VISIBILITY_MISMATCH       — visibility attribute or <visibility> does not match naming convention
 BML_VISIBILITY_ON_ROOT_BLOCK  — <visibility> on root Block

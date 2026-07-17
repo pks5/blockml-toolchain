@@ -1691,36 +1691,7 @@ Use `bml:id` for dynamic IDs inside loops:
 
 Sub-Blocks are Block definitions nested inside a parent Block definition. They are analogous to **Java static nested classes** — they belong to the parent conceptually, share its FQN prefix, may declare their own `<genericTypes>`, and do **not** see the enclosing Block's type parameters (forward explicitly). Sub-Blocks form a **semantic type hierarchy** within a single `BomDocument` and may nest to arbitrary depth via `<subBlocks>`. They do not open their own document or library scope. Unqualified nested type resolution walks the enclosing chain like Java — see `02_mbml.md` — § Unqualified nested type resolution.
 
-Sub-Blocks are declared in a `<subBlocks>` section within the parent Block definition (root block, parent Sub-Block, or embedded block). Each Sub-Block is a full Block definition with its own properties, aggregations, capabilities, composition, and optional generics. Sub-Blocks must not declare `<embeddedBlocks>`.
-
-### Allowed Sub-Block Types
-
-The `baseType` chain defines which Sub-Block base types are permitted via **effective `subTypes`**. By default every Block has **no** permitted Sub-Block base types (`[]`). A type must **explicitly** declare `<subTypes>` to enable Sub-Blocks — or omit `<subTypes>` to inherit from its parent type.
-
-```text
-org.blockml.bml.core.Block
-  → subTypes omitted → effective [] (default)
-
-com.machineblocks.bml.core.Block
-  → subTypes omitted → inherits [] from org.blockml.bml.core.Block
-
-com.machineblocks.bml.core.CompositeBlock
-  → subTypes declared explicitly:
-    [com.machineblocks.bml.core.Block]
-
-com.machineblocks.bml.core.Set
-  → subTypes omitted → inherits CompositeBlock chain
-
-org.blockml.bml.service.Math
-  → baseType: org.blockml.bml.core.Entity
-
-com.machineblocks.bml.core.NativeBlock
-  → subTypes omitted → inherits [] (final leaf — no Sub-Blocks)
-```
-
-To **forbid** Sub-Blocks on a type whose parent enabled them, declare an explicit empty override: `<subTypes/>`.
-
-If a Sub-Block's `baseType` is not in the parent's effective `subTypes`, the compiler emits `BML_INVALID_SUBBLOCK_TYPE`.
+Sub-Blocks are declared in a `<subBlocks>` section within the parent Block definition (root block, parent Sub-Block, or embedded block). Each Sub-Block is a full Block definition with its own properties, aggregations, capabilities, composition, and optional generics. Sub-Blocks must not declare `<embeddedBlocks>`. Their `baseType` follows the same rules as any other Block definition (must resolve, must not be `final`, branch rules).
 
 Sub-Blocks follow the same visibility naming convention as members (`__` private, `_` protected, plain public). Optional root-level `<visibility>` on Sub-Blocks only — forbidden on root Blocks (`BML_VISIBILITY_ON_ROOT_BLOCK`). Visibility controls BlockML reference scope only — not target-system visibility. Mismatch → `BML_VISIBILITY_MISMATCH`; out-of-scope reference → `BML_PRIVATE_SUBBLOCK_ACCESS` or `BML_PROTECTED_SUBBLOCK_ACCESS`. See `02_mbml.md` — § Member Visibility · § Sub-Block Visibility.
 

@@ -1378,7 +1378,6 @@ PascalCase ensures composition instance tags with `xmlns:` prefixes are unambigu
                               — local declaration property; not inherited. Validator enforces effect.
                               — declared on StructuralDefinition; applies to block definitions
 <visibility>                  — Sub-Blocks only: private | protected | public; must match <name>
-<subTypes>          — override: permitted Sub-Block baseTypes (omit to inherit — see Framework Base Types)
 <languages>         — Language references for <implementation language="...">
 <properties>    — Property declarations. Omit if no custom properties or default overrides needed.
 <aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice.
@@ -1402,11 +1401,6 @@ Framework base types (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.
 <abstract>true</abstract>
 <final>true</final>
 
-<subTypes>
-  <core:Block />
-  <core:Entity />
-</subTypes>
-
 <languages>
   <lang:OpenSCAD />
   <lang:TypeScript />
@@ -1414,12 +1408,9 @@ Framework base types (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.
 ```
 
 ```text
-Omitted <subTypes>            — inherit effective subTypes from baseType chain
-Explicit <subTypes>…          — override (enable or restrict Sub-Blocks)
-Explicit empty <subTypes/>    — override: forbid Sub-Blocks even when parent allowed them
 Omitted abstract/final          — false (local declaration properties; not inherited from baseType)
 Omitted languages / contracts   — inherit from baseType at validate
-org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritance root); effective subTypes []
+org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritance root)
 ```
 
 **Container pattern:** BlockML uses a consistent syntax for typed collections on Block definitions. The container element defines context; each child is the actual definition or Block reference — no redundant wrapper elements when context is already unambiguous.
@@ -1431,7 +1422,6 @@ domain `Block[]` aggregation denotes a real empty instance of that Block instead
 
 ```text
 <languages>    →  <lang:OpenSCAD/>           TypeReferenceEntity(core:Language)[] — Entity sugar
-<subTypes>     →  <core:Block/>              TypeReferenceEntity(core:Block)[] — Entity sugar
 <contracts>    →  <ac:Wall/>                 TypeReferenceEntity(core:Block)[] — Entity sugar
 <language>     →  <German/>                  TypeReferenceEntity(NaturalLanguage) — optional single
 <type>         →  foo:MyBlock                TypeReference property text — required on root

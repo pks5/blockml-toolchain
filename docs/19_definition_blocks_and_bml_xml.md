@@ -182,9 +182,6 @@ Same pattern as `org.blockml.bml.core.Block` (`${ bml:Self }`) and Language refe
 <languages>
   <lang:OpenSCAD/>    → language reference — type ref, not instance
 </languages>
-<subTypes>
-  <core:Block/>       → allowed Sub-Block baseType reference — type ref, not instance
-</subTypes>
 ```
 
 The container defines context; the child element is the Block reference — no wrapper elements (`contract`, `genericType`) when context is already unambiguous.
@@ -249,7 +246,6 @@ org.blockml.bml.definition.BlockDefinition
                     aliases → Alias[]
                     genericTypes → GenericTypeDefinition[]
                     languages → TypeReferenceEntity(Language)[]
-                    subTypes → TypeReferenceEntity(Block)[]
                     contracts → TypeReferenceEntity(Block)[]
                     properties → PropertyDefinition[]
                     aggregations → AggregationDefinition[]

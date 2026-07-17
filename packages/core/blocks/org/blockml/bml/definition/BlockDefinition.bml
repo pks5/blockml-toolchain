@@ -29,7 +29,7 @@
     com.foo.Bar when B resolves to com.foo.Bar.
 
     Declares identity first (name, type, baseType, version), then semantic and discovery fields
-    (is, isnot, aliases), generic parameters, contracts, allowed Sub-Blocks and languages, and
+    (is, isnot, aliases), generic parameters, contracts, languages, and
     member declaration containers (properties, aggregations, associations, capabilities). Inherits
     summary and keywords aggregation (core.Keyword[]) from
     org.blockml.bml.definition.StructuralDefinition. isnot is block-level only; aliases aggregation
@@ -73,7 +73,7 @@
       Virtual .bml under root embeddedBlocks — overrides definition.
     </see>
     <see type="type:TypeReferenceEntity" relation="Defines">
-      Entity payload for contracts, languages, language, and subTypes aggregations — not
+      Entity payload for contracts, languages, and language aggregations — not
       type/baseType (those stay scalar TypeReference text).
     </see>
     <see type="type:TypeReference" relation="Defines">
@@ -201,12 +201,6 @@
       Each child is a TypeReferenceEntity instance (empty QName sugar or explicit value). Omitted =
       inherit from baseType chain. Stored in BOM as block.languages[] (Entity instances).</documentation>
     </languages>
-    <subTypes type="type:TypeReferenceEntity(core:Block)[]">
-      <documentation>Block types allowed as baseType on Sub-Blocks in subBlocks[]. Each child is a
-      TypeReferenceEntity instance. Omitted = inherit effective subTypes from baseType chain;
-      explicit empty list = override to forbid Sub-Blocks. Stored in BOM as block.subTypes[].
-      </documentation>
-    </subTypes>
     <contracts type="type:TypeReferenceEntity(core:Block)[]">
       <documentation>Contract Block references merged into this Block after the baseType chain
       (root block only). Each child is a TypeReferenceEntity instance — for example

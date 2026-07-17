@@ -97,31 +97,6 @@ Empty elements (`<final/>`) are not permitted — use `<final>true</final>` expl
 
 `com.machineblocks.bml.core.NativeBlock` is `final=true`.
 
-### `<subTypes>`
-
-```xml
-<subTypes>
-  <core:Block />
-  <core:Entity />
-</subTypes>
-```
-
-```text
-Lists Block type references permitted as baseType on Sub-Blocks in <subBlocks>.
-Meta-model type: type:TypeReferenceEntity(core:Block)[]. Each child is a TypeReferenceEntity instance — empty QName sugar or explicit value.
-See 17_type_system_bml.md — TypeReference and TypeReferenceEntity.
-
-Default (no declaration on this block):  [] — Sub-Blocks forbidden until explicitly enabled
-Omitted <subTypes>:                      inherit effective subTypes from baseType chain
-Explicit <subTypes>…</subTypes>:          override inherited list (enable or restrict Sub-Blocks)
-Explicit empty <subTypes/>:              override — close Sub-Blocks even when parent allowed them
-
-Declare <subTypes> only when overriding the inherited list. Do not emit an empty element
-merely to restate the default — omit the element instead.
-
-Sub-Block baseType not in effective subTypes → BML_INVALID_SUBBLOCK_TYPE
-```
-
 ### `<languages>`
 
 ```xml
@@ -152,7 +127,7 @@ Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 ```text
 Lists contract Block references merged into this Block (root block only).
 Meta-model type: type:TypeReferenceEntity(core:Block)[]. Each child is a TypeReferenceEntity instance — empty QName sugar or explicit value.
-Same container pattern as <languages> and <subTypes> — no wrapper <contract> element.
+Same container pattern as <languages> — no wrapper <contract> element.
 See 17_type_system_bml.md — TypeReference and TypeReferenceEntity.
 Role            — member merge + type-bound identification (satisfiesTypeBound); see 17_type_system_bml.md
 Omitted = inherit from baseType at validate
@@ -326,7 +301,7 @@ in child blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 
-`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`name`, `type`, `baseType`, `version`), designation (`is`, `isnot`), abstract `definition` (meta-model role selector), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), `subBlocks` (recursive Sub-Block hierarchy), and block-level collections (`genericTypes`, `languages`, `subTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
+`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`name`, `type`, `baseType`, `version`), designation (`is`, `isnot`), abstract `definition` (meta-model role selector), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), `subBlocks` (recursive Sub-Block hierarchy), and block-level collections (`genericTypes`, `languages`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
 
 `org.blockml.bml.definition.SubBlockDefinition`, `RootBlockDefinition`, and `EmbeddedBlockDefinition` are **sibling** specializations of `BlockDefinition` that each override `definition` with a tighter TypeReference and default (`SubBlockDefinition` / `RootBlockDefinition` / `EmbeddedBlockDefinition`). `RootBlockDefinition` additionally declares `embeddedBlocks` (`EmbeddedBlockDefinition[]` — virtual files, root-only). `EmbeddedBlockDefinition` has no nested embeds. `subBlocks` is inherited from `BlockDefinition` and may nest to arbitrary depth on roots, embeds, and Sub-Blocks.
 

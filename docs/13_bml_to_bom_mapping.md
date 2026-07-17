@@ -319,7 +319,6 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <abstract>true</abstract>                    → block.abstract = true
 <final>true</final>                          → block.final = true
 <visibility>…</visibility>                   → block.visibility (Sub-Block only; root → BML_VISIBILITY_ON_ROOT_BLOCK)
-<core:Block />                               → block.subTypes[] (TypeReference(core:Block)[] child)
 <lang:OpenSCAD />                            → block.languages[] (TypeReference(core:Language)[] child)
 <ac:Wall />                                  → block.contracts[]   (TypeReference(core:Block)[] child; root block only)
 `<definition>RootBlockDefinition</definition>` → `block.definitionFqn`. Default depends on parse context: Sub-Blocks → `SubBlockDefinition`; document root → `RootBlockDefinition`; embedded virtual files → `EmbeddedBlockDefinition`. Explicit `<definition>` must be compatible with block role (`BML_DEFINITION_TYPE_MISMATCH`).
@@ -369,8 +368,6 @@ Protected member access outside scope    → BML_PROTECTED_MEMBER_ACCESS (error)
 Private Sub-Block reference outside scope → BML_PRIVATE_SUBBLOCK_ACCESS (error)
 Protected Sub-Block reference outside scope → BML_PROTECTED_SUBBLOCK_ACCESS (error)
 Duplicate members by visibility prefix   → BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT (error)
-Omitted <subTypes>                     → undefined — inherit effective subTypes from baseType chain
-Empty <subTypes/>                        → block.subTypes = [] (explicit override — forbid Sub-Blocks)
 Omitted languages / contracts          → inherit from baseType at validate
 Omitted genericTypes                 → none — generic parameters are not inherited; bind or forward via baseType / Sub-Block application
 <contracts> on Sub-Block                 → BML_CONTRACT_NOT_ON_ROOT (error)
@@ -748,7 +745,7 @@ See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 Aggregation type is TypeReferenceEntity(B)[/…/]  →  TypeReferenceEntity instances
   Parser: empty non-TypeReferenceEntity QName child → expand sugar → Entity { value: resolved FQN }
   Explicit <type:TypeReferenceEntity value="…" /> is equivalent
-  Store Entity instances in contracts[] / languages[] / subTypes[] / language / Library lists
+  Store Entity instances in contracts[] / languages[] / language / Library lists
   Validator: satisfiesTypeBound(resolve(value), B) for each child
   FQN projections (e.g. languageFqn, contract FQN sets) derive from .value
 

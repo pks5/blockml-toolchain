@@ -801,7 +801,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 13_bml_to_bom_mapping.md — BML → BOM algorithm (parser implementation contract)
 14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
 15_dev_setup.md        — monorepo tooling, build, test, IDE setup
-16_framework_base_types.md — framework base types as BML (abstract, final, subTypes)
+16_framework_base_types.md — framework base types as BML (abstract, final)
 17_type_system_bml.md  — ValueType, Language, Block hierarchy
 18_constraints_and_suggestions.md — property constraints and suggestions
 19_definition_blocks_and_bml_xml.md — Definition meta-model BML (specified); bml:xml meta-serializer (not implemented)

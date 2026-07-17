@@ -89,9 +89,6 @@
 
   <abstract>true</abstract>
 
-  <subTypes type="type:TypeReferenceEntity(core:Block)[]">
-    <core:Block />
-  </subTypes>
   <properties>
     <description type="Text" readOnly="true">
       <documentation>Human-readable summary of what this library provides. Public readOnly —

@@ -535,7 +535,6 @@ Defined in `CompositeBlock.bml`. Extends `Block`. Adds `_parts` as the default c
 ```text
 Extends:        com.machineblocks.bml.core.Block
 Aggregations:   _parts (type: com.machineblocks.bml.core.Block[], default)
-subTypes: Block
 languages: OpenSCAD
 ```
 
@@ -570,31 +569,6 @@ Derivable:      baseType = com.machineblocks.bml.core.Set  ✓
 Processor:      ScadSetProcessor → STEPS array + 4 view submodules
 ```
 
-### subTypes
-
-**Default:** `[]` — Sub-Blocks forbidden until explicitly enabled via `<subTypes>`.
-
-**Omit** `<subTypes>` to inherit the effective list from the `baseType` chain. **Declare** `<subTypes>` only when overriding (enable or restrict).
-
-Declared on `CompositeBlock.bml` (enables Sub-Blocks for composites):
-
-```xml
-<subTypes>
-  <core:Block />
-</subTypes>
-```
-
-```text
-org.blockml.bml.core.Block                — omitted → effective []
-com.machineblocks.bml.core.Block          — omitted → inherits []
-com.machineblocks.bml.core.CompositeBlock — explicit → Block
-com.machineblocks.bml.core.Set            — omitted → inherits CompositeBlock
-com.machineblocks.bml.core.NativeBlock    — omitted → inherits [] (final leaf)
-org.blockml.bml.service.Math              — baseType: org.blockml.bml.core.Entity
-```
-
-To close Sub-Blocks on a type whose parent enabled them: `<subTypes/>` (explicit empty override).
-
 ### languages
 
 Declared on `CompositeBlock.bml`:
@@ -615,7 +589,6 @@ org.blockml.bml.service.*                 — TypeScript on Transformation capab
 ```text
 BML_FINAL_BASE_TYPE             — NativeBlock used as baseType
 BML_NATIVE_BLOCK_CUSTOM_PROPERTY — custom property declared on NativeBlock
-BML_INVALID_SUBBLOCK_TYPE       — Sub-Block baseType not in subTypes
 MB_EMPTY_BLOCK                  — Block has no Composition and no registered custom Processor
                                    (MB_* prefix = MachineBlocks-specific, not BML Core)
 ```

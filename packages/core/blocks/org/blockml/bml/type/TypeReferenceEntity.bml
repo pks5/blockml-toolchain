@@ -23,7 +23,7 @@
     baseType — inherits the value property automatically as value : TypeReference(B).
 
     Use on aggregation type attributes when children are type references stored as Entity instances:
-    • type:TypeReferenceEntity(core:Block)[] — contracts, subTypes, Library blocks
+    • type:TypeReferenceEntity(core:Block)[] — contracts, Library blocks
     • type:TypeReferenceEntity(lang:NaturalLanguage) — language (singular, 0..1)
     • type:TypeReferenceEntity(core:Language)[] — languages
     • type:TypeReferenceEntity(core:ReadMe)[1..1] — Library readMe
@@ -59,7 +59,7 @@
       Abstract generic base — value property inherited after binding T.
     </see>
     <see type="def:BlockDefinition" relation="Defines">
-      contracts, languages, subTypes, language aggregations.
+      contracts, languages, language aggregations.
     </see>
     <see type="core:BlockLibrary" relation="SeeAlso">
       readMe, bootstrap, dependencies, subLibraries, blocks aggregations.
