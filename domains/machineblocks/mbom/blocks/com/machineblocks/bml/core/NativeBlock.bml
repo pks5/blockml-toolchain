@@ -1178,6 +1178,16 @@
         Slope and bevel can be used together.
       </documentation>
       <examples>
+        <example language="BML" snippet="true" title="no slope (boolean)">
+          ...
+          slope = "false"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="no slope (zero map)">
+          ...
+          slope = "{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0}"
+          ...
+        </example>
         <example language="BML" snippet="true" title="positive slope">
           ...
           slope = "{xNeg: 1, xPos: 1, yNeg: 0, yPos: 0}"
@@ -1190,6 +1200,16 @@
         </example>
       </examples>
       <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="no slope (false)">
+          ...
+          ["slope", false]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="no slope (zero array)">
+          ...
+          ["slope", [0, 0, 0, 0]]
+          ...
+        </example>
         <example language="OpenSCAD" snippet="true" title="positive slope">
           ...
           ["slope", [1, 1, 0, 0]]
@@ -1208,7 +1228,7 @@
       <scad:value>false</scad:value>
     </slope>
 
-    <slopeBaseHeightBottom type="Decimal">
+    <slopeBaseHeightBottom type="Decimal(mbunit:MBU)">
       <documentation>Start height of the slope on the respective side for positive slopes.
         Usually does not need adjustment.
       </documentation>
@@ -1217,7 +1237,7 @@
       <scad:value>1.333</scad:value>
     </slopeBaseHeightBottom>
 
-    <slopeBaseHeightInner type="Decimal">
+    <slopeBaseHeightInner type="Decimal(mbunit:MBU)">
       <documentation>Start height of the slope on the inner wall of the brick.
         Usually does not need adjustment.
       </documentation>
@@ -1226,7 +1246,7 @@
       <scad:value>1.125</scad:value>
     </slopeBaseHeightInner>
 
-    <slopeBaseHeightTop type="Decimal">
+    <slopeBaseHeightTop type="Decimal(mbunit:MBU)">
       <documentation>Height subtracted from block height for inverted (negative) slopes.
         Usually does not need adjustment.
       </documentation>
@@ -1243,30 +1263,30 @@
       <scad:value>2</scad:value>
     </stabilizerExpansion>
 
-    <stabilizerExpansionOffset type="Decimal">
+    <stabilizerExpansionOffset type="Decimal(mbunit:MBU)">
       <documentation>Distance of expanded grid elements from the bottom edge.</documentation>
       <value>1</value>
       <scad:value>1</scad:value>
     </stabilizerExpansionOffset>
 
-    <stabilizerHeight type="Decimal">
+    <stabilizerHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of the stabilizer grid.</documentation>
       <since>3.0.0</since>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
     </stabilizerHeight>
 
-    <stabilizerLayerOffset type="Decimal">
+    <stabilizerLayerOffset type="Decimal(unit:Millimeter)">
       <documentation>Offset between the first and subsequent grid layers.
         Ensures subsequent layers have a surface to print on.
         "auto" uses printerLayerHeight.
       </documentation>
       <since>3.0.0</since>
-      <value>0.2</value>
-      <scad:value>0.2</scad:value>
+      <value>Auto</value>
+      <scad:value>auto</scad:value>
     </stabilizerLayerOffset>
 
-    <stabilizerThickness type="Decimal">
+    <stabilizerThickness type="Decimal(mbunit:MBU)">
       <documentation>Width of a single grid strut.</documentation>
       <since>3.0.0</since>
       <value>0.5</value>
@@ -1283,7 +1303,7 @@
       <scad:value>true</scad:value>
     </stabilizers>
 
-    <studBaseOverlap type="Decimal">
+    <studBaseOverlap type="Decimal(mbunit:MBU)">
       <documentation>How deeply the stud is sunk into the block body (overlap with base).
         Ensures the stud is geometrically connected to the body (no floating geometry).
         Also prevents gaps when grille or surfacePattern is active.
@@ -1295,7 +1315,7 @@
       <scad:value>0.25</scad:value>
     </studBaseOverlap>
 
-    <studClampHeight type="Decimal">
+    <studClampHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of the stud clamp ring at the upper stud edge.
         Creates a near-permanent connection between two bricks.
         Only active when studClampThickness &gt; 0.
@@ -1304,17 +1324,17 @@
       <scad:value>0.5</scad:value>
     </studClampHeight>
 
-    <studClampOffset type="Decimal">
+    <studClampOffset type="Decimal(mbunit:MBU)">
       <documentation>Distance from the stud clamp ring to the base body.
         "auto" = studHeight - studClampHeight, so the clamp sits as high
         as possible, flush with the top of the stud.
       </documentation>
       <since>3.0.0</since>
-      <value>auto</value>
+      <value>Auto</value>
       <scad:value>auto</scad:value>
     </studClampOffset>
 
-    <studClampThickness type="Decimal">
+    <studClampThickness type="Decimal(mbunit:MBU)">
       <documentation>Thickness of the stud clamp ring. At 0 no clamp is active.</documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
@@ -1340,7 +1360,7 @@
       <scad:value>0.4</scad:value>
     </studCutoutHeightAdjustment>
 
-    <studDiameter type="Decimal">
+    <studDiameter type="Decimal(mbunit:MBU)">
       <documentation>Diameter of studs. Usually does not need adjustment.</documentation>
       <value>3</value>
       <scad:value>3</scad:value>
@@ -1352,7 +1372,7 @@
       <scad:value>0.2</scad:value>
     </studDiameterAdjustment>
 
-    <studHeight type="Decimal">
+    <studHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of studs. Usually does not need adjustment.</documentation>
       <value>1</value>
       <scad:value>1</scad:value>
@@ -1364,7 +1384,7 @@
       <scad:value>0.0</scad:value>
     </studHeightAdjustment>
 
-    <studHoleClampThickness type="Decimal">
+    <studHoleClampThickness type="Decimal(unit:Millimeter)">
       <documentation>Thickness of the clamp inside the stud hole (studType=hollow).
         A constriction of the inner hole so pins/axles grip in the stud.
       </documentation>
@@ -1372,11 +1392,11 @@
       <scad:value>0.1</scad:value>
     </studHoleClampThickness>
 
-    <studHoleDiameter type="Decimal">
+    <studHoleDiameter type="Decimal(mbunit:MBU)">
       <documentation>Diameter of the hole in studs (studType=hollow).
         Automatically calculated.
       </documentation>
-      <value>auto</value>
+      <value>Auto</value>
       <scad:value>auto</scad:value>
     </studHoleDiameter>
 
@@ -1386,7 +1406,7 @@
       <scad:value>0.3</scad:value>
     </studHoleDiameterAdjustment>
 
-    <studIcon type="Text">
+    <studIcon type="Boolean.False | Text">
       <documentation>SVG file engraved into each stud.</documentation>
       <value>../../pattern/bolt-solid-full.svg</value>
       <scad:value>../../pattern/bolt-solid-full.svg</scad:value>
@@ -1396,11 +1416,11 @@
       <documentation>Color of the stud icon. "inherit" uses baseColor.
         Only visually relevant when studIconDepth &gt; 0.
       </documentation>
-      <value>inherit</value>
+      <value>Inherit</value>
       <scad:value>inherit</scad:value>
     </studIconColor>
 
-    <studIconDepth type="Decimal">
+    <studIconDepth type="Decimal(mbunit:MBU)">
       <documentation>Depth of the icon engraving. Negative = engraved into the stud.
         Positive = raised above the stud.
       </documentation>
@@ -1408,11 +1428,11 @@
       <scad:value>-0.2</scad:value>
     </studIconDepth>
 
-    <studIconDimensions type="mbtype:AxisXY(FloatPt)">
+    <studIconDimensions type="mbtype:AxisXY(unit:Millimeter)">
       <documentation>Dimensions of the stud icon SVG in mm (from the SVG file).
         Default values match all standard icons in the /patterns directory.
       </documentation>
-      <value>[169.333, 169.333]</value>
+      <value>{x: 169.333, y: 169.333}</value>
       <scad:value>[169.333, 169.333]</scad:value>
     </studIconDimensions>
 
@@ -1422,7 +1442,7 @@
       <scad:value>0.8</scad:value>
     </studIconScale>
 
-    <studMaxOverhang type="Decimal">
+    <studMaxOverhang type="Decimal(mbunit:MBU)">
       <documentation>Maximum allowed stud overhang beyond the outer edge.
         Studs exceeding this are not drawn.
       </documentation>
@@ -1434,11 +1454,11 @@
       <documentation>Padding from sides 0-3 inward. Shifts the outer wall for the decision
         whether studs are drawn, allowing outer studs to be hidden.
       </documentation>
-      <value>0</value>
-      <scad:value>0</scad:value>
+      <value>{XNeg: 0, XPos: 0, YNeg: 0, YPos: 0}</value>
+      <scad:value>[0, 0, 0, 0]</scad:value>
     </studPadding>
 
-    <studRounding type="Decimal">
+    <studRounding type="Decimal(mbunit:MBU)">
       <documentation>Rounding radius of the upper stud edge.</documentation>
       <value>0.0625</value>
       <scad:value>0.0625</scad:value>
@@ -1467,37 +1487,37 @@
       <scad:value>true</scad:value>
     </studs>
 
-    <surfacePattern type="Text">
+    <surfacePattern type="Boolean.False | Text">
       <documentation>SVG file for a pattern on the brick surface. Applied to the brick
         body surface as a repeating or single pattern.
       </documentation>
-      <value>none</value>
-      <scad:value>none</scad:value>
+      <value>False</value>
+      <scad:value>false</scad:value>
     </surfacePattern>
 
     <surfacePatternColor type="mbtype:Inherit | mbtype:Color">
       <documentation>Color of the surface pattern. "inherit" uses baseColor.
         Only visually relevant when surfacePatternDepth &gt; 0.
       </documentation>
-      <value>inherit</value>
+      <value>Inherit</value>
       <scad:value>inherit</scad:value>
     </surfacePatternColor>
 
-    <surfacePatternDepth type="Decimal">
+    <surfacePatternDepth type="Decimal(mbunit:MBU)">
       <documentation>Depth of the surface pattern. Negative = engraved. Positive = raised.</documentation>
       <value>-0.0625</value>
       <scad:value>-0.0625</scad:value>
     </surfacePatternDepth>
 
-    <surfacePatternDimensions type="mbtype:AxisXY(FloatPt)">
+    <surfacePatternDimensions type="mbtype:AxisXY(unit:Millimeter)">
       <documentation>Dimensions of the surface pattern SVG in mm (from the SVG file).</documentation>
-      <value>[451.556, 451.556]</value>
+      <value>{x: 451.556, y: 451.556}</value>
       <scad:value>[451.556, 451.556]</scad:value>
     </surfacePatternDimensions>
 
     <surfacePatternOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Offset of the surface pattern.</documentation>
-      <value>[0, 0]</value>
+      <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
     </surfacePatternOffset>
 
@@ -1508,8 +1528,8 @@
         4-element array form.
       </documentation>
       <since>3.0.0</since>
-      <value>0</value>
-      <scad:value>0</scad:value>
+      <value>{XNeg: 0, XPos: 0, YNeg: 0, YPos: 0}</value>
+      <scad:value>[0, 0, 0, 0]</scad:value>
     </surfacePatternPadding>
 
     <surfacePatternScale type="Decimal">
@@ -1518,12 +1538,12 @@
       <scad:value>1</scad:value>
     </surfacePatternScale>
 
-    <svg type="Text">
+    <svg type="Boolean.False | Text">
       <documentation>SVG file to draw on a brick side. Placed on the side specified
         by svgFace.
       </documentation>
-      <value></value>
-      <scad:value></scad:value>
+      <value>False</value>
+      <scad:value>false</scad:value>
     </svg>
 
     <svgColor type="mbtype:Color">
@@ -1532,28 +1552,28 @@
       <scad:value>#2c3e50</scad:value>
     </svgColor>
 
-    <svgDepth type="Decimal">
+    <svgDepth type="Decimal(mbunit:MBU)">
       <documentation>Depth/height of the SVG. Negative = engraved. Positive = raised.</documentation>
       <value>0.4</value>
       <scad:value>0.4</scad:value>
     </svgDepth>
 
-    <svgDimensions type="mbtype:AxisXY(FloatPt)">
+    <svgDimensions type="mbtype:AxisXY(unit:Millimeter)">
       <documentation>Dimensions of the SVG in mm (from the SVG file).</documentation>
-      <value>[100, 100]</value>
+      <value>{x: 100, y: 100}</value>
       <scad:value>[100, 100]</scad:value>
     </svgDimensions>
 
     <svgFace type="mbtype:Face">
       <documentation>Side on which the SVG is drawn (0-5 or string "x-" etc.).</documentation>
       <since>3.0.0</since>
-      <value>5</value>
-      <scad:value>5</scad:value>
+      <value>ZPos</value>
+      <scad:value>z+</scad:value>
     </svgFace>
 
     <svgOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Offset of the SVG from its default position.</documentation>
-      <value>[0, 0]</value>
+      <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
     </svgOffset>
 
@@ -1563,20 +1583,20 @@
       <scad:value>1.0</scad:value>
     </svgScale>
 
-    <text type="Text">
+    <text type="Boolean.False | Text">
       <documentation>Text to draw on the brick. If not empty, rendered on the side
         specified by textFace.
       </documentation>
-      <value></value>
-      <scad:value></scad:value>
+      <value>False</value>
+      <scad:value>false</scad:value>
     </text>
 
-    <textAlign type="mbtype:AxisXYZ(Align)">
+    <textAlign type="mbtype:Align">
       <documentation>Alignment of the text on the brick surface, using the same
         format as align and alignChildren.
       </documentation>
       <since>3.0.0</since>
-      <value>center</value>
+      <value>Center</value>
       <scad:value>center</scad:value>
     </textAlign>
 
@@ -1586,7 +1606,7 @@
       <scad:value>#2c3e50</scad:value>
     </textColor>
 
-    <textDepth type="Decimal">
+    <textDepth type="Decimal(mbunit:MBU)">
       <documentation>Depth/height of the text. Negative = engraved. Positive = raised.</documentation>
       <value>-0.25</value>
       <scad:value>-0.25</scad:value>
@@ -1595,7 +1615,7 @@
     <textFace type="mbtype:Face">
       <documentation>Side of the brick on which text is displayed (0-5 or string "x-" etc.).</documentation>
       <since>3.0.0</since>
-      <value>x-</value>
+      <value>XNeg</value>
       <scad:value>x-</scad:value>
     </textFace>
 
@@ -1611,7 +1631,7 @@
       <scad:value>[0, 0]</scad:value>
     </textOffset>
 
-    <textSize type="Decimal">
+    <textSize type="Decimal(unit:Millimeter)">
       <documentation>Font size of the text.</documentation>
       <value>4</value>
       <scad:value>4</scad:value>
@@ -1635,7 +1655,7 @@
       <scad:value>false</scad:value>
     </tongue>
 
-    <tongueClampHeight type="Decimal">
+    <tongueClampHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of the tongue clamp lip. Affects both the lip on the tongue
         and the matching recess in the groove for snapping together.
       </documentation>
@@ -1643,7 +1663,7 @@
       <scad:value>0.5</scad:value>
     </tongueClampHeight>
 
-    <tongueClampOffset type="Decimal">
+    <tongueClampOffset type="Decimal(mbunit:MBU)">
       <documentation>Distance from the lower edge of the tongue to the lower edge of
         the tongue clamp lip. Also affects the groove's clamp recess position.
       </documentation>
@@ -1656,12 +1676,13 @@
       <scad:value>0.5</scad:value>
     </tongueClampOffset>
 
-    <tongueClampThickness type="Decimal">
+    <tongueClampThickness type="Decimal(mbunit:MBU)">
       <documentation>Thickness of the tongue clamp lip / groove recess.</documentation>
       <value>0.1</value>
       <scad:value>0.1</scad:value>
     </tongueClampThickness>
 
+    <!-- TODO: implement in SCAD -->
     <tongueGrooveClampOffsetClearance type="Decimal(unit:Millimeter)">
       <documentation>Extra clearance in the groove before the clamp recess. In the groove,
         both tongueClampOffset and tongueClampHeight are increased by this value,
@@ -1680,10 +1701,11 @@
         "auto" uses printerLayerHeight.
       </documentation>
       <since>3.0.0</since>
-      <value>auto</value>
+      <value>Auto</value>
       <scad:value>auto</scad:value>
     </tongueGrooveDepthClearance>
 
+    <!-- TODO: implement in SCAD -->
     <tongueGrooveThicknessClearance type="Decimal(unit:Millimeter)">
       <documentation>Clearance added to the groove width to allow the tongue to fit.
         Applied to both the groove wall thickness and tongueClampThickness
@@ -1697,13 +1719,13 @@
       <scad:value>0.1</scad:value>
     </tongueGrooveThicknessClearance>
 
-    <tongueHeight type="Decimal">
+    <tongueHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of the tongue.</documentation>
       <value>1.25</value>
       <scad:value>1.25</scad:value>
     </tongueHeight>
 
-    <tongueOffset type="Decimal">
+    <tongueOffset type="Decimal(mbunit:MBU)">
       <documentation>Distance of the tongue from the side edge.
         Corresponds to the distance of studs from the side edge.
       </documentation>
@@ -1719,7 +1741,7 @@
       <scad:value>auto</scad:value>
     </tongueRoundingRadius>
 
-    <tongueThickness type="Decimal">
+    <tongueThickness type="Decimal(mbunit:MBU)">
       <documentation>Thickness of the tongue.</documentation>
       <value>0.666</value>
       <scad:value>0.666</scad:value>
@@ -1731,11 +1753,11 @@
         a non-groove partner brick. Does not affect tongueClampThickness.
         For groove clearance, use tongueGrooveThicknessClearance instead.
       </documentation>
-      <value>0</value>
-      <scad:value>0</scad:value>
+      <value>0.0</value>
+      <scad:value>0.0</scad:value>
     </tongueThicknessAdjustment>
 
-    <topPlateHeight type="Decimal">
+    <topPlateHeight type="Decimal(mbunit:MBU)">
       <documentation>Preferred height of the top plate (upper ceiling of the base body).
         Actual height may differ depending on baseCutoutMaxDepth and
         recess depth. Usually does not need adjustment.
@@ -1754,22 +1776,22 @@
       <scad:value>-0.6</scad:value>
     </topPlateHeightAdjustment>
 
-    <topPlateHelperHeight type="Decimal">
+    <topPlateHelperHeight type="Decimal(unit:Millimeter)">
       <documentation>Height of one top plate helper layer. Typically matches the 3D print
         layer height. The horizontal layer is effectively 2× this value as
         it is printed first.
         "auto" uses printerLayerHeight.
       </documentation>
-      <value>0.2</value>
-      <scad:value>0.2</scad:value>
+      <value>Auto</value>
+      <scad:value>auto</scad:value>
     </topPlateHelperHeight>
 
-    <topPlateHelperThickness type="Decimal">
+    <topPlateHelperThickness type="mbtype:Auto | Decimal(unit:Millimeter)">
       <documentation>Thickness of the top plate helpers in X/Y direction.
         "auto" uses 0.5 * printerNozzleDiameter (minimum 0.1 mm).
       </documentation>
-      <value>0.2</value>
-      <scad:value>0.2</scad:value>
+      <value>Auto</value>
+      <scad:value>auto</scad:value>
     </topPlateHelperThickness>
 
     <topPlateHelpers type="Boolean">
@@ -1783,32 +1805,33 @@
       <scad:value>true</scad:value>
     </topPlateHelpers>
 
-    <tubeDiameter type="Decimal">
+    <tubeDiameter type="mbtype:Auto | Decimal(mbunit:MBU)">
       <documentation>Diameter of outer tubes for LEGO Technic holes.
         Automatically calculated per axis.
       </documentation>
       <since>3.0.0</since>
-      <value>auto</value>
+      <value>Auto</value>
       <scad:value>auto</scad:value>
     </tubeDiameter>
 
-    <tubeDiameterAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
+    <tubeDiameterAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for tubeDiameter.</documentation>
       <since>3.0.0</since>
       <value>-0.1</value>
       <scad:value>-0.1</scad:value>
     </tubeDiameterAdjustment>
 
-    <unitGridToMbu type="mbtype:UnitGridToMbu">
+    <!-- TODO: use XYZ in scad -->
+    <unitGridToMbu type="mbtype:SizeXYZ(Integer)">
       <documentation>Grid size in mbu, representing a 1x1 plate.
         X and Y share the first value, Z uses the second.
         A 1x1 plate = 5×5×2 mbu = 8×8×3.2 mm at default settings.
       </documentation>
-      <value>[5, 2]</value>
-      <scad:value>[5, 2]</scad:value>
+      <value>{x: 5, y: 5, z: 2}</value>
+      <scad:value>[5, 5, 2]</scad:value>
     </unitGridToMbu>
 
-    <unitMbuToMm type="Decimal">
+    <unitMbuToMm type="Decimal(unit:Millimeter)">
       <documentation>Base unit of the MachineBlocks system in millimeters.
         All grid-based size values are multiples of this unit.
         Adjustment parameters are exempt (always in mm).
