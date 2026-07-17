@@ -684,14 +684,15 @@ Mapping sequence (append to members[] in this order):
 
 The position of each entry in `BlockDefinition.members[]` is the **declaration ordinal** for that block. Render targets may use this order (e.g. Customizer parameter sequence, UI field layout). The compiler must not reorder declared members when writing BOM or when passing definitions to processors.
 
-**StructType array literals:** for a StructType defined via `<properties>` (e.g. `SizeXYZ` with `x`, `y`, `z`), property **declaration order** defines positional array literal mapping. Member access in expressions uses property names only. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md`.
+**StructType array literals and SCAD arrays:** for a StructType defined via `<properties>` (e.g. `SizeXYZ` with `x`, `y`, `z`), property **declaration order** defines positional array literal mapping **and** the default SCAD array serialization order (unless the type/property defines an exception). Member access in expressions uses property names only. See `17_type_system_bml.md` — Declaration Order · `04_types.md` — MBOM→SCAD Serialization Rules · `18_function_mapping.md`.
 
 ```text
 size="[4, 2, 3]"   →  index 0 = x, index 1 = y, index 2 = z  (order in SizeXYZ.bml)
 size="${ [size.x, size.y, size.z - 1] }"
+SCAD render: [4, 2, 3]  ← same declaration order by default
 ```
 
-Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" z="3"` on a StructType instance) are equivalent; array literals use **declaration order**, not alphabetical name order.
+Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" z="3"` on a StructType instance) are equivalent; array literals and default SCAD arrays use **declaration order**, not alphabetical name order.
 
 **Function argument mapping:** handled by FunctionMapping — see `18_function_mapping.md` · `10_expression_language.md` — Capability Input Types and Function Parameters.
 
@@ -712,7 +713,9 @@ An override that is locally concrete and complete for the member kind satisfies 
 ```text
 Parser / mapper     MUST NOT reorder declared members
 Validator           MUST NOT reorder members[] or struct fields for display
-Render target       MAY use declaration order for output sequencing
+SCAD renderer       MUST emit StructType arrays in declaration order by default
+                    (exceptions only when type/property/Annotation defines otherwise)
+Render target       MAY use declaration order for other output sequencing (UI, Customizer, …)
 ```
 
 ### Effective Members (not stored in BOM)

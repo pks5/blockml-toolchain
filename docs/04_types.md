@@ -399,7 +399,9 @@ com.machineblocks.bml.type.FaceMapXYZ
   — lateral T; zNeg/zPos use Z (defaultType T)
 
 MBOM:  { xNeg: T, xPos: T, ... }       — authored property names
-SCAD:  "x-" / "x+" / …                 — via Face scad:value / renderer map
+SCAD:  Face keys via Face scad:value (x- / x+ / …);
+       Struct arrays → [xNeg, xPos, yNeg, yPos] by declaration order
+       (FaceMapXYZ appends zNeg, zPos) — see Declaration Order / MBOM→SCAD
 ```
 
 Legacy PerSide4 / FaceVector6 / FaceMap names below remain for older docs; prefer FaceMapXY / FaceMapXYZ.
@@ -467,7 +469,7 @@ Type check:      both forms valid against SizeXYZ field order (x, y, z)
 SCAD (render):   ["size", [4, 2, 3]]                    — renderer serialization
 ```
 
-Integer grid dimensions. Defines the block's spatial contract. Array literals map by **StructType property declaration order** — see `17_type_system_bml.md` — Ordered Struct Fields.
+Integer grid dimensions. Defines the block's spatial contract. Array literals and default SCAD array serialization map by **StructType property declaration order** — see `17_type_system_bml.md` — Declaration Order.
 
 ## GridPositionXYZ
 
@@ -649,7 +651,21 @@ The serialization rules are configurable and defined per property in `09_mbom_pr
      Future (object):  object(paramName = value, …)
 ```
 
-See `05_scad_renderer.md` — Settings Format for the pseudo-map vs. OpenSCAD `object()` roadmap.
+**Default StructType → SCAD array order:** when a StructType value is emitted as a SCAD array, element order is the type's **property declaration order** — the same ordinal used for BML positional array literals and FunctionMapping. Do not invent a separate SCAD index convention.
+
+```text
+FaceMapXY properties:  xNeg, xPos, yNeg, yPos
+MBOM:  { xNeg: 1, xPos: 1, yNeg: 0, yPos: 0 }
+SCAD:  [1, 1, 0, 0]          ← declaration order; no per-example remapping
+```
+
+**Exceptions** (must be defined on the type, property, or Annotation facet — never implied):
+
+- Compact / shortened forms (e.g. `PerSide4` scalar or 2-element when faces are paired)
+- Enum / catalog literals via `scad:value`
+- Custom serialize Capability or property-catalog rules in `09_mbom_properties.yml`
+
+Canonical rule: `17_type_system_bml.md` — Declaration Order. See `05_scad_renderer.md` — Settings Format for the pseudo-map vs. OpenSCAD `object()` roadmap.
 
 ## Serialization Examples
 

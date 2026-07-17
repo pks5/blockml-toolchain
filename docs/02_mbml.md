@@ -1594,7 +1594,7 @@ The member namespace is supplied exclusively by the **XML element QName** — se
 
 ### Conventions
 
-**Member declaration order:** within `<properties>`, `<aggregations>`, and `<associations>`, child elements are mapped to `members[]` in **XML document order**. The parser must not reorder. Order is significant for StructType array literal authoring, FunctionMapping positional parameters, and compatibility. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
+**Member declaration order:** within `<properties>`, `<aggregations>`, and `<associations>`, child elements are mapped to `members[]` in **XML document order**. The parser must not reorder. Order is significant for StructType array literal authoring, FunctionMapping positional parameters, default SCAD/render-target array serialization, and compatibility. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
 
 **`<aggregations>`** — Domain base types declare inherited aggregations in BML (e.g. `_presets` on `Block.bml`, `_parts` on `CompositeBlock.bml`). The parser stores **declared** members only; inherited members resolve at validate via `baseType` chain. Omit `<aggregations>` on user blocks when the inherited set suffices.
 

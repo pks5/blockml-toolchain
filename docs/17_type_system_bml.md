@@ -196,7 +196,7 @@ org.blockml.bml.core.Block                         abstract root · omits baseTy
   │     │     ├── org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
   │     ├── org.blockml.bml.language.ProgrammingLanguage(L)   TypeScript · OpenSCAD · PseudoCode · …
   │     │     L : NaturalLanguage (default English) — optional content/text language
-  │     └── org.blockml.bml.language.MarkupLanguage(L)        XML · JSON · YML · Markdown
+  │     └── org.blockml.bml.language.MarkupLanguage(L)        XML · JSON · YML · Markdown · BML
   │           L : NaturalLanguage (default English) — optional content/text language
   ├── org.blockml.bml.core.Entity                general entities — built-in services, domain blocks
   ├── com.machineblocks.bml.core.Block             domain base
@@ -909,6 +909,7 @@ Field declaration order in StructType definitions remains significant for purpos
 |---|---|
 | **Positional array literals** | `size="[4, 2, 3]"` maps values to properties by declaration order |
 | **FunctionMapping** | Positional capability call parameters map by declaration order — see `18_function_mapping.md` |
+| **SCAD / render-target arrays** | Default serialization of a StructType value is a positional array in property declaration order (e.g. `FaceMapXY` → `[xNeg, xPos, yNeg, yPos]`) |
 | **Compatibility** | Existing field order must not change across versions; append new fields only at the end |
 
 This applies uniformly to named StructTypes (`<properties>` on a StructType) and anonymous struct `inputType` values (`{ a: Float, b: Float }`).
@@ -923,7 +924,9 @@ Authored as object:  size="{ x: 4, y: 2, z: 3 }"    → BOM: { x: 4, y: 2, z: 3 
 Authored as element: <SizeXYZ x="4" y="2" z="3"/>   → BOM: nested BlockInstance
 ```
 
-All three are **type-equivalent** for validation. Renderers use field-order metadata to emit target form (e.g. SCAD `[4, 2, 3]`). The validator does **not** normalize one form into another.
+All three are **type-equivalent** for validation. The validator does **not** normalize one form into another.
+
+**Default SCAD rule:** unless a type, property, or Annotation facet defines a different representation (`scad:value`, compact forms, custom serialize Capability, property catalog rules), the SCAD renderer emits StructType values as arrays whose element order is exactly the StructType property declaration order. Examples and docs need not restate per-field index mapping when this default applies — see `04_types.md` — MBOM→SCAD Serialization Rules.
 
 ### Compiler and BOM
 
@@ -989,7 +992,7 @@ Complex values are described by **normal Properties** — no special struct synt
 </block>
 ```
 
-StructType properties follow **Struct Property Access** and **Declaration Order** (§ above): named member access only; declaration order used for array literal authoring, FunctionMapping, and compatibility constraints.
+StructType properties follow **Struct Property Access** and **Declaration Order** (§ above): named member access only; declaration order used for array literal authoring, FunctionMapping, default SCAD/render-target array serialization, and compatibility constraints.
 
 **As type reference:**
 
@@ -1551,7 +1554,8 @@ org.blockml.bml.core.Block
               ├── org.blockml.bml.language.XML
               ├── org.blockml.bml.language.JSON
               ├── org.blockml.bml.language.YML
-              └── org.blockml.bml.language.Markdown
+              ├── org.blockml.bml.language.Markdown
+              └── org.blockml.bml.language.BML
 ```
 
 ```xml

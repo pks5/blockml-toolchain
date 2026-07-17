@@ -56,7 +56,7 @@ MUST NOT merge sections out of document sequence
 MAY omit empty sections (<properties> absent → skip)
 ```
 
-Ordinal = index in `members[]` after mapping. Used by renderers when interpreting StructType array literals against field declaration order and by FunctionMapping for positional capability parameters. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
+Ordinal = index in `members[]` after mapping. Used by renderers when interpreting StructType array literals against field declaration order, by default SCAD StructType array serialization, and by FunctionMapping for positional capability parameters. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
 
 ### Canonical definition paths
 

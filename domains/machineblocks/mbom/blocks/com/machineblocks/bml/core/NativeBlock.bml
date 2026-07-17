@@ -1177,6 +1177,30 @@
         blockHeight - slopeBaseHeightTop going down to the floor.
         Slope and bevel can be used together.
       </documentation>
+      <examples>
+        <example language="BML" snippet="true" title="positive slope">
+          ...
+          slope = "{xNeg: 1, xPos: 1, yNeg: 0, yPos: 0}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="inverted slope">
+          ...
+          slope = "{xNeg: 0, xPos: 2, yNeg: -2, yPos: 0}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="positive slope">
+          ...
+          ["slope", [1, 1, 0, 0]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="inverted slope">
+          ...
+          ["slope", [0, 2, -2, 0]]
+          ...
+        </example>
+      </scad:examples>
       <changelog>
         <change version="3.0.0">Can now be combined with bevel. The conflicts_with constraint has been removed.</change>
       </changelog>

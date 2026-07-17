@@ -144,6 +144,7 @@
       <constraint:StructuralConstraint />
       <constraint:ValueConstraint />
       <constraint:ValuePresent />
+      <lang:BML />
       <lang:C />
       <lang:CPP />
       <lang:MarkupLanguage />
