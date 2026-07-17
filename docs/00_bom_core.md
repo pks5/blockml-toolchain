@@ -1877,7 +1877,7 @@ A Library is a **Block** with `baseType="org.blockml.bml.core.BlockLibrary"`. It
 org.blockml.bml.core.BlockLibrary           abstract composable Block
   property     description   String          (public, readOnly)
   aggregation  language      NaturalLanguage (public, readOnly)
-  aggregation  readFirst     ReadMe[1..1]     (public, readOnly — human/LLM reading entry)
+  aggregation  readMe     ReadMe[1..1]     (public, readOnly — human/LLM reading entry)
   aggregation  bootstrap     Bootstrap        (public, readOnly — optional automation SPOE, 0..1)
   aggregation  dependencies  BlockLibrary[]   (public, readOnly)
   aggregation  subLibraries  BlockLibrary[]   (public, readOnly)
@@ -1892,12 +1892,13 @@ org.blockml.bml.core.TaskGuide                 abstract — org.blockml.bml.task
 org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diagnostic.* error codes
 ```
 
-`description`, `language`, `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, `schemas`, and `blocks` are **public** and **`readOnly`**: foreign Blocks and tools may inspect a library catalog in expressions; only the Library definition (and child overrides) may author these members — instances must not rewrite them (`BML_READONLY_MEMBER_WRITE`).
+`description`, `language`, `readMe`, `bootstrap`, `dependencies`, `subLibraries`, `schemas`, and `blocks` are **public** and **`readOnly`**: foreign Blocks and tools may inspect a library catalog in expressions; only the Library definition (and child overrides) may author these members — instances must not rewrite them (`BML_READONLY_MEMBER_WRITE`).
 
-`readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` are **TypeReferenceEntity** aggregations — each empty QName child expands to a TypeReferenceEntity instance. Optional **`bml:version`** on sugar (or explicit Entity) children is an exact-version assert against the referenced type (`value`) — omitted → TypeRegistry / library context; no match → `BML_UNKNOWN_VERSION`. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
+`readMe`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` are **TypeReferenceEntity** aggregations — each empty QName child expands to a TypeReferenceEntity instance. Optional **`bml:version`** on sugar (or explicit Entity) children is an exact-version assert against the referenced type (`value`) — omitted → TypeRegistry / library context; no match → `BML_UNKNOWN_VERSION`. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
-`readFirst` references a `ReadMe` block (typically `README`) — required human/LLM reading entry. Curated reading order uses `<references>` with `relation=ReadFirst`; available tasks use `relation=TaskIndex`. `bootstrap` is the optional automation SPOE — see `doc:BootstrapModel` and `doc:TaskGuideModel`.
+`readMe` references a `ReadMe` block (typically `README`) — required human/LLM reading entry. Curated reading order uses `<references>` with `relation=ReadFirst`; available tasks use `relation=TaskIndex`. `bootstrap` is the optional automation SPOE — see `doc:BootstrapModel` and `doc:TaskGuideModel`.
 
+**Concrete Library `<references>`:** at most two `<see>` entries — required `ReadFirst` → the `readMe` target; optional `ThenExecute` → the `bootstrap` target when present (after reading, execute the automation SPOE). No other relations on the catalog descriptor.
 `schemas` holds `FilePathEntity` composition children; **`value`** is the relative `.xsd` path from the library package root (directory containing `Library.bml`).
 
 The Library block is always named `Library.bml`. Its FQN is `{package}.Library` where `{package}` is derived from the file's package path (e.g. `com.machineblocks.bml.bricks.Library`, `org.blockml.bml.Library`, `org.blockml.bml.compiler.Library`).
@@ -1946,7 +1947,7 @@ org/blockml/bml/
 
 Violation → `BML_LIBRARY_NESTING_VIOLATION`.
 
-**Bootstrap:** the CLI/orchestrator discovers all `Library.bml` files, resolves `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` by FQN (effective version from library context), and registers referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
+**Bootstrap:** the CLI/orchestrator discovers all `Library.bml` files, resolves `readMe`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` by FQN (effective version from library context), and registers referenced definitions in dependency order. Without a Library block, all BML files in a directory are treated as public (fallback).
 
 **Types:** ValueType definitions (StructType, EnumType, …) are exported via `blocks` alongside composable Blocks. **`schemas`** holds optional legacy XSD paths as `FilePathEntity` instances — omit when types are BML-only.
 

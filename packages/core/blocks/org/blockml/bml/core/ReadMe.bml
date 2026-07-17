@@ -22,7 +22,7 @@
     startup (tasks, agents, CI pipelines).
 
     org.blockml.bml.README is the standard ReadMe for the core library. Library descriptors point
-    here via the required readFirst aggregation (1..1).
+    here via the required readMe aggregation (1..1).
 
     ReadMe blocks carry the normal documentation model (idea, documentation, references). Curated
     reading order is expressed via &lt;references&gt; with relation=ReadFirst; available task
@@ -34,7 +34,7 @@
       Automation SPOE branch — separate from human/LLM reading entry.
     </see>
     <see type="core:BlockLibrary" relation="Requires">
-      readFirst aggregation requires a ReadMe reference.
+      readMe aggregation requires a ReadMe reference.
     </see>
     <see type="blockml:README" relation="SeeAlso">
       Concrete ReadMe for the BlockML core library.

@@ -1190,7 +1190,7 @@ External reference (type from another BML file — `.bml`):
   → bml:version present  → target must be exactly that version
                            → no match → BML_UNKNOWN_VERSION (error)
 
-Inside Library files (readFirst / bootstrap / dependencies / subLibraries / blocks):
+Inside Library files (readMe / bootstrap / dependencies / subLibraries / blocks):
   → bml:version optional on TypeReferenceEntity sugar / explicit Entity children
   → present → exact-version assert against referenced type (value)
   → no match → BML_UNKNOWN_VERSION (error)
@@ -1281,7 +1281,7 @@ Inner libraries usually declare the outer library in `dependencies`. The outer l
 org.blockml.bml.core.BlockLibrary
   property     description     String                         (public, readOnly)
   aggregation  language        org.blockml.bml.language.NaturalLanguage  (public, readOnly)
-  aggregation  readFirst       1..1  org.blockml.bml.core.ReadMe         (public, readOnly)
+  aggregation  readMe       1..1  org.blockml.bml.core.ReadMe         (public, readOnly)
   aggregation  bootstrap       0..1  org.blockml.bml.core.Bootstrap      (public, readOnly)
   aggregation  dependencies    0..n  org.blockml.bml.core.BlockLibrary   (public, readOnly)
   aggregation  subLibraries    0..n  org.blockml.bml.core.BlockLibrary   (public, readOnly)
@@ -1298,7 +1298,7 @@ org.blockml.bml.core.Diagnostic                abstract — org.blockml.bml.diag
 
 Catalog members are **public** and **`readOnly`**: foreign Blocks may inspect a library descriptor; only the Library definition authors the catalog (instances → `BML_READONLY_MEMBER_WRITE`).
 
-`readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` use `TypeReferenceEntity`
+`readMe`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks` use `TypeReferenceEntity`
 aggregations — QName sugar expands to Entity instances (not instances of the named Block).
 Optional **`bml:version`** on sugar children is an exact-version assert against the referenced type
 (`value`); effective version when omitted is resolved from library / TypeRegistry context.
@@ -1311,15 +1311,16 @@ container where required by instance fill rules. For these aggregations, each ch
 **TypeReferenceEntity** instance (sugar or explicit). `schemas` remains a `FilePathEntity[]`
 aggregation — its children are FilePathEntity instances.
 
-The orchestrator resolves `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks`
+The orchestrator resolves `readMe`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks`
 entries by FQN, loads referenced definitions into the TypeRegistry using effective block versions,
 and validates library membership.
 
-`readFirst` is the required human/LLM reading entry (exactly one ReadMe — typically
+`readMe` is the required human/LLM reading entry (exactly one ReadMe — typically
 `org.blockml.bml.README`). Curated reading order uses `<references>` with `relation=ReadFirst`;
 available tasks use `relation=TaskIndex`. `bootstrap` is the optional automation SPOE (at most one
-Bootstrap). `schemas` is optional legacy XSD (`FilePathEntity` paths). `blocks` lists exported
-Block and ValueType BML — primary SSOT as types migrate from XSD.
+Bootstrap). Concrete Library `<references>`: required `ReadFirst` → readMe target; optional
+`ThenExecute` → bootstrap target when present. `schemas` is optional legacy XSD (`FilePathEntity`
+paths). `blocks` lists exported Block and ValueType BML — primary SSOT as types migrate from XSD.
 ---
 
 ## Source Locations
@@ -1352,7 +1353,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 ```text
 1. Built-in services     — @blockml/core (org.blockml.bml.service.*)
 2. Framework BML              — @blockml/core, @machineblocks/mbom (see 16_framework_base_types.md)
-3. Library blocks             — org.blockml.bml.core.BlockLibrary → resolve readFirst / bootstrap / dependencies / subLibraries / blocks by FQN (optional bml:version assert against value)
+3. Library blocks             — org.blockml.bml.core.BlockLibrary → resolve readMe / bootstrap / dependencies / subLibraries / blocks by FQN (optional bml:version assert against value)
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
 5. Declared dependencies      — Library dependencies entries + bom.config.json paths
 ```
@@ -1435,7 +1436,7 @@ The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
 ✓  Block definitions have effective version (BML_MISSING_VERSION if standalone and no <version>)
 ✓  Library member block.version >= library.version when both declared
 ✓  External instance references resolve via registry context; optional bml:version is exact assert (BML_UNKNOWN_VERSION)
-✓  Library readFirst / bootstrap / dependencies / subLibraries / blocks sugar bml:version asserts match when present (BML_UNKNOWN_VERSION)
+✓  Library readMe / bootstrap / dependencies / subLibraries / blocks sugar bml:version asserts match when present (BML_UNKNOWN_VERSION)
 ✓  Cross-instance references (blockId, placeId, FQN::id) resolve to explicit authored id
 ✓  Qualified FQN::id references target public aggregations with static literal ids
 ✓  bml:each elements have explicit id (literal or Expression)

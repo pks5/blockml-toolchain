@@ -26,17 +26,24 @@
     Bootstrap order (summary):
     1. Core branches — Block, ValueType, Language, Status, Relation, Constraint, Capability, Definition
     2. Concrete types — Integer, Decimal, languages, services, constraints, relations
-    3. BlockLibrary — library descriptor base (readFirst, bootstrap, dependencies, subLibraries,
+    3. BlockLibrary — library descriptor base (readMe, bootstrap, dependencies, subLibraries,
        schemas, blocks)
-    4. org.blockml.bml.Library — published catalog via blocks; readFirst → README
+    4. org.blockml.bml.Library — published catalog via blocks; readMe → README
     5. Domain framework BML (e.g. com.machineblocks.bml.core.*)
 
     Two library entry roles (do not conflate):
     • org.blockml.bml.core.ReadMe — human/LLM reading entry. Required on every Library via
-      readFirst (exactly one TypeReferenceEntity(ReadMe)). org.blockml.bml.README is the standard
+      readMe (exactly one TypeReferenceEntity(ReadMe)). org.blockml.bml.README is the standard
       core-library ReadMe.
     • org.blockml.bml.core.Bootstrap — optional automation SPOE (tasks, agents, CI). At most one
       per Library via bootstrap (0..1). Empty abstract branch; concrete subtypes supply process logic.
+
+    Concrete Library.bml &lt;references&gt; — at most two &lt;see&gt; entries on the catalog
+    descriptor (not on documentation blocks):
+    1. Required relation=ReadFirst → the ReadMe named in readMe
+    2. Optional relation=ThenExecute → the Bootstrap named in bootstrap (only when present)
+    Signals: after reading, continue by executing the automation SPOE. No AuthoringGuide /
+    DeepDive / Extends / SeeAlso on concrete Libraries.
 
     Curated reading order lives in &lt;references&gt; on the ReadMe block — each entry uses
     relation=ReadFirst with a context note. Available tasks use relation=TaskIndex on the same
@@ -75,13 +82,16 @@
       Self-hosting bootstrap and BML self-description roadmap (V1/V2/V3).
     </see>
     <see type="core:BlockLibrary" relation="Defines">
-      Library descriptor — readFirst (ReadMe, 1..1) and bootstrap (Bootstrap, 0..1).
+      Library descriptor — readMe (ReadMe, 1..1) and bootstrap (Bootstrap, 0..1).
     </see>
     <see type="core:ReadMe" relation="Defines">
       Abstract ReadMe role — required Library reading entry.
     </see>
     <see type="core:Bootstrap" relation="Defines">
       Abstract Bootstrap role — optional automation SPOE.
+    </see>
+    <see type="relation:ThenExecute" relation="SeeAlso">
+      Library &lt;see&gt; after ReadFirst when bootstrap is present.
     </see>
     <see type="blockml:README" relation="SeeAlso">
       Standard human/LLM library ReadMe — ReadFirst references in mental learning order.

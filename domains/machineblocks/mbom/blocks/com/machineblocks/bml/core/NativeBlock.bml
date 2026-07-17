@@ -916,14 +916,14 @@
       <scad:value>false</scad:value>
     </reliefCut>
 
-    <reliefCutHeight type="Decimal">
+    <reliefCutHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of the relief cut.</documentation>
       <since>3.0.0</since>
       <value>0.375</value>
       <scad:value>0.375</scad:value>
     </reliefCutHeight>
 
-    <reliefCutThickness type="Decimal">
+    <reliefCutThickness type="Decimal(mbunit:MBU)">
       <documentation>Thickness of the cut-away portion.</documentation>
       <since>3.0.0</since>
       <value>0.375</value>

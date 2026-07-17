@@ -86,7 +86,7 @@
     Resolves. README curates with ReadFirst; documentation blocks chain with ReadNext.
 
     README / ReadMe blocks (baseType org.blockml.bml.core.ReadMe) are library reading entry points
-    for humans and LLMs (Library.readFirst). Curated reading order is expressed via references with
+    for humans and LLMs (Library.readMe). Curated reading order is expressed via references with
     relation=ReadFirst; available tasks via relation=TaskIndex — not via separate aggregations on
     ReadMe. Documentation blocks (org.blockml.bml.documentation.*) inherit from
     org.blockml.bml.core.Documentation. TaskGuide blocks (org.blockml.bml.task.*) inherit from
@@ -123,7 +123,7 @@
       Relation branch — optional relation attribute on see entries.
     </see>
     <see type="core:Documentation" relation="Extends">
-      Abstract base for narrative documentation blocks in readFirst lists.
+      Abstract base for narrative documentation blocks in readMe lists.
     </see>
     <see type="core:Bootstrap" relation="ContrastsWith">
       Abstract bootstrap role marker — ReadFirst lives on references, not on Bootstrap.

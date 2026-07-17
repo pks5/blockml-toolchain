@@ -22,7 +22,7 @@
     needed.
 
     Distinct from org.blockml.bml.core.ReadMe, which is the required human/LLM reading entry on a
-    Library (readFirst aggregation). A Library may omit bootstrap (0..1) when it has no automated
+    Library (readMe aggregation). A Library may omit bootstrap (0..1) when it has no automated
     startup SPOE; it must never declare more than one Bootstrap.
 
     Human/LLM orientation (curated ReadFirst reading order, TaskIndex catalog) lives on ReadMe
@@ -30,7 +30,7 @@
 
   <references>
     <see type="core:ReadMe" relation="ContrastsWith">
-      Human/LLM reading entry — Library.readFirst, not bootstrap.
+      Human/LLM reading entry — Library.readMe, not bootstrap.
     </see>
     <see type="core:BlockLibrary" relation="SeeAlso">
       Optional bootstrap aggregation (0..1 SPOE).

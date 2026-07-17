@@ -57,17 +57,8 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Library format and publishable catalog rules.
-    </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
-      Bootstrap order for framework base types.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      Library BOM data structure.
-    </see>
-    <see type="core:BlockLibrary" relation="Extends">
-      Framework base type — not exported from this catalog.
+    <see type="blockml:README" relation="ReadFirst">
+      Human/LLM reading entry for this library.
     </see>
   </references>
 
@@ -83,9 +74,9 @@
   </properties>
 
   <aggregations>
-    <readFirst>
+    <readMe>
       <blockml:README />
-    </readFirst>
+    </readMe>
     <!-- Optional legacy XSD — omit when all types are exported via blocks -->
     <schemas>
       <composition>
@@ -199,6 +190,7 @@
       <relation:SeeAlso />
       <relation:TaskIndex />
       <relation:TaskStep />
+      <relation:ThenExecute />
       <status:Deprecated />
       <status:Draft />
       <status:Stable />

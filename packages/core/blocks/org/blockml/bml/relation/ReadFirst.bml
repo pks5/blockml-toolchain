@@ -16,10 +16,14 @@
   <baseType>core:Relation</baseType>
   <is>A read-this-first Relation</is>
 
-  <documentation>Use on &lt;see&gt; entries in README / ReadMe blocks to declare mental learning
-    order. ReadFirst entries should appear first in &lt;references&gt;, in reading order. Distinct
-    from Library.readFirst (which names the ReadMe block itself) and from ReadNext (forward edge
-    between documentation blocks outside the README catalog). One references mechanism for all
-    cross-links inside the ReadMe.</documentation>
+  <documentation>Two uses:
+    1. Concrete Library.bml — required single ReadFirst &lt;see&gt; targeting the ReadMe named in
+       the readMe aggregation (catalog entry point). May be followed by ThenExecute → Bootstrap
+       when bootstrap is present; no other &lt;see&gt; relations on concrete Libraries.
+    2. README / ReadMe blocks — curated mental learning order. ReadFirst entries should appear
+       first in &lt;references&gt;, in reading order.
+
+    Distinct from Library.readMe (aggregation that names the ReadMe block) and from ReadNext
+    (forward edge between documentation blocks outside the README catalog).</documentation>
 
 </block>

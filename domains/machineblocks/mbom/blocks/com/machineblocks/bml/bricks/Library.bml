@@ -28,6 +28,13 @@
   <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
     preset blocks. Sub-library of com.machineblocks.bml.Library; depends on the root library for
     shared types and units.</documentation>
+
+  <references>
+    <see type="mb:README" relation="ReadFirst">
+      Human/LLM reading entry for this library.
+    </see>
+  </references>
+
   <version>3.0.0</version>
 
   <language>
@@ -40,9 +47,9 @@
   </properties>
 
   <aggregations>
-    <readFirst>
+    <readMe>
       <mb:README />
-    </readFirst>
+    </readMe>
 
     <dependencies>
       <mb:Library />

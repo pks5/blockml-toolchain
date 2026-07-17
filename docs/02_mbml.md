@@ -1157,7 +1157,7 @@ relation="Extends"        — Block reference via org.blockml.bml.relation.* (un
                           — omitted → org.blockml.bml.relation.SeeAlso
 ```
 
-Standard relation blocks: `SeeAlso` (default when omitted), `ReadFirst`, `ReadNext`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Domain libraries may define additional relation blocks extending `org.blockml.bml.core.Relation`.
+Standard relation blocks: `SeeAlso` (default when omitted), `ReadFirst`, `ReadNext`, `ThenExecute`, `Extends`, `Requires`, `ContrastsWith`, `AuthoringGuide`, `Defines`, `DeepDive`, `TaskIndex`, `TaskStep`, `Prerequisite`, `Resolves`. Domain libraries may define additional relation blocks extending `org.blockml.bml.core.Relation`.
 
 **Why separate target attributes instead of one `target`?**
 
@@ -2579,7 +2579,7 @@ TypeReferenceEntity(T)[]  →  TypeReferenceEntity instances (QName sugar or exp
 plain Block[]       →  real BlockInstance (empty = valid instance with no authored values)
 ```
 
-Examples: `readFirst` / `bootstrap` / `blocks` on `org.blockml.bml.core.BlockLibrary` use
+Examples: `readMe` / `bootstrap` / `blocks` on `org.blockml.bml.core.BlockLibrary` use
 `TypeReferenceEntity(...)`; `<contracts>` / `<languages>` on Block definitions use
 `TypeReferenceEntity(core:Block)[]` / `TypeReferenceEntity(core:Language)[]`. See
 `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
@@ -3301,7 +3301,7 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 
 ```xml
 <aggregations>
-  <readFirst type="type:TypeReferenceEntity(core:ReadMe)[1..1]" readOnly="true" />
+  <readMe type="type:TypeReferenceEntity(core:ReadMe)[1..1]" readOnly="true" />
   <bootstrap type="type:TypeReferenceEntity(core:Bootstrap)" readOnly="true" />
   <dependencies type="type:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true" />
   <subLibraries type="type:TypeReferenceEntity(core:BlockLibrary)[]" readOnly="true" />
@@ -3310,13 +3310,13 @@ The parser resolves the element QName via the document's `xmlns:` declarations a
 </aggregations>
 ```
 
-**Library reference aggregations:** `readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and
+**Library reference aggregations:** `readMe`, `bootstrap`, `dependencies`, `subLibraries`, and
 `blocks` on `org.blockml.bml.core.BlockLibrary` are **TypeReferenceEntity** aggregations — each empty
 child element (e.g. `<blockml:Library />`) expands to a TypeReferenceEntity (not an instance of the
-named Block). Catalog members (`description`, `language`, `readFirst`, `bootstrap`, `dependencies`,
+named Block). Catalog members (`description`, `language`, `readMe`, `bootstrap`, `dependencies`,
 `subLibraries`, `schemas`, `blocks`) are **public** and **`readOnly`** — foreign Blocks may inspect
 a library; only the Library definition authors the catalog. Optional **`bml:version`** on sugar
-children is an exact-version assert against the referenced type (`value`). **`readFirst`** (1..1) references a
+children is an exact-version assert against the referenced type (`value`). **`readMe`** (1..1) references a
 `ReadMe` (typically `README`). **`bootstrap`** (0..1) is the optional automation SPOE
 (`core:Bootstrap`). **`schemas`** is an **instance** aggregation and holds real `FilePathEntity`
 composition children.
@@ -3974,24 +3974,50 @@ Physical directories and overlapping package prefixes do not define membership. 
 </block>
 ```
 
-**`readFirst`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks`** are
+**`readMe`, `bootstrap`, `dependencies`, `subLibraries`, and `blocks`** are
 `TypeReferenceEntity` aggregations — QName sugar expands to Entity instances. Optional
 **`bml:version`** on sugar children is an exact-version assert against the referenced type
 (`value`); omitted → library / TypeRegistry context. Catalog members
 are **public** and **`readOnly`** (inspectable from foreign Blocks; authored on the Library
 definition only). See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
-**`readFirst`** (1..1) points to the human/LLM reading entry — a `ReadMe` block (typically
+**`readMe`** (1..1) points to the human/LLM reading entry — a `ReadMe` block (typically
 `org.blockml.bml.README`). Curated reading order lives in `<references>` with `relation=ReadFirst`
 (see `doc:BootstrapModel`). **`bootstrap`** (0..1) is the optional automation SPOE (`core:Bootstrap`).
-Example on `org.blockml.bml.Library`:
+
+**Concrete Library `<references>` rule** — at most two `<see>` entries on the catalog descriptor:
+
+1. **Required:** `relation=ReadFirst` targeting the same ReadMe named in `readMe`
+2. **Optional:** `relation=ThenExecute` targeting the Bootstrap named in `bootstrap` (only when
+   present) — after reading, continue by executing the automation SPOE
+
+No AuthoringGuide / DeepDive / Extends / SeeAlso (or other) entries on concrete `Library.bml` —
+those belong on documentation blocks. Example without bootstrap:
 
 ```xml
-<readFirst>
+<references>
+  <see type="blockml:README" relation="ReadFirst">
+    Human/LLM reading entry for this library.
+  </see>
+</references>
+
+<readMe>
   <blockml:README />
-</readFirst>
+</readMe>
 ```
 
+Example with bootstrap:
+
+```xml
+<references>
+  <see type="blockml:README" relation="ReadFirst">…</see>
+  <see type="blockml:MyBootstrap" relation="ThenExecute">
+    After reading, execute the library automation SPOE.
+  </see>
+</references>
+```
+
+Example on `org.blockml.bml.Library` aggregations:
 **`value` paths** on `schemas` `FilePathEntity` entries are relative to the **library package root** (directory containing `Library.bml`).
 
 **`blocks`** lists exported Block and ValueType definitions (composable Blocks, StructType, EnumType, presets, …). **`schemas`** holds optional legacy XSD paths as `FilePathEntity` instances during migration; omit when all types are in BML.

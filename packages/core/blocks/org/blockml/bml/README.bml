@@ -25,7 +25,7 @@
     conceptual core: after reading them, most of the core library can be derived from Block
     definitions themselves. Later entries cover conventions, organisation, and background knowledge.
 
-    Library.bml points here via the required readFirst aggregation (&lt;blockml:README /&gt;).
+    Library.bml points here via the required readMe aggregation (&lt;blockml:README /&gt;).
     Tooling filters references where relation=ReadFirst to build a curated learning context bundle;
     relation=TaskIndex lists accomplishable procedural tasks for humans, agents, and CI. Automated
     process SPOE uses Library.bootstrap (core:Bootstrap) — not this ReadMe.
@@ -122,7 +122,7 @@
     </see>
 
     <see type="core:Bootstrap" relation="ContrastsWith">
-      Automation SPOE branch — Library.bootstrap, not readFirst.
+      Automation SPOE branch — Library.bootstrap, not readMe.
     </see>
 
     <see type="blockml:Library" relation="SeeAlso">

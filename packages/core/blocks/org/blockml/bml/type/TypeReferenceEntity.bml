@@ -26,7 +26,7 @@
     • type:TypeReferenceEntity(core:Block)[] — contracts, subTypes, Library blocks
     • type:TypeReferenceEntity(lang:NaturalLanguage) — language (singular, 0..1)
     • type:TypeReferenceEntity(core:Language)[] — languages
-    • type:TypeReferenceEntity(core:ReadMe)[1..1] — Library readFirst
+    • type:TypeReferenceEntity(core:ReadMe)[1..1] — Library readMe
     • type:TypeReferenceEntity(core:Bootstrap) — Library bootstrap (0..1 SPOE)
     • type:TypeReferenceEntity(core:BlockLibrary)[] — dependencies, subLibraries
 
@@ -62,7 +62,7 @@
       contracts, languages, subTypes, language aggregations.
     </see>
     <see type="core:BlockLibrary" relation="SeeAlso">
-      readFirst, bootstrap, dependencies, subLibraries, blocks aggregations.
+      readMe, bootstrap, dependencies, subLibraries, blocks aggregations.
     </see>
   </references>
 

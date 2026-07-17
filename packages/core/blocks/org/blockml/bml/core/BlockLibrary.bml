@@ -15,6 +15,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:doc="org.blockml.bml.documentation"
   xmlns:lang="org.blockml.bml.language"
+  xmlns:relation="org.blockml.bml.relation"
   xmlns:type="org.blockml.bml.type">
 
   <name>BlockLibrary</name>
@@ -35,7 +36,7 @@
     (and child overrides) may author the catalog. Instances must not rewrite these members.
 
     Aggregations (each aggregation member is opened by name; none is default):
-    • readFirst — required human/LLM reading entry (ReadMe block, 1..1)
+    • readMe — required human/LLM reading entry (ReadMe block, 1..1)
     • bootstrap — optional automation SPOE (Bootstrap block, 0..1)
     • dependencies — other Library blocks this library depends on (typical: inner library
       depends on outer)
@@ -43,13 +44,20 @@
     • schemas — optional legacy XSD paths as FilePathEntity instances
     • blocks — exported Block and ValueType definitions (membership SSOT)
 
-    readFirst and bootstrap hold TypeReferenceEntity children — empty QName sugar sets value to
+    readMe and bootstrap hold TypeReferenceEntity children — empty QName sugar sets value to
     that FQN. dependencies, subLibraries, and blocks use the same pattern. Optional bml:version on
     sugar (or explicit TypeReferenceEntity) children is an exact-version assert against the
     referenced type (value) — same semantics as external composition references; omitted → resolve
     from TypeRegistry / library context; no match → BML_UNKNOWN_VERSION. schemas holds
     FilePathEntity composition children; value is the relative .xsd path from the library package
     root (directory containing Library.bml).
+
+    Concrete Library.bml &lt;references&gt; rule — at most two &lt;see&gt; entries:
+    1. Required: relation=ReadFirst targeting the same ReadMe named in readMe.
+    2. Optional: relation=ThenExecute targeting the Bootstrap named in bootstrap, only when
+       bootstrap is present. Signals: after reading, continue by executing the automation SPOE.
+    No AuthoringGuide / DeepDive / Extends / SeeAlso (or other) entries on concrete Libraries —
+    those belong on documentation blocks, not on the catalog descriptor.
   </documentation>
 
   <references>
@@ -66,13 +74,16 @@
       Entity wrapper used for schemas entries.
     </see>
     <see type="core:ReadMe" relation="Requires">
-      Required readFirst target — human/LLM reading entry.
+      Required readMe target — human/LLM reading entry.
     </see>
     <see type="core:Bootstrap" relation="SeeAlso">
       Optional bootstrap target — automation SPOE (0..1).
     </see>
+    <see type="relation:ThenExecute" relation="SeeAlso">
+      Optional Library &lt;see&gt; after ReadFirst when bootstrap is present.
+    </see>
     <see type="type:TypeReferenceEntity" relation="Requires">
-      Entity payload for readFirst, bootstrap, dependencies, subLibraries, and blocks.
+      Entity payload for readMe, bootstrap, dependencies, subLibraries, and blocks.
     </see>
   </references>
 
@@ -98,18 +109,18 @@
         bml:version on the sugar child is an exact-version assert against the referenced
         language type.</documentation>
     </language>
-    <readFirst type="type:TypeReferenceEntity(core:ReadMe)[1..1]" readOnly="true">
+    <readMe type="type:TypeReferenceEntity(core:ReadMe)[1..1]" readOnly="true">
       <documentation>Required human/LLM reading entry for this library. Exactly one ReadMe
         TypeReferenceEntity — empty QName sugar or explicit value. Typically
         &lt;blockml:README /&gt; on the core library. Missing or duplicate →
         BML_TYPE_REFERENCE_MULTIPLICITY. Optional bml:version is an exact-version assert against
         the referenced ReadMe type. Public readOnly — inspectable from foreign Blocks; authored on
         the Library definition only.</documentation>
-    </readFirst>
+    </readMe>
     <bootstrap type="type:TypeReferenceEntity(core:Bootstrap)" readOnly="true">
       <documentation>Optional single point of entry (SPOE) for automated startup — tasks, agents,
         CI pipelines. Bare TypeReferenceEntity = 0..1. At most one Bootstrap; omit when the library
-        has no automation entry. Not the human reading entry (use readFirst). Optional bml:version
+        has no automation entry. Not the human reading entry (use readMe). Optional bml:version
         is an exact-version assert against the referenced Bootstrap type. Public readOnly —
         inspectable from foreign Blocks; authored on the Library definition only.</documentation>
     </bootstrap>

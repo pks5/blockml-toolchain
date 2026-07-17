@@ -34,6 +34,12 @@
     exclusively by this file's blocks list — not by directory layout.
   </documentation>
 
+  <references>
+    <see type="mb:README" relation="ReadFirst">
+      Human/LLM reading entry for this library.
+    </see>
+  </references>
+
   <version>3.0.0</version>
 
   <language>
@@ -46,9 +52,9 @@
   </properties>
 
   <aggregations>
-    <readFirst>
+    <readMe>
       <mb:README />
-    </readFirst>
+    </readMe>
 
     <dependencies>
       <blockml:Library />
