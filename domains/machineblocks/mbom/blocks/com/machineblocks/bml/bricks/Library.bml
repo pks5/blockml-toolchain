@@ -9,9 +9,9 @@
   Nested under com.machineblocks.bml.Library via subLibraries.
 -->
 <block
-  xmlns="http://blockml.org/schema/block"
+  xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:blockml="org.blockml.bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"

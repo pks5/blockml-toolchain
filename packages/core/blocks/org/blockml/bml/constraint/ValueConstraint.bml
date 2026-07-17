@@ -4,9 +4,9 @@
   FQN: org.blockml.bml.constraint.ValueConstraint
 -->
 <block
-  xmlns="http://blockml.org/schema/block"
+  xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core">
