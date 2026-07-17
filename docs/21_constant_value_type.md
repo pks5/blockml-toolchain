@@ -131,6 +131,34 @@ Constant(Text){"auto"}    →  value = "auto"
 Constant(Integer){5}      →  value = 5
 ```
 
+### Boolean.True / Boolean.False shortcuts
+
+`org.blockml.bml.type.Boolean` declares two public Sub-Blocks — **`True`** and **`False`** — that are **Constant shortcuts** for the singleton boolean domains:
+
+```text
+Boolean.True   ≡  Constant(Boolean){value: true}
+Boolean.False  ≡  Constant(Boolean){value: false}
+```
+
+FQNs: `org.blockml.bml.type.Boolean.True` · `org.blockml.bml.type.Boolean.False`.
+
+Use them in type expressions wherever a boolean Constant would appear — especially as the narrow (left) alternative of a union:
+
+```text
+Boolean.False | T          ≡  Constant(Boolean){value: false} | T
+Boolean.True | T           ≡  Constant(Boolean){value: true} | T
+```
+
+```xml
+<!-- preferred shorthand -->
+<pcb type="Boolean.False | mbtype:PcbMountingType"/>
+
+<!-- equivalent Constant form -->
+<pcb type="Constant(Boolean){value: false} | mbtype:PcbMountingType"/>
+```
+
+These Sub-Blocks are **type references**, not boolean literals. Property **values** still use ordinary boolean literals (`true` / `false`). Prefer `Boolean.False | T` over spelling out `Constant(Boolean){value: false} | T` in new authoring. See `04_types.md` — FalseOr migration.
+
 ---
 
 ## Validation

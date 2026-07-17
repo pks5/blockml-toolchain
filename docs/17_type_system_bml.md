@@ -438,12 +438,15 @@ Legacy domain wrapper types are replaced by union syntax:
 ```text
 Obsolete                    Write instead
 AutoOr<T>                   Constant(Text){value: "auto"} | T
-FalseOr<T>                  Constant(Boolean){value: false} | T
+FalseOr<T>                  Boolean.False | T
+                            (≡ Constant(Boolean){value: false} | T)
 NoneOr<T>                   Constant(Text){value: "none"} | T
 BooleanOr<T>                Boolean | T
 Array<T>                    T[]
 UnionType                   A | B | C
 ```
+
+`Boolean.True` / `Boolean.False` are Sub-Blocks of `org.blockml.bml.type.Boolean` — Constant shortcuts for `Constant(Boolean){value: true}` / `{value: false}`. Prefer them in type expressions over spelling out Constant. See `21_constant_value_type.md` — Boolean.True / Boolean.False shortcuts.
 
 See `04_types.md` for parse/serialize migration per MBOM type.
 

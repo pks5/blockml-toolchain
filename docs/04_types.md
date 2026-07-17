@@ -154,6 +154,15 @@ String:   "west"
 
 Boolean literals are **case-insensitive** at authoring time. Empty boolean elements and attribute shorthand without an explicit value are not permitted.
 
+**`Boolean.True` / `Boolean.False`** — public Sub-Blocks of `org.blockml.bml.type.Boolean` that shortcut Constant notation for singleton boolean domains:
+
+```text
+Boolean.True   ≡  Constant(Boolean){value: true}
+Boolean.False  ≡  Constant(Boolean){value: false}
+```
+
+Use in **type expressions** (e.g. `Boolean.False | T`), not as property values. See `21_constant_value_type.md` — Boolean.True / Boolean.False shortcuts.
+
 ---
 
 # 2. Atomic MB Types
@@ -286,7 +295,7 @@ Canonical singleton alternatives use **Constant** — see `21_constant_value_typ
 
 ```text
 AutoOr<T>      →  Constant(Text){value: "auto"} | T
-FalseOr<T>     →  Constant(Boolean){value: false} | T
+FalseOr<T>     →  Boolean.False | T     (≡ Constant(Boolean){value: false} | T)
 NoneOr<T>      →  Constant(Text){value: "none"} | T
 BooleanOr<T>   →  Boolean | T
 ```
@@ -305,11 +314,14 @@ MBOM:  "auto"  or  T
 SCAD:  "auto"  or  serialized T
 ```
 
-### FalseOr — migrate to `Constant(Boolean){value: false} | T`
+### FalseOr — migrate to `Boolean.False | T`
 
 ```text
-Constant(Boolean){value: false} | T
+Preferred:   Boolean.False | T
+Equivalent:  Constant(Boolean){value: false} | T
 ```
+
+`Boolean.False` is a Sub-Block of `Boolean` — a Constant shortcut. See `21_constant_value_type.md` — Boolean.True / Boolean.False shortcuts.
 
 ### NoneOr — migrate to `Constant(Text){value: "none"} | T`
 
