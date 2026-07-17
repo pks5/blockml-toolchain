@@ -87,6 +87,7 @@
       <mbtype:SelectiveGrid />
       <mbtype:SizeXY />
       <mbtype:SizeXYZ />
+      <mbtype:StudType />
       <mbunit:MBU />
       <mbunit:GridUnitXY />
       <mbunit:GridUnitZ />

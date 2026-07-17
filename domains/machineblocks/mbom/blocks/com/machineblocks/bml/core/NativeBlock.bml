@@ -623,17 +623,17 @@
       <scad:value>false</scad:value>
     </pcb>
 
-    <pcbDimensions type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
+    <pcbDimensions type="mbtype:SizeXYZ(Decimal(unit:Millimeter), Decimal(unit:Millimeter))">
       <documentation>Dimensions of the PCB in mm. Refers to the board size,
         especially relevant for pcb="clips".
       </documentation>
-      <value>[20, 30, 3]</value>
+      <value>{x: 20, y: 30, z: 3}</value>
       <scad:value>[20, 30, 3]</scad:value>
     </pcbDimensions>
 
     <pcbOffset type="mbtype:OffsetXY">
       <documentation>Offset of the PCB from the center of the brick.</documentation>
-      <value>[0, 0]</value>
+      <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
     </pcbOffset>
 
@@ -808,7 +808,7 @@
         shrink the recess.
       </documentation>
       <since>3.0.0</since>
-      <value>auto</value>
+      <value>Auto</value>
       <scad:value>auto</scad:value>
     </recessAdjustment>
 
@@ -830,7 +830,7 @@
       <documentation>Rounding radius of the recess cavity. Derived from the block's
         rounding radius. Usually does not need adjustment.
       </documentation>
-      <value>auto</value>
+      <value>Auto</value>
       <scad:value>auto</scad:value>
     </recessRoundingRadius>
 
@@ -856,7 +856,7 @@
       <documentation>Type of studs on the recess floor.
         solid: massive studs. hollow: studs with a hole in the center.
       </documentation>
-      <value>solid</value>
+      <value>Solid</value>
       <scad:value>solid</scad:value>
     </recessStudType>
 
@@ -1431,7 +1431,7 @@
 
     <studType type="mbtype:StudType">
       <documentation>Type of studs. solid: massive. hollow: with a hole in the center.</documentation>
-      <value>solid</value>
+      <value>Solid</value>
       <scad:value>solid</scad:value>
     </studType>
 
