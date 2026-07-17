@@ -3,6 +3,10 @@
 
   FQN: com.machineblocks.bml.core.NativeBlock
   Final — cannot be used as baseType on Block definitions
+
+  SSOT for all MB parameters (property set / docs / defaults).
+  Types SSOT: com.machineblocks.bml.type.* (inventory not yet complete).
+  External docs are not synced from this definition yet.
 -->
 <block
   xmlns="http://blockml.org/bml"
@@ -23,6 +27,13 @@
 
   <documentation>Final leaf Block mapped directly to SCAD mb_block() — the native geometry primitive
     at render time. Uses children aggregation for mb_block() sub-geometry instead of _parts.
+
+    SSOT for all MachineBlocks (MB) parameters: this Block is the single source of truth for the
+    full parameter set. Property docs and defaults here are authoritative; external docs must be
+    derived from this definition (sync pending — do not treat external docs as canonical yet).
+
+    SSOT for MachineBlocks types is the package com.machineblocks.bml.type.* — that type inventory
+    is also not yet complete.
   </documentation>
 
   <references>
@@ -1018,7 +1029,14 @@
         Smaller segmentLengthMm increases quality.
         maxSegments limits the maximum full-circle resolution.
       </documentation>
-      <value>[[0.55, 32], [0.38, 48], [0.28, 64], [0.16, 120]]</value>
+      <value>
+        {
+          preview: { length: 0.55, segments: 32 }, 
+          normal: { length: 0.38, segments: 48 }, 
+          print: { length: 0.28, segments: 64 }, 
+          render: { length: 0.16, segments: 120 } 
+        }
+      </value>
       <scad:value>[[0.55, 32], [0.38, 48], [0.28, 64], [0.16, 120]]</scad:value>
     </scadQualityProfile>
 

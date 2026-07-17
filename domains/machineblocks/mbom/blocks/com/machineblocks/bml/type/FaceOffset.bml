@@ -1,0 +1,49 @@
+<!--
+  MachineBlocks — FaceOffset struct type
+
+  FQN: com.machineblocks.bml.type.FaceOffset
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>FaceOffset</name>
+  <type>mbtype:FaceOffset</type>
+  <baseType>type:StructType</baseType>
+  <is>A face-local offset pair</is>
+
+  <documentation>Struct ValueType for a face-local offset pair { a, b }. a and b are the in-plane
+    offset components, both typed as T, measured from the respective negative (-) sides of the
+    face. T is constrained to Number (default Decimal, dimensionless). Override via T — e.g.
+    FaceOffset(Decimal(mbunit:GridUnitXY)) or FaceOffset(Decimal(unit:Millimeter)).</documentation>
+
+  <genericTypes>
+    <T baseType="type:Number" defaultType="type:Decimal"/>
+  </genericTypes>
+
+  <properties>
+    <a type="T">
+      <documentation>First in-plane offset component, measured from the corresponding negative (-)
+        side — type T.</documentation>
+    </a>
+    <b type="T">
+      <documentation>Second in-plane offset component, measured from the corresponding negative (-)
+        side — type T.</documentation>
+    </b>
+  </properties>
+
+  <references>
+    <see type="type:StructType" relation="Extends">
+      Struct ValueType branch — a, b.
+    </see>
+    <see type="mbtype:OffsetXY" relation="SeeAlso">
+      Axis-keyed offset pair { x, y }.
+    </see>
+  </references>
+
+</block>

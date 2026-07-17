@@ -1,0 +1,56 @@
+<!--
+  MachineBlocks — OffsetXZ struct type
+
+  FQN: com.machineblocks.bml.type.OffsetXZ
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>OffsetXZ</name>
+  <type>mbtype:OffsetXZ</type>
+  <baseType>mbtype:MultiAxis(N)</baseType>
+  <is>An offset along X and Z</is>
+
+  <documentation>Semantic Struct ValueType for an offset pair { x, z }. Extends MultiAxis(N) —
+    declares x (N) and z (Z); adds offset / translation semantics (may be negative). N and Z are
+    constrained to Number. Bare OffsetXZ defaults N to Decimal(mbunit:GridUnitXY) and Z to
+    Decimal(mbunit:GridUnitZ) — distinct plate-grid scales. Uniform override requires both
+    arguments — e.g. OffsetXZ(Decimal(unit:Millimeter), Decimal(unit:Millimeter)). Named OffsetXZ
+    — MachineBlocks axis-keyed types use XY / XZ / YZ / XYZ, not 2D / 3D.</documentation>
+
+  <genericTypes>
+    <N baseType="type:Number" defaultType="type:Decimal(mbunit:GridUnitXY)"/>
+    <Z baseType="type:Number" defaultType="type:Decimal(mbunit:GridUnitZ)"/>
+  </genericTypes>
+
+  <properties>
+    <x type="N">
+      <documentation>Offset along the X axis.</documentation>
+    </x>
+    <z type="Z">
+      <documentation>Offset along the Z axis — type Z (defaults to Decimal(GridUnitZ)).</documentation>
+    </z>
+  </properties>
+
+  <references>
+    <see type="mbtype:MultiAxis" relation="Extends">
+      Abstract axis-map base — N; OffsetXZ declares { x, z } and adds offset semantics.
+    </see>
+    <see type="mbtype:OffsetXY" relation="SeeAlso">
+      Two-axis offset map on X and Y.
+    </see>
+    <see type="mbtype:OffsetYZ" relation="SeeAlso">
+      Two-axis offset map on Y and Z.
+    </see>
+    <see type="mbtype:OffsetXYZ" relation="SeeAlso">
+      Three-axis offset map on AxisXYZ.
+    </see>
+  </references>
+
+</block>
