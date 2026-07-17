@@ -1,0 +1,51 @@
+<!--
+  MachineBlocks — AxisAB struct type
+
+  FQN: com.machineblocks.bml.type.AxisAB
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type">
+
+  <name>AxisAB</name>
+  <type>mbtype:AxisAB</type>
+  <baseType>mbtype:MultiAxis(N)</baseType>
+  <is>A value pair along A and B</is>
+
+  <documentation>Struct ValueType for component-keyed { a, b }. Extends MultiAxis(N).
+    N is any ValueType (default Decimal) — numbers, structs, enums, etc. Bare AxisAB is Decimal
+    (dimensionless). Supply a unit or other ValueType via N — e.g. AxisAB(Decimal(unit:Millimeter))
+    or AxisAB(mbtype:HoleEdgeMode). Parallel to AxisXY, but with abstract a / b keys instead of
+    X / Y.</documentation>
+
+  <genericTypes>
+    <N baseType="core:ValueType" defaultType="type:Decimal"/>
+  </genericTypes>
+
+  <properties>
+    <a type="N">
+      <documentation>Value of the first component (a).</documentation>
+    </a>
+    <b type="N">
+      <documentation>Value of the second component (b).</documentation>
+    </b>
+  </properties>
+
+  <references>
+    <see type="mbtype:MultiAxis" relation="Extends">
+      Abstract axis-map base — N.
+    </see>
+    <see type="mbtype:AxisXY" relation="SeeAlso">
+      Parallel ValueType-universal pair on X / Y.
+    </see>
+    <see type="mbtype:OffsetAB" relation="SeeAlso">
+      Offset semantics on AxisAB — N closed to Number.
+    </see>
+  </references>
+
+</block>

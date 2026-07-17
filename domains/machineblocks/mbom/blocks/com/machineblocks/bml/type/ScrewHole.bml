@@ -17,14 +17,14 @@
   <is>A screw hole on a directed face</is>
 
   <documentation>Struct ValueType for a screw hole placement { face, offset }. face selects the
-    directed brick face; offset is the in-plane position on that face (FaceOffset), measured from
+    directed brick face; offset is the in-plane position on that face (OffsetAB), measured from
     the respective negative (-) sides.</documentation>
 
   <properties>
     <face type="mbtype:Face">
       <documentation>Directed face where the screw hole is placed (x- / x+ / y- / y+ / z- / z+).</documentation>
     </face>
-    <offset type="mbtype:FaceOffset">
+    <offset type="mbtype:OffsetAB(Decimal)">
       <documentation>In-plane offset of the hole center on the selected face, measured from the
         respective negative (-) sides.</documentation>
     </offset>
@@ -37,8 +37,11 @@
     <see type="mbtype:Face" relation="SeeAlso">
       face selector — six directed brick faces.
     </see>
-    <see type="mbtype:FaceOffset" relation="SeeAlso">
-      In-plane offset pair { a, b } on the selected face.
+    <see type="mbtype:OffsetAB" relation="SeeAlso">
+      Numeric offset pair { a, b } on AxisAB — used for in-plane hole position.
+    </see>
+    <see type="mbtype:AxisAB" relation="SeeAlso">
+      ValueType-universal { a, b } map — structural base for OffsetAB.
     </see>
   </references>
 

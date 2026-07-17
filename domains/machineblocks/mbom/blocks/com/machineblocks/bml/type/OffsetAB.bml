@@ -1,0 +1,40 @@
+<!--
+  MachineBlocks — OffsetAB struct type
+
+  FQN: com.machineblocks.bml.type.OffsetAB
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>OffsetAB</name>
+  <type>mbtype:OffsetAB</type>
+  <baseType>mbtype:AxisAB(N)</baseType>
+  <is>An offset along A and B</is>
+
+  <documentation>Semantic Struct ValueType for an offset pair { a, b }. Extends AxisAB(N) —
+    inherits a and b; adds offset / translation semantics (may be negative). When used as a
+    face-local offset, a and b are measured from the respective negative (-) sides of the face.
+    N is constrained to Number (AxisAB remains ValueType-universal). Bare OffsetAB defaults N to
+    Decimal (dimensionless). Override via N — e.g. OffsetAB(Decimal(mbunit:GridUnitXY)) or
+    OffsetAB(Decimal(unit:Millimeter)).</documentation>
+
+  <genericTypes>
+    <N baseType="type:Number" defaultType="type:Decimal"/>
+  </genericTypes>
+
+  <references>
+    <see type="mbtype:AxisAB" relation="Extends">
+      Structural { a, b } map — OffsetAB adds offset semantics.
+    </see>
+    <see type="mbtype:OffsetXY" relation="SeeAlso">
+      Parallel offset semantics on AxisXY.
+    </see>
+  </references>
+
+</block>

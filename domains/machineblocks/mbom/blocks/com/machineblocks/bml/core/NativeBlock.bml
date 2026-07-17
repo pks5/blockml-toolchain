@@ -497,7 +497,7 @@
       <scad:value>0.3</scad:value>
     </holeXYZDiameterAdjustment>
 
-    <holeXYZEdgeMode type="mbtype:HoleEdgeMode | mbtype:FaceOffset(mbtype:HoleEdgeMode) | mbtype:AxisXYZ(mbtype:HoleEdgeMode) | mbtype:FaceOffset(mbtype:AxisXYZ(mbtype:HoleEdgeMode))">
+    <holeXYZEdgeMode type="mbtype:HoleEdgeMode | mbtype:AxisAB(mbtype:HoleEdgeMode) | mbtype:AxisXYZ(mbtype:HoleEdgeMode) | mbtype:AxisXYZ(mbtype:AxisAB(mbtype:HoleEdgeMode))">
       <documentation>Controls whether partial (half) Technic holes are drawn at the edges
         of the block for X, Y, and Z direction holes.
 
