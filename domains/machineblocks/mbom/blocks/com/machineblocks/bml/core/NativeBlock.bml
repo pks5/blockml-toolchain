@@ -497,7 +497,7 @@
       <scad:value>0.3</scad:value>
     </holeXYZDiameterAdjustment>
 
-    <holeXYZEdgeMode type="mbtype:HoleEdgeMode | mbtype:AxisXYZ(mbtype:HoleEdgeMode)">
+    <holeXYZEdgeMode type="mbtype:HoleEdgeMode | mbtype:FaceOffset(mbtype:HoleEdgeMode) | mbtype:AxisXYZ(mbtype:HoleEdgeMode) | mbtype:FaceOffset(AxisXYZ(mbtype:HoleEdgeMode)) ">
       <documentation>Controls whether partial (half) Technic holes are drawn at the edges
         of the block for X, Y, and Z direction holes.
 
@@ -606,8 +606,6 @@
         the resulting part ID is "mm.anyclosure.wall/bottom".
       </documentation>
       <since>3.0.0</since>
-      <value></value>
-      <scad:value></scad:value>
     </id>
 
     <offset type="mbtype:OffsetXYZ">
@@ -615,7 +613,7 @@
         chain. Same unit as size (grid units / multiples of a 1x1 plate).
         Origin depends on whether the brick is global or a child.
       </documentation>
-      <value>[0, 0, 0]</value>
+      <value>{x: 0, y: 0, z: 0}</value>
       <scad:value>[0, 0, 0]</scad:value>
     </offset>
 
@@ -720,7 +718,7 @@
       <scad:value>0.53125</scad:value>
     </pillarOriginalWallThickness>
 
-    <pillars type="mbtype:SelectiveGrid(Boolean)">
+    <pillars type="Boolean | mbtype:SelectiveGrid(Boolean)">
       <documentation>Whether tubes/pins are drawn on the underside (baseCutoutType=standard).</documentation>
       <value>true</value>
       <scad:value>true</scad:value>
