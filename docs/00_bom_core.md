@@ -1,6 +1,6 @@
 # BOM Core
 
-version: 2.1.0
+version: 2.4.0
 
 ## Purpose of this Document
 
@@ -42,11 +42,11 @@ The parser makes **no semantic decisions**. It exclusively:
 
 All BML information must be fully preserved in the BOM. The parser must **never** pre-empt information that a renderer might interpret differently later.
 
-### Canonical BOM is immutable
+### Canonical BOM is immutable (Urmodell)
 
-The Canonical BOM is the **Single Source of Truth**. It is **not modified** after parsing.
+The **Urmodell** (Canonical BOM) is the **Single Source of Truth**. The parser produces it; it is **read-only** and **not modified** after parsing.
 
-The following must **never** be written back into the Canonical BOM:
+The following must **never** be written back into the Urmodell:
 
 - resolved inheritance
 - effective properties
@@ -56,17 +56,134 @@ The following must **never** be written back into the Canonical BOM:
 - evaluated expressions
 - resolved references
 - generated getters/setters
-- any other renderer-specific derivations
+- any other derived or renderer-specific data
 
-The BOM describes **only** what was modelled in BML.
+The Urmodell describes **only** what was modelled in BML.
 
 Parsed literal values remain in **authored form** (`[5,5,6]` stays an array; `{x:5,y:5,z:6}` stays an object). Expression values store **`raw` source text** only — AST and evaluation results are utility output, not BOM mutations.
+
+### Urmodell and Pragmatic Model
+
+BlockML maintains two complementary model roles. They are not two sources of truth:
+
+```text
+Urmodell (Canonical BOM)          Pragmatic Model (Working Model)
+──────────────────────────        ────────────────────────────────
+read-only after parse             mutable copy / derived graph
+SSOT — what was authored          convenience snapshot — what tools need
+roundtripable to BML              may hold resolved inheritance, merges, …
+never receives derived writes     resolution and partial merges live here
+```
+
+**Parser** → creates the Urmodell (immutable).
+
+**Validator** → works on a **copy** (the default Pragmatic Model). It may already resolve inheritance chains, contracts, effective members, and related merges there. Diagnostics and the default pragmatic snapshot are Stage-2 outputs. The Urmodell stays untouched.
+
+**Renderer** decides what to read:
+
+1. the Urmodell directly (e.g. documentation, diff, IDE authored view),
+2. the Validator’s default Pragmatic Model, or
+3. a **new fork** from the Urmodell for its own pipeline.
+
+Forking is first-class and may happen **multiple times**. Each fork may apply **partial merges** only (e.g. effective members now, directive expansion later, expression evaluation in a further step — or parallel forks for different targets). Derived copies must never write back into the Urmodell; they should retain provenance (Urmodell identity / content hash) so tools can detect staleness.
+
+The Pragmatic Model is a **cache / working surface**, not a second SSOT.
+
+### Language Server — planned IDE integration (V2)
+
+> **Status: planned for V2.** Not implemented in V1. Architecture must keep Parser, Serializer, Validator, and core types reusable as the LSP backend.
+
+A **VS Code Language Server** (`@blockml/lsp`, name TBD) is a thin adapter over the existing language loop — **not** a second parser or AST:
+
+```text
+VS Code / editor
+  ↕  Language Server Protocol
+@blockml/lsp (V2)
+  ├─ @blockml/parser       → Urmodell (on open / change)
+  ├─ @blockml/validator    → Diagnostics (pragmatic fork)
+  ├─ @blockml/serializer   → Format / TextEdits from Urmodell
+  └─ @blockml/core         → TypeRegistry, utilities, symbol queries
+```
+
+| LSP capability | Reuses |
+|---|---|
+| Parse / document sync | Parser → Urmodell |
+| Diagnostics | Validator on pragmatic fork |
+| Format document | Serializer ← Urmodell |
+| Hover, outline, symbols | Urmodell + TypeRegistry |
+| Go-to-definition / references | TypeRegistry + Urmodell graph |
+
+**V2 scope:** text/XML editing with BOM-backed intelligence. Structural DOM editing (`addProperty`, …) remains **BomBuilder (V3)** — the LSP does not require the Builder.
+
+#### V1 reuse mandate (build for the LSP now)
+
+| Do now | Why |
+|---|---|
+| Populate **source spans** on parse (ranges for diagnostics, hover, go-to) | LSP maps BOM nodes ↔ editor positions |
+| Keep spans **optional** on types | Builder-origin Urmodelle (V3) have none |
+| **Tolerant parse** where feasible (partial BOM on broken XML) | IntelliSense must survive mid-edit errors |
+| TypeRegistry bootstrap usable outside CLI | Workspace-wide navigation |
+| Diagnostics with stable codes + ranges | `publishDiagnostics` |
+| Serializer accepts any Urmodell provenance | Format-on-save without parser-only assumptions |
+| No parallel IDE AST beside BOM | One model for CLI, compile, and LSP |
+
+XSD/`catalog.xml` remain a V1 IDE aid; the Language Server is the long-term semantic editor backend and complements or supersedes schema-only validation over time.
+
+### BomBuilder — planned writable authoring API (V3)
+
+> **Status: planned for V3.** Not implemented in V1/V2. Architecture and type design must anticipate it from day one.
+
+Creating or changing authored members (e.g. **new properties**, aggregations, composition children, `baseType`) is **authoring**, not resolution. It does **not** belong on the Urmodell (read-only) and must **not** be conflated with the Pragmatic Model (resolve / partial merges only).
+
+```text
+Producers of Urmodell                          Consumers of Urmodell
+─────────────────────                          ─────────────────────
+Parser (V1)        BML → Urmodell              Serializer → BML
+BomBuilder (V3)    program → seal() → Urmodell Validator / pragmatic forks
+                                               Renderer pipelines
+                                               TypeRegistry bootstrap
+```
+
+**BomBuilder** (name TBD; package likely `@blockml/core` authoring surface or `@blockml/authoring`) is a **writable session** that builds or edits a BOM graph block-by-block from scratch or from `fork(Urmodell)`:
+
+```text
+createBlock() · addProperty() · addAggregation() · setBaseType()
+setMemberValue() · addCompositionChild() · …
+  ↓
+seal() / toBomDocument()  →  immutable Urmodell
+  ↓
+optional validate · serialize → BML
+```
+
+Rules:
+
+- Builder uses the **same** graph types as the Urmodell (`BomDocument`, `BlockDefinition`, members, instances) — **no parallel authoring schema**.
+- `seal()` produces a normal Urmodell. Serializer, validator, and renderers must not care whether it came from Parser or Builder.
+- Authoring never mutates an existing sealed Urmodell in place; edits yield a **new** sealed document (or replace the session’s draft until seal).
+- Pragmatic forks remain resolve-only — no `createProperty` / structural authoring on the pragmatic path.
+
+#### V1/V2 reuse mandate (build for the Builder now)
+
+Everything shipped before V3 must maximize reuse when BomBuilder arrives:
+
+| Do now | Why |
+|---|---|
+| Keep core BOM interfaces **construction-friendly** (plain data / factories, not parse-only objects) | Builder constructs the same types |
+| Make parse-only metadata **optional** (e.g. source spans, XML locations) | Builder-origin documents have no BML offsets |
+| Route all output through **Urmodell → Serializer** | One serialize path for parse and build |
+| Keep Validator / utilities **provenance-agnostic** | Same Stage 2 for both producers |
+| Do **not** put structural authoring on pragmatic forks | Clean Builder vs Resolve split later |
+| Prefer small **factory helpers** in `@blockml/core` for valid empty/partial nodes | Shared by tests, scaffolding, and future Builder |
+| Avoid baking “only exists after XML map” invariants into types | Builder must assemble graphs without the mapper |
+
+IDE editors use the **Language Server (V2)** for parse/validate/format on text. Structured graph editing and `bom new` / generative tools are expected **V3** consumers of BomBuilder (LSP may call Builder later for refactors).
 
 ### Framework Utilities
 
 BlockML provides a toolkit of standardised utilities. Examples:
 
 ```text
+forkBom() / copyBom()           → new mutable pragmatic copy from Urmodell (resolve only)
 resolveInheritance()
 resolveEffectiveMembers()
 resolveType()
@@ -81,30 +198,34 @@ validateTypes()
 validateConstraints()
 ```
 
-Utilities **never mutate** the Canonical BOM. They return derived information or produce **new structures** (views, working models, diagnostics).
+Structural authoring (`addProperty`, …) is **not** a Stage-2 utility — it is BomBuilder (V3).
 
-A utility may read the immutable BOM plus a TypeRegistry and return e.g. an `EffectiveMemberSet`, an `ExpandedComposition`, or `Diagnostic[]` — always as a separate result object.
+Utilities **never mutate** the Urmodell. They return derived information or write only into a pragmatic copy / new result structures (views, working models, diagnostics).
+
+A utility may read the Urmodell plus a TypeRegistry and return e.g. an `EffectiveMemberSet`, an `ExpandedComposition`, or `Diagnostic[]` — always as a separate result object — or apply a named partial merge onto a forked pragmatic model.
 
 ### Renderer determines the flow
 
-The framework does **not** prescribe pipeline order. Each renderer decides which utilities it uses and in what sequence.
+The framework does **not** prescribe pipeline order. Each renderer decides which model to read and which utilities to run, in what sequence.
 
 ```text
 SCAD Renderer:
-  resolveInheritance() → evaluateExpression() → expandComposition() → renderSCAD()
+  fork(Urmodell) → resolveInheritance() → evaluateExpression() → expandComposition() → renderSCAD()
 
 Java Renderer:
-  resolveInheritance() → resolveContracts() → renderJava()
+  reuse Validator pragmatic model → resolveContracts() → renderJava()
+  — or —
+  fork(Urmodell) → partial merges as needed → renderJava()
 
 Documentation Renderer:
-  renderRawBOM()
+  read Urmodell → renderRawBOM()
 ```
 
 Each renderer defines its own pipeline. The framework provides building blocks — not a fixed compile path.
 
 ### Renderer Working Model
 
-Each renderer owns an **internal working model** — optimised, cacheable, and freely mutable:
+Separately from the Pragmatic BOM copy, each renderer may own an **internal target working model** — optimised, cacheable, and freely mutable:
 
 ```text
 SCAD:   Modules, Parameters, GeometryGraph
@@ -112,7 +233,7 @@ Java:   Classes, Fields, Methods, Constructors
 React:  Components, Props, JSX Tree
 ```
 
-The working model belongs exclusively to the renderer. The Canonical BOM remains unchanged throughout.
+That target model belongs exclusively to the renderer. The Urmodell remains unchanged throughout.
 
 ### Semantics remain in BML
 
@@ -127,22 +248,23 @@ setValue() → direct field assignment · generated setter
 render()   → SCAD module · JSX component · may be ignored
 ```
 
-Interpretation happens **only** in the renderer — by reading Capability definitions and member values from the immutable BOM. The BOM never contains implementation concepts such as constructors, getters, setters, runtime values, or executable behaviour.
+Interpretation happens **only** in the renderer — by reading Capability definitions and member values from the Urmodell (and/or a pragmatic fork). The Urmodell never contains implementation concepts such as constructors, getters, setters, runtime values, or executable behaviour.
 
 ### Validation pipeline
 
 Validation consists of three independent stages:
 
 ```text
-Stage 1 — XML          syntax · namespaces · XSD (no semantics)
-Stage 2 — Validator    inheritance · contracts · type compatibility · visibility ·
-                       constraints · references · expression correctness
+Stage 1 — Parser       XML syntax · namespaces · XSD → Urmodell (immutable Canonical BOM)
+Stage 2 — Validator    fork → pragmatic model; inheritance · contracts · type compatibility ·
+                       visibility · constraints · references · expression correctness
                        (expressions are NOT evaluated)
-Stage 3 — Renderer     expression evaluation · optional handling · capability interpretation ·
+Stage 3 — Renderer     chooses Urmodell / default pragmatic model / own fork(s);
+                       expression evaluation · optional handling · capability interpretation ·
                        code generation · runtime behaviour
 ```
 
-The Validator creates the immutable Canonical BOM and a mutable **default Working Model** (partial resolution: inheritance, contracts, effective members, default values). This Working Model is shared infrastructure — a Renderer may reuse it or create an entirely new Working Model.
+The **Parser** creates the Urmodell. The **Validator** forks a mutable **default Pragmatic Model** and may resolve inheritance, contracts, effective members, and defaults there. That default is shared infrastructure for diagnostics and convenience — a Renderer may reuse it, ignore it, or `fork` the Urmodell again (once or repeatedly) for its own partial merges.
 
 ### Properties are Optional
 
@@ -160,49 +282,58 @@ Expressions describe **what should happen**, not the computed result. The Valida
 
 | Layer | What it is | Where it lives |
 |---|---|---|
-| **BOM data** | `LiteralValue`, `ExpressionValue.raw` | Canonical BOM (immutable) |
+| **BOM data** | `LiteralValue`, `ExpressionValue.raw` | Urmodell / Canonical BOM (immutable) |
 | **Expression syntax** | AST, type inference, access level | `parseExpression()` utility output |
-| **Expression evaluation** | resolved values | Renderer working model only |
+| **Expression evaluation** | resolved values | Pragmatic / renderer working model only |
 
 In `${ size.x }`, member access is **expression semantics** — not BOM mutation. The underlying `size` literal stays in authored form. Numeric index access on StructType (`size[0]`) is not valid.
 
 ### Architecture
 
 ```text
-BML
+BML                         BomBuilder (V3, planned)
+ │                          createBlock / addProperty / …
+ ▼                          │
+Parser                      seal()
+ │                          │
+ └──────────┬───────────────┘
+            ▼
+Urmodell (Canonical BOM, immutable, SSOT)
  │
+ ├─ Validator fork ──► default Pragmatic Model (partial merges, resolve only)
+ │
+ ├─────────────── Framework Utilities (never mutate Urmodell) ───┐
+ │                                                               │
+ ▼                                                               ▼
+Renderer Pipeline                                        other Renderers
+ │  may read Urmodell · reuse pragmatic · fork again (N times)
  ▼
-Parser
- │
- ▼
-Canonical BOM (immutable)
- │
- ├─────────────── Framework Utilities ───────────────┐
- │                                                   │
- ▼                                                   ▼
-Renderer Pipeline                            other Renderers
- │
- ▼
-Renderer Working Model
+Renderer target Working Model (optional, target-specific)
  │
  ▼
 Emitter
  │
  ▼
 Target Output
+
+Serializer ← Urmodell (regardless of Parser or Builder provenance)
 ```
 
 ### Summary
 
 ```text
-The BOM describes exclusively the semantics of BML.
+The Urmodell describes exclusively the semantics of BML (SSOT, read-only).
+The Pragmatic Model holds tool/resolve state; renderers choose what to read.
+Language Server (V2) reuses parser, validator, serializer, and core — no parallel AST.
+BomBuilder (V3) is the writable authoring path; seal() yields a new Urmodell.
+V1 must keep types and pipelines LSP- and Builder-ready (spans optional; shared serialize/validate).
 The framework provides reusable analysis and transformation algorithms.
 The renderer orchestrates these algorithms and produces its own working model for the target system.
 ```
 
 Only **BML ↔ BOM** must be lossless. **BOM → Target** is entirely the renderer's interpretive job.
 
-See also: `01_system.md` — Architecture · `06_compiler.md` — Parser, Utilities, and Renderer · `12_bom_object_model.md` — Abstraction Principle · `10_expression_language.md` — Expression vs BOM Data Layer · `08_managed_object.md` — Semantics in BML.
+See also: `01_system.md` — Architecture · Language Server (V2) · BomBuilder (V3) · `06_compiler.md` — Parser, Utilities, and Renderer · `12_bom_object_model.md` — Abstraction Principle · `10_expression_language.md` — Expression vs BOM Data Layer · `08_managed_object.md` — Semantics in BML.
 
 ---
 

@@ -484,18 +484,22 @@ SCAD:  ["offset", [0, 4, 1]]
 
 ```text
 com.machineblocks.bml.type.SelectiveGrid
+Sub-Block: com.machineblocks.bml.type.SelectiveGrid.Selector
 
-MBOM:
+Java static nested model: SelectiveGrid and Selector each declare generic T;
+parent forwards via selectors: Selector(T)[].
+
+MBOM / BML shape:
 {
-  default: T,
-  overrides: [
-    { region: { from: {x, y}, to: {x, y} }, value: T }
+  baseValue: T,
+  selectors: [
+    { from: {x, y}, to: {x, y}, value: T }   ← SelectiveGrid.Selector(T)
   ]
 }
 
 SCAD serialization:
-  With overrides:   [default, [[x0,y0,x1,y1], value], ...]
-  Without overrides: default value only (scalar or boolean)
+  With selectors:   [baseValue, [[x0,y0,x1,y1], value], ...]
+  Without selectors: baseValue only (scalar or boolean)
 ```
 
 ---
@@ -697,10 +701,10 @@ SCAD: ["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
 ```text
 MBOM:
 {
-  default: true,
-  overrides: [
-    { region: { from:{x:0,y:0}, to:{x:1,y:1} }, value: false },
-    { region: { from:{x:2,y:0}, to:{x:3,y:1} }, value: "hollow" }
+  baseValue: true,
+  selectors: [
+    { from:{x:0,y:0}, to:{x:1,y:1}, value: false },
+    { from:{x:2,y:0}, to:{x:3,y:1}, value: "hollow" }
   ]
 }
 SCAD: ["studs", [true, [[0,0,1,1], false], [[2,0,3,1], "hollow"]]]

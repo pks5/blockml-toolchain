@@ -1,6 +1,6 @@
 # BOM Object Model
 
-version: 1.0.0
+version: 1.3.0
 
 ## Purpose of this Document
 
@@ -28,9 +28,11 @@ This document is the **implementation contract** for `@blockml/core`. It specifi
 
 ```text
 BML source          →  authoring format
-BOM (this doc)      →  canonical, immutable, lossless parse result
-Framework Utilities →  derived views (EffectiveMemberSet, AST, diagnostics) — never mutate BOM
-Render Target       →  own pipeline + working model
+Urmodell (BOM)      →  canonical, immutable, lossless parse/build result (SSOT, read-only)
+BomBuilder (V3)     →  planned writable session; seal() → Urmodell (same types)
+Pragmatic Model     →  Validator default fork + optional renderer forks (partial merges, resolve only)
+Framework Utilities →  derived views / merges on forks — never mutate Urmodell
+Render Target       →  chooses Urmodell / pragmatic / own forks + optional target working model
 ```
 
 Examples of what BOM **stores** vs. what downstream **interprets**:
@@ -52,7 +54,8 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 
 | Topic | Decision |
 |---|---|
-| **Immutability** | Canonical `BomDocument` is **immutable** after parse. No utility or renderer may write derived data back. See `00_bom_core.md` — Canonical BOM is immutable. |
+| **Immutability** | Urmodell (`BomDocument`) is **immutable** after parse or `BomBuilder.seal()`. No utility or renderer may write derived data back. Validator and renderers work on pragmatic forks (resolve only). Structural authoring is BomBuilder (V3). See `00_bom_core.md` — Urmodell and Pragmatic Model · BomBuilder. |
+| **Builder / LSP reuse** | Core interfaces must stay **construction-friendly** and **provenance-agnostic**. Parser and BomBuilder produce the same `BomDocument` graph. Parse-only metadata (source spans, XML locations) is **optional on types** but **populated by the parser** for diagnostics and the V2 Language Server. Serializer and validator must not require parser provenance. See `00_bom_core.md` — Language Server · BomBuilder · V1 reuse mandates. |
 | **Member inheritance** | **Utility lookup only.** BOM stores **declared** members per Block. `resolveEffectiveMembers()` returns `EffectiveMemberSet` — a separate structure, never flattened into BOM. |
 | **Capabilities** | Authored Capabilities stored in BOM. No synthetic getter/setter generation. Renderer interprets all Capabilities. See `08_managed_object.md`. |
 | **Member identity** | Uniqueness by resolved **`(namespace, name)`**. Namespace from member element QName prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
@@ -74,17 +77,25 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 @blockml/core
   - All interfaces in this document
   - TypeRegistry + bootstrap API
-  - Framework utilities: resolveEffectiveMembers(), validateTypes(), parseExpression(), …
-  - Utilities return derived views — never mutate Canonical BOM
+  - Framework utilities: forkBom(), resolveEffectiveMembers(), validateTypes(), parseExpression(), …
+  - Utilities return derived views or merge into pragmatic forks — never mutate Urmodell
+  - Prefer small factory helpers for empty/partial nodes (tests, scaffolding, future BomBuilder)
+  - BomBuilder / writable authoring session — **V3** (same graph types; seal() → BomDocument)
 
 @blockml/cli
   - TypeRegistry bootstrap: discover + parse + register all project/library sources
   - Calls validateTypes() / validateConstraints() after parse (diagnostics)
   - Invokes renderer pipeline for compile
+  - V3: scaffolding / IDE paths may call BomBuilder instead of string templates
+
+@blockml/lsp (V2, planned)
+  - Language Server Protocol adapter for VS Code
+  - Reuses parser → Urmodell, validator → diagnostics, serializer → format
+  - No parallel IDE AST; no BomBuilder required in V2
 
 @blockml/parser
   - BML → BomDocument mapper (stage [5]) — **single file per invocation**
-  - Produces immutable Canonical BOM
+  - Produces immutable Urmodell (Canonical BOM); populates source spans for LSP/diagnostics
   - Does NOT load external BML files, populate TypeRegistry, merge inheritance, or expand directives
 
 @blockml/compiler
@@ -100,7 +111,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 
 ## Root: `BomDocument`
 
-Every parsed BML file produces exactly one `BomDocument`.
+Every parsed or Builder-sealed BML document is exactly one `BomDocument` (Urmodell).
 
 ```typescript
 interface BomDocument {

@@ -1,6 +1,6 @@
 # BOM Compiler — Compiler Pipeline
 
-version: 2.0.0
+version: 2.3.0
 
 ## Purpose of this Document
 
@@ -37,31 +37,37 @@ The compiler is implemented across these packages:
 
 ## Compiler Pipeline
 
-> **Architecture decision:** Parser produces immutable Canonical BOM. Framework utilities and renderer pipelines are separate layers. See `00_bom_core.md` — Fundamental Architecture Principles.
+> **Architecture decision:** Parser produces the read-only Urmodell (Canonical BOM). Validator forks a default Pragmatic Model (resolve only). Renderers choose Urmodell, reuse that pragmatic model, or fork again for partial merges (including multiple times). **Language Server (V2)** reuses parser / validator / serializer. Structural authoring is **BomBuilder (V3)** — `seal()` → Urmodell. V1 must stay LSP- and Builder-ready. See `00_bom_core.md` — Language Server · BomBuilder.
 
 ## Validation Pipeline
 
 > **Architecture decision:** Three independent validation stages. See `00_bom_core.md` — Validation pipeline.
 
 ```text
-Stage 1 — XML (Parser)
+Stage 1 — Parser
   Checks: XML syntax · namespaces · XSD
+  Produces: Urmodell (Canonical BOM, immutable, SSOT)
   No semantics.
 
 Stage 2 — Validator
-  Creates immutable Canonical BOM + mutable default Working Model.
+  Forks Urmodell → mutable default Pragmatic Model.
+  May resolve: inheritance · contracts · effective members · defaults.
   Checks: inheritance · contracts · type compatibility · visibility ·
           constraints · references · expression correctness
-  Expressions are NOT evaluated.
+  Expressions are NOT evaluated. Never mutates Urmodell.
 
 Stage 3 — Renderer / Runtime
+  Chooses: Urmodell · default pragmatic model · own fork(s) from Urmodell
+           (forking / partial merges may happen multiple times)
   Decides: expression evaluation · optional handling · capability interpretation ·
            code generation · runtime behaviour
 ```
 
+See `00_bom_core.md` — Urmodell and Pragmatic Model.
+
 ### Layer 1 — Parser (`@blockml/parser`) — Stage 1
 
-Produces the **Canonical BOM**. No semantic decisions. Output is immutable.
+Produces the **Urmodell** (Canonical BOM). No semantic decisions. Output is immutable and read-only.
 
 ```text
 BML Source (.bml)                   — V1: XML only; JSON BML deferred (TBD)
@@ -76,20 +82,21 @@ BML Source (.bml)                   — V1: XML only; JSON BML deferred (TBD)
   ↓
 [5] BML → BOM Mapper
   ↓
-Canonical BOM (immutable)
+Urmodell / Canonical BOM (immutable)
 ```
 
 ### Roundtrip — Serializer (`@blockml/serializer`)
 
-Inverse of the parser mapping: **BOM → canonical BML XML**. Enables lossless roundtrip (`BML → BOM → BML`). Not a render target emitter.
+Inverse of the parser mapping: **BOM → canonical BML XML**. Enables lossless roundtrip (`BML → BOM → BML`). Not a render target emitter. Operates on the Urmodell only.
 
 **V1:** Implemented and tested together with the parser, before validator and compiler. See `15_dev_setup.md` — V1 Implementation Strategy.
 
 ### Layer 2 — Validator (`@blockml/validator`) + Framework Utilities (`@blockml/core`) — Stage 2
 
-The validator orchestrates semantic checks. Framework utilities live in `@blockml/core`; the validator package exposes the Stage 2 entry point (e.g. `validateBom()`). Optional, composable. **Never mutate** the Canonical BOM. Return derived views, diagnostics, or new structures.
+The validator orchestrates semantic checks on a **fork** of the Urmodell (default Pragmatic Model). Framework utilities live in `@blockml/core`; the validator package exposes the Stage 2 entry point (e.g. `validateBom()`). Optional, composable. **Never mutate** the Urmodell. Return derived views, diagnostics, or mutate only a pragmatic copy.
 
 ```text
+forkBom(urmodell)                     → mutable Pragmatic Model copy
 resolveInheritance(bom, registry)       → EffectiveMemberSet
 resolveEffectiveMembers(block, registry)  → EffectiveMemberSet
 resolveType(typeFqn, registry)          → TypeDescriptor
@@ -99,21 +106,21 @@ inBranch(blockFqn, branchFqn, registry) → boolean  (baseType chain only — br
 satisfiesTypeBound(blockFqn, boundFqn, registry) → boolean  (baseType chain OR direct contracts[])
 resolveGenerics(typeExpr, registry)     → ResolvedTypeExpr
 parseExpression(raw, context)           → ExpressionNode + resultTypeFqn
-evaluateExpression(ast, context)        → evaluated value (working model)
+evaluateExpression(ast, context)        → evaluated value (pragmatic / working model)
 expandComposition(bom, context)       → ExpandedComposition
 expandDirectives(bom, context)          → ExpandedComposition
 validateTypes(bom, registry)            → Diagnostic[]
 validateConstraints(bom, registry)      → Diagnostic[]
 ```
 
-The CLI may invoke utilities before or during compile for diagnostics — but utilities **never write back** to the Canonical BOM.
+The CLI may invoke utilities before or during compile for diagnostics — but utilities **never write back** to the Urmodell. Renderers may call `forkBom()` again (including multiple times) and apply only the partial merges they need.
 
 ### Layer 3 — Renderer Pipeline (target-specific) — Stage 3
 
-Each renderer defines its own flow. Example — **SCAD Renderer** (reference implementation):
+Each renderer defines its own flow and chooses its read source (Urmodell, default pragmatic model, or own forks). Example — **SCAD Renderer** (reference implementation):
 
 ```text
-Canonical BOM (immutable)
+Urmodell (immutable)  — or —  default Pragmatic Model  — or —  fork(Urmodell)
   ↓
 [9]  Target Resolver
   ↓
@@ -143,7 +150,7 @@ Target Output File(s) + Source Map(s)
 Example — **Documentation Renderer**:
 
 ```text
-Canonical BOM (immutable)  →  renderRawBOM()  →  Markdown / HTML
+Urmodell (immutable)  →  renderRawBOM()  →  Markdown / HTML
 ```
 
 Stages [9]–[19] are **not** a fixed framework pipeline — they document the SCAD reference renderer. Other renderers choose different utilities and ordering.

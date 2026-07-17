@@ -89,6 +89,7 @@ blockml/
     validator/                 — @blockml/validator
     compiler/                  — @blockml/compiler
     cli-tools/                 — @blockml/cli          (Node-only)
+    lsp/                       — @blockml/lsp          (V2, planned — Language Server)
 
   engines/
     maker-engine/              — @blockml/engine-maker
@@ -459,6 +460,8 @@ VS Code / Cursor: install **XML** extension; set `xml.catalog.catalogs` to `./ca
 
 Until schema packages exist, authors reference published URLs in `xsi:schemaLocation` — local catalog activates after first `npm install`.
 
+**V2:** `@blockml/lsp` becomes the semantic IDE backend (diagnostics, hover, format via parser/validator/serializer). XSD catalog remains useful for XML completion until LSP covers the same ground. See `00_bom_core.md` — Language Server.
+
 ### Recommended editor settings (`.vscode/settings.json`)
 
 ```json
@@ -539,19 +542,30 @@ This follows the core principle **BML → BOM → BML must always be possible** 
 
 ```text
 INPUT (BML-centric)
-  @blockml/parser       — BML → Canonical BOM (Stage 1, no semantics)
-  @blockml/validator    — BOM → diagnostics + working model (Stage 2) — after roundtrip gate
+  @blockml/parser       — BML → Urmodell / Canonical BOM (Stage 1, no semantics)
+  @blockml/validator    — Urmodell → diagnostics + pragmatic model (Stage 2) — after roundtrip gate
 
 OUTPUT (roundtrip)
-  @blockml/serializer   — BOM → canonical BML XML (lossless inverse of parser mapping)
+  @blockml/serializer   — Urmodell → canonical BML XML (lossless inverse of parser mapping)
+                          Must accept any Urmodell provenance (parse today; BomBuilder seal in V3)
 
 ORCHESTRATION (later)
   @blockml/compiler     — Facade + Target Registry + render pipeline
+
+AUTHORING (V3)
+  BomBuilder            — writable session → seal() → Urmodell (same types as parser output)
+                          See `00_bom_core.md` — BomBuilder; V1 must stay Builder-ready
+
+IDE (V2)
+  @blockml/lsp          — Language Server; reuses parser + validator + serializer + core
+                          See `00_bom_core.md` — Language Server; V1 must populate source spans
 ```
 
 The serializer is **not** a render target emitter (SCAD, JSON, …). Target output stays in `@blockml/compiler` and domain target packages.
 
 **V1 serializer note:** The meta-driven serializer from `19_definition_blocks_and_bml_xml.md` is the long-term target. V1 ships a **hardcoded inverse mapper** aligned with `13_bml_to_bom_mapping.md` — same approach as the V1 parser. Roundtrip tests still catch mapping gaps and information loss.
+
+**Builder- and LSP-ready constraint (V1 onward):** BOM interfaces in `@blockml/core` must remain construction-friendly and provenance-agnostic (optional source spans; factory helpers for nodes). Parser **should populate spans** for diagnostics and future LSP. Do not bake parse-only invariants into types. Structural authoring stays off the pragmatic resolve path. Tolerant parse is preferred where it does not undermine roundtrip tests on valid corpus files.
 
 ### Build phases
 

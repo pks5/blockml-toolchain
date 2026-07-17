@@ -1,6 +1,6 @@
 # BOM Compiler — Capabilities and Renderer Interpretation
 
-version: 0.3.0
+version: 0.5.0
 
 status: **Supersedes** prior ManagedObject / synthetic accessor drafts (v0.2.0-draft).
 
@@ -17,9 +17,9 @@ For validation stages see `00_bom_core.md` — Validation pipeline.
 
 ## Core principle
 
-BlockML describes **semantics only**. The Canonical BOM is an immutable semantic representation. The Validator performs static semantic validation and creates a partially resolved working model. The Renderer interprets semantics and decides how they manifest in the target technology.
+BlockML describes **semantics only**. The **Urmodell** (Canonical BOM) is an immutable semantic representation (SSOT), produced by the parser or (V3) by `BomBuilder.seal()`. The Validator performs static semantic validation on a **Pragmatic Model** fork and may partially resolve inheritance and merges there. Structural authoring (`addProperty`, build from scratch) is **BomBuilder (V3)** — not the pragmatic path. The Renderer interprets semantics — reading the Urmodell, reusing the default pragmatic model, or forking the Urmodell again (including multiple times) for its own partial merges — and decides how they manifest in the target technology.
 
-The BOM never contains implementation concepts such as constructors, getters, setters, runtime values, or executable behaviour.
+The Urmodell never contains implementation concepts such as constructors, getters, setters, runtime values, or executable behaviour.
 
 ---
 
