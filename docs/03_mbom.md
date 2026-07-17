@@ -535,7 +535,6 @@ Defined in `CompositeBlock.bml`. Extends `Block`. Adds `_parts` as the default c
 ```text
 Extends:        com.machineblocks.bml.core.Block
 Aggregations:   _parts (type: com.machineblocks.bml.core.Block[], default)
-languages: OpenSCAD
 ```
 
 ### com.machineblocks.bml.core.NativeBlock
@@ -567,21 +566,6 @@ Aggregations:   _presets (type: com.machineblocks.bml.core.Block[] — inherited
                 _steps  (type: com.machineblocks.bml.core.Step[] — declared on Set.bml)
 Derivable:      baseType = com.machineblocks.bml.core.Set  ✓
 Processor:      ScadSetProcessor → STEPS array + 4 view submodules
-```
-
-### languages
-
-Declared on `CompositeBlock.bml`:
-
-```xml
-<languages>
-  <lang:OpenSCAD />
-</languages>
-```
-
-```text
-com.machineblocks.bml.core.CompositeBlock — OpenSCAD
-org.blockml.bml.service.*                 — TypeScript on Transformation capabilities
 ```
 
 ### Validation

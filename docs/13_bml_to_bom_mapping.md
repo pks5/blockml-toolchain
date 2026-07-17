@@ -264,10 +264,11 @@ Rules:
 language attribute   — required; must be org.blockml.bml.language.* FQN
 Missing language     → BML_MISSING_IMPLEMENTATION_LANGUAGE (error)
 Unknown language FQN → BML_IMPLEMENTATION_UNKNOWN_LANGUAGE (error)
-Unsupported language → BML_IMPLEMENTATION_NOT_SUPPORTED (validate — not in baseType languages)
 ```
 
 V1 known languages: `org.blockml.bml.language.TypeScript`, `org.blockml.bml.language.OpenSCAD`.
+
+Whether the active Target/renderer can execute or emit that language is a Target concern — not a per-Block authoring whitelist.
 
 ### Type modifiers
 
@@ -319,7 +320,6 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <abstract>true</abstract>                    → block.abstract = true
 <final>true</final>                          → block.final = true
 <visibility>…</visibility>                   → block.visibility (Sub-Block only; root → BML_VISIBILITY_ON_ROOT_BLOCK)
-<lang:OpenSCAD />                            → block.languages[] (TypeReference(core:Language)[] child)
 <ac:Wall />                                  → block.contracts[]   (TypeReference(core:Block)[] child; root block only)
 `<definition>RootBlockDefinition</definition>` → `block.definitionFqn`. Default depends on parse context: Sub-Blocks → `SubBlockDefinition`; document root → `RootBlockDefinition`; embedded virtual files → `EmbeddedBlockDefinition`. Explicit `<definition>` must be compatible with block role (`BML_DEFINITION_TYPE_MISMATCH`).
 <baseType="…"/>                            → block.genericTypes[] { name: element local name, baseType, defaultType? } (any Block definition — root, Sub-Block, embedded)
@@ -368,7 +368,7 @@ Protected member access outside scope    → BML_PROTECTED_MEMBER_ACCESS (error)
 Private Sub-Block reference outside scope → BML_PRIVATE_SUBBLOCK_ACCESS (error)
 Protected Sub-Block reference outside scope → BML_PROTECTED_SUBBLOCK_ACCESS (error)
 Duplicate members by visibility prefix   → BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT (error)
-Omitted languages / contracts          → inherit from baseType at validate
+Omitted contracts          → inherit from baseType at validate
 Omitted genericTypes                 → none — generic parameters are not inherited; bind or forward via baseType / Sub-Block application
 <contracts> on Sub-Block                 → BML_CONTRACT_NOT_ON_ROOT (error)
 Duplicate contract reference           → BML_DUPLICATE_CONTRACT (error)
@@ -745,7 +745,7 @@ See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 Aggregation type is TypeReferenceEntity(B)[/…/]  →  TypeReferenceEntity instances
   Parser: empty non-TypeReferenceEntity QName child → expand sugar → Entity { value: resolved FQN }
   Explicit <type:TypeReferenceEntity value="…" /> is equivalent
-  Store Entity instances in contracts[] / languages[] / language / Library lists
+  Store Entity instances in contracts[] / language / Library lists
   Validator: satisfiesTypeBound(resolve(value), B) for each child
   FQN projections (e.g. languageFqn, contract FQN sets) derive from .value
 

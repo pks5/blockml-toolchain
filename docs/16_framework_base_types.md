@@ -97,24 +97,6 @@ Empty elements (`<final/>`) are not permitted — use `<final>true</final>` expl
 
 `com.machineblocks.bml.core.NativeBlock` is `final=true`.
 
-### `<languages>`
-
-```xml
-<languages>
-  <lang:OpenSCAD />
-  <lang:TypeScript />
-</languages>
-```
-
-```text
-Lists Language references permitted on <implementation language="...">.
-Meta-model type: type:TypeReferenceEntity(core:Language)[]. Each child is a TypeReferenceEntity
-instance — empty QName sugar or explicit value.
-Type-reference interpretation follows from the Block-definition role — same pattern as Library blocks.
-Omitted = inherit from baseType
-Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
-```
-
 ### `<contracts>`
 
 ```xml
@@ -127,7 +109,7 @@ Unknown language on capability → BML_IMPLEMENTATION_NOT_SUPPORTED
 ```text
 Lists contract Block references merged into this Block (root block only).
 Meta-model type: type:TypeReferenceEntity(core:Block)[]. Each child is a TypeReferenceEntity instance — empty QName sugar or explicit value.
-Same container pattern as <languages> — no wrapper <contract> element.
+Same container pattern as other TypeReferenceEntity aggregations — no wrapper <contract> element.
 See 17_type_system_bml.md — TypeReference and TypeReferenceEntity.
 Role            — member merge + type-bound identification (satisfiesTypeBound); see 17_type_system_bml.md
 Omitted = inherit from baseType at validate
@@ -301,7 +283,7 @@ in child blocks.
 
 `org.blockml.bml.core.Block` declares `language` (NaturalLanguage) — root default English. Library descriptors inherit via BlockLibrary.
 
-`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`name`, `type`, `baseType`, `version`), designation (`is`, `isnot`), abstract `definition` (meta-model role selector), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), `subBlocks` (recursive Sub-Block hierarchy), and block-level collections (`genericTypes`, `languages`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
+`org.blockml.bml.definition.BlockDefinition` declares the shared shape of all Block definition documents: identity (`name`, `type`, `baseType`, `version`), designation (`is`, `isnot`), abstract `definition` (meta-model role selector), `summary` and `keywords` aggregation (`core:Keyword[]`, inherited from StructuralDefinition), `aliases` aggregation (`core:Alias[]`, block-level), `language` (NaturalLanguage element — per-block override), member containers (`properties`, `aggregations`, `associations`, `capabilities`), `subBlocks` (recursive Sub-Block hierarchy), and block-level collections (`genericTypes`, `contracts`). Generic meta-type parameter `B extends org.blockml.bml.core.Block` binds the definition to the Block type it describes.
 
 `org.blockml.bml.definition.SubBlockDefinition`, `RootBlockDefinition`, and `EmbeddedBlockDefinition` are **sibling** specializations of `BlockDefinition` that each override `definition` with a tighter TypeReference and default (`SubBlockDefinition` / `RootBlockDefinition` / `EmbeddedBlockDefinition`). `RootBlockDefinition` additionally declares `embeddedBlocks` (`EmbeddedBlockDefinition[]` — virtual files, root-only). `EmbeddedBlockDefinition` has no nested embeds. `subBlocks` is inherited from `BlockDefinition` and may nest to arbitrary depth on roots, embeds, and Sub-Blocks.
 

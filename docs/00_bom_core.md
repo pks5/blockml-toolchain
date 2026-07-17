@@ -1371,26 +1371,22 @@ Whether Capability linking in Presets is permitted is to be defined.
 
 ### Transformation Capability Implementations
 
-A `Transformation` Capability may carry an `<implementation>` element that provides a target-language function body. This is only permitted when the Block's `baseType` declares support for that implementation type.
+A `Transformation` Capability may carry an `<implementation>` element that provides a target-language function body. The `language` attribute must reference a registered Language FQN (`org.blockml.bml.language.*`). Whether that language can be executed or rendered is decided by the active Target/renderer — not by a per-Block whitelist.
 
 ```text
 Implementation language types (org.blockml.bml.language.*):
   org.blockml.bml.language.TypeScript   — TypeScript arrow function (compile-time / transpile)
   org.blockml.bml.language.OpenSCAD     — OpenSCAD function(s) in CDATA
 
-baseType declares:
-  languages: [org.blockml.bml.language.OpenSCAD]
-    — e.g. com.machineblocks.bml.core.Block
-  languages: [org.blockml.bml.language.OpenSCAD, org.blockml.bml.language.TypeScript]
-    — e.g. org.blockml.bml.core.Entity
+Unknown Language FQN → BML_IMPLEMENTATION_UNKNOWN_LANGUAGE
+Target/renderer cannot use the implementation → Target-specific diagnostic
+  (e.g. BML_FUNCTION_NO_RUNTIME_IMPL, BML_NO_TARGET)
 ```
 
-If a Block carries `<implementation language="org.blockml.bml.language.OpenSCAD">` but its `baseType` does not list that type in `languages`, the compiler emits `BML_IMPLEMENTATION_NOT_SUPPORTED`.
-
-A Transformation Capability implementation can live directly on any Block whose `baseType` supports it — not only on `utility Sub-Block` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
+A Transformation Capability implementation can live directly on any Block — not only on `utility Sub-Block` Sub-Blocks. The Sub-Block approach is a convention for grouping related utilities, not a requirement:
 
 ```xml
-<!-- Direct on Block — valid if baseType supports OpenSCAD -->
+<!-- Direct on Block -->
 <capabilities>
   <formatValue type="org.blockml.bml.capability.Transformation" ...>
     <implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[

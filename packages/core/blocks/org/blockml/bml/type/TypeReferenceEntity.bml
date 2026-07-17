@@ -25,7 +25,6 @@
     Use on aggregation type attributes when children are type references stored as Entity instances:
     • type:TypeReferenceEntity(core:Block)[] — contracts, Library blocks
     • type:TypeReferenceEntity(lang:NaturalLanguage) — language (singular, 0..1)
-    • type:TypeReferenceEntity(core:Language)[] — languages
     • type:TypeReferenceEntity(core:ReadMe)[1..1] — Library readMe
     • type:TypeReferenceEntity(core:Bootstrap) — Library bootstrap (0..1 SPOE)
     • type:TypeReferenceEntity(core:BlockLibrary)[] — dependencies, subLibraries
@@ -59,7 +58,7 @@
       Abstract generic base — value property inherited after binding T.
     </see>
     <see type="def:BlockDefinition" relation="Defines">
-      contracts, languages, language aggregations.
+      contracts and language aggregations.
     </see>
     <see type="core:BlockLibrary" relation="SeeAlso">
       readMe, bootstrap, dependencies, subLibraries, blocks aggregations.

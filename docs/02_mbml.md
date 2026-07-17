@@ -1378,7 +1378,6 @@ PascalCase ensures composition instance tags with `xmlns:` prefixes are unambigu
                               — local declaration property; not inherited. Validator enforces effect.
                               — declared on StructuralDefinition; applies to block definitions
 <visibility>                  — Sub-Blocks only: private | protected | public; must match <name>
-<languages>         — Language references for <implementation language="...">
 <properties>    — Property declarations. Omit if no custom properties or default overrides needed.
 <aggregations>  — Aggregation declarations. Omit when inherited aggregations from baseType suffice.
 <associations>  — Association declarations.
@@ -1400,16 +1399,11 @@ Framework base types (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.
 ```xml
 <abstract>true</abstract>
 <final>true</final>
-
-<languages>
-  <lang:OpenSCAD />
-  <lang:TypeScript />
-</languages>
 ```
 
 ```text
 Omitted abstract/final          — false (local declaration properties; not inherited from baseType)
-Omitted languages / contracts   — inherit from baseType at validate
+Omitted contracts               — inherit from baseType at validate
 org.blockml.bml.core.Block        — sole type that omits <baseType> (inheritance root)
 ```
 
@@ -1421,7 +1415,6 @@ domain `Block[]` aggregation denotes a real empty instance of that Block instead
 `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 ```text
-<languages>    →  <lang:OpenSCAD/>           TypeReferenceEntity(core:Language)[] — Entity sugar
 <contracts>    →  <ac:Wall/>                 TypeReferenceEntity(core:Block)[] — Entity sugar
 <language>     →  <German/>                  TypeReferenceEntity(NaturalLanguage) — optional single
 <type>         →  foo:MyBlock                TypeReference property text — required on root
@@ -2570,8 +2563,8 @@ plain Block[]       →  real BlockInstance (empty = valid instance with no auth
 ```
 
 Examples: `readMe` / `bootstrap` / `blocks` on `org.blockml.bml.core.BlockLibrary` use
-`TypeReferenceEntity(...)`; `<contracts>` / `<languages>` on Block definitions use
-`TypeReferenceEntity(core:Block)[]` / `TypeReferenceEntity(core:Language)[]`. See
+`TypeReferenceEntity(...)`; `<contracts>` on Block definitions use
+`TypeReferenceEntity(core:Block)[]`. See
 `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 Member visibility follows § Member Visibility. Protected aggregations (`_name`) are accessible in derived Blocks and by the direct composition owner; private aggregations (`__name`) are confined to the declaring Block. Cross-document `{BlockFQN}::{id}` references require a **public** target aggregation.

@@ -141,7 +141,7 @@ interface SourceInfo {
 
 A Block definition is the abstract representation of a `<block>` document (or a Sub-Block within one). Semantically: a **Class** — type shape without instance state.
 
-`TypeReferenceEntity` aggregations (`contracts`, `languages`, `language`, Library lists) store real Entity instances. FQN membership checks use `resolve(value)`.
+`TypeReferenceEntity` aggregations (`contracts`, `language`, Library lists) store real Entity instances. FQN membership checks use `resolve(value)`.
 
 ```typescript
 /** BOM shape for org.blockml.bml.type.TypeReferenceEntity(B[, D]) instances */
@@ -220,9 +220,6 @@ interface BlockDefinition {
 
   /** BlockML access visibility — Sub-Blocks only. Derived from name when omitted. Forbidden on root Blocks. Does not restrict renderer BOM access. */
   visibility?: "private" | "protected" | "public"
-
-  /** Language TypeReferenceEntity instances allowed on capability implementations. Default: inherit. */
-  languages?: TypeReferenceEntityInstance[]
 
   /** Contract TypeReferenceEntity instances merged into this Block after the baseType chain.
    * Root block only. Order is significant — later contracts override earlier ones;

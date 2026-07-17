@@ -57,7 +57,7 @@
       Required branch for aggregation payload types.
     </see>
     <see type="type:TypeReferenceEntity" relation="Requires">
-      Entity payload for type-reference aggregations (contracts, languages, Library lists).
+      Entity payload for type-reference aggregations (contracts, Library lists).
     </see>
   </references>
 

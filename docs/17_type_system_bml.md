@@ -669,7 +669,7 @@ strings (formerly `FullyQualifiedName`). Use it on scalar properties such as ide
 
 `org.blockml.bml.type.TypeReferenceEntity(B)` is the **PrimitiveEntity** wrapper — open generic,
 forwards `B` onto `PrimitiveEntity(TypeReference(B))`. Use it when a type reference must appear as
-an Entity in composition or aggregation (contracts, languages, Library lists, …).
+an Entity in composition or aggregation (contracts, Library lists, …).
 
 `org.blockml.bml.type.MemberReference(B, D)` extends `TypeReference(B)` and adds `D` (baseType
 `MemberDefinition`) for **member definition paths**. Concrete children bind `D`:
@@ -720,7 +720,7 @@ Rule:  aggregation type attribute  →  decides sugar vs domain-Block instance
        and the child element QName is not TypeReferenceEntity itself
 ```
 
-**Definition sites** (`<contracts>`, `<languages>`, `<language>`) declare
+**Definition sites** (`<contracts>`, `<language>`) declare
 `TypeReferenceEntity` aggregations — children are Entity instances (sugar or explicit), never wrapped
 in `<composition>` at the definition site:
 
@@ -1577,7 +1577,7 @@ MarkupLanguage(lang:German)
 
 Bare `lang:TypeScript`, `language="OpenSCAD"`, and `baseType>lang:ProgrammingLanguage</baseType>` remain valid — `L` defaults to English.
 
-Every Capability inherits an optional `<implementation>` member from `org.blockml.bml.core.CapabilityType`. The element **`language`** attribute must reference a registered Language FQN. Composable Blocks may additionally restrict permitted languages via `<languages>` — see `16_framework_base_types.md`.
+Every Capability inherits an optional `<implementation>` member from `org.blockml.bml.core.CapabilityType`. The element **`language`** attribute must reference a registered Language FQN. Support for emitting or executing that language is a Target/renderer concern — not a per-Block authoring whitelist.
 
 Capability references inside an `<implementation>` body use **BML Embedded Expression** syntax (`<$ … $>`) — see `10_expression_language.md` — BML Embedded Expressions.
 
@@ -1611,7 +1611,6 @@ Branch is derived by walking the **`baseType` chain only** — `contracts[]` doe
 | `<capabilities>` | allowed | allowed on branch bases; uncommon on leaf types | forbidden | forbidden | forbidden |
 | `<genericTypes>` | allowed | allowed | allowed | forbidden | forbidden |
 | `<properties>` | allowed | StructType · PrimitiveType · EnumType (catalog metadata) | allowed | forbidden | forbidden |
-| `<languages>` | allowed | forbidden | forbidden | forbidden | forbidden |
 | Meta property `id` on instances | yes (always) | yes (always) | yes (always) | yes (always) | yes (always) |
 | `<property name="id">` | forbidden | forbidden | forbidden | forbidden | forbidden |
 | Used as composition instance typeFqn | if not abstract | if not abstract | if not abstract | if not abstract | forbidden |

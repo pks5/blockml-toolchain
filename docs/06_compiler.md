@@ -621,7 +621,6 @@ BML_GENERIC_DEFAULT_CYCLE — defaultType reference graph contains a cycle
 BML_GENERIC_DEFAULT_UNRESOLVED — defaultType chain does not ground to a concrete type
 BML_UNQUALIFIED_BLOCK_REFERENCE — bare block reference without FQN or xmlns prefix at a general reference site (composition tag, baseType, aggregation/association type)
 BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED — Sub-Block shares root Block name; bare short tag is ambiguous
-BML_IMPLEMENTATION_NOT_SUPPORTED — <implementation language="..."> not listed in baseType languages
 BML_UNCLOSED_EMBEDDED_EXPRESSION — <$ in implementation CDATA without matching $>
 BML_INVALID_EMBEDDED_EXPRESSION — nested or malformed <$ $> region in implementation
 BML_UNKNOWN_CAPABILITY — Capability referenced in embedded expression does not exist

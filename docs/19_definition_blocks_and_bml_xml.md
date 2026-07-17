@@ -173,15 +173,12 @@ Examples: `PropertyDefinition`, `AggregationDefinition`, `AssociationDefinition`
 
 **Direct Block reference — effective Block type as element name**
 
-Same pattern as `org.blockml.bml.core.Block` (`${ bml:Self }`) and Language references in `<languages>`. On these **definition containers**, every empty child element is **TypeReferenceEntity sugar** (QName → value) — not an instance of the named Block. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
+Same pattern as `org.blockml.bml.core.Block` (`${ bml:Self }`) and other TypeReferenceEntity definition containers. On these **definition containers**, every empty child element is **TypeReferenceEntity sugar** (QName → value) — not an instance of the named Block. See `17_type_system_bml.md` — TypeReference and TypeReferenceEntity.
 
 ```text
 <contracts>
   <ac:Wall/>          → contract reference (element name = FQN via xmlns prefix) — type ref, not instance
 </contracts>
-<languages>
-  <lang:OpenSCAD/>    → language reference — type ref, not instance
-</languages>
 ```
 
 The container defines context; the child element is the Block reference — no wrapper elements (`contract`, `genericType`) when context is already unambiguous.
@@ -245,7 +242,6 @@ org.blockml.bml.definition.BlockDefinition
   aggregations:     language → TypeReferenceEntity(NaturalLanguage)
                     aliases → Alias[]
                     genericTypes → GenericTypeDefinition[]
-                    languages → TypeReferenceEntity(Language)[]
                     contracts → TypeReferenceEntity(Block)[]
                     properties → PropertyDefinition[]
                     aggregations → AggregationDefinition[]
