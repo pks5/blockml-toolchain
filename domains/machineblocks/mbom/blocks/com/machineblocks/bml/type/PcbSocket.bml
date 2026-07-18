@@ -17,9 +17,10 @@
   <is>A PCB screw-socket position</is>
 
   <documentation>Struct ValueType for one PCB screw-socket center { x, y } in millimeters,
-    measured from the brick center. Maps 1:1 to the SCAD pcbSockets entry [x, y]. Diameter,
-    height, and hole diameter stay on NativeBlock.pcbSocket* (global). Used by
-    NativeBlock.pcbSockets as PcbSocket[].</documentation>
+    measured from the brick center. Maps 1:1 to the SCAD pcbSockets entry [x, y]. Used by
+    NativeBlock.pcbSockets as the list of individual sockets — distinct from NativeBlock.pcbOffset,
+    which offsets the entire PCB assembly. Diameter, height, and hole diameter stay on
+    NativeBlock.pcbSocket* (global).</documentation>
 
   <properties>
     <x type="Decimal(unit:Millimeter)">

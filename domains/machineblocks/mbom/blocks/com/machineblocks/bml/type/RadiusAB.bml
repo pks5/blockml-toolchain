@@ -36,6 +36,12 @@
     <see type="mbtype:OffsetAB" relation="SeeAlso">
       Parallel offset semantics on AxisAB.
     </see>
+    <see type="mbtype:BaseRoundingMap" relation="SeeAlso">
+      Body rounding — CornerMap(Decimal | RadiusAB) nested in AxisXYZ.
+    </see>
+    <see type="mbtype:PlaneRoundingMap" relation="SeeAlso">
+      Recess / tongue rounding — CornerMap with GridUnitXY.
+    </see>
   </references>
 
 </block>

@@ -73,6 +73,7 @@
       <mbtype:AxisXY />
       <mbtype:AxisXYZ />
       <mbtype:BaseCutout />
+      <mbtype:BaseRoundingMap />
       <mbtype:Connector />
       <mbtype:CornerMap />
       <mbtype:Direction />
@@ -96,6 +97,7 @@
       <mbtype:PcbMountingType />
       <mbtype:PcbSocket />
       <mbtype:PillarGapAutoConfig />
+      <mbtype:PlaneRoundingMap />
       <mbtype:Port />
       <mbtype:PortShapeType />
       <mbtype:QualityPreset />

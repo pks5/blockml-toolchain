@@ -213,13 +213,14 @@
       <scad:value>standard</scad:value>
     </baseCutoutType>
 
-    <baseRoundingRadius type="Decimal | mbtype:AxisXYZ(mbtype:CornerMap(Decimal | mbtype:RadiusAB))">
+    <baseRoundingRadius type="Decimal | mbtype:BaseRoundingMap">
       <documentation>Rounding radius of the block corners. Unlike recessRoundingRadius /
-        tongueRoundingRadius (Z-plane / horizontal corners only), this parameter defines
-        radii along all three brick axes via AxisXYZ(CornerMap(…)). Because the three axes
-        use different scales (XY grid vs Z plate height), component values stay unitless
-        Decimal | RadiusAB — the axis context supplies the physical meaning. A bare Decimal
-        applies the same radius on all axes and corners.
+        tongueRoundingRadius (Z-plane / horizontal corners only via PlaneRoundingMap), this
+        parameter defines radii along all three brick axes via BaseRoundingMap
+        (AxisXYZ(CornerMap(Decimal | RadiusAB))). Because the three axes use different scales
+        (XY grid vs Z plate height), component values stay unitless Decimal | RadiusAB — the
+        axis context supplies the physical meaning. A bare Decimal applies the same radius on
+        all axes and corners.
       </documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
@@ -648,7 +649,9 @@
     </pcbDimensions>
 
     <pcbOffset type="mbtype:OffsetXY">
-      <documentation>Offset of the PCB from the center of the brick.</documentation>
+      <documentation>Offset of the entire PCB assembly (board and related features) from the
+        brick center — not individual socket positions. For per-socket centers see pcbSockets.
+      </documentation>
       <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
     </pcbOffset>
@@ -675,8 +678,9 @@
     </pcbSocketHoleDiameter>
 
     <pcbSockets type="mbtype:PcbSocket[]">
-      <documentation>Positions of screw sockets. Each PcbSocket { x, y } is the distance of the
-        socket center from the brick center in mm (SCAD [x, y]).
+      <documentation>List of individual screw-socket positions. Each PcbSocket { x, y } is one
+        socket center from the brick center in mm (SCAD [x, y]). Distinct from pcbOffset, which
+        shifts the entire PCB assembly as a whole.
       </documentation>
       <since>3.0.0</since>
       <value>[]</value>
@@ -842,10 +846,10 @@
       <scad:value>auto</scad:value>
     </recessDepth>
 
-    <recessRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:CornerMap(Decimal(mbunit:GridUnitXY) | mbtype:RadiusAB(Decimal(mbunit:GridUnitXY)))">
+    <recessRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:PlaneRoundingMap">
       <documentation>Rounding radius of the recess cavity corners on the horizontal (Z-face)
-        plane only — not a full AxisXYZ map like baseRoundingRadius. Because only the XY
-        plane is involved, values carry GridUnitXY. Auto derives from the block's
+        plane only — not a full BaseRoundingMap like baseRoundingRadius. Expanded form is
+        PlaneRoundingMap (CornerMap with GridUnitXY). Auto derives from the block's
         baseRoundingRadius. Usually does not need adjustment.
       </documentation>
       <value>Auto</value>
@@ -1772,10 +1776,10 @@
       <scad:value>1</scad:value>
     </tongueOffset>
 
-    <tongueRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:CornerMap(Decimal(mbunit:GridUnitXY) | mbtype:RadiusAB(Decimal(mbunit:GridUnitXY)))">
+    <tongueRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:PlaneRoundingMap">
       <documentation>Rounding radius of the tongue corners on the horizontal (Z-face) plane
-        only — not a full AxisXYZ map like baseRoundingRadius. Because only the XY plane is
-        involved, values carry GridUnitXY. Auto typically derives from the block's
+        only — not a full BaseRoundingMap like baseRoundingRadius. Expanded form is
+        PlaneRoundingMap (CornerMap with GridUnitXY). Auto typically derives from the block's
         baseRoundingRadius. Usually does not need adjustment.
       </documentation>
       <value>Auto</value>
