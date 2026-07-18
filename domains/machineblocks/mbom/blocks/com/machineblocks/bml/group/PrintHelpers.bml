@@ -8,12 +8,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
-  xmlns:core="org.blockml.bml.core"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
   <name>PrintHelpers</name>
   <type>mbgroup:PrintHelpers</type>
-  <baseType>core:MemberGroup</baseType>
+  <baseType>mbgroup:Category</baseType>
   <is>A Print Helpers parameter group</is>
 
   <documentation>MachineBlocks member group for Print Helpers parameters on NativeBlock

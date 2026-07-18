@@ -68,6 +68,12 @@
 
     <blocks>
       <mbann:ScadAnnotation />
+      <mbgroup:AiUsage />
+      <mbgroup:FrequentAiUsage />
+      <mbgroup:RareAiUsage />
+      <mbgroup:ConfigOnlyAiUsage />
+      <mbgroup:NeverAiUsage />
+      <mbgroup:Category />
       <mbgroup:System />
       <mbgroup:CoreGeometry />
       <mbgroup:Positioning />

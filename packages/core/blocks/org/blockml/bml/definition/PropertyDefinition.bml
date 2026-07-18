@@ -26,12 +26,12 @@
     BOM namespace; unprefixed elements belong to the default namespace (empty string). The prefix
     itself is never stored. Member identity is (resolvedNamespace, localName). Maps to BOM
     PropertyDefinition (kind: "property") with typeFqn, values[] (value-field entries with
-    namespace), optional group (inherited from MemberDefinition), and optional constraints (via
+    namespace), optional groups (inherited from MemberDefinition), and optional constraints (via
     ConstrainableDefinition) and suggestions. Convenience path value is the default-namespace entry.
-    Property type must resolve to a ValueType branch. Scalar member fields (type, value, group)
-    follow org.blockml.bml.definition.MemberDefinition placement rules — element preferred on
-    definitions, attribute preferred on Block instances. Structured suggestions remain a child
-    element. Every Property behaves as Optional — it has a value or has no value; there
+    Property type must resolve to a ValueType branch. Scalar member fields (type, value) follow
+    org.blockml.bml.definition.MemberDefinition placement rules — element preferred on
+    definitions, attribute preferred on Block instances. Structured children (groups, suggestions)
+    remain elements. Every Property behaves as Optional — it has a value or has no value; there
     is no null. Declaration order among properties is significant for StructType positional mapping
     and Capability parameter order.
 

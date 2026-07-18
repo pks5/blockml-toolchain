@@ -11,7 +11,8 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
-  xmlns:def="org.blockml.bml.definition">
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
 
   <name>MemberDefinition</name>
   <type>def:MemberDefinition</type>
@@ -36,7 +37,8 @@
     • On Block instances (composition): the same fields may also render as element or attribute —
       both are valid; attribute form is preferred when serializing instances (e.g. width="50" over
       &lt;width&gt;50&lt;/width&gt;).
-    Structured children (constraints, suggestions, composition, implementation) remain elements.
+    Structured children (constraints, groups, suggestions, composition, implementation) remain
+    elements.
 
     Member declaration modes are orthogonal:
     • new — introduces a new member; must not set override="true"
@@ -59,8 +61,8 @@
     Aggregation: type; Association: type; Capability: type + implementation). To keep a member
     abstract in a child block, explicitly declare abstract="true" on that redeclaration.
 
-    Maps to BOM MemberDefinitionBase fields shared by all member kinds — including visibility,
-    readOnly, and group attributes on member elements.</documentation>
+    Maps to BOM MemberDefinitionBase fields shared by all member kinds — including visibility and
+    readOnly attributes, plus the groups aggregation (MemberGroup type references).</documentation>
 
   <references>
     <see type="core:Block" property="language" relation="Defines">
@@ -78,6 +80,9 @@
     </see>
     <see type="def:ConstrainableDefinition" relation="SeeAlso">
       Shared constraints container for Block and member definitions.
+    </see>
+    <see type="core:MemberGroup" relation="Defines">
+      Branch for groups aggregation entries — UI categories, usage facets, and other tooling groups.
     </see>
   </references>
 
@@ -145,12 +150,17 @@
         values on the member declaration; readOnly forbids instance authoring only. Maps to BOM
         MemberDefinitionBase.readOnly.</documentation>
     </readOnly>
-    <group type="core:MemberGroup" bml:xml="element|attribute">
-      <documentation>Optional member group — organizes this member under a MemberGroup category for
-        editors and tooling. Type is org.blockml.bml.core.MemberGroup (or a concrete subtype). On
-        definitions, element form is preferred (&lt;group&gt;…&lt;/group&gt;); on Block instances,
-        attribute form is preferred. Maps to BOM MemberDefinitionBase.group.</documentation>
-    </group>
   </properties>
+
+  <aggregations>
+    <groups type="type:TypeReferenceEntity(core:MemberGroup)[]" bml:xml="element">
+      <documentation>Optional MemberGroup references that organize this member for editors and
+        tooling — a member may belong to several groups at once (e.g. a UI category and a usage
+        facet). Each child is a TypeReferenceEntity instance — empty children whose element QName is
+        not TypeReferenceEntity are sugar, e.g. &lt;mbgroup:Body /&gt; expands to
+        &lt;type:TypeReferenceEntity value="mbgroup:Body" /&gt;. Document order preserved in BOM
+        groups[]. Maps to BOM MemberDefinitionBase.groups.</documentation>
+    </groups>
+  </aggregations>
 
 </block>
