@@ -41,6 +41,13 @@
     Cross-cutting rules: design in west-local face semantics; prefer direction over free rotation;
     keep calibration adjustments out of instance settings when they belong in config; use face
     string identifiers in V3.
+
+    TODO — Decision Knowledge package: Long-term, grow this into a large structured collection
+    (best practices, antipatterns/negative examples, pattern choices, boundaries, rules) under
+    com.machineblocks.bml.decision.* — not under documentation.*. Own knowledge branch types
+    (e.g. Practice, Antipattern, DecisionRule, PatternChoice) with typed relations to
+    NativeBlock / CompositeBlock / examples. Migrate this block and scad:ScadDecisionRules into
+    that package; keep documentation.concept|mbml|scad as reading guides that only cross-link in.
   </documentation>
 
   <references>
