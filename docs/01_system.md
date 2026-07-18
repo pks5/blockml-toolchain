@@ -51,7 +51,7 @@ Serializer ← Urmodell (Parser or Builder provenance)
 
 **V1 build order:** Parser and serializer prove BML ↔ BOM roundtrip first (`@blockml/parser`, `@blockml/serializer`); validator and compiler follow. See `15_dev_setup.md` — V1 Implementation Strategy.
 
-**BML** (Block Markup Language) is the universal declarative authoring format. File extension **`.bml`**. Content-type `bml`. **XML is the V1 reference format.** JSON as an alternate BML authoring serialization is **deferred (TBD — not V1)** due to namespace and directive constraints.
+**BML** (Block Markup Language) is the universal declarative authoring format. File extension **`.bml`**. Content-type `bml`. **XML is the sole authoring serialization** for V1 and V2. A JSON authoring form is **not planned** as an equivalent format (see `02_mbml.md` — JSON as authoring form); it remains at most an open possibility, not a roadmap item.
 
 **BOM** (Block Object Model) has two runtime roles plus a planned authoring path — see `00_bom_core.md` — Urmodell and Pragmatic Model · BomBuilder (V3):
 
@@ -367,9 +367,9 @@ The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocu
 
 ```text
   - XML parser (V1; browser-compatible)
-  - JSON BML parser — deferred (TBD, not V1)
+  - JSON BML parser — **not planned** for V1/V2; XML only (see `02_mbml.md`)
   - Namespace resolver (xmlns → FQN)
-  - XSD loader (JSON Schema for BML authoring — deferred with JSON format)
+  - XSD loader — optional IDE aid; not required for parse (see XSD Render Target)
   - BML → BOM mapper (per root type, extensible)
   - Parse diagnostics (using `@blockml/core` `Diagnostic`)
   - No render output
@@ -424,7 +424,7 @@ See `14_compiler_runtime.md` — Compiler Facade API (C2).
 Node.js-only CLI tools.
 
 ```text
-- bom new block <fqn> [--format bml]   # JSON deferred (TBD)
+- bom new block <fqn> [--format bml]   # XML only; JSON authoring not planned
 - bom compile <file> <target>
 - bom compile --all <target>
 - bom validate <file>

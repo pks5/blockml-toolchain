@@ -596,7 +596,7 @@ Full language rules live in `02` / `13` / `19`. **Phase A implements and gates o
 
 | In Phase A | Out of Phase A |
 |---|---|
-| XML `.bml` → Urmodell (parser steps `[1]`–`[5]`) | JSON BML |
+| XML `.bml` → Urmodell (parser steps `[1]`–`[5]`) | JSON authoring (not planned) |
 | Hardcoded map + hardcoded inverse serialize | Meta-`bml:xml` drive (`19`) |
 | `ExpressionValue.raw` (+ embedded `{ raw, start, end }`) | `parseExpression()` / AST |
 | Directives unexpanded on Urmodell | Expansion / effective members |

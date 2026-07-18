@@ -133,8 +133,8 @@ interface BomDocument {
 interface SourceInfo {
   /** Absolute or project-relative path */
   filePath: string
-  /** "xml" in V1. "json" deferred (TBD). */
-  format: "xml" | "json"
+  /** "xml" only for authoring. JSON authoring is not planned (see 02_mbml.md). */
+  format: "xml"
   /** xmlns prefix → resolved namespace identifier (XML only; authoring aid — members store resolved values) */
   namespaceBindings?: Record<string, string>
 }

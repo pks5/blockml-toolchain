@@ -4,7 +4,7 @@ version: 0.2.0
 
 ## Purpose of this Document
 
-This document defines the **algorithmic mapping rules** from parsed BML (XML/JSON) to `BomDocument` — the implementation contract for `@blockml/parser`.
+This document defines the **algorithmic mapping rules** from parsed BML XML to `BomDocument` — the implementation contract for `@blockml/parser`.
 
 **Phase A:** implement only § V1 Parser / Serializer Scope below; the rest of this document is the full language contract to grow into.
 
@@ -48,7 +48,7 @@ Parser step [5] produces the immutable BOM graph with expression **raw** text on
 
 | In V1 (Phase A) | Not in V1 (Phase A) |
 |---|---|
-| XML `.bml` only (parser steps `[1]`–`[5]`) | JSON BML authoring |
+| XML `.bml` only (parser steps `[1]`–`[5]`) | JSON authoring (not planned — see § JSON BML) |
 | Structural map → immutable Urmodell | Semantic validation (Stage 2) |
 | Authored literals + `ExpressionValue { raw }` | `parseExpression()` / AST / evaluation |
 | Directives stored in `directives[]` (unexpanded) | Directive expansion / composition expand |
@@ -123,7 +123,7 @@ Block metadata (`name`, `is`, `summary`, `keywords`, `documentation`, `isnot`, `
 | **`inputType` / `outputType`** | Parsed into `TypeDescriptor` at map time — anonymous `{ a: Float }` = anonymous struct type |
 | **Expression parsing** | Parser stores `raw` in BOM; `parseExpression()` utility builds AST (separate result) |
 | **Cross-file resolution** | Single-file parser; TypeRegistry bootstrap by CLI/orchestrator before validate |
-| **JSON BML format** | **Deferred (TBD).** V1 parser accepts XML only (`.bml`) |
+| **JSON authoring format** | **Not planned** as equivalent BML. V1/V2 parser accepts XML only (`.bml`). See § JSON BML |
 | **Composition render** | Leaf geometry → NativeBlock → `mb_block()`; see `14_compiler_runtime.md` |
 | **Member order** | Properties, aggregations, associations, capabilities appended in BML document order — **never sorted**; see `12_bom_object_model.md` — Member Declaration Order |
 
@@ -890,15 +890,13 @@ The orchestrator re-bootstraps or incrementally updates the TypeRegistry when an
 
 ---
 
-## JSON BML Format (Deferred — TBD)
+## JSON BML authoring (not planned)
 
-JSON as a BML **authoring format** is **not implemented in V1**. The V1 parser accepts **XML only** (`.bml`).
+JSON is **not** an equivalent BML authoring format and is **not planned** for V1 or V2 (and may never ship). The parser accepts **XML only** (`.bml`).
 
-JSON may eventually support a very restricted subset (e.g. flat preset blocks, simple leaf blocks). Whether a viable mapping exists is **TBD** — intensive XML namespace usage (`xmlns:bricks`, `bml:*`, prefixed member element names, typed element names) has no natural JSON equivalent. Full BML power requires XML.
+Reasons: no natural mapping for namespaces / `bml:*` / typed element names; exploratory comparisons produced **larger** JSON than XML for the same content. See `02_mbml.md` — JSON as authoring form (not planned).
 
-When JSON support is specified, it will register a separate root-type mapping rule and JSON Schema — not in V1.
-
-See `02_mbml.md` — Serialization Formats for the design rationale.
+Do not extend the format detector, root-type registry, or CLI for JSON authoring unless this decision is explicitly revisited.
 
 ---
 
@@ -910,7 +908,7 @@ See `02_mbml.md` — Serialization Formats for the design rationale.
 | B3 | `inputType` / `outputType` storage — `TypeDescriptor` union (anonymous struct model) | **Decided** |
 | B4 | Expression parsing — raw in BOM; AST via parseExpression() utility | **Decided** |
 | B5 | Cross-file / TypeRegistry — single-file parser; orchestrator bootstrap | **Decided** |
-| B6 | JSON BML authoring format | **Deferred (TBD)** — not in V1; XML-only parser |
+| B6 | JSON BML authoring format | **Not planned** — not equivalent to XML; not V1/V2; may never ship (see § JSON BML) |
 | B7 | V1 Phase-A slice — no XSD must; no meta-`bml:xml` drive; raw expressions only | **Decided** — see § V1 Parser / Serializer Scope |
 | B8 | XSD generation as Render Target; XSD validation only after that target ships; **always disableable** so regen is never blocked | **Decided** — see § V1 Scope · `15_dev_setup.md` Phase C |
 | B9 | BlockDoc + FatBlock Render Targets (toolchain; may precede MachineBlocks SCAD) | **Decided** — see `01_system.md` · `15_dev_setup.md` Phase C |

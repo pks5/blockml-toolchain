@@ -22,7 +22,7 @@ For pipeline stages see `06_compiler.md`.
 | **Composition leaves** | **MachineBlocks convention:** leaf geometry → `mb_block()` — authored as `<core:NativeBlock>` or lowered from domain instances |
 | **Sub-Blocks** | Same-document Sub-Blocks → sub-modules embedded in the parent output SCAD file |
 | **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.bml` is compiled |
-| **JSON BML** | Deferred (TBD — not V1) |
+| **JSON BML authoring** | **Not planned** — not equivalent to XML; not V1/V2; may never ship (`02_mbml.md`) |
 | **Facade API (C2)** | `CompileInput` + `CompileOptions`; explicit `TypeRegistry`; CLI writes files |
 | **Target bootstrap (C3)** | V1: CLI hardcoded `bootstrapTargets()`; configurability planned — early hooks, no `targets[]` in V1 |
 | **RenderContext (C1)** | `RenderSession` (immutable) + forked `RenderContext` per render node; `PropertyResolver` on-demand; internal API |

@@ -27,13 +27,13 @@ Content-type:   bml     — MIME / tooling identifier
 
 The compiler discovers source files via `bmlExtensions` in `bom.config.json` (default: `[".bml"]`).
 
-The root XML element determines the document type — not the filename suffix. (JSON `type` field: deferred TBD.)
+The root XML element determines the document type — not the filename suffix.
 
 ---
 
 ## Serialization Formats
 
-**XML is the canonical BML format.** It is the format of choice for all Block definitions, Composite Blocks, Sub-Blocks, and anything involving BML Directives or Functions. XML is not a legacy choice — it is the right tool for this kind of structured, namespace-aware, hierarchical information.
+**XML is the only BML authoring serialization** for V1 and V2 (and the intended long-term format). It is not a legacy choice — it is the right tool for this kind of structured, namespace-aware, hierarchical information.
 
 Specific XML capabilities that make it irreplaceable for BML:
 
@@ -59,9 +59,9 @@ Schema validation   XSD with full namespace awareness
                     → JSON Schema cannot match this expressiveness
 ```
 
-**JSON BML authoring is deferred (TBD — not V1).** JSON may eventually cover a very restricted subset; intensive namespace usage makes full parity unlikely. See § JSON Format (Deferred) below.
+**JSON is not an equivalent BML format.** A JSON authoring form is **not planned** for V1 or V2 and may never ship. Exploratory comparisons showed that representing the same BML content in JSON tends to produce **larger** payloads than XML, because namespaces, directives, and typed element names must be reified as explicit fields/objects. See § JSON as authoring form (not planned) below.
 
-The document type is determined by the root element (XML). JSON `type` field mapping is not implemented in V1.
+The document type is determined by the root XML element.
 
 ---
 
@@ -4077,11 +4077,11 @@ Legacy `library.xml` is **replaced** by the Library block — not supported in V
 
 ---
 
-## JSON Format (Deferred — TBD)
+## JSON as authoring form (not planned)
 
-> **Not in V1.** The V1 compiler parser accepts XML only. This section sketches a possible future subset — specification and implementation are **TBD**.
+> **Status:** Not an equivalent format. **Not in V1 or V2.** Not on the roadmap as a committed deliverable. May never be implemented. Kept here only as a design note / possibility.
 
-JSON as a BML authoring format faces fundamental constraints from BlockML's namespace model:
+JSON cannot match XML BML for BlockML’s model:
 
 ```text
 Namespaces          → no element-name types (bricks:StandardBrick); explicit type fields only
@@ -4091,9 +4091,11 @@ Sub-Blocks          → awkward nesting; FQN derivation unclear
 Functions (CDATA)   → no inline SCAD/TS bodies
 ```
 
-A future JSON subset might cover flat preset blocks or simple leaf `<block>` definitions without composition directives — if a mapping can be specified without compromising the BOM model. **No commitment until the mapping is formally defined.**
+**Size:** Exploratory round-trips / comparisons for equivalent content showed JSON payloads **larger than XML**, because structure that XML encodes in element/attribute names and namespaces must be duplicated as JSON keys and nested objects. There is no “JSON is more compact” argument for full BML.
 
-The examples below are **illustrative drafts only** — not valid V1 input.
+A hypothetical future JSON **subset** (e.g. flat leaves without directives) would still not be full BML and is **not scheduled**. Do not build parser, CLI `--format json`, or tests against JSON authoring until a separate, explicit decision reopens this topic.
+
+The examples below are **historical illustrative drafts only** — not valid input and not a specification.
 
 ### Block Definition (JSON) — Simple Blocks Only
 

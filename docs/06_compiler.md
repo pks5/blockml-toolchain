@@ -99,7 +99,7 @@ See `00_bom_core.md` — Urmodell and Pragmatic Model.
 Produces the **Urmodell** (Canonical BOM). No semantic decisions. Output is immutable and read-only.
 
 ```text
-BML Source (.bml)                   — V1: XML only; JSON BML deferred (TBD)
+BML Source (.bml)                   — XML only; JSON authoring not planned
   ↓
 [1] Format Detector
   ↓
@@ -137,13 +137,13 @@ inBranch(blockFqn, branchFqn, registry) → boolean  (baseType chain only — br
 satisfiesTypeBound(blockFqn, boundFqn, registry) → boolean  (baseType chain OR direct contracts[])
 resolveGenerics(typeExpr, registry)     → ResolvedTypeExpr
 parseExpression(raw, context)           → ExpressionNode + resultTypeFqn
-evaluateExpression(ast, context)        → evaluated value (pragmatic / working model)
 expandComposition(bom, context)       → ExpandedComposition
 expandDirectives(bom, context)          → ExpandedComposition
 validateTypes(bom, registry)            → Diagnostic[]
 validateConstraints(bom, registry)      → Diagnostic[]
 ```
 
+`evaluateExpression()` is a Stage 3 / renderer utility (constant fold / emit), not Stage 2 validation.
 The CLI may invoke utilities before or during compile for diagnostics — but utilities **never write back** to the Urmodell. Renderers may call `forkBom()` again (including multiple times) and apply only the partial merges they need.
 
 ### Layer 3 — Renderer Pipeline (target-specific) — Stage 3
@@ -211,7 +211,7 @@ SCAD renderer steps [9]–[19] are **not** a fixed framework pipeline — they d
 
 V1 accepts **XML only** (`.bml`). Detects XML from the first non-whitespace character (`<`).
 
-JSON BML authoring is deferred (TBD). When implemented, the format detector will branch on `{` vs. `<`.
+JSON as a BML authoring serialization is **not planned** (not V1/V2; may never ship) — see `02_mbml.md` · `13_bml_to_bom_mapping.md` B6. The format detector does not branch on `{`.
 
 ### [2] XML Parser
 
