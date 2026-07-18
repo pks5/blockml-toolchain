@@ -12,10 +12,10 @@
 
   <name>BaseRoundingMap</name>
   <type>mbt:BaseRoundingMap</type>
-  <baseType>mbt:AxisXYZ(mbt:CornerMap(Decimal | mbt:RadiusAB))</baseType>
+  <baseType>mbt:AxisXYZ(Decimal | RadiusAB | mbt:CornerMap(Decimal | mbt:RadiusAB))</baseType>
   <is>A per-axis corner rounding map for the brick body</is>
 
-  <documentation>Closed AxisXYZ(CornerMap(Decimal | RadiusAB)) for body corner rounding on
+  <documentation>Closed AxisXYZ(Decimal | RadiusAB | CornerMap(Decimal | RadiusAB)) for body corner rounding on
     all three brick axes. Not re-opened as a generic. Inherits x, y, z; each axis holds a
     CornerMap of unitless Decimal or RadiusAB (axis context supplies XY vs Z scale). SCAD
     serializes as the nested AxisXYZ / CornerMap form. Used by NativeBlock.baseRoundingRadius

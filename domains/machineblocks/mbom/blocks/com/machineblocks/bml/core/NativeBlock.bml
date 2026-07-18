@@ -391,13 +391,13 @@
       <examples>
         <example language="BML" snippet="true" title="deeper">
           <![CDATA[
-<NativeBlock baseCutoutMaxDepth="2" />
+<NativeBlock baseCutoutMaxDepth="6" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="deeper">
           <![CDATA[
           ...
-          ["baseCutoutMaxDepth", 2]
+          ["baseCutoutMaxDepth", 6]
           ...
           ]]>
         </scad:example>
@@ -416,12 +416,12 @@
       <value>Standard</value>
       <scad:value>standard</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="none">
+        <example language="BML" snippet="true" title="Solid block without underside cutout">
           <![CDATA[
 <NativeBlock baseCutoutType="None" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="none">
+        <scad:example language="OpenSCAD" snippet="true" title="Solid block without underside cutout">
           <![CDATA[
           ...
           ["baseCutoutType", "none"]
@@ -431,39 +431,55 @@
       </examples>
     </baseCutoutType>
 
-    <baseRoundingRadius type="Decimal | mbt:BaseRoundingMap">
+    <baseRoundingRadius type="Decimal | mbt:RadiusAB | mbt:BaseRoundingMap">
       <documentation>Rounding radius of the block corners. Unlike recessRoundingRadius /
         tongueRoundingRadius (Z-plane / horizontal corners only via PlaneRoundingMap), this
         parameter defines radii along all three brick axes via BaseRoundingMap
-        (AxisXYZ(CornerMap(Decimal | RadiusAB))). Because the three axes use different scales
+        (AxisXYZ(Decimal | RadiusAB | CornerMap(Decimal | RadiusAB))). Because the three axes use different scales
         (XY grid vs Z plate height), component values stay unitless Decimal | RadiusAB — the
-        axis context supplies the physical meaning. A bare Decimal applies the same radius on
-        all axes and corners.
+        axis context supplies the physical meaning.
+
+        Authored forms (combinable inside BaseRoundingMap):
+        • Decimal — same radius on all axes and corners
+        • RadiusAB — same anisotropic {a,b} on all axes and corners
+        • BaseRoundingMap — per axis: Decimal | RadiusAB | CornerMap; per corner: Decimal | RadiusAB
       </documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="rounded">
+        <example language="BML" snippet="true" title="uniform">
           <![CDATA[
-<NativeBlock baseRoundingRadius="0.5" />
+<NativeBlock baseRoundingRadius="5" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="rounded">
+        <scad:example language="OpenSCAD" snippet="true" title="uniform">
           <![CDATA[
           ...
-          ["baseRoundingRadius", 0.5]
+          ["baseRoundingRadius", 5]
           ...
           ]]>
         </scad:example>
-        <example language="BML" snippet="true" title="per-axis corners">
+        <example language="BML" snippet="true" title="anisotropic">
           <![CDATA[
-<NativeBlock baseRoundingRadius="{x: {sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}, y: {sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}, z: {sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}}" />
+<NativeBlock baseRoundingRadius="{a: 3, b: 2}" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="per-axis corners">
+        <scad:example language="OpenSCAD" snippet="true" title="anisotropic">
           <![CDATA[
           ...
-          ["baseRoundingRadius", [[0.5, 0.5, 0.5, 0.5], [0.5, 0.5, 0.5, 0.5], [0.5, 0.5, 0.5, 0.5]]]
+          ["baseRoundingRadius", [[3, 2], [3, 2], [3, 2]]]
+          ...
+          ]]>
+        </scad:example>
+        <example language="BML" snippet="true" title="per-axis mix">
+          <![CDATA[
+<NativeBlock baseRoundingRadius="{x: {sw: 2, nw: {a: 3, b: 2}}, y: 0, z: {a: 1, b: 4}}" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis mix">
+          <![CDATA[
+          ...
+          ["baseRoundingRadius", [[2, [3, 2], 0, 0], 0, [1, 4]]]
           ...
           ]]>
         </scad:example>
