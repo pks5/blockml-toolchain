@@ -1118,7 +1118,7 @@
       </examples>
     </holeXYGridSizeZ>
 
-    <holeXYGridSizeZAdjustment type="Decimal(mbunit:MBU) | mbt:AxisXY(Decimal(unit:Millimeter))">
+    <holeXYGridSizeZAdjustment type="Decimal(unit:Millimeter) | mbt:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYGridSizeZ — per-axis scalar in mm
         (AxisXY, same convention as holeXYGridSizeZ).
       </documentation>
@@ -1673,30 +1673,6 @@
       <value>{x: 0, y: 0, z: 0}</value>
       <scad:value>[0, 0, 0]</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="shifted">
-          <![CDATA[
-<NativeBlock offset="{x: 1, y: 0, z: 0.5}" />
-          ]]>
-        </example>
-        <scad:example language="OpenSCAD" snippet="true" title="shifted">
-          <![CDATA[
-          ...
-          ["offset", [1, 0, 0.5]]
-          ...
-          ]]>
-        </scad:example>
-        <example language="BML" snippet="true" title="xy pair">
-          <![CDATA[
-<NativeBlock offset="{x: 0.5, y: -0.25}" />
-          ]]>
-        </example>
-        <scad:example language="OpenSCAD" snippet="true" title="xy pair">
-          <![CDATA[
-          ...
-          ["offset", [0.5, -0.25]]
-          ...
-          ]]>
-        </scad:example>
         <example language="BML" snippet="true" title="xyz offset">
           <![CDATA[
 <NativeBlock offset="{x: 1, y: 0, z: 0.5}" />
