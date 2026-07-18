@@ -14,7 +14,7 @@
 
   <name>Grille</name>
   <type>mbt:Grille</type>
-  <baseType>mbmbt:MBEnum(Text)</baseType>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>A top-plate grille bar direction</is>
 
   <documentation>Enum ValueType for grille bar orientation on MachineBlocks bricks.

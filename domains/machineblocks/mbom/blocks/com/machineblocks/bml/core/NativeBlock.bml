@@ -431,16 +431,16 @@
       <scad:value>3.625</scad:value>
     </holeXYGridOffsetZ>
 
-    <holeXYGridOffsetZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
-      <documentation>Calibration adjustment for holeXYGridOffsetZ.</documentation>
+    <holeXYGridOffsetZAdjustment type="mbt:OffsetXY(Decimal(unit:Millimeter))">
+      <documentation>Calibration adjustment for holeXYGridOffsetZ (OffsetXY in mm).</documentation>
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
     </holeXYGridOffsetZAdjustment>
 
-    <holeXYGridSizeZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
-      <documentation>Center-to-center distance between two rows of Technic holes
-        in X- and Y-direction.
+    <holeXYGridSizeZ type="mbt:SizeXY(Decimal(mbunit:MBU))">
+      <documentation>Center-to-center size between two rows of Technic holes
+        in X- and Y-direction (SizeXY in MBU).
       </documentation>
       <since>3.0.0</since>
       <value>6</value>
@@ -1469,8 +1469,8 @@
       <scad:value>-0.2</scad:value>
     </studIconDepth>
 
-    <studIconDimensions type="mbt:AxisXY(Decimal(unit:Millimeter))">
-      <documentation>Dimensions of the stud icon SVG in mm (from the SVG file).
+    <studIconDimensions type="mbt:SizeXY(Decimal(unit:Millimeter))">
+      <documentation>Size of the stud icon SVG in mm (from the SVG file).
         Default values match all standard icons in the /patterns directory.
       </documentation>
       <value>{x: 169.333, y: 169.333}</value>
@@ -1550,8 +1550,8 @@
       <scad:value>-0.0625</scad:value>
     </surfacePatternDepth>
 
-    <surfacePatternDimensions type="mbt:AxisXY(Decimal(unit:Millimeter))">
-      <documentation>Dimensions of the surface pattern SVG in mm (from the SVG file).</documentation>
+    <surfacePatternDimensions type="mbt:SizeXY(Decimal(unit:Millimeter))">
+      <documentation>Size of the surface pattern SVG in mm (from the SVG file).</documentation>
       <value>{x: 451.556, y: 451.556}</value>
       <scad:value>[451.556, 451.556]</scad:value>
     </surfacePatternDimensions>
@@ -1602,8 +1602,8 @@
       <scad:value>0.4</scad:value>
     </svgDepth>
 
-    <svgDimensions type="mbt:AxisXY(Decimal(unit:Millimeter))">
-      <documentation>Dimensions of the SVG in mm (from the SVG file).</documentation>
+    <svgDimensions type="mbt:SizeXY(Decimal(unit:Millimeter))">
+      <documentation>Size of the SVG in mm (from the SVG file).</documentation>
       <value>{x: 100, y: 100}</value>
       <scad:value>[100, 100]</scad:value>
     </svgDimensions>
@@ -1615,8 +1615,8 @@
       <scad:value>z+</scad:value>
     </svgFace>
 
-    <svgOffset type="mbt:AxisXY(Decimal(mbunit:GridUnitXY))">
-      <documentation>Offset of the SVG from its default position.</documentation>
+    <svgOffset type="mbt:OffsetXY">
+      <documentation>Offset of the SVG from its default position (OffsetXY, default GridUnitXY).</documentation>
       <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
     </svgOffset>
@@ -1669,8 +1669,8 @@
       <scad:value>Liberation Sans</scad:value>
     </textFont>
 
-    <textOffset type="mbt:AxisXY(Decimal(mbunit:GridUnitXY))">
-      <documentation>Offset of the text from its normal position.</documentation>
+    <textOffset type="mbt:OffsetXY">
+      <documentation>Offset of the text from its normal position (OffsetXY, default GridUnitXY).</documentation>
       <value>[0, 0]</value>
       <scad:value>[0, 0]</scad:value>
     </textOffset>

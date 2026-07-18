@@ -14,7 +14,7 @@
 
   <name>HoleType</name>
   <type>mbt:HoleType</type>
-  <baseType>mbmbt:MBEnum(Text)</baseType>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>A Technic hole shape</is>
 
   <documentation>Enum ValueType for LEGO Technic hole shapes on MachineBlocks bricks.
