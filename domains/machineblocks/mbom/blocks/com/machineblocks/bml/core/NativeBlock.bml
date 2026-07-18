@@ -497,15 +497,39 @@
       <value>[]</value>
       <scad:value>[]</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="one gap">
+        <example language="BML" snippet="true" title="faces">
           <![CDATA[
-<NativeBlock baseWallGaps="[{face: XNeg, pos: 1, len: 2}]" />
+<NativeBlock baseWallGaps="[{face: XNeg, pos: 1, len: 2}, {face: YPos, pos: 0, len: 1}]" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="one gap">
+        <scad:example language="OpenSCAD" snippet="true" title="faces">
           <![CDATA[
           ...
-          ["baseWallGaps", [["x-", 1, 2]]]
+          ["baseWallGaps", [["x-", 1, 2], ["y+", 0, 1]]]
+          ...
+          ]]>
+        </scad:example>
+        <example language="BML" snippet="true" title="axes">
+          <![CDATA[
+<NativeBlock baseWallGaps="[{face: X, pos: 1, len: 2}, {face: Y, pos: 0, len: 1}]" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="axes">
+          <![CDATA[
+          ...
+          ["baseWallGaps", [["x", 1, 2], ["y", 0, 1]]]
+          ...
+          ]]>
+        </scad:example>
+        <example language="BML" snippet="true" title="xy">
+          <![CDATA[
+<NativeBlock baseWallGaps="[{face: XY, pos: 2, len: 1}]" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="xy">
+          <![CDATA[
+          ...
+          ["baseWallGaps", [["xy", 2, 1]]]
           ...
           ]]>
         </scad:example>
