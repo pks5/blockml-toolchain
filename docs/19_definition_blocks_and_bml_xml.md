@@ -109,7 +109,18 @@ Each member kind in the block grammar has a corresponding Definition block. Sour
 
 ## The `bml:xml` Directive
 
-`bml:xml` declares **how a block type or member maps to XML** when rendering BML from the canonical BOM. It complements flow-control directives (`bml:each`, `bml:if`, …) documented in `00_bom_core.md` — those control composition expansion; `bml:xml` controls **serialization shape**.
+`bml:xml` declares **how a block type or member maps to XML** when emitting BML-shaped XML from the canonical BOM. It complements flow-control directives (`bml:each`, `bml:if`, …) documented in `00_bom_core.md` — those control composition expansion; `bml:xml` controls **XML serialization shape**.
+
+**Consumers are not limited to `@blockml/serializer`.** Any Stage-3 target that emits BML XML (or BML-shaped XML) should read the same metadata — notably:
+
+| Consumer | Why `bml:xml` matters |
+|---|---|
+| **`@blockml/serializer`** | Canonical roundtrip: BOM → authored BML XML |
+| **FatBlock Render Target** | Emits one `.bml` with inlined `<embeddedBlocks>`; must place root/member nodes correctly for every dependency type |
+| **XSD Render Target** | Schema particle shape (element vs attribute, local names) follows the same declarations |
+| **BlockDoc** (optional) | May surface authored XML form in examples / API pages |
+
+Flow-control directives stay renderer-expansion concerns; `bml:xml` is **shared XML grammar metadata** on the Urmodell / TypeRegistry — not a serializer private detail.
 
 Two authoring forms exist.
 
@@ -198,17 +209,38 @@ On property (and member) definitions inside Definition blocks, `bml:xml` selects
 |---|---|
 | `attribute` | XML attribute on the parent element |
 | `element` | Child XML element |
-| `element\|attribute` | Element or attribute — both valid; preference depends on context (see below) |
+| `element\|attribute` | Element or attribute — both valid at parse; **canonical emit** uses § Default XML rendering by kind |
 | `text` | Text node child |
 | `cdata` | CDATA section child |
+| `text\|cdata` | Text or CDATA — both valid at parse; canonical emit prefers `cdata` for code/snippet bodies, else `text` |
 
-**Member value placement** — for scalar fields on member declarations (`PropertyDefinition`,
-`CapabilityDefinition`, shared `MemberDefinition` fields):
+Explicit `bml:xml` on a Definition member **always wins** over the defaults below.
+
+Member-level `bml:xml` is declared on **Definition block properties** — it describes serialization for all instances of the described member kind, not on every user-authored Wall or Brick.
+
+#### Default XML rendering by kind (**D1 — Decided**)
+
+When `bml:xml` is **omitted**, or when `element|attribute` / `text|cdata` leaves a choice at **canonical emit**, use the **kind** of what is being rendered. Serializer, FatBlock, XSD, and other XML-emitting targets share this table.
+
+| Kind of thing being rendered | Canonical XML form | Notes |
+|---|---|---|
+| **Aggregation / structured container** (`properties`, `aggregations`, `associations`, `capabilities`, `subBlocks`, `embeddedBlocks`, `constraints`, `suggestions`, `composition`, `implementation`, `changelog`, `examples`, `references`, `groups`, `contracts`, `aliases`, `genericTypes`, `language` lists, …) | **element** | Never attributes |
+| **Member declaration** inside a member container (Property / Aggregation / Association / Capability / GenericType instance) | **element** named by member identity (`${ #this.name }` on the Definition block) | Optional xmlns prefix on the element name supplies the member namespace |
+| **Scalar / TypeReference on a Block definition document** (`name`, `type`, `baseType`, `is`, `isnot`, `version`, member `type` / `value` on definitions, …) | **element** | Definition documents read as nested markup |
+| **Scalar member value on a Block instance** (composition / preset instance attributes) | **attribute** | Compact instance authoring |
+| **Short meta on documentation Sub-Blocks** (`language`, `version`, `title`, `snippet`, Reference `type` / `file` / `url` / member refs, Change `version`, …) | **attribute** | Facets on the Sub-Block element |
+| **Prose / body** (`content`, `description`, `context`, long `documentation` text) | **text** | Prefer **cdata** when the body is code, CDATA-authored, or `bml:xml` includes `cdata` |
+| **TypeReferenceEntity sugar** children (e.g. empty `<ac:Wall/>` under `contracts`) | **element** (QName → type ref) | Not a Block instance — see `17_type_system_bml.md` |
+| **Block / Definition root tag** | from **element-form** `<bml:xml>…</bml:xml>` on the type | Literal, `${ bml:Self }`, or `${ #this.name }` — not covered by member defaults |
+
+**Accept vs emit:**
 
 ```text
-Block definition documents   element | attribute allowed — prefer element when serializing
-Block instances (composition)  element | attribute allowed — prefer attribute when serializing
-Structured children            always elements (constraints, suggestions, composition, implementation, …)
+Parse (Stage 1)     — if declared form allows both (element|attribute, text|cdata), accept either;
+                      store authored placement for lossless roundtrip (Phase A).
+Canonical emit      — apply this table (or explicit bml:xml) when generating fresh XML
+                      (meta-serializer, FatBlock, XSD particles, format-on-save canonicalize).
+Roundtrip serialize — prefer authored placement when present; otherwise this table.
 ```
 
 Example (from `org.blockml.bml.definition.StructuralDefinition` — `Documentation` Sub-Block shape):
@@ -219,13 +251,9 @@ Example (from `org.blockml.bml.definition.StructuralDefinition` — `Documentati
 </documentation>
 ```
 
-→ the `documentation` value renders as `<documentation>…</documentation>`, not as `documentation="…"`.
+→ the `documentation` value renders as `<documentation>…</documentation>`, not as `documentation="…"` (kind: prose/body on a definition-shaped field, and explicit `bml:xml="element"`).
 
-When `bml:xml="element|attribute"` is declared, the parser accepts both forms; the meta-driven
-serializer chooses element vs attribute using the preference rules above unless the authored
-BML form is preserved losslessly in BOM.
-
-Member-level `bml:xml` is declared on **Definition block properties** — it describes serialization for all instances of the described member kind, not on every user-authored Wall or Brick.
+When `bml:xml="element|attribute"` is declared (e.g. `abstract`, `type`, `value` on member Definitions), the parser accepts both forms; canonical emit uses the **definition → element** / **instance → attribute** rows above unless authored placement is preserved for roundtrip.
 
 ---
 
@@ -264,7 +292,7 @@ org.blockml.bml.definition.EmbeddedBlockDefinition
 
 org.blockml.bml.definition.PropertyDefinition
   bml:xml element:  ${ #this.name }
-  (member bml:xml rules for type, value, documentation, … — TBD)
+  member fields follow § Default XML rendering by kind (D1); explicit bml:xml overrides
 
 org.blockml.bml.core.Block
   bml:xml element:  ${ bml:Self }
@@ -306,14 +334,14 @@ The result is **lossless canonical BML XML** derived from BOM + Definition regis
 |---|---|
 | **Parser step [5]** | Parses authored XML into Canonical BOM — today uses fixed mapping rules in `13_bml_to_bom_mapping.md` |
 | **Definition blocks** | Declarative SSOT for what those mapping rules *should* be |
-| **`bml:xml`** | Declarative SSOT for BOM → XML rendering |
-| **Future serializer** | Reads Definition blocks + `bml:xml` from TypeRegistry; emits XML without per-type hardcoding |
+| **`bml:xml`** | Declarative SSOT for BOM → XML shape — shared by serializer **and** XML-emitting Render Targets (FatBlock, XSD, …) |
+| **Future serializer / FatBlock / XSD** | Read Definition blocks + `bml:xml` from TypeRegistry; emit XML without per-type hardcoding |
 
 Until the meta-serializer exists:
 
 - Parser behavior remains as documented in `13_bml_to_bom_mapping.md`.
 - Definition `.bml` files are loaded like any framework block (bootstrap in `16_framework_base_types.md`).
-- `bml:xml` elements and attributes are stored in BOM (directives / member metadata — exact BOM fields TBD).
+- `bml:xml` elements and attributes are stored in BOM (directives / member metadata — exact BOM fields TBD; see D3). Prefer a shape that **Render Targets can query without filtering flow-control `directives[]`**. Omitted / dual forms resolve via **D1** kind defaults at canonical emit.
 
 **Non-goals for initial implementation:** Evaluating `${ bml:Self }` / `${ #this.name }` at parse time for non-meta blocks. **XSD emission** is not a parser side-effect — it is the XSD Render Target (D5).
 
@@ -364,9 +392,9 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 
 | ID | Topic | Notes |
 |---|---|---|
-| D1 | Default `bml:xml` when omitted on members | Member scalars: `element\|attribute`; prefer element on definitions, attribute on instances — see § Attribute Form |
+| D1 | Default `bml:xml` when omitted on members | **Decided:** kind-based defaults — § Default XML rendering by kind. Explicit `bml:xml` wins. Dual forms (`element\|attribute`, …) accepted at parse; canonical emit uses the table |
 | D2 | `${ bml:Self }` prefix resolution at serialize time | Reuse xmlns bindings from BOM `SourceInfo.namespaceBindings` |
-| D3 | BOM storage shape for `<bml:xml>` element | `xmlRendering` on BlockDefinition vs `directives[]` |
+| D3 | BOM storage shape for `<bml:xml>` element | `xmlRendering` on BlockDefinition vs `directives[]`. **Lean toward first-class field(s):** serializer **and** XML-emitting RTs (FatBlock, XSD, …) need typed access — not mixed with flow-control directives |
 | D4 | Whether composable blocks may override inherited `bml:xml` | **Member-level:** allowed on `override="true"` redeclarations (e.g. FixedAlias `_name` element → FreeTextAlias `name` attribute). **Block-level** `<bml:xml>` root element: still TBD / prefer Definition branch only |
 | D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |
 
