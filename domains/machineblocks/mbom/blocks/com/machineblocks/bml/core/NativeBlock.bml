@@ -1020,6 +1020,18 @@
       <value>3.625</value>
       <scad:value>3.625</scad:value>
       <examples>
+        <example language="BML" snippet="true" title="global">
+          <![CDATA[
+<NativeBlock holeXYGridOffsetZ="3" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="global">
+          <![CDATA[
+          ...
+          ["holeXYGridOffsetZ", 3]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYGridOffsetZ="{x: 3, y: 4}" />
@@ -1043,34 +1055,34 @@
       <value>0.0</value>
       <scad:value>0.0</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="per-axis mm">
+        <example language="BML" snippet="true" title="global">
+          <![CDATA[
+<NativeBlock holeXYGridOffsetZAdjustment="0.1" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="global">
+          <![CDATA[
+          ...
+          ["holeXYGridOffsetZAdjustment", 0.1]
+          ...
+          ]]>
+        </scad:example>
+        <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYGridOffsetZAdjustment="{x: 0.1, y: -0.1}" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
           <![CDATA[
           ...
           ["holeXYGridOffsetZAdjustment", [0.1, -0.1]]
           ...
           ]]>
         </scad:example>
-        <example language="BML" snippet="true" title="per-axis">
-          <![CDATA[
-<NativeBlock holeXYGridOffsetZAdjustment="{x: 1, y: 2}" />
-          ]]>
-        </example>
-        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
-          <![CDATA[
-          ...
-          ["holeXYGridOffsetZAdjustment", [1, 2]]
-          ...
-          ]]>
-        </scad:example>
       </examples>
     </holeXYGridOffsetZAdjustment>
 
-    <holeXYGridSizeZ type="Decimal(mbunit:MBU) |mbt:AxisXY(Decimal(mbunit:MBU))">
+    <holeXYGridSizeZ type="Decimal(mbunit:MBU) | mbt:AxisXY(Decimal(mbunit:MBU))">
       <documentation>Per-axis scalar: center-to-center distance between two rows of Technic
         holes for X-holes and Y-holes (AxisXY in MBU — not SizeXY; one independent
         spacing scalar per hole axis, not a 2D footprint).
@@ -1079,6 +1091,18 @@
       <value>6</value>
       <scad:value>6</scad:value>
       <examples>
+        <example language="BML" snippet="true" title="global">
+          <![CDATA[
+<NativeBlock holeXYGridSizeZ="6" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="global">
+          <![CDATA[
+          ...
+          ["holeXYGridSizeZ", 6]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYGridSizeZ="{x: 6, y: 8}" />
@@ -1094,7 +1118,7 @@
       </examples>
     </holeXYGridSizeZ>
 
-    <holeXYGridSizeZAdjustment type="Decimal(mbunit:MBU) |mbt:AxisXY(Decimal(unit:Millimeter))">
+    <holeXYGridSizeZAdjustment type="Decimal(mbunit:MBU) | mbt:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYGridSizeZ — per-axis scalar in mm
         (AxisXY, same convention as holeXYGridSizeZ).
       </documentation>
@@ -1102,27 +1126,27 @@
       <value>0.0</value>
       <scad:value>0.0</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="per-axis mm">
+        <example language="BML" snippet="true" title="global">
           <![CDATA[
-<NativeBlock holeXYGridSizeZAdjustment="{x: 0.1, y: 0}" />
+<NativeBlock holeXYGridSizeZAdjustment="0.1" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+        <scad:example language="OpenSCAD" snippet="true" title="global">
           <![CDATA[
           ...
-          ["holeXYGridSizeZAdjustment", [0.1, 0]]
+          ["holeXYGridSizeZAdjustment", 0.1]
           ...
           ]]>
         </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
-<NativeBlock holeXYGridSizeZAdjustment="{x: 1, y: 2}" />
+<NativeBlock holeXYGridSizeZAdjustment="{x: 0.1, y: 0}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="per-axis">
           <![CDATA[
           ...
-          ["holeXYGridSizeZAdjustment", [1, 2]]
+          ["holeXYGridSizeZAdjustment", [0.1, 0]]
           ...
           ]]>
         </scad:example>
@@ -1138,6 +1162,18 @@
       <value>0.5</value>
       <scad:value>0.5</scad:value>
       <examples>
+        <example language="BML" snippet="true" title="global">
+          <![CDATA[
+<NativeBlock holeXYMinTopMargin="1" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="global">
+          <![CDATA[
+          ...
+          ["holeXYMinTopMargin", 1]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYMinTopMargin="{x: 1, y: 0.5}" />
@@ -1153,7 +1189,7 @@
       </examples>
     </holeXYMinTopMargin>
 
-    <holeXYZAxleThickness type="Decimal(mbunit:MBU) |mbt:AxisXYZ(Decimal(mbunit:MBU))">
+    <holeXYZAxleThickness type="Decimal(mbunit:MBU) | mbt:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Thickness of one strut of the cross axle for holeXYZType="axle".
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -1161,6 +1197,18 @@
       <value>1</value>
       <scad:value>1</scad:value>
       <examples>
+        <example language="BML" snippet="true" title="global">
+          <![CDATA[
+<NativeBlock holeXYZAxleThickness="1.2" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="global">
+          <![CDATA[
+          ...
+          ["holeXYZAxleThickness", 1.2]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYZAxleThickness="{x: 1, y: 1, z: 1.2}" />
@@ -1185,27 +1233,27 @@
       <value>0.0</value>
       <scad:value>0.0</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="per-axis mm">
+        <example language="BML" snippet="true" title="global">
           <![CDATA[
-<NativeBlock holeXYZAxleThicknessAdjustment="{x: 0, y: 0, z: 0.05}" />
+<NativeBlock holeXYZAxleThicknessAdjustment="0.05" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+        <scad:example language="OpenSCAD" snippet="true" title="global">
           <![CDATA[
           ...
-          ["holeXYZAxleThicknessAdjustment", [0, 0, 0.05]]
+          ["holeXYZAxleThicknessAdjustment", 0.05]
           ...
           ]]>
         </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
-<NativeBlock holeXYZAxleThicknessAdjustment="{x: 1, y: 1, z: 1}" />
+<NativeBlock holeXYZAxleThicknessAdjustment="{x: 0, y: 0, z: 0.05}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="per-axis">
           <![CDATA[
           ...
-          ["holeXYZAxleThicknessAdjustment", [1, 1, 1]]
+          ["holeXYZAxleThicknessAdjustment", [0, 0, 0.05]]
           ...
           ]]>
         </scad:example>
@@ -1220,15 +1268,27 @@
       <value>Auto</value>
       <scad:value>auto</scad:value>
       <examples>
+        <example language="BML" snippet="true" title="global">
+          <![CDATA[
+<NativeBlock holeXYZDiameter="4" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="global">
+          <![CDATA[
+          ...
+          ["holeXYZDiameter", 4]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
-<NativeBlock holeXYZDiameter="{x: 4, y: 4, z: 4}" />
+<NativeBlock holeXYZDiameter="{x: 4, y: 4, z: 3.5}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="per-axis">
           <![CDATA[
           ...
-          ["holeXYZDiameter", [4, 4, 4]]
+          ["holeXYZDiameter", [4, 4, 3.5]]
           ...
           ]]>
         </scad:example>
@@ -1243,27 +1303,27 @@
       <value>0.3</value>
       <scad:value>0.3</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="per-axis mm">
+        <example language="BML" snippet="true" title="global">
           <![CDATA[
-<NativeBlock holeXYZDiameterAdjustment="{x: 0.1, y: 0.1, z: 0}" />
+<NativeBlock holeXYZDiameterAdjustment="0.1" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+        <scad:example language="OpenSCAD" snippet="true" title="global">
           <![CDATA[
           ...
-          ["holeXYZDiameterAdjustment", [0.1, 0.1, 0]]
+          ["holeXYZDiameterAdjustment", 0.1]
           ...
           ]]>
         </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
-<NativeBlock holeXYZDiameterAdjustment="{x: 1, y: 1, z: 1}" />
+<NativeBlock holeXYZDiameterAdjustment="{x: 0.1, y: 0.1, z: 0}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="per-axis">
           <![CDATA[
           ...
-          ["holeXYZDiameterAdjustment", [1, 1, 1]]
+          ["holeXYZDiameterAdjustment", [0.1, 0.1, 0]]
           ...
           ]]>
         </scad:example>
@@ -1345,15 +1405,27 @@
       <value>0.5</value>
       <scad:value>0.5</scad:value>
       <examples>
+        <example language="BML" snippet="true" title="global">
+          <![CDATA[
+<NativeBlock holeXYZInsetDepth="0.5" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="global">
+          <![CDATA[
+          ...
+          ["holeXYZInsetDepth", 0.5]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
-<NativeBlock holeXYZInsetDepth="{x: 0.5, y: 0.5, z: 0.5}" />
+<NativeBlock holeXYZInsetDepth="{x: 0.5, y: 0.5, z: 0.25}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="per-axis">
           <![CDATA[
           ...
-          ["holeXYZInsetDepth", [0.5, 0.5, 0.5]]
+          ["holeXYZInsetDepth", [0.5, 0.5, 0.25]]
           ...
           ]]>
         </scad:example>
@@ -1368,27 +1440,27 @@
       <value>0.0</value>
       <scad:value>0.0</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="per-axis mm">
+        <example language="BML" snippet="true" title="global">
           <![CDATA[
-<NativeBlock holeXYZInsetDepthAdjustment="{x: 0, y: 0, z: 0.05}" />
+<NativeBlock holeXYZInsetDepthAdjustment="0.05" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+        <scad:example language="OpenSCAD" snippet="true" title="global">
           <![CDATA[
           ...
-          ["holeXYZInsetDepthAdjustment", [0, 0, 0.05]]
+          ["holeXYZInsetDepthAdjustment", 0.05]
           ...
           ]]>
         </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
-<NativeBlock holeXYZInsetDepthAdjustment="{x: 1, y: 1, z: 1}" />
+<NativeBlock holeXYZInsetDepthAdjustment="{x: 0, y: 0, z: 0.05}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="per-axis">
           <![CDATA[
           ...
-          ["holeXYZInsetDepthAdjustment", [1, 1, 1]]
+          ["holeXYZInsetDepthAdjustment", [0, 0, 0.05]]
           ...
           ]]>
         </scad:example>
@@ -1405,15 +1477,27 @@
       <value>0.375</value>
       <scad:value>0.375</scad:value>
       <examples>
+        <example language="BML" snippet="true" title="global">
+          <![CDATA[
+<NativeBlock holeXYZInsetThickness="0.3" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="global">
+          <![CDATA[
+          ...
+          ["holeXYZInsetThickness", 0.3]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
-<NativeBlock holeXYZInsetThickness="{x: 0.3, y: 0.3, z: 0.3}" />
+<NativeBlock holeXYZInsetThickness="{x: 0.3, y: 0.3, z: 0.2}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="per-axis">
           <![CDATA[
           ...
-          ["holeXYZInsetThickness", [0.3, 0.3, 0.3]]
+          ["holeXYZInsetThickness", [0.3, 0.3, 0.2]]
           ...
           ]]>
         </scad:example>
@@ -1428,27 +1512,27 @@
       <value>0.0</value>
       <scad:value>0.0</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="per-axis mm">
+        <example language="BML" snippet="true" title="global">
           <![CDATA[
-<NativeBlock holeXYZInsetThicknessAdjustment="{x: 0.05, y: 0, z: 0}" />
+<NativeBlock holeXYZInsetThicknessAdjustment="0.05" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+        <scad:example language="OpenSCAD" snippet="true" title="global">
           <![CDATA[
           ...
-          ["holeXYZInsetThicknessAdjustment", [0.05, 0, 0]]
+          ["holeXYZInsetThicknessAdjustment", 0.05]
           ...
           ]]>
         </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
-<NativeBlock holeXYZInsetThicknessAdjustment="{x: 1, y: 1, z: 1}" />
+<NativeBlock holeXYZInsetThicknessAdjustment="{x: 0.05, y: 0, z: 0}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="per-axis">
           <![CDATA[
           ...
-          ["holeXYZInsetThicknessAdjustment", [1, 1, 1]]
+          ["holeXYZInsetThicknessAdjustment", [0.05, 0, 0]]
           ...
           ]]>
         </scad:example>
@@ -1464,12 +1548,12 @@
       <value>false</value>
       <scad:value>false</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="stud-aligned">
+        <example language="BML" snippet="true" title="global">
           <![CDATA[
 <NativeBlock holeXYZShift="true" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="stud-aligned">
+        <scad:example language="OpenSCAD" snippet="true" title="global">
           <![CDATA[
           ...
           ["holeXYZShift", true]
@@ -1500,15 +1584,15 @@
       <value>Pin</value>
       <scad:value>pin</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="axle on z">
+        <example language="BML" snippet="true" title="global">
           <![CDATA[
-<NativeBlock holeXYZType="{x: Pin, y: Pin, z: Axle}" />
+<NativeBlock holeXYZType="Axle" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="axle on z">
+        <scad:example language="OpenSCAD" snippet="true" title="global">
           <![CDATA[
           ...
-          ["holeXYZType", ["pin", "pin", "axle"]]
+          ["holeXYZType", "axle"]
           ...
           ]]>
         </scad:example>
