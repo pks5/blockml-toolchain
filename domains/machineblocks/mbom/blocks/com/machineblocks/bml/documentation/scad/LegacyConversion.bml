@@ -28,7 +28,7 @@
     Module naming generations:
     v1: block() — earliest; no nesting
     v2: machineblock() — direct parameter style (file-scope script)
-    v3: mb_block() / mb_block__…() — config/settings Block Module (current)
+    v3: mb_block() / mb__…() — config/settings Block Module (current)
 
     Primary supported path: machineblock() (V2) → mb_block() or composite V3 Block Files.
     V1 block() may be attempted when parameters look familiar, but always warn that nesting is
@@ -36,7 +36,8 @@
 
     Conversion steps:
     1. Create V3 Block File structure (mandatory header, imports, customizer, main call, module)
-       and mb_block__&lt;package&gt;__&lt;Class&gt; / mb__com__… naming. Replace V2 import paths
+       and mb__&lt;package&gt;__&lt;Class&gt; naming (e.g. mb__com__machineblocks__examples__Cross).
+       Replace V2 import paths
        (machineblocks/lib/block.scad, machineblocks/config/config.scad) with project-relative
        lib/block.scad and config/mb_config.scad.
     2. Replace machineblock(a=…) with mb_block(config, settings=[["a", …]]); use string face ids.

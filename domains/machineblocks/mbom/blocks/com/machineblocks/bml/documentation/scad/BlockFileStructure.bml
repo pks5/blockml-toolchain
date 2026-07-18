@@ -18,7 +18,8 @@
 
   <documentation>
     A Block Module is the reusable OpenSCAD module that calls mb_block() (directly or indirectly).
-    Naming: mb_block__&lt;package&gt;__&lt;Class&gt; with package segments separated by double underscores.
+    Naming: mb__&lt;package&gt;__&lt;Class&gt; with package segments separated by double underscores
+    (example: mb__com__machineblocks__examples__Cross).
     Signature is always (config, settings).
 
     A Block File is a self-contained .scad file: Block Module plus customizer variables and a main
