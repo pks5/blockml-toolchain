@@ -47,7 +47,7 @@ Implemented in `@blockml/cli` as `bootstrapTypeRegistry.ts`.
 
 ### Target bootstrap (C3)
 
-Registers render targets in `@blockml/compiler` before stage [9]. **V1:** hardcoded — registers `"machineblocks-v3-scad"` only. Called by `bom compile` and `bom watch`; **not** by `bom validate` or `bom inspect`.
+Registers render targets in `@blockml/compiler` before SCAD renderer step [9]. **V1:** hardcoded — registers `"machineblocks-v3-scad"` only. Called by `bom compile` and `bom watch`; **not** by `bom validate` or `bom inspect`.
 
 Implemented in `@blockml/cli` as `bootstrapTargets.ts` — idempotent, single entry point. Post-V1 this module will read `bom.config.json` → `targets[]` (field reserved, TBD — not V1).
 

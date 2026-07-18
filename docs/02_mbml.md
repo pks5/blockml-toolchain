@@ -1492,8 +1492,8 @@ Override rule   — only explicitly specified attributes replace inherited/merge
                   declare override="true" (including contract completion) → BML_OVERRIDE_REQUIRED
 final           — final members from any layer cannot be overridden
 Sub-Blocks      — contracts not allowed on nested Sub-Blocks (root only)
-Validation      — merge resolution at stage [8] via resolveEffectiveMembers()
-                  type-bound checks at stage [8] via satisfiesTypeBound()
+Validation      — merge resolution at Stage 2 via resolveEffectiveMembers()
+                  type-bound checks at Stage 2 via satisfiesTypeBound()
 ```
 
 **Example — contract Block (partial definition):**
@@ -1626,7 +1626,7 @@ The member namespace is supplied exclusively by the **XML element QName** — se
 
 ### Conventions
 
-**Member declaration order:** within `<properties>`, `<aggregations>`, and `<associations>`, child elements are mapped to `members[]` in **XML document order**. The parser must not reorder. Order is significant for StructType array literal authoring, FunctionMapping positional parameters, default SCAD/render-target array serialization, and compatibility. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
+**Member declaration order:** within `<properties>`, `<aggregations>`, and `<associations>`, child elements are mapped to `members[]` in **XML document order**. The parser must not reorder. Order is significant for StructType array literal authoring, FunctionMapping positional parameters, default SCAD/render-target array serialization, and compatibility. See `17_type_system_bml.md` — Declaration Order · `22_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
 
 **`<aggregations>`** — Domain base types declare inherited aggregations in BML (e.g. `_presets` on `Block.bml`, `_parts` on `CompositeBlock.bml`). The parser stores **declared** members only; inherited members resolve at validate via `baseType` chain. Omit `<aggregations>` on user blocks when the inherited set suffices.
 
@@ -2211,7 +2211,7 @@ A `readOnly` member remains **publicly readable** when visibility is public (or 
 <ac:Wall myReadOnlyProperty="true"/>
 ```
 
-→ `BML_READONLY_MEMBER_WRITE` at validate (stage [8]).
+→ `BML_READONLY_MEMBER_WRITE` at validate (Stage 2).
 
 The check runs after `resolveEffectiveMembers()` on every `BlockInstance` — composition children, preset instances, constraint instances, and any other instance node. For each authored `memberValues` entry and each aggregation/association child element on the instance, the validator resolves the effective member; when `readOnly=true`, it emits `BML_READONLY_MEMBER_WRITE`.
 

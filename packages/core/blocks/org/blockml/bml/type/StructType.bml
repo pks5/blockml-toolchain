@@ -3,7 +3,7 @@
 
   FQN: org.blockml.bml.type.StructType
   See docs/17_type_system_bml.md — StructType · Struct Property Access
-       docs/18_function_mapping.md — FunctionMapping (positional call syntax)
+       docs/22_function_mapping.md — FunctionMapping (positional call syntax)
        docs/12_bom_object_model.md — Member Declaration Order · Type Descriptors
        docs/16_framework_base_types.md — ValueType branch
        docs/02_mbml.md — Member declaration order
@@ -63,7 +63,7 @@
     <see file="17_type_system_bml.md" relation="AuthoringGuide">
       StructType branch and struct property access rules.
     </see>
-    <see file="18_function_mapping.md" relation="AuthoringGuide">
+    <see file="22_function_mapping.md" relation="AuthoringGuide">
       Positional function-parameter syntax at call sites.
     </see>
     <see file="12_bom_object_model.md" relation="DeepDive">

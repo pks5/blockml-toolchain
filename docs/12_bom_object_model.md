@@ -94,7 +94,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
   - No parallel IDE AST; no BomBuilder required in V2
 
 @blockml/parser
-  - BML → BomDocument mapper (stage [5]) — **single file per invocation**
+  - BML → BomDocument mapper (parser step [5]) — **single file per invocation**
   - Produces immutable Urmodell (Canonical BOM) using `@blockml/core` types; populates source spans for LSP/diagnostics
   - Does NOT own BOM interfaces; does NOT load external BML files, populate TypeRegistry, merge inheritance, or expand directives
 
@@ -365,7 +365,7 @@ class /*anonymous*/ {
 }
 ```
 
-The BOM stores this as `AnonymousStructType` with **ordered fields**. FunctionMapping uses field order for positional call parameters — see `18_function_mapping.md`.
+The BOM stores this as `AnonymousStructType` with **ordered fields**. FunctionMapping uses field order for positional call parameters — see `22_function_mapping.md`.
 
 A single primitive (`Float`, `org.blockml.bml.type.Integer`, …) is **not** wrapped — it is a `NamedTypeReference` directly (equivalent to a single-parameter method, not a one-field class).
 
@@ -691,7 +691,7 @@ Mapping sequence (append to members[] in this order):
 
 The position of each entry in `BlockDefinition.members[]` is the **declaration ordinal** for that block. Render targets may use this order (e.g. Customizer parameter sequence, UI field layout). The compiler must not reorder declared members when writing BOM or when passing definitions to processors.
 
-**StructType array literals and SCAD arrays:** for a StructType defined via `<properties>` (e.g. `SizeXYZ` with `x`, `y`, `z`), property **declaration order** defines positional array literal mapping **and** the default SCAD array serialization order (unless the type/property defines an exception). Member access in expressions uses property names only. See `17_type_system_bml.md` — Declaration Order · `04_types.md` — MBOM→SCAD Serialization Rules · `18_function_mapping.md`.
+**StructType array literals and SCAD arrays:** for a StructType defined via `<properties>` (e.g. `SizeXYZ` with `x`, `y`, `z`), property **declaration order** defines positional array literal mapping **and** the default SCAD array serialization order (unless the type/property defines an exception). Member access in expressions uses property names only. See `17_type_system_bml.md` — Declaration Order · `04_types.md` — MBOM→SCAD Serialization Rules · `22_function_mapping.md`.
 
 ```text
 size="[4, 2, 3]"   →  index 0 = x, index 1 = y, index 2 = z  (order in SizeXYZ.bml)
@@ -701,7 +701,7 @@ SCAD render: [4, 2, 3]  ← same declaration order by default
 
 Named object syntax (`{ x: 4, y: 2, z: 3 }`) and attribute syntax (`x="4" y="2" z="3"` on a StructType instance) are equivalent; array literals and default SCAD arrays use **declaration order**, not alphabetical name order.
 
-**Function argument mapping:** handled by FunctionMapping — see `18_function_mapping.md` · `10_expression_language.md` — Capability Input Types and Function Parameters.
+**Function argument mapping:** handled by FunctionMapping — see `22_function_mapping.md` · `10_expression_language.md` — Capability Input Types and Function Parameters.
 
 **Effective members:** `resolveEffectiveMembers()` merges by `(namespace, normalizedLogicalName)` in this order (visibility prefixes `_` / `__` stripped from element localName before match):
 
@@ -1362,7 +1362,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 5. Declared dependencies      — Library dependencies entries + bom.config.json paths
 ```
 
-Each discovered file is parsed independently (stages [5–7]) and registered via `registerBlockDefinition(doc)`.
+Each discovered file is parsed independently (parser step [5]) and registered via `registerBlockDefinition(doc)`.
 
 Without `library.xml`, all BML files in a directory are registered. With `library.xml`, the manifest explicitly lists public blocks and presets.
 

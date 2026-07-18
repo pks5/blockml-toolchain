@@ -328,20 +328,20 @@ interface CompilerResult<T> {
 ### Functions
 
 ```typescript
-/** Stages 1–8: parse + validate. No target required. */
+/** Stage 1 + Stage 2: parse + validate. No target required. Returns Urmodell (+ diagnostics). */
 compileBmlToBom(
   input: CompileInput,
   options?: CompileOptions
 ): CompilerResult<BomDocument>
 
-/** Stages 9–19: render. Target must be registered. */
+/** Stage 3: render. Target must be registered. SCAD reference uses renderer steps [9]–[19]. */
 compileBomToOutput(
   model: BomDocument,
   targetName: string,
   options?: CompileOptions
 ): CompilerResult<RenderOutput>
 
-/** Full pipeline: stages 1–19. */
+/** Full pipeline: Stage 1 → Stage 2 → Stage 3. See 06_compiler.md — Stage numbering glossary. */
 compileBmlToOutput(
   input: CompileInput,
   targetName: string,
@@ -404,7 +404,7 @@ const result = compileBmlToOutput(
 
 ## Target Bootstrap (C3)
 
-Before stage [9] can resolve a target by name, the caller must populate the **Target Registry** via `registerTarget()`. `@blockml/compiler` ships **no default targets** — targets live in domain packages (e.g. `@machineblocks/machineblocks-v3-scad-target`).
+Before SCAD renderer step [9] can resolve a target by name, the caller must populate the **Target Registry** via `registerTarget()`. `@blockml/compiler` ships **no default targets** — targets live in domain packages (e.g. `@machineblocks/machineblocks-v3-scad-target`).
 
 ### V1 decision — CLI hardcoded
 
@@ -439,8 +439,8 @@ bom watch <target>
 Commands that do **not** call `bootstrapTargets()`:
 
 ```text
-bom validate   — stages 1–8 only; no target required
-bom inspect    — BOM dump only; no target required
+bom validate   — Stage 1 + Stage 2 only; no target required
+bom inspect    — Urmodell dump only; no target required
 ```
 
 ### Planned configurability (post-V1)
@@ -496,7 +496,7 @@ If `<target>` is not in the registry after bootstrap, the CLI exits with code **
 
 `RenderContext` is the **per-block render state** passed to `RenderEngine.compile()`. It is **internal** to `@blockml/compiler` and render targets — not part of the public Facade API (C2).
 
-Session-level options live in `CompileOptions`. `RenderContext` carries what changes as the renderer walks the composition tree after directive expansion (stage [10]).
+Session-level options live in `CompileOptions`. `RenderContext` carries what changes as the renderer walks the composition tree after directive expansion (SCAD renderer step [10]).
 
 ### Separation from CompileOptions
 
@@ -540,7 +540,7 @@ interface RenderContext {
   /** Primary output path relative to outputBasePath (e.g. com/.../Wall.scad) */
   outputRelativePath: string
 
-  /** Composition identity — stage [10]; undefined at document root */
+  /** Composition identity — SCAD renderer step [10]; undefined at document root */
   parentPartId?: string
   partId?: string
   // partIdPath (computed): parentPartId ? `${parentPartId}::${partId}` : partId
@@ -573,7 +573,7 @@ compileBomToOutput(input, targetName, options)
        │
        ├─ engine.compile(blockDef, processor, rootContext)
        │
-       └─ CompositionRenderer (after stage [10] directive expansion)
+       └─ CompositionRenderer (after SCAD renderer step [10] directive expansion)
             └─ for each expanded instance:
                  context.child({ parentPartId, partId, instance, withScope, loopScope })
                  engine.compile(...)
@@ -600,7 +600,7 @@ compileBomToOutput(input, targetName, options)
 |---|---|
 | `blockFqn` | Module name, property definitions, processor dispatch |
 | `outputRelativePath` | Import resolver (Set `_blocks` `use` paths), file output |
-| `parentPartId` / `partId` | Nested SCAD identity (`mb_block_id`, stage [10]) |
+| `parentPartId` / `partId` | Nested SCAD identity (`mb_block_id`, SCAD renderer step [10]) |
 | `instance` | Inline properties, `basePresets` — property merge layers 1–2 |
 | `withScope` | Expression rendering for `bml:with` variables |
 | `loopScope` | Expression rendering for `bml:each` loop variables |
@@ -614,7 +614,7 @@ Definition render (Wall.bml → Wall.scad)
   partId   = undefined at root module level
   → Customizer parameters from Block properties
 
-Instance render (composition children after stage [10])
+Instance render (composition children after SCAD renderer step [10])
   instance = BlockInstance { memberValues, basePresets, … }
   partId   = resolved id expression
   parentPartId = parent's partIdPath
@@ -652,7 +652,7 @@ Post-V1, property resolution **may** consult authored Capability definitions as 
 ```text
 Block / BlockDefinition     — separate argument to compile()
 CompileInput / CompileOptions — session level; mapped into RenderSession only
-Auto-IDs                    — not in BomDocument; assigned at stage [10], stored in partId
+Auto-IDs                    — not in BomDocument; assigned at SCAD renderer step [10], stored in partId
 Resolved property cache     — PropertyResolver on-demand (V1)
 Diagnostics collector       — separate pipeline object
 RenderOutput / file buffer  — accumulated by processor, not in context

@@ -6,7 +6,7 @@ version: 0.1.0
 
 This document specifies how a Property configures its referenced **ValueType** through an owned type instance, and how that configuration is authored inline in `type` expressions.
 
-For instance configuration syntax see `20_value_type_instance_configuration.md`. For Constant singleton types see `21_constant_value_type.md`. For positional mapping rules see `18_function_mapping.md`.
+For Constant singleton types see `21_constant_value_type.md`. For positional capability-call mapping see `22_function_mapping.md`.
 
 ---
 

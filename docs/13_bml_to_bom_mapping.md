@@ -29,13 +29,14 @@ NOT mapper responsibility: canonicalization, expansion, merge, evaluation
 ## Pipeline Placement
 
 ```text
+Parser steps (Stage 1 — see 06_compiler.md Stage numbering glossary):
 [4] Namespace Resolver     → FQN prefix bindings
 [5] BML → BOM Mapper       → this document (structure + attribute classification) → Canonical BOM
 ```
 
-Expression parsing, type validation, and semantic validation are **framework utilities** — not parser stages. See `06_compiler.md` — Framework Utilities.
+Expression parsing, type validation, and semantic validation are **Stage 2** (`@blockml/validator` + `@blockml/core` utilities) — not parser steps. See `06_compiler.md` — Framework Utilities.
 
-Stage [5] produces the immutable BOM graph with expression **raw** text only. `parseExpression()` is a separate utility.
+Parser step [5] produces the immutable BOM graph with expression **raw** text only. `parseExpression()` is a separate Stage-2 utility (Phase B+).
 
 ---
 
@@ -56,7 +57,7 @@ MUST NOT merge sections out of document sequence
 MAY omit empty sections (<properties> absent → skip)
 ```
 
-Ordinal = index in `members[]` after mapping. Used by renderers when interpreting StructType array literals against field declaration order, by default SCAD StructType array serialization, and by FunctionMapping for positional capability parameters. See `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
+Ordinal = index in `members[]` after mapping. Used by renderers when interpreting StructType array literals against field declaration order, by default SCAD StructType array serialization, and by FunctionMapping for positional capability parameters. See `17_type_system_bml.md` — Declaration Order · `22_function_mapping.md` · `12_bom_object_model.md` — Member Declaration Order.
 
 ### Canonical definition paths
 
@@ -154,7 +155,7 @@ Value classification within rule 3:
 ```text
 ${ ... }                     → ExpressionValue { raw }  (AST via parseExpression() utility)
 address-shaped capability    → AddressValue
-otherwise                    → LiteralValue (authored value preserved — type-checked in stage [6])
+otherwise                    → LiteralValue (authored value preserved — type-checked in Stage 2)
 ```
 
 Unknown member names survive rule 3 and are stored in `memberValues`. The semantic validator emits **`BML_UNKNOWN_PROPERTY` (warning)** — custom property assumed. See § Unknown Attributes below.
@@ -420,7 +421,7 @@ Legacy `namespace="…"` attribute on member elements → **`BML_DEPRECATED_MEMB
 
 **Non-definition elements** (`<documentation>`, `<since>`, `<changelog>`, `<examples>`, `<references>`, `<is>`, `<implementation>`, Block instances, …) may carry `bml:status="Draft"` — mapped to `statusFqn` on the same BOM node **only when deviating** from inherited status. No `<status>` child on these elements.
 
-**Effective status resolution (stage [5] / validate [8]):**
+**Effective status resolution (parser step [5] / Stage 2):**
 
 ```text
 Implicit default (no declaration anywhere in chain from root):
@@ -442,7 +443,7 @@ Unknown status FQN                               →  BML_UNKNOWN_STATUS (valida
 Redundant status (= inherited)         →  BML_REDUNDANT_STATUS (warning V1)
 ```
 
-**Member namespace resolution (stage [5]):**
+**Member namespace resolution (parser step [5]):**
 
 Member namespace is supplied **exclusively by the XML element QName**. The element local name is the member name; an optional prefix supplies the namespace.
 
@@ -552,7 +553,7 @@ Partial overrides: a child Block may declare a member with only the logical name
 Expression handling spans parser and utility:
 
 ```text
-Stage [5] BML → BOM Mapper
+Parser step [5] BML → BOM Mapper
   Detect ${ ... } spans in attribute and directive values
   Store ExpressionValue { raw, source } in Canonical BOM
 
@@ -562,7 +563,7 @@ parseExpression() utility (@blockml/core)
   On failure → BML_EXPR_SYNTAX_ERROR
 ```
 
-### Stage [5] — raw capture
+### Parser step [5] — raw capture
 
 When an attribute or directive value contains `${ }`:
 
@@ -577,11 +578,11 @@ size="[1, 8, 9]"
   → LiteralValue { value: [1, 8, 9], typeFqn: "…SizeXYZ" }   (authored form; type-checked by validateTypes() utility)
 ```
 
-Directive values (e.g. `bml:each="i : ${ numberOfSamples }"`) are split structurally in stage [5]: loop variables parsed from the prefix; the `${ }` portion stored as `ExpressionValue { raw }` on the directive node.
+Directive values (e.g. `bml:each="i : ${ numberOfSamples }"`) are split structurally in parser step [5]: loop variables parsed from the prefix; the `${ }` portion stored as `ExpressionValue { raw }` on the directive node.
 
-Stage [5] does **not** build AST nodes and does **not** resolve property references.
+Parser step [5] does **not** build AST nodes and does **not** resolve property references.
 
-`<implementation language="…">` CDATA is stored verbatim on `ImplementationBlock.source`. During stage [5], the mapper scans for `<$ … $>` pairs and appends each to `ImplementationBlock.embeddedExpressions`:
+`<implementation language="…">` CDATA is stored verbatim on `ImplementationBlock.source`. During parser step [5], the mapper scans for `<$ … $>` pairs and appends each to `ImplementationBlock.embeddedExpressions`:
 
 ```text
 <implementation language="org.blockml.bml.language.OpenSCAD"><![CDATA[
@@ -615,7 +616,7 @@ Expressions are **parsed, not evaluated**. Evaluation is `evaluateExpression()` 
 ### Why parser and utility are separate
 
 ```text
-Stage [5] needs no expression grammar  — only ${ } detection and raw extraction
+Parser step [5] needs no expression grammar  — only ${ } detection and raw extraction
 parseExpression() runs when needed    — CLI validation, renderer pipeline, tooling
 validateTypes() can check literals before expressions are parsed
 Mapping errors vs. expression syntax errors are separated
@@ -632,12 +633,12 @@ The parser is **single-file scoped**. Cross-file resolution is a **bootstrap + v
 ### Responsibilities
 
 ```text
-@blockml/parser (stage [5])
+@blockml/parser (parser step [5])
   Input:   one BML source file (+ format hint)
   Output:  one BomDocument
   Stores:  external refs as typeFqn + version on BlockInstance — does NOT load other files
 
-@blockml/core (TypeRegistry + stages [6–8])
+@blockml/core (TypeRegistry) + @blockml/validator (Stage 2)
   Populated before validation of any document that needs cross-file lookup
   Resolves: external block types, preset refs, version pins, effective members
 
@@ -661,10 +662,10 @@ Before validating or compiling a file that references external types, the orches
      library.xml manifests   →  explicit <block> / <presets> refs (optional index)
      Declared dependencies   →  transitive library paths from bom.config.json / library.xml
 
-3. Parse each discovered file (single-file parser — stage [5–7])
+3. Parse each discovered file (single-file parser — parser step [5])
      registerBlockDefinition(doc)  for each BomDocument
 
-4. Validate / compile target file(s) using populated registry (stages [6–8])
+4. Validate / compile target file(s) using populated registry (Stage 2)
 ```
 
 Without `library.xml`, all BML files in a directory are discovered and registered. With `library.xml`, the manifest lists public blocks and presets; see `02_mbml.md` — Library Format.
@@ -675,12 +676,12 @@ Without `library.xml`, all BML files in a directory are discovered and registere
 <bricks:StandardBrick bml:version="3.0.0" bml:id="strip" size="[2, 4, 3]" />
 ```
 
-Stage [5] output — no file load:
+Parser step [5] output — no file load:
 
 ```text
 BlockInstance:
   typeFqn:  com.machineblocks.bml.bricks.StandardBrick
-  version:  undefined | "3.0.0"   ← optional; omitted = resolve from registry context at stage [8]
+  version:  undefined | "3.0.0"   ← optional; omitted = resolve from registry context at Stage 2
   memberValues: { id, size }
 ```
 
@@ -705,12 +706,12 @@ Same-document Sub-Block references omit `version` — resolved against the `subB
 
 ```text
 basePresets="com.martianmicro.anyclosure.WallPresets::large"
-  → Parser stores string as authored (stage [5])
-  → Validator resolves preset BlockDefinition + preset instance id in _presets (stage [8])
+  → Parser stores string as authored (parser step [5])
+  → Validator resolves preset BlockDefinition + preset instance id in _presets (Stage 2)
 
 basePresets="brick-1x1 com.other.Presets::color-red"
-  → Stored on Block instance memberValues.basePresets (stage [5])
-  → Validator resolves each token as local id or FQN::id (stage [8])
+  → Stored on Block instance memberValues.basePresets (parser step [5])
+  → Validator resolves each token as local id or FQN::id (Stage 2)
 ```
 
 Preset instances in `_presets` composition map like any other Block instance. The `name` attribute maps to `memberValues.name`; `bml:id` maps to `BlockInstance.id`.
@@ -742,7 +743,7 @@ bare <composition> on definition            → BML_STANDALONE_COMPOSITION (erro
 
 The `composition aggregation="…"` attribute is **removed** — aggregations are opened by member element name.
 
-### TypeReferenceEntity aggregation (stage [8])
+### TypeReferenceEntity aggregation (Stage 2)
 
 **Empty child sugar:** when the aggregation payload type is a `TypeReferenceEntity` application,
 `<foo:Bar />` expands to `<type:TypeReferenceEntity value="foo:Bar" />` — a real Entity instance.
@@ -776,12 +777,12 @@ BML_TYPE_REFERENCE_MULTIPLICITY     — wrong child count (bare = 0..1, [1..1] =
 BML_TYPE_REFERENCE_CHILD_VALUE      — domain members authored on QName-sugar child (instance is TypeReferenceEntity)
 ```
 
-### Contract merge (stage [8])
+### Contract merge (Stage 2)
 
 ```text
 <ac:IIdentifiable/>
   → Parser expands sugar → TypeReferenceEntity { value: "…IIdentifiable" } in block.contracts[]
-  → Validator resolves contract BlockDefinition from resolve(value) (stage [8])
+  → Validator resolves contract BlockDefinition from resolve(value) (Stage 2)
   → resolveContractMembers(contractFqn) — declared members only;
     subBlocks[], embeddedBlocks[], and compositions[] on contract type ignored
   → resolveEffectiveMembers(implementingBlock) merges:
@@ -790,7 +791,7 @@ BML_TYPE_REFERENCE_CHILD_VALUE      — domain members authored on QName-sugar c
      → Block local declarations (override all)
      Same partial-override rules as baseType inheritance; override="true" required on every local
      redeclaration that merges with a baseType or contract member → BML_OVERRIDE_REQUIRED
-  → satisfiesTypeBound checks on generic constraints and other type-bound sites (stage [8])
+  → satisfiesTypeBound checks on generic constraints and other type-bound sites (Stage 2)
 ```
 
 ```text

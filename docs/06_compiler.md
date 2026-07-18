@@ -43,6 +43,33 @@ The compiler is implemented across these packages:
 
 > **Architecture decision:** Three independent validation stages. See `00_bom_core.md` — Validation pipeline.
 
+### Stage numbering glossary (normative)
+
+BlockML uses **three separate numbering systems**. Do not mix them:
+
+```text
+A. Validation Stages (architecture — prefer this wording)
+   Stage 1 — Parser       → Urmodell
+   Stage 2 — Validator    → diagnostics + default pragmatic model
+   Stage 3 — Renderer     → evaluate / generate (target-specific)
+
+B. Parser steps (sub-steps of Stage 1 only — bracket notation)
+   [1] Format Detector → [2] XML Parser → [3] Root Type Resolver
+   → [4] Namespace Resolver → [5] BML → BOM Mapper
+   Serializer is the inverse of [5]. There are no parser steps [6]+.
+
+C. SCAD renderer steps (example Stage-3 pipeline — bracket notation from [9])
+   [9] Target Resolver … [19] Source Map Generator
+   Not a framework-wide pipeline; other renderers differ.
+
+Deprecated legacy numbering (do not use in new text):
+   Former “stages [6]–[8]”  → now Stage 2 utilities / @blockml/validator
+   Former “stage [7]” AST-on-BOM → parseExpression() utility (no Urmodell write-back)
+   Former “stages 1–8” for bom validate → Stage 1 + Stage 2
+```
+
+**Test suites** use **Test Layer A/B/C** (roundtrip / correctness / snapshot) — not Validation Stage numbers. See § Testing Strategy.
+
 ```text
 Stage 1 — Parser
   Checks: XML syntax · namespaces · XSD
@@ -155,7 +182,7 @@ Example — **Documentation Renderer**:
 Urmodell (immutable)  →  renderRawBOM()  →  Markdown / HTML
 ```
 
-Stages [9]–[19] are **not** a fixed framework pipeline — they document the SCAD reference renderer. Other renderers choose different utilities and ordering.
+SCAD renderer steps [9]–[19] are **not** a fixed framework pipeline — they document the SCAD reference renderer. Other renderers choose different utilities and ordering.
 
 ---
 
@@ -210,7 +237,9 @@ Mapping rules are defined once per root type. The mapper produces the **Canonica
 
 ---
 
-## Framework Utilities (formerly stages [6]–[8])
+## Framework Utilities (Stage 2 — `@blockml/core`)
+
+> Framework utilities support **Stage 2** (and may be reused in Stage 3). Older drafts numbered these as “stages [6]–[8]” — that numbering is **retired**. See § Stage numbering glossary.
 
 > **`@blockml/core` utilities** — read immutable BOM, return results, **never mutate** Canonical BOM. See `00_bom_core.md` — Framework Utilities.
 
@@ -256,7 +285,9 @@ The CLI typically calls these after parse. Renderers may call them during their 
 
 ---
 
-## Renderer Pipeline (SCAD reference — stages [9]–[19])
+## Renderer Pipeline (SCAD reference — renderer steps [9]–[19])
+
+> These bracket numbers are **SCAD renderer steps** (Stage 3 example), not Validation Stages and not parser steps. See § Stage numbering glossary.
 
 > **Not a fixed framework pipeline.** Each renderer defines its own flow. Stages below document the SCAD reference renderer.
 
@@ -292,7 +323,7 @@ The Target Registry is the central registration point for all RenderTargets. It 
 
 ### Registration
 
-RenderTargets must be registered before compilation reaches stage [9]:
+RenderTargets must be registered before the SCAD renderer reaches step [9]:
 
 ```typescript
 import { registerTarget } from "@blockml/compiler";
@@ -885,7 +916,7 @@ registerTarget(new DeviceTarget());
 
 > **V1 gate (before compiler):** Roundtrip tests (`parse → serialize → parse`) against the existing BML corpus are the first integration milestone. See `15_dev_setup.md` — V1 Implementation Strategy.
 
-### Stage 0 — Roundtrip Tests (V1 gate)
+### Test Layer A — Roundtrip Tests (V1 gate)
 
 Prove the language layer before validator, compiler, or render targets exist.
 
@@ -907,7 +938,7 @@ Coverage:
 
 Does **not** require: TypeRegistry bootstrap, validator, SCAD output, or compiler facade.
 
-### Stage 1 — Correctness Tests
+### Test Layer B — Correctness Tests
 
 Manual verification tests that ensure the compiler produces semantically correct output.
 
@@ -929,14 +960,14 @@ Coverage (SCAD target):
 
 Correctness tests are the authoritative definition of correct compiler behavior. They are written and verified before snapshot tests are created.
 
-### Stage 2 — Snapshot Tests (Regression)
+### Test Layer C — Snapshot Tests (Regression)
 
 Snapshot tests detect unintended changes to compiler output after the correctness baseline is established.
 
 ```text
 Tool:       Jest or Vitest (--updateSnapshot flag)
 Input:      same BML source files as correctness tests
-Snapshot:   the verified correct output from Stage 1
+Snapshot:   the verified correct output from Test Layer B
 Test:       current output vs. stored snapshot (diff)
 
 Behavior:

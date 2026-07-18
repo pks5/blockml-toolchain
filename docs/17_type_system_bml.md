@@ -30,7 +30,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Block metadata** | Every `<block>` carries required `<is>`, required `<documentation>`, conditional `<summary>` (when documentation is long), conditional `<isnot>` (when confusion risk exists), optional `<keywords>` (`core:Keyword[]`), optional `<aliases>` (`core:Alias[]`); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
 | **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — four sibling branches under ValueType |
-| **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `18_function_mapping.md` |
+| **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `22_function_mapping.md` |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
 | **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `org.blockml.bml.compiler.*`); TypeScript BOM interfaces in `@blockml/core` — see `00_bom_core.md` |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
@@ -891,7 +891,7 @@ Numeric index access on StructType values is **not valid**:
 ${ size[0] }   — invalid (BML_EXPR_UNKNOWN_PROPERTY or index-not-supported diagnostic)
 ```
 
-A StructType is a typed object with named properties. Declaration order does not create general index semantics. See `18_function_mapping.md` for how positional **function-parameter** syntax maps to struct fields at capability call sites.
+A StructType is a typed object with named properties. Declaration order does not create general index semantics. See `22_function_mapping.md` for how positional **function-parameter** syntax maps to struct fields at capability call sites.
 
 Nested access uses member names throughout:
 
@@ -911,7 +911,7 @@ Field declaration order in StructType definitions remains significant for purpos
 | Use | Rule |
 |---|---|
 | **Positional array literals** | `size="[4, 2, 3]"` maps values to properties by declaration order |
-| **FunctionMapping** | Positional capability call parameters map by declaration order — see `18_function_mapping.md` |
+| **FunctionMapping** | Positional capability call parameters map by declaration order — see `22_function_mapping.md` |
 | **SCAD / render-target arrays** | Default serialization of a StructType value is a positional array in property declaration order (e.g. `FaceMapXY` → `[xNeg, xPos, yNeg, yPos]`) |
 | **Compatibility** | Existing field order must not change across versions; append new fields only at the end |
 
@@ -949,7 +949,7 @@ size.x    — named access in expressions (all targets)
 
 ### Capability parameter mapping
 
-Positional and named capability call syntax is handled by **FunctionMapping**, not by StructType index semantics. See `18_function_mapping.md` — Canonical Call Form.
+Positional and named capability call syntax is handled by **FunctionMapping**, not by StructType index semantics. See `22_function_mapping.md` — Canonical Call Form.
 
 ```text
 inputType: { a: Float, b: Float }
@@ -971,7 +971,7 @@ This applies to named StructTypes (`SizeXYZ`, `Color`, …) and to anonymous str
 
 ---
 
-<!-- Former "Ordered Struct Fields" section superseded by Struct Property Access, Declaration Order, and 18_function_mapping.md -->
+<!-- Former "Ordered Struct Fields" section superseded by Struct Property Access, Declaration Order, and 22_function_mapping.md -->
 
 ### StructType
 
@@ -1009,7 +1009,7 @@ StructType properties follow **Struct Property Access** and **Declaration Order*
 <SizeXYZ x="10" y="5" z="2"/>
 ```
 
-Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) follows the same declaration-order contract for FunctionMapping. The validator may suggest promoting repeated anonymous structs to named StructTypes. See `18_function_mapping.md`.
+Anonymous struct syntax in Capability signatures (`{ a: Float, b: Float }`) follows the same declaration-order contract for FunctionMapping. The validator may suggest promoting repeated anonymous structs to named StructTypes. See `22_function_mapping.md`.
 
 **ConstantType — Constant** — singleton union alternative (`21_constant_value_type.md`):
 
@@ -1343,7 +1343,7 @@ Decimal 10, 2           Decimal{10, 2}     — positional by ValueType property 
 
 Named configuration uses JSON-like `key: value` (same as object literals) so nested StructType values nest cleanly — e.g. `Constant(SizeXY){value: {x: 1, y: 2}}`. See `20_value_type_instance_configuration.md`.
 
-Named and positional configuration must not be mixed in one `{...}` block. Positional mapping follows the same declaration-order rules as FunctionMapping — see `18_function_mapping.md` · `20_value_type_instance_configuration.md`.
+Named and positional configuration must not be mixed in one `{...}` block. Positional mapping follows the same declaration-order rules as FunctionMapping — see `22_function_mapping.md` · `20_value_type_instance_configuration.md`.
 
 **Constant** — `Constant(T){value: …}` configures a singleton ValueType for union alternatives. Generic `(...)` binds `T`; `{…}` supplies the required `value`. See `21_constant_value_type.md`.
 
@@ -1766,6 +1766,7 @@ never expose „Block“ outside parser/BOM types
 | TypeExpression AST | `12_bom_object_model.md` |
 | ValueType instance configuration | `20_value_type_instance_configuration.md` |
 | Constant singleton ValueType | `21_constant_value_type.md` |
+| FunctionMapping (capability calls) | `22_function_mapping.md` |
 | Parse/serialize behaviour | `04_types.md` |
 | Synthetic accessors · Capability interpretation | `08_managed_object.md` |
 | Collections and Multiplicity | this document — § Collections and Multiplicity |

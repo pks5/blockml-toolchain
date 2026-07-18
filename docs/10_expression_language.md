@@ -127,7 +127,7 @@ interface EmbeddedExpression {
 }
 ```
 
-Extraction of `{ raw, start, end }` runs during BML → BOM mapping (stage [5]). AST construction is **not** a parser stage: call **`parseExpression()`** later with the same expression grammar as `${ }` values, extended with `#this` calls (see below).
+Extraction of `{ raw, start, end }` runs during BML → BOM mapping (parser step [5]). AST construction is **not** a parser step: call **`parseExpression()`** later with the same expression grammar as `${ }` values, extended with `#this` calls (see below).
 
 ### Embedded Expression Grammar Extension
 
@@ -254,7 +254,7 @@ Utility:        parseExpression("size.x") → { ast: MemberAccess(...), resultTy
 BOM storage:    ExpressionValue { raw: "size.x" }   ← raw only; AST is utility output
 ```
 
-The StructType definition (field names, declaration order) is **type metadata** consulted by the expression type checker (stage [8]) and by the renderer at evaluation/serialization time. It is not applied to rewrite `LiteralValue.value` at parse time.
+The StructType definition (field names, declaration order) is **type metadata** consulted by the expression type checker (Stage 2) and by the renderer at evaluation/serialization time. It is not applied to rewrite `LiteralValue.value` at parse time.
 
 **Validation** checks that `size.x` is a valid member access on a `SizeXYZ`-typed `size` member. **Evaluation** (resolving `size.x` to `5`) happens at render time only.
 
@@ -422,7 +422,7 @@ Objects inside `${ }` may contain expressions as values. Objects outside `${ }` 
 
 Accesses a member of the current Block instance. No prefix required.
 
-StructType property values are accessed **by property name only**. Numeric index access (`size[0]`) is not valid on StructType members — see `17_type_system_bml.md` — Struct Property Access · `18_function_mapping.md`.
+StructType property values are accessed **by property name only**. Numeric index access (`size[0]`) is not valid on StructType members — see `17_type_system_bml.md` — Struct Property Access · `22_function_mapping.md`.
 
 This applies to **expression evaluation and type checking** — not to BOM storage. A `size` member authored as `[5,5,6]` remains `[5,5,6]` in `LiteralValue.value`; `${ size.x }` addresses the `x` field at evaluation time via type metadata.
 
@@ -692,7 +692,7 @@ Built-ins are pure functions — no side effects, no state. They are resolved at
 
 ## Capability Input Types and Function Parameters
 
-Capability call argument mapping is handled by **FunctionMapping** — see `18_function_mapping.md`. Anonymous struct `{ a: Float, b: Float }` and named StructType `inputType` values share the default FunctionMapping rules.
+Capability call argument mapping is handled by **FunctionMapping** — see `22_function_mapping.md`. Anonymous struct `{ a: Float, b: Float }` and named StructType `inputType` values share the default FunctionMapping rules.
 
 ### Capabilities Have No Parameters — Only Typed Input/Output
 
@@ -718,7 +718,7 @@ A `utility Sub-Block` interprets a Capability as a function. When the `inputType
   → Canonical:       #math.max({a: size.x, b: labelSize})
 ```
 
-Positional parameter order follows **field declaration order** in `inputType` via FunctionMapping — not general StructType index semantics. See `18_function_mapping.md`.
+Positional parameter order follows **field declaration order** in `inputType` via FunctionMapping — not general StructType index semantics. See `22_function_mapping.md`.
 
 **Single primitive inputType** — no Object wrapper needed:
 
@@ -1422,8 +1422,8 @@ Utilities **never mutate** Canonical BOM. Diagnostics are returned separately.
   - evaluateExpression(ast, context) → value (renderer/working model)
 
 @blockml/parser
-  - Stage [5]: capture ExpressionValue { raw } during BML → BOM mapping
-  - Stage [5]: extract EmbeddedExpression { raw, start, end } from ImplementationBlock.source
+  - Parser step [5]: capture ExpressionValue { raw } during BML → BOM mapping
+  - Parser step [5]: extract EmbeddedExpression { raw, start, end } from ImplementationBlock.source
   - Does NOT parse or evaluate expressions
 
 @blockml/compiler / render targets

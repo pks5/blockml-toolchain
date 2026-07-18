@@ -579,7 +579,7 @@ The serializer is **not** a render target emitter (SCAD, JSON, …). Target outp
 Phase A — Language loop (V1 gate)
   1. BOM types + Diagnostic          — @blockml/core TS (12_bom_object_model.md)
                                       ExpressionValue = { raw } only; no AST fields on Urmodell
-  2. Parser                          — @blockml/parser (stages [1]–[5]; preserve expression raw)
+  2. Parser                          — @blockml/parser (parser steps [1]–[5]; preserve expression raw)
   3. Serializer                      — @blockml/serializer (inverse mapping; emit raw)
   4. Roundtrip tests                 — tests/roundtrip/ against BML corpus
 
@@ -646,11 +646,11 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 2. @machineblocks/mbom BML    — com.machineblocks.bml.core.*
 3. @blockml/core TS           — types from 12_bom_object_model.md + Diagnostic
                               (ExpressionValue = raw only; ExpressionNode types may land with step 7)
-4. @blockml/parser            — stages [1]–[5] + unit tests (preserve expression raw)
+4. @blockml/parser            — parser steps [1]–[5] + unit tests (preserve expression raw)
 5. @blockml/serializer        — BOM → BML (V1 hardcoded inverse map)
 6. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers)
 7. parseExpression()          — @blockml/core utility (AST as ParsedExpression; no Urmodell write-back)
-8. @blockml/validator         — TypeRegistry + validate (may call parseExpression)
+8. @blockml/validator         — Stage 2 (TypeRegistry + validate; may call parseExpression)
 9. @blockml/compiler          — Facade + Target Registry (C2, C3)
 10. @blockml/engine-maker      — RenderEngine stub
 11. @machineblocks/mbom        — domain types + NativeBlock.bml parameter SSOT

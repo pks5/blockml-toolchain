@@ -1,329 +1,162 @@
-# Constant ValueType
+# Constant ValueType — Singleton Domains
 
-version: 0.2.0
+version: 0.1.0
 
 ## Purpose of this Document
 
-This document specifies **Constant** — a generic ValueType for singleton (constant) values in type expressions, built on ValueType instance configuration without a dedicated literal-type mechanism.
+This document defines **ConstantType** / **`Constant(T){value: …}`** — singleton value domains used mainly as **union alternatives** (sentinels such as `"auto"`, `false`, `"none"`).
 
-Constant is a **ConstantType** — a dedicated ValueType branch with its own validation semantics. It is neither a StructType nor a PrimitiveType.
-
-For instance configuration syntax see `20_value_type_instance_configuration.md`. For unions and generics see `17_type_system_bml.md`. For the BOM model see `12_bom_object_model.md`.
-
----
-
-## Motivation
-
-Union alternatives often include a fixed sentinel alongside an ordinary ValueType:
-
-```text
-"auto" | Float          — auto sentinel or float
-false | Size3D          — false or struct
-Boolean | StudType      — boolean or enum
-```
-
-Instead of treating literal values as a separate language feature, BlockML models each singleton alternative as a **configured ValueType instance** — the same mechanism as `Text{maxLength: 100}` or `Decimal{precision: 10, scale: 2}`.
+For the four ValueType kinds and unions see `17_type_system_bml.md`.
+For `{…}` instance configuration syntax see `20_value_type_instance_configuration.md`.
+For MBOM parse/serialize companions see `04_types.md`.
+BML SSOT: `org.blockml.bml.type.Constant` / `ConstantType` under `packages/core/blocks/org/blockml/bml/type/`.
 
 ---
 
-## ValueType Hierarchy
+## Design Decisions
 
-```text
-ValueType
-├── PrimitiveType
-├── StructType
-├── EnumType
-└── ConstantType
-      └── Constant
-```
-
-### Why not StructType?
-
-A StructType defines the **shape of the external value**. For example:
-
-```text
-StructType
-└── property value : Text
-```
-
-would mean the external value is:
-
-```json
-{ "value": "auto" }
-```
-
-This is not the desired behavior. The external value of `Constant(Text){value: "auto"}` is simply `"auto"`. The configured `value` Property belongs to the internal ValueType instance on the Property definition — not to the property's external representation.
-
-### Why not PrimitiveType?
-
-A PrimitiveType defines a **value domain**:
-
-```text
-Text     → all text values
-Integer  → all integer values
-Boolean  → true | false
-```
-
-Constant defines a **singleton value domain**:
-
-```text
-Constant(Text){value: "auto"}   → accepts exactly "auto"
-Constant(Integer){value: 5}     → accepts exactly 5
-```
-
-Its defining characteristic is the validation rule, not serialization shape.
+| Topic | Decision |
+|---|---|
+| **Kind** | `ConstantType` is a **fourth ValueType branch** under `org.blockml.bml.core.ValueType` — sibling of Primitive, Struct, Enum |
+| **Generic form** | `Constant(T){value: …}` — `(...)` binds `T`; `{value: …}` configures the singleton |
+| **External value** | Authored/runtime value is the **inner literal** (`"auto"`), not `{ value: "auto" }` |
+| **Shortcuts** | `Boolean.True` / `Boolean.False` ≡ `Constant(Boolean){value: true/false}` |
+| **Parser (Phase A)** | Map type attributes to `TypeExpression` including Constant applications |
+| **AST / evaluation** | N/A for the type itself; property values matching a Constant alternative are ordinary literals |
 
 ---
 
-## Definition
-
-**FQN:** `org.blockml.bml.type.Constant`  
-**Branch:** `org.blockml.bml.type.ConstantType`
-
-Constant is the standard **ConstantType** implementation:
+## Type Hierarchy
 
 ```text
-Constant<T extends ValueType>
+org.blockml.bml.core.ValueType
+  └── org.blockml.bml.type.ConstantType     — abstract branch (singleton domains)
+        └── org.blockml.bml.type.Constant   — Constant(T){value: …}
 ```
-
-with a single Property:
 
 ```text
-value : T
+ConstantType  — singleton value domain; not a StructType; not a PrimitiveType
+Constant      — generic configured application of ConstantType
 ```
 
-The generic type parameter **T is mandatory** at every reference site. Constant is not abstract — it is instantiated through generic application and instance configuration on the type reference.
+A PrimitiveType defines an open value domain; a StructType defines external value **shape**; a ConstantType defines a **singleton** domain validated against underlying `T` and the configured `value`.
 
 ---
 
-## Syntax
-
-Constant combines generic application `(...)` with instance configuration `{...}`:
+## Surface Syntax
 
 ```text
 Constant(Text){value: "auto"}
+Constant(Boolean){value: false}
 Constant(Integer){value: 5}
-Constant(Decimal){value: 5.5}
-Constant(Boolean){value: true}
-Constant(type:SizeXY){value: {x: 1, y: 2}}   — nested struct literal (T = StructType)
+Constant(SizeXY){value: {x: 1, y: 2}}    — nested StructType via instance config
 ```
 
-Named configuration uses `key: value` (not `key=value`) — see `20_value_type_instance_configuration.md`.
+Rules:
 
-In union type attributes:
+- Generic argument `T` must satisfy `ValueType` (via `satisfiesTypeBound`).
+- Configuration **must** include `value` of type `T`.
+- Named and positional configuration must not be mixed in one `{…}` — see `20_value_type_instance_configuration.md`.
+- Positional mapping of configuration fields follows declaration order (same principle as FunctionMapping for structs) — see `22_function_mapping.md` · `20_…`.
 
-```xml
-<mode type="Boolean | Constant(Text){value: &quot;auto&quot;}"/>
-```
-
-Semantically:
+### In union type expressions
 
 ```text
-Boolean
-  or
-Constant ValueType configured with the single allowed value "auto"
+Boolean | Constant(Text){value: "auto"}
+Float | Constant(Text){value: "auto"}
+Constant(Boolean){value: false} | Connector[]
+Boolean.False | SizeXYZ
 ```
 
-Positional configuration is supported when `value` is the sole Property:
+**Match order:** left to right, first hit wins — see `17_type_system_bml.md` — Unions.
+
+### Future literal shorthand
 
 ```text
-Constant(Text){"auto"}    →  value = "auto"
-Constant(Integer){5}      →  value = 5
+Boolean | "auto"    ≡    Boolean | Constant(Text){value: "auto"}
 ```
 
-### Boolean.True / Boolean.False shortcuts
+Until enabled, author the explicit Constant form. Legacy literal unions (`"auto" | Float`) remain parseable; normalization to Constant at map time is recommended.
 
-`org.blockml.bml.type.Boolean` declares two public Sub-Blocks — **`True`** and **`False`** — that are **Constant shortcuts** for the singleton boolean domains:
+---
+
+## External Value vs Internal Configuration
+
+```text
+Type expression:   Constant(Text){value: "auto"}
+Property value:    "auto"                         ← external
+NOT:               { value: "auto" }              ← that would be a struct-shaped value
+```
+
+The `{value: …}` block configures the **type** (which singleton is allowed). At value sites, authors write the singleton payload directly.
+
+---
+
+## Boolean.True / Boolean.False Shortcuts
+
+Public Sub-Blocks of `org.blockml.bml.type.Boolean`:
 
 ```text
 Boolean.True   ≡  Constant(Boolean){value: true}
 Boolean.False  ≡  Constant(Boolean){value: false}
 ```
 
-FQNs: `org.blockml.bml.type.Boolean.True` · `org.blockml.bml.type.Boolean.False`.
+**Use in type expressions only** (e.g. `Boolean.False | T`), not as ordinary property values (`true` / `false` literals remain the value syntax).
 
-Use them in type expressions wherever a boolean Constant would appear — especially as the narrow (left) alternative of a union:
-
-```text
-Boolean.False | T          ≡  Constant(Boolean){value: false} | T
-Boolean.True | T           ≡  Constant(Boolean){value: true} | T
-```
-
-```xml
-<!-- preferred shorthand -->
-<pcb type="Boolean.False | mbtype:PcbMountingType"/>
-
-<!-- equivalent Constant form -->
-<pcb type="Constant(Boolean){value: false} | mbtype:PcbMountingType"/>
-```
-
-These Sub-Blocks are **type references**, not boolean literals. Property **values** still use ordinary boolean literals (`true` / `false`). Prefer `Boolean.False | T` over spelling out `Constant(Boolean){value: false} | T` in new authoring. See `04_types.md` — FalseOr migration.
+Prefer shortcuts over spelling out `Constant(Boolean){value: …}` when the singleton is boolean.
 
 ---
 
-## Validation
+## Obsolete Wrappers → Constant Unions
 
-Validation proceeds in two steps:
+```text
+Obsolete          Write instead
+AutoOr<T>         Constant(Text){value: "auto"} | T
+FalseOr<T>        Boolean.False | T
+NoneOr<T>         Constant(Text){value: "none"} | T
+```
 
-1. Validate the supplied value against the generic ValueType **T**.
-2. Compare the supplied value with the configured constant value.
-
-| Expression | Supplied value | Result |
-|---|---|---|
-| `Constant(Text){value: "auto"}` | `"auto"` | ✓ |
-| `Constant(Text){value: "auto"}` | `"manual"` | ✗ |
-| `Constant(Text){value: "auto"}` | `5` | ✗ |
-| `Constant(Integer){value: 5}` | `5` | ✓ |
-| `Constant(Integer){value: 5}` | `6` | ✗ |
-| `Constant(Integer){value: "auto"}` | — | ✗ — configured value does not match Integer |
-| `Constant{value: "auto"}` | — | ✗ — missing generic type argument |
-| `Constant(Text)` | — | ✗ — missing required `value` configuration |
-| `Constant(Text){value: "auto", value: "x"}` | — | ✗ — duplicate configuration |
-
-The validator:
-
-1. Resolves `Constant(T)` — `T` must satisfy `T extends ValueType`.
-2. Requires `value` in instance configuration (`BML_MISSING_CONSTANT_VALUE`).
-3. Validates the supplied value against the bound type `T`.
-4. Compares the supplied value with the configured constant (`BML_CONSTANT_VALUE_MISMATCH`).
-
-No type inference is required for Constant itself — `T` is always authored explicitly.
+See `17_type_system_bml.md` — Obsolete wrapper types · `04_types.md` for MBOM migration.
 
 ---
 
-## External Representation
+## BOM / Parser Mapping
 
-The external representation is always **identical to the representation of the underlying generic type T**.
+At Stage 1 map time, type attributes become `TypeExpression` nodes in `@blockml/core` (alias `TypeDescriptor`):
 
-| Type reference | External value | Not |
-|---|---|---|
-| `Constant(Text){value: "auto"}` | `"auto"` | `{ "value": "auto" }` |
-| `Constant(Integer){value: 5}` | `5` | `{ "value": 5 }` |
-| `Constant(Boolean){value: true}` | `true` | `{ "value": true }` |
+```text
+Constant(Text){value: "auto"}
+  → GenericApplication(Constant, [Text]) + instance configuration { value: "auto" }
+  → or dedicated ConstantTypeExpression shape — implementation freedom in 12_bom_object_model.md
+```
 
-The configured `value` Property exists only on the internal ValueType instance that belongs to the Property definition.
+```text
+Boolean.False
+  → NamedTypeReference to Sub-Block org.blockml.bml.type.Boolean.False
+  → semantically ≡ Constant(Boolean){value: false} for union matching
+```
+
+No expression AST is involved for the type expression itself. Property values that match a Constant alternative are stored as `LiteralValue` (authored form).
 
 ---
 
-## Relation to Unions
-
-Constant alternatives appear as ordinary union members:
+## Validation (Stage 2)
 
 ```text
-Boolean | Constant(Text){value: "auto"}
-Float | Constant(Text){value: "auto"}
-Integer | Text | Constant(Integer){value: 0}
+✓  T is a ValueType bound
+✓  value configuration present and type-compatible with T
+✓  Union match: authored value equals configured singleton when that alternative wins
+✓  Unreachable Constant alternatives → BML_UNREACHABLE_UNION_ALTERNATIVE (warning) when subsumed
 ```
 
-At validate time, union alternatives are tested **left to right**; the **first** alternative that accepts the authored value wins (not merely “at least one”). A value `"auto"` matches a leading Constant alternative; `true` matches Boolean when Boolean appears before Text. Overlapping alternatives are resolved by author order — see `17_type_system_bml.md` — Unions · Match order. Unreachable later alternatives → `BML_UNREACHABLE_UNION_ALTERNATIVE`.
+---
 
-### Canonical vs literal union syntax
+## Related Documents
 
-**Canonical (V1):** every singleton alternative is an explicit Constant application:
-
-```text
-Boolean | Constant(Text){value: "auto"}
-```
-
-**Literal shorthand (future):** JSON literals in union positions desugar to Constant:
-
-```text
-Boolean | "auto"
-
-  ≡  Boolean | Constant(Text){value: "auto"}
-```
-
-Desugaring table:
-
-| Literal shorthand | Desugars to |
+| Topic | Document |
 |---|---|
-| `"auto"` | `Constant(Text){value: "auto"}` |
-| `5` | `Constant(Integer){value: 5}` |
-| `5.5` | `Constant(Decimal){value: 5.5}` |
-| `true` / `false` | `Constant(Boolean){value: true}` / `{value: false}` |
-
-The BOM may store either the authored literal form or the normalized Constant form. Normalization is recommended at map time so downstream validation uses one representation.
-
-Legacy union literal syntax (`"auto" | Float`) remains parseable; the validator may emit `BML_PREFER_CONSTANT_TYPE` when a literal alternative has an obvious Constant desugaring.
-
----
-
-## Relation to Obsolete Wrapper Types
-
-Legacy wrapper types map to union + Constant:
-
-```text
-Obsolete              Canonical replacement
-AutoOr<T>             Constant(Text){value: "auto"} | T     — when sentinel is "auto"
-FalseOr<T>            Constant(Boolean){value: false} | T
-NoneOr<T>             Constant(Text){value: "none"} | T
-BooleanOr<T>          Boolean | T
-```
-
-Sentinel string choice follows domain convention; Constant makes the allowed literal explicit and type-checked.
-
----
-
-## BOM Representation
-
-```text
-Boolean | Constant(Text){value: "auto"}
-
-  →  UnionTypeExpression {
-       alternatives: [
-         NamedTypeReference { fqn: Boolean },
-         NamedTypeReference {
-           fqn: Constant,
-           typeArguments: [ NamedTypeReference { fqn: Text } ],
-           instanceConfiguration: { named: { value: "auto" } }
-         }
-       ]
-     }
-```
-
-Property values for the Constant alternative use the external representation of T — `"auto"`, not a struct payload.
-
-Future literal form:
-
-```text
-Boolean | "auto"
-
-  →  (normalize to the same UnionTypeExpression as above)
-```
-
----
-
-## Compiler Diagnostics
-
-| Code | Condition |
-|---|---|
-| `BML_MISSING_GENERIC_TYPE_ARGUMENT` | Constant reference without mandatory `(T)` |
-| `BML_MISSING_CONSTANT_VALUE` | Constant(T) without required `{value: …}` |
-| `BML_CONSTANT_VALUE_MISMATCH` | Supplied value does not equal configured constant, or incompatible with T |
-| `BML_PREFER_CONSTANT_TYPE` | Union literal alternative should use Constant form (hint) |
-| `BML_UNREACHABLE_UNION_ALTERNATIVE` | Later union alternative subsumed by an earlier one (warning) |
-
-See also instance-configuration codes in `06_compiler.md` and `20_value_type_instance_configuration.md`.
-
----
-
-## Rationale
-
-Making Constant a dedicated **ConstantType** keeps the type system explicit and avoids hidden special cases in PrimitiveType or StructType.
-
-It aligns with the "Everything is a Block" philosophy:
-
-- Constant is a normal ValueType.
-- It owns a normal Property (`value`).
-- Its special behavior is defined by ConstantType semantics — not by compiler-specific exceptions.
-
----
-
-## Benefits
-
-- No dedicated literal-type mechanism — constants are ordinary configured ValueTypes.
-- Validation is fully type-safe without inference on Constant.
-- External representation follows the underlying generic type — no struct wrapper leakage.
-- Future literal union syntax is syntactic sugar over the same semantic model.
-- Fully aligned with "Everything is a Block" and ValueType instance configuration.
-- Orthogonal to generics: `()` binds T; `{…}` configures the Constant instance.
+| Four kinds, unions, generics | `17_type_system_bml.md` |
+| `{…}` configuration syntax | `20_value_type_instance_configuration.md` |
+| MBOM boolean / AutoOr migration | `04_types.md` |
+| FunctionMapping (calls, not Constant) | `22_function_mapping.md` |
+| TypeExpression BOM shapes | `12_bom_object_model.md` |

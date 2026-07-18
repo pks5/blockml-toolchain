@@ -53,7 +53,7 @@
   </documentation>
 
   <references>
-    <see file="18_function_mapping.md" relation="AuthoringGuide">
+    <see file="22_function_mapping.md" relation="AuthoringGuide">
       Function parameter mapping rules and default behavior.
     </see>
   </references>

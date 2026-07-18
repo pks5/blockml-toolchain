@@ -48,7 +48,7 @@
     <see file="20_value_type_instance_configuration.md" relation="AuthoringGuide">
       Detailed configuration rules for ValueType instances on Properties.
     </see>
-    <see file="18_function_mapping.md" relation="AuthoringGuide">
+    <see file="22_function_mapping.md" relation="AuthoringGuide">
       Positional parameter order — shared rules with FunctionMapping.
     </see>
     <see type="type:Decimal" relation="SeeAlso">

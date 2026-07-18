@@ -304,7 +304,7 @@ The result is **lossless canonical BML XML** derived from BOM + Definition regis
 
 | Layer | Responsibility |
 |---|---|
-| **Parser (stage [5])** | Parses authored XML into Canonical BOM — today uses fixed mapping rules in `13_bml_to_bom_mapping.md` |
+| **Parser step [5]** | Parses authored XML into Canonical BOM — today uses fixed mapping rules in `13_bml_to_bom_mapping.md` |
 | **Definition blocks** | Declarative SSOT for what those mapping rules *should* be |
 | **`bml:xml`** | Declarative SSOT for BOM → XML rendering |
 | **Future serializer** | Reads Definition blocks + `bml:xml` from TypeRegistry; emits XML without per-type hardcoding |

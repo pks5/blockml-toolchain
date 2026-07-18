@@ -252,7 +252,7 @@ Interpretation happens **only** in the renderer — by reading Capability defini
 
 ### Validation pipeline
 
-Validation consists of three independent stages:
+Validation consists of three independent stages. **Numbering glossary** (Validation Stages vs parser steps `[1]`–`[5]` vs SCAD renderer steps `[9]`–`[19]` vs Test Layers): see `06_compiler.md` — Stage numbering glossary.
 
 ```text
 Stage 1 — Parser       XML syntax · namespaces · XSD → Urmodell (immutable Canonical BOM)
@@ -826,7 +826,7 @@ com.foo.Money                 →  satisfiesTypeBound(Money, com.foo:IValueType)
 
 Mismatch → `BML_GENERIC_CONSTRAINT_VIOLATION` or `BML_TYPE_BOUND_NOT_SATISFIED`. See `17_type_system_bml.md` — Contracts as type-bound identifiers · `12_bom_object_model.md`.
 
-Contract members are **merged into** the effective member set by `resolveEffectiveMembers()` — they are not validated as a separate superset check. Merge resolution runs at stage [8] (semantic validation), after the contract Block definitions themselves are resolved.
+Contract members are **merged into** the effective member set by `resolveEffectiveMembers()` — they are not validated as a separate superset check. Merge resolution runs at Stage 2 (semantic validation), after the contract Block definitions themselves are resolved.
 
 ---
 
@@ -875,7 +875,7 @@ namespace     — resolved canonical namespace identifier (empty = default names
 visibility    — optional; must match naming convention
 ```
 
-**Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order defines array literal authoring, FunctionMapping positional parameters, default SCAD/render-target array serialization, and compatibility — see `17_type_system_bml.md` — Declaration Order · `18_function_mapping.md`.
+**Declaration order:** `<property>` elements within `<properties>` are stored in BML document order. The parser must not reorder them. Order defines array literal authoring, FunctionMapping positional parameters, default SCAD/render-target array serialization, and compatibility — see `17_type_system_bml.md` — Declaration Order · `22_function_mapping.md`.
 
 **EnumType property values:** when the property `type` is an EnumType, enum member references may omit the `{EnumTypeFQN}::` prefix — `Standard` is equivalent to `com.machineblocks.bml.type.BaseCutout::Standard` on a `BaseCutout` property. BOM stores **id + typeFqn** only. See `17_type_system_bml.md` — EnumType.
 
@@ -1295,7 +1295,7 @@ Unqualified type names are resolved against the domain's default type namespace 
 
 ### Object Input as Function Signature
 
-When a Capability uses a structured Object as `inputType`, the Object defines an **anonymous struct type**. FunctionMapping translates call syntax to this struct — see `18_function_mapping.md`.
+When a Capability uses a structured Object as `inputType`, the Object defines an **anonymous struct type**. FunctionMapping translates call syntax to this struct — see `22_function_mapping.md`.
 
 ```text
 inputType: { a: Float, b: Float }
@@ -1327,7 +1327,7 @@ Collection field { values: T[0..n] }:
   myCapa([4, 5])                  →  sequence literal (positional values)
 ```
 
-Named parameters `(a=4, b=5)`, object literal `({a:4, b:5})`, and positional `(4, 5)` all produce identical input values for Object `inputType`s. A mismatch between declared `inputType` and call syntax is a parse-time error.
+A mismatch between declared `inputType` and call syntax is a **validation** error (Stage 2 FunctionMapping) — not a Stage-1 parse failure. See `22_function_mapping.md`.
 
 ### Capability Value in Compositions
 

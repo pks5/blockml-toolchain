@@ -795,7 +795,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 03_mbom.md             — MBOM: MachineBlocks domain model, properties, aggregations, expressions
 04_types.md            — MBOM type system, serialization rules
 05_scad_renderer.md    — SCAD Render Target: Block Renderers, assembly patterns, naming, source maps
-06_compiler.md         — compiler pipeline, Target Registry, error handling, testing strategy
+06_compiler.md         — compiler pipeline, Stage numbering glossary, Target Registry, testing
 07_cli.md              — CLI commands, configuration, watch mode, scaffolding
 12_bom_object_model.md — formal BOM data structures (BomDocument, BlockDefinition, CompositionNode)
 13_bml_to_bom_mapping.md — BML → BOM algorithm (parser implementation contract)
@@ -805,6 +805,9 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 17_type_system_bml.md  — ValueType, Language, Block hierarchy
 18_constraints_and_suggestions.md — property constraints and suggestions
 19_definition_blocks_and_bml_xml.md — Definition meta-model BML (specified); bml:xml meta-serializer (not implemented)
+20_value_type_instance_configuration.md — ValueType `{…}` instance configuration
+21_constant_value_type.md — Constant(T){value} singleton domains
+22_function_mapping.md — Capability call argument mapping (FunctionMapping)
 09_mbom_properties.yml — transitional SCAD render hints only (must follow NativeBlock.bml)
 
 domains/machineblocks/runtimes/scad-lib/
