@@ -10,10 +10,10 @@
                       "
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>ScrewHole</name>
-  <type>mbtype:ScrewHole</type>
+  <type>mbt:ScrewHole</type>
   <baseType>StructType</baseType>
   <is>A screw hole on a directed face</is>
 
@@ -25,27 +25,27 @@
     Decimal(Millimeter) per-hole override. Used by NativeBlock.screwHoles as ScrewHole[].</documentation>
 
   <properties>
-    <face type="mbtype:Face">
+    <face type="mbt:Face">
       <documentation>Directed face where the screw hole is drilled (x- / x+ / y- / y+ / z- / z+).</documentation>
     </face>
-    <offset type="mbtype:OffsetAB(Decimal)">
+    <offset type="mbt:OffsetAB(Decimal)">
       <documentation>In-plane grid position of the hole center on the selected face, measured from
         the respective negative (-) sides. Unitless — scale depends on the face.</documentation>
     </offset>
-    <diameter type="mbtype:Auto | Decimal(unit:Millimeter)">
+    <diameter type="mbt:Auto | Decimal(unit:Millimeter)">
       <documentation>Hole diameter in millimeters. Auto inherits NativeBlock.screwHoleDiameter.</documentation>
       <value>Auto</value>
     </diameter>
-    <depth type="mbtype:Auto | Decimal(unit:Millimeter)">
+    <depth type="mbt:Auto | Decimal(unit:Millimeter)">
       <documentation>Hole depth in millimeters. Auto inherits NativeBlock.screwHoleDepth.</documentation>
       <value>Auto</value>
     </depth>
-    <insetThickness type="mbtype:Auto | Decimal(unit:Millimeter)">
+    <insetThickness type="mbt:Auto | Decimal(unit:Millimeter)">
       <documentation>Inset ring thickness in millimeters. Auto inherits
         NativeBlock.screwHoleInsetThickness. 0 = no inset when explicit.</documentation>
       <value>Auto</value>
     </insetThickness>
-    <insetDepth type="mbtype:Auto | Decimal(unit:Millimeter)">
+    <insetDepth type="mbt:Auto | Decimal(unit:Millimeter)">
       <documentation>Inset ring depth in millimeters. Auto inherits
         NativeBlock.screwHoleInsetDepth. 0 = no inset when explicit.</documentation>
       <value>Auto</value>
@@ -56,13 +56,13 @@
     <see type="StructType" relation="Extends">
       Struct ValueType branch — face, offset, diameter, depth, insetThickness, insetDepth.
     </see>
-    <see type="mbtype:Face" relation="SeeAlso">
+    <see type="mbt:Face" relation="SeeAlso">
       face selector — six directed brick faces.
     </see>
-    <see type="mbtype:OffsetAB" relation="SeeAlso">
+    <see type="mbt:OffsetAB" relation="SeeAlso">
       Face-local position { a, b }.
     </see>
-    <see type="mbtype:Auto" relation="SeeAlso">
+    <see type="mbt:Auto" relation="SeeAlso">
       Sentinel for inheriting NativeBlock.screwHole* defaults.
     </see>
   </references>

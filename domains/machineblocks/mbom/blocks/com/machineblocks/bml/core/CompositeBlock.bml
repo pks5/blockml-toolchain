@@ -11,7 +11,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>CompositeBlock</name>
   <type>mbcore:CompositeBlock</type>

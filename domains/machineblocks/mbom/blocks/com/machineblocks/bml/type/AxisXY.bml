@@ -10,11 +10,11 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>AxisXY</name>
-  <type>mbtype:AxisXY</type>
-  <baseType>mbtype:MultiAxis(N)</baseType>
+  <type>mbt:AxisXY</type>
+  <baseType>mbt:MultiAxis(N)</baseType>
   <is>A value pair along X and Y</is>
 
   <documentation>Struct ValueType for axis-keyed { x, y }. Extends MultiAxis(N).
@@ -36,19 +36,19 @@
   </properties>
 
   <references>
-    <see type="mbtype:MultiAxis" relation="Extends">
+    <see type="mbt:MultiAxis" relation="Extends">
       Abstract axis-map base — N.
     </see>
-    <see type="mbtype:AxisXYZ" relation="SeeAlso">
+    <see type="mbt:AxisXYZ" relation="SeeAlso">
       Adds Z — extends this type.
     </see>
-    <see type="mbtype:SizeXY" relation="SeeAlso">
+    <see type="mbt:SizeXY" relation="SeeAlso">
       Size semantics on AxisXY.
     </see>
-    <see type="mbtype:OffsetXY" relation="SeeAlso">
+    <see type="mbt:OffsetXY" relation="SeeAlso">
       Offset semantics on AxisXY.
     </see>
-    <see type="mbtype:RotationXY" relation="SeeAlso">
+    <see type="mbt:RotationXY" relation="SeeAlso">
       Rotation semantics — AxisXY with N closed to Decimal(unit:Degree).
     </see>
   </references>

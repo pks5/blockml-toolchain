@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>QualityPreset</name>
-  <type>mbtype:QualityPreset</type>
-  <baseType>mbtype:MBEnum(Text)</baseType>
+  <type>mbt:QualityPreset</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>A render or mesh quality preset</is>
 
   <documentation>Enum ValueType for quality presets — preview / normal / print / render.

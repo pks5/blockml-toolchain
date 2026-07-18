@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Align</name>
-  <type>mbtype:Align</type>
-  <baseType>mbtype:MBEnum(Text)</baseType>
+  <type>mbt:Align</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>An alignment along an axis</is>
 
   <documentation>Enum ValueType for start / center / end alignment on MachineBlocks bricks.
@@ -38,10 +38,10 @@
   </aggregations>
 
   <references>
-    <see type="mbtype:AxisXYZ" relation="SeeAlso">
+    <see type="mbt:AxisXYZ" relation="SeeAlso">
       Brick-space expand form — NativeBlock.align / alignChildren.
     </see>
-    <see type="mbtype:AxisAB" relation="SeeAlso">
+    <see type="mbt:AxisAB" relation="SeeAlso">
       Face-local expand form — Port.align.
     </see>
   </references>

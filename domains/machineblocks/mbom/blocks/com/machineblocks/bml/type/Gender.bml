@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Gender</name>
-  <type>mbtype:Gender</type>
-  <baseType>mbtype:MBEnum(Text)</baseType>
+  <type>mbt:Gender</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>A connector mating gender</is>
 
   <documentation>Enum ValueType for male / female connector mating. Extends MBEnum(Text).

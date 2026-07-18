@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>PcbMountingType</name>
-  <type>mbtype:PcbMountingType</type>
-  <baseType>mbtype:MBEnum(Text)</baseType>
+  <type>mbt:PcbMountingType</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>A PCB mounting mode</is>
 
   <documentation>Enum ValueType for PCB mounting features on MachineBlocks bricks —

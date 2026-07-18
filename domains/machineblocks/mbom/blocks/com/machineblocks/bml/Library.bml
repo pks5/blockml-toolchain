@@ -19,7 +19,7 @@
   xmlns:mb="com.machineblocks.bml"
   xmlns:mbann="com.machineblocks.bml.annotation"
   xmlns:bricks="com.machineblocks.bml.bricks"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>Library</name>
@@ -66,55 +66,55 @@
 
     <blocks>
       <mbann:ScadAnnotation />
-      <mbtype:Align />
-      <mbtype:Auto />
-      <mbtype:Axis />
-      <mbtype:AxisAB />
-      <mbtype:AxisXY />
-      <mbtype:AxisXYZ />
-      <mbtype:BaseCutout />
-      <mbtype:BaseRoundingMap />
-      <mbtype:Connector />
-      <mbtype:CornerMap />
-      <mbtype:Direction />
-      <mbtype:Face />
-      <mbtype:FaceAxisXY />
-      <mbtype:FaceMapXY />
-      <mbtype:FaceMapXYZ />
-      <mbtype:Gender />
-      <mbtype:Grille />
-      <mbtype:HoleEdgeMap />
-      <mbtype:HoleEdgeMode />
-      <mbtype:HoleEdgePair />
-      <mbtype:HoleType />
-      <mbtype:Inherit />
-      <mbtype:MBEnum />
-      <mbtype:MultiAxis />
-      <mbtype:None />
-      <mbtype:OffsetAB />
-      <mbtype:OffsetXY />
-      <mbtype:OffsetXYZ />
-      <mbtype:PcbMountingType />
-      <mbtype:PcbSocket />
-      <mbtype:PillarGapAutoConfig />
-      <mbtype:PlaneRoundingMap />
-      <mbtype:Port />
-      <mbtype:PortShapeType />
-      <mbtype:QualityPreset />
-      <mbtype:RadiusAB />
-      <mbtype:RecessWallGap />
-      <mbtype:RotationXY />
-      <mbtype:RotationXYZ />
-      <mbtype:ScadQualityClassFactors />
-      <mbtype:ScadQualityClassMinSegments />
-      <mbtype:ScadQualityProfile />
-      <mbtype:ScrewHole />
-      <mbtype:SelectiveGrid />
-      <mbtype:SizeAB />
-      <mbtype:SizeXY />
-      <mbtype:SizeXYZ />
-      <mbtype:StudType />
-      <mbtype:WallGap />
+      <mbt:Align />
+      <mbt:Auto />
+      <mbt:Axis />
+      <mbt:AxisAB />
+      <mbt:AxisXY />
+      <mbt:AxisXYZ />
+      <mbt:BaseCutout />
+      <mbt:BaseRoundingMap />
+      <mbt:Connector />
+      <mbt:CornerMap />
+      <mbt:Direction />
+      <mbt:Face />
+      <mbt:FaceAxisXY />
+      <mbt:FaceMapXY />
+      <mbt:FaceMapXYZ />
+      <mbt:Gender />
+      <mbt:Grille />
+      <mbt:HoleEdgeMap />
+      <mbt:HoleEdgeMode />
+      <mbt:HoleEdgePair />
+      <mbt:HoleType />
+      <mbt:Inherit />
+      <mbt:MBEnum />
+      <mbt:MultiAxis />
+      <mbt:None />
+      <mbt:OffsetAB />
+      <mbt:OffsetXY />
+      <mbt:OffsetXYZ />
+      <mbt:PcbMountingType />
+      <mbt:PcbSocket />
+      <mbt:PillarGapAutoConfig />
+      <mbt:PlaneRoundingMap />
+      <mbt:Port />
+      <mbt:PortShapeType />
+      <mbt:QualityPreset />
+      <mbt:RadiusAB />
+      <mbt:RecessWallGap />
+      <mbt:RotationXY />
+      <mbt:RotationXYZ />
+      <mbt:ScadQualityClassFactors />
+      <mbt:ScadQualityClassMinSegments />
+      <mbt:ScadQualityProfile />
+      <mbt:ScrewHole />
+      <mbt:SelectiveGrid />
+      <mbt:SizeAB />
+      <mbt:SizeXY />
+      <mbt:SizeXYZ />
+      <mbt:StudType />
+      <mbt:WallGap />
       <mbunit:GridUnitXY />
       <mbunit:GridUnitZ />
       <mbunit:MBU />

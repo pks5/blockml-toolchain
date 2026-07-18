@@ -9,12 +9,12 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>RecessWallGap</name>
-  <type>mbtype:RecessWallGap</type>
-  <baseType>mbtype:WallGap</baseType>
+  <type>mbt:RecessWallGap</type>
+  <baseType>mbt:WallGap</baseType>
   <is>A recess wall opening with end padding</is>
 
   <documentation>Struct ValueType for a gap in a recess wall. Extends WallGap (face, pos, len)
@@ -23,12 +23,12 @@
     beyond a plain WallGap.</documentation>
 
   <properties>
-    <padStart type="mbtype:Auto | Decimal(mbunit:GridUnitXY)">
+    <padStart type="mbt:Auto | Decimal(mbunit:GridUnitXY)">
       <documentation>How much the gap is reduced from the start end along the wall
         (GridUnitXY). Auto selects the default inset.</documentation>
       <value>Auto</value>
     </padStart>
-    <padEnd type="mbtype:Auto | Decimal(mbunit:GridUnitXY)">
+    <padEnd type="mbt:Auto | Decimal(mbunit:GridUnitXY)">
       <documentation>How much the gap is reduced from the end along the wall
         (GridUnitXY). Auto selects the default inset.</documentation>
       <value>Auto</value>
@@ -36,10 +36,10 @@
   </properties>
 
   <references>
-    <see type="mbtype:WallGap" relation="Extends">
+    <see type="mbt:WallGap" relation="Extends">
       Base gap — face, pos, len inherited; padStart / padEnd declared here.
     </see>
-    <see type="mbtype:Auto" relation="SeeAlso">
+    <see type="mbt:Auto" relation="SeeAlso">
       Default sentinel for padStart / padEnd.
     </see>
     <see type="mbunit:GridUnitXY" relation="SeeAlso">

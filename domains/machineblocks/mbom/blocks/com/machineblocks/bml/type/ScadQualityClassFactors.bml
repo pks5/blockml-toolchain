@@ -9,10 +9,10 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>ScadQualityClassFactors</name>
-  <type>mbtype:ScadQualityClassFactors</type>
+  <type>mbt:ScadQualityClassFactors</type>
   <baseType>StructType</baseType>
   <is>Per quality-class segment length multipliers</is>
 
@@ -36,7 +36,7 @@
     <see type="StructType" relation="Extends">
       Struct ValueType branch — functional, visual, hidden.
     </see>
-    <see type="mbtype:ScadQualityProfile" relation="SeeAlso">
+    <see type="mbt:ScadQualityProfile" relation="SeeAlso">
       Per-preset segment length and max segment count.
     </see>
   </references>

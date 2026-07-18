@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>HoleType</name>
-  <type>mbtype:HoleType</type>
-  <baseType>mbmbtype:MBEnum(Text)</baseType>
+  <type>mbt:HoleType</type>
+  <baseType>mbmbt:MBEnum(Text)</baseType>
   <is>A Technic hole shape</is>
 
   <documentation>Enum ValueType for LEGO Technic hole shapes on MachineBlocks bricks.

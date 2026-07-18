@@ -11,10 +11,10 @@
                       "
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>ScadQualityProfile</name>
-  <type>mbtype:ScadQualityProfile</type>
+  <type>mbt:ScadQualityProfile</type>
   <baseType>StructType</baseType>
   <is>A quality-preset map of SCAD mesh profiles</is>
 
@@ -63,7 +63,7 @@
     <see type="StructType" relation="Extends">
       Struct ValueType branch — preview, normal, print, render.
     </see>
-    <see type="mbtype:QualityPreset" relation="SeeAlso">
+    <see type="mbt:QualityPreset" relation="SeeAlso">
       Enum whose four members map 1:1 to the profile properties.
     </see>
     <see type="unit:Millimeter" relation="SeeAlso">

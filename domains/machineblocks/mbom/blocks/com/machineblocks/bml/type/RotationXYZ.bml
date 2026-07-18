@@ -10,11 +10,11 @@
                       "
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>RotationXYZ</name>
-  <type>mbtype:RotationXYZ</type>
-  <baseType>mbtype:AxisXYZ(Decimal(unit:Degree))</baseType>
+  <type>mbt:RotationXYZ</type>
+  <baseType>mbt:AxisXYZ(Decimal(unit:Degree))</baseType>
   <is>A rotation about X, Y, and Z in degrees</is>
 
   <documentation>Semantic Struct ValueType for a rotation triple { x, y, z } in degrees. Extends
@@ -23,10 +23,10 @@
     Rotation3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <references>
-    <see type="mbtype:AxisXYZ" relation="Extends">
+    <see type="mbt:AxisXYZ" relation="Extends">
       Structural { x, y, z } map — N closed to Decimal(unit:Degree); Z defaults to N.
     </see>
-    <see type="mbtype:RotationXY" relation="SeeAlso">
+    <see type="mbt:RotationXY" relation="SeeAlso">
       Two-axis rotation map on AxisXY.
     </see>
     <see type="unit:Degree" relation="SeeAlso">

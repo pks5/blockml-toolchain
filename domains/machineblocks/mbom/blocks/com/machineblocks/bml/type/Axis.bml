@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Axis</name>
-  <type>mbtype:Axis</type>
-  <baseType>mbtype:MBEnum(Text)</baseType>
+  <type>mbt:Axis</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>A coordinate axis</is>
 
   <documentation>Enum ValueType for the X / Y / Z axes on MachineBlocks bricks.

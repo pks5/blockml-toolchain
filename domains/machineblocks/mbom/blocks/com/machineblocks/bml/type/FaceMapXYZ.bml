@@ -9,11 +9,11 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>FaceMapXYZ</name>
-  <type>mbtype:FaceMapXYZ</type>
-  <baseType>mbtype:FaceMapXY(T)</baseType>
+  <type>mbt:FaceMapXYZ</type>
+  <baseType>mbt:FaceMapXY(T)</baseType>
   <is>A face-keyed value map on X, Y, and Z</is>
 
   <documentation>Struct ValueType for a sparse face map on all six faces
@@ -39,13 +39,13 @@
   </properties>
 
   <references>
-    <see type="mbtype:FaceMapXY" relation="Extends">
+    <see type="mbt:FaceMapXY" relation="Extends">
       Four-face parent — xNeg, xPos, yNeg, yPos inherited; zNeg / zPos declared here.
     </see>
-    <see type="mbtype:Face" relation="SeeAlso">
+    <see type="mbt:Face" relation="SeeAlso">
       Face enum — six axis-directed faces (XNeg … ZPos).
     </see>
-    <see type="mbtype:AxisXYZ" relation="SeeAlso">
+    <see type="mbt:AxisXYZ" relation="SeeAlso">
       Parallel pattern — AxisXYZ(N, Z) with Z defaulting to N.
     </see>
   </references>

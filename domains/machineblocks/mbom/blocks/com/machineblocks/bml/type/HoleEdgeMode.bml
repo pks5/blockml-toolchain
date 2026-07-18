@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>HoleEdgeMode</name>
-  <type>mbtype:HoleEdgeMode</type>
-  <baseType>mbtype:MBEnum(Text)</baseType>
+  <type>mbt:HoleEdgeMode</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>A hole edge application mode</is>
 
   <documentation>Enum ValueType for how hole-edge treatment applies along an edge —
@@ -34,10 +34,10 @@
   </aggregations>
 
   <references>
-    <see type="mbtype:HoleEdgePair" relation="SeeAlso">
+    <see type="mbt:HoleEdgePair" relation="SeeAlso">
       Two companion edges as AxisAB(HoleEdgeMode).
     </see>
-    <see type="mbtype:HoleEdgeMap" relation="SeeAlso">
+    <see type="mbt:HoleEdgeMap" relation="SeeAlso">
       Per hole-axis X/Y/Z map on NativeBlock.holeXYZEdgeMode.
     </see>
   </references>

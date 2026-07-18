@@ -10,11 +10,11 @@
                       "
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>RotationXY</name>
-  <type>mbtype:RotationXY</type>
-  <baseType>mbtype:AxisXY(Decimal(unit:Degree))</baseType>
+  <type>mbt:RotationXY</type>
+  <baseType>mbt:AxisXY(Decimal(unit:Degree))</baseType>
   <is>A rotation about X and Y in degrees</is>
 
   <documentation>Semantic Struct ValueType for a rotation pair { x, y } in degrees. Extends
@@ -23,10 +23,10 @@
     types use XY / XYZ, not 2D / 3D.</documentation>
 
   <references>
-    <see type="mbtype:AxisXY" relation="Extends">
+    <see type="mbt:AxisXY" relation="Extends">
       Structural { x, y } map — RotationXY closes N to Decimal(unit:Degree).
     </see>
-    <see type="mbtype:RotationXYZ" relation="SeeAlso">
+    <see type="mbt:RotationXYZ" relation="SeeAlso">
       Three-axis rotation map on AxisXYZ.
     </see>
     <see type="unit:Degree" relation="SeeAlso">

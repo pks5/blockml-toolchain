@@ -8,12 +8,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>PlaneRoundingMap</name>
-  <type>mbtype:PlaneRoundingMap</type>
-  <baseType>mbtype:CornerMap(Decimal(mbunit:GridUnitXY) | mbtype:RadiusAB(Decimal(mbunit:GridUnitXY)))</baseType>
+  <type>mbt:PlaneRoundingMap</type>
+  <baseType>mbt:CornerMap(Decimal(mbunit:GridUnitXY) | mbt:RadiusAB(Decimal(mbunit:GridUnitXY)))</baseType>
   <is>A corner rounding map on the horizontal plane</is>
 
   <documentation>Closed CornerMap(Decimal(GridUnitXY) | RadiusAB(Decimal(GridUnitXY))) for
@@ -24,16 +24,16 @@
     expanded alternative beside Auto and bare Decimal(GridUnitXY).</documentation>
 
   <references>
-    <see type="mbtype:CornerMap" relation="Extends">
+    <see type="mbt:CornerMap" relation="Extends">
       Structural { sw, nw, ne, se } map — PlaneRoundingMap closes T to Decimal(GridUnitXY) | RadiusAB(…).
     </see>
-    <see type="mbtype:RadiusAB" relation="SeeAlso">
+    <see type="mbt:RadiusAB" relation="SeeAlso">
       Per-corner anisotropic radius pair (GridUnitXY).
     </see>
-    <see type="mbtype:BaseRoundingMap" relation="SeeAlso">
+    <see type="mbt:BaseRoundingMap" relation="SeeAlso">
       Three-axis body rounding map (unitless Decimal | RadiusAB per corner).
     </see>
-    <see type="mbtype:Auto" relation="SeeAlso">
+    <see type="mbt:Auto" relation="SeeAlso">
       Sentinel alternative on recess / tongue rounding properties.
     </see>
   </references>

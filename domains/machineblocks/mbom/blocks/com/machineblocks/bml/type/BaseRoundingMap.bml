@@ -8,11 +8,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>BaseRoundingMap</name>
-  <type>mbtype:BaseRoundingMap</type>
-  <baseType>mbtype:AxisXYZ(mbtype:CornerMap(Decimal | mbtype:RadiusAB))</baseType>
+  <type>mbt:BaseRoundingMap</type>
+  <baseType>mbt:AxisXYZ(mbt:CornerMap(Decimal | mbt:RadiusAB))</baseType>
   <is>A per-axis corner rounding map for the brick body</is>
 
   <documentation>Closed AxisXYZ(CornerMap(Decimal | RadiusAB)) for body corner rounding on
@@ -22,16 +22,16 @@
     as the expanded alternative beside a bare Decimal broadcast.</documentation>
 
   <references>
-    <see type="mbtype:AxisXYZ" relation="Extends">
+    <see type="mbt:AxisXYZ" relation="Extends">
       Structural { x, y, z } map — BaseRoundingMap closes N/Z to CornerMap(Decimal | RadiusAB).
     </see>
-    <see type="mbtype:CornerMap" relation="SeeAlso">
+    <see type="mbt:CornerMap" relation="SeeAlso">
       Per-corner { sw, nw, ne, se } map nested per axis.
     </see>
-    <see type="mbtype:RadiusAB" relation="SeeAlso">
+    <see type="mbt:RadiusAB" relation="SeeAlso">
       Per-corner anisotropic radius pair.
     </see>
-    <see type="mbtype:PlaneRoundingMap" relation="SeeAlso">
+    <see type="mbt:PlaneRoundingMap" relation="SeeAlso">
       Z-plane-only rounding map for recess / tongue (GridUnitXY).
     </see>
   </references>

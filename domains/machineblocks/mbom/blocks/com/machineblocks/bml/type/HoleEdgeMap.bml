@@ -8,11 +8,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>HoleEdgeMap</name>
-  <type>mbtype:HoleEdgeMap</type>
-  <baseType>mbtype:AxisXYZ(mbtype:HoleEdgeMode | mbtype:HoleEdgePair)</baseType>
+  <type>mbt:HoleEdgeMap</type>
+  <baseType>mbt:AxisXYZ(mbt:HoleEdgeMode | mbt:HoleEdgePair)</baseType>
   <is>A per-axis hole-edge mode map</is>
 
   <documentation>Closed AxisXYZ(HoleEdgeMode | HoleEdgePair) for Technic hole edge modes on
@@ -22,13 +22,13 @@
     NativeBlock.holeXYZEdgeMode.</documentation>
 
   <references>
-    <see type="mbtype:AxisXYZ" relation="Extends">
+    <see type="mbt:AxisXYZ" relation="Extends">
       Structural { x, y, z } map — HoleEdgeMap closes N/Z to HoleEdgeMode | HoleEdgePair.
     </see>
-    <see type="mbtype:HoleEdgeMode" relation="SeeAlso">
+    <see type="mbt:HoleEdgeMode" relation="SeeAlso">
       Scalar per-axis mode.
     </see>
-    <see type="mbtype:HoleEdgePair" relation="SeeAlso">
+    <see type="mbt:HoleEdgePair" relation="SeeAlso">
       Two-edge companion pair nested per axis.
     </see>
   </references>

@@ -10,11 +10,11 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>AxisXYZ</name>
-  <type>mbtype:AxisXYZ</type>
-  <baseType>mbtype:AxisXY(N)</baseType>
+  <type>mbt:AxisXYZ</type>
+  <baseType>mbt:AxisXY(N)</baseType>
   <is>A value triple along X, Y, and Z</is>
 
   <documentation>Struct ValueType for axis-keyed { x, y, z }. Extends AxisXY(N) and adds z.
@@ -35,19 +35,19 @@
   </properties>
 
   <references>
-    <see type="mbtype:AxisXY" relation="Extends">
+    <see type="mbt:AxisXY" relation="Extends">
       Two-axis parent — x, y inherited; z declared here.
     </see>
-    <see type="mbtype:MultiAxis" relation="SeeAlso">
+    <see type="mbt:MultiAxis" relation="SeeAlso">
       Abstract axis-map base — N.
     </see>
-    <see type="mbtype:SizeXYZ" relation="SeeAlso">
+    <see type="mbt:SizeXYZ" relation="SeeAlso">
       Size semantics on AxisXYZ — N = GridUnitXY, Z = GridUnitZ by default.
     </see>
-    <see type="mbtype:OffsetXYZ" relation="SeeAlso">
+    <see type="mbt:OffsetXYZ" relation="SeeAlso">
       Offset semantics on AxisXYZ — same grid-unit defaults as SizeXYZ.
     </see>
-    <see type="mbtype:RotationXYZ" relation="SeeAlso">
+    <see type="mbt:RotationXYZ" relation="SeeAlso">
       Rotation semantics — AxisXYZ with N (and Z via default) closed to Decimal(unit:Degree).
     </see>
   </references>

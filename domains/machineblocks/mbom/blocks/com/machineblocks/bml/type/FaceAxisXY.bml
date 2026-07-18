@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>FaceAxisXY</name>
-  <type>mbtype:FaceAxisXY</type>
-  <baseType>mbtype:MBEnum(Text)</baseType>
+  <type>mbt:FaceAxisXY</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>An XY face, axis, or both axes</is>
 
   <documentation>Enum ValueType for XY-directed faces (x- / x+ / y- / y+), single axes (x / y),

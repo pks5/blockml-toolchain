@@ -9,11 +9,11 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>WallGap</name>
-  <type>mbtype:WallGap</type>
+  <type>mbt:WallGap</type>
   <baseType>StructType</baseType>
   <is>A wall opening on a face or axis</is>
 
@@ -23,7 +23,7 @@
     WallGap[].</documentation>
 
   <properties>
-    <face type="mbtype:FaceAxisXY">
+    <face type="mbt:FaceAxisXY">
       <documentation>Wall side or axis where the gap applies (x- / x+ / y- / y+ / x / y / xy).</documentation>
     </face>
     <pos type="Decimal(mbunit:GridXY)">
@@ -38,7 +38,7 @@
     <see type="StructType" relation="Extends">
       Struct ValueType branch — face, pos, len.
     </see>
-    <see type="mbtype:FaceAxisXY" relation="SeeAlso">
+    <see type="mbt:FaceAxisXY" relation="SeeAlso">
       face selector — XY faces, axes, and XY.
     </see>
   </references>

@@ -10,10 +10,10 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>FaceMapXY</name>
-  <type>mbtype:FaceMapXY</type>
+  <type>mbt:FaceMapXY</type>
   <baseType>StructType</baseType>
   <is>A face-keyed value map on X and Y</is>
 
@@ -46,10 +46,10 @@
     <see type="StructType" relation="Extends">
       Struct ValueType branch — named face fields.
     </see>
-    <see type="mbtype:FaceMapXYZ" relation="SeeAlso">
+    <see type="mbt:FaceMapXYZ" relation="SeeAlso">
       Adds Z faces (generic Z, defaultType T) — extends this type.
     </see>
-    <see type="mbtype:Face" relation="SeeAlso">
+    <see type="mbt:Face" relation="SeeAlso">
       Face enum — XNeg / XPos / YNeg / YPos / ZNeg / ZPos.
     </see>
   </references>

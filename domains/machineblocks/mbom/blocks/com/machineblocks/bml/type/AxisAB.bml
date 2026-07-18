@@ -10,11 +10,11 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>AxisAB</name>
-  <type>mbtype:AxisAB</type>
-  <baseType>mbtype:MultiAxis(N)</baseType>
+  <type>mbt:AxisAB</type>
+  <baseType>mbt:MultiAxis(N)</baseType>
   <is>A value pair along A and B</is>
 
   <documentation>Struct ValueType for component-keyed { a, b }. Extends MultiAxis(N).
@@ -41,25 +41,25 @@
   </properties>
 
   <references>
-    <see type="mbtype:MultiAxis" relation="Extends">
+    <see type="mbt:MultiAxis" relation="Extends">
       Abstract axis-map base — N.
     </see>
-    <see type="mbtype:AxisXY" relation="SeeAlso">
+    <see type="mbt:AxisXY" relation="SeeAlso">
       Parallel ValueType-universal pair on X / Y.
     </see>
-    <see type="mbtype:AxisXYZ" relation="SeeAlso">
+    <see type="mbt:AxisXYZ" relation="SeeAlso">
       Parallel pattern — Z defaults to N.
     </see>
-    <see type="mbtype:OffsetAB" relation="SeeAlso">
+    <see type="mbt:OffsetAB" relation="SeeAlso">
       Offset semantics on AxisAB — N / B closed to Number.
     </see>
-    <see type="mbtype:RadiusAB" relation="SeeAlso">
+    <see type="mbt:RadiusAB" relation="SeeAlso">
       Radius semantics on AxisAB — N / B closed to Number, default Decimal.
     </see>
-    <see type="mbtype:SizeAB" relation="SeeAlso">
+    <see type="mbt:SizeAB" relation="SeeAlso">
       Size semantics on AxisAB — N / B closed to Number, default Decimal.
     </see>
-    <see type="mbtype:Align" relation="SeeAlso">
+    <see type="mbt:Align" relation="SeeAlso">
       Port.align expands as Align | AxisAB(Align); brick align uses AxisXYZ(Align).
     </see>
   </references>

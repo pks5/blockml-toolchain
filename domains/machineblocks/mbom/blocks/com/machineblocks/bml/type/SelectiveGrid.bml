@@ -11,18 +11,18 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>SelectiveGrid</name>
-  <type>mbtype:SelectiveGrid</type>
+  <type>mbt:SelectiveGrid</type>
   <baseType>StructType</baseType>
   <is>A grid of values with rectangular selectors</is>
 
   <documentation>Struct ValueType for a plate-grid of cell values. baseValue is the default for
     every cell; selectors overlays rectangular ranges (from/to in GridUnitXY) with an override
     value. Generic T is the cell value type — e.g. SelectiveGrid(Boolean) or
-    SelectiveGrid(Boolean | mbtype:HoleType). Sub-Block Selector is a Java-style static nested
+    SelectiveGrid(Boolean | mbt:HoleType). Sub-Block Selector is a Java-style static nested
     type with its own T — forward via selectors type="Selector(T)[]".</documentation>
 
   <genericTypes>
@@ -56,10 +56,10 @@
       </genericTypes>
 
       <properties>
-        <from type="mbtype:AxisXY(Integer(mbunit:GridUnitXY))">
+        <from type="mbt:AxisXY(Integer(mbunit:GridUnitXY))">
           <documentation>Inclusive start corner of the selection (x, y) in GridUnitXY.</documentation>
         </from>
-        <to type="mbtype:AxisXY(Integer(mbunit:GridUnitXY))">
+        <to type="mbt:AxisXY(Integer(mbunit:GridUnitXY))">
           <documentation>Inclusive end corner of the selection (x, y) in GridUnitXY.</documentation>
         </to>
         <value type="T">
@@ -73,7 +73,7 @@
     <see type="StructType" relation="Extends">
       Struct ValueType branch — baseValue + selectors.
     </see>
-    <see type="mbtype:AxisXY" relation="SeeAlso">
+    <see type="mbt:AxisXY" relation="SeeAlso">
       from / to range corners.
     </see>
     <see type="mbunit:GridUnitXY" relation="SeeAlso">

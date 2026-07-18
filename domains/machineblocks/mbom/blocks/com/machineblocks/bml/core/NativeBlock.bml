@@ -17,7 +17,7 @@
   xmlns:unit="org.blockml.bml.unit"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>NativeBlock</name>
@@ -49,7 +49,7 @@
 
   <!-- Native MB properties — all mb_block() parameters from 09_api_parameters.yml (v3.0.5) -->
   <properties>
-    <align type="mbtype:Align | mbtype:AxisXYZ(mbtype:Align)">
+    <align type="mbt:Align | mbt:AxisXYZ(mbt:Align)">
       <documentation>Alignment relative to the origin, per brick axis.
         Scalar Align broadcasts to X/Y/Z; AxisXYZ(Align) sets each axis.
         "start" = toward x-/y-/z-, "end" = toward x+/y+/z+.
@@ -65,7 +65,7 @@
       <scad:value>start</scad:value>
     </align>
 
-    <alignChildren type="mbtype:Align | mbtype:AxisXYZ(mbtype:Align)">
+    <alignChildren type="mbt:Align | mbt:AxisXYZ(mbt:Align)">
       <documentation>Defines the origin inside a parent brick for child positioning.
         Same convention as align (Align | AxisXYZ(Align) in brick space).
         Children use this as their reference point.
@@ -86,7 +86,7 @@
       <scad:value>true</scad:value>
     </base>
 
-    <baseAdjustment type="mbtype:FaceMapXYZ(Decimal(unit:Millimeter))">
+    <baseAdjustment type="mbt:FaceMapXYZ(Decimal(unit:Millimeter))">
       <documentation>Per-side calibration adjustment in mm. Extends or reduces specific sides
         of a block. Never scales with the scale parameter.
 
@@ -173,7 +173,7 @@
       <scad:value>#EAC645</scad:value>
     </baseColor>
 
-    <baseCrop type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
+    <baseCrop type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Hard cut or extension per side (0-3 only, no Z-axis crop).
         Positive = cut geometry, negative = extend geometry.
         The cut is applied brutally — without regard to grid compatibility,
@@ -200,7 +200,7 @@
       <scad:value>5</scad:value>
     </baseCutoutMaxDepth>
 
-    <baseCutoutType type="mbtype:BaseCutout">
+    <baseCutoutType type="mbt:BaseCutout">
       <documentation>Type of underside opening.
         standard: Classic LEGO underside with tubes/pins.
         studs: Alternative with only stud holes, no tube structure.
@@ -213,7 +213,7 @@
       <scad:value>standard</scad:value>
     </baseCutoutType>
 
-    <baseRoundingRadius type="Decimal | mbtype:BaseRoundingMap">
+    <baseRoundingRadius type="Decimal | mbt:BaseRoundingMap">
       <documentation>Rounding radius of the block corners. Unlike recessRoundingRadius /
         tongueRoundingRadius (Z-plane / horizontal corners only via PlaneRoundingMap), this
         parameter defines radii along all three brick axes via BaseRoundingMap
@@ -226,7 +226,7 @@
       <scad:value>0.0</scad:value>
     </baseRoundingRadius>
 
-    <baseWallGaps type="mbtype:WallGap[]">
+    <baseWallGaps type="mbt:WallGap[]">
       <documentation>Gaps in the underside wall (baseCutoutType=standard).
         Used to restore grid compatibility in composite blocks where blocks cross.
         Replaces baseWallGapsX and baseWallGapsY from V2.
@@ -238,7 +238,7 @@
       <scad:value>[]</scad:value>
     </baseWallGaps>
 
-    <baseWallThickness type="mbtype:Auto | Decimal(mbunit:MBU)">
+    <baseWallThickness type="mbt:Auto | Decimal(mbunit:MBU)">
       <documentation>Wall thickness of the underside opening (baseCutoutType=standard).
         Automatically calculated. Usually does not need adjustment.
       </documentation>
@@ -254,7 +254,7 @@
       <scad:value>-0.1</scad:value>
     </baseWallThicknessAdjustment>
 
-    <bevel type="mbtype:CornerMap(mbtype:AxisXY(Decimal(mbunit:GridUnitXY)))">
+    <bevel type="mbt:CornerMap(mbt:AxisXY(Decimal(mbunit:GridUnitXY)))">
       <documentation>Creates wedges by shifting corners on the horizontal (Z-face) plane
         only — not a multi-axis map like baseRoundingRadius. Each of the four local corners
         (sw / nw / ne / se) gets an XY displacement in GridUnitXY. AxisXY (not AxisAB) is
@@ -288,7 +288,7 @@
       <scad:value>0.75</scad:value>
     </connectorDepth>
 
-    <connectorLength type="mbtype:Auto | Decimal(mbunit:MBU)">
+    <connectorLength type="mbt:Auto | Decimal(mbunit:MBU)">
       <documentation>Length of the connector run on the face. At "auto" equals the
         available space (brick height for x/y faces, width/depth for z faces).
       </documentation>
@@ -321,7 +321,7 @@
       <scad:value>2.25</scad:value>
     </connectorWidth>
 
-    <connectors type="Boolean.False | mbtype:Connector[]">
+    <connectors type="Boolean.False | mbt:Connector[]">
       <documentation>Side connection system using triangular wedges. Alternative to tongue/groove.
         Enables side-by-side (0°) and angled (90°) connections.
         Padding skips connectors at start/end — important when connecting
@@ -356,7 +356,7 @@
       <since>3.0.0</since>
     </debugShowOnly>
 
-    <direction type="mbtype:Direction">
+    <direction type="mbt:Direction">
       <documentation>Semantic grid-aligned rotation. Applied before align.
         west=0°, north=90°, east=180°, south=270° (clockwise).
         All internal values (size, side numbering, etc.) always refer to
@@ -367,7 +367,7 @@
       <scad:value>west</scad:value>
     </direction>
 
-    <grille type="mbtype:Grille">
+    <grille type="mbt:Grille">
       <documentation>Whether the top plate is rendered as a grille with regular openings.
         "x" or "y" defines the direction of the grille bars.
       </documentation>
@@ -393,7 +393,7 @@
       <scad:value>false</scad:value>
     </grilleInverted>
 
-    <holeX type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
+    <holeX type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
       <documentation>Whether LEGO Technic holes are drawn along the X-axis.
         Multiple rows possible depending on block height.
       </documentation>
@@ -401,7 +401,7 @@
       <scad:value>false</scad:value>
     </holeX>
     
-    <holeY type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
+    <holeY type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
       <documentation>Whether LEGO Technic holes are drawn along the Y-axis.
         Multiple rows possible depending on block height.
         Type, shift, diameter, inset, and grid parameters are shared with
@@ -411,7 +411,7 @@
       <scad:value>false</scad:value>
     </holeY>
 
-    <holeZ type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:HoleType)">
+    <holeZ type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
       <documentation>Whether LEGO Technic holes are drawn along the Z-axis.
         Type, shift, diameter, and inset parameters are shared with holeX
         and holeY via the holeXYZ* unified parameters.
@@ -421,24 +421,24 @@
       <scad:value>false</scad:value>
     </holeZ>
 
-    <holeXYGridOffsetZ type="mbtype:AxisXY(Decimal(mbunit:MBU))">
-      <documentation>Distance from the block bottom to the center of the first row
-        of Technic holes in X- and Y-direction.
-        Each parameter can independently be a single value or a 2-element array.
+    <holeXYGridOffsetZ type="mbt:OffsetXY(Decimal(mbunit:MBU))">
+      <documentation>Offset from the block bottom to the center of the first row
+        of Technic holes in X- and Y-direction (OffsetXY in MBU).
+        Each component can independently be a single value or a 2-element array.
       </documentation>
       <since>3.0.0</since>
       <value>3.625</value>
       <scad:value>3.625</scad:value>
     </holeXYGridOffsetZ>
 
-    <holeXYGridOffsetZAdjustment type="mbtype:AxisXY(Decimal(unit:Millimeter))">
+    <holeXYGridOffsetZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYGridOffsetZ.</documentation>
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
     </holeXYGridOffsetZAdjustment>
 
-    <holeXYGridSizeZ type="mbtype:AxisXY(Decimal(mbunit:MBU))">
+    <holeXYGridSizeZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
       <documentation>Center-to-center distance between two rows of Technic holes
         in X- and Y-direction.
       </documentation>
@@ -447,14 +447,14 @@
       <scad:value>6</scad:value>
     </holeXYGridSizeZ>
 
-    <holeXYGridSizeZAdjustment type="mbtype:AxisXY(Decimal(unit:Millimeter))">
+    <holeXYGridSizeZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYGridSizeZ.</documentation>
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
     </holeXYGridSizeZAdjustment>
 
-    <holeXYMinTopMargin type="mbtype:AxisXY(Decimal(mbunit:MBU))">
+    <holeXYMinTopMargin type="mbt:AxisXY(Decimal(mbunit:MBU))">
       <documentation>Minimum distance between the block top and the topmost row of
         Technic holes in X- and Y-direction. Determines whether a row is drawn.
       </documentation>
@@ -463,7 +463,7 @@
       <scad:value>0.5</scad:value>
     </holeXYMinTopMargin>
 
-    <holeXYZAxleThickness type="mbtype:AxisXYZ(Decimal(mbunit:MBU))">
+    <holeXYZAxleThickness type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Thickness of one strut of the cross axle for holeXYZType="axle".
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -472,7 +472,7 @@
       <scad:value>1</scad:value>
     </holeXYZAxleThickness>
 
-    <holeXYZAxleThicknessAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
+    <holeXYZAxleThicknessAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYZAxleThickness, in mm.
         Follows the 1/2/3-value array rule.
         Analog to other Adjustment parameters for printer compensation.
@@ -482,7 +482,7 @@
       <scad:value>0.0</scad:value>
     </holeXYZAxleThicknessAdjustment>
 
-    <holeXYZDiameter type="mbtype:Auto | mbtype:AxisXYZ(Decimal(mbunit:MBU))">
+    <holeXYZDiameter type="mbt:Auto | mbt:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Diameter of Technic holes per axis. Automatically calculated.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -491,7 +491,7 @@
       <scad:value>auto</scad:value>
     </holeXYZDiameter>
 
-    <holeXYZDiameterAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
+    <holeXYZDiameterAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYZDiameter per axis.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -500,7 +500,7 @@
       <scad:value>0.3</scad:value>
     </holeXYZDiameterAdjustment>
 
-    <holeXYZEdgeMode type="mbtype:HoleEdgeMode | mbtype:HoleEdgePair | mbtype:HoleEdgeMap">
+    <holeXYZEdgeMode type="mbt:HoleEdgeMode | mbt:HoleEdgePair | mbt:HoleEdgeMap">
       <documentation>Controls whether partial (half) Technic holes are drawn at the edges
         of the block for X, Y, and Z direction holes.
 
@@ -529,7 +529,7 @@
       <scad:value>none</scad:value>
     </holeXYZEdgeMode>
 
-    <holeXYZInsetDepth type="mbtype:AxisXYZ(Decimal(mbunit:MBU))">
+    <holeXYZInsetDepth type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Depth of the inset ring around Technic holes, per axis.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -538,7 +538,7 @@
       <scad:value>0.5</scad:value>
     </holeXYZInsetDepth>
 
-    <holeXYZInsetDepthAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
+    <holeXYZInsetDepthAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYZInsetDepth per axis.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -547,7 +547,7 @@
       <scad:value>0.0</scad:value>
     </holeXYZInsetDepthAdjustment>
 
-    <holeXYZInsetThickness type="mbtype:AxisXYZ(Decimal(mbunit:MBU))">
+    <holeXYZInsetThickness type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Width of the inset ring around Technic holes, per axis.
         In V2, insets existed only for x and y holes. Z holes now also
         support insets.
@@ -558,7 +558,7 @@
       <scad:value>0.375</scad:value>
     </holeXYZInsetThickness>
 
-    <holeXYZInsetThicknessAdjustment type="mbtype:AxisXYZ(Decimal(unit:Millimeter))">
+    <holeXYZInsetThicknessAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYZInsetThickness per axis.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -567,7 +567,7 @@
       <scad:value>0.0</scad:value>
     </holeXYZInsetThicknessAdjustment>
 
-    <holeXYZShift type="Boolean | mbtype:AxisXYZ(Boolean)">
+    <holeXYZShift type="Boolean | mbt:AxisXYZ(Boolean)">
       <documentation>Whether Technic holes per axis are shifted by 1/2 stud.
         true: holes align with studs. false: holes sit between two studs.
         Follows the 1/2/3-value array rule.
@@ -577,7 +577,7 @@
       <scad:value>false</scad:value>
     </holeXYZShift>
 
-    <holeXYZType type="mbtype:AxisXYZ(mbtype:HoleType)">
+    <holeXYZType type="mbt:AxisXYZ(mbt:HoleType)">
       <documentation>Type of Technic holes per axis.
         pin: round holes. axle: cross-shaped holes.
         Follows the 1/2/3-value array rule.
@@ -616,7 +616,7 @@
       <since>3.0.0</since>
     </id>
 
-    <offset type="mbtype:OffsetXYZ">
+    <offset type="mbt:OffsetXYZ">
       <documentation>Final displacement of the brick. Applied last in the transformation
         chain. Same unit as size (grid units / multiples of a 1x1 plate).
         Origin depends on whether the brick is global or a child.
@@ -625,7 +625,7 @@
       <scad:value>[0, 0, 0]</scad:value>
     </offset>
 
-    <pcb type="Boolean.False | mbtype:PcbMountingType">
+    <pcb type="Boolean.False | mbt:PcbMountingType">
       <documentation>PCB mounting mode. Combines the former pcb (bool) and pcbMountingType into one.
         false or "none": no PCB mounting features.
         "clips": frame for clipping in the PCB.
@@ -640,7 +640,7 @@
       <scad:value>false</scad:value>
     </pcb>
 
-    <pcbDimensions type="mbtype:SizeXYZ(Decimal(unit:Millimeter), Decimal(unit:Millimeter))">
+    <pcbDimensions type="mbt:SizeXYZ(Decimal(unit:Millimeter), Decimal(unit:Millimeter))">
       <documentation>Dimensions of the PCB in mm. Refers to the board size,
         especially relevant for pcb="clips".
       </documentation>
@@ -648,7 +648,7 @@
       <scad:value>[20, 30, 3]</scad:value>
     </pcbDimensions>
 
-    <pcbOffset type="mbtype:OffsetXY">
+    <pcbOffset type="mbt:OffsetXY">
       <documentation>Offset of the entire PCB assembly (board and related features) from the
         brick center — not individual socket positions. For per-socket centers see pcbSockets.
       </documentation>
@@ -677,7 +677,7 @@
       <scad:value>2.2</scad:value>
     </pcbSocketHoleDiameter>
 
-    <pcbSockets type="mbtype:PcbSocket[]">
+    <pcbSockets type="mbt:PcbSocket[]">
       <documentation>List of individual screw-socket positions. Each PcbSocket { x, y } is one
         socket center from the brick center in mm (SCAD [x, y]). Distinct from pcbOffset, which
         shifts the entire PCB assembly as a whole.
@@ -687,7 +687,7 @@
       <scad:value>[]</scad:value>
     </pcbSockets>
 
-    <pillarGapAutoConfig type="mbtype:PillarGapAutoConfig">
+    <pillarGapAutoConfig type="mbt:PillarGapAutoConfig">
       <documentation>Configures how pillars are placed when pillars = "auto". Used to
         avoid a full pillar grid on large plates, which would otherwise sit
         too tightly on other bricks — only the corners and a middle cross
@@ -729,13 +729,13 @@
       <scad:value>0.53125</scad:value>
     </pillarOriginalWallThickness>
 
-    <pillars type="Boolean | mbtype:SelectiveGrid(Boolean)">
+    <pillars type="Boolean | mbt:SelectiveGrid(Boolean)">
       <documentation>Whether tubes/pins are drawn on the underside (baseCutoutType=standard).</documentation>
       <value>true</value>
       <scad:value>true</scad:value>
     </pillars>
 
-    <pinDiameter type="mbtype:Auto | Decimal(mbunit:MBU)">
+    <pinDiameter type="mbt:Auto | Decimal(mbunit:MBU)">
       <documentation>Diameter of pins (small tubes) for bricks with size.x or size.y = 1.
         Automatically calculated.
       </documentation>
@@ -749,7 +749,7 @@
       <scad:value>0.0</scad:value>
     </pinDiameterAdjustment>
 
-    <ports type="Boolean.False | mbtype:Port[]">
+    <ports type="Boolean.False | mbt:Port[]">
       <documentation>Cutouts on a face for connectors such as USB, screw terminals, etc.
         Each port is placed on a face using anchor + offset, then filled with
         one or more shapes (rect/circle) that are subtracted from the body.
@@ -791,7 +791,7 @@
       <scad:value>0.4</scad:value>
     </printerNozzleDiameter>
 
-    <quality type="mbtype:QualityPreset">
+    <quality type="mbt:QualityPreset">
       <documentation>User-level quality preset. Controls overall rendering quality
         independent of renderer implementation.
         "preview"  — fast, reduced quality for interactive preview
@@ -812,7 +812,7 @@
       <scad:value>false</scad:value>
     </recess>
 
-    <recessAdjustment type="mbtype:Auto | mbtype:FaceMapXYZ(Decimal(unit:Millimeter))">
+    <recessAdjustment type="mbt:Auto | mbt:FaceMapXYZ(Decimal(unit:Millimeter))">
       <documentation>Per-side calibration adjustment for the inner recess walls and floor.
         Applied to the interior surfaces of the recess (the inner box).
 
@@ -832,7 +832,7 @@
       <scad:value>auto</scad:value>
     </recessAdjustment>
 
-    <recessDepth type="mbtype:Auto | Decimal(mbunit:GridUnitZ)">
+    <recessDepth type="mbt:Auto | Decimal(mbunit:GridUnitZ)">
       <documentation>Depth of the recess cavity, expressed as multiples of one plate (unitGrid[1] = 2 mbu).
         At "auto" depth is maximized.
         When set to an absolute value, the baseCutout (standard) goes up to
@@ -846,7 +846,7 @@
       <scad:value>auto</scad:value>
     </recessDepth>
 
-    <recessRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:PlaneRoundingMap">
+    <recessRoundingRadius type="mbt:Auto | Decimal(mbunit:GridUnitXY) | mbt:PlaneRoundingMap">
       <documentation>Rounding radius of the recess cavity corners on the horizontal (Z-face)
         plane only — not a full BaseRoundingMap like baseRoundingRadius. Expanded form is
         PlaneRoundingMap (CornerMap with GridUnitXY). Auto derives from the block's
@@ -856,7 +856,7 @@
       <scad:value>auto</scad:value>
     </recessRoundingRadius>
 
-    <recessStudPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
+    <recessStudPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Padding from the recess wall inward. Determines whether outer studs
         in the recess are hidden. Studs whose center is closer to the recess
         wall than this padding value are not drawn.
@@ -874,7 +874,7 @@
       <scad:value>false</scad:value>
     </recessStudShift>
 
-    <recessStudType type="mbtype:StudType">
+    <recessStudType type="mbt:StudType">
       <documentation>Type of studs on the recess floor.
         solid: massive studs. hollow: studs with a hole in the center.
       </documentation>
@@ -900,7 +900,7 @@
       <scad:value>false</scad:value>
     </recessWallGapStuds>
 
-    <recessWallGaps type="mbtype:RecessWallGap[]">
+    <recessWallGaps type="mbt:RecessWallGap[]">
       <documentation>Openings in recess walls. Each entry specifies a side and optional
         left/right offsets to create partial or full wall openings.
         Also creates matching openings in tongue and groove.
@@ -922,7 +922,7 @@
       <scad:value>true</scad:value>
     </recessWallStuds>
 
-    <recessWallThickness type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
+    <recessWallThickness type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Wall thickness of the recess cavity (box wall thickness).</documentation>
       <value>0.333</value>
       <scad:value>0.333</scad:value>
@@ -962,7 +962,7 @@
       <scad:value>true</scad:value>
     </render>
 
-    <rotation type="mbtype:RotationXYZ">
+    <rotation type="mbt:RotationXYZ">
       <documentation>Free geometric rotation applied after align. Not grid-safe —
         can break alignment and connectivity. The pivot is the relative
         zero point which varies depending on align. Children are rotated
@@ -972,7 +972,7 @@
       <scad:value>[0, 0, 0]</scad:value>
     </rotation>
 
-    <rotationOffset type="mbtype:OffsetXYZ">
+    <rotationOffset type="mbt:OffsetXYZ">
       <documentation>Shifts the rotation pivot before rotation is applied.</documentation>
       <value>[0, 0, 0]</value>
       <scad:value>[0, 0, 0]</scad:value>
@@ -1018,7 +1018,7 @@
       <scad:value>1.0</scad:value>
     </scadPreviewQuality>
 
-    <scadQualityClassFactors type="mbtype:ScadQualityClassFactors">
+    <scadQualityClassFactors type="mbt:ScadQualityClassFactors">
       <documentation>Per quality-class segment length multipliers.
         Higher values reduce quality and improve render performance.
       </documentation>
@@ -1032,7 +1032,7 @@
       <scad:value>[1.00, 1.35, 2.25]</scad:value>
     </scadQualityClassFactors>
 
-    <scadQualityClassMinSegments type="mbtype:ScadQualityClassMinSegments">
+    <scadQualityClassMinSegments type="mbt:ScadQualityClassMinSegments">
       <documentation>Minimum full-circle segment count per quality class.
         Prevents small radii from becoming overly coarse.
       </documentation>
@@ -1046,7 +1046,7 @@
       <scad:value>[16, 12, 8]</scad:value>
     </scadQualityClassMinSegments>
 
-    <scadQualityProfile type="mbtype:ScadQualityProfile">
+    <scadQualityProfile type="mbt:ScadQualityProfile">
       <documentation>OpenSCAD quality profile mapping. Maps each quality preset to
         segment length (mm) and maximum segment count.
         Smaller segmentLengthMm increases quality.
@@ -1138,7 +1138,7 @@
       <scad:value>0.8</scad:value>
     </screwHoleZHelperThickness>
 
-    <screwHoles type="mbtype:ScrewHole[]">
+    <screwHoles type="mbt:ScrewHole[]">
       <documentation>Mounting screw holes on any face of the brick. Each entry defines one hole
         with a face, a grid position, and optional per-hole size overrides.
         Global defaults for diameter, depth, and inset are set via the
@@ -1150,7 +1150,7 @@
       <scad:value>[]</scad:value>
     </screwHoles>
 
-    <size type="mbtype:SizeXYZ">
+    <size type="mbt:SizeXYZ">
       <documentation>Size of the bounding box in grid units. Defines the brick body;
         studs are excluded from the bounding box. For simple bricks the
         bounding box matches the body exactly.
@@ -1164,7 +1164,7 @@
       <scad:value>[1, 1, 1]</scad:value>
     </size>
 
-    <sizeAdjustment type="mbtype:FaceMapXYZ(Decimal(unit:Millimeter))">
+    <sizeAdjustment type="mbt:FaceMapXYZ(Decimal(unit:Millimeter))">
       <documentation>Global calibration adjustment for block size, applied uniformly.
         sideXYAdj is applied to all four horizontal sides (x-, x+, y-, y+).
         heightAdj is applied to the top face (z+) only.
@@ -1186,7 +1186,7 @@
       <scad:value>[-0.1, 0]</scad:value>
     </sizeAdjustment>
 
-    <sizeMod type="mbtype:FaceMapXYZ(Decimal(mbunit:GridUnitXY))">
+    <sizeMod type="mbt:FaceMapXYZ(Decimal(mbunit:GridUnitXY))">
       <documentation>Semantic size modification per side, in grid units. Adjusts the
         brick geometry while keeping it structurally intact (walls, studs,
         connectors remain consistent). Unlike crop, sizeMod does not brutally
@@ -1210,7 +1210,7 @@
       <scad:value>[0, 0, 0, 0, 0, 0]</scad:value>
     </sizeMod>
 
-    <slope type="Boolean.False | mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
+    <slope type="Boolean.False | mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Defines slopes per side (0-3).
         Positive values: slope on top surface (z+), starting at slopeBaseHeightBottom
         and going the specified number of plates toward the center upward.
@@ -1453,7 +1453,7 @@
       <scad:value>../../pattern/bolt-solid-full.svg</scad:value>
     </studIcon>
 
-    <studIconColor type="mbtype:Inherit | Color">
+    <studIconColor type="mbt:Inherit | Color">
       <documentation>Color of the stud icon. "inherit" uses baseColor.
         Only visually relevant when studIconDepth &gt; 0.
       </documentation>
@@ -1469,7 +1469,7 @@
       <scad:value>-0.2</scad:value>
     </studIconDepth>
 
-    <studIconDimensions type="mbtype:AxisXY(Decimal(unit:Millimeter))">
+    <studIconDimensions type="mbt:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Dimensions of the stud icon SVG in mm (from the SVG file).
         Default values match all standard icons in the /patterns directory.
       </documentation>
@@ -1491,7 +1491,7 @@
       <scad:value>0.3</scad:value>
     </studMaxOverhang>
 
-    <studPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
+    <studPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Padding from sides 0-3 inward. Shifts the outer wall for the decision
         whether studs are drawn, allowing outer studs to be hidden.
       </documentation>
@@ -1514,13 +1514,13 @@
       <scad:value>false</scad:value>
     </studShift>
 
-    <studType type="mbtype:StudType">
+    <studType type="mbt:StudType">
       <documentation>Type of studs. solid: massive. hollow: with a hole in the center.</documentation>
       <value>Solid</value>
       <scad:value>solid</scad:value>
     </studType>
 
-    <studs type="Boolean | mbtype:SelectiveGrid(Boolean | mbtype:StudType)">
+    <studs type="Boolean | mbt:SelectiveGrid(Boolean | mbt:StudType)">
       <documentation>Whether studs are drawn. Selective array allows per-region control
         including stud type override.
       </documentation>
@@ -1536,7 +1536,7 @@
       <scad:value>false</scad:value>
     </surfacePattern>
 
-    <surfacePatternColor type="mbtype:Inherit | Color">
+    <surfacePatternColor type="mbt:Inherit | Color">
       <documentation>Color of the surface pattern. "inherit" uses baseColor.
         Only visually relevant when surfacePatternDepth &gt; 0.
       </documentation>
@@ -1550,21 +1550,22 @@
       <scad:value>-0.0625</scad:value>
     </surfacePatternDepth>
 
-    <surfacePatternDimensions type="mbtype:AxisXY(Decimal(unit:Millimeter))">
+    <surfacePatternDimensions type="mbt:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Dimensions of the surface pattern SVG in mm (from the SVG file).</documentation>
       <value>{x: 451.556, y: 451.556}</value>
       <scad:value>[451.556, 451.556]</scad:value>
     </surfacePatternDimensions>
 
-    <surfacePatternOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
-      <documentation>Offset of the surface pattern on the horizontal (Z-face) plane only.
-        AxisXY (not AxisAB) is intentional: the pattern lies on world XY / GridUnitXY.
+    <surfacePatternOffset type="mbt:OffsetXY">
+      <documentation>Offset of the surface pattern on the horizontal (Z-face) plane only
+        (OffsetXY, default GridUnitXY). World XY — not AxisAB — because the pattern
+        lies on the brick Z-face / GridUnitXY plane.
       </documentation>
       <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
     </surfacePatternOffset>
 
-    <surfacePatternPadding type="mbtype:FaceMapXY(Decimal(mbunit:GridUnitXY))">
+    <surfacePatternPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Distance from the edges of the surface pattern area, forming a smooth
         (pattern-free) border around the structure. At 0, the pattern extends
         to the edges. Each edge can be configured individually via the
@@ -1601,20 +1602,20 @@
       <scad:value>0.4</scad:value>
     </svgDepth>
 
-    <svgDimensions type="mbtype:AxisXY(Decimal(unit:Millimeter))">
+    <svgDimensions type="mbt:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Dimensions of the SVG in mm (from the SVG file).</documentation>
       <value>{x: 100, y: 100}</value>
       <scad:value>[100, 100]</scad:value>
     </svgDimensions>
 
-    <svgFace type="mbtype:Face">
+    <svgFace type="mbt:Face">
       <documentation>Side on which the SVG is drawn (0-5 or string "x-" etc.).</documentation>
       <since>3.0.0</since>
       <value>ZPos</value>
       <scad:value>z+</scad:value>
     </svgFace>
 
-    <svgOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
+    <svgOffset type="mbt:AxisXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Offset of the SVG from its default position.</documentation>
       <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
@@ -1634,7 +1635,7 @@
       <scad:value>false</scad:value>
     </text>
 
-    <textAlign type="mbtype:Align">
+    <textAlign type="mbt:Align">
       <documentation>Alignment of the text on the brick surface, using the same
         format as align and alignChildren.
       </documentation>
@@ -1655,7 +1656,7 @@
       <scad:value>-0.25</scad:value>
     </textDepth>
 
-    <textFace type="mbtype:Face">
+    <textFace type="mbt:Face">
       <documentation>Side of the brick on which text is displayed (0-5 or string "x-" etc.).</documentation>
       <since>3.0.0</since>
       <value>XNeg</value>
@@ -1668,7 +1669,7 @@
       <scad:value>Liberation Sans</scad:value>
     </textFont>
 
-    <textOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
+    <textOffset type="mbt:AxisXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Offset of the text from its normal position.</documentation>
       <value>[0, 0]</value>
       <scad:value>[0, 0]</scad:value>
@@ -1776,7 +1777,7 @@
       <scad:value>1</scad:value>
     </tongueOffset>
 
-    <tongueRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:PlaneRoundingMap">
+    <tongueRoundingRadius type="mbt:Auto | Decimal(mbunit:GridUnitXY) | mbt:PlaneRoundingMap">
       <documentation>Rounding radius of the tongue corners on the horizontal (Z-face) plane
         only — not a full BaseRoundingMap like baseRoundingRadius. Expanded form is
         PlaneRoundingMap (CornerMap with GridUnitXY). Auto typically derives from the block's
@@ -1831,7 +1832,7 @@
       <scad:value>auto</scad:value>
     </topPlateHelperHeight>
 
-    <topPlateHelperThickness type="mbtype:Auto | Decimal(unit:Millimeter)">
+    <topPlateHelperThickness type="mbt:Auto | Decimal(unit:Millimeter)">
       <documentation>Thickness of the top plate helpers in X/Y direction.
         "auto" uses 0.5 * printerNozzleDiameter (minimum 0.1 mm).
       </documentation>
@@ -1850,7 +1851,7 @@
       <scad:value>true</scad:value>
     </topPlateHelpers>
 
-    <tubeDiameter type="mbtype:Auto | Decimal(mbunit:MBU)">
+    <tubeDiameter type="mbt:Auto | Decimal(mbunit:MBU)">
       <documentation>Diameter of outer tubes for LEGO Technic holes.
         Automatically calculated per axis.
       </documentation>
@@ -1867,7 +1868,7 @@
     </tubeDiameterAdjustment>
 
     <!-- TODO: use XYZ in scad -->
-    <unitGridToMbu type="mbtype:SizeXYZ(Integer)">
+    <unitGridToMbu type="mbt:SizeXYZ(Integer)">
       <documentation>Grid size in mbu, representing a 1x1 plate.
         X and Y share the first value, Z uses the second.
         A 1x1 plate = 5×5×2 mbu = 8×8×3.2 mm at default settings.

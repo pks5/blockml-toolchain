@@ -8,11 +8,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>HoleEdgePair</name>
-  <type>mbtype:HoleEdgePair</type>
-  <baseType>mbtype:AxisAB(mbtype:HoleEdgeMode)</baseType>
+  <type>mbt:HoleEdgePair</type>
+  <baseType>mbt:AxisAB(mbt:HoleEdgeMode)</baseType>
   <is>A hole-edge mode pair on two companion edges</is>
 
   <documentation>Closed AxisAB(HoleEdgeMode) for one hole-axis entry's inner two companion
@@ -21,13 +21,13 @@
     Used inside HoleEdgeMap and as a top-level alternative on NativeBlock.holeXYZEdgeMode.</documentation>
 
   <references>
-    <see type="mbtype:AxisAB" relation="Extends">
+    <see type="mbt:AxisAB" relation="Extends">
       Structural { a, b } map — HoleEdgePair closes N/B to HoleEdgeMode.
     </see>
-    <see type="mbtype:HoleEdgeMode" relation="SeeAlso">
+    <see type="mbt:HoleEdgeMode" relation="SeeAlso">
       Per-edge mode enum.
     </see>
-    <see type="mbtype:HoleEdgeMap" relation="SeeAlso">
+    <see type="mbt:HoleEdgeMap" relation="SeeAlso">
       Per hole-axis (X/Y/Z) map that may nest HoleEdgePair.
     </see>
   </references>

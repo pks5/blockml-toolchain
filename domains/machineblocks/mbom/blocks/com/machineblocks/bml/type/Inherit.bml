@@ -9,10 +9,10 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Inherit</name>
-  <type>mbtype:Inherit</type>
+  <type>mbt:Inherit</type>
   <baseType>Constant(Text)</baseType>
   <is>The literal Inherit sentinel</is>
 
@@ -25,10 +25,10 @@
     <see type="Constant" relation="Extends">
       Constant(Text) with value fixed to "Inherit".
     </see>
-    <see type="mbtype:Auto" relation="SeeAlso">
+    <see type="mbt:Auto" relation="SeeAlso">
       Parallel Auto sentinel Constant.
     </see>
-    <see type="mbtype:None" relation="SeeAlso">
+    <see type="mbt:None" relation="SeeAlso">
       Parallel None sentinel Constant.
     </see>
   </references>

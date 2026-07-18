@@ -9,10 +9,10 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Connector</name>
-  <type>mbtype:Connector</type>
+  <type>mbt:Connector</type>
   <baseType>StructType</baseType>
   <is>A side connector on a directed face</is>
 
@@ -22,16 +22,16 @@
     along the face — important when joining bricks of different sizes.</documentation>
 
   <properties>
-    <face type="mbtype:Face">
+    <face type="mbt:Face">
       <documentation>Directed face where the connector is placed (x- / x+ / y- / y+ / z- / z+).</documentation>
     </face>
-    <axis type="mbtype:Axis">
+    <axis type="mbt:Axis">
       <documentation>Axis along which the connector wedge is oriented (x / y / z).</documentation>
     </axis>
-    <gender type="mbtype:Gender">
+    <gender type="mbt:Gender">
       <documentation>Mating gender — male wedge or female recess.</documentation>
     </gender>
-    <align type="mbtype:Align">
+    <align type="mbt:Align">
       <documentation>Alignment of the connector along the face (start / center / end).</documentation>
     </align>
     <padStart type="Integer">
@@ -46,16 +46,16 @@
     <see type="StructType" relation="Extends">
       Struct ValueType branch — face, axis, gender, align, padStart, padEnd.
     </see>
-    <see type="mbtype:Face" relation="SeeAlso">
+    <see type="mbt:Face" relation="SeeAlso">
       face selector — six directed brick faces.
     </see>
-    <see type="mbtype:Axis" relation="SeeAlso">
+    <see type="mbt:Axis" relation="SeeAlso">
       axis selector — X / Y / Z.
     </see>
-    <see type="mbtype:Gender" relation="SeeAlso">
+    <see type="mbt:Gender" relation="SeeAlso">
       Mating gender — Male / Female.
     </see>
-    <see type="mbtype:Align" relation="SeeAlso">
+    <see type="mbt:Align" relation="SeeAlso">
       Alignment along the face — Start / Center / End.
     </see>
   </references>

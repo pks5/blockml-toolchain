@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>PortShapeType</name>
-  <type>mbtype:PortShapeType</type>
-  <baseType>mbtype:MBEnum(Text)</baseType>
+  <type>mbt:PortShapeType</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>A port cutout shape kind</is>
 
   <documentation>Enum ValueType for port shape kinds — rect / circle. Extends MBEnum(Text).

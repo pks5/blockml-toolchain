@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Face</name>
-  <type>mbtype:Face</type>
-  <baseType>mbtype:MBEnum(Text)</baseType>
+  <type>mbt:Face</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
   <is>A directed face on a brick</is>
 
   <documentation>Enum ValueType for the six axis-directed faces on MachineBlocks bricks.

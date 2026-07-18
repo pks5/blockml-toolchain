@@ -10,10 +10,10 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>CornerMap</name>
-  <type>mbtype:CornerMap</type>
+  <type>mbt:CornerMap</type>
   <baseType>StructType</baseType>
   <is>A value map on the four corners</is>
 
@@ -46,10 +46,10 @@
     <see type="StructType" relation="Extends">
       Struct ValueType branch — named corner fields.
     </see>
-    <see type="mbtype:FaceMapXY" relation="SeeAlso">
+    <see type="mbt:FaceMapXY" relation="SeeAlso">
       Face-keyed lateral map — parallel sparse map pattern.
     </see>
-    <see type="mbtype:Direction" relation="SeeAlso">
+    <see type="mbt:Direction" relation="SeeAlso">
       Cardinal directions abbreviated in corner keys.
     </see>
   </references>

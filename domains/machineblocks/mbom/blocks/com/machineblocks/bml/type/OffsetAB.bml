@@ -9,12 +9,12 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>OffsetAB</name>
-  <type>mbtype:OffsetAB</type>
-  <baseType>mbtype:AxisAB(N, B)</baseType>
+  <type>mbt:OffsetAB</type>
+  <baseType>mbt:AxisAB(N, B)</baseType>
   <is>An offset along A and B</is>
 
   <documentation>Semantic Struct ValueType for an offset pair { a, b }. Extends AxisAB(N, B) —
@@ -33,13 +33,13 @@
   </genericTypes>
 
   <references>
-    <see type="mbtype:AxisAB" relation="Extends">
+    <see type="mbt:AxisAB" relation="Extends">
       Structural { a, b } map — OffsetAB adds offset semantics; forwards N and B.
     </see>
-    <see type="mbtype:OffsetXY" relation="SeeAlso">
+    <see type="mbt:OffsetXY" relation="SeeAlso">
       Parallel offset semantics on AxisXY.
     </see>
-    <see type="mbtype:RadiusAB" relation="SeeAlso">
+    <see type="mbt:RadiusAB" relation="SeeAlso">
       Parallel radius semantics on AxisAB.
     </see>
   </references>

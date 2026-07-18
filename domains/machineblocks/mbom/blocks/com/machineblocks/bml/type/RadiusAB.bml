@@ -9,12 +9,12 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>RadiusAB</name>
-  <type>mbtype:RadiusAB</type>
-  <baseType>mbtype:AxisAB(N, B)</baseType>
+  <type>mbt:RadiusAB</type>
+  <baseType>mbt:AxisAB(N, B)</baseType>
   <is>A radius pair along A and B</is>
 
   <documentation>Semantic Struct ValueType for a radius pair { a, b }. Extends AxisAB(N, B) —
@@ -30,16 +30,16 @@
   </genericTypes>
 
   <references>
-    <see type="mbtype:AxisAB" relation="Extends">
+    <see type="mbt:AxisAB" relation="Extends">
       Structural { a, b } map — RadiusAB adds radius semantics; forwards N and B.
     </see>
-    <see type="mbtype:OffsetAB" relation="SeeAlso">
+    <see type="mbt:OffsetAB" relation="SeeAlso">
       Parallel offset semantics on AxisAB.
     </see>
-    <see type="mbtype:BaseRoundingMap" relation="SeeAlso">
+    <see type="mbt:BaseRoundingMap" relation="SeeAlso">
       Body rounding — CornerMap(Decimal | RadiusAB) nested in AxisXYZ.
     </see>
-    <see type="mbtype:PlaneRoundingMap" relation="SeeAlso">
+    <see type="mbt:PlaneRoundingMap" relation="SeeAlso">
       Recess / tongue rounding — CornerMap with GridUnitXY.
     </see>
   </references>

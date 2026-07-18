@@ -9,10 +9,10 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>None</name>
-  <type>mbtype:None</type>
+  <type>mbt:None</type>
   <baseType>Constant(Text)</baseType>
   <is>The literal None sentinel</is>
 
@@ -26,7 +26,7 @@
     <see type="Constant" relation="Extends">
       Constant(Text) with value fixed to "None".
     </see>
-    <see type="mbtype:Auto" relation="SeeAlso">
+    <see type="mbt:Auto" relation="SeeAlso">
       Parallel Auto sentinel Constant.
     </see>
   </references>

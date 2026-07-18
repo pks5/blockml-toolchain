@@ -9,10 +9,10 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Auto</name>
-  <type>mbtype:Auto</type>
+  <type>mbt:Auto</type>
   <baseType>Constant(Text)</baseType>
   <is>The literal Auto sentinel</is>
 

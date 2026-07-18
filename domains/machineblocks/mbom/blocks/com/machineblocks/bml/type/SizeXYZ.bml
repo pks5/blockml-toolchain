@@ -9,12 +9,12 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>SizeXYZ</name>
-  <type>mbtype:SizeXYZ</type>
-  <baseType>mbtype:AxisXYZ(N, Z)</baseType>
+  <type>mbt:SizeXYZ</type>
+  <baseType>mbt:AxisXYZ(N, Z)</baseType>
   <is>A size along X, Y, and Z</is>
 
   <documentation>Semantic Struct ValueType for a size triple { x, y, z }. Extends AxisXYZ(N, Z) —
@@ -30,13 +30,13 @@
   </genericTypes>
 
   <references>
-    <see type="mbtype:AxisXYZ" relation="Extends">
+    <see type="mbt:AxisXYZ" relation="Extends">
       Structural { x, y, z } map — SizeXYZ adds size semantics; forwards N and Z.
     </see>
-    <see type="mbtype:SizeXY" relation="SeeAlso">
+    <see type="mbt:SizeXY" relation="SeeAlso">
       Two-axis size map on AxisXY.
     </see>
-    <see type="mbtype:OffsetXYZ" relation="SeeAlso">
+    <see type="mbt:OffsetXYZ" relation="SeeAlso">
       Parallel offset semantics on AxisXYZ.
     </see>
   </references>

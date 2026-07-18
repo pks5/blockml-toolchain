@@ -10,11 +10,11 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Grille</name>
-  <type>mbtype:Grille</type>
-  <baseType>mbmbtype:MBEnum(Text)</baseType>
+  <type>mbt:Grille</type>
+  <baseType>mbmbt:MBEnum(Text)</baseType>
   <is>A top-plate grille bar direction</is>
 
   <documentation>Enum ValueType for grille bar orientation on MachineBlocks bricks.

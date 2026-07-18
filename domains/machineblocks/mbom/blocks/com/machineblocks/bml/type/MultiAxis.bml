@@ -10,10 +10,10 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>MultiAxis</name>
-  <type>mbtype:MultiAxis</type>
+  <type>mbt:MultiAxis</type>
   <baseType>StructType</baseType>
   <is>An axis-keyed multi-component value</is>
 
@@ -30,10 +30,10 @@
   </genericTypes>
 
   <references>
-    <see type="mbtype:AxisXY" relation="SeeAlso">
+    <see type="mbt:AxisXY" relation="SeeAlso">
       Two-axis map — x, y.
     </see>
-    <see type="mbtype:AxisXYZ" relation="SeeAlso">
+    <see type="mbt:AxisXYZ" relation="SeeAlso">
       Three-axis map — x, y, z (extends AxisXY).
     </see>
   </references>
