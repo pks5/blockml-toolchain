@@ -900,33 +900,21 @@ Source Map V3 is used as the format. It is language-agnostic and has established
 
 ## Extension Mechanism
 
-The compiler supports extension root types (e.g. `<device>`) without modifying the core. Extensions register:
+BML is **universal**: the only document root is `<block>`. Domains extend the system by registering **types**, **libraries**, and **Render Targets** — not by new root element names.
 
 ```text
-1. A root type name  (e.g. "device")
-2. A BML→BOM mapping rule
-3. A Render Target (or reuse an existing one)
-4. A schema (XSD or JSON Schema)
+1. Domain Block types / packages (BML corpus under a domain FQN)
+2. Optional domain XSD(s) for allowed-type vocabularies (alongside universal block.xsd)
+3. One or more Render Targets (or reuse an existing one)
 ```
 
-Root type registration:
-
-```typescript
-import { registerRootType } from "@blockml/parser";
-
-registerRootType({
-  name:    "device",
-  mapper:  deviceBmlToBomMapper,
-  schema:  deviceXsdUrl
-});
-```
-
-Target registration:
+Legacy idea of alternate roots (`<device>`, `<sign>`, …) is **withdrawn**. Parser registration is for **targets and type packages**, not multiple document roots:
 
 ```typescript
 import { registerTarget } from "@blockml/compiler";
 
-registerTarget(new DeviceTarget());
+registerTarget(new MachineBlocksScadTarget());
+// Domain schemas: produced by XSD Render Target / published under domain schema URLs
 ```
 
 ---

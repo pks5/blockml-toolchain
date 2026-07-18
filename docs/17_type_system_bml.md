@@ -49,6 +49,7 @@ In the Web of Things, Blocks are the **grammar of a World**. Types are part of t
 
 ```text
 stud:// is how Things communicate (Capabilities over sockets and HTTP).
+  Protocol design still in progress — relative Capability path expansion deferred.
 BOM Core is how Things are structured.
 BML is the universal format for data and semantics — authoring and messages.
 Everything else is implementation.

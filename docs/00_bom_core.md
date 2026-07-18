@@ -1270,7 +1270,7 @@ Like Properties, Capabilities are declared with a name and a type (FQN). Like Pr
 
 Capabilities use FQN type values. The type determines the communication pattern.
 
-> **Package TBD** — placeholder `org.blockml.bml.capability.*`. Candidate: `bom.foundation` (domain to be confirmed).
+**Package (decided):** `org.blockml.bml.capability.*`, base type `org.blockml.bml.core.Capability`. Sources: `packages/core/blocks/org/blockml/bml/capability/{Inbound,Outbound,Transformation}.bml` and `…/core/Capability.bml`.
 
 ```text
 org.blockml.bml.capability.Inbound         — receives data/messages asynchronously
@@ -1364,8 +1364,10 @@ Four value patterns are recognized:
 Absolute URI      — outbound routing to a fixed address (stud:// over sockets/HTTP)
   stud://domain/path
 
-Relative path     — context-resolved address (TBD: resolved against nearest App/Area Block)
+Relative path     — context-resolved address; **deferred** until the stud:// protocol design is complete
   /path/to/resource
+  Candidate rule: resolve against nearest App/Area Block, then expand to stud://…
+  Phase A/B: store authored path losslessly; do not resolve. See Address Schemes.
 
 Capability linking — forward to another Capability (via Expression)
   ${ @myService.otherCapa }
@@ -1398,7 +1400,7 @@ The rule mirrors external access: with `()` = Transformation call, without `()` 
 
 `Outbound` Capabilities of the same Block cannot be referenced in Expressions — they are triggered by the Block's internal logic, not bound.
 
-Whether Capability linking in Presets is permitted is to be defined.
+**Capability linking in Presets:** **Not in V1.** MachineBlocks presets are property-only (renderer-oriented). Linking remains a Composition concern — see § Preset (MachineBlocks).
 
 ### Transformation Capability Implementations
 
@@ -1439,12 +1441,15 @@ BOM Core uses `protocol://` as a generic placeholder. Domain specializations def
 
 ```text
 stud://    — Capability addressing (WOT / MachineBlocks); reachable over sockets and HTTP
+             (protocol design in progress — relative path expansion deferred)
 http://    — REST / WebHook
 mqtt://    — MQTT broker topic
 wot://     — Web of Things device hub
 ```
 
-**`stud://`** is the primary scheme for Capability endpoints in the WOT stack: it makes Inbound / Outbound / Transformation Capabilities addressable as networked resources (socket and HTTP transports). Relative paths and Expression-produced addresses may resolve into `stud://` URIs at runtime (see Capability Value in Compositions).
+**`stud://`** is the primary scheme for Capability endpoints in the WOT stack: it makes Inbound / Outbound / Transformation Capabilities addressable as networked resources (socket and HTTP transports).
+
+> **Design phase:** The `stud://` protocol (routing, authority, path semantics, App/Area context) is **not finalized**. Absolute `stud://…` bindings may be authored and stored; **relative Capability paths** (`/path/…` → expand to `stud://…`) are specified only as a **candidate pattern** and must not be resolved by parser, validator, or renderers until the protocol design lands. See Capability Value in Compositions.
 
 ### Message Model
 
@@ -1511,7 +1516,7 @@ ${ size[0] + 1 }      — Expression
 
 ```text
 stud://domain/path            — Absolute URI
-/path/to/resource             — Relative path (context-resolved, TBD)
+/path/to/resource             — Relative path (deferred — stud:// protocol still in design)
 ${ @myService.otherCapa }     — Capability linking
 ${ @myService.getAddress() }  — Dynamic address
 ```
@@ -1818,6 +1823,8 @@ Presets are **not** a BlockML core feature. In MachineBlocks, a preset is a name
 
 Presets apply only to Properties — not to Aggregations, Associations, or Capabilities. Preset merge is compiler logic; Customizer JSON is render-target logic.
 
+**V1 / MachineBlocks:** The current MB preset system (`_presets` / `basePresets`) is a **renderer-oriented** property-configuration mechanism. It uses **Properties only** — no Capability bindings or Capability linking. Capability linking in presets is **out of scope for V1**; revisit only if a future preset model becomes capability-aware (WOT / messaging). Until then, Capability linking is valid in **Compositions** only (see Capability Linking).
+
 ### Preset Block
 
 A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a Block definition with `baseType="com.machineblocks.bml.core.Block"`:
@@ -2110,7 +2117,7 @@ Links an `Outbound` Capability of a Bean to an `Inbound` Capability of the curre
 
 For `Transformation → Transformation` linking: `inputType` and `outputType` must both match.
 
-This form is only valid when the target member is a Capability — using it on a Property is a parse-time error. Whether Capability linking is permitted in Presets is to be defined.
+This form is only valid when the target member is a Capability — using it on a Property is a parse-time error. **Not permitted in MachineBlocks presets (V1):** presets configure Properties only; Capability linking is Composition-only — see § Preset (MachineBlocks).
 
 ### Model Binding
 

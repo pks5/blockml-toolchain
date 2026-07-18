@@ -168,6 +168,8 @@ Every MachineBlocks Block inherits `_presets` and `basePresets`. Composite block
 
 **Presets are not a BlockML core feature.** Preset instances are ordinary Block instances in `_presets`. The `basePresets` association references preset ids (local or `{BlockFQN}::{id}`). Preset merge is compiler logic; Customizer JSON is render-target logic.
 
+**V1:** The MB preset system is **renderer-oriented** and configures **Properties only** — no Capabilities, no Capability linking. See `00_bom_core.md` — Preset (MachineBlocks).
+
 When a Block's `baseType` chain includes `com.machineblocks.bml.core.CompositeBlock` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited members appear via `resolveEffectiveMembers()`.
 
 Declare `<aggregations>` explicitly when **adding** aggregations beyond the inherited set (e.g. `_steps` on `Set`), when **overriding** inherited aggregations (`override="true"` required; partial override — type may be omitted), or when filling an aggregation with a nested `<composition>`.
@@ -224,7 +226,7 @@ Capabilities describe how a Block communicates — externally via async messagin
 
 Like Properties, Capabilities are declared with a name and a type (FQN). Their value in a Composition is the address or binding — set as an attribute on the child instance, exactly like a Property value.
 
-> **Capability package TBD** — placeholder `org.blockml.bml.capability.*`. Candidate: `bom.foundation`.
+**Package:** `org.blockml.bml.capability.*` (base `org.blockml.bml.core.Capability`) — see `00_bom_core.md` — Capability Types.
 
 ### Inbound
 
@@ -294,7 +296,7 @@ The address or binding is the Capability's value on a child Block instance:
 
 ```text
 stud://domain/path                  — Absolute URI (Outbound / Capability routing; sockets + HTTP)
-/path/to/resource                   — Relative path (context-resolved, TBD)
+/path/to/resource                   — Relative path (deferred until stud:// protocol design is complete)
 ${ @myService.otherCapa }           — Capability linking (no parentheses)
 ${ @myService.getAddress() }        — Dynamic address (Transformation outputType must be String)
 ```

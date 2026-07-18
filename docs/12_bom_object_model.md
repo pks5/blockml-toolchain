@@ -236,8 +236,10 @@ interface BlockDefinition {
 
   /**
    * Authored block-level `<bml:xml>…</bml:xml>` — XML root-tag recipe for instances of this type.
-   * First-class (not directives[]). Omitted → no authored override; emit uses Definition/`bml:Self` rules.
-   * `raw` is lossless body text (literal local name or `${ … }`). See 19 D3 · 00 Maximum authored surface.
+   * First-class (not directives[]). Legal only on core.Block and Definition-branch types (19 D4);
+   * ordinary composable/ValueType must omit (inherit). Illegal authoring may still be stored for
+   * roundtrip/diagnostics, then rejected at Stage 2. `raw` is lossless body text.
+   * See 19 D3/D4 · 00 Maximum authored surface.
    */
   xmlRendering?: XmlRenderingBlock
 
@@ -640,7 +642,11 @@ interface MemberDefinitionBase {
 
 /** Block-level `<bml:xml>` body — lossless. */
 interface XmlRenderingBlock {
-  /** Literal local name or expression source, e.g. "block" or "${ bml:Self }" */
+  /**
+   * Literal local name or fixed recipe source.
+   * Allowed recipes only: literal | "${ bml:Self }" | "${ #this.name }"
+   * (Expression-looking syntax; constant recipes — not open Expression Language). See 19 D6.
+   */
   raw: string
 }
 

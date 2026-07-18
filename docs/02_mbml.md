@@ -69,25 +69,15 @@ The document type is determined by the root XML element.
 
 ## Document Types
 
-BML defines one core document root:
+BML has **one** document root for all authoring and interchange:
 
 ```text
-<block>   — Block Definition (composable types, ValueTypes, language blocks, preset collections, …)
+<block>   — Block Definition (composable types, ValueTypes, languages, libraries, presets-as-blocks, …)
 ```
 
-Property presets are **not** a BlockML core feature. MachineBlocks models presets as Block instances in `_presets` with `basePresets` associations — see § Presets (MachineBlocks) and `03_mbom.md`.
+Domains do **not** introduce alternate root elements (`<device>`, `<sign>`, … — legacy idea, withdrawn). Everything is a `<block>` with a domain `baseType` / type FQN. Property presets are **not** a BlockML core feature; MachineBlocks models them as Block instances in `_presets` with `basePresets` — see § Presets (MachineBlocks) and `03_mbom.md`.
 
 Library packages use `<block baseType="org.blockml.bml.core.BlockLibrary">` — see § Library Format.
-
-Extension document types (defined in domain packages, not in core):
-
-```text
-<device>   — Electronic device (electronics + software) — separate package
-<sign>     — Dynamic sign (draft)
-<game>     — Board game (draft)
-```
-
-Extension types register their own BML→BOM mapping rule with the parser. The core defines the registration mechanism, not the extension types themselves.
 
 ---
 
@@ -580,14 +570,23 @@ Sub-Block:
 
 ## Schema Validation
 
-Each document type has its own schema:
+There is **one document schema** for the universal `<block>` root (structure, members, directives, …):
 
 ```text
-XML:   XSD schema  (http://blockml.org/<type>.xsd)
-JSON:  JSON Schema
+XML / XSD:  http://blockml.org/schema/block  →  block.xsd
 ```
 
-Extension document types bring their own schema. The schema location and management details are to be defined.
+(JSON Schema for authoring is **not planned** — see § JSON as authoring form.)
+
+**Domain XSDs** do not change the root element. They constrain or document **which types / packages** are expected in a project (e.g. MachineBlocks bricks, calibration) and are referenced alongside `block.xsd` via `xsi:schemaLocation` / `catalog.xml`:
+
+```text
+block.xsd              — universal BML document grammar (<block> only)
+types.xsd / service.xsd — core type & service vocabularies
+core.xsd / bricks.xsd / … — domain allowed-type / package schemas
+```
+
+Long-term these artifacts are **XSD Render Target** output (Stage 3), always disableable for validation — see `01_system.md` — XSD Schema Structure · `13` B8. Parser Stage 1 does not require schemas.
 
 ---
 
@@ -2705,7 +2704,7 @@ values are InstanceReference tokens (local `bml:id` or `{FQN}::{id}`).
 
 Capabilities describe how a Block communicates. Like Properties, they are declared with a name and a type (FQN). Their value in a Composition is the address or binding — set as an attribute on the child Block instance, just like a Property value.
 
-> **Capability package TBD** — placeholder `org.blockml.bml.capability.*`. Candidate: `bom.foundation`.
+**Package:** `org.blockml.bml.capability.*` (base `org.blockml.bml.core.Capability`). Unqualified Capability `type` values resolve here — see § Context-Bound Implicit Namespace · `00_bom_core.md` — Capability Types.
 
 ```xml
 <capabilities>
@@ -2922,7 +2921,7 @@ Capability values:
 <!-- Absolute URI → Outbound routing -->
 <ac:MyBlock onResized="stud://enclosure/blocks/resized" />
 
-<!-- Relative path → context-resolved (TBD) -->
+<!-- Relative path → deferred until stud:// protocol design is complete; store only -->
 <ac:MyBlock onResized="/blocks/resized" />
 
 <!-- Capability linking: Outbound → Inbound, or Transformation → Transformation -->
@@ -3768,6 +3767,8 @@ Presets are **not** a BlockML core feature. MachineBlocks models them as ordinar
 
 Preset merge is compiler logic (`resolveBasePresets`, block merge helpers). Customizer JSON output is render-target logic (machineblocks-v3-scad).
 
+**V1:** The MB preset system is **renderer-oriented** and configures **Properties only** — no Capabilities / Capability linking. See `00_bom_core.md` — Preset (MachineBlocks).
+
 A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a normal `<block>` with `baseType="com.machineblocks.bml.core.Block"` whose composition fills `_presets` with Block instances of the target type.
 
 ### Structure
@@ -4181,16 +4182,13 @@ The examples below are **historical illustrative drafts only** — not valid inp
 
 ## BML→BOM Mapping
 
-The BML→BOM mapping is defined once per root type and applies uniformly to all documents of that type. It is configurable and extensible for new root types.
+The BML→BOM mapping is defined **once** for the universal `<block>` root and applies to every `.bml` document. Domains differ by **types** (`baseType`, member type FQNs, libraries) — not by alternate document roots.
 
 ```text
-<block>   → Block mapping rule (all block types)
-<device>    → Device mapping rule (external package)
+<block>   → Block mapping rule (all blocks: composable, ValueTypes, Library, Set, …)
 ```
 
-Mapping rules are not hardcoded in the parser — they are registered per root type. The algorithmic rules are specified in `13_bml_to_bom_mapping.md`.
-
-There is no separate mapping rule for MachineBlocks Sets. The `<block>` mapping rule handles them identically to any other Block. The SCAD Renderer detects `baseType = com.machineblocks.bml.core.Set` and switches to STEPS-based output.
+There is no separate root mapper for MachineBlocks Sets or other domains. The SCAD Renderer detects `baseType = com.machineblocks.bml.core.Set` (and similar) and switches output strategy. Algorithmic rules: `13_bml_to_bom_mapping.md`.
 
 ### Default Resolution
 

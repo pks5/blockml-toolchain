@@ -286,7 +286,7 @@ MachineBlocks SCAD is the primary **product** target. These **toolchain** target
 
 | Target | Name (TBD) | Minimal output | Role |
 |---|---|---|---|
-| **XSD** | `@blockml/xsd-target` | `.xsd` artifacts | Schemas for IDE / later validation; particle shape aligns with **`bml:xml`** |
+| **XSD** | `@blockml/xsd-target` | `.xsd` artifacts | **Universal** `block.xsd` (document grammar) + optional **domain** XSDs for allowed-type packages; particle shape aligns with **`bml:xml`** |
 | **BlockDoc** | `@blockml/blockdoc-target` | Static HTML files whose URLs follow the **package / FQN hierarchy** (JavaDoc-like browse). Later: richer site, graphs, cross-links | Human/LLM-readable navigation of the block corpus |
 | **FatBlock** | `@blockml/fatblock-target` | One `.bml` document: root block plus **all transitive dependencies** inlined as root `<embeddedBlocks>` (virtual `.bml` files) | Portable single-file artifact; proves registry closure + embed model. Emits BML XML → consumes **`bml:xml`**. **Requires Stage 2 validation first**; authored `xmlns` prefixes preserved 1:1 — missing/conflicting NS → error (no invented prefixes; `19` D2) |
 

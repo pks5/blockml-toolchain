@@ -131,7 +131,11 @@ Two authoring forms exist.
 | `<bml:xml>…</bml:xml>` element | `org.blockml.bml.core.Block` and **all Definition blocks** (`baseType` chain includes `org.blockml.bml.core.Definition`) | Root XML element name for instances of this block type |
 | `bml:xml="…"` attribute | Properties (and, by extension, members) on Definition blocks | How this member's value is rendered in XML |
 
-The element form is **not** permitted on ordinary composable or ValueType blocks — only on the root Block type and on Definition blocks that declare serialization for their described shape.
+The element form is **not** permitted on ordinary composable or ValueType blocks — only on **`org.blockml.bml.core.Block`** and on **Definition blocks** (`baseType` chain includes `org.blockml.bml.core.Definition`) that declare serialization for their described shape (**D4**).
+
+Ordinary domain blocks **inherit** root-tag behavior (typically `${ bml:Self }` from `core.Block`) and must **not** redeclare `<bml:xml>`. If authored anyway → store on Urmodell (**maximum authored surface**), Stage 2 → `BML_XML_DIRECTIVE_NOT_ALLOWED` (or dedicated override code TBD).
+
+**Member-level** `bml:xml` may change on `override="true"` redeclarations (e.g. FixedAlias `_name` element → FreeTextAlias `name` attribute).
 
 Unknown or misplaced `bml:xml` → `BML_XML_DIRECTIVE_NOT_ALLOWED` (validate; TBD in parser).
 
@@ -210,7 +214,19 @@ The container defines context; the child element is the Block reference — no w
 The element body may contain only:
 
 - a **literal** XML local name, or
-- a **`${ … }` expression** referencing allowed roots (`bml:Self`, `#this`, … — exact set TBD per Definition block)
+- one of the **fixed tag recipes** below (authored with Expression-looking `${ … }` syntax for simplicity — they are not general Expression Language evaluation)
+
+##### Allowed `<bml:xml>` recipes (**decided**)
+
+In this context the `${ … }` forms are **named constants / recipes**, not open Expressions. Same surface syntax as the Expression Language; **no** arithmetic, calls, or other roots.
+
+| Recipe | Meaning | Allowed on |
+|---|---|---|
+| literal local name | fixed tag, e.g. `block` | `core.Block` + Definition branch (D4) |
+| `${ bml:Self }` | effective Block type → QName element | types that emit instance tags from type identity (e.g. `core.Block`) |
+| `${ #this.name }` | current Definition instance’s `name` member → local element name | Member Definition blocks (`PropertyDefinition`, `AggregationDefinition`, `AssociationDefinition`, `CapabilityDefinition`, `GenericTypeDefinition`, …) |
+
+Anything else in the `<bml:xml>` body (other roots, `#this.other`, `@bean`, operators, …) → validation error (code TBD). Phase A: store `xmlRendering.raw` losslessly; enforce the whitelist when evaluating for emit / Stage 2.
 
 ---
 
@@ -408,8 +424,9 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 | D1 | Default `bml:xml` when omitted on members | **Decided:** kind-based defaults — § Default XML rendering by kind. Explicit `bml:xml` wins. Dual forms (`element\|attribute`, …) accepted at parse; canonical emit uses the table |
 | D2 | `${ bml:Self }` prefix resolution at serialize time | **Decided:** store authored prefixes in `SourceInfo.namespaceBindings` — **1:1 roundtrip**, no invented prefixes. Missing NS → error. FatBlock only after Stage 2 validator; unbound/conflicting NS fail — see § Namespace prefixes |
 | D3 | BOM storage shape for `<bml:xml>` / member `bml:xml` | **Decided:** first-class `xmlRendering` on `BlockDefinition` + `MemberDefinitionBase` — **not** flow-control `directives[]`. Follows **maximum authored surface** (`00_bom_core.md`). See `12_bom_object_model.md` · `XmlRenderingBlock` / `XmlRenderingMember` |
-| D4 | Whether composable blocks may override inherited `bml:xml` | **Member-level:** allowed on `override="true"` redeclarations (e.g. FixedAlias `_name` element → FreeTextAlias `name` attribute). **Block-level** `<bml:xml>` root element: still TBD / prefer Definition branch only |
+| D4 | Whether composable blocks may override inherited `bml:xml` | **Decided (A):** **Member-level** — allowed on `override="true"` redeclarations. **Block-level** `<bml:xml>` — only on `core.Block` + Definition branch; ordinary composable/ValueType must not redeclare (inherit `${ bml:Self }` etc.). Illegal authoring preserved then rejected at Stage 2 — see § Placement Rules |
 | D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |
+| D6 | Allowed `<bml:xml>` body recipes | **Decided:** literal, `${ bml:Self }`, `${ #this.name }` only — Expression-looking syntax, constant recipes (not open EL). See § Allowed `<bml:xml>` recipes |
 
 ---
 
