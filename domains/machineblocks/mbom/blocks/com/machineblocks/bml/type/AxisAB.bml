@@ -53,6 +53,9 @@
     <see type="mbtype:RadiusAB" relation="SeeAlso">
       Radius semantics on AxisAB — N / B closed to Number, default Decimal.
     </see>
+    <see type="mbtype:SizeAB" relation="SeeAlso">
+      Size semantics on AxisAB — N / B closed to Number, default Decimal.
+    </see>
   </references>
 
 </block>

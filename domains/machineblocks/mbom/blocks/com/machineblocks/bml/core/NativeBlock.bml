@@ -729,7 +729,7 @@
       <scad:value>0.0</scad:value>
     </pinDiameterAdjustment>
 
-    <ports type="mbtype:Port[]">
+    <ports type="Boolean.False | mbtype:Port[]">
       <documentation>Cutouts on a face for connectors such as USB, screw terminals, etc.
         Each port is placed on a face using anchor + offset, then filled with
         one or more shapes (rect/circle) that are subtracted from the body.

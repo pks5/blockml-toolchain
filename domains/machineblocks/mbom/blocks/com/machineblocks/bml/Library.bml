@@ -69,28 +69,36 @@
       <mbtype:Align />
       <mbtype:Auto />
       <mbtype:Axis />
+      <mbtype:AxisAB />
       <mbtype:AxisXY />
       <mbtype:AxisXYZ />
       <mbtype:BaseCutout />
+      <mbtype:Connector />
+      <mbtype:CornerMap />
       <mbtype:Direction />
       <mbtype:Face />
       <mbtype:FaceMapXY />
       <mbtype:FaceMapXYZ />
+      <mbtype:Gender />
       <mbtype:Grille />
       <mbtype:HoleEdgeMode />
       <mbtype:HoleType />
       <mbtype:Inherit />
-      <mbtype:CornerMap />
       <mbtype:MBEnum />
       <mbtype:MultiAxis />
       <mbtype:None />
+      <mbtype:OffsetAB />
       <mbtype:OffsetXY />
       <mbtype:OffsetXYZ />
       <mbtype:PillarGapAutoConfig />
+      <mbtype:Port />
+      <mbtype:PortShapeType />
       <mbtype:QualityPreset />
+      <mbtype:RadiusAB />
       <mbtype:RotationXY />
       <mbtype:RotationXYZ />
       <mbtype:SelectiveGrid />
+      <mbtype:SizeAB />
       <mbtype:SizeXY />
       <mbtype:SizeXYZ />
       <mbtype:StudType />
