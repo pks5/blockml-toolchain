@@ -1846,12 +1846,27 @@
       <examples>
         <example language="BML" snippet="true" title="one port">
           <![CDATA[
-<NativeBlock ports="[{face: YNeg, align: Center, offset: {a: 0, b: 0}, rotation: 0, shapes: [{type: Rect, offset: {a: 0, b: 0}, rotation: 0, setting: {size: {a: 8, b: 4}}}], depth: Auto}]" />
+<NativeBlock>
+  <ports>
+[
+  {
+    face: YNeg, align: Center, offset: {a: 0, b: 0}, rotation: 0,
+    shapes: [{
+      type: Rect, offset: {a: 0, b: 0}, rotation: 0,
+      setting: {size: {a: 8, b: 4}}
+    }],
+    depth: Auto
+  }
+]
+  </ports>
+</NativeBlock>
           ]]>
         </example>
         <example language="BML" snippet="true" title="Raspberry Pi side ports (HDMI / power / headphone)">
           <![CDATA[
-<NativeBlock ports="[
+<NativeBlock>
+  <ports>
+[
   {
     face: XNeg, align: Start, offset: {a: 4.35, b: 3.25}, rotation: 0,
     shapes: [{
@@ -1890,7 +1905,9 @@
     }],
     depth: Auto
   }
-]" />
+]
+  </ports>
+</NativeBlock>
           ]]>
         </example>
       </examples>
