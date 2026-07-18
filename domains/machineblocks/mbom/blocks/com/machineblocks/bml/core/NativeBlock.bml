@@ -1873,13 +1873,13 @@
       <examples>
         <example language="BML" snippet="true" title="wider gaps">
           <![CDATA[
-<NativeBlock pillarGapAutoConfig="{cornerGap: 2, crossGap: 4}" />
+<NativeBlock pillarGapAutoConfig="{cornerLength: 2, middleWidth: 4}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="wider gaps">
           <![CDATA[
           ...
-          ["pillarGapAutoConfig", /* PillarGapAutoConfig */]
+          ["pillarGapAutoConfig", [2, 4]]
           ...
           ]]>
         </scad:example>
