@@ -545,13 +545,13 @@
       <examples>
         <example language="BML" snippet="true" title="explicit">
           <![CDATA[
-<NativeBlock baseWallThickness="1" />
+<NativeBlock baseWallThickness="1.1" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="explicit">
           <![CDATA[
           ...
-          ["baseWallThickness", 1]
+          ["baseWallThickness", 1.1]
           ...
           ]]>
         </scad:example>
@@ -630,13 +630,13 @@
       <examples>
         <example language="BML" snippet="true" title="deeper">
           <![CDATA[
-<NativeBlock connectorDepth="1.5" />
+<NativeBlock connectorDepth="0.875" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="deeper">
           <![CDATA[
           ...
-          ["connectorDepth", 1.5]
+          ["connectorDepth", 0.875]
           ...
           ]]>
         </scad:example>
@@ -676,13 +676,13 @@
       <examples>
         <example language="BML" snippet="true" title="more clearance">
           <![CDATA[
-<NativeBlock connectorLengthClearance="0.2" />
+<NativeBlock connectorLengthClearance="0.3" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="more clearance">
           <![CDATA[
           ...
-          ["connectorLengthClearance", 0.2]
+          ["connectorLengthClearance", 0.3]
           ...
           ]]>
         </scad:example>
@@ -719,13 +719,13 @@
       <examples>
         <example language="BML" snippet="true" title="wider">
           <![CDATA[
-<NativeBlock connectorWidth="1.5" />
+<NativeBlock connectorWidth="2" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="wider">
           <![CDATA[
           ...
-          ["connectorWidth", 1.5]
+          ["connectorWidth", 2]
           ...
           ]]>
         </scad:example>
@@ -740,7 +740,7 @@
       </documentation>
       <changelog>
         <change version="3.0.0">Completely new format: [face, direction, gender, align?,
-          paddingStart?, paddingEnd?]
+          padStart?, padEnd?]
           per connector. The old [[side, arrangement]] format is no longer valid.
           Padding is now per-connector; the separate connectorPadding parameter is removed.
         </change>
@@ -748,15 +748,27 @@
       <value>false</value>
       <scad:value>false</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="one connector">
+        <example language="BML" snippet="true" title="basic">
           <![CDATA[
 <NativeBlock connectors="[{face: XPos, axis: Y, gender: Male}]" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="one connector">
+        <scad:example language="OpenSCAD" snippet="true" title="basic">
           <![CDATA[
           ...
           ["connectors", [["x+", "y", "male"]]]
+          ...
+          ]]>
+        </scad:example>
+        <example language="BML" snippet="true" title="with padding">
+          <![CDATA[
+<NativeBlock connectors="[{face: XPos, axis: Y, gender: Male, align: Center, padStart: 1, padEnd: 1}]" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="with padding">
+          <![CDATA[
+          ...
+          ["connectors", [["x+", "y", "male", "center", 1, 1]]]
           ...
           ]]>
         </scad:example>
