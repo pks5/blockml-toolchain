@@ -74,6 +74,7 @@
       <mbt:AxisXYZ />
       <mbt:BaseCutout />
       <mbt:BaseRoundingMap />
+      <mbt:Bevel />
       <mbt:Connector />
       <mbt:CornerMap />
       <mbt:Direction />

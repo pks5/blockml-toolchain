@@ -254,12 +254,13 @@
       <scad:value>-0.1</scad:value>
     </baseWallThicknessAdjustment>
 
-    <bevel type="mbt:CornerMap(mbt:AxisXY(Decimal(mbunit:GridUnitXY)))">
+    <bevel type="mbt:Bevel">
       <documentation>Creates wedges by shifting corners on the horizontal (Z-face) plane
-        only — not a multi-axis map like baseRoundingRadius. Each of the four local corners
-        (sw / nw / ne / se) gets an XY displacement in GridUnitXY. AxisXY (not AxisAB) is
-        intentional: the plane is fixed to world XY on Z. The resulting shape is intersected
-        with the bounding box. Can be used together with slope.
+        only — Bevel = CornerMap(OffsetXY) in GridUnitXY, not a multi-axis map like
+        baseRoundingRadius. Each of the four local corners (sw / nw / ne / se) gets an XY
+        displacement. World XY (not AxisAB) is intentional: the plane is fixed to the brick
+        Z-face. The resulting shape is intersected with the bounding box. Can be used
+        together with slope.
       </documentation>
       <changelog>
         <change version="3.0.0">Can now be combined with slope.</change>
