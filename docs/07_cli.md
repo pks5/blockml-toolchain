@@ -66,8 +66,8 @@ The BOM Compiler is installed from source by cloning the repository. No npm regi
 ### 1. Clone and initialize
 
 ```bash
-git clone https://github.com/.../bom-compiler
-cd bom-compiler
+git clone https://github.com/.../blockml
+cd blockml
 git submodule update --init --recursive
 ```
 

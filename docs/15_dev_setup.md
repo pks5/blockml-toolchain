@@ -10,7 +10,7 @@ For architecture and package responsibilities see `01_system.md`.
 For compiler runtime (bootstrap, facade, cache) see `14_compiler_runtime.md`.
 For testing strategy see `06_compiler.md` — Testing Strategy.
 
-Implementation code is scaffolded according to this document. The repo currently contains **specs + fixtures**; TypeScript packages are added incrementally.
+Implementation code is scaffolded according to this document. **As of now** the repo holds **specs + BML corpus** only — see § Repository Layout. TypeScript packages and the root npm workspace are added incrementally (Phase A first).
 
 ---
 
@@ -43,21 +43,25 @@ OpenSCAD (optional) — thumbnail generation only; not required for build/test
 
 ## First-Time Setup
 
+Until the workspace is scaffolded, clone + submodules is enough to browse specs and BML:
+
 ```bash
 git clone <repo-url> blockml
 cd blockml
-
 git submodule update --init --recursive
-# Initializes domains/.../scad-lib (MachineBlocks V3 SCAD Library)
+# scad-lib under domains/machineblocks/machineblocks-v3-scad-target/runtimes/
+```
 
+After Phase A workspace scaffold exists:
+
+```bash
 npm install
 npm run build
 npm link -w @blockml/cli    # exposes `bom` globally (once)
-
 bom --version
 ```
 
-`git submodule update --init --recursive` is **required** — correctness tests and SCAD fixtures live in `scad-lib`.
+`git submodule update --init --recursive` is **required** for scad-lib fixtures (Test Layer B/C and T3 corpus).
 
 After pulling updates:
 
@@ -72,24 +76,63 @@ npm run build
 
 ## Repository Layout
 
-Current and target layout (from `01_system.md`):
+### As of now (specs + BML corpus)
+
+No root `package.json` / npm workspaces yet. TypeScript packages (`parser`, `serializer`, …) are **not** scaffolded.
 
 ```text
 blockml/
-  package.json                 — root workspace
-  tsconfig.base.json           — shared compiler options
-  tsconfig.json                — solution-style project references
-  catalog.xml                  — XSD namespace → node_modules (IDE)
+  docs/                          — specifications (authoritative Markdown)
+  packages/
+    core/
+      blocks/org/blockml/bml/    — framework BML SSOT (core, definition, type, service, …)
+      src/org/blockml/language/  — Language blocks (TypeScript.bml, OpenSCAD.bml, …)
+      test/                      — BML/constraint fixtures (not Vitest packages yet)
+  domains/
+    machineblocks/
+      mbom/blocks/com/machineblocks/bml/   — MBOM domain BML (NativeBlock, types, …)
+      machineblocks-v3-scad-target/
+        runtimes/scad-lib/                 — Git submodule (SCAD runtime + example .bml/.scad)
+  scripts/
+```
+
+**There is no `@blockml/core-services` package.** Built-in services (`Math`, `Strings`, …) live under `packages/core/blocks/org/blockml/bml/service/`.
+
+### Target packages (end state)
+
+| npm package | Path | When |
+|---|---|---|
+| `@blockml/core` | `packages/core` | Phase A — add TS (`BomDocument`, …) beside existing BML |
+| `@blockml/parser` | `packages/parser` | Phase A |
+| `@blockml/serializer` | `packages/serializer` | Phase A |
+| `@blockml/validator` | `packages/validator` | Phase B |
+| `@blockml/compiler` | `packages/compiler` | Phase C |
+| `@blockml/cli` | `packages/cli-tools` | Phase C |
+| `@blockml/engine-maker` | `engines/maker-engine` | Phase C |
+| `@machineblocks/mbom` | `domains/machineblocks/mbom` | Phase C (BML already present; package shell + exports) |
+| `@machineblocks/machineblocks-v3-scad-target` | `domains/machineblocks/machineblocks-v3-scad-target` | Phase C |
+| `@blockml/lsp` | `packages/lsp` | V2 |
+
+### Target monorepo tree
+
+After scaffolding (from `01_system.md`):
+
+```text
+blockml/
+  package.json                 — root workspace (to create)
+  tsconfig.base.json
+  tsconfig.json
+  catalog.xml                  — XSD catalog (when schemas ship)
   .gitignore
 
   packages/
-    core/                      — @blockml/core (framework + built-in service BML)
+    core/                      — @blockml/core (BML + BOM TS + utilities)
     parser/                    — @blockml/parser
     serializer/                — @blockml/serializer
     validator/                 — @blockml/validator
     compiler/                  — @blockml/compiler
     cli-tools/                 — @blockml/cli          (Node-only)
-    lsp/                       — @blockml/lsp          (V2, planned — Language Server)
+    lsp/                       — @blockml/lsp          (V2)
 
   engines/
     maker-engine/              — @blockml/engine-maker
@@ -97,23 +140,20 @@ blockml/
   domains/
     machineblocks/
       mbom/                    — @machineblocks/mbom
+        blocks/com/machineblocks/bml/
       machineblocks-v3-scad-target/
-        src/                   — target implementation (planned)
-        runtimes/
-          scad-lib/            — Git submodule (fixtures + SCAD runtime)
+        src/                   — target implementation
+        runtimes/scad-lib/     — Git submodule
 
   tests/
-    unit/                      — per-package unit tests (colocated or mirrored)
-    roundtrip/                 — parse → serialize → parse against BML corpus (V1 gate)
-    correctness/               — hand-verified reference outputs (after compiler exists)
-    snapshots/                 — Vitest snapshot output
+    roundtrip/                 — parse → serialize → parse (V1 gate)
+    correctness/               — after compiler exists
+    snapshots/
 
-  docs/                        — specifications (authoritative)
+  docs/
 ```
 
-**Present today:** `docs/`, `packages/core/blocks/**/*.bml`, `domains/.../scad-lib/` (submodule).
-
-**Scaffold next:** empty package shells with `package.json`, `tsconfig.json`, `src/index.ts` per build order below.
+**Scaffold next (Phase A):** root workspace + `packages/parser`, `packages/serializer`, and TypeScript entrypoints under `packages/core/src/` for BOM types. Empty shells: `package.json`, `tsconfig.json`, `src/index.ts` per package below.
 
 ---
 
@@ -260,25 +300,29 @@ Entry point: `src/index.ts` — re-exports public API only.
 
 ### `@blockml/core` (BML SSOT + BOM TypeScript)
 
-Owns framework BML **and** the shared TypeScript BOM contracts. Parser, serializer, validator, and compiler depend on the TS API — they do not redefine `BomDocument`.
+Owns framework BML **and** (once scaffolded) the shared TypeScript BOM contracts. Parser, serializer, validator, and compiler depend on the TS API — they do not redefine `BomDocument`.
+
+**Today:** BML under `blocks/` and language samples under `src/org/blockml/language/`. No `package.json` / `tsc` yet.
+
+**Target layout:**
 
 ```text
 packages/core/
   package.json          — name: @blockml/core, private: true
   blocks/
-    org/blockml/bml/core/
-      Block.bml · …
-    org/blockml/bml/service/
-      Math.bml
-      Strings.bml
-      …
-  src/                  — BomDocument types (12_bom_object_model.md), Diagnostic, TypeRegistry, utilities
+    org/blockml/bml/core/         — Block, Entity, …
+    org/blockml/bml/definition/   — BlockDefinition, …
+    org/blockml/bml/service/      — Math, Strings, Numbers, Lists, Bools  (NOT a separate npm package)
+    org/blockml/bml/type/         — …
+  src/
+    org/blockml/language/         — TypeScript.bml, OpenSCAD.bml (present today)
+    index.ts                      — re-exports BomDocument, Diagnostic, TypeRegistry, utilities (Phase A)
 ```
 
 Consumed by:
 
 - TypeRegistry bootstrap (CLI scans workspace + scad-lib)
-- Correctness tests (expression builtins)
+- Roundtrip corpus (T0/T1) and correctness tests
 - Pre-rendered SCAD artifacts in `scad-lib/blocks/org/blockml/bml/service/`
 
 ### `@blockml/cli` (Node-only)
@@ -318,8 +362,10 @@ src/
 
 ## Dependency Graph
 
+Target dependency order after packages exist (Phase A starts at `core` TS + parser + serializer):
+
 ```text
-@blockml/core (BML files — no TS deps)
+@blockml/core (BML under blocks/ + language under src/ — no package deps)
 
 @blockml/core (TS: BomDocument types, TypeRegistry, framework utilities)
   ↑
@@ -617,10 +663,10 @@ Run roundtrip tests against files already in the repository — grow tiers as pa
 
 | Tier | Source | Examples |
 |---|---|---|
-| **T0 — Minimal** | `packages/core/src/`, `packages/core-services/src/` | `TypeScript.bml`, `Math.bml` |
+| **T0 — Minimal** | `packages/core/src/org/blockml/language/`, `packages/core/blocks/org/blockml/bml/service/` | `TypeScript.bml`, `Math.bml` |
 | **T1 — Framework** | `packages/core/blocks/` | `Block.bml`, `BlockDefinition.bml`, `MemberDefinition.bml` |
-| **T2 — Domain** | `domains/machineblocks/mbom/src/` | `NativeBlock.bml`, `CompositeBlock.bml`, `Set.bml` |
-| **T3 — Real-world** | `scad-lib/blocks/` | `Calibrator.bml`, `Standard.bml`, `Cross.bml` |
+| **T2 — Domain** | `domains/machineblocks/mbom/blocks/` | `NativeBlock.bml`, `CompositeBlock.bml`, `Set.bml` |
+| **T3 — Real-world** | `domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/` | `Calibrator.bml`, `Standard.bml`, `Cross.bml` |
 
 Add new framework BML to T1 as it lands — the Definition meta-model corpus is the highest-value roundtrip fixture set.
 

@@ -121,7 +121,7 @@ STL / 3MF
 `bom` is a standalone tool — installed or cloned once and used across multiple content projects. Content projects (BML sources, render target output) live in separate directories and are not part of the compiler repository.
 
 ```text
-~/.../bom-compiler/             ← BOM Compiler tool (installed once)
+~/.../blockml/                  ← BlockML / BOM Compiler tool (installed once)
 ~/.../my-enclosure-project/     ← content project (BML sources, SCAD output)
 ~/.../my-electronics-project/   ← another content project
 ```
@@ -132,10 +132,14 @@ This is analogous to `tsc` or `webpack` — the tool is global, content projects
 
 ## Monorepo Structure
 
-See `15_dev_setup.md` for workspace configuration, build scripts, and implementation order.
+See `15_dev_setup.md` for **as-of-now vs target** layout, workspace configuration, build scripts, and implementation order.
+
+**Today:** specs under `docs/`, framework BML under `packages/core/`, domain BML under `domains/machineblocks/mbom/`, scad-lib submodule — no npm workspace / TS packages yet.
+
+**Target tree** (after scaffolding):
 
 ```text
-bom-compiler/
+blockml/
   packages/
     core/              — @blockml/core (BOM TS contracts + framework BML: org.blockml.bml.*)
     parser/            — @blockml/parser (BML → BomDocument; types from core)
@@ -175,6 +179,7 @@ bom-compiler/
                   bricks/
                   ...
 
+  docs/
   README.md
 ```
 
