@@ -1,7 +1,7 @@
 <!--
-  MachineBlocks — LocalCorner struct type
+  MachineBlocks — CornerMap struct type
 
-  FQN: com.machineblocks.bml.type.LocalCorner
+  FQN: com.machineblocks.bml.type.CornerMap
 -->
 <block
   xmlns="http://blockml.org/bml"
@@ -12,15 +12,16 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:mbtype="com.machineblocks.bml.type">
 
-  <name>LocalCorner</name>
-  <type>mbtype:LocalCorner</type>
+  <name>CornerMap</name>
+  <type>mbtype:CornerMap</type>
   <baseType>type:StructType</baseType>
-  <is>A value map on the four local corners</is>
+  <is>A value map on the four corners</is>
 
-  <documentation>Struct ValueType for a corner-keyed map on the local horizontal plane
-    { sw, nw, ne, se }. Generic T is the per-corner value type — any ValueType; no defaultType —
-    bind T explicitly, e.g. LocalCorner(Boolean) or LocalCorner(Decimal(unit:Millimeter)).
-    Short keys map to south-west / north-west / north-east / south-east in the local brick frame.</documentation>
+  <documentation>Struct ValueType for a corner-keyed map { sw, nw, ne, se } in the local brick
+    frame. The four corners may lie on any local plane (XY, XZ, or YZ) — the plane is not part of
+    the type. Generic T is the per-corner value type — any ValueType; no defaultType — bind T
+    explicitly, e.g. CornerMap(Boolean) or CornerMap(Decimal(unit:Millimeter)). Short keys map to
+    south-west / north-west / north-east / south-east.</documentation>
 
   <genericTypes>
     <T baseType="core:ValueType"/>
@@ -28,16 +29,16 @@
 
   <properties>
     <sw type="T">
-      <documentation>Value at the south-west local corner (sw).</documentation>
+      <documentation>Value at the south-west corner (sw).</documentation>
     </sw>
     <nw type="T">
-      <documentation>Value at the north-west local corner (nw).</documentation>
+      <documentation>Value at the north-west corner (nw).</documentation>
     </nw>
     <ne type="T">
-      <documentation>Value at the north-east local corner (ne).</documentation>
+      <documentation>Value at the north-east corner (ne).</documentation>
     </ne>
     <se type="T">
-      <documentation>Value at the south-east local corner (se).</documentation>
+      <documentation>Value at the south-east corner (se).</documentation>
     </se>
   </properties>
 

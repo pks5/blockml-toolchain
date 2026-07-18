@@ -1,0 +1,63 @@
+<!--
+  MachineBlocks — Connector struct type
+
+  FQN: com.machineblocks.bml.type.Connector
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type">
+
+  <name>Connector</name>
+  <type>mbtype:Connector</type>
+  <baseType>type:StructType</baseType>
+  <is>A side connector on a directed face</is>
+
+  <documentation>Struct ValueType for a triangular side connector placement
+    { face, axis, gender, align, padStart, padEnd }. Used by NativeBlock.connectors as
+    Boolean.False | Connector[]. padStart / padEnd skip connector slots at the start and end
+    along the face — important when joining bricks of different sizes.</documentation>
+
+  <properties>
+    <face type="mbtype:Face">
+      <documentation>Directed face where the connector is placed (x- / x+ / y- / y+ / z- / z+).</documentation>
+    </face>
+    <axis type="mbtype:Axis">
+      <documentation>Axis along which the connector wedge is oriented (x / y / z).</documentation>
+    </axis>
+    <gender type="mbtype:Gender">
+      <documentation>Mating gender — male wedge or female recess.</documentation>
+    </gender>
+    <align type="mbtype:Align">
+      <documentation>Alignment of the connector along the face (start / center / end).</documentation>
+    </align>
+    <padStart type="type:Integer">
+      <documentation>Number of connector slots to skip from the start end of the face.</documentation>
+    </padStart>
+    <padEnd type="type:Integer">
+      <documentation>Number of connector slots to skip from the end of the face.</documentation>
+    </padEnd>
+  </properties>
+
+  <references>
+    <see type="type:StructType" relation="Extends">
+      Struct ValueType branch — face, axis, gender, align, padStart, padEnd.
+    </see>
+    <see type="mbtype:Face" relation="SeeAlso">
+      face selector — six directed brick faces.
+    </see>
+    <see type="mbtype:Axis" relation="SeeAlso">
+      axis selector — X / Y / Z.
+    </see>
+    <see type="mbtype:Gender" relation="SeeAlso">
+      Mating gender — Male / Female.
+    </see>
+    <see type="mbtype:Align" relation="SeeAlso">
+      Alignment along the face — Start / Center / End.
+    </see>
+  </references>
+
+</block>

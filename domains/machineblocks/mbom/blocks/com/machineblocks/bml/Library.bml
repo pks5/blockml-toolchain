@@ -80,7 +80,7 @@
       <mbtype:HoleEdgeMode />
       <mbtype:HoleType />
       <mbtype:Inherit />
-      <mbtype:LocalCorner />
+      <mbtype:CornerMap />
       <mbtype:MBEnum />
       <mbtype:MultiAxis />
       <mbtype:None />

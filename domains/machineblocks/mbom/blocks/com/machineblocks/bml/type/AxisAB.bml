@@ -46,6 +46,9 @@
     <see type="mbtype:OffsetAB" relation="SeeAlso">
       Offset semantics on AxisAB — N closed to Number.
     </see>
+    <see type="mbtype:RadiusAB" relation="SeeAlso">
+      Radius semantics on AxisAB — N closed to Number, default Decimal.
+    </see>
   </references>
 
 </block>

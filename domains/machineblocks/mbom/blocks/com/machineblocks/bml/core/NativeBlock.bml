@@ -243,7 +243,7 @@
       <scad:value>-0.1</scad:value>
     </baseWallThicknessAdjustment>
 
-    <bevel type="mbtype:LocalCorner(mbtype:AxisXY(Decimal(mbunit:GridUnitXY)))">
+    <bevel type="mbtype:CornerMap(mbtype:AxisXY(Decimal(mbunit:GridUnitXY)))">
       <documentation>Creates wedges by shifting Z-axis corners (0-3) in XY space.
         Each corner gets an [x,y] displacement value.
         The resulting shape is intersected with the bounding box.
@@ -325,16 +325,7 @@
       <scad:value>false</scad:value>
     </connectors>
 
-    <cutouts type="Boolean.False | mbtype:Cutout[]">
-      <documentation>Defines one or more void volumes to subtract from the block body.
-        Each entry in the array is a settings array describing one cutout.
-        The subtraction is applied brutally — it ignores walls, recess,
-        tongue, and all structural features. The cutout cuts through everything.
-      </documentation>
-      <since>3.0.0</since>
-      <value>false</value>
-      <scad:value>false</scad:value>
-    </cutouts>
+    
 
     <debug type="Boolean">
       <documentation>Enables debug output to the console. Has no effect on geometry.
@@ -667,7 +658,7 @@
       <scad:value>2.2</scad:value>
     </pcbSocketHoleDiameter>
 
-    <pcbSockets type="mbtype:PcbSocket[]">
+    <pcbSockets type="mbtype:OffsetXY(Decimal(unit:Millimeter))[]">
       <documentation>Positions of screw sockets. Each entry gives the distance of the
         socket center from the brick center in mm.
       </documentation>
@@ -1761,11 +1752,11 @@
       <scad:value>1</scad:value>
     </tongueOffset>
 
-    <tongueRoundingRadius type="mbtype:Auto | mbtype:RoundingRadius">
+    <tongueRoundingRadius type="mbtype:Auto | mbtype:AxisXYZ(mbtype:CornerMap(mbtype:RadiusAB))">
       <documentation>Rounding radius of the tongue. Typically derived from the block's
         rounding radius. Usually does not need adjustment.
       </documentation>
-      <value>auto</value>
+      <value>Auto</value>
       <scad:value>auto</scad:value>
     </tongueRoundingRadius>
 
@@ -1870,9 +1861,19 @@
   </properties>
 
   <aggregations>
-    <children
-      type="mbcore:Block[]"
-      default="true" />
+    <children type="mbcore:Block[]" default="true">
+      <documentation>
+        Defines the child blocks of the current block.
+      </documentation>
+    </children>
+    <cutouts type="NativeBlock[]">
+      <documentation>Defines one or more void volumes to subtract from the block body.
+        Each entry in the array is a settings array describing one cutout.
+        The subtraction is applied brutally — it ignores walls, recess,
+        tongue, and all structural features. The cutout cuts through everything.
+      </documentation>
+      <since>3.0.0</since>
+    </cutouts>
   </aggregations>
 
 </block>

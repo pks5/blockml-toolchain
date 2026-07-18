@@ -1,0 +1,39 @@
+<!--
+  MachineBlocks — RadiusAB struct type
+
+  FQN: com.machineblocks.bml.type.RadiusAB
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>RadiusAB</name>
+  <type>mbtype:RadiusAB</type>
+  <baseType>mbtype:AxisAB(N)</baseType>
+  <is>A radius pair along A and B</is>
+
+  <documentation>Semantic Struct ValueType for a radius pair { a, b }. Extends AxisAB(N) —
+    inherits a and b; adds radius / rounding semantics (non-negative extents). N is constrained
+    to Number (AxisAB remains ValueType-universal). Bare RadiusAB defaults N to Decimal
+    (dimensionless). Override via N — e.g. RadiusAB(Decimal(mbunit:MBU)) or
+    RadiusAB(Decimal(unit:Millimeter)).</documentation>
+
+  <genericTypes>
+    <N baseType="type:Number" defaultType="type:Decimal"/>
+  </genericTypes>
+
+  <references>
+    <see type="mbtype:AxisAB" relation="Extends">
+      Structural { a, b } map — RadiusAB adds radius semantics.
+    </see>
+    <see type="mbtype:OffsetAB" relation="SeeAlso">
+      Parallel offset semantics on AxisAB.
+    </see>
+  </references>
+
+</block>
