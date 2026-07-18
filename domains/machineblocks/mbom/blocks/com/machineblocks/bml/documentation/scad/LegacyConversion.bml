@@ -1,0 +1,67 @@
+<!--
+  MachineBlocks — SCAD documentation
+
+  FQN: com.machineblocks.bml.documentation.scad.LegacyConversion
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>LegacyConversion</name>
+  <type>scad:LegacyConversion</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to converting V2 machineblock() files to V3</is>
+
+  <status>Draft</status>
+
+  <documentation>
+    Status: Draft — primary V2→V3 path is documented; edge cases and automated converter coverage
+    are still incomplete. Expand this block as conversion rules harden.
+
+    Module naming generations:
+    v1: block() — earliest; no nesting
+    v2: machineblock() — direct parameter style
+    v3: mb_block() / mb_block__…() — config/settings style (current)
+
+    Primary supported path: machineblock() (V2) → mb_block() or composite V3 Block Files.
+    V1 block() may be attempted when parameters look familiar, but always warn that nesting is
+    unsupported and manual testing is required.
+
+    Conversion steps:
+    1. Create V3 Block File structure and mb_block__&lt;package&gt;__&lt;Class&gt; naming.
+    2. Replace machineblock(a=…) with mb_block(config, settings=[["a", …]]); use string face ids.
+    3. Remove overrideConfig, *_ovr customizer vars, and deprecated *RoundingResolution params.
+       Move calibration into config. Replace baseWallGapsX/Y with baseWallGaps; split old
+       "both sides" entries; string sides.
+    4. Wrap all geometry in a Block Module; read parameters only via getters.
+    5. Multiple machineblock() calls → wrapper mb_block(base=false, studs=false) with children;
+       derive shared size when needed.
+    6. Child align="ccs" → wrapper alignChildren; adjust offsets.
+    7. Keep split customizer UI vars; combine under Hidden into one module argument.
+
+    Hidden section: customizer bridge only — no getters, no unitMbu/unitGrid/scale globals.
+    Retrieve unitMbu, unitGrid, and scale via mb_param_* inside the module. Native parameter
+    inventory for getters: NativeBlock (not legacy YAML).
+  </documentation>
+
+  <references>
+    <see type="scad:BlockFileStructure" relation="Requires">
+      Target Block File structure for converted modules.
+    </see>
+    <see type="scad:ModulePatterns" relation="SeeAlso">
+      V3 pattern examples to aim for after conversion.
+    </see>
+    <see type="mbcore:NativeBlock" relation="Defines">
+      Native parameter SSOT for getters and settings keys.
+    </see>
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/docs/01_system.md" relation="DeepDive">
+      Legacy conversion section in the SCAD system doc.
+    </see>
+  </references>
+
+</block>

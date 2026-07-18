@@ -1,0 +1,58 @@
+<!--
+  MachineBlocks — concept documentation
+
+  FQN: com.machineblocks.bml.documentation.concept.CompositionConcepts
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>CompositionConcepts</name>
+  <type>concept:CompositionConcepts</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MachineBlocks composition and assembly</is>
+
+  <documentation>
+    Composition builds larger objects from multiple blocks that share one spatial contract.
+
+    Flat composition places sibling blocks in a shared parent. Nested composition places child
+    blocks inside a parent; configuration propagates from parent to children unless overridden.
+
+    A composite wrapper typically hides its own body and studs (base=false, studs=false) and sets
+    size to the outer bounding box of its parts. Placement of each part uses direction, offset,
+    and alignment relative to the parent origin (alignChildren).
+
+    Assembly modes describe how parts are presented for preview or print: unassembled, assembled,
+    or merged. Nested assembly may carry size and direction alongside the mode.
+
+    Calibration at internal contacts often uses a tiny namespaced baseAdjustment overlap so parts
+    fuse cleanly when merged. Derived outer size can be computed from part sizes, directions, and
+    offsets when no explicit shared size exists.
+
+    In MBOM, composition fills aggregations (for example _parts on CompositeBlock). There is no
+    separate Placement meta-block — placement is properties on the placed instances.
+  </documentation>
+
+  <references>
+    <see type="concept:DecisionFramework" relation="ReadNext">
+      Next — intent → pattern → parameter decision layers.
+    </see>
+    <see type="mbcore:CompositeBlock" relation="Defines">
+      Domain type with default _parts aggregation.
+    </see>
+    <see type="mbml:AuthoringPatterns" relation="SeeAlso">
+      MBML composition patterns.
+    </see>
+    <see type="scad:ModulePatterns" relation="SeeAlso">
+      SCAD composite Block File patterns and full-file examples.
+    </see>
+  </references>
+
+</block>

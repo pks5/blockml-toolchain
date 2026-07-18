@@ -19,6 +19,9 @@
   xmlns:mb="com.machineblocks.bml"
   xmlns:mbann="com.machineblocks.bml.annotation"
   xmlns:bricks="com.machineblocks.bml.bricks"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml"
+  xmlns:scad="com.machineblocks.bml.documentation.scad"
   xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit"
   xmlns:mbgroup="com.machineblocks.bml.group">
@@ -30,7 +33,8 @@
 
   <documentation>
     Publishable MachineBlocks root library (com.machineblocks.bml.Library). Exports shared domain
-    ValueTypes, Units, MemberGroups (com.machineblocks.bml.group.*), and ScadAnnotation. Brick
+    ValueTypes, Units, MemberGroups (com.machineblocks.bml.group.*), ScadAnnotation, and curated
+    documentation blocks under com.machineblocks.bml.documentation.{concept,mbml,scad}. Brick
     catalogs are nested via subLibraries — consumers that need bricks depend on
     com.machineblocks.bml.bricks.Library directly. Membership is defined exclusively by this file's
     blocks list — not by directory layout.
@@ -67,6 +71,26 @@
     </subLibraries>
 
     <blocks>
+      <concept:Introduction />
+      <concept:Architecture />
+      <concept:UnitsAndGrid />
+      <concept:GeometryConcepts />
+      <concept:TransformationConcepts />
+      <concept:StructureSystems />
+      <concept:CompositionConcepts />
+      <concept:DecisionFramework />
+      <concept:StatusConvention />
+      <mbml:MbmlOverview />
+      <mbml:DomainModel />
+      <mbml:TypeSystem />
+      <mbml:AuthoringPatterns />
+      <scad:ScadRenderTarget />
+      <scad:MbBlockApi />
+      <scad:BlockFileStructure />
+      <scad:ModulePatterns />
+      <scad:TypesAndSerialization />
+      <scad:ScadDecisionRules />
+      <scad:LegacyConversion />
       <mbann:ScadAnnotation />
       <mbgroup:AiUsage />
       <mbgroup:FrequentAiUsage />

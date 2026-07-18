@@ -1,0 +1,58 @@
+<!--
+  MachineBlocks — concept documentation
+
+  FQN: com.machineblocks.bml.documentation.concept.DecisionFramework
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>DecisionFramework</name>
+  <type>concept:DecisionFramework</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MachineBlocks decision layers</is>
+
+  <documentation>
+    Do not start with parameters — start with intent. Three decision layers apply whether authoring
+    in MBML or targeting SCAD:
+
+    1. Semantic Intent — what is this block for?
+    2. Pattern Selection — how is it structured?
+    3. Parameter Realization — how is it built?
+
+    Intent order: Semantic Mode (purpose, structure, printability) is primary. Output Mode chooses
+    LEGO-like (playful, looser) versus Device (functional, strict printability). Design Mode
+    (appearance) is secondary and never overrides purpose.
+
+    Pattern selection: Primitive Wrapper, Semantic/Simple Block, Composite Block, or Helper/Form.
+    When in doubt, choose Composite.
+
+    Capability boundary of a single native geometry call: classic bricks and plates, slopes or
+    wedges (not both in one call), rounds, recess, studs, simple cutouts, and similar single-body
+    forms. L/T/cross shapes, Z-brackets, side panels, cable channels, bent liftarms, multi-line
+    text, and multi-body carriers require composition.
+
+    Cross-cutting rules: design in west-local face semantics; prefer direction over free rotation;
+    keep calibration adjustments out of instance settings when they belong in config; use face
+    string identifiers in V3.
+  </documentation>
+
+  <references>
+    <see type="concept:StatusConvention" relation="ReadNext">
+      Next — status Block references for maturity.
+    </see>
+    <see type="mbml:AuthoringPatterns" relation="SeeAlso">
+      MBML realization of these patterns.
+    </see>
+    <see type="scad:ScadDecisionRules" relation="SeeAlso">
+      SCAD-specific decision rules and mb_block() whitelist/blacklist.
+    </see>
+  </references>
+
+</block>

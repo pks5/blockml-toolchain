@@ -1,0 +1,53 @@
+<!--
+  MachineBlocks — concept documentation
+
+  FQN: com.machineblocks.bml.documentation.concept.GeometryConcepts
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbcore="com.machineblocks.bml.core">
+
+  <name>GeometryConcepts</name>
+  <type>concept:GeometryConcepts</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MachineBlocks shape modification concepts</is>
+
+  <documentation>
+    Core geometry parameters modify the block shape inside the bounding box defined by size:
+
+    size — integer grid extent; the spatial contract of the block.
+    sizeMod — semantic per-side modification that keeps the brick structurally intact.
+    slope — height change per side; positive slopes the top, negative creates inverted bottom
+      slopes. Does not change footprint.
+    bevel — footprint change by shifting top corners in XY; produces wedge shapes. Does not change
+      height. Wedges are not a separate primitive — they emerge from bevel.
+    crop — hard cut or extension; does not preserve grid compatibility, walls, or structural
+      features; does not change bounding box or positioning; corner rounding applies after crop.
+    Prefer sizeMod over crop when the brick should remain structurally intact.
+
+    Cutouts are an array of settings arrays. Each inner array defines one cut volume using geometry
+    and size parameters. The cutout is boolean-subtracted from the body. Surface-only and
+    render-only parameters are ignored in a cutout context.
+
+    Parameter names, types, and defaults are defined on NativeBlock — do not treat external YAML or
+    Markdown tables as authoritative.
+  </documentation>
+
+  <references>
+    <see type="concept:TransformationConcepts" relation="ReadNext">
+      Next — direction, alignment, rotation, and transform order.
+    </see>
+    <see type="mbcore:NativeBlock" relation="Defines">
+      SSOT for size, sizeMod, slope, bevel, crop, cutouts, and related properties.
+    </see>
+    <see type="concept:DecisionFramework" relation="SeeAlso">
+      When slope and bevel should not share a single native call.
+    </see>
+  </references>
+
+</block>

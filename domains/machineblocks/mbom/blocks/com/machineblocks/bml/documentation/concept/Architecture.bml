@@ -1,0 +1,65 @@
+<!--
+  MachineBlocks — concept documentation
+
+  FQN: com.machineblocks.bml.documentation.concept.Architecture
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>Architecture</name>
+  <type>concept:Architecture</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to the MachineBlocks layered architecture</is>
+
+  <documentation>
+    MachineBlocks follows a layered architecture:
+
+    MBML (MachineBlocks Markup Language)
+      ↓
+    MBOM (MachineBlocks Object Model)
+      ↓
+    Render Target (reference: OpenSCAD)
+      ↓
+    STL / 3MF (or other target artifacts)
+
+    MBML is the declarative authoring format for blocks, sets, and devices. Authors describe typed,
+    parameterized elements without knowledge of any render target.
+
+    MBOM is the renderer-independent canonical object model. The MBML compiler produces MBOM.
+    Validation, composition, and domain semantics operate on MBOM.
+
+    A render target serializes MBOM into a concrete output language. The MachineBlocks V3 SCAD
+    library is the reference render target: OpenSCAD files that OpenSCAD turns into STL or 3MF.
+    MBOM is canonical; SCAD is a serialization of MBOM — not the other way around.
+
+    Core principle: one native geometry primitive with a large parameter space. Complexity comes
+    from parameter combinations, composition of multiple blocks, and nesting — not from many
+    unrelated primitives.
+  </documentation>
+
+  <references>
+    <see type="concept:UnitsAndGrid" relation="ReadNext">
+      Next — unit stack, grid aspect ratio, and bounding box.
+    </see>
+    <see type="mbml:MbmlOverview" relation="SeeAlso">
+      MBML authoring path on this architecture.
+    </see>
+    <see type="scad:ScadRenderTarget" relation="SeeAlso">
+      OpenSCAD as the reference render target.
+    </see>
+    <see file="docs/03_mbom.md" relation="AuthoringGuide">
+      MBOM specialization of BOM Core.
+    </see>
+    <see file="docs/05_scad_renderer.md" relation="DeepDive">
+      SCAD render target registration and processors.
+    </see>
+  </references>
+
+</block>
