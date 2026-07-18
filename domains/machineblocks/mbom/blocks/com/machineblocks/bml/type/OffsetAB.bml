@@ -20,13 +20,16 @@
   <documentation>Semantic Struct ValueType for an offset pair { a, b }. Extends AxisAB(N, B) —
     inherits a (N) and b (B); adds offset / translation semantics (may be negative). When used as a
     face-local offset, a and b are measured from the respective negative (-) sides of the face.
-    N and B are constrained to Number. B defaults to N so bare OffsetAB / OffsetAB(T) binds both
-    to the same effective type. Bare OffsetAB defaults N to Decimal (dimensionless). Override via
-    N / B — e.g. OffsetAB(Decimal(mbunit:GridUnitXY)) or OffsetAB(Decimal(unit:Millimeter)).</documentation>
+    AB stands for a face-local plane that may be XY, XZ, or YZ depending on context (e.g. the
+    selected Face) — therefore bare OffsetAB defaults N to dimensionless Decimal and does not
+    bind a single grid unit such as GridUnitXY. A uniform GridUnitXY default (as on OffsetXY)
+    would be wrong whenever the plane includes Z (GridUnitZ). Bind units explicitly when known —
+    e.g. OffsetAB(Decimal(unit:Millimeter)) or OffsetAB(Decimal(mbunit:GridUnitXY),
+    Decimal(mbunit:GridUnitZ)). N and B are constrained to Number; B defaults to N.</documentation>
 
   <genericTypes>
-    <N baseType="type:Number" defaultType="type:Decimal"/>
-    <B baseType="type:Number" defaultType="N"/>
+    <N baseType="Number" defaultType="Decimal"/>
+    <B baseType="Number" defaultType="N"/>
   </genericTypes>
 
   <references>

@@ -14,7 +14,7 @@
 
   <name>FaceMapXY</name>
   <type>mbtype:FaceMapXY</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>A face-keyed value map on X and Y</is>
 
   <documentation>Struct ValueType for a sparse face map on the four lateral faces
@@ -43,7 +43,7 @@
   </properties>
 
   <references>
-    <see type="type:StructType" relation="Extends">
+    <see type="StructType" relation="Extends">
       Struct ValueType branch — named face fields.
     </see>
     <see type="mbtype:FaceMapXYZ" relation="SeeAlso">

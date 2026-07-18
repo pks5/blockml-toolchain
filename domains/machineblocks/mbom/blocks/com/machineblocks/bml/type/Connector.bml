@@ -13,7 +13,7 @@
 
   <name>Connector</name>
   <type>mbtype:Connector</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>A side connector on a directed face</is>
 
   <documentation>Struct ValueType for a triangular side connector placement
@@ -34,16 +34,16 @@
     <align type="mbtype:Align">
       <documentation>Alignment of the connector along the face (start / center / end).</documentation>
     </align>
-    <padStart type="type:Integer">
+    <padStart type="Integer">
       <documentation>Number of connector slots to skip from the start end of the face.</documentation>
     </padStart>
-    <padEnd type="type:Integer">
+    <padEnd type="Integer">
       <documentation>Number of connector slots to skip from the end of the face.</documentation>
     </padEnd>
   </properties>
 
   <references>
-    <see type="type:StructType" relation="Extends">
+    <see type="StructType" relation="Extends">
       Struct ValueType branch — face, axis, gender, align, padStart, padEnd.
     </see>
     <see type="mbtype:Face" relation="SeeAlso">

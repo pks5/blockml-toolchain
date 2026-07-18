@@ -14,7 +14,7 @@
 
   <name>CornerMap</name>
   <type>mbtype:CornerMap</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>A value map on the four corners</is>
 
   <documentation>Struct ValueType for a corner-keyed map { sw, nw, ne, se } in the local brick
@@ -43,7 +43,7 @@
   </properties>
 
   <references>
-    <see type="type:StructType" relation="Extends">
+    <see type="StructType" relation="Extends">
       Struct ValueType branch — named corner fields.
     </see>
     <see type="mbtype:FaceMapXY" relation="SeeAlso">

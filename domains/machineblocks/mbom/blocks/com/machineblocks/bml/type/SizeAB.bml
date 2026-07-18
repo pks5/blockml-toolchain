@@ -23,8 +23,8 @@
     defaults N to Decimal (dimensionless). Override via N / B — e.g. SizeAB(Decimal(unit:Millimeter)).</documentation>
 
   <genericTypes>
-    <N baseType="type:Number" defaultType="type:Decimal"/>
-    <B baseType="type:Number" defaultType="N"/>
+    <N baseType="Number" defaultType="Decimal"/>
+    <B baseType="Number" defaultType="N"/>
   </genericTypes>
 
   <references>

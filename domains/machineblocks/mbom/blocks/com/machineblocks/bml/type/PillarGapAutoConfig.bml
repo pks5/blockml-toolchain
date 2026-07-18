@@ -13,7 +13,7 @@
 
   <name>PillarGapAutoConfig</name>
   <type>mbtype:PillarGapAutoConfig</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>Auto pillar-gap layout parameters</is>
 
   <documentation>Struct ValueType for pillars="auto" layout: corner triangle leg length and
@@ -21,17 +21,17 @@
     V2 pair pillarGapCornerLength / pillarGapMiddle.</documentation>
 
   <properties>
-    <cornerLength type="type:Integer">
+    <cornerLength type="Integer">
       <documentation>Length of the two legs of the pillar triangle at each corner (grid units).</documentation>
     </cornerLength>
-    <middleWidth type="type:Integer">
+    <middleWidth type="Integer">
       <documentation>Width of the pillar cross in the middle of the plate (grid units);
         each arm extends middleWidth / 2 from the center.</documentation>
     </middleWidth>
   </properties>
 
   <references>
-    <see type="type:StructType" relation="Extends">
+    <see type="StructType" relation="Extends">
       Struct ValueType branch — named layout fields.
     </see>
   </references>

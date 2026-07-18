@@ -13,7 +13,7 @@
 
   <name>Inherit</name>
   <type>mbtype:Inherit</type>
-  <baseType>type:Constant(Text)</baseType>
+  <baseType>Constant(Text)</baseType>
   <is>The literal Inherit sentinel</is>
 
   <documentation>Named Constant(Text) for the singleton value "Inherit". Use as a union
@@ -22,7 +22,7 @@
     property should take its effective value from the parent / surrounding context.</documentation>
 
   <references>
-    <see type="type:Constant" relation="Extends">
+    <see type="Constant" relation="Extends">
       Constant(Text) with value fixed to "Inherit".
     </see>
     <see type="mbtype:Auto" relation="SeeAlso">

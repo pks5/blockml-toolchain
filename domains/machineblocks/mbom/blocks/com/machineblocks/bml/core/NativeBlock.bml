@@ -210,7 +210,13 @@
     </baseCutoutType>
 
     <baseRoundingRadius type="Decimal | mbtype:AxisXYZ(mbtype:CornerMap(Decimal | mbtype:RadiusAB))">
-      <documentation>Rounding radius of the block corners.</documentation>
+      <documentation>Rounding radius of the block corners. Unlike recessRoundingRadius /
+        tongueRoundingRadius (Z-plane / horizontal corners only), this parameter defines
+        radii along all three brick axes via AxisXYZ(CornerMap(…)). Because the three axes
+        use different scales (XY grid vs Z plate height), component values stay unitless
+        Decimal | RadiusAB — the axis context supplies the physical meaning. A bare Decimal
+        applies the same radius on all axes and corners.
+      </documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
     </baseRoundingRadius>
@@ -827,8 +833,10 @@
     </recessDepth>
 
     <recessRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:CornerMap(Decimal(mbunit:GridUnitXY) | mbtype:RadiusAB(Decimal(mbunit:GridUnitXY)))">
-      <documentation>Rounding radius of the recess cavity. Derived from the block's
-        rounding radius. Usually does not need adjustment.
+      <documentation>Rounding radius of the recess cavity corners on the horizontal (Z-face)
+        plane only — not a full AxisXYZ map like baseRoundingRadius. Because only the XY
+        plane is involved, values carry GridUnitXY. Auto derives from the block's
+        baseRoundingRadius. Usually does not need adjustment.
       </documentation>
       <value>Auto</value>
       <scad:value>auto</scad:value>
@@ -1753,8 +1761,10 @@
     </tongueOffset>
 
     <tongueRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:CornerMap(Decimal(mbunit:GridUnitXY) | mbtype:RadiusAB(Decimal(mbunit:GridUnitXY)))">
-      <documentation>Rounding radius of the tongue. Typically derived from the block's
-        rounding radius. Usually does not need adjustment.
+      <documentation>Rounding radius of the tongue corners on the horizontal (Z-face) plane
+        only — not a full AxisXYZ map like baseRoundingRadius. Because only the XY plane is
+        involved, values carry GridUnitXY. Auto typically derives from the block's
+        baseRoundingRadius. Usually does not need adjustment.
       </documentation>
       <value>Auto</value>
       <scad:value>auto</scad:value>
@@ -1867,10 +1877,13 @@
       </documentation>
     </children>
     <cutouts type="NativeBlock[]">
-      <documentation>Defines one or more void volumes to subtract from the block body.
-        Each entry in the array is a settings array describing one cutout.
-        The subtraction is applied brutally — it ignores walls, recess,
-        tongue, and all structural features. The cutout cuts through everything.
+      <documentation>Void volumes subtracted from the block body. Unlike ports / connectors /
+        screwHoles (ValueType structs), each cutout is a full NativeBlock instance — a complete
+        block description limited to the parameters that determine shape (size, offset, bevel,
+        slope, rounding, etc.). Aggregation (not a property) because cutouts are composition
+        children of geometry, not scalar/struct values. A future split of NativeBlock will
+        extract a dedicated shape-only Block type for this role. The subtraction is applied
+        brutally — it ignores walls, recess, tongue, and all structural features.
       </documentation>
       <since>3.0.0</since>
     </cutouts>

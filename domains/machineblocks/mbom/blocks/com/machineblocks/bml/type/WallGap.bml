@@ -14,7 +14,7 @@
 
   <name>WallGap</name>
   <type>mbtype:WallGap</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>A wall opening on a face or axis</is>
 
   <documentation>Struct ValueType for a gap in a base or recess wall. face selects an XY face,
@@ -26,16 +26,16 @@
     <face type="mbtype:FaceAxisXY">
       <documentation>Wall side or axis where the gap applies (x- / x+ / y- / y+ / x / y / xy).</documentation>
     </face>
-    <pos type="type:Decimal(mbunit:GridXY)">
+    <pos type="Decimal(mbunit:GridXY)">
       <documentation>Start position of the gap along the wall (grid units).</documentation>
     </pos>
-    <len type="type:Decimal(mbunit:GridXY)">
+    <len type="Decimal(mbunit:GridXY)">
       <documentation>Length of the gap along the wall (grid units).</documentation>
     </len>
   </properties>
 
   <references>
-    <see type="type:StructType" relation="Extends">
+    <see type="StructType" relation="Extends">
       Struct ValueType branch — face, pos, len.
     </see>
     <see type="mbtype:FaceAxisXY" relation="SeeAlso">

@@ -101,6 +101,7 @@
       <mbtype:SizeAB />
       <mbtype:SizeXY />
       <mbtype:SizeXYZ />
+      <mbtype:ScrewHole />
       <mbtype:StudType />
       <mbunit:MBU />
       <mbunit:GridUnitXY />

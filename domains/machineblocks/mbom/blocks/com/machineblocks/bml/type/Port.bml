@@ -15,7 +15,7 @@
 
   <name>Port</name>
   <type>mbtype:Port</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>A face cutout port with shapes</is>
 
   <documentation>Struct ValueType for a face cutout port { face, align, offset, rotation, shapes,
@@ -35,13 +35,13 @@
       <documentation>2D offset from the align anchor on the face. Unitless — scale depends on
         the selected face.</documentation>
     </offset>
-    <rotation type="type:Decimal(unit:Degree)">
+    <rotation type="Decimal(unit:Degree)">
       <documentation>Rotation of the whole port in degrees.</documentation>
     </rotation>
     <shapes type="PortShape[]">
       <documentation>One or more shapes cut into the face for this port.</documentation>
     </shapes>
-    <depth type="mbtype:Auto | type:Decimal">
+    <depth type="mbtype:Auto | Decimal">
       <documentation>Cut depth — Auto for default resolution, or an explicit unitless Decimal.</documentation>
     </depth>
   </properties>
@@ -49,7 +49,7 @@
   <subBlocks>
     <block>
       <name>PortShape</name>
-      <baseType>type:StructType</baseType>
+      <baseType>StructType</baseType>
       <is>A single shape within a port</is>
 
       <documentation>Struct ValueType for one port shape { type, offset, rotation, setting }.
@@ -60,10 +60,10 @@
         <type type="mbtype:PortShapeType">
           <documentation>Shape kind — Rect or Circle (SCAD "rect" / "circle").</documentation>
         </type>
-        <offset type="mbtype:OffsetAB(type:Decimal(unit:Millimeter))">
+        <offset type="mbtype:OffsetAB(Decimal(unit:Millimeter))">
           <documentation>Offset of the shape from the port center, in millimeters.</documentation>
         </offset>
-        <rotation type="type:Decimal(unit:Degree)">
+        <rotation type="Decimal(unit:Degree)">
           <documentation>Shape rotation in degrees.</documentation>
         </rotation>
         <setting type="PortShapeSettings">
@@ -75,7 +75,7 @@
 
     <block>
       <name>PortShapeSettings</name>
-      <baseType>type:StructType</baseType>
+      <baseType>StructType</baseType>
       <abstract>true</abstract>
       <is>Abstract port shape type-data</is>
 
@@ -93,7 +93,7 @@
         FQN: com.machineblocks.bml.type.Port.PortCircleShapeSettings.</documentation>
 
       <properties>
-        <diameter type="type:Decimal(unit:Millimeter)">
+        <diameter type="Decimal(unit:Millimeter)">
           <documentation>Circle diameter in millimeters.</documentation>
         </diameter>
       </properties>
@@ -108,10 +108,10 @@
         FQN: com.machineblocks.bml.type.Port.PortRectShapeSettings.</documentation>
 
       <properties>
-        <size type="mbtype:SizeAB(type:Decimal(unit:Millimeter))">
+        <size type="mbtype:SizeAB(Decimal(unit:Millimeter))">
           <documentation>Rectangle width / height in millimeters (a / b).</documentation>
         </size>
-        <radius type="type:Decimal(unit:Millimeter) | mbtype:RadiusAB(type:Decimal(unit:Millimeter))">
+        <radius type="Decimal(unit:Millimeter) | mbtype:RadiusAB(Decimal(unit:Millimeter))">
           <documentation>Corner rounding — uniform Decimal(Millimeter), or per-component
             RadiusAB(Decimal(Millimeter)).</documentation>
         </radius>
@@ -120,7 +120,7 @@
   </subBlocks>
 
   <references>
-    <see type="type:StructType" relation="Extends">
+    <see type="StructType" relation="Extends">
       Struct ValueType branch — face, align, offset, rotation, shapes, depth.
     </see>
     <see type="mbtype:PortShapeType" relation="SeeAlso">

@@ -24,7 +24,7 @@
     OffsetXY (not Offset2D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
 
   <genericTypes>
-    <N baseType="type:Number" defaultType="type:Decimal(mbunit:GridUnitXY)"/>
+    <N baseType="Number" defaultType="Decimal(mbunit:GridUnitXY)"/>
   </genericTypes>
 
   <references>

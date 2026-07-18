@@ -13,7 +13,7 @@
 
   <name>Auto</name>
   <type>mbtype:Auto</type>
-  <baseType>type:Constant(Text)</baseType>
+  <baseType>Constant(Text)</baseType>
   <is>The literal Auto sentinel</is>
 
   <documentation>Named Constant(Text) for the singleton value "Auto". Use as a union
@@ -21,7 +21,7 @@
     at every reference site. The external value is "Auto" (identical to Text).</documentation>
 
   <references>
-    <see type="type:Constant" relation="Extends">
+    <see type="Constant" relation="Extends">
       Constant(Text) with value fixed to "Auto".
     </see>
   </references>

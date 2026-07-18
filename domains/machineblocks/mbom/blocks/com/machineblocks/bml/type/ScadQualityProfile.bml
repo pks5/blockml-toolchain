@@ -15,7 +15,7 @@
 
   <name>ScadQualityProfile</name>
   <type>mbtype:ScadQualityProfile</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>A quality-preset map of SCAD mesh profiles</is>
 
   <documentation>Struct ValueType mapping each QualityPreset (preview / normal / print / render)
@@ -41,18 +41,18 @@
   <subBlocks>
     <block>
       <name>Profile</name>
-      <baseType>type:StructType</baseType>
+      <baseType>StructType</baseType>
       <is>A SCAD mesh quality profile entry</is>
 
       <documentation>Struct ValueType for one quality level: target segment length in millimeters
         and maximum segment count. FQN: com.machineblocks.bml.type.ScadQualityProfile.Profile.</documentation>
 
       <properties>
-        <length type="type:Decimal(unit:Millimeter)">
+        <length type="Decimal(unit:Millimeter)">
           <documentation>Target segment length in millimeters. Smaller values increase mesh
             quality.</documentation>
         </length>
-        <segments type="type:Integer">
+        <segments type="Integer">
           <documentation>Maximum segment count for a full circle (caps resolution).</documentation>
         </segments>
       </properties>
@@ -60,7 +60,7 @@
   </subBlocks>
 
   <references>
-    <see type="type:StructType" relation="Extends">
+    <see type="StructType" relation="Extends">
       Struct ValueType branch — preview, normal, print, render.
     </see>
     <see type="mbtype:QualityPreset" relation="SeeAlso">

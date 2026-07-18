@@ -18,13 +18,16 @@
   <is>A value pair along A and B</is>
 
   <documentation>Struct ValueType for component-keyed { a, b }. Extends MultiAxis(N).
-    Inherits the MultiAxis N parameter for a. B is a separate generic (defaultType N) so the b
-    component may differ from a — e.g. AxisAB(Decimal(mbunit:GridUnitXY), Decimal(mbunit:GridUnitZ)).
-    Bare AxisAB / AxisAB(T) binds B to the same effective type as N. N and B are any ValueType
-    (default Decimal). Parallel to AxisXY / AxisXYZ, but with abstract a / b keys.</documentation>
+    AB names an abstract face-local plane that resolves to XY, XZ, or YZ depending on context —
+    not a fixed world-axis pair like AxisXY. Inherits the MultiAxis N parameter for a. B is a
+    separate generic (defaultType N) so the b component may differ from a — e.g.
+    AxisAB(Decimal(mbunit:GridUnitXY), Decimal(mbunit:GridUnitZ)) when the plane mixes XY and Z
+    scales. Bare AxisAB / AxisAB(T) binds B to N as dimensionless Decimal; no default grid unit,
+    because no single GridUnitXY / GridUnitZ applies to every AB plane. N and B are any
+    ValueType.</documentation>
 
   <genericTypes>
-    <N baseType="core:ValueType" defaultType="type:Decimal"/>
+    <N baseType="core:ValueType" defaultType="Decimal"/>
     <B baseType="core:ValueType" defaultType="N"/>
   </genericTypes>
 

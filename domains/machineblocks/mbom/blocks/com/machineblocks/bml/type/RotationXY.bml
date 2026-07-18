@@ -14,7 +14,7 @@
 
   <name>RotationXY</name>
   <type>mbtype:RotationXY</type>
-  <baseType>mbtype:AxisXY(type:Decimal(unit:Degree))</baseType>
+  <baseType>mbtype:AxisXY(Decimal(unit:Degree))</baseType>
   <is>A rotation about X and Y in degrees</is>
 
   <documentation>Semantic Struct ValueType for a rotation pair { x, y } in degrees. Extends

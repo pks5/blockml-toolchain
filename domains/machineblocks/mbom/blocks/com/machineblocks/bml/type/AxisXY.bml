@@ -23,7 +23,7 @@
     AxisXY(Integer(mbunit:MBU)).</documentation>
 
   <genericTypes>
-    <N baseType="core:ValueType" defaultType="type:Decimal"/>
+    <N baseType="core:ValueType" defaultType="Decimal"/>
   </genericTypes>
 
   <properties>

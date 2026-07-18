@@ -13,7 +13,7 @@
 
   <name>None</name>
   <type>mbtype:None</type>
-  <baseType>type:Constant(Text)</baseType>
+  <baseType>Constant(Text)</baseType>
   <is>The literal None sentinel</is>
 
   <documentation>Named Constant(Text) for the singleton value "None". Use as a union
@@ -23,7 +23,7 @@
     com.machineblocks.bml.type.</documentation>
 
   <references>
-    <see type="type:Constant" relation="Extends">
+    <see type="Constant" relation="Extends">
       Constant(Text) with value fixed to "None".
     </see>
     <see type="mbtype:Auto" relation="SeeAlso">

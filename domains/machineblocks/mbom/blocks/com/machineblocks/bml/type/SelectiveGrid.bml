@@ -16,7 +16,7 @@
 
   <name>SelectiveGrid</name>
   <type>mbtype:SelectiveGrid</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>A grid of values with rectangular selectors</is>
 
   <documentation>Struct ValueType for a plate-grid of cell values. baseValue is the default for
@@ -44,7 +44,7 @@
     <block>
 
       <name>Selector</name>
-      <baseType>type:StructType</baseType>
+      <baseType>StructType</baseType>
       <is>A rectangular grid range override</is>
 
       <documentation>Inclusive axis-aligned range on the plate grid. Static nested StructType with
@@ -70,7 +70,7 @@
   </subBlocks>
 
   <references>
-    <see type="type:StructType" relation="Extends">
+    <see type="StructType" relation="Extends">
       Struct ValueType branch — baseValue + selectors.
     </see>
     <see type="mbtype:AxisXY" relation="SeeAlso">

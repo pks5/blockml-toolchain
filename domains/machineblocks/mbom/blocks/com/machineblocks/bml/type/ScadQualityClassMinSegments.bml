@@ -13,7 +13,7 @@
 
   <name>ScadQualityClassMinSegments</name>
   <type>mbtype:ScadQualityClassMinSegments</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>Per quality-class minimum segment counts</is>
 
   <documentation>Struct ValueType for OpenSCAD quality-class minimum full-circle segment counts
@@ -21,19 +21,19 @@
     NativeBlock.scadQualityClassMinSegments.</documentation>
 
   <properties>
-    <functional type="type:Integer">
+    <functional type="Integer">
       <documentation>Minimum full-circle segment count for the functional quality class.</documentation>
     </functional>
-    <visual type="type:Integer">
+    <visual type="Integer">
       <documentation>Minimum full-circle segment count for the visual quality class.</documentation>
     </visual>
-    <hidden type="type:Integer">
+    <hidden type="Integer">
       <documentation>Minimum full-circle segment count for the hidden quality class.</documentation>
     </hidden>
   </properties>
 
   <references>
-    <see type="type:StructType" relation="Extends">
+    <see type="StructType" relation="Extends">
       Struct ValueType branch — functional, visual, hidden.
     </see>
     <see type="mbtype:ScadQualityClassFactors" relation="SeeAlso">

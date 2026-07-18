@@ -25,8 +25,8 @@
     Decimal(mbunit:GridUnitZ)).</documentation>
 
   <genericTypes>
-    <N baseType="type:Number" defaultType="type:Decimal"/>
-    <B baseType="type:Number" defaultType="N"/>
+    <N baseType="Number" defaultType="Decimal"/>
+    <B baseType="Number" defaultType="N"/>
   </genericTypes>
 
   <references>

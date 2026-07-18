@@ -14,7 +14,7 @@
 
   <name>MultiAxis</name>
   <type>mbtype:MultiAxis</type>
-  <baseType>type:StructType</baseType>
+  <baseType>StructType</baseType>
   <is>An axis-keyed multi-component value</is>
 
   <documentation>Abstract StructType base for MachineBlocks axis-keyed maps (AxisXY, AxisXYZ).
@@ -26,7 +26,7 @@
   <abstract>true</abstract>
 
   <genericTypes>
-    <N baseType="core:ValueType" defaultType="type:Decimal"/>
+    <N baseType="core:ValueType" defaultType="Decimal"/>
   </genericTypes>
 
   <references>

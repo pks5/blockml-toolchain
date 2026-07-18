@@ -24,7 +24,7 @@
     (default Decimal).</documentation>
 
   <genericTypes>
-    <N baseType="core:ValueType" defaultType="type:Decimal"/>
+    <N baseType="core:ValueType" defaultType="Decimal"/>
     <Z baseType="core:ValueType" defaultType="N"/>
   </genericTypes>
 
