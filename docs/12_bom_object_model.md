@@ -20,7 +20,9 @@ This document is the **implementation contract** for `@blockml/core`. It specifi
 
 ## Abstraction Principle
 
-> **A BOM document is a lossless representation of BML source.** It preserves authored structure and authored values — including directives, aggregation declarations, literal syntax, and unresolved type references. BOM makes **no statement** about how directives are expanded, how aggregations are interpreted, or how blocks are rendered.
+> **A BOM document is a lossless representation of BML source.** It preserves authored structure and authored values — including directives, aggregation declarations, literal syntax, unresolved type references, namespace bindings, and XML-rendering metadata (`bml:xml`). BOM makes **no statement** about how directives are expanded, how aggregations are interpreted, or how blocks are rendered.
+
+> **Maximum authored surface:** Render Targets (and the serializer) must be able to read **as much of the original document** as the Urmodell can carry — including details that seem parse-internal. Prefer first-class fields over hidden side channels. See `00_bom_core.md` — Maximum authored surface for renderers.
 
 > **BML → BOM → BML must always be possible.** See `00_bom_core.md` — Fundamental Architecture Principles.
 
@@ -40,6 +42,9 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | Authored in BML | Stored in BOM | Interpreted downstream |
 |---|---|---|
 | `bml:each`, `bml:if`, `bml:with` | `directives[]` on element — **unexpanded** | Renderer (directive expansion) |
+| `xmlns` / `xmlns:prefix` | `SourceInfo.namespaceBindings` — **1:1 authored** | Serializer / FatBlock / QName emit (`19` D2) |
+| `<bml:xml>` / `bml:xml="…"` | First-class `xmlRendering` (block + member) — **not** flow-control `directives[]` (`19` D3) | Serializer, FatBlock, XSD, meta-serializer |
+| Authored element vs attribute when both legal | `xmlRendering.authoredPlacement` (when dual form) | Roundtrip preserve; canonical emit may apply D1 |
 | `size="[5,5,6]"` vs `size="{x:5,…}"` | `LiteralValue` in **authored form** | Renderer (target serialization via type metadata) |
 | `${ size.x }` | `ExpressionValue { raw }` — **AST via `parseExpression()` utility, not evaluated** | Renderer (parse AST → evaluate / emit) |
 | `<aggregations>` declaration | `AggregationDefinition` (declared only) | Type Registry lookup for effective members — **metadata only, no instance data resolution** |
@@ -63,7 +68,8 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Sub-Blocks** | **Nested** in `BlockDefinition.subBlocks[]` — recursive type hierarchy within one `BomDocument`. FQN derived as `resolve(parent.type) + "." + name`. |
 | **Embedded Blocks (Inline Library)** | **Inlined** in `RootBlockDefinition.embeddedBlocks[]` on the **document root only** (forbidden on Sub-Blocks and on embeds). Each entry is `EmbeddedBlockDefinition` — a virtual `.bml` file (FQN = `<type>`). Shadow library/file definitions within the BomDocument; duplicate embed FQNs → error; invisible externally. |
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
-| **Directives** | `bml:*` on composition elements — flow-control in `directives[]`; composition meta (`bml:id`, `bml:version`) on `BlockInstance` fields. **Not expanded** at parse time. |
+| **Directives** | Flow-control `bml:*` on composition elements → `directives[]`. Composition meta (`bml:id`, `bml:version`) → `BlockInstance` fields. **`bml:xml` → first-class `xmlRendering`** (not `directives[]`). None expanded at parse time. |
+| **Maximum authored surface** | Urmodell exposes as much of the original document as possible to renderers — including seeming internals (`00_bom_core.md`). When in doubt, preserve. |
 | **Instance `version`** | From **`bml:version`** — optional on external block references and Library TypeReferenceEntity sugar. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert against the referenced type (`BML_UNKNOWN_VERSION` if no match). Same-document Sub-Blocks exempt. |
 | **Definition `version`** | Every Block definition has an **effective version**: own `<version>` if present, else library version if the block is exported via a Library, else error (`BML_MISSING_VERSION`). |
 | **Instance `id`** | From **`bml:id`** — authored in BOM only on `BlockInstance.id`; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `bml:id`. No FQN fallback. |
@@ -135,7 +141,12 @@ interface SourceInfo {
   filePath: string
   /** "xml" only for authoring. JSON authoring is not planned (see 02_mbml.md). */
   format: "xml"
-  /** xmlns prefix → resolved namespace identifier (XML only; authoring aid — members store resolved values) */
+  /**
+   * Authored xmlns prefix → namespace identifier (XML).
+   * Lossless 1:1 with source — required for roundtrip and for QName emit (`bml:Self`, …).
+   * Do not invent prefixes at serialize time; missing binding → BML_NAMESPACE_UNBOUND (see 19 D2).
+   * Default xmlns uses prefix key "".
+   */
   namespaceBindings?: Record<string, string>
 }
 ```
@@ -222,6 +233,13 @@ interface BlockDefinition {
 
   /** Final type — cannot be used as baseType on definitions. Default false. */
   final?: boolean
+
+  /**
+   * Authored block-level `<bml:xml>…</bml:xml>` — XML root-tag recipe for instances of this type.
+   * First-class (not directives[]). Omitted → no authored override; emit uses Definition/`bml:Self` rules.
+   * `raw` is lossless body text (literal local name or `${ … }`). See 19 D3 · 00 Maximum authored surface.
+   */
+  xmlRendering?: XmlRenderingBlock
 
   /** BlockML access visibility — Sub-Blocks only. Derived from name when omitted. Forbidden on root Blocks. Does not restrict renderer BOM access. */
   visibility?: "private" | "protected" | "public"
@@ -609,9 +627,31 @@ interface MemberDefinitionBase {
   final?: boolean
   /** Local declaration property — not inherited. When true, this declaration overrides a same-named parent member. Must be set on every redeclaration layer. */
   override?: boolean
+  /**
+   * Authored member-level `bml:xml="…"`. First-class (not directives[]).
+   * Omitted → D1 kind defaults at canonical emit. Dual forms store allowed kinds + authoredPlacement.
+   * See 19 D1/D3 · 00 Maximum authored surface.
+   */
+  xmlRendering?: XmlRenderingMember
   /** Constraint Block instances — document order preserved. Target binding resolved at validate time. */
   constraints?: BlockInstance[]
   source?: SourceLocation
+}
+
+/** Block-level `<bml:xml>` body — lossless. */
+interface XmlRenderingBlock {
+  /** Literal local name or expression source, e.g. "block" or "${ bml:Self }" */
+  raw: string
+}
+
+type XmlNodeKind = "attribute" | "element" | "text" | "cdata"
+
+/** Member-level `bml:xml` — lossless + emit hints. */
+interface XmlRenderingMember {
+  /** Declared kind(s). Single value or dual allow-list (element|attribute, text|cdata). */
+  kinds: XmlNodeKind[]
+  /** When dual forms were legal: which form appeared in source (roundtrip). */
+  authoredPlacement?: XmlNodeKind
 }
 
 interface PropertyDefinition extends MemberDefinitionBase {

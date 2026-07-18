@@ -157,14 +157,27 @@ Example: `org.blockml.bml.definition.BlockDefinition` — every block document u
 <bml:xml>${ bml:Self }</bml:xml>
 ```
 
-→ element name derived from the instance's **effective Block type** (`bml:Self`). Namespace prefix syntax is supported where authored:
+→ element name derived from the instance's **effective Block type** (`bml:Self`). The **XML prefix** is not invented at emit time:
 
 ```text
-bml:Self = org.blockml.bml.core.Block     →  <core:Block>   (xmlns:core bound)
-bml:Self = com.foo.MyBlock            →  <myns:MyBlock> or unprefixed per namespace rules
+bml:Self = org.blockml.bml.core.Block     →  <core:Block>   only if xmlns:core was authored and stored
+bml:Self = com.foo.MyBlock                →  <myns:MyBlock> only with the authored prefix for that namespace
 ```
 
 Example: `org.blockml.bml.core.Block` — composable instances render under their declared type tag.
+
+##### Namespace prefixes (**D2 — Decided**)
+
+**1:1 roundtrip of authored prefixes is mandatory.**
+
+| Rule | Detail |
+|---|---|
+| **Store** | Parser records every authored `xmlns` / `xmlns:prefix` on `BomDocument.source.namespaceBindings` (`prefix → namespace id`). Default (unprefixed) xmlns uses a reserved key (e.g. `""`). Do not normalize or rewrite prefixes. |
+| **Emit** | Serializer and XML-emitting targets reuse **exactly** those bindings for QNames (`${ bml:Self }`, TypeReferenceEntity sugar, prefixed member elements). No synthetic `ns1` / guessed short names. |
+| **Missing binding** | If emit would need a prefix for a namespace that is **not** in `namespaceBindings` → **error** (diagnostic e.g. `BML_NAMESPACE_UNBOUND` — code TBD). Do not invent a binding. |
+| **FatBlock** | Host **must** run Stage 2 validation **before** FatBlock emit. Validator ensures the closure of types/namespaces for the bundle is bound (root + every inlined dependency’s authored bindings, merged without prefix collisions). Unbound or conflicting prefix→namespace mappings → fail FatBlock; no silent rewrite. |
+
+Phase A roundtrip of a single file already requires preserving `namespaceBindings` losslessly. Prefix resolution for `${ bml:Self }` evaluation is post–Phase A; the storage and “no invent” rules apply from Phase A onward.
 
 **Expression — member name as element name**
 
@@ -341,7 +354,7 @@ Until the meta-serializer exists:
 
 - Parser behavior remains as documented in `13_bml_to_bom_mapping.md`.
 - Definition `.bml` files are loaded like any framework block (bootstrap in `16_framework_base_types.md`).
-- `bml:xml` elements and attributes are stored in BOM (directives / member metadata — exact BOM fields TBD; see D3). Prefer a shape that **Render Targets can query without filtering flow-control `directives[]`**. Omitted / dual forms resolve via **D1** kind defaults at canonical emit.
+- `bml:xml` elements and attributes are stored on the Urmodell as first-class **`xmlRendering`** (`12` — D3). Omitted / dual forms resolve via **D1** kind defaults at canonical emit. Prefer this over flow-control `directives[]` so every XML-emitting target can query the same fields (**maximum authored surface** — `00_bom_core.md`).
 
 **Non-goals for initial implementation:** Evaluating `${ bml:Self }` / `${ #this.name }` at parse time for non-meta blocks. **XSD emission** is not a parser side-effect — it is the XSD Render Target (D5).
 
@@ -393,8 +406,8 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 | ID | Topic | Notes |
 |---|---|---|
 | D1 | Default `bml:xml` when omitted on members | **Decided:** kind-based defaults — § Default XML rendering by kind. Explicit `bml:xml` wins. Dual forms (`element\|attribute`, …) accepted at parse; canonical emit uses the table |
-| D2 | `${ bml:Self }` prefix resolution at serialize time | Reuse xmlns bindings from BOM `SourceInfo.namespaceBindings` |
-| D3 | BOM storage shape for `<bml:xml>` element | `xmlRendering` on BlockDefinition vs `directives[]`. **Lean toward first-class field(s):** serializer **and** XML-emitting RTs (FatBlock, XSD, …) need typed access — not mixed with flow-control directives |
+| D2 | `${ bml:Self }` prefix resolution at serialize time | **Decided:** store authored prefixes in `SourceInfo.namespaceBindings` — **1:1 roundtrip**, no invented prefixes. Missing NS → error. FatBlock only after Stage 2 validator; unbound/conflicting NS fail — see § Namespace prefixes |
+| D3 | BOM storage shape for `<bml:xml>` / member `bml:xml` | **Decided:** first-class `xmlRendering` on `BlockDefinition` + `MemberDefinitionBase` — **not** flow-control `directives[]`. Follows **maximum authored surface** (`00_bom_core.md`). See `12_bom_object_model.md` · `XmlRenderingBlock` / `XmlRenderingMember` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | **Member-level:** allowed on `override="true"` redeclarations (e.g. FixedAlias `_name` element → FreeTextAlias `name` attribute). **Block-level** `<bml:xml>` root element: still TBD / prefer Definition branch only |
 | D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |
 

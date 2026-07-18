@@ -720,7 +720,7 @@ Add new framework BML to T1 as it lands — the Definition meta-model corpus is 
 | XSD as hard Stage-1 requirement | Never for Phase A — see below |
 | XSD Render Target (generate `.xsd`) | Phase C — toolchain; recommended **before** MachineBlocks SCAD |
 | BlockDoc Render Target (HTML docs) | Phase C — toolchain; minimal = static HTML by package path; may precede SCAD |
-| FatBlock Render Target (embed bundle) | Phase C — toolchain; inlines deps as root `<embeddedBlocks>`; may precede SCAD |
+| FatBlock Render Target (embed bundle) | Phase C — toolchain; inlines deps as root `<embeddedBlocks>`; may precede SCAD; **Stage 2 first**; xmlns 1:1 / unbound NS error (`19` D2) |
 | XSD validation of BML authoring | **After** XSD Render Target ships; **always disableable** (must not block `bom compile … xsd` / schema regen) |
 | Meta-driven `bml:xml` parser/serializer | Post–Phase A (see `19_definition_blocks_and_bml_xml.md`) |
 | SCAD / Customizer JSON render output | Phase C product path (after or alongside toolchain targets) |

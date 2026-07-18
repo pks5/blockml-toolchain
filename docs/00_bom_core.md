@@ -42,6 +42,30 @@ The parser makes **no semantic decisions**. It exclusively:
 
 All BML information must be fully preserved in the BOM. The parser must **never** pre-empt information that a renderer might interpret differently later.
 
+### Maximum authored surface for renderers
+
+> **General rule:** The Urmodell must expose **as much of the original document** as possible to serializers and Render Targets — including details that look like parser/serializer “internals” at first glance.
+
+```text
+If a renderer or FatBlock / XSD / meta-serializer might need it later,
+  it belongs on the Urmodell (authored form) — not dropped at parse time.
+```
+
+Examples of “internal-looking” data that **must** still be available downstream:
+
+| Authored detail | Why renderers need it |
+|---|---|
+| `xmlns` / prefix bindings | 1:1 QName emit (`19` D2) |
+| `<bml:xml>` / member `bml:xml` | XML shape for serializer, FatBlock, XSD (`19` D1/D3) |
+| Element vs attribute **placement** when both were legal | Lossless roundtrip; canonical emit may differ |
+| Expression / literal **raw** form | Target-specific emit without re-authoring |
+| Directive attributes unexpanded | Composition expansion is Stage 3, not parse |
+| Source locations (when parsed) | Diagnostics, LSP — optional on types, populated by parser |
+
+**Do not** strip or only keep a “semantic subset” for a cleaner object model. Derived convenience belongs on pragmatic forks; **authored facts** stay on the Urmodell. When in doubt, **preserve**.
+
+Consequence for BOM shape: prefer **first-class fields** for grammar/serialization metadata (e.g. `xmlRendering`) over burying it where only the serializer knows to look — every XML-emitting target is a first-class consumer.
+
 ### Canonical BOM is immutable (Urmodell)
 
 The **Urmodell** (Canonical BOM) is the **Single Source of Truth**. The parser produces it; it is **read-only** and **not modified** after parsing.
