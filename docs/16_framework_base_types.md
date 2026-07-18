@@ -460,7 +460,7 @@ Each file is parsed and `registerBlockDefinition(doc)` — **identical path** to
 
 | In BML (under `<domain>.bml.*`) | In TypeScript (npm packages) |
 |---|---|
-| `org.blockml.bml.core.Block`, branches, primitives | `@blockml/parser` — parser, validator, BOM interfaces |
+| `org.blockml.bml.core.Block`, branches, primitives | `@blockml/core` — BOM interfaces; `@blockml/parser` / `@blockml/validator` consume them |
 | `org.blockml.bml.compiler.parser.Parser` | `@blockml/compiler` — compile pipeline |
 | `com.machineblocks.bml.core.Set`, `Step` | render targets — SCAD emission, processors |
 | `org.blockml.bml.language.OpenSCAD` | branch-specific validation rules |

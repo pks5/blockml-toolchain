@@ -230,7 +230,7 @@ npm workspace names (`@blockml/core`, `@blockml/parser`, `@blockml/compiler`, �
 @blockml/core npm package may contain:
   blocks/org/blockml/bml/core/*.bml       →  Block FQNs (org.blockml.bml.core.Block, …)
   blocks/org/blockml/bml/compiler/*.bml   →  compiler domain Blocks (org.blockml.bml.compiler.*, …)
-  src/**/*.ts                             →  TypeScript toolchain (parser BOM interfaces, utilities)
+  src/**/*.ts                             →  BOM interfaces (BomDocument, …), TypeRegistry, framework utilities
 ```
 
 Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may exist outside the domain's `bml` namespace. See `00_bom_core.md` — Mandatory BML namespace.
@@ -258,9 +258,9 @@ Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may e
 
 Entry point: `src/index.ts` — re-exports public API only.
 
-### `@blockml/core` (BML SSOT)
+### `@blockml/core` (BML SSOT + BOM TypeScript)
 
-No TypeScript build. Package contains BML source files only:
+Owns framework BML **and** the shared TypeScript BOM contracts. Parser, serializer, validator, and compiler depend on the TS API — they do not redefine `BomDocument`.
 
 ```text
 packages/core/
@@ -272,7 +272,7 @@ packages/core/
       Math.bml
       Strings.bml
       …
-  src/                  — reserved for future TypeScript (none today)
+  src/                  — BomDocument types (12_bom_object_model.md), Diagnostic, TypeRegistry, utilities
 ```
 
 Consumed by:
@@ -544,10 +544,16 @@ This follows the core principle **BML → BOM → BML must always be possible** 
 INPUT (BML-centric)
   @blockml/parser       — BML → Urmodell / Canonical BOM (Stage 1, no semantics)
   @blockml/validator    — Urmodell → diagnostics + pragmatic model (Stage 2) — after roundtrip gate
+                          Does not abort callers; returns diagnostics only
 
 OUTPUT (roundtrip)
   @blockml/serializer   — Urmodell → canonical BML XML (lossless inverse of parser mapping)
                           Must accept any Urmodell provenance (parse today; BomBuilder seal in V3)
+                          No validator dependency
+
+ORCHESTRATION (CLI / IDE / LSP)
+  Hosts call parse → optional validate → serialize/compile
+  Abort-on-diagnostics is host policy (e.g. refuse compile on errors; still allow format)
 
 ORCHESTRATION (later)
   @blockml/compiler     — Facade + Target Registry + render pipeline
@@ -572,17 +578,21 @@ The serializer is **not** a render target emitter (SCAD, JSON, …). Target outp
 ```text
 Phase A — Language loop (V1 gate)
   1. BOM types + Diagnostic          — @blockml/core TS (12_bom_object_model.md)
-  2. Parser                          — @blockml/parser (stages [1]–[5])
-  3. Serializer                      — @blockml/serializer (inverse mapping)
+                                      ExpressionValue = { raw } only; no AST fields on Urmodell
+  2. Parser                          — @blockml/parser (stages [1]–[5]; preserve expression raw)
+  3. Serializer                      — @blockml/serializer (inverse mapping; emit raw)
   4. Roundtrip tests                 — tests/roundtrip/ against BML corpus
 
 Phase B — Semantic layer
-  5. Validator                       — @blockml/validator (TypeRegistry + stages [6]–[8])
+  5. parseExpression() + ExpressionNode — @blockml/core utility (AST as ParsedExpression;
+                                      never written back into Canonical BOM)
+  6. Validator                       — @blockml/validator (TypeRegistry + semantic checks;
+                                      may call parseExpression for expression correctness)
 
 Phase C — Compile pipeline
-  6. Compiler facade                 — @blockml/compiler (C2, C3)
-  7. Engine + SCAD target + CLI      — @blockml/engine-maker, scad-target, @blockml/cli
-  8. Correctness + snapshot tests    — tests/correctness/, tests/snapshots/
+  7. Compiler facade                 — @blockml/compiler (C2, C3)
+  8. Engine + SCAD target + CLI      — @blockml/engine-maker, scad-target, @blockml/cli
+  9. Correctness + snapshot tests    — tests/correctness/, tests/snapshots/
 ```
 
 **Do not start Phase C until Phase A roundtrip tests pass** for the agreed corpus tiers (see below).
@@ -618,6 +628,7 @@ Add new framework BML to T1 as it lands — the Definition meta-model corpus is 
 
 | Concern | When |
 |---|---|
+| Expression AST (`parseExpression`) | Phase B — after roundtrip gate; AST never written into Canonical BOM |
 | Cross-file reference resolution | Phase B (validator + TypeRegistry bootstrap) |
 | Constraint / inheritance validation | Phase B |
 | SCAD / JSON render output | Phase C |
@@ -634,16 +645,18 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 1. @blockml/core BML          — org.blockml.bml.core.*, org.blockml.bml.service.*
 2. @machineblocks/mbom BML    — com.machineblocks.bml.core.*
 3. @blockml/core TS           — types from 12_bom_object_model.md + Diagnostic
-4. @blockml/parser            — stages [1]–[5] + unit tests
+                              (ExpressionValue = raw only; ExpressionNode types may land with step 7)
+4. @blockml/parser            — stages [1]–[5] + unit tests (preserve expression raw)
 5. @blockml/serializer        — BOM → BML (V1 hardcoded inverse map)
 6. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers)
-7. @blockml/validator         — TypeRegistry + validate (stages [6]–[8])
-8. @blockml/compiler          — Facade + Target Registry (C2, C3)
-9. @blockml/engine-maker       — RenderEngine stub
-10. @machineblocks/mbom        — domain types + NativeBlock.bml parameter SSOT
-11. @machineblocks/...-scad-target — ScadBlockProcessor MVP
-12. @blockml/cli               — bom validate, then bom compile
-13. Correctness tests         — Calibrator, Standard, Cross from scad-lib
+7. parseExpression()          — @blockml/core utility (AST as ParsedExpression; no Urmodell write-back)
+8. @blockml/validator         — TypeRegistry + validate (may call parseExpression)
+9. @blockml/compiler          — Facade + Target Registry (C2, C3)
+10. @blockml/engine-maker      — RenderEngine stub
+11. @machineblocks/mbom        — domain types + NativeBlock.bml parameter SSOT
+12. @machineblocks/...-scad-target — ScadBlockProcessor MVP
+13. @blockml/cli               — bom validate, then bom compile
+14. Correctness tests         — Calibrator, Standard, Cross from scad-lib
 ```
 
 Specs dependency:

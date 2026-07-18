@@ -471,7 +471,7 @@ org.blockml.bml.documentation.* — bootstrap documentation blocks
 
 These namespaces contain BML-defined Blocks, ValueTypes, Capability types, and Languages. They are part of the public BlockML grammar.
 
-npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. A single npm package may ship BML files under `blocks/org/blockml/bml/` and TypeScript toolchain code under `src/`. TypeScript interfaces (parser BOM shapes, render processors, CLI utilities) are **not** BML definitions and do not receive `<domain>.bml.*` FQNs. See `15_dev_setup.md` — Package Conventions.
+npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. A single npm package may ship BML files under `blocks/org/blockml/bml/` and TypeScript toolchain code under `src/`. TypeScript interfaces (BOM shapes in `@blockml/core`, render processors, CLI utilities) are **not** BML definitions and do not receive `<domain>.bml.*` FQNs. See `15_dev_setup.md` — Package Conventions.
 
 Built-in services live in `org.blockml.bml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
 
@@ -2116,7 +2116,9 @@ Operators: arithmetic `+  -  *  /  %`, comparison `>  <  ==  !=  >=  <=`.
 
 ### Expression AST
 
-Expressions are parsed into typed **`ExpressionNode`** trees at compile stage [7] — not evaluated as raw strings. Each `${ }` span becomes an `ExpressionValue { raw, ast, resultTypeFqn }` on the BOM. The AST is renderer-independent. See `10_expression_language.md` — Expression AST.
+`${ }` spans are stored in Canonical BOM as **`ExpressionValue { raw }` only** — never as AST. The **`parseExpression()` utility** (`@blockml/core`) builds a typed **`ExpressionNode`** tree as a separate result (`ParsedExpression`); it must **not** write `ast` / `resultTypeFqn` back into the Urmodell. Evaluation is renderer / pragmatic-model only. See `10_expression_language.md` — Expression AST.
+
+**Implementation order:** Parser and serializer (Phase A) preserve `raw` for roundtrip. `parseExpression()` ships with the validator / framework utilities (Phase B), before renderers consume ASTs (Phase C). See `15_dev_setup.md` — V1 Implementation Strategy.
 
 ---
 

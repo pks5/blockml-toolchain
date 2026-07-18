@@ -20,10 +20,10 @@ For the SCAD Renderer see `05_scad_renderer.md`.
 The compiler is implemented across these packages:
 
 ```text
-@blockml/parser                              — parse BML → BOM
-@blockml/serializer                          — serialize BOM → BML (roundtrip; V1 before compiler)
-@blockml/validator                           — validate BOM (Stage 2; after roundtrip gate)
-@blockml/core                                — BOM object model, TypeRegistry, framework + built-in service BML
+@blockml/core                                — BOM TypeScript contracts + TypeRegistry + framework / service BML
+@blockml/parser                              — parse BML → BomDocument (types from @blockml/core)
+@blockml/serializer                          — serialize BomDocument → BML (roundtrip; V1 before compiler)
+@blockml/validator                           — validate BomDocument (Stage 2; after roundtrip gate)
 @blockml/compiler                            — Facade + Target Registry
 @blockml/engine-maker                        — V1 CompilerEngine implementation (MakerEngine)
 @machineblocks/machineblocks-v3-scad-target  — RenderTarget + BlockProcessors
@@ -87,13 +87,15 @@ Urmodell / Canonical BOM (immutable)
 
 ### Roundtrip — Serializer (`@blockml/serializer`)
 
-Inverse of the parser mapping: **BOM → canonical BML XML**. Enables lossless roundtrip (`BML → BOM → BML`). Not a render target emitter. Operates on the Urmodell only.
+Inverse of the parser mapping: **BOM → canonical BML XML**. Enables lossless roundtrip (`BML → BOM → BML`). Not a render target emitter. Operates on the Urmodell only — **no** dependency on `@blockml/validator`.
+
+**Host policy:** CLI / IDE / LSP may run Stage 2 first and abort on diagnostics before calling `serialize()` or compile. That decision is orchestration, not serializer logic.
 
 **V1:** Implemented and tested together with the parser, before validator and compiler. See `15_dev_setup.md` — V1 Implementation Strategy.
 
 ### Layer 2 — Validator (`@blockml/validator`) + Framework Utilities (`@blockml/core`) — Stage 2
 
-The validator orchestrates semantic checks on a **fork** of the Urmodell (default Pragmatic Model). Framework utilities live in `@blockml/core`; the validator package exposes the Stage 2 entry point (e.g. `validateBom()`). Optional, composable. **Never mutate** the Urmodell. Return derived views, diagnostics, or mutate only a pragmatic copy.
+The validator orchestrates semantic checks on a **fork** of the Urmodell (default Pragmatic Model). Framework utilities live in `@blockml/core`; the validator package exposes the Stage 2 entry point (e.g. `validateBom()`). Optional, composable. **Never mutate** the Urmodell. Return derived views, diagnostics, or mutate only a pragmatic copy. **Abort-on-error is not a validator concern** — CLI, IDE, and other hosts decide whether diagnostics stop serialize/compile.
 
 ```text
 forkBom(urmodell)                     → mutable Pragmatic Model copy

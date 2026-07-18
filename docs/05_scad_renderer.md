@@ -462,7 +462,7 @@ The renderer determines native vs. custom from the domain TypeRegistry (NativeBl
 
 ## Expression Renderer
 
-Expressions in BOM are stored as typed Expression AST nodes. The Expression Renderer serializes AST nodes into SCAD-compatible expressions.
+Canonical BOM stores expressions as **`ExpressionValue { raw }`**. The Expression Renderer obtains typed AST nodes via **`parseExpression()`** (utility / pragmatic working model — not Canonical BOM fields) and serializes them into SCAD-compatible expressions.
 
 ### Static Resolution
 

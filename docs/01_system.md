@@ -137,9 +137,9 @@ See `15_dev_setup.md` for workspace configuration, build scripts, and implementa
 ```text
 bom-compiler/
   packages/
-    core/              — @blockml/core (framework BML: org.blockml.bml.core.*, org.blockml.bml.service.*)
-    parser/            — @blockml/parser
-    serializer/        — @blockml/serializer
+    core/              — @blockml/core (BOM TS contracts + framework BML: org.blockml.bml.*)
+    parser/            — @blockml/parser (BML → BomDocument; types from core)
+    serializer/        — @blockml/serializer (BomDocument → BML; types from core)
     validator/         — @blockml/validator
     compiler/          — @blockml/compiler (Rahmen + Target Registry)
     cli-tools/         — @blockml/cli
@@ -328,59 +328,59 @@ A `catalog.xml` in the project root maps namespace URLs to local XSD files for o
 
 ### `@blockml/core`
 
-The BOM object model. Browser and Node compatible.
+The BOM object model and framework utilities. Browser and Node compatible. **Owns** the shared TypeScript BOM contracts (`BomDocument`, `BlockDefinition`, …) used by parser, serializer, validator, compiler, and LSP.
 
 ```text
-- Block class (metadata, members, compositions)
-- Member model: Property, Aggregation, Association, Capability (shared namespace)
-- Composition model
-- Preset model
-- Library and Catalog model
-- Expression AST (typed)
-- Type Registry (FQN-based, dynamic)
-- Validation API
-- Target Registry interface
-- No domain-specific types, no render logic, no Node-only APIs
+  - BomDocument / BlockDefinition / member model (Property, Aggregation, Association, Capability)
+  - Composition, Preset, Library, Catalog shapes
+  - Expression AST types (`ExpressionNode`) — parse/eval utilities live here; Canonical BOM stores `raw` only
+  - TypeRegistry (FQN-based, dynamic)
+  - Framework utilities (`resolve*`, `parseExpression`, `validate*`)
+  - Framework + built-in service BML (`org.blockml.bml.*`)
+  - No domain-specific types, no render logic, no Node-only APIs
 ```
 
 ### `@blockml/parser`
 
-The universal BML parser and BOM builder. Browser and Node compatible.
+The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocument` types from `@blockml/core` — does not own those interfaces.
 
 ```text
-- XML parser (browser-compatible)
-- XML parser (V1)
-- JSON BML parser — deferred (TBD, not V1)
-- Namespace resolver (xmlns → FQN)
-- XSD loader (JSON Schema for BML authoring — deferred with JSON format)
-- BML → BOM mapper (per root type, extensible)
-- Diagnostics and error reporting
-- No render output
+  - XML parser (V1; browser-compatible)
+  - JSON BML parser — deferred (TBD, not V1)
+  - Namespace resolver (xmlns → FQN)
+  - XSD loader (JSON Schema for BML authoring — deferred with JSON format)
+  - BML → BOM mapper (per root type, extensible)
+  - Parse diagnostics (using `@blockml/core` `Diagnostic`)
+  - No render output
 ```
 
 **V1:** Implemented and tested **before** compiler. See `15_dev_setup.md` — V1 Implementation Strategy.
 
 ### `@blockml/serializer`
 
-BOM → canonical BML XML. Browser and Node compatible. Inverse of the parser mapping — enables the **BML → BOM → BML** roundtrip.
+BOM → canonical BML XML. Browser and Node compatible. Inverse of the parser mapping — enables the **BML → BOM → BML** roundtrip. Consumes `BomDocument` from `@blockml/core` (no dependency on `@blockml/parser` or `@blockml/validator`).
 
 ```text
 - BOM → BML XML (V1: hardcoded inverse of 13_bml_to_bom_mapping.md)
 - Meta-driven output via Definition blocks + bml:xml — deferred (19_definition_blocks_and_bml_xml.md)
 - No semantic validation, no render output
+- Operates on Urmodell only
 ```
+
+**Host policy (CLI / IDE):** Whether to refuse serialize/compile after Stage-2 diagnostics is an **orchestrator** decision. The serializer package does not call the validator.
 
 **V1:** Ships together with `@blockml/parser`; roundtrip tests gate validator and compiler work.
 
 ### `@blockml/validator`
 
-Semantic validation (Stage 2). Browser and Node compatible.
+Semantic validation (Stage 2). Browser and Node compatible. Independent of parser and serializer.
 
 ```text
 - TypeRegistry integration
 - Inheritance, contracts, constraints, references, expression correctness
 - Forks Urmodell → mutable default Pragmatic Model (partial resolution / merges)
 - Never mutates Urmodell (Canonical BOM)
+- Returns diagnostics — does not abort callers; hosts decide abort policy
 ```
 
 **V1:** Implemented **after** parser + serializer roundtrip tests pass.

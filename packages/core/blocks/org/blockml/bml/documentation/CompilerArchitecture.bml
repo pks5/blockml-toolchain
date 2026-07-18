@@ -39,6 +39,9 @@
     must be fully preserved. Resolved inheritance, effective properties, expanded composition, and
     evaluated expressions must never be written back into the Canonical BOM.
 
+    Serializer reads the Urmodell only — it does not validate. CLI / IDE hosts may run the validator
+    and abort on diagnostics before serialize or compile; that policy is orchestration, not package logic.
+
     Self-hosting bootstrap: before processing user projects, the CLI bootstraps a TypeRegistry
     from framework BML in @blockml/core and domain packages.
   </documentation>

@@ -241,7 +241,7 @@ bom validate <file>
 bom validate --all
 ```
 
-Runs the full compiler pipeline up to and including the Semantic Validator (stages 1–8). Reports all diagnostics. Produces no output files. No target is required — validation is universal.
+Runs Stage 1 (parser) and Stage 2 (semantic validator). Reports all diagnostics. Produces no output files. No target is required — validation is universal. Exit code / abort policy is CLI-owned (non-zero on errors).
 
 ---
 
@@ -253,7 +253,7 @@ Prints the BOM representation of a compiled BML file for debugging.
 bom inspect <file>
 ```
 
-Outputs a human-readable dump of the BOM object graph produced from the given BML file. No target output is produced.
+Outputs a human-readable dump of the Urmodell (`BomDocument`) produced by parsing the given BML file. No target output is produced. Does not require validation to succeed.
 
 ---
 

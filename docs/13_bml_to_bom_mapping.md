@@ -202,7 +202,7 @@ directives:
 
 ## Type Descriptor Parsing
 
-Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`@blockml/parser`** BOM interfaces — not in `org.blockml.bml.type.*`. See `00_bom_core.md` — Mandatory BML namespace · `17_type_system_bml.md` — Type Expressions.
+Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`@blockml/core`** BOM interfaces — not in `org.blockml.bml.type.*`. See `00_bom_core.md` — Mandatory BML namespace · `17_type_system_bml.md` — Type Expressions.
 
 Unqualified names at **specialized reference sites** resolve via context-bound implicit namespace — see `02_mbml.md` — § Context-Bound Implicit Namespace:
 
@@ -597,7 +597,7 @@ function clamp(v) = <$ #math.max(#this.minimum(), v) $>;
    }
 ```
 
-Validation (stage [8]) runs `parseExpression()` on each `embeddedExpressions[].raw` and applies the same semantic checks as member-value expressions, plus `#this` resolution against `resolveEffectiveMembers()`. See `10_expression_language.md` — BML Embedded Expressions.
+Validation runs `parseExpression()` on each `embeddedExpressions[].raw` and applies the same semantic checks as member-value expressions, plus `#this` resolution against `resolveEffectiveMembers()`. See `10_expression_language.md` — BML Embedded Expressions.
 
 ### parseExpression() — AST construction
 

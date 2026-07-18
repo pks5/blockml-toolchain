@@ -32,7 +32,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — four sibling branches under ValueType |
 | **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `18_function_mapping.md` |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
-| **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `org.blockml.bml.compiler.*`); TypeScript BOM interfaces in `@blockml/parser` — see `00_bom_core.md` |
+| **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `org.blockml.bml.compiler.*`); TypeScript BOM interfaces in `@blockml/core` — see `00_bom_core.md` |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
 | **Domain XSD enums** | Deprecated as type SSOT — migrate to BML `EnumType` |
 

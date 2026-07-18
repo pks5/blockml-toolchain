@@ -447,7 +447,7 @@ Ternary:      condition ? valueIfTrue : valueIfFalse
 
 ### Expression AST
 
-Expressions are parsed into typed **`ExpressionNode`** trees — not evaluated as raw strings. Stored as `ExpressionValue` on the BOM. The SCAD Renderer serializes AST nodes. See `10_expression_language.md` — Expression AST.
+`${ }` values are stored on Canonical BOM as **`ExpressionValue { raw }`**. Typed **`ExpressionNode`** trees come from **`parseExpression()`** (utility result — not written back into BOM). The SCAD Renderer calls that utility (or reuses a pragmatic-model cache) and serializes AST nodes. See `10_expression_language.md` — Expression AST.
 
 ### Sharing Values Between Siblings
 

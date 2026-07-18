@@ -14,7 +14,7 @@ For the abstract object model see `00_bom_core.md`. For the formal BOM data stru
 
 BML is the human- and editor-friendly authoring format for BOM. It describes semantic BOM objects — Blocks, Composite Blocks, and Presets — without any knowledge of render target syntax or parameters.
 
-BML is parsed and validated by `@blockml/parser`, which produces a BOM document as output. The BOM is then compiled to the selected render target by `@blockml/compiler`.
+BML is parsed by `@blockml/parser` into an immutable Urmodell (`BomDocument`). Semantic validation is **Stage 2** (`@blockml/validator`) — not part of the parser. `@blockml/serializer` writes Canonical BOM back to BML XML (Urmodell only; no validator dependency). Hosts (CLI, IDE/LSP) may call `validate()` and abort on diagnostics **before** serialize or compile — that policy lives in the orchestrator, not in parser/serializer. Render targets are selected via `@blockml/compiler`.
 
 ### File Extensions
 

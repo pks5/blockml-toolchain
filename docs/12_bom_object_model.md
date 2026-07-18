@@ -4,7 +4,7 @@ version: 1.3.0
 
 ## Purpose of this Document
 
-This document defines the **formal BOM object model** — the canonical data structures produced by `@blockml/parser` and consumed by `@blockml/core`, `@blockml/compiler`, and render targets.
+This document defines the **formal BOM object model** — the canonical TypeScript data structures in `@blockml/core`. They are produced by `@blockml/parser` (or, V3, `BomBuilder.seal()`) and consumed by `@blockml/serializer`, `@blockml/validator`, `@blockml/compiler`, LSP, and render targets.
 
 For conceptual foundations see `00_bom_core.md`.
 For BML authoring syntax see `02_mbml.md`.
@@ -14,7 +14,7 @@ For Expression AST node types see `10_expression_language.md` — Expression AST
 
 This document is the **implementation contract** for `@blockml/core`. It specifies TypeScript-oriented interfaces and validation rules. It does not duplicate domain semantics already defined elsewhere.
 
-**Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) are TypeScript contracts in `@blockml/parser` — not BML Block FQNs. BML meta-model Blocks live under `org.blockml.bml.definition.*` (e.g. `org.blockml.bml.definition.BlockDefinition`, `org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). Language Blocks like `org.blockml.bml.core.Block` are BML-defined. See `00_bom_core.md` — Mandatory BML namespace.
+**Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) are TypeScript contracts in `@blockml/core` — not BML Block FQNs. BML meta-model Blocks live under `org.blockml.bml.definition.*` (e.g. `org.blockml.bml.definition.BlockDefinition`, `org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). Language Blocks like `org.blockml.bml.core.Block` are BML-defined. See `00_bom_core.md` — Mandatory BML namespace.
 
 ---
 
@@ -41,7 +41,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 |---|---|---|
 | `bml:each`, `bml:if`, `bml:with` | `directives[]` on element — **unexpanded** | Renderer (directive expansion) |
 | `size="[5,5,6]"` vs `size="{x:5,…}"` | `LiteralValue` in **authored form** | Renderer (target serialization via type metadata) |
-| `${ size.x }` | `ExpressionValue { raw, ast }` — **not evaluated** | Renderer (expression evaluation) |
+| `${ size.x }` | `ExpressionValue { raw }` — **AST via `parseExpression()` utility, not evaluated** | Renderer (parse AST → evaluate / emit) |
 | `<aggregations>` declaration | `AggregationDefinition` (declared only) | Type Registry lookup for effective members — **metadata only, no instance data resolution** |
 | `<composition>` children | `CompositionNode` tree | Renderer (wrapper logic, assembly patterns) |
 | `baseType` FQN | string reference | Type Registry → effective member metadata |
@@ -95,8 +95,12 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 
 @blockml/parser
   - BML → BomDocument mapper (stage [5]) — **single file per invocation**
-  - Produces immutable Urmodell (Canonical BOM); populates source spans for LSP/diagnostics
-  - Does NOT load external BML files, populate TypeRegistry, merge inheritance, or expand directives
+  - Produces immutable Urmodell (Canonical BOM) using `@blockml/core` types; populates source spans for LSP/diagnostics
+  - Does NOT own BOM interfaces; does NOT load external BML files, populate TypeRegistry, merge inheritance, or expand directives
+
+@blockml/serializer
+  - BomDocument → canonical BML XML (inverse of parser mapping)
+  - Consumes `@blockml/core` types only — no dependency on `@blockml/parser`
 
 @blockml/compiler
   - Target Registry facade — renderers orchestrate their own pipelines
@@ -344,7 +348,7 @@ Sub-Blocks must not declare `embeddedBlocks` (`BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`)
 
 Types in BOM are represented by **`TypeExpression`** (alias: `TypeDescriptor` in V1 docs) — a structured, parse-time model. This applies to Capability `inputType` / `outputType` and Property `type` attributes.
 
-**Language vs. BOM:** BML knows four ValueType kinds (Primitive, Enum, Struct, Constant). Unions, collections, and generic applications are **type expressions** — not ValueTypes. The parser maps them to `@blockml/parser` descriptor types internally.
+**Language vs. BOM:** BML knows four ValueType kinds (Primitive, Enum, Struct, Constant). Unions, collections, and generic applications are **type expressions** — not ValueTypes. The parser maps them to `@blockml/core` `TypeExpression` / `TypeDescriptor` shapes.
 
 ### Anonymous struct = shorthand for inline class
 
@@ -368,7 +372,7 @@ A single primitive (`Float`, `org.blockml.bml.type.Integer`, …) is **not** wra
 ### `TypeExpression` union
 
 ```typescript
-/** Parse-time type expression — @blockml/parser (not a language ValueType). */
+/** Parse-time type expression — @blockml/core (not a language ValueType). */
 type TypeExpression =
   | NamedTypeReference
   | AnonymousStructType
@@ -666,11 +670,10 @@ interface ImplementationBlock {
 }
 
 interface EmbeddedExpression {
-  raw: string               // expression text between delimiters (for parsing)
+  raw: string               // expression text between delimiters (for later parseExpression)
   start: number             // byte/char offset of opening <$ in source
   end: number               // offset immediately after closing $>
-  /** AST from parseExpression() — utility output; optional on Canonical BOM */
-  ast?: ExpressionNode
+  // NO ast field — AST is parseExpression() utility output, never Canonical BOM
 }
 ```
 
@@ -1419,15 +1422,15 @@ BomDocument
 Key observations for implementers:
 
 - Root composition references Sub-Blocks by short name — parser resolves against the `subBlocks[]` tree (walk nested Sub-Blocks by local name or qualified path).
-- `@utils.formatValue(...)` in expressions is stored as `ExpressionValue` — V1 runtime deferred, parse allowed.
-- `#math.round_n(...)`, `#math.floor(...)` stored as `ExpressionValue` with builtin call AST nodes.
+- `@utils.formatValue(...)` in expressions is stored as `ExpressionValue { raw }` — V1 runtime deferred; AST via `parseExpression()` later.
+- `#math.round_n(...)`, `#math.floor(...)` likewise stored as `ExpressionValue { raw }` — builtin-call AST nodes appear only after `parseExpression()`.
 - Inherited native properties (`size` used in expressions) are **not** in `Calibrator.members[]` — validator resolves via `resolveEffectiveMembers()`.
 
 ---
 
 ## Validation Responsibilities
 
-The parser produces `BomDocument`. The validator (`@blockml/core`) checks:
+The parser produces `BomDocument`. The validator (`@blockml/validator`, using `@blockml/core` utilities) checks:
 
 ```text
 ✓  Member namespace uniqueness (declared members per block)

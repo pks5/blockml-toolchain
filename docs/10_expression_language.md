@@ -9,7 +9,7 @@ This document is the authoritative reference for the BML Expression Language —
 For the BOM object model (`ExpressionValue`, `MemberValue`) see `12_bom_object_model.md`.
 For MBOM-specific types and properties see `03_mbom.md`.
 
-This document specifies both the **surface syntax** (EBNF, semantics) and the **formal AST** (`ExpressionNode` union) — the implementation contract for `@blockml/core` and `@blockml/parser`.
+This document specifies both the **surface syntax** (EBNF, semantics) and the **formal AST** (`ExpressionNode` union) — the implementation contract for `@blockml/core`. `@blockml/parser` stores expression `raw` text only during BML → BOM mapping.
 
 ---
 
@@ -120,14 +120,14 @@ The implementation body is stored as **complete original text**. The parser addi
 
 ```typescript
 interface EmbeddedExpression {
-  raw: string       // expression text between delimiters (trimmed for parsing)
+  raw: string       // expression text between delimiters
   start: number     // start offset of opening <$ in source
   end: number       // end offset after closing $>
-  ast?: ExpressionNode   // populated by parseExpression() utility — not Canonical BOM
+  // NO ast — Canonical BOM only; AST via parseExpression(raw)
 }
 ```
 
-Extraction runs during BML → BOM mapping (stage [5]). Each `raw` span is parsed with the same expression grammar as `${ }` values, extended with `#this` calls (see below). AST construction uses `parseExpression()` — same utility contract as member-value expressions.
+Extraction of `{ raw, start, end }` runs during BML → BOM mapping (stage [5]). AST construction is **not** a parser stage: call **`parseExpression()`** later with the same expression grammar as `${ }` values, extended with `#this` calls (see below).
 
 ### Embedded Expression Grammar Extension
 
@@ -1500,7 +1500,7 @@ The parser distinguishes call vs. link by the presence or absence of parentheses
 ## Error Cases
 
 ```text
-BML_EXPR_SYNTAX_ERROR          — raw expression text fails to parse (stage [7])
+BML_EXPR_SYNTAX_ERROR          — raw expression text fails to parse (`parseExpression()` utility)
 BML_EXPR_UNKNOWN_PROPERTY      — identifier not found in scope (member, loop, with); or index access on StructType
 BML_EXPR_UNKNOWN_BEAN          — @bean not declared as Aggregation
 BML_EXPR_UNKNOWN_BUILTIN       — #name not a registered built-in

@@ -690,14 +690,15 @@ Map values are always wrapped in `${ }` because they are object literals in the 
 org.blockml.bml.type.Expression
 
 An expression is a typed value wrapped in ${ }.
-It is parsed into an ExpressionValue { ast: ExpressionNode, ... } at compile stage [7].
-It is not evaluated at parse time — renderers serialize the AST.
-See `10_expression_language.md` — Expression AST.
+Canonical BOM stores ExpressionValue { raw } only — lossless roundtrip text.
+The parseExpression() utility builds ExpressionNode trees later (Phase B+);
+AST and resultTypeFqn are never written into the Urmodell.
+See `10_expression_language.md` — Expression AST · `15_dev_setup.md` — V1 Implementation Strategy.
 
-BML:   size="${ [size[0], size[1], size[2] - 1] }"
-BOM:   ExpressionValue { ast: ArrayLiteral(...), resultTypeFqn: "com.machineblocks.bml.type.SizeXYZ" }
-SCAD:  serialized as the expression result or as a SCAD expression
-       depending on whether it can be statically resolved
+BML:   size="${ [size.x, size.y, size.z - 1] }"
+BOM:   ExpressionValue { raw: "[size.x, size.y, size.z - 1]", … }
+Utility: ParsedExpression { raw, ast: ArrayLiteral(...), resultTypeFqn?: "…" }
+SCAD:  renderer serializes the AST or a statically resolved value
 ```
 
 ---
