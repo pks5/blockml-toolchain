@@ -215,6 +215,20 @@ MBOM:  Align.Start   (id + typeFqn)
 SCAD:  "start"       (from catalog property scad:value)
 ```
 
+Scalar `Align` may be broadcast, or expanded per axis / face-local plane:
+
+```text
+Brick placement (NativeBlock.align / alignChildren):
+  Align | AxisXYZ(Align)
+  — world brick axes X/Y/Z (3-value SCAD array rule)
+
+Face-local anchor (Port.align, and similar face-plane parameters):
+  Align | AxisAB(Align)
+  — face-local A/B plane (XY, XZ, or YZ depending on Face); 1- or 2-value SCAD form
+```
+
+Do not interchange `AxisXYZ(Align)` and `AxisAB(Align)` — XYZ is brick placement; AB is in-plane on a directed face. See `AxisAB` / `Port` BML docs.
+
 ## StudType
 
 ```text

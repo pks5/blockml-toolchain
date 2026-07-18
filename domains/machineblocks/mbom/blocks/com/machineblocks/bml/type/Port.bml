@@ -28,8 +28,10 @@
       <documentation>Directed face where the port is cut (x- / x+ / y- / y+ / z- / z+).</documentation>
     </face>
     <align type="mbtype:Align | mbtype:AxisAB(mbtype:Align)">
-      <documentation>Anchor alignment on the face — a single Align, or a per-component
-        AxisAB(Align) pair matching SCAD string vs [alignA, alignB].</documentation>
+      <documentation>Anchor alignment on the face — scalar Align, or AxisAB(Align) for the
+        two in-plane axes (SCAD string vs [alignA, alignB]). Uses AxisAB (not AxisXYZ):
+        the plane is face-local (XY / XZ / YZ from Face), whereas NativeBlock.align expands
+        in brick world space via AxisXYZ(Align). See Align type docs.</documentation>
     </align>
     <offset type="mbtype:OffsetAB">
       <documentation>2D offset from the align anchor on the face. Unitless — scale depends on

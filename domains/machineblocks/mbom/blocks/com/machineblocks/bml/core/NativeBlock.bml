@@ -50,10 +50,13 @@
   <!-- Native MB properties — all mb_block() parameters from 09_api_parameters.yml (v3.0.5) -->
   <properties>
     <align type="mbtype:Align | mbtype:AxisXYZ(mbtype:Align)">
-      <documentation>Alignment relative to the origin, per axis.
+      <documentation>Alignment relative to the origin, per brick axis.
+        Scalar Align broadcasts to X/Y/Z; AxisXYZ(Align) sets each axis.
         "start" = toward x-/y-/z-, "end" = toward x+/y+/z+.
         Origin is [0,0,0] globally, or defined by parent's alignChildren.
         Alignment is based strictly on the bounding box.
+        Contrast: face-local anchors (e.g. Port.align) use Align | AxisAB(Align),
+        not AxisXYZ — see Align / Port type docs.
       </documentation>
       <changelog>
         <change version="3.0.0">mb_param_align() now always resolves to a 3-element array.</change>
@@ -64,7 +67,8 @@
 
     <alignChildren type="mbtype:Align | mbtype:AxisXYZ(mbtype:Align)">
       <documentation>Defines the origin inside a parent brick for child positioning.
-        Same convention as align. Children use this as their reference point.
+        Same convention as align (Align | AxisXYZ(Align) in brick space).
+        Children use this as their reference point.
       </documentation>
       <changelog>
         <change version="3.0.0">mb_param_alignChildren() now always resolves to a 3-element array.</change>
