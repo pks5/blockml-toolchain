@@ -64,6 +64,30 @@
       </changelog>
       <value>Start</value>
       <scad:value>start</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          align = "Start"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          align = "{x: Start, y: Center, z: End}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["align", "start"]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["align", ["start", "center", "end"]]
+          ...
+        </example>
+      </scad:examples>
     </align>
 
     <alignChildren type="mbt:Align | mbt:AxisXYZ(mbt:Align)">
@@ -76,6 +100,30 @@
       </changelog>
       <value>Start</value>
       <scad:value>start</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          alignChildren = "Start"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          alignChildren = "{x: Start, y: Center, z: End}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["alignChildren", "start"]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["alignChildren", ["start", "center", "end"]]
+          ...
+        </example>
+      </scad:examples>
     </alignChildren>
 
     <base type="Boolean">
@@ -85,6 +133,20 @@
       </documentation>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          base = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["base", true]
+          ...
+        </example>
+      </scad:examples>
     </base>
 
     <baseAdjustment type="mbt:FaceMapXYZ(Decimal(unit:Millimeter))">
@@ -132,12 +194,50 @@
       </changelog>
       <value>{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0}</value>
       <scad:value>[0, 0, 0, 0, 0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseAdjustment = "{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="faces">
+          ...
+          baseAdjustment = "{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseAdjustment", [0, 0, 0, 0, 0, 0]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="faces">
+          ...
+          ["baseAdjustment", [0, 0, 0, 0, 0, 0.1]]
+          ...
+        </example>
+      </scad:examples>
     </baseAdjustment>
 
     <baseClampHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of the base clamp lip.</documentation>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseClampHeight = "0.5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseClampHeight", 0.5]
+          ...
+        </example>
+      </scad:examples>
     </baseClampHeight>
 
     <baseClampOffset type="Decimal(mbunit:MBU)">
@@ -148,6 +248,20 @@
       </documentation>
       <value>0.25</value>
       <scad:value>0.25</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseClampOffset = "0.25"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseClampOffset", 0.25]
+          ...
+        </example>
+      </scad:examples>
     </baseClampOffset>
 
     <baseClampOuter type="Boolean">
@@ -158,12 +272,40 @@
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseClampOuter = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseClampOuter", false]
+          ...
+        </example>
+      </scad:examples>
     </baseClampOuter>
 
     <baseClampThickness type="Decimal(unit:Millimeter)">
       <documentation>Thickness of the base clamp lip.</documentation>
       <value>0.1</value>
       <scad:value>0.1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseClampThickness = "0.1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseClampThickness", 0.1]
+          ...
+        </example>
+      </scad:examples>
     </baseClampThickness>
 
     <baseColor type="Color">
@@ -171,7 +313,21 @@
         Does NOT apply to text (use textColor separately).
       </documentation>
       <value>#EAC645</value>
-      <scad:value>#EAC645</scad:value>
+      <scad:value>"#EAC645"</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseColor = "#EAC645"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseColor", "#EAC645"]
+          ...
+        </example>
+      </scad:examples>
     </baseColor>
 
     <baseCrop type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -188,6 +344,20 @@
       <since>3.0.0</since>
       <value>{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0}</value>
       <scad:value>[0, 0, 0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseCrop = "{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseCrop", [0, 0, 0, 0]]
+          ...
+        </example>
+      </scad:examples>
     </baseCrop>
 
     <baseCutoutMaxDepth type="Decimal(mbunit:MBU)">
@@ -199,6 +369,20 @@
       </documentation>
       <value>5</value>
       <scad:value>5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseCutoutMaxDepth = "5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseCutoutMaxDepth", 5]
+          ...
+        </example>
+      </scad:examples>
     </baseCutoutMaxDepth>
 
     <baseCutoutType type="mbt:BaseCutout">
@@ -212,6 +396,20 @@
       </documentation>
       <value>Standard</value>
       <scad:value>standard</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseCutoutType = "Standard"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseCutoutType", "standard"]
+          ...
+        </example>
+      </scad:examples>
     </baseCutoutType>
 
     <baseRoundingRadius type="Decimal | mbt:BaseRoundingMap">
@@ -225,6 +423,30 @@
       </documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseRoundingRadius = "0.0"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis corners">
+          ...
+          baseRoundingRadius = "{x: {sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}, y: {sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}, z: {sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseRoundingRadius", 0.0]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis corners">
+          ...
+          ["baseRoundingRadius", [[0.5, 0.5, 0.5, 0.5], [0.5, 0.5, 0.5, 0.5], [0.5, 0.5, 0.5, 0.5]]]
+          ...
+        </example>
+      </scad:examples>
     </baseRoundingRadius>
 
     <baseWallGaps type="mbt:WallGap[]">
@@ -237,6 +459,30 @@
       <since>3.0.0</since>
       <value>[]</value>
       <scad:value>[]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseWallGaps = "[]"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="one gap">
+          ...
+          baseWallGaps = "[{face: XNeg, pos: 1, len: 2}]"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseWallGaps", []]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="one gap">
+          ...
+          ["baseWallGaps", [["x-", 1, 2]]]
+          ...
+        </example>
+      </scad:examples>
     </baseWallGaps>
 
     <baseWallThickness type="mbt:Auto | Decimal(mbunit:MBU)">
@@ -245,6 +491,20 @@
       </documentation>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseWallThickness = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseWallThickness", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </baseWallThickness>
 
     <baseWallThicknessAdjustment type="Decimal(unit:Millimeter)">
@@ -253,6 +513,20 @@
       </documentation>
       <value>-0.1</value>
       <scad:value>-0.1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          baseWallThicknessAdjustment = "-0.1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["baseWallThicknessAdjustment", -0.1]
+          ...
+        </example>
+      </scad:examples>
     </baseWallThicknessAdjustment>
 
     <bevel type="mbt:Bevel">
@@ -282,12 +556,50 @@
           [0,0]
         ]
       </scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          bevel = "{sw: {x: 0, y: 0}, nw: {x: 0, y: 0}, ne: {x: 0, y: 0}, se: {x: 0, y: 0}}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="corner shift">
+          ...
+          bevel = "{sw: {x: 0, y: 0}, nw: {x: 0, y: 0}, ne: {x: 1, y: 0}, se: {x: 1, y: 0}}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["bevel", [[0,0], [0,0], [0,0], [0,0]]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="corner shift">
+          ...
+          ["bevel", [[0, 0], [0, 0], [1, 0], [1, 0]]]
+          ...
+        </example>
+      </scad:examples>
     </bevel>
 
     <connectorDepth type="Decimal(mbunit:MBU)">
       <documentation>How far the connector triangles protrude.</documentation>
       <value>0.75</value>
       <scad:value>0.75</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          connectorDepth = "0.75"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["connectorDepth", 0.75]
+          ...
+        </example>
+      </scad:examples>
     </connectorDepth>
 
     <connectorLength type="mbt:Auto | Decimal(mbunit:MBU)">
@@ -297,6 +609,20 @@
       <since>3.0.0</since>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          connectorLength = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["connectorLength", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </connectorLength>
 
     <connectorLengthClearance type="Decimal(unit:Millimeter)">
@@ -306,6 +632,20 @@
       <since>3.0.0</since>
       <value>0.2</value>
       <scad:value>0.2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          connectorLengthClearance = "0.2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["connectorLengthClearance", 0.2]
+          ...
+        </example>
+      </scad:examples>
     </connectorLengthClearance>
 
     <connectorSideClearance type="Decimal(unit:Millimeter)">
@@ -315,12 +655,40 @@
       <since>3.0.0</since>
       <value>0.1</value>
       <scad:value>0.1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          connectorSideClearance = "0.1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["connectorSideClearance", 0.1]
+          ...
+        </example>
+      </scad:examples>
     </connectorSideClearance>
 
     <connectorWidth type="Decimal(mbunit:MBU)">
       <documentation>Width of the connector triangles.</documentation>
       <value>2.25</value>
       <scad:value>2.25</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          connectorWidth = "2.25"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["connectorWidth", 2.25]
+          ...
+        </example>
+      </scad:examples>
     </connectorWidth>
 
     <connectors type="Boolean.False | mbt:Connector[]">
@@ -337,6 +705,30 @@
       </changelog>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          connectors = "false"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="one connector">
+          ...
+          connectors = "[{face: XPos, axis: Y, gender: Male}]"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["connectors", false]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="one connector">
+          ...
+          ["connectors", [["x+", "y", "male"]]]
+          ...
+        </example>
+      </scad:examples>
     </connectors>
 
     
@@ -348,6 +740,20 @@
       <since>3.0.0</since>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          debug = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["debug", false]
+          ...
+        </example>
+      </scad:examples>
     </debug>
 
     <debugShowOnly type="Text">
@@ -356,6 +762,30 @@
         on geometry semantics — for debugging/inspection only.
       </documentation>
       <since>3.0.0</since>
+      <examples>
+        <example language="BML" snippet="true" title="not set">
+          ...
+          // debugShowOnly is not set — omit the property
+          ...
+        </example>
+        <example language="BML" snippet="true" title="filter studs">
+          ...
+          debugShowOnly = "studs"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="not set">
+          ...
+          ["debugShowOnly", undef]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="filter studs">
+          ...
+          ["debugShowOnly", "studs"]
+          ...
+        </example>
+      </scad:examples>
     </debugShowOnly>
 
     <direction type="mbt:Direction">
@@ -367,6 +797,20 @@
       </documentation>
       <value>West</value>
       <scad:value>west</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          direction = "West"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["direction", "west"]
+          ...
+        </example>
+      </scad:examples>
     </direction>
 
     <grille type="mbt:Grille">
@@ -375,24 +819,80 @@
       </documentation>
       <value>None</value>
       <scad:value>none</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          grille = "None"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["grille", "none"]
+          ...
+        </example>
+      </scad:examples>
     </grille>
 
     <grilleCount type="Integer">
       <documentation>Number of grille bars across the entire surface.</documentation>
       <value>5</value>
       <scad:value>5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          grilleCount = "5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["grilleCount", 5]
+          ...
+        </example>
+      </scad:examples>
     </grilleCount>
 
     <grilleDepth type="Decimal(mbunit:MBU)">
       <documentation>Depth of the grille openings.</documentation>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          grilleDepth = "1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["grilleDepth", 1]
+          ...
+        </example>
+      </scad:examples>
     </grilleDepth>
 
     <grilleInverted type="Boolean">
       <documentation>Whether the grille starts with an opening instead of a solid bar.</documentation>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          grilleInverted = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["grilleInverted", false]
+          ...
+        </example>
+      </scad:examples>
     </grilleInverted>
 
     <holeX type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
@@ -401,6 +901,20 @@
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeX = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeX", false]
+          ...
+        </example>
+      </scad:examples>
     </holeX>
     
     <holeY type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
@@ -411,6 +925,20 @@
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeY = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeY", false]
+          ...
+        </example>
+      </scad:examples>
     </holeY>
 
     <holeZ type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
@@ -421,6 +949,20 @@
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeZ = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeZ", false]
+          ...
+        </example>
+      </scad:examples>
     </holeZ>
 
     <holeXYGridOffsetZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
@@ -432,6 +974,30 @@
       <since>3.0.0</since>
       <value>3.625</value>
       <scad:value>3.625</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYGridOffsetZ = "3.625"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYGridOffsetZ = "{x: 1, y: 2}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYGridOffsetZ", 3.625]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYGridOffsetZ", [1, 2]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYGridOffsetZ>
 
     <holeXYGridOffsetZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
@@ -441,6 +1007,30 @@
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYGridOffsetZAdjustment = "0.0"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYGridOffsetZAdjustment = "{x: 1, y: 2}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYGridOffsetZAdjustment", 0.0]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYGridOffsetZAdjustment", [1, 2]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYGridOffsetZAdjustment>
 
     <holeXYGridSizeZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
@@ -451,6 +1041,30 @@
       <since>3.0.0</since>
       <value>6</value>
       <scad:value>6</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYGridSizeZ = "6"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYGridSizeZ = "{x: 1, y: 2}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYGridSizeZ", 6]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYGridSizeZ", [1, 2]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYGridSizeZ>
 
     <holeXYGridSizeZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
@@ -460,6 +1074,30 @@
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYGridSizeZAdjustment = "0.0"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYGridSizeZAdjustment = "{x: 1, y: 2}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYGridSizeZAdjustment", 0.0]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYGridSizeZAdjustment", [1, 2]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYGridSizeZAdjustment>
 
     <holeXYMinTopMargin type="mbt:AxisXY(Decimal(mbunit:MBU))">
@@ -470,6 +1108,30 @@
       <since>3.0.0</since>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYMinTopMargin = "0.5"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYMinTopMargin = "{x: 1, y: 2}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYMinTopMargin", 0.5]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYMinTopMargin", [1, 2]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYMinTopMargin>
 
     <holeXYZAxleThickness type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
@@ -479,6 +1141,30 @@
       <since>3.0.0</since>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZAxleThickness = "1"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZAxleThickness = "{x: 1, y: 1, z: 1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZAxleThickness", 1]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZAxleThickness", [1, 1, 1]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZAxleThickness>
 
     <holeXYZAxleThicknessAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
@@ -489,6 +1175,30 @@
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZAxleThicknessAdjustment = "0.0"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZAxleThicknessAdjustment = "{x: 1, y: 1, z: 1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZAxleThicknessAdjustment", 0.0]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZAxleThicknessAdjustment", [1, 1, 1]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZAxleThicknessAdjustment>
 
     <holeXYZDiameter type="mbt:Auto | mbt:AxisXYZ(Decimal(mbunit:MBU))">
@@ -498,6 +1208,30 @@
       <since>3.0.0</since>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZDiameter = "Auto"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZDiameter = "{x: 1, y: 1, z: 1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZDiameter", "auto"]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZDiameter", [1, 1, 1]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZDiameter>
 
     <holeXYZDiameterAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
@@ -507,6 +1241,30 @@
       <since>3.0.0</since>
       <value>0.3</value>
       <scad:value>0.3</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZDiameterAdjustment = "0.3"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZDiameterAdjustment = "{x: 1, y: 1, z: 1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZDiameterAdjustment", 0.3]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZDiameterAdjustment", [1, 1, 1]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZDiameterAdjustment>
 
     <holeXYZEdgeMode type="mbt:HoleEdgeMode | mbt:HoleEdgePair | mbt:HoleEdgeMap">
@@ -536,6 +1294,40 @@
       <since>3.0.0</since>
       <value>None</value>
       <scad:value>none</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZEdgeMode = "None"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="pair">
+          ...
+          holeXYZEdgeMode = "{a: Start, b: End}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis map">
+          ...
+          holeXYZEdgeMode = "{x: All, y: {a: Start, b: End}, z: None}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZEdgeMode", "none"]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="pair">
+          ...
+          ["holeXYZEdgeMode", ["start", "end"]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis map">
+          ...
+          ["holeXYZEdgeMode", ["all", ["start", "end"], "none"]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZEdgeMode>
 
     <holeXYZInsetDepth type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
@@ -545,6 +1337,30 @@
       <since>3.0.0</since>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZInsetDepth = "0.5"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZInsetDepth = "{x: 1, y: 1, z: 1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZInsetDepth", 0.5]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZInsetDepth", [1, 1, 1]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZInsetDepth>
 
     <holeXYZInsetDepthAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
@@ -554,6 +1370,30 @@
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZInsetDepthAdjustment = "0.0"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZInsetDepthAdjustment = "{x: 1, y: 1, z: 1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZInsetDepthAdjustment", 0.0]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZInsetDepthAdjustment", [1, 1, 1]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZInsetDepthAdjustment>
 
     <holeXYZInsetThickness type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
@@ -565,6 +1405,30 @@
       <since>3.0.0</since>
       <value>0.375</value>
       <scad:value>0.375</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZInsetThickness = "0.375"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZInsetThickness = "{x: 1, y: 1, z: 1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZInsetThickness", 0.375]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZInsetThickness", [1, 1, 1]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZInsetThickness>
 
     <holeXYZInsetThicknessAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
@@ -574,6 +1438,30 @@
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZInsetThicknessAdjustment = "0.0"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZInsetThicknessAdjustment = "{x: 1, y: 1, z: 1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZInsetThicknessAdjustment", 0.0]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZInsetThicknessAdjustment", [1, 1, 1]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZInsetThicknessAdjustment>
 
     <holeXYZShift type="Boolean | mbt:AxisXYZ(Boolean)">
@@ -584,6 +1472,30 @@
       <since>3.0.0</since>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZShift = "false"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZShift = "{x: true, y: false, z: true}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZShift", false]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZShift", [true, false, true]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZShift>
 
     <holeXYZType type="mbt:AxisXYZ(mbt:HoleType)">
@@ -594,6 +1506,30 @@
       <since>3.0.0</since>
       <value>Pin</value>
       <scad:value>pin</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          holeXYZType = "Pin"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-axis">
+          ...
+          holeXYZType = "{x: Pin, y: Pin, z: Axle}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["holeXYZType", "pin"]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-axis">
+          ...
+          ["holeXYZType", ["pin", "pin", "axle"]]
+          ...
+        </example>
+      </scad:examples>
     </holeXYZType>
 
     
@@ -623,6 +1559,30 @@
         the resulting part ID is "mm.anyclosure.wall/bottom".
       </documentation>
       <since>3.0.0</since>
+      <examples>
+        <example language="BML" snippet="true" title="not set">
+          ...
+          // id is not set — omit the property (runtime may generate a random ID)
+          ...
+        </example>
+        <example language="BML" snippet="true" title="explicit">
+          ...
+          id = "mm.example.brick"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="not set">
+          ...
+          ["id", undef]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="explicit">
+          ...
+          ["id", "mm.example.brick"]
+          ...
+        </example>
+      </scad:examples>
     </id>
 
     <offset type="mbt:OffsetXYZ">
@@ -632,6 +1592,40 @@
       </documentation>
       <value>{x: 0, y: 0, z: 0}</value>
       <scad:value>[0, 0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          offset = "{x: 0, y: 0, z: 0}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="xy pair">
+          ...
+          offset = "{x: 0.5, y: -0.25}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="xyz offset">
+          ...
+          offset = "{x: 1, y: 0, z: 0.5}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["offset", [0, 0, 0]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="xy pair">
+          ...
+          ["offset", [0.5, -0.25]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="xyz offset">
+          ...
+          ["offset", [1, 0, 0.5]]
+          ...
+        </example>
+      </scad:examples>
     </offset>
 
     <pcb type="Boolean.False | mbt:PcbMountingType">
@@ -647,6 +1641,30 @@
       </changelog>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pcb = "false"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="clips">
+          ...
+          pcb = "Clips"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pcb", false]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="clips">
+          ...
+          ["pcb", "clips"]
+          ...
+        </example>
+      </scad:examples>
     </pcb>
 
     <pcbDimensions type="mbt:SizeXYZ(Decimal(unit:Millimeter), Decimal(unit:Millimeter))">
@@ -655,6 +1673,20 @@
       </documentation>
       <value>{x: 20, y: 30, z: 3}</value>
       <scad:value>[20, 30, 3]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pcbDimensions = "{x: 20, y: 30, z: 3}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pcbDimensions", [20, 30, 3]]
+          ...
+        </example>
+      </scad:examples>
     </pcbDimensions>
 
     <pcbOffset type="mbt:OffsetXY">
@@ -663,6 +1695,20 @@
       </documentation>
       <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pcbOffset = "{x: 0, y: 0}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pcbOffset", [0, 0]]
+          ...
+        </example>
+      </scad:examples>
     </pcbOffset>
 
     <pcbSocketDiameter type="Decimal(unit:Millimeter)">
@@ -670,6 +1716,20 @@
       <since>3.0.0</since>
       <value>5</value>
       <scad:value>5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pcbSocketDiameter = "5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pcbSocketDiameter", 5]
+          ...
+        </example>
+      </scad:examples>
     </pcbSocketDiameter>
 
     <pcbSocketHeight type="Decimal(unit:Millimeter)">
@@ -677,6 +1737,20 @@
       <since>3.0.0</since>
       <value>3</value>
       <scad:value>3</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pcbSocketHeight = "3"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pcbSocketHeight", 3]
+          ...
+        </example>
+      </scad:examples>
     </pcbSocketHeight>
 
     <pcbSocketHoleDiameter type="Decimal(unit:Millimeter)">
@@ -684,6 +1758,20 @@
       <since>3.0.0</since>
       <value>2.2</value>
       <scad:value>2.2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pcbSocketHoleDiameter = "2.2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pcbSocketHoleDiameter", 2.2]
+          ...
+        </example>
+      </scad:examples>
     </pcbSocketHoleDiameter>
 
     <pcbSockets type="mbt:PcbSocket[]">
@@ -694,6 +1782,30 @@
       <since>3.0.0</since>
       <value>[]</value>
       <scad:value>[]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pcbSockets = "[]"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="two sockets">
+          ...
+          pcbSockets = "[{x: -5, y: -5}, {x: 5, y: 5}]"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pcbSockets", []]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="two sockets">
+          ...
+          ["pcbSockets", [[-5, -5], [5, 5]]]
+          ...
+        </example>
+      </scad:examples>
     </pcbSockets>
 
     <pillarGapAutoConfig type="mbt:PillarGapAutoConfig">
@@ -717,6 +1829,20 @@
       <since>3.0.0</since>
       <value>{ cornerLength: 2, middleWidth: 10 }</value>
       <scad:value>[2, 10]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pillarGapAutoConfig = "{ cornerLength: 2, middleWidth: 10 }"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pillarGapAutoConfig", [2, 10]]
+          ...
+        </example>
+      </scad:examples>
     </pillarGapAutoConfig>
 
     <pillarInnerClampThickness type="Decimal(unit:Millimeter)">
@@ -727,6 +1853,20 @@
       <since>3.0.0</since>
       <value>0.1</value>
       <scad:value>0.1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pillarInnerClampThickness = "0.1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pillarInnerClampThickness", 0.1]
+          ...
+        </example>
+      </scad:examples>
     </pillarInnerClampThickness>
 
     <pillarOriginalWallThickness type="Decimal(mbunit:MBU)">
@@ -736,12 +1876,40 @@
       <since>3.0.0</since>
       <value>0.53125</value>
       <scad:value>0.53125</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pillarOriginalWallThickness = "0.53125"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pillarOriginalWallThickness", 0.53125]
+          ...
+        </example>
+      </scad:examples>
     </pillarOriginalWallThickness>
 
     <pillars type="Boolean | mbt:SelectiveGrid(Boolean)">
       <documentation>Whether tubes/pins are drawn on the underside (baseCutoutType=standard).</documentation>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pillars = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pillars", true]
+          ...
+        </example>
+      </scad:examples>
     </pillars>
 
     <pinDiameter type="mbt:Auto | Decimal(mbunit:MBU)">
@@ -750,12 +1918,40 @@
       </documentation>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pinDiameter = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pinDiameter", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </pinDiameter>
 
     <pinDiameterAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for pin diameter.</documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          pinDiameterAdjustment = "0.0"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["pinDiameterAdjustment", 0.0]
+          ...
+        </example>
+      </scad:examples>
     </pinDiameterAdjustment>
 
     <ports type="Boolean.False | mbt:Port[]">
@@ -766,6 +1962,30 @@
       <since>3.0.0</since>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          ports = "false"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="one port">
+          ...
+          ports = "[{face: YNeg, align: Center, offset: {a: 0, b: 0}, shapes: [{type: Rect, offset: {a: 0, b: 0}, setting: {size: {a: 8, b: 4}}}]}]"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["ports", false]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="one port">
+          ...
+          ["ports", [["y-", "center", [0, 0], 0, [["rect", [0, 0], 0, [[8, 4]]]], "auto"]]]
+          ...
+        </example>
+      </scad:examples>
     </ports>
 
     <printerLayerHeight type="Decimal(unit:Millimeter)">
@@ -783,6 +2003,20 @@
       <since>3.0.0</since>
       <value>0.2</value>
       <scad:value>0.2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          printerLayerHeight = "0.2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["printerLayerHeight", 0.2]
+          ...
+        </example>
+      </scad:examples>
     </printerLayerHeight>
 
     <printerNozzleDiameter type="Decimal(unit:Millimeter)">
@@ -798,6 +2032,20 @@
       <since>3.0.0</since>
       <value>0.4</value>
       <scad:value>0.4</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          printerNozzleDiameter = "0.4"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["printerNozzleDiameter", 0.4]
+          ...
+        </example>
+      </scad:examples>
     </printerNozzleDiameter>
 
     <quality type="mbt:QualityPreset">
@@ -810,6 +2058,20 @@
       </documentation>
       <value>Normal</value>
       <scad:value>normal</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          quality = "Normal"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["quality", "normal"]
+          ...
+        </example>
+      </scad:examples>
     </quality>
 
     <recess type="Boolean">
@@ -819,6 +2081,20 @@
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recess = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recess", false]
+          ...
+        </example>
+      </scad:examples>
     </recess>
 
     <recessAdjustment type="mbt:Auto | mbt:FaceMapXYZ(Decimal(unit:Millimeter))">
@@ -839,6 +2115,30 @@
       <since>3.0.0</since>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessAdjustment = "Auto"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="faces">
+          ...
+          recessAdjustment = "{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessAdjustment", "auto"]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="faces">
+          ...
+          ["recessAdjustment", [0, 0, 0, 0, 0, 0.1]]
+          ...
+        </example>
+      </scad:examples>
     </recessAdjustment>
 
     <recessDepth type="mbt:Auto | Decimal(mbunit:GridUnitZ)">
@@ -853,6 +2153,20 @@
       </changelog>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessDepth = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessDepth", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </recessDepth>
 
     <recessRoundingRadius type="mbt:Auto | Decimal(mbunit:GridUnitXY) | mbt:PlaneRoundingMap">
@@ -863,6 +2177,40 @@
       </documentation>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessRoundingRadius = "Auto"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-corner">
+          ...
+          recessRoundingRadius = "{sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="anisotropic corner">
+          ...
+          recessRoundingRadius = "{sw: {a: 0.5, b: 0.25}, nw: 0.5, ne: 0.5, se: {a: 0.5, b: 0.25}}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessRoundingRadius", "auto"]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-corner">
+          ...
+          ["recessRoundingRadius", [0.5, 0.5, 0.5, 0.5]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="anisotropic corner">
+          ...
+          ["recessRoundingRadius", [[0.5, 0.25], 0.5, 0.5, [0.5, 0.25]]]
+          ...
+        </example>
+      </scad:examples>
     </recessRoundingRadius>
 
     <recessStudPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -872,6 +2220,20 @@
       </documentation>
       <value>0.2</value>
       <scad:value>0.2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessStudPadding = "0.2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessStudPadding", 0.2]
+          ...
+        </example>
+      </scad:examples>
     </recessStudPadding>
 
     <recessStudShift type="Boolean">
@@ -881,6 +2243,20 @@
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessStudShift = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessStudShift", false]
+          ...
+        </example>
+      </scad:examples>
     </recessStudShift>
 
     <recessStudType type="mbt:StudType">
@@ -889,6 +2265,20 @@
       </documentation>
       <value>Solid</value>
       <scad:value>solid</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessStudType = "Solid"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessStudType", "solid"]
+          ...
+        </example>
+      </scad:examples>
     </recessStudType>
 
     <recessStuds type="Boolean">
@@ -898,6 +2288,20 @@
       </documentation>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessStuds = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessStuds", true]
+          ...
+        </example>
+      </scad:examples>
     </recessStuds>
 
     <recessWallGapStuds type="Boolean">
@@ -907,6 +2311,20 @@
       <since>3.0.0</since>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessWallGapStuds = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessWallGapStuds", false]
+          ...
+        </example>
+      </scad:examples>
     </recessWallGapStuds>
 
     <recessWallGaps type="mbt:RecessWallGap[]">
@@ -919,6 +2337,30 @@
       </changelog>
       <value>[]</value>
       <scad:value>[]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessWallGaps = "[]"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="one gap">
+          ...
+          recessWallGaps = "[{face: YPos, pos: 0, len: 1}]"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessWallGaps", []]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="one gap">
+          ...
+          ["recessWallGaps", [["y+", 0, 1]]]
+          ...
+        </example>
+      </scad:examples>
     </recessWallGaps>
 
     <recessWallStuds type="Boolean">
@@ -929,12 +2371,40 @@
       <since>3.0.0</since>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessWallStuds = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessWallStuds", true]
+          ...
+        </example>
+      </scad:examples>
     </recessWallStuds>
 
     <recessWallThickness type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <documentation>Wall thickness of the recess cavity (box wall thickness).</documentation>
       <value>0.333</value>
       <scad:value>0.333</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          recessWallThickness = "0.333"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["recessWallThickness", 0.333]
+          ...
+        </example>
+      </scad:examples>
     </recessWallThickness>
 
     <reliefCut type="Boolean">
@@ -945,6 +2415,20 @@
       <since>3.0.0</since>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          reliefCut = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["reliefCut", false]
+          ...
+        </example>
+      </scad:examples>
     </reliefCut>
 
     <reliefCutHeight type="Decimal(mbunit:MBU)">
@@ -952,6 +2436,20 @@
       <since>3.0.0</since>
       <value>0.375</value>
       <scad:value>0.375</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          reliefCutHeight = "0.375"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["reliefCutHeight", 0.375]
+          ...
+        </example>
+      </scad:examples>
     </reliefCutHeight>
 
     <reliefCutThickness type="Decimal(mbunit:MBU)">
@@ -959,6 +2457,20 @@
       <since>3.0.0</since>
       <value>0.375</value>
       <scad:value>0.375</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          reliefCutThickness = "0.375"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["reliefCutThickness", 0.375]
+          ...
+        </example>
+      </scad:examples>
     </reliefCutThickness>
 
     <render type="Boolean">
@@ -969,6 +2481,20 @@
       <since>3.0.0</since>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          render = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["render", true]
+          ...
+        </example>
+      </scad:examples>
     </render>
 
     <rotation type="mbt:RotationXYZ">
@@ -979,18 +2505,80 @@
       </documentation>
       <value>[0, 0, 0]</value>
       <scad:value>[0, 0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          rotation = "[0, 0, 0]"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["rotation", [0, 0, 0]]
+          ...
+        </example>
+      </scad:examples>
     </rotation>
 
     <rotationOffset type="mbt:OffsetXYZ">
       <documentation>Shifts the rotation pivot before rotation is applied.</documentation>
       <value>[0, 0, 0]</value>
       <scad:value>[0, 0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          rotationOffset = "[0, 0, 0]"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="xy pair">
+          ...
+          rotationOffset = "{x: 0.5, y: -0.25}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="xyz offset">
+          ...
+          rotationOffset = "{x: 1, y: 0, z: 0.5}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["rotationOffset", [0, 0, 0]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="xy pair">
+          ...
+          ["rotationOffset", [0.5, -0.25]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="xyz offset">
+          ...
+          ["rotationOffset", [1, 0, 0.5]]
+          ...
+        </example>
+      </scad:examples>
     </rotationOffset>
 
     <rotationOffsetRevert type="Boolean">
       <documentation>Whether the rotationOffset is reversed after rotation.</documentation>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          rotationOffsetRevert = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["rotationOffsetRevert", true]
+          ...
+        </example>
+      </scad:examples>
     </rotationOffsetRevert>
 
     <scadPreviewMaxMult type="Decimal">
@@ -1000,6 +2588,20 @@
       </documentation>
       <value>2.5</value>
       <scad:value>2.5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          scadPreviewMaxMult = "2.5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["scadPreviewMaxMult", 2.5]
+          ...
+        </example>
+      </scad:examples>
     </scadPreviewMaxMult>
 
     <scadPreviewPreRender type="Boolean">
@@ -1008,6 +2610,20 @@
       </documentation>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          scadPreviewPreRender = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["scadPreviewPreRender", true]
+          ...
+        </example>
+      </scad:examples>
     </scadPreviewPreRender>
 
     <scadPreviewPreRenderConvexity type="Integer">
@@ -1016,6 +2632,20 @@
       </documentation>
       <value>25</value>
       <scad:value>25</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          scadPreviewPreRenderConvexity = "25"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["scadPreviewPreRenderConvexity", 25]
+          ...
+        </example>
+      </scad:examples>
     </scadPreviewPreRenderConvexity>
 
     <scadPreviewQuality type="Decimal">
@@ -1025,6 +2655,20 @@
       </documentation>
       <value>1.0</value>
       <scad:value>1.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          scadPreviewQuality = "1.0"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["scadPreviewQuality", 1.0]
+          ...
+        </example>
+      </scad:examples>
     </scadPreviewQuality>
 
     <scadQualityClassFactors type="mbt:ScadQualityClassFactors">
@@ -1039,6 +2683,20 @@
         }
       </value>
       <scad:value>[1.00, 1.35, 2.25]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          scadQualityClassFactors = "{functional: 1.00, visual: 1.35, hidden: 2.25}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["scadQualityClassFactors", [1.00, 1.35, 2.25]]
+          ...
+        </example>
+      </scad:examples>
     </scadQualityClassFactors>
 
     <scadQualityClassMinSegments type="mbt:ScadQualityClassMinSegments">
@@ -1053,6 +2711,20 @@
         }
       </value>
       <scad:value>[16, 12, 8]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          scadQualityClassMinSegments = "{functional: 16, visual: 12, hidden: 8}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["scadQualityClassMinSegments", [16, 12, 8]]
+          ...
+        </example>
+      </scad:examples>
     </scadQualityClassMinSegments>
 
     <scadQualityProfile type="mbt:ScadQualityProfile">
@@ -1070,6 +2742,20 @@
         }
       </value>
       <scad:value>[[0.55, 32], [0.38, 48], [0.28, 64], [0.16, 120]]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          scadQualityProfile = "{preview: {length: 0.55, segments: 32}, normal: {length: 0.38, segments: 48}, print: {length: 0.28, segments: 64}, render: {length: 0.16, segments: 120}}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["scadQualityProfile", [[0.55, 32], [0.38, 48], [0.28, 64], [0.16, 120]]]
+          ...
+        </example>
+      </scad:examples>
     </scadQualityProfile>
 
     <scadQualitySegmentMultiplier type="Decimal">
@@ -1081,6 +2767,20 @@
       </documentation>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          scadQualitySegmentMultiplier = "1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["scadQualitySegmentMultiplier", 1]
+          ...
+        </example>
+      </scad:examples>
     </scadQualitySegmentMultiplier>
 
     <scale type="Decimal">
@@ -1090,6 +2790,20 @@
       </documentation>
       <value>1.0</value>
       <scad:value>1.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          scale = "1.0"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["scale", 1.0]
+          ...
+        </example>
+      </scad:examples>
     </scale>
 
     <screwHoleDepth type="Decimal(unit:Millimeter)">
@@ -1097,6 +2811,20 @@
       <since>3.0.0</since>
       <value>4</value>
       <scad:value>4</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          screwHoleDepth = "4"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["screwHoleDepth", 4]
+          ...
+        </example>
+      </scad:examples>
     </screwHoleDepth>
 
     <screwHoleDiameter type="Decimal(unit:Millimeter)">
@@ -1104,6 +2832,20 @@
       <since>3.0.0</since>
       <value>1.6</value>
       <scad:value>1.6</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          screwHoleDiameter = "1.6"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["screwHoleDiameter", 1.6]
+          ...
+        </example>
+      </scad:examples>
     </screwHoleDiameter>
 
     <screwHoleInsetDepth type="Decimal(unit:Millimeter)">
@@ -1113,6 +2855,20 @@
       <since>3.0.0</since>
       <value>0.8</value>
       <scad:value>0.8</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          screwHoleInsetDepth = "0.8"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["screwHoleInsetDepth", 0.8]
+          ...
+        </example>
+      </scad:examples>
     </screwHoleInsetDepth>
 
     <screwHoleInsetThickness type="Decimal(unit:Millimeter)">
@@ -1122,12 +2878,40 @@
       <since>3.0.0</since>
       <value>0.6</value>
       <scad:value>0.6</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          screwHoleInsetThickness = "0.6"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["screwHoleInsetThickness", 0.6]
+          ...
+        </example>
+      </scad:examples>
     </screwHoleInsetThickness>
 
     <screwHoleZHelperHeight type="Decimal(unit:Millimeter)">
       <documentation>Height of the helper layers for Z-face screw holes.</documentation>
       <value>0.2</value>
       <scad:value>0.2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          screwHoleZHelperHeight = "0.2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["screwHoleZHelperHeight", 0.2]
+          ...
+        </example>
+      </scad:examples>
     </screwHoleZHelperHeight>
 
     <screwHoleZHelperLayerOffset type="Decimal(unit:Millimeter)">
@@ -1137,6 +2921,20 @@
       <since>3.0.0</since>
       <value>0.2</value>
       <scad:value>0.2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          screwHoleZHelperLayerOffset = "0.2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["screwHoleZHelperLayerOffset", 0.2]
+          ...
+        </example>
+      </scad:examples>
     </screwHoleZHelperLayerOffset>
 
     <screwHoleZHelperThickness type="Decimal(unit:Millimeter)">
@@ -1145,6 +2943,20 @@
       </documentation>
       <value>0.8</value>
       <scad:value>0.8</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          screwHoleZHelperThickness = "0.8"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["screwHoleZHelperThickness", 0.8]
+          ...
+        </example>
+      </scad:examples>
     </screwHoleZHelperThickness>
 
     <screwHoles type="mbt:ScrewHole[]">
@@ -1157,6 +2969,30 @@
       <since>3.0.0</since>
       <value>[]</value>
       <scad:value>[]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          screwHoles = "[]"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="one hole">
+          ...
+          screwHoles = "[{face: ZPos, offset: {a: 1, b: 2}}]"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["screwHoles", []]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="one hole">
+          ...
+          ["screwHoles", [["z+", [1, 2]]]]
+          ...
+        </example>
+      </scad:examples>
     </screwHoles>
 
     <size type="mbt:SizeXYZ">
@@ -1171,6 +3007,30 @@
       </changelog>
       <value>[1, 1, 1]</value>
       <scad:value>[1, 1, 1]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          size = "[1, 1, 1]"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="xyz size">
+          ...
+          size = "{x: 2, y: 4, z: 3}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["size", [1, 1, 1]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="xyz size">
+          ...
+          ["size", [2, 4, 3]]
+          ...
+        </example>
+      </scad:examples>
     </size>
 
     <sizeAdjustment type="mbt:FaceMapXYZ(Decimal(unit:Millimeter))">
@@ -1193,6 +3053,20 @@
       </changelog>
       <value>[-0.1, 0]</value>
       <scad:value>[-0.1, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          sizeAdjustment = "[-0.1, 0]"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["sizeAdjustment", [-0.1, 0]]
+          ...
+        </example>
+      </scad:examples>
     </sizeAdjustment>
 
     <sizeMod type="mbt:FaceMapXYZ(Decimal(mbunit:GridUnitXY))">
@@ -1217,6 +3091,30 @@
       <since>3.0.0</since>
       <value>{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0}</value>
       <scad:value>[0, 0, 0, 0, 0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          sizeMod = "{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="faces">
+          ...
+          sizeMod = "{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["sizeMod", [0, 0, 0, 0, 0, 0]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="faces">
+          ...
+          ["sizeMod", [0, 0, 0, 0, 0, 0.1]]
+          ...
+        </example>
+      </scad:examples>
     </sizeMod>
 
     <slope type="Boolean.False | mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -1285,6 +3183,20 @@
       <since>3.0.0</since>
       <value>1.333</value>
       <scad:value>1.333</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          slopeBaseHeightBottom = "1.333"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["slopeBaseHeightBottom", 1.333]
+          ...
+        </example>
+      </scad:examples>
     </slopeBaseHeightBottom>
 
     <slopeBaseHeightInner type="Decimal(mbunit:MBU)">
@@ -1294,6 +3206,20 @@
       <since>3.0.0</since>
       <value>1.125</value>
       <scad:value>1.125</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          slopeBaseHeightInner = "1.125"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["slopeBaseHeightInner", 1.125]
+          ...
+        </example>
+      </scad:examples>
     </slopeBaseHeightInner>
 
     <slopeBaseHeightTop type="Decimal(mbunit:MBU)">
@@ -1303,6 +3229,20 @@
       <since>3.0.0</since>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          slopeBaseHeightTop = "1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["slopeBaseHeightTop", 1]
+          ...
+        </example>
+      </scad:examples>
     </slopeBaseHeightTop>
 
     <stabilizerExpansion type="Integer">
@@ -1311,12 +3251,40 @@
       </documentation>
       <value>2</value>
       <scad:value>2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          stabilizerExpansion = "2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["stabilizerExpansion", 2]
+          ...
+        </example>
+      </scad:examples>
     </stabilizerExpansion>
 
     <stabilizerExpansionOffset type="Decimal(mbunit:MBU)">
       <documentation>Distance of expanded grid elements from the bottom edge.</documentation>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          stabilizerExpansionOffset = "1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["stabilizerExpansionOffset", 1]
+          ...
+        </example>
+      </scad:examples>
     </stabilizerExpansionOffset>
 
     <stabilizerHeight type="Decimal(mbunit:MBU)">
@@ -1324,6 +3292,20 @@
       <since>3.0.0</since>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          stabilizerHeight = "0.5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["stabilizerHeight", 0.5]
+          ...
+        </example>
+      </scad:examples>
     </stabilizerHeight>
 
     <stabilizerLayerOffset type="Decimal(unit:Millimeter)">
@@ -1334,6 +3316,20 @@
       <since>3.0.0</since>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          stabilizerLayerOffset = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["stabilizerLayerOffset", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </stabilizerLayerOffset>
 
     <stabilizerThickness type="Decimal(mbunit:MBU)">
@@ -1341,6 +3337,20 @@
       <since>3.0.0</since>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          stabilizerThickness = "0.5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["stabilizerThickness", 0.5]
+          ...
+        </example>
+      </scad:examples>
     </stabilizerThickness>
 
     <stabilizers type="Boolean">
@@ -1351,6 +3361,20 @@
       <since>3.0.0</since>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          stabilizers = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["stabilizers", true]
+          ...
+        </example>
+      </scad:examples>
     </stabilizers>
 
     <studBaseOverlap type="Decimal(mbunit:MBU)">
@@ -1363,6 +3387,20 @@
       <since>3.0.0</since>
       <value>0.25</value>
       <scad:value>0.25</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studBaseOverlap = "0.25"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studBaseOverlap", 0.25]
+          ...
+        </example>
+      </scad:examples>
     </studBaseOverlap>
 
     <studClampHeight type="Decimal(mbunit:MBU)">
@@ -1372,6 +3410,20 @@
       </documentation>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studClampHeight = "0.5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studClampHeight", 0.5]
+          ...
+        </example>
+      </scad:examples>
     </studClampHeight>
 
     <studClampOffset type="Decimal(mbunit:MBU)">
@@ -1382,12 +3434,40 @@
       <since>3.0.0</since>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studClampOffset = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studClampOffset", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </studClampOffset>
 
     <studClampThickness type="Decimal(mbunit:MBU)">
       <documentation>Thickness of the stud clamp ring. At 0 no clamp is active.</documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studClampThickness = "0.0"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studClampThickness", 0.0]
+          ...
+        </example>
+      </scad:examples>
     </studClampThickness>
 
     <studCutoutDiameterAdjustment type="Decimal(unit:Millimeter)">
@@ -1398,6 +3478,20 @@
       <since>3.0.0</since>
       <value>0.2</value>
       <scad:value>0.2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studCutoutDiameterAdjustment = "0.2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studCutoutDiameterAdjustment", 0.2]
+          ...
+        </example>
+      </scad:examples>
     </studCutoutDiameterAdjustment>
 
     <studCutoutHeightAdjustment type="Decimal(unit:Millimeter)">
@@ -1408,30 +3502,100 @@
       <since>3.0.0</since>
       <value>0.4</value>
       <scad:value>0.4</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studCutoutHeightAdjustment = "0.4"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studCutoutHeightAdjustment", 0.4]
+          ...
+        </example>
+      </scad:examples>
     </studCutoutHeightAdjustment>
 
     <studDiameter type="Decimal(mbunit:MBU)">
       <documentation>Diameter of studs. Usually does not need adjustment.</documentation>
       <value>3</value>
       <scad:value>3</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studDiameter = "3"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studDiameter", 3]
+          ...
+        </example>
+      </scad:examples>
     </studDiameter>
 
     <studDiameterAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for studDiameter.</documentation>
       <value>0.2</value>
       <scad:value>0.2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studDiameterAdjustment = "0.2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studDiameterAdjustment", 0.2]
+          ...
+        </example>
+      </scad:examples>
     </studDiameterAdjustment>
 
     <studHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of studs. Usually does not need adjustment.</documentation>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studHeight = "1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studHeight", 1]
+          ...
+        </example>
+      </scad:examples>
     </studHeight>
 
     <studHeightAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for studHeight.</documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studHeightAdjustment = "0.0"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studHeightAdjustment", 0.0]
+          ...
+        </example>
+      </scad:examples>
     </studHeightAdjustment>
 
     <studHoleClampThickness type="Decimal(unit:Millimeter)">
@@ -1440,6 +3604,20 @@
       </documentation>
       <value>0.1</value>
       <scad:value>0.1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studHoleClampThickness = "0.1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studHoleClampThickness", 0.1]
+          ...
+        </example>
+      </scad:examples>
     </studHoleClampThickness>
 
     <studHoleDiameter type="Decimal(mbunit:MBU)">
@@ -1448,18 +3626,60 @@
       </documentation>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studHoleDiameter = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studHoleDiameter", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </studHoleDiameter>
 
     <studHoleDiameterAdjustment type="Decimal(unit:Millimeter)">
       <documentation>Calibration adjustment for studHoleDiameter.</documentation>
       <value>0.3</value>
       <scad:value>0.3</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studHoleDiameterAdjustment = "0.3"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studHoleDiameterAdjustment", 0.3]
+          ...
+        </example>
+      </scad:examples>
     </studHoleDiameterAdjustment>
 
     <studIcon type="Boolean.False | Text">
       <documentation>SVG file engraved into each stud.</documentation>
       <value>../../pattern/bolt-solid-full.svg</value>
       <scad:value>../../pattern/bolt-solid-full.svg</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studIcon = "../../pattern/bolt-solid-full.svg"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studIcon", ../../pattern/bolt-solid-full.svg]
+          ...
+        </example>
+      </scad:examples>
     </studIcon>
 
     <studIconColor type="mbt:Inherit | Color">
@@ -1467,7 +3687,21 @@
         Only visually relevant when studIconDepth &gt; 0.
       </documentation>
       <value>Inherit</value>
-      <scad:value>inherit</scad:value>
+      <scad:value>"inherit"</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studIconColor = "Inherit"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studIconColor", "inherit"]
+          ...
+        </example>
+      </scad:examples>
     </studIconColor>
 
     <studIconDepth type="Decimal(mbunit:MBU)">
@@ -1476,6 +3710,20 @@
       </documentation>
       <value>-0.2</value>
       <scad:value>-0.2</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studIconDepth = "-0.2"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studIconDepth", -0.2]
+          ...
+        </example>
+      </scad:examples>
     </studIconDepth>
 
     <studIconDimensions type="mbt:SizeXY(Decimal(unit:Millimeter))">
@@ -1484,12 +3732,50 @@
       </documentation>
       <value>{x: 169.333, y: 169.333}</value>
       <scad:value>[169.333, 169.333]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studIconDimensions = "{x: 169.333, y: 169.333}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="xy size">
+          ...
+          studIconDimensions = "{x: 100, y: 50}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studIconDimensions", [169.333, 169.333]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="xy size">
+          ...
+          ["studIconDimensions", [100, 50]]
+          ...
+        </example>
+      </scad:examples>
     </studIconDimensions>
 
     <studIconScale type="Decimal">
       <documentation>Effective scale factor for the stud icon.</documentation>
       <value>0.8</value>
       <scad:value>0.8</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studIconScale = "0.8"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studIconScale", 0.8]
+          ...
+        </example>
+      </scad:examples>
     </studIconScale>
 
     <studMaxOverhang type="Decimal(mbunit:MBU)">
@@ -1498,6 +3784,20 @@
       </documentation>
       <value>0.3</value>
       <scad:value>0.3</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studMaxOverhang = "0.3"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studMaxOverhang", 0.3]
+          ...
+        </example>
+      </scad:examples>
     </studMaxOverhang>
 
     <studPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -1506,12 +3806,40 @@
       </documentation>
       <value>{XNeg: 0, XPos: 0, YNeg: 0, YPos: 0}</value>
       <scad:value>[0, 0, 0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studPadding = "{XNeg: 0, XPos: 0, YNeg: 0, YPos: 0}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studPadding", [0, 0, 0, 0]]
+          ...
+        </example>
+      </scad:examples>
     </studPadding>
 
     <studRounding type="Decimal(mbunit:MBU)">
       <documentation>Rounding radius of the upper stud edge.</documentation>
       <value>0.0625</value>
       <scad:value>0.0625</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studRounding = "0.0625"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studRounding", 0.0625]
+          ...
+        </example>
+      </scad:examples>
     </studRounding>
 
     <studShift type="Boolean">
@@ -1521,12 +3849,40 @@
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studShift = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studShift", false]
+          ...
+        </example>
+      </scad:examples>
     </studShift>
 
     <studType type="mbt:StudType">
       <documentation>Type of studs. solid: massive. hollow: with a hole in the center.</documentation>
       <value>Solid</value>
       <scad:value>solid</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studType = "Solid"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studType", "solid"]
+          ...
+        </example>
+      </scad:examples>
     </studType>
 
     <studs type="Boolean | mbt:SelectiveGrid(Boolean | mbt:StudType)">
@@ -1535,6 +3891,20 @@
       </documentation>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          studs = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["studs", true]
+          ...
+        </example>
+      </scad:examples>
     </studs>
 
     <surfacePattern type="Boolean.False | Text">
@@ -1543,6 +3913,20 @@
       </documentation>
       <value>False</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          surfacePattern = "False"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["surfacePattern", false]
+          ...
+        </example>
+      </scad:examples>
     </surfacePattern>
 
     <surfacePatternColor type="mbt:Inherit | Color">
@@ -1550,19 +3934,71 @@
         Only visually relevant when surfacePatternDepth &gt; 0.
       </documentation>
       <value>Inherit</value>
-      <scad:value>inherit</scad:value>
+      <scad:value>"inherit"</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          surfacePatternColor = "Inherit"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["surfacePatternColor", "inherit"]
+          ...
+        </example>
+      </scad:examples>
     </surfacePatternColor>
 
     <surfacePatternDepth type="Decimal(mbunit:MBU)">
       <documentation>Depth of the surface pattern. Negative = engraved. Positive = raised.</documentation>
       <value>-0.0625</value>
       <scad:value>-0.0625</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          surfacePatternDepth = "-0.0625"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["surfacePatternDepth", -0.0625]
+          ...
+        </example>
+      </scad:examples>
     </surfacePatternDepth>
 
     <surfacePatternDimensions type="mbt:SizeXY(Decimal(unit:Millimeter))">
       <documentation>Size of the surface pattern SVG in mm (from the SVG file).</documentation>
       <value>{x: 451.556, y: 451.556}</value>
       <scad:value>[451.556, 451.556]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          surfacePatternDimensions = "{x: 451.556, y: 451.556}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="xy size">
+          ...
+          surfacePatternDimensions = "{x: 100, y: 50}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["surfacePatternDimensions", [451.556, 451.556]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="xy size">
+          ...
+          ["surfacePatternDimensions", [100, 50]]
+          ...
+        </example>
+      </scad:examples>
     </surfacePatternDimensions>
 
     <surfacePatternOffset type="mbt:OffsetXY">
@@ -1572,6 +4008,20 @@
       </documentation>
       <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          surfacePatternOffset = "{x: 0, y: 0}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["surfacePatternOffset", [0, 0]]
+          ...
+        </example>
+      </scad:examples>
     </surfacePatternOffset>
 
     <surfacePatternPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -1583,12 +4033,40 @@
       <since>3.0.0</since>
       <value>{XNeg: 0, XPos: 0, YNeg: 0, YPos: 0}</value>
       <scad:value>[0, 0, 0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          surfacePatternPadding = "{XNeg: 0, XPos: 0, YNeg: 0, YPos: 0}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["surfacePatternPadding", [0, 0, 0, 0]]
+          ...
+        </example>
+      </scad:examples>
     </surfacePatternPadding>
 
     <surfacePatternScale type="Decimal">
       <documentation>Scale factor for the surface pattern.</documentation>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          surfacePatternScale = "1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["surfacePatternScale", 1]
+          ...
+        </example>
+      </scad:examples>
     </surfacePatternScale>
 
     <svg type="Boolean.False | Text">
@@ -1597,24 +4075,90 @@
       </documentation>
       <value>False</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          svg = "False"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["svg", false]
+          ...
+        </example>
+      </scad:examples>
     </svg>
 
     <svgColor type="Color">
       <documentation>Color of the SVG.</documentation>
       <value>#2c3e50</value>
-      <scad:value>#2c3e50</scad:value>
+      <scad:value>"#2c3e50"</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          svgColor = "#2c3e50"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["svgColor", "#2c3e50"]
+          ...
+        </example>
+      </scad:examples>
     </svgColor>
 
     <svgDepth type="Decimal(mbunit:MBU)">
       <documentation>Depth/height of the SVG. Negative = engraved. Positive = raised.</documentation>
       <value>0.4</value>
       <scad:value>0.4</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          svgDepth = "0.4"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["svgDepth", 0.4]
+          ...
+        </example>
+      </scad:examples>
     </svgDepth>
 
     <svgDimensions type="mbt:SizeXY(Decimal(unit:Millimeter))">
       <documentation>Size of the SVG in mm (from the SVG file).</documentation>
       <value>{x: 100, y: 100}</value>
       <scad:value>[100, 100]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          svgDimensions = "{x: 100, y: 100}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="xy size">
+          ...
+          svgDimensions = "{x: 100, y: 50}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["svgDimensions", [100, 100]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="xy size">
+          ...
+          ["svgDimensions", [100, 50]]
+          ...
+        </example>
+      </scad:examples>
     </svgDimensions>
 
     <svgFace type="mbt:Face">
@@ -1622,18 +4166,60 @@
       <since>3.0.0</since>
       <value>ZPos</value>
       <scad:value>z+</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          svgFace = "ZPos"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["svgFace", "z+"]
+          ...
+        </example>
+      </scad:examples>
     </svgFace>
 
     <svgOffset type="mbt:OffsetXY">
       <documentation>Offset of the SVG from its default position (OffsetXY, default GridUnitXY).</documentation>
       <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          svgOffset = "{x: 0, y: 0}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["svgOffset", [0, 0]]
+          ...
+        </example>
+      </scad:examples>
     </svgOffset>
 
     <svgScale type="Decimal">
       <documentation>Scale factor for the SVG.</documentation>
       <value>1.0</value>
       <scad:value>1.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          svgScale = "1.0"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["svgScale", 1.0]
+          ...
+        </example>
+      </scad:examples>
     </svgScale>
 
     <text type="Boolean.False | Text">
@@ -1642,6 +4228,20 @@
       </documentation>
       <value>False</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          text = "False"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["text", false]
+          ...
+        </example>
+      </scad:examples>
     </text>
 
     <textAlign type="mbt:Align">
@@ -1651,18 +4251,60 @@
       <since>3.0.0</since>
       <value>Center</value>
       <scad:value>center</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          textAlign = "Center"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["textAlign", "center"]
+          ...
+        </example>
+      </scad:examples>
     </textAlign>
 
     <textColor type="Color">
       <documentation>Color of the text. Independent from baseColor.</documentation>
       <value>#2c3e50</value>
-      <scad:value>#2c3e50</scad:value>
+      <scad:value>"#2c3e50"</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          textColor = "#2c3e50"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["textColor", "#2c3e50"]
+          ...
+        </example>
+      </scad:examples>
     </textColor>
 
     <textDepth type="Decimal(mbunit:MBU)">
       <documentation>Depth/height of the text. Negative = engraved. Positive = raised.</documentation>
       <value>-0.25</value>
       <scad:value>-0.25</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          textDepth = "-0.25"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["textDepth", -0.25]
+          ...
+        </example>
+      </scad:examples>
     </textDepth>
 
     <textFace type="mbt:Face">
@@ -1670,30 +4312,100 @@
       <since>3.0.0</since>
       <value>XNeg</value>
       <scad:value>x-</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          textFace = "XNeg"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["textFace", "x-"]
+          ...
+        </example>
+      </scad:examples>
     </textFace>
 
     <textFont type="Text">
       <documentation>Font family for the text.</documentation>
       <value>Liberation Sans</value>
       <scad:value>Liberation Sans</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          textFont = "Liberation Sans"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["textFont", Liberation Sans]
+          ...
+        </example>
+      </scad:examples>
     </textFont>
 
     <textOffset type="mbt:OffsetXY">
       <documentation>Offset of the text from its normal position (OffsetXY, default GridUnitXY).</documentation>
       <value>[0, 0]</value>
       <scad:value>[0, 0]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          textOffset = "[0, 0]"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["textOffset", [0, 0]]
+          ...
+        </example>
+      </scad:examples>
     </textOffset>
 
     <textSize type="Decimal(unit:Millimeter)">
       <documentation>Font size of the text.</documentation>
       <value>4</value>
       <scad:value>4</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          textSize = "4"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["textSize", 4]
+          ...
+        </example>
+      </scad:examples>
     </textSize>
 
     <textSpacing type="Decimal">
       <documentation>Letter spacing of the text.</documentation>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          textSpacing = "1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["textSpacing", 1]
+          ...
+        </example>
+      </scad:examples>
     </textSpacing>
 
     <tongue type="Boolean">
@@ -1706,6 +4418,20 @@
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongue = "false"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongue", false]
+          ...
+        </example>
+      </scad:examples>
     </tongue>
 
     <tongueClampHeight type="Decimal(mbunit:MBU)">
@@ -1714,6 +4440,20 @@
       </documentation>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueClampHeight = "0.5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueClampHeight", 0.5]
+          ...
+        </example>
+      </scad:examples>
     </tongueClampHeight>
 
     <tongueClampOffset type="Decimal(mbunit:MBU)">
@@ -1727,12 +4467,40 @@
       </changelog>
       <value>0.5</value>
       <scad:value>0.5</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueClampOffset = "0.5"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueClampOffset", 0.5]
+          ...
+        </example>
+      </scad:examples>
     </tongueClampOffset>
 
     <tongueClampThickness type="Decimal(mbunit:MBU)">
       <documentation>Thickness of the tongue clamp lip / groove recess.</documentation>
       <value>0.1</value>
       <scad:value>0.1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueClampThickness = "0.1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueClampThickness", 0.1]
+          ...
+        </example>
+      </scad:examples>
     </tongueClampThickness>
 
     <!-- TODO: implement in SCAD -->
@@ -1745,6 +4513,20 @@
       <since>3.0.0</since>
       <value>0</value>
       <scad:value>0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueGrooveClampOffsetClearance = "0"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueGrooveClampOffsetClearance", 0]
+          ...
+        </example>
+      </scad:examples>
     </tongueGrooveClampOffsetClearance>
 
     <tongueGrooveDepthClearance type="Decimal(unit:Millimeter)">
@@ -1756,6 +4538,20 @@
       <since>3.0.0</since>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueGrooveDepthClearance = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueGrooveDepthClearance", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </tongueGrooveDepthClearance>
 
     <!-- TODO: implement in SCAD -->
@@ -1770,12 +4566,40 @@
       <since>3.0.0</since>
       <value>0.1</value>
       <scad:value>0.1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueGrooveThicknessClearance = "0.1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueGrooveThicknessClearance", 0.1]
+          ...
+        </example>
+      </scad:examples>
     </tongueGrooveThicknessClearance>
 
     <tongueHeight type="Decimal(mbunit:MBU)">
       <documentation>Height of the tongue.</documentation>
       <value>1.25</value>
       <scad:value>1.25</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueHeight = "1.25"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueHeight", 1.25]
+          ...
+        </example>
+      </scad:examples>
     </tongueHeight>
 
     <tongueOffset type="Decimal(mbunit:MBU)">
@@ -1784,6 +4608,20 @@
       </documentation>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueOffset = "1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueOffset", 1]
+          ...
+        </example>
+      </scad:examples>
     </tongueOffset>
 
     <tongueRoundingRadius type="mbt:Auto | Decimal(mbunit:GridUnitXY) | mbt:PlaneRoundingMap">
@@ -1794,12 +4632,60 @@
       </documentation>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueRoundingRadius = "Auto"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="per-corner">
+          ...
+          tongueRoundingRadius = "{sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="anisotropic corner">
+          ...
+          tongueRoundingRadius = "{sw: {a: 0.5, b: 0.25}, nw: 0.5, ne: 0.5, se: {a: 0.5, b: 0.25}}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueRoundingRadius", "auto"]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="per-corner">
+          ...
+          ["tongueRoundingRadius", [0.5, 0.5, 0.5, 0.5]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="anisotropic corner">
+          ...
+          ["tongueRoundingRadius", [[0.5, 0.25], 0.5, 0.5, [0.5, 0.25]]]
+          ...
+        </example>
+      </scad:examples>
     </tongueRoundingRadius>
 
     <tongueThickness type="Decimal(mbunit:MBU)">
       <documentation>Thickness of the tongue.</documentation>
       <value>0.666</value>
       <scad:value>0.666</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueThickness = "0.666"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueThickness", 0.666]
+          ...
+        </example>
+      </scad:examples>
     </tongueThickness>
 
     <tongueThicknessAdjustment type="Decimal(unit:Millimeter)">
@@ -1810,6 +4696,20 @@
       </documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tongueThicknessAdjustment = "0.0"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tongueThicknessAdjustment", 0.0]
+          ...
+        </example>
+      </scad:examples>
     </tongueThicknessAdjustment>
 
     <topPlateHeight type="Decimal(mbunit:MBU)">
@@ -1820,6 +4720,20 @@
       <since>3.0.0</since>
       <value>1</value>
       <scad:value>1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          topPlateHeight = "1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["topPlateHeight", 1]
+          ...
+        </example>
+      </scad:examples>
     </topPlateHeight>
 
     <topPlateHeightAdjustment type="Decimal(unit:Millimeter)">
@@ -1829,6 +4743,20 @@
       <since>3.0.0</since>
       <value>-0.6</value>
       <scad:value>-0.6</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          topPlateHeightAdjustment = "-0.6"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["topPlateHeightAdjustment", -0.6]
+          ...
+        </example>
+      </scad:examples>
     </topPlateHeightAdjustment>
 
     <topPlateHelperHeight type="Decimal(unit:Millimeter)">
@@ -1839,6 +4767,20 @@
       </documentation>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          topPlateHelperHeight = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["topPlateHelperHeight", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </topPlateHelperHeight>
 
     <topPlateHelperThickness type="mbt:Auto | Decimal(unit:Millimeter)">
@@ -1847,6 +4789,20 @@
       </documentation>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          topPlateHelperThickness = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["topPlateHelperThickness", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </topPlateHelperThickness>
 
     <topPlateHelpers type="Boolean">
@@ -1858,6 +4814,20 @@
       </documentation>
       <value>true</value>
       <scad:value>true</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          topPlateHelpers = "true"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["topPlateHelpers", true]
+          ...
+        </example>
+      </scad:examples>
     </topPlateHelpers>
 
     <tubeDiameter type="mbt:Auto | Decimal(mbunit:MBU)">
@@ -1867,6 +4837,20 @@
       <since>3.0.0</since>
       <value>Auto</value>
       <scad:value>auto</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tubeDiameter = "Auto"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tubeDiameter", "auto"]
+          ...
+        </example>
+      </scad:examples>
     </tubeDiameter>
 
     <tubeDiameterAdjustment type="Decimal(unit:Millimeter)">
@@ -1874,6 +4858,20 @@
       <since>3.0.0</since>
       <value>-0.1</value>
       <scad:value>-0.1</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          tubeDiameterAdjustment = "-0.1"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["tubeDiameterAdjustment", -0.1]
+          ...
+        </example>
+      </scad:examples>
     </tubeDiameterAdjustment>
 
     <!-- TODO: use XYZ in scad -->
@@ -1884,6 +4882,30 @@
       </documentation>
       <value>{x: 5, y: 5, z: 2}</value>
       <scad:value>[5, 5, 2]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          unitGridToMbu = "{x: 5, y: 5, z: 2}"
+          ...
+        </example>
+        <example language="BML" snippet="true" title="xyz size">
+          ...
+          unitGridToMbu = "{x: 2, y: 4, z: 3}"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["unitGridToMbu", [5, 5, 2]]
+          ...
+        </example>
+        <example language="OpenSCAD" snippet="true" title="xyz size">
+          ...
+          ["unitGridToMbu", [2, 4, 3]]
+          ...
+        </example>
+      </scad:examples>
     </unitGridToMbu>
 
     <unitMbuToMm type="Decimal(unit:Millimeter)">
@@ -1893,6 +4915,20 @@
       </documentation>
       <value>1.6</value>
       <scad:value>1.6</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="default">
+          ...
+          unitMbuToMm = "1.6"
+          ...
+        </example>
+      </examples>
+      <scad:examples>
+        <example language="OpenSCAD" snippet="true" title="default">
+          ...
+          ["unitMbuToMm", 1.6]
+          ...
+        </example>
+      </scad:examples>
     </unitMbuToMm>
   </properties>
 
