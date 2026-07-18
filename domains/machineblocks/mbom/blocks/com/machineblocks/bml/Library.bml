@@ -94,6 +94,7 @@
       <mbtype:OffsetXY />
       <mbtype:OffsetXYZ />
       <mbtype:PcbMountingType />
+      <mbtype:PcbSocket />
       <mbtype:PillarGapAutoConfig />
       <mbtype:Port />
       <mbtype:PortShapeType />

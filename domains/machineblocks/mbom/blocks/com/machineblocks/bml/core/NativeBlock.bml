@@ -674,9 +674,9 @@
       <scad:value>2.2</scad:value>
     </pcbSocketHoleDiameter>
 
-    <pcbSockets type="mbtype:OffsetXY(Decimal(unit:Millimeter))[]">
-      <documentation>Positions of screw sockets. Each entry gives the distance of the
-        socket center from the brick center in mm.
+    <pcbSockets type="mbtype:PcbSocket[]">
+      <documentation>Positions of screw sockets. Each PcbSocket { x, y } is the distance of the
+        socket center from the brick center in mm (SCAD [x, y]).
       </documentation>
       <since>3.0.0</since>
       <value>[]</value>
