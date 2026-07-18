@@ -2466,7 +2466,13 @@ There is no implicit fallback to the baseType's namespace. If a type cannot be r
 
 When the property `type` is an EnumType, `value` and instance attribute values use `{EnumTypeFQN}::{valueId}` or the short form `{valueId}` only. BOM stores id + typeFqn — not a copy of catalog properties. See `17_type_system_bml.md` — EnumType.
 
-**Suggestions** are hints for free-text properties — the author can enter any value. The editor renders them as a **Combobox**. Each suggestion is a Block instance of the property type (not a special element):
+**Suggestions** are hints for free-text or open ValueType properties — the author can enter any value. The editor renders them as a **Combobox**. Each suggestion is a Block instance (not a special element). The property still holds its literal `value`; suggestion children use the instance form of that type:
+
+- Property `type="Text"` → `<TextEntity value="…"/>` (not `<Text …/>`)
+- Property `type="Integer"` → `<IntegerEntity value="…"/>`
+- Property `type="type:SizeXYZ"` → `<type:SizeXYZ …/>`
+
+See `18_constraints_and_suggestions.md` for the full Primitive vs Struct rule.
 
 ```xml
 <!-- Free-text with suggestions — Combobox, not validated -->
@@ -2500,7 +2506,7 @@ When the property `type` is an EnumType, `value` and instance attribute values u
 
 Whether BlockML enforces a constraint depends on its optional `validation` property referencing `org.blockml.bml.core.Validation`. Constraints without `validation` are metadata only — the validator still checks type, branch compatibility, and generic binding. Wrong branch for context → `BML_CONSTRAINT_TARGET_MISMATCH`. See `18_constraints_and_suggestions.md` for the full hierarchy (ValueConstraint vs StructuralConstraint branches).
 
-For struct properties, suggestions are typed Block instances:
+For struct properties, suggestions are instances of the StructType itself (not an Entity wrapper):
 
 ```xml
 <size type="type:SizeXYZ">
@@ -2511,6 +2517,8 @@ For struct properties, suggestions are typed Block instances:
   </suggestions>
 </size>
 ```
+
+Primitive properties use the matching `*Entity` instead — e.g. `type="Text"` → `<TextEntity …/>`. See `18_constraints_and_suggestions.md`.
 
 **Computed values:** `value` may be an Expression referencing other Properties of the same Block. Cycle detection applies — see `10_expression_language.md`.
 

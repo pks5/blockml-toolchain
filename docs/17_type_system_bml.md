@@ -1110,11 +1110,12 @@ A ValueType may appear in different roles:
 |---|---|---|
 | Property type | `type="org.blockml.bml.type.Integer"` | type reference — value stored on Property |
 | Property value on instance | `columns="5"` | inline literal on Property |
-| Suggestion | Block instance in `<suggestions>` | metadata — same type as property |
+| Suggestion (primitive) | `<TextEntity value="…"/>` under `<suggestions>` on a `Text` property | metadata — `*Entity` wrapper, not the PrimitiveType |
+| Suggestion (struct) | `<SizeXYZ …/>` under `<suggestions>` on a `SizeXYZ` property | metadata — StructType instance |
 | Aggregation type | `type="org.blockml.bml.type.IntegerEntity[]"` | collection of integer Entities |
 | Composition child | `<SizeXYZ x="10" y="5" z="2"/>` | StructType Block instance |
 
-**Primitive values in composition:** use `IntegerEntity`, `TextEntity`, or another concrete `*Entity` type when a primitive must be an Entity — not `<Integer value="5"/>`. Properties always store values directly.
+**Primitive values in composition and suggestions:** use `IntegerEntity`, `TextEntity`, `ColorEntity`, or another concrete `*Entity` type when a primitive must be an Entity — not `<Integer value="5"/>` or `<Text value="…"/>`. Properties always store values directly. The same rule applies to `<suggestions>` children. See `18_constraints_and_suggestions.md`.
 
 The renderer and validator decide semantics from `baseType`, branch, and usage context — not from separate metamodels.
 
@@ -1626,7 +1627,7 @@ Branch is derived by walking the **`baseType` chain only** — `contracts[]` doe
 | Used as property `<constraints>` child | forbidden | forbidden | yes (Constraint sub-type) | forbidden | forbidden |
 | Used as Block / member `<constraints>` child | yes (BlockConstraint on Block; member branches on members) | — | yes | forbidden | forbidden |
 | Used as Constraint `validation` property | forbidden | forbidden | forbidden | yes (Validation sub-type) | forbidden |
-| Used as property `<suggestions>` child | yes (same type as property) | yes | forbidden | forbidden | forbidden |
+| Used as property `<suggestions>` child | yes (`*Entity` for primitives) | yes (StructType instance; not bare PrimitiveType) | forbidden | forbidden | forbidden |
 | Used as Capability input/output type | forbidden | yes (+ generic substitution) | forbidden | forbidden | forbidden |
 | Used as `<implementation language>` | forbidden | forbidden | forbidden | forbidden | yes |
 

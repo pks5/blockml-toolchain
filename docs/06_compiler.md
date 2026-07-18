@@ -584,7 +584,7 @@ BML_VALIDATION_UNKNOWN        — validation Block type not in TypeRegistry or n
 BML_CONSTRAINT_VIOLATION      — constraint rule fails with validation="Error"
 BML_CONSTRAINT_WARNING        — constraint rule fails with validation:Warning
 BML_CONSTRAINT_INFORMATION    — constraint rule fails with validation:Information
-BML_SUGGESTION_TYPE_MISMATCH  — suggestion Block instance type incompatible with property type
+BML_SUGGESTION_TYPE_MISMATCH  — suggestion instance incompatible with property type (e.g. Text instead of TextEntity)
 BML_CARDINALITY_VIOLATION     — aggregation occurrence constraint not satisfied (type notation)
 BML_DUPLICATE_MEMBER_NAME     — member name used more than once in a block
 BML_INVALID_PROPERTY_TYPE     — property or Capability type is not a ValueType

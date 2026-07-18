@@ -83,14 +83,17 @@
   </properties>
 
   <aggregations>
-    <suggestions type="core:ValueType[]" bml:xml="element">
+    <suggestions type="core:Block[]" bml:xml="element">
       <documentation>Property-only metadata — suggested values for editors and renderers. Each child
-        element is a Block instance of the same type as this property's typeFqn (Stage [8] validates
-        compatibility — BML_SUGGESTION_TYPE_MISMATCH). Document order preserved in BOM
-        suggestions[]. Must not appear on properties typed with an EnumType (BML_SUGGESTIONS_ON_ENUM).
-        Suggestions are not enforced — authors may enter any compatible value. Always rendered as a
-        suggestions child element; children use their declared type tag (same pattern as composition
-        instances).</documentation>
+        is a Block instance compatible with this property's typeFqn (Stage [8] —
+        BML_SUGGESTION_TYPE_MISMATCH). Coarse aggregation bound is Block[] (BOM BlockInstance[]);
+        exact compatibility is contextual: StructType / EnumType-adjacent instances use the
+        ValueType itself (e.g. SizeXYZ); PrimitiveType properties use the matching *Entity wrapper
+        (e.g. TextEntity for Text). Document order preserved in BOM suggestions[]. Must not appear
+        on properties typed with an EnumType (BML_SUGGESTIONS_ON_ENUM). Suggestions are not
+        enforced — authors may enter any compatible value. Always rendered as a suggestions child
+        element; children use their declared type tag (same pattern as composition instances).
+      </documentation>
     </suggestions>
   </aggregations>
 </block>

@@ -300,7 +300,17 @@ The Canonical BOM stores constraint instances verbatim. Generic binding, branch 
 
 ## Suggestions
 
-A Property may declare a list of suggested values. Each suggestion is a Block instance of the **same type as the property** — no special base type.
+A Property may declare a list of suggested values. Each suggestion is a **Block instance** compatible with the property's `typeFqn` — no special Suggestion base type. On `PropertyDefinition` the aggregation is typed `core:Block[]` (BOM `BlockInstance[]`); Stage [8] enforces property-type compatibility (`BML_SUGGESTION_TYPE_MISMATCH`).
+
+**Property value vs suggestion child:** the property still stores its value as a literal or expression on the Property (`<value>…</value>` / `value="…"`). Suggestion children are composition-style Block instances. Which instance type to author depends on the property's ValueType kind:
+
+| Property `type` | Suggestion child element | Why |
+|---|---|---|
+| PrimitiveType (e.g. `Text`, `Integer`, `Color`) | Matching `*Entity` wrapper (`TextEntity`, `IntegerEntity`, `ColorEntity`) | PrimitiveTypes never carry a `value` member — only `PrimitiveEntity(T)` wrappers may appear as instances |
+| StructType (e.g. `SizeXYZ`) | The StructType itself (`SizeXYZ`) | StructTypes are instantiable value Blocks |
+| EnumType | — forbidden | Closed set comes from `values` → `BML_SUGGESTIONS_ON_ENUM` |
+
+**Primitive example** — property type `Text`, suggestions must be `TextEntity` (not `<Text …/>`):
 
 ```xml
 <textColor type="Text">
@@ -310,6 +320,25 @@ A Property may declare a list of suggested values. Each suggestion is a Block in
     <TextEntity value="#EAC645"/>
   </suggestions>
 </textColor>
+```
+
+```xml
+<!-- WRONG — Text is a PrimitiveType, not an Entity instance -->
+<suggestions>
+  <Text value="#303D4E"/>
+</suggestions>
+```
+
+**Struct example** — property type `SizeXYZ`, suggestions are `SizeXYZ` instances:
+
+```xml
+<size type="type:SizeXYZ">
+  <value>[1, 1, 3]</value>
+  <suggestions>
+    <type:SizeXYZ x="1" y="1" z="3"/>
+    <type:SizeXYZ x="2" y="4" z="3"/>
+  </suggestions>
+</size>
 ```
 
 Suggestions are purely metadata. Properties typed with an EnumType **must not** carry `<suggestions>` (`BML_SUGGESTIONS_ON_ENUM`).
@@ -328,7 +357,7 @@ Suggestions are purely metadata. Properties typed with an EnumType **must not** 
 | `BML_CONSTRAINT_VIOLATION` | Rule fails with `validation="Error"` |
 | `BML_CONSTRAINT_WARNING` | Rule fails with `validation="Warning"` |
 | `BML_CONSTRAINT_INFORMATION` | Rule fails with `validation="Information"` |
-| `BML_SUGGESTION_TYPE_MISMATCH` | Suggestion type ≠ property type |
+| `BML_SUGGESTION_TYPE_MISMATCH` | Suggestion instance not compatible with property type (e.g. wrong Entity wrapper, or ValueType used where `*Entity` is required) |
 
 Constraints without `validation` produce no rule-enforcement diagnostics.
 

@@ -931,7 +931,13 @@ Wrong constraint branch for context → `BML_CONSTRAINT_TARGET_MISMATCH`. Intrin
 
 ### Suggestions
 
-A Property may declare a list of suggested values. Each suggestion is a Block instance of the **same type as the property** — no special base type. Suggestions are purely metadata — they do not affect type validation or compilation. Editors display the property as a combobox; the SCAD BlockProcessor generates an OpenSCAD Customizer dropdown comment.
+A Property may declare a list of suggested values. Each suggestion is a Block instance compatible with the property type — no special base type. The property value remains a literal on the Property; suggestion children are composition-style instances:
+
+- **PrimitiveType** property (e.g. `Text`, `Integer`, `Color`) → matching `*Entity` wrapper (`TextEntity`, `IntegerEntity`, `ColorEntity`) — not `<Text …/>`
+- **StructType** property (e.g. `SizeXYZ`) → instance of that StructType
+- **EnumType** property → `<suggestions>` forbidden (`BML_SUGGESTIONS_ON_ENUM`)
+
+Suggestions are purely metadata — they do not affect type validation or compilation. Editors display the property as a combobox; the SCAD BlockProcessor generates an OpenSCAD Customizer dropdown comment.
 
 ```xml
 <textColor type="Text">

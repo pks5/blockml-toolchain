@@ -519,10 +519,14 @@ Constraints without a `validation` reference are not rule-enforced by the BlockM
 
 **`<suggestions>` mapping (Property only):**
 
-Each child element inside `<suggestions>` is mapped as a `BlockInstance`. Stage [8] validates:
+Each child element inside `<suggestions>` is mapped as a `BlockInstance`. Aggregation type on `PropertyDefinition` is `core:Block[]`. Stage [8] validates compatibility with the property `typeFqn`:
 
 ```text
-instance.typeFqn compatible with property typeFqn
+PrimitiveType property  → suggestion must be PrimitiveEntity(T) for that T
+                          (Text → TextEntity, Integer → IntegerEntity, Color → ColorEntity, …)
+StructType property     → suggestion typeFqn compatible with the StructType
+EnumType property       → <suggestions> forbidden (BML_SUGGESTIONS_ON_ENUM)
+otherwise               → BML_SUGGESTION_TYPE_MISMATCH
 ```
 
 Suggestions are metadata — no value enforcement. See `18_constraints_and_suggestions.md`.
