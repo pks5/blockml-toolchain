@@ -1897,13 +1897,13 @@
       <examples>
         <example language="BML" snippet="true" title="thicker">
           <![CDATA[
-<NativeBlock pillarInnerClampThickness="0.4" />
+<NativeBlock pillarInnerClampThickness="0.2" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="thicker">
           <![CDATA[
           ...
-          ["pillarInnerClampThickness", 0.4]
+          ["pillarInnerClampThickness", 0.2]
           ...
           ]]>
         </scad:example>
@@ -1911,22 +1911,25 @@
     </pillarInnerClampThickness>
 
     <pillarOriginalWallThickness type="Decimal(mbunit:MBU)">
-      <documentation>Fixed constant used for automatic tube diameter calculation.
-        Do not modify.
+      <documentation>LEGO system constant used for automatic tube diameter calculation.
+        Encodes the classic LEGO underside wall / tube proportion relative to the
+        grid. Do not modify for printer calibration or ordinary brick design —
+        change only when intentionally resizing the grid system itself (non-LEGO
+        scale).
       </documentation>
       <since>3.0.0</since>
       <value>0.53125</value>
       <scad:value>0.53125</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="thicker">
+        <example language="BML" snippet="true" title="non-LEGO grid scale">
           <![CDATA[
-<NativeBlock pillarOriginalWallThickness="1.2" />
+<NativeBlock pillarOriginalWallThickness="0.6" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="thicker">
+        <scad:example language="OpenSCAD" snippet="true" title="non-LEGO grid scale">
           <![CDATA[
           ...
-          ["pillarOriginalWallThickness", 1.2]
+          ["pillarOriginalWallThickness", 0.6]
           ...
           ]]>
         </scad:example>
@@ -1962,13 +1965,13 @@
       <examples>
         <example language="BML" snippet="true" title="explicit">
           <![CDATA[
-<NativeBlock pinDiameter="3" />
+<NativeBlock pinDiameter="1.2" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="explicit">
           <![CDATA[
           ...
-          ["pinDiameter", 3]
+          ["pinDiameter", 1.2]
           ...
           ]]>
         </scad:example>
@@ -2113,13 +2116,13 @@
       <examples>
         <example language="BML" snippet="true" title="finer">
           <![CDATA[
-<NativeBlock printerLayerHeight="0.15" />
+<NativeBlock printerLayerHeight="0.1" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="finer">
           <![CDATA[
           ...
-          ["printerLayerHeight", 0.15]
+          ["printerLayerHeight", 0.1]
           ...
           ]]>
         </scad:example>
@@ -2140,15 +2143,15 @@
       <value>0.4</value>
       <scad:value>0.4</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="0.6 nozzle">
+        <example language="BML" snippet="true" title="0.1 nozzle">
           <![CDATA[
-<NativeBlock printerNozzleDiameter="0.6" />
+<NativeBlock printerNozzleDiameter="0.1" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="0.6 nozzle">
+        <scad:example language="OpenSCAD" snippet="true" title="0.1 nozzle">
           <![CDATA[
           ...
-          ["printerNozzleDiameter", 0.6]
+          ["printerNozzleDiameter", 0.1]
           ...
           ]]>
         </scad:example>
@@ -2543,13 +2546,13 @@
       <examples>
         <example language="BML" snippet="true" title="taller">
           <![CDATA[
-<NativeBlock reliefCutHeight="1" />
+<NativeBlock reliefCutHeight="0.75" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="taller">
           <![CDATA[
           ...
-          ["reliefCutHeight", 1]
+          ["reliefCutHeight", 0.75]
           ...
           ]]>
         </scad:example>
@@ -2794,7 +2797,15 @@
       <examples>
         <example language="BML" snippet="true" title="higher visual">
           <![CDATA[
-<NativeBlock scadQualityClassFactors="{functional: 1.0, visual: 1.5, hidden: 2.0}" />
+<NativeBlock>
+  <scadQualityClassFactors>
+{
+  functional: 1.0,
+  visual: 1.5,
+  hidden: 2.0
+}
+  </scadQualityClassFactors>
+</NativeBlock>
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="higher visual">
@@ -2822,7 +2833,15 @@
       <examples>
         <example language="BML" snippet="true" title="more segments">
           <![CDATA[
-<NativeBlock scadQualityClassMinSegments="{functional: 24, visual: 16, hidden: 8}" />
+<NativeBlock>
+  <scadQualityClassMinSegments>
+{
+  functional: 24,
+  visual: 16,
+  hidden: 8
+}
+  </scadQualityClassMinSegments>
+</NativeBlock>
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="more segments">
@@ -2853,13 +2872,22 @@
       <examples>
         <example language="BML" snippet="true" title="finer preview">
           <![CDATA[
-<NativeBlock scadQualityProfile="{preview: {length: 0.4, segments: 24}, normal: {length: 0.3, segments: 32}, high: {length: 0.2, segments: 48}}" />
+<NativeBlock>
+  <scadQualityProfile>
+{
+  preview: { length: 0.4, segments: 24 },
+  normal: { length: 0.3, segments: 32 },
+  print: { length: 0.2, segments: 48 },
+  render: { length: 0.12, segments: 96 }
+}
+  </scadQualityProfile>
+</NativeBlock>
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="finer preview">
           <![CDATA[
           ...
-          ["scadQualityProfile", /* ScadQualityProfile */]
+          ["scadQualityProfile", [[0.4, 24], [0.3, 32], [0.2, 48], [0.12, 96]]]
           ...
           ]]>
         </scad:example>
@@ -3296,13 +3324,13 @@
       <examples>
         <example language="BML" snippet="true" title="higher base">
           <![CDATA[
-<NativeBlock slopeBaseHeightBottom="2" />
+<NativeBlock slopeBaseHeightBottom="1.5" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="higher base">
           <![CDATA[
           ...
-          ["slopeBaseHeightBottom", 2]
+          ["slopeBaseHeightBottom", 1.5]
           ...
           ]]>
         </scad:example>
@@ -3319,13 +3347,13 @@
       <examples>
         <example language="BML" snippet="true" title="higher inner">
           <![CDATA[
-<NativeBlock slopeBaseHeightInner="1.5" />
+<NativeBlock slopeBaseHeightInner="1.25" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="higher inner">
           <![CDATA[
           ...
-          ["slopeBaseHeightInner", 1.5]
+          ["slopeBaseHeightInner", 1.25]
           ...
           ]]>
         </scad:example>
@@ -3342,13 +3370,13 @@
       <examples>
         <example language="BML" snippet="true" title="higher top">
           <![CDATA[
-<NativeBlock slopeBaseHeightTop="1.5" />
+<NativeBlock slopeBaseHeightTop="1.25" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="higher top">
           <![CDATA[
           ...
-          ["slopeBaseHeightTop", 1.5]
+          ["slopeBaseHeightTop", 1.25]
           ...
           ]]>
         </scad:example>
@@ -3472,15 +3500,15 @@
       <value>true</value>
       <scad:value>true</scad:value>
       <examples>
-        <example language="BML" snippet="true" title="enabled">
+        <example language="BML" snippet="true" title="disabled">
           <![CDATA[
-<NativeBlock stabilizers="true" />
+<NativeBlock stabilizers="false" />
           ]]>
         </example>
-        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="disabled">
           <![CDATA[
           ...
-          ["stabilizers", true]
+          ["stabilizers", false]
           ...
           ]]>
         </scad:example>
