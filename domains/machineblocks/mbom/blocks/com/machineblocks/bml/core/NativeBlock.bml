@@ -250,10 +250,11 @@
     </baseWallThicknessAdjustment>
 
     <bevel type="mbtype:CornerMap(mbtype:AxisXY(Decimal(mbunit:GridUnitXY)))">
-      <documentation>Creates wedges by shifting Z-axis corners (0-3) in XY space.
-        Each corner gets an [x,y] displacement value.
-        The resulting shape is intersected with the bounding box.
-        Can be used together with slope.
+      <documentation>Creates wedges by shifting corners on the horizontal (Z-face) plane
+        only — not a multi-axis map like baseRoundingRadius. Each of the four local corners
+        (sw / nw / ne / se) gets an XY displacement in GridUnitXY. AxisXY (not AxisAB) is
+        intentional: the plane is fixed to world XY on Z. The resulting shape is intersected
+        with the bounding box. Can be used together with slope.
       </documentation>
       <changelog>
         <change version="3.0.0">Can now be combined with slope.</change>
@@ -1548,7 +1549,9 @@
     </surfacePatternDimensions>
 
     <surfacePatternOffset type="mbtype:AxisXY(Decimal(mbunit:GridUnitXY))">
-      <documentation>Offset of the surface pattern.</documentation>
+      <documentation>Offset of the surface pattern on the horizontal (Z-face) plane only.
+        AxisXY (not AxisAB) is intentional: the pattern lies on world XY / GridUnitXY.
+      </documentation>
       <value>{x: 0, y: 0}</value>
       <scad:value>[0, 0]</scad:value>
     </surfacePatternOffset>

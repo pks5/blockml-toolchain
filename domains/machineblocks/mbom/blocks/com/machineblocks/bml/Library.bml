@@ -77,12 +77,13 @@
       <mbtype:CornerMap />
       <mbtype:Direction />
       <mbtype:Face />
+      <mbtype:FaceAxisXY />
       <mbtype:FaceMapXY />
       <mbtype:FaceMapXYZ />
       <mbtype:Gender />
       <mbtype:Grille />
-      <mbtype:HoleEdgeMode />
       <mbtype:HoleEdgeMap />
+      <mbtype:HoleEdgeMode />
       <mbtype:HoleEdgePair />
       <mbtype:HoleType />
       <mbtype:Inherit />
@@ -92,22 +93,28 @@
       <mbtype:OffsetAB />
       <mbtype:OffsetXY />
       <mbtype:OffsetXYZ />
+      <mbtype:PcbMountingType />
       <mbtype:PillarGapAutoConfig />
       <mbtype:Port />
       <mbtype:PortShapeType />
       <mbtype:QualityPreset />
       <mbtype:RadiusAB />
+      <mbtype:RecessWallGap />
       <mbtype:RotationXY />
       <mbtype:RotationXYZ />
+      <mbtype:ScadQualityClassFactors />
+      <mbtype:ScadQualityClassMinSegments />
+      <mbtype:ScadQualityProfile />
+      <mbtype:ScrewHole />
       <mbtype:SelectiveGrid />
       <mbtype:SizeAB />
       <mbtype:SizeXY />
       <mbtype:SizeXYZ />
-      <mbtype:ScrewHole />
       <mbtype:StudType />
-      <mbunit:MBU />
+      <mbtype:WallGap />
       <mbunit:GridUnitXY />
       <mbunit:GridUnitZ />
+      <mbunit:MBU />
     </blocks>
   </aggregations>
 
