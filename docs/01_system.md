@@ -439,7 +439,7 @@ The MachineBlocks domain BOM. Browser and Node compatible.
 ```text
 - MBOM Block class (extends BOM Core Block)
 - MachineBlocks-specific member types (SizeXYZ, Direction, WallGap, Color, ...)
-- Native property definitions (from 09_mbom_properties.yml)
+- Native property definitions from `NativeBlock.bml` + `com.machineblocks.bml.type.*` (SSOT)
 - `com.machineblocks.bml.core.Block` type definition — including inherited `_parts` aggregation
 - No SCAD logic, no Node-only APIs
 ```
@@ -805,7 +805,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 17_type_system_bml.md  — ValueType, Language, Block hierarchy
 18_constraints_and_suggestions.md — property constraints and suggestions
 19_definition_blocks_and_bml_xml.md — Definition meta-model BML (specified); bml:xml meta-serializer (not implemented)
-09_mbom_properties.yml — MBOM native property SCAD mapping (render only)
+09_mbom_properties.yml — transitional SCAD render hints only (must follow NativeBlock.bml)
 
 domains/machineblocks/runtimes/scad-lib/
   lib/                 — SCAD Runtime (every generated SCAD file uses this)
@@ -817,6 +817,6 @@ domains/machineblocks/runtimes/scad-lib/
       ...
 ```
 
-Native MBOM property **declarations** (names, types, defaults) migrate to BML — see `16_framework_base_types.md` and `17_type_system_bml.md`. `09_mbom_properties.yml` retains SCAD render mapping only.
+Native MBOM / SCAD parameters (**SSOT**): `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml` + `…/type/*.bml`. See `04_types.md` (XY / XYZ / AB). `09_mbom_properties.yml` is transitional only and must not contradict NativeBlock.
 
 **BML vs Markdown:** BML is SSOT for structure you author and validate against (V1 scope above). Markdown explains concepts, relationships, architecture decisions, and reading order. Long-term, Markdown links to BML FQNs instead of duplicating tables — see [BML Self-Description Roadmap](#bml-self-description-roadmap).

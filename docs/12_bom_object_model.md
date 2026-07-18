@@ -103,7 +103,8 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 
 @machineblocks/mbom
   - Framework base type BML (com.machineblocks.bml.core.Block, NativeBlock, Set, …)
-  - 09_mbom_properties.yml — SCAD render mapping (renderer concern)
+  - NativeBlock.bml + type/*.bml — MB native parameter / type SSOT
+  - 09_mbom_properties.yml — transitional SCAD hints only (must follow NativeBlock)
   - Extends TypeRegistry bootstrap with mbom BML paths
 ```
 
@@ -737,7 +738,7 @@ interface EffectiveMemberSet {
 }
 ```
 
-Native MBOM properties from `09_mbom_properties.yml` are attached to `com.machineblocks.bml.core.Block` in the Type Registry — not repeated in every derived Block's `members[]`.
+Native MBOM properties from `NativeBlock.bml` are attached to the MachineBlocks domain Block chain in the Type Registry — not repeated in every derived Block's `members[]`.
 
 ### Capabilities in the BOM
 
@@ -1471,7 +1472,7 @@ The validator does **not** expand directives, assign auto-IDs, or interpret aggr
 | Framework base types (BML) | `16_framework_base_types.md` |
 | ValueType · Language (BML) | `17_type_system_bml.md` |
 | Development setup (Phase D) | `15_dev_setup.md` |
-| MBOM native property list | `09_mbom_properties.yml` |
+| MBOM native parameter / type SSOT | `NativeBlock.bml` + `type/*.bml` |
 | MBOM → SCAD serialization | `04_types.md`, `05_scad_renderer.md` |
 | Synthetic accessors · ManagedObject | `08_managed_object.md` (Draft · V1 preparation) |
 | Built-in `#math` / `#strings` capabilities | `@blockml/core` |

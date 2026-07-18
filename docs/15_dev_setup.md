@@ -640,7 +640,7 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 7. @blockml/validator         — TypeRegistry + validate (stages [6]–[8])
 8. @blockml/compiler          — Facade + Target Registry (C2, C3)
 9. @blockml/engine-maker       — RenderEngine stub
-10. @machineblocks/mbom        — domain types + property registry from 09_mbom_properties.yml
+10. @machineblocks/mbom        — domain types + NativeBlock.bml parameter SSOT
 11. @machineblocks/...-scad-target — ScadBlockProcessor MVP
 12. @blockml/cli               — bom validate, then bom compile
 13. Correctness tests         — Calibrator, Standard, Cross from scad-lib

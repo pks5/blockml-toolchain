@@ -6,7 +6,7 @@ version: 2.1.0
 
 This document defines the BML (Block Markup Language) format — the universal declarative authoring language for BOM Blocks, Composite Blocks, and Presets.
 
-For the abstract object model see `00_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For value type BML definitions see `17_type_system_bml.md`. For property constraints and suggestions see `18_constraints_and_suggestions.md`. For MBOM type parse/serialize rules see `04_types.md`. For native MBOM property SCAD mapping see `09_mbom_properties.yml`.
+For the abstract object model see `00_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For value type BML definitions see `17_type_system_bml.md`. For property constraints and suggestions see `18_constraints_and_suggestions.md`. For MBOM type parse/serialize rules and XY/AB conventions see `04_types.md`. For native MBOM / SCAD parameters see `NativeBlock.bml` (SSOT); transitional render hints only: `09_mbom_properties.yml`.
 
 ---
 
@@ -261,7 +261,7 @@ BOM: `values[]` as `PropertyValueEntry { namespace, value }`; convenience `value
 | `lang` | `org.blockml.bml.language` | BlockML |
 | `status` / `def` / `constraint` / `validation` / … | matching `org.blockml.bml.*` | BlockML |
 | `mbcore` | `com.machineblocks.bml.core` | Domain |
-| `mbtype` | `com.machineblocks.bml.type` | Domain |
+| `mbt` | `com.machineblocks.bml.type` | Domain |
 | `mbunit` | `com.machineblocks.bml.unit` | Domain |
 | `bricks` / `cal` / `scad` | collective / annotation packages | Domain (descriptive OK) |
 
@@ -271,12 +271,12 @@ xmlns:core="org.blockml.bml.core"
 xmlns:type="org.blockml.bml.type"
 xmlns:unit="org.blockml.bml.unit"
 xmlns:mbcore="com.machineblocks.bml.core"
-xmlns:mbtype="com.machineblocks.bml.type"
+xmlns:mbt="com.machineblocks.bml.type"
 xmlns:mbunit="com.machineblocks.bml.unit"
 
 <baseType>mbcore:Block</baseType>
-<holeXY type="mbtype:AxisXY(Decimal(mbunit:MBU))" />
-<sizeAdj type="mbtype:AxisXY(Decimal(unit:Millimeter))" />
+<holeXY type="mbt:AxisXY(Decimal(mbunit:MBU))" />
+<sizeAdj type="mbt:AxisXY(Decimal(unit:Millimeter))" />
 ```
 
 ```text
@@ -428,7 +428,7 @@ Then repeat for the **immediate enclosing Block**, then its enclosing Block, up 
 4. Enclosing Block name → its generics → its direct Sub-Blocks  
 5. … until the root Block
 
-**Grandchildren are never unqualified.** From `Grid`, `Range` does not resolve to `Grid.Selector.Range` — write `Selector.Range` or `Grid.Selector.Range` / `mbtype:SelectiveGrid.Selector.Range`.
+**Grandchildren are never unqualified.** From `Grid`, `Range` does not resolve to `Grid.Selector.Range` — write `Selector.Range` or `Grid.Selector.Range` / `mbt:SelectiveGrid.Selector.Range`.
 
 ```text
 Scope = SelectiveGrid.Selector.Range
@@ -1519,7 +1519,7 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:mbtype="com.machineblocks.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
@@ -1552,7 +1552,7 @@ FQN-Referenz-Namespaces (prefix convention — see § XML prefix convention · �
   xmlns:type="org.blockml.bml.type"               ← Decimal, Boolean, …
   xmlns:unit="org.blockml.bml.unit"               ← Millimeter, …
   xmlns:mbcore="com.machineblocks.bml.core"       ← <mbcore:NativeBlock />
-  xmlns:mbtype="com.machineblocks.bml.type"       ← type="mbtype:SizeXYZ"
+  xmlns:mbt="com.machineblocks.bml.type"       ← type="mbt:SizeXYZ"
   xmlns:mbunit="com.machineblocks.bml.unit"       ← MBU, GridUnitXY, GridUnitZ
   xmlns:bricks="com.machineblocks.bml.bricks"     ← <bricks:Standard />
   xmlns:cal="com.machineblocks.bml.calibration"   ← <cal:Calibrator />
@@ -1581,7 +1581,7 @@ XSD-Dateien werden als Teil der npm-Packages ausgeliefert.
 ```text
 xmlns:bml     — org.blockml.bml.annotation.BmlAnnotation (required when using bml:* directives)
 xmlns:type   — BlockML framework Package (org.blockml.bml.type.*)
-xmlns:mbtype  — domain Package (e.g. mbtype:SizeXYZ) — do not reuse type= for domain
+xmlns:mbt  — domain Package (e.g. mbt:SizeXYZ) — do not reuse type= for domain
 xmlns:scad    — com.machineblocks.bml.annotation.ScadAnnotation (SCAD member/prose facets)
 xmlns:*       — other Package or Annotation targets only
 ```
@@ -2341,11 +2341,11 @@ Properties are typed parameters of the Block. Three kinds exist:
 
 **System properties** are defined on `org.blockml.bml.core.Block` — notably `id` (instance identity). System-relevant: dedicated compiler/validator/renderer handling. Not custom properties. See `00_bom_core.md` — System Properties.
 
-**Domain native properties** are defined in `com.machineblocks.bml.core.Block` and its base types. They have dedicated SCAD getters (`mb_param_size()`, etc.) and are listed in `09_mbom_properties.yml`.
+**Domain native properties** are declared on `com.machineblocks.bml.core.NativeBlock` (`NativeBlock.bml`) — **SSOT** for MBML / SCAD parameters (types, docs, defaults, `scad:value`). Type shapes: `com.machineblocks.bml.type.*` (`mbt:`). Dedicated SCAD getters (`mb_param_size()`, etc.). Conventions (XY / XYZ / AB): `04_types.md`.
 
 **Custom properties** are defined inline in the Block definition. They generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
 
-Native and custom properties use the same element syntax — the member name is the element tag. The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Native properties only need to be declared when their value differs from the inherited value. System properties like `id` are set as XML attributes on composition instances — not declared in `<properties>`.
+Native and custom properties use the same element syntax — the member name is the element tag. Native = members from NativeBlock (domain chain); custom = additional members on a concrete Block. Native properties only need to be declared when their value differs from the inherited default. System properties like `id` are set as XML attributes on composition instances — not declared in `<properties>`.
 
 ### Property Value (`<value>`)
 

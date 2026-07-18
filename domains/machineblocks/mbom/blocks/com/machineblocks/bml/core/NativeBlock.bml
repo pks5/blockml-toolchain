@@ -4,9 +4,10 @@
   FQN: com.machineblocks.bml.core.NativeBlock
   Final — cannot be used as baseType on Block definitions
 
-  SSOT for all MB parameters (property set / docs / defaults).
-  Types SSOT: com.machineblocks.bml.type.* (inventory not yet complete).
-  External docs are not synced from this definition yet.
+  SSOT for all MachineBlocks MBML / SCAD parameters: property set, types, docs,
+  defaults, and scad:value literals. Type shapes SSOT: com.machineblocks.bml.type.*
+  (Library.bml membership). Markdown / YAML / scad-lib docs must follow this BML —
+  they must not redefine the parameter inventory.
 -->
 <block
   xmlns="http://blockml.org/bml"

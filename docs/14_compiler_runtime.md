@@ -635,7 +635,7 @@ resolveProperty(name, blockDef, context):
   4. blockDef property value
 ```
 
-Merge order: `inline > preset > config > default` — see `09_mbom_properties.yml`.
+Merge order: `inline > preset > config > default` — defaults from `NativeBlock.bml` (SSOT).
 
 The merge result is a **render-time view** — it is not written back to `BomDocument`.
 
@@ -645,7 +645,7 @@ The merge result is a **render-time view** — it is not written back to `BomDoc
 
 Post-V1, property resolution **may** consult authored Capability definitions as translation metadata. The Renderer decides merge order and optional handling.
 
-**V1 rule:** `PropertyResolver` reads `memberValues` in authored form directly. An optional `AccessorInvoker` stub may exist for future wiring. SCAD emission uses `04_types.md` and `09_mbom_properties.yml` type metadata.
+**V1 rule:** `PropertyResolver` reads `memberValues` in authored form directly. An optional `AccessorInvoker` stub may exist for future wiring. SCAD emission uses `04_types.md` and NativeBlock type / `scad:value` metadata (transitional `09_mbom_properties.yml` must follow).
 
 ### Not in RenderContext
 

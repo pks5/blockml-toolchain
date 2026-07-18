@@ -9,7 +9,7 @@ This document specifies how **framework base types** (`org.blockml.bml.core.Bloc
 For BML block syntax see `02_mbml.md`.
 For MBOM hierarchy see `03_mbom.md`.
 For TypeRegistry bootstrap see `13_bml_to_bom_mapping.md`.
-For SCAD property mapping (render-only) see `09_mbom_properties.yml`.
+For SCAD property mapping see `NativeBlock.bml` (parameter SSOT) and transitional `09_mbom_properties.yml` (must follow NativeBlock).
 For value types and implementation languages as BML see `17_type_system_bml.md`.
 For property constraints and suggestions see `18_constraints_and_suggestions.md`.
 For FunctionMapping and capability call semantics see `18_function_mapping.md`.
@@ -23,9 +23,10 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | Aspect | Decision |
 |---|---|
 | **Base type SSOT** | BML files in `@blockml/core`, `@machineblocks/mbom` |
+| **MB native params SSOT** | `com.machineblocks.bml.core.NativeBlock` + `com.machineblocks.bml.type.*` |
 | **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry; **renderers free in output** — see `17_type_system_bml.md` — Renderer freedom |
 | **Compiler internals** | Parser **must** know `<block>` as input concept; internal representation **free** — see `17_type_system_bml.md` |
-| **09_mbom_properties.yml** | **Render mapping only** (serializer, scad_name, customizer) — not type SSOT |
+| **09_mbom_properties.yml** | Transitional render hints only — **must follow** NativeBlock; not parameter SSOT |
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
 | **Block identity** | Every `<block>` starts with definition identity — `<name>`, `<type>`, `<baseType>` (before `<is>`) |
 | **Block is** | Every `<block>` carries required `<is>` after identity — names the Idea (Urbild); see `02_mbml.md` § Terminology — Urbild |
@@ -37,11 +38,9 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `01_system.md` |
 
 ```text
-BML (what the type IS)          →  TypeRegistry
-09_mbom_properties.yml (how     →  ScadBlockProcessor maps property → SCAD
-  SCAD serializes a property)
-BlockProcessor (when/how        →  Render pipeline
-  to render)
+BML NativeBlock + type/*.bml (what params/types ARE)  →  TypeRegistry / authoring SSOT
+09_mbom_properties.yml (optional transitional hints) →  must match NativeBlock; never override
+BlockProcessor (when/how to render)                  →  Render pipeline
 ```
 
 ---
@@ -476,7 +475,7 @@ No framework FQN should exist only in TypeScript — if it is part of the gramma
 
 Native MB properties (`size`, `offset`, …) are declared on **concrete MachineBlocks block types** (e.g. `com.machineblocks.bml.bricks.Standard`) — not on the abstract `com.machineblocks.bml.core.Block` base.
 
-`09_mbom_properties.yml` retains **SCAD render hints** keyed by property name:
+`09_mbom_properties.yml` may retain transitional **SCAD render hints** keyed by property name (must follow NativeBlock):
 
 ```yaml
 - name: size
@@ -523,7 +522,8 @@ domains/machineblocks/mbom/blocks/
 | MBOM hierarchy | `03_mbom.md` |
 | BlockDefinition BOM | `12_bom_object_model.md` |
 | Bootstrap | `13_bml_to_bom_mapping.md` |
-| SCAD property mapping | `09_mbom_properties.yml` |
+| MB native params / types | `NativeBlock.bml` + `type/*.bml` |
+| SCAD property hints (transitional) | `09_mbom_properties.yml` (must follow NativeBlock) |
 | Value types · languages (BML) | `17_type_system_bml.md` |
 | Constraints · suggestions | `18_constraints_and_suggestions.md` |
 | Definition blocks · bml:xml | `19_definition_blocks_and_bml_xml.md` |

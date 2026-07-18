@@ -9,7 +9,7 @@ This document specifies how **value types**, **implementation languages**, and r
 For composable Block base types see `16_framework_base_types.md`.
 For property parse/serialize rules (MB domain) see `04_types.md`.
 For `TypeDescriptor` AST see `12_bom_object_model.md`.
-For SCAD render mapping see `09_mbom_properties.yml`.
+For SCAD render mapping see `NativeBlock.bml` (parameter SSOT; `scad:value`) and transitional `09_mbom_properties.yml` (must follow NativeBlock). Axis conventions (XY / XYZ / AB): `04_types.md`.
 For WOT vision and motivation see `WOT_Reference_v26.md`.
 For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self-Description Roadmap.
 
@@ -22,10 +22,11 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | Aspect | Decision |
 |---|---|
 | **Type SSOT** | BML files in `@blockml/core`, `@machineblocks/mbom`, domain packages |
+| **MB native params SSOT** | `NativeBlock.bml` + `com.machineblocks.bml.type.*` (`mbt:`) |
 | **Same mechanism** | Same `<block>` element · same parser · same TypeRegistry bootstrap |
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
-| **09_mbom_properties.yml** | Render mapping only — not type SSOT |
+| **09_mbom_properties.yml** | Transitional render hints only — must follow NativeBlock; not type/param SSOT |
 | **Block metadata** | Every `<block>` carries required `<is>`, required `<documentation>`, conditional `<summary>` (when documentation is long), conditional `<isnot>` (when confusion risk exists), optional `<keywords>` (`core:Keyword[]`), optional `<aliases>` (`core:Alias[]`); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
 | **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — four sibling branches under ValueType |
@@ -36,11 +37,10 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Domain XSD enums** | Deprecated as type SSOT — migrate to BML `EnumType` |
 
 ```text
-BML (what the type IS)           →  TypeRegistry
-04_types.md (how values parse)   →  Parser / validator value coercion
-09_mbom_properties.yml (how     →  ScadBlockProcessor serializes property
-  SCAD renders a property)
-Renderer                         →  target-specific output
+BML NativeBlock + type/*.bml (what params/types ARE) →  TypeRegistry / authoring SSOT
+04_types.md (how values parse; XY/AB conventions)  →  Parser / validator value coercion
+09_mbom_properties.yml (optional transitional)     →  must match NativeBlock; never override
+Renderer                                           →  target-specific output
 ```
 
 ### WOT alignment
@@ -1697,7 +1697,7 @@ Phase 4                   04_types.md becomes parse/serialize reference only
 
 During migration, the validator accepts types from **either** registry BML **or** legacy XSD. BML wins on conflict. Legacy-only types emit `BML_LEGACY_TYPE_SOURCE` warning.
 
-Property declarations on composable Blocks migrate from `09_mbom_properties.yml` → BML `<properties>` per `16_framework_base_types.md`. Type shape (StructType properties, EnumType `values`) migrates from `04_types.md` → BML. YAML retains SCAD serializer hints keyed by property name.
+Property declarations for MachineBlocks natives live in `NativeBlock.bml` (SSOT). Type shapes live in `type/*.bml`. `09_mbom_properties.yml` may retain transitional SCAD serializer hints keyed by property name — never as inventory authority.
 
 ---
 
@@ -1769,5 +1769,6 @@ never expose „Block“ outside parser/BOM types
 | Synthetic accessors · Capability interpretation | `08_managed_object.md` |
 | Collections and Multiplicity | this document — § Collections and Multiplicity |
 | Bootstrap mapping | `13_bml_to_bom_mapping.md` |
-| SCAD property mapping | `09_mbom_properties.yml` |
+| MB native params / types | `NativeBlock.bml` + `type/*.bml` |
+| SCAD property hints (transitional) | `09_mbom_properties.yml` (must follow NativeBlock) |
 | WOT vision | `WOT_Reference_v26.md` |

@@ -10,7 +10,7 @@ MBOM is a domain-specific specialization of BOM Core (`00_bom_core.md`). BOM Cor
 
 For the BML authoring format see `02_mbml.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
-For native property definitions see `09_mbom_properties.yml`.
+For native property definitions see `com.machineblocks.bml.core.NativeBlock` (`NativeBlock.bml`) — **SSOT** for MBML / SCAD parameters. Type shapes: `com.machineblocks.bml.type.*`. Conventions: `04_types.md`. Transitional SCAD hints only: `09_mbom_properties.yml` (must follow NativeBlock).
 
 ---
 
@@ -18,7 +18,7 @@ For native property definitions see `09_mbom_properties.yml`.
 
 MBOM is the renderer-independent domain model layered on BOM Core. It has no knowledge of SCAD syntax, parameters, or file formats. Validation operates on the lossless BOM; rendering interprets it for the target.
 
-MBOM specializes BOM Core for the MachineBlocks domain — adding MB-specific property types (`SizeXYZ`, `WallGap`, `Direction`, ...), the native property set (`09_mbom_properties.yml`), and the SCAD render target interface.
+MBOM specializes BOM Core for the MachineBlocks domain — adding MB-specific property types (`SizeXYZ`, `WallGap`, `Direction`, ...), the native property set on `NativeBlock.bml` (SSOT), and the SCAD render target interface.
 
 MBOM is strongly inspired by the SAPUI5 object model. Existing SAPUI5 concepts are adopted where they fit. Deviations are documented explicitly.
 
@@ -113,15 +113,15 @@ Properties are typed parameters of a Block. Every Property has a name, a type, a
 
 ### Native vs. Custom Properties
 
-**System properties** are defined on `org.blockml.bml.core.Block` and inherited by all Blocks — notably `id` (instance identity). They are system-relevant: the compiler, validator, and renderer treat them with dedicated logic. In MachineBlocks, `id` is also listed in `09_mbom_properties.yml` for SCAD serialization (`mb_block_id`). See `00_bom_core.md` — System Properties.
+**System properties** are defined on `org.blockml.bml.core.Block` and inherited by all Blocks — notably `id` (instance identity). They are system-relevant: the compiler, validator, and renderer treat them with dedicated logic. In MachineBlocks, `id` is also emitted for SCAD (`mb_block_id`) via NativeBlock / render mapping. See `00_bom_core.md` — System Properties.
 
-**Domain native properties** are defined in `com.machineblocks.bml.core.Block` and its base types. They are listed in `09_mbom_properties.yml` and have dedicated SCAD getters in the render target (`mb_param_size()`, `mb_param_baseColor()`, etc.).
+**Domain native properties** are declared on `com.machineblocks.bml.core.NativeBlock` (`NativeBlock.bml`) — the **sole SSOT** for MachineBlocks MBML and SCAD parameters (names, types, documentation, defaults, `scad:value`). Type shapes live under `com.machineblocks.bml.type.*` (`mbt:`). Dedicated SCAD getters: `mb_param_size()`, `mb_param_baseColor()`, etc.
 
-Domain native properties include (non-exhaustive): `size`, `offset`, `direction`, `align`, `baseColor`, `studs`, `base`, `recess`, `tongue`, `baseCutoutType`, `rotation`, `alignChildren`, `sizeMod`, `baseCrop`, `baseAdjustment`, `baseWallThickness`, `topPlateHelpers`, `render`, `debug`. See `09_mbom_properties.yml` for the full authoritative list. (`id` is a system property — listed there for SCAD mapping, not a domain-native geometry parameter.)
+The full authoritative list is the `<properties>` section of `NativeBlock.bml` (not Markdown tables, not `09_mbom_properties.yml`). Axis conventions (XY / XYZ vs AB): `04_types.md`.
 
 **Custom properties** are defined inline in a Block definition. They generate generic SCAD getters (`mb_param(config, settings, "wallThickness", 1)`).
 
-The compiler determines native vs. custom by checking `09_mbom_properties.yml`. Both use the same `<property>` element in BML. Native properties only need to be declared when their value differs from the inherited value.
+The compiler treats members declared on NativeBlock (and inherited through the domain Block chain) as native; custom members are everything else authored on a concrete Block. Both use the same property element syntax in BML. Native properties only need to be declared on an instance when their value differs from the inherited default.
 
 ### Property Metadata
 
@@ -526,7 +526,7 @@ Associations:   basePresets (bml:Self[] — references ids in _presets)
 Aggregations:   _presets (type: com.machineblocks.bml.core.Block[])
 ```
 
-Domain native properties (size, offset, direction, …) are declared on concrete block types (e.g. `com.machineblocks.bml.bricks.Standard`), not on the abstract base. SCAD mapping in `09_mbom_properties.yml` (render only).
+Domain native properties (size, offset, direction, …) are declared on `NativeBlock.bml` (SSOT) and inherited by concrete brick types (e.g. `com.machineblocks.bml.bricks.Standard`). `09_mbom_properties.yml` may hold transitional render hints only and must follow NativeBlock.
 
 ### com.machineblocks.bml.core.CompositeBlock
 

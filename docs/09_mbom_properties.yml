@@ -1,12 +1,15 @@
 # ============================================================================
 # MachineBlocks Compiler — MBOM Native Property Definitions
-# SCAD render mapping for properties declared on concrete MachineBlocks block types
-# Type SSOT: BML (see docs/16_framework_base_types.md)
-# Single Source of Truth for SCAD serialization rules (not for property existence)
 # ============================================================================
 #
-# This file is the authoritative specification for native MBOM properties
-# on MachineBlocks block types (e.g. com.machineblocks.bml.bricks.Standard).
+# SSOT for MachineBlocks native parameters (MBML + SCAD):
+#   domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml
+# Type shapes SSOT:
+#   domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/*.bml
+#
+# This YAML file is NOT the parameter inventory. It may hold transitional SCAD
+# render hints (serializer / customizer). When it disagrees with NativeBlock.bml
+# or type BML, BML wins — update this file to match, never the reverse.
 #
 # Native properties have dedicated SCAD getters in the render target:
 #   mb_param_{propertyName}(config, settings)
@@ -14,10 +17,8 @@
 # Custom properties defined inline in block definitions use the generic getter:
 #   mb_param(config, settings, "propertyName", defaultValue)
 #
-# For the full SCAD parameter specification (types, formats, constraints,
-# version history) see: docs/scad-reference/09_api_parameters.yml
-#
-# For the MBOM type system see: 04_types.md
+# Conventions (XY / XYZ / AB, kinds): see docs/04_types.md
+# Type system: docs/17_type_system_bml.md
 #
 # ============================================================================
 

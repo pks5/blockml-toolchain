@@ -4,16 +4,30 @@ version: 1.0.0
 
 ## Purpose of this Document
 
-This document defines **parse and serialize behaviour** for MBOM types — how BML attribute values become MBOM values, and how MBOM values become SCAD.
+This document describes **parse and serialize behaviour** for MBOM types — how BML
+attribute values become MBOM values, and how MBOM values become SCAD.
 
-**Type definitions (SSOT)** are BML files — see `17_type_system_bml.md`. This document describes behaviour per type; it does not define type shape.
+It is **not** the inventory of native parameters or type shapes.
 
-For native property declarations (names, types, defaults) see `com/machineblocks/bml/core/Block.bml` (migrating from `09_mbom_properties.yml`).
+### Single Source of Truth (MachineBlocks parameters & types)
+
+| Concern | SSOT |
+|---------|------|
+| Native MBML / SCAD parameters (names, types, docs, defaults, `scad:value`) | `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml` |
+| Type shapes (structs, enums, closed kinds, units) | `domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/*.bml` (+ `Library.bml` membership) |
+| This document (`04_types.md`) | Parse / serialize behaviour and conventions only |
+| `09_mbom_properties.yml` | Legacy / transitional render hints — **must not contradict** NativeBlock |
+
+Markdown, YAML, and scad-lib API docs **orient to** NativeBlock + type BML. When they
+diverge, BML wins.
+
 For the MBOM object model see `03_mbom.md`.
-For the SCAD render target see `docs/scad-reference/05_types_and_mapping.md`.
+For the SCAD render target see `05_scad_renderer.md`.
 For the target Capability interpretation model see `08_managed_object.md`.
+For BML type-system mechanics see `17_type_system_bml.md`.
 
-**V1:** This document remains authoritative for **parse** and **SCAD serialize** behaviour. Values are stored on Properties; PrimitiveTypes are pure type definitions.
+**V1:** This document remains authoritative for **parse** and **SCAD serialize** behaviour
+patterns. Values are stored on Properties; PrimitiveTypes are pure type definitions.
 
 ---
 
@@ -32,18 +46,46 @@ See `00_bom_core.md` — Fundamental Architecture Principles.
 
 **Type equivalence** (e.g. `[4,2,3]` and `{x:4,y:2,z:3}` both valid for `SizeXYZ`) is a **validation rule** — not a mandate to rewrite stored values. Each authored form is preserved in `LiteralValue.value`.
 
-All MBOM types are defined in the **`com.machineblocks.bml.type`** namespace (singular `.type` segment — see `00_bom_core.md` — FQN Convention).
+All MBOM types are defined in the **`com.machineblocks.bml.type`** namespace (singular `.type` segment — see `00_bom_core.md` — FQN Convention). XML prefix: **`mbt:`**.
 
-### Naming convention — XYZ / XY (not 3D / 2D)
+### Naming convention — XY / XYZ / AB (not 3D / 2D)
 
 Axis-keyed compound types are named by **which axes they cover**, not by spatial-dimension metaphors:
 
 ```text
-XYZ  — X, Y, and Z     SizeXYZ · AxisXYZ<T> · GridPositionXYZ
-XY   — X and Y only    AxisXY<T>
+World / brick axes (fixed):
+  XY   — X and Y only     AxisXY · SizeXY · OffsetXY · RotationXY · FaceMapXY · …
+  XYZ  — X, Y, and Z      AxisXYZ · SizeXYZ · OffsetXYZ · RotationXYZ · FaceMapXYZ · …
+
+Face-local plane (abstract):
+  AB   — in-plane A/B     AxisAB · SizeAB · OffsetAB · RadiusAB · HoleEdgePair · …
+         Resolves to XY, XZ, or YZ depending on Face / context — not a fixed world pair.
 ```
 
-Do **not** use `3D` / `2D` type-name suffixes (`Size3D`, `Axis2D`, …). Prefer `XYZ` / `XY` so names align with property keys `x` / `y` / `z` and with the `Axis` / `Face` enums.
+Do **not** use `3D` / `2D` type-name suffixes (`Size3D`, `Axis2D`, …). Prefer `XY` / `XYZ` / `AB`
+so names align with property keys and with the `Axis` / `Face` enums.
+
+**Rule:** world / brick placement and Z-face features that are locked to brick XY use **XY/XYZ**.
+Anything measured in the plane of a directed face uses **AB**. Do not interchange them.
+
+```text
+Examples:
+  NativeBlock.align / alignChildren     Align | AxisXYZ(Align)     brick space
+  Port.align                            Align | AxisAB(Align)      face-local
+  NativeBlock.offset                    OffsetXYZ                  brick translation
+  ScrewHole.offset / Port offsets       OffsetAB                   face-local
+  NativeBlock.bevel                     Bevel (= CornerMap(OffsetXY))  Z-face / world XY
+  holeXYGrid*                           AxisXY(…)                  per-axis scalars (not Size/Offset kinds)
+```
+
+**Semantic kinds** (`Size*`, `Offset*`, `Rotation*`, `Radius*`) add meaning on top of `Axis*`
+structure. Use a kind when the value is truly a size, offset, etc. Use bare `AxisXY` / `AxisXYZ`
+when the map is only “one scalar per axis” (e.g. Technic hole grid parameters).
+
+Closed kinds (`Bevel`, `BaseRoundingMap`, `PlaneRoundingMap`, `HoleEdgeMap`, …) package nested
+type expressions for NativeBlock properties without changing SCAD shape.
+
+See also Align section below; `AxisAB.bml` / `Port.bml` / `Bevel.bml` documentation.
 
 ---
 
@@ -662,13 +704,13 @@ SCAD:  serialized as the expression result or as a SCAD expression
 
 # 10. MBOM→SCAD Serialization Rules
 
-The serialization rules are configurable and defined per property in `09_mbom_properties.yml`. The following describes the general strategy.
+The serialization rules follow NativeBlock type metadata and `scad:value`. Optional transitional hints in `09_mbom_properties.yml` must not contradict NativeBlock. The following describes the general strategy.
 
 ## General Strategy
 
 ```text
 1. Read BOM member value in authored form
-2. Consult type metadata (field order, serialize Capability, 09_mbom_properties.yml)
+2. Consult type metadata (field order, serialize Capability, NativeBlock `scad:value`)
 3. Translate to target representation at render time
 4. Choose shortest valid SCAD representation (expression text per value)
 5. Add to SettingsBundle: scadName → SCAD expression
@@ -689,7 +731,7 @@ SCAD:  [1, 1, 0, 0]          ← declaration order; no per-example remapping
 
 - Compact / shortened forms (e.g. `PerSide4` scalar or 2-element when faces are paired)
 - Enum / catalog literals via `scad:value`
-- Custom serialize Capability or property-catalog rules in `09_mbom_properties.yml`
+- Custom serialize Capability or transitional property-catalog rules in `09_mbom_properties.yml` (must follow NativeBlock)
 
 Canonical rule: `17_type_system_bml.md` — Declaration Order. See `05_scad_renderer.md` — Settings Format for the pseudo-map vs. OpenSCAD `object()` roadmap.
 

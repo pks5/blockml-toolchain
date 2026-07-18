@@ -426,7 +426,7 @@ The Property Renderer maps MBOM property values to **settings entries** (via `Se
 
 ### Mapping Configuration
 
-All mappings are defined in `09_mbom_properties.yml` and are fully configurable. The renderer reads the mapping config at startup — no mappings are hardcoded.
+Native parameter inventory and `scad:value` defaults come from `NativeBlock.bml` (SSOT). Optional transitional mapping hints in `09_mbom_properties.yml` must follow NativeBlock — no hardcoded parameter lists in the renderer.
 
 Each property definition specifies:
 
@@ -456,7 +456,7 @@ wallThickness  = mb_param(config, settings, "wallThickness", 1);
 cornerRounding = mb_param(config, settings, "cornerRounding", 0.5);
 ```
 
-The renderer determines native vs. custom by checking `09_mbom_properties.yml`.
+The renderer determines native vs. custom from the domain TypeRegistry (NativeBlock property set). Transitional catalogs in `09_mbom_properties.yml` must match NativeBlock.
 
 ---
 
@@ -737,7 +737,7 @@ Hidden section (`/* [Hidden] */`) contains derived variables that combine custom
 
 ### Complex Type Serialization
 
-OpenSCAD Customizer only supports flat primitives — no arrays, no compound types. The BlockProcessor splits complex properties into multiple Customizer variables and recombines them in the `[Hidden]` section. The splitting rules are defined per property in `09_mbom_properties.yml` via the `scad_customizer` field:
+OpenSCAD Customizer only supports flat primitives — no arrays, no compound types. The BlockProcessor splits complex properties into multiple Customizer variables and recombines them in the `[Hidden]` section. Splitting rules follow NativeBlock type metadata; optional `scad_customizer` hints in `09_mbom_properties.yml` must not contradict NativeBlock.
 
 **`split: [x, y, z]`** — splits a vector/array property into named scalar variables:
 

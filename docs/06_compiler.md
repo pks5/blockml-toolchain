@@ -218,7 +218,7 @@ Mapping rules are defined once per root type. The mapper produces the **Canonica
 validateTypes(bom, registry) → Diagnostic[]
 ```
 
-Checks member values conform to declared types **without rewriting** authored values. For MBOM: native property types from `09_mbom_properties.yml`, custom types from block definitions.
+Checks member values conform to declared types **without rewriting** authored values. For MBOM: native property types from `NativeBlock.bml` / `type/*.bml`, custom types from block definitions.
 
 ### parseExpression()
 
