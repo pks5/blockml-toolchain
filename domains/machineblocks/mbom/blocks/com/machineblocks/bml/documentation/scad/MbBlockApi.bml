@@ -28,16 +28,32 @@
     for each parameter: settings → config → default. Merge helpers combine layers; never read the
     arrays by hand inside Block Modules.
 
-    Native parameters use dedicated getters mb_param_* (config, settings, optional default).
-    Custom (non-native) parameters use mb_param(config, settings, name, default).
+    Parameter access rule (mandatory inside every Block Module):
+
+    • Native — every property declared on com.machineblocks.bml.core.NativeBlock is a native
+      parameter. In SCAD it MUST be read via its dedicated getter:
+      mb_param_[propertyName](config, settings)
+      optional third argument: block-specific default override.
+      Example: size → mb_param_size(config, settings)
+
+    • Custom — any other parameter (module-specific, not a NativeBlock property) MUST be read via
+      the generic getter:
+      mb_param(config, settings, "name", default)
+      Example: brick1SizeY → mb_param(config, settings, "brick1SizeY", 2)
+
+    Never invent mb_param_* for custom names. Never use mb_param() for NativeBlock properties.
+    Never access config/settings arrays directly.
+
+    Reference: com.machineblocks.bml.examples.Cross (Cross.scad) shows both sides in one module —
+    native getters for size, studs, baseColor, … and mb_param() for brick1SizeY, brick2SizeX,
+    brick1OffsetY, brick2OffsetX.
 
     config carries environment, calibration, and shared profile values. settings carry instance
     overrides for one call. Calibration adjustments belong in config profiles — not as routine
     settings on content blocks.
 
-    Parameter inventory, types, defaults, and documentation are defined on
-    com.machineblocks.bml.core.NativeBlock — that Block is the SSOT. SCAD docs explain the call
-    model; they do not redefine the parameter set.
+    Parameter inventory, types, defaults, and documentation are defined on NativeBlock — that Block
+    is the SSOT. SCAD docs explain the call model; they do not redefine the parameter set.
   </documentation>
 
   <references>
@@ -45,7 +61,13 @@
       Next — mandatory Block File section layout.
     </see>
     <see type="mbcore:NativeBlock" relation="Defines">
-      SSOT for every native mb_block() parameter.
+      SSOT — every property here is a native parameter with mb_param_[propertyName]().
+    </see>
+    <see type="scad:ModulePatterns" relation="SeeAlso">
+      Cross.scad example — native getters and mb_param() side by side.
+    </see>
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/examples/Cross.scad" relation="SeeAlso">
+      Composite Block File demonstrating native vs custom parameter access.
     </see>
   </references>
 

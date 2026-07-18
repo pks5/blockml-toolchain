@@ -29,6 +29,10 @@
     Pattern 3 — Composite Block: outer mb_block(base=false, studs=false) with size = outer bbox;
     children() hold parts with direction/offset. Examples: Cross, Frame.
 
+    Parameter access inside every pattern: NativeBlock properties → mb_param_[propertyName]();
+    all other parameters → mb_param(). Cross.scad is the reference for both in one module
+    (native: size, studs, …; custom: brick1SizeY, brick2SizeX, brick1OffsetY, brick2OffsetX).
+
     Structural composites often realize Panel, Corner Panel, Channel, and Enclosure intents.
     Connection uses tongue-and-groove or discrete connectors — see StructureSystems for concepts.
 
@@ -814,11 +818,14 @@ module mb__com__machineblocks__examples__Frame(config = undef, settings = undef)
     <see type="scad:ScadDecisionRules" relation="SeeAlso">
       When to pick Wrapper vs Composite.
     </see>
+    <see type="scad:MbBlockApi" relation="Requires">
+      NativeBlock properties → mb_param_[propertyName](); custom → mb_param(). Cross shows both.
+    </see>
     <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/bricks/Standard.scad" relation="SeeAlso">
       Source Block File for the Standard.scad example.
     </see>
     <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/examples/Cross.scad" relation="SeeAlso">
-      Source Block File for the Cross.scad example.
+      Source Block File for the Cross.scad example — native and custom getters side by side.
     </see>
     <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/examples/Frame.scad" relation="SeeAlso">
       Source Block File for the Frame.scad example.
