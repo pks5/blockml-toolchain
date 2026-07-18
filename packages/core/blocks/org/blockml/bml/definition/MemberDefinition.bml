@@ -59,8 +59,8 @@
     Aggregation: type; Association: type; Capability: type + implementation). To keep a member
     abstract in a child block, explicitly declare abstract="true" on that redeclaration.
 
-    Maps to BOM MemberDefinitionBase fields shared by all member kinds — including visibility and
-    readOnly attributes on member elements.</documentation>
+    Maps to BOM MemberDefinitionBase fields shared by all member kinds — including visibility,
+    readOnly, and group attributes on member elements.</documentation>
 
   <references>
     <see type="core:Block" property="language" relation="Defines">
@@ -145,6 +145,12 @@
         values on the member declaration; readOnly forbids instance authoring only. Maps to BOM
         MemberDefinitionBase.readOnly.</documentation>
     </readOnly>
+    <group type="core:MemberGroup" bml:xml="element|attribute">
+      <documentation>Optional member group — organizes this member under a MemberGroup category for
+        editors and tooling. Type is org.blockml.bml.core.MemberGroup (or a concrete subtype). On
+        definitions, element form is preferred (&lt;group&gt;…&lt;/group&gt;); on Block instances,
+        attribute form is preferred. Maps to BOM MemberDefinitionBase.group.</documentation>
+    </group>
   </properties>
 
 </block>
