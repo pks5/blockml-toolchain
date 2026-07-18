@@ -200,24 +200,24 @@
       <value>{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0}</value>
       <scad:value>[0, 0, 0, 0, 0, 0]</scad:value>
       <examples>
+        <example language="BML" snippet="true" title="xy face calibration">
+          <![CDATA[
+<NativeBlock baseAdjustment="{xNeg: 0.05, xPos: 0.05, yNeg: -0.02, yPos: -0.02, zNeg: 0, zPos: 0}" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="xy face calibration">
+          <![CDATA[
+          ...
+          ["baseAdjustment", [0.05, 0.05, -0.02, -0.02, 0, 0]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="z-plus tweak">
           <![CDATA[
 <NativeBlock baseAdjustment="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="z-plus tweak">
-          <![CDATA[
-          ...
-          ["baseAdjustment", [0, 0, 0, 0, 0, 0.1]]
-          ...
-          ]]>
-        </scad:example>
-        <example language="BML" snippet="true" title="faces">
-          <![CDATA[
-<NativeBlock baseAdjustment="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}" />
-          ]]>
-        </example>
-        <scad:example language="OpenSCAD" snippet="true" title="faces">
           <![CDATA[
           ...
           ["baseAdjustment", [0, 0, 0, 0, 0, 0.1]]
