@@ -194,7 +194,7 @@ org.blockml.bml.core.Block
     preferredAlias · directives[]
     SubBlocks: Directive → Member(*) | Element | Attribute
                Member → Property | Aggregation | Association | Capability
-               Element → Document(document) | Summary(summary) | Examples(examples) | Value(value)
+               Element → Document(document) | Summary(summary) | Examples(examples) | Example(example) | Value(value)
 
 org.blockml.bml.annotation.BmlAnnotation          preferredAlias=bml
 com.machineblocks.bml.annotation.ScadAnnotation   preferredAlias=scad
@@ -336,7 +336,7 @@ snippet         Boolean            — optional; default false — illustrative 
 content         String (required)  — CDATA body
 ```
 
-`org.blockml.bml.definition.StructuralDefinition.Documentation` — inline Sub-Block; one technical prose entry on any StructuralDefinition element. Authors may repeat the element for **i18n** (`language=`) and for **QName facets** (`scad:document`, …). Facet namespaces are **not** NaturalLanguage / i18n. Examples containers follow the same Annotation-facet pattern via `Annotation.Examples` (`scad:examples`, …).
+`org.blockml.bml.definition.StructuralDefinition.Documentation` — inline Sub-Block; one technical prose entry on any StructuralDefinition element. Authors may repeat the element for **i18n** (`language=`) and for **QName facets** (`scad:document`, …). Facet namespaces are **not** NaturalLanguage / i18n. Examples containers follow the same Annotation-facet pattern via `Annotation.Examples` (`scad:examples`, …). Paired target-language samples use `Annotation.Example` (`scad:example` sibling of `<example>` under the same `<examples>`).
 
 ```text
 FQN             org.blockml.bml.definition.StructuralDefinition.Documentation (Sub-Block)

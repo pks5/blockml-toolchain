@@ -30,12 +30,14 @@
       (&lt;myProp&gt;&lt;scad:value&gt;…&lt;/scad:value&gt;&lt;/myProp&gt;) — not a member scad:myProp
     • Document (name="document") — scad:document prose facets
     • Summary (name="summary") — scad:summary prose facets
-    • Examples (name="examples") — scad:examples containers (OpenSCAD usage samples)
+    • Examples (name="examples") — scad:examples containers (independent OpenSCAD sample sets)
+    • Example (name="example") — scad:example sibling under canonical &lt;examples&gt; (1:1 pair)
 
     Parent context disambiguates &lt;scad:value&gt;: under &lt;properties&gt; → Property member;
-    nested under a property element → Value facet. Orthogonal to Definition — does not alter
-    MBEnum or StructuralDefinition shape; it formalizes the annotation namespace those QNames
-    resolve through.
+    nested under a property element → Value facet. Parent context for &lt;scad:example&gt;:
+    direct child of &lt;examples&gt; → Example facet entry (sibling of &lt;example&gt;).
+    Orthogonal to Definition — does not alter MBEnum or StructuralDefinition shape; it
+    formalizes the annotation namespace those QNames resolve through.
   </documentation>
 
   <references>
@@ -48,8 +50,14 @@
     <see type="core:Annotation.Value" relation="SeeAlso">
       Value-field facet directive for nested scad:value under a property declaration.
     </see>
+    <see type="core:Annotation.Examples" relation="SeeAlso">
+      Container-level OpenSCAD examples facet (scad:examples).
+    </see>
+    <see type="core:Annotation.Example" relation="SeeAlso">
+      Example-level OpenSCAD facet (scad:example sibling under examples).
+    </see>
     <see file="02_mbml.md" relation="AuthoringGuide">
-      Annotations · value facets · documentation facets.
+      Annotations · value facets · documentation facets · example facets.
     </see>
   </references>
 
@@ -67,6 +75,7 @@
       <mbann:ScadAnnotation.Document />
       <mbann:ScadAnnotation.Summary />
       <mbann:ScadAnnotation.Examples />
+      <mbann:ScadAnnotation.Example />
     </directives>
   </aggregations>
 
@@ -116,9 +125,22 @@
       <baseType>core:Annotation.Examples</baseType>
       <is>An OpenSCAD examples container facet directive</is>
 
-      <documentation>Element directive scad:examples — OpenSCAD-specific examples container.
-        Holds &lt;example&gt; entries (typically language="OpenSCAD") beside the canonical
-        default-namespace &lt;examples&gt; aggregation. Does not replace canonical examples.</documentation>
+      <documentation>Element directive scad:examples — OpenSCAD-specific examples container for
+        independent sample sets (no 1:1 BML pair). Holds &lt;example&gt; entries (typically
+        language="OpenSCAD") beside the canonical default-namespace &lt;examples&gt; aggregation.
+        Prefer scad:example as a sibling of &lt;example&gt; under the same &lt;examples&gt; when
+        BML and SCAD bodies are one logical pair. Does not replace canonical examples.</documentation>
+    </block>
+
+    <block>
+      <name>Example</name>
+      <baseType>core:Annotation.Example</baseType>
+      <is>An OpenSCAD example entry facet directive</is>
+
+      <documentation>Element directive scad:example — OpenSCAD body as a sibling of canonical
+        &lt;example&gt; under the same &lt;examples&gt; container. Requires title (match the paired
+        BML example). Typically language="OpenSCAD" with CDATA body. Prefer over a parallel
+        scad:examples list when the sample is a paired render of the same usage.</documentation>
     </block>
   </subBlocks>
 

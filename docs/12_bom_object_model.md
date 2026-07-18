@@ -525,7 +525,7 @@ interface ChangelogEntry {
 }
 
 interface DocumentationExample {
-  /** Required title attribute on <example> — always in enclosing block's natural language */
+  /** Required title attribute on <example> / *:example — always in enclosing block's natural language */
   title: string
   /** CDATA body — BML/MBML, target-language source, or prose */
   content: string
@@ -533,7 +533,10 @@ interface DocumentationExample {
   contentLanguageFqn?: string
   /** When true, body is an illustrative fragment — skip syntax / well-formedness checks. Default false. */
   snippet?: boolean
-  /** Resolved Annotation FQN when inside a faceted examples container (e.g. scad:examples); "" / omitted: canonical */
+  /**
+   * Resolved Annotation FQN when the entry is an Annotation Example sibling (e.g. scad:example)
+   * or when inside a faceted examples container (e.g. scad:examples); "" / omitted: canonical <example>
+   */
   namespace?: string
   source?: SourceLocation
 }
@@ -1507,8 +1510,8 @@ BML_DUPLICATE_SUMMARY         — two <summary> entries share the same (namespac
 BML_DUPLICATE_PROPERTY_VALUE  — two PropertyDefinition value-field entries share the same namespace
 BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version
 BML_CHANGELOG_VERSION_ORDER   — <changelog> entries not ordered oldest-first (warning V1)
-BML_EXAMPLE_MISSING_TITLE     — <example> lacks required title attribute
-BML_EXAMPLE_NOT_CDATA         — <example> body is not CDATA
+BML_EXAMPLE_MISSING_TITLE     — <example> / *:example lacks required title attribute
+BML_EXAMPLE_NOT_CDATA         — <example> / *:example body is not CDATA
 BML_EXAMPLE_UNKNOWN_LANGUAGE  — <example> language attribute is not a known Language FQN
 BML_UNKNOWN_NATURAL_LANGUAGE  — <language> or documentation/summary language attribute is not a NaturalLanguage FQN
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)

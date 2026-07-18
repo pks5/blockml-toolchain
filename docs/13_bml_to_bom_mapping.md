@@ -293,9 +293,10 @@ Optional elements on `<block>` — mapped to `BlockDefinition` fields. See `16_f
 <since>…</since>                             → block.since (trimmed text)
 <changelog>                                  → block.changelog[]
   <change version="…" language="…">…</change> → { version, text: trimmed body, languageFqn? }
-<examples>                                   → block.examples[] (namespace: "" canonical)
+<examples>                                   → block.examples[] (mixed canonical + Annotation Example siblings)
   <example title="…" language="…" snippet="…"> → { title, content, contentLanguageFqn?, snippet?, namespace: "" }
-  <scad:examples>…</scad:examples>           → same shape; namespace from xmlns:scad (Annotation facet)
+  <scad:example title="…" language="…" snippet="…"> → { title, content, contentLanguageFqn?, snippet?, namespace: resolved Annotation FQN }
+  <scad:examples>…</scad:examples>           → independent container; namespace from xmlns:scad on each child example
     <example …>                              → { …, namespace: resolved Annotation FQN }
 <references>                                 → block.references[]
   <see type="…" relation="…" language="…">…</see>         → { type, relationFqn?, context, languageFqn? }
@@ -338,7 +339,9 @@ Omitted <since> / <changelog> / <examples> / <references> → undefined (optiona
 Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <changelog> entries out of version order → BML_CHANGELOG_VERSION_ORDER (warning V1)
 <example> without title attribute        → BML_EXAMPLE_MISSING_TITLE (error)
+<*:example> without title attribute      → BML_EXAMPLE_MISSING_TITLE (error)
 <example> body not CDATA                 → BML_EXAMPLE_NOT_CDATA (error)
+<*:example> body not CDATA               → BML_EXAMPLE_NOT_CDATA (error)
 <example language="…"> unknown Language FQN → BML_EXAMPLE_UNKNOWN_LANGUAGE (error)
 <language> or documentation/summary language="…" unknown NaturalLanguage FQN → BML_UNKNOWN_NATURAL_LANGUAGE (error)
 <see> without type, instance, file, url, property, aggregation, association, or capability → BML_REFERENCE_MISSING_TARGET (error)

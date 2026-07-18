@@ -34,6 +34,7 @@
       → Property · Aggregation · Association · Capability
     • Element — element-form directives
       → Document (name="document") · Summary (name="summary") · Examples (name="examples")
+        · Example (name="example") — sibling under StructuralDefinition examples container
         · Value (name="value") — PropertyDefinition value-field facets
     • Attribute — attribute-form directives (id, with, each, …)
 
@@ -67,6 +68,7 @@
     <core:Annotation.Document />
     <core:Annotation.Summary />
     <core:Annotation.Examples />
+    <core:Annotation.Example />
     <core:Annotation.Value />
   </subTypes>
 
@@ -92,9 +94,9 @@
 
       <documentation>Abstract base for all annotation directives. The name property is the
         directive local name under the annotation namespace (e.g. id, with, document, examples,
-        value). Member directives fix name to "*"; Document, Summary, Examples, and Value fix
-        document / summary / examples / value; Attribute and Element concretes set an explicit
-        local name.</documentation>
+        example, value). Member directives fix name to "*"; Document, Summary, Examples, Example,
+        and Value fix document / summary / examples / example / value; Attribute and Element
+        concretes set an explicit local name.</documentation>
 
       <abstract>true</abstract>
 
@@ -102,7 +104,7 @@
         <name abstract="true" type="Text">
           <documentation>Directive local name in the annotation namespace. "*" on Member means any
             local name. Fixed on Document ("document"), Summary ("summary"), Examples ("examples"),
-            and Value ("value").</documentation>
+            Example ("example"), and Value ("value").</documentation>
         </name>
       </properties>
     </block>
@@ -178,9 +180,9 @@
       <is>An element-form annotation directive</is>
 
       <documentation>Directive that appears as an XML element under the annotation namespace
-        (e.g. bml:container, scad:document, scad:examples, nested scad:value). Concrete directives
-        set name; Document, Summary, Examples, and Value are standard element kinds with fixed
-        names.</documentation>
+        (e.g. bml:container, scad:document, scad:examples, sibling scad:example, nested scad:value).
+        Concrete directives set name; Document, Summary, Examples, Example, and Value are standard
+        element kinds with fixed names.</documentation>
 
       <abstract>true</abstract>
     </block>
@@ -242,14 +244,39 @@
       <documentation>Standard element directive for namespaced examples containers. name is fixed
         to "examples" (e.g. scad:examples). Parallel to Document and Summary facets: the default-
         namespace &lt;examples&gt; aggregation on StructuralDefinition remains the canonical slot;
-        Annotation-prefixed containers (scad:examples, …) hold facet-specific &lt;example&gt;
-        entries and never replace the canonical examples aggregation.</documentation>
+        Annotation-prefixed containers (scad:examples, …) hold independent facet-specific sample
+        sets and never replace the canonical examples aggregation. Prefer Annotation.Example
+        (scad:example sibling under the same &lt;examples&gt;) when a target-language sample pairs
+        1:1 with a canonical &lt;example&gt;.</documentation>
 
       <properties>
         <name override="true" final="true" type="Text">
           <value>examples</value>
           <documentation>Fixed local name for examples container facets under an annotation
             namespace.</documentation>
+        </name>
+      </properties>
+    </block>
+
+    <block>
+      <name>Example</name>
+      <baseType>core:Annotation.Element</baseType>
+      <is>An example entry facet directive</is>
+
+      <documentation>Standard element directive for a target-language sample as a sibling of
+        StructuralDefinition.Example under the same &lt;examples&gt; container. name is fixed to
+        "example" (e.g. scad:example next to &lt;example&gt;). Parent context: direct child of
+        &lt;examples&gt; with an Annotation prefix → this Example facet entry; unprefixed
+        &lt;example&gt; → StructuralDefinition.Example. Same shape as a canonical example (required
+        title, optional language / snippet, CDATA body). Prefer this over a parallel scad:examples
+        container when BML and OpenSCAD bodies are one logical pair (match by title). Does not
+        replace canonical &lt;example&gt; entries.</documentation>
+
+      <properties>
+        <name override="true" final="true" type="Text">
+          <value>example</value>
+          <documentation>Fixed local name for example entry facets under an annotation
+            namespace (sibling of canonical &lt;example&gt; inside &lt;examples&gt;).</documentation>
         </name>
       </properties>
     </block>

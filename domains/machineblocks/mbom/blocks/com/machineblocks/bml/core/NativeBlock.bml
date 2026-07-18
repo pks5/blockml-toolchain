@@ -70,24 +70,26 @@
 <NativeBlock align="Center" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="center">
+          <![CDATA[
+          ...
+          ["align", "center"]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock align="{x: Start, y: Center, z: End}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="center">
-          ...
-          ["align", "center"]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["align", ["start", "center", "end"]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </align>
 
     <alignChildren type="mbt:Align | mbt:AxisXYZ(mbt:Align)">
@@ -106,24 +108,26 @@
 <NativeBlock alignChildren="Center" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="center">
+          <![CDATA[
+          ...
+          ["alignChildren", "center"]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock alignChildren="{x: Start, y: Center, z: End}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="center">
-          ...
-          ["alignChildren", "center"]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["alignChildren", ["start", "center", "end"]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </alignChildren>
 
     <base type="Boolean">
@@ -139,14 +143,14 @@
 <NativeBlock base="false" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="hidden">
+        <scad:example language="OpenSCAD" snippet="true" title="hidden">
+          <![CDATA[
           ...
           ["base", false]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </base>
 
     <baseAdjustment type="mbt:FaceMapXYZ(Decimal(unit:Millimeter))">
@@ -201,24 +205,26 @@
 <NativeBlock baseAdjustment="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="z-plus tweak">
+          <![CDATA[
+          ...
+          ["baseAdjustment", [0, 0, 0, 0, 0, 0.1]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="faces">
           <![CDATA[
 <NativeBlock baseAdjustment="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="faces">
+          <![CDATA[
+          ...
+          ["baseAdjustment", [0, 0, 0, 0, 0, 0.1]]
+          ...
+          ]]>
+        </scad:example>
       </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="z-plus tweak">
-          ...
-          ["baseAdjustment", [0, 0, 0, 0, 0, 0.1]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="faces">
-          ...
-          ["baseAdjustment", [0, 0, 0, 0, 0, 0.1]]
-          ...
-        </example>
-      </scad:examples>
     </baseAdjustment>
 
     <baseClampHeight type="Decimal(mbunit:MBU)">
@@ -231,14 +237,14 @@
 <NativeBlock baseClampHeight="1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller lip">
+        <scad:example language="OpenSCAD" snippet="true" title="taller lip">
+          <![CDATA[
           ...
           ["baseClampHeight", 1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseClampHeight>
 
     <baseClampOffset type="Decimal(mbunit:MBU)">
@@ -255,14 +261,14 @@
 <NativeBlock baseClampOffset="1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="raised">
+        <scad:example language="OpenSCAD" snippet="true" title="raised">
+          <![CDATA[
           ...
           ["baseClampOffset", 1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseClampOffset>
 
     <baseClampOuter type="Boolean">
@@ -279,14 +285,14 @@
 <NativeBlock baseClampOuter="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="outer">
+        <scad:example language="OpenSCAD" snippet="true" title="outer">
+          <![CDATA[
           ...
           ["baseClampOuter", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseClampOuter>
 
     <baseClampThickness type="Decimal(unit:Millimeter)">
@@ -299,14 +305,14 @@
 <NativeBlock baseClampThickness="0.4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker">
+          <![CDATA[
           ...
           ["baseClampThickness", 0.4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseClampThickness>
 
     <baseColor type="Color">
@@ -321,14 +327,14 @@
 <NativeBlock baseColor="#EAC645" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="yellow">
+        <scad:example language="OpenSCAD" snippet="true" title="yellow">
+          <![CDATA[
           ...
           ["baseColor", "#EAC645"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseColor>
 
     <baseCrop type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -351,14 +357,14 @@
 <NativeBlock baseCrop="{xNeg: 0.5, xPos: 0.5, yNeg: 0, yPos: 0}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="crop sides">
+        <scad:example language="OpenSCAD" snippet="true" title="crop sides">
+          <![CDATA[
           ...
           ["baseCrop", [0.5, 0.5, 0, 0]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseCrop>
 
     <baseCutoutMaxDepth type="Decimal(mbunit:MBU)">
@@ -376,14 +382,14 @@
 <NativeBlock baseCutoutMaxDepth="2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="deeper">
+        <scad:example language="OpenSCAD" snippet="true" title="deeper">
+          <![CDATA[
           ...
           ["baseCutoutMaxDepth", 2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseCutoutMaxDepth>
 
     <baseCutoutType type="mbt:BaseCutout">
@@ -403,14 +409,14 @@
 <NativeBlock baseCutoutType="None" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="none">
+        <scad:example language="OpenSCAD" snippet="true" title="none">
+          <![CDATA[
           ...
           ["baseCutoutType", "none"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseCutoutType>
 
     <baseRoundingRadius type="Decimal | mbt:BaseRoundingMap">
@@ -430,24 +436,26 @@
 <NativeBlock baseRoundingRadius="0.5" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="rounded">
+          <![CDATA[
+          ...
+          ["baseRoundingRadius", 0.5]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis corners">
           <![CDATA[
 <NativeBlock baseRoundingRadius="{x: {sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}, y: {sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}, z: {sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="rounded">
-          ...
-          ["baseRoundingRadius", 0.5]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis corners">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis corners">
+          <![CDATA[
           ...
           ["baseRoundingRadius", [[0.5, 0.5, 0.5, 0.5], [0.5, 0.5, 0.5, 0.5], [0.5, 0.5, 0.5, 0.5]]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseRoundingRadius>
 
     <baseWallGaps type="mbt:WallGap[]">
@@ -466,14 +474,14 @@
 <NativeBlock baseWallGaps="[{face: XNeg, pos: 1, len: 2}]" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="one gap">
+        <scad:example language="OpenSCAD" snippet="true" title="one gap">
+          <![CDATA[
           ...
           ["baseWallGaps", [["x-", 1, 2]]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseWallGaps>
 
     <baseWallThickness type="mbt:Auto | Decimal(mbunit:MBU)">
@@ -488,14 +496,14 @@
 <NativeBlock baseWallThickness="1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["baseWallThickness", 1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseWallThickness>
 
     <baseWallThicknessAdjustment type="Decimal(unit:Millimeter)">
@@ -510,14 +518,14 @@
 <NativeBlock baseWallThicknessAdjustment="-0.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="tighter">
+        <scad:example language="OpenSCAD" snippet="true" title="tighter">
+          <![CDATA[
           ...
           ["baseWallThicknessAdjustment", -0.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </baseWallThicknessAdjustment>
 
     <bevel type="mbt:Bevel">
@@ -553,14 +561,14 @@
 <NativeBlock bevel="{sw: {x: 0, y: 0}, nw: {x: 0, y: 0}, ne: {x: 1, y: 0}, se: {x: 1, y: 0}}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="corner shift">
+        <scad:example language="OpenSCAD" snippet="true" title="corner shift">
+          <![CDATA[
           ...
           ["bevel", [[0, 0], [0, 0], [1, 0], [1, 0]]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </bevel>
 
     <connectorDepth type="Decimal(mbunit:MBU)">
@@ -573,14 +581,14 @@
 <NativeBlock connectorDepth="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="deeper">
+        <scad:example language="OpenSCAD" snippet="true" title="deeper">
+          <![CDATA[
           ...
           ["connectorDepth", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </connectorDepth>
 
     <connectorLength type="mbt:Auto | Decimal(mbunit:MBU)">
@@ -596,14 +604,14 @@
 <NativeBlock connectorLength="2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["connectorLength", 2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </connectorLength>
 
     <connectorLengthClearance type="Decimal(unit:Millimeter)">
@@ -619,14 +627,14 @@
 <NativeBlock connectorLengthClearance="0.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="more clearance">
+        <scad:example language="OpenSCAD" snippet="true" title="more clearance">
+          <![CDATA[
           ...
           ["connectorLengthClearance", 0.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </connectorLengthClearance>
 
     <connectorSideClearance type="Decimal(unit:Millimeter)">
@@ -642,14 +650,14 @@
 <NativeBlock connectorSideClearance="0.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="more clearance">
+        <scad:example language="OpenSCAD" snippet="true" title="more clearance">
+          <![CDATA[
           ...
           ["connectorSideClearance", 0.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </connectorSideClearance>
 
     <connectorWidth type="Decimal(mbunit:MBU)">
@@ -662,14 +670,14 @@
 <NativeBlock connectorWidth="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="wider">
+        <scad:example language="OpenSCAD" snippet="true" title="wider">
+          <![CDATA[
           ...
           ["connectorWidth", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </connectorWidth>
 
     <connectors type="Boolean.False | mbt:Connector[]">
@@ -693,14 +701,14 @@
 <NativeBlock connectors="[{face: XPos, axis: Y, gender: Male}]" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="one connector">
+        <scad:example language="OpenSCAD" snippet="true" title="one connector">
+          <![CDATA[
           ...
           ["connectors", [["x+", "y", "male"]]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </connectors>
 
 
@@ -717,14 +725,14 @@
 <NativeBlock debug="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="on">
+        <scad:example language="OpenSCAD" snippet="true" title="on">
+          <![CDATA[
           ...
           ["debug", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </debug>
 
     <debugShowOnly type="Text">
@@ -739,24 +747,26 @@
 <NativeBlock />  <!-- debugShowOnly is not set — omit the property -->
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="not set">
+          <![CDATA[
+          ...
+          ["debugShowOnly", undef]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="filter studs">
           <![CDATA[
 <NativeBlock debugShowOnly="studs" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="not set">
-          ...
-          ["debugShowOnly", undef]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="filter studs">
+        <scad:example language="OpenSCAD" snippet="true" title="filter studs">
+          <![CDATA[
           ...
           ["debugShowOnly", "studs"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </debugShowOnly>
 
     <direction type="mbt:Direction">
@@ -774,14 +784,14 @@
 <NativeBlock direction="North" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="north">
+        <scad:example language="OpenSCAD" snippet="true" title="north">
+          <![CDATA[
           ...
           ["direction", "north"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </direction>
 
     <grille type="mbt:Grille">
@@ -796,14 +806,14 @@
 <NativeBlock grille="X" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="x bars">
+        <scad:example language="OpenSCAD" snippet="true" title="x bars">
+          <![CDATA[
           ...
           ["grille", "x"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </grille>
 
     <grilleCount type="Integer">
@@ -816,14 +826,14 @@
 <NativeBlock grilleCount="3" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="three">
+        <scad:example language="OpenSCAD" snippet="true" title="three">
+          <![CDATA[
           ...
           ["grilleCount", 3]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </grilleCount>
 
     <grilleDepth type="Decimal(mbunit:MBU)">
@@ -836,14 +846,14 @@
 <NativeBlock grilleDepth="1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="deeper">
+        <scad:example language="OpenSCAD" snippet="true" title="deeper">
+          <![CDATA[
           ...
           ["grilleDepth", 1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </grilleDepth>
 
     <grilleInverted type="Boolean">
@@ -856,14 +866,14 @@
 <NativeBlock grilleInverted="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="inverted">
+        <scad:example language="OpenSCAD" snippet="true" title="inverted">
+          <![CDATA[
           ...
           ["grilleInverted", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </grilleInverted>
 
     <holeX type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
@@ -878,14 +888,14 @@
 <NativeBlock holeX="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["holeX", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeX>
 
     <holeY type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
@@ -902,14 +912,14 @@
 <NativeBlock holeY="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["holeY", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeY>
 
     <holeZ type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
@@ -926,14 +936,14 @@
 <NativeBlock holeZ="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["holeZ", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeZ>
 
     <holeXYGridOffsetZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
@@ -951,14 +961,14 @@
 <NativeBlock holeXYGridOffsetZ="{x: 3, y: 4}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYGridOffsetZ", [3, 4]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYGridOffsetZ>
 
     <holeXYGridOffsetZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
@@ -974,24 +984,26 @@
 <NativeBlock holeXYGridOffsetZAdjustment="{x: 0.1, y: -0.1}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+          <![CDATA[
+          ...
+          ["holeXYGridOffsetZAdjustment", [0.1, -0.1]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYGridOffsetZAdjustment="{x: 1, y: 2}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis mm">
-          ...
-          ["holeXYGridOffsetZAdjustment", [0.1, -0.1]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYGridOffsetZAdjustment", [1, 2]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYGridOffsetZAdjustment>
 
     <holeXYGridSizeZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
@@ -1008,14 +1020,14 @@
 <NativeBlock holeXYGridSizeZ="{x: 6, y: 8}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYGridSizeZ", [6, 8]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYGridSizeZ>
 
     <holeXYGridSizeZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
@@ -1031,24 +1043,26 @@
 <NativeBlock holeXYGridSizeZAdjustment="{x: 0.1, y: 0}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+          <![CDATA[
+          ...
+          ["holeXYGridSizeZAdjustment", [0.1, 0]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYGridSizeZAdjustment="{x: 1, y: 2}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis mm">
-          ...
-          ["holeXYGridSizeZAdjustment", [0.1, 0]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYGridSizeZAdjustment", [1, 2]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYGridSizeZAdjustment>
 
     <holeXYMinTopMargin type="mbt:AxisXY(Decimal(mbunit:MBU))">
@@ -1065,14 +1079,14 @@
 <NativeBlock holeXYMinTopMargin="{x: 1, y: 0.5}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYMinTopMargin", [1, 0.5]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYMinTopMargin>
 
     <holeXYZAxleThickness type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
@@ -1088,14 +1102,14 @@
 <NativeBlock holeXYZAxleThickness="{x: 1, y: 1, z: 1.2}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYZAxleThickness", [1, 1, 1.2]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZAxleThickness>
 
     <holeXYZAxleThicknessAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
@@ -1112,24 +1126,26 @@
 <NativeBlock holeXYZAxleThicknessAdjustment="{x: 0, y: 0, z: 0.05}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+          <![CDATA[
+          ...
+          ["holeXYZAxleThicknessAdjustment", [0, 0, 0.05]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYZAxleThicknessAdjustment="{x: 1, y: 1, z: 1}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis mm">
-          ...
-          ["holeXYZAxleThicknessAdjustment", [0, 0, 0.05]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYZAxleThicknessAdjustment", [1, 1, 1]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZAxleThicknessAdjustment>
 
     <holeXYZDiameter type="mbt:Auto | mbt:AxisXYZ(Decimal(mbunit:MBU))">
@@ -1145,14 +1161,14 @@
 <NativeBlock holeXYZDiameter="{x: 4, y: 4, z: 4}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYZDiameter", [4, 4, 4]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZDiameter>
 
     <holeXYZDiameterAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
@@ -1168,24 +1184,26 @@
 <NativeBlock holeXYZDiameterAdjustment="{x: 0.1, y: 0.1, z: 0}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+          <![CDATA[
+          ...
+          ["holeXYZDiameterAdjustment", [0.1, 0.1, 0]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYZDiameterAdjustment="{x: 1, y: 1, z: 1}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis mm">
-          ...
-          ["holeXYZDiameterAdjustment", [0.1, 0.1, 0]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYZDiameterAdjustment", [1, 1, 1]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZDiameterAdjustment>
 
     <holeXYZEdgeMode type="mbt:HoleEdgeMode | mbt:HoleEdgePair | mbt:HoleEdgeMap">
@@ -1221,34 +1239,38 @@
 <NativeBlock holeXYZEdgeMode="All" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="all edges">
+          <![CDATA[
+          ...
+          ["holeXYZEdgeMode", "all"]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="pair">
           <![CDATA[
 <NativeBlock holeXYZEdgeMode="{a: Start, b: End}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="pair">
+          <![CDATA[
+          ...
+          ["holeXYZEdgeMode", ["start", "end"]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis map">
           <![CDATA[
 <NativeBlock holeXYZEdgeMode="{x: All, y: {a: Start, b: End}, z: None}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="all edges">
-          ...
-          ["holeXYZEdgeMode", "all"]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="pair">
-          ...
-          ["holeXYZEdgeMode", ["start", "end"]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis map">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis map">
+          <![CDATA[
           ...
           ["holeXYZEdgeMode", ["all", ["start", "end"], "none"]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZEdgeMode>
 
     <holeXYZInsetDepth type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
@@ -1264,14 +1286,14 @@
 <NativeBlock holeXYZInsetDepth="{x: 0.5, y: 0.5, z: 0.5}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYZInsetDepth", [0.5, 0.5, 0.5]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZInsetDepth>
 
     <holeXYZInsetDepthAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
@@ -1287,24 +1309,26 @@
 <NativeBlock holeXYZInsetDepthAdjustment="{x: 0, y: 0, z: 0.05}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+          <![CDATA[
+          ...
+          ["holeXYZInsetDepthAdjustment", [0, 0, 0.05]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYZInsetDepthAdjustment="{x: 1, y: 1, z: 1}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis mm">
-          ...
-          ["holeXYZInsetDepthAdjustment", [0, 0, 0.05]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYZInsetDepthAdjustment", [1, 1, 1]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZInsetDepthAdjustment>
 
     <holeXYZInsetThickness type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
@@ -1322,14 +1346,14 @@
 <NativeBlock holeXYZInsetThickness="{x: 0.3, y: 0.3, z: 0.3}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYZInsetThickness", [0.3, 0.3, 0.3]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZInsetThickness>
 
     <holeXYZInsetThicknessAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
@@ -1345,24 +1369,26 @@
 <NativeBlock holeXYZInsetThicknessAdjustment="{x: 0.05, y: 0, z: 0}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis mm">
+          <![CDATA[
+          ...
+          ["holeXYZInsetThicknessAdjustment", [0.05, 0, 0]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYZInsetThicknessAdjustment="{x: 1, y: 1, z: 1}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="per-axis mm">
-          ...
-          ["holeXYZInsetThicknessAdjustment", [0.05, 0, 0]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYZInsetThicknessAdjustment", [1, 1, 1]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZInsetThicknessAdjustment>
 
     <holeXYZShift type="Boolean | mbt:AxisXYZ(Boolean)">
@@ -1379,24 +1405,26 @@
 <NativeBlock holeXYZShift="true" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="stud-aligned">
+          <![CDATA[
+          ...
+          ["holeXYZShift", true]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYZShift="{x: true, y: false, z: true}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="stud-aligned">
-          ...
-          ["holeXYZShift", true]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
           ...
           ["holeXYZShift", [true, false, true]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </holeXYZShift>
 
     <holeXYZType type="mbt:AxisXYZ(mbt:HoleType)">
@@ -1413,24 +1441,26 @@
 <NativeBlock holeXYZType="{x: Pin, y: Pin, z: Axle}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="axle on z">
+          <![CDATA[
+          ...
+          ["holeXYZType", ["pin", "pin", "axle"]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-axis">
           <![CDATA[
 <NativeBlock holeXYZType="{x: Pin, y: Pin, z: Axle}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-axis">
+          <![CDATA[
+          ...
+          ["holeXYZType", ["pin", "pin", "axle"]]
+          ...
+          ]]>
+        </scad:example>
       </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="axle on z">
-          ...
-          ["holeXYZType", ["pin", "pin", "axle"]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-axis">
-          ...
-          ["holeXYZType", ["pin", "pin", "axle"]]
-          ...
-        </example>
-      </scad:examples>
     </holeXYZType>
 
 
@@ -1465,24 +1495,26 @@
 <NativeBlock />  <!-- id is not set — omit the property (runtime may generate a random ID) -->
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="not set">
+          <![CDATA[
+          ...
+          ["id", undef]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="explicit">
           <![CDATA[
 <NativeBlock id="mm.example.brick" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="not set">
-          ...
-          ["id", undef]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["id", "mm.example.brick"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </id>
 
     <offset type="mbt:OffsetXYZ">
@@ -1498,34 +1530,38 @@
 <NativeBlock offset="{x: 1, y: 0, z: 0.5}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="shifted">
+          <![CDATA[
+          ...
+          ["offset", [1, 0, 0.5]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="xy pair">
           <![CDATA[
 <NativeBlock offset="{x: 0.5, y: -0.25}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="xy pair">
+          <![CDATA[
+          ...
+          ["offset", [0.5, -0.25]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="xyz offset">
           <![CDATA[
 <NativeBlock offset="{x: 1, y: 0, z: 0.5}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="xyz offset">
+          <![CDATA[
+          ...
+          ["offset", [1, 0, 0.5]]
+          ...
+          ]]>
+        </scad:example>
       </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="shifted">
-          ...
-          ["offset", [1, 0, 0.5]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="xy pair">
-          ...
-          ["offset", [0.5, -0.25]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="xyz offset">
-          ...
-          ["offset", [1, 0, 0.5]]
-          ...
-        </example>
-      </scad:examples>
     </offset>
 
     <pcb type="Boolean.False | mbt:PcbMountingType">
@@ -1548,14 +1584,14 @@
 <NativeBlock pcb="Clips" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="clips">
+        <scad:example language="OpenSCAD" snippet="true" title="clips">
+          <![CDATA[
           ...
           ["pcb", "clips"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pcb>
 
     <pcbDimensions type="mbt:SizeXYZ(Decimal(unit:Millimeter), Decimal(unit:Millimeter))">
@@ -1570,14 +1606,14 @@
 <NativeBlock pcbDimensions="{x: 40, y: 60, z: 1.6}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="board size">
+        <scad:example language="OpenSCAD" snippet="true" title="board size">
+          <![CDATA[
           ...
           ["pcbDimensions", [40, 60, 1.6]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pcbDimensions>
 
     <pcbOffset type="mbt:OffsetXY">
@@ -1592,14 +1628,14 @@
 <NativeBlock pcbOffset="{x: 2, y: -1}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="shifted">
+        <scad:example language="OpenSCAD" snippet="true" title="shifted">
+          <![CDATA[
           ...
           ["pcbOffset", [2, -1]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pcbOffset>
 
     <pcbSocketDiameter type="Decimal(unit:Millimeter)">
@@ -1613,14 +1649,14 @@
 <NativeBlock pcbSocketDiameter="6" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="wider">
+        <scad:example language="OpenSCAD" snippet="true" title="wider">
+          <![CDATA[
           ...
           ["pcbSocketDiameter", 6]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pcbSocketDiameter>
 
     <pcbSocketHeight type="Decimal(unit:Millimeter)">
@@ -1634,14 +1670,14 @@
 <NativeBlock pcbSocketHeight="4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller">
+        <scad:example language="OpenSCAD" snippet="true" title="taller">
+          <![CDATA[
           ...
           ["pcbSocketHeight", 4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pcbSocketHeight>
 
     <pcbSocketHoleDiameter type="Decimal(unit:Millimeter)">
@@ -1655,14 +1691,14 @@
 <NativeBlock pcbSocketHoleDiameter="2.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="wider hole">
+        <scad:example language="OpenSCAD" snippet="true" title="wider hole">
+          <![CDATA[
           ...
           ["pcbSocketHoleDiameter", 2.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pcbSocketHoleDiameter>
 
     <pcbSockets type="mbt:PcbSocket[]">
@@ -1679,14 +1715,14 @@
 <NativeBlock pcbSockets="[{x: -5, y: -5}, {x: 5, y: 5}]" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="two sockets">
+        <scad:example language="OpenSCAD" snippet="true" title="two sockets">
+          <![CDATA[
           ...
           ["pcbSockets", [[-5, -5], [5, 5]]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pcbSockets>
 
     <pillarGapAutoConfig type="mbt:PillarGapAutoConfig">
@@ -1716,14 +1752,14 @@
 <NativeBlock pillarGapAutoConfig="{cornerGap: 2, crossGap: 4}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="wider gaps">
+        <scad:example language="OpenSCAD" snippet="true" title="wider gaps">
+          <![CDATA[
           ...
           ["pillarGapAutoConfig", /* PillarGapAutoConfig */]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pillarGapAutoConfig>
 
     <pillarInnerClampThickness type="Decimal(unit:Millimeter)">
@@ -1740,14 +1776,14 @@
 <NativeBlock pillarInnerClampThickness="0.4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker">
+          <![CDATA[
           ...
           ["pillarInnerClampThickness", 0.4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pillarInnerClampThickness>
 
     <pillarOriginalWallThickness type="Decimal(mbunit:MBU)">
@@ -1763,14 +1799,14 @@
 <NativeBlock pillarOriginalWallThickness="1.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker">
+          <![CDATA[
           ...
           ["pillarOriginalWallThickness", 1.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pillarOriginalWallThickness>
 
     <pillars type="Boolean | mbt:SelectiveGrid(Boolean)">
@@ -1783,14 +1819,14 @@
 <NativeBlock pillars="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["pillars", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pillars>
 
     <pinDiameter type="mbt:Auto | Decimal(mbunit:MBU)">
@@ -1805,14 +1841,14 @@
 <NativeBlock pinDiameter="3" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["pinDiameter", 3]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pinDiameter>
 
     <pinDiameterAdjustment type="Decimal(unit:Millimeter)">
@@ -1825,14 +1861,14 @@
 <NativeBlock pinDiameterAdjustment="-0.05" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="tighter">
+        <scad:example language="OpenSCAD" snippet="true" title="tighter">
+          <![CDATA[
           ...
           ["pinDiameterAdjustment", -0.05]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </pinDiameterAdjustment>
 
     <ports type="Boolean.False | mbt:Port[]">
@@ -1862,6 +1898,13 @@
 </NativeBlock>
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="one port">
+          <![CDATA[
+          ...
+          ["ports", [["y-", "center", [0, 0], 0, [["rect", [0, 0], 0, [[8, 4]]]], "auto"]]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="Raspberry Pi side ports (HDMI / power / headphone)">
           <![CDATA[
 <NativeBlock>
@@ -1910,14 +1953,8 @@
 </NativeBlock>
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="one port">
-          ...
-          ["ports", [["y-", "center", [0, 0], 0, [["rect", [0, 0], 0, [[8, 4]]]], "auto"]]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="Raspberry Pi side ports (HDMI / power / headphone)">
+        <scad:example language="OpenSCAD" snippet="true" title="Raspberry Pi side ports (HDMI / power / headphone)">
+          <![CDATA[
           ...
           ["ports", [
             ["x-", "start", [4.35, 3.25], 0, [ ["circle", [0, 0], 0, [7.1]] ], "auto"],
@@ -1929,8 +1966,9 @@
             ["y-", "start", [1.6125, 4.5], 0, [ ["rect", [0, 0], 0, [[17, 14.4], 0.5]] ], "auto"]
           ]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </ports>
 
     <printerLayerHeight type="Decimal(unit:Millimeter)">
@@ -1954,14 +1992,14 @@
 <NativeBlock printerLayerHeight="0.15" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="finer">
+        <scad:example language="OpenSCAD" snippet="true" title="finer">
+          <![CDATA[
           ...
           ["printerLayerHeight", 0.15]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </printerLayerHeight>
 
     <printerNozzleDiameter type="Decimal(unit:Millimeter)">
@@ -1983,14 +2021,14 @@
 <NativeBlock printerNozzleDiameter="0.6" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="0.6 nozzle">
+        <scad:example language="OpenSCAD" snippet="true" title="0.6 nozzle">
+          <![CDATA[
           ...
           ["printerNozzleDiameter", 0.6]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </printerNozzleDiameter>
 
     <quality type="mbt:QualityPreset">
@@ -2009,14 +2047,14 @@
 <NativeBlock quality="High" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="high">
+        <scad:example language="OpenSCAD" snippet="true" title="high">
+          <![CDATA[
           ...
           ["quality", "high"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </quality>
 
     <recess type="Boolean">
@@ -2032,14 +2070,14 @@
 <NativeBlock recess="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["recess", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recess>
 
     <recessAdjustment type="mbt:Auto | mbt:FaceMapXYZ(Decimal(unit:Millimeter))">
@@ -2066,24 +2104,26 @@
 <NativeBlock recessAdjustment="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: -0.1, zPos: 0}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="floor down">
+          <![CDATA[
+          ...
+          ["recessAdjustment", [0, 0, 0, 0, -0.1, 0]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="faces">
           <![CDATA[
 <NativeBlock recessAdjustment="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="floor down">
-          ...
-          ["recessAdjustment", [0, 0, 0, 0, -0.1, 0]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="faces">
+        <scad:example language="OpenSCAD" snippet="true" title="faces">
+          <![CDATA[
           ...
           ["recessAdjustment", [0, 0, 0, 0, 0, 0.1]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessAdjustment>
 
     <recessDepth type="mbt:Auto | Decimal(mbunit:GridUnitZ)">
@@ -2105,14 +2145,14 @@
 <NativeBlock recessDepth="2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="two plates">
+        <scad:example language="OpenSCAD" snippet="true" title="two plates">
+          <![CDATA[
           ...
           ["recessDepth", 2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessDepth>
 
     <recessRoundingRadius type="mbt:Auto | Decimal(mbunit:GridUnitXY) | mbt:PlaneRoundingMap">
@@ -2129,34 +2169,38 @@
 <NativeBlock recessRoundingRadius="0.5" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="rounded">
+          <![CDATA[
+          ...
+          ["recessRoundingRadius", 0.5]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-corner">
           <![CDATA[
 <NativeBlock recessRoundingRadius="{sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-corner">
+          <![CDATA[
+          ...
+          ["recessRoundingRadius", [0.5, 0.5, 0.5, 0.5]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="anisotropic corner">
           <![CDATA[
 <NativeBlock recessRoundingRadius="{sw: {a: 0.5, b: 0.25}, nw: 0.5, ne: 0.5, se: {a: 0.5, b: 0.25}}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="rounded">
-          ...
-          ["recessRoundingRadius", 0.5]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-corner">
-          ...
-          ["recessRoundingRadius", [0.5, 0.5, 0.5, 0.5]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="anisotropic corner">
+        <scad:example language="OpenSCAD" snippet="true" title="anisotropic corner">
+          <![CDATA[
           ...
           ["recessRoundingRadius", [[0.5, 0.25], 0.5, 0.5, [0.5, 0.25]]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessRoundingRadius>
 
     <recessStudPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -2172,14 +2216,14 @@
 <NativeBlock recessStudPadding="{xNeg: 0.4, xPos: 0.4, yNeg: 0.4, yPos: 0.4}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="more padding">
+        <scad:example language="OpenSCAD" snippet="true" title="more padding">
+          <![CDATA[
           ...
           ["recessStudPadding", [0.4, 0.4, 0.4, 0.4]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessStudPadding>
 
     <recessStudShift type="Boolean">
@@ -2195,14 +2239,14 @@
 <NativeBlock recessStudShift="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="shifted">
+        <scad:example language="OpenSCAD" snippet="true" title="shifted">
+          <![CDATA[
           ...
           ["recessStudShift", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessStudShift>
 
     <recessStudType type="mbt:StudType">
@@ -2217,14 +2261,14 @@
 <NativeBlock recessStudType="Hollow" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="hollow">
+        <scad:example language="OpenSCAD" snippet="true" title="hollow">
+          <![CDATA[
           ...
           ["recessStudType", "hollow"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessStudType>
 
     <recessStuds type="Boolean">
@@ -2240,14 +2284,14 @@
 <NativeBlock recessStuds="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["recessStuds", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessStuds>
 
     <recessWallGapStuds type="Boolean">
@@ -2263,14 +2307,14 @@
 <NativeBlock recessWallGapStuds="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["recessWallGapStuds", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessWallGapStuds>
 
     <recessWallGaps type="mbt:RecessWallGap[]">
@@ -2289,14 +2333,14 @@
 <NativeBlock recessWallGaps="[{face: YPos, pos: 0, len: 1}]" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="one gap">
+        <scad:example language="OpenSCAD" snippet="true" title="one gap">
+          <![CDATA[
           ...
           ["recessWallGaps", [["y+", 0, 1]]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessWallGaps>
 
     <recessWallStuds type="Boolean">
@@ -2313,14 +2357,14 @@
 <NativeBlock recessWallStuds="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["recessWallStuds", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessWallStuds>
 
     <recessWallThickness type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -2333,14 +2377,14 @@
 <NativeBlock recessWallThickness="{xNeg: 1, xPos: 1, yNeg: 1, yPos: 1}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker sides">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker sides">
+          <![CDATA[
           ...
           ["recessWallThickness", [1, 1, 1, 1]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </recessWallThickness>
 
     <reliefCut type="Boolean">
@@ -2357,14 +2401,14 @@
 <NativeBlock reliefCut="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["reliefCut", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </reliefCut>
 
     <reliefCutHeight type="Decimal(mbunit:MBU)">
@@ -2378,14 +2422,14 @@
 <NativeBlock reliefCutHeight="1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller">
+        <scad:example language="OpenSCAD" snippet="true" title="taller">
+          <![CDATA[
           ...
           ["reliefCutHeight", 1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </reliefCutHeight>
 
     <reliefCutThickness type="Decimal(mbunit:MBU)">
@@ -2399,14 +2443,14 @@
 <NativeBlock reliefCutThickness="0.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker">
+          <![CDATA[
           ...
           ["reliefCutThickness", 0.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </reliefCutThickness>
 
     <render type="Boolean">
@@ -2423,14 +2467,14 @@
 <NativeBlock render="false" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="off">
+        <scad:example language="OpenSCAD" snippet="true" title="off">
+          <![CDATA[
           ...
           ["render", false]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </render>
 
     <rotation type="mbt:RotationXYZ">
@@ -2447,14 +2491,14 @@
 <NativeBlock rotation="{x: 0, y: 0, z: 45}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="tilt">
+        <scad:example language="OpenSCAD" snippet="true" title="tilt">
+          <![CDATA[
           ...
           ["rotation", [0, 0, 45]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </rotation>
 
     <rotationOffset type="mbt:OffsetXYZ">
@@ -2467,34 +2511,38 @@
 <NativeBlock rotationOffset="{x: 1, y: 0, z: 0}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="pivot shift">
+          <![CDATA[
+          ...
+          ["rotationOffset", [1, 0, 0]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="xy pair">
           <![CDATA[
 <NativeBlock rotationOffset="{x: 0.5, y: -0.25}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="xy pair">
+          <![CDATA[
+          ...
+          ["rotationOffset", [0.5, -0.25]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="xyz offset">
           <![CDATA[
 <NativeBlock rotationOffset="{x: 1, y: 0, z: 0.5}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="pivot shift">
-          ...
-          ["rotationOffset", [1, 0, 0]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="xy pair">
-          ...
-          ["rotationOffset", [0.5, -0.25]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="xyz offset">
+        <scad:example language="OpenSCAD" snippet="true" title="xyz offset">
+          <![CDATA[
           ...
           ["rotationOffset", [1, 0, 0.5]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </rotationOffset>
 
     <rotationOffsetRevert type="Boolean">
@@ -2507,14 +2555,14 @@
 <NativeBlock rotationOffsetRevert="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="revert">
+        <scad:example language="OpenSCAD" snippet="true" title="revert">
+          <![CDATA[
           ...
           ["rotationOffsetRevert", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </rotationOffsetRevert>
 
     <scadPreviewMaxMult type="Decimal">
@@ -2530,14 +2578,14 @@
 <NativeBlock scadPreviewMaxMult="2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="higher">
+        <scad:example language="OpenSCAD" snippet="true" title="higher">
+          <![CDATA[
           ...
           ["scadPreviewMaxMult", 2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </scadPreviewMaxMult>
 
     <scadPreviewPreRender type="Boolean">
@@ -2552,14 +2600,14 @@
 <NativeBlock scadPreviewPreRender="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="on">
+        <scad:example language="OpenSCAD" snippet="true" title="on">
+          <![CDATA[
           ...
           ["scadPreviewPreRender", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </scadPreviewPreRender>
 
     <scadPreviewPreRenderConvexity type="Integer">
@@ -2574,14 +2622,14 @@
 <NativeBlock scadPreviewPreRenderConvexity="4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="higher">
+        <scad:example language="OpenSCAD" snippet="true" title="higher">
+          <![CDATA[
           ...
           ["scadPreviewPreRenderConvexity", 4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </scadPreviewPreRenderConvexity>
 
     <scadPreviewQuality type="Decimal">
@@ -2597,14 +2645,14 @@
 <NativeBlock scadPreviewQuality="0.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="finer">
+        <scad:example language="OpenSCAD" snippet="true" title="finer">
+          <![CDATA[
           ...
           ["scadPreviewQuality", 0.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </scadPreviewQuality>
 
     <scadQualityClassFactors type="mbt:ScadQualityClassFactors">
@@ -2625,14 +2673,14 @@
 <NativeBlock scadQualityClassFactors="{functional: 1.0, visual: 1.5, hidden: 2.0}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="higher visual">
+        <scad:example language="OpenSCAD" snippet="true" title="higher visual">
+          <![CDATA[
           ...
           ["scadQualityClassFactors", [1.0, 1.5, 2.0]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </scadQualityClassFactors>
 
     <scadQualityClassMinSegments type="mbt:ScadQualityClassMinSegments">
@@ -2653,14 +2701,14 @@
 <NativeBlock scadQualityClassMinSegments="{functional: 24, visual: 16, hidden: 8}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="more segments">
+        <scad:example language="OpenSCAD" snippet="true" title="more segments">
+          <![CDATA[
           ...
           ["scadQualityClassMinSegments", [24, 16, 8]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </scadQualityClassMinSegments>
 
     <scadQualityProfile type="mbt:ScadQualityProfile">
@@ -2684,14 +2732,14 @@
 <NativeBlock scadQualityProfile="{preview: {length: 0.4, segments: 24}, normal: {length: 0.3, segments: 32}, high: {length: 0.2, segments: 48}}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="finer preview">
+        <scad:example language="OpenSCAD" snippet="true" title="finer preview">
+          <![CDATA[
           ...
           ["scadQualityProfile", /* ScadQualityProfile */]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </scadQualityProfile>
 
     <scadQualitySegmentMultiplier type="Decimal">
@@ -2709,14 +2757,14 @@
 <NativeBlock scadQualitySegmentMultiplier="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="higher">
+        <scad:example language="OpenSCAD" snippet="true" title="higher">
+          <![CDATA[
           ...
           ["scadQualitySegmentMultiplier", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </scadQualitySegmentMultiplier>
 
     <scale type="Decimal">
@@ -2732,14 +2780,14 @@
 <NativeBlock scale="2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="double">
+        <scad:example language="OpenSCAD" snippet="true" title="double">
+          <![CDATA[
           ...
           ["scale", 2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </scale>
 
     <screwHoleDepth type="Decimal(unit:Millimeter)">
@@ -2753,14 +2801,14 @@
 <NativeBlock screwHoleDepth="8" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="deeper">
+        <scad:example language="OpenSCAD" snippet="true" title="deeper">
+          <![CDATA[
           ...
           ["screwHoleDepth", 8]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </screwHoleDepth>
 
     <screwHoleDiameter type="Decimal(unit:Millimeter)">
@@ -2774,14 +2822,14 @@
 <NativeBlock screwHoleDiameter="3.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="M3">
+        <scad:example language="OpenSCAD" snippet="true" title="M3">
+          <![CDATA[
           ...
           ["screwHoleDiameter", 3.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </screwHoleDiameter>
 
     <screwHoleInsetDepth type="Decimal(unit:Millimeter)">
@@ -2797,14 +2845,14 @@
 <NativeBlock screwHoleInsetDepth="1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="inset">
+        <scad:example language="OpenSCAD" snippet="true" title="inset">
+          <![CDATA[
           ...
           ["screwHoleInsetDepth", 1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </screwHoleInsetDepth>
 
     <screwHoleInsetThickness type="Decimal(unit:Millimeter)">
@@ -2820,14 +2868,14 @@
 <NativeBlock screwHoleInsetThickness="0.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="inset ring">
+        <scad:example language="OpenSCAD" snippet="true" title="inset ring">
+          <![CDATA[
           ...
           ["screwHoleInsetThickness", 0.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </screwHoleInsetThickness>
 
     <screwHoleZHelperHeight type="Decimal(unit:Millimeter)">
@@ -2840,14 +2888,14 @@
 <NativeBlock screwHoleZHelperHeight="0.4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller helper">
+        <scad:example language="OpenSCAD" snippet="true" title="taller helper">
+          <![CDATA[
           ...
           ["screwHoleZHelperHeight", 0.4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </screwHoleZHelperHeight>
 
     <screwHoleZHelperLayerOffset type="Decimal(unit:Millimeter)">
@@ -2863,14 +2911,14 @@
 <NativeBlock screwHoleZHelperLayerOffset="0.3" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="larger offset">
+        <scad:example language="OpenSCAD" snippet="true" title="larger offset">
+          <![CDATA[
           ...
           ["screwHoleZHelperLayerOffset", 0.3]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </screwHoleZHelperLayerOffset>
 
     <screwHoleZHelperThickness type="Decimal(unit:Millimeter)">
@@ -2885,14 +2933,14 @@
 <NativeBlock screwHoleZHelperThickness="1.0" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker helper">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker helper">
+          <![CDATA[
           ...
           ["screwHoleZHelperThickness", 1.0]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </screwHoleZHelperThickness>
 
     <screwHoles type="mbt:ScrewHole[]">
@@ -2911,14 +2959,14 @@
 <NativeBlock screwHoles="[{face: ZPos, offset: {a: 1, b: 2}}]" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="one hole">
+        <scad:example language="OpenSCAD" snippet="true" title="one hole">
+          <![CDATA[
           ...
           ["screwHoles", [["z+", [1, 2]]]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </screwHoles>
 
     <size type="mbt:SizeXYZ">
@@ -2939,24 +2987,26 @@
 <NativeBlock size="{x: 2, y: 4, z: 1}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="2x4 plate">
+          <![CDATA[
+          ...
+          ["size", [2, 4, 1]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="xyz size">
           <![CDATA[
 <NativeBlock size="{x: 2, y: 4, z: 3}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="2x4 plate">
-          ...
-          ["size", [2, 4, 1]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="xyz size">
+        <scad:example language="OpenSCAD" snippet="true" title="xyz size">
+          <![CDATA[
           ...
           ["size", [2, 4, 3]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </size>
 
     <sizeAdjustment type="mbt:FaceMapXYZ(Decimal(unit:Millimeter))">
@@ -2986,14 +3036,14 @@
 <NativeBlock sizeAdjustment="[-0.2, 0]" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="xy shrink">
+        <scad:example language="OpenSCAD" snippet="true" title="xy shrink">
+          <![CDATA[
           ...
           ["sizeAdjustment", [-0.2, 0]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </sizeAdjustment>
 
     <sizeMod type="mbt:FaceMapXYZ(Decimal(mbunit:GridUnitXY))">
@@ -3024,24 +3074,26 @@
 <NativeBlock sizeMod="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: -0.5}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="half brick">
+          <![CDATA[
+          ...
+          ["sizeMod", [0, 0, 0, 0, 0, -0.5]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="faces">
           <![CDATA[
 <NativeBlock sizeMod="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="half brick">
-          ...
-          ["sizeMod", [0, 0, 0, 0, 0, -0.5]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="faces">
+        <scad:example language="OpenSCAD" snippet="true" title="faces">
+          <![CDATA[
           ...
           ["sizeMod", [0, 0, 0, 0, 0, 0.1]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </sizeMod>
 
     <slope type="Boolean.False | mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -3058,44 +3110,50 @@
 <NativeBlock slope="false" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="no slope (boolean)">
+          <![CDATA[
+          ...
+          ["slope", false]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="no slope (zero map)">
           <![CDATA[
 <NativeBlock slope="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="no slope (zero map)">
+          <![CDATA[
+          ...
+          ["slope", [0, 0, 0, 0]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="positive slope">
           <![CDATA[
 <NativeBlock slope="{xNeg: 1, xPos: 1, yNeg: 0, yPos: 0}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="positive slope">
+          <![CDATA[
+          ...
+          ["slope", [1, 1, 0, 0]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="inverted slope">
           <![CDATA[
 <NativeBlock slope="{xNeg: 0, xPos: 2, yNeg: -2, yPos: 0}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="no slope (false)">
-          ...
-          ["slope", false]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="no slope (zero array)">
-          ...
-          ["slope", [0, 0, 0, 0]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="positive slope">
-          ...
-          ["slope", [1, 1, 0, 0]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="inverted slope">
+        <scad:example language="OpenSCAD" snippet="true" title="inverted slope">
+          <![CDATA[
           ...
           ["slope", [0, 2, -2, 0]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
       <changelog>
         <change version="3.0.0">Can now be combined with bevel. The conflicts_with constraint has
           been removed.</change>
@@ -3117,14 +3175,14 @@
 <NativeBlock slopeBaseHeightBottom="2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="higher base">
+        <scad:example language="OpenSCAD" snippet="true" title="higher base">
+          <![CDATA[
           ...
           ["slopeBaseHeightBottom", 2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </slopeBaseHeightBottom>
 
     <slopeBaseHeightInner type="Decimal(mbunit:MBU)">
@@ -3140,14 +3198,14 @@
 <NativeBlock slopeBaseHeightInner="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="higher inner">
+        <scad:example language="OpenSCAD" snippet="true" title="higher inner">
+          <![CDATA[
           ...
           ["slopeBaseHeightInner", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </slopeBaseHeightInner>
 
     <slopeBaseHeightTop type="Decimal(mbunit:MBU)">
@@ -3163,14 +3221,14 @@
 <NativeBlock slopeBaseHeightTop="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="higher top">
+        <scad:example language="OpenSCAD" snippet="true" title="higher top">
+          <![CDATA[
           ...
           ["slopeBaseHeightTop", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </slopeBaseHeightTop>
 
     <stabilizerExpansion type="Integer">
@@ -3185,14 +3243,14 @@
 <NativeBlock stabilizerExpansion="3" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="wider">
+        <scad:example language="OpenSCAD" snippet="true" title="wider">
+          <![CDATA[
           ...
           ["stabilizerExpansion", 3]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </stabilizerExpansion>
 
     <stabilizerExpansionOffset type="Decimal(mbunit:MBU)">
@@ -3205,14 +3263,14 @@
 <NativeBlock stabilizerExpansionOffset="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="larger offset">
+        <scad:example language="OpenSCAD" snippet="true" title="larger offset">
+          <![CDATA[
           ...
           ["stabilizerExpansionOffset", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </stabilizerExpansionOffset>
 
     <stabilizerHeight type="Decimal(mbunit:MBU)">
@@ -3226,14 +3284,14 @@
 <NativeBlock stabilizerHeight="0.75" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller">
+        <scad:example language="OpenSCAD" snippet="true" title="taller">
+          <![CDATA[
           ...
           ["stabilizerHeight", 0.75]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </stabilizerHeight>
 
     <stabilizerLayerOffset type="Decimal(unit:Millimeter)">
@@ -3250,14 +3308,14 @@
 <NativeBlock stabilizerLayerOffset="0.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit mm">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit mm">
+          <![CDATA[
           ...
           ["stabilizerLayerOffset", 0.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </stabilizerLayerOffset>
 
     <stabilizerThickness type="Decimal(mbunit:MBU)">
@@ -3271,14 +3329,14 @@
 <NativeBlock stabilizerThickness="0.75" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker">
+          <![CDATA[
           ...
           ["stabilizerThickness", 0.75]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </stabilizerThickness>
 
     <stabilizers type="Boolean">
@@ -3295,14 +3353,14 @@
 <NativeBlock stabilizers="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["stabilizers", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </stabilizers>
 
     <studBaseOverlap type="Decimal(mbunit:MBU)">
@@ -3321,14 +3379,14 @@
 <NativeBlock studBaseOverlap="0.4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="more overlap">
+        <scad:example language="OpenSCAD" snippet="true" title="more overlap">
+          <![CDATA[
           ...
           ["studBaseOverlap", 0.4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studBaseOverlap>
 
     <studClampHeight type="Decimal(mbunit:MBU)">
@@ -3344,14 +3402,14 @@
 <NativeBlock studClampHeight="0.75" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller clamp">
+        <scad:example language="OpenSCAD" snippet="true" title="taller clamp">
+          <![CDATA[
           ...
           ["studClampHeight", 0.75]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studClampHeight>
 
     <studClampOffset type="Decimal(mbunit:MBU)">
@@ -3368,14 +3426,14 @@
 <NativeBlock studClampOffset="0.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["studClampOffset", 0.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studClampOffset>
 
     <studClampThickness type="Decimal(mbunit:MBU)">
@@ -3388,14 +3446,14 @@
 <NativeBlock studClampThickness="0.15" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="with clamp">
+        <scad:example language="OpenSCAD" snippet="true" title="with clamp">
+          <![CDATA[
           ...
           ["studClampThickness", 0.15]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studClampThickness>
 
     <studCutoutDiameterAdjustment type="Decimal(unit:Millimeter)">
@@ -3412,14 +3470,14 @@
 <NativeBlock studCutoutDiameterAdjustment="0.3" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="looser">
+        <scad:example language="OpenSCAD" snippet="true" title="looser">
+          <![CDATA[
           ...
           ["studCutoutDiameterAdjustment", 0.3]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studCutoutDiameterAdjustment>
 
     <studCutoutHeightAdjustment type="Decimal(unit:Millimeter)">
@@ -3436,14 +3494,14 @@
 <NativeBlock studCutoutHeightAdjustment="0.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller cutout">
+        <scad:example language="OpenSCAD" snippet="true" title="taller cutout">
+          <![CDATA[
           ...
           ["studCutoutHeightAdjustment", 0.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studCutoutHeightAdjustment>
 
     <studDiameter type="Decimal(mbunit:MBU)">
@@ -3456,14 +3514,14 @@
 <NativeBlock studDiameter="3.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="wider stud">
+        <scad:example language="OpenSCAD" snippet="true" title="wider stud">
+          <![CDATA[
           ...
           ["studDiameter", 3.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studDiameter>
 
     <studDiameterAdjustment type="Decimal(unit:Millimeter)">
@@ -3476,14 +3534,14 @@
 <NativeBlock studDiameterAdjustment="0.1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="tighter">
+        <scad:example language="OpenSCAD" snippet="true" title="tighter">
+          <![CDATA[
           ...
           ["studDiameterAdjustment", 0.1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studDiameterAdjustment>
 
     <studHeight type="Decimal(mbunit:MBU)">
@@ -3496,14 +3554,14 @@
 <NativeBlock studHeight="1.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller stud">
+        <scad:example language="OpenSCAD" snippet="true" title="taller stud">
+          <![CDATA[
           ...
           ["studHeight", 1.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studHeight>
 
     <studHeightAdjustment type="Decimal(unit:Millimeter)">
@@ -3516,14 +3574,14 @@
 <NativeBlock studHeightAdjustment="0.1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller mm">
+        <scad:example language="OpenSCAD" snippet="true" title="taller mm">
+          <![CDATA[
           ...
           ["studHeightAdjustment", 0.1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studHeightAdjustment>
 
     <studHoleClampThickness type="Decimal(unit:Millimeter)">
@@ -3538,14 +3596,14 @@
 <NativeBlock studHoleClampThickness="0.15" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker">
+          <![CDATA[
           ...
           ["studHoleClampThickness", 0.15]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studHoleClampThickness>
 
     <studHoleDiameter type="Decimal(mbunit:MBU)">
@@ -3560,14 +3618,14 @@
 <NativeBlock studHoleDiameter="2.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["studHoleDiameter", 2.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studHoleDiameter>
 
     <studHoleDiameterAdjustment type="Decimal(unit:Millimeter)">
@@ -3580,14 +3638,14 @@
 <NativeBlock studHoleDiameterAdjustment="0.4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="looser">
+        <scad:example language="OpenSCAD" snippet="true" title="looser">
+          <![CDATA[
           ...
           ["studHoleDiameterAdjustment", 0.4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studHoleDiameterAdjustment>
 
     <studIcon type="Boolean.False | Text">
@@ -3600,14 +3658,14 @@
 <NativeBlock studIcon="../../pattern/bolt-solid-full.svg" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="bolt icon">
+        <scad:example language="OpenSCAD" snippet="true" title="bolt icon">
+          <![CDATA[
           ...
           ["studIcon", "../../pattern/bolt-solid-full.svg"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studIcon>
 
     <studIconColor type="mbt:Inherit | Color">
@@ -3622,14 +3680,14 @@
 <NativeBlock studIconColor="#FF0000" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="red">
+        <scad:example language="OpenSCAD" snippet="true" title="red">
+          <![CDATA[
           ...
           ["studIconColor", "#FF0000"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studIconColor>
 
     <studIconDepth type="Decimal(mbunit:MBU)">
@@ -3644,14 +3702,14 @@
 <NativeBlock studIconDepth="-0.3" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="deeper icon">
+        <scad:example language="OpenSCAD" snippet="true" title="deeper icon">
+          <![CDATA[
           ...
           ["studIconDepth", -0.3]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studIconDepth>
 
     <studIconDimensions type="mbt:SizeXY(Decimal(unit:Millimeter))">
@@ -3666,24 +3724,26 @@
 <NativeBlock studIconDimensions="{x: 200, y: 200}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="custom svg size">
+          <![CDATA[
+          ...
+          ["studIconDimensions", [200, 200]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="xy size">
           <![CDATA[
 <NativeBlock studIconDimensions="{x: 100, y: 50}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="custom svg size">
-          ...
-          ["studIconDimensions", [200, 200]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="xy size">
+        <scad:example language="OpenSCAD" snippet="true" title="xy size">
+          <![CDATA[
           ...
           ["studIconDimensions", [100, 50]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studIconDimensions>
 
     <studIconScale type="Decimal">
@@ -3696,14 +3756,14 @@
 <NativeBlock studIconScale="1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="larger">
+        <scad:example language="OpenSCAD" snippet="true" title="larger">
+          <![CDATA[
           ...
           ["studIconScale", 1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studIconScale>
 
     <studMaxOverhang type="Decimal(mbunit:MBU)">
@@ -3718,14 +3778,14 @@
 <NativeBlock studMaxOverhang="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="more overhang">
+        <scad:example language="OpenSCAD" snippet="true" title="more overhang">
+          <![CDATA[
           ...
           ["studMaxOverhang", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studMaxOverhang>
 
     <studPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -3740,14 +3800,14 @@
 <NativeBlock studPadding="{xNeg: 0.5, xPos: 0.5, yNeg: 0.5, yPos: 0.5}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="inset studs">
+        <scad:example language="OpenSCAD" snippet="true" title="inset studs">
+          <![CDATA[
           ...
           ["studPadding", [0.5, 0.5, 0.5, 0.5]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studPadding>
 
     <studRounding type="Decimal(mbunit:MBU)">
@@ -3760,14 +3820,14 @@
 <NativeBlock studRounding="0.125" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="more round">
+        <scad:example language="OpenSCAD" snippet="true" title="more round">
+          <![CDATA[
           ...
           ["studRounding", 0.125]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studRounding>
 
     <studShift type="Boolean">
@@ -3783,14 +3843,14 @@
 <NativeBlock studShift="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="shifted">
+        <scad:example language="OpenSCAD" snippet="true" title="shifted">
+          <![CDATA[
           ...
           ["studShift", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studShift>
 
     <studType type="mbt:StudType">
@@ -3803,14 +3863,14 @@
 <NativeBlock studType="Hollow" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="hollow">
+        <scad:example language="OpenSCAD" snippet="true" title="hollow">
+          <![CDATA[
           ...
           ["studType", "hollow"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studType>
 
     <studs type="Boolean | mbt:SelectiveGrid(Boolean | mbt:StudType)">
@@ -3825,14 +3885,14 @@
 <NativeBlock studs="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["studs", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </studs>
 
     <surfacePattern type="Boolean.False | Text">
@@ -3847,14 +3907,14 @@
 <NativeBlock surfacePattern="patterns/hex.svg" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="pattern file">
+        <scad:example language="OpenSCAD" snippet="true" title="pattern file">
+          <![CDATA[
           ...
           ["surfacePattern", "patterns/hex.svg"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </surfacePattern>
 
     <surfacePatternColor type="mbt:Inherit | Color">
@@ -3869,14 +3929,14 @@
 <NativeBlock surfacePatternColor="#0066CC" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="blue">
+        <scad:example language="OpenSCAD" snippet="true" title="blue">
+          <![CDATA[
           ...
           ["surfacePatternColor", "#0066CC"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </surfacePatternColor>
 
     <surfacePatternDepth type="Decimal(mbunit:MBU)">
@@ -3889,14 +3949,14 @@
 <NativeBlock surfacePatternDepth="0.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="emboss">
+        <scad:example language="OpenSCAD" snippet="true" title="emboss">
+          <![CDATA[
           ...
           ["surfacePatternDepth", 0.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </surfacePatternDepth>
 
     <surfacePatternDimensions type="mbt:SizeXY(Decimal(unit:Millimeter))">
@@ -3909,24 +3969,26 @@
 <NativeBlock surfacePatternDimensions="{x: 500, y: 500}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="custom svg size">
+          <![CDATA[
+          ...
+          ["surfacePatternDimensions", [500, 500]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="xy size">
           <![CDATA[
 <NativeBlock surfacePatternDimensions="{x: 100, y: 50}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="custom svg size">
-          ...
-          ["surfacePatternDimensions", [500, 500]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="xy size">
+        <scad:example language="OpenSCAD" snippet="true" title="xy size">
+          <![CDATA[
           ...
           ["surfacePatternDimensions", [100, 50]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </surfacePatternDimensions>
 
     <surfacePatternOffset type="mbt:OffsetXY">
@@ -3942,14 +4004,14 @@
 <NativeBlock surfacePatternOffset="{x: 0.5, y: 0.25}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="shifted">
+        <scad:example language="OpenSCAD" snippet="true" title="shifted">
+          <![CDATA[
           ...
           ["surfacePatternOffset", [0.5, 0.25]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </surfacePatternOffset>
 
     <surfacePatternPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
@@ -3967,14 +4029,14 @@
 <NativeBlock surfacePatternPadding="{xNeg: 0.5, xPos: 0.5, yNeg: 0.5, yPos: 0.5}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="border">
+        <scad:example language="OpenSCAD" snippet="true" title="border">
+          <![CDATA[
           ...
           ["surfacePatternPadding", [0.5, 0.5, 0.5, 0.5]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </surfacePatternPadding>
 
     <surfacePatternScale type="Decimal">
@@ -3987,14 +4049,14 @@
 <NativeBlock surfacePatternScale="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="larger">
+        <scad:example language="OpenSCAD" snippet="true" title="larger">
+          <![CDATA[
           ...
           ["surfacePatternScale", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </surfacePatternScale>
 
     <svg type="Boolean.False | Text">
@@ -4009,14 +4071,14 @@
 <NativeBlock svg="icons/logo.svg" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="icon">
+        <scad:example language="OpenSCAD" snippet="true" title="icon">
+          <![CDATA[
           ...
           ["svg", "icons/logo.svg"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </svg>
 
     <svgColor type="Color">
@@ -4029,14 +4091,14 @@
 <NativeBlock svgColor="#2c3e50" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="dark">
+        <scad:example language="OpenSCAD" snippet="true" title="dark">
+          <![CDATA[
           ...
           ["svgColor", "#2c3e50"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </svgColor>
 
     <svgDepth type="Decimal(mbunit:MBU)">
@@ -4049,14 +4111,14 @@
 <NativeBlock svgDepth="0.6" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="deeper svg">
+        <scad:example language="OpenSCAD" snippet="true" title="deeper svg">
+          <![CDATA[
           ...
           ["svgDepth", 0.6]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </svgDepth>
 
     <svgDimensions type="mbt:SizeXY(Decimal(unit:Millimeter))">
@@ -4069,24 +4131,26 @@
 <NativeBlock svgDimensions="{x: 120, y: 80}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="custom size">
+          <![CDATA[
+          ...
+          ["svgDimensions", [120, 80]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="xy size">
           <![CDATA[
 <NativeBlock svgDimensions="{x: 100, y: 50}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="custom size">
-          ...
-          ["svgDimensions", [120, 80]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="xy size">
+        <scad:example language="OpenSCAD" snippet="true" title="xy size">
+          <![CDATA[
           ...
           ["svgDimensions", [100, 50]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </svgDimensions>
 
     <svgFace type="mbt:Face">
@@ -4100,14 +4164,14 @@
 <NativeBlock svgFace="YPos" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="front">
+        <scad:example language="OpenSCAD" snippet="true" title="front">
+          <![CDATA[
           ...
           ["svgFace", "y+"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </svgFace>
 
     <svgOffset type="mbt:OffsetXY">
@@ -4120,14 +4184,14 @@
 <NativeBlock svgOffset="{x: 0.5, y: 0}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="shifted">
+        <scad:example language="OpenSCAD" snippet="true" title="shifted">
+          <![CDATA[
           ...
           ["svgOffset", [0.5, 0]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </svgOffset>
 
     <svgScale type="Decimal">
@@ -4140,14 +4204,14 @@
 <NativeBlock svgScale="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="larger">
+        <scad:example language="OpenSCAD" snippet="true" title="larger">
+          <![CDATA[
           ...
           ["svgScale", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </svgScale>
 
     <text type="Boolean.False | Text">
@@ -4162,14 +4226,14 @@
 <NativeBlock text="MB" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="label">
+        <scad:example language="OpenSCAD" snippet="true" title="label">
+          <![CDATA[
           ...
           ["text", "MB"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </text>
 
     <textAlign type="mbt:Align">
@@ -4185,14 +4249,14 @@
 <NativeBlock textAlign="Center" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="center">
+        <scad:example language="OpenSCAD" snippet="true" title="center">
+          <![CDATA[
           ...
           ["textAlign", "center"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </textAlign>
 
     <textColor type="Color">
@@ -4205,14 +4269,14 @@
 <NativeBlock textColor="#2c3e50" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="dark">
+        <scad:example language="OpenSCAD" snippet="true" title="dark">
+          <![CDATA[
           ...
           ["textColor", "#2c3e50"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </textColor>
 
     <textDepth type="Decimal(mbunit:MBU)">
@@ -4225,14 +4289,14 @@
 <NativeBlock textDepth="0.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="raised text">
+        <scad:example language="OpenSCAD" snippet="true" title="raised text">
+          <![CDATA[
           ...
           ["textDepth", 0.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </textDepth>
 
     <textFace type="mbt:Face">
@@ -4246,14 +4310,14 @@
 <NativeBlock textFace="ZPos" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="top face">
+        <scad:example language="OpenSCAD" snippet="true" title="top face">
+          <![CDATA[
           ...
           ["textFace", "z+"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </textFace>
 
     <textFont type="Text">
@@ -4266,14 +4330,14 @@
 <NativeBlock textFont="RBNo3.1 Black" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="font">
+        <scad:example language="OpenSCAD" snippet="true" title="font">
+          <![CDATA[
           ...
           ["textFont", "RBNo3.1 Black"]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </textFont>
 
     <textOffset type="mbt:OffsetXY">
@@ -4286,14 +4350,14 @@
 <NativeBlock textOffset="{x: 0.5, y: 0}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="shifted">
+        <scad:example language="OpenSCAD" snippet="true" title="shifted">
+          <![CDATA[
           ...
           ["textOffset", [0.5, 0]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </textOffset>
 
     <textSize type="Decimal(unit:Millimeter)">
@@ -4306,14 +4370,14 @@
 <NativeBlock textSize="6" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="larger">
+        <scad:example language="OpenSCAD" snippet="true" title="larger">
+          <![CDATA[
           ...
           ["textSize", 6]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </textSize>
 
     <textSpacing type="Decimal">
@@ -4326,14 +4390,14 @@
 <NativeBlock textSpacing="1.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="looser">
+        <scad:example language="OpenSCAD" snippet="true" title="looser">
+          <![CDATA[
           ...
           ["textSpacing", 1.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </textSpacing>
 
     <tongue type="Boolean">
@@ -4352,14 +4416,14 @@
 <NativeBlock tongue="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="enabled">
+        <scad:example language="OpenSCAD" snippet="true" title="enabled">
+          <![CDATA[
           ...
           ["tongue", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongue>
 
     <tongueClampHeight type="Decimal(mbunit:MBU)">
@@ -4374,14 +4438,14 @@
 <NativeBlock tongueClampHeight="0.75" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller">
+        <scad:example language="OpenSCAD" snippet="true" title="taller">
+          <![CDATA[
           ...
           ["tongueClampHeight", 0.75]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueClampHeight>
 
     <tongueClampOffset type="Decimal(mbunit:MBU)">
@@ -4402,14 +4466,14 @@
 <NativeBlock tongueClampOffset="0.75" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="larger offset">
+        <scad:example language="OpenSCAD" snippet="true" title="larger offset">
+          <![CDATA[
           ...
           ["tongueClampOffset", 0.75]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueClampOffset>
 
     <tongueClampThickness type="Decimal(mbunit:MBU)">
@@ -4422,14 +4486,14 @@
 <NativeBlock tongueClampThickness="0.15" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker">
+          <![CDATA[
           ...
           ["tongueClampThickness", 0.15]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueClampThickness>
 
     <!-- TODO: implement in SCAD -->
@@ -4448,14 +4512,14 @@
 <NativeBlock tongueGrooveClampOffsetClearance="0.05" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="more clearance">
+        <scad:example language="OpenSCAD" snippet="true" title="more clearance">
+          <![CDATA[
           ...
           ["tongueGrooveClampOffsetClearance", 0.05]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueGrooveClampOffsetClearance>
 
     <tongueGrooveDepthClearance type="Decimal(unit:Millimeter)">
@@ -4473,14 +4537,14 @@
 <NativeBlock tongueGrooveDepthClearance="0.1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["tongueGrooveDepthClearance", 0.1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueGrooveDepthClearance>
 
     <!-- TODO: implement in SCAD -->
@@ -4501,14 +4565,14 @@
 <NativeBlock tongueGrooveThicknessClearance="0.15" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="more clearance">
+        <scad:example language="OpenSCAD" snippet="true" title="more clearance">
+          <![CDATA[
           ...
           ["tongueGrooveThicknessClearance", 0.15]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueGrooveThicknessClearance>
 
     <tongueHeight type="Decimal(mbunit:MBU)">
@@ -4521,14 +4585,14 @@
 <NativeBlock tongueHeight="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller tongue">
+        <scad:example language="OpenSCAD" snippet="true" title="taller tongue">
+          <![CDATA[
           ...
           ["tongueHeight", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueHeight>
 
     <tongueOffset type="Decimal(mbunit:MBU)">
@@ -4543,14 +4607,14 @@
 <NativeBlock tongueOffset="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="inset">
+        <scad:example language="OpenSCAD" snippet="true" title="inset">
+          <![CDATA[
           ...
           ["tongueOffset", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueOffset>
 
     <tongueRoundingRadius type="mbt:Auto | Decimal(mbunit:GridUnitXY) | mbt:PlaneRoundingMap">
@@ -4567,34 +4631,38 @@
 <NativeBlock tongueRoundingRadius="0.5" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="rounded">
+          <![CDATA[
+          ...
+          ["tongueRoundingRadius", 0.5]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="per-corner">
           <![CDATA[
 <NativeBlock tongueRoundingRadius="{sw: 0.5, nw: 0.5, ne: 0.5, se: 0.5}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="per-corner">
+          <![CDATA[
+          ...
+          ["tongueRoundingRadius", [0.5, 0.5, 0.5, 0.5]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="anisotropic corner">
           <![CDATA[
 <NativeBlock tongueRoundingRadius="{sw: {a: 0.5, b: 0.25}, nw: 0.5, ne: 0.5, se: {a: 0.5, b: 0.25}}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="rounded">
-          ...
-          ["tongueRoundingRadius", 0.5]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="per-corner">
-          ...
-          ["tongueRoundingRadius", [0.5, 0.5, 0.5, 0.5]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="anisotropic corner">
+        <scad:example language="OpenSCAD" snippet="true" title="anisotropic corner">
+          <![CDATA[
           ...
           ["tongueRoundingRadius", [[0.5, 0.25], 0.5, 0.5, [0.5, 0.25]]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueRoundingRadius>
 
     <tongueThickness type="Decimal(mbunit:MBU)">
@@ -4607,14 +4675,14 @@
 <NativeBlock tongueThickness="1.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker">
+          <![CDATA[
           ...
           ["tongueThickness", 1.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueThickness>
 
     <tongueThicknessAdjustment type="Decimal(unit:Millimeter)">
@@ -4631,14 +4699,14 @@
 <NativeBlock tongueThicknessAdjustment="0.1" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker mm">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker mm">
+          <![CDATA[
           ...
           ["tongueThicknessAdjustment", 0.1]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tongueThicknessAdjustment>
 
     <topPlateHeight type="Decimal(mbunit:MBU)">
@@ -4655,14 +4723,14 @@
 <NativeBlock topPlateHeight="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="thicker plate">
+        <scad:example language="OpenSCAD" snippet="true" title="thicker plate">
+          <![CDATA[
           ...
           ["topPlateHeight", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </topPlateHeight>
 
     <topPlateHeightAdjustment type="Decimal(unit:Millimeter)">
@@ -4678,14 +4746,14 @@
 <NativeBlock topPlateHeightAdjustment="-0.4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="taller mm">
+        <scad:example language="OpenSCAD" snippet="true" title="taller mm">
+          <![CDATA[
           ...
           ["topPlateHeightAdjustment", -0.4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </topPlateHeightAdjustment>
 
     <topPlateHelperHeight type="Decimal(unit:Millimeter)">
@@ -4702,14 +4770,14 @@
 <NativeBlock topPlateHelperHeight="0.2" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["topPlateHelperHeight", 0.2]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </topPlateHelperHeight>
 
     <topPlateHelperThickness type="mbt:Auto | Decimal(unit:Millimeter)">
@@ -4724,14 +4792,14 @@
 <NativeBlock topPlateHelperThickness="0.4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["topPlateHelperThickness", 0.4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </topPlateHelperThickness>
 
     <topPlateHelpers type="Boolean">
@@ -4749,14 +4817,14 @@
 <NativeBlock topPlateHelpers="true" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="on">
+        <scad:example language="OpenSCAD" snippet="true" title="on">
+          <![CDATA[
           ...
           ["topPlateHelpers", true]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </topPlateHelpers>
 
     <tubeDiameter type="mbt:Auto | Decimal(mbunit:MBU)">
@@ -4772,14 +4840,14 @@
 <NativeBlock tubeDiameter="4" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="explicit">
+        <scad:example language="OpenSCAD" snippet="true" title="explicit">
+          <![CDATA[
           ...
           ["tubeDiameter", 4]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tubeDiameter>
 
     <tubeDiameterAdjustment type="Decimal(unit:Millimeter)">
@@ -4793,14 +4861,14 @@
 <NativeBlock tubeDiameterAdjustment="-0.15" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="tighter">
+        <scad:example language="OpenSCAD" snippet="true" title="tighter">
+          <![CDATA[
           ...
           ["tubeDiameterAdjustment", -0.15]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </tubeDiameterAdjustment>
 
     <!-- TODO: use XYZ in scad -->
@@ -4817,24 +4885,26 @@
 <NativeBlock unitGridToMbu="{x: 8, y: 8, z: 3.2}" />
           ]]>
         </example>
+        <scad:example language="OpenSCAD" snippet="true" title="custom grid">
+          <![CDATA[
+          ...
+          ["unitGridToMbu", [8, 8, 3.2]]
+          ...
+          ]]>
+        </scad:example>
         <example language="BML" snippet="true" title="xyz size">
           <![CDATA[
 <NativeBlock unitGridToMbu="{x: 2, y: 4, z: 3}" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="custom grid">
-          ...
-          ["unitGridToMbu", [8, 8, 3.2]]
-          ...
-        </example>
-        <example language="OpenSCAD" snippet="true" title="xyz size">
+        <scad:example language="OpenSCAD" snippet="true" title="xyz size">
+          <![CDATA[
           ...
           ["unitGridToMbu", [2, 4, 3]]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </unitGridToMbu>
 
     <unitMbuToMm type="Decimal(unit:Millimeter)">
@@ -4850,14 +4920,14 @@
 <NativeBlock unitMbuToMm="1.5" />
           ]]>
         </example>
-      </examples>
-      <scad:examples>
-        <example language="OpenSCAD" snippet="true" title="custom scale">
+        <scad:example language="OpenSCAD" snippet="true" title="custom scale">
+          <![CDATA[
           ...
           ["unitMbuToMm", 1.5]
           ...
-        </example>
-      </scad:examples>
+          ]]>
+        </scad:example>
+      </examples>
     </unitMbuToMm>
   </properties>
 

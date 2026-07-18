@@ -131,11 +131,12 @@
     </changelog>
     <examples type="Example[]">
       <documentation>Usage examples for this definition. Default-namespace &lt;examples&gt; is the
-        canonical container. Optional Annotation QName facets (e.g. scad:examples from
-        Annotation.Examples) hold target-specific example sets beside the canonical slot — facet
-        namespaces resolve to Annotations, not locales. Each container holds &lt;example&gt;
-        children (StructuralDefinition.Example). Facet containers never replace the canonical
-        examples aggregation.</documentation>
+        canonical container. Children may be unprefixed &lt;example&gt; (StructuralDefinition.Example)
+        or Annotation-prefixed entries such as scad:example (Annotation.Example) — siblings in the
+        same container, paired by title. Optional Annotation container facets (e.g. scad:examples)
+        hold independent target-specific sample sets beside the canonical slot. Facet namespaces
+        resolve to Annotations, not locales. Facet containers never replace the canonical examples
+        aggregation.</documentation>
     </examples>
     <references type="Reference[]">
       <documentation>Documentation cross-references of the definition. Connects types to types or
@@ -219,13 +220,16 @@
       <documentation>Describes one usage example in an examples container on any definition element
         (block, property, aggregation, …). Rendered as an example element with a required title
         attribute and a CDATA body. The enclosing container may be default-namespace
-        &lt;examples&gt; or an Annotation facet (e.g. scad:examples). Maps to BOM DocumentationExample
-        { title, content, contentLanguageFqn?, namespace?, snippet }. Body content must be CDATA
-        (BML_EXAMPLE_NOT_CDATA otherwise). The title is always written in the effective natural
-        language of the enclosing block definition. An optional language attribute on the example
-        element references a Language FQN — implementation languages (OpenSCAD, TypeScript, …) for
-        code samples, or NaturalLanguage (English, German, …) for prose bodies. Optional snippet
-        marks illustrative fragments that are not complete / not to be syntax-checked.</documentation>
+        &lt;examples&gt; or an Annotation facet (e.g. scad:examples). Paired target-language samples
+        use Annotation.Example as a sibling under the same &lt;examples&gt; (e.g. scad:example with
+        matching title) — preferred over a parallel scad:examples container. Maps to BOM
+        DocumentationExample { title, content, contentLanguageFqn?, namespace?, snippet }. Body
+        content must be CDATA (BML_EXAMPLE_NOT_CDATA otherwise). The title is always written in the
+        effective natural language of the enclosing block definition. An optional language attribute
+        on the example element references a Language FQN — implementation languages (OpenSCAD,
+        TypeScript, …) for code samples, or NaturalLanguage (English, German, …) for prose bodies.
+        Optional snippet marks illustrative fragments that are not complete / not to be
+        syntax-checked.</documentation>
 
       <bml:xml>example</bml:xml>
 
@@ -233,7 +237,8 @@
         <title type="Text" bml:xml="attribute">
           <documentation>Short title identifying this example. Required attribute on every example
             element (BML_EXAMPLE_MISSING_TITLE when omitted). Always written in the effective natural
-            language of the enclosing block definition — no separate language attribute on title.</documentation>
+            language of the enclosing block definition — no separate language attribute on title.
+            Annotation Example siblings (e.g. scad:example) use the same title to form a pair.</documentation>
         </title>
         <language type="TypeReference(core:Language)" bml:xml="attribute">
           <documentation>Optional Language for the CDATA body. Unqualified names resolve via implicit
