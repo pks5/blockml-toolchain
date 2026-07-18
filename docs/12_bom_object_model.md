@@ -27,7 +27,7 @@ This document is the **implementation contract** for `@blockml/core`. It specifi
 > **„Block“ in BML is the mandatory input concept — not a uniform runtime object model.** The parser must read `<block>` documents; validators must walk `baseType` chains. Internal representation after parse is free. See `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation.
 
 ```text
-BML source          →  authoring format
+BML source          →  universal format (authoring + WOT message / interchange)
 Urmodell (BOM)      →  canonical, immutable, lossless parse/build result (SSOT, read-only)
 BomBuilder (V3)     →  planned writable session; seal() → Urmodell (same types)
 Pragmatic Model     →  Validator default fork + optional renderer forks (partial merges, resolve only)

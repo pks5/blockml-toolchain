@@ -1337,7 +1337,7 @@ Capabilities do not have an `address` attribute in their definition. The address
 Four value patterns are recognized:
 
 ```text
-Absolute URI      — outbound routing to a fixed address
+Absolute URI      — outbound routing to a fixed address (stud:// over sockets/HTTP)
   stud://domain/path
 
 Relative path     — context-resolved address (TBD: resolved against nearest App/Area Block)
@@ -1414,11 +1414,13 @@ function formatValue(x) =
 BOM Core uses `protocol://` as a generic placeholder. Domain specializations define concrete schemes:
 
 ```text
-stud://    — MachineBlocks physical block network
+stud://    — Capability addressing (WOT / MachineBlocks); reachable over sockets and HTTP
 http://    — REST / WebHook
 mqtt://    — MQTT broker topic
 wot://     — Web of Things device hub
 ```
+
+**`stud://`** is the primary scheme for Capability endpoints in the WOT stack: it makes Inbound / Outbound / Transformation Capabilities addressable as networked resources (socket and HTTP transports). Relative paths and Expression-produced addresses may resolve into `stud://` URIs at runtime (see Capability Value in Compositions).
 
 ### Message Model
 
@@ -1426,13 +1428,15 @@ BOM Core defines a minimal abstract message model for Inbound and Outbound Capab
 
 ```text
 Message
-  address   — URI identifying the target capability
+  address   — URI identifying the target capability (typically stud://…)
   headers   — key-value metadata
     replyTo — optional; address to send an asynchronous response to
   payload   — structure declared by the Capability's inputType (Inbound) or outputType (Outbound)
 ```
 
 All async messaging is asynchronous. A Capability may reply using the `replyTo` header. BOM Core does not prescribe when or whether a response is sent.
+
+**BML as message format:** In the WOT context, BlockML is **not authoring-only**. The same typed BML grammar carries **data and semantics** on the wire — Capability payloads and structured interchange use BML so humans, LLMs, compilers, and Things share one format. Authoring files (`.bml`) and runtime messages are two roles of that universal format, not separate languages. See `01_system.md` · `02_mbml.md` · `17_type_system_bml.md` — WOT alignment.
 
 ---
 

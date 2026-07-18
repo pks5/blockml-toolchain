@@ -35,7 +35,7 @@ patterns. Values are stored on Properties; PrimitiveTypes are pure type definiti
 
 ```text
 BOM preserves authored form (lossless BML ↔ BOM round-trip).
-BML is the authoring format.
+BML is the universal format (authoring and, in WOT, Capability messages) — see `01_system.md` · `02_mbml.md`.
 Target output is renderer-specific serialization (lossy by design).
 
 Do not normalize BOM values to a canonical internal shape at parse time.

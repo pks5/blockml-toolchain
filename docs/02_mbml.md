@@ -4,7 +4,7 @@ version: 2.1.0
 
 ## Purpose of this Document
 
-This document defines the BML (Block Markup Language) format — the universal declarative authoring language for BOM Blocks, Composite Blocks, and Presets.
+This document defines the BML (Block Markup Language) format — the universal declarative language for BOM Blocks, Composite Blocks, and Presets. In tooling it is the primary **authoring** serialization; in the Web of Things it is also a **message / interchange** format (see Overview · WOT).
 
 For the abstract object model see `00_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For value type BML definitions see `17_type_system_bml.md`. For property constraints and suggestions see `18_constraints_and_suggestions.md`. For MBOM type parse/serialize rules and XY/AB conventions see `04_types.md`. For native MBOM / SCAD parameters see `NativeBlock.bml` (SSOT); transitional render hints only: `09_mbom_properties.yml`.
 
@@ -12,7 +12,9 @@ For the abstract object model see `00_bom_core.md`. For the formal BOM data stru
 
 ## Overview
 
-BML is the human- and editor-friendly authoring format for BOM. It describes semantic BOM objects — Blocks, Composite Blocks, and Presets — without any knowledge of render target syntax or parameters.
+BML is the human- and editor-friendly serialization of BOM. It describes semantic BOM objects — Blocks, Composite Blocks, and Presets — without any knowledge of render target syntax or parameters.
+
+**Not authoring-only.** In the Web of Things (WOT), the same BML is a **universal format for data and semantics**: Capability payloads, typed values, and structured messages use BML so that Things share one grammar with authors, LLMs, and the compiler. The **`stud://`** protocol exposes Capabilities over **sockets and HTTP**; addresses appear on Capability bindings (e.g. `stud://domain/path`). See `00_bom_core.md` — Capabilities · Message Model · `17_type_system_bml.md` — WOT alignment.
 
 BML is parsed by `@blockml/parser` into an immutable Urmodell (`BomDocument`). Semantic validation is **Stage 2** (`@blockml/validator`) — not part of the parser. `@blockml/serializer` writes Canonical BOM back to BML XML (Urmodell only; no validator dependency). Hosts (CLI, IDE/LSP) may call `validate()` and abort on diagnostics **before** serialize or compile — that policy lives in the orchestrator, not in parser/serializer. Render targets are selected via `@blockml/compiler`.
 
@@ -33,7 +35,7 @@ The root XML element determines the document type — not the filename suffix.
 
 ## Serialization Formats
 
-**XML is the only BML authoring serialization** for V1 and V2 (and the intended long-term format). It is not a legacy choice — it is the right tool for this kind of structured, namespace-aware, hierarchical information.
+**XML is the only BML serialization** for V1 and V2 (and the intended long-term format) — for authoring files and for WOT message interchange. It is not a legacy choice — it is the right tool for this kind of structured, namespace-aware, hierarchical information.
 
 Specific XML capabilities that make it irreplaceable for BML:
 

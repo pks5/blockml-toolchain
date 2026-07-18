@@ -48,12 +48,15 @@ Renderer                                           →  target-specific output
 In the Web of Things, Blocks are the **grammar of a World**. Types are part of that grammar — not implementation detail.
 
 ```text
-stud:// is how Things communicate.
+stud:// is how Things communicate (Capabilities over sockets and HTTP).
 BOM Core is how Things are structured.
+BML is the universal format for data and semantics — authoring and messages.
 Everything else is implementation.
 ```
 
-Types are structure. They belong in BML — the same language humans, LLMs, and compilers use for Walls, Bricks, and built-in services. A MachineBlocks Set rendered to SCAD + a Martian Micro Device rendered to Python + React share **the same type FQNs**; only the render mapping differs.
+**Not authoring-only.** BML is also the **message format** for Capability traffic: typed payloads travel as BML so the same semantics used when modelling are shared at runtime. The **`stud://`** protocol addresses Capabilities as networked endpoints (sockets and HTTP). See `00_bom_core.md` — Address Schemes · Message Model · `02_mbml.md` — Overview.
+
+Types are structure. They belong in BML — the same language humans, LLMs, compilers, and Things use for Walls, Bricks, and built-in services. A MachineBlocks Set rendered to SCAD + a Martian Micro Device rendered to Python + React share **the same type FQNs**; only the render mapping differs.
 
 ---
 

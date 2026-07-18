@@ -293,7 +293,7 @@ Named parameters and object literal are interchangeable for Object input types. 
 The address or binding is the Capability's value on a child Block instance:
 
 ```text
-stud://domain/path                  — Absolute URI (Outbound routing)
+stud://domain/path                  — Absolute URI (Outbound / Capability routing; sockets + HTTP)
 /path/to/resource                   — Relative path (context-resolved, TBD)
 ${ @myService.otherCapa }           — Capability linking (no parentheses)
 ${ @myService.getAddress() }        — Dynamic address (Transformation outputType must be String)

@@ -51,7 +51,9 @@ Serializer ← Urmodell (Parser or Builder provenance)
 
 **V1 build order:** Parser and serializer prove BML ↔ BOM roundtrip first (`@blockml/parser`, `@blockml/serializer`); validator and compiler follow. See `15_dev_setup.md` — V1 Implementation Strategy.
 
-**BML** (Block Markup Language) is the universal declarative authoring format. File extension **`.bml`**. Content-type `bml`. **XML is the sole authoring serialization** for V1 and V2. A JSON authoring form is **not planned** as an equivalent format (see `02_mbml.md` — JSON as authoring form); it remains at most an open possibility, not a roadmap item.
+**BML** (Block Markup Language) is the universal declarative format for **typed structure, data, and semantics** — not an authoring-only language. File extension **`.bml`**. Content-type `bml`. **XML is the sole BML serialization** for V1 and V2. A JSON authoring form is **not planned** as an equivalent format (see `02_mbml.md` — JSON as authoring form); it remains at most an open possibility, not a roadmap item.
+
+**WOT / runtime role:** In the Web of Things, BML is also a **message format**. Capabilities are addressable via the **`stud://`** protocol over **sockets and HTTP**. The same typed Blocks, values, and semantics used when authoring travel as interchange payloads between Things — BML is the shared grammar for humans, LLMs, compilers, and networked Capabilities. See `00_bom_core.md` — Capabilities · Address Schemes · Message Model · `17_type_system_bml.md` — WOT alignment.
 
 **BOM** (Block Object Model) has two runtime roles plus a planned authoring path — see `00_bom_core.md` — Urmodell and Pragmatic Model · BomBuilder (V3):
 
