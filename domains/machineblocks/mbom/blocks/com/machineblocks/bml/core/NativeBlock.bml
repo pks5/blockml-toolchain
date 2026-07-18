@@ -907,13 +907,13 @@
       <examples>
         <example language="BML" snippet="true" title="deeper">
           <![CDATA[
-<NativeBlock grilleDepth="1" />
+<NativeBlock grilleDepth="1.25" />
           ]]>
         </example>
         <scad:example language="OpenSCAD" snippet="true" title="deeper">
           <![CDATA[
           ...
-          ["grilleDepth", 1]
+          ["grilleDepth", 1.25]
           ...
           ]]>
         </scad:example>
@@ -1010,7 +1010,7 @@
       </examples>
     </holeZ>
 
-    <holeXYGridOffsetZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
+    <holeXYGridOffsetZ type="Decimal(mbunit:MBU) | mbt:AxisXY(Decimal(mbunit:MBU))">
       <documentation>Per-axis scalar: distance from the block bottom to the center of the first
         row of Technic holes for X-holes and Y-holes (AxisXY in MBU — not OffsetXY;
         one independent scalar per hole axis, not a 2D translation).
@@ -1035,7 +1035,7 @@
       </examples>
     </holeXYGridOffsetZ>
 
-    <holeXYGridOffsetZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
+    <holeXYGridOffsetZAdjustment type="Decimal(unit:Millimeter) | mbt:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYGridOffsetZ — per-axis scalar in mm
         (AxisXY, same convention as holeXYGridOffsetZ).
       </documentation>
@@ -1070,7 +1070,7 @@
       </examples>
     </holeXYGridOffsetZAdjustment>
 
-    <holeXYGridSizeZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
+    <holeXYGridSizeZ type="Decimal(mbunit:MBU) |mbt:AxisXY(Decimal(mbunit:MBU))">
       <documentation>Per-axis scalar: center-to-center distance between two rows of Technic
         holes for X-holes and Y-holes (AxisXY in MBU — not SizeXY; one independent
         spacing scalar per hole axis, not a 2D footprint).
@@ -1094,7 +1094,7 @@
       </examples>
     </holeXYGridSizeZ>
 
-    <holeXYGridSizeZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
+    <holeXYGridSizeZAdjustment type="Decimal(mbunit:MBU) |mbt:AxisXY(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYGridSizeZ — per-axis scalar in mm
         (AxisXY, same convention as holeXYGridSizeZ).
       </documentation>
@@ -1129,7 +1129,7 @@
       </examples>
     </holeXYGridSizeZAdjustment>
 
-    <holeXYMinTopMargin type="mbt:AxisXY(Decimal(mbunit:MBU))">
+    <holeXYMinTopMargin type="Decimal(mbunit:MBU) | mbt:AxisXY(Decimal(mbunit:MBU))">
       <documentation>Per-axis scalar: minimum distance between the block top and the topmost
         row of Technic holes for X-holes and Y-holes (AxisXY in MBU). Determines whether
         a row is drawn.
@@ -1153,7 +1153,7 @@
       </examples>
     </holeXYMinTopMargin>
 
-    <holeXYZAxleThickness type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
+    <holeXYZAxleThickness type="Decimal(mbunit:MBU) |mbt:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Thickness of one strut of the cross axle for holeXYZType="axle".
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -1176,7 +1176,7 @@
       </examples>
     </holeXYZAxleThickness>
 
-    <holeXYZAxleThicknessAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
+    <holeXYZAxleThicknessAdjustment type="Decimal(unit:Millimeter) | mbt:AxisXYZ(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYZAxleThickness, in mm.
         Follows the 1/2/3-value array rule.
         Analog to other Adjustment parameters for printer compensation.
@@ -1212,7 +1212,7 @@
       </examples>
     </holeXYZAxleThicknessAdjustment>
 
-    <holeXYZDiameter type="mbt:Auto | mbt:AxisXYZ(Decimal(mbunit:MBU))">
+    <holeXYZDiameter type="mbt:Auto | Decimal(mbunit:MBU) | mbt:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Diameter of Technic holes per axis. Automatically calculated.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -1235,7 +1235,7 @@
       </examples>
     </holeXYZDiameter>
 
-    <holeXYZDiameterAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
+    <holeXYZDiameterAdjustment type="Decimal(unit:Millimeter) | mbt:AxisXYZ(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYZDiameter per axis.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -1337,7 +1337,7 @@
       </examples>
     </holeXYZEdgeMode>
 
-    <holeXYZInsetDepth type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
+    <holeXYZInsetDepth type="Decimal(mbunit:MBU) | mbt:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Depth of the inset ring around Technic holes, per axis.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -1360,7 +1360,7 @@
       </examples>
     </holeXYZInsetDepth>
 
-    <holeXYZInsetDepthAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
+    <holeXYZInsetDepthAdjustment type="Decimal(unit:Millimeter) | mbt:AxisXYZ(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYZInsetDepth per axis.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -1395,7 +1395,7 @@
       </examples>
     </holeXYZInsetDepthAdjustment>
 
-    <holeXYZInsetThickness type="mbt:AxisXYZ(Decimal(mbunit:MBU))">
+    <holeXYZInsetThickness type="Decimal(mbunit:MBU) | mbt:AxisXYZ(Decimal(mbunit:MBU))">
       <documentation>Width of the inset ring around Technic holes, per axis.
         In V2, insets existed only for x and y holes. Z holes now also
         support insets.
@@ -1420,7 +1420,7 @@
       </examples>
     </holeXYZInsetThickness>
 
-    <holeXYZInsetThicknessAdjustment type="mbt:AxisXYZ(Decimal(unit:Millimeter))">
+    <holeXYZInsetThicknessAdjustment type="Decimal(unit:Millimeter) | mbt:AxisXYZ(Decimal(unit:Millimeter))">
       <documentation>Calibration adjustment for holeXYZInsetThickness per axis.
         Follows the 1/2/3-value array rule.
       </documentation>
@@ -1491,7 +1491,7 @@
       </examples>
     </holeXYZShift>
 
-    <holeXYZType type="mbt:AxisXYZ(mbt:HoleType)">
+    <holeXYZType type="mbt:HoleType | mbt:AxisXYZ(mbt:HoleType)">
       <documentation>Type of Technic holes per axis.
         pin: round holes. axle: cross-shaped holes.
         Follows the 1/2/3-value array rule.
