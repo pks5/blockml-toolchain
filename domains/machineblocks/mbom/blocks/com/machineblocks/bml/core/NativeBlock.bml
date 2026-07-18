@@ -422,9 +422,10 @@
       <scad:value>false</scad:value>
     </holeZ>
 
-    <holeXYGridOffsetZ type="mbt:OffsetXY(Decimal(mbunit:MBU))">
-      <documentation>Offset from the block bottom to the center of the first row
-        of Technic holes in X- and Y-direction (OffsetXY in MBU).
+    <holeXYGridOffsetZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
+      <documentation>Per-axis scalar: distance from the block bottom to the center of the first
+        row of Technic holes for X-holes and Y-holes (AxisXY in MBU — not OffsetXY;
+        one independent scalar per hole axis, not a 2D translation).
         Each component can independently be a single value or a 2-element array.
       </documentation>
       <since>3.0.0</since>
@@ -432,16 +433,19 @@
       <scad:value>3.625</scad:value>
     </holeXYGridOffsetZ>
 
-    <holeXYGridOffsetZAdjustment type="mbt:OffsetXY(Decimal(unit:Millimeter))">
-      <documentation>Calibration adjustment for holeXYGridOffsetZ (OffsetXY in mm).</documentation>
+    <holeXYGridOffsetZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
+      <documentation>Calibration adjustment for holeXYGridOffsetZ — per-axis scalar in mm
+        (AxisXY, same convention as holeXYGridOffsetZ).
+      </documentation>
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
     </holeXYGridOffsetZAdjustment>
 
-    <holeXYGridSizeZ type="mbt:SizeXY(Decimal(mbunit:MBU))">
-      <documentation>Center-to-center size between two rows of Technic holes
-        in X- and Y-direction (SizeXY in MBU).
+    <holeXYGridSizeZ type="mbt:AxisXY(Decimal(mbunit:MBU))">
+      <documentation>Per-axis scalar: center-to-center distance between two rows of Technic
+        holes for X-holes and Y-holes (AxisXY in MBU — not SizeXY; one independent
+        spacing scalar per hole axis, not a 2D footprint).
       </documentation>
       <since>3.0.0</since>
       <value>6</value>
@@ -449,15 +453,18 @@
     </holeXYGridSizeZ>
 
     <holeXYGridSizeZAdjustment type="mbt:AxisXY(Decimal(unit:Millimeter))">
-      <documentation>Calibration adjustment for holeXYGridSizeZ.</documentation>
+      <documentation>Calibration adjustment for holeXYGridSizeZ — per-axis scalar in mm
+        (AxisXY, same convention as holeXYGridSizeZ).
+      </documentation>
       <since>3.0.0</since>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
     </holeXYGridSizeZAdjustment>
 
     <holeXYMinTopMargin type="mbt:AxisXY(Decimal(mbunit:MBU))">
-      <documentation>Minimum distance between the block top and the topmost row of
-        Technic holes in X- and Y-direction. Determines whether a row is drawn.
+      <documentation>Per-axis scalar: minimum distance between the block top and the topmost
+        row of Technic holes for X-holes and Y-holes (AxisXY in MBU). Determines whether
+        a row is drawn.
       </documentation>
       <since>3.0.0</since>
       <value>0.5</value>
