@@ -494,12 +494,17 @@
       <scad:value>0.3</scad:value>
     </holeXYZDiameterAdjustment>
 
-    <holeXYZEdgeMode type="mbtype:HoleEdgeMode | mbtype:AxisAB(mbtype:HoleEdgeMode) | mbtype:AxisXYZ(mbtype:HoleEdgeMode) | mbtype:AxisXYZ(mbtype:AxisAB(mbtype:HoleEdgeMode))">
+    <holeXYZEdgeMode type="mbtype:HoleEdgeMode | mbtype:HoleEdgePair | mbtype:HoleEdgeMap">
       <documentation>Controls whether partial (half) Technic holes are drawn at the edges
         of the block for X, Y, and Z direction holes.
 
-        Applies to all three hole axes (X, Y, Z) using the 3-value array rule.
-        Each axis entry resolves to an inner 2-element list [otherAxis1, otherAxis2]:
+        Type forms (SCAD 1:1):
+          HoleEdgeMode              — scalar broadcast to all hole axes ("none")
+          HoleEdgePair              — 2-element companion-edge pair (AxisAB)
+          HoleEdgeMap               — per hole-axis X/Y/Z map (AxisXYZ); each
+                                      component is HoleEdgeMode or HoleEdgePair
+
+        HoleEdgeMap axis entries resolve to an inner 2-element list [otherAxis1, otherAxis2]:
           X-entry: [Y-edge, Z-edge]
           Y-entry: [X-edge, Z-edge]
           Z-entry: [X-edge, Y-edge]

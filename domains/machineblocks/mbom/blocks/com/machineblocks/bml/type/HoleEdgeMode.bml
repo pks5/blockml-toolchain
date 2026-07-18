@@ -33,4 +33,13 @@
     </values>
   </aggregations>
 
+  <references>
+    <see type="mbtype:HoleEdgePair" relation="SeeAlso">
+      Two companion edges as AxisAB(HoleEdgeMode).
+    </see>
+    <see type="mbtype:HoleEdgeMap" relation="SeeAlso">
+      Per hole-axis X/Y/Z map on NativeBlock.holeXYZEdgeMode.
+    </see>
+  </references>
+
 </block>

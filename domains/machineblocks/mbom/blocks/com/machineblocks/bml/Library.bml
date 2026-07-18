@@ -82,6 +82,8 @@
       <mbtype:Gender />
       <mbtype:Grille />
       <mbtype:HoleEdgeMode />
+      <mbtype:HoleEdgeMap />
+      <mbtype:HoleEdgePair />
       <mbtype:HoleType />
       <mbtype:Inherit />
       <mbtype:MBEnum />
