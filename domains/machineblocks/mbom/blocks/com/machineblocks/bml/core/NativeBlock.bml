@@ -209,7 +209,7 @@
       <scad:value>standard</scad:value>
     </baseCutoutType>
 
-    <baseRoundingRadius type="mbtype:RoundingRadius">
+    <baseRoundingRadius type="Decimal | mbtype:AxisXYZ(mbtype:CornerMap(Decimal | mbtype:RadiusAB))">
       <documentation>Rounding radius of the block corners.</documentation>
       <value>0.0</value>
       <scad:value>0.0</scad:value>
@@ -826,7 +826,7 @@
       <scad:value>auto</scad:value>
     </recessDepth>
 
-    <recessRoundingRadius type="mbtype:Auto | mbtype:RoundingRadius">
+    <recessRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:CornerMap(Decimal(mbunit:GridUnitXY) | mbtype:RadiusAB(Decimal(mbunit:GridUnitXY)))">
       <documentation>Rounding radius of the recess cavity. Derived from the block's
         rounding radius. Usually does not need adjustment.
       </documentation>
@@ -1752,7 +1752,7 @@
       <scad:value>1</scad:value>
     </tongueOffset>
 
-    <tongueRoundingRadius type="mbtype:Auto | mbtype:AxisXYZ(mbtype:CornerMap(mbtype:RadiusAB))">
+    <tongueRoundingRadius type="mbtype:Auto | Decimal(mbunit:GridUnitXY) | mbtype:CornerMap(Decimal(mbunit:GridUnitXY) | mbtype:RadiusAB(Decimal(mbunit:GridUnitXY)))">
       <documentation>Rounding radius of the tongue. Typically derived from the block's
         rounding radius. Usually does not need adjustment.
       </documentation>

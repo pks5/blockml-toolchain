@@ -14,26 +14,30 @@
 
   <name>OffsetAB</name>
   <type>mbtype:OffsetAB</type>
-  <baseType>mbtype:AxisAB(N)</baseType>
+  <baseType>mbtype:AxisAB(N, B)</baseType>
   <is>An offset along A and B</is>
 
-  <documentation>Semantic Struct ValueType for an offset pair { a, b }. Extends AxisAB(N) —
-    inherits a and b; adds offset / translation semantics (may be negative). When used as a
+  <documentation>Semantic Struct ValueType for an offset pair { a, b }. Extends AxisAB(N, B) —
+    inherits a (N) and b (B); adds offset / translation semantics (may be negative). When used as a
     face-local offset, a and b are measured from the respective negative (-) sides of the face.
-    N is constrained to Number (AxisAB remains ValueType-universal). Bare OffsetAB defaults N to
-    Decimal (dimensionless). Override via N — e.g. OffsetAB(Decimal(mbunit:GridUnitXY)) or
-    OffsetAB(Decimal(unit:Millimeter)).</documentation>
+    N and B are constrained to Number. B defaults to N so bare OffsetAB / OffsetAB(T) binds both
+    to the same effective type. Bare OffsetAB defaults N to Decimal (dimensionless). Override via
+    N / B — e.g. OffsetAB(Decimal(mbunit:GridUnitXY)) or OffsetAB(Decimal(unit:Millimeter)).</documentation>
 
   <genericTypes>
     <N baseType="type:Number" defaultType="type:Decimal"/>
+    <B baseType="type:Number" defaultType="N"/>
   </genericTypes>
 
   <references>
     <see type="mbtype:AxisAB" relation="Extends">
-      Structural { a, b } map — OffsetAB adds offset semantics.
+      Structural { a, b } map — OffsetAB adds offset semantics; forwards N and B.
     </see>
     <see type="mbtype:OffsetXY" relation="SeeAlso">
       Parallel offset semantics on AxisXY.
+    </see>
+    <see type="mbtype:RadiusAB" relation="SeeAlso">
+      Parallel radius semantics on AxisAB.
     </see>
   </references>
 

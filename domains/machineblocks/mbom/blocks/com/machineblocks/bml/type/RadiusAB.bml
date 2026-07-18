@@ -14,22 +14,24 @@
 
   <name>RadiusAB</name>
   <type>mbtype:RadiusAB</type>
-  <baseType>mbtype:AxisAB(N)</baseType>
+  <baseType>mbtype:AxisAB(N, B)</baseType>
   <is>A radius pair along A and B</is>
 
-  <documentation>Semantic Struct ValueType for a radius pair { a, b }. Extends AxisAB(N) —
-    inherits a and b; adds radius / rounding semantics (non-negative extents). N is constrained
-    to Number (AxisAB remains ValueType-universal). Bare RadiusAB defaults N to Decimal
-    (dimensionless). Override via N — e.g. RadiusAB(Decimal(mbunit:MBU)) or
-    RadiusAB(Decimal(unit:Millimeter)).</documentation>
+  <documentation>Semantic Struct ValueType for a radius pair { a, b }. Extends AxisAB(N, B) —
+    inherits a (N) and b (B); adds radius / rounding semantics (non-negative extents). N and B are
+    constrained to Number. B defaults to N so bare RadiusAB / RadiusAB(T) binds both components to
+    the same effective type. Bare RadiusAB defaults N to Decimal (dimensionless). Override via N /
+    B — e.g. RadiusAB(Decimal(mbunit:MBU)) or RadiusAB(Decimal(unit:Millimeter),
+    Decimal(mbunit:GridUnitZ)).</documentation>
 
   <genericTypes>
     <N baseType="type:Number" defaultType="type:Decimal"/>
+    <B baseType="type:Number" defaultType="N"/>
   </genericTypes>
 
   <references>
     <see type="mbtype:AxisAB" relation="Extends">
-      Structural { a, b } map — RadiusAB adds radius semantics.
+      Structural { a, b } map — RadiusAB adds radius semantics; forwards N and B.
     </see>
     <see type="mbtype:OffsetAB" relation="SeeAlso">
       Parallel offset semantics on AxisAB.
