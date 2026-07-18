@@ -276,7 +276,23 @@ Engines are always independent packages implementing the CompilerEngine contract
 
 ## XSD Schema Structure
 
-BML uses XSD schemas for IDE validation, autocomplete, and Enum enforcement. Schemas are distributed as part of npm packages and referenced via `xsi:schemaLocation` in every BML document.
+> **Architecture decision:** **XSD files are Render Target output**, not a Stage-1 parser dependency. An **XSD Render Target** (Phase C; package name TBD, e.g. `@blockml/xsd-target`) generates `.xsd` from BML / Definition meta-model. **Validating** authored BML against those schemas is enabled only after that target exists — and must remain **always disableable** (CLI/config escape hatch), so intentional language/meta changes can still regenerate schemas when they no longer match the previous `.xsd`.
+
+### Planned toolchain Render Targets (before or beside MachineBlocks SCAD)
+
+MachineBlocks SCAD is the primary **product** target. These **toolchain** targets exercise Stage 3 with less domain surface and are **candidates to ship before** `machineblocks-v3-scad`:
+
+| Target | Name (TBD) | Minimal output | Role |
+|---|---|---|---|
+| **XSD** | `@blockml/xsd-target` | `.xsd` artifacts | Schemas for IDE / later validation |
+| **BlockDoc** | `@blockml/blockdoc-target` | Static HTML files whose URLs follow the **package / FQN hierarchy** (JavaDoc-like browse). Later: richer site, graphs, cross-links | Human/LLM-readable navigation of the block corpus |
+| **FatBlock** | `@blockml/fatblock-target` | One `.bml` document: root block plus **all transitive dependencies** inlined as root `<embeddedBlocks>` (virtual `.bml` files) | Portable single-file artifact; proves registry closure + embed model |
+
+See `15_dev_setup.md` — Phase C ordering · `12_bom_object_model.md` / `02_mbml.md` — Embedded Blocks (Inline Library).
+
+Until generated schemas ship, hand-maintained XSDs / `catalog.xml` may remain a temporary **IDE aid** for autocomplete. They are not required for parse/roundtrip.
+
+Long-term, schemas are distributed as compile artifacts (or published from the XSD target) and referenced via `xsi:schemaLocation` / catalog — not authored as the type SSOT (BML is).
 
 ### Namespace URLs
 
@@ -800,7 +816,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 03_mbom.md             — MBOM: MachineBlocks domain model, properties, aggregations, expressions
 04_types.md            — MBOM type system, serialization rules
 05_scad_renderer.md    — SCAD Render Target: Block Renderers, assembly patterns, naming, source maps
-06_compiler.md         — compiler pipeline, Stage numbering glossary, Target Registry, testing
+06_compiler.md         — compiler pipeline, Stage numbering glossary, Target Registry, testing (incl. toolchain RT sketches)
 07_cli.md              — CLI commands, configuration, watch mode, scaffolding
 12_bom_object_model.md — formal BOM data structures (BomDocument, BlockDefinition, CompositionNode)
 13_bml_to_bom_mapping.md — BML → BOM algorithm (parser implementation contract)

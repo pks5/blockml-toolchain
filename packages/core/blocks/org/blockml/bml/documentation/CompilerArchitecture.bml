@@ -29,7 +29,8 @@
 
     Validation pipeline — three independent Validation Stages
     (glossary: 06_compiler.md — do not confuse with parser steps [1]–[5] or SCAD steps [9]+):
-    Stage 1 — XML (Parser): syntax, namespaces, XSD. No semantics.
+    Stage 1 — XML (Parser): well-formed XML, namespaces. No semantics.
+              XSD generation is a Render Target (Phase C); schema validation only after it ships.
     Stage 2 — Validator: inheritance, contracts, types, constraints, references,
               expression correctness. Expressions are NOT evaluated.
     Stage 3 — Renderer: expression evaluation, optional handling, capability interpretation,

@@ -34,7 +34,7 @@ Each Definition block carries bml:xml directives
 
 This is a step toward **BML self-hosting** (Phase 2/3 in `01_system.md`): BlockML understands BlockML because BlockML is written in BlockML.
 
-**Scope note:** V1 does **not** require a fully meta-driven parser. Definition blocks and `bml:xml` are specified here as the **target architecture**. Implementation may lag; Markdown remains authoritative for pipeline details until the meta-serializer is wired.
+**Scope note:** V1 does **not** require a fully meta-driven parser or serializer. Definition blocks and `bml:xml` are the **target architecture**. Phase A uses a **hardcoded** mapper/serializer (`13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope): preserve authored `bml:xml` for roundtrip; do not drive grammar from Definition blocks yet. Markdown remains authoritative for pipeline details until the meta-serializer is wired.
 
 ---
 
@@ -315,7 +315,7 @@ Until the meta-serializer exists:
 - Definition `.bml` files are loaded like any framework block (bootstrap in `16_framework_base_types.md`).
 - `bml:xml` elements and attributes are stored in BOM (directives / member metadata — exact BOM fields TBD).
 
-**Non-goals for initial implementation:** Evaluating `${ bml:Self }` / `${ #this.name }` at parse time for non-meta blocks; expanding `bml:xml` into XSD automatically (may follow later).
+**Non-goals for initial implementation:** Evaluating `${ bml:Self }` / `${ #this.name }` at parse time for non-meta blocks. **XSD emission** is not a parser side-effect — it is the XSD Render Target (D5).
 
 ---
 
@@ -368,7 +368,7 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 | D2 | `${ bml:Self }` prefix resolution at serialize time | Reuse xmlns bindings from BOM `SourceInfo.namespaceBindings` |
 | D3 | BOM storage shape for `<bml:xml>` element | `xmlRendering` on BlockDefinition vs `directives[]` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | **Member-level:** allowed on `override="true"` redeclarations (e.g. FixedAlias `_name` element → FreeTextAlias `name` attribute). **Block-level** `<bml:xml>` root element: still TBD / prefer Definition branch only |
-| D5 | XSD generation from Definition blocks | Future; replaces hand-maintained schemas long-term |
+| D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |
 
 ---
 

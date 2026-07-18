@@ -186,11 +186,14 @@ bom compile --all <target>
 
 ```text
 <file>    — path to a .bml file. JSON BML deferred (TBD)
-<target>  — registered target name, e.g. "machineblocks-v3-scad"
+<target>  — registered target name, e.g. "machineblocks-v3-scad", "xsd" (TBD)
 --all     — compile all source files in srcDir
 --src     — override srcDir (default: from bom.config.json)
 --out     — override outDir (default: from bom.config.json)
 --force   — ignore hash cache, recompile everything
+--no-xsd  — disable XSD schema validation when that check exists (TBD exact flag);
+            required escape hatch so the XSD target can regenerate schemas after
+            intentional BML/meta changes that break the previous .xsd (see 13 B8)
 ```
 
 `--all` processes every `.bml` source file in `srcDir`. Each file is evaluated against its stored hash — unchanged artifacts are skipped.
@@ -242,6 +245,8 @@ bom validate --all
 ```
 
 Runs Stage 1 (parser) and Stage 2 (semantic validator). Reports all diagnostics. Produces no output files. No target is required — validation is universal. Exit code / abort policy is CLI-owned (non-zero on errors).
+
+**XSD checks (when an XSD target / catalog exists):** optional and **always disableable** (e.g. `--no-xsd` / config — flag TBD). Schema validation must never be a hard prerequisite for regenerating `.xsd` via the XSD Render Target after intentional BML/meta changes. See `13_bml_to_bom_mapping.md` — B8 · `01_system.md` — XSD Schema Structure.
 
 ---
 

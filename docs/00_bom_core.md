@@ -255,7 +255,8 @@ Interpretation happens **only** in the renderer — by reading Capability defini
 Validation consists of three independent stages. **Numbering glossary** (Validation Stages vs parser steps `[1]`–`[5]` vs SCAD renderer steps `[9]`–`[19]` vs Test Layers): see `06_compiler.md` — Stage numbering glossary.
 
 ```text
-Stage 1 — Parser       XML syntax · namespaces · XSD → Urmodell (immutable Canonical BOM)
+Stage 1 — Parser       well-formed XML · namespaces → Urmodell (immutable Canonical BOM)
+                       (XSD not required; generation = Render Target — see 13 B8 / 15 Phase C)
 Stage 2 — Validator    fork → pragmatic model; inheritance · contracts · type compatibility ·
                        visibility · constraints · references · expression correctness
                        (expressions are NOT evaluated)
@@ -1731,6 +1732,8 @@ If a Sub-Block shares the root Block's `<name>`, bare short tags are ambiguous �
 ### Embedded Blocks (Inline Library)
 
 **Gedankenstütze:** `embeddedBlocks` is an **Inline Library** of **virtual `.bml` files** on the **document root only** — primary use: fat single-file artifacts. Meta-model entry type: `org.blockml.bml.definition.EmbeddedBlockDefinition`. Multiple BML documents in one source file, including packages outside the root block's namespace.
+
+**FatBlock Render Target (planned):** produces such an artifact automatically — root block plus transitive dependencies inlined as root `<embeddedBlocks>`. See `01_system.md` — Planned toolchain Render Targets · `15_dev_setup.md` Phase C.
 
 Each embedded block is a **full Block document** — own FQN, members, `subBlocks`. Its **FQN is the value of its `<type>` element** (e.g. `com.foo.internal.Physics`) — not nested under the enclosing block. Sub-Blocks on an embedded block derive their FQNs from the embedded block's type. Nested `embeddedBlocks` are **forbidden** (`BML_NESTED_EMBEDDED_BLOCKS`); compose by listing virtual files flat under the root.
 

@@ -6,6 +6,8 @@ version: 0.2.0
 
 This document defines the **algorithmic mapping rules** from parsed BML (XML/JSON) to `BomDocument` — the implementation contract for `@blockml/parser`.
 
+**Phase A:** implement only § V1 Parser / Serializer Scope below; the rest of this document is the full language contract to grow into.
+
 For BOM target types see `12_bom_object_model.md`.
 For BML authoring syntax see `02_mbml.md`.
 For expression parsing see `10_expression_language.md`.
@@ -39,6 +41,41 @@ Expression parsing, type validation, and semantic validation are **Stage 2** (`@
 Parser step [5] produces the immutable BOM graph with expression **raw** text only. `parseExpression()` is a separate Stage-2 utility (Phase B+).
 
 ---
+
+## V1 Parser / Serializer Scope (Phase A)
+
+> **Normative for Phase A.** Full mapping rules in this document describe the language contract; **implement and gate** only the slice below until roundtrip tests pass. See `15_dev_setup.md` — V1 Implementation Strategy.
+
+| In V1 (Phase A) | Not in V1 (Phase A) |
+|---|---|
+| XML `.bml` only (parser steps `[1]`–`[5]`) | JSON BML authoring |
+| Structural map → immutable Urmodell | Semantic validation (Stage 2) |
+| Authored literals + `ExpressionValue { raw }` | `parseExpression()` / AST / evaluation |
+| Directives stored in `directives[]` (unexpanded) | Directive expansion / composition expand |
+| **Single-file** parse (no library load) | TypeRegistry bootstrap / cross-file resolve |
+| Hardcoded mapper + hardcoded inverse serializer | Meta-driven `bml:xml` parser/serializer (`19_…`) |
+| Well-formed XML + mapping diagnostics | **XSD as a hard parse requirement** |
+| Preserve `bml:xml` / unknown-safe authored form for roundtrip | Interpret Definition/`bml:xml` grammar at parse time |
+| Roundtrip corpus T0–T3 | `bom compile` / render targets |
+
+**XSD:** Not part of Phase-A Stage 1. Hand-written schemas / `catalog.xml` may remain a temporary **IDE aid**, but:
+
+- **XSD generation** is a **Render Target** (Stage 3): compile BML / Definition meta-model → `.xsd` artifacts (see `19_definition_blocks_and_bml_xml.md` — D5 · `15_dev_setup.md` — Phase C ordering).
+- **XSD validation** of authoring (CLI / IDE / optional parser hook against generated schemas) comes **only after** that target exists — and must remain **always disableable**.
+- **Why disableable:** After intentional BML/meta changes, authoring may no longer match the *previous* `.xsd`. Users must still be able to run the XSD target to emit the *new* schemas (chicken-and-egg). Hard-failing schema validation would block regeneration.
+- Default may be “on” once schemas exist; escape hatch is mandatory (e.g. CLI `--no-xsd` / config `xsdValidation: false` — exact flag TBD).
+
+V1 parser must not require schema files to succeed. Schema checks are not a Phase-A gate.
+
+**`bml:xml`:** Authored directives/elements are preserved on the Urmodell when present (lossless). V1 does **not** drive mapping or serialization from Definition blocks — that is post–Phase-A (`19_definition_blocks_and_bml_xml.md`).
+
+**Done when:**
+
+```text
+parse(serialize(parse(corpus.bml))) deep-equals parse(corpus.bml)
+```
+
+on the agreed corpus tiers — no validator, no target, no TypeRegistry bootstrap required.
 
 ## Member Mapping Order
 
@@ -874,6 +911,9 @@ See `02_mbml.md` — Serialization Formats for the design rationale.
 | B4 | Expression parsing — raw in BOM; AST via parseExpression() utility | **Decided** |
 | B5 | Cross-file / TypeRegistry — single-file parser; orchestrator bootstrap | **Decided** |
 | B6 | JSON BML authoring format | **Deferred (TBD)** — not in V1; XML-only parser |
+| B7 | V1 Phase-A slice — no XSD must; no meta-`bml:xml` drive; raw expressions only | **Decided** — see § V1 Parser / Serializer Scope |
+| B8 | XSD generation as Render Target; XSD validation only after that target ships; **always disableable** so regen is never blocked | **Decided** — see § V1 Scope · `15_dev_setup.md` Phase C |
+| B9 | BlockDoc + FatBlock Render Targets (toolchain; may precede MachineBlocks SCAD) | **Decided** — see `01_system.md` · `15_dev_setup.md` Phase C |
 
 ---
 
@@ -882,6 +922,7 @@ See `02_mbml.md` — Serialization Formats for the design rationale.
 | Topic | Document |
 |---|---|
 | BOM object model | `12_bom_object_model.md` |
+| V1 Phase-A build order | `15_dev_setup.md` — V1 Implementation Strategy |
 | Expression AST | `10_expression_language.md` |
 | Embedded expressions in implementations | `10_expression_language.md` — BML Embedded Expressions |
 | Directive placement rules | `12_bom_object_model.md` — Directive Placement Rules |

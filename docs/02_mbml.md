@@ -3239,6 +3239,8 @@ Sub-Block:   <name>Cylinder</name>
 
 **Gedankenstütze:** `embeddedBlocks` is an **Inline Library** of **virtual `.bml` files** co-located in one BomDocument — primary use: fat single-file artifacts. Unlike Sub-Blocks, each embedded block is a full Block document. Meta-model: `org.blockml.bml.definition.EmbeddedBlockDefinition`. Each embedded block's **FQN is the value of its `<type>` element** (e.g. `com.foo.internal.Physics`) — not nested under the root. Sub-Blocks on an embedded block derive their FQNs from the embedded block's type.
 
+**FatBlock Render Target (planned):** bundles a block and its transitive dependencies into one `.bml` with those deps as root `<embeddedBlocks>`. See `01_system.md` — Planned toolchain Render Targets · `15_dev_setup.md` Phase C.
+
 **Root-only:** `<embeddedBlocks>` is allowed **only on the document root** (`RootBlockDefinition`). Forbidden on Sub-Blocks (`BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`) and on embedded entries themselves (`BML_NESTED_EMBEDDED_BLOCKS`). Nesting would suggest false ownership to readers/LLMs; compose artifacts by listing virtual files **flat** at the root (bundlers flatten when merging packages).
 
 ```text

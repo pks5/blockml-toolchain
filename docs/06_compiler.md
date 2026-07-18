@@ -72,7 +72,9 @@ Deprecated legacy numbering (do not use in new text):
 
 ```text
 Stage 1 — Parser
-  Checks: XML syntax · namespaces · XSD
+  Checks: well-formed XML · namespaces (V1)
+          XSD — not Stage 1; generation = Render Target (Phase C); validation only after that target
+              (see 13 — V1 Scope / B8 · 15 — Phase C ordering)
   Produces: Urmodell (Canonical BOM, immutable, SSOT)
   No semantics.
 
@@ -176,13 +178,30 @@ Urmodell (immutable)  — or —  default Pragmatic Model  — or —  fork(Urmo
 Target Output File(s) + Source Map(s)
 ```
 
-Example — **Documentation Renderer**:
+Example — **BlockDoc Render Target** (toolchain; planned):
+
+```text
+Urmodell (+ TypeRegistry for cross-links)
+  → BlockDoc processors
+  → static HTML tree (path ≡ package / FQN hierarchy)
+  → later: graphs, richer navigation
+```
+
+Example — **FatBlock Render Target** (toolchain; planned):
+
+```text
+Urmodell + TypeRegistry closure of dependencies
+  → emit single RootBlockDefinition .bml
+  → each dependency as EmbeddedBlockDefinition under root embeddedBlocks[]
+```
+
+Example — **Documentation Renderer** (generic / early sketch — superseded in intent by BlockDoc):
 
 ```text
 Urmodell (immutable)  →  renderRawBOM()  →  Markdown / HTML
 ```
 
-SCAD renderer steps [9]–[19] are **not** a fixed framework pipeline — they document the SCAD reference renderer. Other renderers choose different utilities and ordering.
+SCAD renderer steps [9]–[19] are **not** a fixed framework pipeline — they document the SCAD reference renderer. Other renderers (XSD, BlockDoc, FatBlock, …) choose different utilities and ordering. See `15_dev_setup.md` — Phase C toolchain targets.
 
 ---
 
