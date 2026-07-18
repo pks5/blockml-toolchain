@@ -1327,6 +1327,8 @@ org.blockml.bml.status.Deprecated
 
 Domain libraries may define additional status blocks.
 
+**Stub:** Validator **accepts** Stub elements. Renderers may treat them differently (empty/stub emit + logs, skip, or abort) — see `00_bom_core.md` — Stub toolchain behaviour.
+
 #### Definition elements: `<status>` child
 
 Only elements that **define** something may carry a `<status>` child — and **only when deviating** from the inherited status:

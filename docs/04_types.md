@@ -157,7 +157,7 @@ Core status blocks:
 ```text
 status:Stable       — defined, MBML parsing complete, SCAD mapping complete
 Draft        — defined; MBML parsing or SCAD mapping incomplete or untested
-status:Stub         — placeholder; shape declared, behaviour not yet specified
+status:Stub         — placeholder; validates OK; renderer may stub/log or abort (`00_bom_core.md`)
 status:Deprecated   — retained for compatibility; do not use in new work
 ```
 

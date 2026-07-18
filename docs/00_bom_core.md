@@ -1547,11 +1547,23 @@ Status expresses the **maturity or lifecycle** of a BML element. Status is not a
 org.blockml.bml.core.Status          — abstract base (in @blockml/core)
 org.blockml.bml.status.Stable        — complete, tested, reliable
 org.blockml.bml.status.Draft         — defined; implementation or mapping incomplete
-org.blockml.bml.status.Stub          — placeholder; behaviour not yet specified
+org.blockml.bml.status.Stub          — structural placeholder; see Stub toolchain behaviour below
 org.blockml.bml.status.Deprecated    — retained for compatibility; do not use in new work
 ```
 
 Domain libraries may define additional status blocks (e.g. domain-specific WIP markers).
+
+### Stub toolchain behaviour (**decided**)
+
+`status:Stub` marks **intent / reserved shape** without committing to behaviour, types, or mapping.
+
+| Layer | Behaviour |
+|---|---|
+| **Parser / serializer** | Store and roundtrip like any other status FQN |
+| **Validator (Stage 2)** | **Passes** — Stub is not a validation error. Unknown status FQN still fails (`BML_UNKNOWN_STATUS`). |
+| **Render Target (Stage 3)** | **Free to interpret** — e.g. emit empty/stub methods with log/trace, omit emit, or **abort** the compile for that node/target. Policy is target-specific, not core-mandated. |
+
+**Draft** vs **Stub:** Draft = declared but incomplete (gap known). Stub = placeholder only (behaviour not committed). Both validate; only renderers (and hosts) choose severity for Stub.
 
 ### Inheritance and defaults
 
