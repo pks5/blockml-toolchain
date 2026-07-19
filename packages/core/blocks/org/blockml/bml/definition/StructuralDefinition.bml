@@ -258,9 +258,10 @@
         </snippet>
         <content type="Text" bml:xml="text">
           <documentation>BML, MBML, target-language source, or prose demonstrating usage. Stored as
-            character data on the host element (BOM DocumentationExample.content). Serializer may
-            emit Text or CDATA per escape policy (19 D8). When snippet is true, content need not
-            be complete or syntactically valid.</documentation>
+            character data on the host element (BOM DocumentationExample.content). Text node and
+            CDATA both accepted; authored form stored (authoredCharacterDataForm). Serializer emits
+            CDATA when escape requires it or when authored as CDATA (19 D8). When snippet is true,
+            content need not be complete or syntactically valid.</documentation>
         </content>
       </properties>
     

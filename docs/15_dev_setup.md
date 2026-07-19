@@ -223,7 +223,7 @@ Workspace dependency links use `"@blockml/core": "workspace:*"` (npm 7+).
 }
 ```
 
-Browser-compatible packages add `"lib": ["ES2022", "DOM"]` where needed (XML parser in browser).
+Browser-compatible packages add `"lib": ["ES2022", "DOM"]` where needed. **XML parse (B18):** `@blockml/parser` depends on `@xmldom/xmldom` in Node and browser (do not rely on the host `DOMParser` alone).
 
 `@blockml/cli` may use `"lib": ["ES2022"]` with `@types/node`.
 
@@ -596,15 +596,19 @@ Full language rules live in `02` / `13` / `19`. **Phase A implements and gates o
 
 | In Phase A | Out of Phase A |
 |---|---|
-| XML `.bml` → Urmodell (parser steps `[1]`–`[5]`) | JSON authoring (not planned) |
+| XML `.bml` → Urmodell (parser steps `[1]`–`[5]`; DOM via `@xmldom/xmldom` B18) | JSON authoring (not planned) |
 | Hardcoded map + hardcoded inverse serialize | Meta-`bml:xml` drive (`19`) |
 | `ExpressionValue.raw` (+ embedded `{ raw, start, end }`) | `parseExpression()` / AST |
 | Directives unexpanded on Urmodell | Expansion / effective members |
 | Single-file parse | TypeRegistry / cross-file |
 | Tolerant parse without XSD files | XSD as hard requirement |
 | Preserve authored `bml:xml` for roundtrip | Interpret Definition grammar |
-| Preserve XML comments on elements (B11) | PIs; insignificant whitespace |
+| Preserve XML comments on elements (B11) | PIs; formatting whitespace (B13 — may normalize) |
 | Canonical emit order from Definition members (B12) — V1 hardcoded | V2: order read dynamically from Definition `.bml` |
+| Dual element\|attribute authoredPlacement (D9) | Collapse dual forms to D1 without storing choice |
+| Visibility prefixes from visibility on emit (B14) | Emit logical names without `_`/`__` for private/protected |
+| Boolean value casing normalize (B15); Boolean.True/False as types (B16) | Collapse Boolean.True to literal true |
+| Omit-by-default emit (B17) | Emit all default-false / empty noise |
 | Test Layer A roundtrip (T0–T3) | Stage 2 validate, Stage 3 compile |
 
 **Definition of Done:** `parse(serialize(parse(f)))` deep-equals `parse(f)` for the corpus — no validator, no target, no bootstrap. XML source fidelity is **not** required (B10).
@@ -743,7 +747,7 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 2. @machineblocks/mbom BML    — com.machineblocks.bml.core.*
 3. @blockml/core TS           — types from 12_bom_object_model.md + Diagnostic
                               (ExpressionValue = raw only; ExpressionNode types may land with step 7)
-4. @blockml/parser            — parser steps [1]–[5] + unit tests (preserve expression raw)
+4. @blockml/parser            — `@xmldom/xmldom` + steps [1]–[5] + unit tests (preserve expression raw)
 5. @blockml/serializer        — BOM → BML (V1 hardcoded inverse map)
 6. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers)
 7. parseExpression()          — @blockml/core utility (AST as ParsedExpression; no Urmodell write-back)

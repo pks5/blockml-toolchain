@@ -215,9 +215,24 @@ JSON as a BML authoring serialization is **not planned** (not V1/V2; may never s
 
 ### [2] XML Parser
 
-Parses the raw XML source into an intermediate document tree. Browser-compatible parsers only.
+Parses the raw XML source into an intermediate W3C-like document tree.
+
+**Library (B18 — decided):** `@xmldom/xmldom` — pure-JS ponyfill of `DOMParser` / `XMLSerializer`. Use it in **both** Node and browser so parse behaviour (namespaces, `Comment`, `CDATASection`, error reporting) stays identical. Do not split “native `DOMParser` in browser / xmldom in Node” for V1.
+
+```text
+import { DOMParser } from "@xmldom/xmldom"
+const doc = new DOMParser().parseFromString(source, "application/xml")
+```
+
+Thin internal facade (`parseXml(source): Document`) is fine; callers outside `@blockml/parser` should not depend on xmldom types.
+
+**Smoke checks before locking versions:** file-header comments → `COMMENT_NODE`; `<![CDATA[…]]>` → `CDATA_SECTION_NODE`; default `xmlns="http://blockml.org/bml"` + prefixed xmlns; malformed XML → diagnostic (not a silent empty document).
+
+**Alternatives considered:** linkedom (faster, HTML/SSR-oriented — Plan B if perf forces it and smoke checks pass); jsdom (too heavy); fast-xml-parser (no DOM — incompatible with step [2]).
 
 JSON parser: **not in V1.**
+
+Browser-compatible only — no Node-only XML stacks (`libxmljs`, etc.).
 
 ### [3] Root Type Resolver
 

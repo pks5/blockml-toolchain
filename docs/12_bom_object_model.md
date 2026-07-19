@@ -44,7 +44,8 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | `bml:each`, `bml:if`, `bml:with` | `directives[]` on element — **unexpanded** | Renderer (directive expansion) |
 | `xmlns` / `xmlns:prefix` | `SourceInfo.namespaceBindings` — **1:1 authored** | Serializer / FatBlock / QName emit (`19` D2) |
 | `<bml:xml>` / `bml:xml="…"` | First-class `xmlRendering` (block + member) — **not** flow-control `directives[]` (`19` D3) | Serializer, FatBlock, XSD, meta-serializer |
-| Authored element vs attribute when both legal | `xmlRendering.authoredPlacement` (when dual form) | Roundtrip preserve; canonical emit may apply D1 |
+| Authored element vs attribute when both legal | `authoredPlacement` on value / `xmlRendering` (D9) | **MUST** roundtrip that form; D1 only when authored form absent |
+| Authored Text vs CDATA for `text` placement | `authoredCharacterDataForm` (D8) | Emit CDATA if escape needs it **or** author used CDATA |
 | `size="[5,5,6]"` vs `size="{x:5,…}"` | `LiteralValue` in **authored form** | Renderer (target serialization via type metadata) |
 | `${ size.x }` | `ExpressionValue { raw }` — **AST via `parseExpression()` utility, not evaluated** | Renderer (parse AST → evaluate / emit) |
 | `<aggregations>` declaration | `AggregationDefinition` (declared only) | Type Registry lookup for effective members — **metadata only, no instance data resolution** |
@@ -73,6 +74,12 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Maximum authored surface** | Urmodell exposes as much of the original document as possible to renderers — including seeming internals (`01_bom_core.md`). When in doubt, preserve. |
 | **XML comments (B11)** | Bind to the **following** XML element (`leadingComments`); same-line / immediately-after → `trailingComments`. Not discarded. See § XML Comments · `13` B11. |
 | **Emit order (B12)** | Serialize `<block>` children in Definition member declaration order — **V1 hardcoded**, **V2 from Definition `.bml`**. See `13` § Serializer Emit Order. |
+| **Whitespace (B13)** | Formatting whitespace is not on the Urmodell; serializer may pretty-print / normalize. See `13` B13. |
+| **Dual placement (D9)** | When `element\|attribute` is legal, store and re-emit `authoredPlacement`. See `19` D9. |
+| **Visibility prefixes (B14)** | BOM `name` is logical; emit `_`/`__` from `visibility`. See `13` B14. |
+| **Boolean values (B15)** | Literal booleans normalize to lowercase. |
+| **Boolean.True/False (B16)** | Type refs in type expressions — preserve; not boolean values. |
+| **Omit defaults (B17)** | Omit emit when absence ≡ default / unchanged semantics. See `13` B17. |
 | **Instance `version`** | From **`bml:version`** — optional on external block references and Library TypeReferenceEntity sugar. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert against the referenced type (`BML_UNKNOWN_VERSION` if no match). Same-document Sub-Blocks exempt. |
 | **Definition `version`** | Every Block definition has an **effective version**: own `<version>` if present, else library version if the block is exported via a Library, else error (`BML_MISSING_VERSION`). |
 | **Instance `id`** | From **`bml:id`** — authored in BOM only on `BlockInstance.id`; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `bml:id`. No FQN fallback. |
@@ -213,7 +220,7 @@ type MetadataElementTrivia = Record<string, XmlTrivia>
         trailing on the root BlockDefinition
 ```
 
-**Not preserved (Phase A):** processing instructions, insignificant whitespace / indentation, attribute order. Gate remains BOM deep-equal (B10).
+**Not preserved (Phase A):** processing instructions; **formatting whitespace** / indentation / blank lines between elements (B13); attribute order on a start-tag. Gate remains BOM deep-equal (B10). **Do preserve:** XML comments (B11); dual `element|attribute` authored form (D9); authored CDATA form for `text` (D8).
 
 **Serializer:** re-emit `leadingComments` immediately before the element and `trailingComments` immediately after. Comment body text is opaque — no trimming beyond what the XML parser already applied to the comment node. Sibling **element** order follows B12 (`13` — Serializer Emit Order).
 
@@ -609,6 +616,8 @@ interface DocumentationProseEntry {
    * Block/Library language when the attribute is omitted).
    */
   languageFqn: string
+  /** How the prose body appeared when placement is text (19 D8). */
+  authoredCharacterDataForm?: CharacterDataForm
   source?: SourceLocation
 }
 
@@ -639,7 +648,9 @@ interface DocumentationExample {
   title: string
   /** Character data body — BML/MBML, target-language source, or prose (text or CDATA in XML). */
   content: string
-  /** Language FQN for CDATA content (implementation Language or NaturalLanguage). Omitted when content is BML/MBML. */
+  /** How `content` appeared in source — text node vs CDATA (19 D8). */
+  authoredCharacterDataForm?: CharacterDataForm
+  /** Language FQN for body content (implementation Language or NaturalLanguage). Omitted when content is BML/MBML. */
   contentLanguageFqn?: string
   /** When true, body is an illustrative fragment — skip syntax / well-formedness checks. Default false. */
   snippet?: boolean
@@ -683,6 +694,10 @@ interface ConstrainableDefinition {
 }
 
 interface MemberDefinitionBase {
+  /**
+   * Logical member name — visibility prefixes `_` / `__` stripped (B14).
+   * XML localName on emit = visibilityPrefix(visibility) + name.
+   */
   name: string
   /** Short prose expansions (i18n + optional QName facets). See DocumentationProseEntry. */
   summaries?: DocumentationProseEntry[]
@@ -740,16 +755,31 @@ interface XmlRenderingBlock {
 
 type XmlNodeKind = "attribute" | "element" | "text"
 
+/**
+ * How host-element character data appeared in source when placement is `text` (19 D8).
+ * Not a bml:xml placement kind — escape / authored form only.
+ */
+type CharacterDataForm = "text" | "cdata"
+
 /** Member-level `bml:xml` — lossless + emit hints. */
 interface XmlRenderingMember {
   /**
    * Declared placement kind(s). Single value or dual allow-list (`element|attribute` only).
    * `text` = character data of the host element (no nested child element for this value).
-   * CDATA is not a kind — serializer escape for `text` (19 D8).
+   * CDATA is not a placement kind — see CharacterDataForm / 19 D8.
    */
   kinds: XmlNodeKind[]
-  /** When dual forms were legal (`element|attribute`): which form appeared in source (roundtrip). */
+  /**
+   * When kinds include both element and attribute: which form appeared on **this** declaration
+   * in source (D9). Roundtrip MUST re-emit that form. Fresh/canonical emit without this field
+   * uses D1 defaults.
+   */
   authoredPlacement?: XmlNodeKind
+  /**
+   * When placement includes `text`: whether the body was a Text node or CDATA in source.
+   * Emit: CDATA if escape requires it OR this is `"cdata"` (19 D8).
+   */
+  authoredCharacterDataForm?: CharacterDataForm
 }
 
 interface PropertyDefinition extends MemberDefinitionBase {
@@ -803,6 +833,8 @@ interface CapabilityDefinition extends MemberDefinitionBase {
 interface ImplementationBlock {
   languageFqn: string      // org.blockml.bml.language.TypeScript | org.blockml.bml.language.OpenSCAD
   source: string            // host-element character data — full original text including <$ $> regions
+  /** How `source` appeared in XML — text node vs CDATA (19 D8). */
+  authoredCharacterDataForm?: CharacterDataForm
   embeddedExpressions: EmbeddedExpression[]
   sourceLocation?: SourceLocation
 }
@@ -973,12 +1005,21 @@ interface LiteralValue {
    */
   value: unknown
   typeFqn: string
+  /**
+   * When the member's bml:xml allows element|attribute: which form this value used in source (D9).
+   * Roundtrip MUST emit the same form. Omitted → D1 canonical default for the host context.
+   */
+  authoredPlacement?: "attribute" | "element"
 }
 
 interface ExpressionValue {
   kind: "expression"
   /** Raw source inside ${ } — the only expression field in Canonical BOM */
   raw: string
+  /**
+   * When the member's bml:xml allows element|attribute: which form carried this expression (D9).
+   */
+  authoredPlacement?: "attribute" | "element"
   source: SourceLocation
 }
 

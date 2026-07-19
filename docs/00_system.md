@@ -353,7 +353,7 @@ The BOM object model and framework utilities. Browser and Node compatible. **Own
 The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocument` types from `@blockml/core` — does not own those interfaces.
 
 ```text
-  - XML parser (V1; browser-compatible)
+  - XML DOM via `@xmldom/xmldom` (B18; same in Node and browser — see `06_compiler.md` [2])
   - JSON BML parser — **not planned** for V1/V2; XML only (see `02_mbml.md`)
   - Namespace resolver (xmlns → FQN)
   - XSD loader — optional IDE aid; not required for parse (see XSD Render Target)

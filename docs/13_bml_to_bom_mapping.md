@@ -54,7 +54,7 @@ Parser step [5] produces the immutable BOM graph with expression **raw** text on
 | Directives stored in `directives[]` (unexpanded) | Directive expansion / composition expand |
 | **Single-file** parse (no library load) | TypeRegistry bootstrap / cross-file resolve |
 | Hardcoded mapper + hardcoded inverse serializer | Meta-driven `bml:xml` parser/serializer (`19_…`) |
-| Well-formed XML + mapping diagnostics | **XSD as a hard parse requirement** |
+| Well-formed XML via `@xmldom/xmldom` (B18) + mapping diagnostics | **XSD as a hard parse requirement** |
 | Preserve `bml:xml` / unknown-safe authored form for roundtrip | Interpret Definition/`bml:xml` grammar at parse time |
 | Preserve XML comments bound to elements (B11) | Processing instructions; insignificant whitespace |
 | Roundtrip corpus T0–T3 | `bom compile` / render targets |
@@ -78,11 +78,23 @@ parse(serialize(parse(corpus.bml))) deep-equals parse(corpus.bml)
 
 on the agreed corpus tiers — no validator, no target, no TypeRegistry bootstrap required.
 
-**Roundtrip gate (B10 — decided):** The sole authoritative Phase-A assertion is **BOM deep equality** after `parse → serialize → parse`. XML text fidelity (`serialize(parse(f))` vs original source) is **not** a gate — optional diagnostic / snapshot only, never blocking. Consequence: the serializer may emit canonical forms where the mapper already canonicalized (e.g. Boolean `True` → `true`) or where placement is under-specified in the Urmodell; success is defined on the object graph, not byte-identical XML.
+**Roundtrip gate (B10 — decided):** The sole authoritative Phase-A assertion is **BOM deep equality** after `parse → serialize → parse`. XML text fidelity (`serialize(parse(f))` vs original source) is **not** a gate — optional diagnostic / snapshot only, never blocking. Consequence: the serializer may normalize **formatting whitespace** (indent, blank lines between elements, attribute spacing) and may emit canonical forms where the mapper already canonicalized (e.g. Boolean `True` → `true`) or where placement is under-specified; success is defined on the object graph, not byte-identical XML.
+
+**Whitespace (B13 — decided):** Insignificant / formatting whitespace is **not** stored on the Urmodell and **need not** roundtrip. Serialized XML may be pretty-printed or otherwise whitespace-normalized. Significant character data inside `text` bodies remains the string value (subject to existing field trim rules, e.g. documentation prose).
 
 **XML comments (B11 — decided):** Comments are preserved on the Urmodell, bound to elements — see § XML Comments. They participate in BOM deep equality; dropping them fails the gate when the corpus has comments.
 
 **Emit order (B12 — decided):** Canonical `<block>` child order = Definition member declaration order. **V1:** hardcoded sequence (mirror of `BlockDefinition.bml` + bases). **V2:** read dynamically from those Definition `.bml` files / TypeRegistry — see § Serializer Emit Order.
+
+**Dual placement (D9 — decided):** When `bml:xml` allows both `element` and `attribute`, the parser **MUST** store which form was authored (`authoredPlacement`) and the serializer **MUST** emit that form on roundtrip. See `19` D9 · `12` `authoredPlacement`.
+
+**Visibility prefixes (B14 — decided):** `_` / `__` on member (and Sub-Block) element / attribute localNames are **derived from `visibility` on emit**. BOM stores logical `name` (no visibility prefix) + `visibility`. Roundtrip **MUST** rewrite the matching prefix. See § Visibility Prefix Emit.
+
+**Boolean literals (B15 — decided):** Boolean **values** may normalize casing (`True`/`TRUE` → `true`). Emit always lowercase `true`/`false`.
+
+**Boolean.True / Boolean.False (B16 — decided):** These are **types** (Sub-Blocks / Constant shortcuts in type expressions), **not** boolean values. Preserve as type references — never collapse to literal `true`/`false`. See `04_types.md` · `21_constant_value_type.md`.
+
+**Omit defaults (B17 — decided):** What can be omitted without changing semantics **SHOULD** be omitted on emit (default `false`, empty containers, redundant restatements, …). Do not emit noise that parse would treat as equivalent to absence.
 
 ## Member Mapping Order
 
@@ -135,6 +147,8 @@ Block metadata (`name`, `is`, `summary`, `keywords`, `documentation`, `isnot`, `
 | **Member order** | Properties, aggregations, associations, capabilities appended in BML document order — **never sorted**; see `12_bom_object_model.md` — Member Declaration Order |
 | **XML comments (B11)** | Bind to following element (`leadingComments`); trailing/same-line → `trailingComments`. Preserve on Urmodell — see § XML Comments below · `12` |
 | **Emit order (B12)** | Definition member declaration order — **V1 hardcoded**, **V2 from Definition `.bml`**; see § Serializer Emit Order |
+| **Whitespace (B13)** | Formatting whitespace not stored / may normalize on emit — see B10 · B13 above |
+| **Dual placement (D9)** | `element\|attribute` → store `authoredPlacement`, emit same form on roundtrip — see `19` D9 |
 
 ---
 
@@ -220,7 +234,7 @@ Parser **accepts** any authored sibling order and maps into BOM fields / arrays 
 
 ### Canonical `<block>` child sequence (V1 — hardcoded)
 
-Emit each element **only when present** on the Urmodell (omit empty / default-false noise unless authored and stored). Order — **copy of the Definition `.bml` declaration lists** for V1; V2 must produce the same order by reading those files instead of this table:
+Emit each element **only when present** on the Urmodell and not omit-equivalent (B17). Order — **copy of the Definition `.bml` declaration lists** for V1; V2 must produce the same order by reading those files instead of this table:
 
 ```text
 # BlockDefinition properties (declaration order in BlockDefinition.bml)
@@ -237,8 +251,8 @@ since
 status
 summary          # may repeat (i18n / facets) — BOM summaries[] order
 documentation    # may repeat — BOM documentations[] order
-abstract         # omit when false/default unless stored
-final            # omit when false/default unless stored
+abstract         # omit when false/default (B17)
+final            # omit when false/default (B17)
 
 # StructuralDefinition aggregations
 keywords
@@ -278,6 +292,53 @@ embeddedBlocks   # children = embeddedBlocks[], BOM order
 ### Identity-first (aligned with BlockDefinition.bml)
 
 `BlockDefinition.bml` requires authored identity **`name` → `type` → `baseType` before `is`**. The canonical emit sequence above starts with that prefix. See also `02_mbml.md` — Definition identity first.
+
+### Visibility prefix emit (B14 — decided)
+
+```text
+Parse:
+  XML localName "__foo" / "_foo" / "foo"
+    → MemberDefinition.name = "foo"          (logical — prefixes stripped)
+    → MemberDefinition.visibility = private | protected | public
+  Explicit visibility= must match derived prefix → else BML_VISIBILITY_MISMATCH
+
+Serialize (members, Sub-Blocks, instance member attributes):
+  private   → localName "__" + name
+  protected → localName "_"  + name
+  public    → localName name
+```
+
+Do **not** emit a bare logical name for private/protected members. Do **not** keep a separate “authored prefix spelling” — visibility is the SSOT; the prefix is reconstructible.
+
+Same rule on composition instances: ` __myVar="5" ` ↔ `memberValues.myVar` with member visibility private.
+
+### Boolean literals vs Boolean.True / Boolean.False (B15 / B16 — decided)
+
+| Form | Kind | Parse / BOM | Serialize |
+|---|---|---|---|
+| `true` / `True` / `TRUE` / `false` / … | Boolean **value** | Canonical lowercase boolean (B15) | Always `true` / `false` |
+| `Boolean.True` / `Boolean.False` | **Type** reference (Sub-Block / Constant shortcut) | `TypeExpression` / named type ref — unchanged (B16) | Same type spelling (QName/FQN as authored bindings allow) |
+| `Constant(Boolean){value: true}` | Type expression | Preserve Constant application | Preserve Constant application |
+
+Never rewrite `Boolean.False | SizeXYZ` into `false | SizeXYZ` or a bare boolean literal type.
+
+### Omit-by-default emit (B17 — decided)
+
+General rule: **if omitting a node/attribute does not change parse+validate semantics, omit it on serialize.**
+
+```text
+SHOULD omit:
+  abstract/final/override/readOnly when false (default)
+  empty member containers (<properties/> with no children)
+  <visibility> when it matches the name-prefix convention (prefix already encodes it)
+  redundant restated type on overrides when unchanged (authoring guidance; emit follows BOM — if not stored, omit)
+  default-false snippet, empty optional prose slots, …
+
+MUST NOT omit:
+  anything whose absence would change meaning (required identity, true flags, non-default enums, authoredPlacement-bearing dual forms that differ from D1, authored CDATA form when set, comments, …)
+```
+
+Aligned with StructuralDefinition guidance (“Default false when omitted — do not write false explicitly unless documenting intent”).
 
 ### V2 dynamic order (normative intent)
 
@@ -545,7 +606,7 @@ Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <example> without title attribute        → BML_EXAMPLE_MISSING_TITLE (error)
 <*:example> without title attribute      → BML_EXAMPLE_MISSING_TITLE (error)
 <example> / *:example empty body         → BML_EXAMPLE_EMPTY_BODY (error)
-  (Text node or CDATA both valid — placement is text / D8; CDATA not required)
+  (Text node or CDATA both valid — store authoredCharacterDataForm; D8)
 <example language="…"> unknown Language FQN → BML_EXAMPLE_UNKNOWN_LANGUAGE (error)
 <language> or documentation/summary language="…" unknown NaturalLanguage FQN → BML_UNKNOWN_NATURAL_LANGUAGE (error)
 <see> without type, instance, file, url, property, aggregation, association, or capability → BML_REFERENCE_MISSING_TARGET (error)
@@ -566,8 +627,9 @@ Full-path form: attribute value stored as-is when it already contains the contai
 Omitted abstract/final/override          → false
 <abstract/> / <final/> / empty boolean   → parse error (explicit true/false required; case variants True/TRUE/False/FALSE accepted)
 Attribute shorthand without value        → parse error (e.g. abstract without ="true")
-Boolean authored True/TRUE/False/FALSE   → BOM canonical lowercase true/false
-Omitted <visibility> on Sub-Block      → derive from <name> (__ → private, _ → protected, else public)
+Boolean authored True/TRUE/False/FALSE   → BOM canonical lowercase true/false (B15 — value only)
+Boolean.True / Boolean.False in type=    → type reference preserved (B16 — not a boolean value)
+Omitted <visibility> on Sub-Block      → derive from <name> prefix (__ → private, _ → protected, else public)
 <visibility> on root Block               → BML_VISIBILITY_ON_ROOT_BLOCK (error)
 <visibility> mismatches <name>           → BML_VISIBILITY_MISMATCH (error)
 Private member access outside scope      → BML_PRIVATE_MEMBER_ACCESS (error)
@@ -604,9 +666,9 @@ ValueType BML uses the same `BlockDefinition` shape as all Blocks — StructType
 All member kinds map common fields to `MemberDefinitionBase`:
 
 ```text
-element localName          → name
+element localName          → name = normalizedLogicalName (visibility prefixes _ / __ stripped — B14)
 element prefix (if any)    → namespace (resolved — see below)
-visibility="protected"     → visibility (optional; derived from name when omitted)
+visibility="protected"     → visibility (optional; derived from localName prefix when omitted; must match)
 readOnly="true"            → readOnly (validator-enforced on instances — see 02_mbml.md § readOnly Members)
 abstract="true"            → abstract (local declaration property — not inherited)
 final="true"               → final (local declaration property — not inherited)
@@ -1081,6 +1143,12 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | B10 | Roundtrip gate = BOM deep equality only | **Decided** — `parse(serialize(parse(f)))` deep-equals `parse(f)`; XML source diff optional/non-blocking — see § V1 Parser / Serializer Scope · `15_dev_setup.md` Roundtrip test contract |
 | B11 | XML comments bound to following element | **Decided** — `XmlTrivia.leadingComments` / `trailingComments`; section/metadata slots when element is flattened — see § XML Comments · `12` |
 | B12 | Serializer emit order = Definition member declaration order | **Decided** — **V1 hardcoded** (snapshot of `BlockDefinition.bml` + bases); **V2 dynamic** from Definition `.bml` / effective members — see § Serializer Emit Order |
+| B13 | Formatting whitespace not preserved | **Decided** — indent / blank lines / attribute spacing may normalize on emit; not on Urmodell — see § V1 Parser / Serializer Scope |
+| B14 | Visibility prefixes `_`/`__` on emit | **Decided** — derive from `visibility`; BOM `name` is logical (stripped); see § Visibility Prefix Emit |
+| B15 | Boolean **value** casing | **Decided** — normalize to lowercase `true`/`false` on parse and emit |
+| B16 | `Boolean.True` / `Boolean.False` | **Decided** — type references in type expressions; never collapse to boolean values — see `04` · `21` |
+| B17 | Omit-by-default on emit | **Decided** — omit anything whose absence is semantically equivalent; see § Omit-by-default emit |
+| B18 | XML DOM library | **Decided** — `@xmldom/xmldom` in Node **and** browser (same impl); see `06_compiler.md` — [2] XML Parser |
 
 ---
 
@@ -1088,6 +1156,7 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 
 | Topic | Document |
 |---|---|
+| XML DOM / emit policy | `06_compiler.md` — [2] · this document B10–B18 |
 | BOM object model | `12_bom_object_model.md` |
 | V1 Phase-A build order | `15_dev_setup.md` — V1 Implementation Strategy |
 | Expression AST | `10_expression_language.md` |

@@ -20,8 +20,8 @@ BML SSOT: `org.blockml.bml.type.Constant` / `ConstantType` under `packages/core/
 | **Kind** | `ConstantType` is a **fourth ValueType branch** under `org.blockml.bml.core.ValueType` — sibling of Primitive, Struct, Enum |
 | **Generic form** | `Constant(T){value: …}` — `(...)` binds `T`; `{value: …}` configures the singleton |
 | **External value** | Authored/runtime value is the **inner literal** (`"auto"`), not `{ value: "auto" }` |
-| **Shortcuts** | `Boolean.True` / `Boolean.False` ≡ `Constant(Boolean){value: true/false}` |
-| **Parser (Phase A)** | Map type attributes to `TypeExpression` including Constant applications |
+| **Shortcuts** | `Boolean.True` / `Boolean.False` ≡ `Constant(Boolean){value: true/false}` — **types**, not values (B16: preserve in type expressions) |
+| **Parser (Phase A)** | Map type attributes to `TypeExpression` including Constant applications; do not rewrite Boolean.True/False to literals |
 | **AST / evaluation** | N/A for the type itself; property values matching a Constant alternative are ordinary literals |
 
 ---

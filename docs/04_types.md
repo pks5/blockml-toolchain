@@ -203,7 +203,7 @@ Boolean.True   ≡  Constant(Boolean){value: true}
 Boolean.False  ≡  Constant(Boolean){value: false}
 ```
 
-Use in **type expressions** (e.g. `Boolean.False | T`), not as property values. See `21_constant_value_type.md` — Boolean.True / Boolean.False shortcuts.
+These are **types** (usable in type expressions, e.g. `Boolean.False | T`), **not** boolean property values. Parser/serializer **MUST** preserve them as type references (B16) — never collapse to literal `true`/`false`. Boolean **values** (`true`/`True`/…) normalize to lowercase (B15). See `21_constant_value_type.md` — Boolean.True / Boolean.False shortcuts · `13` B15/B16.
 
 ---
 
