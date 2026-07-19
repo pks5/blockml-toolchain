@@ -70,7 +70,7 @@ Authoring options (equivalent at render time):
 Both produce:  mb_block(config, settings = [ native property settings ... ])
 ```
 
-Typed block modules (e.g. `mb__com__machineblocks__bricks__Standard`) exist for **standalone compile** of a Block definition file — Customizer entry point, library artifact — not for composition references.
+Typed block modules (e.g. `mb__com__machineblocks__scad__bricks__Standard`) exist for **standalone compile** of a Block definition file — Customizer entry point, library artifact — not for composition references.
 
 ### Leaf-only blocks — optimize to direct `mb_block()`
 
@@ -85,7 +85,7 @@ mb_block(config = mb_config, settings = [ ["size", size], ["studs", studs], ... 
 instead of:
 
 ```scad
-mb__com__machineblocks__bricks__Standard(config, settings = [...]);  // ✗ avoid
+mb__com__machineblocks__scad__bricks__Standard(config, settings = [...]);  // ✗ avoid
   → module extracts mb_param_* …
   → mb_block(...)
 ```

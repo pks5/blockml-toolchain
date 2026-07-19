@@ -729,8 +729,8 @@ Each Capability has exactly one `<implementation>` block. The implementation con
 **Name replacement:** The processor scans the CDATA for all `function <name>(` declarations — these are the names to replace. All occurrences (declarations + calls) are replaced via regex. Embedded expression regions are resolved **before** name replacement on the surrounding target-language text:
 
 ```text
-formatValue    → mb__com__machineblocks__calibration__Calibrator__Utils__formatValue
-replaceZeroDot → mb__com__machineblocks__calibration__Calibrator__Utils__replaceZeroDot
+formatValue    → mb__com__machineblocks__scad__calibration__Calibrator__Utils__formatValue
+replaceZeroDot → mb__com__machineblocks__scad__calibration__Calibrator__Utils__replaceZeroDot
 ```
 
 **Embedded expression resolution in SCAD CDATA:** `#math.*`, `#strings.*`, `#this.*`, and `@bean.*` inside `<$ $>` are parsed as BlockML expressions and mapped to SCAD by the renderer. The author never writes raw SCAD FQN calls or service import paths:

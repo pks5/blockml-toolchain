@@ -511,7 +511,7 @@ Package segments are lowercase. Class names are PascalCase.
 FQN segments are separated by double underscores. Package segments are lowercase, class names are PascalCase:
 
 ```scad
-mb__com__machineblocks__bricks__StandardBrick
+mb__com__machineblocks__scad__bricks__StandardBrick
 mb__com__martianmicro__anyclosure__Wall
 mb__com__martianmicro__anyclosure__Wall__Bottom          ← subclass
 mb__com__martianmicro__anyclosure__Wall__help__myHelper  ← private helper

@@ -1844,7 +1844,7 @@ Within the enclosing document, each embedded FQN **shadows** the corresponding l
 
 ```text
 com.machineblocks.bml.calibration.Calibrator.Base
-→  mb__com__machineblocks__calibration__Calibrator__Base
+→  mb__com__machineblocks__scad__calibration__Calibrator__Base
 ```
 
 ### Visibility

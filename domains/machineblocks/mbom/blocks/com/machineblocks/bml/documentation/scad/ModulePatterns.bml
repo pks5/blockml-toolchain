@@ -54,7 +54,7 @@
  *
  * Name: MachineBlock Standard Brick
  * Filename: Standard.scad
- * FQN: com.machineblocks.bml.bricks.Standard
+ * FQN: com.machineblocks.scad.bricks.Standard
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -222,7 +222,7 @@ holeXYGridOffsetZ = [holeXGridOffsetZ, holeYGridOffsetZ];
 /*
  * Main Module Call
  */
-mb__com__machineblocks__bricks__Standard(
+mb__com__machineblocks__scad__bricks__Standard(
     config = mb_config,
     settings = [
         ["size",                 size],
@@ -270,16 +270,16 @@ mb__com__machineblocks__bricks__Standard(
 
 /*
  * Main Module Definition
- * com.machineblocks.bml.bricks.Standard
+ * com.machineblocks.scad.bricks.Standard
  *
  * CompositeBlock with a single NativeBlock child — no wrapper mb_block()
  * generated (1 child rule). Each NativeBlock property is extracted via
  * mb_param_* — no generic mb_param() for natives. Only the declared
  * parameter set of Standard is forwarded to mb_block().
  */
-module mb__com__machineblocks__bricks__Standard(config = undef, settings = undef) {
+module mb__com__machineblocks__scad__bricks__Standard(config = undef, settings = undef) {
 
-    blockId             = mb_param_id(config, settings, "com.machineblocks.bml.bricks.Standard");
+    blockId             = mb_param_id(config, settings, "com.machineblocks.scad.bricks.Standard");
     size                = mb_param_size(config, settings, [4, 2, 3]);
     baseRoundingRadius  = mb_param_baseRoundingRadius(config, settings, 0);
     baseCutoutType      = mb_param_baseCutoutType(config, settings);
@@ -381,7 +381,7 @@ module mb__com__machineblocks__bricks__Standard(config = undef, settings = undef
  *
  * Name: Cross / Corner Brick
  * Filename: Cross.scad
- * FQN: com.machineblocks.bml.examples.Cross
+ * FQN: com.machineblocks.scad.examples.Cross
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -469,7 +469,7 @@ studIcon = "../../pattern/bolt-solid-full.svg"; // [none:None, ../../pattern/anc
 /*
  * Main Module Call
  */
-mb__com__machineblocks__examples__Cross(
+mb__com__machineblocks__scad__examples__Cross(
     config = mb_config,
     settings = [
         ["size", size],
@@ -501,7 +501,7 @@ mb__com__machineblocks__examples__Cross(
 /*
  * Main Module Definition
  */
-module mb__com__machineblocks__examples__Cross(config = undef, settings = undef){
+module mb__com__machineblocks__scad__examples__Cross(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);
@@ -602,7 +602,7 @@ module mb__com__machineblocks__examples__Cross(config = undef, settings = undef)
  *
  * Name: Frame
  * Filename: Frame.scad
- * FQN: com.machineblocks.bml.examples.Frame
+ * FQN: com.machineblocks.scad.examples.Frame
  */
 
 /*
@@ -654,7 +654,7 @@ studIcon = "../../pattern/bolt-solid-full.svg";
 /*
  * Main Module Call
  */
-mb__com__machineblocks__examples__Frame(
+mb__com__machineblocks__scad__examples__Frame(
     config = mb_config,
     settings = [
         ["size", size],
@@ -683,7 +683,7 @@ mb__com__machineblocks__examples__Frame(
 /*
  * Main Module Definition
  */
-module mb__com__machineblocks__examples__Frame(config = undef, settings = undef){
+module mb__com__machineblocks__scad__examples__Frame(config = undef, settings = undef){
     // Native Parameters
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);
@@ -811,13 +811,13 @@ module mb__com__machineblocks__examples__Frame(config = undef, settings = undef)
     <see type="scad:MbBlockApi" relation="Requires">
       NativeBlock properties → mb_param_[propertyName](); custom → mb_param(). Cross shows both.
     </see>
-    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/bricks/Standard.scad" relation="SeeAlso">
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/scad/bricks/Standard.scad" relation="SeeAlso">
       Source Block File for the Standard.scad example.
     </see>
-    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/examples/Cross.scad" relation="SeeAlso">
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/scad/examples/Cross.scad" relation="SeeAlso">
       Source Block File for the Cross.scad example — native and custom getters side by side.
     </see>
-    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/examples/Frame.scad" relation="SeeAlso">
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/scad/examples/Frame.scad" relation="SeeAlso">
       Source Block File for the Frame.scad example.
     </see>
   </references>

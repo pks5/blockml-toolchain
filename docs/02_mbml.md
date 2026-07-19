@@ -3905,7 +3905,7 @@ The render target may produce a `.json` file in OpenSCAD Customizer format when 
 
 ```text
 BML:   blocks/com/machineblocks/bml/bricks/presets/StandardPresets.bml
-JSON:  scad/com/machineblocks/bml/bricks/Standard.json
+JSON:  scad/com/machineblocks/scad/bricks/Standard.json
 ```
 
 The Customizer JSON uses the preset **name** as the key — the human-readable label shown in the OpenSCAD UI.

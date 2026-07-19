@@ -19,7 +19,17 @@
   <documentation>
     A Block Module is the reusable OpenSCAD module that calls mb_block() (directly or indirectly).
     Naming: mb__&lt;package&gt;__&lt;Class&gt; with package segments separated by double underscores
-    (example: mb__com__machineblocks__examples__Cross).
+    (example: mb__com__machineblocks__scad__examples__Cross).
+
+    MachineBlocks 1:1 SCAD convention — Manifestation FQN: replace the reserved definition segment
+    bml with scad in the Definition FQN. Definition com.machineblocks.bml.examples.Cross maps to
+    Manifestation com.machineblocks.scad.examples.Cross → file under
+    scad-lib/blocks/com/machineblocks/scad/examples/Cross.scad and module
+    mb__com__machineblocks__scad__examples__Cross. Header FQN on the .scad file is the Manifestation
+    FQN; the BML Definition FQN remains the Idea identity in MBOM. Other targets may use another
+    segment (e.g. cadq) the same way. This replace rule applies only to 1:1 Block→file projects —
+    not a BlockML platform requirement.
+
     Signature is always (config, settings).
 
     A Block File is a self-contained .scad file: Block Module plus customizer variables and a main

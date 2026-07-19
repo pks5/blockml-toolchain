@@ -103,7 +103,24 @@ ScadFile(s)
 
 ## FQN → SCAD Module Name
 
-Every MBOM Block class is identified by its FQN. The SCAD Renderer maps FQNs to SCAD module names following a deterministic convention.
+Every MBOM Block class is identified by its Definition FQN (`*.bml.*`). The SCAD Renderer maps
+FQNs to SCAD module names following a deterministic convention.
+
+### MachineBlocks 1:1 convention (this target)
+
+For MachineBlocks Block→file emit, replace the reserved definition segment `bml` with `scad` to
+form the Manifestation FQN, then map that to the module name and output path:
+
+```text
+Definition FQN:      com.machineblocks.bml.examples.Cross
+Manifestation FQN:   com.machineblocks.scad.examples.Cross
+SCAD module:         mb__com__machineblocks__scad__examples__Cross
+Output file:         …/scad-lib/blocks/com/machineblocks/scad/examples/Cross.scad
+```
+
+Other MachineBlocks targets may use another segment (e.g. `cadq`) the same way. This replace rule
+is a 1:1-project convention — not a BlockML platform requirement. Targets that do not emit one
+file per Block are free to choose any layout.
 
 ### Convention
 
@@ -119,6 +136,10 @@ Functions:    __func__camelCase  (private, not a block)
 ### Examples
 
 ```text
+Definition FQN:   com.machineblocks.bml.bricks.Standard
+Manifestation:    com.machineblocks.scad.bricks.Standard
+SCAD:             mb__com__machineblocks__scad__bricks__Standard
+
 FQN:   com.martianmicro.anyclosure.Wall
 SCAD:  mb__com__martianmicro__anyclosure__Wall
 
@@ -139,6 +160,9 @@ The names `help` and `func` are reserved and cannot be used as subclass names.
 ## FQN → SCAD File Path
 
 ```text
+Manifestation FQN:   com.machineblocks.scad.examples.Cross
+File:                {outDir}/com/machineblocks/scad/examples/Cross.scad
+
 FQN:   com.martianmicro.anyclosure.Wall
 File:  scad/com/martianmicro/anyclosure/Wall.scad
 ```

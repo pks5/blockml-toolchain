@@ -36,7 +36,7 @@
 
     Conversion steps:
     1. Create V3 Block File structure (mandatory header, imports, customizer, main call, module)
-       and mb__&lt;package&gt;__&lt;Class&gt; naming (e.g. mb__com__machineblocks__examples__Cross).
+       and mb__&lt;package&gt;__&lt;Class&gt; naming (e.g. mb__com__machineblocks__scad__examples__Cross).
        Replace V2 import paths
        (machineblocks/lib/block.scad, machineblocks/config/config.scad) with project-relative
        lib/block.scad and config/mb_config.scad.
@@ -392,7 +392,7 @@ union(){
     <see type="mbcore:NativeBlock" relation="Defines">
       Native parameter SSOT for getters and settings keys.
     </see>
-    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/examples/Cross.scad" relation="SeeAlso">
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/scad/examples/Cross.scad" relation="SeeAlso">
       V3 converted Composite Block File for the same Cross / Corner intent.
     </see>
     <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/docs/01_system.md" relation="DeepDive">

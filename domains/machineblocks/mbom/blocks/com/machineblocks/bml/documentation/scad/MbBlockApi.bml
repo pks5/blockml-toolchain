@@ -66,7 +66,7 @@
     <see type="scad:ModulePatterns" relation="SeeAlso">
       Cross.scad example — native getters and mb_param() side by side.
     </see>
-    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/examples/Cross.scad" relation="SeeAlso">
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/scad/examples/Cross.scad" relation="SeeAlso">
       Composite Block File demonstrating native vs custom parameter access.
     </see>
   </references>
