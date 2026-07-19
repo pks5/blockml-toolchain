@@ -219,17 +219,17 @@
 
       <documentation>Describes one usage example in an examples container on any definition element
         (block, property, aggregation, …). Rendered as an example element with a required title
-        attribute and a CDATA body. The enclosing container may be default-namespace
-        &lt;examples&gt; or an Annotation facet (e.g. scad:examples). Paired target-language samples
-        use Annotation.Example as a sibling under the same &lt;examples&gt; (e.g. scad:example with
-        matching title) — preferred over a parallel scad:examples container. Maps to BOM
-        DocumentationExample { title, content, contentLanguageFqn?, namespace?, snippet }. Body
-        content must be CDATA (BML_EXAMPLE_NOT_CDATA otherwise). The title is always written in the
-        effective natural language of the enclosing block definition. An optional language attribute
-        on the example element references a Language FQN — implementation languages (OpenSCAD,
-        TypeScript, …) for code samples, or NaturalLanguage (English, German, …) for prose bodies.
-        Optional snippet marks illustrative fragments that are not complete / not to be
-        syntax-checked.</documentation>
+        attribute and a character-data body (bml:xml="text" — Text node or CDATA equally valid;
+        serializer chooses CDATA vs text per escape policy, 19 D8). The enclosing container may be
+        default-namespace &lt;examples&gt; or an Annotation facet (e.g. scad:examples). Paired
+        target-language samples use Annotation.Example as a sibling under the same &lt;examples&gt;
+        (e.g. scad:example with matching title) — preferred over a parallel scad:examples container.
+        Maps to BOM DocumentationExample { title, content, contentLanguageFqn?, namespace?, snippet }.
+        Empty body → BML_EXAMPLE_EMPTY_BODY. The title is always written in the effective natural
+        language of the enclosing block definition. An optional language attribute on the example
+        element references a Language FQN — implementation languages (OpenSCAD, TypeScript, …) for
+        code samples, or NaturalLanguage (English, German, …) for prose bodies. Optional snippet
+        marks illustrative fragments that are not complete / not to be syntax-checked.</documentation>
 
       <bml:xml>example</bml:xml>
 
@@ -256,9 +256,10 @@
             — do not write false explicitly unless documenting intent. Boolean with explicit true or
             false; empty elements and attribute shorthand without value are not permitted.</documentation>
         </snippet>
-        <content type="Text" bml:xml="text|cdata">
+        <content type="Text" bml:xml="text">
           <documentation>BML, MBML, target-language source, or prose demonstrating usage. Stored as
-            CDATA body in BOM DocumentationExample.content. When snippet is true, content need not
+            character data on the host element (BOM DocumentationExample.content). Serializer may
+            emit Text or CDATA per escape policy (19 D8). When snippet is true, content need not
             be complete or syntactically valid.</documentation>
         </content>
       </properties>

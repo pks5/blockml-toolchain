@@ -52,6 +52,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | `baseType` FQN | string reference | Type Registry → effective member metadata |
 | Preset reference | string `FQN::id` — **unmerged** | Renderer (preset merge) |
 | Authored Capabilities | `CapabilityDefinition` in BOM | Renderer (interpretation only — not invoked at parse/validate time) |
+| XML comments `<!-- … -->` | `XmlTrivia` on the **following** element (B11) | Serializer re-emits before/after that element |
 
 ---
 
@@ -70,6 +71,8 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | Flow-control `bml:*` on composition elements → `directives[]`. Composition meta (`bml:id`, `bml:version`) → `BlockInstance` fields. **`bml:xml` → first-class `xmlRendering`** (not `directives[]`). None expanded at parse time. |
 | **Maximum authored surface** | Urmodell exposes as much of the original document as possible to renderers — including seeming internals (`01_bom_core.md`). When in doubt, preserve. |
+| **XML comments (B11)** | Bind to the **following** XML element (`leadingComments`); same-line / immediately-after → `trailingComments`. Not discarded. See § XML Comments · `13` B11. |
+| **Emit order (B12)** | Serialize `<block>` children in Definition member declaration order — **V1 hardcoded**, **V2 from Definition `.bml`**. See `13` § Serializer Emit Order. |
 | **Instance `version`** | From **`bml:version`** — optional on external block references and Library TypeReferenceEntity sugar. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert against the referenced type (`BML_UNKNOWN_VERSION` if no match). Same-document Sub-Blocks exempt. |
 | **Definition `version`** | Every Block definition has an **effective version**: own `<version>` if present, else library version if the block is exported via a Library, else error (`BML_MISSING_VERSION`). |
 | **Instance `id`** | From **`bml:id`** — authored in BOM only on `BlockInstance.id`; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `bml:id`. No FQN fallback. |
@@ -150,7 +153,71 @@ interface SourceInfo {
    */
   namespaceBindings?: Record<string, string>
 }
+
+/**
+ * XML comment trivia bound to an element (B11).
+ * Bodies only — without `<!--` / `-->`; document order preserved.
+ * Leading = immediately before this element's start tag (after previous sibling).
+ * Trailing = immediately after this element's end tag (before next sibling), including same-line.
+ */
+interface XmlTrivia {
+  leadingComments?: string[]
+  trailingComments?: string[]
+}
+
+/**
+ * Structural member containers flattened into members[] — comments on the container
+ * element itself (e.g. before `<properties>`) live here, keyed by container local name.
+ */
+type MemberSectionName =
+  | "properties"
+  | "aggregations"
+  | "associations"
+  | "capabilities"
+
+/**
+ * Definition metadata child elements that map to fields rather than child BOM nodes
+ * (`name`, `type`, `baseType`, `final`, `documentation`, …). Key = element localName.
+ */
+type MetadataElementTrivia = Record<string, XmlTrivia>
 ```
+
+---
+
+## XML Comments (B11)
+
+> **Decided:** XML comments are part of the maximum authored surface. The parser **binds** each comment to an element; it does **not** drop comments.
+
+**Binding rules:**
+
+```text
+1. One or more Comment nodes immediately before element E
+     → E.xmlTrivia.leadingComments[]  (document order)
+
+2. Comment node(s) immediately after E's end tag, before the next sibling
+   (including same-line trailing comments)
+     → E.xmlTrivia.trailingComments[]
+
+3. File-header comment(s) before the root <block>
+     → root BlockDefinition.xmlTrivia.leadingComments
+
+4. Comments before a member-section container (<properties>, …)
+     → BlockDefinition.memberSectionTrivia[section].leadingComments
+     (containers are flattened into members[]; trivia stays on the definition)
+
+5. Comments before a metadata child that maps to a field (<final>, <name>, …)
+     → BlockDefinition.metadataTrivia[localName].leadingComments
+
+6. Comment with no following element in the same parent (EOF / dangling)
+     → attach as trailingComments of the previous sibling, else document-level
+        trailing on the root BlockDefinition
+```
+
+**Not preserved (Phase A):** processing instructions, insignificant whitespace / indentation, attribute order. Gate remains BOM deep-equal (B10).
+
+**Serializer:** re-emit `leadingComments` immediately before the element and `trailingComments` immediately after. Comment body text is opaque — no trimming beyond what the XML parser already applied to the comment node. Sibling **element** order follows B12 (`13` — Serializer Emit Order).
+
+See `13_bml_to_bom_mapping.md` — XML Comments · B11.
 
 ---
 
@@ -223,7 +290,7 @@ interface BlockDefinition {
   /** Version history entries — oldest first. */
   changelog?: ChangelogEntry[]
 
-  /** Usage examples with title and CDATA body. */
+  /** Usage examples with character-data body (text or CDATA — same string). */
   examples?: DocumentationExample[]
 
   /** Cross-references to related Blocks or Definitions. */
@@ -300,6 +367,24 @@ interface BlockDefinition {
    * May contain BlockInstanceNode and VirtualContainerNode children.
    */
   compositions: CompositionTemplate[]
+
+  /**
+   * XML comments on this definition element itself (B11).
+   * Root file-header comments → leadingComments on the document root BlockDefinition.
+   */
+  xmlTrivia?: XmlTrivia
+
+  /**
+   * Comments bound to flattened member-section containers (<properties>, …).
+   * Key = container local name.
+   */
+  memberSectionTrivia?: Partial<Record<MemberSectionName, XmlTrivia>>
+
+  /**
+   * Comments bound to metadata child elements that map to fields (<name>, <final>, …).
+   * Key = element localName.
+   */
+  metadataTrivia?: MetadataElementTrivia
 
   /** BML source span of this definition (root or sub-block) */
   source: SourceLocation
@@ -552,7 +637,7 @@ interface ChangelogEntry {
 interface DocumentationExample {
   /** Required title attribute on <example> / *:example — always in enclosing block's natural language */
   title: string
-  /** CDATA body — BML/MBML, target-language source, or prose */
+  /** Character data body — BML/MBML, target-language source, or prose (text or CDATA in XML). */
   content: string
   /** Language FQN for CDATA content (implementation Language or NaturalLanguage). Omitted when content is BML/MBML. */
   contentLanguageFqn?: string
@@ -638,6 +723,8 @@ interface MemberDefinitionBase {
   xmlRendering?: XmlRenderingMember
   /** Constraint Block instances — document order preserved. Target binding resolved at validate time. */
   constraints?: BlockInstance[]
+  /** XML comments bound to this member element (B11). */
+  xmlTrivia?: XmlTrivia
   source?: SourceLocation
 }
 
@@ -651,13 +738,17 @@ interface XmlRenderingBlock {
   raw: string
 }
 
-type XmlNodeKind = "attribute" | "element" | "text" | "cdata"
+type XmlNodeKind = "attribute" | "element" | "text"
 
 /** Member-level `bml:xml` — lossless + emit hints. */
 interface XmlRenderingMember {
-  /** Declared kind(s). Single value or dual allow-list (element|attribute, text|cdata). */
+  /**
+   * Declared placement kind(s). Single value or dual allow-list (`element|attribute` only).
+   * `text` = character data of the host element (no nested child element for this value).
+   * CDATA is not a kind — serializer escape for `text` (19 D8).
+   */
   kinds: XmlNodeKind[]
-  /** When dual forms were legal: which form appeared in source (roundtrip). */
+  /** When dual forms were legal (`element|attribute`): which form appeared in source (roundtrip). */
   authoredPlacement?: XmlNodeKind
 }
 
@@ -711,7 +802,7 @@ interface CapabilityDefinition extends MemberDefinitionBase {
 
 interface ImplementationBlock {
   languageFqn: string      // org.blockml.bml.language.TypeScript | org.blockml.bml.language.OpenSCAD
-  source: string            // CDATA body — full original text including <$ $> regions
+  source: string            // host-element character data — full original text including <$ $> regions
   embeddedExpressions: EmbeddedExpression[]
   sourceLocation?: SourceLocation
 }
@@ -1196,6 +1287,9 @@ interface BlockInstance {
    */
   aggregationCompositions?: InstanceAggregationComposition[]
 
+  /** XML comments bound to this composition instance element (B11). */
+  xmlTrivia?: XmlTrivia
+
   source: SourceLocation
 }
 ```
@@ -1561,7 +1655,7 @@ BML_DUPLICATE_PROPERTY_VALUE  — two PropertyDefinition value-field entries sha
 BML_INVALID_SINCE_VERSION     — <since> is not a valid semantic version
 BML_CHANGELOG_VERSION_ORDER   — <changelog> entries not ordered oldest-first (warning V1)
 BML_EXAMPLE_MISSING_TITLE     — <example> / *:example lacks required title attribute
-BML_EXAMPLE_NOT_CDATA         — <example> / *:example body is not CDATA
+BML_EXAMPLE_EMPTY_BODY        — <example> / *:example has no character data body (text or CDATA)
 BML_EXAMPLE_UNKNOWN_LANGUAGE  — <example> language attribute is not a known Language FQN
 BML_UNKNOWN_NATURAL_LANGUAGE  — <language> or documentation/summary language attribute is not a NaturalLanguage FQN
 BML_MISSING_VERSION           — Block definition lacks effective version (no own <version> and not exported via Library)

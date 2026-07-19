@@ -603,9 +603,11 @@ Full language rules live in `02` / `13` / `19`. **Phase A implements and gates o
 | Single-file parse | TypeRegistry / cross-file |
 | Tolerant parse without XSD files | XSD as hard requirement |
 | Preserve authored `bml:xml` for roundtrip | Interpret Definition grammar |
+| Preserve XML comments on elements (B11) | PIs; insignificant whitespace |
+| Canonical emit order from Definition members (B12) — V1 hardcoded | V2: order read dynamically from Definition `.bml` |
 | Test Layer A roundtrip (T0–T3) | Stage 2 validate, Stage 3 compile |
 
-**Definition of Done:** `parse(serialize(parse(f)))` deep-equals `parse(f)` for the corpus — no validator, no target, no bootstrap.
+**Definition of Done:** `parse(serialize(parse(f)))` deep-equals `parse(f)` for the corpus — no validator, no target, no bootstrap. XML source fidelity is **not** required (B10).
 
 ```text
 INPUT (BML-centric)
@@ -695,7 +697,9 @@ original.bml
   → deepEqual(BomDocument, BomDocument')
 ```
 
-Optional secondary check: normalized XML diff of `serialize(parse(original))` vs. `original` — BOM equality is the authoritative assertion.
+**Authoritative gate (B10):** BOM deep equality only. A test fails if and only if `BomDocument` ≠ `BomDocument'`.
+
+**Not a gate:** byte-identical or normalized XML equality of `reserialized.bml` vs `original.bml`. XML diffs may be logged as diagnostics / optional snapshots for humans; they must not fail Phase A. Serializer emit may differ in whitespace, attribute order, Boolean casing (`True`→`true`), self-closing style, and other surface details so long as re-parse yields an equal Urmodell.
 
 Parser is **single-file scoped** — roundtrip tests do not require TypeRegistry bootstrap (`13_bml_to_bom_mapping.md`).
 

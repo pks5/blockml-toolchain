@@ -56,6 +56,7 @@ Parser step [5] produces the immutable BOM graph with expression **raw** text on
 | Hardcoded mapper + hardcoded inverse serializer | Meta-driven `bml:xml` parser/serializer (`19_…`) |
 | Well-formed XML + mapping diagnostics | **XSD as a hard parse requirement** |
 | Preserve `bml:xml` / unknown-safe authored form for roundtrip | Interpret Definition/`bml:xml` grammar at parse time |
+| Preserve XML comments bound to elements (B11) | Processing instructions; insignificant whitespace |
 | Roundtrip corpus T0–T3 | `bom compile` / render targets |
 
 **XSD:** Not part of Phase-A Stage 1. Hand-written schemas / `catalog.xml` may remain a temporary **IDE aid**, but:
@@ -76,6 +77,12 @@ parse(serialize(parse(corpus.bml))) deep-equals parse(corpus.bml)
 ```
 
 on the agreed corpus tiers — no validator, no target, no TypeRegistry bootstrap required.
+
+**Roundtrip gate (B10 — decided):** The sole authoritative Phase-A assertion is **BOM deep equality** after `parse → serialize → parse`. XML text fidelity (`serialize(parse(f))` vs original source) is **not** a gate — optional diagnostic / snapshot only, never blocking. Consequence: the serializer may emit canonical forms where the mapper already canonicalized (e.g. Boolean `True` → `true`) or where placement is under-specified in the Urmodell; success is defined on the object graph, not byte-identical XML.
+
+**XML comments (B11 — decided):** Comments are preserved on the Urmodell, bound to elements — see § XML Comments. They participate in BOM deep equality; dropping them fails the gate when the corpus has comments.
+
+**Emit order (B12 — decided):** Canonical `<block>` child order = Definition member declaration order. **V1:** hardcoded sequence (mirror of `BlockDefinition.bml` + bases). **V2:** read dynamically from those Definition `.bml` files / TypeRegistry — see § Serializer Emit Order.
 
 ## Member Mapping Order
 
@@ -126,6 +133,165 @@ Block metadata (`name`, `is`, `summary`, `keywords`, `documentation`, `isnot`, `
 | **JSON authoring format** | **Not planned** as equivalent BML. V1/V2 parser accepts XML only (`.bml`). See § JSON BML |
 | **Composition render** | Leaf geometry → NativeBlock → `mb_block()`; see `14_compiler_runtime.md` |
 | **Member order** | Properties, aggregations, associations, capabilities appended in BML document order — **never sorted**; see `12_bom_object_model.md` — Member Declaration Order |
+| **XML comments (B11)** | Bind to following element (`leadingComments`); trailing/same-line → `trailingComments`. Preserve on Urmodell — see § XML Comments below · `12` |
+| **Emit order (B12)** | Definition member declaration order — **V1 hardcoded**, **V2 from Definition `.bml`**; see § Serializer Emit Order |
+
+---
+
+## XML Comments
+
+> **B11 — decided.** Part of maximum authored surface (`01_bom_core.md`). Full BOM shapes: `12_bom_object_model.md` — `XmlTrivia`.
+
+XML Comment nodes are **not discarded**. Each comment is bound to an element:
+
+```text
+<!-- A -->
+<!-- B -->
+<properties> … </properties>   → memberSectionTrivia.properties.leadingComments = ["A", "B"]
+
+<!-- #strings.trim(s) -->
+<trim …>                       → member.xmlTrivia.leadingComments = [" #strings.trim(s) "]
+
+<NativeBlock /> <!-- omit -->  → instance.xmlTrivia.trailingComments = [" omit "]
+
+<!-- file header -->
+<block …>                      → root BlockDefinition.xmlTrivia.leadingComments
+```
+
+**Mapper algorithm (per parent element):**
+
+```text
+pendingLeading = []
+for each child node in document order:
+  if Comment:
+    pendingLeading.append(comment.body)
+  else if Element E:
+    map E → BOM node N
+    if pendingLeading non-empty:
+      N.xmlTrivia.leadingComments = pendingLeading  (or section/metadata slot — see below)
+      pendingLeading = []
+    map E's own children recursively
+    // trailing: comments that follow E before the next Element sibling
+    collect immediately-following Comment siblings → N.xmlTrivia.trailingComments
+  else:
+    // Text / CDATA / PI — flush pendingLeading only when next Element arrives;
+    // insignificant whitespace between comments and E does not break binding
+    ignore for comment binding (PI not preserved in Phase A)
+if pendingLeading non-empty at end of parent:
+  attach as trailingComments of last mapped child, else parent's trailing
+```
+
+**Where trivia is stored when the XML element has no 1:1 BOM node:**
+
+| XML element | BOM storage |
+|---|---|
+| Root / Sub-Block `<block>` | `BlockDefinition.xmlTrivia` |
+| Member element (`<width>`, `<trim>`, …) | `MemberDefinitionBase.xmlTrivia` |
+| Composition instance | `BlockInstance.xmlTrivia` |
+| Section container `<properties>` / `<aggregations>` / `<associations>` / `<capabilities>` | `BlockDefinition.memberSectionTrivia[section]` |
+| Metadata field child (`<name>`, `<final>`, `<documentation>`, …) | `BlockDefinition.metadataTrivia[localName]` |
+
+**Serializer:** emit `leadingComments` as `<!-- body -->` lines immediately before the element; emit `trailingComments` immediately after (same line or next — implementation choice; BOM equality does not require whitespace match). Bodies are opaque strings as stored.
+
+**Out of Phase A:** XML processing instructions; pretty-print whitespace.
+
+---
+
+## Serializer Emit Order
+
+> **B12 — decided.** Canonical BOM→BML element order for Block **definition** documents follows the **member declaration order** of the Definition meta-model — not alphabetical order and not “whatever field the serializer visits first.”
+
+| Release | How emit order is obtained |
+|---|---|
+| **V1 (Phase A)** | **Hardcoded** in `@blockml/serializer` — sequence below mirrors `BlockDefinition.bml` + bases / specializations. Sufficient for the roundtrip gate. |
+| **V2** | **Dynamic** — load Definition `.bml` (`BlockDefinition`, `StructuralDefinition`, `ConstrainableDefinition`, `RootBlockDefinition`, …) via TypeRegistry / effective members and emit children in that declaration order (same SSOT files; no hand-maintained list). Aligns with meta-`bml:xml` drive (`19`). |
+
+### SSOT (both V1 and V2)
+
+| Role | File / type |
+|---|---|
+| Primary | `packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml` → `org.blockml.bml.definition.BlockDefinition` |
+| Inherited docs / modifiers | `StructuralDefinition.bml` |
+| Constraints container | `ConstrainableDefinition.bml` |
+| Document root add-on | `RootBlockDefinition.bml` (`embeddedBlocks`) |
+| Nested / embed specializations | `SubBlockDefinition.bml` · `EmbeddedBlockDefinition.bml` |
+
+Parser **accepts** any authored sibling order and maps into BOM fields / arrays (lossless). Serializer **emits** a canonical sibling order derived from those Definition members. Compatible with B10: top-level section order is not stored as a sequence on the Urmodell (fields are unordered); only array orders (`members[]`, `contracts[]`, …) must roundtrip.
+
+### Canonical `<block>` child sequence (V1 — hardcoded)
+
+Emit each element **only when present** on the Urmodell (omit empty / default-false noise unless authored and stored). Order — **copy of the Definition `.bml` declaration lists** for V1; V2 must produce the same order by reading those files instead of this table:
+
+```text
+# BlockDefinition properties (declaration order in BlockDefinition.bml)
+name
+type
+baseType
+is
+isnot
+version
+definition
+
+# StructuralDefinition properties (declaration order in StructuralDefinition.bml)
+since
+status
+summary          # may repeat (i18n / facets) — BOM summaries[] order
+documentation    # may repeat — BOM documentations[] order
+abstract         # omit when false/default unless stored
+final            # omit when false/default unless stored
+
+# StructuralDefinition aggregations
+keywords
+changelog
+examples         # + Annotation facet sibling containers if stored
+references
+
+# ConstrainableDefinition
+constraints
+
+# BlockDefinition aggregations (declaration order in BlockDefinition.bml)
+aliases
+language
+genericTypes
+contracts
+properties       # children = members[] where kind=property, BOM order
+aggregations     # children = members[] where kind=aggregation, BOM order
+associations     # children = members[] where kind=association, BOM order
+capabilities     # children = members[] where kind=capability, BOM order
+subBlocks        # children = subBlocks[], BOM order
+
+# RootBlockDefinition only
+embeddedBlocks   # children = embeddedBlocks[], BOM order
+```
+
+`bml:xml` / `xmlns*` / `xsi:*` remain on the root start-tag (not in this child list). Leading/trailing `XmlTrivia` emit immediately before/after the corresponding element (B11).
+
+### Inside containers
+
+| Container | Child order |
+|---|---|
+| `<properties>` / `<aggregations>` / `<associations>` / `<capabilities>` | `members[]` filtered by kind — **BOM document order** (never resorted) |
+| `<genericTypes>` / `<contracts>` / `<aliases>` / … | corresponding BOM array order |
+| `<subBlocks>` / `<embeddedBlocks>` | `subBlocks[]` / `embeddedBlocks[]` order |
+| Member element internals | **V1:** hardcoded from `MemberDefinition.bml` / kind specialization · **V2:** same, read dynamically from those Definition `.bml` files |
+
+### Identity-first (aligned with BlockDefinition.bml)
+
+`BlockDefinition.bml` requires authored identity **`name` → `type` → `baseType` before `is`**. The canonical emit sequence above starts with that prefix. See also `02_mbml.md` — Definition identity first.
+
+### V2 dynamic order (normative intent)
+
+```text
+V2 serializer:
+  1. Resolve the Definition type for the document
+     (RootBlockDefinition / SubBlockDefinition / EmbeddedBlockDefinition / …)
+  2. resolveEffectiveMembers(definitionType)  — or equivalent walk of
+     properties[] then aggregations[] along the Definition baseType chain
+  3. Emit present BOM fields/sections in that member declaration order
+  4. Within each container, keep BOM array order (unchanged from V1)
+```
+
+V1’s hardcoded list is a **frozen snapshot** of step 2 for today’s Definition corpus. When Definition `.bml` members are reordered or extended, **V2 picks it up automatically**; V1 requires updating the hardcoded sequence (and this section) to match.
 
 ---
 
@@ -378,8 +544,8 @@ Invalid <since> version                  → BML_INVALID_SINCE_VERSION (error)
 <changelog> entries out of version order → BML_CHANGELOG_VERSION_ORDER (warning V1)
 <example> without title attribute        → BML_EXAMPLE_MISSING_TITLE (error)
 <*:example> without title attribute      → BML_EXAMPLE_MISSING_TITLE (error)
-<example> body not CDATA                 → BML_EXAMPLE_NOT_CDATA (error)
-<*:example> body not CDATA               → BML_EXAMPLE_NOT_CDATA (error)
+<example> / *:example empty body         → BML_EXAMPLE_EMPTY_BODY (error)
+  (Text node or CDATA both valid — placement is text / D8; CDATA not required)
 <example language="…"> unknown Language FQN → BML_EXAMPLE_UNKNOWN_LANGUAGE (error)
 <language> or documentation/summary language="…" unknown NaturalLanguage FQN → BML_UNKNOWN_NATURAL_LANGUAGE (error)
 <see> without type, instance, file, url, property, aggregation, association, or capability → BML_REFERENCE_MISSING_TARGET (error)
@@ -912,6 +1078,9 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | B7 | V1 Phase-A slice — no XSD must; no meta-`bml:xml` drive; raw expressions only | **Decided** — see § V1 Parser / Serializer Scope |
 | B8 | XSD generation as Render Target; XSD validation only after that target ships; **always disableable** via `--no-xsd` + `xsdValidation: false` | **Decided** — see § V1 Scope · `07_cli.md` escape hatch · `15_dev_setup.md` Phase C |
 | B9 | BlockDoc-first Stage-3 + `targets[]` in V1; then XSD / FatBlock / SCAD | **Decided** — default `targets: ["blockdoc"]`; packages `@blockml/{blockdoc,xsd,fatblock}-target` — see `01` · `07` · `14` C3 · `15` Phase C |
+| B10 | Roundtrip gate = BOM deep equality only | **Decided** — `parse(serialize(parse(f)))` deep-equals `parse(f)`; XML source diff optional/non-blocking — see § V1 Parser / Serializer Scope · `15_dev_setup.md` Roundtrip test contract |
+| B11 | XML comments bound to following element | **Decided** — `XmlTrivia.leadingComments` / `trailingComments`; section/metadata slots when element is flattened — see § XML Comments · `12` |
+| B12 | Serializer emit order = Definition member declaration order | **Decided** — **V1 hardcoded** (snapshot of `BlockDefinition.bml` + bases); **V2 dynamic** from Definition `.bml` / effective members — see § Serializer Emit Order |
 
 ---
 
@@ -924,4 +1093,6 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | Expression AST | `10_expression_language.md` |
 | Embedded expressions in implementations | `10_expression_language.md` — BML Embedded Expressions |
 | Directive placement rules | `12_bom_object_model.md` — Directive Placement Rules |
+| XML comments (B11) | `12_bom_object_model.md` — XML Comments · this document § XML Comments |
+| Serializer emit order (B12) | `BlockDefinition.bml` (+ definition bases) · this document § Serializer Emit Order |
 | Default resolution shortcuts | `02_mbml.md` — BML→BOM Mapping |

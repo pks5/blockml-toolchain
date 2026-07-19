@@ -34,7 +34,7 @@ Each Definition block carries bml:xml directives
 
 This is a step toward **BML self-hosting** (Phase 2/3 in `00_system.md`): BlockML understands BlockML because BlockML is written in BlockML.
 
-**Scope note:** V1 does **not** require a fully meta-driven parser or serializer. Definition blocks and `bml:xml` are the **target architecture**. Phase A uses a **hardcoded** mapper/serializer (`13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope): preserve authored `bml:xml` for roundtrip; do not drive grammar from Definition blocks yet. Markdown remains authoritative for pipeline details until the meta-serializer is wired.
+**Scope note:** V1 does **not** require a fully meta-driven parser or serializer. Definition blocks and `bml:xml` are the **target architecture**. Phase A uses a **hardcoded** mapper/serializer (`13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope): preserve authored `bml:xml` for roundtrip; do not drive grammar from Definition blocks yet. **Emit order (B12):** V1 hardcodes Definition member order; **V2** reads that order dynamically from Definition `.bml` files — see `13` § Serializer Emit Order. Markdown remains authoritative for pipeline details until the meta-serializer is wired.
 
 ---
 
@@ -247,19 +247,44 @@ On property (and member) definitions inside Definition blocks, `bml:xml` selects
 | Value | XML rendering |
 |---|---|
 | `attribute` | XML attribute on the parent element |
-| `element` | Child XML element |
+| `element` | Child XML element (named after the member / recipe) |
 | `element\|attribute` | Element or attribute — both valid at parse; **canonical emit** uses § Default XML rendering by kind |
-| `text` | Text node child |
-| `cdata` | CDATA section child |
-| `text\|cdata` | Text or CDATA — both valid at parse; canonical emit prefers `cdata` for code/snippet bodies, else `text` |
+| `text` | Character data written **directly into the host element** — no nested child element for this value |
+
+**Not a `bml:xml` value:** `cdata` / `text|cdata`. CDATA is only an **escaping form** of `text` placement — chosen by the serializer from content (D8). Parse accepts Text nodes and CDATA sections equally when placement is `text`.
 
 Explicit `bml:xml` on a Definition member **always wins** over the defaults below.
 
 Member-level `bml:xml` is declared on **Definition block properties** — it describes serialization for all instances of the described member kind, not on every user-authored Wall or Brick.
 
+#### What `text` means (structural)
+
+```text
+bml:xml="element"   →  <documentation><content>Hello</content></documentation>   # extra child
+bml:xml="attribute" →  <documentation content="Hello"/>                          # attribute
+bml:xml="text"      →  <documentation>Hello</documentation>                      # body of host
+```
+
+`text` is therefore still required in the grammar: it is a **placement**, parallel to `element` / `attribute`, not a synonym for “non-CDATA”.
+
+#### CDATA = escape policy for `text` (**D8 — Decided**)
+
+When placement is `text`, the serializer picks Text node vs `<![CDATA[…]]>` automatically:
+
+```text
+if content contains ']]>'     → split across CDATA sections (or entity-escape) — never raw ']]>' inside one CDATA
+else if content contains '<' or '&'
+                              → emit as <![CDATA[…]]>
+else                          → emit as ordinary text node
+```
+
+Optional emit preference (non-normative for parse): implementation / example bodies may always use CDATA even without `<`/`&` for readability. BOM stores a single string either way — **no** `authoredPlacement` of `cdata` vs `text` (B10).
+
+Legacy authored `bml:xml="cdata"` / `bml:xml="text|cdata"` → treat as `text` (warn once in tooling if desired).
+
 #### Default XML rendering by kind (**D1 — Decided**)
 
-When `bml:xml` is **omitted**, or when `element|attribute` / `text|cdata` leaves a choice at **canonical emit**, use the **kind** of what is being rendered. Serializer, FatBlock, XSD, and other XML-emitting targets share this table.
+When `bml:xml` is **omitted**, or when `element|attribute` leaves a choice at **canonical emit**, use the **kind** of what is being rendered. Serializer, FatBlock, XSD, and other XML-emitting targets share this table.
 
 | Kind of thing being rendered | Canonical XML form | Notes |
 |---|---|---|
@@ -268,18 +293,20 @@ When `bml:xml` is **omitted**, or when `element|attribute` / `text|cdata` leaves
 | **Scalar / TypeReference on a Block definition document** (`name`, `type`, `baseType`, `is`, `isnot`, `version`, member `type` / `value` on definitions, …) | **element** | Definition documents read as nested markup |
 | **Scalar member value on a Block instance** (composition / preset instance attributes) | **attribute** | Compact instance authoring |
 | **Short meta on documentation Sub-Blocks** (`language`, `version`, `title`, `snippet`, Reference `type` / `file` / `url` / member refs, Change `version`, …) | **attribute** | Facets on the Sub-Block element |
-| **Prose / body** (`content`, `description`, `context`, long `documentation` text) | **text** | Prefer **cdata** when the body is code, CDATA-authored, or `bml:xml` includes `cdata` |
+| **Prose / body** (`content`, `description`, `context`, long `documentation` text) | **text** | Character data of the host element; CDATA vs text node = D8 escape policy |
 | **TypeReferenceEntity sugar** children (e.g. empty `<ac:Wall/>` under `contracts`) | **element** (QName → type ref) | Not a Block instance — see `17_type_system_bml.md` |
 | **Block / Definition root tag** | from **element-form** `<bml:xml>…</bml:xml>` on the type | Literal, `${ bml:Self }`, or `${ #this.name }` — not covered by member defaults |
 
 **Accept vs emit:**
 
 ```text
-Parse (Stage 1)     — if declared form allows both (element|attribute, text|cdata), accept either;
-                      store authored placement for lossless roundtrip (Phase A).
-Canonical emit      — apply this table (or explicit bml:xml) when generating fresh XML
-                      (meta-serializer, FatBlock, XSD particles, format-on-save canonicalize).
-Roundtrip serialize — prefer authored placement when present; otherwise this table.
+Parse (Stage 1)     — if declared form allows both (element|attribute), accept either;
+                      store authoredPlacement for roundtrip when dual.
+                      For bml:xml="text": accept Text node or CDATA — same string in BOM (D8).
+Canonical emit      — apply this table (or explicit bml:xml) when generating fresh XML;
+                      text bodies use D8 CDATA escape policy.
+Roundtrip serialize — prefer authoredPlacement for element|attribute; text bodies use D8
+                      (CDATA form not preserved — B10).
 ```
 
 Example (from `org.blockml.bml.definition.StructuralDefinition` — `Documentation` Sub-Block shape):
@@ -360,7 +387,8 @@ Serialization path (conceptual):
 2. Root element name from BlockDefinition.bml:xml → "block"
 3. Each aggregation child resolved via its Definition block's bml:xml
 4. Property "width" → PropertyDefinition.bml:xml → element name from #this.name → <width>
-5. Member values placed per bml:xml="attribute|element|text|cdata" on PropertyDefinition fields
+5. Member values placed per bml:xml="attribute|element|text" on PropertyDefinition fields
+   (CDATA is D8 escape for text — not a separate placement)
 ```
 
 The result is **lossless canonical BML XML** derived from BOM + Definition registry — not ad hoc string templates.
@@ -431,13 +459,14 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 
 | ID | Topic | Notes |
 |---|---|---|
-| D1 | Default `bml:xml` when omitted on members | **Decided:** kind-based defaults — § Default XML rendering by kind. Explicit `bml:xml` wins. Dual forms (`element\|attribute`, …) accepted at parse; canonical emit uses the table |
+| D1 | Default `bml:xml` when omitted on members | **Decided:** kind-based defaults — § Default XML rendering by kind. Explicit `bml:xml` wins. Dual form `element\|attribute` accepted at parse; canonical emit uses the table |
 | D2 | `${ bml:Self }` prefix resolution at serialize time | **Decided:** store authored prefixes in `SourceInfo.namespaceBindings` — **1:1 roundtrip**, no invented prefixes. Missing NS → error. FatBlock only after Stage 2 validator; unbound/conflicting NS fail — see § Namespace prefixes |
 | D3 | BOM storage shape for `<bml:xml>` / member `bml:xml` | **Decided:** first-class `xmlRendering` on `BlockDefinition` + `MemberDefinitionBase` — **not** flow-control `directives[]`. Follows **maximum authored surface** (`01_bom_core.md`). See `12_bom_object_model.md` · `XmlRenderingBlock` / `XmlRenderingMember` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | **Decided (A):** **Member-level** — allowed on `override="true"`. **Block-level** — only `core.Block` + Definition branch. Illegal → `BML_XML_DIRECTIVE_NOT_ALLOWED` at **Stage 2** (hybrid). See § Placement Rules · § When Stage 1 vs Stage 2 |
 | D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |
 | D6 | Allowed `<bml:xml>` body recipes | **Decided:** literal, `${ bml:Self }`, `${ #this.name }` only. Invalid → `BML_XML_RENDERING_INVALID` at **Stage 1**. See § Allowed `<bml:xml>` recipes · § When Stage 1 vs Stage 2 |
 | D7 | Illegal `bml:xml` — parser vs validator | **Decided (hybrid):** structural + D6 → Stage 1; D4 / branch placement → Stage 2. See § When Stage 1 vs Stage 2 |
+| D8 | `text` vs `cdata` in `bml:xml` | **Decided:** `text` remains as **placement** (body of host element, no child element). `cdata` is **not** a placement — serializer escape policy for `text` bodies (`<`/`&` → CDATA). Legacy `cdata` / `text\|cdata` → `text`. See § Attribute Form · § CDATA = escape policy |
 
 ---
 

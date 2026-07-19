@@ -60,6 +60,7 @@ Examples of “internal-looking” data that **must** still be available downstr
 | Element vs attribute **placement** when both were legal | Lossless roundtrip; canonical emit may differ |
 | Expression / literal **raw** form | Target-specific emit without re-authoring |
 | Directive attributes unexpanded | Composition expansion is Stage 3, not parse |
+| XML comments (`<!-- … -->`) | Author intent / section labels; bound to following element (`13` B11) |
 | Source locations (when parsed) | Diagnostics, LSP — optional on types, populated by parser |
 
 **Do not** strip or only keep a “semantic subset” for a cleaner object model. Derived convenience belongs on pragmatic forks; **authored facts** stay on the Urmodell. When in doubt, **preserve**.

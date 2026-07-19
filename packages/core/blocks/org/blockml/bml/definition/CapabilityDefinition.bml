@@ -108,9 +108,11 @@
             OpenSCAD, …). Unqualified names resolve via implicit namespace org.blockml.bml.language.*.
             Must resolve to a registered Language type; the active Target/renderer must support it.</documentation>
         </language>
-        <content type="Text" bml:xml="text|cdata">
-          <documentation>Target-language source body. Stored as CDATA in BOM ImplementationBlock.source.
-            May contain embedded BlockML expressions between &lt;$ and $&gt; delimiters.</documentation>
+        <content type="Text" bml:xml="text">
+          <documentation>Target-language source body. Stored as character data on the host
+            &lt;implementation&gt; element (BOM ImplementationBlock.source). Serializer may emit
+            Text or CDATA per escape policy (19 D8). May contain embedded BlockML expressions
+            between &lt;$ and $&gt; delimiters.</documentation>
         </content>
       </properties>
     
