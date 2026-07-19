@@ -40,8 +40,9 @@
 
     Implementation rules: design west-local; prefer direction over rotation; no calibration
     adjustments in routine settings; NativeBlock properties always via mb_param_[propertyName](),
-    all other parameters via mb_param() (see MbBlockApi; Cross.scad demonstrates both); V3 face
-    strings; no globals inside modules; Hidden section is customizer bridge only.
+    all other parameters via mb_param() (see MbBlockApi; Cross.scad demonstrates both); in SCAD
+    settings/config use Face scad:value strings ("x-", "x+", …) — MBML/BOM still authors enum
+    member ids; no globals inside modules; Hidden section is customizer bridge only.
   </documentation>
 
   <references>

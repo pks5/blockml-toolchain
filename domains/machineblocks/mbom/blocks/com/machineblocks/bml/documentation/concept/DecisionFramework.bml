@@ -40,8 +40,9 @@
     composition.
 
     Cross-cutting rules: design in west-local face semantics; prefer direction over free rotation;
-    keep calibration adjustments out of instance settings when they belong in config; use face
-    string identifiers in V3.
+    keep calibration adjustments out of instance settings when they belong in config. In MBML/BOM
+    author Face (and Direction / Align) as enum member ids (XNeg, XPos, …) — not SCAD face strings;
+    SCAD literals ("x-", "x+", …) are emit-only (see TransformationConcepts / scad:ScadDecisionRules).
 
     TODO — Decision Knowledge package: Long-term, grow this into a large structured collection
     (best practices, antipatterns/negative examples, pattern choices, boundaries, rules) under
