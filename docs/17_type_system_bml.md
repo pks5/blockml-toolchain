@@ -983,7 +983,7 @@ This applies to named StructTypes (`SizeXYZ`, `Address`, …) and to anonymous s
 Complex values are described by **normal Properties** — no special struct syntax. A StructType is a ValueType with `<properties>`:
 
 ```xml
-<block xmlns="http://blockml.org/schema/block"
+<block xmlns="http://blockml.org/bml"
        xmlns:type="com.machineblocks.bml.type" ...>
 
   <name>SizeXYZ</name>

@@ -99,7 +99,7 @@ resolve(xmlns value) →
 
 There is **no third category**. Orphan namespace strings and language-directive schema URIs are not valid BML xmlns targets.
 
-**Infrastructure exceptions** (not BML-semantic prefixes): document default `xmlns="http://blockml.org/schema/block"`, `xmlns:xsi`, and other XSD/catalog URIs.
+**Infrastructure exceptions** (not BML-semantic prefixes): document default `xmlns="http://blockml.org/bml"`, `xmlns:xsi`, and other XSD/catalog URIs.
 
 **Mandatory BML namespace:** All Block FQNs and Package xmlns bindings must live under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `com.machineblocks.bml.core.*`). See `01_bom_core.md` — Mandatory BML namespace · `BML_OUTSIDE_BML_NAMESPACE`.
 
@@ -225,7 +225,7 @@ Inside a property member with namespace N,
 a nested value facet with the same namespace N is not allowed.
 ```
 
-The legacy schema URI `http://blockml.org/schema/bml` remains an **XSD/catalog** identifier only — BML-semantic `xmlns:bml` must target `BmlAnnotation`.
+The document default xmlns and `xsi:schemaLocation` namespace key are both **`http://blockml.org/bml`** (→ `bml.xsd`). Legacy URIs such as `http://blockml.org/schema/bml` / `http://blockml.org/schema/block` are obsolete. BML-semantic `xmlns:bml` must still target `BmlAnnotation` — never a schema URL.
 
 ### Property value facets
 
@@ -573,15 +573,15 @@ Sub-Block:
 There is **one document schema** for the universal `<block>` root (structure, members, directives, …):
 
 ```text
-XML / XSD:  http://blockml.org/schema/block  →  block.xsd
+XML / XSD:  http://blockml.org/bml  →  bml.xsd
 ```
 
 (JSON Schema for authoring is **not planned** — see § JSON as authoring form.)
 
-**Domain XSDs** do not change the root element. They constrain or document **which types / packages** are expected in a project (e.g. MachineBlocks bricks, calibration) and are referenced alongside `block.xsd` via `xsi:schemaLocation` / `catalog.xml`:
+**Domain XSDs** do not change the root element. They constrain or document **which types / packages** are expected in a project (e.g. MachineBlocks bricks, calibration) and are referenced alongside `bml.xsd` via `xsi:schemaLocation` / `catalog.xml`:
 
 ```text
-block.xsd              — universal BML document grammar (<block> only)
+bml.xsd                — universal BML document grammar (<block> only)
 types.xsd / service.xsd — core type & service vocabularies
 core.xsd / bricks.xsd / … — domain allowed-type / package schemas
 ```
@@ -1255,7 +1255,7 @@ Relation is a **Block reference** — not a free string — following Everything
         Block-Definition — Idea, Dokumentation und Dokumentations-Erweiterungen.
     </see>
 
-    <see url="https://blockml.org/schemas/core/block.xsd" relation="DeepDive">
+    <see url="https://blockml.org/schemas/bml.xsd" relation="DeepDive">
         XML schema for block definition documents.
     </see>
 
@@ -1502,7 +1502,7 @@ Validation      — merge resolution at Stage 2 via resolveEffectiveMembers()
 **Example — contract Block (partial definition):**
 
 ```xml
-<block xmlns="http://blockml.org/schema/block" …>
+<block xmlns="http://blockml.org/bml" …>
   <name>IIdentifiable</name>
   <type>com.foo.IIdentifiable</type>
   <baseType>org.blockml.bml.core.Block</baseType>
@@ -1517,7 +1517,7 @@ Validation      — merge resolution at Stage 2 via resolveEffectiveMembers()
 **Example — contract supplies type, Block completes the member:**
 
 ```xml
-<block xmlns="http://blockml.org/schema/block" …>
+<block xmlns="http://blockml.org/bml" …>
   <name>MyEntity</name>
   <type>com.foo.MyEntity</type>
   <baseType>org.blockml.bml.core.Entity</baseType>
@@ -1549,7 +1549,7 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 
 ```xml
 <block
-  xmlns="http://blockml.org/schema/block"
+  xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
@@ -1558,8 +1558,8 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
   xmlns:mbunit="com.machineblocks.bml.unit"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
+    http://blockml.org/bml
+        https://blockml.org/schemas/bml.xsd
     http://machineblocks.com/schema/core
         https://machineblocks.com/schemas/core/core.xsd
     http://machineblocks.com/schema/bricks
@@ -1571,10 +1571,9 @@ Every BML document declares namespaces and a `xsi:schemaLocation` for IDE valida
 
 ```text
 BlockML Core:
-  http://blockml.org/schema/block                  ← Dokument-Root (default xmlns)
+  http://blockml.org/bml                           ← Dokument-Root (default xmlns) + schemaLocation-Key → bml.xsd
   org.blockml.bml.annotation.BmlAnnotation         ← bml: Annotation (Direktiven)
-  http://blockml.org/schema/bml                    ← nur XSD/catalog (kein xmlns-Ziel)
-  http://blockml.org/schema/service                ← org.blockml.bml.service.*
+  http://blockml.org/schema/service                ← org.blockml.bml.service.* (XSD/catalog; kein default xmlns)
 
 MachineBlocks (Domain):
   http://machineblocks.com/schema/core             ← MB Core, NativeBlock, Set
@@ -1602,8 +1601,8 @@ IDEs nutzen eine Catalog-Datei im Projekt-Root für offline XSD-Auflösung statt
 ```xml
 <!-- catalog.xml -->
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-  <uri name="http://blockml.org/schema/block"
-       uri="./node_modules/@blockml/core/schemas/core/block.xsd" />
+  <uri name="http://blockml.org/bml"
+       uri="./node_modules/@blockml/core/schemas/bml.xsd" />
   <uri name="http://machineblocks.com/schema/core"
        uri="./node_modules/@machineblocks/mbom/schemas/machineblocks/core.xsd" />
   <uri name="http://machineblocks.com/schema/bricks"
@@ -1659,7 +1658,7 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 ### Minimal Block Example
 
 ```xml
-<block xmlns="http://blockml.org/schema/block"
+<block xmlns="http://blockml.org/bml"
        xmlns:bricks="com.machineblocks.bml.bricks">
 
   <name>Wall</name>
@@ -1695,7 +1694,7 @@ For CompositeBlocks the default aggregation is typically inherited `_parts`. Set
 ### Full Block Example
 
 ```xml
-<block xmlns="http://blockml.org/schema/block"
+<block xmlns="http://blockml.org/bml"
        xmlns:bricks="com.machineblocks.bml.bricks"
        xmlns:status="org.blockml.bml.status">
 
@@ -2231,7 +2230,7 @@ Properties, Aggregations, Associations, and Capabilities receive their namespace
 
 ```xml
 <block
-    xmlns="http://blockml.org/schema/block"
+    xmlns="http://blockml.org/bml"
     xmlns:ui5="com.sap.ui5">
 
   <properties>
@@ -3468,7 +3467,7 @@ Sub-Blocks are full BOM objects with their own FQN and can be referenced from ou
 ### Calibrator Example
 
 ```xml
-<block xmlns="http://blockml.org/schema/block">
+<block xmlns="http://blockml.org/bml">
 
   <name>Calibrator</name>
   <type>com.machineblocks.bml.calibration.Calibrator</type>
@@ -3630,7 +3629,7 @@ _steps      — assembly order (optional; defaults to document order of _parts)
 ### Structure
 
 ```xml
-<block xmlns="http://blockml.org/schema/block"
+<block xmlns="http://blockml.org/bml"
        xmlns:core="com.machineblocks.bml.core"
        xmlns:ac="com.martianmicro.anyclosure">
 
@@ -3781,13 +3780,13 @@ A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a normal
 -->
 <block
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns="http://blockml.org/schema/block"
+  xmlns="http://blockml.org/bml"
   xmlns:type="com.machineblocks.bml.type"
   xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
+    http://blockml.org/bml
+        https://blockml.org/schemas/bml.xsd
   ">
 
   <is>Named size and color shortcuts for the Standard brick.</is>
@@ -3957,7 +3956,7 @@ Physical directories and overlapping package prefixes do not define membership. 
   FQN: com.machineblocks.bml.bricks.Library
   Filename: Library.bml
 -->
-<block xmlns="http://blockml.org/schema/block"
+<block xmlns="http://blockml.org/bml"
        ...>
 
   <is>Published catalog of MachineBlocks standard brick definitions.</is>

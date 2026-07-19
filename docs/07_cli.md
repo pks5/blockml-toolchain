@@ -563,7 +563,7 @@ src/config/scale_2x.bml
 ### Format
 
 ```xml
-<block xmlns="http://blockml.org/schema/block" ...>
+<block xmlns="http://blockml.org/bml" ...>
 
   <name>PrusaPla</name>
   <type>com.machineblocks.bml.config.PrusaPla</type>
