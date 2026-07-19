@@ -34,7 +34,7 @@ Each Definition block carries bml:xml directives
 
 This is a step toward **BML self-hosting** (Phase 2/3 in `00_system.md`): BlockML understands BlockML because BlockML is written in BlockML.
 
-**Scope note:** V1 does **not** require a fully meta-driven parser or serializer. Definition blocks and `bml:xml` are the **target architecture**. Phase A uses a **hardcoded** mapper/serializer (`13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope): preserve authored `bml:xml` for roundtrip; do not drive grammar from Definition blocks yet. **Emit order (B12):** V1 hardcodes Definition member order; **V2** reads that order dynamically from Definition `.bml` files — see `13` § Serializer Emit Order. Markdown remains authoritative for pipeline details until the meta-serializer is wired.
+**Scope note:** V1 does **not** require a fully meta-driven parser or serializer. Definition blocks and `bml:xml` are the **target architecture**. Phase A uses a **hardcoded** mapper/serializer (`13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope): preserve authored `bml:xml` as `xmlRendering` **and** run the D6 Stage-1 recipe check (**B23**); do not drive grammar from Definition blocks yet. **Emit order (B12):** V1 hardcodes Definition member order; **V2** reads that order dynamically from Definition `.bml` files — see `13` § Serializer Emit Order. Markdown remains authoritative for pipeline details until the meta-serializer is wired.
 
 ---
 
@@ -197,17 +197,19 @@ Example: `org.blockml.bml.core.Block` — composable instances render under thei
 BOM stores resolved FQNs only. On serialize, choose spelling:
 
 ```text
-FQN-emit mode  —  document contains no prefixed QNames
-                  (no non-default xmlns:prefix bindings; author wrote FQNs / bare specialized-site names only)
-                  → emit type references as FQN (e.g. type="com.machineblocks.bml.bricks.Standard")
+FQN-emit mode  —  document contains no BML-semantic prefixed QNames
+                  (non-default xmlns:prefix whose URI is not XMLSchema-instance;
+                   xmlns:xsi alone → still FQN mode — B25)
+                  → emit type references as FQN
 
-QName-emit mode — otherwise (any xmlns:prefix present / QNames appear in the document)
+QName-emit mode — otherwise (any BML-semantic xmlns:prefix present)
                   → always emit type references as prefixed QNames when a binding exists for that namespace
                   → never prefer FQN merely because both spellings are possible
 ```
 
 **Multiple prefixes → same namespace:** use the **first** authored binding for that namespace id (declaration order in `namespaceBindings`). Do not pick arbitrarily or by shortest name.
 
+**XSI (B25):** `xmlns:xsi` → `namespaceBindings`; `xsi:schemaLocation` → `SourceInfo.schemaLocation`; both **MUST** roundtrip on the root element. See `13` § Rule 1 · `12` SourceInfo.
 Applies to: `type` / `baseType` / aggregation & association type attributes, TypeReferenceEntity sugar tags (`${ bml:Self }` / empty QName children), composition instance tags, and any other site that emits a Block type identity as QName or FQN.
 
 Compatible with B10: QName and FQN parse to the same FQN on the Urmodell; mixed authored spelling may normalize to all-QName (or all-FQN) on emit.
@@ -511,7 +513,7 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 | D3 | BOM storage shape for `<bml:xml>` / member `bml:xml` | **Decided:** first-class `xmlRendering` on `BlockDefinition` + `MemberDefinitionBase` — **not** flow-control `directives[]`. Follows **maximum authored surface** (`01_bom_core.md`). See `12_bom_object_model.md` · `XmlRenderingBlock` / `XmlRenderingMember` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | **Decided (A):** **Member-level** — allowed on `override="true"`. **Block-level** — only `core.Block` + Definition branch. Illegal → `BML_XML_DIRECTIVE_NOT_ALLOWED` at **Stage 2** (hybrid). See § Placement Rules · § When Stage 1 vs Stage 2 |
 | D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |
-| D6 | Allowed `<bml:xml>` body recipes | **Decided:** literal, `${ bml:Self }`, `${ #this.name }` only. Invalid → `BML_XML_RENDERING_INVALID` at **Stage 1**. See § Allowed `<bml:xml>` recipes · § When Stage 1 vs Stage 2 |
+| D6 | Allowed `<bml:xml>` body recipes | **Decided:** literal, `${ bml:Self }`, `${ #this.name }` only. Invalid → `BML_XML_RENDERING_INVALID` at **Stage 1**. Phase A (**B23**): check D6 **and** still store `xmlRendering` — preserve ≠ skip validation. See § Allowed `<bml:xml>` recipes · § When Stage 1 vs Stage 2 · `13` B23 |
 | D7 | Illegal `bml:xml` — parser vs validator | **Decided (hybrid):** structural + D6 → Stage 1; D4 / branch placement → Stage 2. See § When Stage 1 vs Stage 2 |
 | D8 | `text` vs `cdata` | **Decided:** `text` = placement (host body). CDATA = escape form of `text`, **plus** store `authoredCharacterDataForm` on BOM. Emit CDATA if escape requires it **or** author used CDATA. Legacy `cdata` / `text\|cdata` → placement `text`. See § CDATA = escape policy + authored form |
 | D9 | Dual `element\|attribute` authored form | **Decided:** Parser **MUST** store `authoredPlacement`; roundtrip serializer **MUST** emit that form. D1 defaults only when authored form absent. See § Dual element\|attribute authored form |

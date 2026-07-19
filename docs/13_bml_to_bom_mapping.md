@@ -55,7 +55,8 @@ Parser step [5] produces the immutable BOM graph with expression **raw** text on
 | **Single-file** parse (no library load) | TypeRegistry bootstrap / cross-file resolve |
 | Hardcoded mapper + hardcoded inverse serializer | Meta-driven `bml:xml` parser/serializer (`19_…`) |
 | Well-formed XML via `@xmldom/xmldom` (B18) + mapping diagnostics | **XSD as a hard parse requirement** |
-| Preserve `bml:xml` / unknown-safe authored form for roundtrip | Interpret Definition/`bml:xml` grammar at parse time |
+| Format detect: strip UTF-8 BOM; first non-ws `<` (B24) | JSON path; require bare `<block` at byte 0 |
+| Preserve `bml:xml` on Urmodell + D6 recipe check (B23) | Drive mapping/serialization from Definition `bml:xml` (meta) |
 | Preserve XML comments bound to elements (B11) | Processing instructions; insignificant whitespace |
 | Roundtrip corpus T0–T3 | `bom compile` / render targets |
 
@@ -68,7 +69,7 @@ Parser step [5] produces the immutable BOM graph with expression **raw** text on
 
 V1 parser must not require schema files to succeed. Schema checks are not a Phase-A gate.
 
-**`bml:xml`:** Authored directives/elements are preserved on the Urmodell when present (lossless). V1 does **not** drive mapping or serialization from Definition blocks — that is post–Phase-A (`19_definition_blocks_and_bml_xml.md`).
+**`bml:xml` (B23 — decided):** Authored `<bml:xml>` / `bml:xml="…"` are stored on the Urmodell as `xmlRendering` (lossless roundtrip — maximum authored surface). Phase A does **not** drive mapping or serialization from Definition blocks (that remains post–Phase-A meta). **Do** run the **D6 syntactic recipe check** at Stage 1: `<bml:xml>` body must be literal | `${ bml:Self }` | `${ #this.name }` — else `BML_XML_RENDERING_INVALID`. Still attach `xmlRendering` when the host continues after diagnostics. D4 placement (wrong host block) stays Stage 2. See `19_definition_blocks_and_bml_xml.md` — D6 · When Stage 1 vs Stage 2.
 
 **Done when:**
 
@@ -80,7 +81,7 @@ on the agreed corpus tiers — no validator, no target, no TypeRegistry bootstra
 
 **Roundtrip gate (B10 — decided):** The sole authoritative Phase-A assertion is **BOM deep equality** after `parse → serialize → parse`. XML text fidelity (`serialize(parse(f))` vs original source) is **not** a gate — optional diagnostic / snapshot only, never blocking. Consequence: the serializer may normalize **formatting whitespace** (indent, blank lines between elements, attribute spacing) and may emit canonical forms where the mapper already canonicalized (e.g. Boolean `True` → `true`) or where placement is under-specified; success is defined on the object graph, not byte-identical XML.
 
-**Deep equality excludes provenance (B20 — decided):** Roundtrip `deepEqual` compares **structural / semantic** Urmodell fields only. **Ignore** all parse provenance: `source`, `sourceLocation`, and optional end spans (`endLine` / `endColumn`) on every node — including nested `ExpressionValue` / member / instance locations. Re-parse after serialize always yields different offsets (and often different `file` strings); treating those as equality failures would break the gate even when the language graph is identical. **Do compare:** comments (B11), `authoredPlacement` (D9), `authoredCharacterDataForm` (D8), `namespaceBindings`, array order, visibility, raw expression text, and all other semantic fields. Implement as `deepEqual(stripProvenance(a), stripProvenance(b))` or an equivalent equality helper in `@blockml/core` / test utils — not a naive recursive compare of the raw parser output.
+**Deep equality excludes provenance (B20 — decided):** Roundtrip `deepEqual` compares **structural / semantic** Urmodell fields only. **Ignore** all parse provenance: `source`, `sourceLocation`, and optional end spans (`endLine` / `endColumn`) on every node — including nested `ExpressionValue` / member / instance locations. Re-parse after serialize always yields different offsets (and often different `file` strings); treating those as equality failures would break the gate even when the language graph is identical. **Do compare:** comments (B11), `authoredPlacement` (D9), `authoredCharacterDataForm` (D8), `namespaceBindings`, `schemaLocation` / `noNamespaceSchemaLocation` (B25), array order, visibility, raw expression text, and all other semantic fields. Implement as `deepEqual(stripProvenance(a), stripProvenance(b))` or an equivalent equality helper in `@blockml/core` / test utils — not a naive recursive compare of the raw parser output.
 
 **Whitespace (B13 — decided):** Insignificant / formatting whitespace is **not** stored on the Urmodell and **need not** roundtrip. Serialized XML may be pretty-printed or otherwise whitespace-normalized. Significant character data inside `text` bodies remains the string value (subject to existing field trim rules, e.g. documentation prose).
 
@@ -100,7 +101,9 @@ on the agreed corpus tiers — no validator, no target, no TypeRegistry bootstra
 
 **Omit defaults (B17 — decided):** What can be omitted without changing semantics **SHOULD** be omitted on emit (default `false`, empty containers, redundant restatements, …). Do not emit noise that parse would treat as equivalent to absence.
 
-**Type-ref emit (B21 — decided):** Prefer prefixed **QName** whenever the document has any `xmlns:prefix` / QNames; emit **FQN** only in FQN-only documents (no prefixed bindings — author consciously wrote FQNs). If several prefixes map to the same namespace, use the **first** authored binding. Missing binding in QName mode → `BML_NAMESPACE_UNBOUND`, not silent FQN. See `19_definition_blocks_and_bml_xml.md` — D2 / B21.
+**Type-ref emit (B21 — decided):** Prefer prefixed **QName** whenever the document has any **BML-semantic** `xmlns:prefix` (URI ≠ XMLSchema-instance); emit **FQN** only in FQN-only documents. `xmlns:xsi` alone does **not** force QName mode (B25). If several prefixes map to the same namespace, use the **first** authored binding. Missing binding in QName mode → `BML_NAMESPACE_UNBOUND`, not silent FQN. See `19_definition_blocks_and_bml_xml.md` — D2 / B21.
+
+**XSI infrastructure (B25 — decided):** Store `xmlns:xsi` in `namespaceBindings` and `xsi:schemaLocation` / `xsi:noNamespaceSchemaLocation` on `SourceInfo`; re-emit on the root start-tag. Not member values; not ignored.
 
 ## Member Mapping Order
 
@@ -156,8 +159,10 @@ Block metadata (`name`, `is`, `summary`, `keywords`, `documentation`, `isnot`, `
 | **Emit order (B12)** | Definition member declaration order — **V1 hardcoded**, **V2 from Definition `.bml`**; see § Serializer Emit Order |
 | **Whitespace (B13)** | Formatting whitespace not stored / may normalize on emit — see B10 · B13 above |
 | **Deep-equal (B20)** | Ignore `source` / `sourceLocation` / end spans — see B10 · B20 above |
-| **Type-ref emit (B21)** | QName if any prefixed xmlns; FQN only in FQN-only docs; multi-prefix → first — see B21 · `19` D2 |
+| **Type-ref emit (B21)** | QName if any BML-semantic prefixed xmlns; FQN only in FQN-only docs; `xmlns:xsi` alone ≠ QName mode — see B21 · B25 · `19` D2 |
+| **XSI (B25)** | Store + re-emit `xmlns:xsi` and `xsi:schemaLocation` — see § Rule 1 · `12` SourceInfo |
 | **Dual placement (D9)** | `element\|attribute` → store `authoredPlacement`, emit same form on roundtrip — see `19` D9 |
+| **`bml:xml` (B23)** | Preserve `xmlRendering` + Stage-1 D6 recipe check; no meta-drive — see B23 · `19` D6 |
 
 ---
 
@@ -296,7 +301,7 @@ subBlocks        # children = subBlocks[], BOM order
 embeddedBlocks   # children = embeddedBlocks[], BOM order
 ```
 
-`bml:xml` / `xmlns*` / `xsi:*` remain on the root start-tag (not in this child list). Leading/trailing `XmlTrivia` emit immediately before/after the corresponding element (B11).
+`bml:xml` remain in their authored slots; `xmlns*` / `xsi:schemaLocation` (B25) remain on the root start-tag (not in this child list). Leading/trailing `XmlTrivia` emit immediately before/after the corresponding element (B11).
 
 ### Inside containers
 
@@ -335,8 +340,9 @@ Same rule on composition instances: ` __myVar="5" ` ↔ `memberValues.myVar` wit
 BOM type fields store **resolved FQNs**. Serializer spelling:
 
 ```text
-Document has no prefixed QNames
-  (no non-default keys in source.namespaceBindings)
+Document has no BML-semantic prefixed QNames
+  (no non-default keys in source.namespaceBindings whose URI is not
+   http://www.w3.org/2001/XMLSchema-instance — xmlns:xsi alone does not count)
   → FQN-emit mode: write FQNs for type / baseType / sugar tags / composition type identities
 
 Otherwise
@@ -345,8 +351,7 @@ Otherwise
   → namespace needed but unbound → BML_NAMESPACE_UNBOUND (do not fall back to FQN)
 ```
 
-Normative detail: `19_definition_blocks_and_bml_xml.md` — Namespace prefixes (D2) · B21. Compatible with B10 (BOM equality uses FQNs, not surface spelling).
-
+Normative detail: `19_definition_blocks_and_bml_xml.md` — Namespace prefixes (D2) · B21. Compatible with B10 (BOM equality uses FQNs, not surface spelling). **B25:** `xmlns:xsi` + `schemaLocation` roundtrip separately — see § Attribute Classification Rule 1.
 ### Boolean literals vs Boolean.True / Boolean.False (B15 / B16 — decided)
 
 | Form | Kind | Parse / BOM | Serialize |
@@ -396,7 +401,10 @@ V1’s hardcoded list is a **frozen snapshot** of step 2 for today’s Definitio
 When mapping an XML element to a BOM node, every attribute is classified using this **fixed priority chain**. The first matching rule wins.
 
 ```text
-1. xmlns*, xsi:*              → ignore (except xmlns bindings → SourceInfo.namespaceBindings)
+1. xmlns*                     → SourceInfo.namespaceBindings (incl. xmlns:xsi — B25)
+   xsi:schemaLocation         → SourceInfo.schemaLocation (B25 — store, do not map to members)
+   xsi:noNamespaceSchemaLocation → SourceInfo.noNamespaceSchemaLocation (B25)
+   other xsi:*                → ignore (not memberValues)
 2. bml:*                      → see § Rule 2 — meta (bml:id, bml:version) or directives[]
 3. All other attributes       → memberValues[name]  (camelCase property/capability values)
 ```
@@ -405,9 +413,15 @@ When mapping an XML element to a BOM node, every attribute is classified using t
 
 ```text
 xmlns:bricks="com.machineblocks.bml.bricks"   → namespaceBindings["bricks"]
-xsi:schemaLocation="..."                  → ignored
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  → namespaceBindings["xsi"]  (B25)
+xsi:schemaLocation="http://blockml.org/bml …/bml.xsd …" → source.schemaLocation (B25)
+xsi:noNamespaceSchemaLocation="…"             → source.noNamespaceSchemaLocation (B25)
+other xsi:*                                   → ignored (not memberValues)
 ```
 
+**Serialize (B25):** re-emit every stored `namespaceBindings` entry (including `xsi`) and, when present, `xsi:schemaLocation` / `xsi:noNamespaceSchemaLocation` on the **root** start-tag. Do not invent schemaLocation when absent. Opaque string — no normalize of path lists beyond XML attribute quoting.
+
+**B21 interaction:** the XSD-instance URI (`http://www.w3.org/2001/XMLSchema-instance`) does **not** count as a BML-semantic QName binding. A document whose only non-default prefix is `xmlns:xsi` stays in **FQN-emit mode** for type references.
 ### Rule 2 — `bml:*` attributes
 
 **Composition meta** (Block instances only) — stored on `BlockInstance` fields, not in `directives[]`:
@@ -1188,8 +1202,11 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | B18 | XML DOM library | **Decided** — `@xmldom/xmldom` in Node **and** browser (same impl); see `06_compiler.md` — [2] XML Parser |
 | B19 | Redundant aggregation `type` | **Decided** — `BML_REDUNDANT_AGGREGATION_TYPE` (**warning V1**); ignore authored type, keep inherited — see § Partial overrides · `02_mbml.md` Aggregations / Default Resolution |
 | B20 | Deep-equal ignores provenance | **Decided** — strip `source` / `sourceLocation` / end spans before compare; see § V1 Parser / Serializer Scope · `15` Roundtrip test contract · `12` Source Locations |
-| B21 | Type-ref emit QName vs FQN | **Decided** — QName whenever document has prefixed bindings; FQN only if no QNames authored; multi-prefix → first authored — see § Type-reference emit · `19` D2/B21 |
+| B21 | Type-ref emit QName vs FQN | **Decided** — QName when BML-semantic prefixed bindings exist; FQN only if none; `xmlns:xsi` alone ≠ QName mode (B25); multi-prefix → first authored — see § Type-reference emit · `19` D2/B21 |
 | B22 | Trailing-comment emit layout | **Decided** — next line after the element, then a **blank line**; parse still accepts same-line — see § XML Comments |
+| B23 | Phase A `bml:xml` = preserve + D6 check | **Decided** — store `xmlRendering`; Stage-1 D6 recipe validate; do **not** meta-drive mapper from Definition `bml:xml` — see § V1 Scope · `19` D6 |
+| B24 | Format detector edges | **Decided** — strip UTF-8 BOM; first non-ws must be `<` (`<?xml`, `<!--`, `<block`); no BOM on emit — see `06_compiler.md` [1] |
+| B25 | `xmlns:xsi` / `xsi:schemaLocation` | **Decided** — store in `namespaceBindings` + `SourceInfo.schemaLocation`; re-emit on root; xsi alone ≠ QName mode (B21) — see § Rule 1 · `12` SourceInfo |
 
 ---
 
@@ -1197,7 +1214,7 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 
 | Topic | Document |
 |---|---|
-| XML DOM / emit policy | `06_compiler.md` — [2] · this document B10–B22 |
+| XML DOM / emit policy | `06_compiler.md` — [1]–[2] · this document B10–B25 |
 | BOM object model | `12_bom_object_model.md` |
 | V1 Phase-A build order | `15_dev_setup.md` — V1 Implementation Strategy |
 | Expression AST | `10_expression_language.md` |

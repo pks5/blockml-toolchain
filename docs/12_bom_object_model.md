@@ -42,7 +42,8 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | Authored in BML | Stored in BOM | Interpreted downstream |
 |---|---|---|
 | `bml:each`, `bml:if`, `bml:with` | `directives[]` on element — **unexpanded** | Renderer (directive expansion) |
-| `xmlns` / `xmlns:prefix` | `SourceInfo.namespaceBindings` — **1:1 authored** (order preserved) | Serializer / FatBlock / QName emit (`19` D2 · B21) |
+| `xmlns` / `xmlns:prefix` | `SourceInfo.namespaceBindings` — **1:1 authored** (order preserved; includes `xmlns:xsi`) | Serializer / FatBlock / QName emit (`19` D2 · B21) |
+| `xsi:schemaLocation` / `xsi:noNamespaceSchemaLocation` | `SourceInfo.schemaLocation` / `noNamespaceSchemaLocation` (B25) | Re-emit on root start-tag |
 | `<bml:xml>` / `bml:xml="…"` | First-class `xmlRendering` (block + member) — **not** flow-control `directives[]` (`19` D3) | Serializer, FatBlock, XSD, meta-serializer |
 | Authored element vs attribute when both legal | `authoredPlacement` on value / `xmlRendering` (D9) | **MUST** roundtrip that form; D1 only when authored form absent |
 | Authored Text vs CDATA for `text` placement | `authoredCharacterDataForm` (D8) | Emit CDATA if escape needs it **or** author used CDATA |
@@ -154,13 +155,24 @@ interface SourceInfo {
   /**
    * Authored xmlns prefix → namespace identifier (XML).
    * Lossless 1:1 with source — required for roundtrip and for QName emit (`bml:Self`, …).
+   * Includes infrastructure bindings such as xmlns:xsi → XMLSchema-instance (B25).
    * Do not invent prefixes at serialize time; missing binding → BML_NAMESPACE_UNBOUND;
    * FatBlock prefix conflicts → BML_NAMESPACE_PREFIX_COLLISION (see 19 D2).
    * Default xmlns uses prefix key "".
    * Declaration order must be preserved (B21: first prefix wins when several map to one NS).
-   * B21: any non-default prefix ⇒ QName-emit mode; none ⇒ FQN-emit mode.
+   * B21 QName-emit mode: any non-default prefix whose URI is **not** the XSD-instance
+   *   namespace (http://www.w3.org/2001/XMLSchema-instance); xsi alone does not force QName mode.
    */
   namespaceBindings?: Record<string, string>
+  /**
+   * Authored xsi:schemaLocation value (opaque string, whitespace preserved as authored).
+   * B25 — store and re-emit on the root element; not a member value.
+   */
+  schemaLocation?: string
+  /**
+   * Authored xsi:noNamespaceSchemaLocation when present (rare in BML corpus).
+   */
+  noNamespaceSchemaLocation?: string
 }
 
 /**

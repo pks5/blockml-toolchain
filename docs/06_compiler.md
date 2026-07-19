@@ -209,9 +209,22 @@ SCAD renderer steps [9]–[19] are **not** a fixed framework pipeline — they d
 
 ### [1] Format Detector
 
-V1 accepts **XML only** (`.bml`). Detects XML from the first non-whitespace character (`<`).
+V1 accepts **XML only** (`.bml`). JSON authoring is **not planned** — see `02_mbml.md` · `13` B6. No branch on `{`.
 
-JSON as a BML authoring serialization is **not planned** (not V1/V2; may never ship) — see `02_mbml.md` · `13_bml_to_bom_mapping.md` B6. The format detector does not branch on `{`.
+**Detection (B24 — decided):**
+
+```text
+1. If the buffer starts with UTF-8 BOM (EF BB BF / U+FEFF) → strip it (do not store; do not re-emit)
+2. Skip leading whitespace (space, tab, CR, LF)
+3. First remaining character MUST be '<'
+   → covers <?xml …?>, <!-- … -->, <block …>, and any other well-formed XML prolog/root
+4. Otherwise → format diagnostic (not XML); abort before [2]
+5. Hand the (BOM-stripped) source to [2] XML Parser
+```
+
+**Prolog comments** before the root element are valid XML; after [2] they bind per B11 (typically `leadingComments` on the root `<block>`). The detector must **not** require the file to start with `<block`.
+
+**Serialize:** never write a UTF-8 BOM. XML declaration (`<?xml …?>`) is optional on emit — prefer omit when absence is equivalent (B17); presence is not required for roundtrip (B10).
 
 ### [2] XML Parser
 

@@ -99,7 +99,7 @@ resolve(xmlns value) →
 
 There is **no third category**. Orphan namespace strings and language-directive schema URIs are not valid BML xmlns targets.
 
-**Infrastructure exceptions** (not BML-semantic prefixes): document default `xmlns="http://blockml.org/bml"`, `xmlns:xsi`, and other XSD/catalog URIs.
+**Infrastructure exceptions** (not BML-semantic Package/Annotation targets): document default `xmlns="http://blockml.org/bml"`, `xmlns:xsi`, and other XSD/catalog URIs. **B25:** still **store and re-emit** `xmlns:xsi` and `xsi:schemaLocation` on `SourceInfo` for IDE roundtrip — they are not member values and do not count as BML QName bindings for B21.
 
 **Mandatory BML namespace:** All Block FQNs and Package xmlns bindings must live under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `com.machineblocks.bml.core.*`). See `01_bom_core.md` — Mandatory BML namespace · `BML_OUTSIDE_BML_NAMESPACE`.
 
