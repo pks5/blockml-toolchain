@@ -41,8 +41,8 @@
        (machineblocks/lib/block.scad, machineblocks/config/config.scad) with project-relative
        lib/block.scad and config/mb_config.scad.
     2. Replace machineblock(a=…) with mb_block(config, settings=[["a", …]]); use string face ids.
-       Pass the shared config object — do not re-pass unitMbu / unitGrid / scale / *Adjustment
-       into every call.
+       Pass the shared config object — do not re-pass unitMbuToMm / unitGridToMbu / scale /
+       *Adjustment into every call (V2 names were unitMbu / unitGrid).
     3. Remove the entire [Override Config] tab: overrideConfig, all *_ovr customizer variables,
        Hidden ternaries that select ovr vs global, and deprecated *RoundingResolution parameters.
        Calibration and quality live in mb_config / config profiles only.
@@ -71,9 +71,9 @@
     • Do not copy V2 default sizes blindly — Cross V3 uses different product defaults ([4,4,3] vs
       V2 [3,3,1]); preserve author intent, not legacy demo numbers, unless converting that exact file.
 
-    Hidden section: customizer bridge only — no getters, no unitMbu/unitGrid/scale globals.
-    Retrieve unitMbu, unitGrid, and scale via mb_param_* inside the module when needed. Native
-    parameter inventory for getters: NativeBlock (not legacy YAML).
+    Hidden section: customizer bridge only — no getters, no unitMbuToMm/unitGridToMbu/scale
+    globals. Retrieve unitMbuToMm, unitGridToMbu, and scale via mb_param_* inside the module when
+    needed. Native parameter inventory for getters: NativeBlock (not legacy YAML).
   </documentation>
 
   <examples>

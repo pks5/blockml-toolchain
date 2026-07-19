@@ -17,6 +17,6 @@
   <is>MachineBlocks grid unit (X/Y)</is>
 
   <documentation>Plate-grid unit along X and Y. A 1×1 plate footprint is one GridUnitXY in each
-    horizontal axis. Size in mbu via unitGridToMbu[0] (default 5 mbu per GridUnitXY).
-    Distinct from GridUnitZ — vertical plate height uses a different mbu scale.</documentation>
+    horizontal axis. Size in mbu via unitGridToMbu.x / unitGridToMbu.y (default 5 mbu per
+    GridUnitXY). Distinct from GridUnitZ — vertical plate height uses a different mbu scale.</documentation>
 </block>

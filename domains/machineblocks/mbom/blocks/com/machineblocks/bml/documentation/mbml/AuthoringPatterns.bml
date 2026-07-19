@@ -37,7 +37,7 @@
     instructions.
 
     Decision rule: if a single native call cannot express the topology without breaking the
-    capability boundary, author a Composite Block. Prefer composition over crop and over mixing
+    capability boundary, author a Composite Block. Prefer composition over baseCrop and over mixing
     incompatible shape modifiers in one leaf.
   </documentation>
 

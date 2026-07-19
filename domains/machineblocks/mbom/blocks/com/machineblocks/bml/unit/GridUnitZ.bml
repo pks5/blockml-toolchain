@@ -17,6 +17,6 @@
   <is>MachineBlocks grid unit (Z)</is>
 
   <documentation>Plate-grid unit along Z (stack height). One plate layer is one GridUnitZ.
-    Size in mbu via unitGridToMbu[1] (default 2 mbu per GridUnitZ). Distinct from GridUnitXY —
+    Size in mbu via unitGridToMbu.z (default 2 mbu per GridUnitZ). Distinct from GridUnitXY —
     horizontal footprint uses a different mbu scale.</documentation>
 </block>

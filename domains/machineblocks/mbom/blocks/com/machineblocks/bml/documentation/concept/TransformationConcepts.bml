@@ -30,7 +30,7 @@
     SCAD serialize literals (scad:value): west / north / east / south.
 
     align — Start / Center / End relative to the reference bounding box (studs, slope, bevel, and
-    crop do not change the align box). Scalar Align may broadcast, or AxisXYZ(Align) sets each
+    baseCrop do not change the align box). Scalar Align may broadcast, or AxisXYZ(Align) sets each
     axis. alignChildren sets the parent origin used by children (default Start on all axes).
     SCAD serialize literals (scad:value): start / center / end.
 

@@ -24,13 +24,14 @@
 
     mm → mbu → grid → block geometry
 
-    One mbu (MachineBlocks Unit) is 1.6 mm. The default unit grid is [5, 2]: five mbu per XY grid
-    step (8 mm) and two mbu per Z grid step (3.2 mm). A size of [1, 1, 1] is therefore an 8×8×3.2 mm
-    plate — not a cube. The XY-to-Z grid ratio is 2.5:1; cube-like blocks need Z ≈ 2.5× the XY grid
-    extent (for example [2, 2, 5] → 16×16×16 mm).
+    unitMbuToMm (default 1.6) is the millimetre length of one mbu (MachineBlocks Unit).
+    unitGridToMbu is SizeXYZ (default {x: 5, y: 5, z: 2}): mbu per grid step on each axis for a
+    1×1 plate. At defaults that is 8×8×3.2 mm. A size of [1, 1, 1] is therefore a plate — not a
+    cube. The default XY-to-Z grid ratio is 2.5:1; cube-like blocks need Z ≈ 2.5× the XY grid
+    extent (for example [2, 2, 5] → 16×16×16 mm). X and Y may differ (unitGridToMbu is full XYZ).
 
-    Absolute size along an axis is size × unitGrid[axis] × unitMbu × scale, with XY using
-    unitGrid[0] and Z using unitGrid[1].
+    Absolute size along an axis is
+    size[axis] × unitGridToMbu[axis] × unitMbuToMm × scale.
 
     The bounding box is defined exclusively by size. Other parameters change visible geometry
     inside that box; they do not redefine the spatial contract.
@@ -53,10 +54,10 @@
       Default Z grid step in mbu.
     </see>
     <see type="mbt:SizeXYZ" relation="Defines">
-      Integer grid size — spatial contract of a block.
+      Integer grid size — spatial contract of a block; also the shape of unitGridToMbu.
     </see>
     <see type="mbcore:NativeBlock" relation="SeeAlso">
-      Native parameters including size, unitMbu, unitGrid, scale — SSOT.
+      Native parameters including size, unitGridToMbu, unitMbuToMm, scale — SSOT.
     </see>
   </references>
 

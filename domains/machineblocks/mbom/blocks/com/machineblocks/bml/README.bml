@@ -38,7 +38,7 @@
       Unit stack, grid ratio, bounding box.
     </see>
     <see type="concept:GeometryConcepts" relation="ReadFirst">
-      size, sizeMod, slope, bevel, crop, cutouts.
+      size, sizeMod, slope, bevel, baseCrop, cutouts.
     </see>
     <see type="concept:TransformationConcepts" relation="ReadFirst">
       Direction, align, rotation, transform order.
