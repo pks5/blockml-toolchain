@@ -611,7 +611,7 @@ Full language rules live in `02` / `13` / `19`. **Phase A implements and gates o
 | Omit-by-default emit (B17) | Emit all default-false / empty noise |
 | Test Layer A roundtrip (T0–T3) | Stage 2 validate, Stage 3 compile |
 
-**Definition of Done:** `parse(serialize(parse(f)))` deep-equals `parse(f)` for the corpus — no validator, no target, no bootstrap. XML source fidelity is **not** required (B10).
+**Definition of Done:** `parse(serialize(parse(f)))` deep-equals `parse(f)` for the corpus **modulo provenance (B20)** — no validator, no target, no bootstrap. XML source fidelity is **not** required (B10).
 
 ```text
 INPUT (BML-centric)
@@ -701,9 +701,11 @@ original.bml
   → deepEqual(BomDocument, BomDocument')
 ```
 
-**Authoritative gate (B10):** BOM deep equality only. A test fails if and only if `BomDocument` ≠ `BomDocument'`.
+**Authoritative gate (B10 + B20):** BOM deep equality of the **semantic** Urmodell only. A test fails if and only if `BomDocument` ≠ `BomDocument'` **after stripping provenance** (`source` / `sourceLocation` / optional end spans on every node). Offsets and `file` paths always change across `serialize → parse`; they must not fail Phase A.
 
-**Not a gate:** byte-identical or normalized XML equality of `reserialized.bml` vs `original.bml`. XML diffs may be logged as diagnostics / optional snapshots for humans; they must not fail Phase A. Serializer emit may differ in whitespace, attribute order, Boolean casing (`True`→`true`), self-closing style, and other surface details so long as re-parse yields an equal Urmodell.
+**Not a gate:** byte-identical or normalized XML equality of `reserialized.bml` vs `original.bml`. XML diffs may be logged as diagnostics / optional snapshots for humans; they must not fail Phase A. Serializer emit may differ in whitespace, attribute order, Boolean casing (`True`→`true`), self-closing style, and other surface details so long as re-parse yields an equal Urmodell (modulo B20).
+
+**Equality helper:** prefer a shared `bomEquals(a, b)` / `stripProvenance(doc)` in `@blockml/core` (or test utils used by all packages) so roundtrip, correctness, and future LSP fixtures share one definition of “same BOM”.
 
 Parser is **single-file scoped** — roundtrip tests do not require TypeRegistry bootstrap (`13_bml_to_bom_mapping.md`).
 

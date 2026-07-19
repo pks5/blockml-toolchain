@@ -1526,6 +1526,8 @@ interface SourceLocation {
 
 Every `BlockDefinition`, `BlockInstance`, `MemberDefinition`, and `ExpressionValue` SHOULD carry a `source` / `sourceLocation` for diagnostic quality.
 
+**Roundtrip equality (B20):** Provenance fields are **not** part of BOM deep equality for the Phase-A gate. Compare semantic structure only — strip or ignore `source`, `sourceLocation`, and optional end spans before `deepEqual`. See `13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope · `15_dev_setup.md` Roundtrip test contract.
+
 ---
 
 ## Type Registry

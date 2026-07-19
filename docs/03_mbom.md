@@ -172,7 +172,7 @@ Every MachineBlocks Block inherits `_presets` and `basePresets`. Composite block
 
 When a Block's `baseType` chain includes `com.machineblocks.bml.core.CompositeBlock` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited members appear via `resolveEffectiveMembers()`.
 
-Declare `<aggregations>` explicitly when **adding** aggregations beyond the inherited set (e.g. `_steps` on `Set`), when **overriding** inherited aggregations (`override="true"` required; partial override — type may be omitted), or when filling an aggregation with a nested `<composition>`.
+Declare `<aggregations>` explicitly when **adding** aggregations beyond the inherited set (e.g. `_steps` on `Set`), when **overriding** inherited aggregations (`override="true"` required; partial override — type may be omitted; identical restated `type` → `BML_REDUNDANT_AGGREGATION_TYPE` warning V1), or when filling an aggregation with a nested `<composition>` (no `type` on fill).
 
 ### Example
 

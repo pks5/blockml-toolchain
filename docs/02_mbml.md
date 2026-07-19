@@ -2321,10 +2321,10 @@ flag, and **changed attributes** need to be specified — all other attributes a
 parent definition.
 
 **Omit unchanged `type`:** when the override does not change the member type, do **not** restate
-`type` — it is inherited. Restating an identical type is allowed but discouraged (noise). Declare
-`type` on an override only when refining or replacing the inherited type. The same omit-unchanged
-rule applies to other unchanged attributes (`bml:xml`, defaults, …) — only differences belong on the
-override.
+`type` — it is inherited. On **aggregations**, restating an identical type (or any `type` when only
+filling an inherited member) → `BML_REDUNDANT_AGGREGATION_TYPE` (warning V1; B19). Declare `type` on
+an override only when refining or replacing the inherited type. The same omit-unchanged rule applies
+to other unchanged attributes (`bml:xml`, defaults, …) — only differences belong on the override.
 
 To refine an inherited abstract member while keeping it abstract, use `override="true"` with
 `abstract="true"`. To implement an inherited abstract member, use `override="true"` without
@@ -2356,8 +2356,9 @@ The effective definition is the **merge** of both declarations. Override matchin
 Same member kind required     — property overrides property, aggregation overrides aggregation, …
 Only specified attrs replaced — unspecified attrs inherited from parent
 Omit unchanged type           — do not restate type when it is the same as the parent (should omit)
+Aggregation redundant type    — BML_REDUNDANT_AGGREGATION_TYPE (warning V1; B19); authored type ignored
 override="true" required      — for any local redeclaration merging with a baseType or contract member
-Inherited aggregation override  → override="true" required; type may be omitted
+Inherited aggregation override  → override="true" required; type may be omitted (identical restated type → BML_REDUNDANT_AGGREGATION_TYPE)
 Visibility may widen          — e.g. `_name` → `name` (protected → public); narrowing → BML_VISIBILITY_NARROWING
 Member bml:xml may change     — e.g. element → attribute on the same override
 Private members               — cannot be overridden
@@ -2588,6 +2589,8 @@ For MachineBlocks Blocks, `_presets` and `_parts` are inherited from the base ty
 ```
 
 When overriding an inherited aggregation, `type` is required only on **new** declarations. Sub-Blocks and derived Blocks filling an inherited aggregation specify only the aggregation member element and nested `<composition>` — no `type` attribute.
+
+**Redundant `type` (B19):** when filling an inherited aggregation, or when an `override="true"` restates a `type` identical to the inherited member, omit `type`. If authored anyway → `BML_REDUNDANT_AGGREGATION_TYPE` (**warning V1**); the mapper **ignores** the authored attribute and keeps the inherited/effective type. To refine the payload type, use `override="true"` with a **different** `type` — that is not redundant.
 
 ```text
 type         — child type (required on new declarations; omitted when filling inherited aggregations)
@@ -2837,7 +2840,7 @@ Block instance — recursive inner structure:
 ```text
 <composition> must always be nested inside an aggregation member element — never standalone
 New aggregation declaration     → type required
-Inherited aggregation override  → override="true" required; type may be omitted
+Inherited aggregation override  → override="true" required; type may be omitted (identical restated type → BML_REDUNDANT_AGGREGATION_TYPE)
 Standalone <composition>        → BML_STANDALONE_COMPOSITION (validation error)
 ```
 
@@ -4211,7 +4214,7 @@ ambiguous unqualified fallback → BML_AMBIGUOUS_TYPE
 <aggregations> missing        → no parser action; inherited members resolved at validate (e.g. _presets, _parts from MachineBlocks base types)
 standalone <composition>      → BML_STANDALONE_COMPOSITION (validation error)
 <aggregation> without type on new declaration       → BML_MISSING_AGGREGATION_TYPE
-<aggregation> with type when filling inherited member → type ignored or BML_REDUNDANT_AGGREGATION_TYPE (implementation choice)
+<aggregation> with type when filling inherited member → BML_REDUNDANT_AGGREGATION_TYPE (warning V1); authored type ignored — see B19
 partial member override       → merge with parent member at validate; private/final violations → errors
 visibility mismatch           → BML_VISIBILITY_MISMATCH
 visibility narrowing on override → BML_VISIBILITY_NARROWING

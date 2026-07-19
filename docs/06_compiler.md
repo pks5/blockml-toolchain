@@ -952,7 +952,7 @@ Prove the language layer before validator, compiler, or render targets exist.
 
 ```text
 Input:    BML source files from repository corpus (T0–T3 tiers)
-Test:     parse → serialize → parse; BomDocument deep equality
+Test:     parse → serialize → parse; BomDocument deep equality modulo provenance (B20 — strip source spans)
 Tool:     Vitest — tests/roundtrip/
 Gate:     Phase C (compiler, targets, CLI compile) must not start until roundtrip passes
 ```

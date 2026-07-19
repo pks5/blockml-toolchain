@@ -80,6 +80,8 @@ on the agreed corpus tiers — no validator, no target, no TypeRegistry bootstra
 
 **Roundtrip gate (B10 — decided):** The sole authoritative Phase-A assertion is **BOM deep equality** after `parse → serialize → parse`. XML text fidelity (`serialize(parse(f))` vs original source) is **not** a gate — optional diagnostic / snapshot only, never blocking. Consequence: the serializer may normalize **formatting whitespace** (indent, blank lines between elements, attribute spacing) and may emit canonical forms where the mapper already canonicalized (e.g. Boolean `True` → `true`) or where placement is under-specified; success is defined on the object graph, not byte-identical XML.
 
+**Deep equality excludes provenance (B20 — decided):** Roundtrip `deepEqual` compares **structural / semantic** Urmodell fields only. **Ignore** all parse provenance: `source`, `sourceLocation`, and optional end spans (`endLine` / `endColumn`) on every node — including nested `ExpressionValue` / member / instance locations. Re-parse after serialize always yields different offsets (and often different `file` strings); treating those as equality failures would break the gate even when the language graph is identical. **Do compare:** comments (B11), `authoredPlacement` (D9), `authoredCharacterDataForm` (D8), `namespaceBindings`, array order, visibility, raw expression text, and all other semantic fields. Implement as `deepEqual(stripProvenance(a), stripProvenance(b))` or an equivalent equality helper in `@blockml/core` / test utils — not a naive recursive compare of the raw parser output.
+
 **Whitespace (B13 — decided):** Insignificant / formatting whitespace is **not** stored on the Urmodell and **need not** roundtrip. Serialized XML may be pretty-printed or otherwise whitespace-normalized. Significant character data inside `text` bodies remains the string value (subject to existing field trim rules, e.g. documentation prose).
 
 **XML comments (B11 — decided):** Comments are preserved on the Urmodell, bound to elements — see § XML Comments. They participate in BOM deep equality; dropping them fails the gate when the corpus has comments.
@@ -148,6 +150,7 @@ Block metadata (`name`, `is`, `summary`, `keywords`, `documentation`, `isnot`, `
 | **XML comments (B11)** | Bind to following element (`leadingComments`); trailing/same-line → `trailingComments`. Preserve on Urmodell — see § XML Comments below · `12` |
 | **Emit order (B12)** | Definition member declaration order — **V1 hardcoded**, **V2 from Definition `.bml`**; see § Serializer Emit Order |
 | **Whitespace (B13)** | Formatting whitespace not stored / may normalize on emit — see B10 · B13 above |
+| **Deep-equal (B20)** | Ignore `source` / `sourceLocation` / end spans — see B10 · B20 above |
 | **Dual placement (D9)** | `element\|attribute` → store `authoredPlacement`, emit same form on roundtrip — see `19` D9 |
 
 ---
@@ -809,6 +812,8 @@ Mismatch between derived and explicit `visibility` → `BML_VISIBILITY_MISMATCH`
 
 Partial overrides: a child Block may declare a member with only the logical name and changed attributes. Unspecified fields inherit from the parent member at `resolveEffectiveMembers()`. **Unchanged `type` should be omitted** — restate `type` only when refining it. Override key is resolved `(namespace, normalizedLogicalName)` — visibility prefixes stripped; not the XML xmlns prefix. Visibility may widen (`_name` → `name`); narrowing → `BML_VISIBILITY_NARROWING`.
 
+**Redundant aggregation `type` (B19):** when an aggregation element only fills an inherited member (composition / no new declaration), or an `override="true"` restates a `type` equal to the inherited member after resolve, emit `BML_REDUNDANT_AGGREGATION_TYPE` (**warning V1**). Do **not** apply the authored attribute to the BOM — effective type stays the inherited one. A differing `type` on a true override is a refinement and is not redundant. Analogous in spirit to `BML_REDUNDANT_STATUS`.
+
 **General namespace rule:** all XML prefixes in BML (Block type tags, member element QNames, `type:` shorthand, `bml:*`) are resolved during parsing. The BOM stores canonical namespace identifiers only. See `02_mbml.md` — Namespaces · § Member Namespace (Element QName).
 
 ---
@@ -1140,7 +1145,7 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | B7 | V1 Phase-A slice — no XSD must; no meta-`bml:xml` drive; raw expressions only | **Decided** — see § V1 Parser / Serializer Scope |
 | B8 | XSD generation as Render Target; XSD validation only after that target ships; **always disableable** via `--no-xsd` + `xsdValidation: false` | **Decided** — see § V1 Scope · `07_cli.md` escape hatch · `15_dev_setup.md` Phase C |
 | B9 | BlockDoc-first Stage-3 + `targets[]` in V1; then XSD / FatBlock / SCAD | **Decided** — default `targets: ["blockdoc"]`; packages `@blockml/{blockdoc,xsd,fatblock}-target` — see `01` · `07` · `14` C3 · `15` Phase C |
-| B10 | Roundtrip gate = BOM deep equality only | **Decided** — `parse(serialize(parse(f)))` deep-equals `parse(f)`; XML source diff optional/non-blocking — see § V1 Parser / Serializer Scope · `15_dev_setup.md` Roundtrip test contract |
+| B10 | Roundtrip gate = BOM deep equality only | **Decided** — `parse(serialize(parse(f)))` deep-equals `parse(f)` **modulo provenance (B20)**; XML source diff optional/non-blocking — see § V1 Parser / Serializer Scope · `15_dev_setup.md` Roundtrip test contract |
 | B11 | XML comments bound to following element | **Decided** — `XmlTrivia.leadingComments` / `trailingComments`; section/metadata slots when element is flattened — see § XML Comments · `12` |
 | B12 | Serializer emit order = Definition member declaration order | **Decided** — **V1 hardcoded** (snapshot of `BlockDefinition.bml` + bases); **V2 dynamic** from Definition `.bml` / effective members — see § Serializer Emit Order |
 | B13 | Formatting whitespace not preserved | **Decided** — indent / blank lines / attribute spacing may normalize on emit; not on Urmodell — see § V1 Parser / Serializer Scope |
@@ -1149,6 +1154,8 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | B16 | `Boolean.True` / `Boolean.False` | **Decided** — type references in type expressions; never collapse to boolean values — see `04` · `21` |
 | B17 | Omit-by-default on emit | **Decided** — omit anything whose absence is semantically equivalent; see § Omit-by-default emit |
 | B18 | XML DOM library | **Decided** — `@xmldom/xmldom` in Node **and** browser (same impl); see `06_compiler.md` — [2] XML Parser |
+| B19 | Redundant aggregation `type` | **Decided** — `BML_REDUNDANT_AGGREGATION_TYPE` (**warning V1**); ignore authored type, keep inherited — see § Partial overrides · `02_mbml.md` Aggregations / Default Resolution |
+| B20 | Deep-equal ignores provenance | **Decided** — strip `source` / `sourceLocation` / end spans before compare; see § V1 Parser / Serializer Scope · `15` Roundtrip test contract · `12` Source Locations |
 
 ---
 
@@ -1156,7 +1163,7 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 
 | Topic | Document |
 |---|---|
-| XML DOM / emit policy | `06_compiler.md` — [2] · this document B10–B18 |
+| XML DOM / emit policy | `06_compiler.md` — [2] · this document B10–B20 |
 | BOM object model | `12_bom_object_model.md` |
 | V1 Phase-A build order | `15_dev_setup.md` — V1 Implementation Strategy |
 | Expression AST | `10_expression_language.md` |
