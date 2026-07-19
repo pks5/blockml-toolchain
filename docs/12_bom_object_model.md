@@ -42,7 +42,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | Authored in BML | Stored in BOM | Interpreted downstream |
 |---|---|---|
 | `bml:each`, `bml:if`, `bml:with` | `directives[]` on element — **unexpanded** | Renderer (directive expansion) |
-| `xmlns` / `xmlns:prefix` | `SourceInfo.namespaceBindings` — **1:1 authored** | Serializer / FatBlock / QName emit (`19` D2) |
+| `xmlns` / `xmlns:prefix` | `SourceInfo.namespaceBindings` — **1:1 authored** (order preserved) | Serializer / FatBlock / QName emit (`19` D2 · B21) |
 | `<bml:xml>` / `bml:xml="…"` | First-class `xmlRendering` (block + member) — **not** flow-control `directives[]` (`19` D3) | Serializer, FatBlock, XSD, meta-serializer |
 | Authored element vs attribute when both legal | `authoredPlacement` on value / `xmlRendering` (D9) | **MUST** roundtrip that form; D1 only when authored form absent |
 | Authored Text vs CDATA for `text` placement | `authoredCharacterDataForm` (D8) | Emit CDATA if escape needs it **or** author used CDATA |
@@ -72,7 +72,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | Flow-control `bml:*` on composition elements → `directives[]`. Composition meta (`bml:id`, `bml:version`) → `BlockInstance` fields. **`bml:xml` → first-class `xmlRendering`** (not `directives[]`). None expanded at parse time. |
 | **Maximum authored surface** | Urmodell exposes as much of the original document as possible to renderers — including seeming internals (`01_bom_core.md`). When in doubt, preserve. |
-| **XML comments (B11)** | Bind to the **following** XML element (`leadingComments`); same-line / immediately-after → `trailingComments`. Not discarded. See § XML Comments · `13` B11. |
+| **XML comments (B11)** | Bind to the **following** XML element (`leadingComments`); same-line / immediately-after → `trailingComments`. Emit trailing on **next line** + blank line (B22). Not discarded. See § XML Comments · `13` B11/B22. |
 | **Emit order (B12)** | Serialize `<block>` children in Definition member declaration order — **V1 hardcoded**, **V2 from Definition `.bml`**. See `13` § Serializer Emit Order. |
 | **Whitespace (B13)** | Formatting whitespace is not on the Urmodell; serializer may pretty-print / normalize. See `13` B13. |
 | **Dual placement (D9)** | When `element\|attribute` is legal, store and re-emit `authoredPlacement`. See `19` D9. |
@@ -157,6 +157,8 @@ interface SourceInfo {
    * Do not invent prefixes at serialize time; missing binding → BML_NAMESPACE_UNBOUND;
    * FatBlock prefix conflicts → BML_NAMESPACE_PREFIX_COLLISION (see 19 D2).
    * Default xmlns uses prefix key "".
+   * Declaration order must be preserved (B21: first prefix wins when several map to one NS).
+   * B21: any non-default prefix ⇒ QName-emit mode; none ⇒ FQN-emit mode.
    */
   namespaceBindings?: Record<string, string>
 }
@@ -165,7 +167,8 @@ interface SourceInfo {
  * XML comment trivia bound to an element (B11).
  * Bodies only — without `<!--` / `-->`; document order preserved.
  * Leading = immediately before this element's start tag (after previous sibling).
- * Trailing = immediately after this element's end tag (before next sibling), including same-line.
+ * Trailing = immediately after this element's end tag (before next sibling), including same-line on parse.
+ * Emit (B22): trailing comments on the next line after the end tag, then a blank line.
  */
 interface XmlTrivia {
   leadingComments?: string[]
@@ -222,9 +225,9 @@ type MetadataElementTrivia = Record<string, XmlTrivia>
 
 **Not preserved (Phase A):** processing instructions; **formatting whitespace** / indentation / blank lines between elements (B13); attribute order on a start-tag. Gate remains BOM deep-equal (B10). **Do preserve:** XML comments (B11); dual `element|attribute` authored form (D9); authored CDATA form for `text` (D8).
 
-**Serializer:** re-emit `leadingComments` immediately before the element and `trailingComments` immediately after. Comment body text is opaque — no trimming beyond what the XML parser already applied to the comment node. Sibling **element** order follows B12 (`13` — Serializer Emit Order).
+**Serializer:** re-emit `leadingComments` immediately before the element. Re-emit `trailingComments` on the **next line** after the element's end tag, then a **blank line** after that trailing-comment block (**B22** — so trailing is visually distinct from the next sibling's leading comments). Parse still accepts same-line trailing comments into `trailingComments`. Comment body text is opaque — no trimming beyond what the XML parser already applied to the comment node. Sibling **element** order follows B12 (`13` — Serializer Emit Order). Layout whitespace is not part of BOM equality (B10/B13).
 
-See `13_bml_to_bom_mapping.md` — XML Comments · B11.
+See `13_bml_to_bom_mapping.md` — XML Comments · B11 · B22.
 
 ---
 

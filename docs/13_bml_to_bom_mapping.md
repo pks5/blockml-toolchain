@@ -86,6 +86,8 @@ on the agreed corpus tiers — no validator, no target, no TypeRegistry bootstra
 
 **XML comments (B11 — decided):** Comments are preserved on the Urmodell, bound to elements — see § XML Comments. They participate in BOM deep equality; dropping them fails the gate when the corpus has comments.
 
+**Trailing-comment layout (B22 — decided):** On emit, each `trailingComments` entry is written on the **next line** after the element's end tag — not same-line — then a **blank line** after the last trailing comment so the comment reads as trailing to the previous element (not as leading of the next). Parse still accepts same-line trailing comments into `trailingComments`. Whitespace/layout is not part of BOM equality (B10/B13).
+
 **Emit order (B12 — decided):** Canonical `<block>` child order = Definition member declaration order. **V1:** hardcoded sequence (mirror of `BlockDefinition.bml` + bases). **V2:** read dynamically from those Definition `.bml` files / TypeRegistry — see § Serializer Emit Order.
 
 **Dual placement (D9 — decided):** When `bml:xml` allows both `element` and `attribute`, the parser **MUST** store which form was authored (`authoredPlacement`) and the serializer **MUST** emit that form on roundtrip. See `19` D9 · `12` `authoredPlacement`.
@@ -97,6 +99,8 @@ on the agreed corpus tiers — no validator, no target, no TypeRegistry bootstra
 **Boolean.True / Boolean.False (B16 — decided):** These are **types** (Sub-Blocks / Constant shortcuts in type expressions), **not** boolean values. Preserve as type references — never collapse to literal `true`/`false`. See `04_types.md` · `21_constant_value_type.md`.
 
 **Omit defaults (B17 — decided):** What can be omitted without changing semantics **SHOULD** be omitted on emit (default `false`, empty containers, redundant restatements, …). Do not emit noise that parse would treat as equivalent to absence.
+
+**Type-ref emit (B21 — decided):** Prefer prefixed **QName** whenever the document has any `xmlns:prefix` / QNames; emit **FQN** only in FQN-only documents (no prefixed bindings — author consciously wrote FQNs). If several prefixes map to the same namespace, use the **first** authored binding. Missing binding in QName mode → `BML_NAMESPACE_UNBOUND`, not silent FQN. See `19_definition_blocks_and_bml_xml.md` — D2 / B21.
 
 ## Member Mapping Order
 
@@ -148,9 +152,11 @@ Block metadata (`name`, `is`, `summary`, `keywords`, `documentation`, `isnot`, `
 | **Composition render** | Leaf geometry → NativeBlock → `mb_block()`; see `14_compiler_runtime.md` |
 | **Member order** | Properties, aggregations, associations, capabilities appended in BML document order — **never sorted**; see `12_bom_object_model.md` — Member Declaration Order |
 | **XML comments (B11)** | Bind to following element (`leadingComments`); trailing/same-line → `trailingComments`. Preserve on Urmodell — see § XML Comments below · `12` |
+| **Trailing layout (B22)** | Emit trailing on **next line**, then a **blank line** — see B22 · § XML Comments |
 | **Emit order (B12)** | Definition member declaration order — **V1 hardcoded**, **V2 from Definition `.bml`**; see § Serializer Emit Order |
 | **Whitespace (B13)** | Formatting whitespace not stored / may normalize on emit — see B10 · B13 above |
 | **Deep-equal (B20)** | Ignore `source` / `sourceLocation` / end spans — see B10 · B20 above |
+| **Type-ref emit (B21)** | QName if any prefixed xmlns; FQN only in FQN-only docs; multi-prefix → first — see B21 · `19` D2 |
 | **Dual placement (D9)** | `element\|attribute` → store `authoredPlacement`, emit same form on roundtrip — see `19` D9 |
 
 ---
@@ -208,7 +214,16 @@ if pendingLeading non-empty at end of parent:
 | Section container `<properties>` / `<aggregations>` / `<associations>` / `<capabilities>` | `BlockDefinition.memberSectionTrivia[section]` |
 | Metadata field child (`<name>`, `<final>`, `<documentation>`, …) | `BlockDefinition.metadataTrivia[localName]` |
 
-**Serializer:** emit `leadingComments` as `<!-- body -->` lines immediately before the element; emit `trailingComments` immediately after (same line or next — implementation choice; BOM equality does not require whitespace match). Bodies are opaque strings as stored.
+**Serializer:** emit `leadingComments` as `<!-- body -->` lines immediately before the element; emit `trailingComments` on the **next line** after the element's end tag, then a **blank line** after the trailing-comment block (B22 — decided; not same-line). Example:
+
+```xml
+<bricks:Standard bml:id="a" />
+<!-- trailing note -->
+
+<bricks:Standard bml:id="b" />
+```
+
+BOM equality does not require whitespace match (B10/B13). Bodies are opaque strings as stored.
 
 **Out of Phase A:** XML processing instructions; pretty-print whitespace.
 
@@ -315,12 +330,29 @@ Do **not** emit a bare logical name for private/protected members. Do **not** ke
 
 Same rule on composition instances: ` __myVar="5" ` ↔ `memberValues.myVar` with member visibility private.
 
+### Type-reference emit — QName vs FQN (B21 — decided)
+
+BOM type fields store **resolved FQNs**. Serializer spelling:
+
+```text
+Document has no prefixed QNames
+  (no non-default keys in source.namespaceBindings)
+  → FQN-emit mode: write FQNs for type / baseType / sugar tags / composition type identities
+
+Otherwise
+  → QName-emit mode: always write prefixed QNames using namespaceBindings
+  → several prefixes for one namespace id → first authored (declaration order)
+  → namespace needed but unbound → BML_NAMESPACE_UNBOUND (do not fall back to FQN)
+```
+
+Normative detail: `19_definition_blocks_and_bml_xml.md` — Namespace prefixes (D2) · B21. Compatible with B10 (BOM equality uses FQNs, not surface spelling).
+
 ### Boolean literals vs Boolean.True / Boolean.False (B15 / B16 — decided)
 
 | Form | Kind | Parse / BOM | Serialize |
 |---|---|---|---|
 | `true` / `True` / `TRUE` / `false` / … | Boolean **value** | Canonical lowercase boolean (B15) | Always `true` / `false` |
-| `Boolean.True` / `Boolean.False` | **Type** reference (Sub-Block / Constant shortcut) | `TypeExpression` / named type ref — unchanged (B16) | Same type spelling (QName/FQN as authored bindings allow) |
+| `Boolean.True` / `Boolean.False` | **Type** reference (Sub-Block / Constant shortcut) | `TypeExpression` / named type ref — unchanged (B16) | QName or FQN per B21 (same as other type refs) |
 | `Constant(Boolean){value: true}` | Type expression | Preserve Constant application | Preserve Constant application |
 
 Never rewrite `Boolean.False | SizeXYZ` into `false | SizeXYZ` or a bare boolean literal type.
@@ -1156,6 +1188,8 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | B18 | XML DOM library | **Decided** — `@xmldom/xmldom` in Node **and** browser (same impl); see `06_compiler.md` — [2] XML Parser |
 | B19 | Redundant aggregation `type` | **Decided** — `BML_REDUNDANT_AGGREGATION_TYPE` (**warning V1**); ignore authored type, keep inherited — see § Partial overrides · `02_mbml.md` Aggregations / Default Resolution |
 | B20 | Deep-equal ignores provenance | **Decided** — strip `source` / `sourceLocation` / end spans before compare; see § V1 Parser / Serializer Scope · `15` Roundtrip test contract · `12` Source Locations |
+| B21 | Type-ref emit QName vs FQN | **Decided** — QName whenever document has prefixed bindings; FQN only if no QNames authored; multi-prefix → first authored — see § Type-reference emit · `19` D2/B21 |
+| B22 | Trailing-comment emit layout | **Decided** — next line after the element, then a **blank line**; parse still accepts same-line — see § XML Comments |
 
 ---
 
@@ -1163,7 +1197,7 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 
 | Topic | Document |
 |---|---|
-| XML DOM / emit policy | `06_compiler.md` — [2] · this document B10–B20 |
+| XML DOM / emit policy | `06_compiler.md` — [2] · this document B10–B22 |
 | BOM object model | `12_bom_object_model.md` |
 | V1 Phase-A build order | `15_dev_setup.md` — V1 Implementation Strategy |
 | Expression AST | `10_expression_language.md` |

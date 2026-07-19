@@ -1,5 +1,7 @@
 # Web of Things (WOT)
-## Reference Document — v28
+## Reference Document
+
+> **Revision:** v28 (bump this label when the document changes; the filename stays `WOT_Reference.md`).
 
 > *"The WOT is the implementation of Plato's theory of Ideas."*
 > *"As simple as LEGO. As powerful as SAP."*

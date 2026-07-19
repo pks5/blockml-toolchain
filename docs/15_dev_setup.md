@@ -715,7 +715,7 @@ Run roundtrip tests against files already in the repository — grow tiers as pa
 
 | Tier | Source | Examples |
 |---|---|---|
-| **T0 — Minimal** | `packages/core/src/org/blockml/language/`, `packages/core/blocks/org/blockml/bml/service/` | `TypeScript.bml`, `Math.bml` |
+| **T0 — Minimal** | `packages/core/blocks/org/blockml/bml/language/`, `packages/core/blocks/org/blockml/bml/service/` | `TypeScript.bml`, `Math.bml` |
 | **T1 — Framework** | `packages/core/blocks/` | `Block.bml`, `BlockDefinition.bml`, `MemberDefinition.bml` |
 | **T2 — Domain** | `domains/machineblocks/mbom/blocks/` | `NativeBlock.bml`, `CompositeBlock.bml`, `Set.bml` |
 | **T3 — Real-world** | `domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/` | `Calibrator.bml`, `Standard.bml`, `Cross.bml` |

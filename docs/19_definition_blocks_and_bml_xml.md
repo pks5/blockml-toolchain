@@ -186,12 +186,33 @@ Example: `org.blockml.bml.core.Block` — composable instances render under thei
 
 | Rule | Detail |
 |---|---|
-| **Store** | Parser records every authored `xmlns` / `xmlns:prefix` on `BomDocument.source.namespaceBindings` (`prefix → namespace id`). Default (unprefixed) xmlns uses a reserved key (e.g. `""`). Do not normalize or rewrite prefixes. |
-| **Emit** | Serializer and XML-emitting targets reuse **exactly** those bindings for QNames (`${ bml:Self }`, TypeReferenceEntity sugar, prefixed member elements). No synthetic `ns1` / guessed short names. |
-| **Missing binding** | If emit would need a prefix for a namespace that is **not** in `namespaceBindings` → **`BML_NAMESPACE_UNBOUND`** (error). Do not invent a binding. |
+| **Store** | Parser records every authored `xmlns` / `xmlns:prefix` on `BomDocument.source.namespaceBindings` (`prefix → namespace id`). Default (unprefixed) xmlns uses a reserved key (e.g. `""`). Do not normalize or rewrite prefixes. Insertion / iteration order **MUST** match authored declaration order. |
+| **Emit bindings** | Serializer and XML-emitting targets reuse **exactly** those bindings. No synthetic `ns1` / guessed short names. |
+| **Type-ref form (B21)** | Prefer **prefixed QName** vs **FQN** at document level — see below. |
+| **Missing binding** | In QName-emit mode, if emit would need a prefix for a namespace that is **not** in `namespaceBindings` → **`BML_NAMESPACE_UNBOUND`** (error). Do not invent a binding and do **not** silently fall back to FQN. |
 | **FatBlock** | Host **must** run Stage 2 validation **before** FatBlock emit. Validator ensures the closure of types/namespaces for the bundle is bound (root + every inlined dependency’s authored bindings, merged without prefix collisions). Unbound → `BML_NAMESPACE_UNBOUND`; conflicting prefix→namespace mappings → `BML_NAMESPACE_PREFIX_COLLISION`. No silent rewrite. |
 
-Phase A roundtrip of a single file already requires preserving `namespaceBindings` losslessly. Prefix resolution for `${ bml:Self }` evaluation is post–Phase A; the storage and “no invent” rules apply from Phase A onward.
+###### Type-reference emit preference (**B21 — decided**)
+
+BOM stores resolved FQNs only. On serialize, choose spelling:
+
+```text
+FQN-emit mode  —  document contains no prefixed QNames
+                  (no non-default xmlns:prefix bindings; author wrote FQNs / bare specialized-site names only)
+                  → emit type references as FQN (e.g. type="com.machineblocks.bml.bricks.Standard")
+
+QName-emit mode — otherwise (any xmlns:prefix present / QNames appear in the document)
+                  → always emit type references as prefixed QNames when a binding exists for that namespace
+                  → never prefer FQN merely because both spellings are possible
+```
+
+**Multiple prefixes → same namespace:** use the **first** authored binding for that namespace id (declaration order in `namespaceBindings`). Do not pick arbitrarily or by shortest name.
+
+Applies to: `type` / `baseType` / aggregation & association type attributes, TypeReferenceEntity sugar tags (`${ bml:Self }` / empty QName children), composition instance tags, and any other site that emits a Block type identity as QName or FQN.
+
+Compatible with B10: QName and FQN parse to the same FQN on the Urmodell; mixed authored spelling may normalize to all-QName (or all-FQN) on emit.
+
+Phase A roundtrip of a single file already requires preserving `namespaceBindings` losslessly. Prefix resolution for `${ bml:Self }` evaluation is post–Phase A; the storage, “no invent”, and B21 preference rules apply from Phase A onward.
 
 **Expression — member name as element name**
 
@@ -486,7 +507,7 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 | ID | Topic | Notes |
 |---|---|---|
 | D1 | Default `bml:xml` when omitted on members | **Decided:** kind-based defaults — § Default XML rendering by kind. Explicit `bml:xml` wins. Dual `element\|attribute`: parse both, store `authoredPlacement` (D9); D1 only when authored form absent |
-| D2 | `${ bml:Self }` prefix resolution at serialize time | **Decided:** store authored prefixes in `SourceInfo.namespaceBindings` — **1:1 roundtrip**, no invented prefixes. Missing NS → error. FatBlock only after Stage 2 validator; unbound/conflicting NS fail — see § Namespace prefixes |
+| D2 | `${ bml:Self }` / type-ref prefix resolution at serialize time | **Decided:** store authored prefixes in `SourceInfo.namespaceBindings` — **1:1 roundtrip**, no invented prefixes. **B21:** QName-emit when any prefixed binding exists; FQN-emit only when the document has no QNames. Multiple prefixes for one NS → first authored. Missing NS → error. FatBlock only after Stage 2; unbound/conflicting NS fail — see § Namespace prefixes |
 | D3 | BOM storage shape for `<bml:xml>` / member `bml:xml` | **Decided:** first-class `xmlRendering` on `BlockDefinition` + `MemberDefinitionBase` — **not** flow-control `directives[]`. Follows **maximum authored surface** (`01_bom_core.md`). See `12_bom_object_model.md` · `XmlRenderingBlock` / `XmlRenderingMember` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | **Decided (A):** **Member-level** — allowed on `override="true"`. **Block-level** — only `core.Block` + Definition branch. Illegal → `BML_XML_DIRECTIVE_NOT_ALLOWED` at **Stage 2** (hybrid). See § Placement Rules · § When Stage 1 vs Stage 2 |
 | D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |

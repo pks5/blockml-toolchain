@@ -1073,7 +1073,7 @@ type CallArgument =
 
 ### `ExpressionNode` Union
 
-Root type of `ExpressionValue.ast`:
+Root type of `ParsedExpression.ast` (utility result — **not** on Canonical `ExpressionValue`):
 
 ```typescript
 type ExpressionNode =

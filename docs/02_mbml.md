@@ -700,7 +700,7 @@ Examples:
 
 `<is>` is required on every Block definition (root blocks and Sub-Blocks). Omitted → `BML_MISSING_IS` (warning in V1, error in a later release). Primary input for editors, LLMs, and documentation navigation — after FQN identity is established.
 
-**WOT:** The Block itself is the Idea (Urbild) — the stable semantic constant. `<is>` **names** that Idea (Urbild) in prose — it is not the Idea. See `WOTFoundation` and `WOT_Reference` — The Idea. Spec prose uses the English gloss **Idea** plus **`(Urbild)`** per § Terminology — Urbild.
+**WOT:** The Block itself is the Idea (Urbild) — the stable semantic constant. `<is>` **names** that Idea (Urbild) in prose — it is not the Idea. See `WOTFoundation` and `WOT_Reference.md` — The Idea. Spec prose uses the English gloss **Idea** plus **`(Urbild)`** per § Terminology — Urbild.
 
 ### `<summary>` — short prose expansion
 

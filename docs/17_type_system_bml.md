@@ -10,7 +10,7 @@ For composable Block base types see `16_framework_base_types.md`.
 For property parse/serialize rules (MB domain) see `04_types.md`.
 For `TypeDescriptor` AST see `12_bom_object_model.md`.
 For SCAD render mapping see `NativeBlock.bml` (parameter SSOT; `scad:value`). `09_mbom_properties.yml` is a pointer stub only. Axis conventions (XY / XYZ / AB): `04_types.md`.
-For WOT vision and motivation see `WOT_Reference_v26.md`.
+For WOT vision and motivation see `WOT_Reference.md`.
 For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self-Description Roadmap.
 
 ---
@@ -180,7 +180,7 @@ Manifestation                 Compiler · Renderer · Runtime
 
 BML hält die Idee (Urbild) stabil. Der Compiler ist Manifestor-Werkzeug — er darf die Idee intern beliebig repräsentieren, solange die Beschreibungssprache intakt bleibt. Die vollständige Manifestation kennt der Compiler nicht; das ist Sache des Renderers und der Runtime.
 
-See `WOT_Reference_v26.md` §1 · The Idea · Manifestation.
+See `WOT_Reference.md` §1 · The Idea · Manifestation.
 
 ---
 
@@ -493,7 +493,7 @@ JSON `[1, 2, 3]` in property values remains a **literal sequence** in expression
 
 > **The World provides the interpretation.**
 
-BlockML states what a collection *means*. The concrete data structure is part of the Manifestation — decided by the render target and runtime. See `WOT_Reference_v26.md` — The Idea.
+BlockML states what a collection *means*. The concrete data structure is part of the Manifestation — decided by the render target and runtime. See `WOT_Reference.md` — The Idea.
 
 ### Where multiplicity applies
 
@@ -1779,4 +1779,4 @@ never expose „Block“ outside parser/BOM types
 | Bootstrap mapping | `13_bml_to_bom_mapping.md` |
 | MB native params / types | `NativeBlock.bml` + `type/*.bml` |
 | SCAD property hints (legacy path) | `09_mbom_properties.yml` — pointer stub; prefer NativeBlock |
-| WOT vision | `WOT_Reference_v26.md` |
+| WOT vision | `WOT_Reference.md` |

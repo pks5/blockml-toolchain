@@ -420,7 +420,7 @@ Sub-Block in same .bml file     →  nested class (derived type, inner scope)
 Preset                          →  named default binding on a class (partial object factory)
 ```
 
-WOT vocabulary: Block = grammar / template; Block Instance configured via Preset may become a **Thing** when a Runtime activates it — see `WOT_Reference_v26.md` — Block · Block Instance · Set.
+WOT vocabulary: Block = grammar / template; Block Instance configured via Preset may become a **Thing** when a Runtime activates it — see `WOT_Reference.md` — Block · Block Instance · Set.
 
 Everything else — assemblies, placements, steps, scenes, views — is defined by domain-specific BOMs as specialized Block types.
 
