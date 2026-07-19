@@ -111,8 +111,8 @@
     <see type="doc:Introduction" relation="ReadFirst">
       First ReadFirst entry on org.blockml.bml.README — BlockML goals and overview.
     </see>
-    <see type="doc:ModelingGuidelines" relation="SeeAlso">
-      Recommended patterns for modeling Blocks — later in the ReadFirst path.
+    <see type="doc:ModelingGuidelines" relation="ReadNext">
+      Next — recommended patterns for modeling Blocks.
     </see>
   </references>
 

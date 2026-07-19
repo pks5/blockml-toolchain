@@ -68,6 +68,9 @@
     <see type="doc:BmlNamespace" relation="SeeAlso">
       Mandatory domain.bml namespace — FQN layout.
     </see>
+    <see type="doc:DocumentationModel" relation="ReadNext">
+      Next — is, documentation, references on Block definitions.
+    </see>
   </references>
 
 </block>

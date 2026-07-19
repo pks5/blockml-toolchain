@@ -21,7 +21,7 @@
 
   <documentation>
     README block for the BlockML core library. Start with references marked relation=ReadFirst —
-    seventeen documentation blocks in mental learning order. The first ten form the BlockML
+    eighteen documentation blocks in mental learning order. The first ten form the BlockML
     conceptual core: after reading them, most of the core library can be derived from Block
     definitions themselves. Later entries cover conventions, organisation, and background knowledge.
 
@@ -79,6 +79,10 @@
 
     <see type="doc:BmlNamespace" relation="ReadFirst">
       org.blockml.bml.* namespace layout and domain package conventions.
+    </see>
+
+    <see type="doc:ImplicitNamespaceResolution" relation="ReadFirst">
+      Context-bound implicit namespaces for unqualified references.
     </see>
 
     <see type="doc:DocumentationModel" relation="ReadFirst">

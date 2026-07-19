@@ -76,8 +76,8 @@
     <see type="doc:LibrarySystem" relation="SeeAlso">
       Libraries, packages, and namespace membership — related reading.
     </see>
-    <see type="doc:ImplicitNamespaceResolution" relation="SeeAlso">
-      Context-bound implicit namespace — unqualified references at specialized sites.
+    <see type="doc:ImplicitNamespaceResolution" relation="ReadNext">
+      Next — context-bound implicit namespace for unqualified references.
     </see>
   </references>
 

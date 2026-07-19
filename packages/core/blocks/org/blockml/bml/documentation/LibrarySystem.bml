@@ -88,11 +88,8 @@
     <see type="relation:ThenContinueWith" relation="SeeAlso">
       Library &lt;see&gt; after ReadFirst when bootstrap is present.
     </see>
-    <see type="doc:BmlNamespace" relation="SeeAlso">
-      Mandatory domain.bml namespace for all BML definitions.
-    </see>
-    <see type="doc:DocumentationModel" relation="ReadNext">
-      Next reading step — is, documentation, references on Block definitions.
+    <see type="doc:BmlNamespace" relation="ReadNext">
+      Next — mandatory domain.bml namespace for all BML definitions.
     </see>
   </references>
 
