@@ -24,19 +24,23 @@
 
     direction → align → rotationOffset → rotation → rotationOffsetRevert → offset
 
-    direction — semantic 90° grid orientation (west / north / east / south). At north and south,
+    direction — semantic 90° grid orientation (West / North / East / South). At North and South,
     size X and Y swap for placement; face semantics stay west-local for authoring.
     Prefer direction over free rotation whenever the intent is grid-aligned reorientation.
+    SCAD serialize literals (scad:value): west / north / east / south.
 
-    align — start / center / end relative to the reference bounding box (studs, slope, bevel, and
-    crop do not change the align box). alignChildren sets the parent origin used by children
-    (default start on all axes).
+    align — Start / Center / End relative to the reference bounding box (studs, slope, bevel, and
+    crop do not change the align box). Scalar Align may broadcast, or AxisXYZ(Align) sets each
+    axis. alignChildren sets the parent origin used by children (default Start on all axes).
+    SCAD serialize literals (scad:value): start / center / end.
 
     rotation — free rotation after alignment; not grid-safe; last resort.
     rotationOffset — optional pivot for rotation; may be reverted after rotation.
     offset — final placement translation only.
 
-    Face identifiers in V3 are strings ("x-", "x+", "y-", "y+", "z-", "z+"), not integers.
+    Face identifiers in MBML/BOM are enum member ids (XNeg, XPos, YNeg, YPos, ZNeg, ZPos) —
+    not integers and not authored as SCAD face strings. The SCAD literals "x-", "x+", … live on
+    Face as scad:value and are emit-only. Same pattern for Direction and Align.
   </documentation>
 
   <references>
