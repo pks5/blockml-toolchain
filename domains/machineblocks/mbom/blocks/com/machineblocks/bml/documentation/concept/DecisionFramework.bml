@@ -33,10 +33,11 @@
     Pattern selection: Primitive Wrapper, Semantic/Simple Block, Composite Block, or Helper/Form.
     When in doubt, choose Composite.
 
-    Capability boundary of a single native geometry call: classic bricks and plates, slopes or
-    wedges (not both in one call), rounds, recess, studs, simple cutouts, and similar single-body
-    forms. L/T/cross shapes, Z-brackets, side panels, cable channels, bent liftarms, multi-line
-    text, and multi-body carriers require composition.
+    Capability boundary of a single native geometry call: classic bricks and plates, slopes and
+    bevels (may be combined in one call — V3; V2 forbade slope+bevel together), rounds, recess,
+    studs, simple cutouts, and similar single-body forms. L/T/cross shapes, Z-brackets, side
+    panels, cable channels, bent liftarms, multi-line text, and multi-body carriers require
+    composition.
 
     Cross-cutting rules: design in west-local face semantics; prefer direction over free rotation;
     keep calibration adjustments out of instance settings when they belong in config; use face

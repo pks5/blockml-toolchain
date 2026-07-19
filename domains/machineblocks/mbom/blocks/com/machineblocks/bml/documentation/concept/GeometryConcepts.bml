@@ -53,7 +53,7 @@
       SCAD emit form of MBOM values including cutout aggregation.
     </see>
     <see type="concept:DecisionFramework" relation="SeeAlso">
-      When slope and bevel should not share a single native call.
+      Intent → pattern → parameters; slope and bevel may share one native call in V3.
     </see>
   </references>
 

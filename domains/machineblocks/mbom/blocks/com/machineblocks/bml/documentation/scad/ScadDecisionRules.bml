@@ -28,9 +28,9 @@
     4. Helper / Form — shared geometry helpers, not content products
     When in doubt, choose Composite.
 
-    Single mb_block() whitelist (examples): classic bricks/plates; slope or bevel (not both);
-    round forms; recess; studs; simple cutouts; single-line top text; PCB cavities; straight
-    liftarms.
+    Single mb_block() whitelist (examples): classic bricks/plates; slope and/or bevel (combinable
+    in V3 — V2 disallowed both in one call); round forms; recess; studs; simple cutouts;
+    single-line top text; PCB cavities; straight liftarms.
 
     Requires Composite (blacklist for one call): L/T/cross; Z-brackets; side panels; cable
     channels; bent liftarms; carriers; multi-line text; multi-body devices.
