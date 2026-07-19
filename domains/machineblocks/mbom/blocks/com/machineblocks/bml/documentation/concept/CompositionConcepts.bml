@@ -29,15 +29,15 @@
     size to the outer bounding box of its parts. Placement of each part uses direction, offset,
     and alignment relative to the parent origin (alignChildren).
 
-    Assembly modes describe how parts are presented for preview or print: unassembled, assembled,
-    or merged. Nested assembly may carry size and direction alongside the mode.
+    In MBOM, composition fills aggregations (for example _parts on CompositeBlock). There is no
+    separate Placement meta-block — placement is properties on the placed instances. There is also
+    no MBOM “assembly mode” property: unassembled / assembled / merged are SCAD preview/print
+    helpers (for example mb_assembly), not domain model concepts — see scad:ModulePatterns /
+    scad-lib docs when targeting OpenSCAD.
 
     Calibration at internal contacts often uses a tiny namespaced baseAdjustment overlap so parts
-    fuse cleanly when merged. Derived outer size can be computed from part sizes, directions, and
-    offsets when no explicit shared size exists.
-
-    In MBOM, composition fills aggregations (for example _parts on CompositeBlock). There is no
-    separate Placement meta-block — placement is properties on the placed instances.
+    fuse cleanly when boolean-merged at render time. Derived outer size can be computed from part
+    sizes, directions, and offsets when no explicit shared size exists.
   </documentation>
 
   <references>

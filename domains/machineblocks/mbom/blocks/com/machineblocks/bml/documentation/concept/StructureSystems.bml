@@ -26,10 +26,12 @@
 
     1. Body — base toggles the solid body. base=false hides the body while bounding box and
        alignment stay unchanged (useful for composite wrappers and stud-only layers).
-    2. Underside — baseCutoutType selects standard, studs, groove, or none. baseWallGaps open
-       passages through underside walls for crossing geometry.
-    3. Enclosure — recess and recessWallThickness carve an interior; recessWallGaps open walls.
-       Do not use wall thickness 0 to create openings — use gaps.
+    2. Underside — baseCutoutType selects None / Standard / Studs / Groove (enum member ids).
+       baseWallGaps (WallGap[]) open passages through underside walls for crossing geometry.
+    3. Enclosure — recess and recessWallThickness carve an interior; recessWallGaps
+       (RecessWallGap[]) open walls. RecessWallGap extends WallGap with padStart / padEnd
+       (default Auto) for tongue/groove-aware end insets. Do not use wall thickness 0 to create
+       openings — use gaps.
     4. Connection — continuous tongue-and-groove versus discrete connectors for segmented or
        angled joints.
 
@@ -42,13 +44,16 @@
       Next — composition, assembly, and parts.
     </see>
     <see type="mbt:BaseCutout" relation="Defines">
-      Underside cutout mode enum.
+      Underside cutout mode enum (None, Standard, Studs, Groove).
     </see>
     <see type="mbt:StudType" relation="Defines">
-      Stud solid/hollow (and related) modes.
+      Stud Solid / Hollow modes.
     </see>
     <see type="mbt:WallGap" relation="Defines">
-      Wall gap compound type for underside and recess openings.
+      Wall gap for underside openings (baseWallGaps) — face, pos, len.
+    </see>
+    <see type="mbt:RecessWallGap" relation="Defines">
+      Recess wall gap (recessWallGaps) — WallGap plus padStart / padEnd.
     </see>
     <see type="mbt:Connector" relation="Defines">
       Discrete connector compound type.

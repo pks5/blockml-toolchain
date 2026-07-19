@@ -20,17 +20,21 @@
   <documentation>
     MachineBlocks domain types under com.machineblocks.bml.core:
 
-    Block — abstract domain base. Carries name, presets aggregation, and basePresets association.
+    Block — abstract domain base (baseType Entity). Carries name, presets aggregation, and
+    basePresets association.
     CompositeBlock — Block with default _parts aggregation for child block instances.
     NativeBlock — final leaf geometry Block. Maps 1:1 to the native geometry primitive at render
       time. SSOT for all native MachineBlocks parameters. Uses children for nested native geometry
       instead of _parts. Must not be used as baseType for custom Block definitions.
     Set — CompositeBlock for LEGO-style builds: palette via presets, placed instances in _parts,
       assembly order in _steps.
-    Step — final assembly instruction; part association references a placed _parts instance by
-      bml:id; document order in _steps is build order.
+    Step — final assembly instruction Block. baseType is org.blockml.bml.core.Block (framework
+      Block), not mbcore:Block / Entity — a sibling outside the Entity → mbcore:Block tree.
+      part association references a placed _parts instance by bml:id; document order in _steps is
+      build order.
 
-    Hierarchy: Entity → Block → CompositeBlock → Set. NativeBlock is a final sibling under Block.
+    Hierarchy: Entity → mbcore:Block → CompositeBlock → Set. NativeBlock is a final sibling under
+    mbcore:Block. Step sits on org.blockml.bml.core.Block → Step.
 
     Class identity is the Block FQN. Instance identity inside composition uses bml:id (nested paths
     use ::). There is no separate Placement type — direction, offset, and related placement data
@@ -54,7 +58,10 @@
       LEGO-style set with _steps.
     </see>
     <see type="mbcore:Step" relation="Defines">
-      Assembly step referencing a placed part.
+      Assembly step — framework Block (org.blockml.bml.core.Block), not mbcore:Block.
+    </see>
+    <see type="core:Block" relation="SeeAlso">
+      Framework Block — baseType of Step.
     </see>
   </references>
 
