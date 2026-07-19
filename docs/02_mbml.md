@@ -6,7 +6,7 @@ version: 2.1.0
 
 This document defines the BML (Block Markup Language) format — the universal declarative language for BOM Blocks, Composite Blocks, and Presets. In tooling it is the primary **authoring** serialization; in the Web of Things it is also a **message / interchange** format (see Overview · WOT).
 
-For the abstract object model see `01_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For value type BML definitions see `17_type_system_bml.md`. For property constraints and suggestions see `18_constraints_and_suggestions.md`. For MBOM type parse/serialize rules and XY/AB conventions see `04_types.md`. For native MBOM / SCAD parameters see `NativeBlock.bml` (SSOT); transitional render hints only: `09_mbom_properties.yml`.
+For the abstract object model see `01_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For value type BML definitions see `17_type_system_bml.md`. For property constraints and suggestions see `18_constraints_and_suggestions.md`. For MBOM type parse/serialize rules and XY/AB conventions see `04_types.md`. For native MBOM / SCAD parameters see `NativeBlock.bml` (SSOT). `09_mbom_properties.yml` is a pointer stub only.
 
 ---
 

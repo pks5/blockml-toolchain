@@ -9,7 +9,7 @@ This document specifies how **value types**, **implementation languages**, and r
 For composable Block base types see `16_framework_base_types.md`.
 For property parse/serialize rules (MB domain) see `04_types.md`.
 For `TypeDescriptor` AST see `12_bom_object_model.md`.
-For SCAD render mapping see `NativeBlock.bml` (parameter SSOT; `scad:value`) and transitional `09_mbom_properties.yml` (must follow NativeBlock). Axis conventions (XY / XYZ / AB): `04_types.md`.
+For SCAD render mapping see `NativeBlock.bml` (parameter SSOT; `scad:value`). `09_mbom_properties.yml` is a pointer stub only. Axis conventions (XY / XYZ / AB): `04_types.md`.
 For WOT vision and motivation see `WOT_Reference_v26.md`.
 For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self-Description Roadmap.
 
@@ -26,7 +26,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Same mechanism** | Same `<block>` element · same parser · same TypeRegistry bootstrap |
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |
 | **Interpretation** | Renderers map type → target syntax (SCAD, React, Python, …) |
-| **09_mbom_properties.yml** | Transitional render hints only — must follow NativeBlock; not type/param SSOT |
+| **09_mbom_properties.yml** | Pointer stub only — not type/param SSOT |
 | **Block metadata** | Every `<block>` carries required `<is>`, required `<documentation>`, conditional `<summary>` (when documentation is long), conditional `<isnot>` (when confusion risk exists), optional `<keywords>` (`core:Keyword[]`), optional `<aliases>` (`core:Alias[]`); optional `<since>`, `<changelog>`, `<examples>`, `<references>` — see `02_mbml.md` |
 | **Strict type/value separation** | ValueTypes never store data — Properties own all concrete values |
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — four sibling branches under ValueType |
@@ -39,7 +39,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 ```text
 BML NativeBlock + type/*.bml (what params/types ARE) →  TypeRegistry / authoring SSOT
 04_types.md (how values parse; XY/AB conventions)  →  Parser / validator value coercion
-09_mbom_properties.yml (optional transitional)     →  must match NativeBlock; never override
+09_mbom_properties.yml (pointer stub)              →  no inventory; NativeBlock wins
 Renderer                                           →  target-specific output
 ```
 
@@ -1694,15 +1694,16 @@ Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType`
 > **Note:** These phases are **type-migration steps within V1** — not the system-wide V1/V2/V3 roadmap. See `00_system.md` — BML Self-Description Roadmap.
 
 ```text
-Phase 1 (this document)   Spec + bootstrap primitives + Language BML
-Phase 2                   Migrate com.machineblocks.bml.type.* from 04_types.md → BML
-Phase 3                   Remove enum SSOT from domain XSD files
-Phase 4                   04_types.md becomes parse/serialize reference only
+Phase 1                   Spec + bootstrap primitives + Language BML
+Phase 2                   com.machineblocks.bml.type.* in BML (done — type/*.bml)
+Phase 3                   Remove enum SSOT from domain XSD files (as schemas retire)
+Phase 4                   04_types.md = parse/serialize + XY/AB conventions only (done —
+                          no type/value inventory in Markdown)
 ```
 
-During migration, the validator accepts types from **either** registry BML **or** legacy XSD. BML wins on conflict. Legacy-only types emit `BML_LEGACY_TYPE_SOURCE` warning.
+During any remaining legacy acceptance, the validator may accept types from **either** registry BML **or** legacy XSD. BML wins on conflict. Legacy-only types emit `BML_LEGACY_TYPE_SOURCE` warning.
 
-Property declarations for MachineBlocks natives live in `NativeBlock.bml` (SSOT). Type shapes live in `type/*.bml`. `09_mbom_properties.yml` may retain transitional SCAD serializer hints keyed by property name — never as inventory authority.
+Property declarations for MachineBlocks natives live in `NativeBlock.bml` (SSOT). Type shapes live in `type/*.bml`. `09_mbom_properties.yml` is a pointer stub — never inventory authority.
 
 ---
 
@@ -1776,5 +1777,5 @@ never expose „Block“ outside parser/BOM types
 | Collections and Multiplicity | this document — § Collections and Multiplicity |
 | Bootstrap mapping | `13_bml_to_bom_mapping.md` |
 | MB native params / types | `NativeBlock.bml` + `type/*.bml` |
-| SCAD property hints (transitional) | `09_mbom_properties.yml` (must follow NativeBlock) |
+| SCAD property hints (legacy path) | `09_mbom_properties.yml` — pointer stub; prefer NativeBlock |
 | WOT vision | `WOT_Reference_v26.md` |

@@ -69,7 +69,7 @@ gibt es das noch nicht.
 
 - Core `MemberGroup` / `groups` bewusst domain-agnostisch belassen.
 - Keine feste 2-Achsen-Regel in Core, solange nur MB sie braucht.
-- YAML `09_api_parameters.yml` bleibt Mirror; BML (NativeBlock) ist SSOT.
+- YAML `09_api_parameters.yml` ist Pointer-Stub (kein Inventar); BML (NativeBlock) ist SSOT.
 
 ## Status
 

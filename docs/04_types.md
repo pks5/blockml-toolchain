@@ -16,7 +16,7 @@ It is **not** the inventory of native parameters or type shapes.
 | Native MBML / SCAD parameters (names, types, docs, defaults, `scad:value`) | `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml` |
 | Type shapes (structs, enums, closed kinds, units) | `domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/*.bml` (+ `Library.bml` membership) |
 | This document (`04_types.md`) | Parse / serialize behaviour and conventions only |
-| `09_mbom_properties.yml` | Legacy / transitional render hints — **must not contradict** NativeBlock |
+| `09_mbom_properties.yml` | Pointer stub only — no inventory; see NativeBlock |
 
 Markdown, YAML, and scad-lib API docs **must follow or only link** NativeBlock + type BML.
 When they diverge, **BML wins** — update the mirror, never NativeBlock to match prose/YAML.
@@ -85,7 +85,7 @@ when the map is only “one scalar per axis” (e.g. Technic hole grid parameter
 Closed kinds (`Bevel`, `BaseRoundingMap`, `PlaneRoundingMap`, `HoleEdgeMap`, …) package nested
 type expressions for NativeBlock properties without changing SCAD shape.
 
-See also Align section below; `AxisAB.bml` / `Port.bml` / `Bevel.bml` documentation.
+See `AxisAB.bml` / `Port.bml` / `Bevel.bml` / `Align.bml` documentation.
 
 ---
 
@@ -207,141 +207,25 @@ Use in **type expressions** (e.g. `Boolean.False | T`), not as property values. 
 
 ---
 
-# 2. Atomic MB Types
+# 2. MachineBlocks type inventory → BML (SSOT)
 
-## Direction
+Do **not** maintain enum/struct/value catalogs in this Markdown file.
 
-```text
-com.machineblocks.bml.type.Direction
+| Concern | SSOT path |
+|---------|-----------|
+| Native parameters | `…/core/NativeBlock.bml` |
+| MB type shapes | `…/type/*.bml` (e.g. `Direction.bml`, `SizeXYZ.bml`, `Align.bml`, `WallGap.bml`, …) |
+| Framework primitives | `packages/core/blocks/org/blockml/bml/type/*.bml` |
 
-Values:  West | North | East | South
+This document keeps only **parse / serialize / convention** commentary. For values,
+defaults, docs, and `scad:value`, open the corresponding `.bml` file.
 
-MBML:  direction="West"
-MBOM:  Direction.West
-SCAD:  "west"
-```
-
-## Face
-
-```text
-com.machineblocks.bml.type.Face
-
-Values:  XNeg | XPos | YNeg | YPos | ZNeg | ZPos
-
-MBML:  face="XPos"   (or scad literal via catalog)
-MBOM:  Face.XPos
-SCAD:  "x+"           (from catalog property scad:value)
-```
-
-## Axis
-
-```text
-com.machineblocks.bml.type.Axis
-
-Values:  X | Y | Z
-
-MBML:  axis="x"
-MBOM:  Axis.X
-SCAD:  "x"
-```
-
-## Align
-
-```text
-com.machineblocks.bml.type.Align
-
-Values:  Start | Center | End
-
-MBML:  align="Start"
-MBOM:  Align.Start   (id + typeFqn)
-SCAD:  "start"       (from catalog property scad:value)
-```
-
-Scalar `Align` may be broadcast, or expanded per axis / face-local plane:
-
-```text
-Brick placement (NativeBlock.align / alignChildren):
-  Align | AxisXYZ(Align)
-  — world brick axes X/Y/Z (3-value SCAD array rule)
-
-Face-local anchor (Port.align, and similar face-plane parameters):
-  Align | AxisAB(Align)
-  — face-local A/B plane (XY, XZ, or YZ depending on Face); 1- or 2-value SCAD form
-```
-
-Do not interchange `AxisXYZ(Align)` and `AxisAB(Align)` — XYZ is brick placement; AB is in-plane on a directed face. See `AxisAB` / `Port` BML docs.
-
-## StudType
-
-```text
-com.machineblocks.bml.type.StudType
-
-Values:  Solid | Hollow
-
-MBML:  studType="Solid"
-MBOM:  StudType.Solid
-SCAD:  "solid"
-```
-
-## HoleType
-
-```text
-com.machineblocks.bml.type.HoleType
-
-Values:  Pin | Axle
-
-MBML:  holeType="Pin"
-MBOM:  HoleType.Pin
-SCAD:  "pin"
-```
-
-## AssemblyMode
-
-```text
-com.machineblocks.bml.type.AssemblyMode
-
-Values:  Unassembled | Assembled | Merged
-
-MBML:  assembly="Merged"
-MBOM:  AssemblyMode.Merged
-SCAD:  "merged"
-```
-
-## Color
-
-```text
-com.machineblocks.bml.type.Color
-
-Values:  "#RRGGBB" | "#RRGGBBAA" | [r, g, b] | [r, g, b, a]
-
-MBML:  baseColor="#EAC645"
-MBOM:  Color { hex: "#EAC645" }
-SCAD:  "#EAC645"
-```
-
-## ColorOrInherit
-
-```text
-com.machineblocks.bml.type.ColorOrInherit
-
-Values:  Color | "inherit"
-```
+XY / XYZ / AB naming and Align brick-vs-face rules: § Naming convention above ·
+`AxisAB.bml` / `Port.bml`.
 
 ---
 
-# 3. Unit Types
-
-| Type                                  | Description                   |
-|---------------------------------------|-------------------------------|
-| `com.machineblocks.bml.type.FloatMm`     | Length in millimeters         |
-| `com.machineblocks.bml.type.FloatMbu`    | Length in MachineBlocks units |
-| `com.machineblocks.bml.type.FloatGrid`   | Length in grid units          |
-| `com.machineblocks.bml.type.FloatPt`     | Text size unit                |
-| `com.machineblocks.bml.type.FloatDeg`    | Angle in degrees              |
-
----
-
-# 4. Type Expressions (Unions and Legacy Wrappers)
+# 3. Type Expressions (Unions and Legacy Wrappers)
 
 BlockML has four ValueType kinds: **Primitive**, **Enum**, **Struct**, **Constant**. The forms below are **type expressions** — not separate ValueTypes. Write unions directly in `type="..."` attributes.
 
@@ -414,243 +298,7 @@ During migration, legacy `com.machineblocks.bml.type.AutoOr_*` XSD/BML names may
 
 ---
 
-# 5. Axis Container Types
-
-## AxisXY\<T\>
-
-```text
-com.machineblocks.bml.type.AxisXY
-
-MBOM:  { x: T, y: T }
-
-MBML:
-  Single value:  value="1.5"          →  x == y == 1.5
-  Array:         value="[1.5, 2.0]"   →  x=1.5, y=2.0
-
-SCAD serialization:
-  x == y   →  scalar
-  x != y   →  [x, y]
-```
-
-## AxisXYZ\<T\>
-
-```text
-com.machineblocks.bml.type.AxisXYZ
-
-MBOM:  { x: T, y: T, z: T }
-
-MBML:
-  Single value:  value="1.5"               →  x == y == z
-  Two values:    value="[1.5, 2.0]"        →  x == y, z differs
-  Three values:  value="[1.5, 1.5, 2.0]"  →  all specified
-
-SCAD serialization:
-  x == y == z   →  scalar
-  x == y        →  [xy, z]
-  all differ    →  [x, y, z]
-```
-
----
-
-# 6. Per-Face Types
-
-## FaceMapXY\<T\> / FaceMapXYZ\<T, Z\>
-
-Canonical BML/BOM face keys (signed axis — not min/max ranges):
-
-```text
-com.machineblocks.bml.type.FaceMapXY
-  { xNeg, xPos, yNeg, yPos }           — T on each face
-
-com.machineblocks.bml.type.FaceMapXYZ
-  { xNeg, xPos, yNeg, yPos, zNeg, zPos }
-  — lateral T; zNeg/zPos use Z (defaultType T)
-
-MBOM:  { xNeg: T, xPos: T, ... }       — authored property names
-SCAD:  Face keys via Face scad:value (x- / x+ / …);
-       Struct arrays → [xNeg, xPos, yNeg, yPos] by declaration order
-       (FaceMapXYZ appends zNeg, zPos) — see Declaration Order / MBOM→SCAD
-```
-
-Legacy PerSide4 / FaceVector6 / FaceMap names below remain for older docs; prefer FaceMapXY / FaceMapXYZ.
-
-## PerSide4\<T\>
-
-Covers the four lateral faces: `x-`, `x+`, `y-`, `y+`
-
-```text
-com.machineblocks.bml.type.PerSide4
-
-MBOM:  { "x-": T, "x+": T, "y-": T, "y+": T }
-
-MBML:
-  Single:      value="0.333"                   →  all equal
-  Two values:  value="[0.5, 0.25]"             →  x-==x+, y-==y+
-  Four values: value="[0.5, 0.4, 0.25, 0.2]"  →  all differ
-
-SCAD serialization:
-  all equal          →  scalar
-  x-==x+, y-==y+     →  [x, y]
-  all differ         →  [x-, x+, y-, y+]
-```
-
-## FaceVector6\<T\>
-
-Covers all six faces: `x-`, `x+`, `y-`, `y+`, `z-`, `z+`
-
-```text
-com.machineblocks.bml.type.FaceVector6
-
-MBOM:  { "x-": T, "x+": T, "y-": T, "y+": T, "z-": T, "z+": T }
-
-SCAD serialization:  always full 6-element array
-  [x-, x+, y-, y+, z-, z+]
-```
-
-## FaceMap\<T\>
-
-Sparse face map — only present faces are set.
-
-```text
-com.machineblocks.bml.type.FaceMap
-
-MBOM:  { face: T, ... }  (partial)
-
-SCAD serialization:
-  [["x-", value], ["z+", value], ...]
-
-Supports namespace-qualified keys for composite block forwarding:
-  [["pbx.x+", value], ["pty.z+", value]]
-```
-
----
-
-# 7. Grid Types
-
-## SizeXYZ
-
-```text
-com.machineblocks.bml.type.SizeXYZ
-
-BOM (authored):  [4, 2, 3]  or  { x: 4, y: 2, z: 3 }  — preserved as authored
-Type check:      both forms valid against SizeXYZ field order (x, y, z)
-SCAD (render):   ["size", [4, 2, 3]]                    — renderer serialization
-```
-
-Integer grid dimensions. Defines the block's spatial contract. Array literals and default SCAD array serialization map by **StructType property declaration order** — see `17_type_system_bml.md` — Declaration Order.
-
-## GridPositionXYZ
-
-```text
-com.machineblocks.bml.type.GridPositionXYZ
-
-MBOM:  { x: Integer, y: Integer, z: Integer }
-
-MBML:  offset="[0, 4, 1]"
-SCAD:  ["offset", [0, 4, 1]]
-```
-
-## SelectiveGrid\<T\>
-
-```text
-com.machineblocks.bml.type.SelectiveGrid
-Sub-Block: com.machineblocks.bml.type.SelectiveGrid.Selector
-
-Java static nested model: SelectiveGrid and Selector each declare generic T;
-parent forwards via selectors: Selector(T)[].
-
-MBOM / BML shape:
-{
-  baseValue: T,
-  selectors: [
-    { from: {x, y}, to: {x, y}, value: T }   ← SelectiveGrid.Selector(T)
-  ]
-}
-
-SCAD serialization:
-  With selectors:   [baseValue, [[x0,y0,x1,y1], value], ...]
-  Without selectors: baseValue only (scalar or boolean)
-```
-
----
-
-# 8. Compound Domain Types
-
-## WallGap
-
-```text
-com.machineblocks.bml.type.WallGap
-
-MBOM:  { face: Face, position: Integer, length: Integer | "full" }
-
-MBML:  wallGap="x+"                   →  face x+, position 0, full length
-       wallGap="[x+, 2, 3]"           →  face x+, position 2, length 3
-
-SCAD:  ["x+"]                          →  position 0, full length
-       ["x+", 2, 3]                    →  explicit position and length
-```
-
-## WallGapList
-
-```text
-com.machineblocks.bml.type.WallGapList
-
-List of WallGap entries.
-
-MBML shorthand (single gap, full length):
-  recessWallGaps="x+"  →  [["x+"]]
-
-SCAD:
-  [["x+"], ["y-", 2, 3]]
-```
-
-## Connector
-
-```text
-com.machineblocks.bml.type.Connector
-
-MBOM:  { face, axis, gender, align, paddingStart, paddingEnd }
-
-Gender:  male | female
-
-SCAD:
-  ["face", "axis", "gender"]                            →  defaults for align/padding
-  ["face", "axis", "gender", "align", start, end]       →  full form
-```
-
-## ScrewHole
-
-```text
-com.machineblocks.bml.type.ScrewHole
-
-MBOM:  { face, position: {x,y}, diameter, depth, insetThickness, insetDepth }
-
-SCAD:
-  ["face", [x, y]]                                               →  defaults
-  ["face", [x, y], diameter, depth, insetThickness, insetDepth]  →  full form
-```
-
-## RoundingRadius
-
-> **Status: `Draft`**
-> The MBOM canonical form is defined. The SCAD mapping is partially implemented.
-> See `docs/scad-reference/05_types_and_mapping.md` for full details and current
-> implementation status.
-
-```text
-com.machineblocks.bml.type.RoundingRadius
-
-MBOM canonical:  8 corners × 6 radii per corner
-Corners:         sw-  nw-  ne-  se-  (lower Z)
-                 sw+  nw+  ne+  se+  (upper Z)
-Radii per corner: xy  xz  yx  yz  zx  zy
-```
-
-Three SCAD input modes are supported (Block-Axis, Block-Axis Map, Per-Corner Direct). See `docs/scad-reference/05_types_and_mapping.md` for the full specification.
-
----
-
-# 9. Map Type
+# 4. Map Type
 
 A Map type represents a set of key-value pairs where keys are strings and values are typed. In BML, Maps use **JSON Object syntax**. The SCAD BlockProcessor translates to SCAD's array-of-arrays format.
 
@@ -662,13 +310,10 @@ BML:   { 'z+': -0.5, 'x+': 1.0 }
 SCAD:  [["z+", -0.5], ["x+", 1.0]]
 ```
 
-Properties using Map type in MBOM:
+Illustrative Map-typed natives (authoritative types/defaults: NativeBlock + type BML):
 
 ```text
-sizeMod          — Map<Face, Float>    per-face size modification
-baseAdjustment   — Map<Axis, Float>    per-axis base adjustment
-baseSideAdj      — Map<Face, Float>    per-face side adjustment
-baseCrop         — Map<Face, Float>    per-face crop
+sizeMod · baseAdjustment · baseSideAdj · baseCrop
 ```
 
 BML examples:
@@ -684,7 +329,7 @@ Map values are always wrapped in `${ }` because they are object literals in the 
 
 ---
 
-# 10. Expression Type
+# 5. Expression Type
 
 ```text
 org.blockml.bml.type.Expression
@@ -703,9 +348,9 @@ SCAD:  renderer serializes the AST or a statically resolved value
 
 ---
 
-# 10. MBOM→SCAD Serialization Rules
+# 6. MBOM→SCAD Serialization Rules
 
-The serialization rules follow NativeBlock type metadata and `scad:value`. Optional transitional hints in `09_mbom_properties.yml` must not contradict NativeBlock. The following describes the general strategy.
+The serialization rules follow NativeBlock type metadata and `scad:value`. `09_mbom_properties.yml` is a pointer stub (no inventory). Serialization follows NativeBlock / type BML. The following describes the general strategy.
 
 ## General Strategy
 
@@ -732,7 +377,7 @@ SCAD:  [1, 1, 0, 0]          ← declaration order; no per-example remapping
 
 - Compact / shortened forms (e.g. `PerSide4` scalar or 2-element when faces are paired)
 - Enum / catalog literals via `scad:value`
-- Custom serialize Capability or transitional property-catalog rules in `09_mbom_properties.yml` (must follow NativeBlock)
+- Custom serialize Capability on the type / property (or Annotation facet) — never a parallel YAML catalog
 
 Canonical rule: `17_type_system_bml.md` — Declaration Order. See `05_scad_renderer.md` — Settings Format for the pseudo-map vs. OpenSCAD `object()` roadmap.
 

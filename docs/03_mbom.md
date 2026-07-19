@@ -10,7 +10,7 @@ MBOM is a domain-specific specialization of BOM Core (`01_bom_core.md`). BOM Cor
 
 For the BML authoring format see `02_mbml.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
-For native property definitions see `com.machineblocks.bml.core.NativeBlock` (`NativeBlock.bml`) — **SSOT** for MBML / SCAD parameters. Type shapes: `com.machineblocks.bml.type.*`. Conventions: `04_types.md`. Transitional SCAD hints only: `09_mbom_properties.yml` (must follow NativeBlock).
+For native property definitions see `com.machineblocks.bml.core.NativeBlock` (`NativeBlock.bml`) — **SSOT** for MBML / SCAD parameters. Type shapes: `com.machineblocks.bml.type.*`. Conventions: `04_types.md`. `09_mbom_properties.yml` is a pointer stub only.
 
 ---
 
@@ -528,7 +528,7 @@ Associations:   basePresets (bml:Self[] — references ids in _presets)
 Aggregations:   _presets (type: com.machineblocks.bml.core.Block[])
 ```
 
-Domain native properties (size, offset, direction, …) are declared on `NativeBlock.bml` (SSOT) and inherited by concrete brick types (e.g. `com.machineblocks.bml.bricks.Standard`). `09_mbom_properties.yml` may hold transitional render hints only and must follow NativeBlock.
+Domain native properties (size, offset, direction, …) are declared on `NativeBlock.bml` (SSOT) and inherited by concrete brick types (e.g. `com.machineblocks.bml.bricks.Standard`). Do not maintain a second inventory in Markdown or `09_mbom_properties.yml`.
 
 ### com.machineblocks.bml.core.CompositeBlock
 

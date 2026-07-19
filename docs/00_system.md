@@ -735,7 +735,7 @@ V1 does **not** model the full compiler in BML. V1 pulls into BML only what you 
 
 Markdown remains **authoritative** in V1 for architecture, pipeline, runtime, CLI, implementation details, and design rationale.
 
-**Exception (already in force):** MachineBlocks **native parameters and type shapes** — sole SSOT is `NativeBlock.bml` + `com.machineblocks.bml.type.*`. Markdown/YAML/scad-lib mirrors must follow or only link; do not maintain a second parameter inventory.
+**Exception (already in force):** MachineBlocks **native parameters and type shapes** — sole SSOT is `NativeBlock.bml` + `com.machineblocks.bml.type.*`. Markdown/YAML are pointer/commentary only — do not maintain a second parameter inventory.
 
 **V1:** Authored Capabilities in BML; no synthetic accessor generation. Renderer interprets Capabilities target-specifically — see `08_managed_object.md`.
 
@@ -819,7 +819,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 20_value_type_instance_configuration.md — ValueType `{…}` instance configuration
 21_constant_value_type.md — Constant(T){value} singleton domains
 22_function_mapping.md — Capability call argument mapping (FunctionMapping)
-09_mbom_properties.yml — transitional SCAD render hints only (must follow NativeBlock.bml)
+09_mbom_properties.yml — pointer stub only (inventory removed; see NativeBlock.bml)
 
 domains/machineblocks/runtimes/scad-lib/
   lib/                 — SCAD Runtime (every generated SCAD file uses this)

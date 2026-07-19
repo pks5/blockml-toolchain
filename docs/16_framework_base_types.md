@@ -9,7 +9,7 @@ This document specifies how **framework base types** (`org.blockml.bml.core.Bloc
 For BML block syntax see `02_mbml.md`.
 For MBOM hierarchy see `03_mbom.md`.
 For TypeRegistry bootstrap see `13_bml_to_bom_mapping.md`.
-For SCAD property mapping see `NativeBlock.bml` (parameter SSOT) and transitional `09_mbom_properties.yml` (must follow NativeBlock).
+For SCAD property mapping see `NativeBlock.bml` (parameter SSOT). `09_mbom_properties.yml` is a pointer stub only.
 For value types and implementation languages as BML see `17_type_system_bml.md`.
 For property constraints and suggestions see `18_constraints_and_suggestions.md`.
 For FunctionMapping and capability call semantics see `22_function_mapping.md`.
@@ -26,7 +26,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self
 | **MB native params SSOT** | `com.machineblocks.bml.core.NativeBlock` + `com.machineblocks.bml.type.*` |
 | **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry; **renderers free in output** — see `17_type_system_bml.md` — Renderer freedom |
 | **Compiler internals** | Parser **must** know `<block>` as input concept; internal representation **free** — see `17_type_system_bml.md` |
-| **09_mbom_properties.yml** | Transitional render hints only — **must follow** NativeBlock; not parameter SSOT |
+| **09_mbom_properties.yml** | Pointer stub only — not parameter SSOT |
 | **User blocks** | Same mechanism — `<baseType>` → chain to framework BML |
 | **Block identity** | Every `<block>` starts with definition identity — `<name>`, `<type>`, `<baseType>` (before `<is>`) |
 | **Block is** | Every `<block>` carries required `<is>` after identity — names the Idea (Urbild); see `02_mbml.md` § Terminology — Urbild |
@@ -39,7 +39,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self
 
 ```text
 BML NativeBlock + type/*.bml (what params/types ARE)  →  TypeRegistry / authoring SSOT
-09_mbom_properties.yml (optional transitional hints) →  must match NativeBlock; never override
+09_mbom_properties.yml (pointer stub)               →  no inventory; NativeBlock wins
 BlockProcessor (when/how to render)                  →  Render pipeline
 ```
 
@@ -471,22 +471,16 @@ No framework FQN should exist only in TypeScript — if it is part of the gramma
 
 ---
 
-## Native Properties Migration
+## Native Properties — Sole SSOT
 
-Native MB properties (`size`, `offset`, …) are declared on **concrete MachineBlocks block types** (e.g. `com.machineblocks.bml.bricks.Standard`) — not on the abstract `com.machineblocks.bml.core.Block` base.
+MachineBlocks native parameters (`size`, `offset`, …) are declared only on
+`com.machineblocks.bml.core.NativeBlock` (`NativeBlock.bml`) and inherited through
+the domain Block chain. Type shapes live under `com.machineblocks.bml.type.*`.
 
-`09_mbom_properties.yml` may retain transitional **SCAD render hints** keyed by property name (must follow NativeBlock):
-
-```yaml
-- name: size
-  scad_name: size
-  serializer: SizeXYZ
-  scad_customizer: …
-```
-
-Validator matches BML property declarations against YAML entries for SCAD target completeness. Missing YAML entry → warning at render time, not parse time.
-
-Full property migration from YAML → BML proceeds incrementally; structure and modifiers land first.
+`docs/09_mbom_properties.yml` is a **pointer stub** — not a property catalog. Do not
+reintroduce type/default/description lists there. Any future transitional render keys
+(`serializer`, `scad_customizer`, `assembly_pattern`) must be keyed by name and must
+follow NativeBlock; prefer annotations / Capabilities on BML instead.
 
 ---
 
@@ -523,7 +517,7 @@ domains/machineblocks/mbom/blocks/
 | BlockDefinition BOM | `12_bom_object_model.md` |
 | Bootstrap | `13_bml_to_bom_mapping.md` |
 | MB native params / types | `NativeBlock.bml` + `type/*.bml` |
-| SCAD property hints (transitional) | `09_mbom_properties.yml` (must follow NativeBlock) |
+| SCAD property hints (transitional) | `09_mbom_properties.yml` — pointer stub; prefer NativeBlock annotations |
 | Value types · languages (BML) | `17_type_system_bml.md` |
 | Constraints · suggestions | `18_constraints_and_suggestions.md` |
 | Definition blocks · bml:xml | `19_definition_blocks_and_bml_xml.md` |

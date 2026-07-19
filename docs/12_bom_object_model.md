@@ -114,7 +114,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 @machineblocks/mbom
   - Framework base type BML (com.machineblocks.bml.core.Block, NativeBlock, Set, …)
   - NativeBlock.bml + type/*.bml — MB native parameter / type SSOT
-  - 09_mbom_properties.yml — transitional SCAD hints only (must follow NativeBlock)
+  - 09_mbom_properties.yml — pointer stub only (see NativeBlock)
   - Extends TypeRegistry bootstrap with mbom BML paths
 ```
 
