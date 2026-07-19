@@ -615,6 +615,10 @@ BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — abstract member on a concrete block (mus
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
 BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
+BML_NAMESPACE_UNBOUND         — QName emit needs unbound namespace (no namespaceBindings entry — D2)
+BML_NAMESPACE_PREFIX_COLLISION — prefix→namespace conflict when merging documents (FatBlock — D2)
+BML_XML_DIRECTIVE_NOT_ALLOWED — bml:xml on disallowed host (Stage 1 structural / Stage 2 D4 — 19 hybrid); not flow-control BML_DIRECTIVE_NOT_ALLOWED
+BML_XML_RENDERING_INVALID     — <bml:xml> body not an allowed recipe (literal | ${ bml:Self } | ${ #this.name } — Stage 1 D6)
 BML_OUTSIDE_BML_NAMESPACE — Block FQN, xmlns binding, or Library export is outside <domain>.bml.*
 BML_DEPRECATED_MEMBER_NAMESPACE_ATTR — legacy namespace="…" attribute on member element
 BML_PRESET_CYCLE              — circular dependency in basePresets chain
@@ -689,6 +693,10 @@ Examples:
 BML_UNKNOWN_PROPERTY   — property not defined on block type (custom property assumed)
 BML_UNKNOWN_DIRECTIVE  — unrecognized bml:* attribute name (always error)
 BML_DIRECTIVE_NOT_ALLOWED — known bml:* directive on disallowed element (always error)
+BML_XML_DIRECTIVE_NOT_ALLOWED — bml:xml misplaced / illegal host (Stage 1 structural or Stage 2 D4 — 19 hybrid)
+BML_XML_RENDERING_INVALID — illegal <bml:xml> recipe body (Stage 1 — 19 D6)
+BML_NAMESPACE_UNBOUND — missing xmlns binding for QName emit (see 19 D2)
+BML_NAMESPACE_PREFIX_COLLISION — conflicting prefix bindings on merge (FatBlock)
 BML_DEPRECATED_TYPE    — referenced type is deprecated
 BML_UNREACHABLE_UNION_ALTERNATIVE — later union alternative subsumed under left-to-right match
 ```

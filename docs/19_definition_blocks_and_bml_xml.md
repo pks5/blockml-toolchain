@@ -133,11 +133,21 @@ Two authoring forms exist.
 
 The element form is **not** permitted on ordinary composable or ValueType blocks — only on **`org.blockml.bml.core.Block`** and on **Definition blocks** (`baseType` chain includes `org.blockml.bml.core.Definition`) that declare serialization for their described shape (**D4**).
 
-Ordinary domain blocks **inherit** root-tag behavior (typically `${ bml:Self }` from `core.Block`) and must **not** redeclare `<bml:xml>`. If authored anyway → store on Urmodell (**maximum authored surface**), Stage 2 → `BML_XML_DIRECTIVE_NOT_ALLOWED` (or dedicated override code TBD).
+Ordinary domain blocks **inherit** root-tag behavior (typically `${ bml:Self }` from `core.Block`) and must **not** redeclare `<bml:xml>`. If authored anyway → store on Urmodell (**maximum authored surface**); **Stage 2** → `BML_XML_DIRECTIVE_NOT_ALLOWED` (type/branch knowledge — not Stage 1).
 
 **Member-level** `bml:xml` may change on `override="true"` redeclarations (e.g. FixedAlias `_name` element → FreeTextAlias `name` attribute).
 
-Unknown or misplaced `bml:xml` → `BML_XML_DIRECTIVE_NOT_ALLOWED` (validate; TBD in parser).
+##### When Stage 1 vs Stage 2 (**hybrid — decided**)
+
+| Check | Stage | Code |
+|---|---|---|
+| `bml:xml` attribute on an element that the **hardcoded** grammar never allows | **Stage 1** (parser) | `BML_XML_DIRECTIVE_NOT_ALLOWED` |
+| `<bml:xml>` body not literal / `${ bml:Self }` / `${ #this.name }` (D6) | **Stage 1** (syntactic recipe check) | `BML_XML_RENDERING_INVALID` |
+| Malformed `${ … }` / empty illegal body | **Stage 1** | `BML_XML_RENDERING_INVALID` |
+| Block-level `<bml:xml>` on ordinary composable / ValueType (D4) | **Stage 2** (needs `baseType` / Definition-branch) | `BML_XML_DIRECTIVE_NOT_ALLOWED` |
+| Member `bml:xml` only legal on Definition-branch member declarations | **Stage 2** | `BML_XML_DIRECTIVE_NOT_ALLOWED` |
+
+Stage 1 may still **attach** illegal `xmlRendering` for tooling when the host continues after diagnostics (maximum authored surface); hard-abort vs. continue is host policy. Semantic placement (D4) is never decided by the parser alone.
 
 ---
 
@@ -178,8 +188,8 @@ Example: `org.blockml.bml.core.Block` — composable instances render under thei
 |---|---|
 | **Store** | Parser records every authored `xmlns` / `xmlns:prefix` on `BomDocument.source.namespaceBindings` (`prefix → namespace id`). Default (unprefixed) xmlns uses a reserved key (e.g. `""`). Do not normalize or rewrite prefixes. |
 | **Emit** | Serializer and XML-emitting targets reuse **exactly** those bindings for QNames (`${ bml:Self }`, TypeReferenceEntity sugar, prefixed member elements). No synthetic `ns1` / guessed short names. |
-| **Missing binding** | If emit would need a prefix for a namespace that is **not** in `namespaceBindings` → **error** (diagnostic e.g. `BML_NAMESPACE_UNBOUND` — code TBD). Do not invent a binding. |
-| **FatBlock** | Host **must** run Stage 2 validation **before** FatBlock emit. Validator ensures the closure of types/namespaces for the bundle is bound (root + every inlined dependency’s authored bindings, merged without prefix collisions). Unbound or conflicting prefix→namespace mappings → fail FatBlock; no silent rewrite. |
+| **Missing binding** | If emit would need a prefix for a namespace that is **not** in `namespaceBindings` → **`BML_NAMESPACE_UNBOUND`** (error). Do not invent a binding. |
+| **FatBlock** | Host **must** run Stage 2 validation **before** FatBlock emit. Validator ensures the closure of types/namespaces for the bundle is bound (root + every inlined dependency’s authored bindings, merged without prefix collisions). Unbound → `BML_NAMESPACE_UNBOUND`; conflicting prefix→namespace mappings → `BML_NAMESPACE_PREFIX_COLLISION`. No silent rewrite. |
 
 Phase A roundtrip of a single file already requires preserving `namespaceBindings` losslessly. Prefix resolution for `${ bml:Self }` evaluation is post–Phase A; the storage and “no invent” rules apply from Phase A onward.
 
@@ -226,7 +236,7 @@ In this context the `${ … }` forms are **named constants / recipes**, not open
 | `${ bml:Self }` | effective Block type → QName element | types that emit instance tags from type identity (e.g. `core.Block`) |
 | `${ #this.name }` | current Definition instance’s `name` member → local element name | Member Definition blocks (`PropertyDefinition`, `AggregationDefinition`, `AssociationDefinition`, `CapabilityDefinition`, `GenericTypeDefinition`, …) |
 
-Anything else in the `<bml:xml>` body (other roots, `#this.other`, `@bean`, operators, …) → validation error (code TBD). Phase A: store `xmlRendering.raw` losslessly; enforce the whitelist when evaluating for emit / Stage 2.
+Anything else in the `<bml:xml>` body (other roots, `#this.other`, `@bean`, operators, …) → **`BML_XML_RENDERING_INVALID`** (**Stage 1** syntactic check; also enforced at emit if skipped). Phase A stores `xmlRendering.raw` when present; whitelist is hybrid Stage 1 / emit — see § When Stage 1 vs Stage 2.
 
 ---
 
@@ -385,7 +395,7 @@ Until the meta-serializer exists:
 | `org.blockml.bml.definition.*` member surfaces | Done — Property, Aggregation, Association, Capability, MemberDefinition |
 | `org.blockml.bml.type.TypeReference` / `TypeReferenceEntity` / `MemberReference` (+ children) BML | Specified — ValueType hierarchy for type + member path refs |
 | Meta-driven BOM → XML serializer | Not implemented |
-| Validator rules for placement | Specified here; codes TBD |
+| Validator rules for placement / `bml:xml` / xmlns emit | **Hybrid:** D6 + structural → Stage 1; D4 / Definition-branch placement → Stage 2. Codes: `BML_XML_DIRECTIVE_NOT_ALLOWED`, `BML_XML_RENDERING_INVALID`, `BML_NAMESPACE_UNBOUND`, `BML_NAMESPACE_PREFIX_COLLISION` |
 
 Source files live under:
 
@@ -424,9 +434,10 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 | D1 | Default `bml:xml` when omitted on members | **Decided:** kind-based defaults — § Default XML rendering by kind. Explicit `bml:xml` wins. Dual forms (`element\|attribute`, …) accepted at parse; canonical emit uses the table |
 | D2 | `${ bml:Self }` prefix resolution at serialize time | **Decided:** store authored prefixes in `SourceInfo.namespaceBindings` — **1:1 roundtrip**, no invented prefixes. Missing NS → error. FatBlock only after Stage 2 validator; unbound/conflicting NS fail — see § Namespace prefixes |
 | D3 | BOM storage shape for `<bml:xml>` / member `bml:xml` | **Decided:** first-class `xmlRendering` on `BlockDefinition` + `MemberDefinitionBase` — **not** flow-control `directives[]`. Follows **maximum authored surface** (`00_bom_core.md`). See `12_bom_object_model.md` · `XmlRenderingBlock` / `XmlRenderingMember` |
-| D4 | Whether composable blocks may override inherited `bml:xml` | **Decided (A):** **Member-level** — allowed on `override="true"` redeclarations. **Block-level** `<bml:xml>` — only on `core.Block` + Definition branch; ordinary composable/ValueType must not redeclare (inherit `${ bml:Self }` etc.). Illegal authoring preserved then rejected at Stage 2 — see § Placement Rules |
+| D4 | Whether composable blocks may override inherited `bml:xml` | **Decided (A):** **Member-level** — allowed on `override="true"`. **Block-level** — only `core.Block` + Definition branch. Illegal → `BML_XML_DIRECTIVE_NOT_ALLOWED` at **Stage 2** (hybrid). See § Placement Rules · § When Stage 1 vs Stage 2 |
 | D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |
-| D6 | Allowed `<bml:xml>` body recipes | **Decided:** literal, `${ bml:Self }`, `${ #this.name }` only — Expression-looking syntax, constant recipes (not open EL). See § Allowed `<bml:xml>` recipes |
+| D6 | Allowed `<bml:xml>` body recipes | **Decided:** literal, `${ bml:Self }`, `${ #this.name }` only. Invalid → `BML_XML_RENDERING_INVALID` at **Stage 1**. See § Allowed `<bml:xml>` recipes · § When Stage 1 vs Stage 2 |
+| D7 | Illegal `bml:xml` — parser vs validator | **Decided (hybrid):** structural + D6 → Stage 1; D4 / branch placement → Stage 2. See § When Stage 1 vs Stage 2 |
 
 ---
 

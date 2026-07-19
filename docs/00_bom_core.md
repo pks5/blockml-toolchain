@@ -117,7 +117,7 @@ The Pragmatic Model is a **cache / working surface**, not a second SSOT.
 
 > **Status: planned for V2.** Not implemented in V1. Architecture must keep Parser, Serializer, Validator, and core types reusable as the LSP backend.
 
-A **VS Code Language Server** (`@blockml/lsp`, name TBD) is a thin adapter over the existing language loop — **not** a second parser or AST:
+A **VS Code Language Server** (`@blockml/lsp` — **decided** package name) is a thin adapter over the existing language loop — **not** a second parser or AST:
 
 ```text
 VS Code / editor
@@ -137,7 +137,7 @@ VS Code / editor
 | Hover, outline, symbols | Urmodell + TypeRegistry |
 | Go-to-definition / references | TypeRegistry + Urmodell graph |
 
-**V2 scope:** text/XML editing with BOM-backed intelligence. Structural DOM editing (`addProperty`, …) remains **BomBuilder (V3)** — the LSP does not require the Builder.
+**V2 scope:** text/XML editing with BOM-backed intelligence. Structural DOM editing (`querySelector`, `addProperty`, …) remains **BomBuilder (V3)** — the LSP does not require the Builder.
 
 #### V1 reuse mandate (build for the LSP now)
 
@@ -168,16 +168,39 @@ BomBuilder (V3)    program → seal() → Urmodell Validator / pragmatic forks
                                                TypeRegistry bootstrap
 ```
 
-**BomBuilder** (name TBD; package likely `@blockml/core` authoring surface or `@blockml/authoring`) is a **writable session** that builds or edits a BOM graph block-by-block from scratch or from `fork(Urmodell)`:
+**BomBuilder** (**decided** API name) is a **writable session** that builds or edits a BOM graph block-by-block from scratch or from `fork(Urmodell)`. Package: export from `@blockml/core` and/or a thin `@blockml/authoring` facade (exact package split TBD at V3 scaffold — the type/API remains `BomBuilder`).
 
 ```text
 createBlock() · addProperty() · addAggregation() · setBaseType()
 setMemberValue() · addCompositionChild() · …
+querySelector() / querySelectorAll() · …   — DOM-like navigation over the BOM graph
   ↓
 seal() / toBomDocument()  →  immutable Urmodell
   ↓
 optional validate · serialize → BML
 ```
+
+#### DOM-like surface
+
+Treat the BOM graph like a document tree (HTML/DOM analogy):
+
+| DOM idea | BomBuilder (V3) |
+|---|---|
+| `querySelector` / `querySelectorAll` | Find blocks, members, instances by FQN, member path, `bml:id`, … |
+| walk / parent / children | Navigate definition ↔ composition ↔ nested instances |
+| mutate node attributes | set member values, documentation, … within the existing shape |
+| createElement / appendChild | create Block / member / composition child **allowed by current BlockML** |
+
+Selectors and traversal are first-class in V3 — not an afterthought.
+
+#### Scope: V3 vs V4
+
+| Version | May do | Must not do |
+|---|---|---|
+| **V3 (first BomBuilder)** | Author and edit **within** existing BlockML definitions: blocks, members, compositions, values, embeds as the language already allows | Change **BlockML itself** — meta-model / Definition grammar / language structure |
+| **V4 (BomBuilder “next”)** | Possible future: evolve or rewrite language structure via Builder | **Not designed yet** — direction unclear; do not implement in V3 |
+
+V3 stays inside the world the parser already understands. Extending or rewriting the Definition meta-model through the Builder is **out of scope until V4** is explicitly specified.
 
 Rules:
 
@@ -185,6 +208,7 @@ Rules:
 - `seal()` produces a normal Urmodell. Serializer, validator, and renderers must not care whether it came from Parser or Builder.
 - Authoring never mutates an existing sealed Urmodell in place; edits yield a **new** sealed document (or replace the session’s draft until seal).
 - Pragmatic forks remain resolve-only — no `createProperty` / structural authoring on the pragmatic path.
+- V3 structural APIs only create shapes that are **valid under the current language** (same constraints as authored `.bml`).
 
 #### V1/V2 reuse mandate (build for the Builder now)
 

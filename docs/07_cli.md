@@ -47,15 +47,19 @@ Implemented in `@blockml/cli` as `bootstrapTypeRegistry.ts`.
 
 ### Target bootstrap (C3)
 
-Registers render targets in `@blockml/compiler` before SCAD renderer step [9]. **V1:** hardcoded — registers `"machineblocks-v3-scad"` only. Called by `bom compile` and `bom watch`; **not** by `bom validate` or `bom inspect`.
+Registers render targets in `@blockml/compiler` before compile. Called by `bom compile` and `bom watch`; **not** by `bom validate` or `bom inspect`.
 
-Implemented in `@blockml/cli` as `bootstrapTargets.ts` — idempotent, single entry point. Post-V1 this module will read `bom.config.json` → `targets[]` (field reserved, TBD — not V1).
+**V1 (decided):** `bootstrapTargets()` reads `bom.config.json` → **`targets[]`** and registers those packages. **First / default control target is `blockdoc`** — not SCAD.
 
 ```typescript
-bootstrapTargets();   // V1: MachineBlocksV3ScadTarget only
+bootstrapTargets(config);   // V1: register names from config.targets (default ["blockdoc"])
 ```
 
-The `<target>` CLI argument remains required in V1. Configurable target lists will define *available* targets later, not replace the explicit argument.
+Implemented in `@blockml/cli` as `bootstrapTargets.ts` — idempotent, single entry point.
+
+The `<target>` CLI argument remains **required** on compile/watch — `targets[]` defines what is *available* to bootstrap, not which target this run uses.
+
+See `14_compiler_runtime.md` — Target Bootstrap · `15_dev_setup.md` — Phase C ordering (BlockDoc-first).
 
 ---
 
@@ -186,14 +190,17 @@ bom compile --all <target>
 
 ```text
 <file>    — path to a .bml file (XML). JSON authoring is not planned.
-<target>  — registered target name, e.g. "machineblocks-v3-scad", "xsd" (TBD)
+<target>  — registered target name (**decided**):
+            blockdoc | xsd | fatblock | machineblocks-v3-scad
+            V1 control path: prefer `blockdoc` first (see 15 Phase C). Bootstrap via targets[].
 --all     — compile all source files in srcDir
 --src     — override srcDir (default: from bom.config.json)
 --out     — override outDir (default: from bom.config.json)
 --force   — ignore hash cache, recompile everything
---no-xsd  — disable XSD schema validation when that check exists (TBD exact flag);
-            required escape hatch so the XSD target can regenerate schemas after
-            intentional BML/meta changes that break the previous .xsd (see 13 B8)
+--no-xsd  — disable XSD schema validation for this run (**decided** escape hatch).
+            Overrides `bom.config.json` → `xsdValidation` when that would be on.
+            Required so the XSD target can regenerate schemas after intentional
+            BML/meta changes that break the previous .xsd (see 13 B8 · § XSD validation escape hatch)
 ```
 
 `--all` processes every `.bml` source file in `srcDir`. Each file is evaluated against its stored hash — unchanged artifacts are skipped.
@@ -246,7 +253,7 @@ bom validate --all
 
 Runs Stage 1 (parser) and Stage 2 (semantic validator). Reports all diagnostics. Produces no output files. No target is required — validation is universal. Exit code / abort policy is CLI-owned (non-zero on errors).
 
-**XSD checks (when an XSD target / catalog exists):** optional and **always disableable** (e.g. `--no-xsd` / config — flag TBD). Schema validation must never be a hard prerequisite for regenerating `.xsd` via the XSD Render Target after intentional BML/meta changes. See `13_bml_to_bom_mapping.md` — B8 · `01_system.md` — XSD Schema Structure.
+**XSD checks (when an XSD target / catalog exists):** optional and **always disableable** via CLI **and** config — see § XSD validation escape hatch. Schema validation must never be a hard prerequisite for regenerating `.xsd` via the XSD Render Target after intentional BML/meta changes. See `13_bml_to_bom_mapping.md` — B8 · `01_system.md` — XSD Schema Structure.
 
 ---
 
@@ -462,7 +469,50 @@ Project-level configuration. Located at the project root.
 | `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved |
 | `activeConfig` | `null` | Name of the active config profile |
 | `bmlExtensions` | `[".bml"]` | File suffixes scanned by `compile --all` / `validate --all` |
-| `targets` | *(not V1)* | **Reserved (TBD).** Future: target names to bootstrap via `bootstrapTargets()`. V1 ignores this field. |
+| `xsdValidation` | `true` (when schemas exist) | When `false`, skip optional XSD schema validation of authoring. Ignored until XSD validation exists. See § XSD validation escape hatch |
+| `targets` | `["blockdoc"]` | **V1.** Registry names to bootstrap via `bootstrapTargets()`. CLI `<target>` still required per run. Missing field → default `["blockdoc"]`. See § Target list |
+
+#### Target list (`targets[]`) — **V1 decided**
+
+```json
+{
+  "targets": ["blockdoc"]
+}
+```
+
+| Rule | Detail |
+|---|---|
+| **Purpose** | Which Render Targets this project **loads** into the Target Registry |
+| **Not** | Which target a given `bom compile` uses — that remains the CLI `<target>` argument |
+| **Default** | `["blockdoc"]` when omitted — BlockDoc is the V1 **control** target |
+| **Allowed names** | `blockdoc`, `xsd`, `fatblock`, `machineblocks-v3-scad` (as packages ship) |
+| **`bom init`** | Scaffold includes `"targets": ["blockdoc"]` |
+
+Example multi-target project after more RTs exist:
+
+```json
+{ "targets": ["blockdoc", "xsd", "machineblocks-v3-scad"] }
+```
+
+#### XSD validation escape hatch (**decided**)
+
+Optional authoring checks against generated / catalog `.xsd` (after the XSD Render Target exists) must always be disableable:
+
+| Mechanism | Form | Role |
+|---|---|---|
+| **Config** | `bom.config.json` → `"xsdValidation": false` | Project default off (e.g. during meta refactors) |
+| **CLI** | `--no-xsd` on `bom compile` / `bom validate` (and other commands that run XSD checks) | Per-run off |
+
+**Precedence:**
+
+```text
+No schemas / Phase A          →  XSD validation N/A (not a Stage-1 requirement)
+xsdValidation omitted/true    →  on (once schemas exist)
+xsdValidation: false          →  off for the project
+CLI --no-xsd                  →  off for this invocation (overrides config on)
+```
+
+`--no-xsd` does **not** disable the XSD **Render Target** itself (`bom compile … xsd`) — only validation of authoring against schemas.
 
 ---
 

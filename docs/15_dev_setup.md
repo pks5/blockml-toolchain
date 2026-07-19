@@ -107,14 +107,14 @@ blockml/
 | `@blockml/serializer` | `packages/serializer` | Phase A |
 | `@blockml/validator` | `packages/validator` | Phase B |
 | `@blockml/compiler` | `packages/compiler` | Phase C |
-| `@blockml/xsd-target` (name TBD) | `packages/xsd-target` (TBD) | Phase C — toolchain RT: generate `.xsd` |
-| `@blockml/blockdoc-target` (name TBD) | `packages/blockdoc-target` (TBD) | Phase C — toolchain RT: BlockDoc HTML site |
-| `@blockml/fatblock-target` (name TBD) | `packages/fatblock-target` (TBD) | Phase C — toolchain RT: FatBlock bundling |
-| `@blockml/cli` | `packages/cli-tools` | Phase C |
-| `@blockml/engine-maker` | `engines/maker-engine` | Phase C |
+| `@blockml/blockdoc-target` | `packages/blockdoc-target` | Phase C — **first** Stage-3 / V1 control RT; registry `"blockdoc"` |
+| `@blockml/xsd-target` | `packages/xsd-target` | Phase C — after BlockDoc; registry `"xsd"` |
+| `@blockml/fatblock-target` | `packages/fatblock-target` | Phase C — after / beside XSD; registry `"fatblock"` |
+| `@blockml/cli` | `packages/cli-tools` | Phase C — reads `targets[]` (default `["blockdoc"]`) |
+| `@blockml/engine-maker` | `engines/maker-engine` | Phase C — needed for SCAD product path |
 | `@machineblocks/mbom` | `domains/machineblocks/mbom` | Phase C (BML already present; package shell + exports) |
-| `@machineblocks/machineblocks-v3-scad-target` | `domains/machineblocks/machineblocks-v3-scad-target` | Phase C — product RT; after toolchain targets preferred |
-| `@blockml/lsp` | `packages/lsp` | V2 |
+| `@machineblocks/machineblocks-v3-scad-target` | `domains/machineblocks/machineblocks-v3-scad-target` | Phase C — **product** RT; after BlockDoc control gate |
+| `@blockml/lsp` | `packages/lsp` | V2 — package name **decided** |
 
 ### Target monorepo tree
 
@@ -134,9 +134,9 @@ blockml/
     serializer/                — @blockml/serializer
     validator/                 — @blockml/validator
     compiler/                  — @blockml/compiler
-    xsd-target/                — @blockml/xsd-target (TBD) — generate .xsd
-    blockdoc-target/           — @blockml/blockdoc-target (TBD) — BlockDoc HTML
-    fatblock-target/           — @blockml/fatblock-target (TBD) — FatBlock embed bundle
+    xsd-target/                — @blockml/xsd-target — registry "xsd"
+    blockdoc-target/           — @blockml/blockdoc-target — registry "blockdoc"
+    fatblock-target/           — @blockml/fatblock-target — registry "fatblock"
     cli-tools/                 — @blockml/cli          (Node-only)
     lsp/                       — @blockml/lsp          (V2)
 
@@ -656,32 +656,34 @@ Phase B — Semantic layer
   6. Validator                       — @blockml/validator (TypeRegistry + semantic checks;
                                       may call parseExpression for expression correctness)
 
-Phase C — Compile pipeline
+Phase C — Compile pipeline (BlockDoc-first)
   7. Compiler facade                 — @blockml/compiler (C2, C3)
-  8. Toolchain Render Targets (recommended before MachineBlocks SCAD)
-     a. XSD target      — emit .xsd from BML / Definition meta-model
-     b. BlockDoc target — browseable HTML docs (minimal: static HTML tree by package FQN)
-     c. FatBlock target — bundle block + deps into one document via root <embeddedBlocks>
-     — package names TBD (@blockml/xsd-target, @blockml/blockdoc-target, @blockml/fatblock-target)
-     — prove Facade + Target Registry; domain-light Stage-3 exercise
+  8. CLI + targets[]                 — @blockml/cli; bom.config.json targets (default ["blockdoc"])
+  9. **First Stage-3 gate: BlockDoc** — @blockml/blockdoc-target / CLI `blockdoc`
+     — static HTML by package/FQN hierarchy — corpus control / review
+     — proves Facade + Target Registry with minimal domain surface
+ 10. Further toolchain RTs (after BlockDoc control path works)
+     a. XSD target      — @blockml/xsd-target / `xsd`
+     b. FatBlock target — @blockml/fatblock-target / `fatblock`
      — XSD *validation* of authoring only after (a) can generate schemas
-     — XSD validation must stay **disableable** (e.g. `--no-xsd`) so meta/BML changes can still regenerate schemas
-  9. Engine + MachineBlocks SCAD target + CLI
-     — @blockml/engine-maker, machineblocks-v3-scad-target, @blockml/cli
- 10. Correctness + snapshot tests    — tests/correctness/, tests/snapshots/
+     — XSD validation must stay **disableable** (`--no-xsd` / `xsdValidation`)
+ 11. Engine + MachineBlocks SCAD     — product path after toolchain control
+     — @blockml/engine-maker, machineblocks-v3-scad-target
+ 12. Correctness + snapshot tests    — tests/correctness/, tests/snapshots/
 ```
 
 **Do not start Phase C until Phase A roundtrip tests pass** for the agreed corpus tiers (see below).
 
-**Phase C ordering note:** Prefer **toolchain Render Targets before** `machineblocks-v3-scad`:
+**Phase C ordering (**decided**):**
 
-| Target | Output | Why early |
+| Order | Target | Why |
 |---|---|---|
-| **XSD** | `.xsd` files | Schemas for IDE / later validation; first Facade proof. Validation against them is optional and **always disableable** so the XSD target can regenerate after breaking meta changes |
-| **BlockDoc** | Static HTML (URLs follow package hierarchy); later: richer site + graphs | Documents the BML corpus; JavaDoc-like browse |
-| **FatBlock** | Single `.bml` with deps inlined as root `<embeddedBlocks>` | Tests TypeRegistry closure + embed model; portable artifacts |
+| **1st** | **BlockDoc** (`blockdoc`) | **Control gate** — browseable HTML of the BML corpus (package/FQN hierarchy); ideal to verify structure after roundtrip |
+| 2nd+ | **XSD** (`xsd`) | Schemas for IDE / later validation; always-disableable validation escape hatch |
+| 2nd+ | **FatBlock** (`fatblock`) | Registry closure + embed model; Stage 2 first |
+| Later | **machineblocks-v3-scad** | Primary **product** target — more domain surface (NativeBlock, engine, scad-lib) |
 
-MachineBlocks SCAD remains the primary **product** target. XSD / BlockDoc / FatBlock are **toolchain** targets that validate the compile pipeline with less domain surface area. Relative order among the three toolchain targets is flexible; all are candidates to precede SCAD.
+MachineBlocks SCAD remains the reference **product** target. BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control. `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3.
 
 ### Roundtrip test contract
 
@@ -718,13 +720,13 @@ Add new framework BML to T1 as it lands — the Definition meta-model corpus is 
 | Cross-file reference resolution | Phase B (validator + TypeRegistry bootstrap) |
 | Constraint / inheritance validation | Phase B |
 | XSD as hard Stage-1 requirement | Never for Phase A — see below |
-| XSD Render Target (generate `.xsd`) | Phase C — toolchain; recommended **before** MachineBlocks SCAD |
-| BlockDoc Render Target (HTML docs) | Phase C — toolchain; minimal = static HTML by package path; may precede SCAD |
-| FatBlock Render Target (embed bundle) | Phase C — toolchain; inlines deps as root `<embeddedBlocks>`; may precede SCAD; **Stage 2 first**; xmlns 1:1 / unbound NS error (`19` D2) |
-| XSD validation of BML authoring | **After** XSD Render Target ships; **always disableable** (must not block `bom compile … xsd` / schema regen) |
+| BlockDoc Render Target (HTML docs) | Phase C — **first** Stage-3 / V1 control RT (`blockdoc`); default in `targets[]` |
+| XSD Render Target (generate `.xsd`) | Phase C — after BlockDoc; `@blockml/xsd-target` / CLI `xsd` |
+| FatBlock Render Target (embed bundle) | Phase C — after / beside XSD; `@blockml/fatblock-target` / CLI `fatblock`; **Stage 2 first** |
+| XSD validation of BML authoring | **After** XSD Render Target ships; **always disableable** (`--no-xsd` / `xsdValidation`) |
 | Meta-driven `bml:xml` parser/serializer | Post–Phase A (see `19_definition_blocks_and_bml_xml.md`) |
-| SCAD / Customizer JSON render output | Phase C product path (after or alongside toolchain targets) |
-| CLI `bom compile` | Phase C |
+| SCAD / Customizer JSON render output | Phase C **product** path (after BlockDoc control gate) |
+| CLI `bom compile` + `targets[]` | Phase C / V1 — config bootstraps available targets; default `["blockdoc"]` |
 
 ---
 
@@ -743,10 +745,11 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 7. parseExpression()          — @blockml/core utility (AST as ParsedExpression; no Urmodell write-back)
 8. @blockml/validator         — Stage 2 (TypeRegistry + validate; may call parseExpression)
 9. @blockml/compiler          — Facade + Target Registry (C2, C3)
-10. Toolchain RTs (TBD pkgs)   — xsd-target, blockdoc-target, fatblock-target (prefer before SCAD)
-11. @blockml/engine-maker      — RenderEngine stub (for SCAD strategies)
-12. @machineblocks/mbom        — domain package shell + NativeBlock.bml SSOT
-13. @machineblocks/...-scad-target — ScadBlockProcessor MVP
+10. BlockDoc RT first          — @blockml/blockdoc-target (control gate)
+11. XSD / FatBlock RTs         — after BlockDoc
+12. @blockml/engine-maker      — RenderEngine stub (for SCAD strategies)
+13. @machineblocks/mbom        — domain package shell + NativeBlock.bml SSOT
+14. @machineblocks/...-scad-target — ScadBlockProcessor MVP (product path)
 14. @blockml/cli               — bom validate, then bom compile
 15. Correctness tests         — Calibrator, Standard, Cross from scad-lib
 ```

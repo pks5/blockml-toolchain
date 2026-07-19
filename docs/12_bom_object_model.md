@@ -60,7 +60,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | Topic | Decision |
 |---|---|
 | **Immutability** | Urmodell (`BomDocument`) is **immutable** after parse or `BomBuilder.seal()`. No utility or renderer may write derived data back. Validator and renderers work on pragmatic forks (resolve only). Structural authoring is BomBuilder (V3). See `00_bom_core.md` — Urmodell and Pragmatic Model · BomBuilder. |
-| **Builder / LSP reuse** | Core interfaces must stay **construction-friendly** and **provenance-agnostic**. Parser and BomBuilder produce the same `BomDocument` graph. Parse-only metadata (source spans, XML locations) is **optional on types** but **populated by the parser** for diagnostics and the V2 Language Server. Serializer and validator must not require parser provenance. See `00_bom_core.md` — Language Server · BomBuilder · V1 reuse mandates. |
+| **Builder / LSP reuse** | Core interfaces must stay **construction-friendly** and **provenance-agnostic**. Parser and BomBuilder produce the same `BomDocument` graph. Parse-only metadata (source spans, XML locations) is **optional on types** but **populated by the parser** for diagnostics and the V2 Language Server. Serializer and validator must not require parser provenance. BomBuilder V3 is DOM-like and stays **within** BlockML definitions (no language-structure rewrite — V4). See `00_bom_core.md` — Language Server · BomBuilder · V1 reuse mandates. |
 | **Member inheritance** | **Utility lookup only.** BOM stores **declared** members per Block. `resolveEffectiveMembers()` returns `EffectiveMemberSet` — a separate structure, never flattened into BOM. |
 | **Capabilities** | Authored Capabilities stored in BOM. No synthetic getter/setter generation. Renderer interprets all Capabilities. See `08_managed_object.md`. |
 | **Member identity** | Uniqueness by resolved **`(namespace, name)`**. Namespace from member element QName prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
@@ -144,7 +144,8 @@ interface SourceInfo {
   /**
    * Authored xmlns prefix → namespace identifier (XML).
    * Lossless 1:1 with source — required for roundtrip and for QName emit (`bml:Self`, …).
-   * Do not invent prefixes at serialize time; missing binding → BML_NAMESPACE_UNBOUND (see 19 D2).
+   * Do not invent prefixes at serialize time; missing binding → BML_NAMESPACE_UNBOUND;
+   * FatBlock prefix conflicts → BML_NAMESPACE_PREFIX_COLLISION (see 19 D2).
    * Default xmlns uses prefix key "".
    */
   namespaceBindings?: Record<string, string>
@@ -1597,7 +1598,11 @@ BML_OVERRIDE_REQUIRED         — local redeclaration merges with baseType or co
 BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED — unsatisfied abstract implementation obligation on a concrete block
 BML_READONLY_MEMBER_WRITE     — Block instance sets a member with readOnly=true
 BML_STANDALONE_COMPOSITION     — <composition> not nested inside an aggregation member element
-BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix
+BML_UNKNOWN_NAMESPACE_PREFIX  — member element prefix references undeclared xmlns: prefix (Stage 1 / parse)
+BML_NAMESPACE_UNBOUND         — QName emit needs a namespace with no entry in SourceInfo.namespaceBindings (Stage 2 / serialize / FatBlock — D2)
+BML_NAMESPACE_PREFIX_COLLISION — same xmlns prefix maps to different namespace ids when merging documents (FatBlock / multi-doc — D2)
+BML_XML_DIRECTIVE_NOT_ALLOWED — bml:xml element or attribute on disallowed host (Stage 1 if hardcoded grammar forbids the site; Stage 2 for D4 / Definition-branch — see 19 hybrid); distinct from flow-control BML_DIRECTIVE_NOT_ALLOWED
+BML_XML_RENDERING_INVALID     — <bml:xml> body is not literal | ${ bml:Self } | ${ #this.name } (Stage 1 — D6)
 BML_PRESET_CYCLE              — circular basePresets chain
 BML_GENERIC_CONSTRAINT_VIOLATION — generic type argument fails satisfiesTypeBound
 BML_GENERIC_DEFAULT_FORWARD_REF — defaultType names a later or unknown generic parameter

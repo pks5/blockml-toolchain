@@ -63,7 +63,7 @@ Parser step [5] produces the immutable BOM graph with expression **raw** text on
 - **XSD generation** is a **Render Target** (Stage 3): compile BML / Definition meta-model → `.xsd` artifacts (see `19_definition_blocks_and_bml_xml.md` — D5 · `15_dev_setup.md` — Phase C ordering).
 - **XSD validation** of authoring (CLI / IDE / optional parser hook against generated schemas) comes **only after** that target exists — and must remain **always disableable**.
 - **Why disableable:** After intentional BML/meta changes, authoring may no longer match the *previous* `.xsd`. Users must still be able to run the XSD target to emit the *new* schemas (chicken-and-egg). Hard-failing schema validation would block regeneration.
-- Default may be “on” once schemas exist; escape hatch is mandatory (e.g. CLI `--no-xsd` / config `xsdValidation: false` — exact flag TBD).
+- Default may be “on” once schemas exist; escape hatch is mandatory: CLI **`--no-xsd`** and config **`xsdValidation: false`** (both — see `07_cli.md` — XSD validation escape hatch).
 
 V1 parser must not require schema files to succeed. Schema checks are not a Phase-A gate.
 
@@ -910,8 +910,8 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | B5 | Cross-file / TypeRegistry — single-file parser; orchestrator bootstrap | **Decided** |
 | B6 | JSON BML authoring format | **Not planned** — not equivalent to XML; not V1/V2; may never ship (see § JSON BML) |
 | B7 | V1 Phase-A slice — no XSD must; no meta-`bml:xml` drive; raw expressions only | **Decided** — see § V1 Parser / Serializer Scope |
-| B8 | XSD generation as Render Target; XSD validation only after that target ships; **always disableable** so regen is never blocked | **Decided** — see § V1 Scope · `15_dev_setup.md` Phase C |
-| B9 | BlockDoc + FatBlock Render Targets (toolchain; may precede MachineBlocks SCAD) | **Decided** — see `01_system.md` · `15_dev_setup.md` Phase C |
+| B8 | XSD generation as Render Target; XSD validation only after that target ships; **always disableable** via `--no-xsd` + `xsdValidation: false` | **Decided** — see § V1 Scope · `07_cli.md` escape hatch · `15_dev_setup.md` Phase C |
+| B9 | BlockDoc-first Stage-3 + `targets[]` in V1; then XSD / FatBlock / SCAD | **Decided** — default `targets: ["blockdoc"]`; packages `@blockml/{blockdoc,xsd,fatblock}-target` — see `01` · `07` · `14` C3 · `15` Phase C |
 
 ---
 

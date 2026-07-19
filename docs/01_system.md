@@ -59,7 +59,7 @@ Serializer ← Urmodell (Parser or Builder provenance)
 
 - **Urmodell (Canonical BOM)** — immutable, lossless representation of BML; SSOT; produced by the parser (V1) or by `BomBuilder.seal()` (V3); never receives derived writes.
 - **Pragmatic Model** — mutable working copy; the Validator resolves inheritance/merges here by default; renderers may reuse it or fork the Urmodell again (including multiple times) for their own partial merges. **Resolve only** — not structural authoring.
-- **BomBuilder (V3, planned)** — writable session to build or edit BOM graphs block-by-block (`addProperty`, …); `seal()` yields a new Urmodell. V1/V2 type and pipeline design must maximize reuse for this path.
+- **BomBuilder (V3, planned — name decided)** — writable, DOM-like session (`querySelector`, …) to build or edit BOM graphs **within** existing BlockML definitions; `seal()` → Urmodell. Does **not** change BlockML language structure (that is V4 territory). See `00_bom_core.md` — BomBuilder.
 
 BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific type definitions declared in BML.
 
@@ -278,17 +278,22 @@ Engines are always independent packages implementing the CompilerEngine contract
 
 ## XSD Schema Structure
 
-> **Architecture decision:** **XSD files are Render Target output**, not a Stage-1 parser dependency. An **XSD Render Target** (Phase C; package name TBD, e.g. `@blockml/xsd-target`) generates `.xsd` from BML / Definition meta-model. **Validating** authored BML against those schemas is enabled only after that target exists — and must remain **always disableable** (CLI/config escape hatch), so intentional language/meta changes can still regenerate schemas when they no longer match the previous `.xsd`.
+> **Architecture decision:** **XSD files are Render Target output**, not a Stage-1 parser dependency. The **XSD Render Target** (Phase C; package `@blockml/xsd-target`, registry name `"xsd"`) generates `.xsd` from BML / Definition meta-model. **Validating** authored BML against those schemas is enabled only after that target exists — and must remain **always disableable** via CLI `--no-xsd` **and** `bom.config.json` → `xsdValidation: false` (see `07_cli.md` — XSD validation escape hatch), so intentional language/meta changes can still regenerate schemas when they no longer match the previous `.xsd`.
 
-### Planned toolchain Render Targets (before or beside MachineBlocks SCAD)
+### Planned toolchain Render Targets (BlockDoc-first, then beside MachineBlocks SCAD)
 
-MachineBlocks SCAD is the primary **product** target. These **toolchain** targets exercise Stage 3 with less domain surface and are **candidates to ship before** `machineblocks-v3-scad`:
+MachineBlocks SCAD is the primary **product** target. **V1 Stage-3 control gate is BlockDoc** — browseable HTML of the corpus for verification after roundtrip. Other toolchain targets and SCAD follow.
 
-| Target | Name (TBD) | Minimal output | Role |
-|---|---|---|---|
-| **XSD** | `@blockml/xsd-target` | `.xsd` artifacts | **Universal** `block.xsd` (document grammar) + optional **domain** XSDs for allowed-type packages; particle shape aligns with **`bml:xml`** |
-| **BlockDoc** | `@blockml/blockdoc-target` | Static HTML files whose URLs follow the **package / FQN hierarchy** (JavaDoc-like browse). Later: richer site, graphs, cross-links | Human/LLM-readable navigation of the block corpus |
-| **FatBlock** | `@blockml/fatblock-target` | One `.bml` document: root block plus **all transitive dependencies** inlined as root `<embeddedBlocks>` (virtual `.bml` files) | Portable single-file artifact; proves registry closure + embed model. Emits BML XML → consumes **`bml:xml`**. **Requires Stage 2 validation first**; authored `xmlns` prefixes preserved 1:1 — missing/conflicting NS → error (no invented prefixes; `19` D2) |
+**Decided names:** npm package + CLI/registry short name (not the same string).
+
+| Order | Target | Package | Registry / CLI `<target>` | Minimal output | Role |
+|---|---|---|---|---|---|
+| **1st** | **BlockDoc** | `@blockml/blockdoc-target` | `blockdoc` | Static HTML files whose URLs follow the **package / FQN hierarchy** (JavaDoc-like browse). Later: richer site, graphs, cross-links | **V1 control gate** — human/LLM review of the block corpus |
+| 2nd+ | **XSD** | `@blockml/xsd-target` | `xsd` | `.xsd` artifacts | **Universal** `block.xsd` + optional **domain** XSDs; particle shape aligns with **`bml:xml`** |
+| 2nd+ | **FatBlock** | `@blockml/fatblock-target` | `fatblock` | One `.bml` with transitive deps in root `<embeddedBlocks>` | Portable artifact; registry closure + embed model; Stage 2 first (`19` D2) |
+| Later | **SCAD (product)** | `@machineblocks/machineblocks-v3-scad-target` | `machineblocks-v3-scad` | `.scad` (+ maps, …) | MachineBlocks V3 reference product target |
+
+`bom.config.json` → **`targets[]` is V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3 · `15_dev_setup.md` Phase C.
 
 See `15_dev_setup.md` — Phase C ordering · `12_bom_object_model.md` / `02_mbml.md` — Embedded Blocks (Inline Library).
 
@@ -439,9 +444,9 @@ Node.js-only CLI tools.
 - Thumbnail renderer (Sharp-based, Node-only, for SCAD target)
 ```
 
-### `@blockml/lsp` (V2, planned)
+### `@blockml/lsp` (V2, planned — package name **decided**)
 
-VS Code Language Server for BML. Thin LSP adapter — **reuses** parser, validator, serializer, and core. No parallel IDE AST.
+VS Code Language Server for BML. Thin LSP adapter — **reuses** parser, validator, serializer, and core. No parallel IDE AST. Display name in the editor may still be “BlockML Language Server”; the npm package stays `@blockml/lsp`.
 
 ```text
 - Language Server Protocol host (Node)
@@ -778,13 +783,13 @@ bml:xml meta-serializer (not implemented)   ← BML meta-model specified in 19_d
 
 During migration, content is classified as: stays prose · becomes BML · removed from Markdown (link only) · temporarily duplicated.
 
-**Language Server (V2):** `@blockml/lsp` (name TBD) — VS Code Language Server that **reuses** `@blockml/parser`, `@blockml/validator`, `@blockml/serializer`, and `@blockml/core`. Diagnostics, hover, outline, go-to-definition, format-on-save. Text/XML editing only; structural BomBuilder editing is V3. See `00_bom_core.md` — Language Server — planned IDE integration (V2).
+**Language Server (V2):** `@blockml/lsp` (**decided**) — VS Code Language Server that **reuses** `@blockml/parser`, `@blockml/validator`, `@blockml/serializer`, and `@blockml/core`. Diagnostics, hover, outline, go-to-definition, format-on-save. Text/XML editing only; structural BomBuilder editing is V3. See `00_bom_core.md` — Language Server — planned IDE integration (V2).
 
 ### V3 — Compiler as BlockML system · BomBuilder
 
 Pipeline, stages, targets, processors, diagnostics, CLI, and tests are **predominantly** described as Blocks. Prose remains only for core principles and rationale.
 
-**BomBuilder (V3)** ships as the writable authoring API: build or edit BOM graphs programmatically (block-by-block, including new properties), then `seal()` to Urmodell. Same consumers as parse-origin documents (serializer, validator, renderers, LSP). See `00_bom_core.md` — BomBuilder — planned writable authoring API (V3).
+**BomBuilder (V3)** (**decided** name) ships as the writable authoring API: DOM-like navigation (`querySelector`, …) and mutation **within** existing BlockML definitions, then `seal()` to Urmodell. Same consumers as parse-origin documents. **Out of V3 scope:** changing BlockML’s own meta/grammar structure — deferred to a possible **V4** BomBuilder evolution (direction TBD). See `00_bom_core.md` — BomBuilder — Scope: V3 vs V4.
 
 ### Phases
 
@@ -802,7 +807,8 @@ Phase 2 / V2   Documentation migration + Language Server
 
 Phase 3 / V3   Compiler as BlockML system + BomBuilder
                Pipeline, stages, targets, diagnostics, CLI largely in BML
-               BomBuilder: writable session → seal() → Urmodell; IDE / bom new / generators
+               BomBuilder: DOM-like session within BlockML definitions → seal() → Urmodell
+               (language-structure mutation → V4, not V3)
 ```
 
 Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is specified in `17_type_system_bml.md` — Migration from XSD and 04_types.md. Framework bootstrap scope is in `16_framework_base_types.md`.

@@ -24,7 +24,7 @@ For pipeline stages see `06_compiler.md`.
 | **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.bml` is compiled |
 | **JSON BML authoring** | **Not planned** — not equivalent to XML; not V1/V2; may never ship (`02_mbml.md`) |
 | **Facade API (C2)** | `CompileInput` + `CompileOptions`; explicit `TypeRegistry`; CLI writes files |
-| **Target bootstrap (C3)** | V1: CLI hardcoded `bootstrapTargets()`; configurability planned — early hooks, no `targets[]` in V1 |
+| **Target bootstrap (C3)** | V1: `bom.config.json` → `targets[]` (default `["blockdoc"]`); CLI `<target>` still required per run |
 | **RenderContext (C1)** | `RenderSession` (immutable) + forked `RenderContext` per render node; `PropertyResolver` on-demand; internal API |
 | **Thumbnails (C6)** | CLI-only (OpenSCAD + Sharp); not in `RenderOutput`; compiler produces `.scad` + `.json` prerequisites |
 | **Incremental build (C5)** | CLI-only cache (`.bom-cache/`); SHA-256 canonical input hash; skip before compile; dedup by output path |
@@ -404,29 +404,36 @@ const result = compileBmlToOutput(
 
 ## Target Bootstrap (C3)
 
-Before SCAD renderer step [9] can resolve a target by name, the caller must populate the **Target Registry** via `registerTarget()`. `@blockml/compiler` ships **no default targets** — targets live in domain packages (e.g. `@machineblocks/machineblocks-v3-scad-target`).
+Before a render target can resolve by name, the caller must populate the **Target Registry** via `registerTarget()`. `@blockml/compiler` ships **no default targets** — targets live in packages (e.g. `@blockml/blockdoc-target`, `@machineblocks/machineblocks-v3-scad-target`).
 
-### V1 decision — CLI hardcoded
+### V1 decision — `targets[]` + BlockDoc-first
 
-In V1, **`@blockml/cli` registers targets explicitly** in a dedicated bootstrap function — not via `bom.config.json`.
+In V1, **`@blockml/cli` bootstraps targets from `bom.config.json` → `targets[]`**. The first / default control target is **`blockdoc`** (`@blockml/blockdoc-target`), not MachineBlocks SCAD.
 
 ```typescript
-// @blockml/cli — bootstrapTargets.ts
+// @blockml/cli — bootstrapTargets.ts (sketch)
 import { registerTarget } from "@blockml/compiler";
-import { MakerEngine } from "@blockml/engine-maker";
-import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
+import { BlockDocTarget } from "@blockml/blockdoc-target";
+// … map name → package as other targets ship
 
-let bootstrapped = false;
+const DEFAULT_TARGETS = ["blockdoc"];
 
-/** Idempotent — safe to call on every compile/watch invocation. */
-export function bootstrapTargets(): void {
+export function bootstrapTargets(config: { targets?: string[] }): void {
   if (bootstrapped) return;
-  registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
+  const names = config.targets?.length ? config.targets : DEFAULT_TARGETS;
+  for (const name of names) {
+    registerTarget(loadTarget(name)); // e.g. "blockdoc" → new BlockDocTarget()
+  }
   bootstrapped = true;
 }
 ```
 
-V1 registers exactly one target: `"machineblocks-v3-scad"`.
+| Name | Package | V1 role |
+|---|---|---|
+| `blockdoc` | `@blockml/blockdoc-target` | **First Stage-3 gate** — browseable corpus HTML for control / review |
+| `xsd` | `@blockml/xsd-target` | After BlockDoc control path works |
+| `fatblock` | `@blockml/fatblock-target` | After / beside XSD |
+| `machineblocks-v3-scad` | `@machineblocks/machineblocks-v3-scad-target` | Primary **product** target — after toolchain control |
 
 Commands that require a target call `bootstrapTargets()` before `compileBmlToOutput()`:
 
@@ -436,6 +443,12 @@ bom compile --all <target>
 bom watch <target>
 ```
 
+Typical V1 control compile:
+
+```bash
+bom compile --all blockdoc
+```
+
 Commands that do **not** call `bootstrapTargets()`:
 
 ```text
@@ -443,27 +456,23 @@ bom validate   — Stage 1 + Stage 2 only; no target required
 bom inspect    — Urmodell dump only; no target required
 ```
 
-### Planned configurability (post-V1)
+### Planned configurability
 
-Target selection will become configurable. V1 sets the following **extension points** so later changes stay localized:
-
-| Hook | V1 | Planned |
+| Hook | V1 | Later |
 |---|---|---|
-| `bootstrapTargets(config?)` | Hardcoded SCAD target | Reads `bom.config.json` → `targets[]` and/or plugin manifest |
-| CLI `<target>` argument | Required on compile/watch | Stays required; config defines *available* targets, not implicit default |
+| `bootstrapTargets(config)` | Reads `bom.config.json` → `targets[]` (default `["blockdoc"]`) | Plugin loader / more names |
+| CLI `<target>` argument | Required on compile/watch | Unchanged — config does not replace the argument |
 | `@blockml/compiler` | `registerTarget()` / `getTarget()` only | Unchanged — no built-in targets |
-| `bom.config.json` → `targets` | **Not read in V1** (field reserved, TBD) | List of target names to bootstrap for this project |
-| Target packages | Direct import in CLI | Dynamic import / plugin loader by target name |
-
-**Reserved config field (TBD — not V1):**
+| `bom.config.json` → `targets` | **V1** — list of registry names to bootstrap | Same |
+| Target packages | Import map name → package in CLI | Dynamic import by name |
 
 ```json
 {
-  "targets": ["machineblocks-v3-scad"]
+  "targets": ["blockdoc"]
 }
 ```
 
-Do not add this field to `bom init` scaffolding in V1. When implemented, missing `targets` should fall back to the V1 hardcoded set for backward compatibility.
+`bom init` scaffolds `"targets": ["blockdoc"]`. Missing `targets` → default `["blockdoc"]`.
 
 ### Bootstrap order (CLI)
 
@@ -488,7 +497,7 @@ compileBmlToOutput(input, "machineblocks-v3-scad", { typeRegistry });
 
 ### Unknown target
 
-If `<target>` is not in the registry after bootstrap, the CLI exits with code **2** (configuration error). V1 only registers `"machineblocks-v3-scad"` — any other name fails immediately with a clear message.
+If `<target>` is not in the registry after bootstrap, the CLI exits with code **2** (configuration error). Register via `targets[]` (or default `blockdoc`) before compiling that name.
 
 ---
 
@@ -913,7 +922,7 @@ Single-file bom compile <file> — same hash logic applies (not only --all)
 |---|---|---|
 | C1 | `RenderContext` — `RenderSession` + forked per-node context | **Decided** |
 | C2 | Facade API — `CompileInput` + `CompileOptions` | **Decided** |
-| C3 | Target bootstrap — CLI hardcoded V1; config/plugins planned | **Decided** |
+| C3 | Target bootstrap — `targets[]` in V1; default / first control target `blockdoc` | **Decided** |
 | C4 | Compile scope + NativeBlock model | **Decided** |
 | C5 | Incremental build — SHA-256, CLI cache, output-path keys | **Decided** |
 | C6 | Thumbnails — CLI-only; not in RenderOutput | **Decided** |
