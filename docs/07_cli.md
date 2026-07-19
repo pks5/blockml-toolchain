@@ -75,7 +75,7 @@ cd blockml
 git submodule update --init --recursive
 ```
 
-`git submodule update --init --recursive` initializes all runtime submodules (e.g. `domains/machineblocks/runtimes/scad-lib/`).
+`git submodule update --init --recursive` initializes all runtime submodules (e.g. `domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/`).
 
 ### 2. Build and link
 

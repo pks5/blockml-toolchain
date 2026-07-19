@@ -9,7 +9,8 @@ This document defines the SCAD Renderer — the MachineBlocks Atomic Render Targ
 For the MBOM object model see `03_mbom.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
 For the Target system see `06_compiler.md`.
-For the MachineBlocks V3 SCAD Library specification see `domains/machineblocks/runtimes/scad-lib/docs/`.
+For the MachineBlocks V3 SCAD Library specification see
+`domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/docs/`.
 
 ---
 
