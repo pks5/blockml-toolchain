@@ -20,7 +20,7 @@
   <is>A grid of values with rectangular selectors</is>
 
   <documentation>Struct ValueType for a plate-grid of cell values. baseValue is the default for
-    every cell; selectors overlays rectangular ranges (from/to in GridUnitXY) with an override
+    every cell; selectors overlays rectangular ranges (start/end in GridUnitXY) with an override
     value. Generic T is the cell value type — e.g. SelectiveGrid(Boolean) or
     SelectiveGrid(Boolean | mbt:HoleType). Sub-Block Selector is a Java-style static nested
     type with its own T — forward via selectors type="Selector(T)[]".</documentation>
@@ -35,7 +35,7 @@
     </baseValue>
     <selectors type="Selector(T)[]">
       <documentation>Rectangular range overrides. Later selectors win on overlap (authoring
-        order). Forwards this Block's T into Selector(T). Each Selector carries from, to, and
+        order). Forwards this Block's T into Selector(T). Each Selector carries start, end, and
         value.</documentation>
     </selectors>
   </properties>
@@ -48,7 +48,7 @@
       <is>A rectangular grid range override</is>
 
       <documentation>Inclusive axis-aligned range on the plate grid. Static nested StructType with
-        its own generic T (no outer-T scope). from/to are AxisXY in Integer(GridUnitXY).
+        its own generic T (no outer-T scope). start/end are AxisXY in Integer(GridUnitXY).
         FQN: com.machineblocks.bml.type.SelectiveGrid.Selector.</documentation>
 
       <genericTypes>
@@ -56,14 +56,14 @@
       </genericTypes>
 
       <properties>
-        <from type="mbt:AxisXY(Integer(mbunit:GridUnitXY))">
+        <start type="mbt:AxisXY(Integer(mbunit:GridUnitXY))">
           <documentation>Inclusive start corner of the selection (x, y) in GridUnitXY.</documentation>
-        </from>
-        <to type="mbt:AxisXY(Integer(mbunit:GridUnitXY))">
+        </start>
+        <end type="mbt:AxisXY(Integer(mbunit:GridUnitXY))">
           <documentation>Inclusive end corner of the selection (x, y) in GridUnitXY.</documentation>
-        </to>
+        </end>
         <value type="T">
-          <documentation>Override value for cells in [from, to] — Selector's own T.</documentation>
+          <documentation>Override value for cells in [start, end] — Selector's own T.</documentation>
         </value>
       </properties>
     </block>
@@ -74,10 +74,10 @@
       Struct ValueType branch — baseValue + selectors.
     </see>
     <see type="mbt:AxisXY" relation="SeeAlso">
-      from / to range corners.
+      start / end range corners.
     </see>
     <see type="mbunit:GridUnitXY" relation="SeeAlso">
-      Plate-grid unit on from / to Integer components.
+      Plate-grid unit on start / end Integer components.
     </see>
   </references>
 
