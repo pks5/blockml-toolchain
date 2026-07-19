@@ -96,7 +96,7 @@
 
   <references>
     <see file="02_mbml.md" relation="AuthoringGuide">
-      idea, summary, keywords, not, aliases, documentation, since, changelog, examples, references — authoring rules.
+      is, summary, keywords, isnot, aliases, documentation, since, changelog, examples, references — authoring rules.
     </see>
     <see file="16_framework_base_types.md" relation="AuthoringGuide">
       Definition branch documentation model — StructuralDefinition sub-blocks.
@@ -111,7 +111,7 @@
       Natural language branch — documentation prose and example titles.
     </see>
     <see type="core:Block" relation="SeeAlso">
-      Root block — documents idea, language, documentation, references on every definition.
+      Root block — documents is, language, documentation, references on every definition.
     </see>
     <see type="core:Definition" relation="Extends">
       Definition branch — shared documentation aggregations.

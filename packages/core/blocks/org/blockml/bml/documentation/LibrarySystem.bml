@@ -92,7 +92,7 @@
       Mandatory domain.bml namespace for all BML definitions.
     </see>
     <see type="doc:DocumentationModel" relation="ReadNext">
-      Next reading step — idea, documentation, references on Block definitions.
+      Next reading step — is, documentation, references on Block definitions.
     </see>
   </references>
 

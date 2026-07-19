@@ -56,7 +56,8 @@
       FunctionMapping — positional and named capability call argument mapping.
     </see>
     <see type="mapping:FunctionMapping" relation="SeeAlso">
-      Default function mapping rules for capability calls and positional StructType access.
+      Default function mapping — capability call arguments by inputType declaration order
+      (named and positional); not StructType numeric index access.
     </see>
     <see type="service:Math" relation="SeeAlso">
       Built-in #math.* expression utilities.

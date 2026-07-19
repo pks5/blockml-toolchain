@@ -32,8 +32,9 @@
     • Renderer freedom — each target decides how to manifest Blocks in its output
     • Self-hosting bootstrap — the compiler loads framework BML before user content
 
-    BML file extension is .bml. XML is the V1 canonical authoring format. The root element
-    determines document type; the primary root is block for Block definitions.
+    BML file extension is .bml. XML is the sole BML serialization for V1 and V2 — a JSON
+    authoring form is not planned as an equivalent format. Every document uses one root
+    element: &lt;block&gt; (legacy roots such as device / sign / game are withdrawn).
   </documentation>
 
   <references>

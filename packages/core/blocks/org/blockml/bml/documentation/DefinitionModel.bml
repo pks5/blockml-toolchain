@@ -61,7 +61,7 @@
       Definition blocks and bml:xml self-description rules (WIP).
     </see>
     <see file="02_mbml.md" relation="AuthoringGuide">
-      Block Definition — idea, documentation, references, examples on root blocks and members.
+      Block Definition — is, documentation, references, examples on root blocks and members.
     </see>
     <see file="12_bom_object_model.md" relation="DeepDive">
       MemberDefinition, DocumentationReference — BOM reflection shapes.
