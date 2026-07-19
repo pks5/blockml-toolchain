@@ -57,7 +57,7 @@
     <_legacy type="Boolean" bml:xml="element">
       <value>false</value>
       <documentation>When true, marks a deprecated or legacy catalogue name — prefer the canonical
-        Block name and idea in new prose. Set on the alias block definition. Default false when
+        Block name and &lt;is&gt; in new prose. Set on the alias block definition. Default false when
         omitted.</documentation>
     </_legacy>
   </properties>

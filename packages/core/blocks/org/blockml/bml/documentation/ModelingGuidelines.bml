@@ -47,7 +47,7 @@
     • Use for validation rules expressible as reusable Constraint blocks (Min, Max, Pattern, …)
     • Suggestions (optional Block instances of property type) guide editors — not validation
 
-    General: keep idea stable; put cross-links in references; prefer explicit baseType over
+    General: keep &lt;is&gt; stable; put cross-links in references; prefer explicit baseType over
     implicit defaults; document partial members in contracts clearly.
   </documentation>
 

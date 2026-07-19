@@ -17,6 +17,6 @@
   <is>An inheritance Relation</is>
 
   <documentation>Use when the referenced Block is in the baseType chain or represents a branch the
-    current type belongs to. Typical block= targets only — not for file or url references.</documentation>
+    current type belongs to. Typical type= targets only — not for file or url references.</documentation>
 
 </block>

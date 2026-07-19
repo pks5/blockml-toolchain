@@ -21,7 +21,7 @@
   <baseType>core:TaskGuide</baseType>
   <is>A how-to for authoring a new Block</is>
 
-  <summary>Create a root .bml file with idea, documentation, type, baseType, version, and member
+  <summary>Create a root .bml file with is, documentation, type, baseType, version, and member
     containers as needed. Register the block FQN in Library blocks when publishing a library
     catalogue.</summary>
 
@@ -36,7 +36,7 @@
   <documentation>
     Procedure for a new domain Block type:
     1. Choose baseType from the framework or domain branch.
-    2. Declare identity and documentation metadata (idea, documentation, optional summary).
+    2. Declare identity and documentation metadata (is, documentation, optional summary).
     3. Add properties, aggregations, associations, or capabilities.
     4. Add constraints, capabilities, and examples as needed.
     5. Export via Library.bml blocks when the type belongs to a published catalogue.
@@ -44,7 +44,7 @@
 
   <references>
     <see type="doc:DefinitionModel" relation="Prerequisite">
-      Understand idea, members, and documentation extensions before authoring.
+      Understand is, members, and documentation extensions before authoring.
     </see>
     <see type="def:RootBlockDefinition" relation="TaskStep">
       Step 1 — inspect the root block definition meta-model shape.

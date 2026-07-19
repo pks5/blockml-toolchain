@@ -46,7 +46,7 @@
     </see>
 
     <see type="doc:DefinitionModel" relation="ReadFirst">
-      Definition meta-model — idea, members, documentation extensions on block definitions.
+      Definition meta-model — is, members, documentation extensions on block definitions.
     </see>
 
     <see type="doc:TypeSystemOverview" relation="ReadFirst">
@@ -82,7 +82,7 @@
     </see>
 
     <see type="doc:DocumentationModel" relation="ReadFirst">
-      idea, documentation, references, examples — the block documentation model.
+      is, documentation, references, examples — the block documentation model.
     </see>
 
     <see type="doc:BootstrapModel" relation="ReadFirst">

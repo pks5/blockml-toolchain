@@ -4326,7 +4326,14 @@
         <mbgroup:StudIcon />
         <mbgroup:FrequentAiUsage />
       </groups>
-      <documentation>SVG file engraved into each stud.</documentation>
+      <documentation>SVG file engraved into each stud.
+        OpenSCAD resolves relative SVG paths against the .scad file that uses the path
+        (the file that passes studIcon / import()), not against NativeBlock, the library
+        root, or the FQN package folder. The same relative string therefore resolves
+        differently from bricks/ vs examples/ vs a consumer project file — choose the
+        path relative to the consuming .scad file. Absolute paths and paths relative to
+        the OpenSCAD working directory follow normal OpenSCAD rules.
+      </documentation>
       <value>../../pattern/bolt-solid-full.svg</value>
       <scad:value>../../pattern/bolt-solid-full.svg</scad:value>
       <examples>
@@ -4619,6 +4626,10 @@
       </groups>
       <documentation>SVG file for a pattern on the brick surface. Applied to the brick
         body surface as a repeating or single pattern.
+        OpenSCAD resolves relative SVG paths against the .scad file that uses the path
+        (the file that passes surfacePattern / import()), not against NativeBlock, the
+        library root, or the FQN package folder. Pick the path relative to the consuming
+        .scad file — the same string is not portable across different file depths.
       </documentation>
       <value>False</value>
       <scad:value>false</scad:value>

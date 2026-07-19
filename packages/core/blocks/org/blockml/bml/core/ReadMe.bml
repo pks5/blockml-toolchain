@@ -24,7 +24,7 @@
     org.blockml.bml.README is the standard ReadMe for the core library. Library descriptors point
     here via the required readMe aggregation (1..1).
 
-    ReadMe blocks carry the normal documentation model (idea, documentation, references). Curated
+    ReadMe blocks carry the normal documentation model (is, documentation, references). Curated
     reading order is expressed via &lt;references&gt; with relation=ReadFirst; available task
     catalog entries via relation=TaskIndex — not via separate aggregations on ReadMe itself. The
     abstract base declares no members.</documentation>

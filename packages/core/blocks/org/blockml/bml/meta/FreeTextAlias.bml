@@ -44,7 +44,7 @@
     </language>
     <legacy override="true" bml:xml="attribute">
       <documentation>When true, marks a deprecated or legacy name — public override of
-        FixedAlias._legacy. Prefer the canonical Block name and idea in new prose. Default false when
+        FixedAlias._legacy. Prefer the canonical Block name and &lt;is&gt; in new prose. Default false when
         omitted.</documentation>
     </legacy>
   </properties>

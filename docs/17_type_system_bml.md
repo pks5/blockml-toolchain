@@ -368,13 +368,14 @@ org.blockml.bml.core.ValueType              abstract — never stores data
   │     │     ├── org.blockml.bml.type.URI
   │     │     ├── org.blockml.bml.type.FilePath
   │     │     ├── org.blockml.bml.type.MimeType
+  │     │     ├── org.blockml.bml.type.Color     — textual color strings (hex / rgb / named)
   │     │     └── …
   │     ├── org.blockml.bml.type.Number       abstract — numeric primitives
   │     │     ├── org.blockml.bml.type.Integer
   │     │     ├── org.blockml.bml.type.Decimal   — default for non-integer numbers
   │     │     └── org.blockml.bml.type.Float     — binary float — special-purpose only
   │     └── org.blockml.bml.type.Boolean      — neither textual nor numeric
-  ├── org.blockml.bml.type.StructType         SizeXYZ · Color · Address · …
+  ├── org.blockml.bml.type.StructType         SizeXYZ · Address · Transform · …
   ├── org.blockml.bml.type.EnumType           BaseCutout · Direction · Align · …
   └── org.blockml.bml.type.ConstantType       singleton value domains
         └── org.blockml.bml.type.Constant     Constant(T){value: …}
@@ -384,8 +385,8 @@ org.blockml.bml.core.ValueType              abstract — never stores data
 
 | Branch | Role | Examples |
 |---|---|---|
-| **PrimitiveType** | Atomic scalar semantics — no stored values | `Boolean`, `Integer`, `Decimal`, `Float`, `Text`, `URL`, `Version` |
-| **StructType** | Custom value objects — structure via properties | `SizeXYZ`, `Color`, `Address`, `Transform` |
+| **PrimitiveType** | Atomic scalar semantics — no stored values | `Boolean`, `Integer`, `Decimal`, `Float`, `Text`, `Color`, `URL`, `Version` |
+| **StructType** | Custom value objects — structure via properties | `SizeXYZ`, `Address`, `Transform` |
 | **EnumType** | Closed set of named members — BOM stores id + typeFqn | `Direction`, `Face`, `StudType`, `BaseCutout`, `Align` |
 | **ConstantType** | Singleton value domain — one configured literal | `Constant(Text){value: "auto"}`, `Constant(Integer){value: 5}` |
 
@@ -971,7 +972,7 @@ Because declaration order is part of the **public contract** of a struct type:
 * New fields may be appended **only at the end** to preserve backward compatibility.
 * Removing or reordering fields is an **incompatible breaking change** (requires a new type FQN or major version bump).
 
-This applies to named StructTypes (`SizeXYZ`, `Color`, …) and to anonymous struct signatures on Capabilities.
+This applies to named StructTypes (`SizeXYZ`, `Address`, …) and to anonymous struct signatures on Capabilities.
 
 ---
 

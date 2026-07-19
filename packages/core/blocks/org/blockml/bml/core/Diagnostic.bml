@@ -16,7 +16,7 @@
   <is>A validator diagnostic code</is>
 
   <documentation>Abstract branch for org.blockml.bml.diagnostic.* blocks. Each concrete diagnostic
-    block documents one validator or parser code (for example BML_UNKNOWN_TYPE) with idea, summary,
+    block documents one validator or parser code (for example BML_UNKNOWN_TYPE) with is, summary,
     keywords, and references. Use relation=Resolves on &lt;see&gt; to link to a TaskGuide that
     walks through the fix. Enables agents and humans to navigate from a reported error to a
     procedural resolution path without searching documentation prose.</documentation>
