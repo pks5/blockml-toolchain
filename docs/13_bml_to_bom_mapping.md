@@ -59,6 +59,7 @@ Parser step [5] produces the immutable BOM graph with expression **raw** text on
 | Preserve `bml:xml` on Urmodell + D6 recipe check (B23) | Drive mapping/serialization from Definition `bml:xml` (meta) |
 | Preserve XML comments bound to elements (B11) | Processing instructions; insignificant whitespace |
 | Roundtrip corpus T0–T3 | `bom compile` / render targets |
+| Public `parse` / `serialize` (B26) | `parseFile` / async / validate-on-parse |
 
 **XSD:** Not part of Phase-A Stage 1. Hand-written schemas / `catalog.xml` may remain a temporary **IDE aid**, but:
 
@@ -1207,6 +1208,7 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | B23 | Phase A `bml:xml` = preserve + D6 check | **Decided** — store `xmlRendering`; Stage-1 D6 recipe validate; do **not** meta-drive mapper from Definition `bml:xml` — see § V1 Scope · `19` D6 |
 | B24 | Format detector edges | **Decided** — strip UTF-8 BOM; first non-ws must be `<` (`<?xml`, `<!--`, `<block`); no BOM on emit — see `06_compiler.md` [1] |
 | B25 | `xmlns:xsi` / `xsi:schemaLocation` | **Decided** — store in `namespaceBindings` + `SourceInfo.schemaLocation`; re-emit on root; xsi alone ≠ QName mode (B21) — see § Rule 1 · `12` SourceInfo |
+| B26 | Public `parse` / `serialize` API | **Decided** — sync; `ParseResult` / `SerializeResult` + `diagnostics[]`; no throw on authoring errors — see `15` Public API · `12` |
 
 ---
 
@@ -1214,7 +1216,7 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 
 | Topic | Document |
 |---|---|
-| XML DOM / emit policy | `06_compiler.md` — [1]–[2] · this document B10–B25 |
+| XML DOM / emit policy | `06_compiler.md` — [1]–[2] · this document B10–B26 |
 | BOM object model | `12_bom_object_model.md` |
 | V1 Phase-A build order | `15_dev_setup.md` — V1 Implementation Strategy |
 | Expression AST | `10_expression_language.md` |

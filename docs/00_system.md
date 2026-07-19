@@ -354,6 +354,7 @@ The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocu
 
 ```text
   - XML DOM via `@xmldom/xmldom` (B18; same in Node and browser — see `06_compiler.md` [2])
+  - Public entry: `parse(source, options?) → ParseResult` (B26 — see `15_dev_setup.md`)
   - JSON BML parser — **not planned** for V1/V2; XML only (see `02_mbml.md`)
   - Namespace resolver (xmlns → FQN)
   - XSD loader — optional IDE aid; not required for parse (see XSD Render Target)
@@ -370,6 +371,7 @@ BOM → canonical BML XML. Browser and Node compatible. Inverse of the parser ma
 
 ```text
 - BOM → BML XML (V1: hardcoded inverse of 13_bml_to_bom_mapping.md)
+- Public entry: `serialize(document, options?) → SerializeResult` (B26)
 - Meta-driven output via Definition blocks + bml:xml — deferred (19_definition_blocks_and_bml_xml.md)
 - No semantic validation, no render output
 - Operates on Urmodell only

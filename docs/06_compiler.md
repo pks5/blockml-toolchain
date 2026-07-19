@@ -98,6 +98,8 @@ See `01_bom_core.md` — Urmodell and Pragmatic Model.
 
 Produces the **Urmodell** (Canonical BOM). No semantic decisions. Output is immutable and read-only.
 
+**Public API (B26):** `parse(source: string, options?: ParseOptions): ParseResult` — sync; `{ document, diagnostics, success }`. See `15_dev_setup.md` — Public API.
+
 ```text
 BML Source (.bml)                   — XML only; JSON authoring not planned
   ↓
@@ -117,6 +119,8 @@ Urmodell / Canonical BOM (immutable)
 ### Roundtrip — Serializer (`@blockml/serializer`)
 
 Inverse of the parser mapping: **BOM → canonical BML XML**. Enables lossless roundtrip (`BML → BOM → BML`). Not a render target emitter. Operates on the Urmodell only — **no** dependency on `@blockml/validator`.
+
+**Public API (B26):** `serialize(document: BomDocument, options?: SerializeOptions): SerializeResult` — sync; returns `{ text, diagnostics, success }`. See `15_dev_setup.md` — Public API.
 
 **Host policy:** CLI / IDE / LSP may run Stage 2 first and abort on diagnostics before calling `serialize()` or compile. That decision is orchestration, not serializer logic.
 

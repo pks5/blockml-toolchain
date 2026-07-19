@@ -112,11 +112,13 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 
 @blockml/parser
   - BML → BomDocument mapper (parser step [5]) — **single file per invocation**
+  - Public API: `parse(source, options?) → ParseResult` (B26 — see `15_dev_setup.md`)
   - Produces immutable Urmodell (Canonical BOM) using `@blockml/core` types; populates source spans for LSP/diagnostics
   - Does NOT own BOM interfaces; does NOT load external BML files, populate TypeRegistry, merge inheritance, or expand directives
 
 @blockml/serializer
   - BomDocument → canonical BML XML (inverse of parser mapping)
+  - Public API: `serialize(document, options?) → SerializeResult` (B26)
   - Consumes `@blockml/core` types only — no dependency on `@blockml/parser`
 
 @blockml/compiler
@@ -128,6 +130,41 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
   - 09_mbom_properties.yml — pointer stub only (see NativeBlock)
   - Extends TypeRegistry bootstrap with mbom BML paths
 ```
+
+---
+
+## Public parse / serialize results (B26)
+
+Shared with `@blockml/parser` / `@blockml/serializer`. Full contract: `15_dev_setup.md` — Public API.
+
+```typescript
+interface ParseResult {
+  document: BomDocument | null
+  diagnostics: Diagnostic[]
+  success: boolean
+}
+
+interface SerializeResult {
+  text: string | null
+  diagnostics: Diagnostic[]
+  success: boolean
+}
+
+interface ParseOptions {
+  filePath?: string
+  continueOnError?: boolean  // default true
+}
+
+interface SerializeOptions {
+  indent?: number            // default 2
+  xmlDeclaration?: boolean   // default false
+}
+
+function bomEquals(a: BomDocument, b: BomDocument): boolean
+function stripProvenance<T>(node: T): T
+```
+
+Sync only. No throw on recoverable diagnostics. `Diagnostic` is the same type used by validator and compiler (`06_compiler.md`).
 
 ---
 

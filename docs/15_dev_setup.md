@@ -695,11 +695,13 @@ MachineBlocks SCAD remains the reference **product** target. BlockDoc is the V1 
 
 ```text
 original.bml
-  → parse()      → BomDocument
-  → serialize()  → reserialized.bml
-  → parse()      → BomDocument'
-  → deepEqual(BomDocument, BomDocument')
+  → parse()      → ParseResult { document, diagnostics, success }
+  → serialize()  → SerializeResult { text, diagnostics, success }
+  → parse()      → ParseResult'
+  → bomEquals(document, document')   // B20 — strip provenance
 ```
+
+**Public API (B26 — decided):** Sync string in/out; results carry `diagnostics[]` (same `Diagnostic` as validator/compiler). Authoring errors do **not** throw. See § Public API below.
 
 **Authoritative gate (B10 + B20):** BOM deep equality of the **semantic** Urmodell only. A test fails if and only if `BomDocument` ≠ `BomDocument'` **after stripping provenance** (`source` / `sourceLocation` / optional end spans on every node). Offsets and `file` paths always change across `serialize → parse`; they must not fail Phase A.
 
@@ -708,6 +710,63 @@ original.bml
 **Equality helper:** prefer a shared `bomEquals(a, b)` / `stripProvenance(doc)` in `@blockml/core` (or test utils used by all packages) so roundtrip, correctness, and future LSP fixtures share one definition of “same BOM”.
 
 Parser is **single-file scoped** — roundtrip tests do not require TypeRegistry bootstrap (`13_bml_to_bom_mapping.md`).
+
+### Public API (`parse` / `serialize`) — B26
+
+> **Normative for Phase A.** Result/options types and `bomEquals` live in `@blockml/core`; entry points in `@blockml/parser` / `@blockml/serializer`.
+
+**Principles:** sync only (no FS/network in these functions); no throw on recoverable authoring/mapping errors (internal bugs may throw); tolerant parse by default; shared `Diagnostic` with Stage 2 / compiler; no `validate` option on parse.
+
+```typescript
+// ——— @blockml/core ———
+
+interface ParseResult {
+  /** null only on hard fail (format / malformed XML / no usable root) */
+  document: BomDocument | null
+  diagnostics: Diagnostic[]
+  /** false if any diagnostic has severity === "error" */
+  success: boolean
+}
+
+interface SerializeResult {
+  /** null only if serialize cannot produce text */
+  text: string | null
+  diagnostics: Diagnostic[]
+  success: boolean
+}
+
+interface ParseOptions {
+  /** default: "<memory>" — written to BomDocument.source.filePath */
+  filePath?: string
+  /** default true — keep mapping after errors; attach document when possible */
+  continueOnError?: boolean
+}
+
+interface SerializeOptions {
+  /** default 2 — pretty-print spaces (B13); 0 = compact */
+  indent?: number
+  /** default false — omit <?xml …?> (B17 / B24) */
+  xmlDeclaration?: boolean
+}
+
+/** Structural equality modulo provenance (B20) */
+function bomEquals(a: BomDocument, b: BomDocument): boolean
+function stripProvenance<T>(node: T): T
+
+// ——— @blockml/parser ———
+function parse(source: string, options?: ParseOptions): ParseResult
+
+// ——— @blockml/serializer ———
+function serialize(document: BomDocument, options?: SerializeOptions): SerializeResult
+```
+
+**`parse`:** B24 detect → [2] xmldom → [3]–[5] map. Hard fail → `document: null`. Mapping errors/warnings → `diagnostics`; with `continueOnError` (default) still return a document when possible. Warnings alone leave `success: true`.
+
+**`serialize`:** Emit per B12–B25 / D8–D9. `BML_NAMESPACE_UNBOUND` → error diagnostic; prefer still emitting `text` when possible (host may abort). Does **not** call the validator.
+
+**Not in V1 API:** `parseFile` / `serializeFile`, async variants, streaming, `parse({ validate: true })`.
+
+Aligned with `CompilerResult<T>` (`06_compiler.md`) — same diagnostics model.
 
 ### BML test corpus (fixture tiers)
 
@@ -780,7 +839,8 @@ Phase D  ✅  15_dev_setup (this document)
 | Topic | Document |
 |---|---|
 | Monorepo architecture | `00_system.md` |
-| BOM types (implement first) | `12_bom_object_model.md` |
+| BOM types + ParseResult (B26) | `12_bom_object_model.md` |
+| Public `parse` / `serialize` (B26) | this document — Public API |
 | Parser mapping | `13_bml_to_bom_mapping.md` |
 | Runtime / Facade / Cache | `14_compiler_runtime.md` |
 | CLI commands | `07_cli.md` |
