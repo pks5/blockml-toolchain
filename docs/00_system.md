@@ -55,19 +55,11 @@ Serializer ← Urmodell (Parser or Builder provenance)
 
 **WOT / runtime role:** In the Web of Things, BML is also a **message format**. Capabilities are addressable via the **`stud://`** protocol over **sockets and HTTP**. The same typed Blocks, values, and semantics used when authoring travel as interchange payloads between Things — BML is the shared grammar for humans, LLMs, compilers, and networked Capabilities. See `01_bom_core.md` — Capabilities · Address Schemes · Message Model · `17_type_system_bml.md` — WOT alignment.
 
-**BOM** (Block Object Model) has two runtime roles plus a planned authoring path — see `01_bom_core.md` — Urmodell and Pragmatic Model · BomBuilder (V3):
-
-- **Urmodell (Canonical BOM)** — immutable, lossless representation of BML; SSOT; produced by the parser (V1) or by `BomBuilder.seal()` (V3); never receives derived writes.
-- **Pragmatic Model** — mutable working copy; the Validator resolves inheritance/merges here by default; renderers may reuse it or fork the Urmodell again (including multiple times) for their own partial merges. **Resolve only** — not structural authoring.
-- **BomBuilder (V3, planned — name decided)** — writable, DOM-like session (`querySelector`, …) to build or edit BOM graphs **within** existing BlockML definitions; `seal()` → Urmodell. Does **not** change BlockML language structure (that is V4 territory). See `01_bom_core.md` — BomBuilder.
+**BOM** (Block Object Model) is the typed graph behind BML. Normative roles — **Urmodell** (immutable Canonical BOM / SSOT), **Pragmatic Model** (resolve-only forks), **BomBuilder** (V3 authoring → `seal()`), Framework Utilities, and renderer freedom — live in `01_bom_core.md` — Fundamental Architecture Principles. This document only sketches the system layout above.
 
 BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-specific type definitions declared in BML.
 
-**Framework Utilities** (`@blockml/core`) provide reusable analysis and transformation algorithms. They read the Urmodell and return derived views/diagnostics or apply partial merges only to pragmatic forks — they never write back to the Urmodell. Semantic validation (Stage 2) is orchestrated by `@blockml/validator`.
-
-**Render Target** is the domain-specific output backend. Each target defines its own pipeline: which model to read (Urmodell, default pragmatic, or own forks), which utilities to call, in what order, and how to build its target working model. A Target declares which `baseType` FQNs it supports and contains Block Processors that emit target-specific results.
-
-**The Compiler** (`@blockml/compiler`) is the facade and Target Registry. It does not prescribe a fixed compile path — renderers orchestrate utilities themselves.
+**The Compiler** (`@blockml/compiler`) is the facade and Target Registry. It does not prescribe a fixed compile path — renderers orchestrate utilities themselves. Pipeline detail: `06_compiler.md`.
 
 **Self-hosting (bootstrap):** Before processing user projects, the CLI bootstraps a TypeRegistry from framework BML in `@blockml/core` and `@machineblocks/mbom`. Each registered BlockDefinition is an immutable `BomDocument` (Urmodell) — typically parse-origin today; Builder-origin documents are valid once V3 ships.
 
@@ -92,21 +84,9 @@ STL / 3MF
 
 ## Key Design Principles
 
-**BML and BOM are inseparable.** The Urmodell is the lossless, immutable representation of BML — not a pre-interpreted object model. BML → BOM → BML must always be possible.
+**Urmodell / roundtrip / authoring.** Canonical BOM is immutable SSOT; BML → BOM → BML must always be possible; pragmatic forks are resolve-only; structural authoring is BomBuilder (V3); LSP (V2) reuses the language loop. **Normative detail:** `01_bom_core.md` — Fundamental Architecture Principles (do not restate here).
 
-**The parser makes no semantic decisions.** It produces the read-only Urmodell. Validation, inheritance resolution, expression evaluation, and composition expansion run on pragmatic forks or as utility results — never as Urmodell mutations.
-
-**Urmodell is SSOT; Pragmatic Model is not.** The Validator resolves on a copy. Renderers decide what to read and may fork the Urmodell repeatedly for partial merges.
-
-**Authoring is BomBuilder (V3), not pragmatic resolve.** Structural writes (`addProperty`, new blocks from scratch) go through a writable builder session that `seal()`s to a new Urmodell. Build V1 so Parser, Serializer, Validator, and core types are fully reusable by Language Server (V2) and BomBuilder (V3) — see `01_bom_core.md`.
-
-**Language Server (V2) reuses the language loop.** `@blockml/lsp` adapts Parser → Urmodell, Validator → diagnostics, Serializer → format — no parallel IDE AST. See `01_bom_core.md` — Language Server.
-
-**Renderers own their pipeline and working model.** The framework provides utilities; each renderer decides which model and merges to use and how to map BML semantics to the target system.
-
-**BML is not a SCAD wrapper.** BML describes semantic objects. Any render target is one possible output.
-
-**BOM is not a render target AST.** The Urmodell is the authored model. Renderers build pragmatic forks and/or their own target working models.
+**Renderers own their pipeline and working model.** The framework provides utilities; each renderer decides which model and merges to use and how to map BML semantics to the target system. BML describes semantic objects — not a SCAD wrapper or a render-target AST.
 
 **The core is browser-compatible.** No Node.js-only APIs in `@blockml/core`, `@blockml/parser`, `@blockml/compiler`, or any Render Target package.
 
@@ -755,6 +735,8 @@ V1 does **not** model the full compiler in BML. V1 pulls into BML only what you 
 
 Markdown remains **authoritative** in V1 for architecture, pipeline, runtime, CLI, implementation details, and design rationale.
 
+**Exception (already in force):** MachineBlocks **native parameters and type shapes** — sole SSOT is `NativeBlock.bml` + `com.machineblocks.bml.type.*`. Markdown/YAML/scad-lib mirrors must follow or only link; do not maintain a second parameter inventory.
+
 **V1:** Authored Capabilities in BML; no synthetic accessor generation. Renderer interprets Capabilities target-specifically — see `08_managed_object.md`.
 
 ### V2 — Documentation migration · Language Server
@@ -849,6 +831,8 @@ domains/machineblocks/runtimes/scad-lib/
       ...
 ```
 
-Native MBOM / SCAD parameters (**SSOT**): `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml` + `…/type/*.bml`. See `04_types.md` (XY / XYZ / AB). `09_mbom_properties.yml` is transitional only and must not contradict NativeBlock.
+**Native MBOM / SCAD parameters — sole SSOT (already today):**  
+`domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml` + `…/type/*.bml`.  
+Markdown (`03`/`04`/`05`/…), `09_mbom_properties.yml`, and scad-lib `09_api_parameters.yml` **must follow or only link** — they are not a second inventory. Conventions (XY / XYZ / AB) stay in `04_types.md`.
 
-**BML vs Markdown:** BML is SSOT for structure you author and validate against (V1 scope above). Markdown explains concepts, relationships, architecture decisions, and reading order. Long-term, Markdown links to BML FQNs instead of duplicating tables — see [BML Self-Description Roadmap](#bml-self-description-roadmap).
+**BML vs Markdown (general):** For compiler architecture / pipeline, Markdown remains authoritative in V1 (see roadmap). For **MachineBlocks native params and type shapes**, BML is already the sole SSOT you maintain — do not duplicate parameter tables in Markdown. Long-term, other structural docs also link to BML FQNs — see [BML Self-Description Roadmap](#bml-self-description-roadmap).

@@ -17,35 +17,13 @@
   <is>A guide to the compiler pipeline</is>
 
   <documentation>
-    The BOM Compiler follows a three-layer architecture with immutable Canonical BOM at the center:
+    Overview only — normative Urmodell / Pragmatic / BomBuilder rules live in docs/01_bom_core.md;
+    pipeline stages and packages in docs/06_compiler.md; system layout in docs/00_system.md.
 
-    BML → Parser (@blockml/parser) → Canonical BOM (immutable, lossless SSOT)
-
-    Framework Utilities (@blockml/core) — optional, composable; never mutate Canonical BOM:
-    resolveInheritance, resolveEffectiveMembers, parseExpression, expandComposition,
-    validateTypes, validateConstraints, …
-
-    Renderer Pipeline (target-specific) — orchestrates utilities, owns working model, emits output.
-
-    Validation pipeline — three independent Validation Stages
-    (glossary: 06_compiler.md — do not confuse with parser steps [1]–[5] or SCAD steps [9]+):
-    Stage 1 — XML (Parser): well-formed XML, namespaces. No semantics.
-              XSD generation is a Render Target (Phase C); schema validation only after it ships.
-    Stage 2 — Validator: inheritance, contracts, types, constraints, references,
-              expression correctness. Expressions are NOT evaluated.
-    Stage 3 — Renderer: expression evaluation, optional handling, capability interpretation,
-              code generation, runtime behaviour.
-
-    The parser makes no semantic decisions. It parses XML, resolves namespaces and type references
-    syntactically, and transfers the BML tree into a canonical object structure. All BML information
-    must be fully preserved. Resolved inheritance, effective properties, expanded composition, and
-    evaluated expressions must never be written back into the Canonical BOM.
-
-    Serializer reads the Urmodell only — it does not validate. CLI / IDE hosts may run the validator
-    and abort on diagnostics before serialize or compile; that policy is orchestration, not package logic.
-
-    Self-hosting bootstrap: before processing user projects, the CLI bootstraps a TypeRegistry
-    from framework BML in @blockml/core and domain packages.
+    Sketch: BML → Parser → Urmodell (immutable Canonical BOM) → Validator pragmatic fork /
+    Framework Utilities / Render Target pipeline → target output. Serializer reads the Urmodell only.
+    Validation Stages 1–3 (Parser / Validator / Renderer) — glossary in 06_compiler.md.
+    Self-hosting: CLI bootstraps TypeRegistry from framework BML before user projects.
   </documentation>
 
   <references>

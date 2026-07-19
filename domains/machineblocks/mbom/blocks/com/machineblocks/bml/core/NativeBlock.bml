@@ -30,12 +30,12 @@
   <documentation>Final leaf Block mapped directly to SCAD mb_block() — the native geometry primitive
     at render time. Uses children aggregation for mb_block() sub-geometry instead of _parts.
 
-    SSOT for all MachineBlocks (MB) parameters: this Block is the single source of truth for the
-    full parameter set. Property docs and defaults here are authoritative; external docs must be
-    derived from this definition (sync pending — do not treat external docs as canonical yet).
+    Sole SSOT for MachineBlocks (MB) native parameters: names, types, documentation, defaults,
+    and scad:value live only here. Markdown, YAML (09_mbom_properties.yml, 09_api_parameters.yml),
+    and scad-lib docs must follow this file — align to it or link only; never redefine the inventory.
 
-    SSOT for MachineBlocks types is the package com.machineblocks.bml.type.* — that type inventory
-    is also not yet complete.
+    Type shapes SSOT: com.machineblocks.bml.type.* (Library.bml membership). Extend types there;
+    do not invent parallel type tables in Markdown/YAML.
   </documentation>
 
   <references>
@@ -49,7 +49,7 @@
 
   <final>true</final>
 
-  <!-- Native MB properties — all mb_block() parameters from 09_api_parameters.yml (v3.0.5) -->
+  <!-- Native MB properties — sole inventory for mb_block() / MBML parameters (SSOT) -->
   <properties>
     <align type="mbt:Align | mbt:AxisXYZ(mbt:Align)">
       <groups>

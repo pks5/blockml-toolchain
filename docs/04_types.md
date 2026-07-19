@@ -18,8 +18,8 @@ It is **not** the inventory of native parameters or type shapes.
 | This document (`04_types.md`) | Parse / serialize behaviour and conventions only |
 | `09_mbom_properties.yml` | Legacy / transitional render hints — **must not contradict** NativeBlock |
 
-Markdown, YAML, and scad-lib API docs **orient to** NativeBlock + type BML. When they
-diverge, BML wins.
+Markdown, YAML, and scad-lib API docs **must follow or only link** NativeBlock + type BML.
+When they diverge, **BML wins** — update the mirror, never NativeBlock to match prose/YAML.
 
 For the MBOM object model see `03_mbom.md`.
 For the SCAD render target see `05_scad_renderer.md`.
