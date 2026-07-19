@@ -395,7 +395,7 @@ union(){
     <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml/examples/Cross.scad" relation="SeeAlso">
       V3 converted Composite Block File for the same Cross / Corner intent.
     </see>
-    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/docs/01_system.md" relation="DeepDive">
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/docs/00_system.md" relation="DeepDive">
       Legacy conversion section in the SCAD system doc (render output of BML).
     </see>
   </references>

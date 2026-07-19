@@ -6,7 +6,7 @@ version: 2.0.0
 
 This document defines the MBOM (MachineBlocks Object Model) — the MachineBlocks domain specialization of BOM Core. MBOM extends the lossless BOM transport model with MachineBlocks-specific types, properties, and render-target conventions.
 
-MBOM is a domain-specific specialization of BOM Core (`00_bom_core.md`). BOM Core defines the abstract structural foundation — Block, Member (Properties, Aggregations, Associations, Capabilities), Preset, Library, Catalog, and the Expression system. MBOM extends these with MachineBlocks-specific types, properties, and the SCAD render target. Concepts already defined in BOM Core are not repeated here — this document covers only MBOM-specific extensions and decisions.
+MBOM is a domain-specific specialization of BOM Core (`01_bom_core.md`). BOM Core defines the abstract structural foundation — Block, Member (Properties, Aggregations, Associations, Capabilities), Preset, Library, Catalog, and the Expression system. MBOM extends these with MachineBlocks-specific types, properties, and the SCAD render target. Concepts already defined in BOM Core are not repeated here — this document covers only MBOM-specific extensions and decisions.
 
 For the BML authoring format see `02_mbml.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
@@ -37,7 +37,7 @@ SAPUI5 Control Renderer   →  MBOM Block Renderer (inside a Target)
 Key differences from SAPUI5:
 
 ```text
-Expression syntax:  BOM Expression system (see 00_bom_core.md)
+Expression syntax:  BOM Expression system (see 01_bom_core.md)
                     (not SAPUI5 binding syntax)
 Block definition:   combines control definition + composition
                     (control definition + fragment/view in SAPUI5 terms)
@@ -71,7 +71,7 @@ Class name:        PascalCase
 Full FQN:          <reverse-domain-package>.<ClassName>
 ```
 
-`com.machineblocks.bml.bricks` is a **documented exception** — plural library package for the brick Block family. See `00_bom_core.md` — FQN Convention.
+`com.machineblocks.bml.bricks` is a **documented exception** — plural library package for the brick Block family. See `01_bom_core.md` — FQN Convention.
 
 ### Instance Identity
 
@@ -86,7 +86,7 @@ Examples:
   wall::a3f7c2                 — auto-generated part under explicit parent
 ```
 
-No FQN fallback. See `00_bom_core.md` and `12_bom_object_model.md` — Instance ID Rules.
+No FQN fallback. See `01_bom_core.md` and `12_bom_object_model.md` — Instance ID Rules.
 
 ---
 
@@ -113,7 +113,7 @@ Properties are typed parameters of a Block. Every Property has a name, a type, a
 
 ### Native vs. Custom Properties
 
-**System properties** are defined on `org.blockml.bml.core.Block` and inherited by all Blocks — notably `id` (instance identity). They are system-relevant: the compiler, validator, and renderer treat them with dedicated logic. In MachineBlocks, `id` is also emitted for SCAD (`mb_block_id`) via NativeBlock / render mapping. See `00_bom_core.md` — System Properties.
+**System properties** are defined on `org.blockml.bml.core.Block` and inherited by all Blocks — notably `id` (instance identity). They are system-relevant: the compiler, validator, and renderer treat them with dedicated logic. In MachineBlocks, `id` is also emitted for SCAD (`mb_block_id`) via NativeBlock / render mapping. See `01_bom_core.md` — System Properties.
 
 **Domain native properties** are declared on `com.machineblocks.bml.core.NativeBlock` (`NativeBlock.bml`) — the **sole SSOT** for MachineBlocks MBML and SCAD parameters (names, types, documentation, defaults, `scad:value`). Type shapes live under `com.machineblocks.bml.type.*` (`mbt:`). Dedicated SCAD getters: `mb_param_size()`, `mb_param_baseColor()`, etc.
 
@@ -168,7 +168,7 @@ Every MachineBlocks Block inherits `_presets` and `basePresets`. Composite block
 
 **Presets are not a BlockML core feature.** Preset instances are ordinary Block instances in `_presets`. The `basePresets` association references preset ids (local or `{BlockFQN}::{id}`). Preset merge is compiler logic; Customizer JSON is render-target logic.
 
-**V1:** The MB preset system is **renderer-oriented** and configures **Properties only** — no Capabilities, no Capability linking. See `00_bom_core.md` — Preset (MachineBlocks).
+**V1:** The MB preset system is **renderer-oriented** and configures **Properties only** — no Capabilities, no Capability linking. See `01_bom_core.md` — Preset (MachineBlocks).
 
 When a Block's `baseType` chain includes `com.machineblocks.bml.core.CompositeBlock` and the author omits `<aggregations>`, `_parts` is still present in the effective member set. The parser stores only **declared** aggregations in the BOM; inherited members appear via `resolveEffectiveMembers()`.
 
@@ -226,7 +226,7 @@ Capabilities describe how a Block communicates — externally via async messagin
 
 Like Properties, Capabilities are declared with a name and a type (FQN). Their value in a Composition is the address or binding — set as an attribute on the child instance, exactly like a Property value.
 
-**Package:** `org.blockml.bml.capability.*` (base `org.blockml.bml.core.Capability`) — see `00_bom_core.md` — Capability Types.
+**Package:** `org.blockml.bml.capability.*` (base `org.blockml.bml.core.Capability`) — see `01_bom_core.md` — Capability Types.
 
 ### Inbound
 
@@ -389,7 +389,7 @@ Wall._parts:
 
 ### Expression Syntax
 
-Inside `${ }`, the content is **extended JSON** — standard JSON extended with property references, model bindings, and bean calls. See `00_bom_core.md` — Expression System for the full specification.
+Inside `${ }`, the content is **extended JSON** — standard JSON extended with property references, model bindings, and bean calls. See `01_bom_core.md` — Expression System for the full specification.
 
 ```text
 myProperty            — Property reference (no prefix)

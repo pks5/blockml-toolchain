@@ -9,7 +9,7 @@ This document specifies how **constraints** and **suggestions** are modeled in B
 Constraints may be attached to **Blocks**, **Properties**, **Aggregations**, **Associations**, and **Capabilities** via a single shared `<constraints>` container.
 
 For BML syntax see `02_mbml.md`.
-For the abstract object model see `00_bom_core.md`.
+For the abstract object model see `01_bom_core.md`.
 For constraint generic binding see `17_type_system_bml.md`.
 For BOM mapping see `13_bml_to_bom_mapping.md`.
 For compiler diagnostics see `06_compiler.md`.
@@ -368,7 +368,7 @@ Constraints without `validation` produce no rule-enforcement diagnostics.
 | Topic | Document |
 |---|---|
 | Property BML syntax | `02_mbml.md` |
-| Abstract object model | `00_bom_core.md` |
+| Abstract object model | `01_bom_core.md` |
 | Type system · generic binding | `17_type_system_bml.md` |
 | BOM mapping | `13_bml_to_bom_mapping.md` |
 | Compiler diagnostics | `06_compiler.md` |

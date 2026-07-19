@@ -78,7 +78,7 @@
     <see file="14_compiler_runtime.md" relation="AuthoringGuide">
       CLI bootstrap — loading framework BML before user projects.
     </see>
-    <see file="01_system.md" relation="DeepDive">
+    <see file="00_system.md" relation="DeepDive">
       Self-hosting bootstrap and BML self-description roadmap (V1/V2/V3).
     </see>
     <see type="core:BlockLibrary" relation="Defines">

@@ -2,7 +2,7 @@
   BlockML Core — Block instance pointer value type
 
   FQN: org.blockml.bml.type.InstanceReference
-  See docs/00_bom_core.md — Qualified Block Instance References
+  See docs/01_bom_core.md — Qualified Block Instance References
        docs/17_type_system_bml.md — TypeReference · InstanceReference · MemberReference
        docs/02_mbml.md — Associations · references
 -->
@@ -44,12 +44,12 @@
     or InstanceReference(T)[] — instance-to-instance model links). Also the type of see instance=
     on StructuralDefinition.Reference (documentation type→instance links — not Associations).
 
-    Resolution and visibility rules: docs/00_bom_core.md — Qualified Block Instance References
+    Resolution and visibility rules: docs/01_bom_core.md — Qualified Block Instance References
     (public aggregation, static authored bml:id, BML_UNRESOLVABLE_INSTANCE_REF, …).
   </documentation>
 
   <references>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Qualified Block Instance References — lexical form and visibility.
     </see>
     <see file="17_type_system_bml.md" relation="AuthoringGuide">

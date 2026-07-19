@@ -37,11 +37,11 @@ The compiler is implemented across these packages:
 
 ## Compiler Pipeline
 
-> **Architecture decision:** Parser produces the read-only Urmodell (Canonical BOM). Validator forks a default Pragmatic Model (resolve only). Renderers choose Urmodell, reuse that pragmatic model, or fork again for partial merges (including multiple times). **Language Server (V2)** reuses parser / validator / serializer. Structural authoring is **BomBuilder (V3)** — `seal()` → Urmodell. V1 must stay LSP- and Builder-ready. See `00_bom_core.md` — Language Server · BomBuilder.
+> **Architecture decision:** Parser produces the read-only Urmodell (Canonical BOM). Validator forks a default Pragmatic Model (resolve only). Renderers choose Urmodell, reuse that pragmatic model, or fork again for partial merges (including multiple times). **Language Server (V2)** reuses parser / validator / serializer. Structural authoring is **BomBuilder (V3)** — `seal()` → Urmodell. V1 must stay LSP- and Builder-ready. See `01_bom_core.md` — Language Server · BomBuilder.
 
 ## Validation Pipeline
 
-> **Architecture decision:** Three independent validation stages. See `00_bom_core.md` — Validation pipeline.
+> **Architecture decision:** Three independent validation stages. See `01_bom_core.md` — Validation pipeline.
 
 ### Stage numbering glossary (normative)
 
@@ -92,7 +92,7 @@ Stage 3 — Renderer / Runtime
            code generation · runtime behaviour
 ```
 
-See `00_bom_core.md` — Urmodell and Pragmatic Model.
+See `01_bom_core.md` — Urmodell and Pragmatic Model.
 
 ### Layer 1 — Parser (`@blockml/parser`) — Stage 1
 
@@ -260,7 +260,7 @@ Mapping rules are defined once per root type. The mapper produces the **Canonica
 
 > Framework utilities support **Stage 2** (and may be reused in Stage 3). Older drafts numbered these as “stages [6]–[8]” — that numbering is **retired**. See § Stage numbering glossary.
 
-> **`@blockml/core` utilities** — read immutable BOM, return results, **never mutate** Canonical BOM. See `00_bom_core.md` — Framework Utilities.
+> **`@blockml/core` utilities** — read immutable BOM, return results, **never mutate** Canonical BOM. See `01_bom_core.md` — Framework Utilities.
 
 ### validateTypes()
 
@@ -318,7 +318,7 @@ For Composite Targets: resolves the responsible Atomic Target per Block and vali
 
 ### [10] expandDirectives() + ID Resolution
 
-**Renderer working model** — uses `expandDirectives()` utility on a **copy/view** of the BOM. Canonical BOM is unchanged. See `00_bom_core.md` — Canonical BOM is immutable.
+**Renderer working model** — uses `expandDirectives()` utility on a **copy/view** of the BOM. Canonical BOM is unchanged. See `01_bom_core.md` — Canonical BOM is immutable.
 
 Before rendering, the BlockProcessor expands `bml:each`, `bml:if`, and `bml:with` on the composition tree. Then:
 

@@ -382,7 +382,7 @@ The renderer orchestrates these algorithms and produces its own working model fo
 
 Only **BML ↔ BOM** must be lossless. **BOM → Target** is entirely the renderer's interpretive job.
 
-See also: `01_system.md` — Architecture · Language Server (V2) · BomBuilder (V3) · `06_compiler.md` — Parser, Utilities, and Renderer · `12_bom_object_model.md` — Abstraction Principle · `10_expression_language.md` — Expression vs BOM Data Layer · `08_managed_object.md` — Semantics in BML.
+See also: `00_system.md` — Architecture · Language Server (V2) · BomBuilder (V3) · `06_compiler.md` — Parser, Utilities, and Renderer · `12_bom_object_model.md` — Abstraction Principle · `10_expression_language.md` — Expression vs BOM Data Layer · `08_managed_object.md` — Semantics in BML.
 
 ---
 
@@ -1489,7 +1489,7 @@ Message
 
 All async messaging is asynchronous. A Capability may reply using the `replyTo` header. BOM Core does not prescribe when or whether a response is sent.
 
-**BML as message format:** In the WOT context, BlockML is **not authoring-only**. The same typed BML grammar carries **data and semantics** on the wire — Capability payloads and structured interchange use BML so humans, LLMs, compilers, and Things share one format. Authoring files (`.bml`) and runtime messages are two roles of that universal format, not separate languages. See `01_system.md` · `02_mbml.md` · `17_type_system_bml.md` — WOT alignment.
+**BML as message format:** In the WOT context, BlockML is **not authoring-only**. The same typed BML grammar carries **data and semantics** on the wire — Capability payloads and structured interchange use BML so humans, LLMs, compilers, and Things share one format. Authoring files (`.bml`) and runtime messages are two roles of that universal format, not separate languages. See `00_system.md` · `02_mbml.md` · `17_type_system_bml.md` — WOT alignment.
 
 ---
 
@@ -1802,7 +1802,7 @@ If a Sub-Block shares the root Block's `<name>`, bare short tags are ambiguous �
 
 **Gedankenstütze:** `embeddedBlocks` is an **Inline Library** of **virtual `.bml` files** on the **document root only** — primary use: fat single-file artifacts. Meta-model entry type: `org.blockml.bml.definition.EmbeddedBlockDefinition`. Multiple BML documents in one source file, including packages outside the root block's namespace.
 
-**FatBlock Render Target (planned):** produces such an artifact automatically — root block plus transitive dependencies inlined as root `<embeddedBlocks>`. See `01_system.md` — Planned toolchain Render Targets · `15_dev_setup.md` Phase C.
+**FatBlock Render Target (planned):** produces such an artifact automatically — root block plus transitive dependencies inlined as root `<embeddedBlocks>`. See `00_system.md` — Planned toolchain Render Targets · `15_dev_setup.md` Phase C.
 
 Each embedded block is a **full Block document** — own FQN, members, `subBlocks`. Its **FQN is the value of its `<type>` element** (e.g. `com.foo.internal.Physics`) — not nested under the enclosing block. Sub-Blocks on an embedded block derive their FQNs from the embedded block's type. Nested `embeddedBlocks` are **forbidden** (`BML_NESTED_EMBEDDED_BLOCKS`); compose by listing virtual files flat under the root.
 

@@ -104,7 +104,7 @@
     <see file="12_bom_object_model.md" relation="DeepDive">
       DocumentationExample, DocumentationReference — BOM documentation shapes.
     </see>
-    <see file="01_system.md" relation="DeepDive">
+    <see file="00_system.md" relation="DeepDive">
       V2 documentation migration — Markdown vs BML roles.
     </see>
     <see type="lang:NaturalLanguage" relation="Extends">

@@ -43,7 +43,7 @@
     <see file="02_mbml.md" relation="AuthoringGuide">
       Associations authoring rules; Associations vs References.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Qualified Block Instance References for association values.
     </see>
     <see type="type:InstanceReference" relation="Requires">

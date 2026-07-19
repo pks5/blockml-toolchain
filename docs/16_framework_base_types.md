@@ -14,7 +14,7 @@ For value types and implementation languages as BML see `17_type_system_bml.md`.
 For property constraints and suggestions see `18_constraints_and_suggestions.md`.
 For FunctionMapping and capability call semantics see `22_function_mapping.md`.
 For Definition blocks and `bml:xml` self-description see `19_definition_blocks_and_bml_xml.md`.
-For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self-Description Roadmap.
+For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self-Description Roadmap.
 
 ---
 
@@ -34,8 +34,8 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self
 | **Everything is a Block** | Framework types, primitives, languages, services, Set meta blocks — one `<block>` element, one registry; see `17_type_system_bml.md` |
 | **ValueType branch** | `org.blockml.bml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; four kinds: PrimitiveType · StructType · EnumType · ConstantType |
 | **Unit branch** | `org.blockml.bml.core.Unit` — measurement-unit taxonomy (like Language/Status), not a ValueType; used as generic type arguments on Number (e.g. `Decimal(unit:Millimeter)`); concrete units in `org.blockml.bml.unit.*` |
-| **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` — see `00_bom_core.md` |
-| **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `01_system.md` |
+| **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` — see `01_bom_core.md` |
+| **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `00_system.md` |
 
 ```text
 BML NativeBlock + type/*.bml (what params/types ARE)  →  TypeRegistry / authoring SSOT
@@ -117,7 +117,7 @@ Duplicate reference → BML_DUPLICATE_CONTRACT
 Core branch types (ValueType, Entity, Language, …) are baseType markers — not duplicated as interface contracts
 ```
 
-See `02_mbml.md` — Contracts · `00_bom_core.md` — Contracts.
+See `02_mbml.md` — Contracts · `01_bom_core.md` — Contracts.
 
 ### `<genericTypes>`
 
@@ -517,7 +517,7 @@ domains/machineblocks/mbom/blocks/
 
 | Topic | Document |
 |---|---|
-| V1/V2/V3 scope · BML vs Markdown | `01_system.md` — BML Self-Description Roadmap |
+| V1/V2/V3 scope · BML vs Markdown | `00_system.md` — BML Self-Description Roadmap |
 | Block BML syntax | `02_mbml.md` |
 | MBOM hierarchy | `03_mbom.md` |
 | BlockDefinition BOM | `12_bom_object_model.md` |

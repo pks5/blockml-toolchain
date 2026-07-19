@@ -8,7 +8,7 @@ This document defines the `bom` CLI tool — its commands, configuration files, 
 
 For the compiler pipeline and Target Registry see `06_compiler.md`.
 For compiler runtime (bootstrap, RenderContext, compile I/O model) see `14_compiler_runtime.md`.
-For the project file structure and library resolution see `01_system.md`.
+For the project file structure and library resolution see `00_system.md`.
 
 ---
 
@@ -253,7 +253,7 @@ bom validate --all
 
 Runs Stage 1 (parser) and Stage 2 (semantic validator). Reports all diagnostics. Produces no output files. No target is required — validation is universal. Exit code / abort policy is CLI-owned (non-zero on errors).
 
-**XSD checks (when an XSD target / catalog exists):** optional and **always disableable** via CLI **and** config — see § XSD validation escape hatch. Schema validation must never be a hard prerequisite for regenerating `.xsd` via the XSD Render Target after intentional BML/meta changes. See `13_bml_to_bom_mapping.md` — B8 · `01_system.md` — XSD Schema Structure.
+**XSD checks (when an XSD target / catalog exists):** optional and **always disableable** via CLI **and** config — see § XSD validation escape hatch. Schema validation must never be a hard prerequisite for regenerating `.xsd` via the XSD Render Target after intentional BML/meta changes. See `13_bml_to_bom_mapping.md` — B8 · `00_system.md` — XSD Schema Structure.
 
 ---
 

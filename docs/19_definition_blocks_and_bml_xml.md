@@ -10,7 +10,7 @@ The BML sources under `packages/core/blocks/org/blockml/bml/core/Definition.bml`
 
 For framework base types see `16_framework_base_types.md`.
 For BML authoring syntax see `02_mbml.md`.
-For the self-description roadmap see `01_system.md` — BML Self-Description Roadmap.
+For the self-description roadmap see `00_system.md` — BML Self-Description Roadmap.
 For BOM parse shapes see `12_bom_object_model.md`.
 
 ---
@@ -32,7 +32,7 @@ Each Definition block carries bml:xml directives
   → the grammar is data, not only prose in Markdown
 ```
 
-This is a step toward **BML self-hosting** (Phase 2/3 in `01_system.md`): BlockML understands BlockML because BlockML is written in BlockML.
+This is a step toward **BML self-hosting** (Phase 2/3 in `00_system.md`): BlockML understands BlockML because BlockML is written in BlockML.
 
 **Scope note:** V1 does **not** require a fully meta-driven parser or serializer. Definition blocks and `bml:xml` are the **target architecture**. Phase A uses a **hardcoded** mapper/serializer (`13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope): preserve authored `bml:xml` for roundtrip; do not drive grammar from Definition blocks yet. Markdown remains authoritative for pipeline details until the meta-serializer is wired.
 
@@ -109,7 +109,7 @@ Each member kind in the block grammar has a corresponding Definition block. Sour
 
 ## The `bml:xml` Directive
 
-`bml:xml` declares **how a block type or member maps to XML** when emitting BML-shaped XML from the canonical BOM. It complements flow-control directives (`bml:each`, `bml:if`, …) documented in `00_bom_core.md` — those control composition expansion; `bml:xml` controls **XML serialization shape**.
+`bml:xml` declares **how a block type or member maps to XML** when emitting BML-shaped XML from the canonical BOM. It complements flow-control directives (`bml:each`, `bml:if`, …) documented in `01_bom_core.md` — those control composition expansion; `bml:xml` controls **XML serialization shape**.
 
 **Consumers are not limited to `@blockml/serializer`.** Any Stage-3 target that emits BML XML (or BML-shaped XML) should read the same metadata — notably:
 
@@ -380,7 +380,7 @@ Until the meta-serializer exists:
 
 - Parser behavior remains as documented in `13_bml_to_bom_mapping.md`.
 - Definition `.bml` files are loaded like any framework block (bootstrap in `16_framework_base_types.md`).
-- `bml:xml` elements and attributes are stored on the Urmodell as first-class **`xmlRendering`** (`12` — D3). Omitted / dual forms resolve via **D1** kind defaults at canonical emit. Prefer this over flow-control `directives[]` so every XML-emitting target can query the same fields (**maximum authored surface** — `00_bom_core.md`).
+- `bml:xml` elements and attributes are stored on the Urmodell as first-class **`xmlRendering`** (`12` — D3). Omitted / dual forms resolve via **D1** kind defaults at canonical emit. Prefer this over flow-control `directives[]` so every XML-emitting target can query the same fields (**maximum authored surface** — `01_bom_core.md`).
 
 **Non-goals for initial implementation:** Evaluating `${ bml:Self }` / `${ #this.name }` at parse time for non-meta blocks. **XSD emission** is not a parser side-effect — it is the XSD Render Target (D5).
 
@@ -433,7 +433,7 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 |---|---|---|
 | D1 | Default `bml:xml` when omitted on members | **Decided:** kind-based defaults — § Default XML rendering by kind. Explicit `bml:xml` wins. Dual forms (`element\|attribute`, …) accepted at parse; canonical emit uses the table |
 | D2 | `${ bml:Self }` prefix resolution at serialize time | **Decided:** store authored prefixes in `SourceInfo.namespaceBindings` — **1:1 roundtrip**, no invented prefixes. Missing NS → error. FatBlock only after Stage 2 validator; unbound/conflicting NS fail — see § Namespace prefixes |
-| D3 | BOM storage shape for `<bml:xml>` / member `bml:xml` | **Decided:** first-class `xmlRendering` on `BlockDefinition` + `MemberDefinitionBase` — **not** flow-control `directives[]`. Follows **maximum authored surface** (`00_bom_core.md`). See `12_bom_object_model.md` · `XmlRenderingBlock` / `XmlRenderingMember` |
+| D3 | BOM storage shape for `<bml:xml>` / member `bml:xml` | **Decided:** first-class `xmlRendering` on `BlockDefinition` + `MemberDefinitionBase` — **not** flow-control `directives[]`. Follows **maximum authored surface** (`01_bom_core.md`). See `12_bom_object_model.md` · `XmlRenderingBlock` / `XmlRenderingMember` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | **Decided (A):** **Member-level** — allowed on `override="true"`. **Block-level** — only `core.Block` + Definition branch. Illegal → `BML_XML_DIRECTIVE_NOT_ALLOWED` at **Stage 2** (hybrid). See § Placement Rules · § When Stage 1 vs Stage 2 |
 | D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |
 | D6 | Allowed `<bml:xml>` body recipes | **Decided:** literal, `${ bml:Self }`, `${ #this.name }` only. Invalid → `BML_XML_RENDERING_INVALID` at **Stage 1**. See § Allowed `<bml:xml>` recipes · § When Stage 1 vs Stage 2 |
@@ -446,8 +446,8 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 | Topic | Document |
 |---|---|
 | Framework base types bootstrap | `16_framework_base_types.md` |
-| BML directives (flow control) | `00_bom_core.md` — BML Directives · `02_mbml.md` |
-| Self-description roadmap | `01_system.md` — BML Self-Description Roadmap |
+| BML directives (flow control) | `01_bom_core.md` — BML Directives · `02_mbml.md` |
+| Self-description roadmap | `00_system.md` — BML Self-Description Roadmap |
 | BML → BOM mapping (current) | `13_bml_to_bom_mapping.md` |
 | BOM BlockDefinition interface | `12_bom_object_model.md` |
 | Type system in BML | `17_type_system_bml.md` |

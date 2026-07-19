@@ -36,7 +36,7 @@
     <see file="docs/03_mbom.md" relation="DeepDive">
       MBOM domain model — BlockML MD companion.
     </see>
-    <see file="docs/01_system.md" relation="DeepDive">
+    <see file="docs/00_system.md" relation="DeepDive">
       BlockML system overview — packages and conventions.
     </see>
   </references>

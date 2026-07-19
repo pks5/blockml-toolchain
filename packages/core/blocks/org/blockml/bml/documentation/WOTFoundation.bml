@@ -58,7 +58,7 @@
     <see file="17_type_system_bml.md" relation="AuthoringGuide">
       WOT alignment and Platonic mapping — Idea vs Manifestation in BlockML layers.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Block and Block Instance — WOT vocabulary for grammar, template, and Thing.
     </see>
     <see type="core:Block" relation="SeeAlso">

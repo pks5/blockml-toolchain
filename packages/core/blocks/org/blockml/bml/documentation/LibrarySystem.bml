@@ -64,7 +64,7 @@
     <see file="02_mbml.md" relation="AuthoringGuide">
       Library Format — structure, nested libraries, blocks membership rules.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       FQN convention, domain-scoped namespace separation, instance identity.
     </see>
     <see file="13_bml_to_bom_mapping.md" relation="AuthoringGuide">

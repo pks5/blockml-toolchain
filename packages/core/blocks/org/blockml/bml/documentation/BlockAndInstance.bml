@@ -53,7 +53,7 @@
   </documentation>
 
   <references>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Block and Block Instance — Class and Object; instance identity; qualified references.
     </see>
     <see file="17_type_system_bml.md" relation="AuthoringGuide">

@@ -46,7 +46,7 @@
   </documentation>
 
   <references>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Semantics remain in BML — Capability interpretation in renderers.
     </see>
     <see file="08_managed_object.md" relation="DeepDive">

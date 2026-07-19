@@ -8,7 +8,7 @@ This document defines **FunctionMapping** — how Capability call syntax in expr
 
 For expression surface syntax and AST see `10_expression_language.md`.
 For `TypeExpression` / anonymous structs see `12_bom_object_model.md` · `17_type_system_bml.md`.
-For BOM Core capability overview see `00_bom_core.md` — Object Input as Function Signature.
+For BOM Core capability overview see `01_bom_core.md` — Object Input as Function Signature.
 BML meta: `org.blockml.bml.mapping.FunctionMapping` (`packages/core/blocks/org/blockml/bml/mapping/FunctionMapping.bml`).
 
 > **Numbering note:** Earlier drafts linked this topic as `18_function_mapping.md`. Document `18` is `18_constraints_and_suggestions.md`. This file (`22_function_mapping.md`) is the Markdown SSOT for FunctionMapping.

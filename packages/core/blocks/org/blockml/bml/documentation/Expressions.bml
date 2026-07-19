@@ -49,7 +49,7 @@
     <see file="10_expression_language.md" relation="AuthoringGuide">
       Authoritative expression language reference — grammar, AST, bean calls, bindings.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Expression layer vs BOM data layer — validation vs evaluation stages.
     </see>
     <see file="22_function_mapping.md" relation="AuthoringGuide">

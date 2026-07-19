@@ -19,7 +19,7 @@ Mapping rules are registered per root type (`<block>`, …) — not hardcoded in
 
 ## Fundamental Rule
 
-> **BML → BOM → BML must always be possible.** The mapper preserves authored structure and authored values. It makes no interpretive decisions. See `00_bom_core.md` — Fundamental Architecture Principles.
+> **BML → BOM → BML must always be possible.** The mapper preserves authored structure and authored values. It makes no interpretive decisions. See `01_bom_core.md` — Fundamental Architecture Principles.
 
 ```text
 Mapper responsibility:     structure + classification + preservation
@@ -106,7 +106,7 @@ com.foo.Bar.aggregations.parts →  members[] entry where kind="aggregation" and
 com.foo.Bar.capabilities.render → members[] entry where kind="capability" and name="render"
 ```
 
-Block metadata (`name`, `is`, `summary`, `keywords`, `documentation`, `isnot`, `aliases`, `version`, `baseType`, `definitionFqn`, …) maps to top-level `BlockDefinition` fields — addressable directly under the Block FQN without a container segment. See `00_bom_core.md` — § Canonical definition paths · `16_framework_base_types.md` — § Definition Addressing.
+Block metadata (`name`, `is`, `summary`, `keywords`, `documentation`, `isnot`, `aliases`, `version`, `baseType`, `definitionFqn`, …) maps to top-level `BlockDefinition` fields — addressable directly under the Block FQN without a container segment. See `01_bom_core.md` — § Canonical definition paths · `16_framework_base_types.md` — § Definition Addressing.
 
 ---
 
@@ -240,7 +240,7 @@ directives:
 
 ## Type Descriptor Parsing
 
-Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`@blockml/core`** BOM interfaces — not in `org.blockml.bml.type.*`. See `00_bom_core.md` — Mandatory BML namespace · `17_type_system_bml.md` — Type Expressions.
+Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`@blockml/core`** BOM interfaces — not in `org.blockml.bml.type.*`. See `01_bom_core.md` — Mandatory BML namespace · `17_type_system_bml.md` — Type Expressions.
 
 Unqualified names at **specialized reference sites** resolve via context-bound implicit namespace — see `02_mbml.md` — § Context-Bound Implicit Namespace:
 
@@ -758,7 +758,7 @@ Preset instances in `_presets` composition map like any other Block instance. Th
   <composition>  →  CompositionTemplate for _presets (instance ID reachability from aggregation visibility)
 ```
 
-Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against instances in **public** target aggregations with static target ids — see `00_bom_core.md` — Qualified Block Instance References.
+Qualified `{BlockFQN}::{id}` references (e.g. in `basePresets`) validate against instances in **public** target aggregations with static target ids — see `01_bom_core.md` — Qualified Block Instance References.
 
 **Aggregation + composition mapping:**
 

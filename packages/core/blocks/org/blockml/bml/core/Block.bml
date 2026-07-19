@@ -91,7 +91,7 @@
     <see type="mbcore:Block" relation="SeeAlso">
       Example domain base — domain-specific branches extend Block.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Block and Block Instance — fundamental architecture principles.
     </see>
     <see file="02_mbml.md" relation="AuthoringGuide">

@@ -632,7 +632,7 @@ Instance render (composition children after SCAD renderer step [10])
 
 ### Property resolution
 
-**Renderer stage** — preset/config merge happens here, not in the parser. See `00_bom_core.md` — Renderer Boundary.
+**Renderer stage** — preset/config merge happens here, not in the parser. See `01_bom_core.md` — Renderer Boundary.
 
 Resolved property values are **not cached** on `RenderContext` in V1. A `PropertyResolver` computes effective values on demand from the **authored BOM** plus merge rules:
 

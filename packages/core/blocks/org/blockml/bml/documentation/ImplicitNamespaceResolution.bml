@@ -62,7 +62,7 @@
     <see file="02_mbml.md" relation="AuthoringGuide">
       Context-Bound Implicit Namespace — authoritative authoring rules.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Context-bound implicit namespace summary.
     </see>
     <see type="doc:BmlNamespace" relation="SeeAlso">

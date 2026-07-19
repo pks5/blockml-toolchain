@@ -5,7 +5,7 @@
   See docs/17_type_system_bml.md — EnumType
        docs/02_mbml.md — Enum types · Enum value references
        docs/04_types.md — Enum types · Enum value references
-       docs/00_bom_core.md — EnumType property values
+       docs/01_bom_core.md — EnumType property values
        docs/16_framework_base_types.md — ValueType branch
 -->
 <block
@@ -82,7 +82,7 @@
     <see file="04_types.md" relation="AuthoringGuide">
       Enum types and enum value references (MBOM).
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       EnumType property values.
     </see>
     <see file="12_bom_object_model.md" relation="DeepDive">

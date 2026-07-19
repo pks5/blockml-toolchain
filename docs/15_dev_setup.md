@@ -6,7 +6,7 @@ version: 0.1.0
 
 This document defines the **monorepo development setup** for the BOM Compiler (`blockml` repository) — tooling, package layout, build order, scripts, testing, and IDE configuration.
 
-For architecture and package responsibilities see `01_system.md`.
+For architecture and package responsibilities see `00_system.md`.
 For compiler runtime (bootstrap, facade, cache) see `14_compiler_runtime.md`.
 For testing strategy see `06_compiler.md` — Testing Strategy.
 
@@ -118,7 +118,7 @@ blockml/
 
 ### Target monorepo tree
 
-After scaffolding (from `01_system.md`):
+After scaffolding (from `00_system.md`):
 
 ```text
 blockml/
@@ -279,7 +279,7 @@ npm workspace names (`@blockml/core`, `@blockml/parser`, `@blockml/compiler`, �
   src/**/*.ts                             →  BOM interfaces (BomDocument, …), TypeRegistry, framework utilities
 ```
 
-Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may exist outside the domain's `bml` namespace. See `00_bom_core.md` — Mandatory BML namespace.
+Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may exist outside the domain's `bml` namespace. See `01_bom_core.md` — Mandatory BML namespace.
 
 ### Standard library package
 
@@ -501,7 +501,7 @@ Thumbnail / OpenSCAD tests: **optional** integration suite — skipped in CI whe
 
 ### XSD / BML authoring
 
-Copy or generate `catalog.xml` at repo root (see `01_system.md` — catalog.xml). Points namespace URLs to:
+Copy or generate `catalog.xml` at repo root (see `00_system.md` — catalog.xml). Points namespace URLs to:
 
 ```text
 node_modules/@blockml/core/schemas/core/*.xsd
@@ -512,7 +512,7 @@ VS Code / Cursor: install **XML** extension; set `xml.catalog.catalogs` to `./ca
 
 Until schema packages exist, authors reference published URLs in `xsi:schemaLocation` — local catalog activates after first `npm install`.
 
-**V2:** `@blockml/lsp` becomes the semantic IDE backend (diagnostics, hover, format via parser/validator/serializer). XSD catalog remains useful for XML completion until LSP covers the same ground. See `00_bom_core.md` — Language Server.
+**V2:** `@blockml/lsp` becomes the semantic IDE backend (diagnostics, hover, format via parser/validator/serializer). XSD catalog remains useful for XML completion until LSP covers the same ground. See `01_bom_core.md` — Language Server.
 
 ### Recommended editor settings (`.vscode/settings.json`)
 
@@ -588,7 +588,7 @@ jobs:
 
 > **Decision (V1):** Implement **parser and serializer first**, prove correctness via **roundtrip tests** against the existing BML corpus, **before** validator, compiler, targets, or CLI compile paths.
 
-This follows the core principle **BML → BOM → BML must always be possible** (`00_bom_core.md`, `13_bml_to_bom_mapping.md`). The roundtrip loop validates the language layer in isolation — without render targets, engines, or SCAD output.
+This follows the core principle **BML → BOM → BML must always be possible** (`01_bom_core.md`, `13_bml_to_bom_mapping.md`). The roundtrip loop validates the language layer in isolation — without render targets, engines, or SCAD output.
 
 ### Phase A slice — what to implement (normative)
 
@@ -627,11 +627,11 @@ ORCHESTRATION (later)
 
 AUTHORING (V3)
   BomBuilder            — writable session → seal() → Urmodell (same types as parser output)
-                          See `00_bom_core.md` — BomBuilder; V1 must stay Builder-ready
+                          See `01_bom_core.md` — BomBuilder; V1 must stay Builder-ready
 
 IDE (V2)
   @blockml/lsp          — Language Server; reuses parser + validator + serializer + core
-                          See `00_bom_core.md` — Language Server; V1 must populate source spans
+                          See `01_bom_core.md` — Language Server; V1 must populate source spans
 ```
 
 The serializer is **not** a render target emitter (SCAD, JSON, …). Target output stays in `@blockml/compiler` and domain target packages.
@@ -769,7 +769,7 @@ Phase D  ✅  15_dev_setup (this document)
 
 | Topic | Document |
 |---|---|
-| Monorepo architecture | `01_system.md` |
+| Monorepo architecture | `00_system.md` |
 | BOM types (implement first) | `12_bom_object_model.md` |
 | Parser mapping | `13_bml_to_bom_mapping.md` |
 | Runtime / Facade / Cache | `14_compiler_runtime.md` |

@@ -6,7 +6,7 @@ version: 1.3.0
 
 This document defines the **formal BOM object model** — the canonical TypeScript data structures in `@blockml/core`. They are produced by `@blockml/parser` (or, V3, `BomBuilder.seal()`) and consumed by `@blockml/serializer`, `@blockml/validator`, `@blockml/compiler`, LSP, and render targets.
 
-For conceptual foundations see `00_bom_core.md`.
+For conceptual foundations see `01_bom_core.md`.
 For BML authoring syntax see `02_mbml.md`.
 For MachineBlocks domain extensions see `03_mbom.md`.
 For the ManagedObject and synthetic accessor model (Draft · V1 preparation) see `08_managed_object.md`.
@@ -14,7 +14,7 @@ For Expression AST node types see `10_expression_language.md` — Expression AST
 
 This document is the **implementation contract** for `@blockml/core`. It specifies TypeScript-oriented interfaces and validation rules. It does not duplicate domain semantics already defined elsewhere.
 
-**Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) are TypeScript contracts in `@blockml/core` — not BML Block FQNs. BML meta-model Blocks live under `org.blockml.bml.definition.*` (e.g. `org.blockml.bml.definition.BlockDefinition`, `org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). Language Blocks like `org.blockml.bml.core.Block` are BML-defined. See `00_bom_core.md` — Mandatory BML namespace.
+**Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) are TypeScript contracts in `@blockml/core` — not BML Block FQNs. BML meta-model Blocks live under `org.blockml.bml.definition.*` (e.g. `org.blockml.bml.definition.BlockDefinition`, `org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). Language Blocks like `org.blockml.bml.core.Block` are BML-defined. See `01_bom_core.md` — Mandatory BML namespace.
 
 ---
 
@@ -22,9 +22,9 @@ This document is the **implementation contract** for `@blockml/core`. It specifi
 
 > **A BOM document is a lossless representation of BML source.** It preserves authored structure and authored values — including directives, aggregation declarations, literal syntax, unresolved type references, namespace bindings, and XML-rendering metadata (`bml:xml`). BOM makes **no statement** about how directives are expanded, how aggregations are interpreted, or how blocks are rendered.
 
-> **Maximum authored surface:** Render Targets (and the serializer) must be able to read **as much of the original document** as the Urmodell can carry — including details that seem parse-internal. Prefer first-class fields over hidden side channels. See `00_bom_core.md` — Maximum authored surface for renderers.
+> **Maximum authored surface:** Render Targets (and the serializer) must be able to read **as much of the original document** as the Urmodell can carry — including details that seem parse-internal. Prefer first-class fields over hidden side channels. See `01_bom_core.md` — Maximum authored surface for renderers.
 
-> **BML → BOM → BML must always be possible.** See `00_bom_core.md` — Fundamental Architecture Principles.
+> **BML → BOM → BML must always be possible.** See `01_bom_core.md` — Fundamental Architecture Principles.
 
 > **„Block“ in BML is the mandatory input concept — not a uniform runtime object model.** The parser must read `<block>` documents; validators must walk `baseType` chains. Internal representation after parse is free. See `17_type_system_bml.md` — Semantic Layer vs Compiler Implementation.
 
@@ -59,8 +59,8 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 
 | Topic | Decision |
 |---|---|
-| **Immutability** | Urmodell (`BomDocument`) is **immutable** after parse or `BomBuilder.seal()`. No utility or renderer may write derived data back. Validator and renderers work on pragmatic forks (resolve only). Structural authoring is BomBuilder (V3). See `00_bom_core.md` — Urmodell and Pragmatic Model · BomBuilder. |
-| **Builder / LSP reuse** | Core interfaces must stay **construction-friendly** and **provenance-agnostic**. Parser and BomBuilder produce the same `BomDocument` graph. Parse-only metadata (source spans, XML locations) is **optional on types** but **populated by the parser** for diagnostics and the V2 Language Server. Serializer and validator must not require parser provenance. BomBuilder V3 is DOM-like and stays **within** BlockML definitions (no language-structure rewrite — V4). See `00_bom_core.md` — Language Server · BomBuilder · V1 reuse mandates. |
+| **Immutability** | Urmodell (`BomDocument`) is **immutable** after parse or `BomBuilder.seal()`. No utility or renderer may write derived data back. Validator and renderers work on pragmatic forks (resolve only). Structural authoring is BomBuilder (V3). See `01_bom_core.md` — Urmodell and Pragmatic Model · BomBuilder. |
+| **Builder / LSP reuse** | Core interfaces must stay **construction-friendly** and **provenance-agnostic**. Parser and BomBuilder produce the same `BomDocument` graph. Parse-only metadata (source spans, XML locations) is **optional on types** but **populated by the parser** for diagnostics and the V2 Language Server. Serializer and validator must not require parser provenance. BomBuilder V3 is DOM-like and stays **within** BlockML definitions (no language-structure rewrite — V4). See `01_bom_core.md` — Language Server · BomBuilder · V1 reuse mandates. |
 | **Member inheritance** | **Utility lookup only.** BOM stores **declared** members per Block. `resolveEffectiveMembers()` returns `EffectiveMemberSet` — a separate structure, never flattened into BOM. |
 | **Capabilities** | Authored Capabilities stored in BOM. No synthetic getter/setter generation. Renderer interprets all Capabilities. See `08_managed_object.md`. |
 | **Member identity** | Uniqueness by resolved **`(namespace, name)`**. Namespace from member element QName prefix — resolved to canonical identifier at parse time; alias never stored in BOM. |
@@ -69,7 +69,7 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 | **Embedded Blocks (Inline Library)** | **Inlined** in `RootBlockDefinition.embeddedBlocks[]` on the **document root only** (forbidden on Sub-Blocks and on embeds). Each entry is `EmbeddedBlockDefinition` — a virtual `.bml` file (FQN = `<type>`). Shadow library/file definitions within the BomDocument; duplicate embed FQNs → error; invisible externally. |
 | **Semantic vs runtime** | BML `<block>` is one authoring element for all definition kinds; internal split into separate interfaces/registries is **implementation freedom** — see `17_type_system_bml.md`. |
 | **Directives** | Flow-control `bml:*` on composition elements → `directives[]`. Composition meta (`bml:id`, `bml:version`) → `BlockInstance` fields. **`bml:xml` → first-class `xmlRendering`** (not `directives[]`). None expanded at parse time. |
-| **Maximum authored surface** | Urmodell exposes as much of the original document as possible to renderers — including seeming internals (`00_bom_core.md`). When in doubt, preserve. |
+| **Maximum authored surface** | Urmodell exposes as much of the original document as possible to renderers — including seeming internals (`01_bom_core.md`). When in doubt, preserve. |
 | **Instance `version`** | From **`bml:version`** — optional on external block references and Library TypeReferenceEntity sugar. Omitted → resolve effective version from TypeRegistry context. Present → exact-version assert against the referenced type (`BML_UNKNOWN_VERSION` if no match). Same-document Sub-Blocks exempt. |
 | **Definition `version`** | Every Block definition has an **effective version**: own `<version>` if present, else library version if the block is exported via a Library, else error (`BML_MISSING_VERSION`). |
 | **Instance `id`** | From **`bml:id`** — authored in BOM only on `BlockInstance.id`; no auto-ID in `BomDocument`. Auto-IDs assigned **after directive expansion** for static unreferenced children. Referenced instances and `bml:each` elements require explicit `bml:id`. No FQN fallback. |
@@ -795,7 +795,7 @@ Native MBOM properties from `NativeBlock.bml` are attached to the MachineBlocks 
 
 ### Capabilities in the BOM
 
-Authored Capabilities (`Inbound`, `Outbound`, `Transformation`) are stored in Canonical BOM as declared. There are **no special** constructor, getter, or setter types — all behaviour is expressed as ordinary Capabilities. The Renderer decides how to interpret each Capability for the target system. See `08_managed_object.md` · `00_bom_core.md` — Semantics remain in BML.
+Authored Capabilities (`Inbound`, `Outbound`, `Transformation`) are stored in Canonical BOM as declared. There are **no special** constructor, getter, or setter types — all behaviour is expressed as ordinary Capabilities. The Renderer decides how to interpret each Capability for the target system. See `08_managed_object.md` · `01_bom_core.md` — Semantics remain in BML.
 
 V1: Canonical BOM (`BlockDefinition.members[]`) contains **only authored** members. Renderers read BOM Property values and Capability definitions directly.
 

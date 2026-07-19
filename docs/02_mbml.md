@@ -6,7 +6,7 @@ version: 2.1.0
 
 This document defines the BML (Block Markup Language) format — the universal declarative language for BOM Blocks, Composite Blocks, and Presets. In tooling it is the primary **authoring** serialization; in the Web of Things it is also a **message / interchange** format (see Overview · WOT).
 
-For the abstract object model see `00_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For value type BML definitions see `17_type_system_bml.md`. For property constraints and suggestions see `18_constraints_and_suggestions.md`. For MBOM type parse/serialize rules and XY/AB conventions see `04_types.md`. For native MBOM / SCAD parameters see `NativeBlock.bml` (SSOT); transitional render hints only: `09_mbom_properties.yml`.
+For the abstract object model see `01_bom_core.md`. For the formal BOM data structures (implementation contract) see `12_bom_object_model.md`. For the MBOM object model (MachineBlocks domain) see `03_mbom.md`. For value type BML definitions see `17_type_system_bml.md`. For property constraints and suggestions see `18_constraints_and_suggestions.md`. For MBOM type parse/serialize rules and XY/AB conventions see `04_types.md`. For native MBOM / SCAD parameters see `NativeBlock.bml` (SSOT); transitional render hints only: `09_mbom_properties.yml`.
 
 ---
 
@@ -14,7 +14,7 @@ For the abstract object model see `00_bom_core.md`. For the formal BOM data stru
 
 BML is the human- and editor-friendly serialization of BOM. It describes semantic BOM objects — Blocks, Composite Blocks, and Presets — without any knowledge of render target syntax or parameters.
 
-**Not authoring-only.** In the Web of Things (WOT), the same BML is a **universal format for data and semantics**: Capability payloads, typed values, and structured messages use BML so that Things share one grammar with authors, LLMs, and the compiler. The **`stud://`** protocol exposes Capabilities over **sockets and HTTP**; addresses appear on Capability bindings (e.g. `stud://domain/path`). See `00_bom_core.md` — Capabilities · Message Model · `17_type_system_bml.md` — WOT alignment.
+**Not authoring-only.** In the Web of Things (WOT), the same BML is a **universal format for data and semantics**: Capability payloads, typed values, and structured messages use BML so that Things share one grammar with authors, LLMs, and the compiler. The **`stud://`** protocol exposes Capabilities over **sockets and HTTP**; addresses appear on Capability bindings (e.g. `stud://domain/path`). See `01_bom_core.md` — Capabilities · Message Model · `17_type_system_bml.md` — WOT alignment.
 
 BML is parsed by `@blockml/parser` into an immutable Urmodell (`BomDocument`). Semantic validation is **Stage 2** (`@blockml/validator`) — not part of the parser. `@blockml/serializer` writes Canonical BOM back to BML XML (Urmodell only; no validator dependency). Hosts (CLI, IDE/LSP) may call `validate()` and abort on diagnostics **before** serialize or compile — that policy lives in the orchestrator, not in parser/serializer. Render targets are selected via `@blockml/compiler`.
 
@@ -101,7 +101,7 @@ There is **no third category**. Orphan namespace strings and language-directive 
 
 **Infrastructure exceptions** (not BML-semantic prefixes): document default `xmlns="http://blockml.org/schema/block"`, `xmlns:xsi`, and other XSD/catalog URIs.
 
-**Mandatory BML namespace:** All Block FQNs and Package xmlns bindings must live under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `com.machineblocks.bml.core.*`). See `00_bom_core.md` — Mandatory BML namespace · `BML_OUTSIDE_BML_NAMESPACE`.
+**Mandatory BML namespace:** All Block FQNs and Package xmlns bindings must live under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `com.machineblocks.bml.core.*`). See `01_bom_core.md` — Mandatory BML namespace · `BML_OUTSIDE_BML_NAMESPACE`.
 
 ```xml
 <!-- Packages → types -->
@@ -586,7 +586,7 @@ types.xsd / service.xsd — core type & service vocabularies
 core.xsd / bricks.xsd / … — domain allowed-type / package schemas
 ```
 
-Long-term these artifacts are **XSD Render Target** output (Stage 3), always disableable for validation — see `01_system.md` — XSD Schema Structure · `13` B8. Parser Stage 1 does not require schemas.
+Long-term these artifacts are **XSD Render Target** output (Stage 3), always disableable for validation — see `00_system.md` — XSD Schema Structure · `13` B8. Parser Stage 1 does not require schemas.
 
 ---
 
@@ -594,7 +594,7 @@ Long-term these artifacts are **XSD Render Target** output (Stage 3), always dis
 
 A Block definition describes a reusable Block type — semantically a **Class**: declarative shape, members, and optional composition template. It declares Members (Properties, Aggregations, Associations, Capabilities) and an optional Composition (internal structure).
 
-Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **Block Instances** — semantically **Objects**: they reference a class (`typeFqn`) and carry instance state (`bml:id`, member values). See `00_bom_core.md` — Block and Block Instance.
+Composition children (`<ac:Wall bml:id="wall" …/>`, `<core:Step …/>`) are **Block Instances** — semantically **Objects**: they reference a class (`typeFqn`) and carry instance state (`bml:id`, member values). See `01_bom_core.md` — Block and Block Instance.
 
 ### Required Fields
 
@@ -1327,7 +1327,7 @@ org.blockml.bml.status.Deprecated
 
 Domain libraries may define additional status blocks.
 
-**Stub:** Validator **accepts** Stub elements. Renderers may treat them differently (empty/stub emit + logs, skip, or abort) — see `00_bom_core.md` — Stub toolchain behaviour.
+**Stub:** Validator **accepts** Stub elements. Renderers may treat them differently (empty/stub emit + logs, skip, or abort) — see `01_bom_core.md` — Stub toolchain behaviour.
 
 #### Definition elements: `<status>` child
 
@@ -2043,7 +2043,7 @@ For **aggregation** members, visibility additionally controls which **`bml:id` v
 
 There is **no** separate export flag on `<composition>` or `<bml:container>`. Reachability follows the **aggregation member's** visibility.
 
-Qualified cross-document `{BlockFQN}::{id}` references require a **public** target aggregation and a **literal static `bml:id`** on the target instance — see § Qualified references and `00_bom_core.md` — Qualified Block Instance References.
+Qualified cross-document `{BlockFQN}::{id}` references require a **public** target aggregation and a **literal static `bml:id`** on the target instance — see § Qualified references and `01_bom_core.md` — Qualified Block Instance References.
 
 #### Optional `visibility` attribute
 
@@ -2374,7 +2374,7 @@ The parser stores override declarations in `members[]`; `resolveEffectiveMembers
 
 Properties are typed parameters of the Block. Three kinds exist:
 
-**System properties** are defined on `org.blockml.bml.core.Block` — notably `id` (instance identity). System-relevant: dedicated compiler/validator/renderer handling. Not custom properties. See `00_bom_core.md` — System Properties.
+**System properties** are defined on `org.blockml.bml.core.Block` — notably `id` (instance identity). System-relevant: dedicated compiler/validator/renderer handling. Not custom properties. See `01_bom_core.md` — System Properties.
 
 **Domain native properties** are declared on `com.machineblocks.bml.core.NativeBlock` (`NativeBlock.bml`) — **SSOT** for MBML / SCAD parameters (types, docs, defaults, `scad:value`). Type shapes: `com.machineblocks.bml.type.*` (`mbt:`). Dedicated SCAD getters (`mb_param_size()`, etc.). Conventions (XY / XYZ / AB): `04_types.md`.
 
@@ -2653,7 +2653,7 @@ com.foo.Bar.isnot                     →  Block isnot (disambiguation)
 com.foo.Bar.aliases                 →  Block aliases (alternative type names)
 ```
 
-No special definition-reference constructs are required — the path itself carries all type information. See `00_bom_core.md` — § Canonical definition paths.
+No special definition-reference constructs are required — the path itself carries all type information. See `01_bom_core.md` — § Canonical definition paths.
 
 **Service beans** register named service instances in a Composition. Once registered via `bml:bean`, the bean is accessible in Expressions via `@beanName`. The `bml:scope` attribute controls visibility to child Blocks:
 
@@ -2706,7 +2706,7 @@ values are InstanceReference tokens (local `bml:id` or `{FQN}::{id}`).
 
 Capabilities describe how a Block communicates. Like Properties, they are declared with a name and a type (FQN). Their value in a Composition is the address or binding — set as an attribute on the child Block instance, just like a Property value.
 
-**Package:** `org.blockml.bml.capability.*` (base `org.blockml.bml.core.Capability`). Unqualified Capability `type` values resolve here — see § Context-Bound Implicit Namespace · `00_bom_core.md` — Capability Types.
+**Package:** `org.blockml.bml.capability.*` (base `org.blockml.bml.core.Capability`). Unqualified Capability `type` values resolve here — see § Context-Bound Implicit Namespace · `01_bom_core.md` — Capability Types.
 
 ```xml
 <capabilities>
@@ -2933,7 +2933,7 @@ Capability values:
 <ac:MyBlock onResized="${ @myService.getAddress() }" />
 ```
 
-See `00_bom_core.md` — Expression System for the full specification.
+See `01_bom_core.md` — Expression System for the full specification.
 
 ### Sharing Values Between Siblings
 
@@ -3242,7 +3242,7 @@ Sub-Block:   <name>Cylinder</name>
 
 **Gedankenstütze:** `embeddedBlocks` is an **Inline Library** of **virtual `.bml` files** co-located in one BomDocument — primary use: fat single-file artifacts. Unlike Sub-Blocks, each embedded block is a full Block document. Meta-model: `org.blockml.bml.definition.EmbeddedBlockDefinition`. Each embedded block's **FQN is the value of its `<type>` element** (e.g. `com.foo.internal.Physics`) — not nested under the root. Sub-Blocks on an embedded block derive their FQNs from the embedded block's type.
 
-**FatBlock Render Target (planned):** bundles a block and its transitive dependencies into one `.bml` with those deps as root `<embeddedBlocks>`. See `01_system.md` — Planned toolchain Render Targets · `15_dev_setup.md` Phase C.
+**FatBlock Render Target (planned):** bundles a block and its transitive dependencies into one `.bml` with those deps as root `<embeddedBlocks>`. See `00_system.md` — Planned toolchain Render Targets · `15_dev_setup.md` Phase C.
 
 **Root-only:** `<embeddedBlocks>` is allowed **only on the document root** (`RootBlockDefinition`). Forbidden on Sub-Blocks (`BML_EMBEDDED_BLOCKS_ON_SUBBLOCK`) and on embedded entries themselves (`BML_NESTED_EMBEDDED_BLOCKS`). Nesting would suggest false ownership to readers/LLMs; compose artifacts by listing virtual files **flat** at the root (bundlers flatten when merging packages).
 
@@ -3769,7 +3769,7 @@ Presets are **not** a BlockML core feature. MachineBlocks models them as ordinar
 
 Preset merge is compiler logic (`resolveBasePresets`, block merge helpers). Customizer JSON output is render-target logic (machineblocks-v3-scad).
 
-**V1:** The MB preset system is **renderer-oriented** and configures **Properties only** — no Capabilities / Capability linking. See `00_bom_core.md` — Preset (MachineBlocks).
+**V1:** The MB preset system is **renderer-oriented** and configures **Properties only** — no Capabilities / Capability linking. See `01_bom_core.md` — Preset (MachineBlocks).
 
 A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a normal `<block>` with `baseType="com.machineblocks.bml.core.Block"` whose composition fills `_presets` with Block instances of the target type.
 
@@ -3840,7 +3840,7 @@ A preset block (e.g. `com.machineblocks.bml.bricks.StandardPresets`) is a normal
 
 **`basePresets`** — space-separated preset ids on any MachineBlocks Block instance. Local ids resolve within the enclosing Block's `_presets`; cross-file entries use `{BlockFQN}::{id}`. Applied left-to-right; later entries override earlier. Own instance properties override all base presets.
 
-Qualified `{BlockFQN}::{id}` references require the target instance in a **public** aggregation and a **literal static `bml:id`** — see `00_bom_core.md` — Qualified Block Instance References.
+Qualified `{BlockFQN}::{id}` references require the target instance in a **public** aggregation and a **literal static `bml:id`** — see `01_bom_core.md` — Qualified Block Instance References.
 
 Presets can reference other presets — preset instances in `_presets` may themselves carry `basePresets`, forming an inheritance chain.
 

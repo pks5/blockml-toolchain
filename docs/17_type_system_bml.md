@@ -11,7 +11,7 @@ For property parse/serialize rules (MB domain) see `04_types.md`.
 For `TypeDescriptor` AST see `12_bom_object_model.md`.
 For SCAD render mapping see `NativeBlock.bml` (parameter SSOT; `scad:value`) and transitional `09_mbom_properties.yml` (must follow NativeBlock). Axis conventions (XY / XYZ / AB): `04_types.md`.
 For WOT vision and motivation see `WOT_Reference_v26.md`.
-For V1/V2/V3 scope and BML-vs-Markdown decisions see `01_system.md` — BML Self-Description Roadmap.
+For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self-Description Roadmap.
 
 ---
 
@@ -32,7 +32,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 | **Four ValueType kinds** | PrimitiveType · StructType · EnumType · ConstantType — four sibling branches under ValueType |
 | **Struct property access** | Named access only (`size.x`) — no numeric index on StructType members; positional function calls use FunctionMapping — see `22_function_mapping.md` |
 | **Collections** | No `Array` type — multiplicity on any type reference (`T[]`, `T[3]`, `T[0..n]`) — see § Type Expressions |
-| **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `org.blockml.bml.compiler.*`); TypeScript BOM interfaces in `@blockml/core` — see `00_bom_core.md` |
+| **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` (e.g. `org.blockml.bml.core.*`, `org.blockml.bml.compiler.*`); TypeScript BOM interfaces in `@blockml/core` — see `01_bom_core.md` |
 | **04_types.md** | Parse/serialize behaviour per type · migration companion |
 | **Domain XSD enums** | Deprecated as type SSOT — migrate to BML `EnumType` |
 
@@ -55,7 +55,7 @@ BML is the universal format for data and semantics — authoring and messages.
 Everything else is implementation.
 ```
 
-**Not authoring-only.** BML is also the **message format** for Capability traffic: typed payloads travel as BML so the same semantics used when modelling are shared at runtime. The **`stud://`** protocol addresses Capabilities as networked endpoints (sockets and HTTP). See `00_bom_core.md` — Address Schemes · Message Model · `02_mbml.md` — Overview.
+**Not authoring-only.** BML is also the **message format** for Capability traffic: typed payloads travel as BML so the same semantics used when modelling are shared at runtime. The **`stud://`** protocol addresses Capabilities as networked endpoints (sockets and HTTP). See `01_bom_core.md` — Address Schemes · Message Model · `02_mbml.md` — Overview.
 
 Types are structure. They belong in BML — the same language humans, LLMs, compilers, and Things use for Walls, Bricks, and built-in services. A MachineBlocks Set rendered to SCAD + a Martian Micro Device rendered to Python + React share **the same type FQNs**; only the render mapping differs.
 
@@ -188,7 +188,7 @@ See `WOT_Reference_v26.md` §1 · The Idea · Manifestation.
 
 BOM Core defines Block as **„a parametric, reusable unit (definition / type)“** — not only as a composable physical object. ValueTypes and Languages are type definitions. They **are Blocks**.
 
-**Class vs Object:** In familiar terms, every `<block>` document is a **Class** (declarative, semantic type). Every element in a `<composition>` is a **Block Instance** — an **Object** referencing that class by FQN. ValueTypes (`Integer`, `SizeXYZ`) are type-classes that may also appear as Block instances — interpretation is context-dependent. See `00_bom_core.md` — Block and Block Instance · Context-Dependent Interpretation (below).
+**Class vs Object:** In familiar terms, every `<block>` document is a **Class** (declarative, semantic type). Every element in a `<composition>` is a **Block Instance** — an **Object** referencing that class by FQN. ValueTypes (`Integer`, `SizeXYZ`) are type-classes that may also appear as Block instances — interpretation is context-dependent. See `01_bom_core.md` — Block and Block Instance · Context-Dependent Interpretation (below).
 
 All definitions use the BML `<block>` element, register in the same TypeRegistry, and inherit from **`org.blockml.bml.core.Block`** — the sole inheritance root.
 
@@ -254,7 +254,7 @@ When a primitive value must exist as an **Entity** inside composition or aggrega
 
 ### Capabilities — no special lifecycle types
 
-BlockML has no special concepts for constructor, getter, or setter. All behaviour is expressed as ordinary **Capabilities** (`init()`, `getValue()`, `setValue()`, `render()`, …). The Renderer decides how to interpret each Capability for the target system. See `00_bom_core.md` — Semantics remain in BML.
+BlockML has no special concepts for constructor, getter, or setter. All behaviour is expressed as ordinary **Capabilities** (`init()`, `getValue()`, `setValue()`, `render()`, …). The Renderer decides how to interpret each Capability for the target system. See `01_bom_core.md` — Semantics remain in BML.
 
 ### Self-hosting on the compiler level
 
@@ -504,7 +504,7 @@ Capability inputType=  { items: String[0..n] }   — named field with multiplici
 Composition children=   governed by parent aggregation multiplicity
 ```
 
-See `00_bom_core.md` — Type Notation · `02_mbml.md` — Type notation · `12_bom_object_model.md` — Type Expressions.
+See `01_bom_core.md` — Type Notation · `02_mbml.md` — Type notation · `12_bom_object_model.md` — Type Expressions.
 
 ### Unions
 
@@ -923,7 +923,7 @@ This applies uniformly to named StructTypes (`<properties>` on a StructType) and
 
 ### Serialization
 
-Struct values may be authored in multiple equivalent forms. **Each form is preserved in BOM** — see `00_bom_core.md` — Fundamental Architecture Principles.
+Struct values may be authored in multiple equivalent forms. **Each form is preserved in BOM** — see `01_bom_core.md` — Fundamental Architecture Principles.
 
 ```text
 Authored as array:   size="[4, 2, 3]"              → BOM: [4, 2, 3]
@@ -1539,7 +1539,7 @@ function satisfiesTypeBound(blockFqn: string, boundFqn: string): boolean
 
 Mismatch at a bound reference site → `BML_GENERIC_CONSTRAINT_VIOLATION` (generic arguments) or `BML_TYPE_BOUND_NOT_SATISFIED` (other bound checks).
 
-See `00_bom_core.md` — Contracts · `12_bom_object_model.md` — satisfiesTypeBound.
+See `01_bom_core.md` — Contracts · `12_bom_object_model.md` — satisfiesTypeBound.
 
 ---
 
@@ -1691,7 +1691,7 @@ Same `registerBlockDefinition(doc)` API — the registry inspects the `baseType`
 
 ## Migration from XSD and 04_types.md
 
-> **Note:** These phases are **type-migration steps within V1** — not the system-wide V1/V2/V3 roadmap. See `01_system.md` — BML Self-Description Roadmap.
+> **Note:** These phases are **type-migration steps within V1** — not the system-wide V1/V2/V3 roadmap. See `00_system.md` — BML Self-Description Roadmap.
 
 ```text
 Phase 1 (this document)   Spec + bootstrap primitives + Language BML
@@ -1726,7 +1726,7 @@ domains/machineblocks/mbom/blocks/
     Block.bml · NativeBlock.bml · Set.bml · …
 ```
 
-Domain packages use the singular `.type` segment per `00_bom_core.md` FQN convention.
+Domain packages use the singular `.type` segment per `01_bom_core.md` FQN convention.
 
 ---
 
@@ -1761,8 +1761,8 @@ never expose „Block“ outside parser/BOM types
 
 | Topic | Document |
 |---|---|
-| V1/V2/V3 scope · BML vs Markdown | `01_system.md` — BML Self-Description Roadmap |
-| FQN namespaces | `00_bom_core.md` — Mandatory BML namespace |
+| V1/V2/V3 scope · BML vs Markdown | `00_system.md` — BML Self-Description Roadmap |
+| FQN namespaces | `01_bom_core.md` — Mandatory BML namespace |
 | Composable Block base types | `16_framework_base_types.md` |
 | Definition blocks · bml:xml | `19_definition_blocks_and_bml_xml.md` |
 | BML block syntax | `02_mbml.md` |

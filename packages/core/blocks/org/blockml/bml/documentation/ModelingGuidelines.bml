@@ -52,7 +52,7 @@
   </documentation>
 
   <references>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Contracts, inheritance, Properties, Capabilities — core modeling rules.
     </see>
     <see file="16_framework_base_types.md" relation="AuthoringGuide">

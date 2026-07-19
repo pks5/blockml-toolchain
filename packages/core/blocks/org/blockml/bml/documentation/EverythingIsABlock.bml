@@ -45,7 +45,7 @@
     <see file="17_type_system_bml.md" relation="AuthoringGuide">
       One Root: Everything is a Block — type system and semantic vs compiler layers.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Core concepts — Block as parametric reusable unit (definition / type).
     </see>
     <see file="16_framework_base_types.md" relation="AuthoringGuide">

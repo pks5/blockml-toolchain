@@ -37,10 +37,10 @@
   </documentation>
 
   <references>
-    <see file="01_system.md" relation="DeepDive">
+    <see file="00_system.md" relation="DeepDive">
       System architecture, packages, monorepo structure, and design principles.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       BOM Core — abstract object model and fundamental architecture principles.
     </see>
     <see file="02_mbml.md" relation="AuthoringGuide">

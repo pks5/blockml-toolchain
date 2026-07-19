@@ -52,7 +52,7 @@
     <see file="16_framework_base_types.md" relation="AuthoringGuide">
       languages aggregation — permitted implementation languages on Block definitions.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Semantics remain in BML — no constructor/getter/setter special cases.
     </see>
     <see type="lang:PseudoCode" relation="SeeAlso">

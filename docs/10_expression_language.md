@@ -235,7 +235,7 @@ Expression parse/type errors inside an embedded region reuse existing `BML_EXPR_
 
 ## Expression vs BOM Data Layer
 
-> **Expressions and BOM member values are separate layers.** See `00_bom_core.md` — Expression layer vs BOM data layer.
+> **Expressions and BOM member values are separate layers.** See `01_bom_core.md` — Expression layer vs BOM data layer.
 
 | Layer | Stored where | Mutated by parser? |
 |---|---|---|
@@ -1033,7 +1033,7 @@ interface ExpressionValue {
 }
 ```
 
-See `12_bom_object_model.md` — Member Values · `00_bom_core.md` — Framework Utilities.
+See `12_bom_object_model.md` — Member Values · `01_bom_core.md` — Framework Utilities.
 
 ### Design Principles
 

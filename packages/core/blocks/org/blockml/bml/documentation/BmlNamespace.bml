@@ -58,10 +58,10 @@
   </documentation>
 
   <references>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Mandatory BML namespace — authoritative rules and examples.
     </see>
-    <see file="01_system.md" relation="DeepDive">
+    <see file="00_system.md" relation="DeepDive">
       FQN Namespaces — system-level summary.
     </see>
     <see file="02_mbml.md" relation="AuthoringGuide">

@@ -49,7 +49,7 @@
     <see file="17_type_system_bml.md" relation="AuthoringGuide">
       Renderer freedom — semantic layer vs compiler implementation; Platonic mapping.
     </see>
-    <see file="00_bom_core.md" relation="DeepDive">
+    <see file="01_bom_core.md" relation="DeepDive">
       Renderer determines the flow; renderer working model; semantics in BML only.
     </see>
     <see file="14_compiler_runtime.md" relation="DeepDive">

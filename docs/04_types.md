@@ -35,18 +35,18 @@ patterns. Values are stored on Properties; PrimitiveTypes are pure type definiti
 
 ```text
 BOM preserves authored form (lossless BML ↔ BOM round-trip).
-BML is the universal format (authoring and, in WOT, Capability messages) — see `01_system.md` · `02_mbml.md`.
+BML is the universal format (authoring and, in WOT, Capability messages) — see `00_system.md` · `02_mbml.md`.
 Target output is renderer-specific serialization (lossy by design).
 
 Do not normalize BOM values to a canonical internal shape at parse time.
 Renderers interpret authored Property values using type metadata and field order.
 ```
 
-See `00_bom_core.md` — Fundamental Architecture Principles.
+See `01_bom_core.md` — Fundamental Architecture Principles.
 
 **Type equivalence** (e.g. `[4,2,3]` and `{x:4,y:2,z:3}` both valid for `SizeXYZ`) is a **validation rule** — not a mandate to rewrite stored values. Each authored form is preserved in `LiteralValue.value`.
 
-All MBOM types are defined in the **`com.machineblocks.bml.type`** namespace (singular `.type` segment — see `00_bom_core.md` — FQN Convention). XML prefix: **`mbt:`**.
+All MBOM types are defined in the **`com.machineblocks.bml.type`** namespace (singular `.type` segment — see `01_bom_core.md` — FQN Convention). XML prefix: **`mbt:`**.
 
 ### Naming convention — XY / XYZ / AB (not 3D / 2D)
 
@@ -148,7 +148,7 @@ inputType: Float                       → #math.floor(x)   (single primitive �
 
 ## Status
 
-Type and parameter definitions express maturity via **status Block references** — not strings or boolean flags. See `02_mbml.md` — § Status and `00_bom_core.md` — § Status.
+Type and parameter definitions express maturity via **status Block references** — not strings or boolean flags. See `02_mbml.md` — § Status and `01_bom_core.md` — § Status.
 
 **Implicit default:** `status:Stable` when omitted — at document root and inherited by children unless a deviation is declared. Declare `<status>` or `bml:status` **only when deviating** from the inherited status.
 
@@ -157,7 +157,7 @@ Core status blocks:
 ```text
 status:Stable       — defined, MBML parsing complete, SCAD mapping complete
 Draft        — defined; MBML parsing or SCAD mapping incomplete or untested
-status:Stub         — placeholder; validates OK; renderer may stub/log or abort (`00_bom_core.md`)
+status:Stub         — placeholder; validates OK; renderer may stub/log or abort (`01_bom_core.md`)
 status:Deprecated   — retained for compatibility; do not use in new work
 ```
 

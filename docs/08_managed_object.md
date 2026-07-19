@@ -11,7 +11,7 @@ This document specifies how BlockML **Capabilities** express behaviour intent an
 For the formal BOM transport types see `12_bom_object_model.md`.
 For Capability BML syntax see `02_mbml.md` — Capabilities.
 For type/value separation see `17_type_system_bml.md`.
-For validation stages see `00_bom_core.md` — Validation pipeline.
+For validation stages see `01_bom_core.md` — Validation pipeline.
 
 ---
 
@@ -124,7 +124,7 @@ V1 renderers continue reading authored Property values and Capability definition
 
 | Topic | Document |
 |---|---|
-| Validation pipeline | `00_bom_core.md` — Validation pipeline |
+| Validation pipeline | `01_bom_core.md` — Validation pipeline |
 | Capabilities BML syntax | `02_mbml.md` — Capabilities |
 | Type/value separation | `17_type_system_bml.md` |
 | Expression language | `10_expression_language.md` |

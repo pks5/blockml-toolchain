@@ -129,7 +129,7 @@
       Published catalog of exported framework blocks, types, and services.
     </see>
 
-    <see file="01_system.md" relation="DeepDive">
+    <see file="00_system.md" relation="DeepDive">
       System architecture and package overview — authoritative prose in V1.
     </see>
 
