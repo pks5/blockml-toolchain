@@ -4438,7 +4438,7 @@
       </examples>
     </studHoleDiameterAdjustment>
 
-    <studIcon type="Boolean.False | Text">
+    <studIcon type="Boolean.False | FilePath">
       <groups>
         <mbgroup:StudIcon />
         <mbgroup:FrequentAiUsage />
@@ -4764,7 +4764,7 @@
       </examples>
     </studAreas>
 
-    <surfacePattern type="Boolean.False | Text">
+    <surfacePattern type="Boolean.False | FilePath">
       <groups>
         <mbgroup:SurfacePattern />
         <mbgroup:FrequentAiUsage />
@@ -4960,7 +4960,7 @@
       </examples>
     </surfacePatternScale>
 
-    <svg type="Boolean.False | Text">
+    <svg type="Boolean.False | FilePath">
       <groups>
         <mbgroup:Svg />
         <mbgroup:FrequentAiUsage />
