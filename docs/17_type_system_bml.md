@@ -427,9 +427,9 @@ In **`type="..."` XML attributes**, generic applications use **round parentheses
 
 ```xml
 <!-- BooleanOr&lt;HoleType&gt; inside a generic — write the union as the type argument -->
-<holeX type="type:SelectiveGrid(Boolean | type:HoleType)">
-  <value>false</value>
-</holeX>
+<holeXAreas type="type:SelectiveGrid(Boolean | type:HoleType)[]">
+  <value>[]</value>
+</holeXAreas>
 ```
 
 When a generic parameter constrains `baseType` to `ValueType` (or another branch), a union argument is valid if **every alternative** satisfies that bound via `satisfiesTypeBound` (`BML_GENERIC_CONSTRAINT_VIOLATION` otherwise).
@@ -1402,7 +1402,7 @@ Branch ↔ context mismatch → `BML_CONSTRAINT_TARGET_MISMATCH`. Binding rules 
 
 ### Generic parameter naming
 
-Every Block definition — **root, Sub-Block, or embedded** — may declare `<genericTypes>`. Sub-Blocks follow the **Java static nested class** model: they declare their own parameters and **do not** see the enclosing Block's generics. Bindings must be forwarded explicitly (e.g. `selectors type="Selector(T)[]"` where `T` is the outer parameter and `Selector` declares its own `T`).
+Every Block definition — **root, Sub-Block, or embedded** — may declare `<genericTypes>`. Sub-Blocks follow the **Java static nested class** model: they declare their own parameters and **do not** see the enclosing Block's generics. Bindings must be forwarded explicitly (e.g. `items type="Item(T)[]"` where `T` is the outer parameter and `Item` declares its own `T`).
 
 The parser rejects name collisions **on the declaring Block** (same scope — not nested scopes):
 
@@ -1412,7 +1412,7 @@ The parser rejects name collisions **on the declaring Block** (same scope — no
   <Box baseType="…"/>     → BML_GENERIC_BLOCK_NAME_COLLISION
 </genericTypes>
 
-<name>SelectiveGrid</name>
+<name>Grid</name>
 <subBlocks>
   <block><name>Selector</name>…</block>
 </subBlocks>
@@ -1421,7 +1421,7 @@ The parser rejects name collisions **on the declaring Block** (same scope — no
 </genericTypes>
 ```
 
-Nested scopes may reuse the same parameter letter — `SelectiveGrid` and `SelectiveGrid.Selector` may each declare `T` independently (outer `T` is not in scope on the Sub-Block).
+Nested scopes may reuse the same parameter letter — `Grid` and `Grid.Selector` may each declare `T` independently (outer `T` is not in scope on the Sub-Block).
 
 ```text
 BML_GENERIC_BLOCK_NAME_COLLISION    — generic parameter element name equals the declaring Block's <name>

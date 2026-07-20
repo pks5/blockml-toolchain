@@ -414,7 +414,7 @@ Sub-Blocks are types declared inside a parent Block — **Java static nested cla
 <MySubBlock … />                      →  com.foo.Bar.MySubBlock   (in com.foo.Bar context)
 <com.foo.Bar.MySubBlock … />          →  com.foo.Bar.MySubBlock
 <foo:Bar.MySubBlock … />              →  com.foo.Bar.MySubBlock   (xmlns:foo="com.foo")
-selectors type="Selector(T)[]"        →  forward outer T into Sub-Block Selector's own T
+selectors type="Item(T)[]"        →  forward outer T into Sub-Block Item's own T
 ```
 
 The local part of a QName may include a relative Sub-Block path (`foo:Bar.MySubBlock`), not only the root Block name.
@@ -434,17 +434,17 @@ Then repeat for the **immediate enclosing Block**, then its enclosing Block, up 
 4. Enclosing Block name → its generics → its direct Sub-Blocks  
 5. … until the root Block
 
-**Grandchildren are never unqualified.** From `Grid`, `Range` does not resolve to `Grid.Selector.Range` — write `Selector.Range` or `Grid.Selector.Range` / `mbt:SelectiveGrid.Selector.Range`.
+**Grandchildren are never unqualified.** From `Grid`, `Range` does not resolve to `Grid.Selector.Range` — write `Selector.Range` or `Grid.Selector.Range` / `mbt:Grid.Selector.Range`.
 
 ```text
-Scope = SelectiveGrid.Selector.Range
+Scope = Grid.Selector.Range
 
 1. Range
 2. generics of Range
 3. direct Sub-Blocks of Range
 4. Selector → generics of Selector → direct Sub-Blocks of Selector (e.g. Range siblings)
-5. SelectiveGrid → generics of SelectiveGrid → direct Sub-Blocks (e.g. Selector)
-✗  bare name of a Sub-Block of Selector when looking only for a grandchild from SelectiveGrid
+5. Grid → generics of Grid → direct Sub-Blocks (e.g. Selector)
+✗  bare name of a Sub-Block of Selector when looking only for a grandchild from Grid
 ```
 
 After the nested walk fails, normal rules apply (context-bound implicit namespace at specialized sites, then FQN / `xmlns:` — see § Context-Bound Implicit Namespace). Ambiguous match → `BML_AMBIGUOUS_TYPE`. Unknown → `BML_UNKNOWN_TYPE` or `BML_UNQUALIFIED_BLOCK_REFERENCE` as applicable.

@@ -283,13 +283,16 @@ When `Boolean | T` is itself a **generic type argument**, write the union inside
 
 ```text
 Was:  type="type:SelectiveGrid(BooleanOr(HoleType))"
-Now:  type="type:SelectiveGrid(Boolean | type:HoleType)"
+Now:  type="type:SelectiveGrid(Boolean | type:HoleType)[]"
 ```
 
 ```xml
-<holeX type="type:SelectiveGrid(Boolean | type:HoleType)">
+<holeX type="Boolean">
   <value>false</value>
 </holeX>
+<holeXAreas type="type:SelectiveGrid(Boolean | type:HoleType)[]">
+  <value>[]</value>
+</holeXAreas>
 ```
 
 See `17_type_system_bml.md` — Type Expressions · Generics — BML attribute syntax.
@@ -430,14 +433,15 @@ SCAD: ["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
 
 ```text
 MBOM:
-{
-  baseValue: true,
-  selectors: [
-    { from:{x:0,y:0}, to:{x:1,y:1}, value: false },
-    { from:{x:2,y:0}, to:{x:3,y:1}, value: "hollow" }
-  ]
-}
-SCAD: ["studs", [true, [[0,0,1,1], false], [[2,0,3,1], "hollow"]]]
+studs: true
+studAreas: [
+  { start:{x:0,y:0}, end:{x:1,y:1}, value: false },
+  { start:{x:2,y:0}, end:{x:3,y:1}, value: "hollow" }
+]
+
+SCAD:
+["studs", true]
+["studAreas", [[[0,0],[1,1], false], [[2,0],[3,1], "hollow"]]]
 ```
 
 ### WallGapList — recessWallGaps

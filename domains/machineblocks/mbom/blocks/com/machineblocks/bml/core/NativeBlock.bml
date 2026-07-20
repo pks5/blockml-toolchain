@@ -1061,13 +1061,14 @@
       </examples>
     </grilleInverted>
 
-    <holeX type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
+    <holeX type="Boolean">
       <groups>
         <mbgroup:TechnicHolesX />
         <mbgroup:FrequentAiUsage />
       </groups>
       <documentation>Whether LEGO Technic holes are drawn along the X-axis.
-        Multiple rows possible depending on block height.
+        Multiple rows possible depending on block height. Use holeXAreas for per-region
+        overrides; later areas win on overlap.
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
@@ -1087,7 +1088,35 @@
       </examples>
     </holeX>
 
-    <holeY type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
+    <holeXAreas type="mbt:SelectiveGrid(Boolean | mbt:HoleType)[]">
+      <groups>
+        <mbgroup:TechnicHolesX />
+        <mbgroup:FrequentAiUsage />
+      </groups>
+      <documentation>Per-region overrides for holeX on the plate grid. Each entry is an inclusive
+        rectangular range (start/end in GridUnitXY) with a Boolean or HoleType value. Later entries
+        win on overlap.
+      </documentation>
+      <value>[]</value>
+      <scad:value>[]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="one area">
+          <![CDATA[
+<NativeBlock holeX="true" holeXAreas="[{start:{x:0,y:0}, end:{x:1,y:1}, value:false}]" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="one area">
+          <![CDATA[
+          ...
+          ["holeX", true],
+          ["holeXAreas", [[[0,0],[1,1],false]]]
+          ...
+          ]]>
+        </scad:example>
+      </examples>
+    </holeXAreas>
+
+    <holeY type="Boolean">
       <groups>
         <mbgroup:TechnicHolesY />
         <mbgroup:FrequentAiUsage />
@@ -1096,6 +1125,7 @@
         Multiple rows possible depending on block height.
         Type, shift, diameter, inset, and grid parameters are shared with
         holeX and holeZ via the holeXYZ* and holeXY* unified parameters.
+        Use holeYAreas for per-region overrides; later areas win on overlap.
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
@@ -1115,7 +1145,35 @@
       </examples>
     </holeY>
 
-    <holeZ type="Boolean | mbt:SelectiveGrid(Boolean | mbt:HoleType)">
+    <holeYAreas type="mbt:SelectiveGrid(Boolean | mbt:HoleType)[]">
+      <groups>
+        <mbgroup:TechnicHolesY />
+        <mbgroup:FrequentAiUsage />
+      </groups>
+      <documentation>Per-region overrides for holeY on the plate grid. Each entry is an inclusive
+        rectangular range (start/end in GridUnitXY) with a Boolean or HoleType value. Later entries
+        win on overlap.
+      </documentation>
+      <value>[]</value>
+      <scad:value>[]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="one area">
+          <![CDATA[
+<NativeBlock holeY="true" holeYAreas="[{start:{x:0,y:0}, end:{x:1,y:1}, value:false}]" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="one area">
+          <![CDATA[
+          ...
+          ["holeY", true],
+          ["holeYAreas", [[[0,0],[1,1],false]]]
+          ...
+          ]]>
+        </scad:example>
+      </examples>
+    </holeYAreas>
+
+    <holeZ type="Boolean">
       <groups>
         <mbgroup:TechnicHolesZ />
         <mbgroup:FrequentAiUsage />
@@ -1124,6 +1182,7 @@
         Type, shift, diameter, and inset parameters are shared with holeX
         and holeY via the holeXYZ* unified parameters.
         Z holes now also support insets (holeXYZInsetThickness/Depth).
+        Use holeZAreas for per-region overrides; later areas win on overlap.
       </documentation>
       <value>false</value>
       <scad:value>false</scad:value>
@@ -1142,6 +1201,34 @@
         </scad:example>
       </examples>
     </holeZ>
+
+    <holeZAreas type="mbt:SelectiveGrid(Boolean | mbt:HoleType)[]">
+      <groups>
+        <mbgroup:TechnicHolesZ />
+        <mbgroup:FrequentAiUsage />
+      </groups>
+      <documentation>Per-region overrides for holeZ on the plate grid. Each entry is an inclusive
+        rectangular range (start/end in GridUnitXY) with a Boolean or HoleType value. Later entries
+        win on overlap.
+      </documentation>
+      <value>[]</value>
+      <scad:value>[]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="one area">
+          <![CDATA[
+<NativeBlock holeZ="true" holeZAreas="[{start:{x:0,y:0}, end:{x:1,y:1}, value:false}]" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="one area">
+          <![CDATA[
+          ...
+          ["holeZ", true],
+          ["holeZAreas", [[[0,0],[1,1],false]]]
+          ...
+          ]]>
+        </scad:example>
+      </examples>
+    </holeZAreas>
 
     <holeXYGridOffsetZ type="Decimal(mbunit:MBU) | mbt:AxisXY(Decimal(mbunit:MBU))">
       <groups>
@@ -2181,12 +2268,14 @@
       </examples>
     </pillarOriginalWallThickness>
 
-    <pillars type="Boolean | mbt:SelectiveGrid(Boolean)">
+    <pillars type="Boolean">
       <groups>
         <mbgroup:Pillars />
         <mbgroup:FrequentAiUsage />
       </groups>
-      <documentation>Whether tubes/pins are drawn on the underside (baseCutoutType=standard).</documentation>
+      <documentation>Whether tubes/pins are drawn on the underside (baseCutoutType=standard).
+        Use pillarAreas for per-region overrides; later areas win on overlap.
+      </documentation>
       <value>true</value>
       <scad:value>true</scad:value>
       <examples>
@@ -2204,6 +2293,34 @@
         </scad:example>
       </examples>
     </pillars>
+
+    <pillarAreas type="mbt:SelectiveGrid(Boolean)[]">
+      <groups>
+        <mbgroup:Pillars />
+        <mbgroup:FrequentAiUsage />
+      </groups>
+      <documentation>Per-region overrides for pillars on the plate grid. Each entry is an inclusive
+        rectangular range (start/end in GridUnitXY) with a Boolean value. Later entries win on
+        overlap.
+      </documentation>
+      <value>[]</value>
+      <scad:value>[]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="one area">
+          <![CDATA[
+<NativeBlock pillars="true" pillarAreas="[{start:{x:0,y:0}, end:{x:1,y:1}, value:false}]" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="one area">
+          <![CDATA[
+          ...
+          ["pillars", true],
+          ["pillarAreas", [[[0,0],[1,1],false]]]
+          ...
+          ]]>
+        </scad:example>
+      </examples>
+    </pillarAreas>
 
     <pinDiameter type="mbt:Auto | Decimal(mbunit:MBU)">
       <groups>
@@ -4593,13 +4710,13 @@
       </examples>
     </studType>
 
-    <studs type="Boolean | mbt:SelectiveGrid(Boolean | mbt:StudType)">
+    <studs type="Boolean">
       <groups>
         <mbgroup:Studs />
         <mbgroup:FrequentAiUsage />
       </groups>
-      <documentation>Whether studs are drawn. Selective array allows per-region control
-        including stud type override.
+      <documentation>Whether studs are drawn. Use studAreas for per-region control including stud
+        type override; later areas win on overlap.
       </documentation>
       <value>true</value>
       <scad:value>true</scad:value>
@@ -4618,6 +4735,34 @@
         </scad:example>
       </examples>
     </studs>
+
+    <studAreas type="mbt:SelectiveGrid(Boolean | mbt:StudType)[]">
+      <groups>
+        <mbgroup:Studs />
+        <mbgroup:FrequentAiUsage />
+      </groups>
+      <documentation>Per-region overrides for studs on the plate grid. Each entry is an inclusive
+        rectangular range (start/end in GridUnitXY) with a Boolean or StudType value. Later entries
+        win on overlap.
+      </documentation>
+      <value>[]</value>
+      <scad:value>[]</scad:value>
+      <examples>
+        <example language="BML" snippet="true" title="hollow region">
+          <![CDATA[
+<NativeBlock studs="true" studAreas="[{start:{x:0,y:0}, end:{x:3,y:0}, value:Hollow}]" />
+          ]]>
+        </example>
+        <scad:example language="OpenSCAD" snippet="true" title="hollow region">
+          <![CDATA[
+          ...
+          ["studs", true],
+          ["studAreas", [[[0,0],[3,0],"hollow"]]]
+          ...
+          ]]>
+        </scad:example>
+      </examples>
+    </studAreas>
 
     <surfacePattern type="Boolean.False | Text">
       <groups>
