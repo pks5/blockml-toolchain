@@ -22,6 +22,7 @@
   xmlns:def="org.blockml.bml.definition"
   xmlns:diag="org.blockml.bml.diagnostic"
   xmlns:doc="org.blockml.bml.documentation"
+  xmlns:group="org.blockml.bml.group"
   xmlns:lang="org.blockml.bml.language"
   xmlns:mapping="org.blockml.bml.mapping"
   xmlns:meta="org.blockml.bml.meta"
@@ -40,7 +41,8 @@
 
   <documentation>
     Publishable BlockML core library (org.blockml.bml.Library). Exports the framework grammar:
-    core branches (Block, Annotation, ValueType, Language, Status, Relation, Constraint, Validation, Capability, Definition, MemberGroup),
+    core branches (Block, Annotation, ValueType, Language, Status, Relation, Constraint, Validation, Capability, Definition, Group),
+    group branch (org.blockml.bml.group.MemberGroup),
     concrete value types and constraints, implementation languages, built-in services, lifecycle
     status blocks, the Definition meta-model branch (org.blockml.bml.definition.*), the language
     annotation (org.blockml.bml.annotation.BmlAnnotation), bootstrap
@@ -98,7 +100,7 @@
       <core:Constraint />
       <core:Definition />
       <core:Entity />
-      <core:MemberGroup />
+      <core:Group />
       <core:PrimitiveEntity />
       <core:Language />
       <core:Mapping />
@@ -121,6 +123,7 @@
       <def:MemberDefinition />
       <def:PropertyDefinition />
       <def:StructuralDefinition />
+      <group:MemberGroup />
       <cap:Inbound />
       <cap:Outbound />
       <cap:Transformation />

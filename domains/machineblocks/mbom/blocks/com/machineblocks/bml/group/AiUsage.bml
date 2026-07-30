@@ -8,12 +8,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
-  xmlns:core="org.blockml.bml.core"
+  xmlns:group="org.blockml.bml.group"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
   <name>AiUsage</name>
   <type>mbgroup:AiUsage</type>
-  <baseType>core:MemberGroup</baseType>
+  <baseType>group:MemberGroup</baseType>
   <is>An AI member-usage guidance category</is>
 
   <documentation>Abstract base MemberGroup for AI usage facets — categories that describe whether

@@ -12,6 +12,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:group="org.blockml.bml.group"
   xmlns:type="org.blockml.bml.type">
 
   <name>MemberDefinition</name>
@@ -81,7 +82,7 @@
     <see type="def:ConstrainableDefinition" relation="SeeAlso">
       Shared constraints container for Block and member definitions.
     </see>
-    <see type="core:MemberGroup" relation="Defines">
+    <see type="group:MemberGroup" relation="Defines">
       Branch for groups aggregation entries — UI categories, usage facets, and other tooling groups.
     </see>
   </references>
@@ -153,7 +154,7 @@
   </properties>
 
   <aggregations>
-    <groups type="type:TypeReferenceEntity(core:MemberGroup)[]" bml:xml="element">
+    <groups type="type:TypeReferenceEntity(group:MemberGroup)[]" bml:xml="element">
       <documentation>Optional MemberGroup references that organize this member for editors and
         tooling — a member may belong to several groups at once (e.g. a UI category and a usage
         facet). Each child is a TypeReferenceEntity instance — empty children whose element QName is
