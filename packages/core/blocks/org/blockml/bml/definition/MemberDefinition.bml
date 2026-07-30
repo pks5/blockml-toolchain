@@ -83,7 +83,7 @@
       Shared constraints container for Block and member definitions.
     </see>
     <see type="group:MemberGroup" relation="Defines">
-      Branch for groups aggregation entries — UI categories, usage facets, and other tooling groups.
+      Narrows inherited StructuralDefinition.groups to MemberGroup references.
     </see>
   </references>
 
@@ -154,13 +154,14 @@
   </properties>
 
   <aggregations>
-    <groups type="type:TypeReferenceEntity(group:MemberGroup)[]" bml:xml="element">
+    <groups override="true" type="type:TypeReferenceEntity(group:MemberGroup)[]" bml:xml="element">
       <documentation>Optional MemberGroup references that organize this member for editors and
         tooling — a member may belong to several groups at once (e.g. a UI category and a usage
-        facet). Each child is a TypeReferenceEntity instance — empty children whose element QName is
-        not TypeReferenceEntity are sugar, e.g. &lt;mbgroup:Body /&gt; expands to
-        &lt;type:TypeReferenceEntity value="mbgroup:Body" /&gt;. Document order preserved in BOM
-        groups[]. Maps to BOM MemberDefinitionBase.groups.</documentation>
+        facet). Overrides StructuralDefinition.groups, narrowing the Group branch to
+        org.blockml.bml.group.MemberGroup. Each child is a TypeReferenceEntity instance — empty
+        children whose element QName is not TypeReferenceEntity are sugar, e.g.
+        &lt;mbgroup:Body /&gt; expands to &lt;type:TypeReferenceEntity value="mbgroup:Body" /&gt;.
+        Document order preserved in BOM groups[]. Maps to BOM MemberDefinitionBase.groups.</documentation>
     </groups>
   </aggregations>
 

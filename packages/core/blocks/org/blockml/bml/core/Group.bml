@@ -18,7 +18,7 @@
   <documentation>Abstract base type for groups — named categories that organize related elements
     for editors and tooling. Intentionally empty — no properties, aggregations, or Sub-Blocks.
     Concrete group kinds extend this branch (e.g. org.blockml.bml.group.MemberGroup for Block
-    members).</documentation>
+    members, org.blockml.bml.group.BlockGroup for Blocks).</documentation>
 
   <abstract>true</abstract>
 

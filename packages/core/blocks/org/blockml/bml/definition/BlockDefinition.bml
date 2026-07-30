@@ -14,6 +14,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:group="org.blockml.bml.group"
   xmlns:lang="org.blockml.bml.language"
   xmlns:type="org.blockml.bml.type"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
@@ -78,6 +79,9 @@
     </see>
     <see type="type:TypeReference" relation="Defines">
       ValueType for identity type and baseType properties (FQN / TypeExpression text).
+    </see>
+    <see type="group:BlockGroup" relation="Defines">
+      Narrows inherited StructuralDefinition.groups to BlockGroup references.
     </see>
   </references>
 
@@ -203,6 +207,16 @@
       order is significant — later contracts override earlier ones; local Block declarations
       override all contracts. Stored in BOM as block.contracts[].</documentation>
     </contracts>
+    <groups override="true" type="type:TypeReferenceEntity(group:BlockGroup)[]" bml:xml="element">
+      <documentation>Optional BlockGroup references that organize this Block for editors and
+        tooling — a Block may belong to several groups at once. Overrides
+        StructuralDefinition.groups, narrowing the Group branch to
+        org.blockml.bml.group.BlockGroup. Each child is a TypeReferenceEntity instance — empty
+        children whose element QName is not TypeReferenceEntity are sugar, e.g.
+        &lt;mbgroup:SomeBlockGroup /&gt; expands to
+        &lt;type:TypeReferenceEntity value="mbgroup:SomeBlockGroup" /&gt;. Document order preserved
+        in BOM groups[].</documentation>
+    </groups>
     <properties type="def:PropertyDefinition[]">
       <documentation>Property member declarations. Mapped to members[] in XML document order.
         Order is significant for StructType field indices and positional array literals.</documentation>

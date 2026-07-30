@@ -20,7 +20,7 @@
     members (properties, aggregations, associations, capabilities) for editors and tooling.
     A member may reference several groups via MemberDefinition.groups (e.g. UI category and usage
     facet). Intentionally empty — no properties, aggregations, or Sub-Blocks. Concrete group kinds
-    extend this branch. Referenced from org.blockml.bml.definition.MemberDefinition.groups as
+    extend this branch. MemberDefinition.groups overrides StructuralDefinition.groups to
     TypeReferenceEntity(group:MemberGroup)[].</documentation>
 
   <abstract>true</abstract>

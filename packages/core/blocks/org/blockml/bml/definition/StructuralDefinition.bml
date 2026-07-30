@@ -26,12 +26,13 @@
 
   <documentation>
     Abstract base type for BlockML structural definition elements. It provides the common
-    documentation model consisting of summaries[], keywords, documentations[] (i18n via language=
-    and optional QName facets — facets are not for locales), version information, change history,
-    examples, and references, plus local declaration properties (abstract, final) for block
+    documentation model consisting of summaries[], keywords, groups, documentations[] (i18n via
+    language= and optional QName facets — facets are not for locales), version information, change
+    history, examples, and references, plus local declaration properties (abstract, final) for block
     definitions. Concrete structural definition types inherit these members to describe themselves
     consistently. Member declarations declare abstract, final, and override locally via
-    org.blockml.bml.definition.MemberDefinition.
+    org.blockml.bml.definition.MemberDefinition. BlockDefinition and MemberDefinition override
+    groups to narrow the Group branch (BlockGroup and MemberGroup respectively).
   </documentation>
   <abstract>true</abstract>
 
@@ -113,7 +114,7 @@
   <!--
   Aggregation definitions are grouped inside the <aggregations> element.
   Each aggregation is rendered as a direct XML child element named after the
-  aggregation itself (for example <keywords>, <changelog>, <references>).
+  aggregation itself (for example <keywords>, <groups>, <changelog>, <references>).
 -->
   <aggregations>
     <keywords type="core:Keyword[]">
@@ -126,6 +127,15 @@
         trimmed token. Addressable as com.foo.Bar.keywords on blocks and
         com.foo.Bar.properties.width.keywords on members.</documentation>
     </keywords>
+    <groups type="type:TypeReferenceEntity(core:Group)[]" bml:xml="element">
+      <documentation>Optional Group references that organize this definition element for editors and
+        tooling — a definition may belong to several groups at once. Each child is a
+        TypeReferenceEntity instance — empty children whose element QName is not TypeReferenceEntity
+        are sugar, e.g. &lt;mbgroup:Body /&gt; expands to
+        &lt;type:TypeReferenceEntity value="mbgroup:Body" /&gt;. Document order preserved in BOM
+        groups[]. Bound to org.blockml.bml.core.Group; BlockDefinition overrides to
+        group:BlockGroup and MemberDefinition overrides to group:MemberGroup.</documentation>
+    </groups>
     <changelog type="Change[]">
       <documentation>The changelog of the definition.</documentation>
     </changelog>

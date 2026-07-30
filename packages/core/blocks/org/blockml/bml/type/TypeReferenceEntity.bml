@@ -24,7 +24,9 @@
 
     Use on aggregation type attributes when children are type references stored as Entity instances:
     • type:TypeReferenceEntity(core:Block)[] — contracts, Library blocks
+    • type:TypeReferenceEntity(core:Group)[] — StructuralDefinition.groups (narrowed on subtypes)
     • type:TypeReferenceEntity(group:MemberGroup)[] — MemberDefinition.groups
+    • type:TypeReferenceEntity(group:BlockGroup)[] — BlockDefinition.groups
     • type:TypeReferenceEntity(lang:NaturalLanguage) — language (singular, 0..1)
     • type:TypeReferenceEntity(core:ReadMe)[1..1] — Library readMe
     • type:TypeReferenceEntity(core:Bootstrap) — Library bootstrap (0..1 SPOE)
