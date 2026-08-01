@@ -45,8 +45,9 @@ Historical long-form prose and examples (pre–self-description migration) are a
 |---|---|
 | `domain.bml.*`, xmlns Package vs Annotation | `org.blockml.bml.documentation.BmlNamespace` |
 | Context-bound unqualified names | `org.blockml.bml.documentation.ImplicitNamespaceResolution` |
+| Annotation namespaces, facets, directive taxonomy | `org.blockml.bml.documentation.AnnotationModel` |
 | `bml:` directives catalogue | `org.blockml.bml.annotation.BmlAnnotation` · `…documentation.BmlDirectives` |
-| Property value facets | `org.blockml.bml.definition.PropertyDefinition` |
+| Property value facets | `org.blockml.bml.definition.PropertyDefinition` · `…documentation.AnnotationModel` |
 
 ### Type references · identity · Sub-Blocks
 
@@ -106,6 +107,7 @@ Historical long-form prose and examples (pre–self-description migration) are a
 | Topic | BML SSOT |
 |---|---|
 | baseType, contracts, capabilities, constraints | `org.blockml.bml.documentation.ModelingGuidelines` |
+| Constraints and suggestions | `org.blockml.bml.documentation.ConstraintsModel` |
 | Capability kinds | `org.blockml.bml.documentation.CapabilitySemantics` |
 | PseudoCode | `org.blockml.bml.documentation.PseudoCode` |
 

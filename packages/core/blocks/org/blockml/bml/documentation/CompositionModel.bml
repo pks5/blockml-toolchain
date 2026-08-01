@@ -91,8 +91,11 @@
     <see type="doc:Expressions" relation="SeeAlso">
       Expression language used in composition member values.
     </see>
-    <see type="doc:BmlDirectives" relation="ReadNext">
-      Next — bml:each, bml:if, bml:container, bml:with, bml:xml.
+    <see type="doc:AnnotationModel" relation="ReadNext">
+      Next — Annotation namespaces and facets (then bml: directives).
+    </see>
+    <see type="doc:BmlDirectives" relation="SeeAlso">
+      bml:each, bml:if, bml:container, bml:with, bml:xml on composition hosts.
     </see>
     <see file="02_mbml.md" relation="DeepDive">
       Historical long-form examples — Composition (superseded as AuthoringGuide by this block).

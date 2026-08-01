@@ -39,20 +39,23 @@
     value element (e.g. scad:value from Annotation.Value) multiplies the value field along the
     Annotation namespace axis — same property identity, not a member QName and not scad:myProp.
     Parent context disambiguates from top-level &lt;properties&gt;&lt;scad:value/&gt; members.
-    See 02_mbml.md — Annotations · Property value facets.</documentation>
+    See doc:AnnotationModel — Property value facets.</documentation>
 
   <references>
+    <see type="doc:AnnotationModel" relation="AuthoringGuide">
+      Annotation value facets, parent-context rules, duplicate-namespace diagnostics.
+    </see>
     <see file="12_bom_object_model.md" relation="DeepDive">
       PropertyDefinition BOM structure.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Members and properties authoring rules.
+    <see file="02_mbml.md" relation="DeepDive">
+      Historical members and properties notes.
     </see>
     <see type="core:ValueType" relation="Requires">
       Required branch for property payload types.
     </see>
-    <see file="18_constraints_and_suggestions.md" relation="AuthoringGuide">
-      Suggestions authoring rules and BML_SUGGESTIONS_ON_ENUM.
+    <see type="doc:ConstraintsModel" relation="SeeAlso">
+      Constraints and suggestions on properties.
     </see>
   </references>
 

@@ -76,8 +76,11 @@
     <see type="constraint:Min" relation="SeeAlso">
       Example scalar constraint — binds T from enclosing property type.
     </see>
-    <see type="doc:MemberVisibility" relation="ReadNext">
-      Next reading step — member and Sub-Block visibility rules.
+    <see type="doc:ConstraintsModel" relation="ReadNext">
+      Next reading step — constraints and suggestions.
+    </see>
+    <see type="doc:MemberVisibility" relation="SeeAlso">
+      Member and Sub-Block visibility rules.
     </see>
     <see type="doc:PartialMemberOverrides" relation="SeeAlso">
       Partial overrides and abstract/final merge semantics.

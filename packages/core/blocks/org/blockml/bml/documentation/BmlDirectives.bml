@@ -77,6 +77,9 @@
     <see type="ann:BmlAnnotation" relation="Defines">
       Concrete Annotation — directive catalogue and preferredAlias bml.
     </see>
+    <see type="doc:AnnotationModel" relation="SeeAlso">
+      Annotation branch — facets, match rules, Package vs Annotation.
+    </see>
     <see type="core:Annotation" relation="Extends">
       Annotation branch — Package vs Annotation xmlns rule.
     </see>

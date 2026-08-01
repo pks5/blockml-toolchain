@@ -268,9 +268,11 @@
       <doc:DocumentationModel />
       <doc:BootstrapModel />
       <doc:ModelingGuidelines />
+      <doc:ConstraintsModel />
       <doc:MemberVisibility />
       <doc:PartialMemberOverrides />
       <doc:CompositionModel />
+      <doc:AnnotationModel />
       <doc:BmlDirectives />
       <doc:TypeIdentityDerivation />
       <doc:SubBlockModel />
@@ -364,6 +366,81 @@
       <diag:BML_INVALID_EMBEDDED_EXPRESSION />
       <diag:BML_PROPERTY_CYCLE />
       <diag:BML_UNCLOSED_EMBEDDED_EXPRESSION />
+      <diag:BML_CAPABILITY_LINK_MISMATCH />
+      <diag:BML_CARDINALITY_VIOLATION />
+      <diag:BML_CHANGELOG_VERSION_ORDER />
+      <diag:BML_CONSTANT_VALUE_MISMATCH />
+      <diag:BML_CONSTRAINT_INFORMATION />
+      <diag:BML_CONSTRAINT_TYPE_MISMATCH />
+      <diag:BML_CONSTRAINT_UNKNOWN />
+      <diag:BML_CONSTRAINT_VALUE_MISMATCH />
+      <diag:BML_CONSTRAINT_VIOLATION />
+      <diag:BML_CONSTRAINT_WARNING />
+      <diag:BML_CONTRACT_MEMBER_KIND_MISMATCH />
+      <diag:BML_CONTRACT_NOT_ON_ROOT />
+      <diag:BML_DEPRECATED_MEMBER_NAMESPACE_ATTR />
+      <diag:BML_DEPRECATED_TYPE />
+      <diag:BML_DIRECTIVE_NOT_ALLOWED />
+      <diag:BML_DUPLICATE_CONTRACT />
+      <diag:BML_DUPLICATE_DOCUMENTATION />
+      <diag:BML_DUPLICATE_GENERIC />
+      <diag:BML_DUPLICATE_MEMBER_NAME />
+      <diag:BML_DUPLICATE_PROPERTY_VALUE />
+      <diag:BML_DUPLICATE_SUMMARY />
+      <diag:BML_DUPLICATE_TYPE_CONFIGURATION />
+      <diag:BML_EXAMPLE_EMPTY_BODY />
+      <diag:BML_EXAMPLE_MISSING_TITLE />
+      <diag:BML_EXAMPLE_UNKNOWN_LANGUAGE />
+      <diag:BML_EXPRESSION_TYPE_ERROR />
+      <diag:BML_FUNCTION_DUPLICATE_MAIN />
+      <diag:BML_FUNCTION_MISSING_MAIN />
+      <diag:BML_FUNCTION_NO_RUNTIME_IMPL />
+      <diag:BML_IDENTITY_TYPE_CHILD_ELEMENT />
+      <diag:BML_IMPLEMENTATION_UNKNOWN_LANGUAGE />
+      <diag:BML_INVALID_DEFINITION_BRANCH />
+      <diag:BML_INVALID_NAMESPACE_TARGET />
+      <diag:BML_INVALID_PROPERTY />
+      <diag:BML_INVALID_SINCE_VERSION />
+      <diag:BML_INVALID_TYPE_REFERENCE />
+      <diag:BML_LEGACY_TYPE_SOURCE />
+      <diag:BML_MISSING_AGGREGATION_TYPE />
+      <diag:BML_MISSING_CONSTANT_VALUE />
+      <diag:BML_MISSING_GENERIC_TYPE_ARGUMENT />
+      <diag:BML_MISSING_ID />
+      <diag:BML_MISSING_IMPLEMENTATION_LANGUAGE />
+      <diag:BML_NAMESPACE_PREFIX_COLLISION />
+      <diag:BML_NAMESPACE_UNBOUND />
+      <diag:BML_NATIVE_BLOCK_CUSTOM_PROPERTY />
+      <diag:BML_NON_STATIC_INSTANCE_REF />
+      <diag:BML_NO_TARGET />
+      <diag:BML_PREFER_CONSTANT_TYPE />
+      <diag:BML_PREFER_TYPE_CONFIGURATION />
+      <diag:BML_PRESET_CYCLE />
+      <diag:BML_REDUNDANT_STATUS />
+      <diag:BML_REFERENCE_AMBIGUOUS_TARGET />
+      <diag:BML_REFERENCE_MISSING_TARGET />
+      <diag:BML_REFERENCE_UNKNOWN_MEMBER />
+      <diag:BML_SUGGESTIONS_ON_ENUM />
+      <diag:BML_SUGGESTION_TYPE_MISMATCH />
+      <diag:BML_TYPE_BOUND_NOT_SATISFIED />
+      <diag:BML_TYPE_REFERENCE_CHILD_VALUE />
+      <diag:BML_TYPE_REFERENCE_CONSTRAINT />
+      <diag:BML_TYPE_REFERENCE_MULTIPLICITY />
+      <diag:BML_UNEXPORTED_INSTANCE_REF />
+      <diag:BML_UNKNOWN_BEAN />
+      <diag:BML_UNKNOWN_CAPABILITY />
+      <diag:BML_UNKNOWN_CONTRACT />
+      <diag:BML_UNKNOWN_DIRECTIVE />
+      <diag:BML_UNKNOWN_NATURAL_LANGUAGE />
+      <diag:BML_UNKNOWN_PROPERTY />
+      <diag:BML_UNKNOWN_RELATION />
+      <diag:BML_UNKNOWN_SERVICE />
+      <diag:BML_UNKNOWN_STATUS />
+      <diag:BML_UNKNOWN_TARGET />
+      <diag:BML_UNRESOLVABLE_INSTANCE_REF />
+      <diag:BML_VALIDATION_UNKNOWN />
+      <diag:BML_VERSION_BELOW_LIBRARY />
+      <diag:BML_VERSION_MINOR_DRIFT />
     </blocks>
   </aggregations>
 

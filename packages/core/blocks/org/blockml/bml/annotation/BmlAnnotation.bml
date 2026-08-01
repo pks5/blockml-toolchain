@@ -37,6 +37,9 @@
     <see type="core:Annotation" relation="Extends">
       Annotation branch — Package vs Annotation xmlns rule.
     </see>
+    <see type="doc:AnnotationModel" relation="SeeAlso">
+      Annotation branch — facets and Package vs Annotation xmlns rule.
+    </see>
     <see type="doc:BmlDirectives" relation="AuthoringGuide">
       Normative placement and semantics for all bml: directives.
     </see>

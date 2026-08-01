@@ -4,7 +4,7 @@ Stand: 2026-08-02
 Ziel: BlockML BML Core selbstbeschreibend genug für Repo-Extraktion / Submodule — ohne externe MD als Sprach-SSOT.
 
 **Aktuell:** `docs/02_mbml.md` ist ToC → FQN-Index; Langform in `docs/archive/02_mbml_historical.md`.
-README: 31 Doc-Blocks · 77 Diagnostics · 8 TaskGuides.
+README: 33 Doc-Blocks · **152 Diagnostics** (alle in Docs genannten `BML_*`) · 8 TaskGuides.
 
 ## Legende
 
@@ -33,7 +33,7 @@ README: 31 Doc-Blocks · 77 Diagnostics · 8 TaskGuides.
 | GAP | ~12 |
 | OUT | ~14 |
 
-**P0/P1/Typsystem/Expressions:** in BML verdichtet. Verbleibende MD-SSOT eher Toolchain (`12`/`13`/`10` EBNF/AST), Domain, und Rest-Diagnostics (~80 Codes).
+**P0/P1/Typsystem/Expressions/Constraints/Annotations:** in BML verdichtet. Verbleibende MD-SSOT eher Toolchain (`12`/`13`/`10` EBNF/AST) und Domain.
 
 ---
 
@@ -53,7 +53,7 @@ README: 31 Doc-Blocks · 77 Diagnostics · 8 TaskGuides.
 | MD-Sektion | Status | Primäre BML-Abdeckung | Fehlt in BML |
 |---|---|---|---|
 | Namespaces | **PARTIAL** | `documentation/BmlNamespace.bml`, `core/Annotation.bml` | Vollständige Prefix-/Binding-Matrix aus MD |
-| Annotations | **PARTIAL** | `annotation/BmlAnnotation.bml`, `core/Annotation.bml`, `PropertyDefinition.bml` | Ausführliche Annotation-Authoring-Guide als Doc-Block |
+| Annotations | **OK** | `documentation/AnnotationModel.bml` + `core/Annotation.bml` + `BmlAnnotation` | — |
 | Property value facets | **OK** | `definition/PropertyDefinition.bml` (values[], facets, Diagnostics) | — (MD-Verweis bleibt DeepDive) |
 | XML prefix convention | **PARTIAL** | `BmlNamespace.bml`, `MemberDefinition.bml` | Kurze Norm-Tabelle „short = BlockML, domain token = domain“ |
 | Context-Bound Implicit Namespace | **OK** | `documentation/ImplicitNamespaceResolution.bml` | — |
@@ -91,12 +91,12 @@ README: 31 Doc-Blocks · 77 Diagnostics · 8 TaskGuides.
 | `<isnot>` | **OK** | `BlockDefinition`, `DocumentationModel`, `Block` | — |
 | `<aliases>` | **OK** | `BlockDefinition`, `meta/*Alias`, `DocumentationModel` | — |
 | Documentation extensions | **OK** | `StructuralDefinition` (changelog, examples, references) | — |
-| Task guides and diagnostics | **PARTIAL** | `TaskGuideModel`, `BootstrapModel`, 3 Tasks, 1 Diagnostic | ~155 weitere Diagnostic-Blocks; MD-lange Task-Beispiele |
+| Task guides and diagnostics | **OK** / PARTIAL | `TaskGuideModel`, 8 Tasks, 152 Diagnostics | Optional: MD-lange Task-Beispiele in `examples` |
 | `<status>` | **OK** | `StructuralDefinition.status`, `status/*` | — |
-| Block Name Convention | **PARTIAL** | `BlockDefinition` / Diagnostics `BML_INVALID_BLOCK_NAME` | Explizite Naming-Regeln als Doc-Block |
+| Block Name Convention | **OK** | `documentation/BlockNameConvention.bml` | — |
 | Optional Fields | **OK** | Definition-Branch Members | — |
 | Type Modifiers | **OK** | `StructuralDefinition` abstract/final | — |
-| Contracts | **PARTIAL** | `ModelingGuidelines.bml`, `BlockDefinition.contracts` | Merge-Reihenfolge, Ignorierregeln (subBlocks/compositions) vollständig |
+| Contracts | **OK** | `documentation/ContractsModel.bml` | — |
 | Namespace Declarations | **PARTIAL** | `BmlNamespace`, `MemberDefinition` | Member-xmlns Authoring-Beispiele |
 | Member Namespace | **OK** | `MemberDefinition.bml` | — |
 | Conventions / Minimal / Full examples | **GAP** (examples) | Task `AuthorNewBlock` | Volle MD-Beispiele → `examples` auf Doc-/Task-Blocks |
@@ -196,6 +196,8 @@ Priorität für README `ReadFirst` / `ReadNext`-Kette:
 | `doc:SubBlockModel` | 02 — Sub-Block Visibility, utility, scope | P1 ✅ |
 | `doc:ContractsModel` | 02/17 — Contracts merge rules | P1 ✅ |
 | `doc:BlockNameConvention` | 02 — Block Name Convention | P1 ✅ |
+| `doc:ConstraintsModel` | 18 / 02 — Constraints & suggestions | ✅ |
+| `doc:AnnotationModel` | 02 — Annotations · value facets | ✅ |
 
 Bestehende Blocks erweitern (statt neu):
 
@@ -214,7 +216,7 @@ Bestehende Blocks erweitern (statt neu):
 
 | In Docs (ca.) | Als `diagnostic/*.bml` | Status |
 |---|---|---|
-| ~156 `BML_*` | **45** (P0/P1-Cluster + Docs-Modell/Library) | Rest ~110 (Expression, Constraint, …) offen |
+| ~156 `BML_*` | **152** (alle genannten Codes) | Optional: Prose schärfen (Fallback-Texte) |
 
 Cluster-TaskGuides: `FixVisibilityAccess`, `FixMemberOverride`, `FixCompositionPlacement`, `FixTypeIdentity` (+ bestehend `DebugUnknownType`).
 
@@ -241,12 +243,14 @@ Cluster-TaskGuides: `FixVisibilityAccess`, `FixMemberOverride`, `FixCompositionP
 - [x] `BmlAnnotation.*` verweist auf Core-Doc-Blocks, nicht auf `10_*` als Norm
 - [x] Diagnostic-Blocks für Codes aus P0/P1-Kapiteln (2026-08-01) — 45 diagnostics + 4 cluster TaskGuides
 - [ ] Domain-Abschnitte (Set/Preset) aus Core-Lernpfad entfernt oder klar als OUT markiert
-- [ ] `02_mbml.md` auf ToC + Links zu FQNs gekürzt (Roadmap V2)
+- [x] `02_mbml.md` → ToC + FQN-Links; Langform nach `archive/02_mbml_historical.md`
 - [x] Typsystem-DeepDive verdichtet (2026-08-01): TypeExpressions, GenericsModel, ConstantValueType, FunctionMappingModel (+ 17 Typ-Diagnostics)
 - [x] Expressions verdichtet (2026-08-02): Expressions + EmbeddedExpressions + FixExpressionErrors + 15 Expr-Diagnostics
-- [x] `02_mbml.md` → ToC + FQN-Links; Langform nach `archive/02_mbml_historical.md`
-- [ ] Restliche `BML_*` Codes (~80) aus Docs als Diagnostic-Blocks
-- [ ] Optional: Annotation-Authoring-Doc-Block; `10_*` EBNF bleibt DeepDive/Parser-Vertrag
+- [x] Alle in Docs genannten `BML_*` Codes als Diagnostic-Blocks (2026-08-02) — 152
+- [x] `ConstraintsModel` Doc-Block (+ AddConstraint verdrahtet)
+- [x] `AnnotationModel` Doc-Block (2026-08-02) — Annotation-Authoring + Facets
+- [ ] Optional: `10_*` EBNF / `12`/`13` bleiben DeepDive/Parser-Vertrag; Prefix-Matrix verdichten
+- [ ] Optional: Diagnostics-Prose schärfen (einige Fallback-Texte generisch)
 
 ---
 

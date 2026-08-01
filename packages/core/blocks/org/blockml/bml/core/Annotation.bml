@@ -51,8 +51,11 @@
     <see type="core:Definition" relation="ContrastsWith">
       Definition meta-model describes block structure — Annotations do not.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Namespaces — Package vs Annotation xmlns targets.
+    <see type="doc:AnnotationModel" relation="AuthoringGuide">
+      Normative Annotation authoring — facets, match rules, Package vs Annotation.
+    </see>
+    <see file="02_mbml.md" relation="DeepDive">
+      Historical notes — Annotations (superseded as AuthoringGuide by AnnotationModel).
     </see>
   </references>
 
