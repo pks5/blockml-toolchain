@@ -62,9 +62,6 @@
     <see type="type:ConstantType" relation="Extends">
       ConstantType branch — singleton value domain semantics.
     </see>
-    <see file="21_constant_value_type.md" relation="DeepDive">
-      Historical Constant design notes.
-    </see>
   </references>
 
   <genericTypes>

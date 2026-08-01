@@ -67,9 +67,6 @@
     <see type="doc:FunctionMappingModel" relation="ReadNext">
       Next — positional/named mapping sharing declaration-order rules.
     </see>
-    <see file="21_constant_value_type.md" relation="DeepDive">
-      Historical Constant design notes and BOM mapping.
-    </see>
   </references>
 
 </block>

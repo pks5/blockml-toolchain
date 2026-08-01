@@ -76,12 +76,6 @@
     <see type="doc:BlockNameConvention" relation="ReadNext">
       Next — PascalCase Block name rules.
     </see>
-    <see file="17_type_system_bml.md" relation="DeepDive">
-      baseType vs contracts and satisfiesTypeBound formal rules.
-    </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form contract examples.
-    </see>
   </references>
 
 </block>

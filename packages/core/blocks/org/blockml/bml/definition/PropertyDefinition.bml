@@ -45,12 +45,6 @@
     <see type="doc:AnnotationModel" relation="AuthoringGuide">
       Annotation value facets, parent-context rules, duplicate-namespace diagnostics.
     </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      PropertyDefinition BOM structure.
-    </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical members and properties notes.
-    </see>
     <see type="core:ValueType" relation="Requires">
       Required branch for property payload types.
     </see>

@@ -91,9 +91,6 @@
     <see type="doc:BlockNameConvention" relation="SeeAlso">
       PascalCase rules for &lt;name&gt;.
     </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form examples — Type References and Block Identity.
-    </see>
   </references>
 
 </block>

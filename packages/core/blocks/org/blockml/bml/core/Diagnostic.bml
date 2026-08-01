@@ -25,9 +25,6 @@
     <see type="core:TaskGuide" relation="SeeAlso">
       Procedural fix guides linked via relation=Resolves.
     </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      Diagnostic code catalogue — BML_* error and warning codes.
-    </see>
   </references>
 
   <abstract>true</abstract>

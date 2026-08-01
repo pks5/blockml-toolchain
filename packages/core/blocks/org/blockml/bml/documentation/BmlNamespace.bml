@@ -85,18 +85,6 @@
     <see type="doc:ImplicitNamespaceResolution" relation="ReadNext">
       Next — context-bound implicit namespace for unqualified references.
     </see>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Mandatory BML namespace — historical notes and examples.
-    </see>
-    <see file="00_system.md" relation="DeepDive">
-      FQN Namespaces — system-level summary.
-    </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      ToC index — namespaces topic maps to this block.
-    </see>
-    <see file="15_dev_setup.md" relation="DeepDive">
-      Package Conventions — npm packages vs. FQN namespaces.
-    </see>
   </references>
 
 </block>

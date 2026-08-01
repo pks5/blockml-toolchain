@@ -31,9 +31,6 @@
     <see type="doc:BmlDirectives" relation="AuthoringGuide">
       Allowed bml:xml recipes.
     </see>
-    <see file="19_definition_blocks_and_bml_xml.md" relation="DeepDive">
-      Stage 1/2 hybrid checks for bml:xml.
-    </see>
   </references>
 
 </block>

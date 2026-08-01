@@ -57,15 +57,6 @@
     <see type="doc:GenericsModel" relation="AuthoringGuide">
       Generic declarations, inheritance binding, defaultType.
     </see>
-    <see file="17_type_system_bml.md" relation="DeepDive">
-      Historical long-form type system specification.
-    </see>
-    <see file="04_types.md" relation="DeepDive">
-      MBOM parse/serialize rules per type — domain migration companion.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      TypeDescriptor AST — formal type expression structures.
-    </see>
     <see type="core:ValueType" relation="Extends">
       Abstract base for all value blocks used in Property and Capability types.
     </see>

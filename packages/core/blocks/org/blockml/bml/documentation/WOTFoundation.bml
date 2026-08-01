@@ -52,14 +52,8 @@
   </documentation>
 
   <references>
-    <see file="WOT_Reference_v28.md" relation="DeepDive">
-      Web of Things reference — Idea, Manifestation, World, vocabulary, Maker Universe.
-    </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      WOT alignment and Platonic mapping — Idea vs Manifestation in BlockML layers.
-    </see>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Block and Block Instance — WOT vocabulary for grammar, template, and Thing.
+    <see type="doc:EverythingIsABlock" relation="SeeAlso">
+      WOT alignment and Idea vs Manifestation.
     </see>
     <see type="core:Block" relation="SeeAlso">
       Universal semantic unit — grammar element of a World.

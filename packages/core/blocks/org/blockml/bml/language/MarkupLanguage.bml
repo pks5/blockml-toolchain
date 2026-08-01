@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:lang="org.blockml.bml.language">
 
   <name>MarkupLanguage</name>
@@ -39,8 +40,8 @@
     <see type="lang:ProgrammingLanguage" relation="SeeAlso">
       Parallel formal-language branch with the same L parameter.
     </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      Language branch and generic type parameters.
+    <see type="doc:TypeSystemOverview" relation="AuthoringGuide">
+      Language branch and generics.
     </see>
   </references>
 

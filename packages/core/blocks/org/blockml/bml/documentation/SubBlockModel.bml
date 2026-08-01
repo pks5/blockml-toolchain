@@ -90,9 +90,6 @@
     <see type="doc:ContractsModel" relation="ReadNext">
       Next — contracts merge and type bounds (root only; not on Sub-Blocks).
     </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form examples — Sub-Blocks and Embedded Blocks.
-    </see>
   </references>
 
 </block>

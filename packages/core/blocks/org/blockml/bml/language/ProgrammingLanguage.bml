@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:lang="org.blockml.bml.language">
 
   <name>ProgrammingLanguage</name>
@@ -43,8 +44,8 @@
     <see type="lang:PseudoCode" relation="SeeAlso">
       Typical consumer — free-form code whose prose language may be declared via L.
     </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      Language branch and generic type parameters.
+    <see type="doc:TypeSystemOverview" relation="AuthoringGuide">
+      Language branch and generics.
     </see>
   </references>
 

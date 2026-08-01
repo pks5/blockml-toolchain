@@ -104,12 +104,6 @@
     <see type="diag:BML_EXPR_SYNTAX_ERROR" relation="SeeAlso">
       Expression parse failure.
     </see>
-    <see file="10_expression_language.md" relation="DeepDive">
-      Full EBNF, AST union, and worked examples — parser utility contract.
-    </see>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Expression layer vs BOM data layer.
-    </see>
   </references>
 
 </block>

@@ -77,9 +77,6 @@
     <see type="doc:CompilerArchitecture" relation="ReadNext">
       Next — parser / validator / renderer pipeline.
     </see>
-    <see file="10_expression_language.md" relation="DeepDive">
-      Historical embedded-expression examples and renderer behaviour.
-    </see>
   </references>
 
 </block>

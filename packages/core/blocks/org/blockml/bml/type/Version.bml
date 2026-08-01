@@ -10,6 +10,7 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <name>Version</name>
@@ -27,11 +28,8 @@
     type itself.</documentation>
 
   <references>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Version attribute on Block and Library definitions.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      Version comparison and reference rules.
+    <see type="doc:LibrarySystem" relation="AuthoringGuide">
+      Version on Block and Library definitions.
     </see>
   </references>
 

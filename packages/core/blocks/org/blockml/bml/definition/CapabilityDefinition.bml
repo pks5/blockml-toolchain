@@ -12,6 +12,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:def="org.blockml.bml.definition"
   xmlns:lang="org.blockml.bml.language"
   xmlns:type="org.blockml.bml.type">
@@ -34,10 +35,7 @@
     attribute preferred on Block instances. Structured implementation remains a child element.</documentation>
 
   <references>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      CapabilityDefinition BOM structure.
-    </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
+    <see type="doc:CapabilitySemantics" relation="AuthoringGuide">
       Capabilities authoring rules.
     </see>
     <see type="cap:Inbound" relation="Requires">

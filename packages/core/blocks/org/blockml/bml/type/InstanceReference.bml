@@ -13,6 +13,7 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
@@ -49,14 +50,11 @@
   </documentation>
 
   <references>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Qualified Block Instance References — lexical form and visibility.
+    <see type="doc:TypeExpressions" relation="AuthoringGuide">
+      TypeReference · InstanceReference · MemberReference.
     </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      TypeReference · InstanceReference · MemberReference hierarchy.
-    </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Associations authoring and see instance= target.
+    <see type="doc:BlockAndInstance" relation="AuthoringGuide">
+      Associations and see instance= targets.
     </see>
     <see type="type:TypeReference" relation="SeeAlso">
       Sibling ValueType for Block type FQNs — not instance pointers.

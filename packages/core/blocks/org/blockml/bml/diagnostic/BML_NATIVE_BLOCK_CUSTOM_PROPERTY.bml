@@ -33,9 +33,6 @@
     <see type="doc:ModelingGuidelines" relation="SeeAlso">
       Modeling patterns.
     </see>
-    <see file="03_mbom.md" relation="DeepDive">
-      MBOM NativeBlock rules.
-    </see>
   </references>
 
 </block>

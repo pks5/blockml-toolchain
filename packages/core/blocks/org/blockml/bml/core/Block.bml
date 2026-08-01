@@ -10,9 +10,9 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:def="org.blockml.bml.definition"
-  xmlns:lang="org.blockml.bml.language"
-  xmlns:mbcore="com.machineblocks.bml.core">
+  xmlns:lang="org.blockml.bml.language">
 
   <name>Block</name>
   <type>core:Block</type>
@@ -88,22 +88,16 @@
     <see type="def:StructuralDefinition" relation="Defines">
       Shared documentation model for structural definition elements.
     </see>
-    <see type="mbcore:Block" relation="SeeAlso">
-      Example domain base — domain-specific branches extend Block.
+    <see type="doc:DocumentationModel" relation="AuthoringGuide">
+      Block documentation model — is, documentation, extensions.
     </see>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Block and Block Instance — fundamental architecture principles.
+    <see type="doc:DefinitionModel" relation="AuthoringGuide">
+      Root type exception and Definition branch.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Block Definition — is, documentation, and documentation extensions.
-    </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
-      Root Type Exception and Definition Branch.
-    </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
+    <see type="doc:EverythingIsABlock" relation="AuthoringGuide">
       Everything is a Block — type system overview.
     </see>
-    <see file="19_definition_blocks_and_bml_xml.md" relation="AuthoringGuide">
+    <see type="doc:BmlDirectives" relation="AuthoringGuide">
       Definition branch bml:xml serialization rules.
     </see>
   </references>

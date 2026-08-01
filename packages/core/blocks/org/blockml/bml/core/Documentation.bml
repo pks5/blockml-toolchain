@@ -8,7 +8,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
-  xmlns:core="org.blockml.bml.core">
+  xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation">
 
   <name>Documentation</name>
   <type>core:Documentation</type>
@@ -30,8 +31,8 @@
     <see type="core:TaskGuide" relation="SeeAlso">
       Procedural task guides — org.blockml.bml.task.* blocks.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Block documentation model — is, documentation, references, examples.
+    <see type="doc:DocumentationModel" relation="AuthoringGuide">
+      Block documentation model.
     </see>
   </references>
 

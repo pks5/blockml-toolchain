@@ -15,6 +15,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:mapping="org.blockml.bml.mapping"
   xmlns:type="org.blockml.bml.type">
 
@@ -60,23 +61,17 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      StructType branch and struct property access rules.
+    <see type="doc:TypeExpressions" relation="AuthoringGuide">
+      StructType and property access.
     </see>
-    <see file="22_function_mapping.md" relation="AuthoringGuide">
-      Positional function-parameter syntax at call sites.
+    <see type="doc:FunctionMappingModel" relation="AuthoringGuide">
+      Positional function-parameter syntax.
     </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      Member declaration order and type descriptors.
-    </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
+    <see type="doc:TypeSystemOverview" relation="AuthoringGuide">
       ValueType branch.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
+    <see type="doc:MemberVisibility" relation="AuthoringGuide">
       Member declaration order authoring rules.
-    </see>
-    <see file="04_types.md" relation="AuthoringGuide">
-      Anonymous Object inputType (MBOM).
     </see>
     <see type="mapping:FunctionMapping" relation="SeeAlso">
       Positional parameter mapping at capability call sites.

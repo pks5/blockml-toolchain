@@ -97,9 +97,6 @@
     <see type="doc:CompositionModel" relation="ReadNext">
       Next — filling aggregations with composition instances.
     </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form examples — Partial Member Overrides (superseded as AuthoringGuide by this block).
-    </see>
   </references>
 
 </block>

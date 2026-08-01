@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:mapping="org.blockml.bml.mapping">
 
   <name>Mapping</name>
@@ -33,8 +34,8 @@
   </documentation>
 
   <references>
-    <see file="22_function_mapping.md" relation="AuthoringGuide">
-      Function parameter mapping rules and component responsibilities.
+    <see type="doc:FunctionMappingModel" relation="AuthoringGuide">
+      Function parameter mapping rules.
     </see>
     <see type="mapping:FunctionMapping" relation="SeeAlso">
       Concrete mapping for function-like call syntax.

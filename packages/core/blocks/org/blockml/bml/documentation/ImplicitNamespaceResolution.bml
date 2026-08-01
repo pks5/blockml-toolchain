@@ -46,7 +46,7 @@
     • &lt;language&gt;&lt;English /&gt;&lt;/language&gt; → org.blockml.bml.language.English
     • &lt;documentation language="German"&gt; → org.blockml.bml.language.German
     • &lt;change version="2.0.0" language="German"&gt; → org.blockml.bml.language.German
-    • &lt;see file="02_mbml.md" language="English"&gt; → org.blockml.bml.language.English
+    • &lt;see file="guide.md" language="English"&gt; → org.blockml.bml.language.English
     • &lt;see type="core:Block" relation="Extends"&gt; → org.blockml.bml.relation.Extends
     • &lt;example language="OpenSCAD"&gt; → org.blockml.bml.language.OpenSCAD
     • &lt;status&gt;Draft&lt;/status&gt; → org.blockml.bml.status.Draft
@@ -59,12 +59,6 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Context-Bound Implicit Namespace — authoritative authoring rules.
-    </see>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Context-bound implicit namespace summary.
-    </see>
     <see type="doc:BmlNamespace" relation="SeeAlso">
       Mandatory domain.bml namespace — FQN layout.
     </see>

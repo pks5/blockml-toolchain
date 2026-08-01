@@ -61,11 +61,8 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Library Format — structure, nested libraries, blocks membership rules.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      BlockLibrary BOM structure and nested-library rules.
+    <see type="doc:LibrarySystem" relation="AuthoringGuide">
+      Library format — structure and blocks membership.
     </see>
     <see type="doc:LibrarySystem" relation="SeeAlso">
       Libraries, packages, namespaces, versioning, and imports.

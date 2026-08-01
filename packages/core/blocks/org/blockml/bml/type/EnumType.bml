@@ -15,6 +15,7 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <name>EnumType</name>
@@ -73,22 +74,13 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      EnumType branch and value declaration rules.
+    <see type="doc:TypeSystemOverview" relation="AuthoringGuide">
+      EnumType branch and value declaration.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Enum types and enum value reference syntax.
+    <see type="doc:ConstraintsModel" relation="AuthoringGuide">
+      Enum types vs suggestions.
     </see>
-    <see file="04_types.md" relation="AuthoringGuide">
-      Enum types and enum value references (MBOM).
-    </see>
-    <see file="01_bom_core.md" relation="DeepDive">
-      EnumType property values.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      BOM stores enum property values as id + typeFqn only.
-    </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
+    <see type="doc:TypeSystemOverview" relation="AuthoringGuide">
       ValueType branch.
     </see>
     <see type="type:StructType" relation="ContrastsWith">

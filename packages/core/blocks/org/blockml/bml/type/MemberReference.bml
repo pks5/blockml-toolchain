@@ -11,6 +11,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
@@ -43,11 +44,11 @@
     aggregations (use TypeReferenceEntity).</documentation>
 
   <references>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
-      Definition addressing and see target attributes.
+    <see type="doc:DocumentationModel" relation="AuthoringGuide">
+      Definition addressing and see targets.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      references — Why separate target attributes.
+    <see type="doc:DocumentationModel" relation="AuthoringGuide">
+      references — separate target attributes.
     </see>
     <see type="type:TypeReference" relation="SeeAlso">
       Parent ValueType — Block type FQNs only.

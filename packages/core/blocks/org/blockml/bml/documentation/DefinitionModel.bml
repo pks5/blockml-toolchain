@@ -54,17 +54,11 @@
   </documentation>
 
   <references>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
-      Definition Branch — meta-model hierarchy, addressing, and bml:xml.
+    <see type="doc:BmlDirectives" relation="AuthoringGuide">
+      bml:xml self-description rules.
     </see>
-    <see file="19_definition_blocks_and_bml_xml.md" relation="AuthoringGuide">
-      Definition blocks and bml:xml self-description rules (WIP).
-    </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Block Definition — is, documentation, references, examples on root blocks and members.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      MemberDefinition, DocumentationReference — BOM reflection shapes.
+    <see type="doc:DocumentationModel" relation="AuthoringGuide">
+      is, documentation, references, examples.
     </see>
     <see type="core:Definition" relation="Extends">
       Abstract base of the Definition branch.

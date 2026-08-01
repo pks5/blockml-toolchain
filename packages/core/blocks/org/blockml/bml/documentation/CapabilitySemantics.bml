@@ -59,12 +59,6 @@
   </documentation>
 
   <references>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Semantics remain in BML — Capability interpretation in renderers.
-    </see>
-    <see file="08_managed_object.md" relation="DeepDive">
-      Managed object model — Capabilities as the behavioural surface.
-    </see>
     <see type="doc:ImplicitNamespaceResolution" relation="SeeAlso">
       Unqualified Capability type vs inputType / outputType sites.
     </see>
@@ -73,9 +67,6 @@
     </see>
     <see type="doc:PseudoCode" relation="SeeAlso">
       Preferred Capability implementation dialect for semantic prose.
-    </see>
-    <see file="16_framework_base_types.md" relation="DeepDive">
-      languages aggregation — permitted implementation languages on Block definitions.
     </see>
     <see type="core:Capability" relation="Extends">
       Capability branch — implementation member and input/output type rules.

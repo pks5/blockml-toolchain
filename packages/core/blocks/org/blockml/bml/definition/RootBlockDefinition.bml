@@ -43,12 +43,6 @@
     <see type="doc:TypeIdentityDerivation" relation="AuthoringGuide">
       Root Block identity — type required; name optional short form.
     </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      BlockDefinition BOM structure.
-    </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form root and embedded block examples.
-    </see>
     <see type="def:BlockDefinition" relation="Extends">
       Shared block definition shape — identity, members, definition, and subBlocks.
     </see>

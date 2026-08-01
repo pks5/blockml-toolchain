@@ -54,12 +54,6 @@
     <see type="doc:MemberVisibility" relation="AuthoringGuide">
       Aggregation visibility controls which bml:id values may be referenced.
     </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      AggregationDefinition BOM structure and CompositionTemplate.
-    </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form aggregation and composition examples.
-    </see>
     <see type="core:Block" relation="Requires">
       Required branch for aggregation payload types.
     </see>

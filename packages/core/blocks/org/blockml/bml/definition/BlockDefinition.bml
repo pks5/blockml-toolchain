@@ -62,15 +62,6 @@
     <see type="doc:BlockNameConvention" relation="AuthoringGuide">
       PascalCase &lt;name&gt; rules.
     </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      BlockDefinition BOM structure.
-    </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form block definition examples.
-    </see>
-    <see file="16_framework_base_types.md" relation="DeepDive">
-      Definition Addressing and genericTypes aggregation.
-    </see>
     <see type="core:Block" relation="Extends">
       Sole inheritance root — empty &lt;baseType /&gt; only (org.blockml.bml.core.Block).
     </see>

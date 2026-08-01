@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <name>PrimitiveType</name>
@@ -31,8 +32,8 @@
     Valid: &lt;property name="count" type="Integer"&gt;&lt;value&gt;5&lt;/value&gt;&lt;/property&gt;</documentation>
 
   <references>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      PrimitiveType branch and PrimitiveEntity wrappers.
+    <see type="doc:TypeSystemOverview" relation="AuthoringGuide">
+      PrimitiveType branch.
     </see>
     <see type="type:Number" relation="SeeAlso">
       Numeric primitive branch.

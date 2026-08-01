@@ -94,9 +94,6 @@
     <see type="doc:MemberVisibility" relation="ReadNext">
       Next — member and Sub-Block visibility (README learning order).
     </see>
-    <see file="18_constraints_and_suggestions.md" relation="DeepDive">
-      Historical constraint hierarchy tables and pipeline notes.
-    </see>
   </references>
 
 </block>

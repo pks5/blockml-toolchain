@@ -61,17 +61,8 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Library Format — structure, nested libraries, blocks membership rules.
-    </see>
-    <see file="01_bom_core.md" relation="DeepDive">
-      FQN convention, domain-scoped namespace separation, instance identity.
-    </see>
-    <see file="13_bml_to_bom_mapping.md" relation="AuthoringGuide">
-      Library discovery and TypeRegistry bootstrap from library manifests.
-    </see>
-    <see file="15_dev_setup.md" relation="AuthoringGuide">
-      Monorepo package conventions and workspace layout.
+    <see type="doc:CompilerArchitecture" relation="SeeAlso">
+      Library discovery and TypeRegistry bootstrap.
     </see>
     <see type="blockml:Library" relation="SeeAlso">
       Published catalog of the BlockML core library.

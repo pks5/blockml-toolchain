@@ -39,12 +39,6 @@
     <see type="doc:SubBlockModel" relation="AuthoringGuide">
       Embedded Blocks — root-only Inline Library rules.
     </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      Embedded Blocks / Inline Library.
-    </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form embedded block examples.
-    </see>
     <see type="def:BlockDefinition" relation="Extends">
       Shared block definition shape — identity, members, definition, and subBlocks.
     </see>

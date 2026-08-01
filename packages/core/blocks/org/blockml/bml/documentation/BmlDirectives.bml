@@ -98,15 +98,6 @@
     <see type="doc:TypeIdentityDerivation" relation="ReadNext">
       Next — type references and Block identity derivation.
     </see>
-    <see file="19_definition_blocks_and_bml_xml.md" relation="DeepDive">
-      Extended bml:xml placement, Stage 1/2 hybrid checks, and open decisions.
-    </see>
-    <see file="10_expression_language.md" relation="DeepDive">
-      Full expression grammar used inside directive attributes.
-    </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form examples — BML Directives (superseded as AuthoringGuide by this block).
-    </see>
   </references>
 
 </block>

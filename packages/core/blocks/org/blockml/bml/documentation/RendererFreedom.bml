@@ -46,20 +46,8 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      Renderer freedom — semantic layer vs compiler implementation; Platonic mapping.
-    </see>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Renderer determines the flow; renderer working model; semantics in BML only.
-    </see>
-    <see file="14_compiler_runtime.md" relation="DeepDive">
-      Compile I/O model — target-defined output cardinality (C4).
-    </see>
-    <see file="05_scad_renderer.md" relation="DeepDive">
-      SCAD reference renderer — mb_block pattern as one manifestation strategy.
-    </see>
-    <see file="06_compiler.md" relation="DeepDive">
-      Example renderer pipelines — SCAD vs Documentation renderer flows.
+    <see type="doc:EverythingIsABlock" relation="SeeAlso">
+      Semantic layer vs compiler; renderer freedom.
     </see>
     <see type="doc:LibrarySystem" relation="ReadNext">
       Next reading step — libraries, packages, namespaces, versioning.

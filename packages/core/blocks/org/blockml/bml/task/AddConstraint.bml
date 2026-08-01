@@ -45,9 +45,6 @@
     <see type="doc:ConstraintsModel" relation="TaskStep">
       Step 2 — choose constraint branch and target binding rules.
     </see>
-    <see file="18_constraints_and_suggestions.md" relation="DeepDive">
-      Historical constraint hierarchy tables.
-    </see>
     <see type="constraint:Min" relation="TaskStep">
       Step 3 — pick a concrete constraint block (Min, Max, Pattern, RequiresMember, …).
     </see>

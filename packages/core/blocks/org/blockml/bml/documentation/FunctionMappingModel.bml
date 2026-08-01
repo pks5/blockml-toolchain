@@ -78,9 +78,6 @@
     <see type="diag:BML_MIXED_FUNCTION_ARGUMENTS" relation="SeeAlso">
       Mixed positional and named arguments.
     </see>
-    <see file="22_function_mapping.md" relation="DeepDive">
-      Historical FunctionMapping examples and V1 scope notes.
-    </see>
   </references>
 
 </block>

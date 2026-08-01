@@ -9,8 +9,8 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
-  xmlns:type="org.blockml.bml.type"
-  xmlns:mbcore="com.machineblocks.bml.core">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:type="org.blockml.bml.type">
 
   <name>Entity</name>
   <type>core:Entity</type>
@@ -22,11 +22,11 @@
     Entity. Entity is not a ValueType; use Property with a ValueType for typed payloads.</documentation>
 
   <references>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
+    <see type="doc:TypeSystemOverview" relation="AuthoringGuide">
       Entity branch and PrimitiveEntity wrappers.
     </see>
-    <see type="mbcore:Block" relation="Extends">
-      Example domain Entity base type.
+    <see type="doc:BlockAndInstance" relation="SeeAlso">
+      Entity instances in composition vs Block definitions.
     </see>
     <see type="core:PrimitiveEntity" relation="SeeAlso">
       Primitive value wrappers as Entity instances.

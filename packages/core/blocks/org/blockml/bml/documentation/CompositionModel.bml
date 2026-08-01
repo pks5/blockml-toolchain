@@ -97,9 +97,6 @@
     <see type="doc:BmlDirectives" relation="SeeAlso">
       bml:each, bml:if, bml:container, bml:with, bml:xml on composition hosts.
     </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form examples — Composition (superseded as AuthoringGuide by this block).
-    </see>
   </references>
 
 </block>

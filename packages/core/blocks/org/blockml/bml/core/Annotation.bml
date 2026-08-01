@@ -54,9 +54,6 @@
     <see type="doc:AnnotationModel" relation="AuthoringGuide">
       Normative Annotation authoring — facets, match rules, Package vs Annotation.
     </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical notes — Annotations (superseded as AuthoringGuide by AnnotationModel).
-    </see>
   </references>
 
   <subTypes>

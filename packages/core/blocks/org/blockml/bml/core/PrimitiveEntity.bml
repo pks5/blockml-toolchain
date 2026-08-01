@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <name>PrimitiveEntity</name>
@@ -29,8 +30,8 @@
     primitive value itself must become an Entity with identity, documentation, or metadata.</documentation>
 
   <references>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      PrimitiveEntity and generic resolution through inheritance.
+    <see type="doc:TypeSystemOverview" relation="AuthoringGuide">
+      PrimitiveEntity and generic resolution.
     </see>
   </references>
 

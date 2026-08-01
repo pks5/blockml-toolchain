@@ -85,12 +85,6 @@
     <see type="diag:BML_INVALID_PROPERTY_TYPE" relation="SeeAlso">
       Non-ValueType used where a ValueType is required.
     </see>
-    <see file="17_type_system_bml.md" relation="DeepDive">
-      Historical long-form type expression examples.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      TypeDescriptor AST shapes.
-    </see>
   </references>
 
 </block>

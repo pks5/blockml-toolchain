@@ -38,8 +38,8 @@
     <see type="doc:LibrarySystem" relation="Prerequisite">
       How libraries register blocks in TypeRegistry.
     </see>
-    <see file="12_bom_object_model.md" relation="SeeAlso">
-      BML_UNKNOWN_TYPE in the diagnostic code catalogue.
+    <see type="doc:TypeIdentityDerivation" relation="SeeAlso">
+      Type resolution and unknown-type diagnostics.
     </see>
   </references>
 

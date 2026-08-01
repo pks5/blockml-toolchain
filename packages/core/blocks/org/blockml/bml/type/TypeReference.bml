@@ -14,6 +14,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:def="org.blockml.bml.definition"
   xmlns:type="org.blockml.bml.type">
 
@@ -59,23 +60,14 @@
   </documentation>
 
   <references>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Object identity and FQN convention.
+    <see type="doc:TypeExpressions" relation="AuthoringGuide">
+      Generics and TypeReference syntax.
     </see>
-    <see file="00_system.md" relation="DeepDive">
-      FQN (Fully Qualified Name) system overview.
+    <see type="doc:DefinitionModel" relation="AuthoringGuide">
+      Definition branch and Reference sub-block.
     </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      Generics and BML attribute syntax for type parameters · TypeReferenceEntity · MemberReference.
-    </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
-      Definition branch and StructuralDefinition Reference sub-block.
-    </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Namespace resolution and Block definition authoring.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      typeFqn fields in BOM structures.
+    <see type="doc:TypeIdentityDerivation" relation="AuthoringGuide">
+      Namespace resolution and type identity.
     </see>
     <see type="def:BlockDefinition" relation="Defines">
       type and baseType TypeReference properties (Block FQN / TypeExpression text).

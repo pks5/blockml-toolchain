@@ -77,9 +77,6 @@
     <see type="core:ValueType" relation="Extends">
       ValueType branch — types describe nature; Properties own values.
     </see>
-    <see file="20_value_type_instance_configuration.md" relation="DeepDive">
-      Historical configuration tables and BOM representation.
-    </see>
   </references>
 
 </block>

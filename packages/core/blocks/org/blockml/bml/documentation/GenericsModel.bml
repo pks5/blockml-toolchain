@@ -84,9 +84,6 @@
     <see type="diag:BML_GENERIC_CONSTRAINT_VIOLATION" relation="SeeAlso">
       Type argument fails parameter baseType.
     </see>
-    <see file="17_type_system_bml.md" relation="DeepDive">
-      Historical long-form generics examples.
-    </see>
   </references>
 
 </block>

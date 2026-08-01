@@ -4,7 +4,8 @@ Stand: 2026-08-02
 Ziel: BlockML BML Core selbstbeschreibend genug für Repo-Extraktion / Submodule — ohne externe MD als Sprach-SSOT.
 
 **Aktuell:** `docs/02_mbml.md` ist ToC → FQN-Index; Langform in `docs/archive/02_mbml_historical.md`.
-README: 33 Doc-Blocks · **152 Diagnostics** (alle in Docs genannten `BML_*`) · 8 TaskGuides.
+README: 33 Doc-Blocks · **152 Diagnostics** · 8 TaskGuides.  
+**Submodule-reif bzgl. Docs:** Core-BML enthält **keine** `see file="*.md"` mehr — Normen nur noch über `doc:*` / Definitionen.
 
 ## Legende
 
@@ -239,10 +240,10 @@ Cluster-TaskGuides: `FixVisibilityAccess`, `FixMemberOverride`, `FixCompositionP
 
 - [x] P0 Doc-Blocks geschrieben und in `Library.blocks` + `README` ReadFirst/ReadNext eingehängt (2026-08-01)
 - [x] P1 Doc-Blocks geschrieben und eingehängt (2026-08-01): TypeIdentityDerivation, SubBlockModel, ContractsModel, BlockNameConvention
-- [x] Visibility / Partial Override / Composition: keine `see file="02_mbml.md"` mehr als *AuthoringGuide* (höchstens DeepDive/Historie)
+- [x] Visibility / Partial Override / Composition: keine `see file="02_mbml.md"` mehr als *AuthoringGuide*
 - [x] `BmlAnnotation.*` verweist auf Core-Doc-Blocks, nicht auf `10_*` als Norm
 - [x] Diagnostic-Blocks für Codes aus P0/P1-Kapiteln (2026-08-01) — 45 diagnostics + 4 cluster TaskGuides
-- [ ] Domain-Abschnitte (Set/Preset) aus Core-Lernpfad entfernt oder klar als OUT markiert
+- [x] Domain-SeeAlso (`mbcore:*`) aus Core-Blocks entfernt (2026-08-02); Preset-Diagnostic als Domain markiert
 - [x] `02_mbml.md` → ToC + FQN-Links; Langform nach `archive/02_mbml_historical.md`
 - [x] Typsystem-DeepDive verdichtet (2026-08-01): TypeExpressions, GenericsModel, ConstantValueType, FunctionMappingModel (+ 17 Typ-Diagnostics)
 - [x] Expressions verdichtet (2026-08-02): Expressions + EmbeddedExpressions + FixExpressionErrors + 15 Expr-Diagnostics
@@ -252,8 +253,8 @@ Cluster-TaskGuides: `FixVisibilityAccess`, `FixMemberOverride`, `FixCompositionP
 - [x] Prefix-Matrix / Namespace-Norm in `BmlNamespace` (2026-08-02)
 - [x] CapabilitySemantics + readOnly-Semantik verdichtet; Gap-Matrix Sprach-Sektionen auf OK
 - [x] Diagnostic-Prose Batch-Expand (summary + Remedy) für dünne Fallbacks
-- [ ] Optional: `10_*` EBNF / `12`/`13` bleiben DeepDive/Parser-Vertrag
-- [ ] Optional: Doc-Stil/Urbild, Instanz-Serialisierung, `bml:xml` Stage-Hybrid; Beispiele in `examples`
+- [x] **Keine `see file="*.md"` mehr in Core-BML** (2026-08-02) — AuthoringGuide/TaskStep → `doc:*`; DeepDive-MD entfernt
+- [ ] Optional: Beispiele in `examples`; Parser-Vertrag `10`/`12`/`13` bleibt im Monorepo außerhalb Core
 
 ---
 

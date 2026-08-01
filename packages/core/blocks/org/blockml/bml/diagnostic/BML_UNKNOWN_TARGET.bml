@@ -33,9 +33,6 @@
     <see type="doc:CompilerArchitecture" relation="AuthoringGuide">
       Targets.
     </see>
-    <see file="07_cli.md" relation="DeepDive">
-      CLI targets.
-    </see>
   </references>
 
 </block>

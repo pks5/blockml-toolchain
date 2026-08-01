@@ -69,17 +69,11 @@
   </documentation>
 
   <references>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
-      Bootstrap Order — framework BML load sequence for TypeRegistry.
+    <see type="doc:CompilerArchitecture" relation="SeeAlso">
+      TypeRegistry bootstrap and BML registration.
     </see>
-    <see file="13_bml_to_bom_mapping.md" relation="AuthoringGuide">
-      TypeRegistry bootstrap — BML registration algorithm.
-    </see>
-    <see file="14_compiler_runtime.md" relation="AuthoringGuide">
-      CLI bootstrap — loading framework BML before user projects.
-    </see>
-    <see file="00_system.md" relation="DeepDive">
-      Self-hosting bootstrap and BML self-description roadmap (V1/V2/V3).
+    <see type="doc:CompilerArchitecture" relation="SeeAlso">
+      CLI bootstrap — framework BML before user projects.
     </see>
     <see type="core:BlockLibrary" relation="Defines">
       Library descriptor — readMe (ReadMe, 1..1) and bootstrap (Bootstrap, 0..1).

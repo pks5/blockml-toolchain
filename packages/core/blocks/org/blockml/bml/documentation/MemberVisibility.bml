@@ -93,9 +93,6 @@
     <see type="doc:ModelingGuidelines" relation="SeeAlso">
       Inheritance, contracts, and member modeling patterns.
     </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form examples — Member Visibility (superseded as AuthoringGuide by this block).
-    </see>
   </references>
 
 </block>

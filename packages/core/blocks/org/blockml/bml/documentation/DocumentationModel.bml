@@ -74,7 +74,7 @@
     see target attributes — exactly one target kind:
     type="core:ValueType" — Block or Definition type via xmlns prefix (TypeReference)
     instance="myId" / instance="foo:Bar::myId" — Block instance pointer (InstanceReference)
-    file="02_mbml.md" — repository documentation file
+    file="guide.md" — optional companion markdown in the consuming repository (not Core SSOT)
     url="https://…" — external URL
     property="com.foo.Bar.properties.width" — PropertyDefinition canonical path
     aggregation="com.foo.Bar.aggregations.parts" — AggregationDefinition canonical path
@@ -101,17 +101,8 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      is, summary, keywords, isnot, aliases, documentation, since, changelog, examples, references — authoring rules.
-    </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
-      Definition branch documentation model — StructuralDefinition sub-blocks.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      DocumentationExample, DocumentationReference — BOM documentation shapes.
-    </see>
-    <see file="00_system.md" relation="DeepDive">
-      V2 documentation migration — Markdown vs BML roles.
+    <see type="doc:DefinitionModel" relation="SeeAlso">
+      StructuralDefinition documentation model.
     </see>
     <see type="lang:NaturalLanguage" relation="Extends">
       Natural language branch — documentation prose and example titles.

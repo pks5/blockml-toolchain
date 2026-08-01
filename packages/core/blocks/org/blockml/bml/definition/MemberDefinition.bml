@@ -77,12 +77,6 @@
     <see type="doc:PartialMemberOverrides" relation="AuthoringGuide">
       Partial overrides — merge semantics, abstract/final/override, readOnly.
     </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      MemberDefinitionBase and member kind unions in the BOM.
-    </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form member examples.
-    </see>
     <see type="def:BlockDefinition" relation="Defines">
       Parent block shape — properties, aggregations, associations, capabilities containers.
     </see>

@@ -52,17 +52,11 @@
   </documentation>
 
   <references>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Contracts, inheritance, Properties, Capabilities — core modeling rules.
+    <see type="doc:ContractsModel" relation="AuthoringGuide">
+      Contracts and validation by branch.
     </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
-      abstract, final, subTypes, languages, contracts, genericTypes modifiers.
-    </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      Contracts section; validation rules by branch.
-    </see>
-    <see file="18_constraints_and_suggestions.md" relation="AuthoringGuide">
-      Property constraints and editor suggestions.
+    <see type="doc:ConstraintsModel" relation="AuthoringGuide">
+      Property constraints and suggestions.
     </see>
     <see type="core:Capability" relation="Extends">
       Capability branch — behaviour as the public semantic surface.

@@ -39,15 +39,6 @@
     <see type="doc:TypeExpressions" relation="SeeAlso">
       Generic application as a type expression.
     </see>
-    <see file="16_framework_base_types.md" relation="DeepDive">
-      genericTypes aggregation on Block definitions.
-    </see>
-    <see file="17_type_system_bml.md" relation="DeepDive">
-      Historical generics examples.
-    </see>
-    <see file="12_bom_object_model.md" relation="DeepDive">
-      GenericType BOM structure.
-    </see>
   </references>
 
   <bml:xml>${ #this.name }</bml:xml>

@@ -11,6 +11,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <name>ConstantType</name>
@@ -50,14 +51,14 @@
   </documentation>
 
   <references>
-    <see file="21_constant_value_type.md" relation="AuthoringGuide">
-      Constant ValueType — syntax, validation, and external representation.
+    <see type="doc:ConstantValueType" relation="AuthoringGuide">
+      Constant ValueType — syntax and validation.
     </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
+    <see type="doc:TypeSystemOverview" relation="AuthoringGuide">
       ValueType branch hierarchy.
     </see>
-    <see file="20_value_type_instance_configuration.md" relation="AuthoringGuide">
-      ValueType instance configuration via {…} on type references.
+    <see type="doc:ValueTypeConfiguration" relation="AuthoringGuide">
+      ValueType instance configuration via {…}.
     </see>
     <see type="type:Constant" relation="SeeAlso">
       Standard ConstantType implementation.

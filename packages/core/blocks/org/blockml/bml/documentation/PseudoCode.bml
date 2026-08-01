@@ -46,14 +46,11 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      Language branch — PseudoCode as bootstrap language; capability implementation language attribute.
+    <see type="doc:CapabilitySemantics" relation="SeeAlso">
+      Capability implementation languages.
     </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
-      languages aggregation — permitted implementation languages on Block definitions.
-    </see>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Semantics remain in BML — no constructor/getter/setter special cases.
+    <see type="doc:CapabilitySemantics" relation="SeeAlso">
+      languages aggregation on Block definitions.
     </see>
     <see type="lang:PseudoCode" relation="SeeAlso">
       Free-form pseudocode implementation language block.

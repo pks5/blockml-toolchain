@@ -63,9 +63,6 @@
     <see type="doc:Expressions" relation="SeeAlso">
       Expression call sites.
     </see>
-    <see file="22_function_mapping.md" relation="DeepDive">
-      Historical FunctionMapping examples.
-    </see>
   </references>
 
   <properties>

@@ -11,6 +11,7 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <name>TypeReferenceEntity</name>
@@ -48,11 +49,11 @@
     FullyQualifiedNameEntity.</documentation>
 
   <references>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      TypeReferenceEntity, sugar for empty children, and PrimitiveEntity pattern.
+    <see type="doc:TypeExpressions" relation="AuthoringGuide">
+      TypeReferenceEntity and empty-child sugar.
     </see>
-    <see file="13_bml_to_bom_mapping.md" relation="AuthoringGuide">
-      TypeReferenceEntity aggregation mapping.
+    <see type="doc:CompositionModel" relation="AuthoringGuide">
+      TypeReferenceEntity aggregation composition.
     </see>
     <see type="type:TypeReference" relation="SeeAlso">
       Scalar FQN / TypeExpression ValueType wrapped by this Entity.

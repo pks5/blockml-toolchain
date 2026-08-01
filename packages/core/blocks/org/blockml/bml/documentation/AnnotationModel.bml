@@ -87,12 +87,6 @@
     <see type="diag:BML_DUPLICATE_PROPERTY_VALUE" relation="SeeAlso">
       Duplicate value facet on the same Annotation namespace.
     </see>
-    <see file="02_mbml.md" relation="DeepDive">
-      Historical long-form examples — Annotations (superseded as AuthoringGuide by this block).
-    </see>
-    <see file="16_framework_base_types.md" relation="DeepDive">
-      Annotation branch notes in the framework base-types survey.
-    </see>
   </references>
 
 </block>
