@@ -267,6 +267,10 @@
       <doc:PartialMemberOverrides />
       <doc:CompositionModel />
       <doc:BmlDirectives />
+      <doc:TypeIdentityDerivation />
+      <doc:SubBlockModel />
+      <doc:ContractsModel />
+      <doc:BlockNameConvention />
       <doc:PseudoCode />
       <doc:TaskGuideModel />
       <doc:WOTFoundation />

@@ -92,8 +92,8 @@
     <see type="doc:DefinitionModel" relation="SeeAlso">
       Definition branch that carries bml:xml serialization metadata.
     </see>
-    <see type="doc:PseudoCode" relation="ReadNext">
-      Next — PseudoCode as semantic capability implementation dialect.
+    <see type="doc:TypeIdentityDerivation" relation="ReadNext">
+      Next — type references and Block identity derivation.
     </see>
     <see file="19_definition_blocks_and_bml_xml.md" relation="DeepDive">
       Extended bml:xml placement, Stage 1/2 hybrid checks, and open decisions.

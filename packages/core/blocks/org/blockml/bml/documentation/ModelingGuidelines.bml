@@ -82,6 +82,9 @@
     <see type="doc:PartialMemberOverrides" relation="SeeAlso">
       Partial overrides and abstract/final merge semantics.
     </see>
+    <see type="doc:ContractsModel" relation="SeeAlso">
+      Contracts merge order and satisfiesTypeBound.
+    </see>
   </references>
 
 </block>

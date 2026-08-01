@@ -21,10 +21,11 @@
 
   <documentation>
     README block for the BlockML core library. Start with references marked relation=ReadFirst —
-    twenty-two documentation blocks in mental learning order. The first ten form the BlockML
+    twenty-six documentation blocks in mental learning order. The first ten form the BlockML
     conceptual core: after reading them, most of the core library can be derived from Block
     definitions themselves. Later entries cover conventions, authoring rules (visibility, overrides,
-    composition, directives), organisation, and background knowledge.
+    composition, directives, type identity, Sub-Blocks, contracts), organisation, and background
+    knowledge.
 
     Library.bml points here via the required readMe aggregation (&lt;blockml:README /&gt;).
     Tooling filters references where relation=ReadFirst to build a curated learning context bundle;
@@ -112,6 +113,22 @@
 
     <see type="doc:BmlDirectives" relation="ReadFirst">
       BML directives — bml:each, bml:if, bml:container, bml:with, bml:xml.
+    </see>
+
+    <see type="doc:TypeIdentityDerivation" relation="ReadFirst">
+      Type references and Block identity — FQN forms, root vs Sub-Block derivation.
+    </see>
+
+    <see type="doc:SubBlockModel" relation="ReadFirst">
+      Sub-Blocks, visibility, embedded Blocks, composition reference scope.
+    </see>
+
+    <see type="doc:ContractsModel" relation="ReadFirst">
+      Contracts — member merge, type bounds, baseType vs implements.
+    </see>
+
+    <see type="doc:BlockNameConvention" relation="ReadFirst">
+      Block &lt;name&gt; PascalCase rules and relation to type identity.
     </see>
 
     <see type="doc:PseudoCode" relation="ReadFirst">

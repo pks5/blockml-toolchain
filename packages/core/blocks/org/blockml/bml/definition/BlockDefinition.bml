@@ -14,6 +14,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:group="org.blockml.bml.group"
   xmlns:lang="org.blockml.bml.language"
   xmlns:type="org.blockml.bml.type"
@@ -52,13 +53,22 @@
   </documentation>
 
   <references>
+    <see type="doc:TypeIdentityDerivation" relation="AuthoringGuide">
+      Type references and root / Sub-Block identity derivation.
+    </see>
+    <see type="doc:ContractsModel" relation="AuthoringGuide">
+      contracts aggregation — merge order and type bounds.
+    </see>
+    <see type="doc:BlockNameConvention" relation="AuthoringGuide">
+      PascalCase &lt;name&gt; rules.
+    </see>
     <see file="12_bom_object_model.md" relation="DeepDive">
       BlockDefinition BOM structure.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Block definition authoring format and type reference rules.
+    <see file="02_mbml.md" relation="DeepDive">
+      Historical long-form block definition examples.
     </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
+    <see file="16_framework_base_types.md" relation="DeepDive">
       Definition Addressing and genericTypes aggregation.
     </see>
     <see type="core:Block" relation="Extends">

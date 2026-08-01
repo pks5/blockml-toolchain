@@ -12,6 +12,7 @@
                       "
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation">
 
   <name>RootBlockDefinition</name>
@@ -36,11 +37,17 @@
     BML_DUPLICATE_EMBEDDED_BLOCK; externally embeds remain invisible.</documentation>
 
   <references>
+    <see type="doc:SubBlockModel" relation="AuthoringGuide">
+      Embedded Blocks (Inline Library) and Sub-Block nesting.
+    </see>
+    <see type="doc:TypeIdentityDerivation" relation="AuthoringGuide">
+      Root Block identity — type required; name optional short form.
+    </see>
     <see file="12_bom_object_model.md" relation="DeepDive">
       BlockDefinition BOM structure.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Block definition authoring format and Embedded Blocks.
+    <see file="02_mbml.md" relation="DeepDive">
+      Historical long-form root and embedded block examples.
     </see>
     <see type="def:BlockDefinition" relation="Extends">
       Shared block definition shape — identity, members, definition, and subBlocks.

@@ -191,10 +191,10 @@ Priorität für README `ReadFirst` / `ReadNext`-Kette:
 | `doc:PartialMemberOverrides` | 02 — Partial Member Overrides | P0 ✅ |
 | `doc:CompositionModel` | 02 — Composition (*) | P0 ✅ |
 | `doc:BmlDirectives` | 02 — BML Directives + Teile 10/19 | P0 ✅ |
-| `doc:TypeIdentityDerivation` | 02 — Type References / Canonical derivation | P1 |
-| `doc:SubBlockModel` | 02 — Sub-Block Visibility, utility, scope | P1 |
-| `doc:ContractsModel` | 02/17 — Contracts merge rules | P1 |
-| `doc:BlockNameConvention` | 02 — Block Name Convention | P2 |
+| `doc:TypeIdentityDerivation` | 02 — Type References / Canonical derivation | P1 ✅ |
+| `doc:SubBlockModel` | 02 — Sub-Block Visibility, utility, scope | P1 ✅ |
+| `doc:ContractsModel` | 02/17 — Contracts merge rules | P1 ✅ |
+| `doc:BlockNameConvention` | 02 — Block Name Convention | P1 ✅ |
 
 Bestehende Blocks erweitern (statt neu):
 
@@ -235,11 +235,13 @@ Jeder Code aus Visibility/Override/Composition/Directives sollte als Diagnostic-
 ## Migrations-Checkliste (Submodule-reif)
 
 - [x] P0 Doc-Blocks geschrieben und in `Library.blocks` + `README` ReadFirst/ReadNext eingehängt (2026-08-01)
+- [x] P1 Doc-Blocks geschrieben und eingehängt (2026-08-01): TypeIdentityDerivation, SubBlockModel, ContractsModel, BlockNameConvention
 - [x] Visibility / Partial Override / Composition: keine `see file="02_mbml.md"` mehr als *AuthoringGuide* (höchstens DeepDive/Historie)
 - [x] `BmlAnnotation.*` verweist auf Core-Doc-Blocks, nicht auf `10_*` als Norm
-- [ ] Diagnostic-Blocks für alle Codes aus P0-Kapiteln
+- [ ] Diagnostic-Blocks für Codes aus P0/P1-Kapiteln
 - [ ] Domain-Abschnitte (Set/Preset) aus Core-Lernpfad entfernt oder klar als OUT markiert
 - [ ] `02_mbml.md` auf ToC + Links zu FQNs gekürzt (Roadmap V2)
+- [ ] Typsystem-DeepDive aus `17_*` / `20_*` verdichten (nächste Gap-Welle)
 
 ---
 

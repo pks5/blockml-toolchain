@@ -87,6 +87,9 @@
     <see type="doc:ValueTypeConfiguration" relation="ReadNext">
       Next reading step — inline ValueType instance configuration syntax.
     </see>
+    <see type="doc:ContractsModel" relation="SeeAlso">
+      contracts merge and satisfiesTypeBound — baseType vs implements.
+    </see>
   </references>
 
 </block>
