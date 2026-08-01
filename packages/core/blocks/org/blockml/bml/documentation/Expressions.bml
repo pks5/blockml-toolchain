@@ -52,12 +52,15 @@
     <see file="01_bom_core.md" relation="DeepDive">
       Expression layer vs BOM data layer — validation vs evaluation stages.
     </see>
-    <see file="22_function_mapping.md" relation="AuthoringGuide">
+    <see type="doc:FunctionMappingModel" relation="AuthoringGuide">
       FunctionMapping — positional and named capability call argument mapping.
     </see>
     <see type="mapping:FunctionMapping" relation="SeeAlso">
       Default function mapping — capability call arguments by inputType declaration order
       (named and positional); not StructType numeric index access.
+    </see>
+    <see file="22_function_mapping.md" relation="DeepDive">
+      Historical FunctionMapping examples.
     </see>
     <see type="service:Math" relation="SeeAlso">
       Built-in #math.* expression utilities.

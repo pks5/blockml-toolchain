@@ -252,7 +252,11 @@
       <doc:BlockAndInstance />
       <doc:DefinitionModel />
       <doc:TypeSystemOverview />
+      <doc:TypeExpressions />
+      <doc:GenericsModel />
       <doc:ValueTypeConfiguration />
+      <doc:ConstantValueType />
+      <doc:FunctionMappingModel />
       <doc:CapabilitySemantics />
       <doc:Expressions />
       <doc:CompilerArchitecture />
@@ -326,6 +330,23 @@
       <diag:BML_VISIBILITY_ON_ROOT_BLOCK />
       <diag:BML_XML_DIRECTIVE_NOT_ALLOWED />
       <diag:BML_XML_RENDERING_INVALID />
+      <diag:BML_AMBIGUOUS_FUNCTION_MAPPING />
+      <diag:BML_CONSTRAINT_TARGET_MISMATCH />
+      <diag:BML_DUPLICATE_FUNCTION_PARAMETER />
+      <diag:BML_GENERIC_CONSTRAINT_VIOLATION />
+      <diag:BML_GENERIC_DEFAULT_CYCLE />
+      <diag:BML_GENERIC_DEFAULT_FORWARD_REF />
+      <diag:BML_GENERIC_DEFAULT_UNRESOLVED />
+      <diag:BML_INVALID_PROPERTY_TYPE />
+      <diag:BML_MISSING_FUNCTION_MAPPING />
+      <diag:BML_MISSING_FUNCTION_PARAMETER />
+      <diag:BML_MIXED_FUNCTION_ARGUMENTS />
+      <diag:BML_MIXED_TYPE_CONFIGURATION />
+      <diag:BML_TOO_MANY_FUNCTION_PARAMETERS />
+      <diag:BML_TYPE_CONFIGURATION_VIOLATION />
+      <diag:BML_UNKNOWN_FUNCTION_PARAMETER />
+      <diag:BML_UNKNOWN_TYPE_CONFIGURATION />
+      <diag:BML_UNREACHABLE_UNION_ALTERNATIVE />
     </blocks>
   </aggregations>
 

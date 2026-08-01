@@ -12,6 +12,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <name>GenericTypeDefinition</name>
@@ -32,11 +33,17 @@
     defaultType. Parameter name must differ from the Block name and every Sub-Block name.</documentation>
 
   <references>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
+    <see type="doc:GenericsModel" relation="AuthoringGuide">
+      Generics — inheritance binding, defaultType, attribute syntax.
+    </see>
+    <see type="doc:TypeExpressions" relation="SeeAlso">
+      Generic application as a type expression.
+    </see>
+    <see file="16_framework_base_types.md" relation="DeepDive">
       genericTypes aggregation on Block definitions.
     </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      Generic type parameters and constraints.
+    <see file="17_type_system_bml.md" relation="DeepDive">
+      Historical generics examples.
     </see>
     <see file="12_bom_object_model.md" relation="DeepDive">
       GenericType BOM structure.

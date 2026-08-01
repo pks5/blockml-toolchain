@@ -9,6 +9,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:mapping="org.blockml.bml.mapping"
   xmlns:type="org.blockml.bml.type">
 
@@ -53,8 +54,17 @@
   </documentation>
 
   <references>
-    <see file="22_function_mapping.md" relation="AuthoringGuide">
-      Function parameter mapping rules and default behavior.
+    <see type="doc:FunctionMappingModel" relation="AuthoringGuide">
+      Normative FunctionMapping rules and call forms.
+    </see>
+    <see type="doc:ValueTypeConfiguration" relation="SeeAlso">
+      Shared declaration-order principle for positional {…}.
+    </see>
+    <see type="doc:Expressions" relation="SeeAlso">
+      Expression call sites.
+    </see>
+    <see file="22_function_mapping.md" relation="DeepDive">
+      Historical FunctionMapping examples.
     </see>
   </references>
 

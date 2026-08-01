@@ -21,11 +21,11 @@
 
   <documentation>
     README block for the BlockML core library. Start with references marked relation=ReadFirst —
-    twenty-six documentation blocks in mental learning order. The first ten form the BlockML
-    conceptual core: after reading them, most of the core library can be derived from Block
-    definitions themselves. Later entries cover conventions, authoring rules (visibility, overrides,
-    composition, directives, type identity, Sub-Blocks, contracts), organisation, and background
-    knowledge.
+    thirty documentation blocks in mental learning order. The early entries form the BlockML
+    conceptual core — including the type system (kinds, expressions, generics, configuration,
+    Constant, FunctionMapping). Later entries cover conventions, authoring rules (visibility,
+    overrides, composition, directives, type identity, Sub-Blocks, contracts), organisation, and
+    background knowledge.
 
     Library.bml points here via the required readMe aggregation (&lt;blockml:README /&gt;).
     Tooling filters references where relation=ReadFirst to build a curated learning context bundle;
@@ -52,11 +52,27 @@
     </see>
 
     <see type="doc:TypeSystemOverview" relation="ReadFirst">
-      ValueTypes, generics, collections, baseType vs contracts.
+      ValueTypes — four kinds; overview of type expressions.
+    </see>
+
+    <see type="doc:TypeExpressions" relation="ReadFirst">
+      Multiplicity, unions, obsolete wrappers, match order.
+    </see>
+
+    <see type="doc:GenericsModel" relation="ReadFirst">
+      Generics — declarations, inheritance binding, defaultType, constraints.
     </see>
 
     <see type="doc:ValueTypeConfiguration" relation="ReadFirst">
       ValueType instance configuration on Property type references.
+    </see>
+
+    <see type="doc:ConstantValueType" relation="ReadFirst">
+      Constant(T){value: …} singleton domains for unions.
+    </see>
+
+    <see type="doc:FunctionMappingModel" relation="ReadFirst">
+      FunctionMapping — positional/named Capability call arguments.
     </see>
 
     <see type="doc:CapabilitySemantics" relation="ReadFirst">

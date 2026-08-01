@@ -241,8 +241,9 @@ Cluster-TaskGuides: `FixVisibilityAccess`, `FixMemberOverride`, `FixCompositionP
 - [x] Diagnostic-Blocks für Codes aus P0/P1-Kapiteln (2026-08-01) — 45 diagnostics + 4 cluster TaskGuides
 - [ ] Domain-Abschnitte (Set/Preset) aus Core-Lernpfad entfernt oder klar als OUT markiert
 - [ ] `02_mbml.md` auf ToC + Links zu FQNs gekürzt (Roadmap V2)
-- [ ] Typsystem-DeepDive aus `17_*` / `20_*` verdichten (nächste Gap-Welle)
-- [ ] Restliche ~110 `BML_*` Codes aus Docs (Expression, Constraint, …) als Diagnostic-Blocks
+- [x] Typsystem-DeepDive verdichtet (2026-08-01): TypeExpressions, GenericsModel, ConstantValueType, FunctionMappingModel (+ 17 Typ-Diagnostics)
+- [ ] Restliche `BML_*` Codes aus Docs (Expression-AST, restliche Constraints, …) als Diagnostic-Blocks
+- [ ] Domain-Abschnitte / `02_mbml.md` auf ToC + FQN-Links kürzen
 
 ---
 

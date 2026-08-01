@@ -13,6 +13,7 @@
                       "
   xmlns:constraint="org.blockml.bml.constraint"
   xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type"
   xmlns:validation="org.blockml.bml.validation">
 
@@ -45,21 +46,24 @@
     Boolean | Constant(Text){value: "auto"}
 
     Future literal union syntax (Boolean | "auto") desugars to this form. See
-    21_constant_value_type.md.
+    doc:ConstantValueType.
   </documentation>
 
   <references>
-    <see file="21_constant_value_type.md" relation="AuthoringGuide">
-      Constant ValueType — syntax, validation, and future literal sugar.
+    <see type="doc:ConstantValueType" relation="AuthoringGuide">
+      Constant singleton domains — syntax, unions, Boolean shortcuts.
     </see>
-    <see file="20_value_type_instance_configuration.md" relation="AuthoringGuide">
+    <see type="doc:ValueTypeConfiguration" relation="AuthoringGuide">
       ValueType instance configuration via {…} on type references.
     </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      Union type expressions and generic application syntax.
+    <see type="doc:TypeExpressions" relation="AuthoringGuide">
+      Union type expressions and obsolete wrapper migration.
     </see>
     <see type="type:ConstantType" relation="Extends">
       ConstantType branch — singleton value domain semantics.
+    </see>
+    <see file="21_constant_value_type.md" relation="DeepDive">
+      Historical Constant design notes.
     </see>
   </references>
 

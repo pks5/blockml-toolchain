@@ -51,11 +51,17 @@
   </documentation>
 
   <references>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
-      Authoritative type system specification — four kinds, type expressions, generics.
+    <see type="doc:TypeExpressions" relation="AuthoringGuide">
+      Multiplicity, unions, obsolete wrappers — type expressions.
     </see>
-    <see file="04_types.md" relation="AuthoringGuide">
-      MBOM parse/serialize rules per type — migration companion.
+    <see type="doc:GenericsModel" relation="AuthoringGuide">
+      Generic declarations, inheritance binding, defaultType.
+    </see>
+    <see file="17_type_system_bml.md" relation="DeepDive">
+      Historical long-form type system specification.
+    </see>
+    <see file="04_types.md" relation="DeepDive">
+      MBOM parse/serialize rules per type — domain migration companion.
     </see>
     <see file="12_bom_object_model.md" relation="DeepDive">
       TypeDescriptor AST — formal type expression structures.
@@ -84,8 +90,8 @@
     <see type="type:Decimal" relation="SeeAlso">
       Default primitive for non-integer numeric values.
     </see>
-    <see type="doc:ValueTypeConfiguration" relation="ReadNext">
-      Next reading step — inline ValueType instance configuration syntax.
+    <see type="doc:TypeExpressions" relation="ReadNext">
+      Next reading step — multiplicity, unions, and type-expression forms.
     </see>
     <see type="doc:ContractsModel" relation="SeeAlso">
       contracts merge and satisfiesTypeBound — baseType vs implements.
