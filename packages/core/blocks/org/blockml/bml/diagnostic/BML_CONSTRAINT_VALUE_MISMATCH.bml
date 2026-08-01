@@ -25,7 +25,8 @@
   <keywords>BML_CONSTRAINT_VALUE_MISMATCH</keywords>
 
   <documentation>
-    Fix the constraint parameter value types (e.g. Min.value).
+    Emitted when a constraint instance property value is incompatible with bound T. Remedy: Fix
+    the constraint parameter value types (e.g. Min.value).
   </documentation>
 
   <references>

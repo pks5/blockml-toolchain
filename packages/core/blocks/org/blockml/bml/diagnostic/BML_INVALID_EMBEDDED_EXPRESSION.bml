@@ -23,7 +23,8 @@
   <keywords>BML_INVALID_EMBEDDED_EXPRESSION</keywords>
 
   <documentation>
-    Use #this.capa(...), #built-ins, @bean calls, and the shared expression grammar inside embeds.
+    Emitted when an &lt;$ $&gt; region contains invalid BlockML Expression content. Remedy: Use
+    #this.capa(...), #built-ins, @bean calls, and the shared expression grammar inside embeds.
   </documentation>
 
   <references>

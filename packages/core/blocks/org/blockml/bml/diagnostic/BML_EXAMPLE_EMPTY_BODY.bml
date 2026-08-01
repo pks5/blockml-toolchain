@@ -25,7 +25,8 @@
   <keywords>BML_EXAMPLE_EMPTY_BODY</keywords>
 
   <documentation>
-    Provide CDATA/text content for the example.
+    Emitted when an example entry has an empty body. Remedy: Provide CDATA/text content for the
+    example.
   </documentation>
 
   <references>

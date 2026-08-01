@@ -23,6 +23,7 @@
   <keywords>BML_EXPR_PAYLOAD_MISMATCH</keywords>
 
   <documentation>
+    Emitted when call syntax does not match declared inputType after FunctionMapping. Remedy:
     Adjust positional/named/object-literal arguments to the Capability inputType shape.
   </documentation>
 

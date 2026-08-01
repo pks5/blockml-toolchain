@@ -25,7 +25,8 @@
   <keywords>BML_SUGGESTIONS_ON_ENUM</keywords>
 
   <documentation>
-    Enum values come from the EnumType values aggregation — remove suggestions.
+    Emitted when &lt;suggestions&gt; appears on an EnumType-typed property. Remedy: Enum values
+    come from the EnumType values aggregation — remove suggestions.
   </documentation>
 
   <references>

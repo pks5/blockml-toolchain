@@ -21,16 +21,29 @@
   <documentation>
     BlockML describes semantics only. There are no special language concepts for constructor,
     getter, setter, or render — all behaviour is expressed as ordinary Capabilities: init(),
-    getValue(), setValue(), render(), and domain-specific operations.
+    getValue(), setValue(), render(), and domain-specific operations. Package:
+    org.blockml.bml.capability.* (base org.blockml.bml.core.Capability).
 
     Capability kinds describe intent — they are not compiler rules or runtime objects:
-    • Inbound — receives input from outside (setValue, configure)
-    • Outbound — produces output to outside (getValue, emit)
-    • Transformation — maps input to output (compute, format, render)
+    • Inbound — receives input from outside (setValue, configure); requires inputType; no outputType
+    • Outbound — produces output to outside (getValue, emit); requires outputType; no inputType
+    • Transformation — maps input to output (compute, format, render); requires both
+    Async reply via replyTo is a runtime/message pattern — not modeled on the Capability.
+
+    Unqualified Capability type resolves to org.blockml.bml.capability.*; unqualified inputType /
+    outputType resolve to org.blockml.bml.type.* (doc:ImplicitNamespaceResolution). General block
+    references (aggregation type, association type, baseType) have no implicit namespace.
+
+    Authoring: declare under &lt;capabilities&gt; with a camelCase name (visibility prefixes apply —
+    doc:MemberVisibility). In a Composition the Capability value is the address or binding —
+    attribute on the child Block instance, like a Property value. Private Capabilities (__name)
+    cannot be bound from outside the declaring Block; protected (_name) follow the formal access
+    rule including derived Blocks and the direct composition owner.
 
     Each Capability may carry an implementation whose language attribute references a Language FQN
-    (org.blockml.bml.language.*). The renderer decides how to realise each Capability in the
-    target system:
+    (org.blockml.bml.language.*). utility Sub-Blocks (baseType Entity) commonly host Transformation
+    implementations — doc:SubBlockModel. Preferred semantic dialect: PseudoCode
+    (doc:PseudoCode). The renderer decides how to realise each Capability in the target system:
 
     init()     → Java constructor · UI5 onInit() · React useEffect()
     getValue() → direct field access · generated getter · reflection
@@ -52,7 +65,16 @@
     <see file="08_managed_object.md" relation="DeepDive">
       Managed object model — Capabilities as the behavioural surface.
     </see>
-    <see file="16_framework_base_types.md" relation="AuthoringGuide">
+    <see type="doc:ImplicitNamespaceResolution" relation="SeeAlso">
+      Unqualified Capability type vs inputType / outputType sites.
+    </see>
+    <see type="doc:SubBlockModel" relation="SeeAlso">
+      utility Sub-Blocks hosting Transformation implementations.
+    </see>
+    <see type="doc:PseudoCode" relation="SeeAlso">
+      Preferred Capability implementation dialect for semantic prose.
+    </see>
+    <see file="16_framework_base_types.md" relation="DeepDive">
       languages aggregation — permitted implementation languages on Block definitions.
     </see>
     <see type="core:Capability" relation="Extends">

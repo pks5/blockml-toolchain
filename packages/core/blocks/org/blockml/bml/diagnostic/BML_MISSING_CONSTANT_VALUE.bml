@@ -25,7 +25,8 @@
   <keywords>BML_MISSING_CONSTANT_VALUE</keywords>
 
   <documentation>
-    Write Constant(T){value: …}.
+    Emitted when Constant(T) omits required {value: …} configuration. Remedy: Write Constant(T){value:
+    …}.
   </documentation>
 
   <references>

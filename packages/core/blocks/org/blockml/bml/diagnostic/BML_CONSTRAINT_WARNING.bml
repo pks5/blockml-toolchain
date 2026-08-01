@@ -25,7 +25,8 @@
   <keywords>BML_CONSTRAINT_WARNING</keywords>
 
   <documentation>
-    Warning only — compilation continues unless elevated by policy.
+    Emitted when a constraint fails with validation=Warning. Remedy: Warning only — compilation
+    continues unless elevated by policy.
   </documentation>
 
   <references>

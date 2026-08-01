@@ -25,6 +25,7 @@
   <keywords>BML_CONSTRAINT_UNKNOWN</keywords>
 
   <documentation>
+    Emitted when a constraint type is not in TypeRegistry or not a Constraint subtype. Remedy:
     Export the constraint via Library.blocks and use a valid Constraint FQN.
   </documentation>
 

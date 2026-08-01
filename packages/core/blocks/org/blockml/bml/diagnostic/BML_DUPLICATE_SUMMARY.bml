@@ -25,7 +25,8 @@
   <keywords>BML_DUPLICATE_SUMMARY</keywords>
 
   <documentation>
-    Keep one summary per namespace/language pair.
+    Emitted when summary entries collide on (namespace, languageFqn). Remedy: Keep one summary
+    per namespace/language pair.
   </documentation>
 
   <references>

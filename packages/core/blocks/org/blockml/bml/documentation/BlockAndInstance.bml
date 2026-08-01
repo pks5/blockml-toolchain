@@ -42,6 +42,15 @@
     • Nested paths compose with :: (wall::bottom::inner)
     • bml:version pins external references to exact library versions
 
+    Instance serialization (authoring):
+    • On Block definitions — &lt;composition&gt; nested inside the aggregation member fills defaults
+    • On Block instances — aggregations are filled directly by member name (no composition wrapper);
+      property/capability values as attributes or child elements; Aggregation children as nested
+      elements (or bml:container for shared directives)
+    • readOnly effective members must not be authored on instances → BML_READONLY_MEMBER_WRITE
+    • Empty child meaning depends on aggregation type (instance vs TypeReferenceEntity sugar) —
+      doc:CompositionModel / doc:SubBlockModel
+
     Context-dependent interpretation:
     • ValueTypes as type-classes for Property values and Capability input/output
     • Languages as meta-classes for implementation contracts
@@ -56,11 +65,17 @@
     <see file="01_bom_core.md" relation="DeepDive">
       Block and Block Instance — Class and Object; instance identity; qualified references.
     </see>
-    <see file="17_type_system_bml.md" relation="AuthoringGuide">
+    <see type="doc:CompositionModel" relation="SeeAlso">
+      Aggregation fill — definition composition vs instance children.
+    </see>
+    <see type="doc:PartialMemberOverrides" relation="SeeAlso">
+      readOnly — instance authoring forbidden.
+    </see>
+    <see file="17_type_system_bml.md" relation="DeepDive">
       Class vs Object; context-dependent interpretation of ValueTypes and Languages.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Block Instances — composition children, bml:id, bml:version.
+    <see file="02_mbml.md" relation="DeepDive">
+      ToC — Block Instances topic maps to this block.
     </see>
     <see file="12_bom_object_model.md" relation="DeepDive">
       BlockDefinition vs CompositionNode — formal BOM shapes.

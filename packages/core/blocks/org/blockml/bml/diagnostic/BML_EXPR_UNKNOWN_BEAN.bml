@@ -23,7 +23,8 @@
   <keywords>BML_EXPR_UNKNOWN_BEAN</keywords>
 
   <documentation>
-    Register the instance with bml:bean (and optional bml:scope). V1 defers bean execution.
+    Emitted when @bean refers to a name not declared as a service bean Aggregation. Remedy: Register
+    the instance with bml:bean (and optional bml:scope). V1 defers bean execution.
   </documentation>
 
   <references>

@@ -24,7 +24,9 @@
   <keywords>BML_MISSING_VERSION</keywords>
 
   <documentation>
-    Framework convention: version often only on Library.bml for org.blockml.bml.* exports.
+    Emitted when a Block has no effective version (own version and library.version both absent
+    for an exported block). Remedy: Framework convention: version often only on Library.bml for
+    org.blockml.bml.* exports.
   </documentation>
 
   <references>

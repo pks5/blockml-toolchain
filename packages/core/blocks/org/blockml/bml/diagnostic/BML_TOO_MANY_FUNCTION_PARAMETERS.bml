@@ -23,6 +23,7 @@
   <keywords>BML_TOO_MANY_FUNCTION_PARAMETERS</keywords>
 
   <documentation>
+    Emitted when a call supplies more positional arguments than the inputType arity allows. Remedy:
     Trim excess arguments or adjust inputType / FunctionMapping.
   </documentation>
 

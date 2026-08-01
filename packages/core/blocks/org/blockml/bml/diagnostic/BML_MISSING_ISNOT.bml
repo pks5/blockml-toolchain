@@ -24,7 +24,8 @@
   <keywords>BML_MISSING_ISNOT</keywords>
 
   <documentation>
-    isnot is block-level negative space for disambiguation. Missing when required → this code.
+    Warning/required when confusion risk exists and isnot is omitted on a Block. isnot is block-level
+    negative space for disambiguation. Missing when required → this code.
   </documentation>
 
   <references>

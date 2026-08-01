@@ -25,7 +25,8 @@
   <keywords>BML_CARDINALITY_VIOLATION</keywords>
 
   <documentation>
-    Adjust children count or the member multiplicity (e.g. [1..n]).
+    Emitted when the number of aggregation/association children violates the type multiplicity.
+    Remedy: Adjust children count or the member multiplicity (e.g. [1..n]).
   </documentation>
 
   <references>

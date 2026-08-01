@@ -25,7 +25,8 @@
   <keywords>BML_REFERENCE_MISSING_TARGET</keywords>
 
   <documentation>
-    Provide type, instance, file, url, or member path target.
+    Emitted when a &lt;see&gt; entry has no target attribute. Remedy: Provide type, instance,
+    file, url, or member path target.
   </documentation>
 
   <references>

@@ -44,8 +44,8 @@
     <see file="01_bom_core.md" relation="DeepDive">
       BOM Core — abstract object model and fundamental architecture principles.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      BML format overview — document types, namespaces, and serialization.
+    <see file="02_mbml.md" relation="DeepDive">
+      Language ToC — FQN index into Core documentation blocks.
     </see>
     <see type="core:Block" relation="Extends">
       Universal semantic unit — sole inheritance root of the BlockML grammar.

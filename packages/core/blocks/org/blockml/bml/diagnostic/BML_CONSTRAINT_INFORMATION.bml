@@ -25,7 +25,8 @@
   <keywords>BML_CONSTRAINT_INFORMATION</keywords>
 
   <documentation>
-    Informational only — compilation continues.
+    Emitted when a constraint fails with validation=Information. Remedy: Informational only —
+    compilation continues.
   </documentation>
 
   <references>

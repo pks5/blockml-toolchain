@@ -25,7 +25,8 @@
   <keywords>BML_DEPRECATED_MEMBER_NAMESPACE_ATTR</keywords>
 
   <documentation>
-    Use XML element QName / xmlns prefixes for member namespaces — no namespace attribute.
+    Emitted when a legacy namespace= attribute appears on a member element. Remedy: Use XML element
+    QName / xmlns prefixes for member namespaces — no namespace attribute.
   </documentation>
 
   <references>

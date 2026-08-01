@@ -25,6 +25,7 @@
   <keywords>BML_UNKNOWN_PROPERTY</keywords>
 
   <documentation>
+    Emitted when a property name cannot be resolved on the Block (non-expression site). Remedy:
     Check member name, namespace, and effective members after merge.
   </documentation>
 

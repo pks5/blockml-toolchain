@@ -25,6 +25,7 @@
   <keywords>BML_CONTRACT_NOT_ON_ROOT</keywords>
 
   <documentation>
+    Emitted when &lt;contracts&gt; is declared on a Sub-Block or non-root definition. Remedy:
     Contracts are root-block only.
   </documentation>
 

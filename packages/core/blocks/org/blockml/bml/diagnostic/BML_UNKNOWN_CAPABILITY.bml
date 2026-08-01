@@ -25,7 +25,8 @@
   <keywords>BML_UNKNOWN_CAPABILITY</keywords>
 
   <documentation>
-    Check Capability name and inheritance/contract merge.
+    Emitted when a Capability reference cannot be resolved on the target Block. Remedy: Check
+    Capability name and inheritance/contract merge.
   </documentation>
 
   <references>

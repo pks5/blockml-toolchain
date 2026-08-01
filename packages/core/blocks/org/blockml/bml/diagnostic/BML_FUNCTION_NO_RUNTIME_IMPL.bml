@@ -25,7 +25,9 @@
   <keywords>BML_FUNCTION_NO_RUNTIME_IMPL</keywords>
 
   <documentation>
-    Supply an implementation language/body supported by the renderer, or mark appropriately.
+    Emitted when a Capability requires a runtime implementation that is not provided for the
+    target. Remedy: Supply an implementation language/body supported by the renderer, or mark
+    appropriately.
   </documentation>
 
   <references>

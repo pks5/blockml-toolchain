@@ -43,7 +43,7 @@ Historical long-form prose and examples (pre–self-description migration) are a
 
 | Topic | BML SSOT |
 |---|---|
-| `domain.bml.*`, xmlns Package vs Annotation | `org.blockml.bml.documentation.BmlNamespace` |
+| `domain.bml.*`, xmlns Package vs Annotation, prefix convention | `org.blockml.bml.documentation.BmlNamespace` |
 | Context-bound unqualified names | `org.blockml.bml.documentation.ImplicitNamespaceResolution` |
 | Annotation namespaces, facets, directive taxonomy | `org.blockml.bml.documentation.AnnotationModel` |
 | `bml:` directives catalogue | `org.blockml.bml.annotation.BmlAnnotation` · `…documentation.BmlDirectives` |

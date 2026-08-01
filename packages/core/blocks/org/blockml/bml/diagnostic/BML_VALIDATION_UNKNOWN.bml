@@ -25,7 +25,8 @@
   <keywords>BML_VALIDATION_UNKNOWN</keywords>
 
   <documentation>
-    Use Error, Warning, or Information.
+    Emitted when constraint validation= does not resolve to a Validation block. Remedy: Use Error,
+    Warning, or Information.
   </documentation>
 
   <references>

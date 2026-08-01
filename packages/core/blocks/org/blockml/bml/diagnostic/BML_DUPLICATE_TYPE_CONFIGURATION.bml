@@ -25,7 +25,8 @@
   <keywords>BML_DUPLICATE_TYPE_CONFIGURATION</keywords>
 
   <documentation>
-    Provide each configuration key once.
+    Emitted when the same configuration property is supplied twice in {...}. Remedy: Provide
+    each configuration key once.
   </documentation>
 
   <references>

@@ -25,6 +25,7 @@
   <keywords>BML_IDENTITY_TYPE_CHILD_ELEMENT</keywords>
 
   <documentation>
+    Emitted when type/baseType identity fields are authored as illegal child shapes. Remedy:
     Author type/baseType as TypeReference text (element or attribute) per MemberDefinition placement.
   </documentation>
 

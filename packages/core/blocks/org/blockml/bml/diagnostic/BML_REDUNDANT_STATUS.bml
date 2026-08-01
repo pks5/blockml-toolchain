@@ -25,7 +25,8 @@
   <keywords>BML_REDUNDANT_STATUS</keywords>
 
   <documentation>
-    Omit redundant status unless documenting intent.
+    Warning: explicit status duplicates the effective/default status unnecessarily. Omit redundant
+    status unless documenting intent.
   </documentation>
 
   <references>

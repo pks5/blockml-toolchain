@@ -25,7 +25,8 @@
   <keywords>BML_TYPE_REFERENCE_CONSTRAINT</keywords>
 
   <documentation>
-    Referenced type must satisfy the branch bound B (and D for MemberReference).
+    Emitted when a TypeReference(B)/MemberReference bound is not satisfied by the referenced
+    type. Remedy: Referenced type must satisfy the branch bound B (and D for MemberReference).
   </documentation>
 
   <references>

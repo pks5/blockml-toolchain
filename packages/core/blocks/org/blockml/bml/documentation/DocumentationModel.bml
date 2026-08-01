@@ -28,10 +28,12 @@
     Definition identity first (required at top of every Block document):
     name / type / baseType — FQN identity before prose (baseType omitted only on org.blockml.bml.core.Block).
 
-    is (always required, after identity) — clear designation of the Urbild: what this Block
-      semantically represents (noun phrase; several words when name/type alone is too thin).
-      Distinct from WOT Idea — WOT Idea is the Block itself; &lt;is&gt; names it in prose.
-      Definition reflection: bml:Self.is. Omitted → BML_MISSING_IS.
+    is (always required, after identity) — names the Idea (Urbild): what this Block semantically
+      represents. Noun phrase; several words when name/type alone is too thin — not purpose and not
+      full technical detail. Urbild is a fixed BlockML term (keep German explicit in meta-prose):
+      English/French gloss + (Urbild); German docs may use Urbild alone. WOT: the Block itself is
+      the Idea (Urbild); &lt;is&gt; names it in prose. Reflection: bml:Self.is. Omitted →
+      BML_MISSING_IS. Motto: as simple as Lego at the designation; as powerful as SAP beneath.
     summary (required when documentation is too long) — short prose expansion between is and
       documentation; inherited from StructuralDefinition on blocks and members. Missing when
       required → BML_MISSING_SUMMARY.

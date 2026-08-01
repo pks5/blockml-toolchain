@@ -25,7 +25,8 @@
   <keywords>BML_INVALID_PROPERTY</keywords>
 
   <documentation>
-    Check property type, value placement, and facets.
+    Emitted when a property declaration or instance value is structurally invalid. Remedy: Check
+    property type, value placement, and facets.
   </documentation>
 
   <references>

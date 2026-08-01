@@ -25,7 +25,8 @@
   <keywords>BML_FUNCTION_MISSING_MAIN</keywords>
 
   <documentation>
-    Add function &lt;capabilityName&gt;(...) as the main entry.
+    Emitted when an OpenSCAD utility implementation lacks a main function matching the Capability
+    name. Remedy: Add function &lt;capabilityName&gt;(...) as the main entry.
   </documentation>
 
   <references>

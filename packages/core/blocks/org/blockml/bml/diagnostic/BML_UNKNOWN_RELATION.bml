@@ -25,7 +25,8 @@
   <keywords>BML_UNKNOWN_RELATION</keywords>
 
   <documentation>
-    Use standard Relation blocks (SeeAlso, ReadFirst, …).
+    Emitted when see relation= does not resolve to org.blockml.bml.relation.*. Remedy: Use standard
+    Relation blocks (SeeAlso, ReadFirst, …).
   </documentation>
 
   <references>

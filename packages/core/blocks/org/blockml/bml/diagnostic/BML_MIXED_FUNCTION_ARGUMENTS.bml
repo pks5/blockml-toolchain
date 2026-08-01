@@ -23,7 +23,9 @@
   <keywords>BML_MIXED_FUNCTION_ARGUMENTS</keywords>
 
   <documentation>
-    Use positional-only, named-only, or a single object literal — not mixed forms.
+    Emitted when a Capability/function call mixes positional and named arguments under default
+    FunctionMapping. Remedy: Use positional-only, named-only, or a single object literal — not
+    mixed forms.
   </documentation>
 
   <references>

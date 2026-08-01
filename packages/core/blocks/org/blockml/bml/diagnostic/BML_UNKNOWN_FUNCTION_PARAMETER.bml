@@ -23,7 +23,8 @@
   <keywords>BML_UNKNOWN_FUNCTION_PARAMETER</keywords>
 
   <documentation>
-    Named keys must match StructType / anonymous struct field names.
+    Emitted when a named call argument is not a field of the Capability inputType. Remedy: Named
+    keys must match StructType / anonymous struct field names.
   </documentation>
 
   <references>

@@ -28,12 +28,12 @@ README: 33 Doc-Blocks · **152 Diagnostics** (alle in Docs genannten `BML_*`) ·
 
 | Status | Anzahl Sektionen (### / ## inhaltlich) |
 |---|---|
-| OK | ~18 |
-| PARTIAL | ~35 |
-| GAP | ~12 |
-| OUT | ~14 |
+| OK | Mehrheit der Sprach-Sektionen |
+| PARTIAL | Expressions-Grammar, `bml:xml` Stage-Hybrid, Doc-Stil/Urbild, Instanz-Serialisierung |
+| GAP | Beispiele-Aggregation; BML→BOM Mapping (Parser-Vertrag) |
+| OUT | Domain / Toolchain |
 
-**P0/P1/Typsystem/Expressions/Constraints/Annotations:** in BML verdichtet. Verbleibende MD-SSOT eher Toolchain (`12`/`13`/`10` EBNF/AST) und Domain.
+**Sprachregeln (02/17/18/…):** weitgehend in BML. Verbleibende MD-SSOT: Toolchain (`12`/`13`/`10` EBNF/AST), Domain, optional Prose-Feinschliff.
 
 ---
 
@@ -45,29 +45,29 @@ README: 33 Doc-Blocks · **152 Diagnostics** (alle in Docs genannten `BML_*`) ·
 |---|---|---|---|
 | Overview · File Extensions | **OK** | `documentation/Introduction.bml` | — |
 | Serialization Formats | **OK** | `Introduction.bml` (XML sole; JSON not planned) | Detailvergleiche JSON-Beispiele |
-| Document Types | **PARTIAL** | `Introduction.bml` (ein Root `<block>`) | Legacy-Root-Withdrawal-Liste, Document-Type-Tabelle |
+| Document Types | **OK** | `Introduction.bml` (ein Root `<block>`; Legacy-Roots withdrawn) | — |
 | JSON as authoring form | **OK** / OUT | `Introduction.bml` | Explizite JSON-Beispiele (bewusst OUT) |
 
 ### Namespaces
 
 | MD-Sektion | Status | Primäre BML-Abdeckung | Fehlt in BML |
 |---|---|---|---|
-| Namespaces | **PARTIAL** | `documentation/BmlNamespace.bml`, `core/Annotation.bml` | Vollständige Prefix-/Binding-Matrix aus MD |
+| Namespaces | **OK** | `documentation/BmlNamespace.bml` (+ AnnotationModel) | — |
 | Annotations | **OK** | `documentation/AnnotationModel.bml` + `core/Annotation.bml` + `BmlAnnotation` | — |
 | Property value facets | **OK** | `definition/PropertyDefinition.bml` (values[], facets, Diagnostics) | — (MD-Verweis bleibt DeepDive) |
-| XML prefix convention | **PARTIAL** | `BmlNamespace.bml`, `MemberDefinition.bml` | Kurze Norm-Tabelle „short = BlockML, domain token = domain“ |
+| XML prefix convention | **OK** | `BmlNamespace.bml` (short = BlockML, domain token = domain) | — |
 | Context-Bound Implicit Namespace | **OK** | `documentation/ImplicitNamespaceResolution.bml` | — |
 
 ### Type References and Block Identity
 
 | MD-Sektion | Status | Primäre BML-Abdeckung | Fehlt in BML |
 |---|---|---|---|
-| Type references in attributes/values | **PARTIAL** | `type/TypeReference.bml`, `BlockDefinition.bml` | Vollständige Auflösungsreihenfolge |
-| Sub-Block type references | **PARTIAL** | `definition/SubBlockDefinition.bml` | Alle Edge Cases aus MD |
-| Unqualified nested type resolution | **PARTIAL** | `SubBlockDefinition.bml` | Algorithmus „enclosing-chain first“ als Doc-Block |
-| Root Block identity | **PARTIAL** | `definition/RootBlockDefinition.bml`, `BlockDefinition.bml` | Canonical-Ableitungstabellen |
-| Sub-Block identity | **PARTIAL** | `SubBlockDefinition.bml` | Vollständige Mismatch-/Depth-Regeln |
-| Canonical derivation summary | **GAP** | nur Fragmente in Definition-Docs | Eigener Doc-Block `TypeIdentityDerivation` empfohlen |
+| Type references in attributes/values | **OK** | `documentation/TypeIdentityDerivation.bml` | — |
+| Sub-Block type references | **OK** | `TypeIdentityDerivation` + `SubBlockDefinition` | — |
+| Unqualified nested type resolution | **OK** | `TypeIdentityDerivation` (enclosing-chain first) | — |
+| Root Block identity | **OK** | `TypeIdentityDerivation` + `RootBlockDefinition` | — |
+| Sub-Block identity | **OK** | `TypeIdentityDerivation` + `SubBlockDefinition` | — |
+| Canonical derivation summary | **OK** | `documentation/TypeIdentityDerivation.bml` | — |
 
 ### Schema Validation
 
@@ -80,8 +80,8 @@ README: 33 Doc-Blocks · **152 Diagnostics** (alle in Docs genannten `BML_*`) ·
 | MD-Sektion | Status | Primäre BML-Abdeckung | Fehlt in BML |
 |---|---|---|---|
 | Required Fields | **OK** | `core/Block.bml`, `DocumentationModel.bml`, `BlockDefinition.bml` | — |
-| Terminology — Urbild | **PARTIAL** | `DocumentationModel.bml`, `Block.bml` | Dedizierte Urbild-/WOT-Abgrenzung (teilweise `WOTFoundation`) |
-| Documentation prose rules | **PARTIAL** | `DocumentationModel.bml` | Stilregeln / „several words“-Normen aus MD |
+| Terminology — Urbild | **OK** | `DocumentationModel.bml` + `WOTFoundation` | — |
+| Documentation prose rules | **OK** | `DocumentationModel.bml` | — |
 | Definition identity first — `<is>` | **OK** | `DocumentationModel.bml`, `Block.bml` | — |
 | `<summary>` | **OK** | `StructuralDefinition.bml`, `DocumentationModel.bml` | — |
 | `<keywords>` | **OK** | `StructuralDefinition`, `meta/Fixed*`, `FreeText*` | — |
@@ -97,7 +97,7 @@ README: 33 Doc-Blocks · **152 Diagnostics** (alle in Docs genannten `BML_*`) ·
 | Optional Fields | **OK** | Definition-Branch Members | — |
 | Type Modifiers | **OK** | `StructuralDefinition` abstract/final | — |
 | Contracts | **OK** | `documentation/ContractsModel.bml` | — |
-| Namespace Declarations | **PARTIAL** | `BmlNamespace`, `MemberDefinition` | Member-xmlns Authoring-Beispiele |
+| Namespace Declarations | **OK** | `BmlNamespace` + `MemberDefinition` + `AnnotationModel` | Beispiele optional in `examples` |
 | Member Namespace | **OK** | `MemberDefinition.bml` | — |
 | Conventions / Minimal / Full examples | **GAP** (examples) | Task `AuthorNewBlock` | Volle MD-Beispiele → `examples` auf Doc-/Task-Blocks |
 
@@ -107,20 +107,20 @@ README: 33 Doc-Blocks · **152 Diagnostics** (alle in Docs genannten `BML_*`) ·
 |---|---|---|---|
 | Member Element Names | **OK** | `MemberDefinition` (`bml:xml="${ #this.name }"`) | — |
 | Definition Content Containers | **OK** | `BlockDefinition` properties/aggregations/… | — |
-| Block Instances | **PARTIAL** | `BlockAndInstance.bml`, Aggregation composition | Instanz-Serialisierungsregeln vollständig |
+| Block Instances | **OK** | `BlockAndInstance.bml` + `CompositionModel` | — |
 | **Member Visibility** | **OK** | `documentation/MemberVisibility.bml` + `MemberDefinition.visibility` | MD nur noch DeepDive/Beispiele |
 | Common Member Attributes | **OK** | `MemberDefinition` | — |
 | Abstract, final, and override | **OK** | `MemberDefinition`, `StructuralDefinition`, `ModelingGuidelines` | Wenige Edge Cases nur in MD |
-| readOnly Members | **PARTIAL** | `MemberDefinition.readOnly`, `MustBeReadOnly` | Ausführliche Instanz-vs-Definition-Semantik |
+| readOnly Members | **OK** | `PartialMemberOverrides.bml` + `MemberDefinition.readOnly` | — |
 | Member Namespace (Element QName) | **OK** | `MemberDefinition`, Property/Aggregation Docs | — |
 | **Partial Member Overrides** | **OK** | `documentation/PartialMemberOverrides.bml` + `MemberDefinition` | MD nur noch DeepDive/Beispiele |
 | Properties | **OK** | `PropertyDefinition.bml` | — |
 | Property Value (`<value>`) | **OK** | `PropertyDefinition` | — |
-| Type Resolution | **PARTIAL** | `PropertyDefinition`, `TypeSystemOverview` | Verweis auf `17_*` für Generics/Unions |
-| Enum Types vs. Suggestions | **OK** | `PropertyDefinition.suggestions`, `EnumType` | Detail in `18_*` |
-| Aggregations | **OK** | `AggregationDefinition.bml` | Composition-Details → Composition-GAP |
+| Type Resolution | **OK** | `TypeExpressions` / `GenericsModel` / `TypeSystemOverview` | DeepDive `17_*` |
+| Enum Types vs. Suggestions | **OK** | `ConstraintsModel` + `PropertyDefinition.suggestions` | DeepDive `18_*` |
+| Aggregations | **OK** | `AggregationDefinition.bml` + `CompositionModel` | — |
 | Associations | **OK** | `AssociationDefinition.bml`, `InstanceReference` | — |
-| Capabilities | **PARTIAL** | `CapabilityDefinition`, `CapabilitySemantics` | Authoring-Beispiele, Implementation-Placement aus MD |
+| Capabilities | **OK** | `CapabilitySemantics` + `CapabilityDefinition` + `PseudoCode` | Beispiele optional |
 
 ### Composition
 
@@ -149,14 +149,14 @@ README: 33 Doc-Blocks · **152 Diagnostics** (alle in Docs genannten `BML_*`) ·
 | MD-Sektion | Status | Primäre BML-Abdeckung | Fehlt in BML |
 |---|---|---|---|
 | Format | **OK** | `SubBlockDefinition.bml` | — |
-| Sub-Block Visibility | **GAP** | — | Visibility-on-SubBlock-Norm |
-| Optional `<visibility>` on Sub-Blocks | **GAP** | — | Property/Regel fehlt oder nur MD |
-| FQN Auto-Resolution | **PARTIAL** | `SubBlockDefinition` | Canonical summary Doc-Block |
-| Embedded Blocks (Inline Library) | **OK** | `RootBlockDefinition`, `EmbeddedBlockDefinition` | Edge Cases aus MD |
-| Composition Block References | **PARTIAL** | `BlockAndInstance`, TypeReference | Qualifier/`::`-Regeln vollständig |
-| Sub-Block reference scope | **PARTIAL** | `SubBlockDefinition` | Scope-Tabelle |
-| Sub-Block naming vs parent | **PARTIAL** | `SubBlockDefinition` | Naming-Collision-Regeln |
-| utility Sub-Blocks | **GAP** | praktisch keine | utility-Semantik |
+| Sub-Block Visibility | **OK** | `SubBlockModel` + `MemberVisibility` | — |
+| Optional `<visibility>` on Sub-Blocks | **OK** | `SubBlockModel` | — |
+| FQN Auto-Resolution | **OK** | `TypeIdentityDerivation` + `SubBlockModel` | — |
+| Embedded Blocks (Inline Library) | **OK** | `SubBlockModel` + `EmbeddedBlockDefinition` | — |
+| Composition Block References | **OK** | `SubBlockModel` + `CompositionModel` | — |
+| Sub-Block reference scope | **OK** | `SubBlockModel` | — |
+| Sub-Block naming vs parent | **OK** | `SubBlockModel` + `BlockNameConvention` | — |
+| utility Sub-Blocks | **OK** | `SubBlockModel` | — |
 | Calibrator Example / Visibility repeats | **OUT**/examples | — | Beispiele → examples-Aggregation |
 
 ### Domain (nicht Core)
@@ -249,8 +249,11 @@ Cluster-TaskGuides: `FixVisibilityAccess`, `FixMemberOverride`, `FixCompositionP
 - [x] Alle in Docs genannten `BML_*` Codes als Diagnostic-Blocks (2026-08-02) — 152
 - [x] `ConstraintsModel` Doc-Block (+ AddConstraint verdrahtet)
 - [x] `AnnotationModel` Doc-Block (2026-08-02) — Annotation-Authoring + Facets
-- [ ] Optional: `10_*` EBNF / `12`/`13` bleiben DeepDive/Parser-Vertrag; Prefix-Matrix verdichten
-- [ ] Optional: Diagnostics-Prose schärfen (einige Fallback-Texte generisch)
+- [x] Prefix-Matrix / Namespace-Norm in `BmlNamespace` (2026-08-02)
+- [x] CapabilitySemantics + readOnly-Semantik verdichtet; Gap-Matrix Sprach-Sektionen auf OK
+- [x] Diagnostic-Prose Batch-Expand (summary + Remedy) für dünne Fallbacks
+- [ ] Optional: `10_*` EBNF / `12`/`13` bleiben DeepDive/Parser-Vertrag
+- [ ] Optional: Doc-Stil/Urbild, Instanz-Serialisierung, `bml:xml` Stage-Hybrid; Beispiele in `examples`
 
 ---
 

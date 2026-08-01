@@ -25,7 +25,7 @@
   <keywords>BML_PRESET_CYCLE</keywords>
 
   <documentation>
-    Break the preset dependency cycle in domain presets.
+    Domain: preset references form a cycle. Break the preset dependency cycle in domain presets.
   </documentation>
 
   <references>

@@ -24,7 +24,9 @@
   <keywords>BML_GENERIC_BLOCK_NAME_COLLISION</keywords>
 
   <documentation>
-    On the same declaring Block, generic parameter names must not collide with the Block name or a direct Sub-Block name.
+    Emitted when a genericTypes parameter name equals the declaring Block's name. Remedy: On
+    the same declaring Block, generic parameter names must not collide with the Block name or
+    a direct Sub-Block name.
   </documentation>
 
   <references>

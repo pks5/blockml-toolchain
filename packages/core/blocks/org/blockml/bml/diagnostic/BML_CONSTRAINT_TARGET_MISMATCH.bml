@@ -23,7 +23,9 @@
   <keywords>BML_CONSTRAINT_TARGET_MISMATCH</keywords>
 
   <documentation>
-    Constraint generics are compiler-bound from context (Property → ValueType, Aggregation → AggregationDefinition, …).
+    Emitted when a Constraint branch is placed in an incompatible embedding context. Remedy:
+    Constraint generics are compiler-bound from context (Property → ValueType, Aggregation →
+    AggregationDefinition, …).
   </documentation>
 
   <references>

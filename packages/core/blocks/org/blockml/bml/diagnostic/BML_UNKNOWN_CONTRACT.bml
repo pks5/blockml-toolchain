@@ -25,7 +25,8 @@
   <keywords>BML_UNKNOWN_CONTRACT</keywords>
 
   <documentation>
-    Export the contract Block and fix the FQN/QName.
+    Emitted when a &lt;contracts&gt; entry does not resolve to a BlockDefinition. Remedy: Export
+    the contract Block and fix the FQN/QName.
   </documentation>
 
   <references>

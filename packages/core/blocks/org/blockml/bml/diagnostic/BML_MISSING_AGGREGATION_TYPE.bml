@@ -25,7 +25,8 @@
   <keywords>BML_MISSING_AGGREGATION_TYPE</keywords>
 
   <documentation>
-    Provide type on new aggregations; inherited overrides may omit unchanged type.
+    Emitted when a new aggregation declaration omits required type. Remedy: Provide type on new
+    aggregations; inherited overrides may omit unchanged type.
   </documentation>
 
   <references>

@@ -25,7 +25,8 @@
   <keywords>BML_PREFER_TYPE_CONFIGURATION</keywords>
 
   <documentation>
-    E.g. Text{maxLength: 100} instead of MaxLength constraint when intrinsic.
+    Warning: prefer ValueType {...} configuration over equivalent Constraints for type-intrinsic
+    thresholds. E.g. Text{maxLength: 100} instead of MaxLength constraint when intrinsic.
   </documentation>
 
   <references>

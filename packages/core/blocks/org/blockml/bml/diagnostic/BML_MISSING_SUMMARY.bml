@@ -24,7 +24,8 @@
   <keywords>BML_MISSING_SUMMARY</keywords>
 
   <documentation>
-    summary sits between is and documentation for LLM/human orientation.
+    Warning when documentation is too long for a quick scan and default-namespace summary is
+    omitted. summary sits between is and documentation for LLM/human orientation.
   </documentation>
 
   <references>

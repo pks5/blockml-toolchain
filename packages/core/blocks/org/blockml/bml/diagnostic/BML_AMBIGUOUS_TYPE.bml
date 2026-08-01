@@ -24,7 +24,9 @@
   <keywords>BML_AMBIGUOUS_TYPE</keywords>
 
   <documentation>
-    Qualify with xmlns QName, FQN, or Sub-Block-relative path. Grandchildren are never unqualified.
+    Emitted when an unqualified type name matches more than one candidate in nested or context-bound
+    resolution. Remedy: Qualify with xmlns QName, FQN, or Sub-Block-relative path. Grandchildren
+    are never unqualified.
   </documentation>
 
   <references>

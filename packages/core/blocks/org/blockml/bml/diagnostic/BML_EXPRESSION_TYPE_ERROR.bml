@@ -25,6 +25,7 @@
   <keywords>BML_EXPRESSION_TYPE_ERROR</keywords>
 
   <documentation>
+    Legacy/alias style expression type error — prefer BML_EXPR_TYPE_MISMATCH where applicable.
     Align expression result type with the target member type.
   </documentation>
 

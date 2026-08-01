@@ -23,6 +23,7 @@
   <keywords>BML_EXPR_TYPE_MISMATCH</keywords>
 
   <documentation>
+    Emitted when the expression result type is incompatible with the target member type. Remedy:
     Align operators/calls with the Property or Capability payload type after inference.
   </documentation>
 

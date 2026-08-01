@@ -24,7 +24,9 @@
   <keywords>BML_PRIVATE_SUBBLOCK_ACCESS</keywords>
 
   <documentation>
-    Private Sub-Blocks (__Name) follow the same access model as private members — declaring Block only.
+    Emitted when a private Sub-Block is referenced outside the immediately declaring Block definition.
+    Remedy: Private Sub-Blocks (__Name) follow the same access model as private members — declaring
+    Block only.
   </documentation>
 
   <references>

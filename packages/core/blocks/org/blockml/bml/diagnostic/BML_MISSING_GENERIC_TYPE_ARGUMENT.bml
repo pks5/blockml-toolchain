@@ -25,7 +25,8 @@
   <keywords>BML_MISSING_GENERIC_TYPE_ARGUMENT</keywords>
 
   <documentation>
-    Supply the argument or declare defaultType.
+    Emitted when a generic application omits a required type argument with no resolvable defaultType.
+    Remedy: Supply the argument or declare defaultType.
   </documentation>
 
   <references>

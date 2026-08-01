@@ -25,7 +25,8 @@
   <keywords>BML_NAMESPACE_PREFIX_COLLISION</keywords>
 
   <documentation>
-    Align xmlns prefixes across the bundle.
+    Emitted when the same prefix maps to conflicting namespaces when merging bindings (e.g. FatBlock).
+    Remedy: Align xmlns prefixes across the bundle.
   </documentation>
 
   <references>

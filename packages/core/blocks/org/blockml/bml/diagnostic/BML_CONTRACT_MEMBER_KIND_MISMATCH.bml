@@ -25,7 +25,8 @@
   <keywords>BML_CONTRACT_MEMBER_KIND_MISMATCH</keywords>
 
   <documentation>
-    Property overrides property, aggregation overrides aggregation, etc.
+    Emitted when a contract member kind does not match the merging member kind. Remedy: Property
+    overrides property, aggregation overrides aggregation, etc.
   </documentation>
 
   <references>

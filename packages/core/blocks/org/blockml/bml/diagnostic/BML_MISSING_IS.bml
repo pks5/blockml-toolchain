@@ -24,7 +24,8 @@
   <keywords>BML_MISSING_IS</keywords>
 
   <documentation>
-    is is always required after identity fields — a clear noun phrase for what the Block semantically represents.
+    Emitted when a Block definition omits the required is Urbild designation. Remedy: is is always
+    required after identity fields — a clear noun phrase for what the Block semantically represents.
   </documentation>
 
   <references>

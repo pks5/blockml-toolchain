@@ -59,10 +59,16 @@
     • Private members cannot be overridden → BML_FINAL_MEMBER_OVERRIDE
     • final="true" on parent prevents override → BML_FINAL_MEMBER_OVERRIDE
 
-    readOnly is orthogonal: definition authoring and child definition overrides may set values /
-    composition on readOnly members; Block instances must not → BML_READONLY_MEMBER_WRITE.
-    Expressions may still read readOnly members subject to visibility. final blocks value overrides
-    entirely; readOnly does not.
+    readOnly is orthogonal to final / abstract / override: it controls instance authoring only.
+    • Block definition — may declare and set readOnly members via value, composition, or partial
+      override
+    • Child Block definition — may override an inherited readOnly member (value/composition only;
+      cannot override a final member at all)
+    • Block instance — must not set a member whose effective definition has readOnly=true →
+      BML_READONLY_MEMBER_WRITE (after resolveEffectiveMembers on every BlockInstance)
+    • Expressions — may read readOnly members subject to visibility; renderers may read the BOM
+    A public readOnly member remains publicly readable. final blocks value overrides entirely;
+    readOnly does not.
 
     Declared on org.blockml.bml.definition.MemberDefinition (abstract, final, override, readOnly,
     visibility) and specialized on PropertyDefinition, AggregationDefinition, AssociationDefinition,

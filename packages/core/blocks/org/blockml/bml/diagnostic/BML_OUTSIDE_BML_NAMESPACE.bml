@@ -24,7 +24,9 @@
   <keywords>BML_OUTSIDE_BML_NAMESPACE</keywords>
 
   <documentation>
-    Every BlockML definition must live under &lt;domain&gt;.bml.* — e.g. org.blockml.bml.*, com.machineblocks.bml.*.
+    Emitted when a BML definition FQN does not reside under the domain's bml package (domain.bml.*).
+    Remedy: Every BlockML definition must live under &lt;domain&gt;.bml.* — e.g. org.blockml.bml.*,
+    com.machineblocks.bml.*.
   </documentation>
 
   <references>

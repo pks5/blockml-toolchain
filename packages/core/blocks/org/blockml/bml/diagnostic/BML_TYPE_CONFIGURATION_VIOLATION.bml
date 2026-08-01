@@ -23,7 +23,9 @@
   <keywords>BML_TYPE_CONFIGURATION_VIOLATION</keywords>
 
   <documentation>
-    Configured instances are checked against the configured type — not bare ValueType defaults.
+    Emitted when a {...} configuration value does not satisfy the configuration Property's type.
+    Remedy: Configured instances are checked against the configured type — not bare ValueType
+    defaults.
   </documentation>
 
   <references>

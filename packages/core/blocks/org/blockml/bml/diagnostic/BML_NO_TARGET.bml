@@ -25,7 +25,8 @@
   <keywords>BML_NO_TARGET</keywords>
 
   <documentation>
-    Configure targets[] in bom.config / CLI.
+    Emitted when compilation is requested with no configured render target. Remedy: Configure
+    targets[] in bom.config / CLI.
   </documentation>
 
   <references>

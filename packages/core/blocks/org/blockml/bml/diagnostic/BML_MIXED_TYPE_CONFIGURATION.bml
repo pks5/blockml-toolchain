@@ -23,7 +23,9 @@
   <keywords>BML_MIXED_TYPE_CONFIGURATION</keywords>
 
   <documentation>
-    Use either named key: value pairs or positional values by property declaration order — not both.
+    Emitted when named and positional ValueType instance configuration are mixed in one {...}
+    block. Remedy: Use either named key: value pairs or positional values by property declaration
+    order — not both.
   </documentation>
 
   <references>

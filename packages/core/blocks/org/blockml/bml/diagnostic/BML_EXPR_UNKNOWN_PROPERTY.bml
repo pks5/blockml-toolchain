@@ -23,7 +23,9 @@
   <keywords>BML_EXPR_UNKNOWN_PROPERTY</keywords>
 
   <documentation>
-    Bare property access is current Block only. StructType members are addressed by name (size.x), not size[0].
+    Emitted when an identifier is not found in scope, or index access is used on a StructType
+    field. Remedy: Bare property access is current Block only. StructType members are addressed
+    by name (size.x), not size[0].
   </documentation>
 
   <references>

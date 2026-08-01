@@ -25,7 +25,8 @@
   <keywords>BML_UNKNOWN_STATUS</keywords>
 
   <documentation>
-    Use Draft, Stable, Deprecated, Stub (or library Status blocks).
+    Emitted when status does not resolve to org.blockml.bml.status.*. Remedy: Use Draft, Stable,
+    Deprecated, Stub (or library Status blocks).
   </documentation>
 
   <references>

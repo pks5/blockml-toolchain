@@ -24,7 +24,9 @@
   <keywords>BML_UNQUALIFIED_BLOCK_REFERENCE</keywords>
 
   <documentation>
-    Inside the declaring root's composition, Sub-Blocks may use local names. Elsewhere require FQN / xmlns-qualified names.
+    Emitted when a composition/type site uses an unqualified Block name outside Sub-Block parent
+    context or a specialized implicit-namespace site. Remedy: Inside the declaring root's composition,
+    Sub-Blocks may use local names. Elsewhere require FQN / xmlns-qualified names.
   </documentation>
 
   <references>

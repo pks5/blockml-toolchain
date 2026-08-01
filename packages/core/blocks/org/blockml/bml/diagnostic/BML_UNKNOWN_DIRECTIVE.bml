@@ -25,7 +25,7 @@
   <keywords>BML_UNKNOWN_DIRECTIVE</keywords>
 
   <documentation>
-    Use directives declared on org.blockml.bml.annotation.BmlAnnotation.
+    Emitted when an unknown bml: directive name is used. Remedy: Use directives declared on org.blockml.bml.annotation.BmlAnnotation.
   </documentation>
 
   <references>

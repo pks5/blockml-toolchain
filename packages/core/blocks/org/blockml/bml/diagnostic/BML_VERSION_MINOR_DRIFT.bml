@@ -25,7 +25,8 @@
   <keywords>BML_VERSION_MINOR_DRIFT</keywords>
 
   <documentation>
-    Align versions per library convention (framework often versions only Library.bml).
+    Warning: Block version drifts from library.version in a minor/patch policy sense. Align versions
+    per library convention (framework often versions only Library.bml).
   </documentation>
 
   <references>

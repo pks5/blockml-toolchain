@@ -25,7 +25,8 @@
   <keywords>BML_DUPLICATE_DOCUMENTATION</keywords>
 
   <documentation>
-    Keep one documentation entry per namespace/language pair.
+    Emitted when documentation entries collide on (namespace, languageFqn). Remedy: Keep one
+    documentation entry per namespace/language pair.
   </documentation>
 
   <references>

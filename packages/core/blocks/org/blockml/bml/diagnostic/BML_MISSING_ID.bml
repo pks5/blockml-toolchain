@@ -25,7 +25,8 @@
   <keywords>BML_MISSING_ID</keywords>
 
   <documentation>
-    Add bml:id (literal or expression).
+    Emitted when bml:id is required (referenced instance or bml:each) but absent. Remedy: Add
+    bml:id (literal or expression).
   </documentation>
 
   <references>

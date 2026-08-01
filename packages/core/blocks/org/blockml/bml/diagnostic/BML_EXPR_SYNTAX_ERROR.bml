@@ -23,7 +23,9 @@
   <keywords>BML_EXPR_SYNTAX_ERROR</keywords>
 
   <documentation>
-    Check ${ } / &lt;$ $&gt; delimiters, quotes, operators, and balanced brackets. Nested embed delimiters are invalid.
+    Emitted when expression raw text fails to parse (parseExpression utility). Remedy: Check
+    ${ } / &lt;$ $&gt; delimiters, quotes, operators, and balanced brackets. Nested embed delimiters
+    are invalid.
   </documentation>
 
   <references>

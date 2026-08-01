@@ -25,7 +25,8 @@
   <keywords>BML_INVALID_NAMESPACE_TARGET</keywords>
 
   <documentation>
-    Bind prefixes to package FQNs or Annotation FQNs only.
+    Emitted when xmlns targets neither a Package nor an Annotation. Remedy: Bind prefixes to
+    package FQNs or Annotation FQNs only.
   </documentation>
 
   <references>

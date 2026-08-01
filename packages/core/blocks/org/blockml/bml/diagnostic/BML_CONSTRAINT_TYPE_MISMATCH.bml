@@ -25,7 +25,8 @@
   <keywords>BML_CONSTRAINT_TYPE_MISMATCH</keywords>
 
   <documentation>
-    Choose a constraint whose T binds from the embedding context type.
+    Emitted when constraint generic T is incompatible with the bound target type. Remedy: Choose
+    a constraint whose T binds from the embedding context type.
   </documentation>
 
   <references>

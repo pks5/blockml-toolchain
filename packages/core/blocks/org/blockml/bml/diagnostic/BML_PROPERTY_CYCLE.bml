@@ -23,7 +23,9 @@
   <keywords>BML_PROPERTY_CYCLE</keywords>
 
   <documentation>
-    value expressions may reference own Block Properties and #built-ins only; resolve via topological sort.
+    Emitted when &lt;value&gt; expressions form a cyclic dependency among Properties. Remedy:
+    value expressions may reference own Block Properties and #built-ins only; resolve via topological
+    sort.
   </documentation>
 
   <references>

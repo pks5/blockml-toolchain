@@ -25,6 +25,7 @@
   <keywords>BML_TYPE_REFERENCE_MULTIPLICITY</keywords>
 
   <documentation>
+    Emitted when multiplicity is applied illegally to a TypeReference site that forbids it. Remedy:
     Check the site's type attribute rules — some TypeReference usages are singular only.
   </documentation>
 

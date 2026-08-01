@@ -25,7 +25,8 @@
   <keywords>BML_REFERENCE_AMBIGUOUS_TARGET</keywords>
 
   <documentation>
-    Use exactly one target kind or a disambiguating split form.
+    Emitted when a documentation &lt;see&gt; target is ambiguous. Remedy: Use exactly one target
+    kind or a disambiguating split form.
   </documentation>
 
   <references>

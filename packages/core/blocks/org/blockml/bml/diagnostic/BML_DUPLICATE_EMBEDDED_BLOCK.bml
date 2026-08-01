@@ -24,7 +24,8 @@
   <keywords>BML_DUPLICATE_EMBEDDED_BLOCK</keywords>
 
   <documentation>
-    Within the BomDocument, embed FQNs must be unique. Externally, embeds remain invisible.
+    Emitted when two embedded Blocks in the same document share the same FQN. Remedy: Within
+    the BomDocument, embed FQNs must be unique. Externally, embeds remain invisible.
   </documentation>
 
   <references>

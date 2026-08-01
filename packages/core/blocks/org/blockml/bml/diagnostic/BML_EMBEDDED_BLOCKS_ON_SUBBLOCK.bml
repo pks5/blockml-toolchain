@@ -24,7 +24,9 @@
   <keywords>BML_EMBEDDED_BLOCKS_ON_SUBBLOCK</keywords>
 
   <documentation>
-    Sub-Blocks may nest subBlocks but must not declare embeddedBlocks. Flat root embeddedBlocks compose fat artifacts.
+    Emitted when a Sub-Block declares embeddedBlocks — only the document root may own that aggregation.
+    Remedy: Sub-Blocks may nest subBlocks but must not declare embeddedBlocks. Flat root embeddedBlocks
+    compose fat artifacts.
   </documentation>
 
   <references>

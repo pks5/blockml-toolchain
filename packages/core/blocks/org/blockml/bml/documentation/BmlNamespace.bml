@@ -29,8 +29,8 @@
     • com.example.bml.*
 
     No BML Block, Library, or other BlockML definition may exist outside the domain's bml
-    namespace. Physical source layout mirrors the FQN: blocks/org/blockml/bml/core/Block.bml
-    defines org.blockml.bml.core.Block.
+    namespace (BML_OUTSIDE_BML_NAMESPACE). Physical source layout mirrors the FQN:
+    blocks/org/blockml/bml/core/Block.bml defines org.blockml.bml.core.Block.
 
     Typical BlockML branches (all under org.blockml.bml.*):
     • org.blockml.bml.core.* — framework base types (Block, Annotation, ValueType, Status, Library, …)
@@ -41,16 +41,34 @@
     • org.blockml.bml.capability.* — Capability type branches
     • org.blockml.bml.definition.* — Definition meta-model (orthogonal to Annotations)
     • org.blockml.bml.documentation.* — bootstrap documentation blocks
+    • org.blockml.bml.status.* / constraint.* / validation.* / relation.* / unit.* — matching branches
 
     xmlns prefixes are BML-semantic only when they target a Package or an Annotation:
     • Package — type addressing (xmlns:core="org.blockml.bml.core")
     • Annotation — directives (xmlns:bml="org.blockml.bml.annotation.BmlAnnotation")
+    Other URI bindings (schemaLocation keys) are not BML-semantic type namespaces. Undeclared
+    prefix → BML_UNKNOWN_NAMESPACE_PREFIX; non-Package/Annotation target →
+    BML_INVALID_NAMESPACE_TARGET; colliding prefixes across a bundle →
+    BML_NAMESPACE_PREFIX_COLLISION.
 
-    Domain libraries follow the same rule:
-    • com.machineblocks.bml.core.*
-    • com.machineblocks.bml.bricks.*
-    • com.machineblocks.bml.type.*
-    • com.machineblocks.bml.annotation.* (e.g. ScadAnnotation)
+    XML prefix convention (required authoring practice — BOM stores FQNs; compiler does not
+    rewrite aliases). Rule of thumb: a bare short prefix always means BlockML. Domain mirrors of
+    the same segment use a domain token in front (MachineBlocks → mb):
+    • core → org.blockml.bml.core · type → org.blockml.bml.type · unit → org.blockml.bml.unit
+    • lang → org.blockml.bml.language · status / def / constraint / validation / … → matching
+      org.blockml.bml.*
+    • mbcore → com.machineblocks.bml.core · mbt → …type · mbunit → …unit
+    • bricks / cal / scad — collective or annotation packages (descriptive OK when no collision)
+    Do not steal framework aliases (xmlns:core="com.machineblocks.bml.core" is wrong). Do not use
+    legacy bcore / btype. Other domains use their own short token (ac → acore / atype / aunit).
+
+    Member and facet QNames: optional XML prefix on member element names supplies the member
+    namespace (resolved via xmlns; unprefixed → default empty namespace). Prefixed member QNames
+    that are Annotation Member directives (name="*") resolve to that Annotation — see
+    doc:AnnotationModel. There is no namespace= attribute on members.
+
+    Domain libraries follow the same &lt;domain&gt;.bml.* rule
+    (com.machineblocks.bml.core / bricks / type / annotation.*, …).
 
     npm workspace packages (@blockml/core, @blockml/parser, …) are deployment units — not
     identical to FQN namespaces. TypeScript toolchain code ships in package src/ directories;
@@ -58,26 +76,26 @@
   </documentation>
 
   <references>
-    <see file="01_bom_core.md" relation="DeepDive">
-      Mandatory BML namespace — authoritative rules and examples.
-    </see>
-    <see file="00_system.md" relation="DeepDive">
-      FQN Namespaces — system-level summary.
-    </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Namespaces — xmlns bindings, context-bound implicit namespace, and Block FQN resolution.
-    </see>
-    <see file="15_dev_setup.md" relation="AuthoringGuide">
-      Package Conventions — npm packages vs. FQN namespaces.
-    </see>
-    <see file="06_compiler.md" relation="DeepDive">
-      BML_OUTSIDE_BML_NAMESPACE — validation error code.
+    <see type="doc:AnnotationModel" relation="SeeAlso">
+      Annotation xmlns targets vs Package prefixes.
     </see>
     <see type="doc:LibrarySystem" relation="SeeAlso">
       Libraries, packages, and namespace membership — related reading.
     </see>
     <see type="doc:ImplicitNamespaceResolution" relation="ReadNext">
       Next — context-bound implicit namespace for unqualified references.
+    </see>
+    <see file="01_bom_core.md" relation="DeepDive">
+      Mandatory BML namespace — historical notes and examples.
+    </see>
+    <see file="00_system.md" relation="DeepDive">
+      FQN Namespaces — system-level summary.
+    </see>
+    <see file="02_mbml.md" relation="DeepDive">
+      ToC index — namespaces topic maps to this block.
+    </see>
+    <see file="15_dev_setup.md" relation="DeepDive">
+      Package Conventions — npm packages vs. FQN namespaces.
     </see>
   </references>
 

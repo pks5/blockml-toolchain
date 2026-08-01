@@ -25,7 +25,8 @@
   <keywords>BML_UNKNOWN_SERVICE</keywords>
 
   <documentation>
-    Use registered services (#math, #strings, #lists, #numbers, #bools).
+    Emitted when a #service builtin namespace is unknown. Remedy: Use registered services (#math,
+    #strings, #lists, #numbers, #bools).
   </documentation>
 
   <references>

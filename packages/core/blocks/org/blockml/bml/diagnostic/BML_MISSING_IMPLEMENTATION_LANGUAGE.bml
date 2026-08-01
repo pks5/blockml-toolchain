@@ -25,7 +25,8 @@
   <keywords>BML_MISSING_IMPLEMENTATION_LANGUAGE</keywords>
 
   <documentation>
-    Set language to an org.blockml.bml.language.* FQN.
+    Emitted when &lt;implementation&gt; omits required language. Remedy: Set language to an org.blockml.bml.language.*
+    FQN.
   </documentation>
 
   <references>

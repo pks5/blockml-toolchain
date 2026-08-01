@@ -24,7 +24,9 @@
   <keywords>BML_SUBBLOCK_TYPE_MISMATCH</keywords>
 
   <documentation>
-    The validator checks the full expected type from the immediate enclosing block — not the last segment alone.
+    Emitted when an explicit Sub-Block type does not equal resolve(parent.type) + &quot;.&quot;
+    + name. Remedy: The validator checks the full expected type from the immediate enclosing
+    block — not the last segment alone.
   </documentation>
 
   <references>

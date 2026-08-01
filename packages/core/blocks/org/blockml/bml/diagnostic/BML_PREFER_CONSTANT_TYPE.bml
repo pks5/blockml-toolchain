@@ -25,7 +25,8 @@
   <keywords>BML_PREFER_CONSTANT_TYPE</keywords>
 
   <documentation>
-    Migrate AutoOr/FalseOr/NoneOr and bare literal unions to Constant form.
+    Warning: prefer Constant(T){value: …} over obsolete wrapper/literal union forms. Migrate
+    AutoOr/FalseOr/NoneOr and bare literal unions to Constant form.
   </documentation>
 
   <references>

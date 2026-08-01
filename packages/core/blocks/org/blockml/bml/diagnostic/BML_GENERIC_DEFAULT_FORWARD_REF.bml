@@ -23,7 +23,8 @@
   <keywords>BML_GENERIC_DEFAULT_FORWARD_REF</keywords>
 
   <documentation>
-    Sibling-parameter defaults may reference only earlier parameters (declaration-order DAG).
+    Emitted when defaultType names a later or unknown sibling generic parameter. Remedy: Sibling-parameter
+    defaults may reference only earlier parameters (declaration-order DAG).
   </documentation>
 
   <references>

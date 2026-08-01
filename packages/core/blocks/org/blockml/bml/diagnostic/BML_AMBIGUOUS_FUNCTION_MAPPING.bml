@@ -23,7 +23,8 @@
   <keywords>BML_AMBIGUOUS_FUNCTION_MAPPING</keywords>
 
   <documentation>
-    Until custom mappings ship, treat as reserved.
+    Reserved: emitted when a call maps ambiguously under a custom FunctionMapping. Until custom
+    mappings ship, treat as reserved.
   </documentation>
 
   <references>

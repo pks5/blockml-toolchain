@@ -24,7 +24,8 @@
   <keywords>BML_MISSING_SUBBLOCK_NAME</keywords>
 
   <documentation>
-    Sub-Blocks use the opposite identity convention from roots: name is required; type is normally derived.
+    Emitted when a Sub-Block omits the required name element. Remedy: Sub-Blocks use the opposite
+    identity convention from roots: name is required; type is normally derived.
   </documentation>
 
   <references>

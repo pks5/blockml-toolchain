@@ -25,7 +25,8 @@
   <keywords>BML_INVALID_DEFINITION_BRANCH</keywords>
 
   <documentation>
-    Use Root/Sub/Embedded/Member definition types appropriately.
+    Emitted when a definition meta-model type is used outside the Definition branch expectations.
+    Remedy: Use Root/Sub/Embedded/Member definition types appropriately.
   </documentation>
 
   <references>

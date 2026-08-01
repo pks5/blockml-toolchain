@@ -24,7 +24,8 @@
   <keywords>BML_BLOCK_NAME_TYPE_MISMATCH</keywords>
 
   <documentation>
-    Root design principle: type is canonical; name is a redundant short form of the last type segment.
+    Emitted when an explicit root name does not equal lastSegment(resolve(type)). Remedy: Root
+    design principle: type is canonical; name is a redundant short form of the last type segment.
   </documentation>
 
   <references>

@@ -25,7 +25,8 @@
   <keywords>BML_DEPRECATED_TYPE</keywords>
 
   <documentation>
-    Prefer the replacement type; status may be warning-level depending on policy.
+    Emitted when a referenced type is marked deprecated/status Deprecated. Remedy: Prefer the
+    replacement type; status may be warning-level depending on policy.
   </documentation>
 
   <references>

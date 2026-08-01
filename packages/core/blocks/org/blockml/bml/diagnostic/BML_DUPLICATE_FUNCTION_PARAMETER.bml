@@ -23,7 +23,8 @@
   <keywords>BML_DUPLICATE_FUNCTION_PARAMETER</keywords>
 
   <documentation>
-    Each inputType field may appear at most once in named form.
+    Emitted when a named call argument is supplied more than once. Remedy: Each inputType field
+    may appear at most once in named form.
   </documentation>
 
   <references>

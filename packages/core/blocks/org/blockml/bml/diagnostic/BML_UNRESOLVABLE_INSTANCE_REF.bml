@@ -25,6 +25,7 @@
   <keywords>BML_UNRESOLVABLE_INSTANCE_REF</keywords>
 
   <documentation>
+    Emitted when an InstanceReference cannot be resolved to an instance id in scope. Remedy:
     Fix bml:id, aggregation visibility, or the reference path.
   </documentation>
 

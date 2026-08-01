@@ -23,7 +23,8 @@
   <keywords>BML_EXPR_BUILTIN_NOT_V1</keywords>
 
   <documentation>
-    V1 includes a focused #math / #numbers / #strings / #lists subset — see doc:Expressions V1 scope.
+    Emitted when a built-in outside the V1 supported set is called. Remedy: V1 includes a focused
+    #math / #numbers / #strings / #lists subset — see doc:Expressions V1 scope.
   </documentation>
 
   <references>

@@ -25,7 +25,8 @@
   <keywords>BML_NATIVE_BLOCK_CUSTOM_PROPERTY</keywords>
 
   <documentation>
-    Prefer declared NativeBlock properties; domain-specific.
+    Domain/policy: unexpected custom property on NativeBlock chain. Prefer declared NativeBlock
+    properties; domain-specific.
   </documentation>
 
   <references>

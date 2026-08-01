@@ -24,7 +24,8 @@
   <keywords>BML_MISSING_DOCUMENTATION</keywords>
 
   <documentation>
-    Every Block definition (root and Sub-Blocks) requires ≥1 default-namespace documentation entry.
+    Emitted when a Block definition omits required default-namespace documentation. Remedy: Every
+    Block definition (root and Sub-Blocks) requires ≥1 default-namespace documentation entry.
   </documentation>
 
   <references>

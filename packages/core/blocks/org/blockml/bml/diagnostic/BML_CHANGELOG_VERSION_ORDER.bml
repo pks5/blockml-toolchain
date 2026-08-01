@@ -25,7 +25,8 @@
   <keywords>BML_CHANGELOG_VERSION_ORDER</keywords>
 
   <documentation>
-    Order &lt;change&gt; entries ascending by version.
+    Emitted when changelog entries are not in oldest-first version order. Remedy: Order &lt;change&gt;
+    entries ascending by version.
   </documentation>
 
   <references>

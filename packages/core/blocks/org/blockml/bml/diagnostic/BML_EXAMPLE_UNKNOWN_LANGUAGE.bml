@@ -25,7 +25,8 @@
   <keywords>BML_EXAMPLE_UNKNOWN_LANGUAGE</keywords>
 
   <documentation>
-    Use org.blockml.bml.language.* (implementation dialect for CDATA).
+    Emitted when example language= does not resolve to a Language block. Remedy: Use org.blockml.bml.language.*
+    (implementation dialect for CDATA).
   </documentation>
 
   <references>

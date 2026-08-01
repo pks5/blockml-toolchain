@@ -25,7 +25,8 @@
   <keywords>BML_CONSTANT_VALUE_MISMATCH</keywords>
 
   <documentation>
-    Use the exact singleton literal allowed by the Constant configuration.
+    Emitted when a value does not equal the configured Constant(T){value: …} literal after type
+    checks. Remedy: Use the exact singleton literal allowed by the Constant configuration.
   </documentation>
 
   <references>

@@ -25,7 +25,8 @@
   <keywords>BML_UNKNOWN_BEAN</keywords>
 
   <documentation>
-    Declare bml:bean on the instance; prefer BML_EXPR_UNKNOWN_BEAN for expression sites.
+    Emitted when a bean name cannot be resolved (alias of expression bean errors in some pipelines).
+    Remedy: Declare bml:bean on the instance; prefer BML_EXPR_UNKNOWN_BEAN for expression sites.
   </documentation>
 
   <references>

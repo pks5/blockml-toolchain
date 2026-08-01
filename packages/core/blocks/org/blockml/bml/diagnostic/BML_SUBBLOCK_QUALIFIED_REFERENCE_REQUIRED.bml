@@ -24,7 +24,9 @@
   <keywords>BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED</keywords>
 
   <documentation>
-    Prefer distinctive Sub-Block names. If names collide with the root, use Root.SubBlock / FQN forms.
+    Emitted when a Sub-Block shares the root Block name and a bare short tag is ambiguous. Remedy:
+    Prefer distinctive Sub-Block names. If names collide with the root, use Root.SubBlock / FQN
+    forms.
   </documentation>
 
   <references>

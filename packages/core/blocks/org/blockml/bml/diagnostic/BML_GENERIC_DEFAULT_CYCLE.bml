@@ -23,7 +23,8 @@
   <keywords>BML_GENERIC_DEFAULT_CYCLE</keywords>
 
   <documentation>
-    Declaration-order sibling defaults already prevent most cycles; this is defense in depth.
+    Emitted when defaultType bindings form a cycle. Remedy: Declaration-order sibling defaults
+    already prevent most cycles; this is defense in depth.
   </documentation>
 
   <references>

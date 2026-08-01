@@ -24,7 +24,8 @@
   <keywords>BML_MISSING_BASE_TYPE</keywords>
 
   <documentation>
-    Single inheritance is mandatory except on the sole root org.blockml.bml.core.Block.
+    Emitted when a Block other than org.blockml.bml.core.Block omits baseType. Remedy: Single
+    inheritance is mandatory except on the sole root org.blockml.bml.core.Block.
   </documentation>
 
   <references>

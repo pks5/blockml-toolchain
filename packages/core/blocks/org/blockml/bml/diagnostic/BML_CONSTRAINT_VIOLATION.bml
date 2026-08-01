@@ -25,7 +25,8 @@
   <keywords>BML_CONSTRAINT_VIOLATION</keywords>
 
   <documentation>
-    Change the authored value or relax/remove the constraint.
+    Emitted when a constraint fails with validation=Error. Remedy: Change the authored value
+    or relax/remove the constraint.
   </documentation>
 
   <references>

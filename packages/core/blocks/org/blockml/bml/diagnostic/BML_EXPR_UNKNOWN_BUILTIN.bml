@@ -23,7 +23,9 @@
   <keywords>BML_EXPR_UNKNOWN_BUILTIN</keywords>
 
   <documentation>
-    Use documented #math / #strings / #lists / #numbers / #bools names. Unknown or misspelled builtins fail validation.
+    Emitted when #name is not a registered built-in service Capability. Remedy: Use documented
+    #math / #strings / #lists / #numbers / #bools names. Unknown or misspelled builtins fail
+    validation.
   </documentation>
 
   <references>

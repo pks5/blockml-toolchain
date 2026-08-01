@@ -25,7 +25,8 @@
   <keywords>BML_DUPLICATE_CONTRACT</keywords>
 
   <documentation>
-    List each contract at most once.
+    Emitted when the same contract FQN appears more than once in &lt;contracts&gt;. Remedy: List
+    each contract at most once.
   </documentation>
 
   <references>

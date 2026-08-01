@@ -25,7 +25,8 @@
   <keywords>BML_NAMESPACE_UNBOUND</keywords>
 
   <documentation>
-    Declare xmlns for that namespace; do not invent prefixes at emit time.
+    Emitted when emit/QName mode needs a prefix for a namespace missing from authored bindings.
+    Remedy: Declare xmlns for that namespace; do not invent prefixes at emit time.
   </documentation>
 
   <references>

@@ -25,7 +25,8 @@
   <keywords>BML_DIRECTIVE_NOT_ALLOWED</keywords>
 
   <documentation>
-    See placement rules for each directive.
+    Emitted when a bml: directive appears on an element where it is not permitted. Remedy: See
+    placement rules for each directive.
   </documentation>
 
   <references>

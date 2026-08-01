@@ -23,7 +23,9 @@
   <keywords>BML_MISSING_FUNCTION_MAPPING</keywords>
 
   <documentation>
-    Until custom mappings ship, treat as reserved. Default FunctionMapping covers V1 built-ins.
+    Reserved: emitted when an implementation requires a non-default FunctionMapping but none
+    is declared. Until custom mappings ship, treat as reserved. Default FunctionMapping covers
+    V1 built-ins.
   </documentation>
 
   <references>

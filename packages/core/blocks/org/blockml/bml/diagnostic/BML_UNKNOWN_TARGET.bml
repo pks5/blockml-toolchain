@@ -25,7 +25,8 @@
   <keywords>BML_UNKNOWN_TARGET</keywords>
 
   <documentation>
-    Register the target package or fix targets[] configuration.
+    Emitted when a configured render target name is not registered. Remedy: Register the target
+    package or fix targets[] configuration.
   </documentation>
 
   <references>

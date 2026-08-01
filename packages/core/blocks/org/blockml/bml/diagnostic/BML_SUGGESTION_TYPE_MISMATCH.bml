@@ -25,7 +25,8 @@
   <keywords>BML_SUGGESTION_TYPE_MISMATCH</keywords>
 
   <documentation>
-    Use compatible ValueType/Entity instances; primitives need matching *Entity wrappers.
+    Emitted when a suggestion instance is incompatible with the property type. Remedy: Use compatible
+    ValueType/Entity instances; primitives need matching *Entity wrappers.
   </documentation>
 
   <references>

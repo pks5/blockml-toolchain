@@ -25,6 +25,7 @@
   <keywords>BML_DUPLICATE_MEMBER_NAME</keywords>
 
   <documentation>
+    Emitted when two members share the same (namespace, normalizedLogicalName) identity. Remedy:
     Rename one member or fix visibility-prefix duplicates.
   </documentation>
 

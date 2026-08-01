@@ -25,7 +25,8 @@
   <keywords>BML_UNEXPORTED_INSTANCE_REF</keywords>
 
   <documentation>
-    Use a public aggregation for cross-document ids, or reference from an allowed scope.
+    Emitted when an instance id is referenced outside the aggregation visibility export rules.
+    Remedy: Use a public aggregation for cross-document ids, or reference from an allowed scope.
   </documentation>
 
   <references>

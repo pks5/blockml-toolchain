@@ -25,7 +25,8 @@
   <keywords>BML_LEGACY_TYPE_SOURCE</keywords>
 
   <documentation>
-    Migrate to BML TypeRegistry definitions.
+    Emitted when a type still comes from a legacy XSD/YAML source during migration. Remedy: Migrate
+    to BML TypeRegistry definitions.
   </documentation>
 
   <references>

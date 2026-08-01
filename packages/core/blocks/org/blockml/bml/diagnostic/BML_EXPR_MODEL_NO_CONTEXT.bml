@@ -23,7 +23,9 @@
   <keywords>BML_EXPR_MODEL_NO_CONTEXT</keywords>
 
   <documentation>
-    Absolute paths start with /. Relative paths require a nearest parent Model-bound Aggregation. V1 defers model runtime.
+    Emitted when a relative @model: path is used without a binding context. Remedy: Absolute
+    paths start with /. Relative paths require a nearest parent Model-bound Aggregation. V1 defers
+    model runtime.
   </documentation>
 
   <references>

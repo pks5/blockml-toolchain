@@ -23,7 +23,8 @@
   <keywords>BML_MISSING_FUNCTION_PARAMETER</keywords>
 
   <documentation>
-    Supply the missing positional or named argument, or an object literal with all required fields.
+    Emitted when a required inputType field is absent after FunctionMapping. Remedy: Supply the
+    missing positional or named argument, or an object literal with all required fields.
   </documentation>
 
   <references>

@@ -24,7 +24,8 @@
   <keywords>BML_NESTED_EMBEDDED_BLOCKS</keywords>
 
   <documentation>
-    Compose artifacts by listing virtual files flat at the root. Bundlers flatten when merging packages.
+    Emitted when an embedded Block itself declares embeddedBlocks. Remedy: Compose artifacts
+    by listing virtual files flat at the root. Bundlers flatten when merging packages.
   </documentation>
 
   <references>

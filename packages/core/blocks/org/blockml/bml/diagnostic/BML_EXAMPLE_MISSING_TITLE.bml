@@ -25,7 +25,7 @@
   <keywords>BML_EXAMPLE_MISSING_TITLE</keywords>
 
   <documentation>
-    Add title= on the example entry.
+    Emitted when an example omits the required title. Remedy: Add title= on the example entry.
   </documentation>
 
   <references>

@@ -25,6 +25,7 @@
   <keywords>BML_IMPLEMENTATION_UNKNOWN_LANGUAGE</keywords>
 
   <documentation>
+    Emitted when implementation language= does not resolve to org.blockml.bml.language.*. Remedy:
     Use a Language FQN or unqualified name at the language attribute site.
   </documentation>
 

@@ -23,7 +23,8 @@
   <keywords>BML_UNREACHABLE_UNION_ALTERNATIVE</keywords>
 
   <documentation>
-    Prefer narrower/sentinel alternatives on the left. Advisory like unreachable code — compile succeeds.
+    Warning: a later union alternative cannot win under left-to-right first-hit matching. Prefer
+    narrower/sentinel alternatives on the left. Advisory like unreachable code — compile succeeds.
   </documentation>
 
   <references>

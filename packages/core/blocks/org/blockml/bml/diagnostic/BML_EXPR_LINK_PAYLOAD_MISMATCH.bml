@@ -23,7 +23,8 @@
   <keywords>BML_EXPR_LINK_PAYLOAD_MISMATCH</keywords>
 
   <documentation>
-    Ensure linked Outbound/Inbound (or Transformation) payloads are compatible.
+    Emitted when linked Capabilities have incompatible inputType/outputType. Remedy: Ensure linked
+    Outbound/Inbound (or Transformation) payloads are compatible.
   </documentation>
 
   <references>

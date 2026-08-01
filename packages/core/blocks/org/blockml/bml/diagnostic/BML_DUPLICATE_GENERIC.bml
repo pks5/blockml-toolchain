@@ -25,7 +25,7 @@
   <keywords>BML_DUPLICATE_GENERIC</keywords>
 
   <documentation>
-    Rename one parameter.
+    Emitted when two genericTypes entries share the same parameter name. Remedy: Rename one parameter.
   </documentation>
 
   <references>

@@ -25,7 +25,8 @@
   <keywords>BML_INVALID_SINCE_VERSION</keywords>
 
   <documentation>
-    Use org.blockml.bml.type.Version format.
+    Emitted when since is not a valid Version value. Remedy: Use org.blockml.bml.type.Version
+    format.
   </documentation>
 
   <references>

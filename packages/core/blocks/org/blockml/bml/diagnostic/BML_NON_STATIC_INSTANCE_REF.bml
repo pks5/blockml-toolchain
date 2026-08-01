@@ -25,7 +25,8 @@
   <keywords>BML_NON_STATIC_INSTANCE_REF</keywords>
 
   <documentation>
-    Use a literal static bml:id for cross-document {FQN}::{id} references.
+    Emitted when a qualified instance reference requires a static literal bml:id but got a dynamic
+    id. Remedy: Use a literal static bml:id for cross-document {FQN}::{id} references.
   </documentation>
 
   <references>

@@ -24,7 +24,9 @@
   <keywords>BML_GENERIC_SUBBLOCK_NAME_COLLISION</keywords>
 
   <documentation>
-    Rename the generic parameter or the Sub-Block so nested unqualified resolution remains unambiguous.
+    Emitted when a genericTypes parameter name equals a direct Sub-Block local name on the same
+    Block. Remedy: Rename the generic parameter or the Sub-Block so nested unqualified resolution
+    remains unambiguous.
   </documentation>
 
   <references>

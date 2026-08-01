@@ -23,7 +23,8 @@
   <keywords>BML_UNCLOSED_EMBEDDED_EXPRESSION</keywords>
 
   <documentation>
-    Every opening &lt;$ must close with $&gt;. Nested embeds are forbidden.
+    Emitted when an implementation body has &lt;$ without a matching $&gt;. Remedy: Every opening
+    &lt;$ must close with $&gt;. Nested embeds are forbidden.
   </documentation>
 
   <references>

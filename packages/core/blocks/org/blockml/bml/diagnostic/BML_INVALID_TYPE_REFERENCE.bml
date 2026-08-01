@@ -25,6 +25,7 @@
   <keywords>BML_INVALID_TYPE_REFERENCE</keywords>
 
   <documentation>
+    Emitted when a TypeReference / TypeExpression cannot be parsed or is ill-formed. Remedy:
     Fix FQN/QName/generic/configuration syntax.
   </documentation>
 

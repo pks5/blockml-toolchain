@@ -25,7 +25,8 @@
   <keywords>BML_UNKNOWN_NATURAL_LANGUAGE</keywords>
 
   <documentation>
-    Use org.blockml.bml.language.* NaturalLanguage blocks (English, German, …).
+    Emitted when a NaturalLanguage reference does not resolve. Remedy: Use org.blockml.bml.language.*
+    NaturalLanguage blocks (English, German, …).
   </documentation>
 
   <references>

@@ -25,7 +25,8 @@
   <keywords>BML_VERSION_BELOW_LIBRARY</keywords>
 
   <documentation>
-    Raise the Block version or align with library versioning conventions.
+    Emitted when a Block version is below its exporting library.version policy. Remedy: Raise
+    the Block version or align with library versioning conventions.
   </documentation>
 
   <references>

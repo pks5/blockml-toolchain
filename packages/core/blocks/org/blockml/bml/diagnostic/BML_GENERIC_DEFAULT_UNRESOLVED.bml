@@ -23,7 +23,8 @@
   <keywords>BML_GENERIC_DEFAULT_UNRESOLVED</keywords>
 
   <documentation>
-    Every unbound parameter at a reference site must resolve via authored args or defaults.
+    Emitted when a defaultType chain does not ground to a concrete TypeExpression. Remedy: Every
+    unbound parameter at a reference site must resolve via authored args or defaults.
   </documentation>
 
   <references>

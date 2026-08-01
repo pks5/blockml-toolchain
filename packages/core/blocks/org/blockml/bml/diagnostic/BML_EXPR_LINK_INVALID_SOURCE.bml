@@ -23,7 +23,8 @@
   <keywords>BML_EXPR_LINK_INVALID_SOURCE</keywords>
 
   <documentation>
-    Capability linking without call parentheses requires an Outbound source.
+    Emitted when @bean.capa (no parentheses) is used on a non-Outbound Capability. Remedy: Capability
+    linking without call parentheses requires an Outbound source.
   </documentation>
 
   <references>
