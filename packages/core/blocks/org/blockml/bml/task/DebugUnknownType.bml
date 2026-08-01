@@ -44,14 +44,14 @@
     <see type="doc:LibrarySystem" relation="TaskStep">
       Step 2 — confirm Library blocks exports the defining type.
     </see>
-    <see file="16_framework_base_types.md" relation="TaskStep">
-      Step 3 — review bootstrap order — framework BML before project content.
-    </see>
-    <see file="17_type_system_bml.md" relation="TaskStep">
-      Step 4 — check type reference forms (FQN, QName, context-bound unqualified names).
+    <see type="doc:TypeIdentityDerivation" relation="TaskStep">
+      Step 3 — check type reference forms (FQN, QName, Sub-Block-relative, nested resolution).
     </see>
     <see type="doc:BootstrapModel" relation="TaskStep">
-      Step 5 — confirm TypeRegistry bootstrap loaded dependencies before this document.
+      Step 4 — confirm TypeRegistry bootstrap loaded dependencies before this document.
+    </see>
+    <see type="task:FixTypeIdentity" relation="SeeAlso">
+      Related — identity mismatches when the type exists but the form is wrong.
     </see>
   </references>
 

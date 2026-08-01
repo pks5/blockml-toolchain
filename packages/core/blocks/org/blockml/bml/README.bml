@@ -151,6 +151,22 @@
       Fix BML_UNKNOWN_TYPE — unresolved type reference.
     </see>
 
+    <see type="task:FixVisibilityAccess" relation="TaskIndex">
+      Fix visibility — private/protected access, narrowing, mismatches.
+    </see>
+
+    <see type="task:FixMemberOverride" relation="TaskIndex">
+      Fix member overrides — override/abstract/final/readOnly.
+    </see>
+
+    <see type="task:FixCompositionPlacement" relation="TaskIndex">
+      Fix composition placement — nest under aggregation members.
+    </see>
+
+    <see type="task:FixTypeIdentity" relation="TaskIndex">
+      Fix type identity — root/Sub-Block/embedded and unqualified refs.
+    </see>
+
     <see type="doc:TaskGuideModel" relation="SeeAlso">
       TaskGuide blocks, task relations, and error-driven fix paths.
     </see>

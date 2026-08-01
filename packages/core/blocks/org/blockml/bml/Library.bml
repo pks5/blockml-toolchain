@@ -277,7 +277,55 @@
       <task:AuthorNewBlock />
       <task:AddConstraint />
       <task:DebugUnknownType />
+      <task:FixVisibilityAccess />
+      <task:FixMemberOverride />
+      <task:FixCompositionPlacement />
+      <task:FixTypeIdentity />
       <diag:BML_UNKNOWN_TYPE />
+      <diag:BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED />
+      <diag:BML_AMBIGUOUS_TYPE />
+      <diag:BML_BLOCK_NAME_TYPE_MISMATCH />
+      <diag:BML_DEFINITION_TYPE_MISMATCH />
+      <diag:BML_DUPLICATE_EMBEDDED_BLOCK />
+      <diag:BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT />
+      <diag:BML_EMBEDDED_BLOCKS_ON_SUBBLOCK />
+      <diag:BML_FINAL_BASE_TYPE />
+      <diag:BML_FINAL_MEMBER_OVERRIDE />
+      <diag:BML_GENERIC_BLOCK_NAME_COLLISION />
+      <diag:BML_GENERIC_SUBBLOCK_NAME_COLLISION />
+      <diag:BML_INVALID_BLOCK_NAME />
+      <diag:BML_LIBRARY_NESTING_VIOLATION />
+      <diag:BML_MISSING_BASE_TYPE />
+      <diag:BML_MISSING_BLOCK_TYPE />
+      <diag:BML_MISSING_DOCUMENTATION />
+      <diag:BML_MISSING_EMBEDDED_BLOCK_TYPE />
+      <diag:BML_MISSING_IS />
+      <diag:BML_MISSING_ISNOT />
+      <diag:BML_MISSING_SUBBLOCK_NAME />
+      <diag:BML_MISSING_SUMMARY />
+      <diag:BML_MISSING_VERSION />
+      <diag:BML_NESTED_EMBEDDED_BLOCKS />
+      <diag:BML_OUTSIDE_BML_NAMESPACE />
+      <diag:BML_OVERRIDE_REQUIRED />
+      <diag:BML_OVERRIDE_WITHOUT_PARENT />
+      <diag:BML_PRIVATE_MEMBER_ACCESS />
+      <diag:BML_PRIVATE_SUBBLOCK_ACCESS />
+      <diag:BML_PROTECTED_MEMBER_ACCESS />
+      <diag:BML_PROTECTED_SUBBLOCK_ACCESS />
+      <diag:BML_READONLY_MEMBER_WRITE />
+      <diag:BML_REDUNDANT_AGGREGATION_TYPE />
+      <diag:BML_STANDALONE_COMPOSITION />
+      <diag:BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED />
+      <diag:BML_SUBBLOCK_TYPE_MISMATCH />
+      <diag:BML_UNKNOWN_NAMESPACE_PREFIX />
+      <diag:BML_UNKNOWN_VERSION />
+      <diag:BML_UNQUALIFIED_BLOCK_REFERENCE />
+      <diag:BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE />
+      <diag:BML_VISIBILITY_MISMATCH />
+      <diag:BML_VISIBILITY_NARROWING />
+      <diag:BML_VISIBILITY_ON_ROOT_BLOCK />
+      <diag:BML_XML_DIRECTIVE_NOT_ALLOWED />
+      <diag:BML_XML_RENDERING_INVALID />
     </blocks>
   </aggregations>
 

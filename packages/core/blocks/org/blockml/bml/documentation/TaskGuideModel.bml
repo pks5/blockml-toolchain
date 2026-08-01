@@ -45,8 +45,20 @@
   </documentation>
 
   <references>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Task guides — authoring rules for TaskGuide blocks and task relations.
+    <see type="task:FixVisibilityAccess" relation="SeeAlso">
+      Example cluster task — visibility diagnostics.
+    </see>
+    <see type="task:FixMemberOverride" relation="SeeAlso">
+      Example cluster task — override/merge diagnostics.
+    </see>
+    <see type="task:FixCompositionPlacement" relation="SeeAlso">
+      Example cluster task — composition placement.
+    </see>
+    <see type="task:FixTypeIdentity" relation="SeeAlso">
+      Example cluster task — type identity diagnostics.
+    </see>
+    <see file="02_mbml.md" relation="DeepDive">
+      Historical task-guide authoring notes.
     </see>
     <see type="core:TaskGuide" relation="Defines">
       Abstract base for org.blockml.bml.task.* procedural blocks.

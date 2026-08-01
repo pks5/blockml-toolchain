@@ -211,11 +211,11 @@ Bestehende Blocks erweitern (statt neu):
 
 ## Diagnostics-Gap (quer zu 02)
 
-| In Docs (ca.) | Als `diagnostic/*.bml` | In Core-Prose erwähnt |
+| In Docs (ca.) | Als `diagnostic/*.bml` | Status |
 |---|---|---|
-| ~156 `BML_*` | 1 (`BML_UNKNOWN_TYPE`) | ~60 |
+| ~156 `BML_*` | **45** (P0/P1-Cluster + Docs-Modell/Library) | Rest ~110 (Expression, Constraint, …) offen |
 
-Jeder Code aus Visibility/Override/Composition/Directives sollte als Diagnostic-Block + optional `Resolves`→TaskGuide wandern.
+Cluster-TaskGuides: `FixVisibilityAccess`, `FixMemberOverride`, `FixCompositionPlacement`, `FixTypeIdentity` (+ bestehend `DebugUnknownType`).
 
 ---
 
@@ -238,10 +238,11 @@ Jeder Code aus Visibility/Override/Composition/Directives sollte als Diagnostic-
 - [x] P1 Doc-Blocks geschrieben und eingehängt (2026-08-01): TypeIdentityDerivation, SubBlockModel, ContractsModel, BlockNameConvention
 - [x] Visibility / Partial Override / Composition: keine `see file="02_mbml.md"` mehr als *AuthoringGuide* (höchstens DeepDive/Historie)
 - [x] `BmlAnnotation.*` verweist auf Core-Doc-Blocks, nicht auf `10_*` als Norm
-- [ ] Diagnostic-Blocks für Codes aus P0/P1-Kapiteln
+- [x] Diagnostic-Blocks für Codes aus P0/P1-Kapiteln (2026-08-01) — 45 diagnostics + 4 cluster TaskGuides
 - [ ] Domain-Abschnitte (Set/Preset) aus Core-Lernpfad entfernt oder klar als OUT markiert
 - [ ] `02_mbml.md` auf ToC + Links zu FQNs gekürzt (Roadmap V2)
 - [ ] Typsystem-DeepDive aus `17_*` / `20_*` verdichten (nächste Gap-Welle)
+- [ ] Restliche ~110 `BML_*` Codes aus Docs (Expression, Constraint, …) als Diagnostic-Blocks
 
 ---
 
