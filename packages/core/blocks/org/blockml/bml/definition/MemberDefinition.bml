@@ -12,6 +12,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:group="org.blockml.bml.group"
   xmlns:type="org.blockml.bml.type">
 
@@ -70,11 +71,17 @@
       Example property member reference — split form resolves to
       org.blockml.bml.core.Block.properties.language.
     </see>
-    <see file="12_bom_object_model.md" relation="AuthoringGuide">
+    <see type="doc:MemberVisibility" relation="AuthoringGuide">
+      Visibility naming convention, access rules, and aggregation ID reachability.
+    </see>
+    <see type="doc:PartialMemberOverrides" relation="AuthoringGuide">
+      Partial overrides — merge semantics, abstract/final/override, readOnly.
+    </see>
+    <see file="12_bom_object_model.md" relation="DeepDive">
       MemberDefinitionBase and member kind unions in the BOM.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Member containers, abstract/override/final rules.
+    <see file="02_mbml.md" relation="DeepDive">
+      Historical long-form member examples.
     </see>
     <see type="def:BlockDefinition" relation="Defines">
       Parent block shape — properties, aggregations, associations, capabilities containers.

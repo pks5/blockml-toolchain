@@ -12,6 +12,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
+  xmlns:doc="org.blockml.bml.documentation"
   xmlns:type="org.blockml.bml.type">
 
   <name>AggregationDefinition</name>
@@ -47,11 +48,17 @@
     instances — not aggregation member fields.</documentation>
 
   <references>
+    <see type="doc:CompositionModel" relation="AuthoringGuide">
+      Composition placement, recursion, and instance ID reachability.
+    </see>
+    <see type="doc:MemberVisibility" relation="AuthoringGuide">
+      Aggregation visibility controls which bml:id values may be referenced.
+    </see>
     <see file="12_bom_object_model.md" relation="DeepDive">
       AggregationDefinition BOM structure and CompositionTemplate.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Aggregations, composition placement, and default aggregation rules.
+    <see file="02_mbml.md" relation="DeepDive">
+      Historical long-form aggregation and composition examples.
     </see>
     <see type="core:Block" relation="Requires">
       Required branch for aggregation payload types.
@@ -85,7 +92,7 @@
         definition. Rendered as a composition child element inside the aggregation member element.
         Maps to BOM AggregationDefinition.composition (CompositionTemplate). May be omitted on
         override declarations that only refine metadata. On Block instances, aggregation content is
-        opened inline without a composition wrapper — see docs/02_mbml.md — Composition.
+        opened inline without a composition wrapper — see doc:CompositionModel.
         </documentation>
     </composition>
   </properties>

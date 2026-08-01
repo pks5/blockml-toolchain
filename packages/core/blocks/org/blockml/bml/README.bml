@@ -21,9 +21,10 @@
 
   <documentation>
     README block for the BlockML core library. Start with references marked relation=ReadFirst —
-    eighteen documentation blocks in mental learning order. The first ten form the BlockML
+    twenty-two documentation blocks in mental learning order. The first ten form the BlockML
     conceptual core: after reading them, most of the core library can be derived from Block
-    definitions themselves. Later entries cover conventions, organisation, and background knowledge.
+    definitions themselves. Later entries cover conventions, authoring rules (visibility, overrides,
+    composition, directives), organisation, and background knowledge.
 
     Library.bml points here via the required readMe aggregation (&lt;blockml:README /&gt;).
     Tooling filters references where relation=ReadFirst to build a curated learning context bundle;
@@ -95,6 +96,22 @@
 
     <see type="doc:ModelingGuidelines" relation="ReadFirst">
       Recommended patterns — baseType, contracts, capabilities, constraints.
+    </see>
+
+    <see type="doc:MemberVisibility" relation="ReadFirst">
+      Member and Sub-Block visibility — naming convention, access rules, aggregation IDs.
+    </see>
+
+    <see type="doc:PartialMemberOverrides" relation="ReadFirst">
+      Partial member overrides — merge semantics, abstract/final/override, readOnly.
+    </see>
+
+    <see type="doc:CompositionModel" relation="ReadFirst">
+      Composition — aggregation fill, placement, recursion, sibling sharing.
+    </see>
+
+    <see type="doc:BmlDirectives" relation="ReadFirst">
+      BML directives — bml:each, bml:if, bml:container, bml:with, bml:xml.
     </see>
 
     <see type="doc:PseudoCode" relation="ReadFirst">

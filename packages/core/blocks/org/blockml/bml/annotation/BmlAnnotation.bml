@@ -13,7 +13,8 @@
                       "
   xmlns:ann="org.blockml.bml.annotation"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:core="org.blockml.bml.core">
+  xmlns:core="org.blockml.bml.core"
+  xmlns:doc="org.blockml.bml.documentation">
 
   <name>BmlAnnotation</name>
   <type>ann:BmlAnnotation</type>
@@ -36,11 +37,17 @@
     <see type="core:Annotation" relation="Extends">
       Annotation branch — Package vs Annotation xmlns rule.
     </see>
-    <see file="10_expression_language.md" relation="AuthoringGuide">
-      bml: directive syntax (each, if, unless, with, container).
+    <see type="doc:BmlDirectives" relation="AuthoringGuide">
+      Normative placement and semantics for all bml: directives.
     </see>
-    <see file="02_mbml.md" relation="AuthoringGuide">
-      Namespaces and annotation bindings.
+    <see type="doc:CompositionModel" relation="SeeAlso">
+      Composition and bml:container as directive hosts.
+    </see>
+    <see file="10_expression_language.md" relation="DeepDive">
+      Full expression grammar used inside directive attributes.
+    </see>
+    <see file="19_definition_blocks_and_bml_xml.md" relation="DeepDive">
+      Extended bml:xml serialization rules and Stage checks.
     </see>
   </references>
 
@@ -149,7 +156,7 @@
       <is>A composition loop directive</is>
 
       <documentation>Attribute directive bml:each — expands the element once per loop iteration
-        (numeric or collection). See 10_expression_language.md.</documentation>
+        (numeric or collection). See doc:BmlDirectives.</documentation>
 
       <properties>
         <name override="true" final="true" type="Text">
@@ -194,7 +201,7 @@
       <is>A local variable scope directive</is>
 
       <documentation>Attribute directive bml:with — defines local variables visible within the
-        element and its descendants. See 10_expression_language.md.</documentation>
+        element and its descendants. See doc:BmlDirectives.</documentation>
 
       <properties>
         <name override="true" final="true" type="Text">
@@ -210,7 +217,7 @@
 
       <documentation>Attribute or member-level directive bml:xml — declares how a definition or
         member maps to XML when rendering BML from the BOM. Complements flow-control directives;
-        does not expand composition. See 19_definition_blocks_and_bml_xml.md.</documentation>
+        does not expand composition. See doc:BmlDirectives · 19_definition_blocks_and_bml_xml.md.</documentation>
 
       <properties>
         <name override="true" final="true" type="Text">

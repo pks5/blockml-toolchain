@@ -76,8 +76,11 @@
     <see type="constraint:Min" relation="SeeAlso">
       Example scalar constraint — binds T from enclosing property type.
     </see>
-    <see type="doc:PseudoCode" relation="ReadNext">
-      Next reading step — why pseudocode exists for semantic descriptions.
+    <see type="doc:MemberVisibility" relation="ReadNext">
+      Next reading step — member and Sub-Block visibility rules.
+    </see>
+    <see type="doc:PartialMemberOverrides" relation="SeeAlso">
+      Partial overrides and abstract/final merge semantics.
     </see>
   </references>
 

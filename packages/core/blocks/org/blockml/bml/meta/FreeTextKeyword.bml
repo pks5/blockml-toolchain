@@ -19,7 +19,7 @@
   <documentation>Standard free-text specialization of org.blockml.bml.meta.FixedKeyword for ad-hoc RAG
     and discovery tags. Extends FixedKeyword and widens protected catalogue members to public
     attributes via visibility widening (`_term` → `term`, same for language and weight) — see
-    02_mbml.md — Member Visibility — Visibility on override. Types are inherited from FixedKeyword
+    doc:MemberVisibility. Types are inherited from FixedKeyword
     and omitted on these overrides. Rendered as a direct child inside &lt;keywords&gt; (for example
     &lt;meta:FreeTextKeyword term="inheritance" /&gt;). Comma-separated plain text on &lt;keywords&gt;
     is shorthand that expands to FreeTextKeyword instances — one term per trimmed token. For

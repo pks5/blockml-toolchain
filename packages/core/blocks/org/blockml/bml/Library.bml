@@ -263,6 +263,10 @@
       <doc:DocumentationModel />
       <doc:BootstrapModel />
       <doc:ModelingGuidelines />
+      <doc:MemberVisibility />
+      <doc:PartialMemberOverrides />
+      <doc:CompositionModel />
+      <doc:BmlDirectives />
       <doc:PseudoCode />
       <doc:TaskGuideModel />
       <doc:WOTFoundation />
