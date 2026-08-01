@@ -259,6 +259,7 @@
       <doc:FunctionMappingModel />
       <doc:CapabilitySemantics />
       <doc:Expressions />
+      <doc:EmbeddedExpressions />
       <doc:CompilerArchitecture />
       <doc:RendererFreedom />
       <doc:LibrarySystem />
@@ -285,6 +286,7 @@
       <task:FixMemberOverride />
       <task:FixCompositionPlacement />
       <task:FixTypeIdentity />
+      <task:FixExpressionErrors />
       <diag:BML_UNKNOWN_TYPE />
       <diag:BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED />
       <diag:BML_AMBIGUOUS_TYPE />
@@ -347,6 +349,21 @@
       <diag:BML_UNKNOWN_FUNCTION_PARAMETER />
       <diag:BML_UNKNOWN_TYPE_CONFIGURATION />
       <diag:BML_UNREACHABLE_UNION_ALTERNATIVE />
+      <diag:BML_EXPR_BUILTIN_NOT_V1 />
+      <diag:BML_EXPR_DIVISION_BY_ZERO />
+      <diag:BML_EXPR_LINK_INVALID_SOURCE />
+      <diag:BML_EXPR_LINK_INVALID_TARGET />
+      <diag:BML_EXPR_LINK_PAYLOAD_MISMATCH />
+      <diag:BML_EXPR_MODEL_NO_CONTEXT />
+      <diag:BML_EXPR_PAYLOAD_MISMATCH />
+      <diag:BML_EXPR_SYNTAX_ERROR />
+      <diag:BML_EXPR_TYPE_MISMATCH />
+      <diag:BML_EXPR_UNKNOWN_BEAN />
+      <diag:BML_EXPR_UNKNOWN_BUILTIN />
+      <diag:BML_EXPR_UNKNOWN_PROPERTY />
+      <diag:BML_INVALID_EMBEDDED_EXPRESSION />
+      <diag:BML_PROPERTY_CYCLE />
+      <diag:BML_UNCLOSED_EMBEDDED_EXPRESSION />
     </blocks>
   </aggregations>
 

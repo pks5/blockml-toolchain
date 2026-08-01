@@ -21,11 +21,10 @@
 
   <documentation>
     README block for the BlockML core library. Start with references marked relation=ReadFirst —
-    thirty documentation blocks in mental learning order. The early entries form the BlockML
-    conceptual core — including the type system (kinds, expressions, generics, configuration,
-    Constant, FunctionMapping). Later entries cover conventions, authoring rules (visibility,
-    overrides, composition, directives, type identity, Sub-Blocks, contracts), organisation, and
-    background knowledge.
+    thirty-one documentation blocks in mental learning order. The early entries form the BlockML
+    conceptual core — including the type system and expression language (${ } and &lt;$ $&gt;).
+    Later entries cover conventions, authoring rules (visibility, overrides, composition,
+    directives, type identity, Sub-Blocks, contracts), organisation, and background knowledge.
 
     Library.bml points here via the required readMe aggregation (&lt;blockml:README /&gt;).
     Tooling filters references where relation=ReadFirst to build a curated learning context bundle;
@@ -80,7 +79,11 @@
     </see>
 
     <see type="doc:Expressions" relation="ReadFirst">
-      Expression language, FunctionMapping, and capability call syntax.
+      Expression language — ${ }, scope, V1 builtins, FunctionMapping.
+    </see>
+
+    <see type="doc:EmbeddedExpressions" relation="ReadFirst">
+      &lt;$ $&gt; embeds inside Capability implementations.
     </see>
 
     <see type="doc:CompilerArchitecture" relation="ReadFirst">
@@ -183,8 +186,16 @@
       Fix type identity — root/Sub-Block/embedded and unqualified refs.
     </see>
 
+    <see type="task:FixExpressionErrors" relation="TaskIndex">
+      Fix expression errors — ${ }, embeds, beans, builtins, linking.
+    </see>
+
     <see type="doc:TaskGuideModel" relation="SeeAlso">
       TaskGuide blocks, task relations, and error-driven fix paths.
+    </see>
+
+    <see file="02_mbml.md" relation="SeeAlso">
+      Language ToC — maps former handbook sections to Core FQNs.
     </see>
 
     <see type="core:ReadMe" relation="Defines">

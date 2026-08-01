@@ -1,7 +1,10 @@
 # Gap-Matrix: `02_mbml.md` → BlockML Core BML
 
-Stand: 2026-08-01  
+Stand: 2026-08-02  
 Ziel: BlockML BML Core selbstbeschreibend genug für Repo-Extraktion / Submodule — ohne externe MD als Sprach-SSOT.
+
+**Aktuell:** `docs/02_mbml.md` ist ToC → FQN-Index; Langform in `docs/archive/02_mbml_historical.md`.
+README: 31 Doc-Blocks · 77 Diagnostics · 8 TaskGuides.
 
 ## Legende
 
@@ -30,9 +33,7 @@ Ziel: BlockML BML Core selbstbeschreibend genug für Repo-Extraktion / Submodule
 | GAP | ~12 |
 | OUT | ~14 |
 
-**Kritisch für Submodule (müssen vor Split in BML):** Member Visibility (Vollregeln), Partial Overrides, Composition Placement, Sub-Block Visibility/utility, Directive-Semantik (über Katalog hinaus), FQN-/Identity-Algorithmen (Canonical derivation).
-
-**Bereits stark in BML:** Documentation-Modell, Implicit Namespace, Library-Format, Member abstract/final/override (Kern), Property facets (Kern), Sub-/Root-/Embedded-Definition-Shapes, BmlAnnotation-Directive-Katalog.
+**P0/P1/Typsystem/Expressions:** in BML verdichtet. Verbleibende MD-SSOT eher Toolchain (`12`/`13`/`10` EBNF/AST), Domain, und Rest-Diagnostics (~80 Codes).
 
 ---
 
@@ -242,8 +243,10 @@ Cluster-TaskGuides: `FixVisibilityAccess`, `FixMemberOverride`, `FixCompositionP
 - [ ] Domain-Abschnitte (Set/Preset) aus Core-Lernpfad entfernt oder klar als OUT markiert
 - [ ] `02_mbml.md` auf ToC + Links zu FQNs gekürzt (Roadmap V2)
 - [x] Typsystem-DeepDive verdichtet (2026-08-01): TypeExpressions, GenericsModel, ConstantValueType, FunctionMappingModel (+ 17 Typ-Diagnostics)
-- [ ] Restliche `BML_*` Codes aus Docs (Expression-AST, restliche Constraints, …) als Diagnostic-Blocks
-- [ ] Domain-Abschnitte / `02_mbml.md` auf ToC + FQN-Links kürzen
+- [x] Expressions verdichtet (2026-08-02): Expressions + EmbeddedExpressions + FixExpressionErrors + 15 Expr-Diagnostics
+- [x] `02_mbml.md` → ToC + FQN-Links; Langform nach `archive/02_mbml_historical.md`
+- [ ] Restliche `BML_*` Codes (~80) aus Docs als Diagnostic-Blocks
+- [ ] Optional: Annotation-Authoring-Doc-Block; `10_*` EBNF bleibt DeepDive/Parser-Vertrag
 
 ---
 
