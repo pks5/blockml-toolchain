@@ -248,7 +248,7 @@ BOM equality does not require whitespace match (B10/B13). Bodies are opaque stri
 
 | Role | File / type |
 |---|---|
-| Primary | `packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml` → `org.blockml.bml.definition.BlockDefinition` |
+| Primary | `libs/bml-core/blocks/org/blockml/bml/definition/BlockDefinition.bml` → `org.blockml.bml.definition.BlockDefinition` |
 | Inherited docs / modifiers | `StructuralDefinition.bml` |
 | Constraints container | `ConstrainableDefinition.bml` |
 | Document root add-on | `RootBlockDefinition.bml` (`embeddedBlocks`) |
@@ -971,7 +971,7 @@ Before validating or compiling a file that references external types, the orches
 
 ```text
 1. Pre-register framework BML (fixed paths — see 16_framework_base_types.md)
-     @blockml/core/blocks        →  org.blockml.bml.core.*, org.blockml.bml.service.*
+     libs/bml-core/blocks        →  org.blockml.bml.core.*, org.blockml.bml.service.*
      @machineblocks/mbom/blocks  →  com.machineblocks.bml.core.*
 
 2. Discover BML sources

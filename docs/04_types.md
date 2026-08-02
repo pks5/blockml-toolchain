@@ -215,7 +215,7 @@ Do **not** maintain enum/struct/value catalogs in this Markdown file.
 |---------|-----------|
 | Native parameters | `…/core/NativeBlock.bml` |
 | MB type shapes | `…/type/*.bml` (e.g. `Direction.bml`, `SizeXYZ.bml`, `Align.bml`, `WallGap.bml`, …) |
-| Framework primitives | `packages/core/blocks/org/blockml/bml/type/*.bml` |
+| Framework primitives | `libs/bml-core/blocks/org/blockml/bml/type/*.bml` |
 
 This document keeps only **parse / serialize / convention** commentary. For values,
 defaults, docs, and `scad:value`, open the corresponding `.bml` file.

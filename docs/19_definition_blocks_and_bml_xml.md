@@ -6,7 +6,7 @@ version: 0.1.0 · **BML meta-model specified; parser/serializer WIP**
 
 This document specifies the **meta-model** for BlockML self-description: how BlockML describes its own block structure in BML, and how the **`bml:xml`** directive declares the canonical XML rendering of any block type.
 
-The BML sources under `packages/core/blocks/org/blockml/bml/core/Definition.bml` and `packages/core/blocks/org/blockml/bml/definition/*` describe the **Definition meta-model**. `core.Definition` is complete as an empty identification marker; concrete shapes live on `org.blockml.bml.definition.*` subtypes. This document captures the **design intent** so parser, validator, and serializer work can proceed against a stable concept.
+The BML sources under `libs/bml-core/blocks/org/blockml/bml/core/Definition.bml` and `libs/bml-core/blocks/org/blockml/bml/definition/*` describe the **Definition meta-model**. `core.Definition` is complete as an empty identification marker; concrete shapes live on `org.blockml.bml.definition.*` subtypes. This document captures the **design intent** so parser, validator, and serializer work can proceed against a stable concept.
 
 For framework base types see `16_framework_base_types.md`.
 For BML authoring syntax see `02_mbml.md`.
@@ -86,7 +86,7 @@ An ordinary **composable block** (e.g. `com.machineblocks.bml.bricks.StandardBri
 
 ## Definition Block Branch (`org.blockml.bml.definition.*`)
 
-Each member kind in the block grammar has a corresponding Definition block. Sources in `@blockml/core`:
+Each member kind in the block grammar has a corresponding Definition block. Sources in `libs/bml-core`:
 
 | Definition block | Describes |
 |---|---|
@@ -101,7 +101,7 @@ Each member kind in the block grammar has a corresponding Definition block. Sour
 | `org.blockml.bml.definition.CapabilityDefinition` | `<capabilities>` child members |
 | `org.blockml.bml.definition.GenericTypeDefinition` | `<genericTypes>` entries |
 
-`BlockDefinition`, `SubBlockDefinition`, `EmbeddedBlockDefinition`, and `RootBlockDefinition` together describe block definition documents. `BlockDefinition` declares the shared members (`name`, `type`, `baseType`, abstract `definition`, `subBlocks`, aggregations for `properties`, `aggregations`, …). `SubBlockDefinition`, `EmbeddedBlockDefinition`, and `RootBlockDefinition` are **sibling** specializations of `BlockDefinition` that each override `definition` with a tighter TypeReference and default. `RootBlockDefinition` additionally owns `embeddedBlocks` (`EmbeddedBlockDefinition[]`). Type modifiers `abstract` and `final` are declared on `org.blockml.bml.definition.StructuralDefinition` as local boolean properties (default false, not inherited) and apply to block definitions and member declarations via `MemberDefinition`. See `packages/core/blocks/org/blockml/bml/definition/*.bml`.
+`BlockDefinition`, `SubBlockDefinition`, `EmbeddedBlockDefinition`, and `RootBlockDefinition` together describe block definition documents. `BlockDefinition` declares the shared members (`name`, `type`, `baseType`, abstract `definition`, `subBlocks`, aggregations for `properties`, `aggregations`, …). `SubBlockDefinition`, `EmbeddedBlockDefinition`, and `RootBlockDefinition` are **sibling** specializations of `BlockDefinition` that each override `definition` with a tighter TypeReference and default. `RootBlockDefinition` additionally owns `embeddedBlocks` (`EmbeddedBlockDefinition[]`). Type modifiers `abstract` and `final` are declared on `org.blockml.bml.definition.StructuralDefinition` as local boolean properties (default false, not inherited) and apply to block definitions and member declarations via `MemberDefinition`. See `libs/bml-core/blocks/org/blockml/bml/definition/*.bml`.
 
 **Distinction from BOM `BlockDefinition`:** The TypeScript interface `org.blockml.bml.bom.BlockDefinition` is the **parse result** for any `<block>` document. The BML blocks `org.blockml.bml.definition.BlockDefinition`, `SubBlockDefinition`, `EmbeddedBlockDefinition`, and `RootBlockDefinition` are the **meta-model** that describes what a block document means. Same word, different layers — see `12_bom_object_model.md`.
 
@@ -477,27 +477,27 @@ Until the meta-serializer exists:
 Source files live under:
 
 ```text
-packages/core/blocks/org/blockml/bml/core/Definition.bml
-packages/core/blocks/org/blockml/bml/core/PrimitiveEntity.bml
-packages/core/blocks/org/blockml/bml/type/TypeReference.bml
-packages/core/blocks/org/blockml/bml/type/TypeReferenceEntity.bml
-packages/core/blocks/org/blockml/bml/type/MemberReference.bml
-packages/core/blocks/org/blockml/bml/type/PropertyReference.bml
-packages/core/blocks/org/blockml/bml/type/AggregationReference.bml
-packages/core/blocks/org/blockml/bml/type/AssociationReference.bml
-packages/core/blocks/org/blockml/bml/type/CapabilityReference.bml
-packages/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/ConstrainableDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/BlockDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/SubBlockDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/EmbeddedBlockDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/RootBlockDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/MemberDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/PropertyDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/AggregationDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/AssociationDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/CapabilityDefinition.bml
-packages/core/blocks/org/blockml/bml/definition/GenericTypeDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/core/Definition.bml
+libs/bml-core/blocks/org/blockml/bml/core/PrimitiveEntity.bml
+libs/bml-core/blocks/org/blockml/bml/type/TypeReference.bml
+libs/bml-core/blocks/org/blockml/bml/type/TypeReferenceEntity.bml
+libs/bml-core/blocks/org/blockml/bml/type/MemberReference.bml
+libs/bml-core/blocks/org/blockml/bml/type/PropertyReference.bml
+libs/bml-core/blocks/org/blockml/bml/type/AggregationReference.bml
+libs/bml-core/blocks/org/blockml/bml/type/AssociationReference.bml
+libs/bml-core/blocks/org/blockml/bml/type/CapabilityReference.bml
+libs/bml-core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/ConstrainableDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/BlockDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/SubBlockDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/EmbeddedBlockDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/RootBlockDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/MemberDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/PropertyDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/AggregationDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/AssociationDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/CapabilityDefinition.bml
+libs/bml-core/blocks/org/blockml/bml/definition/GenericTypeDefinition.bml
 ```
 
 Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are declared **inline** in `StructuralDefinition.bml` — not as separate top-level `*Definition.bml` library exports.

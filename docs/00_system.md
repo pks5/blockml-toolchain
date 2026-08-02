@@ -61,7 +61,7 @@ BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-
 
 **The Compiler** (`@blockml/compiler`) is the facade and Target Registry. It does not prescribe a fixed compile path — renderers orchestrate utilities themselves. Pipeline detail: `06_compiler.md`.
 
-**Self-hosting (bootstrap):** Before processing user projects, the CLI bootstraps a TypeRegistry from framework BML in `@blockml/core` and `@machineblocks/mbom`. Each registered BlockDefinition is an immutable `BomDocument` (Urmodell) — typically parse-origin today; Builder-origin documents are valid once V3 ships.
+**Self-hosting (bootstrap):** Before processing user projects, the CLI bootstraps a TypeRegistry from framework BML in `libs/bml-core` (`org.blockml.bml.*`) and `@machineblocks/mbom`. Each registered BlockDefinition is an immutable `BomDocument` (Urmodell) — typically parse-origin today; Builder-origin documents are valid once V3 ships.
 
 **The CLI** (`bom`) is the Node.js command-line interface for parsing, validating, compiling, watching, and scaffolding BML projects.
 
@@ -116,14 +116,17 @@ This is analogous to `tsc` or `webpack` — the tool is global, content projects
 
 See `15_dev_setup.md` for **as-of-now vs target** layout, workspace configuration, build scripts, and implementation order.
 
-**Today:** specs under `docs/`, framework BML under `packages/core/`, domain BML under `domains/machineblocks/mbom/`, scad-lib submodule — no npm workspace / TS packages yet.
+**Today:** specs under `docs/`, framework BML under `libs/bml-core/` (Git submodule), domain BML under `domains/machineblocks/mbom/`, scad-lib submodule — no npm workspace / TS packages yet.
 
 **Target tree** (after scaffolding):
 
 ```text
 blockml/
+  libs/
+    bml-core/          — Git submodule: BlockML Core BML (org.blockml.bml.*)
+
   packages/
-    core/              — @blockml/core (BOM TS contracts + framework BML: org.blockml.bml.*)
+    core/              — @blockml/core (BOM TS contracts + utilities)
     parser/            — @blockml/parser (BML → BomDocument; types from core)
     serializer/        — @blockml/serializer (BomDocument → BML; types from core)
     validator/         — @blockml/validator
@@ -184,12 +187,12 @@ New engines can always be built as independent packages. Each implements the Com
 
 ### Built-in service Definitions
 
-Built-in services (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML service files in `@blockml/core` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/bml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
+Built-in services (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML service files in `libs/bml-core` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/bml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 The library follows Thymeleaf's `#` utility object naming — plural for utilities (`#strings`, `#lists`, …), extended with `#math` which Thymeleaf does not provide.
 
 ```text
-packages/core/
+libs/bml-core/
   blocks/
     org/blockml/bml/core/
       Entity.bml         ← org.blockml.bml.core.Entity
@@ -336,7 +339,7 @@ A `catalog.xml` in the project root maps namespace URLs to local XSD files for o
 
 ### `@blockml/core`
 
-The BOM object model and framework utilities. Browser and Node compatible. **Owns** the shared TypeScript BOM contracts (`BomDocument`, `BlockDefinition`, …) used by parser, serializer, validator, compiler, and LSP.
+The BOM object model and framework utilities. Browser and Node compatible. **Owns** the shared TypeScript BOM contracts (`BomDocument`, `BlockDefinition`, …) used by parser, serializer, validator, compiler, and LSP. Framework BML (`org.blockml.bml.*`) lives in the `libs/bml-core` submodule — not in this npm package’s source tree.
 
 ```text
   - BomDocument / BlockDefinition / member model (Property, Aggregation, Association, Capability)
@@ -344,7 +347,7 @@ The BOM object model and framework utilities. Browser and Node compatible. **Own
   - Expression AST types (`ExpressionNode`) — parse/eval utilities live here; Canonical BOM stores `raw` only
   - TypeRegistry (FQN-based, dynamic)
   - Framework utilities (`resolve*`, `parseExpression`, `validate*`)
-  - Framework + built-in service BML (`org.blockml.bml.*`)
+  - Bootstraps framework BML from libs/bml-core (`org.blockml.bml.*`)
   - No domain-specific types, no render logic, no Node-only APIs
 ```
 

@@ -816,7 +816,7 @@ BML_IMPLEMENTATION_UNKNOWN_LANGUAGE — language attribute is not a known org.bl
 
 ### Built-in Services — No Processor Needed
 
-Built-in Services (`#math`, `#strings`, etc.) are defined as BML service Blocks in `@blockml/core` (SSOT). Their SCAD equivalents live in `scad-lib/blocks/org/blockml/bml/service/` as pre-rendered artifacts:
+Built-in Services (`#math`, `#strings`, etc.) are defined as BML service Blocks in `libs/bml-core` (SSOT). Their SCAD equivalents live in `scad-lib/blocks/org/blockml/bml/service/` as pre-rendered artifacts:
 
 ```text
 FQN:  org.blockml.bml.service.Math  →  scad-lib/blocks/org/blockml/bml/service/Math.scad

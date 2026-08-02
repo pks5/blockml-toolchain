@@ -522,7 +522,7 @@ org.blockml.bml.documentation.* — bootstrap documentation blocks
 
 These namespaces contain BML-defined Blocks, ValueTypes, Capability types, and Languages. They are part of the public BlockML grammar.
 
-npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. A single npm package may ship BML files under `blocks/org/blockml/bml/` and TypeScript toolchain code under `src/`. TypeScript interfaces (BOM shapes in `@blockml/core`, render processors, CLI utilities) are **not** BML definitions and do not receive `<domain>.bml.*` FQNs. See `15_dev_setup.md` — Package Conventions.
+npm workspace packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. Framework BML lives in the `libs/bml-core` Git submodule (`blocks/org/blockml/bml/`); `@blockml/core` owns TypeScript BOM contracts under `src/`. TypeScript interfaces (BOM shapes, render processors, CLI utilities) are **not** BML definitions and do not receive `<domain>.bml.*` FQNs. See `15_dev_setup.md` — Package Conventions.
 
 Built-in services live in `org.blockml.bml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
 
@@ -1296,7 +1296,7 @@ Like Properties, Capabilities are declared with a name and a type (FQN). Like Pr
 
 Capabilities use FQN type values. The type determines the communication pattern.
 
-**Package (decided):** `org.blockml.bml.capability.*`, base type `org.blockml.bml.core.Capability`. Sources: `packages/core/blocks/org/blockml/bml/capability/{Inbound,Outbound,Transformation}.bml` and `…/core/Capability.bml`.
+**Package (decided):** `org.blockml.bml.capability.*`, base type `org.blockml.bml.core.Capability`. Sources: `libs/bml-core/blocks/org/blockml/bml/capability/{Inbound,Outbound,Transformation}.bml` and `…/core/Capability.bml`.
 
 ```text
 org.blockml.bml.capability.Inbound         — receives data/messages asynchronously
@@ -1570,7 +1570,7 @@ Status expresses the **maturity or lifecycle** of a BML element. Status is not a
 ### Core status blocks
 
 ```text
-org.blockml.bml.core.Status          — abstract base (in @blockml/core)
+org.blockml.bml.core.Status          — abstract base (in libs/bml-core)
 org.blockml.bml.status.Stable        — complete, tested, reliable
 org.blockml.bml.status.Draft         — defined; implementation or mapping incomplete
 org.blockml.bml.status.Stub          — structural placeholder; see Stub toolchain behaviour below
@@ -2391,11 +2391,11 @@ machineblocks-v3-scad-target
 
 ### Built-in services as BML
 
-Built-in services (`#math`, `#strings`, etc.) are defined as BML BML service files in `@blockml/core` — **SSOT**. SCAD equivalents in `scad-lib/blocks/org/blockml/bml/service/` are pre-rendered build artifacts. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
+Built-in services (`#math`, `#strings`, etc.) are defined as BML service files in `libs/bml-core` — **SSOT**. SCAD equivalents in `scad-lib/blocks/org/blockml/bml/service/` are pre-rendered build artifacts. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 ```text
-@blockml/core/
-  src/
+libs/bml-core/
+  blocks/
     org/blockml/bml/service/
       Math.bml            — org.blockml.bml.service.Math      — #math.*
       Strings.bml         — org.blockml.bml.service.Strings   — #strings.*

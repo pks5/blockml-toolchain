@@ -495,7 +495,7 @@ When `_steps` is absent or empty, assembly order equals the document order of `_
 Framework types are **BML files** — see `16_framework_base_types.md`. Interpretation (SCAD mapping, processors) lives in render targets only.
 
 ```text
-org.blockml.bml.core.Block                                  ← packages/core/…/Block.bml (abstract, root)
+org.blockml.bml.core.Block                                  ← libs/bml-core/…/Block.bml (abstract, root)
     com.machineblocks.bml.core.Step                         ← mbom/…/Step.bml (final)
   org.blockml.bml.core.ValueType                            ← ValueType.bml (abstract)
   org.blockml.bml.core.Language                             ← Language.bml (abstract)

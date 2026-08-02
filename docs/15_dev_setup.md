@@ -49,6 +49,7 @@ Until the workspace is scaffolded, clone + submodules is enough to browse specs 
 git clone <repo-url> blockml
 cd blockml
 git submodule update --init --recursive
+# libs/bml-core — BlockML Core BML SSOT
 # scad-lib under domains/machineblocks/machineblocks-v3-scad-target/runtimes/
 ```
 
@@ -61,7 +62,7 @@ npm link -w @blockml/cli    # exposes `bom` globally (once)
 bom --version
 ```
 
-`git submodule update --init --recursive` is **required** for scad-lib fixtures (Test Layer B/C and T3 corpus).
+`git submodule update --init --recursive` is **required** for `libs/bml-core` (framework BML) and scad-lib fixtures (Test Layer B/C and T3 corpus).
 
 After pulling updates:
 
@@ -83,11 +84,13 @@ No root `package.json` / npm workspaces yet. TypeScript packages (`parser`, `ser
 ```text
 blockml/
   docs/                          — specifications (authoritative Markdown)
+  libs/
+    bml-core/                    — Git submodule (https://github.com/pks5/blockml-core)
+      blocks/org/blockml/bml/   — framework BML SSOT (Library.bml, README.bml, …)
   packages/
     core/
-      blocks/org/blockml/bml/    — framework BML SSOT (core, definition, type, service, …)
-      src/org/blockml/language/  — Language blocks (TypeScript.bml, OpenSCAD.bml, …)
-      test/                      — BML/constraint fixtures (not Vitest packages yet)
+      src/                       — BOM TypeScript (Phase A; no framework BML sources here)
+      test/                      — constraint fixtures (toolchain; not Core SSOT)
   domains/
     machineblocks/
       mbom/blocks/com/machineblocks/bml/   — MBOM domain BML (NativeBlock, types, …)
@@ -96,13 +99,13 @@ blockml/
   scripts/
 ```
 
-**There is no `@blockml/core-services` package.** Built-in services (`Math`, `Strings`, …) live under `packages/core/blocks/org/blockml/bml/service/`.
+**There is no `@blockml/core-services` package.** Built-in services (`Math`, `Strings`, …) live under `libs/bml-core/blocks/org/blockml/bml/service/`.
 
 ### Target packages (end state)
 
 | npm package | Path | When |
 |---|---|---|
-| `@blockml/core` | `packages/core` | Phase A — add TS (`BomDocument`, …) beside existing BML |
+| `@blockml/core` | `packages/core` | Phase A — BOM TS (`BomDocument`, …); framework BML is `libs/bml-core` |
 | `@blockml/parser` | `packages/parser` | Phase A |
 | `@blockml/serializer` | `packages/serializer` | Phase A |
 | `@blockml/validator` | `packages/validator` | Phase B |
@@ -128,8 +131,11 @@ blockml/
   catalog.xml                  — XSD catalog (when schemas ship)
   .gitignore
 
+  libs/
+    bml-core/                  — Git submodule: BlockML Core BML (org.blockml.bml.*)
+
   packages/
-    core/                      — @blockml/core (BML + BOM TS + utilities)
+    core/                      — @blockml/core (BOM TS + utilities; BML via libs/bml-core)
     parser/                    — @blockml/parser
     serializer/                — @blockml/serializer
     validator/                 — @blockml/validator
@@ -273,10 +279,12 @@ Each package `tsconfig.json`:
 npm workspace names (`@blockml/core`, `@blockml/parser`, `@blockml/compiler`, …) are **deployment units**. They are not the same as FQN package segments.
 
 ```text
-@blockml/core npm package may contain:
+libs/bml-core/ (Git submodule — framework BML SSOT):
   blocks/org/blockml/bml/core/*.bml       →  Block FQNs (org.blockml.bml.core.Block, …)
-  blocks/org/blockml/bml/compiler/*.bml   →  compiler domain Blocks (org.blockml.bml.compiler.*, …)
-  src/**/*.ts                             →  BOM interfaces (BomDocument, …), TypeRegistry, framework utilities
+  blocks/org/blockml/bml/…                →  definition, type, service, documentation, …
+
+@blockml/core npm package (packages/core):
+  src/**/*.ts                             →  BOM interfaces (BomDocument, …), TypeRegistry, utilities
 ```
 
 Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may exist outside the domain's `bml` namespace. See `01_bom_core.md` — Mandatory BML namespace.
@@ -304,30 +312,33 @@ Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may e
 
 Entry point: `src/index.ts` — re-exports public API only.
 
-### `@blockml/core` (BML SSOT + BOM TypeScript)
+### `@blockml/core` (BOM TypeScript)
 
-Owns framework BML **and** (once scaffolded) the shared TypeScript BOM contracts. Parser, serializer, validator, and compiler depend on the TS API — they do not redefine `BomDocument`.
+Owns the shared TypeScript BOM contracts (once scaffolded). Framework BML SSOT lives in the
+`libs/bml-core` Git submodule ([blockml-core](https://github.com/pks5/blockml-core)). Parser,
+serializer, validator, and compiler depend on the TS API — they do not redefine `BomDocument`.
 
-**Today:** BML under `blocks/` and language samples under `src/org/blockml/language/`. No `package.json` / `tsc` yet.
+**Today:** BML under `libs/bml-core/blocks/org/blockml/bml/`. No `package.json` / `tsc` yet under
+`packages/core/`.
 
 **Target layout:**
 
 ```text
+libs/bml-core/                              — submodule root (= Library root)
+  blocks/org/blockml/bml/
+    Library.bml · README.bml
+    core/ · definition/ · service/ · type/ · …
+
 packages/core/
   package.json          — name: @blockml/core, private: true
-  blocks/
-    org/blockml/bml/core/         — Block, Entity, …
-    org/blockml/bml/definition/   — BlockDefinition, …
-    org/blockml/bml/service/      — Math, Strings, Numbers, Lists, Bools  (NOT a separate npm package)
-    org/blockml/bml/type/         — …
   src/
-    org/blockml/language/         — TypeScript.bml, OpenSCAD.bml (present today)
-    index.ts                      — re-exports BomDocument, Diagnostic, TypeRegistry, utilities (Phase A)
+    index.ts            — re-exports BomDocument, Diagnostic, TypeRegistry, utilities (Phase A)
+  test/                 — constraint / toolchain fixtures
 ```
 
 Consumed by:
 
-- TypeRegistry bootstrap (CLI scans workspace + scad-lib)
+- TypeRegistry bootstrap (CLI scans `libs/bml-core` + workspace + scad-lib)
 - Roundtrip corpus (T0/T1) and correctness tests
 - Pre-rendered SCAD artifacts in `scad-lib/blocks/org/blockml/bml/service/`
 
@@ -774,8 +785,8 @@ Run roundtrip tests against files already in the repository — grow tiers as pa
 
 | Tier | Source | Examples |
 |---|---|---|
-| **T0 — Minimal** | `packages/core/blocks/org/blockml/bml/language/`, `packages/core/blocks/org/blockml/bml/service/` | `TypeScript.bml`, `Math.bml` |
-| **T1 — Framework** | `packages/core/blocks/` | `Block.bml`, `BlockDefinition.bml`, `MemberDefinition.bml` |
+| **T0 — Minimal** | `libs/bml-core/blocks/org/blockml/bml/language/`, `libs/bml-core/blocks/org/blockml/bml/service/` | `TypeScript.bml`, `Math.bml` |
+| **T1 — Framework** | `libs/bml-core/blocks/` | `Block.bml`, `BlockDefinition.bml`, `MemberDefinition.bml` |
 | **T2 — Domain** | `domains/machineblocks/mbom/blocks/` | `NativeBlock.bml`, `CompositeBlock.bml`, `Set.bml` |
 | **T3 — Real-world** | `domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/` | `Calibrator.bml`, `Standard.bml`, `Cross.bml` |
 

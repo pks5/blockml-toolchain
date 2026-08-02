@@ -18,7 +18,7 @@ No Block, Library, Type, Language, Service, Capability, or other BlockML definit
 
 ## Library structure
 
-- Abstract base type: `org.blockml.bml.core.BlockLibrary` in `packages/core/blocks/org/blockml/bml/core/BlockLibrary.bml`
+- Abstract base type: `org.blockml.bml.core.BlockLibrary` in `libs/bml-core/blocks/org/blockml/bml/core/BlockLibrary.bml`
 - Framework base type — **not** exported via any Library `blocks`
 - Concrete libraries: `<name>Library</name>`, filename **`Library.bml`**, `baseType="bcore:BlockLibrary"`
 - FQN = `{package}.Library` from the file's package path

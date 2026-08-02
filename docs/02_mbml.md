@@ -6,7 +6,7 @@ version: 3.0.0 · **BML Core is SSOT for language rules**
 
 This file is the **table of contents** for BML authoring. Normative language rules live in
 BlockML Core documentation and definition blocks under `org.blockml.bml.*`
-(`packages/core/blocks/org/blockml/bml/`).
+(`libs/bml-core/blocks/org/blockml/bml/`).
 
 Start reading at `org.blockml.bml.README` (`relation=ReadFirst`). Use `relation=TaskIndex` for
 procedural fixes and `org.blockml.bml.diagnostic.*` for validator codes.
