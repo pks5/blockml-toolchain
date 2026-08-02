@@ -51,6 +51,7 @@
   <language>
     <English />
   </language>
+
   <properties>
     <description>
       <value>MachineBlocks root library</value>
@@ -59,128 +60,136 @@
 
   <aggregations>
     <readMe>
-      <mb:README />
+      <composition>
+        <mb:README />
+      </composition>
     </readMe>
 
     <dependencies>
-      <blockml:Library />
+      <composition>
+        <blockml:Library />
+      </composition>
     </dependencies>
 
     <subLibraries>
-      <bricks:Library />
+      <composition>
+        <bricks:Library />
+      </composition>
     </subLibraries>
 
     <blocks>
-      <concept:Introduction />
-      <concept:Architecture />
-      <concept:UnitsAndGrid />
-      <concept:GeometryConcepts />
-      <concept:TransformationConcepts />
-      <concept:StructureSystems />
-      <concept:CompositionConcepts />
-      <concept:DecisionFramework />
-      <concept:StatusConvention />
-      <mbml:MbmlOverview />
-      <mbml:DomainModel />
-      <mbml:TypeSystem />
-      <mbml:AuthoringPatterns />
-      <scad:ScadRenderTarget />
-      <scad:MbBlockApi />
-      <scad:BlockFileStructure />
-      <scad:ModulePatterns />
-      <scad:TypesAndSerialization />
-      <scad:ScadDecisionRules />
-      <scad:LegacyConversion />
-      <mbann:ScadAnnotation />
-      <mbgroup:AiUsage />
-      <mbgroup:FrequentAiUsage />
-      <mbgroup:RareAiUsage />
-      <mbgroup:ConfigOnlyAiUsage />
-      <mbgroup:NeverAiUsage />
-      <mbgroup:Category />
-      <mbgroup:System />
-      <mbgroup:CoreGeometry />
-      <mbgroup:Positioning />
-      <mbgroup:Body />
-      <mbgroup:TopPlate />
-      <mbgroup:Underside />
-      <mbgroup:BaseClamp />
-      <mbgroup:Rounding />
-      <mbgroup:ReliefCut />
-      <mbgroup:Calibration />
-      <mbgroup:PrintHelpers />
-      <mbgroup:Pillars />
-      <mbgroup:Pins />
-      <mbgroup:Tubes />
-      <mbgroup:TechnicHolesX />
-      <mbgroup:TechnicHoles />
-      <mbgroup:TechnicHolesY />
-      <mbgroup:TechnicHolesZ />
-      <mbgroup:Studs />
-      <mbgroup:StudIcon />
-      <mbgroup:TongueGroove />
-      <mbgroup:Grille />
-      <mbgroup:Recess />
-      <mbgroup:Text />
-      <mbgroup:SurfacePattern />
-      <mbgroup:Svg />
-      <mbgroup:Connectors />
-      <mbgroup:ScrewHoles />
-      <mbgroup:Pcb />
-      <mbgroup:Quality />
-      <mbt:Align />
-      <mbt:Auto />
-      <mbt:Axis />
-      <mbt:AxisAB />
-      <mbt:AxisXY />
-      <mbt:AxisXYZ />
-      <mbt:BaseCutout />
-      <mbt:BaseRoundingMap />
-      <mbt:Bevel />
-      <mbt:Connector />
-      <mbt:CornerMap />
-      <mbt:Direction />
-      <mbt:Face />
-      <mbt:FaceAxisXY />
-      <mbt:FaceMapXY />
-      <mbt:FaceMapXYZ />
-      <mbt:Gender />
-      <mbt:Grille />
-      <mbt:HoleEdgeMap />
-      <mbt:HoleEdgeMode />
-      <mbt:HoleEdgePair />
-      <mbt:HoleType />
-      <mbt:Inherit />
-      <mbt:MBEnum />
-      <mbt:MultiAxis />
-      <mbt:None />
-      <mbt:OffsetAB />
-      <mbt:OffsetXY />
-      <mbt:OffsetXYZ />
-      <mbt:PcbMountingType />
-      <mbt:PcbSocket />
-      <mbt:PillarGapAutoConfig />
-      <mbt:PlaneRoundingMap />
-      <mbt:Port />
-      <mbt:PortShapeType />
-      <mbt:QualityPreset />
-      <mbt:RadiusAB />
-      <mbt:RecessWallGap />
-      <mbt:RotationXY />
-      <mbt:RotationXYZ />
-      <mbt:ScadQualityClassFactors />
-      <mbt:ScadQualityClassMinSegments />
-      <mbt:ScadQualityProfile />
-      <mbt:ScrewHole />
-      <mbt:SelectiveGrid />
-      <mbt:SizeAB />
-      <mbt:SizeXY />
-      <mbt:SizeXYZ />
-      <mbt:StudType />
-      <mbt:WallGap />
-      <mbunit:GridUnitXY />
-      <mbunit:GridUnitZ />
-      <mbunit:MBU />
+      <composition>
+        <concept:Introduction />
+        <concept:Architecture />
+        <concept:UnitsAndGrid />
+        <concept:GeometryConcepts />
+        <concept:TransformationConcepts />
+        <concept:StructureSystems />
+        <concept:CompositionConcepts />
+        <concept:DecisionFramework />
+        <concept:StatusConvention />
+        <mbml:MbmlOverview />
+        <mbml:DomainModel />
+        <mbml:TypeSystem />
+        <mbml:AuthoringPatterns />
+        <scad:ScadRenderTarget />
+        <scad:MbBlockApi />
+        <scad:BlockFileStructure />
+        <scad:ModulePatterns />
+        <scad:TypesAndSerialization />
+        <scad:ScadDecisionRules />
+        <scad:LegacyConversion />
+        <mbann:ScadAnnotation />
+        <mbgroup:AiUsage />
+        <mbgroup:FrequentAiUsage />
+        <mbgroup:RareAiUsage />
+        <mbgroup:ConfigOnlyAiUsage />
+        <mbgroup:NeverAiUsage />
+        <mbgroup:Category />
+        <mbgroup:System />
+        <mbgroup:CoreGeometry />
+        <mbgroup:Positioning />
+        <mbgroup:Body />
+        <mbgroup:TopPlate />
+        <mbgroup:Underside />
+        <mbgroup:BaseClamp />
+        <mbgroup:Rounding />
+        <mbgroup:ReliefCut />
+        <mbgroup:Calibration />
+        <mbgroup:PrintHelpers />
+        <mbgroup:Pillars />
+        <mbgroup:Pins />
+        <mbgroup:Tubes />
+        <mbgroup:TechnicHolesX />
+        <mbgroup:TechnicHoles />
+        <mbgroup:TechnicHolesY />
+        <mbgroup:TechnicHolesZ />
+        <mbgroup:Studs />
+        <mbgroup:StudIcon />
+        <mbgroup:TongueGroove />
+        <mbgroup:Grille />
+        <mbgroup:Recess />
+        <mbgroup:Text />
+        <mbgroup:SurfacePattern />
+        <mbgroup:Svg />
+        <mbgroup:Connectors />
+        <mbgroup:ScrewHoles />
+        <mbgroup:Pcb />
+        <mbgroup:Quality />
+        <mbt:Align />
+        <mbt:Auto />
+        <mbt:Axis />
+        <mbt:AxisAB />
+        <mbt:AxisXY />
+        <mbt:AxisXYZ />
+        <mbt:BaseCutout />
+        <mbt:BaseRoundingMap />
+        <mbt:Bevel />
+        <mbt:Connector />
+        <mbt:CornerMap />
+        <mbt:Direction />
+        <mbt:Face />
+        <mbt:FaceAxisXY />
+        <mbt:FaceMapXY />
+        <mbt:FaceMapXYZ />
+        <mbt:Gender />
+        <mbt:Grille />
+        <mbt:HoleEdgeMap />
+        <mbt:HoleEdgeMode />
+        <mbt:HoleEdgePair />
+        <mbt:HoleType />
+        <mbt:Inherit />
+        <mbt:MBEnum />
+        <mbt:MultiAxis />
+        <mbt:None />
+        <mbt:OffsetAB />
+        <mbt:OffsetXY />
+        <mbt:OffsetXYZ />
+        <mbt:PcbMountingType />
+        <mbt:PcbSocket />
+        <mbt:PillarGapAutoConfig />
+        <mbt:PlaneRoundingMap />
+        <mbt:Port />
+        <mbt:PortShapeType />
+        <mbt:QualityPreset />
+        <mbt:RadiusAB />
+        <mbt:RecessWallGap />
+        <mbt:RotationXY />
+        <mbt:RotationXYZ />
+        <mbt:ScadQualityClassFactors />
+        <mbt:ScadQualityClassMinSegments />
+        <mbt:ScadQualityProfile />
+        <mbt:ScrewHole />
+        <mbt:SelectiveGrid />
+        <mbt:SizeAB />
+        <mbt:SizeXY />
+        <mbt:SizeXYZ />
+        <mbt:StudType />
+        <mbt:WallGap />
+        <mbunit:GridUnitXY />
+        <mbunit:GridUnitZ />
+        <mbunit:MBU />
+      </composition>
     </blocks>
   </aggregations>
 
