@@ -1499,7 +1499,7 @@ Library descriptors are ordinary `BlockDefinition` documents with `baseType="org
 
 `org.blockml.bml.core.BlockLibrary` is a framework base type in `core/` — not exported via Library `blocks`. All concrete `Library.bml` files inherit from it.
 
-**Naming (required):** every real library block is named `Library` (`<name>Library</name>`), filename is always `Library.bml`. FQN = package + `Library` (e.g. `com.machineblocks.bml.bricks.Library`, `org.blockml.bml.Library`, `org.blockml.bml.compiler.Library`).
+**Naming (required):** every real library block is named `Library` (`<name>Library</name>`), filename is always `Library.bml`. FQN = package + `Library` (e.g. `com.machineblocks.bml.Library`, `org.blockml.bml.Library`, `org.blockml.bml.compiler.Library`).
 
 **Membership is defined only by `Library.bml` — not by directories.** A Block belongs to the Library whose `blocks` lists it. Package-prefix overlap does not imply inclusion.
 

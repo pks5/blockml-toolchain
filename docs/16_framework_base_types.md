@@ -499,10 +499,16 @@ libs/bml-core/blocks/
   org/blockml/bml/status/ · type/ · constraint/ · validation/ · service/ · …
 
 scad-lib/blocks/
+  com/machineblocks/bml/
+    Library.bml                             ← com.machineblocks.bml.Library
   com/machineblocks/bml/core/
     Step.bml · Block.bml · …
   com/machineblocks/bml/bricks/
-    Library.bml · presets/StandardPresets.bml
+    Standard.bml · presets/StandardPresets.bml
+  com/machineblocks/bml/calibration/
+    Calibrator.bml
+  com/machineblocks/bml/examples/
+    Connector.bml · Cross.bml
 ```
 
 ---
