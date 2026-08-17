@@ -34,7 +34,7 @@ Each Definition block carries bml:xml directives
 
 This is a step toward **BML self-hosting** (Phase 2/3 in `00_system.md`): BlockML understands BlockML because BlockML is written in BlockML.
 
-**Scope note:** V1 does **not** require a fully meta-driven parser or serializer. Definition blocks and `bml:xml` are the **target architecture**. Phase A uses a **hardcoded** mapper/serializer (`13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope): preserve authored `bml:xml` as `xmlRendering` **and** run the D6 Stage-1 recipe check (**B23**); do not drive grammar from Definition blocks yet. **Emit order (B12):** V1 hardcodes Definition member order; **V2** reads that order dynamically from Definition `.bml` files — see `13` § Serializer Emit Order. Markdown remains authoritative for pipeline details until the meta-serializer is wired.
+**Scope note:** V1 does **not** require a fully meta-driven parser or serializer. Definition blocks and `bml:xml` are the **target architecture**. Phase A uses a **hardcoded** mapper/serializer (`13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope): preserve authored `bml:xml` as `xmlRendering` **and** run the D6 Stage-1 recipe check (**B23**); do not drive grammar from Definition blocks yet. **Emit order (B12):** V1 hardcodes Definition member order; **V2** reads that order dynamically from Definition `.bml` files — see `13` § Serializer Emit Order. Markdown in `docs/` is **transitional**; package `blocks/` BML is the long-term SSOT (`00_system.md` — BlockML node packages).
 
 ---
 

@@ -16,7 +16,7 @@ For the MachineBlocks V3 SCAD Library specification see
 
 ## Overview
 
-The MachineBlocks V3 SCAD Target is implemented in `@machineblocks/machineblocks-v3-scad-target`. It is browser and Node compatible — no Node-only APIs.
+The MachineBlocks V3 SCAD Target is a **separate** `@machineblocks/*` compiler package (developed under `packages/`), not `@machineblocks/core`. `@machineblocks/core` is the domain library (BML docs, SCAD reference renderer, examples). The target is browser and Node compatible — no Node-only APIs.
 
 The target uses `@blockml/engine-maker` (**MakerEngine**) as its CompilerEngine implementation. It registers under the name `"machineblocks-v3-scad"` and contains two BlockProcessors. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the processor logic.
 

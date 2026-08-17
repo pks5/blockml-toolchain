@@ -6,11 +6,11 @@ version: 0.1.0
 
 This document defines the **development setup** for the BOM Compiler (`blockml` repository) — tooling, package layout, build order, scripts, testing, and IDE configuration.
 
-For architecture and package responsibilities see `00_system.md`.
+For architecture and package responsibilities see `00_system.md` (including **BlockML node packages**).
 For compiler runtime (bootstrap, facade, cache) see `14_compiler_runtime.md`.
 For testing strategy see `06_compiler.md` — Testing Strategy.
 
-Implementation code is scaffolded according to this document. **Libraries** (BlockML Core, MachineBlocks SCAD + MBOM, and later parser/renderer packages) are **npm packages** under `node_modules/`. TypeScript toolchain packages are added incrementally (Phase A first).
+Implementation code is scaffolded according to this document. **Libraries and toolchain packages** are **BlockML node modules** (`package.json` + `blocks/` SSOT) under `node_modules/` / `packages/`. See `00_system.md` — BlockML node packages. TypeScript surfaces are added incrementally (Phase A first).
 
 ---
 
@@ -25,7 +25,8 @@ Implementation code is scaffolded according to this document. **Libraries** (Blo
 | **Tests** | **Vitest** — unit + correctness + snapshots |
 | **CLI link** | `npm link` from `@blockml/cli` after first build |
 | **Node version** | **Node 20 LTS** minimum (22 supported) |
-| **Package scope** | `@blockml/*`, `@machineblocks/*` — no `@bom/*` |
+| **Package scope** | `@blockml/*` (toolchain) and `@machineblocks/*` (domain) — no `@bom/*` |
+| **Package shape** | Normal npm module (`package.json`) **+ `blocks/`** — BML in `blocks/` is the package SSOT |
 | **Browser packages** | No `fs`, `path`, `child_process` in core/parser/compiler/targets |
 
 ---
@@ -79,20 +80,22 @@ git submodule update --recursive
 
 ### Working tree (specs + npm libraries)
 
-`libs/` and `domains/` are **not required**. Framework and domain BML come from npm:
+`libs/` and `domains/` are **not required**. Every package is a **BlockML node module**: `package.json` + `blocks/` (SSOT). See `00_system.md` — BlockML node packages.
 
 ```text
 blockml/
-  docs/                          — specifications (authoritative Markdown)
+  docs/                          — transitional Markdown (handbook until migrated into package BML)
   package.json                   — depends on @blockml/core, @machineblocks/core
   node_modules/
-    @blockml/core/               — BlockML Core (https://github.com/pks5/blockml-core)
-      blocks/org/blockml/bml/   — framework BML SSOT (Library.bml, README.bml, …)
-    @machineblocks/core/         — MachineBlocks SCAD + MBOM (https://github.com/pks5/machineblocks)
-      blocks/com/machineblocks/bml/  — domain BML SSOT (NativeBlock, types, bricks, …)
-      lib/ · config/ · pattern/      — SCAD runtime
-  packages/
-    core/                        — local TS / fixtures as they land
+    @blockml/core/               — BlockML Core
+      package.json
+      blocks/org/blockml/bml/   — package SSOT (Library.bml, README.bml, …)
+    @machineblocks/core/         — MachineBlocks domain library
+      package.json
+      blocks/com/machineblocks/bml/  — SSOT: docs, types, bricks, examples
+      lib/ · config/ · pattern/      — SCAD reference renderer
+  packages/                      — @blockml/* and @machineblocks/* authored here
+                                 — each: package.json + blocks/ + src/
   scripts/
 ```
 
@@ -104,19 +107,19 @@ Git submodules remain **for now** at `libs/bml-core` and `domains/machineblocks/
 
 | npm package | Path | When |
 |---|---|---|
-| `@blockml/core` | `node_modules/@blockml/core` | Installed — framework BML SSOT; BOM TS as it ships |
-| `@blockml/parser` | `node_modules/@blockml/parser` | Phase A |
-| `@blockml/serializer` | `node_modules/@blockml/serializer` | Phase A |
-| `@blockml/validator` | `node_modules/@blockml/validator` | Phase B |
-| `@blockml/compiler` | `node_modules/@blockml/compiler` | Phase C |
-| `@blockml/blockdoc-target` | `node_modules/@blockml/blockdoc-target` | Phase C — **first** Stage-3 / V1 control RT; registry `"blockdoc"` |
-| `@blockml/xsd-target` | `node_modules/@blockml/xsd-target` | Phase C — after BlockDoc; registry `"xsd"` |
-| `@blockml/fatblock-target` | `node_modules/@blockml/fatblock-target` | Phase C — after / beside XSD; registry `"fatblock"` |
-| `@blockml/cli` | `node_modules/@blockml/cli` | Phase C — reads `targets[]` (default `["blockdoc"]`) |
-| `@blockml/engine-maker` | `node_modules/@blockml/engine-maker` | Phase C — needed for SCAD product path |
-| `@machineblocks/core` | `node_modules/@machineblocks/core` | Installed — SCAD library + MBOM BML |
-| `@machineblocks/machineblocks-v3-scad-target` | `node_modules/@machineblocks/machineblocks-v3-scad-target` | Phase C — **product** RT; after BlockDoc control gate |
-| `@blockml/lsp` | `node_modules/@blockml/lsp` | V2 — package name **decided** |
+| `@blockml/core` | `node_modules/@blockml/core` | Installed — `blocks/` SSOT; BOM TS as it ships |
+| `@blockml/parser` | `packages/parser` → `@blockml/parser` | Phase A — own `blocks/` SSOT |
+| `@blockml/serializer` | `packages/serializer` → `@blockml/serializer` | Phase A — own `blocks/` SSOT |
+| `@blockml/validator` | `packages/validator` → `@blockml/validator` | Phase B |
+| `@blockml/compiler` | `packages/compiler` → `@blockml/compiler` | Phase C |
+| `@blockml/blockdoc-target` | `packages/blockdoc-target` | Phase C — **first** Stage-3 / V1 control RT; registry `"blockdoc"` |
+| `@blockml/xsd-target` | `packages/xsd-target` | Phase C — after BlockDoc; registry `"xsd"` |
+| `@blockml/fatblock-target` | `packages/fatblock-target` | Phase C — after / beside XSD; registry `"fatblock"` |
+| `@blockml/cli` | `packages/cli-tools` | Phase C — reads `targets[]` (default `["blockdoc"]`) |
+| `@blockml/engine-maker` | `packages/` / `engines/` | Phase C — needed for SCAD product path |
+| `@machineblocks/core` | `node_modules/@machineblocks/core` | Installed — docs (BML), SCAD reference renderer, examples |
+| `@machineblocks/*` SCAD target | `packages/` → `@machineblocks/*` | Phase C — **product** RT; **separate** from `@machineblocks/core` |
+| `@blockml/lsp` | `packages/lsp` | V2 — package name **decided** |
 
 ### Target tree
 
@@ -135,7 +138,8 @@ blockml/
     @machineblocks/core/       — MachineBlocks SCAD + MBOM (com.machineblocks.bml.*)
 
   packages/
-    parser/                    — @blockml/parser (local until published)
+    parser/                    — @blockml/parser
+      package.json · blocks/ · src/
     serializer/                — @blockml/serializer
     validator/                 — @blockml/validator
     compiler/                  — @blockml/compiler
@@ -144,6 +148,7 @@ blockml/
     fatblock-target/           — @blockml/fatblock-target — registry "fatblock"
     cli-tools/                 — @blockml/cli          (Node-only)
     lsp/                       — @blockml/lsp          (V2)
+    <machineblocks-scad-target>/  — @machineblocks/* compiler target (not core)
 
   engines/
     maker-engine/              — @blockml/engine-maker (local until published)
@@ -265,17 +270,24 @@ Each package `tsconfig.json`:
 
 ## Package Conventions
 
+Every package is a **normal Node module** (`package.json`) **with a BlockML extension**: a `blocks/` folder. The `.bml` files in `blocks/` are the **SSOT for that package** — same pattern as `@blockml/core` and `@machineblocks/core` already. Future `@blockml/parser`, `@blockml/serializer`, … and the `@machineblocks/*` compiler target each get their own `blocks/`. npm organizations: `@blockml` (toolchain) and `@machineblocks` (domain). See `00_system.md` — BlockML node packages.
+
+Markdown under `docs/` is **transitional**. The goal is total self-description: all package information lives as BML in that package's `blocks/`.
+
 ### FQN namespaces vs. npm packages
 
-npm workspace names (`@blockml/core`, `@blockml/parser`, `@blockml/compiler`, …) are **deployment units**. They are not the same as FQN package segments.
+npm names (`@blockml/core`, `@blockml/parser`, `@blockml/compiler`, …) are **deployment units**. They are not the same as FQN package segments.
 
 ```text
-node_modules/@blockml/core/ (npm — framework BML SSOT):
+node_modules/@blockml/core/               — BlockML node module
+  package.json
   blocks/org/blockml/bml/core/*.bml       →  Block FQNs (org.blockml.bml.core.Block, …)
   blocks/org/blockml/bml/…                →  definition, type, service, documentation, …
 
-@blockml/core TypeScript surface (as it ships in the same package):
-  BomDocument, TypeRegistry, utilities
+node_modules/@machineblocks/core/         — BlockML node module
+  package.json
+  blocks/com/machineblocks/bml/           →  docs, MBOM grammar, examples (BML)
+  lib/ · config/ · pattern/               →  SCAD reference renderer
 ```
 
 Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may exist outside the domain's `bml` namespace. See `01_bom_core.md` — Mandatory BML namespace.
@@ -294,7 +306,7 @@ Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may e
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist", "schemas"],
+  "files": ["dist", "blocks", "schemas"],
   "scripts": {
     "build": "tsc --build"
   }
@@ -303,10 +315,10 @@ Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may e
 
 Entry point: `src/index.ts` — re-exports public API only.
 
-### `@blockml/core` (BOM TypeScript)
+### `@blockml/core` (BOM TypeScript + BML SSOT)
 
-Owns the shared TypeScript BOM contracts (once scaffolded). Framework BML SSOT lives in
-`node_modules/@blockml/core` ([blockml-core](https://github.com/pks5/blockml-core), published as `@blockml/core`). Parser,
+A BlockML node module (`package.json` + `blocks/`). Framework BML SSOT is `blocks/org/blockml/bml/`
+([blockml-core](https://github.com/pks5/blockml-core), published as `@blockml/core`). Owns the shared TypeScript BOM contracts (once scaffolded). Parser,
 serializer, validator, and compiler depend on the TS API — they do not redefine `BomDocument`.
 
 **Today:** BML under `node_modules/@blockml/core/blocks/org/blockml/bml/`.
@@ -315,7 +327,8 @@ serializer, validator, and compiler depend on the TS API — they do not redefin
 
 ```text
 node_modules/@blockml/core/                 — npm package root (= Library root)
-  blocks/org/blockml/bml/
+  package.json
+  blocks/org/blockml/bml/                   — package SSOT
     Library.bml · README.bml
     core/ · definition/ · service/ · type/ · …
 ```

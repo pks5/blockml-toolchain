@@ -1,6 +1,6 @@
 # BOM Compiler — System
 
-version: 2.4.0
+version: 2.5.0
 
 ## Purpose
 
@@ -94,6 +94,8 @@ STL / 3MF
 
 **Domain BOMs extend, never modify core.** Adding EBOM, UBOM, or any future BOM does not change `@blockml/core`, `@blockml/parser`, or `@blockml/compiler`.
 
+**Every toolchain package is a BlockML node module.** A normal npm package (`package.json`) plus a `blocks/` folder. That folder is the **SSOT** for the package. Markdown in this repo is transitional — see [BlockML node packages](#blockml-node-packages) and [BML Self-Description Roadmap](#bml-self-description-roadmap).
+
 **No mandatory input↔output mapping.** Render targets define output cardinality. See `14_compiler_runtime.md` — Compile I/O Model (C4).
 
 ---
@@ -116,34 +118,69 @@ This is analogous to `tsc` or `webpack` — the tool is global, content projects
 
 See `15_dev_setup.md` for workspace configuration, build scripts, and implementation order.
 
-**All packages** — renderer, core, parser, domain libraries — are **npm packages**. After `npm install` they live under `node_modules/`. The `libs/` and `domains/` trees are **not required** to use the toolchain.
+### BlockML node packages
+
+All modules — renderer, core, parser, domain libraries, future compiler targets — are **npm packages with a BlockML extension**. They are ordinary Node modules (`package.json`, optional `src/` / `dist/` / `lib/`) **plus** a `blocks/` folder that holds `.bml` files.
+
+**`blocks/` is the SSOT for that package.** Types, documentation, services, examples, and other package knowledge that belongs in the grammar live there as BML — not in Markdown in this repo, and not as a second inventory beside the package.
+
+```text
+@scope/name/
+  package.json              — normal npm package
+  blocks/                   — BlockML SSOT for this package
+    <domain>/…/*.bml
+  src/ · dist/              — TypeScript when the package has runtime code
+  lib/ · config/ · …        — optional native artifacts (e.g. SCAD runtime)
+```
+
+This is a further step toward **total self-description**: BlockML and every package describe themselves in BML inside their own node module. The Markdown files under `docs/` are a **transitional** solution. The goal is that all information lives in the respective npm packages as BML.
+
+### npm organizations
+
+Two organizations are registered on npm. They are the **root** for all future packages:
+
+| Scope | Owns |
+|---|---|
+| `@blockml` | BlockML toolchain — `core`, and later `parser`, `serializer`, `validator`, `compiler`, `cli`, targets, … |
+| `@machineblocks` | MachineBlocks domain — `core` today; later the compiler **render target** as a separate package |
+
+Parser, serializer, and other BlockML packages are grouped under **`@blockml`**. Each will have its own `blocks/` folder — SSOT for that package — exactly as `@blockml/core` and `@machineblocks/core` already do.
+
+The MachineBlocks **compiler target** (MBOM → SCAD) is **not** part of `@machineblocks/core`. It will be a separate `@machineblocks/*` package, developed under `packages/` in this repo.
+
+### Working tree
+
+After `npm install`, packages live under `node_modules/`. The `libs/` and `domains/` trees are **not required** to use the toolchain.
 
 Git submodules (`libs/bml-core`, `domains/machineblocks/.../scad-lib`) remain **for now** as a checkout of the same source repos. Their **internal folder layout is unchanged**; the difference is that this repo consumes the published packages rather than those submodule paths.
 
 ```text
 blockml/
   package.json                 — root workspace; depends on @blockml/core, @machineblocks/core, …
-  docs/                        — specifications (authoritative Markdown)
+  docs/                        — transitional Markdown (authoritative until migrated into package BML)
 
   node_modules/
     @blockml/
-      core/                    — BlockML Core (org.blockml.bml.*)
-        blocks/org/blockml/bml/
+      core/                    — BlockML Core
+        package.json
+        blocks/org/blockml/bml/          — SSOT (org.blockml.bml.*)
     @machineblocks/
-      core/                    — MachineBlocks SCAD library + MBOM (com.machineblocks.bml.*)
-        blocks/com/machineblocks/bml/
-        lib/ · config/ · pattern/
+      core/                    — MachineBlocks domain library
+        package.json
+        blocks/com/machineblocks/bml/    — SSOT: docs, types, bricks, examples
+        lib/ · config/ · pattern/        — SCAD reference renderer / runtime
 
-  packages/                    — local @blockml/* TypeScript packages (parser, compiler, …) as they land
+  packages/                    — @blockml/* and @machineblocks/* as they are authored here
+                                 (each package: package.json + blocks/ + src/)
 ```
 
 | npm package | Role | Path after `npm install` |
 |---|---|---|
-| `@blockml/core` | Framework BML SSOT (`org.blockml.bml.*`); planned BOM TS contracts | `node_modules/@blockml/core` |
-| `@machineblocks/core` | MachineBlocks SCAD runtime + MBOM BML (`com.machineblocks.bml.*`) | `node_modules/@machineblocks/core` |
-| `@blockml/parser` | BML → BomDocument | `node_modules/@blockml/parser` (when published) |
-| `@blockml/compiler` | Facade + Target Registry | `node_modules/@blockml/compiler` (when published) |
-| `@machineblocks/machineblocks-v3-scad-target` | SCAD Render Target (TypeScript) | `node_modules/@machineblocks/machineblocks-v3-scad-target` (when published) |
+| `@blockml/core` | Framework BML SSOT in `blocks/`; planned BOM TS contracts | `node_modules/@blockml/core` |
+| `@machineblocks/core` | MachineBlocks docs (BML), SCAD reference renderer, BML + SCAD examples | `node_modules/@machineblocks/core` |
+| `@blockml/parser` | BML → BomDocument; own `blocks/` SSOT when it ships | `node_modules/@blockml/parser` (when published) |
+| `@blockml/compiler` | Facade + Target Registry; own `blocks/` SSOT when it ships | `node_modules/@blockml/compiler` (when published) |
+| `@machineblocks/*` target | Compiler render target (MBOM → SCAD) — **separate** from `core`; lives under `packages/` | `node_modules/@machineblocks/…` (when published) |
 
 ### The First Engine: `@blockml/engine-maker`
 
@@ -316,7 +353,7 @@ A `catalog.xml` in the project root maps namespace URLs to local XSD files for o
 
 ### `@blockml/core`
 
-The BlockML Core library, installed at `node_modules/@blockml/core`. Browser and Node compatible. **Owns** the shared TypeScript BOM contracts (`BomDocument`, `BlockDefinition`, …) used by parser, serializer, validator, compiler, and LSP (as that TS surface ships). Framework BML (`org.blockml.bml.*`) ships in this package under `blocks/org/blockml/bml/`.
+The BlockML Core library, installed at `node_modules/@blockml/core`. A BlockML node module: `package.json` + `blocks/` (SSOT for `org.blockml.bml.*`). Browser and Node compatible. **Owns** the shared TypeScript BOM contracts (`BomDocument`, `BlockDefinition`, …) used by parser, serializer, validator, compiler, and LSP (as that TS surface ships).
 
 ```text
   - BomDocument / BlockDefinition / member model (Property, Aggregation, Association, Capability)
@@ -422,11 +459,25 @@ VS Code Language Server for BML. Thin LSP adapter — **reuses** parser, validat
 
 See `01_bom_core.md` — Language Server — planned IDE integration (V2).
 
-### `@machineblocks/core` (SCAD library + MBOM)
+### `@machineblocks/core` (domain library)
 
-MachineBlocks domain BML and the V3 SCAD runtime ship together in **`@machineblocks/core`** — not a separate `mbom` package and not under `domains/`.
+MachineBlocks **domain library** — not the compiler render target, and not a separate `mbom` package.
 
-Path: `node_modules/@machineblocks/core/blocks/com/machineblocks/bml`
+Installed at `node_modules/@machineblocks/core`. A BlockML node module: `package.json` + `blocks/` (SSOT). It contains:
+
+```text
+- General MachineBlocks documentation as BML
+    blocks/com/machineblocks/bml/documentation/
+- Domain grammar (MBOM) — Block, NativeBlock, Set, types, bricks, …
+    blocks/com/machineblocks/bml/core/ · type/ · bricks/ · …
+- SCAD library as the reference renderer / runtime
+    lib/ · config/ · pattern/
+- Examples in BML and SCAD
+    blocks/com/machineblocks/bml/examples/
+    blocks/com/machineblocks/scad/
+```
+
+Path for domain BML: `node_modules/@machineblocks/core/blocks/com/machineblocks/bml`
 
 ```text
 - com.machineblocks.bml.core.* — Block, NativeBlock, CompositeBlock, Set, Step, …
@@ -435,9 +486,9 @@ Path: `node_modules/@machineblocks/core/blocks/com/machineblocks/bml`
 - bricks/, calibration/, examples/ — library blocks and fixtures
 ```
 
-### `@machineblocks/machineblocks-v3-scad-target`
+### `@machineblocks/*` compiler target (future)
 
-The MachineBlocks V3 SCAD Render Target. Browser and Node compatible. Registers under the name `"machineblocks-v3-scad"`.
+The MachineBlocks V3 SCAD **Render Target** for the BML compiler is a **separate** package under `@machineblocks`, developed in this repo under `packages/`. It is not `@machineblocks/core`. It will follow the same BlockML node-module shape (`package.json` + `blocks/` SSOT + TypeScript). Browser and Node compatible. Registers under the name `"machineblocks-v3-scad"`.
 
 ```text
 - Atomic Target: registers for com.machineblocks.bml.core.Block and com.machineblocks.bml.core.Set
@@ -450,7 +501,7 @@ The MachineBlocks V3 SCAD Render Target. Browser and Node compatible. Registers 
 - Import resolver
 - Customizer generator
 - Source map generation (Source Map Spec V3)
-- Reference: machineblocks-lib/docs/scad-reference/
+- Domain library / SCAD reference: `@machineblocks/core`
 ```
 
 ---
@@ -686,7 +737,9 @@ configProfile < appliedPresets chain < inline property
 
 ## BML Self-Description Roadmap
 
-BlockML should eventually be the language in which BlockML is understood. The path there is **evolutionary** — V1 must not be overloaded. V1 exists first to make **MachineBlocks** workable.
+BlockML should eventually be the language in which BlockML **and every package** are understood. Each npm package carries that knowledge in its own `blocks/` folder (see [BlockML node packages](#blockml-node-packages)).
+
+The Markdown files in this repository (`docs/*.md`) are a **transitional** solution. **Goal:** all information lives in the respective node packages as BML. The path there is **evolutionary** — V1 must not be overloaded. V1 exists first to make **MachineBlocks** workable.
 
 ### Decision criterion
 
@@ -716,7 +769,7 @@ V1 does **not** model the full compiler in BML. V1 pulls into BML only what you 
 | Framework base types for validation and authoring | Self-hosting of the entire toolchain |
 | Definition meta-model (`org.blockml.bml.definition.*`, `core.Definition`) | Meta-driven `bml:xml` parser and BOM → XML serializer |
 
-Markdown remains **authoritative** in V1 for architecture, pipeline, runtime, CLI, implementation details, and design rationale.
+Markdown remains **authoritative in this repo for V1** for architecture, pipeline, runtime, CLI, implementation details, and design rationale — as a **transitional** handbook. It is not the long-term SSOT. Package BML under `blocks/` wins wherever it already exists (Core, MachineBlocks native params and types).
 
 **Exception (already in force):** MachineBlocks **native parameters and type shapes** — sole SSOT is `NativeBlock.bml` + `com.machineblocks.bml.type.*`. Markdown/YAML are pointer/commentary only — do not maintain a second parameter inventory.
 
@@ -724,7 +777,7 @@ Markdown remains **authoritative** in V1 for architecture, pipeline, runtime, CL
 
 ### V2 — Documentation migration · Language Server
 
-From V2 onward, stable structural information moves from Markdown into BML Blocks. Roles split as follows:
+From V2 onward, stable structural information moves from Markdown into **package `blocks/`** BML. Roles split as follows:
 
 | Markdown | BML |
 |---|---|
@@ -784,6 +837,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 
 ```text
 00_system.md           — this document (architecture, packages, conventions, project structure)
+                           transitional Markdown — package BML is the long-term SSOT
 01_bom_core.md         — BOM Core: abstract model (Block, Member, Preset, Library, Catalog, Target System)
 02_mbml.md             — BML format, document types, namespaces, schema
 03_mbom.md             — MBOM: MachineBlocks domain model, properties, aggregations, expressions
@@ -804,13 +858,16 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 22_function_mapping.md — Capability call argument mapping (FunctionMapping)
 09_mbom_properties.yml — pointer stub only (inventory removed; see NativeBlock.bml)
 
-node_modules/@machineblocks/core/   — @machineblocks/core (SCAD library + MBOM)
+node_modules/@machineblocks/core/   — BlockML node module (docs, SCAD reference renderer, examples)
+  package.json
   lib/                 — SCAD Runtime (every generated SCAD file uses this)
   config/              — mb_config.scad
   pattern/             — assembly patterns
-  blocks/
-    com/machineblocks/bml/   — MachineBlocks BML SSOT (core, type, bricks, …)
-      bricks/                — Standard.bml + pre-rendered .scad / .json / thumbnails
+  blocks/              — package SSOT
+    com/machineblocks/bml/
+      documentation/         — general MachineBlocks docs as BML
+      core/ type/ bricks/    — MBOM grammar
+      examples/              — BML examples
       ...
 ```
 
@@ -818,4 +875,4 @@ node_modules/@machineblocks/core/   — @machineblocks/core (SCAD library + MBOM
 `node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/NativeBlock.bml` + `…/type/*.bml`.  
 Markdown (`03`/`04`/`05`/…), `09_mbom_properties.yml`, and MachineBlocks API notes **must follow or only link** — they are not a second inventory. Conventions (XY / XYZ / AB) stay in `04_types.md`.
 
-**BML vs Markdown (general):** For compiler architecture / pipeline, Markdown remains authoritative in V1 (see roadmap). For **MachineBlocks native params and type shapes**, BML is already the sole SSOT you maintain — do not duplicate parameter tables in Markdown. Long-term, other structural docs also link to BML FQNs — see [BML Self-Description Roadmap](#bml-self-description-roadmap).
+**BML vs Markdown (general):** Markdown in `docs/` is **transitional**. For compiler architecture / pipeline it remains the V1 handbook (see roadmap). For **MachineBlocks native params and type shapes**, BML in `@machineblocks/core` is already the sole SSOT — do not duplicate parameter tables in Markdown. Long-term, **all** information belongs in the respective node packages as BML — see [BlockML node packages](#blockml-node-packages) and [BML Self-Description Roadmap](#bml-self-description-roadmap).

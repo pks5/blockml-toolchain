@@ -21,7 +21,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 
 | Aspect | Decision |
 |---|---|
-| **Type SSOT** | BML files in `node_modules/@blockml/core`, `node_modules/@machineblocks/core/blocks/com/machineblocks/bml`, domain packages |
+| **Type SSOT** | BML in each package's `blocks/` — today `node_modules/@blockml/core`, `node_modules/@machineblocks/core`; later every `@blockml/*` / `@machineblocks/*` package |
 | **MB native params SSOT** | `NativeBlock.bml` + `com.machineblocks.bml.type.*` (`mbt:`) |
 | **Same mechanism** | Same `<block>` element · same parser · same TypeRegistry bootstrap |
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |

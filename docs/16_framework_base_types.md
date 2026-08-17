@@ -22,7 +22,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self
 
 | Aspect | Decision |
 |---|---|
-| **Base type SSOT** | BML files in `node_modules/@blockml/core`, `node_modules/@machineblocks/core/blocks/com/machineblocks/bml` |
+| **Base type SSOT** | BML in each package's `blocks/` — today `node_modules/@blockml/core`, `node_modules/@machineblocks/core` |
 | **MB native params SSOT** | `com.machineblocks.bml.core.NativeBlock` + `com.machineblocks.bml.type.*` |
 | **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry; **renderers free in output** — see `17_type_system_bml.md` — Renderer freedom |
 | **Compiler internals** | Parser **must** know `<block>` as input concept; internal representation **free** — see `17_type_system_bml.md` |

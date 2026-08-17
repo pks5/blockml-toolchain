@@ -6,7 +6,7 @@ version: 2.0.0
 
 This document defines the MBOM (MachineBlocks Object Model) — the MachineBlocks domain specialization of BOM Core. MBOM extends the lossless BOM transport model with MachineBlocks-specific types, properties, and render-target conventions.
 
-MachineBlocks BML sources live in **`@machineblocks/core`** at `node_modules/@machineblocks/core/blocks/com/machineblocks/bml` (not a separate `mbom` package).
+MachineBlocks BML sources, documentation, the SCAD reference renderer, and examples live in **`@machineblocks/core`** at `node_modules/@machineblocks/core/blocks/com/machineblocks/bml` (not a separate `mbom` package). The compiler's MachineBlocks render target is a **separate** `@machineblocks/*` package under `packages/` — see `00_system.md` — BlockML node packages.
 
 MBOM is a domain-specific specialization of BOM Core (`01_bom_core.md`). BOM Core defines the abstract structural foundation — Block, Member (Properties, Aggregations, Associations, Capabilities), Preset, Library, Catalog, and the Expression system. MBOM extends these with MachineBlocks-specific types, properties, and the SCAD render target. Concepts already defined in BOM Core are not repeated here — this document covers only MBOM-specific extensions and decisions.
 

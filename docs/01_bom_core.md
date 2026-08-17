@@ -522,7 +522,7 @@ org.blockml.bml.documentation.* — bootstrap documentation blocks
 
 These namespaces contain BML-defined Blocks, ValueTypes, Capability types, and Languages. They are part of the public BlockML grammar.
 
-npm packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. Framework BML lives in `node_modules/@blockml/core` (`blocks/org/blockml/bml/`); the same package owns TypeScript BOM contracts as that surface ships. TypeScript interfaces (BOM shapes, render processors, CLI utilities) are **not** BML definitions and do not receive `<domain>.bml.*` FQNs. See `15_dev_setup.md` — Package Conventions.
+npm packages (`@blockml/core`, `@blockml/parser`, …) are **deployment units** — not identical to FQN namespaces. They are ordinary Node modules **plus** a `blocks/` folder; that folder is the **SSOT for the package**. Scopes: `@blockml` (toolchain) and `@machineblocks` (domain). Framework BML lives in `node_modules/@blockml/core` (`blocks/org/blockml/bml/`). TypeScript interfaces (BOM shapes, render processors, CLI utilities) are **not** BML definitions and do not receive `<domain>.bml.*` FQNs. See `00_system.md` — BlockML node packages · `15_dev_setup.md` — Package Conventions.
 
 Built-in services live in `org.blockml.bml.service.*`. **Class names** follow Thymeleaf utility objects where applicable (`Math`, `Strings`, `Numbers`, `Lists`, `Bools`). Expression calls use the **`#` prefix** with the lowercase utility name — Thymeleaf-aligned, plural for utilities: `#math`, `#strings`, `#numbers`, `#lists`, `#bools`. (`#math` is BlockML-specific; Thymeleaf has no `#math`.)
 
