@@ -150,9 +150,7 @@ The MachineBlocks **compiler target** (MBOM → SCAD) is **not** part of `@machi
 
 ### Working tree
 
-After `npm install`, packages live under `node_modules/`. The `libs/` and `domains/` trees are **not required** to use the toolchain.
-
-Git submodules (`libs/bml-core`, `domains/machineblocks/.../scad-lib`) remain **for now** as a checkout of the same source repos. Their **internal folder layout is unchanged**; the difference is that this repo consumes the published packages rather than those submodule paths.
+After `npm install`, packages live under `node_modules/`.
 
 ```text
 blockml/

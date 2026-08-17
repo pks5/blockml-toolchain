@@ -73,11 +73,9 @@ The BOM Compiler is installed from source by cloning the repository, then `npm i
 git clone https://github.com/.../blockml
 cd blockml
 npm install
-# optional, while git submodules remain:
-git submodule update --init --recursive
 ```
 
-`npm install` provides `@blockml/core` and `@machineblocks/core` under `node_modules/`. Git submodules (`libs/bml-core`, `domains/.../scad-lib`) are kept for now with the same internal layout; they are not required to use the libraries.
+`npm install` provides `@blockml/core` and `@machineblocks/core` under `node_modules/`.
 
 ### 2. Build and link
 
@@ -103,8 +101,6 @@ When pulling new changes from the repository:
 git pull
 npm install
 npm run build
-# optional, while git submodules remain:
-git submodule update --recursive
 ```
 
 `npm link` does not need to be repeated after updates.

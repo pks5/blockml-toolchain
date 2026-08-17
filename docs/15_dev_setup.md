@@ -34,7 +34,7 @@ Implementation code is scaffolded according to this document. **Libraries and to
 ## Prerequisites
 
 ```text
-git                 — clone (submodules optional; kept for now)
+git                 — clone
 Node.js >= 20       — build + CLI + Vitest
 npm >= 10           — workspaces + package install (bundled with Node 20+)
 OpenSCAD (optional) — thumbnail generation only; not required for build/test
@@ -62,16 +62,12 @@ bom --version
 
 `npm install` is **required** for framework BML (`@blockml/core`) and MachineBlocks fixtures (`@machineblocks/core`, Test Layer B/C and T3 corpus).
 
-Git submodules (`libs/bml-core`, `domains/.../scad-lib`) are **kept for now** — same internal layout as the published packages. They are **not required** to browse or bootstrap BML in this repo.
-
 After pulling updates:
 
 ```bash
 git pull
 npm install
 npm run build
-# optional, while submodules remain:
-git submodule update --recursive
 ```
 
 ---
@@ -80,7 +76,7 @@ git submodule update --recursive
 
 ### Working tree (specs + npm libraries)
 
-`libs/` and `domains/` are **not required**. Every package is a **BlockML node module**: `package.json` + `blocks/` (SSOT). See `00_system.md` — BlockML node packages.
+Every package is a **BlockML node module**: `package.json` + `blocks/` (SSOT). See `00_system.md` — BlockML node packages.
 
 ```text
 blockml/
@@ -100,8 +96,6 @@ blockml/
 ```
 
 **There is no `@blockml/core-services` package.** Built-in services (`Math`, `Strings`, …) live under `node_modules/@blockml/core/blocks/org/blockml/bml/service/`.
-
-Git submodules remain **for now** at `libs/bml-core` and `domains/machineblocks/.../scad-lib` — same folder structure as the npm packages above.
 
 ### Target packages (end state)
 
@@ -578,8 +572,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
