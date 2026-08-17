@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "workspaces": [
+      "packages/*"
+    ],
+    "dependencies": {
+      "@blockml/core": "^1.0.1",
+      "@machineblocks/core": "^3.0.0-A1"
+    }
+  }
