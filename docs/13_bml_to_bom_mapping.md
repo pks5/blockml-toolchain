@@ -972,7 +972,7 @@ Before validating or compiling a file that references external types, the orches
 ```text
 1. Pre-register framework BML (fixed paths — see 16_framework_base_types.md)
      libs/bml-core/blocks        →  org.blockml.bml.core.*, org.blockml.bml.service.*
-     @machineblocks/mbom/blocks  →  com.machineblocks.bml.core.*
+     scad-lib/blocks/com/machineblocks/bml  →  com.machineblocks.bml.core.*
 
 2. Discover BML sources
      Project srcDir scan     →  all *.bml

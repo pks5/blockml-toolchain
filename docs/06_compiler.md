@@ -1039,8 +1039,8 @@ tests/
       DefaultEnclosureSet.bml
       DefaultEnclosureSet.expected.scad
     presets/
-      presets/StandardPresets.bml   — @machineblocks/mbom fixture (preset block)
-      Library.bml                   — @machineblocks/mbom fixture (Library)
+      presets/StandardPresets.bml   — scad-lib fixture (preset block)
+      Library.bml                   — scad-lib fixture (Library)
       Standard.expected.json
 
   snapshots/

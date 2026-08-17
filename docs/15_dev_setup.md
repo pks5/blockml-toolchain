@@ -93,9 +93,9 @@ blockml/
       test/                      — constraint fixtures (toolchain; not Core SSOT)
   domains/
     machineblocks/
-      mbom/blocks/com/machineblocks/bml/   — MBOM domain BML (NativeBlock, types, …)
       machineblocks-v3-scad-target/
-        runtimes/scad-lib/                 — Git submodule (SCAD runtime + example .bml/.scad)
+        runtimes/scad-lib/                 — Git submodule (SCAD runtime + MachineBlocks BML)
+          blocks/com/machineblocks/bml/    — domain BML SSOT (NativeBlock, types, bricks, …)
   scripts/
 ```
 
@@ -115,8 +115,7 @@ blockml/
 | `@blockml/fatblock-target` | `packages/fatblock-target` | Phase C — after / beside XSD; registry `"fatblock"` |
 | `@blockml/cli` | `packages/cli-tools` | Phase C — reads `targets[]` (default `["blockdoc"]`) |
 | `@blockml/engine-maker` | `engines/maker-engine` | Phase C — needed for SCAD product path |
-| `@machineblocks/mbom` | `domains/machineblocks/mbom` | Phase C (BML already present; package shell + exports) |
-| `@machineblocks/machineblocks-v3-scad-target` | `domains/machineblocks/machineblocks-v3-scad-target` | Phase C — **product** RT; after BlockDoc control gate |
+| `@machineblocks/machineblocks-v3-scad-target` | `domains/machineblocks/machineblocks-v3-scad-target` | Phase C — **product** RT; after BlockDoc control gate. MachineBlocks BML lives in `scad-lib/blocks/com/machineblocks/bml` |
 | `@blockml/lsp` | `packages/lsp` | V2 — package name **decided** |
 
 ### Target monorepo tree
@@ -151,11 +150,9 @@ blockml/
 
   domains/
     machineblocks/
-      mbom/                    — @machineblocks/mbom
-        blocks/com/machineblocks/bml/
       machineblocks-v3-scad-target/
         src/                   — target implementation
-        runtimes/scad-lib/     — Git submodule
+        runtimes/scad-lib/     — Git submodule (BML at scad-lib/blocks/com/machineblocks/bml)
 
   tests/
     roundtrip/                 — parse → serialize → parse (V1 gate)
@@ -181,7 +178,6 @@ Root `package.json`:
   "workspaces": [
     "packages/*",
     "engines/*",
-    "domains/machineblocks/mbom",
     "domains/machineblocks/machineblocks-v3-scad-target"
   ],
   "scripts": {
@@ -247,7 +243,6 @@ Build order encoded in references:
     { "path": "packages/validator" },
     { "path": "packages/compiler" },
     { "path": "engines/maker-engine" },
-    { "path": "domains/machineblocks/mbom" },
     { "path": "domains/machineblocks/machineblocks-v3-scad-target" },
     { "path": "packages/cli-tools" }
   ]
@@ -392,7 +387,8 @@ Target dependency order after packages exist (Phase A starts at `core` TS + pars
                   ↑
            @blockml/compiler ──→ @blockml/engine-maker
                   ↑                    ↑
-           @machineblocks/mbom        │
+           scad-lib BML               │
+           (com.machineblocks.bml.*)  │
                   ↑                    │
            @machineblocks/machineblocks-v3-scad-target
                   ↑
@@ -431,7 +427,6 @@ npm run build -w @blockml/parser
 | `@blockml/validator` | Yes |
 | `@blockml/compiler` | Yes |
 | `@blockml/engine-maker` | Yes |
-| `@machineblocks/mbom` | Yes |
 | `@machineblocks/machineblocks-v3-scad-target` | Yes |
 | `@blockml/cli` | **No** — Node-only |
 
@@ -516,7 +511,7 @@ Copy or generate `catalog.xml` at repo root (see `00_system.md` — catalog.xml)
 
 ```text
 node_modules/@blockml/core/schemas/core/*.xsd
-node_modules/@machineblocks/mbom/schemas/machineblocks/*.xsd
+node_modules/@machineblocks/machineblocks-v3-scad-target/schemas/machineblocks/*.xsd
 ```
 
 VS Code / Cursor: install **XML** extension; set `xml.catalog.catalogs` to `./catalog.xml`.
@@ -787,8 +782,8 @@ Run roundtrip tests against files already in the repository — grow tiers as pa
 |---|---|---|
 | **T0 — Minimal** | `libs/bml-core/blocks/org/blockml/bml/language/`, `libs/bml-core/blocks/org/blockml/bml/service/` | `TypeScript.bml`, `Math.bml` |
 | **T1 — Framework** | `libs/bml-core/blocks/` | `Block.bml`, `BlockDefinition.bml`, `MemberDefinition.bml` |
-| **T2 — Domain** | `domains/machineblocks/mbom/blocks/` | `NativeBlock.bml`, `CompositeBlock.bml`, `Set.bml` |
-| **T3 — Real-world** | `domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/` | `Calibrator.bml`, `Standard.bml`, `Cross.bml` |
+| **T2 — Domain** | `scad-lib/blocks/com/machineblocks/bml/` | `NativeBlock.bml`, `CompositeBlock.bml`, `Set.bml` |
+| **T3 — Real-world** | `scad-lib/blocks/com/machineblocks/bml/` | `Calibrator.bml`, `Standard.bml`, `Cross.bml` |
 
 Add new framework BML to T1 as it lands — the Definition meta-model corpus is the highest-value roundtrip fixture set.
 
@@ -816,7 +811,7 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 
 ```text
 1. @blockml/core BML          — org.blockml.bml.core.*, org.blockml.bml.service.*
-2. @machineblocks/mbom BML    — com.machineblocks.bml.core.*
+2. scad-lib BML               — com.machineblocks.bml.core.* (scad-lib/blocks/com/machineblocks/bml)
 3. @blockml/core TS           — types from 12_bom_object_model.md + Diagnostic
                               (ExpressionValue = raw only; ExpressionNode types may land with step 7)
 4. @blockml/parser            — `@xmldom/xmldom` + steps [1]–[5] + unit tests (preserve expression raw)
@@ -828,7 +823,7 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 10. BlockDoc RT first          — @blockml/blockdoc-target (control gate)
 11. XSD / FatBlock RTs         — after BlockDoc
 12. @blockml/engine-maker      — RenderEngine stub (for SCAD strategies)
-13. @machineblocks/mbom        — domain package shell + NativeBlock.bml SSOT
+13. scad-lib BML already present — NativeBlock.bml SSOT in scad-lib/blocks/com/machineblocks/bml
 14. @machineblocks/...-scad-target — ScadBlockProcessor MVP (product path)
 14. @blockml/cli               — bom validate, then bom compile
 15. Correctness tests         — Calibrator, Standard, Cross from scad-lib

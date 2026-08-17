@@ -3,9 +3,9 @@
 # ============================================================================
 #
 # Sole SSOT for native parameters:
-#   domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml
+#   scad-lib/blocks/com/machineblocks/bml/core/NativeBlock.bml
 # Type shapes SSOT:
-#   domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/*.bml
+#   scad-lib/blocks/com/machineblocks/bml/type/*.bml
 #
 # This file previously listed types/defaults/descriptions for ~60 native properties.
 # That inventory is removed. Renderer/customizer metadata belongs on NativeBlock /
@@ -19,6 +19,6 @@
 version: "1.1.0"
 status: stub-pointer
 ssot:
-  parameters: domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml
-  types: domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/
+  parameters: scad-lib/blocks/com/machineblocks/bml/core/NativeBlock.bml
+  types: scad-lib/blocks/com/machineblocks/bml/type/
 properties: []   # intentionally empty — see NativeBlock.bml

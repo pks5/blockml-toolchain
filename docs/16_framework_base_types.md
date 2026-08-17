@@ -22,7 +22,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self
 
 | Aspect | Decision |
 |---|---|
-| **Base type SSOT** | BML files in `libs/bml-core`, `@machineblocks/mbom` |
+| **Base type SSOT** | BML files in `libs/bml-core`, `scad-lib/blocks/com/machineblocks/bml` |
 | **MB native params SSOT** | `com.machineblocks.bml.core.NativeBlock` + `com.machineblocks.bml.type.*` |
 | **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry; **renderers free in output** — see `17_type_system_bml.md` — Renderer freedom |
 | **Compiler internals** | Parser **must** know `<block>` as input concept; internal representation **free** — see `17_type_system_bml.md` |
@@ -447,7 +447,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/core/Definition.bml     ← empty Definition-branch identification marker
      org/blockml/bml/definition/*.bml        ← StructuralDefinition (inline Documentation/Change/Example/Reference), BlockDefinition, MemberDefinition, …
 
-2. @machineblocks/mbom BML              ← MBOM framework grammar
+2. scad-lib BML                         ← MBOM framework grammar (scad-lib/blocks/com/machineblocks/bml)
      com/machineblocks/bml/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
      …
 
@@ -498,7 +498,7 @@ libs/bml-core/blocks/
     Library.bml                             ← org.blockml.bml.compiler.Library
   org/blockml/bml/status/ · type/ · constraint/ · validation/ · service/ · …
 
-domains/machineblocks/mbom/blocks/
+scad-lib/blocks/
   com/machineblocks/bml/core/
     Step.bml · Block.bml · …
   com/machineblocks/bml/bricks/

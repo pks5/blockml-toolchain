@@ -21,7 +21,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 
 | Aspect | Decision |
 |---|---|
-| **Type SSOT** | BML files in `libs/bml-core`, `@machineblocks/mbom`, domain packages |
+| **Type SSOT** | BML files in `libs/bml-core`, `scad-lib/blocks/com/machineblocks/bml`, domain packages |
 | **MB native params SSOT** | `NativeBlock.bml` + `com.machineblocks.bml.type.*` (`mbt:`) |
 | **Same mechanism** | Same `<block>` element · same parser · same TypeRegistry bootstrap |
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |
@@ -266,7 +266,7 @@ Before the compiler validates or renders **any** user file, it bootstraps the Ty
   Integer.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml · …
   Math.bml · Strings.bml · …
 
-@machineblocks/mbom BML
+scad-lib BML (scad-lib/blocks/com/machineblocks/bml)
   Block.bml · CompositeBlock.bml · Set.bml · Step.bml · NativeBlock.bml · …
 
 →  then  project srcDir
@@ -1680,7 +1680,7 @@ Type definitions bootstrap **before** composable Blocks that reference them:
      org/blockml/bml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …
 
-2. @machineblocks/mbom
+2. scad-lib BML (scad-lib/blocks/com/machineblocks/bml)
      com/machineblocks/bml/type/SizeXYZ.bml · …
      com/machineblocks/bml/core/Block.bml                             ← baseType: Block
      …
@@ -1721,7 +1721,7 @@ libs/bml-core/blocks/
   org/blockml/bml/service/
     Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 
-domains/machineblocks/mbom/blocks/
+scad-lib/blocks/
   com/machineblocks/bml/type/
     SizeXYZ.bml · Direction.bml · Color.bml · Face.bml · …
   com/machineblocks/bml/core/

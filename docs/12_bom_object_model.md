@@ -124,11 +124,11 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 @blockml/compiler
   - Target Registry facade — renderers orchestrate their own pipelines
 
-@machineblocks/mbom
-  - Framework base type BML (com.machineblocks.bml.core.Block, NativeBlock, Set, …)
+scad-lib (MachineBlocks BML)
+  - Domain BML at scad-lib/blocks/com/machineblocks/bml (com.machineblocks.bml.core.Block, NativeBlock, Set, …)
   - NativeBlock.bml + type/*.bml — MB native parameter / type SSOT
   - 09_mbom_properties.yml — pointer stub only (see NativeBlock)
-  - Extends TypeRegistry bootstrap with mbom BML paths
+  - Extends TypeRegistry bootstrap with scad-lib BML paths
 ```
 
 ---
@@ -1592,7 +1592,7 @@ The parser (`@blockml/parser`) is **single-file scoped** — it does not load or
 
 ```text
 1. Built-in services     — @blockml/core (org.blockml.bml.service.*)
-2. Framework BML              — libs/bml-core, @machineblocks/mbom (see 16_framework_base_types.md)
+2. Framework BML              — libs/bml-core, scad-lib/blocks/com/machineblocks/bml (see 16_framework_base_types.md)
 3. Library blocks             — org.blockml.bml.core.BlockLibrary → resolve readMe / bootstrap / dependencies / subLibraries / blocks by FQN (optional bml:version assert against value)
 4. Project srcDir scan        — remaining *.bml in bom.config.json srcDir
 5. Declared dependencies      — Library dependencies entries + bom.config.json paths

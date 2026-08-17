@@ -25,7 +25,7 @@ Historical long-form prose and examples (pre–self-description migration) are a
 | Author a new Block | `org.blockml.bml.task.AuthorNewBlock` |
 | Formal BOM AST / parser contracts | `12_bom_object_model.md`, `13_bml_to_bom_mapping.md` |
 | Expression EBNF / AST utility contract | `10_expression_language.md` (DeepDive; surface rules in BML) |
-| MachineBlocks domain authoring | Domain packages / `03_mbom.md` — **not** Core language SSOT |
+| MachineBlocks domain authoring | scad-lib BML (`scad-lib/blocks/com/machineblocks/bml`) / `03_mbom.md` — **not** Core language SSOT |
 
 ---
 

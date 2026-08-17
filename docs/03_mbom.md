@@ -6,6 +6,8 @@ version: 2.0.0
 
 This document defines the MBOM (MachineBlocks Object Model) — the MachineBlocks domain specialization of BOM Core. MBOM extends the lossless BOM transport model with MachineBlocks-specific types, properties, and render-target conventions.
 
+MachineBlocks BML sources live in the **scad-lib** repo at `scad-lib/blocks/com/machineblocks/bml` (not a separate `mbom` package).
+
 MBOM is a domain-specific specialization of BOM Core (`01_bom_core.md`). BOM Core defines the abstract structural foundation — Block, Member (Properties, Aggregations, Associations, Capabilities), Preset, Library, Catalog, and the Expression system. MBOM extends these with MachineBlocks-specific types, properties, and the SCAD render target. Concepts already defined in BOM Core are not repeated here — this document covers only MBOM-specific extensions and decisions.
 
 For the BML authoring format see `02_mbml.md`.
@@ -496,7 +498,7 @@ Framework types are **BML files** — see `16_framework_base_types.md`. Interpre
 
 ```text
 org.blockml.bml.core.Block                                  ← libs/bml-core/…/Block.bml (abstract, root)
-    com.machineblocks.bml.core.Step                         ← mbom/…/Step.bml (final)
+    com.machineblocks.bml.core.Step                         ← scad-lib/…/Step.bml (final)
   org.blockml.bml.core.ValueType                            ← ValueType.bml (abstract)
   org.blockml.bml.core.Language                             ← Language.bml (abstract)
     org.blockml.bml.core.ProgrammingLanguage                ← ProgrammingLanguage.bml (abstract)
@@ -506,7 +508,7 @@ org.blockml.bml.core.Block                                  ← libs/bml-core/�
     org.blockml.bml.language.English · German · French · Spanish · Chinese · Japanese · Russian
   org.blockml.bml.core.Entity                               ← Entity.bml (abstract)
       org.blockml.bml.service.Math                          ← core/…/service/Math.bml
-  com.machineblocks.bml.core.Block                          ← mbom/…/Block.bml (abstract)
+  com.machineblocks.bml.core.Block                          ← scad-lib/…/Block.bml (abstract)
     com.machineblocks.bml.core.CompositeBlock               ← CompositeBlock.bml (abstract)
       com.machineblocks.bml.core.Set                        ← Set.bml (abstract)
         com.martianmicro.anyclosure.DefaultEnclosure   ← user BML
@@ -519,7 +521,7 @@ org.blockml.bml.core.Block                                  ← libs/bml-core/�
 
 ### com.machineblocks.bml.core.Block
 
-MachineBlocks domain base type. Defined in `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/Block.bml`. Extends `org.blockml.bml.core.Entity`.
+MachineBlocks domain base type. Defined in `scad-lib/blocks/com/machineblocks/bml/core/Block.bml`. Extends `org.blockml.bml.core.Entity`.
 
 ```text
 Extends:        org.blockml.bml.core.Entity

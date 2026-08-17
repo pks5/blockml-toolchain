@@ -13,8 +13,8 @@ It is **not** the inventory of native parameters or type shapes.
 
 | Concern | SSOT |
 |---------|------|
-| Native MBML / SCAD parameters (names, types, docs, defaults, `scad:value`) | `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml` |
-| Type shapes (structs, enums, closed kinds, units) | `domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/*.bml` (+ `Library.bml` membership) |
+| Native MBML / SCAD parameters (names, types, docs, defaults, `scad:value`) | `scad-lib/blocks/com/machineblocks/bml/core/NativeBlock.bml` |
+| Type shapes (structs, enums, closed kinds, units) | `scad-lib/blocks/com/machineblocks/bml/type/*.bml` (+ `Library.bml` membership) |
 | This document (`04_types.md`) | Parse / serialize behaviour and conventions only |
 | `09_mbom_properties.yml` | Pointer stub only — no inventory; see NativeBlock |
 
