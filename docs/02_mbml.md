@@ -6,7 +6,7 @@ version: 3.0.0 · **BML Core is SSOT for language rules**
 
 This file is the **table of contents** for BML authoring. Normative language rules live in
 BlockML Core documentation and definition blocks under `org.blockml.bml.*`
-(`libs/bml-core/blocks/org/blockml/bml/`).
+(`node_modules/@blockml/core/blocks/org/blockml/bml/`).
 
 Start reading at `org.blockml.bml.README` (`relation=ReadFirst`). Use `relation=TaskIndex` for
 procedural fixes and `org.blockml.bml.diagnostic.*` for validator codes.
@@ -25,7 +25,7 @@ Historical long-form prose and examples (pre–self-description migration) are a
 | Author a new Block | `org.blockml.bml.task.AuthorNewBlock` |
 | Formal BOM AST / parser contracts | `12_bom_object_model.md`, `13_bml_to_bom_mapping.md` |
 | Expression EBNF / AST utility contract | `10_expression_language.md` (DeepDive; surface rules in BML) |
-| MachineBlocks domain authoring | scad-lib BML (`scad-lib/blocks/com/machineblocks/bml`) / `03_mbom.md` — **not** Core language SSOT |
+| MachineBlocks domain authoring | `@machineblocks/core` BML (`node_modules/@machineblocks/core/blocks/com/machineblocks/bml`) / `03_mbom.md` — **not** Core language SSOT |
 
 ---
 

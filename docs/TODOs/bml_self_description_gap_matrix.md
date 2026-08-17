@@ -262,7 +262,7 @@ Cluster-TaskGuides: `FixVisibilityAccess`, `FixMemberOverride`, `FixCompositionP
 
 | Thema | Datei |
 |---|---|
-| Lernpfad | `libs/bml-core/blocks/org/blockml/bml/README.bml` |
+| Lernpfad | `node_modules/@blockml/core/blocks/org/blockml/bml/README.bml` |
 | Docs-Modell | `documentation/DocumentationModel.bml` |
 | Implicit NS | `documentation/ImplicitNamespaceResolution.bml` |
 | Library | `documentation/LibrarySystem.bml`, `core/BlockLibrary.bml` |

@@ -65,17 +65,19 @@ See `14_compiler_runtime.md` — Target Bootstrap · `15_dev_setup.md` — Phase
 
 ## Installation
 
-The BOM Compiler is installed from source by cloning the repository. No npm registry is required.
+The BOM Compiler is installed from source by cloning the repository, then `npm install` (libraries come from the npm registry as `@blockml/*` and `@machineblocks/*`).
 
 ### 1. Clone and initialize
 
 ```bash
 git clone https://github.com/.../blockml
 cd blockml
+npm install
+# optional, while git submodules remain:
 git submodule update --init --recursive
 ```
 
-`git submodule update --init --recursive` initializes all runtime submodules (e.g. `domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/`).
+`npm install` provides `@blockml/core` and `@machineblocks/core` under `node_modules/`. Git submodules (`libs/bml-core`, `domains/.../scad-lib`) are kept for now with the same internal layout; they are not required to use the libraries.
 
 ### 2. Build and link
 
@@ -99,9 +101,10 @@ When pulling new changes from the repository:
 
 ```bash
 git pull
-git submodule update --recursive
 npm install
 npm run build
+# optional, while git submodules remain:
+git submodule update --recursive
 ```
 
 `npm link` does not need to be repeated after updates.
@@ -465,7 +468,7 @@ Project-level configuration. Located at the project root.
 | `srcDir` | `"src"` | Root directory for BML source files |
 | `outDir` | `"scad"` | Root directory for target output files |
 | `thumbsDir` | `null` | Output directory for thumbnails. `null` = alongside output files in `outDir` |
-| `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library root (`scad-lib/`). `null` = resolved from bom executable location |
+| `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library root (`node_modules/@machineblocks/core/`). `null` = resolved from bom executable location |
 | `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved |
 | `activeConfig` | `null` | Name of the active config profile |
 | `bmlExtensions` | `[".bml"]` | File suffixes scanned by `compile --all` / `validate --all` |

@@ -22,7 +22,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self
 
 | Aspect | Decision |
 |---|---|
-| **Base type SSOT** | BML files in `libs/bml-core`, `scad-lib/blocks/com/machineblocks/bml` |
+| **Base type SSOT** | BML files in `node_modules/@blockml/core`, `node_modules/@machineblocks/core/blocks/com/machineblocks/bml` |
 | **MB native params SSOT** | `com.machineblocks.bml.core.NativeBlock` + `com.machineblocks.bml.type.*` |
 | **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry; **renderers free in output** — see `17_type_system_bml.md` — Renderer freedom |
 | **Compiler internals** | Parser **must** know `<block>` as input concept; internal representation **free** — see `17_type_system_bml.md` |
@@ -35,7 +35,7 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self
 | **ValueType branch** | `org.blockml.bml.core.ValueType` — abstract base for all value blocks used in Property `type` and Capability `inputType` / `outputType`; four kinds: PrimitiveType · StructType · EnumType · ConstantType |
 | **Unit branch** | `org.blockml.bml.core.Unit` — measurement-unit taxonomy (like Language/Status), not a ValueType; used as generic type arguments on Number (e.g. `Decimal(unit:Millimeter)`); concrete units in `org.blockml.bml.unit.*` |
 | **Mandatory BML namespace** | All BML definitions under `<domain>.bml.*` — see `01_bom_core.md` |
-| **Self-hosting bootstrap** | Compiler loads `libs/bml-core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `00_system.md` |
+| **Self-hosting bootstrap** | Compiler loads `@blockml/core` + domain framework BML **before** user content — TypeRegistry bootstrap in V1; full toolchain self-description is V3 — see `00_system.md` |
 
 ```text
 BML NativeBlock + type/*.bml (what params/types ARE)  →  TypeRegistry / authoring SSOT
@@ -200,7 +200,7 @@ org.blockml.bml.annotation.BmlAnnotation          preferredAlias=bml
 com.machineblocks.bml.annotation.ScadAnnotation   preferredAlias=scad
 ```
 
-Source: `libs/bml-core/blocks/org/blockml/bml/core/Annotation.bml`
+Source: `node_modules/@blockml/core/blocks/org/blockml/bml/core/Annotation.bml`
 
 ### Keyword and Alias branches
 
@@ -235,7 +235,7 @@ relation=Resolves       on Diagnostic — link to fix TaskGuide
 
 See `02_mbml.md` — Task guides · `doc:TaskGuideModel`.
 
-Source: `libs/bml-core/blocks/org/blockml/bml/core/Definition.bml`
+Source: `node_modules/@blockml/core/blocks/org/blockml/bml/core/Definition.bml`
 
 ```text
 org.blockml.bml.core.Block
@@ -266,7 +266,7 @@ org.blockml.bml.core.Block
 Properties:    since · status · summary · documentation (Documentation) · abstract · final
 Aggregations:  keywords (core:Keyword[]) · changelog (Change[]) · examples (Example[]) · references (Reference[])
 Sub-blocks:    Documentation · Change · Example · Reference   ← inline in StructuralDefinition.bml
-Source:        libs/bml-core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
+Source:        node_modules/@blockml/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml
 ```
 
 `abstract`, `final`, and `override` are local declaration properties — not inherited. On block
@@ -447,7 +447,7 @@ The compiler **bootstraps from its own BML** — self-hosting at the TypeRegistr
      org/blockml/bml/core/Definition.bml     ← empty Definition-branch identification marker
      org/blockml/bml/definition/*.bml        ← StructuralDefinition (inline Documentation/Change/Example/Reference), BlockDefinition, MemberDefinition, …
 
-2. scad-lib BML                         ← MBOM framework grammar (scad-lib/blocks/com/machineblocks/bml)
+2. @machineblocks/core BML              ← MBOM framework grammar (node_modules/@machineblocks/core/blocks/com/machineblocks/bml)
      com/machineblocks/bml/core/Step.bml · Block.bml · CompositeBlock.bml · NativeBlock.bml · Set.bml
      …
 
@@ -489,7 +489,7 @@ follow NativeBlock; prefer annotations / Capabilities on BML instead.
 Membership is defined by each `Library.bml` `blocks` list — not by directory. Nested libraries are independent units:
 
 ```text
-libs/bml-core/blocks/
+node_modules/@blockml/core/blocks/
   org/blockml/bml/
     Library.bml                             ← org.blockml.bml.Library (concrete library)
   org/blockml/bml/core/
@@ -498,7 +498,7 @@ libs/bml-core/blocks/
     Library.bml                             ← org.blockml.bml.compiler.Library
   org/blockml/bml/status/ · type/ · constraint/ · validation/ · service/ · …
 
-scad-lib/blocks/
+node_modules/@machineblocks/core/blocks/
   com/machineblocks/bml/
     Library.bml                             ← com.machineblocks.bml.Library
   com/machineblocks/bml/core/

@@ -21,7 +21,7 @@ BlockML must be able to describe **everything** that belongs to a World's gramma
 
 | Aspect | Decision |
 |---|---|
-| **Type SSOT** | BML files in `libs/bml-core`, `scad-lib/blocks/com/machineblocks/bml`, domain packages |
+| **Type SSOT** | BML files in `node_modules/@blockml/core`, `node_modules/@machineblocks/core/blocks/com/machineblocks/bml`, domain packages |
 | **MB native params SSOT** | `NativeBlock.bml` + `com.machineblocks.bml.type.*` (`mbt:`) |
 | **Same mechanism** | Same `<block>` element · same parser · same TypeRegistry bootstrap |
 | **Different rules** | Validator applies branch-specific rules via `baseType` chain |
@@ -266,7 +266,7 @@ Before the compiler validates or renders **any** user file, it bootstraps the Ty
   Integer.bml · TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml · …
   Math.bml · Strings.bml · …
 
-scad-lib BML (scad-lib/blocks/com/machineblocks/bml)
+scad-lib BML (node_modules/@machineblocks/core/blocks/com/machineblocks/bml)
   Block.bml · CompositeBlock.bml · Set.bml · Step.bml · NativeBlock.bml · …
 
 →  then  project srcDir
@@ -667,7 +667,7 @@ When a primitive must appear as a Block instance in composition or aggregation:
 
 Properties continue to store primitive values directly (`width : Integer`) — `*Entity` types exist only when the primitive value itself must become an identifiable Block instance (ordered collections, referencable values, metadata-bearing primitives).
 
-V1 bootstrap: `IntegerEntity`, `DecimalEntity`, `FloatEntity`, `TextEntity`, `BooleanEntity`, `VersionEntity`, `URLEntity`, `URIEntity`, `FilePathEntity`, `MimeTypeEntity`, `TypeReferenceEntity` in `libs/bml-core`.
+V1 bootstrap: `IntegerEntity`, `DecimalEntity`, `FloatEntity`, `TextEntity`, `BooleanEntity`, `VersionEntity`, `URLEntity`, `URIEntity`, `FilePathEntity`, `MimeTypeEntity`, `TypeReferenceEntity` in `node_modules/@blockml/core`.
 
 #### TypeReference, TypeReferenceEntity, and MemberReference
 
@@ -824,7 +824,7 @@ block.baseType  → TypeReference(core:Block) property — TypeExpression text; 
 
 V1 bootstrap: `org.blockml.bml.type.TypeReference`, `TypeReferenceEntity`, `MemberReference`,
 `PropertyReference`, `AggregationReference`, `AssociationReference`, `CapabilityReference`
-in `libs/bml-core`.
+in `node_modules/@blockml/core`.
 
 ```typescript
 /** @blockml/core — not part of BomDocument */
@@ -1372,7 +1372,7 @@ Examples from core Block definitions:
 `org.blockml.bml.core.Definition` itself declares no members — it identifies the Definition branch.
 `MemberReference.D` uses `baseType="def:MemberDefinition"` so only member meta-model FQNs satisfy
 the constraint. See `16_framework_base_types.md` — Definition Branch ·
-`libs/bml-core/blocks/org/blockml/bml/type/MemberReference.bml`.
+`node_modules/@blockml/core/blocks/org/blockml/bml/type/MemberReference.bml`.
 
 At reference sites:
 
@@ -1596,7 +1596,7 @@ Capability references inside an `<implementation>` body use **BML Embedded Expre
 
 **PseudoCode** is free-form program code that must be internally consistent but is otherwise unconstrained — an LLM may interpret it. Its prose language follows `ProgrammingLanguage.L` (default English).
 
-V1 bootstrap languages in `libs/bml-core`: TypeScript, OpenSCAD, English, German, French, Spanish, Chinese, Japanese, Russian, PseudoCode, XML, JSON, YML, Markdown, JavaScript, Python, CSharp, Unity, CPP, C, Java. Extensibility: domains register new Language BML files.
+V1 bootstrap languages in `node_modules/@blockml/core`: TypeScript, OpenSCAD, English, German, French, Spanish, Chinese, Japanese, Russian, PseudoCode, XML, JSON, YML, Markdown, JavaScript, Python, CSharp, Unity, CPP, C, Java. Extensibility: domains register new Language BML files.
 
 ---
 
@@ -1680,7 +1680,7 @@ Type definitions bootstrap **before** composable Blocks that reference them:
      org/blockml/bml/language/TypeScript.bml · OpenSCAD.bml · English.bml · German.bml · PseudoCode.bml
      org/blockml/bml/service/Math.bml · Strings.bml · …
 
-2. scad-lib BML (scad-lib/blocks/com/machineblocks/bml)
+2. scad-lib BML (node_modules/@machineblocks/core/blocks/com/machineblocks/bml)
      com/machineblocks/bml/type/SizeXYZ.bml · …
      com/machineblocks/bml/core/Block.bml                             ← baseType: Block
      …
@@ -1711,7 +1711,7 @@ Property declarations for MachineBlocks natives live in `NativeBlock.bml` (SSOT)
 ## Package Layout (target)
 
 ```text
-libs/bml-core/blocks/
+node_modules/@blockml/core/blocks/
   org/blockml/bml/core/
     Block.bml · ValueType.bml · Language.bml · ProgrammingLanguage.bml · MarkupLanguage.bml · …
   org/blockml/bml/type/
@@ -1721,7 +1721,7 @@ libs/bml-core/blocks/
   org/blockml/bml/service/
     Math.bml · Strings.bml · Numbers.bml · Lists.bml · Bools.bml
 
-scad-lib/blocks/
+node_modules/@machineblocks/core/blocks/
   com/machineblocks/bml/type/
     SizeXYZ.bml · Direction.bml · Color.bml · Face.bml · …
   com/machineblocks/bml/core/

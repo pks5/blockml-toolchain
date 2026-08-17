@@ -9,7 +9,7 @@ This document defines **ConstantType** / **`Constant(T){value: …}`** — singl
 For the four ValueType kinds and unions see `17_type_system_bml.md`.
 For `{…}` instance configuration syntax see `20_value_type_instance_configuration.md`.
 For MBOM parse/serialize companions see `04_types.md`.
-BML SSOT: `org.blockml.bml.type.Constant` / `ConstantType` under `libs/bml-core/blocks/org/blockml/bml/type/`.
+BML SSOT: `org.blockml.bml.type.Constant` / `ConstantType` under `node_modules/@blockml/core/blocks/org/blockml/bml/type/`.
 
 ---
 

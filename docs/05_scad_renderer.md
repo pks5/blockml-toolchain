@@ -10,7 +10,7 @@ For the MBOM object model see `03_mbom.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
 For the Target system see `06_compiler.md`.
 For the MachineBlocks V3 SCAD Library specification see
-`domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/docs/`.
+`node_modules/@machineblocks/core/` (BML documentation under `blocks/com/machineblocks/bml/documentation/`).
 
 ---
 
@@ -116,7 +116,7 @@ form the Manifestation FQN, then map that to the module name and output path:
 Definition FQN:      com.machineblocks.bml.examples.Cross
 Manifestation FQN:   com.machineblocks.scad.examples.Cross
 SCAD module:         mb__com__machineblocks__scad__examples__Cross
-Output file:         …/scad-lib/blocks/com/machineblocks/scad/examples/Cross.scad
+Output file:         …/@machineblocks/core/blocks/com/machineblocks/scad/examples/Cross.scad
 ```
 
 Other MachineBlocks targets may use another segment (e.g. `cadq`) the same way. This replace rule
@@ -205,10 +205,10 @@ use <{relative_path_to_scad-lib}/blocks/org/blockml/bml/service/Math.scad>;
 use <{relative_path_to_scad-lib}/blocks/org/blockml/bml/service/Strings.scad>;
 ```
 
-Built-in service files live under `scad-lib/blocks/org/blockml/bml/service/` — the same `blocks/` structure as all other pre-rendered blocks, following the FQN package convention:
+Built-in service files live under `node_modules/@machineblocks/core/blocks/org/blockml/bml/service/` — the same `blocks/` structure as all other pre-rendered blocks, following the FQN package convention:
 
 ```text
-scad-lib/blocks/org/blockml/bml/service/
+node_modules/@machineblocks/core/blocks/org/blockml/bml/service/
   Math.scad
   Math.scad
   Strings.scad

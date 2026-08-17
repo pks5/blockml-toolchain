@@ -61,7 +61,7 @@ BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-
 
 **The Compiler** (`@blockml/compiler`) is the facade and Target Registry. It does not prescribe a fixed compile path — renderers orchestrate utilities themselves. Pipeline detail: `06_compiler.md`.
 
-**Self-hosting (bootstrap):** Before processing user projects, the CLI bootstraps a TypeRegistry from framework BML in `libs/bml-core` (`org.blockml.bml.*`) and MachineBlocks BML in `scad-lib/blocks/com/machineblocks/bml` (`com.machineblocks.bml.*`). Each registered BlockDefinition is an immutable `BomDocument` (Urmodell) — typically parse-origin today; Builder-origin documents are valid once V3 ships.
+**Self-hosting (bootstrap):** Before processing user projects, the CLI bootstraps a TypeRegistry from framework BML in `node_modules/@blockml/core` (`org.blockml.bml.*`) and MachineBlocks BML in `node_modules/@machineblocks/core` (`com.machineblocks.bml.*`). Each registered BlockDefinition is an immutable `BomDocument` (Urmodell) — typically parse-origin today; Builder-origin documents are valid once V3 ships.
 
 **The CLI** (`bom`) is the Node.js command-line interface for parsing, validating, compiling, watching, and scaffolding BML projects.
 
@@ -112,59 +112,38 @@ This is analogous to `tsc` or `webpack` — the tool is global, content projects
 
 ---
 
-## Monorepo Structure
+## Repository Structure
 
-See `15_dev_setup.md` for **as-of-now vs target** layout, workspace configuration, build scripts, and implementation order.
+See `15_dev_setup.md` for workspace configuration, build scripts, and implementation order.
 
-**Today:** specs under `docs/`, framework BML under `libs/bml-core/` (Git submodule), MachineBlocks BML under `scad-lib/blocks/com/machineblocks/bml` (part of the scad-lib submodule) — no npm workspace / TS packages yet.
+**All packages** — renderer, core, parser, domain libraries — are **npm packages**. After `npm install` they live under `node_modules/`. The `libs/` and `domains/` trees are **not required** to use the toolchain.
 
-**Target tree** (after scaffolding):
+Git submodules (`libs/bml-core`, `domains/machineblocks/.../scad-lib`) remain **for now** as a checkout of the same source repos. Their **internal folder layout is unchanged**; the difference is that this repo consumes the published packages rather than those submodule paths.
 
 ```text
 blockml/
-  libs/
-    bml-core/          — Git submodule: BlockML Core BML (org.blockml.bml.*)
+  package.json                 — root workspace; depends on @blockml/core, @machineblocks/core, …
+  docs/                        — specifications (authoritative Markdown)
 
-  packages/
-    core/              — @blockml/core (BOM TS contracts + utilities)
-    parser/            — @blockml/parser (BML → BomDocument; types from core)
-    serializer/        — @blockml/serializer (BomDocument → BML; types from core)
-    validator/         — @blockml/validator
-    compiler/          — @blockml/compiler (Rahmen + Target Registry)
-    cli-tools/         — @blockml/cli
-    lsp/               — @blockml/lsp (V2, planned — Language Server)
+  node_modules/
+    @blockml/
+      core/                    — BlockML Core (org.blockml.bml.*)
+        blocks/org/blockml/bml/
+    @machineblocks/
+      core/                    — MachineBlocks SCAD library + MBOM (com.machineblocks.bml.*)
+        blocks/com/machineblocks/bml/
+        lib/ · config/ · pattern/
 
-  engines/
-    maker-engine/      — @blockml/engine-maker (V1 engine: compile + template + copy + llm)
-
-  domains/
-    machineblocks/
-      machineblocks-v3-scad-target/
-        src/
-          target.ts
-          processors/
-            ScadBlockProcessor/      — compile strategy
-              processor.ts
-            ScadSetProcessor/        — compile strategy
-              processor.ts
-            MathBuiltInProcessor/    — copy strategy (copies scad-lib math helpers)
-              processor.ts
-            CapabilityImplementationProcessor/  — compile strategy (TS → SCAD transpilation)
-              processor.ts
-        runtimes/
-          scad-lib/    — Git Submodule: MachineBlocks V3 SCAD Library (https://github.com/pks5/machineblocks)
-            lib/
-            config/
-            docs/
-            blocks/
-              com/machineblocks/bml/   — MachineBlocks BML SSOT (com.machineblocks.bml.*)
-                core/                  — NativeBlock.bml, Block.bml, Set.bml, …
-                type/
-                bricks/
-
-  docs/
-  README.md
+  packages/                    — local @blockml/* TypeScript packages (parser, compiler, …) as they land
 ```
+
+| npm package | Role | Path after `npm install` |
+|---|---|---|
+| `@blockml/core` | Framework BML SSOT (`org.blockml.bml.*`); planned BOM TS contracts | `node_modules/@blockml/core` |
+| `@machineblocks/core` | MachineBlocks SCAD runtime + MBOM BML (`com.machineblocks.bml.*`) | `node_modules/@machineblocks/core` |
+| `@blockml/parser` | BML → BomDocument | `node_modules/@blockml/parser` (when published) |
+| `@blockml/compiler` | Facade + Target Registry | `node_modules/@blockml/compiler` (when published) |
+| `@machineblocks/machineblocks-v3-scad-target` | SCAD Render Target (TypeScript) | `node_modules/@machineblocks/machineblocks-v3-scad-target` (when published) |
 
 ### The First Engine: `@blockml/engine-maker`
 
@@ -185,12 +164,12 @@ New engines can always be built as independent packages. Each implements the Com
 
 ### Built-in service Definitions
 
-Built-in services (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML service files in `libs/bml-core` — **SSOT**. Pre-rendered SCAD in `scad-lib/blocks/org/blockml/bml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
+Built-in services (`#math`, `#strings`, `#numbers`, `#lists`, `#bools`) are defined as BML service files in `node_modules/@blockml/core` — **SSOT**. Pre-rendered SCAD in `node_modules/@machineblocks/core/blocks/org/blockml/bml/service/`. Thymeleaf-aligned `#` utility names; `#math` is BlockML-specific.
 
 The library follows Thymeleaf's `#` utility object naming — plural for utilities (`#strings`, `#lists`, …), extended with `#math` which Thymeleaf does not provide.
 
 ```text
-libs/bml-core/
+node_modules/@blockml/core/
   blocks/
     org/blockml/bml/core/
       Entity.bml         ← org.blockml.bml.core.Entity
@@ -217,7 +196,7 @@ libs/bml-core/
 #bools.*                 org.blockml.bml.service.Bools          Bools.bml
 ```
 
-BML files are **SSOT**. SCAD files in scad-lib are pre-rendered compile artifacts — not hand-edited.
+BML files are **SSOT**. SCAD files in `@machineblocks/core` are pre-rendered compile artifacts — not hand-edited.
 
 All Transformation Capabilities use structured Object `inputType` with named keys — enabling both positional and named call syntax. Single-parameter Capabilities use the primitive type directly:
 
@@ -230,7 +209,7 @@ All Transformation Capabilities use structured Object `inputType` with named key
 #numbers.formatDecimal → inputType: { x: Float, minInt: Integer, decPoint: String, minFrac: Integer }, outputType: String
 ```
 
-Each Capability has a TypeScript implementation in `<implementation language="org.blockml.bml.language.TypeScript">`. SCAD equivalents live in `scad-lib/blocks/org/blockml/bml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
+Each Capability has a TypeScript implementation in `<implementation language="org.blockml.bml.language.TypeScript">`. SCAD equivalents live in `node_modules/@machineblocks/core/blocks/org/blockml/bml/service/` — one `.scad` file per service. The ScadBlockProcessor automatically adds `use` imports for each service file referenced by a Block's expressions.
 
 ### Delegate-Only Targets
 
@@ -306,7 +285,7 @@ blockml.org schemas (in @blockml/core package):
     types.xsd          ← org.blockml.bml.type.* primitives (filename plural; maps to singular .type package)
     service.xsd        ← org.blockml.bml.service.* hierarchy
 
-machineblocks.com schemas (generated from scad-lib BML; packaging with the SCAD target when it exists):
+machineblocks.com schemas (generated from `@machineblocks/core` BML; packaging with the SCAD target when it exists):
   schemas/machineblocks/
     core.xsd           ← MB Core Block, NativeBlock, Set, native properties
     bricks.xsd         ← com.machineblocks.bml.bricks.* + Enum types
@@ -337,7 +316,7 @@ A `catalog.xml` in the project root maps namespace URLs to local XSD files for o
 
 ### `@blockml/core`
 
-The BOM object model and framework utilities. Browser and Node compatible. **Owns** the shared TypeScript BOM contracts (`BomDocument`, `BlockDefinition`, …) used by parser, serializer, validator, compiler, and LSP. Framework BML (`org.blockml.bml.*`) lives in the `libs/bml-core` submodule — not in this npm package’s source tree.
+The BlockML Core library, installed at `node_modules/@blockml/core`. Browser and Node compatible. **Owns** the shared TypeScript BOM contracts (`BomDocument`, `BlockDefinition`, …) used by parser, serializer, validator, compiler, and LSP (as that TS surface ships). Framework BML (`org.blockml.bml.*`) ships in this package under `blocks/org/blockml/bml/`.
 
 ```text
   - BomDocument / BlockDefinition / member model (Property, Aggregation, Association, Capability)
@@ -345,7 +324,7 @@ The BOM object model and framework utilities. Browser and Node compatible. **Own
   - Expression AST types (`ExpressionNode`) — parse/eval utilities live here; Canonical BOM stores `raw` only
   - TypeRegistry (FQN-based, dynamic)
   - Framework utilities (`resolve*`, `parseExpression`, `validate*`)
-  - Bootstraps framework BML from libs/bml-core (`org.blockml.bml.*`)
+  - Bootstraps framework BML from `node_modules/@blockml/core` (`org.blockml.bml.*`)
   - No domain-specific types, no render logic, no Node-only APIs
 ```
 
@@ -443,12 +422,11 @@ VS Code Language Server for BML. Thin LSP adapter — **reuses** parser, validat
 
 See `01_bom_core.md` — Language Server — planned IDE integration (V2).
 
-### MachineBlocks BML (scad-lib)
+### `@machineblocks/core` (SCAD library + MBOM)
 
-MachineBlocks domain BML is part of the **scad-lib** repo, not a separate `mbom` package.
+MachineBlocks domain BML and the V3 SCAD runtime ship together in **`@machineblocks/core`** — not a separate `mbom` package and not under `domains/`.
 
-Path: `scad-lib/blocks/com/machineblocks/bml`  
-(host mount: `domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/bml`)
+Path: `node_modules/@machineblocks/core/blocks/com/machineblocks/bml`
 
 ```text
 - com.machineblocks.bml.core.* — Block, NativeBlock, CompositeBlock, Set, Step, …
@@ -816,7 +794,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 12_bom_object_model.md — formal BOM data structures (BomDocument, BlockDefinition, CompositionNode)
 13_bml_to_bom_mapping.md — BML → BOM algorithm (parser implementation contract)
 14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
-15_dev_setup.md        — monorepo tooling, build, test, IDE setup
+15_dev_setup.md        — tooling, package layout, build, test, IDE setup
 16_framework_base_types.md — framework base types as BML (abstract, final)
 17_type_system_bml.md  — ValueType, Language, Block hierarchy
 18_constraints_and_suggestions.md — property constraints and suggestions
@@ -826,10 +804,10 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 22_function_mapping.md — Capability call argument mapping (FunctionMapping)
 09_mbom_properties.yml — pointer stub only (inventory removed; see NativeBlock.bml)
 
-scad-lib/  (Git submodule: MachineBlocks V3 SCAD Library)
+node_modules/@machineblocks/core/   — @machineblocks/core (SCAD library + MBOM)
   lib/                 — SCAD Runtime (every generated SCAD file uses this)
   config/              — mb_config.scad
-  docs/                — SCAD API reference (used by machineblocks-v3-scad-target)
+  pattern/             — assembly patterns
   blocks/
     com/machineblocks/bml/   — MachineBlocks BML SSOT (core, type, bricks, …)
       bricks/                — Standard.bml + pre-rendered .scad / .json / thumbnails
@@ -837,7 +815,7 @@ scad-lib/  (Git submodule: MachineBlocks V3 SCAD Library)
 ```
 
 **Native MBOM / SCAD parameters — sole SSOT (already today):**  
-`scad-lib/blocks/com/machineblocks/bml/core/NativeBlock.bml` + `…/type/*.bml`.  
-Markdown (`03`/`04`/`05`/…), `09_mbom_properties.yml`, and scad-lib `09_api_parameters.yml` **must follow or only link** — they are not a second inventory. Conventions (XY / XYZ / AB) stay in `04_types.md`.
+`node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/NativeBlock.bml` + `…/type/*.bml`.  
+Markdown (`03`/`04`/`05`/…), `09_mbom_properties.yml`, and MachineBlocks API notes **must follow or only link** — they are not a second inventory. Conventions (XY / XYZ / AB) stay in `04_types.md`.
 
 **BML vs Markdown (general):** For compiler architecture / pipeline, Markdown remains authoritative in V1 (see roadmap). For **MachineBlocks native params and type shapes**, BML is already the sole SSOT you maintain — do not duplicate parameter tables in Markdown. Long-term, other structural docs also link to BML FQNs — see [BML Self-Description Roadmap](#bml-self-description-roadmap).
