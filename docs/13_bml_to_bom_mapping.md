@@ -1,12 +1,12 @@
 # BML → BOM Mapping
 
-version: 0.2.0
+version: 0.3.0
 
 ## Purpose of this Document
 
-This document defines the **algorithmic mapping rules** from parsed BML XML to `BomDocument` — the implementation contract for `@blockml/parser`.
+This document defines the **algorithmic mapping rules** from parsed BML XML to `BomDocument` — the implementation contract for `@blockml/parser` **while it remains transitional Markdown**. Before implementing `@blockml/parser` or `@blockml/serializer`, migrate the owned sections into that package’s BML library (`13` map → parser; emit / inverse → serializer). Implementation uses **only** the package library. See `00_system.md` — Package Implementation Workflow.
 
-**Phase A:** implement only § V1 Parser / Serializer Scope below; the rest of this document is the full language contract to grow into.
+**Phase A:** migrate the V1 Parser / Serializer Scope into the parser/serializer BML libraries, then implement **that slice only** from the libraries; the rest of this document is the full language contract to grow into.
 
 For BOM target types see `12_bom_object_model.md`.
 For BML authoring syntax see `02_mbml.md`.

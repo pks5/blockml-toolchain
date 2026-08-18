@@ -11,7 +11,7 @@ For property parse/serialize rules (MB domain) see `04_types.md`.
 For `TypeDescriptor` AST see `12_bom_object_model.md`.
 For SCAD render mapping see `NativeBlock.bml` (parameter SSOT; `scad:value`). `09_mbom_properties.yml` is a pointer stub only. Axis conventions (XY / XYZ / AB): `04_types.md`.
 For WOT vision and motivation see `WOT_Reference.md`.
-For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self-Description Roadmap.
+For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self-Description Roadmap · Package Implementation Workflow.
 
 ---
 

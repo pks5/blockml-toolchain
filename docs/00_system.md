@@ -1,6 +1,6 @@
 # BOM Compiler — System
 
-version: 2.5.0
+version: 2.6.0
 
 ## Purpose
 
@@ -94,7 +94,7 @@ STL / 3MF
 
 **Domain BOMs extend, never modify core.** Adding EBOM, UBOM, or any future BOM does not change `@blockml/core`, `@blockml/parser`, or `@blockml/compiler`.
 
-**Every toolchain package is a BlockML node module.** A normal npm package (`package.json`) plus a `blocks/` folder. That folder is the **SSOT** for the package. Markdown in this repo is transitional — see [BlockML node packages](#blockml-node-packages) and [BML Self-Description Roadmap](#bml-self-description-roadmap).
+**Every toolchain package is a BlockML node module.** A normal npm package (`package.json`) plus a `blocks/` folder. That folder is the **SSOT** for the package. Markdown in this repo is transitional and is **not** an implementation source — see [BlockML node packages](#blockml-node-packages), [Package Implementation Workflow](#package-implementation-workflow), and [BML Self-Description Roadmap](#bml-self-description-roadmap).
 
 **No mandatory input↔output mapping.** Render targets define output cardinality. See `14_compiler_runtime.md` — Compile I/O Model (C4).
 
@@ -133,7 +133,9 @@ All modules — renderer, core, parser, domain libraries, future compiler target
   lib/ · config/ · …        — optional native artifacts (e.g. SCAD runtime)
 ```
 
-This is a further step toward **total self-description**: BlockML and every package describe themselves in BML inside their own node module. The Markdown files under `docs/` are a **transitional** solution. The goal is that all information lives in the respective npm packages as BML.
+This is a further step toward **total self-description**: BlockML and every package describe themselves in BML inside their own node module. The Markdown files under `docs/` are a **transitional** solution. The goal is that all information lives in the respective npm packages as BML. **MD files are deleted** once every package is implemented and all of their information has been transferred into the corresponding BML libraries.
+
+Creating or implementing a package follows the [Package Implementation Workflow](#package-implementation-workflow): own BlockML library first (linked from `package.json`), migrate that package’s Markdown into the library, then implement **only** from the library.
 
 ### npm organizations
 
@@ -155,7 +157,7 @@ After `npm install`, packages live under `node_modules/`.
 ```text
 blockml/
   package.json                 — root workspace; depends on @blockml/core, @machineblocks/core, …
-  docs/                        — transitional Markdown (authoritative until migrated into package BML)
+  docs/                        — transitional Markdown (migrate into package BML; not an implementation SSOT)
 
   node_modules/
     @blockml/
@@ -733,41 +735,153 @@ configProfile < appliedPresets chain < inline property
 
 ---
 
+## Package Implementation Workflow
+
+> **Normative for every new and not-yet-implemented package.** `@blockml/parser`, `@blockml/serializer`, `@blockml/validator`, `@blockml/compiler`, `@blockml/cli`, toolchain targets, `@blockml/engine-maker`, `@blockml/lsp`, the `@machineblocks/*` SCAD target — the same three steps. No exceptions for “just a first TypeScript slice”.
+
+Markdown under `docs/` is a **holding handbook** until the owning package is implemented. It is **not** the implementation SSOT. TypeScript, tests, and further BML for a package are written from that package’s BML library only.
+
+### Step 1 — Package-own BlockML library
+
+Create a BlockML library **inside the package**, following `@blockml/core`:
+
+```text
+<package>/
+  package.json                 — npm package + blockml.library pointer (required)
+  blocks/<domain>/bml/…        — package SSOT
+    Library.bml                — catalog (baseType core:BlockLibrary)
+    README.bml                 — ReadFirst entry (when the library has docs)
+    …                          — types, documentation, diagnostics, tasks, …
+  src/                         — TypeScript (only after Steps 1–2)
+```
+
+The library is a normal `Library.bml` catalog: filename `Library.bml`, `baseType="core:BlockLibrary"`, membership **only** via the `blocks` list (not by directory). Physical paths mirror FQNs under `<domain>.bml.*`. Nested libraries follow `01_bom_core.md` / `.cursor/rules/blockml-libraries-versioning.mdc`.
+
+**`package.json` must link the library** — same field as `@blockml/core`:
+
+```json
+{
+  "name": "@blockml/core",
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/Library.bml"
+  }
+}
+```
+
+Reference: `node_modules/@blockml/core/package.json` (and `@machineblocks/core`: `"library": "./blocks/com/machineblocks/bml/Library.bml"`).
+
+A new package uses the same key, pointing at **its** `Library.bml`. Example for `@blockml/parser`:
+
+```json
+{
+  "name": "@blockml/parser",
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/compiler/parser/Library.bml"
+  }
+}
+```
+
+FQN path follows the package’s namespace (e.g. `org.blockml.bml.compiler.parser.Library`). Do not omit `blockml.library`. Do not point at `@blockml/core`’s library instead of an own catalog.
+
+**Done when:** `package.json` has `blockml.library`; `Library.bml` exists at that path; the package is a BlockML node module (`package.json` + `blocks/`).
+
+### Step 2 — Migrate the package’s Markdown into the library
+
+The package BML library is the **SSOT of the package**. Transfer **all** information from the Markdown files that belong to this package (see [MD → package map](#md--package-map) below) into that library: documentation blocks, types, diagnostics, tasks, mapping rules, APIs, invariants, examples.
+
+```text
+docs/*.md  (transitional)  →  <package>/blocks/…  (SSOT)
+```
+
+Rules:
+
+- Every fact needed to implement or use the package must exist in the package BML. MD may still be readable as a handbook during migration; it is not a second inventory.
+- Shared MD (one file, several packages) is **split by section**: each section has one owning package. Language rules that already live in `@blockml/core` stay there; the new library **links** them (`see` / `ReadFirst`) instead of copying.
+- Do not start Step 3 while package-relevant MD content is still only in Markdown.
+
+**MD files are transitional.** They are **deleted** when **all** packages are implemented **and** every piece of information has been transferred into the corresponding BML libraries. Until then, migrated sections in MD become pointers to FQNs (same pattern as `02_mbml.md`).
+
+**Done when:** a reader (human or LLM) can implement and review the package from `Library.bml` / `README.bml` and the exported blocks alone.
+
+### Step 3 — Implement from the package BML library only
+
+Implementation (TypeScript, tests, further BML, schemas) uses **exclusively** the package’s BML library as basis.
+
+```text
+allowed:   package BML library  →  src/, tests/, further BML in the same package
+forbidden: docs/*.md            →  src/   (direct implementation from Markdown)
+```
+
+If something is missing, contradictory, or only found in Markdown:
+
+1. **Stop** implementation from that MD passage.
+2. **Update the package BML library** with the missing or corrected information.
+3. **Resume implementation from the library.**
+
+No implementation on the direct basis of MD files — not for a “first slice”, not for tests, not for “the MD is still more detailed”. Detail that is needed belongs in the library first.
+
+Existing libraries (`@blockml/core`, `@machineblocks/core`) already have Step 1. Remaining Core- or domain-owned MD still follows Steps 2–3 **before** further implementation from those packages (e.g. Core TypeScript from `12_bom_object_model.md`: migrate into Core BML, then implement).
+
+### MD → package map
+
+Primary owner of each transitional Markdown file. Implement the owner → migrate that file (or its owned sections) in Step 2.
+
+| Transitional MD | Owning package BML library |
+|---|---|
+| `01_bom_core.md`, `02_mbml.md`, `08_managed_object.md`, `10_expression_language.md`, `12_bom_object_model.md`, `16_framework_base_types.md`, `17_type_system_bml.md`, `18_constraints_and_suggestions.md`, `19_definition_blocks_and_bml_xml.md`, `20_value_type_instance_configuration.md`, `21_constant_value_type.md`, `22_function_mapping.md`, `WOT_Reference.md` | `@blockml/core` (language already largely in Core BML; leftover MD still migrates here) |
+| `13_bml_to_bom_mapping.md` | `@blockml/parser` (map BML → BOM); serializer emit / inverse → `@blockml/serializer` |
+| `06_compiler.md`, `14_compiler_runtime.md` | `@blockml/compiler` |
+| `07_cli.md` | `@blockml/cli` |
+| `03_mbom.md`, `04_types.md` | `@machineblocks/core` (native params/types already BML SSOT) |
+| `05_scad_renderer.md` | `@machineblocks/*` SCAD target |
+| BlockDoc / XSD / FatBlock slices in `00` / `06` / `14` / `19` | `@blockml/blockdoc-target`, `@blockml/xsd-target`, `@blockml/fatblock-target` |
+| Engine slices in `00` / `06` / `14` | `@blockml/engine-maker` |
+| Language Server slices in `01` | `@blockml/lsp` |
+| `00_system.md`, `15_dev_setup.md` | Split into owning packages last; remaining repo handbook until all packages exist |
+
+---
+
 ## BML Self-Description Roadmap
 
 BlockML should eventually be the language in which BlockML **and every package** are understood. Each npm package carries that knowledge in its own `blocks/` folder (see [BlockML node packages](#blockml-node-packages)).
 
-The Markdown files in this repository (`docs/*.md`) are a **transitional** solution. **Goal:** all information lives in the respective node packages as BML. The path there is **evolutionary** — V1 must not be overloaded. V1 exists first to make **MachineBlocks** workable.
+The Markdown files in this repository (`docs/*.md`) are a **transitional** solution. **Goal:** all information lives in the respective node packages as BML. **MD files are deleted** when all packages are implemented and all information has been transferred. The operational path is the [Package Implementation Workflow](#package-implementation-workflow) — not a later documentation-only cleanup.
+
+V1 must not overload **Core** BML with the entire toolchain. Toolchain and domain packages each get **their own** library when they are implemented.
 
 ### Decision criterion
 
-When choosing whether content belongs in BML or Markdown:
+When choosing whether content belongs in **Core** BML or still sits in Markdown **until the owning package is implemented**:
 
 ```text
-Does this information directly benefit authoring, validation, the customizer,
-the type system, or MachineBlocks implementation?
+Does this information belong to a package that is being implemented now?
 
-  yes  →  prefer BML (V1 scope)
-  no   →  keep Markdown for now; mark as V2 migration candidate
+  yes  →  migrate it into that package’s BML library (workflow Steps 1–2), then implement
+  no   →  keep Markdown as holding handbook; do not implement from it
+
+Does this information belong in @blockml/core (language, types, services)?
+
+  yes  →  prefer Core BML (already largely so)
+  no   →  it belongs in the owning toolchain/domain package library, not in Core
 ```
 
-### V1 — MachineBlocks-focused BML SSOT
+### V1 — MachineBlocks-focused Core BML · per-package libraries on implement
 
-V1 does **not** model the full compiler in BML. V1 pulls into BML only what you actively extend, validate, or author against — without wading through long Markdown handbooks.
+V1 does **not** model the full compiler in **Core** BML. Core BML holds what you actively extend, validate, or author against. Pipeline, parser, CLI, and target detail stay in Markdown **only until that package is implemented** — then the workflow applies and that package’s BML becomes SSOT.
 
-| In BML (V1) | Stays Markdown (V1) |
+| In Core BML (V1) | Stays Markdown until the owning package is implemented |
 |---|---|
-| Parameter definitions | Compiler pipeline architecture |
-| Property types | Parser architecture |
-| Primitive, Struct, Enum, Generic container types | CLI specification |
-| Native MachineBlocks properties | Target implementation details |
-| Defaults and computed defaults | Design rationale and principles |
-| Suggestions / customizer metadata | Runtime and bootstrap internals |
-| Built-in services used in expressions | Full replacement of existing docs |
-| Framework base types for validation and authoring | Self-hosting of the entire toolchain |
-| Definition meta-model (`org.blockml.bml.definition.*`, `core.Definition`) | Meta-driven `bml:xml` parser and BOM → XML serializer |
+| Parameter definitions | Compiler pipeline architecture → `@blockml/compiler` |
+| Property types | Parser architecture → `@blockml/parser` |
+| Primitive, Struct, Enum, Generic container types | CLI specification → `@blockml/cli` |
+| Native MachineBlocks properties | Target implementation details → owning target package |
+| Defaults and computed defaults | Design rationale for a package → that package’s BML (with the package) |
+| Suggestions / customizer metadata | Runtime and bootstrap internals → `@blockml/compiler` |
+| Built-in services used in expressions | Full replacement of existing docs (when all packages have libraries) |
+| Framework base types for validation and authoring | Self-hosting of the entire toolchain (per package, at implement time) |
+| Definition meta-model (`org.blockml.bml.definition.*`, `core.Definition`) | Meta-driven `bml:xml` parser and BOM → XML serializer → parser/serializer libraries |
 
-Markdown remains **authoritative in this repo for V1** for architecture, pipeline, runtime, CLI, implementation details, and design rationale — as a **transitional** handbook. It is not the long-term SSOT. Package BML under `blocks/` wins wherever it already exists (Core, MachineBlocks native params and types).
+Markdown is a **transitional handbook**, not an implementation SSOT. Package BML under `blocks/` wins wherever it exists. When a package is implemented, its MD is migrated first — see [Package Implementation Workflow](#package-implementation-workflow).
 
 **Exception (already in force):** MachineBlocks **native parameters and type shapes** — sole SSOT is `NativeBlock.bml` + `com.machineblocks.bml.type.*`. Markdown/YAML are pointer/commentary only — do not maintain a second parameter inventory.
 
@@ -775,7 +889,7 @@ Markdown remains **authoritative in this repo for V1** for architecture, pipelin
 
 ### V2 — Documentation migration · Language Server
 
-From V2 onward, stable structural information moves from Markdown into **package `blocks/`** BML. Roles split as follows:
+From V2 onward, remaining cross-cutting handbook prose shortens. Per-package migration does **not** wait for V2 — it happens in the [Package Implementation Workflow](#package-implementation-workflow) when each package is built. Roles split as follows:
 
 | Markdown | BML |
 |---|---|
@@ -810,14 +924,15 @@ Pipeline, stages, targets, processors, diagnostics, CLI, and tests are **predomi
 ### Phases
 
 ```text
-Phase 1 / V1   MachineBlocks-focused BML SSOT
+Phase 1 / V1   MachineBlocks-focused Core BML SSOT
                Types, properties, framework base types, service blocks, authoring metadata
-               Goal: practical usability — not complete self-description
+               Goal: practical usability — not complete self-description of the toolchain in Core
+               Per package: Package Implementation Workflow (library → migrate MD → implement from BML)
                Constraint: BOM types + serialize/validate provenance-agnostic;
                            source spans on parse (optional on types) — LSP- and Builder-ready
 
-Phase 2 / V2   Documentation migration + Language Server
-               Stable structure from Markdown → BML; Markdown shortens and links to FQNs
+Phase 2 / V2   Remaining handbook shortening + Language Server
+               Leftover cross-cutting MD → owning package BML; Markdown becomes ToC / commentary
                @blockml/lsp: Parser / Validator / Serializer / TypeRegistry behind LSP
                Constraint: keep construction-friendly factories; no parse-only type traps
 
@@ -835,7 +950,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 
 ```text
 00_system.md           — this document (architecture, packages, conventions, project structure)
-                           transitional Markdown — package BML is the long-term SSOT
+                           transitional Markdown — package BML is SSOT; see Package Implementation Workflow
 01_bom_core.md         — BOM Core: abstract model (Block, Member, Preset, Library, Catalog, Target System)
 02_mbml.md             — BML format, document types, namespaces, schema
 03_mbom.md             — MBOM: MachineBlocks domain model, properties, aggregations, expressions
@@ -873,4 +988,4 @@ node_modules/@machineblocks/core/   — BlockML node module (docs, SCAD referenc
 `node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/NativeBlock.bml` + `…/type/*.bml`.  
 Markdown (`03`/`04`/`05`/…), `09_mbom_properties.yml`, and MachineBlocks API notes **must follow or only link** — they are not a second inventory. Conventions (XY / XYZ / AB) stay in `04_types.md`.
 
-**BML vs Markdown (general):** Markdown in `docs/` is **transitional**. For compiler architecture / pipeline it remains the V1 handbook (see roadmap). For **MachineBlocks native params and type shapes**, BML in `@machineblocks/core` is already the sole SSOT — do not duplicate parameter tables in Markdown. Long-term, **all** information belongs in the respective node packages as BML — see [BlockML node packages](#blockml-node-packages) and [BML Self-Description Roadmap](#bml-self-description-roadmap).
+**BML vs Markdown (general):** Markdown in `docs/` is **transitional** and is **not** an implementation SSOT. For **MachineBlocks native params and type shapes**, BML in `@machineblocks/core` is already the sole SSOT — do not duplicate parameter tables in Markdown. When a package is implemented, its MD is migrated into that package’s BML library first; implementation uses only the library. **MD files are deleted** once all packages are implemented and all information has been transferred — see [BlockML node packages](#blockml-node-packages), [Package Implementation Workflow](#package-implementation-workflow), and [BML Self-Description Roadmap](#bml-self-description-roadmap).

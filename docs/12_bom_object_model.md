@@ -1,6 +1,6 @@
 # BOM Object Model
 
-version: 1.3.0
+version: 1.4.0
 
 ## Purpose of this Document
 
@@ -12,7 +12,9 @@ For MachineBlocks domain extensions see `03_mbom.md`.
 For the ManagedObject and synthetic accessor model (Draft · V1 preparation) see `08_managed_object.md`.
 For Expression AST node types see `10_expression_language.md` — Expression AST.
 
-This document is the **implementation contract** for `@blockml/core`. It specifies TypeScript-oriented interfaces and validation rules. It does not duplicate domain semantics already defined elsewhere.
+This document is the **implementation contract** for `@blockml/core` **while it remains transitional Markdown**. Before Core TypeScript (or further Core implementation) is written from it, migrate its content into `@blockml/core` BML. Implementation uses **only** that library. See `00_system.md` — Package Implementation Workflow.
+
+It specifies TypeScript-oriented interfaces and validation rules. It does not duplicate domain semantics already defined elsewhere.
 
 **Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) are TypeScript contracts in `@blockml/core` — not BML Block FQNs. BML meta-model Blocks live under `org.blockml.bml.definition.*` (e.g. `org.blockml.bml.definition.BlockDefinition`, `org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). Language Blocks like `org.blockml.bml.core.Block` are BML-defined. See `01_bom_core.md` — Mandatory BML namespace.
 

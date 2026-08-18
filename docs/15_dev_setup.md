@@ -1,6 +1,6 @@
 # Development Setup
 
-version: 0.1.0
+version: 0.2.0
 
 ## Purpose of this Document
 
@@ -10,7 +10,7 @@ For architecture and package responsibilities see `00_system.md` (including **Bl
 For compiler runtime (bootstrap, facade, cache) see `14_compiler_runtime.md`.
 For testing strategy see `06_compiler.md` — Testing Strategy.
 
-Implementation code is scaffolded according to this document. **Libraries and toolchain packages** are **BlockML node modules** (`package.json` + `blocks/` SSOT) under `node_modules/` / `packages/`. See `00_system.md` — BlockML node packages. TypeScript surfaces are added incrementally (Phase A first).
+Implementation code is scaffolded according to this document. **Libraries and toolchain packages** are **BlockML node modules** (`package.json` + `blocks/` SSOT) under `node_modules/` / `packages/`. See `00_system.md` — BlockML node packages · Package Implementation Workflow. TypeScript surfaces are added **after** the package BML library exists and that package’s Markdown has been migrated into it.
 
 ---
 
@@ -80,7 +80,7 @@ Every package is a **BlockML node module**: `package.json` + `blocks/` (SSOT). S
 
 ```text
 blockml/
-  docs/                          — transitional Markdown (handbook until migrated into package BML)
+  docs/                          — transitional Markdown (handbook until migrated into package BML; not an implementation SSOT)
   package.json                   — depends on @blockml/core, @machineblocks/core
   node_modules/
     @blockml/core/               — BlockML Core
@@ -155,7 +155,7 @@ blockml/
   docs/
 ```
 
-**Scaffold next (Phase A):** `packages/parser`, `packages/serializer`, and TypeScript entrypoints for BOM types. Empty shells: `package.json`, `tsconfig.json`, `src/index.ts` per package below. Framework BML is already available via `@blockml/core`.
+**Scaffold next (Phase A):** `@blockml/core` leftover MD → Core BML, then Core TS; then `packages/parser` and `packages/serializer` via the Package Implementation Workflow (`package.json` + `blockml.library` + `blocks/` **before** `src/`). Empty TypeScript shells (`tsconfig.json`, `src/index.ts`) come after Steps 1–2. Framework BML is already available via `@blockml/core`.
 
 ---
 
@@ -264,9 +264,49 @@ Each package `tsconfig.json`:
 
 ## Package Conventions
 
-Every package is a **normal Node module** (`package.json`) **with a BlockML extension**: a `blocks/` folder. The `.bml` files in `blocks/` are the **SSOT for that package** — same pattern as `@blockml/core` and `@machineblocks/core` already. Future `@blockml/parser`, `@blockml/serializer`, … and the `@machineblocks/*` compiler target each get their own `blocks/`. npm organizations: `@blockml` (toolchain) and `@machineblocks` (domain). See `00_system.md` — BlockML node packages.
+Every package is a **normal Node module** (`package.json`) **with a BlockML extension**: a `blocks/` folder. The `.bml` files in `blocks/` are the **SSOT for that package** — same pattern as `@blockml/core` and `@machineblocks/core` already. Future `@blockml/parser`, `@blockml/serializer`, … and the `@machineblocks/*` compiler target each get their own `blocks/`. npm organizations: `@blockml` (toolchain) and `@machineblocks` (domain). See `00_system.md` — BlockML node packages · Package Implementation Workflow.
 
-Markdown under `docs/` is **transitional**. The goal is total self-description: all package information lives as BML in that package's `blocks/`.
+Markdown under `docs/` is **transitional**. The goal is total self-description: all package information lives as BML in that package's `blocks/`. MD files are **deleted** when all packages are implemented and all information has been transferred. **Do not implement a package from Markdown.**
+
+### Package Implementation Workflow (mandatory)
+
+Normative detail: `00_system.md` — Package Implementation Workflow. Same three steps for every new package:
+
+```text
+1. Own BlockML library     — Library.bml after @blockml/core; link it in package.json
+2. Migrate package MD      — all facts from that package’s docs/*.md into the library (SSOT)
+3. Implement from BML only — TypeScript / tests / further BML from the library
+                             If MD is still needed or contradicts BML: update the library first,
+                             then continue from BML. Never implement directly from MD.
+```
+
+**Step 1 — `package.json` library pointer** (required). Copy the field from `@blockml/core`:
+
+```json
+{
+  "name": "@blockml/core",
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/Library.bml"
+  }
+}
+```
+
+`@machineblocks/core` uses `"library": "./blocks/com/machineblocks/bml/Library.bml"`. A new package points at **its** catalog, e.g. `@blockml/parser`:
+
+```json
+{
+  "name": "@blockml/parser",
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/compiler/parser/Library.bml"
+  }
+}
+```
+
+**Step 2** uses the MD → package map in `00_system.md`. Shared files (e.g. `13_bml_to_bom_mapping.md`) are split by section across owning libraries; Core language stays in `@blockml/core` and is linked, not copied.
+
+**Step 3:** if a contradiction or a gap appears during implementation, stop, amend the package BML library, then resume. Implementation never proceeds on the direct basis of MD files.
+
+Existing packages (`@blockml/core`, `@machineblocks/core`) already have a library. Remaining owned MD still migrates (Step 2) before further implementation from those packages (e.g. Core TS).
 
 ### FQN namespaces vs. npm packages
 
@@ -294,6 +334,9 @@ Each root domain defines BML under `<domain>.bml.*`. No Block FQN or xmlns may e
   "version": "0.0.0",
   "type": "module",
   "sideEffects": false,
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/Library.bml"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -391,7 +434,7 @@ Target dependency order after packages exist (Phase A starts at `core` TS + pars
            @blockml/cli
 ```
 
-Implement packages **bottom-up**. Each package's first milestone: export types/interfaces from spec (`12_bom_object_model.md`, etc.) with passing empty or smoke tests.
+Implement packages **bottom-up**. Each package follows the Package Implementation Workflow **before** TypeScript: own BML library (`blockml.library` in `package.json`) → migrate that package’s Markdown into the library → implement from the library only. First TypeScript milestone: export types/interfaces that the **package BML** describes, with passing empty or smoke tests. See `00_system.md` — Package Implementation Workflow.
 
 See **V1 Implementation Strategy** below — parser and serializer (with roundtrip tests) ship **before** validator and compiler.
 
@@ -592,7 +635,7 @@ This follows the core principle **BML → BOM → BML must always be possible** 
 
 ### Phase A slice — what to implement (normative)
 
-Full language rules live in `02` / `13` / `19`. **Phase A implements and gates only this slice** (same table as `13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope):
+Full language rules live in Core BML (`org.blockml.bml.*`) plus the parser/serializer package libraries once migrated. Transitional MD (`02` / `13` / `19`) is the holding handbook until Step 2 of the Package Implementation Workflow. **Phase A implements and gates only this slice** (same table as `13_bml_to_bom_mapping.md` — V1 Parser / Serializer Scope) — after those rules are in the owning package BML:
 
 | In Phase A | Out of Phase A |
 |---|---|
@@ -650,10 +693,11 @@ The serializer is **not** a render target emitter (SCAD, JSON, …). Target outp
 
 ```text
 Phase A — Language loop (V1 gate)
-  1. BOM types + Diagnostic          — @blockml/core TS (12_bom_object_model.md)
+  1. BOM types + Diagnostic          — @blockml/core TS from Core BML
+                                      (migrate leftover `12_bom_object_model.md` into Core BML first)
                                       ExpressionValue = { raw } only; no AST fields on Urmodell
-  2. Parser                          — @blockml/parser (parser steps [1]–[5]; preserve expression raw)
-  3. Serializer                      — @blockml/serializer (inverse mapping; emit raw)
+  2. Parser                          — @blockml/parser library + migrate `13` map; then steps [1]–[5]
+  3. Serializer                      — @blockml/serializer library + migrate `13` inverse; then emit raw
   4. Roundtrip tests                 — tests/roundtrip/ against BML corpus
 
 Phase B — Semantic layer
@@ -804,24 +848,27 @@ Add new framework BML to T1 as it lands — the Definition meta-model corpus is 
 Recommended first coding milestones (aligned with **V1 Implementation Strategy** above):
 
 ```text
-1. @blockml/core BML          — org.blockml.bml.core.*, org.blockml.bml.service.*
-2. @machineblocks/core BML    — com.machineblocks.bml.core.* (node_modules/@machineblocks/core/blocks/com/machineblocks/bml)
-3. @blockml/core TS           — types from 12_bom_object_model.md + Diagnostic
+1. @blockml/core BML          — already present (node_modules/@blockml/core)
+                              migrate leftover Core-owned MD (12, 10, …) into Core BML before Core TS
+2. @machineblocks/core BML    — already present (com.machineblocks.bml.*)
+3. @blockml/core TS           — types from Core BML (migrated from 12_bom_object_model.md) + Diagnostic
                               (ExpressionValue = raw only; ExpressionNode types may land with step 7)
-4. @blockml/parser            — `@xmldom/xmldom` + steps [1]–[5] + unit tests (preserve expression raw)
-5. @blockml/serializer        — BOM → BML (V1 hardcoded inverse map)
+4. @blockml/parser            — library + migrate 13 (map) → then `@xmldom/xmldom` + steps [1]–[5]
+5. @blockml/serializer        — library + migrate 13 (inverse) / 19 emit → then BOM → BML
 6. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers)
 7. parseExpression()          — @blockml/core utility (AST as ParsedExpression; no Urmodell write-back)
-8. @blockml/validator         — Stage 2 (TypeRegistry + validate; may call parseExpression)
-9. @blockml/compiler          — Facade + Target Registry (C2, C3)
-10. BlockDoc RT first          — @blockml/blockdoc-target (control gate)
-11. XSD / FatBlock RTs         — after BlockDoc
-12. @blockml/engine-maker      — RenderEngine stub (for SCAD strategies)
-13. @machineblocks/core BML already present — NativeBlock.bml SSOT in node_modules/@machineblocks/core/blocks/com/machineblocks/bml
-14. @machineblocks/...-scad-target — ScadBlockProcessor MVP (product path)
-14. @blockml/cli               — bom validate, then bom compile
+8. @blockml/validator         — library + migrate owned MD → Stage 2
+9. @blockml/compiler          — library + migrate 06 / 14 → Facade + Target Registry (C2, C3)
+10. BlockDoc RT first          — library + owned slices → @blockml/blockdoc-target (control gate)
+11. XSD / FatBlock RTs         — each: library + owned MD, then after BlockDoc
+12. @blockml/engine-maker      — library + owned MD → RenderEngine stub
+13. @machineblocks/core BML already present — NativeBlock.bml SSOT
+14. @machineblocks/...-scad-target — library + migrate 05 → ScadBlockProcessor MVP
+14. @blockml/cli               — library + migrate 07 → bom validate, then bom compile
 15. Correctness tests         — Calibrator, Standard, Cross from @machineblocks/core
 ```
+
+Every numbered package step includes the Package Implementation Workflow (library → migrate MD → implement from BML). There is no TypeScript-first shortcut.
 
 Specs dependency:
 
@@ -839,9 +886,10 @@ Phase D  ✅  15_dev_setup (this document)
 | Topic | Document |
 |---|---|
 | Repository architecture | `00_system.md` |
-| BOM types + ParseResult (B26) | `12_bom_object_model.md` |
+| Package Implementation Workflow | `00_system.md` — Package Implementation Workflow |
+| BOM types + ParseResult (B26) | `12_bom_object_model.md` (migrate into `@blockml/core` BML before Core TS) |
 | Public `parse` / `serialize` (B26) | this document — Public API |
-| Parser mapping | `13_bml_to_bom_mapping.md` |
+| Parser mapping | `13_bml_to_bom_mapping.md` (migrate into parser/serializer BML before implement) |
 | Runtime / Facade / Cache | `14_compiler_runtime.md` |
 | CLI commands | `07_cli.md` |
 | SCAD fixtures | `node_modules/@machineblocks/core/` |
