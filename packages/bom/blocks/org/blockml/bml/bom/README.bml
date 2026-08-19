@@ -1,0 +1,24 @@
+<!--
+  BlockML BOM — README
+
+  FQN: org.blockml.bml.bom.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core">
+
+  <name>README</name>
+  <type>blockml:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the BOM Urmodell library</is>
+
+  <documentation>
+    Canonical TypeScript BOM interfaces (BomDocument, BlockDefinition, composition tree, member
+    values, parse/serialize result types). See docs/12_bom_object_model.md during migration.
+  </documentation>
+
+</block>

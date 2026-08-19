@@ -1,0 +1,15 @@
+<!--
+  BlockML Serializer package library stub.
+  FQN: org.blockml.bml.compiler.serializer.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:core="org.blockml.bml.core">
+
+  <name>Library</name>
+  <type>serializer:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>Serializer compiler package library</is>
+  <version>0.0.0</version>
+</block>

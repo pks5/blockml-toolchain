@@ -1,0 +1,15 @@
+<!--
+  BlockML Parser package library stub.
+  FQN: org.blockml.bml.compiler.parser.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:core="org.blockml.bml.core">
+
+  <name>Library</name>
+  <type>parser:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>Parser compiler package library</is>
+  <version>0.0.0</version>
+</block>

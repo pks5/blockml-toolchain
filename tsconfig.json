@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/bom" },
+    { "path": "packages/parser" },
+    { "path": "packages/serializer" }
+  ]
+}

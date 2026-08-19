@@ -1,0 +1,1 @@
+{"version":3,"file":"root-type.js","sourceRoot":"","sources":["../../src/pipeline/root-type.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,gBAAgB,EAAE,MAAM,gBAAgB,CAAC;AAElD,MAAM,UAAU,eAAe,CAAC,OAAgB;IAC9C,MAAM,KAAK,GAAG,gBAAgB,CAAC,OAAO,CAAC,CAAC;IACxC,IAAI,KAAK,KAAK,OAAO,EAAE,CAAC;QACtB,MAAM,IAAI,KAAK,CAAC,4CAA4C,KAAK,GAAG,CAAC,CAAC;IACxE,CAAC;AACH,CAAC"}

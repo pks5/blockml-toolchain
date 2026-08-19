@@ -1,0 +1,1 @@
+{"version":3,"file":"visibility.d.ts","sourceRoot":"","sources":["../../src/util/visibility.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,UAAU,GAAG,SAAS,GAAG,WAAW,GAAG,QAAQ,CAAC;AAE5D,wBAAgB,uBAAuB,CAAC,SAAS,EAAE,MAAM,GAAG;IAC1D,IAAI,EAAE,MAAM,CAAC;IACb,UAAU,EAAE,UAAU,CAAC;CACxB,CAQA;AAED,wBAAgB,gBAAgB,CAAC,UAAU,EAAE,UAAU,GAAG,SAAS,GAAG,MAAM,CAS3E"}

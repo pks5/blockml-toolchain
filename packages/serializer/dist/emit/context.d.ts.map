@@ -1,0 +1,1 @@
+{"version":3,"file":"context.d.ts","sourceRoot":"","sources":["../../src/emit/context.ts"],"names":[],"mappings":"AAEA,MAAM,WAAW,WAAW;IAC1B,QAAQ,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAC;IACjC,QAAQ,EAAE,OAAO,CAAC;IAClB,MAAM,EAAE,MAAM,CAAC;CAChB;AAED,wBAAgB,iBAAiB,CAC/B,QAAQ,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,EAChC,MAAM,EAAE,MAAM,GACb,WAAW,CAMb"}

@@ -1,10 +1,30 @@
 {
-    "private": true,
-    "workspaces": [
-      "packages/*"
-    ],
-    "dependencies": {
-      "@blockml/core": "^1.0.3",
-      "@machineblocks/core": "^3.0.0-A1"
-    }
+  "name": "blockml",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "@blockml/core": "^1.0.3",
+    "@machineblocks/core": "^3.0.0-A1"
+  },
+  "devDependencies": {
+    "@blockml/bom": "file:packages/bom",
+    "@blockml/parser": "file:packages/parser",
+    "@blockml/serializer": "file:packages/serializer",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:roundtrip": "vitest run tests/roundtrip",
+    "typecheck": "tsc --build --emitDeclarationOnly"
+  },
+  "engines": {
+    "node": ">=20"
   }
+}

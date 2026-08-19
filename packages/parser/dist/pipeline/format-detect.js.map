@@ -1,0 +1,1 @@
+{"version":3,"file":"format-detect.js","sourceRoot":"","sources":["../../src/pipeline/format-detect.ts"],"names":[],"mappings":"AAAA,MAAM,UAAU,YAAY,CAAC,MAAc;IACzC,MAAM,OAAO,GAAG,MAAM,CAAC,SAAS,EAAE,CAAC;IACnC,IAAI,OAAO,CAAC,UAAU,CAAC,OAAO,CAAC,IAAI,OAAO,CAAC,UAAU,CAAC,GAAG,CAAC,EAAE,CAAC;QAC3D,OAAO,KAAK,CAAC;IACf,CAAC;IACD,OAAO,IAAI,CAAC;AACd,CAAC"}

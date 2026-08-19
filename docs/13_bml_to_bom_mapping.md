@@ -517,7 +517,7 @@ directives:
 
 ## Type Descriptor Parsing
 
-Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`@blockml/core`** BOM interfaces — not in `org.blockml.bml.type.*`. See `01_bom_core.md` — Mandatory BML namespace · `17_type_system_bml.md` — Type Expressions.
+Capability and property type attributes are parsed into **`TypeExpression`** objects at map time (V1 alias: `TypeDescriptor`) — not stored as raw strings. Lives in **`@blockml/bom`** BOM interfaces — not in `org.blockml.bml.type.*`.
 
 Unqualified names at **specialized reference sites** resolve via context-bound implicit namespace — see `02_mbml.md` — § Context-Bound Implicit Namespace:
 

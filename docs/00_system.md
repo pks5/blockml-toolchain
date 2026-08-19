@@ -176,9 +176,10 @@ blockml/
 
 | npm package | Role | Path after `npm install` |
 |---|---|---|
-| `@blockml/core` | Framework BML SSOT in `blocks/`; planned BOM TS contracts | `node_modules/@blockml/core` |
+| `@blockml/core` | Framework BML SSOT in `blocks/` (language, services, diagnostics) | `node_modules/@blockml/core` |
+| `@blockml/bom` | Urmodell TypeScript (`BomDocument`, `bomEquals`, B26 result types) | `packages/bom` → `@blockml/bom` |
 | `@machineblocks/core` | MachineBlocks docs (BML), SCAD reference renderer, BML + SCAD examples | `node_modules/@machineblocks/core` |
-| `@blockml/parser` | BML → BomDocument; own `blocks/` SSOT when it ships | `node_modules/@blockml/parser` (when published) |
+| `@blockml/parser` | BML → BomDocument; own `blocks/` SSOT when it ships | `packages/parser` → `@blockml/parser` |
 | `@blockml/compiler` | Facade + Target Registry; own `blocks/` SSOT when it ships | `node_modules/@blockml/compiler` (when published) |
 | `@machineblocks/*` target | Compiler render target (MBOM → SCAD) — **separate** from `core`; lives under `packages/` | `node_modules/@machineblocks/…` (when published) |
 
@@ -353,7 +354,7 @@ A `catalog.xml` in the project root maps namespace URLs to local XSD files for o
 
 ### `@blockml/core`
 
-The BlockML Core library, installed at `node_modules/@blockml/core`. A BlockML node module: `package.json` + `blocks/` (SSOT for `org.blockml.bml.*`). Browser and Node compatible. **Owns** the shared TypeScript BOM contracts (`BomDocument`, `BlockDefinition`, …) used by parser, serializer, validator, compiler, and LSP (as that TS surface ships).
+The BlockML Core library, installed at `node_modules/@blockml/core`. A BlockML node module: `package.json` + `blocks/` (SSOT for `org.blockml.bml.*`). Browser and Node compatible. **Owns the BML language** — grammar, types, services, diagnostics. Does **not** own Urmodell TypeScript (see `@blockml/bom`).
 
 ```text
   - BomDocument / BlockDefinition / member model (Property, Aggregation, Association, Capability)
@@ -365,9 +366,13 @@ The BlockML Core library, installed at `node_modules/@blockml/core`. A BlockML n
   - No domain-specific types, no render logic, no Node-only APIs
 ```
 
+### `@blockml/bom`
+
+The Urmodell runtime package. Browser and Node compatible. **Owns** shared TypeScript BOM contracts (`BomDocument`, `BlockDefinition`, `Diagnostic`, `ParseResult`, `bomEquals`, …) used by parser, serializer, validator, compiler, and LSP. BML language rules remain in `@blockml/core`.
+
 ### `@blockml/parser`
 
-The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocument` types from `@blockml/core` — does not own those interfaces.
+The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocument` types from `@blockml/bom` — does not own those interfaces.
 
 ```text
   - XML DOM via `@xmldom/xmldom` (B18; same in Node and browser — see `06_compiler.md` [2])
@@ -376,7 +381,7 @@ The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocu
   - Namespace resolver (xmlns → FQN)
   - XSD loader — optional IDE aid; not required for parse (see XSD Render Target)
   - BML → BOM mapper (per root type, extensible)
-  - Parse diagnostics (using `@blockml/core` `Diagnostic`)
+  - Parse diagnostics (using `@blockml/bom` `Diagnostic`)
   - No render output
 ```
 
@@ -384,7 +389,7 @@ The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocu
 
 ### `@blockml/serializer`
 
-BOM → canonical BML XML. Browser and Node compatible. Inverse of the parser mapping — enables the **BML → BOM → BML** roundtrip. Consumes `BomDocument` from `@blockml/core` (no dependency on `@blockml/parser` or `@blockml/validator`).
+BOM → canonical BML XML. Browser and Node compatible. Inverse of the parser mapping — enables the **BML → BOM → BML** roundtrip. Consumes `BomDocument` from `@blockml/bom` (no dependency on `@blockml/parser` or `@blockml/validator`).
 
 ```text
 - BOM → BML XML (V1: hardcoded inverse of 13_bml_to_bom_mapping.md)
@@ -828,7 +833,8 @@ Primary owner of each transitional Markdown file. Implement the owner → migrat
 
 | Transitional MD | Owning package BML library |
 |---|---|
-| `01_bom_core.md`, `02_mbml.md`, `08_managed_object.md`, `10_expression_language.md`, `12_bom_object_model.md`, `16_framework_base_types.md`, `17_type_system_bml.md`, `18_constraints_and_suggestions.md`, `19_definition_blocks_and_bml_xml.md`, `20_value_type_instance_configuration.md`, `21_constant_value_type.md`, `22_function_mapping.md`, `WOT_Reference.md` | `@blockml/core` (language already largely in Core BML; leftover MD still migrates here) |
+| `01_bom_core.md`, `02_mbml.md`, `08_managed_object.md`, `10_expression_language.md`, `16_framework_base_types.md`, `17_type_system_bml.md`, `18_constraints_and_suggestions.md`, `19_definition_blocks_and_bml_xml.md`, `20_value_type_instance_configuration.md`, `21_constant_value_type.md`, `22_function_mapping.md`, `WOT_Reference.md` | `@blockml/core` (language already largely in Core BML; leftover MD still migrates here) |
+| `12_bom_object_model.md` | `@blockml/bom` (Urmodell interfaces, B26, bomEquals — not `@blockml/core`) |
 | `13_bml_to_bom_mapping.md` | `@blockml/parser` (map BML → BOM); serializer emit / inverse → `@blockml/serializer` |
 | `06_compiler.md`, `14_compiler_runtime.md` | `@blockml/compiler` |
 | `07_cli.md` | `@blockml/cli` |

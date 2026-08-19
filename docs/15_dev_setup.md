@@ -102,6 +102,7 @@ blockml/
 | npm package | Path | When |
 |---|---|---|
 | `@blockml/core` | `node_modules/@blockml/core` | Installed — `blocks/` SSOT; BOM TS as it ships |
+| `@blockml/bom` | `packages/bom` → `@blockml/bom` | Phase A — Urmodell TS + own `blocks/` SSOT |
 | `@blockml/parser` | `packages/parser` → `@blockml/parser` | Phase A — own `blocks/` SSOT |
 | `@blockml/serializer` | `packages/serializer` → `@blockml/serializer` | Phase A — own `blocks/` SSOT |
 | `@blockml/validator` | `packages/validator` → `@blockml/validator` | Phase B |
@@ -132,6 +133,7 @@ blockml/
     @machineblocks/core/       — MachineBlocks SCAD + MBOM (com.machineblocks.bml.*)
 
   packages/
+    bom/                       — @blockml/bom (Urmodell TS)
     parser/                    — @blockml/parser
       package.json · blocks/ · src/
     serializer/                — @blockml/serializer
@@ -155,7 +157,7 @@ blockml/
   docs/
 ```
 
-**Scaffold next (Phase A):** `@blockml/core` leftover MD → Core BML, then Core TS; then `packages/parser` and `packages/serializer` via the Package Implementation Workflow (`package.json` + `blockml.library` + `blocks/` **before** `src/`). Empty TypeScript shells (`tsconfig.json`, `src/index.ts`) come after Steps 1–2. Framework BML is already available via `@blockml/core`.
+**Scaffold next (Phase A):** `@blockml/bom` library + migrate `12` Urmodell slice → BOM TS; then `packages/parser` and `packages/serializer` via the Package Implementation Workflow (`package.json` + `blockml.library` + `blocks/` **before** `src/`). Framework BML remains in `@blockml/core` (npm).
 
 ---
 
@@ -233,7 +235,7 @@ Build order encoded in references:
 {
   "files": [],
   "references": [
-    { "path": "packages/core" },
+    { "path": "packages/bom" },
     { "path": "packages/parser" },
     { "path": "packages/serializer" },
     { "path": "packages/validator" },
@@ -413,12 +415,12 @@ src/
 
 ## Dependency Graph
 
-Target dependency order after packages exist (Phase A starts at `core` TS + parser + serializer):
+Target dependency order after packages exist (Phase A starts at `@blockml/bom` TS + parser + serializer):
 
 ```text
-@blockml/core (BML under blocks/ + language under src/ — no package deps)
+@blockml/core (BML under blocks/ — npm; language SSOT, no Urmodell TS in Phase A)
 
-@blockml/core (TS: BomDocument types, TypeRegistry, framework utilities)
+@blockml/bom (TS: BomDocument, Diagnostic, bomEquals, B26 result types)
   ↑
 @blockml/parser          @blockml/serializer
   ↑                            ↑
@@ -687,14 +689,13 @@ The serializer is **not** a render target emitter (SCAD, JSON, …). Target outp
 
 **V1 serializer note:** The meta-driven serializer from `19_definition_blocks_and_bml_xml.md` is the long-term target. V1 ships a **hardcoded inverse mapper** aligned with `13_bml_to_bom_mapping.md` — same approach as the V1 parser. Roundtrip tests still catch mapping gaps and information loss.
 
-**Builder- and LSP-ready constraint (V1 onward):** BOM interfaces in `@blockml/core` must remain construction-friendly and provenance-agnostic (optional source spans; factory helpers for nodes). Parser **should populate spans** for diagnostics and future LSP. Do not bake parse-only invariants into types. Structural authoring stays off the pragmatic resolve path. Tolerant parse is preferred where it does not undermine roundtrip tests on valid corpus files.
+**Builder- and LSP-ready constraint (V1 onward):** BOM interfaces in `@blockml/bom` must remain construction-friendly and provenance-agnostic (optional source spans; factory helpers for nodes). Parser **should populate spans** for diagnostics and future LSP. Do not bake parse-only invariants into types. Structural authoring stays off the pragmatic resolve path. Tolerant parse is preferred where it does not undermine roundtrip tests on valid corpus files.
 
 ### Build phases
 
 ```text
 Phase A — Language loop (V1 gate)
-  1. BOM types + Diagnostic          — @blockml/core TS from Core BML
-                                      (migrate leftover `12_bom_object_model.md` into Core BML first)
+  1. BOM types + Diagnostic          — @blockml/bom TS from BOM BML (migrate `12` Urmodell slice)
                                       ExpressionValue = { raw } only; no AST fields on Urmodell
   2. Parser                          — @blockml/parser library + migrate `13` map; then steps [1]–[5]
   3. Serializer                      — @blockml/serializer library + migrate `13` inverse; then emit raw
@@ -751,18 +752,18 @@ original.bml
 
 **Not a gate:** byte-identical or normalized XML equality of `reserialized.bml` vs `original.bml`. XML diffs may be logged as diagnostics / optional snapshots for humans; they must not fail Phase A. Serializer emit may differ in whitespace, attribute order, Boolean casing (`True`→`true`), self-closing style, and other surface details so long as re-parse yields an equal Urmodell (modulo B20).
 
-**Equality helper:** prefer a shared `bomEquals(a, b)` / `stripProvenance(doc)` in `@blockml/core` (or test utils used by all packages) so roundtrip, correctness, and future LSP fixtures share one definition of “same BOM”.
+**Equality helper:** prefer a shared `bomEquals(a, b)` / `stripProvenance(doc)` in `@blockml/bom` so roundtrip, correctness, and future LSP fixtures share one definition of “same BOM”.
 
 Parser is **single-file scoped** — roundtrip tests do not require TypeRegistry bootstrap (`13_bml_to_bom_mapping.md`).
 
 ### Public API (`parse` / `serialize`) — B26
 
-> **Normative for Phase A.** Result/options types and `bomEquals` live in `@blockml/core`; entry points in `@blockml/parser` / `@blockml/serializer`.
+> **Normative for Phase A.** Result/options types and `bomEquals` live in `@blockml/bom`; entry points in `@blockml/parser` / `@blockml/serializer`.
 
 **Principles:** sync only (no FS/network in these functions); no throw on recoverable authoring/mapping errors (internal bugs may throw); tolerant parse by default; shared `Diagnostic` with Stage 2 / compiler; no `validate` option on parse.
 
 ```typescript
-// ——— @blockml/core ———
+// ——— @blockml/bom ———
 
 interface ParseResult {
   /** null only on hard fail (format / malformed XML / no usable root) */
@@ -848,11 +849,9 @@ Add new framework BML to T1 as it lands — the Definition meta-model corpus is 
 Recommended first coding milestones (aligned with **V1 Implementation Strategy** above):
 
 ```text
-1. @blockml/core BML          — already present (node_modules/@blockml/core)
-                              migrate leftover Core-owned MD (12, 10, …) into Core BML before Core TS
-2. @machineblocks/core BML    — already present (com.machineblocks.bml.*)
-3. @blockml/core TS           — types from Core BML (migrated from 12_bom_object_model.md) + Diagnostic
-                              (ExpressionValue = raw only; ExpressionNode types may land with step 7)
+1. @blockml/bom BML + TS       — packages/bom; migrate `12` Urmodell slice; BomDocument + Diagnostic + bomEquals
+2. @blockml/core BML          — already present (node_modules/@blockml/core) — language SSOT only
+3. @machineblocks/core BML    — already present (com.machineblocks.bml.*)
 4. @blockml/parser            — library + migrate 13 (map) → then `@xmldom/xmldom` + steps [1]–[5]
 5. @blockml/serializer        — library + migrate 13 (inverse) / 19 emit → then BOM → BML
 6. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers)
@@ -887,7 +886,7 @@ Phase D  ✅  15_dev_setup (this document)
 |---|---|
 | Repository architecture | `00_system.md` |
 | Package Implementation Workflow | `00_system.md` — Package Implementation Workflow |
-| BOM types + ParseResult (B26) | `12_bom_object_model.md` (migrate into `@blockml/core` BML before Core TS) |
+| BOM types + ParseResult (B26) | `12_bom_object_model.md` (migrate into `@blockml/bom` BML before BOM TS) |
 | Public `parse` / `serialize` (B26) | this document — Public API |
 | Parser mapping | `13_bml_to_bom_mapping.md` (migrate into parser/serializer BML before implement) |
 | Runtime / Facade / Cache | `14_compiler_runtime.md` |

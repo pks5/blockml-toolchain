@@ -4,7 +4,7 @@ version: 1.4.0
 
 ## Purpose of this Document
 
-This document defines the **formal BOM object model** — the canonical TypeScript data structures in `@blockml/core`. They are produced by `@blockml/parser` (or, V3, `BomBuilder.seal()`) and consumed by `@blockml/serializer`, `@blockml/validator`, `@blockml/compiler`, LSP, and render targets.
+This document defines the **formal BOM object model** — the canonical TypeScript data structures in `@blockml/bom`. They are produced by `@blockml/parser` (or, V3, `BomBuilder.seal()`) and consumed by `@blockml/serializer`, `@blockml/validator`, `@blockml/compiler`, LSP, and render targets.
 
 For conceptual foundations see `01_bom_core.md`.
 For BML authoring syntax see `02_mbml.md`.
@@ -12,11 +12,11 @@ For MachineBlocks domain extensions see `03_mbom.md`.
 For the ManagedObject and synthetic accessor model (Draft · V1 preparation) see `08_managed_object.md`.
 For Expression AST node types see `10_expression_language.md` — Expression AST.
 
-This document is the **implementation contract** for `@blockml/core` **while it remains transitional Markdown**. Before Core TypeScript (or further Core implementation) is written from it, migrate its content into `@blockml/core` BML. Implementation uses **only** that library. See `00_system.md` — Package Implementation Workflow.
+This document is the **implementation contract** for `@blockml/bom` **while it remains transitional Markdown**. Before BOM TypeScript is written from it, migrate its Urmodell slice into `@blockml/bom` BML. Implementation uses **only** that library. See `00_system.md` — Package Implementation Workflow. (`@blockml/core` remains the BML **language** SSOT — grammar, services, diagnostics — not the Urmodell runtime package.)
 
 It specifies TypeScript-oriented interfaces and validation rules. It does not duplicate domain semantics already defined elsewhere.
 
-**Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) are TypeScript contracts in `@blockml/core` — not BML Block FQNs. BML meta-model Blocks live under `org.blockml.bml.definition.*` (e.g. `org.blockml.bml.definition.BlockDefinition`, `org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). Language Blocks like `org.blockml.bml.core.Block` are BML-defined. See `01_bom_core.md` — Mandatory BML namespace.
+**Namespace convention:** Interfaces in this document (`BlockDefinition`, `TypeDescriptor`, `BomDocument`, …) are TypeScript contracts in `@blockml/bom` — not BML Block FQNs. BML meta-model Blocks live under `org.blockml.bml.definition.*` (e.g. `org.blockml.bml.definition.BlockDefinition`, `org.blockml.bml.definition.SubBlockDefinition`, `org.blockml.bml.definition.RootBlockDefinition`). Language Blocks like `org.blockml.bml.core.Block` are BML-defined. See `01_bom_core.md` — Mandatory BML namespace.
 
 ---
 
@@ -93,13 +93,18 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 ## Package Ownership
 
 ```text
-@blockml/core
-  - All interfaces in this document
-  - TypeRegistry + bootstrap API
-  - Framework utilities: forkBom(), resolveEffectiveMembers(), validateTypes(), parseExpression(), …
-  - Utilities return derived views or merge into pragmatic forks — never mutate Urmodell
+@blockml/bom
+  - All Urmodell interfaces in this document (BomDocument, BlockDefinition, MemberDefinition, …)
+  - ParseResult / SerializeResult / ParseOptions / SerializeOptions (B26)
+  - Diagnostic (compiler result type — distinct from org.blockml.bml.core.Diagnostic BML branch)
+  - bomEquals() / stripProvenance() — roundtrip gate (B20)
   - Prefer small factory helpers for empty/partial nodes (tests, scaffolding, future BomBuilder)
   - BomBuilder / writable authoring session — **V3** (same graph types; seal() → BomDocument)
+
+@blockml/core (language SSOT — BML only in Phase A)
+  - TypeRegistry + bootstrap API (Phase B+ TypeScript — location TBD; not Urmodell)
+  - Framework utilities: forkBom(), resolveEffectiveMembers(), validateTypes(), parseExpression(), …
+  - Utilities return derived views or merge into pragmatic forks — never mutate Urmodell
 
 @blockml/cli
   - TypeRegistry bootstrap: discover + parse + register all project/library sources
@@ -115,13 +120,13 @@ Examples of what BOM **stores** vs. what downstream **interprets**:
 @blockml/parser
   - BML → BomDocument mapper (parser step [5]) — **single file per invocation**
   - Public API: `parse(source, options?) → ParseResult` (B26 — see `15_dev_setup.md`)
-  - Produces immutable Urmodell (Canonical BOM) using `@blockml/core` types; populates source spans for LSP/diagnostics
+  - Produces immutable Urmodell (Canonical BOM) using `@blockml/bom` types; populates source spans for LSP/diagnostics
   - Does NOT own BOM interfaces; does NOT load external BML files, populate TypeRegistry, merge inheritance, or expand directives
 
 @blockml/serializer
   - BomDocument → canonical BML XML (inverse of parser mapping)
   - Public API: `serialize(document, options?) → SerializeResult` (B26)
-  - Consumes `@blockml/core` types only — no dependency on `@blockml/parser`
+  - Consumes `@blockml/bom` types only — no dependency on `@blockml/parser`
 
 @blockml/compiler
   - Target Registry facade — renderers orchestrate their own pipelines
