@@ -1,0 +1,12 @@
+<!--
+  Version test — domain block missing version
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:example="com.example.demo">
+
+  <type>example:StandaloneWidget</type>
+  <baseType>core:Block</baseType>
+  <is>A standalone widget without version</is>
+</block>

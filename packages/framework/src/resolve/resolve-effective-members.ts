@@ -1,4 +1,4 @@
-import type { BlockDefinition, MemberDefinition } from "@blockml/bom";
+import type { BlockDefinition, MemberDefinition, PropertyDefinition } from "@blockml/bom";
 import type { TypeRegistry } from "../registry/type-registry.js";
 
 export function memberIdentityKey(member: MemberDefinition): string {
@@ -31,30 +31,114 @@ export function collectBaseTypeChain(
   return chain;
 }
 
+function mergeMemberPartial(
+  existing: MemberDefinition,
+  incoming: MemberDefinition,
+): MemberDefinition {
+  const merged = { ...existing, ...incoming, name: incoming.name } as MemberDefinition;
+
+  if (existing.kind === "property" && incoming.kind === "property") {
+    const existingConstraints = existing.constraints ?? [];
+    const incomingConstraints = incoming.constraints ?? [];
+    if (incomingConstraints.length > 0) {
+      (merged as PropertyDefinition).constraints = [
+        ...existingConstraints,
+        ...incomingConstraints,
+      ];
+    }
+    if (incoming.value !== undefined) {
+      (merged as PropertyDefinition).value = incoming.value;
+    }
+    if (incoming.values !== undefined && incoming.values.length > 0) {
+      (merged as PropertyDefinition).values = incoming.values;
+    }
+  }
+
+  return merged;
+}
+
+function mergeMemberLayer(
+  effective: Map<string, MemberDefinition>,
+  members: MemberDefinition[],
+  treatAsOverride: boolean,
+): void {
+  for (const member of members) {
+    const key = memberIdentityKey(member);
+    const existing = effective.get(key);
+    if (!existing) {
+      effective.set(key, member);
+      continue;
+    }
+    if (member.override || treatAsOverride) {
+      effective.set(key, mergeMemberPartial(existing, member));
+    }
+  }
+}
+
 /**
- * Merge members along baseType chain + local declarations.
- * Later layers override earlier when override=true or same identity replaces.
+ * Merge members from block.contracts[] in declaration order.
+ * Contract subBlocks/compositions/embeddedBlocks are ignored.
+ */
+export function resolveContracts(
+  block: BlockDefinition,
+  registry: TypeRegistry,
+): MemberDefinition[] {
+  const effective = new Map<string, MemberDefinition>();
+
+  for (const ref of block.contracts ?? []) {
+    const contractFqn = ref.value;
+    const contractDoc = registry.get(contractFqn);
+    if (!contractDoc) {
+      continue;
+    }
+    mergeMemberLayer(effective, contractDoc.block.members, true);
+  }
+
+  return [...effective.values()];
+}
+
+/**
+ * Merge members: baseType chain (ancestors) → contracts[] → local members.
  */
 export function resolveEffectiveMembers(
   block: BlockDefinition,
   registry: TypeRegistry,
 ): MemberDefinition[] {
   const chain = collectBaseTypeChain(block, registry);
+  const ancestors = chain.slice(0, -1);
   const effective = new Map<string, MemberDefinition>();
 
-  for (const layer of chain) {
-    for (const member of layer.members) {
-      const key = memberIdentityKey(member);
-      const existing = effective.get(key);
-      if (!existing) {
-        effective.set(key, member);
-        continue;
-      }
-      if (member.override) {
-        effective.set(key, { ...existing, ...member, name: member.name });
-      }
-    }
+  for (const layer of ancestors) {
+    mergeMemberLayer(effective, layer.members, false);
   }
 
+  mergeMemberLayer(effective, resolveContracts(block, registry), true);
+  mergeMemberLayer(effective, block.members, true);
+
   return [...effective.values()];
+}
+
+export function findLocalMember(
+  block: BlockDefinition,
+  member: MemberDefinition,
+): MemberDefinition | undefined {
+  const key = memberIdentityKey(member);
+  return block.members.find((m) => memberIdentityKey(m) === key);
+}
+
+export function propertyForConstraintCheck(
+  effective: PropertyDefinition,
+  local: PropertyDefinition | undefined,
+): PropertyDefinition {
+  if (!local) {
+    return effective;
+  }
+  const merged: PropertyDefinition = { ...effective };
+  if (local.value !== undefined) {
+    merged.value = local.value;
+  }
+  if (local.values !== undefined && local.values.length > 0) {
+    merged.values = local.values;
+  }
+  return merged;
 }

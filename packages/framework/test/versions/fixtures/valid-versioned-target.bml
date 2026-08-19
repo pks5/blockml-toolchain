@@ -1,0 +1,13 @@
+<!--
+  Version test — block with explicit version for pin assert
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:example="com.example.demo">
+
+  <type>example:VersionedTarget</type>
+  <baseType>core:Block</baseType>
+  <is>Versioned target block</is>
+  <version>2.0.0</version>
+</block>

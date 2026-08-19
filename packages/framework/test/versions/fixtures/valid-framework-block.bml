@@ -1,0 +1,12 @@
+<!--
+  Version test — framework convention block without own version
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:test="org.blockml.bml.test.version">
+
+  <type>test:FrameworkLike</type>
+  <baseType>core:Block</baseType>
+  <is>Framework convention block fixture</is>
+</block>

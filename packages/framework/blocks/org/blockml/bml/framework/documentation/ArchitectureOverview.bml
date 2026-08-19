@@ -38,13 +38,15 @@
 
     registry/type-registry.ts — fwcap:TypeRegistry (register, get, has, keys, size)
     registry/bootstrap.ts — fwcap:BootstrapTypeRegistry, fwcap:DefaultBootstrapPaths
+    registry/library-bootstrap.ts — library graph resolution (Library.bml dependencies)
     fork/fork-bom.ts — fwcap:ForkBom (structuredClone pragmatic copy)
     resolve/resolve-effective-members.ts — fwcap:ResolveEffectiveMembers,
-      fwcap:CollectBaseTypeChain, fwcap:MemberIdentityKey
+      fwcap:ResolveContracts, fwcap:CollectBaseTypeChain, fwcap:MemberIdentityKey
     expression/parse-expression.ts — fwcap:ParseExpression
     expression/types.ts — fwexpression:* AST node types
     validate/validate-types.ts — fwcap:ValidateTypes, fwcap:GetPropertyNumericValue,
       fwcap:IsLiteralValue
+    validate/validate-versions.ts — fwcap:ValidateVersions
     validate/validate-constraints.ts — fwcap:ValidateConstraints
 
     Internal data-structure types extend framework:FrameworkType.

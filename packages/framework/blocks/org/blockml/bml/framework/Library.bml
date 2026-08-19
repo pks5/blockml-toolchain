@@ -86,17 +86,20 @@
       <composition><fwexpression:ParseExpressionResult /></composition>
       <composition><fwexpression:ParseExpressionError /></composition>
       <composition><fwexpression:ParseExpressionOutcome /></composition>
+      <composition><fwregistry:BootstrapOptions /></composition>
       <composition><fwconfig:FrameworkDiagnosticCodes /></composition>
       <composition><fwcap:TypeRegistry /></composition>
       <composition><fwcap:BootstrapTypeRegistry /></composition>
       <composition><fwcap:DefaultBootstrapPaths /></composition>
       <composition><fwcap:ForkBom /></composition>
+      <composition><fwcap:ResolveContracts /></composition>
       <composition><fwcap:ResolveEffectiveMembers /></composition>
       <composition><fwcap:CollectBaseTypeChain /></composition>
       <composition><fwcap:MemberIdentityKey /></composition>
       <composition><fwcap:ParseExpression /></composition>
       <composition><fwcap:ValidateTypes /></composition>
       <composition><fwcap:ValidateConstraints /></composition>
+      <composition><fwcap:ValidateVersions /></composition>
       <composition><fwcap:GetPropertyNumericValue /></composition>
       <composition><fwcap:IsLiteralValue /></composition>
       <composition><fwdocumentation:Introduction /></composition>

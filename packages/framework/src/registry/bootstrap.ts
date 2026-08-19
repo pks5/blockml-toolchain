@@ -1,30 +1,18 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import type { Diagnostic } from "@blockml/bom";
-import { parse } from "@blockml/parser";
 import { TypeRegistry } from "./type-registry.js";
+import {
+  bootstrapFromCorpusPaths,
+  bootstrapFromLibraryPaths,
+} from "./library-bootstrap.js";
 
-function collectBmlFiles(dir: string, out: string[] = []): string[] {
-  let entries: string[];
-  try {
-    entries = readdirSync(dir);
-  } catch {
-    return out;
-  }
-  for (const entry of entries) {
-    const full = join(dir, entry);
-    try {
-      const st = statSync(full);
-      if (st.isDirectory()) {
-        collectBmlFiles(full, out);
-      } else if (entry.endsWith(".bml")) {
-        out.push(full);
-      }
-    } catch {
-      continue;
-    }
-  }
-  return out;
+export interface BootstrapOptions {
+  /** Corpus roots for flat scan mode. */
+  paths?: string[];
+  /** Library.bml entry points for library graph mode. */
+  libraryPaths?: string[];
+  /** Working directory for relative paths. */
+  rootDir?: string;
 }
 
 export function defaultBootstrapPaths(rootDir = process.cwd()): string[] {
@@ -39,42 +27,37 @@ export interface BootstrapResult {
   diagnostics: Diagnostic[];
 }
 
+function normalizeOptions(
+  optionsOrPaths?: BootstrapOptions | string[],
+  rootDirArg?: string,
+): BootstrapOptions {
+  if (Array.isArray(optionsOrPaths)) {
+    return { paths: optionsOrPaths, rootDir: rootDirArg ?? process.cwd() };
+  }
+  if (optionsOrPaths) {
+    return { ...optionsOrPaths, rootDir: optionsOrPaths.rootDir ?? rootDirArg ?? process.cwd() };
+  }
+  return { rootDir: rootDirArg ?? process.cwd() };
+}
+
 export function bootstrapTypeRegistry(
-  paths: string[],
-  rootDir = process.cwd(),
+  optionsOrPaths?: BootstrapOptions | string[],
+  rootDirArg?: string,
 ): BootstrapResult {
-  const registry = new TypeRegistry();
-  const diagnostics: Diagnostic[] = [];
-  const resolvedPaths = paths.length > 0 ? paths : defaultBootstrapPaths(rootDir);
-  const files = new Set<string>();
+  const options = normalizeOptions(optionsOrPaths, rootDirArg);
+  const rootDir = options.rootDir ?? process.cwd();
+  const searchRoots = [
+    ...(options.paths ?? []),
+    ...(options.libraryPaths ?? []),
+    ...defaultBootstrapPaths(rootDir),
+    join(rootDir, "packages"),
+  ].map((p) => (p.startsWith("/") || p.includes(":") ? p : join(rootDir, p)));
 
-  for (const base of resolvedPaths) {
-    for (const file of collectBmlFiles(base)) {
-      files.add(file);
-    }
+  if (options.libraryPaths && options.libraryPaths.length > 0) {
+    return bootstrapFromLibraryPaths(options.libraryPaths, searchRoots, rootDir);
   }
 
-  for (const filePath of files) {
-    let source: string;
-    try {
-      source = readFileSync(filePath, "utf8");
-    } catch (e) {
-      diagnostics.push({
-        severity: "warning",
-        code: "BML_BOOTSTRAP_READ_ERROR",
-        message: e instanceof Error ? e.message : String(e),
-        source: { file: filePath, line: 1, column: 1 },
-      });
-      continue;
-    }
-    const result = parse(source, { filePath, continueOnError: true });
-    for (const d of result.diagnostics) {
-      diagnostics.push(d);
-    }
-    if (result.document?.block.type) {
-      registry.register(result.document);
-    }
-  }
-
-  return { registry, diagnostics };
+  const paths =
+    options.paths && options.paths.length > 0 ? options.paths : defaultBootstrapPaths(rootDir);
+  return bootstrapFromCorpusPaths(paths, rootDir);
 }

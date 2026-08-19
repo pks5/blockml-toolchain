@@ -51,6 +51,20 @@ function validateBlockDefinition(
     );
   }
 
+  for (const ref of block.contracts ?? []) {
+    if (!registry.has(ref.value)) {
+      diagnostics.push(
+        diag(
+          "BML_UNKNOWN_CONTRACT",
+          `Unknown contract: ${ref.value}`,
+          file,
+          block.source?.line,
+          block.source?.column,
+        ),
+      );
+    }
+  }
+
   const effective = resolveEffectiveMembers(block, registry);
   const seen = new Set<string>();
   for (const member of effective) {

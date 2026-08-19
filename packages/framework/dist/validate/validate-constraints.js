@@ -1,4 +1,4 @@
-import { resolveEffectiveMembers } from "../resolve/resolve-effective-members.js";
+import { findLocalMember, propertyForConstraintCheck, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
 import { getPropertyNumericValue, isLiteralValue, } from "./validate-types.js";
 function diag(code, message, file, line = 1, column = 1, severity = "error") {
     return { severity, code, message, source: { file, line, column } };
@@ -140,7 +140,7 @@ function validateConstraintInstances(instances, context, file, diagnostics, bloc
         }
     }
 }
-function validateMemberConstraints(member, file, diagnostics) {
+function validateMemberConstraintPlacement(member, file, diagnostics) {
     const context = member.kind === "property"
         ? "property"
         : member.kind === "aggregation"
@@ -148,13 +148,47 @@ function validateMemberConstraints(member, file, diagnostics) {
             : member.kind === "association"
                 ? "association"
                 : "capability";
-    validateConstraintInstances(member.constraints, context, file, diagnostics, undefined, undefined, member.kind === "property" ? member : undefined);
+    if (!member.constraints?.length) {
+        return;
+    }
+    const allowed = allowedBranchForContext(context);
+    for (const inst of member.constraints) {
+        const branch = constraintBranch(inst.typeFqn);
+        if (branch === "Unknown") {
+            diagnostics.push(diag("BML_CONSTRAINT_UNKNOWN", `Unknown constraint type: ${inst.typeFqn}`, file, inst.source?.line, inst.source?.column));
+            continue;
+        }
+        if (!allowed.has(branch)) {
+            diagnostics.push(diag("BML_CONSTRAINT_TARGET_MISMATCH", `${branch} not allowed on ${context}`, file, inst.source?.line, inst.source?.column));
+        }
+    }
+}
+function validateEffectiveMemberConstraints(block, registry, file, diagnostics) {
+    const effective = resolveEffectiveMembers(block, registry);
+    for (const member of effective) {
+        if (!member.constraints?.length) {
+            continue;
+        }
+        if (member.kind === "property") {
+            const local = findLocalMember(block, member);
+            const prop = propertyForConstraintCheck(member, local?.kind === "property" ? local : undefined);
+            for (const inst of member.constraints) {
+                if (constraintBranch(inst.typeFqn) === "ValueConstraint") {
+                    evaluateValueConstraint(inst, prop, file, diagnostics);
+                }
+            }
+        }
+    }
+}
+function validateMemberConstraints(member, file, diagnostics) {
+    validateMemberConstraintPlacement(member, file, diagnostics);
 }
 function validateBlockConstraints(block, registry, file, diagnostics) {
     validateConstraintInstances(block.constraints, "block", file, diagnostics, block, registry);
     for (const member of block.members) {
         validateMemberConstraints(member, file, diagnostics);
     }
+    validateEffectiveMemberConstraints(block, registry, file, diagnostics);
     for (const sub of block.subBlocks) {
         validateBlockConstraints(sub, registry, file, diagnostics);
     }

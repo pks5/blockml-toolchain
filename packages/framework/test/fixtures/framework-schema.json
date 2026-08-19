@@ -233,6 +233,30 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.framework.registry.BootstrapOptions",
+      "tsExport": "BootstrapOptions",
+      "pkg": "registry",
+      "abstract": false,
+      "baseType": "framework:FrameworkType",
+      "fields": [
+        {
+          "name": "paths",
+          "type": "type:Text[]",
+          "required": false
+        },
+        {
+          "name": "libraryPaths",
+          "type": "type:Text[]",
+          "required": false
+        },
+        {
+          "name": "rootDir",
+          "type": "type:Text",
+          "required": false
+        }
+      ]
+    },
+    {
       "fqn": "org.blockml.bml.framework.config.FrameworkDiagnosticCodes",
       "tsExport": "FrameworkDiagnosticCodes",
       "pkg": "config",
@@ -261,13 +285,8 @@
       "fqn": "org.blockml.bml.framework.capability.BootstrapTypeRegistry",
       "inputs": [
         {
-          "name": "paths",
-          "type": "type:Text[]",
-          "required": false
-        },
-        {
-          "name": "rootDir",
-          "type": "type:Text",
+          "name": "options",
+          "type": "fwregistry:BootstrapOptions",
           "required": false
         }
       ],
@@ -308,6 +327,28 @@
       "output": {
         "name": "copy",
         "type": "bomdoc:BomDocument",
+        "required": true
+      }
+    },
+    {
+      "name": "ResolveContracts",
+      "tsExport": "resolveContracts",
+      "fqn": "org.blockml.bml.framework.capability.ResolveContracts",
+      "inputs": [
+        {
+          "name": "block",
+          "type": "bomblock:BlockDefinition",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "members",
+        "type": "bommember:MemberDefinition[]",
         "required": true
       }
     },
@@ -434,6 +475,28 @@
       }
     },
     {
+      "name": "ValidateVersions",
+      "tsExport": "validateVersions",
+      "fqn": "org.blockml.bml.framework.capability.ValidateVersions",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "diagnostics",
+        "type": "bomcommon:Diagnostic[]",
+        "required": true
+      }
+    },
+    {
       "name": "GetPropertyNumericValue",
       "tsExport": "getPropertyNumericValue",
       "fqn": "org.blockml.bml.framework.capability.GetPropertyNumericValue",
@@ -470,6 +533,7 @@
   ],
   "frameworkDiagnosticCodes": [
     "BML_UNKNOWN_BASE_TYPE",
+    "BML_UNKNOWN_CONTRACT",
     "BML_MEMBER_COLLISION",
     "BML_OVERRIDE_WITHOUT_PARENT",
     "BML_OVERRIDE_REQUIRED",
@@ -477,6 +541,10 @@
     "BML_CONSTRAINT_VIOLATION",
     "BML_CONSTRAINT_UNKNOWN",
     "BML_CONSTRAINT_TARGET_MISMATCH",
+    "BML_MISSING_VERSION",
+    "BML_UNKNOWN_VERSION",
+    "BML_LIBRARY_RESOLVE_ERROR",
+    "BML_LIBRARY_NESTING_VIOLATION",
     "BML_BOOTSTRAP_READ_ERROR"
   ],
   "documentationBlocks": [

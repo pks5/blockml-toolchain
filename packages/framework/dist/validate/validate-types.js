@@ -13,6 +13,11 @@ function validateBlockDefinition(block, registry, file, diagnostics) {
     if (block.baseType && !registry.has(block.baseType)) {
         diagnostics.push(diag("BML_UNKNOWN_BASE_TYPE", `Unknown baseType: ${block.baseType}`, file, block.source?.line, block.source?.column));
     }
+    for (const ref of block.contracts ?? []) {
+        if (!registry.has(ref.value)) {
+            diagnostics.push(diag("BML_UNKNOWN_CONTRACT", `Unknown contract: ${ref.value}`, file, block.source?.line, block.source?.column));
+        }
+    }
     const effective = resolveEffectiveMembers(block, registry);
     const seen = new Set();
     for (const member of effective) {

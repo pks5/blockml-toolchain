@@ -78,4 +78,12 @@ cases:
   - id: inherited-constraints-effective
     fixture: fixtures/valid-inherited-constraints.bml
     expect: pass
+    contractFixture: fixtures/contracts/IIdentifiable.bml
     notes: Contract-declared ValuePresent merged into effective property definition
+
+  - id: inherited-constraint-violation
+    fixture: fixtures/invalid-inherited-constraint-violation.bml
+    expect: fail
+    contractFixture: fixtures/contracts/IIdentifiable.bml
+    diagnostic: BML_CONSTRAINT_VIOLATION
+    notes: Contract ValuePresent without local id value

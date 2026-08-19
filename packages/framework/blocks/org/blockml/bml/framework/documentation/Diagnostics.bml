@@ -38,10 +38,15 @@
 
     validateTypes:
     • BML_UNKNOWN_BASE_TYPE — baseType FQN not in TypeRegistry
+    • BML_UNKNOWN_CONTRACT — contracts[] FQN not in TypeRegistry
     • BML_MEMBER_COLLISION — duplicate member identity in effective set
     • BML_OVERRIDE_WITHOUT_PARENT — override without resolvable base member
     • BML_OVERRIDE_REQUIRED — override on non-overridable member
     • BML_EXPRESSION_PARSE_ERROR — parseExpression failed on ExpressionValue.raw
+
+    validateVersions:
+    • BML_MISSING_VERSION — standalone root block missing effective version (non-framework convention)
+    • BML_UNKNOWN_VERSION — bml:version pin does not match registered block version
 
     validateConstraints:
     • BML_CONSTRAINT_VIOLATION — constraint predicate failed
@@ -50,6 +55,8 @@
 
     bootstrap:
     • BML_BOOTSTRAP_READ_ERROR — file read failure during corpus walk (warning)
+    • BML_LIBRARY_RESOLVE_ERROR — Library.bml path or dependency could not be resolved
+    • BML_LIBRARY_NESTING_VIOLATION — outer library re-exports inner-only block
 
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic.</documentation>
 

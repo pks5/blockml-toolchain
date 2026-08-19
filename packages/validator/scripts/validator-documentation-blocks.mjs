@@ -56,12 +56,13 @@ export const documentationBlocks = [
     doc: `validate(document, options?) pipeline (packages/validator/src/validate.ts):
 
     1. Resolve TypeRegistry — options.typeRegistry if instanceof TypeRegistry,
-       else bootstrapTypeRegistry(options.bootstrapPaths ?? defaultBootstrapPaths())
+       else bootstrapTypeRegistry({ paths, libraryPaths, rootDir })
     2. forkBom(document) → pragmaticModel (structuredClone working copy)
     3. validateTypes(pragmaticModel, registry) → diagnostics[]
-    4. validateConstraints(pragmaticModel, registry) → append diagnostics
-    5. success = no diagnostic with severity === "error"
-    6. Return ValidateResult { pragmaticModel?, diagnostics, success }
+    4. validateVersions(pragmaticModel, registry) → append diagnostics
+    5. validateConstraints(pragmaticModel, registry) → append diagnostics
+    6. success = no diagnostic with severity === "error"
+    7. Return ValidateResult { pragmaticModel?, diagnostics, success }
 
     When continueOnError === false and success === false, pragmaticModel is omitted
     from the result (early return with diagnostics only).`,
@@ -161,6 +162,9 @@ export const documentationBlocks = [
 
     success semantics: false when any diagnostic has severity === "error"; warnings
     alone do not fail success.
+
+    Bootstrap modes: bootstrapPaths (corpus flat scan) or libraryPaths (Library.bml graph).
+    validateVersions runs after validateTypes and before validateConstraints.
 
     No throw on validation failure — aligns with B26 sync diagnostic API across parser,
     serializer, validator, and compiler.`,

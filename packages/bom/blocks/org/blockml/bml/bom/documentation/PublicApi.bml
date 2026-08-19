@@ -39,7 +39,8 @@
 
     SerializeOptions: indent (default 2; 0=compact B13), xmlDeclaration (default false B17/B24).
 
-    ValidateOptions: typeRegistry (TypeRegistryReader), bootstrapPaths, continueOnError (default true).
+    ValidateOptions: typeRegistry (TypeRegistryReader), bootstrapPaths, libraryPaths,
+    continueOnError (default true).
 
     TypeRegistryReader: minimal get/has surface for ValidateOptions — implemented by @blockml/framework.
 

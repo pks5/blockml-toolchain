@@ -18,6 +18,7 @@ const schema = JSON.parse(
 /** TS type exports from index.ts that map to FrameworkType blocks. */
 const TS_TYPE_EXPORTS = [
   "BootstrapResult",
+  "BootstrapOptions",
   "ExpressionNode",
   "ParseExpressionResult",
   "ParseExpressionOutcome",
@@ -29,10 +30,12 @@ const TS_CAPABILITY_EXPORTS = [
   "defaultBootstrapPaths",
   "forkBom",
   "resolveEffectiveMembers",
+  "resolveContracts",
   "collectBaseTypeChain",
   "memberIdentityKey",
   "parseExpression",
   "validateTypes",
+  "validateVersions",
   "validateConstraints",
   "getPropertyNumericValue",
   "isLiteralValue",
@@ -40,6 +43,7 @@ const TS_CAPABILITY_EXPORTS = [
 
 const TS_FILE_MAP: Record<string, string> = {
   BootstrapResult: "registry/bootstrap.ts",
+  BootstrapOptions: "registry/bootstrap.ts",
   ParseExpressionResult: "expression/types.ts",
   ParseExpressionOutcome: "expression/types.ts",
 };
@@ -136,7 +140,13 @@ function listExportedFunctionsFromIndex(): string[] {
 
 function readDiagnosticCodesFromSrc(): string[] {
   const codes = new Set<string>();
-  for (const rel of ["validate/validate-types.ts", "validate/validate-constraints.ts", "registry/bootstrap.ts"]) {
+  for (const rel of [
+    "validate/validate-types.ts",
+    "validate/validate-constraints.ts",
+    "validate/validate-versions.ts",
+    "registry/bootstrap.ts",
+    "registry/library-bootstrap.ts",
+  ]) {
     const content = readFileSync(join(srcRoot, rel), "utf8");
     const codeRegex = /"((?:BML_[A-Z0-9_]+))"/g;
     let m;

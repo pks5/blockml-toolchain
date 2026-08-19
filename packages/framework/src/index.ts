@@ -3,10 +3,12 @@ export {
   bootstrapTypeRegistry,
   defaultBootstrapPaths,
   type BootstrapResult,
+  type BootstrapOptions,
 } from "./registry/bootstrap.js";
 export { forkBom } from "./fork/fork-bom.js";
 export {
   resolveEffectiveMembers,
+  resolveContracts,
   collectBaseTypeChain,
   memberIdentityKey,
 } from "./resolve/resolve-effective-members.js";
@@ -21,4 +23,5 @@ export {
   getPropertyNumericValue,
   isLiteralValue,
 } from "./validate/validate-types.js";
+export { validateVersions } from "./validate/validate-versions.js";
 export { validateConstraints } from "./validate/validate-constraints.js";

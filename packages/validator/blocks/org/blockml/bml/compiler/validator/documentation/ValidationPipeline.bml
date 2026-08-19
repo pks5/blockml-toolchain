@@ -31,12 +31,13 @@
   <documentation>validate(document, options?) pipeline (packages/validator/src/validate.ts):
 
     1. Resolve TypeRegistry — options.typeRegistry if instanceof TypeRegistry,
-       else bootstrapTypeRegistry(options.bootstrapPaths ?? defaultBootstrapPaths())
+       else bootstrapTypeRegistry({ paths, libraryPaths, rootDir })
     2. forkBom(document) → pragmaticModel (structuredClone working copy)
     3. validateTypes(pragmaticModel, registry) → diagnostics[]
-    4. validateConstraints(pragmaticModel, registry) → append diagnostics
-    5. success = no diagnostic with severity === "error"
-    6. Return ValidateResult { pragmaticModel?, diagnostics, success }
+    4. validateVersions(pragmaticModel, registry) → append diagnostics
+    5. validateConstraints(pragmaticModel, registry) → append diagnostics
+    6. success = no diagnostic with severity === "error"
+    7. Return ValidateResult { pragmaticModel?, diagnostics, success }
 
     When continueOnError === false and success === false, pragmaticModel is omitted
     from the result (early return with diagnostics only).</documentation>

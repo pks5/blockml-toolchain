@@ -45,10 +45,12 @@ export interface ValidateResult {
 }
 
 export interface ValidateOptions {
-  /** Pre-built registry; when omitted, bootstrap from bootstrapPaths. */
+  /** Pre-built registry; when omitted, bootstrap from bootstrapPaths / libraryPaths. */
   typeRegistry?: TypeRegistryReader;
-  /** Directories scanned for .bml when typeRegistry omitted. */
+  /** Directories scanned for .bml when typeRegistry omitted (corpus mode). */
   bootstrapPaths?: string[];
+  /** Library.bml paths for library-graph bootstrap when typeRegistry omitted. */
+  libraryPaths?: string[];
   /** default true — continue after errors; still attach pragmaticModel when possible */
   continueOnError?: boolean;
 }

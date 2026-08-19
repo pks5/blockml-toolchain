@@ -60,13 +60,15 @@ export const documentationBlocks = [
 
     registry/type-registry.ts — fwcap:TypeRegistry (register, get, has, keys, size)
     registry/bootstrap.ts — fwcap:BootstrapTypeRegistry, fwcap:DefaultBootstrapPaths
+    registry/library-bootstrap.ts — library graph resolution (Library.bml dependencies)
     fork/fork-bom.ts — fwcap:ForkBom (structuredClone pragmatic copy)
     resolve/resolve-effective-members.ts — fwcap:ResolveEffectiveMembers,
-      fwcap:CollectBaseTypeChain, fwcap:MemberIdentityKey
+      fwcap:ResolveContracts, fwcap:CollectBaseTypeChain, fwcap:MemberIdentityKey
     expression/parse-expression.ts — fwcap:ParseExpression
     expression/types.ts — fwexpression:* AST node types
     validate/validate-types.ts — fwcap:ValidateTypes, fwcap:GetPropertyNumericValue,
       fwcap:IsLiteralValue
+    validate/validate-versions.ts — fwcap:ValidateVersions
     validate/validate-constraints.ts — fwcap:ValidateConstraints
 
     Internal data-structure types extend framework:FrameworkType.
@@ -82,19 +84,22 @@ export const documentationBlocks = [
     doc: `Public exports from @blockml/framework (packages/framework/src/index.ts):
 
     TypeRegistry — class; register/get/has/keys/size on BomDocument index
-    bootstrapTypeRegistry(paths?, rootDir?) → BootstrapResult
+    bootstrapTypeRegistry(options?) → BootstrapResult
     defaultBootstrapPaths(rootDir?) → string[]
+    BootstrapOptions — paths?, libraryPaths?, rootDir?
     forkBom(document) → BomDocument
     resolveEffectiveMembers(block, registry) → MemberDefinition[]
+    resolveContracts(block, registry) → MemberDefinition[] (contract slice; used by resolveEffectiveMembers)
     collectBaseTypeChain(block, registry) → BlockDefinition[]
     memberIdentityKey(member) → string
     parseExpression(source) → ParseExpressionOutcome
     validateTypes(document, registry) → Diagnostic[]
+    validateVersions(document, registry) → Diagnostic[]
     validateConstraints(document, registry) → Diagnostic[]
     getPropertyNumericValue(property) → number | undefined
     isLiteralValue(value) → boolean
 
-    Types: BootstrapResult, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
+    Types: BootstrapResult, BootstrapOptions, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
 
     Not exported from index: getLiteralNumericValue (internal helper in validate-types.ts).`,
     refs: [
@@ -105,9 +110,15 @@ export const documentationBlocks = [
   {
     name: "TypeRegistryBootstrap",
     is: "defaultBootstrapPaths and bootstrapTypeRegistry",
-    doc: `bootstrapTypeRegistry(paths?, rootDir?) walks BML files under each path,
-    parses them via @blockml/parser parse(), and registers each document root block
-    in a new TypeRegistry.
+    doc: `bootstrapTypeRegistry(options?) supports two modes:
+
+    corpus (default) — walks options.paths (or defaultBootstrapPaths()) for all .bml files,
+    parses via @blockml/parser parse(), registers each document root block.
+
+    library — when options.libraryPaths is set, resolves each Library.bml dependency graph
+    (dependencies, subLibraries) in order, then registers blocks from each library blocks root.
+    Missing Library path → BML_LIBRARY_RESOLVE_ERROR. Outer re-export of inner-only block →
+    BML_LIBRARY_NESTING_VIOLATION (minimal check).
 
     defaultBootstrapPaths(rootDir?) returns:
     • node_modules/@blockml/core/blocks
@@ -118,7 +129,8 @@ export const documentationBlocks = [
     but do not stop registration of successfully parsed documents.
 
     Hosts (@blockml/cli, @blockml/validator) may inject a pre-built TypeRegistry via
-    ValidateOptions.typeRegistry instead of bootstrapping.`,
+    ValidateOptions.typeRegistry instead of bootstrapping. ValidateOptions.libraryPaths
+    selects library mode when typeRegistry is omitted.`,
     refs: [
       { type: "fwdocumentation:EffectiveMembers", relation: "ReadNext" },
       { type: "fwcap:BootstrapTypeRegistry", relation: "Defines" },
@@ -127,19 +139,27 @@ export const documentationBlocks = [
   {
     name: "EffectiveMembers",
     is: "resolveEffectiveMembers and baseType chain merge",
-    doc: `resolveEffectiveMembers(block, registry) merges members[] along the baseType chain
-    (via collectBaseTypeChain) plus local declarations.
+    doc: `resolveEffectiveMembers(block, registry) merges members[] in order:
+
+    1. baseType chain (via collectBaseTypeChain) — earliest to latest
+    2. contracts[] in declaration order (via resolveContracts) — contract Block members only;
+       subBlocks/compositions/embeddedBlocks on contract types are ignored
+    3. local block.members — override earlier layers when override=true
 
     collectBaseTypeChain walks block.baseType → registry.get(baseType) until absent or cycle.
+    resolveContracts resolves each contracts[] FQN via TypeRegistry; unknown contract →
+    BML_UNKNOWN_CONTRACT (validateTypes).
     memberIdentityKey(member) = (namespace ?? "") + ":" + name — collision detection key.
 
-    Later layers override earlier when override=true or same identity replaces.
-    Used by validateTypes (member collision, override rules) and validateConstraints.
+    Partial merge: later layer replaces only explicitly authored attributes on the member.
+    Used by validateTypes (member collision, override rules) and validateConstraints (effective
+    PropertyDefinition constraints).
 
     EffectiveMemberSet is a runtime view — not stored on Urmodell (BOM SSOT).`,
     refs: [
       { type: "fwdocumentation:ExpressionParsing", relation: "ReadNext" },
       { type: "fwcap:ResolveEffectiveMembers", relation: "Defines" },
+      { type: "fwcap:ResolveContracts", relation: "SeeAlso" },
     ],
   },
   {
@@ -163,9 +183,11 @@ export const documentationBlocks = [
   {
     name: "ConstraintValidation",
     is: "validateConstraints branch dispatch and embed contexts",
-    doc: `validateConstraints walks BomDocument compositions and evaluates constraint
-    BlockInstance children against embed context:
+    doc: `validateConstraints evaluates constraints on the effective member set from
+    resolveEffectiveMembers (baseType + contracts + local). Property ValuePresent and other
+    ValueConstraints on effective PropertyDefinition are checked against authored local values.
 
+    Embed contexts for directly declared constraint BlockInstances:
     block — BlockConstraint (RequiresMember), ValueConstraint (Min/Max/ValuePresent)
     property — PropertyConstraint (MustBeReadOnly), ValueConstraint
     aggregation — AggregationConstraint (AllowedChildType)
@@ -189,10 +211,15 @@ export const documentationBlocks = [
 
     validateTypes:
     • BML_UNKNOWN_BASE_TYPE — baseType FQN not in TypeRegistry
+    • BML_UNKNOWN_CONTRACT — contracts[] FQN not in TypeRegistry
     • BML_MEMBER_COLLISION — duplicate member identity in effective set
     • BML_OVERRIDE_WITHOUT_PARENT — override without resolvable base member
     • BML_OVERRIDE_REQUIRED — override on non-overridable member
     • BML_EXPRESSION_PARSE_ERROR — parseExpression failed on ExpressionValue.raw
+
+    validateVersions:
+    • BML_MISSING_VERSION — standalone root block missing effective version (non-framework convention)
+    • BML_UNKNOWN_VERSION — bml:version pin does not match registered block version
 
     validateConstraints:
     • BML_CONSTRAINT_VIOLATION — constraint predicate failed
@@ -201,6 +228,8 @@ export const documentationBlocks = [
 
     bootstrap:
     • BML_BOOTSTRAP_READ_ERROR — file read failure during corpus walk (warning)
+    • BML_LIBRARY_RESOLVE_ERROR — Library.bml path or dependency could not be resolved
+    • BML_LIBRARY_NESTING_VIOLATION — outer library re-exports inner-only block
 
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic.`,
     refs: [

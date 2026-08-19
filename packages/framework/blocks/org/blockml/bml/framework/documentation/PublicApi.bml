@@ -37,19 +37,22 @@
   <documentation>Public exports from @blockml/framework (packages/framework/src/index.ts):
 
     TypeRegistry — class; register/get/has/keys/size on BomDocument index
-    bootstrapTypeRegistry(paths?, rootDir?) → BootstrapResult
+    bootstrapTypeRegistry(options?) → BootstrapResult
     defaultBootstrapPaths(rootDir?) → string[]
+    BootstrapOptions — paths?, libraryPaths?, rootDir?
     forkBom(document) → BomDocument
     resolveEffectiveMembers(block, registry) → MemberDefinition[]
+    resolveContracts(block, registry) → MemberDefinition[] (contract slice; used by resolveEffectiveMembers)
     collectBaseTypeChain(block, registry) → BlockDefinition[]
     memberIdentityKey(member) → string
     parseExpression(source) → ParseExpressionOutcome
     validateTypes(document, registry) → Diagnostic[]
+    validateVersions(document, registry) → Diagnostic[]
     validateConstraints(document, registry) → Diagnostic[]
     getPropertyNumericValue(property) → number | undefined
     isLiteralValue(value) → boolean
 
-    Types: BootstrapResult, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
+    Types: BootstrapResult, BootstrapOptions, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
 
     Not exported from index: getLiteralNumericValue (internal helper in validate-types.ts).</documentation>
 

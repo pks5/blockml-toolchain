@@ -1,0 +1,22 @@
+<!--
+  Version test — composition with wrong bml:version pin
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:example="com.example.demo">
+
+  <type>example:VersionConsumer</type>
+  <baseType>core:Block</baseType>
+  <is>References versioned block with wrong pin</is>
+  <version>1.0.0</version>
+
+  <aggregations>
+    <target type="core:Block[]">
+      <composition>
+        <example:VersionedTarget bml:version="9.9.9" />
+      </composition>
+    </target>
+  </aggregations>
+</block>

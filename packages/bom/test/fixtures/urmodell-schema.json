@@ -1833,6 +1833,11 @@
           "required": false
         },
         {
+          "name": "libraryPaths",
+          "type": "type:Text[]",
+          "required": false
+        },
+        {
           "name": "continueOnError",
           "type": "type:Boolean",
           "required": false

@@ -31,22 +31,20 @@
   <name>BootstrapTypeRegistry</name>
   <type>fwcap:BootstrapTypeRegistry</type>
   <baseType>core:Capability</baseType>
-  <is>Walk BML corpus paths, parse, and populate TypeRegistry</is>
+  <is>Populate TypeRegistry from corpus paths or Library.bml graph</is>
 
-  <documentation>Uses @blockml/parser parse() per file. Collects bootstrap and parse diagnostics.</documentation>
+  <documentation>Accepts fwregistry:BootstrapOptions or legacy paths[] + rootDir. Library mode resolves dependencies/subLibraries in order, then registers blocks from each library blocks root. Flat mode walks paths for all .bml files.</documentation>
 
   <references>
     <see type="fwcap:DefaultBootstrapPaths" relation="SeeAlso" />
+    <see type="fwregistry:BootstrapOptions" relation="SeeAlso" />
     <see type="parser:Library" relation="SeeAlso" />
   </references>
 
   <properties>
-    <paths type="type:Text[]">
-      <documentation>Corpus roots; default defaultBootstrapPaths(). (optional)</documentation>
-    </paths>
-    <rootDir type="type:Text">
-      <documentation>Working directory for relative paths. (optional)</documentation>
-    </rootDir>
+    <options type="fwregistry:BootstrapOptions">
+      <documentation>Bootstrap options object. (optional)</documentation>
+    </options>
     <result type="fwregistry:BootstrapResult">
       <documentation>result. TS type: fwregistry:BootstrapResult. (required)</documentation>
     </result>

@@ -34,9 +34,11 @@
   <baseType>core:Documentation</baseType>
   <is>validateConstraints branch dispatch and embed contexts</is>
 
-  <documentation>validateConstraints walks BomDocument compositions and evaluates constraint
-    BlockInstance children against embed context:
+  <documentation>validateConstraints evaluates constraints on the effective member set from
+    resolveEffectiveMembers (baseType + contracts + local). Property ValuePresent and other
+    ValueConstraints on effective PropertyDefinition are checked against authored local values.
 
+    Embed contexts for directly declared constraint BlockInstances:
     block — BlockConstraint (RequiresMember), ValueConstraint (Min/Max/ValuePresent)
     property — PropertyConstraint (MustBeReadOnly), ValueConstraint
     aggregation — AggregationConstraint (AllowedChildType)

@@ -34,9 +34,15 @@
   <baseType>core:Documentation</baseType>
   <is>defaultBootstrapPaths and bootstrapTypeRegistry</is>
 
-  <documentation>bootstrapTypeRegistry(paths?, rootDir?) walks BML files under each path,
-    parses them via @blockml/parser parse(), and registers each document root block
-    in a new TypeRegistry.
+  <documentation>bootstrapTypeRegistry(options?) supports two modes:
+
+    corpus (default) — walks options.paths (or defaultBootstrapPaths()) for all .bml files,
+    parses via @blockml/parser parse(), registers each document root block.
+
+    library — when options.libraryPaths is set, resolves each Library.bml dependency graph
+    (dependencies, subLibraries) in order, then registers blocks from each library blocks root.
+    Missing Library path → BML_LIBRARY_RESOLVE_ERROR. Outer re-export of inner-only block →
+    BML_LIBRARY_NESTING_VIOLATION (minimal check).
 
     defaultBootstrapPaths(rootDir?) returns:
     • node_modules/@blockml/core/blocks
@@ -47,7 +53,8 @@
     but do not stop registration of successfully parsed documents.
 
     Hosts (@blockml/cli, @blockml/validator) may inject a pre-built TypeRegistry via
-    ValidateOptions.typeRegistry instead of bootstrapping.</documentation>
+    ValidateOptions.typeRegistry instead of bootstrapping. ValidateOptions.libraryPaths
+    selects library mode when typeRegistry is omitted.</documentation>
 
   <references>
     <see type="fwdocumentation:EffectiveMembers" relation="ReadNext"></see>

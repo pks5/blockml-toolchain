@@ -40,6 +40,9 @@
     success semantics: false when any diagnostic has severity === "error"; warnings
     alone do not fail success.
 
+    Bootstrap modes: bootstrapPaths (corpus flat scan) or libraryPaths (Library.bml graph).
+    validateVersions runs after validateTypes and before validateConstraints.
+
     No throw on validation failure — aligns with B26 sync diagnostic API across parser,
     serializer, validator, and compiler.</documentation>
 

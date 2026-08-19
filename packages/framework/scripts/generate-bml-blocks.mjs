@@ -13,6 +13,7 @@ const blocksRoot = join(__dirname, "../blocks/org/blockml/bml/framework");
 
 const FRAMEWORK_DIAGNOSTIC_CODES = [
   "BML_UNKNOWN_BASE_TYPE",
+  "BML_UNKNOWN_CONTRACT",
   "BML_MEMBER_COLLISION",
   "BML_OVERRIDE_WITHOUT_PARENT",
   "BML_OVERRIDE_REQUIRED",
@@ -20,6 +21,10 @@ const FRAMEWORK_DIAGNOSTIC_CODES = [
   "BML_CONSTRAINT_VIOLATION",
   "BML_CONSTRAINT_UNKNOWN",
   "BML_CONSTRAINT_TARGET_MISMATCH",
+  "BML_MISSING_VERSION",
+  "BML_UNKNOWN_VERSION",
+  "BML_LIBRARY_RESOLVE_ERROR",
+  "BML_LIBRARY_NESTING_VIOLATION",
   "BML_BOOTSTRAP_READ_ERROR",
 ];
 
@@ -198,6 +203,18 @@ const blocks = [
     ],
   },
   {
+    pkg: "registry",
+    prefix: "fwregistry",
+    name: "BootstrapOptions",
+    is: "Options for bootstrapTypeRegistry corpus or library graph modes",
+    doc: "paths — flat corpus scan roots. libraryPaths — Library.bml entry points for dependency-ordered library mode. rootDir — relative path resolution base.",
+    fields: [
+      { name: "paths", type: "type:Text[]", doc: "Corpus roots for flat scan mode. (optional)" },
+      { name: "libraryPaths", type: "type:Text[]", doc: "Library.bml file paths for library graph mode. (optional)" },
+      { name: "rootDir", type: "type:Text", doc: "Working directory for relative paths. (optional)" },
+    ],
+  },
+  {
     pkg: "config",
     prefix: "fwconfig",
     name: "FrameworkDiagnosticCodes",
@@ -229,15 +246,14 @@ const capabilities = [
     pkg: "capability",
     prefix: "fwcap",
     name: "BootstrapTypeRegistry",
-    is: "Walk BML corpus paths, parse, and populate TypeRegistry",
-    doc: "Uses @blockml/parser parse() per file. Collects bootstrap and parse diagnostics.",
+    is: "Populate TypeRegistry from corpus paths or Library.bml graph",
+    doc: "Accepts fwregistry:BootstrapOptions or legacy paths[] + rootDir. Library mode resolves dependencies/subLibraries in order, then registers blocks from each library blocks root. Flat mode walks paths for all .bml files.",
     tsExport: "bootstrapTypeRegistry",
     inputs: [
-      { name: "paths", type: "type:Text[]", doc: "Corpus roots; default defaultBootstrapPaths()." },
-      { name: "rootDir", type: "type:Text", doc: "Working directory for relative paths." },
+      { name: "options", type: "fwregistry:BootstrapOptions", doc: "Bootstrap options object. (optional)" },
     ],
     output: { name: "result", type: "fwregistry:BootstrapResult", required: true },
-    refs: ["fwcap:DefaultBootstrapPaths", "parser:Library"],
+    refs: ["fwcap:DefaultBootstrapPaths", "fwregistry:BootstrapOptions", "parser:Library"],
   },
   {
     pkg: "capability",
@@ -261,15 +277,29 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "fwcap",
+    name: "ResolveContracts",
+    is: "Merge contract Block members into effective member slice",
+    doc: "Resolves block.contracts[] in declaration order via TypeRegistry. Returns merged members from contract Blocks only (ignores contract subBlocks/compositions/embeddedBlocks). Unknown contract FQN → BML_UNKNOWN_CONTRACT in validateTypes.",
+    tsExport: "resolveContracts",
+    inputs: [
+      { name: "block", type: "bomblock:BlockDefinition", required: true },
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+    ],
+    output: { name: "members", type: "bommember:MemberDefinition[]", required: true },
+    refs: ["fwcap:ResolveEffectiveMembers", "fwcap:MemberIdentityKey"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
     name: "ResolveEffectiveMembers",
-    is: "Merge members along baseType chain and local declarations",
+    is: "Merge members along baseType chain, contracts, and local declarations",
     tsExport: "resolveEffectiveMembers",
     inputs: [
       { name: "block", type: "bomblock:BlockDefinition", required: true },
       { name: "registry", type: "fwcap:TypeRegistry", required: true },
     ],
     output: { name: "members", type: "bommember:MemberDefinition[]", required: true },
-    refs: ["fwcap:CollectBaseTypeChain", "fwcap:MemberIdentityKey"],
+    refs: ["fwcap:CollectBaseTypeChain", "fwcap:MemberIdentityKey", "fwcap:ResolveContracts"],
   },
   {
     pkg: "capability",
@@ -327,6 +357,20 @@ const capabilities = [
     ],
     output: { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true },
     refs: ["fwdocumentation:ConstraintValidation"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "ValidateVersions",
+    is: "Minimal effectiveBlockVersion and bml:version assert checks",
+    doc: "BML_MISSING_VERSION on standalone root blocks outside framework library convention. BML_UNKNOWN_VERSION when bml:version pin does not match a registered block version.",
+    tsExport: "validateVersions",
+    inputs: [
+      { name: "document", type: "bomdoc:BomDocument", required: true },
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+    ],
+    output: { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true },
+    refs: ["bomdocumentation:VersionRules"],
   },
   {
     pkg: "capability",

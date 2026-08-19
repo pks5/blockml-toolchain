@@ -31,13 +31,14 @@
   <name>ResolveEffectiveMembers</name>
   <type>fwcap:ResolveEffectiveMembers</type>
   <baseType>core:Capability</baseType>
-  <is>Merge members along baseType chain and local declarations</is>
+  <is>Merge members along baseType chain, contracts, and local declarations</is>
 
-  <documentation>Merge members along baseType chain and local declarations</documentation>
+  <documentation>Merge members along baseType chain, contracts, and local declarations</documentation>
 
   <references>
     <see type="fwcap:CollectBaseTypeChain" relation="SeeAlso" />
     <see type="fwcap:MemberIdentityKey" relation="SeeAlso" />
+    <see type="fwcap:ResolveContracts" relation="SeeAlso" />
   </references>
 
   <properties>
