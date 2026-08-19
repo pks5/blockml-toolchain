@@ -27,15 +27,21 @@
   <name>PublicApi</name>
   <type>bomdocumentation:PublicApi</type>
   <baseType>core:Documentation</baseType>
-  <is>Shared parse/serialize results (B26)</is>
+  <is>Shared parse/serialize/validate results (B26 + Stage 2)</is>
 
   <documentation>ParseResult: document (BomDocument | null), diagnostics[], success (false if any error).
 
     SerializeResult: text (string | null), diagnostics[], success.
 
+    ValidateResult: optional pragmaticModel (forked BomDocument), diagnostics[], success.
+
     ParseOptions: filePath (default "<memory>"), continueOnError (default true).
 
     SerializeOptions: indent (default 2; 0=compact B13), xmlDeclaration (default false B17/B24).
+
+    ValidateOptions: typeRegistry (TypeRegistryReader), bootstrapPaths, continueOnError (default true).
+
+    TypeRegistryReader: minimal get/has surface for ValidateOptions — implemented by @blockml/framework.
 
     bomEquals(a, b): structural equality modulo provenance (B20).
     stripProvenance(node): deep-clone omitting sourceLocation, endLine, endColumn, provenance source.
@@ -45,6 +51,7 @@
 
   <references>
     <see type="bomapi:ParseResult" relation="Defines"></see>
+    <see type="bomapi:ValidateResult" relation="Defines"></see>
     <see type="bomcap:BomEquals" relation="Defines"></see>
   </references>
 

@@ -79,6 +79,9 @@ const TS_TYPE_EXPORTS = [
   "SerializeResult",
   "ParseOptions",
   "SerializeOptions",
+  "ValidateResult",
+  "ValidateOptions",
+  "TypeRegistryReader",
 ];
 
 const TS_CAPABILITY_EXPORTS = ["bomEquals", "stripProvenance"];
@@ -147,6 +150,9 @@ const TS_FILE_MAP: Record<string, string> = {
   SerializeResult: "api.ts",
   ParseOptions: "api.ts",
   SerializeOptions: "api.ts",
+  ValidateResult: "api.ts",
+  ValidateOptions: "api.ts",
+  TypeRegistryReader: "api.ts",
 };
 
 /** Interfaces that extend another interface in TS. */

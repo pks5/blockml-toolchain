@@ -1,0 +1,46 @@
+<!--
+  BOM Urmodell — ValidateResult
+  FQN: org.blockml.bml.bom.api.ValidateResult
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ValidateResult</name>
+  <type>bomapi:ValidateResult</type>
+  <baseType>bom:UrmodellType</baseType>
+  <is>Result of validate() (Stage 2)</is>
+
+  <documentation>Result of @blockml/validator validate(). success is false when any diagnostic
+    has severity error. pragmaticModel is the forked working copy when validation ran.</documentation>
+
+  <properties>
+    <pragmaticModel type="bomdoc:BomDocument">
+      <documentation>Pragmatic model fork — optional. TS type: bomdoc:BomDocument | undefined.</documentation>
+    </pragmaticModel>
+    <diagnostics type="bomcommon:Diagnostic[]">
+      <documentation>diagnostics (required). TS type: bomcommon:Diagnostic[].</documentation>
+    </diagnostics>
+    <success type="type:Boolean">
+      <documentation>success (required). TS type: type:Boolean.</documentation>
+    </success>
+  </properties>
+
+</block>

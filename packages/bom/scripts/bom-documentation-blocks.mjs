@@ -129,8 +129,9 @@ export const documentationBlocks = [
   {
     name: "PackageOwnership",
     is: "Toolchain package responsibilities for the Urmodell",
-    doc: `@blockml/bom — all Urmodell interfaces, ParseResult/SerializeResult (B26), Diagnostic
-    (compiler result type), bomEquals/stripProvenance (B20), future BomBuilder (V3).
+    doc: `@blockml/bom — all Urmodell interfaces, ParseResult/SerializeResult/ValidateResult (B26 + Stage 2),
+    ValidateOptions, TypeRegistryReader, Diagnostic (compiler result type), bomEquals/stripProvenance (B20),
+    future BomBuilder (V3).
 
     @blockml/framework — TypeRegistry, forkBom, resolveEffectiveMembers, validateTypes, parseExpression.
     Utilities never mutate Urmodell.
@@ -154,14 +155,20 @@ export const documentationBlocks = [
   },
   {
     name: "PublicApi",
-    is: "Shared parse/serialize results (B26)",
+    is: "Shared parse/serialize/validate results (B26 + Stage 2)",
     doc: `ParseResult: document (BomDocument | null), diagnostics[], success (false if any error).
 
     SerializeResult: text (string | null), diagnostics[], success.
 
+    ValidateResult: optional pragmaticModel (forked BomDocument), diagnostics[], success.
+
     ParseOptions: filePath (default "<memory>"), continueOnError (default true).
 
     SerializeOptions: indent (default 2; 0=compact B13), xmlDeclaration (default false B17/B24).
+
+    ValidateOptions: typeRegistry (TypeRegistryReader), bootstrapPaths, continueOnError (default true).
+
+    TypeRegistryReader: minimal get/has surface for ValidateOptions — implemented by @blockml/framework.
 
     bomEquals(a, b): structural equality modulo provenance (B20).
     stripProvenance(node): deep-clone omitting sourceLocation, endLine, endColumn, provenance source.
@@ -170,6 +177,7 @@ export const documentationBlocks = [
     Sync only. No throw on recoverable diagnostics. Diagnostic distinct from org.blockml.bml.core.Diagnostic.`,
     refs: [
       { type: "bomapi:ParseResult", relation: "Defines" },
+      { type: "bomapi:ValidateResult", relation: "Defines" },
       { type: "bomcap:BomEquals", relation: "Defines" },
     ],
   },

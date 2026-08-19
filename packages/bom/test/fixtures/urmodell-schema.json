@@ -1792,6 +1792,62 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.bom.api.ValidateResult",
+      "tsExport": "ValidateResult",
+      "pkg": "api",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "pragmaticModel",
+          "type": "bomdoc:BomDocument",
+          "required": false
+        },
+        {
+          "name": "diagnostics",
+          "type": "bomcommon:Diagnostic[]",
+          "required": true
+        },
+        {
+          "name": "success",
+          "type": "type:Boolean",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.api.ValidateOptions",
+      "tsExport": "ValidateOptions",
+      "pkg": "api",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "typeRegistry",
+          "type": "bomapi:TypeRegistryReader",
+          "required": false
+        },
+        {
+          "name": "bootstrapPaths",
+          "type": "type:Text[]",
+          "required": false
+        },
+        {
+          "name": "continueOnError",
+          "type": "type:Boolean",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.api.TypeRegistryReader",
+      "tsExport": "TypeRegistryReader",
+      "pkg": "api",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": []
+    },
+    {
       "fqn": "org.blockml.bml.bom.capability.StripProvenance",
       "tsExport": "StripProvenance",
       "pkg": "capability",
