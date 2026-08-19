@@ -1,0 +1,53 @@
+<!--
+  BOM Documentation — PackageOwnership
+  FQN: org.blockml.bml.bom.documentation.PackageOwnership
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PackageOwnership</name>
+  <type>bomdocumentation:PackageOwnership</type>
+  <baseType>core:Documentation</baseType>
+  <is>Toolchain package responsibilities for the Urmodell</is>
+
+  <documentation>@blockml/bom — all Urmodell interfaces, ParseResult/SerializeResult (B26), Diagnostic
+    (compiler result type), bomEquals/stripProvenance (B20), future BomBuilder (V3).
+
+    @blockml/core — TypeRegistry, forkBom, resolveEffectiveMembers, validateTypes, parseExpression.
+    Utilities never mutate Urmodell.
+
+    @blockml/parser — BML → BomDocument mapper; single file per invocation; parse() → ParseResult.
+    Does not own BOM interfaces or expand directives.
+
+    @blockml/serializer — BomDocument → canonical BML XML; serialize() → SerializeResult.
+
+    @blockml/validator — checks on BomDocument using core utilities.
+
+    @blockml/cli — TypeRegistry bootstrap, validateTypes/validateConstraints, compile pipeline.
+
+    @blockml/lsp (V2) — reuses parser, validator, serializer; no parallel IDE AST.
+
+    @blockml/compiler — Target Registry facade.
+
+    @machineblocks/core — domain BML; extends TypeRegistry bootstrap.</documentation>
+
+</block>

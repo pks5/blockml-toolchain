@@ -1,0 +1,53 @@
+<!--
+  BOM Documentation — CalibratorExample
+  FQN: org.blockml.bml.bom.documentation.CalibratorExample
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>CalibratorExample</name>
+  <type>bomdocumentation:CalibratorExample</type>
+  <baseType>core:Documentation</baseType>
+  <is>Reference BomDocument walkthrough</is>
+
+  <documentation>Source: com.machineblocks.bml.calibration.Calibrator.bml
+
+    BomDocument kind block → BlockDefinition Calibrator
+    type com.machineblocks.bml.calibration.Calibrator, baseType CompositeBlock, version 1.0.0
+
+    Declared members only (not inherited size, offset, baseColor):
+    numberOfSamples, font, size (ExpressionValue), _utils aggregation (Utils bean context),
+    _parts aggregation (4 calibration rows).
+
+    subBlocks: Utils, Base, StudDiameter, BaseWallThickness, TubeDiameter, PinDiameter.
+
+    compositions: _utils → Utils instance; _parts → Base, StudDiameter, Base (id=base_wall), …
+
+    Observations: Sub-Block refs by short name resolved via subBlocks[] tree.
+    @utils.formatValue and #math.* stored as ExpressionValue { raw }.
+    Inherited native properties not in members[] — validator uses resolveEffectiveMembers().</documentation>
+
+  <references>
+    <see type="bomdoc:BomDocument" relation="ExampleOf"></see>
+  </references>
+
+</block>

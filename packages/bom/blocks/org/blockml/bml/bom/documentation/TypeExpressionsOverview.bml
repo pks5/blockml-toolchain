@@ -1,0 +1,47 @@
+<!--
+  BOM Documentation — TypeExpressionsOverview
+  FQN: org.blockml.bml.bom.documentation.TypeExpressionsOverview
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>TypeExpressionsOverview</name>
+  <type>bomdocumentation:TypeExpressionsOverview</type>
+  <baseType>core:Documentation</baseType>
+  <is>Parse-time type expression model</is>
+
+  <documentation>TypeExpression (alias TypeDescriptor in V1) — structured parse-time AST, not a ValueType.
+    Used for Capability inputType/outputType and Property type attributes.
+
+    Union variants: named, union, genericParam, self, anonymousStruct.
+
+    Anonymous struct = shorthand for inline class with ordered fields (FunctionMapping positional order).
+    Single primitive = NamedTypeReference directly — not wrapped in one-field struct.
+
+    Union variant discrimination and AST are validateTypes()/parseExpression() utility results —
+    not stored in Canonical BOM.</documentation>
+
+  <references>
+    <see type="bomtype:TypeExpression" relation="Defines"></see>
+  </references>
+
+</block>

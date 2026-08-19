@@ -2,11 +2,14 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { documentationBlocks } from "../scripts/bom-documentation-blocks.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const pkgRoot = join(__dirname, "..");
 const blocksRoot = join(pkgRoot, "blocks/org/blockml/bml/bom");
 const srcRoot = join(pkgRoot, "src");
+
+const EXPECTED_DOC_BLOCKS = documentationBlocks.map((d) => d.name);
 
 const schema = JSON.parse(
   readFileSync(join(__dirname, "fixtures/urmodell-schema.json"), "utf8"),
@@ -331,6 +334,20 @@ describe("BOM BML ↔ TS parity", () => {
     expect(catalog.has("BomEquals")).toBe(true);
     expect(catalog.has("StripProvenance")).toBe(true);
     expect(TS_CAPABILITY_EXPORTS).toEqual(["bomEquals", "stripProvenance"]);
+  });
+
+  it("documentation blocks are in Library.bml catalog", () => {
+    const catalog = parseLibraryCatalog();
+    for (const name of EXPECTED_DOC_BLOCKS) {
+      expect(catalog.has(name), `Library.bml missing documentation ${name}`).toBe(true);
+    }
+    const docDir = join(blocksRoot, "documentation");
+    for (const name of EXPECTED_DOC_BLOCKS) {
+      expect(
+        readFileSync(join(docDir, `${name}.bml`), "utf8").includes("core:Documentation"),
+        `${name}.bml should extend core:Documentation`,
+      ).toBe(true);
+    }
   });
 
   it("union variants have kind discriminators in schema", () => {

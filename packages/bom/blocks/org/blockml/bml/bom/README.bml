@@ -15,8 +15,8 @@
   xmlns:bomcommon="org.blockml.bml.bom.common"
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bommember="org.blockml.bml.bom.member"
-  xmlns:bomrules="org.blockml.bml.bom.rules"
   xmlns:bomtype="org.blockml.bml.bom.type"
   xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
@@ -33,22 +33,22 @@
     This library (org.blockml.bml.bom.*) is the SSOT; TypeScript in packages/bom/src/ implements it.
     Parity tests in packages/bom/test/ verify BML ↔ TS alignment.
 
+    Start reading at org.blockml.bml.bom.documentation.Introduction (ReadNext chain).
+
     Layer separation:
     • org.blockml.bml.definition.* (@blockml/core) — BML meta-model (what block documents mean)
     • org.blockml.bml.bom.* (this library) — parse-result data structures (BomDocument graph)
 
-    Modules: common (provenance, diagnostics), block (BlockDefinition cluster), member (members),
-    composition (trees, directives, instances), type (TypeExpression AST), value (MemberValue),
-    document (BomDocument root), api (ParseResult/SerializeResult B26), capability (bomEquals),
-    rules (design decisions and validation responsibilities).
+    Modules: documentation (narrative specs), common, block, member, composition, type, value,
+    document (BomDocument root), api (B26), capability (bomEquals).
 
-    Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/core utilities);
-    BML→BOM mapping rules (@blockml/parser, doc 13).
+    Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/core); BML→BOM mapping (@blockml/parser).
   </documentation>
 
   <references>
-    <see type="bomrules:DesignDecisions" relation="ReadFirst" />
-    <see type="bomrules:ValidationResponsibilities" relation="SeeAlso" />
+    <see type="bomdocumentation:Introduction" relation="ReadFirst" />
+    <see type="bomdocumentation:DesignDecisions" relation="SeeAlso" />
+    <see type="bomdocumentation:ValidationResponsibilities" relation="SeeAlso" />
     <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
 

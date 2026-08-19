@@ -1,0 +1,47 @@
+<!--
+  BOM Documentation — LayerSeparation
+  FQN: org.blockml.bml.bom.documentation.LayerSeparation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>LayerSeparation</name>
+  <type>bomdocumentation:LayerSeparation</type>
+  <baseType>core:Documentation</baseType>
+  <is>Urmodell types vs BML definition meta-model</is>
+
+  <documentation>Two layers share names but differ in semantics:
+
+    org.blockml.bml.definition.* (@blockml/core) — BML meta-model. Describes what block
+    definition documents mean (PropertyDefinition, BlockDefinition meta-type, …).
+
+    org.blockml.bml.bom.* (this package) — Urmodell runtime. Parse-result data structures
+    (BomDocument, BlockDefinition as TS interface, MemberDefinition, …).
+
+    Example: org.blockml.bml.definition.BlockDefinition describes BML syntax; org.blockml.bml.bom.block.BlockDefinition
+    describes the parser output shape. See 19_definition_blocks_and_bml_xml.md.</documentation>
+
+  <references>
+    <see type="def:BlockDefinition" relation="SeeAlso"></see>
+  </references>
+
+</block>

@@ -1,0 +1,45 @@
+<!--
+  BOM Documentation — InstanceIdRules
+  FQN: org.blockml.bml.bom.documentation.InstanceIdRules
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>InstanceIdRules</name>
+  <type>bomdocumentation:InstanceIdRules</type>
+  <baseType>core:Documentation</baseType>
+  <is>bml:id identity and cross-instance references</is>
+
+  <documentation>bml:id identifies child within parent composition tree. No FQN fallback.
+
+    Pipeline: Parse stores authored id → Validate cross-refs → Expand directives →
+    Resolve/auto-ID static unreferenced children → Render.
+
+    Auto-IDs NOT in BomDocument — only on expanded composition tree.
+    Referenced instances and bml:each require explicit bml:id (BML_MISSING_ID).
+
+    Auto-ID: hash(typeFqn, sibling index post-expansion, parent partId) → 6 hex chars.
+
+    Qualified FQN::id: target in public aggregation, literal id, literal reference token.
+    Same-document unqualified ids resolve within visible aggregations.</documentation>
+
+</block>

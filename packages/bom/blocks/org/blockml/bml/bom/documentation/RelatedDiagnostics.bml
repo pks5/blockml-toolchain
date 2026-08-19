@@ -1,0 +1,51 @@
+<!--
+  BOM Documentation — RelatedDiagnostics
+  FQN: org.blockml.bml.bom.documentation.RelatedDiagnostics
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>RelatedDiagnostics</name>
+  <type>bomdocumentation:RelatedDiagnostics</type>
+  <baseType>core:Documentation</baseType>
+  <is>BOM-relevant diagnostic codes</is>
+
+  <documentation>BML_MISSING_BASE_TYPE, BML_MISSING_BLOCK_TYPE, BML_BLOCK_NAME_TYPE_MISMATCH,
+    BML_MISSING_SUBBLOCK_NAME, BML_SUBBLOCK_TYPE_MISMATCH, BML_EMBEDDED_BLOCKS_ON_SUBBLOCK,
+    BML_NESTED_EMBEDDED_BLOCKS, BML_DUPLICATE_EMBEDDED_BLOCK, BML_DEFINITION_TYPE_MISMATCH,
+    BML_MISSING_EMBEDDED_BLOCK_TYPE, BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE, BML_AMBIGUOUS_TYPE,
+    BML_CONSTRAINT_*, BML_MISSING_IS, BML_MISSING_DOCUMENTATION, BML_MISSING_ISNOT,
+    BML_MISSING_SUMMARY, BML_DUPLICATE_*, BML_INVALID_SINCE_VERSION, BML_CHANGELOG_VERSION_ORDER,
+    BML_EXAMPLE_*, BML_UNKNOWN_NATURAL_LANGUAGE, BML_MISSING_VERSION, BML_UNKNOWN_VERSION,
+    BML_VERSION_BELOW_LIBRARY, BML_VERSION_MINOR_DRIFT, BML_LIBRARY_NESTING_VIOLATION,
+    BML_MISSING_ID, BML_UNRESOLVABLE_INSTANCE_REF, BML_UNEXPORTED_INSTANCE_REF,
+    BML_NON_STATIC_INSTANCE_REF, BML_DUPLICATE_MEMBER_*, BML_INVALID_PROPERTY_TYPE,
+    BML_UNKNOWN_TYPE, BML_INVALID_DEFINITION_BRANCH, BML_INVALID_TYPE_REFERENCE,
+    BML_UNKNOWN_PROPERTY, BML_UNKNOWN_DIRECTIVE, BML_DIRECTIVE_NOT_ALLOWED,
+    BML_PROPERTY_CYCLE, BML_VISIBILITY_*, BML_FINAL_MEMBER_OVERRIDE, BML_OVERRIDE_*,
+    BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED, BML_READONLY_MEMBER_WRITE, BML_STANDALONE_COMPOSITION,
+    BML_NAMESPACE_*, BML_XML_*, BML_PRESET_CYCLE, BML_GENERIC_*, BML_TYPE_BOUND_NOT_SATISFIED,
+    BML_UNKNOWN_CONTRACT, BML_CONTRACT_*, BML_EXPR_UNKNOWN_PROPERTY.
+
+    Full catalog: org.blockml.bml.diagnostic.* (@blockml/core) and 06_compiler.md.</documentation>
+
+</block>

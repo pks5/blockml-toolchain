@@ -3,9 +3,10 @@
  * One-shot generator for BOM Urmodell BML blocks.
  * Output under blocks/ is the SSOT; this script is a migration aid only.
  */
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { documentationBlocks } from "./bom-documentation-blocks.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const blocksRoot = join(__dirname, "../blocks/org/blockml/bml/bom");
@@ -22,8 +23,8 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:bomcommon="org.blockml.bml.bom.common"
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bommember="org.blockml.bml.bom.member"
-  xmlns:bomrules="org.blockml.bml.bom.rules"
   xmlns:bomtype="org.blockml.bml.bom.type"
   xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
@@ -869,40 +870,6 @@ const blocks = [
       { name: "output", type: "type:Boolean", required: true },
     ],
   },
-
-  // rules
-  {
-    pkg: "rules",
-    prefix: "bomrules",
-    name: "DesignDecisions",
-    is: "Normative Urmodell design decisions",
-    doc: `Abstraction: BOM is a lossless representation of BML source — no directive expansion at parse time.
-Immutability: Urmodell is read-only after parse or BomBuilder.seal().
-Member inheritance: utility lookup only — declared members stored per block; EffectiveMemberSet never in BOM.
-Directives: stored unexpanded in directives[]; bml:xml → xmlRendering (not directives[]).
-Composition: nested inside aggregations only; block instances open aggregations directly.
-Sub-Blocks: nested in BlockDefinition.subBlocks[]; FQN = parent.type + "." + name.
-Embedded Blocks: root embeddedBlocks[] only — virtual .bml files.
-Property values: deep copy only — never linked; cross-instance FQN::id only on associations.
-XML comments (B11): bound to following element. Whitespace (B13): not on Urmodell.
-Dual placement (D9): store authoredPlacement. Visibility (B14): logical name in BOM.`,
-    baseType: "core:ReadMe",
-  },
-  {
-    pkg: "rules",
-    prefix: "bomrules",
-    name: "ValidationResponsibilities",
-    is: "Validator checks on BomDocument",
-    doc: `Parser produces BomDocument; validator (@blockml/validator + @blockml/core) checks:
-Member namespace uniqueness; baseType in TypeRegistry; effective version (BML_MISSING_VERSION);
-Library block.version >= library.version; bml:version exact asserts (BML_UNKNOWN_VERSION);
-Property values inline deep copies; resolveEffectiveMembers for expression refs;
-constraints via validateConstraints after resolveEffectiveMembers;
-readOnly enforcement on instances; Library nesting (BML_LIBRARY_NESTING_VIOLATION);
-Sub-Block visibility and qualification rules; bml:each requires explicit id.
-Validator does NOT expand directives, assign auto-IDs, or interpret aggregations.`,
-    baseType: "core:ReadMe",
-  },
 ];
 
 function fqn(b) {
@@ -926,6 +893,39 @@ function renderFields(fields) {
     })
     .join("\n");
   return `\n\n  <properties>\n${props}\n  </properties>`;
+}
+
+function docFqn(name) {
+  return `org.blockml.bml.bom.documentation.${name}`;
+}
+
+function renderDocBlock(d) {
+  const refs = d.refs?.length
+    ? `\n\n  <references>\n${d.refs
+        .map(
+          (r) =>
+            `    <see type="${r.type}" relation="${r.relation}">${r.context ?? ""}</see>`,
+        )
+        .join("\n")}\n  </references>`
+    : "";
+
+  return `<!--
+  BOM Documentation — ${d.name}
+  FQN: ${docFqn(d.name)}
+-->
+<block
+${XMLNS}
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>${d.name}</name>
+  <type>bomdocumentation:${d.name}</type>
+  <baseType>core:Documentation</baseType>
+  <is>${d.is}</is>
+
+  <documentation>${d.doc}</documentation>${refs}
+
+</block>
+`;
 }
 
 function renderBlock(b) {
@@ -963,16 +963,35 @@ function catalogEntry(b) {
   return `      <composition><${typeRef(b)} /></composition>`;
 }
 
-// Generate block files
+// Generate Urmodell block files
 for (const b of blocks) {
   const dir = b.pkg ? join(blocksRoot, b.pkg) : blocksRoot;
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, `${b.name}.bml`), renderBlock(b));
 }
 
-// Library catalog — all blocks except README handled separately
-const catalogBlocks = blocks.filter((b) => b.name !== "UrmodellType" || b.pkg === "");
-const libraryBlocks = blocks.map(catalogEntry).join("\n");
+// Generate documentation block files
+const docDir = join(blocksRoot, "documentation");
+mkdirSync(docDir, { recursive: true });
+for (const d of documentationBlocks) {
+  writeFileSync(join(docDir, `${d.name}.bml`), renderDocBlock(d));
+}
+
+// Remove legacy rules/ stubs superseded by documentation/
+const rulesDir = join(blocksRoot, "rules");
+try {
+  rmSync(rulesDir, { recursive: true, force: true });
+} catch {
+  /* ignore */
+}
+
+// Library catalog
+const libraryBlocks = [
+  ...blocks.map(catalogEntry),
+  ...documentationBlocks.map(
+    (d) => `      <composition><bomdocumentation:${d.name} /></composition>`,
+  ),
+].join("\n");
 
 const library = `<!--
   BlockML BOM Library Descriptor
@@ -1044,22 +1063,22 @@ ${XMLNS}>
     This library (org.blockml.bml.bom.*) is the SSOT; TypeScript in packages/bom/src/ implements it.
     Parity tests in packages/bom/test/ verify BML ↔ TS alignment.
 
+    Start reading at org.blockml.bml.bom.documentation.Introduction (ReadNext chain).
+
     Layer separation:
     • org.blockml.bml.definition.* (@blockml/core) — BML meta-model (what block documents mean)
     • org.blockml.bml.bom.* (this library) — parse-result data structures (BomDocument graph)
 
-    Modules: common (provenance, diagnostics), block (BlockDefinition cluster), member (members),
-    composition (trees, directives, instances), type (TypeExpression AST), value (MemberValue),
-    document (BomDocument root), api (ParseResult/SerializeResult B26), capability (bomEquals),
-    rules (design decisions and validation responsibilities).
+    Modules: documentation (narrative specs), common, block, member, composition, type, value,
+    document (BomDocument root), api (B26), capability (bomEquals).
 
-    Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/core utilities);
-    BML→BOM mapping rules (@blockml/parser, doc 13).
+    Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/core); BML→BOM mapping (@blockml/parser).
   </documentation>
 
   <references>
-    <see type="bomrules:DesignDecisions" relation="ReadFirst" />
-    <see type="bomrules:ValidationResponsibilities" relation="SeeAlso" />
+    <see type="bomdocumentation:Introduction" relation="ReadFirst" />
+    <see type="bomdocumentation:DesignDecisions" relation="SeeAlso" />
+    <see type="bomdocumentation:ValidationResponsibilities" relation="SeeAlso" />
     <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
 
@@ -1111,4 +1130,6 @@ writeFileSync(
   ),
 );
 
-console.log(`Generated ${blocks.length} BML blocks + Library.bml + README.bml`);
+console.log(
+  `Generated ${blocks.length} Urmodell blocks + ${documentationBlocks.length} documentation blocks + Library.bml + README.bml`,
+);

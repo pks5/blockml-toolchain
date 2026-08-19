@@ -1,0 +1,47 @@
+<!--
+  BOM Documentation — ScopeExclusions
+  FQN: org.blockml.bml.bom.documentation.ScopeExclusions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ScopeExclusions</name>
+  <type>bomdocumentation:ScopeExclusions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Topics intentionally outside @blockml/bom</is>
+
+  <documentation>Not specified in this library:
+
+    Expression AST node union → 10_expression_language.md
+    Embedded expressions in implementations → 10_expression_language.md
+    BML → BOM mapping algorithm → @blockml/parser, 13_bml_to_bom_mapping.md
+    Framework base types (BML) → @blockml/core, 16_framework_base_types.md
+    ValueType / Language BML → 17_type_system_bml.md
+    Dev setup → 15_dev_setup.md
+    MBOM native params → NativeBlock.bml + com.machineblocks.bml.type.*
+    MBOM → SCAD → 04_types.md, 05_scad_renderer.md
+    ManagedObject / synthetic accessors → 08_managed_object.md
+    Built-in #math / #strings → @blockml/core services
+
+    Also outside Urmodell: EffectiveMemberSet, TypeRegistry (core utilities).</documentation>
+
+</block>

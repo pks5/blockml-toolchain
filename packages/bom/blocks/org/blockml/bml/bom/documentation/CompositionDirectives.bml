@@ -1,0 +1,45 @@
+<!--
+  BOM Documentation — CompositionDirectives
+  FQN: org.blockml.bml.bom.documentation.CompositionDirectives
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>CompositionDirectives</name>
+  <type>bomdocumentation:CompositionDirectives</type>
+  <baseType>core:Documentation</baseType>
+  <is>Directive placement and Thymeleaf model</is>
+
+  <documentation>Directives follow Thymeleaf model — attributes on modified element, stored unexpanded.
+
+    bml:id, bml:version, bml:bean, bml:scope → BlockInstance fields (NOT directives[]).
+    bml:with → composition, aggregation, bml:container, block instances.
+    bml:each, bml:if, bml:unless → bml:container, block instances.
+
+    Dynamic ids: bml:id="${ 'val_' + i }" stored as ExpressionValue or literal on BlockInstance.id.
+    Omitted bml:id stored absent — parser does not assign auto-IDs.</documentation>
+
+  <references>
+    <see type="bomcomp:DirectiveAttribute" relation="Defines"></see>
+  </references>
+
+</block>

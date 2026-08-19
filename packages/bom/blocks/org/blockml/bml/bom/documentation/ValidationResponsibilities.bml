@@ -1,0 +1,51 @@
+<!--
+  BOM Documentation — ValidationResponsibilities
+  FQN: org.blockml.bml.bom.documentation.ValidationResponsibilities
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ValidationResponsibilities</name>
+  <type>bomdocumentation:ValidationResponsibilities</type>
+  <baseType>core:Documentation</baseType>
+  <is>Full validator checklist on BomDocument</is>
+
+  <documentation>Parser produces BomDocument. Validator (@blockml/validator + @blockml/core) checks:
+
+    Member namespace uniqueness; baseType in TypeRegistry; property values inline deep copies;
+    resolveEffectiveMembers for expression refs; effective version (BML_MISSING_VERSION);
+    library block.version >= library.version; bml:version asserts (BML_UNKNOWN_VERSION);
+    cross-instance refs to explicit authored id; qualified FQN::id on public aggregations;
+    bml:each explicit id; Sub-Block qualified/FQN refs; generic param ≠ block/sub-block names;
+    visibility rules; no duplicate visibility-prefix variants; expression types match;
+    preset properties exist; property value cycles; basePresets resolve without cycles;
+    contracts merge order; validateConstraints after resolveEffectiveMembers;
+    readOnly enforcement (BML_READONLY_MEMBER_WRITE); library blocks/deps resolve;
+    no outer library re-export from inner library (BML_LIBRARY_NESTING_VIOLATION).
+
+    Validator does NOT expand directives, assign auto-IDs, or interpret aggregations.</documentation>
+
+  <references>
+    <see type="bomdocumentation:RelatedDiagnostics" relation="SeeAlso"></see>
+  </references>
+
+</block>

@@ -1,0 +1,45 @@
+<!--
+  BOM Documentation — SubBlockAndEmbeddedBlocks
+  FQN: org.blockml.bml.bom.documentation.SubBlockAndEmbeddedBlocks
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>SubBlockAndEmbeddedBlocks</name>
+  <type>bomdocumentation:SubBlockAndEmbeddedBlocks</type>
+  <baseType>core:Documentation</baseType>
+  <is>Sub-Block FQN derivation and inline library embeds</is>
+
+  <documentation>Sub-Blocks omit type in BML by convention. FQN derived recursively:
+    parent.type + "." + name (BML_SUBBLOCK_TYPE_MISMATCH if explicit type differs).
+
+    Sub-Blocks share one BomDocument; may nest arbitrarily. Must not declare embeddedBlocks
+    (BML_EMBEDDED_BLOCKS_ON_SUBBLOCK).
+
+    embeddedBlocks: Inline Library on document root only. Each entry is a virtual .bml file.
+    FQN = fully qualified type element value — not nested under root. No nested embeds
+    (BML_NESTED_EMBEDDED_BLOCKS). Duplicate FQNs → BML_DUPLICATE_EMBEDDED_BLOCK.
+    Shadows library definitions within BomDocument; invisible externally.
+
+    Composition references to embeds must use fully qualified block type.</documentation>
+
+</block>

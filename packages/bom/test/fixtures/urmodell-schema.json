@@ -1833,22 +1833,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "fqn": "org.blockml.bml.bom.rules.DesignDecisions",
-      "tsExport": "DesignDecisions",
-      "pkg": "rules",
-      "abstract": false,
-      "baseType": "core:ReadMe",
-      "fields": []
-    },
-    {
-      "fqn": "org.blockml.bml.bom.rules.ValidationResponsibilities",
-      "tsExport": "ValidationResponsibilities",
-      "pkg": "rules",
-      "abstract": false,
-      "baseType": "core:ReadMe",
-      "fields": []
     }
   ],
   "capabilities": [

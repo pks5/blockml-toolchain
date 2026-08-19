@@ -1,47 +1,48 @@
 # BOM Object Model
 
-version: 1.5.0 · **@blockml/bom BML library is SSOT**
+version: 1.6.0 · **@blockml/bom BML library is SSOT**
 
 ## Purpose of this Document
 
-This file is the **table of contents** for the BlockML Urmodell (Canonical BOM) — **transitional Markdown**. Normative type contracts, design decisions, and validation rules live in the `@blockml/bom` BML library at `packages/bom/blocks/org/blockml/bml/bom/`. TypeScript in `packages/bom/src/` implements that library; parity tests in `packages/bom/test/` verify alignment.
+Transitional **table of contents** only. Normative Urmodell contracts, design decisions, validation rules, and narrative documentation live in `@blockml/bom` BML under `packages/bom/blocks/org/blockml/bml/bom/`.
 
-Start reading at `org.blockml.bml.bom.README` (`relation=ReadFirst`).
+**Start reading:** `org.blockml.bml.bom.documentation.Introduction` → ReadNext chain.
 
-For conceptual foundations see `01_bom_core.md`.
-For BML authoring syntax see `02_mbml.md`.
-For BML → BOM mapping see `13_bml_to_bom_mapping.md` (`@blockml/parser`).
-For BML meta-model (what block documents mean) see `org.blockml.bml.definition.*` in `@blockml/core` — **distinct layer** from Urmodell types below.
+TypeScript in `packages/bom/src/` implements the library; parity tests in `packages/bom/test/` verify BML ↔ TS alignment.
 
----
-
-## Layer separation
-
-| Layer | FQN prefix | Package | Role |
-|---|---|---|---|
-| BML meta-model | `org.blockml.bml.definition.*` | `@blockml/core` | Describes BML syntax / block document shape |
-| Urmodell (BOM) | `org.blockml.bml.bom.*` | `@blockml/bom` | Parse-result data structures (`BomDocument` graph) |
-
-Same names (e.g. `BlockDefinition`) may appear on both layers — different semantics. See `19_definition_blocks_and_bml_xml.md`.
+Cross-package references (still Markdown until migrated): `01_bom_core.md`, `13_bml_to_bom_mapping.md`, `10_expression_language.md`.
 
 ---
 
-## How to use this index
+## Documentation map — narrative specs
 
-| Need | Go to |
+| Topic | BML FQN |
 |---|---|
-| Library entry point | `org.blockml.bml.bom.README` |
-| Design decisions (immutability, directives, …) | `org.blockml.bml.bom.rules.DesignDecisions` |
-| Validator responsibilities | `org.blockml.bml.bom.rules.ValidationResponsibilities` |
-| Calibrator reference example | `org.blockml.bml.bom.document.BomDocument` — `<examples>` |
-| Roundtrip equality (B20) | `org.blockml.bml.bom.capability.BomEquals` · `StripProvenance` |
-| Public parse/serialize API (B26) | `org.blockml.bml.bom.api.ParseResult` · `SerializeResult` |
+| Package purpose & scope | `org.blockml.bml.bom.documentation.Introduction` |
+| Layer separation (bom vs definition) | `org.blockml.bml.bom.documentation.LayerSeparation` |
+| Architecture pipeline | `org.blockml.bml.bom.documentation.ArchitectureOverview` |
+| Abstraction & roundtrip | `org.blockml.bml.bom.documentation.AbstractionPrinciple` |
+| Stores vs interprets table | `org.blockml.bml.bom.documentation.AuthoredSurfaceTable` |
+| Design decisions (full) | `org.blockml.bml.bom.documentation.DesignDecisions` |
+| Package ownership | `org.blockml.bml.bom.documentation.PackageOwnership` |
+| Public API B26 | `org.blockml.bml.bom.documentation.PublicApi` |
+| XML comments B11/B22 | `org.blockml.bml.bom.documentation.XmlComments` |
+| Sub-Blocks & embedded blocks | `org.blockml.bml.bom.documentation.SubBlockAndEmbeddedBlocks` |
+| Type expressions overview | `org.blockml.bml.bom.documentation.TypeExpressionsOverview` |
+| Member value semantics | `org.blockml.bml.bom.documentation.MemberValueSemantics` |
+| Composition directives | `org.blockml.bml.bom.documentation.CompositionDirectives` |
+| Instance ID rules | `org.blockml.bml.bom.documentation.InstanceIdRules` |
+| Version rules | `org.blockml.bml.bom.documentation.VersionRules` |
+| Validation checklist | `org.blockml.bml.bom.documentation.ValidationResponsibilities` |
+| Related diagnostics | `org.blockml.bml.bom.documentation.RelatedDiagnostics` |
+| Calibrator walkthrough | `org.blockml.bml.bom.documentation.CalibratorExample` |
+| Out-of-scope topics | `org.blockml.bml.bom.documentation.ScopeExclusions` |
+
+Library entry: `org.blockml.bml.bom.README` · Catalog: `org.blockml.bml.bom.Library`
 
 ---
 
 ## Urmodell type map — TS export → BML FQN
-
-Library catalog: `org.blockml.bml.bom.Library` (`packages/bom/blocks/org/blockml/bml/bom/Library.bml`).
 
 ### Root document
 
@@ -156,29 +157,10 @@ Library catalog: `org.blockml.bml.bom.Library` (`packages/bom/blocks/org/blockml
 
 ## Intentionally not in @blockml/bom
 
-| Topic | Owner |
-|---|---|
-| `EffectiveMemberSet` | `@blockml/core` utility — computed, not stored in Urmodell |
-| `TypeRegistry` | `@blockml/core` — bootstrap / lookup API |
-| BML → BOM mapping algorithm | `@blockml/parser` — `13_bml_to_bom_mapping.md` |
-| Expression AST node union | `10_expression_language.md` |
-| BML meta-model blocks | `org.blockml.bml.definition.*` in `@blockml/core` |
-
----
-
-## Package ownership (summary)
-
-```text
-@blockml/bom     — Urmodell BML library (SSOT) + TypeScript implementation + bomEquals (B20)
-@blockml/parser  — BML → BomDocument mapper; owns doc 13
-@blockml/serializer — BomDocument → BML XML
-@blockml/core    — TypeRegistry, resolveEffectiveMembers(), validateTypes(), …
-```
-
-Full ownership matrix: `00_system.md` — Package map · `15_dev_setup.md` — Phase A.
+See `org.blockml.bml.bom.documentation.ScopeExclusions`.
 
 ---
 
 ## Historical content
 
-The pre-migration long-form interface definitions, validation checklists, and Calibrator walkthrough that previously lived in this file are now in the BML library blocks listed above. Do not treat this Markdown file as an implementation SSOT.
+Pre-migration long-form prose from doc 12 v1.4.0 lives in `org.blockml.bml.bom.documentation.*`. Do not treat this Markdown file as implementation SSOT.

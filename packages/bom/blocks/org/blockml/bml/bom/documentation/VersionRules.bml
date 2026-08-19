@@ -1,0 +1,41 @@
+<!--
+  BOM Documentation — VersionRules
+  FQN: org.blockml.bml.bom.documentation.VersionRules
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>VersionRules</name>
+  <type>bomdocumentation:VersionRules</type>
+  <baseType>core:Documentation</baseType>
+  <is>Effective block version and instance version asserts</is>
+
+  <documentation>Definition effectiveBlockVersion = own version | library.version (if exported) | BML_MISSING_VERSION.
+    Block in library: version >= library.version when both declared.
+
+    Same-document Sub-Block refs: bml:version not allowed as resolution hint.
+    External refs: bml:version omitted → registry context; present → exact assert (BML_UNKNOWN_VERSION).
+    Library catalog sugar (readMe, bootstrap, dependencies, blocks): same bml:version rules.
+
+    Framework convention: version only on Library.bml for org.blockml.bml.* / com.machineblocks.bml.*</documentation>
+
+</block>
