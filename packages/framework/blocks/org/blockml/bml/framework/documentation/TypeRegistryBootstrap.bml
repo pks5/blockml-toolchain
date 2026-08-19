@@ -1,0 +1,57 @@
+<!--
+  Framework Documentation — TypeRegistryBootstrap
+  FQN: org.blockml.bml.framework.documentation.TypeRegistryBootstrap
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>TypeRegistryBootstrap</name>
+  <type>fwdocumentation:TypeRegistryBootstrap</type>
+  <baseType>core:Documentation</baseType>
+  <is>defaultBootstrapPaths and bootstrapTypeRegistry</is>
+
+  <documentation>bootstrapTypeRegistry(paths?, rootDir?) walks BML files under each path,
+    parses them via @blockml/parser parse(), and registers each document root block
+    in a new TypeRegistry.
+
+    defaultBootstrapPaths(rootDir?) returns:
+    • node_modules/@blockml/core/blocks
+    • node_modules/@machineblocks/core/blocks
+
+    BootstrapResult: { registry: TypeRegistry, diagnostics: Diagnostic[] }
+    Read errors emit BML_BOOTSTRAP_READ_ERROR (warning). Parse diagnostics are collected
+    but do not stop registration of successfully parsed documents.
+
+    Hosts (@blockml/cli, @blockml/validator) may inject a pre-built TypeRegistry via
+    ValidateOptions.typeRegistry instead of bootstrapping.</documentation>
+
+  <references>
+    <see type="fwdocumentation:EffectiveMembers" relation="ReadNext"></see>
+    <see type="fwcap:BootstrapTypeRegistry" relation="Defines"></see>
+  </references>
+
+</block>

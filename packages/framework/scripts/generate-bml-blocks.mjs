@@ -1,0 +1,673 @@
+#!/usr/bin/env node
+/**
+ * One-shot generator for Framework BML blocks.
+ * Output under blocks/ is the SSOT; this script is a migration aid only.
+ */
+import { writeFileSync, mkdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { documentationBlocks } from "./framework-documentation-blocks.mjs";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const blocksRoot = join(__dirname, "../blocks/org/blockml/bml/framework");
+
+const FRAMEWORK_DIAGNOSTIC_CODES = [
+  "BML_UNKNOWN_BASE_TYPE",
+  "BML_MEMBER_COLLISION",
+  "BML_OVERRIDE_WITHOUT_PARENT",
+  "BML_OVERRIDE_REQUIRED",
+  "BML_EXPRESSION_PARSE_ERROR",
+  "BML_CONSTRAINT_VIOLATION",
+  "BML_CONSTRAINT_UNKNOWN",
+  "BML_CONSTRAINT_TARGET_MISMATCH",
+  "BML_BOOTSTRAP_READ_ERROR",
+];
+
+const XMLNS = `  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"`;
+
+/** @typedef {{ name: string, type: string, required?: boolean, doc?: string, literal?: string, value?: string }} Field */
+/** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, abstract?: boolean, baseType?: string, fields?: Field[], refs?: string[] }} BlockDef */
+/** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, tsExport?: string, inputs?: Field[], output?: Field, refs?: string[] }} CapabilityDef */
+
+/** @type {BlockDef[]} */
+const blocks = [
+  {
+    pkg: "",
+    prefix: "framework",
+    name: "FrameworkType",
+    is: "Abstract marker for framework implementation data-structure blocks",
+    doc: "All org.blockml.bml.framework.registry.* and .expression.* types extend this marker. Distinct from bom:UrmodellType (parse-result data) and core:Capability (operations).",
+    abstract: true,
+    baseType: "core:Entity",
+    refs: ["bom:UrmodellType"],
+  },
+  {
+    pkg: "registry",
+    prefix: "fwregistry",
+    name: "BootstrapResult",
+    is: "Result of bootstrapTypeRegistry corpus walk",
+    doc: "Returned by fwcap:BootstrapTypeRegistry. Registry may be partially populated when diagnostics are present.",
+    fields: [
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+      { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "ExpressionNode",
+    is: "Abstract union of expression AST node variants",
+    doc: "Discriminated by kind: literal | array | object | property | call | binary.",
+    abstract: true,
+    baseType: "framework:FrameworkType",
+    refs: ["fwexpression:LiteralExpressionNode"],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "LiteralExpressionNode",
+    is: "Literal expression AST node",
+    baseType: "fwexpression:ExpressionNode",
+    doc: "kind: literal. value: string | number | boolean | null.",
+    fields: [
+      { name: "kind", type: "type:Text", required: true, value: "literal" },
+      { name: "value", type: "core:Any", required: true },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "ArrayExpressionNode",
+    is: "Array expression AST node",
+    baseType: "fwexpression:ExpressionNode",
+    doc: "kind: array. elements: ExpressionNode[].",
+    fields: [
+      { name: "kind", type: "type:Text", required: true, value: "array" },
+      { name: "elements", type: "fwexpression:ExpressionNode[]", required: true },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "ObjectExpressionNode",
+    is: "Object expression AST node",
+    baseType: "fwexpression:ExpressionNode",
+    doc: "kind: object. entries: Record<string, ExpressionNode>.",
+    fields: [
+      { name: "kind", type: "type:Text", required: true, value: "object" },
+      { name: "entries", type: "core:Any", required: true, doc: "Record<string, ExpressionNode>." },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "PropertyExpressionNode",
+    is: "Property path expression AST node",
+    baseType: "fwexpression:ExpressionNode",
+    doc: "kind: property. path: string[] (dot-separated property access).",
+    fields: [
+      { name: "kind", type: "type:Text", required: true, value: "property" },
+      { name: "path", type: "type:Text[]", required: true },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "CallExpressionNode",
+    is: "Function call expression AST node",
+    baseType: "fwexpression:ExpressionNode",
+    doc: "kind: call. callee: string. args: ExpressionNode[].",
+    fields: [
+      { name: "kind", type: "type:Text", required: true, value: "call" },
+      { name: "callee", type: "type:Text", required: true },
+      { name: "args", type: "fwexpression:ExpressionNode[]", required: true },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "BinaryExpressionNode",
+    is: "Binary operator expression AST node",
+    baseType: "fwexpression:ExpressionNode",
+    doc: "kind: binary. operator: + | - | * | /. left/right: ExpressionNode.",
+    fields: [
+      { name: "kind", type: "type:Text", required: true, value: "binary" },
+      { name: "operator", type: "type:Text", required: true },
+      { name: "left", type: "fwexpression:ExpressionNode", required: true },
+      { name: "right", type: "fwexpression:ExpressionNode", required: true },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "ParseExpressionResult",
+    is: "Successful parseExpression result",
+    baseType: "framework:FrameworkType",
+    doc: "Returned when ParseExpressionOutcome.ok === true.",
+    fields: [
+      { name: "ast", type: "fwexpression:ExpressionNode", required: true },
+      { name: "resultTypeFqn", type: "type:Text", doc: "Optional resolved result type FQN." },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "ParseExpressionError",
+    is: "Failed parseExpression error detail",
+    baseType: "framework:FrameworkType",
+    doc: "Returned when ParseExpressionOutcome.ok === false.",
+    fields: [
+      { name: "message", type: "type:Text", required: true },
+      { name: "offset", type: "type:Integer", required: true },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
+    name: "ParseExpressionOutcome",
+    is: "Discriminated union result of parseExpression",
+    baseType: "framework:FrameworkType",
+    doc: "TS: { ok: true, result: ParseExpressionResult } | { ok: false, error: ParseExpressionError }.",
+    fields: [
+      { name: "ok", type: "type:Boolean", required: true },
+      { name: "result", type: "fwexpression:ParseExpressionResult", doc: "Present when ok === true." },
+      { name: "error", type: "fwexpression:ParseExpressionError", doc: "Present when ok === false." },
+    ],
+  },
+  {
+    pkg: "config",
+    prefix: "fwconfig",
+    name: "FrameworkDiagnosticCodes",
+    is: "Diagnostic codes emitted by framework utilities",
+    doc: "Used by validateTypes, validateConstraints, and bootstrapTypeRegistry.",
+    fields: [
+      {
+        name: "codes",
+        type: "type:Text[]",
+        required: true,
+        doc: `Ordered: ${FRAMEWORK_DIAGNOSTIC_CODES.join(", ")}`,
+      },
+    ],
+  },
+];
+
+/** @type {CapabilityDef[]} */
+const capabilities = [
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "TypeRegistry",
+    is: "In-memory index of BlockDefinition documents by type FQN",
+    doc: "Class exported from registry/type-registry.ts. Implements bomapi:TypeRegistryReader (get/has).",
+    tsExport: "TypeRegistry",
+    refs: ["bomapi:TypeRegistryReader", "fwdocumentation:TypeRegistryBootstrap"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "BootstrapTypeRegistry",
+    is: "Walk BML corpus paths, parse, and populate TypeRegistry",
+    doc: "Uses @blockml/parser parse() per file. Collects bootstrap and parse diagnostics.",
+    tsExport: "bootstrapTypeRegistry",
+    inputs: [
+      { name: "paths", type: "type:Text[]", doc: "Corpus roots; default defaultBootstrapPaths()." },
+      { name: "rootDir", type: "type:Text", doc: "Working directory for relative paths." },
+    ],
+    output: { name: "result", type: "fwregistry:BootstrapResult", required: true },
+    refs: ["fwcap:DefaultBootstrapPaths", "parser:Library"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "DefaultBootstrapPaths",
+    is: "Default TypeRegistry corpus paths under node_modules",
+    tsExport: "defaultBootstrapPaths",
+    inputs: [{ name: "rootDir", type: "type:Text", doc: "Default process.cwd()." }],
+    output: { name: "paths", type: "type:Text[]", required: true },
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "ForkBom",
+    is: "Deep-clone Urmodell for pragmatic / validation working copy",
+    tsExport: "forkBom",
+    inputs: [{ name: "document", type: "bomdoc:BomDocument", required: true }],
+    output: { name: "copy", type: "bomdoc:BomDocument", required: true },
+    refs: ["bomdocumentation:PragmaticModel"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "ResolveEffectiveMembers",
+    is: "Merge members along baseType chain and local declarations",
+    tsExport: "resolveEffectiveMembers",
+    inputs: [
+      { name: "block", type: "bomblock:BlockDefinition", required: true },
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+    ],
+    output: { name: "members", type: "bommember:MemberDefinition[]", required: true },
+    refs: ["fwcap:CollectBaseTypeChain", "fwcap:MemberIdentityKey"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "CollectBaseTypeChain",
+    is: "Walk baseType references to root via TypeRegistry",
+    tsExport: "collectBaseTypeChain",
+    inputs: [
+      { name: "block", type: "bomblock:BlockDefinition", required: true },
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+    ],
+    output: { name: "chain", type: "bomblock:BlockDefinition[]", required: true },
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "MemberIdentityKey",
+    is: "Stable identity key for member collision detection",
+    tsExport: "memberIdentityKey",
+    inputs: [{ name: "member", type: "bommember:MemberDefinition", required: true }],
+    output: { name: "key", type: "type:Text", required: true },
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "ParseExpression",
+    is: "Parse expression source text into ExpressionNode AST",
+    tsExport: "parseExpression",
+    inputs: [{ name: "source", type: "type:Text", required: true }],
+    output: { name: "outcome", type: "fwexpression:ParseExpressionOutcome", required: true },
+    refs: ["fwdocumentation:ExpressionParsing"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "ValidateTypes",
+    is: "Semantic type checks on BomDocument using TypeRegistry",
+    tsExport: "validateTypes",
+    inputs: [
+      { name: "document", type: "bomdoc:BomDocument", required: true },
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+    ],
+    output: { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true },
+    refs: ["fwcap:ResolveEffectiveMembers", "fwcap:ParseExpression"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "ValidateConstraints",
+    is: "Evaluate constraint BlockInstances in composition tree",
+    tsExport: "validateConstraints",
+    inputs: [
+      { name: "document", type: "bomdoc:BomDocument", required: true },
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+    ],
+    output: { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true },
+    refs: ["fwdocumentation:ConstraintValidation"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "GetPropertyNumericValue",
+    is: "Extract numeric literal from PropertyDefinition value or values[]",
+    tsExport: "getPropertyNumericValue",
+    inputs: [{ name: "property", type: "bommember:PropertyDefinition", required: true }],
+    output: { name: "value", type: "type:Number", doc: "undefined when no numeric literal." },
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "IsLiteralValue",
+    is: "Type guard for LiteralValue member values",
+    tsExport: "isLiteralValue",
+    inputs: [{ name: "value", type: "bomvalue:MemberValue", doc: "Member value or undefined." }],
+    output: { name: "result", type: "type:Boolean", required: true },
+  },
+];
+
+function fqn(b) {
+  const pkg = b.pkg ? `.${b.pkg}` : "";
+  return `org.blockml.bml.framework${pkg}.${b.name}`;
+}
+
+function docFqn(name) {
+  return `org.blockml.bml.framework.documentation.${name}`;
+}
+
+function typeRef(b) {
+  return `${b.prefix}:${b.name}`;
+}
+
+function renderFields(fields) {
+  if (!fields?.length) return "";
+  const props = fields
+    .map((f) => {
+      const req = f.required ? " (required)" : " (optional)";
+      const base = f.doc ?? `${f.name}. TS type: ${f.type}.`;
+      const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
+      const valueLine = f.value ? `\n      <value>${f.value}</value>` : f.literal ? `\n      <value>${f.literal}</value>` : "";
+      return `    <${f.name} type="${f.type}">
+      <documentation>${doc}</documentation>${valueLine}
+    </${f.name}>`;
+    })
+    .join("\n");
+  return `\n\n  <properties>\n${props}\n  </properties>`;
+}
+
+function renderCapabilityFields(inputs, output) {
+  const parts = [];
+  if (inputs?.length) {
+    parts.push(
+      ...inputs.map((f) => {
+        const req = f.required ? " (required)" : " (optional)";
+        const base = f.doc ?? `${f.name}. TS type: ${f.type}.`;
+        const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
+        return `    <${f.name} type="${f.type}">
+      <documentation>${doc}</documentation>
+    </${f.name}>`;
+      }),
+    );
+  }
+  if (output) {
+    const req = output.required ? " (required)" : " (optional)";
+    const base = output.doc ?? `${output.name}. TS type: ${output.type}.`;
+    const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
+    parts.push(`    <${output.name} type="${output.type}">
+      <documentation>${doc}</documentation>
+    </${output.name}>`);
+  }
+  if (!parts.length) return "";
+  return `\n\n  <properties>\n${parts.join("\n")}\n  </properties>`;
+}
+
+function renderDocBlock(d) {
+  const refs = d.refs?.length
+    ? `\n\n  <references>\n${d.refs
+        .map(
+          (r) =>
+            `    <see type="${r.type}" relation="${r.relation}">${r.context ?? ""}</see>`,
+        )
+        .join("\n")}\n  </references>`
+    : "";
+
+  return `<!--
+  Framework Documentation — ${d.name}
+  FQN: ${docFqn(d.name)}
+-->
+<block
+${XMLNS}
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>${d.name}</name>
+  <type>fwdocumentation:${d.name}</type>
+  <baseType>core:Documentation</baseType>
+  <is>${d.is}</is>
+
+  <documentation>${d.doc}</documentation>${refs}
+
+</block>
+`;
+}
+
+function renderBlock(b) {
+  const base = b.baseType ?? "framework:FrameworkType";
+  const abstract = b.abstract ? "\n\n  <abstract>true</abstract>" : "";
+  const refs = b.refs?.length
+    ? `\n\n  <references>\n${b.refs.map((r) => `    <see type="${r}" relation="SeeAlso" />`).join("\n")}\n  </references>`
+    : "";
+
+  return `<!--
+  Framework — ${b.name}
+  FQN: ${fqn(b)}
+-->
+<block
+${XMLNS}>
+
+  <name>${b.name}</name>
+  <type>${typeRef(b)}</type>
+  <baseType>${base}</baseType>
+  <is>${b.is}</is>
+
+  <documentation>${b.doc || b.is}</documentation>${refs}${abstract}${renderFields(b.fields)}
+
+</block>
+`;
+}
+
+function renderCapability(c) {
+  const refs = c.refs?.length
+    ? `\n\n  <references>\n${c.refs.map((r) => `    <see type="${r}" relation="SeeAlso" />`).join("\n")}\n  </references>`
+    : "";
+
+  return `<!--
+  Framework Capability — ${c.name}
+  FQN: ${fqn(c)}
+-->
+<block
+${XMLNS}>
+
+  <name>${c.name}</name>
+  <type>${typeRef(c)}</type>
+  <baseType>core:Capability</baseType>
+  <is>${c.is}</is>
+
+  <documentation>${c.doc || c.is}</documentation>${refs}${renderCapabilityFields(c.inputs, c.output)}
+
+</block>
+`;
+}
+
+function catalogEntry(b) {
+  return `      <composition><${typeRef(b)} /></composition>`;
+}
+
+function capabilityTsExport(c) {
+  return c.tsExport ?? c.name.charAt(0).toLowerCase() + c.name.slice(1);
+}
+
+// Generate FrameworkType + type/config blocks
+for (const b of blocks) {
+  const dir = b.pkg ? join(blocksRoot, b.pkg) : blocksRoot;
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, `${b.name}.bml`), renderBlock(b));
+}
+
+// Generate capability blocks
+const capDir = join(blocksRoot, "capability");
+mkdirSync(capDir, { recursive: true });
+for (const c of capabilities) {
+  writeFileSync(join(capDir, `${c.name}.bml`), renderCapability(c));
+}
+
+// Generate documentation blocks
+const docDir = join(blocksRoot, "documentation");
+mkdirSync(docDir, { recursive: true });
+for (const d of documentationBlocks) {
+  writeFileSync(join(docDir, `${d.name}.bml`), renderDocBlock(d));
+}
+
+// Library catalog
+const libraryBlocks = [
+  ...blocks.map(catalogEntry),
+  ...capabilities.map(catalogEntry),
+  ...documentationBlocks.map(
+    (d) => `      <composition><fwdocumentation:${d.name} /></composition>`,
+  ),
+].join("\n");
+
+const library = `<!--
+  BlockML Framework Library Descriptor
+  FQN: org.blockml.bml.framework.Library
+-->
+<block
+${XMLNS}
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+
+  <name>Library</name>
+  <type>framework:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>The BlockML Framework utilities package library catalog</is>
+
+  <documentation>
+    Canonical framework specification for BlockML Stage-2 utilities — TypeRegistry,
+    bootstrap, fork/resolve, parseExpression, validateTypes/validateConstraints.
+    TypeScript in packages/framework/src/ implements this library.
+    Urmodell types live in org.blockml.bml.bom.* (@blockml/bom).
+    Membership is defined exclusively by this blocks list.
+  </documentation>
+
+  <version>0.1.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>BlockML Framework utilities library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <framework:README />
+      </composition>
+    </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+      <composition>
+        <bom:Library />
+      </composition>
+      <composition>
+        <parser:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+${libraryBlocks}
+    </blocks>
+  </aggregations>
+
+</block>
+`;
+
+writeFileSync(join(blocksRoot, "Library.bml"), library);
+
+const readme = `<!--
+  BlockML Framework — README
+  FQN: org.blockml.bml.framework.README
+-->
+<block
+${XMLNS}
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+
+  <name>README</name>
+  <type>blockml:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the Framework utilities library</is>
+
+  <documentation>
+    The @blockml/framework package provides Stage-2 utilities: TypeRegistry,
+    bootstrapTypeRegistry, forkBom, resolveEffectiveMembers, parseExpression,
+    validateTypes, and validateConstraints.
+
+    This library (org.blockml.bml.framework.*) is the SSOT; TypeScript in
+    packages/framework/src/ implements it. Parity tests in packages/framework/test/
+    verify BML ↔ TS alignment.
+
+    Start reading at org.blockml.bml.framework.documentation.Introduction (ReadNext chain).
+
+    Layer separation:
+    • org.blockml.bml.bom.* (@blockml/bom) — Urmodell types framework operates on
+    • org.blockml.bml.framework.* (this library) — Stage-2 utilities
+    • org.blockml.bml.compiler.parser.* (@blockml/parser) — parse() for bootstrap
+    • org.blockml.bml.compiler.validator.* (@blockml/validator) — validate() orchestrator
+    • org.blockml.bml.definition.* (@blockml/core) — language BML corpus (npm)
+
+    Modules: documentation (narrative specs), registry, expression, config,
+    capability (public operations).
+
+    Not in this library: validate() orchestration (@blockml/validator); parse()/serialize() entry points.
+  </documentation>
+
+  <references>
+    <see type="fwdocumentation:Introduction" relation="ReadFirst" />
+    <see type="fwdocumentation:PublicApi" relation="SeeAlso" />
+    <see type="bomdocumentation:PackageOwnership" relation="SeeAlso" />
+    <see type="pardocumentation:Introduction" relation="SeeAlso" />
+    <see type="valdocumentation:Introduction" relation="SeeAlso" />
+  </references>
+
+</block>
+`;
+
+writeFileSync(join(blocksRoot, "README.bml"), readme);
+
+// Export schema for parity tests
+const fixturesDir = join(__dirname, "../test/fixtures");
+mkdirSync(fixturesDir, { recursive: true });
+writeFileSync(
+  join(fixturesDir, "framework-schema.json"),
+  JSON.stringify(
+    {
+      blocks: blocks.map((b) => ({
+        fqn: fqn(b),
+        tsExport: b.name,
+        pkg: b.pkg || "root",
+        abstract: !!b.abstract,
+        baseType: b.baseType ?? "framework:FrameworkType",
+        fields: (b.fields ?? []).map((f) => ({
+          name: f.name,
+          type: f.type,
+          required: !!f.required,
+          literal: f.literal,
+          value: f.value,
+        })),
+      })),
+      capabilities: capabilities.map((c) => ({
+        name: c.name,
+        tsExport: capabilityTsExport(c),
+        fqn: fqn(c),
+        inputs: (c.inputs ?? []).map((f) => ({ name: f.name, type: f.type, required: !!f.required })),
+        output: c.output ?? null,
+      })),
+      frameworkDiagnosticCodes: FRAMEWORK_DIAGNOSTIC_CODES,
+      documentationBlocks: documentationBlocks.map((d) => d.name),
+    },
+    null,
+    2,
+  ),
+);
+
+console.log(
+  `Generated ${blocks.length} type blocks + ${capabilities.length} capabilities + ${documentationBlocks.length} documentation blocks + Library.bml + README.bml`,
+);

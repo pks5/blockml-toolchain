@@ -1,0 +1,46 @@
+<!--
+  Validator Documentation — ScopeExclusions
+  FQN: org.blockml.bml.compiler.validator.documentation.ScopeExclusions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ScopeExclusions</name>
+  <type>valdocumentation:ScopeExclusions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Explicit out-of-scope for the validator package</is>
+
+  <documentation>Out of scope for @blockml/validator:
+
+    • TypeRegistry implementation — @blockml/framework
+    • Individual validation rules — @blockml/framework (validateTypes/validateConstraints)
+    • parse() / serialize() — @blockml/parser / @blockml/serializer
+    • Render target emit / compile — @blockml/compiler
+    • CLI file I/O — @blockml/cli
+    • Language BML corpus — @blockml/core (npm)
+
+    In scope: validate() orchestration on BomDocument with framework utilities.</documentation>
+
+  <references>
+    <see type="valdocumentation:Introduction" relation="SeeAlso"></see>
+  </references>
+
+</block>

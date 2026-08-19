@@ -1,0 +1,55 @@
+<!--
+  Framework Capability — BootstrapTypeRegistry
+  FQN: org.blockml.bml.framework.capability.BootstrapTypeRegistry
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>BootstrapTypeRegistry</name>
+  <type>fwcap:BootstrapTypeRegistry</type>
+  <baseType>core:Capability</baseType>
+  <is>Walk BML corpus paths, parse, and populate TypeRegistry</is>
+
+  <documentation>Uses @blockml/parser parse() per file. Collects bootstrap and parse diagnostics.</documentation>
+
+  <references>
+    <see type="fwcap:DefaultBootstrapPaths" relation="SeeAlso" />
+    <see type="parser:Library" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <paths type="type:Text[]">
+      <documentation>Corpus roots; default defaultBootstrapPaths(). (optional)</documentation>
+    </paths>
+    <rootDir type="type:Text">
+      <documentation>Working directory for relative paths. (optional)</documentation>
+    </rootDir>
+    <result type="fwregistry:BootstrapResult">
+      <documentation>result. TS type: fwregistry:BootstrapResult. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

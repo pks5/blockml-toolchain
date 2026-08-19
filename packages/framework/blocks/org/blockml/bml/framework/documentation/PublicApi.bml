@@ -1,0 +1,61 @@
+<!--
+  Framework Documentation — PublicApi
+  FQN: org.blockml.bml.framework.documentation.PublicApi
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PublicApi</name>
+  <type>fwdocumentation:PublicApi</type>
+  <baseType>core:Documentation</baseType>
+  <is>Framework public exports from index.ts</is>
+
+  <documentation>Public exports from @blockml/framework (packages/framework/src/index.ts):
+
+    TypeRegistry — class; register/get/has/keys/size on BomDocument index
+    bootstrapTypeRegistry(paths?, rootDir?) → BootstrapResult
+    defaultBootstrapPaths(rootDir?) → string[]
+    forkBom(document) → BomDocument
+    resolveEffectiveMembers(block, registry) → MemberDefinition[]
+    collectBaseTypeChain(block, registry) → BlockDefinition[]
+    memberIdentityKey(member) → string
+    parseExpression(source) → ParseExpressionOutcome
+    validateTypes(document, registry) → Diagnostic[]
+    validateConstraints(document, registry) → Diagnostic[]
+    getPropertyNumericValue(property) → number | undefined
+    isLiteralValue(value) → boolean
+
+    Types: BootstrapResult, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
+
+    Not exported from index: getLiteralNumericValue (internal helper in validate-types.ts).</documentation>
+
+  <references>
+    <see type="fwdocumentation:TypeRegistryBootstrap" relation="ReadNext"></see>
+    <see type="bomapi:TypeRegistryReader" relation="SeeAlso"></see>
+  </references>
+
+</block>

@@ -29,7 +29,9 @@
     "test:watch": "vitest",
     "test:roundtrip": "vitest run tests/roundtrip",
     "test:framework": "vitest run packages/framework/test",
+    "test:framework-bml": "vitest run packages/framework/test/bml-ts-parity.test.ts",
     "test:validator": "vitest run packages/validator/test tests/validation",
+    "test:validator-bml": "vitest run packages/validator/test/bml-ts-parity.test.ts",
     "test:constraints": "vitest run packages/framework/test/constraints.test.ts",
     "typecheck": "tsc --build --emitDeclarationOnly"
   },

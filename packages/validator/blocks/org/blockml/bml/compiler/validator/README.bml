@@ -1,0 +1,60 @@
+<!--
+  BlockML Validator — README
+  FQN: org.blockml.bml.compiler.validator.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation">
+
+  <name>README</name>
+  <type>blockml:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the Validator compiler library</is>
+
+  <documentation>
+    The @blockml/validator package validates BomDocument (Urmodell) and returns
+    diagnostics plus an optional pragmatic model fork.
+
+    This library (org.blockml.bml.compiler.validator.*) is the SSOT; TypeScript in
+    packages/validator/src/ implements it. Parity tests in packages/validator/test/
+    verify BML ↔ TS alignment.
+
+    Start reading at org.blockml.bml.compiler.validator.documentation.Introduction (ReadNext chain).
+
+    Layer separation:
+    • org.blockml.bml.bom.* (@blockml/bom) — Urmodell types and ValidateOptions/ValidateResult
+    • org.blockml.bml.framework.* (@blockml/framework) — TypeRegistry, validation utilities
+    • org.blockml.bml.compiler.validator.* (this library) — validate() orchestration
+
+    Modules: documentation (narrative specs), capability (validate entry point).
+
+    Not in this library: validateTypes/validateConstraints implementation (@blockml/framework);
+    parse()/serialize() entry points.
+  </documentation>
+
+  <references>
+    <see type="valdocumentation:Introduction" relation="ReadFirst" />
+    <see type="valdocumentation:PublicApi" relation="SeeAlso" />
+    <see type="bomdocumentation:PublicApi" relation="SeeAlso" />
+    <see type="fwdocumentation:Introduction" relation="SeeAlso" />
+  </references>
+
+</block>

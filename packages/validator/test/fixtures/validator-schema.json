@@ -1,0 +1,45 @@
+{
+  "blocks": [
+    {
+      "fqn": "org.blockml.bml.compiler.validator.ValidatorType",
+      "tsExport": "ValidatorType",
+      "pkg": "root",
+      "abstract": true,
+      "baseType": "core:Entity"
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "Validate",
+      "tsExport": "validate",
+      "fqn": "org.blockml.bml.compiler.validator.capability.Validate",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "bomapi:ValidateOptions",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "bomapi:ValidateResult",
+        "required": true
+      }
+    }
+  ],
+  "documentationBlocks": [
+    "Introduction",
+    "LayerSeparation",
+    "ValidationPipeline",
+    "PublicApi",
+    "Diagnostics",
+    "PackageOwnership",
+    "ScopeExclusions",
+    "DesignDecisions"
+  ]
+}

@@ -1,0 +1,51 @@
+<!--
+  Framework — CallExpressionNode
+  FQN: org.blockml.bml.framework.expression.CallExpressionNode
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>CallExpressionNode</name>
+  <type>fwexpression:CallExpressionNode</type>
+  <baseType>fwexpression:ExpressionNode</baseType>
+  <is>Function call expression AST node</is>
+
+  <documentation>kind: call. callee: string. args: ExpressionNode[].</documentation>
+
+  <properties>
+    <kind type="type:Text">
+      <documentation>kind. TS type: type:Text. (required)</documentation>
+      <value>call</value>
+    </kind>
+    <callee type="type:Text">
+      <documentation>callee. TS type: type:Text. (required)</documentation>
+    </callee>
+    <args type="fwexpression:ExpressionNode[]">
+      <documentation>args. TS type: fwexpression:ExpressionNode[]. (required)</documentation>
+    </args>
+  </properties>
+
+</block>

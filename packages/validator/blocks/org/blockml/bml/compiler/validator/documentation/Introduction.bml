@@ -1,0 +1,49 @@
+<!--
+  Validator Documentation — Introduction
+  FQN: org.blockml.bml.compiler.validator.documentation.Introduction
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Introduction</name>
+  <type>valdocumentation:Introduction</type>
+  <baseType>core:Documentation</baseType>
+  <is>Purpose and scope of the Validator package</is>
+
+  <documentation>The @blockml/validator package provides Stage-2 semantic validation on BomDocument.
+    It orchestrates @blockml/framework utilities on a pragmatic fork of the Urmodell.
+
+    This library (org.blockml.bml.compiler.validator.*) is the SSOT. TypeScript in
+    packages/validator/src/ implements it. Parity tests in packages/validator/test/
+    verify BML ↔ TS alignment.
+
+    Pipeline placement: BomDocument ← Parser | BomBuilder → Validator → diagnostics +
+    optional pragmaticModel. Consumed by @blockml/cli, @blockml/lsp (V2), and hosts.
+
+    Validator never mutates the input Urmodell. Abort-on-error is a host concern — not
+    enforced inside the validator package.</documentation>
+
+  <references>
+    <see type="valdocumentation:LayerSeparation" relation="ReadNext"></see>
+    <see type="bomdocumentation:Introduction" relation="SeeAlso"></see>
+  </references>
+
+</block>

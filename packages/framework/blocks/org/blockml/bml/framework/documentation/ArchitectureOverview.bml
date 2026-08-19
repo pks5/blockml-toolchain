@@ -1,0 +1,58 @@
+<!--
+  Framework Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.framework.documentation.ArchitectureOverview
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ArchitectureOverview</name>
+  <type>fwdocumentation:ArchitectureOverview</type>
+  <baseType>core:Documentation</baseType>
+  <is>Module decomposition for framework utilities</is>
+
+  <documentation>Module decomposition (packages/framework/src/):
+
+    registry/type-registry.ts — fwcap:TypeRegistry (register, get, has, keys, size)
+    registry/bootstrap.ts — fwcap:BootstrapTypeRegistry, fwcap:DefaultBootstrapPaths
+    fork/fork-bom.ts — fwcap:ForkBom (structuredClone pragmatic copy)
+    resolve/resolve-effective-members.ts — fwcap:ResolveEffectiveMembers,
+      fwcap:CollectBaseTypeChain, fwcap:MemberIdentityKey
+    expression/parse-expression.ts — fwcap:ParseExpression
+    expression/types.ts — fwexpression:* AST node types
+    validate/validate-types.ts — fwcap:ValidateTypes, fwcap:GetPropertyNumericValue,
+      fwcap:IsLiteralValue
+    validate/validate-constraints.ts — fwcap:ValidateConstraints
+
+    Internal data-structure types extend framework:FrameworkType.
+    Public operations are fwcap:* capabilities.</documentation>
+
+  <references>
+    <see type="fwdocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="fwcap:TypeRegistry" relation="Defines"></see>
+  </references>
+
+</block>

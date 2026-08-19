@@ -1,0 +1,59 @@
+<!--
+  Framework Documentation — LayerSeparation
+  FQN: org.blockml.bml.framework.documentation.LayerSeparation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>LayerSeparation</name>
+  <type>fwdocumentation:LayerSeparation</type>
+  <baseType>core:Documentation</baseType>
+  <is>Framework vs BOM vs parser vs validator vs core</is>
+
+  <documentation>Five layers relevant to framework utilities:
+
+    org.blockml.bml.bom.* (@blockml/bom) — Urmodell data structures (BomDocument, …).
+    ValidateOptions, ValidateResult, TypeRegistryReader (B26) live here.
+
+    org.blockml.bml.framework.* (this package) — TypeRegistry, fork/resolve/validate utilities,
+    parseExpression AST (Stage 2). Does not own validate() orchestration.
+
+    org.blockml.bml.compiler.parser.* (@blockml/parser) — BML → BomDocument (Stage 1).
+    bootstrapTypeRegistry calls parse() on corpus files.
+
+    org.blockml.bml.compiler.validator.* (@blockml/validator) — validate() entry point;
+    orchestrates framework utilities on a pragmatic fork.
+
+    org.blockml.bml.definition.* (@blockml/core) — BML meta-model corpus (npm).
+    Framework reads Definition types via TypeRegistry; does not duplicate grammar blocks.</documentation>
+
+  <references>
+    <see type="fwdocumentation:ArchitectureOverview" relation="ReadNext"></see>
+    <see type="bomdocumentation:LayerSeparation" relation="SeeAlso"></see>
+  </references>
+
+</block>

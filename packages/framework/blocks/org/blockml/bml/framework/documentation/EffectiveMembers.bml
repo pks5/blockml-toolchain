@@ -1,0 +1,53 @@
+<!--
+  Framework Documentation — EffectiveMembers
+  FQN: org.blockml.bml.framework.documentation.EffectiveMembers
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>EffectiveMembers</name>
+  <type>fwdocumentation:EffectiveMembers</type>
+  <baseType>core:Documentation</baseType>
+  <is>resolveEffectiveMembers and baseType chain merge</is>
+
+  <documentation>resolveEffectiveMembers(block, registry) merges members[] along the baseType chain
+    (via collectBaseTypeChain) plus local declarations.
+
+    collectBaseTypeChain walks block.baseType → registry.get(baseType) until absent or cycle.
+    memberIdentityKey(member) = (namespace ?? "") + ":" + name — collision detection key.
+
+    Later layers override earlier when override=true or same identity replaces.
+    Used by validateTypes (member collision, override rules) and validateConstraints.
+
+    EffectiveMemberSet is a runtime view — not stored on Urmodell (BOM SSOT).</documentation>
+
+  <references>
+    <see type="fwdocumentation:ExpressionParsing" relation="ReadNext"></see>
+    <see type="fwcap:ResolveEffectiveMembers" relation="Defines"></see>
+  </references>
+
+</block>

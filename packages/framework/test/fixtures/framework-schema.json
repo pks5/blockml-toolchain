@@ -1,0 +1,495 @@
+{
+  "blocks": [
+    {
+      "fqn": "org.blockml.bml.framework.FrameworkType",
+      "tsExport": "FrameworkType",
+      "pkg": "root",
+      "abstract": true,
+      "baseType": "core:Entity",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.framework.registry.BootstrapResult",
+      "tsExport": "BootstrapResult",
+      "pkg": "registry",
+      "abstract": false,
+      "baseType": "framework:FrameworkType",
+      "fields": [
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        },
+        {
+          "name": "diagnostics",
+          "type": "bomcommon:Diagnostic[]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.ExpressionNode",
+      "tsExport": "ExpressionNode",
+      "pkg": "expression",
+      "abstract": true,
+      "baseType": "framework:FrameworkType",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.LiteralExpressionNode",
+      "tsExport": "LiteralExpressionNode",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "fwexpression:ExpressionNode",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "value": "literal"
+        },
+        {
+          "name": "value",
+          "type": "core:Any",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.ArrayExpressionNode",
+      "tsExport": "ArrayExpressionNode",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "fwexpression:ExpressionNode",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "value": "array"
+        },
+        {
+          "name": "elements",
+          "type": "fwexpression:ExpressionNode[]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.ObjectExpressionNode",
+      "tsExport": "ObjectExpressionNode",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "fwexpression:ExpressionNode",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "value": "object"
+        },
+        {
+          "name": "entries",
+          "type": "core:Any",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.PropertyExpressionNode",
+      "tsExport": "PropertyExpressionNode",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "fwexpression:ExpressionNode",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "value": "property"
+        },
+        {
+          "name": "path",
+          "type": "type:Text[]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.CallExpressionNode",
+      "tsExport": "CallExpressionNode",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "fwexpression:ExpressionNode",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "value": "call"
+        },
+        {
+          "name": "callee",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "args",
+          "type": "fwexpression:ExpressionNode[]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.BinaryExpressionNode",
+      "tsExport": "BinaryExpressionNode",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "fwexpression:ExpressionNode",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "value": "binary"
+        },
+        {
+          "name": "operator",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "left",
+          "type": "fwexpression:ExpressionNode",
+          "required": true
+        },
+        {
+          "name": "right",
+          "type": "fwexpression:ExpressionNode",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.ParseExpressionResult",
+      "tsExport": "ParseExpressionResult",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "framework:FrameworkType",
+      "fields": [
+        {
+          "name": "ast",
+          "type": "fwexpression:ExpressionNode",
+          "required": true
+        },
+        {
+          "name": "resultTypeFqn",
+          "type": "type:Text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.ParseExpressionError",
+      "tsExport": "ParseExpressionError",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "framework:FrameworkType",
+      "fields": [
+        {
+          "name": "message",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "offset",
+          "type": "type:Integer",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.expression.ParseExpressionOutcome",
+      "tsExport": "ParseExpressionOutcome",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "framework:FrameworkType",
+      "fields": [
+        {
+          "name": "ok",
+          "type": "type:Boolean",
+          "required": true
+        },
+        {
+          "name": "result",
+          "type": "fwexpression:ParseExpressionResult",
+          "required": false
+        },
+        {
+          "name": "error",
+          "type": "fwexpression:ParseExpressionError",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.config.FrameworkDiagnosticCodes",
+      "tsExport": "FrameworkDiagnosticCodes",
+      "pkg": "config",
+      "abstract": false,
+      "baseType": "framework:FrameworkType",
+      "fields": [
+        {
+          "name": "codes",
+          "type": "type:Text[]",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "TypeRegistry",
+      "tsExport": "TypeRegistry",
+      "fqn": "org.blockml.bml.framework.capability.TypeRegistry",
+      "inputs": [],
+      "output": null
+    },
+    {
+      "name": "BootstrapTypeRegistry",
+      "tsExport": "bootstrapTypeRegistry",
+      "fqn": "org.blockml.bml.framework.capability.BootstrapTypeRegistry",
+      "inputs": [
+        {
+          "name": "paths",
+          "type": "type:Text[]",
+          "required": false
+        },
+        {
+          "name": "rootDir",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "fwregistry:BootstrapResult",
+        "required": true
+      }
+    },
+    {
+      "name": "DefaultBootstrapPaths",
+      "tsExport": "defaultBootstrapPaths",
+      "fqn": "org.blockml.bml.framework.capability.DefaultBootstrapPaths",
+      "inputs": [
+        {
+          "name": "rootDir",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "paths",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ForkBom",
+      "tsExport": "forkBom",
+      "fqn": "org.blockml.bml.framework.capability.ForkBom",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "copy",
+        "type": "bomdoc:BomDocument",
+        "required": true
+      }
+    },
+    {
+      "name": "ResolveEffectiveMembers",
+      "tsExport": "resolveEffectiveMembers",
+      "fqn": "org.blockml.bml.framework.capability.ResolveEffectiveMembers",
+      "inputs": [
+        {
+          "name": "block",
+          "type": "bomblock:BlockDefinition",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "members",
+        "type": "bommember:MemberDefinition[]",
+        "required": true
+      }
+    },
+    {
+      "name": "CollectBaseTypeChain",
+      "tsExport": "collectBaseTypeChain",
+      "fqn": "org.blockml.bml.framework.capability.CollectBaseTypeChain",
+      "inputs": [
+        {
+          "name": "block",
+          "type": "bomblock:BlockDefinition",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "chain",
+        "type": "bomblock:BlockDefinition[]",
+        "required": true
+      }
+    },
+    {
+      "name": "MemberIdentityKey",
+      "tsExport": "memberIdentityKey",
+      "fqn": "org.blockml.bml.framework.capability.MemberIdentityKey",
+      "inputs": [
+        {
+          "name": "member",
+          "type": "bommember:MemberDefinition",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "key",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "ParseExpression",
+      "tsExport": "parseExpression",
+      "fqn": "org.blockml.bml.framework.capability.ParseExpression",
+      "inputs": [
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "outcome",
+        "type": "fwexpression:ParseExpressionOutcome",
+        "required": true
+      }
+    },
+    {
+      "name": "ValidateTypes",
+      "tsExport": "validateTypes",
+      "fqn": "org.blockml.bml.framework.capability.ValidateTypes",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "diagnostics",
+        "type": "bomcommon:Diagnostic[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ValidateConstraints",
+      "tsExport": "validateConstraints",
+      "fqn": "org.blockml.bml.framework.capability.ValidateConstraints",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "diagnostics",
+        "type": "bomcommon:Diagnostic[]",
+        "required": true
+      }
+    },
+    {
+      "name": "GetPropertyNumericValue",
+      "tsExport": "getPropertyNumericValue",
+      "fqn": "org.blockml.bml.framework.capability.GetPropertyNumericValue",
+      "inputs": [
+        {
+          "name": "property",
+          "type": "bommember:PropertyDefinition",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "value",
+        "type": "type:Number",
+        "doc": "undefined when no numeric literal."
+      }
+    },
+    {
+      "name": "IsLiteralValue",
+      "tsExport": "isLiteralValue",
+      "fqn": "org.blockml.bml.framework.capability.IsLiteralValue",
+      "inputs": [
+        {
+          "name": "value",
+          "type": "bomvalue:MemberValue",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    }
+  ],
+  "frameworkDiagnosticCodes": [
+    "BML_UNKNOWN_BASE_TYPE",
+    "BML_MEMBER_COLLISION",
+    "BML_OVERRIDE_WITHOUT_PARENT",
+    "BML_OVERRIDE_REQUIRED",
+    "BML_EXPRESSION_PARSE_ERROR",
+    "BML_CONSTRAINT_VIOLATION",
+    "BML_CONSTRAINT_UNKNOWN",
+    "BML_CONSTRAINT_TARGET_MISMATCH",
+    "BML_BOOTSTRAP_READ_ERROR"
+  ],
+  "documentationBlocks": [
+    "Introduction",
+    "LayerSeparation",
+    "ArchitectureOverview",
+    "PublicApi",
+    "TypeRegistryBootstrap",
+    "EffectiveMembers",
+    "ExpressionParsing",
+    "ConstraintValidation",
+    "Diagnostics",
+    "PackageOwnership",
+    "ScopeExclusions"
+  ]
+}

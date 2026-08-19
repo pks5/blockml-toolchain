@@ -24,7 +24,9 @@
   xmlns:parmap="org.blockml.bml.compiler.parser.map"
   xmlns:type="org.blockml.bml.type"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation">
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>README</name>
   <type>blockml:README</type>
@@ -43,6 +45,8 @@
     • org.blockml.bml.bom.* (@blockml/bom) — Urmodell types parser produces
     • org.blockml.bml.compiler.parser.* (this library) — mapping rules and pipeline
     • org.blockml.bml.compiler.serializer.* (@blockml/serializer) — inverse emit
+    • org.blockml.bml.framework.* (@blockml/framework) — Stage-2 utilities
+    • org.blockml.bml.compiler.validator.* (@blockml/validator) — validate() orchestration
     • org.blockml.bml.definition.* (@blockml/core) — BML meta-model
 
     Modules: documentation (narrative specs), map (MapContext), config (constants),
@@ -57,6 +61,8 @@
     <see type="pardocumentation:PublicApi" relation="SeeAlso" />
     <see type="bomdocumentation:PublicApi" relation="SeeAlso" />
     <see type="serdocumentation:Introduction" relation="SeeAlso" />
+    <see type="fwdocumentation:Introduction" relation="SeeAlso" />
+    <see type="valdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

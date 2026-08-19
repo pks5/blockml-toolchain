@@ -1,0 +1,44 @@
+<!--
+  Framework — FrameworkDiagnosticCodes
+  FQN: org.blockml.bml.framework.config.FrameworkDiagnosticCodes
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>FrameworkDiagnosticCodes</name>
+  <type>fwconfig:FrameworkDiagnosticCodes</type>
+  <baseType>framework:FrameworkType</baseType>
+  <is>Diagnostic codes emitted by framework utilities</is>
+
+  <documentation>Used by validateTypes, validateConstraints, and bootstrapTypeRegistry.</documentation>
+
+  <properties>
+    <codes type="type:Text[]">
+      <documentation>Ordered: BML_UNKNOWN_BASE_TYPE, BML_MEMBER_COLLISION, BML_OVERRIDE_WITHOUT_PARENT, BML_OVERRIDE_REQUIRED, BML_EXPRESSION_PARSE_ERROR, BML_CONSTRAINT_VIOLATION, BML_CONSTRAINT_UNKNOWN, BML_CONSTRAINT_TARGET_MISMATCH, BML_BOOTSTRAP_READ_ERROR (required)</documentation>
+    </codes>
+  </properties>
+
+</block>

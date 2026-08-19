@@ -1,5 +1,5 @@
 <!--
-  BlockML Framework Utilities Library (Phase B)
+  BlockML Framework Library Descriptor
   FQN: org.blockml.bml.framework.Library
 -->
 <block
@@ -8,19 +8,109 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
-  xmlns:fw="org.blockml.bml.framework">
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>Library</name>
-  <type>blockml:Library</type>
+  <type>framework:Library</type>
   <baseType>core:BlockLibrary</baseType>
-  <is>Framework utilities — TypeRegistry, parseExpression, validation helpers</is>
+  <is>The BlockML Framework utilities package library catalog</is>
 
   <documentation>
-    TypeScript in packages/framework/src/ implements Stage-2 framework utilities.
-    Language BML corpus remains in npm @blockml/core (node_modules).
+    Canonical framework specification for BlockML Stage-2 utilities — TypeRegistry,
+    bootstrap, fork/resolve, parseExpression, validateTypes/validateConstraints.
+    TypeScript in packages/framework/src/ implements this library.
+    Urmodell types live in org.blockml.bml.bom.* (@blockml/bom).
+    Membership is defined exclusively by this blocks list.
   </documentation>
 
   <version>0.1.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>BlockML Framework utilities library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <framework:README />
+      </composition>
+    </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+      <composition>
+        <bom:Library />
+      </composition>
+      <composition>
+        <parser:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition><framework:FrameworkType /></composition>
+      <composition><fwregistry:BootstrapResult /></composition>
+      <composition><fwexpression:ExpressionNode /></composition>
+      <composition><fwexpression:LiteralExpressionNode /></composition>
+      <composition><fwexpression:ArrayExpressionNode /></composition>
+      <composition><fwexpression:ObjectExpressionNode /></composition>
+      <composition><fwexpression:PropertyExpressionNode /></composition>
+      <composition><fwexpression:CallExpressionNode /></composition>
+      <composition><fwexpression:BinaryExpressionNode /></composition>
+      <composition><fwexpression:ParseExpressionResult /></composition>
+      <composition><fwexpression:ParseExpressionError /></composition>
+      <composition><fwexpression:ParseExpressionOutcome /></composition>
+      <composition><fwconfig:FrameworkDiagnosticCodes /></composition>
+      <composition><fwcap:TypeRegistry /></composition>
+      <composition><fwcap:BootstrapTypeRegistry /></composition>
+      <composition><fwcap:DefaultBootstrapPaths /></composition>
+      <composition><fwcap:ForkBom /></composition>
+      <composition><fwcap:ResolveEffectiveMembers /></composition>
+      <composition><fwcap:CollectBaseTypeChain /></composition>
+      <composition><fwcap:MemberIdentityKey /></composition>
+      <composition><fwcap:ParseExpression /></composition>
+      <composition><fwcap:ValidateTypes /></composition>
+      <composition><fwcap:ValidateConstraints /></composition>
+      <composition><fwcap:GetPropertyNumericValue /></composition>
+      <composition><fwcap:IsLiteralValue /></composition>
+      <composition><fwdocumentation:Introduction /></composition>
+      <composition><fwdocumentation:LayerSeparation /></composition>
+      <composition><fwdocumentation:ArchitectureOverview /></composition>
+      <composition><fwdocumentation:PublicApi /></composition>
+      <composition><fwdocumentation:TypeRegistryBootstrap /></composition>
+      <composition><fwdocumentation:EffectiveMembers /></composition>
+      <composition><fwdocumentation:ExpressionParsing /></composition>
+      <composition><fwdocumentation:ConstraintValidation /></composition>
+      <composition><fwdocumentation:Diagnostics /></composition>
+      <composition><fwdocumentation:PackageOwnership /></composition>
+      <composition><fwdocumentation:ScopeExclusions /></composition>
+    </blocks>
+  </aggregations>
 
 </block>

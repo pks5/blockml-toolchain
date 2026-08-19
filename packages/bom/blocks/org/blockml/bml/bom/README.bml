@@ -42,7 +42,7 @@
     Modules: documentation (narrative specs), common, block, member, composition, type, value,
     document (BomDocument root), api (B26), capability (bomEquals).
 
-    Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/core); BML→BOM mapping (@blockml/parser).
+    Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/framework); BML→BOM mapping (@blockml/parser).
   </documentation>
 
   <references>

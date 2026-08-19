@@ -1,0 +1,49 @@
+<!--
+  Validator Documentation — ValidationPipeline
+  FQN: org.blockml.bml.compiler.validator.documentation.ValidationPipeline
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ValidationPipeline</name>
+  <type>valdocumentation:ValidationPipeline</type>
+  <baseType>core:Documentation</baseType>
+  <is>validate() orchestration steps</is>
+
+  <documentation>validate(document, options?) pipeline (packages/validator/src/validate.ts):
+
+    1. Resolve TypeRegistry — options.typeRegistry if instanceof TypeRegistry,
+       else bootstrapTypeRegistry(options.bootstrapPaths ?? defaultBootstrapPaths())
+    2. forkBom(document) → pragmaticModel (structuredClone working copy)
+    3. validateTypes(pragmaticModel, registry) → diagnostics[]
+    4. validateConstraints(pragmaticModel, registry) → append diagnostics
+    5. success = no diagnostic with severity === "error"
+    6. Return ValidateResult { pragmaticModel?, diagnostics, success }
+
+    When continueOnError === false and success === false, pragmaticModel is omitted
+    from the result (early return with diagnostics only).</documentation>
+
+  <references>
+    <see type="valdocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="valcap:Validate" relation="Defines"></see>
+  </references>
+
+</block>

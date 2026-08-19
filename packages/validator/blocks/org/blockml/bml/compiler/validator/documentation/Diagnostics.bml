@@ -1,0 +1,47 @@
+<!--
+  Validator Documentation — Diagnostics
+  FQN: org.blockml.bml.compiler.validator.documentation.Diagnostics
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Diagnostics</name>
+  <type>valdocumentation:Diagnostics</type>
+  <baseType>core:Documentation</baseType>
+  <is>Validator diagnostics and host abort policy</is>
+
+  <documentation>The validator aggregates diagnostics from framework utilities (validateTypes,
+    validateConstraints) and bootstrap (when TypeRegistry is built inline).
+
+    Diagnostic type: org.blockml.bml.bom.common.Diagnostic (shared across toolchain).
+
+    Host policy: CLI, IDE, and other orchestrators decide whether error diagnostics
+    block serialize, compile, or other downstream steps. The validator package does
+    not enforce abort-on-error — it reports diagnostics and success flag only.
+
+    Cross-ref diagnostic codes: org.blockml.bml.framework.config.FrameworkDiagnosticCodes</documentation>
+
+  <references>
+    <see type="fwconfig:FrameworkDiagnosticCodes" relation="SeeAlso"></see>
+    <see type="valdocumentation:PackageOwnership" relation="ReadNext"></see>
+  </references>
+
+</block>

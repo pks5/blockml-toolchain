@@ -1,0 +1,51 @@
+<!--
+  Validator Documentation — LayerSeparation
+  FQN: org.blockml.bml.compiler.validator.documentation.LayerSeparation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>LayerSeparation</name>
+  <type>valdocumentation:LayerSeparation</type>
+  <baseType>core:Documentation</baseType>
+  <is>Validator vs framework vs BOM vs parser</is>
+
+  <documentation>Four layers relevant to validation:
+
+    org.blockml.bml.bom.* (@blockml/bom) — Urmodell types (BomDocument, …).
+    ValidateOptions, ValidateResult, TypeRegistryReader (B26) live here.
+
+    org.blockml.bml.framework.* (@blockml/framework) — TypeRegistry, forkBom,
+    validateTypes, validateConstraints, bootstrapTypeRegistry. Validator calls these;
+    does not reimplement them.
+
+    org.blockml.bml.compiler.validator.* (this package) — validate() orchestration
+    and Stage-2 entry point contract only.
+
+    org.blockml.bml.compiler.parser.* (@blockml/parser) — BML → BomDocument (Stage 1).
+    Validator consumes parser output; does not call parse() directly (bootstrap is via framework).</documentation>
+
+  <references>
+    <see type="valdocumentation:ValidationPipeline" relation="ReadNext"></see>
+    <see type="fwdocumentation:Introduction" relation="SeeAlso"></see>
+  </references>
+
+</block>
