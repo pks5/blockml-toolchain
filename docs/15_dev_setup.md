@@ -1,6 +1,6 @@
 # Development Setup
 
-version: 0.2.0
+version: 0.3.0
 
 ## Purpose of this Document
 
@@ -272,7 +272,7 @@ Markdown under `docs/` is **transitional**. The goal is total self-description: 
 
 ### Package Implementation Workflow (mandatory)
 
-Normative detail: `00_system.md` — Package Implementation Workflow. Same three steps for every new package:
+Normative detail: `00_system.md` — Package Implementation Workflow · [BML library requirements (every package)](00_system.md#bml-library-requirements-every-package). Same three steps for every new package:
 
 ```text
 1. Own BlockML library     — Library.bml after @blockml/core; link it in package.json
@@ -281,6 +281,16 @@ Normative detail: `00_system.md` — Package Implementation Workflow. Same three
                              If MD is still needed or contradicts BML: update the library first,
                              then continue from BML. Never implement directly from MD.
 ```
+
+**BML library rules (summary):**
+
+| Rule | Detail |
+|---|---|
+| **Complete library** | Every package needs a full BML library: migrated MD facts **plus** a model of the package (types, capabilities, config, documentation). Templates: `@blockml/bom`, `@blockml/parser`, `@blockml/serializer`. |
+| **Stay in sync** | Keep BML and TypeScript aligned throughout development; parity tests (BML ↔ TS) where runtime code exists. Ideal: regenerate implementation from BML. |
+| **Timing** | The library need not be finished before the first code slice — Steps 2 and 3 may iterate. **Done** means BML is complete, synchronized, and the documentation SSOT. |
+
+See `00_system.md` — BML library requirements (every package) for the full normative text.
 
 **Step 1 — `package.json` library pointer** (required). Copy the field from `@blockml/core`:
 
@@ -886,6 +896,7 @@ Phase D  ✅  15_dev_setup (this document)
 |---|---|
 | Repository architecture | `00_system.md` |
 | Package Implementation Workflow | `00_system.md` — Package Implementation Workflow |
+| BML library requirements | `00_system.md` — BML library requirements (every package) |
 | BOM types + ParseResult (B26) | `12_bom_object_model.md` (migrate into `@blockml/bom` BML before BOM TS) |
 | Public `parse` / `serialize` (B26) | this document — Public API |
 | Parser mapping | `13_bml_to_bom_mapping.md` (migrate into parser/serializer BML before implement) |

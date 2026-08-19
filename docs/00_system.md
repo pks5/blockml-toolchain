@@ -1,6 +1,6 @@
 # BOM Compiler — System
 
-version: 2.6.0
+version: 2.7.0
 
 ## Purpose
 
@@ -135,7 +135,7 @@ All modules — renderer, core, parser, domain libraries, future compiler target
 
 This is a further step toward **total self-description**: BlockML and every package describe themselves in BML inside their own node module. The Markdown files under `docs/` are a **transitional** solution. The goal is that all information lives in the respective npm packages as BML. **MD files are deleted** once every package is implemented and all of their information has been transferred into the corresponding BML libraries.
 
-Creating or implementing a package follows the [Package Implementation Workflow](#package-implementation-workflow): own BlockML library first (linked from `package.json`), migrate that package’s Markdown into the library, then implement **only** from the library.
+Creating or implementing a package follows the [Package Implementation Workflow](#package-implementation-workflow): own BlockML library (linked from `package.json`), migrate that package’s Markdown into the library, implement from the library, and keep BML synchronized with the implementation. Reference templates: `@blockml/bom`, `@blockml/parser`, `@blockml/serializer`.
 
 ### npm organizations
 
@@ -750,6 +750,30 @@ configProfile < appliedPresets chain < inline property
 
 Markdown under `docs/` is a **holding handbook** until the owning package is implemented. It is **not** the implementation SSOT. TypeScript, tests, and further BML for a package are written from that package’s BML library only.
 
+### BML library requirements (every package)
+
+Every package — toolchain, domain, or render target — must have a **complete BML library** in its `blocks/` folder. The library is more than migrated prose: it **models the package** (types, capabilities, config constants, documentation blocks, diagnostics) **and** holds all essential facts from the package’s transitional Markdown.
+
+**Reference templates** — study these before creating a new package library:
+
+| Package | Library path | What it models |
+|---|---|---|
+| `@blockml/bom` | `packages/bom/blocks/org/blockml/bml/bom/` | Urmodell types, API (`ParseResult`, `bomEquals`), documentation |
+| `@blockml/parser` | `packages/parser/blocks/org/blockml/bml/compiler/parser/` | Stage 1 pipeline, mapping capabilities, config, documentation |
+| `@blockml/serializer` | `packages/serializer/blocks/org/blockml/bml/compiler/serializer/` | Emit rules, capabilities, documentation |
+
+Typical modules (adapt per package): `Library.bml`, `README.bml`, `documentation/*`, domain types, `capability/*`, `config/*`.
+
+**Synchronization with implementation.** The BML library and TypeScript in `src/` must be kept **as closely in sync as practical** throughout development — not only at delivery. Where the package has runtime code, **parity tests** (BML ↔ TS) verify alignment. **Ideal end state:** the implementation can be regenerated more or less accurately from the BML library alone.
+
+**Timing — library need not precede all implementation.** The BML library does **not** need to be fully complete before the first TypeScript slice. Steps 2 and 3 may proceed **iteratively**: implement a vertical slice, discover gaps, backfill the library, resume. What matters is the **delivered end state**:
+
+- The BML library contains **all essential information** (migrated MD + package model).
+- The library is **synchronized** with the implementation.
+- The library is the **SSOT for documentation** — humans and LLMs read the library, not Markdown, to understand or review the package.
+
+Markdown remains a transitional handbook during migration; it is never an implementation source (see Step 3).
+
 ### Step 1 — Package-own BlockML library
 
 Create a BlockML library **inside the package**, following `@blockml/core`:
@@ -804,13 +828,13 @@ docs/*.md  (transitional)  →  <package>/blocks/…  (SSOT)
 
 Rules:
 
-- Every fact needed to implement or use the package must exist in the package BML. MD may still be readable as a handbook during migration; it is not a second inventory.
+- Every fact needed to implement or use the package must eventually exist in the package BML. MD may still be readable as a handbook during migration; it is not a second inventory.
 - Shared MD (one file, several packages) is **split by section**: each section has one owning package. Language rules that already live in `@blockml/core` stay there; the new library **links** them (`see` / `ReadFirst`) instead of copying.
-- Do not start Step 3 while package-relevant MD content is still only in Markdown.
+- Prefer migrating a slice of MD **before** implementing that slice. Remaining MD may lag during active development, but must be fully migrated before the package is considered **done** (see [BML library requirements](#bml-library-requirements-every-package)).
 
 **MD files are transitional.** They are **deleted** when **all** packages are implemented **and** every piece of information has been transferred into the corresponding BML libraries. Until then, migrated sections in MD become pointers to FQNs (same pattern as `02_mbml.md`).
 
-**Done when:** a reader (human or LLM) can implement and review the package from `Library.bml` / `README.bml` and the exported blocks alone.
+**Done when (package complete):** a reader (human or LLM) can implement and review the package from `Library.bml` / `README.bml` and the exported blocks alone — with no essential facts left only in Markdown.
 
 ### Step 3 — Implement from the package BML library only
 
@@ -827,7 +851,9 @@ If something is missing, contradictory, or only found in Markdown:
 2. **Update the package BML library** with the missing or corrected information.
 3. **Resume implementation from the library.**
 
-No implementation on the direct basis of MD files — not for a “first slice”, not for tests, not for “the MD is still more detailed”. Detail that is needed belongs in the library first.
+No implementation on the direct basis of MD files — not for a “first slice”, not for tests, not for “the MD is still more detailed”. Detail that is needed belongs in the library first (or is added to the library in the same change set as the implementation).
+
+**Ongoing sync.** After each meaningful implementation change, update the package BML library so it stays aligned with `src/`. Treat drift between BML and TypeScript as a defect — fix the library (or the code) before merging. Parity tests where they exist are the gate.
 
 Existing libraries (`@blockml/core`, `@machineblocks/core`) already have Step 1. Remaining Core- or domain-owned MD still follows Steps 2–3 **before** further implementation from those packages (e.g. Core TypeScript from `12_bom_object_model.md`: migrate into Core BML, then implement).
 
