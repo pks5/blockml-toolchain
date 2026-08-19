@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@blockml/bom": "file:../bom",
+    "@blockml/core": "^1.0.3",
     "@blockml/framework": "file:../framework"
   }
 }

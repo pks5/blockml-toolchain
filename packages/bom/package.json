@@ -20,5 +20,8 @@
   "scripts": {
     "build": "tsc --build",
     "test": "vitest run packages/bom/test"
+  },
+  "dependencies": {
+    "@blockml/core": "^1.0.3"
   }
 }

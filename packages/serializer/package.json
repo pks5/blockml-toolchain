@@ -22,6 +22,7 @@
     "test": "vitest run packages/serializer/test"
   },
   "dependencies": {
-    "@blockml/bom": "file:../bom"
+    "@blockml/bom": "file:../bom",
+    "@blockml/core": "^1.0.3"
   }
 }
