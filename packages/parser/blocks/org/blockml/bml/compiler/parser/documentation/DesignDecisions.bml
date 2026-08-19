@@ -1,0 +1,53 @@
+<!--
+  Parser Documentation — DesignDecisions
+  FQN: org.blockml.bml.compiler.parser.documentation.DesignDecisions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>DesignDecisions</name>
+  <type>pardocumentation:DesignDecisions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Normative parser design decisions</is>
+
+  <documentation>B2: unknown bml:* → error at map; unknown custom props → validator warning.
+    B3: inputType/outputType → TypeExpression at map time.
+    B4: ExpressionValue.raw only; AST via core utility.
+    B5: single-file parser scope.
+    B6: JSON not planned.
+    B7/B8: Phase A slice; XSD not Stage 1.
+    B11: XML comments bound to elements (parse side).
+    B14: strip _/__ → logical name + visibility.
+    B15/B16: boolean values vs type refs.
+    B18: @xmldom/xmldom for DOM.
+    B19: redundant aggregation type — map must not apply.
+    B23: preserve xmlRendering + D6 recipe at Stage 1.
+    B24: format detector (BOM strip, first '<').
+    B25: store xmlns:xsi + schemaLocation on SourceInfo.
+    B26: parse() entry; types in @blockml/bom.</documentation>
+
+  <references>
+    <see type="pardocumentation:RoundtripContract" relation="ReadNext"></see>
+  </references>
+
+</block>

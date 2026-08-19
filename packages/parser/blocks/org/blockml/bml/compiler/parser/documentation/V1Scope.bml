@@ -1,0 +1,48 @@
+<!--
+  Parser Documentation — V1Scope
+  FQN: org.blockml.bml.compiler.parser.documentation.V1Scope
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>V1Scope</name>
+  <type>pardocumentation:V1Scope</type>
+  <baseType>core:Documentation</baseType>
+  <is>Phase A parser slice and deferred features</is>
+
+  <documentation>V1 (Phase A) parser implements:
+    • Hardcoded BML → BOM mapper for <block> root documents
+    • Single-file scope (B5) — no TypeRegistry bootstrap in parse()
+    • Stage 1 only — no semantic validation (B8: XSD not Stage 1)
+    • JSON BML authoring not planned (B6)
+    • Tolerant parse by default (continueOnError: true)
+
+    Deferred: cross-file resolution, parseFile/async, streaming, parse({ validate: true }),
+    meta-driven mapping from Definition blocks (V2).</documentation>
+
+  <references>
+    <see type="pardocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="pardocumentation:SingleFileScope" relation="SeeAlso"></see>
+  </references>
+
+</block>

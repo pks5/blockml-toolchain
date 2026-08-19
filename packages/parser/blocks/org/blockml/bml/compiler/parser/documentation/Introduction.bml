@@ -1,0 +1,52 @@
+<!--
+  Parser Documentation — Introduction
+  FQN: org.blockml.bml.compiler.parser.documentation.Introduction
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Introduction</name>
+  <type>pardocumentation:Introduction</type>
+  <baseType>core:Documentation</baseType>
+  <is>Purpose and scope of the Parser package</is>
+
+  <documentation>The @blockml/parser package converts BML XML source to BomDocument (Urmodell).
+    It is the forward mapping — enabling BML → BOM → BML roundtrip together with @blockml/serializer.
+
+    This library (org.blockml.bml.compiler.parser.*) is the SSOT. TypeScript in
+    packages/parser/src/ implements it. Parity tests in packages/parser/test/
+    verify BML ↔ TS alignment.
+
+    V1 build order: parser and serializer prove BML ↔ BOM roundtrip first; validator
+    and compiler follow. Single-file scoped — one parse() invocation → one BomDocument.
+
+    Pipeline placement: BML XML → Parser → BomDocument; consumed by serializer, validator,
+    compiler, LSP. Depends on @blockml/bom (types) and @xmldom/xmldom (B18). Does not
+    depend on @blockml/serializer, @blockml/validator, or TypeRegistry bootstrap.</documentation>
+
+  <references>
+    <see type="pardocumentation:LayerSeparation" relation="ReadNext"></see>
+    <see type="bomdocumentation:Introduction" relation="SeeAlso"></see>
+  </references>
+
+</block>

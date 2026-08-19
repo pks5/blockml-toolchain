@@ -1,0 +1,61 @@
+<!--
+  Parser Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.compiler.parser.documentation.ArchitectureOverview
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ArchitectureOverview</name>
+  <type>pardocumentation:ArchitectureOverview</type>
+  <baseType>core:Documentation</baseType>
+  <is>Parse pipeline [1]–[5] and module decomposition</is>
+
+  <documentation>Entry point: parse(source, options?) → ParseResult (B26).
+
+    Stage 1 pipeline:
+    [1] Format detect (B24) — detectFormat(); strip UTF-8 BOM; first '<' → xml
+    [2] XML DOM (B18) — parseXmlDom() via @xmldom/xmldom
+    [3] Root type resolver — assertBlockRoot(); V1: <block> only
+    [4] Namespace resolver — extractNamespaceBindings(), mergeSourceInfo(); FQN resolution
+    [5] BML → BOM mapper — mapDocumentBlock() → BomDocument
+
+    Module decomposition (packages/parser/src/):
+    • parse.ts → parcap:Parse orchestrates [1]–[5]
+    • pipeline/format-detect.ts → parcap:DetectFormat
+    • pipeline/xml-dom.ts → parcap:ParseXmlDom, GetParseErrors, DocumentElement
+    • pipeline/root-type.ts → parcap:AssertBlockRoot
+    • pipeline/namespaces.ts → parcap:ExtractNamespaceBindings, MergeSourceInfo
+    • map/context.ts → parmap:MapContext, parcap:CreateMapContext
+    • map/map-block.ts → parcap:MapDocumentBlock, MapBlock
+    • map/map-composition.ts → composition tree mapping
+    • map/type-expression.ts → parcap:ParseTypeExpression
+    • map/member-value.ts → parcap:ParseMemberValue
+    • map/directives.ts → parcap:ParseDirectives, ParseBmlMeta
+    • util/* → visibility, boolean, qname, xml helpers</documentation>
+
+  <references>
+    <see type="pardocumentation:V1Scope" relation="ReadNext"></see>
+    <see type="parcap:Parse" relation="Defines"></see>
+  </references>
+
+</block>

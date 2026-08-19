@@ -1,14 +1,27 @@
 # BML → BOM Mapping
 
-version: 0.3.0
+version: 0.5.0 · **@blockml/parser and @blockml/serializer BML libraries are SSOT**
 
 ## Purpose of this Document
 
-This document defines the **algorithmic mapping rules** from parsed BML XML to `BomDocument` — the implementation contract for `@blockml/parser` **while it remains transitional Markdown**. Before implementing `@blockml/parser` or `@blockml/serializer`, migrate the owned sections into that package’s BML library (`13` map → parser; emit / inverse → serializer). Implementation uses **only** the package library. See `00_system.md` — Package Implementation Workflow.
+Transitional **table of contents** only. Normative mapping contracts live in package BML libraries:
 
-**Phase A:** migrate the V1 Parser / Serializer Scope into the parser/serializer BML libraries, then implement **that slice only** from the libraries; the rest of this document is the full language contract to grow into.
+- **Parser (BML → BOM):** `@blockml/parser` BML under `packages/parser/blocks/org/blockml/bml/compiler/parser/`
+- **Serializer (emit / inverse):** `@blockml/serializer` BML under `packages/serializer/blocks/org/blockml/bml/compiler/serializer/`
+
+**Start reading (parser):** `org.blockml.bml.compiler.parser.documentation.Introduction` → ReadNext chain.
+
+**Start reading (serializer):** `org.blockml.bml.compiler.serializer.documentation.Introduction` → ReadNext chain.
+
+TypeScript implements the libraries; parity tests verify BML ↔ TS alignment:
+`packages/parser/test/` · `packages/serializer/test/`.
+
+Do not treat the sections below as implementation SSOT — they are retained for cross-reference until fully retired.
+
+**Phase A:** V1 Parser / Serializer Scope — both slices live in package BML libraries.
 
 For BOM target types see `12_bom_object_model.md`.
+For serializer emit rules see `org.blockml.bml.compiler.serializer.documentation.*` (@blockml/serializer).
 For BML authoring syntax see `02_mbml.md`.
 For expression parsing see `10_expression_language.md`.
 For compiler pipeline placement see `06_compiler.md`.
@@ -17,7 +30,67 @@ Mapping rules are registered per root type (`<block>`, …) — not hardcoded in
 
 ---
 
+## Serializer documentation map — emit / inverse (SSOT in BML)
+
+| Topic | BML FQN |
+|---|---|
+| Package purpose & scope | `org.blockml.bml.compiler.serializer.documentation.Introduction` |
+| Layer separation | `org.blockml.bml.compiler.serializer.documentation.LayerSeparation` |
+| Emit pipeline & modules | `org.blockml.bml.compiler.serializer.documentation.ArchitectureOverview` |
+| V1 hardcoded vs V2 meta | `org.blockml.bml.compiler.serializer.documentation.V1Scope` |
+| Public API B26 (`serialize`) | `org.blockml.bml.compiler.serializer.documentation.PublicApi` |
+| Emit order B12 | `org.blockml.bml.compiler.serializer.documentation.EmitOrder` |
+| Emit rules B14–B17, B21, B25 | `org.blockml.bml.compiler.serializer.documentation.EmitRules` |
+| XML comments re-emit B11/B22 | `org.blockml.bml.compiler.serializer.documentation.XmlCommentsEmit` |
+| Roundtrip contract B10/B13/B20 | `org.blockml.bml.compiler.serializer.documentation.RoundtripContract` |
+| Design decisions | `org.blockml.bml.compiler.serializer.documentation.DesignDecisions` |
+| Diagnostics & host policy | `org.blockml.bml.compiler.serializer.documentation.Diagnostics` |
+| Package ownership | `org.blockml.bml.compiler.serializer.documentation.PackageOwnership` |
+| Out-of-scope | `org.blockml.bml.compiler.serializer.documentation.ScopeExclusions` |
+| Block emit order (V1 list) | `org.blockml.bml.compiler.serializer.config.BlockEmitOrder` |
+| `serialize()` capability | `org.blockml.bml.compiler.serializer.capability.Serialize` |
+
+Library entry: `org.blockml.bml.compiler.serializer.README` · Catalog: `org.blockml.bml.compiler.serializer.Library`
+
+Shared types (`ParseOptions`, `ParseResult`, `SerializeOptions`, `SerializeResult`, `BomDocument`): `org.blockml.bml.bom.*` — see `12_bom_object_model.md`.
+
+---
+
+## Parser documentation map — BML → BOM (SSOT in BML)
+
+| Topic | BML FQN |
+|---|---|
+| Package purpose & scope | `org.blockml.bml.compiler.parser.documentation.Introduction` |
+| Layer separation | `org.blockml.bml.compiler.parser.documentation.LayerSeparation` |
+| Pipeline [1]–[5] & modules | `org.blockml.bml.compiler.parser.documentation.ArchitectureOverview` |
+| V1 Phase-A parser slice | `org.blockml.bml.compiler.parser.documentation.V1Scope` |
+| Public API B26 (`parse`) | `org.blockml.bml.compiler.parser.documentation.PublicApi` |
+| Fundamental mapping rule | `org.blockml.bml.compiler.parser.documentation.MappingPrinciples` |
+| Member order in members[] | `org.blockml.bml.compiler.parser.documentation.MemberMappingOrder` |
+| Attribute classification Rules 1–3 | `org.blockml.bml.compiler.parser.documentation.AttributeClassification` |
+| XML comments parse (B11) | `org.blockml.bml.compiler.parser.documentation.XmlCommentsParse` |
+| Type descriptor parsing | `org.blockml.bml.compiler.parser.documentation.TypeDescriptorParsing` |
+| Block metadata mapping | `org.blockml.bml.compiler.parser.documentation.BlockMetadataMapping` |
+| Member & composition mapping | `org.blockml.bml.compiler.parser.documentation.MemberMapping` |
+| Expression capture (B4) | `org.blockml.bml.compiler.parser.documentation.ExpressionCapture` |
+| Single-file scope (B5) | `org.blockml.bml.compiler.parser.documentation.SingleFileScope` |
+| Design decisions | `org.blockml.bml.compiler.parser.documentation.DesignDecisions` |
+| Roundtrip contract (parse side) | `org.blockml.bml.compiler.parser.documentation.RoundtripContract` |
+| Diagnostics & codes | `org.blockml.bml.compiler.parser.documentation.Diagnostics` |
+| Package ownership | `org.blockml.bml.compiler.parser.documentation.PackageOwnership` |
+| Out-of-scope | `org.blockml.bml.compiler.parser.documentation.ScopeExclusions` |
+| Map context type | `org.blockml.bml.compiler.parser.map.MapContext` |
+| Constants & root element | `org.blockml.bml.compiler.parser.config.ParserConstants` |
+| Map-time diagnostic codes | `org.blockml.bml.compiler.parser.config.MapTimeDiagnosticCodes` |
+| `parse()` capability | `org.blockml.bml.compiler.parser.capability.Parse` |
+
+Library entry: `org.blockml.bml.compiler.parser.README` · Catalog: `org.blockml.bml.compiler.parser.Library`
+
+---
+
 ## Fundamental Rule
+
+> **Historical reference.** Normative content: `org.blockml.bml.compiler.parser.documentation.MappingPrinciples`.
 
 > **BML → BOM → BML must always be possible.** The mapper preserves authored structure and authored values. It makes no interpretive decisions. See `01_bom_core.md` — Fundamental Architecture Principles.
 
@@ -237,6 +310,8 @@ BOM equality does not require whitespace match (B10/B13). Bodies are opaque stri
 
 ## Serializer Emit Order
 
+> **Historical reference.** Normative content: `org.blockml.bml.compiler.serializer.documentation.EmitOrder` and `org.blockml.bml.compiler.serializer.config.BlockEmitOrder`.
+
 > **B12 — decided.** Canonical BOM→BML element order for Block **definition** documents follows the **member declaration order** of the Definition meta-model — not alphabetical order and not “whatever field the serializer visits first.”
 
 | Release | How emit order is obtained |
@@ -398,6 +473,8 @@ V1’s hardcoded list is a **frozen snapshot** of step 2 for today’s Definitio
 ---
 
 ## Attribute Classification
+
+> **Historical reference.** Normative content: `org.blockml.bml.compiler.parser.documentation.AttributeClassification`.
 
 When mapping an XML element to a BOM node, every attribute is classified using this **fixed priority chain**. The first matching rule wins.
 

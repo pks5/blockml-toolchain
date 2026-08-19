@@ -1,0 +1,56 @@
+<!--
+  Parser Documentation — AttributeClassification
+  FQN: org.blockml.bml.compiler.parser.documentation.AttributeClassification
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>AttributeClassification</name>
+  <type>pardocumentation:AttributeClassification</type>
+  <baseType>core:Documentation</baseType>
+  <is>Fixed priority chain for XML attributes (Rules 1–3)</is>
+
+  <documentation>When mapping an XML element, every attribute is classified — first matching rule wins:
+
+    Rule 1 — XML infrastructure:
+    • xmlns* → SourceInfo.namespaceBindings (incl. xmlns:xsi — B25)
+    • xsi:schemaLocation / xsi:noNamespaceSchemaLocation → SourceInfo (B25)
+    • other xsi:* → ignore (not memberValues)
+
+    Rule 2 — bml:* attributes:
+    • Composition meta (bml:id, bml:version, …) → BlockInstance fields
+    • Directives (bml:each, bml:if, …) → directives[]
+    • Unknown bml:* → BML_UNKNOWN_DIRECTIVE (error at map time — B2)
+
+    Rule 3 — All other attributes:
+    • memberValues[name] (camelCase)
+    • ${ expr } → ExpressionValue { raw } (B4)
+
+    Serialize side of Rule 1 (B25 re-emit) → @blockml/serializer.</documentation>
+
+  <references>
+    <see type="pardocumentation:XmlCommentsParse" relation="ReadNext"></see>
+    <see type="parcap:ParseDirectives" relation="SeeAlso"></see>
+  </references>
+
+</block>

@@ -1,0 +1,47 @@
+<!--
+  Serializer Capability — VisibilityPrefix
+  FQN: org.blockml.bml.compiler.serializer.capability.VisibilityPrefix
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>VisibilityPrefix</name>
+  <type>sercap:VisibilityPrefix</type>
+  <baseType>core:Capability</baseType>
+  <is>Map visibility enum to XML localName prefix (B14)</is>
+
+  <documentation>Map visibility enum to XML localName prefix (B14)</documentation>
+
+  <references>
+    <see type="serdocumentation:EmitRules" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <visibility type="type:Text">
+      <documentation>private | protected | public | undefined (optional)</documentation>
+    </visibility>
+    <prefix type="type:Text">
+      <documentation>__ | _ | (empty) (required)</documentation>
+    </prefix>
+  </properties>
+
+</block>

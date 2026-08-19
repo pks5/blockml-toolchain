@@ -18,7 +18,8 @@
     "blocks"
   ],
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "test": "vitest run packages/parser/test"
   },
   "dependencies": {
     "@blockml/bom": "file:../bom",

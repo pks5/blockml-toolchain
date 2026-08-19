@@ -1,0 +1,47 @@
+<!--
+  Parser Documentation — TypeDescriptorParsing
+  FQN: org.blockml.bml.compiler.parser.documentation.TypeDescriptorParsing
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>TypeDescriptorParsing</name>
+  <type>pardocumentation:TypeDescriptorParsing</type>
+  <baseType>core:Documentation</baseType>
+  <is>TypeExpression parsing at map time</is>
+
+  <documentation>Parse type attribute strings into BOM TypeExpression shapes (defined in @blockml/bom).
+
+    • Named type refs → resolved FQN via namespace bindings + implicit namespaces
+    • Union (A | B), struct ({ a: T }), multiplicity, generics, self refs
+    • Boolean.True/Boolean.False preserved as type refs (B16) — not rewritten to literals
+    • Boolean values normalized to lowercase (B15)
+    • Failure → BML_UNKNOWN_TYPE
+    • Anonymous struct at specialized sites; context-bound implicit namespaces per 02_mbml.md</documentation>
+
+  <references>
+    <see type="parcap:ParseTypeExpression" relation="Defines"></see>
+    <see type="pardocumentation:BlockMetadataMapping" relation="ReadNext"></see>
+  </references>
+
+</block>

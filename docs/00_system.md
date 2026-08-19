@@ -374,14 +374,16 @@ The Urmodell runtime package. Browser and Node compatible. **Owns** shared TypeS
 
 The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocument` types from `@blockml/bom` — does not own those interfaces.
 
+**BML library is SSOT:** `packages/parser/blocks/org/blockml/bml/compiler/parser/` — start at `org.blockml.bml.compiler.parser.documentation.Introduction`. TypeScript in `packages/parser/src/` implements it; parity tests in `packages/parser/test/`.
+
 ```text
   - XML DOM via `@xmldom/xmldom` (B18; same in Node and browser — see `06_compiler.md` [2])
-  - Public entry: `parse(source, options?) → ParseResult` (B26 — see `15_dev_setup.md`)
-  - JSON BML parser — **not planned** for V1/V2; XML only (see `02_mbml.md`)
+  - Public entry: parse(source, options?) → ParseResult (B26)
+  - JSON BML parser — not planned for V1/V2; XML only (see `02_mbml.md`)
   - Namespace resolver (xmlns → FQN)
-  - XSD loader — optional IDE aid; not required for parse (see XSD Render Target)
+  - XSD loader — optional IDE aid; not required for parse
   - BML → BOM mapper (per root type, extensible)
-  - Parse diagnostics (using `@blockml/bom` `Diagnostic`)
+  - Parse diagnostics (using @blockml/bom Diagnostic)
   - No render output
 ```
 
@@ -391,9 +393,11 @@ The universal BML → BOM mapper. Browser and Node compatible. Produces `BomDocu
 
 BOM → canonical BML XML. Browser and Node compatible. Inverse of the parser mapping — enables the **BML → BOM → BML** roundtrip. Consumes `BomDocument` from `@blockml/bom` (no dependency on `@blockml/parser` or `@blockml/validator`).
 
+**BML library is SSOT:** `packages/serializer/blocks/org/blockml/bml/compiler/serializer/` — start at `org.blockml.bml.compiler.serializer.documentation.Introduction`. TypeScript in `packages/serializer/src/` implements it; parity tests in `packages/serializer/test/`.
+
 ```text
-- BOM → BML XML (V1: hardcoded inverse of 13_bml_to_bom_mapping.md)
-- Public entry: `serialize(document, options?) → SerializeResult` (B26)
+- BOM → BML XML (V1: hardcoded inverse — rules in serializer BML, not this MD)
+- Public entry: serialize(document, options?) → SerializeResult (B26)
 - Meta-driven output via Definition blocks + bml:xml — deferred (19_definition_blocks_and_bml_xml.md)
 - No semantic validation, no render output
 - Operates on Urmodell only
@@ -835,7 +839,7 @@ Primary owner of each transitional Markdown file. Implement the owner → migrat
 |---|---|
 | `01_bom_core.md`, `02_mbml.md`, `08_managed_object.md`, `10_expression_language.md`, `16_framework_base_types.md`, `17_type_system_bml.md`, `18_constraints_and_suggestions.md`, `19_definition_blocks_and_bml_xml.md`, `20_value_type_instance_configuration.md`, `21_constant_value_type.md`, `22_function_mapping.md`, `WOT_Reference.md` | `@blockml/core` (language already largely in Core BML; leftover MD still migrates here) |
 | `12_bom_object_model.md` | `@blockml/bom` (Urmodell interfaces, B26, bomEquals — not `@blockml/core`) |
-| `13_bml_to_bom_mapping.md` | `@blockml/parser` (map BML → BOM); serializer emit / inverse → `@blockml/serializer` |
+| `13_bml_to_bom_mapping.md` | Transitional TOC — parser SSOT → `@blockml/parser` BML; serializer SSOT → `@blockml/serializer` BML |
 | `06_compiler.md`, `14_compiler_runtime.md` | `@blockml/compiler` |
 | `07_cli.md` | `@blockml/cli` |
 | `03_mbom.md`, `04_types.md` | `@machineblocks/core` (native params/types already BML SSOT) |

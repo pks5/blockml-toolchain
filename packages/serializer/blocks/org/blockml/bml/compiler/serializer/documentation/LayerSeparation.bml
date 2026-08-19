@@ -1,0 +1,54 @@
+<!--
+  Serializer Documentation — LayerSeparation
+  FQN: org.blockml.bml.compiler.serializer.documentation.LayerSeparation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>LayerSeparation</name>
+  <type>serdocumentation:LayerSeparation</type>
+  <baseType>core:Documentation</baseType>
+  <is>Serializer vs parser vs BOM vs core</is>
+
+  <documentation>Four layers relevant to serialization:
+
+    org.blockml.bml.bom.* (@blockml/bom) — Urmodell data structures the serializer reads
+    (BomDocument, BlockDefinition, MemberDefinition, SourceInfo, XmlTrivia, …).
+    SerializeOptions and SerializeResult (B26) also live here.
+
+    org.blockml.bml.compiler.serializer.* (this package) — emit rules (B12–B25), emit
+    architecture, serialize() entry point contract.
+
+    org.blockml.bml.definition.* (@blockml/core) — BML meta-model. V2 serializer reads
+    Definition blocks + bml:xml for dynamic emit order. V1 uses a hardcoded snapshot.
+
+    @blockml/parser — BML → BomDocument mapper (inverse direction). Does not own serializer rules.
+
+    The serializer accepts any Urmodell provenance (parser or future BomBuilder.seal()).</documentation>
+
+  <references>
+    <see type="serdocumentation:ArchitectureOverview" relation="ReadNext"></see>
+    <see type="bomdocumentation:LayerSeparation" relation="SeeAlso"></see>
+  </references>
+
+</block>

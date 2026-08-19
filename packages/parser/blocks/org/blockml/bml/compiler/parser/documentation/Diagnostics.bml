@@ -1,0 +1,52 @@
+<!--
+  Parser Documentation — Diagnostics
+  FQN: org.blockml.bml.compiler.parser.documentation.Diagnostics
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Diagnostics</name>
+  <type>pardocumentation:Diagnostics</type>
+  <baseType>core:Documentation</baseType>
+  <is>Map-time and pipeline diagnostic codes</is>
+
+  <documentation>Pipeline hard-fail codes (parse.ts):
+    • BML_UNSUPPORTED_FORMAT — format detect failed
+    • BML_MALFORMED_XML — DOM parse error
+    • BML_MISSING_ROOT — no document element
+    • BML_INVALID_ROOT — not <block> (V1)
+    • BML_MAP_ERROR — mapping exception
+
+    Map-time codes (mapper modules):
+    • BML_UNKNOWN_NAMESPACE_PREFIX, BML_UNQUALIFIED_BLOCK_REFERENCE
+    • BML_UNKNOWN_TYPE — type expression parse failure
+
+    Host policy: whether to abort after diagnostics is orchestrator decision.
+    Diagnostic type: org.blockml.bml.bom.common.Diagnostic.</documentation>
+
+  <references>
+    <see type="parconfig:MapTimeDiagnosticCodes" relation="Defines"></see>
+    <see type="pardocumentation:PackageOwnership" relation="ReadNext"></see>
+  </references>
+
+</block>

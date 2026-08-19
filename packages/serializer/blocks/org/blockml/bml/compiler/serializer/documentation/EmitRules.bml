@@ -1,0 +1,64 @@
+<!--
+  Serializer Documentation — EmitRules
+  FQN: org.blockml.bml.compiler.serializer.documentation.EmitRules
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>EmitRules</name>
+  <type>serdocumentation:EmitRules</type>
+  <baseType>core:Documentation</baseType>
+  <is>Visibility, boolean, omit, QName/FQN, XSI (B14–B17, B21, B25)</is>
+
+  <documentation>Visibility prefix emit (B14):
+    private → localName "__" + name; protected → "_" + name; public → bare name.
+    Visibility is SSOT; prefix is reconstructible. Same on composition instance attributes.
+
+    Type-reference emit (B21):
+    No BML-semantic prefixed xmlns (excluding xsi) → FQN-emit mode.
+    Otherwise → QName-emit mode using namespaceBindings; first authored prefix wins.
+    Missing binding in QName mode → BML_NAMESPACE_UNBOUND (no silent FQN fallback).
+    xmlns:xsi alone does NOT force QName mode (B25 interaction).
+
+    Boolean literals vs type refs (B15/B16):
+    Boolean values → always lowercase true/false.
+    Boolean.True/Boolean.False type refs → preserve as TypeExpression (QName or FQN per B21).
+
+    Omit-by-default (B17):
+    SHOULD omit: abstract/final/override/readOnly when false, empty containers, visibility
+    when prefix encodes it, default-false flags, …
+    MUST NOT omit: required identity, true flags, non-default enums, authoredPlacement (D9),
+    authored CDATA form (D8), comments, …
+
+    XSI infrastructure (B25):
+    Re-emit every stored namespaceBindings entry (including xsi) and, when present,
+    xsi:schemaLocation / xsi:noNamespaceSchemaLocation on root start-tag.
+    Do not invent schemaLocation when absent.</documentation>
+
+  <references>
+    <see type="serdocumentation:XmlCommentsEmit" relation="ReadNext"></see>
+    <see type="sercap:FqnToQName" relation="SeeAlso"></see>
+    <see type="sercap:VisibilityPrefix" relation="SeeAlso"></see>
+  </references>
+
+</block>

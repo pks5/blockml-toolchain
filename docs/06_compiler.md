@@ -98,7 +98,9 @@ See `01_bom_core.md` — Urmodell and Pragmatic Model.
 
 Produces the **Urmodell** (Canonical BOM). No semantic decisions. Output is immutable and read-only.
 
-**Public API (B26):** `parse(source: string, options?: ParseOptions): ParseResult` — sync; `{ document, diagnostics, success }`. See `15_dev_setup.md` — Public API.
+**BML SSOT:** `org.blockml.bml.compiler.parser.documentation.*` — pipeline [1]–[5], mapping rules, `parse()` contract.
+
+**Public API (B26):** `parse(source: string, options?: ParseOptions): ParseResult` — sync; `{ document, diagnostics, success }`. See `org.blockml.bml.compiler.parser.documentation.PublicApi`.
 
 ```text
 BML Source (.bml)                   — XML only; JSON authoring not planned

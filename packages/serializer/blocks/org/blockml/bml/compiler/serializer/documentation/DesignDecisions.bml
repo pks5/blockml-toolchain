@@ -1,0 +1,55 @@
+<!--
+  Serializer Documentation — DesignDecisions
+  FQN: org.blockml.bml.compiler.serializer.documentation.DesignDecisions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>DesignDecisions</name>
+  <type>serdocumentation:DesignDecisions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Normative serializer design decisions</is>
+
+  <documentation>Emit order (B12): Definition member declaration order — V1 hardcoded, V2 from Definition .bml.
+
+    Whitespace (B13): formatting whitespace not stored; may normalize on emit.
+
+    Visibility (B14): _ / __ derived from visibility on emit; BOM stores logical name + visibility.
+
+    Omit defaults (B17): omit semantically equivalent absent nodes/attributes on emit.
+
+    Type-ref emit (B21): QName if any BML-semantic prefixed xmlns; FQN in FQN-only docs.
+
+    Trailing comments (B22): next line after end tag + blank line after block.
+
+    XSI (B25): store + re-emit xmlns:xsi and schemaLocation on SourceInfo / root tag.
+
+    Dual placement (D9): emit authoredPlacement form on roundtrip — cross-ref org.blockml.bml.core.
+
+    Provenance-agnostic: serializer works on parser- or builder-origin Urmodell.</documentation>
+
+  <references>
+    <see type="serdocumentation:Diagnostics" relation="ReadNext"></see>
+  </references>
+
+</block>

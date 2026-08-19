@@ -157,7 +157,7 @@ blockml/
   docs/
 ```
 
-**Scaffold next (Phase A):** `@blockml/bom` library + migrate `12` Urmodell slice → BOM TS; then `packages/parser` and `packages/serializer` via the Package Implementation Workflow (`package.json` + `blockml.library` + `blocks/` **before** `src/`). Framework BML remains in `@blockml/core` (npm).
+**Scaffold next (Phase A):** `@blockml/bom` library + migrate `12` Urmodell slice → BOM TS; `@blockml/parser` and `@blockml/serializer` BML libraries (done). Framework BML remains in `@blockml/core` (npm).
 
 ---
 
@@ -697,8 +697,8 @@ The serializer is **not** a render target emitter (SCAD, JSON, …). Target outp
 Phase A — Language loop (V1 gate)
   1. BOM types + Diagnostic          — @blockml/bom TS from BOM BML (migrate `12` Urmodell slice)
                                       ExpressionValue = { raw } only; no AST fields on Urmodell
-  2. Parser                          — @blockml/parser library + migrate `13` map; then steps [1]–[5]
-  3. Serializer                      — @blockml/serializer library + migrate `13` inverse; then emit raw
+  2. Parser                          — @blockml/parser BML library (done); maintain TS parity → steps [1]–[5]
+  3. Serializer                      — @blockml/serializer BML library (done); implement/maintain emit from BML SSOT
   4. Roundtrip tests                 — tests/roundtrip/ against BML corpus
 
 Phase B — Semantic layer
@@ -758,7 +758,7 @@ Parser is **single-file scoped** — roundtrip tests do not require TypeRegistry
 
 ### Public API (`parse` / `serialize`) — B26
 
-> **Normative for Phase A.** Result/options types and `bomEquals` live in `@blockml/bom`; entry points in `@blockml/parser` / `@blockml/serializer`.
+> **Normative for Phase A.** Result/options types and `bomEquals` live in `@blockml/bom` (`org.blockml.bml.bom.documentation.PublicApi`). **Parser entry and mapping rules:** `@blockml/parser` BML — `org.blockml.bml.compiler.parser.documentation.PublicApi` → ReadNext chain. **Serializer entry and emit rules:** `@blockml/serializer` BML — `org.blockml.bml.compiler.serializer.documentation.PublicApi` → ReadNext chain.
 
 **Principles:** sync only (no FS/network in these functions); no throw on recoverable authoring/mapping errors (internal bugs may throw); tolerant parse by default; shared `Diagnostic` with Stage 2 / compiler; no `validate` option on parse.
 
@@ -805,9 +805,9 @@ function parse(source: string, options?: ParseOptions): ParseResult
 function serialize(document: BomDocument, options?: SerializeOptions): SerializeResult
 ```
 
-**`parse`:** B24 detect → [2] xmldom → [3]–[5] map. Hard fail → `document: null`. Mapping errors/warnings → `diagnostics`; with `continueOnError` (default) still return a document when possible. Warnings alone leave `success: true`.
+**`parse`:** See `org.blockml.bml.compiler.parser.documentation.PublicApi`. B24 detect → [2] xmldom → [3]–[5] map. Hard fail → `document: null`. Mapping errors/warnings → `diagnostics`; with `continueOnError` (default) still return a document when possible. Warnings alone leave `success: true`.
 
-**`serialize`:** Emit per B12–B25 / D8–D9. `BML_NAMESPACE_UNBOUND` → error diagnostic; prefer still emitting `text` when possible (host may abort). Does **not** call the validator.
+**`serialize`:** See `org.blockml.bml.compiler.serializer.documentation.PublicApi`. Emit per B12–B25 / D8–D9. `BML_NAMESPACE_UNBOUND` → error diagnostic; prefer still emitting `text` when possible (host may abort). Does **not** call the validator.
 
 **Not in V1 API:** `parseFile` / `serializeFile`, async variants, streaming, `parse({ validate: true })`.
 
@@ -852,8 +852,8 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 1. @blockml/bom BML + TS       — packages/bom; migrate `12` Urmodell slice; BomDocument + Diagnostic + bomEquals
 2. @blockml/core BML          — already present (node_modules/@blockml/core) — language SSOT only
 3. @machineblocks/core BML    — already present (com.machineblocks.bml.*)
-4. @blockml/parser            — library + migrate 13 (map) → then `@xmldom/xmldom` + steps [1]–[5]
-5. @blockml/serializer        — library + migrate 13 (inverse) / 19 emit → then BOM → BML
+4. @blockml/parser            — BML library migrated (mapping SSOT); maintain TS parity → `@xmldom/xmldom` + steps [1]–[5]
+5. @blockml/serializer        — BML library migrated (emit rules SSOT); maintain TS parity → BOM → BML
 6. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers)
 7. parseExpression()          — @blockml/core utility (AST as ParsedExpression; no Urmodell write-back)
 8. @blockml/validator         — library + migrate owned MD → Stage 2

@@ -1,0 +1,1118 @@
+{
+  "blocks": [
+    {
+      "fqn": "org.blockml.bml.compiler.parser.ParserType",
+      "tsExport": "ParserType",
+      "pkg": "root",
+      "abstract": true,
+      "baseType": "core:Entity",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.parser.map.MapContext",
+      "tsExport": "MapContext",
+      "pkg": "map",
+      "abstract": false,
+      "baseType": "parser:ParserType",
+      "fields": [
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "subBlockIndex",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "parentBlockType",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "isRoot",
+          "type": "type:Boolean",
+          "required": true
+        },
+        {
+          "name": "isEmbedded",
+          "type": "type:Boolean",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.parser.config.ParserConstants",
+      "tsExport": "ParserConstants",
+      "pkg": "config",
+      "abstract": false,
+      "baseType": "parser:ParserType",
+      "fields": [
+        {
+          "name": "XSI_NS",
+          "type": "type:Text",
+          "required": true,
+          "literal": "http://www.w3.org/2001/XMLSchema-instance"
+        },
+        {
+          "name": "BML_XMLNS",
+          "type": "type:Text",
+          "required": true,
+          "literal": "http://blockml.org/bml"
+        },
+        {
+          "name": "TYPE_REFERENCE_ENTITY",
+          "type": "type:Text",
+          "required": true,
+          "literal": "org.blockml.bml.type.TypeReferenceEntity"
+        },
+        {
+          "name": "V1_ROOT_ELEMENT",
+          "type": "type:Text",
+          "required": true,
+          "literal": "block"
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.parser.config.MapTimeDiagnosticCodes",
+      "tsExport": "MapTimeDiagnosticCodes",
+      "pkg": "config",
+      "abstract": false,
+      "baseType": "parser:ParserType",
+      "fields": [
+        {
+          "name": "codes",
+          "type": "type:Text[]",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "Parse",
+      "tsExport": "parse",
+      "fqn": "org.blockml.bml.compiler.parser.capability.Parse",
+      "inputs": [
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "bomapi:ParseOptions",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "bomapi:ParseResult",
+        "required": true
+      }
+    },
+    {
+      "name": "DetectFormat",
+      "tsExport": "detectFormat",
+      "fqn": "org.blockml.bml.compiler.parser.capability.DetectFormat",
+      "inputs": [
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "format",
+        "type": "type:Text",
+        "doc": "\"xml\" | null"
+      }
+    },
+    {
+      "name": "ParseXmlDom",
+      "tsExport": "parseXmlDom",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ParseXmlDom",
+      "inputs": [
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "document",
+        "type": "core:Any",
+        "required": true,
+        "doc": "DOM Document"
+      }
+    },
+    {
+      "name": "GetParseErrors",
+      "tsExport": "getParseErrors",
+      "fqn": "org.blockml.bml.compiler.parser.capability.GetParseErrors",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "errors",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "DocumentElement",
+      "tsExport": "documentElement",
+      "fqn": "org.blockml.bml.compiler.parser.capability.DocumentElement",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "element",
+        "type": "core:Any",
+        "doc": "Element | null"
+      }
+    },
+    {
+      "name": "AssertBlockRoot",
+      "tsExport": "assertBlockRoot",
+      "fqn": "org.blockml.bml.compiler.parser.capability.AssertBlockRoot",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": null
+    },
+    {
+      "name": "ExtractNamespaceBindings",
+      "tsExport": "extractNamespaceBindings",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ExtractNamespaceBindings",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "sourceInfo",
+        "type": "bomcommon:SourceInfo",
+        "required": true
+      }
+    },
+    {
+      "name": "MergeSourceInfo",
+      "tsExport": "mergeSourceInfo",
+      "fqn": "org.blockml.bml.compiler.parser.capability.MergeSourceInfo",
+      "inputs": [
+        {
+          "name": "partial",
+          "type": "bomcommon:SourceInfo",
+          "required": true
+        },
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "format",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "sourceInfo",
+        "type": "bomcommon:SourceInfo",
+        "required": true
+      }
+    },
+    {
+      "name": "CreateMapContext",
+      "tsExport": "createMapContext",
+      "fqn": "org.blockml.bml.compiler.parser.capability.CreateMapContext",
+      "inputs": [
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "core:Any",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "context",
+        "type": "parmap:MapContext",
+        "required": true
+      }
+    },
+    {
+      "name": "MapDocumentBlock",
+      "tsExport": "mapDocumentBlock",
+      "fqn": "org.blockml.bml.compiler.parser.capability.MapDocumentBlock",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "sourceInfo",
+          "type": "bomcommon:SourceInfo",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "document",
+        "type": "bomdoc:BomDocument",
+        "required": true
+      }
+    },
+    {
+      "name": "MapBlock",
+      "tsExport": "mapBlock",
+      "fqn": "org.blockml.bml.compiler.parser.capability.MapBlock",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "block",
+        "type": "bomblock:BlockDefinition",
+        "required": true
+      }
+    },
+    {
+      "name": "MapCompositionTemplate",
+      "tsExport": "mapCompositionTemplate",
+      "fqn": "org.blockml.bml.compiler.parser.capability.MapCompositionTemplate",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "template",
+        "type": "bomcomp:CompositionTemplate",
+        "required": true
+      }
+    },
+    {
+      "name": "MapBlockInstanceNode",
+      "tsExport": "mapBlockInstanceNode",
+      "fqn": "org.blockml.bml.compiler.parser.capability.MapBlockInstanceNode",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "node",
+        "type": "bomcomp:BlockInstanceNode",
+        "required": true
+      }
+    },
+    {
+      "name": "IsTypeReferenceEntitySugar",
+      "tsExport": "isTypeReferenceEntitySugar",
+      "fqn": "org.blockml.bml.compiler.parser.capability.IsTypeReferenceEntitySugar",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "MapTypeReferenceEntityInstance",
+      "tsExport": "mapTypeReferenceEntityInstance",
+      "fqn": "org.blockml.bml.compiler.parser.capability.MapTypeReferenceEntityInstance",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "entity",
+        "type": "bomblock:TypeReferenceEntityInstance",
+        "required": true
+      }
+    },
+    {
+      "name": "BuildSubBlockIndex",
+      "tsExport": "buildSubBlockIndex",
+      "fqn": "org.blockml.bml.compiler.parser.capability.BuildSubBlockIndex",
+      "inputs": [
+        {
+          "name": "block",
+          "type": "bomblock:BlockDefinition",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "index",
+        "type": "type:Text",
+        "required": true,
+        "doc": "Map<string, string>"
+      }
+    },
+    {
+      "name": "ParseTypeExpression",
+      "tsExport": "parseTypeExpression",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ParseTypeExpression",
+      "inputs": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        },
+        {
+          "name": "implicitContext",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "expression",
+        "type": "bomtype:TypeExpression",
+        "required": true
+      }
+    },
+    {
+      "name": "InferCardinality",
+      "tsExport": "inferCardinality",
+      "fqn": "org.blockml.bml.compiler.parser.capability.InferCardinality",
+      "inputs": [
+        {
+          "name": "type",
+          "type": "bomtype:TypeExpression",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "cardinality",
+        "type": "type:Text"
+      }
+    },
+    {
+      "name": "TypeExpressionToString",
+      "tsExport": "typeExpressionToString",
+      "fqn": "org.blockml.bml.compiler.parser.capability.TypeExpressionToString",
+      "inputs": [
+        {
+          "name": "type",
+          "type": "bomtype:TypeExpression",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "text",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "ParseMemberValue",
+      "tsExport": "parseMemberValue",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ParseMemberValue",
+      "inputs": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "value",
+        "type": "core:Any",
+        "required": true,
+        "doc": "MemberValue"
+      }
+    },
+    {
+      "name": "ExpressionFromRaw",
+      "tsExport": "expressionFromRaw",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ExpressionFromRaw",
+      "inputs": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "value",
+        "type": "core:Any",
+        "required": true,
+        "doc": "ExpressionValue"
+      }
+    },
+    {
+      "name": "ParseDirectives",
+      "tsExport": "parseDirectives",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ParseDirectives",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "directives",
+        "type": "core:Any[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ParseBmlMeta",
+      "tsExport": "parseBmlMeta",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ParseBmlMeta",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "meta",
+        "type": "core:Any",
+        "required": true
+      }
+    },
+    {
+      "name": "ParseVisibilityFromName",
+      "tsExport": "parseVisibilityFromName",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ParseVisibilityFromName",
+      "inputs": [
+        {
+          "name": "localName",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "core:Any",
+        "required": true,
+        "doc": "{ name, visibility }"
+      }
+    },
+    {
+      "name": "VisibilityPrefix",
+      "tsExport": "visibilityPrefix",
+      "fqn": "org.blockml.bml.compiler.parser.capability.VisibilityPrefix",
+      "inputs": [
+        {
+          "name": "visibility",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "prefix",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "NormalizeBooleanValue",
+      "tsExport": "normalizeBooleanValue",
+      "fqn": "org.blockml.bml.compiler.parser.capability.NormalizeBooleanValue",
+      "inputs": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "value",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "IsBooleanLiteral",
+      "tsExport": "isBooleanLiteral",
+      "fqn": "org.blockml.bml.compiler.parser.capability.IsBooleanLiteral",
+      "inputs": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "ParseBooleanAttribute",
+      "tsExport": "parseBooleanAttribute",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ParseBooleanAttribute",
+      "inputs": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "value",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "SplitQName",
+      "tsExport": "splitQName",
+      "fqn": "org.blockml.bml.compiler.parser.capability.SplitQName",
+      "inputs": [
+        {
+          "name": "qname",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "parts",
+        "type": "core:Any",
+        "required": true
+      }
+    },
+    {
+      "name": "ResolvePrefix",
+      "tsExport": "resolvePrefix",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ResolvePrefix",
+      "inputs": [
+        {
+          "name": "prefix",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "uri",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "ResolveBlockReference",
+      "tsExport": "resolveBlockReference",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ResolveBlockReference",
+      "inputs": [
+        {
+          "name": "qname",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "ctx",
+          "type": "parmap:MapContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "fqn",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "ResolveTypeName",
+      "tsExport": "resolveTypeName",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ResolveTypeName",
+      "inputs": [
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "implicitContext",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "fqn",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "HasBmlSemanticQNameBindings",
+      "tsExport": "hasBmlSemanticQNameBindings",
+      "fqn": "org.blockml.bml.compiler.parser.capability.HasBmlSemanticQNameBindings",
+      "inputs": [
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "FqnToQName",
+      "tsExport": "fqnToQName",
+      "fqn": "org.blockml.bml.compiler.parser.capability.FqnToQName",
+      "inputs": [
+        {
+          "name": "fqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "qname",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "SourceLoc",
+      "tsExport": "sourceLoc",
+      "fqn": "org.blockml.bml.compiler.parser.capability.SourceLoc",
+      "inputs": [
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "line",
+          "type": "type:Integer",
+          "required": true
+        },
+        {
+          "name": "column",
+          "type": "type:Integer",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "location",
+        "type": "bomcommon:SourceLocation",
+        "required": true
+      }
+    },
+    {
+      "name": "ElementSourceLoc",
+      "tsExport": "elementSourceLoc",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ElementSourceLoc",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "location",
+        "type": "bomcommon:SourceLocation",
+        "required": true
+      }
+    },
+    {
+      "name": "IsElement",
+      "tsExport": "isElement",
+      "fqn": "org.blockml.bml.compiler.parser.capability.IsElement",
+      "inputs": [
+        {
+          "name": "node",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "IsComment",
+      "tsExport": "isComment",
+      "fqn": "org.blockml.bml.compiler.parser.capability.IsComment",
+      "inputs": [
+        {
+          "name": "node",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "IsTextNode",
+      "tsExport": "isTextNode",
+      "fqn": "org.blockml.bml.compiler.parser.capability.IsTextNode",
+      "inputs": [
+        {
+          "name": "node",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "IsCData",
+      "tsExport": "isCData",
+      "fqn": "org.blockml.bml.compiler.parser.capability.IsCData",
+      "inputs": [
+        {
+          "name": "node",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "ElementChildren",
+      "tsExport": "elementChildren",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ElementChildren",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "children",
+        "type": "core:Any[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ElementLocalName",
+      "tsExport": "elementLocalName",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ElementLocalName",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "localName",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "ElementPrefix",
+      "tsExport": "elementPrefix",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ElementPrefix",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "prefix",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "GetAttribute",
+      "tsExport": "getAttribute",
+      "fqn": "org.blockml.bml.compiler.parser.capability.GetAttribute",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "value",
+        "type": "type:Text"
+      }
+    },
+    {
+      "name": "GetCharacterData",
+      "tsExport": "getCharacterData",
+      "fqn": "org.blockml.bml.compiler.parser.capability.GetCharacterData",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "data",
+        "type": "core:Any",
+        "required": true
+      }
+    },
+    {
+      "name": "CollectLeadingComments",
+      "tsExport": "collectLeadingComments",
+      "fqn": "org.blockml.bml.compiler.parser.capability.CollectLeadingComments",
+      "inputs": [
+        {
+          "name": "siblings",
+          "type": "core:Any[]",
+          "required": true
+        },
+        {
+          "name": "index",
+          "type": "type:Integer",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "comments",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "CollectTrailingComments",
+      "tsExport": "collectTrailingComments",
+      "fqn": "org.blockml.bml.compiler.parser.capability.CollectTrailingComments",
+      "inputs": [
+        {
+          "name": "siblings",
+          "type": "core:Any[]",
+          "required": true
+        },
+        {
+          "name": "index",
+          "type": "type:Integer",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "comments",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "XmlTriviaFromElement",
+      "tsExport": "xmlTriviaFromElement",
+      "fqn": "org.blockml.bml.compiler.parser.capability.XmlTriviaFromElement",
+      "inputs": [
+        {
+          "name": "element",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "trivia",
+        "type": "bomcommon:XmlTrivia"
+      }
+    },
+    {
+      "name": "TrimText",
+      "tsExport": "trimText",
+      "fqn": "org.blockml.bml.compiler.parser.capability.TrimText",
+      "inputs": [
+        {
+          "name": "value",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "trimmed",
+        "type": "type:Text",
+        "required": true
+      }
+    }
+  ],
+  "constants": {
+    "XSI_NS": "http://www.w3.org/2001/XMLSchema-instance",
+    "BML_XMLNS": "http://blockml.org/bml",
+    "TYPE_REFERENCE_ENTITY": "org.blockml.bml.type.TypeReferenceEntity",
+    "V1_ROOT_ELEMENT": "block"
+  },
+  "mapTimeDiagnosticCodes": [
+    "BML_UNSUPPORTED_FORMAT",
+    "BML_MALFORMED_XML",
+    "BML_MISSING_ROOT",
+    "BML_INVALID_ROOT",
+    "BML_MAP_ERROR",
+    "BML_UNKNOWN_NAMESPACE_PREFIX",
+    "BML_UNQUALIFIED_BLOCK_REFERENCE",
+    "BML_UNKNOWN_TYPE"
+  ],
+  "documentationBlocks": [
+    "Introduction",
+    "LayerSeparation",
+    "ArchitectureOverview",
+    "V1Scope",
+    "PublicApi",
+    "MappingPrinciples",
+    "MemberMappingOrder",
+    "AttributeClassification",
+    "XmlCommentsParse",
+    "TypeDescriptorParsing",
+    "BlockMetadataMapping",
+    "MemberMapping",
+    "ExpressionCapture",
+    "SingleFileScope",
+    "DesignDecisions",
+    "RoundtripContract",
+    "Diagnostics",
+    "PackageOwnership",
+    "ScopeExclusions"
+  ]
+}

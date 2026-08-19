@@ -1,0 +1,47 @@
+<!--
+  Parser Documentation — SingleFileScope
+  FQN: org.blockml.bml.compiler.parser.documentation.SingleFileScope
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>SingleFileScope</name>
+  <type>pardocumentation:SingleFileScope</type>
+  <baseType>core:Documentation</baseType>
+  <is>One BomDocument per parse(); external refs as strings (B5)</is>
+
+  <documentation>parse() produces exactly one BomDocument per invocation.
+
+    Cross-file references stored in authored form:
+    • type/baseType FQNs as resolved strings
+    • Preset refs as FQN::id strings (unmerged)
+    • bml:version on instances — no registry lookup at parse time
+
+    TypeRegistry bootstrap, effective member resolution, cross-file validation →
+    @blockml/cli orchestrator + @blockml/core utilities + @blockml/validator.</documentation>
+
+  <references>
+    <see type="pardocumentation:DesignDecisions" relation="ReadNext"></see>
+  </references>
+
+</block>

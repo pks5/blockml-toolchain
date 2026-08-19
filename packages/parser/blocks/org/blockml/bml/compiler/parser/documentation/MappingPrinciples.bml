@@ -1,0 +1,48 @@
+<!--
+  Parser Documentation — MappingPrinciples
+  FQN: org.blockml.bml.compiler.parser.documentation.MappingPrinciples
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>MappingPrinciples</name>
+  <type>pardocumentation:MappingPrinciples</type>
+  <baseType>core:Documentation</baseType>
+  <is>Fundamental mapping rule — structure + preservation</is>
+
+  <documentation>BML → BOM → BML must always be possible. The mapper preserves authored structure
+    and values — directives, aggregation declarations, literal syntax, unresolved type
+    references, namespace bindings, and bml:xml metadata.
+
+    Mapper responsibility: structure + classification + preservation.
+    NOT mapper responsibility: canonicalization, expansion, merge, evaluation.
+
+    BOM makes no statement about directive expansion, aggregation interpretation, or
+    block rendering. Maximum authored surface: store as much as Urmodell can carry.</documentation>
+
+  <references>
+    <see type="pardocumentation:MemberMappingOrder" relation="ReadNext"></see>
+    <see type="bomdocumentation:AbstractionPrinciple" relation="SeeAlso"></see>
+  </references>
+
+</block>

@@ -1,0 +1,584 @@
+{
+  "blocks": [
+    {
+      "fqn": "org.blockml.bml.compiler.serializer.SerializerType",
+      "tsExport": "SerializerType",
+      "pkg": "root",
+      "abstract": true,
+      "baseType": "core:Entity",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.serializer.emit.EmitContext",
+      "tsExport": "EmitContext",
+      "pkg": "emit",
+      "abstract": false,
+      "baseType": "serializer:SerializerType",
+      "fields": [
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "useQName",
+          "type": "type:Boolean",
+          "required": true
+        },
+        {
+          "name": "indent",
+          "type": "type:Integer",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.serializer.emit.XmlWriter",
+      "tsExport": "XmlWriter",
+      "pkg": "emit",
+      "abstract": false,
+      "baseType": "serializer:SerializerType",
+      "fields": [
+        {
+          "name": "indent",
+          "type": "type:Integer",
+          "required": true
+        },
+        {
+          "name": "depth",
+          "type": "type:Integer",
+          "required": true
+        },
+        {
+          "name": "lines",
+          "type": "type:Text[]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.serializer.config.BlockEmitOrder",
+      "tsExport": "BlockEmitOrder",
+      "pkg": "config",
+      "abstract": false,
+      "baseType": "serializer:SerializerType",
+      "fields": [
+        {
+          "name": "entries",
+          "type": "type:Text[]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.serializer.config.SerializerConstants",
+      "tsExport": "SerializerConstants",
+      "pkg": "config",
+      "abstract": false,
+      "baseType": "serializer:SerializerType",
+      "fields": [
+        {
+          "name": "XSI_NS",
+          "type": "type:Text",
+          "required": true,
+          "literal": "http://www.w3.org/2001/XMLSchema-instance"
+        },
+        {
+          "name": "BML_XMLNS",
+          "type": "type:Text",
+          "required": true,
+          "literal": "http://blockml.org/bml"
+        }
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "Serialize",
+      "tsExport": "serialize",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.Serialize",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "options",
+          "type": "bomapi:SerializeOptions",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "bomapi:SerializeResult",
+        "required": true
+      }
+    },
+    {
+      "name": "CreateEmitContext",
+      "tsExport": "createEmitContext",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.CreateEmitContext",
+      "inputs": [
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "indent",
+          "type": "type:Integer",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "context",
+        "type": "seremit:EmitContext",
+        "required": true
+      }
+    },
+    {
+      "name": "EmitBlockDefinition",
+      "tsExport": "emitBlockDefinition",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EmitBlockDefinition",
+      "inputs": [
+        {
+          "name": "writer",
+          "type": "seremit:XmlWriter",
+          "required": true
+        },
+        {
+          "name": "block",
+          "type": "bomblock:BlockDefinition",
+          "required": true
+        },
+        {
+          "name": "context",
+          "type": "seremit:EmitContext",
+          "required": true
+        }
+      ],
+      "output": null
+    },
+    {
+      "name": "EmitRootStartTag",
+      "tsExport": "emitRootStartTag",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EmitRootStartTag",
+      "inputs": [
+        {
+          "name": "writer",
+          "type": "seremit:XmlWriter",
+          "required": true
+        },
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "schemaLocation",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "noNamespaceSchemaLocation",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": null
+    },
+    {
+      "name": "EmitTypeExpression",
+      "tsExport": "emitTypeExpression",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EmitTypeExpression",
+      "inputs": [
+        {
+          "name": "expression",
+          "type": "bomtype:TypeExpression",
+          "required": true
+        },
+        {
+          "name": "context",
+          "type": "seremit:EmitContext",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "text",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "EmitCompositionTemplate",
+      "tsExport": "emitCompositionTemplate",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EmitCompositionTemplate",
+      "inputs": [
+        {
+          "name": "writer",
+          "type": "seremit:XmlWriter",
+          "required": true
+        },
+        {
+          "name": "template",
+          "type": "bomcomp:CompositionTemplate",
+          "required": true
+        },
+        {
+          "name": "context",
+          "type": "seremit:EmitContext",
+          "required": true
+        },
+        {
+          "name": "wrapInAggregation",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": null
+    },
+    {
+      "name": "EmitCompositionNode",
+      "tsExport": "emitCompositionNode",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EmitCompositionNode",
+      "inputs": [
+        {
+          "name": "writer",
+          "type": "seremit:XmlWriter",
+          "required": true
+        },
+        {
+          "name": "node",
+          "type": "bomcomp:CompositionNode",
+          "required": true
+        },
+        {
+          "name": "context",
+          "type": "seremit:EmitContext",
+          "required": true
+        }
+      ],
+      "output": null
+    },
+    {
+      "name": "EmitBlockInstance",
+      "tsExport": "emitBlockInstance",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EmitBlockInstance",
+      "inputs": [
+        {
+          "name": "writer",
+          "type": "seremit:XmlWriter",
+          "required": true
+        },
+        {
+          "name": "instance",
+          "type": "bomcomp:BlockInstance",
+          "required": true
+        },
+        {
+          "name": "context",
+          "type": "seremit:EmitContext",
+          "required": true
+        }
+      ],
+      "output": null
+    },
+    {
+      "name": "EmitConstraintInstances",
+      "tsExport": "emitConstraintInstances",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EmitConstraintInstances",
+      "inputs": [
+        {
+          "name": "writer",
+          "type": "seremit:XmlWriter",
+          "required": true
+        },
+        {
+          "name": "instances",
+          "type": "bomcomp:BlockInstance[]",
+          "required": true
+        },
+        {
+          "name": "context",
+          "type": "seremit:EmitContext",
+          "required": true
+        }
+      ],
+      "output": null
+    },
+    {
+      "name": "EmitTypeReferenceEntity",
+      "tsExport": "emitTypeReferenceEntity",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EmitTypeReferenceEntity",
+      "inputs": [
+        {
+          "name": "writer",
+          "type": "seremit:XmlWriter",
+          "required": true
+        },
+        {
+          "name": "entity",
+          "type": "bomblock:TypeReferenceEntityInstance",
+          "required": true
+        },
+        {
+          "name": "context",
+          "type": "seremit:EmitContext",
+          "required": true
+        }
+      ],
+      "output": null
+    },
+    {
+      "name": "HasBmlSemanticQNameBindings",
+      "tsExport": "hasBmlSemanticQNameBindings",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.HasBmlSemanticQNameBindings",
+      "inputs": [
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "FqnToQName",
+      "tsExport": "fqnToQName",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.FqnToQName",
+      "inputs": [
+        {
+          "name": "fqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "qname",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "QnameToParts",
+      "tsExport": "qnameToParts",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.QnameToParts",
+      "inputs": [
+        {
+          "name": "qname",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "parts",
+        "type": "type:Text",
+        "required": true,
+        "doc": "{ prefix, local }"
+      }
+    },
+    {
+      "name": "VisibilityPrefix",
+      "tsExport": "visibilityPrefix",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.VisibilityPrefix",
+      "inputs": [
+        {
+          "name": "visibility",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "prefix",
+        "type": "type:Text",
+        "required": true,
+        "doc": "__ | _ | (empty)"
+      }
+    },
+    {
+      "name": "EscapeAttr",
+      "tsExport": "escapeAttr",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EscapeAttr",
+      "inputs": [
+        {
+          "name": "value",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "escaped",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "EscapeText",
+      "tsExport": "escapeText",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EscapeText",
+      "inputs": [
+        {
+          "name": "value",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "escaped",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "NeedsCData",
+      "tsExport": "needsCData",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.NeedsCData",
+      "inputs": [
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
+      "name": "EmitCharacterData",
+      "tsExport": "emitCharacterData",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.EmitCharacterData",
+      "inputs": [
+        {
+          "name": "writer",
+          "type": "seremit:XmlWriter",
+          "required": true
+        },
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "form",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": null
+    },
+    {
+      "name": "FormatBoolean",
+      "tsExport": "formatBoolean",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.FormatBoolean",
+      "inputs": [
+        {
+          "name": "value",
+          "type": "type:Boolean",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "text",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "FormatMemberValue",
+      "tsExport": "formatMemberValue",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.FormatMemberValue",
+      "inputs": [
+        {
+          "name": "value",
+          "type": "core:Any",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "text",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
+      "name": "ShouldUseQName",
+      "tsExport": "shouldUseQName",
+      "fqn": "org.blockml.bml.compiler.serializer.capability.ShouldUseQName",
+      "inputs": [
+        {
+          "name": "bindings",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    }
+  ],
+  "blockEmitOrder": [
+    "name",
+    "type",
+    "baseType",
+    "is",
+    "isNot",
+    "version",
+    "definition",
+    "since",
+    "status",
+    "summary",
+    "documentation",
+    "abstract",
+    "final",
+    "keywords",
+    "changelog",
+    "examples",
+    "references",
+    "constraints",
+    "aliases",
+    "language",
+    "genericTypes",
+    "contracts",
+    "properties",
+    "aggregations",
+    "associations",
+    "capabilities",
+    "subBlocks",
+    "embeddedBlocks",
+    "bml:xml"
+  ],
+  "constants": {
+    "XSI_NS": "http://www.w3.org/2001/XMLSchema-instance",
+    "BML_XMLNS": "http://blockml.org/bml"
+  },
+  "documentationBlocks": [
+    "Introduction",
+    "LayerSeparation",
+    "ArchitectureOverview",
+    "V1Scope",
+    "PublicApi",
+    "EmitOrder",
+    "EmitRules",
+    "XmlCommentsEmit",
+    "RoundtripContract",
+    "DesignDecisions",
+    "Diagnostics",
+    "PackageOwnership",
+    "ScopeExclusions"
+  ]
+}

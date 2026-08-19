@@ -1,0 +1,53 @@
+<!--
+  Parser Capability — ResolveBlockReference
+  FQN: org.blockml.bml.compiler.parser.capability.ResolveBlockReference
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ResolveBlockReference</name>
+  <type>parcap:ResolveBlockReference</type>
+  <baseType>core:Capability</baseType>
+  <is>Resolve block type/baseType QName to FQN</is>
+
+  <documentation>Resolve block type/baseType QName to FQN</documentation>
+
+  <references>
+    <see type="parconfig:ParserConstants" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <qname type="type:Text">
+      <documentation>qname. TS type: type:Text. (required)</documentation>
+    </qname>
+    <bindings type="type:Text">
+      <documentation>bindings. TS type: type:Text. (required)</documentation>
+    </bindings>
+    <ctx type="parmap:MapContext">
+      <documentation>ctx. TS type: parmap:MapContext. (required)</documentation>
+    </ctx>
+    <fqn type="type:Text">
+      <documentation>fqn. TS type: type:Text. (required)</documentation>
+    </fqn>
+  </properties>
+
+</block>

@@ -1,0 +1,58 @@
+<!--
+  Parser — MapContext
+  FQN: org.blockml.bml.compiler.parser.map.MapContext
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>MapContext</name>
+  <type>parmap:MapContext</type>
+  <baseType>parser:ParserType</baseType>
+  <is>Per-parse mapping configuration and namespace context</is>
+
+  <documentation>Created by createMapContext(). Passed through map/* modules during step [5].</documentation>
+
+  <properties>
+    <filePath type="type:Text">
+      <documentation>filePath. TS type: type:Text. (required)</documentation>
+    </filePath>
+    <source type="type:Text">
+      <documentation>Original source string. (required)</documentation>
+    </source>
+    <bindings type="type:Text">
+      <documentation>Record<string, string> namespace bindings. (required)</documentation>
+    </bindings>
+    <subBlockIndex type="type:Text">
+      <documentation>Map<string, string> sub-block lookup. (required)</documentation>
+    </subBlockIndex>
+    <parentBlockType type="type:Text">
+      <documentation>Enclosing block type FQN when nested. (optional)</documentation>
+    </parentBlockType>
+    <isRoot type="type:Boolean">
+      <documentation>isRoot. TS type: type:Boolean. (required)</documentation>
+    </isRoot>
+    <isEmbedded type="type:Boolean">
+      <documentation>isEmbedded. TS type: type:Boolean. (required)</documentation>
+    </isEmbedded>
+  </properties>
+
+</block>

@@ -1,0 +1,43 @@
+<!--
+  Parser Capability — IsElement
+  FQN: org.blockml.bml.compiler.parser.capability.IsElement
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>IsElement</name>
+  <type>parcap:IsElement</type>
+  <baseType>core:Capability</baseType>
+  <is>Type guard: DOM node is Element</is>
+
+  <documentation>Type guard: DOM node is Element</documentation>
+
+  <properties>
+    <node type="core:Any">
+      <documentation>node. TS type: core:Any. (required)</documentation>
+    </node>
+    <result type="type:Boolean">
+      <documentation>result. TS type: type:Boolean. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

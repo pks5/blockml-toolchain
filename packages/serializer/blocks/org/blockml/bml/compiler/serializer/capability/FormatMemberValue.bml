@@ -1,0 +1,48 @@
+<!--
+  Serializer Capability — FormatMemberValue
+  FQN: org.blockml.bml.compiler.serializer.capability.FormatMemberValue
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>FormatMemberValue</name>
+  <type>sercap:FormatMemberValue</type>
+  <baseType>core:Capability</baseType>
+  <is>Format MemberValue for XML attribute emission</is>
+
+  <documentation>Format MemberValue for XML attribute emission</documentation>
+
+  <references>
+    <see type="sercap:FormatBoolean" relation="SeeAlso" />
+    <see type="sercap:EscapeAttr" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <value type="core:Any">
+      <documentation>value. TS type: core:Any. (required)</documentation>
+    </value>
+    <text type="type:Text">
+      <documentation>text. TS type: type:Text. (required)</documentation>
+    </text>
+  </properties>
+
+</block>

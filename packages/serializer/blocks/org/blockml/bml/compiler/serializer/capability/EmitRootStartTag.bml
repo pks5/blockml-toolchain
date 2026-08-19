@@ -1,0 +1,53 @@
+<!--
+  Serializer Capability — EmitRootStartTag
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitRootStartTag
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>EmitRootStartTag</name>
+  <type>sercap:EmitRootStartTag</type>
+  <baseType>core:Capability</baseType>
+  <is>Emit root <block> opening tag with xmlns and xsi attrs (B25)</is>
+
+  <documentation>Re-emits namespaceBindings, schemaLocation, noNamespaceSchemaLocation from SourceInfo.</documentation>
+
+  <references>
+    <see type="serdocumentation:EmitRules" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <writer type="seremit:XmlWriter">
+      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+    </writer>
+    <bindings type="type:Text">
+      <documentation>bindings. TS type: type:Text. (required)</documentation>
+    </bindings>
+    <schemaLocation type="type:Text">
+      <documentation>schemaLocation. TS type: type:Text. (optional)</documentation>
+    </schemaLocation>
+    <noNamespaceSchemaLocation type="type:Text">
+      <documentation>noNamespaceSchemaLocation. TS type: type:Text. (optional)</documentation>
+    </noNamespaceSchemaLocation>
+  </properties>
+
+</block>

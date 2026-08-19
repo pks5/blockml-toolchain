@@ -1,0 +1,46 @@
+<!--
+  Parser Documentation — MemberMappingOrder
+  FQN: org.blockml.bml.compiler.parser.documentation.MemberMappingOrder
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>MemberMappingOrder</name>
+  <type>pardocumentation:MemberMappingOrder</type>
+  <baseType>core:Documentation</baseType>
+  <is>BML document order preserved in members[]</is>
+
+  <documentation>Append to members[] in BML document order — the order elements appear in source.
+
+    • Element localName = member name (no name= attribute on member elements)
+    • MUST NOT sort by name, kind, or type
+    • Ordinal = index in members[] — roundtrip must preserve array order
+    • Parser accepts any authored sibling order; serializer emits canonical order (B12)
+
+    Inside containers (properties/aggregations/…): filter by kind, keep BOM array order.</documentation>
+
+  <references>
+    <see type="pardocumentation:AttributeClassification" relation="ReadNext"></see>
+  </references>
+
+</block>

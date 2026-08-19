@@ -1,0 +1,62 @@
+<!--
+  Serializer Documentation — EmitOrder
+  FQN: org.blockml.bml.compiler.serializer.documentation.EmitOrder
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>EmitOrder</name>
+  <type>serdocumentation:EmitOrder</type>
+  <baseType>core:Documentation</baseType>
+  <is>Canonical block child sequence (B12)</is>
+
+  <documentation>B12 — decided. Canonical BOM→BML element order for Block definition documents follows
+    the member declaration order of the Definition meta-model — not alphabetical order.
+
+    V1: hardcoded in serconfig:BlockEmitOrder (frozen snapshot of Definition .bml lists).
+    V2: dynamic — load Definition types via TypeRegistry / effective members.
+
+    Canonical <block> child sequence (V1 — emit only when present and not omit-equivalent B17):
+    name, type, baseType, is, isNot, version, definition,
+    since, status, summary, documentation, abstract, final,
+    keywords, changelog, examples, references, constraints,
+    aliases, language, genericTypes, contracts,
+    properties, aggregations, associations, capabilities, subBlocks, embeddedBlocks, bml:xml
+
+    bml:xml remain in authored slots; xmlns* / xsi:schemaLocation (B25) on root start-tag.
+    Leading/trailing XmlTrivia emit immediately before/after the corresponding element (B11).
+
+    Inside containers:
+    • properties/aggregations/associations/capabilities — members[] filtered by kind, BOM order
+    • genericTypes/contracts/aliases/… — corresponding BOM array order
+    • subBlocks/embeddedBlocks — subBlocks[] / embeddedBlocks[] order
+    • Member element internals — V1 hardcoded from MemberDefinition.bml; V2 from Definition files
+
+    Identity-first: BlockDefinition.bml requires name → type → baseType before is.</documentation>
+
+  <references>
+    <see type="serconfig:BlockEmitOrder" relation="Defines"></see>
+    <see type="serdocumentation:EmitRules" relation="ReadNext"></see>
+  </references>
+
+</block>

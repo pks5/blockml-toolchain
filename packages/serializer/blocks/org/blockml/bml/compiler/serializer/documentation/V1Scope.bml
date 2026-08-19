@@ -1,0 +1,50 @@
+<!--
+  Serializer Documentation — V1Scope
+  FQN: org.blockml.bml.compiler.serializer.documentation.V1Scope
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>V1Scope</name>
+  <type>serdocumentation:V1Scope</type>
+  <baseType>core:Documentation</baseType>
+  <is>Phase A hardcoded inverse vs V2 meta-serializer</is>
+
+  <documentation>V1 (Phase A): hardcoded inverse mapper in @blockml/serializer. Emit order (B12)
+    is a frozen snapshot of Definition member declaration order — see serdocumentation:EmitOrder.
+    Sufficient for the roundtrip gate (B10).
+
+    V2 (deferred): meta-driven serializer reads Definition .bml files via TypeRegistry,
+    resolves effective members dynamically, and emits per bml:xml metadata (D1–D9 in
+    org.blockml.bml.core). Aligns with 19_definition_blocks_and_bml_xml.md.
+
+    V1 serializer note: roundtrip tests still catch mapping gaps and information loss even
+    without meta-driven emit. When Definition .bml members are reordered, V1 requires updating
+    the hardcoded BLOCK_EMIT_ORDER; V2 picks up changes automatically.</documentation>
+
+  <references>
+    <see type="serdocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="def:BlockDefinition" relation="SeeAlso"></see>
+  </references>
+
+</block>

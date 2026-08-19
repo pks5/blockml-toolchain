@@ -1,0 +1,51 @@
+<!--
+  Serializer Capability — EmitBlockDefinition
+  FQN: org.blockml.bml.compiler.serializer.capability.EmitBlockDefinition
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>EmitBlockDefinition</name>
+  <type>sercap:EmitBlockDefinition</type>
+  <baseType>core:Capability</baseType>
+  <is>Emit full BlockDefinition tree in BLOCK_EMIT_ORDER (B12)</is>
+
+  <documentation>Walks serconfig:BlockEmitOrder; delegates to member/composition/type emit helpers.</documentation>
+
+  <references>
+    <see type="serconfig:BlockEmitOrder" relation="SeeAlso" />
+    <see type="serdocumentation:EmitOrder" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <writer type="seremit:XmlWriter">
+      <documentation>writer. TS type: seremit:XmlWriter. (required)</documentation>
+    </writer>
+    <block type="bomblock:BlockDefinition">
+      <documentation>block. TS type: bomblock:BlockDefinition. (required)</documentation>
+    </block>
+    <context type="seremit:EmitContext">
+      <documentation>context. TS type: seremit:EmitContext. (required)</documentation>
+    </context>
+  </properties>
+
+</block>

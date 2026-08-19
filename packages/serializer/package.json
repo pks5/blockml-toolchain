@@ -18,7 +18,8 @@
     "blocks"
   ],
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "test": "vitest run packages/serializer/test"
   },
   "dependencies": {
     "@blockml/bom": "file:../bom"
