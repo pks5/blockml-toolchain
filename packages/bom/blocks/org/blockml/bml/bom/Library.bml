@@ -1,8 +1,5 @@
 <!--
   BlockML BOM Library Descriptor
-
-  Name: Library
-  Filename: Library.bml
   FQN: org.blockml.bml.bom.Library
 -->
 <block
@@ -11,7 +8,21 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:blockml="org.blockml.bml"
-  xmlns:core="org.blockml.bml.core">
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:cap="org.blockml.bml.capability">
 
   <name>Library</name>
   <type>blockml:Library</type>
@@ -19,8 +30,10 @@
   <is>The BlockML BOM Urmodell library catalog</is>
 
   <documentation>
-    Canonical BOM object model (Urmodell) for BlockML — TypeScript contracts consumed by parser,
-    serializer, validator, compiler, and LSP. Depends on org.blockml.bml.Library for framework types.
+    Canonical BOM object model (Urmodell) for BlockML — TypeScript contracts in packages/bom/src/
+    implement this library. Consumed by parser, serializer, validator, compiler, and LSP.
+    Distinct from org.blockml.bml.definition.* (BML meta-model in @blockml/core).
+    Membership is defined exclusively by this blocks list.
   </documentation>
 
   <version>0.1.0</version>
@@ -36,11 +49,85 @@
   </properties>
 
   <aggregations>
+    <readMe>
+      <composition>
+        <bom:README />
+      </composition>
+    </readMe>
     <dependencies>
       <composition>
         <blockml:Library />
       </composition>
     </dependencies>
+    <blocks>
+      <composition><bom:UrmodellType /></composition>
+      <composition><bomcommon:SourceLocation /></composition>
+      <composition><bomcommon:SourceInfo /></composition>
+      <composition><bomcommon:XmlTrivia /></composition>
+      <composition><bomcommon:MemberSectionName /></composition>
+      <composition><bomcommon:MetadataElementTrivia /></composition>
+      <composition><bomcommon:XmlNodeKind /></composition>
+      <composition><bomcommon:CharacterDataForm /></composition>
+      <composition><bomcommon:XmlRenderingBlock /></composition>
+      <composition><bomcommon:XmlRenderingMember /></composition>
+      <composition><bomcommon:DiagnosticSeverity /></composition>
+      <composition><bomcommon:Diagnostic /></composition>
+      <composition><bomvalue:Address /></composition>
+      <composition><bomvalue:MemberValue /></composition>
+      <composition><bomvalue:LiteralValue /></composition>
+      <composition><bomvalue:ExpressionValue /></composition>
+      <composition><bomvalue:AddressValue /></composition>
+      <composition><bomtype:Multiplicity /></composition>
+      <composition><bomtype:InstanceConfiguration /></composition>
+      <composition><bomtype:TypeExpression /></composition>
+      <composition><bomtype:TypeDescriptor /></composition>
+      <composition><bomtype:NamedTypeReference /></composition>
+      <composition><bomtype:UnionTypeExpression /></composition>
+      <composition><bomtype:GenericParameterReference /></composition>
+      <composition><bomtype:SelfTypeReference /></composition>
+      <composition><bomtype:StructField /></composition>
+      <composition><bomtype:AnonymousStructType /></composition>
+      <composition><bomblock:TypeReferenceEntityInstance /></composition>
+      <composition><bomblock:GenericType /></composition>
+      <composition><bomblock:KeywordEntry /></composition>
+      <composition><bomblock:DocumentationProseEntry /></composition>
+      <composition><bomblock:AliasEntry /></composition>
+      <composition><bomblock:ChangelogEntry /></composition>
+      <composition><bomblock:DocumentationExample /></composition>
+      <composition><bomblock:DocumentationReference /></composition>
+      <composition><bomblock:BlockDefinition /></composition>
+      <composition><bommember:ConstrainableDefinition /></composition>
+      <composition><bommember:MemberDefinitionBase /></composition>
+      <composition><bommember:MemberDefinition /></composition>
+      <composition><bommember:PropertyValueEntry /></composition>
+      <composition><bommember:PropertyDefinition /></composition>
+      <composition><bommember:AggregationDefinition /></composition>
+      <composition><bommember:AssociationDefinition /></composition>
+      <composition><bommember:EmbeddedExpression /></composition>
+      <composition><bommember:ImplementationBlock /></composition>
+      <composition><bommember:CapabilityDefinition /></composition>
+      <composition><bomcomp:WithBinding /></composition>
+      <composition><bomcomp:DirectiveAttribute /></composition>
+      <composition><bomcomp:EachDirective /></composition>
+      <composition><bomcomp:IfDirective /></composition>
+      <composition><bomcomp:UnlessDirective /></composition>
+      <composition><bomcomp:WithDirective /></composition>
+      <composition><bomcomp:BlockInstance /></composition>
+      <composition><bomcomp:CompositionTemplate /></composition>
+      <composition><bomcomp:InstanceAggregationComposition /></composition>
+      <composition><bomcomp:CompositionNode /></composition>
+      <composition><bomcomp:BlockInstanceNode /></composition>
+      <composition><bomcomp:VirtualContainerNode /></composition>
+      <composition><bomdoc:BomDocument /></composition>
+      <composition><bomapi:ParseOptions /></composition>
+      <composition><bomapi:SerializeOptions /></composition>
+      <composition><bomapi:ParseResult /></composition>
+      <composition><bomapi:SerializeResult /></composition>
+      <composition><bomcap:StripProvenance /></composition>
+      <composition><bomcap:BomEquals /></composition>
+      <composition><bomrules:DesignDecisions /></composition>
+      <composition><bomrules:ValidationResponsibilities /></composition>
+    </blocks>
   </aggregations>
 
 </block>

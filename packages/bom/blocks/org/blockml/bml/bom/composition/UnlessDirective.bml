@@ -1,0 +1,43 @@
+<!--
+  BOM Urmodell — UnlessDirective
+  FQN: org.blockml.bml.bom.composition.UnlessDirective
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>UnlessDirective</name>
+  <type>bomcomp:UnlessDirective</type>
+  <baseType>bomcomp:DirectiveAttribute</baseType>
+  <is>bml:unless directive (type: unless)</is>
+
+  <documentation>bml:unless directive (type: unless)</documentation>
+
+  <properties>
+    <type type="type:Text">
+      <documentation>type (required). TS type: type:Text.</documentation>
+      <value>unless</value>
+    </type>
+    <condition type="bomvalue:ExpressionValue">
+      <documentation>condition (required). TS type: bomvalue:ExpressionValue.</documentation>
+    </condition>
+  </properties>
+
+</block>

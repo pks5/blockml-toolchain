@@ -20,6 +20,7 @@
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "test": "vitest run",
+    "test:bom": "vitest run packages/bom/test",
     "test:watch": "vitest",
     "test:roundtrip": "vitest run tests/roundtrip",
     "typecheck": "tsc --build --emitDeclarationOnly"

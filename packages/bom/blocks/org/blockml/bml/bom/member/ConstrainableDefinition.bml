@@ -1,0 +1,39 @@
+<!--
+  BOM Urmodell — ConstrainableDefinition
+  FQN: org.blockml.bml.bom.member.ConstrainableDefinition
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ConstrainableDefinition</name>
+  <type>bommember:ConstrainableDefinition</type>
+  <baseType>bom:UrmodellType</baseType>
+  <is>Mixin shape for constraint Block instances</is>
+
+  <documentation>Mixin shape for constraint Block instances</documentation>
+
+  <properties>
+    <constraints type="bomcomp:BlockInstance[]">
+      <documentation>constraints (optional). TS type: bomcomp:BlockInstance[].</documentation>
+    </constraints>
+  </properties>
+
+</block>

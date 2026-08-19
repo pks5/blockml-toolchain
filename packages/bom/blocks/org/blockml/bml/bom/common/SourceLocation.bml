@@ -1,0 +1,51 @@
+<!--
+  BOM Urmodell — SourceLocation
+  FQN: org.blockml.bml.bom.common.SourceLocation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>SourceLocation</name>
+  <type>bomcommon:SourceLocation</type>
+  <baseType>bom:UrmodellType</baseType>
+  <is>BML source span for diagnostics and LSP</is>
+
+  <documentation>Optional provenance attached by the parser. Stripped by stripProvenance() for B20 equality.</documentation>
+
+  <properties>
+    <file type="type:Text">
+      <documentation>file (required). TS type: type:Text.</documentation>
+    </file>
+    <line type="type:Integer">
+      <documentation>line (required). TS type: type:Integer.</documentation>
+    </line>
+    <column type="type:Integer">
+      <documentation>column (required). TS type: type:Integer.</documentation>
+    </column>
+    <endLine type="type:Integer">
+      <documentation>endLine (optional). TS type: type:Integer.</documentation>
+    </endLine>
+    <endColumn type="type:Integer">
+      <documentation>endColumn (optional). TS type: type:Integer.</documentation>
+    </endColumn>
+  </properties>
+
+</block>

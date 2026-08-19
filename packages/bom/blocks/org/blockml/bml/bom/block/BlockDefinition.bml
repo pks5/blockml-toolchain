@@ -1,0 +1,136 @@
+<!--
+  BOM Urmodell — BlockDefinition
+  FQN: org.blockml.bml.bom.block.BlockDefinition
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>BlockDefinition</name>
+  <type>bomblock:BlockDefinition</type>
+  <baseType>bom:UrmodellType</baseType>
+  <is>Parse-result shape of a block definition document</is>
+
+  <documentation>Urmodell BlockDefinition — distinct from org.blockml.bml.definition.BlockDefinition (meta-model). Stores declared members only — not inherited. TS: baseType and version optional for corpus compatibility; doc 12 normative future may require them.</documentation>
+
+  <references>
+    <see type="def:BlockDefinition" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <name type="type:Text">
+      <documentation>name (required). TS type: type:Text.</documentation>
+    </name>
+    <type type="type:Text">
+      <documentation>type (required). TS type: type:Text.</documentation>
+    </type>
+    <baseType type="type:Text">
+      <documentation>baseType (optional). TS type: type:Text.</documentation>
+    </baseType>
+    <version type="type:Text">
+      <documentation>version (optional). TS type: type:Text.</documentation>
+    </version>
+    <is type="type:Text">
+      <documentation>is (optional). TS type: type:Text.</documentation>
+    </is>
+    <summaries type="bomblock:DocumentationProseEntry[]">
+      <documentation>summaries (optional). TS type: bomblock:DocumentationProseEntry[].</documentation>
+    </summaries>
+    <keywords type="bomblock:KeywordEntry[]">
+      <documentation>keywords (optional). TS type: bomblock:KeywordEntry[].</documentation>
+    </keywords>
+    <language type="bomblock:TypeReferenceEntityInstance">
+      <documentation>language (optional). TS type: bomblock:TypeReferenceEntityInstance.</documentation>
+    </language>
+    <languageFqn type="type:Text">
+      <documentation>languageFqn (optional). TS type: type:Text.</documentation>
+    </languageFqn>
+    <documentations type="bomblock:DocumentationProseEntry[]">
+      <documentation>documentations (optional). TS type: bomblock:DocumentationProseEntry[].</documentation>
+    </documentations>
+    <isNot type="type:Text">
+      <documentation>TS field isNot; BML XML element is isnot. (optional)</documentation>
+    </isNot>
+    <aliases type="bomblock:AliasEntry[]">
+      <documentation>aliases (optional). TS type: bomblock:AliasEntry[].</documentation>
+    </aliases>
+    <since type="type:Text">
+      <documentation>since (optional). TS type: type:Text.</documentation>
+    </since>
+    <changelog type="bomblock:ChangelogEntry[]">
+      <documentation>changelog (optional). TS type: bomblock:ChangelogEntry[].</documentation>
+    </changelog>
+    <examples type="bomblock:DocumentationExample[]">
+      <documentation>examples (optional). TS type: bomblock:DocumentationExample[].</documentation>
+    </examples>
+    <references type="bomblock:DocumentationReference[]">
+      <documentation>references (optional). TS type: bomblock:DocumentationReference[].</documentation>
+    </references>
+    <abstract type="type:Boolean">
+      <documentation>abstract (optional). TS type: type:Boolean.</documentation>
+    </abstract>
+    <final type="type:Boolean">
+      <documentation>final (optional). TS type: type:Boolean.</documentation>
+    </final>
+    <xmlRendering type="bomcommon:XmlRenderingBlock">
+      <documentation>xmlRendering (optional). TS type: bomcommon:XmlRenderingBlock.</documentation>
+    </xmlRendering>
+    <visibility type="type:Text">
+      <documentation>"private" | "protected" | "public". Sub-Blocks only. (optional)</documentation>
+    </visibility>
+    <contracts type="bomblock:TypeReferenceEntityInstance[]">
+      <documentation>contracts (optional). TS type: bomblock:TypeReferenceEntityInstance[].</documentation>
+    </contracts>
+    <genericTypes type="bomblock:GenericType[]">
+      <documentation>genericTypes (optional). TS type: bomblock:GenericType[].</documentation>
+    </genericTypes>
+    <definitionFqn type="type:Text">
+      <documentation>definitionFqn (optional). TS type: type:Text.</documentation>
+    </definitionFqn>
+    <constraints type="bomcomp:BlockInstance[]">
+      <documentation>constraints (optional). TS type: bomcomp:BlockInstance[].</documentation>
+    </constraints>
+    <members type="bommember:MemberDefinition[]">
+      <documentation>members (required). TS type: bommember:MemberDefinition[].</documentation>
+    </members>
+    <subBlocks type="bomblock:BlockDefinition[]">
+      <documentation>subBlocks (required). TS type: bomblock:BlockDefinition[].</documentation>
+    </subBlocks>
+    <embeddedBlocks type="bomblock:BlockDefinition[]">
+      <documentation>embeddedBlocks (required). TS type: bomblock:BlockDefinition[].</documentation>
+    </embeddedBlocks>
+    <compositions type="bomcomp:CompositionTemplate[]">
+      <documentation>compositions (required). TS type: bomcomp:CompositionTemplate[].</documentation>
+    </compositions>
+    <xmlTrivia type="bomcommon:XmlTrivia">
+      <documentation>xmlTrivia (optional). TS type: bomcommon:XmlTrivia.</documentation>
+    </xmlTrivia>
+    <memberSectionTrivia type="type:Text">
+      <documentation>Partial<Record<MemberSectionName, XmlTrivia>>. (optional)</documentation>
+    </memberSectionTrivia>
+    <metadataTrivia type="bomcommon:MetadataElementTrivia">
+      <documentation>metadataTrivia (optional). TS type: bomcommon:MetadataElementTrivia.</documentation>
+    </metadataTrivia>
+    <source type="bomcommon:SourceLocation">
+      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+    </source>
+  </properties>
+
+</block>

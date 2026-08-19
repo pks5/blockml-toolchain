@@ -1,0 +1,48 @@
+<!--
+  BOM Urmodell — XmlRenderingMember
+  FQN: org.blockml.bml.bom.common.XmlRenderingMember
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>XmlRenderingMember</name>
+  <type>bomcommon:XmlRenderingMember</type>
+  <baseType>bom:UrmodellType</baseType>
+  <is>Member-level bml:xml rendering hints</is>
+
+  <documentation>Lossless raw value plus emit hints for dual placement (D9) and CDATA form (D8).</documentation>
+
+  <properties>
+    <raw type="type:Text">
+      <documentation>raw (optional). TS type: type:Text.</documentation>
+    </raw>
+    <kinds type="bomcommon:XmlNodeKind[]">
+      <documentation>kinds (required). TS type: bomcommon:XmlNodeKind[].</documentation>
+    </kinds>
+    <authoredPlacement type="bomcommon:XmlNodeKind">
+      <documentation>authoredPlacement (optional). TS type: bomcommon:XmlNodeKind.</documentation>
+    </authoredPlacement>
+    <authoredCharacterDataForm type="bomcommon:CharacterDataForm">
+      <documentation>authoredCharacterDataForm (optional). TS type: bomcommon:CharacterDataForm.</documentation>
+    </authoredCharacterDataForm>
+  </properties>
+
+</block>

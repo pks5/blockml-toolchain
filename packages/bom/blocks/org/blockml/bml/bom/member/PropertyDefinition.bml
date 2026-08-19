@@ -1,0 +1,61 @@
+<!--
+  BOM Urmodell — PropertyDefinition
+  FQN: org.blockml.bml.bom.member.PropertyDefinition
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>PropertyDefinition</name>
+  <type>bommember:PropertyDefinition</type>
+  <baseType>bommember:MemberDefinitionBase</baseType>
+  <is>Property member definition (kind: property)</is>
+
+  <documentation>Property member definition (kind: property)</documentation>
+
+  <properties>
+    <kind type="type:Text">
+      <documentation>kind (required). TS type: type:Text.</documentation>
+      <value>property</value>
+    </kind>
+    <typeFqn type="type:Text">
+      <documentation>typeFqn (required). TS type: type:Text.</documentation>
+    </typeFqn>
+    <type type="bomtype:TypeExpression">
+      <documentation>type (optional). TS type: bomtype:TypeExpression.</documentation>
+    </type>
+    <values type="bommember:PropertyValueEntry[]">
+      <documentation>values (optional). TS type: bommember:PropertyValueEntry[].</documentation>
+    </values>
+    <value type="bomvalue:MemberValue">
+      <documentation>value (optional). TS type: bomvalue:MemberValue.</documentation>
+    </value>
+    <group type="type:Text">
+      <documentation>group (optional). TS type: type:Text.</documentation>
+    </group>
+    <suggestions type="bomcomp:BlockInstance[]">
+      <documentation>suggestions (optional). TS type: bomcomp:BlockInstance[].</documentation>
+    </suggestions>
+    <groups type="bomblock:TypeReferenceEntityInstance[]">
+      <documentation>groups (optional). TS type: bomblock:TypeReferenceEntityInstance[].</documentation>
+    </groups>
+  </properties>
+
+</block>

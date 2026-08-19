@@ -18,6 +18,7 @@
     "blocks"
   ],
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "test": "vitest run packages/bom/test"
   }
 }

@@ -1,0 +1,90 @@
+<!--
+  BOM Urmodell — MemberDefinitionBase
+  FQN: org.blockml.bml.bom.member.MemberDefinitionBase
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>MemberDefinitionBase</name>
+  <type>bommember:MemberDefinitionBase</type>
+  <baseType>bom:UrmodellType</baseType>
+  <is>Shared base for all member definition kinds</is>
+
+  <documentation>Shared base for all member definition kinds</documentation>
+
+  <properties>
+    <name type="type:Text">
+      <documentation>name (required). TS type: type:Text.</documentation>
+    </name>
+    <summaries type="bomblock:DocumentationProseEntry[]">
+      <documentation>summaries (optional). TS type: bomblock:DocumentationProseEntry[].</documentation>
+    </summaries>
+    <keywords type="bomblock:KeywordEntry[]">
+      <documentation>keywords (optional). TS type: bomblock:KeywordEntry[].</documentation>
+    </keywords>
+    <documentations type="bomblock:DocumentationProseEntry[]">
+      <documentation>documentations (optional). TS type: bomblock:DocumentationProseEntry[].</documentation>
+    </documentations>
+    <since type="type:Text">
+      <documentation>since (optional). TS type: type:Text.</documentation>
+    </since>
+    <changelog type="bomblock:ChangelogEntry[]">
+      <documentation>changelog (optional). TS type: bomblock:ChangelogEntry[].</documentation>
+    </changelog>
+    <examples type="bomblock:DocumentationExample[]">
+      <documentation>examples (optional). TS type: bomblock:DocumentationExample[].</documentation>
+    </examples>
+    <references type="bomblock:DocumentationReference[]">
+      <documentation>references (optional). TS type: bomblock:DocumentationReference[].</documentation>
+    </references>
+    <namespace type="type:Text">
+      <documentation>namespace (optional). TS type: type:Text.</documentation>
+    </namespace>
+    <visibility type="type:Text">
+      <documentation>visibility (optional). TS type: type:Text.</documentation>
+    </visibility>
+    <readOnly type="type:Boolean">
+      <documentation>readOnly (optional). TS type: type:Boolean.</documentation>
+    </readOnly>
+    <abstract type="type:Boolean">
+      <documentation>abstract (optional). TS type: type:Boolean.</documentation>
+    </abstract>
+    <final type="type:Boolean">
+      <documentation>final (optional). TS type: type:Boolean.</documentation>
+    </final>
+    <override type="type:Boolean">
+      <documentation>override (optional). TS type: type:Boolean.</documentation>
+    </override>
+    <xmlRendering type="bomcommon:XmlRenderingMember">
+      <documentation>xmlRendering (optional). TS type: bomcommon:XmlRenderingMember.</documentation>
+    </xmlRendering>
+    <constraints type="bomcomp:BlockInstance[]">
+      <documentation>constraints (optional). TS type: bomcomp:BlockInstance[].</documentation>
+    </constraints>
+    <xmlTrivia type="bomcommon:XmlTrivia">
+      <documentation>xmlTrivia (optional). TS type: bomcommon:XmlTrivia.</documentation>
+    </xmlTrivia>
+    <source type="bomcommon:SourceLocation">
+      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+    </source>
+  </properties>
+
+</block>

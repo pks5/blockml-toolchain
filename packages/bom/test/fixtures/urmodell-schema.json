@@ -1,0 +1,1896 @@
+{
+  "blocks": [
+    {
+      "fqn": "org.blockml.bml.bom.UrmodellType",
+      "tsExport": "UrmodellType",
+      "pkg": "root",
+      "abstract": true,
+      "baseType": "core:Entity",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.SourceLocation",
+      "tsExport": "SourceLocation",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "file",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "line",
+          "type": "type:Integer",
+          "required": true
+        },
+        {
+          "name": "column",
+          "type": "type:Integer",
+          "required": true
+        },
+        {
+          "name": "endLine",
+          "type": "type:Integer",
+          "required": false
+        },
+        {
+          "name": "endColumn",
+          "type": "type:Integer",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.SourceInfo",
+      "tsExport": "SourceInfo",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "format",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "namespaceBindings",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "schemaLocation",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "noNamespaceSchemaLocation",
+          "type": "type:Text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.XmlTrivia",
+      "tsExport": "XmlTrivia",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "leadingComments",
+          "type": "type:Text[]",
+          "required": false
+        },
+        {
+          "name": "trailingComments",
+          "type": "type:Text[]",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.MemberSectionName",
+      "tsExport": "MemberSectionName",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "value",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.MetadataElementTrivia",
+      "tsExport": "MetadataElementTrivia",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "entries",
+          "type": "bomcommon:XmlTrivia",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.XmlNodeKind",
+      "tsExport": "XmlNodeKind",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "value",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.CharacterDataForm",
+      "tsExport": "CharacterDataForm",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "value",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.XmlRenderingBlock",
+      "tsExport": "XmlRenderingBlock",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.XmlRenderingMember",
+      "tsExport": "XmlRenderingMember",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "kinds",
+          "type": "bomcommon:XmlNodeKind[]",
+          "required": true
+        },
+        {
+          "name": "authoredPlacement",
+          "type": "bomcommon:XmlNodeKind",
+          "required": false
+        },
+        {
+          "name": "authoredCharacterDataForm",
+          "type": "bomcommon:CharacterDataForm",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.DiagnosticSeverity",
+      "tsExport": "DiagnosticSeverity",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "value",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.common.Diagnostic",
+      "tsExport": "Diagnostic",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "severity",
+          "type": "bomcommon:DiagnosticSeverity",
+          "required": true
+        },
+        {
+          "name": "code",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "message",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.value.Address",
+      "tsExport": "Address",
+      "pkg": "value",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "scheme",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "path",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "isAbsolute",
+          "type": "type:Boolean",
+          "required": true
+        },
+        {
+          "name": "isRelative",
+          "type": "type:Boolean",
+          "required": true
+        },
+        {
+          "name": "isExpression",
+          "type": "type:Boolean",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.value.MemberValue",
+      "tsExport": "MemberValue",
+      "pkg": "value",
+      "abstract": true,
+      "baseType": "bom:UrmodellType",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.bom.value.LiteralValue",
+      "tsExport": "LiteralValue",
+      "pkg": "value",
+      "abstract": false,
+      "baseType": "bomvalue:MemberValue",
+      "kind": "literal",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "literal"
+        },
+        {
+          "name": "value",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "typeFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "authoredPlacement",
+          "type": "type:Text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.value.ExpressionValue",
+      "tsExport": "ExpressionValue",
+      "pkg": "value",
+      "abstract": false,
+      "baseType": "bomvalue:MemberValue",
+      "kind": "expression",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "expression"
+        },
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "authoredPlacement",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.value.AddressValue",
+      "tsExport": "AddressValue",
+      "pkg": "value",
+      "abstract": false,
+      "baseType": "bomvalue:MemberValue",
+      "kind": "address",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "address"
+        },
+        {
+          "name": "address",
+          "type": "bomvalue:Address",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.Multiplicity",
+      "tsExport": "Multiplicity",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "min",
+          "type": "type:Integer",
+          "required": true
+        },
+        {
+          "name": "max",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.InstanceConfiguration",
+      "tsExport": "InstanceConfiguration",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "named",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "positional",
+          "type": "bomvalue:MemberValue[]",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.TypeExpression",
+      "tsExport": "TypeExpression",
+      "pkg": "type",
+      "abstract": true,
+      "baseType": "bom:UrmodellType",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.TypeDescriptor",
+      "tsExport": "TypeDescriptor",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bomtype:TypeExpression",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.NamedTypeReference",
+      "tsExport": "NamedTypeReference",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bomtype:TypeExpression",
+      "kind": "named",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "named"
+        },
+        {
+          "name": "fqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "typeArguments",
+          "type": "bomtype:TypeExpression[]",
+          "required": false
+        },
+        {
+          "name": "instanceConfiguration",
+          "type": "bomtype:InstanceConfiguration",
+          "required": false
+        },
+        {
+          "name": "multiplicity",
+          "type": "bomtype:Multiplicity",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.UnionTypeExpression",
+      "tsExport": "UnionTypeExpression",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bomtype:TypeExpression",
+      "kind": "union",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "union"
+        },
+        {
+          "name": "alternatives",
+          "type": "bomtype:TypeExpression[]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.GenericParameterReference",
+      "tsExport": "GenericParameterReference",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bomtype:TypeExpression",
+      "kind": "genericParam",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "genericParam"
+        },
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.SelfTypeReference",
+      "tsExport": "SelfTypeReference",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bomtype:TypeExpression",
+      "kind": "self",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "self"
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.StructField",
+      "tsExport": "StructField",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "bomtype:TypeExpression",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.type.AnonymousStructType",
+      "tsExport": "AnonymousStructType",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bomtype:TypeExpression",
+      "kind": "anonymousStruct",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "anonymousStruct"
+        },
+        {
+          "name": "fields",
+          "type": "bomtype:StructField[]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.block.TypeReferenceEntityInstance",
+      "tsExport": "TypeReferenceEntityInstance",
+      "pkg": "block",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "typeFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "boundB",
+          "type": "type:Text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.block.GenericType",
+      "tsExport": "GenericType",
+      "pkg": "block",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "baseType",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "defaultType",
+          "type": "type:Text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.block.KeywordEntry",
+      "tsExport": "KeywordEntry",
+      "pkg": "block",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "typeFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "term",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "languageFqn",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "weight",
+          "type": "type:Decimal",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.block.DocumentationProseEntry",
+      "tsExport": "DocumentationProseEntry",
+      "pkg": "block",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "namespace",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "languageFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "authoredCharacterDataForm",
+          "type": "bomcommon:CharacterDataForm",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.block.AliasEntry",
+      "tsExport": "AliasEntry",
+      "pkg": "block",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "typeFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "languageFqn",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "legacy",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.block.ChangelogEntry",
+      "tsExport": "ChangelogEntry",
+      "pkg": "block",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "version",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "languageFqn",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.block.DocumentationExample",
+      "tsExport": "DocumentationExample",
+      "pkg": "block",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "title",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "authoredCharacterDataForm",
+          "type": "bomcommon:CharacterDataForm",
+          "required": false
+        },
+        {
+          "name": "contentLanguageFqn",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "snippet",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "namespace",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.block.DocumentationReference",
+      "tsExport": "DocumentationReference",
+      "pkg": "block",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "type",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "instance",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "file",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "url",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "property",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "aggregation",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "association",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "capability",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "relationFqn",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "context",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "languageFqn",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.block.BlockDefinition",
+      "tsExport": "BlockDefinition",
+      "pkg": "block",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "baseType",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "version",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "is",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "summaries",
+          "type": "bomblock:DocumentationProseEntry[]",
+          "required": false
+        },
+        {
+          "name": "keywords",
+          "type": "bomblock:KeywordEntry[]",
+          "required": false
+        },
+        {
+          "name": "language",
+          "type": "bomblock:TypeReferenceEntityInstance",
+          "required": false
+        },
+        {
+          "name": "languageFqn",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "documentations",
+          "type": "bomblock:DocumentationProseEntry[]",
+          "required": false
+        },
+        {
+          "name": "isNot",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "aliases",
+          "type": "bomblock:AliasEntry[]",
+          "required": false
+        },
+        {
+          "name": "since",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "changelog",
+          "type": "bomblock:ChangelogEntry[]",
+          "required": false
+        },
+        {
+          "name": "examples",
+          "type": "bomblock:DocumentationExample[]",
+          "required": false
+        },
+        {
+          "name": "references",
+          "type": "bomblock:DocumentationReference[]",
+          "required": false
+        },
+        {
+          "name": "abstract",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "final",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "xmlRendering",
+          "type": "bomcommon:XmlRenderingBlock",
+          "required": false
+        },
+        {
+          "name": "visibility",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "contracts",
+          "type": "bomblock:TypeReferenceEntityInstance[]",
+          "required": false
+        },
+        {
+          "name": "genericTypes",
+          "type": "bomblock:GenericType[]",
+          "required": false
+        },
+        {
+          "name": "definitionFqn",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "constraints",
+          "type": "bomcomp:BlockInstance[]",
+          "required": false
+        },
+        {
+          "name": "members",
+          "type": "bommember:MemberDefinition[]",
+          "required": true
+        },
+        {
+          "name": "subBlocks",
+          "type": "bomblock:BlockDefinition[]",
+          "required": true
+        },
+        {
+          "name": "embeddedBlocks",
+          "type": "bomblock:BlockDefinition[]",
+          "required": true
+        },
+        {
+          "name": "compositions",
+          "type": "bomcomp:CompositionTemplate[]",
+          "required": true
+        },
+        {
+          "name": "xmlTrivia",
+          "type": "bomcommon:XmlTrivia",
+          "required": false
+        },
+        {
+          "name": "memberSectionTrivia",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "metadataTrivia",
+          "type": "bomcommon:MetadataElementTrivia",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.ConstrainableDefinition",
+      "tsExport": "ConstrainableDefinition",
+      "pkg": "member",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "constraints",
+          "type": "bomcomp:BlockInstance[]",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.MemberDefinitionBase",
+      "tsExport": "MemberDefinitionBase",
+      "pkg": "member",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "summaries",
+          "type": "bomblock:DocumentationProseEntry[]",
+          "required": false
+        },
+        {
+          "name": "keywords",
+          "type": "bomblock:KeywordEntry[]",
+          "required": false
+        },
+        {
+          "name": "documentations",
+          "type": "bomblock:DocumentationProseEntry[]",
+          "required": false
+        },
+        {
+          "name": "since",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "changelog",
+          "type": "bomblock:ChangelogEntry[]",
+          "required": false
+        },
+        {
+          "name": "examples",
+          "type": "bomblock:DocumentationExample[]",
+          "required": false
+        },
+        {
+          "name": "references",
+          "type": "bomblock:DocumentationReference[]",
+          "required": false
+        },
+        {
+          "name": "namespace",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "visibility",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "readOnly",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "abstract",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "final",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "override",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "xmlRendering",
+          "type": "bomcommon:XmlRenderingMember",
+          "required": false
+        },
+        {
+          "name": "constraints",
+          "type": "bomcomp:BlockInstance[]",
+          "required": false
+        },
+        {
+          "name": "xmlTrivia",
+          "type": "bomcommon:XmlTrivia",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.MemberDefinition",
+      "tsExport": "MemberDefinition",
+      "pkg": "member",
+      "abstract": true,
+      "baseType": "bom:UrmodellType",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.PropertyValueEntry",
+      "tsExport": "PropertyValueEntry",
+      "pkg": "member",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "namespace",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "bomvalue:MemberValue",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.PropertyDefinition",
+      "tsExport": "PropertyDefinition",
+      "pkg": "member",
+      "abstract": false,
+      "baseType": "bommember:MemberDefinitionBase",
+      "kind": "property",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "property"
+        },
+        {
+          "name": "typeFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "bomtype:TypeExpression",
+          "required": false
+        },
+        {
+          "name": "values",
+          "type": "bommember:PropertyValueEntry[]",
+          "required": false
+        },
+        {
+          "name": "value",
+          "type": "bomvalue:MemberValue",
+          "required": false
+        },
+        {
+          "name": "group",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "suggestions",
+          "type": "bomcomp:BlockInstance[]",
+          "required": false
+        },
+        {
+          "name": "groups",
+          "type": "bomblock:TypeReferenceEntityInstance[]",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.AggregationDefinition",
+      "tsExport": "AggregationDefinition",
+      "pkg": "member",
+      "abstract": false,
+      "baseType": "bommember:MemberDefinitionBase",
+      "kind": "aggregation",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "aggregation"
+        },
+        {
+          "name": "type",
+          "type": "bomtype:TypeExpression",
+          "required": false
+        },
+        {
+          "name": "cardinality",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "default",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "composition",
+          "type": "bomcomp:CompositionTemplate",
+          "required": false
+        },
+        {
+          "name": "groups",
+          "type": "bomblock:TypeReferenceEntityInstance[]",
+          "required": false
+        },
+        {
+          "name": "authoredInAggregationsSection",
+          "type": "type:Boolean",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.AssociationDefinition",
+      "tsExport": "AssociationDefinition",
+      "pkg": "member",
+      "abstract": false,
+      "baseType": "bommember:MemberDefinitionBase",
+      "kind": "association",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "association"
+        },
+        {
+          "name": "type",
+          "type": "bomtype:TypeExpression",
+          "required": true
+        },
+        {
+          "name": "cardinality",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.EmbeddedExpression",
+      "tsExport": "EmbeddedExpression",
+      "pkg": "member",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "raw",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "type:Integer",
+          "required": true
+        },
+        {
+          "name": "end",
+          "type": "type:Integer",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.ImplementationBlock",
+      "tsExport": "ImplementationBlock",
+      "pkg": "member",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "languageFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "authoredCharacterDataForm",
+          "type": "bomcommon:CharacterDataForm",
+          "required": false
+        },
+        {
+          "name": "embeddedExpressions",
+          "type": "bommember:EmbeddedExpression[]",
+          "required": false
+        },
+        {
+          "name": "sourceLocation",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.member.CapabilityDefinition",
+      "tsExport": "CapabilityDefinition",
+      "pkg": "member",
+      "abstract": false,
+      "baseType": "bommember:MemberDefinitionBase",
+      "kind": "capability",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "capability"
+        },
+        {
+          "name": "typeFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "inputType",
+          "type": "bomtype:TypeDescriptor",
+          "required": false
+        },
+        {
+          "name": "outputType",
+          "type": "bomtype:TypeDescriptor",
+          "required": false
+        },
+        {
+          "name": "implementation",
+          "type": "bommember:ImplementationBlock",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.WithBinding",
+      "tsExport": "WithBinding",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "bomvalue:ExpressionValue",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.DirectiveAttribute",
+      "tsExport": "DirectiveAttribute",
+      "pkg": "composition",
+      "abstract": true,
+      "baseType": "bom:UrmodellType",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.EachDirective",
+      "tsExport": "EachDirective",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bomcomp:DirectiveAttribute",
+      "kind": "each",
+      "fields": [
+        {
+          "name": "type",
+          "type": "type:Text",
+          "required": true,
+          "literal": "each"
+        },
+        {
+          "name": "variables",
+          "type": "type:Text[]",
+          "required": true
+        },
+        {
+          "name": "statVariable",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "collection",
+          "type": "bomvalue:ExpressionValue",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.IfDirective",
+      "tsExport": "IfDirective",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bomcomp:DirectiveAttribute",
+      "kind": "if",
+      "fields": [
+        {
+          "name": "type",
+          "type": "type:Text",
+          "required": true,
+          "literal": "if"
+        },
+        {
+          "name": "condition",
+          "type": "bomvalue:ExpressionValue",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.UnlessDirective",
+      "tsExport": "UnlessDirective",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bomcomp:DirectiveAttribute",
+      "kind": "unless",
+      "fields": [
+        {
+          "name": "type",
+          "type": "type:Text",
+          "required": true,
+          "literal": "unless"
+        },
+        {
+          "name": "condition",
+          "type": "bomvalue:ExpressionValue",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.WithDirective",
+      "tsExport": "WithDirective",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bomcomp:DirectiveAttribute",
+      "kind": "with",
+      "fields": [
+        {
+          "name": "type",
+          "type": "type:Text",
+          "required": true,
+          "literal": "with"
+        },
+        {
+          "name": "bindings",
+          "type": "bomcomp:WithBinding[]",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.BlockInstance",
+      "tsExport": "BlockInstance",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "typeFqn",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "bomvalue:MemberValue",
+          "required": false
+        },
+        {
+          "name": "version",
+          "type": "bomvalue:MemberValue",
+          "required": false
+        },
+        {
+          "name": "bean",
+          "type": "bomvalue:MemberValue",
+          "required": false
+        },
+        {
+          "name": "scope",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "basePresets",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "renderGroup",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "namespace",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "memberValues",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "aggregationCompositions",
+          "type": "bomcomp:InstanceAggregationComposition[]",
+          "required": false
+        },
+        {
+          "name": "xmlTrivia",
+          "type": "bomcommon:XmlTrivia",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.CompositionTemplate",
+      "tsExport": "CompositionTemplate",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "aggregationName",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "directives",
+          "type": "bomcomp:DirectiveAttribute[]",
+          "required": false
+        },
+        {
+          "name": "children",
+          "type": "bomcomp:CompositionNode[]",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.InstanceAggregationComposition",
+      "tsExport": "InstanceAggregationComposition",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "aggregationName",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "composition",
+          "type": "bomcomp:CompositionTemplate",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.CompositionNode",
+      "tsExport": "CompositionNode",
+      "pkg": "composition",
+      "abstract": true,
+      "baseType": "bom:UrmodellType",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.BlockInstanceNode",
+      "tsExport": "BlockInstanceNode",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bomcomp:CompositionNode",
+      "kind": "blockInstance",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "blockInstance"
+        },
+        {
+          "name": "instance",
+          "type": "bomcomp:BlockInstance",
+          "required": true
+        },
+        {
+          "name": "directives",
+          "type": "bomcomp:DirectiveAttribute[]",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.composition.VirtualContainerNode",
+      "tsExport": "VirtualContainerNode",
+      "pkg": "composition",
+      "abstract": false,
+      "baseType": "bomcomp:CompositionNode",
+      "kind": "virtualContainer",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "virtualContainer"
+        },
+        {
+          "name": "directives",
+          "type": "bomcomp:DirectiveAttribute[]",
+          "required": false
+        },
+        {
+          "name": "children",
+          "type": "bomcomp:CompositionNode[]",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.document.BomDocument",
+      "tsExport": "BomDocument",
+      "pkg": "document",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceInfo",
+          "required": true
+        },
+        {
+          "name": "block",
+          "type": "bomblock:BlockDefinition",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.api.ParseOptions",
+      "tsExport": "ParseOptions",
+      "pkg": "api",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "continueOnError",
+          "type": "type:Boolean",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.api.SerializeOptions",
+      "tsExport": "SerializeOptions",
+      "pkg": "api",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "indent",
+          "type": "type:Integer",
+          "required": false
+        },
+        {
+          "name": "xmlDeclaration",
+          "type": "type:Boolean",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.api.ParseResult",
+      "tsExport": "ParseResult",
+      "pkg": "api",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "diagnostics",
+          "type": "bomcommon:Diagnostic[]",
+          "required": true
+        },
+        {
+          "name": "success",
+          "type": "type:Boolean",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.api.SerializeResult",
+      "tsExport": "SerializeResult",
+      "pkg": "api",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "diagnostics",
+          "type": "bomcommon:Diagnostic[]",
+          "required": true
+        },
+        {
+          "name": "success",
+          "type": "type:Boolean",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.capability.StripProvenance",
+      "tsExport": "StripProvenance",
+      "pkg": "capability",
+      "abstract": false,
+      "baseType": "core:Capability",
+      "fields": [
+        {
+          "name": "input",
+          "type": "core:Any",
+          "required": true
+        },
+        {
+          "name": "output",
+          "type": "core:Any",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.capability.BomEquals",
+      "tsExport": "BomEquals",
+      "pkg": "capability",
+      "abstract": false,
+      "baseType": "core:Capability",
+      "fields": [
+        {
+          "name": "inputA",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "inputB",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "output",
+          "type": "type:Boolean",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.bom.rules.DesignDecisions",
+      "tsExport": "DesignDecisions",
+      "pkg": "rules",
+      "abstract": false,
+      "baseType": "core:ReadMe",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.bom.rules.ValidationResponsibilities",
+      "tsExport": "ValidationResponsibilities",
+      "pkg": "rules",
+      "abstract": false,
+      "baseType": "core:ReadMe",
+      "fields": []
+    }
+  ],
+  "capabilities": [
+    "bomEquals",
+    "stripProvenance"
+  ],
+  "typeAliases": {
+    "TypeDescriptor": "TypeExpression",
+    "MemberSectionName": "string-literal-union",
+    "MetadataElementTrivia": "Record<string, XmlTrivia>",
+    "XmlNodeKind": "string-literal-union",
+    "CharacterDataForm": "string-literal-union",
+    "DiagnosticSeverity": "string-literal-union"
+  },
+  "unions": {
+    "MemberDefinition": [
+      "PropertyDefinition",
+      "AggregationDefinition",
+      "AssociationDefinition",
+      "CapabilityDefinition"
+    ],
+    "TypeExpression": [
+      "NamedTypeReference",
+      "UnionTypeExpression",
+      "GenericParameterReference",
+      "SelfTypeReference",
+      "AnonymousStructType"
+    ],
+    "MemberValue": [
+      "LiteralValue",
+      "ExpressionValue",
+      "AddressValue"
+    ],
+    "CompositionNode": [
+      "BlockInstanceNode",
+      "VirtualContainerNode"
+    ],
+    "DirectiveAttribute": [
+      "EachDirective",
+      "IfDirective",
+      "UnlessDirective",
+      "WithDirective"
+    ]
+  }
+}

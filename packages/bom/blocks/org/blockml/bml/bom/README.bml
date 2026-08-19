@@ -1,6 +1,5 @@
 <!--
   BlockML BOM — README
-
   FQN: org.blockml.bml.bom.README
 -->
 <block
@@ -9,7 +8,20 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:blockml="org.blockml.bml"
-  xmlns:core="org.blockml.bml.core">
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
 
   <name>README</name>
   <type>blockml:README</type>
@@ -17,8 +29,27 @@
   <is>Reading entry for the BOM Urmodell library</is>
 
   <documentation>
-    Canonical TypeScript BOM interfaces (BomDocument, BlockDefinition, composition tree, member
-    values, parse/serialize result types). See docs/12_bom_object_model.md during migration.
+    The @blockml/bom package owns the Canonical BOM (Urmodell) — lossless, immutable parse results.
+    This library (org.blockml.bml.bom.*) is the SSOT; TypeScript in packages/bom/src/ implements it.
+    Parity tests in packages/bom/test/ verify BML ↔ TS alignment.
+
+    Layer separation:
+    • org.blockml.bml.definition.* (@blockml/core) — BML meta-model (what block documents mean)
+    • org.blockml.bml.bom.* (this library) — parse-result data structures (BomDocument graph)
+
+    Modules: common (provenance, diagnostics), block (BlockDefinition cluster), member (members),
+    composition (trees, directives, instances), type (TypeExpression AST), value (MemberValue),
+    document (BomDocument root), api (ParseResult/SerializeResult B26), capability (bomEquals),
+    rules (design decisions and validation responsibilities).
+
+    Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/core utilities);
+    BML→BOM mapping rules (@blockml/parser, doc 13).
   </documentation>
+
+  <references>
+    <see type="bomrules:DesignDecisions" relation="ReadFirst" />
+    <see type="bomrules:ValidationResponsibilities" relation="SeeAlso" />
+    <see type="def:BlockDefinition" relation="SeeAlso" />
+  </references>
 
 </block>

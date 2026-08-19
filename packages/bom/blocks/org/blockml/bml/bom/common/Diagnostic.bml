@@ -1,0 +1,48 @@
+<!--
+  BOM Urmodell — Diagnostic
+  FQN: org.blockml.bml.bom.common.Diagnostic
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Diagnostic</name>
+  <type>bomcommon:Diagnostic</type>
+  <baseType>bom:UrmodellType</baseType>
+  <is>Compiler result diagnostic (B26)</is>
+
+  <documentation>Shared with ParseResult and SerializeResult. Distinct from org.blockml.bml.core.Diagnostic.</documentation>
+
+  <properties>
+    <severity type="bomcommon:DiagnosticSeverity">
+      <documentation>severity (required). TS type: bomcommon:DiagnosticSeverity.</documentation>
+    </severity>
+    <code type="type:Text">
+      <documentation>code (required). TS type: type:Text.</documentation>
+    </code>
+    <message type="type:Text">
+      <documentation>message (required). TS type: type:Text.</documentation>
+    </message>
+    <source type="bomcommon:SourceLocation">
+      <documentation>source (required). TS type: bomcommon:SourceLocation.</documentation>
+    </source>
+  </properties>
+
+</block>

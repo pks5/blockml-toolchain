@@ -1,0 +1,49 @@
+<!--
+  BOM Urmodell — BlockInstanceNode
+  FQN: org.blockml.bml.bom.composition.BlockInstanceNode
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>BlockInstanceNode</name>
+  <type>bomcomp:BlockInstanceNode</type>
+  <baseType>bomcomp:CompositionNode</baseType>
+  <is>Composition node wrapping a BlockInstance (kind: blockInstance)</is>
+
+  <documentation>Composition node wrapping a BlockInstance (kind: blockInstance)</documentation>
+
+  <properties>
+    <kind type="type:Text">
+      <documentation>kind (required). TS type: type:Text.</documentation>
+      <value>blockInstance</value>
+    </kind>
+    <instance type="bomcomp:BlockInstance">
+      <documentation>instance (required). TS type: bomcomp:BlockInstance.</documentation>
+    </instance>
+    <directives type="bomcomp:DirectiveAttribute[]">
+      <documentation>directives (optional). TS type: bomcomp:DirectiveAttribute[].</documentation>
+    </directives>
+    <source type="bomcommon:SourceLocation">
+      <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
+    </source>
+  </properties>
+
+</block>

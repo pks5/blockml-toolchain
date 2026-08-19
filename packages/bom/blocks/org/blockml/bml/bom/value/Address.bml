@@ -1,0 +1,54 @@
+<!--
+  BOM Urmodell — Address
+  FQN: org.blockml.bml.bom.value.Address
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomrules="org.blockml.bml.bom.rules"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Address</name>
+  <type>bomvalue:Address</type>
+  <baseType>bom:UrmodellType</baseType>
+  <is>Parsed org.blockml.bml.type.Address shape</is>
+
+  <documentation>BOM projection of Address ValueType — see @blockml/core type/Address.bml.</documentation>
+
+  <properties>
+    <raw type="type:Text">
+      <documentation>raw (required). TS type: type:Text.</documentation>
+    </raw>
+    <scheme type="type:Text">
+      <documentation>string | null in TS — required field, nullable value. (required)</documentation>
+    </scheme>
+    <path type="type:Text">
+      <documentation>path (required). TS type: type:Text.</documentation>
+    </path>
+    <isAbsolute type="type:Boolean">
+      <documentation>isAbsolute (required). TS type: type:Boolean.</documentation>
+    </isAbsolute>
+    <isRelative type="type:Boolean">
+      <documentation>isRelative (required). TS type: type:Boolean.</documentation>
+    </isRelative>
+    <isExpression type="type:Boolean">
+      <documentation>isExpression (required). TS type: type:Boolean.</documentation>
+    </isExpression>
+  </properties>
+
+</block>
