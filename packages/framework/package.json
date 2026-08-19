@@ -1,0 +1,28 @@
+{
+  "name": "@blockml/framework",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/framework/Library.bml"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "blocks"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run packages/framework/test"
+  },
+  "dependencies": {
+    "@blockml/bom": "file:../bom",
+    "@blockml/parser": "file:../parser"
+  }
+}

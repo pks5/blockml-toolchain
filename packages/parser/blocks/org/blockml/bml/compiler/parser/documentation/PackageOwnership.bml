@@ -36,7 +36,7 @@
     @blockml/bom — Urmodell types, ParseOptions/ParseResult (B26), Diagnostic,
     bomEquals/stripProvenance (B20). Parser produces; does not redefine.
 
-    @blockml/core — TypeRegistry, parseExpression(), Definition meta-model, validateTypes.
+    @blockml/framework — TypeRegistry, parseExpression(), Definition meta-model, validateTypes.
     Parser consumes implicit namespace rules; defers AST and semantic validation.
 
     @blockml/serializer — BOM → BML inverse. @blockml/validator — Stage 2 checks.

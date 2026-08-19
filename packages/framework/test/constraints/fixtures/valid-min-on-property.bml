@@ -1,6 +1,6 @@
 <!--
   Test fixture — valid Min on numeric Property
-  See packages/core/test/constraints/constraints.test-spec.yaml
+  See packages/framework/test/constraints/constraints.test-spec.yaml
 -->
 <block
   xmlns="http://blockml.org/bml"

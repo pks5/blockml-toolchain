@@ -25,4 +25,24 @@ export interface SerializeOptions {
     /** default false — omit <?xml …?> (B17 / B24) */
     xmlDeclaration?: boolean;
 }
+/** Minimal registry surface for ValidateOptions (implemented by @blockml/framework TypeRegistry). */
+export interface TypeRegistryReader {
+    get(fqn: string): BomDocument | undefined;
+    has(fqn: string): boolean;
+}
+export interface ValidateResult {
+    /** Forked pragmatic model when validation ran (resolve-only copy). */
+    pragmaticModel?: BomDocument;
+    diagnostics: Diagnostic[];
+    /** false if any diagnostic has severity === "error". */
+    success: boolean;
+}
+export interface ValidateOptions {
+    /** Pre-built registry; when omitted, bootstrap from bootstrapPaths. */
+    typeRegistry?: TypeRegistryReader;
+    /** Directories scanned for .bml when typeRegistry omitted. */
+    bootstrapPaths?: string[];
+    /** default true — continue after errors; still attach pragmaticModel when possible */
+    continueOnError?: boolean;
+}
 //# sourceMappingURL=api.d.ts.map

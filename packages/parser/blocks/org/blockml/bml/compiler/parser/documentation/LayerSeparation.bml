@@ -44,7 +44,7 @@
     org.blockml.bml.compiler.serializer.* (@blockml/serializer) — inverse mapping (BOM → BML).
     Emit rules B12–B25 live there, not here.
 
-    @blockml/core utilities — parseExpression() (Stage 2 AST), TypeRegistry, validateTypes.
+    @blockml/framework utilities — parseExpression() (Stage 2 AST), TypeRegistry, validateTypes.
     Parser stores ExpressionValue.raw only (B4); never writes AST to Urmodell.</documentation>
 
   <references>

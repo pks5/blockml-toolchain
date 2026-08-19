@@ -46,7 +46,7 @@ export const documentationBlocks = [
     org.blockml.bml.compiler.serializer.* (@blockml/serializer) — inverse mapping (BOM → BML).
     Emit rules B12–B25 live there, not here.
 
-    @blockml/core utilities — parseExpression() (Stage 2 AST), TypeRegistry, validateTypes.
+    @blockml/framework utilities — parseExpression() (Stage 2 AST), TypeRegistry, validateTypes.
     Parser stores ExpressionValue.raw only (B4); never writes AST to Urmodell.`,
     refs: [
       { type: "pardocumentation:ArchitectureOverview", relation: "ReadNext" },
@@ -261,7 +261,7 @@ export const documentationBlocks = [
     Implementation CDATA → embeddedExpressions[] with source offsets.
 
     Parser step [5] captures raw text only. AST construction via parseExpression()
-    in @blockml/core (Stage 2 utility) — never stored on Urmodell.
+    in @blockml/framework (Stage 2 utility) — never stored on Urmodell.
 
     inputType/outputType on capabilities → TypeExpression at map time (B3).`,
     refs: [
@@ -280,7 +280,7 @@ export const documentationBlocks = [
     • bml:version on instances — no registry lookup at parse time
 
     TypeRegistry bootstrap, effective member resolution, cross-file validation →
-    @blockml/cli orchestrator + @blockml/core utilities + @blockml/validator.`,
+    @blockml/cli orchestrator + @blockml/framework utilities + @blockml/validator.`,
     refs: [
       { type: "pardocumentation:DesignDecisions", relation: "ReadNext" },
     ],
@@ -356,7 +356,7 @@ export const documentationBlocks = [
     @blockml/bom — Urmodell types, ParseOptions/ParseResult (B26), Diagnostic,
     bomEquals/stripProvenance (B20). Parser produces; does not redefine.
 
-    @blockml/core — TypeRegistry, parseExpression(), Definition meta-model, validateTypes.
+    @blockml/framework — TypeRegistry, parseExpression(), Definition meta-model, validateTypes.
     Parser consumes implicit namespace rules; defers AST and semantic validation.
 
     @blockml/serializer — BOM → BML inverse. @blockml/validator — Stage 2 checks.
@@ -373,8 +373,8 @@ export const documentationBlocks = [
 
     • BOM → BML emit — @blockml/serializer
     • Semantic validation — @blockml/validator
-    • TypeRegistry bootstrap / cross-file resolve — @blockml/cli + @blockml/core
-    • parseExpression() AST — @blockml/core (Stage 2)
+    • TypeRegistry bootstrap / cross-file resolve — @blockml/cli + @blockml/framework
+    • parseExpression() AST — @blockml/framework (Stage 2)
     • Render target output — @blockml/compiler
     • parseFile, async, streaming — deferred API
     • Meta-driven mapping from Definition blocks — V2

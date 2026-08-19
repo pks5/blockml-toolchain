@@ -373,4 +373,4 @@ Constraints without `validation` produce no rule-enforcement diagnostics.
 | BOM mapping | `13_bml_to_bom_mapping.md` |
 | Compiler diagnostics | `06_compiler.md` |
 | Framework base types | `16_framework_base_types.md` |
-| Constraint test fixtures | `packages/core/test/constraints/` |
+| Constraint test fixtures | `packages/framework/test/constraints/` |

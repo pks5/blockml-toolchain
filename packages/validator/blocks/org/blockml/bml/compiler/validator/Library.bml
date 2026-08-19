@@ -1,0 +1,18 @@
+<!--
+  BlockML Validator — Stage 2 semantic validation library stub
+  FQN: org.blockml.bml.compiler.validator.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:val="org.blockml.bml.compiler.validator">
+
+  <name>Library</name>
+  <type>val:Library</type>
+  <baseType>core:Block</baseType>
+  <is>BlockML Stage-2 validator library</is>
+  <version>0.0.0</version>
+</block>

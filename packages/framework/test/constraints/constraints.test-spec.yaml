@@ -1,6 +1,6 @@
 # Constraint model test specification
 # Consumed by @blockml/core validateConstraints() tests (when implemented).
-# Fixtures: packages/core/test/constraints/fixtures/
+# Fixtures: packages/framework/test/constraints/fixtures/
 
 version: 1.0.0
 

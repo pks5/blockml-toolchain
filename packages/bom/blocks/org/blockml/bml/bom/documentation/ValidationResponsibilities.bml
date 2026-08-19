@@ -29,7 +29,7 @@
   <baseType>core:Documentation</baseType>
   <is>Full validator checklist on BomDocument</is>
 
-  <documentation>Parser produces BomDocument. Validator (@blockml/validator + @blockml/core) checks:
+  <documentation>Parser produces BomDocument. Validator (@blockml/validator + @blockml/framework) checks:
 
     Member namespace uniqueness; baseType in TypeRegistry; property values inline deep copies;
     resolveEffectiveMembers for expression refs; effective version (BML_MISSING_VERSION);

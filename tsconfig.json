@@ -3,6 +3,8 @@
   "references": [
     { "path": "packages/bom" },
     { "path": "packages/parser" },
-    { "path": "packages/serializer" }
+    { "path": "packages/serializer" },
+    { "path": "packages/framework" },
+    { "path": "packages/validator" }
   ]
 }

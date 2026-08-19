@@ -80,6 +80,9 @@ export type {
   SerializeResult,
   ParseOptions,
   SerializeOptions,
+  ValidateResult,
+  ValidateOptions,
+  TypeRegistryReader,
 } from "./types/api.js";
 
 export { bomEquals, stripProvenance } from "./equals.js";

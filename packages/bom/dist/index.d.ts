@@ -5,6 +5,6 @@ export type { TypeExpression, TypeDescriptor, Multiplicity, InstanceConfiguratio
 export type { MemberDefinition, ConstrainableDefinition, MemberDefinitionBase, PropertyDefinition, PropertyValueEntry, AggregationDefinition, AssociationDefinition, CapabilityDefinition, ImplementationBlock, EmbeddedExpression, } from "./types/member-definition.js";
 export type { CompositionTemplate, InstanceAggregationComposition, CompositionNode, BlockInstanceNode, VirtualContainerNode, BlockInstance, DirectiveAttribute, EachDirective, IfDirective, UnlessDirective, WithDirective, WithBinding, } from "./types/composition.js";
 export type { MemberValue, LiteralValue, ExpressionValue, AddressValue, Address, } from "./types/values.js";
-export type { ParseResult, SerializeResult, ParseOptions, SerializeOptions, } from "./types/api.js";
+export type { ParseResult, SerializeResult, ParseOptions, SerializeOptions, ValidateResult, ValidateOptions, TypeRegistryReader, } from "./types/api.js";
 export { bomEquals, stripProvenance } from "./equals.js";
 //# sourceMappingURL=index.d.ts.map

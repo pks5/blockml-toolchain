@@ -36,7 +36,7 @@
     • Render target emit (SCAD, JSON, MBOM serialize) — @blockml/compiler / domain packages
     • Semantic validation — @blockml/validator
     • Parser mapping (BML → BOM) — @blockml/parser
-    • TypeRegistry bootstrap, effective member resolution — @blockml/core
+    • TypeRegistry bootstrap, effective member resolution — @blockml/framework
     • BomBuilder (V3) — future; serializer accepts its output types only
     • File I/O (serializeFile), async, streaming — deferred API surfaces
 

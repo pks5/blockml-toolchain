@@ -34,8 +34,8 @@
 
     • BOM → BML emit — @blockml/serializer
     • Semantic validation — @blockml/validator
-    • TypeRegistry bootstrap / cross-file resolve — @blockml/cli + @blockml/core
-    • parseExpression() AST — @blockml/core (Stage 2)
+    • TypeRegistry bootstrap / cross-file resolve — @blockml/cli + @blockml/framework
+    • parseExpression() AST — @blockml/framework (Stage 2)
     • Render target output — @blockml/compiler
     • parseFile, async, streaming — deferred API
     • Meta-driven mapping from Definition blocks — V2

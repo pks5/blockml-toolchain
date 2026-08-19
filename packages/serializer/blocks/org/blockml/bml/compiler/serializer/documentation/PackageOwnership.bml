@@ -36,7 +36,7 @@
     @blockml/bom — Urmodell types, SerializeOptions/SerializeResult (B26), Diagnostic,
     bomEquals/stripProvenance (B20). Serializer consumes; does not redefine.
 
-    @blockml/core — TypeRegistry, Definition meta-model, bml:xml directive spec (D1–D9).
+    @blockml/framework — TypeRegistry, Definition meta-model, bml:xml directive spec (D1–D9).
     V2 serializer consumes; V1 uses hardcoded snapshot.
 
     @blockml/parser — BML → BomDocument; inverse mapping owned separately.
