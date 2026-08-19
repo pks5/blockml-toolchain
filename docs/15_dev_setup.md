@@ -718,10 +718,11 @@ Phase B — Semantic layer
                                       may call parseExpression for expression correctness)
 
 Phase C — Compile pipeline (BlockDoc-first)
-  7. Compiler facade                 — @blockml/compiler (C2, C3)
+  7. Compiler facade                 — @blockml/compiler (C2, C3, C7)
   8. CLI + targets[]                 — @blockml/cli; bom.config.json targets (default ["blockdoc"])
   9. **First Stage-3 gate: BlockDoc** — @blockml/blockdoc-target / CLI `blockdoc`
      — static HTML by package/FQN hierarchy — corpus control / review
+     — compile scope: library/corpus (`bom compile blockdoc`), not per-file --all
      — proves Facade + Target Registry with minimal domain surface
  10. Further toolchain RTs (after BlockDoc control path works)
      a. XSD target      — @blockml/xsd-target / `xsd`
@@ -744,7 +745,7 @@ Phase C — Compile pipeline (BlockDoc-first)
 | 2nd+ | **FatBlock** (`fatblock`) | Registry closure + embed model; Stage 2 first |
 | Later | **machineblocks-v3-scad** | Primary **product** target — more domain surface (NativeBlock, engine, `@machineblocks/core`) |
 
-MachineBlocks SCAD remains the reference **product** target. BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control. `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3.
+MachineBlocks SCAD remains the reference **product** target. BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`bom compile blockdoc`, library/corpus scope — see `14_compiler_runtime.md` C7). `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3.
 
 ### Roundtrip test contract
 

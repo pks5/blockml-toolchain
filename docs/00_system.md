@@ -286,7 +286,7 @@ MachineBlocks SCAD is the primary **product** target. **V1 Stage-3 control gate 
 
 | Order | Target | Package | Registry / CLI `<target>` | Minimal output | Role |
 |---|---|---|---|---|---|
-| **1st** | **BlockDoc** | `@blockml/blockdoc-target` | `blockdoc` | Static HTML files whose URLs follow the **package / FQN hierarchy** (JavaDoc-like browse). Later: richer site, graphs, cross-links | **V1 control gate** — human/LLM review of the block corpus |
+| **1st** | **BlockDoc** | `@blockml/blockdoc-target` | `blockdoc` | Static HTML (`siteMode`: merged or perLibrary). URLs follow **package / FQN hierarchy**. Input: **library/corpus scope** (`libraries[]` + `srcDir` fallback) — see `14` C7 | **V1 control gate** — human/LLM review of the block corpus |
 | 2nd+ | **XSD** | `@blockml/xsd-target` | `xsd` | `.xsd` artifacts | **Universal** `block.xsd` + optional **domain** XSDs; particle shape aligns with **`bml:xml`** |
 | 2nd+ | **FatBlock** | `@blockml/fatblock-target` | `fatblock` | One `.bml` with transitive deps in root `<embeddedBlocks>` | Portable artifact; registry closure + embed model; Stage 2 first (`19` D2) |
 | Later | **SCAD (product)** | `@machineblocks/machineblocks-v3-scad-target` | `machineblocks-v3-scad` | `.scad` (+ maps, …) | MachineBlocks V3 reference product target |
@@ -429,10 +429,11 @@ Facade and Target Registry. Browser and Node compatible.
 - Target Registry: registerTarget(target), getTarget(name)
 - compileBmlToBom(input: CompileInput, options?): CompilerResult<BomDocument>
 - compileBomToOutput(model, targetName, options?): CompilerResult<RenderOutput>
-- compileBmlToOutput(input: CompileInput, targetName, options?): CompilerResult<RenderOutput>
+- compileToOutput(request: CompileRequest, targetName, options?): CompilerResult<RenderOutput>
+- compileBmlToOutput(input, targetName, options?) — document-scope sugar
 ```
 
-See `14_compiler_runtime.md` — Compiler Facade API (C2).
+See `14_compiler_runtime.md` — Compiler Facade API (C2) · Compile Scope (C7).
 
 ### `@blockml/cli`
 
@@ -440,8 +441,9 @@ Node.js-only CLI tools.
 
 ```text
 - bom new block <fqn> [--format bml]   # XML only; JSON authoring not planned
-- bom compile <file> <target>
-- bom compile --all <target>
+- bom compile <file> <target>          # document targets
+- bom compile <target>                 # library/corpus targets (blockdoc, xsd)
+- bom compile --all <target>           # document targets only
 - bom validate <file>
 - bom inspect <file>
 - bom watch [--src <dir>] [--out <dir>] <target>

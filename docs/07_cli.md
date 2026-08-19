@@ -16,7 +16,7 @@ For the project file structure and library resolution see `00_system.md`.
 
 The CLI is implemented in `@blockml/cli`. It is Node.js-only — it may use `fs`, `path`, `chokidar`, `child_process`, and other Node-only APIs. The CLI wraps `@blockml/compiler` and adds file system operations, watching, scaffolding, and (for the SCAD target) thumbnail rendering.
 
-**CLI orchestration convention:** one BML file per `compileBmlToOutput` call, writing `RenderOutput.files[]` to disk. This reflects the **MachineBlocks 1→1 convention**, not a BlockML platform rule. Targets may return empty `files[]` or side effects — the CLI handles each target's output shape accordingly.
+**CLI orchestration:** builds a `CompileRequest` per target kind, then calls `compileToOutput`. Document targets (SCAD) loop one file per call; library/corpus targets (BlockDoc, XSD) use one scope-based call per run. See `14_compiler_runtime.md` — Compile Scope (C7).
 
 Command names, argument names, and shorthand flags are configurable via `bom-cli.config.json`.
 
@@ -30,20 +30,23 @@ Before compile or watch, the CLI bootstraps two registries in a fixed order. See
 1. load bom.config.json
 2. bootstrapTypeRegistry()   — discover + parse project/library BML (B5)
 3. bootstrapTargets()        — register render targets (C3)
-4. for each file (or single file):
-     shouldSkip(artifact) ? skip : compileBmlToOutput(...)
-5. write RenderOutput.files[] to disk
-6. generateThumbnails(...)   — preset blocks + SCAD target only (C6)
-7. writeStoredHash(...)      — update .bom-cache (C5)
+4. build CompileRequest from target.accepts + flags + config
+   document target + <file>  →  scope.kind = document
+   document target + --all   →  loop srcDir (one request per file)
+   library/corpus target     →  scope.kind = auto (libraries[] + srcDir fallback)
+5. shouldSkip(artifact) ? skip : compileToOutput(request, target, options)
+6. write RenderOutput.files[] to disk
+7. generateThumbnails(...)   — preset blocks + SCAD target only (C6)
+8. writeStoredHash(...)      — update .bom-cache (C5)
 ```
 
 Incremental skip checks (step 4) and hash writes (step 7) are CLI-only. See `14_compiler_runtime.md` — Incremental Build (C5).
 
 ### TypeRegistry bootstrap (B5)
 
-Scans `srcDir` and library paths, parses all BML sources, populates `TypeRegistry`. Required for `bom validate`, `bom inspect`, and `bom compile` when cross-file references exist.
+Scans `srcDir`, `libraries[]`, and dependency paths; parses all BML sources; populates `TypeRegistry`. Required for `bom validate`, `bom inspect`, and `bom compile` when cross-file references exist.
 
-Implemented in `@blockml/cli` as `bootstrapTypeRegistry.ts`.
+Implemented in `@blockml/cli` as `bootstrapTypeRegistry.ts`. **Separate from compile scope** — registry answers “what types exist”; scope answers “what to render” (see `14_compiler_runtime.md` — C7).
 
 ### Target bootstrap (C3)
 
@@ -177,34 +180,46 @@ The generated file contains the minimum required structure:
 
 ### `bom compile`
 
-Compiles one or all BML source files to a specified render target. Output depends on the document type of the input file and the selected target.
+Compiles to a registered render target. **Input shape depends on the target** — document targets require a `<file>`; library/corpus targets compile from `libraries[]` and/or `srcDir` scope.
 
 ```bash
-# Compile a single file
+# Document target — single file (SCAD, FatBlock root)
 bom compile <file> <target>
 
-# Compile all files in srcDir
+# Document target — all files in srcDir
 bom compile --all <target>
+
+# Library/corpus target — scope from config (BlockDoc, XSD)
+bom compile <target>
+
+# Library/corpus target — explicit Library.bml roots
+bom compile <target> --libraries path/to/Library.bml,path/to/other/Library.bml
 ```
 
 ```text
-<file>    — path to a .bml file (XML). JSON authoring is not planned.
-<target>  — registered target name (**decided**):
-            blockdoc | xsd | fatblock | machineblocks-v3-scad
-            V1 control path: prefer `blockdoc` first (see 15 Phase C). Bootstrap via targets[].
---all     — compile all source files in srcDir
---src     — override srcDir (default: from bom.config.json)
---out     — override outDir (default: from bom.config.json)
---force   — ignore hash cache, recompile everything
---no-xsd  — disable XSD schema validation for this run (**decided** escape hatch).
-            Overrides `bom.config.json` → `xsdValidation` when that would be on.
-            Required so the XSD target can regenerate schemas after intentional
-            BML/meta changes that break the previous .xsd (see 13 B8 · § XSD validation escape hatch)
+<file>         — path to a .bml file; required for document targets only
+<target>       — registered target name (**decided**):
+                 blockdoc | xsd | fatblock | machineblocks-v3-scad
+--all          — compile every .bml in srcDir; **document targets only**
+--libraries    — comma-separated Library.bml paths (overrides config.libraries[])
+--src          — override srcDir (default: from bom.config.json)
+--out          — override outDir (default: from bom.config.json)
+--force        — ignore hash cache, recompile everything
+--no-xsd       — disable XSD schema validation for this run (see § XSD validation escape hatch)
 ```
 
-`--all` processes every `.bml` source file in `srcDir`. Each file is evaluated against its stored hash — unchanged artifacts are skipped.
+**Target ↔ CLI matrix:**
 
-A Block referenced by both a direct `<block>` compile and an implicit compile from a preset block is only built once — the hash check prevents redundant work.
+| Target | `<file>` | `--all` | Scope source |
+|---|---|---|---|
+| `machineblocks-v3-scad` | required | yes (loop srcDir) | `document` |
+| `fatblock` | required | yes | `document` |
+| `blockdoc` | omit | no (ignored) | `auto`: `libraries[]` → `srcDir` |
+| `xsd` | omit | no | `auto`: `libraries[]` |
+
+`--all` processes every `.bml` in `srcDir` **for document targets only**. Each file is hash-checked independently. Library/corpus targets run **once** per invocation and produce a combined output (e.g. one BlockDoc site or merged/per-library sites per `targetOptions.blockdoc.siteMode`).
+
+A Block referenced by both a direct `<block>` compile and an implicit compile from a preset block is only built once — the hash check prevents redundant work (SCAD target).
 
 #### Output by document type (SCAD target)
 
@@ -282,7 +297,7 @@ bom watch [--src <dir>] [--out <dir>] <target>
 --out     — output directory (default: outDir from bom.config.json)
 ```
 
-Behavior:
+Behavior (document targets — e.g. SCAD):
 
 ```text
 - On startup: compiles all files in srcDir (equivalent to bom compile --all <target>)
@@ -291,6 +306,14 @@ Behavior:
 - On file delete: removes the corresponding output file(s)
 - Prints diagnostics to stdout for each compilation
 - Continues running until interrupted (Ctrl+C)
+```
+
+Behavior (library/corpus targets — e.g. BlockDoc):
+
+```text
+- On startup: one scope compile (equivalent to bom compile <target>)
+- On any .bml change under watched roots: recompile the whole scope (site regen)
+- On file delete: remove stale HTML if target tracks deletions
 ```
 
 Thumbnail generation follows the same rules as `bom compile` — thumbnails are generated automatically when a preset block file changes (SCAD target only).
@@ -337,7 +360,7 @@ Thumbnails run automatically as part of `bom compile machineblocks-v3-scad` when
 @blockml/cli        →  Wall__brick-2x4.webp, …               (generateThumbnails.ts)
 ```
 
-Browser `compileBmlToOutput` never produces thumbnails — no OpenSCAD dependency in the compiler package.
+Browser `compileToOutput` never produces thumbnails — no OpenSCAD dependency in the compiler package.
 
 ### CLI orchestration
 
@@ -451,6 +474,8 @@ Project-level configuration. Located at the project root.
 {
   "srcDir":        "src",
   "outDir":        "scad",
+  "libraries":     [],
+  "targetOptions": {},
   "thumbsDir":     null,
   "mbLibPath":     null,
   "openscadPath":  null,
@@ -461,8 +486,10 @@ Project-level configuration. Located at the project root.
 
 | Field | Default | Description |
 |---|---|---|
-| `srcDir` | `"src"` | Root directory for BML source files |
+| `srcDir` | `"src"` | Root directory for project BML; corpus-scope fallback for BlockDoc |
 | `outDir` | `"scad"` | Root directory for target output files |
+| `libraries` | `[]` | Paths to `Library.bml` catalog roots for library-scope compiles (BlockDoc, XSD). CLI `--libraries` overrides per run |
+| `targetOptions` | `{}` | Per-target opaque options; keys = registry names (e.g. `"blockdoc": { "siteMode": "merged" }`). Typed in each target package |
 | `thumbsDir` | `null` | Output directory for thumbnails. `null` = alongside output files in `outDir` |
 | `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library root (`node_modules/@machineblocks/core/`). `null` = resolved from bom executable location |
 | `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved |
@@ -470,6 +497,26 @@ Project-level configuration. Located at the project root.
 | `bmlExtensions` | `[".bml"]` | File suffixes scanned by `compile --all` / `validate --all` |
 | `xsdValidation` | `true` (when schemas exist) | When `false`, skip optional XSD schema validation of authoring. Ignored until XSD validation exists. See § XSD validation escape hatch |
 | `targets` | `["blockdoc"]` | **V1.** Registry names to bootstrap via `bootstrapTargets()`. CLI `<target>` still required per run. Missing field → default `["blockdoc"]`. See § Target list |
+
+Example BlockDoc project:
+
+```json
+{
+  "outDir": "doc",
+  "libraries": [
+    "node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml"
+  ],
+  "targets": ["blockdoc"],
+  "targetOptions": {
+    "blockdoc": {
+      "siteMode": "merged",
+      "outLayout": "fqn"
+    }
+  }
+}
+```
+
+Compile: `bom compile blockdoc` → static HTML under `doc/` (package/FQN hierarchy). See `14_compiler_runtime.md` — Compile Scope (C7).
 
 #### Target list (`targets[]`) — **V1 decided**
 

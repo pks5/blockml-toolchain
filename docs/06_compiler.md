@@ -187,9 +187,11 @@ Target Output File(s) + Source Map(s)
 Example — **BlockDoc Render Target** (toolchain; planned):
 
 ```text
-Urmodell (+ TypeRegistry for cross-links)
+CompileRequest (scope: library | corpus | auto)
+  + TypeRegistry (cross-links, exported blocks)
   → BlockDoc processors
   → static HTML tree (path ≡ package / FQN hierarchy)
+  → siteMode: merged (one site) | perLibrary (one site per Library root)
   → later: graphs, richer navigation
 ```
 
@@ -395,16 +397,26 @@ Browser / tests  → caller invokes registerTarget() directly
 @blockml/compiler → registerTarget() / getTarget() API only — no built-in targets
 ```
 
-Future: CLI reads `bom.config.json` → `targets[]` (TBD — not V1). See C3 in `14_compiler_runtime.md`.
+CLI reads `bom.config.json` → `targets[]` (V1). See C3 · C7 in `14_compiler_runtime.md`.
 
 ### Interfaces
 
+Stage-3 targets implement **`RenderTarget`** with scope acceptance (C7). SCAD targets additionally use `BlockProcessor` / `RenderEngine` (steps [9]–[19]).
+
 ```typescript
+/** Normative compile contract — see 14_compiler_runtime.md C2 · C7 */
 interface RenderTarget {
-  name:       string
-  engine?:    RenderEngine
+  name: string
+  accepts: Array<"document" | "library" | "corpus" | "auto">
+  validateRequest?(request: CompileRequest): Diagnostic[]
+  render(request: CompileRequest, ctx: RenderContext): RenderOutput
+}
+
+/** SCAD reference — also uses processors + engine */
+interface ScadRenderTarget extends RenderTarget {
+  engine?: RenderEngine
   processors: BlockProcessor[]
-  delegates:  RenderTarget[]
+  delegates: RenderTarget[]
 }
 
 interface BlockProcessor {
@@ -496,13 +508,26 @@ class MartianMicroAnyclosureTarget implements RenderTarget {
 
 ## Compiler Facade API
 
-`@blockml/compiler` exposes three public functions. See `14_compiler_runtime.md` — Compiler Facade API (C2) for full specification.
+`@blockml/compiler` exposes **`compileToOutput`** as the normative Stage-3 entry. See `14_compiler_runtime.md` — Compiler Facade API (C2) · Compile Scope (C7).
 
 ```typescript
 interface CompileInput {
   source:   string
   filePath: string
-  format?:  "xml"          // V1: xml only
+  format?:  "xml"
+}
+
+interface CompileScope {
+  kind: "document" | "library" | "corpus" | "auto"
+  document?: CompileInput
+  libraries?: string[]
+  roots?: string[]
+  includeDependencies?: boolean
+}
+
+interface CompileRequest {
+  scope: CompileScope
+  targetOptions?: unknown
 }
 
 interface CompileOptions {
@@ -514,7 +539,9 @@ interface CompileOptions {
 
 compileBmlToBom(input: CompileInput, options?: CompileOptions): CompilerResult<BomDocument>
 compileBomToOutput(model: BomDocument, targetName: string, options?: CompileOptions): CompilerResult<RenderOutput>
+compileToOutput(request: CompileRequest, targetName: string, options?: CompileOptions): CompilerResult<RenderOutput>
 compileBmlToOutput(input: CompileInput, targetName: string, options?: CompileOptions): CompilerResult<RenderOutput>
+// ↑ sugar for compileToOutput({ scope: { kind: "document", document: input } }, …)
 ```
 
 ### CompilerResult
@@ -552,14 +579,19 @@ For preset blocks in the MachineBlocks SCAD target, `files[]` includes the impli
 ### Browser Usage
 
 ```typescript
-import { compileBmlToOutput, registerTarget } from "@blockml/compiler";
+import { compileToOutput, registerTarget } from "@blockml/compiler";
 import { MakerEngine } from "@blockml/engine-maker";
 import { MachineBlocksV3ScadTarget } from "@machineblocks/machineblocks-v3-scad-target";
 
 registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
 
-const result = compileBmlToOutput(
-  { source: xmlSource, filePath: "Wall.bml" },
+const result = compileToOutput(
+  {
+    scope: {
+      kind: "document",
+      document: { source: xmlSource, filePath: "Wall.bml" },
+    },
+  },
   "machineblocks-v3-scad",
   { typeRegistry: preloadedRegistry }
 );

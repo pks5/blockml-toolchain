@@ -1,6 +1,6 @@
 # Compiler Runtime
 
-version: 0.7.0
+version: 0.8.0
 
 ## Purpose of this Document
 
@@ -18,12 +18,13 @@ For pipeline stages see `06_compiler.md`.
 | Topic | Decision |
 |---|---|
 | **Compile I/O (C4)** | **BlockML:** no mandatory input↔output mapping; targets define cardinality (0..n files, side effects). **MachineBlocks convention:** 1 BML → 1 primary SCAD (+ side artifacts) |
+| **Compile scope (C7)** | **Decided:** unified `compileToOutput(CompileRequest, …)`; scope kinds `document` \| `library` \| `corpus` \| `auto`; targets declare `accepts[]`; `targetOptions` opaque at compiler, typed per target |
 | **NativeBlock = mb_block** | **MachineBlocks convention:** `com.machineblocks.bml.core.NativeBlock` maps to SCAD `mb_block()` — not a global BlockML rule; other targets need not emit blocks |
 | **Composition leaves** | **MachineBlocks convention:** leaf geometry → `mb_block()` — authored as `<core:NativeBlock>` or lowered from domain instances |
 | **Sub-Blocks** | Same-document Sub-Blocks → sub-modules embedded in the parent output SCAD file |
 | **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.bml` is compiled |
 | **JSON BML authoring** | **Not planned** — not equivalent to XML; not V1/V2; may never ship (`02_mbml.md`) |
-| **Facade API (C2)** | `CompileInput` + `CompileOptions`; explicit `TypeRegistry`; CLI writes files |
+| **Facade API (C2)** | **`compileToOutput(CompileRequest, targetName, CompileOptions)`** — single Stage-3 entry; `compileBmlToOutput` = document-scope sugar; explicit `TypeRegistry`; CLI writes files |
 | **Target bootstrap (C3)** | V1: `bom.config.json` → `targets[]` (default `["blockdoc"]`); CLI `<target>` still required per run |
 | **RenderContext (C1)** | `RenderSession` (immutable) + forked `RenderContext` per render node; `PropertyResolver` on-demand; internal API |
 | **Thumbnails (C6)** | CLI-only (OpenSCAD + Sharp); not in `RenderOutput`; compiler produces `.scad` + `.json` prerequisites |
@@ -134,8 +135,8 @@ Multi-input → one output     — a processor may consume multiple BomDocuments
 One input → arbitrary output — a single BML file may emit files, API calls, or nothing
 Zero file output is valid    — success with empty files[] and/or side effects only
 RenderOutput is opaque       — shape defined per target, not by @blockml/compiler
-Facade is input-oriented     — compileBmlToOutput(input) passes one BomDocument; targets
-                               may pull additional inputs from TypeRegistry internally
+Facade envelope only         — CompileRequest.scope kind + roots; target interprets payload
+                               (document vs library vs corpus — see Compile Scope C7)
 ```
 
 The compiler **does not** assume every compile produces files on disk. A target may:
@@ -151,18 +152,21 @@ Return success with no output  →  validate-and-register, dry-run deploy, analy
 
 ```text
 @blockml/compiler (generic)
-  compileBmlToBom(input)           → BomDocument        (1 input → 1 BOM)
-  compileBomToOutput(model, target)  → RenderOutput       (target decides cardinality)
+  compileBmlToBom(input)              → BomDocument        (Stage 1+2; always document-scoped)
+  compileBomToOutput(model, target)   → RenderOutput       (Stage 3 from one BOM — advanced)
+  compileToOutput(request, target)    → RenderOutput       (Stage 1+2+3; normative entry)
 
-RenderTarget / BlockProcessor (domain-specific)
-  process(block, engine)             → RenderOutput       (per block or batch — target policy)
-  may merge multiple blocks          → one combined output
+RenderTarget (domain-specific)
+  accepts: scope kinds the target understands
+  render(request, ctx)               → RenderOutput       (target decides cardinality)
+  may merge N BomDocuments           → one site / bundle / schema set
   may emit zero files                → side effects only
 
 @blockml/cli (orchestration — not a BlockML rule)
-  typically: one file per compileBmlToOutput call
+  builds CompileRequest from config + CLI flags + target.accepts
+  document targets: loop srcDir files (--all) or single <file>
+  library/corpus targets: one compileToOutput per run (no --all file loop)
   writes files[] when present; runs post-steps (thumbnails, cache)
-  side effects: CLI may invoke Node-only follow-ups; browser hosts handle RenderOutput themselves
 ```
 
 ### RenderOutput variants (examples)
@@ -204,15 +208,9 @@ interface BundleRenderOutput {
 | N BML → 1 output | Allowed | Set/library processor bundles blocks into one file |
 | N BML → M outputs | Allowed | Target-defined batch policy |
 
-The Facade V1 API takes **one `CompileInput`** per call. Multi-input aggregation is a **target/orchestrator concern**:
+Stage 3 input is **`CompileRequest`** — a thin envelope (see **Compile Scope (C7)**). The platform does **not** mandate one BML file per compile. Targets declare which scope kinds they accept; the CLI builds the matching request.
 
-```text
-Option A — target reads TypeRegistry, pulls related BomDocuments during render
-Option B — orchestrator calls compileBmlToBom N times, passes merged model to compileBomToOutput
-Option C — future CompileBatchInput { inputs: CompileInput[] } on Facade (extension point)
-```
-
-V1 does not require Option C — targets may aggregate via TypeRegistry (Option A).
+**Deprecated pattern (do not use in new text):** implicit multi-input via “pass one file, target pulls the rest from TypeRegistry only”. Library/corpus targets receive an explicit scope.
 
 ### MachineBlocks convention (not a BlockML rule)
 
@@ -291,57 +289,92 @@ Block-to-block `use` imports apply to **Set `_blocks` dispatch** (block configur
 
 ## Compiler Facade API (C2)
 
-`@blockml/compiler` exposes three public functions. Input is structured — not a bare `string`.
+`@blockml/compiler` exposes **`compileToOutput`** as the single normative Stage-3 entry. Stage 1–2 helpers remain document-scoped.
+
+The platform defines a **minimal request envelope** only. Targets own input semantics and output cardinality — the compiler does not prescribe “one `.bml` file in, one artifact out” globally.
 
 ### Types
 
 ```typescript
+/** Document payload — used inside CompileScope and by compileBmlToBom */
 interface CompileInput {
-  /** Raw BML source text */
   source: string
-  /** Project-relative or absolute path — used in SourceInfo and Diagnostic.source.file */
   filePath: string
-  /** V1: always "xml". Default: inferred from filePath extension or first non-whitespace char */
   format?: "xml"
 }
 
+type CompileScopeKind = "document" | "library" | "corpus" | "auto"
+
+interface CompileScope {
+  kind: CompileScopeKind
+
+  /** document scope — one .bml file */
+  document?: CompileInput
+
+  /** library scope — paths to Library.bml catalog roots */
+  libraries?: string[]
+
+  /** corpus scope — directory roots (srcDir scan, blocks/ trees) */
+  roots?: string[]
+
+  /** resolve transitive dependencies / subLibraries (default true for library/corpus) */
+  includeDependencies?: boolean
+}
+
+interface CompileRequest {
+  scope: CompileScope
+  /** Opaque for @blockml/compiler; typed in each target package (e.g. BlockDocOptions) */
+  targetOptions?: unknown
+}
+
 interface CompileOptions {
-  /** Pre-bootstrapped registry (CLI scans srcDir + libraries before compile). Required for validate/compile with cross-file refs. */
   typeRegistry?: TypeRegistry
-  /** Active config profile name — from bom.config.json activeConfig */
   activeConfig?: string
-  /** Output root (outDir) — used by render targets for relative output paths and SCAD import resolution */
   outputBasePath?: string
-  /** MachineBlocks SCAD library root — mbLibPath; required for SCAD target import paths */
   mbLibPath?: string
 }
 
 interface CompilerResult<T> {
-  output:      T | null
+  output: T | null
   diagnostics: Diagnostic[]
-  success:     boolean
+  success: boolean
+}
+
+interface RenderTarget {
+  name: string
+  /** Scope kinds this target accepts — CLI validates before compile */
+  accepts: CompileScopeKind[]
+  validateRequest?(request: CompileRequest): Diagnostic[]
+  render(request: CompileRequest, ctx: RenderContext): RenderOutput
 }
 ```
 
-`CompileOptions` is **session-level** (one compile invocation). Per-block render state is `RenderContext` (C1) — see RenderContext (C1) below.
+`CompileOptions` is **session-level** (one compile invocation). Per-block render state is `RenderContext` (C1).
 
 ### Functions
 
 ```typescript
-/** Stage 1 + Stage 2: parse + validate. No target required. Returns Urmodell (+ diagnostics). */
+/** Stage 1 + Stage 2: parse + validate. Always document-scoped. */
 compileBmlToBom(
   input: CompileInput,
   options?: CompileOptions
 ): CompilerResult<BomDocument>
 
-/** Stage 3: render. Target must be registered. SCAD reference uses renderer steps [9]–[19]. */
+/** Stage 3 from an existing BOM — advanced / tests. */
 compileBomToOutput(
   model: BomDocument,
   targetName: string,
   options?: CompileOptions
 ): CompilerResult<RenderOutput>
 
-/** Full pipeline: Stage 1 → Stage 2 → Stage 3. See 06_compiler.md — Stage numbering glossary. */
+/** Normative full pipeline: Stage 1 → 2 → 3. Scope interpreted by target. */
+compileToOutput(
+  request: CompileRequest,
+  targetName: string,
+  options?: CompileOptions
+): CompilerResult<RenderOutput>
+
+/** Sugar — equivalent to compileToOutput({ scope: { kind: "document", document: input } }, …) */
 compileBmlToOutput(
   input: CompileInput,
   targetName: string,
@@ -352,40 +385,58 @@ compileBmlToOutput(
 ### Design rules
 
 ```text
-TypeRegistry     — explicit in CompileOptions, not a hidden global singleton
-                   CLI bootstraps registry (B5) and passes it on every call
+TypeRegistry        — explicit in CompileOptions; bootstrap is separate from compile scope
+                      (registry = “what types exist”; scope = “what to render now”)
 
-File output      — Facade returns RenderOutput.files[] with relative paths + content
-                   CLI writes to disk; browser uses content in-memory
+Scope validation    — if request.scope.kind ∉ target.accepts (after auto resolution) →
+                      BML_TARGET_SCOPE_MISMATCH
 
-validate         — compileBmlToBom only; no targetName; typeRegistry required when
-                   the file has external references
+File output         — RenderOutput.files[] with relative paths + content;
+                      CLI writes to disk; browser uses content in-memory
 
-Diagnostics      — always reference input.filePath + line/column from parse
+Stage 1–2           — always per-document (parse / validate one BomDocument)
+
+Diagnostics         — reference paths from scope (document.filePath or library/roots)
 ```
 
-### CLI example
+### CLI example — document target (SCAD)
 
 ```typescript
-const registry = bootstrapTypeRegistry({ srcDir, mbLibPath, bmlExtensions });
+const registry = bootstrapTypeRegistry({ srcDir, libraries, mbLibPath, bmlExtensions });
 
-const input: CompileInput = {
-  source: fs.readFileSync("src/com/.../Calibrator.bml", "utf8"),
-  filePath: "src/com/.../Calibrator.bml",
-};
-
-const result = compileBmlToOutput(input, "machineblocks-v3-scad", {
-  typeRegistry: registry,
-  outputBasePath: config.outDir,
-  mbLibPath: resolveMbLibPath(config),
-  activeConfig: config.activeConfig,
-});
-
-if (result.success) {
-  for (const file of (result.output as ScadRenderOutput).files) {
-    fs.writeFileSync(path.join(config.outDir, file.path), file.content);
+const result = compileToOutput(
+  {
+    scope: {
+      kind: "document",
+      document: {
+        source: fs.readFileSync("src/com/.../Calibrator.bml", "utf8"),
+        filePath: "src/com/.../Calibrator.bml",
+      },
+    },
+  },
+  "machineblocks-v3-scad",
+  {
+    typeRegistry: registry,
+    outputBasePath: config.outDir,
+    mbLibPath: resolveMbLibPath(config),
+    activeConfig: config.activeConfig,
   }
-}
+);
+```
+
+### CLI example — library/corpus target (BlockDoc)
+
+```typescript
+const registry = bootstrapTypeRegistry({ srcDir, libraries, mbLibPath, bmlExtensions });
+
+const result = compileToOutput(
+  {
+    scope: { kind: "auto", libraries: config.libraries, roots: [config.srcDir] },
+    targetOptions: config.targetOptions?.blockdoc,
+  },
+  "blockdoc",
+  { typeRegistry: registry, outputBasePath: config.outDir ?? "doc" }
+);
 ```
 
 ### Browser example
@@ -393,12 +444,110 @@ if (result.success) {
 ```typescript
 registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
 
-const result = compileBmlToOutput(
-  { source: xmlSource, filePath: "Wall.bml" },
+const result = compileToOutput(
+  {
+    scope: {
+      kind: "document",
+      document: { source: xmlSource, filePath: "Wall.bml" },
+    },
+  },
   "machineblocks-v3-scad",
   { typeRegistry: preloadedRegistry }
 );
 ```
+
+---
+
+## Compile Scope (C7)
+
+Compile scope separates **what to render** from **what types exist** (TypeRegistry). Parser and serializer remain strictly **document-scoped** (one file ↔ one `BomDocument`). Stage 3 uses scope kinds:
+
+| Kind | Meaning | Typical targets |
+|---|---|---|
+| `document` | One `.bml` file | `machineblocks-v3-scad`, `fatblock` (root + closure) |
+| `library` | One or more `Library.bml` roots + dependency closure | `blockdoc`, `xsd` |
+| `corpus` | Directory roots (`srcDir`, `blocks/` trees) | `blockdoc` (fallback) |
+| `auto` | Resolve from request fields, then config (see below) | CLI default |
+
+### Scope resolution (`kind: "auto"`)
+
+```text
+1. request.scope.libraries present?     → library scope (resolve Library graph:
+                                             dependencies, subLibraries, blocks[])
+2. else request.scope.roots present?      → corpus scope (scan *.bml under roots)
+3. else bom.config.json libraries[]       → library scope
+4. else bom.config.json srcDir            → corpus scope
+5. else                                   → BML_COMPILE_SCOPE_EMPTY
+```
+
+**Library-first, directory fallback** — both are first-class. Without a `Library.bml`, all `.bml` files under a root are discovered and registered (existing B5 fallback).
+
+### Target `accepts` matrix (V1)
+
+| Target | `accepts` | Primary scope payload |
+|---|---|---|
+| `blockdoc` | `library`, `corpus`, `auto` | `libraries[]` and/or `roots[]` |
+| `xsd` | `library`, `auto` | Definition / domain `Library.bml` roots |
+| `fatblock` | `document` | `document` (+ TypeRegistry closure internally) |
+| `machineblocks-v3-scad` | `document` | `document` |
+
+CLI behaviour:
+
+```text
+document target + <file>     →  compileToOutput({ scope: { kind: "document", document } })
+document target + --all      →  loop srcDir; one compileToOutput per file
+library/corpus target        →  compileToOutput({ scope: buildFromConfig() }) once
+                               (--all is invalid / ignored for library/corpus targets)
+```
+
+### BlockDoc `targetOptions` (typed in `@blockml/blockdoc-target`)
+
+```typescript
+interface BlockDocOptions {
+  /** default: "merged" — one site for all libraries in scope */
+  siteMode?: "merged" | "perLibrary"
+  /** URL path layout under outDir — default: "fqn" */
+  outLayout?: "fqn" | "package"
+  /** when false, only Library.blocks exports; when true, all .bml under roots */
+  includeNonExported?: boolean
+}
+```
+
+Example `bom.config.json`:
+
+```json
+{
+  "outDir": "doc",
+  "libraries": [
+    "node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml"
+  ],
+  "targetOptions": {
+    "blockdoc": { "siteMode": "perLibrary" }
+  }
+}
+```
+
+### BlockDoc output (V1 minimal)
+
+```text
+outDir/
+  index.html                              — package overview (merged mode)
+  org/blockml/bml/core/Block.html         — FQN layout (default outLayout)
+  com/machineblocks/bml/bricks/Standard.html
+
+perLibrary mode:
+  outDir/org/blockml/bml/index.html
+  outDir/com/machineblocks/bml/index.html
+  … pages under each library package prefix
+```
+
+### Scope diagnostics
+
+| Code | When |
+|---|---|
+| `BML_TARGET_SCOPE_MISMATCH` | Resolved scope kind not in `target.accepts` |
+| `BML_COMPILE_SCOPE_EMPTY` | `auto` resolution found no libraries or roots |
+| `BML_LIBRARY_RESOLVE_ERROR` | `Library.bml` path missing or invalid graph |
 
 ---
 
@@ -435,18 +584,21 @@ export function bootstrapTargets(config: { targets?: string[] }): void {
 | `fatblock` | `@blockml/fatblock-target` | After / beside XSD |
 | `machineblocks-v3-scad` | `@machineblocks/machineblocks-v3-scad-target` | Primary **product** target — after toolchain control |
 
-Commands that require a target call `bootstrapTargets()` before `compileBmlToOutput()`:
+Commands that require a target call `bootstrapTargets()` before `compileToOutput()`:
 
 ```text
-bom compile <file> <target>
-bom compile --all <target>
-bom watch <target>
+bom compile <file> <target>          — document targets only
+bom compile <target>                 — library/corpus targets (blockdoc, xsd)
+bom compile --all <target>           — document targets only (loop srcDir)
+bom watch <target>                   — target-dependent (see 07_cli.md)
 ```
 
 Typical V1 control compile:
 
 ```bash
-bom compile --all blockdoc
+bom compile blockdoc
+# optional explicit library roots:
+bom compile blockdoc --libraries node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml
 ```
 
 Commands that do **not** call `bootstrapTargets()`:
@@ -478,13 +630,20 @@ bom inspect    — Urmodell dump only; no target required
 
 ```text
 1. load bom.config.json
-2. bootstrapTypeRegistry({ srcDir, mbLibPath, bmlExtensions })   — B5; validate + compile
-3. bootstrapTargets()                                             — C3; compile + watch only
-4. compileBmlToOutput(input, targetName, compileOptions)
-5. write RenderOutput.files[] to disk                           — CLI only
+2. bootstrapTypeRegistry({ srcDir, libraries, mbLibPath, bmlExtensions })   — B5
+3. bootstrapTargets()                                                          — C3
+4. build CompileRequest from CLI flags + target.accepts + config
+5. compileToOutput(request, targetName, compileOptions)
+6. write RenderOutput.files[] to disk                                        — CLI only
 ```
 
-`bootstrapTypeRegistry` and `bootstrapTargets` are **separate concerns** — do not merge them. TypeRegistry answers “what types exist?”; Target Registry answers “how do we render?”.
+`bootstrapTypeRegistry`, compile **scope**, and `bootstrapTargets` are **three separate concerns**:
+
+```text
+TypeRegistry   — “what types exist?” (cross-file resolution)
+CompileScope   — “what do we render in this invocation?”
+Target Registry — “how do we render?”
+```
 
 ### Browser / tests
 
@@ -492,7 +651,7 @@ Hosts that call `@blockml/compiler` directly (browser playground, unit tests) ca
 
 ```typescript
 registerTarget(new MachineBlocksV3ScadTarget(new MakerEngine()));
-compileBmlToOutput(input, "machineblocks-v3-scad", { typeRegistry });
+compileToOutput(request, "machineblocks-v3-scad", { typeRegistry });
 ```
 
 ### Unknown target
@@ -701,7 +860,16 @@ No thumbnail step. `RenderOutput` contains **text artifacts only** (`.scad`, `.m
 ### CLI — after compile success
 
 ```typescript
-const result = compileBmlToOutput(input, "machineblocks-v3-scad", options);
+const result = compileToOutput(
+  {
+    scope: {
+      kind: "document",
+      document: input,
+    },
+  },
+  "machineblocks-v3-scad",
+  options
+);
 
 if (result.success && session.isPresetBlock) {
   writeRenderOutputFiles(result.output, config.outDir);
@@ -736,7 +904,7 @@ Trigger:     bom compile <StandardPresets.bml> machineblocks-v3-scad
              bom watch (same rules on file change)
 Not triggered: bom compile <block.bml>  — no thumbnails
                bom validate / bom inspect
-               Browser compileBmlToOutput — no OpenSCAD available
+               Browser compileToOutput — no OpenSCAD available
 No separate bom thumbnail command
 ```
 
@@ -910,7 +1078,7 @@ Mirror `outDir` / `thumbsDir` structure. Add `.bom-cache/` to `.gitignore`.
 
 ```text
 bom validate / bom inspect     — no output artifacts
-Browser compileBmlToOutput     — no .bom-cache
+Browser compileToOutput          — no .bom-cache
 Single-file bom compile <file> — same hash logic applies (not only --all)
 ```
 
@@ -921,11 +1089,12 @@ Single-file bom compile <file> — same hash logic applies (not only --all)
 | ID | Topic | Status |
 |---|---|---|
 | C1 | `RenderContext` — `RenderSession` + forked per-node context | **Decided** |
-| C2 | Facade API — `CompileInput` + `CompileOptions` | **Decided** |
+| C2 | Facade API — `compileToOutput(CompileRequest, …)`; `compileBmlToOutput` = document sugar | **Decided** |
 | C3 | Target bootstrap — `targets[]` in V1; default / first control target `blockdoc` | **Decided** |
-| C4 | Compile scope + NativeBlock model | **Decided** |
+| C4 | Compile I/O — no fixed input↔output mapping; MachineBlocks SCAD 1:1 convention | **Decided** |
 | C5 | Incremental build — SHA-256, CLI cache, output-path keys | **Decided** |
 | C6 | Thumbnails — CLI-only; not in RenderOutput | **Decided** |
+| C7 | Compile scope — `document` \| `library` \| `corpus` \| `auto`; target `accepts[]`; `targetOptions` | **Decided** |
 
 Phase C complete.
 
