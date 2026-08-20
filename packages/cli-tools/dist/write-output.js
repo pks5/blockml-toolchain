@@ -10,5 +10,10 @@ export function writeOutputFiles(output, outDir, rootDir = process.cwd(), option
         mkdirSync(dirname(targetPath), { recursive: true });
         writeFileSync(targetPath, file.content, "utf8");
     }
+    for (const file of options.rootFiles ?? []) {
+        const targetPath = join(resolve(rootDir), file.path);
+        mkdirSync(dirname(targetPath), { recursive: true });
+        writeFileSync(targetPath, file.content, "utf8");
+    }
 }
 //# sourceMappingURL=write-output.js.map

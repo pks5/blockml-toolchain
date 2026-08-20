@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <uri
-        name="https://blockml.org/schemas/bml.xsd"
-        uri="schemas/bml.xsd"/>
+  <uri
+    name="http://blockml.org/bml"
+    uri="./schemas/bml.xsd"/>
+  <uri
+    name="http://blockml.org/schema/types"
+    uri="./schemas/types.xsd"/>
+  <uri
+    name="http://blockml.org/schema/service"
+    uri="./schemas/service.xsd"/>
 </catalog>

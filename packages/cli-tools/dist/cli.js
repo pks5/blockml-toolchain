@@ -164,8 +164,18 @@ function runCompile(parsed, rootDir, lines) {
     if (!result.success || !result.output) {
         return 1;
     }
-    writeOutputFiles(result.output, outDir, rootDir, { cleanOutDir: true });
-    lines.push(`Wrote ${result.output.files.length} file(s) to ${outDir}/`);
+    const writeOpts = { cleanOutDir: true };
+    if (target === "xsd") {
+        const xsdRootFiles = result.output.rootFiles;
+        if (xsdRootFiles) {
+            writeOpts.rootFiles = xsdRootFiles;
+        }
+    }
+    writeOutputFiles(result.output, outDir, rootDir, writeOpts);
+    const rootNote = writeOpts.rootFiles && writeOpts.rootFiles.length > 0
+        ? ` and ${writeOpts.rootFiles.map((f) => f.path).join(", ")}`
+        : "";
+    lines.push(`Wrote ${result.output.files.length} file(s) to ${outDir}/${rootNote}`);
     return 0;
 }
 export function runCli(argv, cwd = process.cwd()) {

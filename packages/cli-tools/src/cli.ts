@@ -10,7 +10,8 @@ import {
 import { bootstrapTargets } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
 import { loadConfig, type BomConfig } from "./load-config.js";
-import { writeOutputFiles } from "./write-output.js";
+import { writeOutputFiles, type WriteOutputOptions } from "./write-output.js";
+import type { XsdRenderOutput } from "@blockml/xsd-target";
 
 const USAGE =
   "Usage: blockml compile <blockdoc|xsd> [--out dir] [--src dir] [--libraries a,b]\n" +
@@ -232,8 +233,21 @@ function runCompile(parsed: ParsedArgs, rootDir: string, lines: string[]): numbe
     return 1;
   }
 
-  writeOutputFiles(result.output, outDir, rootDir, { cleanOutDir: true });
-  lines.push(`Wrote ${result.output.files.length} file(s) to ${outDir}/`);
+  const writeOpts: WriteOutputOptions = { cleanOutDir: true };
+  if (target === "xsd") {
+    const xsdRootFiles = (result.output as XsdRenderOutput).rootFiles;
+    if (xsdRootFiles) {
+      writeOpts.rootFiles = xsdRootFiles;
+    }
+  }
+
+  writeOutputFiles(result.output, outDir, rootDir, writeOpts);
+
+  const rootNote =
+    writeOpts.rootFiles && writeOpts.rootFiles.length > 0
+      ? ` and ${writeOpts.rootFiles.map((f) => f.path).join(", ")}`
+      : "";
+  lines.push(`Wrote ${result.output.files.length} file(s) to ${outDir}/${rootNote}`);
   return 0;
 }
 

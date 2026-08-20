@@ -1,0 +1,1 @@
+{"version":3,"file":"emit-catalog-xml.d.ts","sourceRoot":"","sources":["../src/emit-catalog-xml.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,YAAY;IAC3B,YAAY,EAAE,MAAM,CAAC;IACrB,YAAY,EAAE,MAAM,CAAC;CACtB;AAED,wBAAgB,mBAAmB,CAAC,MAAM,EAAE,MAAM,EAAE,cAAc,EAAE,MAAM,GAAG,MAAM,CAGlF;AAED,wBAAgB,cAAc,CAAC,OAAO,EAAE,YAAY,EAAE,GAAG,MAAM,CAa9D"}

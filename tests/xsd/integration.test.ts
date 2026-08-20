@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { existsSync } from "node:fs";
 import { describe, expect, it, beforeEach } from "vitest";
 import { compileToOutput, clearTargets, registerTarget } from "@blockml/compiler";
-import { XsdTarget } from "@blockml/xsd-target";
+import { XsdTarget, BML_DOCUMENT_NS } from "@blockml/xsd-target";
 import { bootstrapTypeRegistry } from "@blockml/framework";
 
 const ROOT = join(import.meta.dirname, "..", "..");
@@ -17,7 +17,7 @@ describe("xsd integration", () => {
     registerTarget(new XsdTarget());
   });
 
-  it("generates bml.xsd from the core library", () => {
+  it("generates bml, types, service schemas and catalog from the core library", () => {
     if (!existsSync(CORE_LIBRARY)) {
       throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
     }
@@ -40,10 +40,25 @@ describe("xsd integration", () => {
 
     expect(result.success, JSON.stringify(result.diagnostics)).toBe(true);
     expect(result.output).not.toBeNull();
-    const schema = result.output!.files.find((f) => f.path === "bml.xsd");
-    expect(schema).toBeDefined();
-    expect(schema!.content).toContain("<xs:schema");
-    expect(schema!.content).toContain('element name="block"');
-    expect(schema!.content).not.toContain("<xs:any ");
+
+    const bml = result.output!.files.find((f) => f.path === "bml.xsd");
+    expect(bml).toBeDefined();
+    expect(bml!.content).toContain("<xs:schema");
+    expect(bml!.content).toContain('element name="block"');
+    expect(bml!.content).not.toContain("<xs:any ");
+
+    const types = result.output!.files.find((f) => f.path === "types.xsd");
+    expect(types).toBeDefined();
+    expect(types!.content).toContain('<xs:element name="Boolean"');
+
+    const service = result.output!.files.find((f) => f.path === "service.xsd");
+    expect(service).toBeDefined();
+    expect(service!.content).toContain('<xs:element name="Math"');
+
+    const catalog = (result.output as { rootFiles?: { path: string; content: string }[] })
+      .rootFiles?.find((f) => f.path === "catalog.xml");
+    expect(catalog).toBeDefined();
+    expect(catalog!.content).toContain(`name="${BML_DOCUMENT_NS}"`);
+    expect(catalog!.content).toContain('uri="./schemas/bml.xsd"');
   });
 });

@@ -4,6 +4,10 @@ export interface XsdRenderOutput extends RenderOutput {
         path: string;
         content: string;
     }[];
+    rootFiles?: {
+        path: string;
+        content: string;
+    }[];
 }
 export declare class XsdTarget implements RenderTarget {
     readonly name = "xsd";

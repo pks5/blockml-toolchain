@@ -17,10 +17,14 @@
     Generates XSD artifacts from BML / Definition meta-model — not a Stage-1 parser
     dependency (B8 / D5). V1 emits bml.xsd for all block roots: identity and
     container particles from D1 defaults and authored bml:xml / xmlRendering.
+    Also emits types.xsd and service.xsd (org.blockml.bml.type.* /
+    org.blockml.bml.service.* vocabulary) and writes catalog.xml at the project
+    root mapping namespace URIs to ./schemas/*.xsd for IDE offline resolution.
     Unknown child elements of block are invalid (no xs:any wildcard). Attributes
     stay lax via xs:anyAttribute so xmlns / xsi:schemaLocation remain legal.
     Target namespace http://blockml.org/bml.
     Compile: blockml compile xsd (library/corpus/auto). Default outDir schemas/.
+    Domain schemas can be disabled via targetOptions.xsd.emitDomainSchemas: false.
     Validating authored BML against generated schemas is out of this package's
     generate path and must stay disableable (--no-xsd / xsdValidation).
   </documentation>

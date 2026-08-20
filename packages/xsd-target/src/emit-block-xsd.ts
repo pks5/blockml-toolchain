@@ -1,7 +1,6 @@
 import type { BlockDefinition, MemberDefinition, XmlRenderingMember } from "@blockml/bom";
 import type { TypeRegistry } from "@blockml/framework";
-
-const TARGET_NS = "http://blockml.org/bml";
+import { BML_DOCUMENT_NS } from "./constants.js";
 
 /** D1 definition-document identity / prose particles. */
 const D1_IDENTITY_ELEMENTS = [
@@ -118,8 +117,8 @@ export function emitBlockXsd(registry: TypeRegistry): string {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  targetNamespace="${TARGET_NS}"
-  xmlns="${TARGET_NS}"
+  targetNamespace="${BML_DOCUMENT_NS}"
+  xmlns="${BML_DOCUMENT_NS}"
   elementFormDefault="qualified"
   attributeFormDefault="unqualified">
 

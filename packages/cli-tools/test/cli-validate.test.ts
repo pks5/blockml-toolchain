@@ -1,7 +1,8 @@
-import { existsSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it, afterEach, beforeEach } from "vitest";
 import { clearTargets } from "@blockml/compiler";
+import { BML_DOCUMENT_NS } from "@blockml/xsd-target";
 import { parseArgs, runCli } from "../src/cli.js";
 import { resetBootstrapTargets } from "../src/bootstrap-targets.js";
 
@@ -88,15 +89,17 @@ describe("runCli validate", () => {
 });
 
 describe("runCli other commands", () => {
-  const tmpOut = join(import.meta.dirname, ".tmp-xsd-out");
+  const tmpProject = join(import.meta.dirname, ".tmp-xsd-project");
+  const tmpOut = "schemas-out";
 
   beforeEach(() => {
     clearTargets();
     resetBootstrapTargets();
+    mkdirSync(tmpProject, { recursive: true });
   });
 
   afterEach(() => {
-    rmSync(tmpOut, { recursive: true, force: true });
+    rmSync(tmpProject, { recursive: true, force: true });
     clearTargets();
     resetBootstrapTargets();
   });
@@ -113,20 +116,28 @@ describe("runCli other commands", () => {
     expect(stderr).toMatch(/Unsupported target in minimal CLI: fatblock/);
   });
 
-  it("compiles xsd without writing into doc/", () => {
+  it("compiles xsd schemas and root catalog", () => {
     if (!existsSync(CORE_LIBRARY)) {
       throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
     }
 
     const { code, stderr } = runCli(
       ["compile", "xsd", "--out", tmpOut, "--libraries", CORE_LIBRARY],
-      ROOT,
+      tmpProject,
     );
 
     expect(code, stderr).toBe(0);
-    expect(stderr).toMatch(/Wrote \d+ file\(s\)/);
-    const schemaPath = join(tmpOut, "bml.xsd");
-    expect(existsSync(schemaPath)).toBe(true);
-    expect(readFileSync(schemaPath, "utf8")).toContain("<xs:schema");
+    expect(stderr).toMatch(/Wrote 3 file\(s\)/);
+    expect(stderr).toMatch(/catalog\.xml/);
+
+    expect(existsSync(join(tmpProject, tmpOut, "bml.xsd"))).toBe(true);
+    expect(existsSync(join(tmpProject, tmpOut, "types.xsd"))).toBe(true);
+    expect(existsSync(join(tmpProject, tmpOut, "service.xsd"))).toBe(true);
+
+    const catalogPath = join(tmpProject, "catalog.xml");
+    expect(existsSync(catalogPath)).toBe(true);
+    const catalog = readFileSync(catalogPath, "utf8");
+    expect(catalog).toContain(`name="${BML_DOCUMENT_NS}"`);
+    expect(catalog).toContain(`uri="./${tmpOut}/bml.xsd"`);
   });
 });
