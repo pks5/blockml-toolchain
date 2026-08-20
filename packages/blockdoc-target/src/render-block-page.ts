@@ -15,16 +15,46 @@ import { renderTypeRef } from "./type-links.js";
 const PAGE_CSS = `
 body { font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; max-width: 960px; }
 nav.breadcrumb { color: #555; margin-bottom: 1.5rem; font-size: 0.9rem; }
-h1 { margin-bottom: 0.25rem; }
-.meta { color: #444; margin-bottom: 1.5rem; }
-.meta dt { font-weight: 600; display: inline; }
-.meta dd { display: inline; margin: 0 1rem 0 0.25rem; }
+.package-fqn { color: #666; font-size: 0.85rem; margin: 0 0 0.25rem; }
+.extends { color: #666; font-size: 0.85rem; margin: 0.25rem 0 0.75rem; }
+.version { color: #666; font-size: 0.85rem; margin: 0 0 0.75rem; }
+h1 { margin: 0 0 0.25rem; }
+h2.designation { font-size: 1.15rem; font-weight: 500; color: #333; margin: 0 0 1.5rem; }
 section { margin-top: 1.5rem; }
 table { border-collapse: collapse; width: 100%; }
 th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; }
 th { background: #f5f5f5; }
 a { color: #0366d6; }
 `.trim();
+
+function renderBlockHeader(
+  block: BlockDefinition,
+  pagePath: string,
+  options: Required<BlockDocOptions>,
+  knownFqns: Set<string>,
+): string {
+  const packageFqn = fqnToPackagePrefix(block.type);
+  const packageLine =
+    options.outLayout === "fqn"
+      ? `<p class="package-fqn"><a href="${relativePath(pagePath, packageIndexPath(packageFqn))}">${escapeHtml(packageFqn)}</a></p>`
+      : `<p class="package-fqn">${escapeHtml(packageFqn)}</p>`;
+
+  const extendsLine = block.baseType
+    ? `<p class="extends">extends ${renderTypeRef(block.baseType, pagePath, options, knownFqns)}</p>`
+    : "";
+
+  const versionLine = block.version
+    ? `<p class="version">${escapeHtml(block.version)}</p>`
+    : "";
+
+  const designationLine = block.is
+    ? `<h2 class="designation">${escapeHtml(block.is)}</h2>`
+    : "";
+
+  return `${packageLine}
+  <h1>${escapeHtml(block.name)}</h1>
+  ${extendsLine}${versionLine}${designationLine}`;
+}
 
 function renderMemberSections(
   block: BlockDefinition,
@@ -144,13 +174,7 @@ export function renderBlockPage(
 </head>
 <body>
   <nav class="breadcrumb">${renderNavigationBreadcrumb(block.type, rootFqn, pagePath, options, rootIndexPath)}</nav>
-  <h1>${escapeHtml(block.name)}</h1>
-  <dl class="meta">
-    <dt>FQN</dt><dd>${escapeHtml(block.type)}</dd>
-    ${block.baseType ? `<dt>baseType</dt><dd>${renderTypeRef(block.baseType, pagePath, options, knownFqns)}</dd>` : ""}
-    ${block.version ? `<dt>version</dt><dd>${escapeHtml(block.version)}</dd>` : ""}
-    <dt>is</dt><dd>${escapeHtml(block.is ?? "")}</dd>
-  </dl>
+  ${renderBlockHeader(block, pagePath, options, knownFqns)}
   ${proseSection("Documentation", block.documentations)}
   ${memberSections}
   ${compositionSections ? `<section><h2>Composition</h2>${compositionSections}</section>` : ""}

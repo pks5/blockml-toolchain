@@ -56,7 +56,7 @@ describe("blockdoc integration", () => {
       f.path.endsWith("org/blockml/bml/core/ValueType.html"),
     );
     expect(valueTypePage).toBeDefined();
-    expect(valueTypePage!.content).toContain('<dt>baseType</dt><dd><a href="');
+    expect(valueTypePage!.content).toContain('<p class="extends">extends <a href="');
     expect(valueTypePage!.content).toContain("org.blockml.bml.core.Block");
 
     const packageIndex = result.output!.files.find(

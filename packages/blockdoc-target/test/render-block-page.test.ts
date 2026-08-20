@@ -70,8 +70,12 @@ describe("renderBlockPage", () => {
       KNOWN,
       "com.example.Parent",
     );
-    expect(html).toContain('<dt>baseType</dt><dd><a href="');
+    expect(html).toContain('<p class="extends">extends <a href="');
     expect(html).toContain("com.example.RefType");
+    expect(html).toContain('<h2 class="designation">A parent block</h2>');
+    expect(html).not.toContain("<dt>FQN</dt>");
+    expect(html).not.toContain("<dt>baseType</dt>");
+    expect(html).not.toContain("<dt>is</dt>");
     expect(html).toMatch(/<h2>Properties<\/h2>/);
     expect(html).toMatch(/<td>title<\/td><td><a href="/);
     expect(html).not.toContain("<th>Kind</th>");
