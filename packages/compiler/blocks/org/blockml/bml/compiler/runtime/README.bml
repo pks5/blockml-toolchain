@@ -1,0 +1,21 @@
+<!--
+  BlockML Compiler Runtime — README
+  FQN: org.blockml.bml.compiler.runtime.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:runtime="org.blockml.bml.compiler.runtime">
+
+  <name>README</name>
+  <type>runtime:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the compiler runtime library</is>
+
+  <documentation>
+    @blockml/compiler exposes compileToOutput as the normative Stage-3 entry.
+    Targets register via registerTarget(); the compiler ships no default targets.
+    See docs/14_compiler_runtime.md for C2 Facade, C3 Target Bootstrap, C7 Compile Scope.
+  </documentation>
+
+</block>

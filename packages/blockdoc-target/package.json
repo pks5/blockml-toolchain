@@ -1,0 +1,30 @@
+{
+  "name": "@blockml/blockdoc-target",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/target/blockdoc/Library.bml"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "blocks"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run packages/blockdoc-target/test"
+  },
+  "dependencies": {
+    "@blockml/bom": "file:../bom",
+    "@blockml/compiler": "file:../compiler",
+    "@blockml/framework": "file:../framework",
+    "@blockml/parser": "file:../parser"
+  }
+}

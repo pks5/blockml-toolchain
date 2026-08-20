@@ -1,0 +1,45 @@
+<!--
+  BlockML Compiler Runtime Library
+  FQN: org.blockml.bml.compiler.runtime.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:runtime="org.blockml.bml.compiler.runtime">
+
+  <name>Library</name>
+  <type>runtime:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>The BlockML compiler runtime package library catalog</is>
+
+  <documentation>
+    Stage-3 compiler facade — compileToOutput, Target Registry, compile scope (C2, C3, C7).
+    TypeScript in packages/compiler/src/ implements this library.
+  </documentation>
+
+  <version>0.1.0</version>
+
+  <properties>
+    <description>
+      <value>BlockML Compiler runtime library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <runtime:README />
+      </composition>
+    </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+    </dependencies>
+  </aggregations>
+
+</block>

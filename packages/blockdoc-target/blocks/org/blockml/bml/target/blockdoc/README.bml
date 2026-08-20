@@ -1,0 +1,20 @@
+<!--
+  BlockDoc Render Target — README
+  FQN: org.blockml.bml.target.blockdoc.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc">
+
+  <name>README</name>
+  <type>blockdoc:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the BlockDoc render target</is>
+
+  <documentation>
+    @blockml/blockdoc-target implements RenderTarget name blockdoc.
+    Accepts library, corpus, and auto compile scope. Emits static HTML under outDir.
+  </documentation>
+
+</block>

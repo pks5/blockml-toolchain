@@ -1,0 +1,30 @@
+<!--
+  BlockDoc Render Target Library
+  FQN: org.blockml.bml.target.blockdoc.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc">
+
+  <name>Library</name>
+  <type>blockdoc:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>BlockDoc HTML render target library catalog</is>
+
+  <documentation>
+    V1 control gate — static HTML by package/FQN hierarchy. Registry name: blockdoc.
+    See docs/14_compiler_runtime.md BlockDoc targetOptions and output layout.
+  </documentation>
+
+  <version>0.1.0</version>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <blockdoc:README />
+      </composition>
+    </readMe>
+  </aggregations>
+
+</block>

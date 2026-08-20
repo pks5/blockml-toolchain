@@ -1,0 +1,39 @@
+export function fqnToHtmlPath(fqn: string, outLayout: "fqn" | "package"): string {
+  const segments = fqn.split(".");
+  if (outLayout === "package") {
+    const packageSegments =
+      segments.length > 1 ? segments.slice(0, -1) : segments;
+    return `${packageSegments.join("/")}/index.html`;
+  }
+  return `${segments.join("/")}.html`;
+}
+
+export function fqnToPackagePrefix(fqn: string): string {
+  const segments = fqn.split(".");
+  return segments.length > 1 ? segments.slice(0, -1).join(".") : fqn;
+}
+
+export function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+export function relativePath(from: string, to: string): string {
+  const fromParts = from.split("/").filter(Boolean);
+  const toParts = to.split("/").filter(Boolean);
+  fromParts.pop();
+  let common = 0;
+  while (
+    common < fromParts.length &&
+    common < toParts.length &&
+    fromParts[common] === toParts[common]
+  ) {
+    common++;
+  }
+  const ups = fromParts.length - common;
+  const prefix = ups === 0 ? "./" : "../".repeat(ups);
+  return prefix + toParts.slice(common).join("/");
+}

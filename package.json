@@ -11,6 +11,9 @@
   },
   "devDependencies": {
     "@blockml/bom": "file:packages/bom",
+    "@blockml/blockdoc-target": "file:packages/blockdoc-target",
+    "@blockml/cli": "file:packages/cli-tools",
+    "@blockml/compiler": "file:packages/compiler",
     "@blockml/framework": "file:packages/framework",
     "@blockml/parser": "file:packages/parser",
     "@blockml/serializer": "file:packages/serializer",
@@ -33,6 +36,9 @@
     "test:validator": "vitest run packages/validator/test tests/validation",
     "test:validator-bml": "vitest run packages/validator/test/bml-ts-parity.test.ts",
     "test:constraints": "vitest run packages/framework/test/constraints.test.ts",
+    "test:compiler": "vitest run packages/compiler/test",
+    "test:blockdoc": "vitest run packages/blockdoc-target/test tests/blockdoc",
+    "compile:blockdoc": "node packages/cli-tools/dist/cli.js compile blockdoc",
     "typecheck": "tsc --build --emitDeclarationOnly"
   },
   "engines": {
