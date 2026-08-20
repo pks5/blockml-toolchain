@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parse } from "@blockml/parser";
 import { fqnToHtmlPath } from "./fqn-path.js";
-import { collectPackagePrefixes, renderPackageIndexPage } from "./package-index.js";
+import { collectPackagePrefixes, collectRootFqns, rootFqnForBlock, } from "./navigation.js";
+import { renderPackageIndexPage } from "./package-index.js";
 import { renderBlockPage, renderIndexPage } from "./render-block-page.js";
 import { resolveBlockDocOptions } from "./options.js";
 function aggregationTypeFqns(block, aggregationName) {
@@ -45,6 +46,17 @@ function collectBlockFqns(ctx, request) {
         fqns = fqns.filter((fqn) => exported.has(fqn));
     }
     return [...new Set(fqns)].sort();
+}
+function collectRootBlockFqns(ctx, request) {
+    const options = resolveBlockDocOptions(request.targetOptions);
+    const registry = ctx.session.typeRegistry;
+    let rootFqns = collectRootFqns(registry);
+    if (!options.includeNonExported && ctx.session.libraryPaths?.length) {
+        const rootDir = process.cwd();
+        const exported = collectExportedFqns(ctx.session.libraryPaths, rootDir);
+        rootFqns = rootFqns.filter((fqn) => exported.has(fqn));
+    }
+    return rootFqns;
 }
 function findBlock(root, fqn) {
     if (root.type === fqn) {
@@ -98,6 +110,7 @@ export class BlockDocTarget {
     render(request, ctx) {
         const options = resolveBlockDocOptions(request.targetOptions);
         const fqns = collectBlockFqns(ctx, request);
+        const rootFqns = collectRootBlockFqns(ctx, request);
         const knownFqns = new Set(fqns);
         const files = [];
         const rootDir = process.cwd();
@@ -113,38 +126,39 @@ export class BlockDocTarget {
             if (!block) {
                 continue;
             }
+            const rootFqn = rootFqnForBlock(fqn, rootFqns) ?? fqn;
             const pagePath = options.outLayout === "fqn"
                 ? fqnToHtmlPath(fqn, "fqn")
                 : fqnToHtmlPath(fqn, "package");
             files.push({
                 path: pagePath,
-                content: renderBlockPage(block, options, resolveRootIndexPath(fqn, options, libraryRoots), knownFqns),
+                content: renderBlockPage(block, options, resolveRootIndexPath(rootFqn, options, libraryRoots), knownFqns, rootFqn),
             });
         }
         if (options.siteMode === "perLibrary" && ctx.session.libraryPaths?.length) {
             for (const lib of libraryRoots) {
-                const libFqns = fqns.filter((f) => f.startsWith(`${lib.prefix}.`) || f === lib.prefix);
+                const libRootFqns = rootFqns.filter((f) => f.startsWith(`${lib.prefix}.`) || f === lib.prefix);
                 files.push({
                     path: lib.indexPath,
-                    content: renderIndexPage(`${lib.prefix} — BlockDoc`, libFqns, options, lib.indexPath),
+                    content: renderIndexPage(`${lib.prefix} — BlockDoc`, libRootFqns, options, lib.indexPath),
                 });
             }
         }
         else {
             files.push({
                 path: "index.html",
-                content: renderIndexPage("BlockDoc", fqns, options, "index.html"),
+                content: renderIndexPage("BlockDoc", rootFqns, options, "index.html"),
             });
         }
         if (options.outLayout === "fqn") {
-            for (const prefix of collectPackagePrefixes(fqns)) {
+            for (const prefix of collectPackagePrefixes(rootFqns)) {
                 const indexPath = `${prefix.split(".").join("/")}/index.html`;
                 const rootIndexPath = options.siteMode === "perLibrary"
                     ? (libraryRoots.find((lib) => prefix.startsWith(`${lib.prefix}.`) || prefix === lib.prefix)?.indexPath ?? "index.html")
                     : "index.html";
                 files.push({
                     path: indexPath,
-                    content: renderPackageIndexPage(prefix, fqns, options, indexPath, rootIndexPath),
+                    content: renderPackageIndexPage(prefix, rootFqns, options, indexPath, rootIndexPath),
                 });
             }
         }

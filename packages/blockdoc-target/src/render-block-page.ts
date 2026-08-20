@@ -1,4 +1,4 @@
-import type { BlockDefinition, MemberDefinition } from "@blockml/bom";
+import type { BlockDefinition } from "@blockml/bom";
 import {
   escapeHtml,
   fqnToHtmlPath,
@@ -6,9 +6,11 @@ import {
   packageIndexPath,
   relativePath,
 } from "./fqn-path.js";
+import { packageSegmentLabel, renderNavigationBreadcrumb } from "./navigation.js";
 import type { BlockDocOptions } from "./options.js";
 import { renderCompositionGroup } from "./composition-render.js";
-import { renderTypeExpression, renderTypeRef } from "./type-links.js";
+import { renderMemberTable } from "./member-sections.js";
+import { renderTypeRef } from "./type-links.js";
 
 const PAGE_CSS = `
 body { font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; max-width: 960px; }
@@ -24,31 +26,25 @@ th { background: #f5f5f5; }
 a { color: #0366d6; }
 `.trim();
 
-function renderMemberType(
-  member: MemberDefinition,
+function renderMemberSections(
+  block: BlockDefinition,
   pagePath: string,
   options: Required<BlockDocOptions>,
   knownFqns: Set<string>,
 ): string {
-  if (member.kind === "property") {
-    if (member.typeFqn) {
-      return renderTypeRef(member.typeFqn, pagePath, options, knownFqns);
-    }
-    if (member.type) {
-      return renderTypeExpression(member.type, pagePath, options, knownFqns);
-    }
-    return "—";
-  }
-  if (member.kind === "capability") {
-    if (member.typeFqn) {
-      return renderTypeRef(member.typeFqn, pagePath, options, knownFqns);
-    }
-    return "capability";
-  }
-  if (member.kind === "aggregation" || member.kind === "association") {
-    return renderTypeExpression(member.type, pagePath, options, knownFqns);
-  }
-  return "—";
+  const properties = block.members.filter((m) => m.kind === "property");
+  const aggregations = block.members.filter((m) => m.kind === "aggregation");
+  const associations = block.members.filter((m) => m.kind === "association");
+  const capabilities = block.members.filter((m) => m.kind === "capability");
+
+  return [
+    renderMemberTable("Properties", properties, block, pagePath, options, knownFqns),
+    renderMemberTable("Aggregations", aggregations, block, pagePath, options, knownFqns),
+    renderMemberTable("Associations", associations, block, pagePath, options, knownFqns),
+    renderMemberTable("Capabilities", capabilities, block, pagePath, options, knownFqns),
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function proseSection(title: string, entries: { text: string }[] | undefined): string {
@@ -57,28 +53,6 @@ function proseSection(title: string, entries: { text: string }[] | undefined): s
   }
   const items = entries.map((e) => `<p>${escapeHtml(e.text)}</p>`).join("\n");
   return `<section><h2>${escapeHtml(title)}</h2>${items}</section>`;
-}
-
-function renderBreadcrumb(
-  fqn: string,
-  pagePath: string,
-  options: Required<BlockDocOptions>,
-  rootIndexPath: string,
-): string {
-  const parts = [
-    `<a href="${relativePath(pagePath, rootIndexPath)}">Index</a>`,
-  ];
-  if (options.outLayout === "fqn") {
-    const pkg = fqnToPackagePrefix(fqn);
-    const segments = pkg.split(".");
-    for (let i = 1; i <= segments.length; i++) {
-      const prefix = segments.slice(0, i).join(".");
-      const href = relativePath(pagePath, packageIndexPath(prefix));
-      parts.push(`<a href="${href}">${escapeHtml(prefix)}</a>`);
-    }
-  }
-  parts.push(escapeHtml(fqn));
-  return parts.join(" / ");
 }
 
 function collectCompositionGroups(block: BlockDefinition): Array<{
@@ -121,20 +95,16 @@ export function renderBlockPage(
   options: Required<BlockDocOptions>,
   rootIndexPath: string,
   knownFqns: Set<string>,
+  rootFqn: string,
 ): string {
   const pagePath = fqnToHtmlPath(block.type, options.outLayout);
 
-  const memberRows = block.members
-    .map(
-      (m) =>
-        `<tr><td>${escapeHtml(m.kind)}</td><td>${escapeHtml(m.name)}</td><td>${renderMemberType(m, pagePath, options, knownFqns)}</td></tr>`,
-    )
-    .join("\n");
+  const memberSections = renderMemberSections(block, pagePath, options, knownFqns);
 
   const subBlockLinks = block.subBlocks
     .map((sub) => {
       const href = relativePath(pagePath, fqnToHtmlPath(sub.type, options.outLayout));
-      return `<li><a href="${href}">${escapeHtml(sub.type)}</a> — ${escapeHtml(sub.name)}</li>`;
+      return `<li><a href="${href}">${escapeHtml(sub.name)}</a></li>`;
     })
     .join("\n");
 
@@ -173,7 +143,7 @@ export function renderBlockPage(
   <style>${PAGE_CSS}</style>
 </head>
 <body>
-  <nav class="breadcrumb">${renderBreadcrumb(block.type, pagePath, options, rootIndexPath)}</nav>
+  <nav class="breadcrumb">${renderNavigationBreadcrumb(block.type, rootFqn, pagePath, options, rootIndexPath)}</nav>
   <h1>${escapeHtml(block.name)}</h1>
   <dl class="meta">
     <dt>FQN</dt><dd>${escapeHtml(block.type)}</dd>
@@ -182,11 +152,7 @@ export function renderBlockPage(
     <dt>is</dt><dd>${escapeHtml(block.is ?? "")}</dd>
   </dl>
   ${proseSection("Documentation", block.documentations)}
-  ${
-    memberRows
-      ? `<section><h2>Members</h2><table><thead><tr><th>Kind</th><th>Name</th><th>Type</th></tr></thead><tbody>${memberRows}</tbody></table></section>`
-      : ""
-  }
+  ${memberSections}
   ${compositionSections ? `<section><h2>Composition</h2>${compositionSections}</section>` : ""}
   ${subBlockLinks ? `<section><h2>Sub-Blocks</h2><ul>${subBlockLinks}</ul></section>` : ""}
   ${refLinks ? `<section><h2>References</h2><ul>${refLinks}</ul></section>` : ""}
@@ -196,12 +162,12 @@ export function renderBlockPage(
 
 export function renderIndexPage(
   title: string,
-  fqns: string[],
+  rootFqns: string[],
   options: Required<BlockDocOptions>,
   indexPath: string,
 ): string {
   const byPackage = new Map<string, string[]>();
-  for (const fqn of [...fqns].sort()) {
+  for (const fqn of [...rootFqns].sort()) {
     const pkg = fqnToPackagePrefix(fqn);
     const list = byPackage.get(pkg) ?? [];
     list.push(fqn);
@@ -213,12 +179,13 @@ export function renderIndexPage(
     .map(([pkg, blocks]) => {
       const heading =
         options.outLayout === "fqn"
-          ? `<h2><a href="${relativePath(indexPath, packageIndexPath(pkg))}">${escapeHtml(pkg)}</a></h2>`
+          ? `<h2><a href="${relativePath(indexPath, packageIndexPath(pkg))}">${escapeHtml(packageSegmentLabel(pkg))}</a></h2>`
           : `<h2>${escapeHtml(pkg)}</h2>`;
       const links = blocks
         .map((fqn) => {
           const href = relativePath(indexPath, fqnToHtmlPath(fqn, options.outLayout));
-          return `<li><a href="${href}">${escapeHtml(fqn)}</a></li>`;
+          const label = fqn.split(".").pop() ?? fqn;
+          return `<li><a href="${href}">${escapeHtml(label)}</a></li>`;
         })
         .join("\n");
       return `<section>${heading}<ul>${links}</ul></section>`;
@@ -234,7 +201,7 @@ export function renderIndexPage(
 </head>
 <body>
   <h1>${escapeHtml(title)}</h1>
-  <p>${fqns.length} block(s) in scope.</p>
+  <p>${rootFqns.length} block(s) in scope.</p>
   ${sections}
 </body>
 </html>`;

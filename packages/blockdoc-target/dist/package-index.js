@@ -1,22 +1,12 @@
 import { escapeHtml, fqnToHtmlPath, fqnToPackagePrefix, packageIndexPath, relativePath } from "./fqn-path.js";
-export function collectPackagePrefixes(fqns) {
-    const prefixes = new Set();
-    for (const fqn of fqns) {
-        const pkg = fqnToPackagePrefix(fqn);
-        const segments = pkg.split(".");
-        for (let i = 1; i <= segments.length; i++) {
-            prefixes.add(segments.slice(0, i).join("."));
-        }
-    }
-    return [...prefixes].sort();
+import { packageSegmentLabel, renderNavigationBreadcrumb } from "./navigation.js";
+function directBlocks(packagePrefix, rootFqns) {
+    return rootFqns.filter((fqn) => fqnToPackagePrefix(fqn) === packagePrefix).sort();
 }
-function directBlocks(packagePrefix, fqns) {
-    return fqns.filter((fqn) => fqnToPackagePrefix(fqn) === packagePrefix).sort();
-}
-function directSubPackages(packagePrefix, fqns) {
+function directSubPackages(packagePrefix, rootFqns) {
     const prefixDot = `${packagePrefix}.`;
     const subs = new Set();
-    for (const fqn of fqns) {
+    for (const fqn of rootFqns) {
         const pkg = fqnToPackagePrefix(fqn);
         if (!pkg.startsWith(prefixDot)) {
             continue;
@@ -29,32 +19,34 @@ function directSubPackages(packagePrefix, fqns) {
     }
     return [...subs].sort();
 }
-export function renderPackageIndexPage(packagePrefix, fqns, options, indexPath, rootIndexPath) {
-    const blocks = directBlocks(packagePrefix, fqns);
-    const subPackages = directSubPackages(packagePrefix, fqns);
+export function renderPackageIndexPage(packagePrefix, rootFqns, options, indexPath, rootIndexPath) {
+    const blocks = directBlocks(packagePrefix, rootFqns);
+    const subPackages = directSubPackages(packagePrefix, rootFqns);
     const breadcrumbParts = [
         `<a href="${relativePath(indexPath, rootIndexPath)}">Index</a>`,
     ];
     const segments = packagePrefix.split(".");
     for (let i = 1; i <= segments.length; i++) {
         const prefix = segments.slice(0, i).join(".");
+        const label = packageSegmentLabel(prefix);
         if (prefix === packagePrefix) {
-            breadcrumbParts.push(escapeHtml(prefix));
+            breadcrumbParts.push(escapeHtml(label));
         }
         else {
-            breadcrumbParts.push(`<a href="${relativePath(indexPath, packageIndexPath(prefix))}">${escapeHtml(prefix)}</a>`);
+            breadcrumbParts.push(`<a href="${relativePath(indexPath, packageIndexPath(prefix))}">${escapeHtml(label)}</a>`);
         }
     }
     const subPackageLinks = subPackages
         .map((pkg) => {
         const href = relativePath(indexPath, packageIndexPath(pkg));
-        return `<li><a href="${href}">${escapeHtml(pkg)}</a></li>`;
+        return `<li><a href="${href}">${escapeHtml(packageSegmentLabel(pkg))}</a></li>`;
     })
         .join("\n");
     const blockLinks = blocks
         .map((fqn) => {
         const href = relativePath(indexPath, fqnToHtmlPath(fqn, options.outLayout));
-        return `<li><a href="${href}">${escapeHtml(fqn)}</a></li>`;
+        const label = fqn.split(".").pop() ?? fqn;
+        return `<li><a href="${href}">${escapeHtml(label)}</a></li>`;
     })
         .join("\n");
     const PAGE_CSS = `
@@ -74,7 +66,7 @@ a { color: #0366d6; }
 </head>
 <body>
   <nav class="breadcrumb">${breadcrumbParts.join(" / ")}</nav>
-  <h1>${escapeHtml(packagePrefix)}</h1>
+  <h1>${escapeHtml(packageSegmentLabel(packagePrefix))}</h1>
   ${subPackageLinks ? `<section><h2>Sub-packages</h2><ul>${subPackageLinks}</ul></section>` : ""}
   ${blockLinks ? `<section><h2>Blocks</h2><ul>${blockLinks}</ul></section>` : ""}
 </body>

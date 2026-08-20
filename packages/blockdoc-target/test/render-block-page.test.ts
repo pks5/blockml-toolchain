@@ -7,6 +7,7 @@ const KNOWN = new Set([
   "com.example.Child",
   "com.example.Parent",
   "com.example.RefType",
+  "com.example.Parent.Documentation",
 ]);
 
 function minimalBlock(overrides: Partial<BlockDefinition> = {}): BlockDefinition {
@@ -20,6 +21,11 @@ function minimalBlock(overrides: Partial<BlockDefinition> = {}): BlockDefinition
         kind: "property",
         name: "title",
         typeFqn: "com.example.RefType",
+      },
+      {
+        kind: "property",
+        name: "documentation",
+        typeFqn: "com.example.type.Documentation",
       },
       {
         kind: "aggregation",
@@ -38,7 +44,17 @@ function minimalBlock(overrides: Partial<BlockDefinition> = {}): BlockDefinition
         },
       },
     ],
-    subBlocks: [],
+    subBlocks: [
+      {
+        name: "Documentation",
+        type: "com.example.Parent.Documentation",
+        is: "Docs",
+        members: [],
+        subBlocks: [],
+        embeddedBlocks: [],
+        compositions: [],
+      },
+    ],
     embeddedBlocks: [],
     compositions: [],
     ...overrides,
@@ -52,10 +68,25 @@ describe("renderBlockPage", () => {
       DEFAULT_BLOCKDOC_OPTIONS,
       "index.html",
       KNOWN,
+      "com.example.Parent",
     );
     expect(html).toContain('<dt>baseType</dt><dd><a href="');
     expect(html).toContain("com.example.RefType");
-    expect(html).toMatch(/<td>property<\/td><td>title<\/td><td><a href="/);
+    expect(html).toMatch(/<h2>Properties<\/h2>/);
+    expect(html).toMatch(/<td>title<\/td><td><a href="/);
+    expect(html).not.toContain("<th>Kind</th>");
+  });
+
+  it("links unqualified member types to sub-blocks", () => {
+    const html = renderBlockPage(
+      minimalBlock(),
+      DEFAULT_BLOCKDOC_OPTIONS,
+      "index.html",
+      KNOWN,
+      "com.example.Parent",
+    );
+    expect(html).toContain("Documentation.html");
+    expect(html).toContain("com.example.Parent.Documentation");
   });
 
   it("renders composition children", () => {
@@ -64,10 +95,23 @@ describe("renderBlockPage", () => {
       DEFAULT_BLOCKDOC_OPTIONS,
       "index.html",
       KNOWN,
+      "com.example.Parent",
     );
     expect(html).toContain("<h2>Composition</h2>");
     expect(html).toContain("<h3>blocks</h3>");
     expect(html).toContain("com.example.Child");
     expect(html).toContain("members: size");
+  });
+
+  it("shows segment-only breadcrumb labels", () => {
+    const html = renderBlockPage(
+      minimalBlock(),
+      DEFAULT_BLOCKDOC_OPTIONS,
+      "index.html",
+      KNOWN,
+      "com.example.Parent",
+    );
+    expect(html).toContain('<a href="../../index.html">Index</a> / <a href="../index.html">com</a> / <a href="./index.html">example</a> / Parent');
+    expect(html).not.toContain("com.example.Parent / com.example");
   });
 });

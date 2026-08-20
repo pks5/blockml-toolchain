@@ -4,7 +4,12 @@ import type { BlockDefinition } from "@blockml/bom";
 import type { CompileRequest, RenderContext, RenderOutput, RenderTarget } from "@blockml/compiler";
 import { parse } from "@blockml/parser";
 import { fqnToHtmlPath } from "./fqn-path.js";
-import { collectPackagePrefixes, renderPackageIndexPage } from "./package-index.js";
+import {
+  collectPackagePrefixes,
+  collectRootFqns,
+  rootFqnForBlock,
+} from "./navigation.js";
+import { renderPackageIndexPage } from "./package-index.js";
 import { renderBlockPage, renderIndexPage } from "./render-block-page.js";
 import { resolveBlockDocOptions } from "./options.js";
 
@@ -62,6 +67,20 @@ function collectBlockFqns(ctx: RenderContext, request: CompileRequest): string[]
   }
 
   return [...new Set(fqns)].sort();
+}
+
+function collectRootBlockFqns(ctx: RenderContext, request: CompileRequest): string[] {
+  const options = resolveBlockDocOptions(request.targetOptions);
+  const registry = ctx.session.typeRegistry;
+  let rootFqns = collectRootFqns(registry);
+
+  if (!options.includeNonExported && ctx.session.libraryPaths?.length) {
+    const rootDir = process.cwd();
+    const exported = collectExportedFqns(ctx.session.libraryPaths, rootDir);
+    rootFqns = rootFqns.filter((fqn) => exported.has(fqn));
+  }
+
+  return rootFqns;
 }
 
 function findBlock(root: BlockDefinition, fqn: string): BlockDefinition | undefined {
@@ -123,6 +142,7 @@ export class BlockDocTarget implements RenderTarget {
   render(request: CompileRequest, ctx: RenderContext): BlockDocRenderOutput {
     const options = resolveBlockDocOptions(request.targetOptions);
     const fqns = collectBlockFqns(ctx, request);
+    const rootFqns = collectRootBlockFqns(ctx, request);
     const knownFqns = new Set(fqns);
     const files: BlockDocRenderOutput["files"] = [];
     const rootDir = process.cwd();
@@ -140,6 +160,7 @@ export class BlockDocTarget implements RenderTarget {
       if (!block) {
         continue;
       }
+      const rootFqn = rootFqnForBlock(fqn, rootFqns) ?? fqn;
       const pagePath =
         options.outLayout === "fqn"
           ? fqnToHtmlPath(fqn, "fqn")
@@ -149,29 +170,37 @@ export class BlockDocTarget implements RenderTarget {
         content: renderBlockPage(
           block,
           options,
-          resolveRootIndexPath(fqn, options, libraryRoots),
+          resolveRootIndexPath(rootFqn, options, libraryRoots),
           knownFqns,
+          rootFqn,
         ),
       });
     }
 
     if (options.siteMode === "perLibrary" && ctx.session.libraryPaths?.length) {
       for (const lib of libraryRoots) {
-        const libFqns = fqns.filter((f) => f.startsWith(`${lib.prefix}.`) || f === lib.prefix);
+        const libRootFqns = rootFqns.filter(
+          (f) => f.startsWith(`${lib.prefix}.`) || f === lib.prefix,
+        );
         files.push({
           path: lib.indexPath,
-          content: renderIndexPage(`${lib.prefix} — BlockDoc`, libFqns, options, lib.indexPath),
+          content: renderIndexPage(
+            `${lib.prefix} — BlockDoc`,
+            libRootFqns,
+            options,
+            lib.indexPath,
+          ),
         });
       }
     } else {
       files.push({
         path: "index.html",
-        content: renderIndexPage("BlockDoc", fqns, options, "index.html"),
+        content: renderIndexPage("BlockDoc", rootFqns, options, "index.html"),
       });
     }
 
     if (options.outLayout === "fqn") {
-      for (const prefix of collectPackagePrefixes(fqns)) {
+      for (const prefix of collectPackagePrefixes(rootFqns)) {
         const indexPath = `${prefix.split(".").join("/")}/index.html`;
         const rootIndexPath =
           options.siteMode === "perLibrary"
@@ -183,7 +212,7 @@ export class BlockDocTarget implements RenderTarget {
           path: indexPath,
           content: renderPackageIndexPage(
             prefix,
-            fqns,
+            rootFqns,
             options,
             indexPath,
             rootIndexPath,

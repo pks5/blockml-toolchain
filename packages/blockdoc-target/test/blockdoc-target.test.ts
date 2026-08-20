@@ -35,7 +35,7 @@ function registerBlock(
 }
 
 describe("BlockDocTarget package indexes", () => {
-  it("emits hierarchical package index pages for fqn layout", () => {
+  it("emits hierarchical package index pages without sub-block packages", () => {
     const registry = new TypeRegistry();
     registerBlock(
       registry,
@@ -44,7 +44,17 @@ describe("BlockDocTarget package indexes", () => {
         type: "com.example.pkg.Alpha",
         is: "Alpha block",
         members: [],
-        subBlocks: [],
+        subBlocks: [
+          {
+            name: "Child",
+            type: "com.example.pkg.Alpha.Child",
+            is: "Child block",
+            members: [],
+            subBlocks: [],
+            embeddedBlocks: [],
+            compositions: [],
+          },
+        ],
         embeddedBlocks: [],
         compositions: [],
       },
@@ -73,9 +83,13 @@ describe("BlockDocTarget package indexes", () => {
     expect(output.files.some((f) => f.path === "com/index.html")).toBe(true);
     expect(output.files.some((f) => f.path === "com/example/pkg/index.html")).toBe(true);
     expect(output.files.some((f) => f.path === "com/example/other/index.html")).toBe(true);
+    expect(
+      output.files.some((f) => f.path === "com/example/pkg/Alpha/index.html"),
+    ).toBe(false);
 
     const pkgIndex = output.files.find((f) => f.path === "com/example/pkg/index.html");
-    expect(pkgIndex?.content).toContain("com.example.pkg.Alpha");
     expect(pkgIndex?.content).toContain("<h2>Blocks</h2>");
+    expect(pkgIndex?.content).toContain("Alpha");
+    expect(pkgIndex?.content).not.toContain("Alpha.Child");
   });
 });

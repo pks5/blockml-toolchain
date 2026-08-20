@@ -63,11 +63,11 @@ describe("blockdoc integration", () => {
       (f) => f.path === "org/blockml/bml/core/index.html",
     );
     expect(packageIndex).toBeDefined();
-    expect(packageIndex!.content).toContain("org.blockml.bml.core.Block");
+    expect(packageIndex!.content).toContain('<a href="./Block.html">Block</a>');
 
     const index = result.output!.files.find((f) => f.path === "index.html");
     expect(index).toBeDefined();
-    expect(index!.content).toContain("org.blockml.bml.core.Block");
-    expect(index!.content).toMatch(/<h2><a href="\.\/org\/blockml\/bml\/core\/index\.html">/);
+    expect(index!.content).toContain('<a href="./org/blockml/bml/core/Block.html">Block</a>');
+    expect(index!.content).toMatch(/<h2><a href="\.\/org\/blockml\/bml\/core\/index\.html">core<\/a><\/h2>/);
   });
 });
