@@ -113,7 +113,6 @@ export function emitBlockXsd(registry: TypeRegistry): string {
     ...identity.map(elementDecl),
     ...containers.map(elementDecl),
     ...extras.map(elementDecl),
-    `      <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax" namespace="##any"/>`,
   ].join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>

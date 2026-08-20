@@ -44,6 +44,6 @@ describe("xsd integration", () => {
     expect(schema).toBeDefined();
     expect(schema!.content).toContain("<xs:schema");
     expect(schema!.content).toContain('element name="block"');
-    expect(schema!.content).toContain("processContents=\"lax\"");
+    expect(schema!.content).not.toContain("<xs:any ");
   });
 });

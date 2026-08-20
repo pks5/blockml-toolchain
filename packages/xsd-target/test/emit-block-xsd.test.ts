@@ -3,7 +3,7 @@ import { TypeRegistry } from "@blockml/framework";
 import { emitBlockXsd } from "../src/emit-block-xsd.js";
 
 describe("emitBlockXsd", () => {
-  it("emits a universal block schema with D1 particles and lax xs:any", () => {
+  it("emits a universal block schema with D1 particles and no element wildcard", () => {
     const xml = emitBlockXsd(new TypeRegistry());
     expect(xml).toContain('<xs:schema');
     expect(xml).toContain('targetNamespace="http://blockml.org/bml"');
@@ -13,7 +13,7 @@ describe("emitBlockXsd", () => {
     expect(xml).toContain('<xs:element name="baseType"');
     expect(xml).toContain('<xs:element name="properties"');
     expect(xml).toContain('<xs:element name="aggregations"');
-    expect(xml).toContain('processContents="lax"');
+    expect(xml).not.toContain("<xs:any ");
     expect(xml).toContain("<xs:anyAttribute");
   });
 });
