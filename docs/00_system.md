@@ -4,7 +4,7 @@ version: 2.7.0
 
 ## Purpose
 
-This document describes the BOM Compiler project (`bom`) — the universal toolchain that translates BML (Block Markup Language) source files into domain-specific render target files via a typed BOM (Block Object Model).
+This document describes the BlockML toolchain (`blockml` CLI) — the universal toolchain that translates BML (Block Markup Language) source files into domain-specific render target files via a typed BOM (Block Object Model).
 
 The compiler is domain-agnostic. It understands the BML format and the BOM object model. Domain-specific knowledge lives exclusively in Render Targets. MachineBlocks is the reference implementation (Blaupause) — the first domain built on this foundation.
 
@@ -63,7 +63,7 @@ BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-
 
 **Self-hosting (bootstrap):** Before processing user projects, the CLI bootstraps a TypeRegistry from framework BML in `node_modules/@blockml/core` (`org.blockml.bml.*`) and MachineBlocks BML in `node_modules/@machineblocks/core` (`com.machineblocks.bml.*`). Each registered BlockDefinition is an immutable `BomDocument` (Urmodell) — typically parse-origin today; Builder-origin documents are valid once V3 ships.
 
-**The CLI** (`bom`) is the Node.js command-line interface for parsing, validating, compiling, watching, and scaffolding BML projects.
+**The CLI** (`blockml`) is the Node.js command-line interface for parsing, validating, compiling, watching, and scaffolding BML projects.
 
 ### Reference Implementation: MachineBlocks
 
@@ -102,7 +102,7 @@ STL / 3MF
 
 ## Tool vs. Content
 
-`bom` is a standalone tool — installed or cloned once and used across multiple content projects. Content projects (BML sources, render target output) live in separate directories and are not part of the compiler repository.
+`blockml` is a standalone tool — installed or cloned once and used across multiple content projects. Content projects (BML sources, render target output) live in separate directories and are not part of the compiler repository.
 
 ```text
 ~/.../blockml/                  ← BlockML / BOM Compiler tool (installed once)
@@ -440,14 +440,14 @@ See `14_compiler_runtime.md` — Compiler Facade API (C2) · Compile Scope (C7).
 Node.js-only CLI tools.
 
 ```text
-- bom new block <fqn> [--format bml]   # XML only; JSON authoring not planned
-- bom compile <file> <target>          # document targets
-- bom compile <target>                 # library/corpus targets (blockdoc, xsd)
-- bom compile --all <target>           # document targets only
-- bom validate <file>
-- bom inspect <file>
-- bom watch [--src <dir>] [--out <dir>] <target>
-- bom activate-config <profileName>
+- blockml new block <fqn> [--format bml]   # XML only; JSON authoring not planned
+- blockml compile <file> <target>          # document targets
+- blockml compile <target>                 # library/corpus targets (blockdoc, xsd)
+- blockml compile --all <target>           # document targets only
+- blockml validate <file>
+- blockml inspect <file>
+- blockml watch [--src <dir>] [--out <dir>] <target>
+- blockml activate-config <profileName>
 - bootstrapTypeRegistry() + bootstrapTargets() before compile/watch (see 14_compiler_runtime.md)
 - incrementalBuild.ts — SHA-256 cache in .bom-cache/ (C5)
 - OpenSCAD executable resolver (for SCAD target)
@@ -735,7 +735,7 @@ config/scale_2x.bml     — scale profile
 Only one config profile is active at a time:
 
 ```bash
-bom activate-config prusa_pla
+blockml activate-config prusa_pla
 ```
 
 Merge priority (ascending):

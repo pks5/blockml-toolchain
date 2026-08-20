@@ -4,7 +4,7 @@ version: 2.0.0
 
 ## Purpose of this Document
 
-This document defines the `bom` CLI tool — its commands, configuration files, watch mode, scaffolding, config profile management, and thumbnail generation.
+This document defines the `blockml` CLI tool — its commands, configuration files, watch mode, scaffolding, config profile management, and thumbnail generation. The command name is the product (`blockml`); BOM remains the object model (`@blockml/bom`). Project config stays `bom.config.json` in V1.
 
 For the compiler pipeline and Target Registry see `06_compiler.md`.
 For compiler runtime (bootstrap, RenderContext, compile I/O model) see `14_compiler_runtime.md`.
@@ -44,13 +44,13 @@ Incremental skip checks (step 4) and hash writes (step 7) are CLI-only. See `14_
 
 ### TypeRegistry bootstrap (B5)
 
-Scans `srcDir`, `libraries[]`, and dependency paths; parses all BML sources; populates `TypeRegistry`. Required for `bom validate`, `bom inspect`, and `bom compile` when cross-file references exist.
+Scans `srcDir`, `libraries[]`, and dependency paths; parses all BML sources; populates `TypeRegistry`. Required for `blockml validate`, `blockml inspect`, and `blockml compile` when cross-file references exist.
 
 Implemented in `@blockml/cli` as `bootstrapTypeRegistry.ts`. **Separate from compile scope** — registry answers “what types exist”; scope answers “what to render” (see `14_compiler_runtime.md` — C7).
 
 ### Target bootstrap (C3)
 
-Registers render targets in `@blockml/compiler` before compile. Called by `bom compile` and `bom watch`; **not** by `bom validate` or `bom inspect`.
+Registers render targets in `@blockml/compiler` before compile. Called by `blockml compile` and `blockml watch`; **not** by `blockml validate` or `blockml inspect`.
 
 **V1 (decided):** `bootstrapTargets()` reads `bom.config.json` → **`targets[]`** and registers those packages. **First / default control target is `blockdoc`** — not SCAD.
 
@@ -88,12 +88,12 @@ npm run build
 npm link
 ```
 
-`npm link` makes the `bom` command available globally. This step only needs to be run once.
+`npm link` makes the `blockml` command available globally. This step only needs to be run once.
 
 ### 3. Verify
 
 ```bash
-bom --version
+blockml --version
 ```
 
 ### Updating
@@ -112,12 +112,12 @@ npm run build
 
 ## Commands
 
-### `bom init`
+### `blockml init`
 
 Initializes a new BOM content project in the current directory.
 
 ```bash
-bom init
+blockml init
 ```
 
 Creates the following structure:
@@ -134,12 +134,12 @@ If `bom.config.json` already exists, the command exits with an error without mod
 
 ---
 
-### `bom new block`
+### `blockml new block`
 
 Scaffolds a new block definition file with the required structure.
 
 ```bash
-bom new block <fqn> [--format bml]   # XML only; JSON authoring not planned
+blockml new block <fqn> [--format bml]   # XML only; JSON authoring not planned
 ```
 
 ```text
@@ -178,22 +178,22 @@ The generated file contains the minimum required structure:
 
 ---
 
-### `bom compile`
+### `blockml compile`
 
 Compiles to a registered render target. **Input shape depends on the target** — document targets require a `<file>`; library/corpus targets compile from `libraries[]` and/or `srcDir` scope.
 
 ```bash
 # Document target — single file (SCAD, FatBlock root)
-bom compile <file> <target>
+blockml compile <file> <target>
 
 # Document target — all files in srcDir
-bom compile --all <target>
+blockml compile --all <target>
 
 # Library/corpus target — scope from config (BlockDoc, XSD)
-bom compile <target>
+blockml compile <target>
 
 # Library/corpus target — explicit Library.bml roots
-bom compile <target> --libraries path/to/Library.bml,path/to/other/Library.bml
+blockml compile <target> --libraries path/to/Library.bml,path/to/other/Library.bml
 ```
 
 ```text
@@ -256,13 +256,13 @@ Compiling a preset block is a standard entry point for generating Customizer out
 
 ---
 
-### `bom validate`
+### `blockml validate`
 
 Validates one or all BML source files without producing any output.
 
 ```bash
-bom validate <file>
-bom validate --all
+blockml validate <file>
+blockml validate --all
 ```
 
 Runs Stage 1 (parser) and Stage 2 (semantic validator). Reports all diagnostics. Produces no output files. No target is required — validation is universal. Exit code / abort policy is CLI-owned (non-zero on errors).
@@ -271,24 +271,24 @@ Runs Stage 1 (parser) and Stage 2 (semantic validator). Reports all diagnostics.
 
 ---
 
-### `bom inspect`
+### `blockml inspect`
 
 Prints the BOM representation of a compiled BML file for debugging.
 
 ```bash
-bom inspect <file>
+blockml inspect <file>
 ```
 
 Outputs a human-readable dump of the Urmodell (`BomDocument`) produced by parsing the given BML file. No target output is produced. Does not require validation to succeed.
 
 ---
 
-### `bom watch`
+### `blockml watch`
 
 Watches the source directory and recompiles changed files automatically.
 
 ```bash
-bom watch [--src <dir>] [--out <dir>] <target>
+blockml watch [--src <dir>] [--out <dir>] <target>
 ```
 
 ```text
@@ -300,7 +300,7 @@ bom watch [--src <dir>] [--out <dir>] <target>
 Behavior (document targets — e.g. SCAD):
 
 ```text
-- On startup: compiles all files in srcDir (equivalent to bom compile --all <target>)
+- On startup: compiles all files in srcDir (equivalent to blockml compile --all <target>)
 - On file change: recompiles the changed file only
 - On file add: compiles the new file
 - On file delete: removes the corresponding output file(s)
@@ -311,23 +311,23 @@ Behavior (document targets — e.g. SCAD):
 Behavior (library/corpus targets — e.g. BlockDoc):
 
 ```text
-- On startup: one scope compile (equivalent to bom compile <target>)
+- On startup: one scope compile (equivalent to blockml compile <target>)
 - On any .bml change under watched roots: recompile the whole scope (site regen)
 - On file delete: remove stale HTML if target tracks deletions
 ```
 
-Thumbnail generation follows the same rules as `bom compile` — thumbnails are generated automatically when a preset block file changes (SCAD target only).
+Thumbnail generation follows the same rules as `blockml compile` — thumbnails are generated automatically when a preset block file changes (SCAD target only).
 
 Conceptually equivalent to TypeScript watch mode (`tsc --watch`).
 
 ---
 
-### `bom activate-config`
+### `blockml activate-config`
 
 Sets the active config profile for the project.
 
 ```bash
-bom activate-config <profileName>
+blockml activate-config <profileName>
 ```
 
 ```text
@@ -351,7 +351,7 @@ Only one config profile is active at a time. Activating a new profile replaces t
 
 Thumbnails are **CLI-only** (C6) — not part of `@blockml/compiler` or `RenderOutput`. The compiler produces `.scad` and `.json`; the CLI renders `.webp` afterward using OpenSCAD + Sharp. See `14_compiler_runtime.md` — Thumbnails (C6).
 
-Thumbnails run automatically as part of `bom compile machineblocks-v3-scad` when the input is a preset block. There is no separate thumbnail command.
+Thumbnails run automatically as part of `blockml compile machineblocks-v3-scad` when the input is a preset block. There is no separate thumbnail command.
 
 ### Architecture boundary
 
@@ -491,7 +491,7 @@ Project-level configuration. Located at the project root.
 | `libraries` | `[]` | Paths to `Library.bml` catalog roots for library-scope compiles (BlockDoc, XSD). CLI `--libraries` overrides per run |
 | `targetOptions` | `{}` | Per-target opaque options; keys = registry names (e.g. `"blockdoc": { "siteMode": "merged" }`). Typed in each target package |
 | `thumbsDir` | `null` | Output directory for thumbnails. `null` = alongside output files in `outDir` |
-| `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library root (`node_modules/@machineblocks/core/`). `null` = resolved from bom executable location |
+| `mbLibPath` | `null` | Path to the MachineBlocks V3 SCAD Library root (`node_modules/@machineblocks/core/`). `null` = resolved from blockml executable location |
 | `openscadPath` | `null` | Path to the OpenSCAD executable. `null` = auto-resolved |
 | `activeConfig` | `null` | Name of the active config profile |
 | `bmlExtensions` | `[".bml"]` | File suffixes scanned by `compile --all` / `validate --all` |
@@ -516,7 +516,7 @@ Example BlockDoc project:
 }
 ```
 
-Compile: `bom compile blockdoc` → static HTML under `doc/` (package/FQN hierarchy). See `14_compiler_runtime.md` — Compile Scope (C7).
+Compile: `blockml compile blockdoc` → static HTML under `doc/` (package/FQN hierarchy). See `14_compiler_runtime.md` — Compile Scope (C7).
 
 #### Target list (`targets[]`) — **V1 decided**
 
@@ -529,10 +529,10 @@ Compile: `bom compile blockdoc` → static HTML under `doc/` (package/FQN hierar
 | Rule | Detail |
 |---|---|
 | **Purpose** | Which Render Targets this project **loads** into the Target Registry |
-| **Not** | Which target a given `bom compile` uses — that remains the CLI `<target>` argument |
+| **Not** | Which target a given `blockml compile` uses — that remains the CLI `<target>` argument |
 | **Default** | `["blockdoc"]` when omitted — BlockDoc is the V1 **control** target |
 | **Allowed names** | `blockdoc`, `xsd`, `fatblock`, `machineblocks-v3-scad` (as packages ship) |
-| **`bom init`** | Scaffold includes `"targets": ["blockdoc"]` |
+| **`blockml init`** | Scaffold includes `"targets": ["blockdoc"]` |
 
 Example multi-target project after more RTs exist:
 
@@ -547,7 +547,7 @@ Optional authoring checks against generated / catalog `.xsd` (after the XSD Rend
 | Mechanism | Form | Role |
 |---|---|---|
 | **Config** | `bom.config.json` → `"xsdValidation": false` | Project default off (e.g. during meta refactors) |
-| **CLI** | `--no-xsd` on `bom compile` / `bom validate` (and other commands that run XSD checks) | Per-run off |
+| **CLI** | `--no-xsd` on `blockml compile` / `blockml validate` (and other commands that run XSD checks) | Per-run off |
 
 **Precedence:**
 
@@ -558,7 +558,7 @@ xsdValidation: false          →  off for the project
 CLI --no-xsd                  →  off for this invocation (overrides config on)
 ```
 
-`--no-xsd` does **not** disable the XSD **Render Target** itself (`bom compile … xsd`) — only validation of authoring against schemas.
+`--no-xsd` does **not** disable the XSD **Render Target** itself (`blockml compile … xsd`) — only validation of authoring against schemas.
 
 ---
 
@@ -634,7 +634,7 @@ A property set inline on a block instance always wins over a preset, which alway
 ### Activation
 
 ```bash
-bom activate-config prusa_pla
+blockml activate-config prusa_pla
 ```
 
 Sets `"activeConfig": "prusa_pla"` in `bom.config.json`. The compiler reads the active profile on every compilation run.

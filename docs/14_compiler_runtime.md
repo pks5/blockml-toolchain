@@ -228,14 +228,14 @@ Other domains or future targets may differ without changing `@blockml/compiler`.
 ### Per input file (MachineBlocks SCAD)
 
 ```text
-bom compile src/.../Calibrator.bml machineblocks-v3-scad
+blockml compile src/.../Calibrator.bml machineblocks-v3-scad
   → scad/.../Calibrator.scad
   → scad/.../Calibrator.scad.map
   (does NOT emit Standard.scad — even though Calibrator references StandardBrick)
 ```
 
 ```text
-bom compile src/.../Standard.bml machineblocks-v3-scad
+blockml compile src/.../Standard.bml machineblocks-v3-scad
   → scad/.../Standard.scad        (standalone library / customizer entry)
 ```
 
@@ -587,25 +587,25 @@ export function bootstrapTargets(config: { targets?: string[] }): void {
 Commands that require a target call `bootstrapTargets()` before `compileToOutput()`:
 
 ```text
-bom compile <file> <target>          — document targets only
-bom compile <target>                 — library/corpus targets (blockdoc, xsd)
-bom compile --all <target>           — document targets only (loop srcDir)
-bom watch <target>                   — target-dependent (see 07_cli.md)
+blockml compile <file> <target>          — document targets only
+blockml compile <target>                 — library/corpus targets (blockdoc, xsd)
+blockml compile --all <target>           — document targets only (loop srcDir)
+blockml watch <target>                   — target-dependent (see 07_cli.md)
 ```
 
 Typical V1 control compile:
 
 ```bash
-bom compile blockdoc
+blockml compile blockdoc
 # optional explicit library roots:
-bom compile blockdoc --libraries node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml
+blockml compile blockdoc --libraries node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml
 ```
 
 Commands that do **not** call `bootstrapTargets()`:
 
 ```text
-bom validate   — Stage 1 + Stage 2 only; no target required
-bom inspect    — Urmodell dump only; no target required
+blockml validate   — Stage 1 + Stage 2 only; no target required
+blockml inspect    — Urmodell dump only; no target required
 ```
 
 ### Planned configurability
@@ -624,7 +624,7 @@ bom inspect    — Urmodell dump only; no target required
 }
 ```
 
-`bom init` scaffolds `"targets": ["blockdoc"]`. Missing `targets` → default `["blockdoc"]`.
+`blockml init` scaffolds `"targets": ["blockdoc"]`. Missing `targets` → default `["blockdoc"]`.
 
 ### Bootstrap order (CLI)
 
@@ -900,10 +900,10 @@ CLI iterates `parameterSets` in the compiled `.json`:
 ### Trigger and scope
 
 ```text
-Trigger:     bom compile <StandardPresets.bml> machineblocks-v3-scad
-             bom watch (same rules on file change)
-Not triggered: bom compile <block.bml>  — no thumbnails
-               bom validate / bom inspect
+Trigger:     blockml compile <StandardPresets.bml> machineblocks-v3-scad
+             blockml watch (same rules on file change)
+Not triggered: blockml compile <block.bml>  — no thumbnails
+               blockml validate / blockml inspect
                Browser compileToOutput — no OpenSCAD available
 No separate bom thumbnail command
 ```
@@ -927,7 +927,7 @@ Thumbnail backend        — post-V1: swap OpenSCAD renderer without touching co
 
 ## Incremental Build (C5)
 
-Incremental builds skip unchanged output artifacts during `bom compile --all` and `bom watch`. Like thumbnails (C6), caching is **CLI-only** — `@blockml/compiler` has no filesystem cache and no skip logic.
+Incremental builds skip unchanged output artifacts during `blockml compile --all` and `blockml watch`. Like thumbnails (C6), caching is **CLI-only** — `@blockml/compiler` has no filesystem cache and no skip logic.
 
 ### Strategy
 
@@ -945,8 +945,8 @@ Before compile/render/thumbnail for an artifact:
 Cache key is the **output artifact path** (relative to `outDir`), not the input BML path. This deduplicates implicit and direct compiles of the same block:
 
 ```text
-bom compile Wall.bml …           →  scad/.../Wall.scad
-bom compile WallPresets.bml …    →  same Wall.scad (implicit) — same .hash file, skip if unchanged
+blockml compile Wall.bml …           →  scad/.../Wall.scad
+blockml compile WallPresets.bml …    →  same Wall.scad (implicit) — same .hash file, skip if unchanged
 ```
 
 `.scad.map` is not hashed separately — written together with `.scad`, skipped together.
@@ -1077,9 +1077,9 @@ Mirror `outDir` / `thumbsDir` structure. Add `.bom-cache/` to `.gitignore`.
 ### Not cached
 
 ```text
-bom validate / bom inspect     — no output artifacts
+blockml validate / blockml inspect     — no output artifacts
 Browser compileToOutput          — no .bom-cache
-Single-file bom compile <file> — same hash logic applies (not only --all)
+Single-file `blockml compile <file>` — same hash logic applies (not only --all)
 ```
 
 ---

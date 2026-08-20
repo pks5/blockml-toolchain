@@ -52,7 +52,7 @@ async function main(): Promise<number> {
   const rootDir = process.cwd();
 
   if (parsed.command !== "compile") {
-    console.error("Usage: bom compile blockdoc [--out dir] [--src dir] [--libraries a,b]");
+    console.error("Usage: blockml compile blockdoc [--out dir] [--src dir] [--libraries a,b]");
     return 2;
   }
 

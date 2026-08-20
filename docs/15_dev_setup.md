@@ -56,8 +56,8 @@ After Phase A workspace scaffold exists:
 
 ```bash
 npm run build
-npm link -w @blockml/cli    # exposes `bom` globally (once)
-bom --version
+npm link -w @blockml/cli    # exposes `blockml` globally (once)
+blockml --version
 ```
 
 `npm install` is **required** for framework BML (`@blockml/core`) and MachineBlocks fixtures (`@machineblocks/core`, Test Layer B/C and T3 corpus).
@@ -396,7 +396,7 @@ Consumed by:
   "version": "0.0.0",
   "type": "module",
   "bin": {
-    "bom": "./dist/cli.js"
+    "blockml": "./dist/cli.js"
   },
   "dependencies": {
     "@blockml/compiler": "workspace:*",
@@ -549,7 +549,7 @@ Thumbnail / OpenSCAD tests: **optional** integration suite — skipped in CI whe
 | `npm run test:watch` | Vitest watch mode |
 | `npm run test:roundtrip` | Roundtrip tests only (V1 gate) |
 | `npm run test:correctness` | SCAD/JSON correctness tests (after compiler) |
-| `npm link -w @blockml/cli` | Global `bom` command |
+| `npm link -w @blockml/cli` | Global `blockml` command |
 | `npm run lint` | ESLint (when configured) |
 
 ---
@@ -722,7 +722,7 @@ Phase C — Compile pipeline (BlockDoc-first)
   8. CLI + targets[]                 — @blockml/cli; bom.config.json targets (default ["blockdoc"])
   9. **First Stage-3 gate: BlockDoc** — @blockml/blockdoc-target / CLI `blockdoc`
      — static HTML by package/FQN hierarchy — corpus control / review
-     — compile scope: library/corpus (`bom compile blockdoc`), not per-file --all
+     — compile scope: library/corpus (`blockml compile blockdoc`), not per-file --all
      — proves Facade + Target Registry with minimal domain surface
  10. Further toolchain RTs (after BlockDoc control path works)
      a. XSD target      — @blockml/xsd-target / `xsd`
@@ -745,7 +745,7 @@ Phase C — Compile pipeline (BlockDoc-first)
 | 2nd+ | **FatBlock** (`fatblock`) | Registry closure + embed model; Stage 2 first |
 | Later | **machineblocks-v3-scad** | Primary **product** target — more domain surface (NativeBlock, engine, `@machineblocks/core`) |
 
-MachineBlocks SCAD remains the reference **product** target. BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`bom compile blockdoc`, library/corpus scope — see `14_compiler_runtime.md` C7). `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3.
+MachineBlocks SCAD remains the reference **product** target. BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`blockml compile blockdoc`, library/corpus scope — see `14_compiler_runtime.md` C7). `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3.
 
 ### Roundtrip test contract
 
@@ -851,7 +851,7 @@ Add new framework BML to T1 as it lands — the Definition meta-model corpus is 
 | XSD validation of BML authoring | **After** XSD Render Target ships; **always disableable** (`--no-xsd` / `xsdValidation`) |
 | Meta-driven `bml:xml` parser/serializer | Post–Phase A (see `19_definition_blocks_and_bml_xml.md`) |
 | SCAD / Customizer JSON render output | Phase C **product** path (after BlockDoc control gate) |
-| CLI `bom compile` + `targets[]` | Phase C / V1 — config bootstraps available targets; default `["blockdoc"]` |
+| CLI `blockml compile` + `targets[]` | Phase C / V1 — config bootstraps available targets; default `["blockdoc"]` |
 
 ---
 
@@ -874,7 +874,7 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 12. @blockml/engine-maker      — library + owned MD → RenderEngine stub
 13. @machineblocks/core BML already present — NativeBlock.bml SSOT
 14. @machineblocks/...-scad-target — library + migrate 05 → ScadBlockProcessor MVP
-14. @blockml/cli               — library + migrate 07 → bom validate, then bom compile
+14. @blockml/cli               — library + migrate 07 → blockml validate, then blockml compile
 15. Correctness tests         — Calibrator, Standard, Cross from @machineblocks/core
 ```
 

@@ -226,7 +226,7 @@ Everything shipped before V3 must maximize reuse when BomBuilder arrives:
 | Prefer small **factory helpers** in `@blockml/bom` for valid empty/partial nodes | Shared by tests, scaffolding, and future Builder |
 | Avoid baking “only exists after XML map” invariants into types | Builder must assemble graphs without the mapper |
 
-IDE editors use the **Language Server (V2)** for parse/validate/format on text. Structured graph editing and `bom new` / generative tools are expected **V3** consumers of BomBuilder (LSP may call Builder later for refactors).
+IDE editors use the **Language Server (V2)** for parse/validate/format on text. Structured graph editing and `blockml new` / generative tools are expected **V3** consumers of BomBuilder (LSP may call Builder later for refactors).
 
 ### Framework Utilities
 

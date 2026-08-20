@@ -131,7 +131,7 @@ Parser step [5] produces the immutable BOM graph with expression **raw** text on
 | Format detect: strip UTF-8 BOM; first non-ws `<` (B24) | JSON path; require bare `<block` at byte 0 |
 | Preserve `bml:xml` on Urmodell + D6 recipe check (B23) | Drive mapping/serialization from Definition `bml:xml` (meta) |
 | Preserve XML comments bound to elements (B11) | Processing instructions; insignificant whitespace |
-| Roundtrip corpus T0–T3 | `bom compile` / render targets |
+| Roundtrip corpus T0–T3 | `blockml compile` / render targets |
 | Public `parse` / `serialize` (B26) | `parseFile` / async / validate-on-parse |
 
 **XSD:** Not part of Phase-A Stage 1. Hand-written schemas / `catalog.xml` may remain a temporary **IDE aid**, but:
@@ -1268,7 +1268,7 @@ Do not extend the format detector, root-type registry, or CLI for JSON authoring
 | B6 | JSON BML authoring format | **Not planned** — not equivalent to XML; not V1/V2; may never ship (see § JSON BML) |
 | B7 | V1 Phase-A slice — no XSD must; no meta-`bml:xml` drive; raw expressions only | **Decided** — see § V1 Parser / Serializer Scope |
 | B8 | XSD generation as Render Target; XSD validation only after that target ships; **always disableable** via `--no-xsd` + `xsdValidation: false` | **Decided** — see § V1 Scope · `07_cli.md` escape hatch · `15_dev_setup.md` Phase C |
-| B9 | BlockDoc-first Stage-3 + `targets[]` in V1; library/corpus compile scope (C7); then XSD / FatBlock / SCAD | **Decided** — default `targets: ["blockdoc"]`; `bom compile blockdoc`; packages `@blockml/{blockdoc,xsd,fatblock}-target` — see `01` · `07` · `14` C3 · C7 · `15` Phase C |
+| B9 | BlockDoc-first Stage-3 + `targets[]` in V1; library/corpus compile scope (C7); then XSD / FatBlock / SCAD | **Decided** — default `targets: ["blockdoc"]`; `blockml compile blockdoc`; packages `@blockml/{blockdoc,xsd,fatblock}-target` — see `01` · `07` · `14` C3 · C7 · `15` Phase C |
 | B10 | Roundtrip gate = BOM deep equality only | **Decided** — `parse(serialize(parse(f)))` deep-equals `parse(f)` **modulo provenance (B20)**; XML source diff optional/non-blocking — see § V1 Parser / Serializer Scope · `15_dev_setup.md` Roundtrip test contract |
 | B11 | XML comments bound to following element | **Decided** — `XmlTrivia.leadingComments` / `trailingComments`; section/metadata slots when element is flattened — see § XML Comments · `12` |
 | B12 | Serializer emit order = Definition member declaration order | **Decided** — **V1 hardcoded** (snapshot of `BlockDefinition.bml` + bases); **V2 dynamic** from Definition `.bml` / effective members — see § Serializer Emit Order |

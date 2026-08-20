@@ -178,7 +178,7 @@ export function compileToOutput(
   );
   diagnostics.push(...bootstrapDiagnostics);
 
-  // Stage-2 validation is reported via bom validate; BlockDoc control gate renders
+  // Stage-2 validation is reported via blockml validate; BlockDoc control gate renders
   // the corpus for structural review without failing on semantic validation gaps.
   if (resolved.kind === "document") {
     diagnostics.push(...validateRegistryDocuments(registry));

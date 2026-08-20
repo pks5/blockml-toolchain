@@ -65,7 +65,7 @@ C. SCAD renderer steps (example Stage-3 pipeline — bracket notation from [9])
 Deprecated legacy numbering (do not use in new text):
    Former “stages [6]–[8]”  → now Stage 2 utilities / @blockml/validator
    Former “stage [7]” AST-on-BOM → parseExpression() utility (no Urmodell write-back)
-   Former “stages 1–8” for bom validate → Stage 1 + Stage 2
+   Former “stages 1–8” for blockml validate → Stage 1 + Stage 2
 ```
 
 **Test suites** use **Test Layer A/B/C** (roundtrip / correctness / snapshot) — not Validation Stage numbers. See § Testing Strategy.
@@ -898,7 +898,7 @@ The Capability documentation is therefore not just for humans — it is a primar
 
 ## Incremental Build
 
-The CLI supports incremental builds — skipping compilation (and thumbnail generation) when hash inputs are unchanged. Applies to `bom compile --all`, single-file `bom compile`, and `bom watch`. Full specification: `14_compiler_runtime.md` — Incremental Build (C5).
+The CLI supports incremental builds — skipping compilation (and thumbnail generation) when hash inputs are unchanged. Applies to `blockml compile --all`, single-file `blockml compile`, and `blockml watch`. Full specification: `14_compiler_runtime.md` — Incremental Build (C5).
 
 ### Strategy
 

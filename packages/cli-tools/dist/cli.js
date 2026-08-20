@@ -41,7 +41,7 @@ async function main() {
     const parsed = parseArgs(process.argv.slice(2));
     const rootDir = process.cwd();
     if (parsed.command !== "compile") {
-        console.error("Usage: bom compile blockdoc [--out dir] [--src dir] [--libraries a,b]");
+        console.error("Usage: blockml compile blockdoc [--out dir] [--src dir] [--libraries a,b]");
         return 2;
     }
     const target = parsed.target ?? "blockdoc";

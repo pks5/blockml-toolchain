@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "bin": {
-    "bom": "./dist/cli.js"
+    "blockml": "./dist/cli.js"
   },
   "sideEffects": false,
   "exports": {
