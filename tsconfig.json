@@ -9,6 +9,7 @@
     { "path": "packages/compiler" },
     { "path": "packages/blockdoc-target" },
     { "path": "packages/xsd-target" },
+    { "path": "packages/fatblock-target" },
     { "path": "packages/cli-tools" }
   ]
 }

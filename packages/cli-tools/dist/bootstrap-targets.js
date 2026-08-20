@@ -1,11 +1,13 @@
 import { registerTarget } from "@blockml/compiler";
 import { BlockDocTarget } from "@blockml/blockdoc-target";
+import { FatBlockTarget } from "@blockml/fatblock-target";
 import { XsdTarget } from "@blockml/xsd-target";
 const DEFAULT_TARGETS = ["blockdoc"];
 let bootstrapped = false;
 const TARGET_FACTORIES = {
     blockdoc: () => new BlockDocTarget(),
     xsd: () => new XsdTarget(),
+    fatblock: () => new FatBlockTarget(),
 };
 export function bootstrapTargets(config, requested = []) {
     if (bootstrapped) {

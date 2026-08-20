@@ -26,7 +26,18 @@ export function bootstrapTypeRegistry(optionsOrPaths, rootDirArg) {
         join(rootDir, "packages"),
     ].map((p) => (p.startsWith("/") || p.includes(":") ? p : join(rootDir, p)));
     if (options.libraryPaths && options.libraryPaths.length > 0) {
-        return bootstrapFromLibraryPaths(options.libraryPaths, searchRoots, rootDir);
+        const result = bootstrapFromLibraryPaths(options.libraryPaths, searchRoots, rootDir);
+        if (options.paths && options.paths.length > 0) {
+            const corpus = bootstrapFromCorpusPaths(options.paths, rootDir);
+            for (const fqn of corpus.registry.keys()) {
+                const doc = corpus.registry.get(fqn);
+                if (doc) {
+                    result.registry.register(doc);
+                }
+            }
+            result.diagnostics.push(...corpus.diagnostics);
+        }
+        return result;
     }
     const paths = options.paths && options.paths.length > 0 ? options.paths : defaultBootstrapPaths(rootDir);
     return bootstrapFromCorpusPaths(paths, rootDir);

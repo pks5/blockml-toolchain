@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it, afterEach, beforeEach } from "vitest";
 import { clearTargets } from "@blockml/compiler";
@@ -110,10 +110,132 @@ describe("runCli other commands", () => {
     expect(stderr).toMatch(/Usage: blockml/);
   });
 
-  it("rejects an unsupported compile target", () => {
+  it("requires host file and --src for fatblock", () => {
     const { code, stderr } = runCli(["compile", "fatblock"], ROOT);
     expect(code).toBe(2);
-    expect(stderr).toMatch(/Unsupported target in minimal CLI: fatblock/);
+    expect(stderr).toMatch(/FatBlock requires a host <file> argument/);
+  });
+
+  it("compiles fatblock into Host.fat.bml", () => {
+    const srcDir = join(tmpProject, "src");
+    mkdirSync(srcDir, { recursive: true });
+    writeFileSync(
+      join(srcDir, "Host.bml"),
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cli="com.test.cli">
+  <name>Host</name>
+  <type>cli:Host</type>
+  <baseType>core:Block</baseType>
+  <is>host</is>
+  <version>1.0.0</version>
+</block>`,
+      "utf8",
+    );
+    writeFileSync(
+      join(srcDir, "Peer.bml"),
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cli="com.test.cli">
+  <name>Peer</name>
+  <type>cli:Peer</type>
+  <baseType>core:Block</baseType>
+  <is>peer</is>
+  <version>1.0.0</version>
+</block>`,
+      "utf8",
+    );
+
+    const { code, stderr } = runCli(
+      ["compile", "src/Host.bml", "fatblock", "--src", "src"],
+      tmpProject,
+    );
+
+    expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Wrote .*Host\.fat\.bml/);
+    expect(existsSync(join(tmpProject, "src", "Host.fat.bml"))).toBe(true);
+    const fat = readFileSync(join(tmpProject, "src", "Host.fat.bml"), "utf8");
+    expect(fat).toContain("<embeddedBlocks>");
+    expect(fat).toContain("cli:Peer");
+  });
+
+  it("rejects fatblock when host already has embeddedBlocks", () => {
+    const srcDir = join(tmpProject, "src");
+    mkdirSync(srcDir, { recursive: true });
+    writeFileSync(
+      join(srcDir, "Host.bml"),
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cli="com.test.cli">
+  <name>Host</name>
+  <type>cli:Host</type>
+  <baseType>core:Block</baseType>
+  <is>host</is>
+  <embeddedBlocks>
+    <block>
+      <type>cli:Nested</type>
+      <baseType>core:Block</baseType>
+      <is>nested</is>
+      <version>1.0.0</version>
+    </block>
+  </embeddedBlocks>
+</block>`,
+      "utf8",
+    );
+
+    const { code, stderr } = runCli(
+      ["compile", "src/Host.bml", "fatblock", "--src", "src"],
+      tmpProject,
+    );
+
+    expect(code).toBe(1);
+    expect(stderr).toMatch(/BML_FATBLOCK_HOST_HAS_EMBEDDED_BLOCKS/);
+  });
+
+  it("rejects fatblock when embed candidate has embeddedBlocks", () => {
+    const srcDir = join(tmpProject, "src");
+    mkdirSync(srcDir, { recursive: true });
+    writeFileSync(
+      join(srcDir, "Host.bml"),
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cli="com.test.cli">
+  <name>Host</name>
+  <type>cli:Host</type>
+  <baseType>core:Block</baseType>
+  <is>host</is>
+  <version>1.0.0</version>
+</block>`,
+      "utf8",
+    );
+    writeFileSync(
+      join(srcDir, "Peer.bml"),
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cli="com.test.cli">
+  <name>Peer</name>
+  <type>cli:Peer</type>
+  <baseType>core:Block</baseType>
+  <is>peer</is>
+  <embeddedBlocks>
+    <block>
+      <type>cli:AlreadyFat</type>
+      <baseType>core:Block</baseType>
+      <is>already fat</is>
+      <version>1.0.0</version>
+    </block>
+  </embeddedBlocks>
+</block>`,
+      "utf8",
+    );
+
+    const { code, stderr } = runCli(
+      ["compile", "src/Host.bml", "fatblock", "--src", "src"],
+      tmpProject,
+    );
+
+    expect(code).toBe(1);
+    expect(stderr).toMatch(/BML_FATBLOCK_EMBED_HAS_EMBEDDED_BLOCKS/);
   });
 
   it("compiles xsd schemas and root catalog", () => {

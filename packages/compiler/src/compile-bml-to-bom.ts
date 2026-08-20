@@ -36,9 +36,12 @@ export function compileBmlToBom(
 
 export function validateRegistryDocuments(
   registry: TypeRegistry,
+  filePaths?: string[],
 ): Diagnostic[] {
   const seen = new Set<string>();
   const diagnostics: Diagnostic[] = [];
+  const pathFilter =
+    filePaths && filePaths.length > 0 ? new Set(filePaths) : undefined;
 
   for (const fqn of registry.keys()) {
     const doc = registry.get(fqn);
@@ -46,6 +49,9 @@ export function validateRegistryDocuments(
       continue;
     }
     const filePath = doc.source?.filePath ?? fqn;
+    if (pathFilter && !pathFilter.has(filePath)) {
+      continue;
+    }
     if (seen.has(filePath)) {
       continue;
     }

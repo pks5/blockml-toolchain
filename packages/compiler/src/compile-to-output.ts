@@ -180,8 +180,10 @@ export function compileToOutput(
 
   // Stage-2 validation is reported via blockml validate; BlockDoc control gate renders
   // the corpus for structural review without failing on semantic validation gaps.
-  if (resolved.kind === "document") {
-    diagnostics.push(...validateRegistryDocuments(registry));
+  if (resolved.kind === "document" && resolved.document) {
+    diagnostics.push(
+      ...validateRegistryDocuments(registry, [resolved.document.filePath]),
+    );
   }
 
   const sessionOptions: Parameters<typeof buildRenderSession>[0] = {

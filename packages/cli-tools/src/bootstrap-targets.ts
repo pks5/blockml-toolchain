@@ -1,5 +1,6 @@
 import { registerTarget, type RenderTarget } from "@blockml/compiler";
 import { BlockDocTarget } from "@blockml/blockdoc-target";
+import { FatBlockTarget } from "@blockml/fatblock-target";
 import { XsdTarget } from "@blockml/xsd-target";
 import type { BomConfig } from "./load-config.js";
 
@@ -10,6 +11,7 @@ let bootstrapped = false;
 const TARGET_FACTORIES: Record<string, () => RenderTarget> = {
   blockdoc: () => new BlockDocTarget(),
   xsd: () => new XsdTarget(),
+  fatblock: () => new FatBlockTarget(),
 };
 
 export function bootstrapTargets(config: BomConfig, requested: string[] = []): void {

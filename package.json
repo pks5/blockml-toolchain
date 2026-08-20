@@ -12,6 +12,7 @@
   "devDependencies": {
     "@blockml/bom": "file:packages/bom",
     "@blockml/blockdoc-target": "file:packages/blockdoc-target",
+    "@blockml/fatblock-target": "file:packages/fatblock-target",
     "@blockml/xsd-target": "file:packages/xsd-target",
     "@blockml/cli": "file:packages/cli-tools",
     "@blockml/compiler": "file:packages/compiler",
@@ -40,9 +41,11 @@
     "test:compiler": "vitest run packages/compiler/test",
     "test:blockdoc": "vitest run packages/blockdoc-target/test tests/blockdoc",
     "test:xsd": "vitest run packages/xsd-target/test tests/xsd",
+    "test:fatblock": "vitest run packages/fatblock-target/test tests/fatblock",
     "test:cli": "vitest run packages/cli-tools/test",
     "compile:blockdoc": "node packages/cli-tools/dist/cli.js compile blockdoc",
     "compile:xsd": "node packages/cli-tools/dist/cli.js compile xsd",
+    "compile:fatblock": "node packages/cli-tools/dist/cli.js compile",
     "validate": "node packages/cli-tools/dist/cli.js validate",
     "typecheck": "tsc --build --emitDeclarationOnly"
   },

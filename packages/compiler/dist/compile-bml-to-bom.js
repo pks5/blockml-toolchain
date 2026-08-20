@@ -23,15 +23,19 @@ export function compileBmlToBom(input, options = {}) {
         success,
     };
 }
-export function validateRegistryDocuments(registry) {
+export function validateRegistryDocuments(registry, filePaths) {
     const seen = new Set();
     const diagnostics = [];
+    const pathFilter = filePaths && filePaths.length > 0 ? new Set(filePaths) : undefined;
     for (const fqn of registry.keys()) {
         const doc = registry.get(fqn);
         if (!doc) {
             continue;
         }
         const filePath = doc.source?.filePath ?? fqn;
+        if (pathFilter && !pathFilter.has(filePath)) {
+            continue;
+        }
         if (seen.has(filePath)) {
             continue;
         }

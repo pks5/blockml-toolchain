@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { bootstrapTypeRegistry } from "@blockml/framework";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   compileBmlToBom,
@@ -11,13 +12,30 @@ import { bootstrapTargets } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
 import { loadConfig, type BomConfig } from "./load-config.js";
 import { writeOutputFiles, type WriteOutputOptions } from "./write-output.js";
+import type { FatBlockRenderOutput } from "@blockml/fatblock-target";
 import type { XsdRenderOutput } from "@blockml/xsd-target";
 
 const USAGE =
   "Usage: blockml compile <blockdoc|xsd> [--out dir] [--src dir] [--libraries a,b]\n" +
+  "       blockml compile <file> fatblock --src dir [--include a,b] [--out dir]\n" +
   "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b]";
 
-const SUPPORTED_TARGETS = new Set(["blockdoc", "xsd"]);
+const SUPPORTED_TARGETS = new Set(["blockdoc", "xsd", "fatblock"]);
+const DOCUMENT_TARGETS = new Set(["fatblock"]);
+
+function workspaceRoot(from: string): string {
+  let dir = resolve(from);
+  for (;;) {
+    if (existsSync(join(dir, "node_modules/@blockml/core"))) {
+      return dir;
+    }
+    const parent = dirname(dir);
+    if (parent === dir) {
+      return from;
+    }
+    dir = parent;
+  }
+}
 
 export interface ParsedArgs {
   command?: string;
@@ -27,6 +45,7 @@ export interface ParsedArgs {
   outDir?: string;
   srcDir?: string;
   libraries?: string[];
+  include?: string[];
 }
 
 interface PrintableDiagnostic {
@@ -62,12 +81,23 @@ export function parseArgs(argv: string[]): ParsedArgs {
       if (value) {
         result.libraries = value.split(",").map((s) => s.trim()).filter(Boolean);
       }
+    } else if (flag === "--include") {
+      const value = args.shift();
+      if (value) {
+        result.include = value.split(",").map((s) => s.trim()).filter(Boolean);
+      }
     } else if (flag === "--all") {
       result.all = true;
     } else if (flag && !flag.startsWith("-")) {
       if (result.command === "validate") {
         if (!result.file) {
           result.file = flag;
+        }
+      } else if (result.command === "compile") {
+        if (flag.endsWith(".bml") && !result.file) {
+          result.file = flag;
+        } else if (!result.target) {
+          result.target = flag;
         }
       } else if (!result.target) {
         result.target = flag;
@@ -163,6 +193,91 @@ function defaultOutDir(target: string, config: BomConfig): string {
   return config.outDir ?? "doc";
 }
 
+function runCompileFatBlock(
+  parsed: ParsedArgs,
+  rootDir: string,
+  config: BomConfig,
+  lines: string[],
+): number {
+  if (!parsed.file) {
+    lines.push("FatBlock requires a host <file> argument.");
+    lines.push(USAGE);
+    return 2;
+  }
+  if (!parsed.srcDir) {
+    lines.push("FatBlock requires --src <dir> for the embed candidate pool.");
+    lines.push(USAGE);
+    return 2;
+  }
+
+  const hostPath = resolve(rootDir, parsed.file);
+  if (!existsSync(hostPath)) {
+    lines.push(`File not found: ${parsed.file}`);
+    return 2;
+  }
+
+  const srcDir = parsed.srcDir;
+  const wsRoot = workspaceRoot(rootDir);
+  const absSrc = resolve(rootDir, srcDir);
+  const coreLibrary = join(
+    wsRoot,
+    "node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml",
+  );
+  const bootstrap = bootstrapTypeRegistry({
+    libraryPaths: existsSync(coreLibrary) ? [coreLibrary] : [],
+    paths: [absSrc],
+    rootDir: wsRoot,
+  });
+  const source = readFileSync(hostPath, "utf8");
+
+  const fatblockConfig = config.targetOptions?.fatblock;
+  const targetOptions = {
+    srcDir: absSrc,
+    rootDir: wsRoot,
+    ...(parsed.include !== undefined ? { include: parsed.include } : {}),
+    ...(typeof fatblockConfig === "object" && fatblockConfig !== null
+      ? fatblockConfig
+      : {}),
+  };
+
+  const result = compileToOutput(
+    {
+      scope: { kind: "document", document: { source, filePath: hostPath } },
+      targetOptions,
+    },
+    "fatblock",
+    {
+      typeRegistry: bootstrap.registry,
+      rootDir,
+      outputBasePath: parsed.outDir ?? dirname(hostPath),
+    },
+  );
+
+  const fatOutput = result.output as FatBlockRenderOutput | null;
+  const fatDiagnostics = fatOutput?.diagnostics ?? [];
+  printDiagnostics(
+    [...bootstrap.diagnostics, ...result.diagnostics, ...fatDiagnostics],
+    lines,
+  );
+
+  if (
+    !result.success ||
+    !fatOutput?.files.length ||
+    fatDiagnostics.some((d: PrintableDiagnostic) => d.severity === "error")
+  ) {
+    return 1;
+  }
+
+  const outBase = parsed.outDir
+    ? resolve(rootDir, parsed.outDir)
+    : dirname(hostPath);
+  const outFile = join(outBase, fatOutput.files[0]!.path);
+  mkdirSync(dirname(outFile), { recursive: true });
+  writeFileSync(outFile, fatOutput.files[0]!.content, "utf8");
+  lines.push(`Wrote ${outFile}`);
+  return 0;
+}
+
 function runCompile(parsed: ParsedArgs, rootDir: string, lines: string[]): number {
   const target = parsed.target ?? "blockdoc";
   if (!SUPPORTED_TARGETS.has(target)) {
@@ -183,6 +298,10 @@ function runCompile(parsed: ParsedArgs, rootDir: string, lines: string[]): numbe
   } catch (e) {
     lines.push(e instanceof Error ? e.message : String(e));
     return 2;
+  }
+
+  if (DOCUMENT_TARGETS.has(target)) {
+    return runCompileFatBlock(parsed, rootDir, config, lines);
   }
 
   const bootstrap = bootstrapProjectTypeRegistry(

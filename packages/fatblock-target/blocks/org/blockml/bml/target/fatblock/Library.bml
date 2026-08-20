@@ -1,0 +1,33 @@
+<!--
+  FatBlock Render Target Library
+  FQN: org.blockml.bml.target.fatblock.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:fatblock="org.blockml.bml.target.fatblock">
+
+  <name>Library</name>
+  <type>fatblock:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>FatBlock bundle render target library catalog</is>
+
+  <documentation>
+    Stage-3 target that emits one portable .bml with peer blocks inlined under root
+    embeddedBlocks. Registry name: fatblock. Accepts document compile scope only.
+    v1: folder bundle (--src) with optional --include FQN filters; host and embed
+    candidates must not already declare embeddedBlocks. SubBlocks ship inside their
+    parent embed. Output: Host.fat.bml beside source or under --out.
+  </documentation>
+
+  <version>0.1.0</version>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <fatblock:README />
+      </composition>
+    </readMe>
+  </aggregations>
+
+</block>

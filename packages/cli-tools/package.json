@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@blockml/blockdoc-target": "file:../blockdoc-target",
+    "@blockml/fatblock-target": "file:../fatblock-target",
     "@blockml/xsd-target": "file:../xsd-target",
     "@blockml/compiler": "file:../compiler",
     "@blockml/framework": "file:../framework"

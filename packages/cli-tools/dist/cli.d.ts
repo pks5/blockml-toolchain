@@ -7,6 +7,7 @@ export interface ParsedArgs {
     outDir?: string;
     srcDir?: string;
     libraries?: string[];
+    include?: string[];
 }
 interface PrintableDiagnostic {
     severity: string;

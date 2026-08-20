@@ -1,0 +1,25 @@
+<!--
+  FatBlock Render Target — README
+  FQN: org.blockml.bml.target.fatblock.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:fatblock="org.blockml.bml.target.fatblock">
+
+  <name>README</name>
+  <type>fatblock:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the FatBlock render target</is>
+
+  <documentation>
+    @blockml/fatblock-target implements RenderTarget name fatblock (Phase C after XSD).
+    Compiles a host .bml plus selected peer root blocks from --src into one Host.fat.bml
+    with flat embeddedBlocks. Each embed is a full root block including subBlocks[].
+    Host and embed sources must not already declare embeddedBlocks (v1 error). Optional
+    --include filters by FQN glob within the src pool. Stage 2 namespace merge before emit.
+    Compile: blockml compile Host.bml fatblock --src dir [--include patterns] [--out dir].
+    Closure/auto transitive mode is planned for v2.
+  </documentation>
+
+</block>
