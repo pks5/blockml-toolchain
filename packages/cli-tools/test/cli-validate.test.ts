@@ -125,7 +125,7 @@ describe("runCli other commands", () => {
 
     expect(code, stderr).toBe(0);
     expect(stderr).toMatch(/Wrote \d+ file\(s\)/);
-    const schemaPath = join(tmpOut, "core", "block.xsd");
+    const schemaPath = join(tmpOut, "bml.xsd");
     expect(existsSync(schemaPath)).toBe(true);
     expect(readFileSync(schemaPath, "utf8")).toContain("<xs:schema");
   });

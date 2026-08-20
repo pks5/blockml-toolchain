@@ -8,7 +8,7 @@ export class XsdTarget {
         return {
             files: [
                 {
-                    path: "core/block.xsd",
+                    path: "bml.xsd",
                     content: emitBlockXsd(ctx.session.typeRegistry),
                 },
             ],

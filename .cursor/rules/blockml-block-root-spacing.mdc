@@ -11,14 +11,14 @@ After the `<block …>` opening tag, leave **one blank line** before the first c
 ```xml
 <!-- ❌ BAD -->
 <block
-  xmlns="http://blockml.org/schema/block"
+  xmlns="http://blockml.org/bml"
   …>
   <name>Face</name>
   <type>mbtype:Face</type>
 
 <!-- ✅ GOOD -->
 <block
-  xmlns="http://blockml.org/schema/block"
+  xmlns="http://blockml.org/bml"
   …>
 
   <name>Face</name>

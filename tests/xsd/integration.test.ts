@@ -17,7 +17,7 @@ describe("xsd integration", () => {
     registerTarget(new XsdTarget());
   });
 
-  it("generates core/block.xsd from the core library", () => {
+  it("generates bml.xsd from the core library", () => {
     if (!existsSync(CORE_LIBRARY)) {
       throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
     }
@@ -40,7 +40,7 @@ describe("xsd integration", () => {
 
     expect(result.success, JSON.stringify(result.diagnostics)).toBe(true);
     expect(result.output).not.toBeNull();
-    const schema = result.output!.files.find((f) => f.path === "core/block.xsd");
+    const schema = result.output!.files.find((f) => f.path === "bml.xsd");
     expect(schema).toBeDefined();
     expect(schema!.content).toContain("<xs:schema");
     expect(schema!.content).toContain('element name="block"');

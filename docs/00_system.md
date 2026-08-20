@@ -287,7 +287,7 @@ MachineBlocks SCAD is the primary **product** target. **V1 Stage-3 control gate 
 | Order | Target | Package | Registry / CLI `<target>` | Minimal output | Role |
 |---|---|---|---|---|---|
 | **1st** | **BlockDoc** | `@blockml/blockdoc-target` | `blockdoc` | Static HTML (`siteMode`: merged or perLibrary). URLs follow **package / FQN hierarchy**. Input: **library/corpus scope** (`libraries[]` + `srcDir` fallback) — see `14` C7 | **V1 control gate** — human/LLM review of the block corpus |
-| 2nd+ | **XSD** | `@blockml/xsd-target` | `xsd` | `.xsd` artifacts | **Universal** `block.xsd` + optional **domain** XSDs; particle shape aligns with **`bml:xml`** |
+| 2nd+ | **XSD** | `@blockml/xsd-target` | `xsd` | `.xsd` artifacts | **Universal** `bml.xsd` + optional **domain** XSDs; particle shape aligns with **`bml:xml`** |
 | 2nd+ | **FatBlock** | `@blockml/fatblock-target` | `fatblock` | One `.bml` with transitive deps in root `<embeddedBlocks>` | Portable artifact; registry closure + embed model; Stage 2 first (`19` D2) |
 | Later | **SCAD (product)** | `@machineblocks/machineblocks-v3-scad-target` | `machineblocks-v3-scad` | `.scad` (+ maps, …) | MachineBlocks V3 reference product target |
 
@@ -303,10 +303,9 @@ Long-term, schemas are distributed as compile artifacts (or published from the X
 
 ```text
 BlockML Core (blockml.org):
-  http://blockml.org/schema/block      ← default xmlns for <block> documents
+  http://blockml.org/bml               ← default xmlns + schemaLocation key for <block> documents (→ bml.xsd)
   org.blockml.bml.annotation.BmlAnnotation  ← bml: Annotation (directives)
-  http://blockml.org/schema/bml        ← XSD/catalog only (not xmlns target)
-  http://blockml.org/schema/service    ← org.blockml.bml.service.*
+  http://blockml.org/schema/service    ← org.blockml.bml.service.* (domain/catalog, not document xmlns)
 
 MachineBlocks (machineblocks.com):
   http://machineblocks.com/schema/core        ← MB Core, NativeBlock, Set
@@ -317,11 +316,10 @@ MachineBlocks (machineblocks.com):
 ### Schema Files
 
 ```text
-blockml.org schemas (in @blockml/core package):
-  schemas/core/
-    block.xsd          ← BML document structure (all <block> roots: composable, types, Library, …)
-    types.xsd          ← org.blockml.bml.type.* primitives (filename plural; maps to singular .type package)
-    service.xsd        ← org.blockml.bml.service.* hierarchy
+blockml.org schemas (XSD target output, default outDir schemas/):
+  bml.xsd              ← BML document structure (all <block> roots: composable, types, Library, …)
+  types.xsd            ← org.blockml.bml.type.* primitives (optional; filename plural; maps to singular .type package)
+  service.xsd          ← org.blockml.bml.service.* hierarchy (optional)
 
 machineblocks.com schemas (generated from `@machineblocks/core` BML; packaging with the SCAD target when it exists):
   schemas/machineblocks/
@@ -337,10 +335,8 @@ A `catalog.xml` in the project root maps namespace URLs to local XSD files for o
 
 ```xml
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-  <uri name="http://blockml.org/schema/block"
-       uri="./node_modules/@blockml/core/schemas/core/block.xsd" />
-  <uri name="http://blockml.org/schema/bml"
-       uri="./node_modules/@blockml/core/schemas/core/block.xsd" />
+  <uri name="http://blockml.org/bml"
+       uri="./schemas/bml.xsd" />
   <uri name="http://machineblocks.com/schema/core"
        uri="./node_modules/@machineblocks/machineblocks-v3-scad-target/schemas/machineblocks/core.xsd" />
   <uri name="http://machineblocks.com/schema/bricks"

@@ -11,9 +11,9 @@ On every `<block>` root, declare attributes in this order — nothing interleave
 ## 1. URIs and schemaLocation
 
 ```xml
-xmlns="http://blockml.org/schema/block"
+xmlns="http://blockml.org/bml"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                     "
 ```
 
@@ -31,10 +31,10 @@ Within each group, sort by package FQN (hierarchical / alphabetical).
 ```xml
 <!-- ❌ BAD — package before schemaLocation; BlockML and domain interleaved -->
 <block
-  xmlns="http://blockml.org/schema/block"
+  xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:mbtype="com.machineblocks.bml.type"
   xmlns:unit="org.blockml.bml.unit"
@@ -42,9 +42,9 @@ Within each group, sort by package FQN (hierarchical / alphabetical).
 
 <!-- ✅ GOOD -->
 <block
-  xmlns="http://blockml.org/schema/block"
+  xmlns="http://blockml.org/bml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:type="org.blockml.bml.type"

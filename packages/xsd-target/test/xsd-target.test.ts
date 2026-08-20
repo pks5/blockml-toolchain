@@ -25,13 +25,13 @@ describe("XsdTarget", () => {
     // no registry side effects
   });
 
-  it("emits core/block.xsd", () => {
+  it("emits bml.xsd", () => {
     const output = new XsdTarget().render(
       { scope: { kind: "library" } },
       mockContext(new TypeRegistry()),
     );
     expect(output.files).toHaveLength(1);
-    expect(output.files[0]?.path).toBe("core/block.xsd");
+    expect(output.files[0]?.path).toBe("bml.xsd");
     expect(output.files[0]?.content).toContain('element name="block"');
   });
 });

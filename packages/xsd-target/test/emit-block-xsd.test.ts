@@ -6,7 +6,7 @@ describe("emitBlockXsd", () => {
   it("emits a universal block schema with D1 particles and lax xs:any", () => {
     const xml = emitBlockXsd(new TypeRegistry());
     expect(xml).toContain('<xs:schema');
-    expect(xml).toContain('targetNamespace="http://blockml.org/schema/block"');
+    expect(xml).toContain('targetNamespace="http://blockml.org/bml"');
     expect(xml).toContain('<xs:element name="block">');
     expect(xml).toContain('<xs:element name="name"');
     expect(xml).toContain('<xs:element name="type"');

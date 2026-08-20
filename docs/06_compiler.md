@@ -978,7 +978,7 @@ BML is **universal**: the only document root is `<block>`. Domains extend the sy
 
 ```text
 1. Domain Block types / packages (BML corpus under a domain FQN)
-2. Optional domain XSD(s) for allowed-type vocabularies (alongside universal block.xsd)
+2. Optional domain XSD(s) for allowed-type vocabularies (alongside universal bml.xsd)
 3. One or more Render Targets (or reuse an existing one)
 ```
 

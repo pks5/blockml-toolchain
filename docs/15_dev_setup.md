@@ -561,7 +561,7 @@ Thumbnail / OpenSCAD tests: **optional** integration suite — skipped in CI whe
 Copy or generate `catalog.xml` at repo root (see `00_system.md` — catalog.xml). Points namespace URLs to:
 
 ```text
-node_modules/@blockml/core/schemas/core/*.xsd
+schemas/bml.xsd
 node_modules/@machineblocks/machineblocks-v3-scad-target/schemas/machineblocks/*.xsd
 ```
 

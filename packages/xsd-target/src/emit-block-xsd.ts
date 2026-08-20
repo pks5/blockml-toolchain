@@ -1,7 +1,7 @@
 import type { BlockDefinition, MemberDefinition, XmlRenderingMember } from "@blockml/bom";
 import type { TypeRegistry } from "@blockml/framework";
 
-const TARGET_NS = "http://blockml.org/schema/block";
+const TARGET_NS = "http://blockml.org/bml";
 
 /** D1 definition-document identity / prose particles. */
 const D1_IDENTITY_ELEMENTS = [

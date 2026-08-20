@@ -13,9 +13,9 @@
   <is>XSD schema render target library catalog</is>
 
   <documentation>
-    Stage-3 target that emits universal block.xsd from the Definition meta-model and D1
+    Stage-3 target that emits universal bml.xsd from the Definition meta-model and D1
     XML defaults. Registry name: xsd. Accepts library, corpus, and auto compile scope.
-    Output: core/block.xsd under outDir (CLI default schemas/).
+    Output: bml.xsd under outDir (CLI default schemas/).
     Authoring XSD validation is a separate, always-disableable CLI/config concern.
   </documentation>
 
