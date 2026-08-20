@@ -107,7 +107,7 @@ describe("renderBlockPage", () => {
     expect(html).toContain("members: size");
   });
 
-  it("shows segment-only breadcrumb labels", () => {
+  it("shows a dotted package path above the block name", () => {
     const html = renderBlockPage(
       minimalBlock(),
       DEFAULT_BLOCKDOC_OPTIONS,
@@ -115,7 +115,11 @@ describe("renderBlockPage", () => {
       KNOWN,
       "com.example.Parent",
     );
-    expect(html).toContain('<a href="../../index.html">Index</a> / <a href="../index.html">com</a> / <a href="./index.html">example</a> / Parent');
-    expect(html).not.toContain("com.example.Parent / com.example");
+    expect(html).toContain('<p class="site-index"><a href="../../index.html">Index</a></p>');
+    expect(html).toContain(
+      '<p class="package-fqn"><a href="../index.html">com</a>.<a href="./index.html">example</a></p>',
+    );
+    expect(html).not.toContain("nav class=\"breadcrumb\"");
+    expect(html).not.toContain("Index</a> /");
   });
 });

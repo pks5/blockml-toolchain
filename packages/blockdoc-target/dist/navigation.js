@@ -45,6 +45,18 @@ export function collectPackagePrefixes(rootFqns) {
     }
     return [...prefixes].sort();
 }
+export function renderDottedPackagePath(packageFqn, pagePath, options, knownFqns) {
+    const segments = packageFqn.split(".").filter(Boolean);
+    return segments
+        .map((segment, index) => {
+        const prefix = segments.slice(0, index + 1).join(".");
+        const href = knownFqns.has(prefix)
+            ? relativePath(pagePath, fqnToHtmlPath(prefix, options.outLayout))
+            : relativePath(pagePath, packageIndexPath(prefix));
+        return `<a href="${href}">${escapeHtml(segment)}</a>`;
+    })
+        .join(".");
+}
 export function renderNavigationBreadcrumb(fqn, rootFqn, pagePath, options, rootIndexPath) {
     const parts = [`<a href="${relativePath(pagePath, rootIndexPath)}">Index</a>`];
     if (options.outLayout === "fqn") {
