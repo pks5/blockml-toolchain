@@ -38,7 +38,9 @@
     "test:constraints": "vitest run packages/framework/test/constraints.test.ts",
     "test:compiler": "vitest run packages/compiler/test",
     "test:blockdoc": "vitest run packages/blockdoc-target/test tests/blockdoc",
+    "test:cli": "vitest run packages/cli-tools/test",
     "compile:blockdoc": "node packages/cli-tools/dist/cli.js compile blockdoc",
+    "validate": "node packages/cli-tools/dist/cli.js validate",
     "typecheck": "tsc --build --emitDeclarationOnly"
   },
   "engines": {

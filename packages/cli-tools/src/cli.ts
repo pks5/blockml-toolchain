@@ -1,19 +1,39 @@
 #!/usr/bin/env node
-import { compileToOutput } from "@blockml/compiler";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import {
+  compileBmlToBom,
+  compileToOutput,
+  validateRegistryDocuments,
+} from "@blockml/compiler";
 import { bootstrapTargets } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
-import { loadConfig } from "./load-config.js";
+import { loadConfig, type BomConfig } from "./load-config.js";
 import { writeOutputFiles } from "./write-output.js";
 
-interface ParsedArgs {
+const USAGE =
+  "Usage: blockml compile blockdoc [--out dir] [--src dir] [--libraries a,b]\n" +
+  "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b]";
+
+export interface ParsedArgs {
   command?: string;
   target?: string;
+  file?: string;
+  all?: boolean;
   outDir?: string;
   srcDir?: string;
   libraries?: string[];
 }
 
-function parseArgs(argv: string[]): ParsedArgs {
+interface PrintableDiagnostic {
+  severity: string;
+  code: string;
+  message: string;
+  source?: { file: string; line: number };
+}
+
+export function parseArgs(argv: string[]): ParsedArgs {
   const args = [...argv];
   const result: ParsedArgs = {};
 
@@ -39,46 +59,45 @@ function parseArgs(argv: string[]): ParsedArgs {
       if (value) {
         result.libraries = value.split(",").map((s) => s.trim()).filter(Boolean);
       }
-    } else if (flag && !flag.startsWith("-") && !result.target) {
-      result.target = flag;
+    } else if (flag === "--all") {
+      result.all = true;
+    } else if (flag && !flag.startsWith("-")) {
+      if (result.command === "validate") {
+        if (!result.file) {
+          result.file = flag;
+        }
+      } else if (!result.target) {
+        result.target = flag;
+      }
     }
   }
 
   return result;
 }
 
-async function main(): Promise<number> {
-  const parsed = parseArgs(process.argv.slice(2));
-  const rootDir = process.cwd();
+export function formatDiagnostic(d: PrintableDiagnostic): string {
+  const loc = d.source ? `${d.source.file}:${d.source.line}` : "";
+  return `${d.severity} ${d.code} ${loc} — ${d.message}`;
+}
 
-  if (parsed.command !== "compile") {
-    console.error("Usage: blockml compile blockdoc [--out dir] [--src dir] [--libraries a,b]");
-    return 2;
+function printDiagnostics(diagnostics: PrintableDiagnostic[], lines: string[]): void {
+  for (const d of diagnostics) {
+    lines.push(formatDiagnostic(d));
   }
+}
 
-  const target = parsed.target ?? "blockdoc";
-  if (target !== "blockdoc") {
-    console.error(`Unsupported target in minimal CLI: ${target}`);
-    return 2;
-  }
-
-  let config;
-  try {
-    config = loadConfig(rootDir);
-  } catch (e) {
-    console.error(e instanceof Error ? e.message : String(e));
-    return 2;
-  }
-
-  try {
-    bootstrapTargets(config);
-  } catch (e) {
-    console.error(e instanceof Error ? e.message : String(e));
-    return 2;
-  }
-
+function bootstrapOptsFromParsed(
+  parsed: ParsedArgs,
+  config: BomConfig,
+  rootDir: string,
+): {
+  config: BomConfig;
+  rootDir: string;
+  srcDirOverride?: string;
+  librariesOverride?: string[];
+} {
   const bootstrapOpts: {
-    config: ReturnType<typeof loadConfig>;
+    config: BomConfig;
     rootDir: string;
     srcDirOverride?: string;
     librariesOverride?: string[];
@@ -89,8 +108,76 @@ async function main(): Promise<number> {
   if (parsed.libraries !== undefined) {
     bootstrapOpts.librariesOverride = parsed.libraries;
   }
+  return bootstrapOpts;
+}
 
-  const bootstrap = bootstrapProjectTypeRegistry(bootstrapOpts);
+function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): number {
+  if (parsed.file && parsed.all) {
+    lines.push("Specify either <file> or --all, not both.");
+    lines.push(USAGE);
+    return 2;
+  }
+
+  let config: BomConfig;
+  try {
+    config = loadConfig(rootDir);
+  } catch (e) {
+    lines.push(e instanceof Error ? e.message : String(e));
+    return 2;
+  }
+
+  const bootstrap = bootstrapProjectTypeRegistry(
+    bootstrapOptsFromParsed(parsed, config, rootDir),
+  );
+
+  if (parsed.file) {
+    const filePath = resolve(rootDir, parsed.file);
+    if (!existsSync(filePath)) {
+      lines.push(`File not found: ${parsed.file}`);
+      return 2;
+    }
+    const source = readFileSync(filePath, "utf8");
+    const result = compileBmlToBom(
+      { source, filePath },
+      { typeRegistry: bootstrap.registry, rootDir },
+    );
+    printDiagnostics([...bootstrap.diagnostics, ...result.diagnostics], lines);
+    return result.success ? 0 : 1;
+  }
+
+  const diagnostics = [
+    ...bootstrap.diagnostics,
+    ...validateRegistryDocuments(bootstrap.registry),
+  ];
+  printDiagnostics(diagnostics, lines);
+  return diagnostics.some((d) => d.severity === "error") ? 1 : 0;
+}
+
+function runCompile(parsed: ParsedArgs, rootDir: string, lines: string[]): number {
+  const target = parsed.target ?? "blockdoc";
+  if (target !== "blockdoc") {
+    lines.push(`Unsupported target in minimal CLI: ${target}`);
+    return 2;
+  }
+
+  let config: BomConfig;
+  try {
+    config = loadConfig(rootDir);
+  } catch (e) {
+    lines.push(e instanceof Error ? e.message : String(e));
+    return 2;
+  }
+
+  try {
+    bootstrapTargets(config);
+  } catch (e) {
+    lines.push(e instanceof Error ? e.message : String(e));
+    return 2;
+  }
+
+  const bootstrap = bootstrapProjectTypeRegistry(
+    bootstrapOptsFromParsed(parsed, config, rootDir),
+  );
 
   const outDir = parsed.outDir ?? config.outDir ?? "doc";
   const srcDir = parsed.srcDir ?? config.srcDir ?? "src";
@@ -130,25 +217,51 @@ async function main(): Promise<number> {
     configHints,
   );
 
-  for (const d of [...bootstrap.diagnostics, ...result.diagnostics]) {
-    const loc = d.source ? `${d.source.file}:${d.source.line}` : "";
-    console.error(`${d.severity} ${d.code} ${loc} — ${d.message}`);
-  }
+  printDiagnostics([...bootstrap.diagnostics, ...result.diagnostics], lines);
 
   if (!result.success || !result.output) {
     return 1;
   }
 
   writeOutputFiles(result.output, outDir, rootDir);
-  console.error(`Wrote ${result.output.files.length} file(s) to ${outDir}/`);
+  lines.push(`Wrote ${result.output.files.length} file(s) to ${outDir}/`);
   return 0;
 }
 
-main()
-  .then((code) => {
-    process.exitCode = code;
-  })
-  .catch((e) => {
-    console.error(e);
-    process.exitCode = 1;
-  });
+export function runCli(argv: string[], cwd = process.cwd()): { code: number; stderr: string } {
+  const parsed = parseArgs(argv);
+  const lines: string[] = [];
+
+  if (parsed.command === "validate") {
+    const code = runValidate(parsed, cwd, lines);
+    return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
+  }
+
+  if (parsed.command !== "compile") {
+    lines.push(USAGE);
+    return { code: 2, stderr: `${lines.join("\n")}\n` };
+  }
+
+  const code = runCompile(parsed, cwd, lines);
+  return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
+}
+
+function isDirectRun(): boolean {
+  const entry = process.argv[1];
+  if (!entry) {
+    return false;
+  }
+  try {
+    return resolve(fileURLToPath(import.meta.url)) === resolve(entry);
+  } catch {
+    return false;
+  }
+}
+
+if (isDirectRun()) {
+  const { code, stderr } = runCli(process.argv.slice(2), process.cwd());
+  if (stderr) {
+    console.error(stderr.replace(/\n$/, ""));
+  }
+  process.exitCode = code;
+}
