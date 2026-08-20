@@ -157,7 +157,7 @@ function runCompile(parsed, rootDir, lines) {
     if (!result.success || !result.output) {
         return 1;
     }
-    writeOutputFiles(result.output, outDir, rootDir);
+    writeOutputFiles(result.output, outDir, rootDir, { cleanOutDir: true });
     lines.push(`Wrote ${result.output.files.length} file(s) to ${outDir}/`);
     return 0;
 }

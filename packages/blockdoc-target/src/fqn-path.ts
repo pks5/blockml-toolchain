@@ -13,6 +13,10 @@ export function fqnToPackagePrefix(fqn: string): string {
   return segments.length > 1 ? segments.slice(0, -1).join(".") : fqn;
 }
 
+export function packageIndexPath(packagePrefix: string): string {
+  return `${packagePrefix.split(".").join("/")}/index.html`;
+}
+
 export function escapeHtml(text: string): string {
   return text
     .replace(/&/g, "&amp;")

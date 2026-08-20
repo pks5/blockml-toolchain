@@ -10,6 +10,9 @@ export function fqnToPackagePrefix(fqn) {
     const segments = fqn.split(".");
     return segments.length > 1 ? segments.slice(0, -1).join(".") : fqn;
 }
+export function packageIndexPath(packagePrefix) {
+    return `${packagePrefix.split(".").join("/")}/index.html`;
+}
 export function escapeHtml(text) {
     return text
         .replace(/&/g, "&amp;")

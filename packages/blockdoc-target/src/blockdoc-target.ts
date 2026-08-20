@@ -4,11 +4,17 @@ import type { BlockDefinition } from "@blockml/bom";
 import type { CompileRequest, RenderContext, RenderOutput, RenderTarget } from "@blockml/compiler";
 import { parse } from "@blockml/parser";
 import { fqnToHtmlPath } from "./fqn-path.js";
+import { collectPackagePrefixes, renderPackageIndexPage } from "./package-index.js";
 import { renderBlockPage, renderIndexPage } from "./render-block-page.js";
 import { resolveBlockDocOptions } from "./options.js";
 
 export interface BlockDocRenderOutput extends RenderOutput {
   files: { path: string; content: string }[];
+}
+
+interface LibraryRoot {
+  prefix: string;
+  indexPath: string;
 }
 
 function aggregationTypeFqns(block: BlockDefinition, aggregationName: string): string[] {
@@ -71,6 +77,45 @@ function findBlock(root: BlockDefinition, fqn: string): BlockDefinition | undefi
   return undefined;
 }
 
+function collectLibraryRoots(libraryPaths: string[], rootDir: string): LibraryRoot[] {
+  const roots: LibraryRoot[] = [];
+  for (const libPath of libraryPaths) {
+    const abs = resolve(rootDir, libPath);
+    let source: string;
+    try {
+      source = readFileSync(abs, "utf8");
+    } catch {
+      continue;
+    }
+    const parsed = parse(source, { filePath: abs, continueOnError: true });
+    const libFqn = parsed.document?.block.type;
+    if (!libFqn) {
+      continue;
+    }
+    const prefix = libFqn.replace(/\.Library$/, "");
+    roots.push({
+      prefix,
+      indexPath: `${prefix.split(".").join("/")}/index.html`,
+    });
+  }
+  return roots;
+}
+
+function resolveRootIndexPath(
+  fqn: string,
+  options: ReturnType<typeof resolveBlockDocOptions>,
+  libraryRoots: LibraryRoot[],
+): string {
+  if (options.siteMode === "perLibrary") {
+    for (const lib of libraryRoots) {
+      if (fqn.startsWith(`${lib.prefix}.`) || fqn === lib.prefix) {
+        return lib.indexPath;
+      }
+    }
+  }
+  return "index.html";
+}
+
 export class BlockDocTarget implements RenderTarget {
   readonly name = "blockdoc";
   readonly accepts: Array<"library" | "corpus" | "auto"> = ["library", "corpus", "auto"];
@@ -78,7 +123,13 @@ export class BlockDocTarget implements RenderTarget {
   render(request: CompileRequest, ctx: RenderContext): BlockDocRenderOutput {
     const options = resolveBlockDocOptions(request.targetOptions);
     const fqns = collectBlockFqns(ctx, request);
+    const knownFqns = new Set(fqns);
     const files: BlockDocRenderOutput["files"] = [];
+    const rootDir = process.cwd();
+    const libraryRoots =
+      options.siteMode === "perLibrary" && ctx.session.libraryPaths?.length
+        ? collectLibraryRoots(ctx.session.libraryPaths, rootDir)
+        : [];
 
     for (const fqn of fqns) {
       const doc = ctx.session.typeRegistry.get(fqn);
@@ -95,31 +146,21 @@ export class BlockDocTarget implements RenderTarget {
           : fqnToHtmlPath(fqn, "package");
       files.push({
         path: pagePath,
-        content: renderBlockPage(block, options, "index.html"),
+        content: renderBlockPage(
+          block,
+          options,
+          resolveRootIndexPath(fqn, options, libraryRoots),
+          knownFqns,
+        ),
       });
     }
 
     if (options.siteMode === "perLibrary" && ctx.session.libraryPaths?.length) {
-      const rootDir = process.cwd();
-      for (const libPath of ctx.session.libraryPaths) {
-        const abs = resolve(rootDir, libPath);
-        let source: string;
-        try {
-          source = readFileSync(abs, "utf8");
-        } catch {
-          continue;
-        }
-        const parsed = parse(source, { filePath: abs, continueOnError: true });
-        const libFqn = parsed.document?.block.type;
-        if (!libFqn) {
-          continue;
-        }
-        const prefix = libFqn.replace(/\.Library$/, "");
-        const libFqns = fqns.filter((f) => f.startsWith(prefix + ".") || f === prefix);
-        const indexPath = `${prefix.split(".").join("/")}/index.html`;
+      for (const lib of libraryRoots) {
+        const libFqns = fqns.filter((f) => f.startsWith(`${lib.prefix}.`) || f === lib.prefix);
         files.push({
-          path: indexPath,
-          content: renderIndexPage(`${prefix} — BlockDoc`, libFqns, options, indexPath),
+          path: lib.indexPath,
+          content: renderIndexPage(`${lib.prefix} — BlockDoc`, libFqns, options, lib.indexPath),
         });
       }
     } else {
@@ -127,6 +168,28 @@ export class BlockDocTarget implements RenderTarget {
         path: "index.html",
         content: renderIndexPage("BlockDoc", fqns, options, "index.html"),
       });
+    }
+
+    if (options.outLayout === "fqn") {
+      for (const prefix of collectPackagePrefixes(fqns)) {
+        const indexPath = `${prefix.split(".").join("/")}/index.html`;
+        const rootIndexPath =
+          options.siteMode === "perLibrary"
+            ? (libraryRoots.find(
+                (lib) => prefix.startsWith(`${lib.prefix}.`) || prefix === lib.prefix,
+              )?.indexPath ?? "index.html")
+            : "index.html";
+        files.push({
+          path: indexPath,
+          content: renderPackageIndexPage(
+            prefix,
+            fqns,
+            options,
+            indexPath,
+            rootIndexPath,
+          ),
+        });
+      }
     }
 
     return { files };

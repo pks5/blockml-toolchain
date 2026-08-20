@@ -52,8 +52,22 @@ describe("blockdoc integration", () => {
     expect(blockPage!.content).toContain("org.blockml.bml.core.Block");
     expect(blockPage!.content).toContain("Documentation");
 
+    const valueTypePage = result.output!.files.find((f) =>
+      f.path.endsWith("org/blockml/bml/core/ValueType.html"),
+    );
+    expect(valueTypePage).toBeDefined();
+    expect(valueTypePage!.content).toContain('<dt>baseType</dt><dd><a href="');
+    expect(valueTypePage!.content).toContain("org.blockml.bml.core.Block");
+
+    const packageIndex = result.output!.files.find(
+      (f) => f.path === "org/blockml/bml/core/index.html",
+    );
+    expect(packageIndex).toBeDefined();
+    expect(packageIndex!.content).toContain("org.blockml.bml.core.Block");
+
     const index = result.output!.files.find((f) => f.path === "index.html");
     expect(index).toBeDefined();
     expect(index!.content).toContain("org.blockml.bml.core.Block");
+    expect(index!.content).toMatch(/<h2><a href="\.\/org\/blockml\/bml\/core\/index\.html">/);
   });
 });
