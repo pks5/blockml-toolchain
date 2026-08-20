@@ -7,8 +7,9 @@ import { bootstrapTargets } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
 import { loadConfig } from "./load-config.js";
 import { writeOutputFiles } from "./write-output.js";
-const USAGE = "Usage: blockml compile blockdoc [--out dir] [--src dir] [--libraries a,b]\n" +
+const USAGE = "Usage: blockml compile <blockdoc|xsd> [--out dir] [--src dir] [--libraries a,b]\n" +
     "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b]";
+const SUPPORTED_TARGETS = new Set(["blockdoc", "xsd"]);
 export function parseArgs(argv) {
     const args = [...argv];
     const result = {};
@@ -104,9 +105,15 @@ function runValidate(parsed, rootDir, lines) {
     printDiagnostics(diagnostics, lines);
     return diagnostics.some((d) => d.severity === "error") ? 1 : 0;
 }
+function defaultOutDir(target, config) {
+    if (target === "xsd") {
+        return "schemas";
+    }
+    return config.outDir ?? "doc";
+}
 function runCompile(parsed, rootDir, lines) {
     const target = parsed.target ?? "blockdoc";
-    if (target !== "blockdoc") {
+    if (!SUPPORTED_TARGETS.has(target)) {
         lines.push(`Unsupported target in minimal CLI: ${target}`);
         return 2;
     }
@@ -119,14 +126,14 @@ function runCompile(parsed, rootDir, lines) {
         return 2;
     }
     try {
-        bootstrapTargets(config);
+        bootstrapTargets(config, [target]);
     }
     catch (e) {
         lines.push(e instanceof Error ? e.message : String(e));
         return 2;
     }
     const bootstrap = bootstrapProjectTypeRegistry(bootstrapOptsFromParsed(parsed, config, rootDir));
-    const outDir = parsed.outDir ?? config.outDir ?? "doc";
+    const outDir = parsed.outDir ?? defaultOutDir(target, config);
     const srcDir = parsed.srcDir ?? config.srcDir ?? "src";
     const libraries = parsed.libraries ?? config.libraries ?? [];
     const scope = { kind: "auto" };
@@ -147,7 +154,7 @@ function runCompile(parsed, rootDir, lines) {
     }
     const result = compileToOutput({
         scope,
-        targetOptions: config.targetOptions?.blockdoc,
+        targetOptions: config.targetOptions?.[target],
     }, target, {
         typeRegistry: bootstrap.registry,
         outputBasePath: outDir,

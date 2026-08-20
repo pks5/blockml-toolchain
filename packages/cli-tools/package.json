@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@blockml/blockdoc-target": "file:../blockdoc-target",
+    "@blockml/xsd-target": "file:../xsd-target",
     "@blockml/compiler": "file:../compiler",
     "@blockml/framework": "file:../framework"
   }

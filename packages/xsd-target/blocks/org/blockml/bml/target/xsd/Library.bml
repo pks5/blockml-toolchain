@@ -1,0 +1,32 @@
+<!--
+  XSD Render Target Library
+  FQN: org.blockml.bml.target.xsd.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:xsd="org.blockml.bml.target.xsd">
+
+  <name>Library</name>
+  <type>xsd:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>XSD schema render target library catalog</is>
+
+  <documentation>
+    Stage-3 target that emits universal block.xsd from the Definition meta-model and D1
+    XML defaults. Registry name: xsd. Accepts library, corpus, and auto compile scope.
+    Output: core/block.xsd under outDir (CLI default schemas/).
+    Authoring XSD validation is a separate, always-disableable CLI/config concern.
+  </documentation>
+
+  <version>0.1.0</version>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <xsd:README />
+      </composition>
+    </readMe>
+  </aggregations>
+
+</block>

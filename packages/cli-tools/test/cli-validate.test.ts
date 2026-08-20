@@ -1,7 +1,9 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, afterEach, beforeEach } from "vitest";
+import { clearTargets } from "@blockml/compiler";
 import { parseArgs, runCli } from "../src/cli.js";
+import { resetBootstrapTargets } from "../src/bootstrap-targets.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
 const CORE_LIBRARY = join(
@@ -86,15 +88,45 @@ describe("runCli validate", () => {
 });
 
 describe("runCli other commands", () => {
+  const tmpOut = join(import.meta.dirname, ".tmp-xsd-out");
+
+  beforeEach(() => {
+    clearTargets();
+    resetBootstrapTargets();
+  });
+
+  afterEach(() => {
+    rmSync(tmpOut, { recursive: true, force: true });
+    clearTargets();
+    resetBootstrapTargets();
+  });
+
   it("returns 2 for an unknown command", () => {
     const { code, stderr } = runCli(["inspect"], ROOT);
     expect(code).toBe(2);
     expect(stderr).toMatch(/Usage: blockml/);
   });
 
-  it("rejects a non-blockdoc compile target", () => {
-    const { code, stderr } = runCli(["compile", "xsd"], ROOT);
+  it("rejects an unsupported compile target", () => {
+    const { code, stderr } = runCli(["compile", "fatblock"], ROOT);
     expect(code).toBe(2);
-    expect(stderr).toMatch(/Unsupported target in minimal CLI: xsd/);
+    expect(stderr).toMatch(/Unsupported target in minimal CLI: fatblock/);
+  });
+
+  it("compiles xsd without writing into doc/", () => {
+    if (!existsSync(CORE_LIBRARY)) {
+      throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
+    }
+
+    const { code, stderr } = runCli(
+      ["compile", "xsd", "--out", tmpOut, "--libraries", CORE_LIBRARY],
+      ROOT,
+    );
+
+    expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Wrote \d+ file\(s\)/);
+    const schemaPath = join(tmpOut, "core", "block.xsd");
+    expect(existsSync(schemaPath)).toBe(true);
+    expect(readFileSync(schemaPath, "utf8")).toContain("<xs:schema");
   });
 });

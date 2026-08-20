@@ -1,0 +1,29 @@
+{
+  "name": "@blockml/xsd-target",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/target/xsd/Library.bml"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "blocks"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run packages/xsd-target/test"
+  },
+  "dependencies": {
+    "@blockml/bom": "file:../bom",
+    "@blockml/compiler": "file:../compiler",
+    "@blockml/framework": "file:../framework"
+  }
+}

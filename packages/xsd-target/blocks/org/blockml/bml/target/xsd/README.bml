@@ -1,0 +1,27 @@
+<!--
+  XSD Render Target — README
+  FQN: org.blockml.bml.target.xsd.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:xsd="org.blockml.bml.target.xsd">
+
+  <name>README</name>
+  <type>xsd:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the XSD render target</is>
+
+  <documentation>
+    @blockml/xsd-target implements RenderTarget name xsd (Phase C after BlockDoc).
+    Generates XSD artifacts from BML / Definition meta-model — not a Stage-1 parser
+    dependency (B8 / D5). V1 emits core/block.xsd for all block roots: identity and
+    container particles from D1 defaults and authored bml:xml / xmlRendering, plus
+    xs:any processContents=lax so schema regen is never blocked by new language
+    particles. Target namespace http://blockml.org/schema/block.
+    Compile: blockml compile xsd (library/corpus/auto). Default outDir schemas/.
+    Validating authored BML against generated schemas is out of this package's
+    generate path and must stay disableable (--no-xsd / xsdValidation).
+  </documentation>
+
+</block>

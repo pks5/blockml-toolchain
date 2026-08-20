@@ -13,8 +13,10 @@ import { loadConfig, type BomConfig } from "./load-config.js";
 import { writeOutputFiles } from "./write-output.js";
 
 const USAGE =
-  "Usage: blockml compile blockdoc [--out dir] [--src dir] [--libraries a,b]\n" +
+  "Usage: blockml compile <blockdoc|xsd> [--out dir] [--src dir] [--libraries a,b]\n" +
   "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b]";
+
+const SUPPORTED_TARGETS = new Set(["blockdoc", "xsd"]);
 
 export interface ParsedArgs {
   command?: string;
@@ -153,9 +155,16 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
   return diagnostics.some((d) => d.severity === "error") ? 1 : 0;
 }
 
+function defaultOutDir(target: string, config: BomConfig): string {
+  if (target === "xsd") {
+    return "schemas";
+  }
+  return config.outDir ?? "doc";
+}
+
 function runCompile(parsed: ParsedArgs, rootDir: string, lines: string[]): number {
   const target = parsed.target ?? "blockdoc";
-  if (target !== "blockdoc") {
+  if (!SUPPORTED_TARGETS.has(target)) {
     lines.push(`Unsupported target in minimal CLI: ${target}`);
     return 2;
   }
@@ -169,7 +178,7 @@ function runCompile(parsed: ParsedArgs, rootDir: string, lines: string[]): numbe
   }
 
   try {
-    bootstrapTargets(config);
+    bootstrapTargets(config, [target]);
   } catch (e) {
     lines.push(e instanceof Error ? e.message : String(e));
     return 2;
@@ -179,7 +188,7 @@ function runCompile(parsed: ParsedArgs, rootDir: string, lines: string[]): numbe
     bootstrapOptsFromParsed(parsed, config, rootDir),
   );
 
-  const outDir = parsed.outDir ?? config.outDir ?? "doc";
+  const outDir = parsed.outDir ?? defaultOutDir(target, config);
   const srcDir = parsed.srcDir ?? config.srcDir ?? "src";
   const libraries = parsed.libraries ?? config.libraries ?? [];
 
@@ -206,7 +215,7 @@ function runCompile(parsed: ParsedArgs, rootDir: string, lines: string[]): numbe
   const result = compileToOutput(
     {
       scope,
-      targetOptions: config.targetOptions?.blockdoc,
+      targetOptions: config.targetOptions?.[target],
     },
     target,
     {
