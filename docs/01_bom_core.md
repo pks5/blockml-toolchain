@@ -2444,10 +2444,10 @@ BOM Core is published as a standalone package with no domain dependencies:
 @blockml/core
 ```
 
-Domain BOMs declare it as a dependency:
+Domain BOMs declare it as a dependency (domain packages live in **domain repos**, not in the BlockML toolchain repo — see `00_system.md` — Zielbild):
 
 ```text
-@machineblocks/machineblocks-v3-scad-target   depends on   @blockml/core
+@machineblocks/machineblocks-v3-scad-target   depends on   @blockml/core   (MachineBlocks mono-repo)
 @electronics/ebom     depends on   @blockml/core
 @ui/uibom             depends on   @blockml/core
 ```

@@ -1,15 +1,15 @@
 # Framework Base Types — BML Definitions
 
-version: 0.1.0
+version: 0.2.0
 
 ## Purpose of this Document
 
-This document specifies how **framework base types** (`org.blockml.bml.core.Block`, `com.machineblocks.bml.core.Block`, `org.blockml.bml.core.Entity`, …) are defined — as **BML files**, not code or YAML.
+This document specifies how **framework base types** (`org.blockml.bml.core.Block`, `org.blockml.bml.core.Entity`, …) are defined — as **BML files**, not code or YAML. Domain base types (e.g. `com.machineblocks.bml.core.Block`) follow the same pattern in **domain packages** — MachineBlocks material is **out of scope** for this toolchain repo (see `00_system.md` — Zielbild).
 
 For BML block syntax see `02_mbml.md`.
-For MBOM hierarchy see `03_mbom.md`.
+For MBOM hierarchy see `03_mbom.md` (holding text → MachineBlocks mono-repo).
 For TypeRegistry bootstrap see `13_bml_to_bom_mapping.md`.
-For SCAD property mapping see `NativeBlock.bml` (parameter SSOT). `09_mbom_properties.yml` is a pointer stub only.
+For SCAD property mapping see `NativeBlock.bml` in `@machineblocks/core` (parameter SSOT). `09_mbom_properties.yml` is a pointer stub only.
 For value types and implementation languages as BML see `17_type_system_bml.md`.
 For property constraints and suggestions see `18_constraints_and_suggestions.md`.
 For FunctionMapping and capability call semantics see `22_function_mapping.md`.
@@ -22,8 +22,8 @@ For V1/V2/V3 scope and BML-vs-Markdown decisions see `00_system.md` — BML Self
 
 | Aspect | Decision |
 |---|---|
-| **Base type SSOT** | BML in each package's `blocks/` — today `node_modules/@blockml/core`, `node_modules/@machineblocks/core` |
-| **MB native params SSOT** | `com.machineblocks.bml.core.NativeBlock` + `com.machineblocks.bml.type.*` |
+| **Base type SSOT** | BML in each package's `blocks/` — today `node_modules/@blockml/core`; domain types e.g. `@machineblocks/core` (**MachineBlocks mono-repo**, out of scope here) |
+| **MB native params SSOT** | `com.machineblocks.bml.core.NativeBlock` + `com.machineblocks.bml.type.*` (**OUT OF SCOPE** for this repo — see `00_system.md` Zielbild) |
 | **Interpretation** | Renderers / validators only — no type semantics hardcoded outside BML + registry; **renderers free in output** — see `17_type_system_bml.md` — Renderer freedom |
 | **Compiler internals** | Parser **must** know `<block>` as input concept; internal representation **free** — see `17_type_system_bml.md` |
 | **09_mbom_properties.yml** | Pointer stub only — not parameter SSOT |

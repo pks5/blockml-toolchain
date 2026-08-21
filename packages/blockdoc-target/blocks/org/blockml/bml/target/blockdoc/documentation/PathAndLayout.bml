@@ -1,0 +1,54 @@
+<!--
+  BlockDoc Documentation — PathAndLayout
+  FQN: org.blockml.bml.target.blockdoc.documentation.PathAndLayout
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PathAndLayout</name>
+  <type>bddocumentation:PathAndLayout</type>
+  <baseType>core:Documentation</baseType>
+  <is>FQN paths, package prefixes, relative hrefs (BD7–BD12)</is>
+
+  <documentation>BD7 FqnToHtmlPath:
+    • fqn: org.blockml.bml.core.Block → org/blockml/bml/core/Block.html
+    • package: same → org/blockml/bml/core/index.html
+
+    Package prefix = all segments except last (Library → org.blockml.bml for ….Library).
+    Package index path = prefix dots→slashes + /index.html.
+
+    BD9 RelativeHref: pop file segment from from; common prefix; ups=0 → ./ else ../ * ups.
+
+    BD12 package indexes only when outLayout=fqn; prefixes = all ancestors of root FQN packages.
+
+    perLibrary library prefix = Library type FQN with trailing .Library stripped.</documentation>
+  <references>
+    <see type="bddocumentation:TypeLinkRules" relation="ReadNext"></see>
+    <see type="bdcap:FqnToHtmlPath" relation="SeeAlso"></see>
+    <see type="bdcap:RelativeHref" relation="SeeAlso"></see>
+  </references>
+
+</block>

@@ -1,0 +1,57 @@
+<!--
+  BlockDoc Documentation — MemberAndCompositionRules
+  FQN: org.blockml.bml.target.blockdoc.documentation.MemberAndCompositionRules
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>MemberAndCompositionRules</name>
+  <type>bddocumentation:MemberAndCompositionRules</type>
+  <baseType>core:Documentation</baseType>
+  <is>Member tables and composition trees (BD14–BD19)</is>
+
+  <documentation>Member sections (BD17): Properties, Aggregations, Associations, Capabilities — Name + Type columns.
+    Empty sections omitted. No Kind column.
+
+    Sub-block resolve (BD16): simple type name (strip type-args/multiplicity, last segment) matched
+    against block.subBlocks[].name → use sub-block full type FQN for linking.
+
+    Property cell: sub-block resolve → typeFqn → type expression → —.
+    Capability: typeFqn or literal "capability".
+    Aggregation/association: named + sub-block resolve (+ multiplicity suffix) else type expression.
+
+    Composition groups (BD18): compositions first (dedupe aggregationName), then aggregation
+    members with composition (dedupe member name).
+
+    Node render (BD14/BD19): blockInstance linked type; optional id=; members: keys ≤5 else +N more.
+    Containers: each vars | if | unless | with names | "container" + nested ul.</documentation>
+  <references>
+    <see type="bddocumentation:PageChrome" relation="ReadNext"></see>
+    <see type="bdcap:RenderMemberSections" relation="SeeAlso"></see>
+    <see type="bdcap:RenderComposition" relation="SeeAlso"></see>
+  </references>
+
+</block>

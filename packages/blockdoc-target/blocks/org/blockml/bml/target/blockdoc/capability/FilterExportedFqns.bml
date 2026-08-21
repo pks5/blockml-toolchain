@@ -1,0 +1,56 @@
+<!--
+  BlockDoc Capability — FilterExportedFqns
+  FQN: org.blockml.bml.target.blockdoc.capability.FilterExportedFqns
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>FilterExportedFqns</name>
+  <type>bdcap:FilterExportedFqns</type>
+  <baseType>core:Capability</baseType>
+  <is>Optionally restrict FQNs to Library.blocks exports</is>
+
+  <documentation>BD13: when includeNonExported=false and libraryPaths present, re-parse each Library, read aggregation named blocks, collect blockInstance.typeFqn; keep only those FQNs.</documentation>
+
+  <references>
+    <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <fqns type="type:Text">
+      <documentation>Candidate FQN list (required).</documentation>
+    </fqns>
+    <libraryPaths type="type:Text">
+      <documentation>Library.bml paths (required).</documentation>
+    </libraryPaths>
+    <includeNonExported type="type:Boolean">
+      <documentation>If true, return fqns unchanged (required).</documentation>
+    </includeNonExported>
+    <result type="type:Text">
+      <documentation>Filtered FQN list (required).</documentation>
+    </result>
+  </properties>
+
+</block>

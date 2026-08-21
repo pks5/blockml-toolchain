@@ -1,0 +1,62 @@
+<!--
+  BlockDoc Capability — RenderPackageIndex
+  FQN: org.blockml.bml.target.blockdoc.capability.RenderPackageIndex
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>RenderPackageIndex</name>
+  <type>bdcap:RenderPackageIndex</type>
+  <baseType>core:Capability</baseType>
+  <is>Assemble package prefix index HTML (fqn layout)</is>
+
+  <documentation>BD22: direct blocks where fqnToPackagePrefix(fqn)===prefix; direct sub-packages = next segment under prefix; breadcrumb Index / linked ancestors / current plain.</documentation>
+
+  <references>
+    <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <packagePrefix type="type:Text">
+      <documentation>Package prefix (required).</documentation>
+    </packagePrefix>
+    <rootFqns type="type:Text">
+      <documentation>Root FQN list (required).</documentation>
+    </rootFqns>
+    <options type="bdapi:BlockDocOptions">
+      <documentation>Resolved options (required).</documentation>
+    </options>
+    <indexPath type="type:Text">
+      <documentation>This package index path (required).</documentation>
+    </indexPath>
+    <rootIndexPath type="type:Text">
+      <documentation>Owning site/library index (required).</documentation>
+    </rootIndexPath>
+    <result type="bdpage:PackageIndexPage">
+      <documentation>HTML page (required).</documentation>
+    </result>
+  </properties>
+
+</block>

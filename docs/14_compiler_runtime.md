@@ -1,15 +1,18 @@
 # Compiler Runtime
 
-version: 0.8.0
+version: 0.9.0
 
 ## Purpose of this Document
 
-This document defines the **compiler runtime** — how `@blockml/compiler`, `@blockml/cli`, and render targets orchestrate parsing, validation, and rendering after the BOM model and BML mapping rules are fixed.
+This document defines the **compiler runtime** — how `@blockml/compiler`, host CLIs (`@blockml/cli` and thin domain CLIs such as `@machineblocks/cli`), and render targets orchestrate parsing, validation, and rendering after the BOM model and BML mapping rules are fixed.
 
 For BOM types see `12_bom_object_model.md`.
 For BML mapping see `13_bml_to_bom_mapping.md`.
-For SCAD rendering details see `05_scad_renderer.md`.
+For SCAD rendering details see `05_scad_renderer.md` (**OUT OF SCOPE** for this repo — MachineBlocks mono-repo).
 For pipeline stages see `06_compiler.md`.
+For repo / domain ownership see `00_system.md` — Zielbild.
+
+> **MachineBlocks sections below** (NativeBlock / `mb_block`, SCAD I/O conventions, thumbnails prerequisites) describe the **reference domain Blaupause**. They are **not** BlockML core rules and are **out of scope for implementation in this repo**. Normative home: MachineBlocks mono-repo + `@machineblocks/*` packages.
 
 ---
 
@@ -17,25 +20,26 @@ For pipeline stages see `06_compiler.md`.
 
 | Topic | Decision |
 |---|---|
-| **Compile I/O (C4)** | **BlockML:** no mandatory input↔output mapping; targets define cardinality (0..n files, side effects). **MachineBlocks convention:** 1 BML → 1 primary SCAD (+ side artifacts) |
+| **Compile I/O (C4)** | **BlockML:** no mandatory input↔output mapping; targets define cardinality (0..n files, side effects). **MachineBlocks convention (domain):** 1 BML → 1 primary SCAD (+ side artifacts) |
 | **Compile scope (C7)** | **Decided:** unified `compileToOutput(CompileRequest, …)`; scope kinds `document` \| `library` \| `corpus` \| `auto`; targets declare `accepts[]`; `targetOptions` opaque at compiler, typed per target |
-| **NativeBlock = mb_block** | **MachineBlocks convention:** `com.machineblocks.bml.core.NativeBlock` maps to SCAD `mb_block()` — not a global BlockML rule; other targets need not emit blocks |
-| **Composition leaves** | **MachineBlocks convention:** leaf geometry → `mb_block()` — authored as `<core:NativeBlock>` or lowered from domain instances |
-| **Sub-Blocks** | Same-document Sub-Blocks → sub-modules embedded in the parent output SCAD file |
-| **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.bml` is compiled |
+| **NativeBlock = mb_block** | **MachineBlocks convention (domain, out of scope here):** `com.machineblocks.bml.core.NativeBlock` maps to SCAD `mb_block()` — not a global BlockML rule |
+| **Composition leaves** | **MachineBlocks convention (domain):** leaf geometry → `mb_block()` — authored as `<core:NativeBlock>` or lowered from domain instances |
+| **Sub-Blocks** | Same-document Sub-Blocks → sub-modules embedded in the parent output SCAD file *(MB convention)* |
+| **Library blocks** | Pre-rendered `.scad` in scad-lib; re-compiled only when their own `.bml` is compiled *(MB convention)* |
 | **JSON BML authoring** | **Not planned** — not equivalent to XML; not V1/V2; may never ship (`02_mbml.md`) |
-| **Facade API (C2)** | **`compileToOutput(CompileRequest, targetName, CompileOptions)`** — single Stage-3 entry; `compileBmlToOutput` = document-scope sugar; explicit `TypeRegistry`; CLI writes files |
-| **Target bootstrap (C3)** | V1: `bom.config.json` → `targets[]` (default `["blockdoc"]`); CLI `<target>` still required per run |
+| **Facade API (C2)** | **`compileToOutput(CompileRequest, targetName, CompileOptions)`** — single Stage-3 entry; `compileBmlToOutput` = document-scope sugar; explicit `TypeRegistry`; host CLI writes files |
+| **Target bootstrap (C3)** | V1: `bom.config.json` → `targets[]` (default `["blockdoc"]` for `@blockml/cli`); CLI `<target>` still required per run. Domain CLIs register their own targets (e.g. `@machineblocks/cli` → `machineblocks-v3-scad`) |
+| **Host CLIs** | **`@blockml/cli`** = universal toolchain. **Domain thin CLIs** (e.g. `@machineblocks/cli`) = recommended product entry; same `registerTarget` / `compileToOutput` contract |
 | **RenderContext (C1)** | `RenderSession` (immutable) + forked `RenderContext` per render node; `PropertyResolver` on-demand; internal API |
-| **Thumbnails (C6)** | CLI-only (OpenSCAD + Sharp); not in `RenderOutput`; compiler produces `.scad` + `.json` prerequisites |
+| **Thumbnails (C6)** | Host-CLI concern (OpenSCAD + Sharp); not in `RenderOutput`. For MachineBlocks: prefer `@machineblocks/cli` (out of scope for this repo) |
 | **Incremental build (C5)** | CLI-only cache (`.bom-cache/`); SHA-256 canonical input hash; skip before compile; dedup by output path |
-| **SCAD settings format** | V1: pseudo-map `[["key", val], …]`; renderer uses SettingsBundle + pluggable SettingsEmitter; future: OpenSCAD `object()` |
+| **SCAD settings format** | V1 MB convention: pseudo-map `[["key", val], …]`; renderer uses SettingsBundle + pluggable SettingsEmitter; future: OpenSCAD `object()` |
 
 ---
 
 ## NativeBlock Render Model
 
-> **Scope:** MachineBlocks SCAD target only. Render targets are free in output shape — see `17_type_system_bml.md` — Renderer freedom.
+> **OUT OF SCOPE (this repo) — MachineBlocks SCAD target only.** Render targets are free in output shape — see `17_type_system_bml.md` — Renderer freedom. Normative implementation home: MachineBlocks mono-repo.
 
 ### Core rule
 
@@ -500,18 +504,15 @@ library/corpus target        →  compileToOutput({ scope: buildFromConfig() }) 
                                (--all is invalid / ignored for library/corpus targets)
 ```
 
-### BlockDoc `targetOptions` (typed in `@blockml/blockdoc-target`)
+### BlockDoc target (`@blockml/blockdoc-target`)
 
-```typescript
-interface BlockDocOptions {
-  /** default: "merged" — one site for all libraries in scope */
-  siteMode?: "merged" | "perLibrary"
-  /** URL path layout under outDir — default: "fqn" */
-  outLayout?: "fqn" | "package"
-  /** when false, only Library.blocks exports; when true, all .bml under roots */
-  includeNonExported?: boolean
-}
-```
+**BML library is SSOT:** `packages/blockdoc-target/blocks/org/blockml/bml/target/blockdoc/` — start at `org.blockml.bml.target.blockdoc.documentation.Introduction` → ReadNext chain (options, path/layout, page chrome, site assembly, BD1–BD23).
+
+TypeScript in `packages/blockdoc-target/src/` implements it. Host wiring only here:
+
+- `accepts`: `library` | `corpus` | `auto` (see matrix above)
+- Opaque `CompileRequest.targetOptions` → typed as `BlockDocOptions` in the target package
+- CLI passes `config.targetOptions?.blockdoc`; default `outDir` for this target is `doc/`
 
 Example `bom.config.json`:
 
@@ -527,20 +528,6 @@ Example `bom.config.json`:
 }
 ```
 
-### BlockDoc output (V1 minimal)
-
-```text
-outDir/
-  index.html                              — package overview (merged mode)
-  org/blockml/bml/core/Block.html         — FQN layout (default outLayout)
-  com/machineblocks/bml/bricks/Standard.html
-
-perLibrary mode:
-  outDir/org/blockml/bml/index.html
-  outDir/com/machineblocks/bml/index.html
-  … pages under each library package prefix
-```
-
 ### Scope diagnostics
 
 | Code | When |
@@ -553,11 +540,11 @@ perLibrary mode:
 
 ## Target Bootstrap (C3)
 
-Before a render target can resolve by name, the caller must populate the **Target Registry** via `registerTarget()`. `@blockml/compiler` ships **no default targets** — targets live in packages (e.g. `@blockml/blockdoc-target`, `@machineblocks/machineblocks-v3-scad-target`).
+Before a render target can resolve by name, the caller must populate the **Target Registry** via `registerTarget()`. `@blockml/compiler` ships **no default targets** — targets live in packages (e.g. `@blockml/blockdoc-target`; domain targets such as `@machineblocks/machineblocks-v3-scad-target` live in the **MachineBlocks mono-repo**).
 
 ### V1 decision — `targets[]` + BlockDoc-first
 
-In V1, **`@blockml/cli` bootstraps targets from `bom.config.json` → `targets[]`**. The first / default control target is **`blockdoc`** (`@blockml/blockdoc-target`), not MachineBlocks SCAD.
+In V1, **`@blockml/cli` bootstraps toolchain targets from `bom.config.json` → `targets[]`**. The first / default control target is **`blockdoc`** (`@blockml/blockdoc-target`). MachineBlocks SCAD is **not** a default and is **not** authored in this repo — domain thin CLIs (e.g. `@machineblocks/cli`) register their own targets.
 
 ```typescript
 // @blockml/cli — bootstrapTargets.ts (sketch)

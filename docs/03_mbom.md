@@ -1,12 +1,15 @@
 # BOM Compiler — MBOM
 
-version: 2.0.0
+version: 2.1.0
+
+> **OUT OF SCOPE for the BlockML toolchain repo.**  
+> This entire document is **MachineBlocks domain** material. The recommended home is the **MachineBlocks mono-repo** (`@machineblocks/core` BML + domain docs). npm packages stay split; this Markdown is **transitional holding text** in `blockml/docs/` until it is moved. Do **not** implement MBOM packages under this repo’s `packages/`. See `00_system.md` — Zielbild.
 
 ## Purpose of this Document
 
 This document defines the MBOM (MachineBlocks Object Model) — the MachineBlocks domain specialization of BOM Core. MBOM extends the lossless BOM transport model with MachineBlocks-specific types, properties, and render-target conventions.
 
-MachineBlocks BML sources, documentation, the SCAD reference renderer, and examples live in **`@machineblocks/core`** at `node_modules/@machineblocks/core/blocks/com/machineblocks/bml` (not a separate `mbom` package). The compiler's MachineBlocks render target is a **separate** `@machineblocks/*` package under `packages/` — see `00_system.md` — BlockML node packages.
+MachineBlocks BML sources, documentation, the SCAD reference renderer, and examples live in **`@machineblocks/core`** (MachineBlocks mono-repo; installed as `node_modules/@machineblocks/core/blocks/com/machineblocks/bml` — not a separate `mbom` package). The compiler's MachineBlocks render target and thin domain CLI are **separate** `@machineblocks/*` packages in that same mono-repo — see `00_system.md` — Zielbild · BlockML node packages.
 
 MBOM is a domain-specific specialization of BOM Core (`01_bom_core.md`). BOM Core defines the abstract structural foundation — Block, Member (Properties, Aggregations, Associations, Capabilities), Preset, Library, Catalog, and the Expression system. MBOM extends these with MachineBlocks-specific types, properties, and the SCAD render target. Concepts already defined in BOM Core are not repeated here — this document covers only MBOM-specific extensions and decisions.
 

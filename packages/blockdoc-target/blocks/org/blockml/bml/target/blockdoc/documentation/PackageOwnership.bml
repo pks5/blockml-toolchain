@@ -1,0 +1,52 @@
+<!--
+  BlockDoc Documentation — PackageOwnership
+  FQN: org.blockml.bml.target.blockdoc.documentation.PackageOwnership
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PackageOwnership</name>
+  <type>bddocumentation:PackageOwnership</type>
+  <baseType>core:Documentation</baseType>
+  <is>Who owns BlockDoc vs host toolchain</is>
+
+  <documentation>@blockml/blockdoc-target owns: this BML library; TypeScript implementation; behavioral tests;
+    BlockDocOptions; HTML layout and link algorithms; registry identity blockdoc.
+
+    @blockml/compiler owns: RenderTarget contract; CompileRequest/CompileOptions; Target Registry;
+    compileToOutput; scope kind resolution for auto.
+
+    @blockml/cli owns: bootstrapTargets / targets[] default ["blockdoc"]; writing files under
+    outDir (default doc/); CLI usage strings and exit codes.
+
+    @blockml/bom owns: Urmodell types consumed by render helpers.
+
+    MachineBlocks / domain targets are out of scope for this repo.</documentation>
+  <references>
+    <see type="bddocumentation:ScopeExclusions" relation="ReadNext"></see>
+  </references>
+
+</block>

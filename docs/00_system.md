@@ -1,14 +1,36 @@
 # BOM Compiler — System
 
-version: 2.7.0
+version: 2.8.0
 
 ## Purpose
 
 This document describes the BlockML toolchain (`blockml` CLI) — the universal toolchain that translates BML (Block Markup Language) source files into domain-specific render target files via a typed BOM (Block Object Model).
 
-The compiler is domain-agnostic. It understands the BML format and the BOM object model. Domain-specific knowledge lives exclusively in Render Targets. MachineBlocks is the reference implementation (Blaupause) — the first domain built on this foundation.
+The compiler is domain-agnostic. It understands the BML format and the BOM object model. Domain-specific knowledge lives exclusively in Render Targets and domain packages — **never** in the BlockML core.
 
 The architecture is designed to accommodate domain BOMs and Render Targets that are not yet known. Adding a new domain requires no changes to the core.
+
+### Zielbild: this repo vs. domain repos
+
+```text
+blockml/                    ← THIS REPO — BlockML toolchain only
+  @blockml/*                — language, parser, validator, compiler, universal CLI,
+                              toolchain targets (blockdoc, xsd, fatblock, …)
+
+machineblocks/              ← SEPARATE MONO-REPO — all MachineBlocks-specific work
+  @machineblocks/core       — BML SSOT, SCAD lib, examples
+  @machineblocks/…-scad-target
+  @machineblocks/cli        — thin host CLI (recommended entry for MB users)
+  (npm packages remain split; one git repo for the product chain)
+```
+
+**Recommended / target architecture (normative):**
+
+1. **All MachineBlocks-specific artifacts** (domain BML, SCAD library, SCAD render target, MB schemas, domain docs, domain CLI) live in the **MachineBlocks mono-repo**. They are **out of scope** for this BlockML repo.
+2. **npm packages stay split** (`@machineblocks/core`, `@machineblocks/machineblocks-v3-scad-target`, `@machineblocks/cli`, …). The mono-repo is a development/product boundary, not a single npm bundle.
+3. **`@machineblocks/cli`** is a **thin layer** over `@blockml/*`: it depends on published toolchain packages, registers the MB SCAD target, and supplies MB defaults. MachineBlocks users check out **one** repo and get the full chain (validate → compile → SCAD) without needing this BlockML repo.
+4. **`@blockml/cli` (`blockml`)** remains the **universal** toolchain CLI (parameters / `targets[]`). It must not hardcode MachineBlocks. Domain targets may be loadable as plugins later; product UX for MB is the domain CLI.
+5. **Zielbild for this repo:** know **nothing** about specific domains — only the BlockML language and toolchain. MachineBlocks material that still appears in `docs/` here is **transitional holding text** (Blaupause / examples) and will be **moved entirely** into the MachineBlocks mono-repo. Until then, treat every MachineBlocks section as **out of scope for implementation in this repo**.
 
 ---
 
@@ -61,13 +83,15 @@ BOM specializations (MBOM, EBOM, etc.) extend the abstract BOM Core with domain-
 
 **The Compiler** (`@blockml/compiler`) is the facade and Target Registry. It does not prescribe a fixed compile path — renderers orchestrate utilities themselves. Pipeline detail: `06_compiler.md`.
 
-**Self-hosting (bootstrap):** Before processing user projects, the CLI bootstraps a TypeRegistry from framework BML in `node_modules/@blockml/core` (`org.blockml.bml.*`) and MachineBlocks BML in `node_modules/@machineblocks/core` (`com.machineblocks.bml.*`). Each registered BlockDefinition is an immutable `BomDocument` (Urmodell) — typically parse-origin today; Builder-origin documents are valid once V3 ships.
+**Self-hosting (bootstrap):** Before processing user projects, a host CLI bootstraps a TypeRegistry from framework BML in `node_modules/@blockml/core` (`org.blockml.bml.*`) plus any **domain libraries** configured for that project (e.g. `@machineblocks/core` → `com.machineblocks.bml.*`). Domain libraries are **not** owned by this repo. Each registered BlockDefinition is an immutable `BomDocument` (Urmodell) — typically parse-origin today; Builder-origin documents are valid once V3 ships.
 
-**The CLI** (`blockml`) is the Node.js command-line interface for parsing, validating, compiling, watching, and scaffolding BML projects.
+**The CLI** (`blockml` / `@blockml/cli`) is the Node.js command-line interface for the **universal** toolchain — parsing, validating, compiling, watching, scaffolding. Domain products may ship a **thin domain CLI** (e.g. `@machineblocks/cli`) that wraps the same packages with domain defaults; see [Zielbild](#zielbild-this-repo-vs-domain-repos) and `07_cli.md` — Dual CLI model.
 
-### Reference Implementation: MachineBlocks
+### Reference domain: MachineBlocks (out of scope for this repo)
 
-MachineBlocks is the first and reference domain. Its BOM specialization is **MBOM** (MachineBlocks Object Model). Its Render Target is the **SCAD Renderer**, producing OpenSCAD files compatible with the MachineBlocks V3 SCAD Library.
+> **OUT OF SCOPE (this repo).** MachineBlocks is the first / reference **Blaupause** domain. All MB-specific work (MBOM BML, SCAD lib, SCAD target, MB CLI, domain docs) belongs in the **MachineBlocks mono-repo**. Content below and in `03_mbom.md` / `04_types.md` / `05_scad_renderer.md` remains here only as transitional holding text until that move is complete. Do **not** implement `@machineblocks/*` packages under this repo’s `packages/`.
+
+MachineBlocks BOM specialization is **MBOM**. Its product Render Target is the **SCAD Renderer** (`machineblocks-v3-scad`), producing OpenSCAD compatible with the MachineBlocks V3 SCAD Library. Host entry for MB users: `@machineblocks/cli` (thin layer), not a MachineBlocks fork of this toolchain repo.
 
 ```text
 BML Source (.bml)                    BomBuilder (V3, planned)
@@ -92,25 +116,30 @@ STL / 3MF
 
 **All mappings are declarative and configurable.** No BOM types, properties, or render mappings are hardcoded in compiler logic.
 
-**Domain BOMs extend, never modify core.** Adding EBOM, UBOM, or any future BOM does not change `@blockml/core`, `@blockml/parser`, or `@blockml/compiler`.
+**Domain BOMs extend, never modify core.** Adding EBOM, UBOM, or any future BOM does not change `@blockml/core`, `@blockml/parser`, or `@blockml/compiler`. Domain packages and domain CLIs live in **domain repos** (MachineBlocks mono-repo for `@machineblocks/*`) — see [Zielbild](#zielbild-this-repo-vs-domain-repos).
 
 **Every toolchain package is a BlockML node module.** A normal npm package (`package.json`) plus a `blocks/` folder. That folder is the **SSOT** for the package. Markdown in this repo is transitional and is **not** an implementation source — see [BlockML node packages](#blockml-node-packages), [Package Implementation Workflow](#package-implementation-workflow), and [BML Self-Description Roadmap](#bml-self-description-roadmap).
 
 **No mandatory input↔output mapping.** Render targets define output cardinality. See `14_compiler_runtime.md` — Compile I/O Model (C4).
 
+**Dual CLI (universal + domain host).** `@blockml/cli` is domain-agnostic. Product domains may ship a thin CLI that registers their target(s). Recommended for MachineBlocks: `@machineblocks/cli` in the MachineBlocks mono-repo.
+
 ---
 
 ## Tool vs. Content
 
-`blockml` is a standalone tool — installed or cloned once and used across multiple content projects. Content projects (BML sources, render target output) live in separate directories and are not part of the compiler repository.
+`blockml` is a standalone **toolchain** — installed or cloned once and used across multiple content projects. Content projects (BML sources, render target output) live in separate directories and are not part of this compiler repository.
 
 ```text
-~/.../blockml/                  ← BlockML / BOM Compiler tool (installed once)
+~/.../blockml/                  ← BlockML toolchain (this repo) — domain-agnostic
+~/.../machineblocks/            ← MachineBlocks mono-repo (domain product + thin CLI)
 ~/.../my-enclosure-project/     ← content project (BML sources, SCAD output)
-~/.../my-electronics-project/   ← another content project
+~/.../my-electronics-project/   ← another content / domain project
 ```
 
-This is analogous to `tsc` or `webpack` — the tool is global, content projects each have their own `bom.config.json`.
+MachineBlocks **users** typically clone or install from the MachineBlocks mono-repo (or `@machineblocks/cli`) and do not need this BlockML repo. This is analogous to `tsc` vs. a product that embeds TypeScript — the language tool is separate from the product host.
+
+Content projects each have their own `bom.config.json` (or domain-CLI defaults).
 
 ---
 
@@ -120,7 +149,7 @@ See `15_dev_setup.md` for workspace configuration, build scripts, and implementa
 
 ### BlockML node packages
 
-All modules — renderer, core, parser, domain libraries, future compiler targets — are **npm packages with a BlockML extension**. They are ordinary Node modules (`package.json`, optional `src/` / `dist/` / `lib/`) **plus** a `blocks/` folder that holds `.bml` files.
+All modules — renderer, core, parser, domain libraries, compiler targets — are **npm packages with a BlockML extension**. They are ordinary Node modules (`package.json`, optional `src/` / `dist/` / `lib/`) **plus** a `blocks/` folder that holds `.bml` files.
 
 **`blocks/` is the SSOT for that package.** Types, documentation, services, examples, and other package knowledge that belongs in the grammar live there as BML — not in Markdown in this repo, and not as a second inventory beside the package.
 
@@ -141,47 +170,40 @@ Creating or implementing a package follows the [Package Implementation Workflow]
 
 Two organizations are registered on npm. They are the **root** for all future packages:
 
-| Scope | Owns |
-|---|---|
-| `@blockml` | BlockML toolchain — `core`, and later `parser`, `serializer`, `validator`, `compiler`, `cli`, targets, … |
-| `@machineblocks` | MachineBlocks domain — `core` today; later the compiler **render target** as a separate package |
+| Scope | Owns | Git home (Zielbild) |
+|---|---|---|
+| `@blockml` | BlockML toolchain — `core`, `parser`, `serializer`, `validator`, `compiler`, `cli`, toolchain targets, … | **This repo** |
+| `@machineblocks` | MachineBlocks domain — `core`, SCAD target, domain CLI, … | **MachineBlocks mono-repo** (not this repo) |
 
-Parser, serializer, and other BlockML packages are grouped under **`@blockml`**. Each will have its own `blocks/` folder — SSOT for that package — exactly as `@blockml/core` and `@machineblocks/core` already do.
+Parser, serializer, and other BlockML packages are grouped under **`@blockml`**. Each will have its own `blocks/` folder — SSOT for that package — exactly as `@blockml/core` already does.
 
-The MachineBlocks **compiler target** (MBOM → SCAD) is **not** part of `@machineblocks/core`. It will be a separate `@machineblocks/*` package, developed under `packages/` in this repo.
+The MachineBlocks **compiler target** (MBOM → SCAD) is **not** part of `@machineblocks/core`. It is a separate `@machineblocks/*` package authored in the **MachineBlocks mono-repo**, alongside `core` and the thin `@machineblocks/cli`. npm packages remain split; only the git boundary is the mono-repo.
 
-### Working tree
+### Working tree (this repo — toolchain only)
 
-After `npm install`, packages live under `node_modules/`.
+After `npm install`, packages live under `node_modules/`. Domain fixtures may still appear as **dependencies** for transitional tests; they are not authored here.
 
 ```text
-blockml/
-  package.json                 — root workspace; depends on @blockml/core, @machineblocks/core, …
-  docs/                        — transitional Markdown (migrate into package BML; not an implementation SSOT)
+blockml/                       ← THIS REPO (toolchain)
+  package.json                 — root workspace; @blockml/* packages
+  docs/                        — transitional Markdown (domain MD → move to MachineBlocks)
+  packages/                    — @blockml/* only (bom, parser, validator, compiler, cli, …)
 
   node_modules/
-    @blockml/
-      core/                    — BlockML Core
-        package.json
-        blocks/org/blockml/bml/          — SSOT (org.blockml.bml.*)
-    @machineblocks/
-      core/                    — MachineBlocks domain library
-        package.json
-        blocks/com/machineblocks/bml/    — SSOT: docs, types, bricks, examples
-        lib/ · config/ · pattern/        — SCAD reference renderer / runtime
-
-  packages/                    — @blockml/* and @machineblocks/* as they are authored here
-                                 (each package: package.json + blocks/ + src/)
+    @blockml/core/             — Framework BML SSOT
+    @machineblocks/core/       — optional installed dependency / fixture (authored elsewhere)
 ```
 
-| npm package | Role | Path after `npm install` |
+| npm package | Role | Authored in |
 |---|---|---|
-| `@blockml/core` | Framework BML SSOT in `blocks/` (language, services, diagnostics) | `node_modules/@blockml/core` |
-| `@blockml/bom` | Urmodell TypeScript (`BomDocument`, `bomEquals`, B26 result types) | `packages/bom` → `@blockml/bom` |
-| `@machineblocks/core` | MachineBlocks docs (BML), SCAD reference renderer, BML + SCAD examples | `node_modules/@machineblocks/core` |
-| `@blockml/parser` | BML → BomDocument; own `blocks/` SSOT when it ships | `packages/parser` → `@blockml/parser` |
-| `@blockml/compiler` | Facade + Target Registry; own `blocks/` SSOT when it ships | `node_modules/@blockml/compiler` (when published) |
-| `@machineblocks/*` target | Compiler render target (MBOM → SCAD) — **separate** from `core`; lives under `packages/` | `node_modules/@machineblocks/…` (when published) |
+| `@blockml/core` | Framework BML SSOT | published / Core |
+| `@blockml/bom` | Urmodell TypeScript | this repo `packages/bom` |
+| `@blockml/parser` | BML → BomDocument | this repo `packages/parser` |
+| `@blockml/compiler` | Facade + Target Registry | this repo `packages/compiler` |
+| `@blockml/cli` | Universal CLI | this repo `packages/cli-tools` |
+| `@machineblocks/core` | MB BML SSOT + SCAD lib | **MachineBlocks mono-repo** |
+| `@machineblocks/…-scad-target` | MBOM → SCAD RenderTarget | **MachineBlocks mono-repo** |
+| `@machineblocks/cli` | Thin MB host CLI | **MachineBlocks mono-repo** |
 
 ### The First Engine: `@blockml/engine-maker`
 
@@ -278,20 +300,20 @@ Engines are always independent packages implementing the CompilerEngine contract
 
 > **Architecture decision:** **XSD files are Render Target output**, not a Stage-1 parser dependency. The **XSD Render Target** (Phase C; package `@blockml/xsd-target`, registry name `"xsd"`) generates `.xsd` from BML / Definition meta-model. **Validating** authored BML against those schemas is enabled only after that target exists — and must remain **always disableable** via CLI `--no-xsd` **and** `bom.config.json` → `xsdValidation: false` (see `07_cli.md` — XSD validation escape hatch), so intentional language/meta changes can still regenerate schemas when they no longer match the previous `.xsd`.
 
-### Planned toolchain Render Targets (BlockDoc-first, then beside MachineBlocks SCAD)
+### Planned toolchain Render Targets (BlockDoc-first)
 
-MachineBlocks SCAD is the primary **product** target. **V1 Stage-3 control gate is BlockDoc** — browseable HTML of the corpus for verification after roundtrip. Other toolchain targets and SCAD follow.
+**V1 Stage-3 control gate is BlockDoc** — browseable HTML of the corpus for verification after roundtrip. Toolchain targets ship in this repo. **MachineBlocks SCAD is a product / domain target** — out of scope here; authored in the MachineBlocks mono-repo (see [Zielbild](#zielbild-this-repo-vs-domain-repos)).
 
 **Decided names:** npm package + CLI/registry short name (not the same string).
 
-| Order | Target | Package | Registry / CLI `<target>` | Minimal output | Role |
-|---|---|---|---|---|---|
-| **1st** | **BlockDoc** | `@blockml/blockdoc-target` | `blockdoc` | Static HTML (`siteMode`: merged or perLibrary). URLs follow **package / FQN hierarchy**. Input: **library/corpus scope** (`libraries[]` + `srcDir` fallback) — see `14` C7 | **V1 control gate** — human/LLM review of the block corpus |
-| 2nd+ | **XSD** | `@blockml/xsd-target` | `xsd` | `.xsd` artifacts | **Universal** `bml.xsd` + optional **domain** XSDs; particle shape aligns with **`bml:xml`** |
-| 2nd+ | **FatBlock** | `@blockml/fatblock-target` | `fatblock` | One `.bml` with transitive deps in root `<embeddedBlocks>` | Portable artifact; registry closure + embed model; Stage 2 first (`19` D2) |
-| Later | **SCAD (product)** | `@machineblocks/machineblocks-v3-scad-target` | `machineblocks-v3-scad` | `.scad` (+ maps, …) | MachineBlocks V3 reference product target |
+| Order | Target | Package | Registry / CLI `<target>` | Minimal output | Role | Scope |
+|---|---|---|---|---|---|---|
+| **1st** | **BlockDoc** | `@blockml/blockdoc-target` | `blockdoc` | Static HTML site (package/FQN hierarchy). **SSOT:** `org.blockml.bml.target.blockdoc.documentation.Introduction`. Input: library/corpus scope — see `14` C7 | **V1 control gate** — human/LLM review of the block corpus | this repo |
+| 2nd+ | **XSD** | `@blockml/xsd-target` | `xsd` | `.xsd` artifacts | **Universal** `bml.xsd` + optional **domain** XSDs; particle shape aligns with **`bml:xml`** | this repo |
+| 2nd+ | **FatBlock** | `@blockml/fatblock-target` | `fatblock` | One `.bml` with transitive deps in root `<embeddedBlocks>` | Portable artifact; registry closure + embed model; Stage 2 first (`19` D2) | this repo |
+| Later | **SCAD (product)** | `@machineblocks/machineblocks-v3-scad-target` | `machineblocks-v3-scad` | `.scad` (+ maps, …) | MachineBlocks V3 product target | **MachineBlocks mono-repo** (out of scope here) |
 
-`bom.config.json` → **`targets[]` is V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3 · `15_dev_setup.md` Phase C.
+`bom.config.json` → **`targets[]` is V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3 · `15_dev_setup.md` Phase C. Universal CLI bootstraps **toolchain** targets; domain hosts register domain targets.
 
 See `15_dev_setup.md` — Phase C ordering · `12_bom_object_model.md` / `02_mbml.md` — Embedded Blocks (Inline Library).
 
@@ -466,11 +488,13 @@ VS Code Language Server for BML. Thin LSP adapter — **reuses** parser, validat
 
 See `01_bom_core.md` — Language Server — planned IDE integration (V2).
 
-### `@machineblocks/core` (domain library)
+### `@machineblocks/core` (domain library) — out of scope
+
+> **OUT OF SCOPE (this repo).** Authored in the MachineBlocks mono-repo. Listed here only as transitional Blaupause reference.
 
 MachineBlocks **domain library** — not the compiler render target, and not a separate `mbom` package.
 
-Installed at `node_modules/@machineblocks/core`. A BlockML node module: `package.json` + `blocks/` (SSOT). It contains:
+Installed at `node_modules/@machineblocks/core` when a project depends on it. A BlockML node module: `package.json` + `blocks/` (SSOT). It contains:
 
 ```text
 - General MachineBlocks documentation as BML
@@ -493,9 +517,13 @@ Path for domain BML: `node_modules/@machineblocks/core/blocks/com/machineblocks/
 - bricks/, calibration/, examples/ — library blocks and fixtures
 ```
 
-### `@machineblocks/*` compiler target (future)
+### `@machineblocks/*` compiler target + CLI — out of scope
 
-The MachineBlocks V3 SCAD **Render Target** for the BML compiler is a **separate** package under `@machineblocks`, developed in this repo under `packages/`. It is not `@machineblocks/core`. It will follow the same BlockML node-module shape (`package.json` + `blocks/` SSOT + TypeScript). Browser and Node compatible. Registers under the name `"machineblocks-v3-scad"`.
+> **OUT OF SCOPE (this repo).** Authored in the MachineBlocks mono-repo. npm packages remain split.
+
+The MachineBlocks V3 SCAD **Render Target** is a **separate** package under `@machineblocks` (not `@machineblocks/core`). Same BlockML node-module shape (`package.json` + `blocks/` SSOT + TypeScript). Browser and Node compatible. Registers under the name `"machineblocks-v3-scad"`.
+
+**`@machineblocks/cli`** is the recommended **thin host** for MachineBlocks users: depends on `@blockml/compiler` / validator / parser / …, calls `registerTarget(new MachineBlocksV3ScadTarget(…))`, applies MB path defaults. Users check out the MachineBlocks mono-repo once and get the full product chain. Universal `blockml` may still invoke the target by name when the package is installed as a plugin — that is optional interop, not the primary MB UX.
 
 ```text
 - Atomic Target: registers for com.machineblocks.bml.core.Block and com.machineblocks.bml.core.Set
@@ -509,6 +537,7 @@ The MachineBlocks V3 SCAD **Render Target** for the BML compiler is a **separate
 - Customizer generator
 - Source map generation (Source Map Spec V3)
 - Domain library / SCAD reference: `@machineblocks/core`
+- Thin CLI: `@machineblocks/cli`
 ```
 
 ---
@@ -546,6 +575,8 @@ com.electronics.core.Component
 ```
 
 Package segments are lowercase. Class names are PascalCase.
+
+> **MachineBlocks naming / path / thumbnail conventions below** are **OUT OF SCOPE** for this repo (transitional Blaupause → MachineBlocks mono-repo).
 
 ### SCAD Module Names (MachineBlocks domain)
 
@@ -641,6 +672,8 @@ The root element of the BML file determines the document type — not the filena
 
 ## SCAD Output per Document Type (MachineBlocks domain)
 
+> **OUT OF SCOPE (this repo).** Transitional Blaupause — move to MachineBlocks mono-repo / `@machineblocks/cli` docs. Normative ownership: MachineBlocks.
+
 ```text
 <block> (composable)     → scad/com/.../ClassName.scad
                            scad/com/.../ClassName.scad.map
@@ -695,9 +728,11 @@ CLI-level configuration (command names, argument names, shortcuts):
 
 ## Library Resolution (MachineBlocks domain)
 
-The MachineBlocks V3 SCAD Library (`machineblocks-lib/`) is bundled with the BOM Compiler installation as a Git Submodule. Content projects do not need to install or reference the library separately.
+> **OUT OF SCOPE (this repo).** Transitional Blaupause — move to MachineBlocks mono-repo. The SCAD library ships with `@machineblocks/core` / `@machineblocks/cli`, **not** as a submodule of this BlockML toolchain repo.
 
-Resolution order for the library path:
+The MachineBlocks V3 SCAD Library is part of the MachineBlocks product distribution (`@machineblocks/core`). Content projects that use `@machineblocks/cli` do not need a separate BlockML toolchain checkout.
+
+Resolution order for the library path (domain host / config):
 
 ```text
 1. bom.config.json → "mbLibPath"         (explicit override, highest priority)
@@ -744,7 +779,7 @@ configProfile < appliedPresets chain < inline property
 
 ## Package Implementation Workflow
 
-> **Normative for every new and not-yet-implemented package.** `@blockml/parser`, `@blockml/serializer`, `@blockml/validator`, `@blockml/compiler`, `@blockml/cli`, toolchain targets, `@blockml/engine-maker`, `@blockml/lsp`, the `@machineblocks/*` SCAD target — the same three steps. No exceptions for “just a first TypeScript slice”.
+> **Normative for every new and not-yet-implemented package.** `@blockml/parser`, `@blockml/serializer`, `@blockml/validator`, `@blockml/compiler`, `@blockml/cli`, toolchain targets, `@blockml/engine-maker`, `@blockml/lsp` — the same three steps. Domain packages (`@machineblocks/*`) follow the same workflow **in the MachineBlocks mono-repo** — not under this repo’s `packages/`.
 
 Markdown under `docs/` is a **holding handbook** until the owning package is implemented. It is **not** the implementation SSOT. TypeScript, tests, and further BML for a package are written from that package’s BML library only.
 
@@ -866,9 +901,10 @@ Primary owner of each transitional Markdown file. Implement the owner → migrat
 | `13_bml_to_bom_mapping.md` | Transitional TOC — parser SSOT → `@blockml/parser` BML; serializer SSOT → `@blockml/serializer` BML |
 | `06_compiler.md`, `14_compiler_runtime.md` | `@blockml/compiler` |
 | `07_cli.md` | `@blockml/cli` |
-| `03_mbom.md`, `04_types.md` | `@machineblocks/core` (native params/types already BML SSOT) |
-| `05_scad_renderer.md` | `@machineblocks/*` SCAD target |
-| BlockDoc / XSD / FatBlock slices in `00` / `06` / `14` / `19` | `@blockml/blockdoc-target`, `@blockml/xsd-target`, `@blockml/fatblock-target` |
+| `03_mbom.md`, `04_types.md` | **OUT OF SCOPE here** → move to MachineBlocks mono-repo / `@machineblocks/core` BML |
+| `05_scad_renderer.md` | **OUT OF SCOPE here** → move to MachineBlocks mono-repo / `@machineblocks/*` SCAD target |
+| BlockDoc (migrated) | `@blockml/blockdoc-target` BML — start `org.blockml.bml.target.blockdoc.documentation.Introduction`; host pointers remain in `00` / `06` / `07` / `14` |
+| XSD / FatBlock slices in `00` / `06` / `14` / `19` | `@blockml/xsd-target`, `@blockml/fatblock-target` |
 | Engine slices in `00` / `06` / `14` | `@blockml/engine-maker` |
 | Language Server slices in `01` | `@blockml/lsp` |
 | `00_system.md`, `15_dev_setup.md` | Split into owning packages last; remaining repo handbook until all packages exist |
@@ -987,15 +1023,15 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
                            transitional Markdown — package BML is SSOT; see Package Implementation Workflow
 01_bom_core.md         — BOM Core: abstract model (Block, Member, Preset, Library, Catalog, Target System)
 02_mbml.md             — BML format, document types, namespaces, schema
-03_mbom.md             — MBOM: MachineBlocks domain model, properties, aggregations, expressions
-04_types.md            — MBOM type system, serialization rules
-05_scad_renderer.md    — SCAD Render Target: Block Renderers, assembly patterns, naming, source maps
+03_mbom.md             — MBOM (OUT OF SCOPE → MachineBlocks mono-repo; holding text)
+04_types.md            — MB types (OUT OF SCOPE → MachineBlocks mono-repo; holding text)
+05_scad_renderer.md    — SCAD target (OUT OF SCOPE → MachineBlocks mono-repo; holding text)
 06_compiler.md         — compiler pipeline, Stage numbering glossary, Target Registry, testing (incl. toolchain RT sketches)
-07_cli.md              — CLI commands, configuration, watch mode, scaffolding
+07_cli.md              — universal CLI; dual CLI model; domain CLI is out of scope here
 12_bom_object_model.md — formal BOM data structures (BomDocument, BlockDefinition, CompositionNode)
 13_bml_to_bom_mapping.md — BML → BOM algorithm (parser implementation contract)
 14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
-15_dev_setup.md        — tooling, package layout, build, test, IDE setup
+15_dev_setup.md        — tooling, package layout, build, test, IDE setup (this repo = @blockml/* only)
 16_framework_base_types.md — framework base types as BML (abstract, final)
 17_type_system_bml.md  — ValueType, Language, Block hierarchy
 18_constraints_and_suggestions.md — property constraints and suggestions
@@ -1003,23 +1039,16 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 20_value_type_instance_configuration.md — ValueType `{…}` instance configuration
 21_constant_value_type.md — Constant(T){value} singleton domains
 22_function_mapping.md — Capability call argument mapping (FunctionMapping)
-09_mbom_properties.yml — pointer stub only (inventory removed; see NativeBlock.bml)
+09_mbom_properties.yml — pointer stub only (OUT OF SCOPE → MachineBlocks; see NativeBlock.bml)
 
-node_modules/@machineblocks/core/   — BlockML node module (docs, SCAD reference renderer, examples)
-  package.json
-  lib/                 — SCAD Runtime (every generated SCAD file uses this)
-  config/              — mb_config.scad
-  pattern/             — assembly patterns
-  blocks/              — package SSOT
-    com/machineblocks/bml/
-      documentation/         — general MachineBlocks docs as BML
-      core/ type/ bricks/    — MBOM grammar
-      examples/              — BML examples
-      ...
+MachineBlocks mono-repo (Zielbild) — not this tree:
+  @machineblocks/core         — BML SSOT, SCAD lib, examples
+  @machineblocks/…-scad-target
+  @machineblocks/cli          — thin host
 ```
 
-**Native MBOM / SCAD parameters — sole SSOT (already today):**  
-`node_modules/@machineblocks/core/blocks/com/machineblocks/bml/core/NativeBlock.bml` + `…/type/*.bml`.  
-Markdown (`03`/`04`/`05`/…), `09_mbom_properties.yml`, and MachineBlocks API notes **must follow or only link** — they are not a second inventory. Conventions (XY / XYZ / AB) stay in `04_types.md`.
+**Native MBOM / SCAD parameters — sole SSOT (already today, owned by MachineBlocks):**  
+`@machineblocks/core` → `blocks/com/machineblocks/bml/core/NativeBlock.bml` + `…/type/*.bml`.  
+Markdown (`03`/`04`/`05`/…), `09_mbom_properties.yml`, and MachineBlocks API notes **must follow or only link** — they are not a second inventory. Those MD files will leave this repo when the MachineBlocks mono-repo absorbs them.
 
-**BML vs Markdown (general):** Markdown in `docs/` is **transitional** and is **not** an implementation SSOT. For **MachineBlocks native params and type shapes**, BML in `@machineblocks/core` is already the sole SSOT — do not duplicate parameter tables in Markdown. When a package is implemented, its MD is migrated into that package’s BML library first; implementation uses only the library. **MD files are deleted** once all packages are implemented and all information has been transferred — see [BlockML node packages](#blockml-node-packages), [Package Implementation Workflow](#package-implementation-workflow), and [BML Self-Description Roadmap](#bml-self-description-roadmap).
+**BML vs Markdown (general):** Markdown in `docs/` is **transitional** and is **not** an implementation SSOT. When a package is implemented, its MD is migrated into that package’s BML library first; implementation uses only the library. **Domain MD is deleted from this repo** once moved to MachineBlocks. Toolchain MD is deleted once transferred into `@blockml/*` libraries — see [BlockML node packages](#blockml-node-packages), [Package Implementation Workflow](#package-implementation-workflow), and [BML Self-Description Roadmap](#bml-self-description-roadmap).

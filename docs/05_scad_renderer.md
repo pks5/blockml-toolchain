@@ -1,6 +1,9 @@
 # SCAD Renderer — Render Target
 
-version: 2.1.0
+version: 2.2.0
+
+> **OUT OF SCOPE for the BlockML toolchain repo.**  
+> MachineBlocks product render target. Authored in the **MachineBlocks mono-repo** as `@machineblocks/machineblocks-v3-scad-target` (plus thin `@machineblocks/cli`). npm packages remain split. This Markdown is transitional holding text until moved. Do **not** develop this target under `blockml/packages/`. See `00_system.md` — Zielbild.
 
 ## Purpose of this Document
 
@@ -10,13 +13,13 @@ For the MBOM object model see `03_mbom.md`.
 For the MBOM type system and serialization rules see `04_types.md`.
 For the Target system see `06_compiler.md`.
 For the MachineBlocks V3 SCAD Library specification see
-`node_modules/@machineblocks/core/` (BML documentation under `blocks/com/machineblocks/bml/documentation/`).
+`@machineblocks/core` (BML documentation under `blocks/com/machineblocks/bml/documentation/`).
 
 ---
 
 ## Overview
 
-The MachineBlocks V3 SCAD Target is a **separate** `@machineblocks/*` compiler package (developed under `packages/`), not `@machineblocks/core`. `@machineblocks/core` is the domain library (BML docs, SCAD reference renderer, examples). The target is browser and Node compatible — no Node-only APIs.
+The MachineBlocks V3 SCAD Target is a **separate** `@machineblocks/*` compiler package in the **MachineBlocks mono-repo**, not `@machineblocks/core` and not under this BlockML repo’s `packages/`. `@machineblocks/core` is the domain library (BML docs, SCAD reference renderer, examples). The target is browser and Node compatible — no Node-only APIs. MachineBlocks users typically run **`@machineblocks/cli`** (thin host) rather than wiring the target into `@blockml/cli`.
 
 The target uses `@blockml/engine-maker` (**MakerEngine**) as its CompilerEngine implementation. It registers under the name `"machineblocks-v3-scad"` and contains two BlockProcessors. All MBOM→SCAD mappings are declarative and configurable — no mappings are hardcoded in the processor logic.
 

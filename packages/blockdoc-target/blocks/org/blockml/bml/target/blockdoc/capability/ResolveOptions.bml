@@ -1,0 +1,51 @@
+<!--
+  BlockDoc Capability — ResolveOptions
+  FQN: org.blockml.bml.target.blockdoc.capability.ResolveOptions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ResolveOptions</name>
+  <type>bdcap:ResolveOptions</type>
+  <baseType>core:Capability</baseType>
+  <is>Merge opaque targetOptions into required BlockDocOptions</is>
+
+  <documentation>BD3: missing fields take defaults from BlockDocConstants (siteMode=merged, outLayout=fqn, includeNonExported=true).</documentation>
+
+  <references>
+    <see type="bddocumentation:PublicApi" relation="SeeAlso" />
+    <see type="bdconfig:BlockDocConstants" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <targetOptions type="type:Text">
+      <documentation>Opaque CompileRequest.targetOptions (optional).</documentation>
+    </targetOptions>
+    <result type="bdapi:BlockDocOptions">
+      <documentation>Fully resolved options (required).</documentation>
+    </result>
+  </properties>
+
+</block>

@@ -1,0 +1,63 @@
+<!--
+  BlockDoc Documentation — DesignDecisions
+  FQN: org.blockml.bml.target.blockdoc.documentation.DesignDecisions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>DesignDecisions</name>
+  <type>bddocumentation:DesignDecisions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Normative BlockDoc decisions BD1–BD23</is>
+
+  <documentation>BD1 siteMode merged vs perLibrary.
+    BD2 outLayout fqn vs package (package may collide when multiple blocks share a package).
+    BD3 option defaults: merged / fqn / includeNonExported=true.
+    BD4 registry name blockdoc; accepts library|corpus|auto.
+    BD5 shared minimal CSS profile.
+    BD6 block page section order (PageSectionOrder).
+    BD7 FqnToHtmlPath algebra.
+    BD8 no FQN dl / no block-page breadcrumb.
+    BD9 RelativeHref algebra.
+    BD10 EscapeHtml.
+    BD11 CollectRootFqns = shortest per file.
+    BD12 package prefix ancestor set for indexes.
+    BD13 export filter via Library.blocks aggregation.
+    BD14 member-value summary limit 5.
+    BD15 type-link policy (named+known only).
+    BD16 sub-block simple-name resolve.
+    BD17 member table kinds and columns.
+    BD18 composition group order/dedupe.
+    BD19 composition node / directive labels.
+    BD20 dotted package path linking.
+    BD21 site index grouping.
+    BD22 package index direct blocks/sub-packages + breadcrumb.
+    BD23 AssembleSite orchestration including library prefix = strip .Library.</documentation>
+  <references>
+    <see type="bddocumentation:PackageOwnership" relation="ReadNext"></see>
+  </references>
+
+</block>

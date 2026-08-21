@@ -1,6 +1,9 @@
 # MachineBlocks Compiler — MBOM Type System
 
-version: 1.0.0
+version: 1.1.0
+
+> **OUT OF SCOPE for the BlockML toolchain repo.**  
+> MachineBlocks domain material. Target home: **MachineBlocks mono-repo**. This file is transitional holding text until the move. See `00_system.md` — Zielbild.
 
 ## Purpose of this Document
 

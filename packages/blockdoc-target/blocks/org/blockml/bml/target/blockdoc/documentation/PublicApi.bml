@@ -1,0 +1,57 @@
+<!--
+  BlockDoc Documentation — PublicApi
+  FQN: org.blockml.bml.target.blockdoc.documentation.PublicApi
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PublicApi</name>
+  <type>bddocumentation:PublicApi</type>
+  <baseType>core:Documentation</baseType>
+  <is>Public TypeScript / capability surface</is>
+
+  <documentation>Package @blockml/blockdoc-target exports:
+
+    • BlockDocTarget — RenderTarget; name="blockdoc"; accepts=["library","corpus","auto"];
+      render(request, ctx) → BlockDocRenderOutput { files: {path, content}[] }
+    • BlockDocOptions — siteMode?, outLayout?, includeNonExported?
+    • DEFAULT_BLOCKDOC_OPTIONS / resolveBlockDocOptions(targetOptions?)
+    • fqnToHtmlPath(fqn, outLayout), escapeHtml(text)
+
+    BML counterparts: bdcap:Render, bdapi:BlockDocOptions, bdapi:BlockDocRenderOutput,
+    bdcap:ResolveOptions, bdcap:FqnToHtmlPath, bdcap:EscapeHtml.
+
+    Opaque CompileRequest.targetOptions is typed here as BlockDocOptions (BD3).
+    Host CLI passes config.targetOptions.blockdoc.</documentation>
+  <references>
+    <see type="bddocumentation:PathAndLayout" relation="ReadNext"></see>
+    <see type="bdcap:Render" relation="Defines"></see>
+    <see type="bdapi:BlockDocOptions" relation="Defines"></see>
+    <see type="bdapi:BlockDocRenderOutput" relation="Defines"></see>
+    <see type="bdcap:ResolveOptions" relation="Defines"></see>
+  </references>
+
+</block>

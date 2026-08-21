@@ -1,0 +1,57 @@
+<!--
+  BlockDoc Documentation — SiteAssembly
+  FQN: org.blockml.bml.target.blockdoc.documentation.SiteAssembly
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>SiteAssembly</name>
+  <type>bddocumentation:SiteAssembly</type>
+  <baseType>core:Documentation</baseType>
+  <is>Corpus selection and multi-file emission (BD11, BD13, BD23)</is>
+
+  <documentation>FQN selection: TypeRegistry.keys(), sorted unique. includeNonExported=false → FilterExportedFqns
+    from Library aggregation "blocks" (re-parse libraryPaths).
+
+    Root FQNs (BD11): shortest FQN per source.filePath — indexes list these only.
+
+    Nested types: if registry doc root FQN ≠ requested FQN, DFS subBlocks (findBlock).
+
+    Site indexes (BD23):
+    • merged → index.html titled "BlockDoc"
+    • perLibrary → {libPrefix}/index.html per Library; filter roots under that prefix
+
+    Package indexes when outLayout=fqn for every CollectPackagePrefixes entry; perLibrary mode
+    points package-index "root" breadcrumb to owning library index when prefix is under that library.
+
+    Control gate: does not require validator Stage-2 success.</documentation>
+  <references>
+    <see type="bddocumentation:DesignDecisions" relation="ReadNext"></see>
+    <see type="bdcap:AssembleSite" relation="SeeAlso"></see>
+    <see type="bdcap:FilterExportedFqns" relation="SeeAlso"></see>
+  </references>
+
+</block>

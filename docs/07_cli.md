@@ -1,22 +1,45 @@
 # BOM Compiler — CLI
 
-version: 2.0.0
+version: 2.1.0
 
 ## Purpose of this Document
 
-This document defines the `blockml` CLI tool — its commands, configuration files, watch mode, scaffolding, config profile management, and thumbnail generation. The command name is the product (`blockml`); BOM remains the object model (`@blockml/bom`). Project config stays `bom.config.json` in V1.
+This document defines the `blockml` CLI tool — its commands, configuration files, watch mode, scaffolding, config profile management, and (where applicable) post-compile hooks. The command name is the product (`blockml`); BOM remains the object model (`@blockml/bom`). Project config stays `bom.config.json` in V1.
 
 For the compiler pipeline and Target Registry see `06_compiler.md`.
 For compiler runtime (bootstrap, RenderContext, compile I/O model) see `14_compiler_runtime.md`.
 For the project file structure and library resolution see `00_system.md`.
+For the recommended **domain host** pattern see [Dual CLI model](#dual-cli-model) and `00_system.md` — Zielbild.
+
+---
+
+## Dual CLI model
+
+```text
+@blockml/cli  (blockml)           — universal toolchain CLI (THIS REPO)
+  validate · compile blockdoc|xsd|fatblock · watch · scaffold
+  domain-agnostic; targets[] / plugins; no MachineBlocks hardcoding
+
+@machineblocks/cli                — thin MachineBlocks host (MACHINEBLOCKS MONO-REPO)
+  depends on @blockml/* packages
+  registerTarget(MachineBlocksV3ScadTarget)
+  MB defaults (mbLibPath, SCAD thumbnails, …)
+  MB users check out one repo → full product chain
+```
+
+**Recommended for MachineBlocks users:** use `@machineblocks/cli` from the MachineBlocks mono-repo. They do not need to clone this BlockML repo.
+
+**Interop:** when `@machineblocks/machineblocks-v3-scad-target` is installed, a future plugin loader may allow `blockml compile machineblocks-v3-scad`. That is optional; product UX stays with the domain CLI.
+
+> **OUT OF SCOPE for `@blockml/cli` implementation:** MachineBlocks-specific defaults, OpenSCAD thumbnail pipeline as a hard dependency, bundling the SCAD library, or shipping `@machineblocks/*` under this repo. Sections below that still describe SCAD/MB behaviour are **transitional Blaupause** text pending move to MachineBlocks docs / `@machineblocks/cli`.
 
 ---
 
 ## Overview
 
-The CLI is implemented in `@blockml/cli`. It is Node.js-only — it may use `fs`, `path`, `chokidar`, `child_process`, and other Node-only APIs. The CLI wraps `@blockml/compiler` and adds file system operations, watching, scaffolding, and (for the SCAD target) thumbnail rendering.
+The CLI is implemented in `@blockml/cli`. It is Node.js-only — it may use `fs`, `path`, `chokidar`, `child_process`, and other Node-only APIs. The CLI wraps `@blockml/compiler` and adds file system operations, watching, scaffolding, and optional post-compile hooks. Domain hosts (e.g. `@machineblocks/cli`) may own domain-specific post-steps such as SCAD thumbnails.
 
-**CLI orchestration:** builds a `CompileRequest` per target kind, then calls `compileToOutput`. Document targets (SCAD) loop one file per call; library/corpus targets (BlockDoc, XSD) use one scope-based call per run. See `14_compiler_runtime.md` — Compile Scope (C7).
+**CLI orchestration:** builds a `CompileRequest` per target kind, then calls `compileToOutput`. Document targets loop one file per call; library/corpus targets (BlockDoc, XSD) use one scope-based call per run. See `14_compiler_runtime.md` — Compile Scope (C7).
 
 Command names, argument names, and shorthand flags are configurable via `bom-cli.config.json`.
 
@@ -52,7 +75,7 @@ Implemented in `@blockml/cli` as `bootstrapTypeRegistry.ts`. **Separate from com
 
 Registers render targets in `@blockml/compiler` before compile. Called by `blockml compile` and `blockml watch`; **not** by `blockml validate` or `blockml inspect`.
 
-**V1 (decided):** `bootstrapTargets()` reads `bom.config.json` → **`targets[]`** and registers those packages. **First / default control target is `blockdoc`** — not SCAD.
+**V1 (decided):** `bootstrapTargets()` reads `bom.config.json` → **`targets[]`** and registers those **toolchain** packages. **First / default control target is `blockdoc`**. Domain targets (e.g. MachineBlocks SCAD) are registered by domain thin CLIs — not hardcoded in `@blockml/cli`. See Dual CLI model.
 
 ```typescript
 bootstrapTargets(config);   // V1: register names from config.targets (default ["blockdoc"])
@@ -68,9 +91,9 @@ See `14_compiler_runtime.md` — Target Bootstrap · `15_dev_setup.md` — Phase
 
 ## Installation
 
-The BOM Compiler is installed from source by cloning the repository, then `npm install` (libraries come from the npm registry as `@blockml/*` and `@machineblocks/*`).
+### Universal toolchain (`blockml`)
 
-### 1. Clone and initialize
+Clone this repository, then `npm install` (`@blockml/*` workspace packages). Domain libraries such as `@machineblocks/core` may appear as optional dependencies / fixtures — they are **not authored here**.
 
 ```bash
 git clone https://github.com/.../blockml
@@ -78,7 +101,9 @@ cd blockml
 npm install
 ```
 
-`npm install` provides `@blockml/core` and `@machineblocks/core` under `node_modules/`.
+### MachineBlocks product chain (recommended for MB users)
+
+> **OUT OF SCOPE for this repo.** Check out the **MachineBlocks mono-repo** and use `@machineblocks/cli` (thin host over `@blockml/*`). One clone covers BML SSOT, SCAD lib, SCAD target, and CLI. See `00_system.md` — Zielbild · `07_cli.md` — Dual CLI model.
 
 ### 2. Build and link
 
@@ -516,7 +541,7 @@ Example BlockDoc project:
 }
 ```
 
-Compile: `blockml compile blockdoc` → static HTML under `doc/` (package/FQN hierarchy). See `14_compiler_runtime.md` — Compile Scope (C7).
+Compile: `blockml compile blockdoc` → static HTML under `doc/`. BlockDoc options/layout/page rules SSOT: `org.blockml.bml.target.blockdoc.documentation.Introduction`. Host scope wiring: `14_compiler_runtime.md` — Compile Scope (C7).
 
 #### Target list (`targets[]`) — **V1 decided**
 
@@ -531,15 +556,17 @@ Compile: `blockml compile blockdoc` → static HTML under `doc/` (package/FQN hi
 | **Purpose** | Which Render Targets this project **loads** into the Target Registry |
 | **Not** | Which target a given `blockml compile` uses — that remains the CLI `<target>` argument |
 | **Default** | `["blockdoc"]` when omitted — BlockDoc is the V1 **control** target |
-| **Allowed names** | `blockdoc`, `xsd`, `fatblock`, `machineblocks-v3-scad` (as packages ship) |
+| **Allowed names (this repo / `@blockml/cli`)** | `blockdoc`, `xsd`, `fatblock` (toolchain targets) |
+| **Domain names** | e.g. `machineblocks-v3-scad` — registered by **domain hosts** (`@machineblocks/cli`) or a future plugin loader; **not** authored in this repo |
 | **`blockml init`** | Scaffold includes `"targets": ["blockdoc"]` |
 
-Example multi-target project after more RTs exist:
+Example multi-target **toolchain** project:
 
 ```json
-{ "targets": ["blockdoc", "xsd", "machineblocks-v3-scad"] }
+{ "targets": ["blockdoc", "xsd", "fatblock"] }
 ```
 
+MachineBlocks product projects use `@machineblocks/cli` (or install the SCAD target as a plugin). See Dual CLI model · `00_system.md` — Zielbild.
 #### XSD validation escape hatch (**decided**)
 
 Optional authoring checks against generated / catalog `.xsd` (after the XSD Render Target exists) must always be disableable:

@@ -1,0 +1,54 @@
+<!--
+  BlockDoc Documentation — Introduction
+  FQN: org.blockml.bml.target.blockdoc.documentation.Introduction
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Introduction</name>
+  <type>bddocumentation:Introduction</type>
+  <baseType>core:Documentation</baseType>
+  <is>Purpose and scope of the BlockDoc render target</is>
+
+  <documentation>The @blockml/blockdoc-target package implements RenderTarget registry name blockdoc.
+    It is the V1 Stage-3 control gate: browseable static HTML of the block corpus for human
+    and LLM review after roundtrip — not a product SCAD/XSD emitter.
+
+    This library (org.blockml.bml.target.blockdoc.*) is the SSOT. TypeScript in
+    packages/blockdoc-target/src/ implements it. Tests in packages/blockdoc-target/test/
+    encode behavioral contracts.
+
+    Pipeline placement: TypeRegistry (+ optional libraryPaths) → BlockDocTarget.render →
+    multi-file HTML under outDir (CLI default doc/). Accepts compile scopes library, corpus, auto.
+
+    Related host wiring (CLI bootstrap, compileToOutput, scope auto resolution) lives in
+    @blockml/compiler / @blockml/cli — see PackageOwnership.</documentation>
+  <references>
+    <see type="bddocumentation:LayerSeparation" relation="ReadNext"></see>
+    <see type="bdcap:Render" relation="SeeAlso"></see>
+  </references>
+
+</block>

@@ -1,0 +1,60 @@
+<!--
+  BlockDoc Capability — RenderMemberSections
+  FQN: org.blockml.bml.target.blockdoc.capability.RenderMemberSections
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>RenderMemberSections</name>
+  <type>bdcap:RenderMemberSections</type>
+  <baseType>core:Capability</baseType>
+  <is>Emit Properties/Aggregations/Associations/Capabilities tables</is>
+
+  <documentation>BD17: columns Name + Type only. Property: sub-block resolve → typeFqn → type expression → —. Capability: typeFqn or literal 'capability'. Aggregation/association: named + sub-block resolve (multiplicity suffix) else RenderTypeExpression. Empty sections omitted.</documentation>
+
+  <references>
+    <see type="bddocumentation:MemberAndCompositionRules" relation="SeeAlso" />
+    <see type="bdconfig:PageSectionOrder" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <block type="bomblock:BlockDefinition">
+      <documentation>Block definition (required).</documentation>
+    </block>
+    <pagePath type="type:Text">
+      <documentation>Current page path (required).</documentation>
+    </pagePath>
+    <options type="bdapi:BlockDocOptions">
+      <documentation>Resolved options (required).</documentation>
+    </options>
+    <knownFqns type="type:Text">
+      <documentation>Set of linkable FQNs (required).</documentation>
+    </knownFqns>
+    <result type="bdrender:DocMarkup">
+      <documentation>HTML sections (required).</documentation>
+    </result>
+  </properties>
+
+</block>

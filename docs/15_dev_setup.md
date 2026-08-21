@@ -1,14 +1,17 @@
 # Development Setup
 
-version: 0.3.0
+version: 0.4.0
 
 ## Purpose of this Document
 
-This document defines the **development setup** for the BOM Compiler (`blockml` repository) — tooling, package layout, build order, scripts, testing, and IDE configuration.
+This document defines the **development setup** for the BlockML toolchain (`blockml` repository) — tooling, package layout, build order, scripts, testing, and IDE configuration.
+
+**This repo authors `@blockml/*` only.** All `@machineblocks/*` packages (core, SCAD target, domain CLI) are **out of scope** here — they live in the **MachineBlocks mono-repo** (npm packages remain split). See `00_system.md` — Zielbild.
 
 For architecture and package responsibilities see `00_system.md` (including **BlockML node packages**).
 For compiler runtime (bootstrap, facade, cache) see `14_compiler_runtime.md`.
 For testing strategy see `06_compiler.md` — Testing Strategy.
+For the dual CLI model see `07_cli.md`.
 
 Implementation code is scaffolded according to this document. **Libraries and toolchain packages** are **BlockML node modules** (`package.json` + `blocks/` SSOT) under `node_modules/` / `packages/`. See `00_system.md` — BlockML node packages · Package Implementation Workflow. TypeScript surfaces are added **after** the package BML library exists and that package’s Markdown has been migrated into it.
 
@@ -25,7 +28,8 @@ Implementation code is scaffolded according to this document. **Libraries and to
 | **Tests** | **Vitest** — unit + correctness + snapshots |
 | **CLI link** | `npm link` from `@blockml/cli` after first build |
 | **Node version** | **Node 20 LTS** minimum (22 supported) |
-| **Package scope** | `@blockml/*` (toolchain) and `@machineblocks/*` (domain) — no `@bom/*` |
+| **Package scope (this repo)** | **`@blockml/*` only** — toolchain |
+| **Domain scope** | **`@machineblocks/*`** authored in MachineBlocks mono-repo (out of scope here) |
 | **Package shape** | Normal npm module (`package.json`) **+ `blocks/`** — BML in `blocks/` is the package SSOT |
 | **Browser packages** | No `fs`, `path`, `child_process` in core/parser/compiler/targets |
 
@@ -79,23 +83,19 @@ npm run build
 Every package is a **BlockML node module**: `package.json` + `blocks/` (SSOT). See `00_system.md` — BlockML node packages.
 
 ```text
-blockml/
-  docs/                          — transitional Markdown (handbook until migrated into package BML; not an implementation SSOT)
-  package.json                   — depends on @blockml/core, @machineblocks/core
+blockml/                         ← THIS REPO — @blockml/* toolchain only
+  docs/                          — transitional Markdown; domain MD (03/04/05) → move to MachineBlocks
+  package.json                   — @blockml/* workspaces; optional @machineblocks/core as fixture dep
   node_modules/
     @blockml/core/               — BlockML Core
       package.json
       blocks/org/blockml/bml/   — package SSOT (Library.bml, README.bml, …)
-    @machineblocks/core/         — MachineBlocks domain library
-      package.json
-      blocks/com/machineblocks/bml/  — SSOT: docs, types, bricks, examples
-      lib/ · config/ · pattern/      — SCAD reference renderer
-  packages/                      — @blockml/* and @machineblocks/* authored here
-                                 — each: package.json + blocks/ + src/
+    @machineblocks/core/         — optional installed fixture (authored in MachineBlocks mono-repo)
+  packages/                      — @blockml/* ONLY (each: package.json + blocks/ + src/)
   scripts/
 ```
 
-**There is no `@blockml/core-services` package.** Built-in services (`Math`, `Strings`, …) live under `node_modules/@blockml/core/blocks/org/blockml/bml/service/`.
+**There is no `@blockml/core-services` package.** Built-in services (`Math`, `Strings`, …) live under `node_modules/@blockml/core/blocks/org/blockml/bml/service/`. **Do not author `@machineblocks/*` under this `packages/`.**
 
 ### Target packages (end state)
 
@@ -110,10 +110,11 @@ blockml/
 | `@blockml/blockdoc-target` | `packages/blockdoc-target` | Phase C — **first** Stage-3 / V1 control RT; registry `"blockdoc"` |
 | `@blockml/xsd-target` | `packages/xsd-target` | Phase C — after BlockDoc; registry `"xsd"` |
 | `@blockml/fatblock-target` | `packages/fatblock-target` | Phase C — after / beside XSD; registry `"fatblock"` |
-| `@blockml/cli` | `packages/cli-tools` | Phase C — reads `targets[]` (default `["blockdoc"]`) |
-| `@blockml/engine-maker` | `packages/` / `engines/` | Phase C — needed for SCAD product path |
-| `@machineblocks/core` | `node_modules/@machineblocks/core` | Installed — docs (BML), SCAD reference renderer, examples |
-| `@machineblocks/*` SCAD target | `packages/` → `@machineblocks/*` | Phase C — **product** RT; **separate** from `@machineblocks/core` |
+| `@blockml/cli` | `packages/cli-tools` | Phase C — reads `targets[]` (default `["blockdoc"]`); universal CLI only |
+| `@blockml/engine-maker` | `packages/` / `engines/` | Phase C — reusable engine; SCAD product path consumes it from MachineBlocks |
+| `@machineblocks/core` | *installed dep / fixture* | **OUT OF SCOPE** — MachineBlocks mono-repo |
+| `@machineblocks/*` SCAD target | *published from MB mono-repo* | **OUT OF SCOPE** — not under this `packages/` |
+| `@machineblocks/cli` | *MachineBlocks mono-repo* | **OUT OF SCOPE** — thin domain host; recommended MB entry |
 | `@blockml/lsp` | `packages/lsp` | V2 — package name **decided** |
 
 ### Target tree
@@ -130,9 +131,9 @@ blockml/
 
   node_modules/
     @blockml/core/             — BlockML Core BML (org.blockml.bml.*)
-    @machineblocks/core/       — MachineBlocks SCAD + MBOM (com.machineblocks.bml.*)
+    @machineblocks/core/       — optional installed fixture (authored in MachineBlocks mono-repo)
 
-  packages/
+  packages/                    — @blockml/* ONLY (no @machineblocks/* here)
     bom/                       — @blockml/bom (Urmodell TS)
     parser/                    — @blockml/parser
       package.json · blocks/ · src/
@@ -142,22 +143,26 @@ blockml/
     xsd-target/                — @blockml/xsd-target — registry "xsd"
     blockdoc-target/           — @blockml/blockdoc-target — registry "blockdoc"
     fatblock-target/           — @blockml/fatblock-target — registry "fatblock"
-    cli-tools/                 — @blockml/cli          (Node-only)
+    cli-tools/                 — @blockml/cli          (Node-only, universal)
     lsp/                       — @blockml/lsp          (V2)
-    <machineblocks-scad-target>/  — @machineblocks/* compiler target (not core)
 
   engines/
     maker-engine/              — @blockml/engine-maker (local until published)
 
   tests/
     roundtrip/                 — parse → serialize → parse (V1 gate)
-    correctness/               — after compiler exists
+    correctness/               — after compiler exists (may use MB fixtures as deps)
     snapshots/
 
-  docs/
+  docs/                        — toolchain MD; domain MD (03/04/05) = holding text → move to MB
+
+MachineBlocks mono-repo (separate; not this tree):
+  @machineblocks/core
+  @machineblocks/machineblocks-v3-scad-target
+  @machineblocks/cli           — thin host; recommended MB user entry
 ```
 
-**Scaffold next (Phase A):** `@blockml/bom` library + migrate `12` Urmodell slice → BOM TS; `@blockml/parser` and `@blockml/serializer` BML libraries (done). Framework BML remains in `@blockml/core` (npm).
+**Scaffold next (Phase A):** `@blockml/bom` library + migrate `12` Urmodell slice → BOM TS; `@blockml/parser` and `@blockml/serializer` BML libraries (done). Framework BML remains in `@blockml/core` (npm). **Do not scaffold `@machineblocks/*` under this `packages/`.**
 
 ---
 
@@ -266,7 +271,7 @@ Each package `tsconfig.json`:
 
 ## Package Conventions
 
-Every package is a **normal Node module** (`package.json`) **with a BlockML extension**: a `blocks/` folder. The `.bml` files in `blocks/` are the **SSOT for that package** — same pattern as `@blockml/core` and `@machineblocks/core` already. Future `@blockml/parser`, `@blockml/serializer`, … and the `@machineblocks/*` compiler target each get their own `blocks/`. npm organizations: `@blockml` (toolchain) and `@machineblocks` (domain). See `00_system.md` — BlockML node packages · Package Implementation Workflow.
+Every package is a **normal Node module** (`package.json`) **with a BlockML extension**: a `blocks/` folder. The `.bml` files in `blocks/` are the **SSOT for that package** — same pattern as `@blockml/core` (and domain packages such as `@machineblocks/core` in their own mono-repo). This repo authors **`@blockml/*` only**. `@machineblocks/*` packages follow the same shape in the **MachineBlocks mono-repo**. See `00_system.md` — Zielbild · BlockML node packages · Package Implementation Workflow.
 
 Markdown under `docs/` is **transitional**. The goal is total self-description: all package information lives as BML in that package's `blocks/`. MD files are **deleted** when all packages are implemented and all information has been transferred. **Do not implement a package from Markdown.**
 
@@ -721,7 +726,7 @@ Phase C — Compile pipeline (BlockDoc-first)
   7. Compiler facade                 — @blockml/compiler (C2, C3, C7)
   8. CLI + targets[]                 — @blockml/cli; bom.config.json targets (default ["blockdoc"])
   9. **First Stage-3 gate: BlockDoc** — @blockml/blockdoc-target / CLI `blockdoc`
-     — static HTML by package/FQN hierarchy — corpus control / review
+     — SSOT: org.blockml.bml.target.blockdoc.documentation.Introduction
      — compile scope: library/corpus (`blockml compile blockdoc`), not per-file --all
      — proves Facade + Target Registry with minimal domain surface
  10. Further toolchain RTs (after BlockDoc control path works)
@@ -729,23 +734,23 @@ Phase C — Compile pipeline (BlockDoc-first)
      b. FatBlock target — @blockml/fatblock-target / `fatblock`
      — XSD *validation* of authoring only after (a) can generate schemas
      — XSD validation must stay **disableable** (`--no-xsd` / `xsdValidation`)
- 11. Engine + MachineBlocks SCAD     — product path after toolchain control
-     — @blockml/engine-maker, machineblocks-v3-scad-target
+ 11. Engine (optional in this repo)  — @blockml/engine-maker for consumers
  12. Correctness + snapshot tests    — tests/correctness/, tests/snapshots/
+                                       (MB product path is OUT OF SCOPE — MachineBlocks mono-repo)
 ```
 
 **Do not start Phase C until Phase A roundtrip tests pass** for the agreed corpus tiers (see below).
 
 **Phase C ordering (**decided**):**
 
-| Order | Target | Why |
-|---|---|---|
-| **1st** | **BlockDoc** (`blockdoc`) | **Control gate** — browseable HTML of the BML corpus (package/FQN hierarchy); ideal to verify structure after roundtrip |
-| 2nd+ | **XSD** (`xsd`) | Schemas for IDE / later validation; always-disableable validation escape hatch |
-| 2nd+ | **FatBlock** (`fatblock`) | Registry closure + embed model; Stage 2 first |
-| Later | **machineblocks-v3-scad** | Primary **product** target — more domain surface (NativeBlock, engine, `@machineblocks/core`) |
+| Order | Target | Why | Where |
+|---|---|---|---|
+| **1st** | **BlockDoc** (`blockdoc`) | **Control gate** — browseable HTML of the BML corpus | this repo |
+| 2nd+ | **XSD** (`xsd`) | Schemas for IDE / later validation | this repo |
+| 2nd+ | **FatBlock** (`fatblock`) | Registry closure + embed model | this repo |
+| Later | **machineblocks-v3-scad** | Product SCAD target + thin `@machineblocks/cli` | **MachineBlocks mono-repo (out of scope here)** |
 
-MachineBlocks SCAD remains the reference **product** target. BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`blockml compile blockdoc`, library/corpus scope — see `14_compiler_runtime.md` C7). `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3.
+BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`blockml compile blockdoc`, library/corpus scope — see `14_compiler_runtime.md` C7). `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3. MachineBlocks users use `@machineblocks/cli` from the MachineBlocks mono-repo for the product chain.
 
 ### Roundtrip test contract
 
@@ -862,20 +867,22 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 ```text
 1. @blockml/bom BML + TS       — packages/bom; migrate `12` Urmodell slice; BomDocument + Diagnostic + bomEquals
 2. @blockml/core BML          — already present (node_modules/@blockml/core) — language SSOT only
-3. @machineblocks/core BML    — already present (com.machineblocks.bml.*)
-4. @blockml/parser            — BML library migrated (mapping SSOT); maintain TS parity → `@xmldom/xmldom` + steps [1]–[5]
-5. @blockml/serializer        — BML library migrated (emit rules SSOT); maintain TS parity → BOM → BML
-6. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers)
-7. parseExpression()          — @blockml/core utility (AST as ParsedExpression; no Urmodell write-back)
-8. @blockml/validator         — library + migrate owned MD → Stage 2
-9. @blockml/compiler          — library + migrate 06 / 14 → Facade + Target Registry (C2, C3)
-10. BlockDoc RT first          — library + owned slices → @blockml/blockdoc-target (control gate)
-11. XSD / FatBlock RTs         — each: library + owned MD, then after BlockDoc
-12. @blockml/engine-maker      — library + owned MD → RenderEngine stub
-13. @machineblocks/core BML already present — NativeBlock.bml SSOT
-14. @machineblocks/...-scad-target — library + migrate 05 → ScadBlockProcessor MVP
-14. @blockml/cli               — library + migrate 07 → blockml validate, then blockml compile
-15. Correctness tests         — Calibrator, Standard, Cross from @machineblocks/core
+3. @blockml/parser            — BML library migrated (mapping SSOT); maintain TS parity → `@xmldom/xmldom` + steps [1]–[5]
+4. @blockml/serializer        — BML library migrated (emit rules SSOT); maintain TS parity → BOM → BML
+5. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers; may use @machineblocks/core as fixture dep)
+6. parseExpression()          — @blockml/core utility (AST as ParsedExpression; no Urmodell write-back)
+7. @blockml/validator         — library + migrate owned MD → Stage 2
+8. @blockml/compiler          — library + migrate 06 / 14 → Facade + Target Registry (C2, C3)
+9. BlockDoc RT first          — library + owned slices → @blockml/blockdoc-target (control gate)
+10. XSD / FatBlock RTs         — each: library + owned MD, then after BlockDoc
+11. @blockml/engine-maker      — library + owned MD → RenderEngine stub (consumed by domain targets)
+12. @blockml/cli               — library + migrate 07 → blockml validate / compile (universal; no MB hardcoding)
+
+OUT OF SCOPE for this repo (MachineBlocks mono-repo):
+  — @machineblocks/core BML + SCAD lib
+  — @machineblocks/…-scad-target (migrate 05)
+  — @machineblocks/cli (thin host)
+  — MB correctness fixtures as product ownership (may still be npm deps for toolchain tests)
 ```
 
 Every numbered package step includes the Package Implementation Workflow (library → migrate MD → implement from BML). There is no TypeScript-first shortcut.

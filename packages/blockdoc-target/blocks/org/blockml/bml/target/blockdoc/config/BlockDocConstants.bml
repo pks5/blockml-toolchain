@@ -1,0 +1,64 @@
+<!--
+  BlockDoc Config — BlockDocConstants
+  FQN: org.blockml.bml.target.blockdoc.config.BlockDocConstants
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>BlockDocConstants</name>
+  <type>bdconfig:BlockDocConstants</type>
+  <baseType>blockdoc:BlockdocType</baseType>
+  <is>Defaults, registry identity, shared CSS profile</is>
+
+  <documentation>Well-known constants for BlockDoc render (BD3–BD5).</documentation>
+
+  <properties>
+    <REGISTRY_NAME type="type:Text">
+      <documentation>Always "blockdoc".</documentation>
+    </REGISTRY_NAME>
+    <DEFAULT_SITE_MODE type="type:Text">
+      <documentation>"merged".</documentation>
+    </DEFAULT_SITE_MODE>
+    <DEFAULT_OUT_LAYOUT type="type:Text">
+      <documentation>"fqn".</documentation>
+    </DEFAULT_OUT_LAYOUT>
+    <DEFAULT_INCLUDE_NON_EXPORTED type="type:Boolean">
+      <documentation>true.</documentation>
+    </DEFAULT_INCLUDE_NON_EXPORTED>
+    <ACCEPTS type="type:Text">
+      <documentation>JSON array string of scope kinds: library, corpus, auto.</documentation>
+    </ACCEPTS>
+    <PAGE_CSS type="type:Text">
+      <documentation>Shared minimal CSS for block and site index pages (system-ui, tables, blue links).</documentation>
+    </PAGE_CSS>
+    <PACKAGE_INDEX_CSS type="type:Text">
+      <documentation>CSS for package index pages (breadcrumb nav).</documentation>
+    </PACKAGE_INDEX_CSS>
+    <MEMBER_VALUE_SUMMARY_LIMIT type="type:Integer">
+      <documentation>Max member-value keys shown before "+N more" (BD14). Default 5.</documentation>
+    </MEMBER_VALUE_SUMMARY_LIMIT>
+  </properties>
+
+</block>

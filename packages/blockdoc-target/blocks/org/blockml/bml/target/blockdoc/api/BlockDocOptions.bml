@@ -1,0 +1,54 @@
+<!--
+  BlockDoc API — BlockDocOptions
+  FQN: org.blockml.bml.target.blockdoc.api.BlockDocOptions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>BlockDocOptions</name>
+  <type>bdapi:BlockDocOptions</type>
+  <baseType>blockdoc:BlockdocType</baseType>
+  <is>Opaque targetOptions payload for registry name blockdoc</is>
+
+  <documentation>Typed targetOptions for BlockDocTarget.render. Defaults: siteMode=merged, outLayout=fqn, includeNonExported=true (BD3).</documentation>
+
+  <references>
+    <see type="bddocumentation:PublicApi" relation="SeeAlso" />
+    <see type="bdcap:ResolveOptions" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <siteMode type="bdapi:SiteMode">
+      <documentation>default "merged" — one site for all libraries in scope. (optional)</documentation>
+    </siteMode>
+    <outLayout type="bdapi:OutLayout">
+      <documentation>URL path layout under outDir — default "fqn". (optional)</documentation>
+    </outLayout>
+    <includeNonExported type="type:Boolean">
+      <documentation>when false, only Library.blocks exports; when true, all registry FQNs. Default true. (optional)</documentation>
+    </includeNonExported>
+  </properties>
+
+</block>

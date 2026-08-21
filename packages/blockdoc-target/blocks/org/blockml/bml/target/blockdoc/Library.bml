@@ -4,20 +4,52 @@
 -->
 <block
   xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
   xmlns:core="org.blockml.bml.core"
-  xmlns:blockdoc="org.blockml.bml.target.blockdoc">
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type">
 
   <name>Library</name>
   <type>blockdoc:Library</type>
   <baseType>core:BlockLibrary</baseType>
-  <is>BlockDoc HTML render target library catalog</is>
+  <is>The BlockDoc HTML render target library catalog</is>
 
   <documentation>
-    V1 control gate — static HTML by package/FQN hierarchy. Registry name: blockdoc.
-    See docs/14_compiler_runtime.md BlockDoc targetOptions and output layout.
+    Canonical BlockDoc specification for BlockML — registry name blockdoc, options,
+    path/link/page/site rules (BD1–BD23). TypeScript in packages/blockdoc-target/src/
+    implements this library. Urmodell input types live in org.blockml.bml.bom.* (@blockml/bom).
+    Membership is defined exclusively by this blocks list.
   </documentation>
 
   <version>0.1.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>BlockDoc render target library</value>
+    </description>
+  </properties>
 
   <aggregations>
     <readMe>
@@ -25,6 +57,59 @@
         <blockdoc:README />
       </composition>
     </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+      <composition>
+        <bom:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition><blockdoc:BlockdocType /></composition>
+      <composition><bdapi:SiteMode /></composition>
+      <composition><bdapi:OutLayout /></composition>
+      <composition><bdapi:BlockDocOptions /></composition>
+      <composition><bdapi:BlockDocRenderOutput /></composition>
+      <composition><bdconfig:BlockDocConstants /></composition>
+      <composition><bdconfig:PageSectionOrder /></composition>
+      <composition><bdpath:FqnHtmlPath /></composition>
+      <composition><bdpage:BlockPage /></composition>
+      <composition><bdpage:SiteIndexPage /></composition>
+      <composition><bdpage:PackageIndexPage /></composition>
+      <composition><bdrender:DocMarkup /></composition>
+      <composition><bdcap:Render /></composition>
+      <composition><bdcap:ResolveOptions /></composition>
+      <composition><bdcap:FqnToHtmlPath /></composition>
+      <composition><bdcap:RelativeHref /></composition>
+      <composition><bdcap:EscapeHtml /></composition>
+      <composition><bdcap:CollectRootFqns /></composition>
+      <composition><bdcap:CollectPackagePrefixes /></composition>
+      <composition><bdcap:FilterExportedFqns /></composition>
+      <composition><bdcap:RenderTypeExpression /></composition>
+      <composition><bdcap:ResolveSubBlockType /></composition>
+      <composition><bdcap:RenderMemberSections /></composition>
+      <composition><bdcap:CollectCompositionGroups /></composition>
+      <composition><bdcap:RenderComposition /></composition>
+      <composition><bdcap:RenderDottedPackagePath /></composition>
+      <composition><bdcap:RenderBlockPage /></composition>
+      <composition><bdcap:RenderSiteIndex /></composition>
+      <composition><bdcap:RenderPackageIndex /></composition>
+      <composition><bdcap:AssembleSite /></composition>
+      <composition><bddocumentation:Introduction /></composition>
+      <composition><bddocumentation:LayerSeparation /></composition>
+      <composition><bddocumentation:ArchitectureOverview /></composition>
+      <composition><bddocumentation:V1Scope /></composition>
+      <composition><bddocumentation:PublicApi /></composition>
+      <composition><bddocumentation:PathAndLayout /></composition>
+      <composition><bddocumentation:TypeLinkRules /></composition>
+      <composition><bddocumentation:MemberAndCompositionRules /></composition>
+      <composition><bddocumentation:PageChrome /></composition>
+      <composition><bddocumentation:SiteAssembly /></composition>
+      <composition><bddocumentation:DesignDecisions /></composition>
+      <composition><bddocumentation:PackageOwnership /></composition>
+      <composition><bddocumentation:ScopeExclusions /></composition>
+    </blocks>
   </aggregations>
 
 </block>

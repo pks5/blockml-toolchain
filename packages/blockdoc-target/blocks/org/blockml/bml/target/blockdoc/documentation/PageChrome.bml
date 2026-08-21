@@ -1,0 +1,56 @@
+<!--
+  BlockDoc Documentation — PageChrome
+  FQN: org.blockml.bml.target.blockdoc.documentation.PageChrome
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PageChrome</name>
+  <type>bddocumentation:PageChrome</type>
+  <baseType>core:Documentation</baseType>
+  <is>Block / site / package page chrome (BD6, BD8, BD20–BD22)</is>
+
+  <documentation>Block page (BD6/BD8): Site Index link; dotted package path (fqn layout via RenderDottedPackagePath)
+    or plain escaped package; h1 = block.name; optional extends (linked), version, is as designation.
+    Then Documentation, member tables, Composition, Sub-Blocks, References.
+    No definition-list for FQN/baseType/is; no breadcrumb nav on block pages.
+
+    References: prefer ref.type as href; else url/file as text + context.
+
+    Site index (BD21): title "BlockDoc" or "{prefix} — BlockDoc"; count line; packages as headings
+    (linked to package index when outLayout=fqn); block labels = last FQN segment.
+
+    Package index (BD22, fqn only): breadcrumb Index / ancestors / current; Sub-packages; Blocks
+    (direct roots only — nested Alpha.Child is a block page but not listed under Blocks).
+
+    Shared CSS: system-ui, tables, blue links (BlockDocConstants.PAGE_CSS).</documentation>
+  <references>
+    <see type="bddocumentation:SiteAssembly" relation="ReadNext"></see>
+    <see type="bdconfig:PageSectionOrder" relation="SeeAlso"></see>
+    <see type="bdcap:RenderBlockPage" relation="SeeAlso"></see>
+  </references>
+
+</block>

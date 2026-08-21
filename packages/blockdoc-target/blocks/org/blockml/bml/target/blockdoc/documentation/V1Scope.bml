@@ -1,0 +1,50 @@
+<!--
+  BlockDoc Documentation — V1Scope
+  FQN: org.blockml.bml.target.blockdoc.documentation.V1Scope
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>V1Scope</name>
+  <type>bddocumentation:V1Scope</type>
+  <baseType>core:Documentation</baseType>
+  <is>What BlockDoc V1 includes and accepts</is>
+
+  <documentation>V1 ships static HTML by package/FQN hierarchy with:
+
+    • Registry name blockdoc; accepts library, corpus, auto
+    • Options: siteMode (merged|perLibrary), outLayout (fqn|package), includeNonExported
+    • Block pages, site index, package indexes (fqn layout)
+    • Type links for known named FQNs; member tables; composition trees
+    • Control gate: renders without requiring Stage-2 semantic success
+
+    Not V1 (see ScopeExclusions): dependency graphs, richer navigation chrome on block pages,
+    authored XML example surfaces, package-layout collision tooling.</documentation>
+  <references>
+    <see type="bddocumentation:PublicApi" relation="ReadNext"></see>
+  </references>
+
+</block>

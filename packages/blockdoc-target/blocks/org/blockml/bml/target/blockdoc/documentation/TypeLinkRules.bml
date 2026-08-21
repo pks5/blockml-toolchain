@@ -1,0 +1,53 @@
+<!--
+  BlockDoc Documentation — TypeLinkRules
+  FQN: org.blockml.bml.target.blockdoc.documentation.TypeLinkRules
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>TypeLinkRules</name>
+  <type>bddocumentation:TypeLinkRules</type>
+  <baseType>core:Documentation</baseType>
+  <is>TypeExpression summary and link policy (BD15)</is>
+
+  <documentation>Summary syntax:
+    • named: fqn + optional type-args + optional [min..max] multiplicity
+    • union: a | b
+    • Self; generic param name; anonymous { f: T, … }
+
+    Link policy:
+    • Link only if knownFqns.has(fqn) for named expressions; else escaped plain text
+    • Named: link the fqn, append escaped suffix (type args / multiplicity)
+    • Unions / anonymous / self / generic: no links — escaped summary only
+    • Missing expression → em dash (—)
+
+    Sub-block pages always link to sub.type paths (not gated on knownFqns) — see PageChrome.</documentation>
+  <references>
+    <see type="bddocumentation:MemberAndCompositionRules" relation="ReadNext"></see>
+    <see type="bdcap:RenderTypeExpression" relation="SeeAlso"></see>
+  </references>
+
+</block>

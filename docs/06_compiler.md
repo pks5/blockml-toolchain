@@ -1,6 +1,6 @@
 # BOM Compiler — Compiler Pipeline
 
-version: 2.3.0
+version: 2.4.0
 
 ## Purpose of this Document
 
@@ -27,9 +27,10 @@ The compiler is implemented across these packages:
 @blockml/compiler                            — Facade + Target Registry
 @blockml/engine-maker                        — V1 CompilerEngine implementation (MakerEngine)
 @machineblocks/machineblocks-v3-scad-target  — RenderTarget + BlockProcessors
+                                               (OUT OF SCOPE here — MachineBlocks mono-repo)
 ```
 
-`@blockml/parser`, `@blockml/serializer`, `@blockml/validator`, `@blockml/core`, `@blockml/compiler`, and `@blockml/engine-maker` are browser and Node compatible. No Node-only APIs in any of these packages. RenderTarget packages follow the same constraint.
+`@blockml/parser`, `@blockml/serializer`, `@blockml/validator`, `@blockml/core`, `@blockml/compiler`, and `@blockml/engine-maker` are browser and Node compatible. No Node-only APIs in any of these packages. RenderTarget packages follow the same constraint. Domain targets (MachineBlocks SCAD) are authored outside this repo — see `00_system.md` — Zielbild.
 
 > **V1 build order:** Parser and serializer ship first; roundtrip tests against the BML corpus gate further work. Compiler and render targets follow only after the language loop is stable. See `15_dev_setup.md` — V1 Implementation Strategy.
 
@@ -184,16 +185,18 @@ Urmodell (immutable)  — or —  default Pragmatic Model  — or —  fork(Urmo
 Target Output File(s) + Source Map(s)
 ```
 
-Example — **BlockDoc Render Target** (toolchain; planned):
+Example — **BlockDoc Render Target** (toolchain; SSOT in package library):
 
 ```text
 CompileRequest (scope: library | corpus | auto)
-  + TypeRegistry (cross-links, exported blocks)
-  → BlockDoc processors
-  → static HTML tree (path ≡ package / FQN hierarchy)
-  → siteMode: merged (one site) | perLibrary (one site per Library root)
-  → later: graphs, richer navigation
+  + TypeRegistry
+  → BlockDocTarget.render (org.blockml.bml.target.blockdoc.*)
+  → multi-file static HTML under outDir
 ```
+
+Normative options, path/layout, page chrome, and site assembly: start at
+`org.blockml.bml.target.blockdoc.documentation.Introduction` (ReadNext chain).
+Host/scope wiring: `14_compiler_runtime.md` C7.
 
 Example — **FatBlock Render Target** (toolchain; planned):
 
@@ -201,12 +204,6 @@ Example — **FatBlock Render Target** (toolchain; planned):
 Urmodell + TypeRegistry closure of dependencies
   → emit single RootBlockDefinition .bml
   → each dependency as EmbeddedBlockDefinition under root embeddedBlocks[]
-```
-
-Example — **Documentation Renderer** (generic / early sketch — superseded in intent by BlockDoc):
-
-```text
-Urmodell (immutable)  →  renderRawBOM()  →  Markdown / HTML
 ```
 
 SCAD renderer steps [9]–[19] are **not** a fixed framework pipeline — they document the SCAD reference renderer. Other renderers (XSD, BlockDoc, FatBlock, …) choose different utilities and ordering. See `15_dev_setup.md` — Phase C toolchain targets.
@@ -392,12 +389,13 @@ registerTarget(new MachineBlocksV3ScadTarget(engine));
 **Who registers:**
 
 ```text
-@blockml/cli     → bootstrapTargets() before compile/watch (V1: hardcoded SCAD target)
-Browser / tests  → caller invokes registerTarget() directly
-@blockml/compiler → registerTarget() / getTarget() API only — no built-in targets
+@blockml/cli              → bootstrapTargets() for toolchain targets (blockdoc, xsd, fatblock, …)
+@machineblocks/cli        → thin host: registerTarget(MachineBlocksV3ScadTarget)  (MB mono-repo)
+Browser / tests           → caller invokes registerTarget() directly
+@blockml/compiler         → registerTarget() / getTarget() API only — no built-in targets
 ```
 
-CLI reads `bom.config.json` → `targets[]` (V1). See C3 · C7 in `14_compiler_runtime.md`.
+`@blockml/cli` reads `bom.config.json` → `targets[]` (V1). Domain CLIs supply their own bootstrap. See C3 · C7 in `14_compiler_runtime.md` · `00_system.md` — Zielbild.
 
 ### Interfaces
 
