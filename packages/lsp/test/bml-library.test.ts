@@ -10,7 +10,7 @@ const blocksRoot = join(pkgRoot, "blocks/org/blockml/bml/lsp");
 
 const EXPECTED_DOC_BLOCKS = documentationBlocks.map((d) => d.name);
 
-const EXPECTED_CAPABILITIES = ["AnalyzeDocument", "FormatDocument", "StartLanguageServer"];
+const EXPECTED_CAPABILITIES = ["AnalyzeDocument", "FormatDocument", "HoverAt", "StartLanguageServer"];
 
 function walkBmlFiles(dir: string): string[] {
   const results: string[] = [];

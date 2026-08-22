@@ -1,6 +1,6 @@
 import { DOMParser } from "@xmldom/xmldom";
 export function parseXmlDom(source) {
-    const parser = new DOMParser();
+    const parser = new DOMParser({ locator: true });
     return parser.parseFromString(source, "text/xml");
 }
 export function getParseErrors(doc) {

@@ -28,7 +28,7 @@
   <baseType>core:Capability</baseType>
   <is>Deep-clone omitting provenance keys (B20)</is>
 
-  <documentation>Removes sourceLocation, endLine, endColumn, and provenance source/SourceInfo fields recursively. Preserves ImplementationBlock.source (implementation code body). Reference: packages/bom/src/equals.ts.</documentation>
+  <documentation>Removes sourceLocation, endLine, endColumn, SourceLocation-shaped fields (source, typeSource, baseTypeSource), and SourceInfo recursively. Preserves ImplementationBlock.source (implementation code body). Reference: packages/bom/src/equals.ts.</documentation>
 
   <properties>
     <input type="core:Any">

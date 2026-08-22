@@ -463,9 +463,11 @@ const capabilities = [
     prefix: "parcap",
     name: "ElementSourceLoc",
     is: "Extract SourceLocation from DOM element line/column attrs",
+    doc: "Start from DOM locator line/column when present, else string search. End by scanning source for the matching close tag or self-closing start tag (endLine/endColumn).",
     inputs: [
       { name: "element", type: "core:Any", required: true },
       { name: "filePath", type: "type:Text", required: true },
+      { name: "source", type: "type:Text", required: true },
     ],
     output: { name: "location", type: "bomcommon:SourceLocation", required: true },
   },

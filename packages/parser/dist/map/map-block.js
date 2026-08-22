@@ -53,7 +53,7 @@ function mapBlockDefinition(element, ctx, parentType) {
     if (trivia) {
         block.xmlTrivia = trivia;
     }
-    block.source = elementSourceLoc(ctx.filePath, ctx.source, "block");
+    block.source = elementSourceLoc(ctx.filePath, ctx.source, element);
     const childElements = elementChildren(element);
     const subBlocksRaw = [];
     const embeddedRaw = [];
@@ -292,6 +292,7 @@ function mapMemberBase(element, name, visibility, namespace, ctx) {
     const base = {
         name,
         visibility,
+        source: elementSourceLoc(ctx.filePath, ctx.source, element),
     };
     if (namespace) {
         base.namespace = namespace;
@@ -366,12 +367,14 @@ function mapMetadataFields(element, block, ctx) {
                 break;
             case "type":
                 block.type = resolveBlockReference(getTextOrAttr(child) ?? "", ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType);
+                block.typeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
                 break;
             case "baseType": {
                 const bt = getTextOrAttr(child);
                 if (bt) {
                     block.baseType = resolveBlockReference(bt, ctx.bindings, ctx.subBlockIndex, block.type);
                 }
+                block.baseTypeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
                 break;
             }
             case "is": {
@@ -733,7 +736,7 @@ function mapSuggestions(element, prop, ctx) {
     }
     prop.suggestions = elementChildren(sugEl).map((c) => {
         const local = elementLocalName(c);
-        const loc = elementSourceLoc(ctx.filePath, ctx.source, local);
+        const loc = elementSourceLoc(ctx.filePath, ctx.source, c);
         const memberValues = {};
         if (c.attributes) {
             for (let i = 0; i < c.attributes.length; i++) {

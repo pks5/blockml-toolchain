@@ -1013,6 +1013,16 @@
           "name": "source",
           "type": "bomcommon:SourceLocation",
           "required": false
+        },
+        {
+          "name": "typeSource",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        },
+        {
+          "name": "baseTypeSource",
+          "type": "bomcommon:SourceLocation",
+          "required": false
         }
       ]
     },

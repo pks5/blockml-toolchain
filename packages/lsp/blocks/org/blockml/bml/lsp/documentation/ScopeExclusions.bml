@@ -34,7 +34,7 @@
   <documentation>Out of scope:
     • IDE extension UI, syntax highlighting — external packages
     • BomBuilder structural authoring (V3)
-    • Hover, completion, references — V1.1+
+    • Completion, go-to-definition, references
     • Range formatting, tab indent
     • Duplicate parse/validate/serialize logic — must delegate to parser/validator/serializer</documentation>
 

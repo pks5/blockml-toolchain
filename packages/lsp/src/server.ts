@@ -9,9 +9,11 @@ import {
   type DidCloseTextDocumentParams,
   type DidOpenTextDocumentParams,
   type DocumentFormattingParams,
+  type HoverParams,
   type InitializeParams,
 } from "vscode-languageserver/node.js";
 import { TextDocument } from "vscode-languageserver-textdocument";
+import { hoverAt } from "./hover.js";
 import { analyzeDocument, formatDocument } from "./language-service.js";
 import { diagnosticToLsp } from "./positions.js";
 import {
@@ -112,6 +114,7 @@ connection.onInitialize((params) => {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Full,
       documentFormattingProvider: true,
+      hoverProvider: true,
     },
   };
 });
@@ -198,6 +201,19 @@ connection.onDocumentFormatting((params: DocumentFormattingParams) => {
     return [];
   }
   return [{ range: fullDocumentRange(text), newText: formatted }];
+});
+
+connection.onHover((params: HoverParams) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc || !workspaceRoot) {
+    return null;
+  }
+  const workspace = createWorkspace(workspaceRoot);
+  const info = hoverAt(doc.getText(), uriToFilePath(doc.uri), params.position, workspace);
+  if (!info) {
+    return null;
+  }
+  return { contents: info.contents, range: info.range };
 });
 
 connection.listen();

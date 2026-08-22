@@ -13,5 +13,10 @@ export declare function resolveTypeName(name: string, bindings: Record<string, s
 export declare function hasBmlSemanticQNameBindings(bindings: Record<string, string>): boolean;
 export declare function fqnToQName(fqn: string, bindings: Record<string, string>): string;
 export declare function sourceLoc(file: string, source: string, search: string, occurrence?: number): SourceLocation;
-export declare function elementSourceLoc(file: string, source: string, tagName: string, occurrence?: number): SourceLocation;
+/** Source span for a DOM element, including endLine/endColumn. */
+export declare function elementSourceLoc(file: string, source: string, element: {
+    nodeName: string;
+    lineNumber?: number;
+    columnNumber?: number;
+}): SourceLocation;
 //# sourceMappingURL=qname.d.ts.map

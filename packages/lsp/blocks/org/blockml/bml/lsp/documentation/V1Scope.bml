@@ -37,11 +37,12 @@
     • publishDiagnostics (parse + validate)
     • workspace/didChangeWatchedFiles (TypeRegistry refresh)
     • textDocument/formatting (parse → serialize)
+    • textDocument/hover (Urmodell hit-test + TypeRegistry)
     • blockml-lsp stdio binary
-    • analyzeDocument and formatDocument public API for tests and non-LSP hosts
+    • analyzeDocument, formatDocument, and hoverAt public API for tests and non-LSP hosts
 
     Out of scope V1:
-    • Hover, completion, go-to-definition
+    • Completion, go-to-definition
     • Range formatting, tab indent
     • XSD validation, documentSymbol, BomBuilder (V3)
     • VS Code extension in this repo</documentation>

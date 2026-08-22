@@ -47,6 +47,9 @@
     onDocumentFormatting: formatDocument on the in-memory buffer; one full-document
     TextEdit, empty list if unchanged, or none if parse cannot produce a document.
 
+    onHover: hoverAt on the in-memory buffer; innermost covering Urmodell span;
+    Markdown from TypeRegistry. Parse-only — no validator.
+
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.</documentation>
 
   <references>

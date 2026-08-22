@@ -241,18 +241,114 @@ export function sourceLoc(
   return { file, line, column };
 }
 
+function offsetToLineColumn(source: string, offset: number): { line: number; column: number } {
+  const clamped = Math.max(0, Math.min(offset, source.length));
+  const before = source.slice(0, clamped);
+  const line = before.split("\n").length;
+  const lastNl = before.lastIndexOf("\n");
+  const column = clamped - lastNl;
+  return { line, column };
+}
+
+function lineColumnToOffset(source: string, line: number, column: number): number {
+  let remaining = line - 1;
+  let offset = 0;
+  while (remaining > 0) {
+    const nl = source.indexOf("\n", offset);
+    if (nl === -1) {
+      return source.length;
+    }
+    offset = nl + 1;
+    remaining--;
+  }
+  return Math.min(offset + Math.max(0, column - 1), source.length);
+}
+
+function isTagNameBoundary(ch: string | undefined): boolean {
+  return (
+    ch === undefined ||
+    ch === " " ||
+    ch === "\t" ||
+    ch === "\n" ||
+    ch === "\r" ||
+    ch === ">" ||
+    ch === "/"
+  );
+}
+
+function findElementEndOffset(source: string, startOffset: number, tagName: string): number {
+  const startTagEnd = source.indexOf(">", startOffset);
+  if (startTagEnd === -1) {
+    return Math.min(startOffset + tagName.length + 1, source.length);
+  }
+  const startTag = source.slice(startOffset, startTagEnd + 1);
+  if (/\/\s*>$/.test(startTag)) {
+    return startTagEnd + 1;
+  }
+
+  const close = `</${tagName}>`;
+  let depth = 1;
+  let i = startTagEnd + 1;
+  while (i < source.length && depth > 0) {
+    const nextClose = source.indexOf(close, i);
+    if (nextClose === -1) {
+      return startTagEnd + 1;
+    }
+    let nextOpen = source.indexOf(`<${tagName}`, i);
+    while (nextOpen !== -1 && nextOpen < nextClose) {
+      if (isTagNameBoundary(source[nextOpen + 1 + tagName.length])) {
+        break;
+      }
+      nextOpen = source.indexOf(`<${tagName}`, nextOpen + 1);
+    }
+    if (
+      nextOpen !== -1 &&
+      nextOpen < nextClose &&
+      isTagNameBoundary(source[nextOpen + 1 + tagName.length])
+    ) {
+      depth++;
+      const gt = source.indexOf(">", nextOpen);
+      i = gt === -1 ? nextOpen + tagName.length + 1 : gt + 1;
+    } else {
+      depth--;
+      if (depth === 0) {
+        return nextClose + close.length;
+      }
+      i = nextClose + close.length;
+    }
+  }
+  return startTagEnd + 1;
+}
+
+function startOffsetForElement(
+  source: string,
+  element: { nodeName: string; lineNumber?: number; columnNumber?: number },
+): number {
+  if (element.lineNumber !== undefined && element.columnNumber !== undefined) {
+    const line = element.lineNumber < 1 ? 1 : element.lineNumber;
+    const column = element.columnNumber < 1 ? 1 : element.columnNumber;
+    return lineColumnToOffset(source, line, column);
+  }
+  const idx = source.indexOf(`<${element.nodeName}`);
+  return idx === -1 ? 0 : idx;
+}
+
+/** Source span for a DOM element, including endLine/endColumn. */
 export function elementSourceLoc(
   file: string,
   source: string,
-  tagName: string,
-  occurrence = 0,
+  element: { nodeName: string; lineNumber?: number; columnNumber?: number },
 ): SourceLocation {
-  const patterns = [`<${tagName}`, `<${tagName} `, `<${tagName}>`];
-  for (const pattern of patterns) {
-    const loc = sourceLoc(file, source, pattern, occurrence);
-    if (loc.line !== 1 || loc.column !== 1 || source.includes(pattern)) {
-      return loc;
-    }
-  }
-  return { file, line: 1, column: 1 };
+  const tagName = element.nodeName;
+  const startOffset = startOffsetForElement(source, element);
+  const endOffset = findElementEndOffset(source, startOffset, tagName);
+  const start = offsetToLineColumn(source, startOffset);
+  const end = offsetToLineColumn(source, endOffset);
+  return {
+    file,
+    line: start.line,
+    column: start.column,
+    endLine: end.line,
+    endColumn: end.column,
+  };
 }

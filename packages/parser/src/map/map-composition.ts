@@ -71,11 +71,7 @@ export function mapCompositionTemplate(
   aggregationName: string,
   ctx: MapContext,
 ): CompositionTemplate {
-  const loc = elementSourceLoc(
-    ctx.filePath,
-    ctx.source,
-    elementLocalName(element),
-  );
+  const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
   const compositionEl = elementChildren(element).find(
     (c) => elementLocalName(c) === "composition",
   );
@@ -110,7 +106,7 @@ function mapCompositionChildren(
       continue;
     }
     if (local === "container" || local === "bml:container") {
-      const loc = elementSourceLoc(ctx.filePath, ctx.source, local);
+      const loc = elementSourceLoc(ctx.filePath, ctx.source, child);
       const directives = parseDirectives(child, loc);
       const vnode: VirtualContainerNode = {
         kind: "virtualContainer",
@@ -132,7 +128,7 @@ export function mapBlockInstanceNode(
 ): BlockInstanceNode {
   const local = elementLocalName(element);
   const prefix = elementPrefix(element);
-  const loc = elementSourceLoc(ctx.filePath, ctx.source, local);
+  const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
 
   let typeFqn: string;
   if (
@@ -323,7 +319,12 @@ export function mapTypeReferenceEntityInstance(
       valueAttr ??
       resolveTypeName(local, ctx.bindings, "language");
   }
-  const meta = parseBmlMeta(element, TYPE_REFERENCE_ENTITY, ctx.filePath, elementSourceLoc(ctx.filePath, ctx.source, local));
+  const meta = parseBmlMeta(
+    element,
+    TYPE_REFERENCE_ENTITY,
+    ctx.filePath,
+    elementSourceLoc(ctx.filePath, ctx.source, element),
+  );
   const inst = {
     typeFqn: TYPE_REFERENCE_ENTITY as "org.blockml.bml.type.TypeReferenceEntity",
     value,

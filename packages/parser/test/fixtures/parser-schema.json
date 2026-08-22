@@ -835,6 +835,11 @@
           "name": "filePath",
           "type": "type:Text",
           "required": true
+        },
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
         }
       ],
       "output": {

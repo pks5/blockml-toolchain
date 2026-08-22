@@ -29,7 +29,7 @@
   <baseType>core:Capability</baseType>
   <is>Extract SourceLocation from DOM element line/column attrs</is>
 
-  <documentation>Extract SourceLocation from DOM element line/column attrs</documentation>
+  <documentation>Start from DOM locator line/column when present, else string search. End by scanning source for the matching close tag or self-closing start tag (endLine/endColumn).</documentation>
 
   <properties>
     <element type="core:Any">
@@ -38,6 +38,9 @@
     <filePath type="type:Text">
       <documentation>filePath. TS type: type:Text. (required)</documentation>
     </filePath>
+    <source type="type:Text">
+      <documentation>source. TS type: type:Text. (required)</documentation>
+    </source>
     <location type="bomcommon:SourceLocation">
       <documentation>location. TS type: bomcommon:SourceLocation. (required)</documentation>
     </location>

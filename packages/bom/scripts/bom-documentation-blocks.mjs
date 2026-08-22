@@ -172,6 +172,7 @@ export const documentationBlocks = [
 
     bomEquals(a, b): structural equality modulo provenance (B20).
     stripProvenance(node): deep-clone omitting sourceLocation, endLine, endColumn, provenance source.
+    Drops SourceLocation-shaped fields such as typeSource/baseTypeSource.
     Preserves ImplementationBlock.source (code body).
 
     Sync only. No throw on recoverable diagnostics. Diagnostic distinct from org.blockml.bml.core.Diagnostic.`,

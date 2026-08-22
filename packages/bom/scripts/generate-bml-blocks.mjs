@@ -489,6 +489,8 @@ const blocks = [
       { name: "memberSectionTrivia", type: "type:Text", doc: "Partial<Record<MemberSectionName, XmlTrivia>>." },
       { name: "metadataTrivia", type: "bomcommon:MetadataElementTrivia" },
       { name: "source", type: "bomcommon:SourceLocation" },
+      { name: "typeSource", type: "bomcommon:SourceLocation" },
+      { name: "baseTypeSource", type: "bomcommon:SourceLocation" },
     ],
   },
 

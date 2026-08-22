@@ -42,7 +42,7 @@ const METADATA_ELEMENTS = new Set([
 ]);
 const RESERVED = new Set([...MEMBER_SECTIONS, ...METADATA_ELEMENTS, "composition", "implementation", "value", "groups", "suggestions"]);
 export function mapCompositionTemplate(element, aggregationName, ctx) {
-    const loc = elementSourceLoc(ctx.filePath, ctx.source, elementLocalName(element));
+    const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
     const compositionEl = elementChildren(element).find((c) => elementLocalName(c) === "composition");
     const target = compositionEl ?? element;
     const directives = parseDirectives(target, loc);
@@ -70,7 +70,7 @@ function mapCompositionChildren(compositionEl, ctx) {
             continue;
         }
         if (local === "container" || local === "bml:container") {
-            const loc = elementSourceLoc(ctx.filePath, ctx.source, local);
+            const loc = elementSourceLoc(ctx.filePath, ctx.source, child);
             const directives = parseDirectives(child, loc);
             const vnode = {
                 kind: "virtualContainer",
@@ -88,7 +88,7 @@ function mapCompositionChildren(compositionEl, ctx) {
 export function mapBlockInstanceNode(element, ctx) {
     const local = elementLocalName(element);
     const prefix = elementPrefix(element);
-    const loc = elementSourceLoc(ctx.filePath, ctx.source, local);
+    const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
     let typeFqn;
     if (element.childNodes.length === 0 &&
         !element.hasAttributes()) {
@@ -221,7 +221,7 @@ export function mapTypeReferenceEntityInstance(element, ctx, boundB) {
             valueAttr ??
                 resolveTypeName(local, ctx.bindings, "language");
     }
-    const meta = parseBmlMeta(element, TYPE_REFERENCE_ENTITY, ctx.filePath, elementSourceLoc(ctx.filePath, ctx.source, local));
+    const meta = parseBmlMeta(element, TYPE_REFERENCE_ENTITY, ctx.filePath, elementSourceLoc(ctx.filePath, ctx.source, element));
     const inst = {
         typeFqn: TYPE_REFERENCE_ENTITY,
         value,

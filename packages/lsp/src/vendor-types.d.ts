@@ -21,7 +21,7 @@ declare module "vscode-languageserver" {
 }
 
 declare module "vscode-languageserver/node.js" {
-  import type { Diagnostic, Range } from "vscode-languageserver";
+  import type { Diagnostic, Position, Range } from "vscode-languageserver";
 
   export enum TextDocumentSyncKind {
     Full = 1,
@@ -66,6 +66,7 @@ declare module "vscode-languageserver/node.js" {
     onDocumentFormatting: (
       handler: (params: DocumentFormattingParams) => TextEdit[] | null,
     ) => void;
+    onHover: (handler: (params: HoverParams) => Hover | null) => void;
     sendDiagnostics: (params: { uri: string; diagnostics: Diagnostic[] }) => void;
     listen: () => void;
   }
@@ -86,7 +87,23 @@ declare module "vscode-languageserver/node.js" {
     capabilities: {
       textDocumentSync?: TextDocumentSyncKind;
       documentFormattingProvider?: boolean;
+      hoverProvider?: boolean;
     };
+  }
+
+  export interface MarkupContent {
+    kind: "plaintext" | "markdown";
+    value: string;
+  }
+
+  export interface Hover {
+    contents: MarkupContent;
+    range?: Range;
+  }
+
+  export interface HoverParams {
+    textDocument: { uri: string };
+    position: Position;
   }
 
   export interface FormattingOptions {

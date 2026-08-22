@@ -17,7 +17,8 @@ export const documentationBlocks = [
     live outside this repository and connect via stdio LSP.
 
     V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate)
-    + textDocument/formatting (parse → serialize).
+    + textDocument/formatting (parse → serialize)
+    + textDocument/hover (Urmodell hit-test + TypeRegistry).
     Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.`,
     refs: [
       { type: "lspdocumentation:LayerSeparation", relation: "ReadNext" },
@@ -32,7 +33,7 @@ export const documentationBlocks = [
     org.blockml.bml.lsp.* (@blockml/lsp) — LSP protocol adapter + language-service API.
     No semantic rules here.
 
-    @blockml/parser — Stage 1 BML → BomDocument.
+    @blockml/parser — Stage 1 BML → BomDocument (including source spans for hover).
     @blockml/serializer — BomDocument → canonical BML XML (format).
     @blockml/validator — Stage 2 validate() orchestration.
     @blockml/framework — TypeRegistry bootstrap for workspace.
@@ -52,6 +53,9 @@ export const documentationBlocks = [
 
     Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
 
+    Hover: onHover → hoverAt → parse (no validator) → smallest covering Urmodell span
+    → TypeRegistry Markdown.
+
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.`,
     refs: [
       { type: "lspdocumentation:ServerLifecycle", relation: "ReadNext" },
@@ -66,11 +70,12 @@ export const documentationBlocks = [
     • publishDiagnostics (parse + validate)
     • workspace/didChangeWatchedFiles (TypeRegistry refresh)
     • textDocument/formatting (parse → serialize)
+    • textDocument/hover (Urmodell hit-test + TypeRegistry)
     • blockml-lsp stdio binary
-    • analyzeDocument and formatDocument public API for tests and non-LSP hosts
+    • analyzeDocument, formatDocument, and hoverAt public API for tests and non-LSP hosts
 
     Out of scope V1:
-    • Hover, completion, go-to-definition
+    • Completion, go-to-definition
     • Range formatting, tab indent
     • XSD validation, documentSymbol, BomBuilder (V3)
     • VS Code extension in this repo`,
@@ -81,8 +86,9 @@ export const documentationBlocks = [
   {
     name: "PublicApi",
     is: "Exported API from packages/lsp/src/index.ts",
-    doc: `analyzeDocument(text, filePath, workspace): AnalysisResult
+    doc: `    analyzeDocument(text, filePath, workspace): AnalysisResult
     formatDocument(text, options?): string | null
+    hoverAt(text, filePath, position, workspace): HoverInfo | null
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
     invalidateWorkspace(rootDir): void
@@ -94,6 +100,7 @@ export const documentationBlocks = [
     refs: [
       { type: "lspcap:AnalyzeDocument", relation: "Defines" },
       { type: "lspcap:FormatDocument", relation: "Defines" },
+      { type: "lspcap:HoverAt", relation: "Defines" },
       { type: "lspdocumentation:DesignDecisions", relation: "ReadNext" },
     ],
   },
@@ -115,6 +122,9 @@ export const documentationBlocks = [
 
     onDocumentFormatting: formatDocument on the in-memory buffer; one full-document
     TextEdit, empty list if unchanged, or none if parse cannot produce a document.
+
+    onHover: hoverAt on the in-memory buffer; innermost covering Urmodell span;
+    Markdown from TypeRegistry. Parse-only — no validator.
 
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.`,
     refs: [
@@ -138,7 +148,7 @@ export const documentationBlocks = [
     doc: `Out of scope:
     • IDE extension UI, syntax highlighting — external packages
     • BomBuilder structural authoring (V3)
-    • Hover, completion, references — V1.1+
+    • Completion, go-to-definition, references
     • Range formatting, tab indent
     • Duplicate parse/validate/serialize logic — must delegate to parser/validator/serializer`,
     refs: [
@@ -162,7 +172,12 @@ export const documentationBlocks = [
 
     Format is full-document parse→serialize; spaces only (serializer XmlWriter).
     No edits when parse cannot produce a document. xmlDeclaration inferred from
-    a leading XML declaration in the source.`,
+    a leading XML declaration in the source.
+
+    Hover is parse-only (no validator). Hit-test picks the smallest covering
+    Urmodell span; equal area ties break toward the later start (innermost).
+    Contents are Markdown (FQN, is, first documentation/summary). Unknown FQN
+    is still shown. Referenced types come from the disk TypeRegistry.`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

@@ -38,6 +38,9 @@
 
     Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
 
+    Hover: onHover → hoverAt → parse (no validator) → smallest covering Urmodell span
+    → TypeRegistry Markdown.
+
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.</documentation>
 
   <references>

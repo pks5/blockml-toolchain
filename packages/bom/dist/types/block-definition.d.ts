@@ -96,6 +96,10 @@ export interface BlockDefinition {
     metadataTrivia?: MetadataElementTrivia;
     /** BML source span of this definition (root or sub-block). */
     source?: SourceLocation;
+    /** Source span of the `<type>` metadata element. */
+    typeSource?: SourceLocation;
+    /** Source span of the `<baseType>` metadata element. */
+    baseTypeSource?: SourceLocation;
 }
 export interface KeywordEntry {
     typeFqn: string;

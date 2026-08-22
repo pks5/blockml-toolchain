@@ -1,4 +1,9 @@
 export {
+  hoverAt,
+  type HoverInfo,
+  type MarkupContent,
+} from "./hover.js";
+export {
   analyzeDocument,
   formatDocument,
   type AnalysisResult,

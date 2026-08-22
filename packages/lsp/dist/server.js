@@ -2,6 +2,7 @@
 import { fileURLToPath } from "node:url";
 import { createConnection, ProposedFeatures, TextDocumentSyncKind, } from "vscode-languageserver/node.js";
 import { TextDocument } from "vscode-languageserver-textdocument";
+import { hoverAt } from "./hover.js";
 import { analyzeDocument, formatDocument } from "./language-service.js";
 import { diagnosticToLsp } from "./positions.js";
 import { createWorkspace, invalidateWorkspace, isWorkspaceRefreshPath, WATCH_GLOBS, } from "./workspace.js";
@@ -82,6 +83,7 @@ connection.onInitialize((params) => {
         capabilities: {
             textDocumentSync: TextDocumentSyncKind.Full,
             documentFormattingProvider: true,
+            hoverProvider: true,
         },
     };
 });
@@ -152,6 +154,18 @@ connection.onDocumentFormatting((params) => {
         return [];
     }
     return [{ range: fullDocumentRange(text), newText: formatted }];
+});
+connection.onHover((params) => {
+    const doc = documents.get(params.textDocument.uri);
+    if (!doc || !workspaceRoot) {
+        return null;
+    }
+    const workspace = createWorkspace(workspaceRoot);
+    const info = hoverAt(doc.getText(), uriToFilePath(doc.uri), params.position, workspace);
+    if (!info) {
+        return null;
+    }
+    return { contents: info.contents, range: info.range };
 });
 connection.listen();
 //# sourceMappingURL=server.js.map

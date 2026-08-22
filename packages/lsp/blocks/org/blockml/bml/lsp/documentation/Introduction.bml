@@ -39,7 +39,8 @@
     live outside this repository and connect via stdio LSP.
 
     V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate)
-    + textDocument/formatting (parse → serialize).
+    + textDocument/formatting (parse → serialize)
+    + textDocument/hover (Urmodell hit-test + TypeRegistry).
     Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.</documentation>
 
   <references>

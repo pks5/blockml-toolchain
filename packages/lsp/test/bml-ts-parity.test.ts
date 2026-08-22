@@ -16,6 +16,7 @@ const schema = JSON.parse(
 const TS_CAPABILITY_EXPORTS = [
   "analyzeDocument",
   "formatDocument",
+  "hoverAt",
   "createWorkspace",
   "loadBomConfig",
   "invalidateWorkspace",
@@ -65,6 +66,7 @@ describe("LSP BML ↔ TS parity", () => {
     );
     expect(schemaCaps.has("analyzeDocument")).toBe(true);
     expect(schemaCaps.has("formatDocument")).toBe(true);
+    expect(schemaCaps.has("hoverAt")).toBe(true);
     expect(schemaCaps.has("startLanguageServer")).toBe(true);
   });
 

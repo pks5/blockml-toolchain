@@ -16,8 +16,9 @@ function isSourceInfo(value) {
 }
 /**
  * Deep-clone a value tree omitting provenance keys recursively (B20).
- * Removes SourceInfo, SourceLocation spans, and optional endLine/endColumn —
- * but preserves ImplementationBlock.source (implementation code body).
+ * Removes SourceInfo, SourceLocation-shaped spans (including typeSource /
+ * baseTypeSource), and optional endLine/endColumn — but preserves
+ * ImplementationBlock.source (implementation code body).
  */
 export function stripProvenance(node) {
     if (node === null || node === undefined) {
@@ -34,7 +35,10 @@ export function stripProvenance(node) {
         if (key === "sourceLocation" || key === "endLine" || key === "endColumn") {
             continue;
         }
-        if (key === "source" && (isSourceLocation(value) || isSourceInfo(value))) {
+        if (isSourceLocation(value)) {
+            continue;
+        }
+        if (key === "source" && isSourceInfo(value)) {
             continue;
         }
         result[key] = stripProvenance(value);

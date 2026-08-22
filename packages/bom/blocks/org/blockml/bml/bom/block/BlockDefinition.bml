@@ -131,6 +131,12 @@
     <source type="bomcommon:SourceLocation">
       <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
     </source>
+    <typeSource type="bomcommon:SourceLocation">
+      <documentation>typeSource (optional). TS type: bomcommon:SourceLocation.</documentation>
+    </typeSource>
+    <baseTypeSource type="bomcommon:SourceLocation">
+      <documentation>baseTypeSource (optional). TS type: bomcommon:SourceLocation.</documentation>
+    </baseTypeSource>
   </properties>
 
 </block>

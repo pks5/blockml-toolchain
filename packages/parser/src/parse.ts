@@ -12,7 +12,6 @@ import {
   mergeSourceInfo,
 } from "./pipeline/namespaces.js";
 import { mapDocumentBlock } from "./map/map-block.js";
-import { elementSourceLoc } from "./util/qname.js";
 
 function diagnostic(
   code: string,
@@ -92,7 +91,6 @@ export function parse(source: string, options: ParseOptions = {}): ParseResult {
   let block;
   try {
     block = mapDocumentBlock(root, filePath, source, bindings);
-    block.source = elementSourceLoc(filePath, source, "block");
   } catch (e) {
     diagnostics.push(
       diagnostic(

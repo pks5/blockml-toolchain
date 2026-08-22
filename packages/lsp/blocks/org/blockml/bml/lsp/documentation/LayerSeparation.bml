@@ -36,7 +36,7 @@
     org.blockml.bml.lsp.* (@blockml/lsp) — LSP protocol adapter + language-service API.
     No semantic rules here.
 
-    @blockml/parser — Stage 1 BML → BomDocument.
+    @blockml/parser — Stage 1 BML → BomDocument (including source spans for hover).
     @blockml/serializer — BomDocument → canonical BML XML (format).
     @blockml/validator — Stage 2 validate() orchestration.
     @blockml/framework — TypeRegistry bootstrap for workspace.

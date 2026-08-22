@@ -3,7 +3,6 @@ import { documentElement, getParseErrors, parseXmlDom } from "./pipeline/xml-dom
 import { assertBlockRoot } from "./pipeline/root-type.js";
 import { extractNamespaceBindings, mergeSourceInfo, } from "./pipeline/namespaces.js";
 import { mapDocumentBlock } from "./map/map-block.js";
-import { elementSourceLoc } from "./util/qname.js";
 function diagnostic(code, message, filePath) {
     return {
         severity: "error",
@@ -56,7 +55,6 @@ export function parse(source, options = {}) {
     let block;
     try {
         block = mapDocumentBlock(root, filePath, source, bindings);
-        block.source = elementSourceLoc(filePath, source, "block");
     }
     catch (e) {
         diagnostics.push(diagnostic("BML_MAP_ERROR", e instanceof Error ? e.message : String(e), filePath));

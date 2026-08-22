@@ -1,0 +1,58 @@
+<!--
+  LSP Capability — HoverAt
+  FQN: org.blockml.bml.lsp.capability.HoverAt
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:lsp="org.blockml.bml.lsp"
+  xmlns:lspcap="org.blockml.bml.lsp.capability"
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation">
+
+  <name>HoverAt</name>
+  <type>lspcap:HoverAt</type>
+  <baseType>core:Capability</baseType>
+  <is>Urmodell hit-test hover at an LSP position</is>
+
+  <documentation>Parse-only (no validator). Walks Urmodell source spans, picks the smallest covering range, and returns Markdown FQN/is/documentation from the TypeRegistry. Unknown FQN is still shown. Returns null if parse cannot produce a document.</documentation>
+
+  <references>
+    <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
+    <see type="parser:Parse" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <text type="type:Text">
+      <documentation>text. TS type: type:Text. (required)</documentation>
+    </text>
+    <filePath type="type:Text">
+      <documentation>filePath. TS type: type:Text. (required)</documentation>
+    </filePath>
+    <position type="type:Text">
+      <documentation>LSP 0-based Position { line, character }. (required)</documentation>
+    </position>
+    <workspace type="lsp:WorkspaceState">
+      <documentation>workspace. TS type: lsp:WorkspaceState. (required)</documentation>
+    </workspace>
+    <result type="core:Any">
+      <documentation>result. TS type: HoverInfo | null. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

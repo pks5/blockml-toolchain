@@ -81,6 +81,7 @@
       <composition><lsp:LspType /></composition>
       <composition><lspcap:AnalyzeDocument /></composition>
       <composition><lspcap:FormatDocument /></composition>
+      <composition><lspcap:HoverAt /></composition>
       <composition><lspcap:StartLanguageServer /></composition>
       <composition><lspdocumentation:Introduction /></composition>
       <composition><lspdocumentation:LayerSeparation /></composition>
