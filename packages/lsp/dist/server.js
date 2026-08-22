@@ -2,7 +2,7 @@
 import { fileURLToPath } from "node:url";
 import { createConnection, ProposedFeatures, TextDocumentSyncKind, } from "vscode-languageserver/node.js";
 import { TextDocument } from "vscode-languageserver-textdocument";
-import { analyzeDocument } from "./language-service.js";
+import { analyzeDocument, formatDocument } from "./language-service.js";
 import { diagnosticToLsp } from "./positions.js";
 import { createWorkspace, invalidateWorkspace, isWorkspaceRefreshPath, WATCH_GLOBS, } from "./workspace.js";
 const connection = createConnection(ProposedFeatures.all);
@@ -81,6 +81,7 @@ connection.onInitialize((params) => {
     return {
         capabilities: {
             textDocumentSync: TextDocumentSyncKind.Full,
+            documentFormattingProvider: true,
         },
     };
 });
@@ -127,6 +128,30 @@ connection.onDidCloseTextDocument((params) => {
         debounceTimers.delete(params.textDocument.uri);
     }
     connection.sendDiagnostics({ uri: params.textDocument.uri, diagnostics: [] });
+});
+function fullDocumentRange(text) {
+    const lines = text.split(/\r?\n/);
+    const last = lines[lines.length - 1] ?? "";
+    return {
+        start: { line: 0, character: 0 },
+        end: { line: Math.max(0, lines.length - 1), character: last.length },
+    };
+}
+connection.onDocumentFormatting((params) => {
+    const doc = documents.get(params.textDocument.uri);
+    if (!doc) {
+        return null;
+    }
+    const text = doc.getText();
+    const indent = params.options.insertSpaces ? params.options.tabSize : 2;
+    const formatted = formatDocument(text, { indent });
+    if (formatted === null) {
+        return null;
+    }
+    if (formatted === text) {
+        return [];
+    }
+    return [{ range: fullDocumentRange(text), newText: formatted }];
 });
 connection.listen();
 //# sourceMappingURL=server.js.map

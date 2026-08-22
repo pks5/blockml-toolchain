@@ -44,6 +44,9 @@
     re-validate all open documents. node_modules paths are ignored.
     Refresh uses the disk snapshot — unsaved buffers are not overlaid into the registry.
 
+    onDocumentFormatting: formatDocument on the in-memory buffer; one full-document
+    TextEdit, empty list if unchanged, or none if parse cannot produce a document.
+
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.</documentation>
 
   <references>

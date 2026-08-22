@@ -21,7 +21,7 @@ declare module "vscode-languageserver" {
 }
 
 declare module "vscode-languageserver/node.js" {
-  import type { Diagnostic } from "vscode-languageserver";
+  import type { Diagnostic, Range } from "vscode-languageserver";
 
   export enum TextDocumentSyncKind {
     Full = 1,
@@ -63,6 +63,9 @@ declare module "vscode-languageserver/node.js" {
     onDidChangeTextDocument: (handler: (params: DidChangeTextDocumentParams) => void) => void;
     onDidCloseTextDocument: (handler: (params: DidCloseTextDocumentParams) => void) => void;
     onDidChangeWatchedFiles: (handler: (params: DidChangeWatchedFilesParams) => void) => void;
+    onDocumentFormatting: (
+      handler: (params: DocumentFormattingParams) => TextEdit[] | null,
+    ) => void;
     sendDiagnostics: (params: { uri: string; diagnostics: Diagnostic[] }) => void;
     listen: () => void;
   }
@@ -82,7 +85,23 @@ declare module "vscode-languageserver/node.js" {
   export interface InitializeResult {
     capabilities: {
       textDocumentSync?: TextDocumentSyncKind;
+      documentFormattingProvider?: boolean;
     };
+  }
+
+  export interface FormattingOptions {
+    tabSize: number;
+    insertSpaces: boolean;
+  }
+
+  export interface DocumentFormattingParams {
+    textDocument: { uri: string };
+    options: FormattingOptions;
+  }
+
+  export interface TextEdit {
+    range: Range;
+    newText: string;
   }
 
   export interface TextDocumentIdentifier {

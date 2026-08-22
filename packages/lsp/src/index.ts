@@ -1,4 +1,9 @@
-export { analyzeDocument, type AnalysisResult } from "./language-service.js";
+export {
+  analyzeDocument,
+  formatDocument,
+  type AnalysisResult,
+  type FormatDocumentOptions,
+} from "./language-service.js";
 export {
   bomLocationToRange,
   bomSeverityToLsp,

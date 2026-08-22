@@ -32,6 +32,7 @@
   <is>Exported API from packages/lsp/src/index.ts</is>
 
   <documentation>analyzeDocument(text, filePath, workspace): AnalysisResult
+    formatDocument(text, options?): string | null
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
     invalidateWorkspace(rootDir): void
@@ -43,6 +44,7 @@
 
   <references>
     <see type="lspcap:AnalyzeDocument" relation="Defines"></see>
+    <see type="lspcap:FormatDocument" relation="Defines"></see>
     <see type="lspdocumentation:DesignDecisions" relation="ReadNext"></see>
   </references>
 

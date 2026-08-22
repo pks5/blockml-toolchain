@@ -37,6 +37,7 @@
     No semantic rules here.
 
     @blockml/parser — Stage 1 BML → BomDocument.
+    @blockml/serializer — BomDocument → canonical BML XML (format).
     @blockml/validator — Stage 2 validate() orchestration.
     @blockml/framework — TypeRegistry bootstrap for workspace.
 

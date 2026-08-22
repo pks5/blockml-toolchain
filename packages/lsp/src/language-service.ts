@@ -1,5 +1,6 @@
 import type { BomDocument, Diagnostic } from "@blockml/bom";
 import { parse } from "@blockml/parser";
+import { serialize } from "@blockml/serializer";
 import { validate } from "@blockml/validator";
 import type { WorkspaceState } from "./workspace.js";
 
@@ -30,4 +31,36 @@ export function analyzeDocument(
     diagnostics,
     document: parseResult.document,
   };
+}
+
+export interface FormatDocumentOptions {
+  indent?: number;
+  xmlDeclaration?: boolean;
+}
+
+function hasXmlDeclaration(text: string): boolean {
+  return /^\s*<\?xml\b/.test(text);
+}
+
+export function formatDocument(
+  text: string,
+  options: FormatDocumentOptions = {},
+): string | null {
+  const parseResult = parse(text, { continueOnError: true });
+  if (!parseResult.document) {
+    return null;
+  }
+
+  const serializeOptions: {
+    indent?: number;
+    xmlDeclaration?: boolean;
+  } = {
+    xmlDeclaration: options.xmlDeclaration ?? hasXmlDeclaration(text),
+  };
+  if (options.indent !== undefined) {
+    serializeOptions.indent = options.indent;
+  }
+
+  const result = serialize(parseResult.document, serializeOptions);
+  return result.text;
 }

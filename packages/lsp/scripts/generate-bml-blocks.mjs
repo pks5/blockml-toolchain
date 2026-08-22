@@ -26,6 +26,8 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:fwcap="org.blockml.bml.framework.capability"
   xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
   xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:type="org.blockml.bml.type"
@@ -71,9 +73,24 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "lspcap",
+    name: "FormatDocument",
+    is: "Parse then serialize a BML document to canonical XML",
+    doc: "Editor-neutral format: parse(text) then serialize(). Returns null if parse cannot produce a document.",
+    tsExport: "formatDocument",
+    inputs: [
+      { name: "text", type: "type:Text", required: true },
+      { name: "indent", type: "type:Integer" },
+      { name: "xmlDeclaration", type: "type:Boolean" },
+    ],
+    output: { name: "result", type: "type:Text", required: true },
+    refs: ["lspdocumentation:PublicApi", "sercap:Serialize", "parser:Parse"],
+  },
+  {
+    pkg: "capability",
+    prefix: "lspcap",
     name: "StartLanguageServer",
     is: "stdio LSP server entry (bin blockml-lsp)",
-    doc: "packages/lsp/dist/server.js — document sync and publishDiagnostics only in V1.",
+    doc: "packages/lsp/dist/server.js — document sync, publishDiagnostics, and textDocument/formatting.",
     tsExport: "startLanguageServer",
     refs: ["lspdocumentation:ServerLifecycle"],
   },

@@ -38,8 +38,9 @@
     implements it. IDE-specific clients (VS Code extension with TextMate grammar, etc.)
     live outside this repository and connect via stdio LSP.
 
-    V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate).
-    Semantics: @blockml/parser, @blockml/validator, @blockml/framework.</documentation>
+    V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate)
+    + textDocument/formatting (parse → serialize).
+    Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.</documentation>
 
   <references>
     <see type="lspdocumentation:LayerSeparation" relation="ReadNext"></see>

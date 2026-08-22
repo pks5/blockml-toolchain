@@ -1,4 +1,5 @@
 import { parse } from "@blockml/parser";
+import { serialize } from "@blockml/serializer";
 import { validate } from "@blockml/validator";
 export function analyzeDocument(text, filePath, workspace) {
     const parseResult = parse(text, { filePath, continueOnError: true });
@@ -15,5 +16,22 @@ export function analyzeDocument(text, filePath, workspace) {
         diagnostics,
         document: parseResult.document,
     };
+}
+function hasXmlDeclaration(text) {
+    return /^\s*<\?xml\b/.test(text);
+}
+export function formatDocument(text, options = {}) {
+    const parseResult = parse(text, { continueOnError: true });
+    if (!parseResult.document) {
+        return null;
+    }
+    const serializeOptions = {
+        xmlDeclaration: options.xmlDeclaration ?? hasXmlDeclaration(text),
+    };
+    if (options.indent !== undefined) {
+        serializeOptions.indent = options.indent;
+    }
+    const result = serialize(parseResult.document, serializeOptions);
+    return result.text;
 }
 //# sourceMappingURL=language-service.js.map

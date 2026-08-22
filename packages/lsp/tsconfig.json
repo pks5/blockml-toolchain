@@ -8,6 +8,7 @@
   "references": [
     { "path": "../bom" },
     { "path": "../parser" },
+    { "path": "../serializer" },
     { "path": "../validator" },
     { "path": "../framework" }
   ]

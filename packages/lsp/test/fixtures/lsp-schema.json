@@ -37,6 +37,33 @@
       }
     },
     {
+      "name": "FormatDocument",
+      "tsExport": "formatDocument",
+      "fqn": "org.blockml.bml.lsp.capability.FormatDocument",
+      "inputs": [
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "indent",
+          "type": "type:Integer",
+          "required": false
+        },
+        {
+          "name": "xmlDeclaration",
+          "type": "type:Boolean",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Text",
+        "required": true
+      }
+    },
+    {
       "name": "StartLanguageServer",
       "tsExport": "startLanguageServer",
       "fqn": "org.blockml.bml.lsp.capability.StartLanguageServer",

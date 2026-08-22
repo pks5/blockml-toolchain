@@ -16,8 +16,9 @@ export const documentationBlocks = [
     implements it. IDE-specific clients (VS Code extension with TextMate grammar, etc.)
     live outside this repository and connect via stdio LSP.
 
-    V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate).
-    Semantics: @blockml/parser, @blockml/validator, @blockml/framework.`,
+    V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate)
+    + textDocument/formatting (parse → serialize).
+    Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.`,
     refs: [
       { type: "lspdocumentation:LayerSeparation", relation: "ReadNext" },
       { type: "valdocumentation:Introduction", relation: "SeeAlso" },
@@ -32,6 +33,7 @@ export const documentationBlocks = [
     No semantic rules here.
 
     @blockml/parser — Stage 1 BML → BomDocument.
+    @blockml/serializer — BomDocument → canonical BML XML (format).
     @blockml/validator — Stage 2 validate() orchestration.
     @blockml/framework — TypeRegistry bootstrap for workspace.
 
@@ -48,6 +50,8 @@ export const documentationBlocks = [
     → parse + validate with workspace TypeRegistry
     → Diagnostic[] mapped to LSP ranges (positions.ts)
 
+    Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
+
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.`,
     refs: [
       { type: "lspdocumentation:ServerLifecycle", relation: "ReadNext" },
@@ -61,11 +65,13 @@ export const documentationBlocks = [
     • textDocumentSync Full
     • publishDiagnostics (parse + validate)
     • workspace/didChangeWatchedFiles (TypeRegistry refresh)
+    • textDocument/formatting (parse → serialize)
     • blockml-lsp stdio binary
-    • analyzeDocument public API for tests and non-LSP hosts
+    • analyzeDocument and formatDocument public API for tests and non-LSP hosts
 
     Out of scope V1:
-    • Format (serializer), hover, completion, go-to-definition
+    • Hover, completion, go-to-definition
+    • Range formatting, tab indent
     • XSD validation, documentSymbol, BomBuilder (V3)
     • VS Code extension in this repo`,
     refs: [
@@ -76,6 +82,7 @@ export const documentationBlocks = [
     name: "PublicApi",
     is: "Exported API from packages/lsp/src/index.ts",
     doc: `analyzeDocument(text, filePath, workspace): AnalysisResult
+    formatDocument(text, options?): string | null
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
     invalidateWorkspace(rootDir): void
@@ -86,6 +93,7 @@ export const documentationBlocks = [
     Server entry (not exported from index): packages/lsp/dist/server.js via bin blockml-lsp.`,
     refs: [
       { type: "lspcap:AnalyzeDocument", relation: "Defines" },
+      { type: "lspcap:FormatDocument", relation: "Defines" },
       { type: "lspdocumentation:DesignDecisions", relation: "ReadNext" },
     ],
   },
@@ -105,6 +113,9 @@ export const documentationBlocks = [
     re-validate all open documents. node_modules paths are ignored.
     Refresh uses the disk snapshot — unsaved buffers are not overlaid into the registry.
 
+    onDocumentFormatting: formatDocument on the in-memory buffer; one full-document
+    TextEdit, empty list if unchanged, or none if parse cannot produce a document.
+
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.`,
     refs: [
       { type: "lspcap:StartLanguageServer", relation: "Defines" },
@@ -115,7 +126,7 @@ export const documentationBlocks = [
     is: "Toolchain responsibilities for LSP",
     doc: `@blockml/lsp — LSP server, language-service, workspace bootstrap. Owns this BML library.
 
-    @blockml/parser / @blockml/validator / @blockml/framework — semantic backend.
+    @blockml/parser / @blockml/serializer / @blockml/validator / @blockml/framework — semantic backend.
     External VS Code (or other) extension — Language Client, TextMate grammar, .bml file association.`,
     refs: [
       { type: "lspdocumentation:ScopeExclusions", relation: "ReadNext" },
@@ -127,9 +138,9 @@ export const documentationBlocks = [
     doc: `Out of scope:
     • IDE extension UI, syntax highlighting — external packages
     • BomBuilder structural authoring (V3)
-    • Format-on-save (serializer) — V1.1+
     • Hover, completion, references — V1.1+
-    • Duplicate parse/validate logic — must delegate to parser/validator`,
+    • Range formatting, tab indent
+    • Duplicate parse/validate/serialize logic — must delegate to parser/validator/serializer`,
     refs: [
       { type: "lspdocumentation:Introduction", relation: "SeeAlso" },
     ],
@@ -147,7 +158,11 @@ export const documentationBlocks = [
 
     Workspace TypeRegistry cached per rootDir until invalidateWorkspace.
     File watchers trigger a full bootstrap rebuild from disk (not incremental,
-    not unsaved-buffer overlay). Paths under node_modules are skipped.`,
+    not unsaved-buffer overlay). Paths under node_modules are skipped.
+
+    Format is full-document parse→serialize; spaces only (serializer XmlWriter).
+    No edits when parse cannot produce a document. xmlDeclaration inferred from
+    a leading XML declaration in the source.`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

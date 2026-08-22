@@ -15,6 +15,7 @@ const schema = JSON.parse(
 
 const TS_CAPABILITY_EXPORTS = [
   "analyzeDocument",
+  "formatDocument",
   "createWorkspace",
   "loadBomConfig",
   "invalidateWorkspace",
@@ -63,6 +64,7 @@ describe("LSP BML ↔ TS parity", () => {
       schema.capabilities.map((c: { tsExport: string }) => c.tsExport),
     );
     expect(schemaCaps.has("analyzeDocument")).toBe(true);
+    expect(schemaCaps.has("formatDocument")).toBe(true);
     expect(schemaCaps.has("startLanguageServer")).toBe(true);
   });
 
@@ -75,9 +77,10 @@ describe("LSP BML ↔ TS parity", () => {
     expect(schemaCaps.has("analyzeDocument")).toBe(true);
   });
 
-  it("Library depends on parser, validator, and framework libraries", () => {
+  it("Library depends on parser, serializer, validator, and framework libraries", () => {
     const library = readFileSync(join(blocksRoot, "Library.bml"), "utf8");
     expect(library).toContain("<parser:Library />");
+    expect(library).toContain("<serializer:Library />");
     expect(library).toContain("<validator:Library />");
     expect(library).toContain("<framework:Library />");
     expect(library).toContain("<version>0.1.0</version>");

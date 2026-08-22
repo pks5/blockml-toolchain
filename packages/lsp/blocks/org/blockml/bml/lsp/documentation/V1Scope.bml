@@ -36,11 +36,13 @@
     • textDocumentSync Full
     • publishDiagnostics (parse + validate)
     • workspace/didChangeWatchedFiles (TypeRegistry refresh)
+    • textDocument/formatting (parse → serialize)
     • blockml-lsp stdio binary
-    • analyzeDocument public API for tests and non-LSP hosts
+    • analyzeDocument and formatDocument public API for tests and non-LSP hosts
 
     Out of scope V1:
-    • Format (serializer), hover, completion, go-to-definition
+    • Hover, completion, go-to-definition
+    • Range formatting, tab indent
     • XSD validation, documentSymbol, BomBuilder (V3)
     • VS Code extension in this repo</documentation>
 

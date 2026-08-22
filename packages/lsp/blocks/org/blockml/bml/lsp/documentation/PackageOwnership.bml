@@ -33,7 +33,7 @@
 
   <documentation>@blockml/lsp — LSP server, language-service, workspace bootstrap. Owns this BML library.
 
-    @blockml/parser / @blockml/validator / @blockml/framework — semantic backend.
+    @blockml/parser / @blockml/serializer / @blockml/validator / @blockml/framework — semantic backend.
     External VS Code (or other) extension — Language Client, TextMate grammar, .bml file association.</documentation>
 
   <references>

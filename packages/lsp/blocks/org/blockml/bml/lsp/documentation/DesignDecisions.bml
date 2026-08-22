@@ -41,7 +41,11 @@
 
     Workspace TypeRegistry cached per rootDir until invalidateWorkspace.
     File watchers trigger a full bootstrap rebuild from disk (not incremental,
-    not unsaved-buffer overlay). Paths under node_modules are skipped.</documentation>
+    not unsaved-buffer overlay). Paths under node_modules are skipped.
+
+    Format is full-document parse→serialize; spaces only (serializer XmlWriter).
+    No edits when parse cannot produce a document. xmlDeclaration inferred from
+    a leading XML declaration in the source.</documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="ReadNext"></see>

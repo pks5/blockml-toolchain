@@ -36,6 +36,8 @@
     → parse + validate with workspace TypeRegistry
     → Diagnostic[] mapped to LSP ranges (positions.ts)
 
+    Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
+
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.</documentation>
 
   <references>
