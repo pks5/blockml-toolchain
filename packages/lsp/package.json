@@ -1,0 +1,35 @@
+{
+  "name": "@blockml/lsp",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/lsp/Library.bml"
+  },
+  "bin": {
+    "blockml-lsp": "./dist/server.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "blocks"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run packages/lsp/test"
+  },
+  "dependencies": {
+    "@blockml/bom": "file:../bom",
+    "@blockml/framework": "file:../framework",
+    "@blockml/parser": "file:../parser",
+    "@blockml/validator": "file:../validator",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12"
+  }
+}

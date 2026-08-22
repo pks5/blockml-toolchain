@@ -1,0 +1,49 @@
+<!--
+  BlockML LSP — README
+  FQN: org.blockml.bml.lsp.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:lsp="org.blockml.bml.lsp"
+  xmlns:lspcap="org.blockml.bml.lsp.capability"
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
+
+  <name>README</name>
+  <type>blockml:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the LSP library</is>
+
+  <documentation>
+    The @blockml/lsp package provides an editor-agnostic Language Server for BML (stdio).
+    IDE clients (VS Code extension, etc.) connect via LSP; grammar and file associations
+    stay in IDE-specific packages.
+
+    Start at org.blockml.bml.lsp.documentation.Introduction.
+
+    Bin: blockml-lsp → packages/lsp/dist/server.js
+  </documentation>
+
+  <references>
+    <see type="lspdocumentation:Introduction" relation="ReadFirst" />
+    <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
+  </references>
+
+</block>

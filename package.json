@@ -23,6 +23,7 @@
     "@blockml/parser": "file:packages/parser",
     "@blockml/serializer": "file:packages/serializer",
     "@blockml/validator": "file:packages/validator",
+    "@blockml/lsp": "file:packages/lsp",
     "typescript": "^5.7.3",
     "@types/node": "^22.10.0",
     "vitest": "^3.0.5"
@@ -46,6 +47,7 @@
     "test:xsd": "vitest run packages/xsd-target/test tests/xsd",
     "test:fatblock": "vitest run packages/fatblock-target/test tests/fatblock",
     "test:cli": "vitest run packages/cli-tools/test",
+    "test:lsp": "vitest run packages/lsp/test",
     "compile:blockdoc": "node packages/cli-tools/dist/cli.js compile blockdoc",
     "compile:xsd": "node packages/cli-tools/dist/cli.js compile xsd",
     "compile:fatblock": "node packages/cli-tools/dist/cli.js compile",

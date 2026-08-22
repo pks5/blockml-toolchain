@@ -1,0 +1,39 @@
+<!--
+  LSP Capability — StartLanguageServer
+  FQN: org.blockml.bml.lsp.capability.StartLanguageServer
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:lsp="org.blockml.bml.lsp"
+  xmlns:lspcap="org.blockml.bml.lsp.capability"
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation">
+
+  <name>StartLanguageServer</name>
+  <type>lspcap:StartLanguageServer</type>
+  <baseType>core:Capability</baseType>
+  <is>stdio LSP server entry (bin blockml-lsp)</is>
+
+  <documentation>packages/lsp/dist/server.js — document sync and publishDiagnostics only in V1.</documentation>
+
+  <references>
+    <see type="lspdocumentation:ServerLifecycle" relation="SeeAlso" />
+  </references>
+
+</block>

@@ -1,0 +1,49 @@
+<!--
+  LSP Documentation — LayerSeparation
+  FQN: org.blockml.bml.lsp.documentation.LayerSeparation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:lsp="org.blockml.bml.lsp"
+  xmlns:lspcap="org.blockml.bml.lsp.capability"
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>LayerSeparation</name>
+  <type>lspdocumentation:LayerSeparation</type>
+  <baseType>core:Documentation</baseType>
+  <is>LSP vs language-service vs language stack</is>
+
+  <documentation>Layers:
+
+    org.blockml.bml.lsp.* (@blockml/lsp) — LSP protocol adapter + language-service API.
+    No semantic rules here.
+
+    @blockml/parser — Stage 1 BML → BomDocument.
+    @blockml/validator — Stage 2 validate() orchestration.
+    @blockml/framework — TypeRegistry bootstrap for workspace.
+
+    External IDE packages — Language Client only; grammar and file associations stay IDE-local.</documentation>
+
+  <references>
+    <see type="lspdocumentation:ArchitectureOverview" relation="ReadNext"></see>
+  </references>
+
+</block>

@@ -1,0 +1,58 @@
+{
+  "blocks": [
+    {
+      "fqn": "org.blockml.bml.lsp.LspType",
+      "tsExport": "LspType",
+      "pkg": "root",
+      "abstract": true,
+      "baseType": "core:Entity"
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "AnalyzeDocument",
+      "tsExport": "analyzeDocument",
+      "fqn": "org.blockml.bml.lsp.capability.AnalyzeDocument",
+      "inputs": [
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "workspace",
+          "type": "lsp:WorkspaceState",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "lsp:AnalysisResult",
+        "required": true
+      }
+    },
+    {
+      "name": "StartLanguageServer",
+      "tsExport": "startLanguageServer",
+      "fqn": "org.blockml.bml.lsp.capability.StartLanguageServer",
+      "inputs": [],
+      "output": null
+    }
+  ],
+  "documentationBlocks": [
+    "Introduction",
+    "LayerSeparation",
+    "ArchitectureOverview",
+    "V1Scope",
+    "PublicApi",
+    "ServerLifecycle",
+    "PackageOwnership",
+    "ScopeExclusions",
+    "DesignDecisions"
+  ]
+}

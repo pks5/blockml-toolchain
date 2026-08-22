@@ -1,0 +1,50 @@
+<!--
+  LSP Documentation — V1Scope
+  FQN: org.blockml.bml.lsp.documentation.V1Scope
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:lsp="org.blockml.bml.lsp"
+  xmlns:lspcap="org.blockml.bml.lsp.capability"
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>V1Scope</name>
+  <type>lspdocumentation:V1Scope</type>
+  <baseType>core:Documentation</baseType>
+  <is>Explicit V1 capabilities and exclusions</is>
+
+  <documentation>In scope V1:
+    • textDocument/didOpen, didChange, didClose
+    • textDocumentSync Full
+    • publishDiagnostics (parse + validate)
+    • blockml-lsp stdio binary
+    • analyzeDocument public API for tests and non-LSP hosts
+
+    Out of scope V1:
+    • Format (serializer), hover, completion, go-to-definition
+    • XSD validation, documentSymbol, BomBuilder (V3)
+    • VS Code extension in this repo</documentation>
+
+  <references>
+    <see type="lspdocumentation:ScopeExclusions" relation="ReadNext"></see>
+  </references>
+
+</block>

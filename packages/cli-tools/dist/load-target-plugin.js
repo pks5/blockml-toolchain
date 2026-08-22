@@ -10,7 +10,13 @@ export function resolveTargetPackage(config, name) {
     if (isBuiltinTarget(name)) {
         return undefined;
     }
-    return config.targetPackages?.[name] ?? name;
+    if (config.targetPackages?.[name]) {
+        return config.targetPackages[name];
+    }
+    if (name.startsWith("@") || name.includes("/")) {
+        return name;
+    }
+    return undefined;
 }
 function readBlockmlPackageMeta(packageName, rootDir) {
     try {
@@ -29,7 +35,7 @@ function readBlockmlPackageMeta(packageName, rootDir) {
     }
 }
 async function importPackageModule(packageName, rootDir, entry) {
-    if (packageName.startsWith(".") || packageName.startsWith("/")) {
+    if (packageName.startsWith(".") || isAbsolute(packageName)) {
         const base = resolve(rootDir, packageName);
         const modulePath = entry
             ? resolve(base, entry)

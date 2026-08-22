@@ -1,0 +1,92 @@
+<!--
+  BlockML LSP Library Descriptor
+  FQN: org.blockml.bml.lsp.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:lsp="org.blockml.bml.lsp"
+  xmlns:lspcap="org.blockml.bml.lsp.capability"
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+
+  <name>Library</name>
+  <type>lsp:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>The BlockML Language Server package library catalog</is>
+
+  <documentation>
+    Canonical LSP specification for BlockML IDE integration — editor-agnostic language
+    service and stdio server. TypeScript in packages/lsp/src/ implements this library.
+    Membership is defined exclusively by this blocks list.
+  </documentation>
+
+  <version>0.1.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>BlockML Language Server library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <lsp:README />
+      </composition>
+    </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+      <composition>
+        <bom:Library />
+      </composition>
+      <composition>
+        <parser:Library />
+      </composition>
+      <composition>
+        <validator:Library />
+      </composition>
+      <composition>
+        <framework:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition><lsp:LspType /></composition>
+      <composition><lspcap:AnalyzeDocument /></composition>
+      <composition><lspcap:StartLanguageServer /></composition>
+      <composition><lspdocumentation:Introduction /></composition>
+      <composition><lspdocumentation:LayerSeparation /></composition>
+      <composition><lspdocumentation:ArchitectureOverview /></composition>
+      <composition><lspdocumentation:V1Scope /></composition>
+      <composition><lspdocumentation:PublicApi /></composition>
+      <composition><lspdocumentation:ServerLifecycle /></composition>
+      <composition><lspdocumentation:PackageOwnership /></composition>
+      <composition><lspdocumentation:ScopeExclusions /></composition>
+      <composition><lspdocumentation:DesignDecisions /></composition>
+    </blocks>
+  </aggregations>
+
+</block>

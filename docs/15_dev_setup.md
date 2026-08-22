@@ -574,7 +574,7 @@ VS Code / Cursor: install **XML** extension; set `xml.catalog.catalogs` to `./ca
 
 Until schema packages exist, authors reference published URLs in `xsi:schemaLocation` — local catalog activates after first `npm install`.
 
-**V2:** `@blockml/lsp` becomes the semantic IDE backend (diagnostics, hover, format via parser/validator/serializer). XSD catalog remains useful for XML completion until LSP covers the same ground. See `01_bom_core.md` — Language Server.
+**V2:** `@blockml/lsp` provides semantic IDE backend via stdio LSP (`blockml-lsp`): diagnostics from parse + validate. XSD catalog remains useful for XML completion until LSP covers the same ground. IDE grammar/extensions stay in external packages. See `01_bom_core.md` — Language Server.
 
 ### Recommended editor settings (`.vscode/settings.json`)
 
