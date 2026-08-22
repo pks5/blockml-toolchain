@@ -5,6 +5,10 @@ export interface BomConfig {
     libraries?: string[];
 }
 export declare function loadBomConfig(rootDir: string): BomConfig;
+/** Walk up from workspace root until node_modules/@blockml/core is found (CLI parity). */
+export declare function resolveBootstrapRoot(fromDir: string): string;
+/** Read package.json → blockml.library when present (e.g. @blockml/core repo layout). */
+export declare function loadPackageBlockmlLibrary(rootDir: string): string | undefined;
 export interface WorkspaceState {
     rootDir: string;
     config: BomConfig;
