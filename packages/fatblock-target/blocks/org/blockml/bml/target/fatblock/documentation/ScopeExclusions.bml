@@ -33,7 +33,6 @@
     • Alternative embeddedBlocksStrategy behaviors beyond empty-embeds error
     • Inventing or rewriting xmlns prefixes
     • CLI flag parsing and file I/O
-    • Rename of embeddedBlocks aggregation (BOM language TODO)
     • Unused @blockml/parser package dependency (registry pre-loaded by host)
     • Codegen from BML to TypeScript (structural SSOT only)
     • BlockDoc / XSD / SCAD targets</documentation>

@@ -145,6 +145,5 @@ These topics remain outside `org.blockml.bml` language self-description:
 ## Related Documents
 
 - `00_system.md` — BML Self-Description Roadmap  
-- `docs/TODOs/bml_self_description_gap_matrix.md` — migration status  
 - `archive/02_mbml_historical.md` — pre-migration long form  
 - `org.blockml.bml.Library` — exported Core catalogue  
