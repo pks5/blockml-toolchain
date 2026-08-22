@@ -32,13 +32,37 @@ declare module "vscode-languageserver/node.js" {
     all: unknown;
   };
 
+  export interface FileSystemWatcher {
+    globPattern: string;
+  }
+
+  export interface DidChangeWatchedFilesRegistrationOptions {
+    watchers: FileSystemWatcher[];
+  }
+
+  export interface FileEvent {
+    uri: string;
+    type: number;
+  }
+
+  export interface DidChangeWatchedFilesParams {
+    changes: FileEvent[];
+  }
+
   export interface Connection {
     console: { log: (message: string) => void };
+    client: {
+      register: (
+        type: { method: string },
+        registerParams?: DidChangeWatchedFilesRegistrationOptions,
+      ) => void;
+    };
     onInitialize: (handler: (params: InitializeParams) => InitializeResult) => void;
     onInitialized: (handler: () => void) => void;
     onDidOpenTextDocument: (handler: (params: DidOpenTextDocumentParams) => void) => void;
     onDidChangeTextDocument: (handler: (params: DidChangeTextDocumentParams) => void) => void;
     onDidCloseTextDocument: (handler: (params: DidCloseTextDocumentParams) => void) => void;
+    onDidChangeWatchedFiles: (handler: (params: DidChangeWatchedFilesParams) => void) => void;
     sendDiagnostics: (params: { uri: string; diagnostics: Diagnostic[] }) => void;
     listen: () => void;
   }
@@ -46,6 +70,13 @@ declare module "vscode-languageserver/node.js" {
   export interface InitializeParams {
     rootUri?: string;
     workspaceFolders?: Array<{ uri: string; name: string }>;
+    capabilities?: {
+      workspace?: {
+        didChangeWatchedFiles?: {
+          dynamicRegistration?: boolean;
+        };
+      };
+    };
   }
 
   export interface InitializeResult {

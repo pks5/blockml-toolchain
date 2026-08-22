@@ -2,6 +2,8 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   createWorkspace,
+  invalidateWorkspace,
+  isWorkspaceRefreshPath,
   loadPackageBlockmlLibrary,
   resolveBootstrapRoot,
 } from "../src/workspace.js";
@@ -47,6 +49,35 @@ describe("createWorkspace", () => {
   it("bootstraps local BOM blocks from the monorepo package workspace", () => {
     const workspace = createWorkspace(BOM_PACKAGE);
     expect(workspace.registry.has("org.blockml.bml.bom.member.MemberDefinition")).toBe(
+      true,
+    );
+  });
+});
+
+describe("isWorkspaceRefreshPath", () => {
+  it("accepts BML files, bom.config.json, and package.json", () => {
+    expect(isWorkspaceRefreshPath("/proj/blocks/Foo.bml")).toBe(true);
+    expect(isWorkspaceRefreshPath("/proj/bom.config.json")).toBe(true);
+    expect(isWorkspaceRefreshPath("/proj/package.json")).toBe(true);
+  });
+
+  it("rejects unrelated files and node_modules paths", () => {
+    expect(isWorkspaceRefreshPath("/proj/src/index.ts")).toBe(false);
+    expect(
+      isWorkspaceRefreshPath("/proj/node_modules/@blockml/core/blocks/Foo.bml"),
+    ).toBe(false);
+  });
+});
+
+describe("invalidateWorkspace", () => {
+  it("drops the cached workspace so createWorkspace rebuilds", () => {
+    const first = createWorkspace(BOM_PACKAGE);
+    const cached = createWorkspace(BOM_PACKAGE);
+    expect(cached).toBe(first);
+    invalidateWorkspace(BOM_PACKAGE);
+    const rebuilt = createWorkspace(BOM_PACKAGE);
+    expect(rebuilt).not.toBe(first);
+    expect(rebuilt.registry.has("org.blockml.bml.bom.member.MemberDefinition")).toBe(
       true,
     );
   });

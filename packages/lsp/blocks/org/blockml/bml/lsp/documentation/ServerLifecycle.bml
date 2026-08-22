@@ -38,6 +38,12 @@
     onDidChangeTextDocument: debounce 400ms, re-validate.
     onDidCloseTextDocument: clear diagnostics.
 
+    onInitialized: if the client supports dynamic file watchers, register
+    **/*.bml, **/bom.config.json, **/package.json.
+    onDidChangeWatchedFiles: debounce 400ms, invalidateWorkspace, re-bootstrap,
+    re-validate all open documents. node_modules paths are ignored.
+    Refresh uses the disk snapshot — unsaved buffers are not overlaid into the registry.
+
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.</documentation>
 
   <references>

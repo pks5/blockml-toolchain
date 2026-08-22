@@ -39,7 +39,9 @@
 
     continueOnError true on parse and validate — diagnostics survive partial BOM.
 
-    Workspace TypeRegistry cached per rootDir until invalidateWorkspace.</documentation>
+    Workspace TypeRegistry cached per rootDir until invalidateWorkspace.
+    File watchers trigger a full bootstrap rebuild from disk (not incremental,
+    not unsaved-buffer overlay). Paths under node_modules are skipped.</documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="ReadNext"></see>

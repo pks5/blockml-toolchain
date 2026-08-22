@@ -60,6 +60,7 @@ export const documentationBlocks = [
     • textDocument/didOpen, didChange, didClose
     • textDocumentSync Full
     • publishDiagnostics (parse + validate)
+    • workspace/didChangeWatchedFiles (TypeRegistry refresh)
     • blockml-lsp stdio binary
     • analyzeDocument public API for tests and non-LSP hosts
 
@@ -97,6 +98,12 @@ export const documentationBlocks = [
     onDidOpenTextDocument: store TextDocument, validate immediately.
     onDidChangeTextDocument: debounce 400ms, re-validate.
     onDidCloseTextDocument: clear diagnostics.
+
+    onInitialized: if the client supports dynamic file watchers, register
+    **/*.bml, **/bom.config.json, **/package.json.
+    onDidChangeWatchedFiles: debounce 400ms, invalidateWorkspace, re-bootstrap,
+    re-validate all open documents. node_modules paths are ignored.
+    Refresh uses the disk snapshot — unsaved buffers are not overlaid into the registry.
 
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.`,
     refs: [
@@ -138,7 +145,9 @@ export const documentationBlocks = [
 
     continueOnError true on parse and validate — diagnostics survive partial BOM.
 
-    Workspace TypeRegistry cached per rootDir until invalidateWorkspace.`,
+    Workspace TypeRegistry cached per rootDir until invalidateWorkspace.
+    File watchers trigger a full bootstrap rebuild from disk (not incremental,
+    not unsaved-buffer overlay). Paths under node_modules are skipped.`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

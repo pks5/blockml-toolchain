@@ -35,6 +35,7 @@
     • textDocument/didOpen, didChange, didClose
     • textDocumentSync Full
     • publishDiagnostics (parse + validate)
+    • workspace/didChangeWatchedFiles (TypeRegistry refresh)
     • blockml-lsp stdio binary
     • analyzeDocument public API for tests and non-LSP hosts
 

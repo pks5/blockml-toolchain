@@ -1,6 +1,17 @@
 import { readFileSync, existsSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { bootstrapTypeRegistry, defaultBootstrapPaths, TypeRegistry } from "@blockml/framework";
+/** Globs registered with the client for workspace/didChangeWatchedFiles. */
+export const WATCH_GLOBS = ["**/*.bml", "**/bom.config.json", "**/package.json"];
+/** True when a disk path should invalidate the cached TypeRegistry. */
+export function isWorkspaceRefreshPath(filePath) {
+    const normalized = filePath.replaceAll("\\", "/");
+    if (normalized.split("/").includes("node_modules")) {
+        return false;
+    }
+    const name = basename(normalized);
+    return name.endsWith(".bml") || name === "bom.config.json" || name === "package.json";
+}
 const DEFAULT_CONFIG = {
     srcDir: "src",
 };

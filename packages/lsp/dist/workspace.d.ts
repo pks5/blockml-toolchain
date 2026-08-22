@@ -1,5 +1,9 @@
 import type { Diagnostic } from "@blockml/bom";
 import { TypeRegistry } from "@blockml/framework";
+/** Globs registered with the client for workspace/didChangeWatchedFiles. */
+export declare const WATCH_GLOBS: readonly ["**/*.bml", "**/bom.config.json", "**/package.json"];
+/** True when a disk path should invalidate the cached TypeRegistry. */
+export declare function isWorkspaceRefreshPath(filePath: string): boolean;
 export interface BomConfig {
     srcDir?: string;
     libraries?: string[];
