@@ -1,7 +1,16 @@
 {
   "name": "@blockml/blockdoc-target",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "BlockML BlockDoc render target — browseable HTML documentation",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://git.pksoftware.de/pks/blockml.git",
+    "directory": "packages/blockdoc-target"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": false,
   "blockml": {
@@ -19,12 +28,16 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "prepublishOnly": "npm run build",
     "test": "vitest run packages/blockdoc-target/test"
   },
   "dependencies": {
-    "@blockml/bom": "file:../bom",
-    "@blockml/compiler": "file:../compiler",
-    "@blockml/framework": "file:../framework",
-    "@blockml/parser": "file:../parser"
+    "@blockml/bom": "^0.1.0",
+    "@blockml/compiler": "^0.1.0",
+    "@blockml/framework": "^0.1.0",
+    "@blockml/parser": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

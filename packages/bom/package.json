@@ -1,7 +1,16 @@
 {
   "name": "@blockml/bom",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "BlockML BOM (Urmodell) TypeScript contracts — ParseResult, Diagnostic, bomEquals",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://git.pksoftware.de/pks/blockml.git",
+    "directory": "packages/bom"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": false,
   "blockml": {
@@ -19,9 +28,13 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "prepublishOnly": "npm run build",
     "test": "vitest run packages/bom/test"
   },
   "dependencies": {
     "@blockml/core": "^1.0.3"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

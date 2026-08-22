@@ -1,7 +1,16 @@
 {
   "name": "@blockml/framework",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "BlockML framework — TypeRegistry, fork/resolve, parseExpression, validateTypes",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://git.pksoftware.de/pks/blockml.git",
+    "directory": "packages/framework"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": false,
   "blockml": {
@@ -19,11 +28,15 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "prepublishOnly": "npm run build",
     "test": "vitest run packages/framework/test"
   },
   "dependencies": {
-    "@blockml/bom": "file:../bom",
+    "@blockml/bom": "^0.1.0",
     "@blockml/core": "^1.0.3",
-    "@blockml/parser": "file:../parser"
+    "@blockml/parser": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

@@ -1,6 +1,7 @@
 {
   "name": "blockml",
   "private": true,
+  "license": "Apache-2.0",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -13,17 +14,17 @@
     "@machineblocks/core": "^3.0.0-A1"
   },
   "devDependencies": {
-    "@blockml/bom": "file:packages/bom",
-    "@blockml/blockdoc-target": "file:packages/blockdoc-target",
-    "@blockml/fatblock-target": "file:packages/fatblock-target",
-    "@blockml/xsd-target": "file:packages/xsd-target",
-    "@blockml/cli": "file:packages/cli-tools",
-    "@blockml/compiler": "file:packages/compiler",
-    "@blockml/framework": "file:packages/framework",
-    "@blockml/parser": "file:packages/parser",
-    "@blockml/serializer": "file:packages/serializer",
-    "@blockml/validator": "file:packages/validator",
-    "@blockml/lsp": "file:packages/lsp",
+    "@blockml/bom": "workspace:*",
+    "@blockml/blockdoc-target": "workspace:*",
+    "@blockml/fatblock-target": "workspace:*",
+    "@blockml/xsd-target": "workspace:*",
+    "@blockml/cli": "workspace:*",
+    "@blockml/compiler": "workspace:*",
+    "@blockml/framework": "workspace:*",
+    "@blockml/parser": "workspace:*",
+    "@blockml/serializer": "workspace:*",
+    "@blockml/validator": "workspace:*",
+    "@blockml/lsp": "workspace:*",
     "typescript": "^5.7.3",
     "@types/node": "^22.10.0",
     "vitest": "^3.0.5"
@@ -52,7 +53,8 @@
     "compile:xsd": "node packages/cli-tools/dist/cli.js compile xsd",
     "compile:fatblock": "node packages/cli-tools/dist/cli.js compile",
     "validate": "node packages/cli-tools/dist/cli.js validate",
-    "typecheck": "tsc --build --emitDeclarationOnly"
+    "typecheck": "tsc --build --emitDeclarationOnly",
+    "publish:packages": "bash scripts/publish-packages.sh"
   },
   "engines": {
     "node": ">=20"

@@ -1,7 +1,16 @@
 {
   "name": "@blockml/compiler",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "BlockML compiler — facade, target registry, render pipeline",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://git.pksoftware.de/pks/blockml.git",
+    "directory": "packages/compiler"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": false,
   "blockml": {
@@ -19,12 +28,16 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "prepublishOnly": "npm run build",
     "test": "vitest run packages/compiler/test"
   },
   "dependencies": {
-    "@blockml/bom": "file:../bom",
-    "@blockml/framework": "file:../framework",
-    "@blockml/parser": "file:../parser",
-    "@blockml/validator": "file:../validator"
+    "@blockml/bom": "^0.1.0",
+    "@blockml/framework": "^0.1.0",
+    "@blockml/parser": "^0.1.0",
+    "@blockml/validator": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
