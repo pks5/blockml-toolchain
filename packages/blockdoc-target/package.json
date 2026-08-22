@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://git.pksoftware.de/pks/blockml.git",
+    "url": "git+https://github.com/pks5/blockml-toolchain.git",
     "directory": "packages/blockdoc-target"
   },
   "publishConfig": {

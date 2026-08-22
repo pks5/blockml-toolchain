@@ -49,7 +49,7 @@ OpenSCAD (optional) — thumbnail generation only; not required for build/test
 ## First-Time Setup
 
 ```bash
-git clone <repo-url> blockml
+git clone https://github.com/pks5/blockml-toolchain.git blockml
 cd blockml
 npm install
 # node_modules/@blockml/core         — BlockML Core BML SSOT
