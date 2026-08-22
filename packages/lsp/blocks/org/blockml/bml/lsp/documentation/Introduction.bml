@@ -40,7 +40,8 @@
 
     V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate)
     + textDocument/formatting (parse → serialize)
-    + textDocument/hover (Urmodell hit-test + TypeRegistry).
+    + textDocument/hover (Urmodell hit-test + TypeRegistry)
+    + textDocument/documentSymbol (Urmodell outline tree).
     Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.</documentation>
 
   <references>

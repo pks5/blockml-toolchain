@@ -9,12 +9,14 @@ import {
   type DidCloseTextDocumentParams,
   type DidOpenTextDocumentParams,
   type DocumentFormattingParams,
+  type DocumentSymbolParams,
   type HoverParams,
   type InitializeParams,
 } from "vscode-languageserver/node.js";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { hoverAt } from "./hover.js";
 import { analyzeDocument, formatDocument } from "./language-service.js";
+import { documentSymbols } from "./outline.js";
 import { diagnosticToLsp } from "./positions.js";
 import {
   createWorkspace,
@@ -115,6 +117,7 @@ connection.onInitialize((params) => {
       textDocumentSync: TextDocumentSyncKind.Full,
       documentFormattingProvider: true,
       hoverProvider: true,
+      documentSymbolProvider: true,
     },
   };
 });
@@ -214,6 +217,14 @@ connection.onHover((params: HoverParams) => {
     return null;
   }
   return { contents: info.contents, range: info.range };
+});
+
+connection.onDocumentSymbol((params: DocumentSymbolParams) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc) {
+    return null;
+  }
+  return documentSymbols(doc.getText(), uriToFilePath(doc.uri));
 });
 
 connection.listen();

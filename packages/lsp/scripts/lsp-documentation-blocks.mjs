@@ -18,7 +18,8 @@ export const documentationBlocks = [
 
     V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate)
     + textDocument/formatting (parse → serialize)
-    + textDocument/hover (Urmodell hit-test + TypeRegistry).
+    + textDocument/hover (Urmodell hit-test + TypeRegistry)
+    + textDocument/documentSymbol (Urmodell outline tree).
     Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.`,
     refs: [
       { type: "lspdocumentation:LayerSeparation", relation: "ReadNext" },
@@ -56,6 +57,9 @@ export const documentationBlocks = [
     Hover: onHover → hoverAt → parse (no validator) → smallest covering Urmodell span
     → TypeRegistry Markdown.
 
+    Outline: onDocumentSymbol → documentSymbols → parse (no validator) → hierarchical
+    DocumentSymbol tree (Block, members, subBlocks, embeddedBlocks).
+
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.`,
     refs: [
       { type: "lspdocumentation:ServerLifecycle", relation: "ReadNext" },
@@ -71,13 +75,14 @@ export const documentationBlocks = [
     • workspace/didChangeWatchedFiles (TypeRegistry refresh)
     • textDocument/formatting (parse → serialize)
     • textDocument/hover (Urmodell hit-test + TypeRegistry)
+    • textDocument/documentSymbol (Urmodell outline tree)
     • blockml-lsp stdio binary
-    • analyzeDocument, formatDocument, and hoverAt public API for tests and non-LSP hosts
+    • analyzeDocument, formatDocument, hoverAt, and documentSymbols public API for tests and non-LSP hosts
 
     Out of scope V1:
     • Completion, go-to-definition
     • Range formatting, tab indent
-    • XSD validation, documentSymbol, BomBuilder (V3)
+    • XSD validation, BomBuilder (V3)
     • VS Code extension in this repo`,
     refs: [
       { type: "lspdocumentation:ScopeExclusions", relation: "ReadNext" },
@@ -89,6 +94,7 @@ export const documentationBlocks = [
     doc: `    analyzeDocument(text, filePath, workspace): AnalysisResult
     formatDocument(text, options?): string | null
     hoverAt(text, filePath, position, workspace): HoverInfo | null
+    documentSymbols(text, filePath): OutlineSymbol[] | null
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
     invalidateWorkspace(rootDir): void
@@ -101,6 +107,7 @@ export const documentationBlocks = [
       { type: "lspcap:AnalyzeDocument", relation: "Defines" },
       { type: "lspcap:FormatDocument", relation: "Defines" },
       { type: "lspcap:HoverAt", relation: "Defines" },
+      { type: "lspcap:DocumentSymbols", relation: "Defines" },
       { type: "lspdocumentation:DesignDecisions", relation: "ReadNext" },
     ],
   },
@@ -125,6 +132,9 @@ export const documentationBlocks = [
 
     onHover: hoverAt on the in-memory buffer; innermost covering Urmodell span;
     Markdown from TypeRegistry. Parse-only — no validator.
+
+    onDocumentSymbol: documentSymbols on the in-memory buffer; hierarchical
+    Urmodell tree. Parse-only — no validator. selectionRange equals range.
 
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.`,
     refs: [
@@ -177,7 +187,12 @@ export const documentationBlocks = [
     Hover is parse-only (no validator). Hit-test picks the smallest covering
     Urmodell span; equal area ties break toward the later start (innermost).
     Contents are Markdown (FQN, is, first documentation/summary). Unknown FQN
-    is still shown. Referenced types come from the disk TypeRegistry.`,
+    is still shown. Referenced types come from the disk TypeRegistry.
+
+    Outline is parse-only (no validator, no TypeRegistry). Hierarchical
+    DocumentSymbol tree: Block Class, property Property, aggregation/association
+    Field, capability Method; children in members then subBlocks then
+    embeddedBlocks order. selectionRange equals the element range.`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

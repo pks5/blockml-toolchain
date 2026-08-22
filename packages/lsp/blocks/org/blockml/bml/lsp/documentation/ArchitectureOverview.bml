@@ -41,6 +41,9 @@
     Hover: onHover → hoverAt → parse (no validator) → smallest covering Urmodell span
     → TypeRegistry Markdown.
 
+    Outline: onDocumentSymbol → documentSymbols → parse (no validator) → hierarchical
+    DocumentSymbol tree (Block, members, subBlocks, embeddedBlocks).
+
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.</documentation>
 
   <references>

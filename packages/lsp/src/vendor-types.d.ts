@@ -67,6 +67,9 @@ declare module "vscode-languageserver/node.js" {
       handler: (params: DocumentFormattingParams) => TextEdit[] | null,
     ) => void;
     onHover: (handler: (params: HoverParams) => Hover | null) => void;
+    onDocumentSymbol: (
+      handler: (params: DocumentSymbolParams) => DocumentSymbol[] | null,
+    ) => void;
     sendDiagnostics: (params: { uri: string; diagnostics: Diagnostic[] }) => void;
     listen: () => void;
   }
@@ -88,7 +91,28 @@ declare module "vscode-languageserver/node.js" {
       textDocumentSync?: TextDocumentSyncKind;
       documentFormattingProvider?: boolean;
       hoverProvider?: boolean;
+      documentSymbolProvider?: boolean;
     };
+  }
+
+  export enum SymbolKind {
+    Class = 5,
+    Method = 6,
+    Property = 7,
+    Field = 8,
+  }
+
+  export interface DocumentSymbol {
+    name: string;
+    detail?: string;
+    kind: SymbolKind;
+    range: Range;
+    selectionRange: Range;
+    children?: DocumentSymbol[];
+  }
+
+  export interface DocumentSymbolParams {
+    textDocument: { uri: string };
   }
 
   export interface MarkupContent {

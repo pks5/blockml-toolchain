@@ -4,6 +4,11 @@ export {
   type MarkupContent,
 } from "./hover.js";
 export {
+  documentSymbols,
+  SymbolKind,
+  type OutlineSymbol,
+} from "./outline.js";
+export {
   analyzeDocument,
   formatDocument,
   type AnalysisResult,

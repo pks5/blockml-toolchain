@@ -34,6 +34,7 @@
   <documentation>    analyzeDocument(text, filePath, workspace): AnalysisResult
     formatDocument(text, options?): string | null
     hoverAt(text, filePath, position, workspace): HoverInfo | null
+    documentSymbols(text, filePath): OutlineSymbol[] | null
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
     invalidateWorkspace(rootDir): void
@@ -47,6 +48,7 @@
     <see type="lspcap:AnalyzeDocument" relation="Defines"></see>
     <see type="lspcap:FormatDocument" relation="Defines"></see>
     <see type="lspcap:HoverAt" relation="Defines"></see>
+    <see type="lspcap:DocumentSymbols" relation="Defines"></see>
     <see type="lspdocumentation:DesignDecisions" relation="ReadNext"></see>
   </references>
 

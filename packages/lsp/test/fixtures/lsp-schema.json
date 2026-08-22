@@ -96,6 +96,28 @@
       }
     },
     {
+      "name": "DocumentSymbols",
+      "tsExport": "documentSymbols",
+      "fqn": "org.blockml.bml.lsp.capability.DocumentSymbols",
+      "inputs": [
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "core:Any",
+        "required": true
+      }
+    },
+    {
       "name": "StartLanguageServer",
       "tsExport": "startLanguageServer",
       "fqn": "org.blockml.bml.lsp.capability.StartLanguageServer",

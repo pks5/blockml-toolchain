@@ -4,6 +4,7 @@ import { createConnection, ProposedFeatures, TextDocumentSyncKind, } from "vscod
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { hoverAt } from "./hover.js";
 import { analyzeDocument, formatDocument } from "./language-service.js";
+import { documentSymbols } from "./outline.js";
 import { diagnosticToLsp } from "./positions.js";
 import { createWorkspace, invalidateWorkspace, isWorkspaceRefreshPath, WATCH_GLOBS, } from "./workspace.js";
 const connection = createConnection(ProposedFeatures.all);
@@ -84,6 +85,7 @@ connection.onInitialize((params) => {
             textDocumentSync: TextDocumentSyncKind.Full,
             documentFormattingProvider: true,
             hoverProvider: true,
+            documentSymbolProvider: true,
         },
     };
 });
@@ -166,6 +168,13 @@ connection.onHover((params) => {
         return null;
     }
     return { contents: info.contents, range: info.range };
+});
+connection.onDocumentSymbol((params) => {
+    const doc = documents.get(params.textDocument.uri);
+    if (!doc) {
+        return null;
+    }
+    return documentSymbols(doc.getText(), uriToFilePath(doc.uri));
 });
 connection.listen();
 //# sourceMappingURL=server.js.map

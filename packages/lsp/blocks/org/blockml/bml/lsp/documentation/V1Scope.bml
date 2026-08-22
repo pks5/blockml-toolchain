@@ -38,13 +38,14 @@
     • workspace/didChangeWatchedFiles (TypeRegistry refresh)
     • textDocument/formatting (parse → serialize)
     • textDocument/hover (Urmodell hit-test + TypeRegistry)
+    • textDocument/documentSymbol (Urmodell outline tree)
     • blockml-lsp stdio binary
-    • analyzeDocument, formatDocument, and hoverAt public API for tests and non-LSP hosts
+    • analyzeDocument, formatDocument, hoverAt, and documentSymbols public API for tests and non-LSP hosts
 
     Out of scope V1:
     • Completion, go-to-definition
     • Range formatting, tab indent
-    • XSD validation, documentSymbol, BomBuilder (V3)
+    • XSD validation, BomBuilder (V3)
     • VS Code extension in this repo</documentation>
 
   <references>
