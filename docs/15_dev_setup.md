@@ -9,7 +9,7 @@ This document defines the **development setup** for the BlockML toolchain (`bloc
 **This repo authors `@blockml/*` only.** All `@machineblocks/*` packages (core, SCAD target, domain CLI) are **out of scope** here — they live in the **MachineBlocks mono-repo** (npm packages remain split). See `00_system.md` — Zielbild.
 
 For architecture and package responsibilities see `00_system.md` (including **BlockML node packages**).
-For compiler runtime (bootstrap, facade, cache) see `14_compiler_runtime.md`.
+For compiler runtime (bootstrap, facade, cache) see `14_compiler_runtime.md` TOC → `org.blockml.bml.compiler.runtime.documentation.Introduction` (C5/C6 → CLI).
 For testing strategy see `06_compiler.md` — Testing Strategy.
 For the dual CLI model see `07_cli.md`.
 
@@ -106,7 +106,7 @@ blockml/                         ← THIS REPO — @blockml/* toolchain only
 | `@blockml/parser` | `packages/parser` → `@blockml/parser` | Phase A — own `blocks/` SSOT |
 | `@blockml/serializer` | `packages/serializer` → `@blockml/serializer` | Phase A — own `blocks/` SSOT |
 | `@blockml/validator` | `packages/validator` → `@blockml/validator` | Phase B |
-| `@blockml/compiler` | `packages/compiler` → `@blockml/compiler` | Phase C |
+| `@blockml/compiler` | `packages/compiler` → `@blockml/compiler` | Phase C; **SSOT:** `org.blockml.bml.compiler.runtime.documentation.Introduction` |
 | `@blockml/blockdoc-target` | `packages/blockdoc-target` | Phase C — **first** Stage-3 / V1 control RT; registry `"blockdoc"` |
 | `@blockml/xsd-target` | `packages/xsd-target` | Phase C — after BlockDoc; registry `"xsd"`; **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction` |
 | `@blockml/fatblock-target` | `packages/fatblock-target` | Phase C — after / beside XSD; registry `"fatblock"`; **SSOT:** `org.blockml.bml.target.fatblock.documentation.Introduction` |
@@ -724,6 +724,7 @@ Phase B — Semantic layer
 
 Phase C — Compile pipeline (BlockDoc-first)
   7. Compiler facade                 — @blockml/compiler (C2, C3, C7)
+     — SSOT: org.blockml.bml.compiler.runtime.documentation.Introduction
   8. CLI + targets[]                 — @blockml/cli; SSOT: org.blockml.bml.cli.documentation.Introduction
   9. **First Stage-3 gate: BlockDoc** — @blockml/blockdoc-target / CLI `blockdoc`
      — SSOT: org.blockml.bml.target.blockdoc.documentation.Introduction
@@ -752,7 +753,7 @@ Phase C — Compile pipeline (BlockDoc-first)
 | 2nd+ | **FatBlock** (`fatblock`) | Portable `.bml` folder bundle (V1); closure planned v2 | this repo |
 | Later | **machineblocks-v3-scad** | Product SCAD target + thin `@machineblocks/cli` | **MachineBlocks mono-repo (out of scope here)** |
 
-BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`blockml compile blockdoc`, library/corpus scope — see `14_compiler_runtime.md` C7). `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3. MachineBlocks users use `@machineblocks/cli` from the MachineBlocks mono-repo for the product chain.
+BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`blockml compile blockdoc`, library/corpus scope — see `org.blockml.bml.compiler.runtime.documentation.CompileScopeRules`). `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` TOC. MachineBlocks users use `@machineblocks/cli` from the MachineBlocks mono-repo for the product chain.
 
 ### Roundtrip test contract
 
@@ -874,7 +875,7 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 5. Roundtrip tests            — tests/roundtrip/ (T0 → T3 corpus tiers; may use @machineblocks/core as fixture dep)
 6. parseExpression()          — @blockml/core utility (AST as ParsedExpression; no Urmodell write-back)
 7. @blockml/validator         — library + migrate owned MD → Stage 2
-8. @blockml/compiler          — library + migrate 06 / 14 → Facade + Target Registry (C2, C3)
+8. @blockml/compiler          — SSOT: org.blockml.bml.compiler.runtime.documentation.Introduction (C1–C7); migrate done from 06/14
 9. BlockDoc RT first          — library + owned slices → @blockml/blockdoc-target (control gate)
 10. XSD / FatBlock RTs         — XSD SSOT: org.blockml.bml.target.xsd.documentation.Introduction; FatBlock SSOT: org.blockml.bml.target.fatblock.documentation.Introduction
 11. @blockml/engine-maker      — library + owned MD → RenderEngine stub (consumed by domain targets)
@@ -910,6 +911,7 @@ Phase D  ✅  15_dev_setup (this document)
 | BOM types + ParseResult (B26) | `12_bom_object_model.md` (migrate into `@blockml/bom` BML before BOM TS) |
 | Public `parse` / `serialize` (B26) | this document — Public API |
 | Parser mapping | `13_bml_to_bom_mapping.md` (migrate into parser/serializer BML before implement) |
-| Runtime / Facade / Cache | `14_compiler_runtime.md` |
+| Runtime / Facade (C1–C7) | `org.blockml.bml.compiler.runtime.*` · `14_compiler_runtime.md` TOC |
+| Cache / thumbnails (C5/C6) | `org.blockml.bml.cli.documentation.ScopeExclusions` |
 | CLI commands | `07_cli.md` |
 | SCAD fixtures | `node_modules/@machineblocks/core/` |

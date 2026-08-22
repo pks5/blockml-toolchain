@@ -1,0 +1,43 @@
+<!--
+  Compiler Runtime API — CompileInput
+  FQN: org.blockml.bml.compiler.runtime.api.CompileInput
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator">
+
+  <name>CompileInput</name>
+  <type>runapi:CompileInput</type>
+  <baseType>runtime:RuntimeType</baseType>
+  <is>Single BML source unit for document scope</is>
+
+  <documentation>Used as CompileScope.document and by CompileBmlToBom / CompileBmlToOutput.</documentation>
+  <references>
+    <see type="rundocumentation:PublicApi" relation="SeeAlso" />
+  </references>
+  <properties>
+    <source type="type:Text"><documentation>BML source text. (required)</documentation></source>
+    <filePath type="type:Text"><documentation>Logical file path for diagnostics. (required)</documentation></filePath>
+    <format type="type:Text"><documentation>Optional format hint; V1 only xml. (optional)</documentation></format>
+  </properties>
+
+</block>

@@ -63,7 +63,7 @@ Cross-package references (still Markdown until migrated): `06_compiler.md`, `14_
 
 | Concern | Owner |
 |---|---|
-| `compileToOutput`, `CompileRequest`, scope `auto` resolution | `org.blockml.bml.compiler.runtime.*` / `14_compiler_runtime.md` C7 |
+| `compileToOutput`, `CompileRequest`, scope `auto` resolution | `org.blockml.bml.compiler.runtime.*` — start `org.blockml.bml.compiler.runtime.documentation.Introduction` |
 | `bootstrapTypeRegistry` detail | `org.blockml.bml.framework.*` |
 | RenderTarget `targetOptions` types | Target libraries (blockdoc, xsd, fatblock) |
 | Incremental cache (C5), thumbnails (C6) | Planned CLI; see `ScopeExclusions` |

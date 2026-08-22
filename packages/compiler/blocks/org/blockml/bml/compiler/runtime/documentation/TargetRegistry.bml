@@ -1,0 +1,45 @@
+<!--
+  Compiler Runtime Documentation — TargetRegistry
+  FQN: org.blockml.bml.compiler.runtime.documentation.TargetRegistry
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>TargetRegistry</name>
+  <type>rundocumentation:TargetRegistry</type>
+  <baseType>core:Documentation</baseType>
+  <is>Target Registry contract (C3)</is>
+
+  <documentation>In-memory Map of name → RenderTarget. registerTarget overwrites; getTarget may miss;
+    clearTargets empties; registeredTargetNames lists keys.
+    No default targets ship in @blockml/compiler. Hosts (CLI bootstrapTargets, tests, browsers)
+    call registerTarget before compileToOutput.
+    Config targets[] and package loading order are CLI-owned (SeeAlso RuntimeBootstrap).</documentation>
+  <references>
+    <see type="rundocumentation:RenderContextRules" relation="ReadNext"></see>
+    <see type="runcap:RegisterTarget" relation="SeeAlso"></see>
+    <see type="cli:Library" relation="SeeAlso"></see>
+  </references>
+
+</block>

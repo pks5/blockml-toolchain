@@ -1,0 +1,54 @@
+<!--
+  Compiler Runtime Capability — CompileBmlToOutput
+  FQN: org.blockml.bml.compiler.runtime.capability.CompileBmlToOutput
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator">
+
+  <name>CompileBmlToOutput</name>
+  <type>runcap:CompileBmlToOutput</type>
+  <baseType>core:Capability</baseType>
+  <is>Document-scope sugar for CompileToOutput</is>
+
+  <documentation>Wraps CompileInput as scope kind document then calls CompileToOutput.</documentation>
+
+  <references>
+    <see type="runcap:CompileToOutput" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <input type="runapi:CompileInput">
+      <documentation>BML source unit. (required)</documentation>
+    </input>
+    <targetName type="type:Text">
+      <documentation>Registered target name. (required)</documentation>
+    </targetName>
+    <options type="runapi:CompileOptions">
+      <documentation>Host options. (optional)</documentation>
+    </options>
+    <result type="runapi:CompilerResult">
+      <documentation>RenderOutput envelope. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

@@ -1,0 +1,58 @@
+<!--
+  Compiler Runtime Capability — CompileToOutput
+  FQN: org.blockml.bml.compiler.runtime.capability.CompileToOutput
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator">
+
+  <name>CompileToOutput</name>
+  <type>runcap:CompileToOutput</type>
+  <baseType>core:Capability</baseType>
+  <is>Normative Stage-3 facade: request plus target name to CompilerResult</is>
+
+  <documentation>C2: getTarget → optional validateRequest → ResolveScope → scopeAccepts → bootstrapForScope → (document: ValidateRegistryDocuments) → BuildRenderSession → CreateRenderContext → target.render. Emits BML_UNKNOWN_TARGET / BML_TARGET_SCOPE_MISMATCH.</documentation>
+
+  <references>
+    <see type="rundocumentation:PublicApi" relation="SeeAlso" />
+    <see type="rundocumentation:ArchitectureOverview" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <request type="runapi:CompileRequest">
+      <documentation>Compile request. (required)</documentation>
+    </request>
+    <targetName type="type:Text">
+      <documentation>Registered target name. (required)</documentation>
+    </targetName>
+    <options type="runapi:CompileOptions">
+      <documentation>Host compile options. (optional)</documentation>
+    </options>
+    <configHints type="runapi:ScopeConfigHints">
+      <documentation>Scope hints from host config. (optional)</documentation>
+    </configHints>
+    <result type="runapi:CompilerResult">
+      <documentation>RenderOutput envelope. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

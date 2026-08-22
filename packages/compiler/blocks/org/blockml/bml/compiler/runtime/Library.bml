@@ -8,8 +8,22 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
   xmlns:core="org.blockml.bml.core"
-  xmlns:runtime="org.blockml.bml.compiler.runtime">
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator">
 
   <name>Library</name>
   <type>runtime:Library</type>
@@ -17,11 +31,16 @@
   <is>The BlockML compiler runtime package library catalog</is>
 
   <documentation>
-    Stage-3 compiler facade — compileToOutput, Target Registry, compile scope (C2, C3, C7).
-    TypeScript in packages/compiler/src/ implements this library.
+    Canonical compiler runtime specification for BlockML — compileToOutput, Target
+    Registry, compile scope, RenderContext (C1–C7). TypeScript in packages/compiler/src/
+    implements this library. Membership is defined exclusively by this blocks list.
   </documentation>
 
   <version>0.1.0</version>
+
+  <language>
+    <English />
+  </language>
 
   <properties>
     <description>
@@ -39,7 +58,62 @@
       <composition>
         <blockml:Library />
       </composition>
+      <composition>
+        <bom:Library />
+      </composition>
+      <composition>
+        <framework:Library />
+      </composition>
+      <composition>
+        <parser:Library />
+      </composition>
+      <composition>
+        <validator:Library />
+      </composition>
     </dependencies>
+    <blocks>
+      <composition><runtime:RuntimeType /></composition>
+      <composition><runapi:CompileScopeKind /></composition>
+      <composition><runapi:CompileInput /></composition>
+      <composition><runapi:CompileScope /></composition>
+      <composition><runapi:CompileRequest /></composition>
+      <composition><runapi:CompileOptions /></composition>
+      <composition><runapi:CompilerResult /></composition>
+      <composition><runapi:RenderOutputFile /></composition>
+      <composition><runapi:RenderOutput /></composition>
+      <composition><runapi:RenderSession /></composition>
+      <composition><runapi:RenderContext /></composition>
+      <composition><runapi:RenderTarget /></composition>
+      <composition><runapi:ScopeConfigHints /></composition>
+      <composition><runapi:ResolvedScope /></composition>
+      <composition><runconfig:RuntimeConstants /></composition>
+      <composition><runcap:CompileToOutput /></composition>
+      <composition><runcap:CompileBmlToOutput /></composition>
+      <composition><runcap:CompileBomToOutput /></composition>
+      <composition><runcap:RegisterTarget /></composition>
+      <composition><runcap:GetTarget /></composition>
+      <composition><runcap:ClearTargets /></composition>
+      <composition><runcap:RegisteredTargetNames /></composition>
+      <composition><runcap:ResolveScope /></composition>
+      <composition><runcap:ScopeAccepts /></composition>
+      <composition><runcap:CompileBmlToBom /></composition>
+      <composition><runcap:ValidateRegistryDocuments /></composition>
+      <composition><runcap:BuildRenderSession /></composition>
+      <composition><runcap:CreateRenderContext /></composition>
+      <composition><rundocumentation:Introduction /></composition>
+      <composition><rundocumentation:LayerSeparation /></composition>
+      <composition><rundocumentation:ArchitectureOverview /></composition>
+      <composition><rundocumentation:V1Scope /></composition>
+      <composition><rundocumentation:PublicApi /></composition>
+      <composition><rundocumentation:CompileIO /></composition>
+      <composition><rundocumentation:CompileScopeRules /></composition>
+      <composition><rundocumentation:TargetRegistry /></composition>
+      <composition><rundocumentation:RenderContextRules /></composition>
+      <composition><rundocumentation:Diagnostics /></composition>
+      <composition><rundocumentation:DesignDecisions /></composition>
+      <composition><rundocumentation:PackageOwnership /></composition>
+      <composition><rundocumentation:ScopeExclusions /></composition>
+    </blocks>
   </aggregations>
 
 </block>

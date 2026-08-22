@@ -1,0 +1,54 @@
+<!--
+  Compiler Runtime Capability — CreateRenderContext
+  FQN: org.blockml.bml.compiler.runtime.capability.CreateRenderContext
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator">
+
+  <name>CreateRenderContext</name>
+  <type>runcap:CreateRenderContext</type>
+  <baseType>core:Capability</baseType>
+  <is>Create root RenderContext for a session</is>
+
+  <documentation>C1: optional blockFqn and outputRelativePath default empty; child forks overrides.</documentation>
+
+  <references>
+    <see type="rundocumentation:RenderContextRules" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <session type="runapi:RenderSession">
+      <documentation>Session. (required)</documentation>
+    </session>
+    <blockFqn type="type:Text">
+      <documentation>Initial block FQN. (optional)</documentation>
+    </blockFqn>
+    <outputRelativePath type="type:Text">
+      <documentation>Initial relative path. (optional)</documentation>
+    </outputRelativePath>
+    <result type="runapi:RenderContext">
+      <documentation>Root context. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

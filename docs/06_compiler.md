@@ -8,7 +8,7 @@ This document defines the compiler pipeline — the full translation path from B
 
 For the BML format see `02_mbml.md`.
 For the BML→BOM mapping algorithm see `13_bml_to_bom_mapping.md`.
-For compiler runtime (compile I/O model, NativeBlock model) see `14_compiler_runtime.md`.
+For compiler runtime (facade, scope, RenderContext, C1–C7) see `14_compiler_runtime.md` TOC → **SSOT** `org.blockml.bml.compiler.runtime.documentation.Introduction`.
 For the formal BOM object model see `12_bom_object_model.md`.
 For the MBOM object model see `03_mbom.md`.
 For the SCAD Renderer see `05_scad_renderer.md`.
@@ -24,7 +24,7 @@ The compiler is implemented across these packages:
 @blockml/parser                              — parse BML → BomDocument (types from @blockml/core)
 @blockml/serializer                          — serialize BomDocument → BML (roundtrip; V1 before compiler)
 @blockml/validator                           — validate BomDocument (Stage 2; after roundtrip gate)
-@blockml/compiler                            — Facade + Target Registry
+@blockml/compiler                            — Facade + Target Registry; SSOT org.blockml.bml.compiler.runtime.*
 @blockml/engine-maker                        — V1 CompilerEngine implementation (MakerEngine)
 @machineblocks/machineblocks-v3-scad-target  — RenderTarget + BlockProcessors
                                                (OUT OF SCOPE here — MachineBlocks mono-repo)
@@ -377,7 +377,7 @@ Dispatches each Block in the BOM to its Block Renderer within the resolved Targe
 
 ## Target Registry
 
-The Target Registry is the central registration point for all RenderTargets. It is part of `@blockml/compiler`. The compiler **does not register any targets by default** — see `14_compiler_runtime.md` — Target Bootstrap (C3).
+The Target Registry is the central registration point for all RenderTargets. It is part of `@blockml/compiler`. The compiler **does not register any targets by default**. **SSOT:** `org.blockml.bml.compiler.runtime.documentation.TargetRegistry` (C3) — see also `14_compiler_runtime.md` TOC.
 
 ### Registration
 
@@ -512,7 +512,7 @@ class MartianMicroAnyclosureTarget implements RenderTarget {
 
 ## Compiler Facade API
 
-`@blockml/compiler` exposes **`compileToOutput`** as the normative Stage-3 entry. See `14_compiler_runtime.md` — Compiler Facade API (C2) · Compile Scope (C7).
+`@blockml/compiler` exposes **`compileToOutput`** as the normative Stage-3 entry. **SSOT:** `org.blockml.bml.compiler.runtime.documentation.PublicApi` · `…capability.CompileToOutput` (C2) · Compile Scope (C7: `…CompileScopeRules`). Handbook TOC: `14_compiler_runtime.md`.
 
 ```typescript
 interface CompileInput {

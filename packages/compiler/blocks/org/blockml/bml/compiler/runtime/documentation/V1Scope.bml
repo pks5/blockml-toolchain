@@ -1,0 +1,49 @@
+<!--
+  Compiler Runtime Documentation — V1Scope
+  FQN: org.blockml.bml.compiler.runtime.documentation.V1Scope
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>V1Scope</name>
+  <type>rundocumentation:V1Scope</type>
+  <baseType>core:Documentation</baseType>
+  <is>What V1 delivers</is>
+
+  <documentation>V1 includes:
+    • compileToOutput / compileBmlToOutput; compileBomToOutput stub ignoring model
+    • In-memory Target Registry with no built-in targets
+    • Scope kinds document | library | corpus | auto with ScopeConfigHints merge
+    • RenderSession / RenderContext with child fork
+    • Opaque RenderOutput.files; CompilerResult envelope
+    • Diagnostics BML_UNKNOWN_TARGET, BML_TARGET_SCOPE_MISMATCH, BML_COMPILE_SCOPE_EMPTY
+    • Browser-safe package surface (no Node-only APIs in public contracts)
+
+    V1 does NOT include CLI targets[] bootstrap, file I/O, incremental cache (C5),
+    thumbnails (C6), or target-specific emit.</documentation>
+  <references>
+    <see type="rundocumentation:PublicApi" relation="ReadNext"></see>
+  </references>
+
+</block>

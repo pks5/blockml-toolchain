@@ -1,0 +1,46 @@
+<!--
+  Compiler Runtime Documentation — DesignDecisions
+  FQN: org.blockml.bml.compiler.runtime.documentation.DesignDecisions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>DesignDecisions</name>
+  <type>rundocumentation:DesignDecisions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Normative Phase C decisions C1–C7</is>
+
+  <documentation>C1 RenderContext = RenderSession plus forked per-node context; internal render API.
+    C2 Facade = compileToOutput(CompileRequest, …); compileBmlToOutput is document sugar;
+    compileBomToOutput is V1 stub ignoring model.
+    C3 Registry has no defaults; hosts register; targets[] bootstrap is CLI config (cross-ref).
+    C4 No mandatory input↔output mapping; RenderOutput opaque (files[] base).
+    C5 Incremental build is CLI-only (boundary); not a runtime capability.
+    C6 Thumbnails are CLI-only; not part of RenderOutput.
+    C7 Scope document | library | corpus | auto; accepts[]; opaque targetOptions.</documentation>
+  <references>
+    <see type="rundocumentation:PackageOwnership" relation="ReadNext"></see>
+  </references>
+
+</block>

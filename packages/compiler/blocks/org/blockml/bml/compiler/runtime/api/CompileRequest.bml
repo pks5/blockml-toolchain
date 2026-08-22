@@ -1,0 +1,42 @@
+<!--
+  Compiler Runtime API — CompileRequest
+  FQN: org.blockml.bml.compiler.runtime.api.CompileRequest
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator">
+
+  <name>CompileRequest</name>
+  <type>runapi:CompileRequest</type>
+  <baseType>runtime:RuntimeType</baseType>
+  <is>Primary Stage-3 request envelope</is>
+
+  <documentation>C2: scope plus opaque targetOptions typed per target package.</documentation>
+  <references>
+    <see type="rundocumentation:PublicApi" relation="SeeAlso" />
+  </references>
+  <properties>
+    <scope type="runapi:CompileScope"><documentation>Compile scope. (required)</documentation></scope>
+    <targetOptions type="type:Text"><documentation>Opaque options for the named target. (optional)</documentation></targetOptions>
+  </properties>
+
+</block>

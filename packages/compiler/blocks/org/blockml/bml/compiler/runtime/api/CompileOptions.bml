@@ -1,0 +1,45 @@
+<!--
+  Compiler Runtime API — CompileOptions
+  FQN: org.blockml.bml.compiler.runtime.api.CompileOptions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator">
+
+  <name>CompileOptions</name>
+  <type>runapi:CompileOptions</type>
+  <baseType>runtime:RuntimeType</baseType>
+  <is>Host options for compile helpers and compileToOutput</is>
+
+  <documentation>typeRegistry, paths, and session fields supplied by the host (often CLI).</documentation>
+  <references>
+    <see type="rundocumentation:PublicApi" relation="SeeAlso" />
+  </references>
+  <properties>
+    <typeRegistry type="type:Text"><documentation>Optional pre-built TypeRegistry. (optional)</documentation></typeRegistry>
+    <activeConfig type="type:Text"><documentation>Active config name for session. (optional)</documentation></activeConfig>
+    <outputBasePath type="type:Text"><documentation>Output base path for session. (optional)</documentation></outputBasePath>
+    <mbLibPath type="type:Text"><documentation>MachineBlocks lib path passthrough. (optional)</documentation></mbLibPath>
+    <rootDir type="type:Text"><documentation>Project root for bootstrap defaults. (optional)</documentation></rootDir>
+  </properties>
+
+</block>

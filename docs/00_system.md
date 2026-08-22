@@ -120,7 +120,7 @@ STL / 3MF
 
 **Every toolchain package is a BlockML node module.** A normal npm package (`package.json`) plus a `blocks/` folder. That folder is the **SSOT** for the package. Markdown in this repo is transitional and is **not** an implementation source — see [BlockML node packages](#blockml-node-packages), [Package Implementation Workflow](#package-implementation-workflow), and [BML Self-Description Roadmap](#bml-self-description-roadmap).
 
-**No mandatory input↔output mapping.** Render targets define output cardinality. See `14_compiler_runtime.md` — Compile I/O Model (C4).
+**No mandatory input↔output mapping.** Render targets define output cardinality. See `org.blockml.bml.compiler.runtime.documentation.CompileIO` (C4) · `14_compiler_runtime.md` TOC.
 
 **Dual CLI (universal + domain host).** `@blockml/cli` is domain-agnostic. Product domains may ship a thin CLI that registers their target(s). Recommended for MachineBlocks: `@machineblocks/cli` in the MachineBlocks mono-repo.
 
@@ -313,7 +313,7 @@ Engines are always independent packages implementing the CompilerEngine contract
 | 2nd+ | **FatBlock** | `@blockml/fatblock-target` | `fatblock` | One portable `.bml` (V1: folder pool under `--src` → root `embeddedBlocks`). **SSOT:** `org.blockml.bml.target.fatblock.documentation.Introduction` | Portable artifact; Stage 2 NS merge first (`19` D2); closure planned v2 | this repo |
 | Later | **SCAD (product)** | `@machineblocks/machineblocks-v3-scad-target` | `machineblocks-v3-scad` | `.scad` (+ maps, …) | MachineBlocks V3 product target | **MachineBlocks mono-repo** (out of scope here) |
 
-`bom.config.json` → **`targets[]` is V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3 · `15_dev_setup.md` Phase C. Universal CLI bootstraps **toolchain** targets; domain hosts register domain targets.
+`bom.config.json` → **`targets[]` is V1** (default `["blockdoc"]`) — see `07_cli.md` · CLI TargetBootstrap · `14_compiler_runtime.md` TOC (C3 boundary) · `15_dev_setup.md` Phase C. Universal CLI bootstraps **toolchain** targets; domain hosts register domain targets.
 
 See `15_dev_setup.md` — Phase C ordering · `12_bom_object_model.md` / `02_mbml.md` — Embedded Blocks (Inline Library).
 
@@ -444,7 +444,7 @@ Semantic validation (Stage 2). Browser and Node compatible. Independent of parse
 
 ### `@blockml/compiler`
 
-Facade and Target Registry. Browser and Node compatible.
+Facade and Target Registry. Browser and Node compatible. **SSOT:** `org.blockml.bml.compiler.runtime.documentation.Introduction` → ReadNext chain (C1–C7).
 
 ```text
 - Target Registry: registerTarget(target), getTarget(name)
@@ -454,7 +454,7 @@ Facade and Target Registry. Browser and Node compatible.
 - compileBmlToOutput(input, targetName, options?) — document-scope sugar
 ```
 
-See `14_compiler_runtime.md` — Compiler Facade API (C2) · Compile Scope (C7).
+See `14_compiler_runtime.md` (TOC) · BML `org.blockml.bml.compiler.runtime.*`.
 
 ### `@blockml/cli`
 
@@ -470,7 +470,7 @@ Planned (see org.blockml.bml.cli.documentation.ScopeExclusions):
 - init, new block, inspect, watch, activate-config, incremental cache, thumbnails
 ```
 
-See `14_compiler_runtime.md` — Target Bootstrap (C3) · compile facade (C2, C7).
+See `14_compiler_runtime.md` (TOC) · `org.blockml.bml.compiler.runtime.*` (C2, C7) · CLI Target Bootstrap.
 
 ### `@blockml/lsp` (V2, planned — package name **decided**)
 
@@ -899,7 +899,8 @@ Primary owner of each transitional Markdown file. Implement the owner → migrat
 | `01_bom_core.md`, `02_mbml.md`, `08_managed_object.md`, `10_expression_language.md`, `16_framework_base_types.md`, `17_type_system_bml.md`, `18_constraints_and_suggestions.md`, `19_definition_blocks_and_bml_xml.md`, `20_value_type_instance_configuration.md`, `21_constant_value_type.md`, `22_function_mapping.md`, `WOT_Reference.md` | `@blockml/core` (language already largely in Core BML; leftover MD still migrates here) |
 | `12_bom_object_model.md` | `@blockml/bom` (Urmodell interfaces, B26, bomEquals — not `@blockml/core`) |
 | `13_bml_to_bom_mapping.md` | Transitional TOC — parser SSOT → `@blockml/parser` BML; serializer SSOT → `@blockml/serializer` BML |
-| `06_compiler.md`, `14_compiler_runtime.md` | `@blockml/compiler` |
+| `06_compiler.md` (pipeline handbook; Stage-3 slices → BML) | `@blockml/compiler` — start `org.blockml.bml.compiler.runtime.documentation.Introduction` |
+| `14_compiler_runtime.md` (TOC → BML SSOT) | `@blockml/compiler` — `org.blockml.bml.compiler.runtime.*` |
 | `07_cli.md` | `@blockml/cli` BML — start `org.blockml.bml.cli.documentation.Introduction`; host pointers remain in `00` / `14` |
 | `03_mbom.md`, `04_types.md` | **OUT OF SCOPE here** → move to MachineBlocks mono-repo / `@machineblocks/core` BML |
 | `05_scad_renderer.md` | **OUT OF SCOPE here** → move to MachineBlocks mono-repo / `@machineblocks/*` SCAD target |
@@ -1031,7 +1032,7 @@ Type-level migration within V1 (`04_types.md` → BML, XSD deprecation) is speci
 07_cli.md              — universal CLI; dual CLI model; domain CLI is out of scope here
 12_bom_object_model.md — formal BOM data structures (BomDocument, BlockDefinition, CompositionNode)
 13_bml_to_bom_mapping.md — BML → BOM algorithm (parser implementation contract)
-14_compiler_runtime.md — compiler runtime (Facade, bootstrap, RenderContext, cache, thumbnails)
+14_compiler_runtime.md — TOC → org.blockml.bml.compiler.runtime.* (C1–C7; C5/C6 → CLI)
 15_dev_setup.md        — tooling, package layout, build, test, IDE setup (this repo = @blockml/* only)
 16_framework_base_types.md — framework base types as BML (abstract, final)
 17_type_system_bml.md  — ValueType, Language, Block hierarchy

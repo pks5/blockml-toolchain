@@ -1,0 +1,45 @@
+<!--
+  Compiler Runtime Documentation — RenderContextRules
+  FQN: org.blockml.bml.compiler.runtime.documentation.RenderContextRules
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>RenderContextRules</name>
+  <type>rundocumentation:RenderContextRules</type>
+  <baseType>core:Documentation</baseType>
+  <is>RenderSession and RenderContext (C1)</is>
+
+  <documentation>RenderSession is immutable per compile after BuildRenderSession.
+    RenderContext holds session + blockFqn + outputRelativePath; child(overrides) forks a new
+    context sharing the same session.
+    CreateRenderContext defaults empty FQN and relative path for the root call into target.render.
+    PropertyResolver / per-node fork patterns used by domain renderers build on this contract.</documentation>
+  <references>
+    <see type="rundocumentation:Diagnostics" relation="ReadNext"></see>
+    <see type="runcap:BuildRenderSession" relation="SeeAlso"></see>
+    <see type="runcap:CreateRenderContext" relation="SeeAlso"></see>
+  </references>
+
+</block>
