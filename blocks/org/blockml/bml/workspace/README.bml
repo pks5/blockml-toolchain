@@ -1,0 +1,62 @@
+<!--
+  BlockML Workspace — README
+  FQN: org.blockml.bml.workspace.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:workspace="org.blockml.bml.workspace"
+  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
+
+  <name>README</name>
+  <type>workspace:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the BlockML workspace library</is>
+
+  <documentation>
+    This monorepo hosts the BlockML toolchain (@blockml/* only) — the domain-agnostic
+    CLI and packages that turn BML into a typed BOM and render-target outputs.
+
+    This library (org.blockml.bml.workspace.*) is the monorepo documentation hub and
+    SSOT entry. It depends on each package BML library; packages never depend back here.
+
+    Start reading at org.blockml.bml.workspace.documentation.Introduction (ReadNext chain).
+
+    Package detail lives in the linked libraries under packages/*/blocks/.
+    Markdown under docs/ is transitional holding text.
+  </documentation>
+
+  <references>
+    <see type="wsdocumentation:Introduction" relation="ReadFirst" />
+    <see type="wsdocumentation:PackageMap" relation="SeeAlso" />
+    <see type="wsdocumentation:ArchitectureOverview" relation="SeeAlso" />
+    <see type="wsdocumentation:LinkingRules" relation="SeeAlso" />
+    <see type="bom:README" relation="SeeAlso" />
+    <see type="blockdoc:README" relation="SeeAlso" />
+    <see type="cli:README" relation="SeeAlso" />
+    <see type="fatblock:README" relation="SeeAlso" />
+    <see type="framework:README" relation="SeeAlso" />
+    <see type="parser:README" relation="SeeAlso" />
+    <see type="runtime:README" relation="SeeAlso" />
+    <see type="serializer:README" relation="SeeAlso" />
+    <see type="validator:README" relation="SeeAlso" />
+    <see type="xsd:README" relation="SeeAlso" />
+  </references>
+
+</block>

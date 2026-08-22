@@ -1,0 +1,46 @@
+<!--
+  Workspace Documentation — Introduction
+  FQN: org.blockml.bml.workspace.documentation.Introduction
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:workspace="org.blockml.bml.workspace"
+  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Introduction</name>
+  <type>wsdocumentation:Introduction</type>
+  <baseType>core:Documentation</baseType>
+  <is>Purpose and scope of the BlockML monorepo workspace library</is>
+
+  <documentation>This repository is the BlockML toolchain monorepo. It authors @blockml/*
+    packages only — language/BOM, parser, serializer, validator, framework, compiler
+    runtime, universal CLI (blockml), and toolchain render targets (blockdoc, xsd,
+    fatblock). Domain products (e.g. MachineBlocks) live in separate repos.
+
+    This workspace library (org.blockml.bml.workspace.*) is the monorepo documentation
+    hub and SSOT entry for humans and LLMs. It links each package BML library via
+    Library.dependencies (workspace → packages only). Per-package contracts remain
+    in those libraries; this hub does not re-export their blocks.
+
+    Root README.md points here. Transitional Markdown under docs/ will migrate into
+    package and workspace BML over time.</documentation>
+
+  <references>
+    <see type="wsdocumentation:PackageMap" relation="ReadNext"></see>
+    <see type="wsdocumentation:ArchitectureOverview" relation="SeeAlso"></see>
+    <see type="wsdocumentation:LinkingRules" relation="SeeAlso"></see>
+  </references>
+
+</block>

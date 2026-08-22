@@ -1,0 +1,101 @@
+<!--
+  BlockML Workspace Library
+  FQN: org.blockml.bml.workspace.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:workspace="org.blockml.bml.workspace"
+  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation">
+
+  <name>Library</name>
+  <type>workspace:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>The BlockML monorepo workspace library catalog</is>
+
+  <documentation>
+    Documentation and SSOT hub for the BlockML toolchain monorepo. Links package
+    BML libraries (workspace → packages only). Membership is defined exclusively
+    by this blocks list. Package libraries must not depend back on this library.
+  </documentation>
+
+  <version>0.1.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>BlockML workspace monorepo library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <workspace:README />
+      </composition>
+    </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+      <composition>
+        <bom:Library />
+      </composition>
+      <composition>
+        <blockdoc:Library />
+      </composition>
+      <composition>
+        <cli:Library />
+      </composition>
+      <composition>
+        <fatblock:Library />
+      </composition>
+      <composition>
+        <framework:Library />
+      </composition>
+      <composition>
+        <parser:Library />
+      </composition>
+      <composition>
+        <runtime:Library />
+      </composition>
+      <composition>
+        <serializer:Library />
+      </composition>
+      <composition>
+        <validator:Library />
+      </composition>
+      <composition>
+        <xsd:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition><workspace:WorkspaceType /></composition>
+      <composition><wsdocumentation:Introduction /></composition>
+      <composition><wsdocumentation:PackageMap /></composition>
+      <composition><wsdocumentation:ArchitectureOverview /></composition>
+      <composition><wsdocumentation:ReadingOrder /></composition>
+      <composition><wsdocumentation:LinkingRules /></composition>
+    </blocks>
+  </aggregations>
+
+</block>

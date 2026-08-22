@@ -5,6 +5,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/workspace/Library.bml"
+  },
   "dependencies": {
     "@blockml/core": "^1.0.3",
     "@machineblocks/core": "^3.0.0-A1"

@@ -1,0 +1,53 @@
+<!--
+  Workspace Documentation — ReadingOrder
+  FQN: org.blockml.bml.workspace.documentation.ReadingOrder
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:workspace="org.blockml.bml.workspace"
+  xmlns:wsdocumentation="org.blockml.bml.workspace.documentation"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ReadingOrder</name>
+  <type>wsdocumentation:ReadingOrder</type>
+  <baseType>core:Documentation</baseType>
+  <is>Recommended reading path across package libraries</is>
+
+  <documentation>Suggested order for onboarding (each library README → Introduction chain):
+
+    1. This hub — workspace Introduction → PackageMap → ArchitectureOverview
+    2. org.blockml.bml (core language) — @blockml/core
+    3. org.blockml.bml.bom — Urmodell types
+    4. org.blockml.bml.compiler.parser + serializer — BML ↔ BOM
+    5. org.blockml.bml.framework + validator — Stage-2 utilities and validation
+    6. org.blockml.bml.compiler.runtime — compileToOutput / Target Registry
+    7. org.blockml.bml.cli — validate / compile host CLI
+    8. Target libraries as needed — blockdoc, xsd, fatblock
+
+    Dive into a package library only for that package’s contracts; return here for
+    monorepo orientation.</documentation>
+
+  <references>
+    <see type="wsdocumentation:LinkingRules" relation="ReadNext"></see>
+    <see type="bom:Library" relation="SeeAlso"></see>
+    <see type="cli:Library" relation="SeeAlso"></see>
+  </references>
+
+</block>
