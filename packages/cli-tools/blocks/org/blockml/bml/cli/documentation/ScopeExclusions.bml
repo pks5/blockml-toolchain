@@ -1,0 +1,40 @@
+<!--
+  CLI Documentation — ScopeExclusions
+  FQN: org.blockml.bml.cli.documentation.ScopeExclusions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ScopeExclusions</name>
+  <type>clidocumentation:ScopeExclusions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Explicitly out of V1 CLI library scope</is>
+
+  <documentation>Not V1 in this package (may exist in MD vision only):
+    • init, new block, inspect, watch, activate-config commands
+    • bom-cli.config.json command renaming
+    • Incremental build cache .bom-cache/ (C5)
+    • Thumbnail generation OpenSCAD+Sharp (C6)
+    • resolveOpenScad.ts, resolveMbLib.ts
+    • --force, --no-xsd flags
+    • machineblocks-v3-scad target registration
+    • Config profiles (activeConfig)
+    • Codegen from BML to TypeScript (structural SSOT only in V1)</documentation>
+
+</block>

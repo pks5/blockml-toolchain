@@ -1,0 +1,44 @@
+<!--
+  CLI Documentation — RuntimeBootstrap
+  FQN: org.blockml.bml.cli.documentation.RuntimeBootstrap
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>RuntimeBootstrap</name>
+  <type>clidocumentation:RuntimeBootstrap</type>
+  <baseType>core:Documentation</baseType>
+  <is>Fixed bootstrap order before compile/watch</is>
+
+  <documentation>Before compile (validate skips target bootstrap):
+
+    1. load bom.config.json (LoadConfig / CLI1–CLI2)
+    2. bootstrapTypeRegistry via BootstrapProjectTypeRegistry (CLI6)
+    3. bootstrapTargets from config.targets[] (CLI3–CLI5) — compile only
+    4. build CompileRequest from target kind + flags + config
+    5. compileToOutput(request, target, options) — @blockml/compiler
+    6. write RenderOutput.files[] to disk (WriteOutputFiles CLI7–CLI8)
+
+    Incremental cache (C5) and thumbnails (C6) are CLI-later concerns — not V1.
+    See org.blockml.bml.compiler.runtime for compile facade detail.</documentation>
+  <references>
+    <see type="clidocumentation:Commands" relation="ReadNext"></see>
+  </references>
+
+</block>

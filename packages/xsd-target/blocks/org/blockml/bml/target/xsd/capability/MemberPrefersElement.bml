@@ -1,0 +1,43 @@
+<!--
+  XSD Capability — MemberPrefersElement
+  FQN: org.blockml.bml.target.xsd.capability.MemberPrefersElement
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>MemberPrefersElement</name>
+  <type>xsdcap:MemberPrefersElement</type>
+  <baseType>core:Capability</baseType>
+  <is>Decide whether a member becomes an element particle</is>
+
+  <documentation>XSD10: true if xmlRendering.kinds includes element or raw includes element; false if sole kind attribute or raw equals attribute; aggregations and associations true; default true. Attribute-only members omitted from schema.</documentation>
+
+  <references>
+    <see type="xsddocumentation:ParticleMappingRules" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <member type="type:Text">
+      <documentation>MemberDefinition. (required)</documentation>
+    </member>
+    <result type="type:Boolean">
+      <documentation>true if emit as xs:element particle. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

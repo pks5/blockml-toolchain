@@ -1,0 +1,42 @@
+<!--
+  CLI Documentation — V1Scope
+  FQN: org.blockml.bml.cli.documentation.V1Scope
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>V1Scope</name>
+  <type>clidocumentation:V1Scope</type>
+  <baseType>core:Documentation</baseType>
+  <is>V1 implemented vs planned commands</is>
+
+  <documentation>V1 implemented:
+    • blockml validate [file] [--all] [--src] [--libraries]
+    • blockml compile [file] target | blockml compile target
+    • Targets: blockdoc (default), xsd, fatblock
+    • Flags: --out, --src, --libraries, --include (fatblock), --all (validate only meaningful)
+
+    V1 not implemented (documented in ScopeExclusions):
+    init, new block, inspect, watch, activate-config, --force cache skip, --no-xsd,
+    incremental .bom-cache, thumbnails, OpenSCAD resolver, bom-cli.config.json renaming.</documentation>
+  <references>
+    <see type="clidocumentation:PublicApi" relation="ReadNext"></see>
+  </references>
+
+</block>

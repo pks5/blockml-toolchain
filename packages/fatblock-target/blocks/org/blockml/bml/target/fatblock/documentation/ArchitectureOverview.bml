@@ -1,0 +1,53 @@
+<!--
+  FatBlock Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.target.fatblock.documentation.ArchitectureOverview
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ArchitectureOverview</name>
+  <type>fbdocumentation:ArchitectureOverview</type>
+  <baseType>core:Documentation</baseType>
+  <is>Module map and assemble pipeline</is>
+
+  <documentation>Entry: fbcap:Render (FatBlockTarget.render)
+    → ResolveOptions
+    → AssembleFatDocument (RootFqnsByFilePath, CollectCandidateFqns, FilterByIncludes,
+      CloneBlockDefinition, MergeNamespaceBindings)
+    → SerializeFatDocument
+    → FatOutputBasename
+
+    ValidateRequest runs before render when the host calls it; requires srcDir.
+
+    TypeScript module map:
+    • options.ts → ResolveOptions, FatBlockOptions
+    • collect-candidates.ts → RootFqnsByFilePath, CollectCandidateFqns
+    • filter-includes.ts → MatchesIncludePattern, FilterByIncludes
+    • clone-block.ts → CloneBlockDefinition
+    • merge-namespace-bindings.ts → MergeNamespaceBindings
+    • assemble-fat-document.ts → AssembleFatDocument, SerializeFatDocument
+    • fat-output-path.ts → FatOutputBasename
+    • fatblock-target.ts → Render, ValidateRequest</documentation>
+  <references>
+    <see type="fbdocumentation:V1Scope" relation="ReadNext"></see>
+  </references>
+
+</block>

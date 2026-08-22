@@ -298,7 +298,7 @@ Engines are always independent packages implementing the CompilerEngine contract
 
 ## XSD Schema Structure
 
-> **Architecture decision:** **XSD files are Render Target output**, not a Stage-1 parser dependency. The **XSD Render Target** (Phase C; package `@blockml/xsd-target`, registry name `"xsd"`) generates `.xsd` from BML / Definition meta-model. **Validating** authored BML against those schemas is enabled only after that target exists — and must remain **always disableable** via CLI `--no-xsd` **and** `bom.config.json` → `xsdValidation: false` (see `07_cli.md` — XSD validation escape hatch), so intentional language/meta changes can still regenerate schemas when they no longer match the previous `.xsd`.
+> **Architecture decision:** **XSD files are Render Target output**, not a Stage-1 parser dependency. The **XSD Render Target** (Phase C; package `@blockml/xsd-target`, registry name `"xsd"`) generates `.xsd` from BML / Definition meta-model. **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction`. **Validating** authored BML against those schemas is enabled only after that target exists — and must remain **always disableable** via CLI `--no-xsd` **and** `bom.config.json` → `xsdValidation: false` (see `07_cli.md` — XSD validation escape hatch / CLI ScopeExclusion), so intentional language/meta changes can still regenerate schemas when they no longer match the previous `.xsd`.
 
 ### Planned toolchain Render Targets (BlockDoc-first)
 
@@ -309,8 +309,8 @@ Engines are always independent packages implementing the CompilerEngine contract
 | Order | Target | Package | Registry / CLI `<target>` | Minimal output | Role | Scope |
 |---|---|---|---|---|---|---|
 | **1st** | **BlockDoc** | `@blockml/blockdoc-target` | `blockdoc` | Static HTML site (package/FQN hierarchy). **SSOT:** `org.blockml.bml.target.blockdoc.documentation.Introduction`. Input: library/corpus scope — see `14` C7 | **V1 control gate** — human/LLM review of the block corpus | this repo |
-| 2nd+ | **XSD** | `@blockml/xsd-target` | `xsd` | `.xsd` artifacts | **Universal** `bml.xsd` + optional **domain** XSDs; particle shape aligns with **`bml:xml`** | this repo |
-| 2nd+ | **FatBlock** | `@blockml/fatblock-target` | `fatblock` | One `.bml` with transitive deps in root `<embeddedBlocks>` | Portable artifact; registry closure + embed model; Stage 2 first (`19` D2) | this repo |
+| 2nd+ | **XSD** | `@blockml/xsd-target` | `xsd` | `.xsd` artifacts (`bml.xsd`, optional `types.xsd`/`service.xsd`, root `catalog.xml`). **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction` | **Universal** `bml.xsd` + optional **domain** vocabularies; particle shape aligns with **`bml:xml`** | this repo |
+| 2nd+ | **FatBlock** | `@blockml/fatblock-target` | `fatblock` | One portable `.bml` (V1: folder pool under `--src` → root `embeddedBlocks`). **SSOT:** `org.blockml.bml.target.fatblock.documentation.Introduction` | Portable artifact; Stage 2 NS merge first (`19` D2); closure planned v2 | this repo |
 | Later | **SCAD (product)** | `@machineblocks/machineblocks-v3-scad-target` | `machineblocks-v3-scad` | `.scad` (+ maps, …) | MachineBlocks V3 product target | **MachineBlocks mono-repo** (out of scope here) |
 
 `bom.config.json` → **`targets[]` is V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3 · `15_dev_setup.md` Phase C. Universal CLI bootstraps **toolchain** targets; domain hosts register domain targets.
@@ -337,11 +337,14 @@ MachineBlocks (machineblocks.com):
 
 ### Schema Files
 
+**Normative emit layout (BlockML):** `org.blockml.bml.target.xsd.documentation.CatalogAndOutputLayout` (library SSOT). Summary:
+
 ```text
 blockml.org schemas (XSD target output, default outDir schemas/):
   bml.xsd              ← BML document structure (all <block> roots: composable, types, Library, …)
   types.xsd            ← org.blockml.bml.type.* primitives (optional; filename plural; maps to singular .type package)
   service.xsd          ← org.blockml.bml.service.* hierarchy (optional)
+  catalog.xml          ← OASIS catalog (rootFiles; maps NS → ./schemas/*.xsd)
 
 machineblocks.com schemas (generated from `@machineblocks/core` BML; packaging with the SCAD target when it exists):
   schemas/machineblocks/
@@ -455,22 +458,19 @@ See `14_compiler_runtime.md` — Compiler Facade API (C2) · Compile Scope (C7).
 
 ### `@blockml/cli`
 
-Node.js-only CLI tools.
+Node.js-only CLI tools. **SSOT:** `org.blockml.bml.cli.documentation.Introduction` → ReadNext chain.
 
 ```text
-- blockml new block <fqn> [--format bml]   # XML only; JSON authoring not planned
-- blockml compile <file> <target>          # document targets
-- blockml compile <target>                 # library/corpus targets (blockdoc, xsd)
-- blockml compile --all <target>           # document targets only
-- blockml validate <file>
-- blockml inspect <file>
-- blockml watch [--src <dir>] [--out <dir>] <target>
-- blockml activate-config <profileName>
-- bootstrapTypeRegistry() + bootstrapTargets() before compile/watch (see 14_compiler_runtime.md)
-- incrementalBuild.ts — SHA-256 cache in .bom-cache/ (C5)
-- OpenSCAD executable resolver (for SCAD target)
-- Thumbnail renderer (Sharp-based, Node-only, for SCAD target)
+V1 implemented:
+- blockml validate [file] [--all] [--src] [--libraries]
+- blockml compile [file] <target> | blockml compile <target>   # blockdoc | xsd | fatblock
+- bootstrapProjectTypeRegistry + bootstrapTargets before compile
+
+Planned (see org.blockml.bml.cli.documentation.ScopeExclusions):
+- init, new block, inspect, watch, activate-config, incremental cache, thumbnails
 ```
+
+See `14_compiler_runtime.md` — Target Bootstrap (C3) · compile facade (C2, C7).
 
 ### `@blockml/lsp` (V2, planned — package name **decided**)
 
@@ -900,11 +900,12 @@ Primary owner of each transitional Markdown file. Implement the owner → migrat
 | `12_bom_object_model.md` | `@blockml/bom` (Urmodell interfaces, B26, bomEquals — not `@blockml/core`) |
 | `13_bml_to_bom_mapping.md` | Transitional TOC — parser SSOT → `@blockml/parser` BML; serializer SSOT → `@blockml/serializer` BML |
 | `06_compiler.md`, `14_compiler_runtime.md` | `@blockml/compiler` |
-| `07_cli.md` | `@blockml/cli` |
+| `07_cli.md` | `@blockml/cli` BML — start `org.blockml.bml.cli.documentation.Introduction`; host pointers remain in `00` / `14` |
 | `03_mbom.md`, `04_types.md` | **OUT OF SCOPE here** → move to MachineBlocks mono-repo / `@machineblocks/core` BML |
 | `05_scad_renderer.md` | **OUT OF SCOPE here** → move to MachineBlocks mono-repo / `@machineblocks/*` SCAD target |
 | BlockDoc (migrated) | `@blockml/blockdoc-target` BML — start `org.blockml.bml.target.blockdoc.documentation.Introduction`; host pointers remain in `00` / `06` / `07` / `14` |
-| XSD / FatBlock slices in `00` / `06` / `14` / `19` | `@blockml/xsd-target`, `@blockml/fatblock-target` |
+| XSD (migrated) | `@blockml/xsd-target` BML — start `org.blockml.bml.target.xsd.documentation.Introduction`; host pointers remain in `00` / `06` / `14` / `15` / `19` |
+| FatBlock (migrated) | `@blockml/fatblock-target` BML — start `org.blockml.bml.target.fatblock.documentation.Introduction`; host pointers remain in `00` / `06` / `14` / `19` |
 | Engine slices in `00` / `06` / `14` | `@blockml/engine-maker` |
 | Language Server slices in `01` | `@blockml/lsp` |
 | `00_system.md`, `15_dev_setup.md` | Split into owning packages last; remaining repo handbook until all packages exist |

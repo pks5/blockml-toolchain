@@ -1,0 +1,40 @@
+<!--
+  CLI Documentation — ExitCodesAndDiagnostics
+  FQN: org.blockml.bml.cli.documentation.ExitCodesAndDiagnostics
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ExitCodesAndDiagnostics</name>
+  <type>clidocumentation:ExitCodesAndDiagnostics</type>
+  <baseType>core:Documentation</baseType>
+  <is>Exit codes and diagnostic formatting</is>
+
+  <documentation>CLI18 exit codes:
+    • 0 — success
+    • 1 — compiler/parser/validator errors (diagnostics with severity error)
+    • 2 — configuration error (unknown command, missing file, unsupported target, bootstrap failure)
+
+    CLI17 diagnostic format: severity code file:line — message
+    Printed to stderr; runCli joins lines with newlines.</documentation>
+  <references>
+    <see type="clidocumentation:DualCliModel" relation="ReadNext"></see>
+  </references>
+
+</block>

@@ -1,0 +1,33 @@
+<!--
+  FatBlock — FatblockType
+  FQN: org.blockml.bml.target.fatblock.FatblockType
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>FatblockType</name>
+  <type>fatblock:FatblockType</type>
+  <baseType>core:Entity</baseType>
+  <is>Abstract marker for FatBlock implementation data-structure blocks</is>
+
+  <documentation>All org.blockml.bml.target.fatblock.api|config.* types extend this marker. Distinct from bom:UrmodellType and core:Capability.</documentation>
+  <abstract>true</abstract>
+
+</block>

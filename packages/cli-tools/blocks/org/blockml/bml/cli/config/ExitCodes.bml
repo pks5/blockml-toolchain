@@ -1,0 +1,35 @@
+<!--
+  CLI Config — ExitCodes
+  FQN: org.blockml.bml.cli.config.ExitCodes
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ExitCodes</name>
+  <type>cliconfig:ExitCodes</type>
+  <baseType>cli:CliType</baseType>
+  <is>Process exit code meanings</is>
+
+  <documentation>CLI18 exit code matrix.</documentation>
+  <properties>
+    <success type="type:Integer"><documentation>0 — command completed without errors.</documentation></success>
+    <compilerError type="type:Integer"><documentation>1 — parser/validator/compiler diagnostics with severity error.</documentation></compilerError>
+    <configError type="type:Integer"><documentation>2 — unknown command, missing file, unsupported target, bootstrap failure.</documentation></configError>
+  </properties>
+
+</block>

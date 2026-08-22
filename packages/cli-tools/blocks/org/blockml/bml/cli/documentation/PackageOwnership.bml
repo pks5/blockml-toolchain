@@ -1,0 +1,44 @@
+<!--
+  CLI Documentation — PackageOwnership
+  FQN: org.blockml.bml.cli.documentation.PackageOwnership
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PackageOwnership</name>
+  <type>clidocumentation:PackageOwnership</type>
+  <baseType>core:Documentation</baseType>
+  <is>Who owns CLI vs compiler vs targets</is>
+
+  <documentation>@blockml/cli owns: this BML library; cli.ts orchestration; bom.config.json subset;
+    bootstrapTargets; writeOutputFiles; V1 validate/compile commands.
+
+    @blockml/compiler owns: compileToOutput, CompileRequest, scope auto resolution, Target Registry API.
+
+    @blockml/framework owns: bootstrapTypeRegistry, TypeRegistry.
+
+    Target packages own: RenderTarget impl, targetOptions types, render algorithms.
+
+    docs/07_cli.md — transitional pointer only after migration.
+    MachineBlocks SCAD/thumbnails — @machineblocks/cli (out of scope).</documentation>
+  <references>
+    <see type="clidocumentation:ScopeExclusions" relation="ReadNext"></see>
+  </references>
+
+</block>

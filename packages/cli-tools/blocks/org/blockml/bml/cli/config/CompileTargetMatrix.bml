@@ -1,0 +1,35 @@
+<!--
+  CLI Config — CompileTargetMatrix
+  FQN: org.blockml.bml.cli.config.CompileTargetMatrix
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>CompileTargetMatrix</name>
+  <type>cliconfig:CompileTargetMatrix</type>
+  <baseType>cli:CliType</baseType>
+  <is>Target-specific CLI argument requirements (V1)</is>
+
+  <documentation>CLI19 target matrix. Document targets require file; library/corpus omit file; --all ignored for corpus targets.</documentation>
+  <properties>
+    <blockdoc type="type:Text"><documentation>file omit; --all no; scope auto libraries[] then srcDir.</documentation></blockdoc>
+    <xsd type="type:Text"><documentation>file omit; --all no; scope auto libraries[]; default outDir schemas.</documentation></xsd>
+    <fatblock type="type:Text"><documentation>file required; --src required; document scope; single output file beside host.</documentation></fatblock>
+  </properties>
+
+</block>

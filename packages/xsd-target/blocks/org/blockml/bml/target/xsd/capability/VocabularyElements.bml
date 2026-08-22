@@ -1,0 +1,42 @@
+<!--
+  XSD Capability — VocabularyElements
+  FQN: org.blockml.bml.target.xsd.capability.VocabularyElements
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>VocabularyElements</name>
+  <type>xsdcap:VocabularyElements</type>
+  <baseType>core:Capability</baseType>
+  <is>List sorted short names under an FQN prefix</is>
+
+  <documentation>Shared helper for types/service emit: filter registry.keys by prefix; take last segment after dot; sort.</documentation>
+
+  <properties>
+    <typeRegistry type="type:Text">
+      <documentation>TypeRegistry. (required)</documentation>
+    </typeRegistry>
+    <prefix type="type:Text">
+      <documentation>FQN prefix. (required)</documentation>
+    </prefix>
+    <result type="type:Text">
+      <documentation>Sorted short names. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

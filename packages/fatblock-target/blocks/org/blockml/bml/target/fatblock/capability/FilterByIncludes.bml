@@ -1,0 +1,48 @@
+<!--
+  FatBlock Capability — FilterByIncludes
+  FQN: org.blockml.bml.target.fatblock.capability.FilterByIncludes
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>FilterByIncludes</name>
+  <type>fbcap:FilterByIncludes</type>
+  <baseType>core:Capability</baseType>
+  <is>Filter FQN list by include patterns</is>
+
+  <documentation>FB7: empty/omitted patterns keep all; otherwise OR across patterns via MatchesIncludePattern.</documentation>
+
+  <references>
+    <see type="fbdocumentation:CandidateCollection" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <fqns type="type:Text">
+      <documentation>Candidate list. (required)</documentation>
+    </fqns>
+    <patterns type="type:Text">
+      <documentation>Include patterns. (optional)</documentation>
+    </patterns>
+    <result type="type:Text">
+      <documentation>Filtered FQN list. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

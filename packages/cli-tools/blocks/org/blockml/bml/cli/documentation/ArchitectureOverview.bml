@@ -1,0 +1,50 @@
+<!--
+  CLI Documentation — ArchitectureOverview
+  FQN: org.blockml.bml.cli.documentation.ArchitectureOverview
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ArchitectureOverview</name>
+  <type>clidocumentation:ArchitectureOverview</type>
+  <baseType>core:Documentation</baseType>
+  <is>Module map and command flow</is>
+
+  <documentation>Entry: clicap:RunCli (runCli) → ParseArgs → dispatch.
+
+    validate flow: LoadConfig → BootstrapProjectTypeRegistry → compileBmlToBom (single file)
+    or validateRegistryDocuments (corpus).
+
+    compile flow (library/corpus): LoadConfig → BootstrapTargets → BootstrapProjectTypeRegistry
+    → compileToOutput(scope auto) → WriteOutputFiles.
+
+    compile flow (fatblock): LoadConfig → BootstrapTargets → separate registry bootstrap
+    → compileToOutput(document) → write single file beside host.
+
+    TypeScript module map:
+    • cli.ts → RunCli, ParseArgs, RunValidate, RunCompile, RunCompileFatBlock, FormatDiagnostic
+    • load-config.ts → LoadConfig, api/BomConfig
+    • bootstrap-targets.ts → BootstrapTargets
+    • bootstrap-type-registry.ts → BootstrapProjectTypeRegistry
+    • write-output.ts → WriteOutputFiles</documentation>
+  <references>
+    <see type="clidocumentation:V1Scope" relation="ReadNext"></see>
+  </references>
+
+</block>

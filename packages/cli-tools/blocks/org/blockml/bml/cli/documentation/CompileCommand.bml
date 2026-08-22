@@ -1,0 +1,45 @@
+<!--
+  CLI Documentation — CompileCommand
+  FQN: org.blockml.bml.cli.documentation.CompileCommand
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>CompileCommand</name>
+  <type>clidocumentation:CompileCommand</type>
+  <baseType>core:Documentation</baseType>
+  <is>blockml compile specification</is>
+
+  <documentation>Syntax (V1 minimal CLI):
+    blockml compile blockdoc|xsd [--out dir] [--src dir] [--libraries a,b]
+    blockml compile file.bml fatblock --src dir [--include a,b] [--out dir]
+
+    Default target: blockdoc (CLI12).
+    Default outDir: doc (blockdoc), schemas (xsd), config.outDir or beside host (fatblock) (CLI13).
+
+    Unsupported target in V1 CLI → exit 2.
+    fatblock without file or --src → exit 2 (CLI14).
+
+    Library/corpus targets: one compileToOutput per invocation; --all ignored (CLI19).
+    Document target fatblock: writes Host.fat.bml with embeddedBlocks.</documentation>
+  <references>
+    <see type="clidocumentation:ValidateCommand" relation="ReadNext"></see>
+  </references>
+
+</block>

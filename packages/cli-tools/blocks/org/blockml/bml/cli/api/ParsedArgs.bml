@@ -1,0 +1,40 @@
+<!--
+  CLI API — ParsedArgs
+  FQN: org.blockml.bml.cli.api.ParsedArgs
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ParsedArgs</name>
+  <type>cliapi:ParsedArgs</type>
+  <baseType>cli:CliType</baseType>
+  <is>Result of parseArgs(argv)</is>
+
+  <documentation>CLI9: parsed command-line arguments from process.argv slice.</documentation>
+  <properties>
+    <command type="type:Text"><documentation>validate | compile. (optional)</documentation></command>
+    <target type="type:Text"><documentation>Registry name e.g. blockdoc, xsd, fatblock. (optional)</documentation></target>
+    <file type="type:Text"><documentation>Path to .bml file for document targets or validate. (optional)</documentation></file>
+    <all type="type:Boolean"><documentation>--all flag for validate or document compile. (optional)</documentation></all>
+    <outDir type="type:Text"><documentation>--out override. (optional)</documentation></outDir>
+    <srcDir type="type:Text"><documentation>--src override. (optional)</documentation></srcDir>
+    <libraries type="type:Text"><documentation>--libraries comma-separated override. (optional)</documentation></libraries>
+    <include type="type:Text"><documentation>--include comma-separated for fatblock. (optional)</documentation></include>
+  </properties>
+
+</block>

@@ -468,9 +468,9 @@ Compile scope separates **what to render** from **what types exist** (TypeRegist
 
 | Kind | Meaning | Typical targets |
 |---|---|---|
-| `document` | One `.bml` file | `machineblocks-v3-scad`, `fatblock` (root + closure) |
+| `document` | One `.bml` file | `machineblocks-v3-scad`, `fatblock` (host + `--src` peer pool) |
 | `library` | One or more `Library.bml` roots + dependency closure | `blockdoc`, `xsd` |
-| `corpus` | Directory roots (`srcDir`, `blocks/` trees) | `blockdoc` (fallback) |
+| `corpus` | Directory roots (`srcDir`, `blocks/` trees) | `blockdoc`, `xsd` |
 | `auto` | Resolve from request fields, then config (see below) | CLI default |
 
 ### Scope resolution (`kind: "auto"`)
@@ -491,8 +491,8 @@ Compile scope separates **what to render** from **what types exist** (TypeRegist
 | Target | `accepts` | Primary scope payload |
 |---|---|---|
 | `blockdoc` | `library`, `corpus`, `auto` | `libraries[]` and/or `roots[]` |
-| `xsd` | `library`, `auto` | Definition / domain `Library.bml` roots |
-| `fatblock` | `document` | `document` (+ TypeRegistry closure internally) |
+| `xsd` | `library`, `corpus`, `auto` | Definition / domain `Library.bml` roots and/or corpus roots — **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction` |
+| `fatblock` | `document` | `document` + `targetOptions.srcDir` peer pool — **SSOT:** `org.blockml.bml.target.fatblock.documentation.Introduction` |
 | `machineblocks-v3-scad` | `document` | `document` |
 
 CLI behaviour:
@@ -527,6 +527,17 @@ Example `bom.config.json`:
   }
 }
 ```
+
+### XSD target (`@blockml/xsd-target`)
+
+**BML library is SSOT:** `packages/xsd-target/blocks/org/blockml/bml/target/xsd/` — start at `org.blockml.bml.target.xsd.documentation.Introduction` → ReadNext chain (particles, vocabularies, catalog, XSD1–XSD18).
+
+TypeScript in `packages/xsd-target/src/` implements it. Host wiring only here:
+
+- `accepts`: `library` | `corpus` | `auto` (see matrix above)
+- Opaque `CompileRequest.targetOptions` → typed as `XsdOptions` in the target package
+- CLI default `outDir` for this target is `schemas/`; `catalog.xml` via `rootFiles`
+- Authoring XSD validation (`--no-xsd` / `xsdValidation`) is CLI-owned — not part of this target
 
 ### Scope diagnostics
 
@@ -567,7 +578,7 @@ export function bootstrapTargets(config: { targets?: string[] }): void {
 | Name | Package | V1 role |
 |---|---|---|
 | `blockdoc` | `@blockml/blockdoc-target` | **First Stage-3 gate** — browseable corpus HTML for control / review |
-| `xsd` | `@blockml/xsd-target` | After BlockDoc control path works |
+| `xsd` | `@blockml/xsd-target` | After BlockDoc; **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction` |
 | `fatblock` | `@blockml/fatblock-target` | After / beside XSD |
 | `machineblocks-v3-scad` | `@machineblocks/machineblocks-v3-scad-target` | Primary **product** target — after toolchain control |
 
@@ -615,13 +626,15 @@ blockml inspect    — Urmodell dump only; no target required
 
 ### Bootstrap order (CLI)
 
+**CLI-owned steps SSOT:** `org.blockml.bml.cli.documentation.RuntimeBootstrap` (load config → TypeRegistry → targets → compile → write files).
+
 ```text
 1. load bom.config.json
-2. bootstrapTypeRegistry({ srcDir, libraries, mbLibPath, bmlExtensions })   — B5
-3. bootstrapTargets()                                                          — C3
+2. bootstrapTypeRegistry({ srcDir, libraries, … })   — B5 / @blockml/framework
+3. bootstrapTargets()                                 — C3 / @blockml/cli
 4. build CompileRequest from CLI flags + target.accepts + config
 5. compileToOutput(request, targetName, compileOptions)
-6. write RenderOutput.files[] to disk                                        — CLI only
+6. write RenderOutput.files[] to disk                 — CLI only
 ```
 
 `bootstrapTypeRegistry`, compile **scope**, and `bootstrapTargets` are **three separate concerns**:

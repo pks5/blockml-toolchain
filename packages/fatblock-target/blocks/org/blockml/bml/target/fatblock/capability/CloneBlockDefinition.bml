@@ -1,0 +1,41 @@
+<!--
+  FatBlock Capability — CloneBlockDefinition
+  FQN: org.blockml.bml.target.fatblock.capability.CloneBlockDefinition
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>CloneBlockDefinition</name>
+  <type>fbcap:CloneBlockDefinition</type>
+  <baseType>core:Capability</baseType>
+  <is>Deep-clone a BlockDefinition</is>
+
+  <documentation>FB8: structuredClone(block) for isolation before mutating embeddedBlocks.</documentation>
+
+  <properties>
+    <block type="bomblock:BlockDefinition">
+      <documentation>Source block. (required)</documentation>
+    </block>
+    <result type="bomblock:BlockDefinition">
+      <documentation>Cloned block. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

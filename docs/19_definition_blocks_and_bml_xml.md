@@ -116,8 +116,8 @@ Each member kind in the block grammar has a corresponding Definition block. Sour
 | Consumer | Why `bml:xml` matters |
 |---|---|
 | **`@blockml/serializer`** | Canonical roundtrip: BOM → authored BML XML |
-| **FatBlock Render Target** | Emits one `.bml` with inlined `<embeddedBlocks>`; must place root/member nodes correctly for every dependency type |
-| **XSD Render Target** | Schema particle shape (element vs attribute, local names) follows the same declarations |
+| **FatBlock Render Target** | Emits one `.bml` with inlined `<embeddedBlocks>`. **SSOT:** `org.blockml.bml.target.fatblock.documentation.Introduction` |
+| **XSD Render Target** | Schema particle shape (element vs attribute, local names) follows the same declarations. **SSOT (consumer):** `org.blockml.bml.target.xsd.documentation.ParticleMappingRules` (start `Introduction`) |
 | **BlockDoc** (optional) | May surface authored XML form in examples / API pages |
 
 Flow-control directives stay renderer-expansion concerns; `bml:xml` is **shared XML grammar metadata** on the Urmodell / TypeRegistry — not a serializer private detail.
@@ -190,7 +190,7 @@ Example: `org.blockml.bml.core.Block` — composable instances render under thei
 | **Emit bindings** | Serializer and XML-emitting targets reuse **exactly** those bindings. No synthetic `ns1` / guessed short names. |
 | **Type-ref form (B21)** | Prefer **prefixed QName** vs **FQN** at document level — see below. |
 | **Missing binding** | In QName-emit mode, if emit would need a prefix for a namespace that is **not** in `namespaceBindings` → **`BML_NAMESPACE_UNBOUND`** (error). Do not invent a binding and do **not** silently fall back to FQN. |
-| **FatBlock** | Host **must** run Stage 2 validation **before** FatBlock emit. Validator ensures the closure of types/namespaces for the bundle is bound (root + every inlined dependency’s authored bindings, merged without prefix collisions). Unbound → `BML_NAMESPACE_UNBOUND`; conflicting prefix→namespace mappings → `BML_NAMESPACE_PREFIX_COLLISION`. No silent rewrite. |
+| **FatBlock** | Host **must** run Stage 2 validation **before** FatBlock emit. Normative merge / collision / unbound rules for the FatBlock consumer: `org.blockml.bml.target.fatblock.documentation.NamespaceMergeRules` (and Introduction). Unbound → `BML_NAMESPACE_UNBOUND`; conflicting prefix→namespace mappings → `BML_NAMESPACE_PREFIX_COLLISION`. No silent rewrite. V1 candidate set is the `--src` folder pool, not transitive closure. |
 
 ###### Type-reference emit preference (**B21 — decided**)
 
@@ -512,7 +512,7 @@ Documentation Sub-Blocks (`Documentation`, `Change`, `Example`, `Reference`) are
 | D2 | `${ bml:Self }` / type-ref prefix resolution at serialize time | **Decided:** store authored prefixes in `SourceInfo.namespaceBindings` — **1:1 roundtrip**, no invented prefixes. **B21:** QName-emit when any prefixed binding exists; FQN-emit only when the document has no QNames. Multiple prefixes for one NS → first authored. Missing NS → error. FatBlock only after Stage 2; unbound/conflicting NS fail — see § Namespace prefixes |
 | D3 | BOM storage shape for `<bml:xml>` / member `bml:xml` | **Decided:** first-class `xmlRendering` on `BlockDefinition` + `MemberDefinitionBase` — **not** flow-control `directives[]`. Follows **maximum authored surface** (`01_bom_core.md`). See `12_bom_object_model.md` · `XmlRenderingBlock` / `XmlRenderingMember` |
 | D4 | Whether composable blocks may override inherited `bml:xml` | **Decided (A):** **Member-level** — allowed on `override="true"`. **Block-level** — only `core.Block` + Definition branch. Illegal → `BML_XML_DIRECTIVE_NOT_ALLOWED` at **Stage 2** (hybrid). See § Placement Rules · § When Stage 1 vs Stage 2 |
-| D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8 |
+| D5 | XSD generation from Definition blocks | **Decided:** implement as **Render Target** (Stage 3). Replaces hand-maintained schemas long-term. **XSD validation** of authoring only after this target exists and must remain **always disableable** so schema regen is never blocked. Recommended among toolchain targets **before** MachineBlocks SCAD — see `15_dev_setup.md` Phase C · `13` B8. **Consumer SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction` |
 | D6 | Allowed `<bml:xml>` body recipes | **Decided:** literal, `${ bml:Self }`, `${ #this.name }` only. Invalid → `BML_XML_RENDERING_INVALID` at **Stage 1**. Phase A (**B23**): check D6 **and** still store `xmlRendering` — preserve ≠ skip validation. See § Allowed `<bml:xml>` recipes · § When Stage 1 vs Stage 2 · `13` B23 |
 | D7 | Illegal `bml:xml` — parser vs validator | **Decided (hybrid):** structural + D6 → Stage 1; D4 / branch placement → Stage 2. See § When Stage 1 vs Stage 2 |
 | D8 | `text` vs `cdata` | **Decided:** `text` = placement (host body). CDATA = escape form of `text`, **plus** store `authoredCharacterDataForm` on BOM. Emit CDATA if escape requires it **or** author used CDATA. Legacy `cdata` / `text\|cdata` → placement `text`. See § CDATA = escape policy + authored form |

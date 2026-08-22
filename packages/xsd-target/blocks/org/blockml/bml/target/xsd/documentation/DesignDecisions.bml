@@ -1,0 +1,49 @@
+<!--
+  XSD Documentation — DesignDecisions
+  FQN: org.blockml.bml.target.xsd.documentation.DesignDecisions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>DesignDecisions</name>
+  <type>xsddocumentation:DesignDecisions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Normative XSD decisions XSD1–XSD18</is>
+
+  <documentation>XSD1 Always emit bml.xsd.
+    XSD2 accepts library|corpus|auto; registry name xsd.
+    XSD3 Render uses session typeRegistry and outputBasePath.
+    XSD4–XSD7 bml.xsd shell: NS, block root, mixed, choice elements, no xs:any, lax anyAttribute.
+    XSD8 Hardcoded D1 identity + container name lists (including isNot and isnot).
+    XSD9 META_DEFINITION_FQNS walk for extras.
+    XSD10 MemberPrefersElement weak filter.
+    XSD11 Extras unique sorted minus D1 lists.
+    XSD12 types.xsd string vocabulary.
+    XSD13 service.xsd string vocabulary.
+    XSD14 Always catalog.xml in rootFiles; relative ./outDir/file paths.
+    XSD15 emitDomainSchemas default true.
+    XSD16 includeNonExported reserved unused in V1.
+    XSD17 No package-local emit diagnostics.
+    XSD18 Authoring XSD validation is CLI ScopeExclusion — not an XSD capability.</documentation>
+  <references>
+    <see type="xsddocumentation:PackageOwnership" relation="ReadNext"></see>
+  </references>
+
+</block>

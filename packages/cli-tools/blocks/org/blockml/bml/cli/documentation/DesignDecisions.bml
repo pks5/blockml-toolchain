@@ -1,0 +1,53 @@
+<!--
+  CLI Documentation — DesignDecisions
+  FQN: org.blockml.bml.cli.documentation.DesignDecisions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>DesignDecisions</name>
+  <type>clidocumentation:DesignDecisions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Normative CLI decisions CLI1–CLI20</is>
+
+  <documentation>CLI1 missing bom.config.json → DefaultBomConfig.
+    CLI2 empty targets[] → ["blockdoc"].
+    CLI3 bootstrapTargets idempotent.
+    CLI4 TARGET_FACTORIES blockdoc/xsd/fatblock.
+    CLI5 unknown target name throws.
+    CLI6 registry bootstrap libraryPaths vs paths[srcDir].
+    CLI7 writeOutputFiles cleanOutDir rmSync.
+    CLI8 rootFiles beside rootDir (XSD catalog).
+    CLI9 parseArgs flag and positional rules.
+    CLI10 validate file XOR --all.
+    CLI11 validate never writes render output.
+    CLI12 default compile target blockdoc.
+    CLI13 defaultOutDir xsd→schemas else config.outDir/doc.
+    CLI14 fatblock requires file + --src.
+    CLI15 fatblock separate workspace registry with core Library.
+    CLI16 compile scope auto libraries or roots.
+    CLI17 formatDiagnostic line format.
+    CLI18 runCli exit code matrix.
+    CLI19 target CLI matrix blockdoc/xsd/fatblock.
+    CLI20 validate skips bootstrapTargets.</documentation>
+  <references>
+    <see type="clidocumentation:PackageOwnership" relation="ReadNext"></see>
+  </references>
+
+</block>

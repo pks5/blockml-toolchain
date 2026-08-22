@@ -1,0 +1,44 @@
+<!--
+  CLI Capability — BootstrapTargets
+  FQN: org.blockml.bml.cli.capability.BootstrapTargets
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>BootstrapTargets</name>
+  <type>clicap:BootstrapTargets</type>
+  <baseType>core:Capability</baseType>
+  <is>Register render targets from config.targets[]</is>
+
+  <documentation>CLI3: idempotent — second call no-op. CLI4: factories blockdoc, xsd, fatblock. CLI5: unknown name in targets[] throws. Also registers requested target name for this run.</documentation>
+
+  <references>
+    <see type="clidocumentation:TargetBootstrap" relation="SeeAlso" />
+    <see type="cliconfig:CliConstants" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <config type="cliapi:BomConfig">
+      <documentation>Project config with targets[]. (required)</documentation>
+    </config>
+    <requested type="type:Text">
+      <documentation>Target names needed for this invocation. (optional)</documentation>
+    </requested>
+  </properties>
+
+</block>

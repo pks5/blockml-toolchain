@@ -1,0 +1,49 @@
+<!--
+  XSD Documentation — ParticleMappingRules
+  FQN: org.blockml.bml.target.xsd.documentation.ParticleMappingRules
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ParticleMappingRules</name>
+  <type>xsddocumentation:ParticleMappingRules</type>
+  <baseType>core:Documentation</baseType>
+  <is>bml.xsd particle construction (XSD4–XSD11)</is>
+
+  <documentation>Consumes D1 / bml:xml grammar from Definition (docs 19); does not redefine it.
+
+    XSD4: targetNamespace http://blockml.org/bml; single root element block; mixed=true.
+    XSD5: choice of unbounded optional xs:element particles only.
+    XSD6: no element-level xs:any.
+    XSD7: anyAttribute processContents=lax.
+    XSD8: D1_IDENTITY_ELEMENTS and D1_CONTAINER_ELEMENTS hardcoded sorted unique.
+    XSD9: ExtraElementNames from META_DEFINITION_FQNS via MemberPrefersElement.
+    XSD10: MemberPrefersElement — element/raw element true; sole attribute false;
+    aggregations/associations true; default true.
+    XSD11: extras exclude names already in D1 identity or containers.
+
+    Later: full D1 fidelity (attributes, text, nested models); pure Definition-driven lists.</documentation>
+  <references>
+    <see type="xsddocumentation:DomainVocabularyRules" relation="ReadNext"></see>
+    <see type="xsdcap:EmitBlockXsd" relation="SeeAlso"></see>
+    <see type="def:BlockDefinition" relation="SeeAlso"></see>
+  </references>
+
+</block>

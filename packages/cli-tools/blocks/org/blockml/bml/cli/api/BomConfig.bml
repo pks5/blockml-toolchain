@@ -1,0 +1,40 @@
+<!--
+  CLI API — BomConfig
+  FQN: org.blockml.bml.cli.api.BomConfig
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>BomConfig</name>
+  <type>cliapi:BomConfig</type>
+  <baseType>cli:CliType</baseType>
+  <is>bom.config.json project configuration shape (CLI-owned subset)</is>
+
+  <documentation>Fields the V1 CLI reads from bom.config.json. Full schema in clidocumentation:Configuration.</documentation>
+  <references>
+    <see type="clidocumentation:Configuration" relation="SeeAlso" />
+  </references>
+  <properties>
+    <outDir type="type:Text"><documentation>Output root. Default "doc". (optional)</documentation></outDir>
+    <srcDir type="type:Text"><documentation>Source root. Default "src". (optional)</documentation></srcDir>
+    <libraries type="type:Text"><documentation>Library.bml paths for library-scope compiles. (optional)</documentation></libraries>
+    <targets type="type:Text"><documentation>Registry names to bootstrap. Default ["blockdoc"]. (optional)</documentation></targets>
+    <targetOptions type="type:Text"><documentation>Per-target opaque options keyed by registry name. (optional)</documentation></targetOptions>
+  </properties>
+
+</block>

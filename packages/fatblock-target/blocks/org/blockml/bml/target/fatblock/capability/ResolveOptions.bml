@@ -1,0 +1,46 @@
+<!--
+  FatBlock Capability — ResolveOptions
+  FQN: org.blockml.bml.target.fatblock.capability.ResolveOptions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ResolveOptions</name>
+  <type>fbcap:ResolveOptions</type>
+  <baseType>core:Capability</baseType>
+  <is>Merge opaque targetOptions into FatBlockOptions with defaults</is>
+
+  <documentation>FB1: embeddedBlocksStrategy defaults to error. srcDir, rootDir, include passed through when present.</documentation>
+
+  <references>
+    <see type="fbdocumentation:PublicApi" relation="SeeAlso" />
+    <see type="fbconfig:DefaultFatBlockOptions" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <targetOptions type="type:Text">
+      <documentation>Opaque CompileRequest.targetOptions. (optional)</documentation>
+    </targetOptions>
+    <result type="fbapi:FatBlockOptions">
+      <documentation>Resolved options. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

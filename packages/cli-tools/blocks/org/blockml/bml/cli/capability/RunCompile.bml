@@ -1,0 +1,48 @@
+<!--
+  CLI Capability — RunCompile
+  FQN: org.blockml.bml.cli.capability.RunCompile
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>RunCompile</name>
+  <type>clicap:RunCompile</type>
+  <baseType>core:Capability</baseType>
+  <is>Execute blockml compile for library/corpus targets</is>
+
+  <documentation>CLI12: default target blockdoc when omitted. CLI13: xsd default outDir schemas else config.outDir. CLI16: scope auto with libraries[] or roots[srcDir]. Bootstrap targets then compileToOutput; writeOutputFiles with cleanOutDir.</documentation>
+
+  <references>
+    <see type="clidocumentation:CompileCommand" relation="SeeAlso" />
+    <see type="clicap:BootstrapTargets" relation="SeeAlso" />
+    <see type="clicap:WriteOutputFiles" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <parsed type="cliapi:ParsedArgs">
+      <documentation>Parsed compile args. (required)</documentation>
+    </parsed>
+    <rootDir type="type:Text">
+      <documentation>Project root. (required)</documentation>
+    </rootDir>
+    <code type="type:Integer">
+      <documentation>Exit code 0|1|2. (required)</documentation>
+    </code>
+  </properties>
+
+</block>

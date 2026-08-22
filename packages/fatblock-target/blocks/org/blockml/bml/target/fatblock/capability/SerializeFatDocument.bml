@@ -1,0 +1,48 @@
+<!--
+  FatBlock Capability — SerializeFatDocument
+  FQN: org.blockml.bml.target.fatblock.capability.SerializeFatDocument
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>SerializeFatDocument</name>
+  <type>fbcap:SerializeFatDocument</type>
+  <baseType>core:Capability</baseType>
+  <is>Serialize fat BomDocument to canonical BML XML</is>
+
+  <documentation>FB17: call @blockml/serializer serialize(document, { indent: 2 }). Returns text and diagnostics.</documentation>
+
+  <references>
+    <see type="fbdocumentation:OutputLayout" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <document type="bomdoc:BomDocument">
+      <documentation>Assembled fat document. (required)</documentation>
+    </document>
+    <text type="type:Text">
+      <documentation>Serialized XML or null. (optional)</documentation>
+    </text>
+    <diagnostics type="type:Text">
+      <documentation>Serialize diagnostics. (required)</documentation>
+    </diagnostics>
+  </properties>
+
+</block>

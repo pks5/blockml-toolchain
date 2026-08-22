@@ -4,23 +4,47 @@
 -->
 <block
   xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:core="org.blockml.bml.core"
-  xmlns:fatblock="org.blockml.bml.target.fatblock">
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
 
   <name>Library</name>
   <type>fatblock:Library</type>
   <baseType>core:BlockLibrary</baseType>
-  <is>FatBlock bundle render target library catalog</is>
+  <is>The FatBlock portable .bml render target library catalog</is>
 
   <documentation>
-    Stage-3 target that emits one portable .bml with peer blocks inlined under root
-    embeddedBlocks. Registry name: fatblock. Accepts document compile scope only.
-    v1: folder bundle (--src) with optional --include FQN filters; host and embed
-    candidates must not already declare embeddedBlocks. SubBlocks ship inside their
-    parent embed. Output: Host.fat.bml beside source or under --out.
+    Canonical FatBlock specification for BlockML — registry name fatblock, folder-pool
+    candidates, embed assembly, namespace merge, Host.fat.bml (FB1–FB20). TypeScript in
+    packages/fatblock-target/src/ implements this library. Membership is defined
+    exclusively by this blocks list.
   </documentation>
 
   <version>0.1.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>FatBlock render target library</value>
+    </description>
+  </properties>
 
   <aggregations>
     <readMe>
@@ -28,6 +52,50 @@
         <fatblock:README />
       </composition>
     </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+      <composition>
+        <bom:Library />
+      </composition>
+      <composition>
+        <serializer:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition><fatblock:FatblockType /></composition>
+      <composition><fbapi:FatBlockOptions /></composition>
+      <composition><fbapi:FatBlockRenderOutput /></composition>
+      <composition><fbapi:AssembleFatDocumentResult /></composition>
+      <composition><fbconfig:FatBlockConstants /></composition>
+      <composition><fbconfig:DefaultFatBlockOptions /></composition>
+      <composition><fbcap:ResolveOptions /></composition>
+      <composition><fbcap:ValidateRequest /></composition>
+      <composition><fbcap:Render /></composition>
+      <composition><fbcap:RootFqnsByFilePath /></composition>
+      <composition><fbcap:CollectCandidateFqns /></composition>
+      <composition><fbcap:MatchesIncludePattern /></composition>
+      <composition><fbcap:FilterByIncludes /></composition>
+      <composition><fbcap:CloneBlockDefinition /></composition>
+      <composition><fbcap:MergeNamespaceBindings /></composition>
+      <composition><fbcap:AssembleFatDocument /></composition>
+      <composition><fbcap:SerializeFatDocument /></composition>
+      <composition><fbcap:FatOutputBasename /></composition>
+      <composition><fbdocumentation:Introduction /></composition>
+      <composition><fbdocumentation:LayerSeparation /></composition>
+      <composition><fbdocumentation:ArchitectureOverview /></composition>
+      <composition><fbdocumentation:V1Scope /></composition>
+      <composition><fbdocumentation:PublicApi /></composition>
+      <composition><fbdocumentation:CandidateCollection /></composition>
+      <composition><fbdocumentation:EmbedAssemblyRules /></composition>
+      <composition><fbdocumentation:NamespaceMergeRules /></composition>
+      <composition><fbdocumentation:OutputLayout /></composition>
+      <composition><fbdocumentation:Diagnostics /></composition>
+      <composition><fbdocumentation:DesignDecisions /></composition>
+      <composition><fbdocumentation:PackageOwnership /></composition>
+      <composition><fbdocumentation:ScopeExclusions /></composition>
+    </blocks>
   </aggregations>
 
 </block>

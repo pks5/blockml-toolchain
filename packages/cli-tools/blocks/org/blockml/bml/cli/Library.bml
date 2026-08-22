@@ -1,0 +1,112 @@
+<!--
+  BlockML CLI Library
+  FQN: org.blockml.bml.cli.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Library</name>
+  <type>cli:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>The BlockML universal CLI package library catalog</is>
+
+  <documentation>
+    Canonical CLI specification for BlockML — commands, config, bootstrap order,
+    target matrix, exit codes (CLI1–CLI20). TypeScript in packages/cli-tools/src/
+    implements this library. Compiler facade and scope live in org.blockml.bml.compiler.runtime.*
+    Framework bootstrap lives in org.blockml.bml.framework.*.
+    Membership is defined exclusively by this blocks list.
+  </documentation>
+
+  <version>0.1.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>BlockML CLI library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <cli:README />
+      </composition>
+    </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+      <composition>
+        <runtime:Library />
+      </composition>
+      <composition>
+        <framework:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition><cli:CliType /></composition>
+      <composition><cliapi:BomConfig /></composition>
+      <composition><cliapi:ParsedArgs /></composition>
+      <composition><cliapi:CliResult /></composition>
+      <composition><cliapi:WriteOutputOptions /></composition>
+      <composition><cliapi:CliBootstrapOptions /></composition>
+      <composition><cliconfig:CliConstants /></composition>
+      <composition><cliconfig:ExitCodes /></composition>
+      <composition><cliconfig:DefaultBomConfig /></composition>
+      <composition><cliconfig:CompileTargetMatrix /></composition>
+      <composition><cliconfig:CommandRegistry /></composition>
+      <composition><clicommand:ValidateCommand /></composition>
+      <composition><clicommand:CompileCommand /></composition>
+      <composition><clicap:LoadConfig /></composition>
+      <composition><clicap:ParseArgs /></composition>
+      <composition><clicap:FormatDiagnostic /></composition>
+      <composition><clicap:RunCli /></composition>
+      <composition><clicap:RunValidate /></composition>
+      <composition><clicap:RunCompile /></composition>
+      <composition><clicap:RunCompileFatBlock /></composition>
+      <composition><clicap:BootstrapTargets /></composition>
+      <composition><clicap:BootstrapProjectTypeRegistry /></composition>
+      <composition><clicap:WriteOutputFiles /></composition>
+      <composition><clicap:DefaultOutDir /></composition>
+      <composition><clicap:WorkspaceRoot /></composition>
+      <composition><clidocumentation:Introduction /></composition>
+      <composition><clidocumentation:LayerSeparation /></composition>
+      <composition><clidocumentation:ArchitectureOverview /></composition>
+      <composition><clidocumentation:V1Scope /></composition>
+      <composition><clidocumentation:PublicApi /></composition>
+      <composition><clidocumentation:RuntimeBootstrap /></composition>
+      <composition><clidocumentation:Commands /></composition>
+      <composition><clidocumentation:CompileCommand /></composition>
+      <composition><clidocumentation:ValidateCommand /></composition>
+      <composition><clidocumentation:Configuration /></composition>
+      <composition><clidocumentation:TargetBootstrap /></composition>
+      <composition><clidocumentation:TargetCliMatrix /></composition>
+      <composition><clidocumentation:ExitCodesAndDiagnostics /></composition>
+      <composition><clidocumentation:DualCliModel /></composition>
+      <composition><clidocumentation:Installation /></composition>
+      <composition><clidocumentation:DesignDecisions /></composition>
+      <composition><clidocumentation:PackageOwnership /></composition>
+      <composition><clidocumentation:ScopeExclusions /></composition>
+    </blocks>
+  </aggregations>
+
+</block>

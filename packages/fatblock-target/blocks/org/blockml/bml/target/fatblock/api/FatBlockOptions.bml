@@ -1,0 +1,42 @@
+<!--
+  FatBlock API — FatBlockOptions
+  FQN: org.blockml.bml.target.fatblock.api.FatBlockOptions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>FatBlockOptions</name>
+  <type>fbapi:FatBlockOptions</type>
+  <baseType>fatblock:FatblockType</baseType>
+  <is>Opaque targetOptions payload for registry name fatblock</is>
+
+  <documentation>FB1: Defaults embeddedBlocksStrategy=error. srcDir required at validate/render (CLI --src). include optional FQN filters.</documentation>
+  <references>
+    <see type="fbdocumentation:PublicApi" relation="SeeAlso" />
+    <see type="fbcap:ResolveOptions" relation="SeeAlso" />
+  </references>
+  <properties>
+    <srcDir type="type:Text"><documentation>Corpus pool root — required for v1 collection. (optional until validate)</documentation></srcDir>
+    <rootDir type="type:Text"><documentation>Project root for resolving srcDir. Default process.cwd() in render. (optional)</documentation></rootDir>
+    <include type="type:Text"><documentation>FQN filters: exact or prefix* globs. Empty/omitted = all peers under srcDir. (optional)</documentation></include>
+    <embeddedBlocksStrategy type="type:Text"><documentation>v1 only "error". Reserved; assemble hardcodes empty-embeds check. (optional)</documentation></embeddedBlocksStrategy>
+  </properties>
+
+</block>

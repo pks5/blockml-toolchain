@@ -1,0 +1,42 @@
+<!--
+  XSD Config — XsdConstants
+  FQN: org.blockml.bml.target.xsd.config.XsdConstants
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>XsdConstants</name>
+  <type>xsdconfig:XsdConstants</type>
+  <baseType>xsd:XsdType</baseType>
+  <is>Well-known namespace URIs, FQN prefixes, and D1 particle lists</is>
+
+  <documentation>XSD4–XSD9 constants. D1 identity and container element name lists are normative for V1 bml.xsd emit.</documentation>
+  <properties>
+    <BML_DOCUMENT_NS type="type:Text"><documentation>http://blockml.org/bml</documentation></BML_DOCUMENT_NS>
+    <BML_TYPES_NS type="type:Text"><documentation>http://blockml.org/schema/types</documentation></BML_TYPES_NS>
+    <BML_SERVICE_NS type="type:Text"><documentation>http://blockml.org/schema/service</documentation></BML_SERVICE_NS>
+    <TYPE_FQN_PREFIX type="type:Text"><documentation>org.blockml.bml.type.</documentation></TYPE_FQN_PREFIX>
+    <SERVICE_FQN_PREFIX type="type:Text"><documentation>org.blockml.bml.service.</documentation></SERVICE_FQN_PREFIX>
+    <D1_IDENTITY_ELEMENTS type="type:Text"><documentation>Hardcoded identity particle names including both isNot and isnot.</documentation></D1_IDENTITY_ELEMENTS>
+    <D1_CONTAINER_ELEMENTS type="type:Text"><documentation>Hardcoded container particle names.</documentation></D1_CONTAINER_ELEMENTS>
+    <META_DEFINITION_FQNS type="type:Text"><documentation>Definition FQNs walked for extra element names.</documentation></META_DEFINITION_FQNS>
+    <REGISTRY_NAME type="type:Text"><documentation>xsd</documentation></REGISTRY_NAME>
+    <ACCEPTS type="type:Text"><documentation>library, corpus, auto</documentation></ACCEPTS>
+  </properties>
+
+</block>

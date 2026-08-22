@@ -1,0 +1,45 @@
+<!--
+  FatBlock Documentation — CandidateCollection
+  FQN: org.blockml.bml.target.fatblock.documentation.CandidateCollection
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>CandidateCollection</name>
+  <type>fbdocumentation:CandidateCollection</type>
+  <baseType>core:Documentation</baseType>
+  <is>Root FQN selection and include filters (FB5–FB7)</is>
+
+  <documentation>FB5 RootFqnsByFilePath: per source file, root FQN is one not prefixed by another FQN
+    from the same file — Sub-Block registry keys are not embed candidates.
+
+    FB6 CollectCandidateFqns: roots whose file path is under resolve(rootDir, srcDir);
+    exclude host FQN; sort ascending; apply include when non-empty.
+
+    FB7 Include: pattern ending * is prefix match; else exact FQN; OR across patterns;
+    empty/omitted patterns keep all candidates.
+
+    V1 semantics = folder pool, not dependency graph walk.</documentation>
+  <references>
+    <see type="fbdocumentation:EmbedAssemblyRules" relation="ReadNext"></see>
+  </references>
+
+</block>

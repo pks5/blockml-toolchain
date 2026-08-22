@@ -1,0 +1,45 @@
+<!--
+  XSD Documentation — PublicApi
+  FQN: org.blockml.bml.target.xsd.documentation.PublicApi
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PublicApi</name>
+  <type>xsddocumentation:PublicApi</type>
+  <baseType>core:Documentation</baseType>
+  <is>Public TypeScript surface mirrored in this library</is>
+
+  <documentation>Exports (packages/xsd-target/src/index.ts):
+    XsdTarget, XsdRenderOutput; XsdOptions, resolveXsdOptions, DEFAULT_XSD_OPTIONS;
+    emitBlockXsd, emitTypesXsd, emitServiceXsd; emitCatalogXml, catalogRelativePath, CatalogEntry;
+    BML_DOCUMENT_NS, BML_TYPES_NS, BML_SERVICE_NS, TYPE_FQN_PREFIX, SERVICE_FQN_PREFIX.
+
+    Modeled as: api/XsdOptions, XsdRenderOutput, CatalogEntry; config/XsdConstants,
+    DefaultXsdOptions; capabilities listed on Library.blocks.
+    Defines relation: this doc ↔ Options and Render.</documentation>
+  <references>
+    <see type="xsddocumentation:ParticleMappingRules" relation="ReadNext"></see>
+    <see type="xsdapi:XsdOptions" relation="SeeAlso"></see>
+    <see type="xsdcap:Render" relation="SeeAlso"></see>
+    <see type="xsdconfig:DefaultXsdOptions" relation="SeeAlso"></see>
+  </references>
+
+</block>

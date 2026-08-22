@@ -1,0 +1,43 @@
+<!--
+  XSD Capability — EmitCatalogXml
+  FQN: org.blockml.bml.target.xsd.capability.EmitCatalogXml
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>EmitCatalogXml</name>
+  <type>xsdcap:EmitCatalogXml</type>
+  <baseType>core:Capability</baseType>
+  <is>Emit OASIS XML catalog document</is>
+
+  <documentation>XSD14: xmlns urn:oasis:names:tc:entity:xmlns:xml:catalog; one uri element per CatalogEntry with name=namespaceUri and uri=relativePath.</documentation>
+
+  <references>
+    <see type="xsddocumentation:CatalogAndOutputLayout" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <entries type="type:Text">
+      <documentation>CatalogEntry list. (required)</documentation>
+    </entries>
+    <result type="type:Text">
+      <documentation>catalog.xml string. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

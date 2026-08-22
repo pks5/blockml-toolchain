@@ -74,8 +74,9 @@ Deprecated legacy numbering (do not use in new text):
 ```text
 Stage 1 — Parser
   Checks: well-formed XML · namespaces (V1)
-          XSD — not Stage 1; generation = Render Target (Phase C); validation only after that target
-              (see 13 — V1 Scope / B8 · 15 — Phase C ordering)
+          XSD — not Stage 1; generation = Render Target (Phase C; SSOT
+              org.blockml.bml.target.xsd.documentation.Introduction); validation only after that target
+              (see 13 — V1 Scope / B8 · 15 — Phase C ordering · CLI --no-xsd)
   Produces: Urmodell (Canonical BOM, immutable, SSOT)
   No semantics.
 
@@ -198,13 +199,18 @@ Normative options, path/layout, page chrome, and site assembly: start at
 `org.blockml.bml.target.blockdoc.documentation.Introduction` (ReadNext chain).
 Host/scope wiring: `14_compiler_runtime.md` C7.
 
-Example — **FatBlock Render Target** (toolchain; planned):
+Example — **FatBlock Render Target** (toolchain; SSOT in package library):
 
 ```text
-Urmodell + TypeRegistry closure of dependencies
-  → emit single RootBlockDefinition .bml
-  → each dependency as EmbeddedBlockDefinition under root embeddedBlocks[]
+CompileRequest (scope: document) + TypeRegistry (host + --src peer pool)
+  → FatBlockTarget.render (org.blockml.bml.target.fatblock.*)
+  → one Host.fat.bml with flat embeddedBlocks
 ```
+
+Normative options, candidate collection, embed assembly, NS merge: start at
+`org.blockml.bml.target.fatblock.documentation.Introduction` (ReadNext chain).
+V1 = folder pool under `--src` (not transitive closure — that is v2).
+Host wiring: `org.blockml.bml.cli.documentation.CompileCommand`.
 
 SCAD renderer steps [9]–[19] are **not** a fixed framework pipeline — they document the SCAD reference renderer. Other renderers (XSD, BlockDoc, FatBlock, …) choose different utilities and ordering. See `15_dev_setup.md` — Phase C toolchain targets.
 

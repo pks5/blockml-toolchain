@@ -1,0 +1,43 @@
+<!--
+  CLI Capability — ParseArgs
+  FQN: org.blockml.bml.cli.capability.ParseArgs
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ParseArgs</name>
+  <type>clicap:ParseArgs</type>
+  <baseType>core:Capability</baseType>
+  <is>Parse process.argv slice into ParsedArgs</is>
+
+  <documentation>CLI9: first non-flag token is command. Flags: --out, --src, --libraries (comma-split), --include (comma-split), --all. Positional: validate=file; compile=target or file+target.</documentation>
+
+  <references>
+    <see type="cliapi:ParsedArgs" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <argv type="type:Text">
+      <documentation>Arguments after node and script path. (required)</documentation>
+    </argv>
+    <result type="cliapi:ParsedArgs">
+      <documentation>Parsed arguments. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

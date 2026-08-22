@@ -1,0 +1,42 @@
+<!--
+  XSD Documentation — LayerSeparation
+  FQN: org.blockml.bml.target.xsd.documentation.LayerSeparation
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>LayerSeparation</name>
+  <type>xsddocumentation:LayerSeparation</type>
+  <baseType>core:Documentation</baseType>
+  <is>What this library owns versus neighbors</is>
+
+  <documentation>Layers:
+    • org.blockml.bml.definition / docs 19 D1 — bml:xml particle grammar SSOT (XSD consumes)
+    • org.blockml.bml.target.xsd.* (this library) — emit bml.xsd / types.xsd / service.xsd / catalog
+    • org.blockml.bml.cli.* — default outDir=schemas, rootFiles write, --no-xsd authoring validation
+    • MachineBlocks domain XSDs — out of scope (product schemas)
+
+    Do not double-maintain CLI flags or D1 grammar here; link via SeeAlso.</documentation>
+  <references>
+    <see type="xsddocumentation:ArchitectureOverview" relation="ReadNext"></see>
+    <see type="cli:Library" relation="SeeAlso"></see>
+  </references>
+
+</block>

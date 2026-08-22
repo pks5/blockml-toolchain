@@ -1,0 +1,39 @@
+<!--
+  CLI Documentation — Commands
+  FQN: org.blockml.bml.cli.documentation.Commands
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Commands</name>
+  <type>clidocumentation:Commands</type>
+  <baseType>core:Documentation</baseType>
+  <is>Command inventory</is>
+
+  <documentation>V1 commands:
+    • validate — parser + semantic validation; no target; no output files (CLI11)
+    • compile — render target output; requires bootstrapped target
+
+    Planned commands (not V1): init, new block, inspect, watch, activate-config.
+    See cliconfig:CommandRegistry for implementation flags.</documentation>
+  <references>
+    <see type="clidocumentation:CompileCommand" relation="ReadNext"></see>
+  </references>
+
+</block>

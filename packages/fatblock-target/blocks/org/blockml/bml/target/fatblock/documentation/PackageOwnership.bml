@@ -1,0 +1,47 @@
+<!--
+  FatBlock Documentation — PackageOwnership
+  FQN: org.blockml.bml.target.fatblock.documentation.PackageOwnership
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PackageOwnership</name>
+  <type>fbdocumentation:PackageOwnership</type>
+  <baseType>core:Documentation</baseType>
+  <is>Who owns FatBlock vs CLI vs BOM</is>
+
+  <documentation>@blockml/fatblock-target owns: this BML library; TypeScript assemble/filter/merge/emit;
+    FatBlockOptions; BML_FATBLOCK_* diagnostics; output basename algorithm.
+
+    @blockml/cli owns: --src / --include / --out; host file required; separate registry
+    bootstrap for fatblock; writing Host.fat.bml; exit codes.
+    See org.blockml.bml.cli.documentation.CompileCommand.
+
+    @blockml/bom owns: embeddedBlocks shape and language invariants.
+
+    @blockml/serializer owns: XML emit of the assembled BomDocument.
+
+    @blockml/compiler owns: RenderTarget contract and document compile scope.</documentation>
+  <references>
+    <see type="fbdocumentation:ScopeExclusions" relation="ReadNext"></see>
+  </references>
+
+</block>

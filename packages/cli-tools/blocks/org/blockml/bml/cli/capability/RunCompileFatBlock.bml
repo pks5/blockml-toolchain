@@ -1,0 +1,50 @@
+<!--
+  CLI Capability — RunCompileFatBlock
+  FQN: org.blockml.bml.cli.capability.RunCompileFatBlock
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>RunCompileFatBlock</name>
+  <type>clicap:RunCompileFatBlock</type>
+  <baseType>core:Capability</baseType>
+  <is>Execute blockml compile for fatblock document target</is>
+
+  <documentation>CLI14: host file and --src required or exit 2. CLI15: separate bootstrapTypeRegistry with core Library + srcDir pool; document scope; writes single Host.fat.bml beside host unless --out.</documentation>
+
+  <references>
+    <see type="clidocumentation:CompileCommand" relation="SeeAlso" />
+    <see type="clicap:WorkspaceRoot" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <parsed type="cliapi:ParsedArgs">
+      <documentation>Parsed compile args with file and srcDir. (required)</documentation>
+    </parsed>
+    <rootDir type="type:Text">
+      <documentation>Project root. (required)</documentation>
+    </rootDir>
+    <config type="cliapi:BomConfig">
+      <documentation>Loaded config. (required)</documentation>
+    </config>
+    <code type="type:Integer">
+      <documentation>Exit code 0|1|2. (required)</documentation>
+    </code>
+  </properties>
+
+</block>

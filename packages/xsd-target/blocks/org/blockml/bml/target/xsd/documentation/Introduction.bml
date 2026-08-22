@@ -1,0 +1,50 @@
+<!--
+  XSD Documentation — Introduction
+  FQN: org.blockml.bml.target.xsd.documentation.Introduction
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Introduction</name>
+  <type>xsddocumentation:Introduction</type>
+  <baseType>core:Documentation</baseType>
+  <is>Purpose and scope of the XSD render target</is>
+
+  <documentation>The @blockml/xsd-target package implements RenderTarget registry name xsd.
+    It emits universal bml.xsd from D1 defaults plus meta Definition extras, optional
+    types.xsd and service.xsd vocabularies, and a root catalog.xml.
+
+    This library (org.blockml.bml.target.xsd.*) is the SSOT. TypeScript in
+    packages/xsd-target/src/ implements it. Tests in packages/xsd-target/test/
+    encode behavioral contracts (XSD1–XSD18).
+
+    Generate vs Validation: this library models schema GENERATE only. Authoring
+    validation against generated XSDs (--no-xsd / xsdValidation) lives in
+    org.blockml.bml.cli ScopeExclusions — never as an XSD target capability.
+
+    Pipeline: ResolveOptions → EmitBlockXsd [+ EmitTypesXsd / EmitServiceXsd] →
+    EmitCatalogXml → files under outDir plus rootFiles catalog.xml.
+    Host CLI wiring (default outDir schemas/, write) lives in org.blockml.bml.cli.*</documentation>
+  <references>
+    <see type="xsddocumentation:LayerSeparation" relation="ReadNext"></see>
+    <see type="xsdcap:Render" relation="SeeAlso"></see>
+  </references>
+
+</block>

@@ -1,0 +1,43 @@
+<!--
+  XSD Capability — EmitServiceXsd
+  FQN: org.blockml.bml.target.xsd.capability.EmitServiceXsd
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>EmitServiceXsd</name>
+  <type>xsdcap:EmitServiceXsd</type>
+  <baseType>core:Capability</baseType>
+  <is>Emit service.xsd vocabulary schema</is>
+
+  <documentation>XSD13: elements for org.blockml.bml.service.* short names as xs:string under http://blockml.org/schema/service.</documentation>
+
+  <references>
+    <see type="xsddocumentation:DomainVocabularyRules" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <typeRegistry type="type:Text">
+      <documentation>TypeRegistry. (required)</documentation>
+    </typeRegistry>
+    <result type="type:Text">
+      <documentation>service.xsd XML string. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

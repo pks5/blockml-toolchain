@@ -7,6 +7,9 @@
     "blockml": "./dist/cli.js"
   },
   "sideEffects": false,
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/cli/Library.bml"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -14,7 +17,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "blocks"
   ],
   "scripts": {
     "build": "tsc --build"

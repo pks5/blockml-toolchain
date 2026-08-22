@@ -1,0 +1,55 @@
+<!--
+  BlockML CLI — README
+  FQN: org.blockml.bml.cli.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>README</name>
+  <type>cli:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the BlockML CLI library</is>
+
+  <documentation>
+    The @blockml/cli package implements the blockml command-line tool.
+    This library (org.blockml.bml.cli.*) is the SSOT; TypeScript in
+    packages/cli-tools/src/ implements it. Tests in packages/cli-tools/test/
+    verify behavioral contracts.
+
+    Start reading at org.blockml.bml.cli.documentation.Introduction (ReadNext chain).
+
+    Layer separation:
+    • org.blockml.bml.cli.* (this library) — commands, config, bootstrap, file I/O
+    • org.blockml.bml.compiler.runtime.* — compileToOutput, Target Registry, scope
+    • org.blockml.bml.framework.* — TypeRegistry bootstrap
+    • org.blockml.bml.target.* — render targets (blockdoc, xsd, fatblock)
+
+    Modules: documentation (narrative specs), api/config/command (data types),
+    capability (CLI operations).
+
+    Not in this library: domain SCAD CLI, thumbnails, incremental cache, planned commands.
+  </documentation>
+
+  <references>
+    <see type="clidocumentation:Introduction" relation="ReadFirst" />
+    <see type="clidocumentation:DesignDecisions" relation="SeeAlso" />
+    <see type="clidocumentation:PublicApi" relation="SeeAlso" />
+    <see type="clicap:RunCli" relation="SeeAlso" />
+  </references>
+
+</block>

@@ -1,0 +1,41 @@
+<!--
+  FatBlock Documentation — ScopeExclusions
+  FQN: org.blockml.bml.target.fatblock.documentation.ScopeExclusions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ScopeExclusions</name>
+  <type>fbdocumentation:ScopeExclusions</type>
+  <baseType>core:Documentation</baseType>
+  <is>Explicitly out of FatBlock V1 library scope</is>
+
+  <documentation>Out of scope for this library / V1:
+    • Transitive dependency-closure candidate selection (planned v2)
+    • Alternative embeddedBlocksStrategy behaviors beyond empty-embeds error
+    • Inventing or rewriting xmlns prefixes
+    • CLI flag parsing and file I/O
+    • Rename of embeddedBlocks aggregation (BOM language TODO)
+    • Unused @blockml/parser package dependency (registry pre-loaded by host)
+    • Codegen from BML to TypeScript (structural SSOT only)
+    • BlockDoc / XSD / SCAD targets</documentation>
+
+</block>

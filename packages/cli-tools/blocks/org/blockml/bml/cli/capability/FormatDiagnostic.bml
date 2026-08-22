@@ -1,0 +1,43 @@
+<!--
+  CLI Capability — FormatDiagnostic
+  FQN: org.blockml.bml.cli.capability.FormatDiagnostic
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>FormatDiagnostic</name>
+  <type>clicap:FormatDiagnostic</type>
+  <baseType>core:Capability</baseType>
+  <is>Format one diagnostic for stderr output</is>
+
+  <documentation>CLI17: format severity code file:line — message. Empty source omits location.</documentation>
+
+  <references>
+    <see type="clidocumentation:ExitCodesAndDiagnostics" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <diagnostic type="type:Text">
+      <documentation>Diagnostic object with severity, code, message, optional source. (required)</documentation>
+    </diagnostic>
+    <result type="type:Text">
+      <documentation>Single formatted line. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

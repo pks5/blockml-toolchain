@@ -1,0 +1,33 @@
+<!--
+  CLI API — WriteOutputOptions
+  FQN: org.blockml.bml.cli.api.WriteOutputOptions
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>WriteOutputOptions</name>
+  <type>cliapi:WriteOutputOptions</type>
+  <baseType>cli:CliType</baseType>
+  <is>Options for writeOutputFiles</is>
+
+  <properties>
+    <cleanOutDir type="type:Boolean"><documentation>When true, rmSync outDir before writing. Default true for compile. (optional)</documentation></cleanOutDir>
+    <rootFiles type="type:Text"><documentation>Additional files written beside outDir (e.g. XSD catalog.xml). (optional)</documentation></rootFiles>
+  </properties>
+
+</block>

@@ -1,0 +1,43 @@
+<!--
+  CLI Capability — BootstrapProjectTypeRegistry
+  FQN: org.blockml.bml.cli.capability.BootstrapProjectTypeRegistry
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>BootstrapProjectTypeRegistry</name>
+  <type>clicap:BootstrapProjectTypeRegistry</type>
+  <baseType>core:Capability</baseType>
+  <is>CLI wrapper around framework bootstrapTypeRegistry</is>
+
+  <documentation>CLI6: libraryPaths when libraries[] non-empty; else paths=[srcDir]. Merges CLI overrides for --src and --libraries.</documentation>
+
+  <references>
+    <see type="clidocumentation:RuntimeBootstrap" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <options type="cliapi:CliBootstrapOptions">
+      <documentation>Bootstrap options. (required)</documentation>
+    </options>
+    <result type="type:Text">
+      <documentation>BootstrapResult with registry and diagnostics. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

@@ -1,0 +1,45 @@
+<!--
+  CLI Documentation — Configuration
+  FQN: org.blockml.bml.cli.documentation.Configuration
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Configuration</name>
+  <type>clidocumentation:Configuration</type>
+  <baseType>core:Documentation</baseType>
+  <is>bom.config.json and later bom-cli.config.json</is>
+
+  <documentation>V1 CLI reads bom.config.json from project root:
+
+    • outDir — default "doc" (CLI DefaultBomConfig)
+    • srcDir — default "src"
+    • libraries — Library.bml paths for library-scope compiles
+    • targets — bootstrap list; default ["blockdoc"] (CLI2)
+    • targetOptions — opaque per-target; keys = registry names
+
+    Fields documented in MD but not read by V1 minimal CLI (later):
+    thumbsDir, mbLibPath, openscadPath, activeConfig, bmlExtensions, xsdValidation.
+
+    bom-cli.config.json command/flag renaming — planned; not V1.</documentation>
+  <references>
+    <see type="clidocumentation:TargetBootstrap" relation="ReadNext"></see>
+  </references>
+
+</block>

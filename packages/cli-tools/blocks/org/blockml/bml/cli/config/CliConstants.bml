@@ -1,0 +1,36 @@
+<!--
+  CLI Config — CliConstants
+  FQN: org.blockml.bml.cli.config.CliConstants
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>CliConstants</name>
+  <type>cliconfig:CliConstants</type>
+  <baseType>cli:CliType</baseType>
+  <is>Well-known CLI constants</is>
+
+  <properties>
+    <USAGE type="type:Text"><documentation>Usage string printed on configuration errors.</documentation></USAGE>
+    <SUPPORTED_TARGETS type="type:Text"><documentation>V1: blockdoc, xsd, fatblock.</documentation></SUPPORTED_TARGETS>
+    <DOCUMENT_TARGETS type="type:Text"><documentation>Targets requiring a host file: fatblock.</documentation></DOCUMENT_TARGETS>
+    <DEFAULT_TARGETS type="type:Text"><documentation>targets[] default when omitted: ["blockdoc"].</documentation></DEFAULT_TARGETS>
+    <BIN_NAME type="type:Text"><documentation>blockml</documentation></BIN_NAME>
+  </properties>
+
+</block>

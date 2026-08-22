@@ -1,0 +1,45 @@
+<!--
+  FatBlock Capability — RootFqnsByFilePath
+  FQN: org.blockml.bml.target.fatblock.capability.RootFqnsByFilePath
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>RootFqnsByFilePath</name>
+  <type>fbcap:RootFqnsByFilePath</type>
+  <baseType>core:Capability</baseType>
+  <is>Map each source file to its root FQN</is>
+
+  <documentation>FB5: group registry keys by filePath; skip missing or angle-bracket paths; root = FQN not prefixed by another FQN from the same file (subBlocks excluded).</documentation>
+
+  <references>
+    <see type="fbdocumentation:CandidateCollection" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <typeRegistry type="type:Text">
+      <documentation>TypeRegistry. (required)</documentation>
+    </typeRegistry>
+    <result type="type:Text">
+      <documentation>Map filePath to root FQN. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

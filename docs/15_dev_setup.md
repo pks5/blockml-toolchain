@@ -108,8 +108,8 @@ blockml/                         ← THIS REPO — @blockml/* toolchain only
 | `@blockml/validator` | `packages/validator` → `@blockml/validator` | Phase B |
 | `@blockml/compiler` | `packages/compiler` → `@blockml/compiler` | Phase C |
 | `@blockml/blockdoc-target` | `packages/blockdoc-target` | Phase C — **first** Stage-3 / V1 control RT; registry `"blockdoc"` |
-| `@blockml/xsd-target` | `packages/xsd-target` | Phase C — after BlockDoc; registry `"xsd"` |
-| `@blockml/fatblock-target` | `packages/fatblock-target` | Phase C — after / beside XSD; registry `"fatblock"` |
+| `@blockml/xsd-target` | `packages/xsd-target` | Phase C — after BlockDoc; registry `"xsd"`; **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction` |
+| `@blockml/fatblock-target` | `packages/fatblock-target` | Phase C — after / beside XSD; registry `"fatblock"`; **SSOT:** `org.blockml.bml.target.fatblock.documentation.Introduction` |
 | `@blockml/cli` | `packages/cli-tools` | Phase C — reads `targets[]` (default `["blockdoc"]`); universal CLI only |
 | `@blockml/engine-maker` | `packages/` / `engines/` | Phase C — reusable engine; SCAD product path consumes it from MachineBlocks |
 | `@machineblocks/core` | *installed dep / fixture* | **OUT OF SCOPE** — MachineBlocks mono-repo |
@@ -724,15 +724,17 @@ Phase B — Semantic layer
 
 Phase C — Compile pipeline (BlockDoc-first)
   7. Compiler facade                 — @blockml/compiler (C2, C3, C7)
-  8. CLI + targets[]                 — @blockml/cli; bom.config.json targets (default ["blockdoc"])
+  8. CLI + targets[]                 — @blockml/cli; SSOT: org.blockml.bml.cli.documentation.Introduction
   9. **First Stage-3 gate: BlockDoc** — @blockml/blockdoc-target / CLI `blockdoc`
      — SSOT: org.blockml.bml.target.blockdoc.documentation.Introduction
      — compile scope: library/corpus (`blockml compile blockdoc`), not per-file --all
      — proves Facade + Target Registry with minimal domain surface
  10. Further toolchain RTs (after BlockDoc control path works)
      a. XSD target      — @blockml/xsd-target / `xsd`
+        — SSOT: org.blockml.bml.target.xsd.documentation.Introduction (generate only)
      b. FatBlock target — @blockml/fatblock-target / `fatblock`
-     — XSD *validation* of authoring only after (a) can generate schemas
+        — SSOT: org.blockml.bml.target.fatblock.documentation.Introduction (V1 folder pool)
+     — XSD *validation* of authoring only after (a) can generate schemas (CLI-owned)
      — XSD validation must stay **disableable** (`--no-xsd` / `xsdValidation`)
  11. Engine (optional in this repo)  — @blockml/engine-maker for consumers
  12. Correctness + snapshot tests    — tests/correctness/, tests/snapshots/
@@ -746,8 +748,8 @@ Phase C — Compile pipeline (BlockDoc-first)
 | Order | Target | Why | Where |
 |---|---|---|---|
 | **1st** | **BlockDoc** (`blockdoc`) | **Control gate** — browseable HTML of the BML corpus | this repo |
-| 2nd+ | **XSD** (`xsd`) | Schemas for IDE / later validation | this repo |
-| 2nd+ | **FatBlock** (`fatblock`) | Registry closure + embed model | this repo |
+| 2nd+ | **XSD** (`xsd`) | Schemas for IDE / later validation — **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction` | this repo |
+| 2nd+ | **FatBlock** (`fatblock`) | Portable `.bml` folder bundle (V1); closure planned v2 | this repo |
 | Later | **machineblocks-v3-scad** | Product SCAD target + thin `@machineblocks/cli` | **MachineBlocks mono-repo (out of scope here)** |
 
 BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`blockml compile blockdoc`, library/corpus scope — see `14_compiler_runtime.md` C7). `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` C3. MachineBlocks users use `@machineblocks/cli` from the MachineBlocks mono-repo for the product chain.
@@ -851,7 +853,7 @@ Add new framework BML to T1 as it lands — the Definition meta-model corpus is 
 | Constraint / inheritance validation | Phase B |
 | XSD as hard Stage-1 requirement | Never for Phase A — see below |
 | BlockDoc Render Target (HTML docs) | Phase C — **first** Stage-3 / V1 control RT (`blockdoc`); default in `targets[]` |
-| XSD Render Target (generate `.xsd`) | Phase C — after BlockDoc; `@blockml/xsd-target` / CLI `xsd` |
+| XSD Render Target (generate `.xsd`) | Phase C — after BlockDoc; `@blockml/xsd-target` / CLI `xsd`; **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction` |
 | FatBlock Render Target (embed bundle) | Phase C — after / beside XSD; `@blockml/fatblock-target` / CLI `fatblock`; **Stage 2 first** |
 | XSD validation of BML authoring | **After** XSD Render Target ships; **always disableable** (`--no-xsd` / `xsdValidation`) |
 | Meta-driven `bml:xml` parser/serializer | Post–Phase A (see `19_definition_blocks_and_bml_xml.md`) |
@@ -874,9 +876,9 @@ Recommended first coding milestones (aligned with **V1 Implementation Strategy**
 7. @blockml/validator         — library + migrate owned MD → Stage 2
 8. @blockml/compiler          — library + migrate 06 / 14 → Facade + Target Registry (C2, C3)
 9. BlockDoc RT first          — library + owned slices → @blockml/blockdoc-target (control gate)
-10. XSD / FatBlock RTs         — each: library + owned MD, then after BlockDoc
+10. XSD / FatBlock RTs         — XSD SSOT: org.blockml.bml.target.xsd.documentation.Introduction; FatBlock SSOT: org.blockml.bml.target.fatblock.documentation.Introduction
 11. @blockml/engine-maker      — library + owned MD → RenderEngine stub (consumed by domain targets)
-12. @blockml/cli               — library + migrate 07 → blockml validate / compile (universal; no MB hardcoding)
+12. @blockml/cli               — SSOT: org.blockml.bml.cli.documentation.Introduction; V1 validate/compile
 
 OUT OF SCOPE for this repo (MachineBlocks mono-repo):
   — @machineblocks/core BML + SCAD lib

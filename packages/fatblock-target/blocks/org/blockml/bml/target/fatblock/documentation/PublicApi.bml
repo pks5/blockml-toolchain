@@ -1,0 +1,48 @@
+<!--
+  FatBlock Documentation — PublicApi
+  FQN: org.blockml.bml.target.fatblock.documentation.PublicApi
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>PublicApi</name>
+  <type>fbdocumentation:PublicApi</type>
+  <baseType>core:Documentation</baseType>
+  <is>Public TypeScript and capability surface</is>
+
+  <documentation>Package @blockml/fatblock-target exports:
+    • FatBlockTarget — RenderTarget; name fatblock; accepts document;
+      validateRequest; render → FatBlockRenderOutput
+    • FatBlockOptions / DEFAULT_FATBLOCK_OPTIONS / resolveFatBlockOptions
+    • assembleFatDocument / serializeFatDocument / AssembleFatDocumentResult
+    • collectCandidateFqns / rootFqnsByFilePath
+    • filterByIncludes / matchesIncludePattern
+    • mergeNamespaceBindings / cloneBlockDefinition / fatOutputBasename
+
+    BML: fbcap:Render, ValidateRequest, AssembleFatDocument, api/FatBlockOptions.</documentation>
+  <references>
+    <see type="fbdocumentation:CandidateCollection" relation="ReadNext"></see>
+    <see type="fbcap:Render" relation="Defines"></see>
+    <see type="fbapi:FatBlockOptions" relation="Defines"></see>
+    <see type="fbcap:AssembleFatDocument" relation="Defines"></see>
+  </references>
+
+</block>

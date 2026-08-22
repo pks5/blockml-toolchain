@@ -1,0 +1,54 @@
+<!--
+  FatBlock Capability — AssembleFatDocument
+  FQN: org.blockml.bml.target.fatblock.capability.AssembleFatDocument
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>AssembleFatDocument</name>
+  <type>fbcap:AssembleFatDocument</type>
+  <baseType>core:Capability</baseType>
+  <is>Build fat BomDocument from host plus peer embeds</is>
+
+  <documentation>FB12: require srcDir. FB13: host not found to BML_FATBLOCK_HOST_NOT_FOUND. FB14: host embeddedBlocks non-empty to BML_FATBLOCK_HOST_HAS_EMBEDDED_BLOCKS. FB15: duplicate candidate FQN to BML_DUPLICATE_EMBEDDED_BLOCK. FB16: embed not root / missing to BML_FATBLOCK_EMBED_NOT_FOUND; embed already has embeds to BML_FATBLOCK_EMBED_HAS_EMBEDDED_BLOCKS. FB17: clone embed, clear nested embeds, preserve subBlocks; sorted embed order; merge NS; abort if any error.</documentation>
+
+  <references>
+    <see type="fbdocumentation:EmbedAssemblyRules" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <typeRegistry type="type:Text">
+      <documentation>TypeRegistry. (required)</documentation>
+    </typeRegistry>
+    <hostFilePath type="type:Text">
+      <documentation>Host .bml path. (required)</documentation>
+    </hostFilePath>
+    <options type="fbapi:FatBlockOptions">
+      <documentation>Resolved options. (required)</documentation>
+    </options>
+    <rootDir type="type:Text">
+      <documentation>Project root. (required)</documentation>
+    </rootDir>
+    <result type="fbapi:AssembleFatDocumentResult">
+      <documentation>document and diagnostics. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

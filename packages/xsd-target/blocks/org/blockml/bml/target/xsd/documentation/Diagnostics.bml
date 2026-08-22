@@ -1,0 +1,38 @@
+<!--
+  XSD Documentation — Diagnostics
+  FQN: org.blockml.bml.target.xsd.documentation.Diagnostics
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Diagnostics</name>
+  <type>xsddocumentation:Diagnostics</type>
+  <baseType>core:Documentation</baseType>
+  <is>Emit path has no package-local diagnostics</is>
+
+  <documentation>V1 XSD target emits without package diagnostics codes. Failures surface as host/CLI
+    or empty/malformed output only if upstream session is broken.
+    Authoring validation diagnostics (--no-xsd) are CLI-owned, not modeled here.
+    Scope mismatch for accepts is compiler/CLI (BML_TARGET_SCOPE_MISMATCH).</documentation>
+  <references>
+    <see type="xsddocumentation:DesignDecisions" relation="ReadNext"></see>
+  </references>
+
+</block>

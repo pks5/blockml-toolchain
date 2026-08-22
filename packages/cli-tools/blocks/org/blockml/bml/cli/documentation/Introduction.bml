@@ -1,0 +1,46 @@
+<!--
+  CLI Documentation — Introduction
+  FQN: org.blockml.bml.cli.documentation.Introduction
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Introduction</name>
+  <type>clidocumentation:Introduction</type>
+  <baseType>core:Documentation</baseType>
+  <is>Purpose and scope of the BlockML CLI</is>
+
+  <documentation>The @blockml/cli package (blockml command) is the universal Node.js toolchain CLI.
+    It wraps @blockml/compiler and @blockml/framework with file-system operations:
+    config loading, TypeRegistry bootstrap, target bootstrap, compile/validate orchestration,
+    and writing RenderOutput to disk.
+
+    This library (org.blockml.bml.cli.*) is the SSOT. TypeScript in packages/cli-tools/src/
+    implements it. Tests in packages/cli-tools/test/ encode behavioral contracts.
+
+    V1 implements validate and compile only (blockdoc, xsd, fatblock targets).
+    Domain products use thin host CLIs (e.g. @machineblocks/cli) — see DualCliModel.
+
+    Pipeline: loadConfig → bootstrapTypeRegistry → bootstrapTargets → compileToOutput → writeOutputFiles.</documentation>
+  <references>
+    <see type="clidocumentation:LayerSeparation" relation="ReadNext"></see>
+    <see type="clicap:RunCli" relation="SeeAlso"></see>
+  </references>
+
+</block>

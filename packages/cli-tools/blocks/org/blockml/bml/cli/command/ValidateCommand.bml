@@ -1,0 +1,38 @@
+<!--
+  CLI Command — ValidateCommand
+  FQN: org.blockml.bml.cli.command.ValidateCommand
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ValidateCommand</name>
+  <type>clicommand:ValidateCommand</type>
+  <baseType>cli:CliType</baseType>
+  <is>blockml validate command model</is>
+
+  <documentation>CLI10/CLI11: validate file OR --all corpus; no target bootstrap; no output files.</documentation>
+  <references>
+    <see type="clidocumentation:ValidateCommand" relation="SeeAlso" />
+    <see type="clicap:RunValidate" relation="SeeAlso" />
+  </references>
+  <properties>
+    <file type="type:Text"><documentation>Single file path. Mutually exclusive with all=true. (optional)</documentation></file>
+    <all type="type:Boolean"><documentation>Validate entire registry corpus. (optional)</documentation></all>
+  </properties>
+
+</block>

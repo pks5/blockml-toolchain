@@ -1,0 +1,34 @@
+<!--
+  CLI API — CliResult
+  FQN: org.blockml.bml.cli.api.CliResult
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>CliResult</name>
+  <type>cliapi:CliResult</type>
+  <baseType>cli:CliType</baseType>
+  <is>Exit code and stderr output from runCli</is>
+
+  <documentation>CLI18: code 0 success, 1 compiler errors, 2 configuration error.</documentation>
+  <properties>
+    <code type="type:Integer"><documentation>Process exit code. (required)</documentation></code>
+    <stderr type="type:Text"><documentation>Diagnostic lines joined with newlines. (required)</documentation></stderr>
+  </properties>
+
+</block>

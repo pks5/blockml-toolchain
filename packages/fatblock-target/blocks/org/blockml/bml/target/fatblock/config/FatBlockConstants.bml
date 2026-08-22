@@ -1,0 +1,38 @@
+<!--
+  FatBlock Config — FatBlockConstants
+  FQN: org.blockml.bml.target.fatblock.config.FatBlockConstants
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:fatblock="org.blockml.bml.target.fatblock"
+  xmlns:fbapi="org.blockml.bml.target.fatblock.api"
+  xmlns:fbcap="org.blockml.bml.target.fatblock.capability"
+  xmlns:fbconfig="org.blockml.bml.target.fatblock.config"
+  xmlns:fbdocumentation="org.blockml.bml.target.fatblock.documentation"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>FatBlockConstants</name>
+  <type>fbconfig:FatBlockConstants</type>
+  <baseType>fatblock:FatblockType</baseType>
+  <is>Well-known FatBlock constants</is>
+
+  <properties>
+    <REGISTRY_NAME type="type:Text"><documentation>Always "fatblock".</documentation></REGISTRY_NAME>
+    <ACCEPTS type="type:Text"><documentation>document only.</documentation></ACCEPTS>
+    <DEFAULT_EMBEDDED_BLOCKS_STRATEGY type="type:Text"><documentation>"error".</documentation></DEFAULT_EMBEDDED_BLOCKS_STRATEGY>
+    <SERIALIZE_INDENT type="type:Integer"><documentation>2 — passed to @blockml/serializer.</documentation></SERIALIZE_INDENT>
+    <DEFAULT_XMLNS type="type:Text"><documentation>http://blockml.org/bml for empty prefix when bindings omitted.</documentation></DEFAULT_XMLNS>
+  </properties>
+
+</block>

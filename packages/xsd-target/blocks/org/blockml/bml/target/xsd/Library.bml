@@ -4,22 +4,46 @@
 -->
 <block
   xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:cli="org.blockml.bml.cli"
   xmlns:core="org.blockml.bml.core"
-  xmlns:xsd="org.blockml.bml.target.xsd">
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:xsd="org.blockml.bml.target.xsd"
+  xmlns:xsdapi="org.blockml.bml.target.xsd.api"
+  xmlns:xsdcap="org.blockml.bml.target.xsd.capability"
+  xmlns:xsdconfig="org.blockml.bml.target.xsd.config"
+  xmlns:xsddocumentation="org.blockml.bml.target.xsd.documentation"
+  xmlns:type="org.blockml.bml.type">
 
   <name>Library</name>
   <type>xsd:Library</type>
   <baseType>core:BlockLibrary</baseType>
-  <is>XSD schema render target library catalog</is>
+  <is>The XSD schema render target library catalog</is>
 
   <documentation>
-    Stage-3 target that emits universal bml.xsd from the Definition meta-model and D1
-    XML defaults. Registry name: xsd. Accepts library, corpus, and auto compile scope.
-    Output: bml.xsd under outDir (CLI default schemas/).
-    Authoring XSD validation is a separate, always-disableable CLI/config concern.
+    Canonical XSD specification for BlockML — registry name xsd, bml.xsd particles,
+    domain vocabularies, catalog.xml (XSD1–XSD18). TypeScript in
+    packages/xsd-target/src/ implements this library. Membership is defined
+    exclusively by this blocks list.
   </documentation>
 
   <version>0.1.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>XSD render target library</value>
+    </description>
+  </properties>
 
   <aggregations>
     <readMe>
@@ -27,6 +51,44 @@
         <xsd:README />
       </composition>
     </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+      <composition>
+        <bom:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition><xsd:XsdType /></composition>
+      <composition><xsdapi:XsdOptions /></composition>
+      <composition><xsdapi:XsdRenderOutput /></composition>
+      <composition><xsdapi:CatalogEntry /></composition>
+      <composition><xsdconfig:XsdConstants /></composition>
+      <composition><xsdconfig:DefaultXsdOptions /></composition>
+      <composition><xsdcap:ResolveOptions /></composition>
+      <composition><xsdcap:Render /></composition>
+      <composition><xsdcap:EmitBlockXsd /></composition>
+      <composition><xsdcap:MemberPrefersElement /></composition>
+      <composition><xsdcap:ExtraElementNames /></composition>
+      <composition><xsdcap:EmitTypesXsd /></composition>
+      <composition><xsdcap:EmitServiceXsd /></composition>
+      <composition><xsdcap:VocabularyElements /></composition>
+      <composition><xsdcap:EmitCatalogXml /></composition>
+      <composition><xsdcap:CatalogRelativePath /></composition>
+      <composition><xsddocumentation:Introduction /></composition>
+      <composition><xsddocumentation:LayerSeparation /></composition>
+      <composition><xsddocumentation:ArchitectureOverview /></composition>
+      <composition><xsddocumentation:V1Scope /></composition>
+      <composition><xsddocumentation:PublicApi /></composition>
+      <composition><xsddocumentation:ParticleMappingRules /></composition>
+      <composition><xsddocumentation:DomainVocabularyRules /></composition>
+      <composition><xsddocumentation:CatalogAndOutputLayout /></composition>
+      <composition><xsddocumentation:Diagnostics /></composition>
+      <composition><xsddocumentation:DesignDecisions /></composition>
+      <composition><xsddocumentation:PackageOwnership /></composition>
+      <composition><xsddocumentation:ScopeExclusions /></composition>
+    </blocks>
   </aggregations>
 
 </block>
