@@ -4,6 +4,11 @@ export {
   type MarkupContent,
 } from "./hover.js";
 export {
+  definitionAt,
+  referencesAt,
+  type LspLocation,
+} from "./navigation.js";
+export {
   documentSymbols,
   SymbolKind,
   type OutlineSymbol,

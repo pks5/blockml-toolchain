@@ -19,7 +19,8 @@ export const documentationBlocks = [
     V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate)
     + textDocument/formatting (parse → serialize)
     + textDocument/hover (Urmodell hit-test + TypeRegistry)
-    + textDocument/documentSymbol (Urmodell outline tree).
+    + textDocument/documentSymbol (Urmodell outline tree)
+    + textDocument/definition and textDocument/references (hit-test + TypeRegistry).
     Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.`,
     refs: [
       { type: "lspdocumentation:LayerSeparation", relation: "ReadNext" },
@@ -60,6 +61,9 @@ export const documentationBlocks = [
     Outline: onDocumentSymbol → documentSymbols → parse (no validator) → hierarchical
     DocumentSymbol tree (Block, members, subBlocks, embeddedBlocks).
 
+    Navigation: onDefinition / onReferences → hitAt → TypeRegistry (definition =
+    block.source; references = baseType + member types, optional declaration).
+
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.`,
     refs: [
       { type: "lspdocumentation:ServerLifecycle", relation: "ReadNext" },
@@ -76,11 +80,12 @@ export const documentationBlocks = [
     • textDocument/formatting (parse → serialize)
     • textDocument/hover (Urmodell hit-test + TypeRegistry)
     • textDocument/documentSymbol (Urmodell outline tree)
+    • textDocument/definition and textDocument/references (hit-test + TypeRegistry)
     • blockml-lsp stdio binary
-    • analyzeDocument, formatDocument, hoverAt, and documentSymbols public API for tests and non-LSP hosts
+    • analyzeDocument, formatDocument, hoverAt, documentSymbols, definitionAt, and referencesAt public API for tests and non-LSP hosts
 
     Out of scope V1:
-    • Completion, go-to-definition
+    • Completion
     • Range formatting, tab indent
     • XSD validation, BomBuilder (V3)
     • VS Code extension in this repo`,
@@ -95,6 +100,8 @@ export const documentationBlocks = [
     formatDocument(text, options?): string | null
     hoverAt(text, filePath, position, workspace): HoverInfo | null
     documentSymbols(text, filePath): OutlineSymbol[] | null
+    definitionAt(text, filePath, position, workspace): LspLocation[] | null
+    referencesAt(text, filePath, position, workspace, includeDeclaration?): LspLocation[] | null
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
     invalidateWorkspace(rootDir): void
@@ -108,6 +115,8 @@ export const documentationBlocks = [
       { type: "lspcap:FormatDocument", relation: "Defines" },
       { type: "lspcap:HoverAt", relation: "Defines" },
       { type: "lspcap:DocumentSymbols", relation: "Defines" },
+      { type: "lspcap:DefinitionAt", relation: "Defines" },
+      { type: "lspcap:ReferencesAt", relation: "Defines" },
       { type: "lspdocumentation:DesignDecisions", relation: "ReadNext" },
     ],
   },
@@ -136,6 +145,10 @@ export const documentationBlocks = [
     onDocumentSymbol: documentSymbols on the in-memory buffer; hierarchical
     Urmodell tree. Parse-only — no validator. selectionRange equals range.
 
+    onDefinition / onReferences: hitAt on the in-memory buffer, then TypeRegistry
+    from disk. Member definition jumps to the member type. includeDeclaration
+    controls whether the defining block.source is included.
+
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.`,
     refs: [
       { type: "lspcap:StartLanguageServer", relation: "Defines" },
@@ -158,7 +171,7 @@ export const documentationBlocks = [
     doc: `Out of scope:
     • IDE extension UI, syntax highlighting — external packages
     • BomBuilder structural authoring (V3)
-    • Completion, go-to-definition, references
+    • Completion, workspace/symbol
     • Range formatting, tab indent
     • Duplicate parse/validate/serialize logic — must delegate to parser/validator/serializer`,
     refs: [
@@ -192,7 +205,11 @@ export const documentationBlocks = [
     Outline is parse-only (no validator, no TypeRegistry). Hierarchical
     DocumentSymbol tree: Block Class, property Property, aggregation/association
     Field, capability Method; children in members then subBlocks then
-    embeddedBlocks order. selectionRange equals the element range.`,
+    embeddedBlocks order. selectionRange equals the element range.
+
+    Definition and references share Hover's hit-test. Member F12 goes to the
+    member type (typeFqn). Targets and usages come from the disk TypeRegistry
+    (no unsaved overlay). includeDeclaration defaults true.`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

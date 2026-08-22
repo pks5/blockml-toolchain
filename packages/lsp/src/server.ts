@@ -10,12 +10,15 @@ import {
   type DidOpenTextDocumentParams,
   type DocumentFormattingParams,
   type DocumentSymbolParams,
+  type DefinitionParams,
   type HoverParams,
   type InitializeParams,
+  type ReferenceParams,
 } from "vscode-languageserver/node.js";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { hoverAt } from "./hover.js";
 import { analyzeDocument, formatDocument } from "./language-service.js";
+import { definitionAt, referencesAt } from "./navigation.js";
 import { documentSymbols } from "./outline.js";
 import { diagnosticToLsp } from "./positions.js";
 import {
@@ -118,6 +121,8 @@ connection.onInitialize((params) => {
       documentFormattingProvider: true,
       hoverProvider: true,
       documentSymbolProvider: true,
+      definitionProvider: true,
+      referencesProvider: true,
     },
   };
 });
@@ -225,6 +230,30 @@ connection.onDocumentSymbol((params: DocumentSymbolParams) => {
     return null;
   }
   return documentSymbols(doc.getText(), uriToFilePath(doc.uri));
+});
+
+connection.onDefinition((params: DefinitionParams) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc || !workspaceRoot) {
+    return null;
+  }
+  const workspace = createWorkspace(workspaceRoot);
+  return definitionAt(doc.getText(), uriToFilePath(doc.uri), params.position, workspace);
+});
+
+connection.onReferences((params: ReferenceParams) => {
+  const doc = documents.get(params.textDocument.uri);
+  if (!doc || !workspaceRoot) {
+    return null;
+  }
+  const workspace = createWorkspace(workspaceRoot);
+  return referencesAt(
+    doc.getText(),
+    uriToFilePath(doc.uri),
+    params.position,
+    workspace,
+    params.context.includeDeclaration,
+  );
 });
 
 connection.listen();

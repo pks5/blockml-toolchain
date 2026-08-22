@@ -70,6 +70,8 @@ declare module "vscode-languageserver/node.js" {
     onDocumentSymbol: (
       handler: (params: DocumentSymbolParams) => DocumentSymbol[] | null,
     ) => void;
+    onDefinition: (handler: (params: DefinitionParams) => Location[] | null) => void;
+    onReferences: (handler: (params: ReferenceParams) => Location[] | null) => void;
     sendDiagnostics: (params: { uri: string; diagnostics: Diagnostic[] }) => void;
     listen: () => void;
   }
@@ -92,7 +94,29 @@ declare module "vscode-languageserver/node.js" {
       documentFormattingProvider?: boolean;
       hoverProvider?: boolean;
       documentSymbolProvider?: boolean;
+      definitionProvider?: boolean;
+      referencesProvider?: boolean;
     };
+  }
+
+  export interface Location {
+    uri: string;
+    range: Range;
+  }
+
+  export interface DefinitionParams {
+    textDocument: { uri: string };
+    position: Position;
+  }
+
+  export interface ReferenceContext {
+    includeDeclaration: boolean;
+  }
+
+  export interface ReferenceParams {
+    textDocument: { uri: string };
+    position: Position;
+    context: ReferenceContext;
   }
 
   export enum SymbolKind {

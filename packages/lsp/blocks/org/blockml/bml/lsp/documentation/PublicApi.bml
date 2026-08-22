@@ -35,6 +35,8 @@
     formatDocument(text, options?): string | null
     hoverAt(text, filePath, position, workspace): HoverInfo | null
     documentSymbols(text, filePath): OutlineSymbol[] | null
+    definitionAt(text, filePath, position, workspace): LspLocation[] | null
+    referencesAt(text, filePath, position, workspace, includeDeclaration?): LspLocation[] | null
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
     invalidateWorkspace(rootDir): void
@@ -49,6 +51,8 @@
     <see type="lspcap:FormatDocument" relation="Defines"></see>
     <see type="lspcap:HoverAt" relation="Defines"></see>
     <see type="lspcap:DocumentSymbols" relation="Defines"></see>
+    <see type="lspcap:DefinitionAt" relation="Defines"></see>
+    <see type="lspcap:ReferencesAt" relation="Defines"></see>
     <see type="lspdocumentation:DesignDecisions" relation="ReadNext"></see>
   </references>
 

@@ -30,7 +30,7 @@
   <baseType>core:Capability</baseType>
   <is>stdio LSP server entry (bin blockml-lsp)</is>
 
-  <documentation>packages/lsp/dist/server.js — document sync, publishDiagnostics, textDocument/formatting, textDocument/hover, and textDocument/documentSymbol.</documentation>
+  <documentation>packages/lsp/dist/server.js — document sync, publishDiagnostics, textDocument/formatting, textDocument/hover, textDocument/documentSymbol, textDocument/definition, and textDocument/references.</documentation>
 
   <references>
     <see type="lspdocumentation:ServerLifecycle" relation="SeeAlso" />

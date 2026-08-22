@@ -53,6 +53,10 @@
     onDocumentSymbol: documentSymbols on the in-memory buffer; hierarchical
     Urmodell tree. Parse-only — no validator. selectionRange equals range.
 
+    onDefinition / onReferences: hitAt on the in-memory buffer, then TypeRegistry
+    from disk. Member definition jumps to the member type. includeDeclaration
+    controls whether the defining block.source is included.
+
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.</documentation>
 
   <references>

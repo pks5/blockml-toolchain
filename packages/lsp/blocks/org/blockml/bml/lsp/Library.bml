@@ -83,6 +83,8 @@
       <composition><lspcap:FormatDocument /></composition>
       <composition><lspcap:HoverAt /></composition>
       <composition><lspcap:DocumentSymbols /></composition>
+      <composition><lspcap:DefinitionAt /></composition>
+      <composition><lspcap:ReferencesAt /></composition>
       <composition><lspcap:StartLanguageServer /></composition>
       <composition><lspdocumentation:Introduction /></composition>
       <composition><lspdocumentation:LayerSeparation /></composition>

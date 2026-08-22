@@ -118,6 +118,75 @@
       }
     },
     {
+      "name": "DefinitionAt",
+      "tsExport": "definitionAt",
+      "fqn": "org.blockml.bml.lsp.capability.DefinitionAt",
+      "inputs": [
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "position",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "workspace",
+          "type": "lsp:WorkspaceState",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "core:Any",
+        "required": true
+      }
+    },
+    {
+      "name": "ReferencesAt",
+      "tsExport": "referencesAt",
+      "fqn": "org.blockml.bml.lsp.capability.ReferencesAt",
+      "inputs": [
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "position",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "workspace",
+          "type": "lsp:WorkspaceState",
+          "required": true
+        },
+        {
+          "name": "includeDeclaration",
+          "type": "type:Boolean",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "core:Any",
+        "required": true
+      }
+    },
+    {
       "name": "StartLanguageServer",
       "tsExport": "startLanguageServer",
       "fqn": "org.blockml.bml.lsp.capability.StartLanguageServer",

@@ -44,6 +44,9 @@
     Outline: onDocumentSymbol → documentSymbols → parse (no validator) → hierarchical
     DocumentSymbol tree (Block, members, subBlocks, embeddedBlocks).
 
+    Navigation: onDefinition / onReferences → hitAt → TypeRegistry (definition =
+    block.source; references = baseType + member types, optional declaration).
+
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.</documentation>
 
   <references>

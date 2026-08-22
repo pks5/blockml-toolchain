@@ -55,7 +55,11 @@
     Outline is parse-only (no validator, no TypeRegistry). Hierarchical
     DocumentSymbol tree: Block Class, property Property, aggregation/association
     Field, capability Method; children in members then subBlocks then
-    embeddedBlocks order. selectionRange equals the element range.</documentation>
+    embeddedBlocks order. selectionRange equals the element range.
+
+    Definition and references share Hover's hit-test. Member F12 goes to the
+    member type (typeFqn). Targets and usages come from the disk TypeRegistry
+    (no unsaved overlay). includeDeclaration defaults true.</documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="ReadNext"></see>
