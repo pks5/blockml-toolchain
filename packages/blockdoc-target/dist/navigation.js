@@ -1,18 +1,7 @@
+import { rootFqns as frameworkRootFqns } from "@blockml/framework";
 import { escapeHtml, fqnToHtmlPath, fqnToPackagePrefix, packageIndexPath, relativePath } from "./fqn-path.js";
 export function collectRootFqns(registry) {
-    const byFile = new Map();
-    for (const fqn of registry.keys()) {
-        const doc = registry.get(fqn);
-        const filePath = doc?.source?.filePath;
-        if (!filePath) {
-            continue;
-        }
-        const existing = byFile.get(filePath);
-        if (!existing || fqn.split(".").length < existing.split(".").length) {
-            byFile.set(filePath, fqn);
-        }
-    }
-    return [...byFile.values()].sort();
+    return frameworkRootFqns(registry);
 }
 export function rootFqnForBlock(fqn, rootFqns) {
     const match = rootFqns

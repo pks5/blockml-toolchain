@@ -1,4 +1,5 @@
 import { resolve, sep } from "node:path";
+import { rootFqnByFilePath } from "@blockml/framework";
 import { filterByIncludes } from "./filter-includes.js";
 function normalizePath(p) {
     return p.split(sep).join("/");
@@ -10,25 +11,7 @@ function isPathUnderDir(filePath, dirPath) {
 }
 /** Root FQN per file: the registry key not prefixed by another key from the same file. */
 export function rootFqnsByFilePath(registry) {
-    const byFile = new Map();
-    for (const fqn of registry.keys()) {
-        const doc = registry.get(fqn);
-        const filePath = doc?.source.filePath;
-        if (!filePath || filePath.startsWith("<")) {
-            continue;
-        }
-        const list = byFile.get(filePath) ?? [];
-        list.push(fqn);
-        byFile.set(filePath, list);
-    }
-    const roots = new Map();
-    for (const [filePath, fqns] of byFile) {
-        const root = fqns.find((candidate) => !fqns.some((other) => other !== candidate && candidate.startsWith(`${other}.`)));
-        if (root) {
-            roots.set(filePath, root);
-        }
-    }
-    return roots;
+    return rootFqnByFilePath(registry);
 }
 export function collectCandidateFqns(registry, srcDir, rootDir, hostFqn, includePatterns) {
     const absSrc = resolve(rootDir, srcDir);

@@ -45,10 +45,21 @@ function diag(
 }
 
 function constraintBranch(typeFqn: string): ConstraintBranch {
-  if (typeFqn.includes(".constraint.Min") || typeFqn.includes(".constraint.Max")) {
-    return "ValueConstraint";
+  if (
+    typeFqn.includes(".constraint.MinItems") ||
+    typeFqn.includes(".constraint.MaxItems") ||
+    typeFqn.includes(".constraint.AllowedChildType")
+  ) {
+    return "AggregationConstraint";
   }
-  if (typeFqn.includes(".constraint.ValuePresent")) {
+  if (
+    typeFqn.includes(".constraint.Min") ||
+    typeFqn.includes(".constraint.Max") ||
+    typeFqn.includes(".constraint.MinLength") ||
+    typeFqn.includes(".constraint.MaxLength") ||
+    typeFqn.includes(".constraint.Pattern") ||
+    typeFqn.includes(".constraint.ValuePresent")
+  ) {
     return "ValueConstraint";
   }
   if (typeFqn.includes(".constraint.RequiresMember")) {
@@ -100,13 +111,87 @@ function hasValidation(instance: BlockInstance): boolean {
   return v !== undefined;
 }
 
-function validationIsError(instance: BlockInstance): boolean {
+function validationSeverity(instance: BlockInstance): Diagnostic["severity"] | null {
   const v = instance.memberValues["validation"];
   if (!v || v.kind !== "literal") {
-    return false;
+    return null;
   }
   const val = String(v.value);
-  return val.includes("Error") || val.includes("error");
+  if (val.includes("Error") || val.includes("error")) {
+    return "error";
+  }
+  if (val.includes("Warning") || val.includes("warning")) {
+    return "warning";
+  }
+  if (val.includes("Information") || val.includes("information")) {
+    return "info";
+  }
+  return null;
+}
+
+function validationIsEnforced(instance: BlockInstance): boolean {
+  return validationSeverity(instance) !== null;
+}
+
+function constraintViolationCode(severity: Diagnostic["severity"]): string {
+  if (severity === "warning") {
+    return "BML_CONSTRAINT_WARNING";
+  }
+  if (severity === "info") {
+    return "BML_CONSTRAINT_INFORMATION";
+  }
+  return "BML_CONSTRAINT_VIOLATION";
+}
+
+function pushConstraintViolation(
+  instance: BlockInstance,
+  message: string,
+  file: string,
+  diagnostics: Diagnostic[],
+  source?: { line?: number; column?: number },
+): void {
+  const severity = validationSeverity(instance);
+  if (!severity) {
+    return;
+  }
+  diagnostics.push(
+    diag(
+      constraintViolationCode(severity),
+      message,
+      file,
+      source?.line ?? instance.source?.line,
+      source?.column ?? instance.source?.column,
+      severity,
+    ),
+  );
+}
+
+function getPropertyStringValue(prop: PropertyDefinition): string | undefined {
+  const fromLiteral = (val: PropertyDefinition["value"]) => {
+    if (val?.kind === "literal" && typeof val.value === "string") {
+      return val.value;
+    }
+    return undefined;
+  };
+  const direct = fromLiteral(prop.value);
+  if (direct !== undefined) {
+    return direct;
+  }
+  for (const entry of prop.values ?? []) {
+    const s = fromLiteral(entry.value);
+    if (s !== undefined) {
+      return s;
+    }
+  }
+  return undefined;
+}
+
+function constraintTypeArg(instance: BlockInstance): string | undefined {
+  const typeVal = instance.memberValues["type"];
+  if (typeVal?.kind === "literal") {
+    return String(typeVal.value);
+  }
+  return undefined;
 }
 
 function evaluateBlockConstraint(
@@ -116,7 +201,7 @@ function evaluateBlockConstraint(
   file: string,
   diagnostics: Diagnostic[],
 ): void {
-  if (!hasValidation(instance) || !validationIsError(instance)) {
+  if (!validationIsEnforced(instance)) {
     return;
   }
   if (instance.typeFqn.includes(".RequiresMember")) {
@@ -129,14 +214,11 @@ function evaluateBlockConstraint(
     const effective = resolveEffectiveMembers(block, registry);
     const found = effective.some((m) => m.name === memberName);
     if (!found) {
-      diagnostics.push(
-        diag(
-          "BML_CONSTRAINT_VIOLATION",
-          `RequiresMember: missing member ${memberName}`,
-          file,
-          instance.source?.line,
-          instance.source?.column,
-        ),
+      pushConstraintViolation(
+        instance,
+        `RequiresMember: missing member ${memberName}`,
+        file,
+        diagnostics,
       );
     }
   }
@@ -164,39 +246,203 @@ function evaluateValueConstraint(
   file: string,
   diagnostics: Diagnostic[],
 ): void {
-  if (!hasValidation(instance) || !validationIsError(instance)) {
+  if (!validationIsEnforced(instance)) {
     return;
   }
   const typeFqn = instance.typeFqn;
-  if (typeFqn.includes(".Min")) {
+  const limitVal = instance.memberValues["value"];
+  const limit =
+    limitVal && isLiteralValue(limitVal) && typeof limitVal.value === "number"
+      ? limitVal.value
+      : Number(limitVal && isLiteralValue(limitVal) ? limitVal.value : NaN);
+
+  if (typeFqn.includes(".Min") && !typeFqn.includes("MinItems") && !typeFqn.includes("MinLength")) {
+    const actual = prop ? getPropertyNumericValue(prop) : undefined;
+    if (actual !== undefined && !Number.isNaN(limit) && actual < limit) {
+      pushConstraintViolation(
+        instance,
+        `Value ${actual} is less than minimum ${limit}`,
+        file,
+        diagnostics,
+        prop?.source,
+      );
+    }
+  }
+  if (typeFqn.includes(".Max") && !typeFqn.includes("MaxItems") && !typeFqn.includes("MaxLength")) {
+    const actual = prop ? getPropertyNumericValue(prop) : undefined;
+    if (actual !== undefined && !Number.isNaN(limit) && actual > limit) {
+      pushConstraintViolation(
+        instance,
+        `Value ${actual} is greater than maximum ${limit}`,
+        file,
+        diagnostics,
+        prop?.source,
+      );
+    }
+  }
+  if (typeFqn.includes(".MinLength")) {
+    const actual = prop ? getPropertyStringValue(prop) : undefined;
+    if (actual !== undefined && !Number.isNaN(limit) && actual.length < limit) {
+      pushConstraintViolation(
+        instance,
+        `String length ${actual.length} is less than minimum ${limit}`,
+        file,
+        diagnostics,
+        prop?.source,
+      );
+    }
+  }
+  if (typeFqn.includes(".MaxLength")) {
+    const actual = prop ? getPropertyStringValue(prop) : undefined;
+    if (actual !== undefined && !Number.isNaN(limit) && actual.length > limit) {
+      pushConstraintViolation(
+        instance,
+        `String length ${actual.length} is greater than maximum ${limit}`,
+        file,
+        diagnostics,
+        prop?.source,
+      );
+    }
+  }
+  if (typeFqn.includes(".Pattern")) {
+    const patternVal = instance.memberValues["pattern"] ?? instance.memberValues["value"];
+    const pattern =
+      patternVal && isLiteralValue(patternVal) ? String(patternVal.value) : undefined;
+    const actual = prop ? getPropertyStringValue(prop) : undefined;
+    if (pattern && actual !== undefined) {
+      try {
+        if (!new RegExp(pattern).test(actual)) {
+          pushConstraintViolation(
+            instance,
+            `Value does not match pattern ${pattern}`,
+            file,
+            diagnostics,
+            prop?.source,
+          );
+        }
+      } catch {
+        // invalid pattern — skip runtime evaluation
+      }
+    }
+  }
+  if (typeFqn.includes(".ValuePresent")) {
+    if (prop && !hasAuthoredPropertyValue(prop)) {
+      pushConstraintViolation(
+        instance,
+        `ValuePresent constraint violated on ${prop.name}`,
+        file,
+        diagnostics,
+        prop?.source,
+      );
+    }
+  }
+}
+
+function evaluatePropertyConstraint(
+  instance: BlockInstance,
+  prop: PropertyDefinition | undefined,
+  file: string,
+  diagnostics: Diagnostic[],
+): void {
+  if (!validationIsEnforced(instance) || !prop) {
+    return;
+  }
+  if (instance.typeFqn.includes(".MustBeReadOnly") && !prop.readOnly) {
+    pushConstraintViolation(
+      instance,
+      `Property ${prop.name} must be readOnly`,
+      file,
+      diagnostics,
+      prop.source,
+    );
+  }
+}
+
+function evaluateAggregationConstraint(
+  instance: BlockInstance,
+  member: MemberDefinition,
+  file: string,
+  diagnostics: Diagnostic[],
+): void {
+  if (!validationIsEnforced(instance) || member.kind !== "aggregation") {
+    return;
+  }
+  const children =
+    member.composition?.children.filter((c) => c.kind === "blockInstance") ?? [];
+  const count = children.length;
+
+  if (instance.typeFqn.includes(".MinItems")) {
     const minVal = instance.memberValues["value"];
     const min =
       minVal && isLiteralValue(minVal) && typeof minVal.value === "number"
         ? minVal.value
         : Number(minVal && isLiteralValue(minVal) ? minVal.value : NaN);
-    const actual = prop ? getPropertyNumericValue(prop) : undefined;
-    if (actual !== undefined && !Number.isNaN(min) && actual < min) {
-      diagnostics.push(
-        diag(
-          "BML_CONSTRAINT_VIOLATION",
-          `Value ${actual} is less than minimum ${min}`,
-          file,
-          prop?.source?.line,
-          prop?.source?.column,
-        ),
+    if (!Number.isNaN(min) && count < min) {
+      pushConstraintViolation(
+        instance,
+        `Aggregation ${member.name} has ${count} children, minimum is ${min}`,
+        file,
+        diagnostics,
+        member.source,
       );
     }
   }
-  if (typeFqn.includes(".ValuePresent")) {
-    if (prop && !hasAuthoredPropertyValue(prop)) {
-      diagnostics.push(
-        diag(
-          "BML_CONSTRAINT_VIOLATION",
-          `ValuePresent constraint violated on ${prop.name}`,
-          file,
-          prop.source?.line,
-          prop.source?.column,
-        ),
+  if (instance.typeFqn.includes(".MaxItems")) {
+    const maxVal = instance.memberValues["value"];
+    const max =
+      maxVal && isLiteralValue(maxVal) && typeof maxVal.value === "number"
+        ? maxVal.value
+        : Number(maxVal && isLiteralValue(maxVal) ? maxVal.value : NaN);
+    if (!Number.isNaN(max) && count > max) {
+      pushConstraintViolation(
+        instance,
+        `Aggregation ${member.name} has ${count} children, maximum is ${max}`,
+        file,
+        diagnostics,
+        member.source,
+      );
+    }
+  }
+  if (instance.typeFqn.includes(".AllowedChildType")) {
+    const allowed = constraintTypeArg(instance);
+    if (allowed) {
+      for (const child of children) {
+        if (child.kind !== "blockInstance") {
+          continue;
+        }
+        const childType = child.instance.typeFqn;
+        if (childType !== allowed && !childType.startsWith(`${allowed}.`)) {
+          pushConstraintViolation(
+            instance,
+            `Child type ${childType} is not allowed (expected ${allowed})`,
+            file,
+            diagnostics,
+            child.instance.source,
+          );
+        }
+      }
+    }
+  }
+}
+
+function evaluateCapabilityConstraint(
+  instance: BlockInstance,
+  member: MemberDefinition,
+  file: string,
+  diagnostics: Diagnostic[],
+): void {
+  if (!validationIsEnforced(instance) || member.kind !== "capability") {
+    return;
+  }
+  if (instance.typeFqn.includes(".RequiresImplementation")) {
+    const impl = member.implementation?.source?.trim();
+    if (!impl) {
+      pushConstraintViolation(
+        instance,
+        `Capability ${member.name} requires implementation`,
+        file,
+        diagnostics,
+        member.source,
       );
     }
   }
@@ -210,6 +456,7 @@ function validateConstraintInstances(
   block?: BlockDefinition,
   registry?: TypeRegistry,
   prop?: PropertyDefinition,
+  member?: MemberDefinition,
 ): void {
   if (!instances?.length) {
     return;
@@ -244,8 +491,17 @@ function validateConstraintInstances(
     if (branch === "ValueConstraint") {
       evaluateValueConstraint(inst, prop, file, diagnostics);
     }
+    if (branch === "PropertyConstraint") {
+      evaluatePropertyConstraint(inst, prop, file, diagnostics);
+    }
     if (branch === "BlockConstraint" && block && registry) {
       evaluateBlockConstraint(inst, block, registry, file, diagnostics);
+    }
+    if (branch === "AggregationConstraint" && member) {
+      evaluateAggregationConstraint(inst, member, file, diagnostics);
+    }
+    if (branch === "CapabilityConstraint" && member) {
+      evaluateCapabilityConstraint(inst, member, file, diagnostics);
     }
   }
 }
@@ -306,16 +562,32 @@ function validateEffectiveMemberConstraints(
     if (!member.constraints?.length) {
       continue;
     }
+    const local = findLocalMember(block, member);
     if (member.kind === "property") {
-      const local = findLocalMember(block, member);
       const prop = propertyForConstraintCheck(
         member,
         local?.kind === "property" ? local : undefined,
       );
       for (const inst of member.constraints) {
-        if (constraintBranch(inst.typeFqn) === "ValueConstraint") {
+        const branch = constraintBranch(inst.typeFqn);
+        if (branch === "ValueConstraint") {
           evaluateValueConstraint(inst, prop, file, diagnostics);
         }
+        if (branch === "PropertyConstraint") {
+          evaluatePropertyConstraint(inst, prop, file, diagnostics);
+        }
+      }
+    }
+    if (member.kind === "aggregation") {
+      const agg = local?.kind === "aggregation" ? local : member;
+      for (const inst of member.constraints) {
+        evaluateAggregationConstraint(inst, agg, file, diagnostics);
+      }
+    }
+    if (member.kind === "capability") {
+      const cap = local?.kind === "capability" ? local : member;
+      for (const inst of member.constraints) {
+        evaluateCapabilityConstraint(inst, cap, file, diagnostics);
       }
     }
   }
@@ -327,6 +599,25 @@ function validateMemberConstraints(
   diagnostics: Diagnostic[],
 ): void {
   validateMemberConstraintPlacement(member, file, diagnostics);
+  const context: EmbedContext =
+    member.kind === "property"
+      ? "property"
+      : member.kind === "aggregation"
+        ? "aggregation"
+        : member.kind === "association"
+          ? "association"
+          : "capability";
+  const prop = member.kind === "property" ? member : undefined;
+  validateConstraintInstances(
+    member.constraints,
+    context,
+    file,
+    diagnostics,
+    undefined,
+    undefined,
+    prop,
+    member,
+  );
 }
 
 function validateBlockConstraints(

@@ -44,7 +44,12 @@
 
     Domain-specific options (MachineBlocks lib path, active config profiles, …) live in opaque
     targetOptions on CompileRequest / CompileBomOptions — not on CompileOptions or RenderSession.
-    Hosts register targets via registerTarget before compile.</documentation>
+    Hosts register targets via registerTarget before compile.
+
+    Stage-2 guarantee: hosts should run validate() or validateRegistryDocuments on the corpus
+    before emit when targets depend on semantic guarantees (embedded blocks, constraints,
+    instance refs). BlockDoc/XSD compile paths may omit full corpus Stage-2 by policy;
+    blockml validate remains SSOT for semantic validation.</documentation>
   <references>
     <see type="rundocumentation:Diagnostics" relation="ReadNext"></see>
     <see type="runapi:RenderTarget" relation="SeeAlso"></see>

@@ -1,21 +1,10 @@
 import type { TypeRegistry } from "@blockml/framework";
+import { rootFqns as frameworkRootFqns } from "@blockml/framework";
 import { escapeHtml, fqnToHtmlPath, fqnToPackagePrefix, packageIndexPath, relativePath } from "./fqn-path.js";
 import type { BlockDocOptions } from "./options.js";
 
 export function collectRootFqns(registry: TypeRegistry): string[] {
-  const byFile = new Map<string, string>();
-  for (const fqn of registry.keys()) {
-    const doc = registry.get(fqn);
-    const filePath = doc?.source?.filePath;
-    if (!filePath) {
-      continue;
-    }
-    const existing = byFile.get(filePath);
-    if (!existing || fqn.split(".").length < existing.split(".").length) {
-      byFile.set(filePath, fqn);
-    }
-  }
-  return [...byFile.values()].sort();
+  return frameworkRootFqns(registry);
 }
 
 export function rootFqnForBlock(fqn: string, rootFqns: string[]): string | undefined {

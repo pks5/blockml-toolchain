@@ -3,6 +3,7 @@ import { TypeRegistry } from "./type-registry.js";
 export declare function bootstrapFromLibraryPaths(libraryPaths: string[], searchRoots: string[], rootDir: string): {
     registry: TypeRegistry;
     diagnostics: Diagnostic[];
+    exportsByLibrary: Map<string, Set<string>>;
 };
 export declare function bootstrapFromCorpusPaths(paths: string[], rootDir: string): {
     registry: TypeRegistry;

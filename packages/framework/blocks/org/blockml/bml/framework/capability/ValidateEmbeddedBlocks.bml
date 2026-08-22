@@ -1,0 +1,31 @@
+<!--
+  Framework Capability — ValidateEmbeddedBlocks
+  FQN: org.blockml.bml.framework.capability.ValidateEmbeddedBlocks
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability">
+
+  <name>ValidateEmbeddedBlocks</name>
+  <type>fwcap:ValidateEmbeddedBlocks</type>
+  <baseType>core:Capability</baseType>
+  <is>Embedded block and sub-block placement rules</is>
+
+  <properties>
+    <document type="bomdoc:BomDocument">
+      <documentation>document. (required)</documentation>
+    </document>
+    <diagnostics type="bomcommon:Diagnostic[]">
+      <documentation>diagnostics. (required)</documentation>
+    </diagnostics>
+  </properties>
+
+</block>

@@ -34,13 +34,21 @@
        else bootstrapTypeRegistry({ paths, libraryPaths, rootDir })
     2. forkBom(document) → pragmaticModel (structuredClone working copy)
     3. validateTypes(pragmaticModel, registry) → diagnostics[]
-    4. validateVersions(pragmaticModel, registry) → append diagnostics
-    5. validateConstraints(pragmaticModel, registry) → append diagnostics
-    6. success = no diagnostic with severity === "error"
-    7. Return ValidateResult { pragmaticModel?, diagnostics, success }
+    4. validateEmbeddedBlocks(pragmaticModel) → append diagnostics
+    5. validateVersions(pragmaticModel, registry) → append diagnostics
+    6. validateInstances(pragmaticModel, registry) → append diagnostics
+    7. validatePresets(pragmaticModel, registry) → append diagnostics
+    8. validateVisibility(pragmaticModel, registry) → append diagnostics
+    9. validateReadOnly(pragmaticModel, registry) → append diagnostics
+    10. validateConstraints(pragmaticModel, registry) → append diagnostics
+    11. success = no diagnostic with severity === "error"
+    12. Return ValidateResult { pragmaticModel?, diagnostics, success }
 
     When continueOnError === false and success === false, pragmaticModel is omitted
-    from the result (early return with diagnostics only).</documentation>
+    from the result (early return with diagnostics only).
+
+    Out of scope in this pipeline: SCAD/MachineBlocks Stage-3 render validation;
+    MemberGroups axis constraints (MB-only).</documentation>
 
   <references>
     <see type="valdocumentation:PublicApi" relation="ReadNext"></see>

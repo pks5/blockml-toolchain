@@ -100,6 +100,14 @@
       <composition><fwcap:ValidateTypes /></composition>
       <composition><fwcap:ValidateConstraints /></composition>
       <composition><fwcap:ValidateVersions /></composition>
+      <composition><fwcap:RootFqnByFilePath /></composition>
+      <composition><fwcap:RootFqns /></composition>
+      <composition><fwcap:GetExportedFqns /></composition>
+      <composition><fwcap:ValidateEmbeddedBlocks /></composition>
+      <composition><fwcap:ValidateInstances /></composition>
+      <composition><fwcap:ValidatePresets /></composition>
+      <composition><fwcap:ValidateVisibility /></composition>
+      <composition><fwcap:ValidateReadOnly /></composition>
       <composition><fwcap:GetPropertyNumericValue /></composition>
       <composition><fwcap:IsLiteralValue /></composition>
       <composition><fwdocumentation:Introduction /></composition>

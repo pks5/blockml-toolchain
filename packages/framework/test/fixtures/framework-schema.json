@@ -529,23 +529,108 @@
         "type": "type:Boolean",
         "required": true
       }
+    },
+    {
+      "name": "RootFqnByFilePath",
+      "tsExport": "rootFqnByFilePath",
+      "fqn": "org.blockml.bml.framework.capability.RootFqnByFilePath",
+      "inputs": [{ "name": "registry", "type": "fwcap:TypeRegistry", "required": true }],
+      "output": { "name": "roots", "type": "type:Text", "required": true }
+    },
+    {
+      "name": "RootFqns",
+      "tsExport": "rootFqns",
+      "fqn": "org.blockml.bml.framework.capability.RootFqns",
+      "inputs": [{ "name": "registry", "type": "fwcap:TypeRegistry", "required": true }],
+      "output": { "name": "fqns", "type": "type:Text[]", "required": true }
+    },
+    {
+      "name": "GetExportedFqns",
+      "tsExport": "getExportedFqns",
+      "fqn": "org.blockml.bml.framework.capability.GetExportedFqns",
+      "inputs": [
+        { "name": "libraryPath", "type": "type:Text", "required": true },
+        { "name": "bootstrap", "type": "fwregistry:BootstrapResult", "required": true },
+        { "name": "rootDir", "type": "type:Text", "required": false }
+      ],
+      "output": { "name": "exported", "type": "type:Text", "required": false }
+    },
+    {
+      "name": "ValidateEmbeddedBlocks",
+      "tsExport": "validateEmbeddedBlocks",
+      "fqn": "org.blockml.bml.framework.capability.ValidateEmbeddedBlocks",
+      "inputs": [{ "name": "document", "type": "bomdoc:BomDocument", "required": true }],
+      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
+    },
+    {
+      "name": "ValidateInstances",
+      "tsExport": "validateInstances",
+      "fqn": "org.blockml.bml.framework.capability.ValidateInstances",
+      "inputs": [
+        { "name": "document", "type": "bomdoc:BomDocument", "required": true },
+        { "name": "registry", "type": "fwcap:TypeRegistry", "required": true }
+      ],
+      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
+    },
+    {
+      "name": "ValidatePresets",
+      "tsExport": "validatePresets",
+      "fqn": "org.blockml.bml.framework.capability.ValidatePresets",
+      "inputs": [
+        { "name": "document", "type": "bomdoc:BomDocument", "required": true },
+        { "name": "registry", "type": "fwcap:TypeRegistry", "required": true }
+      ],
+      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
+    },
+    {
+      "name": "ValidateVisibility",
+      "tsExport": "validateVisibility",
+      "fqn": "org.blockml.bml.framework.capability.ValidateVisibility",
+      "inputs": [
+        { "name": "document", "type": "bomdoc:BomDocument", "required": true },
+        { "name": "registry", "type": "fwcap:TypeRegistry", "required": true }
+      ],
+      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
+    },
+    {
+      "name": "ValidateReadOnly",
+      "tsExport": "validateReadOnly",
+      "fqn": "org.blockml.bml.framework.capability.ValidateReadOnly",
+      "inputs": [
+        { "name": "document", "type": "bomdoc:BomDocument", "required": true },
+        { "name": "registry", "type": "fwcap:TypeRegistry", "required": true }
+      ],
+      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
     }
   ],
   "frameworkDiagnosticCodes": [
+    "BML_BOOTSTRAP_READ_ERROR",
+    "BML_CONSTRAINT_INFORMATION",
+    "BML_CONSTRAINT_TARGET_MISMATCH",
+    "BML_CONSTRAINT_UNKNOWN",
+    "BML_CONSTRAINT_VIOLATION",
+    "BML_CONSTRAINT_WARNING",
+    "BML_DUPLICATE_EMBEDDED_BLOCK",
+    "BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT",
+    "BML_EMBEDDED_BLOCKS_ON_SUBBLOCK",
+    "BML_EXPRESSION_PARSE_ERROR",
+    "BML_LIBRARY_NESTING_VIOLATION",
+    "BML_LIBRARY_RESOLVE_ERROR",
+    "BML_MEMBER_COLLISION",
+    "BML_MISSING_ID",
+    "BML_MISSING_VERSION",
+    "BML_NESTED_EMBEDDED_BLOCKS",
+    "BML_OVERRIDE_REQUIRED",
+    "BML_OVERRIDE_WITHOUT_PARENT",
+    "BML_PRESET_CYCLE",
+    "BML_READONLY_MEMBER_WRITE",
+    "BML_SUBBLOCK_TYPE_MISMATCH",
+    "BML_UNRESOLVABLE_INSTANCE_REF",
     "BML_UNKNOWN_BASE_TYPE",
     "BML_UNKNOWN_CONTRACT",
-    "BML_MEMBER_COLLISION",
-    "BML_OVERRIDE_WITHOUT_PARENT",
-    "BML_OVERRIDE_REQUIRED",
-    "BML_EXPRESSION_PARSE_ERROR",
-    "BML_CONSTRAINT_VIOLATION",
-    "BML_CONSTRAINT_UNKNOWN",
-    "BML_CONSTRAINT_TARGET_MISMATCH",
-    "BML_MISSING_VERSION",
+    "BML_UNKNOWN_PROPERTY",
     "BML_UNKNOWN_VERSION",
-    "BML_LIBRARY_RESOLVE_ERROR",
-    "BML_LIBRARY_NESTING_VIOLATION",
-    "BML_BOOTSTRAP_READ_ERROR"
+    "BML_VISIBILITY_PRIVATE_OVERRIDE"
   ],
   "documentationBlocks": [
     "Introduction",

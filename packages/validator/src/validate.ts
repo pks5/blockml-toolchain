@@ -3,8 +3,13 @@ import {
   bootstrapTypeRegistry,
   forkBom,
   validateConstraints,
+  validateEmbeddedBlocks,
+  validateInstances,
+  validatePresets,
+  validateReadOnly,
   validateTypes,
   validateVersions,
+  validateVisibility,
   TypeRegistry,
   type BootstrapResult,
 } from "@blockml/framework";
@@ -55,7 +60,12 @@ export function validate(
   const diagnostics = [
     ...bootstrapDiagnostics,
     ...validateTypes(pragmaticModel, registry),
+    ...validateEmbeddedBlocks(pragmaticModel),
     ...validateVersions(pragmaticModel, registry),
+    ...validateInstances(pragmaticModel, registry),
+    ...validatePresets(pragmaticModel, registry),
+    ...validateVisibility(pragmaticModel, registry),
+    ...validateReadOnly(pragmaticModel, registry),
     ...validateConstraints(pragmaticModel, registry),
   ];
 

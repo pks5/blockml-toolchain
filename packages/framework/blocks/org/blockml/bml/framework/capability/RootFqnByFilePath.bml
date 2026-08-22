@@ -1,0 +1,33 @@
+<!--
+  Framework Capability — RootFqnByFilePath
+  FQN: org.blockml.bml.framework.capability.RootFqnByFilePath
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>RootFqnByFilePath</name>
+  <type>fwcap:RootFqnByFilePath</type>
+  <baseType>core:Capability</baseType>
+  <is>Map file path to document-root block FQN from TypeRegistry</is>
+
+  <properties>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+    </registry>
+    <roots type="type:Text">
+      <documentation>Map&lt;filePath, rootFqn&gt;. (required)</documentation>
+    </roots>
+  </properties>
+
+</block>

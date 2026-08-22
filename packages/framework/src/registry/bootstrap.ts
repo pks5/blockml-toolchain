@@ -25,6 +25,8 @@ export function defaultBootstrapPaths(rootDir = process.cwd()): string[] {
 export interface BootstrapResult {
   registry: TypeRegistry;
   diagnostics: Diagnostic[];
+  /** Present when bootstrap used libraryPaths mode. */
+  exportsByLibrary?: Map<string, Set<string>>;
 }
 
 function normalizeOptions(
@@ -69,7 +71,11 @@ export function bootstrapTypeRegistry(
       }
       result.diagnostics.push(...corpus.diagnostics);
     }
-    return result;
+    return {
+      registry: result.registry,
+      diagnostics: result.diagnostics,
+      exportsByLibrary: result.exportsByLibrary,
+    };
   }
 
   const paths =

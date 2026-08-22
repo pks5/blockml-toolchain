@@ -1,37 +1,21 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { bootstrapTypeRegistry, getExportedFqns } from "@blockml/framework";
 import { parse } from "@blockml/parser";
 import { fqnToHtmlPath } from "./fqn-path.js";
 import { collectPackagePrefixes, collectRootFqns, rootFqnForBlock, } from "./navigation.js";
 import { renderPackageIndexPage } from "./package-index.js";
 import { renderBlockPage, renderIndexPage } from "./render-block-page.js";
 import { resolveBlockDocOptions } from "./options.js";
-function aggregationTypeFqns(block, aggregationName) {
-    const agg = block.members.find((m) => m.kind === "aggregation" && m.name === aggregationName);
-    if (!agg || agg.kind !== "aggregation" || !agg.composition) {
-        return [];
-    }
-    return agg.composition.children
-        .filter((c) => c.kind === "blockInstance")
-        .map((c) => c.instance.typeFqn);
-}
 function collectExportedFqns(libraryPaths, rootDir) {
+    const bootstrap = bootstrapTypeRegistry({ libraryPaths, rootDir });
     const exported = new Set();
     for (const libPath of libraryPaths) {
-        const abs = resolve(rootDir, libPath);
-        let source;
-        try {
-            source = readFileSync(abs, "utf8");
-        }
-        catch {
-            continue;
-        }
-        const parsed = parse(source, { filePath: abs, continueOnError: true });
-        if (!parsed.document) {
-            continue;
-        }
-        for (const fqn of aggregationTypeFqns(parsed.document.block, "blocks")) {
-            exported.add(fqn);
+        const fqns = getExportedFqns(libPath, bootstrap, rootDir);
+        if (fqns) {
+            for (const fqn of fqns) {
+                exported.add(fqn);
+            }
         }
     }
     return exported;

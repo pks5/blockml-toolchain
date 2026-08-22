@@ -220,7 +220,11 @@ export function bootstrapFromLibraryPaths(
   libraryPaths: string[],
   searchRoots: string[],
   rootDir: string,
-): { registry: TypeRegistry; diagnostics: Diagnostic[] } {
+): {
+  registry: TypeRegistry;
+  diagnostics: Diagnostic[];
+  exportsByLibrary: Map<string, Set<string>>;
+} {
   const registry = new TypeRegistry();
   const diagnostics: Diagnostic[] = [];
   const { orderedPaths, exportsByLibrary } = resolveLibraryGraph(
@@ -240,7 +244,7 @@ export function bootstrapFromLibraryPaths(
   }
 
   registerFiles(registry, [...seenFiles], diagnostics);
-  return { registry, diagnostics };
+  return { registry, diagnostics, exportsByLibrary };
 }
 
 export function bootstrapFromCorpusPaths(

@@ -31,7 +31,10 @@
   <documentation>Out of scope for @blockml/validator:
 
     • TypeRegistry implementation — @blockml/framework
-    • Individual validation rules — @blockml/framework (validateTypes/validateConstraints)
+    • Individual validation rules — @blockml/framework (validateTypes, validateEmbeddedBlocks,
+      validateInstances, validatePresets, validateVisibility, validateReadOnly, validateConstraints)
+    • SCAD / MachineBlocks Stage-3 render validation
+    • MemberGroups axis constraints (Category / AiUsage) — MachineBlocks-only; see docs/TODOs
     • parse() / serialize() — @blockml/parser / @blockml/serializer
     • Render target emit / compile — @blockml/compiler
     • CLI file I/O — @blockml/cli

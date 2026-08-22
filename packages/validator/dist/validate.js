@@ -1,4 +1,4 @@
-import { bootstrapTypeRegistry, forkBom, validateConstraints, validateTypes, validateVersions, TypeRegistry, } from "@blockml/framework";
+import { bootstrapTypeRegistry, forkBom, validateConstraints, validateEmbeddedBlocks, validateInstances, validatePresets, validateReadOnly, validateTypes, validateVersions, validateVisibility, TypeRegistry, } from "@blockml/framework";
 /** Bootstrap scan diagnostics apply to the corpus, not the document under validation. */
 function libraryBootstrapDiagnostics(bootstrap, options) {
     if (!options.libraryPaths?.length) {
@@ -30,7 +30,12 @@ export function validate(document, options = {}) {
     const diagnostics = [
         ...bootstrapDiagnostics,
         ...validateTypes(pragmaticModel, registry),
+        ...validateEmbeddedBlocks(pragmaticModel),
         ...validateVersions(pragmaticModel, registry),
+        ...validateInstances(pragmaticModel, registry),
+        ...validatePresets(pragmaticModel, registry),
+        ...validateVisibility(pragmaticModel, registry),
+        ...validateReadOnly(pragmaticModel, registry),
         ...validateConstraints(pragmaticModel, registry),
     ];
     const success = !diagnostics.some((d) => d.severity === "error");

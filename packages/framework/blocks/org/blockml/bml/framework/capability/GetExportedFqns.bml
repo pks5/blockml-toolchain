@@ -1,0 +1,37 @@
+<!--
+  Framework Capability — GetExportedFqns
+  FQN: org.blockml.bml.framework.capability.GetExportedFqns
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>GetExportedFqns</name>
+  <type>fwcap:GetExportedFqns</type>
+  <baseType>core:Capability</baseType>
+  <is>Exported block FQNs for a library path from BootstrapResult</is>
+
+  <properties>
+    <libraryPath type="type:Text">
+      <documentation>libraryPath. (required)</documentation>
+    </libraryPath>
+    <bootstrap type="fwregistry:BootstrapResult">
+      <documentation>bootstrap. (required)</documentation>
+    </bootstrap>
+    <rootDir type="type:Text">
+      <documentation>rootDir — default process.cwd(). (optional)</documentation>
+    </rootDir>
+    <exported type="type:Text">
+      <documentation>Set&lt;exportedFqn&gt; or undefined. (optional)</documentation>
+    </exported>
+  </properties>
+
+</block>

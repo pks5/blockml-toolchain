@@ -204,7 +204,7 @@ export function bootstrapFromLibraryPaths(libraryPaths, searchRoots, rootDir) {
         }
     }
     registerFiles(registry, [...seenFiles], diagnostics);
-    return { registry, diagnostics };
+    return { registry, diagnostics, exportsByLibrary };
 }
 export function bootstrapFromCorpusPaths(paths, rootDir) {
     const registry = new TypeRegistry();

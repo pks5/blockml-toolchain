@@ -1,9 +1,16 @@
 export { TypeRegistry } from "./registry/type-registry.js";
 export { bootstrapTypeRegistry, defaultBootstrapPaths, } from "./registry/bootstrap.js";
+export { rootFqnByFilePath, rootFqns } from "./registry/root-fqn.js";
+export { getExportedFqns } from "./registry/library-exports.js";
 export { forkBom } from "./fork/fork-bom.js";
 export { resolveEffectiveMembers, resolveContracts, collectBaseTypeChain, memberIdentityKey, } from "./resolve/resolve-effective-members.js";
 export { parseExpression } from "./expression/parse-expression.js";
 export { validateTypes, getPropertyNumericValue, isLiteralValue, } from "./validate/validate-types.js";
 export { validateVersions } from "./validate/validate-versions.js";
 export { validateConstraints } from "./validate/validate-constraints.js";
+export { validateEmbeddedBlocks } from "./validate/validate-embedded-blocks.js";
+export { validateInstances } from "./validate/validate-instances.js";
+export { validatePresets } from "./validate/validate-presets.js";
+export { validateVisibility } from "./validate/validate-visibility.js";
+export { validateReadOnly } from "./validate/validate-readonly.js";
 //# sourceMappingURL=index.js.map

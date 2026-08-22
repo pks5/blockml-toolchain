@@ -1,0 +1,30 @@
+<!--
+  Framework Capability — RootFqns
+  FQN: org.blockml.bml.framework.capability.RootFqns
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>RootFqns</name>
+  <type>fwcap:RootFqns</type>
+  <baseType>core:Capability</baseType>
+  <is>Sorted root FQNs from TypeRegistry index</is>
+
+  <properties>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+    </registry>
+    <fqns type="type:Text[]">
+      <documentation>root FQNs sorted. (required)</documentation>
+    </fqns>
+  </properties>
+
+</block>

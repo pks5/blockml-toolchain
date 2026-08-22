@@ -33,7 +33,10 @@
   <baseType>framework:FrameworkType</baseType>
   <is>Result of bootstrapTypeRegistry corpus walk</is>
 
-  <documentation>Returned by fwcap:BootstrapTypeRegistry. Registry may be partially populated when diagnostics are present.</documentation>
+  <documentation>Returned by fwcap:BootstrapTypeRegistry. Registry may be partially populated when diagnostics are present.
+
+    exportsByLibrary — optional Map from absolute Library.bml path to exported block FQNs;
+    present only when bootstrap used libraryPaths mode.</documentation>
 
   <properties>
     <registry type="fwcap:TypeRegistry">
@@ -42,6 +45,9 @@
     <diagnostics type="bomcommon:Diagnostic[]">
       <documentation>diagnostics. TS type: bomcommon:Diagnostic[]. (required)</documentation>
     </diagnostics>
+    <exportsByLibrary type="type:Text">
+      <documentation>exportsByLibrary — Map&lt;libraryPath, Set&lt;exportedFqn&gt;&gt; when libraryPaths bootstrap. (optional)</documentation>
+    </exportsByLibrary>
   </properties>
 
 </block>

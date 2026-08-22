@@ -37,7 +37,11 @@ export function bootstrapTypeRegistry(optionsOrPaths, rootDirArg) {
             }
             result.diagnostics.push(...corpus.diagnostics);
         }
-        return result;
+        return {
+            registry: result.registry,
+            diagnostics: result.diagnostics,
+            exportsByLibrary: result.exportsByLibrary,
+        };
     }
     const paths = options.paths && options.paths.length > 0 ? options.paths : defaultBootstrapPaths(rootDir);
     return bootstrapFromCorpusPaths(paths, rootDir);

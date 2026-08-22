@@ -12,6 +12,8 @@ export declare function defaultBootstrapPaths(rootDir?: string): string[];
 export interface BootstrapResult {
     registry: TypeRegistry;
     diagnostics: Diagnostic[];
+    /** Present when bootstrap used libraryPaths mode. */
+    exportsByLibrary?: Map<string, Set<string>>;
 }
 export declare function bootstrapTypeRegistry(optionsOrPaths?: BootstrapOptions | string[], rootDirArg?: string): BootstrapResult;
 //# sourceMappingURL=bootstrap.d.ts.map
