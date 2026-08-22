@@ -27,19 +27,24 @@
   <is>Exported TypeScript / capability surface</is>
 
   <documentation>Package @blockml/cli exports:
-    • runCli(argv, cwd?) → { code, stderr }
+    • runCli(argv, cwd?) → Promise&lt;{ code, stderr }&gt;
     • parseArgs(argv) → ParsedArgs
     • formatDiagnostic(d) → string
     • loadConfig(cwd?) → BomConfig
-    • bootstrapTargets(config, requested?)
+    • bootstrapTargets(config, requested?, rootDir?) → Promise&lt;void&gt;
+    • registerTargetFactory(name, factory, hints?)
+    • getTargetCliHints(name) → TargetCliHints | undefined
+    • getTargetFactory(name) → factory | undefined
+    • builtinTargetNames() → string[]
     • resetBootstrapTargets()
     • bootstrapProjectTypeRegistry(options) → BootstrapResult
-    • writeOutputFiles(output, outDir, rootDir?, options?)
+    • writeOutputFiles(output, outDir, rootDir?, options?) → WriteOutputResult
+    • loadTargetFromPackage / resolveTargetPackage / isBuiltinTarget (plugin loader)
 
     Bin: blockml → dist/cli.js (direct run invokes runCli).
 
     BML counterparts: clicap:RunCli, ParseArgs, LoadConfig, BootstrapTargets,
-    BootstrapProjectTypeRegistry, WriteOutputFiles.</documentation>
+    RegisterTargetFactory, BootstrapProjectTypeRegistry, WriteOutputFiles.</documentation>
   <references>
     <see type="clidocumentation:RuntimeBootstrap" relation="ReadNext"></see>
     <see type="clicap:RunCli" relation="Defines"></see>

@@ -10,10 +10,17 @@ export function writeOutputFiles(output, outDir, rootDir = process.cwd(), option
         mkdirSync(dirname(targetPath), { recursive: true });
         writeFileSync(targetPath, file.content, "utf8");
     }
-    for (const file of options.rootFiles ?? []) {
+    const rootFiles = options.rootFiles ?? output.rootFiles ?? [];
+    const rootFilesWritten = [];
+    for (const file of rootFiles) {
         const targetPath = join(resolve(rootDir), file.path);
         mkdirSync(dirname(targetPath), { recursive: true });
         writeFileSync(targetPath, file.content, "utf8");
+        rootFilesWritten.push(file.path);
     }
+    return {
+        filesWritten: output.files.length,
+        rootFilesWritten,
+    };
 }
 //# sourceMappingURL=write-output.js.map

@@ -31,7 +31,8 @@
   <baseType>core:Documentation</baseType>
   <is>Normative contract for external Stage-3 RenderTargets</is>
 
-  <documentation>RenderTarget: name, accepts[], optional validateRequest, render(request, ctx) → RenderOutput.
+  <documentation>RenderTarget: name, accepts[], optional validateRequest, render(request, ctx) → RenderOutput
+    (files[] required; optional rootFiles[] at project root, optional diagnostics[] for CLI merge).
     BOM-first hosts call compileBomToOutput(document, targetName, CompileBomOptions) with a required
     TypeRegistry; no re-parse or bootstrap. Host must ensure the document is discoverable in the
     registry when the target looks up by sourceFilePath or FQN.

@@ -26,9 +26,10 @@
   <baseType>core:Documentation</baseType>
   <is>targets[] and registerTarget wiring (C3)</is>
 
-  <documentation>CLI3: bootstrapTargets is idempotent (bootstrapped flag).
-    CLI4: V1 factories — blockdoc → BlockDocTarget, xsd → XsdTarget, fatblock → FatBlockTarget.
+  <documentation>CLI3: bootstrapTargets is async idempotent (bootstrapped flag).
+    CLI4: V1 built-ins — blockdoc → BlockDocTarget, xsd → XsdTarget, fatblock → FatBlockTarget.
     CLI5: unknown name in targets[] throws configuration error.
+    Custom targets: registerTargetFactory (host API) or targetPackages plugin load.
 
     config.targets[] defines available targets; CLI target argument selects which to compile.
     Default targets when omitted: ["blockdoc"].

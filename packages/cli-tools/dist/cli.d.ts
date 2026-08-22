@@ -21,9 +21,9 @@ interface PrintableDiagnostic {
 }
 export declare function parseArgs(argv: string[]): ParsedArgs;
 export declare function formatDiagnostic(d: PrintableDiagnostic): string;
-export declare function runCli(argv: string[], cwd?: string): {
+export declare function runCli(argv: string[], cwd?: string): Promise<{
     code: number;
     stderr: string;
-};
+}>;
 export {};
 //# sourceMappingURL=cli.d.ts.map

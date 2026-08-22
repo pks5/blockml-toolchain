@@ -4,6 +4,7 @@ const DEFAULT_CONFIG = {
     outDir: "doc",
     srcDir: "src",
     targets: ["blockdoc"],
+    defaultTarget: "blockdoc",
     xsdValidation: true,
 };
 export function loadConfig(cwd = process.cwd()) {
@@ -17,6 +18,7 @@ export function loadConfig(cwd = process.cwd()) {
         ...DEFAULT_CONFIG,
         ...parsed,
         targets: parsed.targets?.length ? parsed.targets : DEFAULT_CONFIG.targets,
+        defaultTarget: parsed.defaultTarget ?? DEFAULT_CONFIG.defaultTarget,
         xsdValidation: parsed.xsdValidation ?? DEFAULT_CONFIG.xsdValidation,
     };
 }

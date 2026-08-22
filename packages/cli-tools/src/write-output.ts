@@ -4,7 +4,13 @@ import type { RenderOutput, RenderOutputFile } from "@blockml/compiler";
 
 export interface WriteOutputOptions {
   cleanOutDir?: boolean;
+  /** Legacy override; prefer output.rootFiles from RenderOutput. */
   rootFiles?: RenderOutputFile[];
+}
+
+export interface WriteOutputResult {
+  filesWritten: number;
+  rootFilesWritten: string[];
 }
 
 export function writeOutputFiles(
@@ -12,7 +18,7 @@ export function writeOutputFiles(
   outDir: string,
   rootDir = process.cwd(),
   options: WriteOutputOptions = {},
-): void {
+): WriteOutputResult {
   const base = resolve(rootDir, outDir);
   if (options.cleanOutDir) {
     rmSync(base, { recursive: true, force: true });
@@ -22,9 +28,18 @@ export function writeOutputFiles(
     mkdirSync(dirname(targetPath), { recursive: true });
     writeFileSync(targetPath, file.content, "utf8");
   }
-  for (const file of options.rootFiles ?? []) {
+
+  const rootFiles = options.rootFiles ?? output.rootFiles ?? [];
+  const rootFilesWritten: string[] = [];
+  for (const file of rootFiles) {
     const targetPath = join(resolve(rootDir), file.path);
     mkdirSync(dirname(targetPath), { recursive: true });
     writeFileSync(targetPath, file.content, "utf8");
+    rootFilesWritten.push(file.path);
   }
+
+  return {
+    filesWritten: output.files.length,
+    rootFilesWritten,
+  };
 }

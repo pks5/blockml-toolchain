@@ -25,7 +25,7 @@
   <baseType>core:Capability</baseType>
   <is>Write RenderOutput files to disk</is>
 
-  <documentation>CLI7: when cleanOutDir true, rmSync outDir recursively before write. CLI8: rootFiles written relative to rootDir outside outDir (e.g. catalog.xml for xsd).</documentation>
+  <documentation>CLI7: when cleanOutDir true, rmSync outDir recursively before write. CLI8: rootFiles from RenderOutput.rootFiles (or options override) written relative to rootDir outside outDir (e.g. catalog.xml for xsd). Returns filesWritten and rootFilesWritten.</documentation>
 
   <references>
     <see type="clidocumentation:RuntimeBootstrap" relation="SeeAlso" />

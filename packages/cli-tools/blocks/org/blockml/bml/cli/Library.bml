@@ -85,6 +85,7 @@
       <composition><clicap:RunCompile /></composition>
       <composition><clicap:RunCompileFatBlock /></composition>
       <composition><clicap:BootstrapTargets /></composition>
+      <composition><clicap:RegisterTargetFactory /></composition>
       <composition><clicap:BootstrapProjectTypeRegistry /></composition>
       <composition><clicap:WriteOutputFiles /></composition>
       <composition><clicap:DefaultOutDir /></composition>

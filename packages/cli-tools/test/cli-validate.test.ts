@@ -52,12 +52,12 @@ describe("xsd-validate helpers", () => {
 });
 
 describe("runCli validate", () => {
-  it("validates corpus from libraries without writing output", () => {
+  it("validates corpus from libraries without writing output", async () => {
     if (!existsSync(CORE_LIBRARY)) {
       throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
     }
 
-    const { code, stderr } = runCli(
+    const { code, stderr } = await runCli(
       ["validate", "--libraries", CORE_LIBRARY, "--no-xsd"],
       ROOT,
     );
@@ -72,12 +72,12 @@ describe("runCli validate", () => {
     }
   });
 
-  it("treats --all as corpus validate", () => {
+  it("treats --all as corpus validate", async () => {
     if (!existsSync(CORE_LIBRARY)) {
       throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
     }
 
-    const { code, stderr } = runCli(
+    const { code, stderr } = await runCli(
       ["validate", "--all", "--libraries", CORE_LIBRARY, "--no-xsd"],
       ROOT,
     );
@@ -86,12 +86,12 @@ describe("runCli validate", () => {
     expect(stderr).not.toMatch(/Wrote \d+ file\(s\)/);
   });
 
-  it("validates a single file against the project registry", () => {
+  it("validates a single file against the project registry", async () => {
     if (!existsSync(CORE_LIBRARY)) {
       throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
     }
 
-    const { code, stderr } = runCli(
+    const { code, stderr } = await runCli(
       ["validate", CORE_LIBRARY, "--libraries", CORE_LIBRARY, "--no-xsd"],
       ROOT,
     );
@@ -100,14 +100,14 @@ describe("runCli validate", () => {
     expect(stderr).not.toMatch(/Wrote \d+ file\(s\)/);
   });
 
-  it("returns 2 for a missing file", () => {
-    const { code, stderr } = runCli(["validate", "no-such.bml"], ROOT);
+  it("returns 2 for a missing file", async () => {
+    const { code, stderr } = await runCli(["validate", "no-such.bml"], ROOT);
     expect(code).toBe(2);
     expect(stderr).toMatch(/File not found: no-such\.bml/);
   });
 
-  it("returns 2 when file and --all are combined", () => {
-    const { code } = runCli(["validate", "no-such.bml", "--all"], ROOT);
+  it("returns 2 when file and --all are combined", async () => {
+    const { code } = await runCli(["validate", "no-such.bml", "--all"], ROOT);
     expect(code).toBe(2);
   });
 });
@@ -154,7 +154,7 @@ describe("runCli validate XSD", () => {
     ]);
   });
 
-  it("reports XSD validation error for invalid root element", () => {
+  it("reports XSD validation error for invalid root element", async () => {
     const schemasDir = join(tmpProject, "schemas");
     mkdirSync(schemasDir, { recursive: true });
     writeFileSync(join(tmpProject, "catalog.xml"), readFileSync(join(ROOT, "catalog.xml"), "utf8"));
@@ -170,7 +170,7 @@ describe("runCli validate XSD", () => {
       "utf8",
     );
 
-    const { code, stderr } = runCli(["validate", "src/Bad.bml"], tmpProject);
+    const { code, stderr } = await runCli(["validate", "src/Bad.bml"], tmpProject);
     expect(code).toBe(1);
     expect(stderr).toMatch(/BML_XSD_VALIDATION_ERROR/);
   });
@@ -202,7 +202,7 @@ describe("runCli validate XSD", () => {
     expect(diagnostics.filter((d) => d.severity === "error")).toEqual([]);
   });
 
-  it("skips XSD validation with --no-xsd even for invalid XML shape", () => {
+  it("skips XSD validation with --no-xsd even for invalid XML shape", async () => {
     const schemasDir = join(tmpProject, "schemas");
     mkdirSync(schemasDir, { recursive: true });
     writeFileSync(join(tmpProject, "catalog.xml"), readFileSync(join(ROOT, "catalog.xml"), "utf8"));
@@ -221,11 +221,11 @@ describe("runCli validate XSD", () => {
     const diagnostics = validateFilesAgainstXsd([file], tmpProject);
     expect(diagnostics.some((d) => d.code === "BML_XSD_VALIDATION_ERROR")).toBe(true);
 
-    const { stderr } = runCli(["validate", "src/Bad.bml", "--no-xsd"], tmpProject);
+    const { stderr } = await runCli(["validate", "src/Bad.bml", "--no-xsd"], tmpProject);
     expect(stderr).not.toMatch(/BML_XSD_VALIDATION_ERROR/);
   });
 
-  it("skips XSD validation when bom.config.json sets xsdValidation false", () => {
+  it("skips XSD validation when bom.config.json sets xsdValidation false", async () => {
     const schemasDir = join(tmpProject, "schemas");
     mkdirSync(schemasDir, { recursive: true });
     writeFileSync(join(tmpProject, "catalog.xml"), readFileSync(join(ROOT, "catalog.xml"), "utf8"));
@@ -246,7 +246,7 @@ describe("runCli validate XSD", () => {
       "utf8",
     );
 
-    const { stderr } = runCli(["validate", "src/Bad.bml"], tmpProject);
+    const { stderr } = await runCli(["validate", "src/Bad.bml"], tmpProject);
     expect(stderr).not.toMatch(/BML_XSD_VALIDATION_ERROR/);
   });
 });
@@ -267,19 +267,19 @@ describe("runCli other commands", () => {
     resetBootstrapTargets();
   });
 
-  it("returns 2 for an unknown command", () => {
-    const { code, stderr } = runCli(["inspect"], ROOT);
+  it("returns 2 for an unknown command", async () => {
+    const { code, stderr } = await runCli(["inspect"], ROOT);
     expect(code).toBe(2);
     expect(stderr).toMatch(/Usage: blockml/);
   });
 
-  it("requires host file and --src for fatblock", () => {
-    const { code, stderr } = runCli(["compile", "fatblock"], ROOT);
+  it("requires host file and --src for fatblock", async () => {
+    const { code, stderr } = await runCli(["compile", "fatblock"], ROOT);
     expect(code).toBe(2);
-    expect(stderr).toMatch(/FatBlock requires a host <file> argument/);
+    expect(stderr).toMatch(/fatblock requires a host <file> argument/);
   });
 
-  it("compiles fatblock into Host.fat.bml", () => {
+  it("compiles fatblock into Host.fat.bml", async () => {
     const srcDir = join(tmpProject, "src");
     mkdirSync(srcDir, { recursive: true });
     writeFileSync(
@@ -309,7 +309,7 @@ describe("runCli other commands", () => {
       "utf8",
     );
 
-    const { code, stderr } = runCli(
+    const { code, stderr } = await runCli(
       ["compile", "src/Host.bml", "fatblock", "--src", "src"],
       tmpProject,
     );
@@ -322,7 +322,7 @@ describe("runCli other commands", () => {
     expect(fat).toContain("cli:Peer");
   });
 
-  it("rejects fatblock when host already has embeddedBlocks", () => {
+  it("rejects fatblock when host already has embeddedBlocks", async () => {
     const srcDir = join(tmpProject, "src");
     mkdirSync(srcDir, { recursive: true });
     writeFileSync(
@@ -346,7 +346,7 @@ describe("runCli other commands", () => {
       "utf8",
     );
 
-    const { code, stderr } = runCli(
+    const { code, stderr } = await runCli(
       ["compile", "src/Host.bml", "fatblock", "--src", "src"],
       tmpProject,
     );
@@ -355,7 +355,7 @@ describe("runCli other commands", () => {
     expect(stderr).toMatch(/BML_FATBLOCK_HOST_HAS_EMBEDDED_BLOCKS/);
   });
 
-  it("rejects fatblock when embed candidate has embeddedBlocks", () => {
+  it("rejects fatblock when embed candidate has embeddedBlocks", async () => {
     const srcDir = join(tmpProject, "src");
     mkdirSync(srcDir, { recursive: true });
     writeFileSync(
@@ -392,7 +392,7 @@ describe("runCli other commands", () => {
       "utf8",
     );
 
-    const { code, stderr } = runCli(
+    const { code, stderr } = await runCli(
       ["compile", "src/Host.bml", "fatblock", "--src", "src"],
       tmpProject,
     );
@@ -401,12 +401,12 @@ describe("runCli other commands", () => {
     expect(stderr).toMatch(/BML_FATBLOCK_EMBED_HAS_EMBEDDED_BLOCKS/);
   });
 
-  it("compiles xsd schemas and root catalog", () => {
+  it("compiles xsd schemas and root catalog", async () => {
     if (!existsSync(CORE_LIBRARY)) {
       throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
     }
 
-    const { code, stderr } = runCli(
+    const { code, stderr } = await runCli(
       ["compile", "xsd", "--out", tmpOut, "--libraries", CORE_LIBRARY],
       tmpProject,
     );

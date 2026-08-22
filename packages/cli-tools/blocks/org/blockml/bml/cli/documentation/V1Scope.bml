@@ -29,7 +29,8 @@
   <documentation>V1 implemented:
     • blockml validate [file] [--all] [--src] [--libraries] [--no-xsd]
     • blockml compile [file] target | blockml compile target
-    • Targets: blockdoc (default), xsd, fatblock
+    • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
+    • Config: targets[], targetPackages, targetOptions, defaultTarget, xsdValidation
     • Flags: --out, --src, --libraries, --include (fatblock), --all (validate only meaningful)
     • Authoring XSD validation on validate (default on; xsdValidation config; --no-xsd escape)
 

@@ -47,6 +47,7 @@ const EXPECTED_CAPABILITIES = [
   "RunCompile",
   "RunCompileFatBlock",
   "BootstrapTargets",
+  "RegisterTargetFactory",
   "BootstrapProjectTypeRegistry",
   "WriteOutputFiles",
   "DefaultOutDir",
@@ -124,6 +125,8 @@ describe("CLI BML library", () => {
     expect(index).toContain("parseArgs");
     expect(index).toContain("loadConfig");
     expect(index).toContain("bootstrapTargets");
+    expect(index).toContain("registerTargetFactory");
+    expect(index).toContain("loadTargetFromPackage");
     expect(index).toContain("writeOutputFiles");
     expect(index).toContain("bootstrapProjectTypeRegistry");
     expect(index).toContain("formatDiagnostic");
@@ -132,6 +135,8 @@ describe("CLI BML library", () => {
     const loadConfig = readFileSync(join(pkgRoot, "src/load-config.ts"), "utf8");
     expect(loadConfig).toContain('outDir: "doc"');
     expect(loadConfig).toContain('targets: ["blockdoc"]');
+    expect(loadConfig).toContain("targetPackages");
+    expect(loadConfig).toContain("defaultTarget");
     expect(loadConfig).toContain("xsdValidation");
 
     const bootstrapTargets = readFileSync(join(pkgRoot, "src/bootstrap-targets.ts"), "utf8");

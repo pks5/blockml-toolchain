@@ -30,12 +30,14 @@
   <baseType>runtime:RuntimeType</baseType>
   <is>Opaque Stage-3 render result</is>
 
-  <documentation>C4/C6: base shape is files[]. Targets may extend (e.g. rootFiles). Thumbnails are not part of RenderOutput.</documentation>
+  <documentation>C4/C6: base shape is files[] with optional rootFiles[] and diagnostics[]. Thumbnails are not part of RenderOutput.</documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
     <files type="runapi:RenderOutputFile"><documentation>Primary artifacts under outputBasePath. (required)</documentation></files>
+    <rootFiles type="runapi:RenderOutputFile"><documentation>Root-level artifacts (e.g. catalog.xml). (optional)</documentation></rootFiles>
+    <diagnostics type="type:Text"><documentation>Target-emitted diagnostics for CLI merge. (optional)</documentation></diagnostics>
   </properties>
 
 </block>

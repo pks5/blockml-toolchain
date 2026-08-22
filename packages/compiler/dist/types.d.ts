@@ -40,6 +40,10 @@ export interface RenderOutputFile {
 }
 export interface RenderOutput {
     files: RenderOutputFile[];
+    /** Files written at project root (e.g. catalog.xml). CLI-owned write path. */
+    rootFiles?: RenderOutputFile[];
+    /** Target-emitted diagnostics merged by CLI after compile. */
+    diagnostics?: Diagnostic[];
 }
 export interface RenderSession {
     typeRegistry: TypeRegistry;
