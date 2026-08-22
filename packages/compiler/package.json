@@ -32,9 +32,9 @@
     "test": "vitest run packages/compiler/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.1.0",
+    "@blockml/bom": "^0.2.0",
     "@blockml/framework": "^0.1.0",
-    "@blockml/parser": "^0.1.0",
+    "@blockml/parser": "^0.2.0",
     "@blockml/validator": "^0.1.0"
   },
   "engines": {

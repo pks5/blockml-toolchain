@@ -32,7 +32,7 @@
     "test": "vitest run packages/xsd-target/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.1.0",
+    "@blockml/bom": "^0.2.0",
     "@blockml/compiler": "^0.1.0",
     "@blockml/framework": "^0.1.0"
   },
