@@ -11,8 +11,6 @@ function mockContext(registry: TypeRegistry, outputBasePath = "schemas"): Render
       sourceFilePath: "<test>",
       outputBasePath,
       targetName: "xsd",
-      documentKind: "block",
-      isPresetBlock: false,
       scopeKind: "library",
     },
     blockFqn: "",

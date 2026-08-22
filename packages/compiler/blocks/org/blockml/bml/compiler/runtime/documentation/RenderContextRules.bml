@@ -32,12 +32,14 @@
   <is>RenderSession and RenderContext (C1)</is>
 
   <documentation>RenderSession is immutable per compile after BuildRenderSession.
+    Stable session fields for registry targets: typeRegistry, sourceFilePath, outputBasePath,
+    targetName, scopeKind, libraryPaths?, corpusRoots?.
     RenderContext holds session + blockFqn + outputRelativePath; child(overrides) forks a new
-    context sharing the same session.
-    CreateRenderContext defaults empty FQN and relative path for the root call into target.render.
-    PropertyResolver / per-node fork patterns used by domain renderers build on this contract.</documentation>
+    context sharing the same session. Per-node fields are for composition/domain renderers;
+    registry targets may ignore them and rely on request.scope plus session.
+    CreateRenderContext defaults empty FQN and relative path for the root call into target.render.</documentation>
   <references>
-    <see type="rundocumentation:Diagnostics" relation="ReadNext"></see>
+    <see type="rundocumentation:ExternalTargetContract" relation="ReadNext"></see>
     <see type="runcap:BuildRenderSession" relation="SeeAlso"></see>
     <see type="runcap:CreateRenderContext" relation="SeeAlso"></see>
   </references>

@@ -33,8 +33,9 @@
 
   <documentation>C1 RenderContext = RenderSession plus forked per-node context; internal render API.
     C2 Facade = compileToOutput(CompileRequest, …); compileBmlToOutput is document sugar;
-    compileBomToOutput is V1 stub ignoring model.
-    C3 Registry has no defaults; hosts register; targets[] bootstrap is CLI config (cross-ref).
+    compileBomToOutput is BOM-first with required TypeRegistry (no re-parse/bootstrap).
+    C3 Registry has no defaults; hosts register; targets[] bootstrap is CLI config (cross-ref);
+    registerTarget validates name, accepts, render.
     C4 No mandatory input↔output mapping; RenderOutput opaque (files[] base).
     C5 Incremental build is CLI-only (boundary); not a runtime capability.
     C6 Thumbnails are CLI-only; not part of RenderOutput.

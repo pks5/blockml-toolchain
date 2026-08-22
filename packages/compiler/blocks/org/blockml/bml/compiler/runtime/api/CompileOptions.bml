@@ -30,15 +30,14 @@
   <baseType>runtime:RuntimeType</baseType>
   <is>Host options for compile helpers and compileToOutput</is>
 
-  <documentation>typeRegistry, paths, and session fields supplied by the host (often CLI).</documentation>
+  <documentation>typeRegistry, paths, and session fields supplied by the host (often CLI).
+    Domain-specific passthrough fields belong in targetOptions, not here.</documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>
   <properties>
     <typeRegistry type="type:Text"><documentation>Optional pre-built TypeRegistry. (optional)</documentation></typeRegistry>
-    <activeConfig type="type:Text"><documentation>Active config name for session. (optional)</documentation></activeConfig>
     <outputBasePath type="type:Text"><documentation>Output base path for session. (optional)</documentation></outputBasePath>
-    <mbLibPath type="type:Text"><documentation>MachineBlocks lib path passthrough. (optional)</documentation></mbLibPath>
     <rootDir type="type:Text"><documentation>Project root for bootstrap defaults. (optional)</documentation></rootDir>
   </properties>
 

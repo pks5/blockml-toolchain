@@ -32,12 +32,13 @@
   <is>What V1 delivers</is>
 
   <documentation>V1 includes:
-    • compileToOutput / compileBmlToOutput; compileBomToOutput stub ignoring model
-    • In-memory Target Registry with no built-in targets
+    • compileToOutput / compileBmlToOutput; compileBomToOutput BOM-first with required TypeRegistry
+    • In-memory Target Registry with no built-in targets; registerTarget validates contract
     • Scope kinds document | library | corpus | auto with ScopeConfigHints merge
-    • RenderSession / RenderContext with child fork
+    • Domain-agnostic RenderSession / RenderContext with child fork
     • Opaque RenderOutput.files; CompilerResult envelope
-    • Diagnostics BML_UNKNOWN_TARGET, BML_TARGET_SCOPE_MISMATCH, BML_COMPILE_SCOPE_EMPTY
+    • Diagnostics BML_UNKNOWN_TARGET, BML_TARGET_SCOPE_MISMATCH, BML_COMPILE_SCOPE_EMPTY,
+      BML_MISSING_TYPE_REGISTRY
     • Browser-safe package surface (no Node-only APIs in public contracts)
 
     V1 does NOT include CLI targets[] bootstrap, file I/O, incremental cache (C5),

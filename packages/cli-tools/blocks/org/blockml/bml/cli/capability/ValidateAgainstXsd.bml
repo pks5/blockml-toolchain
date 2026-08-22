@@ -1,0 +1,51 @@
+<!--
+  CLI Capability — ValidateAgainstXsd
+  FQN: org.blockml.bml.cli.capability.ValidateAgainstXsd
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ValidateAgainstXsd</name>
+  <type>clicap:ValidateAgainstXsd</type>
+  <baseType>core:Capability</baseType>
+  <is>Optional authoring XSD validation after Stage 1–2</is>
+
+  <documentation>Resolves catalog.xml (or fallback schemas/bml.xsd) under project root.
+    Validates each .bml file against bml.xsd for http://blockml.org/bml.
+    Missing schemas → warning BML_XSD_SCHEMAS_MISSING (skip XSD step).
+    Schema violations → error BML_XSD_VALIDATION_ERROR.
+    Orchestrated from RunValidate when xsdValidation enabled and --no-xsd absent.</documentation>
+
+  <references>
+    <see type="clicap:RunValidate" relation="SeeAlso" />
+    <see type="cliconfig:CliConstants" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <filePaths type="type:Text">
+      <documentation>Absolute or project-relative .bml paths to validate. (required)</documentation>
+    </filePaths>
+    <rootDir type="type:Text">
+      <documentation>Project root for catalog/schema resolution. (required)</documentation>
+    </rootDir>
+    <result type="type:Text">
+      <documentation>Diagnostic[] from XSD step. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

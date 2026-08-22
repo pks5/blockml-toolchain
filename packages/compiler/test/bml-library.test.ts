@@ -18,6 +18,7 @@ const EXPECTED_DOC_BLOCKS = [
   "CompileScopeRules",
   "TargetRegistry",
   "RenderContextRules",
+  "ExternalTargetContract",
   "Diagnostics",
   "DesignDecisions",
   "PackageOwnership",
@@ -30,6 +31,7 @@ const EXPECTED_API_BLOCKS = [
   "CompileScope",
   "CompileRequest",
   "CompileOptions",
+  "CompileBomOptions",
   "CompilerResult",
   "RenderOutputFile",
   "RenderOutput",
@@ -125,6 +127,7 @@ describe("Compiler runtime BML library", () => {
   it("public TS surface matches modeled runtime API", () => {
     const index = readFileSync(join(pkgRoot, "src/index.ts"), "utf8");
     expect(index).toContain("CompileRequest");
+    expect(index).toContain("CompileBomOptions");
     expect(index).toContain("RenderTarget");
     expect(index).toContain("registerTarget");
     expect(index).toContain("getTarget");
@@ -143,6 +146,7 @@ describe("Compiler runtime BML library", () => {
     const target = readFileSync(join(pkgRoot, "src/compile-to-output.ts"), "utf8");
     expect(target).toContain("BML_UNKNOWN_TARGET");
     expect(target).toContain("BML_TARGET_SCOPE_MISMATCH");
+    expect(target).toContain("BML_MISSING_TYPE_REGISTRY");
 
     const scope = readFileSync(join(pkgRoot, "src/scope.ts"), "utf8");
     expect(scope).toContain("BML_COMPILE_SCOPE_EMPTY");

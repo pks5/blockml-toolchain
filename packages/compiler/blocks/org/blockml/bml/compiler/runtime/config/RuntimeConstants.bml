@@ -30,11 +30,13 @@
   <baseType>runtime:RuntimeType</baseType>
   <is>Well-known diagnostic codes and scope kind literals</is>
 
-  <documentation>Codes emitted by ResolveScope and CompileToOutput. Scope kinds mirror CompileScopeKind.</documentation>
+  <documentation>Codes emitted by ResolveScope and CompileToOutput / CompileBomToOutput.
+    Scope kinds mirror CompileScopeKind.</documentation>
   <properties>
     <BML_UNKNOWN_TARGET type="type:Text"><documentation>Unknown render target name.</documentation></BML_UNKNOWN_TARGET>
     <BML_TARGET_SCOPE_MISMATCH type="type:Text"><documentation>Resolved scope kind not in target.accepts.</documentation></BML_TARGET_SCOPE_MISMATCH>
     <BML_COMPILE_SCOPE_EMPTY type="type:Text"><documentation>Missing document/libraries/roots or auto found nothing.</documentation></BML_COMPILE_SCOPE_EMPTY>
+    <BML_MISSING_TYPE_REGISTRY type="type:Text"><documentation>compileBomToOutput requires typeRegistry.</documentation></BML_MISSING_TYPE_REGISTRY>
     <SCOPE_KINDS type="type:Text"><documentation>document, library, corpus, auto</documentation></SCOPE_KINDS>
   </properties>
 

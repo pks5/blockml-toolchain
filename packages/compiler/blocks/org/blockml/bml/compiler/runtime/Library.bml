@@ -78,6 +78,7 @@
       <composition><runapi:CompileScope /></composition>
       <composition><runapi:CompileRequest /></composition>
       <composition><runapi:CompileOptions /></composition>
+      <composition><runapi:CompileBomOptions /></composition>
       <composition><runapi:CompilerResult /></composition>
       <composition><runapi:RenderOutputFile /></composition>
       <composition><runapi:RenderOutput /></composition>
@@ -109,6 +110,7 @@
       <composition><rundocumentation:CompileScopeRules /></composition>
       <composition><rundocumentation:TargetRegistry /></composition>
       <composition><rundocumentation:RenderContextRules /></composition>
+      <composition><rundocumentation:ExternalTargetContract /></composition>
       <composition><rundocumentation:Diagnostics /></composition>
       <composition><rundocumentation:DesignDecisions /></composition>
       <composition><rundocumentation:PackageOwnership /></composition>

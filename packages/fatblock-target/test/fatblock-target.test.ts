@@ -27,8 +27,6 @@ function mockContext(
       sourceFilePath: hostFile,
       outputBasePath: ".",
       targetName: "fatblock",
-      documentKind: "block",
-      isPresetBlock: false,
       scopeKind: "document",
     },
     blockFqn: "",

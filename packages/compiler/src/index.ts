@@ -4,6 +4,7 @@ export type {
   CompileScope,
   CompileRequest,
   CompileOptions,
+  CompileBomOptions,
   CompilerResult,
   RenderOutput,
   RenderOutputFile,

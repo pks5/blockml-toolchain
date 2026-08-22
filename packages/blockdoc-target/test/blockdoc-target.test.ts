@@ -12,8 +12,6 @@ function mockContext(registry: TypeRegistry): RenderContext {
       sourceFilePath: "<test>",
       outputBasePath: "doc",
       targetName: "blockdoc",
-      documentKind: "block",
-      isPresetBlock: false,
       scopeKind: "library",
     },
     blockFqn: "",

@@ -33,9 +33,12 @@
     • libraries — Library.bml paths for library-scope compiles
     • targets — bootstrap list; default ["blockdoc"] (CLI2)
     • targetOptions — opaque per-target; keys = registry names
+    • xsdValidation — default true; set false to skip authoring XSD checks on validate
+
+    Escape hatch: --no-xsd on validate overrides xsdValidation to false.
 
     Fields documented in MD but not read by V1 minimal CLI (later):
-    thumbsDir, mbLibPath, openscadPath, activeConfig, bmlExtensions, xsdValidation.
+    thumbsDir, mbLibPath, openscadPath, activeConfig, bmlExtensions.
 
     bom-cli.config.json command/flag renaming — planned; not V1.</documentation>
   <references>

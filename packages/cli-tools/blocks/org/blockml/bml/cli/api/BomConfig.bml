@@ -35,6 +35,7 @@
     <libraries type="type:Text"><documentation>Library.bml paths for library-scope compiles. (optional)</documentation></libraries>
     <targets type="type:Text"><documentation>Registry names to bootstrap. Default ["blockdoc"]. (optional)</documentation></targets>
     <targetOptions type="type:Text"><documentation>Per-target opaque options keyed by registry name. (optional)</documentation></targetOptions>
+    <xsdValidation type="type:Boolean"><documentation>Enable authoring XSD validation on validate. Default true. (optional)</documentation></xsdValidation>
   </properties>
 
 </block>

@@ -35,6 +35,9 @@
     clearTargets empties; registeredTargetNames lists keys.
     No default targets ship in @blockml/compiler. Hosts (CLI bootstrapTargets, tests, browsers)
     call registerTarget before compileToOutput.
+    registerTarget validates: non-empty name; non-empty accepts with only valid CompileScopeKind
+    values; render is a function; validateRequest if present is a function. Invalid hosts throw
+    (programming error — not a BML authoring diagnostic).
     Config targets[] and package loading order are CLI-owned (SeeAlso RuntimeBootstrap).</documentation>
   <references>
     <see type="rundocumentation:RenderContextRules" relation="ReadNext"></see>

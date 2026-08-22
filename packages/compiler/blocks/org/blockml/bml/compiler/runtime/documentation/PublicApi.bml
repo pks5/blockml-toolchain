@@ -33,8 +33,8 @@
 
   <documentation>Exports (packages/compiler/src/index.ts):
     Types: CompileScopeKind, CompileInput, CompileScope, CompileRequest, CompileOptions,
-    CompilerResult, RenderOutput, RenderOutputFile, RenderSession, RenderContext,
-    RenderTarget, ScopeConfigHints, ResolvedScope.
+    CompileBomOptions, CompilerResult, RenderOutput, RenderOutputFile, RenderSession,
+    RenderContext, RenderTarget, ScopeConfigHints, ResolvedScope.
     Registry: registerTarget, getTarget, clearTargets, registeredTargetNames.
     Scope: resolveScope, scopeAccepts.
     Stage 1–2 helpers: compileBmlToBom, validateRegistryDocuments.

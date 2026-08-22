@@ -61,9 +61,94 @@ function bootstrapForScope(resolved, options) {
     }
     return bootstrap;
 }
-export function compileBomToOutput(_model, targetName, options = {}) {
-    void _model;
-    return compileToOutput({ scope: { kind: "document", document: { source: "", filePath: "<memory>" } } }, targetName, options);
+function diagnostic(code, message, file) {
+    return {
+        severity: "error",
+        code,
+        message,
+        source: { file, line: 1, column: 1 },
+    };
+}
+function renderWithTarget(target, request, sessionOptions, priorDiagnostics) {
+    const diagnostics = [...priorDiagnostics];
+    if (target.validateRequest) {
+        diagnostics.push(...target.validateRequest(request));
+    }
+    const session = buildRenderSession(sessionOptions);
+    const ctx = createRenderContext(session);
+    const output = target.render(request, ctx);
+    const success = !diagnostics.some((d) => d.severity === "error");
+    return { output, diagnostics, success };
+}
+function sessionOptionsFromResolved(resolved, registry, targetName, options) {
+    const sessionOptions = {
+        typeRegistry: registry,
+        targetName,
+        scopeKind: resolved.kind,
+    };
+    if (options.outputBasePath !== undefined) {
+        sessionOptions.outputBasePath = options.outputBasePath;
+    }
+    if (resolved.document?.filePath !== undefined) {
+        sessionOptions.sourceFilePath = resolved.document.filePath;
+    }
+    if (resolved.libraries !== undefined) {
+        sessionOptions.libraryPaths = resolved.libraries;
+    }
+    if (resolved.roots !== undefined) {
+        sessionOptions.corpusRoots = resolved.roots;
+    }
+    return sessionOptions;
+}
+export function compileBomToOutput(document, targetName, options) {
+    const fileHint = document.source?.filePath ?? options.rootDir ?? "<memory>";
+    if (!options.typeRegistry) {
+        return {
+            output: null,
+            diagnostics: [
+                diagnostic("BML_MISSING_TYPE_REGISTRY", "compileBomToOutput requires options.typeRegistry", fileHint),
+            ],
+            success: false,
+        };
+    }
+    const target = getTarget(targetName);
+    if (!target) {
+        return {
+            output: null,
+            diagnostics: [
+                diagnostic("BML_UNKNOWN_TARGET", `Unknown render target: ${targetName}`, fileHint),
+            ],
+            success: false,
+        };
+    }
+    if (!scopeAccepts("document", target.accepts)) {
+        return {
+            output: null,
+            diagnostics: [
+                diagnostic("BML_TARGET_SCOPE_MISMATCH", `Target "${targetName}" does not accept scope kind "document"`, fileHint),
+            ],
+            success: false,
+        };
+    }
+    const registry = options.typeRegistry;
+    const sourceFilePath = document.source?.filePath ?? "<memory>";
+    const diagnostics = [
+        ...validateRegistryDocuments(registry, [sourceFilePath]),
+    ];
+    const request = { scope: { kind: "document" } };
+    if (options.targetOptions !== undefined) {
+        request.targetOptions = options.targetOptions;
+    }
+    const sessionOptions = {
+        typeRegistry: registry,
+        targetName,
+        scopeKind: "document",
+        sourceFilePath,
+    };
+    if (options.outputBasePath !== undefined) {
+        sessionOptions.outputBasePath = options.outputBasePath;
+    }
+    return renderWithTarget(target, request, sessionOptions, diagnostics);
 }
 export function compileBmlToOutput(input, targetName, options = {}) {
     return compileToOutput({ scope: { kind: "document", document: input } }, targetName, options);
@@ -71,22 +156,15 @@ export function compileBmlToOutput(input, targetName, options = {}) {
 export function compileToOutput(request, targetName, options = {}, configHints = {}) {
     const diagnostics = [];
     const target = getTarget(targetName);
+    const configFile = configHints.rootDir ?? "<config>";
     if (!target) {
         return {
             output: null,
             diagnostics: [
-                {
-                    severity: "error",
-                    code: "BML_UNKNOWN_TARGET",
-                    message: `Unknown render target: ${targetName}`,
-                    source: { file: configHints.rootDir ?? "<config>", line: 1, column: 1 },
-                },
+                diagnostic("BML_UNKNOWN_TARGET", `Unknown render target: ${targetName}`, configFile),
             ],
             success: false,
         };
-    }
-    if (target.validateRequest) {
-        diagnostics.push(...target.validateRequest(request));
     }
     const scopeHints = {};
     const hintRoot = options.rootDir ?? configHints.rootDir;
@@ -105,12 +183,7 @@ export function compileToOutput(request, targetName, options = {}, configHints =
         return { output: null, diagnostics, success: false };
     }
     if (!scopeAccepts(resolved.kind, target.accepts)) {
-        diagnostics.push({
-            severity: "error",
-            code: "BML_TARGET_SCOPE_MISMATCH",
-            message: `Target "${targetName}" does not accept scope kind "${resolved.kind}"`,
-            source: { file: scopeHints.rootDir ?? "<config>", line: 1, column: 1 },
-        });
+        diagnostics.push(diagnostic("BML_TARGET_SCOPE_MISMATCH", `Target "${targetName}" does not accept scope kind "${resolved.kind}"`, scopeHints.rootDir ?? "<config>"));
         return { output: null, diagnostics, success: false };
     }
     const { registry, diagnostics: bootstrapDiagnostics } = bootstrapForScope(resolved, options);
@@ -120,33 +193,6 @@ export function compileToOutput(request, targetName, options = {}, configHints =
     if (resolved.kind === "document" && resolved.document) {
         diagnostics.push(...validateRegistryDocuments(registry, [resolved.document.filePath]));
     }
-    const sessionOptions = {
-        typeRegistry: registry,
-        targetName,
-        scopeKind: resolved.kind,
-    };
-    if (options.outputBasePath !== undefined) {
-        sessionOptions.outputBasePath = options.outputBasePath;
-    }
-    if (resolved.document?.filePath !== undefined) {
-        sessionOptions.sourceFilePath = resolved.document.filePath;
-    }
-    if (options.activeConfig !== undefined) {
-        sessionOptions.activeConfig = options.activeConfig;
-    }
-    if (options.mbLibPath !== undefined) {
-        sessionOptions.mbLibPath = options.mbLibPath;
-    }
-    if (resolved.libraries !== undefined) {
-        sessionOptions.libraryPaths = resolved.libraries;
-    }
-    if (resolved.roots !== undefined) {
-        sessionOptions.corpusRoots = resolved.roots;
-    }
-    const session = buildRenderSession(sessionOptions);
-    const ctx = createRenderContext(session);
-    const output = target.render(request, ctx);
-    const success = !diagnostics.some((d) => d.severity === "error");
-    return { output, diagnostics, success };
+    return renderWithTarget(target, request, sessionOptionsFromResolved(resolved, registry, targetName, options), diagnostics);
 }
 //# sourceMappingURL=compile-to-output.js.map

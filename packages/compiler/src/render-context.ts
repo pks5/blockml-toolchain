@@ -34,8 +34,6 @@ export function buildRenderSession(
     targetName: string;
     outputBasePath?: string;
     sourceFilePath?: string;
-    activeConfig?: string;
-    mbLibPath?: string;
     scopeKind: RenderSession["scopeKind"];
     libraryPaths?: string[];
     corpusRoots?: string[];
@@ -46,16 +44,8 @@ export function buildRenderSession(
     sourceFilePath: options.sourceFilePath ?? "<scope>",
     outputBasePath: options.outputBasePath ?? ".",
     targetName: options.targetName,
-    documentKind: "block",
-    isPresetBlock: false,
     scopeKind: options.scopeKind,
   };
-  if (options.activeConfig !== undefined) {
-    session.activeConfig = options.activeConfig;
-  }
-  if (options.mbLibPath !== undefined) {
-    session.mbLibPath = options.mbLibPath;
-  }
   if (options.libraryPaths !== undefined) {
     session.libraryPaths = options.libraryPaths;
   }

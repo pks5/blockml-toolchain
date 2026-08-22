@@ -20,16 +20,8 @@ export function buildRenderSession(options) {
         sourceFilePath: options.sourceFilePath ?? "<scope>",
         outputBasePath: options.outputBasePath ?? ".",
         targetName: options.targetName,
-        documentKind: "block",
-        isPresetBlock: false,
         scopeKind: options.scopeKind,
     };
-    if (options.activeConfig !== undefined) {
-        session.activeConfig = options.activeConfig;
-    }
-    if (options.mbLibPath !== undefined) {
-        session.mbLibPath = options.mbLibPath;
-    }
     if (options.libraryPaths !== undefined) {
         session.libraryPaths = options.libraryPaths;
     }

@@ -81,6 +81,7 @@
       <composition><clicap:FormatDiagnostic /></composition>
       <composition><clicap:RunCli /></composition>
       <composition><clicap:RunValidate /></composition>
+      <composition><clicap:ValidateAgainstXsd /></composition>
       <composition><clicap:RunCompile /></composition>
       <composition><clicap:RunCompileFatBlock /></composition>
       <composition><clicap:BootstrapTargets /></composition>

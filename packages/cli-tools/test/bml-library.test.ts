@@ -43,6 +43,7 @@ const EXPECTED_CAPABILITIES = [
   "FormatDiagnostic",
   "RunCli",
   "RunValidate",
+  "ValidateAgainstXsd",
   "RunCompile",
   "RunCompileFatBlock",
   "BootstrapTargets",
@@ -126,10 +127,12 @@ describe("CLI BML library", () => {
     expect(index).toContain("writeOutputFiles");
     expect(index).toContain("bootstrapProjectTypeRegistry");
     expect(index).toContain("formatDiagnostic");
+    expect(index).toContain("validateFilesAgainstXsd");
 
     const loadConfig = readFileSync(join(pkgRoot, "src/load-config.ts"), "utf8");
     expect(loadConfig).toContain('outDir: "doc"');
     expect(loadConfig).toContain('targets: ["blockdoc"]');
+    expect(loadConfig).toContain("xsdValidation");
 
     const bootstrapTargets = readFileSync(join(pkgRoot, "src/bootstrap-targets.ts"), "utf8");
     expect(bootstrapTargets).toContain("blockdoc");

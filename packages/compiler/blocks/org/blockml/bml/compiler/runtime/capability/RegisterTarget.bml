@@ -30,7 +30,9 @@
   <baseType>core:Capability</baseType>
   <is>Register a RenderTarget in the in-memory Target Registry</is>
 
-  <documentation>C3: overwrites same name; registry starts empty — no built-in targets.</documentation>
+  <documentation>C3: overwrites same name; registry starts empty — no built-in targets.
+    Validates before store (host programming errors throw): name non-empty; accepts non-empty
+    and only valid CompileScopeKind values; render is a function; validateRequest if set is a function.</documentation>
 
   <references>
     <see type="rundocumentation:TargetRegistry" relation="SeeAlso" />

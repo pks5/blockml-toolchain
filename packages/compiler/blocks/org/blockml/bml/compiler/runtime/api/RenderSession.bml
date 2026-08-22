@@ -30,19 +30,17 @@
   <baseType>runtime:RuntimeType</baseType>
   <is>Immutable per-compile session shared by RenderContext forks</is>
 
-  <documentation>C1: built by BuildRenderSession after scope bootstrap.</documentation>
+  <documentation>C1: built by BuildRenderSession after scope bootstrap or BOM-first host registry.
+    Domain-agnostic — no MachineBlocks or product-profile fields.</documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
+    <see type="rundocumentation:ExternalTargetContract" relation="SeeAlso" />
   </references>
   <properties>
     <typeRegistry type="type:Text"><documentation>TypeRegistry for this compile. (required)</documentation></typeRegistry>
     <sourceFilePath type="type:Text"><documentation>Document path or scope placeholder. (required)</documentation></sourceFilePath>
     <outputBasePath type="type:Text"><documentation>Output base path. (required)</documentation></outputBasePath>
     <targetName type="type:Text"><documentation>Registered target name. (required)</documentation></targetName>
-    <documentKind type="type:Text"><documentation>V1 always block. (required)</documentation></documentKind>
-    <isPresetBlock type="type:Boolean"><documentation>V1 always false. (required)</documentation></isPresetBlock>
-    <activeConfig type="type:Text"><documentation>Optional active config. (optional)</documentation></activeConfig>
-    <mbLibPath type="type:Text"><documentation>Optional MB lib path. (optional)</documentation></mbLibPath>
     <scopeKind type="type:Text"><documentation>Resolved kind without auto. (required)</documentation></scopeKind>
     <libraryPaths type="type:Text"><documentation>When scope is library. (optional)</documentation></libraryPaths>
     <corpusRoots type="type:Text"><documentation>When scope is corpus. (optional)</documentation></corpusRoots>

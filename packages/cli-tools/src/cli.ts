@@ -11,6 +11,10 @@ import {
 import { bootstrapTargets } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
 import { loadConfig, type BomConfig } from "./load-config.js";
+import {
+  collectRegistryFilePaths,
+  validateFilesAgainstXsd,
+} from "./xsd-validate.js";
 import { writeOutputFiles, type WriteOutputOptions } from "./write-output.js";
 import type { FatBlockRenderOutput } from "@blockml/fatblock-target";
 import type { XsdRenderOutput } from "@blockml/xsd-target";
@@ -18,7 +22,7 @@ import type { XsdRenderOutput } from "@blockml/xsd-target";
 const USAGE =
   "Usage: blockml compile <blockdoc|xsd> [--out dir] [--src dir] [--libraries a,b]\n" +
   "       blockml compile <file> fatblock --src dir [--include a,b] [--out dir]\n" +
-  "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b]";
+  "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--no-xsd]";
 
 const SUPPORTED_TARGETS = new Set(["blockdoc", "xsd", "fatblock"]);
 const DOCUMENT_TARGETS = new Set(["fatblock"]);
@@ -46,6 +50,7 @@ export interface ParsedArgs {
   srcDir?: string;
   libraries?: string[];
   include?: string[];
+  noXsd?: boolean;
 }
 
 interface PrintableDiagnostic {
@@ -88,6 +93,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
       }
     } else if (flag === "--all") {
       result.all = true;
+    } else if (flag === "--no-xsd") {
+      result.noXsd = true;
     } else if (flag && !flag.startsWith("-")) {
       if (result.command === "validate") {
         if (!result.file) {
@@ -144,6 +151,13 @@ function bootstrapOptsFromParsed(
   return bootstrapOpts;
 }
 
+function xsdValidationEnabled(parsed: ParsedArgs, config: BomConfig): boolean {
+  if (parsed.noXsd) {
+    return false;
+  }
+  return config.xsdValidation !== false;
+}
+
 function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): number {
   if (parsed.file && parsed.all) {
     lines.push("Specify either <file> or --all, not both.");
@@ -163,6 +177,8 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
     bootstrapOptsFromParsed(parsed, config, rootDir),
   );
 
+  const xsdEnabled = xsdValidationEnabled(parsed, config);
+
   if (parsed.file) {
     const filePath = resolve(rootDir, parsed.file);
     if (!existsSync(filePath)) {
@@ -174,14 +190,23 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
       { source, filePath },
       { typeRegistry: bootstrap.registry, rootDir },
     );
-    printDiagnostics([...bootstrap.diagnostics, ...result.diagnostics], lines);
-    return result.success ? 0 : 1;
+    const diagnostics = [...bootstrap.diagnostics, ...result.diagnostics];
+    if (xsdEnabled) {
+      diagnostics.push(...validateFilesAgainstXsd([filePath], rootDir));
+    }
+    printDiagnostics(diagnostics, lines);
+    return diagnostics.some((d) => d.severity === "error") ? 1 : 0;
   }
 
   const diagnostics = [
     ...bootstrap.diagnostics,
     ...validateRegistryDocuments(bootstrap.registry),
   ];
+  if (xsdEnabled) {
+    diagnostics.push(
+      ...validateFilesAgainstXsd(collectRegistryFilePaths(bootstrap.registry), rootDir),
+    );
+  }
   printDiagnostics(diagnostics, lines);
   return diagnostics.some((d) => d.severity === "error") ? 1 : 0;
 }

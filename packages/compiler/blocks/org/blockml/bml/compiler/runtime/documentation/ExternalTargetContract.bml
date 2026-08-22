@@ -1,0 +1,54 @@
+<!--
+  Compiler Runtime Documentation — ExternalTargetContract
+  FQN: org.blockml.bml.compiler.runtime.documentation.ExternalTargetContract
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>ExternalTargetContract</name>
+  <type>rundocumentation:ExternalTargetContract</type>
+  <baseType>core:Documentation</baseType>
+  <is>Normative contract for external Stage-3 RenderTargets</is>
+
+  <documentation>RenderTarget: name, accepts[], optional validateRequest, render(request, ctx) → RenderOutput.
+    BOM-first hosts call compileBomToOutput(document, targetName, CompileBomOptions) with a required
+    TypeRegistry; no re-parse or bootstrap. Host must ensure the document is discoverable in the
+    registry when the target looks up by sourceFilePath or FQN.
+
+    Stable RenderSession fields for registry targets: typeRegistry, sourceFilePath, outputBasePath,
+    targetName, scopeKind, libraryPaths?, corpusRoots?.
+    Per-node RenderContext fields (blockFqn, outputRelativePath, child) are for composition renderers;
+    registry targets may ignore them.
+
+    Domain-specific options (MachineBlocks lib path, active config profiles, …) live in opaque
+    targetOptions on CompileRequest / CompileBomOptions — not on CompileOptions or RenderSession.
+    Hosts register targets via registerTarget before compile.</documentation>
+  <references>
+    <see type="rundocumentation:Diagnostics" relation="ReadNext"></see>
+    <see type="runapi:RenderTarget" relation="SeeAlso"></see>
+    <see type="runcap:CompileBomToOutput" relation="SeeAlso"></see>
+    <see type="rundocumentation:TargetRegistry" relation="SeeAlso"></see>
+  </references>
+
+</block>

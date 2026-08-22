@@ -5,8 +5,6 @@ export declare function buildRenderSession(options: {
     targetName: string;
     outputBasePath?: string;
     sourceFilePath?: string;
-    activeConfig?: string;
-    mbLibPath?: string;
     scopeKind: RenderSession["scopeKind"];
     libraryPaths?: string[];
     corpusRoots?: string[];

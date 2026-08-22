@@ -28,9 +28,10 @@
   <name>BuildRenderSession</name>
   <type>runcap:BuildRenderSession</type>
   <baseType>core:Capability</baseType>
-  <is>Construct RenderSession from bootstrap results</is>
+  <is>Construct RenderSession from bootstrap or BOM-first results</is>
 
-  <documentation>C1: defaults sourceFilePath to the literal placeholder scope (angle brackets), outputBasePath to dot, documentKind block, isPresetBlock false.</documentation>
+  <documentation>C1: defaults sourceFilePath to the literal placeholder scope (angle brackets),
+    outputBasePath to dot. Session fields are domain-agnostic.</documentation>
 
   <references>
     <see type="rundocumentation:RenderContextRules" relation="SeeAlso" />

@@ -32,7 +32,7 @@
     • Incremental build cache .bom-cache/ (C5)
     • Thumbnail generation OpenSCAD+Sharp (C6)
     • resolveOpenScad.ts, resolveMbLib.ts
-    • --force, --no-xsd flags
+    • --force flag
     • machineblocks-v3-scad target registration
     • Config profiles (activeConfig)
     • Codegen from BML to TypeScript (structural SSOT only in V1)</documentation>

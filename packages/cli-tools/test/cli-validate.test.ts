@@ -5,6 +5,11 @@ import { clearTargets } from "@blockml/compiler";
 import { BML_DOCUMENT_NS } from "@blockml/xsd-target";
 import { parseArgs, runCli } from "../src/cli.js";
 import { resetBootstrapTargets } from "../src/bootstrap-targets.js";
+import {
+  parseCatalogUriEntries,
+  resolveBmlSchemaPath,
+  validateFilesAgainstXsd,
+} from "../src/xsd-validate.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
 const CORE_LIBRARY = join(
@@ -25,6 +30,25 @@ describe("parseArgs", () => {
     expect(parsed.all).toBe(true);
     expect(parsed.target).toBeUndefined();
   });
+
+  it("maps --no-xsd", () => {
+    expect(parseArgs(["validate", "--no-xsd"]).noXsd).toBe(true);
+  });
+});
+
+describe("xsd-validate helpers", () => {
+  it("parses catalog uri entries", () => {
+    const catalog = readFileSync(join(ROOT, "catalog.xml"), "utf8");
+    const entries = parseCatalogUriEntries(catalog);
+    expect(entries.get(BML_DOCUMENT_NS)).toBe("./schemas/bml.xsd");
+  });
+
+  it("resolves bml.xsd from repo catalog", () => {
+    const schemaPath = resolveBmlSchemaPath(ROOT);
+    expect(schemaPath).toBeTruthy();
+    expect(existsSync(schemaPath!)).toBe(true);
+    expect(schemaPath).toMatch(/bml\.xsd$/);
+  });
 });
 
 describe("runCli validate", () => {
@@ -34,7 +58,7 @@ describe("runCli validate", () => {
     }
 
     const { code, stderr } = runCli(
-      ["validate", "--libraries", CORE_LIBRARY],
+      ["validate", "--libraries", CORE_LIBRARY, "--no-xsd"],
       ROOT,
     );
 
@@ -54,7 +78,7 @@ describe("runCli validate", () => {
     }
 
     const { code, stderr } = runCli(
-      ["validate", "--all", "--libraries", CORE_LIBRARY],
+      ["validate", "--all", "--libraries", CORE_LIBRARY, "--no-xsd"],
       ROOT,
     );
 
@@ -68,7 +92,7 @@ describe("runCli validate", () => {
     }
 
     const { code, stderr } = runCli(
-      ["validate", CORE_LIBRARY, "--libraries", CORE_LIBRARY],
+      ["validate", CORE_LIBRARY, "--libraries", CORE_LIBRARY, "--no-xsd"],
       ROOT,
     );
 
@@ -85,6 +109,145 @@ describe("runCli validate", () => {
   it("returns 2 when file and --all are combined", () => {
     const { code } = runCli(["validate", "no-such.bml", "--all"], ROOT);
     expect(code).toBe(2);
+  });
+});
+
+describe("runCli validate XSD", () => {
+  const tmpProject = join(import.meta.dirname, ".tmp-xsd-validate");
+
+  beforeEach(() => {
+    clearTargets();
+    resetBootstrapTargets();
+    mkdirSync(tmpProject, { recursive: true });
+  });
+
+  afterEach(() => {
+    rmSync(tmpProject, { recursive: true, force: true });
+    clearTargets();
+    resetBootstrapTargets();
+  });
+
+  it("warns and skips when schemas are missing", () => {
+    const srcDir = join(tmpProject, "src");
+    mkdirSync(srcDir, { recursive: true });
+    const file = join(srcDir, "Foo.bml");
+    writeFileSync(
+      file,
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cli="com.test.cli">
+  <name>Foo</name>
+  <type>cli:Foo</type>
+  <baseType>core:Block</baseType>
+  <is>foo</is>
+  <version>1.0.0</version>
+</block>`,
+      "utf8",
+    );
+
+    const diagnostics = validateFilesAgainstXsd([file], tmpProject);
+    expect(diagnostics).toEqual([
+      expect.objectContaining({
+        severity: "warning",
+        code: "BML_XSD_SCHEMAS_MISSING",
+      }),
+    ]);
+  });
+
+  it("reports XSD validation error for invalid root element", () => {
+    const schemasDir = join(tmpProject, "schemas");
+    mkdirSync(schemasDir, { recursive: true });
+    writeFileSync(join(tmpProject, "catalog.xml"), readFileSync(join(ROOT, "catalog.xml"), "utf8"));
+    writeFileSync(join(schemasDir, "bml.xsd"), readFileSync(join(ROOT, "schemas/bml.xsd"), "utf8"));
+
+    const srcDir = join(tmpProject, "src");
+    mkdirSync(srcDir, { recursive: true });
+    const file = join(srcDir, "Bad.bml");
+    writeFileSync(
+      file,
+      `<?xml version="1.0" encoding="UTF-8"?>
+<notBlock xmlns="http://blockml.org/bml"></notBlock>`,
+      "utf8",
+    );
+
+    const { code, stderr } = runCli(["validate", "src/Bad.bml"], tmpProject);
+    expect(code).toBe(1);
+    expect(stderr).toMatch(/BML_XSD_VALIDATION_ERROR/);
+  });
+
+  it("accepts valid block against bml.xsd", () => {
+    const schemasDir = join(tmpProject, "schemas");
+    mkdirSync(schemasDir, { recursive: true });
+    writeFileSync(join(tmpProject, "catalog.xml"), readFileSync(join(ROOT, "catalog.xml"), "utf8"));
+    writeFileSync(join(schemasDir, "bml.xsd"), readFileSync(join(ROOT, "schemas/bml.xsd"), "utf8"));
+
+    const srcDir = join(tmpProject, "src");
+    mkdirSync(srcDir, { recursive: true });
+    const file = join(srcDir, "Good.bml");
+    writeFileSync(
+      file,
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cli="com.test.cli">
+  <name>Good</name>
+  <type>cli:Good</type>
+  <baseType>core:Block</baseType>
+  <is>good</is>
+  <version>1.0.0</version>
+</block>`,
+      "utf8",
+    );
+
+    const diagnostics = validateFilesAgainstXsd([file], tmpProject);
+    expect(diagnostics.filter((d) => d.severity === "error")).toEqual([]);
+  });
+
+  it("skips XSD validation with --no-xsd even for invalid XML shape", () => {
+    const schemasDir = join(tmpProject, "schemas");
+    mkdirSync(schemasDir, { recursive: true });
+    writeFileSync(join(tmpProject, "catalog.xml"), readFileSync(join(ROOT, "catalog.xml"), "utf8"));
+    writeFileSync(join(schemasDir, "bml.xsd"), readFileSync(join(ROOT, "schemas/bml.xsd"), "utf8"));
+
+    const srcDir = join(tmpProject, "src");
+    mkdirSync(srcDir, { recursive: true });
+    const file = join(srcDir, "Bad.bml");
+    writeFileSync(
+      file,
+      `<?xml version="1.0" encoding="UTF-8"?>
+<notBlock xmlns="http://blockml.org/bml"></notBlock>`,
+      "utf8",
+    );
+
+    const diagnostics = validateFilesAgainstXsd([file], tmpProject);
+    expect(diagnostics.some((d) => d.code === "BML_XSD_VALIDATION_ERROR")).toBe(true);
+
+    const { stderr } = runCli(["validate", "src/Bad.bml", "--no-xsd"], tmpProject);
+    expect(stderr).not.toMatch(/BML_XSD_VALIDATION_ERROR/);
+  });
+
+  it("skips XSD validation when bom.config.json sets xsdValidation false", () => {
+    const schemasDir = join(tmpProject, "schemas");
+    mkdirSync(schemasDir, { recursive: true });
+    writeFileSync(join(tmpProject, "catalog.xml"), readFileSync(join(ROOT, "catalog.xml"), "utf8"));
+    writeFileSync(join(schemasDir, "bml.xsd"), readFileSync(join(ROOT, "schemas/bml.xsd"), "utf8"));
+    writeFileSync(
+      join(tmpProject, "bom.config.json"),
+      JSON.stringify({ xsdValidation: false }),
+      "utf8",
+    );
+
+    const srcDir = join(tmpProject, "src");
+    mkdirSync(srcDir, { recursive: true });
+    const file = join(srcDir, "Bad.bml");
+    writeFileSync(
+      file,
+      `<?xml version="1.0" encoding="UTF-8"?>
+<notBlock xmlns="http://blockml.org/bml"></notBlock>`,
+      "utf8",
+    );
+
+    const { stderr } = runCli(["validate", "src/Bad.bml"], tmpProject);
+    expect(stderr).not.toMatch(/BML_XSD_VALIDATION_ERROR/);
   });
 });
 

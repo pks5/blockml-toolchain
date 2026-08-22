@@ -31,6 +31,9 @@
     <DOCUMENT_TARGETS type="type:Text"><documentation>Targets requiring a host file: fatblock.</documentation></DOCUMENT_TARGETS>
     <DEFAULT_TARGETS type="type:Text"><documentation>targets[] default when omitted: ["blockdoc"].</documentation></DEFAULT_TARGETS>
     <BIN_NAME type="type:Text"><documentation>blockml</documentation></BIN_NAME>
+    <BML_DOCUMENT_NS type="type:Text"><documentation>http://blockml.org/bml — catalog key for bml.xsd.</documentation></BML_DOCUMENT_NS>
+    <BML_XSD_SCHEMAS_MISSING type="type:Text"><documentation>Warning when catalog or bml.xsd is absent; XSD step skipped.</documentation></BML_XSD_SCHEMAS_MISSING>
+    <BML_XSD_VALIDATION_ERROR type="type:Text"><documentation>XML does not validate against bml.xsd.</documentation></BML_XSD_VALIDATION_ERROR>
   </properties>
 
 </block>

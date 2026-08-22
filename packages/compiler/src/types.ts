@@ -24,10 +24,16 @@ export interface CompileRequest {
 
 export interface CompileOptions {
   typeRegistry?: TypeRegistry;
-  activeConfig?: string;
   outputBasePath?: string;
-  mbLibPath?: string;
   rootDir?: string;
+}
+
+/** Options for BOM-first Stage-3 (compileBomToOutput). typeRegistry is required. */
+export interface CompileBomOptions {
+  typeRegistry: TypeRegistry;
+  outputBasePath?: string;
+  rootDir?: string;
+  targetOptions?: unknown;
 }
 
 export interface CompilerResult<T> {
@@ -50,10 +56,6 @@ export interface RenderSession {
   sourceFilePath: string;
   outputBasePath: string;
   targetName: string;
-  documentKind: "block";
-  isPresetBlock: boolean;
-  activeConfig?: string;
-  mbLibPath?: string;
   /** Resolved scope kind after auto resolution. */
   scopeKind: Exclude<CompileScopeKind, "auto">;
   /** Library.bml paths when scope is library. */

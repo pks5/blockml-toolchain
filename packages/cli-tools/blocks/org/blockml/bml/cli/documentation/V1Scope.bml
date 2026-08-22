@@ -27,13 +27,14 @@
   <is>V1 implemented vs planned commands</is>
 
   <documentation>V1 implemented:
-    • blockml validate [file] [--all] [--src] [--libraries]
+    • blockml validate [file] [--all] [--src] [--libraries] [--no-xsd]
     • blockml compile [file] target | blockml compile target
     • Targets: blockdoc (default), xsd, fatblock
     • Flags: --out, --src, --libraries, --include (fatblock), --all (validate only meaningful)
+    • Authoring XSD validation on validate (default on; xsdValidation config; --no-xsd escape)
 
     V1 not implemented (documented in ScopeExclusions):
-    init, new block, inspect, watch, activate-config, --force cache skip, --no-xsd,
+    init, new block, inspect, watch, activate-config, --force cache skip,
     incremental .bom-cache, thumbnails, OpenSCAD resolver, bom-cli.config.json renaming.</documentation>
   <references>
     <see type="clidocumentation:PublicApi" relation="ReadNext"></see>

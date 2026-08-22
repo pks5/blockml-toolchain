@@ -35,6 +35,7 @@
     BML_UNKNOWN_TARGET — getTarget missed.
     BML_TARGET_SCOPE_MISMATCH — resolved kind not accepted.
     BML_COMPILE_SCOPE_EMPTY — missing document/libraries/roots or auto empty.
+    BML_MISSING_TYPE_REGISTRY — compileBomToOutput called without typeRegistry.
     Parse/validate diagnostics are forwarded from parser/validator.
     success on CompilerResult is false if any diagnostic has severity error.
     CLI maps diagnostics to exit codes — not modeled here.</documentation>
