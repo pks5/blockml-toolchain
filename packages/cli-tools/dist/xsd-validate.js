@@ -74,7 +74,7 @@ export function collectRegistryFilePaths(registry) {
     }
     return [...paths];
 }
-function validateFileWithLibxmljs(libxmljs, xsdSchema, absPath) {
+function validateFileWithLibxmljs(libxmljs, xsdDoc, absPath) {
     let xmlContent;
     try {
         xmlContent = readFileSync(absPath, "utf8");
@@ -93,7 +93,7 @@ function validateFileWithLibxmljs(libxmljs, xsdSchema, absPath) {
             diagnostic("error", "BML_XSD_VALIDATION_ERROR", `Malformed XML for XSD validation: ${e instanceof Error ? e.message : String(e)}`, absPath),
         ];
     }
-    const valid = doc.validate(xsdSchema);
+    const valid = doc.validate(xsdDoc);
     if (valid) {
         return [];
     }
@@ -149,12 +149,11 @@ export function validateFilesAgainstXsd(filePaths, rootDir) {
         ];
     }
     const libxmljs = loadLibxmljs();
-    let xsdSchema;
+    let xsdDoc;
     if (libxmljs) {
         try {
             const xsdContent = readFileSync(schemaPath, "utf8");
-            const xsdDoc = libxmljs.parseXml(xsdContent);
-            xsdSchema = libxmljs.parseXmlSchema(xsdDoc);
+            xsdDoc = libxmljs.parseXml(xsdContent);
         }
         catch (e) {
             return [
@@ -174,8 +173,8 @@ export function validateFilesAgainstXsd(filePaths, rootDir) {
         if (!existsSync(absPath)) {
             continue;
         }
-        if (libxmljs && xsdSchema) {
-            diagnostics.push(...validateFileWithLibxmljs(libxmljs, xsdSchema, absPath));
+        if (libxmljs && xsdDoc) {
+            diagnostics.push(...validateFileWithLibxmljs(libxmljs, xsdDoc, absPath));
         }
         else {
             diagnostics.push(...validateFileWithXmllint(absPath, schemaPath));

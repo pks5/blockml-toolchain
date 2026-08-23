@@ -7,12 +7,13 @@ import type { TypeRegistry } from "@blockml/framework";
 
 const BML_DOCUMENT_NS = "http://blockml.org/bml";
 
+type XmlDocument = {
+  validate(schema: unknown): boolean;
+  validationErrors: Array<{ message: string; line?: number; column?: number }>;
+};
+
 type Libxmljs = {
-  parseXml(source: string): {
-    validate(schema: unknown): boolean;
-    validationErrors: Array<{ message: string; line?: number; column?: number }>;
-  };
-  parseXmlSchema(xsdDoc: unknown): unknown;
+  parseXml(source: string): XmlDocument;
 };
 
 function loadLibxmljs(): Libxmljs | null {
@@ -101,7 +102,7 @@ export function collectRegistryFilePaths(registry: TypeRegistry): string[] {
 
 function validateFileWithLibxmljs(
   libxmljs: Libxmljs,
-  xsdSchema: unknown,
+  xsdDoc: XmlDocument,
   absPath: string,
 ): Diagnostic[] {
   let xmlContent: string;
@@ -132,7 +133,7 @@ function validateFileWithLibxmljs(
     ];
   }
 
-  const valid = doc.validate(xsdSchema);
+  const valid = doc.validate(xsdDoc);
   if (valid) {
     return [];
   }
@@ -235,12 +236,11 @@ export function validateFilesAgainstXsd(
   }
 
   const libxmljs = loadLibxmljs();
-  let xsdSchema: unknown;
+  let xsdDoc: XmlDocument | undefined;
   if (libxmljs) {
     try {
       const xsdContent = readFileSync(schemaPath, "utf8");
-      const xsdDoc = libxmljs.parseXml(xsdContent);
-      xsdSchema = libxmljs.parseXmlSchema(xsdDoc);
+      xsdDoc = libxmljs.parseXml(xsdContent);
     } catch (e) {
       return [
         diagnostic(
@@ -271,8 +271,8 @@ export function validateFilesAgainstXsd(
       continue;
     }
 
-    if (libxmljs && xsdSchema) {
-      diagnostics.push(...validateFileWithLibxmljs(libxmljs, xsdSchema, absPath));
+    if (libxmljs && xsdDoc) {
+      diagnostics.push(...validateFileWithLibxmljs(libxmljs, xsdDoc, absPath));
     } else {
       diagnostics.push(...validateFileWithXmllint(absPath, schemaPath));
     }
