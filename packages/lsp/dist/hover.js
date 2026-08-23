@@ -14,26 +14,40 @@ function typeMarkdown(fqn, isText, documentations, summaries) {
     }
     return lines.join("\n");
 }
+function memberMarkdown(member, typeFqn) {
+    const lines = [`**${member.name}**`, `\`${member.kind}\``];
+    if (typeFqn) {
+        lines.push(`type: \`${typeFqn}\``);
+    }
+    const prose = firstProse(member.documentations) ?? firstProse(member.summaries);
+    if (prose) {
+        lines.push("", prose);
+    }
+    return lines.join("\n");
+}
+function languageMarkdown(metaFqn, member, workspace) {
+    if (member) {
+        const lines = [`**${member.name}**`, `\`${metaFqn}\` ${member.kind}`];
+        const prose = firstProse(member.documentations) ?? firstProse(member.summaries);
+        if (prose) {
+            lines.push("", prose);
+        }
+        return lines.join("\n");
+    }
+    const registered = workspace.registry.get(metaFqn)?.block;
+    return typeMarkdown(metaFqn, registered?.is, registered?.documentations, registered?.summaries);
+}
 export function hoverAt(text, filePath, position, workspace) {
-    const hit = hitAt(text, filePath, position);
+    const hit = hitAt(text, filePath, position, workspace);
     if (!hit) {
         return null;
     }
     let markdown;
     if (hit.kind === "member") {
-        const lines = [`**${hit.member.name}**`, `\`${hit.member.kind}\``];
-        const typeFqn = hit.typeFqn ?? memberTypeFqn(hit.member);
-        if (typeFqn) {
-            lines.push(`type: \`${typeFqn}\``);
-        }
-        const prose = firstProse(hit.member.documentations) ?? firstProse(hit.member.summaries);
-        if (prose) {
-            lines.push("", prose);
-        }
-        markdown = lines.join("\n");
+        markdown = memberMarkdown(hit.member, hit.typeFqn ?? memberTypeFqn(hit.member));
     }
-    else if (hit.kind === "type") {
-        markdown = typeMarkdown(hit.fqn, hit.block.is, hit.block.documentations, hit.block.summaries);
+    else if (hit.kind === "language") {
+        markdown = languageMarkdown(hit.metaFqn, hit.member, workspace);
     }
     else {
         const registered = workspace.registry.get(hit.fqn)?.block;

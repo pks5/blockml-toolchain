@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
 import { bomLocationToRange, createWorkspace, definitionAt, referencesAt } from "../src/index.js";
 import type { LspLocation } from "../src/index.js";
+import { offsetRangeToLsp } from "../src/xml-token.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
 const CORE_BLOCK = "org.blockml.bml.core.Block";
@@ -35,6 +36,14 @@ function positionAt(text: string, needle: string, offsetInNeedle = 1): { line: n
   return { line: lines.length - 1, character: lines[lines.length - 1]!.length };
 }
 
+function rangeOf(text: string, needle: string) {
+  const idx = text.indexOf(needle);
+  if (idx === -1) {
+    throw new Error(`needle not found: ${needle}`);
+  }
+  return offsetRangeToLsp(text, idx, idx + needle.length);
+}
+
 function sameLocation(a: LspLocation, b: LspLocation): boolean {
   return (
     a.uri === b.uri &&
@@ -46,23 +55,33 @@ function sameLocation(a: LspLocation, b: LspLocation): boolean {
 }
 
 describe("definitionAt / referencesAt", () => {
-  it("jumps from <baseType> to core/Block.bml", () => {
+  it("jumps from core:Block with originSelectionRange covering the whole QName", () => {
     const workspace = createWorkspace(ROOT);
-    const locs = definitionAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "<baseType>"), workspace);
-    expect(locs).not.toBeNull();
-    expect(locs).toHaveLength(1);
-    expect(locs![0]!.uri).toMatch(/core\/Block\.bml$/);
-    expect(locs![0]!.range.end.line > locs![0]!.range.start.line || locs![0]!.range.end.character > locs![0]!.range.start.character).toBe(
-      true,
-    );
+    const expected = rangeOf(NAV_BML, "core:Block");
+    const fromPrefix = definitionAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "core:Block"), workspace);
+    const fromLocal = definitionAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "core:Block", 6), workspace);
+    expect(fromPrefix).not.toBeNull();
+    expect(fromLocal).not.toBeNull();
+    expect(fromPrefix).toHaveLength(1);
+    expect(fromPrefix![0]!.target.uri).toMatch(/core\/Block\.bml$/);
+    expect(fromPrefix![0]!.originSelectionRange).toEqual(expected);
+    expect(fromLocal![0]!.originSelectionRange).toEqual(expected);
+    expect(fromLocal![0]!.target.uri).toBe(fromPrefix![0]!.target.uri);
+    expect(
+      fromPrefix![0]!.target.range.end.line > fromPrefix![0]!.target.range.start.line ||
+        fromPrefix![0]!.target.range.end.character > fromPrefix![0]!.target.range.start.character,
+    ).toBe(true);
   });
 
-  it("jumps from a typed property to type/Integer.bml", () => {
+  it("jumps from type:Integer and not from the <count> tag", () => {
     const workspace = createWorkspace(ROOT);
-    const locs = definitionAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "<count "), workspace);
-    expect(locs).not.toBeNull();
-    expect(locs).toHaveLength(1);
-    expect(locs![0]!.uri).toMatch(/type\/Integer\.bml$/);
+    const fromTag = definitionAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "<count "), workspace);
+    expect(fromTag).toBeNull();
+    const fromValue = definitionAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "type:Integer"), workspace);
+    expect(fromValue).not.toBeNull();
+    expect(fromValue).toHaveLength(1);
+    expect(fromValue![0]!.target.uri).toMatch(/type\/Integer\.bml$/);
+    expect(fromValue![0]!.originSelectionRange).toEqual(rangeOf(NAV_BML, "type:Integer"));
   });
 
   it("includes the core:Block declaration and a disk usage of baseType", () => {
@@ -95,7 +114,7 @@ describe("definitionAt / referencesAt", () => {
     const refs = referencesAt(
       usageText,
       usageFile!,
-      positionAt(usageText, "<baseType>core:Block"),
+      positionAt(usageText, "<baseType>core:Block", 11),
       workspace,
     );
     expect(refs).not.toBeNull();
@@ -107,15 +126,15 @@ describe("definitionAt / referencesAt", () => {
 
   it("omits the defining block.source when includeDeclaration is false", () => {
     const workspace = createWorkspace(ROOT);
-    const declaration = definitionAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "<baseType>"), workspace);
+    const declaration = definitionAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "core:Block"), workspace);
     expect(declaration).not.toBeNull();
 
-    const withDecl = referencesAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "<baseType>"), workspace, true);
-    const withoutDecl = referencesAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "<baseType>"), workspace, false);
+    const withDecl = referencesAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "core:Block"), workspace, true);
+    const withoutDecl = referencesAt(NAV_BML, "nav.bml", positionAt(NAV_BML, "core:Block"), workspace, false);
     expect(withDecl).not.toBeNull();
     expect(withoutDecl).not.toBeNull();
-    expect(withDecl!.some((loc) => sameLocation(loc, declaration![0]!))).toBe(true);
-    expect(withoutDecl!.some((loc) => sameLocation(loc, declaration![0]!))).toBe(false);
+    expect(withDecl!.some((loc) => sameLocation(loc, declaration![0]!.target))).toBe(true);
+    expect(withoutDecl!.some((loc) => sameLocation(loc, declaration![0]!.target))).toBe(false);
     expect(withoutDecl!.length).toBeGreaterThan(0);
   });
 

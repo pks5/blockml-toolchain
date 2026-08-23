@@ -89,8 +89,8 @@ const capabilities = [
     pkg: "capability",
     prefix: "lspcap",
     name: "HoverAt",
-    is: "Urmodell hit-test hover at an LSP position",
-    doc: "Parse-only (no validator). Walks Urmodell source spans, picks the smallest covering range, and returns Markdown FQN/is/documentation from the TypeRegistry. Unknown FQN is still shown. Returns null if parse cannot produce a document.",
+    is: "XML-token hover at an LSP position",
+    doc: "Parse-only (no validator). Classifies the XML token at the cursor (element name, attribute key/value, text). Language tags (name, is, references, properties, …) show documentation from org.blockml.bml.definition.* members via resolveEffectiveMembers. Type QNames show the target TypeRegistry block (is + first documentation). Concrete member tags show that member. Hover range is the token — a whole prefix:Local or dotted FQN, not its parts. Whitespace, comments, and tag punctuation return null. Unknown FQN is still shown. Returns null if parse cannot produce a document.",
     tsExport: "hoverAt",
     inputs: [
       { name: "text", type: "type:Text", required: true },
@@ -119,8 +119,8 @@ const capabilities = [
     pkg: "capability",
     prefix: "lspcap",
     name: "DefinitionAt",
-    is: "Go-to-definition from an LSP position via TypeRegistry",
-    doc: "Parse-only hit-test (smallest covering Urmodell span). Resolves the FQN (type/baseType, or member typeFqn) and returns registry.get(fqn).block.source as a Location. Member jumps go to the member type. Unknown FQN, no hit, or no document → null. Disk TypeRegistry only.",
+    is: "Go-to-definition from a type QName via TypeRegistry",
+    doc: "Parse-only XML-token hit-test. Only resolvable type QNames (prefix:Local or dotted FQN in text or attribute values) are jump targets. Returns LocationLink[]: originSelectionRange covers the whole QName; target is registry.get(fqn).block.source. Language tags and concrete member tags are not definitions. Unknown FQN, no hit, or no document → null. Disk TypeRegistry only.",
     tsExport: "definitionAt",
     inputs: [
       { name: "text", type: "type:Text", required: true },
@@ -128,7 +128,7 @@ const capabilities = [
       { name: "position", type: "type:Text", required: true, doc: "LSP 0-based Position { line, character }." },
       { name: "workspace", type: "lsp:WorkspaceState", required: true },
     ],
-    output: { name: "result", type: "core:Any", required: true, doc: "LspLocation[] | null." },
+    output: { name: "result", type: "core:Any", required: true, doc: "LspLocationLink[] | null." },
     refs: ["lspdocumentation:PublicApi", "parser:Parse"],
   },
   {

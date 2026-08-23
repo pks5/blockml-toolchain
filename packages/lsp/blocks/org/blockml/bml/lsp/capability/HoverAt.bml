@@ -28,9 +28,9 @@
   <name>HoverAt</name>
   <type>lspcap:HoverAt</type>
   <baseType>core:Capability</baseType>
-  <is>Urmodell hit-test hover at an LSP position</is>
+  <is>XML-token hover at an LSP position</is>
 
-  <documentation>Parse-only (no validator). Walks Urmodell source spans, picks the smallest covering range, and returns Markdown FQN/is/documentation from the TypeRegistry. Unknown FQN is still shown. Returns null if parse cannot produce a document.</documentation>
+  <documentation>Parse-only (no validator). Classifies the XML token at the cursor (element name, attribute key/value, text). Language tags (name, is, references, properties, …) show documentation from org.blockml.bml.definition.* members via resolveEffectiveMembers. Type QNames show the target TypeRegistry block (is + first documentation). Concrete member tags show that member. Hover range is the token — a whole prefix:Local or dotted FQN, not its parts. Whitespace, comments, and tag punctuation return null. Unknown FQN is still shown. Returns null if parse cannot produce a document.</documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
@@ -51,7 +51,7 @@
       <documentation>workspace. TS type: lsp:WorkspaceState. (required)</documentation>
     </workspace>
     <result type="core:Any">
-      <documentation>result. TS type: HoverInfo | null. (required)</documentation>
+      <documentation>result. TS type: HoverInfo | null. Range is the XML token / whole QName. (required)</documentation>
     </result>
   </properties>
 

@@ -7,6 +7,7 @@ export {
   definitionAt,
   referencesAt,
   type LspLocation,
+  type LspLocationLink,
 } from "./navigation.js";
 export {
   documentSymbols,

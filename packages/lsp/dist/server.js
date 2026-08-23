@@ -185,7 +185,16 @@ connection.onDefinition((params) => {
         return null;
     }
     const workspace = createWorkspace(workspaceRoot);
-    return definitionAt(doc.getText(), uriToFilePath(doc.uri), params.position, workspace);
+    const links = definitionAt(doc.getText(), uriToFilePath(doc.uri), params.position, workspace);
+    if (!links) {
+        return null;
+    }
+    return links.map((link) => ({
+        originSelectionRange: link.originSelectionRange,
+        targetUri: link.target.uri,
+        targetRange: link.target.range,
+        targetSelectionRange: link.target.range,
+    }));
 });
 connection.onReferences((params) => {
     const doc = documents.get(params.textDocument.uri);

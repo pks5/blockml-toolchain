@@ -9,6 +9,11 @@ export interface LspLocation {
   range: LspRange;
 }
 
+export interface LspLocationLink {
+  originSelectionRange: LspRange;
+  target: LspLocation;
+}
+
 function locationFromSource(loc: SourceLocation): LspLocation | undefined {
   if (!loc.file) {
     return undefined;
@@ -29,17 +34,20 @@ export function definitionAt(
   filePath: string,
   position: LspPosition,
   workspace: WorkspaceState,
-): LspLocation[] | null {
-  const hit = hitAt(text, filePath, position);
-  if (!hit) {
+): LspLocationLink[] | null {
+  const hit = hitAt(text, filePath, position, workspace);
+  if (!hit || hit.kind !== "typeRef") {
     return null;
   }
   const fqn = navigationFqn(hit);
   if (!fqn) {
     return null;
   }
-  const location = definitionLocation(workspace, fqn);
-  return location ? [location] : null;
+  const target = definitionLocation(workspace, fqn);
+  if (!target) {
+    return null;
+  }
+  return [{ originSelectionRange: hit.range, target }];
 }
 
 function pushLocation(out: LspLocation[], loc: SourceLocation | undefined): void {
@@ -75,7 +83,7 @@ export function referencesAt(
   workspace: WorkspaceState,
   includeDeclaration = true,
 ): LspLocation[] | null {
-  const hit = hitAt(text, filePath, position);
+  const hit = hitAt(text, filePath, position, workspace);
   if (!hit) {
     return null;
   }

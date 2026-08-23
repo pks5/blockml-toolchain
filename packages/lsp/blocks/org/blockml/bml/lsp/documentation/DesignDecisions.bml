@@ -47,9 +47,11 @@
     No edits when parse cannot produce a document. xmlDeclaration inferred from
     a leading XML declaration in the source.
 
-    Hover is parse-only (no validator). Hit-test picks the smallest covering
-    Urmodell span; equal area ties break toward the later start (innermost).
-    Contents are Markdown (FQN, is, first documentation/summary). Unknown FQN
+    Hover is parse-only (no validator). Hit-test classifies the XML token at
+    the cursor (element name, attribute key/value, text) — not the covering
+    Urmodell element. Language tags use org.blockml.bml.definition.* member
+    documentation; type QNames use the target TypeRegistry block; concrete
+    member tags use that member. Range is the token (whole QName). Unknown FQN
     is still shown. Referenced types come from the disk TypeRegistry.
 
     Outline is parse-only (no validator, no TypeRegistry). Hierarchical
@@ -57,9 +59,11 @@
     Field, capability Method; children in members then subBlocks then
     embeddedBlocks order. selectionRange equals the element range.
 
-    Definition and references share Hover's hit-test. Member F12 goes to the
-    member type (typeFqn). Targets and usages come from the disk TypeRegistry
-    (no unsaved overlay). includeDeclaration defaults true.</documentation>
+    Definition and references share Hover's XML-token hit-test. F12 is only
+    offered on type QNames and returns LocationLink with originSelectionRange
+    covering the whole prefix:Local (or dotted FQN). Targets and usages come
+    from the disk TypeRegistry (no unsaved overlay). includeDeclaration
+    defaults true.</documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="ReadNext"></see>

@@ -70,7 +70,7 @@ declare module "vscode-languageserver/node.js" {
     onDocumentSymbol: (
       handler: (params: DocumentSymbolParams) => DocumentSymbol[] | null,
     ) => void;
-    onDefinition: (handler: (params: DefinitionParams) => Location[] | null) => void;
+    onDefinition: (handler: (params: DefinitionParams) => LocationLink[] | Location[] | null) => void;
     onReferences: (handler: (params: ReferenceParams) => Location[] | null) => void;
     sendDiagnostics: (params: { uri: string; diagnostics: Diagnostic[] }) => void;
     listen: () => void;
@@ -102,6 +102,13 @@ declare module "vscode-languageserver/node.js" {
   export interface Location {
     uri: string;
     range: Range;
+  }
+
+  export interface LocationLink {
+    originSelectionRange?: Range;
+    targetUri: string;
+    targetRange: Range;
+    targetSelectionRange: Range;
   }
 
   export interface DefinitionParams {

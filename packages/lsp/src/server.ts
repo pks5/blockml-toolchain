@@ -12,6 +12,7 @@ import {
   type DocumentSymbolParams,
   type DefinitionParams,
   type HoverParams,
+  type LocationLink,
   type InitializeParams,
   type ReferenceParams,
 } from "vscode-languageserver/node.js";
@@ -238,7 +239,18 @@ connection.onDefinition((params: DefinitionParams) => {
     return null;
   }
   const workspace = createWorkspace(workspaceRoot);
-  return definitionAt(doc.getText(), uriToFilePath(doc.uri), params.position, workspace);
+  const links = definitionAt(doc.getText(), uriToFilePath(doc.uri), params.position, workspace);
+  if (!links) {
+    return null;
+  }
+  return links.map(
+    (link): LocationLink => ({
+      originSelectionRange: link.originSelectionRange,
+      targetUri: link.target.uri,
+      targetRange: link.target.range,
+      targetSelectionRange: link.target.range,
+    }),
+  );
 });
 
 connection.onReferences((params: ReferenceParams) => {

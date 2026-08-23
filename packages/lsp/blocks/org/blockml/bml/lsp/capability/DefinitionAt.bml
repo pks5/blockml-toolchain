@@ -28,9 +28,9 @@
   <name>DefinitionAt</name>
   <type>lspcap:DefinitionAt</type>
   <baseType>core:Capability</baseType>
-  <is>Go-to-definition from an LSP position via TypeRegistry</is>
+  <is>Go-to-definition from a type QName via TypeRegistry</is>
 
-  <documentation>Parse-only hit-test (smallest covering Urmodell span). Resolves the FQN (type/baseType, or member typeFqn) and returns registry.get(fqn).block.source as a Location. Member jumps go to the member type. Unknown FQN, no hit, or no document → null. Disk TypeRegistry only.</documentation>
+  <documentation>Parse-only XML-token hit-test. Only resolvable type QNames (prefix:Local or dotted FQN in text or attribute values) are jump targets. Returns LocationLink[]: originSelectionRange covers the whole QName; target is registry.get(fqn).block.source. Language tags and concrete member tags are not definitions. Unknown FQN, no hit, or no document → null. Disk TypeRegistry only.</documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
@@ -51,7 +51,7 @@
       <documentation>workspace. TS type: lsp:WorkspaceState. (required)</documentation>
     </workspace>
     <result type="core:Any">
-      <documentation>result. TS type: LspLocation[] | null. (required)</documentation>
+      <documentation>result. TS type: LspLocationLink[] | null. originSelectionRange is the whole QName. (required)</documentation>
     </result>
   </properties>
 

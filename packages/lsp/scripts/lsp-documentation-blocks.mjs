@@ -18,7 +18,7 @@ export const documentationBlocks = [
 
     V1: textDocument sync + publishDiagnostics (parse + Stage-2 validate)
     + textDocument/formatting (parse → serialize)
-    + textDocument/hover (Urmodell hit-test + TypeRegistry)
+    + textDocument/hover (XML-token hit-test + TypeRegistry)
     + textDocument/documentSymbol (Urmodell outline tree)
     + textDocument/definition and textDocument/references (hit-test + TypeRegistry).
     Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.`,
@@ -55,14 +55,15 @@ export const documentationBlocks = [
 
     Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
 
-    Hover: onHover → hoverAt → parse (no validator) → smallest covering Urmodell span
-    → TypeRegistry Markdown.
+    Hover: onHover → hoverAt → parse (no validator) → XML token at cursor
+    → language member docs, type QName target, or concrete member Markdown.
 
     Outline: onDocumentSymbol → documentSymbols → parse (no validator) → hierarchical
     DocumentSymbol tree (Block, members, subBlocks, embeddedBlocks).
 
-    Navigation: onDefinition / onReferences → hitAt → TypeRegistry (definition =
-    block.source; references = baseType + member types, optional declaration).
+    Navigation: onDefinition / onReferences → XML-token hitAt → TypeRegistry
+    (definition = LocationLink with whole-QName originSelectionRange; references =
+    baseType + member types, optional declaration).
 
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.`,
     refs: [
@@ -78,7 +79,7 @@ export const documentationBlocks = [
     • publishDiagnostics (parse + validate)
     • workspace/didChangeWatchedFiles (TypeRegistry refresh)
     • textDocument/formatting (parse → serialize)
-    • textDocument/hover (Urmodell hit-test + TypeRegistry)
+    • textDocument/hover (XML-token hit-test + TypeRegistry)
     • textDocument/documentSymbol (Urmodell outline tree)
     • textDocument/definition and textDocument/references (hit-test + TypeRegistry)
     • blockml-lsp stdio binary
@@ -100,7 +101,7 @@ export const documentationBlocks = [
     formatDocument(text, options?): string | null
     hoverAt(text, filePath, position, workspace): HoverInfo | null
     documentSymbols(text, filePath): OutlineSymbol[] | null
-    definitionAt(text, filePath, position, workspace): LspLocation[] | null
+    definitionAt(text, filePath, position, workspace): LspLocationLink[] | null
     referencesAt(text, filePath, position, workspace, includeDeclaration?): LspLocation[] | null
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig
@@ -139,15 +140,16 @@ export const documentationBlocks = [
     onDocumentFormatting: formatDocument on the in-memory buffer; one full-document
     TextEdit, empty list if unchanged, or none if parse cannot produce a document.
 
-    onHover: hoverAt on the in-memory buffer; innermost covering Urmodell span;
-    Markdown from TypeRegistry. Parse-only — no validator.
+    onHover: hoverAt on the in-memory buffer; XML token at the cursor;
+    language / type-QName / member Markdown. Parse-only — no validator.
 
     onDocumentSymbol: documentSymbols on the in-memory buffer; hierarchical
     Urmodell tree. Parse-only — no validator. selectionRange equals range.
 
-    onDefinition / onReferences: hitAt on the in-memory buffer, then TypeRegistry
-    from disk. Member definition jumps to the member type. includeDeclaration
-    controls whether the defining block.source is included.
+    onDefinition / onReferences: XML-token hitAt on the in-memory buffer, then
+    TypeRegistry from disk. F12 only on type QNames (LocationLink covers the
+    whole QName). includeDeclaration controls whether the defining block.source
+    is included.
 
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.`,
     refs: [
@@ -197,9 +199,11 @@ export const documentationBlocks = [
     No edits when parse cannot produce a document. xmlDeclaration inferred from
     a leading XML declaration in the source.
 
-    Hover is parse-only (no validator). Hit-test picks the smallest covering
-    Urmodell span; equal area ties break toward the later start (innermost).
-    Contents are Markdown (FQN, is, first documentation/summary). Unknown FQN
+    Hover is parse-only (no validator). Hit-test classifies the XML token at
+    the cursor (element name, attribute key/value, text) — not the covering
+    Urmodell element. Language tags use org.blockml.bml.definition.* member
+    documentation; type QNames use the target TypeRegistry block; concrete
+    member tags use that member. Range is the token (whole QName). Unknown FQN
     is still shown. Referenced types come from the disk TypeRegistry.
 
     Outline is parse-only (no validator, no TypeRegistry). Hierarchical
@@ -207,9 +211,11 @@ export const documentationBlocks = [
     Field, capability Method; children in members then subBlocks then
     embeddedBlocks order. selectionRange equals the element range.
 
-    Definition and references share Hover's hit-test. Member F12 goes to the
-    member type (typeFqn). Targets and usages come from the disk TypeRegistry
-    (no unsaved overlay). includeDeclaration defaults true.`,
+    Definition and references share Hover's XML-token hit-test. F12 is only
+    offered on type QNames and returns LocationLink with originSelectionRange
+    covering the whole prefix:Local (or dotted FQN). Targets and usages come
+    from the disk TypeRegistry (no unsaved overlay). includeDeclaration
+    defaults true.`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

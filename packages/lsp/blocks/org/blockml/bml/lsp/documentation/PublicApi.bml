@@ -35,7 +35,7 @@
     formatDocument(text, options?): string | null
     hoverAt(text, filePath, position, workspace): HoverInfo | null
     documentSymbols(text, filePath): OutlineSymbol[] | null
-    definitionAt(text, filePath, position, workspace): LspLocation[] | null
+    definitionAt(text, filePath, position, workspace): LspLocationLink[] | null
     referencesAt(text, filePath, position, workspace, includeDeclaration?): LspLocation[] | null
     createWorkspace(rootDir): WorkspaceState
     loadBomConfig(rootDir): BomConfig

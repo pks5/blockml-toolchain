@@ -15,16 +15,19 @@ function definitionLocation(workspace, fqn) {
     return source ? locationFromSource(source) : undefined;
 }
 export function definitionAt(text, filePath, position, workspace) {
-    const hit = hitAt(text, filePath, position);
-    if (!hit) {
+    const hit = hitAt(text, filePath, position, workspace);
+    if (!hit || hit.kind !== "typeRef") {
         return null;
     }
     const fqn = navigationFqn(hit);
     if (!fqn) {
         return null;
     }
-    const location = definitionLocation(workspace, fqn);
-    return location ? [location] : null;
+    const target = definitionLocation(workspace, fqn);
+    if (!target) {
+        return null;
+    }
+    return [{ originSelectionRange: hit.range, target }];
 }
 function pushLocation(out, loc) {
     const location = loc ? locationFromSource(loc) : undefined;
@@ -46,7 +49,7 @@ function collectUsages(block, fqn, includeDeclaration, out) {
     }
 }
 export function referencesAt(text, filePath, position, workspace, includeDeclaration = true) {
-    const hit = hitAt(text, filePath, position);
+    const hit = hitAt(text, filePath, position, workspace);
     if (!hit) {
         return null;
     }

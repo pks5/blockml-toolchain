@@ -38,14 +38,15 @@
 
     Format: onDocumentFormatting → formatDocument → parse + serialize → TextEdit.
 
-    Hover: onHover → hoverAt → parse (no validator) → smallest covering Urmodell span
-    → TypeRegistry Markdown.
+    Hover: onHover → hoverAt → parse (no validator) → XML token at cursor
+    → language member docs, type QName target, or concrete member Markdown.
 
     Outline: onDocumentSymbol → documentSymbols → parse (no validator) → hierarchical
     DocumentSymbol tree (Block, members, subBlocks, embeddedBlocks).
 
-    Navigation: onDefinition / onReferences → hitAt → TypeRegistry (definition =
-    block.source; references = baseType + member types, optional declaration).
+    Navigation: onDefinition / onReferences → XML-token hitAt → TypeRegistry
+    (definition = LocationLink with whole-QName originSelectionRange; references =
+    baseType + member types, optional declaration).
 
     Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.</documentation>
 
