@@ -35,7 +35,7 @@
     by this blocks list. Package libraries must not depend back on this library.
   </documentation>
 
-  <version>0.1.0</version>
+  <version>0.4.0</version>
 
   <language>
     <English />

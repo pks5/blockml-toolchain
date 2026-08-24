@@ -328,7 +328,7 @@ ${XMLNS}
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.2.0</version>
+  <version>0.4.0</version>
 
   <language>
     <English />

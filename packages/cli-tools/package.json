@@ -1,6 +1,6 @@
 {
   "name": "@blockml/cli",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "description": "BlockML CLI — validate and compile BML (blockdoc, xsd, fatblock)",
   "license": "Apache-2.0",
   "repository": {
@@ -34,12 +34,12 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@blockml/blockdoc-target": "^0.1.0",
-    "@blockml/fatblock-target": "^0.1.0",
-    "@blockml/xsd-target": "^0.1.0",
-    "@blockml/compiler": "^0.1.0",
+    "@blockml/blockdoc-target": "^0.4.0",
+    "@blockml/fatblock-target": "^0.4.0",
+    "@blockml/xsd-target": "^0.4.0",
+    "@blockml/compiler": "^0.4.0",
     "@blockml/core": "^1.0.5",
-    "@blockml/framework": "^0.3.0",
+    "@blockml/framework": "^0.4.0",
     "libxmljs2": "^0.35.0"
   },
   "engines": {

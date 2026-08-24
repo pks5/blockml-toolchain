@@ -286,7 +286,7 @@ describe("Framework BML ↔ TS parity", () => {
     expect(library).toContain("<blockml:Library />");
     expect(library).toContain("<bom:Library />");
     expect(library).toContain("<parser:Library />");
-    expect(library).toContain("<version>0.1.0</version>");
+    expect(library).toContain("<version>0.4.0</version>");
   });
 
   it("does not redefine BOM API types", () => {

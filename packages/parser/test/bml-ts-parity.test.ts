@@ -228,7 +228,7 @@ describe("Parser BML ↔ TS parity", () => {
     const library = readFileSync(join(blocksRoot, "Library.bml"), "utf8");
     expect(library).toContain("<blockml:Library />");
     expect(library).toContain("<bom:Library />");
-    expect(library).toContain("<version>0.2.0</version>");
+    expect(library).toContain("<version>0.4.0</version>");
   });
 
   it("does not redefine BOM API types", () => {
