@@ -1,6 +1,7 @@
 import type {
   CharacterDataForm,
   SourceLocation,
+  UnknownXmlNode,
   XmlRenderingMember,
   XmlTrivia,
 } from "./common.js";
@@ -51,6 +52,8 @@ export interface MemberDefinitionBase {
   source?: SourceLocation;
   /** Source span of the authored `type` attribute value when present. */
   typeSource?: SourceLocation;
+  unknownElements?: UnknownXmlNode[];
+  unknownAttributes?: Record<string, string>;
 }
 
 export interface PropertyDefinition extends MemberDefinitionBase {

@@ -245,7 +245,7 @@ ${XMLNS}
     (@blockml/bom). Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.4.0</version>
+  <version>0.5.0</version>
 
   <language>
     <English />

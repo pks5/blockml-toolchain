@@ -137,6 +137,12 @@
     <baseTypeSource type="bomcommon:SourceLocation">
       <documentation>baseTypeSource (optional). TS type: bomcommon:SourceLocation.</documentation>
     </baseTypeSource>
+    <unknownElements type="bomcommon:UnknownXmlNode[]">
+      <documentation>Preserve-on-error unknown root children. (optional)</documentation>
+    </unknownElements>
+    <unknownAttributes type="type:Text">
+      <documentation>Record of unknown attributes on the grammar node. (optional)</documentation>
+    </unknownAttributes>
   </properties>
 
 </block>

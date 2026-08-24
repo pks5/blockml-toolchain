@@ -96,6 +96,40 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.bom.common.UnknownXmlNode",
+      "tsExport": "UnknownXmlNode",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "localName",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "prefix",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "attributes",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "innerXml",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "source",
+          "type": "bomcommon:SourceLocation",
+          "required": false
+        }
+      ]
+    },
+    {
       "fqn": "org.blockml.bml.bom.common.MemberSectionName",
       "tsExport": "MemberSectionName",
       "pkg": "common",
@@ -1049,6 +1083,16 @@
           "name": "baseTypeSource",
           "type": "bomcommon:SourceLocation",
           "required": false
+        },
+        {
+          "name": "unknownElements",
+          "type": "bomcommon:UnknownXmlNode[]",
+          "required": false
+        },
+        {
+          "name": "unknownAttributes",
+          "type": "type:Text",
+          "required": false
         }
       ]
     },
@@ -1166,6 +1210,16 @@
         {
           "name": "typeSource",
           "type": "bomcommon:SourceLocation",
+          "required": false
+        },
+        {
+          "name": "unknownElements",
+          "type": "bomcommon:UnknownXmlNode[]",
+          "required": false
+        },
+        {
+          "name": "unknownAttributes",
+          "type": "type:Text",
           "required": false
         }
       ]
@@ -1610,6 +1664,11 @@
         {
           "name": "source",
           "type": "bomcommon:SourceLocation",
+          "required": false
+        },
+        {
+          "name": "unknownAttributes",
+          "type": "type:Text",
           "required": false
         }
       ]

@@ -37,7 +37,6 @@
     <targetPackages type="type:Text"><documentation>Registry name → npm package for plugin load. (optional)</documentation></targetPackages>
     <targetOptions type="type:Text"><documentation>Per-target opaque options keyed by registry name. (optional)</documentation></targetOptions>
     <defaultTarget type="type:Text"><documentation>Default compile target when omitted. Default blockdoc. (optional)</documentation></defaultTarget>
-    <xsdValidation type="type:Boolean"><documentation>Enable authoring XSD validation on validate. Default true. (optional)</documentation></xsdValidation>
   </properties>
 
 </block>

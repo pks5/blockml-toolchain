@@ -7,11 +7,10 @@ import { compileBmlToBom, compileToOutput, getTarget, validateRegistryDocuments,
 import { bootstrapTargets, getTargetCliHints, } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
 import { loadConfig } from "./load-config.js";
-import { collectRegistryFilePaths, validateFilesAgainstXsd, } from "./xsd-validate.js";
 import { writeOutputFiles } from "./write-output.js";
 const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
     "       blockml compile <file> <document-target> --src dir [--include a,b] [--out dir]\n" +
-    "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--no-xsd]";
+    "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b]";
 function workspaceRoot(from) {
     let dir = resolve(from);
     for (;;) {
@@ -61,9 +60,6 @@ export function parseArgs(argv) {
         else if (flag === "--all") {
             result.all = true;
         }
-        else if (flag === "--no-xsd") {
-            result.noXsd = true;
-        }
         else if (flag && !flag.startsWith("-")) {
             if (result.command === "validate") {
                 if (!result.file) {
@@ -103,12 +99,6 @@ function bootstrapOptsFromParsed(parsed, config, rootDir) {
         bootstrapOpts.librariesOverride = parsed.libraries;
     }
     return bootstrapOpts;
-}
-function xsdValidationEnabled(parsed, config) {
-    if (parsed.noXsd) {
-        return false;
-    }
-    return config.xsdValidation !== false;
 }
 function isDocumentOnlyTarget(target) {
     return (target.accepts.includes("document") &&
@@ -161,7 +151,6 @@ function runValidate(parsed, rootDir, lines) {
         return 2;
     }
     const bootstrap = bootstrapProjectTypeRegistry(bootstrapOptsFromParsed(parsed, config, rootDir));
-    const xsdEnabled = xsdValidationEnabled(parsed, config);
     if (parsed.file) {
         const filePath = resolve(rootDir, parsed.file);
         if (!existsSync(filePath)) {
@@ -171,9 +160,6 @@ function runValidate(parsed, rootDir, lines) {
         const source = readFileSync(filePath, "utf8");
         const result = compileBmlToBom({ source, filePath }, { typeRegistry: bootstrap.registry, rootDir });
         const diagnostics = [...bootstrap.diagnostics, ...result.diagnostics];
-        if (xsdEnabled) {
-            diagnostics.push(...validateFilesAgainstXsd([filePath], rootDir));
-        }
         printDiagnostics(diagnostics, lines);
         return diagnostics.some((d) => d.severity === "error") ? 1 : 0;
     }
@@ -181,9 +167,6 @@ function runValidate(parsed, rootDir, lines) {
         ...bootstrap.diagnostics,
         ...validateRegistryDocuments(bootstrap.registry),
     ];
-    if (xsdEnabled) {
-        diagnostics.push(...validateFilesAgainstXsd(collectRegistryFilePaths(bootstrap.registry), rootDir));
-    }
     printDiagnostics(diagnostics, lines);
     return diagnostics.some((d) => d.severity === "error") ? 1 : 0;
 }

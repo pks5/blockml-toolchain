@@ -1,4 +1,4 @@
-import type { CharacterDataForm, SourceLocation, XmlRenderingMember, XmlTrivia } from "./common.js";
+import type { CharacterDataForm, SourceLocation, UnknownXmlNode, XmlRenderingMember, XmlTrivia } from "./common.js";
 import type { BlockInstance } from "./composition.js";
 import type { ChangelogEntry, DocumentationExample, DocumentationProseEntry, DocumentationReference, KeywordEntry, TypeReferenceEntityInstance } from "./block-definition.js";
 import type { TypeDescriptor, TypeExpression } from "./type-expression.js";
@@ -31,6 +31,8 @@ export interface MemberDefinitionBase {
     source?: SourceLocation;
     /** Source span of the authored `type` attribute value when present. */
     typeSource?: SourceLocation;
+    unknownElements?: UnknownXmlNode[];
+    unknownAttributes?: Record<string, string>;
 }
 export interface PropertyDefinition extends MemberDefinitionBase {
     kind: "property";

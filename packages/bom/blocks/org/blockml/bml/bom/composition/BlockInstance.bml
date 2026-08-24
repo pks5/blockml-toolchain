@@ -67,6 +67,9 @@
     <source type="bomcommon:SourceLocation">
       <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
     </source>
+    <unknownAttributes type="type:Text">
+      <documentation>Unknown bml:* attributes preserved for roundtrip. (optional)</documentation>
+    </unknownAttributes>
   </properties>
 
 </block>

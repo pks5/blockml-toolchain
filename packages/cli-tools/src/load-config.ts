@@ -11,18 +11,13 @@ export interface BomConfig {
   targetOptions?: Record<string, unknown>;
   /** Default compile target when omitted on CLI. Default "blockdoc". */
   defaultTarget?: string;
-  /** Default true when unset. Set false to skip authoring XSD validation on validate. */
-  xsdValidation?: boolean;
 }
 
-const DEFAULT_CONFIG: Required<Pick<BomConfig, "outDir" | "srcDir" | "targets" | "defaultTarget">> & {
-  xsdValidation: boolean;
-} = {
+const DEFAULT_CONFIG: Required<Pick<BomConfig, "outDir" | "srcDir" | "targets" | "defaultTarget">> = {
   outDir: "doc",
   srcDir: "src",
   targets: ["blockdoc"],
   defaultTarget: "blockdoc",
-  xsdValidation: true,
 };
 
 export function loadConfig(cwd = process.cwd()): BomConfig {
@@ -37,6 +32,5 @@ export function loadConfig(cwd = process.cwd()): BomConfig {
     ...parsed,
     targets: parsed.targets?.length ? parsed.targets : DEFAULT_CONFIG.targets,
     defaultTarget: parsed.defaultTarget ?? DEFAULT_CONFIG.defaultTarget,
-    xsdValidation: parsed.xsdValidation ?? DEFAULT_CONFIG.xsdValidation,
   };
 }

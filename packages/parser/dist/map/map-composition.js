@@ -4,6 +4,7 @@ import { elementChildren, elementLocalName, elementPrefix, getAttribute, isEleme
 import { resolveBlockReference, resolvePrefix, resolveTypeName, TYPE_REFERENCE_ENTITY, elementSourceLoc, } from "../util/qname.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
 import { withElementLocation } from "../util/mapping-error.js";
+import { listUnknownBmlAttributes } from "./structural.js";
 const MEMBER_SECTIONS = new Set([
     "properties",
     "aggregations",
@@ -39,13 +40,15 @@ const METADATA_ELEMENTS = new Set([
     "bml:xml",
     "groups",
     "suggestions",
+    "subTypes",
+    "languages",
 ]);
 const RESERVED = new Set([...MEMBER_SECTIONS, ...METADATA_ELEMENTS, "composition", "implementation", "value", "groups", "suggestions"]);
 export function mapCompositionTemplate(element, aggregationName, ctx) {
     const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
     const compositionEl = elementChildren(element).find((c) => elementLocalName(c) === "composition");
     const target = compositionEl ?? element;
-    const directives = parseDirectives(target, loc);
+    const directives = parseDirectives(target, loc, ctx);
     const children = compositionEl
         ? mapCompositionChildren(compositionEl, ctx)
         : mapCompositionChildren(element, ctx);
@@ -71,7 +74,7 @@ function mapCompositionChildren(compositionEl, ctx) {
         }
         if (local === "container" || local === "bml:container") {
             const loc = elementSourceLoc(ctx.filePath, ctx.source, child);
-            const directives = parseDirectives(child, loc);
+            const directives = parseDirectives(child, loc, ctx);
             const vnode = {
                 kind: "virtualContainer",
                 ...(directives.length > 0 ? { directives } : {}),
@@ -146,12 +149,16 @@ export function mapBlockInstanceNode(element, ctx) {
             }
         }
     }
-    const directives = parseDirectives(element, loc);
+    const directives = parseDirectives(element, loc, ctx);
     const instance = {
         typeFqn,
         memberValues: Object.fromEntries(Object.entries(memberValues).filter(([, v]) => v !== undefined)),
         source: loc,
     };
+    const unknownBml = listUnknownBmlAttributes(element);
+    if (unknownBml) {
+        instance.unknownAttributes = unknownBml;
+    }
     if (meta.id)
         instance.id = meta.id;
     if (meta.version)

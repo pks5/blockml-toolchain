@@ -15,15 +15,8 @@ function diag(code, message, file, loc) {
     }
     return { severity: "error", code, message, source };
 }
-const FRAMEWORK_TYPE_PREFIX = "org.blockml.bml.";
 function typeIsKnown(fqn, registry) {
-    if (registry.has(fqn) || isWellKnownTypeFqn(fqn)) {
-        return true;
-    }
-    // Domain ValueTypes (com.machineblocks.bml.type.*, …) resolve via xmlns and
-    // are catalogued independently of this toolchain. Published examples may lag
-    // catalog renames (Size3D → SizeXYZ); only framework FQNs must be registered.
-    return !fqn.startsWith(FRAMEWORK_TYPE_PREFIX);
+    return registry.has(fqn) || isWellKnownTypeFqn(fqn);
 }
 function walkNamedTypes(expr, visit) {
     if (!expr) {

@@ -88,6 +88,12 @@
     <typeSource type="bomcommon:SourceLocation">
       <documentation>Span of the type= attribute value (use-site for type diagnostics). (optional)</documentation>
     </typeSource>
+    <unknownElements type="bomcommon:UnknownXmlNode[]">
+      <documentation>Preserve-on-error unknown children on this member. (optional)</documentation>
+    </unknownElements>
+    <unknownAttributes type="type:Text">
+      <documentation>Record of unknown attributes on this member. (optional)</documentation>
+    </unknownAttributes>
   </properties>
 
 </block>

@@ -28,7 +28,7 @@
   <is>Explicitly out of XSD V1 library scope</is>
 
   <documentation>Out of scope for this library / V1:
-    • Authoring validation against generated XSD (--no-xsd, xsdValidation)
+    • Authoring validation against generated XSD (parse + validator own validity)
     • Full D1 particle fidelity (attributes, text, nested content models)
     • Pure Definition-driven particle lists without hardcoded D1 arrays
     • includeNonExported filtering effect

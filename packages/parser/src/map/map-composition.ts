@@ -26,6 +26,7 @@ import {
 import { parseVisibilityFromName } from "../util/visibility.js";
 import type { MapContext } from "./context.js";
 import { withElementLocation } from "../util/mapping-error.js";
+import { listUnknownBmlAttributes } from "./structural.js";
 
 const MEMBER_SECTIONS = new Set([
   "properties",
@@ -63,6 +64,8 @@ const METADATA_ELEMENTS = new Set([
   "bml:xml",
   "groups",
   "suggestions",
+  "subTypes",
+  "languages",
 ]);
 
 const RESERVED = new Set([...MEMBER_SECTIONS, ...METADATA_ELEMENTS, "composition", "implementation", "value", "groups", "suggestions"]);
@@ -77,7 +80,7 @@ export function mapCompositionTemplate(
     (c) => elementLocalName(c) === "composition",
   );
   const target = compositionEl ?? element;
-  const directives = parseDirectives(target, loc);
+  const directives = parseDirectives(target, loc, ctx);
   const children = compositionEl
     ? mapCompositionChildren(compositionEl, ctx)
     : mapCompositionChildren(element, ctx);
@@ -108,7 +111,7 @@ function mapCompositionChildren(
     }
     if (local === "container" || local === "bml:container") {
       const loc = elementSourceLoc(ctx.filePath, ctx.source, child);
-      const directives = parseDirectives(child, loc);
+      const directives = parseDirectives(child, loc, ctx);
       const vnode: VirtualContainerNode = {
         kind: "virtualContainer",
         ...(directives.length > 0 ? { directives } : {}),
@@ -215,7 +218,7 @@ export function mapBlockInstanceNode(
     }
   }
 
-  const directives = parseDirectives(element, loc);
+  const directives = parseDirectives(element, loc, ctx);
   const instance: BlockInstance = {
     typeFqn,
     memberValues: Object.fromEntries(
@@ -223,6 +226,11 @@ export function mapBlockInstanceNode(
     ) as BlockInstance["memberValues"],
     source: loc,
   };
+
+  const unknownBml = listUnknownBmlAttributes(element);
+  if (unknownBml) {
+    instance.unknownAttributes = unknownBml;
+  }
 
   if (meta.id) instance.id = meta.id;
   if (meta.version) instance.version = meta.version;

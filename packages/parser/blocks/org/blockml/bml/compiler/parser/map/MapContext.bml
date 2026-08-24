@@ -53,6 +53,9 @@
     <isEmbedded type="type:Boolean">
       <documentation>isEmbedded. TS type: type:Boolean. (required)</documentation>
     </isEmbedded>
+    <diagnostics type="bomcommon:Diagnostic[]">
+      <documentation>Shared map-time diagnostics; structural errors append here without aborting. (required)</documentation>
+    </diagnostics>
   </properties>
 
 </block>

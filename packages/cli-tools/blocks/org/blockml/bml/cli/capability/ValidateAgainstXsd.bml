@@ -23,13 +23,12 @@
   <name>ValidateAgainstXsd</name>
   <type>clicap:ValidateAgainstXsd</type>
   <baseType>core:Capability</baseType>
-  <is>Optional authoring XSD validation after Stage 1–2</is>
+  <is>Standalone XSD helper — not part of blockml validate</is>
 
-  <documentation>Resolves catalog.xml (or fallback schemas/bml.xsd) under project root.
-    Validates each .bml file against bml.xsd for http://blockml.org/bml.
-    Missing schemas → warning BML_XSD_SCHEMAS_MISSING (skip XSD step).
-    Schema violations → error BML_XSD_VALIDATION_ERROR.
-    Orchestrated from RunValidate when xsdValidation enabled and --no-xsd absent.</documentation>
+  <documentation>Optional tooling against generated bml.xsd. Not invoked by RunValidate.
+    Validity of BML is parse + @blockml/validator. XSD generation is compile xsd.
+    Missing schemas → warning BML_XSD_SCHEMAS_MISSING.
+    Schema violations → error BML_XSD_VALIDATION_ERROR.</documentation>
 
   <references>
     <see type="clicap:RunValidate" relation="SeeAlso" />

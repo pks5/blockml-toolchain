@@ -91,7 +91,7 @@ describe("validateTypes diagnostic locations", () => {
     expect(diagnostics.some((d) => d.code === "BML_UNKNOWN_TYPE")).toBe(false);
   });
 
-  it("does not flag xmlns-qualified domain types absent from the registry", () => {
+  it("flags xmlns-qualified domain types absent from the registry", () => {
     const source = [
       '<block xmlns="http://blockml.org/bml"',
       ' xmlns:core="org.blockml.bml.core"',
@@ -109,6 +109,7 @@ describe("validateTypes diagnostic locations", () => {
     const parsed = parse(source, { filePath: "domain-types.bml", continueOnError: true });
     expect(parsed.document).not.toBeNull();
     const diagnostics = validateTypes(parsed.document!, new TypeRegistry());
-    expect(diagnostics.some((d) => d.code === "BML_UNKNOWN_TYPE")).toBe(false);
+    expect(diagnostics.some((d) => d.code === "BML_UNKNOWN_TYPE")).toBe(true);
+    expect(diagnostics.filter((d) => d.code === "BML_UNKNOWN_TYPE").length).toBeGreaterThanOrEqual(2);
   });
 });

@@ -27,12 +27,11 @@
 
   <documentation>CLI10: file and --all together exit 2. CLI11: never writes render output.
     Single file: compileBmlToBom. Corpus/--all: bootstrapProjectTypeRegistry + validateRegistryDocuments.
-    When xsdValidation enabled and --no-xsd absent: ValidateAgainstXsd after Stage 1–2.</documentation>
+    XSD is not part of this command.</documentation>
 
   <references>
     <see type="clidocumentation:ValidateCommand" relation="SeeAlso" />
     <see type="clicommand:ValidateCommand" relation="SeeAlso" />
-    <see type="clicap:ValidateAgainstXsd" relation="SeeAlso" />
   </references>
 
   <properties>

@@ -49,6 +49,11 @@
           "name": "isEmbedded",
           "type": "type:Boolean",
           "required": true
+        },
+        {
+          "name": "diagnostics",
+          "type": "bomcommon:Diagnostic[]",
+          "required": true
         }
       ]
     },
@@ -1103,7 +1108,10 @@
     "BML_UNKNOWN_NAMESPACE_PREFIX",
     "BML_UNQUALIFIED_BLOCK_REFERENCE",
     "BML_UNKNOWN_TYPE",
-    "BML_INVALID_TYPE_REFERENCE"
+    "BML_INVALID_TYPE_REFERENCE",
+    "BML_UNKNOWN_ELEMENT",
+    "BML_UNKNOWN_ATTRIBUTE",
+    "BML_UNKNOWN_DIRECTIVE"
   ],
   "documentationBlocks": [
     "Introduction",
@@ -1114,6 +1122,7 @@
     "MappingPrinciples",
     "MemberMappingOrder",
     "AttributeClassification",
+    "StructuralGrammar",
     "XmlCommentsParse",
     "TypeDescriptorParsing",
     "BlockMetadataMapping",

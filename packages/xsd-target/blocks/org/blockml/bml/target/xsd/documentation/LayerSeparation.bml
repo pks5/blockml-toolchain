@@ -30,7 +30,7 @@
   <documentation>Layers:
     • org.blockml.bml.definition / docs 19 D1 — bml:xml particle grammar SSOT (XSD consumes)
     • org.blockml.bml.target.xsd.* (this library) — emit bml.xsd / types.xsd / service.xsd / catalog
-    • org.blockml.bml.cli.* — default outDir=schemas, rootFiles write, --no-xsd authoring validation
+    • org.blockml.bml.cli.* — default outDir=schemas, rootFiles write; validate is parse + validator
     • MachineBlocks domain XSDs — out of scope (product schemas)
 
     Do not double-maintain CLI flags or D1 grammar here; link via SeeAlso.</documentation>

@@ -11,6 +11,8 @@ import type { Element } from "@xmldom/xmldom";
 import { expressionFromRaw } from "./member-value.js";
 import { getAttribute } from "../util/xml.js";
 import type { SourceLocation } from "@blockml/bom";
+import type { MapContext } from "./context.js";
+import { collectUnknownBmlAttributes } from "./structural.js";
 
 const BML_NS = "http://blockml.org/bml";
 
@@ -24,8 +26,13 @@ function bmlAttr(element: Element, local: string): string | undefined {
 export function parseDirectives(
   element: Element,
   loc: SourceLocation,
+  ctx?: MapContext,
 ): DirectiveAttribute[] {
   const directives: DirectiveAttribute[] = [];
+
+  if (ctx) {
+    collectUnknownBmlAttributes(element, ctx);
+  }
 
   const each = bmlAttr(element, "each");
   if (each !== undefined) {

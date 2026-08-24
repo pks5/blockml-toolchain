@@ -34,6 +34,7 @@
   ],
   "documentationBlocks": [
     "Introduction",
+    "ValidityContract",
     "LayerSeparation",
     "ValidationPipeline",
     "PublicApi",

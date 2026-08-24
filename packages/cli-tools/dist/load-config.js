@@ -5,7 +5,6 @@ const DEFAULT_CONFIG = {
     srcDir: "src",
     targets: ["blockdoc"],
     defaultTarget: "blockdoc",
-    xsdValidation: true,
 };
 export function loadConfig(cwd = process.cwd()) {
     const configPath = resolve(cwd, "bom.config.json");
@@ -19,7 +18,6 @@ export function loadConfig(cwd = process.cwd()) {
         ...parsed,
         targets: parsed.targets?.length ? parsed.targets : DEFAULT_CONFIG.targets,
         defaultTarget: parsed.defaultTarget ?? DEFAULT_CONFIG.defaultTarget,
-        xsdValidation: parsed.xsdValidation ?? DEFAULT_CONFIG.xsdValidation,
     };
 }
 //# sourceMappingURL=load-config.js.map

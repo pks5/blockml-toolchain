@@ -39,11 +39,15 @@
     validateTypes:
     • BML_UNKNOWN_BASE_TYPE — baseType FQN not in TypeRegistry (at baseTypeSource)
     • BML_UNKNOWN_CONTRACT — contracts[] FQN not in TypeRegistry
-    • BML_UNKNOWN_TYPE — named member type FQN in org.blockml.bml.* not in TypeRegistry and not a well-known primitive (at typeSource); xmlns-qualified domain types are not required to be registered
+    • BML_UNKNOWN_TYPE — named type FQN not in TypeRegistry and not a well-known primitive (member types at typeSource; instance typeFqn on the instance)
     • BML_MEMBER_COLLISION — duplicate member identity in effective set
     • BML_OVERRIDE_WITHOUT_PARENT — override without resolvable base member
     • BML_OVERRIDE_REQUIRED — override on non-overridable member
     • BML_EXPRESSION_PARSE_ERROR — parseExpression failed on ExpressionValue.raw
+
+    validateInstances:
+    • BML_UNKNOWN_TYPE — composition instance typeFqn not in TypeRegistry
+    • BML_UNKNOWN_PROPERTY — instance memberValues key not in effective members (error)
 
     validateVersions:
     • BML_MISSING_VERSION — standalone root block missing effective version (non-framework convention)

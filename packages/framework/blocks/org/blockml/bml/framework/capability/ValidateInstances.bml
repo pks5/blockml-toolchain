@@ -17,7 +17,10 @@
   <name>ValidateInstances</name>
   <type>fwcap:ValidateInstances</type>
   <baseType>core:Capability</baseType>
-  <is>Instance id and cross-reference rules</is>
+  <is>Instance type, member, id, and cross-reference rules</is>
+
+  <documentation>Unknown instance typeFqn → BML_UNKNOWN_TYPE. memberValues keys not in
+    resolveEffectiveMembers → BML_UNKNOWN_PROPERTY. Unresolved refs and missing bml:id on bml:each remain.</documentation>
 
   <properties>
     <document type="bomdoc:BomDocument">

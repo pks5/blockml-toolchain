@@ -3,11 +3,11 @@ import type {
   BlockInstance,
   BomDocument,
   CompositionNode,
-  CompositionTemplate,
   Diagnostic,
   MemberValue,
 } from "@blockml/bom";
 import type { TypeRegistry } from "../registry/type-registry.js";
+import { resolveEffectiveMembers } from "../resolve/resolve-effective-members.js";
 
 function diag(
   code: string,
@@ -85,6 +85,54 @@ function resolveInstanceRef(
   return ids.has(token);
 }
 
+function validateInstanceSemantics(
+  instance: BlockInstance,
+  registry: TypeRegistry,
+  file: string,
+  diagnostics: Diagnostic[],
+): void {
+  if (!instance.typeFqn) {
+    diagnostics.push(
+      diag(
+        "BML_UNKNOWN_TYPE",
+        "Unknown type: (missing instance typeFqn)",
+        file,
+        instance.source?.line,
+        instance.source?.column,
+      ),
+    );
+    return;
+  }
+  const typeDoc = registry.get(instance.typeFqn);
+  if (!typeDoc) {
+    diagnostics.push(
+      diag(
+        "BML_UNKNOWN_TYPE",
+        `Unknown type: ${instance.typeFqn}`,
+        file,
+        instance.source?.line,
+        instance.source?.column,
+      ),
+    );
+    return;
+  }
+  const effective = resolveEffectiveMembers(typeDoc.block, registry);
+  const names = new Set(effective.map((m) => m.name));
+  for (const key of Object.keys(instance.memberValues)) {
+    if (!names.has(key)) {
+      diagnostics.push(
+        diag(
+          "BML_UNKNOWN_PROPERTY",
+          `Unknown property: ${key} on ${instance.typeFqn}`,
+          file,
+          instance.source?.line,
+          instance.source?.column,
+        ),
+      );
+    }
+  }
+}
+
 function validateInstanceRefs(
   instance: BlockInstance,
   ids: Map<string, { file: string; line?: number; column?: number }>,
@@ -133,6 +181,7 @@ function validateInstanceRefs(
 function validateCompositionNodes(
   nodes: CompositionNode[],
   ids: Map<string, { file: string; line?: number; column?: number }>,
+  registry: TypeRegistry,
   file: string,
   diagnostics: Diagnostic[],
 ): void {
@@ -150,9 +199,10 @@ function validateCompositionNodes(
           ),
         );
       }
+      validateInstanceSemantics(node.instance, registry, file, diagnostics);
       validateInstanceRefs(node.instance, ids, file, diagnostics);
       for (const agg of node.instance.aggregationCompositions ?? []) {
-        validateCompositionNodes(agg.composition.children, ids, file, diagnostics);
+        validateCompositionNodes(agg.composition.children, ids, registry, file, diagnostics);
       }
     } else {
       const hasEach = node.directives?.some((d) => d.type === "each");
@@ -167,20 +217,54 @@ function validateCompositionNodes(
           ),
         );
       }
-      validateCompositionNodes(node.children, ids, file, diagnostics);
+      validateCompositionNodes(node.children, ids, registry, file, diagnostics);
     }
+  }
+}
+
+function walkBlockInstances(
+  block: BlockDefinition,
+  registry: TypeRegistry,
+  file: string,
+  ids: Map<string, { file: string; line?: number; column?: number }>,
+  diagnostics: Diagnostic[],
+): void {
+  for (const template of block.compositions) {
+    validateCompositionNodes(template.children, ids, registry, file, diagnostics);
+  }
+  for (const instance of block.constraints ?? []) {
+    validateInstanceSemantics(instance, registry, file, diagnostics);
+    validateInstanceRefs(instance, ids, file, diagnostics);
+    for (const agg of instance.aggregationCompositions ?? []) {
+      validateCompositionNodes(agg.composition.children, ids, registry, file, diagnostics);
+    }
+  }
+  for (const member of block.members) {
+    for (const instance of member.constraints ?? []) {
+      validateInstanceSemantics(instance, registry, file, diagnostics);
+      validateInstanceRefs(instance, ids, file, diagnostics);
+    }
+    if (member.kind === "property") {
+      for (const instance of member.suggestions ?? []) {
+        validateInstanceSemantics(instance, registry, file, diagnostics);
+      }
+    }
+  }
+  for (const sub of block.subBlocks) {
+    walkBlockInstances(sub, registry, file, ids, diagnostics);
+  }
+  for (const embedded of block.embeddedBlocks) {
+    walkBlockInstances(embedded, registry, file, ids, diagnostics);
   }
 }
 
 export function validateInstances(
   document: BomDocument,
-  _registry: TypeRegistry,
+  registry: TypeRegistry,
 ): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
   const file = document.source.filePath ?? "<memory>";
   const ids = collectDocumentInstanceIds(document.block, file);
-  for (const template of document.block.compositions) {
-    validateCompositionNodes(template.children, ids, file, diagnostics);
-  }
+  walkBlockInstances(document.block, registry, file, ids, diagnostics);
   return diagnostics;
 }

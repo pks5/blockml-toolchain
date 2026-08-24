@@ -19,7 +19,8 @@
   xmlns:runtime="org.blockml.bml.compiler.runtime"
   xmlns:framework="org.blockml.bml.framework"
   xmlns:type="org.blockml.bml.type"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>ValidateCommand</name>
   <type>clidocumentation:ValidateCommand</type>
@@ -27,21 +28,20 @@
   <is>blockml validate specification</is>
 
   <documentation>Syntax:
-    blockml validate [file] [--all] [--src dir] [--libraries a,b] [--no-xsd]
+    blockml validate [file] [--all] [--src dir] [--libraries a,b]
 
     Single file: parse + compileBmlToBom against project registry.
     --all or corpus: bootstrapProjectTypeRegistry + validateRegistryDocuments.
 
-    After Stage 1–2, optional XSD validation against local bml.xsd (default on).
-    Disable with --no-xsd or bom.config.json xsdValidation: false (--no-xsd wins).
-    Missing catalog.xml or schemas → warning BML_XSD_SCHEMAS_MISSING; XSD step skipped.
+    Validity is parse + semantic validate only. XSD is a render target
+    (blockml compile xsd) and is not consulted.
 
     file and --all together → exit 2 (CLI10).
     No target bootstrap. No output files written (CLI11).
     Exit 0 on success; 1 on diagnostic errors; 2 on config errors.</documentation>
   <references>
     <see type="clidocumentation:Configuration" relation="ReadNext"></see>
-    <see type="clicap:ValidateAgainstXsd" relation="SeeAlso" />
+    <see type="valdocumentation:ValidityContract" relation="SeeAlso" />
   </references>
 
 </block>

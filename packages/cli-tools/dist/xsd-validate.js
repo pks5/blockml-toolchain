@@ -145,7 +145,7 @@ export function validateFilesAgainstXsd(filePaths, rootDir) {
     const schemaPath = resolveBmlSchemaPath(rootDir);
     if (!schemaPath) {
         return [
-            diagnostic("warning", "BML_XSD_SCHEMAS_MISSING", "XSD schemas not found; skipping authoring XSD validation (run compile xsd or set xsdValidation: false)", join(rootDir, "catalog.xml")),
+            diagnostic("warning", "BML_XSD_SCHEMAS_MISSING", "XSD schemas not found; skipping (run compile xsd to generate schemas)", join(rootDir, "catalog.xml")),
         ];
     }
     const libxmljs = loadLibxmljs();

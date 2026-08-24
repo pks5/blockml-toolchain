@@ -39,10 +39,13 @@
     optional pragmaticModel. Consumed by @blockml/cli, @blockml/lsp (V2), and hosts.
 
     Validator never mutates the input Urmodell. Abort-on-error is a host concern — not
-    enforced inside the validator package.</documentation>
+    enforced inside the validator package.
+
+    Validity without XSD: well-formed XML + structural BML + semantic BML against a
+    complete TypeRegistry. CLI validate and LSP share this engine.</documentation>
 
   <references>
-    <see type="valdocumentation:LayerSeparation" relation="ReadNext"></see>
+    <see type="valdocumentation:ValidityContract" relation="ReadNext"></see>
     <see type="bomdocumentation:Introduction" relation="SeeAlso"></see>
   </references>
 

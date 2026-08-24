@@ -32,7 +32,7 @@
 
     Does not own: CLI default outDir=schemas, rootFiles write, exit codes (cli);
     D1/bml:xml grammar SSOT (Definition / docs 19);
-    --no-xsd / xsdValidation (cli ScopeExclusion);
+    authoring validity (parser + validator; CLI validate);
     MachineBlocks domain XSDs.
     Phase C IDE catalog narrative pointers in docs 15 stay host docs; generation here.</documentation>
   <references>

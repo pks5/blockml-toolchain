@@ -17,7 +17,10 @@ describe("TypeRegistry bootstrap", () => {
         d.code !== "BML_MAP_ERROR" &&
         d.code !== "BML_UNKNOWN_NAMESPACE_PREFIX" &&
         d.code !== "BML_UNQUALIFIED_BLOCK_REFERENCE" &&
-        d.code !== "BML_INVALID_TYPE_REFERENCE",
+        d.code !== "BML_INVALID_TYPE_REFERENCE" &&
+        d.code !== "BML_UNKNOWN_ELEMENT" &&
+        d.code !== "BML_UNKNOWN_ATTRIBUTE" &&
+        d.code !== "BML_UNKNOWN_DIRECTIVE",
     );
     expect(bootstrapErrors).toEqual([]);
 
@@ -54,7 +57,10 @@ describe("TypeRegistry bootstrap", () => {
         d.code !== "BML_MAP_ERROR" &&
         d.code !== "BML_UNKNOWN_NAMESPACE_PREFIX" &&
         d.code !== "BML_UNQUALIFIED_BLOCK_REFERENCE" &&
-        d.code !== "BML_INVALID_TYPE_REFERENCE",
+        d.code !== "BML_INVALID_TYPE_REFERENCE" &&
+        d.code !== "BML_UNKNOWN_ELEMENT" &&
+        d.code !== "BML_UNKNOWN_ATTRIBUTE" &&
+        d.code !== "BML_UNKNOWN_DIRECTIVE",
     );
     expect(errors, JSON.stringify(errors)).toEqual([]);
     expect(registry.has("org.blockml.bml.core.Block")).toBe(true);

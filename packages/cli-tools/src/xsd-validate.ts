@@ -229,7 +229,7 @@ export function validateFilesAgainstXsd(
       diagnostic(
         "warning",
         "BML_XSD_SCHEMAS_MISSING",
-        "XSD schemas not found; skipping authoring XSD validation (run compile xsd or set xsdValidation: false)",
+        "XSD schemas not found; skipping (run compile xsd to generate schemas)",
         join(rootDir, "catalog.xml"),
       ),
     ];

@@ -43,6 +43,9 @@
     Bootstrap modes: bootstrapPaths (corpus flat scan) or libraryPaths (Library.bml graph).
     validateVersions runs after validateTypes and before validateConstraints.
 
+    Unknown instance memberValues and unresolved type FQNs are errors (not warnings).
+    Missing libraries are errors. Domain types must be registered like framework types.
+
     No throw on validation failure — aligns with B26 sync diagnostic API across parser,
     serializer, validator, and compiler.</documentation>
 

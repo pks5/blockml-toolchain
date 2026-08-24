@@ -1,12 +1,16 @@
 import { expressionFromRaw } from "./member-value.js";
 import { getAttribute } from "../util/xml.js";
+import { collectUnknownBmlAttributes } from "./structural.js";
 const BML_NS = "http://blockml.org/bml";
 function bmlAttr(element, local) {
     return (getAttribute(element, `bml:${local}`) ??
         getAttribute(element, `${BML_NS}:${local}`));
 }
-export function parseDirectives(element, loc) {
+export function parseDirectives(element, loc, ctx) {
     const directives = [];
+    if (ctx) {
+        collectUnknownBmlAttributes(element, ctx);
+    }
     const each = bmlAttr(element, "each");
     if (each !== undefined) {
         const colon = each.indexOf(":");

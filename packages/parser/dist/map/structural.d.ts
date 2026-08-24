@@ -1,0 +1,17 @@
+import type { SourceLocation, UnknownXmlNode } from "@blockml/bom";
+import type { Element } from "@xmldom/xmldom";
+import type { MapContext } from "./context.js";
+export declare const KNOWN_BML_ATTRIBUTE_LOCALS: Set<string>;
+export declare const isAllowedRootChild: (element: Element) => boolean;
+export declare const isInfrastructureAttribute: (name: string) => boolean;
+export declare const bmlAttributeLocalName: (name: string) => string | undefined;
+export declare const toUnknownXmlNode: (element: Element, ctx: MapContext) => UnknownXmlNode;
+export declare const reportDiagnostic: (ctx: MapContext, code: string, message: string, source: SourceLocation) => void;
+export declare const collectUnknownGrammarAttributes: (element: Element, ctx: MapContext, allowedLocals: Set<string>) => Record<string, string> | undefined;
+export declare const collectBlockGrammarAttributes: (element: Element, ctx: MapContext) => Record<string, string> | undefined;
+export declare const collectIdentityOrSectionAttributes: (element: Element, ctx: MapContext) => Record<string, string> | undefined;
+export declare const collectMemberGrammarAttributes: (element: Element, ctx: MapContext) => Record<string, string> | undefined;
+export declare const reportUnknownElement: (element: Element, ctx: MapContext) => void;
+export declare const listUnknownBmlAttributes: (element: Element) => Record<string, string> | undefined;
+export declare const collectUnknownBmlAttributes: (element: Element, ctx: MapContext) => Record<string, string> | undefined;
+//# sourceMappingURL=structural.d.ts.map

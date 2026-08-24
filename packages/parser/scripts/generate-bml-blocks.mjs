@@ -46,6 +46,9 @@ const MAP_TIME_DIAGNOSTIC_CODES = [
   "BML_UNQUALIFIED_BLOCK_REFERENCE",
   "BML_UNKNOWN_TYPE",
   "BML_INVALID_TYPE_REFERENCE",
+  "BML_UNKNOWN_ELEMENT",
+  "BML_UNKNOWN_ATTRIBUTE",
+  "BML_UNKNOWN_DIRECTIVE",
 ];
 
 /** @type {BlockDef[]} */
@@ -74,6 +77,7 @@ const blocks = [
       { name: "parentBlockType", type: "type:Text", doc: "Enclosing block type FQN when nested." },
       { name: "isRoot", type: "type:Boolean", required: true },
       { name: "isEmbedded", type: "type:Boolean", required: true },
+      { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true, doc: "Shared map-time diagnostics; structural errors append here without aborting." },
     ],
   },
   {
@@ -194,7 +198,7 @@ const capabilities = [
       { name: "filePath", type: "type:Text", required: true },
       { name: "source", type: "type:Text", required: true },
       { name: "bindings", type: "type:Text", required: true },
-      { name: "options", type: "core:Any", doc: "subBlockIndex, parentBlockType, isRoot, isEmbedded." },
+      { name: "options", type: "core:Any", doc: "subBlockIndex, parentBlockType, isRoot, isEmbedded, diagnostics." },
     ],
     output: { name: "context", type: "parmap:MapContext", required: true },
     refs: ["parmap:MapContext"],
@@ -776,7 +780,7 @@ ${XMLNS}
     (@blockml/bom). Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.4.0</version>
+  <version>0.5.0</version>
 
   <language>
     <English />

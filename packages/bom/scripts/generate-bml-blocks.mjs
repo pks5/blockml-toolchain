@@ -91,6 +91,20 @@ const blocks = [
   {
     pkg: "common",
     prefix: "bomcommon",
+    name: "UnknownXmlNode",
+    is: "Preserve-on-error residual for an unknown authored XML element",
+    doc: "Stored when a structural BML error is reported so Format/LSP/serialize can roundtrip the authored construct.",
+    fields: [
+      { name: "localName", type: "type:Text", required: true },
+      { name: "prefix", type: "type:Text" },
+      { name: "attributes", type: "type:Text", required: true, doc: "Record of authored attribute name → value." },
+      { name: "innerXml", type: "type:Text" },
+      { name: "source", type: "bomcommon:SourceLocation" },
+    ],
+  },
+  {
+    pkg: "common",
+    prefix: "bomcommon",
     name: "MemberSectionName",
     is: "Member container section identifier",
     doc: 'String-literal union: "properties" | "aggregations" | "associations" | "capabilities".',
@@ -505,6 +519,8 @@ const blocks = [
       { name: "source", type: "bomcommon:SourceLocation" },
       { name: "typeSource", type: "bomcommon:SourceLocation", doc: "Span of the type= attribute or <type> element value." },
       { name: "baseTypeSource", type: "bomcommon:SourceLocation" },
+      { name: "unknownElements", type: "bomcommon:UnknownXmlNode[]" },
+      { name: "unknownAttributes", type: "type:Text", doc: "Record of unknown attributes on the grammar node." },
     ],
   },
 
@@ -541,6 +557,8 @@ const blocks = [
       { name: "xmlTrivia", type: "bomcommon:XmlTrivia" },
       { name: "source", type: "bomcommon:SourceLocation" },
       { name: "typeSource", type: "bomcommon:SourceLocation", doc: "Span of the type= attribute value (use-site for type diagnostics)." },
+      { name: "unknownElements", type: "bomcommon:UnknownXmlNode[]" },
+      { name: "unknownAttributes", type: "type:Text", doc: "Record of unknown attributes on this member." },
     ],
   },
   {
@@ -738,6 +756,7 @@ const blocks = [
       { name: "aggregationCompositions", type: "bomcomp:InstanceAggregationComposition[]" },
       { name: "xmlTrivia", type: "bomcommon:XmlTrivia" },
       { name: "source", type: "bomcommon:SourceLocation" },
+      { name: "unknownAttributes", type: "type:Text", doc: "Unknown bml:* attributes preserved for roundtrip." },
     ],
   },
   {
@@ -1065,7 +1084,7 @@ ${XMLNS}
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.4.0</version>
+  <version>0.5.0</version>
 
   <language>
     <English />

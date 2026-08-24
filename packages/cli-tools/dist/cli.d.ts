@@ -8,7 +8,6 @@ export interface ParsedArgs {
     srcDir?: string;
     libraries?: string[];
     include?: string[];
-    noXsd?: boolean;
 }
 interface PrintableDiagnostic {
     severity: string;

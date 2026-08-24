@@ -42,14 +42,14 @@
     • Directives (bml:each, bml:if, …) → directives[]
     • Unknown bml:* → BML_UNKNOWN_DIRECTIVE (error at map time — B2)
 
-    Rule 3 — All other attributes:
-    • memberValues[name] (camelCase)
-    • ${ expr } → ExpressionValue { raw } (B4)
+    Rule 3 — Grammar vs instance:
+    • On definition/grammar nodes, remaining attributes are closed. Unknown → BML_UNKNOWN_ATTRIBUTE (structural error); preserved as unknownAttributes.
+    • On block instances, remaining attributes → memberValues[name] (camelCase); ${ expr } → ExpressionValue { raw } (B4). Unknown members are a validator error.
 
     Serialize side of Rule 1 (B25 re-emit) → @blockml/serializer.</documentation>
 
   <references>
-    <see type="pardocumentation:XmlCommentsParse" relation="ReadNext"></see>
+    <see type="pardocumentation:StructuralGrammar" relation="ReadNext"></see>
     <see type="parcap:ParseDirectives" relation="SeeAlso"></see>
   </references>
 

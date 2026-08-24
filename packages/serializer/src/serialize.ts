@@ -23,6 +23,7 @@ export function serialize(
     bindings,
     document.source.schemaLocation,
     document.source.noNamespaceSchemaLocation,
+    document.block.unknownAttributes,
   );
   writer.pushDepth();
   writer.blank();

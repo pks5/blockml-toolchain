@@ -58,6 +58,11 @@ export function emitBlockInstance(writer, instance, directives, ctx) {
     if (instance.scope) {
         attrs.push(`bml:scope="${instance.scope}"`);
     }
+    if (instance.unknownAttributes) {
+        for (const [name, value] of Object.entries(instance.unknownAttributes)) {
+            attrs.push(`${name}="${escapeAttr(value)}"`);
+        }
+    }
     for (const [name, val] of Object.entries(instance.memberValues)) {
         if ("authoredPlacement" in val && val.authoredPlacement === "element") {
             continue;

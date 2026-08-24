@@ -137,7 +137,7 @@ describe("CLI BML library", () => {
     expect(loadConfig).toContain('targets: ["blockdoc"]');
     expect(loadConfig).toContain("targetPackages");
     expect(loadConfig).toContain("defaultTarget");
-    expect(loadConfig).toContain("xsdValidation");
+    expect(loadConfig).not.toContain("xsdValidation");
 
     const bootstrapTargets = readFileSync(join(pkgRoot, "src/bootstrap-targets.ts"), "utf8");
     expect(bootstrapTargets).toContain("blockdoc");

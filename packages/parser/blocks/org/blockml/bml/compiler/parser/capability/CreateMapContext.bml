@@ -46,7 +46,7 @@
       <documentation>bindings. TS type: type:Text. (required)</documentation>
     </bindings>
     <options type="core:Any">
-      <documentation>subBlockIndex, parentBlockType, isRoot, isEmbedded. (optional)</documentation>
+      <documentation>subBlockIndex, parentBlockType, isRoot, isEmbedded, diagnostics. (optional)</documentation>
     </options>
     <context type="parmap:MapContext">
       <documentation>context. TS type: parmap:MapContext. (required)</documentation>

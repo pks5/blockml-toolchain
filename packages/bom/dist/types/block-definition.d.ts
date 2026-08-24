@@ -1,4 +1,4 @@
-import type { CharacterDataForm, MetadataElementTrivia, MemberSectionName, SourceLocation, XmlRenderingBlock, XmlTrivia } from "./common.js";
+import type { CharacterDataForm, MetadataElementTrivia, MemberSectionName, SourceLocation, UnknownXmlNode, XmlRenderingBlock, XmlTrivia } from "./common.js";
 import type { BlockInstance } from "./composition.js";
 import type { MemberDefinition } from "./member-definition.js";
 import type { CompositionTemplate } from "./composition.js";
@@ -100,6 +100,10 @@ export interface BlockDefinition {
     typeSource?: SourceLocation;
     /** Source span of the `<baseType>` metadata element. */
     baseTypeSource?: SourceLocation;
+    /** Preserve-on-error unknown root children. */
+    unknownElements?: UnknownXmlNode[];
+    /** Unknown attributes on the &lt;block&gt; grammar node. */
+    unknownAttributes?: Record<string, string>;
 }
 export interface KeywordEntry {
     typeFqn: string;

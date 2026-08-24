@@ -41,7 +41,7 @@
     XSD15 emitDomainSchemas default true.
     XSD16 includeNonExported reserved unused in V1.
     XSD17 No package-local emit diagnostics.
-    XSD18 Authoring XSD validation is CLI ScopeExclusion — not an XSD capability.</documentation>
+    XSD18 Generated XSD is non-authoritative; authoring validity is parse+validate, not this target.</documentation>
   <references>
     <see type="xsddocumentation:PackageOwnership" relation="ReadNext"></see>
   </references>

@@ -89,7 +89,7 @@ export const documentationBlocks = [
     doc: `V1 (Phase A) parser implements:
     • Hardcoded BML → BOM mapper for <block> root documents
     • Single-file scope (B5) — no TypeRegistry bootstrap in parse()
-    • Stage 1 only — no semantic validation (B8: XSD not Stage 1)
+    • Stage 1 structural BML validation (unknown Gerüst tags/attributes/directives); no TypeRegistry semantic checks (B8: XSD not Stage 1)
     • JSON BML authoring not planned (B6)
     • Tolerant parse by default (continueOnError: true)
 
@@ -176,14 +176,42 @@ export const documentationBlocks = [
     • Directives (bml:each, bml:if, …) → directives[]
     • Unknown bml:* → BML_UNKNOWN_DIRECTIVE (error at map time — B2)
 
-    Rule 3 — All other attributes:
-    • memberValues[name] (camelCase)
-    • \${ expr } → ExpressionValue { raw } (B4)
+    Rule 3 — Grammar vs instance:
+    • On definition/grammar nodes, remaining attributes are closed. Unknown → BML_UNKNOWN_ATTRIBUTE (structural error); preserved as unknownAttributes.
+    • On block instances, remaining attributes → memberValues[name] (camelCase); \${ expr } → ExpressionValue { raw } (B4). Unknown members are a validator error.
 
     Serialize side of Rule 1 (B25 re-emit) → @blockml/serializer.`,
     refs: [
-      { type: "pardocumentation:XmlCommentsParse", relation: "ReadNext" },
+      { type: "pardocumentation:StructuralGrammar", relation: "ReadNext" },
       { type: "parcap:ParseDirectives", relation: "SeeAlso" },
+    ],
+  },
+  {
+    name: "StructuralGrammar",
+    is: "Closed root vocabulary and preserve-on-error for structural BML errors",
+    doc: `A document is valid BlockML if it is well-formed XML, structurally conforms
+    to the BlockML definitions, and passes semantic validation against a complete registry.
+    XSD is not part of this definition.
+
+    Error classes: XML Syntax Error (malformed XML; document may be null);
+    Structural BML Error (unknown Gerüst tag/attribute/directive — this package);
+    Semantic BML Error (unknown type/member/library — @blockml/validator).
+
+    Root children are closed: only identity and container names from the effective
+    Block / document grammar (name, type, baseType, properties, aggregations, …).
+    Direct aggregations at root are not allowed. User content lives only inside
+    predefined containers and members.
+
+    Preserve-on-error: invalid authored constructs that can be represented are stored
+    as unknownElements / unknownAttributes residuals. Diagnostics MUST NOT require
+    destructive recovery. An error invalidates validity, not the whole BOM.
+
+    Definition/grammar nodes: unknown children/attributes → BML_UNKNOWN_ELEMENT /
+    BML_UNKNOWN_ATTRIBUTE. Unknown bml:* → BML_UNKNOWN_DIRECTIVE.
+    Block instances: extra attributes stay in memberValues for semantic checking.`,
+    refs: [
+      { type: "pardocumentation:XmlCommentsParse", relation: "ReadNext" },
+      { type: "valdocumentation:ValidityContract", relation: "SeeAlso" },
     ],
   },
   {
@@ -291,7 +319,7 @@ export const documentationBlocks = [
   {
     name: "DesignDecisions",
     is: "Normative parser design decisions",
-    doc: `B2: unknown bml:* → error at map; unknown custom props → validator warning.
+    doc: `B2: unknown bml:* → error at map (BML_UNKNOWN_DIRECTIVE); unknown instance members → validator error (BML_UNKNOWN_PROPERTY).
     B3: inputType/outputType → TypeExpression at map time.
     B4: ExpressionValue.raw only; AST via core utility.
     B5: single-file parser scope.
@@ -343,6 +371,9 @@ export const documentationBlocks = [
     • BML_UNKNOWN_NAMESPACE_PREFIX, BML_UNQUALIFIED_BLOCK_REFERENCE
     • BML_UNKNOWN_TYPE — type expression parse failure
     • BML_INVALID_TYPE_REFERENCE — ill-formed type expression (ungrouped stacked multiplicity)
+    • BML_UNKNOWN_ELEMENT — child not in closed Block grammar (structural)
+    • BML_UNKNOWN_ATTRIBUTE — attribute not allowed on a grammar node (structural)
+    • BML_UNKNOWN_DIRECTIVE — unknown bml:* attribute (B2)
 
     Map-time diagnostics attach Diagnostic.source to the use-site token when known
     (attribute value or first occurrence in the throwing element), not the document root.

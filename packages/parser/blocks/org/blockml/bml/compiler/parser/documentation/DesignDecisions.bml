@@ -30,7 +30,7 @@
   <baseType>core:Documentation</baseType>
   <is>Normative parser design decisions</is>
 
-  <documentation>B2: unknown bml:* → error at map; unknown custom props → validator warning.
+  <documentation>B2: unknown bml:* → error at map (BML_UNKNOWN_DIRECTIVE); unknown instance members → validator error (BML_UNKNOWN_PROPERTY).
     B3: inputType/outputType → TypeExpression at map time.
     B4: ExpressionValue.raw only; AST via core utility.
     B5: single-file parser scope.

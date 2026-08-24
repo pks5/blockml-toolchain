@@ -9,6 +9,7 @@ import type {
   MemberDefinition,
   PropertyDefinition,
   TypeReferenceEntityInstance,
+  UnknownXmlNode,
 } from "@blockml/bom";
 import type { EmitContext } from "./context.js";
 import { emitTypeExpression } from "./type-expression.js";
@@ -97,6 +98,7 @@ export function emitBlockDefinition(
   for (const key of BLOCK_EMIT_ORDER) {
     emitBlockField(writer, block, key, ctx);
   }
+  emitUnknownXmlNodes(writer, block.unknownElements);
 }
 
 function emitBlockField(
@@ -384,6 +386,28 @@ function emitSimpleElement(writer: XmlWriter, tag: string, text: string): void {
   writer.line(`</${tag}>`);
 }
 
+function emitUnknownXmlNodes(writer: XmlWriter, nodes: UnknownXmlNode[] | undefined): void {
+  if (!nodes?.length) {
+    return;
+  }
+  for (const node of nodes) {
+    emitUnknownXmlNode(writer, node);
+  }
+}
+
+function emitUnknownXmlNode(writer: XmlWriter, node: UnknownXmlNode): void {
+  const tag = node.prefix ? `${node.prefix}:${node.localName}` : node.localName;
+  const attrText = Object.entries(node.attributes)
+    .map(([name, value]) => `${name}="${escapeAttr(value)}"`)
+    .join(" ");
+  const open = attrText ? `<${tag} ${attrText}` : `<${tag}`;
+  if (node.innerXml) {
+    writer.line(`${open}>${node.innerXml}</${tag}>`);
+  } else {
+    writer.line(`${open} />`);
+  }
+}
+
 function emitProse(
   writer: XmlWriter,
   tag: string,
@@ -500,6 +524,11 @@ function emitMember(writer: XmlWriter, member: MemberDefinition, ctx: EmitContex
   if (member.final) attrs.push('final="true"');
   if (member.override) attrs.push('override="true"');
   emitMemberXmlRendering(attrs, member.xmlRendering);
+  if (member.unknownAttributes) {
+    for (const [name, value] of Object.entries(member.unknownAttributes)) {
+      attrs.push(`${name}="${escapeAttr(value)}"`);
+    }
+  }
 
   switch (member.kind) {
     case "property": {
@@ -525,7 +554,8 @@ function emitMember(writer: XmlWriter, member: MemberDefinition, ctx: EmitContex
         member.summaries?.length ||
         member.references?.length ||
         member.keywords?.length ||
-        member.xmlRendering?.authoredPlacement === "element";
+        member.xmlRendering?.authoredPlacement === "element" ||
+        (member.unknownElements?.length ?? 0) > 0;
       if (!hasBody && !("authoredPlacement" in (member.value ?? {}) && member.value && "authoredPlacement" in member.value && member.value.authoredPlacement === "element")) {
         if (member.value) {
           attrs.push(`value="${emitLiteralAttr(member.value)}"`);
@@ -595,7 +625,8 @@ function emitMember(writer: XmlWriter, member: MemberDefinition, ctx: EmitContex
         member.since !== undefined ||
         (member.keywords?.length ?? 0) > 0 ||
         (member.changelog?.length ?? 0) > 0 ||
-        member.xmlRendering?.authoredPlacement === "element";
+        member.xmlRendering?.authoredPlacement === "element" ||
+        (member.unknownElements?.length ?? 0) > 0;
       if (!hasBody) {
         writer.line(`<${tag}${attrs.length ? " " + attrs.join(" ") : ""} />`);
         break;
@@ -618,7 +649,15 @@ function emitMember(writer: XmlWriter, member: MemberDefinition, ctx: EmitContex
       attrs.push(
         `type="${escapeAttr(emitTypeExpression(member.type, ctx.bindings, ctx.useQName))}"`,
       );
-      writer.line(`<${tag} ${attrs.join(" ")} />`);
+      if (member.unknownElements?.length) {
+        writer.line(`<${tag} ${attrs.join(" ")}>`);
+        writer.pushDepth();
+        emitUnknownXmlNodes(writer, member.unknownElements);
+        writer.popDepth();
+        writer.line(`</${tag}>`);
+      } else {
+        writer.line(`<${tag} ${attrs.join(" ")} />`);
+      }
       break;
     }
     case "capability": {
@@ -635,8 +674,8 @@ function emitMember(writer: XmlWriter, member: MemberDefinition, ctx: EmitContex
           `outputType="${escapeAttr(emitTypeExpression(member.outputType, ctx.bindings, ctx.useQName))}"`,
         );
       }
-      const hasImpl = !!member.implementation;
-      if (!hasImpl) {
+      const hasBody = !!member.implementation || (member.unknownElements?.length ?? 0) > 0;
+      if (!hasBody) {
         writer.line(`<${tag} ${attrs.join(" ")} />`);
         break;
       }
@@ -742,6 +781,7 @@ function emitMemberCommonChildren(
   if (member.constraints?.length) {
     emitConstraintInstances(writer, member.constraints, ctx);
   }
+  emitUnknownXmlNodes(writer, member.unknownElements);
 }
 
 function formatLiteralValue(value: unknown): string {
@@ -779,6 +819,7 @@ export function emitRootStartTag(
   bindings: Record<string, string>,
   schemaLocation?: string,
   noNamespaceSchemaLocation?: string,
+  unknownAttributes?: Record<string, string>,
 ): void {
   const attrs: string[] = [];
   for (const [prefix, uri] of Object.entries(bindings)) {
@@ -795,6 +836,11 @@ export function emitRootStartTag(
     attrs.push(
       `xsi:noNamespaceSchemaLocation="${escapeAttr(noNamespaceSchemaLocation)}"`,
     );
+  }
+  if (unknownAttributes) {
+    for (const [name, value] of Object.entries(unknownAttributes)) {
+      attrs.push(`${name}="${escapeAttr(value)}"`);
+    }
   }
   writer.line(`<block ${attrs.join("\n  ")}>`);
 }

@@ -56,6 +56,8 @@ export interface BlockInstance {
   /** XML comments bound to this composition instance element (B11). */
   xmlTrivia?: XmlTrivia;
   source?: SourceLocation;
+  /** Unknown bml:* attributes preserved for roundtrip. */
+  unknownAttributes?: Record<string, string>;
 }
 
 export type DirectiveAttribute =

@@ -35,9 +35,10 @@
     packages/xsd-target/src/ implements it. Tests in packages/xsd-target/test/
     encode behavioral contracts (XSD1–XSD18).
 
-    Generate vs Validation: this library models schema GENERATE only. Authoring
-    validation against generated XSDs (--no-xsd / xsdValidation) lives in
-    org.blockml.bml.cli ScopeExclusions — never as an XSD target capability.
+    Generate vs Validation: this library models schema GENERATE only. Generated schemas
+    are non-authoritative: they MUST NOT encode rules that parse + validate do not
+    themselves enforce. Authoring validity is parse + @blockml/validator (CLI validate /
+    LSP). compile xsd remains the generate path.
 
     Pipeline: ResolveOptions → EmitBlockXsd [+ EmitTypesXsd / EmitServiceXsd] →
     EmitCatalogXml → files under outDir plus rootFiles catalog.xml.

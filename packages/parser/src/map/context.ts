@@ -1,3 +1,5 @@
+import type { Diagnostic } from "@blockml/bom";
+
 export interface MapContext {
   filePath: string;
   source: string;
@@ -6,6 +8,7 @@ export interface MapContext {
   parentBlockType?: string;
   isRoot: boolean;
   isEmbedded: boolean;
+  diagnostics: Diagnostic[];
 }
 
 export function createMapContext(
@@ -17,6 +20,7 @@ export function createMapContext(
     parentBlockType?: string;
     isRoot?: boolean;
     isEmbedded?: boolean;
+    diagnostics?: Diagnostic[];
   } = {},
 ): MapContext {
   const ctx: MapContext = {
@@ -26,6 +30,7 @@ export function createMapContext(
     subBlockIndex: options.subBlockIndex ?? new Map(),
     isRoot: options.isRoot ?? false,
     isEmbedded: options.isEmbedded ?? false,
+    diagnostics: options.diagnostics ?? [],
   };
   if (options.parentBlockType !== undefined) {
     ctx.parentBlockType = options.parentBlockType;

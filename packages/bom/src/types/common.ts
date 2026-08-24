@@ -34,6 +34,15 @@ export interface XmlTrivia {
   trailingComments?: string[];
 }
 
+/** Preserve-on-error residual for an unknown authored XML element. */
+export interface UnknownXmlNode {
+  localName: string;
+  prefix?: string;
+  attributes: Record<string, string>;
+  innerXml?: string;
+  source?: SourceLocation;
+}
+
 export type MemberSectionName =
   | "properties"
   | "aggregations"

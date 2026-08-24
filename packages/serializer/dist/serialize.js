@@ -11,7 +11,7 @@ export function serialize(document, options = {}) {
         writer.line('<?xml version="1.0" encoding="UTF-8"?>');
     }
     writer.comments(document.block.xmlTrivia);
-    emitRootStartTag(writer, bindings, document.source.schemaLocation, document.source.noNamespaceSchemaLocation);
+    emitRootStartTag(writer, bindings, document.source.schemaLocation, document.source.noNamespaceSchemaLocation, document.block.unknownAttributes);
     writer.pushDepth();
     writer.blank();
     emitBlockDefinition(writer, document.block, ctx);

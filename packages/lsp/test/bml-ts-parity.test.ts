@@ -91,6 +91,6 @@ describe("LSP BML ↔ TS parity", () => {
     expect(library).toContain("<serializer:Library />");
     expect(library).toContain("<validator:Library />");
     expect(library).toContain("<framework:Library />");
-    expect(library).toContain("<version>0.4.0</version>");
+    expect(library).toContain("<version>0.5.0</version>");
   });
 });

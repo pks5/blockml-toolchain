@@ -29,7 +29,7 @@
 
   <documentation>V1 XSD target emits without package diagnostics codes. Failures surface as host/CLI
     or empty/malformed output only if upstream session is broken.
-    Authoring validation diagnostics (--no-xsd) are CLI-owned, not modeled here.
+    Generated schema is non-authoritative; CLI validate does not invoke this target.
     Scope mismatch for accepts is compiler/CLI (BML_TARGET_SCOPE_MISMATCH).</documentation>
   <references>
     <see type="xsddocumentation:DesignDecisions" relation="ReadNext"></see>

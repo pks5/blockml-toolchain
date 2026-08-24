@@ -36,7 +36,7 @@
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.4.0</version>
+  <version>0.5.0</version>
 
   <language>
     <English />
@@ -64,6 +64,7 @@
       <composition><bomcommon:SourceLocation /></composition>
       <composition><bomcommon:SourceInfo /></composition>
       <composition><bomcommon:XmlTrivia /></composition>
+      <composition><bomcommon:UnknownXmlNode /></composition>
       <composition><bomcommon:MemberSectionName /></composition>
       <composition><bomcommon:MetadataElementTrivia /></composition>
       <composition><bomcommon:XmlNodeKind /></composition>

@@ -7,6 +7,7 @@ import type {
   CapabilityDefinition,
   ChangelogEntry,
   CompositionTemplate,
+  Diagnostic,
   DocumentationExample,
   DocumentationProseEntry,
   DocumentationReference,
@@ -22,6 +23,7 @@ import type {
   XmlRenderingBlock,
   XmlRenderingMember,
   TypeExpression,
+  UnknownXmlNode,
 } from "@blockml/bom";
 import type { Element } from "@xmldom/xmldom";
 import { createMapContext, type MapContext } from "./context.js";
@@ -56,42 +58,21 @@ import {
   attributeValueLoc,
   TYPE_REFERENCE_ENTITY,
 } from "../util/qname.js";
-import { parseDirectives } from "./directives.js";
 import { withElementLocation } from "../util/mapping-error.js";
+import {
+  collectBlockGrammarAttributes,
+  collectIdentityOrSectionAttributes,
+  collectMemberGrammarAttributes,
+  isAllowedRootChild,
+  reportUnknownElement,
+  toUnknownXmlNode,
+} from "./structural.js";
 
 const MEMBER_SECTIONS = new Set([
   "properties",
   "aggregations",
   "associations",
   "capabilities",
-]);
-
-const METADATA_TAGS = new Set([
-  "name",
-  "type",
-  "baseType",
-  "is",
-  "isnot",
-  "isNot",
-  "version",
-  "definition",
-  "since",
-  "status",
-  "summary",
-  "documentation",
-  "abstract",
-  "final",
-  "language",
-  "subBlocks",
-  "embeddedBlocks",
-  "genericTypes",
-  "contracts",
-  "aliases",
-  "keywords",
-  "changelog",
-  "examples",
-  "references",
-  "constraints",
 ]);
 
 function mapBlockDefinition(
@@ -115,6 +96,11 @@ function mapBlockDefinition(
 
   block.source = elementSourceLoc(ctx.filePath, ctx.source, element);
 
+  const unknownAttrs = collectBlockGrammarAttributes(element, ctx);
+  if (unknownAttrs) {
+    block.unknownAttributes = unknownAttrs;
+  }
+
   const childElements = elementChildren(element);
   const subBlocksRaw: Element[] = [];
   const embeddedRaw: Element[] = [];
@@ -124,7 +110,7 @@ function mapBlockDefinition(
     associations: [],
     capabilities: [],
   };
-  const directAggregations: Element[] = [];
+  const unknownElements: UnknownXmlNode[] = [];
 
   for (const child of childElements) {
     const local = elementLocalName(child);
@@ -140,27 +126,15 @@ function mapBlockDefinition(
       memberSections[local]!.push(...elementChildren(child));
       continue;
     }
-    if (local === "composition") {
+    if (isAllowedRootChild(child)) {
       continue;
     }
-    if (
-      (elementPrefix(child) === "bml" && local === "xml") ||
-      (elementPrefix(child) === "bml" && local === "container")
-    ) {
-      continue;
-    }
-    if (
-      !METADATA_TAGS.has(local) &&
-      local !== "bml:xml" &&
-      !local.startsWith("bml:")
-    ) {
-      const hasComposition = elementChildren(child).some(
-        (c) => elementLocalName(c) === "composition",
-      );
-      if (hasComposition || elementChildren(child).length === 0) {
-        directAggregations.push(child);
-      }
-    }
+    reportUnknownElement(child, ctx);
+    unknownElements.push(toUnknownXmlNode(child, ctx));
+  }
+
+  if (unknownElements.length > 0) {
+    block.unknownElements = unknownElements;
   }
 
   mapMetadataFields(element, block, ctx);
@@ -196,6 +170,7 @@ function mapBlockDefinition(
       parentBlockType: block.type,
       isRoot: false,
       isEmbedded: false,
+      diagnostics: ctx.diagnostics,
     });
     const sb = mapBlockDefinition(sbEl, sbCtx, block.type);
     if (!sb.type) {
@@ -215,6 +190,7 @@ function mapBlockDefinition(
     const ebCtx = createMapContext(ctx.filePath, ctx.source, ctx.bindings, {
       isRoot: false,
       isEmbedded: true,
+      diagnostics: ctx.diagnostics,
     });
     block.embeddedBlocks.push(mapBlockDefinition(ebEl, ebCtx));
   }
@@ -227,7 +203,6 @@ function mapBlockDefinition(
     ctx,
     true,
   );
-  appendMembers(directAggregations, "aggregation", block, ctx, false);
   appendMembers(memberSections.associations ?? [], "association", block, ctx);
   appendMembers(memberSections.capabilities ?? [], "capability", block, ctx);
 
@@ -275,6 +250,10 @@ const MEMBER_CHILD_METADATA = new Set([
   "implementation",
   "bml:xml",
   "xml",
+  "abstract",
+  "final",
+  "language",
+  "status",
 ]);
 
 function isMemberMetadataChild(element: Element): boolean {
@@ -346,7 +325,7 @@ function mapMemberElement(
     mapPropertyValues(element, prop, typeFqn, ctx);
     mapSuggestions(element, prop, ctx);
     mapMemberGroups(element, prop, ctx);
-    return prop;
+    return finishMember(element, prop, ctx);
   }
 
   if (kind === "aggregation") {
@@ -373,12 +352,12 @@ function mapMemberElement(
       agg.composition = mapCompositionTemplate(element, name, ctx);
     }
     mapMemberGroups(element, agg, ctx);
-    return agg;
+    return finishMember(element, agg, ctx);
   }
 
   if (kind === "association") {
     const typeAttr = getAttribute(element, "type") ?? "";
-    return {
+    return finishMember(element, {
       ...base,
       kind: "association",
       type: parseTypeExpression(
@@ -388,7 +367,7 @@ function mapMemberElement(
         typeResolveOptions(ctx),
       ),
       cardinality: "0..n",
-    } satisfies AssociationDefinition;
+    } satisfies AssociationDefinition, ctx);
   }
 
   const capTypeAttr = getAttribute(element, "type") ?? "";
@@ -441,7 +420,32 @@ function mapMemberElement(
   if (implEl) {
     cap.implementation = mapImplementation(implEl, ctx);
   }
-  return cap;
+  return finishMember(element, cap, ctx);
+}
+
+function finishMember<T extends MemberDefinition>(
+  element: Element,
+  member: T,
+  ctx: MapContext,
+): T {
+  if (member.kind !== "aggregation") {
+    const unknown: UnknownXmlNode[] = [];
+    for (const child of elementChildren(element)) {
+      if (isMemberMetadataChild(child)) {
+        continue;
+      }
+      const local = elementLocalName(child);
+      if (local === "value" || local.endsWith(":value")) {
+        continue;
+      }
+      reportUnknownElement(child, ctx);
+      unknown.push(toUnknownXmlNode(child, ctx));
+    }
+    if (unknown.length > 0) {
+      member.unknownElements = unknown;
+    }
+  }
+  return member;
 }
 
 function parseMemberXmlRendering(
@@ -489,6 +493,20 @@ function mapMemberBase(
     if (v !== undefined) {
       base[flag] = parseBooleanAttribute(v);
     }
+  }
+  for (const child of elementChildren(element)) {
+    const local = elementLocalName(child);
+    if (local === "abstract" || local === "final") {
+      const raw = getTextOrAttr(child) ?? getAttribute(child, "value");
+      if (raw !== undefined) {
+        base[local] = parseBooleanAttribute(raw);
+      }
+    }
+  }
+
+  const unknownMemberAttrs = collectMemberGrammarAttributes(element, ctx);
+  if (unknownMemberAttrs) {
+    base.unknownAttributes = unknownMemberAttrs;
   }
 
   const xmlAttr = getAttribute(element, "bml:xml");
@@ -550,6 +568,10 @@ function mapMetadataFields(
   ctx: MapContext,
 ) {
   for (const child of elementChildren(element)) {
+    const extraAttrs = collectIdentityOrSectionAttributes(child, ctx);
+    if (extraAttrs) {
+      block.unknownAttributes = { ...block.unknownAttributes, ...extraAttrs };
+    }
     const local = elementLocalName(child);
     switch (local) {
       case "name":
@@ -1066,7 +1088,8 @@ export function mapDocumentBlock(
   filePath: string,
   source: string,
   bindings: Record<string, string>,
+  diagnostics: Diagnostic[] = [],
 ): BlockDefinition {
-  const ctx = createMapContext(filePath, source, bindings, { isRoot: true });
+  const ctx = createMapContext(filePath, source, bindings, { isRoot: true, diagnostics });
   return withElementLocation(filePath, source, element, () => mapBlockDefinition(element, ctx));
 }

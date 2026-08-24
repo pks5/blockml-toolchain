@@ -2,6 +2,7 @@ export type {
   SourceLocation,
   SourceInfo,
   XmlTrivia,
+  UnknownXmlNode,
   MemberSectionName,
   MetadataElementTrivia,
   XmlNodeKind,

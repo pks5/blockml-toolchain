@@ -35,9 +35,6 @@
     • targetPackages — registry name → npm package for plugin load
     • targetOptions — opaque per-target; keys = registry names
     • defaultTarget — compile default when target omitted; default blockdoc
-    • xsdValidation — default true; set false to skip authoring XSD checks on validate
-
-    Escape hatch: --no-xsd on validate overrides xsdValidation to false.
 
     Fields documented in MD but not read by V1 minimal CLI (later):
     thumbsDir, mbLibPath, openscadPath, activeConfig, bmlExtensions.

@@ -35,8 +35,8 @@
     Start reading at org.blockml.bml.target.xsd.documentation.Introduction (ReadNext chain).
 
     V1: emit universal bml.xsd (D1 lists + Definition extras), optional types.xsd /
-    service.xsd string vocabularies, and root catalog.xml. Authoring validation is
-    CLI-owned (--no-xsd), not this target.
+    service.xsd string vocabularies, and root catalog.xml. Generated schema is
+    non-authoritative; authoring validity is parse + validate, not this target.
 
     Layer separation:
     • Definition / docs 19 — bml:xml particle grammar

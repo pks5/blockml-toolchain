@@ -24,8 +24,32 @@ export const documentationBlocks = [
     Validator never mutates the input Urmodell. Abort-on-error is a host concern — not
     enforced inside the validator package.`,
     refs: [
-      { type: "valdocumentation:LayerSeparation", relation: "ReadNext" },
+      { type: "valdocumentation:ValidityContract", relation: "ReadNext" },
       { type: "bomdocumentation:Introduction", relation: "SeeAlso" },
+    ],
+  },
+  {
+    name: "ValidityContract",
+    is: "When a document is valid BML — parse plus semantic validate, not XSD",
+    doc: `valid BML = well-formed XML + valid BML structure + valid BML semantics.
+
+    Error classes: XML Syntax (parser; document may be null), Structural BML (parser;
+    unknown Gerüst), Semantic BML (this package / framework; unknown type, member, library).
+
+    XSD is a Render Target (blockml compile xsd) and is not consulted for validity.
+    Generated schema is non-authoritative: it must not encode rules parse+validate
+    do not enforce.
+
+    CLI blockml validate and LSP analyzeDocument consume the same parse + validate engine.
+
+    Preserve-on-error: structural/semantic errors keep a partial BOM. Residuals
+    (unknownElements / unknownAttributes / unknown instance memberValues) roundtrip
+    so Format/LSP does not delete typos. An error invalidates validity, not the document.
+
+    Unknown instance members stay in memberValues plus BML_UNKNOWN_PROPERTY error.`,
+    refs: [
+      { type: "valdocumentation:LayerSeparation", relation: "ReadNext" },
+      { type: "pardocumentation:StructuralGrammar", relation: "SeeAlso" },
     ],
   },
   {
@@ -61,8 +85,9 @@ export const documentationBlocks = [
     3. validateTypes(pragmaticModel, registry) → diagnostics[]
     4. validateVersions(pragmaticModel, registry) → append diagnostics
     5. validateConstraints(pragmaticModel, registry) → append diagnostics
-    6. success = no diagnostic with severity === "error"
-    7. Return ValidateResult { pragmaticModel?, diagnostics, success }
+    6. validateInstances / presets / visibility / readOnly / embeddedBlocks
+    7. success = no diagnostic with severity === "error"
+    8. Return ValidateResult { pragmaticModel?, diagnostics, success }
 
     When continueOnError === false and success === false, pragmaticModel is omitted
     from the result (early return with diagnostics only).`,

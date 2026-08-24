@@ -35,7 +35,6 @@
     <srcDir type="type:Text"><documentation>--src override. (optional)</documentation></srcDir>
     <libraries type="type:Text"><documentation>--libraries comma-separated override. (optional)</documentation></libraries>
     <include type="type:Text"><documentation>--include comma-separated for fatblock. (optional)</documentation></include>
-    <noXsd type="type:Boolean"><documentation>--no-xsd disables authoring XSD validation. (optional)</documentation></noXsd>
   </properties>
 
 </block>
