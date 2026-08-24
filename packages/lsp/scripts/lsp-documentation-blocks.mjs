@@ -147,8 +147,9 @@ export const documentationBlocks = [
     Urmodell tree. Parse-only — no validator. selectionRange equals range.
 
     onDefinition / onReferences: XML-token hitAt on the in-memory buffer, then
-    TypeRegistry from disk. F12 only on type QNames (LocationLink covers the
-    whole QName). includeDeclaration controls whether the defining block.source
+    TypeRegistry from disk. F12 on type QNames — prefix:Local, dotted FQN, or
+    unqualified PascalCase in a type slot (implicit namespace). LocationLink covers
+    the whole QName. includeDeclaration controls whether the defining block.source
     is included.
 
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.`,
@@ -213,9 +214,10 @@ export const documentationBlocks = [
 
     Definition and references share Hover's XML-token hit-test. F12 is only
     offered on type QNames and returns LocationLink with originSelectionRange
-    covering the whole prefix:Local (or dotted FQN). Targets and usages come
-    from the disk TypeRegistry (no unsaved overlay). includeDeclaration
-    defaults true.`,
+    covering the whole prefix:Local, dotted FQN, or unqualified PascalCase in a
+    type slot (implicit namespace). Language tags are not definitions. Targets
+    and usages come from the disk TypeRegistry (no unsaved overlay).
+    includeDeclaration defaults true.`,
     refs: [
       { type: "lspdocumentation:PublicApi", relation: "ReadNext" },
     ],

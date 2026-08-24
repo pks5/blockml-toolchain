@@ -1,5 +1,9 @@
 import type { BlockDefinition, MemberDefinition } from "@blockml/bom";
-import { parse } from "@blockml/parser";
+import {
+  parse,
+  resolveTypeName,
+  type ImplicitNamespaceContext,
+} from "@blockml/parser";
 import { resolveEffectiveMembers } from "@blockml/framework";
 import { bomLocationToRange, type LspPosition, type LspRange } from "./positions.js";
 import {
@@ -13,6 +17,19 @@ import {
 import type { WorkspaceState } from "./workspace.js";
 
 const MEMBER_SECTIONS = new Set(["properties", "aggregations", "associations", "capabilities"]);
+
+const TYPE_SLOT_ATTRIBUTES = new Set([
+  "type",
+  "baseType",
+  "inputType",
+  "outputType",
+  "language",
+  "contentLanguage",
+  "relation",
+  "defaultType",
+]);
+
+const TYPE_REF_SUGAR_PARENTS = new Set(["language", "contracts", "groups"]);
 
 const LANGUAGE_ELEMENT_NAMES = new Set([
   "block",
@@ -104,23 +121,51 @@ export function navigationFqn(hit: Hit): string | undefined {
 export function resolveAuthoredTypeRef(
   raw: string,
   bindings: Record<string, string>,
+  context?: ImplicitNamespaceContext,
 ): string | undefined {
   const trimmed = raw.trim();
   if (!trimmed) {
     return undefined;
   }
-  const colon = trimmed.indexOf(":");
-  if (colon > 0) {
-    const prefix = trimmed.slice(0, colon);
-    const local = trimmed.slice(colon + 1);
-    const ns = bindings[prefix];
-    if (!ns) {
+  const qualified = trimmed.includes(":") || trimmed.includes(".");
+  if (!qualified && context === undefined) {
+    return undefined;
+  }
+  try {
+    return resolveTypeName(trimmed, bindings, context ?? "type");
+  } catch {
+    return undefined;
+  }
+}
+
+function implicitContextFor(
+  token: XmlToken,
+  enclosing: MemberDefinition | undefined,
+): ImplicitNamespaceContext | undefined {
+  if (token.kind === "attributeValue") {
+    const attr = xmlLocalName(token.attributeName ?? "");
+    if (!TYPE_SLOT_ATTRIBUTES.has(attr)) {
       return undefined;
     }
-    return `${ns}.${local}`;
+    if (attr === "language" || attr === "contentLanguage") {
+      return "language";
+    }
+    if (attr === "relation") {
+      return "relation";
+    }
+    if (attr === "type" && enclosing?.kind === "capability") {
+      return "capability";
+    }
+    return "type";
   }
-  if (trimmed.includes(".")) {
-    return trimmed;
+  if (token.kind === "text") {
+    if (token.elementLocalName === "language") {
+      return "language";
+    }
+    if (token.elementLocalName === "status") {
+      return "status";
+    }
+    return undefined;
   }
   return undefined;
 }
@@ -281,6 +326,7 @@ export function hitAt(
 
   const bindings = parseResult.document.source.namespaceBindings ?? {};
   const enclosing = innermostBlock(parseResult.document.block, text, position) ?? parseResult.document.block;
+  const domain = enclosingMember(token, enclosing);
 
   if (
     (token.kind === "text" || token.kind === "attributeValue") &&
@@ -288,17 +334,29 @@ export function hitAt(
   ) {
     const qn = qnameAt(token, position, text);
     if (qn) {
-      const fqn = resolveAuthoredTypeRef(qn.text, bindings);
+      const fqn = resolveAuthoredTypeRef(qn.text, bindings, implicitContextFor(token, domain));
       if (fqn) {
         return { kind: "typeRef", fqn, block: enclosing, range: qn.range };
       }
     }
   }
 
-  if (token.kind === "elementName" && token.text.includes(":")) {
-    const fqn = resolveAuthoredTypeRef(token.text, bindings);
-    if (fqn) {
-      return { kind: "typeRef", fqn, block: enclosing, range: token.range };
+  if (token.kind === "elementName") {
+    const parent = parentLocal(token);
+    const isSugar =
+      !!parent &&
+      TYPE_REF_SUGAR_PARENTS.has(parent) &&
+      !LANGUAGE_ELEMENT_NAMES.has(token.elementLocalName);
+    if (token.text.includes(":") || isSugar) {
+      const context: ImplicitNamespaceContext | undefined = isSugar
+        ? parent === "language"
+          ? "language"
+          : "type"
+        : undefined;
+      const fqn = resolveAuthoredTypeRef(token.text, bindings, context);
+      if (fqn) {
+        return { kind: "typeRef", fqn, block: enclosing, range: token.range };
+      }
     }
   }
 

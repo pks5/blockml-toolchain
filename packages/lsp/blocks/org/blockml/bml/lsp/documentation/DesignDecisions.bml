@@ -61,9 +61,10 @@
 
     Definition and references share Hover's XML-token hit-test. F12 is only
     offered on type QNames and returns LocationLink with originSelectionRange
-    covering the whole prefix:Local (or dotted FQN). Targets and usages come
-    from the disk TypeRegistry (no unsaved overlay). includeDeclaration
-    defaults true.</documentation>
+    covering the whole prefix:Local, dotted FQN, or unqualified PascalCase in a
+    type slot (implicit namespace). Language tags are not definitions. Targets
+    and usages come from the disk TypeRegistry (no unsaved overlay).
+    includeDeclaration defaults true.</documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="ReadNext"></see>

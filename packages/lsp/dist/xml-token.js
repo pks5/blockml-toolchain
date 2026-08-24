@@ -1,4 +1,4 @@
-const QNAME_PATTERN = /[A-Za-z_][\w-]*:[A-Za-z_][\w.-]*|[A-Za-z_][\w-]*(?:\.[A-Za-z_][\w-]*){2,}/g;
+const QNAME_PATTERN = /[A-Za-z_][\w-]*:[A-Za-z_][\w.-]*|[A-Za-z_][\w-]*(?:\.[A-Za-z_][\w-]*){2,}|[A-Z][A-Za-z0-9]+/g;
 export function positionToOffset(text, position) {
     let remaining = position.line;
     let offset = 0;

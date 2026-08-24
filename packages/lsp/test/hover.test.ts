@@ -25,6 +25,21 @@ const HOVER_BML = [
   "</block>",
 ].join("\n");
 
+const HOVER_UNQUALIFIED_BML = [
+  '<block xmlns="http://blockml.org/bml"',
+  ' xmlns:core="org.blockml.bml.core"',
+  ' xmlns:test="com.blockml.test.hover">',
+  "  <name>HoverMe</name>",
+  "  <type>test:HoverMe</type>",
+  "  <baseType>core:Block</baseType>",
+  "  <properties>",
+  '    <count type="Integer">',
+  "      <documentation>item count</documentation>",
+  "    </count>",
+  "  </properties>",
+  "</block>",
+].join("\n");
+
 function positionAt(text: string, needle: string, offsetInNeedle = 1): { line: number; character: number } {
   const idx = text.indexOf(needle);
   if (idx === -1) {
@@ -117,6 +132,21 @@ describe("hoverAt", () => {
     expect(value).not.toBeNull();
     expect(value!.contents.value).toContain("org.blockml.bml.type.Integer");
     expect(value!.range).toEqual(rangeOf(HOVER_BML, "type:Integer"));
+  });
+
+  it("shows Integer docs on unqualified type=Integer, not PropertyDefinition.type", () => {
+    const workspace = createWorkspace(ROOT);
+    const value = hoverAt(
+      HOVER_UNQUALIFIED_BML,
+      "hover.bml",
+      positionAt(HOVER_UNQUALIFIED_BML, "Integer"),
+      workspace,
+    );
+    expect(value).not.toBeNull();
+    expect(value!.contents.value).toContain("org.blockml.bml.type.Integer");
+    expect(value!.contents.value).not.toContain("**type**");
+    expect(value!.contents.value).not.toContain(PROPERTY_DEF);
+    expect(value!.range).toEqual(rangeOf(HOVER_UNQUALIFIED_BML, "Integer"));
   });
 
   it("returns null outside the document and for invalid XML", () => {

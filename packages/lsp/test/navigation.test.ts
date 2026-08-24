@@ -26,6 +26,24 @@ const NAV_BML = [
   "</block>",
 ].join("\n");
 
+const UNQUALIFIED_BML = [
+  '<block xmlns="http://blockml.org/bml"',
+  ' xmlns:core="org.blockml.bml.core"',
+  ' xmlns:test="com.blockml.test.nav">',
+  "  <name>NavMe</name>",
+  "  <type>test:NavMe</type>",
+  "  <baseType>core:Block</baseType>",
+  "  <language>",
+  "    <English />",
+  "  </language>",
+  "  <properties>",
+  '    <count type="Integer">',
+  "      <documentation>item count</documentation>",
+  "    </count>",
+  "  </properties>",
+  "</block>",
+].join("\n");
+
 function positionAt(text: string, needle: string, offsetInNeedle = 1): { line: number; character: number } {
   const idx = text.indexOf(needle);
   if (idx === -1) {
@@ -82,6 +100,25 @@ describe("definitionAt / referencesAt", () => {
     expect(fromValue).toHaveLength(1);
     expect(fromValue![0]!.target.uri).toMatch(/type\/Integer\.bml$/);
     expect(fromValue![0]!.originSelectionRange).toEqual(rangeOf(NAV_BML, "type:Integer"));
+  });
+
+  it("jumps from unqualified Integer and English, not from language tags", () => {
+    const workspace = createWorkspace(ROOT);
+    expect(definitionAt(UNQUALIFIED_BML, "nav.bml", positionAt(UNQUALIFIED_BML, "<count "), workspace)).toBeNull();
+    expect(definitionAt(UNQUALIFIED_BML, "nav.bml", positionAt(UNQUALIFIED_BML, "<type>"), workspace)).toBeNull();
+    expect(definitionAt(UNQUALIFIED_BML, "nav.bml", positionAt(UNQUALIFIED_BML, "<language>"), workspace)).toBeNull();
+
+    const fromType = definitionAt(UNQUALIFIED_BML, "nav.bml", positionAt(UNQUALIFIED_BML, "Integer"), workspace);
+    expect(fromType).not.toBeNull();
+    expect(fromType).toHaveLength(1);
+    expect(fromType![0]!.target.uri).toMatch(/type\/Integer\.bml$/);
+    expect(fromType![0]!.originSelectionRange).toEqual(rangeOf(UNQUALIFIED_BML, "Integer"));
+
+    const fromLanguage = definitionAt(UNQUALIFIED_BML, "nav.bml", positionAt(UNQUALIFIED_BML, "English"), workspace);
+    expect(fromLanguage).not.toBeNull();
+    expect(fromLanguage).toHaveLength(1);
+    expect(fromLanguage![0]!.target.uri).toMatch(/language\/English\.bml$/);
+    expect(fromLanguage![0]!.originSelectionRange).toEqual(rangeOf(UNQUALIFIED_BML, "English"));
   });
 
   it("includes the core:Block declaration and a disk usage of baseType", () => {

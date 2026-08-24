@@ -24,7 +24,7 @@ export interface QNameToken {
 }
 
 const QNAME_PATTERN =
-  /[A-Za-z_][\w-]*:[A-Za-z_][\w.-]*|[A-Za-z_][\w-]*(?:\.[A-Za-z_][\w-]*){2,}/g;
+  /[A-Za-z_][\w-]*:[A-Za-z_][\w.-]*|[A-Za-z_][\w-]*(?:\.[A-Za-z_][\w-]*){2,}|[A-Z][A-Za-z0-9]+/g;
 
 export function positionToOffset(text: string, position: LspPosition): number {
   let remaining = position.line;

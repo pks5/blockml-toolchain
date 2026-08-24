@@ -70,4 +70,32 @@ describe("qnameAt", () => {
     const qn = qnameAt(token!, positionAt(SAMPLE, "(core:Block)", 2), SAMPLE);
     expect(qn?.text).toBe("core:Block");
   });
+
+  it("covers an unqualified PascalCase name in a type attribute", () => {
+    const token = xmlTokenAt(SAMPLE, positionAt(SAMPLE, "TypeReference"));
+    expect(token?.kind).toBe("attributeValue");
+    const qn = qnameAt(token!, positionAt(SAMPLE, "TypeReference"), SAMPLE);
+    expect(qn?.text).toBe("TypeReference");
+    const expected = offsetRangeToLsp(
+      SAMPLE,
+      SAMPLE.indexOf("TypeReference"),
+      SAMPLE.indexOf("TypeReference") + "TypeReference".length,
+    );
+    expect(qn?.range).toEqual(expected);
+  });
+
+  it("covers unqualified Integer in type=\"Integer\"", () => {
+    const source = '<count type="Integer">';
+    const token = xmlTokenAt(source, positionAt(source, "Integer"));
+    expect(token?.kind).toBe("attributeValue");
+    const qn = qnameAt(token!, positionAt(source, "Integer"), source);
+    expect(qn?.text).toBe("Integer");
+  });
+
+  it("does not match lowercase words in documentation text", () => {
+    const token = xmlTokenAt(SAMPLE, positionAt(SAMPLE, "item count"));
+    expect(token?.kind).toBe("text");
+    expect(qnameAt(token!, positionAt(SAMPLE, "item count"), SAMPLE)).toBeNull();
+    expect(qnameAt(token!, positionAt(SAMPLE, "item count", 5), SAMPLE)).toBeNull();
+  });
 });

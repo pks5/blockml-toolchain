@@ -120,7 +120,7 @@ const capabilities = [
     prefix: "lspcap",
     name: "DefinitionAt",
     is: "Go-to-definition from a type QName via TypeRegistry",
-    doc: "Parse-only XML-token hit-test. Only resolvable type QNames (prefix:Local or dotted FQN in text or attribute values) are jump targets. Returns LocationLink[]: originSelectionRange covers the whole QName; target is registry.get(fqn).block.source. Language tags and concrete member tags are not definitions. Unknown FQN, no hit, or no document → null. Disk TypeRegistry only.",
+    doc: "Parse-only XML-token hit-test. Resolvable type QNames (prefix:Local, dotted FQN, or unqualified PascalCase in a type slot via implicit namespace) are jump targets. Returns LocationLink[]: originSelectionRange covers the whole QName; target is registry.get(fqn).block.source. Language tags and concrete member tags are not definitions. Unknown FQN, no hit, or no document → null. Disk TypeRegistry only.",
     tsExport: "definitionAt",
     inputs: [
       { name: "text", type: "type:Text", required: true },
