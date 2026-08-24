@@ -33,6 +33,15 @@ describe("parser source spans", () => {
     expect(count!.source!.endColumn).toBeGreaterThan(count!.source!.column);
   });
 
+  it("records typeSource on the type attribute value", () => {
+    const result = parse(NESTED, { filePath: "spans.bml", continueOnError: true });
+    const count = result.document!.block.members.find((m) => m.name === "count");
+    expect(count?.typeSource).toBeDefined();
+    expect(count!.typeSource!.line).toBeGreaterThan(1);
+    expect(count!.typeSource!.endColumn).toBeDefined();
+    expect(count!.typeSource!.endColumn).toBeGreaterThan(count!.typeSource!.column);
+  });
+
   it("gives nested blocks distinct start lines", () => {
     const result = parse(NESTED, { filePath: "spans.bml", continueOnError: true });
     expect(result.document).not.toBeNull();

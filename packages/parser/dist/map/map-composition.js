@@ -1,9 +1,9 @@
 import { parseDirectives, parseBmlMeta } from "./directives.js";
 import { parseMemberValue } from "./member-value.js";
 import { elementChildren, elementLocalName, elementPrefix, getAttribute, isElement, xmlTriviaFromElement, } from "../util/xml.js";
-import { resolveBlockReference, resolvePrefix, resolveTypeName, TYPE_REFERENCE_ENTITY, } from "../util/qname.js";
+import { resolveBlockReference, resolvePrefix, resolveTypeName, TYPE_REFERENCE_ENTITY, elementSourceLoc, } from "../util/qname.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
-import { elementSourceLoc } from "../util/qname.js";
+import { withElementLocation } from "../util/mapping-error.js";
 const MEMBER_SECTIONS = new Set([
     "properties",
     "aggregations",
@@ -89,18 +89,8 @@ export function mapBlockInstanceNode(element, ctx) {
     const local = elementLocalName(element);
     const prefix = elementPrefix(element);
     const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
-    let typeFqn;
-    if (element.childNodes.length === 0 &&
-        !element.hasAttributes()) {
-        typeFqn = resolveBlockReference(prefix ? `${prefix}:${local}` : local, ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType);
-    }
-    else if (element.childNodes.length === 0 &&
-        Object.keys(element.attributes ?? {}).length <= 2) {
-        typeFqn = resolveBlockReference(prefix ? `${prefix}:${local}` : local, ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType);
-    }
-    else {
-        typeFqn = resolveBlockReference(prefix ? `${prefix}:${local}` : local, ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType);
-    }
+    const qname = prefix ? `${prefix}:${local}` : local;
+    const typeFqn = withElementLocation(ctx.filePath, ctx.source, element, () => resolveBlockReference(qname, ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType));
     const meta = parseBmlMeta(element, typeFqn, ctx.filePath, loc);
     const memberValues = {};
     if (element.attributes) {

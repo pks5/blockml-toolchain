@@ -28,7 +28,6 @@
   <baseType>bom:UrmodellType</baseType>
   <is>Minimal TypeRegistry surface for ValidateOptions</is>
 
-  <documentation>TypeScript interface — get(fqn) and has(fqn). Full TypeRegistry in
-    @blockml/framework implements this reader for ValidateOptions.typeRegistry injection.</documentation>
+  <documentation>TypeScript interface — get(fqn) and has(fqn). Full TypeRegistry in @blockml/framework implements this reader for ValidateOptions.typeRegistry injection.</documentation>
 
 </block>

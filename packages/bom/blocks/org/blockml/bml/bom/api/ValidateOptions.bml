@@ -28,13 +28,11 @@
   <baseType>bom:UrmodellType</baseType>
   <is>Options for validate() (Stage 2)</is>
 
-  <documentation>Options for @blockml/validator validate(). When typeRegistry is omitted,
-    bootstrapPaths and/or libraryPaths (or framework default paths) populate the registry.
-    libraryPaths selects library-graph bootstrap mode (Library.bml dependency order).</documentation>
+  <documentation>Options for @blockml/validator validate(). When typeRegistry is omitted, bootstrapPaths and/or libraryPaths (or framework default paths) populate the registry. libraryPaths selects library-graph bootstrap mode (Library.bml dependency order).</documentation>
 
   <properties>
     <typeRegistry type="bomapi:TypeRegistryReader">
-      <documentation>Pre-built registry surface — optional. Implemented by @blockml/framework TypeRegistry.</documentation>
+      <documentation>Pre-built registry surface — optional. Implemented by @blockml/framework TypeRegistry. (optional)</documentation>
     </typeRegistry>
     <bootstrapPaths type="type:Text[]">
       <documentation>Directories scanned for .bml when typeRegistry omitted (corpus mode). (optional)</documentation>

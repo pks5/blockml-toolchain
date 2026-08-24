@@ -117,7 +117,9 @@ export const documentationBlocks = [
     Behaviour:
     • B24 detect → [2] xmldom → [3]–[5] map
     • Hard fail → document: null (unsupported format, missing root, invalid root)
-    • Mapping errors → BML_MAP_ERROR; with continueOnError still return document when possible
+    • Mapping errors → inner BML_* code with use-site Diagnostic.source when MappingError
+      carries a span; otherwise BML_MAP_ERROR at 1:1. continueOnError still returns
+      document when possible
     • Sync only; no throw on recoverable errors
     • Does NOT call validator; does NOT expand directives`,
     refs: [
@@ -341,6 +343,9 @@ export const documentationBlocks = [
     • BML_UNKNOWN_NAMESPACE_PREFIX, BML_UNQUALIFIED_BLOCK_REFERENCE
     • BML_UNKNOWN_TYPE — type expression parse failure
     • BML_INVALID_TYPE_REFERENCE — ill-formed type expression (ungrouped stacked multiplicity)
+
+    Map-time diagnostics attach Diagnostic.source to the use-site token when known
+    (attribute value or first occurrence in the throwing element), not the document root.
 
     Host policy: whether to abort after diagnostics is orchestrator decision.
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic.`,

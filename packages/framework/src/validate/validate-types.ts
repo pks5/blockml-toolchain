@@ -8,6 +8,8 @@ import type {
   MemberDefinition,
   MemberValue,
   PropertyDefinition,
+  SourceLocation,
+  TypeExpression,
 } from "@blockml/bom";
 import type { TypeRegistry } from "../registry/type-registry.js";
 import { parseExpression } from "../expression/parse-expression.js";
@@ -15,15 +17,101 @@ import {
   memberIdentityKey,
   resolveEffectiveMembers,
 } from "../resolve/resolve-effective-members.js";
+import { isWellKnownTypeFqn } from "@blockml/parser";
 
 function diag(
   code: string,
   message: string,
   file: string,
-  line = 1,
-  column = 1,
+  loc?: Pick<SourceLocation, "line" | "column" | "endLine" | "endColumn" | "file">,
 ): Diagnostic {
-  return { severity: "error", code, message, source: { file, line, column } };
+  const source: SourceLocation = {
+    file: loc?.file ?? file,
+    line: loc?.line ?? 1,
+    column: loc?.column ?? 1,
+  };
+  if (loc?.endLine !== undefined) {
+    source.endLine = loc.endLine;
+  }
+  if (loc?.endColumn !== undefined) {
+    source.endColumn = loc.endColumn;
+  }
+  return { severity: "error", code, message, source };
+}
+
+function typeIsKnown(fqn: string, registry: TypeRegistry): boolean {
+  return registry.has(fqn) || isWellKnownTypeFqn(fqn);
+}
+
+function walkNamedTypes(expr: TypeExpression | undefined, visit: (fqn: string) => void): void {
+  if (!expr) {
+    return;
+  }
+  switch (expr.kind) {
+    case "named":
+      visit(expr.fqn);
+      for (const arg of expr.typeArguments ?? []) {
+        walkNamedTypes(arg, visit);
+      }
+      break;
+    case "union":
+      for (const alt of expr.alternatives) {
+        walkNamedTypes(alt, visit);
+      }
+      break;
+    case "grouped":
+      walkNamedTypes(expr.expression, visit);
+      break;
+    case "anonymousStruct":
+      for (const field of expr.fields) {
+        walkNamedTypes(field.type, visit);
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+function validateMemberTypes(
+  member: MemberDefinition,
+  registry: TypeRegistry,
+  file: string,
+  diagnostics: Diagnostic[],
+): void {
+  const loc = member.typeSource ?? member.source;
+  const report = (fqn: string) => {
+    if (!typeIsKnown(fqn, registry)) {
+      diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, loc));
+    }
+  };
+
+  if (member.kind === "property") {
+    if (member.type) {
+      walkNamedTypes(member.type, report);
+    } else if (member.typeFqn) {
+      report(member.typeFqn);
+    }
+  } else if (member.kind === "aggregation" || member.kind === "association") {
+    walkNamedTypes(member.type, report);
+  } else if (member.kind === "capability") {
+    if (member.typeFqn) {
+      report(member.typeFqn);
+    }
+    walkNamedTypes(member.inputType, (fqn) => {
+      if (!typeIsKnown(fqn, registry)) {
+        diagnostics.push(
+          diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, member.inputTypeSource ?? loc),
+        );
+      }
+    });
+    walkNamedTypes(member.outputType, (fqn) => {
+      if (!typeIsKnown(fqn, registry)) {
+        diagnostics.push(
+          diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, member.outputTypeSource ?? loc),
+        );
+      }
+    });
+  }
 }
 
 function literalNumber(val: MemberValue | undefined): number | undefined {
@@ -45,8 +133,7 @@ function validateBlockDefinition(
         "BML_UNKNOWN_BASE_TYPE",
         `Unknown baseType: ${block.baseType}`,
         file,
-        block.source?.line,
-        block.source?.column,
+        block.baseTypeSource ?? block.source,
       ),
     );
   }
@@ -58,8 +145,7 @@ function validateBlockDefinition(
           "BML_UNKNOWN_CONTRACT",
           `Unknown contract: ${ref.value}`,
           file,
-          block.source?.line,
-          block.source?.column,
+          block.source,
         ),
       );
     }
@@ -75,8 +161,7 @@ function validateBlockDefinition(
           "BML_MEMBER_COLLISION",
           `Duplicate effective member identity: ${key}`,
           file,
-          member.source?.line,
-          member.source?.column,
+          member.source,
         ),
       );
     }
@@ -84,6 +169,7 @@ function validateBlockDefinition(
   }
 
   for (const member of block.members) {
+    validateMemberTypes(member, registry, file, diagnostics);
     const skipOverrideCheck =
       member.kind === "aggregation" &&
       (member.composition !== undefined || member.default === true);
@@ -103,8 +189,7 @@ function validateBlockDefinition(
             "BML_OVERRIDE_WITHOUT_PARENT",
             `override without parent member: ${member.name}`,
             file,
-            member.source?.line,
-            member.source?.column,
+            member.source,
           ),
         );
       }
@@ -121,8 +206,7 @@ function validateBlockDefinition(
             "BML_OVERRIDE_REQUIRED",
             `override required for redeclared member: ${member.name}`,
             file,
-            member.source?.line,
-            member.source?.column,
+            member.source,
           ),
         );
       }
@@ -155,8 +239,7 @@ function validatePropertyExpressions(
           "BML_EXPRESSION_PARSE_ERROR",
           `${label}: ${parsed.error.message}`,
           file,
-          expr.source?.line,
-          expr.source?.column,
+          expr.source,
         ),
       );
     }
@@ -181,8 +264,7 @@ function validateInstanceExpressions(
             "BML_EXPRESSION_PARSE_ERROR",
             `${name}: ${parsed.error.message}`,
             file,
-            val.source?.line,
-            val.source?.column,
+            val.source,
           ),
         );
       }

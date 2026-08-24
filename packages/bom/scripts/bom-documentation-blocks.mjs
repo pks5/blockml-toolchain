@@ -292,7 +292,7 @@ export const documentationBlocks = [
   {
     name: "ValidationResponsibilities",
     is: "Full validator checklist on BomDocument",
-    doc: `Parser produces BomDocument. Validator (@blockml/validator + @blockml/core) checks:
+    doc: `Parser produces BomDocument. Validator (@blockml/validator + @blockml/framework) checks:
 
     Member namespace uniqueness; baseType in TypeRegistry; property values inline deep copies;
     resolveEffectiveMembers for expression refs; effective version (BML_MISSING_VERSION);

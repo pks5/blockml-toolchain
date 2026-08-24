@@ -21,10 +21,11 @@ import {
   resolvePrefix,
   resolveTypeName,
   TYPE_REFERENCE_ENTITY,
+  elementSourceLoc,
 } from "../util/qname.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
 import type { MapContext } from "./context.js";
-import { elementSourceLoc } from "../util/qname.js";
+import { withElementLocation } from "../util/mapping-error.js";
 
 const MEMBER_SECTIONS = new Set([
   "properties",
@@ -130,35 +131,10 @@ export function mapBlockInstanceNode(
   const prefix = elementPrefix(element);
   const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
 
-  let typeFqn: string;
-  if (
-    element.childNodes.length === 0 &&
-    !element.hasAttributes()
-  ) {
-    typeFqn = resolveBlockReference(
-      prefix ? `${prefix}:${local}` : local,
-      ctx.bindings,
-      ctx.subBlockIndex,
-      ctx.parentBlockType,
-    );
-  } else if (
-    element.childNodes.length === 0 &&
-    Object.keys(element.attributes ?? {}).length <= 2
-  ) {
-    typeFqn = resolveBlockReference(
-      prefix ? `${prefix}:${local}` : local,
-      ctx.bindings,
-      ctx.subBlockIndex,
-      ctx.parentBlockType,
-    );
-  } else {
-    typeFqn = resolveBlockReference(
-      prefix ? `${prefix}:${local}` : local,
-      ctx.bindings,
-      ctx.subBlockIndex,
-      ctx.parentBlockType,
-    );
-  }
+  const qname = prefix ? `${prefix}:${local}` : local;
+  const typeFqn = withElementLocation(ctx.filePath, ctx.source, element, () =>
+    resolveBlockReference(qname, ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType),
+  );
 
   const meta = parseBmlMeta(element, typeFqn, ctx.filePath, loc);
   const memberValues: Record<string, ReturnType<typeof parseMemberValue>> = {};

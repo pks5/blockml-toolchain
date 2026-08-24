@@ -19,4 +19,18 @@ export declare function elementSourceLoc(file: string, source: string, element: 
     lineNumber?: number;
     columnNumber?: number;
 }): SourceLocation;
+/** Span of an attribute value inside the element's start tag. */
+declare function attributeValueLoc(file: string, source: string, element: {
+    nodeName: string;
+    lineNumber?: number;
+    columnNumber?: number;
+}, attrName: string, attrValue: string): SourceLocation | undefined;
+/** First occurrence of `needle` (or `needle:`) within the element's source span. */
+declare function locateNeedleNearElement(file: string, source: string, element: {
+    nodeName: string;
+    lineNumber?: number;
+    columnNumber?: number;
+}, needle: string): SourceLocation | undefined;
+declare function isWellKnownTypeFqn(fqn: string): boolean;
+export { attributeValueLoc, isWellKnownTypeFqn, locateNeedleNearElement };
 //# sourceMappingURL=qname.d.ts.map

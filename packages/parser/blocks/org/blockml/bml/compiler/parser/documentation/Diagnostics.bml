@@ -42,6 +42,9 @@
     • BML_UNKNOWN_TYPE — type expression parse failure
     • BML_INVALID_TYPE_REFERENCE — ill-formed type expression (ungrouped stacked multiplicity)
 
+    Map-time diagnostics attach Diagnostic.source to the use-site token when known
+    (attribute value or first occurrence in the throwing element), not the document root.
+
     Host policy: whether to abort after diagnostics is orchestrator decision.
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic.</documentation>
 

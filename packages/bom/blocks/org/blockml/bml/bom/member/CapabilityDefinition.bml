@@ -44,6 +44,12 @@
     <outputType type="bomtype:TypeDescriptor">
       <documentation>outputType (optional). TS type: bomtype:TypeDescriptor.</documentation>
     </outputType>
+    <inputTypeSource type="bomcommon:SourceLocation">
+      <documentation>Span of the inputType= attribute value. (optional)</documentation>
+    </inputTypeSource>
+    <outputTypeSource type="bomcommon:SourceLocation">
+      <documentation>Span of the outputType= attribute value. (optional)</documentation>
+    </outputTypeSource>
     <implementation type="bommember:ImplementationBlock">
       <documentation>implementation (optional). TS type: bommember:ImplementationBlock.</documentation>
     </implementation>

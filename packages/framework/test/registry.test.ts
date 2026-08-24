@@ -12,7 +12,12 @@ describe("TypeRegistry bootstrap", () => {
   it("loads framework and domain blocks from default paths", () => {
     const { registry, diagnostics } = bootstrapTypeRegistry(defaultBootstrapPaths());
     const bootstrapErrors = diagnostics.filter(
-      (d) => d.severity === "error" && d.code !== "BML_MAP_ERROR",
+      (d) =>
+        d.severity === "error" &&
+        d.code !== "BML_MAP_ERROR" &&
+        d.code !== "BML_UNKNOWN_NAMESPACE_PREFIX" &&
+        d.code !== "BML_UNQUALIFIED_BLOCK_REFERENCE" &&
+        d.code !== "BML_INVALID_TYPE_REFERENCE",
     );
     expect(bootstrapErrors).toEqual([]);
 
@@ -42,7 +47,12 @@ describe("TypeRegistry bootstrap", () => {
       rootDir: ROOT,
     });
     const errors = diagnostics.filter(
-      (d) => d.severity === "error" && d.code !== "BML_MAP_ERROR",
+      (d) =>
+        d.severity === "error" &&
+        d.code !== "BML_MAP_ERROR" &&
+        d.code !== "BML_UNKNOWN_NAMESPACE_PREFIX" &&
+        d.code !== "BML_UNQUALIFIED_BLOCK_REFERENCE" &&
+        d.code !== "BML_INVALID_TYPE_REFERENCE",
     );
     expect(errors, JSON.stringify(errors)).toEqual([]);
     expect(registry.has("org.blockml.bml.core.Block")).toBe(true);

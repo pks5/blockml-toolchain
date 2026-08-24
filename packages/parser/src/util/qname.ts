@@ -352,3 +352,83 @@ export function elementSourceLoc(
     endColumn: end.column,
   };
 }
+
+function locationFromOffsets(
+  file: string,
+  source: string,
+  startOffset: number,
+  endOffset: number,
+): SourceLocation {
+  const start = offsetToLineColumn(source, startOffset);
+  const end = offsetToLineColumn(source, endOffset);
+  return {
+    file,
+    line: start.line,
+    column: start.column,
+    endLine: end.line,
+    endColumn: end.column,
+  };
+}
+
+/** Span of an attribute value inside the element's start tag. */
+function attributeValueLoc(
+  file: string,
+  source: string,
+  element: { nodeName: string; lineNumber?: number; columnNumber?: number },
+  attrName: string,
+  attrValue: string,
+): SourceLocation | undefined {
+  const start = startOffsetForElement(source, element);
+  const gt = source.indexOf(">", start);
+  if (gt === -1) {
+    return undefined;
+  }
+  const startTag = source.slice(start, gt + 1);
+  for (const q of ['"', "'"] as const) {
+    const needle = `${attrName}=${q}${attrValue}${q}`;
+    const idx = startTag.indexOf(needle);
+    if (idx !== -1) {
+      const valueStart = start + idx + attrName.length + 2;
+      return locationFromOffsets(file, source, valueStart, valueStart + attrValue.length);
+    }
+  }
+  return undefined;
+}
+
+/** First occurrence of `needle` (or `needle:`) within the element's source span. */
+function locateNeedleNearElement(
+  file: string,
+  source: string,
+  element: { nodeName: string; lineNumber?: number; columnNumber?: number },
+  needle: string,
+): SourceLocation | undefined {
+  const start = startOffsetForElement(source, element);
+  const end = findElementEndOffset(source, start, element.nodeName);
+  const slice = source.slice(start, end);
+  const withColon = `${needle}:`;
+  let idx = slice.indexOf(withColon);
+  let len = withColon.length;
+  if (idx === -1) {
+    idx = slice.indexOf(needle);
+    len = needle.length;
+  }
+  if (idx === -1) {
+    return undefined;
+  }
+  return locationFromOffsets(file, source, start + idx, start + idx + len);
+}
+
+const WELL_KNOWN_TYPE_FQNS = new Set<string>([
+  ...Object.values(PRIMITIVE_TYPES),
+  ...Object.values(CAPABILITY_TYPES),
+  ...Object.values(LANGUAGE_TYPES),
+  ...Object.values(STATUS_TYPES),
+  ...Object.values(RELATION_TYPES),
+  "bml:Self",
+]);
+
+function isWellKnownTypeFqn(fqn: string): boolean {
+  return WELL_KNOWN_TYPE_FQNS.has(fqn);
+}
+
+export { attributeValueLoc, isWellKnownTypeFqn, locateNeedleNearElement };

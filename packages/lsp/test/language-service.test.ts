@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse } from "@blockml/parser";
-import { analyzeDocument, createWorkspace } from "../src/index.js";
+import { analyzeDocument, createWorkspace, diagnosticToLsp } from "../src/index.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
 
@@ -30,5 +30,28 @@ describe("analyzeDocument", () => {
     expect(
       result.diagnostics.some((d) => d.code === "BML_CONSTRAINT_VIOLATION"),
     ).toBe(true);
+  });
+
+  it("places unknown prefix diagnostics on the property line", () => {
+    const text = [
+      '<block xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:type="org.blockml.bml.type"',
+      ' xmlns:test="com.blockml.test.lsp">',
+      "  <type>test:Sample</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <properties>",
+      '    <count type="foo:Bar" />',
+      "  </properties>",
+      "</block>",
+    ].join("\n");
+    const workspace = createWorkspace(ROOT);
+    const result = analyzeDocument(text, "unknown-prefix.bml", workspace);
+    const diag = result.diagnostics.find((d) => d.code === "BML_UNKNOWN_NAMESPACE_PREFIX");
+    expect(diag).toBeDefined();
+    expect(diag!.source.line).toBeGreaterThan(1);
+    const lsp = diagnosticToLsp(diag!, text);
+    expect(lsp.range.start.line).toBeGreaterThan(0);
   });
 });

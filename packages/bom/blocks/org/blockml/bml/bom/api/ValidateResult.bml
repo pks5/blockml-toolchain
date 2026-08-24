@@ -28,12 +28,11 @@
   <baseType>bom:UrmodellType</baseType>
   <is>Result of validate() (Stage 2)</is>
 
-  <documentation>Result of @blockml/validator validate(). success is false when any diagnostic
-    has severity error. pragmaticModel is the forked working copy when validation ran.</documentation>
+  <documentation>Result of @blockml/validator validate(). success is false when any diagnostic has severity error. pragmaticModel is the forked working copy when validation ran.</documentation>
 
   <properties>
     <pragmaticModel type="bomdoc:BomDocument">
-      <documentation>Pragmatic model fork — optional. TS type: bomdoc:BomDocument | undefined.</documentation>
+      <documentation>Pragmatic model fork — optional. TS type: bomdoc:BomDocument | undefined. (optional)</documentation>
     </pragmaticModel>
     <diagnostics type="bomcommon:Diagnostic[]">
       <documentation>diagnostics (required). TS type: bomcommon:Diagnostic[].</documentation>

@@ -300,7 +300,7 @@ const blocks = [
     prefix: "bomtype",
     name: "GroupedTypeExpression",
     is: "Parenthesized type expression with optional outer multiplicity",
-    doc: "Grouping wrapper for nested multiplicity, e.g. (T[])[] or (A | B)[].",
+    doc: "Grouping wrapper for nested multiplicity, e.g. (T[])[] or (A | B)[]. Inner expression may itself carry multiplicity.",
     baseType: "bomtype:TypeExpression",
     kind: "grouped",
     fields: [
@@ -503,7 +503,7 @@ const blocks = [
       { name: "memberSectionTrivia", type: "type:Text", doc: "Partial<Record<MemberSectionName, XmlTrivia>>." },
       { name: "metadataTrivia", type: "bomcommon:MetadataElementTrivia" },
       { name: "source", type: "bomcommon:SourceLocation" },
-      { name: "typeSource", type: "bomcommon:SourceLocation" },
+      { name: "typeSource", type: "bomcommon:SourceLocation", doc: "Span of the type= attribute or <type> element value." },
       { name: "baseTypeSource", type: "bomcommon:SourceLocation" },
     ],
   },
@@ -540,6 +540,7 @@ const blocks = [
       { name: "constraints", type: "bomcomp:BlockInstance[]" },
       { name: "xmlTrivia", type: "bomcommon:XmlTrivia" },
       { name: "source", type: "bomcommon:SourceLocation" },
+      { name: "typeSource", type: "bomcommon:SourceLocation", doc: "Span of the type= attribute value (use-site for type diagnostics)." },
     ],
   },
   {
@@ -644,6 +645,8 @@ const blocks = [
       { name: "typeFqn", type: "type:Text", required: true },
       { name: "inputType", type: "bomtype:TypeDescriptor" },
       { name: "outputType", type: "bomtype:TypeDescriptor" },
+      { name: "inputTypeSource", type: "bomcommon:SourceLocation", doc: "Span of the inputType= attribute value." },
+      { name: "outputTypeSource", type: "bomcommon:SourceLocation", doc: "Span of the outputType= attribute value." },
       { name: "implementation", type: "bommember:ImplementationBlock" },
     ],
   },
@@ -859,6 +862,39 @@ const blocks = [
       { name: "success", type: "type:Boolean", required: true },
     ],
   },
+  {
+    pkg: "api",
+    prefix: "bomapi",
+    name: "TypeRegistryReader",
+    is: "Minimal TypeRegistry surface for ValidateOptions",
+    doc: "TypeScript interface — get(fqn) and has(fqn). Full TypeRegistry in @blockml/framework implements this reader for ValidateOptions.typeRegistry injection.",
+    fields: [],
+  },
+  {
+    pkg: "api",
+    prefix: "bomapi",
+    name: "ValidateResult",
+    is: "Result of validate() (Stage 2)",
+    doc: "Result of @blockml/validator validate(). success is false when any diagnostic has severity error. pragmaticModel is the forked working copy when validation ran.",
+    fields: [
+      { name: "pragmaticModel", type: "bomdoc:BomDocument", doc: "Pragmatic model fork — optional. TS type: bomdoc:BomDocument | undefined." },
+      { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true },
+      { name: "success", type: "type:Boolean", required: true },
+    ],
+  },
+  {
+    pkg: "api",
+    prefix: "bomapi",
+    name: "ValidateOptions",
+    is: "Options for validate() (Stage 2)",
+    doc: "Options for @blockml/validator validate(). When typeRegistry is omitted, bootstrapPaths and/or libraryPaths (or framework default paths) populate the registry. libraryPaths selects library-graph bootstrap mode (Library.bml dependency order).",
+    fields: [
+      { name: "typeRegistry", type: "bomapi:TypeRegistryReader", doc: "Pre-built registry surface — optional. Implemented by @blockml/framework TypeRegistry." },
+      { name: "bootstrapPaths", type: "type:Text[]", doc: "Directories scanned for .bml when typeRegistry omitted (corpus mode)." },
+      { name: "libraryPaths", type: "type:Text[]", doc: "Library.bml file paths for library-graph bootstrap when typeRegistry omitted." },
+      { name: "continueOnError", type: "type:Boolean", doc: "Default: true — continue after errors; still attach pragmaticModel when possible." },
+    ],
+  },
 
   // capability
   {
@@ -866,7 +902,7 @@ const blocks = [
     prefix: "bomcap",
     name: "StripProvenance",
     is: "Deep-clone omitting provenance keys (B20)",
-    doc: "Removes sourceLocation, endLine, endColumn, and provenance source/SourceInfo fields recursively. Preserves ImplementationBlock.source (implementation code body). Reference: packages/bom/src/equals.ts.",
+    doc: "Removes sourceLocation, endLine, endColumn, SourceLocation-shaped fields (source, typeSource, baseTypeSource), and SourceInfo recursively. Preserves ImplementationBlock.source (implementation code body). Reference: packages/bom/src/equals.ts.",
     baseType: "core:Capability",
     fields: [
       { name: "input", type: "core:Any", required: true },
@@ -1088,7 +1124,7 @@ ${XMLNS}>
     Modules: documentation (narrative specs), common, block, member, composition, type, value,
     document (BomDocument root), api (B26), capability (bomEquals).
 
-    Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/core); BML→BOM mapping (@blockml/parser).
+    Not in this library: EffectiveMemberSet, TypeRegistry (@blockml/framework); BML→BOM mapping (@blockml/parser).
   </documentation>
 
   <references>

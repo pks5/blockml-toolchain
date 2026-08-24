@@ -124,9 +124,9 @@
       <composition><bomapi:SerializeOptions /></composition>
       <composition><bomapi:ParseResult /></composition>
       <composition><bomapi:SerializeResult /></composition>
-      <composition><bomapi:ValidateOptions /></composition>
-      <composition><bomapi:ValidateResult /></composition>
       <composition><bomapi:TypeRegistryReader /></composition>
+      <composition><bomapi:ValidateResult /></composition>
+      <composition><bomapi:ValidateOptions /></composition>
       <composition><bomcap:StripProvenance /></composition>
       <composition><bomcap:BomEquals /></composition>
       <composition><bomdocumentation:Introduction /></composition>

@@ -29,6 +29,8 @@ export interface MemberDefinitionBase {
     constraints?: BlockInstance[];
     xmlTrivia?: XmlTrivia;
     source?: SourceLocation;
+    /** Source span of the authored `type` attribute value when present. */
+    typeSource?: SourceLocation;
 }
 export interface PropertyDefinition extends MemberDefinitionBase {
     kind: "property";
@@ -74,6 +76,10 @@ export interface CapabilityDefinition extends MemberDefinitionBase {
     typeFqn: string;
     inputType?: TypeDescriptor;
     outputType?: TypeDescriptor;
+    /** Source span of the authored `inputType` attribute value. */
+    inputTypeSource?: SourceLocation;
+    /** Source span of the authored `outputType` attribute value. */
+    outputTypeSource?: SourceLocation;
     implementation?: ImplementationBlock;
 }
 export interface ImplementationBlock {

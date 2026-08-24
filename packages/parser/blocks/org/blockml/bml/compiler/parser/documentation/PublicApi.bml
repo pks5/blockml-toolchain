@@ -44,7 +44,9 @@
     Behaviour:
     • B24 detect → [2] xmldom → [3]–[5] map
     • Hard fail → document: null (unsupported format, missing root, invalid root)
-    • Mapping errors → BML_MAP_ERROR; with continueOnError still return document when possible
+    • Mapping errors → inner BML_* code with use-site Diagnostic.source when MappingError
+      carries a span; otherwise BML_MAP_ERROR at 1:1. continueOnError still returns
+      document when possible
     • Sync only; no throw on recoverable errors
     • Does NOT call validator; does NOT expand directives</documentation>
 

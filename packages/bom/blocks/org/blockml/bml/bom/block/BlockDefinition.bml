@@ -132,7 +132,7 @@
       <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
     </source>
     <typeSource type="bomcommon:SourceLocation">
-      <documentation>typeSource (optional). TS type: bomcommon:SourceLocation.</documentation>
+      <documentation>Span of the type= attribute or <type> element value. (optional)</documentation>
     </typeSource>
     <baseTypeSource type="bomcommon:SourceLocation">
       <documentation>baseTypeSource (optional). TS type: bomcommon:SourceLocation.</documentation>

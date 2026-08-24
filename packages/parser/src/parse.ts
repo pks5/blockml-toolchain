@@ -3,6 +3,7 @@ import type {
   Diagnostic,
   ParseOptions,
   ParseResult,
+  SourceLocation,
 } from "@blockml/bom";
 import { detectFormat } from "./pipeline/format-detect.js";
 import { documentElement, getParseErrors, parseXmlDom } from "./pipeline/xml-dom.js";
@@ -12,6 +13,7 @@ import {
   mergeSourceInfo,
 } from "./pipeline/namespaces.js";
 import { mapDocumentBlock } from "./map/map-block.js";
+import { MappingError } from "./util/mapping-error.js";
 
 function diagnostic(
   code: string,
@@ -19,12 +21,30 @@ function diagnostic(
   filePath: string,
   line = 1,
   column = 1,
+  endLine?: number,
+  endColumn?: number,
 ): Diagnostic {
+  const source: SourceLocation = { file: filePath, line, column };
+  if (endLine !== undefined) {
+    source.endLine = endLine;
+  }
+  if (endColumn !== undefined) {
+    source.endColumn = endColumn;
+  }
   return {
     severity: "error",
     code,
     message,
-    source: { file: filePath, line, column },
+    source,
+  };
+}
+
+function diagnosticAt(code: string, message: string, loc: SourceLocation): Diagnostic {
+  return {
+    severity: "error",
+    code,
+    message,
+    source: loc,
   };
 }
 
@@ -92,13 +112,17 @@ export function parse(source: string, options: ParseOptions = {}): ParseResult {
   try {
     block = mapDocumentBlock(root, filePath, source, bindings);
   } catch (e) {
-    diagnostics.push(
-      diagnostic(
-        "BML_MAP_ERROR",
-        e instanceof Error ? e.message : String(e),
-        filePath,
-      ),
-    );
+    if (e instanceof MappingError) {
+      diagnostics.push(diagnosticAt(e.code, e.message, e.source));
+    } else {
+      diagnostics.push(
+        diagnostic(
+          "BML_MAP_ERROR",
+          e instanceof Error ? e.message : String(e),
+          filePath,
+        ),
+      );
+    }
     if (!continueOnError) {
       return { document: null, diagnostics, success: false };
     }

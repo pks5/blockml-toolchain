@@ -49,9 +49,11 @@ import {
   resolvePrefix,
   resolveTypeName,
   elementSourceLoc,
+  attributeValueLoc,
   TYPE_REFERENCE_ENTITY,
 } from "../util/qname.js";
 import { parseDirectives } from "./directives.js";
+import { withElementLocation } from "../util/mapping-error.js";
 
 const MEMBER_SECTIONS = new Set([
   "properties",
@@ -166,7 +168,13 @@ function mapBlockDefinition(
   if (ctx.isEmbedded && getAttribute(element, "type")) {
     const typeText = getTextOrAttr(element, "type");
     if (typeText) {
-      block.type = resolveBlockReference(typeText, ctx.bindings, ctx.subBlockIndex, parentType);
+      block.type = withElementLocation(
+        ctx.filePath,
+        ctx.source,
+        element,
+        () => resolveBlockReference(typeText, ctx.bindings, ctx.subBlockIndex, parentType),
+        { name: "type", value: typeText },
+      );
     }
   } else if (!block.type && parentType) {
     block.type = `${parentType}.${block.name}`;
@@ -230,7 +238,14 @@ function appendMembers(
   inAggregationsSection = false,
 ) {
   for (const el of elements) {
-    const member = mapMemberElement(el, kind, ctx, inAggregationsSection);
+    const typeAttr = getAttribute(el, "type");
+    const member = withElementLocation(
+      ctx.filePath,
+      ctx.source,
+      el,
+      () => mapMemberElement(el, kind, ctx, inAggregationsSection),
+      typeAttr !== undefined ? { name: "type", value: typeAttr } : undefined,
+    );
     if (member) {
       block.members.push(member);
       if (member.kind === "aggregation" && member.composition) {
@@ -291,12 +306,25 @@ function mapMemberElement(
   const prefix = elementPrefix(element);
   const ns = prefix ? resolvePrefix(prefix, ctx.bindings) : "";
   const base = mapMemberBase(element, name, visibility, ns ?? "", ctx);
+  const typeAttrForSpan = getAttribute(element, "type");
+  if (typeAttrForSpan !== undefined) {
+    const typeSource = attributeValueLoc(
+      ctx.filePath,
+      ctx.source,
+      element,
+      "type",
+      typeAttrForSpan,
+    );
+    if (typeSource) {
+      base.typeSource = typeSource;
+    }
+  }
 
   if (kind === "property") {
-    const typeAttr = getAttribute(element, "type") ?? "";
+    const typeAttr = getAttribute(element, "type");
     let typeFqn = "";
     let typeExpr: TypeExpression | undefined;
-    if (typeAttr) {
+    if (typeAttr !== undefined) {
       typeExpr = parseTypeExpression(typeAttr, ctx.bindings, "type");
       typeFqn = typeExpr.kind === "named" ? typeExpr.fqn : "";
     }
@@ -354,9 +382,29 @@ function mapMemberElement(
   const outputType = getAttribute(element, "outputType");
   if (inputType) {
     cap.inputType = parseTypeExpression(inputType, ctx.bindings, "type");
+    const inputTypeSource = attributeValueLoc(
+      ctx.filePath,
+      ctx.source,
+      element,
+      "inputType",
+      inputType,
+    );
+    if (inputTypeSource) {
+      cap.inputTypeSource = inputTypeSource;
+    }
   }
   if (outputType) {
     cap.outputType = parseTypeExpression(outputType, ctx.bindings, "type");
+    const outputTypeSource = attributeValueLoc(
+      ctx.filePath,
+      ctx.source,
+      element,
+      "outputType",
+      outputType,
+    );
+    if (outputTypeSource) {
+      cap.outputTypeSource = outputTypeSource;
+    }
   }
   const implEl = elementChildren(element).find(
     (c) => elementLocalName(c) === "implementation",
@@ -479,18 +527,29 @@ function mapMetadataFields(
         block.name = getTextOrAttr(child) ?? block.name;
         break;
       case "type":
-        block.type = resolveBlockReference(
-          getTextOrAttr(child) ?? "",
-          ctx.bindings,
-          ctx.subBlockIndex,
-          ctx.parentBlockType,
+        block.type = withElementLocation(
+          ctx.filePath,
+          ctx.source,
+          child,
+          () =>
+            resolveBlockReference(
+              getTextOrAttr(child) ?? "",
+              ctx.bindings,
+              ctx.subBlockIndex,
+              ctx.parentBlockType,
+            ),
         );
         block.typeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
         break;
       case "baseType": {
         const bt = getTextOrAttr(child);
         if (bt) {
-          block.baseType = resolveBlockReference(bt, ctx.bindings, ctx.subBlockIndex, block.type);
+          block.baseType = withElementLocation(
+            ctx.filePath,
+            ctx.source,
+            child,
+            () => resolveBlockReference(bt, ctx.bindings, ctx.subBlockIndex, block.type),
+          );
         }
         block.baseTypeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
         break;
@@ -512,11 +571,17 @@ function mapMetadataFields(
         break;
       }
       case "definition":
-        block.definitionFqn = resolveBlockReference(
-          getTextOrAttr(child) ?? "",
-          ctx.bindings,
-          ctx.subBlockIndex,
-          block.type,
+        block.definitionFqn = withElementLocation(
+          ctx.filePath,
+          ctx.source,
+          child,
+          () =>
+            resolveBlockReference(
+              getTextOrAttr(child) ?? "",
+              ctx.bindings,
+              ctx.subBlockIndex,
+              block.type,
+            ),
         );
         break;
       case "since": {
@@ -956,5 +1021,5 @@ export function mapDocumentBlock(
   bindings: Record<string, string>,
 ): BlockDefinition {
   const ctx = createMapContext(filePath, source, bindings, { isRoot: true });
-  return mapBlockDefinition(element, ctx);
+  return withElementLocation(filePath, source, element, () => mapBlockDefinition(element, ctx));
 }

@@ -23,6 +23,13 @@ describe("bomLocationToRange", () => {
     expect(range.start).toEqual({ line: 0, character: 0 });
     expect(range.end).toEqual({ line: 0, character: 4 });
   });
+
+  it("extends to the line end when end span is missing and text is provided", () => {
+    const text = "abcdefg\nsecond\n";
+    const range = bomLocationToRange({ file: "t.bml", line: 1, column: 1 }, text);
+    expect(range.start).toEqual({ line: 0, character: 0 });
+    expect(range.end.character).toBe("abcdefg".length + 1);
+  });
 });
 
 describe("bomSeverityToLsp", () => {

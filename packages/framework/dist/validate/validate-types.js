@@ -1,7 +1,84 @@
 import { parseExpression } from "../expression/parse-expression.js";
 import { memberIdentityKey, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
-function diag(code, message, file, line = 1, column = 1) {
-    return { severity: "error", code, message, source: { file, line, column } };
+import { isWellKnownTypeFqn } from "@blockml/parser";
+function diag(code, message, file, loc) {
+    const source = {
+        file: loc?.file ?? file,
+        line: loc?.line ?? 1,
+        column: loc?.column ?? 1,
+    };
+    if (loc?.endLine !== undefined) {
+        source.endLine = loc.endLine;
+    }
+    if (loc?.endColumn !== undefined) {
+        source.endColumn = loc.endColumn;
+    }
+    return { severity: "error", code, message, source };
+}
+function typeIsKnown(fqn, registry) {
+    return registry.has(fqn) || isWellKnownTypeFqn(fqn);
+}
+function walkNamedTypes(expr, visit) {
+    if (!expr) {
+        return;
+    }
+    switch (expr.kind) {
+        case "named":
+            visit(expr.fqn);
+            for (const arg of expr.typeArguments ?? []) {
+                walkNamedTypes(arg, visit);
+            }
+            break;
+        case "union":
+            for (const alt of expr.alternatives) {
+                walkNamedTypes(alt, visit);
+            }
+            break;
+        case "grouped":
+            walkNamedTypes(expr.expression, visit);
+            break;
+        case "anonymousStruct":
+            for (const field of expr.fields) {
+                walkNamedTypes(field.type, visit);
+            }
+            break;
+        default:
+            break;
+    }
+}
+function validateMemberTypes(member, registry, file, diagnostics) {
+    const loc = member.typeSource ?? member.source;
+    const report = (fqn) => {
+        if (!typeIsKnown(fqn, registry)) {
+            diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, loc));
+        }
+    };
+    if (member.kind === "property") {
+        if (member.type) {
+            walkNamedTypes(member.type, report);
+        }
+        else if (member.typeFqn) {
+            report(member.typeFqn);
+        }
+    }
+    else if (member.kind === "aggregation" || member.kind === "association") {
+        walkNamedTypes(member.type, report);
+    }
+    else if (member.kind === "capability") {
+        if (member.typeFqn) {
+            report(member.typeFqn);
+        }
+        walkNamedTypes(member.inputType, (fqn) => {
+            if (!typeIsKnown(fqn, registry)) {
+                diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, member.inputTypeSource ?? loc));
+            }
+        });
+        walkNamedTypes(member.outputType, (fqn) => {
+            if (!typeIsKnown(fqn, registry)) {
+                diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, member.outputTypeSource ?? loc));
+            }
+        });
+    }
 }
 function literalNumber(val) {
     if (!val || val.kind !== "literal") {
@@ -11,11 +88,11 @@ function literalNumber(val) {
 }
 function validateBlockDefinition(block, registry, file, diagnostics) {
     if (block.baseType && !registry.has(block.baseType)) {
-        diagnostics.push(diag("BML_UNKNOWN_BASE_TYPE", `Unknown baseType: ${block.baseType}`, file, block.source?.line, block.source?.column));
+        diagnostics.push(diag("BML_UNKNOWN_BASE_TYPE", `Unknown baseType: ${block.baseType}`, file, block.baseTypeSource ?? block.source));
     }
     for (const ref of block.contracts ?? []) {
         if (!registry.has(ref.value)) {
-            diagnostics.push(diag("BML_UNKNOWN_CONTRACT", `Unknown contract: ${ref.value}`, file, block.source?.line, block.source?.column));
+            diagnostics.push(diag("BML_UNKNOWN_CONTRACT", `Unknown contract: ${ref.value}`, file, block.source));
         }
     }
     const effective = resolveEffectiveMembers(block, registry);
@@ -23,11 +100,12 @@ function validateBlockDefinition(block, registry, file, diagnostics) {
     for (const member of effective) {
         const key = memberIdentityKey(member);
         if (seen.has(key)) {
-            diagnostics.push(diag("BML_MEMBER_COLLISION", `Duplicate effective member identity: ${key}`, file, member.source?.line, member.source?.column));
+            diagnostics.push(diag("BML_MEMBER_COLLISION", `Duplicate effective member identity: ${key}`, file, member.source));
         }
         seen.add(key);
     }
     for (const member of block.members) {
+        validateMemberTypes(member, registry, file, diagnostics);
         const skipOverrideCheck = member.kind === "aggregation" &&
             (member.composition !== undefined || member.default === true);
         if (member.override) {
@@ -37,7 +115,7 @@ function validateBlockDefinition(block, registry, file, diagnostics) {
                 : [];
             const hasParent = parentMembers.some((m) => memberIdentityKey(m) === memberIdentityKey(member) && m.kind === member.kind);
             if (block.baseType && registry.has(block.baseType) && !hasParent) {
-                diagnostics.push(diag("BML_OVERRIDE_WITHOUT_PARENT", `override without parent member: ${member.name}`, file, member.source?.line, member.source?.column));
+                diagnostics.push(diag("BML_OVERRIDE_WITHOUT_PARENT", `override without parent member: ${member.name}`, file, member.source));
             }
         }
         else if (block.baseType && registry.has(block.baseType) && !skipOverrideCheck) {
@@ -45,7 +123,7 @@ function validateBlockDefinition(block, registry, file, diagnostics) {
             const parentDirect = parentBlock?.members ?? [];
             const hasParent = parentDirect.some((m) => memberIdentityKey(m) === memberIdentityKey(member) && m.kind === member.kind);
             if (hasParent && !member.override) {
-                diagnostics.push(diag("BML_OVERRIDE_REQUIRED", `override required for redeclared member: ${member.name}`, file, member.source?.line, member.source?.column));
+                diagnostics.push(diag("BML_OVERRIDE_REQUIRED", `override required for redeclared member: ${member.name}`, file, member.source));
             }
         }
         if (member.kind === "property") {
@@ -64,7 +142,7 @@ function validatePropertyExpressions(prop, file, diagnostics) {
         const expr = val;
         const parsed = parseExpression(expr.raw);
         if (!parsed.ok) {
-            diagnostics.push(diag("BML_EXPRESSION_PARSE_ERROR", `${label}: ${parsed.error.message}`, file, expr.source?.line, expr.source?.column));
+            diagnostics.push(diag("BML_EXPRESSION_PARSE_ERROR", `${label}: ${parsed.error.message}`, file, expr.source));
         }
     };
     checkVal(prop.value, prop.name);
@@ -77,7 +155,7 @@ function validateInstanceExpressions(instance, file, diagnostics) {
         if (val.kind === "expression") {
             const parsed = parseExpression(val.raw);
             if (!parsed.ok) {
-                diagnostics.push(diag("BML_EXPRESSION_PARSE_ERROR", `${name}: ${parsed.error.message}`, file, val.source?.line, val.source?.column));
+                diagnostics.push(diag("BML_EXPRESSION_PARSE_ERROR", `${name}: ${parsed.error.message}`, file, val.source));
             }
         }
     }

@@ -13,6 +13,7 @@ const blocksRoot = join(__dirname, "../blocks/org/blockml/bml/framework");
 
 const FRAMEWORK_DIAGNOSTIC_CODES = [
   "BML_UNKNOWN_BASE_TYPE",
+  "BML_UNKNOWN_TYPE",
   "BML_UNKNOWN_CONTRACT",
   "BML_MEMBER_COLLISION",
   "BML_OVERRIDE_WITHOUT_PARENT",
