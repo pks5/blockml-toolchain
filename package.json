@@ -10,23 +10,23 @@
     "library": "./blocks/org/blockml/bml/workspace/Library.bml"
   },
   "dependencies": {
-    "@blockml/core": "^1.0.4",
+    "@blockml/core": "^1.0.5",
     "@machineblocks/core": "^3.0.0-A1"
   },
   "devDependencies": {
-    "@blockml/bom": "workspace:*",
     "@blockml/blockdoc-target": "workspace:*",
-    "@blockml/fatblock-target": "workspace:*",
-    "@blockml/xsd-target": "workspace:*",
+    "@blockml/bom": "workspace:*",
     "@blockml/cli": "workspace:*",
     "@blockml/compiler": "workspace:*",
+    "@blockml/fatblock-target": "workspace:*",
     "@blockml/framework": "workspace:*",
+    "@blockml/lsp": "workspace:*",
     "@blockml/parser": "workspace:*",
     "@blockml/serializer": "workspace:*",
     "@blockml/validator": "workspace:*",
-    "@blockml/lsp": "workspace:*",
-    "typescript": "^5.7.3",
+    "@blockml/xsd-target": "workspace:*",
     "@types/node": "^22.10.0",
+    "typescript": "^5.7.3",
     "vitest": "^3.0.5"
   },
   "scripts": {
