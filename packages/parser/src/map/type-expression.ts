@@ -1,6 +1,7 @@
 import type {
   AnonymousStructType,
   GenericParameterReference,
+  GroupedTypeExpression,
   InstanceConfiguration,
   Multiplicity,
   NamedTypeReference,
@@ -19,6 +20,17 @@ type ParseCtx = {
   bindings: Record<string, string>;
   implicit: ImplicitNamespaceContext;
 };
+
+function formatMultiplicity(m: Multiplicity): string {
+  const { min, max } = m;
+  if (min === 0 && max === "*") {
+    return "[]";
+  }
+  if (min === max) {
+    return `[${min}]`;
+  }
+  return `[${min}..${max}]`;
+}
 
 function parseMultiplicity(input: string): {
   expr: string;
@@ -50,6 +62,40 @@ function parseMultiplicity(input: string): {
   }
 
   return { expr: input.trim() };
+}
+
+function hasMultiplicitySuffix(input: string): boolean {
+  return parseMultiplicity(input).multiplicity !== undefined;
+}
+
+function isFullyParenthesized(input: string): boolean {
+  if (!input.startsWith("(") || !input.endsWith(")")) {
+    return false;
+  }
+  let depth = 0;
+  for (let i = 0; i < input.length; i++) {
+    const ch = input[i]!;
+    if (ch === "(") {
+      depth++;
+    } else if (ch === ")") {
+      depth--;
+      if (depth === 0) {
+        return i === input.length - 1;
+      }
+    }
+  }
+  return false;
+}
+
+function applyMultiplicity(expr: TypeExpression, m: Multiplicity): TypeExpression {
+  if (expr.kind === "named" && !expr.multiplicity) {
+    return { ...expr, multiplicity: m };
+  }
+  return {
+    kind: "grouped",
+    expression: expr,
+    multiplicity: m,
+  } satisfies GroupedTypeExpression;
 }
 
 function parseInstanceConfig(
@@ -188,6 +234,28 @@ function parseTypeExpressionInternal(
     throw new Error("BML_UNKNOWN_TYPE: empty");
   }
 
+  if (input.startsWith("{") && input.endsWith("}")) {
+    return parseAnonymousStruct(input, ctx);
+  }
+
+  if (input.includes("|")) {
+    const alts = splitTopLevel(input, "|");
+    if (alts.length > 1) {
+      return {
+        kind: "union",
+        alternatives: alts.map((a) => parseTypeExpressionInternal(a.trim(), ctx)),
+      } satisfies UnionTypeExpression;
+    }
+  }
+
+  const { expr, multiplicity } = parseMultiplicity(input);
+  if (multiplicity) {
+    if (hasMultiplicitySuffix(expr) && !isFullyParenthesized(expr)) {
+      throw new Error(`BML_INVALID_TYPE_REFERENCE: ${input}`);
+    }
+    return applyMultiplicity(parseTypeExpressionInternal(expr, ctx), multiplicity);
+  }
+
   if (/^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)+$/i.test(input)) {
     const named: NamedTypeReference = { kind: "named", fqn: input };
     return named;
@@ -197,38 +265,26 @@ function parseTypeExpressionInternal(
     return { kind: "self" } satisfies SelfTypeReference;
   }
 
-  if (input.startsWith("{") && input.endsWith("}")) {
-    return parseAnonymousStruct(input, ctx);
-  }
-
-  if (input.includes("|")) {
-    const alts = splitTopLevel(input, "|");
-    return {
-      kind: "union",
-      alternatives: alts.map((a) => parseTypeExpressionInternal(a.trim(), ctx)),
-    } satisfies UnionTypeExpression;
-  }
-
-  const { expr, multiplicity } = parseMultiplicity(input);
-  const { base, config } = parseInstanceConfig(expr, ctx);
+  const { base, config } = parseInstanceConfig(input, ctx);
 
   const genericMatch = base.match(/^(.+?)\((.+)\)$/);
-  if (genericMatch) {
+  if (genericMatch && !isFullyParenthesized(base)) {
     const ref = parseGenericApplication(
       genericMatch[1]!.trim(),
       genericMatch[2]!.trim(),
       ctx,
     );
-    if (multiplicity) {
-      ref.multiplicity = multiplicity;
-    }
     if (config) {
       ref.instanceConfiguration = config;
     }
     return ref;
   }
 
-  if (/^[A-Z]$/.test(base) || /^[A-Z][a-zA-Z0-9]*$/.test(base) && !base.includes(".")) {
+  if (isFullyParenthesized(input)) {
+    return parseTypeExpressionInternal(input.slice(1, -1).trim(), ctx);
+  }
+
+  if (/^[A-Z]$/.test(base) || (/^[A-Z][a-zA-Z0-9]*$/.test(base) && !base.includes("."))) {
     const { prefix } = splitQName(base);
     if (!prefix && base.length <= 2) {
       return { kind: "genericParam", name: base } satisfies GenericParameterReference;
@@ -239,9 +295,6 @@ function parseTypeExpressionInternal(
     kind: "named",
     fqn: resolveTypeName(base, ctx.bindings, ctx.implicit),
   };
-  if (multiplicity) {
-    named.multiplicity = multiplicity;
-  }
   if (config) {
     named.instanceConfiguration = config;
   }
@@ -265,8 +318,10 @@ export function inferCardinality(type: TypeExpression | undefined):
   if (!type) {
     return undefined;
   }
-  if (type.kind === "named" && type.multiplicity) {
-    const { min, max } = type.multiplicity;
+  const multiplicity =
+    type.kind === "named" || type.kind === "grouped" ? type.multiplicity : undefined;
+  if (multiplicity) {
+    const { min, max } = multiplicity;
     if (min === 0 && max === "*") {
       return "0..n";
     }
@@ -296,6 +351,11 @@ export function typeExpressionToString(type: TypeExpression): string {
       return `{ ${type.fields.map((f) => `${f.name}: ${typeExpressionToString(f.type)}`).join(", ")} }`;
     case "union":
       return type.alternatives.map(typeExpressionToString).join(" | ");
+    case "grouped": {
+      const inner = typeExpressionToString(type.expression);
+      const suffix = type.multiplicity ? formatMultiplicity(type.multiplicity) : "";
+      return `(${inner})${suffix}`;
+    }
     case "named": {
       let s = type.fqn;
       if (type.typeArguments?.length) {
@@ -310,14 +370,7 @@ export function typeExpressionToString(type: TypeExpression): string {
         s += `{${type.instanceConfiguration.positional.map(memberValueToConfig).join(", ")}}`;
       }
       if (type.multiplicity) {
-        const { min, max } = type.multiplicity;
-        if (min === 0 && max === "*") {
-          s += "[]";
-        } else if (min === max) {
-          s += `[${min}]`;
-        } else {
-          s += `[${min}..${max}]`;
-        }
+        s += formatMultiplicity(type.multiplicity);
       }
       return s;
     }

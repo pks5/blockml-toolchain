@@ -1,0 +1,46 @@
+<!--
+  BOM Urmodell — GroupedTypeExpression
+  FQN: org.blockml.bml.bom.type.GroupedTypeExpression
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>GroupedTypeExpression</name>
+  <type>bomtype:GroupedTypeExpression</type>
+  <baseType>bomtype:TypeExpression</baseType>
+  <is>Parenthesized type expression with optional outer multiplicity</is>
+
+  <documentation>Grouping wrapper for nested multiplicity, e.g. (T[])[] or (A | B)[]. Inner expression may itself carry multiplicity.</documentation>
+
+  <properties>
+    <kind type="type:Text">
+      <documentation>kind (required). TS type: type:Text.</documentation>
+      <value>grouped</value>
+    </kind>
+    <expression type="bomtype:TypeExpression">
+      <documentation>expression (required). TS type: bomtype:TypeExpression.</documentation>
+    </expression>
+    <multiplicity type="bomtype:Multiplicity">
+      <documentation>multiplicity (optional). TS type: bomtype:Multiplicity.</documentation>
+    </multiplicity>
+  </properties>
+
+</block>

@@ -45,6 +45,7 @@ const MAP_TIME_DIAGNOSTIC_CODES = [
   "BML_UNKNOWN_NAMESPACE_PREFIX",
   "BML_UNQUALIFIED_BLOCK_REFERENCE",
   "BML_UNKNOWN_TYPE",
+  "BML_INVALID_TYPE_REFERENCE",
 ];
 
 /** @type {BlockDef[]} */
@@ -131,7 +132,10 @@ const capabilities = [
     name: "ParseXmlDom",
     is: "XML DOM parser — step [2] (B18)",
     doc: "Uses @xmldom/xmldom. Browser and Node compatible.",
-    inputs: [{ name: "source", type: "type:Text", required: true }],
+    inputs: [
+      { name: "source", type: "type:Text", required: true },
+      { name: "filePath", type: "type:Text" },
+    ],
     output: { name: "document", type: "core:Any", required: true, doc: "DOM Document" },
     refs: ["pardocumentation:V1Scope"],
   },

@@ -5,6 +5,7 @@ export type TypeExpression =
   | NamedTypeReference
   | AnonymousStructType
   | UnionTypeExpression
+  | GroupedTypeExpression
   | GenericParameterReference
   | SelfTypeReference;
 
@@ -34,6 +35,12 @@ export interface NamedTypeReference {
 export interface UnionTypeExpression {
   kind: "union";
   alternatives: TypeExpression[];
+}
+
+export interface GroupedTypeExpression {
+  kind: "grouped";
+  expression: TypeExpression;
+  multiplicity?: Multiplicity;
 }
 
 export interface GenericParameterReference {

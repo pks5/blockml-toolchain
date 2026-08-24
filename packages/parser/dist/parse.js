@@ -3,12 +3,12 @@ import { documentElement, getParseErrors, parseXmlDom } from "./pipeline/xml-dom
 import { assertBlockRoot } from "./pipeline/root-type.js";
 import { extractNamespaceBindings, mergeSourceInfo, } from "./pipeline/namespaces.js";
 import { mapDocumentBlock } from "./map/map-block.js";
-function diagnostic(code, message, filePath) {
+function diagnostic(code, message, filePath, line = 1, column = 1) {
     return {
         severity: "error",
         code,
         message,
-        source: { file: filePath, line: 1, column: 1 },
+        source: { file: filePath, line, column },
     };
 }
 export function parse(source, options = {}) {
@@ -21,21 +21,22 @@ export function parse(source, options = {}) {
         return { document: null, diagnostics, success: false };
     }
     let doc;
-    try {
-        doc = parseXmlDom(source);
+    const parsed = parseXmlDom(source, filePath);
+    doc = parsed.document;
+    for (const err of parsed.errors) {
+        diagnostics.push(diagnostic("BML_MALFORMED_XML", err.message, filePath, err.line, err.column));
     }
-    catch (e) {
-        diagnostics.push(diagnostic("BML_MALFORMED_XML", e instanceof Error ? e.message : String(e), filePath));
+    if (!doc) {
         return { document: null, diagnostics, success: false };
     }
-    const parseErrors = getParseErrors(doc);
-    if (parseErrors.length > 0) {
-        for (const err of parseErrors) {
+    const seen = new Set(diagnostics.map((d) => d.message));
+    for (const err of getParseErrors(doc)) {
+        if (!seen.has(err)) {
             diagnostics.push(diagnostic("BML_MALFORMED_XML", err, filePath));
         }
-        if (!continueOnError) {
-            return { document: null, diagnostics, success: false };
-        }
+    }
+    if (diagnostics.some((d) => d.code === "BML_MALFORMED_XML") && !continueOnError) {
+        return { document: null, diagnostics, success: false };
     }
     const root = documentElement(doc);
     if (!root) {

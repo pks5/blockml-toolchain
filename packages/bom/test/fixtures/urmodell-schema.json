@@ -479,6 +479,32 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.bom.type.GroupedTypeExpression",
+      "tsExport": "GroupedTypeExpression",
+      "pkg": "type",
+      "abstract": false,
+      "baseType": "bomtype:TypeExpression",
+      "kind": "grouped",
+      "fields": [
+        {
+          "name": "kind",
+          "type": "type:Text",
+          "required": true,
+          "literal": "grouped"
+        },
+        {
+          "name": "expression",
+          "type": "bomtype:TypeExpression",
+          "required": true
+        },
+        {
+          "name": "multiplicity",
+          "type": "bomtype:Multiplicity",
+          "required": false
+        }
+      ]
+    },
+    {
       "fqn": "org.blockml.bml.bom.type.GenericParameterReference",
       "tsExport": "GenericParameterReference",
       "pkg": "type",
@@ -1928,6 +1954,7 @@
     "TypeExpression": [
       "NamedTypeReference",
       "UnionTypeExpression",
+      "GroupedTypeExpression",
       "GenericParameterReference",
       "SelfTypeReference",
       "AnonymousStructType"

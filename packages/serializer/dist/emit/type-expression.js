@@ -11,6 +11,11 @@ export function emitTypeExpression(type, bindings, useQName) {
             return type.alternatives
                 .map((a) => emitTypeExpression(a, bindings, useQName))
                 .join(" | ");
+        case "grouped": {
+            const inner = emitTypeExpression(type.expression, bindings, useQName);
+            const suffix = type.multiplicity ? formatMultiplicity(type.multiplicity) : "";
+            return `(${inner})${suffix}`;
+        }
         case "named": {
             let base = useQName ? fqnToQName(type.fqn, bindings) : type.fqn;
             if (type.typeArguments?.length) {
@@ -24,20 +29,21 @@ export function emitTypeExpression(type, bindings, useQName) {
                 base += `{ ${type.instanceConfiguration.positional.map(emitConfigValue).join(", ")} }`;
             }
             if (type.multiplicity) {
-                const { min, max } = type.multiplicity;
-                if (min === 0 && max === "*") {
-                    base += "[]";
-                }
-                else if (min === max) {
-                    base += `[${min}]`;
-                }
-                else {
-                    base += `[${min}..${max}]`;
-                }
+                base += formatMultiplicity(type.multiplicity);
             }
             return base;
         }
     }
+}
+function formatMultiplicity(m) {
+    const { min, max } = m;
+    if (min === 0 && max === "*") {
+        return "[]";
+    }
+    if (min === max) {
+        return `[${min}]`;
+    }
+    return `[${min}..${max}]`;
 }
 function emitConfigValue(v) {
     if (v.kind === "expression") {

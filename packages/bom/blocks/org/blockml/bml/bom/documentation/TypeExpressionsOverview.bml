@@ -32,7 +32,8 @@
   <documentation>TypeExpression (alias TypeDescriptor in V1) — structured parse-time AST, not a ValueType.
     Used for Capability inputType/outputType and Property type attributes.
 
-    Union variants: named, union, genericParam, self, anonymousStruct.
+    Union variants: named, union, grouped, genericParam, self, anonymousStruct.
+    grouped wraps a TypeExpression for nested multiplicity: (T[])[] or (A | B)[].
 
     Anonymous struct = shorthand for inline class with ordered fields (FunctionMapping positional order).
     Single primitive = NamedTypeReference directly — not wrapped in one-field struct.

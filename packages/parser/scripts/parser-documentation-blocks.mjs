@@ -207,7 +207,8 @@ export const documentationBlocks = [
     doc: `Parse type attribute strings into BOM TypeExpression shapes (defined in @blockml/bom).
 
     • Named type refs → resolved FQN via namespace bindings + implicit namespaces
-    • Union (A | B), struct ({ a: T }), multiplicity, generics, self refs
+    • Union (A | B), struct ({ a: T }), multiplicity, nested (T[])[], generics (including unions as arguments), self refs
+    • Ungrouped stacked multiplicity Integer[][] → BML_INVALID_TYPE_REFERENCE
     • Boolean.True/Boolean.False preserved as type refs (B16) — not rewritten to literals
     • Boolean values normalized to lowercase (B15)
     • Failure → BML_UNKNOWN_TYPE
@@ -339,6 +340,7 @@ export const documentationBlocks = [
     Map-time codes (mapper modules):
     • BML_UNKNOWN_NAMESPACE_PREFIX, BML_UNQUALIFIED_BLOCK_REFERENCE
     • BML_UNKNOWN_TYPE — type expression parse failure
+    • BML_INVALID_TYPE_REFERENCE — ill-formed type expression (ungrouped stacked multiplicity)
 
     Host policy: whether to abort after diagnostics is orchestrator decision.
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic.`,

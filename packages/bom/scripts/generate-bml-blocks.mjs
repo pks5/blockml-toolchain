@@ -298,6 +298,20 @@ const blocks = [
   {
     pkg: "type",
     prefix: "bomtype",
+    name: "GroupedTypeExpression",
+    is: "Parenthesized type expression with optional outer multiplicity",
+    doc: "Grouping wrapper for nested multiplicity, e.g. (T[])[] or (A | B)[].",
+    baseType: "bomtype:TypeExpression",
+    kind: "grouped",
+    fields: [
+      { name: "kind", type: "type:Text", required: true, literal: "grouped" },
+      { name: "expression", type: "bomtype:TypeExpression", required: true },
+      { name: "multiplicity", type: "bomtype:Multiplicity" },
+    ],
+  },
+  {
+    pkg: "type",
+    prefix: "bomtype",
     name: "GenericParameterReference",
     is: "Generic parameter reference in type expression",
     baseType: "bomtype:TypeExpression",
@@ -1121,7 +1135,7 @@ writeFileSync(
       },
       unions: {
         MemberDefinition: ["PropertyDefinition", "AggregationDefinition", "AssociationDefinition", "CapabilityDefinition"],
-        TypeExpression: ["NamedTypeReference", "UnionTypeExpression", "GenericParameterReference", "SelfTypeReference", "AnonymousStructType"],
+        TypeExpression: ["NamedTypeReference", "UnionTypeExpression", "GroupedTypeExpression", "GenericParameterReference", "SelfTypeReference", "AnonymousStructType"],
         MemberValue: ["LiteralValue", "ExpressionValue", "AddressValue"],
         CompositionNode: ["BlockInstanceNode", "VirtualContainerNode"],
         DirectiveAttribute: ["EachDirective", "IfDirective", "UnlessDirective", "WithDirective"],

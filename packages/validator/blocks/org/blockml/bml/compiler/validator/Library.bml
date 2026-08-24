@@ -21,8 +21,7 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:fwdocumentation="org.blockml.bml.framework.documentation">
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
   <name>Library</name>
   <type>validator:Library</type>

@@ -297,15 +297,8 @@ function mapMemberElement(
     let typeFqn = "";
     let typeExpr: TypeExpression | undefined;
     if (typeAttr) {
-      try {
-        typeExpr = parseTypeExpression(typeAttr, ctx.bindings, "type");
-        typeFqn =
-          typeExpr.kind === "named"
-            ? typeExpr.fqn
-            : "";
-      } catch {
-        typeFqn = resolveTypeName(typeAttr, ctx.bindings, "type");
-      }
+      typeExpr = parseTypeExpression(typeAttr, ctx.bindings, "type");
+      typeFqn = typeExpr.kind === "named" ? typeExpr.fqn : "";
     }
     const prop: PropertyDefinition = {
       ...base,
@@ -327,17 +320,7 @@ function mapMemberElement(
       authoredInAggregationsSection: inAggregationsSection,
     };
     if (typeAttr) {
-      try {
-        agg.type = parseTypeExpression(typeAttr, ctx.bindings, "type");
-      } catch {
-        const fqn = resolveBlockReference(
-          typeAttr,
-          ctx.bindings,
-          ctx.subBlockIndex,
-          ctx.parentBlockType,
-        );
-        agg.type = { kind: "named", fqn };
-      }
+      agg.type = parseTypeExpression(typeAttr, ctx.bindings, "type");
       agg.cardinality = inferCardinality(agg.type) ?? "0..n";
     }
     const def = getAttribute(element, "default");

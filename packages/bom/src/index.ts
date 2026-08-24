@@ -33,6 +33,7 @@ export type {
   InstanceConfiguration,
   NamedTypeReference,
   UnionTypeExpression,
+  GroupedTypeExpression,
   GenericParameterReference,
   SelfTypeReference,
   AnonymousStructType,

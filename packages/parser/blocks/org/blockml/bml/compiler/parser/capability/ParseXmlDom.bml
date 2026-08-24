@@ -39,6 +39,9 @@
     <source type="type:Text">
       <documentation>source. TS type: type:Text. (required)</documentation>
     </source>
+    <filePath type="type:Text">
+      <documentation>filePath. TS type: type:Text. (optional) Used in XML diagnostics instead of xmldom @#.</documentation>
+    </filePath>
     <document type="core:Any">
       <documentation>DOM Document (required)</documentation>
     </document>

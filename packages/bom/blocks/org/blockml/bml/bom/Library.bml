@@ -83,6 +83,7 @@
       <composition><bomtype:TypeDescriptor /></composition>
       <composition><bomtype:NamedTypeReference /></composition>
       <composition><bomtype:UnionTypeExpression /></composition>
+      <composition><bomtype:GroupedTypeExpression /></composition>
       <composition><bomtype:GenericParameterReference /></composition>
       <composition><bomtype:SelfTypeReference /></composition>
       <composition><bomtype:StructField /></composition>

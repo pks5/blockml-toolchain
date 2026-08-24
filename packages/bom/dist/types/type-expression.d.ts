@@ -1,6 +1,6 @@
 import type { LiteralValue, ExpressionValue } from "./values.js";
 /** Parse-time type expression — not a language ValueType. */
-export type TypeExpression = NamedTypeReference | AnonymousStructType | UnionTypeExpression | GenericParameterReference | SelfTypeReference;
+export type TypeExpression = NamedTypeReference | AnonymousStructType | UnionTypeExpression | GroupedTypeExpression | GenericParameterReference | SelfTypeReference;
 /** V1 alias kept for Capability inputType / outputType. */
 export type TypeDescriptor = TypeExpression;
 export interface Multiplicity {
@@ -23,6 +23,11 @@ export interface NamedTypeReference {
 export interface UnionTypeExpression {
     kind: "union";
     alternatives: TypeExpression[];
+}
+export interface GroupedTypeExpression {
+    kind: "grouped";
+    expression: TypeExpression;
+    multiplicity?: Multiplicity;
 }
 export interface GenericParameterReference {
     kind: "genericParam";

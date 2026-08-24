@@ -149,6 +149,11 @@
           "name": "source",
           "type": "type:Text",
           "required": true
+        },
+        {
+          "name": "filePath",
+          "type": "type:Text",
+          "required": false
         }
       ],
       "output": {
@@ -1097,7 +1102,8 @@
     "BML_MAP_ERROR",
     "BML_UNKNOWN_NAMESPACE_PREFIX",
     "BML_UNQUALIFIED_BLOCK_REFERENCE",
-    "BML_UNKNOWN_TYPE"
+    "BML_UNKNOWN_TYPE",
+    "BML_INVALID_TYPE_REFERENCE"
   ],
   "documentationBlocks": [
     "Introduction",

@@ -18,6 +18,15 @@ export function typeExpressionSummary(expr: TypeExpression): string {
     }
     case "union":
       return expr.alternatives.map(typeExpressionSummary).join(" | ");
+    case "grouped": {
+      const inner = typeExpressionSummary(expr.expression);
+      if (!expr.multiplicity) {
+        return `(${inner})`;
+      }
+      const max =
+        expr.multiplicity.max === "*" ? "*" : String(expr.multiplicity.max);
+      return `(${inner})[${expr.multiplicity.min}..${max}]`;
+    }
     case "genericParam":
       return expr.name;
     case "self":

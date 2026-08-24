@@ -32,7 +32,7 @@
   <baseType>core:Capability</baseType>
   <is>TypeExpression → summary text with optional named FQN links</is>
 
-  <documentation>BD15: named → link fqn if knownFqns else escape; append escaped args/multiplicity suffix. union | Self | anonymousStruct | genericParam → escaped summary only (no links). Missing expr → em dash.</documentation>
+  <documentation>BD15: named → link fqn if knownFqns else escape; append escaped args/multiplicity suffix. union | grouped | Self | anonymousStruct | genericParam → escaped summary only (no links). Missing expr → em dash.</documentation>
 
   <references>
     <see type="bddocumentation:TypeLinkRules" relation="SeeAlso" />
