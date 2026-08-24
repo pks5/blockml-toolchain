@@ -104,4 +104,37 @@ describe("parseTypeExpression", () => {
       "(org.blockml.bml.core.ValueType[])[]",
     );
   });
+
+  it("does not treat Boolean.False as a raw FQN", () => {
+    const expr = parseTypeExpression("Boolean.False | core:Block[]", BINDINGS);
+    expect(expr.kind).toBe("union");
+    if (expr.kind !== "union") {
+      return;
+    }
+    expect(expr.alternatives[0]?.kind).toBe("named");
+    if (expr.alternatives[0]?.kind === "named") {
+      expect(expr.alternatives[0].fqn).toBe("org.blockml.bml.type.Boolean");
+    }
+  });
+
+  it("resolves unqualified names via subBlockIndex and currentTypeFqn", () => {
+    const nested = parseTypeExpression("Utils", BINDINGS, "type", {
+      subBlockIndex: new Map([
+        ["Utils", "com.machineblocks.bml.calibration.Calibrator.Utils"],
+      ]),
+    });
+    expect(nested.kind).toBe("named");
+    if (nested.kind === "named") {
+      expect(nested.fqn).toBe("com.machineblocks.bml.calibration.Calibrator.Utils");
+    }
+
+    const self = parseTypeExpression("NativeBlock[]", BINDINGS, "type", {
+      currentTypeFqn: "com.machineblocks.bml.core.NativeBlock",
+    });
+    expect(self.kind).toBe("named");
+    if (self.kind === "named") {
+      expect(self.fqn).toBe("com.machineblocks.bml.core.NativeBlock");
+      expect(self.multiplicity).toEqual({ min: 0, max: "*" });
+    }
+  });
 });

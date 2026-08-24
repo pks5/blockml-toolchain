@@ -32,7 +32,11 @@ import {
   isTypeReferenceEntitySugar,
   buildSubBlockIndex,
 } from "./map-composition.js";
-import { parseTypeExpression, inferCardinality } from "./type-expression.js";
+import {
+  parseTypeExpression,
+  inferCardinality,
+  type TypeExpressionResolveOptions,
+} from "./type-expression.js";
 import { parseMemberValue } from "./member-value.js";
 import {
   elementChildren,
@@ -325,7 +329,12 @@ function mapMemberElement(
     let typeFqn = "";
     let typeExpr: TypeExpression | undefined;
     if (typeAttr !== undefined) {
-      typeExpr = parseTypeExpression(typeAttr, ctx.bindings, "type");
+      typeExpr = parseTypeExpression(
+        typeAttr,
+        ctx.bindings,
+        "type",
+        typeResolveOptions(ctx),
+      );
       typeFqn = typeExpr.kind === "named" ? typeExpr.fqn : "";
     }
     const prop: PropertyDefinition = {
@@ -348,7 +357,12 @@ function mapMemberElement(
       authoredInAggregationsSection: inAggregationsSection,
     };
     if (typeAttr) {
-      agg.type = parseTypeExpression(typeAttr, ctx.bindings, "type");
+      agg.type = parseTypeExpression(
+        typeAttr,
+        ctx.bindings,
+        "type",
+        typeResolveOptions(ctx),
+      );
       agg.cardinality = inferCardinality(agg.type) ?? "0..n";
     }
     const def = getAttribute(element, "default");
@@ -367,7 +381,12 @@ function mapMemberElement(
     return {
       ...base,
       kind: "association",
-      type: parseTypeExpression(typeAttr, ctx.bindings, "block"),
+      type: parseTypeExpression(
+        typeAttr,
+        ctx.bindings,
+        "block",
+        typeResolveOptions(ctx),
+      ),
       cardinality: "0..n",
     } satisfies AssociationDefinition;
   }
@@ -381,7 +400,12 @@ function mapMemberElement(
   const inputType = getAttribute(element, "inputType");
   const outputType = getAttribute(element, "outputType");
   if (inputType) {
-    cap.inputType = parseTypeExpression(inputType, ctx.bindings, "type");
+    cap.inputType = parseTypeExpression(
+      inputType,
+      ctx.bindings,
+      "type",
+      typeResolveOptions(ctx),
+    );
     const inputTypeSource = attributeValueLoc(
       ctx.filePath,
       ctx.source,
@@ -394,7 +418,12 @@ function mapMemberElement(
     }
   }
   if (outputType) {
-    cap.outputType = parseTypeExpression(outputType, ctx.bindings, "type");
+    cap.outputType = parseTypeExpression(
+      outputType,
+      ctx.bindings,
+      "type",
+      typeResolveOptions(ctx),
+    );
     const outputTypeSource = attributeValueLoc(
       ctx.filePath,
       ctx.source,
@@ -540,6 +569,7 @@ function mapMetadataFields(
             ),
         );
         block.typeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
+        ctx.parentBlockType = block.type;
         break;
       case "baseType": {
         const bt = getTextOrAttr(child);
@@ -548,7 +578,7 @@ function mapMetadataFields(
             ctx.filePath,
             ctx.source,
             child,
-            () => resolveBlockReference(bt, ctx.bindings, ctx.subBlockIndex, block.type),
+            () => namedTypeFqn(bt, ctx, block.type),
           );
         }
         block.baseTypeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
@@ -866,16 +896,33 @@ function mapContracts(element: Element, ctx: MapContext): TypeReferenceEntityIns
   return contracts;
 }
 
+function typeResolveOptions(ctx: MapContext): TypeExpressionResolveOptions {
+  const options: TypeExpressionResolveOptions = {
+    subBlockIndex: ctx.subBlockIndex,
+  };
+  if (ctx.parentBlockType) {
+    options.currentTypeFqn = ctx.parentBlockType;
+  }
+  return options;
+}
+
+function namedTypeFqn(raw: string, ctx: MapContext, fallbackParent?: string): string {
+  const expr = parseTypeExpression(raw, ctx.bindings, "type", typeResolveOptions(ctx));
+  if (expr.kind === "named") {
+    return expr.fqn;
+  }
+  return resolveBlockReference(raw, ctx.bindings, ctx.subBlockIndex, fallbackParent);
+}
+
 function mapGenericTypes(element: Element, ctx: MapContext): GenericType[] {
   return elementChildren(element).map((c) => {
     const defaultType = getAttribute(c, "defaultType");
+    const raw =
+      getAttribute(c, "baseType") ?? getTextOrAttr(c) ?? "org.blockml.bml.core.Block";
     return {
       name: elementLocalName(c),
-      baseType: resolveBlockReference(
-        getAttribute(c, "baseType") ?? getTextOrAttr(c) ?? "org.blockml.bml.core.Block",
-        ctx.bindings,
-        ctx.subBlockIndex,
-        ctx.parentBlockType,
+      baseType: withElementLocation(ctx.filePath, ctx.source, c, () =>
+        namedTypeFqn(raw, ctx, ctx.parentBlockType),
       ),
       ...(defaultType !== undefined ? { defaultType } : {}),
     };

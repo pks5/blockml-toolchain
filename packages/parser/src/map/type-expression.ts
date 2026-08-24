@@ -16,10 +16,15 @@ import {
   type ImplicitNamespaceContext,
 } from "../util/qname.js";
 
+export type TypeExpressionResolveOptions = {
+  subBlockIndex?: Map<string, string>;
+  currentTypeFqn?: string;
+};
+
 type ParseCtx = {
   bindings: Record<string, string>;
   implicit: ImplicitNamespaceContext;
-};
+} & TypeExpressionResolveOptions;
 
 function formatMultiplicity(m: Multiplicity): string {
   const { min, max } = m;
@@ -256,7 +261,9 @@ function parseTypeExpressionInternal(
     return applyMultiplicity(parseTypeExpressionInternal(expr, ctx), multiplicity);
   }
 
-  if (/^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)+$/i.test(input)) {
+  // Package FQNs start with a lowercase segment (com.foo.Bar). Do not treat
+  // Type.Member (Boolean.False) as an already-resolved FQN.
+  if (/^[a-z][a-z0-9]*(\.[A-Za-z0-9]+)+$/.test(input)) {
     const named: NamedTypeReference = { kind: "named", fqn: input };
     return named;
   }
@@ -291,6 +298,26 @@ function parseTypeExpressionInternal(
     }
   }
 
+  const { prefix, local } = splitQName(base);
+  if (!prefix) {
+    const nested = ctx.subBlockIndex?.get(local);
+    if (nested) {
+      const namedNested: NamedTypeReference = { kind: "named", fqn: nested };
+      if (config) {
+        namedNested.instanceConfiguration = config;
+      }
+      return namedNested;
+    }
+    const selfLocal = ctx.currentTypeFqn?.split(".").pop();
+    if (ctx.currentTypeFqn && selfLocal === local) {
+      const namedSelf: NamedTypeReference = { kind: "named", fqn: ctx.currentTypeFqn };
+      if (config) {
+        namedSelf.instanceConfiguration = config;
+      }
+      return namedSelf;
+    }
+  }
+
   const named: NamedTypeReference = {
     kind: "named",
     fqn: resolveTypeName(base, ctx.bindings, ctx.implicit),
@@ -305,8 +332,9 @@ export function parseTypeExpression(
   raw: string,
   bindings: Record<string, string>,
   implicit: ImplicitNamespaceContext = "type",
+  options?: TypeExpressionResolveOptions,
 ): TypeExpression {
-  return parseTypeExpressionInternal(raw, { bindings, implicit });
+  return parseTypeExpressionInternal(raw, { bindings, implicit, ...options });
 }
 
 export function inferCardinality(type: TypeExpression | undefined):

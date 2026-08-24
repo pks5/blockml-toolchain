@@ -90,4 +90,25 @@ describe("validateTypes diagnostic locations", () => {
     const diagnostics = validateTypes(parsed.document!, new TypeRegistry());
     expect(diagnostics.some((d) => d.code === "BML_UNKNOWN_TYPE")).toBe(false);
   });
+
+  it("does not flag xmlns-qualified domain types absent from the registry", () => {
+    const source = [
+      '<block xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:mbt="com.machineblocks.bml.type"',
+      ' xmlns:test="com.blockml.test.diag">',
+      "  <type>test:Sample</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  <properties>",
+      '    <size type="mbt:Size3D" />',
+      '    <baseCutoutType type="mbt:BaseCutoutType" />',
+      "  </properties>",
+      "</block>",
+    ].join("\n");
+    const parsed = parse(source, { filePath: "domain-types.bml", continueOnError: true });
+    expect(parsed.document).not.toBeNull();
+    const diagnostics = validateTypes(parsed.document!, new TypeRegistry());
+    expect(diagnostics.some((d) => d.code === "BML_UNKNOWN_TYPE")).toBe(false);
+  });
 });

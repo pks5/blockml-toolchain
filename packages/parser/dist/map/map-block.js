@@ -1,6 +1,6 @@
 import { createMapContext } from "./context.js";
 import { mapBlockInstanceNode, mapCompositionTemplate, mapTypeReferenceEntityInstance, isTypeReferenceEntitySugar, buildSubBlockIndex, } from "./map-composition.js";
-import { parseTypeExpression, inferCardinality } from "./type-expression.js";
+import { parseTypeExpression, inferCardinality, } from "./type-expression.js";
 import { parseMemberValue } from "./member-value.js";
 import { elementChildren, elementLocalName, elementPrefix, getAttribute, getCharacterData, xmlTriviaFromElement, } from "../util/xml.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
@@ -208,7 +208,7 @@ function mapMemberElement(element, kind, ctx, inAggregationsSection = false) {
         let typeFqn = "";
         let typeExpr;
         if (typeAttr !== undefined) {
-            typeExpr = parseTypeExpression(typeAttr, ctx.bindings, "type");
+            typeExpr = parseTypeExpression(typeAttr, ctx.bindings, "type", typeResolveOptions(ctx));
             typeFqn = typeExpr.kind === "named" ? typeExpr.fqn : "";
         }
         const prop = {
@@ -230,7 +230,7 @@ function mapMemberElement(element, kind, ctx, inAggregationsSection = false) {
             authoredInAggregationsSection: inAggregationsSection,
         };
         if (typeAttr) {
-            agg.type = parseTypeExpression(typeAttr, ctx.bindings, "type");
+            agg.type = parseTypeExpression(typeAttr, ctx.bindings, "type", typeResolveOptions(ctx));
             agg.cardinality = inferCardinality(agg.type) ?? "0..n";
         }
         const def = getAttribute(element, "default");
@@ -248,7 +248,7 @@ function mapMemberElement(element, kind, ctx, inAggregationsSection = false) {
         return {
             ...base,
             kind: "association",
-            type: parseTypeExpression(typeAttr, ctx.bindings, "block"),
+            type: parseTypeExpression(typeAttr, ctx.bindings, "block", typeResolveOptions(ctx)),
             cardinality: "0..n",
         };
     }
@@ -261,14 +261,14 @@ function mapMemberElement(element, kind, ctx, inAggregationsSection = false) {
     const inputType = getAttribute(element, "inputType");
     const outputType = getAttribute(element, "outputType");
     if (inputType) {
-        cap.inputType = parseTypeExpression(inputType, ctx.bindings, "type");
+        cap.inputType = parseTypeExpression(inputType, ctx.bindings, "type", typeResolveOptions(ctx));
         const inputTypeSource = attributeValueLoc(ctx.filePath, ctx.source, element, "inputType", inputType);
         if (inputTypeSource) {
             cap.inputTypeSource = inputTypeSource;
         }
     }
     if (outputType) {
-        cap.outputType = parseTypeExpression(outputType, ctx.bindings, "type");
+        cap.outputType = parseTypeExpression(outputType, ctx.bindings, "type", typeResolveOptions(ctx));
         const outputTypeSource = attributeValueLoc(ctx.filePath, ctx.source, element, "outputType", outputType);
         if (outputTypeSource) {
             cap.outputTypeSource = outputTypeSource;
@@ -371,11 +371,12 @@ function mapMetadataFields(element, block, ctx) {
             case "type":
                 block.type = withElementLocation(ctx.filePath, ctx.source, child, () => resolveBlockReference(getTextOrAttr(child) ?? "", ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType));
                 block.typeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
+                ctx.parentBlockType = block.type;
                 break;
             case "baseType": {
                 const bt = getTextOrAttr(child);
                 if (bt) {
-                    block.baseType = withElementLocation(ctx.filePath, ctx.source, child, () => resolveBlockReference(bt, ctx.bindings, ctx.subBlockIndex, block.type));
+                    block.baseType = withElementLocation(ctx.filePath, ctx.source, child, () => namedTypeFqn(bt, ctx, block.type));
                 }
                 block.baseTypeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
                 break;
@@ -669,12 +670,29 @@ function mapContracts(element, ctx) {
     }
     return contracts;
 }
+function typeResolveOptions(ctx) {
+    const options = {
+        subBlockIndex: ctx.subBlockIndex,
+    };
+    if (ctx.parentBlockType) {
+        options.currentTypeFqn = ctx.parentBlockType;
+    }
+    return options;
+}
+function namedTypeFqn(raw, ctx, fallbackParent) {
+    const expr = parseTypeExpression(raw, ctx.bindings, "type", typeResolveOptions(ctx));
+    if (expr.kind === "named") {
+        return expr.fqn;
+    }
+    return resolveBlockReference(raw, ctx.bindings, ctx.subBlockIndex, fallbackParent);
+}
 function mapGenericTypes(element, ctx) {
     return elementChildren(element).map((c) => {
         const defaultType = getAttribute(c, "defaultType");
+        const raw = getAttribute(c, "baseType") ?? getTextOrAttr(c) ?? "org.blockml.bml.core.Block";
         return {
             name: elementLocalName(c),
-            baseType: resolveBlockReference(getAttribute(c, "baseType") ?? getTextOrAttr(c) ?? "org.blockml.bml.core.Block", ctx.bindings, ctx.subBlockIndex, ctx.parentBlockType),
+            baseType: withElementLocation(ctx.filePath, ctx.source, c, () => namedTypeFqn(raw, ctx, ctx.parentBlockType)),
             ...(defaultType !== undefined ? { defaultType } : {}),
         };
     });

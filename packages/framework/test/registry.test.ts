@@ -23,6 +23,8 @@ describe("TypeRegistry bootstrap", () => {
 
     expect(registry.has("org.blockml.bml.core.Block")).toBe(true);
     expect(registry.has("com.machineblocks.bml.core.NativeBlock")).toBe(true);
+    expect(registry.has("com.machineblocks.bml.type.SizeXYZ")).toBe(true);
+    expect(registry.has("com.machineblocks.bml.type.BaseCutout")).toBe(true);
     expect(registry.size()).toBeGreaterThan(50);
   });
 

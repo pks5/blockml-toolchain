@@ -122,8 +122,12 @@ export function resolveTypeName(name, bindings, context = "type") {
                 : context === "relation"
                     ? RELATION_TYPES
                     : PRIMITIVE_TYPES;
+    const typeLocal = !prefix && local.includes(".") ? local.slice(0, local.indexOf(".")) : local;
     if (table[local]) {
         return table[local];
+    }
+    if (table[typeLocal]) {
+        return table[typeLocal];
     }
     if (context === "relation" && /^[A-Z]/.test(local)) {
         return `org.blockml.bml.relation.${local}`;
@@ -131,8 +135,8 @@ export function resolveTypeName(name, bindings, context = "type") {
     if (trimmed.includes(".") && /^[a-z]/.test(trimmed.split(".")[0])) {
         return trimmed;
     }
-    if (context === "type" && /^[A-Z]/.test(local)) {
-        return `org.blockml.bml.type.${local}`;
+    if (context === "type" && /^[A-Z]/.test(typeLocal)) {
+        return `org.blockml.bml.type.${typeLocal}`;
     }
     throw new Error(`BML_UNKNOWN_TYPE: ${name}`);
 }

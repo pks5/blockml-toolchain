@@ -202,7 +202,9 @@ function parseTypeExpressionInternal(raw, ctx) {
         }
         return applyMultiplicity(parseTypeExpressionInternal(expr, ctx), multiplicity);
     }
-    if (/^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)+$/i.test(input)) {
+    // Package FQNs start with a lowercase segment (com.foo.Bar). Do not treat
+    // Type.Member (Boolean.False) as an already-resolved FQN.
+    if (/^[a-z][a-z0-9]*(\.[A-Za-z0-9]+)+$/.test(input)) {
         const named = { kind: "named", fqn: input };
         return named;
     }
@@ -227,6 +229,25 @@ function parseTypeExpressionInternal(raw, ctx) {
             return { kind: "genericParam", name: base };
         }
     }
+    const { prefix, local } = splitQName(base);
+    if (!prefix) {
+        const nested = ctx.subBlockIndex?.get(local);
+        if (nested) {
+            const namedNested = { kind: "named", fqn: nested };
+            if (config) {
+                namedNested.instanceConfiguration = config;
+            }
+            return namedNested;
+        }
+        const selfLocal = ctx.currentTypeFqn?.split(".").pop();
+        if (ctx.currentTypeFqn && selfLocal === local) {
+            const namedSelf = { kind: "named", fqn: ctx.currentTypeFqn };
+            if (config) {
+                namedSelf.instanceConfiguration = config;
+            }
+            return namedSelf;
+        }
+    }
     const named = {
         kind: "named",
         fqn: resolveTypeName(base, ctx.bindings, ctx.implicit),
@@ -236,8 +257,8 @@ function parseTypeExpressionInternal(raw, ctx) {
     }
     return named;
 }
-export function parseTypeExpression(raw, bindings, implicit = "type") {
-    return parseTypeExpressionInternal(raw, { bindings, implicit });
+export function parseTypeExpression(raw, bindings, implicit = "type", options) {
+    return parseTypeExpressionInternal(raw, { bindings, implicit, ...options });
 }
 export function inferCardinality(type) {
     if (!type) {
