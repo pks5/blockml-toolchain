@@ -82,7 +82,7 @@ export function resolveEffectiveMembers(block, registry) {
     }
     mergeMemberLayer(effective, resolveContracts(block, registry), true);
     mergeMemberLayer(effective, block.members, true);
-    return [...effective.values()];
+    return applyBaseTypeInstanceConfiguration(block, [...effective.values()], registry);
 }
 export function findLocalMember(block, member) {
     const key = memberIdentityKey(member);
@@ -100,5 +100,42 @@ export function propertyForConstraintCheck(effective, local) {
         merged.values = local.values;
     }
     return merged;
+}
+function propertyHasBoundValue(prop) {
+    if (prop.value !== undefined) {
+        return true;
+    }
+    return (prop.values ?? []).some((entry) => entry.value !== undefined);
+}
+function applyInstanceConfigurationToMembers(members, config, propertyOrder) {
+    const named = { ...(config.named ?? {}) };
+    if (config.positional?.length) {
+        for (let i = 0; i < config.positional.length; i++) {
+            const target = propertyOrder[i];
+            const value = config.positional[i];
+            if (target && value !== undefined && named[target.name] === undefined) {
+                named[target.name] = value;
+            }
+        }
+    }
+    return members.map((member) => {
+        if (member.kind !== "property") {
+            return member;
+        }
+        const bound = named[member.name];
+        if (bound === undefined || propertyHasBoundValue(member)) {
+            return member;
+        }
+        return { ...member, value: bound };
+    });
+}
+function applyBaseTypeInstanceConfiguration(block, members, registry) {
+    const expr = block.baseTypeExpression;
+    if (!expr || expr.kind !== "named" || !expr.instanceConfiguration) {
+        return members;
+    }
+    const baseDoc = registry.get(expr.fqn);
+    const propertyOrder = (baseDoc ? resolveEffectiveMembers(baseDoc.block, registry) : members).filter((m) => m.kind === "property");
+    return applyInstanceConfigurationToMembers(members, expr.instanceConfiguration, propertyOrder);
 }
 //# sourceMappingURL=resolve-effective-members.js.map

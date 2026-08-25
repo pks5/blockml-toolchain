@@ -87,3 +87,31 @@ cases:
     contractFixture: fixtures/contracts/IIdentifiable.bml
     diagnostic: BML_CONSTRAINT_VIOLATION
     notes: Contract ValuePresent without local id value
+
+  - id: abstract-member-value-present
+    fixture: fixtures/valid-abstract-value-present.bml
+    expect: pass
+    notes: Abstract members may be empty at the type definition
+
+  - id: override-without-default
+    fixture: fixtures/valid-override-without-default.bml
+    expect: pass
+    contractFixture: fixtures/contracts/IIdentifiable.bml
+    notes: Override without a type-level default is filled at instance sites
+
+  - id: generic-value-present
+    fixture: fixtures/valid-generic-value-present.bml
+    expect: pass
+    notes: Generic configuration property (Constant.value) is bound via {value: …}
+
+  - id: value-present-missing-on-concrete
+    fixture: fixtures/invalid-value-present-missing.bml
+    expect: fail
+    diagnostic: BML_CONSTRAINT_VIOLATION
+    notes: Concrete non-generic property with ValuePresent and no value
+
+  - id: basetype-instance-config-binds-value
+    fixture: fixtures/valid-basetype-instance-config.bml
+    expect: pass
+    parentFixture: fixtures/parent-configurable-constant.bml
+    notes: baseType Constant(T){true} binds the inherited value property

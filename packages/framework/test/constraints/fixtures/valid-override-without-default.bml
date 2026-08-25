@@ -1,0 +1,26 @@
+<!--
+  Test fixture — visibility/override widening without a type-level default
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:test="com.blockml.test.constraints"
+  xmlns:type="org.blockml.bml.type">
+
+  <type>test:OverrideWithoutDefault</type>
+  <baseType>core:Block</baseType>
+  <is>A constraint test fixture</is>
+  <version>1.0.0</version>
+
+  <contracts>
+    <test:IIdentifiable />
+  </contracts>
+  <properties>
+    <id type="type:Text" override="true">
+      <documentation>Filled at instance sites — not on this type definition.</documentation>
+    </id>
+  </properties>
+</block>

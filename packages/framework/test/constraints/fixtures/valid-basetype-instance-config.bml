@@ -1,0 +1,17 @@
+<!--
+  Test fixture — baseType instance configuration binds ValuePresent
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:test="com.blockml.test.constraints"
+  xmlns:type="org.blockml.bml.type">
+
+  <type>test:BoundConstantTrue</type>
+  <baseType>test:ConfigurableConstant(type:Boolean){true}</baseType>
+  <is>A constraint test fixture</is>
+  <version>1.0.0</version>
+</block>

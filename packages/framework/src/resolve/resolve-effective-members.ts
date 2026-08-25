@@ -1,4 +1,10 @@
-import type { BlockDefinition, MemberDefinition, PropertyDefinition } from "@blockml/bom";
+import type {
+  BlockDefinition,
+  InstanceConfiguration,
+  MemberDefinition,
+  MemberValue,
+  PropertyDefinition,
+} from "@blockml/bom";
 import type { TypeRegistry } from "../registry/type-registry.js";
 
 export function memberIdentityKey(member: MemberDefinition): string {
@@ -115,7 +121,7 @@ export function resolveEffectiveMembers(
   mergeMemberLayer(effective, resolveContracts(block, registry), true);
   mergeMemberLayer(effective, block.members, true);
 
-  return [...effective.values()];
+  return applyBaseTypeInstanceConfiguration(block, [...effective.values()], registry);
 }
 
 export function findLocalMember(
@@ -141,4 +147,59 @@ export function propertyForConstraintCheck(
     merged.values = local.values;
   }
   return merged;
+}
+
+function propertyHasBoundValue(prop: PropertyDefinition): boolean {
+  if (prop.value !== undefined) {
+    return true;
+  }
+  return (prop.values ?? []).some((entry) => entry.value !== undefined);
+}
+
+function applyInstanceConfigurationToMembers(
+  members: MemberDefinition[],
+  config: InstanceConfiguration,
+  propertyOrder: PropertyDefinition[],
+): MemberDefinition[] {
+  const named: Record<string, MemberValue> = { ...(config.named ?? {}) };
+  if (config.positional?.length) {
+    for (let i = 0; i < config.positional.length; i++) {
+      const target = propertyOrder[i];
+      const value = config.positional[i];
+      if (target && value !== undefined && named[target.name] === undefined) {
+        named[target.name] = value;
+      }
+    }
+  }
+
+  return members.map((member) => {
+    if (member.kind !== "property") {
+      return member;
+    }
+    const bound = named[member.name];
+    if (bound === undefined || propertyHasBoundValue(member)) {
+      return member;
+    }
+    return { ...member, value: bound };
+  });
+}
+
+function applyBaseTypeInstanceConfiguration(
+  block: BlockDefinition,
+  members: MemberDefinition[],
+  registry: TypeRegistry,
+): MemberDefinition[] {
+  const expr = block.baseTypeExpression;
+  if (!expr || expr.kind !== "named" || !expr.instanceConfiguration) {
+    return members;
+  }
+  const baseDoc = registry.get(expr.fqn);
+  const propertyOrder = (
+    baseDoc ? resolveEffectiveMembers(baseDoc.block, registry) : members
+  ).filter((m): m is PropertyDefinition => m.kind === "property");
+  return applyInstanceConfigurationToMembers(
+    members,
+    expr.instanceConfiguration,
+    propertyOrder,
+  );
 }

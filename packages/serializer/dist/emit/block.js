@@ -52,7 +52,10 @@ function emitBlockField(writer, block, key, ctx) {
             }
             break;
         case "baseType":
-            if (block.baseType) {
+            if (block.baseTypeExpression) {
+                emitSimpleElement(writer, "baseType", emitTypeExpression(block.baseTypeExpression, ctx.bindings, ctx.useQName));
+            }
+            else if (block.baseType) {
                 emitSimpleElement(writer, "baseType", ctx.useQName ? fqnToQName(block.baseType, ctx.bindings) : block.baseType);
             }
             break;

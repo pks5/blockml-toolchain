@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { bomEquals } from "@blockml/bom";
 import { parse } from "@blockml/parser";
 import { serialize } from "@blockml/serializer";
-import { validateConstraints } from "../src/index.js";
+import { validateConstraints, bootstrapTypeRegistry, defaultBootstrapPaths } from "../src/index.js";
 import { TypeRegistry } from "../src/registry/type-registry.js";
 
 const FIXTURES_DIR = join(import.meta.dirname, "constraints");
@@ -16,6 +16,7 @@ interface SpecCase {
   expect: "pass" | "fail";
   diagnostic?: string;
   contractFixture?: string;
+  parentFixture?: string;
   roundtrip?: boolean;
 }
 
@@ -40,6 +41,11 @@ function loadCases(): SpecCase[] {
     const contractMatch = line.match(/^\s+contractFixture:\s+(.+)$/);
     if (contractMatch && current.id) {
       current.contractFixture = contractMatch[1]!.trim();
+      continue;
+    }
+    const parentMatch = line.match(/^\s+parentFixture:\s+(.+)$/);
+    if (parentMatch && current.id) {
+      current.parentFixture = parentMatch[1]!.trim();
       continue;
     }
     const expectMatch = line.match(/^\s+expect:\s+(.+)$/);
@@ -76,13 +82,21 @@ function buildRegistry(
     expect(contractParsed.document).not.toBeNull();
     registry.register(contractParsed.document!);
   }
+  if (spec.parentFixture) {
+    const parentPath = join(FIXTURES_DIR, spec.parentFixture);
+    const parentSource = readFileSync(parentPath, "utf8");
+    const parentParsed = parse(parentSource, { filePath: parentPath });
+    expect(parentParsed.success, JSON.stringify(parentParsed.diagnostics)).toBe(true);
+    expect(parentParsed.document).not.toBeNull();
+    registry.register(parentParsed.document!);
+  }
   registry.register(mainDocument);
   return registry;
 }
 
 describe("validateConstraints — constraints.test-spec.yaml", () => {
   const cases = loadCases();
-  expect(cases.length).toBe(15);
+  expect(cases.length).toBe(20);
 
   it.each(cases)("$id ($expect)", (spec) => {
     const filePath = join(FIXTURES_DIR, spec.fixture);
@@ -116,6 +130,69 @@ describe("validateConstraints — constraints.test-spec.yaml", () => {
       if (spec.diagnostic) {
         expect(errors.some((d) => d.code === spec.diagnostic)).toBe(true);
       }
+    }
+  });
+});
+
+describe("validateConstraints — ValuePresent semantics", () => {
+  it("emits a single diagnostic for a local ValuePresent violation", () => {
+    const filePath = join(FIXTURES_DIR, "fixtures/invalid-value-present-missing.bml");
+    const parsed = parse(readFileSync(filePath, "utf8"), { filePath });
+    expect(parsed.document).not.toBeNull();
+    const registry = new TypeRegistry();
+    registry.register(parsed.document!);
+    const errors = validateConstraints(parsed.document!, registry).filter(
+      (d) => d.code === "BML_CONSTRAINT_VIOLATION",
+    );
+    expect(errors).toHaveLength(1);
+    expect(errors[0]?.source.file).toBe(filePath);
+    expect(errors[0]?.source.line).toBeLessThanOrEqual(
+      readFileSync(filePath, "utf8").split("\n").length,
+    );
+  });
+
+  it("reports inherited ValuePresent on the child document, not the ancestor property line", () => {
+    const filePath = join(FIXTURES_DIR, "fixtures/invalid-inherited-constraint-violation.bml");
+    const contractPath = join(FIXTURES_DIR, "fixtures/contracts/IIdentifiable.bml");
+    const parsed = parse(readFileSync(filePath, "utf8"), { filePath });
+    const contract = parse(readFileSync(contractPath, "utf8"), { filePath: contractPath });
+    expect(parsed.document).not.toBeNull();
+    expect(contract.document).not.toBeNull();
+    const registry = new TypeRegistry();
+    registry.register(contract.document!);
+    registry.register(parsed.document!);
+    const errors = validateConstraints(parsed.document!, registry).filter(
+      (d) => d.code === "BML_CONSTRAINT_VIOLATION",
+    );
+    expect(errors.length).toBeGreaterThan(0);
+    const childLines = readFileSync(filePath, "utf8").split("\n").length;
+    for (const error of errors) {
+      expect(error.source.file).toBe(filePath);
+      expect(error.source.line).toBeGreaterThanOrEqual(1);
+      expect(error.source.line).toBeLessThanOrEqual(childLines);
+    }
+  });
+});
+
+describe("validateConstraints — core library ValuePresent slots", () => {
+  it("accepts core types whose values are bound later", () => {
+    const { registry } = bootstrapTypeRegistry(defaultBootstrapPaths());
+    const fqns = [
+      "org.blockml.bml.meta.FixedAlias",
+      "org.blockml.bml.meta.FixedKeyword",
+      "org.blockml.bml.meta.FreeTextAlias",
+      "org.blockml.bml.meta.FreeTextKeyword",
+      "org.blockml.bml.type.Boolean",
+      "org.blockml.bml.type.Constant",
+    ];
+    for (const fqn of fqns) {
+      const doc = registry.get(fqn);
+      expect(doc, fqn).toBeDefined();
+      if (!doc) {
+        continue;
+      }
+      const errors = validateConstraints(doc, registry).filter((d) => d.severity === "error");
+      expect(errors, `${fqn}: ${JSON.stringify(errors)}`).toEqual([]);
     }
   });
 });

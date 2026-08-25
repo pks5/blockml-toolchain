@@ -631,12 +631,16 @@ function mapMetadataFields(
       case "baseType": {
         const bt = getTextOrAttr(child);
         if (bt) {
-          block.baseType = withElementLocation(
+          const parsed = withElementLocation(
             ctx.filePath,
             ctx.source,
             child,
-            () => namedTypeFqn(bt, ctx, block.type),
+            () => parseBaseType(bt, ctx, block.type),
           );
+          block.baseType = parsed.fqn;
+          if (parsed.expression) {
+            block.baseTypeExpression = parsed.expression;
+          }
         }
         block.baseTypeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
         break;
@@ -981,12 +985,35 @@ function typeResolveOptions(ctx: MapContext): TypeExpressionResolveOptions {
   return options;
 }
 
-function namedTypeFqn(raw: string, ctx: MapContext, fallbackParent?: string): string {
+function isRichNamedType(expr: TypeExpression): boolean {
+  return (
+    expr.kind === "named" &&
+    ((expr.typeArguments?.length ?? 0) > 0 ||
+      expr.instanceConfiguration !== undefined ||
+      expr.multiplicity !== undefined)
+  );
+}
+
+function parseBaseType(
+  raw: string,
+  ctx: MapContext,
+  fallbackParent?: string,
+): { fqn: string; expression?: TypeExpression } {
   const expr = parseTypeExpression(raw, ctx.bindings, "type", typeResolveOptions(ctx));
   if (expr.kind === "named") {
-    return expr.fqn;
+    if (isRichNamedType(expr)) {
+      return { fqn: expr.fqn, expression: expr };
+    }
+    return { fqn: expr.fqn };
   }
-  return resolveBlockReference(raw, ctx.bindings, ctx.subBlockIndex, fallbackParent);
+  return {
+    fqn: resolveBlockReference(raw, ctx.bindings, ctx.subBlockIndex, fallbackParent),
+    expression: expr,
+  };
+}
+
+function namedTypeFqn(raw: string, ctx: MapContext, fallbackParent?: string): string {
+  return parseBaseType(raw, ctx, fallbackParent).fqn;
 }
 
 function mapGenericTypes(element: Element, ctx: MapContext): GenericType[] {

@@ -1,0 +1,31 @@
+<!--
+  Test parent — configurable singleton (Constant.value pattern)
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:constraint="org.blockml.bml.constraint"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validation="org.blockml.bml.validation"
+  xmlns:test="com.blockml.test.constraints">
+
+  <type>test:ConfigurableConstant</type>
+  <baseType>core:Block</baseType>
+  <is>A configurable singleton fixture</is>
+  <version>1.0.0</version>
+
+  <genericTypes>
+    <T baseType="core:ValueType" />
+  </genericTypes>
+
+  <properties>
+    <value type="T">
+      <constraints>
+        <constraint:ValuePresent validation="validation:Error"/>
+      </constraints>
+    </value>
+  </properties>
+</block>

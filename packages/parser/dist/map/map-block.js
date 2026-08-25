@@ -416,7 +416,11 @@ function mapMetadataFields(element, block, ctx) {
             case "baseType": {
                 const bt = getTextOrAttr(child);
                 if (bt) {
-                    block.baseType = withElementLocation(ctx.filePath, ctx.source, child, () => namedTypeFqn(bt, ctx, block.type));
+                    const parsed = withElementLocation(ctx.filePath, ctx.source, child, () => parseBaseType(bt, ctx, block.type));
+                    block.baseType = parsed.fqn;
+                    if (parsed.expression) {
+                        block.baseTypeExpression = parsed.expression;
+                    }
                 }
                 block.baseTypeSource = elementSourceLoc(ctx.filePath, ctx.source, child);
                 break;
@@ -562,8 +566,20 @@ function mapProseEntry(element, ctx) {
 function blockEffectiveLanguage(_ctx) {
     return "org.blockml.bml.language.English";
 }
+const FREE_TEXT_KEYWORD = "org.blockml.bml.meta.FreeTextKeyword";
+const FREE_TEXT_ALIAS = "org.blockml.bml.meta.FreeTextAlias";
+function commaSeparatedTokens(text) {
+    return text
+        .split(",")
+        .map((token) => token.trim())
+        .filter((token) => token.length > 0);
+}
 function mapKeywords(element, ctx) {
     const entries = [];
+    const { text } = getCharacterData(element);
+    for (const term of commaSeparatedTokens(text)) {
+        entries.push({ typeFqn: FREE_TEXT_KEYWORD, term });
+    }
     for (const child of elementChildren(element)) {
         const local = elementLocalName(child);
         const prefix = elementPrefix(child);
@@ -586,6 +602,10 @@ function mapKeywords(element, ctx) {
 }
 function mapAliases(element, ctx) {
     const entries = [];
+    const { text } = getCharacterData(element);
+    for (const name of commaSeparatedTokens(text)) {
+        entries.push({ typeFqn: FREE_TEXT_ALIAS, name });
+    }
     for (const child of elementChildren(element)) {
         const local = elementLocalName(child);
         const prefix = elementPrefix(child);
@@ -719,12 +739,27 @@ function typeResolveOptions(ctx) {
     }
     return options;
 }
-function namedTypeFqn(raw, ctx, fallbackParent) {
+function isRichNamedType(expr) {
+    return (expr.kind === "named" &&
+        ((expr.typeArguments?.length ?? 0) > 0 ||
+            expr.instanceConfiguration !== undefined ||
+            expr.multiplicity !== undefined));
+}
+function parseBaseType(raw, ctx, fallbackParent) {
     const expr = parseTypeExpression(raw, ctx.bindings, "type", typeResolveOptions(ctx));
     if (expr.kind === "named") {
-        return expr.fqn;
+        if (isRichNamedType(expr)) {
+            return { fqn: expr.fqn, expression: expr };
+        }
+        return { fqn: expr.fqn };
     }
-    return resolveBlockReference(raw, ctx.bindings, ctx.subBlockIndex, fallbackParent);
+    return {
+        fqn: resolveBlockReference(raw, ctx.bindings, ctx.subBlockIndex, fallbackParent),
+        expression: expr,
+    };
+}
+function namedTypeFqn(raw, ctx, fallbackParent) {
+    return parseBaseType(raw, ctx, fallbackParent).fqn;
 }
 function mapGenericTypes(element, ctx) {
     return elementChildren(element).map((c) => {

@@ -44,6 +44,9 @@
     <baseType type="type:Text">
       <documentation>baseType (optional). TS type: type:Text.</documentation>
     </baseType>
+    <baseTypeExpression type="bomtype:TypeExpression">
+      <documentation>Full authored baseType when not a plain FQN (generics, instance configuration). (optional)</documentation>
+    </baseTypeExpression>
     <version type="type:Text">
       <documentation>version (optional). TS type: type:Text.</documentation>
     </version>

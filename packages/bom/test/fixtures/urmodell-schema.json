@@ -930,6 +930,11 @@
           "required": false
         },
         {
+          "name": "baseTypeExpression",
+          "type": "bomtype:TypeExpression",
+          "required": false
+        },
+        {
           "name": "version",
           "type": "type:Text",
           "required": false

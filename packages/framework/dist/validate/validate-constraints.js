@@ -1,7 +1,12 @@
 import { findLocalMember, propertyForConstraintCheck, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
 import { getPropertyNumericValue, isLiteralValue, } from "./validate-types.js";
-function diag(code, message, file, line = 1, column = 1, severity = "error") {
-    return { severity, code, message, source: { file, line, column } };
+function diag(code, message, file, loc, severity = "error") {
+    return {
+        severity,
+        code,
+        message,
+        source: { file, line: loc?.line ?? 1, column: loc?.column ?? 1 },
+    };
 }
 function constraintBranch(typeFqn) {
     if (typeFqn.includes(".constraint.MinItems") ||
@@ -92,12 +97,33 @@ function constraintViolationCode(severity) {
     }
     return "BML_CONSTRAINT_VIOLATION";
 }
+function sourceInFile(loc, file) {
+    return loc !== undefined && (!loc.file || loc.file === file);
+}
+function constraintDiagnosticSource(file, instance, prop, local, block) {
+    if (sourceInFile(local?.source, file)) {
+        return local.source;
+    }
+    if (sourceInFile(prop?.source, file)) {
+        return prop.source;
+    }
+    if (sourceInFile(instance.source, file)) {
+        return instance.source;
+    }
+    if (sourceInFile(block?.baseTypeSource, file)) {
+        return block.baseTypeSource;
+    }
+    if (sourceInFile(block?.source, file)) {
+        return block.source;
+    }
+    return undefined;
+}
 function pushConstraintViolation(instance, message, file, diagnostics, source) {
     const severity = validationSeverity(instance);
     if (!severity) {
         return;
     }
-    diagnostics.push(diag(constraintViolationCode(severity), message, file, source?.line ?? instance.source?.line, source?.column ?? instance.source?.column, severity));
+    diagnostics.push(diag(constraintViolationCode(severity), message, file, source, severity));
 }
 function getPropertyStringValue(prop) {
     const fromLiteral = (val) => {
@@ -157,10 +183,26 @@ function hasAuthoredPropertyValue(prop) {
     }
     return false;
 }
-function evaluateValueConstraint(instance, prop, file, diagnostics) {
+function isGenericParamProperty(prop) {
+    return prop.type?.kind === "genericParam";
+}
+function shouldSkipValuePresent(prop, local) {
+    if (prop.abstract || local?.abstract) {
+        return true;
+    }
+    if (isGenericParamProperty(prop) || (local && isGenericParamProperty(local))) {
+        return true;
+    }
+    if (local?.override && !hasAuthoredPropertyValue(local)) {
+        return true;
+    }
+    return false;
+}
+function evaluateValueConstraint(instance, prop, file, diagnostics, local, block) {
     if (!validationIsEnforced(instance)) {
         return;
     }
+    const loc = constraintDiagnosticSource(file, instance, prop, local, block);
     const typeFqn = instance.typeFqn;
     const limitVal = instance.memberValues["value"];
     const limit = limitVal && isLiteralValue(limitVal) && typeof limitVal.value === "number"
@@ -169,25 +211,25 @@ function evaluateValueConstraint(instance, prop, file, diagnostics) {
     if (typeFqn.includes(".Min") && !typeFqn.includes("MinItems") && !typeFqn.includes("MinLength")) {
         const actual = prop ? getPropertyNumericValue(prop) : undefined;
         if (actual !== undefined && !Number.isNaN(limit) && actual < limit) {
-            pushConstraintViolation(instance, `Value ${actual} is less than minimum ${limit}`, file, diagnostics, prop?.source);
+            pushConstraintViolation(instance, `Value ${actual} is less than minimum ${limit}`, file, diagnostics, loc);
         }
     }
     if (typeFqn.includes(".Max") && !typeFqn.includes("MaxItems") && !typeFqn.includes("MaxLength")) {
         const actual = prop ? getPropertyNumericValue(prop) : undefined;
         if (actual !== undefined && !Number.isNaN(limit) && actual > limit) {
-            pushConstraintViolation(instance, `Value ${actual} is greater than maximum ${limit}`, file, diagnostics, prop?.source);
+            pushConstraintViolation(instance, `Value ${actual} is greater than maximum ${limit}`, file, diagnostics, loc);
         }
     }
     if (typeFqn.includes(".MinLength")) {
         const actual = prop ? getPropertyStringValue(prop) : undefined;
         if (actual !== undefined && !Number.isNaN(limit) && actual.length < limit) {
-            pushConstraintViolation(instance, `String length ${actual.length} is less than minimum ${limit}`, file, diagnostics, prop?.source);
+            pushConstraintViolation(instance, `String length ${actual.length} is less than minimum ${limit}`, file, diagnostics, loc);
         }
     }
     if (typeFqn.includes(".MaxLength")) {
         const actual = prop ? getPropertyStringValue(prop) : undefined;
         if (actual !== undefined && !Number.isNaN(limit) && actual.length > limit) {
-            pushConstraintViolation(instance, `String length ${actual.length} is greater than maximum ${limit}`, file, diagnostics, prop?.source);
+            pushConstraintViolation(instance, `String length ${actual.length} is greater than maximum ${limit}`, file, diagnostics, loc);
         }
     }
     if (typeFqn.includes(".Pattern")) {
@@ -197,7 +239,7 @@ function evaluateValueConstraint(instance, prop, file, diagnostics) {
         if (pattern && actual !== undefined) {
             try {
                 if (!new RegExp(pattern).test(actual)) {
-                    pushConstraintViolation(instance, `Value does not match pattern ${pattern}`, file, diagnostics, prop?.source);
+                    pushConstraintViolation(instance, `Value does not match pattern ${pattern}`, file, diagnostics, loc);
                 }
             }
             catch {
@@ -206,17 +248,17 @@ function evaluateValueConstraint(instance, prop, file, diagnostics) {
         }
     }
     if (typeFqn.includes(".ValuePresent")) {
-        if (prop && !hasAuthoredPropertyValue(prop)) {
-            pushConstraintViolation(instance, `ValuePresent constraint violated on ${prop.name}`, file, diagnostics, prop?.source);
+        if (prop && !shouldSkipValuePresent(prop, local) && !hasAuthoredPropertyValue(prop)) {
+            pushConstraintViolation(instance, `ValuePresent constraint violated on ${prop.name}`, file, diagnostics, loc);
         }
     }
 }
-function evaluatePropertyConstraint(instance, prop, file, diagnostics) {
+function evaluatePropertyConstraint(instance, prop, file, diagnostics, local, block) {
     if (!validationIsEnforced(instance) || !prop) {
         return;
     }
     if (instance.typeFqn.includes(".MustBeReadOnly") && !prop.readOnly) {
-        pushConstraintViolation(instance, `Property ${prop.name} must be readOnly`, file, diagnostics, prop.source);
+        pushConstraintViolation(instance, `Property ${prop.name} must be readOnly`, file, diagnostics, constraintDiagnosticSource(file, instance, prop, local, block));
     }
 }
 function evaluateAggregationConstraint(instance, member, file, diagnostics) {
@@ -277,18 +319,18 @@ function validateConstraintInstances(instances, context, file, diagnostics, bloc
     for (const inst of instances) {
         const branch = constraintBranch(inst.typeFqn);
         if (branch === "Unknown") {
-            diagnostics.push(diag("BML_CONSTRAINT_UNKNOWN", `Unknown constraint type: ${inst.typeFqn}`, file, inst.source?.line, inst.source?.column));
+            diagnostics.push(diag("BML_CONSTRAINT_UNKNOWN", `Unknown constraint type: ${inst.typeFqn}`, file, inst.source));
             continue;
         }
         if (!allowed.has(branch)) {
-            diagnostics.push(diag("BML_CONSTRAINT_TARGET_MISMATCH", `${branch} not allowed on ${context}`, file, inst.source?.line, inst.source?.column));
+            diagnostics.push(diag("BML_CONSTRAINT_TARGET_MISMATCH", `${branch} not allowed on ${context}`, file, inst.source));
             continue;
         }
         if (branch === "ValueConstraint") {
-            evaluateValueConstraint(inst, prop, file, diagnostics);
+            evaluateValueConstraint(inst, prop, file, diagnostics, prop, block);
         }
         if (branch === "PropertyConstraint") {
-            evaluatePropertyConstraint(inst, prop, file, diagnostics);
+            evaluatePropertyConstraint(inst, prop, file, diagnostics, prop, block);
         }
         if (branch === "BlockConstraint" && block && registry) {
             evaluateBlockConstraint(inst, block, registry, file, diagnostics);
@@ -316,11 +358,11 @@ function validateMemberConstraintPlacement(member, file, diagnostics) {
     for (const inst of member.constraints) {
         const branch = constraintBranch(inst.typeFqn);
         if (branch === "Unknown") {
-            diagnostics.push(diag("BML_CONSTRAINT_UNKNOWN", `Unknown constraint type: ${inst.typeFqn}`, file, inst.source?.line, inst.source?.column));
+            diagnostics.push(diag("BML_CONSTRAINT_UNKNOWN", `Unknown constraint type: ${inst.typeFqn}`, file, inst.source));
             continue;
         }
         if (!allowed.has(branch)) {
-            diagnostics.push(diag("BML_CONSTRAINT_TARGET_MISMATCH", `${branch} not allowed on ${context}`, file, inst.source?.line, inst.source?.column));
+            diagnostics.push(diag("BML_CONSTRAINT_TARGET_MISMATCH", `${branch} not allowed on ${context}`, file, inst.source));
         }
     }
 }
@@ -336,10 +378,10 @@ function validateEffectiveMemberConstraints(block, registry, file, diagnostics) 
             for (const inst of member.constraints) {
                 const branch = constraintBranch(inst.typeFqn);
                 if (branch === "ValueConstraint") {
-                    evaluateValueConstraint(inst, prop, file, diagnostics);
+                    evaluateValueConstraint(inst, prop, file, diagnostics, local?.kind === "property" ? local : undefined, block);
                 }
                 if (branch === "PropertyConstraint") {
-                    evaluatePropertyConstraint(inst, prop, file, diagnostics);
+                    evaluatePropertyConstraint(inst, prop, file, diagnostics, local?.kind === "property" ? local : undefined, block);
                 }
             }
         }
@@ -359,15 +401,6 @@ function validateEffectiveMemberConstraints(block, registry, file, diagnostics) 
 }
 function validateMemberConstraints(member, file, diagnostics) {
     validateMemberConstraintPlacement(member, file, diagnostics);
-    const context = member.kind === "property"
-        ? "property"
-        : member.kind === "aggregation"
-            ? "aggregation"
-            : member.kind === "association"
-                ? "association"
-                : "capability";
-    const prop = member.kind === "property" ? member : undefined;
-    validateConstraintInstances(member.constraints, context, file, diagnostics, undefined, undefined, prop, member);
 }
 function validateBlockConstraints(block, registry, file, diagnostics) {
     validateConstraintInstances(block.constraints, "block", file, diagnostics, block, registry);

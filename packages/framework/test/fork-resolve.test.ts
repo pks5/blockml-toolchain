@@ -10,6 +10,7 @@ import {
   memberIdentityKey,
   resolveEffectiveMembers,
 } from "../src/index.js";
+import { TypeRegistry } from "../src/registry/type-registry.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
 
@@ -63,5 +64,42 @@ describe("resolveEffectiveMembers", () => {
     registry.register(document!);
     const effective = resolveEffectiveMembers(document!.block, registry);
     expect(effective.some((m) => m.name === "label")).toBe(true);
+  });
+
+  it("binds baseType instance configuration onto inherited properties", () => {
+    const parent = parse(
+      readFileSync(
+        join(import.meta.dirname, "constraints/fixtures/parent-configurable-constant.bml"),
+        "utf8",
+      ),
+      { filePath: "parent.bml" },
+    );
+    const child = parse(
+      readFileSync(
+        join(import.meta.dirname, "constraints/fixtures/valid-basetype-instance-config.bml"),
+        "utf8",
+      ),
+      { filePath: "child.bml" },
+    );
+    expect(parent.document).not.toBeNull();
+    expect(child.document).not.toBeNull();
+    const registry = new TypeRegistry();
+    registry.register(parent.document!);
+    registry.register(child.document!);
+    const expr = child.document!.block.baseTypeExpression;
+    expect(expr?.kind).toBe("named");
+    if (expr?.kind === "named") {
+      expect(expr.fqn).toBe("com.blockml.test.constraints.ConfigurableConstant");
+      expect(expr.instanceConfiguration?.positional?.[0]).toMatchObject({
+        kind: "literal",
+        value: true,
+      });
+    }
+    const effective = resolveEffectiveMembers(child.document!.block, registry);
+    const value = effective.find((m) => m.kind === "property" && m.name === "value");
+    expect(value?.kind).toBe("property");
+    if (value?.kind === "property") {
+      expect(value.value).toMatchObject({ kind: "literal", value: true });
+    }
   });
 });

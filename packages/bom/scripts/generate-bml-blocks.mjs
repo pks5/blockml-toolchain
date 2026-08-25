@@ -488,6 +488,7 @@ const blocks = [
       { name: "name", type: "type:Text", required: true },
       { name: "type", type: "type:Text", required: true },
       { name: "baseType", type: "type:Text" },
+      { name: "baseTypeExpression", type: "bomtype:TypeExpression", doc: "Full authored baseType when not a plain FQN (generics, instance configuration)." },
       { name: "version", type: "type:Text" },
       { name: "is", type: "type:Text" },
       { name: "summaries", type: "bomblock:DocumentationProseEntry[]" },

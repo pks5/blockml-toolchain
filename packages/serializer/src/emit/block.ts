@@ -123,7 +123,13 @@ function emitBlockField(
       }
       break;
     case "baseType":
-      if (block.baseType) {
+      if (block.baseTypeExpression) {
+        emitSimpleElement(
+          writer,
+          "baseType",
+          emitTypeExpression(block.baseTypeExpression, ctx.bindings, ctx.useQName),
+        );
+      } else if (block.baseType) {
         emitSimpleElement(
           writer,
           "baseType",

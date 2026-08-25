@@ -2,6 +2,7 @@ import type { CharacterDataForm, MetadataElementTrivia, MemberSectionName, Sourc
 import type { BlockInstance } from "./composition.js";
 import type { MemberDefinition } from "./member-definition.js";
 import type { CompositionTemplate } from "./composition.js";
+import type { TypeExpression } from "./type-expression.js";
 /** BOM shape for org.blockml.bml.type.TypeReferenceEntity(B[, D]) instances. */
 export interface TypeReferenceEntityInstance {
     typeFqn: "org.blockml.bml.type.TypeReferenceEntity";
@@ -32,6 +33,11 @@ export interface BlockDefinition {
     type: string;
     /** Parent type FQN. Omitted in some corpus files. */
     baseType?: string;
+    /**
+     * Full authored baseType expression when it is not a plain FQN
+     * (generic arguments, instance configuration, multiplicity).
+     */
+    baseTypeExpression?: TypeExpression;
     /** Semantic version of this definition. Omitted when inherited from Library. */
     version?: string;
     /** Required: names the Idea (Urbild). */
