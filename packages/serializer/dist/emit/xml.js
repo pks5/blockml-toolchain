@@ -54,11 +54,21 @@ export function needsCData(text) {
     return /[<&]/.test(text);
 }
 export function emitCharacterData(writer, text, form) {
+    const lines = text.split("\n");
     if (form === "cdata") {
-        writer.line(`<![CDATA[${text}]]>`);
+        if (lines.length <= 1) {
+            writer.line(`<![CDATA[${text}]]>`);
+            return;
+        }
+        writer.line("<![CDATA[");
+        for (const line of lines) {
+            writer.line(line);
+        }
+        writer.line("]]>");
+        return;
     }
-    else {
-        writer.line(escapeText(text));
+    for (const line of lines) {
+        writer.line(escapeText(line));
     }
 }
 export function formatBoolean(value) {

@@ -68,10 +68,21 @@ export function emitCharacterData(
   text: string,
   form?: "text" | "cdata",
 ): void {
+  const lines = text.split("\n");
   if (form === "cdata") {
-    writer.line(`<![CDATA[${text}]]>`);
-  } else {
-    writer.line(escapeText(text));
+    if (lines.length <= 1) {
+      writer.line(`<![CDATA[${text}]]>`);
+      return;
+    }
+    writer.line("<![CDATA[");
+    for (const line of lines) {
+      writer.line(line);
+    }
+    writer.line("]]>");
+    return;
+  }
+  for (const line of lines) {
+    writer.line(escapeText(line));
   }
 }
 

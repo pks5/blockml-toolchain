@@ -212,7 +212,7 @@ function emitBlockField(
             .join(" ");
           writer.line(`<change ${attrs}>`);
           writer.pushDepth();
-          writer.line(ch.text);
+          emitCharacterData(writer, ch.text);
           writer.popDepth();
           writer.line("</change>");
         }
@@ -381,7 +381,7 @@ function emitNestedBlock(
 function emitSimpleElement(writer: XmlWriter, tag: string, text: string): void {
   writer.line(`<${tag}>`);
   writer.pushDepth();
-  writer.line(text);
+  emitCharacterData(writer, text);
   writer.popDepth();
   writer.line(`</${tag}>`);
 }
@@ -759,7 +759,7 @@ function emitMemberCommonChildren(
     for (const ch of member.changelog) {
       writer.line(`<change version="${escapeAttr(ch.version)}">`);
       writer.pushDepth();
-      writer.line(ch.text);
+      emitCharacterData(writer, ch.text);
       writer.popDepth();
       writer.line("</change>");
     }

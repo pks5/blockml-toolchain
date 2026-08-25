@@ -325,6 +325,7 @@ const capabilities = [
     prefix: "sercap",
     name: "EmitCharacterData",
     is: "Emit text or CDATA character data (D8)",
+    doc: "Emit text or CDATA character data (D8). Multiline values are written one XmlWriter line each so pretty-print indent applies per line; parse TrimText then recovers the BOM string (B13).",
     inputs: [
       { name: "writer", type: "seremit:XmlWriter", required: true },
       { name: "text", type: "type:Text", required: true },

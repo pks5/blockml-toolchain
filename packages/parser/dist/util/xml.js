@@ -47,7 +47,7 @@ export function getCharacterData(element) {
             text += child.data;
         }
     }
-    return { text: text.trim(), form };
+    return { text: trimText(text), form };
 }
 export function collectLeadingComments(siblings, index) {
     const comments = [];
@@ -127,7 +127,40 @@ export function xmlTriviaFromElement(element) {
     }
     return Object.keys(trivia).length > 0 ? trivia : undefined;
 }
+/**
+ * Strip the longest leading whitespace prefix shared by every non-empty line,
+ * then trim the result. Pretty-printed XML indent is formatting (B13) and must
+ * not be stored on character-data fields; relative extra indent is kept.
+ */
 export function trimText(value) {
-    return value.trim();
+    const lines = value.split(/\r\n|\n|\r/);
+    const prefix = commonLeadingWhitespace(lines);
+    const stripped = prefix.length === 0
+        ? lines
+        : lines.map((line) => line.startsWith(prefix) ? line.slice(prefix.length) : line.trim() === "" ? "" : line);
+    return stripped.join("\n").trim();
+}
+function commonLeadingWhitespace(lines) {
+    let prefix;
+    for (const line of lines) {
+        if (line.trim() === "") {
+            continue;
+        }
+        const ws = /^[ \t]*/.exec(line)?.[0] ?? "";
+        if (prefix === undefined) {
+            prefix = ws;
+            continue;
+        }
+        let i = 0;
+        const limit = Math.min(prefix.length, ws.length);
+        while (i < limit && prefix.charCodeAt(i) === ws.charCodeAt(i)) {
+            i++;
+        }
+        prefix = prefix.slice(0, i);
+        if (prefix.length === 0) {
+            return "";
+        }
+    }
+    return prefix ?? "";
 }
 //# sourceMappingURL=xml.js.map

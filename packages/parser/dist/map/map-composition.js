@@ -1,6 +1,6 @@
 import { parseDirectives, parseBmlMeta, } from "./directives.js";
 import { parseMemberValue } from "./member-value.js";
-import { elementChildren, elementLocalName, elementPrefix, getAttribute, isElement, xmlTriviaFromElement, } from "../util/xml.js";
+import { elementChildren, elementLocalName, elementPrefix, getAttribute, getCharacterData, isElement, xmlTriviaFromElement, } from "../util/xml.js";
 import { resolveBlockReference, resolvePrefix, resolveTypeName, TYPE_REFERENCE_ENTITY, elementSourceLoc, } from "../util/qname.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
 import { withElementLocation } from "../util/mapping-error.js";
@@ -132,7 +132,7 @@ export function mapBlockInstanceNode(element, ctx) {
         if (RESERVED.has(childLocal)) {
             continue;
         }
-        const { text } = getCharacterDataSimple(child);
+        const { text } = getCharacterData(child);
         const val = parseMemberValue(text || getAttribute(child, "value"), typeFqn, ctx.filePath, loc.line, loc.column, "element");
         if (val) {
             memberValues[childLocal] = val;
@@ -185,16 +185,6 @@ export function mapBlockInstanceNode(element, ctx) {
         ...(directives.length > 0 ? { directives } : {}),
         source: loc,
     };
-}
-function getCharacterDataSimple(element) {
-    let text = "";
-    for (let i = 0; i < element.childNodes.length; i++) {
-        const child = element.childNodes.item(i);
-        if (child.nodeType === 3 || child.nodeType === 4) {
-            text += child.nodeValue ?? "";
-        }
-    }
-    return { text: text.trim() };
 }
 export function isTypeReferenceEntitySugar(element, ctx) {
     if (element.childNodes.length > 0) {

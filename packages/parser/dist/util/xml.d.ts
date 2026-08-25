@@ -21,5 +21,10 @@ export declare function getCharacterData(element: Element): {
 export declare function collectLeadingComments(siblings: DomNode[], index: number): string[];
 export declare function collectTrailingComments(siblings: DomNode[], index: number): string[];
 export declare function xmlTriviaFromElement(element: Element): XmlTrivia | undefined;
+/**
+ * Strip the longest leading whitespace prefix shared by every non-empty line,
+ * then trim the result. Pretty-printed XML indent is formatting (B13) and must
+ * not be stored on character-data fields; relative extra indent is kept.
+ */
 export declare function trimText(value: string): string;
 //# sourceMappingURL=xml.d.ts.map

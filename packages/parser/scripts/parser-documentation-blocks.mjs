@@ -265,6 +265,7 @@ export const documentationBlocks = [
     • xmlRendering (bml:xml metadata) stored on BlockDefinition — NOT in directives[] (B23/D3)
     • authoredPlacement stored for dual element|attribute forms (D9)
     • authoredCharacterDataForm for text vs CDATA (D8)
+    • TrimText on character data: common leading indent stripped, then trim (B13)
     • Visibility prefixes stripped → logical name + visibility (B14 parse half)`,
     refs: [
       { type: "pardocumentation:MemberMapping", relation: "ReadNext" },

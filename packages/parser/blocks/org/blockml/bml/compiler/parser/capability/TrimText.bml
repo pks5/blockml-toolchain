@@ -27,9 +27,12 @@
   <name>TrimText</name>
   <type>parcap:TrimText</type>
   <baseType>core:Capability</baseType>
-  <is>Trim whitespace from text node value</is>
+  <is>Strip common leading indent, then trim, from text node value</is>
 
-  <documentation>Trim whitespace from text node value</documentation>
+  <documentation>Strip the longest leading whitespace prefix shared by every non-empty line
+    (pretty-print indent), then trim surrounding whitespace. Relative extra indent
+    on individual lines is kept. Used by GetCharacterData for documentation prose
+    and other character-data hosts (B13).</documentation>
 
   <properties>
     <value type="type:Text">

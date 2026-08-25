@@ -16,6 +16,7 @@ import {
   elementLocalName,
   elementPrefix,
   getAttribute,
+  getCharacterData,
   isElement,
   xmlTriviaFromElement,
 } from "../util/xml.js";
@@ -191,7 +192,7 @@ export function mapBlockInstanceNode(
     if (RESERVED.has(childLocal)) {
       continue;
     }
-    const { text } = getCharacterDataSimple(child);
+    const { text } = getCharacterData(child);
     const val = parseMemberValue(
       text || getAttribute(child, "value"),
       typeFqn,
@@ -259,17 +260,6 @@ export function mapBlockInstanceNode(
     ...(directives.length > 0 ? { directives } : {}),
     source: loc,
   };
-}
-
-function getCharacterDataSimple(element: Element): { text: string } {
-  let text = "";
-  for (let i = 0; i < element.childNodes.length; i++) {
-    const child = element.childNodes.item(i)!;
-    if (child.nodeType === 3 || child.nodeType === 4) {
-      text += child.nodeValue ?? "";
-    }
-  }
-  return { text: text.trim() };
 }
 
 export function isTypeReferenceEntitySugar(

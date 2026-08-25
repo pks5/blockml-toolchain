@@ -321,7 +321,7 @@ baseType        org.blockml.bml.core.Entity
 bml:xml         change             — renders as <change> inside <changelog>
 version         Version (required) — XML version attribute
 language        NaturalLanguage    — optional; prose language override for description text
-description     String (required)  — trimmed text body
+description     String (required)  — text body after TrimText (common leading indent stripped, then trim)
 ```
 
 `org.blockml.bml.definition.StructuralDefinition.Example` — inline Sub-Block; one usage example in an `<examples>` container:
@@ -344,7 +344,7 @@ baseType        org.blockml.bml.type.StructType
 bml:xml         documentation      — renders as <documentation> or prefixed localName documentation
 namespace       from element QName — "" = canonical facet; never a locale
 language        NaturalLanguage    — optional attribute; omitted → effective Block/Library language
-content         String (required)  — trimmed text body
+content         String (required)  — text body after TrimText (common leading indent stripped, then trim)
 BOM             documentations[] DocumentationProseEntry { namespace, text, languageFqn }
 identity        (namespace, "documentation", languageFqn) — duplicate → BML_DUPLICATE_DOCUMENTATION
 ```
