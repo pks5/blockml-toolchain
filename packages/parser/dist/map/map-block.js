@@ -6,7 +6,6 @@ import { elementChildren, elementLocalName, elementPrefix, getAttribute, getChar
 import { parseVisibilityFromName } from "../util/visibility.js";
 import { parseBooleanAttribute, isBooleanLiteral } from "../util/boolean.js";
 import { resolveBlockReference, resolvePrefix, resolveTypeName, elementSourceLoc, attributeValueLoc, TYPE_REFERENCE_ENTITY, } from "../util/qname.js";
-import { parseDirectives } from "./directives.js";
 import { withElementLocation } from "../util/mapping-error.js";
 import { collectBlockGrammarAttributes, collectIdentityOrSectionAttributes, collectMemberGrammarAttributes, isAllowedRootChild, reportUnknownElement, toUnknownXmlNode, } from "./structural.js";
 const MEMBER_SECTIONS = new Set([
@@ -14,35 +13,6 @@ const MEMBER_SECTIONS = new Set([
     "aggregations",
     "associations",
     "capabilities",
-]);
-const METADATA_TAGS = new Set([
-    "name",
-    "type",
-    "baseType",
-    "is",
-    "isnot",
-    "isNot",
-    "version",
-    "definition",
-    "since",
-    "status",
-    "summary",
-    "documentation",
-    "abstract",
-    "final",
-    "language",
-    "languages",
-    "subTypes",
-    "subBlocks",
-    "embeddedBlocks",
-    "genericTypes",
-    "contracts",
-    "aliases",
-    "keywords",
-    "changelog",
-    "examples",
-    "references",
-    "constraints",
 ]);
 function mapBlockDefinition(element, ctx, parentType) {
     const block = {

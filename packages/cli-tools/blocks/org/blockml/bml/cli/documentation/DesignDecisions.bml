@@ -24,7 +24,7 @@
   <name>DesignDecisions</name>
   <type>clidocumentation:DesignDecisions</type>
   <baseType>core:Documentation</baseType>
-  <is>Normative CLI decisions CLI1–CLI20</is>
+  <is>Normative CLI decisions CLI1–CLI21</is>
 
   <documentation>CLI1 missing bom.config.json → DefaultBomConfig.
     CLI2 empty targets[] → ["blockdoc"].
@@ -45,7 +45,8 @@
     CLI17 formatDiagnostic line format.
     CLI18 runCli exit code matrix.
     CLI19 target CLI matrix blockdoc/xsd/fatblock.
-    CLI20 validate skips bootstrapTargets.</documentation>
+    CLI20 validate skips bootstrapTargets.
+    CLI21 bin entry uses realpath so npm .bin/blockml symlink invokes runCli.</documentation>
   <references>
     <see type="clidocumentation:PackageOwnership" relation="ReadNext"></see>
   </references>

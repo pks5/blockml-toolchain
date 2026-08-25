@@ -1,9 +1,9 @@
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it, afterEach, beforeEach } from "vitest";
 import { clearTargets } from "@blockml/compiler";
 import { BML_DOCUMENT_NS } from "@blockml/xsd-target";
-import { parseArgs, runCli } from "../src/cli.js";
+import { isCliEntry, parseArgs, runCli } from "../src/cli.js";
 import { resetBootstrapTargets } from "../src/bootstrap-targets.js";
 import {
   parseCatalogUriEntries,
@@ -29,6 +29,29 @@ describe("parseArgs", () => {
     expect(parsed.file).toBe("src/Foo.bml");
     expect(parsed.all).toBe(true);
     expect(parsed.target).toBeUndefined();
+  });
+});
+
+describe("isCliEntry", () => {
+  const tmpBin = join(import.meta.dirname, ".tmp-cli-bin");
+
+  beforeEach(() => {
+    mkdirSync(tmpBin, { recursive: true });
+  });
+
+  afterEach(() => {
+    rmSync(tmpBin, { recursive: true, force: true });
+  });
+
+  it("matches an npm-style .bin symlink to the CLI module", () => {
+    const modulePath = join(tmpBin, "cli.js");
+    const binPath = join(tmpBin, "blockml");
+    writeFileSync(modulePath, "");
+    symlinkSync(modulePath, binPath);
+    expect(isCliEntry(binPath, modulePath)).toBe(true);
+    expect(isCliEntry(modulePath, modulePath)).toBe(true);
+    expect(isCliEntry(join(tmpBin, "other.js"), modulePath)).toBe(false);
+    expect(isCliEntry(undefined, modulePath)).toBe(false);
   });
 });
 

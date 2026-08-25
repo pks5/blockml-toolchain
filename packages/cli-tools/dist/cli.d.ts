@@ -24,5 +24,7 @@ export declare function runCli(argv: string[], cwd?: string): Promise<{
     code: number;
     stderr: string;
 }>;
+/** True when argv[1] is this CLI module, including an npm `.bin` symlink to it. */
+export declare function isCliEntry(argv1: string | undefined, modulePath: string): boolean;
 export {};
 //# sourceMappingURL=cli.d.ts.map

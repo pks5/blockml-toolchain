@@ -41,7 +41,8 @@
     • writeOutputFiles(output, outDir, rootDir?, options?) → WriteOutputResult
     • loadTargetFromPackage / resolveTargetPackage / isBuiltinTarget (plugin loader)
 
-    Bin: blockml → dist/cli.js (direct run invokes runCli).
+    Bin: blockml → dist/cli.js (direct run invokes runCli; CLI21 realpath so
+    node_modules/.bin/blockml symlink matches).
 
     BML counterparts: clicap:RunCli, ParseArgs, LoadConfig, BootstrapTargets,
     RegisterTargetFactory, BootstrapProjectTypeRegistry, WriteOutputFiles.</documentation>

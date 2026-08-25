@@ -25,7 +25,9 @@
   <baseType>core:Capability</baseType>
   <is>Public CLI entry: argv + cwd to exit code and stderr</is>
 
-  <documentation>CLI18: validate command to RunValidate; compile to RunCompile; unknown command exit 2 with USAGE. Direct-run entrypoint when invoked as blockml bin.</documentation>
+  <documentation>CLI18: validate command to RunValidate; compile to RunCompile; unknown command exit 2 with USAGE.
+    Direct-run entrypoint when invoked as blockml bin (CLI21: compare realpath of argv[1]
+    and this module so npm node_modules/.bin/blockml symlinks still invoke runCli).</documentation>
 
   <references>
     <see type="clidocumentation:PublicApi" relation="SeeAlso" />

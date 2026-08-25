@@ -27,7 +27,7 @@
 
   <documentation>
     Canonical CLI specification for BlockML — commands, config, bootstrap order,
-    target matrix, exit codes (CLI1–CLI20). TypeScript in packages/cli-tools/src/
+    target matrix, exit codes (CLI1–CLI21). TypeScript in packages/cli-tools/src/
     implements this library. Compiler facade and scope live in org.blockml.bml.compiler.runtime.*
     Framework bootstrap lives in org.blockml.bml.framework.*.
     Membership is defined exclusively by this blocks list.

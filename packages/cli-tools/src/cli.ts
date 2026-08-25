@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { bootstrapTypeRegistry } from "@blockml/framework";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -482,19 +482,19 @@ export async function runCli(
   return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
 }
 
-function isDirectRun(): boolean {
-  const entry = process.argv[1];
-  if (!entry) {
+/** True when argv[1] is this CLI module, including an npm `.bin` symlink to it. */
+export function isCliEntry(argv1: string | undefined, modulePath: string): boolean {
+  if (!argv1) {
     return false;
   }
   try {
-    return resolve(fileURLToPath(import.meta.url)) === resolve(entry);
+    return realpathSync(argv1) === realpathSync(modulePath);
   } catch {
-    return false;
+    return resolve(argv1) === resolve(modulePath);
   }
 }
 
-if (isDirectRun()) {
+if (isCliEntry(process.argv[1], fileURLToPath(import.meta.url))) {
   const { code, stderr } = await runCli(process.argv.slice(2), process.cwd());
   if (stderr) {
     console.error(stderr.replace(/\n$/, ""));
