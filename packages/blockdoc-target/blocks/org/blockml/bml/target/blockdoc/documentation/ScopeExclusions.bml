@@ -36,7 +36,7 @@
   <documentation>Out of scope for this library:
     • CLI bootstrap map, dual-CLI model, exit codes, bom.config.json schema
     • compile scope auto resolution algorithm (compiler SSOT)
-    • Dependency graphs / richer future navigation beyond current dotted path + package indexes
+    • Dependency graphs / richer future navigation beyond toolbar + dotted path + package indexes
     • Authored XML example surfaces on API pages (future Definition / docs work)
     • Unused legacy block-page breadcrumb helper (not part of normative page chrome)
     • XSD, FatBlock, SCAD, and other render targets

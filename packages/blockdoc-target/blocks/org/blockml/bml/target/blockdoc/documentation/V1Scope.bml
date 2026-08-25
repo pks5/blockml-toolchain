@@ -38,11 +38,12 @@
     • Registry name blockdoc; accepts library, corpus, auto
     • Options: siteMode (merged|perLibrary), outLayout (fqn|package), includeNonExported
     • Block pages, site index, package indexes (fqn layout)
+    • Sticky toolbar with Index + keyword quick search; search-index.json at site root
     • Type links for known named FQNs; member tables; composition trees
     • Control gate: renders without requiring Stage-2 semantic success
 
-    Not V1 (see ScopeExclusions): dependency graphs, richer navigation chrome on block pages,
-    authored XML example surfaces, package-layout collision tooling.</documentation>
+    Not V1 (see ScopeExclusions): dependency graphs, authored XML example surfaces,
+    package-layout collision tooling.</documentation>
   <references>
     <see type="bddocumentation:PublicApi" relation="ReadNext"></see>
   </references>

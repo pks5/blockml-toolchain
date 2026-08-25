@@ -89,5 +89,27 @@ describe("BlockDocTarget package indexes", () => {
     expect(pkgIndex?.content).toContain("<h2>Blocks</h2>");
     expect(pkgIndex?.content).toContain("Alpha");
     expect(pkgIndex?.content).not.toContain("Alpha.Child");
+    expect(pkgIndex?.content).toContain('<span class="brand">BlockDoc</span>');
+    expect(pkgIndex?.content).toContain('<a href="../../../index.html">Index</a>');
+    expect(pkgIndex?.content).toContain('src="../../../search.js"');
+
+    const searchIndexFile = output.files.find((f) => f.path === "search-index.json");
+    expect(searchIndexFile).toBeDefined();
+    const searchIndex = JSON.parse(searchIndexFile!.content) as {
+      blocks: Array<{ name: string; type: string; href: string; keywords: string[] }>;
+    };
+    expect(searchIndex.blocks.map((b) => b.type).sort()).toEqual([
+      "com.example.other.Beta",
+      "com.example.pkg.Alpha",
+      "com.example.pkg.Alpha.Child",
+    ]);
+    const alpha = searchIndex.blocks.find((b) => b.name === "Alpha");
+    expect(alpha?.href).toBe("com/example/pkg/Alpha.html");
+    expect(alpha?.keywords).toContain("Alpha");
+    expect(alpha?.keywords).toContain("com.example.pkg.Alpha");
+
+    const searchJs = output.files.find((f) => f.path === "search.js");
+    expect(searchJs?.content).toContain("com.example.pkg.Alpha");
+    expect(searchJs?.content).toContain("function search(");
   });
 });

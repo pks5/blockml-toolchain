@@ -32,7 +32,7 @@
   <baseType>core:Capability</baseType>
   <is>Assemble one block HTML document</is>
 
-  <documentation>BD6/BD8: header (Index link, package path, h1 name, extends/version/is); Documentation prose; member tables; Composition; Sub-Blocks (always relative links to sub.type, not gated on knownFqns); References prefer ref.type as link else url/file text + context.</documentation>
+  <documentation>BD6/BD8/BD25: sticky toolbar (BlockDoc + Index + search); header (package path, h1 name, extends/version/is); Documentation prose; member tables; Composition; Sub-Blocks (always relative links to sub.type, not gated on knownFqns); References prefer ref.type as link else url/file text + context.</documentation>
 
   <references>
     <see type="bddocumentation:PageChrome" relation="SeeAlso" />

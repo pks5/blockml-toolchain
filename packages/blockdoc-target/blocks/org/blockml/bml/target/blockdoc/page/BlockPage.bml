@@ -32,7 +32,7 @@
   <baseType>blockdoc:BlockdocType</baseType>
   <is>HTML template model for one block documentation page</is>
 
-  <documentation>Emitted by RenderBlockPage. No FQN/baseType/is definition list; no block-page breadcrumb nav (BD8).</documentation>
+  <documentation>Emitted by RenderBlockPage. Toolbar chrome (BD25); no FQN/baseType/is definition list; no block-page breadcrumb nav (BD8).</documentation>
 
   <properties>
     <blockType type="type:Text">

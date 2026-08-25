@@ -7,6 +7,8 @@ import { collectPackagePrefixes, collectRootFqns, rootFqnForBlock, } from "./nav
 import { renderPackageIndexPage } from "./package-index.js";
 import { renderBlockPage, renderIndexPage } from "./render-block-page.js";
 import { resolveBlockDocOptions } from "./options.js";
+import { buildSearchIndexEntry, serializeSearchIndex, } from "./search-index.js";
+import { renderSearchScript } from "./toolbar.js";
 function collectExportedFqns(libraryPaths, rootDir) {
     const bootstrap = bootstrapTypeRegistry({ libraryPaths, rootDir });
     const exported = new Set();
@@ -97,6 +99,7 @@ export class BlockDocTarget {
         const rootFqns = collectRootBlockFqns(ctx, request);
         const knownFqns = new Set(fqns);
         const files = [];
+        const searchEntries = [];
         const rootDir = process.cwd();
         const libraryRoots = options.siteMode === "perLibrary" && ctx.session.libraryPaths?.length
             ? collectLibraryRoots(ctx.session.libraryPaths, rootDir)
@@ -114,6 +117,7 @@ export class BlockDocTarget {
             const pagePath = options.outLayout === "fqn"
                 ? fqnToHtmlPath(fqn, "fqn")
                 : fqnToHtmlPath(fqn, "package");
+            searchEntries.push(buildSearchIndexEntry(block, pagePath));
             files.push({
                 path: pagePath,
                 content: renderBlockPage(block, options, resolveRootIndexPath(rootFqn, options, libraryRoots), knownFqns, rootFqn),
@@ -146,6 +150,14 @@ export class BlockDocTarget {
                 });
             }
         }
+        files.push({
+            path: "search-index.json",
+            content: serializeSearchIndex(searchEntries),
+        });
+        files.push({
+            path: "search.js",
+            content: renderSearchScript(searchEntries),
+        });
         return { files };
     }
 }

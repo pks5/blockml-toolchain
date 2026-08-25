@@ -32,11 +32,12 @@
   <baseType>core:Capability</baseType>
   <is>Orchestrate full multi-file site emission</is>
 
-  <documentation>BD23: emit one HTML per selected FQN (nested via findBlock on subBlocks); merged → index.html else perLibrary {libPrefix}/index.html (libPrefix = Library type with .Library stripped); if outLayout=fqn emit package indexes for all prefixes.</documentation>
+  <documentation>BD23/BD24: emit one HTML per selected FQN (nested via findBlock on subBlocks); merged → index.html else perLibrary {libPrefix}/index.html (libPrefix = Library type with .Library stripped); if outLayout=fqn emit package indexes for all prefixes; emit search-index.json and search.js for every block page.</documentation>
 
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />
     <see type="bdcap:Render" relation="SeeAlso" />
+    <see type="bdcap:BuildSearchIndex" relation="SeeAlso" />
   </references>
 
   <properties>

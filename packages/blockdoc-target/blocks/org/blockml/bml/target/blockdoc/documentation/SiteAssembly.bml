@@ -47,6 +47,9 @@
     Package indexes when outLayout=fqn for every CollectPackagePrefixes entry; perLibrary mode
     points package-index "root" breadcrumb to owning library index when prefix is under that library.
 
+    Search (BD24): after HTML pages, emit search-index.json and search.js (inlined index + quick-search client)
+    covering every emitted block FQN.
+
     Control gate: does not require validator Stage-2 success.</documentation>
   <references>
     <see type="bddocumentation:DesignDecisions" relation="ReadNext"></see>

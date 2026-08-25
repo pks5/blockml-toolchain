@@ -42,7 +42,8 @@
     • fqnToHtmlPath(fqn, outLayout), escapeHtml(text)
 
     BML counterparts: bdcap:Render, bdapi:BlockDocOptions, bdapi:BlockDocRenderOutput,
-    bdcap:ResolveOptions, bdcap:FqnToHtmlPath, bdcap:EscapeHtml.
+    bdapi:SearchIndex, bdcap:ResolveOptions, bdcap:FqnToHtmlPath, bdcap:EscapeHtml,
+    bdcap:BuildSearchIndex, bdcap:RenderToolbar.
 
     Opaque CompileRequest.targetOptions is typed here as BlockDocOptions (BD3).
     Host CLI passes config.targetOptions.blockdoc.</documentation>

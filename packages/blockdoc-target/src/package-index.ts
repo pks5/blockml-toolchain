@@ -1,6 +1,7 @@
 import { escapeHtml, fqnToHtmlPath, fqnToPackagePrefix, packageIndexPath, relativePath } from "./fqn-path.js";
-import { packageSegmentLabel, renderNavigationBreadcrumb } from "./navigation.js";
+import { packageSegmentLabel } from "./navigation.js";
 import type { BlockDocOptions } from "./options.js";
+import { PAGE_SHELL_CSS, wrapHtmlDocument } from "./toolbar.js";
 
 function directBlocks(packagePrefix: string, rootFqns: string[]): string[] {
   return rootFqns.filter((fqn) => fqnToPackagePrefix(fqn) === packagePrefix).sort();
@@ -65,7 +66,7 @@ export function renderPackageIndexPage(
     .join("\n");
 
   const PAGE_CSS = `
-body { font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; max-width: 960px; }
+${PAGE_SHELL_CSS}
 nav.breadcrumb { color: #555; margin-bottom: 1.5rem; font-size: 0.9rem; }
 h1 { margin-bottom: 0.25rem; }
 section { margin-top: 1.5rem; }
@@ -73,18 +74,14 @@ ul { padding-left: 1.5rem; }
 a { color: #0366d6; }
 `.trim();
 
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>${escapeHtml(packagePrefix)}</title>
-  <style>${PAGE_CSS}</style>
-</head>
-<body>
-  <nav class="breadcrumb">${breadcrumbParts.join(" / ")}</nav>
+  return wrapHtmlDocument(
+    packagePrefix,
+    indexPath,
+    rootIndexPath,
+    PAGE_CSS,
+    `<nav class="breadcrumb">${breadcrumbParts.join(" / ")}</nav>
   <h1>${escapeHtml(packageSegmentLabel(packagePrefix))}</h1>
   ${subPackageLinks ? `<section><h2>Sub-packages</h2><ul>${subPackageLinks}</ul></section>` : ""}
-  ${blockLinks ? `<section><h2>Blocks</h2><ul>${blockLinks}</ul></section>` : ""}
-</body>
-</html>`;
+  ${blockLinks ? `<section><h2>Blocks</h2><ul>${blockLinks}</ul></section>` : ""}`,
+  );
 }

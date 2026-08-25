@@ -41,6 +41,7 @@
     3. Emit RenderBlockPage per FQN (find nested types via subBlocks DFS)
     4. Emit site index (merged index.html or perLibrary {prefix}/index.html)
     5. If outLayout=fqn: CollectPackagePrefixes → RenderPackageIndex each
+    6. BuildSearchIndex → search-index.json + search.js (inlined entries + RenderToolbar client)
 
     TypeScript module ↔ BML map:
     • options.ts → bdapi:BlockDocOptions, bdcap:ResolveOptions, bdconfig:BlockDocConstants
@@ -51,6 +52,8 @@
     • composition-render.ts → CollectCompositionGroups, RenderComposition
     • render-block-page.ts → RenderBlockPage, RenderSiteIndex, bdpage:*, PageSectionOrder
     • package-index.ts → RenderPackageIndex
+    • search-index.ts → bdapi:SearchIndexEntry, bdapi:SearchIndex, bdcap:BuildSearchIndex
+    • toolbar.ts → bdcap:RenderToolbar, BlockDocConstants.TOOLBAR_CSS
     • blockdoc-target.ts → Render, AssembleSite, FilterExportedFqns</documentation>
   <references>
     <see type="bddocumentation:V1Scope" relation="ReadNext"></see>

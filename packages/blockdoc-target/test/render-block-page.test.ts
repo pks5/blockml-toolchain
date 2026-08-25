@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { BlockDefinition } from "@blockml/bom";
 import { DEFAULT_BLOCKDOC_OPTIONS } from "../src/options.js";
-import { renderBlockPage } from "../src/render-block-page.js";
+import { renderBlockPage, renderIndexPage } from "../src/render-block-page.js";
 
 const KNOWN = new Set([
   "com.example.Child",
@@ -115,11 +115,30 @@ describe("renderBlockPage", () => {
       KNOWN,
       "com.example.Parent",
     );
-    expect(html).toContain('<p class="site-index"><a href="../../index.html">Index</a></p>');
+    expect(html).toContain('<span class="brand">BlockDoc</span>');
+    expect(html).toContain('<a href="../../index.html">Index</a>');
+    expect(html).toContain('src="../../search.js"');
+    expect(html).toContain("Search blocks…");
+    expect(html).not.toContain('class="site-index"');
     expect(html).toContain(
       '<p class="package-fqn"><a href="../index.html">com</a>.<a href="./index.html">example</a></p>',
     );
     expect(html).not.toContain("nav class=\"breadcrumb\"");
     expect(html).not.toContain("Index</a> /");
+  });
+});
+
+describe("renderIndexPage toolbar", () => {
+  it("places BlockDoc and Index in the sticky toolbar", () => {
+    const html = renderIndexPage(
+      "BlockDoc",
+      ["com.example.Parent"],
+      DEFAULT_BLOCKDOC_OPTIONS,
+      "index.html",
+    );
+    expect(html).toContain('<span class="brand">BlockDoc</span>');
+    expect(html).toContain('<a href="./index.html">Index</a>');
+    expect(html).toContain('src="./search.js"');
+    expect(html).toContain('<div class="page">');
   });
 });

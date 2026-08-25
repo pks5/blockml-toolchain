@@ -51,11 +51,14 @@
       <documentation>JSON array string of scope kinds: library, corpus, auto.</documentation>
     </ACCEPTS>
     <PAGE_CSS type="type:Text">
-      <documentation>Shared minimal CSS for block and site index pages (system-ui, tables, blue links).</documentation>
+      <documentation>Shared CSS for block and site index pages (system-ui, page shell, tables, blue links).</documentation>
     </PAGE_CSS>
     <PACKAGE_INDEX_CSS type="type:Text">
       <documentation>CSS for package index pages (breadcrumb nav).</documentation>
     </PACKAGE_INDEX_CSS>
+    <TOOLBAR_CSS type="type:Text">
+      <documentation>Sticky black toolbar and search dropdown styles (BD25).</documentation>
+    </TOOLBAR_CSS>
     <MEMBER_VALUE_SUMMARY_LIMIT type="type:Integer">
       <documentation>Max member-value keys shown before "+N more" (BD14). Default 5.</documentation>
     </MEMBER_VALUE_SUMMARY_LIMIT>

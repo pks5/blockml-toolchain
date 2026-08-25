@@ -32,7 +32,7 @@
   <baseType>blockdoc:BlockdocType</baseType>
   <is>Multi-file HTML site RenderOutput</is>
 
-  <documentation>Extends compiler RenderOutput. files[] are relative paths under outDir with HTML content.</documentation>
+  <documentation>Extends compiler RenderOutput. files[] are relative paths under outDir with HTML, search-index.json, and search.js content.</documentation>
 
   <properties>
     <files type="type:Text">

@@ -2,10 +2,10 @@ import { escapeHtml, fqnToHtmlPath, fqnToPackagePrefix, packageIndexPath, relati
 import { packageSegmentLabel, renderDottedPackagePath } from "./navigation.js";
 import { renderCompositionGroup } from "./composition-render.js";
 import { renderMemberTable } from "./member-sections.js";
+import { PAGE_SHELL_CSS, wrapHtmlDocument } from "./toolbar.js";
 import { renderTypeRef } from "./type-links.js";
 const PAGE_CSS = `
-body { font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; max-width: 960px; }
-.site-index { font-size: 0.85rem; margin: 0 0 1rem; }
+${PAGE_SHELL_CSS}
 .package-fqn { color: #666; font-size: 0.85rem; margin: 0 0 0.25rem; }
 .extends { color: #666; font-size: 0.85rem; margin: 0.25rem 0 0.75rem; }
 .version { color: #666; font-size: 0.85rem; margin: 0 0 0.75rem; }
@@ -17,12 +17,11 @@ th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; }
 th { background: #f5f5f5; }
 a { color: #0366d6; }
 `.trim();
-function renderBlockHeader(block, pagePath, options, knownFqns, rootIndexPath) {
+function renderBlockHeader(block, pagePath, options, knownFqns) {
     const packageFqn = fqnToPackagePrefix(block.type);
     const packagePath = options.outLayout === "fqn"
         ? renderDottedPackagePath(packageFqn, pagePath, options, knownFqns)
         : escapeHtml(packageFqn);
-    const indexHref = relativePath(pagePath, rootIndexPath);
     const extendsLine = block.baseType
         ? `<p class="extends">extends ${renderTypeRef(block.baseType, pagePath, options, knownFqns)}</p>`
         : "";
@@ -32,8 +31,7 @@ function renderBlockHeader(block, pagePath, options, knownFqns, rootIndexPath) {
     const designationLine = block.is
         ? `<h2 class="designation">${escapeHtml(block.is)}</h2>`
         : "";
-    return `<p class="site-index"><a href="${indexHref}">Index</a></p>
-  <p class="package-fqn">${packagePath}</p>
+    return `<p class="package-fqn">${packagePath}</p>
   <h1>${escapeHtml(block.name)}</h1>
   ${extendsLine}${versionLine}${designationLine}`;
 }
@@ -109,22 +107,12 @@ export function renderBlockPage(block, options, rootIndexPath, knownFqns, _rootF
         .map((group) => renderCompositionGroup(group.aggregationName, group.composition, pagePath, options, knownFqns))
         .filter(Boolean)
         .join("\n");
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>${escapeHtml(block.type)}</title>
-  <style>${PAGE_CSS}</style>
-</head>
-<body>
-  ${renderBlockHeader(block, pagePath, options, knownFqns, rootIndexPath)}
+    return wrapHtmlDocument(block.type, pagePath, rootIndexPath, PAGE_CSS, `${renderBlockHeader(block, pagePath, options, knownFqns)}
   ${proseSection("Documentation", block.documentations)}
   ${memberSections}
   ${compositionSections ? `<section><h2>Composition</h2>${compositionSections}</section>` : ""}
   ${subBlockLinks ? `<section><h2>Sub-Blocks</h2><ul>${subBlockLinks}</ul></section>` : ""}
-  ${refLinks ? `<section><h2>References</h2><ul>${refLinks}</ul></section>` : ""}
-</body>
-</html>`;
+  ${refLinks ? `<section><h2>References</h2><ul>${refLinks}</ul></section>` : ""}`);
 }
 export function renderIndexPage(title, rootFqns, options, indexPath) {
     const byPackage = new Map();
@@ -150,18 +138,8 @@ export function renderIndexPage(title, rootFqns, options, indexPath) {
         return `<section>${heading}<ul>${links}</ul></section>`;
     })
         .join("\n");
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>${escapeHtml(title)}</title>
-  <style>${PAGE_CSS}</style>
-</head>
-<body>
-  <h1>${escapeHtml(title)}</h1>
+    return wrapHtmlDocument(title, indexPath, indexPath, PAGE_CSS, `<h1>${escapeHtml(title)}</h1>
   <p>${rootFqns.length} block(s) in scope.</p>
-  ${sections}
-</body>
-</html>`;
+  ${sections}`);
 }
 //# sourceMappingURL=render-block-page.js.map

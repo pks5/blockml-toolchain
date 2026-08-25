@@ -32,9 +32,9 @@
   <baseType>blockdoc:BlockdocType</baseType>
   <is>Normative section order for block / site / package pages</is>
 
-  <documentation>BD6 block page order: Site Index link; dotted package path (fqn layout) or plain package; h1 name; optional extends / version / is; Documentation; Properties; Aggregations; Associations; Capabilities; Composition; Sub-Blocks; References.
-    Site index: h1 title; count line; package sections (heading + block list).
-    Package index: breadcrumb; h1 last segment; Sub-packages; Blocks.</documentation>
+  <documentation>BD6/BD25 block page order: sticky toolbar (BlockDoc, Index, search); dotted package path (fqn layout) or plain package; h1 name; optional extends / version / is; Documentation; Properties; Aggregations; Associations; Capabilities; Composition; Sub-Blocks; References.
+    Site index: toolbar; h1 title; count line; package sections (heading + block list).
+    Package index: toolbar; breadcrumb; h1 last segment; Sub-packages; Blocks.</documentation>
 
   <properties>
     <blockPageSections type="type:Text">

@@ -69,6 +69,8 @@
         <bdapi:OutLayout />
         <bdapi:BlockDocOptions />
         <bdapi:BlockDocRenderOutput />
+        <bdapi:SearchIndexEntry />
+        <bdapi:SearchIndex />
         <bdconfig:BlockDocConstants />
         <bdconfig:PageSectionOrder />
         <bdpath:FqnHtmlPath />
@@ -93,6 +95,8 @@
         <bdcap:RenderBlockPage />
         <bdcap:RenderSiteIndex />
         <bdcap:RenderPackageIndex />
+        <bdcap:BuildSearchIndex />
+        <bdcap:RenderToolbar />
         <bdcap:AssembleSite />
         <bddocumentation:Introduction />
         <bddocumentation:LayerSeparation />

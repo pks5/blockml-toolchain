@@ -31,26 +31,30 @@
   <name>PageChrome</name>
   <type>bddocumentation:PageChrome</type>
   <baseType>core:Documentation</baseType>
-  <is>Block / site / package page chrome (BD6, BD8, BD20–BD22)</is>
+  <is>Block / site / package page chrome (BD6, BD8, BD20–BD22, BD24–BD25)</is>
 
-  <documentation>Block page (BD6/BD8): Site Index link; dotted package path (fqn layout via RenderDottedPackagePath)
+  <documentation>Block page (BD6/BD8/BD25): sticky black toolbar (brand BlockDoc, Index link, search);
+    dotted package path (fqn layout via RenderDottedPackagePath)
     or plain escaped package; h1 = block.name; optional extends (linked), version, is as designation.
     Then Documentation, member tables, Composition, Sub-Blocks, References.
     No definition-list for FQN/baseType/is; no breadcrumb nav on block pages.
+    The former body Index paragraph is the toolbar Index link.
 
     References: prefer ref.type as href; else url/file as text + context.
 
-    Site index (BD21): title "BlockDoc" or "{prefix} — BlockDoc"; count line; packages as headings
+    Site index (BD21): toolbar; title "BlockDoc" or "{prefix} — BlockDoc"; count line; packages as headings
     (linked to package index when outLayout=fqn); block labels = last FQN segment.
 
-    Package index (BD22, fqn only): breadcrumb Index / ancestors / current; Sub-packages; Blocks
+    Package index (BD22, fqn only): toolbar; breadcrumb Index / ancestors / current; Sub-packages; Blocks
     (direct roots only — nested Alpha.Child is a block page but not listed under Blocks).
 
-    Shared CSS: system-ui, tables, blue links (BlockDocConstants.PAGE_CSS).</documentation>
+    Shared CSS: system-ui, sticky toolbar, tables, blue links (BlockDocConstants.PAGE_CSS / TOOLBAR_CSS).
+    Search assets: search-index.json + search.js at site root (BD24).</documentation>
   <references>
     <see type="bddocumentation:SiteAssembly" relation="ReadNext"></see>
     <see type="bdconfig:PageSectionOrder" relation="SeeAlso"></see>
     <see type="bdcap:RenderBlockPage" relation="SeeAlso"></see>
+    <see type="bdcap:RenderToolbar" relation="SeeAlso"></see>
   </references>
 
 </block>

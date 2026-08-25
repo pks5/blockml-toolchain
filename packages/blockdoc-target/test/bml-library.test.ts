@@ -29,6 +29,8 @@ const EXPECTED_API_BLOCKS = [
   "OutLayout",
   "BlockDocOptions",
   "BlockDocRenderOutput",
+  "SearchIndexEntry",
+  "SearchIndex",
 ];
 
 const EXPECTED_CAPABILITIES = [
@@ -49,6 +51,8 @@ const EXPECTED_CAPABILITIES = [
   "RenderBlockPage",
   "RenderSiteIndex",
   "RenderPackageIndex",
+  "BuildSearchIndex",
+  "RenderToolbar",
   "AssembleSite",
 ];
 

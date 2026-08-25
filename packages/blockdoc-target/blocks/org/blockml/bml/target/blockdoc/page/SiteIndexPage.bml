@@ -32,7 +32,7 @@
   <baseType>blockdoc:BlockdocType</baseType>
   <is>HTML template model for merged or perLibrary site index</is>
 
-  <documentation>Title "BlockDoc" (merged) or "{libraryPrefix} — BlockDoc" (perLibrary). Lists only root FQNs grouped by package prefix.</documentation>
+  <documentation>Title "BlockDoc" (merged) or "{libraryPrefix} — BlockDoc" (perLibrary). Lists only root FQNs grouped by package prefix. Includes sticky toolbar (BD25).</documentation>
 
   <properties>
     <title type="type:Text">
