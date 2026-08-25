@@ -794,8 +794,22 @@ function blockEffectiveLanguage(_ctx: MapContext): string {
   return "org.blockml.bml.language.English";
 }
 
+const FREE_TEXT_KEYWORD = "org.blockml.bml.meta.FreeTextKeyword";
+const FREE_TEXT_ALIAS = "org.blockml.bml.meta.FreeTextAlias";
+
+function commaSeparatedTokens(text: string): string[] {
+  return text
+    .split(",")
+    .map((token) => token.trim())
+    .filter((token) => token.length > 0);
+}
+
 function mapKeywords(element: Element, ctx: MapContext): KeywordEntry[] {
   const entries: KeywordEntry[] = [];
+  const { text } = getCharacterData(element);
+  for (const term of commaSeparatedTokens(text)) {
+    entries.push({ typeFqn: FREE_TEXT_KEYWORD, term });
+  }
   for (const child of elementChildren(element)) {
     const local = elementLocalName(child);
     const prefix = elementPrefix(child);
@@ -819,6 +833,10 @@ function mapKeywords(element: Element, ctx: MapContext): KeywordEntry[] {
 
 function mapAliases(element: Element, ctx: MapContext): AliasEntry[] {
   const entries: AliasEntry[] = [];
+  const { text } = getCharacterData(element);
+  for (const name of commaSeparatedTokens(text)) {
+    entries.push({ typeFqn: FREE_TEXT_ALIAS, name });
+  }
   for (const child of elementChildren(element)) {
     const local = elementLocalName(child);
     const prefix = elementPrefix(child);

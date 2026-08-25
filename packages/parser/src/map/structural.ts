@@ -295,6 +295,8 @@ const CHARACTER_DATA_HOSTS = new Set([
   "language",
   "value",
   "xml",
+  "keywords",
+  "aliases",
 ]);
 
 export const isCharacterDataHost = (element: Element): boolean => {
