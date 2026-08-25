@@ -54,4 +54,22 @@ describe("analyzeDocument", () => {
     const lsp = diagnosticToLsp(diag!, text);
     expect(lsp.range.start.line).toBeGreaterThan(0);
   });
+
+  it("surfaces unexpected root text from parse diagnostics", () => {
+    const text = [
+      '<block xmlns="http://blockml.org/bml"',
+      ' xmlns:core="org.blockml.bml.core"',
+      ' xmlns:type="org.blockml.bml.type"',
+      ' xmlns:test="com.blockml.test.lsp">',
+      "  <name>Sample</name>",
+      "  <type>test:Sample</type>",
+      "  <baseType>core:Block</baseType>",
+      "  <is>sample</is>",
+      "  sds",
+      "</block>",
+    ].join("\n");
+    const workspace = createWorkspace(ROOT);
+    const result = analyzeDocument(text, "unexpected-text.bml", workspace);
+    expect(result.diagnostics.some((d) => d.code === "BML_UNEXPECTED_TEXT")).toBe(true);
+  });
 });

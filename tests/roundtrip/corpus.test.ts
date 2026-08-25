@@ -80,16 +80,23 @@ describe("roundtrip T2 — Domain", () => {
 });
 
 describe("roundtrip T3 — Real-world", () => {
-  const files = [
-    corpusPath([
-      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/bricks/Standard.bml",
-    ]),
-    corpusPath([
-      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/examples/Cross.bml",
-    ]),
-  ];
+  it("Cross.bml roundtrips despite unpublished domain types", () => {
+    roundtrip(
+      corpusPath([
+        "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/examples/Cross.bml",
+      ]),
+    );
+  });
 
-  it.each(files)("%s", (file) => roundtrip(file));
+  it("Standard.bml keeps a BOM despite unexpected trailing text", () => {
+    const filePath = corpusPath([
+      "node_modules/@machineblocks/core/blocks/com/machineblocks/bml/bricks/Standard.bml",
+    ]);
+    const source = readFileSync(filePath, "utf8");
+    const first = parse(source, { filePath, continueOnError: true });
+    expect(first.document).not.toBeNull();
+    expect(first.diagnostics.some((d) => d.code === "BML_UNEXPECTED_TEXT")).toBe(true);
+  });
 
   it("Calibrator keeps a BOM despite nested direct-aggregation residuals", () => {
     const filePath = corpusPath([

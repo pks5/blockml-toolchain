@@ -1,10 +1,10 @@
-import { parseDirectives, parseBmlMeta } from "./directives.js";
+import { parseDirectives, parseBmlMeta, } from "./directives.js";
 import { parseMemberValue } from "./member-value.js";
 import { elementChildren, elementLocalName, elementPrefix, getAttribute, isElement, xmlTriviaFromElement, } from "../util/xml.js";
 import { resolveBlockReference, resolvePrefix, resolveTypeName, TYPE_REFERENCE_ENTITY, elementSourceLoc, } from "../util/qname.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
 import { withElementLocation } from "../util/mapping-error.js";
-import { listUnknownBmlAttributes } from "./structural.js";
+import { listUnknownBmlAttributes, reportStandaloneComposition, reportUnexpectedTextChildren } from "./structural.js";
 const MEMBER_SECTIONS = new Set([
     "properties",
     "aggregations",
@@ -46,8 +46,12 @@ const METADATA_ELEMENTS = new Set([
 const RESERVED = new Set([...MEMBER_SECTIONS, ...METADATA_ELEMENTS, "composition", "implementation", "value", "groups", "suggestions"]);
 export function mapCompositionTemplate(element, aggregationName, ctx) {
     const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
-    const compositionEl = elementChildren(element).find((c) => elementLocalName(c) === "composition");
+    const compositionEls = elementChildren(element).filter((c) => elementLocalName(c) === "composition");
+    const compositionEl = compositionEls[0];
     const target = compositionEl ?? element;
+    if (compositionEl) {
+        reportUnexpectedTextChildren(compositionEl, ctx);
+    }
     const directives = parseDirectives(target, loc, ctx);
     const children = compositionEl
         ? mapCompositionChildren(compositionEl, ctx)
@@ -64,6 +68,7 @@ function mapCompositionChildren(compositionEl, ctx) {
     for (const child of elementChildren(compositionEl)) {
         const local = elementLocalName(child);
         if (local === "composition") {
+            reportStandaloneComposition(child, ctx);
             continue;
         }
         if (METADATA_ELEMENTS.has(local)) {
@@ -74,6 +79,7 @@ function mapCompositionChildren(compositionEl, ctx) {
         }
         if (local === "container" || local === "bml:container") {
             const loc = elementSourceLoc(ctx.filePath, ctx.source, child);
+            reportUnexpectedTextChildren(child, ctx);
             const directives = parseDirectives(child, loc, ctx);
             const vnode = {
                 kind: "virtualContainer",

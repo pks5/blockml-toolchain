@@ -35,7 +35,7 @@
     (@blockml/bom). Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -56,26 +56,23 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <framework:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><validator:ValidatorType /></composition>
-      <composition><valcap:Validate /></composition>
-      <composition><valdocumentation:Introduction /></composition>
-      <composition><valdocumentation:ValidityContract /></composition>
-      <composition><valdocumentation:LayerSeparation /></composition>
-      <composition><valdocumentation:ValidationPipeline /></composition>
-      <composition><valdocumentation:PublicApi /></composition>
-      <composition><valdocumentation:Diagnostics /></composition>
-      <composition><valdocumentation:PackageOwnership /></composition>
-      <composition><valdocumentation:ScopeExclusions /></composition>
-      <composition><valdocumentation:DesignDecisions /></composition>
+      <composition><validator:ValidatorType />
+        <valcap:Validate />
+        <valdocumentation:Introduction />
+        <valdocumentation:ValidityContract />
+        <valdocumentation:LayerSeparation />
+        <valdocumentation:ValidationPipeline />
+        <valdocumentation:PublicApi />
+        <valdocumentation:Diagnostics />
+        <valdocumentation:PackageOwnership />
+        <valdocumentation:ScopeExclusions />
+        <valdocumentation:DesignDecisions />
+      </composition>
     </blocks>
   </aggregations>
 

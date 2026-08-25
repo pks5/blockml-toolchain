@@ -39,7 +39,7 @@
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -60,41 +60,32 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <parser:Library />
-      </composition>
-      <composition>
         <serializer:Library />
-      </composition>
-      <composition>
         <validator:Library />
-      </composition>
-      <composition>
         <framework:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><lsp:LspType /></composition>
-      <composition><lspcap:AnalyzeDocument /></composition>
-      <composition><lspcap:FormatDocument /></composition>
-      <composition><lspcap:HoverAt /></composition>
-      <composition><lspcap:DocumentSymbols /></composition>
-      <composition><lspcap:DefinitionAt /></composition>
-      <composition><lspcap:ReferencesAt /></composition>
-      <composition><lspcap:StartLanguageServer /></composition>
-      <composition><lspdocumentation:Introduction /></composition>
-      <composition><lspdocumentation:LayerSeparation /></composition>
-      <composition><lspdocumentation:ArchitectureOverview /></composition>
-      <composition><lspdocumentation:V1Scope /></composition>
-      <composition><lspdocumentation:PublicApi /></composition>
-      <composition><lspdocumentation:ServerLifecycle /></composition>
-      <composition><lspdocumentation:PackageOwnership /></composition>
-      <composition><lspdocumentation:ScopeExclusions /></composition>
-      <composition><lspdocumentation:DesignDecisions /></composition>
+      <composition><lsp:LspType />
+        <lspcap:AnalyzeDocument />
+        <lspcap:FormatDocument />
+        <lspcap:HoverAt />
+        <lspcap:DocumentSymbols />
+        <lspcap:DefinitionAt />
+        <lspcap:ReferencesAt />
+        <lspcap:StartLanguageServer />
+        <lspdocumentation:Introduction />
+        <lspdocumentation:LayerSeparation />
+        <lspdocumentation:ArchitectureOverview />
+        <lspdocumentation:V1Scope />
+        <lspdocumentation:PublicApi />
+        <lspdocumentation:ServerLifecycle />
+        <lspdocumentation:PackageOwnership />
+        <lspdocumentation:ScopeExclusions />
+        <lspdocumentation:DesignDecisions />
+      </composition>
     </blocks>
   </aggregations>
 

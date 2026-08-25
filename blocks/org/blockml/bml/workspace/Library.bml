@@ -35,7 +35,7 @@
     by this blocks list. Package libraries must not depend back on this library.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -56,45 +56,26 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <blockdoc:Library />
-      </composition>
-      <composition>
         <cli:Library />
-      </composition>
-      <composition>
         <fatblock:Library />
-      </composition>
-      <composition>
         <framework:Library />
-      </composition>
-      <composition>
         <parser:Library />
-      </composition>
-      <composition>
         <runtime:Library />
-      </composition>
-      <composition>
         <serializer:Library />
-      </composition>
-      <composition>
         <validator:Library />
-      </composition>
-      <composition>
         <xsd:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><workspace:WorkspaceType /></composition>
-      <composition><wsdocumentation:Introduction /></composition>
-      <composition><wsdocumentation:PackageMap /></composition>
-      <composition><wsdocumentation:ArchitectureOverview /></composition>
-      <composition><wsdocumentation:ReadingOrder /></composition>
-      <composition><wsdocumentation:LinkingRules /></composition>
+      <composition><workspace:WorkspaceType />
+        <wsdocumentation:Introduction />
+        <wsdocumentation:PackageMap />
+        <wsdocumentation:ArchitectureOverview />
+        <wsdocumentation:ReadingOrder />
+        <wsdocumentation:LinkingRules />
+      </composition>
     </blocks>
   </aggregations>
 

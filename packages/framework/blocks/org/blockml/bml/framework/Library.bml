@@ -44,7 +44,7 @@
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -65,62 +65,59 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <parser:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><framework:FrameworkType /></composition>
-      <composition><fwregistry:BootstrapResult /></composition>
-      <composition><fwexpression:ExpressionNode /></composition>
-      <composition><fwexpression:LiteralExpressionNode /></composition>
-      <composition><fwexpression:ArrayExpressionNode /></composition>
-      <composition><fwexpression:ObjectExpressionNode /></composition>
-      <composition><fwexpression:PropertyExpressionNode /></composition>
-      <composition><fwexpression:CallExpressionNode /></composition>
-      <composition><fwexpression:BinaryExpressionNode /></composition>
-      <composition><fwexpression:ParseExpressionResult /></composition>
-      <composition><fwexpression:ParseExpressionError /></composition>
-      <composition><fwexpression:ParseExpressionOutcome /></composition>
-      <composition><fwregistry:BootstrapOptions /></composition>
-      <composition><fwconfig:FrameworkDiagnosticCodes /></composition>
-      <composition><fwcap:TypeRegistry /></composition>
-      <composition><fwcap:BootstrapTypeRegistry /></composition>
-      <composition><fwcap:DefaultBootstrapPaths /></composition>
-      <composition><fwcap:ForkBom /></composition>
-      <composition><fwcap:ResolveContracts /></composition>
-      <composition><fwcap:ResolveEffectiveMembers /></composition>
-      <composition><fwcap:CollectBaseTypeChain /></composition>
-      <composition><fwcap:MemberIdentityKey /></composition>
-      <composition><fwcap:ParseExpression /></composition>
-      <composition><fwcap:ValidateTypes /></composition>
-      <composition><fwcap:ValidateConstraints /></composition>
-      <composition><fwcap:ValidateVersions /></composition>
-      <composition><fwcap:RootFqnByFilePath /></composition>
-      <composition><fwcap:RootFqns /></composition>
-      <composition><fwcap:GetExportedFqns /></composition>
-      <composition><fwcap:ValidateEmbeddedBlocks /></composition>
-      <composition><fwcap:ValidateInstances /></composition>
-      <composition><fwcap:ValidatePresets /></composition>
-      <composition><fwcap:ValidateVisibility /></composition>
-      <composition><fwcap:ValidateReadOnly /></composition>
-      <composition><fwcap:GetPropertyNumericValue /></composition>
-      <composition><fwcap:IsLiteralValue /></composition>
-      <composition><fwdocumentation:Introduction /></composition>
-      <composition><fwdocumentation:LayerSeparation /></composition>
-      <composition><fwdocumentation:ArchitectureOverview /></composition>
-      <composition><fwdocumentation:PublicApi /></composition>
-      <composition><fwdocumentation:TypeRegistryBootstrap /></composition>
-      <composition><fwdocumentation:EffectiveMembers /></composition>
-      <composition><fwdocumentation:ExpressionParsing /></composition>
-      <composition><fwdocumentation:ConstraintValidation /></composition>
-      <composition><fwdocumentation:Diagnostics /></composition>
-      <composition><fwdocumentation:PackageOwnership /></composition>
-      <composition><fwdocumentation:ScopeExclusions /></composition>
+      <composition><framework:FrameworkType />
+        <fwregistry:BootstrapResult />
+        <fwexpression:ExpressionNode />
+        <fwexpression:LiteralExpressionNode />
+        <fwexpression:ArrayExpressionNode />
+        <fwexpression:ObjectExpressionNode />
+        <fwexpression:PropertyExpressionNode />
+        <fwexpression:CallExpressionNode />
+        <fwexpression:BinaryExpressionNode />
+        <fwexpression:ParseExpressionResult />
+        <fwexpression:ParseExpressionError />
+        <fwexpression:ParseExpressionOutcome />
+        <fwregistry:BootstrapOptions />
+        <fwconfig:FrameworkDiagnosticCodes />
+        <fwcap:TypeRegistry />
+        <fwcap:BootstrapTypeRegistry />
+        <fwcap:DefaultBootstrapPaths />
+        <fwcap:ForkBom />
+        <fwcap:ResolveContracts />
+        <fwcap:ResolveEffectiveMembers />
+        <fwcap:CollectBaseTypeChain />
+        <fwcap:MemberIdentityKey />
+        <fwcap:ParseExpression />
+        <fwcap:ValidateTypes />
+        <fwcap:ValidateConstraints />
+        <fwcap:ValidateVersions />
+        <fwcap:RootFqnByFilePath />
+        <fwcap:RootFqns />
+        <fwcap:GetExportedFqns />
+        <fwcap:ValidateEmbeddedBlocks />
+        <fwcap:ValidateInstances />
+        <fwcap:ValidatePresets />
+        <fwcap:ValidateVisibility />
+        <fwcap:ValidateReadOnly />
+        <fwcap:GetPropertyNumericValue />
+        <fwcap:IsLiteralValue />
+        <fwdocumentation:Introduction />
+        <fwdocumentation:LayerSeparation />
+        <fwdocumentation:ArchitectureOverview />
+        <fwdocumentation:PublicApi />
+        <fwdocumentation:TypeRegistryBootstrap />
+        <fwdocumentation:EffectiveMembers />
+        <fwdocumentation:ExpressionParsing />
+        <fwdocumentation:ConstraintValidation />
+        <fwdocumentation:Diagnostics />
+        <fwdocumentation:PackageOwnership />
+        <fwdocumentation:ScopeExclusions />
+      </composition>
     </blocks>
   </aggregations>
 

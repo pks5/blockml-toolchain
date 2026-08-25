@@ -12,6 +12,10 @@ export declare const collectBlockGrammarAttributes: (element: Element, ctx: MapC
 export declare const collectIdentityOrSectionAttributes: (element: Element, ctx: MapContext) => Record<string, string> | undefined;
 export declare const collectMemberGrammarAttributes: (element: Element, ctx: MapContext) => Record<string, string> | undefined;
 export declare const reportUnknownElement: (element: Element, ctx: MapContext) => void;
+export declare const reportStandaloneComposition: (element: Element, ctx: MapContext) => void;
+export declare const reportDuplicateComposition: (element: Element, ctx: MapContext) => void;
+export declare const isCharacterDataHost: (element: Element) => boolean;
+export declare const reportUnexpectedTextChildren: (element: Element, ctx: MapContext) => void;
 export declare const listUnknownBmlAttributes: (element: Element) => Record<string, string> | undefined;
 export declare const collectUnknownBmlAttributes: (element: Element, ctx: MapContext) => Record<string, string> | undefined;
 //# sourceMappingURL=structural.d.ts.map

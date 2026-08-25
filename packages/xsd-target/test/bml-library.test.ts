@@ -56,7 +56,7 @@ function parseLibraryCatalog(): Set<string> {
   const catalog = new Set<string>();
   const blocksSection = library.match(/<blocks>([\s\S]*?)<\/blocks>/)?.[1];
   expect(blocksSection, "Library.bml blocks aggregation").toBeTruthy();
-  const compRegex = /<composition>\s*<(?:[\w]+:)?(\w+)\s*\/?>\s*<\/composition>/g;
+  const compRegex = /<(?:[\w]+:)?(\w+)\s*\/>/g;
   let m;
   while ((m = compRegex.exec(blocksSection!)) !== null) {
     catalog.add(m[1]);

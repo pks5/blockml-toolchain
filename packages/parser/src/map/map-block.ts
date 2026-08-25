@@ -64,6 +64,10 @@ import {
   collectIdentityOrSectionAttributes,
   collectMemberGrammarAttributes,
   isAllowedRootChild,
+  isCharacterDataHost,
+  reportDuplicateComposition,
+  reportStandaloneComposition,
+  reportUnexpectedTextChildren,
   reportUnknownElement,
   toUnknownXmlNode,
 } from "./structural.js";
@@ -112,8 +116,18 @@ function mapBlockDefinition(
   };
   const unknownElements: UnknownXmlNode[] = [];
 
+  reportUnexpectedTextChildren(element, ctx);
+
   for (const child of childElements) {
+    if (!isCharacterDataHost(child)) {
+      reportUnexpectedTextChildren(child, ctx);
+    }
     const local = elementLocalName(child);
+    if (local === "composition") {
+      reportStandaloneComposition(child, ctx);
+      unknownElements.push(toUnknownXmlNode(child, ctx));
+      continue;
+    }
     if (local === "subBlocks") {
       subBlocksRaw.push(...elementChildren(child).filter((c) => elementLocalName(c) === "block"));
       continue;
@@ -123,7 +137,14 @@ function mapBlockDefinition(
       continue;
     }
     if (MEMBER_SECTIONS.has(local)) {
-      memberSections[local]!.push(...elementChildren(child));
+      for (const memberEl of elementChildren(child)) {
+        if (local === "aggregations" && elementLocalName(memberEl) === "composition") {
+          reportStandaloneComposition(memberEl, ctx);
+          unknownElements.push(toUnknownXmlNode(memberEl, ctx));
+          continue;
+        }
+        memberSections[local]!.push(memberEl);
+      }
       continue;
     }
     if (isAllowedRootChild(child)) {
@@ -351,6 +372,17 @@ function mapMemberElement(
     if (aggregationHasCompositionContent(element)) {
       agg.composition = mapCompositionTemplate(element, name, ctx);
     }
+    const compositionEls = elementChildren(element).filter(
+      (c) => elementLocalName(c) === "composition",
+    );
+    if (compositionEls.length > 1) {
+      const extras: UnknownXmlNode[] = [];
+      for (const extra of compositionEls.slice(1)) {
+        reportDuplicateComposition(extra, ctx);
+        extras.push(toUnknownXmlNode(extra, ctx));
+      }
+      agg.unknownElements = extras;
+    }
     mapMemberGroups(element, agg, ctx);
     return finishMember(element, agg, ctx);
   }
@@ -428,6 +460,9 @@ function finishMember<T extends MemberDefinition>(
   member: T,
   ctx: MapContext,
 ): T {
+  if (member.kind !== "property") {
+    reportUnexpectedTextChildren(element, ctx);
+  }
   if (member.kind !== "aggregation") {
     const unknown: UnknownXmlNode[] = [];
     for (const child of elementChildren(element)) {

@@ -37,7 +37,7 @@
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -58,51 +58,50 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><serializer:SerializerType /></composition>
-      <composition><seremit:EmitContext /></composition>
-      <composition><seremit:XmlWriter /></composition>
-      <composition><serconfig:BlockEmitOrder /></composition>
-      <composition><serconfig:SerializerConstants /></composition>
-      <composition><sercap:Serialize /></composition>
-      <composition><sercap:CreateEmitContext /></composition>
-      <composition><sercap:EmitBlockDefinition /></composition>
-      <composition><sercap:EmitRootStartTag /></composition>
-      <composition><sercap:EmitTypeExpression /></composition>
-      <composition><sercap:EmitCompositionTemplate /></composition>
-      <composition><sercap:EmitCompositionNode /></composition>
-      <composition><sercap:EmitBlockInstance /></composition>
-      <composition><sercap:EmitConstraintInstances /></composition>
-      <composition><sercap:EmitTypeReferenceEntity /></composition>
-      <composition><sercap:HasBmlSemanticQNameBindings /></composition>
-      <composition><sercap:FqnToQName /></composition>
-      <composition><sercap:QnameToParts /></composition>
-      <composition><sercap:VisibilityPrefix /></composition>
-      <composition><sercap:EscapeAttr /></composition>
-      <composition><sercap:EscapeText /></composition>
-      <composition><sercap:NeedsCData /></composition>
-      <composition><sercap:EmitCharacterData /></composition>
-      <composition><sercap:FormatBoolean /></composition>
-      <composition><sercap:FormatMemberValue /></composition>
-      <composition><sercap:ShouldUseQName /></composition>
-      <composition><serdocumentation:Introduction /></composition>
-      <composition><serdocumentation:LayerSeparation /></composition>
-      <composition><serdocumentation:ArchitectureOverview /></composition>
-      <composition><serdocumentation:V1Scope /></composition>
-      <composition><serdocumentation:PublicApi /></composition>
-      <composition><serdocumentation:EmitOrder /></composition>
-      <composition><serdocumentation:EmitRules /></composition>
-      <composition><serdocumentation:XmlCommentsEmit /></composition>
-      <composition><serdocumentation:RoundtripContract /></composition>
-      <composition><serdocumentation:DesignDecisions /></composition>
-      <composition><serdocumentation:Diagnostics /></composition>
-      <composition><serdocumentation:PackageOwnership /></composition>
-      <composition><serdocumentation:ScopeExclusions /></composition>
+      <composition><serializer:SerializerType />
+        <seremit:EmitContext />
+        <seremit:XmlWriter />
+        <serconfig:BlockEmitOrder />
+        <serconfig:SerializerConstants />
+        <sercap:Serialize />
+        <sercap:CreateEmitContext />
+        <sercap:EmitBlockDefinition />
+        <sercap:EmitRootStartTag />
+        <sercap:EmitTypeExpression />
+        <sercap:EmitCompositionTemplate />
+        <sercap:EmitCompositionNode />
+        <sercap:EmitBlockInstance />
+        <sercap:EmitConstraintInstances />
+        <sercap:EmitTypeReferenceEntity />
+        <sercap:HasBmlSemanticQNameBindings />
+        <sercap:FqnToQName />
+        <sercap:QnameToParts />
+        <sercap:VisibilityPrefix />
+        <sercap:EscapeAttr />
+        <sercap:EscapeText />
+        <sercap:NeedsCData />
+        <sercap:EmitCharacterData />
+        <sercap:FormatBoolean />
+        <sercap:FormatMemberValue />
+        <sercap:ShouldUseQName />
+        <serdocumentation:Introduction />
+        <serdocumentation:LayerSeparation />
+        <serdocumentation:ArchitectureOverview />
+        <serdocumentation:V1Scope />
+        <serdocumentation:PublicApi />
+        <serdocumentation:EmitOrder />
+        <serdocumentation:EmitRules />
+        <serdocumentation:XmlCommentsEmit />
+        <serdocumentation:RoundtripContract />
+        <serdocumentation:DesignDecisions />
+        <serdocumentation:Diagnostics />
+        <serdocumentation:PackageOwnership />
+        <serdocumentation:ScopeExclusions />
+      </composition>
     </blocks>
   </aggregations>
 

@@ -1,6 +1,6 @@
 # BOM Compiler — Capabilities and Renderer Interpretation
 
-version: 0.5.0
+version: 0.6.0
 
 status: **Supersedes** prior ManagedObject / synthetic accessor drafts (v0.2.0-draft).
 

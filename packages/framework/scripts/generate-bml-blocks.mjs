@@ -526,7 +526,7 @@ ${XMLNS}>
 }
 
 function catalogEntry(b) {
-  return `      <composition><${typeRef(b)} /></composition>`;
+  return `        <${typeRef(b)} />`;
 }
 
 function capabilityTsExport(c) {
@@ -556,11 +556,13 @@ for (const d of documentationBlocks) {
 
 // Library catalog
 const libraryBlocks = [
+  "      <composition>",
   ...blocks.map(catalogEntry),
   ...capabilities.map(catalogEntry),
   ...documentationBlocks.map(
-    (d) => `      <composition><fwdocumentation:${d.name} /></composition>`,
+    (d) => `        <fwdocumentation:${d.name} />`,
   ),
+  "      </composition>",
 ].join("\n");
 
 const library = `<!--
@@ -586,7 +588,7 @@ ${XMLNS}
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />

@@ -39,7 +39,7 @@
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -60,55 +60,54 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><blockdoc:BlockdocType /></composition>
-      <composition><bdapi:SiteMode /></composition>
-      <composition><bdapi:OutLayout /></composition>
-      <composition><bdapi:BlockDocOptions /></composition>
-      <composition><bdapi:BlockDocRenderOutput /></composition>
-      <composition><bdconfig:BlockDocConstants /></composition>
-      <composition><bdconfig:PageSectionOrder /></composition>
-      <composition><bdpath:FqnHtmlPath /></composition>
-      <composition><bdpage:BlockPage /></composition>
-      <composition><bdpage:SiteIndexPage /></composition>
-      <composition><bdpage:PackageIndexPage /></composition>
-      <composition><bdrender:DocMarkup /></composition>
-      <composition><bdcap:Render /></composition>
-      <composition><bdcap:ResolveOptions /></composition>
-      <composition><bdcap:FqnToHtmlPath /></composition>
-      <composition><bdcap:RelativeHref /></composition>
-      <composition><bdcap:EscapeHtml /></composition>
-      <composition><bdcap:CollectRootFqns /></composition>
-      <composition><bdcap:CollectPackagePrefixes /></composition>
-      <composition><bdcap:FilterExportedFqns /></composition>
-      <composition><bdcap:RenderTypeExpression /></composition>
-      <composition><bdcap:ResolveSubBlockType /></composition>
-      <composition><bdcap:RenderMemberSections /></composition>
-      <composition><bdcap:CollectCompositionGroups /></composition>
-      <composition><bdcap:RenderComposition /></composition>
-      <composition><bdcap:RenderDottedPackagePath /></composition>
-      <composition><bdcap:RenderBlockPage /></composition>
-      <composition><bdcap:RenderSiteIndex /></composition>
-      <composition><bdcap:RenderPackageIndex /></composition>
-      <composition><bdcap:AssembleSite /></composition>
-      <composition><bddocumentation:Introduction /></composition>
-      <composition><bddocumentation:LayerSeparation /></composition>
-      <composition><bddocumentation:ArchitectureOverview /></composition>
-      <composition><bddocumentation:V1Scope /></composition>
-      <composition><bddocumentation:PublicApi /></composition>
-      <composition><bddocumentation:PathAndLayout /></composition>
-      <composition><bddocumentation:TypeLinkRules /></composition>
-      <composition><bddocumentation:MemberAndCompositionRules /></composition>
-      <composition><bddocumentation:PageChrome /></composition>
-      <composition><bddocumentation:SiteAssembly /></composition>
-      <composition><bddocumentation:DesignDecisions /></composition>
-      <composition><bddocumentation:PackageOwnership /></composition>
-      <composition><bddocumentation:ScopeExclusions /></composition>
+      <composition><blockdoc:BlockdocType />
+        <bdapi:SiteMode />
+        <bdapi:OutLayout />
+        <bdapi:BlockDocOptions />
+        <bdapi:BlockDocRenderOutput />
+        <bdconfig:BlockDocConstants />
+        <bdconfig:PageSectionOrder />
+        <bdpath:FqnHtmlPath />
+        <bdpage:BlockPage />
+        <bdpage:SiteIndexPage />
+        <bdpage:PackageIndexPage />
+        <bdrender:DocMarkup />
+        <bdcap:Render />
+        <bdcap:ResolveOptions />
+        <bdcap:FqnToHtmlPath />
+        <bdcap:RelativeHref />
+        <bdcap:EscapeHtml />
+        <bdcap:CollectRootFqns />
+        <bdcap:CollectPackagePrefixes />
+        <bdcap:FilterExportedFqns />
+        <bdcap:RenderTypeExpression />
+        <bdcap:ResolveSubBlockType />
+        <bdcap:RenderMemberSections />
+        <bdcap:CollectCompositionGroups />
+        <bdcap:RenderComposition />
+        <bdcap:RenderDottedPackagePath />
+        <bdcap:RenderBlockPage />
+        <bdcap:RenderSiteIndex />
+        <bdcap:RenderPackageIndex />
+        <bdcap:AssembleSite />
+        <bddocumentation:Introduction />
+        <bddocumentation:LayerSeparation />
+        <bddocumentation:ArchitectureOverview />
+        <bddocumentation:V1Scope />
+        <bddocumentation:PublicApi />
+        <bddocumentation:PathAndLayout />
+        <bddocumentation:TypeLinkRules />
+        <bddocumentation:MemberAndCompositionRules />
+        <bddocumentation:PageChrome />
+        <bddocumentation:SiteAssembly />
+        <bddocumentation:DesignDecisions />
+        <bddocumentation:PackageOwnership />
+        <bddocumentation:ScopeExclusions />
+      </composition>
     </blocks>
   </aggregations>
 

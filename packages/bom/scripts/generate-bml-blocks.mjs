@@ -1031,7 +1031,7 @@ ${XMLNS}>
 }
 
 function catalogEntry(b) {
-  return `      <composition><${typeRef(b)} /></composition>`;
+  return `        <${typeRef(b)} />`;
 }
 
 // Generate Urmodell block files
@@ -1058,10 +1058,12 @@ try {
 
 // Library catalog
 const libraryBlocks = [
+  "      <composition>",
   ...blocks.map(catalogEntry),
   ...documentationBlocks.map(
-    (d) => `      <composition><bomdocumentation:${d.name} /></composition>`,
+    (d) => `        <bomdocumentation:${d.name} />`,
   ),
+  "      </composition>",
 ].join("\n");
 
 const library = `<!--
@@ -1084,7 +1086,7 @@ ${XMLNS}
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />

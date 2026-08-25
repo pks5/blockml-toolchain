@@ -7,7 +7,7 @@ import { parseVisibilityFromName } from "../util/visibility.js";
 import { parseBooleanAttribute, isBooleanLiteral } from "../util/boolean.js";
 import { resolveBlockReference, resolvePrefix, resolveTypeName, elementSourceLoc, attributeValueLoc, TYPE_REFERENCE_ENTITY, } from "../util/qname.js";
 import { withElementLocation } from "../util/mapping-error.js";
-import { collectBlockGrammarAttributes, collectIdentityOrSectionAttributes, collectMemberGrammarAttributes, isAllowedRootChild, reportUnknownElement, toUnknownXmlNode, } from "./structural.js";
+import { collectBlockGrammarAttributes, collectIdentityOrSectionAttributes, collectMemberGrammarAttributes, isAllowedRootChild, isCharacterDataHost, reportDuplicateComposition, reportStandaloneComposition, reportUnexpectedTextChildren, reportUnknownElement, toUnknownXmlNode, } from "./structural.js";
 const MEMBER_SECTIONS = new Set([
     "properties",
     "aggregations",
@@ -42,8 +42,17 @@ function mapBlockDefinition(element, ctx, parentType) {
         capabilities: [],
     };
     const unknownElements = [];
+    reportUnexpectedTextChildren(element, ctx);
     for (const child of childElements) {
+        if (!isCharacterDataHost(child)) {
+            reportUnexpectedTextChildren(child, ctx);
+        }
         const local = elementLocalName(child);
+        if (local === "composition") {
+            reportStandaloneComposition(child, ctx);
+            unknownElements.push(toUnknownXmlNode(child, ctx));
+            continue;
+        }
         if (local === "subBlocks") {
             subBlocksRaw.push(...elementChildren(child).filter((c) => elementLocalName(c) === "block"));
             continue;
@@ -53,7 +62,14 @@ function mapBlockDefinition(element, ctx, parentType) {
             continue;
         }
         if (MEMBER_SECTIONS.has(local)) {
-            memberSections[local].push(...elementChildren(child));
+            for (const memberEl of elementChildren(child)) {
+                if (local === "aggregations" && elementLocalName(memberEl) === "composition") {
+                    reportStandaloneComposition(memberEl, ctx);
+                    unknownElements.push(toUnknownXmlNode(memberEl, ctx));
+                    continue;
+                }
+                memberSections[local].push(memberEl);
+            }
             continue;
         }
         if (isAllowedRootChild(child)) {
@@ -215,6 +231,15 @@ function mapMemberElement(element, kind, ctx, inAggregationsSection = false) {
         if (aggregationHasCompositionContent(element)) {
             agg.composition = mapCompositionTemplate(element, name, ctx);
         }
+        const compositionEls = elementChildren(element).filter((c) => elementLocalName(c) === "composition");
+        if (compositionEls.length > 1) {
+            const extras = [];
+            for (const extra of compositionEls.slice(1)) {
+                reportDuplicateComposition(extra, ctx);
+                extras.push(toUnknownXmlNode(extra, ctx));
+            }
+            agg.unknownElements = extras;
+        }
         mapMemberGroups(element, agg, ctx);
         return finishMember(element, agg, ctx);
     }
@@ -256,6 +281,9 @@ function mapMemberElement(element, kind, ctx, inAggregationsSection = false) {
     return finishMember(element, cap, ctx);
 }
 function finishMember(element, member, ctx) {
+    if (member.kind !== "property") {
+        reportUnexpectedTextChildren(element, ctx);
+    }
     if (member.kind !== "aggregation") {
         const unknown = [];
         for (const child of elementChildren(element)) {

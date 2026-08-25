@@ -33,7 +33,7 @@
     exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -54,40 +54,39 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><xsd:XsdType /></composition>
-      <composition><xsdapi:XsdOptions /></composition>
-      <composition><xsdapi:XsdRenderOutput /></composition>
-      <composition><xsdapi:CatalogEntry /></composition>
-      <composition><xsdconfig:XsdConstants /></composition>
-      <composition><xsdconfig:DefaultXsdOptions /></composition>
-      <composition><xsdcap:ResolveOptions /></composition>
-      <composition><xsdcap:Render /></composition>
-      <composition><xsdcap:EmitBlockXsd /></composition>
-      <composition><xsdcap:MemberPrefersElement /></composition>
-      <composition><xsdcap:ExtraElementNames /></composition>
-      <composition><xsdcap:EmitTypesXsd /></composition>
-      <composition><xsdcap:EmitServiceXsd /></composition>
-      <composition><xsdcap:VocabularyElements /></composition>
-      <composition><xsdcap:EmitCatalogXml /></composition>
-      <composition><xsdcap:CatalogRelativePath /></composition>
-      <composition><xsddocumentation:Introduction /></composition>
-      <composition><xsddocumentation:LayerSeparation /></composition>
-      <composition><xsddocumentation:ArchitectureOverview /></composition>
-      <composition><xsddocumentation:V1Scope /></composition>
-      <composition><xsddocumentation:PublicApi /></composition>
-      <composition><xsddocumentation:ParticleMappingRules /></composition>
-      <composition><xsddocumentation:DomainVocabularyRules /></composition>
-      <composition><xsddocumentation:CatalogAndOutputLayout /></composition>
-      <composition><xsddocumentation:Diagnostics /></composition>
-      <composition><xsddocumentation:DesignDecisions /></composition>
-      <composition><xsddocumentation:PackageOwnership /></composition>
-      <composition><xsddocumentation:ScopeExclusions /></composition>
+      <composition><xsd:XsdType />
+        <xsdapi:XsdOptions />
+        <xsdapi:XsdRenderOutput />
+        <xsdapi:CatalogEntry />
+        <xsdconfig:XsdConstants />
+        <xsdconfig:DefaultXsdOptions />
+        <xsdcap:ResolveOptions />
+        <xsdcap:Render />
+        <xsdcap:EmitBlockXsd />
+        <xsdcap:MemberPrefersElement />
+        <xsdcap:ExtraElementNames />
+        <xsdcap:EmitTypesXsd />
+        <xsdcap:EmitServiceXsd />
+        <xsdcap:VocabularyElements />
+        <xsdcap:EmitCatalogXml />
+        <xsdcap:CatalogRelativePath />
+        <xsddocumentation:Introduction />
+        <xsddocumentation:LayerSeparation />
+        <xsddocumentation:ArchitectureOverview />
+        <xsddocumentation:V1Scope />
+        <xsddocumentation:PublicApi />
+        <xsddocumentation:ParticleMappingRules />
+        <xsddocumentation:DomainVocabularyRules />
+        <xsddocumentation:CatalogAndOutputLayout />
+        <xsddocumentation:Diagnostics />
+        <xsddocumentation:DesignDecisions />
+        <xsddocumentation:PackageOwnership />
+        <xsddocumentation:ScopeExclusions />
+      </composition>
     </blocks>
   </aggregations>
 

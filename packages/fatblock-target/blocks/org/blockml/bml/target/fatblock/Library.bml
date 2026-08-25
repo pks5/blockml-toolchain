@@ -34,7 +34,7 @@
     exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -55,46 +55,43 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <serializer:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><fatblock:FatblockType /></composition>
-      <composition><fbapi:FatBlockOptions /></composition>
-      <composition><fbapi:FatBlockRenderOutput /></composition>
-      <composition><fbapi:AssembleFatDocumentResult /></composition>
-      <composition><fbconfig:FatBlockConstants /></composition>
-      <composition><fbconfig:DefaultFatBlockOptions /></composition>
-      <composition><fbcap:ResolveOptions /></composition>
-      <composition><fbcap:ValidateRequest /></composition>
-      <composition><fbcap:Render /></composition>
-      <composition><fbcap:RootFqnsByFilePath /></composition>
-      <composition><fbcap:CollectCandidateFqns /></composition>
-      <composition><fbcap:MatchesIncludePattern /></composition>
-      <composition><fbcap:FilterByIncludes /></composition>
-      <composition><fbcap:CloneBlockDefinition /></composition>
-      <composition><fbcap:MergeNamespaceBindings /></composition>
-      <composition><fbcap:AssembleFatDocument /></composition>
-      <composition><fbcap:SerializeFatDocument /></composition>
-      <composition><fbcap:FatOutputBasename /></composition>
-      <composition><fbdocumentation:Introduction /></composition>
-      <composition><fbdocumentation:LayerSeparation /></composition>
-      <composition><fbdocumentation:ArchitectureOverview /></composition>
-      <composition><fbdocumentation:V1Scope /></composition>
-      <composition><fbdocumentation:PublicApi /></composition>
-      <composition><fbdocumentation:CandidateCollection /></composition>
-      <composition><fbdocumentation:EmbedAssemblyRules /></composition>
-      <composition><fbdocumentation:NamespaceMergeRules /></composition>
-      <composition><fbdocumentation:OutputLayout /></composition>
-      <composition><fbdocumentation:Diagnostics /></composition>
-      <composition><fbdocumentation:DesignDecisions /></composition>
-      <composition><fbdocumentation:PackageOwnership /></composition>
-      <composition><fbdocumentation:ScopeExclusions /></composition>
+      <composition><fatblock:FatblockType />
+        <fbapi:FatBlockOptions />
+        <fbapi:FatBlockRenderOutput />
+        <fbapi:AssembleFatDocumentResult />
+        <fbconfig:FatBlockConstants />
+        <fbconfig:DefaultFatBlockOptions />
+        <fbcap:ResolveOptions />
+        <fbcap:ValidateRequest />
+        <fbcap:Render />
+        <fbcap:RootFqnsByFilePath />
+        <fbcap:CollectCandidateFqns />
+        <fbcap:MatchesIncludePattern />
+        <fbcap:FilterByIncludes />
+        <fbcap:CloneBlockDefinition />
+        <fbcap:MergeNamespaceBindings />
+        <fbcap:AssembleFatDocument />
+        <fbcap:SerializeFatDocument />
+        <fbcap:FatOutputBasename />
+        <fbdocumentation:Introduction />
+        <fbdocumentation:LayerSeparation />
+        <fbdocumentation:ArchitectureOverview />
+        <fbdocumentation:V1Scope />
+        <fbdocumentation:PublicApi />
+        <fbdocumentation:CandidateCollection />
+        <fbdocumentation:EmbedAssemblyRules />
+        <fbdocumentation:NamespaceMergeRules />
+        <fbdocumentation:OutputLayout />
+        <fbdocumentation:Diagnostics />
+        <fbdocumentation:DesignDecisions />
+        <fbdocumentation:PackageOwnership />
+        <fbdocumentation:ScopeExclusions />
+      </composition>
     </blocks>
   </aggregations>
 

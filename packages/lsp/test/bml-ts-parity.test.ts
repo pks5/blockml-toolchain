@@ -31,9 +31,10 @@ const TS_CAPABILITY_EXPORTS = [
 function parseLibraryCatalog(): Set<string> {
   const library = readFileSync(join(blocksRoot, "Library.bml"), "utf8");
   const catalog = new Set<string>();
-  const compRegex = /<composition>\s*<(?:[\w]+:)?(\w+)\s*\/?>\s*<\/composition>/g;
+  const blocksSection = library.match(/<blocks>([\s\S]*?)<\/blocks>/)?.[1] ?? library;
+  const compRegex = /<(?:[\w]+:)?(\w+)\s*\/>/g;
   let m;
-  while ((m = compRegex.exec(library)) !== null) {
+  while ((m = compRegex.exec(blocksSection)) !== null) {
     catalog.add(m[1]!);
   }
   return catalog;
@@ -91,6 +92,6 @@ describe("LSP BML ↔ TS parity", () => {
     expect(library).toContain("<serializer:Library />");
     expect(library).toContain("<validator:Library />");
     expect(library).toContain("<framework:Library />");
-    expect(library).toContain("<version>0.5.0</version>");
+    expect(library).toContain("<version>0.6.0</version>");
   });
 });

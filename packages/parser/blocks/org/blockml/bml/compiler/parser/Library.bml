@@ -38,7 +38,7 @@
     (@blockml/bom). Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -59,85 +59,84 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><parser:ParserType /></composition>
-      <composition><parmap:MapContext /></composition>
-      <composition><parconfig:ParserConstants /></composition>
-      <composition><parconfig:MapTimeDiagnosticCodes /></composition>
-      <composition><parcap:Parse /></composition>
-      <composition><parcap:DetectFormat /></composition>
-      <composition><parcap:ParseXmlDom /></composition>
-      <composition><parcap:GetParseErrors /></composition>
-      <composition><parcap:DocumentElement /></composition>
-      <composition><parcap:AssertBlockRoot /></composition>
-      <composition><parcap:ExtractNamespaceBindings /></composition>
-      <composition><parcap:MergeSourceInfo /></composition>
-      <composition><parcap:CreateMapContext /></composition>
-      <composition><parcap:MapDocumentBlock /></composition>
-      <composition><parcap:MapBlock /></composition>
-      <composition><parcap:MapCompositionTemplate /></composition>
-      <composition><parcap:MapBlockInstanceNode /></composition>
-      <composition><parcap:IsTypeReferenceEntitySugar /></composition>
-      <composition><parcap:MapTypeReferenceEntityInstance /></composition>
-      <composition><parcap:BuildSubBlockIndex /></composition>
-      <composition><parcap:ParseTypeExpression /></composition>
-      <composition><parcap:InferCardinality /></composition>
-      <composition><parcap:TypeExpressionToString /></composition>
-      <composition><parcap:ParseMemberValue /></composition>
-      <composition><parcap:ExpressionFromRaw /></composition>
-      <composition><parcap:ParseDirectives /></composition>
-      <composition><parcap:ParseBmlMeta /></composition>
-      <composition><parcap:ParseVisibilityFromName /></composition>
-      <composition><parcap:VisibilityPrefix /></composition>
-      <composition><parcap:NormalizeBooleanValue /></composition>
-      <composition><parcap:IsBooleanLiteral /></composition>
-      <composition><parcap:ParseBooleanAttribute /></composition>
-      <composition><parcap:SplitQName /></composition>
-      <composition><parcap:ResolvePrefix /></composition>
-      <composition><parcap:ResolveBlockReference /></composition>
-      <composition><parcap:ResolveTypeName /></composition>
-      <composition><parcap:HasBmlSemanticQNameBindings /></composition>
-      <composition><parcap:FqnToQName /></composition>
-      <composition><parcap:SourceLoc /></composition>
-      <composition><parcap:ElementSourceLoc /></composition>
-      <composition><parcap:IsElement /></composition>
-      <composition><parcap:IsComment /></composition>
-      <composition><parcap:IsTextNode /></composition>
-      <composition><parcap:IsCData /></composition>
-      <composition><parcap:ElementChildren /></composition>
-      <composition><parcap:ElementLocalName /></composition>
-      <composition><parcap:ElementPrefix /></composition>
-      <composition><parcap:GetAttribute /></composition>
-      <composition><parcap:GetCharacterData /></composition>
-      <composition><parcap:CollectLeadingComments /></composition>
-      <composition><parcap:CollectTrailingComments /></composition>
-      <composition><parcap:XmlTriviaFromElement /></composition>
-      <composition><parcap:TrimText /></composition>
-      <composition><pardocumentation:Introduction /></composition>
-      <composition><pardocumentation:LayerSeparation /></composition>
-      <composition><pardocumentation:ArchitectureOverview /></composition>
-      <composition><pardocumentation:V1Scope /></composition>
-      <composition><pardocumentation:PublicApi /></composition>
-      <composition><pardocumentation:MappingPrinciples /></composition>
-      <composition><pardocumentation:MemberMappingOrder /></composition>
-      <composition><pardocumentation:AttributeClassification /></composition>
-      <composition><pardocumentation:StructuralGrammar /></composition>
-      <composition><pardocumentation:XmlCommentsParse /></composition>
-      <composition><pardocumentation:TypeDescriptorParsing /></composition>
-      <composition><pardocumentation:BlockMetadataMapping /></composition>
-      <composition><pardocumentation:MemberMapping /></composition>
-      <composition><pardocumentation:ExpressionCapture /></composition>
-      <composition><pardocumentation:SingleFileScope /></composition>
-      <composition><pardocumentation:DesignDecisions /></composition>
-      <composition><pardocumentation:RoundtripContract /></composition>
-      <composition><pardocumentation:Diagnostics /></composition>
-      <composition><pardocumentation:PackageOwnership /></composition>
-      <composition><pardocumentation:ScopeExclusions /></composition>
+      <composition><parser:ParserType />
+        <parmap:MapContext />
+        <parconfig:ParserConstants />
+        <parconfig:MapTimeDiagnosticCodes />
+        <parcap:Parse />
+        <parcap:DetectFormat />
+        <parcap:ParseXmlDom />
+        <parcap:GetParseErrors />
+        <parcap:DocumentElement />
+        <parcap:AssertBlockRoot />
+        <parcap:ExtractNamespaceBindings />
+        <parcap:MergeSourceInfo />
+        <parcap:CreateMapContext />
+        <parcap:MapDocumentBlock />
+        <parcap:MapBlock />
+        <parcap:MapCompositionTemplate />
+        <parcap:MapBlockInstanceNode />
+        <parcap:IsTypeReferenceEntitySugar />
+        <parcap:MapTypeReferenceEntityInstance />
+        <parcap:BuildSubBlockIndex />
+        <parcap:ParseTypeExpression />
+        <parcap:InferCardinality />
+        <parcap:TypeExpressionToString />
+        <parcap:ParseMemberValue />
+        <parcap:ExpressionFromRaw />
+        <parcap:ParseDirectives />
+        <parcap:ParseBmlMeta />
+        <parcap:ParseVisibilityFromName />
+        <parcap:VisibilityPrefix />
+        <parcap:NormalizeBooleanValue />
+        <parcap:IsBooleanLiteral />
+        <parcap:ParseBooleanAttribute />
+        <parcap:SplitQName />
+        <parcap:ResolvePrefix />
+        <parcap:ResolveBlockReference />
+        <parcap:ResolveTypeName />
+        <parcap:HasBmlSemanticQNameBindings />
+        <parcap:FqnToQName />
+        <parcap:SourceLoc />
+        <parcap:ElementSourceLoc />
+        <parcap:IsElement />
+        <parcap:IsComment />
+        <parcap:IsTextNode />
+        <parcap:IsCData />
+        <parcap:ElementChildren />
+        <parcap:ElementLocalName />
+        <parcap:ElementPrefix />
+        <parcap:GetAttribute />
+        <parcap:GetCharacterData />
+        <parcap:CollectLeadingComments />
+        <parcap:CollectTrailingComments />
+        <parcap:XmlTriviaFromElement />
+        <parcap:TrimText />
+        <pardocumentation:Introduction />
+        <pardocumentation:LayerSeparation />
+        <pardocumentation:ArchitectureOverview />
+        <pardocumentation:V1Scope />
+        <pardocumentation:PublicApi />
+        <pardocumentation:MappingPrinciples />
+        <pardocumentation:MemberMappingOrder />
+        <pardocumentation:AttributeClassification />
+        <pardocumentation:StructuralGrammar />
+        <pardocumentation:XmlCommentsParse />
+        <pardocumentation:TypeDescriptorParsing />
+        <pardocumentation:BlockMetadataMapping />
+        <pardocumentation:MemberMapping />
+        <pardocumentation:ExpressionCapture />
+        <pardocumentation:SingleFileScope />
+        <pardocumentation:DesignDecisions />
+        <pardocumentation:RoundtripContract />
+        <pardocumentation:Diagnostics />
+        <pardocumentation:PackageOwnership />
+        <pardocumentation:ScopeExclusions />
+      </composition>
     </blocks>
   </aggregations>
 

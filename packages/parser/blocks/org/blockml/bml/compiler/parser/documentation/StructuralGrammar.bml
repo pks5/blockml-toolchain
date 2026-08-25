@@ -50,6 +50,9 @@
 
     Definition/grammar nodes: unknown children/attributes → BML_UNKNOWN_ELEMENT /
     BML_UNKNOWN_ATTRIBUTE. Unknown bml:* → BML_UNKNOWN_DIRECTIVE.
+    Non-whitespace text on element-only grammar nodes → BML_UNEXPECTED_TEXT.
+    Formatting whitespace is ignored (B13). Character-data hosts keep text
+    (name, is, documentation, value, property host text, …).
     Block instances: extra attributes stay in memberValues for semantic checking.</documentation>
 
   <references>

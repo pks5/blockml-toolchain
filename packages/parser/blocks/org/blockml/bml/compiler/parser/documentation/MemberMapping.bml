@@ -33,7 +33,10 @@
   <documentation>Property/aggregation/association/capability members:
     • Element QName = member identity (deprecated namespace= attr → error)
     • type attribute → TypeExpression; value/memberValues for properties
-    • Composition under aggregation member elements (not standalone <composition>)
+    • One <composition> per aggregation member, as a direct child of that member
+      (not of <block>, <aggregations>, or nested inside metadata). Extra copies →
+      BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.
+      Sugar without a <composition> wrapper (instances as direct children) stays allowed.
     • Constraints/suggestions → BlockInstance[] in document order
     • Sub-Blocks and embedded blocks → nested BlockDefinition trees
     • Redundant aggregation type on override → validator warning B19; parser must not apply

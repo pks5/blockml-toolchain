@@ -303,9 +303,10 @@ function parseTsInterfaceFields(filePath: string, interfaceName: string): Map<st
 function parseLibraryCatalog(): Set<string> {
   const library = readFileSync(join(blocksRoot, "Library.bml"), "utf8");
   const catalog = new Set<string>();
-  const compRegex = /<composition>\s*<(?:[\w]+:)?(\w+)\s*\/?>\s*<\/composition>/g;
+  const blocksSection = library.match(/<blocks>([\s\S]*?)<\/blocks>/)?.[1] ?? library;
+  const compRegex = /<(?:[\w]+:)?(\w+)\s*\/>/g;
   let m;
-  while ((m = compRegex.exec(library)) !== null) {
+  while ((m = compRegex.exec(blocksSection)) !== null) {
     catalog.add(m[1]);
   }
   return catalog;

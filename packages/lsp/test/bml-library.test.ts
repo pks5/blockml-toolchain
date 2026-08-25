@@ -28,9 +28,12 @@ function walkBmlFiles(dir: string): string[] {
 function parseLibraryCatalog(): Set<string> {
   const library = readFileSync(join(blocksRoot, "Library.bml"), "utf8");
   const catalog = new Set<string>();
-  const compRegex = /<composition>\s*<(?:[\w]+:)?(\w+)\s*\/?>\s*<\/composition>/g;
+  const blocksSection = library.match(/<blocks>([\s\S]*?)<\/blocks>/)?.[1] ?? "";
+  const readMeSection = library.match(/<readMe>([\s\S]*?)<\/readMe>/)?.[1] ?? "";
+  const catalogSource = `${blocksSection}\n${readMeSection}` || library;
+  const compRegex = /<(?:[\w]+:)?(\w+)\s*\/>/g;
   let m;
-  while ((m = compRegex.exec(library)) !== null) {
+  while ((m = compRegex.exec(catalogSource)) !== null) {
     catalog.add(m[1]!);
   }
   return catalog;

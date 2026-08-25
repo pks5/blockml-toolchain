@@ -208,6 +208,9 @@ export const documentationBlocks = [
 
     Definition/grammar nodes: unknown children/attributes → BML_UNKNOWN_ELEMENT /
     BML_UNKNOWN_ATTRIBUTE. Unknown bml:* → BML_UNKNOWN_DIRECTIVE.
+    Non-whitespace text on element-only grammar nodes → BML_UNEXPECTED_TEXT.
+    Formatting whitespace is ignored (B13). Character-data hosts keep text
+    (name, is, documentation, value, property host text, …).
     Block instances: extra attributes stay in memberValues for semantic checking.`,
     refs: [
       { type: "pardocumentation:XmlCommentsParse", relation: "ReadNext" },
@@ -274,7 +277,10 @@ export const documentationBlocks = [
     doc: `Property/aggregation/association/capability members:
     • Element QName = member identity (deprecated namespace= attr → error)
     • type attribute → TypeExpression; value/memberValues for properties
-    • Composition under aggregation member elements (not standalone <composition>)
+    • One <composition> per aggregation member, as a direct child of that member
+      (not of <block>, <aggregations>, or nested inside metadata). Extra copies →
+      BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.
+      Sugar without a <composition> wrapper (instances as direct children) stays allowed.
     • Constraints/suggestions → BlockInstance[] in document order
     • Sub-Blocks and embedded blocks → nested BlockDefinition trees
     • Redundant aggregation type on override → validator warning B19; parser must not apply
@@ -374,6 +380,9 @@ export const documentationBlocks = [
     • BML_UNKNOWN_ELEMENT — child not in closed Block grammar (structural)
     • BML_UNKNOWN_ATTRIBUTE — attribute not allowed on a grammar node (structural)
     • BML_UNKNOWN_DIRECTIVE — unknown bml:* attribute (B2)
+    • BML_STANDALONE_COMPOSITION — <composition> not a direct child of an aggregation member
+    • BML_DUPLICATE_COMPOSITION — more than one <composition> on the same aggregation member
+    • BML_UNEXPECTED_TEXT — non-whitespace text on an element-only grammar node
 
     Map-time diagnostics attach Diagnostic.source to the use-site token when known
     (attribute value or first occurrence in the throwing element), not the document root.

@@ -33,7 +33,7 @@
     Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />
@@ -54,60 +54,57 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <runtime:Library />
-      </composition>
-      <composition>
         <framework:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><cli:CliType /></composition>
-      <composition><cliapi:BomConfig /></composition>
-      <composition><cliapi:ParsedArgs /></composition>
-      <composition><cliapi:CliResult /></composition>
-      <composition><cliapi:WriteOutputOptions /></composition>
-      <composition><cliapi:CliBootstrapOptions /></composition>
-      <composition><cliconfig:CliConstants /></composition>
-      <composition><cliconfig:ExitCodes /></composition>
-      <composition><cliconfig:DefaultBomConfig /></composition>
-      <composition><cliconfig:CompileTargetMatrix /></composition>
-      <composition><cliconfig:CommandRegistry /></composition>
-      <composition><clicommand:ValidateCommand /></composition>
-      <composition><clicommand:CompileCommand /></composition>
-      <composition><clicap:LoadConfig /></composition>
-      <composition><clicap:ParseArgs /></composition>
-      <composition><clicap:FormatDiagnostic /></composition>
-      <composition><clicap:RunCli /></composition>
-      <composition><clicap:RunValidate /></composition>
-      <composition><clicap:ValidateAgainstXsd /></composition>
-      <composition><clicap:RunCompile /></composition>
-      <composition><clicap:RunCompileFatBlock /></composition>
-      <composition><clicap:BootstrapTargets /></composition>
-      <composition><clicap:RegisterTargetFactory /></composition>
-      <composition><clicap:BootstrapProjectTypeRegistry /></composition>
-      <composition><clicap:WriteOutputFiles /></composition>
-      <composition><clicap:DefaultOutDir /></composition>
-      <composition><clicap:WorkspaceRoot /></composition>
-      <composition><clidocumentation:Introduction /></composition>
-      <composition><clidocumentation:LayerSeparation /></composition>
-      <composition><clidocumentation:ArchitectureOverview /></composition>
-      <composition><clidocumentation:V1Scope /></composition>
-      <composition><clidocumentation:PublicApi /></composition>
-      <composition><clidocumentation:RuntimeBootstrap /></composition>
-      <composition><clidocumentation:Commands /></composition>
-      <composition><clidocumentation:CompileCommand /></composition>
-      <composition><clidocumentation:ValidateCommand /></composition>
-      <composition><clidocumentation:Configuration /></composition>
-      <composition><clidocumentation:TargetBootstrap /></composition>
-      <composition><clidocumentation:TargetCliMatrix /></composition>
-      <composition><clidocumentation:ExitCodesAndDiagnostics /></composition>
-      <composition><clidocumentation:DualCliModel /></composition>
-      <composition><clidocumentation:Installation /></composition>
-      <composition><clidocumentation:DesignDecisions /></composition>
-      <composition><clidocumentation:PackageOwnership /></composition>
-      <composition><clidocumentation:ScopeExclusions /></composition>
+      <composition><cli:CliType />
+        <cliapi:BomConfig />
+        <cliapi:ParsedArgs />
+        <cliapi:CliResult />
+        <cliapi:WriteOutputOptions />
+        <cliapi:CliBootstrapOptions />
+        <cliconfig:CliConstants />
+        <cliconfig:ExitCodes />
+        <cliconfig:DefaultBomConfig />
+        <cliconfig:CompileTargetMatrix />
+        <cliconfig:CommandRegistry />
+        <clicommand:ValidateCommand />
+        <clicommand:CompileCommand />
+        <clicap:LoadConfig />
+        <clicap:ParseArgs />
+        <clicap:FormatDiagnostic />
+        <clicap:RunCli />
+        <clicap:RunValidate />
+        <clicap:ValidateAgainstXsd />
+        <clicap:RunCompile />
+        <clicap:RunCompileFatBlock />
+        <clicap:BootstrapTargets />
+        <clicap:RegisterTargetFactory />
+        <clicap:BootstrapProjectTypeRegistry />
+        <clicap:WriteOutputFiles />
+        <clicap:DefaultOutDir />
+        <clicap:WorkspaceRoot />
+        <clidocumentation:Introduction />
+        <clidocumentation:LayerSeparation />
+        <clidocumentation:ArchitectureOverview />
+        <clidocumentation:V1Scope />
+        <clidocumentation:PublicApi />
+        <clidocumentation:RuntimeBootstrap />
+        <clidocumentation:Commands />
+        <clidocumentation:CompileCommand />
+        <clidocumentation:ValidateCommand />
+        <clidocumentation:Configuration />
+        <clidocumentation:TargetBootstrap />
+        <clidocumentation:TargetCliMatrix />
+        <clidocumentation:ExitCodesAndDiagnostics />
+        <clidocumentation:DualCliModel />
+        <clidocumentation:Installation />
+        <clidocumentation:DesignDecisions />
+        <clidocumentation:PackageOwnership />
+        <clidocumentation:ScopeExclusions />
+      </composition>
     </blocks>
   </aggregations>
 

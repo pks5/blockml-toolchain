@@ -49,6 +49,9 @@ const MAP_TIME_DIAGNOSTIC_CODES = [
   "BML_UNKNOWN_ELEMENT",
   "BML_UNKNOWN_ATTRIBUTE",
   "BML_UNKNOWN_DIRECTIVE",
+  "BML_STANDALONE_COMPOSITION",
+  "BML_DUPLICATE_COMPOSITION",
+  "BML_UNEXPECTED_TEXT",
 ];
 
 /** @type {BlockDef[]} */
@@ -729,7 +732,7 @@ ${XMLNS}>
 }
 
 function catalogEntry(b) {
-  return `      <composition><${typeRef(b)} /></composition>`;
+  return `        <${typeRef(b)} />`;
 }
 
 // Generate blocks
@@ -752,11 +755,13 @@ for (const d of documentationBlocks) {
 }
 
 const libraryBlocks = [
+  "      <composition>",
   ...blocks.map(catalogEntry),
   ...capabilities.map(catalogEntry),
   ...documentationBlocks.map(
-    (d) => `      <composition><pardocumentation:${d.name} /></composition>`,
+    (d) => `        <pardocumentation:${d.name} />`,
   ),
+  "      </composition>",
 ].join("\n");
 
 const library = `<!--
@@ -780,7 +785,7 @@ ${XMLNS}
     (@blockml/bom). Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />

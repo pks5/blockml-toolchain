@@ -191,7 +191,7 @@ ${XMLNS}>
 }
 
 function catalogEntry(b) {
-  return `      <composition><${typeRef(b)} /></composition>`;
+  return `        <${typeRef(b)} />`;
 }
 
 function capabilityTsExport(c) {
@@ -217,11 +217,13 @@ for (const d of documentationBlocks) {
 }
 
 const libraryBlocks = [
+  "      <composition>",
   ...blocks.map(catalogEntry),
   ...capabilities.map(catalogEntry),
   ...documentationBlocks.map(
-    (d) => `      <composition><valdocumentation:${d.name} /></composition>`,
+    (d) => `        <valdocumentation:${d.name} />`,
   ),
+  "      </composition>",
 ].join("\n");
 
 const library = `<!--
@@ -245,7 +247,7 @@ ${XMLNS}
     (@blockml/bom). Membership is defined exclusively by this blocks list.
   </documentation>
 
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 
   <language>
     <English />

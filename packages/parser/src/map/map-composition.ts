@@ -6,7 +6,10 @@ import type {
   VirtualContainerNode,
 } from "@blockml/bom";
 import type { Element } from "@xmldom/xmldom";
-import { parseDirectives, parseBmlMeta } from "./directives.js";
+import {
+  parseDirectives,
+  parseBmlMeta,
+} from "./directives.js";
 import { parseMemberValue } from "./member-value.js";
 import {
   elementChildren,
@@ -26,7 +29,7 @@ import {
 import { parseVisibilityFromName } from "../util/visibility.js";
 import type { MapContext } from "./context.js";
 import { withElementLocation } from "../util/mapping-error.js";
-import { listUnknownBmlAttributes } from "./structural.js";
+import { listUnknownBmlAttributes, reportStandaloneComposition, reportUnexpectedTextChildren } from "./structural.js";
 
 const MEMBER_SECTIONS = new Set([
   "properties",
@@ -76,10 +79,14 @@ export function mapCompositionTemplate(
   ctx: MapContext,
 ): CompositionTemplate {
   const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
-  const compositionEl = elementChildren(element).find(
+  const compositionEls = elementChildren(element).filter(
     (c) => elementLocalName(c) === "composition",
   );
+  const compositionEl = compositionEls[0];
   const target = compositionEl ?? element;
+  if (compositionEl) {
+    reportUnexpectedTextChildren(compositionEl, ctx);
+  }
   const directives = parseDirectives(target, loc, ctx);
   const children = compositionEl
     ? mapCompositionChildren(compositionEl, ctx)
@@ -101,6 +108,7 @@ function mapCompositionChildren(
   for (const child of elementChildren(compositionEl)) {
     const local = elementLocalName(child);
     if (local === "composition") {
+      reportStandaloneComposition(child, ctx);
       continue;
     }
     if (METADATA_ELEMENTS.has(local)) {
@@ -111,6 +119,7 @@ function mapCompositionChildren(
     }
     if (local === "container" || local === "bml:container") {
       const loc = elementSourceLoc(ctx.filePath, ctx.source, child);
+      reportUnexpectedTextChildren(child, ctx);
       const directives = parseDirectives(child, loc, ctx);
       const vnode: VirtualContainerNode = {
         kind: "virtualContainer",

@@ -2,7 +2,7 @@ import type { Diagnostic, SourceLocation, UnknownXmlNode } from "@blockml/bom";
 import type { Element } from "@xmldom/xmldom";
 import { XMLSerializer } from "@xmldom/xmldom";
 import { attributeValueLoc, elementSourceLoc } from "../util/qname.js";
-import { elementLocalName, elementPrefix } from "../util/xml.js";
+import { elementLocalName, elementPrefix, isCData, isTextNode } from "../util/xml.js";
 import type { MapContext } from "./context.js";
 
 const MEMBER_SECTIONS = new Set([
@@ -42,7 +42,7 @@ const METADATA_TAGS = new Set([
   "constraints",
 ]);
 
-const ROOT_EXTRA_TAGS = new Set(["composition", "block"]);
+const ROOT_EXTRA_TAGS = new Set(["block"]);
 
 export const KNOWN_BML_ATTRIBUTE_LOCALS = new Set([
   "each",
@@ -257,6 +257,88 @@ export const reportUnknownElement = (element: Element, ctx: MapContext): void =>
     `Unknown element: ${qname}`,
     elementSourceLoc(ctx.filePath, ctx.source, element),
   );
+};
+
+export const reportStandaloneComposition = (element: Element, ctx: MapContext): void => {
+  reportDiagnostic(
+    ctx,
+    "BML_STANDALONE_COMPOSITION",
+    "composition must be a direct child of an aggregation member",
+    elementSourceLoc(ctx.filePath, ctx.source, element),
+  );
+};
+
+export const reportDuplicateComposition = (element: Element, ctx: MapContext): void => {
+  reportDiagnostic(
+    ctx,
+    "BML_DUPLICATE_COMPOSITION",
+    "aggregation members may have at most one composition",
+    elementSourceLoc(ctx.filePath, ctx.source, element),
+  );
+};
+
+const CHARACTER_DATA_HOSTS = new Set([
+  "name",
+  "type",
+  "baseType",
+  "is",
+  "isnot",
+  "isNot",
+  "version",
+  "definition",
+  "since",
+  "status",
+  "summary",
+  "documentation",
+  "abstract",
+  "final",
+  "language",
+  "value",
+  "xml",
+]);
+
+export const isCharacterDataHost = (element: Element): boolean => {
+  return CHARACTER_DATA_HOSTS.has(elementLocalName(element));
+};
+
+function textNodeSourceLoc(
+  ctx: MapContext,
+  node: { data: string; lineNumber?: number; columnNumber?: number },
+): SourceLocation {
+  const line = node.lineNumber !== undefined && node.lineNumber >= 1 ? node.lineNumber : 1;
+  const column = node.columnNumber !== undefined && node.columnNumber >= 1 ? node.columnNumber : 1;
+  const trimmed = node.data.trim();
+  const leading = node.data.length - node.data.trimStart().length;
+  const startColumn = column + leading;
+  return {
+    file: ctx.filePath,
+    line,
+    column: startColumn,
+    endLine: line,
+    endColumn: startColumn + trimmed.length,
+  };
+}
+
+export const reportUnexpectedTextChildren = (element: Element, ctx: MapContext): void => {
+  for (let i = 0; i < element.childNodes.length; i++) {
+    const child = element.childNodes.item(i);
+    if (!child) {
+      continue;
+    }
+    if (!isTextNode(child) && !isCData(child)) {
+      continue;
+    }
+    const data = child.data ?? "";
+    if (data.trim() === "") {
+      continue;
+    }
+    reportDiagnostic(
+      ctx,
+      "BML_UNEXPECTED_TEXT",
+      `Unexpected text: ${data.trim().slice(0, 40)}`,
+      textNodeSourceLoc(ctx, child),
+    );
+  }
 };
 
 export const listUnknownBmlAttributes = (
