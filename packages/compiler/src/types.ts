@@ -42,6 +42,12 @@ export interface CompilerResult<T> {
   success: boolean;
 }
 
+export interface ValidateRegistryResult {
+  diagnostics: Diagnostic[];
+  blocksTested: number;
+  blocksWithErrors: number;
+}
+
 export interface RenderOutputFile {
   path: string;
   content: string;

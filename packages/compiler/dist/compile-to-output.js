@@ -77,6 +77,9 @@ function renderWithTarget(target, request, sessionOptions, priorDiagnostics) {
     const session = buildRenderSession(sessionOptions);
     const ctx = createRenderContext(session);
     const output = target.render(request, ctx);
+    if (output.diagnostics) {
+        diagnostics.push(...output.diagnostics);
+    }
     const success = !diagnostics.some((d) => d.severity === "error");
     return { output, diagnostics, success };
 }
@@ -133,7 +136,7 @@ export function compileBomToOutput(document, targetName, options) {
     const registry = options.typeRegistry;
     const sourceFilePath = document.source?.filePath ?? "<memory>";
     const diagnostics = [
-        ...validateRegistryDocuments(registry, [sourceFilePath]),
+        ...validateRegistryDocuments(registry, [sourceFilePath]).diagnostics,
     ];
     const request = { scope: { kind: "document" } };
     if (options.targetOptions !== undefined) {
@@ -191,7 +194,7 @@ export function compileToOutput(request, targetName, options = {}, configHints =
     // Stage-2 validation is reported via blockml validate; BlockDoc control gate renders
     // the corpus for structural review without failing on semantic validation gaps.
     if (resolved.kind === "document" && resolved.document) {
-        diagnostics.push(...validateRegistryDocuments(registry, [resolved.document.filePath]));
+        diagnostics.push(...validateRegistryDocuments(registry, [resolved.document.filePath]).diagnostics);
     }
     return renderWithTarget(target, request, sessionOptionsFromResolved(resolved, registry, targetName, options), diagnostics);
 }

@@ -30,7 +30,7 @@
   <baseType>runtime:RuntimeType</baseType>
   <is>Success flag, diagnostics, and optional output</is>
 
-  <documentation>Generic envelope CompilerResult of T. success is false if any error diagnostic.</documentation>
+  <documentation>Generic envelope CompilerResult of T. success is false if any error diagnostic, including target output.diagnostics folded by renderWithTarget.</documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>

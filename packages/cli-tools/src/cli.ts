@@ -120,6 +120,40 @@ function printDiagnostics(diagnostics: PrintableDiagnostic[], lines: string[]): 
   }
 }
 
+function errorCount(diagnostics: PrintableDiagnostic[]): number {
+  return diagnostics.filter((d) => d.severity === "error").length;
+}
+
+function printValidateOutcome(
+  lines: string[],
+  blocksTested: number,
+  blocksWithErrors: number,
+  failed: boolean,
+): void {
+  const word = blocksTested === 1 ? "block" : "blocks";
+  const status = failed ? "failed" : "succeeded";
+  lines.push(
+    `Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors.`,
+  );
+}
+
+function printCompileSuccess(lines: string[], wrote: string): void {
+  lines.push(`Compilation succeeded. ${wrote}`);
+}
+
+function printCompileFailure(
+  lines: string[],
+  diagnostics: PrintableDiagnostic[],
+  noOutput: boolean,
+): void {
+  const errors = errorCount(diagnostics);
+  if (noOutput && errors === 0) {
+    lines.push("Compilation failed: no output files produced.");
+    return;
+  }
+  lines.push(`Compilation failed with ${errors} error(s).`);
+}
+
 function bootstrapOptsFromParsed(
   parsed: ParsedArgs,
   config: BomConfig,
@@ -233,15 +267,22 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
     );
     const diagnostics = [...bootstrap.diagnostics, ...result.diagnostics];
     printDiagnostics(diagnostics, lines);
-    return diagnostics.some((d) => d.severity === "error") ? 1 : 0;
+    const failed = diagnostics.some((d) => d.severity === "error");
+    printValidateOutcome(lines, 1, result.success ? 0 : 1, failed);
+    return failed ? 1 : 0;
   }
 
-  const diagnostics = [
-    ...bootstrap.diagnostics,
-    ...validateRegistryDocuments(bootstrap.registry),
-  ];
+  const validated = validateRegistryDocuments(bootstrap.registry);
+  const diagnostics = [...bootstrap.diagnostics, ...validated.diagnostics];
   printDiagnostics(diagnostics, lines);
-  return diagnostics.some((d) => d.severity === "error") ? 1 : 0;
+  const failed = diagnostics.some((d) => d.severity === "error");
+  printValidateOutcome(
+    lines,
+    validated.blocksTested,
+    validated.blocksWithErrors,
+    failed,
+  );
+  return failed ? 1 : 0;
 }
 
 async function runCompileDocument(
@@ -321,34 +362,28 @@ async function runCompileDocument(
     },
   );
 
-  const outputDiagnostics = result.output?.diagnostics ?? [];
-  printDiagnostics(
-    [...bootstrap.diagnostics, ...result.diagnostics, ...outputDiagnostics],
-    lines,
-  );
+  const diagnostics = [...bootstrap.diagnostics, ...result.diagnostics];
+  printDiagnostics(diagnostics, lines);
 
-  if (
-    !result.success ||
-    !result.output?.files.length ||
-    outputDiagnostics.some((d) => d.severity === "error")
-  ) {
+  const output = result.output;
+  const hasErrors = diagnostics.some((d) => d.severity === "error");
+  if (!result.success || hasErrors || !output?.files.length) {
+    printCompileFailure(lines, diagnostics, !output?.files.length && !hasErrors);
     return 1;
   }
 
-  const writeResult = writeOutputFiles(result.output, outDir, rootDir, {
+  const writeResult = writeOutputFiles(output, outDir, rootDir, {
     cleanOutDir: false,
   });
   const rootNote =
     writeResult.rootFilesWritten.length > 0
       ? ` and ${writeResult.rootFilesWritten.join(", ")}`
       : "";
-  if (writeResult.filesWritten === 1 && result.output.files.length === 1) {
-    lines.push(`Wrote ${resolve(rootDir, outDir, result.output.files[0]!.path)}${rootNote}`);
-  } else {
-    lines.push(
-      `Wrote ${writeResult.filesWritten} file(s) to ${outDir}/${rootNote}`,
-    );
-  }
+  const wrote =
+    writeResult.filesWritten === 1 && output.files.length === 1
+      ? `Wrote ${resolve(rootDir, outDir, output.files[0]!.path)}${rootNote}`
+      : `Wrote ${writeResult.filesWritten} file(s) to ${outDir}/${rootNote}`;
+  printCompileSuccess(lines, wrote);
   return 0;
 }
 
@@ -401,28 +436,29 @@ async function runCompileCorpus(
     configHints,
   );
 
-  const outputDiagnostics = result.output?.diagnostics ?? [];
-  printDiagnostics(
-    [...bootstrap.diagnostics, ...result.diagnostics, ...outputDiagnostics],
-    lines,
-  );
+  const diagnostics = [...bootstrap.diagnostics, ...result.diagnostics];
+  printDiagnostics(diagnostics, lines);
 
-  if (
-    !result.success ||
-    !result.output ||
-    outputDiagnostics.some((d) => d.severity === "error")
-  ) {
+  const output = result.output;
+  const hasErrors = diagnostics.some((d) => d.severity === "error");
+  const noOutput =
+    !output || (output.files.length === 0 && !(output.rootFiles?.length));
+  if (!result.success || hasErrors || !output || noOutput) {
+    printCompileFailure(lines, diagnostics, noOutput && !hasErrors);
     return 1;
   }
 
-  const writeResult = writeOutputFiles(result.output, outDir, rootDir, {
+  const writeResult = writeOutputFiles(output, outDir, rootDir, {
     cleanOutDir: true,
   });
   const rootNote =
     writeResult.rootFilesWritten.length > 0
       ? ` and ${writeResult.rootFilesWritten.join(", ")}`
       : "";
-  lines.push(`Wrote ${writeResult.filesWritten} file(s) to ${outDir}/${rootNote}`);
+  printCompileSuccess(
+    lines,
+    `Wrote ${writeResult.filesWritten} file(s) to ${outDir}/${rootNote}`,
+  );
   return 0;
 }
 
@@ -465,21 +501,26 @@ export async function runCli(
   argv: string[],
   cwd = process.cwd(),
 ): Promise<{ code: number; stderr: string }> {
-  const parsed = parseArgs(argv);
-  const lines: string[] = [];
+  try {
+    const parsed = parseArgs(argv);
+    const lines: string[] = [];
 
-  if (parsed.command === "validate") {
-    const code = runValidate(parsed, cwd, lines);
+    if (parsed.command === "validate") {
+      const code = runValidate(parsed, cwd, lines);
+      return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
+    }
+
+    if (parsed.command !== "compile") {
+      lines.push(USAGE);
+      return { code: 2, stderr: `${lines.join("\n")}\n` };
+    }
+
+    const code = await runCompile(parsed, cwd, lines);
     return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    return { code: 2, stderr: `Internal CLI error: ${message}\n` };
   }
-
-  if (parsed.command !== "compile") {
-    lines.push(USAGE);
-    return { code: 2, stderr: `${lines.join("\n")}\n` };
-  }
-
-  const code = await runCompile(parsed, cwd, lines);
-  return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
 }
 
 /** True when argv[1] is this CLI module, including an npm `.bin` symlink to it. */

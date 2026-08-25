@@ -2,7 +2,7 @@ import type { BomDocument, Diagnostic } from "@blockml/bom";
 import { parse } from "@blockml/parser";
 import { validate } from "@blockml/validator";
 import type { TypeRegistry } from "@blockml/framework";
-import type { CompileInput, CompileOptions, CompilerResult } from "./types.js";
+import type { CompileInput, CompileOptions, CompilerResult, ValidateRegistryResult } from "./types.js";
 
 export function compileBmlToBom(
   input: CompileInput,
@@ -37,11 +37,12 @@ export function compileBmlToBom(
 export function validateRegistryDocuments(
   registry: TypeRegistry,
   filePaths?: string[],
-): Diagnostic[] {
+): ValidateRegistryResult {
   const seen = new Set<string>();
   const diagnostics: Diagnostic[] = [];
   const pathFilter =
     filePaths && filePaths.length > 0 ? new Set(filePaths) : undefined;
+  let blocksWithErrors = 0;
 
   for (const fqn of registry.keys()) {
     const doc = registry.get(fqn);
@@ -62,7 +63,14 @@ export function validateRegistryDocuments(
       continueOnError: true,
     });
     diagnostics.push(...result.diagnostics);
+    if (!result.success) {
+      blocksWithErrors += 1;
+    }
   }
 
-  return diagnostics;
+  return {
+    diagnostics,
+    blocksTested: seen.size,
+    blocksWithErrors,
+  };
 }

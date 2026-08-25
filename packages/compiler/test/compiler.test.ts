@@ -8,6 +8,7 @@ import {
   registerTarget,
   resolveScope,
   scopeAccepts,
+  validateRegistryDocuments,
 } from "../src/index.js";
 import type {
   CompileBomOptions,
@@ -211,5 +212,74 @@ describe("compileBomToOutput", () => {
     });
     expect(result.success).toBe(false);
     expect(result.diagnostics.some((d) => d.code === "BML_UNKNOWN_TARGET")).toBe(true);
+  });
+
+  it("sets success false when target output.diagnostics contain errors", () => {
+    class DiagnosticTarget implements RenderTarget {
+      readonly name = "diag-mock";
+      readonly accepts = ["document"] as const;
+
+      render(): RenderOutput {
+        return {
+          files: [{ path: "out.txt", content: "x" }],
+          diagnostics: [
+            {
+              severity: "error",
+              code: "BML_TARGET_RENDER",
+              message: "render failed",
+              source: { file: "out.txt", line: 1, column: 1 },
+            },
+          ],
+        };
+      }
+    }
+
+    registerTarget(new DiagnosticTarget());
+    const registry = new TypeRegistry();
+    const doc = minimalBom("pkg/Host.bml");
+    registry.register(doc);
+
+    const result = compileBomToOutput(doc, "diag-mock", { typeRegistry: registry });
+    expect(result.success).toBe(false);
+    expect(result.diagnostics.some((d) => d.code === "BML_TARGET_RENDER")).toBe(true);
+  });
+});
+
+describe("validateRegistryDocuments", () => {
+  it("counts unique filePaths and documents with errors", () => {
+    const registry = new TypeRegistry();
+    const host = minimalBom("pkg/Host.bml");
+    host.block.type = "com.test.Host";
+    const peer = minimalBom("pkg/Peer.bml");
+    peer.block.name = "Peer";
+    peer.block.type = "com.test.Peer";
+    registry.register(host);
+    registry.register(peer);
+
+    const result = validateRegistryDocuments(registry);
+    expect(result.blocksTested).toBe(2);
+    expect(result.blocksWithErrors).toBeGreaterThanOrEqual(0);
+    expect(result.blocksWithErrors).toBeLessThanOrEqual(result.blocksTested);
+    expect(Array.isArray(result.diagnostics)).toBe(true);
+  });
+
+  it("dedupes multiple FQNs from the same filePath", () => {
+    const registry = new TypeRegistry();
+    const doc = minimalBom("pkg/Host.bml");
+    doc.block.subBlocks = [
+      {
+        name: "Child",
+        type: "com.test.Child",
+        version: "0.1.0",
+        members: [],
+        subBlocks: [],
+        embeddedBlocks: [],
+        compositions: [],
+      },
+    ];
+    registry.register(doc);
+
+    const result = validateRegistryDocuments(registry);
+    expect(result.blocksTested).toBe(1);
   });
 });

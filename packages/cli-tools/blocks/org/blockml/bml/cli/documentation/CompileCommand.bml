@@ -37,7 +37,11 @@
     fatblock without file or --src → exit 2 (CLI14).
 
     Library/corpus targets: one compileToOutput per invocation; --all ignored (CLI19).
-    Document target fatblock: writes Host.fat.bml with embeddedBlocks.</documentation>
+    Document target fatblock: writes Host.fat.bml with embeddedBlocks.
+
+    After diagnostics, always a status line: Compilation succeeded. Wrote … or
+    Compilation failed with K error(s). Empty output without errors:
+    Compilation failed: no output files produced.</documentation>
   <references>
     <see type="clidocumentation:ValidateCommand" relation="ReadNext"></see>
   </references>

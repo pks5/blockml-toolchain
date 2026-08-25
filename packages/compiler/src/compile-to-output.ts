@@ -118,6 +118,9 @@ function renderWithTarget(
   const session = buildRenderSession(sessionOptions);
   const ctx = createRenderContext(session);
   const output = target.render(request, ctx);
+  if (output.diagnostics) {
+    diagnostics.push(...output.diagnostics);
+  }
 
   const success = !diagnostics.some((d) => d.severity === "error");
   return { output, diagnostics, success };
@@ -203,7 +206,7 @@ export function compileBomToOutput(
   const registry = options.typeRegistry;
   const sourceFilePath = document.source?.filePath ?? "<memory>";
   const diagnostics: Diagnostic[] = [
-    ...validateRegistryDocuments(registry, [sourceFilePath]),
+    ...validateRegistryDocuments(registry, [sourceFilePath]).diagnostics,
   ];
 
   const request: CompileRequest = { scope: { kind: "document" } };
@@ -303,7 +306,7 @@ export function compileToOutput(
   // the corpus for structural review without failing on semantic validation gaps.
   if (resolved.kind === "document" && resolved.document) {
     diagnostics.push(
-      ...validateRegistryDocuments(registry, [resolved.document.filePath]),
+      ...validateRegistryDocuments(registry, [resolved.document.filePath]).diagnostics,
     );
   }
 

@@ -33,7 +33,7 @@
 
   <documentation>Exports (packages/compiler/src/index.ts):
     Types: CompileScopeKind, CompileInput, CompileScope, CompileRequest, CompileOptions,
-    CompileBomOptions, CompilerResult, RenderOutput, RenderOutputFile, RenderSession,
+    CompileBomOptions, CompilerResult, ValidateRegistryResult, RenderOutput, RenderOutputFile, RenderSession,
     RenderContext, RenderTarget, ScopeConfigHints, ResolvedScope.
     Registry: registerTarget, getTarget, clearTargets, registeredTargetNames.
     Scope: resolveScope, scopeAccepts.

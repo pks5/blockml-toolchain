@@ -83,11 +83,14 @@ describe("runCli validate", () => {
 
     expect([0, 1]).toContain(code);
     expect(stderr).not.toMatch(/Wrote \d+ file\(s\)/);
+    expect(stderr).toMatch(
+      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors\./,
+    );
     if (code === 1) {
       expect(stderr).toMatch(/\berror\b/);
     }
-    if (stderr) {
-      expect(stderr).toMatch(/^\w+ \w+ /m);
+    if (code === 0) {
+      expect(stderr).toMatch(/Validation succeeded\./);
     }
   });
 
@@ -103,6 +106,9 @@ describe("runCli validate", () => {
 
     expect([0, 1]).toContain(code);
     expect(stderr).not.toMatch(/Wrote \d+ file\(s\)/);
+    expect(stderr).toMatch(
+      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors\./,
+    );
   });
 
   it("validates a single file against the project registry", async () => {
@@ -117,6 +123,9 @@ describe("runCli validate", () => {
 
     expect([0, 1]).toContain(code);
     expect(stderr).not.toMatch(/Wrote \d+ file\(s\)/);
+    expect(stderr).toMatch(
+      /Validation (succeeded|failed)\. Tested 1 block, \d+ with errors\./,
+    );
   });
 
   it("returns 2 for a missing file", async () => {
@@ -168,6 +177,7 @@ describe("runCli validate (parse + semantic, no XSD)", () => {
     expect(code).toBe(1);
     expect(stderr).toMatch(/BML_UNKNOWN_ELEMENT/);
     expect(stderr).not.toMatch(/BML_XSD_VALIDATION_ERROR/);
+    expect(stderr).toMatch(/Validation failed\. Tested 1 block, 1 with errors\./);
   });
 
   it("fails invalid root without XSD", async () => {
@@ -184,6 +194,7 @@ describe("runCli validate (parse + semantic, no XSD)", () => {
     expect(code).toBe(1);
     expect(stderr).toMatch(/BML_INVALID_ROOT/);
     expect(stderr).not.toMatch(/BML_XSD_VALIDATION_ERROR/);
+    expect(stderr).toMatch(/Validation failed\. Tested 1 block,/);
   });
 });
 
@@ -341,7 +352,7 @@ describe("runCli other commands", () => {
     );
 
     expect(code, stderr).toBe(0);
-    expect(stderr).toMatch(/Wrote .*Host\.fat\.bml/);
+    expect(stderr).toMatch(/Compilation succeeded\. Wrote .*Host\.fat\.bml/);
     expect(existsSync(join(tmpProject, "src", "Host.fat.bml"))).toBe(true);
     const fat = readFileSync(join(tmpProject, "src", "Host.fat.bml"), "utf8");
     expect(fat).toContain("<embeddedBlocks>");
@@ -379,6 +390,7 @@ describe("runCli other commands", () => {
 
     expect(code).toBe(1);
     expect(stderr).toMatch(/BML_FATBLOCK_HOST_HAS_EMBEDDED_BLOCKS/);
+    expect(stderr).toMatch(/Compilation failed with \d+ error\(s\)\./);
   });
 
   it("rejects fatblock when embed candidate has embeddedBlocks", async () => {
@@ -425,6 +437,7 @@ describe("runCli other commands", () => {
 
     expect(code).toBe(1);
     expect(stderr).toMatch(/BML_FATBLOCK_EMBED_HAS_EMBEDDED_BLOCKS/);
+    expect(stderr).toMatch(/Compilation failed with \d+ error\(s\)\./);
   });
 
   it("compiles xsd schemas and root catalog", async () => {
@@ -438,7 +451,7 @@ describe("runCli other commands", () => {
     );
 
     expect(code, stderr).toBe(0);
-    expect(stderr).toMatch(/Wrote 3 file\(s\)/);
+    expect(stderr).toMatch(/Compilation succeeded\. Wrote 3 file\(s\)/);
     expect(stderr).toMatch(/catalog\.xml/);
 
     expect(existsSync(join(tmpProject, tmpOut, "bml.xsd"))).toBe(true);

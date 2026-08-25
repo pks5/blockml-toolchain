@@ -57,6 +57,7 @@ describe("universal targets", () => {
     );
 
     expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Compilation succeeded\./);
     expect(existsSync(join(tmpProject, "mock-out", "mock.txt"))).toBe(true);
     expect(readFileSync(join(tmpProject, "mock-out", "mock.txt"), "utf8")).toBe("ok");
   });
@@ -83,6 +84,7 @@ describe("universal targets", () => {
     );
 
     expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Compilation succeeded\./);
     expect(
       readFileSync(join(tmpProject, "plugin-out", "mock-plugin.txt"), "utf8"),
     ).toBe("mock-plugin-ok");
@@ -160,6 +162,7 @@ describe("universal targets", () => {
     );
 
     expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Compilation succeeded\./);
     expect(existsSync(join(tmpProject, "default-out", "default-target.txt"))).toBe(true);
   });
 
@@ -200,8 +203,32 @@ describe("universal targets", () => {
     );
 
     expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Compilation succeeded\./);
     expect(readFileSync(join(tmpProject, "override-out", "override.txt"), "utf8")).toBe(
       "override",
     );
+  });
+
+  it("labels unexpected target throws as Internal CLI error", async () => {
+    registerTargetFactory("boom", () => ({
+      name: "boom",
+      accepts: ["library", "corpus", "auto"],
+      render: () => {
+        throw new Error("target exploded");
+      },
+    }));
+
+    if (!existsSync(CORE_LIBRARY)) {
+      throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
+    }
+
+    const { code, stderr } = await runCli(
+      ["compile", "boom", "--out", "boom-out", "--libraries", CORE_LIBRARY],
+      tmpProject,
+    );
+
+    expect(code).toBe(2);
+    expect(stderr).toMatch(/^Internal CLI error: target exploded/);
+    expect(stderr).not.toMatch(/Compilation (succeeded|failed)/);
   });
 });

@@ -6,6 +6,7 @@ export type {
   CompileOptions,
   CompileBomOptions,
   CompilerResult,
+  ValidateRegistryResult,
   RenderOutput,
   RenderOutputFile,
   RenderSession,

@@ -1,0 +1,43 @@
+<!--
+  Compiler Runtime API — ValidateRegistryResult
+  FQN: org.blockml.bml.compiler.runtime.api.ValidateRegistryResult
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:runapi="org.blockml.bml.compiler.runtime.api"
+  xmlns:runcap="org.blockml.bml.compiler.runtime.capability"
+  xmlns:runconfig="org.blockml.bml.compiler.runtime.config"
+  xmlns:rundocumentation="org.blockml.bml.compiler.runtime.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator">
+
+  <name>ValidateRegistryResult</name>
+  <type>runapi:ValidateRegistryResult</type>
+  <baseType>runtime:RuntimeType</baseType>
+  <is>Diagnostics plus per-document validation counts</is>
+
+  <documentation>One unique filePath is one block. blocksWithErrors counts documents whose validate() result has severity error.</documentation>
+  <references>
+    <see type="runcap:ValidateRegistryDocuments" relation="SeeAlso" />
+  </references>
+  <properties>
+    <diagnostics type="type:Text"><documentation>Flattened Diagnostic list. (required)</documentation></diagnostics>
+    <blocksTested type="type:Integer"><documentation>Unique documents validated after filePath dedupe. (required)</documentation></blocksTested>
+    <blocksWithErrors type="type:Integer"><documentation>Documents with at least one error diagnostic. (required)</documentation></blocksWithErrors>
+  </properties>
+
+</block>

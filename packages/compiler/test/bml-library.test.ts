@@ -33,6 +33,7 @@ const EXPECTED_API_BLOCKS = [
   "CompileOptions",
   "CompileBomOptions",
   "CompilerResult",
+  "ValidateRegistryResult",
   "RenderOutputFile",
   "RenderOutput",
   "RenderSession",
@@ -137,6 +138,7 @@ describe("Compiler runtime BML library", () => {
     expect(index).toContain("scopeAccepts");
     expect(index).toContain("compileBmlToBom");
     expect(index).toContain("validateRegistryDocuments");
+    expect(index).toContain("ValidateRegistryResult");
     expect(index).toContain("compileToOutput");
     expect(index).toContain("compileBomToOutput");
     expect(index).toContain("compileBmlToOutput");

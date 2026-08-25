@@ -34,6 +34,11 @@ export interface CompilerResult<T> {
     diagnostics: Diagnostic[];
     success: boolean;
 }
+export interface ValidateRegistryResult {
+    diagnostics: Diagnostic[];
+    blocksTested: number;
+    blocksWithErrors: number;
+}
 export interface RenderOutputFile {
     path: string;
     content: string;

@@ -1,6 +1,6 @@
 # BML → BOM Mapping
 
-version: 0.6.0 · **@blockml/parser and @blockml/serializer BML libraries are SSOT**
+version: 0.7.0 · **@blockml/parser and @blockml/serializer BML libraries are SSOT**
 
 ## Purpose of this Document
 

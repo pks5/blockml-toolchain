@@ -38,7 +38,8 @@
 
     file and --all together → exit 2 (CLI10).
     No target bootstrap. No output files written (CLI11).
-    Exit 0 on success; 1 on diagnostic errors; 2 on config errors.</documentation>
+    Exit 0 on success; 1 on diagnostic errors; 2 on config errors.
+    After diagnostics, always: Validation succeeded|failed. Tested N block(s), M with errors.</documentation>
   <references>
     <see type="clidocumentation:Configuration" relation="ReadNext"></see>
     <see type="valdocumentation:ValidityContract" relation="SeeAlso" />

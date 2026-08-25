@@ -27,6 +27,7 @@ export function validateRegistryDocuments(registry, filePaths) {
     const seen = new Set();
     const diagnostics = [];
     const pathFilter = filePaths && filePaths.length > 0 ? new Set(filePaths) : undefined;
+    let blocksWithErrors = 0;
     for (const fqn of registry.keys()) {
         const doc = registry.get(fqn);
         if (!doc) {
@@ -45,7 +46,14 @@ export function validateRegistryDocuments(registry, filePaths) {
             continueOnError: true,
         });
         diagnostics.push(...result.diagnostics);
+        if (!result.success) {
+            blocksWithErrors += 1;
+        }
     }
-    return diagnostics;
+    return {
+        diagnostics,
+        blocksTested: seen.size,
+        blocksWithErrors,
+    };
 }
 //# sourceMappingURL=compile-bml-to-bom.js.map
