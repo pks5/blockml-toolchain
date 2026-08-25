@@ -225,22 +225,47 @@ const CHARACTER_DATA_HOSTS = new Set([
     "language",
     "value",
     "xml",
+    "keywords",
+    "aliases",
 ]);
 export const isCharacterDataHost = (element) => {
     return CHARACTER_DATA_HOSTS.has(elementLocalName(element));
 };
+function advanceOverText(data, from, to, line, column) {
+    let i = from;
+    while (i < to) {
+        const ch = data[i];
+        if (ch === "\r") {
+            line++;
+            column = 1;
+            i += data[i + 1] === "\n" ? 2 : 1;
+            continue;
+        }
+        if (ch === "\n") {
+            line++;
+            column = 1;
+            i++;
+            continue;
+        }
+        column++;
+        i++;
+    }
+    return { line, column };
+}
 function textNodeSourceLoc(ctx, node) {
     const line = node.lineNumber !== undefined && node.lineNumber >= 1 ? node.lineNumber : 1;
     const column = node.columnNumber !== undefined && node.columnNumber >= 1 ? node.columnNumber : 1;
-    const trimmed = node.data.trim();
-    const leading = node.data.length - node.data.trimStart().length;
-    const startColumn = column + leading;
+    const data = node.data;
+    const trimmed = data.trim();
+    const leading = data.length - data.trimStart().length;
+    const start = advanceOverText(data, 0, leading, line, column);
+    const end = advanceOverText(data, leading, leading + trimmed.length, start.line, start.column);
     return {
         file: ctx.filePath,
-        line,
-        column: startColumn,
-        endLine: line,
-        endColumn: startColumn + trimmed.length,
+        line: start.line,
+        column: start.column,
+        endLine: end.line,
+        endColumn: end.column,
     };
 }
 export const reportUnexpectedTextChildren = (element, ctx) => {

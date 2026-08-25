@@ -70,6 +70,12 @@ describe("analyzeDocument", () => {
     ].join("\n");
     const workspace = createWorkspace(ROOT);
     const result = analyzeDocument(text, "unexpected-text.bml", workspace);
-    expect(result.diagnostics.some((d) => d.code === "BML_UNEXPECTED_TEXT")).toBe(true);
+    const diag = result.diagnostics.find((d) => d.code === "BML_UNEXPECTED_TEXT");
+    expect(diag).toBeDefined();
+    const textLine = text.split("\n").findIndex((l) => l.includes("sds"));
+    expect(diag!.source.line).toBe(textLine + 1);
+    const lsp = diagnosticToLsp(diag!, text);
+    expect(lsp.range.start).toEqual({ line: textLine, character: 2 });
+    expect(lsp.range.end).toEqual({ line: textLine, character: 5 });
   });
 });

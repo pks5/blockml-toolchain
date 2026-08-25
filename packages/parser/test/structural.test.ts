@@ -133,7 +133,11 @@ describe("structural BML validation", () => {
     expect(result.document).not.toBeNull();
     const diag = result.diagnostics.find((d) => d.code === "BML_UNEXPECTED_TEXT");
     expect(diag).toBeDefined();
-    expect(diag!.source.line).toBeGreaterThan(1);
+    const textLine = source.split("\n").findIndex((l) => l.includes("sds")) + 1;
+    expect(diag!.source.line).toBe(textLine);
+    expect(diag!.source.column).toBe(3);
+    expect(diag!.source.endLine).toBe(textLine);
+    expect(diag!.source.endColumn).toBe(6);
     expect(result.document!.block.name).toBe("Sample");
   });
 
