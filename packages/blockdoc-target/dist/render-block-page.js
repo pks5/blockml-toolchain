@@ -1,5 +1,5 @@
 import { escapeHtml, fqnToHtmlPath, fqnToPackagePrefix, packageIndexPath, relativePath, } from "./fqn-path.js";
-import { packageSegmentLabel, renderDottedPackagePath } from "./navigation.js";
+import { collectLibraryPrefixes, libraryGroupLabel, owningLibraryPrefix, packageSegmentLabel, renderDottedPackagePath, } from "./navigation.js";
 import { renderCompositionGroup } from "./composition-render.js";
 import { renderMemberTable } from "./member-sections.js";
 import { PAGE_SHELL_CSS, wrapHtmlDocument } from "./toolbar.js";
@@ -12,6 +12,11 @@ ${PAGE_SHELL_CSS}
 h1 { margin: 0 0 0.25rem; }
 h2.designation { font-size: 1.15rem; font-weight: 500; color: #333; margin: 0 0 1.5rem; }
 section { margin-top: 1.5rem; }
+section.library { margin-top: 2.25rem; }
+section.library > h2 { font-size: 1.35rem; margin: 0 0 0.15rem; }
+section.library .library-prefix { color: #666; font-size: 0.85rem; margin: 0 0 0.75rem; }
+section.library section { margin-top: 1rem; }
+section.library h3 { font-size: 1.05rem; margin: 0 0 0.4rem; }
 table { border-collapse: collapse; width: 100%; }
 th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; }
 th { background: #f5f5f5; }
@@ -114,7 +119,7 @@ export function renderBlockPage(block, options, rootIndexPath, knownFqns, _rootF
   ${subBlockLinks ? `<section><h2>Sub-Blocks</h2><ul>${subBlockLinks}</ul></section>` : ""}
   ${refLinks ? `<section><h2>References</h2><ul>${refLinks}</ul></section>` : ""}`);
 }
-export function renderIndexPage(title, rootFqns, options, indexPath) {
+function groupRootFqnsByPackage(rootFqns) {
     const byPackage = new Map();
     for (const fqn of [...rootFqns].sort()) {
         const pkg = fqnToPackagePrefix(fqn);
@@ -122,22 +127,82 @@ export function renderIndexPage(title, rootFqns, options, indexPath) {
         list.push(fqn);
         byPackage.set(pkg, list);
     }
-    const sections = [...byPackage.entries()]
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([pkg, blocks]) => {
-        const heading = options.outLayout === "fqn"
-            ? `<h2><a href="${relativePath(indexPath, packageIndexPath(pkg))}">${escapeHtml(packageSegmentLabel(pkg))}</a></h2>`
-            : `<h2>${escapeHtml(pkg)}</h2>`;
-        const links = blocks
-            .map((fqn) => {
-            const href = relativePath(indexPath, fqnToHtmlPath(fqn, options.outLayout));
-            const label = fqn.split(".").pop() ?? fqn;
-            return `<li><a href="${href}">${escapeHtml(label)}</a></li>`;
-        })
-            .join("\n");
-        return `<section>${heading}<ul>${links}</ul></section>`;
+    return byPackage;
+}
+function renderBlockList(blocks, options, indexPath) {
+    const links = blocks
+        .map((fqn) => {
+        const href = relativePath(indexPath, fqnToHtmlPath(fqn, options.outLayout));
+        const label = fqn.split(".").pop() ?? fqn;
+        return `<li><a href="${href}">${escapeHtml(label)}</a></li>`;
     })
         .join("\n");
+    return `<ul>${links}</ul>`;
+}
+function renderPackageHeading(pkg, options, indexPath, tag) {
+    if (options.outLayout === "fqn") {
+        const href = relativePath(indexPath, packageIndexPath(pkg));
+        return `<${tag}><a href="${href}">${escapeHtml(packageSegmentLabel(pkg))}</a></${tag}>`;
+    }
+    return `<${tag}>${escapeHtml(pkg)}</${tag}>`;
+}
+function renderPackageSections(byPackage, options, indexPath, headingTag) {
+    return [...byPackage.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([pkg, blocks]) => {
+        return `<section>${renderPackageHeading(pkg, options, indexPath, headingTag)}${renderBlockList(blocks, options, indexPath)}</section>`;
+    })
+        .join("\n");
+}
+function renderLibraryHeading(prefix, allPrefixes, options, indexPath) {
+    const label = libraryGroupLabel(prefix, allPrefixes);
+    const heading = options.outLayout === "fqn"
+        ? `<h2><a href="${relativePath(indexPath, packageIndexPath(prefix))}">${escapeHtml(label)}</a></h2>`
+        : `<h2>${escapeHtml(label)}</h2>`;
+    return `${heading}
+  <p class="library-prefix">${escapeHtml(prefix)}</p>`;
+}
+function renderMultiLibrarySections(rootFqns, libraryPrefixes, options, indexPath) {
+    const byLibrary = new Map();
+    const unmatched = [];
+    for (const fqn of [...rootFqns].sort()) {
+        const owner = owningLibraryPrefix(fqn, libraryPrefixes);
+        if (!owner) {
+            unmatched.push(fqn);
+            continue;
+        }
+        const list = byLibrary.get(owner) ?? [];
+        list.push(fqn);
+        byLibrary.set(owner, list);
+    }
+    const librarySections = libraryPrefixes
+        .filter((prefix) => byLibrary.has(prefix))
+        .map((prefix) => {
+        const fqns = byLibrary.get(prefix);
+        const byPackage = groupRootFqnsByPackage(fqns);
+        const rootBlocks = byPackage.get(prefix) ?? [];
+        byPackage.delete(prefix);
+        const inner = [
+            rootBlocks.length > 0 ? renderBlockList(rootBlocks, options, indexPath) : "",
+            renderPackageSections(byPackage, options, indexPath, "h3"),
+        ]
+            .filter(Boolean)
+            .join("\n");
+        return `<section class="library">${renderLibraryHeading(prefix, libraryPrefixes, options, indexPath)}
+  ${inner}</section>`;
+    })
+        .join("\n");
+    const other = unmatched.length > 0
+        ? `<section class="library"><h2>Other</h2>
+  ${renderPackageSections(groupRootFqnsByPackage(unmatched), options, indexPath, "h3")}</section>`
+        : "";
+    return [librarySections, other].filter(Boolean).join("\n");
+}
+export function renderIndexPage(title, rootFqns, options, indexPath) {
+    const libraryPrefixes = collectLibraryPrefixes(rootFqns);
+    const sections = libraryPrefixes.length >= 2
+        ? renderMultiLibrarySections(rootFqns, libraryPrefixes, options, indexPath)
+        : renderPackageSections(groupRootFqnsByPackage(rootFqns), options, indexPath, "h2");
     return wrapHtmlDocument(title, indexPath, indexPath, PAGE_CSS, `<h1>${escapeHtml(title)}</h1>
   <p>${rootFqns.length} block(s) in scope.</p>
   ${sections}`);

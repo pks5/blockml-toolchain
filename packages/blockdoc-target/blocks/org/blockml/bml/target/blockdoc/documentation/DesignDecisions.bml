@@ -53,7 +53,7 @@
     BD18 composition group order/dedupe.
     BD19 composition node / directive labels.
     BD20 dotted package path linking.
-    BD21 site index grouping.
+    BD21 site index grouping: one library by package; two or more libraries by library then package.
     BD22 package index direct blocks/sub-packages + breadcrumb.
     BD23 AssembleSite orchestration including library prefix = strip .Library.
     BD24 BuildSearchIndex — search-index.json plus inlined search.js of every emitted block page.

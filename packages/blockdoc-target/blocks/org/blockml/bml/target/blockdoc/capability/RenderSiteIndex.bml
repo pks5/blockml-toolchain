@@ -32,7 +32,7 @@
   <baseType>core:Capability</baseType>
   <is>Assemble merged or perLibrary site index HTML</is>
 
-  <documentation>BD21: group root FQNs by package prefix; package heading links to package index when outLayout=fqn; list last-segment labels.</documentation>
+  <documentation>BD21: one library → group root FQNs by package prefix (heading = last segment, linked to package index when outLayout=fqn). Two or more *.Library roots → group first by library (longest prefix match; heading = unique last segment else suffix after common prefix; muted full prefix; Library-package blocks listed directly); packages under a library are h3. Unmatched FQNs under Other. Block labels = last FQN segment.</documentation>
 
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />

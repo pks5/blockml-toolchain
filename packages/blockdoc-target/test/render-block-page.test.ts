@@ -141,4 +141,55 @@ describe("renderIndexPage toolbar", () => {
     expect(html).toContain('src="./search.js"');
     expect(html).toContain('<div class="page">');
   });
+
+  it("groups a single library by package prefix", () => {
+    const html = renderIndexPage(
+      "BlockDoc",
+      [
+        "org.blockml.bml.core.Library",
+        "org.blockml.bml.core.Block",
+        "org.blockml.bml.core.ValueType",
+      ],
+      DEFAULT_BLOCKDOC_OPTIONS,
+      "index.html",
+    );
+    expect(html).toMatch(
+      /<h2><a href="\.\/org\/blockml\/bml\/core\/index\.html">core<\/a><\/h2>/,
+    );
+    expect(html).not.toContain('class="library"');
+    expect(html).not.toContain("<h3>");
+  });
+
+  it("groups multiple libraries under library headings then packages", () => {
+    const html = renderIndexPage(
+      "BlockDoc",
+      [
+        "org.blockml.bml.bom.Library",
+        "org.blockml.bml.bom.api.ParseOptions",
+        "org.blockml.bml.cli.Library",
+        "org.blockml.bml.cli.documentation.Introduction",
+      ],
+      DEFAULT_BLOCKDOC_OPTIONS,
+      "index.html",
+    );
+    expect(html).toMatch(
+      /<section class="library"><h2><a href="\.\/org\/blockml\/bml\/bom\/index\.html">bom<\/a><\/h2>/,
+    );
+    expect(html).toContain('<p class="library-prefix">org.blockml.bml.bom</p>');
+    expect(html).toContain('<a href="./org/blockml/bml/bom/Library.html">Library</a>');
+    expect(html).toMatch(
+      /<h3><a href="\.\/org\/blockml\/bml\/bom\/api\/index\.html">api<\/a><\/h3>/,
+    );
+    expect(html).toContain(
+      '<a href="./org/blockml/bml/bom/api/ParseOptions.html">ParseOptions</a>',
+    );
+    expect(html).toMatch(
+      /<section class="library"><h2><a href="\.\/org\/blockml\/bml\/cli\/index\.html">cli<\/a><\/h2>/,
+    );
+    expect(html).toMatch(
+      /<h3><a href="\.\/org\/blockml\/bml\/cli\/documentation\/index\.html">documentation<\/a><\/h3>/,
+    );
+    expect(html).not.toMatch(/<h2><a href="[^"]+">api<\/a><\/h2>/);
+    expect(html).not.toMatch(/<h2><a href="[^"]+">documentation<\/a><\/h2>/);
+  });
 });

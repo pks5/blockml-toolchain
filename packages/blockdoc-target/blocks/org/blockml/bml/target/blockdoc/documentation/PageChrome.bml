@@ -42,8 +42,9 @@
 
     References: prefer ref.type as href; else url/file as text + context.
 
-    Site index (BD21): toolbar; title "BlockDoc" or "{prefix} — BlockDoc"; count line; packages as headings
-    (linked to package index when outLayout=fqn); block labels = last FQN segment.
+    Site index (BD21): toolbar; title "BlockDoc" or "{prefix} — BlockDoc"; count line; one library
+    → packages as headings (linked to package index when outLayout=fqn); two or more libraries →
+    library sections (h2 + full prefix) with package subheadings (h3); block labels = last FQN segment.
 
     Package index (BD22, fqn only): toolbar; breadcrumb Index / ancestors / current; Sub-packages; Blocks
     (direct roots only — nested Alpha.Child is a block page but not listed under Blocks).

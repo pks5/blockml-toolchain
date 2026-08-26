@@ -13,6 +13,48 @@ export function packageSegmentLabel(packagePrefix) {
     const segments = packagePrefix.split(".");
     return segments[segments.length - 1] ?? packagePrefix;
 }
+/** Library prefixes from root FQNs named *.Library (strip the trailing .Library). */
+export function collectLibraryPrefixes(rootFqns) {
+    const prefixes = new Set();
+    for (const fqn of rootFqns) {
+        if (fqn.endsWith(".Library") && fqn.length > ".Library".length) {
+            prefixes.add(fqn.slice(0, -".Library".length));
+        }
+    }
+    return [...prefixes].sort();
+}
+/** Longest library prefix that owns this FQN, or undefined. */
+export function owningLibraryPrefix(fqn, libraryPrefixes) {
+    return libraryPrefixes
+        .filter((prefix) => fqn === prefix || fqn.startsWith(`${prefix}.`))
+        .sort((a, b) => b.length - a.length)[0];
+}
+function commonPrefixSegmentCount(prefixes) {
+    if (prefixes.length === 0) {
+        return 0;
+    }
+    const split = prefixes.map((p) => p.split("."));
+    const first = split[0];
+    let i = 0;
+    while (i < first.length && split.every((s) => s[i] === first[i])) {
+        i += 1;
+    }
+    return i;
+}
+/** Short unique heading for a library prefix among a set of prefixes. */
+export function libraryGroupLabel(prefix, allPrefixes) {
+    const last = packageSegmentLabel(prefix);
+    const lastCollides = allPrefixes.filter((p) => packageSegmentLabel(p) === last).length > 1;
+    if (!lastCollides) {
+        return last;
+    }
+    const commonLen = commonPrefixSegmentCount(allPrefixes);
+    if (commonLen === 0) {
+        return prefix;
+    }
+    const stripped = prefix.split(".").slice(commonLen).join(".");
+    return stripped || last;
+}
 export function blockPathSegments(fqn, rootFqn) {
     const rootPackage = fqnToPackagePrefix(rootFqn);
     if (fqn === rootFqn) {

@@ -40,12 +40,10 @@
 
     Root FQNs (BD11): shortest FQN per source.filePath — indexes list these only.
 
-    Root FQNs (BD11): shortest FQN per source.filePath — indexes list these only.
-
     Nested types: if registry doc root FQN ≠ requested FQN, DFS subBlocks (findBlock).
 
     Site indexes (BD23):
-    • merged → index.html titled "BlockDoc"
+    • merged → index.html titled "BlockDoc" (BD21: one library groups by package; two or more *.Library roots group by library then package)
     • perLibrary → {libPrefix}/index.html per Library; filter roots under that prefix
 
     Package indexes when outLayout=fqn for every CollectPackagePrefixes entry; perLibrary mode
