@@ -437,6 +437,7 @@ function locateNeedleNearElement(
   return locationFromOffsets(file, source, start + idx, start + idx + len);
 }
 
+/** Implicit-namespace FQNs that exist as real Core blocks (plus `bml:Self`). Never add an unknown or non-existent block here. */
 const WELL_KNOWN_TYPE_FQNS = new Set<string>([
   ...Object.values(PRIMITIVE_TYPES),
   ...Object.values(CAPABILITY_TYPES),
