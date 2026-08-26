@@ -1,0 +1,47 @@
+<!--
+  Validator Capability — ValidateStyle
+  FQN: org.blockml.bml.compiler.validator.capability.ValidateStyle
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:valstyle="org.blockml.bml.compiler.validator.style">
+
+  <name>ValidateStyle</name>
+  <type>valcap:ValidateStyle</type>
+  <baseType>core:Capability</baseType>
+  <is>Run the BML style catalog against a BomDocument</is>
+
+  <documentation>Loads StyleRule documents from this package blocks/style/rule/, dispatches each
+    check type to a TypeScript interpreter, and returns diagnostics. Does not affect
+    success (warnings and recommendations only). Unknown check types emit
+    BML_STYLE_UNKNOWN_CHECK as info.</documentation>
+
+  <references>
+    <see type="valstyle:StyleRule" relation="SeeAlso" />
+    <see type="valcap:Validate" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <document type="bomdoc:BomDocument">
+      <documentation>document. TS type: bomdoc:BomDocument. (required)</documentation>
+    </document>
+    <result type="bomcommon:Diagnostic[]">
+      <documentation>Style diagnostics. TS type: bomcommon:Diagnostic[]. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

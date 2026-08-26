@@ -557,6 +557,18 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "parcap",
+    name: "ElementStartTagIsSelfClosing",
+    is: "Detect whether an element's start tag is authored as self-closing",
+    doc: "True when the start tag ends with slash-greater-than. Used to record authoredEmptyElementForm on empty see references.",
+    inputs: [
+      { name: "source", type: "type:Text", required: true },
+      { name: "element", type: "parmap:XmlDomNode", required: true },
+    ],
+    output: { name: "result", type: "type:Boolean", required: true },
+  },
+  {
+    pkg: "capability",
+    prefix: "parcap",
     name: "IsElement",
     is: "Type guard: DOM node is Element",
     inputs: [{ name: "node", type: "parmap:XmlDomNode", required: true }],

@@ -37,8 +37,8 @@
     validateTypes, validateConstraints, bootstrapTypeRegistry. Validator calls these;
     does not reimplement them.
 
-    org.blockml.bml.compiler.validator.* (this package) — validate() orchestration
-    and Stage-2 entry point contract only.
+    org.blockml.bml.compiler.validator.* (this package) — validate() orchestration,
+    style catalog (org.blockml.bml.compiler.validator.style.*), and Stage-2 entry point.
 
     org.blockml.bml.compiler.parser.* (@blockml/parser) — BML → BomDocument (Stage 1).
     Validator consumes parser output; does not call parse() directly (bootstrap is via framework).</documentation>

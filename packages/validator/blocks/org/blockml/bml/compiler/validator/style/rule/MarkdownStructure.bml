@@ -1,0 +1,50 @@
+<!--
+  Validator Style Rule — MarkdownStructure
+  FQN: org.blockml.bml.compiler.validator.style.MarkdownStructure
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valstyle="org.blockml.bml.compiler.validator.style">
+
+  <name>MarkdownStructure</name>
+  <type>valstyle:MarkdownStructure</type>
+  <baseType>valstyle:StyleRule</baseType>
+  <is>Recommend markdown structure for long unstructured documentation</is>
+
+  <documentation>Long block-level documentation should use markdown headings, lists, or blank-line
+    paragraphs instead of a single run-on text block.</documentation>
+
+  <properties>
+    <code override="true">
+      <value>BML_STYLE_PREFER_MARKDOWN</value>
+    </code>
+    <severity override="true">
+      <value>recommendation</value>
+    </severity>
+    <appliesTo override="true">
+      <value>block documentation</value>
+    </appliesTo>
+    <message override="true">
+      <value>Structure long documentation with markdown (headings, lists, or paragraphs).</value>
+    </message>
+  </properties>
+
+  <aggregations>
+    <check>
+      <composition>
+        <valstyle:PreferMarkdownStructure />
+      </composition>
+    </check>
+  </aggregations>
+
+</block>

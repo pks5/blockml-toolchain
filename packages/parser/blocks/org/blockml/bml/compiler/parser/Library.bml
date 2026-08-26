@@ -113,6 +113,7 @@
         <parcap:FqnToQName />
         <parcap:SourceLoc />
         <parcap:ElementSourceLoc />
+        <parcap:ElementStartTagIsSelfClosing />
         <parcap:IsElement />
         <parcap:IsComment />
         <parcap:IsTextNode />

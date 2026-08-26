@@ -15,7 +15,7 @@ const schema = JSON.parse(
   readFileSync(join(__dirname, "fixtures/validator-schema.json"), "utf8"),
 );
 
-const TS_CAPABILITY_EXPORTS = ["validate"];
+const TS_CAPABILITY_EXPORTS = ["validate", "validateStyle"];
 
 function walkBmlFiles(dir: string): string[] {
   const results: string[] = [];
@@ -107,6 +107,23 @@ describe("Validator BML ↔ TS parity", () => {
     expect(content).toContain("bomapi:ValidateOptions");
     expect(content).toContain("bomapi:ValidateResult");
     expect(content).toContain("core:Capability");
+  });
+
+  it("Library catalogs style types and rule instances", () => {
+    const catalog = parseLibraryCatalog();
+    for (const name of [
+      "StyleRule",
+      "StyleCheck",
+      "PreferCDataWhenNeedsEscape",
+      "PreferMarkdownStructure",
+      "PreferEmptyElementSelfClosing",
+      "CDataWhenEscaping",
+      "MarkdownStructure",
+      "EmptyElementSelfClosing",
+      "ValidateStyle",
+    ]) {
+      expect(catalog.has(name), `Library.bml missing ${name}`).toBe(true);
+    }
   });
 
   it("Library depends on blockml, bom, and framework libraries", () => {

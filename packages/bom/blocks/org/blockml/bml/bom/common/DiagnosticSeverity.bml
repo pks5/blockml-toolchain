@@ -28,7 +28,7 @@
   <baseType>bom:UrmodellType</baseType>
   <is>Compiler diagnostic severity</is>
 
-  <documentation>String-literal union: "error" | "warning" | "info". Distinct from org.blockml.bml.core.Diagnostic BML branch.</documentation>
+  <documentation>String-literal union: "error" | "warning" | "info" | "recommendation". Distinct from org.blockml.bml.core.Diagnostic BML branch.</documentation>
 
   <properties>
     <value type="type:Text">

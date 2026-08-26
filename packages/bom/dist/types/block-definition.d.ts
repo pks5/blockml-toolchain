@@ -1,4 +1,4 @@
-import type { CharacterDataForm, MetadataElementTrivia, MemberSectionName, SourceLocation, UnknownXmlNode, XmlRenderingBlock, XmlTrivia } from "./common.js";
+import type { CharacterDataForm, EmptyElementForm, MetadataElementTrivia, MemberSectionName, SourceLocation, UnknownXmlNode, XmlRenderingBlock, XmlTrivia } from "./common.js";
 import type { BlockInstance } from "./composition.js";
 import type { MemberDefinition } from "./member-definition.js";
 import type { CompositionTemplate } from "./composition.js";
@@ -159,6 +159,7 @@ export interface DocumentationReference {
     relationFqn?: string;
     context: string;
     languageFqn?: string;
+    authoredEmptyElementForm?: EmptyElementForm;
     source?: SourceLocation;
 }
 //# sourceMappingURL=block-definition.d.ts.map

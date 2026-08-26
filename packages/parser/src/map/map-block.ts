@@ -55,6 +55,7 @@ import {
   resolvePrefix,
   resolveTypeName,
   elementSourceLoc,
+  elementStartTagIsSelfClosing,
   attributeValueLoc,
   TYPE_REFERENCE_ENTITY,
 } from "../util/qname.js";
@@ -791,6 +792,7 @@ function mapProseEntry(element: Element, ctx: MapContext): DocumentationProseEnt
       ? resolveTypeName(langAttr, ctx.bindings, "language")
       : blockEffectiveLanguage(ctx),
     ...(form === "cdata" ? { authoredCharacterDataForm: "cdata" as const } : {}),
+    source: elementSourceLoc(ctx.filePath, ctx.source, element),
   };
 }
 
@@ -914,10 +916,20 @@ function mapReferences(element: Element, ctx: MapContext): DocumentationReferenc
     .filter((c) => elementLocalName(c) === "see")
     .map((c) => {
       const langAttr = getAttribute(c, "language");
+      const { text } = getCharacterData(c);
+      const empty = elementChildren(c).length === 0 && text.length === 0;
       const ref: DocumentationReference = {
-        context: getCharacterData(c).text,
+        context: text,
         ...(langAttr !== undefined
           ? { languageFqn: resolveTypeName(langAttr, ctx.bindings, "language") }
+          : {}),
+        source: elementSourceLoc(ctx.filePath, ctx.source, c),
+        ...(empty
+          ? {
+              authoredEmptyElementForm: elementStartTagIsSelfClosing(ctx.source, c)
+                ? ("selfClosing" as const)
+                : ("paired" as const),
+            }
           : {}),
       };
       for (const attr of ["type", "instance", "file", "url", "property", "aggregation", "association", "capability"] as const) {

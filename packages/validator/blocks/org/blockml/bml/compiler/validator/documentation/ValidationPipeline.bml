@@ -41,8 +41,9 @@
     8. validateVisibility(pragmaticModel, registry) → append diagnostics
     9. validateReadOnly(pragmaticModel, registry) → append diagnostics
     10. validateConstraints(pragmaticModel, registry) → append diagnostics
-    11. success = no diagnostic with severity === "error"
-    12. Return ValidateResult { pragmaticModel?, diagnostics, success }
+    11. validateStyle(pragmaticModel) → append warning/recommendation diagnostics
+    12. success = no diagnostic with severity === "error"
+    13. Return ValidateResult { pragmaticModel?, diagnostics, success }
 
     When continueOnError === false and success === false, pragmaticModel is omitted
     from the result (early return with diagnostics only).
@@ -53,6 +54,7 @@
   <references>
     <see type="valdocumentation:PublicApi" relation="ReadNext"></see>
     <see type="valcap:Validate" relation="Defines"></see>
+    <see type="valcap:ValidateStyle" relation="SeeAlso"></see>
   </references>
 
 </block>

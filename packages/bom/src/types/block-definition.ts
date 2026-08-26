@@ -1,5 +1,6 @@
 import type {
   CharacterDataForm,
+  EmptyElementForm,
   MetadataElementTrivia,
   MemberSectionName,
   SourceLocation,
@@ -176,5 +177,6 @@ export interface DocumentationReference {
   relationFqn?: string;
   context: string;
   languageFqn?: string;
+  authoredEmptyElementForm?: EmptyElementForm;
   source?: SourceLocation;
 }

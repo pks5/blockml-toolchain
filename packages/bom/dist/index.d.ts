@@ -1,4 +1,4 @@
-export type { SourceLocation, SourceInfo, XmlTrivia, UnknownXmlNode, MemberSectionName, MetadataElementTrivia, XmlNodeKind, CharacterDataForm, XmlRenderingBlock, XmlRenderingMember, DiagnosticSeverity, Diagnostic, } from "./types/common.js";
+export type { SourceLocation, SourceInfo, XmlTrivia, UnknownXmlNode, MemberSectionName, MetadataElementTrivia, XmlNodeKind, CharacterDataForm, EmptyElementForm, XmlRenderingBlock, XmlRenderingMember, DiagnosticSeverity, Diagnostic, } from "./types/common.js";
 export type { BomDocument } from "./types/document.js";
 export type { TypeReferenceEntityInstance, GenericType, BlockDefinition, KeywordEntry, DocumentationProseEntry, AliasEntry, ChangelogEntry, DocumentationExample, DocumentationReference, } from "./types/block-definition.js";
 export type { TypeExpression, TypeDescriptor, Multiplicity, InstanceConfiguration, NamedTypeReference, UnionTypeExpression, GroupedTypeExpression, GenericParameterReference, SelfTypeReference, AnonymousStructType, StructField, } from "./types/type-expression.js";

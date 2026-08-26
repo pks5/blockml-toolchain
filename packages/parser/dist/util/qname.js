@@ -285,6 +285,15 @@ export function elementSourceLoc(file, source, element) {
         endColumn: end.column,
     };
 }
+/** True when the element's start tag is authored as self-closing (`<tag …/>`). */
+export function elementStartTagIsSelfClosing(source, element) {
+    const startOffset = startOffsetForElement(source, element);
+    const startTagEnd = source.indexOf(">", startOffset);
+    if (startTagEnd === -1) {
+        return false;
+    }
+    return /\/\s*>$/.test(source.slice(startOffset, startTagEnd + 1));
+}
 function locationFromOffsets(file, source, startOffset, endOffset) {
     const start = offsetToLineColumn(source, startOffset);
     const end = offsetToLineColumn(source, endOffset);

@@ -26,6 +26,8 @@ export function bomSeverityToLsp(severity: Diagnostic["severity"]): LspDiagnosti
       return 2;
     case "info":
       return 3;
+    case "recommendation":
+      return 4;
     default:
       return 1;
   }

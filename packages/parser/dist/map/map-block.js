@@ -5,7 +5,7 @@ import { parseMemberValue } from "./member-value.js";
 import { elementChildren, elementLocalName, elementPrefix, getAttribute, getCharacterData, xmlTriviaFromElement, } from "../util/xml.js";
 import { parseVisibilityFromName } from "../util/visibility.js";
 import { parseBooleanAttribute, isBooleanLiteral } from "../util/boolean.js";
-import { resolveBlockReference, resolvePrefix, resolveTypeName, elementSourceLoc, attributeValueLoc, TYPE_REFERENCE_ENTITY, } from "../util/qname.js";
+import { resolveBlockReference, resolvePrefix, resolveTypeName, elementSourceLoc, elementStartTagIsSelfClosing, attributeValueLoc, TYPE_REFERENCE_ENTITY, } from "../util/qname.js";
 import { withElementLocation } from "../util/mapping-error.js";
 import { collectBlockGrammarAttributes, collectIdentityOrSectionAttributes, collectMemberGrammarAttributes, isAllowedRootChild, isCharacterDataHost, reportDuplicateComposition, reportStandaloneComposition, reportUnexpectedTextChildren, reportUnknownElement, toUnknownXmlNode, } from "./structural.js";
 const MEMBER_SECTIONS = new Set([
@@ -561,6 +561,7 @@ function mapProseEntry(element, ctx) {
             ? resolveTypeName(langAttr, ctx.bindings, "language")
             : blockEffectiveLanguage(ctx),
         ...(form === "cdata" ? { authoredCharacterDataForm: "cdata" } : {}),
+        source: elementSourceLoc(ctx.filePath, ctx.source, element),
     };
 }
 function blockEffectiveLanguage(_ctx) {
@@ -676,10 +677,20 @@ function mapReferences(element, ctx) {
         .filter((c) => elementLocalName(c) === "see")
         .map((c) => {
         const langAttr = getAttribute(c, "language");
+        const { text } = getCharacterData(c);
+        const empty = elementChildren(c).length === 0 && text.length === 0;
         const ref = {
-            context: getCharacterData(c).text,
+            context: text,
             ...(langAttr !== undefined
                 ? { languageFqn: resolveTypeName(langAttr, ctx.bindings, "language") }
+                : {}),
+            source: elementSourceLoc(ctx.filePath, ctx.source, c),
+            ...(empty
+                ? {
+                    authoredEmptyElementForm: elementStartTagIsSelfClosing(ctx.source, c)
+                        ? "selfClosing"
+                        : "paired",
+                }
                 : {}),
         };
         for (const attr of ["type", "instance", "file", "url", "property", "aggregation", "association", "capability"]) {

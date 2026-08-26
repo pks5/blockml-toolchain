@@ -1,4 +1,5 @@
 import type { BomDocument, Diagnostic, ValidateOptions, ValidateResult } from "@blockml/bom";
+import { validateStyle } from "./validate-style.js";
 import {
   bootstrapTypeRegistry,
   forkBom,
@@ -67,6 +68,7 @@ export function validate(
     ...validateVisibility(pragmaticModel, registry),
     ...validateReadOnly(pragmaticModel, registry),
     ...validateConstraints(pragmaticModel, registry),
+    ...validateStyle(pragmaticModel),
   ];
 
   const success = !diagnostics.some((d) => d.severity === "error");

@@ -37,5 +37,6 @@ describe("bomSeverityToLsp", () => {
     expect(bomSeverityToLsp("error")).toBe(1);
     expect(bomSeverityToLsp("warning")).toBe(2);
     expect(bomSeverityToLsp("info")).toBe(3);
+    expect(bomSeverityToLsp("recommendation")).toBe(4);
   });
 });

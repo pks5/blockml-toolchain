@@ -1,3 +1,4 @@
+import { validateStyle } from "./validate-style.js";
 import { bootstrapTypeRegistry, forkBom, validateConstraints, validateEmbeddedBlocks, validateInstances, validatePresets, validateReadOnly, validateTypes, validateVersions, validateVisibility, TypeRegistry, } from "@blockml/framework";
 /** Bootstrap scan diagnostics apply to the corpus, not the document under validation. */
 function libraryBootstrapDiagnostics(bootstrap, options) {
@@ -37,6 +38,7 @@ export function validate(document, options = {}) {
         ...validateVisibility(pragmaticModel, registry),
         ...validateReadOnly(pragmaticModel, registry),
         ...validateConstraints(pragmaticModel, registry),
+        ...validateStyle(pragmaticModel),
     ];
     const success = !diagnostics.some((d) => d.severity === "error");
     if (!continueOnError && !success) {

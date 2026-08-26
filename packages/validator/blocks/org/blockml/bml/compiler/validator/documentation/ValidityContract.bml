@@ -34,8 +34,9 @@
     CLI blockml validate and LSP analyzeDocument consume the same parse + validate engine.
     Generated XSD is a non-authoritative render-target projection and is not consulted.
 
-    Severity: error = not valid BlockML; warning = valid but problematic (deprecation);
-    info = hint. Unknown element, attribute, member, type, block, or missing library is error.
+    Severity: error = not valid BlockML; warning = valid but problematic (deprecation
+    or mechanical style); recommendation = quality improvement; info = hint.
+    Unknown element, attribute, member, type, block, or missing library is error.
 
     Semantic checks (this package / framework): every type FQN must resolve in the
     TypeRegistry or be a well-known primitive; instance typeFqn and memberValues keys

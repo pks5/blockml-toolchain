@@ -64,6 +64,9 @@
     <languageFqn type="type:Text">
       <documentation>languageFqn (optional). TS type: type:Text.</documentation>
     </languageFqn>
+    <authoredEmptyElementForm type="bomcommon:EmptyElementForm">
+      <documentation>authoredEmptyElementForm (optional). TS type: bomcommon:EmptyElementForm.</documentation>
+    </authoredEmptyElementForm>
     <source type="bomcommon:SourceLocation">
       <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
     </source>

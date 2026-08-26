@@ -19,6 +19,12 @@ export declare function elementSourceLoc(file: string, source: string, element: 
     lineNumber?: number;
     columnNumber?: number;
 }): SourceLocation;
+/** True when the element's start tag is authored as self-closing (`<tag …/>`). */
+export declare function elementStartTagIsSelfClosing(source: string, element: {
+    nodeName: string;
+    lineNumber?: number;
+    columnNumber?: number;
+}): boolean;
 /** Span of an attribute value inside the element's start tag. */
 declare function attributeValueLoc(file: string, source: string, element: {
     nodeName: string;

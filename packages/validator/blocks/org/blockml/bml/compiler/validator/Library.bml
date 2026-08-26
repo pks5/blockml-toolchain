@@ -21,6 +21,7 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:valstyle="org.blockml.bml.compiler.validator.style"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
   <name>Library</name>
@@ -30,7 +31,8 @@
 
   <documentation>
     Canonical validator specification for BlockML Stage-2 — validate() orchestration
-    on BomDocument using @blockml/framework utilities. TypeScript in packages/validator/src/
+    on BomDocument using @blockml/framework utilities, plus the style catalog
+    (org.blockml.bml.compiler.validator.style.*). TypeScript in packages/validator/src/
     implements this library. Urmodell and API types live in org.blockml.bml.bom.*
     (@blockml/bom). Membership is defined exclusively by this blocks list.
   </documentation>
@@ -63,6 +65,15 @@
     <blocks>
       <composition><validator:ValidatorType />
         <valcap:Validate />
+        <valcap:ValidateStyle />
+        <valstyle:StyleRule />
+        <valstyle:StyleCheck />
+        <valstyle:PreferCDataWhenNeedsEscape />
+        <valstyle:PreferMarkdownStructure />
+        <valstyle:PreferEmptyElementSelfClosing />
+        <valstyle:CDataWhenEscaping />
+        <valstyle:MarkdownStructure />
+        <valstyle:EmptyElementSelfClosing />
         <valdocumentation:Introduction />
         <valdocumentation:ValidityContract />
         <valdocumentation:LayerSeparation />

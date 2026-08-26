@@ -7,6 +7,7 @@ export type {
   MetadataElementTrivia,
   XmlNodeKind,
   CharacterDataForm,
+  EmptyElementForm,
   XmlRenderingBlock,
   XmlRenderingMember,
   DiagnosticSeverity,

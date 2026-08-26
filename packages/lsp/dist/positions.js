@@ -4,6 +4,8 @@ export function bomSeverityToLsp(severity) {
             return 2;
         case "info":
             return 3;
+        case "recommendation":
+            return 4;
         default:
             return 1;
     }

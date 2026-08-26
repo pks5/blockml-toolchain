@@ -984,6 +984,28 @@
       }
     },
     {
+      "name": "ElementStartTagIsSelfClosing",
+      "tsExport": "elementStartTagIsSelfClosing",
+      "fqn": "org.blockml.bml.compiler.parser.capability.ElementStartTagIsSelfClosing",
+      "inputs": [
+        {
+          "name": "source",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "element",
+          "type": "parmap:XmlDomNode",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "type:Boolean",
+        "required": true
+      }
+    },
+    {
       "name": "IsElement",
       "tsExport": "isElement",
       "fqn": "org.blockml.bml.compiler.parser.capability.IsElement",

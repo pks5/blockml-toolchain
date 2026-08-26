@@ -31,8 +31,9 @@
   <documentation>Out of scope for @blockml/validator:
 
     • TypeRegistry implementation — @blockml/framework
-    • Individual validation rules — @blockml/framework (validateTypes, validateEmbeddedBlocks,
+    • Individual semantic validation rules — @blockml/framework (validateTypes, validateEmbeddedBlocks,
       validateInstances, validatePresets, validateVisibility, validateReadOnly, validateConstraints)
+    • Style/quality rules — in scope here (validateStyle + style catalog)
     • SCAD / MachineBlocks Stage-3 render validation
     • MemberGroups axis constraints (Category / AiUsage) — MachineBlocks-only; see docs/TODOs
     • parse() / serialize() — @blockml/parser / @blockml/serializer
@@ -40,7 +41,8 @@
     • CLI file I/O — @blockml/cli
     • Language BML corpus — @blockml/core (npm)
 
-    In scope: validate() orchestration on BomDocument with framework utilities.</documentation>
+    In scope: validate() orchestration on BomDocument with framework utilities and the
+    style catalog.</documentation>
 
   <references>
     <see type="valdocumentation:Introduction" relation="SeeAlso"></see>

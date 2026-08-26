@@ -28,7 +28,8 @@
   <baseType>core:Documentation</baseType>
   <is>validate() entry point (B26)</is>
 
-  <documentation>validate(document: BomDocument, options?: ValidateOptions): ValidateResult
+  <documentation>    validate(document: BomDocument, options?: ValidateOptions): ValidateResult
+    validateStyle(document: BomDocument): Diagnostic[]
 
     ValidateOptions (owned by @blockml/bom):
     • typeRegistry — pre-built TypeRegistryReader / TypeRegistry instance (optional)
@@ -40,12 +41,17 @@
     • diagnostics — Diagnostic[]
     • success — false if any error-severity diagnostic
 
+    Style: validateStyle runs after semantic checks. Catalog SSOT lives under
+    org.blockml.bml.compiler.validator.style.*. Warnings and recommendations do not
+    fail success.
+
     Sync only; does not throw on validation errors. Host decides abort policy.</documentation>
 
   <references>
     <see type="bomapi:ValidateOptions" relation="Defines"></see>
     <see type="bomapi:ValidateResult" relation="Defines"></see>
     <see type="valcap:Validate" relation="Defines"></see>
+    <see type="valcap:ValidateStyle" relation="Defines"></see>
     <see type="valdocumentation:DesignDecisions" relation="ReadNext"></see>
   </references>
 

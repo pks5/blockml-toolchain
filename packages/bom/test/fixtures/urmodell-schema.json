@@ -186,6 +186,20 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.bom.common.EmptyElementForm",
+      "tsExport": "EmptyElementForm",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": [
+        {
+          "name": "value",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
       "fqn": "org.blockml.bml.bom.common.XmlRenderingBlock",
       "tsExport": "XmlRenderingBlock",
       "pkg": "common",
@@ -906,6 +920,11 @@
         {
           "name": "languageFqn",
           "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "authoredEmptyElementForm",
+          "type": "bomcommon:EmptyElementForm",
           "required": false
         },
         {
@@ -2029,6 +2048,7 @@
     "MetadataElementTrivia": "Record<string, XmlTrivia>",
     "XmlNodeKind": "string-literal-union",
     "CharacterDataForm": "string-literal-union",
+    "EmptyElementForm": "string-literal-union",
     "DiagnosticSeverity": "string-literal-union"
   },
   "unions": {

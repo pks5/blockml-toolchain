@@ -30,6 +30,23 @@
         "type": "bomapi:ValidateResult",
         "required": true
       }
+    },
+    {
+      "name": "ValidateStyle",
+      "tsExport": "validateStyle",
+      "fqn": "org.blockml.bml.compiler.validator.capability.ValidateStyle",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "bomcommon:Diagnostic[]",
+        "required": true
+      }
     }
   ],
   "documentationBlocks": [

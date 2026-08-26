@@ -372,6 +372,19 @@ export function elementSourceLoc(
   };
 }
 
+/** True when the element's start tag is authored as self-closing (`<tag …/>`). */
+export function elementStartTagIsSelfClosing(
+  source: string,
+  element: { nodeName: string; lineNumber?: number; columnNumber?: number },
+): boolean {
+  const startOffset = startOffsetForElement(source, element);
+  const startTagEnd = source.indexOf(">", startOffset);
+  if (startTagEnd === -1) {
+    return false;
+  }
+  return /\/\s*>$/.test(source.slice(startOffset, startTagEnd + 1));
+}
+
 function locationFromOffsets(
   file: string,
   source: string,

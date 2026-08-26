@@ -30,7 +30,8 @@
   <baseType>core:Documentation</baseType>
   <is>Toolchain package responsibilities for validation</is>
 
-  <documentation>@blockml/validator — validate() orchestration; ValidateResult assembly. Owns this BML library.
+  <documentation>@blockml/validator — validate() orchestration, style catalog, ValidateResult assembly.
+    Owns this BML library including org.blockml.bml.compiler.validator.style.*.
 
     @blockml/bom — Urmodell types, ValidateOptions/ValidateResult (B26), Diagnostic.
     Validator consumes; does not redefine.

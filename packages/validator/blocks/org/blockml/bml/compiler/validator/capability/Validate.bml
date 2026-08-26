@@ -27,7 +27,9 @@
   <baseType>core:Capability</baseType>
   <is>Public entry: BomDocument → ValidateResult (B26)</is>
 
-  <documentation>Orchestrates TypeRegistry bootstrap/injection, forkBom, validateTypes, and validateConstraints. Does not mutate input Urmodell.</documentation>
+  <documentation>Orchestrates TypeRegistry bootstrap/injection, forkBom, semantic framework
+    checks, and validateStyle. Does not mutate input Urmodell. Style diagnostics never
+    fail success.</documentation>
 
   <references>
     <see type="valdocumentation:PublicApi" relation="SeeAlso" />
@@ -36,6 +38,7 @@
     <see type="fwcap:ForkBom" relation="SeeAlso" />
     <see type="fwcap:ValidateTypes" relation="SeeAlso" />
     <see type="fwcap:ValidateConstraints" relation="SeeAlso" />
+    <see type="valcap:ValidateStyle" relation="SeeAlso" />
     <see type="fwcap:BootstrapTypeRegistry" relation="SeeAlso" />
   </references>
 

@@ -491,7 +491,12 @@ function emitReference(
   ]
     .filter(Boolean)
     .join(" ");
-  writer.line(`<see ${attrs}>`);
+  const attrStr = attrs ? ` ${attrs}` : "";
+  if (!ref.context.trim()) {
+    writer.line(`<see${attrStr} />`);
+    return;
+  }
+  writer.line(`<see${attrStr}>`);
   writer.pushDepth();
   emitCharacterData(writer, ref.context);
   writer.popDepth();

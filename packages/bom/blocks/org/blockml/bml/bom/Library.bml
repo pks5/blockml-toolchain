@@ -70,6 +70,7 @@
         <bomcommon:MetadataElementTrivia />
         <bomcommon:XmlNodeKind />
         <bomcommon:CharacterDataForm />
+        <bomcommon:EmptyElementForm />
         <bomcommon:XmlRenderingBlock />
         <bomcommon:XmlRenderingMember />
         <bomcommon:DiagnosticSeverity />

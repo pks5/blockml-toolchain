@@ -57,6 +57,9 @@ export type XmlNodeKind = "attribute" | "element" | "text";
 /** How host-element character data appeared in source when placement is `text` (D8). */
 export type CharacterDataForm = "text" | "cdata";
 
+/** How an empty XML element was authored (paired vs self-closing). */
+export type EmptyElementForm = "selfClosing" | "paired";
+
 /** Block-level `<bml:xml>` body — lossless. */
 export interface XmlRenderingBlock {
   raw: string;
@@ -71,7 +74,7 @@ export interface XmlRenderingMember {
   authoredCharacterDataForm?: CharacterDataForm;
 }
 
-export type DiagnosticSeverity = "error" | "warning" | "info";
+export type DiagnosticSeverity = "error" | "warning" | "info" | "recommendation";
 
 /** Compiler result diagnostic — distinct from org.blockml.bml.core.Diagnostic BML branch. */
 export interface Diagnostic {
