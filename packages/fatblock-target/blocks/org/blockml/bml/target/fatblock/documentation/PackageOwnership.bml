@@ -32,8 +32,8 @@
     FatBlockOptions; BML_FATBLOCK_* diagnostics; output basename algorithm.
 
     @blockml/cli owns: --src / --include / --out; default host from package.json
-    blockml.library; separate registry bootstrap for fatblock; writing Host.fat.bml
-    at project root; exit codes.
+    blockml.library; TypeRegistry from the package library graph plus core; writing
+    Host.fat.bml at project root; exit codes.
     See org.blockml.bml.cli.documentation.CompileCommand.
 
     @blockml/bom owns: embeddedBlocks shape and language invariants.

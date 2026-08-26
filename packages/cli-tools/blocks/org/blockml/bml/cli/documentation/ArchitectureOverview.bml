@@ -34,8 +34,9 @@
     compile flow (library/corpus): LoadConfig → BootstrapTargets → BootstrapProjectTypeRegistry
     → compileToOutput(scope auto) → WriteOutputFiles.
 
-    compile flow (fatblock): LoadConfig → BootstrapTargets → separate registry bootstrap
-    → compileToOutput(document) → write single .fat.bml at project root.
+    compile flow (fatblock): LoadConfig → BootstrapTargets → project library graph
+    plus core Library and srcDir corpus → compileToOutput(document) → write single
+    .fat.bml at project root.
 
     TypeScript module map:
     • cli.ts → RunCli, ParseArgs, RunValidate, RunCompile, RunCompileFatBlock, FormatDiagnostic

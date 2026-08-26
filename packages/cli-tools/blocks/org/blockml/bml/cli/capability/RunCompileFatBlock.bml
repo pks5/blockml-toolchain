@@ -25,7 +25,7 @@
   <baseType>core:Capability</baseType>
   <is>Execute blockml compile for fatblock document target</is>
 
-  <documentation>CLI14: omitted file and --src default to package.json blockml.library as host and that library directory as the candidate pool; missing both file and library → exit 2. CLI15: separate bootstrapTypeRegistry with core Library + srcDir pool; document scope; writes single Host.fat.bml at project root unless --out.</documentation>
+  <documentation>CLI14: omitted file and --src default to package.json blockml.library as host and that library directory as the candidate pool; missing both file and library → exit 2. CLI15: fatblock TypeRegistry from package.json blockml.library graph plus core Library and srcDir corpus; document scope; writes single Host.fat.bml at project root unless --out.</documentation>
 
   <references>
     <see type="clidocumentation:CompileCommand" relation="SeeAlso" />

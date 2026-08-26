@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import {
-  bootstrapTypeRegistry,
   rootFqnByFilePath,
   type BootstrapResult,
 } from "@blockml/framework";
@@ -282,6 +281,43 @@ function applyDocumentTargetDefaults(
   }
 }
 
+function bootstrapDocumentTypeRegistry(
+  documentBootstrap: "project" | "workspace-core" | undefined,
+  parsed: ParsedArgs,
+  config: BomConfig,
+  rootDir: string,
+  wsRoot: string,
+): BootstrapResult {
+  if (documentBootstrap === "workspace-core") {
+    const extras = [
+      ...(parsed.libraries !== undefined
+        ? parsed.libraries
+        : (config.libraries ?? [])),
+    ];
+    const coreLibrary = join(
+      wsRoot,
+      "node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml",
+    );
+    if (existsSync(coreLibrary)) {
+      extras.push(coreLibrary);
+    }
+    const bootstrapOpts: {
+      config: BomConfig;
+      rootDir: string;
+      srcDirOverride?: string;
+      librariesOverride: string[];
+    } = { config, rootDir, librariesOverride: extras };
+    if (parsed.srcDir !== undefined) {
+      bootstrapOpts.srcDirOverride = parsed.srcDir;
+    }
+    return bootstrapProjectTypeRegistry(bootstrapOpts);
+  }
+
+  return bootstrapProjectTypeRegistry(
+    bootstrapOptsFromParsed(parsed, config, rootDir),
+  );
+}
+
 function buildDocumentTargetOptions(
   target: string,
   parsed: ParsedArgs,
@@ -405,32 +441,13 @@ async function runCompileDocument(
 
   const wsRoot = workspaceRoot(rootDir);
   const absSrc = parsed.srcDir ? resolve(rootDir, parsed.srcDir) : undefined;
-  let bootstrap;
-  if (hints?.documentBootstrap === "workspace-core") {
-    const coreLibrary = join(
-      wsRoot,
-      "node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml",
-    );
-    bootstrap = bootstrapTypeRegistry({
-      libraryPaths: existsSync(coreLibrary) ? [coreLibrary] : [],
-      paths: absSrc ? [absSrc] : [dirname(hostPath)],
-      rootDir: wsRoot,
-    });
-  } else {
-    const bootstrapOpts: {
-      config: BomConfig;
-      rootDir: string;
-      srcDirOverride?: string;
-      librariesOverride?: string[];
-    } = { config, rootDir };
-    if (parsed.srcDir !== undefined) {
-      bootstrapOpts.srcDirOverride = parsed.srcDir;
-    }
-    if (parsed.libraries !== undefined) {
-      bootstrapOpts.librariesOverride = parsed.libraries;
-    }
-    bootstrap = bootstrapProjectTypeRegistry(bootstrapOpts);
-  }
+  const bootstrap = bootstrapDocumentTypeRegistry(
+    hints?.documentBootstrap,
+    parsed,
+    config,
+    rootDir,
+    wsRoot,
+  );
 
   const source = readFileSync(hostPath, "utf8");
   const outDir = resolveDocumentOutDir(target, parsed, config, rootDir, hostPath);

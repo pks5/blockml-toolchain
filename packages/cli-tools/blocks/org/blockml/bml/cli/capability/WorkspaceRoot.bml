@@ -25,7 +25,7 @@
   <baseType>core:Capability</baseType>
   <is>Find workspace root containing @blockml/core</is>
 
-  <documentation>CLI15: walk up from rootDir until node_modules/@blockml/core exists; used for fatblock core Library path.</documentation>
+  <documentation>CLI15: walk up from rootDir until node_modules/@blockml/core exists; used for fatblock core Library seed path.</documentation>
 
   <references>
     <see type="clicap:RunCompileFatBlock" relation="SeeAlso" />
