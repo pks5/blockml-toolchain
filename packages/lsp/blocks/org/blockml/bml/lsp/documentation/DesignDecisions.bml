@@ -33,7 +33,11 @@
 
   <documentation>Editor-agnostic: vscode-languageserver for protocol only; no vscode Extension API in this package.
 
-    Inline bom.config.json loading — avoids @blockml/cli dependency chain.
+    Inline blockml.config.json loading — avoids @blockml/cli dependency chain.
+
+    Workspace bootstrap is corpus-first (srcDir). Library.bml is the FQN dependency graph;
+    npm/workspace packages with blockml.library or blockml.config.json are the search index.
+    A library blocks tree already under srcDir is not registered twice.
 
     Full text sync + debounced validation — simpler than incremental parse for V1.
 

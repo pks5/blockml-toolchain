@@ -24,9 +24,9 @@
   <name>Configuration</name>
   <type>clidocumentation:Configuration</type>
   <baseType>core:Documentation</baseType>
-  <is>bom.config.json and later bom-cli.config.json</is>
+  <is>blockml.config.json and later bom-cli.config.json</is>
 
-  <documentation>V1 CLI reads bom.config.json from project root:
+  <documentation>V1 CLI reads blockml.config.json from project root:
 
     • outDir — default "doc" (CLI DefaultBomConfig)
     • srcDir — default "blocks" (recommended BlockML source folder)

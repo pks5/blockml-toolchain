@@ -171,13 +171,13 @@ FQN:   com.martianmicro.anyclosure.Wall
 File:  scad/com/martianmicro/anyclosure/Wall.scad
 ```
 
-Multiple block classes may exist in one SCAD file. The file is named after the primary class. The output directory root (`scad/`) is configurable via `outDir` in `bom.config.json`.
+Multiple block classes may exist in one SCAD file. The file is named after the primary class. The output directory root (`scad/`) is configurable via `outDir` in `blockml.config.json`.
 
 ---
 
 ## Import Resolver
 
-Every generated SCAD file includes the required imports for the MachineBlocks V3 Library and the project config. Import paths are computed relative to the output file location using the `mbLibPath` from `bom.config.json`.
+Every generated SCAD file includes the required imports for the MachineBlocks V3 Library and the project config. Import paths are computed relative to the output file location using the `mbLibPath` from `blockml.config.json`.
 
 ### Standard Imports
 

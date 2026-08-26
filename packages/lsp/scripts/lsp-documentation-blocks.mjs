@@ -65,7 +65,10 @@ export const documentationBlocks = [
     (definition = LocationLink with whole-QName originSelectionRange; references =
     baseType + member types, optional declaration).
 
-    Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.`,
+    Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
+    Corpus-first: always scan srcDir. Seed library from config.libraries or package.json
+    blockml.library; FQN dependencies resolve via discovered BlockML npm/workspace packages.
+    Library blocks trees inside srcDir are not scanned twice.`,
     refs: [
       { type: "lspdocumentation:ServerLifecycle", relation: "ReadNext" },
     ],
@@ -132,7 +135,7 @@ export const documentationBlocks = [
     onDidCloseTextDocument: clear diagnostics.
 
     onInitialized: if the client supports dynamic file watchers, register
-    **/*.bml, **/bom.config.json, **/package.json.
+    **/*.bml, **/blockml.config.json, **/package.json.
     onDidChangeWatchedFiles: debounce 400ms, invalidateWorkspace, re-bootstrap,
     re-validate all open documents. node_modules paths are ignored.
     Refresh uses the disk snapshot — unsaved buffers are not overlaid into the registry.
@@ -186,7 +189,11 @@ export const documentationBlocks = [
     is: "Normative LSP V1 design decisions",
     doc: `Editor-agnostic: vscode-languageserver for protocol only; no vscode Extension API in this package.
 
-    Inline bom.config.json loading — avoids @blockml/cli dependency chain.
+    Inline blockml.config.json loading — avoids @blockml/cli dependency chain.
+
+    Workspace bootstrap is corpus-first (srcDir). Library.bml is the FQN dependency graph;
+    npm/workspace packages with blockml.library or blockml.config.json are the search index.
+    A library blocks tree already under srcDir is not registered twice.
 
     Full text sync + debounced validation — simpler than incremental parse for V1.
 

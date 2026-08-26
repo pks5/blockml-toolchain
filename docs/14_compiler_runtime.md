@@ -53,7 +53,7 @@ Cross-package references: `07_cli.md` / `org.blockml.bml.cli.*` (host bootstrap,
 
 | Concern | Owner |
 |---|---|
-| `bom.config.json` `targets[]`, `bootstrapTargets`, write files, exit codes | `org.blockml.bml.cli.*` — start `org.blockml.bml.cli.documentation.Introduction` |
+| `blockml.config.json` `targets[]`, `bootstrapTargets`, write files, exit codes | `org.blockml.bml.cli.*` — start `org.blockml.bml.cli.documentation.Introduction` |
 | Incremental cache (C5), thumbnails (C6) | CLI ScopeExclusions / planned CLI |
 | BlockDoc / XSD / FatBlock emit | Target libraries (`…target.blockdoc|xsd|fatblock.documentation.Introduction`) |
 | Parser / serializer / validator algorithms | `org.blockml.bml.compiler.parser|serializer|validator.*` |

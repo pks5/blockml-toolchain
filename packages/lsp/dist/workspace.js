@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import { bootstrapTypeRegistry, defaultBootstrapPaths, TypeRegistry } from "@blockml/framework";
 /** Globs registered with the client for workspace/didChangeWatchedFiles. */
-export const WATCH_GLOBS = ["**/*.bml", "**/bom.config.json", "**/package.json"];
+export const WATCH_GLOBS = ["**/*.bml", "**/blockml.config.json", "**/package.json"];
 /** True when a disk path should invalidate the cached TypeRegistry. */
 export function isWorkspaceRefreshPath(filePath) {
     const normalized = filePath.replaceAll("\\", "/");
@@ -10,13 +10,13 @@ export function isWorkspaceRefreshPath(filePath) {
         return false;
     }
     const name = basename(normalized);
-    return name.endsWith(".bml") || name === "bom.config.json" || name === "package.json";
+    return name.endsWith(".bml") || name === "blockml.config.json" || name === "package.json";
 }
 const DEFAULT_CONFIG = {
-    srcDir: "src",
+    srcDir: "blocks",
 };
 export function loadBomConfig(rootDir) {
-    const configPath = resolve(rootDir, "bom.config.json");
+    const configPath = resolve(rootDir, "blockml.config.json");
     if (!existsSync(configPath)) {
         return { ...DEFAULT_CONFIG };
     }
@@ -27,11 +27,11 @@ export function loadBomConfig(rootDir) {
         ...parsed,
     };
 }
-/** Walk up from workspace root until node_modules/@blockml/core is found (CLI parity). */
+/** Walk up from workspace root until node_modules is found (CLI/framework discovery). */
 export function resolveBootstrapRoot(fromDir) {
     let dir = resolve(fromDir);
     for (;;) {
-        if (existsSync(join(dir, "node_modules/@blockml/core"))) {
+        if (existsSync(join(dir, "node_modules"))) {
             return dir;
         }
         const parent = dirname(dir);
@@ -74,13 +74,11 @@ export function createWorkspace(rootDir) {
         return cached;
     }
     const config = loadBomConfig(absRoot);
-    const bootstrapRoot = resolveBootstrapRoot(absRoot);
     const srcDir = config.srcDir ?? DEFAULT_CONFIG.srcDir;
-    const corpusPaths = [...new Set([srcDir, ...defaultBootstrapPaths(bootstrapRoot)])];
     const libraries = resolveLibraryPaths(config, absRoot);
     const bootstrapOptions = {
         rootDir: absRoot,
-        paths: corpusPaths,
+        paths: libraries.length > 0 ? [srcDir] : [...new Set([srcDir, ...defaultBootstrapPaths(absRoot)])],
     };
     if (libraries.length > 0) {
         bootstrapOptions.libraryPaths = libraries;

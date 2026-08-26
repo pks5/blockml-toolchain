@@ -27,7 +27,7 @@ Cross-package references (still Markdown until migrated): `06_compiler.md`, `14_
 | Command inventory | `org.blockml.bml.cli.documentation.Commands` |
 | blockml compile | `org.blockml.bml.cli.documentation.CompileCommand` |
 | blockml validate | `org.blockml.bml.cli.documentation.ValidateCommand` |
-| bom.config.json | `org.blockml.bml.cli.documentation.Configuration` |
+| blockml.config.json | `org.blockml.bml.cli.documentation.Configuration` |
 | targets[] bootstrap (C3) | `org.blockml.bml.cli.documentation.TargetBootstrap` |
 | Per-target CLI matrix | `org.blockml.bml.cli.documentation.TargetCliMatrix` |
 | Exit codes & diagnostics | `org.blockml.bml.cli.documentation.ExitCodesAndDiagnostics` |
@@ -43,7 +43,7 @@ Cross-package references (still Markdown until migrated): `06_compiler.md`, `14_
 
 | Concern | BML FQN |
 |---|---|
-| bom.config.json shape | `org.blockml.bml.cli.api.BomConfig` |
+| blockml.config.json shape | `org.blockml.bml.cli.api.BomConfig` |
 | Parsed CLI arguments | `org.blockml.bml.cli.api.ParsedArgs` |
 | Exit result | `org.blockml.bml.cli.api.CliResult` |
 | Config defaults | `org.blockml.bml.cli.config.DefaultBomConfig` |

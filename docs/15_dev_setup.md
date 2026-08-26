@@ -753,7 +753,7 @@ Phase C — Compile pipeline (BlockDoc-first)
 | 2nd+ | **FatBlock** (`fatblock`) | Portable `.bml` folder bundle (V1); closure planned v2 | this repo |
 | Later | **machineblocks-v3-scad** | Product SCAD target + thin `@machineblocks/cli` | **MachineBlocks mono-repo (out of scope here)** |
 
-BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`blockml compile blockdoc`, library/corpus scope — see `org.blockml.bml.compiler.runtime.documentation.CompileScopeRules`). `bom.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` TOC. MachineBlocks users use `@machineblocks/cli` from the MachineBlocks mono-repo for the product chain.
+BlockDoc is the V1 **first implemented** Stage-3 target for pipeline + corpus control (`blockml compile blockdoc`, library/corpus scope — see `org.blockml.bml.compiler.runtime.documentation.CompileScopeRules`). `blockml.config.json` → `targets[]` is **V1** (default `["blockdoc"]`) — see `07_cli.md` · `14_compiler_runtime.md` TOC. MachineBlocks users use `@machineblocks/cli` from the MachineBlocks mono-repo for the product chain.
 
 ### Roundtrip test contract
 

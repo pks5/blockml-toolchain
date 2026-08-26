@@ -401,7 +401,7 @@ Browser / tests           → caller invokes registerTarget() directly
 @blockml/compiler         → registerTarget() / getTarget() API only — no built-in targets
 ```
 
-`@blockml/cli` reads `bom.config.json` → `targets[]` (V1). Domain CLIs supply their own bootstrap. See C3 · C7 in `14_compiler_runtime.md` · `00_system.md` — Zielbild.
+`@blockml/cli` reads `blockml.config.json` → `targets[]` (V1). Domain CLIs supply their own bootstrap. See C3 · C7 in `14_compiler_runtime.md` · `00_system.md` — Zielbild.
 
 ### Interfaces
 

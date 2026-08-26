@@ -23,9 +23,9 @@
   <name>BomConfig</name>
   <type>cliapi:BomConfig</type>
   <baseType>cli:CliType</baseType>
-  <is>bom.config.json project configuration shape (CLI-owned subset)</is>
+  <is>blockml.config.json project configuration shape (CLI-owned subset)</is>
 
-  <documentation>Fields the V1 CLI reads from bom.config.json. Full schema in clidocumentation:Configuration.</documentation>
+  <documentation>Fields the V1 CLI reads from blockml.config.json. Full schema in clidocumentation:Configuration.</documentation>
   <references>
     <see type="clidocumentation:Configuration" relation="SeeAlso" />
   </references>

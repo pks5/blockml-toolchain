@@ -23,7 +23,7 @@
   <name>DefaultBomConfig</name>
   <type>cliconfig:DefaultBomConfig</type>
   <baseType>cli:CliType</baseType>
-  <is>Defaults when bom.config.json is missing or fields omitted</is>
+  <is>Defaults when blockml.config.json is missing or fields omitted</is>
 
   <documentation>CLI1/CLI2: missing file returns these defaults; empty targets[] becomes ["blockdoc"].</documentation>
   <properties>

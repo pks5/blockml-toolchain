@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, afterEach } from "vitest";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   bootstrapTypeRegistry,
@@ -7,10 +8,11 @@ import {
 } from "../src/index.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
+const TMP = join(import.meta.dirname, ".tmp-discover");
 
 describe("TypeRegistry bootstrap", () => {
   it("loads framework and domain blocks from default paths", () => {
-    const { registry, diagnostics } = bootstrapTypeRegistry(defaultBootstrapPaths());
+    const { registry, diagnostics } = bootstrapTypeRegistry(defaultBootstrapPaths(ROOT), ROOT);
     const bootstrapErrors = diagnostics.filter(
       (d) =>
         d.severity === "error" &&
@@ -36,7 +38,7 @@ describe("TypeRegistry bootstrap", () => {
 
   it("registers sub-blocks and retrieves by FQN", () => {
     const registry = new TypeRegistry();
-    const { registry: boot } = bootstrapTypeRegistry(defaultBootstrapPaths());
+    const { registry: boot } = bootstrapTypeRegistry(defaultBootstrapPaths(ROOT), ROOT);
     const blockDoc = boot.get("org.blockml.bml.core.Block");
     expect(blockDoc).toBeDefined();
     if (blockDoc) {
@@ -81,5 +83,160 @@ describe("TypeRegistry bootstrap", () => {
     expect(
       diagnostics.some((d) => d.code === "BML_LIBRARY_RESOLVE_ERROR"),
     ).toBe(true);
+  });
+
+  it("discovers BlockML npm and workspace packages", () => {
+    const paths = defaultBootstrapPaths(ROOT).map((p) => p.replaceAll("\\", "/"));
+    expect(paths.some((p) => p.endsWith("node_modules/@blockml/core/blocks"))).toBe(
+      true,
+    );
+    expect(
+      paths.some((p) => p.includes("@machineblocks/core") && p.endsWith("/blocks")),
+    ).toBe(true);
+    expect(paths.some((p) => p.includes("/packages/parser/"))).toBe(false);
+  });
+
+  it("discovers packages from a nested cwd via node_modules walk-up", () => {
+    const paths = defaultBootstrapPaths(join(ROOT, "packages/bom")).map((p) =>
+      p.replaceAll("\\", "/"),
+    );
+    expect(paths.some((p) => p.endsWith("node_modules/@blockml/core/blocks"))).toBe(
+      true,
+    );
+  });
+
+  it("still has core types when the library tree is covered by corpus paths", () => {
+    const libraryPath = join(
+      ROOT,
+      "node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml",
+    );
+    const coreBlocks = join(ROOT, "node_modules/@blockml/core/blocks");
+    const { registry } = bootstrapTypeRegistry({
+      libraryPaths: [libraryPath],
+      paths: [coreBlocks],
+      rootDir: ROOT,
+    });
+    expect(registry.has("org.blockml.bml.core.Block")).toBe(true);
+  });
+
+  it("loads core from the FQN graph when a seed Library.bml reuses the core Library type", () => {
+    const bomRoot = join(ROOT, "packages/bom");
+    const { registry } = bootstrapTypeRegistry({
+      libraryPaths: [join(bomRoot, "blocks/org/blockml/bml/bom/Library.bml")],
+      paths: [join(bomRoot, "blocks")],
+      rootDir: bomRoot,
+    });
+    expect(registry.has("org.blockml.bml.core.Block")).toBe(true);
+    expect(registry.has("org.blockml.bml.definition.MemberDefinition")).toBe(true);
+    expect(registry.has("org.blockml.bml.bom.member.MemberDefinition")).toBe(true);
+  });
+});
+
+describe("defaultBootstrapPaths discovery fixtures", () => {
+  afterEach(() => {
+    rmSync(TMP, { recursive: true, force: true });
+  });
+
+  it("indexes a node_modules package with blockml.library", () => {
+    const pkg = join(TMP, "node_modules/@acme/types");
+    mkdirSync(join(pkg, "blocks/acme"), { recursive: true });
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({
+        name: "tmp-discover",
+        dependencies: { "@acme/types": "1.0.0" },
+      }),
+      "utf8",
+    );
+    writeFileSync(
+      join(pkg, "package.json"),
+      JSON.stringify({
+        name: "@acme/types",
+        blockml: { library: "./blocks/acme/Library.bml" },
+      }),
+      "utf8",
+    );
+    const paths = defaultBootstrapPaths(TMP).map((p) => p.replaceAll("\\", "/"));
+    expect(paths.some((p) => p.endsWith("node_modules/@acme/types/blocks"))).toBe(true);
+  });
+
+  it("indexes a node_modules package with blockml.config.json", () => {
+    const pkg = join(TMP, "node_modules/plain-bml");
+    mkdirSync(join(pkg, "blocks"), { recursive: true });
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({
+        name: "tmp-discover",
+        dependencies: { "plain-bml": "1.0.0" },
+      }),
+      "utf8",
+    );
+    writeFileSync(join(pkg, "package.json"), JSON.stringify({ name: "plain-bml" }), "utf8");
+    writeFileSync(
+      join(pkg, "blockml.config.json"),
+      JSON.stringify({ srcDir: "blocks" }),
+      "utf8",
+    );
+    const paths = defaultBootstrapPaths(TMP).map((p) => p.replaceAll("\\", "/"));
+    expect(paths.some((p) => p.endsWith("node_modules/plain-bml/blocks"))).toBe(true);
+  });
+
+  it("indexes a blockml.library package that is not a production dependency", () => {
+    const pkg = join(TMP, "node_modules/@acme/types");
+    mkdirSync(join(pkg, "blocks/acme"), { recursive: true });
+    mkdirSync(join(TMP, "blocks"), { recursive: true });
+    writeFileSync(join(TMP, "package.json"), JSON.stringify({ name: "tmp-index" }), "utf8");
+    writeFileSync(
+      join(pkg, "package.json"),
+      JSON.stringify({
+        name: "@acme/types",
+        blockml: { library: "./blocks/acme/Library.bml" },
+      }),
+      "utf8",
+    );
+    writeFileSync(
+      join(pkg, "blocks/acme/Library.bml"),
+      `<block xmlns="http://blockml.org/bml" xmlns:core="org.blockml.bml.core" xmlns:acme="acme.types">
+  <name>Library</name>
+  <type>acme:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+</block>
+`,
+      "utf8",
+    );
+    writeFileSync(
+      join(pkg, "blocks/acme/Widget.bml"),
+      `<block xmlns="http://blockml.org/bml" xmlns:core="org.blockml.bml.core" xmlns:acme="acme.types">
+  <name>Widget</name>
+  <type>acme:Widget</type>
+  <baseType>core:Block</baseType>
+</block>
+`,
+      "utf8",
+    );
+    writeFileSync(
+      join(TMP, "blocks/Library.bml"),
+      `<block xmlns="http://blockml.org/bml" xmlns:core="org.blockml.bml.core" xmlns:acme="acme.types">
+  <name>Library</name>
+  <type>acme:AppLibrary</type>
+  <baseType>core:BlockLibrary</baseType>
+  <aggregations>
+    <dependencies>
+      <composition>
+        <acme:Library />
+      </composition>
+    </dependencies>
+  </aggregations>
+</block>
+`,
+      "utf8",
+    );
+    expect(defaultBootstrapPaths(TMP)).toEqual([]);
+    const { registry } = bootstrapTypeRegistry({
+      libraryPaths: [join(TMP, "blocks/Library.bml")],
+      paths: [join(TMP, "blocks")],
+      rootDir: TMP,
+    });
+    expect(registry.has("acme.types.Widget")).toBe(true);
   });
 });

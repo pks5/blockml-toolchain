@@ -44,7 +44,7 @@
     @blockml/compiler — RenderTarget interface, CompileRequest, Target Registry, compileToOutput.
     Owns scope resolution (document|library|corpus|auto); BlockDoc only declares accepts[].
 
-    @blockml/cli — bootstrapTargets from bom.config.json targets[] (default ["blockdoc"]);
+    @blockml/cli — bootstrapTargets from blockml.config.json targets[] (default ["blockdoc"]);
     writes RenderOutput files. Not part of this library.
 
     Sibling toolchain targets (xsd, fatblock) and domain targets (machineblocks-v3-scad)

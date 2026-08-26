@@ -1,5 +1,5 @@
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
+import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { parse } from "@blockml/parser";
 import { TypeRegistry } from "./type-registry.js";
 function collectBmlFiles(dir, out = []) {
@@ -45,6 +45,15 @@ function aggregationInstances(block, name) {
         .filter((child) => child.kind === "blockInstance")
         .map((child) => child.instance);
 }
+function canonicalPath(path) {
+    const abs = resolve(path);
+    try {
+        return realpathSync(abs);
+    }
+    catch {
+        return abs;
+    }
+}
 function indexLibraryFiles(searchRoots) {
     const index = new Map();
     for (const root of searchRoots) {
@@ -57,7 +66,11 @@ function indexLibraryFiles(searchRoots) {
                 const parsed = parse(source, { filePath: file, continueOnError: true });
                 const type = parsed.document?.block.type;
                 if (type) {
-                    index.set(type, file);
+                    const files = index.get(type) ?? [];
+                    if (!files.includes(file)) {
+                        files.push(file);
+                        index.set(type, files);
+                    }
                 }
             }
             catch {
@@ -80,7 +93,7 @@ function resolveLibraryGraph(seedPaths, searchRoots, rootDir, diagnostics) {
     const visited = new Set();
     const exportsByLibrary = new Map();
     const visit = (libraryPath) => {
-        const abs = resolve(rootDir, libraryPath);
+        const abs = canonicalPath(resolve(rootDir, libraryPath));
         if (visited.has(abs)) {
             return;
         }
@@ -121,13 +134,18 @@ function resolveLibraryGraph(seedPaths, searchRoots, rootDir, diagnostics) {
             return;
         }
         const libType = parsed.document.block.type;
-        libraryIndex.set(libType, abs);
+        const indexed = libraryIndex.get(libType) ?? [];
+        if (!indexed.includes(abs)) {
+            indexed.push(abs);
+            libraryIndex.set(libType, indexed);
+        }
         exportsByLibrary.set(abs, exportedBlockFqns(parsed.document.block));
         for (const dep of [
             ...aggregationInstances(parsed.document.block, "dependencies"),
             ...aggregationInstances(parsed.document.block, "subLibraries"),
         ]) {
-            const depPath = libraryIndex.get(dep.typeFqn);
+            const candidates = libraryIndex.get(dep.typeFqn) ?? [];
+            const depPath = candidates.find((file) => canonicalPath(file) !== abs);
             if (!depPath) {
                 diagnostics.push({
                     severity: "error",
@@ -191,14 +209,24 @@ function registerFiles(registry, files, diagnostics) {
         }
     }
 }
-export function bootstrapFromLibraryPaths(libraryPaths, searchRoots, rootDir) {
+function isPathInsideOrEqual(inner, outer) {
+    const a = canonicalPath(inner);
+    const b = canonicalPath(outer);
+    const rel = relative(b, a);
+    return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+}
+export function bootstrapFromLibraryPaths(libraryPaths, searchRoots, rootDir, coveredRoots = []) {
     const registry = new TypeRegistry();
     const diagnostics = [];
     const { orderedPaths, exportsByLibrary } = resolveLibraryGraph(libraryPaths, searchRoots, rootDir, diagnostics);
     checkNestingViolations(exportsByLibrary, diagnostics);
+    const absCovered = coveredRoots.map((root) => resolve(rootDir, root));
     const seenFiles = new Set();
     for (const libraryPath of orderedPaths) {
         const blocksRoot = blocksRootFromLibraryPath(libraryPath);
+        if (absCovered.some((root) => isPathInsideOrEqual(blocksRoot, root))) {
+            continue;
+        }
         for (const file of collectBmlFiles(blocksRoot)) {
             seenFiles.add(file);
         }
@@ -221,7 +249,7 @@ export function bootstrapFromCorpusPaths(paths, rootDir) {
     return { registry, diagnostics };
 }
 export function findLibraryFileForType(typeFqn, searchRoots) {
-    return indexLibraryFiles(searchRoots).get(typeFqn);
+    return indexLibraryFiles(searchRoots).get(typeFqn)?.[0];
 }
 export function parseLibraryDocument(libraryPath) {
     const source = readFileSync(libraryPath, "utf8");

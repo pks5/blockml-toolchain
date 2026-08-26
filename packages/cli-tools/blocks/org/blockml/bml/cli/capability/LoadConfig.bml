@@ -23,9 +23,9 @@
   <name>LoadConfig</name>
   <type>clicap:LoadConfig</type>
   <baseType>core:Capability</baseType>
-  <is>Load bom.config.json from project root</is>
+  <is>Load blockml.config.json from project root</is>
 
-  <documentation>CLI1: missing bom.config.json returns DefaultBomConfig defaults. CLI2: empty targets[] becomes [blockdoc].</documentation>
+  <documentation>CLI1: missing blockml.config.json returns DefaultBomConfig defaults. CLI2: empty targets[] becomes [blockdoc].</documentation>
 
   <references>
     <see type="clidocumentation:Configuration" relation="SeeAlso" />

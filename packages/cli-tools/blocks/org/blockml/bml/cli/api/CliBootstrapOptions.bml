@@ -26,7 +26,7 @@
   <is>Options for bootstrapProjectTypeRegistry</is>
 
   <properties>
-    <config type="cliapi:BomConfig"><documentation>Loaded bom.config.json. (required)</documentation></config>
+    <config type="cliapi:BomConfig"><documentation>Loaded blockml.config.json. (required)</documentation></config>
     <rootDir type="type:Text"><documentation>Project root directory. (optional)</documentation></rootDir>
     <librariesOverride type="type:Text"><documentation>--libraries CLI override. (optional)</documentation></librariesOverride>
     <srcDirOverride type="type:Text"><documentation>--src CLI override. (optional)</documentation></srcDirOverride>

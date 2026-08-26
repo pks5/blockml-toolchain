@@ -8,6 +8,10 @@ export interface BootstrapOptions {
     /** Working directory for relative paths. */
     rootDir?: string;
 }
+/**
+ * Corpus fallback: BlockML packages among the nearest package.json production
+ * dependencies (dependencies + optionalDependencies), resolved via node_modules.
+ */
 export declare function defaultBootstrapPaths(rootDir?: string): string[];
 export interface BootstrapResult {
     registry: TypeRegistry;

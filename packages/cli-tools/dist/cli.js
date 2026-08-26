@@ -263,7 +263,7 @@ async function runCompileDocument(target, parsed, rootDir, config, lines) {
 async function runCompileCorpus(target, parsed, rootDir, config, lines) {
     const bootstrap = bootstrapProjectTypeRegistry(bootstrapOptsFromParsed(parsed, config, rootDir));
     const outDir = parsed.outDir ?? resolveDefaultOutDir(target, config);
-    const srcDir = parsed.srcDir ?? config.srcDir ?? "src";
+    const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
     const libraries = parsed.libraries ?? config.libraries ?? [];
     const scope = { kind: "auto" };
     if (libraries.length > 0) {

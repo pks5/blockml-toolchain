@@ -1054,7 +1054,7 @@ Before validating or compiling a file that references external types, the orches
 2. Discover BML sources
      Project srcDir scan     →  all *.bml
      library.xml manifests   →  explicit <block> / <presets> refs (optional index)
-     Declared dependencies   →  transitive library paths from bom.config.json / library.xml
+     Declared dependencies   →  transitive library paths from blockml.config.json / library.xml
 
 3. Parse each discovered file (single-file parser — parser step [5])
      registerBlockDefinition(doc)  for each BomDocument

@@ -34,7 +34,7 @@ describe("loadPackageBlockmlLibrary", () => {
 });
 
 describe("createWorkspace", () => {
-  it("defaults srcDir to blocks when bom.config.json is absent", () => {
+  it("defaults srcDir to blocks when blockml.config.json is absent", () => {
     const workspace = createWorkspace(BOM_PACKAGE);
     expect(workspace.config.srcDir).toBe("blocks");
   });
@@ -57,12 +57,20 @@ describe("createWorkspace", () => {
       true,
     );
   });
+
+  it("bootstraps workspace library deps when the monorepo root is the workspace", () => {
+    const workspace = createWorkspace(ROOT);
+    expect(workspace.registry.has("org.blockml.bml.bom.member.MemberDefinition")).toBe(
+      true,
+    );
+    expect(workspace.registry.has(MEMBER_DEFINITION)).toBe(true);
+  });
 });
 
 describe("isWorkspaceRefreshPath", () => {
-  it("accepts BML files, bom.config.json, and package.json", () => {
+  it("accepts BML files, blockml.config.json, and package.json", () => {
     expect(isWorkspaceRefreshPath("/proj/blocks/Foo.bml")).toBe(true);
-    expect(isWorkspaceRefreshPath("/proj/bom.config.json")).toBe(true);
+    expect(isWorkspaceRefreshPath("/proj/blockml.config.json")).toBe(true);
     expect(isWorkspaceRefreshPath("/proj/package.json")).toBe(true);
   });
 

@@ -139,7 +139,7 @@ STL / 3MF
 
 MachineBlocks **users** typically clone or install from the MachineBlocks mono-repo (or `@machineblocks/cli`) and do not need this BlockML repo. This is analogous to `tsc` vs. a product that embeds TypeScript — the language tool is separate from the product host.
 
-Content projects each have their own `bom.config.json` (or domain-CLI defaults).
+Content projects each have their own `blockml.config.json` (or domain-CLI defaults).
 
 ---
 
@@ -298,7 +298,7 @@ Engines are always independent packages implementing the CompilerEngine contract
 
 ## XSD Schema Structure
 
-> **Architecture decision:** **XSD files are Render Target output**, not a Stage-1 parser dependency. The **XSD Render Target** (Phase C; package `@blockml/xsd-target`, registry name `"xsd"`) generates `.xsd` from BML / Definition meta-model. **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction`. **Validating** authored BML against those schemas is enabled only after that target exists — and must remain **always disableable** via CLI `--no-xsd` **and** `bom.config.json` → `xsdValidation: false` (see `07_cli.md` — XSD validation escape hatch / CLI ScopeExclusion), so intentional language/meta changes can still regenerate schemas when they no longer match the previous `.xsd`.
+> **Architecture decision:** **XSD files are Render Target output**, not a Stage-1 parser dependency. The **XSD Render Target** (Phase C; package `@blockml/xsd-target`, registry name `"xsd"`) generates `.xsd` from BML / Definition meta-model. **SSOT:** `org.blockml.bml.target.xsd.documentation.Introduction`. **Validating** authored BML against those schemas is enabled only after that target exists — and must remain **always disableable** via CLI `--no-xsd` **and** `blockml.config.json` → `xsdValidation: false` (see `07_cli.md` — XSD validation escape hatch / CLI ScopeExclusion), so intentional language/meta changes can still regenerate schemas when they no longer match the previous `.xsd`.
 
 ### Planned toolchain Render Targets (BlockDoc-first)
 
@@ -313,7 +313,7 @@ Engines are always independent packages implementing the CompilerEngine contract
 | 2nd+ | **FatBlock** | `@blockml/fatblock-target` | `fatblock` | One portable `.bml` (V1: folder pool under `--src` → root `embeddedBlocks`). **SSOT:** `org.blockml.bml.target.fatblock.documentation.Introduction` | Portable artifact; Stage 2 NS merge first (`19` D2); closure planned v2 | this repo |
 | Later | **SCAD (product)** | `@machineblocks/machineblocks-v3-scad-target` | `machineblocks-v3-scad` | `.scad` (+ maps, …) | MachineBlocks V3 product target | **MachineBlocks mono-repo** (out of scope here) |
 
-`bom.config.json` → **`targets[]` is V1** (default `["blockdoc"]`) — see `07_cli.md` · CLI TargetBootstrap · `14_compiler_runtime.md` TOC (C3 boundary) · `15_dev_setup.md` Phase C. Universal CLI bootstraps **toolchain** targets; domain hosts register domain targets.
+`blockml.config.json` → **`targets[]` is V1** (default `["blockdoc"]`) — see `07_cli.md` · CLI TargetBootstrap · `14_compiler_runtime.md` TOC (C3 boundary) · `15_dev_setup.md` Phase C. Universal CLI bootstraps **toolchain** targets; domain hosts register domain targets.
 
 See `15_dev_setup.md` — Phase C ordering · `12_bom_object_model.md` / `02_mbml.md` — Embedded Blocks (Inline Library).
 
@@ -664,7 +664,7 @@ scad/                         — SCAD output files (configurable via outDir)
     StandardBrickSet.scad     — compiled set
 ```
 
-Thumbnail files are placed alongside the SCAD output by default. The output directory for thumbnails is configurable via `thumbsDir` in `bom.config.json`.
+Thumbnail files are placed alongside the SCAD output by default. The output directory for thumbnails is configurable via `thumbsDir` in `blockml.config.json`.
 
 The root element of the BML file determines the document type — not the filename or path.
 
@@ -693,7 +693,7 @@ A MachineBlocks Set is a `<block>` document with `baseType = com.machineblocks.b
 
 ## Configuration Files
 
-### `bom.config.json`
+### `blockml.config.json`
 
 Project-level configuration:
 
@@ -735,7 +735,7 @@ The MachineBlocks V3 SCAD Library is part of the MachineBlocks product distribut
 Resolution order for the library path (domain host / config):
 
 ```text
-1. bom.config.json → "mbLibPath"         (explicit override, highest priority)
+1. blockml.config.json → "mbLibPath"         (explicit override, highest priority)
 2. Environment variable MACHINEBLOCKS_LIB_PATH
 3. Resolved relative to the bom executable:
      path.join(dirname(bom_executable), "../machineblocks-lib")
@@ -745,7 +745,7 @@ If none of the above yields a valid library path, the CLI reports a clear error:
 
 ```text
 ERROR: MachineBlocks V3 SCAD Library not found.
-  Set "mbLibPath" in bom.config.json or MACHINEBLOCKS_LIB_PATH to the library root.
+  Set "mbLibPath" in blockml.config.json or MACHINEBLOCKS_LIB_PATH to the library root.
 ```
 
 This resolution is implemented in `@blockml/cli` as `resolveMbLib.ts`.

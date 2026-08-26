@@ -34,7 +34,7 @@
   <is>Explicitly out of BlockDoc V1 library scope</is>
 
   <documentation>Out of scope for this library:
-    • CLI bootstrap map, dual-CLI model, exit codes, bom.config.json schema
+    • CLI bootstrap map, dual-CLI model, exit codes, blockml.config.json schema
     • compile scope auto resolution algorithm (compiler SSOT)
     • Dependency graphs / richer future navigation beyond toolbar + dotted path + package indexes
     • Authored XML example surfaces on API pages (future Definition / docs work)

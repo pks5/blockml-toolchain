@@ -26,7 +26,7 @@
   <baseType>core:Documentation</baseType>
   <is>Normative CLI decisions CLI1–CLI21</is>
 
-  <documentation>CLI1 missing bom.config.json → DefaultBomConfig.
+  <documentation>CLI1 missing blockml.config.json → DefaultBomConfig.
     CLI2 empty targets[] → ["blockdoc"].
     CLI3 bootstrapTargets idempotent.
     CLI4 TARGET_FACTORIES blockdoc/xsd/fatblock.

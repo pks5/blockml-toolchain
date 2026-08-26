@@ -40,13 +40,21 @@
     parses via @blockml/parser parse(), registers each document root block.
 
     library — when options.libraryPaths is set, resolves each Library.bml dependency graph
-    (dependencies, subLibraries) in order, then registers blocks from each library blocks root.
-    Missing Library path → BML_LIBRARY_RESOLVE_ERROR. Outer re-export of inner-only block →
+    (dependencies, subLibraries) in order, then registers blocks from each library blocks root
+    except trees already covered by options.paths (srcDir / corpus). Missing Library path →
+    BML_LIBRARY_RESOLVE_ERROR. Outer re-export of inner-only block →
     BML_LIBRARY_NESTING_VIOLATION (minimal check).
 
-    defaultBootstrapPaths(rootDir?) returns:
-    • node_modules/@blockml/core/blocks
-    • node_modules/@machineblocks/core/blocks
+    defaultBootstrapPaths(rootDir?) returns BlockML blocks/srcDir roots for production
+    npm dependencies (package.json dependencies + optionalDependencies) of the nearest
+    package, resolved via node_modules walk-up. Used as corpus fallback when no paths
+    are given.
+
+    bootstrapTypeRegistry also indexes Library.bml under all BlockML packages found in
+    node_modules and workspace packages/ along the directory walk (FQN search space).
+    First Library.bml wins per type FQN unless that file is the current library
+    (self-loop); then another file with the same type is used. node_modules is
+    indexed before workspace packages.
 
     BootstrapResult: { registry: TypeRegistry, diagnostics: Diagnostic[] }
     Read errors emit BML_BOOTSTRAP_READ_ERROR (warning). Parse diagnostics are collected

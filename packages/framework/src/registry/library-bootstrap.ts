@@ -1,5 +1,5 @@
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
+import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import type { BlockDefinition, BlockInstance, BomDocument, Diagnostic } from "@blockml/bom";
 import { parse } from "@blockml/parser";
 import { TypeRegistry } from "./type-registry.js";
@@ -47,8 +47,17 @@ function aggregationInstances(block: BlockDefinition, name: string): BlockInstan
     .map((child) => child.instance);
 }
 
-function indexLibraryFiles(searchRoots: string[]): Map<string, string> {
-  const index = new Map<string, string>();
+function canonicalPath(path: string): string {
+  const abs = resolve(path);
+  try {
+    return realpathSync(abs);
+  } catch {
+    return abs;
+  }
+}
+
+function indexLibraryFiles(searchRoots: string[]): Map<string, string[]> {
+  const index = new Map<string, string[]>();
   for (const root of searchRoots) {
     for (const file of collectBmlFiles(root)) {
       if (!file.endsWith("Library.bml")) {
@@ -59,7 +68,11 @@ function indexLibraryFiles(searchRoots: string[]): Map<string, string> {
         const parsed = parse(source, { filePath: file, continueOnError: true });
         const type = parsed.document?.block.type;
         if (type) {
-          index.set(type, file);
+          const files = index.get(type) ?? [];
+          if (!files.includes(file)) {
+            files.push(file);
+            index.set(type, files);
+          }
         }
       } catch {
         continue;
@@ -89,7 +102,7 @@ function resolveLibraryGraph(
   const exportsByLibrary = new Map<string, Set<string>>();
 
   const visit = (libraryPath: string) => {
-    const abs = resolve(rootDir, libraryPath);
+    const abs = canonicalPath(resolve(rootDir, libraryPath));
     if (visited.has(abs)) {
       return;
     }
@@ -133,14 +146,19 @@ function resolveLibraryGraph(
     }
 
     const libType = parsed.document.block.type;
-    libraryIndex.set(libType, abs);
+    const indexed = libraryIndex.get(libType) ?? [];
+    if (!indexed.includes(abs)) {
+      indexed.push(abs);
+      libraryIndex.set(libType, indexed);
+    }
     exportsByLibrary.set(abs, exportedBlockFqns(parsed.document.block));
 
     for (const dep of [
       ...aggregationInstances(parsed.document.block, "dependencies"),
       ...aggregationInstances(parsed.document.block, "subLibraries"),
     ]) {
-      const depPath = libraryIndex.get(dep.typeFqn);
+      const candidates = libraryIndex.get(dep.typeFqn) ?? [];
+      const depPath = candidates.find((file) => canonicalPath(file) !== abs);
       if (!depPath) {
         diagnostics.push({
           severity: "error",
@@ -216,10 +234,18 @@ function registerFiles(
   }
 }
 
+function isPathInsideOrEqual(inner: string, outer: string): boolean {
+  const a = canonicalPath(inner);
+  const b = canonicalPath(outer);
+  const rel = relative(b, a);
+  return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+}
+
 export function bootstrapFromLibraryPaths(
   libraryPaths: string[],
   searchRoots: string[],
   rootDir: string,
+  coveredRoots: string[] = [],
 ): {
   registry: TypeRegistry;
   diagnostics: Diagnostic[];
@@ -235,9 +261,13 @@ export function bootstrapFromLibraryPaths(
   );
   checkNestingViolations(exportsByLibrary, diagnostics);
 
+  const absCovered = coveredRoots.map((root) => resolve(rootDir, root));
   const seenFiles = new Set<string>();
   for (const libraryPath of orderedPaths) {
     const blocksRoot = blocksRootFromLibraryPath(libraryPath);
+    if (absCovered.some((root) => isPathInsideOrEqual(blocksRoot, root))) {
+      continue;
+    }
     for (const file of collectBmlFiles(blocksRoot)) {
       seenFiles.add(file);
     }
@@ -271,7 +301,7 @@ export function findLibraryFileForType(
   typeFqn: string,
   searchRoots: string[],
 ): string | undefined {
-  return indexLibraryFiles(searchRoots).get(typeFqn);
+  return indexLibraryFiles(searchRoots).get(typeFqn)?.[0];
 }
 
 export function parseLibraryDocument(libraryPath: string): BomDocument | null {

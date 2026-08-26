@@ -1,7 +1,7 @@
 import type { Diagnostic } from "@blockml/bom";
 import { TypeRegistry } from "@blockml/framework";
 /** Globs registered with the client for workspace/didChangeWatchedFiles. */
-export declare const WATCH_GLOBS: readonly ["**/*.bml", "**/bom.config.json", "**/package.json"];
+export declare const WATCH_GLOBS: readonly ["**/*.bml", "**/blockml.config.json", "**/package.json"];
 /** True when a disk path should invalidate the cached TypeRegistry. */
 export declare function isWorkspaceRefreshPath(filePath: string): boolean;
 export interface BomConfig {
@@ -9,7 +9,7 @@ export interface BomConfig {
     libraries?: string[];
 }
 export declare function loadBomConfig(rootDir: string): BomConfig;
-/** Walk up from workspace root until node_modules/@blockml/core is found (CLI parity). */
+/** Walk up from workspace root until node_modules is found (CLI/framework discovery). */
 export declare function resolveBootstrapRoot(fromDir: string): string;
 /** Read package.json → blockml.library when present (e.g. @blockml/core repo layout). */
 export declare function loadPackageBlockmlLibrary(rootDir: string): string | undefined;

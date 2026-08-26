@@ -21,7 +21,7 @@ const DEFAULT_CONFIG: Required<Pick<BomConfig, "outDir" | "srcDir" | "targets" |
 };
 
 export function loadConfig(cwd = process.cwd()): BomConfig {
-  const configPath = resolve(cwd, "bom.config.json");
+  const configPath = resolve(cwd, "blockml.config.json");
   if (!existsSync(configPath)) {
     return { ...DEFAULT_CONFIG };
   }

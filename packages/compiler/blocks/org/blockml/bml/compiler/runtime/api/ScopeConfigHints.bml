@@ -30,7 +30,7 @@
   <baseType>runtime:RuntimeType</baseType>
   <is>Host hints merged into ResolveScope</is>
 
-  <documentation>CLI passes libraries/roots/rootDir from bom.config.json.</documentation>
+  <documentation>CLI passes libraries/roots/rootDir from blockml.config.json.</documentation>
   <references>
     <see type="rundocumentation:PublicApi" relation="SeeAlso" />
   </references>

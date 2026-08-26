@@ -64,7 +64,7 @@ describe("universal targets", () => {
 
   it("loads a target from targetPackages config", async () => {
     writeFileSync(
-      join(tmpProject, "bom.config.json"),
+      join(tmpProject, "blockml.config.json"),
       JSON.stringify({
         targets: ["mock-plugin"],
         targetPackages: {
@@ -92,7 +92,7 @@ describe("universal targets", () => {
 
   it("returns exit 2 for unknown target in targets[]", async () => {
     writeFileSync(
-      join(tmpProject, "bom.config.json"),
+      join(tmpProject, "blockml.config.json"),
       JSON.stringify({ targets: ["does-not-exist"] }),
       "utf8",
     );
@@ -144,7 +144,7 @@ describe("universal targets", () => {
     }));
 
     writeFileSync(
-      join(tmpProject, "bom.config.json"),
+      join(tmpProject, "blockml.config.json"),
       JSON.stringify({
         targets: ["mock"],
         defaultTarget: "mock",
@@ -168,7 +168,7 @@ describe("universal targets", () => {
 
   it("programmatic factory wins over plugin package mapping", async () => {
     writeFileSync(
-      join(tmpProject, "bom.config.json"),
+      join(tmpProject, "blockml.config.json"),
       JSON.stringify({
         targets: ["mock-plugin"],
         targetPackages: {

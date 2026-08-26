@@ -48,7 +48,10 @@
     (definition = LocationLink with whole-QName originSelectionRange; references =
     baseType + member types, optional declaration).
 
-    Workspace bootstrap reads bom.config.json (srcDir, libraries) inline — no @blockml/cli dependency.</documentation>
+    Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
+    Corpus-first: always scan srcDir. Seed library from config.libraries or package.json
+    blockml.library; FQN dependencies resolve via discovered BlockML npm/workspace packages.
+    Library blocks trees inside srcDir are not scanned twice.</documentation>
 
   <references>
     <see type="lspdocumentation:ServerLifecycle" relation="ReadNext"></see>
