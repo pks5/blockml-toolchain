@@ -55,6 +55,9 @@
     <knownFqns type="type:Text">
       <documentation>Set of linkable FQNs (required).</documentation>
     </knownFqns>
+    <typeRegistry type="type:Text">
+      <documentation>TypeRegistry for inherited member types (optional).</documentation>
+    </typeRegistry>
     <result type="bdpage:BlockPage">
       <documentation>HTML page (required).</documentation>
     </result>

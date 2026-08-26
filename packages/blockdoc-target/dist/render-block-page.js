@@ -40,16 +40,16 @@ function renderBlockHeader(block, pagePath, options, knownFqns) {
   <h1>${escapeHtml(block.name)}</h1>
   ${extendsLine}${versionLine}${designationLine}`;
 }
-function renderMemberSections(block, pagePath, options, knownFqns) {
+function renderMemberSections(block, pagePath, options, knownFqns, registry) {
     const properties = block.members.filter((m) => m.kind === "property");
     const aggregations = block.members.filter((m) => m.kind === "aggregation");
     const associations = block.members.filter((m) => m.kind === "association");
     const capabilities = block.members.filter((m) => m.kind === "capability");
     return [
-        renderMemberTable("Properties", properties, block, pagePath, options, knownFqns),
-        renderMemberTable("Aggregations", aggregations, block, pagePath, options, knownFqns),
-        renderMemberTable("Associations", associations, block, pagePath, options, knownFqns),
-        renderMemberTable("Capabilities", capabilities, block, pagePath, options, knownFqns),
+        renderMemberTable("Properties", properties, block, pagePath, options, knownFqns, registry),
+        renderMemberTable("Aggregations", aggregations, block, pagePath, options, knownFqns, registry),
+        renderMemberTable("Associations", associations, block, pagePath, options, knownFqns, registry),
+        renderMemberTable("Capabilities", capabilities, block, pagePath, options, knownFqns, registry),
     ]
         .filter(Boolean)
         .join("\n");
@@ -86,9 +86,9 @@ function collectCompositionGroups(block) {
     }
     return groups;
 }
-export function renderBlockPage(block, options, nav, knownFqns, _rootFqn) {
+export function renderBlockPage(block, options, nav, knownFqns, _rootFqn, registry) {
     const pagePath = fqnToHtmlPath(block.type, options.outLayout);
-    const memberSections = renderMemberSections(block, pagePath, options, knownFqns);
+    const memberSections = renderMemberSections(block, pagePath, options, knownFqns, registry);
     const subBlockLinks = block.subBlocks
         .map((sub) => {
         const href = relativePath(pagePath, fqnToHtmlPath(sub.type, options.outLayout));

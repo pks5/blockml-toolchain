@@ -1,0 +1,63 @@
+<!--
+  BlockDoc Capability — ResolveInheritedMemberType
+  FQN: org.blockml.bml.target.blockdoc.capability.ResolveInheritedMemberType
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:blockdoc="org.blockml.bml.target.blockdoc"
+  xmlns:bdapi="org.blockml.bml.target.blockdoc.api"
+  xmlns:bdcap="org.blockml.bml.target.blockdoc.capability"
+  xmlns:bdconfig="org.blockml.bml.target.blockdoc.config"
+  xmlns:bddocumentation="org.blockml.bml.target.blockdoc.documentation"
+  xmlns:bdpage="org.blockml.bml.target.blockdoc.page"
+  xmlns:bdpath="org.blockml.bml.target.blockdoc.path"
+  xmlns:bdrender="org.blockml.bml.target.blockdoc.render"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>ResolveInheritedMemberType</name>
+  <type>bdcap:ResolveInheritedMemberType</type>
+  <baseType>core:Capability</baseType>
+  <is>Fill omitted member type from the nearest typed ancestor</is>
+
+  <documentation>BD28: when a local member has no authored type (empty typeFqn or omitted type
+    expression), walk the baseType chain nearest-first and the block's contracts for a member
+    of the same identity (namespace+name) that has a type. Use that ancestor member (and its
+    owning block for BD16 sub-block resolve). Em dash only when no ancestor provides a type
+    — typically an abstract member that is untyped throughout the chain. Local authored types
+    always win. Does not list undeclared inherited members; only supplies missing types for
+    members already on the page.</documentation>
+
+  <references>
+    <see type="bddocumentation:MemberAndCompositionRules" relation="SeeAlso" />
+    <see type="bdcap:RenderMemberSections" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <member type="type:Text">
+      <documentation>Local member (required).</documentation>
+    </member>
+    <block type="bomblock:BlockDefinition">
+      <documentation>Owning block (required).</documentation>
+    </block>
+    <typeRegistry type="type:Text">
+      <documentation>TypeRegistry for baseType / contract walk (optional).</documentation>
+    </typeRegistry>
+    <result type="type:Text">
+      <documentation>Member to use for type display plus owning block (required).</documentation>
+    </result>
+  </properties>
+
+</block>

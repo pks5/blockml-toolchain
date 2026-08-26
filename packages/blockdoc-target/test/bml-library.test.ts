@@ -45,6 +45,7 @@ const EXPECTED_CAPABILITIES = [
   "FilterExportedFqns",
   "RenderTypeExpression",
   "ResolveSubBlockType",
+  "ResolveInheritedMemberType",
   "RenderMemberSections",
   "CollectCompositionGroups",
   "RenderComposition",

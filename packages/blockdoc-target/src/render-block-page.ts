@@ -1,4 +1,5 @@
 import type { BlockDefinition } from "@blockml/bom";
+import type { TypeRegistry } from "@blockml/framework";
 import {
   escapeHtml,
   fqnToHtmlPath,
@@ -72,6 +73,7 @@ function renderMemberSections(
   pagePath: string,
   options: Required<BlockDocOptions>,
   knownFqns: Set<string>,
+  registry?: TypeRegistry,
 ): string {
   const properties = block.members.filter((m) => m.kind === "property");
   const aggregations = block.members.filter((m) => m.kind === "aggregation");
@@ -79,10 +81,10 @@ function renderMemberSections(
   const capabilities = block.members.filter((m) => m.kind === "capability");
 
   return [
-    renderMemberTable("Properties", properties, block, pagePath, options, knownFqns),
-    renderMemberTable("Aggregations", aggregations, block, pagePath, options, knownFqns),
-    renderMemberTable("Associations", associations, block, pagePath, options, knownFqns),
-    renderMemberTable("Capabilities", capabilities, block, pagePath, options, knownFqns),
+    renderMemberTable("Properties", properties, block, pagePath, options, knownFqns, registry),
+    renderMemberTable("Aggregations", aggregations, block, pagePath, options, knownFqns, registry),
+    renderMemberTable("Associations", associations, block, pagePath, options, knownFqns, registry),
+    renderMemberTable("Capabilities", capabilities, block, pagePath, options, knownFqns, registry),
   ]
     .filter(Boolean)
     .join("\n");
@@ -137,10 +139,11 @@ export function renderBlockPage(
   nav: SiteNav,
   knownFqns: Set<string>,
   _rootFqn: string,
+  registry?: TypeRegistry,
 ): string {
   const pagePath = fqnToHtmlPath(block.type, options.outLayout);
 
-  const memberSections = renderMemberSections(block, pagePath, options, knownFqns);
+  const memberSections = renderMemberSections(block, pagePath, options, knownFqns, registry);
 
   const subBlockLinks = block.subBlocks
     .map((sub) => {

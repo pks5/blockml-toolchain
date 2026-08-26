@@ -51,7 +51,7 @@
     • fqn-path.ts → bdcap:FqnToHtmlPath, RelativeHref, EscapeHtml, bdpath:FqnHtmlPath
     • navigation.ts → CollectRootFqns, CollectPackagePrefixes, FirstInterestingPackagePrefix, RenderDottedPackagePath
     • type-links.ts → RenderTypeExpression
-    • member-sections.ts → ResolveSubBlockType, RenderMemberSections
+    • member-sections.ts → ResolveSubBlockType, ResolveInheritedMemberType, RenderMemberSections
     • composition-render.ts → CollectCompositionGroups, RenderComposition
     • render-block-page.ts → RenderBlockPage, RenderSiteIndex, bdpage:*, PageSectionOrder
     • package-index.ts → RenderPackageIndex

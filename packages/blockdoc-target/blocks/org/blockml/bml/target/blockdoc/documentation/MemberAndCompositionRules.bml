@@ -31,7 +31,7 @@
   <name>MemberAndCompositionRules</name>
   <type>bddocumentation:MemberAndCompositionRules</type>
   <baseType>core:Documentation</baseType>
-  <is>Member tables and composition trees (BD14–BD19)</is>
+  <is>Member tables and composition trees (BD14–BD19, BD28)</is>
 
   <documentation>Member sections (BD17): Properties, Aggregations, Associations, Capabilities — Name + Type columns.
     Empty sections omitted. No Kind column.
@@ -39,9 +39,14 @@
     Sub-block resolve (BD16): simple type name (strip type-args/multiplicity, last segment) matched
     against block.subBlocks[].name → use sub-block full type FQN for linking.
 
-    Property cell: sub-block resolve → typeFqn → type expression → —.
-    Capability: typeFqn or literal "capability".
-    Aggregation/association: named + sub-block resolve (+ multiplicity suffix) else type expression.
+    Property cell: sub-block resolve → typeFqn → type expression → inherited ancestor type (BD28) → —.
+    Capability: typeFqn or inherited typeFqn else literal "capability".
+    Aggregation/association: named + sub-block resolve (+ multiplicity suffix) else type expression
+    (including inherited type when local type is omitted).
+
+    Inherited type (BD28): if the local member has no authored type, use the nearest baseType /
+    contract member of the same identity that has a type. Sub-block resolve runs on the ancestor
+    that owns that type. Untyped abstract members stay —.
 
     Composition groups (BD18): compositions first (dedupe aggregationName), then aggregation
     members with composition (dedupe member name).
@@ -51,6 +56,7 @@
   <references>
     <see type="bddocumentation:PageChrome" relation="ReadNext"></see>
     <see type="bdcap:RenderMemberSections" relation="SeeAlso"></see>
+    <see type="bdcap:ResolveInheritedMemberType" relation="SeeAlso"></see>
     <see type="bdcap:RenderComposition" relation="SeeAlso"></see>
   </references>
 

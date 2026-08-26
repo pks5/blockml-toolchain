@@ -240,6 +240,7 @@ export class BlockDocTarget implements RenderTarget {
           resolveNavForFqn(rootFqn, rootFqns, options, libraryRoots, mergedNav),
           knownFqns,
           rootFqn,
+          ctx.session.typeRegistry,
         ),
       });
     }

@@ -177,7 +177,7 @@ export class BlockDocTarget {
             searchEntries.push(buildSearchIndexEntry(block, pagePath));
             files.push({
                 path: pagePath,
-                content: renderBlockPage(block, options, resolveNavForFqn(rootFqn, rootFqns, options, libraryRoots, mergedNav), knownFqns, rootFqn),
+                content: renderBlockPage(block, options, resolveNavForFqn(rootFqn, rootFqns, options, libraryRoots, mergedNav), knownFqns, rootFqn, ctx.session.typeRegistry),
             });
         }
         if (options.siteMode === "perLibrary" && ctx.session.libraryPaths?.length) {

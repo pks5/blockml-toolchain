@@ -1,4 +1,10 @@
 import type { BlockDefinition, MemberDefinition } from "@blockml/bom";
+import {
+  collectBaseTypeChain,
+  memberIdentityKey,
+  resolveContracts,
+  type TypeRegistry,
+} from "@blockml/framework";
 import { escapeHtml } from "./fqn-path.js";
 import type { BlockDocOptions } from "./options.js";
 import { renderTypeExpression, renderTypeRef } from "./type-links.js";
@@ -25,47 +31,102 @@ export function resolveSubBlockTypeFqn(
   return undefined;
 }
 
+export function memberHasAuthoredType(member: MemberDefinition): boolean {
+  switch (member.kind) {
+    case "property":
+      return Boolean(member.typeFqn) || member.type !== undefined;
+    case "capability":
+      return Boolean(member.typeFqn);
+    case "aggregation":
+    case "association":
+      return member.type !== undefined;
+  }
+}
+
+export function resolveInheritedMemberType(
+  member: MemberDefinition,
+  block: BlockDefinition,
+  registry: TypeRegistry | undefined,
+): { member: MemberDefinition; ownerBlock: BlockDefinition } {
+  if (memberHasAuthoredType(member) || !registry) {
+    return { member, ownerBlock: block };
+  }
+
+  const key = memberIdentityKey(member);
+
+  const fromContracts = (owner: BlockDefinition): MemberDefinition | undefined => {
+    return resolveContracts(owner, registry).find(
+      (candidate) =>
+        memberIdentityKey(candidate) === key && memberHasAuthoredType(candidate),
+    );
+  };
+
+  const contractOnSelf = fromContracts(block);
+  if (contractOnSelf) {
+    return { member: contractOnSelf, ownerBlock: block };
+  }
+
+  const ancestors = collectBaseTypeChain(block, registry).slice(0, -1).reverse();
+  for (const ancestor of ancestors) {
+    const declared = ancestor.members.find((candidate) => memberIdentityKey(candidate) === key);
+    if (declared && memberHasAuthoredType(declared)) {
+      return { member: declared, ownerBlock: ancestor };
+    }
+    const contracted = fromContracts(ancestor);
+    if (contracted) {
+      return { member: contracted, ownerBlock: ancestor };
+    }
+  }
+
+  return { member, ownerBlock: block };
+}
+
 export function renderMemberTypeCell(
   member: MemberDefinition,
   block: BlockDefinition,
   pagePath: string,
   options: Required<BlockDocOptions>,
   knownFqns: Set<string>,
+  registry?: TypeRegistry,
 ): string {
-  if (member.kind === "property") {
+  const resolved = resolveInheritedMemberType(member, block, registry);
+  const typed = resolved.member;
+  const owner = resolved.ownerBlock;
+
+  if (typed.kind === "property") {
     const subBlockFqn =
-      resolveSubBlockTypeFqn(block, member.typeFqn) ??
-      resolveSubBlockTypeFqn(block, member.type?.kind === "named" ? member.type.fqn : undefined);
+      resolveSubBlockTypeFqn(owner, typed.typeFqn) ??
+      resolveSubBlockTypeFqn(owner, typed.type?.kind === "named" ? typed.type.fqn : undefined);
     if (subBlockFqn) {
       return renderTypeRef(subBlockFqn, pagePath, options, knownFqns);
     }
-    if (member.typeFqn) {
-      return renderTypeRef(member.typeFqn, pagePath, options, knownFqns);
+    if (typed.typeFqn) {
+      return renderTypeRef(typed.typeFqn, pagePath, options, knownFqns);
     }
-    if (member.type) {
-      return renderTypeExpression(member.type, pagePath, options, knownFqns);
+    if (typed.type) {
+      return renderTypeExpression(typed.type, pagePath, options, knownFqns);
     }
     return "—";
   }
 
-  if (member.kind === "capability") {
-    if (member.typeFqn) {
-      return renderTypeRef(member.typeFqn, pagePath, options, knownFqns);
+  if (typed.kind === "capability") {
+    if (typed.typeFqn) {
+      return renderTypeRef(typed.typeFqn, pagePath, options, knownFqns);
     }
     return "capability";
   }
 
-  if (member.kind === "aggregation" || member.kind === "association") {
-    if (member.type?.kind === "named") {
-      const subBlockFqn = resolveSubBlockTypeFqn(block, member.type.fqn);
+  if (typed.kind === "aggregation" || typed.kind === "association") {
+    if (typed.type?.kind === "named") {
+      const subBlockFqn = resolveSubBlockTypeFqn(owner, typed.type.fqn);
       if (subBlockFqn) {
-        const suffix = member.type.multiplicity
-          ? `[${member.type.multiplicity.min}..${member.type.multiplicity.max === "*" ? "*" : member.type.multiplicity.max}]`
+        const suffix = typed.type.multiplicity
+          ? `[${typed.type.multiplicity.min}..${typed.type.multiplicity.max === "*" ? "*" : typed.type.multiplicity.max}]`
           : "";
         return `${renderTypeRef(subBlockFqn, pagePath, options, knownFqns)}${suffix}`;
       }
     }
-    return renderTypeExpression(member.type, pagePath, options, knownFqns);
+    return renderTypeExpression(typed.type, pagePath, options, knownFqns);
   }
 
   return "—";
@@ -78,6 +139,7 @@ export function renderMemberTable(
   pagePath: string,
   options: Required<BlockDocOptions>,
   knownFqns: Set<string>,
+  registry?: TypeRegistry,
 ): string {
   if (!members.length) {
     return "";
@@ -85,7 +147,7 @@ export function renderMemberTable(
   const rows = members
     .map(
       (member) =>
-        `<tr><td>${escapeHtml(member.name)}</td><td>${renderMemberTypeCell(member, block, pagePath, options, knownFqns)}</td></tr>`,
+        `<tr><td>${escapeHtml(member.name)}</td><td>${renderMemberTypeCell(member, block, pagePath, options, knownFqns, registry)}</td></tr>`,
     )
     .join("\n");
   return `<section><h2>${title}</h2><table><thead><tr><th>Name</th><th>Type</th></tr></thead><tbody>${rows}</tbody></table></section>`;
