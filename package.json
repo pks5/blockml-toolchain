@@ -51,7 +51,7 @@
     "test:lsp": "vitest run packages/lsp/test",
     "compile:blockdoc": "node packages/cli-tools/dist/cli.js compile blockdoc",
     "compile:xsd": "node packages/cli-tools/dist/cli.js compile xsd",
-    "compile:fatblock": "node packages/cli-tools/dist/cli.js compile fatblock",
+    "compile:fatblock": "node packages/cli-tools/dist/cli.js compile fatblock --per-package",
     "validate": "node packages/cli-tools/dist/cli.js validate",
     "typecheck": "tsc --build --emitDeclarationOnly",
     "publish:packages": "bash scripts/publish-packages.sh"
