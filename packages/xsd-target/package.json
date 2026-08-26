@@ -34,7 +34,7 @@
   "dependencies": {
     "@blockml/bom": "^0.8.0",
     "@blockml/compiler": "^0.8.0",
-    "@blockml/core": "^1.0.5",
+    "@blockml/core": "^1.0.6",
     "@blockml/framework": "^0.8.0"
   },
   "engines": {
