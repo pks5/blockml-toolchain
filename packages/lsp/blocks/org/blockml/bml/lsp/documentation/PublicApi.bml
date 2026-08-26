@@ -51,13 +51,13 @@
     Server entry (not exported from index): packages/lsp/dist/server.js via bin blockml-lsp.</documentation>
 
   <references>
-    <see type="lspcap:AnalyzeDocument" relation="Defines"></see>
-    <see type="lspcap:FormatDocument" relation="Defines"></see>
-    <see type="lspcap:HoverAt" relation="Defines"></see>
-    <see type="lspcap:DocumentSymbols" relation="Defines"></see>
-    <see type="lspcap:DefinitionAt" relation="Defines"></see>
-    <see type="lspcap:ReferencesAt" relation="Defines"></see>
-    <see type="lspdocumentation:DesignDecisions" relation="ReadNext"></see>
+    <see type="lspcap:AnalyzeDocument" relation="Defines" />
+    <see type="lspcap:FormatDocument" relation="Defines" />
+    <see type="lspcap:HoverAt" relation="Defines" />
+    <see type="lspcap:DocumentSymbols" relation="Defines" />
+    <see type="lspcap:DefinitionAt" relation="Defines" />
+    <see type="lspcap:ReferencesAt" relation="Defines" />
+    <see type="lspdocumentation:DesignDecisions" relation="ReadNext" />
   </references>
 
 </block>

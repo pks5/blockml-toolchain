@@ -44,8 +44,8 @@
     @blockml/cli — validate command host; may inject TypeRegistry or bootstrap paths.</documentation>
 
   <references>
-    <see type="valdocumentation:ScopeExclusions" relation="ReadNext"></see>
-    <see type="bomdocumentation:PackageOwnership" relation="SeeAlso"></see>
+    <see type="valdocumentation:ScopeExclusions" relation="ReadNext" />
+    <see type="bomdocumentation:PackageOwnership" relation="SeeAlso" />
   </references>
 
 </block>

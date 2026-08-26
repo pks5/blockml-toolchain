@@ -76,7 +76,7 @@
     includeDeclaration defaults true.</documentation>
 
   <references>
-    <see type="lspdocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="lspdocumentation:PublicApi" relation="ReadNext" />
   </references>
 
 </block>

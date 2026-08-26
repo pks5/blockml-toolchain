@@ -35,19 +35,19 @@
   <baseType>core:Documentation</baseType>
   <is>Comment binding algorithm (B11 parse side)</is>
 
-  <documentation>Cross-ref: org.blockml.bml.bom.documentation.XmlComments for Urmodell storage model.
+  <documentation><![CDATA[Cross-ref: org.blockml.bml.bom.documentation.XmlComments for Urmodell storage model.
 
     Parse algorithm:
     • pendingLeading comments → bind to next element as leadingComments
     • Comments after element end tag → trailingComments on that element
     • Storage: xmlTrivia on elements, memberSectionTrivia, metadataTrivia
 
-    Comment bodies only — without &lt;!-- / -->. Whitespace/layout not stored (B13).
-    Re-emit rules (B22) → @blockml/serializer.</documentation>
+    Comment bodies only — without <!-- / -->. Whitespace/layout not stored (B13).
+    Re-emit rules (B22) → @blockml/serializer.]]></documentation>
 
   <references>
-    <see type="bomdocumentation:XmlComments" relation="SeeAlso"></see>
-    <see type="pardocumentation:TypeDescriptorParsing" relation="ReadNext"></see>
+    <see type="bomdocumentation:XmlComments" relation="SeeAlso" />
+    <see type="pardocumentation:TypeDescriptorParsing" relation="ReadNext" />
   </references>
 
 </block>

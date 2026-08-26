@@ -45,7 +45,7 @@
 
     Sibling targets (blockdoc, xsd) and domain SCAD are out of scope.</documentation>
   <references>
-    <see type="fbdocumentation:ArchitectureOverview" relation="ReadNext"></see>
+    <see type="fbdocumentation:ArchitectureOverview" relation="ReadNext" />
   </references>
 
 </block>

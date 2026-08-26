@@ -40,7 +40,7 @@
     V1 does NOT include authoring XSD validation, MachineBlocks domain schemas,
     or full attribute/text/nested particle models from Definition.</documentation>
   <references>
-    <see type="xsddocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="xsddocumentation:PublicApi" relation="ReadNext" />
   </references>
 
 </block>

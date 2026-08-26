@@ -31,18 +31,25 @@
   <baseType>core:Documentation</baseType>
   <is>Target Registry contract (C3)</is>
 
-  <documentation>In-memory Map of name → RenderTarget. registerTarget overwrites; getTarget may miss;
+  <documentation>
+    # Target Registry contract (C3)
+
+    In-memory Map of name → RenderTarget. registerTarget overwrites; getTarget may miss;
     clearTargets empties; registeredTargetNames lists keys.
+
     No default targets ship in @blockml/compiler. Hosts (CLI bootstrapTargets, tests, browsers)
     call registerTarget before compileToOutput.
+
     registerTarget validates: non-empty name; non-empty accepts with only valid CompileScopeKind
     values; render is a function; validateRequest if present is a function. Invalid hosts throw
     (programming error — not a BML authoring diagnostic).
-    Config targets[] and package loading order are CLI-owned (SeeAlso RuntimeBootstrap).</documentation>
+
+    Config targets[] and package loading order are CLI-owned (SeeAlso RuntimeBootstrap).
+  </documentation>
   <references>
-    <see type="rundocumentation:RenderContextRules" relation="ReadNext"></see>
-    <see type="runcap:RegisterTarget" relation="SeeAlso"></see>
-    <see type="cli:Library" relation="SeeAlso"></see>
+    <see type="rundocumentation:RenderContextRules" relation="ReadNext" />
+    <see type="runcap:RegisterTarget" relation="SeeAlso" />
+    <see type="cli:Library" relation="SeeAlso" />
   </references>
 
 </block>

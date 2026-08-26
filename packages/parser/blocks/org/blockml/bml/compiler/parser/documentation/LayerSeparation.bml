@@ -53,8 +53,8 @@
     Parser stores ExpressionValue.raw only (B4); never writes AST to Urmodell.</documentation>
 
   <references>
-    <see type="pardocumentation:ArchitectureOverview" relation="ReadNext"></see>
-    <see type="bomdocumentation:LayerSeparation" relation="SeeAlso"></see>
+    <see type="pardocumentation:ArchitectureOverview" relation="ReadNext" />
+    <see type="bomdocumentation:LayerSeparation" relation="SeeAlso" />
   </references>
 
 </block>

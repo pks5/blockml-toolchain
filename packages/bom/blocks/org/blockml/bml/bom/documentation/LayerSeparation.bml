@@ -41,7 +41,7 @@
     describes the parser output shape. See 19_definition_blocks_and_bml_xml.md.</documentation>
 
   <references>
-    <see type="def:BlockDefinition" relation="SeeAlso"></see>
+    <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
 
 </block>

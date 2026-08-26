@@ -46,7 +46,7 @@
     • project-sources.ts → project source roots for default validate; project library package roots for default blockdoc
     • write-output.ts → WriteOutputFiles</documentation>
   <references>
-    <see type="clidocumentation:V1Scope" relation="ReadNext"></see>
+    <see type="clidocumentation:V1Scope" relation="ReadNext" />
   </references>
 
 </block>

@@ -46,9 +46,9 @@
     domain CLIs outside this repo.</documentation>
 
   <references>
-    <see type="wsdocumentation:ReadingOrder" relation="ReadNext"></see>
-    <see type="cli:Library" relation="SeeAlso"></see>
-    <see type="runtime:Library" relation="SeeAlso"></see>
+    <see type="wsdocumentation:ReadingOrder" relation="ReadNext" />
+    <see type="cli:Library" relation="SeeAlso" />
+    <see type="runtime:Library" relation="SeeAlso" />
   </references>
 
 </block>

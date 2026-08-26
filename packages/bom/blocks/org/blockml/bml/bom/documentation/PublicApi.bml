@@ -29,13 +29,13 @@
   <baseType>core:Documentation</baseType>
   <is>Shared parse/serialize/validate results (B26 + Stage 2)</is>
 
-  <documentation>ParseResult: document (BomDocument | null), diagnostics[], success (false if any error).
+  <documentation><![CDATA[ParseResult: document (BomDocument | null), diagnostics[], success (false if any error).
 
     SerializeResult: text (string | null), diagnostics[], success.
 
     ValidateResult: optional pragmaticModel (forked BomDocument), diagnostics[], success.
 
-    ParseOptions: filePath (default "&lt;memory>"), continueOnError (default true).
+    ParseOptions: filePath (default "<memory>"), continueOnError (default true).
 
     SerializeOptions: indent (default 2; 0=compact B13), xmlDeclaration (default false B17/B24).
 
@@ -48,12 +48,12 @@
     Drops SourceLocation-shaped fields such as typeSource/baseTypeSource.
     Preserves ImplementationBlock.source (code body).
 
-    Sync only. No throw on recoverable diagnostics. Diagnostic distinct from org.blockml.bml.core.Diagnostic.</documentation>
+    Sync only. No throw on recoverable diagnostics. Diagnostic distinct from org.blockml.bml.core.Diagnostic.]]></documentation>
 
   <references>
-    <see type="bomapi:ParseResult" relation="Defines"></see>
-    <see type="bomapi:ValidateResult" relation="Defines"></see>
-    <see type="bomcap:BomEquals" relation="Defines"></see>
+    <see type="bomapi:ParseResult" relation="Defines" />
+    <see type="bomapi:ValidateResult" relation="Defines" />
+    <see type="bomcap:BomEquals" relation="Defines" />
   </references>
 
 </block>

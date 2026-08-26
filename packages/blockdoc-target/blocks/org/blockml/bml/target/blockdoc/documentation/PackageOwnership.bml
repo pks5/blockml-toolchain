@@ -46,7 +46,7 @@
 
     MachineBlocks / domain targets are out of scope for this repo.</documentation>
   <references>
-    <see type="bddocumentation:ScopeExclusions" relation="ReadNext"></see>
+    <see type="bddocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
 
 </block>

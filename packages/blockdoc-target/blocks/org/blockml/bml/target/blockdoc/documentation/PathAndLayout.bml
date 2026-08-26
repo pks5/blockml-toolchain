@@ -50,9 +50,9 @@
 
     perLibrary library prefix = Library type FQN with trailing .Library stripped.</documentation>
   <references>
-    <see type="bddocumentation:TypeLinkRules" relation="ReadNext"></see>
-    <see type="bdcap:FqnToHtmlPath" relation="SeeAlso"></see>
-    <see type="bdcap:RelativeHref" relation="SeeAlso"></see>
+    <see type="bddocumentation:TypeLinkRules" relation="ReadNext" />
+    <see type="bdcap:FqnToHtmlPath" relation="SeeAlso" />
+    <see type="bdcap:RelativeHref" relation="SeeAlso" />
   </references>
 
 </block>

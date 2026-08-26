@@ -30,6 +30,8 @@
   <is>The BlockML Validator compiler package library catalog</is>
 
   <documentation>
+    # The BlockML Validator compiler package library catalog
+
     Canonical validator specification for BlockML Stage-2 — validate() orchestration
     on BomDocument using @blockml/framework utilities, plus the style catalog
     (org.blockml.bml.compiler.validator.style.*). TypeScript in packages/validator/src/

@@ -35,7 +35,7 @@
 
     Interop: domain targets may be loadable as plugins later; product UX stays with domain CLI.</documentation>
   <references>
-    <see type="clidocumentation:Installation" relation="ReadNext"></see>
+    <see type="clidocumentation:Installation" relation="ReadNext" />
   </references>
 
 </block>

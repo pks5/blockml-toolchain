@@ -55,8 +55,8 @@
     Framework reads Definition types via TypeRegistry; does not duplicate grammar blocks.</documentation>
 
   <references>
-    <see type="fwdocumentation:ArchitectureOverview" relation="ReadNext"></see>
-    <see type="bomdocumentation:LayerSeparation" relation="SeeAlso"></see>
+    <see type="fwdocumentation:ArchitectureOverview" relation="ReadNext" />
+    <see type="bomdocumentation:LayerSeparation" relation="SeeAlso" />
   </references>
 
 </block>

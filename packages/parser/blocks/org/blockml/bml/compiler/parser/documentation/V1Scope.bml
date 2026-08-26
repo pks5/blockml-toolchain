@@ -35,19 +35,19 @@
   <baseType>core:Documentation</baseType>
   <is>Phase A parser slice and deferred features</is>
 
-  <documentation>V1 (Phase A) parser implements:
-    • Hardcoded BML → BOM mapper for &lt;block> root documents
+  <documentation><![CDATA[V1 (Phase A) parser implements:
+    • Hardcoded BML → BOM mapper for <block> root documents
     • Single-file scope (B5) — no TypeRegistry bootstrap in parse()
     • Stage 1 structural BML validation (unknown Gerüst tags/attributes/directives); no TypeRegistry semantic checks (B8: XSD not Stage 1)
     • JSON BML authoring not planned (B6)
     • Tolerant parse by default (continueOnError: true)
 
     Deferred: cross-file resolution, parseFile/async, streaming, parse({ validate: true }),
-    meta-driven mapping from Definition blocks (V2).</documentation>
+    meta-driven mapping from Definition blocks (V2).]]></documentation>
 
   <references>
-    <see type="pardocumentation:PublicApi" relation="ReadNext"></see>
-    <see type="pardocumentation:SingleFileScope" relation="SeeAlso"></see>
+    <see type="pardocumentation:PublicApi" relation="ReadNext" />
+    <see type="pardocumentation:SingleFileScope" relation="SeeAlso" />
   </references>
 
 </block>

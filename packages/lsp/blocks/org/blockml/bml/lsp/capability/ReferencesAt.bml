@@ -34,7 +34,11 @@
   <baseType>core:Capability</baseType>
   <is>Find references to a type FQN from an LSP position</is>
 
-  <documentation>Parse-only hit-test, then scan the disk TypeRegistry. Usages: baseTypeSource and member typeFqn. includeDeclaration (default true) also includes the defining block.source. No hit / no document → null. Hit with no usages → empty list. Unsaved buffers are not overlayed into the scan.</documentation>
+  <documentation>
+    # Find references to a type FQN from an LSP position
+
+    Parse-only hit-test, then scan the disk TypeRegistry. Usages: baseTypeSource and member typeFqn. includeDeclaration (default true) also includes the defining block.source. No hit / no document → null. Hit with no usages → empty list. Unsaved buffers are not overlayed into the scan.
+  </documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />

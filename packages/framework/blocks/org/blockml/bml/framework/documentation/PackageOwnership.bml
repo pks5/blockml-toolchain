@@ -52,8 +52,8 @@
     @blockml/cli — TypeRegistry bootstrap host and validate/compile orchestration.</documentation>
 
   <references>
-    <see type="fwdocumentation:ScopeExclusions" relation="ReadNext"></see>
-    <see type="bomdocumentation:PackageOwnership" relation="SeeAlso"></see>
+    <see type="fwdocumentation:ScopeExclusions" relation="ReadNext" />
+    <see type="bomdocumentation:PackageOwnership" relation="SeeAlso" />
   </references>
 
 </block>

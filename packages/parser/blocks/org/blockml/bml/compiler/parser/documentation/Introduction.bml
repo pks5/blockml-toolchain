@@ -50,8 +50,8 @@
     depend on @blockml/serializer, @blockml/validator, or TypeRegistry bootstrap.</documentation>
 
   <references>
-    <see type="pardocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="bomdocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="pardocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="bomdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

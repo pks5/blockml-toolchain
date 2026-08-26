@@ -47,9 +47,9 @@
     XML byte fidelity NOT a gate — see @blockml/serializer RoundtripContract.</documentation>
 
   <references>
-    <see type="bomcap:BomEquals" relation="SeeAlso"></see>
-    <see type="serdocumentation:RoundtripContract" relation="SeeAlso"></see>
-    <see type="pardocumentation:Diagnostics" relation="ReadNext"></see>
+    <see type="bomcap:BomEquals" relation="SeeAlso" />
+    <see type="serdocumentation:RoundtripContract" relation="SeeAlso" />
+    <see type="pardocumentation:Diagnostics" relation="ReadNext" />
   </references>
 
 </block>

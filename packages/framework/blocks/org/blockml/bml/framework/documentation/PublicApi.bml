@@ -37,7 +37,7 @@
   <baseType>core:Documentation</baseType>
   <is>Framework public exports from index.ts</is>
 
-  <documentation>Public exports from @blockml/framework (packages/framework/src/index.ts):
+  <documentation><![CDATA[Public exports from @blockml/framework (packages/framework/src/index.ts):
 
     TypeRegistry — class; register/get/has/keys/size on BomDocument index
     bootstrapTypeRegistry(options?) → BootstrapResult
@@ -46,7 +46,7 @@
     BootstrapOptions — paths?, libraryPaths?, rootDir?
     BootstrapResult — registry, diagnostics, exportsByLibrary?, trace?
     BootstrapTrace — corpusPaths, seeds, searchRoots, librariesVisited, skippedCoveredRoots
-    rootFqnByFilePath(registry) → Map&lt;filePath, rootFqn&gt;
+    rootFqnByFilePath(registry) → Map<filePath, rootFqn>
     forkBom(document) → BomDocument
     resolveEffectiveMembers(block, registry) → MemberDefinition[]
     resolveContracts(block, registry) → MemberDefinition[] (contract slice; used by resolveEffectiveMembers)
@@ -61,11 +61,11 @@
 
     Types: BootstrapResult, BootstrapTrace, BootstrapOptions, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
 
-    Not exported from index: getLiteralNumericValue (internal helper in validate-types.ts).</documentation>
+    Not exported from index: getLiteralNumericValue (internal helper in validate-types.ts).]]></documentation>
 
   <references>
-    <see type="fwdocumentation:TypeRegistryBootstrap" relation="ReadNext"></see>
-    <see type="bomapi:TypeRegistryReader" relation="SeeAlso"></see>
+    <see type="fwdocumentation:TypeRegistryBootstrap" relation="ReadNext" />
+    <see type="bomapi:TypeRegistryReader" relation="SeeAlso" />
   </references>
 
 </block>

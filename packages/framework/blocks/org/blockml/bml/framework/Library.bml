@@ -37,10 +37,15 @@
   <is>The BlockML Framework utilities package library catalog</is>
 
   <documentation>
+    # The BlockML Framework utilities package library catalog
+
     Canonical framework specification for BlockML Stage-2 utilities — TypeRegistry,
     bootstrap, fork/resolve, parseExpression, validateTypes/validateConstraints.
+
     TypeScript in packages/framework/src/ implements this library.
+
     Urmodell types live in org.blockml.bml.bom.* (@blockml/bom).
+
     Membership is defined exclusively by this blocks list.
   </documentation>
 

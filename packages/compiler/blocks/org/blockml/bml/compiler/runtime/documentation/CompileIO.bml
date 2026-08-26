@@ -31,14 +31,21 @@
   <baseType>core:Documentation</baseType>
   <is>Compile I/O model (C4)</is>
 
-  <documentation>C4: BlockML has no mandatory input↔output cardinality. Targets decide how many files
+  <documentation>
+    # Compile I/O model (C4)
+
+    C4: BlockML has no mandatory input↔output cardinality. Targets decide how many files
     (including zero) and may attach side fields on RenderOutput subtypes.
+
     Hosts write files; the compiler returns opaque RenderOutput.
+
     MachineBlocks 1 BML → 1 SCAD is a domain convention, not a compiler rule.
-    TypeRegistry population follows resolved scope (document vs library vs corpus), not a fixed I/O map.</documentation>
+
+    TypeRegistry population follows resolved scope (document vs library vs corpus), not a fixed I/O map.
+  </documentation>
   <references>
-    <see type="rundocumentation:CompileScopeRules" relation="ReadNext"></see>
-    <see type="runapi:RenderOutput" relation="SeeAlso"></see>
+    <see type="rundocumentation:CompileScopeRules" relation="ReadNext" />
+    <see type="runapi:RenderOutput" relation="SeeAlso" />
   </references>
 
 </block>

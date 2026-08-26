@@ -44,7 +44,7 @@
     • Inventing or rewriting xmlns prefixes
     • Nested / pre-fatted host merge</documentation>
   <references>
-    <see type="fbdocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="fbdocumentation:PublicApi" relation="ReadNext" />
   </references>
 
 </block>

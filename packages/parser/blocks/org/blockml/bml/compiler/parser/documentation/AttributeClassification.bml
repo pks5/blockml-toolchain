@@ -54,8 +54,8 @@
     Serialize side of Rule 1 (B25 re-emit) → @blockml/serializer.</documentation>
 
   <references>
-    <see type="pardocumentation:StructuralGrammar" relation="ReadNext"></see>
-    <see type="parcap:ParseDirectives" relation="SeeAlso"></see>
+    <see type="pardocumentation:StructuralGrammar" relation="ReadNext" />
+    <see type="parcap:ParseDirectives" relation="SeeAlso" />
   </references>
 
 </block>

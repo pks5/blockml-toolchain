@@ -54,10 +54,10 @@
     Node render (BD14/BD19): blockInstance linked type; optional id=; members: keys ≤5 else +N more.
     Containers: each vars | if | unless | with names | "container" + nested ul.</documentation>
   <references>
-    <see type="bddocumentation:PageChrome" relation="ReadNext"></see>
-    <see type="bdcap:RenderMemberSections" relation="SeeAlso"></see>
-    <see type="bdcap:ResolveInheritedMemberType" relation="SeeAlso"></see>
-    <see type="bdcap:RenderComposition" relation="SeeAlso"></see>
+    <see type="bddocumentation:PageChrome" relation="ReadNext" />
+    <see type="bdcap:RenderMemberSections" relation="SeeAlso" />
+    <see type="bdcap:ResolveInheritedMemberType" relation="SeeAlso" />
+    <see type="bdcap:RenderComposition" relation="SeeAlso" />
   </references>
 
 </block>

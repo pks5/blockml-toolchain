@@ -54,7 +54,7 @@
     • VS Code extension in this repo</documentation>
 
   <references>
-    <see type="lspdocumentation:ScopeExclusions" relation="ReadNext"></see>
+    <see type="lspdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
 
 </block>

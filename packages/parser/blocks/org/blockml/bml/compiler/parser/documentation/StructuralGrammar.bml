@@ -60,8 +60,8 @@
     Block instances: extra attributes stay in memberValues for semantic checking.</documentation>
 
   <references>
-    <see type="pardocumentation:XmlCommentsParse" relation="ReadNext"></see>
-    <see type="valdocumentation:ValidityContract" relation="SeeAlso"></see>
+    <see type="pardocumentation:XmlCommentsParse" relation="ReadNext" />
+    <see type="valdocumentation:ValidityContract" relation="SeeAlso" />
   </references>
 
 </block>

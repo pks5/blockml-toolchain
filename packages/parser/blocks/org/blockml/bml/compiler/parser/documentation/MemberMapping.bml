@@ -35,22 +35,22 @@
   <baseType>core:Documentation</baseType>
   <is>Member definition and composition mapping</is>
 
-  <documentation>Property/aggregation/association/capability members:
+  <documentation><![CDATA[Property/aggregation/association/capability members:
     • Element QName = member identity (deprecated namespace= attr → error)
     • type attribute → TypeExpression; value/memberValues for properties
-    • One &lt;composition> per aggregation member, as a direct child of that member
-      (not of &lt;block>, &lt;aggregations>, or nested inside metadata). Extra copies →
+    • One <composition> per aggregation member, as a direct child of that member
+      (not of <block>, <aggregations>, or nested inside metadata). Extra copies →
       BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.
-      Sugar without a &lt;composition> wrapper (instances as direct children) stays allowed.
+      Sugar without a <composition> wrapper (instances as direct children) stays allowed.
     • Constraints/suggestions → BlockInstance[] in document order
     • Sub-Blocks and embedded blocks → nested BlockDefinition trees
     • Redundant aggregation type on override → validator warning B19; parser must not apply
 
-    Directives on composition: bml:each, bml:if, bml:unless, bml:with — stored unexpanded.</documentation>
+    Directives on composition: bml:each, bml:if, bml:unless, bml:with — stored unexpanded.]]></documentation>
 
   <references>
-    <see type="pardocumentation:ExpressionCapture" relation="ReadNext"></see>
-    <see type="parcap:MapBlockInstanceNode" relation="SeeAlso"></see>
+    <see type="pardocumentation:ExpressionCapture" relation="ReadNext" />
+    <see type="parcap:MapBlockInstanceNode" relation="SeeAlso" />
   </references>
 
 </block>

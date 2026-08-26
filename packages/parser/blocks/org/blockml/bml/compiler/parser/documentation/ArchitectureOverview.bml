@@ -35,12 +35,12 @@
   <baseType>core:Documentation</baseType>
   <is>Parse pipeline [1]–[5] and module decomposition</is>
 
-  <documentation>Entry point: parse(source, options?) → ParseResult (B26).
+  <documentation><![CDATA[Entry point: parse(source, options?) → ParseResult (B26).
 
     Stage 1 pipeline:
-    [1] Format detect (B24) — detectFormat(); strip UTF-8 BOM; first '&lt;' → xml
+    [1] Format detect (B24) — detectFormat(); strip UTF-8 BOM; first '<' → xml
     [2] XML DOM (B18) — parseXmlDom() via @xmldom/xmldom
-    [3] Root type resolver — assertBlockRoot(); V1: &lt;block> only
+    [3] Root type resolver — assertBlockRoot(); V1: <block> only
     [4] Namespace resolver — extractNamespaceBindings(), mergeSourceInfo(); FQN resolution
     [5] BML → BOM mapper — mapDocumentBlock() → BomDocument
 
@@ -56,11 +56,11 @@
     • map/type-expression.ts → parcap:ParseTypeExpression
     • map/member-value.ts → parcap:ParseMemberValue
     • map/directives.ts → parcap:ParseDirectives, ParseBmlMeta
-    • util/* → visibility, boolean, qname, xml helpers</documentation>
+    • util/* → visibility, boolean, qname, xml helpers]]></documentation>
 
   <references>
-    <see type="pardocumentation:V1Scope" relation="ReadNext"></see>
-    <see type="parcap:Parse" relation="Defines"></see>
+    <see type="pardocumentation:V1Scope" relation="ReadNext" />
+    <see type="parcap:Parse" relation="Defines" />
   </references>
 
 </block>

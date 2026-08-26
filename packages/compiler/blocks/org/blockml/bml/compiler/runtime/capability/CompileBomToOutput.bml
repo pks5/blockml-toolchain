@@ -30,11 +30,19 @@
   <baseType>core:Capability</baseType>
   <is>BOM-first Stage-3 sugar with required TypeRegistry</is>
 
-  <documentation>Renders an existing BomDocument without re-parse or bootstrap.
+  <documentation>
+    # BOM-first Stage-3 sugar with required TypeRegistry
+
+    Renders an existing BomDocument without re-parse or bootstrap.
+
     Requires CompileBomOptions.typeRegistry (BML_MISSING_TYPE_REGISTRY when absent).
+
     Document scope only — target.accepts must include document.
+
     Registry is passed through unchanged; host owns registry contents.
-    Synthetic CompileRequest uses scope kind document and optional targetOptions.</documentation>
+
+    Synthetic CompileRequest uses scope kind document and optional targetOptions.
+  </documentation>
 
   <references>
     <see type="runcap:CompileToOutput" relation="SeeAlso" />

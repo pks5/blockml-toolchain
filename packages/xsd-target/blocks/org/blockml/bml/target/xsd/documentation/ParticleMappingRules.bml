@@ -41,9 +41,9 @@
 
     Later: full D1 fidelity (attributes, text, nested models); pure Definition-driven lists.</documentation>
   <references>
-    <see type="xsddocumentation:DomainVocabularyRules" relation="ReadNext"></see>
-    <see type="xsdcap:EmitBlockXsd" relation="SeeAlso"></see>
-    <see type="def:BlockDefinition" relation="SeeAlso"></see>
+    <see type="xsddocumentation:DomainVocabularyRules" relation="ReadNext" />
+    <see type="xsdcap:EmitBlockXsd" relation="SeeAlso" />
+    <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
 
 </block>

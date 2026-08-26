@@ -52,7 +52,7 @@
     Provenance-agnostic: serializer works on parser- or builder-origin Urmodell.</documentation>
 
   <references>
-    <see type="serdocumentation:Diagnostics" relation="ReadNext"></see>
+    <see type="serdocumentation:Diagnostics" relation="ReadNext" />
   </references>
 
 </block>

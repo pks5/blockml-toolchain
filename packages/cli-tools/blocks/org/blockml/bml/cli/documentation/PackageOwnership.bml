@@ -38,7 +38,7 @@
     docs/07_cli.md — transitional pointer only after migration.
     MachineBlocks SCAD/thumbnails — @machineblocks/cli (out of scope).</documentation>
   <references>
-    <see type="clidocumentation:ScopeExclusions" relation="ReadNext"></see>
+    <see type="clidocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
 
 </block>

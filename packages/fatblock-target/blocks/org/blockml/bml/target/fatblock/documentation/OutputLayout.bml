@@ -34,7 +34,7 @@
     Single file per render. Content is canonical BML XML from SerializeFatDocument
     (indent 2, no XML declaration by serializer defaults).</documentation>
   <references>
-    <see type="fbdocumentation:Diagnostics" relation="ReadNext"></see>
+    <see type="fbdocumentation:Diagnostics" relation="ReadNext" />
   </references>
 
 </block>

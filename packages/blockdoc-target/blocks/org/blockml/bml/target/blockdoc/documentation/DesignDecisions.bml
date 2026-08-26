@@ -33,36 +33,40 @@
   <baseType>core:Documentation</baseType>
   <is>Normative BlockDoc decisions BD1–BD28</is>
 
-  <documentation>BD1 siteMode merged vs perLibrary.
-    BD2 outLayout fqn vs package (package may collide when multiple blocks share a package).
-    BD3 option defaults: merged / fqn / includeNonExported=true.
-    BD4 registry name blockdoc; accepts library|corpus|auto.
-    BD5 shared minimal CSS profile.
-    BD6 block page section order (PageSectionOrder).
-    BD7 FqnToHtmlPath algebra.
-    BD8 no FQN dl / no block-page breadcrumb.
-    BD9 RelativeHref algebra.
-    BD10 EscapeHtml.
-    BD11 CollectRootFqns = shortest per file.
-    BD12 package prefix ancestor set for indexes.
-    BD13 export filter via Library.blocks aggregation.
-    BD14 member-value summary limit 5.
-    BD15 type-link policy (named+known only).
-    BD16 sub-block simple-name resolve.
-    BD17 member table kinds and columns.
-    BD18 composition group order/dedupe.
-    BD19 composition node / directive labels.
-    BD20 dotted package path linking.
-    BD21 site index grouping: one library by package; two or more libraries by library then package.
-    BD22 package index direct blocks/sub-packages + breadcrumb.
-    BD23 AssembleSite orchestration including library prefix = strip .Library.
-    BD24 BuildSearchIndex — search-index.json plus inlined search.js of every emitted block page.
-    BD25 sticky black toolbar (BlockDoc + Index + All Blocks + keyword quick search) on all HTML pages.
-    BD26 when session.corpusRoots is set, restrict emitted FQNs to files under those roots.
-    BD27 site home is the first interesting package prefix (skip levels with one sub-package and no blocks); merged index.html redirects there when outLayout=fqn; the former site listing is all-blocks.html (toolbar All Blocks).
-    BD28 inherited member type: local member with no authored type uses the nearest ancestor (baseType chain / contracts) member of the same identity that has a type; em dash only when none exists.</documentation>
+  <documentation>
+    # Normative BlockDoc decisions BD1–BD28
+
+    - BD1 siteMode merged vs perLibrary.
+    - BD2 outLayout fqn vs package (package may collide when multiple blocks share a package).
+    - BD3 option defaults: merged / fqn / includeNonExported=true.
+    - BD4 registry name blockdoc; accepts library|corpus|auto.
+    - BD5 shared minimal CSS profile.
+    - BD6 block page section order (PageSectionOrder).
+    - BD7 FqnToHtmlPath algebra.
+    - BD8 no FQN dl / no block-page breadcrumb.
+    - BD9 RelativeHref algebra.
+    - BD10 EscapeHtml.
+    - BD11 CollectRootFqns = shortest per file.
+    - BD12 package prefix ancestor set for indexes.
+    - BD13 export filter via Library.blocks aggregation.
+    - BD14 member-value summary limit 5.
+    - BD15 type-link policy (named+known only).
+    - BD16 sub-block simple-name resolve.
+    - BD17 member table kinds and columns.
+    - BD18 composition group order/dedupe.
+    - BD19 composition node / directive labels.
+    - BD20 dotted package path linking.
+    - BD21 site index grouping: one library by package; two or more libraries by library then package.
+    - BD22 package index direct blocks/sub-packages + breadcrumb.
+    - BD23 AssembleSite orchestration including library prefix = strip .Library.
+    - BD24 BuildSearchIndex — search-index.json plus inlined search.js of every emitted block page.
+    - BD25 sticky black toolbar (BlockDoc + Index + All Blocks + keyword quick search) on all HTML pages.
+    - BD26 when session.corpusRoots is set, restrict emitted FQNs to files under those roots.
+    - BD27 site home is the first interesting package prefix (skip levels with one sub-package and no blocks); merged index.html redirects there when outLayout=fqn; the former site listing is all-blocks.html (toolbar All Blocks).
+    - BD28 inherited member type: local member with no authored type uses the nearest ancestor (baseType chain / contracts) member of the same identity that has a type; em dash only when none exists.
+  </documentation>
   <references>
-    <see type="bddocumentation:PackageOwnership" relation="ReadNext"></see>
+    <see type="bddocumentation:PackageOwnership" relation="ReadNext" />
   </references>
 
 </block>

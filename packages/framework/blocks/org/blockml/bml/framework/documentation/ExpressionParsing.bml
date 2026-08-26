@@ -49,8 +49,8 @@
     Expression AST is a Stage-2 utility — never written back to Urmodell member values.</documentation>
 
   <references>
-    <see type="fwdocumentation:ConstraintValidation" relation="ReadNext"></see>
-    <see type="fwexpression:ExpressionNode" relation="Defines"></see>
+    <see type="fwdocumentation:ConstraintValidation" relation="ReadNext" />
+    <see type="fwexpression:ExpressionNode" relation="Defines" />
   </references>
 
 </block>

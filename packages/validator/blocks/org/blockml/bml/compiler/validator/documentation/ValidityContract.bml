@@ -49,8 +49,8 @@
     Unknown instance members stay in memberValues plus BML_UNKNOWN_PROPERTY error.</documentation>
 
   <references>
-    <see type="pardocumentation:StructuralGrammar" relation="SeeAlso"></see>
-    <see type="valdocumentation:ValidationPipeline" relation="ReadNext"></see>
+    <see type="pardocumentation:StructuralGrammar" relation="SeeAlso" />
+    <see type="valdocumentation:ValidationPipeline" relation="ReadNext" />
   </references>
 
 </block>

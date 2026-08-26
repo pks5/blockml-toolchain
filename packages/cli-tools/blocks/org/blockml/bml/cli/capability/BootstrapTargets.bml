@@ -25,7 +25,11 @@
   <baseType>core:Capability</baseType>
   <is>Register render targets from config.targets[]</is>
 
-  <documentation>CLI3: async idempotent — second call no-op. CLI4: built-in factories blockdoc, xsd, fatblock; custom via registerTargetFactory or targetPackages plugin load. CLI5: unknown name in targets[] throws. Also registers requested target name for this run. resetBootstrapTargets clears registry.</documentation>
+  <documentation>
+    # Register render targets from config.targets[]
+
+    CLI3: async idempotent — second call no-op. CLI4: built-in factories blockdoc, xsd, fatblock; custom via registerTargetFactory or targetPackages plugin load. CLI5: unknown name in targets[] throws. Also registers requested target name for this run. resetBootstrapTargets clears registry.
+  </documentation>
 
   <references>
     <see type="clidocumentation:TargetBootstrap" relation="SeeAlso" />

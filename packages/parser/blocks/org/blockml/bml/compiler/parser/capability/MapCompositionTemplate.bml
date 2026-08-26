@@ -34,7 +34,7 @@
   <baseType>core:Capability</baseType>
   <is>Map &lt;composition> element to CompositionTemplate</is>
 
-  <documentation>Map &lt;composition> element to CompositionTemplate</documentation>
+  <documentation><![CDATA[Map <composition> element to CompositionTemplate]]></documentation>
 
   <properties>
     <element type="parmap:XmlDomNode">

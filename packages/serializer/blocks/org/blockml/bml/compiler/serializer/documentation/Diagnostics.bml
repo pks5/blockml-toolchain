@@ -43,8 +43,8 @@
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic (shared with parser/compiler).</documentation>
 
   <references>
-    <see type="bomcommon:Diagnostic" relation="SeeAlso"></see>
-    <see type="serdocumentation:PackageOwnership" relation="ReadNext"></see>
+    <see type="bomcommon:Diagnostic" relation="SeeAlso" />
+    <see type="serdocumentation:PackageOwnership" relation="ReadNext" />
   </references>
 
 </block>

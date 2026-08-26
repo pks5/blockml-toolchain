@@ -43,7 +43,7 @@
     representation after parse is implementation freedom.</documentation>
 
   <references>
-    <see type="bomdocumentation:AbstractionPrinciple" relation="ReadNext"></see>
+    <see type="bomdocumentation:AbstractionPrinciple" relation="ReadNext" />
   </references>
 
 </block>

@@ -26,10 +26,13 @@
   <is>The BlockML universal CLI package library catalog</is>
 
   <documentation>
+    # The BlockML universal CLI package library catalog
+
     Canonical CLI specification for BlockML — commands, config, bootstrap order,
     target matrix, exit codes, terminal colors (CLI1–CLI24). TypeScript in packages/cli-tools/src/
     implements this library. Compiler facade and scope live in org.blockml.bml.compiler.runtime.*
     Framework bootstrap lives in org.blockml.bml.framework.*.
+
     Membership is defined exclusively by this blocks list.
   </documentation>
 

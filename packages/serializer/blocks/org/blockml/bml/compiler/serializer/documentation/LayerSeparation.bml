@@ -50,8 +50,8 @@
     The serializer accepts any Urmodell provenance (parser or future BomBuilder.seal()).</documentation>
 
   <references>
-    <see type="serdocumentation:ArchitectureOverview" relation="ReadNext"></see>
-    <see type="bomdocumentation:LayerSeparation" relation="SeeAlso"></see>
+    <see type="serdocumentation:ArchitectureOverview" relation="ReadNext" />
+    <see type="bomdocumentation:LayerSeparation" relation="SeeAlso" />
   </references>
 
 </block>

@@ -39,7 +39,7 @@
     Incremental cache (C5) and thumbnails (C6) are CLI-later concerns — not V1.
     See org.blockml.bml.compiler.runtime for compile facade detail.</documentation>
   <references>
-    <see type="clidocumentation:Commands" relation="ReadNext"></see>
+    <see type="clidocumentation:Commands" relation="ReadNext" />
   </references>
 
 </block>

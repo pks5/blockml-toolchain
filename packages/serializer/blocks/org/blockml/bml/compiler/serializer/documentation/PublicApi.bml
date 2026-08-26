@@ -33,11 +33,11 @@
   <baseType>core:Documentation</baseType>
   <is>serialize() entry point (B26)</is>
 
-  <documentation>serialize(document: BomDocument, options?: SerializeOptions): SerializeResult
+  <documentation><![CDATA[serialize(document: BomDocument, options?: SerializeOptions): SerializeResult
 
     SerializeOptions (owned by @blockml/bom):
     • indent — default 2; pretty-print spaces (B13); 0 = compact
-    • xmlDeclaration — default false; omit &lt;?xml …?> (B17/B24)
+    • xmlDeclaration — default false; omit <?xml …?> (B17/B24)
 
     SerializeResult (owned by @blockml/bom):
     • text — string | null (null only if serialize cannot produce text)
@@ -51,13 +51,13 @@
     • Sync only; no throw on recoverable errors
     • Never write UTF-8 BOM on output
 
-    Not in V1 API: serializeFile, async variants, streaming.</documentation>
+    Not in V1 API: serializeFile, async variants, streaming.]]></documentation>
 
   <references>
-    <see type="bomapi:SerializeOptions" relation="Defines"></see>
-    <see type="bomapi:SerializeResult" relation="Defines"></see>
-    <see type="sercap:Serialize" relation="Defines"></see>
-    <see type="serdocumentation:EmitOrder" relation="ReadNext"></see>
+    <see type="bomapi:SerializeOptions" relation="Defines" />
+    <see type="bomapi:SerializeResult" relation="Defines" />
+    <see type="sercap:Serialize" relation="Defines" />
+    <see type="serdocumentation:EmitOrder" relation="ReadNext" />
   </references>
 
 </block>

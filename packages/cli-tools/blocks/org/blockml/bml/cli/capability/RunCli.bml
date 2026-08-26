@@ -25,11 +25,18 @@
   <baseType>core:Capability</baseType>
   <is>Public CLI entry: argv + cwd to exit code and stderr</is>
 
-  <documentation>CLI18: validate command to RunValidate; compile to RunCompile; unknown command exit 2 with USAGE.
+  <documentation>
+    # Public CLI entry: argv + cwd to exit code and stderr
+
+    CLI18: validate command to RunValidate; compile to RunCompile; unknown command exit 2 with USAGE.
+
     Uncaught throws → Internal CLI error: message, exit 2 (application error, not BML diagnostics).
+
     Direct-run entrypoint when invoked as blockml bin (CLI21: compare realpath of argv[1]
     and this module so npm node_modules/.bin/blockml symlinks still invoke runCli).
-    Bin path calls WriteCliOutput (CLI24 colors); runCli itself returns uncolored stderr.</documentation>
+
+    Bin path calls WriteCliOutput (CLI24 colors); runCli itself returns uncolored stderr.
+  </documentation>
 
   <references>
     <see type="clidocumentation:PublicApi" relation="SeeAlso" />

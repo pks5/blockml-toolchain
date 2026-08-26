@@ -39,7 +39,7 @@
     init, new block, inspect, watch, activate-config, --force cache skip,
     incremental .bom-cache, thumbnails, OpenSCAD resolver, bom-cli.config.json renaming.</documentation>
   <references>
-    <see type="clidocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="clidocumentation:PublicApi" relation="ReadNext" />
   </references>
 
 </block>

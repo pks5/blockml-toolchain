@@ -42,8 +42,8 @@
     org.blockml.bml.cli.*. Target emit rules live in each target library.
     Parser/validator algorithms live in their own libraries; this package orchestrates them.</documentation>
   <references>
-    <see type="rundocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="runcap:CompileToOutput" relation="SeeAlso"></see>
+    <see type="rundocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="runcap:CompileToOutput" relation="SeeAlso" />
   </references>
 
 </block>

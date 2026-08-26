@@ -44,8 +44,8 @@
     Validator consumes parser output; does not call parse() directly (bootstrap is via framework).</documentation>
 
   <references>
-    <see type="valdocumentation:ValidationPipeline" relation="ReadNext"></see>
-    <see type="fwdocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="valdocumentation:ValidationPipeline" relation="ReadNext" />
+    <see type="fwdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

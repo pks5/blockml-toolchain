@@ -31,16 +31,24 @@
   <baseType>core:Documentation</baseType>
   <is>Compile scope resolution and accepts (C7)</is>
 
-  <documentation>Kinds: document | library | corpus | auto.
+  <documentation>
+    # Compile scope resolution and accepts (C7)
+
+    Kinds: document | library | corpus | auto.
+
     ResolveScope: document requires scope.document; library uses libraries then hints.libraries;
     corpus uses roots then hints.roots; auto prefers libraries then roots; else BML_COMPILE_SCOPE_EMPTY.
+
     ScopeAccepts: exact kind match, or accepts includes auto and kind is library or corpus.
+
     CompileToOutput rejects with BML_TARGET_SCOPE_MISMATCH when ScopeAccepts is false.
-    Accepts matrix for concrete targets lives in target libraries / CLI TargetCliMatrix — not here.</documentation>
+
+    Accepts matrix for concrete targets lives in target libraries / CLI TargetCliMatrix — not here.
+  </documentation>
   <references>
-    <see type="rundocumentation:TargetRegistry" relation="ReadNext"></see>
-    <see type="runcap:ResolveScope" relation="SeeAlso"></see>
-    <see type="runcap:ScopeAccepts" relation="SeeAlso"></see>
+    <see type="rundocumentation:TargetRegistry" relation="ReadNext" />
+    <see type="runcap:ResolveScope" relation="SeeAlso" />
+    <see type="runcap:ScopeAccepts" relation="SeeAlso" />
   </references>
 
 </block>

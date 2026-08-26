@@ -52,9 +52,9 @@
     MemberGroups axis constraints (MB-only).</documentation>
 
   <references>
-    <see type="valdocumentation:PublicApi" relation="ReadNext"></see>
-    <see type="valcap:Validate" relation="Defines"></see>
-    <see type="valcap:ValidateStyle" relation="SeeAlso"></see>
+    <see type="valdocumentation:PublicApi" relation="ReadNext" />
+    <see type="valcap:Validate" relation="Defines" />
+    <see type="valcap:ValidateStyle" relation="SeeAlso" />
   </references>
 
 </block>

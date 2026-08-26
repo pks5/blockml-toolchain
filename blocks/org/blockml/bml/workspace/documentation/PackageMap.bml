@@ -59,8 +59,8 @@
       → blocks/org/blockml/bml/workspace/Library.bml</documentation>
 
   <references>
-    <see type="wsdocumentation:ArchitectureOverview" relation="ReadNext"></see>
-    <see type="wsdocumentation:ReadingOrder" relation="SeeAlso"></see>
+    <see type="wsdocumentation:ArchitectureOverview" relation="ReadNext" />
+    <see type="wsdocumentation:ReadingOrder" relation="SeeAlso" />
   </references>
 
 </block>

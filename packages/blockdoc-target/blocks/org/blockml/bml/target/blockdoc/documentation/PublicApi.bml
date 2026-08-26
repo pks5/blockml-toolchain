@@ -48,11 +48,11 @@
     Opaque CompileRequest.targetOptions is typed here as BlockDocOptions (BD3).
     Host CLI passes config.targetOptions.blockdoc.</documentation>
   <references>
-    <see type="bddocumentation:PathAndLayout" relation="ReadNext"></see>
-    <see type="bdcap:Render" relation="Defines"></see>
-    <see type="bdapi:BlockDocOptions" relation="Defines"></see>
-    <see type="bdapi:BlockDocRenderOutput" relation="Defines"></see>
-    <see type="bdcap:ResolveOptions" relation="Defines"></see>
+    <see type="bddocumentation:PathAndLayout" relation="ReadNext" />
+    <see type="bdcap:Render" relation="Defines" />
+    <see type="bdapi:BlockDocOptions" relation="Defines" />
+    <see type="bdapi:BlockDocRenderOutput" relation="Defines" />
+    <see type="bdcap:ResolveOptions" relation="Defines" />
   </references>
 
 </block>

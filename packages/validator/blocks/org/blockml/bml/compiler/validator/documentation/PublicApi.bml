@@ -48,11 +48,11 @@
     Sync only; does not throw on validation errors. Host decides abort policy.</documentation>
 
   <references>
-    <see type="bomapi:ValidateOptions" relation="Defines"></see>
-    <see type="bomapi:ValidateResult" relation="Defines"></see>
-    <see type="valcap:Validate" relation="Defines"></see>
-    <see type="valcap:ValidateStyle" relation="Defines"></see>
-    <see type="valdocumentation:DesignDecisions" relation="ReadNext"></see>
+    <see type="bomapi:ValidateOptions" relation="Defines" />
+    <see type="bomapi:ValidateResult" relation="Defines" />
+    <see type="valcap:Validate" relation="Defines" />
+    <see type="valcap:ValidateStyle" relation="Defines" />
+    <see type="valdocumentation:DesignDecisions" relation="ReadNext" />
   </references>
 
 </block>

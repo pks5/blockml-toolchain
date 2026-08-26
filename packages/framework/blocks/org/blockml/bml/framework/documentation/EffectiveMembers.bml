@@ -56,9 +56,9 @@
     EffectiveMemberSet is a runtime view — not stored on Urmodell (BOM SSOT).</documentation>
 
   <references>
-    <see type="fwdocumentation:ExpressionParsing" relation="ReadNext"></see>
-    <see type="fwcap:ResolveEffectiveMembers" relation="Defines"></see>
-    <see type="fwcap:ResolveContracts" relation="SeeAlso"></see>
+    <see type="fwdocumentation:ExpressionParsing" relation="ReadNext" />
+    <see type="fwcap:ResolveEffectiveMembers" relation="Defines" />
+    <see type="fwcap:ResolveContracts" relation="SeeAlso" />
   </references>
 
 </block>

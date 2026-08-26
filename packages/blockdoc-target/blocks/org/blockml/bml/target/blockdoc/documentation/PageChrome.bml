@@ -58,10 +58,10 @@
     Shared CSS: system-ui, sticky toolbar, tables, blue links (BlockDocConstants.PAGE_CSS / TOOLBAR_CSS).
     Search assets: search-index.json + search.js at site root (BD24).</documentation>
   <references>
-    <see type="bddocumentation:SiteAssembly" relation="ReadNext"></see>
-    <see type="bdconfig:PageSectionOrder" relation="SeeAlso"></see>
-    <see type="bdcap:RenderBlockPage" relation="SeeAlso"></see>
-    <see type="bdcap:RenderToolbar" relation="SeeAlso"></see>
+    <see type="bddocumentation:SiteAssembly" relation="ReadNext" />
+    <see type="bdconfig:PageSectionOrder" relation="SeeAlso" />
+    <see type="bdcap:RenderBlockPage" relation="SeeAlso" />
+    <see type="bdcap:RenderToolbar" relation="SeeAlso" />
   </references>
 
 </block>

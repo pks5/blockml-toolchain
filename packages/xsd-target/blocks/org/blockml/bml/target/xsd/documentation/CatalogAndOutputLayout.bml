@@ -37,9 +37,9 @@
 
     IDE catalog usage is host/docs 15; generation rules live here.</documentation>
   <references>
-    <see type="xsddocumentation:Diagnostics" relation="ReadNext"></see>
-    <see type="xsdcap:EmitCatalogXml" relation="SeeAlso"></see>
-    <see type="cli:Library" relation="SeeAlso"></see>
+    <see type="xsddocumentation:Diagnostics" relation="ReadNext" />
+    <see type="xsdcap:EmitCatalogXml" relation="SeeAlso" />
+    <see type="cli:Library" relation="SeeAlso" />
   </references>
 
 </block>

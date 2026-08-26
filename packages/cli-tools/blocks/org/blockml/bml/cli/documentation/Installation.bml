@@ -36,7 +36,7 @@
 
     Domain users: install @machineblocks/cli from MachineBlocks mono-repo instead.</documentation>
   <references>
-    <see type="clidocumentation:DesignDecisions" relation="ReadNext"></see>
+    <see type="clidocumentation:DesignDecisions" relation="ReadNext" />
   </references>
 
 </block>

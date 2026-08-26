@@ -46,8 +46,8 @@
     the hardcoded BLOCK_EMIT_ORDER; V2 picks up changes automatically.</documentation>
 
   <references>
-    <see type="serdocumentation:PublicApi" relation="ReadNext"></see>
-    <see type="def:BlockDefinition" relation="SeeAlso"></see>
+    <see type="serdocumentation:PublicApi" relation="ReadNext" />
+    <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
 
 </block>

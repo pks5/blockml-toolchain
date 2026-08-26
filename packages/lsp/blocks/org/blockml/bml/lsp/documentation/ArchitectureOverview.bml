@@ -58,7 +58,7 @@
     (source root = srcDir, default blocks). Library blocks trees inside srcDir are not scanned twice.</documentation>
 
   <references>
-    <see type="lspdocumentation:ServerLifecycle" relation="ReadNext"></see>
+    <see type="lspdocumentation:ServerLifecycle" relation="ReadNext" />
   </references>
 
 </block>

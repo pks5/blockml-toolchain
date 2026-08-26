@@ -34,7 +34,11 @@
   <baseType>core:Capability</baseType>
   <is>XML-token hover at an LSP position</is>
 
-  <documentation>Parse-only (no validator). Classifies the XML token at the cursor (element name, attribute key/value, text). Language tags (name, is, references, properties, …) show documentation from org.blockml.bml.definition.* members via resolveEffectiveMembers. Type QNames show the target TypeRegistry block (is + first documentation). Concrete member tags show that member. Hover range is the token — a whole prefix:Local or dotted FQN, not its parts. Whitespace, comments, and tag punctuation return null. Unknown FQN is still shown. Returns null if parse cannot produce a document.</documentation>
+  <documentation>
+    # XML-token hover at an LSP position
+
+    Parse-only (no validator). Classifies the XML token at the cursor (element name, attribute key/value, text). Language tags (name, is, references, properties, …) show documentation from org.blockml.bml.definition.* members via resolveEffectiveMembers. Type QNames show the target TypeRegistry block (is + first documentation). Concrete member tags show that member. Hover range is the token — a whole prefix:Local or dotted FQN, not its parts. Whitespace, comments, and tag punctuation return null. Unknown FQN is still shown. Returns null if parse cannot produce a document.
+  </documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />

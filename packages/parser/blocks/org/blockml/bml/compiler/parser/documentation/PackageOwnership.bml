@@ -48,8 +48,8 @@
     @blockml/cli — TypeRegistry bootstrap and orchestration.</documentation>
 
   <references>
-    <see type="pardocumentation:ScopeExclusions" relation="ReadNext"></see>
-    <see type="bomdocumentation:PackageOwnership" relation="SeeAlso"></see>
+    <see type="pardocumentation:ScopeExclusions" relation="ReadNext" />
+    <see type="bomdocumentation:PackageOwnership" relation="SeeAlso" />
   </references>
 
 </block>

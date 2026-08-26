@@ -41,7 +41,7 @@
     External VS Code (or other) extension — Language Client, TextMate grammar, .bml file association.</documentation>
 
   <references>
-    <see type="lspdocumentation:ScopeExclusions" relation="ReadNext"></see>
+    <see type="lspdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
 
 </block>

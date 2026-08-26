@@ -47,8 +47,8 @@
     Related host wiring (CLI bootstrap, compileToOutput, scope auto resolution) lives in
     @blockml/compiler / @blockml/cli — see PackageOwnership.</documentation>
   <references>
-    <see type="bddocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="bdcap:Render" relation="SeeAlso"></see>
+    <see type="bddocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="bdcap:Render" relation="SeeAlso" />
   </references>
 
 </block>

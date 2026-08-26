@@ -54,10 +54,10 @@
     @blockml/lsp (V1) — editor-agnostic stdio language server (blockml-lsp);
     IDE clients connect via LSP. See org.blockml.bml.lsp.documentation.Introduction.</documentation>
   <references>
-    <see type="rundocumentation:Diagnostics" relation="ReadNext"></see>
-    <see type="runapi:RenderTarget" relation="SeeAlso"></see>
-    <see type="runcap:CompileBomToOutput" relation="SeeAlso"></see>
-    <see type="rundocumentation:TargetRegistry" relation="SeeAlso"></see>
+    <see type="rundocumentation:Diagnostics" relation="ReadNext" />
+    <see type="runapi:RenderTarget" relation="SeeAlso" />
+    <see type="runcap:CompileBomToOutput" relation="SeeAlso" />
+    <see type="rundocumentation:TargetRegistry" relation="SeeAlso" />
   </references>
 
 </block>

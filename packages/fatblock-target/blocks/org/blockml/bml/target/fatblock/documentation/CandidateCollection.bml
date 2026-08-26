@@ -39,7 +39,7 @@
 
     V1 semantics = folder pool, not dependency graph walk.</documentation>
   <references>
-    <see type="fbdocumentation:EmbedAssemblyRules" relation="ReadNext"></see>
+    <see type="fbdocumentation:EmbedAssemblyRules" relation="ReadNext" />
   </references>
 
 </block>

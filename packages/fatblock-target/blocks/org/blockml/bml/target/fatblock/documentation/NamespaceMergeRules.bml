@@ -36,7 +36,7 @@
     Aligns with docs/19 Definition / bml:xml D2 consumer rules. Serializer may still emit
     BML_NAMESPACE_UNBOUND if a QName lacks a binding after merge.</documentation>
   <references>
-    <see type="fbdocumentation:OutputLayout" relation="ReadNext"></see>
+    <see type="fbdocumentation:OutputLayout" relation="ReadNext" />
   </references>
 
 </block>

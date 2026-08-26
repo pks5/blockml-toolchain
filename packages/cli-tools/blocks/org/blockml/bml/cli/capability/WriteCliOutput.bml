@@ -25,10 +25,14 @@
   <baseType>core:Capability</baseType>
   <is>Print CLI lines with CLI24 colors and stdout/stderr routing</is>
 
-  <documentation>CLI24: apply CliColorScheme and write lines. error and warning go to stderr;
+  <documentation>
+    # Print CLI lines with CLI24 colors and stdout/stderr routing
+
+    CLI24: apply CliColorScheme and write lines. error and warning go to stderr;
     info, success, and recommendation go to stdout (so terminals that paint stderr red
     do not color normal status). Direct bin entry uses this; runCli returns an uncolored
-    combined transcript in CliResult.stderr for programmatic callers.</documentation>
+    combined transcript in CliResult.stderr for programmatic callers.
+  </documentation>
 
   <references>
     <see type="cliconfig:CliColorScheme" relation="SeeAlso" />

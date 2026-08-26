@@ -32,7 +32,11 @@
   <baseType>core:Capability</baseType>
   <is>Emit Properties/Aggregations/Associations/Capabilities tables</is>
 
-  <documentation>BD17/BD28: columns Name + Type only. Property: sub-block resolve → typeFqn → type expression → inherited ancestor type → —. Capability: typeFqn (or inherited) or literal 'capability'. Aggregation/association: named + sub-block resolve (multiplicity suffix) else RenderTypeExpression. Empty sections omitted.</documentation>
+  <documentation>
+    # Emit Properties/Aggregations/Associations/Capabilities tables
+
+    BD17/BD28: columns Name + Type only. Property: sub-block resolve → typeFqn → type expression → inherited ancestor type → —. Capability: typeFqn (or inherited) or literal 'capability'. Aggregation/association: named + sub-block resolve (multiplicity suffix) else RenderTypeExpression. Empty sections omitted.
+  </documentation>
 
   <references>
     <see type="bddocumentation:MemberAndCompositionRules" relation="SeeAlso" />

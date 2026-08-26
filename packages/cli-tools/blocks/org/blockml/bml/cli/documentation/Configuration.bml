@@ -41,7 +41,7 @@
 
     bom-cli.config.json command/flag renaming — planned; not V1.</documentation>
   <references>
-    <see type="clidocumentation:TargetBootstrap" relation="ReadNext"></see>
+    <see type="clidocumentation:TargetBootstrap" relation="ReadNext" />
   </references>
 
 </block>

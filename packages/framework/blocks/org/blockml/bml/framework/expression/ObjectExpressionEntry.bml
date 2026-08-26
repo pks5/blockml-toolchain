@@ -36,7 +36,7 @@
   <baseType>framework:FrameworkType</baseType>
   <is>One key/value pair in an object expression</is>
 
-  <documentation>BML type gap: stands for TypeScript Record&lt;string, ExpressionNode&gt;. Core has no Map ValueType; this struct is the per-entry shape.</documentation>
+  <documentation><![CDATA[BML type gap: stands for TypeScript Record<string, ExpressionNode>. Core has no Map ValueType; this struct is the per-entry shape.]]></documentation>
 
   <properties>
     <key type="type:Text">

@@ -43,7 +43,7 @@
     • Duplicate parse/validate/serialize logic — must delegate to parser/validator/serializer</documentation>
 
   <references>
-    <see type="lspdocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="lspdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

@@ -37,7 +37,7 @@
     Planned machineblocks-v3-scad — document target; file required; --all loops srcDir;
     registered by domain CLI not @blockml/cli.</documentation>
   <references>
-    <see type="clidocumentation:ExitCodesAndDiagnostics" relation="ReadNext"></see>
+    <see type="clidocumentation:ExitCodesAndDiagnostics" relation="ReadNext" />
   </references>
 
 </block>

@@ -43,8 +43,8 @@
     Pipeline: ResolveOptions → AssembleFatDocument → SerializeFatDocument → {hostFqn}.fat.bml.
     Host CLI wiring (flags, exit codes) lives in org.blockml.bml.cli.*</documentation>
   <references>
-    <see type="fbdocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="fbcap:Render" relation="SeeAlso"></see>
+    <see type="fbdocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="fbcap:Render" relation="SeeAlso" />
   </references>
 
 </block>

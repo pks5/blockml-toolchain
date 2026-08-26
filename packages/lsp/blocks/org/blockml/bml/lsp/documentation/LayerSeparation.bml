@@ -48,7 +48,7 @@
     External IDE packages — Language Client only; grammar and file associations stay IDE-local.</documentation>
 
   <references>
-    <see type="lspdocumentation:ArchitectureOverview" relation="ReadNext"></see>
+    <see type="lspdocumentation:ArchitectureOverview" relation="ReadNext" />
   </references>
 
 </block>

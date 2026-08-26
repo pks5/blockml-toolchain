@@ -36,7 +36,7 @@
   <baseType>fwexpression:ExpressionNode</baseType>
   <is>Object expression AST node</is>
 
-  <documentation>kind: object. entries: Record&lt;string, ExpressionNode&gt;.</documentation>
+  <documentation><![CDATA[kind: object. entries: Record<string, ExpressionNode>.]]></documentation>
 
   <properties>
     <kind type="type:Text">

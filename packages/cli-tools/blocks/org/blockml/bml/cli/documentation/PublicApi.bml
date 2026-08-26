@@ -26,13 +26,13 @@
   <baseType>core:Documentation</baseType>
   <is>Exported TypeScript / capability surface</is>
 
-  <documentation>Package @blockml/cli exports:
-    • runCli(argv, cwd?) → Promise&lt;{ code, stderr }&gt;
+  <documentation><![CDATA[Package @blockml/cli exports:
+    • runCli(argv, cwd?) → Promise<{ code, stderr }>
     • parseArgs(argv) → ParsedArgs
     • formatDiagnostic(d) → string
     • writeCliOutput(lines) — CLI24 colored bin printer
     • loadConfig(cwd?) → BomConfig
-    • bootstrapTargets(config, requested?, rootDir?) → Promise&lt;void&gt;
+    • bootstrapTargets(config, requested?, rootDir?) → Promise<void>
     • registerTargetFactory(name, factory, hints?)
     • getTargetCliHints(name) → TargetCliHints | undefined
     • getTargetFactory(name) → factory | undefined
@@ -47,12 +47,12 @@
 
     BML counterparts: clicap:RunCli, ParseArgs, LoadConfig, BootstrapTargets,
     RegisterTargetFactory, BootstrapProjectTypeRegistry, WriteOutputFiles,
-    WriteCliOutput, FormatDiagnostic.</documentation>
+    WriteCliOutput, FormatDiagnostic.]]></documentation>
   <references>
-    <see type="clidocumentation:RuntimeBootstrap" relation="ReadNext"></see>
-    <see type="clicap:RunCli" relation="Defines"></see>
-    <see type="cliapi:BomConfig" relation="Defines"></see>
-    <see type="cliapi:ParsedArgs" relation="Defines"></see>
+    <see type="clidocumentation:RuntimeBootstrap" relation="ReadNext" />
+    <see type="clicap:RunCli" relation="Defines" />
+    <see type="cliapi:BomConfig" relation="Defines" />
+    <see type="cliapi:ParsedArgs" relation="Defines" />
   </references>
 
 </block>

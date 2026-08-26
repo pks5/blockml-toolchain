@@ -50,7 +50,7 @@
     Sibling toolchain targets (xsd, fatblock) and domain targets (machineblocks-v3-scad)
     are separate packages with their own libraries.</documentation>
   <references>
-    <see type="bddocumentation:ArchitectureOverview" relation="ReadNext"></see>
+    <see type="bddocumentation:ArchitectureOverview" relation="ReadNext" />
   </references>
 
 </block>

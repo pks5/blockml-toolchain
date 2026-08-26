@@ -27,23 +27,27 @@
   <baseType>core:Documentation</baseType>
   <is>Normative XSD decisions XSD1–XSD18</is>
 
-  <documentation>XSD1 Always emit bml.xsd.
-    XSD2 accepts library|corpus|auto; registry name xsd.
-    XSD3 Render uses session typeRegistry and outputBasePath.
-    XSD4–XSD7 bml.xsd shell: NS, block root, mixed, choice elements, no xs:any, lax anyAttribute.
-    XSD8 Hardcoded D1 identity + container name lists (including isNot and isnot).
-    XSD9 META_DEFINITION_FQNS walk for extras.
-    XSD10 MemberPrefersElement weak filter.
-    XSD11 Extras unique sorted minus D1 lists.
-    XSD12 types.xsd string vocabulary.
-    XSD13 service.xsd string vocabulary.
-    XSD14 Always catalog.xml in rootFiles; relative ./outDir/file paths.
-    XSD15 emitDomainSchemas default true.
-    XSD16 includeNonExported reserved unused in V1.
-    XSD17 No package-local emit diagnostics.
-    XSD18 Generated XSD is non-authoritative; authoring validity is parse+validate, not this target.</documentation>
+  <documentation>
+    # Normative XSD decisions XSD1–XSD18
+
+    - XSD1 Always emit bml.xsd.
+    - XSD2 accepts library|corpus|auto; registry name xsd.
+    - XSD3 Render uses session typeRegistry and outputBasePath.
+    - XSD4–XSD7 bml.xsd shell: NS, block root, mixed, choice elements, no xs:any, lax anyAttribute.
+    - XSD8 Hardcoded D1 identity + container name lists (including isNot and isnot).
+    - XSD9 META_DEFINITION_FQNS walk for extras.
+    - XSD10 MemberPrefersElement weak filter.
+    - XSD11 Extras unique sorted minus D1 lists.
+    - XSD12 types.xsd string vocabulary.
+    - XSD13 service.xsd string vocabulary.
+    - XSD14 Always catalog.xml in rootFiles; relative ./outDir/file paths.
+    - XSD15 emitDomainSchemas default true.
+    - XSD16 includeNonExported reserved unused in V1.
+    - XSD17 No package-local emit diagnostics.
+    - XSD18 Generated XSD is non-authoritative; authoring validity is parse+validate, not this target.
+  </documentation>
   <references>
-    <see type="xsddocumentation:PackageOwnership" relation="ReadNext"></see>
+    <see type="xsddocumentation:PackageOwnership" relation="ReadNext" />
   </references>
 
 </block>

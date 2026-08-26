@@ -69,8 +69,8 @@
     Diagnostic type: org.blockml.bml.bom.common.Diagnostic.</documentation>
 
   <references>
-    <see type="fwconfig:FrameworkDiagnosticCodes" relation="Defines"></see>
-    <see type="fwdocumentation:PackageOwnership" relation="ReadNext"></see>
+    <see type="fwconfig:FrameworkDiagnosticCodes" relation="Defines" />
+    <see type="fwdocumentation:PackageOwnership" relation="ReadNext" />
   </references>
 
 </block>

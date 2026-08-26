@@ -56,10 +56,10 @@
 
     Control gate: does not require validator Stage-2 success.</documentation>
   <references>
-    <see type="bddocumentation:DesignDecisions" relation="ReadNext"></see>
-    <see type="bdcap:AssembleSite" relation="SeeAlso"></see>
-    <see type="bdcap:FilterExportedFqns" relation="SeeAlso"></see>
-    <see type="bdcap:FirstInterestingPackagePrefix" relation="SeeAlso"></see>
+    <see type="bddocumentation:DesignDecisions" relation="ReadNext" />
+    <see type="bdcap:AssembleSite" relation="SeeAlso" />
+    <see type="bdcap:FilterExportedFqns" relation="SeeAlso" />
+    <see type="bdcap:FirstInterestingPackagePrefix" relation="SeeAlso" />
   </references>
 
 </block>

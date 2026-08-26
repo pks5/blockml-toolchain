@@ -46,8 +46,8 @@
 
     Sub-block pages always link to sub.type paths (not gated on knownFqns) — see PageChrome.</documentation>
   <references>
-    <see type="bddocumentation:MemberAndCompositionRules" relation="ReadNext"></see>
-    <see type="bdcap:RenderTypeExpression" relation="SeeAlso"></see>
+    <see type="bddocumentation:MemberAndCompositionRules" relation="ReadNext" />
+    <see type="bdcap:RenderTypeExpression" relation="SeeAlso" />
   </references>
 
 </block>

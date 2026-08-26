@@ -49,7 +49,7 @@
     Compilation failed with K error(s). Empty output without errors:
     Compilation failed: no output files produced.</documentation>
   <references>
-    <see type="clidocumentation:ValidateCommand" relation="ReadNext"></see>
+    <see type="clidocumentation:ValidateCommand" relation="ReadNext" />
   </references>
 
 </block>

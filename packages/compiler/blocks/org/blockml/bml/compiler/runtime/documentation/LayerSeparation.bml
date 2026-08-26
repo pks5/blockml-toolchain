@@ -40,9 +40,9 @@
 
     Do not double-maintain CLI command matrices or target particle rules here.</documentation>
   <references>
-    <see type="rundocumentation:ArchitectureOverview" relation="ReadNext"></see>
-    <see type="cli:Library" relation="SeeAlso"></see>
-    <see type="framework:Library" relation="SeeAlso"></see>
+    <see type="rundocumentation:ArchitectureOverview" relation="ReadNext" />
+    <see type="cli:Library" relation="SeeAlso" />
+    <see type="framework:Library" relation="SeeAlso" />
   </references>
 
 </block>

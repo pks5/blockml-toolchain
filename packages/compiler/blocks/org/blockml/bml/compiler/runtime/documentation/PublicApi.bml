@@ -43,10 +43,10 @@
 
     Modeled as api/*, config/RuntimeConstants, and capability/* on Library.blocks.</documentation>
   <references>
-    <see type="rundocumentation:CompileIO" relation="ReadNext"></see>
-    <see type="runapi:CompileRequest" relation="SeeAlso"></see>
-    <see type="runcap:CompileToOutput" relation="SeeAlso"></see>
-    <see type="runapi:RenderTarget" relation="SeeAlso"></see>
+    <see type="rundocumentation:CompileIO" relation="ReadNext" />
+    <see type="runapi:CompileRequest" relation="SeeAlso" />
+    <see type="runcap:CompileToOutput" relation="SeeAlso" />
+    <see type="runapi:RenderTarget" relation="SeeAlso" />
   </references>
 
 </block>

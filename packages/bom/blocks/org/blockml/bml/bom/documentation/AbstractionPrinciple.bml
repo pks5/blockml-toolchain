@@ -40,7 +40,7 @@
     BML → BOM → BML must always be possible.</documentation>
 
   <references>
-    <see type="bomdocumentation:AuthoredSurfaceTable" relation="ReadNext"></see>
+    <see type="bomdocumentation:AuthoredSurfaceTable" relation="ReadNext" />
   </references>
 
 </block>

@@ -35,8 +35,8 @@
        prefer package and workspace BML libraries as authoritative.</documentation>
 
   <references>
-    <see type="wsdocumentation:Introduction" relation="SeeAlso"></see>
-    <see type="wsdocumentation:PackageMap" relation="SeeAlso"></see>
+    <see type="wsdocumentation:Introduction" relation="SeeAlso" />
+    <see type="wsdocumentation:PackageMap" relation="SeeAlso" />
   </references>
 
 </block>

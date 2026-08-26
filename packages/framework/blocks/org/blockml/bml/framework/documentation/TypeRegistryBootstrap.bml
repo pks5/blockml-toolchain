@@ -75,8 +75,8 @@
     selects library mode when typeRegistry is omitted.</documentation>
 
   <references>
-    <see type="fwdocumentation:EffectiveMembers" relation="ReadNext"></see>
-    <see type="fwcap:BootstrapTypeRegistry" relation="Defines"></see>
+    <see type="fwdocumentation:EffectiveMembers" relation="ReadNext" />
+    <see type="fwcap:BootstrapTypeRegistry" relation="Defines" />
   </references>
 
 </block>

@@ -28,24 +28,43 @@
   <baseType>core:Documentation</baseType>
   <is>Normative FatBlock decisions FB1–FB20</is>
 
-  <documentation>FB1 ResolveOptions default embeddedBlocksStrategy=error.
+  <documentation>
+    # Normative FatBlock decisions FB1–FB20
+
+    FB1 ResolveOptions default embeddedBlocksStrategy=error.
+
     FB2 accepts document only; registry name fatblock.
+
     FB3 ValidateRequest requires srcDir.
+
     FB4 render empty files on assemble/serialize errors; strip info diags.
+
     FB5 RootFqnsByFilePath excludes Sub-Block FQNs.
+
     FB6 CollectCandidateFqns path-under-src; exclude host; sort.
+
     FB7 include exact or prefix*; OR; empty=all.
+
     FB8 CloneBlockDefinition via structuredClone.
+
     FB9 Merge host then embeds.
+
     FB10 prefix collision diagnostic; no rewrite.
+
     FB11 default empty-prefix xmlns.
+
     FB12–FB16 assemble host/embed empty-embeds and not-found rules.
+
     FB17 preserve subBlocks; clear nested embeds on clone; serialize indent 2.
+
     FB18 {hostFqn}.fat.bml basename.
+
     FB19 V1 = folder pool not transitive closure.
-    FB20 embeddedBlocksStrategy reserved; assemble hardcodes empty-embeds check.</documentation>
+
+    FB20 embeddedBlocksStrategy reserved; assemble hardcodes empty-embeds check.
+  </documentation>
   <references>
-    <see type="fbdocumentation:PackageOwnership" relation="ReadNext"></see>
+    <see type="fbdocumentation:PackageOwnership" relation="ReadNext" />
   </references>
 
 </block>

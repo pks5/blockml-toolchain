@@ -32,7 +32,11 @@
   <baseType>blockdoc:BlockdocType</baseType>
   <is>HTML template model for the All Blocks listing</is>
 
-  <documentation>Emitted as all-blocks.html (merged) or {libraryPrefix}/all-blocks.html (perLibrary). Title "BlockDoc" (merged) or "{libraryPrefix} — BlockDoc" (perLibrary). Lists only root FQNs. One library: grouped by package prefix. Multiple libraries: grouped by library then package (BD21). Includes sticky toolbar (BD25) with Index → interesting home and All Blocks → this page.</documentation>
+  <documentation>
+    # HTML template model for the All Blocks listing
+
+    Emitted as all-blocks.html (merged) or {libraryPrefix}/all-blocks.html (perLibrary). Title "BlockDoc" (merged) or "{libraryPrefix} — BlockDoc" (perLibrary). Lists only root FQNs. One library: grouped by package prefix. Multiple libraries: grouped by library then package (BD21). Includes sticky toolbar (BD25) with Index → interesting home and All Blocks → this page.
+  </documentation>
 
   <properties>
     <title type="type:Text">

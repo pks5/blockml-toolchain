@@ -35,24 +35,28 @@
   <baseType>core:Documentation</baseType>
   <is>Normative parser design decisions</is>
 
-  <documentation>B2: unknown bml:* → error at map (BML_UNKNOWN_DIRECTIVE); unknown instance members → validator error (BML_UNKNOWN_PROPERTY).
-    B3: inputType/outputType → TypeExpression at map time.
-    B4: ExpressionValue.raw only; AST via core utility.
-    B5: single-file parser scope.
-    B6: JSON not planned.
-    B7/B8: Phase A slice; XSD not Stage 1.
-    B11: XML comments bound to elements (parse side).
-    B14: strip _/__ → logical name + visibility.
-    B15/B16: boolean values vs type refs.
-    B18: @xmldom/xmldom for DOM.
-    B19: redundant aggregation type — map must not apply.
-    B23: preserve xmlRendering + D6 recipe at Stage 1.
-    B24: format detector (BOM strip, first '&lt;').
-    B25: store xmlns:xsi + schemaLocation on SourceInfo.
-    B26: parse() entry; types in @blockml/bom.</documentation>
+  <documentation><![CDATA[
+    # Normative parser design decisions
+
+    - B2: unknown bml:* → error at map (BML_UNKNOWN_DIRECTIVE); unknown instance members → validator error (BML_UNKNOWN_PROPERTY).
+    - B3: inputType/outputType → TypeExpression at map time.
+    - B4: ExpressionValue.raw only; AST via core utility.
+    - B5: single-file parser scope.
+    - B6: JSON not planned.
+    - B7/B8: Phase A slice; XSD not Stage 1.
+    - B11: XML comments bound to elements (parse side).
+    - B14: strip _/__ → logical name + visibility.
+    - B15/B16: boolean values vs type refs.
+    - B18: @xmldom/xmldom for DOM.
+    - B19: redundant aggregation type — map must not apply.
+    - B23: preserve xmlRendering + D6 recipe at Stage 1.
+    - B24: format detector (BOM strip, first '<').
+    - B25: store xmlns:xsi + schemaLocation on SourceInfo.
+    - B26: parse() entry; types in @blockml/bom.
+  ]]></documentation>
 
   <references>
-    <see type="pardocumentation:RoundtripContract" relation="ReadNext"></see>
+    <see type="pardocumentation:RoundtripContract" relation="ReadNext" />
   </references>
 
 </block>

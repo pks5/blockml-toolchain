@@ -46,7 +46,7 @@
     @blockml/cli orchestrator + @blockml/framework utilities + @blockml/validator.</documentation>
 
   <references>
-    <see type="pardocumentation:DesignDecisions" relation="ReadNext"></see>
+    <see type="pardocumentation:DesignDecisions" relation="ReadNext" />
   </references>
 
 </block>

@@ -45,7 +45,7 @@
     Inside containers (properties/aggregations/…): filter by kind, keep BOM array order.</documentation>
 
   <references>
-    <see type="pardocumentation:AttributeClassification" relation="ReadNext"></see>
+    <see type="pardocumentation:AttributeClassification" relation="ReadNext" />
   </references>
 
 </block>

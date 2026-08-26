@@ -59,9 +59,9 @@
     Do not invent schemaLocation when absent.</documentation>
 
   <references>
-    <see type="serdocumentation:XmlCommentsEmit" relation="ReadNext"></see>
-    <see type="sercap:FqnToQName" relation="SeeAlso"></see>
-    <see type="sercap:VisibilityPrefix" relation="SeeAlso"></see>
+    <see type="serdocumentation:XmlCommentsEmit" relation="ReadNext" />
+    <see type="sercap:FqnToQName" relation="SeeAlso" />
+    <see type="sercap:VisibilityPrefix" relation="SeeAlso" />
   </references>
 
 </block>

@@ -33,7 +33,7 @@
     Planned commands (not V1): init, new block, inspect, watch, activate-config.
     See cliconfig:CommandRegistry for implementation flags.</documentation>
   <references>
-    <see type="clidocumentation:CompileCommand" relation="ReadNext"></see>
+    <see type="clidocumentation:CompileCommand" relation="ReadNext" />
   </references>
 
 </block>

@@ -29,19 +29,23 @@
   <baseType>core:Documentation</baseType>
   <is>What BOM stores vs what downstream interprets</is>
 
-  <documentation>bml:each / bml:if / bml:with → directives[] unexpanded → Renderer expands
-    xmlns / xmlns:prefix → SourceInfo.namespaceBindings 1:1 authored → Serializer QName emit (B21)
-    xsi:schemaLocation / xsi:noNamespaceSchemaLocation → SourceInfo (B25) → re-emit on root
-    bml:xml → xmlRendering block+member — NOT directives[] → Serializer, FatBlock, XSD
-    element|attribute dual placement → authoredPlacement (D9) → MUST roundtrip authored form
-    Text vs CDATA → authoredCharacterDataForm (D8) → emit CDATA when needed or authored
-    Literal syntax [5,5,6] vs {x:5,…} → LiteralValue authored form → Renderer serializes
-    ${ expr } → ExpressionValue { raw } — AST via parseExpression(), not evaluated
-    aggregations declaration → AggregationDefinition declared only → TypeRegistry metadata
-    composition children → CompositionNode tree → Renderer assembly patterns
-    baseType FQN → string reference → TypeRegistry effective members
-    Preset reference FQN::id → unmerged string → Renderer preset merge
-    Capabilities → CapabilityDefinition in BOM → Renderer interprets (not invoked at parse)
-    XML comments → XmlTrivia on following element (B11) → Serializer re-emits</documentation>
+  <documentation>
+    # What BOM stores vs what downstream interprets
+
+    - bml:each / bml:if / bml:with → directives[] unexpanded → Renderer expands
+    - xmlns / xmlns:prefix → SourceInfo.namespaceBindings 1:1 authored → Serializer QName emit (B21)
+    - xsi:schemaLocation / xsi:noNamespaceSchemaLocation → SourceInfo (B25) → re-emit on root
+    - bml:xml → xmlRendering block+member — NOT directives[] → Serializer, FatBlock, XSD
+    - element|attribute dual placement → authoredPlacement (D9) → MUST roundtrip authored form
+    - Text vs CDATA → authoredCharacterDataForm (D8) → emit CDATA when needed or authored
+    - Literal syntax [5,5,6] vs {x:5,…} → LiteralValue authored form → Renderer serializes
+    - ${ expr } → ExpressionValue { raw } — AST via parseExpression(), not evaluated
+    - aggregations declaration → AggregationDefinition declared only → TypeRegistry metadata
+    - composition children → CompositionNode tree → Renderer assembly patterns
+    - baseType FQN → string reference → TypeRegistry effective members
+    - Preset reference FQN::id → unmerged string → Renderer preset merge
+    - Capabilities → CapabilityDefinition in BOM → Renderer interprets (not invoked at parse)
+    - XML comments → XmlTrivia on following element (B11) → Serializer re-emits
+  </documentation>
 
 </block>

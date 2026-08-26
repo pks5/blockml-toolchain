@@ -27,15 +27,22 @@
   <baseType>core:Documentation</baseType>
   <is>types.xsd and service.xsd vocabularies (XSD12–XSD13)</is>
 
-  <documentation>XSD12: EmitTypesXsd — VocabularyElements under TYPE_FQN_PREFIX as xs:element type=xs:string
+  <documentation>
+    # types.xsd and service.xsd vocabularies (XSD12–XSD13)
+
+    XSD12: EmitTypesXsd — VocabularyElements under TYPE_FQN_PREFIX as xs:element type=xs:string
     in BML_TYPES_NS (http://blockml.org/schema/types).
+
     XSD13: EmitServiceXsd — same for SERVICE_FQN_PREFIX under BML_SERVICE_NS.
+
     Short name = last FQN segment after dot; sorted.
-    Gated by emitDomainSchemas (XSD15). Not MachineBlocks domain schemas.</documentation>
+
+    Gated by emitDomainSchemas (XSD15). Not MachineBlocks domain schemas.
+  </documentation>
   <references>
-    <see type="xsddocumentation:CatalogAndOutputLayout" relation="ReadNext"></see>
-    <see type="xsdcap:EmitTypesXsd" relation="SeeAlso"></see>
-    <see type="xsdcap:EmitServiceXsd" relation="SeeAlso"></see>
+    <see type="xsddocumentation:CatalogAndOutputLayout" relation="ReadNext" />
+    <see type="xsdcap:EmitTypesXsd" relation="SeeAlso" />
+    <see type="xsdcap:EmitServiceXsd" relation="SeeAlso" />
   </references>
 
 </block>

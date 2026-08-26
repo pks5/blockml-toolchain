@@ -30,9 +30,13 @@
   <is>The BlockML BOM Urmodell library catalog</is>
 
   <documentation>
+    # The BlockML BOM Urmodell library catalog
+
     Canonical BOM object model (Urmodell) for BlockML — TypeScript contracts in packages/bom/src/
     implement this library. Consumed by parser, serializer, validator, compiler, and LSP.
+
     Distinct from org.blockml.bml.definition.* (BML meta-model in @blockml/core).
+
     Membership is defined exclusively by this blocks list.
   </documentation>
 

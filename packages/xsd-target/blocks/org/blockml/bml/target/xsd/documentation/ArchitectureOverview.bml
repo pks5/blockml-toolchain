@@ -38,8 +38,8 @@
     Accepts library|corpus|auto (XSD2). Always emits bml.xsd (XSD1/XSD3). Domain schemas
     gated by emitDomainSchemas (XSD15). Catalog always in rootFiles (XSD14).</documentation>
   <references>
-    <see type="xsddocumentation:V1Scope" relation="ReadNext"></see>
-    <see type="xsdcap:Render" relation="SeeAlso"></see>
+    <see type="xsddocumentation:V1Scope" relation="ReadNext" />
+    <see type="xsdcap:Render" relation="SeeAlso" />
   </references>
 
 </block>

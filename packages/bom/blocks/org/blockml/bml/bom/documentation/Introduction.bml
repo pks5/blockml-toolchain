@@ -43,8 +43,8 @@
     • Expression AST — 10_expression_language.md</documentation>
 
   <references>
-    <see type="bomdocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="bomdocumentation:ArchitectureOverview" relation="SeeAlso"></see>
+    <see type="bomdocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="bomdocumentation:ArchitectureOverview" relation="SeeAlso" />
   </references>
 
 </block>

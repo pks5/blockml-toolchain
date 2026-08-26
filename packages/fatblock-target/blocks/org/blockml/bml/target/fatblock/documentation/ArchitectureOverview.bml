@@ -47,7 +47,7 @@
     • fat-output-path.ts → FatOutputBasename
     • fatblock-target.ts → Render, ValidateRequest</documentation>
   <references>
-    <see type="fbdocumentation:V1Scope" relation="ReadNext"></see>
+    <see type="fbdocumentation:V1Scope" relation="ReadNext" />
   </references>
 
 </block>

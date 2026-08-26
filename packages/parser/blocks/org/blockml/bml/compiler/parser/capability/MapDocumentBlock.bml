@@ -34,7 +34,7 @@
   <baseType>core:Capability</baseType>
   <is>Map root &lt;block> to BomDocument — step [5] entry</is>
 
-  <documentation>Map root &lt;block> to BomDocument — step [5] entry</documentation>
+  <documentation><![CDATA[Map root <block> to BomDocument — step [5] entry]]></documentation>
 
   <references>
     <see type="parcap:MapBlock" relation="SeeAlso" />

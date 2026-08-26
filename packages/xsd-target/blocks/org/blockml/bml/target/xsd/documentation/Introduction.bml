@@ -44,8 +44,8 @@
     EmitCatalogXml → files under outDir plus rootFiles catalog.xml.
     Host CLI wiring (default outDir schemas/, write) lives in org.blockml.bml.cli.*</documentation>
   <references>
-    <see type="xsddocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="xsdcap:Render" relation="SeeAlso"></see>
+    <see type="xsddocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="xsdcap:Render" relation="SeeAlso" />
   </references>
 
 </block>

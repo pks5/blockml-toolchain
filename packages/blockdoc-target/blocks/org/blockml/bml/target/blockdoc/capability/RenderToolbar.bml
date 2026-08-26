@@ -32,11 +32,16 @@
   <baseType>core:Capability</baseType>
   <is>Sticky black site toolbar with Index, All Blocks, and quick search</is>
 
-  <documentation>BD25/BD27: sticky black header on every HTML page. Left: brand "BlockDoc" then
+  <documentation>
+    # Sticky black site toolbar with Index, All Blocks, and quick search
+
+    BD25/BD27: sticky black header on every HTML page. Left: brand "BlockDoc" then
     Index (interesting package home) then All Blocks (full listing). Right: search field matching
     keywords in the inlined search.js index; dropdown up to 12 hits; click or Enter navigates
     to the block page. Ranking: exact name, then name prefix, then other keyword hits.
-    Package-index breadcrumb Index uses the same interesting-home href as the toolbar Index.</documentation>
+
+    Package-index breadcrumb Index uses the same interesting-home href as the toolbar Index.
+  </documentation>
 
   <references>
     <see type="bddocumentation:PageChrome" relation="SeeAlso" />

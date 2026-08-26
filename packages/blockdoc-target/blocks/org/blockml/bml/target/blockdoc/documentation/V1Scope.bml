@@ -45,7 +45,7 @@
     Not V1 (see ScopeExclusions): dependency graphs, authored XML example surfaces,
     package-layout collision tooling.</documentation>
   <references>
-    <see type="bddocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="bddocumentation:PublicApi" relation="ReadNext" />
   </references>
 
 </block>

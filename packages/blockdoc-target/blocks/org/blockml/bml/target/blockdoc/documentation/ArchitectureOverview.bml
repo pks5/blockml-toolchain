@@ -59,7 +59,7 @@
     • toolbar.ts → bdcap:RenderToolbar, BlockDocConstants.TOOLBAR_CSS
     • blockdoc-target.ts → Render, AssembleSite, FilterExportedFqns</documentation>
   <references>
-    <see type="bddocumentation:V1Scope" relation="ReadNext"></see>
+    <see type="bddocumentation:V1Scope" relation="ReadNext" />
   </references>
 
 </block>

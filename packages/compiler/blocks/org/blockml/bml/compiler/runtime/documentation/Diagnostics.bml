@@ -31,17 +31,27 @@
   <baseType>core:Documentation</baseType>
   <is>Compiler envelope diagnostic codes</is>
 
-  <documentation>Runtime-owned codes:
+  <documentation>
+    # Compiler envelope diagnostic codes
+
+    Runtime-owned codes:
     BML_UNKNOWN_TARGET — getTarget missed.
+
     BML_TARGET_SCOPE_MISMATCH — resolved kind not accepted.
+
     BML_COMPILE_SCOPE_EMPTY — missing document/libraries/roots or auto empty.
+
     BML_MISSING_TYPE_REGISTRY — compileBomToOutput called without typeRegistry.
+
     Parse/validate diagnostics are forwarded from parser/validator.
+
     success on CompilerResult is false if any diagnostic has severity error.
-    CLI maps diagnostics to exit codes — not modeled here.</documentation>
+
+    CLI maps diagnostics to exit codes — not modeled here.
+  </documentation>
   <references>
-    <see type="rundocumentation:DesignDecisions" relation="ReadNext"></see>
-    <see type="runconfig:RuntimeConstants" relation="SeeAlso"></see>
+    <see type="rundocumentation:DesignDecisions" relation="ReadNext" />
+    <see type="runconfig:RuntimeConstants" relation="SeeAlso" />
   </references>
 
 </block>

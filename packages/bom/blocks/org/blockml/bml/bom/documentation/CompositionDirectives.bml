@@ -39,7 +39,7 @@
     Omitted bml:id stored absent — parser does not assign auto-IDs.</documentation>
 
   <references>
-    <see type="bomcomp:DirectiveAttribute" relation="Defines"></see>
+    <see type="bomcomp:DirectiveAttribute" relation="Defines" />
   </references>
 
 </block>

@@ -53,7 +53,7 @@
     serializer, validator, and compiler.</documentation>
 
   <references>
-    <see type="valdocumentation:Diagnostics" relation="ReadNext"></see>
+    <see type="valdocumentation:Diagnostics" relation="ReadNext" />
   </references>
 
 </block>

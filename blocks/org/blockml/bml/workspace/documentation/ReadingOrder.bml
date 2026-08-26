@@ -45,9 +45,9 @@
     monorepo orientation.</documentation>
 
   <references>
-    <see type="wsdocumentation:LinkingRules" relation="ReadNext"></see>
-    <see type="bom:Library" relation="SeeAlso"></see>
-    <see type="cli:Library" relation="SeeAlso"></see>
+    <see type="wsdocumentation:LinkingRules" relation="ReadNext" />
+    <see type="bom:Library" relation="SeeAlso" />
+    <see type="cli:Library" relation="SeeAlso" />
   </references>
 
 </block>

@@ -39,8 +39,8 @@
     parser/serializer/validator algorithms; framework TypeRegistry internals;
     target Options and emit; MachineBlocks SCAD NativeBlock.</documentation>
   <references>
-    <see type="rundocumentation:ScopeExclusions" relation="ReadNext"></see>
-    <see type="cli:Library" relation="SeeAlso"></see>
+    <see type="rundocumentation:ScopeExclusions" relation="ReadNext" />
+    <see type="cli:Library" relation="SeeAlso" />
   </references>
 
 </block>

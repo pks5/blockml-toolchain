@@ -48,8 +48,8 @@
     Provenance (source, sourceLocation, end spans) is stripped for equality.</documentation>
 
   <references>
-    <see type="bomcap:BomEquals" relation="SeeAlso"></see>
-    <see type="serdocumentation:DesignDecisions" relation="ReadNext"></see>
+    <see type="bomcap:BomEquals" relation="SeeAlso" />
+    <see type="serdocumentation:DesignDecisions" relation="ReadNext" />
   </references>
 
 </block>

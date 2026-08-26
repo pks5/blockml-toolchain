@@ -49,8 +49,8 @@
     @blockml/compiler / render targets — NOT canonical BML roundtrip; separate emit paths.</documentation>
 
   <references>
-    <see type="serdocumentation:ScopeExclusions" relation="ReadNext"></see>
-    <see type="bomdocumentation:PackageOwnership" relation="SeeAlso"></see>
+    <see type="serdocumentation:ScopeExclusions" relation="ReadNext" />
+    <see type="bomdocumentation:PackageOwnership" relation="SeeAlso" />
   </references>
 
 </block>

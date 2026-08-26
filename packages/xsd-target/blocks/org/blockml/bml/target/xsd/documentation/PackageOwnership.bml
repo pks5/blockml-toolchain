@@ -36,8 +36,8 @@
     MachineBlocks domain XSDs.
     Phase C IDE catalog narrative pointers in docs 15 stay host docs; generation here.</documentation>
   <references>
-    <see type="xsddocumentation:ScopeExclusions" relation="ReadNext"></see>
-    <see type="cli:Library" relation="SeeAlso"></see>
+    <see type="xsddocumentation:ScopeExclusions" relation="ReadNext" />
+    <see type="cli:Library" relation="SeeAlso" />
   </references>
 
 </block>

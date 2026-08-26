@@ -42,7 +42,7 @@
 
     @blockml/compiler owns: RenderTarget contract and document compile scope.</documentation>
   <references>
-    <see type="fbdocumentation:ScopeExclusions" relation="ReadNext"></see>
+    <see type="fbdocumentation:ScopeExclusions" relation="ReadNext" />
   </references>
 
 </block>

@@ -47,8 +47,8 @@
     complete TypeRegistry. CLI validate and LSP share this engine.</documentation>
 
   <references>
-    <see type="valdocumentation:ValidityContract" relation="ReadNext"></see>
-    <see type="bomdocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="valdocumentation:ValidityContract" relation="ReadNext" />
+    <see type="bomdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

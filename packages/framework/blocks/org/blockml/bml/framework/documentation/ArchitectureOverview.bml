@@ -56,8 +56,8 @@
     Public operations are fwcap:* capabilities.</documentation>
 
   <references>
-    <see type="fwdocumentation:PublicApi" relation="ReadNext"></see>
-    <see type="fwcap:TypeRegistry" relation="Defines"></see>
+    <see type="fwdocumentation:PublicApi" relation="ReadNext" />
+    <see type="fwcap:TypeRegistry" relation="Defines" />
   </references>
 
 </block>

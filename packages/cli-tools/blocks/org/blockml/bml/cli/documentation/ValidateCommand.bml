@@ -45,7 +45,7 @@
     Exit 0 on success; 1 on diagnostic errors; 2 on config errors.
     After diagnostics, always: Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).</documentation>
   <references>
-    <see type="clidocumentation:Configuration" relation="ReadNext"></see>
+    <see type="clidocumentation:Configuration" relation="ReadNext" />
     <see type="valdocumentation:ValidityContract" relation="SeeAlso" />
   </references>
 

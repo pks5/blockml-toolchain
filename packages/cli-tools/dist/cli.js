@@ -102,10 +102,17 @@ function printDiagnostics(diagnostics, lines) {
 function errorCount(diagnostics) {
     return diagnostics.filter((d) => d.severity === "error").length;
 }
-function printValidateOutcome(lines, blocksTested, blocksWithErrors, failed) {
+function countBySeverity(diagnostics, severity) {
+    return diagnostics.filter((d) => d.severity === severity).length;
+}
+function printValidateOutcome(lines, blocksTested, blocksWithErrors, failed, diagnostics) {
     const word = blocksTested === 1 ? "block" : "blocks";
     const status = failed ? "failed" : "succeeded";
-    pushLines(lines, `Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors.`, failed ? "error" : "success");
+    const warnings = countBySeverity(diagnostics, "warning");
+    const recommendations = countBySeverity(diagnostics, "recommendation");
+    const warningWord = warnings === 1 ? "warning" : "warnings";
+    const recWord = recommendations === 1 ? "recommendation" : "recommendations";
+    pushLines(lines, `Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors, ${warnings} ${warningWord}, ${recommendations} ${recWord}.`, failed ? "error" : "success");
 }
 function printNamedList(lines, title, items) {
     pushLines(lines, `${title}:`, "info");
@@ -272,7 +279,7 @@ function runValidate(parsed, rootDir, lines) {
         const diagnostics = [...bootstrap.diagnostics, ...result.diagnostics];
         printDiagnostics(diagnostics, lines);
         const failed = diagnostics.some((d) => d.severity === "error");
-        printValidateOutcome(lines, 1, result.success ? 0 : 1, failed);
+        printValidateOutcome(lines, 1, result.success ? 0 : 1, failed, diagnostics);
         return failed ? 1 : 0;
     }
     const validated = parsed.all
@@ -281,7 +288,7 @@ function runValidate(parsed, rootDir, lines) {
     const diagnostics = [...bootstrap.diagnostics, ...validated.diagnostics];
     printDiagnostics(diagnostics, lines);
     const failed = diagnostics.some((d) => d.severity === "error");
-    printValidateOutcome(lines, validated.blocksTested, validated.blocksWithErrors, failed);
+    printValidateOutcome(lines, validated.blocksTested, validated.blocksWithErrors, failed, diagnostics);
     return failed ? 1 : 0;
 }
 function perPackageOutDir(parsed, invocationRoot) {

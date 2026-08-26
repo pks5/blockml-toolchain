@@ -42,7 +42,7 @@
     Preset/config merge copies into render-time view — never writes references back to BomDocument.</documentation>
 
   <references>
-    <see type="bomvalue:MemberValue" relation="Defines"></see>
+    <see type="bomvalue:MemberValue" relation="Defines" />
   </references>
 
 </block>

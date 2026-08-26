@@ -55,8 +55,8 @@
     Fixtures: packages/framework/test/constraints/fixtures/*.bml</documentation>
 
   <references>
-    <see type="fwdocumentation:Diagnostics" relation="ReadNext"></see>
-    <see type="fwcap:ValidateConstraints" relation="Defines"></see>
+    <see type="fwdocumentation:Diagnostics" relation="ReadNext" />
+    <see type="fwcap:ValidateConstraints" relation="Defines" />
   </references>
 
 </block>

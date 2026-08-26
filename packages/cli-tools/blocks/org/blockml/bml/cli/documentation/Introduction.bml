@@ -39,8 +39,8 @@
 
     Pipeline: loadConfig → bootstrapTypeRegistry → bootstrapTargets → compileToOutput → writeOutputFiles.</documentation>
   <references>
-    <see type="clidocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="clicap:RunCli" relation="SeeAlso"></see>
+    <see type="clidocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="clicap:RunCli" relation="SeeAlso" />
   </references>
 
 </block>

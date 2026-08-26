@@ -46,8 +46,8 @@
     block rendering. Maximum authored surface: store as much as Urmodell can carry.</documentation>
 
   <references>
-    <see type="pardocumentation:MemberMappingOrder" relation="ReadNext"></see>
-    <see type="bomdocumentation:AbstractionPrinciple" relation="SeeAlso"></see>
+    <see type="pardocumentation:MemberMappingOrder" relation="ReadNext" />
+    <see type="bomdocumentation:AbstractionPrinciple" relation="SeeAlso" />
   </references>
 
 </block>

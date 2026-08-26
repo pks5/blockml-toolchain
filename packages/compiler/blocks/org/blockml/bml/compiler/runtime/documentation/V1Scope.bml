@@ -44,7 +44,7 @@
     V1 does NOT include CLI targets[] bootstrap, file I/O, incremental cache (C5),
     thumbnails (C6), or target-specific emit.</documentation>
   <references>
-    <see type="rundocumentation:PublicApi" relation="ReadNext"></see>
+    <see type="rundocumentation:PublicApi" relation="ReadNext" />
   </references>
 
 </block>

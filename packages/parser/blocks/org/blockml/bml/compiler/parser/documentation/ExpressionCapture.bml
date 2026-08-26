@@ -44,8 +44,8 @@
     inputType/outputType on capabilities → TypeExpression at map time (B3).</documentation>
 
   <references>
-    <see type="pardocumentation:SingleFileScope" relation="ReadNext"></see>
-    <see type="parcap:ExpressionFromRaw" relation="SeeAlso"></see>
+    <see type="pardocumentation:SingleFileScope" relation="ReadNext" />
+    <see type="parcap:ExpressionFromRaw" relation="SeeAlso" />
   </references>
 
 </block>

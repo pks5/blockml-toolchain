@@ -42,7 +42,7 @@
 
     Severity: all FatBlock codes are error. CLI exit: config → 2; assemble → 1.</documentation>
   <references>
-    <see type="fbdocumentation:DesignDecisions" relation="ReadNext"></see>
+    <see type="fbdocumentation:DesignDecisions" relation="ReadNext" />
   </references>
 
 </block>

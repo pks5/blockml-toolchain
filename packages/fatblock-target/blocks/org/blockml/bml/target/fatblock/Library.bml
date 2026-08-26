@@ -28,6 +28,8 @@
   <is>The FatBlock portable .bml render target library catalog</is>
 
   <documentation>
+    # The FatBlock portable .bml render target library catalog
+
     Canonical FatBlock specification for BlockML — registry name fatblock, folder-pool
     candidates, embed assembly, namespace merge, {hostFqn}.fat.bml (FB1–FB20). TypeScript in
     packages/fatblock-target/src/ implements this library. Membership is defined

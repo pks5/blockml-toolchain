@@ -25,13 +25,21 @@
   <baseType>core:Capability</baseType>
   <is>Execute blockml validate command</is>
 
-  <documentation>CLI10: file and --all together exit 2. CLI11: never writes render output.
+  <documentation>
+    # Execute blockml validate command
+
+    CLI10: file and --all together exit 2. CLI11: never writes render output.
+
     Registry is always full (resolve). Validate set: default = project sources (srcDir + local packages/*);
     --all = entire registry including npm; file = compileBmlToBom for that file.
+
     --verbose prints bootstrap sources then validate vs registry file lists before diagnostics.
+
     After CLI17 diagnostics, always print a status line:
     Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
-    Block = unique filePath. XSD is not part of this command.</documentation>
+
+    Block = unique filePath. XSD is not part of this command.
+  </documentation>
 
   <references>
     <see type="clidocumentation:ValidateCommand" relation="SeeAlso" />

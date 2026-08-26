@@ -42,7 +42,7 @@
     not stored in Canonical BOM.</documentation>
 
   <references>
-    <see type="bomtype:TypeExpression" relation="Defines"></see>
+    <see type="bomtype:TypeExpression" relation="Defines" />
   </references>
 
 </block>

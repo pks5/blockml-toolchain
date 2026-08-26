@@ -66,7 +66,7 @@
     Bootstrap errors (BML_LIBRARY_*) published once per workspace on each document until fixed.</documentation>
 
   <references>
-    <see type="lspcap:StartLanguageServer" relation="Defines"></see>
+    <see type="lspcap:StartLanguageServer" relation="Defines" />
   </references>
 
 </block>

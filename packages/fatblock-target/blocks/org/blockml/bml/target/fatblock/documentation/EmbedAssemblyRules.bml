@@ -40,7 +40,7 @@
     Meta-model (BOM): embeds are flat under root; Sub-Blocks forbid embeds — validator owns
     BML_EMBEDDED_BLOCKS_ON_SUBBLOCK / BML_NESTED_EMBEDDED_BLOCKS.</documentation>
   <references>
-    <see type="fbdocumentation:NamespaceMergeRules" relation="ReadNext"></see>
+    <see type="fbdocumentation:NamespaceMergeRules" relation="ReadNext" />
   </references>
 
 </block>

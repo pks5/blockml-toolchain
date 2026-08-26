@@ -45,7 +45,7 @@
     style catalog.</documentation>
 
   <references>
-    <see type="valdocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="valdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

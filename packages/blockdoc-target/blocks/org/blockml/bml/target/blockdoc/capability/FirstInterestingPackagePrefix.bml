@@ -32,12 +32,16 @@
   <baseType>core:Capability</baseType>
   <is>Deepest package prefix skipped to until a distinction exists</is>
 
-  <documentation>BD27: walk from the empty prefix; while the current prefix has exactly one
+  <documentation>
+    # Deepest package prefix skipped to until a distinction exists
+
+    BD27: walk from the empty prefix; while the current prefix has exactly one
     direct sub-package and no direct root blocks, descend into that sub-package. Stop at the
     first prefix with two or more children (sub-packages and/or blocks). Empty result means
     the site root is already interesting (distinct top-level packages). Used as the merged
     site home when outLayout=fqn: index.html redirects there, or is a virtual root package
-    index when the result is empty.</documentation>
+    index when the result is empty.
+  </documentation>
 
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />

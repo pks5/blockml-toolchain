@@ -33,19 +33,19 @@
   <baseType>core:Documentation</baseType>
   <is>Comment re-emit layout (B11/B22)</is>
 
-  <documentation>Cross-ref: org.blockml.bml.bom.documentation.XmlComments for parse-side binding (B11).
+  <documentation><![CDATA[Cross-ref: org.blockml.bml.bom.documentation.XmlComments for parse-side binding (B11).
 
     Serializer re-emit:
-    • leadingComments → &lt;!-- body --> lines immediately before the element
+    • leadingComments → <!-- body --> lines immediately before the element
     • trailingComments → next line after element end tag (B22 — not same-line)
     • blank line after trailing-comment block so comment reads as trailing to previous element
 
     Whitespace/layout is not part of BOM equality (B10/B13). Parse accepts same-line trailing;
-    serializer normalizes to next-line layout.</documentation>
+    serializer normalizes to next-line layout.]]></documentation>
 
   <references>
-    <see type="bomdocumentation:XmlComments" relation="SeeAlso"></see>
-    <see type="serdocumentation:RoundtripContract" relation="ReadNext"></see>
+    <see type="bomdocumentation:XmlComments" relation="SeeAlso" />
+    <see type="serdocumentation:RoundtripContract" relation="ReadNext" />
   </references>
 
 </block>

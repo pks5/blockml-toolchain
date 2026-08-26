@@ -39,10 +39,10 @@
 
     BML: fbcap:Render, ValidateRequest, AssembleFatDocument, api/FatBlockOptions.</documentation>
   <references>
-    <see type="fbdocumentation:CandidateCollection" relation="ReadNext"></see>
-    <see type="fbcap:Render" relation="Defines"></see>
-    <see type="fbapi:FatBlockOptions" relation="Defines"></see>
-    <see type="fbcap:AssembleFatDocument" relation="Defines"></see>
+    <see type="fbdocumentation:CandidateCollection" relation="ReadNext" />
+    <see type="fbcap:Render" relation="Defines" />
+    <see type="fbapi:FatBlockOptions" relation="Defines" />
+    <see type="fbcap:AssembleFatDocument" relation="Defines" />
   </references>
 
 </block>

@@ -48,7 +48,7 @@
     In scope: single-file BML XML → lossless BomDocument.</documentation>
 
   <references>
-    <see type="pardocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="pardocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

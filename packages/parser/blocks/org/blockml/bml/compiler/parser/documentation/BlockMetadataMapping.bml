@@ -35,7 +35,7 @@
   <baseType>core:Documentation</baseType>
   <is>Block definition metadata field mapping</is>
 
-  <documentation>Map &lt;block> child elements to BlockDefinition fields:
+  <documentation><![CDATA[Map <block> child elements to BlockDefinition fields:
 
     Identity: name, type, baseType, is, isNot, version, definition
     Structural: since, status, summary, documentation, abstract, final
@@ -47,11 +47,11 @@
     • authoredPlacement stored for dual element|attribute forms (D9)
     • authoredCharacterDataForm for text vs CDATA (D8)
     • TrimText on character data: common leading indent stripped, then trim (B13)
-    • Visibility prefixes stripped → logical name + visibility (B14 parse half)</documentation>
+    • Visibility prefixes stripped → logical name + visibility (B14 parse half)]]></documentation>
 
   <references>
-    <see type="pardocumentation:MemberMapping" relation="ReadNext"></see>
-    <see type="def:BlockDefinition" relation="SeeAlso"></see>
+    <see type="pardocumentation:MemberMapping" relation="ReadNext" />
+    <see type="def:BlockDefinition" relation="SeeAlso" />
   </references>
 
 </block>

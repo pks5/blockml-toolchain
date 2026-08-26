@@ -33,14 +33,14 @@
   <baseType>core:Documentation</baseType>
   <is>Emit pipeline and module decomposition</is>
 
-  <documentation>Entry point: serialize(document, options?) → SerializeResult (B26).
+  <documentation><![CDATA[Entry point: serialize(document, options?) → SerializeResult (B26).
 
     Pipeline:
     1. Read document.source.namespaceBindings (default { "": "http://blockml.org/bml" })
     2. createEmitContext(bindings, indent) → EmitContext { bindings, useQName, indent }
     3. new XmlWriter(indent) — line-oriented XML builder with depth/indent
-    4. Optional &lt;?xml version="1.0" encoding="UTF-8"?> when xmlDeclaration=true
-    5. emitRootStartTag — root &lt;block> with xmlns* and xsi:schemaLocation (B25)
+    4. Optional <?xml version="1.0" encoding="UTF-8"?> when xmlDeclaration=true
+    5. emitRootStartTag — root <block> with xmlns* and xsi:schemaLocation (B25)
     6. emitBlockDefinition — walk BlockDefinition in BLOCK_EMIT_ORDER (B12)
     7. Return { text: writer.toString(), diagnostics, success }
 
@@ -54,11 +54,11 @@
     • emit/qname.ts → FQN↔QName, visibility prefixes (B14, B21)
     • emit/constants.ts → serconfig:SerializerConstants (XSI_NS, BML_XMLNS)
 
-    Internal types extend serializer:SerializerType. Public operations are sercap:* capabilities.</documentation>
+    Internal types extend serializer:SerializerType. Public operations are sercap:* capabilities.]]></documentation>
 
   <references>
-    <see type="serdocumentation:V1Scope" relation="ReadNext"></see>
-    <see type="sercap:Serialize" relation="Defines"></see>
+    <see type="serdocumentation:V1Scope" relation="ReadNext" />
+    <see type="sercap:Serialize" relation="Defines" />
   </references>
 
 </block>

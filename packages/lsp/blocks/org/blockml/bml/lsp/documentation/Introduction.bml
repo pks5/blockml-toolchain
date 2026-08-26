@@ -50,8 +50,8 @@
     Semantics: @blockml/parser, @blockml/serializer, @blockml/validator, @blockml/framework.</documentation>
 
   <references>
-    <see type="lspdocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="valdocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="lspdocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="valdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

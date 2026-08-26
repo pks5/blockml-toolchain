@@ -25,10 +25,14 @@
   <baseType>core:Capability</baseType>
   <is>Execute blockml compile for library/corpus targets</is>
 
-  <documentation>CLI12: default target from config.defaultTarget or blockdoc. CLI13: per-target defaultOutDir hints (xsd schemas; blockdoc config.outDir or blockdoc; fatblock .). CLI16: scope auto with libraries[] or roots[srcDir]. CLI22: blockdoc without --src/--libraries uses project packages that declare blockml.library as corpus roots (all .bml under those packages). Bootstrap targets then compileToOutput; writeOutputFiles with cleanOutDir for corpus targets. Document-only targets use generic document compile path.
-    After CLI17 diagnostics, always print a status line:
-    Compilation succeeded. Wrote …  |  Compilation failed with K error(s).
-    No files and no error diagnostics → Compilation failed: no output files produced.</documentation>
+  <documentation>
+    # Execute blockml compile for library/corpus targets
+
+    - CLI12: default target from config.defaultTarget or blockdoc. CLI13: per-target defaultOutDir hints (xsd schemas; blockdoc config.outDir or blockdoc; fatblock .). CLI16: scope auto with libraries[] or roots[srcDir]. CLI22: blockdoc without --src/--libraries uses project packages that declare blockml.library as corpus roots (all .bml under those packages). Bootstrap targets then compileToOutput; writeOutputFiles with cleanOutDir for corpus targets. Document-only targets use generic document compile path.
+    - After CLI17 diagnostics, always print a status line:
+    - Compilation succeeded. Wrote …  |  Compilation failed with K error(s).
+    - No files and no error diagnostics → Compilation failed: no output files produced.
+  </documentation>
 
   <references>
     <see type="clidocumentation:CompileCommand" relation="SeeAlso" />

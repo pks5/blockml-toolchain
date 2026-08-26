@@ -31,17 +31,27 @@
   <baseType>core:Documentation</baseType>
   <is>Normative Phase C decisions C1–C7</is>
 
-  <documentation>C1 RenderContext = RenderSession plus forked per-node context; internal render API.
+  <documentation>
+    # Normative Phase C decisions C1–C7
+
+    C1 RenderContext = RenderSession plus forked per-node context; internal render API.
+
     C2 Facade = compileToOutput(CompileRequest, …); compileBmlToOutput is document sugar;
     compileBomToOutput is BOM-first with required TypeRegistry (no re-parse/bootstrap).
+
     C3 Registry has no defaults; hosts register; targets[] bootstrap is CLI config (cross-ref);
     registerTarget validates name, accepts, render.
+
     C4 No mandatory input↔output mapping; RenderOutput opaque (files[] base).
+
     C5 Incremental build is CLI-only (boundary); not a runtime capability.
+
     C6 Thumbnails are CLI-only; not part of RenderOutput.
-    C7 Scope document | library | corpus | auto; accepts[]; opaque targetOptions.</documentation>
+
+    C7 Scope document | library | corpus | auto; accepts[]; opaque targetOptions.
+  </documentation>
   <references>
-    <see type="rundocumentation:PackageOwnership" relation="ReadNext"></see>
+    <see type="rundocumentation:PackageOwnership" relation="ReadNext" />
   </references>
 
 </block>

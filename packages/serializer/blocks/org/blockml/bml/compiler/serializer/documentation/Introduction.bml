@@ -50,8 +50,8 @@
     Definition blocks + bml:xml is deferred to V2 (see org.blockml.bml.core).</documentation>
 
   <references>
-    <see type="serdocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="bomdocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="serdocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="bomdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

@@ -27,7 +27,11 @@
   <baseType>core:Capability</baseType>
   <is>Build fat BomDocument from host plus peer embeds</is>
 
-  <documentation>FB12: require srcDir. FB13: host not found to BML_FATBLOCK_HOST_NOT_FOUND. FB14: host embeddedBlocks non-empty to BML_FATBLOCK_HOST_HAS_EMBEDDED_BLOCKS. FB15: duplicate candidate FQN to BML_DUPLICATE_EMBEDDED_BLOCK. FB16: embed not root / missing to BML_FATBLOCK_EMBED_NOT_FOUND; embed already has embeds to BML_FATBLOCK_EMBED_HAS_EMBEDDED_BLOCKS. FB17: clone embed, clear nested embeds, preserve subBlocks; sorted embed order; merge NS; abort if any error.</documentation>
+  <documentation>
+    # Build fat BomDocument from host plus peer embeds
+
+    FB12: require srcDir. FB13: host not found to BML_FATBLOCK_HOST_NOT_FOUND. FB14: host embeddedBlocks non-empty to BML_FATBLOCK_HOST_HAS_EMBEDDED_BLOCKS. FB15: duplicate candidate FQN to BML_DUPLICATE_EMBEDDED_BLOCK. FB16: embed not root / missing to BML_FATBLOCK_EMBED_NOT_FOUND; embed already has embeds to BML_FATBLOCK_EMBED_HAS_EMBEDDED_BLOCKS. FB17: clone embed, clear nested embeds, preserve subBlocks; sorted embed order; merge NS; abort if any error.
+  </documentation>
 
   <references>
     <see type="fbdocumentation:EmbedAssemblyRules" relation="SeeAlso" />

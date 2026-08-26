@@ -35,8 +35,8 @@
 
     Do not double-maintain CLI flags or D1 grammar here; link via SeeAlso.</documentation>
   <references>
-    <see type="xsddocumentation:ArchitectureOverview" relation="ReadNext"></see>
-    <see type="cli:Library" relation="SeeAlso"></see>
+    <see type="xsddocumentation:ArchitectureOverview" relation="ReadNext" />
+    <see type="cli:Library" relation="SeeAlso" />
   </references>
 
 </block>

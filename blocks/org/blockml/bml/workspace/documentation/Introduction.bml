@@ -38,9 +38,9 @@
     package and workspace BML over time.</documentation>
 
   <references>
-    <see type="wsdocumentation:PackageMap" relation="ReadNext"></see>
-    <see type="wsdocumentation:ArchitectureOverview" relation="SeeAlso"></see>
-    <see type="wsdocumentation:LinkingRules" relation="SeeAlso"></see>
+    <see type="wsdocumentation:PackageMap" relation="ReadNext" />
+    <see type="wsdocumentation:ArchitectureOverview" relation="SeeAlso" />
+    <see type="wsdocumentation:LinkingRules" relation="SeeAlso" />
   </references>
 
 </block>

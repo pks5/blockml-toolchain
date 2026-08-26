@@ -42,9 +42,9 @@
     blue recommendation, default/white info, green success. error and warning
     write to stderr; info, success, and recommendation write to stdout.</documentation>
   <references>
-    <see type="clidocumentation:DualCliModel" relation="ReadNext"></see>
-    <see type="cliconfig:CliColorScheme" relation="SeeAlso"></see>
-    <see type="clicap:WriteCliOutput" relation="SeeAlso"></see>
+    <see type="clidocumentation:DualCliModel" relation="ReadNext" />
+    <see type="cliconfig:CliColorScheme" relation="SeeAlso" />
+    <see type="clicap:WriteCliOutput" relation="SeeAlso" />
   </references>
 
 </block>

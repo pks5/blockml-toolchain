@@ -52,8 +52,8 @@
     operate on BomDocument (Urmodell) from @blockml/bom — they do not redefine meta-model blocks.</documentation>
 
   <references>
-    <see type="fwdocumentation:LayerSeparation" relation="ReadNext"></see>
-    <see type="bomdocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="fwdocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="bomdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

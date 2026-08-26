@@ -28,7 +28,7 @@
   <baseType>bom:UrmodellType</baseType>
   <is>XML comment trivia bound to an element (B11)</is>
 
-  <documentation>Comment bodies only — without &lt;!-- / -->. Bound to the following XML element.</documentation>
+  <documentation><![CDATA[Comment bodies only — without <!-- / -->. Bound to the following XML element.]]></documentation>
 
   <properties>
     <leadingComments type="type:Text[]">

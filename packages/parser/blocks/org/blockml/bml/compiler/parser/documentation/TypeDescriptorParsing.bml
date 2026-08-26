@@ -46,8 +46,8 @@
     • Anonymous struct at specialized sites; context-bound implicit namespaces per 02_mbml.md</documentation>
 
   <references>
-    <see type="parcap:ParseTypeExpression" relation="Defines"></see>
-    <see type="pardocumentation:BlockMetadataMapping" relation="ReadNext"></see>
+    <see type="parcap:ParseTypeExpression" relation="Defines" />
+    <see type="pardocumentation:BlockMetadataMapping" relation="ReadNext" />
   </references>
 
 </block>

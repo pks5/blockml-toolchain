@@ -45,7 +45,7 @@
     Validator does NOT expand directives, assign auto-IDs, or interpret aggregations.</documentation>
 
   <references>
-    <see type="bomdocumentation:RelatedDiagnostics" relation="SeeAlso"></see>
+    <see type="bomdocumentation:RelatedDiagnostics" relation="SeeAlso" />
   </references>
 
 </block>

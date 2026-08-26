@@ -49,7 +49,7 @@
     In scope: Stage-2 utilities on BomDocument with TypeRegistry-backed semantic checks.</documentation>
 
   <references>
-    <see type="fwdocumentation:Introduction" relation="SeeAlso"></see>
+    <see type="fwdocumentation:Introduction" relation="SeeAlso" />
   </references>
 
 </block>

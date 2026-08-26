@@ -32,7 +32,7 @@
   <baseType>core:Capability</baseType>
   <is>Emit CompositionTemplate as &lt;composition> element tree</is>
 
-  <documentation>Emit CompositionTemplate as &lt;composition> element tree</documentation>
+  <documentation><![CDATA[Emit CompositionTemplate as <composition> element tree]]></documentation>
 
   <references>
     <see type="sercap:EmitCompositionNode" relation="SeeAlso" />

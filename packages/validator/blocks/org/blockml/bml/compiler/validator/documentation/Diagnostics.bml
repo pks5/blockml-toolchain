@@ -45,8 +45,8 @@
     Cross-ref diagnostic codes: org.blockml.bml.framework.config.FrameworkDiagnosticCodes</documentation>
 
   <references>
-    <see type="fwconfig:FrameworkDiagnosticCodes" relation="SeeAlso"></see>
-    <see type="valdocumentation:PackageOwnership" relation="ReadNext"></see>
+    <see type="fwconfig:FrameworkDiagnosticCodes" relation="SeeAlso" />
+    <see type="valdocumentation:PackageOwnership" relation="ReadNext" />
   </references>
 
 </block>
