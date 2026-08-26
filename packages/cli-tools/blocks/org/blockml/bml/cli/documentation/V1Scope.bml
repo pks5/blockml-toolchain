@@ -28,6 +28,7 @@
 
   <documentation>V1 implemented:
     • blockml validate [file] [--all] [--src] [--libraries] [--verbose]
+      (default: project sources; --all: entire registry including npm)
     • blockml compile [file] target | blockml compile target
     • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
     • Config: targets[], targetPackages, targetOptions, defaultTarget

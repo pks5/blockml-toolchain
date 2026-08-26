@@ -7,6 +7,7 @@ import { compileBmlToBom, compileToOutput, getTarget, validateRegistryDocuments,
 import { bootstrapTargets, getTargetCliHints, } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry, projectLibrarySeeds } from "./bootstrap-type-registry.js";
 import { loadConfig } from "./load-config.js";
+import { projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { writeOutputFiles } from "./write-output.js";
 const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
     "       blockml compile <file> <document-target> --src dir [--include a,b] [--out dir]\n" +
@@ -111,14 +112,15 @@ function printNamedList(lines, title, items) {
         lines.push(`  ${item}`);
     }
 }
-function printValidateSources(lines, srcDir, bootstrap) {
+function printValidateSources(lines, srcDir, bootstrap, validateFiles) {
     const trace = bootstrap.trace;
+    const registryFiles = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
     lines.push(`srcDir: ${srcDir}`);
     printNamedList(lines, "seeds", trace?.seeds ?? []);
     printNamedList(lines, "index (search only)", trace?.searchRoots ?? []);
     printNamedList(lines, "graph", trace?.librariesVisited ?? []);
-    const files = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
-    printNamedList(lines, `files (${files.length})`, files);
+    printNamedList(lines, `validate (${validateFiles.length})`, validateFiles);
+    printNamedList(lines, `registry (${registryFiles.length})`, registryFiles);
     if (trace?.skippedCoveredRoots.length) {
         printNamedList(lines, "skipped (covered by srcDir)", trace.skippedCoveredRoots);
     }
@@ -194,10 +196,25 @@ function runValidate(parsed, rootDir, lines) {
         lines.push(e instanceof Error ? e.message : String(e));
         return 2;
     }
-    const bootstrap = bootstrapProjectTypeRegistry(bootstrapOptsFromParsed(parsed, config, rootDir));
     const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
+    const projectRoots = projectSourceRoots(rootDir, srcDir);
+    const bootstrap = bootstrapProjectTypeRegistry({
+        ...bootstrapOptsFromParsed(parsed, config, rootDir),
+        corpusPaths: projectRoots,
+    });
+    const registryFiles = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
+    let validateFiles;
+    if (parsed.file) {
+        validateFiles = [resolve(rootDir, parsed.file)];
+    }
+    else if (parsed.all) {
+        validateFiles = registryFiles;
+    }
+    else {
+        validateFiles = registryFilesUnderRoots(bootstrap.registry, projectRoots);
+    }
     if (parsed.verbose) {
-        printValidateSources(lines, resolve(rootDir, srcDir), bootstrap);
+        printValidateSources(lines, resolve(rootDir, srcDir), bootstrap, validateFiles);
     }
     if (parsed.file) {
         const filePath = resolve(rootDir, parsed.file);
@@ -213,7 +230,9 @@ function runValidate(parsed, rootDir, lines) {
         printValidateOutcome(lines, 1, result.success ? 0 : 1, failed);
         return failed ? 1 : 0;
     }
-    const validated = validateRegistryDocuments(bootstrap.registry);
+    const validated = parsed.all
+        ? validateRegistryDocuments(bootstrap.registry)
+        : validateRegistryDocuments(bootstrap.registry, validateFiles);
     const diagnostics = [...bootstrap.diagnostics, ...validated.diagnostics];
     printDiagnostics(diagnostics, lines);
     const failed = diagnostics.some((d) => d.severity === "error");

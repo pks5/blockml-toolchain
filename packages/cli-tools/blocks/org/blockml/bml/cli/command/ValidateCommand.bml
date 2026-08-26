@@ -25,14 +25,14 @@
   <baseType>cli:CliType</baseType>
   <is>blockml validate command model</is>
 
-  <documentation>CLI10/CLI11: validate file OR --all corpus; no target bootstrap; no output files.</documentation>
+  <documentation>CLI10/CLI11: validate file XOR --all; default = project sources; --all = entire registry; no target bootstrap; no output files.</documentation>
   <references>
     <see type="clidocumentation:ValidateCommand" relation="SeeAlso" />
     <see type="clicap:RunValidate" relation="SeeAlso" />
   </references>
   <properties>
     <file type="type:Text"><documentation>Single file path. Mutually exclusive with all=true. (optional)</documentation></file>
-    <all type="type:Boolean"><documentation>Validate entire registry corpus. (optional)</documentation></all>
+    <all type="type:Boolean"><documentation>Validate every document in the registry, including npm libraries. (optional)</documentation></all>
   </properties>
 
 </block>

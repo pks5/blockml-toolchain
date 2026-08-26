@@ -26,7 +26,7 @@ export function compileBmlToBom(input, options = {}) {
 export function validateRegistryDocuments(registry, filePaths) {
     const seen = new Set();
     const diagnostics = [];
-    const pathFilter = filePaths && filePaths.length > 0 ? new Set(filePaths) : undefined;
+    const pathFilter = filePaths !== undefined ? new Set(filePaths) : undefined;
     let blocksWithErrors = 0;
     for (const fqn of registry.keys()) {
         const doc = registry.get(fqn);

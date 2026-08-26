@@ -21,6 +21,7 @@ import {
 } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry, projectLibrarySeeds } from "./bootstrap-type-registry.js";
 import { loadConfig, type BomConfig } from "./load-config.js";
+import { projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { writeOutputFiles } from "./write-output.js";
 
 const USAGE =
@@ -159,14 +160,16 @@ function printValidateSources(
   lines: string[],
   srcDir: string,
   bootstrap: BootstrapResult,
+  validateFiles: string[],
 ): void {
   const trace = bootstrap.trace;
+  const registryFiles = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
   lines.push(`srcDir: ${srcDir}`);
   printNamedList(lines, "seeds", trace?.seeds ?? []);
   printNamedList(lines, "index (search only)", trace?.searchRoots ?? []);
   printNamedList(lines, "graph", trace?.librariesVisited ?? []);
-  const files = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
-  printNamedList(lines, `files (${files.length})`, files);
+  printNamedList(lines, `validate (${validateFiles.length})`, validateFiles);
+  printNamedList(lines, `registry (${registryFiles.length})`, registryFiles);
   if (trace?.skippedCoveredRoots.length) {
     printNamedList(lines, "skipped (covered by srcDir)", trace.skippedCoveredRoots);
   }
@@ -285,13 +288,25 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
     return 2;
   }
 
-  const bootstrap = bootstrapProjectTypeRegistry(
-    bootstrapOptsFromParsed(parsed, config, rootDir),
-  );
-
   const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
+  const projectRoots = projectSourceRoots(rootDir, srcDir);
+  const bootstrap = bootstrapProjectTypeRegistry({
+    ...bootstrapOptsFromParsed(parsed, config, rootDir),
+    corpusPaths: projectRoots,
+  });
+
+  const registryFiles = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
+  let validateFiles: string[];
+  if (parsed.file) {
+    validateFiles = [resolve(rootDir, parsed.file)];
+  } else if (parsed.all) {
+    validateFiles = registryFiles;
+  } else {
+    validateFiles = registryFilesUnderRoots(bootstrap.registry, projectRoots);
+  }
+
   if (parsed.verbose) {
-    printValidateSources(lines, resolve(rootDir, srcDir), bootstrap);
+    printValidateSources(lines, resolve(rootDir, srcDir), bootstrap, validateFiles);
   }
 
   if (parsed.file) {
@@ -312,7 +327,9 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
     return failed ? 1 : 0;
   }
 
-  const validated = validateRegistryDocuments(bootstrap.registry);
+  const validated = parsed.all
+    ? validateRegistryDocuments(bootstrap.registry)
+    : validateRegistryDocuments(bootstrap.registry, validateFiles);
   const diagnostics = [...bootstrap.diagnostics, ...validated.diagnostics];
   printDiagnostics(diagnostics, lines);
   const failed = diagnostics.some((d) => d.severity === "error");

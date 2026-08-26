@@ -30,12 +30,12 @@
     <command type="type:Text"><documentation>validate | compile. (optional)</documentation></command>
     <target type="type:Text"><documentation>Registry name e.g. blockdoc, xsd, fatblock. (optional)</documentation></target>
     <file type="type:Text"><documentation>Path to .bml file for document targets or validate. (optional)</documentation></file>
-    <all type="type:Boolean"><documentation>--all flag for validate or document compile. (optional)</documentation></all>
+    <all type="type:Boolean"><documentation>--all: validate entire registry including npm (validate) or document compile. (optional)</documentation></all>
     <outDir type="type:Text"><documentation>--out override. (optional)</documentation></outDir>
     <srcDir type="type:Text"><documentation>--src override. (optional)</documentation></srcDir>
     <libraries type="type:Text"><documentation>--libraries comma-separated override of config.libraries extras (identity seed remains). (optional)</documentation></libraries>
     <include type="type:Text"><documentation>--include comma-separated for fatblock. (optional)</documentation></include>
-    <verbose type="type:Boolean"><documentation>--verbose: print bootstrap sources on validate. (optional)</documentation></verbose>
+    <verbose type="type:Boolean"><documentation>--verbose: print bootstrap sources plus validate vs registry file lists. (optional)</documentation></verbose>
   </properties>
 
 </block>

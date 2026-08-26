@@ -5,6 +5,7 @@ import { clearTargets } from "@blockml/compiler";
 import { BML_DOCUMENT_NS } from "@blockml/xsd-target";
 import { isCliEntry, parseArgs, runCli } from "../src/cli.js";
 import { resetBootstrapTargets } from "../src/bootstrap-targets.js";
+import { projectSourceRoots } from "../src/project-sources.js";
 import {
   parseCatalogUriEntries,
   resolveBmlSchemaPath,
@@ -16,6 +17,29 @@ const CORE_LIBRARY = join(
   ROOT,
   "node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml",
 );
+const CORE_PATH_FRAGMENT = "node_modules/@blockml/core";
+
+function namedListSection(text: string, titleStart: string): string {
+  const lines = text.split("\n");
+  const start = lines.findIndex((line) => line.startsWith(titleStart));
+  if (start < 0) {
+    return "";
+  }
+  const items: string[] = [];
+  for (let i = start + 1; i < lines.length; i++) {
+    const line = lines[i]!;
+    if (!line.startsWith("  ")) {
+      break;
+    }
+    items.push(line.slice(2));
+  }
+  return items.join("\n");
+}
+
+function testedCount(stderr: string): number {
+  const match = stderr.match(/Tested (\d+) blocks?/);
+  return match ? Number(match[1]) : -1;
+}
 
 describe("parseArgs", () => {
   it("maps compile positional to target", () => {
@@ -75,7 +99,7 @@ describe("xsd-validate helpers", () => {
 });
 
 describe("runCli validate", () => {
-  it("validates corpus from libraries without writing output", async () => {
+  it("validates project sources with extra library seeds without writing output", async () => {
     if (!existsSync(CORE_LIBRARY)) {
       throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
     }
@@ -114,13 +138,53 @@ describe("runCli validate", () => {
     expect(stderr).toMatch(/seeds:/);
     expect(stderr).toMatch(/Library\.bml/);
     expect(stderr).toMatch(/index \(search only\):/);
-    expect(stderr).toMatch(/files \(\d+\):/);
+    expect(stderr).toMatch(/validate \(\d+\):/);
+    expect(stderr).toMatch(/registry \(\d+\):/);
     expect(stderr).toMatch(
       /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors\./,
     );
   });
 
-  it("treats --all as corpus validate", async () => {
+  it("projectSourceRoots is this package plus local packages/*, not node_modules", () => {
+    const bomRoots = projectSourceRoots(join(ROOT, "packages/bom"), "blocks");
+    expect(bomRoots.some((p) => p.includes(`${join("packages", "bom")}`))).toBe(true);
+    expect(bomRoots.every((p) => !p.includes(`${join("packages", "parser")}`))).toBe(
+      true,
+    );
+
+    const workspaceRoots = projectSourceRoots(ROOT, "blocks");
+    expect(workspaceRoots).toContain(join(ROOT, "blocks"));
+    expect(workspaceRoots.some((p) => p.includes(`${join("packages", "bom")}`))).toBe(
+      true,
+    );
+    expect(workspaceRoots.every((p) => !p.includes("node_modules"))).toBe(true);
+  });
+
+  it("default validate tests project sources; --all tests the full registry", async () => {
+    const bomRoot = join(ROOT, "packages/bom");
+    const project = await runCli(["validate", "--verbose"], bomRoot);
+    const all = await runCli(["validate", "--all", "--verbose"], bomRoot);
+
+    const projectValidate = namedListSection(project.stderr, "validate (");
+    const projectRegistry = namedListSection(project.stderr, "registry (");
+    const allValidate = namedListSection(all.stderr, "validate (");
+
+    expect(projectValidate).not.toMatch(CORE_PATH_FRAGMENT);
+    expect(projectRegistry).toMatch(CORE_PATH_FRAGMENT);
+    expect(allValidate).toMatch(CORE_PATH_FRAGMENT);
+    expect(testedCount(all.stderr)).toBeGreaterThan(testedCount(project.stderr));
+  });
+
+  it("default validate at workspace root includes packages/* and excludes npm core", async () => {
+    const { stderr } = await runCli(["validate", "--verbose"], ROOT);
+    const validate = namedListSection(stderr, "validate (");
+    const registry = namedListSection(stderr, "registry (");
+    expect(validate).toMatch(/packages\/bom\/blocks/);
+    expect(validate).not.toMatch(CORE_PATH_FRAGMENT);
+    expect(registry).toMatch(CORE_PATH_FRAGMENT);
+  });
+
+  it("treats --all as full-registry validate", async () => {
     if (!existsSync(CORE_LIBRARY)) {
       throw new Error(`Missing fixture: ${CORE_LIBRARY}`);
     }

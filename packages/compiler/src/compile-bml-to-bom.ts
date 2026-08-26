@@ -40,8 +40,7 @@ export function validateRegistryDocuments(
 ): ValidateRegistryResult {
   const seen = new Set<string>();
   const diagnostics: Diagnostic[] = [];
-  const pathFilter =
-    filePaths && filePaths.length > 0 ? new Set(filePaths) : undefined;
+  const pathFilter = filePaths !== undefined ? new Set(filePaths) : undefined;
   let blocksWithErrors = 0;
 
   for (const fqn of registry.keys()) {

@@ -282,4 +282,22 @@ describe("validateRegistryDocuments", () => {
     const result = validateRegistryDocuments(registry);
     expect(result.blocksTested).toBe(1);
   });
+
+  it("filters to the given filePaths; empty array tests nothing", () => {
+    const registry = new TypeRegistry();
+    const host = minimalBom("pkg/Host.bml");
+    host.block.type = "com.test.Host";
+    const peer = minimalBom("pkg/Peer.bml");
+    peer.block.name = "Peer";
+    peer.block.type = "com.test.Peer";
+    registry.register(host);
+    registry.register(peer);
+
+    const one = validateRegistryDocuments(registry, ["pkg/Host.bml"]);
+    expect(one.blocksTested).toBe(1);
+
+    const none = validateRegistryDocuments(registry, []);
+    expect(none.blocksTested).toBe(0);
+    expect(none.diagnostics).toEqual([]);
+  });
 });

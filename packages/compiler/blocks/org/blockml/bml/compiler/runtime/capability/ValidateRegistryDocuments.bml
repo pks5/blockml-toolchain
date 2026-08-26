@@ -30,7 +30,7 @@
   <baseType>core:Capability</baseType>
   <is>Re-validate BomDocuments in a TypeRegistry</is>
 
-  <documentation>Dedupes by filePath; optional filePaths filter; continueOnError true.
+  <documentation>Dedupes by filePath; optional filePaths filter (undefined = all; empty = none); continueOnError true.
     Returns ValidateRegistryResult: diagnostics, blocksTested (unique filePaths), blocksWithErrors (documents with !success).</documentation>
 
   <references>
@@ -43,7 +43,7 @@
       <documentation>TypeRegistry. (required)</documentation>
     </typeRegistry>
     <filePaths type="type:Text">
-      <documentation>Optional path filter. (optional)</documentation>
+      <documentation>Optional path filter. undefined = all documents; empty = none. (optional)</documentation>
     </filePaths>
     <result type="runapi:ValidateRegistryResult">
       <documentation>diagnostics, blocksTested, blocksWithErrors. (required)</documentation>

@@ -10,6 +10,8 @@ export interface CliBootstrapOptions {
   rootDir?: string;
   librariesOverride?: string[];
   srcDirOverride?: string;
+  /** When set, used as corpus paths instead of [srcDir]. */
+  corpusPaths?: string[];
 }
 
 export function projectLibrarySeeds(
@@ -26,12 +28,13 @@ export function bootstrapProjectTypeRegistry(
   const rootDir = options.rootDir ?? process.cwd();
   const srcDir = options.srcDirOverride ?? options.config.srcDir ?? "blocks";
   const libraries = projectLibrarySeeds(options);
+  const paths = options.corpusPaths ?? [srcDir];
 
   const bootstrapOptions: {
     libraryPaths?: string[];
     paths?: string[];
     rootDir: string;
-  } = { rootDir, paths: [srcDir] };
+  } = { rootDir, paths };
   if (libraries.length > 0) {
     bootstrapOptions.libraryPaths = libraries;
   }

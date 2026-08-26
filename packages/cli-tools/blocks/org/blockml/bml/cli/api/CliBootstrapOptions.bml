@@ -30,6 +30,7 @@
     <rootDir type="type:Text"><documentation>Project root directory. (optional)</documentation></rootDir>
     <librariesOverride type="type:Text"><documentation>--libraries CLI override. (optional)</documentation></librariesOverride>
     <srcDirOverride type="type:Text"><documentation>--src CLI override. (optional)</documentation></srcDirOverride>
+    <corpusPaths type="type:Text"><documentation>When set, used as corpus paths instead of [srcDir]. Validate passes project source roots. (optional)</documentation></corpusPaths>
   </properties>
 
 </block>

@@ -5,6 +5,8 @@ export interface CliBootstrapOptions {
     rootDir?: string;
     librariesOverride?: string[];
     srcDirOverride?: string;
+    /** When set, used as corpus paths instead of [srcDir]. */
+    corpusPaths?: string[];
 }
 export declare function projectLibrarySeeds(options: Pick<CliBootstrapOptions, "config" | "rootDir" | "librariesOverride">): string[];
 export declare function bootstrapProjectTypeRegistry(options: CliBootstrapOptions): BootstrapResult;

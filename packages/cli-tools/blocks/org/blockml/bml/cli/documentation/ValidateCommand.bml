@@ -30,9 +30,12 @@
   <documentation>Syntax:
     blockml validate [file] [--all] [--src dir] [--libraries a,b] [--verbose]
 
-    Single file: parse + compileBmlToBom against project registry.
-    --all or corpus: bootstrapProjectTypeRegistry + validateRegistryDocuments.
-    --verbose: print srcDir, seeds, search index, graph, registered files (before diagnostics).
+    Single file: parse + compileBmlToBom against the full project registry.
+    Default (no file, no --all): semantic-validate project sources only (this package srcDir
+    plus local packages/* BlockML modules). npm libraries stay on the registry for resolve.
+    --all: semantic-validate every document in the registry, including npm.
+    --verbose: print srcDir, seeds, search index, graph, validate set, registry files
+    (before diagnostics).
 
     Validity is parse + semantic validate only. XSD is a render target
     (blockml compile xsd) and is not consulted.
