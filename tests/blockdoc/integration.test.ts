@@ -67,10 +67,15 @@ describe("blockdoc integration", () => {
 
     const index = result.output!.files.find((f) => f.path === "index.html");
     expect(index).toBeDefined();
-    expect(index!.content).toContain('<a href="./org/blockml/bml/core/Block.html">Block</a>');
-    expect(index!.content).toMatch(/<h2><a href="\.\/org\/blockml\/bml\/core\/index\.html">core<\/a><\/h2>/);
-    expect(index!.content).toContain('<span class="brand">BlockDoc</span>');
-    expect(index!.content).toContain("Search blocks…");
+    expect(index!.content).toContain("./org/blockml/bml/index.html");
+
+    const allBlocks = result.output!.files.find((f) => f.path === "all-blocks.html");
+    expect(allBlocks).toBeDefined();
+    expect(allBlocks!.content).toContain('<a href="./org/blockml/bml/core/Block.html">Block</a>');
+    expect(allBlocks!.content).toMatch(/<h2><a href="\.\/org\/blockml\/bml\/core\/index\.html">core<\/a><\/h2>/);
+    expect(allBlocks!.content).toContain('<span class="brand">BlockDoc</span>');
+    expect(allBlocks!.content).toContain("Search blocks…");
+    expect(allBlocks!.content).toContain("All Blocks");
 
     const searchIndexFile = result.output!.files.find((f) => f.path === "search-index.json");
     expect(searchIndexFile).toBeDefined();

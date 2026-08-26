@@ -86,7 +86,7 @@ function collectCompositionGroups(block) {
     }
     return groups;
 }
-export function renderBlockPage(block, options, rootIndexPath, knownFqns, _rootFqn) {
+export function renderBlockPage(block, options, nav, knownFqns, _rootFqn) {
     const pagePath = fqnToHtmlPath(block.type, options.outLayout);
     const memberSections = renderMemberSections(block, pagePath, options, knownFqns);
     const subBlockLinks = block.subBlocks
@@ -112,7 +112,7 @@ export function renderBlockPage(block, options, rootIndexPath, knownFqns, _rootF
         .map((group) => renderCompositionGroup(group.aggregationName, group.composition, pagePath, options, knownFqns))
         .filter(Boolean)
         .join("\n");
-    return wrapHtmlDocument(block.type, pagePath, rootIndexPath, PAGE_CSS, `${renderBlockHeader(block, pagePath, options, knownFqns)}
+    return wrapHtmlDocument(block.type, pagePath, nav, PAGE_CSS, `${renderBlockHeader(block, pagePath, options, knownFqns)}
   ${proseSection("Documentation", block.documentations)}
   ${memberSections}
   ${compositionSections ? `<section><h2>Composition</h2>${compositionSections}</section>` : ""}
@@ -198,12 +198,12 @@ function renderMultiLibrarySections(rootFqns, libraryPrefixes, options, indexPat
         : "";
     return [librarySections, other].filter(Boolean).join("\n");
 }
-export function renderIndexPage(title, rootFqns, options, indexPath) {
+export function renderIndexPage(title, rootFqns, options, indexPath, nav) {
     const libraryPrefixes = collectLibraryPrefixes(rootFqns);
     const sections = libraryPrefixes.length >= 2
         ? renderMultiLibrarySections(rootFqns, libraryPrefixes, options, indexPath)
         : renderPackageSections(groupRootFqnsByPackage(rootFqns), options, indexPath, "h2");
-    return wrapHtmlDocument(title, indexPath, indexPath, PAGE_CSS, `<h1>${escapeHtml(title)}</h1>
+    return wrapHtmlDocument(title, indexPath, nav, PAGE_CSS, `<h1>${escapeHtml(title)}</h1>
   <p>${rootFqns.length} block(s) in scope.</p>
   ${sections}`);
 }

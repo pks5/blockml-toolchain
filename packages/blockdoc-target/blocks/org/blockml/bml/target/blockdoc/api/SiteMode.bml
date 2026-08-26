@@ -32,7 +32,7 @@
   <baseType>blockdoc:BlockdocType</baseType>
   <is>Site index mode: merged | perLibrary</is>
 
-  <documentation>String-literal union: "merged" | "perLibrary". BD1: merged = one site index.html; perLibrary = one index per Library root.</documentation>
+  <documentation>String-literal union: "merged" | "perLibrary". BD1: merged = one site (index.html home + all-blocks.html listing); perLibrary = one home/listing pair per Library root.</documentation>
 
   <properties>
     <value type="type:Text">

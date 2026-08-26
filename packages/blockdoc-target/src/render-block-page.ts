@@ -12,6 +12,7 @@ import {
   owningLibraryPrefix,
   packageSegmentLabel,
   renderDottedPackagePath,
+  type SiteNav,
 } from "./navigation.js";
 import type { BlockDocOptions } from "./options.js";
 import { renderCompositionGroup } from "./composition-render.js";
@@ -133,7 +134,7 @@ function collectCompositionGroups(block: BlockDefinition): Array<{
 export function renderBlockPage(
   block: BlockDefinition,
   options: Required<BlockDocOptions>,
-  rootIndexPath: string,
+  nav: SiteNav,
   knownFqns: Set<string>,
   _rootFqn: string,
 ): string {
@@ -178,7 +179,7 @@ export function renderBlockPage(
   return wrapHtmlDocument(
     block.type,
     pagePath,
-    rootIndexPath,
+    nav,
     PAGE_CSS,
     `${renderBlockHeader(block, pagePath, options, knownFqns)}
   ${proseSection("Documentation", block.documentations)}
@@ -308,6 +309,7 @@ export function renderIndexPage(
   rootFqns: string[],
   options: Required<BlockDocOptions>,
   indexPath: string,
+  nav: SiteNav,
 ): string {
   const libraryPrefixes = collectLibraryPrefixes(rootFqns);
   const sections =
@@ -318,7 +320,7 @@ export function renderIndexPage(
   return wrapHtmlDocument(
     title,
     indexPath,
-    indexPath,
+    nav,
     PAGE_CSS,
     `<h1>${escapeHtml(title)}</h1>
   <p>${rootFqns.length} block(s) in scope.</p>

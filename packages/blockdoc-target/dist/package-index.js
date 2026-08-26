@@ -1,32 +1,13 @@
-import { escapeHtml, fqnToHtmlPath, fqnToPackagePrefix, packageIndexPath, relativePath } from "./fqn-path.js";
-import { packageSegmentLabel } from "./navigation.js";
+import { escapeHtml, fqnToHtmlPath, packageIndexPath, relativePath } from "./fqn-path.js";
+import { directBlocks, directSubPackages, packageSegmentLabel, } from "./navigation.js";
 import { PAGE_SHELL_CSS, wrapHtmlDocument } from "./toolbar.js";
-function directBlocks(packagePrefix, rootFqns) {
-    return rootFqns.filter((fqn) => fqnToPackagePrefix(fqn) === packagePrefix).sort();
-}
-function directSubPackages(packagePrefix, rootFqns) {
-    const prefixDot = `${packagePrefix}.`;
-    const subs = new Set();
-    for (const fqn of rootFqns) {
-        const pkg = fqnToPackagePrefix(fqn);
-        if (!pkg.startsWith(prefixDot)) {
-            continue;
-        }
-        const rest = pkg.slice(prefixDot.length);
-        const firstSegment = rest.split(".")[0];
-        if (firstSegment) {
-            subs.add(`${prefixDot}${firstSegment}`);
-        }
-    }
-    return [...subs].sort();
-}
-export function renderPackageIndexPage(packagePrefix, rootFqns, options, indexPath, rootIndexPath) {
+export function renderPackageIndexPage(packagePrefix, rootFqns, options, indexPath, nav) {
     const blocks = directBlocks(packagePrefix, rootFqns);
     const subPackages = directSubPackages(packagePrefix, rootFqns);
     const breadcrumbParts = [
-        `<a href="${relativePath(indexPath, rootIndexPath)}">Index</a>`,
+        `<a href="${relativePath(indexPath, nav.rootIndexPath)}">Index</a>`,
     ];
-    const segments = packagePrefix.split(".");
+    const segments = packagePrefix.split(".").filter(Boolean);
     for (let i = 1; i <= segments.length; i++) {
         const prefix = segments.slice(0, i).join(".");
         const label = packageSegmentLabel(prefix);
@@ -58,8 +39,9 @@ section { margin-top: 1.5rem; }
 ul { padding-left: 1.5rem; }
 a { color: #0366d6; }
 `.trim();
-    return wrapHtmlDocument(packagePrefix, indexPath, rootIndexPath, PAGE_CSS, `<nav class="breadcrumb">${breadcrumbParts.join(" / ")}</nav>
-  <h1>${escapeHtml(packageSegmentLabel(packagePrefix))}</h1>
+    const heading = packagePrefix ? packageSegmentLabel(packagePrefix) : "BlockDoc";
+    return wrapHtmlDocument(packagePrefix || "BlockDoc", indexPath, nav, PAGE_CSS, `<nav class="breadcrumb">${breadcrumbParts.join(" / ")}</nav>
+  <h1>${escapeHtml(heading)}</h1>
   ${subPackageLinks ? `<section><h2>Sub-packages</h2><ul>${subPackageLinks}</ul></section>` : ""}
   ${blockLinks ? `<section><h2>Blocks</h2><ul>${blockLinks}</ul></section>` : ""}`);
 }

@@ -14,6 +14,9 @@ export function fqnToPackagePrefix(fqn: string): string {
 }
 
 export function packageIndexPath(packagePrefix: string): string {
+  if (!packagePrefix) {
+    return "index.html";
+  }
   return `${packagePrefix.split(".").join("/")}/index.html`;
 }
 

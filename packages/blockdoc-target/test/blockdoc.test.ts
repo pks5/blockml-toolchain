@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fqnToHtmlPath, escapeHtml } from "../src/fqn-path.js";
+import { fqnToHtmlPath, escapeHtml, packageIndexPath } from "../src/fqn-path.js";
 
 describe("fqnToHtmlPath", () => {
   it("maps FQN to path segments", () => {
@@ -12,6 +12,13 @@ describe("fqnToHtmlPath", () => {
     expect(fqnToHtmlPath("org.blockml.bml.core.Block", "package")).toBe(
       "org/blockml/bml/core/index.html",
     );
+  });
+});
+
+describe("packageIndexPath", () => {
+  it("maps empty prefix to site index.html", () => {
+    expect(packageIndexPath("")).toBe("index.html");
+    expect(packageIndexPath("com.example")).toBe("com/example/index.html");
   });
 });
 

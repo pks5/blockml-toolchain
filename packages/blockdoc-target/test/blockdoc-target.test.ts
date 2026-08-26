@@ -91,8 +91,18 @@ describe("BlockDocTarget package indexes", () => {
     expect(pkgIndex?.content).toContain("Alpha");
     expect(pkgIndex?.content).not.toContain("Alpha.Child");
     expect(pkgIndex?.content).toContain('<span class="brand">BlockDoc</span>');
-    expect(pkgIndex?.content).toContain('<a href="../../../index.html">Index</a>');
+    expect(pkgIndex?.content).toContain('<a href="../index.html">Index</a>');
+    expect(pkgIndex?.content).toContain('<a href="../../../all-blocks.html">All Blocks</a>');
     expect(pkgIndex?.content).toContain('src="../../../search.js"');
+
+    const allBlocks = output.files.find((f) => f.path === "all-blocks.html");
+    expect(allBlocks?.content).toContain("Alpha");
+    expect(allBlocks?.content).toContain("Beta");
+    expect(allBlocks?.content).toContain('<a href="./com/example/index.html">Index</a>');
+
+    const siteIndex = output.files.find((f) => f.path === "index.html");
+    expect(siteIndex?.content).toContain('url=./com/example/index.html');
+    expect(siteIndex?.content).toContain('href="./com/example/index.html"');
 
     const searchIndexFile = output.files.find((f) => f.path === "search-index.json");
     expect(searchIndexFile).toBeDefined();
@@ -112,6 +122,48 @@ describe("BlockDocTarget package indexes", () => {
     const searchJs = output.files.find((f) => f.path === "search.js");
     expect(searchJs?.content).toContain("com.example.pkg.Alpha");
     expect(searchJs?.content).toContain("function search(");
+  });
+
+  it("emits a root package index when top-level packages differ", () => {
+    const registry = new TypeRegistry();
+    registerBlock(
+      registry,
+      {
+        name: "Alpha",
+        type: "com.example.Alpha",
+        is: "Alpha block",
+        members: [],
+        subBlocks: [],
+        embeddedBlocks: [],
+        compositions: [],
+      },
+      "Alpha.bml",
+    );
+    registerBlock(
+      registry,
+      {
+        name: "Beta",
+        type: "org.other.Beta",
+        is: "Beta block",
+        members: [],
+        subBlocks: [],
+        embeddedBlocks: [],
+        compositions: [],
+      },
+      "Beta.bml",
+    );
+
+    const target = new BlockDocTarget();
+    const output = target.render(
+      { scope: { kind: "library" }, targetOptions: DEFAULT_BLOCKDOC_OPTIONS },
+      mockContext(registry),
+    );
+
+    const siteIndex = output.files.find((f) => f.path === "index.html");
+    expect(siteIndex?.content).toContain("<h2>Sub-packages</h2>");
+    expect(siteIndex?.content).toContain('<a href="./com/index.html">com</a>');
+    expect(siteIndex?.content).toContain('<a href="./org/index.html">org</a>');
+    expect(siteIndex?.content).not.toContain("http-equiv");
   });
 
   it("restricts emitted FQNs to session.corpusRoots when set", () => {

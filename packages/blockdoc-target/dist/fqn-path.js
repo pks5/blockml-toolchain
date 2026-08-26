@@ -11,6 +11,9 @@ export function fqnToPackagePrefix(fqn) {
     return segments.length > 1 ? segments.slice(0, -1).join(".") : fqn;
 }
 export function packageIndexPath(packagePrefix) {
+    if (!packagePrefix) {
+        return "index.html";
+    }
     return `${packagePrefix.split(".").join("/")}/index.html`;
 }
 export function escapeHtml(text) {

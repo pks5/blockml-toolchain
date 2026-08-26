@@ -3,6 +3,7 @@ import { DEFAULT_BLOCKDOC_OPTIONS } from "../src/options.js";
 import {
   collectPackagePrefixes,
   collectLibraryPrefixes,
+  firstInterestingPackagePrefix,
   libraryGroupLabel,
   owningLibraryPrefix,
   packageSegmentLabel,
@@ -65,5 +66,42 @@ describe("navigation", () => {
     );
     expect(html).not.toContain(". ");
     expect(html).not.toContain(" / ");
+  });
+});
+
+describe("firstInterestingPackagePrefix", () => {
+  it("stops at a single library with sub-packages and blocks", () => {
+    expect(
+      firstInterestingPackagePrefix([
+        "org.blockml.bml.Library",
+        "org.blockml.bml.bom.Block",
+        "org.blockml.bml.framework.Runtime",
+      ]),
+    ).toBe("org.blockml.bml");
+  });
+
+  it("stops at the first package with more than one child", () => {
+    expect(
+      firstInterestingPackagePrefix([
+        "org.blockml.bml.bom.Library",
+        "org.blockml.bml.framework.Library",
+      ]),
+    ).toBe("org.blockml.bml");
+  });
+
+  it("stops when a parent package already has a block", () => {
+    expect(
+      firstInterestingPackagePrefix([
+        "org.blockml.RootBlock",
+        "org.blockml.bml.Library",
+        "org.blockml.bml.bom.Block",
+      ]),
+    ).toBe("org.blockml");
+  });
+
+  it("stays at the site root when top-level packages differ", () => {
+    expect(
+      firstInterestingPackagePrefix(["com.example.Alpha", "org.blockml.bml.Library"]),
+    ).toBe("");
   });
 });

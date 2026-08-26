@@ -74,12 +74,14 @@ body { font-family: system-ui, sans-serif; margin: 0; line-height: 1.5; }
 .page { margin: 2rem auto; max-width: 960px; padding: 0 2rem 2rem; }
 ${TOOLBAR_CSS}
 `.trim();
-export function renderToolbar(pagePath, rootIndexPath) {
-    const indexHref = relativePath(pagePath, rootIndexPath);
+export function renderToolbar(pagePath, nav) {
+    const indexHref = relativePath(pagePath, nav.rootIndexPath);
+    const allBlocksHref = relativePath(pagePath, nav.allBlocksPath);
     return `<header class="toolbar">
   <div class="toolbar-left">
     <span class="brand">BlockDoc</span>
     <a href="${indexHref}">Index</a>
+    <a href="${allBlocksHref}">All Blocks</a>
   </div>
   <div class="toolbar-right">
     <div class="search">
@@ -89,7 +91,7 @@ export function renderToolbar(pagePath, rootIndexPath) {
   </div>
 </header>`;
 }
-export function wrapHtmlDocument(title, pagePath, rootIndexPath, css, bodyInner) {
+export function wrapHtmlDocument(title, pagePath, nav, css, bodyInner) {
     const searchSrc = relativePath(pagePath, "search.js");
     return `<!DOCTYPE html>
 <html lang="en">
@@ -99,13 +101,31 @@ export function wrapHtmlDocument(title, pagePath, rootIndexPath, css, bodyInner)
   <style>${css}</style>
 </head>
 <body>
-  ${renderToolbar(pagePath, rootIndexPath)}
+  ${renderToolbar(pagePath, nav)}
   <div class="page">
   ${bodyInner}
   </div>
   <script src="${searchSrc}"></script>
 </body>
 </html>`;
+}
+export function renderRedirectPage(fromPath, toPath) {
+    const href = relativePath(fromPath, toPath);
+    const escaped = escapeHtml(href);
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BlockDoc</title>
+  <meta http-equiv="refresh" content="0;url=${escaped}">
+  <link rel="canonical" href="${escaped}">
+  <script>location.replace(${JSON.stringify(href)});</script>
+</head>
+<body>
+  <p>Redirecting to <a href="${escaped}">documentation</a>.</p>
+</body>
+</html>
+`;
 }
 const SEARCH_CLIENT_JS = `
 (function () {

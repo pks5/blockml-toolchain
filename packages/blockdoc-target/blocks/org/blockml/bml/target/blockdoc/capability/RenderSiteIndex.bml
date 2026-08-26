@@ -30,9 +30,9 @@
   <name>RenderSiteIndex</name>
   <type>bdcap:RenderSiteIndex</type>
   <baseType>core:Capability</baseType>
-  <is>Assemble merged or perLibrary site index HTML</is>
+  <is>Assemble All Blocks listing HTML (BD21)</is>
 
-  <documentation>BD21: one library → group root FQNs by package prefix (heading = last segment, linked to package index when outLayout=fqn). Two or more *.Library roots → group first by library (longest prefix match; heading = unique last segment else suffix after common prefix; muted full prefix; Library-package blocks listed directly); packages under a library are h3. Unmatched FQNs under Other. Block labels = last FQN segment.</documentation>
+  <documentation>BD21: one library → group root FQNs by package prefix (heading = last segment, linked to package index when outLayout=fqn). Two or more *.Library roots → group first by library (longest prefix match; heading = unique last segment else suffix after common prefix; muted full prefix; Library-package blocks listed directly); packages under a library are h3. Unmatched FQNs under Other. Block labels = last FQN segment. Emitted as all-blocks.html (merged) or {libPrefix}/all-blocks.html (perLibrary). Toolbar All Blocks points here; Index points at the interesting home (BD27).</documentation>
 
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />
@@ -49,8 +49,14 @@
       <documentation>Resolved options (required).</documentation>
     </options>
     <indexPath type="type:Text">
-      <documentation>This index path (required).</documentation>
+      <documentation>This listing path, typically all-blocks.html (required).</documentation>
     </indexPath>
+    <rootIndexPath type="type:Text">
+      <documentation>Interesting package home for toolbar Index (required).</documentation>
+    </rootIndexPath>
+    <allBlocksPath type="type:Text">
+      <documentation>All Blocks listing path (required).</documentation>
+    </allBlocksPath>
     <result type="bdpage:SiteIndexPage">
       <documentation>HTML page (required).</documentation>
     </result>

@@ -43,6 +43,10 @@
     BD9 RelativeHref: pop file segment from from; common prefix; ups=0 → ./ else ../ * ups.
 
     BD12 package indexes only when outLayout=fqn; prefixes = all ancestors of root FQN packages.
+    Empty prefix maps to index.html (virtual root package index when BD27 home is empty).
+
+    BD27 FirstInterestingPackagePrefix: skip single-child prefixes with no direct blocks;
+    merged index.html redirects to that package index when outLayout=fqn.
 
     perLibrary library prefix = Library type FQN with trailing .Library stripped.</documentation>
   <references>

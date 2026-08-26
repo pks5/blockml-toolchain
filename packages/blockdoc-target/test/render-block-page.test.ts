@@ -3,6 +3,8 @@ import type { BlockDefinition } from "@blockml/bom";
 import { DEFAULT_BLOCKDOC_OPTIONS } from "../src/options.js";
 import { renderBlockPage, renderIndexPage } from "../src/render-block-page.js";
 
+const NAV = { rootIndexPath: "index.html", allBlocksPath: "all-blocks.html" };
+
 const KNOWN = new Set([
   "com.example.Child",
   "com.example.Parent",
@@ -66,7 +68,7 @@ describe("renderBlockPage", () => {
     const html = renderBlockPage(
       minimalBlock(),
       DEFAULT_BLOCKDOC_OPTIONS,
-      "index.html",
+      NAV,
       KNOWN,
       "com.example.Parent",
     );
@@ -85,7 +87,7 @@ describe("renderBlockPage", () => {
     const html = renderBlockPage(
       minimalBlock(),
       DEFAULT_BLOCKDOC_OPTIONS,
-      "index.html",
+      NAV,
       KNOWN,
       "com.example.Parent",
     );
@@ -97,7 +99,7 @@ describe("renderBlockPage", () => {
     const html = renderBlockPage(
       minimalBlock(),
       DEFAULT_BLOCKDOC_OPTIONS,
-      "index.html",
+      NAV,
       KNOWN,
       "com.example.Parent",
     );
@@ -111,12 +113,13 @@ describe("renderBlockPage", () => {
     const html = renderBlockPage(
       minimalBlock(),
       DEFAULT_BLOCKDOC_OPTIONS,
-      "index.html",
+      NAV,
       KNOWN,
       "com.example.Parent",
     );
     expect(html).toContain('<span class="brand">BlockDoc</span>');
     expect(html).toContain('<a href="../../index.html">Index</a>');
+    expect(html).toContain('<a href="../../all-blocks.html">All Blocks</a>');
     expect(html).toContain('src="../../search.js"');
     expect(html).toContain("Search blocks…");
     expect(html).not.toContain('class="site-index"');
@@ -135,9 +138,11 @@ describe("renderIndexPage toolbar", () => {
       ["com.example.Parent"],
       DEFAULT_BLOCKDOC_OPTIONS,
       "index.html",
+      NAV,
     );
     expect(html).toContain('<span class="brand">BlockDoc</span>');
     expect(html).toContain('<a href="./index.html">Index</a>');
+    expect(html).toContain('<a href="./all-blocks.html">All Blocks</a>');
     expect(html).toContain('src="./search.js"');
     expect(html).toContain('<div class="page">');
   });
@@ -152,6 +157,7 @@ describe("renderIndexPage toolbar", () => {
       ],
       DEFAULT_BLOCKDOC_OPTIONS,
       "index.html",
+      NAV,
     );
     expect(html).toMatch(
       /<h2><a href="\.\/org\/blockml\/bml\/core\/index\.html">core<\/a><\/h2>/,
@@ -171,6 +177,7 @@ describe("renderIndexPage toolbar", () => {
       ],
       DEFAULT_BLOCKDOC_OPTIONS,
       "index.html",
+      NAV,
     );
     expect(html).toMatch(
       /<section class="library"><h2><a href="\.\/org\/blockml\/bml\/bom\/index\.html">bom<\/a><\/h2>/,

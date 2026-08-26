@@ -31,7 +31,7 @@
   <name>SiteAssembly</name>
   <type>bddocumentation:SiteAssembly</type>
   <baseType>core:Documentation</baseType>
-  <is>Corpus selection and multi-file emission (BD11, BD13, BD23, BD26)</is>
+  <is>Corpus selection and multi-file emission (BD11, BD13, BD23, BD26, BD27)</is>
 
   <documentation>FQN selection: TypeRegistry.keys(), sorted unique. includeNonExported=false → FilterExportedFqns
     from Library aggregation "blocks" (re-parse libraryPaths). When session.corpusRoots is set (corpus
@@ -42,12 +42,14 @@
 
     Nested types: if registry doc root FQN ≠ requested FQN, DFS subBlocks (findBlock).
 
-    Site indexes (BD23):
-    • merged → index.html titled "BlockDoc" (BD21: one library groups by package; two or more *.Library roots group by library then package)
-    • perLibrary → {libPrefix}/index.html per Library; filter roots under that prefix
+    Site indexes (BD23/BD27):
+    • merged + outLayout=fqn → index.html redirects to FirstInterestingPackagePrefix package index
+      (or is a virtual root package index when that prefix is empty); all-blocks.html is the full listing (BD21)
+    • merged + outLayout=package → index.html and all-blocks.html are the BD21 listing
+    • perLibrary → {libPrefix}/all-blocks.html listing; {libPrefix}/index.html is the package index when outLayout=fqn
 
-    Package indexes when outLayout=fqn for every CollectPackagePrefixes entry; perLibrary mode
-    points package-index "root" breadcrumb to owning library index when prefix is under that library.
+    Package indexes when outLayout=fqn for every CollectPackagePrefixes entry; toolbar Index and
+    package-index breadcrumb Index point at the interesting home (not all-blocks.html).
 
     Search (BD24): after HTML pages, emit search-index.json and search.js (inlined index + quick-search client)
     covering every emitted block FQN.
@@ -57,6 +59,7 @@
     <see type="bddocumentation:DesignDecisions" relation="ReadNext"></see>
     <see type="bdcap:AssembleSite" relation="SeeAlso"></see>
     <see type="bdcap:FilterExportedFqns" relation="SeeAlso"></see>
+    <see type="bdcap:FirstInterestingPackagePrefix" relation="SeeAlso"></see>
   </references>
 
 </block>

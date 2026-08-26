@@ -30,13 +30,13 @@
   <name>RenderToolbar</name>
   <type>bdcap:RenderToolbar</type>
   <baseType>core:Capability</baseType>
-  <is>Sticky black site toolbar with Index link and quick search</is>
+  <is>Sticky black site toolbar with Index, All Blocks, and quick search</is>
 
-  <documentation>BD25: sticky black header on every HTML page. Left: brand "BlockDoc" then
-    Index link (same href as former block-page site-index). Right: search field matching
+  <documentation>BD25/BD27: sticky black header on every HTML page. Left: brand "BlockDoc" then
+    Index (interesting package home) then All Blocks (full listing). Right: search field matching
     keywords in the inlined search.js index; dropdown up to 12 hits; click or Enter navigates
     to the block page. Ranking: exact name, then name prefix, then other keyword hits.
-    Package-index breadcrumb Index link is unchanged.</documentation>
+    Package-index breadcrumb Index uses the same interesting-home href as the toolbar Index.</documentation>
 
   <references>
     <see type="bddocumentation:PageChrome" relation="SeeAlso" />
@@ -48,8 +48,11 @@
       <documentation>This page path for relative hrefs (required).</documentation>
     </pagePath>
     <rootIndexPath type="type:Text">
-      <documentation>Site or library index path (required).</documentation>
+      <documentation>Interesting package home (required).</documentation>
     </rootIndexPath>
+    <allBlocksPath type="type:Text">
+      <documentation>All Blocks listing path (required).</documentation>
+    </allBlocksPath>
     <result type="type:Text">
       <documentation>Toolbar HTML (required).</documentation>
     </result>

@@ -8,7 +8,9 @@ import { fqnToHtmlPath } from "./fqn-path.js";
 import {
   collectPackagePrefixes,
   collectRootFqns,
+  resolveSiteNav,
   rootFqnForBlock,
+  type SiteNav,
 } from "./navigation.js";
 import { renderPackageIndexPage } from "./package-index.js";
 import { renderBlockPage, renderIndexPage } from "./render-block-page.js";
@@ -18,7 +20,7 @@ import {
   serializeSearchIndex,
   type SearchIndexEntry,
 } from "./search-index.js";
-import { renderSearchScript } from "./toolbar.js";
+import { renderRedirectPage, renderSearchScript } from "./toolbar.js";
 
 export interface BlockDocRenderOutput extends RenderOutput {
   files: { path: string; content: string }[];
@@ -142,19 +144,59 @@ function collectLibraryRoots(libraryPaths: string[], rootDir: string): LibraryRo
   return roots;
 }
 
-function resolveRootIndexPath(
+function resolveNavForFqn(
   fqn: string,
+  rootFqns: string[],
   options: ReturnType<typeof resolveBlockDocOptions>,
   libraryRoots: LibraryRoot[],
-): string {
+  mergedNav: SiteNav,
+): SiteNav {
   if (options.siteMode === "perLibrary") {
     for (const lib of libraryRoots) {
       if (fqn.startsWith(`${lib.prefix}.`) || fqn === lib.prefix) {
-        return lib.indexPath;
+        const libRootFqns = rootFqns.filter(
+          (candidate) => candidate.startsWith(`${lib.prefix}.`) || candidate === lib.prefix,
+        );
+        return resolveSiteNav(libRootFqns, options, lib.prefix);
       }
     }
   }
-  return "index.html";
+  return mergedNav;
+}
+
+function emitAllBlocksPage(
+  title: string,
+  rootFqns: string[],
+  options: ReturnType<typeof resolveBlockDocOptions>,
+  nav: SiteNav,
+): { path: string; content: string } {
+  return {
+    path: nav.allBlocksPath,
+    content: renderIndexPage(title, rootFqns, options, nav.allBlocksPath, nav),
+  };
+}
+
+function emitMergedHome(
+  rootFqns: string[],
+  options: ReturnType<typeof resolveBlockDocOptions>,
+  nav: SiteNav,
+): { path: string; content: string } {
+  if (options.outLayout === "fqn" && nav.rootIndexPath !== "index.html") {
+    return {
+      path: "index.html",
+      content: renderRedirectPage("index.html", nav.rootIndexPath),
+    };
+  }
+  if (options.outLayout === "fqn") {
+    return {
+      path: "index.html",
+      content: renderPackageIndexPage("", rootFqns, options, "index.html", nav),
+    };
+  }
+  return {
+    path: "index.html",
+    content: renderIndexPage("BlockDoc", rootFqns, options, "index.html", nav),
+  };
 }
 
 export class BlockDocTarget implements RenderTarget {
@@ -169,6 +211,7 @@ export class BlockDocTarget implements RenderTarget {
     const files: BlockDocRenderOutput["files"] = [];
     const searchEntries: SearchIndexEntry[] = [];
     const rootDir = process.cwd();
+    const mergedNav = resolveSiteNav(rootFqns, options);
     const libraryRoots =
       options.siteMode === "perLibrary" && ctx.session.libraryPaths?.length
         ? collectLibraryRoots(ctx.session.libraryPaths, rootDir)
@@ -194,7 +237,7 @@ export class BlockDocTarget implements RenderTarget {
         content: renderBlockPage(
           block,
           options,
-          resolveRootIndexPath(rootFqn, options, libraryRoots),
+          resolveNavForFqn(rootFqn, rootFqns, options, libraryRoots, mergedNav),
           knownFqns,
           rootFqn,
         ),
@@ -206,41 +249,33 @@ export class BlockDocTarget implements RenderTarget {
         const libRootFqns = rootFqns.filter(
           (f) => f.startsWith(`${lib.prefix}.`) || f === lib.prefix,
         );
-        files.push({
-          path: lib.indexPath,
-          content: renderIndexPage(
-            `${lib.prefix} — BlockDoc`,
-            libRootFqns,
-            options,
-            lib.indexPath,
-          ),
-        });
+        const nav = resolveSiteNav(libRootFqns, options, lib.prefix);
+        files.push(emitAllBlocksPage(`${lib.prefix} — BlockDoc`, libRootFqns, options, nav));
+        if (options.outLayout !== "fqn") {
+          files.push({
+            path: lib.indexPath,
+            content: renderIndexPage(
+              `${lib.prefix} — BlockDoc`,
+              libRootFqns,
+              options,
+              lib.indexPath,
+              nav,
+            ),
+          });
+        }
       }
     } else {
-      files.push({
-        path: "index.html",
-        content: renderIndexPage("BlockDoc", rootFqns, options, "index.html"),
-      });
+      files.push(emitAllBlocksPage("BlockDoc", rootFqns, options, mergedNav));
+      files.push(emitMergedHome(rootFqns, options, mergedNav));
     }
 
     if (options.outLayout === "fqn") {
       for (const prefix of collectPackagePrefixes(rootFqns)) {
         const indexPath = `${prefix.split(".").join("/")}/index.html`;
-        const rootIndexPath =
-          options.siteMode === "perLibrary"
-            ? (libraryRoots.find(
-                (lib) => prefix.startsWith(`${lib.prefix}.`) || prefix === lib.prefix,
-              )?.indexPath ?? "index.html")
-            : "index.html";
+        const nav = resolveNavForFqn(prefix, rootFqns, options, libraryRoots, mergedNav);
         files.push({
           path: indexPath,
-          content: renderPackageIndexPage(
-            prefix,
-            rootFqns,
-            options,
-            indexPath,
-            rootIndexPath,
-          ),
+          content: renderPackageIndexPage(prefix, rootFqns, options, indexPath, nav),
         });
       }
     }

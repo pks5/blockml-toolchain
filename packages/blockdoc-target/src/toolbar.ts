@@ -1,4 +1,5 @@
 import { escapeHtml, relativePath } from "./fqn-path.js";
+import type { SiteNav } from "./navigation.js";
 import type { SearchIndexEntry } from "./search-index.js";
 
 export const TOOLBAR_CSS = `
@@ -78,12 +79,14 @@ body { font-family: system-ui, sans-serif; margin: 0; line-height: 1.5; }
 ${TOOLBAR_CSS}
 `.trim();
 
-export function renderToolbar(pagePath: string, rootIndexPath: string): string {
-  const indexHref = relativePath(pagePath, rootIndexPath);
+export function renderToolbar(pagePath: string, nav: SiteNav): string {
+  const indexHref = relativePath(pagePath, nav.rootIndexPath);
+  const allBlocksHref = relativePath(pagePath, nav.allBlocksPath);
   return `<header class="toolbar">
   <div class="toolbar-left">
     <span class="brand">BlockDoc</span>
     <a href="${indexHref}">Index</a>
+    <a href="${allBlocksHref}">All Blocks</a>
   </div>
   <div class="toolbar-right">
     <div class="search">
@@ -97,7 +100,7 @@ export function renderToolbar(pagePath: string, rootIndexPath: string): string {
 export function wrapHtmlDocument(
   title: string,
   pagePath: string,
-  rootIndexPath: string,
+  nav: SiteNav,
   css: string,
   bodyInner: string,
 ): string {
@@ -110,13 +113,32 @@ export function wrapHtmlDocument(
   <style>${css}</style>
 </head>
 <body>
-  ${renderToolbar(pagePath, rootIndexPath)}
+  ${renderToolbar(pagePath, nav)}
   <div class="page">
   ${bodyInner}
   </div>
   <script src="${searchSrc}"></script>
 </body>
 </html>`;
+}
+
+export function renderRedirectPage(fromPath: string, toPath: string): string {
+  const href = relativePath(fromPath, toPath);
+  const escaped = escapeHtml(href);
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BlockDoc</title>
+  <meta http-equiv="refresh" content="0;url=${escaped}">
+  <link rel="canonical" href="${escaped}">
+  <script>location.replace(${JSON.stringify(href)});</script>
+</head>
+<body>
+  <p>Redirecting to <a href="${escaped}">documentation</a>.</p>
+</body>
+</html>
+`;
 }
 
 const SEARCH_CLIENT_JS = `

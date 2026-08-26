@@ -39,14 +39,17 @@
     1. Collect registry FQNs; optionally FilterExportedFqns (Library.blocks)
     2. CollectRootFqns (shortest FQN per source file) for indexes
     3. Emit RenderBlockPage per FQN (find nested types via subBlocks DFS)
-    4. Emit site index (merged index.html or perLibrary {prefix}/index.html)
-    5. If outLayout=fqn: CollectPackagePrefixes → RenderPackageIndex each
-    6. BuildSearchIndex → search-index.json + search.js (inlined entries + RenderToolbar client)
+    4. Emit All Blocks listing (all-blocks.html, or perLibrary {prefix}/all-blocks.html)
+    5. Emit site home: merged index.html redirects to FirstInterestingPackagePrefix (fqn) or is a
+       virtual root package index when that prefix is empty; package layout keeps the listing at index.html.
+       perLibrary library index.html is the package index when outLayout=fqn.
+    6. If outLayout=fqn: CollectPackagePrefixes → RenderPackageIndex each
+    7. BuildSearchIndex → search-index.json + search.js (inlined entries + RenderToolbar client)
 
     TypeScript module ↔ BML map:
     • options.ts → bdapi:BlockDocOptions, bdcap:ResolveOptions, bdconfig:BlockDocConstants
     • fqn-path.ts → bdcap:FqnToHtmlPath, RelativeHref, EscapeHtml, bdpath:FqnHtmlPath
-    • navigation.ts → CollectRootFqns, CollectPackagePrefixes, RenderDottedPackagePath
+    • navigation.ts → CollectRootFqns, CollectPackagePrefixes, FirstInterestingPackagePrefix, RenderDottedPackagePath
     • type-links.ts → RenderTypeExpression
     • member-sections.ts → ResolveSubBlockType, RenderMemberSections
     • composition-render.ts → CollectCompositionGroups, RenderComposition

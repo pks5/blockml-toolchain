@@ -92,6 +92,86 @@ export function collectPackagePrefixes(rootFqns: string[]): string[] {
   return [...prefixes].sort();
 }
 
+export function directBlocks(packagePrefix: string, rootFqns: string[]): string[] {
+  return rootFqns.filter((fqn) => fqnToPackagePrefix(fqn) === packagePrefix).sort();
+}
+
+export function directSubPackages(packagePrefix: string, rootFqns: string[]): string[] {
+  const subs = new Set<string>();
+  if (!packagePrefix) {
+    for (const fqn of rootFqns) {
+      const first = fqnToPackagePrefix(fqn).split(".")[0];
+      if (first) {
+        subs.add(first);
+      }
+    }
+    return [...subs].sort();
+  }
+  const prefixDot = `${packagePrefix}.`;
+  for (const fqn of rootFqns) {
+    const pkg = fqnToPackagePrefix(fqn);
+    if (!pkg.startsWith(prefixDot)) {
+      continue;
+    }
+    const firstSegment = pkg.slice(prefixDot.length).split(".")[0];
+    if (firstSegment) {
+      subs.add(`${prefixDot}${firstSegment}`);
+    }
+  }
+  return [...subs].sort();
+}
+
+/**
+ * Deepest package prefix reached by skipping levels that have exactly one
+ * sub-package and no direct blocks. Empty string = site root is interesting.
+ */
+export function firstInterestingPackagePrefix(rootFqns: string[]): string {
+  let current = "";
+  for (;;) {
+    const blocks = directBlocks(current, rootFqns);
+    const subs = directSubPackages(current, rootFqns);
+    if (blocks.length > 0 || subs.length !== 1) {
+      return current;
+    }
+    current = subs[0]!;
+  }
+}
+
+export const ALL_BLOCKS_FILE = "all-blocks.html";
+
+export interface SiteNav {
+  rootIndexPath: string;
+  allBlocksPath: string;
+}
+
+export function resolveSiteNav(
+  rootFqns: string[],
+  options: Required<BlockDocOptions>,
+  libraryPrefix?: string,
+): SiteNav {
+  const allBlocksPath = libraryPrefix
+    ? `${libraryPrefix.split(".").join("/")}/${ALL_BLOCKS_FILE}`
+    : ALL_BLOCKS_FILE;
+  const fallbackHome = libraryPrefix
+    ? `${libraryPrefix.split(".").join("/")}/index.html`
+    : "index.html";
+
+  if (options.outLayout !== "fqn") {
+    return { rootIndexPath: fallbackHome, allBlocksPath };
+  }
+
+  const scoped = libraryPrefix
+    ? rootFqns.filter(
+        (fqn) => fqn === libraryPrefix || fqn.startsWith(`${libraryPrefix}.`),
+      )
+    : rootFqns;
+  const interesting = firstInterestingPackagePrefix(scoped);
+  return {
+    rootIndexPath: interesting ? packageIndexPath(interesting) : fallbackHome,
+    allBlocksPath,
+  };
+}
+
 export function renderDottedPackagePath(
   packageFqn: string,
   pagePath: string,

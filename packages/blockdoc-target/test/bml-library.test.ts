@@ -41,6 +41,7 @@ const EXPECTED_CAPABILITIES = [
   "EscapeHtml",
   "CollectRootFqns",
   "CollectPackagePrefixes",
+  "FirstInterestingPackagePrefix",
   "FilterExportedFqns",
   "RenderTypeExpression",
   "ResolveSubBlockType",

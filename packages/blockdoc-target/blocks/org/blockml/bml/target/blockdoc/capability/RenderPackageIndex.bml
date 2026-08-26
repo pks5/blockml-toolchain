@@ -32,7 +32,7 @@
   <baseType>core:Capability</baseType>
   <is>Assemble package prefix index HTML (fqn layout)</is>
 
-  <documentation>BD22: direct blocks where fqnToPackagePrefix(fqn)===prefix; direct sub-packages = next segment under prefix; breadcrumb Index / linked ancestors / current plain.</documentation>
+  <documentation>BD22: direct blocks where fqnToPackagePrefix(fqn)===prefix; direct sub-packages = next segment under prefix; breadcrumb Index / linked ancestors / current plain. Index href is the interesting home (BD27).</documentation>
 
   <references>
     <see type="bddocumentation:SiteAssembly" relation="SeeAlso" />
@@ -52,8 +52,11 @@
       <documentation>This package index path (required).</documentation>
     </indexPath>
     <rootIndexPath type="type:Text">
-      <documentation>Owning site/library index (required).</documentation>
+      <documentation>Interesting package home (required).</documentation>
     </rootIndexPath>
+    <allBlocksPath type="type:Text">
+      <documentation>All Blocks listing path (required).</documentation>
+    </allBlocksPath>
     <result type="bdpage:PackageIndexPage">
       <documentation>HTML page (required).</documentation>
     </result>
