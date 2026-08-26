@@ -1,0 +1,45 @@
+<!--
+  CLI Capability — WriteCliOutput
+  FQN: org.blockml.bml.cli.capability.WriteCliOutput
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>WriteCliOutput</name>
+  <type>clicap:WriteCliOutput</type>
+  <baseType>core:Capability</baseType>
+  <is>Print CLI lines with CLI24 colors and stdout/stderr routing</is>
+
+  <documentation>CLI24: apply CliColorScheme and write lines. error and warning go to stderr;
+    info, success, and recommendation go to stdout (so terminals that paint stderr red
+    do not color normal status). Direct bin entry uses this; runCli returns an uncolored
+    combined transcript in CliResult.stderr for programmatic callers.</documentation>
+
+  <references>
+    <see type="cliconfig:CliColorScheme" relation="SeeAlso" />
+    <see type="clicap:RunCli" relation="SeeAlso" />
+    <see type="clidocumentation:ExitCodesAndDiagnostics" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <lines type="type:Text">
+      <documentation>Structured lines with kind and uncolored text. (required)</documentation>
+    </lines>
+  </properties>
+
+</block>

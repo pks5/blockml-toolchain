@@ -24,7 +24,7 @@
   <name>DesignDecisions</name>
   <type>clidocumentation:DesignDecisions</type>
   <baseType>core:Documentation</baseType>
-  <is>Normative CLI decisions CLI1–CLI23</is>
+  <is>Normative CLI decisions CLI1–CLI24</is>
 
   <documentation>CLI1 missing blockml.config.json → DefaultBomConfig.
     CLI2 empty targets[] → ["blockdoc"].
@@ -48,7 +48,8 @@
     CLI20 validate skips bootstrapTargets.
     CLI21 bin entry uses realpath so npm .bin/blockml symlink invokes runCli.
     CLI22 blockdoc without --src/--libraries scans cwd + packages/* for blockml.library and documents all .bml under those packages (corpus roots; TypeRegistry may still hold identity seeds for type resolution).
-    CLI23 fatblock --per-package writes one {hostFqn}.fat.bml per local package.json blockml.library (this package and packages/*) into the invocation directory; incompatible with host file, --src, and non-fatblock targets; --out overrides that directory.</documentation>
+    CLI23 fatblock --per-package writes one {hostFqn}.fat.bml per local package.json blockml.library (this package and packages/*) into the invocation directory; incompatible with host file, --src, and non-fatblock targets; --out overrides that directory.
+    CLI24 terminal colors: red error, yellow warning, blue recommendation, default/white info, green success. error/warning → stderr; info/success/recommendation → stdout. runCli transcript stays uncolored.</documentation>
   <references>
     <see type="clidocumentation:PackageOwnership" relation="ReadNext"></see>
   </references>

@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { compileBmlToBom, compileToOutput, getTarget, validateRegistryDocuments, } from "@blockml/compiler";
 import { bootstrapTargets, getTargetCliHints, } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry, projectIdentityLibraryPath, projectLibrarySeeds, } from "./bootstrap-type-registry.js";
+import { diagnosticKind, formatCliOutput, pushLines, writeCliOutput, } from "./cli-style.js";
 import { loadConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { writeOutputFiles } from "./write-output.js";
@@ -95,7 +96,7 @@ export function formatDiagnostic(d) {
 }
 function printDiagnostics(diagnostics, lines) {
     for (const d of diagnostics) {
-        lines.push(formatDiagnostic(d));
+        pushLines(lines, formatDiagnostic(d), diagnosticKind(d.severity));
     }
 }
 function errorCount(diagnostics) {
@@ -104,22 +105,22 @@ function errorCount(diagnostics) {
 function printValidateOutcome(lines, blocksTested, blocksWithErrors, failed) {
     const word = blocksTested === 1 ? "block" : "blocks";
     const status = failed ? "failed" : "succeeded";
-    lines.push(`Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors.`);
+    pushLines(lines, `Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors.`, failed ? "error" : "success");
 }
 function printNamedList(lines, title, items) {
-    lines.push(`${title}:`);
+    pushLines(lines, `${title}:`, "info");
     if (items.length === 0) {
-        lines.push("  (none)");
+        pushLines(lines, "  (none)", "info");
         return;
     }
     for (const item of items) {
-        lines.push(`  ${item}`);
+        pushLines(lines, `  ${item}`, "info");
     }
 }
 function printValidateSources(lines, srcDir, bootstrap, validateFiles) {
     const trace = bootstrap.trace;
     const registryFiles = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
-    lines.push(`srcDir: ${srcDir}`);
+    pushLines(lines, `srcDir: ${srcDir}`, "info");
     printNamedList(lines, "seeds", trace?.seeds ?? []);
     printNamedList(lines, "index (search only)", trace?.searchRoots ?? []);
     printNamedList(lines, "graph", trace?.librariesVisited ?? []);
@@ -130,15 +131,15 @@ function printValidateSources(lines, srcDir, bootstrap, validateFiles) {
     }
 }
 function printCompileSuccess(lines, wrote) {
-    lines.push(`Compilation succeeded. ${wrote}`);
+    pushLines(lines, `Compilation succeeded. ${wrote}`, "success");
 }
 function printCompileFailure(lines, diagnostics, noOutput) {
     const errors = errorCount(diagnostics);
     if (noOutput && errors === 0) {
-        lines.push("Compilation failed: no output files produced.");
+        pushLines(lines, "Compilation failed: no output files produced.", "error");
         return;
     }
-    lines.push(`Compilation failed with ${errors} error(s).`);
+    pushLines(lines, `Compilation failed with ${errors} error(s).`, "error");
 }
 function bootstrapOptsFromParsed(parsed, config, rootDir) {
     const bootstrapOpts = { config, rootDir };
@@ -228,8 +229,8 @@ function buildDocumentTargetOptions(target, parsed, config, wsRoot, absSrc) {
 }
 function runValidate(parsed, rootDir, lines) {
     if (parsed.file && parsed.all) {
-        lines.push("Specify either <file> or --all, not both.");
-        lines.push(USAGE);
+        pushLines(lines, "Specify either <file> or --all, not both.", "error");
+        pushLines(lines, USAGE, "info");
         return 2;
     }
     let config;
@@ -237,7 +238,7 @@ function runValidate(parsed, rootDir, lines) {
         config = loadConfig(rootDir);
     }
     catch (e) {
-        lines.push(e instanceof Error ? e.message : String(e));
+        pushLines(lines, e instanceof Error ? e.message : String(e), "error");
         return 2;
     }
     const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
@@ -263,7 +264,7 @@ function runValidate(parsed, rootDir, lines) {
     if (parsed.file) {
         const filePath = resolve(rootDir, parsed.file);
         if (!existsSync(filePath)) {
-            lines.push(`File not found: ${parsed.file}`);
+            pushLines(lines, `File not found: ${parsed.file}`, "error");
             return 2;
         }
         const source = readFileSync(filePath, "utf8");
@@ -293,20 +294,20 @@ async function compileDocumentOnce(target, parsed, rootDir, config, lines) {
     applyDocumentTargetDefaults(target, parsed, rootDir);
     const hints = getTargetCliHints(target);
     if (hints?.requiresHostFile && !parsed.file) {
-        lines.push(hints.defaultHostFromPackageLibrary
+        pushLines(lines, hints.defaultHostFromPackageLibrary
             ? `${target} requires a host <file> argument or package.json blockml.library.`
-            : `${target} requires a host <file> argument.`);
-        lines.push(USAGE);
+            : `${target} requires a host <file> argument.`, "error");
+        pushLines(lines, USAGE, "info");
         return { code: 2 };
     }
     if (hints?.requiresSrcDir && !parsed.srcDir) {
-        lines.push(`${target} requires --src <dir> for the embed candidate pool.`);
-        lines.push(USAGE);
+        pushLines(lines, `${target} requires --src <dir> for the embed candidate pool.`, "error");
+        pushLines(lines, USAGE, "info");
         return { code: 2 };
     }
     const hostPath = resolve(rootDir, parsed.file);
     if (!existsSync(hostPath)) {
-        lines.push(`File not found: ${parsed.file}`);
+        pushLines(lines, `File not found: ${parsed.file}`, "error");
         return { code: 2 };
     }
     const wsRoot = workspaceRoot(rootDir);
@@ -346,18 +347,18 @@ async function runCompileDocument(target, parsed, rootDir, config, lines) {
 }
 async function runCompilePerPackage(target, parsed, rootDir, lines) {
     if (parsed.file) {
-        lines.push("--per-package cannot be combined with a host <file> argument.");
-        lines.push(USAGE);
+        pushLines(lines, "--per-package cannot be combined with a host <file> argument.", "error");
+        pushLines(lines, USAGE, "info");
         return 2;
     }
     if (parsed.srcDir) {
-        lines.push("--per-package cannot be combined with --src.");
-        lines.push(USAGE);
+        pushLines(lines, "--per-package cannot be combined with --src.", "error");
+        pushLines(lines, USAGE, "info");
         return 2;
     }
     const packageDirs = projectLibraryPackageDirs(rootDir);
     if (packageDirs.length === 0) {
-        lines.push("No packages with package.json blockml.library found.");
+        pushLines(lines, "No packages with package.json blockml.library found.", "error");
         return 2;
     }
     const wrote = [];
@@ -373,7 +374,7 @@ async function runCompilePerPackage(target, parsed, rootDir, lines) {
             pkgConfig = loadConfig(pkgDir);
         }
         catch (e) {
-            lines.push(e instanceof Error ? e.message : String(e));
+            pushLines(lines, e instanceof Error ? e.message : String(e), "error");
             worst = 2;
             continue;
         }
@@ -381,7 +382,7 @@ async function runCompilePerPackage(target, parsed, rootDir, lines) {
         const pkgLines = [];
         const result = await compileDocumentOnce(target, pkgParsed, pkgDir, pkgConfig, pkgLines);
         if (pkgLines.length > 0) {
-            lines.push(`${target} ${label}:`);
+            pushLines(lines, `${target} ${label}:`, "info");
             lines.push(...pkgLines);
         }
         if (result.wrote) {
@@ -403,7 +404,7 @@ async function runCompilePerPackage(target, parsed, rootDir, lines) {
         return 0;
     }
     if (wrote.length > 0) {
-        lines.push(`Wrote ${wrote.length} file(s) before failure.`);
+        pushLines(lines, `Wrote ${wrote.length} file(s) before failure.`, "info");
     }
     return worst;
 }
@@ -476,7 +477,7 @@ async function runCompile(parsed, rootDir, lines) {
         config = loadConfig(rootDir);
     }
     catch (e) {
-        lines.push(e instanceof Error ? e.message : String(e));
+        pushLines(lines, e instanceof Error ? e.message : String(e), "error");
         return 2;
     }
     const target = parsed.target ?? config.defaultTarget ?? "blockdoc";
@@ -484,19 +485,19 @@ async function runCompile(parsed, rootDir, lines) {
         await bootstrapTargets(config, [target], rootDir);
     }
     catch (e) {
-        lines.push(e instanceof Error ? e.message : String(e));
+        pushLines(lines, e instanceof Error ? e.message : String(e), "error");
         return 2;
     }
     const registered = getTarget(target);
     if (!registered) {
-        lines.push(`Unknown target: ${target}`);
+        pushLines(lines, `Unknown target: ${target}`, "error");
         return 2;
     }
     if (parsed.perPackage) {
         const hints = getTargetCliHints(target);
         if (!isDocumentOnlyTarget(registered) || !hints?.defaultHostFromPackageLibrary) {
-            lines.push("--per-package is only valid for fatblock.");
-            lines.push(USAGE);
+            pushLines(lines, "--per-package is only valid for fatblock.", "error");
+            pushLines(lines, USAGE, "info");
             return 2;
         }
         return runCompilePerPackage(target, parsed, rootDir, lines);
@@ -506,25 +507,30 @@ async function runCompile(parsed, rootDir, lines) {
     }
     return runCompileCorpus(target, parsed, rootDir, config, lines);
 }
-export async function runCli(argv, cwd = process.cwd()) {
+async function executeCli(argv, cwd) {
+    const lines = [];
     try {
         const parsed = parseArgs(argv);
-        const lines = [];
         if (parsed.command === "validate") {
             const code = runValidate(parsed, cwd, lines);
-            return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
+            return { code, lines };
         }
         if (parsed.command !== "compile") {
-            lines.push(USAGE);
-            return { code: 2, stderr: `${lines.join("\n")}\n` };
+            pushLines(lines, USAGE, "info");
+            return { code: 2, lines };
         }
         const code = await runCompile(parsed, cwd, lines);
-        return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
+        return { code, lines };
     }
     catch (e) {
         const message = e instanceof Error ? e.message : String(e);
-        return { code: 2, stderr: `Internal CLI error: ${message}\n` };
+        pushLines(lines, `Internal CLI error: ${message}`, "error");
+        return { code: 2, lines };
     }
+}
+export async function runCli(argv, cwd = process.cwd()) {
+    const { code, lines } = await executeCli(argv, cwd);
+    return { code, stderr: formatCliOutput(lines) };
 }
 /** True when argv[1] is this CLI module, including an npm `.bin` symlink to it. */
 export function isCliEntry(argv1, modulePath) {
@@ -539,10 +545,8 @@ export function isCliEntry(argv1, modulePath) {
     }
 }
 if (isCliEntry(process.argv[1], fileURLToPath(import.meta.url))) {
-    const { code, stderr } = await runCli(process.argv.slice(2), process.cwd());
-    if (stderr) {
-        console.error(stderr.replace(/\n$/, ""));
-    }
+    const { code, lines } = await executeCli(process.argv.slice(2), process.cwd());
+    writeCliOutput(lines);
     process.exitCode = code;
 }
 //# sourceMappingURL=cli.js.map

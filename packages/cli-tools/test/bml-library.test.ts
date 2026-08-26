@@ -41,6 +41,7 @@ const EXPECTED_CAPABILITIES = [
   "LoadConfig",
   "ParseArgs",
   "FormatDiagnostic",
+  "WriteCliOutput",
   "RunCli",
   "RunValidate",
   "ValidateAgainstXsd",
@@ -130,6 +131,7 @@ describe("CLI BML library", () => {
     expect(index).toContain("writeOutputFiles");
     expect(index).toContain("bootstrapProjectTypeRegistry");
     expect(index).toContain("formatDiagnostic");
+    expect(index).toContain("writeCliOutput");
     expect(index).toContain("validateFilesAgainstXsd");
 
     const loadConfig = readFileSync(join(pkgRoot, "src/load-config.ts"), "utf8");

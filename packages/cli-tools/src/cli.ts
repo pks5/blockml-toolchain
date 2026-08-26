@@ -23,6 +23,13 @@ import {
   projectIdentityLibraryPath,
   projectLibrarySeeds,
 } from "./bootstrap-type-registry.js";
+import {
+  diagnosticKind,
+  formatCliOutput,
+  pushLines,
+  writeCliOutput,
+  type CliOutputLine,
+} from "./cli-style.js";
 import { loadConfig, type BomConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { writeOutputFiles } from "./write-output.js";
@@ -129,9 +136,12 @@ export function formatDiagnostic(d: PrintableDiagnostic): string {
   return `${d.severity} ${d.code} ${loc} — ${d.message}`;
 }
 
-function printDiagnostics(diagnostics: PrintableDiagnostic[], lines: string[]): void {
+function printDiagnostics(
+  diagnostics: PrintableDiagnostic[],
+  lines: CliOutputLine[],
+): void {
   for (const d of diagnostics) {
-    lines.push(formatDiagnostic(d));
+    pushLines(lines, formatDiagnostic(d), diagnosticKind(d.severity));
   }
 }
 
@@ -140,38 +150,40 @@ function errorCount(diagnostics: PrintableDiagnostic[]): number {
 }
 
 function printValidateOutcome(
-  lines: string[],
+  lines: CliOutputLine[],
   blocksTested: number,
   blocksWithErrors: number,
   failed: boolean,
 ): void {
   const word = blocksTested === 1 ? "block" : "blocks";
   const status = failed ? "failed" : "succeeded";
-  lines.push(
+  pushLines(
+    lines,
     `Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors.`,
+    failed ? "error" : "success",
   );
 }
 
-function printNamedList(lines: string[], title: string, items: string[]): void {
-  lines.push(`${title}:`);
+function printNamedList(lines: CliOutputLine[], title: string, items: string[]): void {
+  pushLines(lines, `${title}:`, "info");
   if (items.length === 0) {
-    lines.push("  (none)");
+    pushLines(lines, "  (none)", "info");
     return;
   }
   for (const item of items) {
-    lines.push(`  ${item}`);
+    pushLines(lines, `  ${item}`, "info");
   }
 }
 
 function printValidateSources(
-  lines: string[],
+  lines: CliOutputLine[],
   srcDir: string,
   bootstrap: BootstrapResult,
   validateFiles: string[],
 ): void {
   const trace = bootstrap.trace;
   const registryFiles = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
-  lines.push(`srcDir: ${srcDir}`);
+  pushLines(lines, `srcDir: ${srcDir}`, "info");
   printNamedList(lines, "seeds", trace?.seeds ?? []);
   printNamedList(lines, "index (search only)", trace?.searchRoots ?? []);
   printNamedList(lines, "graph", trace?.librariesVisited ?? []);
@@ -182,21 +194,21 @@ function printValidateSources(
   }
 }
 
-function printCompileSuccess(lines: string[], wrote: string): void {
-  lines.push(`Compilation succeeded. ${wrote}`);
+function printCompileSuccess(lines: CliOutputLine[], wrote: string): void {
+  pushLines(lines, `Compilation succeeded. ${wrote}`, "success");
 }
 
 function printCompileFailure(
-  lines: string[],
+  lines: CliOutputLine[],
   diagnostics: PrintableDiagnostic[],
   noOutput: boolean,
 ): void {
   const errors = errorCount(diagnostics);
   if (noOutput && errors === 0) {
-    lines.push("Compilation failed: no output files produced.");
+    pushLines(lines, "Compilation failed: no output files produced.", "error");
     return;
   }
-  lines.push(`Compilation failed with ${errors} error(s).`);
+  pushLines(lines, `Compilation failed with ${errors} error(s).`, "error");
 }
 
 function bootstrapOptsFromParsed(
@@ -344,10 +356,10 @@ function buildDocumentTargetOptions(
   return base;
 }
 
-function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): number {
+function runValidate(parsed: ParsedArgs, rootDir: string, lines: CliOutputLine[]): number {
   if (parsed.file && parsed.all) {
-    lines.push("Specify either <file> or --all, not both.");
-    lines.push(USAGE);
+    pushLines(lines, "Specify either <file> or --all, not both.", "error");
+    pushLines(lines, USAGE, "info");
     return 2;
   }
 
@@ -355,7 +367,7 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
   try {
     config = loadConfig(rootDir);
   } catch (e) {
-    lines.push(e instanceof Error ? e.message : String(e));
+    pushLines(lines, e instanceof Error ? e.message : String(e), "error");
     return 2;
   }
 
@@ -383,7 +395,7 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
   if (parsed.file) {
     const filePath = resolve(rootDir, parsed.file);
     if (!existsSync(filePath)) {
-      lines.push(`File not found: ${parsed.file}`);
+      pushLines(lines, `File not found: ${parsed.file}`, "error");
       return 2;
     }
     const source = readFileSync(filePath, "utf8");
@@ -428,28 +440,30 @@ async function compileDocumentOnce(
   parsed: ParsedArgs,
   rootDir: string,
   config: BomConfig,
-  lines: string[],
+  lines: CliOutputLine[],
 ): Promise<{ code: number; wrote?: string }> {
   applyDocumentTargetDefaults(target, parsed, rootDir);
   const hints = getTargetCliHints(target);
   if (hints?.requiresHostFile && !parsed.file) {
-    lines.push(
+    pushLines(
+      lines,
       hints.defaultHostFromPackageLibrary
         ? `${target} requires a host <file> argument or package.json blockml.library.`
         : `${target} requires a host <file> argument.`,
+      "error",
     );
-    lines.push(USAGE);
+    pushLines(lines, USAGE, "info");
     return { code: 2 };
   }
   if (hints?.requiresSrcDir && !parsed.srcDir) {
-    lines.push(`${target} requires --src <dir> for the embed candidate pool.`);
-    lines.push(USAGE);
+    pushLines(lines, `${target} requires --src <dir> for the embed candidate pool.`, "error");
+    pushLines(lines, USAGE, "info");
     return { code: 2 };
   }
 
   const hostPath = resolve(rootDir, parsed.file!);
   if (!existsSync(hostPath)) {
-    lines.push(`File not found: ${parsed.file}`);
+    pushLines(lines, `File not found: ${parsed.file}`, "error");
     return { code: 2 };
   }
 
@@ -508,7 +522,7 @@ async function runCompileDocument(
   parsed: ParsedArgs,
   rootDir: string,
   config: BomConfig,
-  lines: string[],
+  lines: CliOutputLine[],
 ): Promise<number> {
   const result = await compileDocumentOnce(target, parsed, rootDir, config, lines);
   if (result.code === 0 && result.wrote) {
@@ -521,22 +535,22 @@ async function runCompilePerPackage(
   target: string,
   parsed: ParsedArgs,
   rootDir: string,
-  lines: string[],
+  lines: CliOutputLine[],
 ): Promise<number> {
   if (parsed.file) {
-    lines.push("--per-package cannot be combined with a host <file> argument.");
-    lines.push(USAGE);
+    pushLines(lines, "--per-package cannot be combined with a host <file> argument.", "error");
+    pushLines(lines, USAGE, "info");
     return 2;
   }
   if (parsed.srcDir) {
-    lines.push("--per-package cannot be combined with --src.");
-    lines.push(USAGE);
+    pushLines(lines, "--per-package cannot be combined with --src.", "error");
+    pushLines(lines, USAGE, "info");
     return 2;
   }
 
   const packageDirs = projectLibraryPackageDirs(rootDir);
   if (packageDirs.length === 0) {
-    lines.push("No packages with package.json blockml.library found.");
+    pushLines(lines, "No packages with package.json blockml.library found.", "error");
     return 2;
   }
 
@@ -552,12 +566,12 @@ async function runCompilePerPackage(
     try {
       pkgConfig = loadConfig(pkgDir);
     } catch (e) {
-      lines.push(e instanceof Error ? e.message : String(e));
+      pushLines(lines, e instanceof Error ? e.message : String(e), "error");
       worst = 2;
       continue;
     }
     const label = relative(rootDir, pkgDir) || ".";
-    const pkgLines: string[] = [];
+    const pkgLines: CliOutputLine[] = [];
     const result = await compileDocumentOnce(
       target,
       pkgParsed,
@@ -566,7 +580,7 @@ async function runCompilePerPackage(
       pkgLines,
     );
     if (pkgLines.length > 0) {
-      lines.push(`${target} ${label}:`);
+      pushLines(lines, `${target} ${label}:`, "info");
       lines.push(...pkgLines);
     }
     if (result.wrote) {
@@ -590,7 +604,7 @@ async function runCompilePerPackage(
     return 0;
   }
   if (wrote.length > 0) {
-    lines.push(`Wrote ${wrote.length} file(s) before failure.`);
+    pushLines(lines, `Wrote ${wrote.length} file(s) before failure.`, "info");
   }
   return worst;
 }
@@ -613,7 +627,7 @@ async function runCompileCorpus(
   parsed: ParsedArgs,
   rootDir: string,
   config: BomConfig,
-  lines: string[],
+  lines: CliOutputLine[],
 ): Promise<number> {
   const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
   const libraries = projectLibrarySeeds({
@@ -694,13 +708,13 @@ async function runCompileCorpus(
 async function runCompile(
   parsed: ParsedArgs,
   rootDir: string,
-  lines: string[],
+  lines: CliOutputLine[],
 ): Promise<number> {
   let config: BomConfig;
   try {
     config = loadConfig(rootDir);
   } catch (e) {
-    lines.push(e instanceof Error ? e.message : String(e));
+    pushLines(lines, e instanceof Error ? e.message : String(e), "error");
     return 2;
   }
 
@@ -709,21 +723,21 @@ async function runCompile(
   try {
     await bootstrapTargets(config, [target], rootDir);
   } catch (e) {
-    lines.push(e instanceof Error ? e.message : String(e));
+    pushLines(lines, e instanceof Error ? e.message : String(e), "error");
     return 2;
   }
 
   const registered = getTarget(target);
   if (!registered) {
-    lines.push(`Unknown target: ${target}`);
+    pushLines(lines, `Unknown target: ${target}`, "error");
     return 2;
   }
 
   if (parsed.perPackage) {
     const hints = getTargetCliHints(target);
     if (!isDocumentOnlyTarget(registered) || !hints?.defaultHostFromPackageLibrary) {
-      lines.push("--per-package is only valid for fatblock.");
-      lines.push(USAGE);
+      pushLines(lines, "--per-package is only valid for fatblock.", "error");
+      pushLines(lines, USAGE, "info");
       return 2;
     }
     return runCompilePerPackage(target, parsed, rootDir, lines);
@@ -736,30 +750,39 @@ async function runCompile(
   return runCompileCorpus(target, parsed, rootDir, config, lines);
 }
 
+async function executeCli(
+  argv: string[],
+  cwd: string,
+): Promise<{ code: number; lines: CliOutputLine[] }> {
+  const lines: CliOutputLine[] = [];
+  try {
+    const parsed = parseArgs(argv);
+
+    if (parsed.command === "validate") {
+      const code = runValidate(parsed, cwd, lines);
+      return { code, lines };
+    }
+
+    if (parsed.command !== "compile") {
+      pushLines(lines, USAGE, "info");
+      return { code: 2, lines };
+    }
+
+    const code = await runCompile(parsed, cwd, lines);
+    return { code, lines };
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    pushLines(lines, `Internal CLI error: ${message}`, "error");
+    return { code: 2, lines };
+  }
+}
+
 export async function runCli(
   argv: string[],
   cwd = process.cwd(),
 ): Promise<{ code: number; stderr: string }> {
-  try {
-    const parsed = parseArgs(argv);
-    const lines: string[] = [];
-
-    if (parsed.command === "validate") {
-      const code = runValidate(parsed, cwd, lines);
-      return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
-    }
-
-    if (parsed.command !== "compile") {
-      lines.push(USAGE);
-      return { code: 2, stderr: `${lines.join("\n")}\n` };
-    }
-
-    const code = await runCompile(parsed, cwd, lines);
-    return { code, stderr: lines.length ? `${lines.join("\n")}\n` : "" };
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    return { code: 2, stderr: `Internal CLI error: ${message}\n` };
-  }
+  const { code, lines } = await executeCli(argv, cwd);
+  return { code, stderr: formatCliOutput(lines) };
 }
 
 /** True when argv[1] is this CLI module, including an npm `.bin` symlink to it. */
@@ -775,9 +798,7 @@ export function isCliEntry(argv1: string | undefined, modulePath: string): boole
 }
 
 if (isCliEntry(process.argv[1], fileURLToPath(import.meta.url))) {
-  const { code, stderr } = await runCli(process.argv.slice(2), process.cwd());
-  if (stderr) {
-    console.error(stderr.replace(/\n$/, ""));
-  }
+  const { code, lines } = await executeCli(process.argv.slice(2), process.cwd());
+  writeCliOutput(lines);
   process.exitCode = code;
 }

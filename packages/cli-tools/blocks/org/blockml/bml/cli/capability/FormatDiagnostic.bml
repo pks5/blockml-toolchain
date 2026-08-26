@@ -23,12 +23,14 @@
   <name>FormatDiagnostic</name>
   <type>clicap:FormatDiagnostic</type>
   <baseType>core:Capability</baseType>
-  <is>Format one diagnostic for stderr output</is>
+  <is>Format one diagnostic for CLI transcript</is>
 
-  <documentation>CLI17: format severity code file:line — message. Empty source omits location.</documentation>
+  <documentation>CLI17: format severity code file:line — message. Empty source omits location.
+    Output is uncolored text. WriteCliOutput applies CLI24 colors from severity.</documentation>
 
   <references>
     <see type="clidocumentation:ExitCodesAndDiagnostics" relation="SeeAlso" />
+    <see type="clicap:WriteCliOutput" relation="SeeAlso" />
   </references>
 
   <properties>

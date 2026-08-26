@@ -30,6 +30,7 @@
     • runCli(argv, cwd?) → Promise&lt;{ code, stderr }&gt;
     • parseArgs(argv) → ParsedArgs
     • formatDiagnostic(d) → string
+    • writeCliOutput(lines) — CLI24 colored bin printer
     • loadConfig(cwd?) → BomConfig
     • bootstrapTargets(config, requested?, rootDir?) → Promise&lt;void&gt;
     • registerTargetFactory(name, factory, hints?)
@@ -41,11 +42,12 @@
     • writeOutputFiles(output, outDir, rootDir?, options?) → WriteOutputResult
     • loadTargetFromPackage / resolveTargetPackage / isBuiltinTarget (plugin loader)
 
-    Bin: blockml → dist/cli.js (direct run invokes runCli; CLI21 realpath so
-    node_modules/.bin/blockml symlink matches).
+    Bin: blockml → dist/cli.js (direct run invokes WriteCliOutput after executeCli;
+    CLI21 realpath so node_modules/.bin/blockml symlink matches).
 
     BML counterparts: clicap:RunCli, ParseArgs, LoadConfig, BootstrapTargets,
-    RegisterTargetFactory, BootstrapProjectTypeRegistry, WriteOutputFiles.</documentation>
+    RegisterTargetFactory, BootstrapProjectTypeRegistry, WriteOutputFiles,
+    WriteCliOutput, FormatDiagnostic.</documentation>
   <references>
     <see type="clidocumentation:RuntimeBootstrap" relation="ReadNext"></see>
     <see type="clicap:RunCli" relation="Defines"></see>

@@ -32,14 +32,19 @@
     • 2 — configuration error (unknown command, missing file, unsupported target, bootstrap failure)
       or uncaught Internal CLI error (application failure, not a BML diagnostic)
 
-    CLI17 diagnostic format: severity code file:line — message
-    Printed to stderr first. Then a status line:
+    CLI17 diagnostic format: severity code file:line — message (uncolored text).
+    Printed first. Then a status line:
     validate — Validation succeeded|failed. Tested N block(s), M with errors.
     compile — Compilation succeeded. Wrote …  |  Compilation failed with K error(s).
     Uncaught exception — Internal CLI error: message (exit 2; no stack dump).
-    runCli joins lines with newlines.</documentation>
+    runCli joins uncolored lines with newlines in CliResult.stderr.
+    Direct bin entry uses WriteCliOutput (CLI24): red error, yellow warning,
+    blue recommendation, default/white info, green success. error and warning
+    write to stderr; info, success, and recommendation write to stdout.</documentation>
   <references>
     <see type="clidocumentation:DualCliModel" relation="ReadNext"></see>
+    <see type="cliconfig:CliColorScheme" relation="SeeAlso"></see>
+    <see type="clicap:WriteCliOutput" relation="SeeAlso"></see>
   </references>
 
 </block>
