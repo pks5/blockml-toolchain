@@ -29,7 +29,7 @@
   <is>Output file naming and host write path</is>
 
   <documentation>FB18 FatOutputBasename: Host.bml → Host.fat.bml (strip .bml, append .fat.bml).
-    Target returns relative path only; CLI writes beside host or under --out.
+    Target returns relative path only; CLI writes to project root or under --out.
 
     Single file per render. Content is canonical BML XML from SerializeFatDocument
     (indent 2, no XML declaration by serializer defaults).</documentation>

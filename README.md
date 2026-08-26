@@ -46,11 +46,14 @@ Emit render-target output. V1 targets: `blockdoc` (default), `xsd`, `fatblock`.
 # Library / corpus targets
 blockml compile blockdoc|xsd [--out dir] [--src dir] [--libraries a,b]
 
-# Document-scope fatblock (file + --src required)
-blockml compile file.bml fatblock --src dir [--include a,b] [--out dir]
+# FatBlock of the current package library (package.json blockml.library as host + source)
+blockml compile fatblock [--include a,b] [--out dir]
+
+# Document-scope fatblock with an explicit host
+blockml compile file.bml fatblock [--src dir] [--include a,b] [--out dir]
 ```
 
-Default output directories: `blockdoc` (blockdoc), `schemas` (xsd).
+Default output directories: `blockdoc` (blockdoc), `schemas` (xsd), project root (fatblock, `*.fat.bml`).
 
 ### npm script wrappers
 
@@ -59,7 +62,7 @@ Default output directories: `blockdoc` (blockdoc), `schemas` (xsd).
 | `npm run validate` | `blockml validate` |
 | `npm run compile:blockdoc` | `blockml compile blockdoc` |
 | `npm run compile:xsd` | `blockml compile xsd` |
-| `npm run compile:fatblock` | `blockml compile` (fatblock via CLI defaults) |
+| `npm run compile:fatblock` | `blockml compile fatblock` |
 
 Exit codes: `0` success · `1` diagnostics · `2` config / unknown command / unsupported target.
 

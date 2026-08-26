@@ -38,8 +38,8 @@
     CLI10 validate file XOR --all. Default validate = project sources; --all = entire registry.
     CLI11 validate never writes render output.
     CLI12 default compile target blockdoc.
-    CLI13 defaultOutDir xsd→schemas; blockdoc→config.outDir/blockdoc.
-    CLI14 fatblock requires file + --src.
+    CLI13 defaultOutDir xsd→schemas; blockdoc→config.outDir/blockdoc; fatblock→. (project root).
+    CLI14 fatblock without file/--src defaults to package.json blockml.library as host and that library directory as src; missing both file and library → exit 2.
     CLI15 fatblock separate workspace registry with core Library.
     CLI16 compile scope auto libraries or roots.
     CLI17 formatDiagnostic line format.

@@ -25,7 +25,7 @@
   <baseType>core:Capability</baseType>
   <is>Resolve default output directory for a target</is>
 
-  <documentation>CLI13: xsd returns schemas; blockdoc returns config.outDir or blockdoc.</documentation>
+  <documentation>CLI13: xsd returns schemas; blockdoc returns config.outDir or blockdoc; fatblock returns . (project root).</documentation>
 
   <properties>
     <target type="type:Text">

@@ -22,6 +22,11 @@ export function projectLibrarySeeds(
   return resolveLibrarySeeds(rootDir, extras);
 }
 
+/** package.json blockml.library path, if declared. */
+export function projectIdentityLibraryPath(rootDir: string): string | undefined {
+  return resolveLibrarySeeds(rootDir)[0];
+}
+
 export function bootstrapProjectTypeRegistry(
   options: CliBootstrapOptions,
 ): BootstrapResult {

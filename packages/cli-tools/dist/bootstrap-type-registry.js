@@ -4,6 +4,10 @@ export function projectLibrarySeeds(options) {
     const extras = options.librariesOverride ?? options.config.libraries ?? [];
     return resolveLibrarySeeds(rootDir, extras);
 }
+/** package.json blockml.library path, if declared. */
+export function projectIdentityLibraryPath(rootDir) {
+    return resolveLibrarySeeds(rootDir)[0];
+}
 export function bootstrapProjectTypeRegistry(options) {
     const rootDir = options.rootDir ?? process.cwd();
     const srcDir = options.srcDirOverride ?? options.config.srcDir ?? "blocks";

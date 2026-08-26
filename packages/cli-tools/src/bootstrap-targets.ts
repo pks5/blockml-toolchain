@@ -33,6 +33,9 @@ const BUILTIN_HINTS: Record<string, TargetCliHints> = {
   fatblock: {
     requiresHostFile: true,
     requiresSrcDir: true,
+    defaultOutDir: ".",
+    defaultHostFromPackageLibrary: true,
+    defaultSrcFromHostDir: true,
     documentBootstrap: "workspace-core",
   },
 };

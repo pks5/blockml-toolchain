@@ -20,6 +20,9 @@ const BUILTIN_HINTS = {
     fatblock: {
         requiresHostFile: true,
         requiresSrcDir: true,
+        defaultOutDir: ".",
+        defaultHostFromPackageLibrary: true,
+        defaultSrcFromHostDir: true,
         documentBootstrap: "workspace-core",
     },
 };

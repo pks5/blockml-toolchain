@@ -5,6 +5,10 @@ export interface TargetCliHints {
     requiresHostFile?: boolean;
     requiresSrcDir?: boolean;
     documentBootstrap?: "project" | "workspace-core";
+    /** When file is omitted, use package.json blockml.library as the host. */
+    defaultHostFromPackageLibrary?: boolean;
+    /** When --src is omitted, use the host file's directory as the candidate pool. */
+    defaultSrcFromHostDir?: boolean;
 }
 export declare function isBuiltinTarget(name: string): boolean;
 export declare function resolveTargetPackage(config: BomConfig, name: string): string | undefined;

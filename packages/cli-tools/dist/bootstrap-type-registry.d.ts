@@ -9,5 +9,7 @@ export interface CliBootstrapOptions {
     corpusPaths?: string[];
 }
 export declare function projectLibrarySeeds(options: Pick<CliBootstrapOptions, "config" | "rootDir" | "librariesOverride">): string[];
+/** package.json blockml.library path, if declared. */
+export declare function projectIdentityLibraryPath(rootDir: string): string | undefined;
 export declare function bootstrapProjectTypeRegistry(options: CliBootstrapOptions): BootstrapResult;
 //# sourceMappingURL=bootstrap-type-registry.d.ts.map

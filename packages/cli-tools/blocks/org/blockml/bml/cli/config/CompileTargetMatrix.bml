@@ -25,11 +25,11 @@
   <baseType>cli:CliType</baseType>
   <is>Target-specific CLI argument requirements (V1)</is>
 
-  <documentation>CLI19 target matrix. Document targets require file; library/corpus omit file; --all ignored for corpus targets.</documentation>
+  <documentation>CLI19 target matrix. Document fatblock defaults file from package.json blockml.library; library/corpus omit file; --all ignored for corpus targets.</documentation>
   <properties>
     <blockdoc type="type:Text"><documentation>file omit; --all no; default outDir blockdoc; no --src/--libraries → project blockml.library packages as corpus; else auto libraries[] then srcDir.</documentation></blockdoc>
     <xsd type="type:Text"><documentation>file omit; --all no; scope auto libraries[]; default outDir schemas.</documentation></xsd>
-    <fatblock type="type:Text"><documentation>file required; --src required; document scope; single output file beside host.</documentation></fatblock>
+    <fatblock type="type:Text"><documentation>file optional (default package.json blockml.library); --src optional (default host directory); document scope; single Library.fat.bml at project root.</documentation></fatblock>
   </properties>
 
 </block>

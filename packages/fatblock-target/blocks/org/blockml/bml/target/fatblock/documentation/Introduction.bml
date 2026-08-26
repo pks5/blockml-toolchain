@@ -36,7 +36,8 @@
     packages/fatblock-target/src/ implements it. Tests in packages/fatblock-target/test/
     encode behavioral contracts.
 
-    V1 is a folder-bundle target: document scope, required srcDir (--src) peer pool,
+    V1 is a folder-bundle target: document scope, srcDir (--src) peer pool
+    (CLI defaults host and srcDir from package.json blockml.library),
     optional include FQN filters. Not transitive dependency closure (that is v2).
 
     Pipeline: ResolveOptions → AssembleFatDocument → SerializeFatDocument → Host.fat.bml.

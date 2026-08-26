@@ -418,13 +418,13 @@ describe("runCli other commands", () => {
     expect(stderr).toMatch(/Usage: blockml/);
   });
 
-  it("requires host file and --src for fatblock", async () => {
-    const { code, stderr } = await runCli(["compile", "fatblock"], ROOT);
+  it("requires host file or package.json blockml.library for fatblock", async () => {
+    const { code, stderr } = await runCli(["compile", "fatblock"], tmpProject);
     expect(code).toBe(2);
-    expect(stderr).toMatch(/fatblock requires a host <file> argument/);
+    expect(stderr).toMatch(/fatblock requires a host <file> argument or package.json blockml.library/);
   });
 
-  it("compiles fatblock into Host.fat.bml", async () => {
+  it("compiles fatblock into Host.fat.bml at project root", async () => {
     const srcDir = join(tmpProject, "src");
     mkdirSync(srcDir, { recursive: true });
     writeFileSync(
@@ -461,10 +461,58 @@ describe("runCli other commands", () => {
 
     expect(code, stderr).toBe(0);
     expect(stderr).toMatch(/Compilation succeeded\. Wrote .*Host\.fat\.bml/);
-    expect(existsSync(join(tmpProject, "src", "Host.fat.bml"))).toBe(true);
-    const fat = readFileSync(join(tmpProject, "src", "Host.fat.bml"), "utf8");
+    expect(existsSync(join(tmpProject, "Host.fat.bml"))).toBe(true);
+    const fat = readFileSync(join(tmpProject, "Host.fat.bml"), "utf8");
     expect(fat).toContain("<embeddedBlocks>");
     expect(fat).toContain("cli:Peer");
+  });
+
+  it("defaults fatblock host and src to package.json blockml.library", async () => {
+    const libDir = join(tmpProject, "blocks", "com", "test", "lib");
+    mkdirSync(libDir, { recursive: true });
+    writeFileSync(
+      join(tmpProject, "package.json"),
+      JSON.stringify({
+        name: "fatblock-default-lib",
+        blockml: { library: "./blocks/com/test/lib/Library.bml" },
+      }),
+      "utf8",
+    );
+    writeFileSync(
+      join(libDir, "Library.bml"),
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lib="com.test.lib">
+  <name>Library</name>
+  <type>lib:Library</type>
+  <baseType>core:Block</baseType>
+  <is>library host</is>
+  <version>1.0.0</version>
+</block>`,
+      "utf8",
+    );
+    writeFileSync(
+      join(libDir, "Peer.bml"),
+      `<block xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lib="com.test.lib">
+  <name>Peer</name>
+  <type>lib:Peer</type>
+  <baseType>core:Block</baseType>
+  <is>library peer</is>
+  <version>1.0.0</version>
+</block>`,
+      "utf8",
+    );
+
+    const { code, stderr } = await runCli(["compile", "fatblock"], tmpProject);
+
+    expect(code, stderr).toBe(0);
+    expect(stderr).toMatch(/Compilation succeeded\. Wrote .*Library\.fat\.bml/);
+    expect(existsSync(join(tmpProject, "Library.fat.bml"))).toBe(true);
+    const fat = readFileSync(join(tmpProject, "Library.fat.bml"), "utf8");
+    expect(fat).toContain("<embeddedBlocks>");
+    expect(fat).toContain("lib:Peer");
   });
 
   it("rejects fatblock when host already has embeddedBlocks", async () => {

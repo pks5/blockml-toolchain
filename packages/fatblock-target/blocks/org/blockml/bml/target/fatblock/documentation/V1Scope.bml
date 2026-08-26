@@ -31,6 +31,7 @@
   <documentation>V1 implemented:
     • Registry name fatblock; accepts document only
     • Required srcDir peer pool of root blocks under that directory
+      (CLI may default host and srcDir from package.json blockml.library)
     • Optional include exact / prefix* filters
     • Reject host or embed that already declares embeddedBlocks
     • Flat root embeddedBlocks; preserve embed subBlocks[]

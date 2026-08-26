@@ -5,12 +5,12 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { compileBmlToBom, compileToOutput, getTarget, validateRegistryDocuments, } from "@blockml/compiler";
 import { bootstrapTargets, getTargetCliHints, } from "./bootstrap-targets.js";
-import { bootstrapProjectTypeRegistry, projectLibrarySeeds } from "./bootstrap-type-registry.js";
+import { bootstrapProjectTypeRegistry, projectIdentityLibraryPath, projectLibrarySeeds, } from "./bootstrap-type-registry.js";
 import { loadConfig } from "./load-config.js";
 import { projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { writeOutputFiles } from "./write-output.js";
 const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
-    "       blockml compile <file> <document-target> --src dir [--include a,b] [--out dir]\n" +
+    "       blockml compile <file> <document-target> [--src dir] [--include a,b] [--out dir]\n" +
     "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]";
 function workspaceRoot(from) {
     let dir = resolve(from);
@@ -160,13 +160,34 @@ function resolveDefaultOutDir(target, config) {
     }
     return config.outDir ?? "blockdoc";
 }
-function resolveDocumentOutDir(parsed, config, rootDir, hostPath) {
+function resolveDocumentOutDir(target, parsed, config, rootDir, hostPath) {
     if (parsed.outDir) {
         return parsed.outDir;
+    }
+    const hints = getTargetCliHints(target);
+    if (hints?.defaultOutDir) {
+        if (typeof hints.defaultOutDir === "function") {
+            return hints.defaultOutDir(config);
+        }
+        return hints.defaultOutDir;
     }
     const hostDir = dirname(hostPath);
     const rel = relative(rootDir, hostDir);
     return rel || ".";
+}
+function applyDocumentTargetDefaults(target, parsed, rootDir) {
+    const hints = getTargetCliHints(target);
+    if (!parsed.file && hints?.defaultHostFromPackageLibrary) {
+        const identity = projectIdentityLibraryPath(rootDir);
+        if (identity) {
+            parsed.file = identity;
+        }
+    }
+    if (!parsed.srcDir && parsed.file && hints?.defaultSrcFromHostDir) {
+        const hostPath = resolve(rootDir, parsed.file);
+        const rel = relative(rootDir, dirname(hostPath));
+        parsed.srcDir = rel === "" ? "." : rel;
+    }
 }
 function buildDocumentTargetOptions(target, parsed, config, wsRoot, absSrc) {
     const fromConfig = config.targetOptions?.[target];
@@ -240,9 +261,12 @@ function runValidate(parsed, rootDir, lines) {
     return failed ? 1 : 0;
 }
 async function runCompileDocument(target, parsed, rootDir, config, lines) {
+    applyDocumentTargetDefaults(target, parsed, rootDir);
     const hints = getTargetCliHints(target);
     if (hints?.requiresHostFile && !parsed.file) {
-        lines.push(`${target} requires a host <file> argument.`);
+        lines.push(hints.defaultHostFromPackageLibrary
+            ? `${target} requires a host <file> argument or package.json blockml.library.`
+            : `${target} requires a host <file> argument.`);
         lines.push(USAGE);
         return 2;
     }
@@ -278,7 +302,7 @@ async function runCompileDocument(target, parsed, rootDir, config, lines) {
         bootstrap = bootstrapProjectTypeRegistry(bootstrapOpts);
     }
     const source = readFileSync(hostPath, "utf8");
-    const outDir = resolveDocumentOutDir(parsed, config, rootDir, hostPath);
+    const outDir = resolveDocumentOutDir(target, parsed, config, rootDir, hostPath);
     const targetOptions = buildDocumentTargetOptions(target, parsed, config, wsRoot, absSrc);
     const result = compileToOutput({
         scope: { kind: "document", document: { source, filePath: hostPath } },

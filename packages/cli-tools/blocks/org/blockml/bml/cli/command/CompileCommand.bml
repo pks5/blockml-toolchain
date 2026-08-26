@@ -25,14 +25,14 @@
   <baseType>cli:CliType</baseType>
   <is>blockml compile command model</is>
 
-  <documentation>CLI12–CLI16: compile to registered target. Default target blockdoc when omitted.</documentation>
+  <documentation>CLI12–CLI16: compile to registered target. Default target blockdoc when omitted. Fatblock without file uses package.json blockml.library.</documentation>
   <references>
     <see type="clidocumentation:CompileCommand" relation="SeeAlso" />
     <see type="clicap:RunCompile" relation="SeeAlso" />
   </references>
   <properties>
     <target type="type:Text"><documentation>Registry name. Default blockdoc. (optional)</documentation></target>
-    <file type="type:Text"><documentation>Required for document targets (fatblock). (optional)</documentation></file>
+    <file type="type:Text"><documentation>Host document for fatblock; defaults to package.json blockml.library. (optional)</documentation></file>
     <all type="type:Boolean"><documentation>Document targets only — loop srcDir. (optional)</documentation></all>
   </properties>
 
