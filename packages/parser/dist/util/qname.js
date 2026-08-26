@@ -17,6 +17,7 @@ const PRIMITIVE_TYPES = {
     Color: "org.blockml.bml.type.Color",
     Entity: "org.blockml.bml.core.Entity",
     Block: "org.blockml.bml.core.Block",
+    Any: "org.blockml.bml.core.Any",
     TypeReference: "org.blockml.bml.type.TypeReference",
     TypeReferenceEntity: "org.blockml.bml.type.TypeReferenceEntity",
     InstanceReference: "org.blockml.bml.type.InstanceReference",

@@ -27,7 +27,7 @@
   <name>EmitRootStartTag</name>
   <type>sercap:EmitRootStartTag</type>
   <baseType>core:Capability</baseType>
-  <is>Emit root <block> opening tag with xmlns and xsi attrs (B25)</is>
+  <is>Emit root &lt;block> opening tag with xmlns and xsi attrs (B25)</is>
 
   <documentation>Re-emits namespaceBindings, schemaLocation, noNamespaceSchemaLocation from SourceInfo.</documentation>
 

@@ -23,7 +23,9 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:parmap="org.blockml.bml.compiler.parser.map"
   xmlns:type="org.blockml.bml.type"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+>
 
   <name>MappingPrinciples</name>
   <type>pardocumentation:MappingPrinciples</type>

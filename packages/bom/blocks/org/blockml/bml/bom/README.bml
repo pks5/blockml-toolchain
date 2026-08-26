@@ -24,7 +24,7 @@
   xmlns:type="org.blockml.bml.type">
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>bom:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the BOM Urmodell library</is>
 

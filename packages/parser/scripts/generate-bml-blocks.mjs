@@ -30,7 +30,10 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:parconfig="org.blockml.bml.compiler.parser.config"
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:parmap="org.blockml.bml.compiler.parser.map"
-  xmlns:type="org.blockml.bml.type"`;
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"`;
 
 /** @typedef {{ name: string, type: string, required?: boolean, doc?: string, literal?: string }} Field */
 /** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, abstract?: boolean, baseType?: string, fields?: Field[], refs?: string[] }} BlockDef */
@@ -794,7 +797,7 @@ ${XMLNS}
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML Parser library</value>
     </description>
   </properties>
@@ -808,8 +811,6 @@ ${XMLNS}
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
       </composition>
     </dependencies>
@@ -833,7 +834,7 @@ ${XMLNS}
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation">
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>parser:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the Parser compiler library</is>
 

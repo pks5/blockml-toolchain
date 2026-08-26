@@ -40,7 +40,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML CLI library</value>
     </description>
   </properties>

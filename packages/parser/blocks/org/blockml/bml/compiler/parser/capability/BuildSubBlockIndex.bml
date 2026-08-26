@@ -36,7 +36,7 @@
       <documentation>block. TS type: bomblock:BlockDefinition. (required)</documentation>
     </block>
     <index type="type:Text">
-      <documentation>Map<string, string> (required)</documentation>
+      <documentation>Map&lt;string, string> (required)</documentation>
     </index>
   </properties>
 

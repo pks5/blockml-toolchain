@@ -33,10 +33,11 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:lsp="org.blockml.bml.lsp"
   xmlns:lspcap="org.blockml.bml.lsp.capability"
-  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"`;
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"`;
 
 /** @typedef {{ name: string, type: string, required?: boolean, doc?: string }} Field */
-/** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, abstract?: boolean, baseType?: string, refs?: string[] }} BlockDef */
+/** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, abstract?: boolean, baseType?: string, fields?: Field[], refs?: string[] }} BlockDef */
 /** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, tsExport?: string, inputs?: Field[], output?: Field, refs?: string[] }} CapabilityDef */
 
 /** @type {BlockDef[]} */
@@ -50,6 +51,32 @@ const blocks = [
     abstract: true,
     baseType: "core:Entity",
     refs: ["bom:UrmodellType"],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
+    name: "WorkspaceState",
+    is: "Cached workspace TypeRegistry and bootstrap diagnostics",
+    doc: "Per-root-dir language-service workspace. createWorkspace() builds and caches this.",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "rootDir", type: "type:Text", required: true, doc: "Absolute workspace root." },
+      { name: "config", type: "type:Text", required: true, doc: "Loaded BomConfig (srcDir, libraries)." },
+      { name: "registry", type: "fwcap:TypeRegistry", required: true, doc: "Bootstrapped TypeRegistry for this workspace." },
+      { name: "bootstrapDiagnostics", type: "bomcommon:Diagnostic[]", required: true, doc: "Library-graph bootstrap errors kept for analysis." },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
+    name: "AnalysisResult",
+    is: "Parse plus validate outcome for one document",
+    doc: "Returned by analyzeDocument(). document is null when parse cannot produce a BomDocument.",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true, doc: "Parse and validate diagnostics." },
+      { name: "document", type: "bomdoc:BomDocument", doc: "Parsed document, or omitted when parse failed." },
+    ],
   },
 ];
 
@@ -172,6 +199,20 @@ function typeRef(b) {
   return `${b.prefix}:${b.name}`;
 }
 
+function renderFields(fields) {
+  if (!fields?.length) return "";
+  const props = fields
+    .map((f) => {
+      const req = f.required ? " (required)" : " (optional)";
+      const doc = f.doc ? `${f.doc}${req}` : `${f.name}${req}. TS type: ${f.type}.`;
+      return `    <${f.name} type="${f.type}">
+      <documentation>${doc}</documentation>
+    </${f.name}>`;
+    })
+    .join("\n");
+  return `\n\n  <properties>\n${props}\n  </properties>`;
+}
+
 function renderCapabilityFields(inputs, output) {
   const parts = [];
   if (inputs?.length) {
@@ -245,7 +286,7 @@ ${XMLNS}>
   <baseType>${base}</baseType>
   <is>${b.is}</is>
 
-  <documentation>${b.doc || b.is}</documentation>${refs}${abstract}
+  <documentation>${b.doc || b.is}</documentation>${refs}${abstract}${renderFields(b.fields)}
 
 </block>
 `;
@@ -337,7 +378,7 @@ ${XMLNS}
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML Language Server library</value>
     </description>
   </properties>
@@ -351,20 +392,10 @@ ${XMLNS}
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <parser:Library />
-      </composition>
-      <composition>
         <serializer:Library />
-      </composition>
-      <composition>
         <validator:Library />
-      </composition>
-      <composition>
         <framework:Library />
       </composition>
     </dependencies>
@@ -387,7 +418,7 @@ ${XMLNS}
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>lsp:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the LSP library</is>
 

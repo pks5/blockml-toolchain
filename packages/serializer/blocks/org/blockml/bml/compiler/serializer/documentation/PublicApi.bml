@@ -34,7 +34,7 @@
 
     SerializeOptions (owned by @blockml/bom):
     • indent — default 2; pretty-print spaces (B13); 0 = compact
-    • xmlDeclaration — default false; omit <?xml …?> (B17/B24)
+    • xmlDeclaration — default false; omit &lt;?xml …?> (B17/B24)
 
     SerializeResult (owned by @blockml/bom):
     • text — string | null (null only if serialize cannot produce text)

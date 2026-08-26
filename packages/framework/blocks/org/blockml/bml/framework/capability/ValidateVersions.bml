@@ -26,7 +26,9 @@
   xmlns:fwexpression="org.blockml.bml.framework.expression"
   xmlns:fwregistry="org.blockml.bml.framework.registry"
   xmlns:parser="org.blockml.bml.compiler.parser"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+>
 
   <name>ValidateVersions</name>
   <type>fwcap:ValidateVersions</type>

@@ -65,7 +65,8 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:fwexpression="org.blockml.bml.framework.expression"
   xmlns:fwregistry="org.blockml.bml.framework.registry"
   xmlns:parser="org.blockml.bml.compiler.parser"
-  xmlns:type="org.blockml.bml.type"`;
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"`;
 
 /** @typedef {{ name: string, type: string, required?: boolean, doc?: string, literal?: string, value?: string }} Field */
 /** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, abstract?: boolean, baseType?: string, fields?: Field[], refs?: string[] }} BlockDef */
@@ -727,7 +728,7 @@ ${XMLNS}
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML Framework utilities library</value>
     </description>
   </properties>
@@ -741,11 +742,7 @@ ${XMLNS}
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <parser:Library />
       </composition>
     </dependencies>
@@ -770,7 +767,7 @@ ${XMLNS}
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>framework:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the Framework utilities library</is>
 

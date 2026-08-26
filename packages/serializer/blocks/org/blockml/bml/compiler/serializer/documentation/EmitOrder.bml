@@ -36,7 +36,7 @@
     V1: hardcoded in serconfig:BlockEmitOrder (frozen snapshot of Definition .bml lists).
     V2: dynamic — load Definition types via TypeRegistry / effective members.
 
-    Canonical <block> child sequence (V1 — emit only when present and not omit-equivalent B17):
+    Canonical &lt;block> child sequence (V1 — emit only when present and not omit-equivalent B17):
     name, type, baseType, is, isNot, version, definition,
     since, status, summary, documentation, abstract, final,
     keywords, changelog, examples, references, constraints,

@@ -27,7 +27,7 @@
   <name>AssertBlockRoot</name>
   <type>parcap:AssertBlockRoot</type>
   <baseType>core:Capability</baseType>
-  <is>Root type resolver — step [3]; V1 requires <block></is>
+  <is>Root type resolver — step [3]; V1 requires &lt;block></is>
 
   <documentation>Throws BML_INVALID_ROOT when localName !== block.</documentation>
 

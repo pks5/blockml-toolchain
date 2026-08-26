@@ -46,7 +46,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockDoc render target library</value>
     </description>
   </properties>

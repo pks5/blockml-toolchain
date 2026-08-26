@@ -42,7 +42,7 @@
     B18: @xmldom/xmldom for DOM.
     B19: redundant aggregation type — map must not apply.
     B23: preserve xmlRendering + D6 recipe at Stage 1.
-    B24: format detector (BOM strip, first '<').
+    B24: format detector (BOM strip, first '&lt;').
     B25: store xmlns:xsi + schemaLocation on SourceInfo.
     B26: parse() entry; types in @blockml/bom.</documentation>
 

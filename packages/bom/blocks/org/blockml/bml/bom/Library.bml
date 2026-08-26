@@ -25,7 +25,7 @@
   xmlns:cap="org.blockml.bml.capability">
 
   <name>Library</name>
-  <type>blockml:Library</type>
+  <type>bom:Library</type>
   <baseType>core:BlockLibrary</baseType>
   <is>The BlockML BOM Urmodell library catalog</is>
 
@@ -43,7 +43,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML BOM Urmodell library</value>
     </description>
   </properties>

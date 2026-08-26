@@ -39,10 +39,10 @@
       <documentation>Original source string. (required)</documentation>
     </source>
     <bindings type="type:Text">
-      <documentation>Record<string, string> namespace bindings. (required)</documentation>
+      <documentation>Record&lt;string, string> namespace bindings. (required)</documentation>
     </bindings>
     <subBlockIndex type="type:Text">
-      <documentation>Map<string, string> sub-block lookup. (required)</documentation>
+      <documentation>Map&lt;string, string> sub-block lookup. (required)</documentation>
     </subBlockIndex>
     <parentBlockType type="type:Text">
       <documentation>Enclosing block type FQN when nested. (optional)</documentation>

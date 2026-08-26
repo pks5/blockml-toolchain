@@ -36,8 +36,8 @@
     1. Read document.source.namespaceBindings (default { "": "http://blockml.org/bml" })
     2. createEmitContext(bindings, indent) → EmitContext { bindings, useQName, indent }
     3. new XmlWriter(indent) — line-oriented XML builder with depth/indent
-    4. Optional <?xml version="1.0" encoding="UTF-8"?> when xmlDeclaration=true
-    5. emitRootStartTag — root <block> with xmlns* and xsi:schemaLocation (B25)
+    4. Optional &lt;?xml version="1.0" encoding="UTF-8"?> when xmlDeclaration=true
+    5. emitRootStartTag — root &lt;block> with xmlns* and xsi:schemaLocation (B25)
     6. emitBlockDefinition — walk BlockDefinition in BLOCK_EMIT_ORDER (B12)
     7. Return { text: writer.toString(), diagnostics, success }
 

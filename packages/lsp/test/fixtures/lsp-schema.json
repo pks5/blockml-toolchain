@@ -6,6 +6,20 @@
       "pkg": "root",
       "abstract": true,
       "baseType": "core:Entity"
+    },
+    {
+      "fqn": "org.blockml.bml.lsp.WorkspaceState",
+      "tsExport": "WorkspaceState",
+      "pkg": "root",
+      "abstract": false,
+      "baseType": "lsp:LspType"
+    },
+    {
+      "fqn": "org.blockml.bml.lsp.AnalysisResult",
+      "tsExport": "AnalysisResult",
+      "pkg": "root",
+      "abstract": false,
+      "baseType": "lsp:LspType"
     }
   ],
   "capabilities": [

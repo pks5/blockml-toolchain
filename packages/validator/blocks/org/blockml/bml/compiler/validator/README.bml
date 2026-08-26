@@ -24,7 +24,7 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>validator:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the Validator compiler library</is>
 

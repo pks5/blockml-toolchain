@@ -26,7 +26,7 @@
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>serializer:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the Serializer compiler library</is>
 

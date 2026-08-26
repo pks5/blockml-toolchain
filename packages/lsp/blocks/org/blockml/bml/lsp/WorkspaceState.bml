@@ -1,0 +1,52 @@
+<!--
+  LSP — WorkspaceState
+  FQN: org.blockml.bml.lsp.WorkspaceState
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
+  xmlns:validator="org.blockml.bml.compiler.validator"
+  xmlns:valcap="org.blockml.bml.compiler.validator.capability"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:lsp="org.blockml.bml.lsp"
+  xmlns:lspcap="org.blockml.bml.lsp.capability"
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation">
+
+  <name>WorkspaceState</name>
+  <type>lsp:WorkspaceState</type>
+  <baseType>lsp:LspType</baseType>
+  <is>Cached workspace TypeRegistry and bootstrap diagnostics</is>
+
+  <documentation>Per-root-dir language-service workspace. createWorkspace() builds and caches this.</documentation>
+
+  <properties>
+    <rootDir type="type:Text">
+      <documentation>Absolute workspace root. (required)</documentation>
+    </rootDir>
+    <config type="type:Text">
+      <documentation>Loaded BomConfig (srcDir, libraries). (required)</documentation>
+    </config>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>Bootstrapped TypeRegistry for this workspace. (required)</documentation>
+    </registry>
+    <bootstrapDiagnostics type="bomcommon:Diagnostic[]">
+      <documentation>Library-graph bootstrap errors kept for analysis. (required)</documentation>
+    </bootstrapDiagnostics>
+  </properties>
+
+</block>

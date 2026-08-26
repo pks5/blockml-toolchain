@@ -23,7 +23,9 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
   xmlns:type="org.blockml.bml.type"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+>
 
   <name>PackageOwnership</name>
   <type>serdocumentation:PackageOwnership</type>

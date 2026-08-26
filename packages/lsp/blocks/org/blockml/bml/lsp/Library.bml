@@ -47,7 +47,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML Language Server library</value>
     </description>
   </properties>
@@ -61,26 +61,18 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <parser:Library />
-      </composition>
-      <composition>
         <serializer:Library />
-      </composition>
-      <composition>
         <validator:Library />
-      </composition>
-      <composition>
         <framework:Library />
       </composition>
     </dependencies>
     <blocks>
       <composition>
         <lsp:LspType />
+        <lsp:WorkspaceState />
+        <lsp:AnalysisResult />
         <lspcap:AnalyzeDocument />
         <lspcap:FormatDocument />
         <lspcap:HoverAt />

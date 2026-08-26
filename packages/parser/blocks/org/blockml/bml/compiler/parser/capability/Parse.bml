@@ -42,7 +42,7 @@
       <documentation>source. TS type: type:Text. (required)</documentation>
     </source>
     <options type="bomapi:ParseOptions">
-      <documentation>Default filePath=<memory>, continueOnError=true. (optional)</documentation>
+      <documentation>Default filePath=&lt;memory>, continueOnError=true. (optional)</documentation>
     </options>
     <result type="bomapi:ParseResult">
       <documentation>result. TS type: bomapi:ParseResult. (required)</documentation>

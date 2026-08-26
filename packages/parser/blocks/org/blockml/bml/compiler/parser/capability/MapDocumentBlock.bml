@@ -27,9 +27,9 @@
   <name>MapDocumentBlock</name>
   <type>parcap:MapDocumentBlock</type>
   <baseType>core:Capability</baseType>
-  <is>Map root <block> to BomDocument — step [5] entry</is>
+  <is>Map root &lt;block> to BomDocument — step [5] entry</is>
 
-  <documentation>Map root <block> to BomDocument — step [5] entry</documentation>
+  <documentation>Map root &lt;block> to BomDocument — step [5] entry</documentation>
 
   <references>
     <see type="parcap:MapBlock" relation="SeeAlso" />

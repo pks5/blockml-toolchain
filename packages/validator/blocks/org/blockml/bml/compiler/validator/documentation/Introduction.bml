@@ -21,7 +21,9 @@
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+>
 
   <name>Introduction</name>
   <type>valdocumentation:Introduction</type>

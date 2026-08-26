@@ -29,7 +29,7 @@
   <baseType>core:Capability</baseType>
   <is>Format detector — step [1] (B24)</is>
 
-  <documentation>Strip UTF-8 BOM; detect xml when first non-whitespace is '<'.</documentation>
+  <documentation>Strip UTF-8 BOM; detect xml when first non-whitespace is '&lt;'.</documentation>
 
   <references>
     <see type="pardocumentation:ArchitectureOverview" relation="SeeAlso" />

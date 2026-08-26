@@ -33,7 +33,7 @@
   <baseType>fwexpression:ExpressionNode</baseType>
   <is>Object expression AST node</is>
 
-  <documentation>kind: object. entries: Record<string, ExpressionNode>.</documentation>
+  <documentation>kind: object. entries: Record&lt;string, ExpressionNode>.</documentation>
 
   <properties>
     <kind type="type:Text">
@@ -41,7 +41,7 @@
       <value>object</value>
     </kind>
     <entries type="core:Any">
-      <documentation>Record<string, ExpressionNode>. (required)</documentation>
+      <documentation>Record&lt;string, ExpressionNode>. (required)</documentation>
     </entries>
   </properties>
 

@@ -51,7 +51,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML Framework utilities library</value>
     </description>
   </properties>
@@ -65,11 +65,7 @@
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <parser:Library />
       </composition>
     </dependencies>

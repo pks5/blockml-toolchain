@@ -32,7 +32,7 @@
 
   <properties>
     <filePath type="type:Text">
-      <documentation>Default: "<memory>". (optional)</documentation>
+      <documentation>Default: "&lt;memory>". (optional)</documentation>
     </filePath>
     <continueOnError type="type:Boolean">
       <documentation>Default: true. (optional)</documentation>

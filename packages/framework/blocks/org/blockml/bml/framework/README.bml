@@ -32,7 +32,7 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>framework:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the Framework utilities library</is>
 

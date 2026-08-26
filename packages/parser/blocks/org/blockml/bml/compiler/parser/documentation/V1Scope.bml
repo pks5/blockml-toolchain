@@ -31,7 +31,7 @@
   <is>Phase A parser slice and deferred features</is>
 
   <documentation>V1 (Phase A) parser implements:
-    • Hardcoded BML → BOM mapper for <block> root documents
+    • Hardcoded BML → BOM mapper for &lt;block> root documents
     • Single-file scope (B5) — no TypeRegistry bootstrap in parse()
     • Stage 1 structural BML validation (unknown Gerüst tags/attributes/directives); no TypeRegistry semantic checks (B8: XSD not Stage 1)
     • JSON BML authoring not planned (B6)

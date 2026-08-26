@@ -35,7 +35,7 @@
 
     ValidateResult: optional pragmaticModel (forked BomDocument), diagnostics[], success.
 
-    ParseOptions: filePath (default "<memory>"), continueOnError (default true).
+    ParseOptions: filePath (default "&lt;memory>"), continueOnError (default true).
 
     SerializeOptions: indent (default 2; 0=compact B13), xmlDeclaration (default false B17/B24).
 

@@ -29,7 +29,7 @@
   xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>parser:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the Parser compiler library</is>
 

@@ -40,7 +40,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>XSD render target library</value>
     </description>
   </properties>

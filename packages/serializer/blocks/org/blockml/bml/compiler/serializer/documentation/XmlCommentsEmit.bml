@@ -23,7 +23,9 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
   xmlns:type="org.blockml.bml.type"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+>
 
   <name>XmlCommentsEmit</name>
   <type>serdocumentation:XmlCommentsEmit</type>
@@ -33,7 +35,7 @@
   <documentation>Cross-ref: org.blockml.bml.bom.documentation.XmlComments for parse-side binding (B11).
 
     Serializer re-emit:
-    • leadingComments → <!-- body --> lines immediately before the element
+    • leadingComments → &lt;!-- body --> lines immediately before the element
     • trailingComments → next line after element end tag (B22 — not same-line)
     • blank line after trailing-comment block so comment reads as trailing to previous element
 

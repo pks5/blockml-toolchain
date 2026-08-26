@@ -27,9 +27,9 @@
   <name>EmitCompositionTemplate</name>
   <type>sercap:EmitCompositionTemplate</type>
   <baseType>core:Capability</baseType>
-  <is>Emit CompositionTemplate as <composition> element tree</is>
+  <is>Emit CompositionTemplate as &lt;composition> element tree</is>
 
-  <documentation>Emit CompositionTemplate as <composition> element tree</documentation>
+  <documentation>Emit CompositionTemplate as &lt;composition> element tree</documentation>
 
   <references>
     <see type="sercap:EmitCompositionNode" relation="SeeAlso" />

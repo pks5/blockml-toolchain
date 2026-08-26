@@ -56,7 +56,7 @@
       <documentation>namespace (optional). TS type: type:Text.</documentation>
     </namespace>
     <memberValues type="type:Text">
-      <documentation>Record<string, MemberValue>. (required)</documentation>
+      <documentation>Record&lt;string, MemberValue>. (required)</documentation>
     </memberValues>
     <aggregationCompositions type="bomcomp:InstanceAggregationComposition[]">
       <documentation>aggregationCompositions (optional). TS type: bomcomp:InstanceAggregationComposition[].</documentation>

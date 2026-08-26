@@ -30,7 +30,7 @@
   <baseType>core:Documentation</baseType>
   <is>Block definition metadata field mapping</is>
 
-  <documentation>Map <block> child elements to BlockDefinition fields:
+  <documentation>Map &lt;block> child elements to BlockDefinition fields:
 
     Identity: name, type, baseType, is, isNot, version, definition
     Structural: since, status, summary, documentation, abstract, final

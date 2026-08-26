@@ -28,7 +28,9 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"`;
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"`;
 
 /** @typedef {{ name: string, type: string, required?: boolean, doc?: string }} Field */
 /** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, abstract?: boolean, baseType?: string, refs?: string[] }} BlockDef */
@@ -254,7 +256,7 @@ ${XMLNS}
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML Validator library</value>
     </description>
   </properties>
@@ -268,11 +270,7 @@ ${XMLNS}
     <dependencies>
       <composition>
         <blockml:Library />
-      </composition>
-      <composition>
         <bom:Library />
-      </composition>
-      <composition>
         <framework:Library />
       </composition>
     </dependencies>
@@ -296,7 +294,7 @@ ${XMLNS}
   xmlns:fwdocumentation="org.blockml.bml.framework.documentation">
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>validator:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the Validator compiler library</is>
 

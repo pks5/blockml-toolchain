@@ -27,7 +27,9 @@
   xmlns:fwregistry="org.blockml.bml.framework.registry"
   xmlns:parser="org.blockml.bml.compiler.parser"
   xmlns:type="org.blockml.bml.type"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+>
 
   <name>LayerSeparation</name>
   <type>fwdocumentation:LayerSeparation</type>

@@ -42,7 +42,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML Validator library</value>
     </description>
   </properties>

@@ -34,7 +34,7 @@
     • BML_UNSUPPORTED_FORMAT — format detect failed
     • BML_MALFORMED_XML — DOM parse error
     • BML_MISSING_ROOT — no document element
-    • BML_INVALID_ROOT — not <block> (V1)
+    • BML_INVALID_ROOT — not &lt;block> (V1)
     • BML_MAP_ERROR — mapping exception
 
     Map-time codes (mapper modules):
@@ -44,8 +44,8 @@
     • BML_UNKNOWN_ELEMENT — child not in closed Block grammar (structural)
     • BML_UNKNOWN_ATTRIBUTE — attribute not allowed on a grammar node (structural)
     • BML_UNKNOWN_DIRECTIVE — unknown bml:* attribute (B2)
-    • BML_STANDALONE_COMPOSITION — <composition> not a direct child of an aggregation member
-    • BML_DUPLICATE_COMPOSITION — more than one <composition> on the same aggregation member
+    • BML_STANDALONE_COMPOSITION — &lt;composition> not a direct child of an aggregation member
+    • BML_DUPLICATE_COMPOSITION — more than one &lt;composition> on the same aggregation member
     • BML_UNEXPECTED_TEXT — non-whitespace text on an element-only grammar node
 
     Map-time diagnostics attach Diagnostic.source to the use-site token when known

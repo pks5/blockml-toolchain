@@ -45,7 +45,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML Parser library</value>
     </description>
   </properties>

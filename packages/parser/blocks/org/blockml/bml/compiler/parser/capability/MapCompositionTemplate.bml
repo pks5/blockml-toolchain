@@ -27,9 +27,9 @@
   <name>MapCompositionTemplate</name>
   <type>parcap:MapCompositionTemplate</type>
   <baseType>core:Capability</baseType>
-  <is>Map <composition> element to CompositionTemplate</is>
+  <is>Map &lt;composition> element to CompositionTemplate</is>
 
-  <documentation>Map <composition> element to CompositionTemplate</documentation>
+  <documentation>Map &lt;composition> element to CompositionTemplate</documentation>
 
   <properties>
     <element type="core:Any">

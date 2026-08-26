@@ -38,7 +38,7 @@
 
   <properties>
     <bindings type="type:Text">
-      <documentation>Record<string, string> namespace bindings. (required)</documentation>
+      <documentation>Record&lt;string, string> namespace bindings. (required)</documentation>
     </bindings>
     <indent type="type:Integer">
       <documentation>indent. TS type: type:Integer. (required)</documentation>

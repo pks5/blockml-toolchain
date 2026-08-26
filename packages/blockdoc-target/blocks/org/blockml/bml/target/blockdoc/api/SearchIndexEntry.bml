@@ -49,7 +49,7 @@
       <documentation>JSON field type — block FQN (required).</documentation>
     </blockType>
     <is type="type:Text">
-      <documentation>Idea designation when present (optional).</documentation>
+      &lt;documentation>Idea designation when present (optional).&lt;/documentation>
     </is>
     <href type="type:Text">
       <documentation>Site-root-relative HTML path (required).</documentation>

@@ -23,7 +23,9 @@
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:parmap="org.blockml.bml.compiler.parser.map"
   xmlns:type="org.blockml.bml.type"
-  xmlns:doc="org.blockml.bml.documentation">
+  xmlns:doc="org.blockml.bml.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+>
 
   <name>XmlCommentsParse</name>
   <type>pardocumentation:XmlCommentsParse</type>
@@ -37,7 +39,7 @@
     • Comments after element end tag → trailingComments on that element
     • Storage: xmlTrivia on elements, memberSectionTrivia, metadataTrivia
 
-    Comment bodies only — without <!-- / -->. Whitespace/layout not stored (B13).
+    Comment bodies only — without &lt;!-- / -->. Whitespace/layout not stored (B13).
     Re-emit rules (B22) → @blockml/serializer.</documentation>
 
   <references>

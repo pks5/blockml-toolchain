@@ -32,7 +32,7 @@
 
   <properties>
     <entries type="bomcommon:XmlTrivia">
-      <documentation>Record<string, XmlTrivia>. (optional)</documentation>
+      <documentation>Record&lt;string, XmlTrivia>. (optional)</documentation>
     </entries>
   </properties>
 

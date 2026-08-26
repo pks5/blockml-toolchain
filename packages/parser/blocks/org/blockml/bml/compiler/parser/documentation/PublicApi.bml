@@ -33,7 +33,7 @@
   <documentation>parse(source: string, options?: ParseOptions): ParseResult
 
     ParseOptions (owned by @blockml/bom):
-    • filePath — default "<memory>"; written to BomDocument.source.filePath
+    • filePath — default "&lt;memory>"; written to BomDocument.source.filePath
     • continueOnError — default true; keep mapping after errors when possible
 
     ParseResult (owned by @blockml/bom):

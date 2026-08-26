@@ -27,7 +27,7 @@
   <name>BlockEmitOrder</name>
   <type>serconfig:BlockEmitOrder</type>
   <baseType>serializer:SerializerType</baseType>
-  <is>V1 hardcoded canonical <block> child sequence (B12)</is>
+  <is>V1 hardcoded canonical &lt;block> child sequence (B12)</is>
 
   <documentation>Frozen snapshot of Definition member declaration order for Phase A. V2 reads Definition .bml dynamically.</documentation>
 

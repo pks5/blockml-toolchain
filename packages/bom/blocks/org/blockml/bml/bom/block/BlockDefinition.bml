@@ -51,7 +51,7 @@
       <documentation>version (optional). TS type: type:Text.</documentation>
     </version>
     <is type="type:Text">
-      <documentation>is (optional). TS type: type:Text.</documentation>
+      &lt;documentation>is (optional). TS type: type:Text.&lt;/documentation>
     </is>
     <summaries type="bomblock:DocumentationProseEntry[]">
       <documentation>summaries (optional). TS type: bomblock:DocumentationProseEntry[].</documentation>
@@ -126,7 +126,7 @@
       <documentation>xmlTrivia (optional). TS type: bomcommon:XmlTrivia.</documentation>
     </xmlTrivia>
     <memberSectionTrivia type="type:Text">
-      <documentation>Partial<Record<MemberSectionName, XmlTrivia>>. (optional)</documentation>
+      <documentation>Partial&lt;Record&lt;MemberSectionName, XmlTrivia>>. (optional)</documentation>
     </memberSectionTrivia>
     <metadataTrivia type="bomcommon:MetadataElementTrivia">
       <documentation>metadataTrivia (optional). TS type: bomcommon:MetadataElementTrivia.</documentation>
@@ -135,7 +135,7 @@
       <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>
     </source>
     <typeSource type="bomcommon:SourceLocation">
-      <documentation>Span of the type= attribute or <type> element value. (optional)</documentation>
+      <documentation>Span of the type= attribute or &lt;type> element value. (optional)</documentation>
     </typeSource>
     <baseTypeSource type="bomcommon:SourceLocation">
       <documentation>baseTypeSource (optional). TS type: bomcommon:SourceLocation.</documentation>

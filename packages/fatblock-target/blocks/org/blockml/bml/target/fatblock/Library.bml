@@ -41,7 +41,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>FatBlock render target library</value>
     </description>
   </properties>

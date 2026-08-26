@@ -948,6 +948,12 @@ function fqn(b) {
   return b.pkg ? `org.blockml.bml.bom.${b.pkg}.${b.name}` : `org.blockml.bml.bom.${b.name}`;
 }
 
+function escapeXml(s) {
+  return String(s)
+    .replace(/&(?!(amp|lt|gt|quot|apos);)/g, "&amp;")
+    .replace(/</g, "&lt;");
+}
+
 function typeRef(b) {
   return `${b.prefix}:${b.name}`;
 }
@@ -960,7 +966,7 @@ function renderFields(fields) {
       const doc = f.doc ? `${f.doc}${req}` : `${f.name}${req}. TS type: ${f.type}.`;
       const value = f.literal ? `\n      <value>${f.literal}</value>` : "";
       return `    <${f.name} type="${f.type}">
-      <documentation>${doc}</documentation>${value}
+      <documentation>${escapeXml(doc)}</documentation>${value}
     </${f.name}>`;
     })
     .join("\n");
@@ -994,7 +1000,7 @@ ${XMLNS}
   <baseType>core:Documentation</baseType>
   <is>${d.is}</is>
 
-  <documentation>${d.doc}</documentation>${refs}
+  <documentation>${escapeXml(d.doc)}</documentation>${refs}
 
 </block>
 `;
@@ -1023,9 +1029,9 @@ ${XMLNS}>
   <name>${b.name}</name>
   <type>${typeRef(b)}</type>
   <baseType>${base}</baseType>
-  <is>${b.is}</is>
+  <is>${escapeXml(b.is)}</is>
 
-  <documentation>${b.doc || b.is}</documentation>${refs}${aliases}${examples}${abstract}${renderFields(b.fields)}
+  <documentation>${escapeXml(b.doc || b.is)}</documentation>${refs}${aliases}${examples}${abstract}${renderFields(b.fields)}
 
 </block>
 `;
@@ -1076,7 +1082,7 @@ ${XMLNS}
   xmlns:cap="org.blockml.bml.capability">
 
   <name>Library</name>
-  <type>blockml:Library</type>
+  <type>bom:Library</type>
   <baseType>core:BlockLibrary</baseType>
   <is>The BlockML BOM Urmodell library catalog</is>
 
@@ -1094,7 +1100,7 @@ ${XMLNS}
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>BlockML BOM Urmodell library</value>
     </description>
   </properties>
@@ -1128,7 +1134,7 @@ const readme = `<!--
 ${XMLNS}>
 
   <name>README</name>
-  <type>blockml:README</type>
+  <type>bom:README</type>
   <baseType>core:ReadMe</baseType>
   <is>Reading entry for the BOM Urmodell library</is>
 
