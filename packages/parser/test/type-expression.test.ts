@@ -137,4 +137,15 @@ describe("parseTypeExpression", () => {
       expect(self.multiplicity).toEqual({ min: 0, max: "*" });
     }
   });
+
+  it("lets own block name win over a same-spelling Sub-Block", () => {
+    const expr = parseTypeExpression("Host", BINDINGS, "type", {
+      currentTypeFqn: "com.blockml.test.Host",
+      subBlockIndex: new Map([["Host", "com.blockml.test.Host.Host"]]),
+    });
+    expect(expr.kind).toBe("named");
+    if (expr.kind === "named") {
+      expect(expr.fqn).toBe("com.blockml.test.Host");
+    }
+  });
 });

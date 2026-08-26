@@ -53,6 +53,13 @@ export function resolvePrefix(prefix, bindings) {
     }
     return bindings[prefix];
 }
+function lastFqnSegment(fqn) {
+    return fqn.split(".").pop() ?? fqn;
+}
+/** Unqualified own Block name — wins over nested types of the same spelling. */
+function isOwnBlockName(local, enclosingTypeFqn) {
+    return enclosingTypeFqn !== undefined && lastFqnSegment(enclosingTypeFqn) === local;
+}
 export function resolveBlockReference(qname, bindings, subBlockIndex, parentBlockType) {
     const { prefix, local } = splitQName(qname);
     if (prefix) {
@@ -61,6 +68,9 @@ export function resolveBlockReference(qname, bindings, subBlockIndex, parentBloc
             throw new Error(`BML_UNKNOWN_NAMESPACE_PREFIX: ${prefix}`);
         }
         return `${ns}.${local}`;
+    }
+    if (isOwnBlockName(local, parentBlockType)) {
+        return parentBlockType;
     }
     if (subBlockIndex.has(local)) {
         return subBlockIndex.get(local);
@@ -79,7 +89,7 @@ export function resolveBlockReference(qname, bindings, subBlockIndex, parentBloc
             return subBlockIndex.get(local);
         }
         if (parentBlockType) {
-            const parentLocal = parentBlockType.split(".").pop();
+            const parentLocal = lastFqnSegment(parentBlockType);
             if (parentLocal === root && parts.length >= 2) {
                 const nested = parts.slice(1).join(".");
                 if (subBlockIndex.has(nested)) {

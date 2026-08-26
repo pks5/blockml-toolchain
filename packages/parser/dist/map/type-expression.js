@@ -231,14 +231,6 @@ function parseTypeExpressionInternal(raw, ctx) {
     }
     const { prefix, local } = splitQName(base);
     if (!prefix) {
-        const nested = ctx.subBlockIndex?.get(local);
-        if (nested) {
-            const namedNested = { kind: "named", fqn: nested };
-            if (config) {
-                namedNested.instanceConfiguration = config;
-            }
-            return namedNested;
-        }
         const selfLocal = ctx.currentTypeFqn?.split(".").pop();
         if (ctx.currentTypeFqn && selfLocal === local) {
             const namedSelf = { kind: "named", fqn: ctx.currentTypeFqn };
@@ -246,6 +238,14 @@ function parseTypeExpressionInternal(raw, ctx) {
                 namedSelf.instanceConfiguration = config;
             }
             return namedSelf;
+        }
+        const nested = ctx.subBlockIndex?.get(local);
+        if (nested) {
+            const namedNested = { kind: "named", fqn: nested };
+            if (config) {
+                namedNested.instanceConfiguration = config;
+            }
+            return namedNested;
         }
     }
     const named = {

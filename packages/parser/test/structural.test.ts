@@ -162,4 +162,31 @@ describe("structural BML validation", () => {
     expect(result.document).not.toBeNull();
     expect(result.diagnostics.some((d) => d.code === "BML_UNEXPECTED_TEXT")).toBe(false);
   });
+
+  it("resolves unqualified composition tags to the enclosing block", () => {
+    const source = sample(
+      [
+        "  <aggregations>",
+        "    <values>",
+        "      <composition>",
+        '        <Sample bml:id="Application" />',
+        "      </composition>",
+        "    </values>",
+        "  </aggregations>",
+      ].join("\n"),
+    );
+    const result = parse(source, { filePath: "self-composition.bml", continueOnError: true });
+    expect(result.document).not.toBeNull();
+    const values = result.document!.block.members.find((m) => m.name === "values");
+    expect(values?.kind).toBe("aggregation");
+    if (values?.kind !== "aggregation") {
+      return;
+    }
+    const child = values.composition?.children[0];
+    expect(child?.kind).toBe("blockInstance");
+    if (child?.kind !== "blockInstance") {
+      return;
+    }
+    expect(child.instance.typeFqn).toBe("com.blockml.test.struct.Sample");
+  });
 });

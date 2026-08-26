@@ -76,6 +76,15 @@ export function resolvePrefix(
   return bindings[prefix];
 }
 
+function lastFqnSegment(fqn: string): string {
+  return fqn.split(".").pop() ?? fqn;
+}
+
+/** Unqualified own Block name — wins over nested types of the same spelling. */
+function isOwnBlockName(local: string, enclosingTypeFqn?: string): boolean {
+  return enclosingTypeFqn !== undefined && lastFqnSegment(enclosingTypeFqn) === local;
+}
+
 export function resolveBlockReference(
   qname: string,
   bindings: Record<string, string>,
@@ -89,6 +98,10 @@ export function resolveBlockReference(
       throw new Error(`BML_UNKNOWN_NAMESPACE_PREFIX: ${prefix}`);
     }
     return `${ns}.${local}`;
+  }
+
+  if (isOwnBlockName(local, parentBlockType)) {
+    return parentBlockType!;
   }
 
   if (subBlockIndex.has(local)) {
@@ -110,7 +123,7 @@ export function resolveBlockReference(
       return subBlockIndex.get(local)!;
     }
     if (parentBlockType) {
-      const parentLocal = parentBlockType.split(".").pop();
+      const parentLocal = lastFqnSegment(parentBlockType);
       if (parentLocal === root && parts.length >= 2) {
         const nested = parts.slice(1).join(".");
         if (subBlockIndex.has(nested)) {

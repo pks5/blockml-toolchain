@@ -81,4 +81,42 @@ describe("validateInstances type and member completeness", () => {
     expect(diag).toBeDefined();
     expect(diag!.message).toMatch(/mystery/);
   });
+
+  it("accepts unqualified composition tags that name the enclosing block", () => {
+    const host = parseBlock(
+      [
+        '<block xmlns="http://blockml.org/bml"',
+        ' xmlns:core="org.blockml.bml.core"',
+        ' xmlns:type="org.blockml.bml.type"',
+        ' xmlns:test="com.blockml.test.inst">',
+        "  <name>Host</name>",
+        "  <type>test:Host</type>",
+        "  <baseType>core:Block</baseType>",
+        "  <is>host</is>",
+        "  <aggregations>",
+        "    <values>",
+        "      <composition>",
+        "        <Host />",
+        "      </composition>",
+        "    </values>",
+        "  </aggregations>",
+        "</block>",
+      ].join("\n"),
+      "self-instance.bml",
+    );
+    const registry = new TypeRegistry();
+    registry.register(host);
+    const diagnostics = validateInstances(host, registry);
+    expect(diagnostics.some((d) => d.code === "BML_UNKNOWN_TYPE")).toBe(false);
+    const values = host.block.members.find((m) => m.name === "values");
+    expect(values?.kind).toBe("aggregation");
+    if (values?.kind !== "aggregation") {
+      return;
+    }
+    const child = values.composition?.children[0];
+    expect(child?.kind).toBe("blockInstance");
+    if (child?.kind === "blockInstance") {
+      expect(child.instance.typeFqn).toBe("com.blockml.test.inst.Host");
+    }
+  });
 });
