@@ -36,7 +36,7 @@
     • Reject host or embed that already declares embeddedBlocks
     • Flat root embeddedBlocks; preserve embed subBlocks[]
     • Namespace binding union with collision errors
-    • Serialize via @blockml/serializer indent 2 → Host.fat.bml
+    • Serialize via @blockml/serializer indent 2 → {hostFqn}.fat.bml
 
     Not V1 (see ScopeExclusions):
     • Transitive registry-closure candidate set (v2)

@@ -27,7 +27,7 @@
   <baseType>fatblock:FatblockType</baseType>
   <is>Single-file fat .bml RenderOutput with diagnostics</is>
 
-  <documentation>files[] typically one Host.fat.bml entry. diagnostics optional; info severity stripped on success path.</documentation>
+  <documentation>files[] typically one {hostFqn}.fat.bml entry. diagnostics optional; info severity stripped on success path.</documentation>
   <properties>
     <files type="type:Text"><documentation>Array of { path, content }. (required)</documentation></files>
     <diagnostics type="type:Text"><documentation>Diagnostic list from assemble and serialize. (optional)</documentation></diagnostics>

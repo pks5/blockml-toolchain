@@ -35,6 +35,7 @@
     <srcDir type="type:Text"><documentation>--src override. (optional)</documentation></srcDir>
     <libraries type="type:Text"><documentation>--libraries comma-separated override of config.libraries extras (identity seed remains). (optional)</documentation></libraries>
     <include type="type:Text"><documentation>--include comma-separated for fatblock. (optional)</documentation></include>
+    <perPackage type="type:Boolean"><documentation>--per-package: one fatblock per local package.json blockml.library. (optional)</documentation></perPackage>
     <verbose type="type:Boolean"><documentation>--verbose: print bootstrap sources plus validate vs registry file lists. (optional)</documentation></verbose>
   </properties>
 

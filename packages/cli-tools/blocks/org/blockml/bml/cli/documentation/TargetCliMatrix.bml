@@ -31,7 +31,8 @@
     blockdoc — file omit; --all ignored; default outDir blockdoc; without --src/--libraries: project packages with blockml.library as corpus (all .bml); else scope auto: libraries[] else roots[srcDir]
     xsd — file omit; --all ignored; default outDir schemas; may write root catalog.xml
     fatblock — file optional (default package.json blockml.library); --src optional
-    (default host directory); document scope; single .fat.bml at project root
+    (default host directory); --per-package one {hostFqn}.fat.bml per local library
+    package, all written to the invocation directory (or --out)
 
     Planned machineblocks-v3-scad — document target; file required; --all loops srcDir;
     registered by domain CLI not @blockml/cli.</documentation>

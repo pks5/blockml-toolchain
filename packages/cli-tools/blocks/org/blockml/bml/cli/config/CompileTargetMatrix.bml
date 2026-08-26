@@ -29,7 +29,7 @@
   <properties>
     <blockdoc type="type:Text"><documentation>file omit; --all no; default outDir blockdoc; no --src/--libraries → project blockml.library packages as corpus; else auto libraries[] then srcDir.</documentation></blockdoc>
     <xsd type="type:Text"><documentation>file omit; --all no; scope auto libraries[]; default outDir schemas.</documentation></xsd>
-    <fatblock type="type:Text"><documentation>file optional (default package.json blockml.library); --src optional (default host directory); document scope; single Library.fat.bml at project root.</documentation></fatblock>
+    <fatblock type="type:Text"><documentation>file optional (default package.json blockml.library); --src optional (default host directory); --per-package one {hostFqn}.fat.bml per local library package at the invocation directory.</documentation></fatblock>
   </properties>
 
 </block>

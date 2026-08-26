@@ -111,6 +111,22 @@ export function projectLibraryPackageRoots(rootDir) {
     });
     return [...roots];
 }
+/**
+ * Package directories (this package and local packages/*) that declare
+ * package.json blockml.library. Sorted, canonical, no node_modules walk.
+ */
+export function projectLibraryPackageDirs(rootDir) {
+    const dirs = new Set();
+    if (packageDeclaresLibrary(rootDir)) {
+        dirs.add(canonicalPath(rootDir));
+    }
+    forEachLocalPackage(rootDir, (pkgDir) => {
+        if (packageDeclaresLibrary(pkgDir)) {
+            dirs.add(canonicalPath(pkgDir));
+        }
+    });
+    return [...dirs].sort();
+}
 /** Registry file paths whose realpath lies under any of the given roots. */
 export function registryFilesUnderRoots(registry, roots) {
     const files = [];

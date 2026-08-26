@@ -28,19 +28,22 @@
 
   <documentation>Syntax (V1 minimal CLI):
     blockml compile blockdoc|xsd [--out dir] [--src dir] [--libraries a,b]
-    blockml compile fatblock [--include a,b] [--out dir]
+    blockml compile fatblock [--include a,b] [--out dir] [--per-package]
     blockml compile file.bml fatblock [--src dir] [--include a,b] [--out dir]
 
     Default target: blockdoc (CLI12).
-    Default outDir: blockdoc (blockdoc), schemas (xsd), project root (fatblock) (CLI13).
+    Default outDir: blockdoc (blockdoc), schemas (xsd), invocation directory (fatblock) (CLI13).
 
     Unsupported target in V1 CLI → exit 2.
     fatblock without file uses package.json blockml.library as host and that
     library directory as --src (CLI14). Missing both file and library → exit 2.
+    fatblock --per-package: one {hostFqn}.fat.bml per local package with
+    blockml.library (this package and packages/*), all written to the invocation
+    directory; not with host file or --src (CLI23).
 
     Library/corpus targets: one compileToOutput per invocation; --all ignored (CLI19).
-    Document target fatblock: writes Host.fat.bml (Library.fat.bml for the package
-    library default) with embeddedBlocks at project root.
+    Document target fatblock: writes {hostFqn}.fat.bml with embeddedBlocks at the
+    invocation directory.
 
     After diagnostics, always a status line: Compilation succeeded. Wrote … or
     Compilation failed with K error(s). Empty output without errors:

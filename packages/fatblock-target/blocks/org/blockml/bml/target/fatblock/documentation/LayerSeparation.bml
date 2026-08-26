@@ -40,8 +40,8 @@
 
     @blockml/compiler — RenderTarget contract, compileToOutput, document scope.
 
-    org.blockml.bml.cli.* — --src / --include / --out, default host from package.json
-    blockml.library, write Host.fat.bml at project root.
+    org.blockml.bml.cli.* — --src / --include / --out / --per-package, default host
+    from package.json blockml.library, write {hostFqn}.fat.bml at the invocation directory.
 
     Sibling targets (blockdoc, xsd) and domain SCAD are out of scope.</documentation>
   <references>

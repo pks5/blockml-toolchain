@@ -25,18 +25,18 @@
   <name>FatOutputBasename</name>
   <type>fbcap:FatOutputBasename</type>
   <baseType>core:Capability</baseType>
-  <is>Derive output filename from host path</is>
+  <is>Derive output filename from host FQN</is>
 
-  <documentation>FB18: if basename ends with .bml, replace with .fat.bml; else append .fat.bml. Example Host.bml to Host.fat.bml.</documentation>
+  <documentation>FB18: output basename is host FQN plus .fat.bml. Example org.blockml.bml.workspace.Library to org.blockml.bml.workspace.Library.fat.bml. Empty FQN yields unnamed.fat.bml.</documentation>
 
   <references>
     <see type="fbdocumentation:OutputLayout" relation="SeeAlso" />
   </references>
 
   <properties>
-    <hostFilePath type="type:Text">
-      <documentation>Host file path. (required)</documentation>
-    </hostFilePath>
+    <hostFqn type="type:Text">
+      <documentation>Host block type FQN. (required)</documentation>
+    </hostFqn>
     <result type="type:Text">
       <documentation>Output basename. (required)</documentation>
     </result>

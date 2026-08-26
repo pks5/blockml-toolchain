@@ -24,7 +24,7 @@
   <name>DesignDecisions</name>
   <type>clidocumentation:DesignDecisions</type>
   <baseType>core:Documentation</baseType>
-  <is>Normative CLI decisions CLI1–CLI22</is>
+  <is>Normative CLI decisions CLI1–CLI23</is>
 
   <documentation>CLI1 missing blockml.config.json → DefaultBomConfig.
     CLI2 empty targets[] → ["blockdoc"].
@@ -38,7 +38,7 @@
     CLI10 validate file XOR --all. Default validate = project sources; --all = entire registry.
     CLI11 validate never writes render output.
     CLI12 default compile target blockdoc.
-    CLI13 defaultOutDir xsd→schemas; blockdoc→config.outDir/blockdoc; fatblock→. (project root).
+    CLI13 defaultOutDir xsd→schemas; blockdoc→config.outDir/blockdoc; fatblock→. (invocation directory).
     CLI14 fatblock without file/--src defaults to package.json blockml.library as host and that library directory as src; missing both file and library → exit 2.
     CLI15 fatblock TypeRegistry from package.json blockml.library graph plus core Library and srcDir corpus.
     CLI16 compile scope auto libraries or roots.
@@ -47,7 +47,8 @@
     CLI19 target CLI matrix blockdoc/xsd/fatblock.
     CLI20 validate skips bootstrapTargets.
     CLI21 bin entry uses realpath so npm .bin/blockml symlink invokes runCli.
-    CLI22 blockdoc without --src/--libraries scans cwd + packages/* for blockml.library and documents all .bml under those packages (corpus roots; TypeRegistry may still hold identity seeds for type resolution).</documentation>
+    CLI22 blockdoc without --src/--libraries scans cwd + packages/* for blockml.library and documents all .bml under those packages (corpus roots; TypeRegistry may still hold identity seeds for type resolution).
+    CLI23 fatblock --per-package writes one {hostFqn}.fat.bml per local package.json blockml.library (this package and packages/*) into the invocation directory; incompatible with host file, --src, and non-fatblock targets; --out overrides that directory.</documentation>
   <references>
     <see type="clidocumentation:PackageOwnership" relation="ReadNext"></see>
   </references>

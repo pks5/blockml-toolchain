@@ -36,7 +36,7 @@
     Start reading at org.blockml.bml.target.fatblock.documentation.Introduction (ReadNext chain).
 
     V1: folder-bundle document target — host .bml plus peer roots under --src into one
-    Host.fat.bml with flat embeddedBlocks. Transitive closure is planned for v2.
+    {hostFqn}.fat.bml with flat embeddedBlocks. Transitive closure is planned for v2.
 
     Layer separation:
     • org.blockml.bml.bom.* — embeddedBlocks meta-model

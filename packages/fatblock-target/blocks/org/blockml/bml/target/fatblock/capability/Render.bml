@@ -25,7 +25,7 @@
   <name>Render</name>
   <type>fbcap:Render</type>
   <baseType>core:Capability</baseType>
-  <is>Public RenderTarget entry: host document to Host.fat.bml</is>
+  <is>Public RenderTarget entry: host document to {hostFqn}.fat.bml</is>
 
   <documentation>FB2: name fatblock; accepts document only. FB4: assemble errors or serialize errors yield empty files. Strip info diagnostics from returned list. Orchestrates ResolveOptions, AssembleFatDocument, SerializeFatDocument, FatOutputBasename.</documentation>
 

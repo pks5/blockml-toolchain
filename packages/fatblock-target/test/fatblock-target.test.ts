@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { BlockDefinition, BomDocument } from "@blockml/bom";
 import { TypeRegistry } from "@blockml/framework";
 import { FatBlockTarget } from "../src/fatblock-target.js";
+import { fatOutputBasename } from "../src/fat-output-path.js";
 import type { RenderContext } from "@blockml/compiler";
 
 function emptyBlock(overrides: Partial<BlockDefinition>): BlockDefinition {
@@ -35,8 +36,16 @@ function mockContext(
   };
 }
 
+describe("fatOutputBasename", () => {
+  it("uses host FQN plus .fat.bml", () => {
+    expect(fatOutputBasename("org.blockml.bml.workspace.Library")).toBe(
+      "org.blockml.bml.workspace.Library.fat.bml",
+    );
+  });
+});
+
 describe("FatBlockTarget", () => {
-  it("renders Host.fat.bml with embedded blocks", () => {
+  it("renders {hostFqn}.fat.bml with embedded blocks", () => {
     const rootDir = "/proj";
     const srcDir = "pkg";
     const hostFile = join(rootDir, srcDir, "Host.bml");
@@ -74,7 +83,7 @@ describe("FatBlockTarget", () => {
     );
 
     expect(output.files).toHaveLength(1);
-    expect(output.files[0]?.path).toBe("Host.fat.bml");
+    expect(output.files[0]?.path).toBe("com.test.fat.Host.fat.bml");
     expect(output.files[0]?.content).toContain("<embeddedBlocks>");
     expect(output.files[0]?.content).toContain("com.test.fat.Peer");
   });

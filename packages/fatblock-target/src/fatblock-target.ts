@@ -58,7 +58,7 @@ export class FatBlockTarget implements RenderTarget {
     return {
       files: [
         {
-          path: fatOutputBasename(hostFilePath),
+          path: fatOutputBasename(document.block.type),
           content: serialized.text,
         },
       ],

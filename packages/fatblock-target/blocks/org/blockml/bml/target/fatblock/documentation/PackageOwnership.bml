@@ -33,7 +33,7 @@
 
     @blockml/cli owns: --src / --include / --out; default host from package.json
     blockml.library; TypeRegistry from the package library graph plus core; writing
-    Host.fat.bml at project root; exit codes.
+    {hostFqn}.fat.bml at the invocation directory; exit codes.
     See org.blockml.bml.cli.documentation.CompileCommand.
 
     @blockml/bom owns: embeddedBlocks shape and language invariants.

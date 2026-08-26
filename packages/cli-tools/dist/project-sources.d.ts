@@ -11,6 +11,11 @@ export declare function projectSourceRoots(rootDir: string, srcDir?: string): st
  * packages are omitted. Does not walk parent workspaces or node_modules.
  */
 export declare function projectLibraryPackageRoots(rootDir: string): string[];
+/**
+ * Package directories (this package and local packages/*) that declare
+ * package.json blockml.library. Sorted, canonical, no node_modules walk.
+ */
+export declare function projectLibraryPackageDirs(rootDir: string): string[];
 /** Registry file paths whose realpath lies under any of the given roots. */
 export declare function registryFilesUnderRoots(registry: TypeRegistry, roots: string[]): string[];
 //# sourceMappingURL=project-sources.d.ts.map

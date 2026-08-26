@@ -35,8 +35,8 @@
     → compileToOutput(scope auto) → WriteOutputFiles.
 
     compile flow (fatblock): LoadConfig → BootstrapTargets → project library graph
-    plus core Library and srcDir corpus → compileToOutput(document) → write single
-    .fat.bml at project root.
+    plus core Library and srcDir corpus → compileToOutput(document) → write
+    {hostFqn}.fat.bml at the invocation directory.
 
     TypeScript module map:
     • cli.ts → RunCli, ParseArgs, RunValidate, RunCompile, RunCompileFatBlock, FormatDiagnostic

@@ -9,6 +9,7 @@ export interface ParsedArgs {
     libraries?: string[];
     include?: string[];
     verbose?: boolean;
+    perPackage?: boolean;
 }
 interface PrintableDiagnostic {
     severity: string;

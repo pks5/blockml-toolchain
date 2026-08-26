@@ -49,11 +49,14 @@ blockml compile blockdoc|xsd [--out dir] [--src dir] [--libraries a,b]
 # FatBlock of the current package library (package.json blockml.library as host + source)
 blockml compile fatblock [--include a,b] [--out dir]
 
+# One FatBlock per local package.json blockml.library (this package + packages/*)
+blockml compile fatblock --per-package [--out dir]
+
 # Document-scope fatblock with an explicit host
 blockml compile file.bml fatblock [--src dir] [--include a,b] [--out dir]
 ```
 
-Default output directories: `blockdoc` (blockdoc), `schemas` (xsd), project root (fatblock, `*.fat.bml`).
+Default output directories: `blockdoc` (blockdoc), `schemas` (xsd), invocation directory (fatblock, `{hostFqn}.fat.bml`).
 
 ### npm script wrappers
 

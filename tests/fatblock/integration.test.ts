@@ -78,7 +78,7 @@ describe("fatblock integration", () => {
 
     expect(result.success, JSON.stringify(result.diagnostics)).toBe(true);
     const output = result.output as { files: { path: string; content: string }[] };
-    expect(output.files[0]?.path).toBe("Host.fat.bml");
+    expect(output.files[0]?.path).toBe("com.test.fatblock.Host.fat.bml");
     expect(output.files[0]?.content).toContain("<embeddedBlocks>");
     expect(output.files[0]?.content).toContain("fat:Peer");
     expect(output.files[0]?.content).toContain("<subBlocks>");

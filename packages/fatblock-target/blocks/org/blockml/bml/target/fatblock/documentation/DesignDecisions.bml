@@ -41,7 +41,7 @@
     FB11 default empty-prefix xmlns.
     FB12–FB16 assemble host/embed empty-embeds and not-found rules.
     FB17 preserve subBlocks; clear nested embeds on clone; serialize indent 2.
-    FB18 Host.fat.bml basename.
+    FB18 {hostFqn}.fat.bml basename.
     FB19 V1 = folder pool not transitive closure.
     FB20 embeddedBlocksStrategy reserved; assemble hardcodes empty-embeds check.</documentation>
   <references>

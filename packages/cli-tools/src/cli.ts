@@ -24,11 +24,12 @@ import {
   projectLibrarySeeds,
 } from "./bootstrap-type-registry.js";
 import { loadConfig, type BomConfig } from "./load-config.js";
-import { projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
+import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { writeOutputFiles } from "./write-output.js";
 
 const USAGE =
   "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
+  "       blockml compile fatblock [--include a,b] [--out dir] [--per-package]\n" +
   "       blockml compile <file> <document-target> [--src dir] [--include a,b] [--out dir]\n" +
   "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]";
 
@@ -56,6 +57,7 @@ export interface ParsedArgs {
   libraries?: string[];
   include?: string[];
   verbose?: boolean;
+  perPackage?: boolean;
 }
 
 interface PrintableDiagnostic {
@@ -98,6 +100,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
       }
     } else if (flag === "--all") {
       result.all = true;
+    } else if (flag === "--per-package") {
+      result.perPackage = true;
     } else if (flag === "--verbose") {
       result.verbose = true;
     } else if (flag && !flag.startsWith("-")) {
@@ -409,13 +413,23 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
   return failed ? 1 : 0;
 }
 
-async function runCompileDocument(
+function perPackageOutDir(
+  parsed: ParsedArgs,
+  invocationRoot: string,
+): string {
+  if (parsed.outDir) {
+    return resolve(invocationRoot, parsed.outDir);
+  }
+  return resolve(invocationRoot);
+}
+
+async function compileDocumentOnce(
   target: string,
   parsed: ParsedArgs,
   rootDir: string,
   config: BomConfig,
   lines: string[],
-): Promise<number> {
+): Promise<{ code: number; wrote?: string }> {
   applyDocumentTargetDefaults(target, parsed, rootDir);
   const hints = getTargetCliHints(target);
   if (hints?.requiresHostFile && !parsed.file) {
@@ -425,18 +439,18 @@ async function runCompileDocument(
         : `${target} requires a host <file> argument.`,
     );
     lines.push(USAGE);
-    return 2;
+    return { code: 2 };
   }
   if (hints?.requiresSrcDir && !parsed.srcDir) {
     lines.push(`${target} requires --src <dir> for the embed candidate pool.`);
     lines.push(USAGE);
-    return 2;
+    return { code: 2 };
   }
 
   const hostPath = resolve(rootDir, parsed.file!);
   if (!existsSync(hostPath)) {
     lines.push(`File not found: ${parsed.file}`);
-    return 2;
+    return { code: 2 };
   }
 
   const wsRoot = workspaceRoot(rootDir);
@@ -479,22 +493,106 @@ async function runCompileDocument(
   const hasErrors = diagnostics.some((d) => d.severity === "error");
   if (!result.success || hasErrors || !output?.files.length) {
     printCompileFailure(lines, diagnostics, !output?.files.length && !hasErrors);
-    return 1;
+    return { code: 1 };
   }
 
-  const writeResult = writeOutputFiles(output, outDir, rootDir, {
+  writeOutputFiles(output, outDir, rootDir, {
     cleanOutDir: false,
   });
-  const rootNote =
-    writeResult.rootFilesWritten.length > 0
-      ? ` and ${writeResult.rootFilesWritten.join(", ")}`
-      : "";
-  const wrote =
-    writeResult.filesWritten === 1 && output.files.length === 1
-      ? `Wrote ${resolve(rootDir, outDir, output.files[0]!.path)}${rootNote}`
-      : `Wrote ${writeResult.filesWritten} file(s) to ${outDir}/${rootNote}`;
-  printCompileSuccess(lines, wrote);
-  return 0;
+  const wrote = resolve(rootDir, outDir, output.files[0]!.path);
+  return { code: 0, wrote };
+}
+
+async function runCompileDocument(
+  target: string,
+  parsed: ParsedArgs,
+  rootDir: string,
+  config: BomConfig,
+  lines: string[],
+): Promise<number> {
+  const result = await compileDocumentOnce(target, parsed, rootDir, config, lines);
+  if (result.code === 0 && result.wrote) {
+    printCompileSuccess(lines, `Wrote ${result.wrote}`);
+  }
+  return result.code;
+}
+
+async function runCompilePerPackage(
+  target: string,
+  parsed: ParsedArgs,
+  rootDir: string,
+  lines: string[],
+): Promise<number> {
+  if (parsed.file) {
+    lines.push("--per-package cannot be combined with a host <file> argument.");
+    lines.push(USAGE);
+    return 2;
+  }
+  if (parsed.srcDir) {
+    lines.push("--per-package cannot be combined with --src.");
+    lines.push(USAGE);
+    return 2;
+  }
+
+  const packageDirs = projectLibraryPackageDirs(rootDir);
+  if (packageDirs.length === 0) {
+    lines.push("No packages with package.json blockml.library found.");
+    return 2;
+  }
+
+  const wrote: string[] = [];
+  let worst = 0;
+  for (const pkgDir of packageDirs) {
+    const pkgParsed: ParsedArgs = { ...parsed };
+    delete pkgParsed.perPackage;
+    delete pkgParsed.file;
+    delete pkgParsed.srcDir;
+    pkgParsed.outDir = perPackageOutDir(parsed, rootDir);
+    let pkgConfig: BomConfig;
+    try {
+      pkgConfig = loadConfig(pkgDir);
+    } catch (e) {
+      lines.push(e instanceof Error ? e.message : String(e));
+      worst = 2;
+      continue;
+    }
+    const label = relative(rootDir, pkgDir) || ".";
+    const pkgLines: string[] = [];
+    const result = await compileDocumentOnce(
+      target,
+      pkgParsed,
+      pkgDir,
+      pkgConfig,
+      pkgLines,
+    );
+    if (pkgLines.length > 0) {
+      lines.push(`${target} ${label}:`);
+      lines.push(...pkgLines);
+    }
+    if (result.wrote) {
+      wrote.push(result.wrote);
+    }
+    if (result.code > worst) {
+      worst = result.code;
+    }
+  }
+
+  if (worst === 0) {
+    if (wrote.length === 0) {
+      printCompileFailure(lines, [], true);
+      return 1;
+    }
+    const summary =
+      wrote.length === 1
+        ? `Wrote ${wrote[0]}`
+        : `Wrote ${wrote.length} file(s):\n${wrote.map((p) => `  ${p}`).join("\n")}`;
+    printCompileSuccess(lines, summary);
+    return 0;
+  }
+  if (wrote.length > 0) {
+    lines.push(`Wrote ${wrote.length} file(s) before failure.`);
+  }
+  return worst;
 }
 
 function isBlockdocProjectLibraryScan(
@@ -619,6 +717,16 @@ async function runCompile(
   if (!registered) {
     lines.push(`Unknown target: ${target}`);
     return 2;
+  }
+
+  if (parsed.perPackage) {
+    const hints = getTargetCliHints(target);
+    if (!isDocumentOnlyTarget(registered) || !hints?.defaultHostFromPackageLibrary) {
+      lines.push("--per-package is only valid for fatblock.");
+      lines.push(USAGE);
+      return 2;
+    }
+    return runCompilePerPackage(target, parsed, rootDir, lines);
   }
 
   if (isDocumentOnlyTarget(registered)) {

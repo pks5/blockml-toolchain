@@ -1,9 +1,9 @@
-import { basename } from "node:path";
-export function fatOutputBasename(hostFilePath) {
-    const base = basename(hostFilePath);
-    if (base.endsWith(".bml")) {
-        return `${base.slice(0, -4)}.fat.bml`;
+/** Output basename: host FQN + ".fat.bml". */
+export function fatOutputBasename(hostFqn) {
+    const fqn = hostFqn.trim();
+    if (!fqn) {
+        return "unnamed.fat.bml";
     }
-    return `${base}.fat.bml`;
+    return `${fqn}.fat.bml`;
 }
 //# sourceMappingURL=fat-output-path.js.map
