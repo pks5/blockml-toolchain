@@ -39,10 +39,11 @@
     TypeRegistry — class; register/get/has/keys/size on BomDocument index
     bootstrapTypeRegistry(options?) → BootstrapResult
     defaultBootstrapPaths(rootDir?) → string[]
+    resolveLibrarySeeds(rootDir?, extras?) → string[]
     BootstrapOptions — paths?, libraryPaths?, rootDir?
+    BootstrapResult — registry, diagnostics, exportsByLibrary?, trace?
+    BootstrapTrace — corpusPaths, seeds, searchRoots, librariesVisited, skippedCoveredRoots
     rootFqnByFilePath(registry) → Map&lt;filePath, rootFqn&gt;
-    rootFqns(registry) → string[]
-    getExportedFqns(libraryPath, bootstrap, rootDir?) → Set&lt;string&gt; | undefined
     forkBom(document) → BomDocument
     resolveEffectiveMembers(block, registry) → MemberDefinition[]
     resolveContracts(block, registry) → MemberDefinition[] (contract slice; used by resolveEffectiveMembers)
@@ -50,17 +51,12 @@
     memberIdentityKey(member) → string
     parseExpression(source) → ParseExpressionOutcome
     validateTypes(document, registry) → Diagnostic[]
-    validateEmbeddedBlocks(document) → Diagnostic[]
     validateVersions(document, registry) → Diagnostic[]
-    validateInstances(document, registry) → Diagnostic[]
-    validatePresets(document, registry) → Diagnostic[]
-    validateVisibility(document, registry) → Diagnostic[]
-    validateReadOnly(document, registry) → Diagnostic[]
     validateConstraints(document, registry) → Diagnostic[]
     getPropertyNumericValue(property) → number | undefined
     isLiteralValue(value) → boolean
 
-    Types: BootstrapResult, BootstrapOptions, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
+    Types: BootstrapResult, BootstrapTrace, BootstrapOptions, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
 
     Not exported from index: getLiteralNumericValue (internal helper in validate-types.ts).</documentation>
 

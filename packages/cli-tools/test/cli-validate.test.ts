@@ -30,6 +30,10 @@ describe("parseArgs", () => {
     expect(parsed.all).toBe(true);
     expect(parsed.target).toBeUndefined();
   });
+
+  it("maps validate --verbose", () => {
+    expect(parseArgs(["validate", "--verbose"]).verbose).toBe(true);
+  });
 });
 
 describe("isCliEntry", () => {
@@ -92,6 +96,28 @@ describe("runCli validate", () => {
     if (code === 0) {
       expect(stderr).toMatch(/Validation succeeded\./);
     }
+  });
+
+  it("seeds from package.json blockml.library without --libraries", async () => {
+    const bomRoot = join(ROOT, "packages/bom");
+    const { code, stderr } = await runCli(["validate"], bomRoot);
+    expect([0, 1]).toContain(code);
+    expect(stderr).toMatch(
+      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors\./,
+    );
+  });
+
+  it("prints bootstrap sources with --verbose", async () => {
+    const bomRoot = join(ROOT, "packages/bom");
+    const { stderr } = await runCli(["validate", "--verbose"], bomRoot);
+    expect(stderr).toMatch(/^srcDir: /m);
+    expect(stderr).toMatch(/seeds:/);
+    expect(stderr).toMatch(/Library\.bml/);
+    expect(stderr).toMatch(/index \(search only\):/);
+    expect(stderr).toMatch(/files \(\d+\):/);
+    expect(stderr).toMatch(
+      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors\./,
+    );
   });
 
   it("treats --all as corpus validate", async () => {

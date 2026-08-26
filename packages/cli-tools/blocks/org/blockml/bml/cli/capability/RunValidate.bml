@@ -27,6 +27,7 @@
 
   <documentation>CLI10: file and --all together exit 2. CLI11: never writes render output.
     Single file: compileBmlToBom. Corpus/--all: bootstrapProjectTypeRegistry + validateRegistryDocuments.
+    --verbose prints bootstrap sources (srcDir, seeds, index, graph, files) before diagnostics.
     After CLI17 diagnostics, always print a status line:
     Validation succeeded|failed. Tested N block(s), M with errors.
     Block = unique filePath. XSD is not part of this command.</documentation>

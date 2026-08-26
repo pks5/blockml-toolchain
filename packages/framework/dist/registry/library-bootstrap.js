@@ -27,14 +27,42 @@ function collectBmlFiles(dir, out = []) {
     }
     return out;
 }
+const CONFIG_FILE = "blockml.config.json";
+const DEFAULT_SRC_DIR = "blocks";
+function packageSrcDir(packageDir) {
+    const configPath = join(packageDir, CONFIG_FILE);
+    if (existsSync(configPath)) {
+        try {
+            const cfg = JSON.parse(readFileSync(configPath, "utf8"));
+            if (typeof cfg.srcDir === "string" && cfg.srcDir.length > 0) {
+                return resolve(packageDir, cfg.srcDir);
+            }
+        }
+        catch {
+            // fall through to default
+        }
+    }
+    return resolve(packageDir, DEFAULT_SRC_DIR);
+}
 function blocksRootFromLibraryPath(libraryPath) {
+    let dir = dirname(canonicalPath(libraryPath));
+    for (;;) {
+        if (existsSync(join(dir, "package.json"))) {
+            return packageSrcDir(dir);
+        }
+        const parent = dirname(dir);
+        if (parent === dir) {
+            break;
+        }
+        dir = parent;
+    }
     const normalized = libraryPath.replace(/\\/g, "/");
-    const marker = "/blocks/";
+    const marker = `/${DEFAULT_SRC_DIR}/`;
     const idx = normalized.indexOf(marker);
     if (idx >= 0) {
-        return normalized.slice(0, idx + "/blocks".length);
+        return normalized.slice(0, idx + `/${DEFAULT_SRC_DIR}`.length);
     }
-    return dirname(dirname(libraryPath));
+    return dirname(libraryPath);
 }
 function aggregationInstances(block, name) {
     const agg = block.members.find((m) => m.kind === "aggregation" && m.name === name);
@@ -222,9 +250,11 @@ export function bootstrapFromLibraryPaths(libraryPaths, searchRoots, rootDir, co
     checkNestingViolations(exportsByLibrary, diagnostics);
     const absCovered = coveredRoots.map((root) => resolve(rootDir, root));
     const seenFiles = new Set();
+    const skippedCoveredRoots = [];
     for (const libraryPath of orderedPaths) {
         const blocksRoot = blocksRootFromLibraryPath(libraryPath);
         if (absCovered.some((root) => isPathInsideOrEqual(blocksRoot, root))) {
+            skippedCoveredRoots.push(blocksRoot);
             continue;
         }
         for (const file of collectBmlFiles(blocksRoot)) {
@@ -232,7 +262,13 @@ export function bootstrapFromLibraryPaths(libraryPaths, searchRoots, rootDir, co
         }
     }
     registerFiles(registry, [...seenFiles], diagnostics);
-    return { registry, diagnostics, exportsByLibrary };
+    return {
+        registry,
+        diagnostics,
+        exportsByLibrary,
+        librariesVisited: orderedPaths,
+        skippedCoveredRoots,
+    };
 }
 export function bootstrapFromCorpusPaths(paths, rootDir) {
     const registry = new TypeRegistry();

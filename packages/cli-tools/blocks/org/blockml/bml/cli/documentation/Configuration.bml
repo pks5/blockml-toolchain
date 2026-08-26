@@ -30,7 +30,7 @@
 
     • outDir — default "doc" (CLI DefaultBomConfig)
     • srcDir — default "blocks" (recommended BlockML source folder)
-    • libraries — Library.bml paths for library-scope compiles
+    • libraries — extra Library.bml seeds (appended to package.json blockml.library)
     • targets — bootstrap list; default ["blockdoc"] (CLI2)
     • targetPackages — registry name → npm package for plugin load
     • targetOptions — opaque per-target; keys = registry names

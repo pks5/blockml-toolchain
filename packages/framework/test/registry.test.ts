@@ -4,6 +4,7 @@ import { join } from "node:path";
 import {
   bootstrapTypeRegistry,
   defaultBootstrapPaths,
+  resolveLibrarySeeds,
   TypeRegistry,
 } from "../src/index.js";
 
@@ -238,5 +239,73 @@ describe("defaultBootstrapPaths discovery fixtures", () => {
       rootDir: TMP,
     });
     expect(registry.has("acme.types.Widget")).toBe(true);
+  });
+
+  it("indexes blockml.library at default srcDir even when the library path has no /blocks/", () => {
+    const pkg = join(TMP, "node_modules/@acme/catalog");
+    mkdirSync(join(pkg, "blocks"), { recursive: true });
+    mkdirSync(join(pkg, "catalog"), { recursive: true });
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({
+        name: "tmp-discover",
+        dependencies: { "@acme/catalog": "1.0.0" },
+      }),
+      "utf8",
+    );
+    writeFileSync(
+      join(pkg, "package.json"),
+      JSON.stringify({
+        name: "@acme/catalog",
+        blockml: { library: "./catalog/Library.bml" },
+      }),
+      "utf8",
+    );
+    const paths = defaultBootstrapPaths(TMP).map((p) => p.replaceAll("\\", "/"));
+    expect(paths.some((p) => p.endsWith("node_modules/@acme/catalog/blocks"))).toBe(
+      true,
+    );
+  });
+
+  it("uses foreign blockml.config.json srcDir over the default", () => {
+    const pkg = join(TMP, "node_modules/@acme/alt");
+    mkdirSync(join(pkg, "src"), { recursive: true });
+    writeFileSync(
+      join(TMP, "package.json"),
+      JSON.stringify({
+        name: "tmp-discover",
+        dependencies: { "@acme/alt": "1.0.0" },
+      }),
+      "utf8",
+    );
+    writeFileSync(
+      join(pkg, "package.json"),
+      JSON.stringify({
+        name: "@acme/alt",
+        blockml: { library: "./src/Library.bml" },
+      }),
+      "utf8",
+    );
+    writeFileSync(
+      join(pkg, "blockml.config.json"),
+      JSON.stringify({ srcDir: "src" }),
+      "utf8",
+    );
+    const paths = defaultBootstrapPaths(TMP).map((p) => p.replaceAll("\\", "/"));
+    expect(paths.some((p) => p.endsWith("node_modules/@acme/alt/src"))).toBe(true);
+  });
+});
+
+describe("resolveLibrarySeeds", () => {
+  it("prepends package identity and dedupes symlink extras", () => {
+    const bomRoot = join(ROOT, "packages/bom");
+    const identity = join(bomRoot, "blocks/org/blockml/bml/bom/Library.bml");
+    const viaNm = join(
+      ROOT,
+      "node_modules/@blockml/bom/blocks/org/blockml/bml/bom/Library.bml",
+    );
+    const seeds = resolveLibrarySeeds(bomRoot, [viaNm]);
+    expect(seeds).toHaveLength(1);
+    expect(seeds[0]!.replaceAll("\\", "/")).toBe(identity.replaceAll("\\", "/"));
   });
 });

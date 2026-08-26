@@ -4,6 +4,8 @@ export declare function bootstrapFromLibraryPaths(libraryPaths: string[], search
     registry: TypeRegistry;
     diagnostics: Diagnostic[];
     exportsByLibrary: Map<string, Set<string>>;
+    librariesVisited: string[];
+    skippedCoveredRoots: string[];
 };
 export declare function bootstrapFromCorpusPaths(paths: string[], rootDir: string): {
     registry: TypeRegistry;

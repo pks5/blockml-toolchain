@@ -359,6 +359,9 @@ ${XMLNS}
         <parser:Library />
       </composition>
       <composition>
+        <serializer:Library />
+      </composition>
+      <composition>
         <validator:Library />
       </composition>
       <composition>

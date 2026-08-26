@@ -27,11 +27,11 @@
   <is>V1 implemented vs planned commands</is>
 
   <documentation>V1 implemented:
-    • blockml validate [file] [--all] [--src] [--libraries]
+    • blockml validate [file] [--all] [--src] [--libraries] [--verbose]
     • blockml compile [file] target | blockml compile target
     • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
     • Config: targets[], targetPackages, targetOptions, defaultTarget
-    • Flags: --out, --src, --libraries, --include (fatblock), --all (validate only meaningful)
+    • Flags: --out, --src, --libraries, --include (fatblock), --all, --verbose (validate)
     • Validate uses parse + @blockml/validator only; XSD is compile xsd, not a validate step
 
     V1 not implemented (documented in ScopeExclusions):

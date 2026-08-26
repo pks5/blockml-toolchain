@@ -65,13 +65,19 @@
     <dependencies>
       <composition>
         <blockml:Library />
+      </composition>
+      <composition>
         <bom:Library />
+      </composition>
+      <composition>
         <parser:Library />
       </composition>
     </dependencies>
     <blocks>
-      <composition><framework:FrameworkType />
+      <composition>
+        <framework:FrameworkType />
         <fwregistry:BootstrapResult />
+        <fwregistry:BootstrapTrace />
         <fwexpression:ExpressionNode />
         <fwexpression:LiteralExpressionNode />
         <fwexpression:ArrayExpressionNode />
@@ -87,6 +93,7 @@
         <fwcap:TypeRegistry />
         <fwcap:BootstrapTypeRegistry />
         <fwcap:DefaultBootstrapPaths />
+        <fwcap:ResolveLibrarySeeds />
         <fwcap:ForkBom />
         <fwcap:ResolveContracts />
         <fwcap:ResolveEffectiveMembers />

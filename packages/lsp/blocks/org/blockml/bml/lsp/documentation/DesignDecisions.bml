@@ -18,6 +18,8 @@
   xmlns:fwcap="org.blockml.bml.framework.capability"
   xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
   xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:type="org.blockml.bml.type"
@@ -35,9 +37,10 @@
 
     Inline blockml.config.json loading — avoids @blockml/cli dependency chain.
 
-    Workspace bootstrap is corpus-first (srcDir). Library.bml is the FQN dependency graph;
-    npm/workspace packages with blockml.library or blockml.config.json are the search index.
-    A library blocks tree already under srcDir is not registered twice.
+    Workspace bootstrap is corpus-first (srcDir). Seed = package.json blockml.library
+    then config.libraries (additive, realpath-deduped). npm/workspace packages with
+    blockml.library or blockml.config.json are the search index (source root = srcDir,
+    default blocks). A library blocks tree already under srcDir is not registered twice.
 
     Full text sync + debounced validation — simpler than incremental parse for V1.
 

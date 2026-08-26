@@ -86,7 +86,11 @@ export const documentationBlocks = [
     TypeRegistry — class; register/get/has/keys/size on BomDocument index
     bootstrapTypeRegistry(options?) → BootstrapResult
     defaultBootstrapPaths(rootDir?) → string[]
+    resolveLibrarySeeds(rootDir?, extras?) → string[]
     BootstrapOptions — paths?, libraryPaths?, rootDir?
+    BootstrapResult — registry, diagnostics, exportsByLibrary?, trace?
+    BootstrapTrace — corpusPaths, seeds, searchRoots, librariesVisited, skippedCoveredRoots
+    rootFqnByFilePath(registry) → Map&lt;filePath, rootFqn&gt;
     forkBom(document) → BomDocument
     resolveEffectiveMembers(block, registry) → MemberDefinition[]
     resolveContracts(block, registry) → MemberDefinition[] (contract slice; used by resolveEffectiveMembers)
@@ -99,7 +103,7 @@ export const documentationBlocks = [
     getPropertyNumericValue(property) → number | undefined
     isLiteralValue(value) → boolean
 
-    Types: BootstrapResult, BootstrapOptions, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
+    Types: BootstrapResult, BootstrapTrace, BootstrapOptions, ExpressionNode, ParseExpressionResult, ParseExpressionOutcome
 
     Not exported from index: getLiteralNumericValue (internal helper in validate-types.ts).`,
     refs: [
@@ -121,10 +125,15 @@ export const documentationBlocks = [
     BML_LIBRARY_RESOLVE_ERROR. Outer re-export of inner-only block →
     BML_LIBRARY_NESTING_VIOLATION (minimal check).
 
-    defaultBootstrapPaths(rootDir?) returns BlockML blocks/srcDir roots for production
+    defaultBootstrapPaths(rootDir?) returns BlockML srcDir roots for production
     npm dependencies (package.json dependencies + optionalDependencies) of the nearest
     package, resolved via node_modules walk-up. Used as corpus fallback when no paths
-    are given.
+    are given. A BlockML package is identified by blockml.library or blockml.config.json;
+    its source root is srcDir (default "blocks", override only in that package's
+    blockml.config.json).
+
+    resolveLibrarySeeds(rootDir, extras?) prepends package.json blockml.library, then
+    extras (config.libraries / --libraries), deduped by realpath.
 
     bootstrapTypeRegistry also indexes Library.bml under all BlockML packages found in
     node_modules and workspace packages/ along the directory walk (FQN search space).
@@ -132,9 +141,11 @@ export const documentationBlocks = [
     (self-loop); then another file with the same type is used. node_modules is
     indexed before workspace packages.
 
-    BootstrapResult: { registry: TypeRegistry, diagnostics: Diagnostic[] }
-    Read errors emit BML_BOOTSTRAP_READ_ERROR (warning). Parse diagnostics are collected
-    but do not stop registration of successfully parsed documents.
+    BootstrapResult: { registry, diagnostics, exportsByLibrary?, trace? }
+    trace lists corpusPaths, seeds, searchRoots (index only), librariesVisited, and
+    skippedCoveredRoots. Read errors emit BML_BOOTSTRAP_READ_ERROR (warning). Parse
+    diagnostics are collected but do not stop registration of successfully parsed
+    documents.
 
     Hosts (@blockml/cli, @blockml/validator) may inject a pre-built TypeRegistry via
     ValidateOptions.typeRegistry instead of bootstrapping. ValidateOptions.libraryPaths

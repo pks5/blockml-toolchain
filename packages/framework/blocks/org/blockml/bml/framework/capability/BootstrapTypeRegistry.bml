@@ -37,6 +37,7 @@
 
   <references>
     <see type="fwcap:DefaultBootstrapPaths" relation="SeeAlso" />
+    <see type="fwcap:ResolveLibrarySeeds" relation="SeeAlso" />
     <see type="fwregistry:BootstrapOptions" relation="SeeAlso" />
     <see type="parser:Library" relation="SeeAlso" />
   </references>

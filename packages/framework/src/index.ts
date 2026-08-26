@@ -2,8 +2,10 @@ export { TypeRegistry } from "./registry/type-registry.js";
 export {
   bootstrapTypeRegistry,
   defaultBootstrapPaths,
+  resolveLibrarySeeds,
   type BootstrapResult,
   type BootstrapOptions,
+  type BootstrapTrace,
 } from "./registry/bootstrap.js";
 export { rootFqnByFilePath, rootFqns } from "./registry/root-fqn.js";
 export { getExportedFqns } from "./registry/library-exports.js";

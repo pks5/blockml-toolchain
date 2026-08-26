@@ -32,7 +32,7 @@
   <baseType>core:Capability</baseType>
   <is>Parse then serialize a BML document to canonical XML</is>
 
-  <documentation>Editor-neutral format: parse(text) then serialize(). Returns null if parse cannot produce a document. xmlDeclaration defaults to a leading &lt;?xml in the source.</documentation>
+  <documentation>Editor-neutral format: parse(text) then serialize(). Returns null if parse cannot produce a document.</documentation>
 
   <references>
     <see type="lspdocumentation:PublicApi" relation="SeeAlso" />
@@ -45,13 +45,13 @@
       <documentation>text. TS type: type:Text. (required)</documentation>
     </text>
     <indent type="type:Integer">
-      <documentation>indent. TS type: type:Integer. (optional; serializer default 2)</documentation>
+      <documentation>indent. TS type: type:Integer. (optional)</documentation>
     </indent>
     <xmlDeclaration type="type:Boolean">
-      <documentation>xmlDeclaration. TS type: type:Boolean. (optional; inferred from source when omitted)</documentation>
+      <documentation>xmlDeclaration. TS type: type:Boolean. (optional)</documentation>
     </xmlDeclaration>
     <result type="type:Text">
-      <documentation>result. TS type: type:Text | null. (required)</documentation>
+      <documentation>result. TS type: type:Text. (required)</documentation>
     </result>
   </properties>
 

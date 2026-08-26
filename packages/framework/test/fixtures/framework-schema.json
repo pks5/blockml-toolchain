@@ -24,6 +24,50 @@
           "name": "diagnostics",
           "type": "bomcommon:Diagnostic[]",
           "required": true
+        },
+        {
+          "name": "exportsByLibrary",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "trace",
+          "type": "fwregistry:BootstrapTrace",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.framework.registry.BootstrapTrace",
+      "tsExport": "BootstrapTrace",
+      "pkg": "registry",
+      "abstract": false,
+      "baseType": "framework:FrameworkType",
+      "fields": [
+        {
+          "name": "corpusPaths",
+          "type": "type:Text[]",
+          "required": true
+        },
+        {
+          "name": "seeds",
+          "type": "type:Text[]",
+          "required": true
+        },
+        {
+          "name": "searchRoots",
+          "type": "type:Text[]",
+          "required": true
+        },
+        {
+          "name": "librariesVisited",
+          "type": "type:Text[]",
+          "required": true
+        },
+        {
+          "name": "skippedCoveredRoots",
+          "type": "type:Text[]",
+          "required": true
         }
       ]
     },
@@ -314,6 +358,28 @@
       }
     },
     {
+      "name": "ResolveLibrarySeeds",
+      "tsExport": "resolveLibrarySeeds",
+      "fqn": "org.blockml.bml.framework.capability.ResolveLibrarySeeds",
+      "inputs": [
+        {
+          "name": "rootDir",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "extras",
+          "type": "type:Text[]",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "seeds",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
       "name": "ForkBom",
       "tsExport": "forkBom",
       "fqn": "org.blockml.bml.framework.capability.ForkBom",
@@ -497,6 +563,173 @@
       }
     },
     {
+      "name": "RootFqnByFilePath",
+      "tsExport": "rootFqnByFilePath",
+      "fqn": "org.blockml.bml.framework.capability.RootFqnByFilePath",
+      "inputs": [
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "roots",
+        "type": "type:Text",
+        "required": true,
+        "doc": "Map&lt;filePath, rootFqn&gt;."
+      }
+    },
+    {
+      "name": "RootFqns",
+      "tsExport": "rootFqns",
+      "fqn": "org.blockml.bml.framework.capability.RootFqns",
+      "inputs": [
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "fqns",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "GetExportedFqns",
+      "tsExport": "getExportedFqns",
+      "fqn": "org.blockml.bml.framework.capability.GetExportedFqns",
+      "inputs": [
+        {
+          "name": "libraryPath",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "bootstrap",
+          "type": "fwregistry:BootstrapResult",
+          "required": true
+        },
+        {
+          "name": "rootDir",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "exported",
+        "type": "type:Text",
+        "doc": "Set&lt;exportedFqn&gt; or undefined."
+      }
+    },
+    {
+      "name": "ValidateEmbeddedBlocks",
+      "tsExport": "validateEmbeddedBlocks",
+      "fqn": "org.blockml.bml.framework.capability.ValidateEmbeddedBlocks",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "diagnostics",
+        "type": "bomcommon:Diagnostic[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ValidateInstances",
+      "tsExport": "validateInstances",
+      "fqn": "org.blockml.bml.framework.capability.ValidateInstances",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "diagnostics",
+        "type": "bomcommon:Diagnostic[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ValidatePresets",
+      "tsExport": "validatePresets",
+      "fqn": "org.blockml.bml.framework.capability.ValidatePresets",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "diagnostics",
+        "type": "bomcommon:Diagnostic[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ValidateVisibility",
+      "tsExport": "validateVisibility",
+      "fqn": "org.blockml.bml.framework.capability.ValidateVisibility",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "diagnostics",
+        "type": "bomcommon:Diagnostic[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ValidateReadOnly",
+      "tsExport": "validateReadOnly",
+      "fqn": "org.blockml.bml.framework.capability.ValidateReadOnly",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "bomdoc:BomDocument",
+          "required": true
+        },
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "diagnostics",
+        "type": "bomcommon:Diagnostic[]",
+        "required": true
+      }
+    },
+    {
       "name": "GetPropertyNumericValue",
       "tsExport": "getPropertyNumericValue",
       "fqn": "org.blockml.bml.framework.capability.GetPropertyNumericValue",
@@ -529,78 +762,6 @@
         "type": "type:Boolean",
         "required": true
       }
-    },
-    {
-      "name": "RootFqnByFilePath",
-      "tsExport": "rootFqnByFilePath",
-      "fqn": "org.blockml.bml.framework.capability.RootFqnByFilePath",
-      "inputs": [{ "name": "registry", "type": "fwcap:TypeRegistry", "required": true }],
-      "output": { "name": "roots", "type": "type:Text", "required": true }
-    },
-    {
-      "name": "RootFqns",
-      "tsExport": "rootFqns",
-      "fqn": "org.blockml.bml.framework.capability.RootFqns",
-      "inputs": [{ "name": "registry", "type": "fwcap:TypeRegistry", "required": true }],
-      "output": { "name": "fqns", "type": "type:Text[]", "required": true }
-    },
-    {
-      "name": "GetExportedFqns",
-      "tsExport": "getExportedFqns",
-      "fqn": "org.blockml.bml.framework.capability.GetExportedFqns",
-      "inputs": [
-        { "name": "libraryPath", "type": "type:Text", "required": true },
-        { "name": "bootstrap", "type": "fwregistry:BootstrapResult", "required": true },
-        { "name": "rootDir", "type": "type:Text", "required": false }
-      ],
-      "output": { "name": "exported", "type": "type:Text", "required": false }
-    },
-    {
-      "name": "ValidateEmbeddedBlocks",
-      "tsExport": "validateEmbeddedBlocks",
-      "fqn": "org.blockml.bml.framework.capability.ValidateEmbeddedBlocks",
-      "inputs": [{ "name": "document", "type": "bomdoc:BomDocument", "required": true }],
-      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
-    },
-    {
-      "name": "ValidateInstances",
-      "tsExport": "validateInstances",
-      "fqn": "org.blockml.bml.framework.capability.ValidateInstances",
-      "inputs": [
-        { "name": "document", "type": "bomdoc:BomDocument", "required": true },
-        { "name": "registry", "type": "fwcap:TypeRegistry", "required": true }
-      ],
-      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
-    },
-    {
-      "name": "ValidatePresets",
-      "tsExport": "validatePresets",
-      "fqn": "org.blockml.bml.framework.capability.ValidatePresets",
-      "inputs": [
-        { "name": "document", "type": "bomdoc:BomDocument", "required": true },
-        { "name": "registry", "type": "fwcap:TypeRegistry", "required": true }
-      ],
-      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
-    },
-    {
-      "name": "ValidateVisibility",
-      "tsExport": "validateVisibility",
-      "fqn": "org.blockml.bml.framework.capability.ValidateVisibility",
-      "inputs": [
-        { "name": "document", "type": "bomdoc:BomDocument", "required": true },
-        { "name": "registry", "type": "fwcap:TypeRegistry", "required": true }
-      ],
-      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
-    },
-    {
-      "name": "ValidateReadOnly",
-      "tsExport": "validateReadOnly",
-      "fqn": "org.blockml.bml.framework.capability.ValidateReadOnly",
-      "inputs": [
-        { "name": "document", "type": "bomdoc:BomDocument", "required": true },
-        { "name": "registry", "type": "fwcap:TypeRegistry", "required": true }
-      ],
-      "output": { "name": "diagnostics", "type": "bomcommon:Diagnostic[]", "required": true }
     }
   ],
   "frameworkDiagnosticCodes": [

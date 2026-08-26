@@ -18,6 +18,8 @@
   xmlns:fwcap="org.blockml.bml.framework.capability"
   xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
   xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:type="org.blockml.bml.type"
@@ -51,7 +53,7 @@
       <documentation>workspace. TS type: lsp:WorkspaceState. (required)</documentation>
     </workspace>
     <result type="core:Any">
-      <documentation>result. TS type: LspLocationLink[] | null. originSelectionRange is the whole QName. (required)</documentation>
+      <documentation>LspLocationLink[] | null. (required)</documentation>
     </result>
   </properties>
 

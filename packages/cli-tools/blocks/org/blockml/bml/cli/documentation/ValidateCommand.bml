@@ -28,10 +28,11 @@
   <is>blockml validate specification</is>
 
   <documentation>Syntax:
-    blockml validate [file] [--all] [--src dir] [--libraries a,b]
+    blockml validate [file] [--all] [--src dir] [--libraries a,b] [--verbose]
 
     Single file: parse + compileBmlToBom against project registry.
     --all or corpus: bootstrapProjectTypeRegistry + validateRegistryDocuments.
+    --verbose: print srcDir, seeds, search index, graph, registered files (before diagnostics).
 
     Validity is parse + semantic validate only. XSD is a render target
     (blockml compile xsd) and is not consulted.

@@ -1,16 +1,16 @@
 #!/usr/bin/env node
-import { bootstrapTypeRegistry } from "@blockml/framework";
+import { bootstrapTypeRegistry, rootFqnByFilePath, } from "@blockml/framework";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { compileBmlToBom, compileToOutput, getTarget, validateRegistryDocuments, } from "@blockml/compiler";
 import { bootstrapTargets, getTargetCliHints, } from "./bootstrap-targets.js";
-import { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
+import { bootstrapProjectTypeRegistry, projectLibrarySeeds } from "./bootstrap-type-registry.js";
 import { loadConfig } from "./load-config.js";
 import { writeOutputFiles } from "./write-output.js";
 const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
     "       blockml compile <file> <document-target> --src dir [--include a,b] [--out dir]\n" +
-    "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b]";
+    "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]";
 function workspaceRoot(from) {
     let dir = resolve(from);
     for (;;) {
@@ -60,6 +60,9 @@ export function parseArgs(argv) {
         else if (flag === "--all") {
             result.all = true;
         }
+        else if (flag === "--verbose") {
+            result.verbose = true;
+        }
         else if (flag && !flag.startsWith("-")) {
             if (result.command === "validate") {
                 if (!result.file) {
@@ -97,6 +100,28 @@ function printValidateOutcome(lines, blocksTested, blocksWithErrors, failed) {
     const word = blocksTested === 1 ? "block" : "blocks";
     const status = failed ? "failed" : "succeeded";
     lines.push(`Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors.`);
+}
+function printNamedList(lines, title, items) {
+    lines.push(`${title}:`);
+    if (items.length === 0) {
+        lines.push("  (none)");
+        return;
+    }
+    for (const item of items) {
+        lines.push(`  ${item}`);
+    }
+}
+function printValidateSources(lines, srcDir, bootstrap) {
+    const trace = bootstrap.trace;
+    lines.push(`srcDir: ${srcDir}`);
+    printNamedList(lines, "seeds", trace?.seeds ?? []);
+    printNamedList(lines, "index (search only)", trace?.searchRoots ?? []);
+    printNamedList(lines, "graph", trace?.librariesVisited ?? []);
+    const files = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
+    printNamedList(lines, `files (${files.length})`, files);
+    if (trace?.skippedCoveredRoots.length) {
+        printNamedList(lines, "skipped (covered by srcDir)", trace.skippedCoveredRoots);
+    }
 }
 function printCompileSuccess(lines, wrote) {
     lines.push(`Compilation succeeded. ${wrote}`);
@@ -170,6 +195,10 @@ function runValidate(parsed, rootDir, lines) {
         return 2;
     }
     const bootstrap = bootstrapProjectTypeRegistry(bootstrapOptsFromParsed(parsed, config, rootDir));
+    const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
+    if (parsed.verbose) {
+        printValidateSources(lines, resolve(rootDir, srcDir), bootstrap);
+    }
     if (parsed.file) {
         const filePath = resolve(rootDir, parsed.file);
         if (!existsSync(filePath)) {
@@ -264,7 +293,11 @@ async function runCompileCorpus(target, parsed, rootDir, config, lines) {
     const bootstrap = bootstrapProjectTypeRegistry(bootstrapOptsFromParsed(parsed, config, rootDir));
     const outDir = parsed.outDir ?? resolveDefaultOutDir(target, config);
     const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
-    const libraries = parsed.libraries ?? config.libraries ?? [];
+    const libraries = projectLibrarySeeds({
+        config,
+        rootDir,
+        ...(parsed.libraries !== undefined ? { librariesOverride: parsed.libraries } : {}),
+    });
     const scope = { kind: "auto" };
     if (libraries.length > 0) {
         scope.libraries = libraries;

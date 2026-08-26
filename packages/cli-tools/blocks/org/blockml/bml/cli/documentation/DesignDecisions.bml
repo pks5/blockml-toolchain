@@ -31,7 +31,7 @@
     CLI3 bootstrapTargets idempotent.
     CLI4 TARGET_FACTORIES blockdoc/xsd/fatblock.
     CLI5 unknown target name throws.
-    CLI6 registry bootstrap libraryPaths vs paths[srcDir].
+    CLI6 registry bootstrap: identity seed (blockml.library) plus config/--libraries extras; paths=[srcDir].
     CLI7 writeOutputFiles cleanOutDir rmSync.
     CLI8 rootFiles beside rootDir (XSD catalog).
     CLI9 parseArgs flag and positional rules.

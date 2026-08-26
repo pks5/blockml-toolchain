@@ -25,7 +25,7 @@
   <baseType>core:Capability</baseType>
   <is>CLI wrapper around framework bootstrapTypeRegistry</is>
 
-  <documentation>CLI6: libraryPaths when libraries[] non-empty; else paths=[srcDir]. Merges CLI overrides for --src and --libraries.</documentation>
+  <documentation>CLI6: libraryPaths from resolveLibrarySeeds (package.json blockml.library then extras). Always paths=[srcDir]. Merges CLI overrides for --src and --libraries (extras only).</documentation>
 
   <references>
     <see type="clidocumentation:RuntimeBootstrap" relation="SeeAlso" />

@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { resolveLibrarySeeds } from "@blockml/framework";
 import {
   createWorkspace,
   invalidateWorkspace,
@@ -30,6 +31,20 @@ describe("loadPackageBlockmlLibrary", () => {
     expect(loadPackageBlockmlLibrary(BOM_PACKAGE)).toBe(
       "./blocks/org/blockml/bml/bom/Library.bml",
     );
+  });
+});
+
+describe("library seeds", () => {
+  it("keeps package identity when extras are also given", () => {
+    const coreLib = join(CORE_PACKAGE, "blocks/org/blockml/bml/Library.bml");
+    const seeds = resolveLibrarySeeds(BOM_PACKAGE, [coreLib]);
+    expect(seeds.some((p) => p.replaceAll("\\", "/").endsWith("/bom/Library.bml"))).toBe(
+      true,
+    );
+    expect(seeds.some((p) => p.replaceAll("\\", "/").endsWith("/bml/Library.bml"))).toBe(
+      true,
+    );
+    expect(seeds.length).toBeGreaterThanOrEqual(2);
   });
 });
 

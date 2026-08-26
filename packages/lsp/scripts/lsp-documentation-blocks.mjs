@@ -66,9 +66,9 @@ export const documentationBlocks = [
     baseType + member types, optional declaration).
 
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
-    Corpus-first: always scan srcDir. Seed library from config.libraries or package.json
-    blockml.library; FQN dependencies resolve via discovered BlockML npm/workspace packages.
-    Library blocks trees inside srcDir are not scanned twice.`,
+    Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
+    (additive). FQN dependencies resolve via discovered BlockML npm/workspace packages
+    (source root = srcDir, default blocks). Library blocks trees inside srcDir are not scanned twice.`,
     refs: [
       { type: "lspdocumentation:ServerLifecycle", relation: "ReadNext" },
     ],
@@ -191,9 +191,10 @@ export const documentationBlocks = [
 
     Inline blockml.config.json loading — avoids @blockml/cli dependency chain.
 
-    Workspace bootstrap is corpus-first (srcDir). Library.bml is the FQN dependency graph;
-    npm/workspace packages with blockml.library or blockml.config.json are the search index.
-    A library blocks tree already under srcDir is not registered twice.
+    Workspace bootstrap is corpus-first (srcDir). Seed = package.json blockml.library
+    then config.libraries (additive, realpath-deduped). npm/workspace packages with
+    blockml.library or blockml.config.json are the search index (source root = srcDir,
+    default blocks). A library blocks tree already under srcDir is not registered twice.
 
     Full text sync + debounced validation — simpler than incremental parse for V1.
 

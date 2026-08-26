@@ -6,5 +6,6 @@ export interface CliBootstrapOptions {
     librariesOverride?: string[];
     srcDirOverride?: string;
 }
+export declare function projectLibrarySeeds(options: Pick<CliBootstrapOptions, "config" | "rootDir" | "librariesOverride">): string[];
 export declare function bootstrapProjectTypeRegistry(options: CliBootstrapOptions): BootstrapResult;
 //# sourceMappingURL=bootstrap-type-registry.d.ts.map

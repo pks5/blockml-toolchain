@@ -18,6 +18,8 @@
   xmlns:fwcap="org.blockml.bml.framework.capability"
   xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
   xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:serializer="org.blockml.bml.compiler.serializer"
+  xmlns:sercap="org.blockml.bml.compiler.serializer.capability"
   xmlns:validator="org.blockml.bml.compiler.validator"
   xmlns:valcap="org.blockml.bml.compiler.validator.capability"
   xmlns:type="org.blockml.bml.type"
@@ -49,9 +51,9 @@
     baseType + member types, optional declaration).
 
     Workspace bootstrap reads blockml.config.json (srcDir, libraries) inline — no @blockml/cli dependency.
-    Corpus-first: always scan srcDir. Seed library from config.libraries or package.json
-    blockml.library; FQN dependencies resolve via discovered BlockML npm/workspace packages.
-    Library blocks trees inside srcDir are not scanned twice.</documentation>
+    Corpus-first: always scan srcDir. Seed = package.json blockml.library then config.libraries
+    (additive). FQN dependencies resolve via discovered BlockML npm/workspace packages
+    (source root = srcDir, default blocks). Library blocks trees inside srcDir are not scanned twice.</documentation>
 
   <references>
     <see type="lspdocumentation:ServerLifecycle" relation="ReadNext"></see>

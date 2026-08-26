@@ -29,7 +29,8 @@
   <documentation>Before compile (validate skips target bootstrap):
 
     1. load blockml.config.json (LoadConfig / CLI1–CLI2)
-    2. bootstrapTypeRegistry via BootstrapProjectTypeRegistry (CLI6)
+    2. bootstrapTypeRegistry via BootstrapProjectTypeRegistry (CLI6) —
+       seeds = package.json blockml.library then config.libraries / --libraries
     3. bootstrapTargets from config.targets[] (CLI3–CLI5) — compile only
     4. build CompileRequest from target kind + flags + config
     5. compileToOutput(request, target, options) — @blockml/compiler

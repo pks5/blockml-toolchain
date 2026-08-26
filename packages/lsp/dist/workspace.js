@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
-import { bootstrapTypeRegistry, defaultBootstrapPaths, TypeRegistry } from "@blockml/framework";
+import { bootstrapTypeRegistry, defaultBootstrapPaths, resolveLibrarySeeds, TypeRegistry } from "@blockml/framework";
 /** Globs registered with the client for workspace/didChangeWatchedFiles. */
 export const WATCH_GLOBS = ["**/*.bml", "**/blockml.config.json", "**/package.json"];
 /** True when a disk path should invalidate the cached TypeRegistry. */
@@ -57,11 +57,7 @@ export function loadPackageBlockmlLibrary(rootDir) {
     }
 }
 function resolveLibraryPaths(config, rootDir) {
-    if (config.libraries?.length) {
-        return config.libraries;
-    }
-    const fromPackage = loadPackageBlockmlLibrary(rootDir);
-    return fromPackage ? [fromPackage] : [];
+    return resolveLibrarySeeds(rootDir, config.libraries ?? []);
 }
 const workspaceCache = new Map();
 export function invalidateWorkspace(rootDir) {

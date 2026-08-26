@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import type { Diagnostic } from "@blockml/bom";
-import { bootstrapTypeRegistry, defaultBootstrapPaths, TypeRegistry } from "@blockml/framework";
+import { bootstrapTypeRegistry, defaultBootstrapPaths, resolveLibrarySeeds, TypeRegistry } from "@blockml/framework";
 
 /** Globs registered with the client for workspace/didChangeWatchedFiles. */
 export const WATCH_GLOBS = ["**/*.bml", "**/blockml.config.json", "**/package.json"] as const;
@@ -71,11 +71,7 @@ export function loadPackageBlockmlLibrary(rootDir: string): string | undefined {
 }
 
 function resolveLibraryPaths(config: BomConfig, rootDir: string): string[] {
-  if (config.libraries?.length) {
-    return config.libraries;
-  }
-  const fromPackage = loadPackageBlockmlLibrary(rootDir);
-  return fromPackage ? [fromPackage] : [];
+  return resolveLibrarySeeds(rootDir, config.libraries ?? []);
 }
 
 export interface WorkspaceState {

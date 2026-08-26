@@ -33,7 +33,7 @@
   <baseType>core:Capability</baseType>
   <is>Corpus fallback paths from production BlockML npm dependencies</is>
 
-  <documentation>Nearest package.json dependencies + optionalDependencies that have blockml.library or blockml.config.json. Resolve via node_modules walk-up. Search index for Library.bml FQNs also scans all such packages under node_modules and workspace packages/.</documentation>
+  <documentation>Nearest package.json dependencies + optionalDependencies that have blockml.library or blockml.config.json. Resolve via node_modules walk-up. Package source root is srcDir (default blocks; foreign blockml.config.json may override srcDir only).</documentation>
 
   <properties>
     <rootDir type="type:Text">

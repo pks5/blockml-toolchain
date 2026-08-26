@@ -1,5 +1,9 @@
 #!/usr/bin/env node
-import { bootstrapTypeRegistry } from "@blockml/framework";
+import {
+  bootstrapTypeRegistry,
+  rootFqnByFilePath,
+  type BootstrapResult,
+} from "@blockml/framework";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,14 +19,14 @@ import {
   bootstrapTargets,
   getTargetCliHints,
 } from "./bootstrap-targets.js";
-import { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
+import { bootstrapProjectTypeRegistry, projectLibrarySeeds } from "./bootstrap-type-registry.js";
 import { loadConfig, type BomConfig } from "./load-config.js";
 import { writeOutputFiles } from "./write-output.js";
 
 const USAGE =
   "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
   "       blockml compile <file> <document-target> --src dir [--include a,b] [--out dir]\n" +
-  "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b]";
+  "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]";
 
 function workspaceRoot(from: string): string {
   let dir = resolve(from);
@@ -47,6 +51,7 @@ export interface ParsedArgs {
   srcDir?: string;
   libraries?: string[];
   include?: string[];
+  verbose?: boolean;
 }
 
 interface PrintableDiagnostic {
@@ -89,6 +94,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
       }
     } else if (flag === "--all") {
       result.all = true;
+    } else if (flag === "--verbose") {
+      result.verbose = true;
     } else if (flag && !flag.startsWith("-")) {
       if (result.command === "validate") {
         if (!result.file) {
@@ -135,6 +142,34 @@ function printValidateOutcome(
   lines.push(
     `Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors.`,
   );
+}
+
+function printNamedList(lines: string[], title: string, items: string[]): void {
+  lines.push(`${title}:`);
+  if (items.length === 0) {
+    lines.push("  (none)");
+    return;
+  }
+  for (const item of items) {
+    lines.push(`  ${item}`);
+  }
+}
+
+function printValidateSources(
+  lines: string[],
+  srcDir: string,
+  bootstrap: BootstrapResult,
+): void {
+  const trace = bootstrap.trace;
+  lines.push(`srcDir: ${srcDir}`);
+  printNamedList(lines, "seeds", trace?.seeds ?? []);
+  printNamedList(lines, "index (search only)", trace?.searchRoots ?? []);
+  printNamedList(lines, "graph", trace?.librariesVisited ?? []);
+  const files = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
+  printNamedList(lines, `files (${files.length})`, files);
+  if (trace?.skippedCoveredRoots.length) {
+    printNamedList(lines, "skipped (covered by srcDir)", trace.skippedCoveredRoots);
+  }
 }
 
 function printCompileSuccess(lines: string[], wrote: string): void {
@@ -253,6 +288,11 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: string[]): numb
   const bootstrap = bootstrapProjectTypeRegistry(
     bootstrapOptsFromParsed(parsed, config, rootDir),
   );
+
+  const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
+  if (parsed.verbose) {
+    printValidateSources(lines, resolve(rootDir, srcDir), bootstrap);
+  }
 
   if (parsed.file) {
     const filePath = resolve(rootDir, parsed.file);
@@ -400,7 +440,11 @@ async function runCompileCorpus(
 
   const outDir = parsed.outDir ?? resolveDefaultOutDir(target, config);
   const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
-  const libraries = parsed.libraries ?? config.libraries ?? [];
+  const libraries = projectLibrarySeeds({
+    config,
+    rootDir,
+    ...(parsed.libraries !== undefined ? { librariesOverride: parsed.libraries } : {}),
+  });
 
   const scope: {
     kind: "auto";

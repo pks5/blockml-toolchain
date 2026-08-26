@@ -33,10 +33,7 @@
   <baseType>framework:FrameworkType</baseType>
   <is>Result of bootstrapTypeRegistry corpus walk</is>
 
-  <documentation>Returned by fwcap:BootstrapTypeRegistry. Registry may be partially populated when diagnostics are present.
-
-    exportsByLibrary — optional Map from absolute Library.bml path to exported block FQNs;
-    present only when bootstrap used libraryPaths mode.</documentation>
+  <documentation>Returned by fwcap:BootstrapTypeRegistry. Registry may be partially populated when diagnostics are present. exportsByLibrary is set in libraryPaths mode. trace lists corpus, seeds, search index, visited libraries, and skipped covered roots.</documentation>
 
   <properties>
     <registry type="fwcap:TypeRegistry">
@@ -48,6 +45,9 @@
     <exportsByLibrary type="type:Text">
       <documentation>exportsByLibrary — Map&lt;libraryPath, Set&lt;exportedFqn&gt;&gt; when libraryPaths bootstrap. (optional)</documentation>
     </exportsByLibrary>
+    <trace type="fwregistry:BootstrapTrace">
+      <documentation>Bootstrap source trace for hosts such as CLI --verbose. (optional)</documentation>
+    </trace>
   </properties>
 
 </block>

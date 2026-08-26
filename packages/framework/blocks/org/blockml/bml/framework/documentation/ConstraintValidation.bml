@@ -35,14 +35,8 @@
   <is>validateConstraints branch dispatch and embed contexts</is>
 
   <documentation>validateConstraints evaluates constraints on the effective member set from
-    resolveEffectiveMembers (baseType + contracts + local), including baseType instance
-    configuration bound onto inherited properties. ValuePresent is checked after that merge —
-    not against empty type-level slots. Abstract members, overrides without a local default,
-    and properties whose type is a generic parameter (e.g. Constant.value : T) may be empty on
-    the type definition; the value is required after instance binding. Constraint evaluation
-    runs once on the effective member set (placement is checked on local declarations).
-    Diagnostics use a source span in the validated document — not an ancestor property line
-    mixed with the current file path.
+    resolveEffectiveMembers (baseType + contracts + local). Property ValuePresent and other
+    ValueConstraints on effective PropertyDefinition are checked against authored local values.
 
     Embed contexts for directly declared constraint BlockInstances:
     block — BlockConstraint (RequiresMember), ValueConstraint (Min/Max/ValuePresent)

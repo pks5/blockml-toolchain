@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { TypeRegistry } from "./type-registry.js";
 import { bootstrapFromCorpusPaths, bootstrapFromLibraryPaths, } from "./library-bootstrap.js";
@@ -41,30 +41,39 @@ function readJson(path) {
         return undefined;
     }
 }
-function blocksRootFromLibraryFile(packageDir, library) {
-    const absLib = resolve(packageDir, library);
-    const normalized = absLib.replace(/\\/g, "/");
-    const marker = "/blocks/";
-    const idx = normalized.indexOf(marker);
-    if (idx >= 0) {
-        return normalized.slice(0, idx + "/blocks".length);
+function canonicalPath(path) {
+    const abs = resolve(path);
+    try {
+        return realpathSync(abs);
     }
-    return dirname(dirname(absLib));
+    catch {
+        return abs;
+    }
+}
+function resolveBootstrapPath(path, rootDir) {
+    return path.startsWith("/") || path.includes(":") ? path : join(rootDir, path);
+}
+/** srcDir for a package: blockml.config.json override, else default "blocks". */
+function packageSrcDir(packageDir) {
+    const configPath = join(packageDir, CONFIG_FILE);
+    if (existsSync(configPath)) {
+        const cfg = readJson(configPath);
+        if (typeof cfg?.srcDir === "string" && cfg.srcDir.length > 0) {
+            return resolve(packageDir, cfg.srcDir);
+        }
+    }
+    return resolve(packageDir, DEFAULT_SRC_DIR);
 }
 /** Blocks/srcDir root when the package is a BlockML module; otherwise undefined. */
 function blockmlPackageBlocksRoot(packageDir) {
     const pkg = readJson(join(packageDir, "package.json"));
     const library = pkg?.blockml?.library;
-    if (typeof library === "string" && library.length > 0) {
-        return blocksRootFromLibraryFile(packageDir, library);
+    const hasLibrary = typeof library === "string" && library.length > 0;
+    const hasConfig = existsSync(join(packageDir, CONFIG_FILE));
+    if (!hasLibrary && !hasConfig) {
+        return undefined;
     }
-    const configPath = join(packageDir, CONFIG_FILE);
-    if (existsSync(configPath)) {
-        const cfg = readJson(configPath);
-        const srcDir = typeof cfg?.srcDir === "string" && cfg.srcDir.length > 0 ? cfg.srcDir : DEFAULT_SRC_DIR;
-        return resolve(packageDir, srcDir);
-    }
-    return undefined;
+    return packageSrcDir(packageDir);
 }
 function scanNodeModulesForBlockml(nodeModulesDir, out) {
     let entries;
@@ -172,6 +181,35 @@ export function defaultBootstrapPaths(rootDir = process.cwd()) {
     }
     return [...out];
 }
+/**
+ * Library graph seeds for this package: package.json blockml.library first,
+ * then extras (config.libraries or --libraries). Deduped by realpath.
+ */
+export function resolveLibrarySeeds(rootDir = process.cwd(), extras = []) {
+    const ordered = [];
+    const pkg = readJson(join(rootDir, "package.json"));
+    const identity = pkg?.blockml?.library;
+    if (typeof identity === "string" && identity.length > 0) {
+        ordered.push(identity);
+    }
+    for (const extra of extras) {
+        if (typeof extra === "string" && extra.trim().length > 0) {
+            ordered.push(extra.trim());
+        }
+    }
+    const seen = new Set();
+    const out = [];
+    for (const seed of ordered) {
+        const abs = resolveBootstrapPath(seed, rootDir);
+        const key = canonicalPath(abs);
+        if (seen.has(key)) {
+            continue;
+        }
+        seen.add(key);
+        out.push(key);
+    }
+    return out;
+}
 function normalizeOptions(optionsOrPaths, rootDirArg) {
     if (Array.isArray(optionsOrPaths)) {
         return { paths: optionsOrPaths, rootDir: rootDirArg ?? process.cwd() };
@@ -181,14 +219,12 @@ function normalizeOptions(optionsOrPaths, rootDirArg) {
     }
     return { rootDir: rootDirArg ?? process.cwd() };
 }
-function resolveBootstrapPath(path, rootDir) {
-    return path.startsWith("/") || path.includes(":") ? path : join(rootDir, path);
-}
 export function bootstrapTypeRegistry(optionsOrPaths, rootDirArg) {
     const options = normalizeOptions(optionsOrPaths, rootDirArg);
     const rootDir = options.rootDir ?? process.cwd();
+    const discovered = discoverBlockmlSearchRoots(rootDir).map((p) => resolveBootstrapPath(p, rootDir));
     const searchRoots = [
-        ...discoverBlockmlSearchRoots(rootDir),
+        ...discovered,
         ...(options.paths ?? []),
         ...(options.libraryPaths ?? []),
     ].map((p) => resolveBootstrapPath(p, rootDir));
@@ -205,13 +241,31 @@ export function bootstrapTypeRegistry(optionsOrPaths, rootDirArg) {
             }
             result.diagnostics.push(...corpus.diagnostics);
         }
+        const seeds = options.libraryPaths.map((p) => canonicalPath(resolveBootstrapPath(p, rootDir)));
         return {
             registry: result.registry,
             diagnostics: result.diagnostics,
             exportsByLibrary: result.exportsByLibrary,
+            trace: {
+                corpusPaths: coveredRoots,
+                seeds,
+                searchRoots: discovered,
+                librariesVisited: result.librariesVisited,
+                skippedCoveredRoots: result.skippedCoveredRoots,
+            },
         };
     }
     const paths = options.paths && options.paths.length > 0 ? options.paths : defaultBootstrapPaths(rootDir);
-    return bootstrapFromCorpusPaths(paths, rootDir);
+    const corpus = bootstrapFromCorpusPaths(paths, rootDir);
+    return {
+        ...corpus,
+        trace: {
+            corpusPaths: paths.map((p) => resolveBootstrapPath(p, rootDir)),
+            seeds: [],
+            searchRoots: discovered,
+            librariesVisited: [],
+            skippedCoveredRoots: [],
+        },
+    };
 }
 //# sourceMappingURL=bootstrap.js.map

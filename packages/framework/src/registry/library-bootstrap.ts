@@ -27,14 +27,43 @@ function collectBmlFiles(dir: string, out: string[] = []): string[] {
   return out;
 }
 
+const CONFIG_FILE = "blockml.config.json";
+const DEFAULT_SRC_DIR = "blocks";
+
+function packageSrcDir(packageDir: string): string {
+  const configPath = join(packageDir, CONFIG_FILE);
+  if (existsSync(configPath)) {
+    try {
+      const cfg = JSON.parse(readFileSync(configPath, "utf8")) as { srcDir?: string };
+      if (typeof cfg.srcDir === "string" && cfg.srcDir.length > 0) {
+        return resolve(packageDir, cfg.srcDir);
+      }
+    } catch {
+      // fall through to default
+    }
+  }
+  return resolve(packageDir, DEFAULT_SRC_DIR);
+}
+
 function blocksRootFromLibraryPath(libraryPath: string): string {
+  let dir = dirname(canonicalPath(libraryPath));
+  for (;;) {
+    if (existsSync(join(dir, "package.json"))) {
+      return packageSrcDir(dir);
+    }
+    const parent = dirname(dir);
+    if (parent === dir) {
+      break;
+    }
+    dir = parent;
+  }
   const normalized = libraryPath.replace(/\\/g, "/");
-  const marker = "/blocks/";
+  const marker = `/${DEFAULT_SRC_DIR}/`;
   const idx = normalized.indexOf(marker);
   if (idx >= 0) {
-    return normalized.slice(0, idx + "/blocks".length);
+    return normalized.slice(0, idx + `/${DEFAULT_SRC_DIR}`.length);
   }
-  return dirname(dirname(libraryPath));
+  return dirname(libraryPath);
 }
 
 function aggregationInstances(block: BlockDefinition, name: string): BlockInstance[] {
@@ -250,6 +279,8 @@ export function bootstrapFromLibraryPaths(
   registry: TypeRegistry;
   diagnostics: Diagnostic[];
   exportsByLibrary: Map<string, Set<string>>;
+  librariesVisited: string[];
+  skippedCoveredRoots: string[];
 } {
   const registry = new TypeRegistry();
   const diagnostics: Diagnostic[] = [];
@@ -263,9 +294,11 @@ export function bootstrapFromLibraryPaths(
 
   const absCovered = coveredRoots.map((root) => resolve(rootDir, root));
   const seenFiles = new Set<string>();
+  const skippedCoveredRoots: string[] = [];
   for (const libraryPath of orderedPaths) {
     const blocksRoot = blocksRootFromLibraryPath(libraryPath);
     if (absCovered.some((root) => isPathInsideOrEqual(blocksRoot, root))) {
+      skippedCoveredRoots.push(blocksRoot);
       continue;
     }
     for (const file of collectBmlFiles(blocksRoot)) {
@@ -274,7 +307,13 @@ export function bootstrapFromLibraryPaths(
   }
 
   registerFiles(registry, [...seenFiles], diagnostics);
-  return { registry, diagnostics, exportsByLibrary };
+  return {
+    registry,
+    diagnostics,
+    exportsByLibrary,
+    librariesVisited: orderedPaths,
+    skippedCoveredRoots,
+  };
 }
 
 export function bootstrapFromCorpusPaths(

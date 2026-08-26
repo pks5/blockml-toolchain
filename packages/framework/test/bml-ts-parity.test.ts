@@ -18,6 +18,7 @@ const schema = JSON.parse(
 /** TS type exports from index.ts that map to FrameworkType blocks. */
 const TS_TYPE_EXPORTS = [
   "BootstrapResult",
+  "BootstrapTrace",
   "BootstrapOptions",
   "ExpressionNode",
   "ParseExpressionResult",
@@ -28,6 +29,7 @@ const TS_CAPABILITY_EXPORTS = [
   "TypeRegistry",
   "bootstrapTypeRegistry",
   "defaultBootstrapPaths",
+  "resolveLibrarySeeds",
   "forkBom",
   "resolveEffectiveMembers",
   "resolveContracts",
@@ -51,6 +53,7 @@ const TS_CAPABILITY_EXPORTS = [
 
 const TS_FILE_MAP: Record<string, string> = {
   BootstrapResult: "registry/bootstrap.ts",
+  BootstrapTrace: "registry/bootstrap.ts",
   BootstrapOptions: "registry/bootstrap.ts",
   ParseExpressionResult: "expression/types.ts",
   ParseExpressionOutcome: "expression/types.ts",

@@ -92,7 +92,8 @@
       "output": {
         "name": "result",
         "type": "core:Any",
-        "required": true
+        "required": true,
+        "doc": "HoverInfo | null."
       }
     },
     {
@@ -114,7 +115,8 @@
       "output": {
         "name": "result",
         "type": "core:Any",
-        "required": true
+        "required": true,
+        "doc": "OutlineSymbol[] | null."
       }
     },
     {
@@ -146,7 +148,8 @@
       "output": {
         "name": "result",
         "type": "core:Any",
-        "required": true
+        "required": true,
+        "doc": "LspLocationLink[] | null."
       }
     },
     {
@@ -183,7 +186,8 @@
       "output": {
         "name": "result",
         "type": "core:Any",
-        "required": true
+        "required": true,
+        "doc": "LspLocation[] | null."
       }
     },
     {

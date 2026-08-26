@@ -1,5 +1,5 @@
 export { TypeRegistry } from "./registry/type-registry.js";
-export { bootstrapTypeRegistry, defaultBootstrapPaths, type BootstrapResult, type BootstrapOptions, } from "./registry/bootstrap.js";
+export { bootstrapTypeRegistry, defaultBootstrapPaths, resolveLibrarySeeds, type BootstrapResult, type BootstrapOptions, type BootstrapTrace, } from "./registry/bootstrap.js";
 export { rootFqnByFilePath, rootFqns } from "./registry/root-fqn.js";
 export { getExportedFqns } from "./registry/library-exports.js";
 export { forkBom } from "./fork/fork-bom.js";

@@ -33,8 +33,9 @@
     <all type="type:Boolean"><documentation>--all flag for validate or document compile. (optional)</documentation></all>
     <outDir type="type:Text"><documentation>--out override. (optional)</documentation></outDir>
     <srcDir type="type:Text"><documentation>--src override. (optional)</documentation></srcDir>
-    <libraries type="type:Text"><documentation>--libraries comma-separated override. (optional)</documentation></libraries>
+    <libraries type="type:Text"><documentation>--libraries comma-separated override of config.libraries extras (identity seed remains). (optional)</documentation></libraries>
     <include type="type:Text"><documentation>--include comma-separated for fatblock. (optional)</documentation></include>
+    <verbose type="type:Boolean"><documentation>--verbose: print bootstrap sources on validate. (optional)</documentation></verbose>
   </properties>
 
 </block>
