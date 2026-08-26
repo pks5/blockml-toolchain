@@ -272,6 +272,14 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.bom.common.HostValue",
+      "tsExport": "HostValue",
+      "pkg": "common",
+      "abstract": false,
+      "baseType": "bom:UrmodellType",
+      "fields": []
+    },
+    {
       "fqn": "org.blockml.bml.bom.value.Address",
       "tsExport": "Address",
       "pkg": "value",
@@ -334,7 +342,7 @@
         },
         {
           "name": "value",
-          "type": "core:Any",
+          "type": "type:Text | type:Integer | type:Decimal | type:Boolean",
           "required": true
         },
         {
@@ -1976,12 +1984,12 @@
       "fields": [
         {
           "name": "input",
-          "type": "core:Any",
+          "type": "bomcommon:HostValue",
           "required": true
         },
         {
           "name": "output",
-          "type": "core:Any",
+          "type": "bomcommon:HostValue",
           "required": true
         }
       ]

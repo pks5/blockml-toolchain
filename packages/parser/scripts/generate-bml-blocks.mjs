@@ -23,6 +23,7 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:parser="org.blockml.bml.compiler.parser"
@@ -33,7 +34,8 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
   xmlns:bomcap="org.blockml.bml.bom.capability"
-  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"`;
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"`;
 
 /** @typedef {{ name: string, type: string, required?: boolean, doc?: string, literal?: string }} Field */
 /** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, abstract?: boolean, baseType?: string, fields?: Field[], refs?: string[] }} BlockDef */
@@ -84,6 +86,73 @@ const blocks = [
       { name: "isRoot", type: "type:Boolean", required: true },
       { name: "isEmbedded", type: "type:Boolean", required: true },
       { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true, doc: "Shared map-time diagnostics; structural errors append here without aborting." },
+    ],
+  },
+  {
+    pkg: "map",
+    prefix: "parmap",
+    name: "XmlDomNode",
+    is: "Host XML DOM node from @xmldom/xmldom",
+    doc: "BML type gap: stands for TypeScript Node | Element | Document (@xmldom/xmldom). Core has no DOM ValueType; this is a host-boundary type, not a reconstructed DOM struct.",
+  },
+  {
+    pkg: "map",
+    prefix: "parmap",
+    name: "QNameParts",
+    is: "Prefix and local name from a QName split",
+    doc: "BML type gap: stands for TypeScript { prefix: string; local: string } from splitQName() (packages/parser/src/util/qname.ts).",
+    fields: [
+      { name: "prefix", type: "type:Text", required: true },
+      { name: "local", type: "type:Text", required: true },
+    ],
+  },
+  {
+    pkg: "map",
+    prefix: "parmap",
+    name: "VisibilityParse",
+    is: "Logical name plus visibility from a localName prefix",
+    doc: "BML type gap: stands for TypeScript { name: string; visibility: string } from parseVisibilityFromName().",
+    fields: [
+      { name: "name", type: "type:Text", required: true },
+      { name: "visibility", type: "type:Text", required: true },
+    ],
+  },
+  {
+    pkg: "map",
+    prefix: "parmap",
+    name: "BmlMeta",
+    is: "Parsed bml:id/version/bean/scope on a BlockInstance",
+    doc: "BML type gap: stands for the object returned by parseBmlMeta() (packages/parser/src/map/directives.ts).",
+    fields: [
+      { name: "id", type: "bomvalue:MemberValue" },
+      { name: "version", type: "bomvalue:MemberValue" },
+      { name: "bean", type: "bomvalue:MemberValue" },
+      { name: "scope", type: "type:Text" },
+    ],
+  },
+  {
+    pkg: "map",
+    prefix: "parmap",
+    name: "MapContextOptions",
+    is: "Optional extras when building MapContext",
+    doc: "BML type gap: stands for the options argument of createMapContext() (packages/parser/src/map/context.ts).",
+    fields: [
+      { name: "subBlockIndex", type: "type:Text", doc: "Map&lt;string, string&gt; sub-block lookup." },
+      { name: "parentBlockType", type: "type:Text", doc: "Enclosing block type FQN when nested." },
+      { name: "isRoot", type: "type:Boolean" },
+      { name: "isEmbedded", type: "type:Boolean" },
+      { name: "diagnostics", type: "bomcommon:Diagnostic[]" },
+    ],
+  },
+  {
+    pkg: "map",
+    prefix: "parmap",
+    name: "CharacterData",
+    is: "Trimmed element character data and authored form",
+    doc: "BML type gap: stands for TypeScript { text: string; form: \"text\" | \"cdata\" } from getCharacterData() (packages/parser/src/util/xml.ts).",
+    fields: [
+      { name: "text", type: "type:Text", required: true },
+      { name: "form", type: "bomcommon:CharacterDataForm", required: true },
     ],
   },
   {
@@ -146,7 +215,7 @@ const capabilities = [
       { name: "source", type: "type:Text", required: true },
       { name: "filePath", type: "type:Text" },
     ],
-    output: { name: "document", type: "core:Any", required: true, doc: "DOM Document" },
+    output: { name: "document", type: "parmap:XmlDomNode", required: true, doc: "DOM Document" },
     refs: ["pardocumentation:V1Scope"],
   },
   {
@@ -154,7 +223,7 @@ const capabilities = [
     prefix: "parcap",
     name: "GetParseErrors",
     is: "Collect xmldom parse error messages",
-    inputs: [{ name: "document", type: "core:Any", required: true }],
+    inputs: [{ name: "document", type: "parmap:XmlDomNode", required: true }],
     output: { name: "errors", type: "type:Text[]", required: true },
   },
   {
@@ -162,8 +231,8 @@ const capabilities = [
     prefix: "parcap",
     name: "DocumentElement",
     is: "Get root element from DOM document",
-    inputs: [{ name: "document", type: "core:Any", required: true }],
-    output: { name: "element", type: "core:Any", doc: "Element | null" },
+    inputs: [{ name: "document", type: "parmap:XmlDomNode", required: true }],
+    output: { name: "element", type: "parmap:XmlDomNode", doc: "Element | null" },
   },
   {
     pkg: "capability",
@@ -171,7 +240,7 @@ const capabilities = [
     name: "AssertBlockRoot",
     is: "Root type resolver — step [3]; V1 requires <block>",
     doc: "Throws BML_INVALID_ROOT when localName !== block.",
-    inputs: [{ name: "element", type: "core:Any", required: true }],
+    inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
     refs: ["parconfig:ParserConstants", "pardocumentation:ArchitectureOverview"],
   },
   {
@@ -179,7 +248,7 @@ const capabilities = [
     prefix: "parcap",
     name: "ExtractNamespaceBindings",
     is: "Extract xmlns* from root element — step [4]",
-    inputs: [{ name: "element", type: "core:Any", required: true }],
+    inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
     output: { name: "sourceInfo", type: "bomcommon:SourceInfo", required: true },
     refs: ["pardocumentation:AttributeClassification"],
   },
@@ -204,7 +273,7 @@ const capabilities = [
       { name: "filePath", type: "type:Text", required: true },
       { name: "source", type: "type:Text", required: true },
       { name: "bindings", type: "type:Text", required: true },
-      { name: "options", type: "core:Any", doc: "subBlockIndex, parentBlockType, isRoot, isEmbedded, diagnostics." },
+      { name: "options", type: "parmap:MapContextOptions", doc: "subBlockIndex, parentBlockType, isRoot, isEmbedded, diagnostics." },
     ],
     output: { name: "context", type: "parmap:MapContext", required: true },
     refs: ["parmap:MapContext"],
@@ -215,7 +284,7 @@ const capabilities = [
     name: "MapDocumentBlock",
     is: "Map root <block> to BomDocument — step [5] entry",
     inputs: [
-      { name: "element", type: "core:Any", required: true },
+      { name: "element", type: "parmap:XmlDomNode", required: true },
       { name: "sourceInfo", type: "bomcommon:SourceInfo", required: true },
       { name: "ctx", type: "parmap:MapContext", required: true },
     ],
@@ -228,7 +297,7 @@ const capabilities = [
     name: "MapBlock",
     is: "Map XML element to BlockDefinition",
     inputs: [
-      { name: "element", type: "core:Any", required: true },
+      { name: "element", type: "parmap:XmlDomNode", required: true },
       { name: "ctx", type: "parmap:MapContext", required: true },
     ],
     output: { name: "block", type: "bomblock:BlockDefinition", required: true },
@@ -240,7 +309,7 @@ const capabilities = [
     name: "MapCompositionTemplate",
     is: "Map <composition> element to CompositionTemplate",
     inputs: [
-      { name: "element", type: "core:Any", required: true },
+      { name: "element", type: "parmap:XmlDomNode", required: true },
       { name: "ctx", type: "parmap:MapContext", required: true },
     ],
     output: { name: "template", type: "bomcomp:CompositionTemplate", required: true },
@@ -251,7 +320,7 @@ const capabilities = [
     name: "MapBlockInstanceNode",
     is: "Map composition child node to BlockInstanceNode",
     inputs: [
-      { name: "element", type: "core:Any", required: true },
+      { name: "element", type: "parmap:XmlDomNode", required: true },
       { name: "ctx", type: "parmap:MapContext", required: true },
     ],
     output: { name: "node", type: "bomcomp:BlockInstanceNode", required: true },
@@ -261,7 +330,7 @@ const capabilities = [
     prefix: "parcap",
     name: "IsTypeReferenceEntitySugar",
     is: "Detect TypeReferenceEntityInstance sugar element",
-    inputs: [{ name: "element", type: "core:Any", required: true }],
+    inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
     output: { name: "result", type: "type:Boolean", required: true },
   },
   {
@@ -270,7 +339,7 @@ const capabilities = [
     name: "MapTypeReferenceEntityInstance",
     is: "Map TypeReferenceEntityInstance sugar element",
     inputs: [
-      { name: "element", type: "core:Any", required: true },
+      { name: "element", type: "parmap:XmlDomNode", required: true },
       { name: "ctx", type: "parmap:MapContext", required: true },
     ],
     output: { name: "entity", type: "bomblock:TypeReferenceEntityInstance", required: true },
@@ -321,7 +390,7 @@ const capabilities = [
       { name: "raw", type: "type:Text", required: true },
       { name: "ctx", type: "parmap:MapContext", required: true },
     ],
-    output: { name: "value", type: "core:Any", required: true, doc: "MemberValue" },
+    output: { name: "value", type: "bomvalue:MemberValue", required: true },
     refs: ["pardocumentation:ExpressionCapture"],
   },
   {
@@ -333,7 +402,7 @@ const capabilities = [
       { name: "raw", type: "type:Text", required: true },
       { name: "source", type: "bomcommon:SourceLocation" },
     ],
-    output: { name: "value", type: "core:Any", required: true, doc: "ExpressionValue" },
+    output: { name: "value", type: "bomvalue:ExpressionValue", required: true },
   },
   {
     pkg: "capability",
@@ -341,10 +410,10 @@ const capabilities = [
     name: "ParseDirectives",
     is: "Parse bml:each/if/unless/with directive attributes",
     inputs: [
-      { name: "element", type: "core:Any", required: true },
+      { name: "element", type: "parmap:XmlDomNode", required: true },
       { name: "ctx", type: "parmap:MapContext", required: true },
     ],
-    output: { name: "directives", type: "core:Any[]", required: true },
+    output: { name: "directives", type: "bomcomp:DirectiveAttribute[]", required: true },
     refs: ["pardocumentation:AttributeClassification"],
   },
   {
@@ -352,8 +421,8 @@ const capabilities = [
     prefix: "parcap",
     name: "ParseBmlMeta",
     is: "Parse bml:id/version/bean/scope/status on BlockInstance",
-    inputs: [{ name: "element", type: "core:Any", required: true }],
-    output: { name: "meta", type: "core:Any", required: true },
+    inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
+    output: { name: "meta", type: "parmap:BmlMeta", required: true },
   },
   {
     pkg: "capability",
@@ -361,7 +430,7 @@ const capabilities = [
     name: "ParseVisibilityFromName",
     is: "Strip _/__ prefix from localName → logical name + visibility (B14)",
     inputs: [{ name: "localName", type: "type:Text", required: true }],
-    output: { name: "result", type: "core:Any", required: true, doc: "{ name, visibility }" },
+    output: { name: "result", type: "parmap:VisibilityParse", required: true },
     refs: ["pardocumentation:DesignDecisions"],
   },
   {
@@ -402,7 +471,7 @@ const capabilities = [
     name: "SplitQName",
     is: "Split prefixed QName into prefix and local name",
     inputs: [{ name: "qname", type: "type:Text", required: true }],
-    output: { name: "parts", type: "core:Any", required: true },
+    output: { name: "parts", type: "parmap:QNameParts", required: true },
   },
   {
     pkg: "capability",
@@ -479,7 +548,7 @@ const capabilities = [
     is: "Extract SourceLocation from DOM element line/column attrs",
     doc: "Start from DOM locator line/column when present, else string search. End by scanning source for the matching close tag or self-closing start tag (endLine/endColumn).",
     inputs: [
-      { name: "element", type: "core:Any", required: true },
+      { name: "element", type: "parmap:XmlDomNode", required: true },
       { name: "filePath", type: "type:Text", required: true },
       { name: "source", type: "type:Text", required: true },
     ],
@@ -490,7 +559,7 @@ const capabilities = [
     prefix: "parcap",
     name: "IsElement",
     is: "Type guard: DOM node is Element",
-    inputs: [{ name: "node", type: "core:Any", required: true }],
+    inputs: [{ name: "node", type: "parmap:XmlDomNode", required: true }],
     output: { name: "result", type: "type:Boolean", required: true },
   },
   {
@@ -498,7 +567,7 @@ const capabilities = [
     prefix: "parcap",
     name: "IsComment",
     is: "Type guard: DOM node is comment",
-    inputs: [{ name: "node", type: "core:Any", required: true }],
+    inputs: [{ name: "node", type: "parmap:XmlDomNode", required: true }],
     output: { name: "result", type: "type:Boolean", required: true },
   },
   {
@@ -506,7 +575,7 @@ const capabilities = [
     prefix: "parcap",
     name: "IsTextNode",
     is: "Type guard: DOM node is text",
-    inputs: [{ name: "node", type: "core:Any", required: true }],
+    inputs: [{ name: "node", type: "parmap:XmlDomNode", required: true }],
     output: { name: "result", type: "type:Boolean", required: true },
   },
   {
@@ -514,7 +583,7 @@ const capabilities = [
     prefix: "parcap",
     name: "IsCData",
     is: "Type guard: DOM node is CDATA",
-    inputs: [{ name: "node", type: "core:Any", required: true }],
+    inputs: [{ name: "node", type: "parmap:XmlDomNode", required: true }],
     output: { name: "result", type: "type:Boolean", required: true },
   },
   {
@@ -522,15 +591,15 @@ const capabilities = [
     prefix: "parcap",
     name: "ElementChildren",
     is: "Get element child nodes as Element array",
-    inputs: [{ name: "element", type: "core:Any", required: true }],
-    output: { name: "children", type: "core:Any[]", required: true },
+    inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
+    output: { name: "children", type: "parmap:XmlDomNode[]", required: true },
   },
   {
     pkg: "capability",
     prefix: "parcap",
     name: "ElementLocalName",
     is: "Get element local name (without prefix)",
-    inputs: [{ name: "element", type: "core:Any", required: true }],
+    inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
     output: { name: "localName", type: "type:Text", required: true },
   },
   {
@@ -538,7 +607,7 @@ const capabilities = [
     prefix: "parcap",
     name: "ElementPrefix",
     is: "Get element namespace prefix",
-    inputs: [{ name: "element", type: "core:Any", required: true }],
+    inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
     output: { name: "prefix", type: "type:Text", required: true },
   },
   {
@@ -547,7 +616,7 @@ const capabilities = [
     name: "GetAttribute",
     is: "Get attribute value from element by name",
     inputs: [
-      { name: "element", type: "core:Any", required: true },
+      { name: "element", type: "parmap:XmlDomNode", required: true },
       { name: "name", type: "type:Text", required: true },
     ],
     output: { name: "value", type: "type:Text" },
@@ -558,8 +627,8 @@ const capabilities = [
     name: "GetCharacterData",
     is: "Extract text/CDATA content and authoredCharacterDataForm (D8)",
     doc: "Extract text/CDATA content and authoredCharacterDataForm (D8). Character data is passed through TrimText: common leading indent on every non-empty line is removed before the value is stored on the BOM.",
-    inputs: [{ name: "element", type: "core:Any", required: true }],
-    output: { name: "data", type: "core:Any", required: true },
+    inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
+    output: { name: "data", type: "parmap:CharacterData", required: true },
   },
   {
     pkg: "capability",
@@ -567,7 +636,7 @@ const capabilities = [
     name: "CollectLeadingComments",
     is: "Collect comment siblings before element index (B11)",
     inputs: [
-      { name: "siblings", type: "core:Any[]", required: true },
+      { name: "siblings", type: "parmap:XmlDomNode[]", required: true },
       { name: "index", type: "type:Integer", required: true },
     ],
     output: { name: "comments", type: "type:Text[]", required: true },
@@ -579,7 +648,7 @@ const capabilities = [
     name: "CollectTrailingComments",
     is: "Collect comment siblings after element (B11)",
     inputs: [
-      { name: "siblings", type: "core:Any[]", required: true },
+      { name: "siblings", type: "parmap:XmlDomNode[]", required: true },
       { name: "index", type: "type:Integer", required: true },
     ],
     output: { name: "comments", type: "type:Text[]", required: true },
@@ -590,7 +659,7 @@ const capabilities = [
     prefix: "parcap",
     name: "XmlTriviaFromElement",
     is: "Build XmlTrivia from element comment context",
-    inputs: [{ name: "element", type: "core:Any", required: true }],
+    inputs: [{ name: "element", type: "parmap:XmlDomNode", required: true }],
     output: { name: "trivia", type: "bomcommon:XmlTrivia" },
     refs: ["pardocumentation:XmlCommentsParse"],
   },
@@ -604,6 +673,12 @@ const capabilities = [
     output: { name: "trimmed", type: "type:Text", required: true },
   },
 ];
+
+function escapeXml(s) {
+  return String(s)
+    .replace(/&(?!(amp|lt|gt|quot|apos);)/g, "&amp;")
+    .replace(/</g, "&lt;");
+}
 
 function fqn(b) {
   const pkg = b.pkg ? `.${b.pkg}` : "";
@@ -626,7 +701,7 @@ function renderFields(fields) {
       const base = f.doc ?? `${f.name}. TS type: ${f.type}.`;
       const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
       return `    <${f.name} type="${f.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${f.name}>`;
     })
     .join("\n");
@@ -642,7 +717,7 @@ function renderCapabilityFields(inputs, output) {
         const base = f.doc ?? `${f.name}. TS type: ${f.type}.`;
         const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
         return `    <${f.name} type="${f.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${f.name}>`;
       }),
     );
@@ -652,7 +727,7 @@ function renderCapabilityFields(inputs, output) {
     const base = output.doc ?? `${output.name}. TS type: ${output.type}.`;
     const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
     parts.push(`    <${output.name} type="${output.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${output.name}>`);
   }
   if (!parts.length) return "";
@@ -680,9 +755,9 @@ ${XMLNS}
   <name>${d.name}</name>
   <type>pardocumentation:${d.name}</type>
   <baseType>core:Documentation</baseType>
-  <is>${d.is}</is>
+  <is>${escapeXml(d.is)}</is>
 
-  <documentation>${d.doc}</documentation>${refs}
+  <documentation>${escapeXml(d.doc)}</documentation>${refs}
 
 </block>
 `;
@@ -705,9 +780,9 @@ ${XMLNS}>
   <name>${b.name}</name>
   <type>${typeRef(b)}</type>
   <baseType>${base}</baseType>
-  <is>${b.is}</is>
+  <is>${escapeXml(b.is)}</is>
 
-  <documentation>${b.doc || b.is}</documentation>${refs}${abstract}${renderFields(b.fields)}
+  <documentation>${escapeXml(b.doc || b.is)}</documentation>${refs}${abstract}${renderFields(b.fields)}
 
 </block>
 `;
@@ -728,9 +803,9 @@ ${XMLNS}>
   <name>${c.name}</name>
   <type>${typeRef(c)}</type>
   <baseType>core:Capability</baseType>
-  <is>${c.is}</is>
+  <is>${escapeXml(c.is)}</is>
 
-  <documentation>${c.doc || c.is}</documentation>${refs}${renderCapabilityFields(c.inputs, c.output)}
+  <documentation>${escapeXml(c.doc || c.is)}</documentation>${refs}${renderCapabilityFields(c.inputs, c.output)}
 
 </block>
 `;
@@ -774,9 +849,7 @@ const library = `<!--
   FQN: org.blockml.bml.compiler.parser.Library
 -->
 <block
-${XMLNS}
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation">
+${XMLNS}>
 
   <name>Library</name>
   <type>parser:Library</type>
@@ -829,9 +902,7 @@ const readme = `<!--
   FQN: org.blockml.bml.compiler.parser.README
 -->
 <block
-${XMLNS}
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation">
+${XMLNS}>
 
   <name>README</name>
   <type>parser:README</type>

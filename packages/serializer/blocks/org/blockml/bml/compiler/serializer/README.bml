@@ -15,6 +15,7 @@
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:serializer="org.blockml.bml.compiler.serializer"
@@ -23,7 +24,8 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
   xmlns:type="org.blockml.bml.type"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability">
 
   <name>README</name>
   <type>serializer:README</type>

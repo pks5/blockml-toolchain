@@ -66,7 +66,9 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:fwregistry="org.blockml.bml.framework.registry"
   xmlns:parser="org.blockml.bml.compiler.parser"
   xmlns:type="org.blockml.bml.type"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"`;
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"`;
 
 /** @typedef {{ name: string, type: string, required?: boolean, doc?: string, literal?: string, value?: string }} Field */
 /** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, abstract?: boolean, baseType?: string, fields?: Field[], refs?: string[] }} BlockDef */
@@ -127,10 +129,10 @@ const blocks = [
     name: "LiteralExpressionNode",
     is: "Literal expression AST node",
     baseType: "fwexpression:ExpressionNode",
-    doc: "kind: literal. value: string | number | boolean | null.",
+    doc: "kind: literal. value: string | number | boolean | null. BML union covers primitives; null is documented only.",
     fields: [
       { name: "kind", type: "type:Text", required: true, value: "literal" },
-      { name: "value", type: "core:Any", required: true },
+      { name: "value", type: "type:Text | type:Integer | type:Decimal | type:Boolean", required: true, doc: "BML type gap: TS string | number | boolean | null. Union covers primitive cases; null is documented only." },
     ],
   },
   {
@@ -148,13 +150,25 @@ const blocks = [
   {
     pkg: "expression",
     prefix: "fwexpression",
+    name: "ObjectExpressionEntry",
+    is: "One key/value pair in an object expression",
+    doc: "BML type gap: stands for TypeScript Record&lt;string, ExpressionNode&gt;. Core has no Map ValueType; this struct is the per-entry shape.",
+    baseType: "framework:FrameworkType",
+    fields: [
+      { name: "key", type: "type:Text", required: true },
+      { name: "value", type: "fwexpression:ExpressionNode", required: true },
+    ],
+  },
+  {
+    pkg: "expression",
+    prefix: "fwexpression",
     name: "ObjectExpressionNode",
     is: "Object expression AST node",
     baseType: "fwexpression:ExpressionNode",
-    doc: "kind: object. entries: Record<string, ExpressionNode>.",
+    doc: "kind: object. entries: Record&lt;string, ExpressionNode&gt;.",
     fields: [
       { name: "kind", type: "type:Text", required: true, value: "object" },
-      { name: "entries", type: "core:Any", required: true, doc: "Record<string, ExpressionNode>." },
+      { name: "entries", type: "fwexpression:ObjectExpressionEntry[]", required: true, doc: "BML type gap: TS Record&lt;string, ExpressionNode&gt;." },
     ],
   },
   {
@@ -526,6 +540,12 @@ const capabilities = [
   },
 ];
 
+function escapeXml(s) {
+  return String(s)
+    .replace(/&(?!(amp|lt|gt|quot|apos);)/g, "&amp;")
+    .replace(/</g, "&lt;");
+}
+
 function fqn(b) {
   const pkg = b.pkg ? `.${b.pkg}` : "";
   return `org.blockml.bml.framework${pkg}.${b.name}`;
@@ -548,7 +568,7 @@ function renderFields(fields) {
       const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
       const valueLine = f.value ? `\n      <value>${f.value}</value>` : f.literal ? `\n      <value>${f.literal}</value>` : "";
       return `    <${f.name} type="${f.type}">
-      <documentation>${doc}</documentation>${valueLine}
+      <documentation>${escapeXml(doc)}</documentation>${valueLine}
     </${f.name}>`;
     })
     .join("\n");
@@ -564,7 +584,7 @@ function renderCapabilityFields(inputs, output) {
         const base = f.doc ?? `${f.name}. TS type: ${f.type}.`;
         const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
         return `    <${f.name} type="${f.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${f.name}>`;
       }),
     );
@@ -574,7 +594,7 @@ function renderCapabilityFields(inputs, output) {
     const base = output.doc ?? `${output.name}. TS type: ${output.type}.`;
     const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
     parts.push(`    <${output.name} type="${output.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${output.name}>`);
   }
   if (!parts.length) return "";
@@ -602,9 +622,9 @@ ${XMLNS}
   <name>${d.name}</name>
   <type>fwdocumentation:${d.name}</type>
   <baseType>core:Documentation</baseType>
-  <is>${d.is}</is>
+  <is>${escapeXml(d.is)}</is>
 
-  <documentation>${d.doc}</documentation>${refs}
+  <documentation>${escapeXml(d.doc)}</documentation>${refs}
 
 </block>
 `;
@@ -627,9 +647,9 @@ ${XMLNS}>
   <name>${b.name}</name>
   <type>${typeRef(b)}</type>
   <baseType>${base}</baseType>
-  <is>${b.is}</is>
+  <is>${escapeXml(b.is)}</is>
 
-  <documentation>${b.doc || b.is}</documentation>${refs}${abstract}${renderFields(b.fields)}
+  <documentation>${escapeXml(b.doc || b.is)}</documentation>${refs}${abstract}${renderFields(b.fields)}
 
 </block>
 `;
@@ -650,9 +670,9 @@ ${XMLNS}>
   <name>${c.name}</name>
   <type>${typeRef(c)}</type>
   <baseType>core:Capability</baseType>
-  <is>${c.is}</is>
+  <is>${escapeXml(c.is)}</is>
 
-  <documentation>${c.doc || c.is}</documentation>${refs}${renderCapabilityFields(c.inputs, c.output)}
+  <documentation>${escapeXml(c.doc || c.is)}</documentation>${refs}${renderCapabilityFields(c.inputs, c.output)}
 
 </block>
 `;
@@ -703,10 +723,7 @@ const library = `<!--
   FQN: org.blockml.bml.framework.Library
 -->
 <block
-${XMLNS}
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+${XMLNS}>
 
   <name>Library</name>
   <type>framework:Library</type>
@@ -761,10 +778,7 @@ const readme = `<!--
   FQN: org.blockml.bml.framework.README
 -->
 <block
-${XMLNS}
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+${XMLNS}>
 
   <name>README</name>
   <type>framework:README</type>

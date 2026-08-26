@@ -77,6 +77,7 @@
         <fwexpression:ExpressionNode />
         <fwexpression:LiteralExpressionNode />
         <fwexpression:ArrayExpressionNode />
+        <fwexpression:ObjectExpressionEntry />
         <fwexpression:ObjectExpressionNode />
         <fwexpression:PropertyExpressionNode />
         <fwexpression:CallExpressionNode />

@@ -15,6 +15,7 @@
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:parser="org.blockml.bml.compiler.parser"
@@ -22,7 +23,11 @@
   xmlns:parconfig="org.blockml.bml.compiler.parser.config"
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:parmap="org.blockml.bml.compiler.parser.map"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>CreateMapContext</name>
   <type>parcap:CreateMapContext</type>
@@ -45,7 +50,7 @@
     <bindings type="type:Text">
       <documentation>bindings. TS type: type:Text. (required)</documentation>
     </bindings>
-    <options type="core:Any">
+    <options type="parmap:MapContextOptions">
       <documentation>subBlockIndex, parentBlockType, isRoot, isEmbedded, diagnostics. (optional)</documentation>
     </options>
     <context type="parmap:MapContext">

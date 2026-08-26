@@ -23,6 +23,7 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:serializer="org.blockml.bml.compiler.serializer"
@@ -349,7 +350,7 @@ const capabilities = [
     prefix: "sercap",
     name: "FormatMemberValue",
     is: "Format MemberValue for XML attribute emission",
-    inputs: [{ name: "value", type: "core:Any", required: true }],
+    inputs: [{ name: "value", type: "bomvalue:MemberValue", required: true }],
     output: { name: "text", type: "type:Text", required: true },
     refs: ["sercap:FormatBoolean", "sercap:EscapeAttr"],
   },
@@ -363,6 +364,12 @@ const capabilities = [
     refs: ["sercap:HasBmlSemanticQNameBindings"],
   },
 ];
+
+function escapeXml(s) {
+  return String(s)
+    .replace(/&(?!(amp|lt|gt|quot|apos);)/g, "&amp;")
+    .replace(/</g, "&lt;");
+}
 
 function fqn(b) {
   const pkg = b.pkg ? `.${b.pkg}` : "";
@@ -385,7 +392,7 @@ function renderFields(fields) {
       const base = f.doc ?? `${f.name}. TS type: ${f.type}.`;
       const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
       return `    <${f.name} type="${f.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${f.name}>`;
     })
     .join("\n");
@@ -401,7 +408,7 @@ function renderCapabilityFields(inputs, output) {
         const base = f.doc ?? `${f.name}. TS type: ${f.type}.`;
         const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
         return `    <${f.name} type="${f.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${f.name}>`;
       }),
     );
@@ -411,7 +418,7 @@ function renderCapabilityFields(inputs, output) {
     const base = output.doc ?? `${output.name}. TS type: ${output.type}.`;
     const doc = base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
     parts.push(`    <${output.name} type="${output.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${output.name}>`);
   }
   if (!parts.length) return "";
@@ -439,9 +446,9 @@ ${XMLNS}
   <name>${d.name}</name>
   <type>serdocumentation:${d.name}</type>
   <baseType>core:Documentation</baseType>
-  <is>${d.is}</is>
+  <is>${escapeXml(d.is)}</is>
 
-  <documentation>${d.doc}</documentation>${refs}
+  <documentation>${escapeXml(d.doc)}</documentation>${refs}
 
 </block>
 `;
@@ -464,9 +471,9 @@ ${XMLNS}>
   <name>${b.name}</name>
   <type>${typeRef(b)}</type>
   <baseType>${base}</baseType>
-  <is>${b.is}</is>
+  <is>${escapeXml(b.is)}</is>
 
-  <documentation>${b.doc || b.is}</documentation>${refs}${abstract}${renderFields(b.fields)}
+  <documentation>${escapeXml(b.doc || b.is)}</documentation>${refs}${abstract}${renderFields(b.fields)}
 
 </block>
 `;
@@ -487,9 +494,9 @@ ${XMLNS}>
   <name>${c.name}</name>
   <type>${typeRef(c)}</type>
   <baseType>core:Capability</baseType>
-  <is>${c.is}</is>
+  <is>${escapeXml(c.is)}</is>
 
-  <documentation>${c.doc || c.is}</documentation>${refs}${renderCapabilityFields(c.inputs, c.output)}
+  <documentation>${escapeXml(c.doc || c.is)}</documentation>${refs}${renderCapabilityFields(c.inputs, c.output)}
 
 </block>
 `;
@@ -558,8 +565,7 @@ const library = `<!--
   FQN: org.blockml.bml.compiler.serializer.Library
 -->
 <block
-${XMLNS}
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
+${XMLNS}>
 
   <name>Library</name>
   <type>serializer:Library</type>
@@ -612,8 +618,7 @@ const readme = `<!--
   FQN: org.blockml.bml.compiler.serializer.README
 -->
 <block
-${XMLNS}
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
+${XMLNS}>
 
   <name>README</name>
   <type>serializer:README</type>

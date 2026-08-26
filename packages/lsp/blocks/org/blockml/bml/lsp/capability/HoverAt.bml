@@ -25,7 +25,9 @@
   xmlns:type="org.blockml.bml.type"
   xmlns:lsp="org.blockml.bml.lsp"
   xmlns:lspcap="org.blockml.bml.lsp.capability"
-  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation">
+  xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
   <name>HoverAt</name>
   <type>lspcap:HoverAt</type>
@@ -46,13 +48,13 @@
     <filePath type="type:Text">
       <documentation>filePath. TS type: type:Text. (required)</documentation>
     </filePath>
-    <position type="type:Text">
+    <position type="lsp:LspPosition">
       <documentation>LSP 0-based Position { line, character }. (required)</documentation>
     </position>
     <workspace type="lsp:WorkspaceState">
       <documentation>workspace. TS type: lsp:WorkspaceState. (required)</documentation>
     </workspace>
-    <result type="core:Any">
+    <result type="lsp:HoverInfo">
       <documentation>HoverInfo | null. (required)</documentation>
     </result>
   </properties>

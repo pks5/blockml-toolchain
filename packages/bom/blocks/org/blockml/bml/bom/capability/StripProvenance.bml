@@ -31,11 +31,11 @@
   <documentation>Removes sourceLocation, endLine, endColumn, SourceLocation-shaped fields (source, typeSource, baseTypeSource), and SourceInfo recursively. Preserves ImplementationBlock.source (implementation code body). Reference: packages/bom/src/equals.ts.</documentation>
 
   <properties>
-    <input type="core:Any">
-      <documentation>input (required). TS type: core:Any.</documentation>
+    <input type="bomcommon:HostValue">
+      <documentation>BML type gap: TS generic T. Deep-clone input. (required)</documentation>
     </input>
-    <output type="core:Any">
-      <documentation>output (required). TS type: core:Any.</documentation>
+    <output type="bomcommon:HostValue">
+      <documentation>BML type gap: TS generic T. Deep-clone without provenance. (required)</documentation>
     </output>
   </properties>
 

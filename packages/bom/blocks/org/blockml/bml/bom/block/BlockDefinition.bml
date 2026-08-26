@@ -51,7 +51,7 @@
       <documentation>version (optional). TS type: type:Text.</documentation>
     </version>
     <is type="type:Text">
-      &lt;documentation>is (optional). TS type: type:Text.&lt;/documentation>
+      <documentation>is (optional). TS type: type:Text.</documentation>
     </is>
     <summaries type="bomblock:DocumentationProseEntry[]">
       <documentation>summaries (optional). TS type: bomblock:DocumentationProseEntry[].</documentation>
@@ -141,7 +141,7 @@
       <documentation>baseTypeSource (optional). TS type: bomcommon:SourceLocation.</documentation>
     </baseTypeSource>
     <unknownElements type="bomcommon:UnknownXmlNode[]">
-      <documentation>Preserve-on-error unknown root children. (optional)</documentation>
+      <documentation>unknownElements (optional). TS type: bomcommon:UnknownXmlNode[].</documentation>
     </unknownElements>
     <unknownAttributes type="type:Text">
       <documentation>Record of unknown attributes on the grammar node. (optional)</documentation>

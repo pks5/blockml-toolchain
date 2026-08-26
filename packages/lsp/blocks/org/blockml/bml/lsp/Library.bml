@@ -26,8 +26,8 @@
   xmlns:lsp="org.blockml.bml.lsp"
   xmlns:lspcap="org.blockml.bml.lsp.capability"
   xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
   <name>Library</name>
   <type>lsp:Library</type>
@@ -73,6 +73,13 @@
         <lsp:LspType />
         <lsp:WorkspaceState />
         <lsp:AnalysisResult />
+        <lsp:LspPosition />
+        <lsp:LspRange />
+        <lsp:MarkupContent />
+        <lsp:HoverInfo />
+        <lsp:OutlineSymbol />
+        <lsp:LspLocation />
+        <lsp:LspLocationLink />
         <lspcap:AnalyzeDocument />
         <lspcap:FormatDocument />
         <lspcap:HoverAt />

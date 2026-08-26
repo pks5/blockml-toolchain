@@ -26,6 +26,7 @@
   xmlns:lsp="org.blockml.bml.lsp"
   xmlns:lspcap="org.blockml.bml.lsp.capability"
   xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
   xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
 
   <name>README</name>

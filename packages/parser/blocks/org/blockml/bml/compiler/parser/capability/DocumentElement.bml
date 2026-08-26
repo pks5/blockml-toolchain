@@ -15,6 +15,7 @@
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:parser="org.blockml.bml.compiler.parser"
@@ -22,7 +23,11 @@
   xmlns:parconfig="org.blockml.bml.compiler.parser.config"
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:parmap="org.blockml.bml.compiler.parser.map"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>DocumentElement</name>
   <type>parcap:DocumentElement</type>
@@ -32,10 +37,10 @@
   <documentation>Get root element from DOM document</documentation>
 
   <properties>
-    <document type="core:Any">
-      <documentation>document. TS type: core:Any. (required)</documentation>
+    <document type="parmap:XmlDomNode">
+      <documentation>document. TS type: parmap:XmlDomNode. (required)</documentation>
     </document>
-    <element type="core:Any">
+    <element type="parmap:XmlDomNode">
       <documentation>Element | null (optional)</documentation>
     </element>
   </properties>

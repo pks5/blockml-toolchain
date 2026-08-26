@@ -40,12 +40,9 @@
     preset properties exist; property value cycles; basePresets resolve without cycles;
     contracts merge order; validateConstraints after resolveEffectiveMembers;
     readOnly enforcement (BML_READONLY_MEMBER_WRITE); library blocks/deps resolve;
-    no outer library re-export from inner library (BML_LIBRARY_NESTING_VIOLATION);
-    every type FQN in the registry (BML_UNKNOWN_TYPE); instance memberValues keys
-    exist on effective members (BML_UNKNOWN_PROPERTY error).
+    no outer library re-export from inner library (BML_LIBRARY_NESTING_VIOLATION).
 
-    Validator does NOT expand directives, assign auto-IDs, or interpret aggregations.
-    Structural unknown Gerüst tags are parser BML_UNKNOWN_ELEMENT, not this checklist.</documentation>
+    Validator does NOT expand directives, assign auto-IDs, or interpret aggregations.</documentation>
 
   <references>
     <see type="bomdocumentation:RelatedDiagnostics" relation="SeeAlso"></see>

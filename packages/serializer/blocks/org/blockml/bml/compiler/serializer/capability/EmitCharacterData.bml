@@ -15,6 +15,7 @@
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:serializer="org.blockml.bml.compiler.serializer"
@@ -22,16 +23,16 @@
   xmlns:serconfig="org.blockml.bml.compiler.serializer.config"
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability">
 
   <name>EmitCharacterData</name>
   <type>sercap:EmitCharacterData</type>
   <baseType>core:Capability</baseType>
   <is>Emit text or CDATA character data (D8)</is>
 
-  <documentation>Emit text or CDATA character data (D8). Multiline values are
-    written one XmlWriter line each so pretty-print indent applies per line;
-    parse TrimText then recovers the BOM string (B13).</documentation>
+  <documentation>Emit text or CDATA character data (D8). Multiline values are written one XmlWriter line each so pretty-print indent applies per line; parse TrimText then recovers the BOM string (B13).</documentation>
 
   <references>
     <see type="sercap:EscapeText" relation="SeeAlso" />

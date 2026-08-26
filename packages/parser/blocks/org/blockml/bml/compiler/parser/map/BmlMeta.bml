@@ -1,0 +1,54 @@
+<!--
+  Parser — BmlMeta
+  FQN: org.blockml.bml.compiler.parser.map.BmlMeta
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+
+  <name>BmlMeta</name>
+  <type>parmap:BmlMeta</type>
+  <baseType>parser:ParserType</baseType>
+  <is>Parsed bml:id/version/bean/scope on a BlockInstance</is>
+
+  <documentation>BML type gap: stands for the object returned by parseBmlMeta() (packages/parser/src/map/directives.ts).</documentation>
+
+  <properties>
+    <id type="bomvalue:MemberValue">
+      <documentation>id. TS type: bomvalue:MemberValue. (optional)</documentation>
+    </id>
+    <version type="bomvalue:MemberValue">
+      <documentation>version. TS type: bomvalue:MemberValue. (optional)</documentation>
+    </version>
+    <bean type="bomvalue:MemberValue">
+      <documentation>bean. TS type: bomvalue:MemberValue. (optional)</documentation>
+    </bean>
+    <scope type="type:Text">
+      <documentation>scope. TS type: type:Text. (optional)</documentation>
+    </scope>
+  </properties>
+
+</block>

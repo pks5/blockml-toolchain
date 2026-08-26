@@ -26,22 +26,25 @@
   xmlns:fwexpression="org.blockml.bml.framework.expression"
   xmlns:fwregistry="org.blockml.bml.framework.registry"
   xmlns:parser="org.blockml.bml.compiler.parser"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>ObjectExpressionNode</name>
   <type>fwexpression:ObjectExpressionNode</type>
   <baseType>fwexpression:ExpressionNode</baseType>
   <is>Object expression AST node</is>
 
-  <documentation>kind: object. entries: Record&lt;string, ExpressionNode>.</documentation>
+  <documentation>kind: object. entries: Record&lt;string, ExpressionNode&gt;.</documentation>
 
   <properties>
     <kind type="type:Text">
       <documentation>kind. TS type: type:Text. (required)</documentation>
       <value>object</value>
     </kind>
-    <entries type="core:Any">
-      <documentation>Record&lt;string, ExpressionNode>. (required)</documentation>
+    <entries type="fwexpression:ObjectExpressionEntry[]">
+      <documentation>BML type gap: TS Record&lt;string, ExpressionNode&gt;. (required)</documentation>
     </entries>
   </properties>
 

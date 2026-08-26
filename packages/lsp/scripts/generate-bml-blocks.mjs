@@ -34,7 +34,8 @@ const XMLNS = `  xmlns="http://blockml.org/bml"
   xmlns:lsp="org.blockml.bml.lsp"
   xmlns:lspcap="org.blockml.bml.lsp.capability"
   xmlns:lspdocumentation="org.blockml.bml.lsp.documentation"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"`;
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"`;
 
 /** @typedef {{ name: string, type: string, required?: boolean, doc?: string }} Field */
 /** @typedef {{ pkg: string, prefix: string, name: string, is: string, doc: string, abstract?: boolean, baseType?: string, fields?: Field[], refs?: string[] }} BlockDef */
@@ -47,7 +48,7 @@ const blocks = [
     prefix: "lsp",
     name: "LspType",
     is: "Abstract marker for LSP implementation data-structure blocks",
-    doc: "Reserved for future LSP-internal types.",
+    doc: "Workspace, analysis, and LSP-protocol ValueTypes used as capability payloads (LspPosition, HoverInfo, OutlineSymbol, …).",
     abstract: true,
     baseType: "core:Entity",
     refs: ["bom:UrmodellType"],
@@ -76,6 +77,94 @@ const blocks = [
     fields: [
       { name: "diagnostics", type: "bomcommon:Diagnostic[]", required: true, doc: "Parse and validate diagnostics." },
       { name: "document", type: "bomdoc:BomDocument", doc: "Parsed document, or omitted when parse failed." },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
+    name: "LspPosition",
+    is: "LSP 0-based text position",
+    doc: "BML type gap: stands for TypeScript LspPosition (packages/lsp/src/positions.ts). Core has no LSP protocol ValueType.",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "line", type: "type:Integer", required: true, doc: "0-based line." },
+      { name: "character", type: "type:Integer", required: true, doc: "0-based character." },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
+    name: "LspRange",
+    is: "LSP text range",
+    doc: "BML type gap: stands for TypeScript LspRange (packages/lsp/src/positions.ts).",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "start", type: "lsp:LspPosition", required: true },
+      { name: "end", type: "lsp:LspPosition", required: true },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
+    name: "MarkupContent",
+    is: "Markdown hover contents",
+    doc: "BML type gap: stands for TypeScript MarkupContent (packages/lsp/src/hover.ts). kind is always markdown.",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "kind", type: "type:Text", required: true, doc: 'Always "markdown".' },
+      { name: "value", type: "type:Text", required: true },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
+    name: "HoverInfo",
+    is: "Hover result at an LSP position",
+    doc: "BML type gap: stands for TypeScript HoverInfo (packages/lsp/src/hover.ts).",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "contents", type: "lsp:MarkupContent", required: true },
+      { name: "range", type: "lsp:LspRange", required: true },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
+    name: "OutlineSymbol",
+    is: "Hierarchical document-symbol outline node",
+    doc: "BML type gap: stands for TypeScript OutlineSymbol (packages/lsp/src/outline.ts). children is recursive.",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "name", type: "type:Text", required: true },
+      { name: "detail", type: "type:Text" },
+      { name: "kind", type: "type:Integer", required: true, doc: "LSP SymbolKind." },
+      { name: "range", type: "lsp:LspRange", required: true },
+      { name: "selectionRange", type: "lsp:LspRange", required: true },
+      { name: "children", type: "lsp:OutlineSymbol[]" },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
+    name: "LspLocation",
+    is: "URI plus range for a workspace location",
+    doc: "BML type gap: stands for TypeScript LspLocation (packages/lsp/src/navigation.ts).",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "uri", type: "type:Text", required: true },
+      { name: "range", type: "lsp:LspRange", required: true },
+    ],
+  },
+  {
+    pkg: "",
+    prefix: "lsp",
+    name: "LspLocationLink",
+    is: "Go-to-definition origin range and target location",
+    doc: "BML type gap: stands for TypeScript LspLocationLink (packages/lsp/src/navigation.ts).",
+    baseType: "lsp:LspType",
+    fields: [
+      { name: "originSelectionRange", type: "lsp:LspRange", required: true },
+      { name: "target", type: "lsp:LspLocation", required: true },
     ],
   },
 ];
@@ -122,10 +211,10 @@ const capabilities = [
     inputs: [
       { name: "text", type: "type:Text", required: true },
       { name: "filePath", type: "type:Text", required: true },
-      { name: "position", type: "type:Text", required: true, doc: "LSP 0-based Position { line, character }." },
+      { name: "position", type: "lsp:LspPosition", required: true, doc: "LSP 0-based Position { line, character }." },
       { name: "workspace", type: "lsp:WorkspaceState", required: true },
     ],
-    output: { name: "result", type: "core:Any", required: true, doc: "HoverInfo | null." },
+    output: { name: "result", type: "lsp:HoverInfo", required: true, doc: "HoverInfo | null." },
     refs: ["lspdocumentation:PublicApi", "parser:Parse"],
   },
   {
@@ -139,7 +228,7 @@ const capabilities = [
       { name: "text", type: "type:Text", required: true },
       { name: "filePath", type: "type:Text", required: true },
     ],
-    output: { name: "result", type: "core:Any", required: true, doc: "OutlineSymbol[] | null." },
+    output: { name: "result", type: "lsp:OutlineSymbol[]", required: true, doc: "OutlineSymbol[] | null." },
     refs: ["lspdocumentation:PublicApi", "parser:Parse"],
   },
   {
@@ -152,10 +241,10 @@ const capabilities = [
     inputs: [
       { name: "text", type: "type:Text", required: true },
       { name: "filePath", type: "type:Text", required: true },
-      { name: "position", type: "type:Text", required: true, doc: "LSP 0-based Position { line, character }." },
+      { name: "position", type: "lsp:LspPosition", required: true, doc: "LSP 0-based Position { line, character }." },
       { name: "workspace", type: "lsp:WorkspaceState", required: true },
     ],
-    output: { name: "result", type: "core:Any", required: true, doc: "LspLocationLink[] | null." },
+    output: { name: "result", type: "lsp:LspLocationLink[]", required: true, doc: "LspLocationLink[] | null." },
     refs: ["lspdocumentation:PublicApi", "parser:Parse"],
   },
   {
@@ -168,11 +257,11 @@ const capabilities = [
     inputs: [
       { name: "text", type: "type:Text", required: true },
       { name: "filePath", type: "type:Text", required: true },
-      { name: "position", type: "type:Text", required: true, doc: "LSP 0-based Position { line, character }." },
+      { name: "position", type: "lsp:LspPosition", required: true, doc: "LSP 0-based Position { line, character }." },
       { name: "workspace", type: "lsp:WorkspaceState", required: true },
       { name: "includeDeclaration", type: "type:Boolean" },
     ],
-    output: { name: "result", type: "core:Any", required: true, doc: "LspLocation[] | null." },
+    output: { name: "result", type: "lsp:LspLocation[]", required: true, doc: "LspLocation[] | null." },
     refs: ["lspdocumentation:PublicApi", "parser:Parse"],
   },
   {
@@ -185,6 +274,12 @@ const capabilities = [
     refs: ["lspdocumentation:ServerLifecycle"],
   },
 ];
+
+function escapeXml(s) {
+  return String(s)
+    .replace(/&(?!(amp|lt|gt|quot|apos);)/g, "&amp;")
+    .replace(/</g, "&lt;");
+}
 
 function fqn(b) {
   const pkg = b.pkg ? `.${b.pkg}` : "";
@@ -206,7 +301,7 @@ function renderFields(fields) {
       const req = f.required ? " (required)" : " (optional)";
       const doc = f.doc ? `${f.doc}${req}` : `${f.name}${req}. TS type: ${f.type}.`;
       return `    <${f.name} type="${f.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${f.name}>`;
     })
     .join("\n");
@@ -223,7 +318,7 @@ function renderCapabilityFields(inputs, output) {
         const doc =
           base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
         return `    <${f.name} type="${f.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${f.name}>`;
       }),
     );
@@ -234,7 +329,7 @@ function renderCapabilityFields(inputs, output) {
     const doc =
       base.includes("(required)") || base.includes("(optional)") ? base : `${base}${req}`;
     parts.push(`    <${output.name} type="${output.type}">
-      <documentation>${doc}</documentation>
+      <documentation>${escapeXml(doc)}</documentation>
     </${output.name}>`);
   }
   if (!parts.length) return "";
@@ -259,9 +354,9 @@ ${XMLNS}
   <name>${d.name}</name>
   <type>lspdocumentation:${d.name}</type>
   <baseType>core:Documentation</baseType>
-  <is>${d.is}</is>
+  <is>${escapeXml(d.is)}</is>
 
-  <documentation>${d.doc}</documentation>${refs}
+  <documentation>${escapeXml(d.doc)}</documentation>${refs}
 
 </block>
 `;
@@ -284,9 +379,9 @@ ${XMLNS}>
   <name>${b.name}</name>
   <type>${typeRef(b)}</type>
   <baseType>${base}</baseType>
-  <is>${b.is}</is>
+  <is>${escapeXml(b.is)}</is>
 
-  <documentation>${b.doc || b.is}</documentation>${refs}${abstract}${renderFields(b.fields)}
+  <documentation>${escapeXml(b.doc || b.is)}</documentation>${refs}${abstract}${renderFields(b.fields)}
 
 </block>
 `;
@@ -307,9 +402,9 @@ ${XMLNS}>
   <name>${c.name}</name>
   <type>${typeRef(c)}</type>
   <baseType>core:Capability</baseType>
-  <is>${c.is}</is>
+  <is>${escapeXml(c.is)}</is>
 
-  <documentation>${c.doc || c.is}</documentation>${refs}${renderCapabilityFields(c.inputs, c.output)}
+  <documentation>${escapeXml(c.doc || c.is)}</documentation>${refs}${renderCapabilityFields(c.inputs, c.output)}
 
 </block>
 `;
@@ -356,9 +451,7 @@ const library = `<!--
   FQN: org.blockml.bml.lsp.Library
 -->
 <block
-${XMLNS}
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
-  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+${XMLNS}>
 
   <name>Library</name>
   <type>lsp:Library</type>
@@ -414,8 +507,7 @@ const readme = `<!--
   FQN: org.blockml.bml.lsp.README
 -->
 <block
-${XMLNS}
-  xmlns:bomdocumentation="org.blockml.bml.bom.documentation">
+${XMLNS}>
 
   <name>README</name>
   <type>lsp:README</type>

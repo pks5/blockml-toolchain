@@ -176,6 +176,13 @@ const blocks = [
       { name: "source", type: "bomcommon:SourceLocation", required: true },
     ],
   },
+  {
+    pkg: "common",
+    prefix: "bomcommon",
+    name: "HostValue",
+    is: "Opaque host value for provenance-stripping",
+    doc: "BML type gap: stands for TypeScript generic T / unknown. Deep-clone of any BOM-shaped graph; Core has no host-value type.",
+  },
 
   // value
   {
@@ -206,12 +213,12 @@ const blocks = [
     prefix: "bomvalue",
     name: "LiteralValue",
     is: "Authored literal member value",
-    doc: "value field is opaque (unknown) — MUST NOT be normalized at parse time (lossless roundtrip).",
+    doc: "value field is a primitive union approximation of TS unknown — MUST NOT be normalized at parse time (lossless roundtrip). Objects/arrays remain a BML type gap.",
     baseType: "bomvalue:MemberValue",
     kind: "literal",
     fields: [
       { name: "kind", type: "type:Text", required: true, literal: "literal" },
-      { name: "value", type: "core:Any", required: true, doc: "Authored value exactly as in BML — opaque." },
+      { name: "value", type: "type:Text | type:Integer | type:Decimal | type:Boolean", required: true, doc: "BML type gap: TS unknown (authored literal, including objects/arrays). Union covers primitive cases only." },
       { name: "typeFqn", type: "type:Text", required: true },
       { name: "authoredPlacement", type: "type:Text", doc: '"attribute" | "element" when dual placement legal (D9).' },
     ],
@@ -925,8 +932,8 @@ const blocks = [
     doc: "Removes sourceLocation, endLine, endColumn, SourceLocation-shaped fields (source, typeSource, baseTypeSource), and SourceInfo recursively. Preserves ImplementationBlock.source (implementation code body). Reference: packages/bom/src/equals.ts.",
     baseType: "core:Capability",
     fields: [
-      { name: "input", type: "core:Any", required: true },
-      { name: "output", type: "core:Any", required: true },
+      { name: "input", type: "bomcommon:HostValue", required: true, doc: "BML type gap: TS generic T. Deep-clone input." },
+      { name: "output", type: "bomcommon:HostValue", required: true, doc: "BML type gap: TS generic T. Deep-clone without provenance." },
     ],
   },
   {

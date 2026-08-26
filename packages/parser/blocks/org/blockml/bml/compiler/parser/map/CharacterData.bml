@@ -1,0 +1,48 @@
+<!--
+  Parser — CharacterData
+  FQN: org.blockml.bml.compiler.parser.map.CharacterData
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:parcap="org.blockml.bml.compiler.parser.capability"
+  xmlns:parconfig="org.blockml.bml.compiler.parser.config"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:parmap="org.blockml.bml.compiler.parser.map"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+
+  <name>CharacterData</name>
+  <type>parmap:CharacterData</type>
+  <baseType>parser:ParserType</baseType>
+  <is>Trimmed element character data and authored form</is>
+
+  <documentation>BML type gap: stands for TypeScript { text: string; form: "text" | "cdata" } from getCharacterData() (packages/parser/src/util/xml.ts).</documentation>
+
+  <properties>
+    <text type="type:Text">
+      <documentation>text. TS type: type:Text. (required)</documentation>
+    </text>
+    <form type="bomcommon:CharacterDataForm">
+      <documentation>form. TS type: bomcommon:CharacterDataForm. (required)</documentation>
+    </form>
+  </properties>
+
+</block>

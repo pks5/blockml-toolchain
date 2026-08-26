@@ -60,7 +60,8 @@
       </composition>
     </dependencies>
     <blocks>
-      <composition><bom:UrmodellType />
+      <composition>
+        <bom:UrmodellType />
         <bomcommon:SourceLocation />
         <bomcommon:SourceInfo />
         <bomcommon:XmlTrivia />
@@ -73,6 +74,7 @@
         <bomcommon:XmlRenderingMember />
         <bomcommon:DiagnosticSeverity />
         <bomcommon:Diagnostic />
+        <bomcommon:HostValue />
         <bomvalue:Address />
         <bomvalue:MemberValue />
         <bomvalue:LiteralValue />

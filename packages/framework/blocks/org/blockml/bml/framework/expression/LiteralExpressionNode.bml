@@ -26,22 +26,25 @@
   xmlns:fwexpression="org.blockml.bml.framework.expression"
   xmlns:fwregistry="org.blockml.bml.framework.registry"
   xmlns:parser="org.blockml.bml.compiler.parser"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>LiteralExpressionNode</name>
   <type>fwexpression:LiteralExpressionNode</type>
   <baseType>fwexpression:ExpressionNode</baseType>
   <is>Literal expression AST node</is>
 
-  <documentation>kind: literal. value: string | number | boolean | null.</documentation>
+  <documentation>kind: literal. value: string | number | boolean | null. BML union covers primitives; null is documented only.</documentation>
 
   <properties>
     <kind type="type:Text">
       <documentation>kind. TS type: type:Text. (required)</documentation>
       <value>literal</value>
     </kind>
-    <value type="core:Any">
-      <documentation>value. TS type: core:Any. (required)</documentation>
+    <value type="type:Text | type:Integer | type:Decimal | type:Boolean">
+      <documentation>BML type gap: TS string | number | boolean | null. Union covers primitive cases; null is documented only. (required)</documentation>
     </value>
   </properties>
 

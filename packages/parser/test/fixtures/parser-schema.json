@@ -58,6 +58,134 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.compiler.parser.map.XmlDomNode",
+      "tsExport": "XmlDomNode",
+      "pkg": "map",
+      "abstract": false,
+      "baseType": "parser:ParserType",
+      "fields": []
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.parser.map.QNameParts",
+      "tsExport": "QNameParts",
+      "pkg": "map",
+      "abstract": false,
+      "baseType": "parser:ParserType",
+      "fields": [
+        {
+          "name": "prefix",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "local",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.parser.map.VisibilityParse",
+      "tsExport": "VisibilityParse",
+      "pkg": "map",
+      "abstract": false,
+      "baseType": "parser:ParserType",
+      "fields": [
+        {
+          "name": "name",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "visibility",
+          "type": "type:Text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.parser.map.BmlMeta",
+      "tsExport": "BmlMeta",
+      "pkg": "map",
+      "abstract": false,
+      "baseType": "parser:ParserType",
+      "fields": [
+        {
+          "name": "id",
+          "type": "bomvalue:MemberValue",
+          "required": false
+        },
+        {
+          "name": "version",
+          "type": "bomvalue:MemberValue",
+          "required": false
+        },
+        {
+          "name": "bean",
+          "type": "bomvalue:MemberValue",
+          "required": false
+        },
+        {
+          "name": "scope",
+          "type": "type:Text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.parser.map.MapContextOptions",
+      "tsExport": "MapContextOptions",
+      "pkg": "map",
+      "abstract": false,
+      "baseType": "parser:ParserType",
+      "fields": [
+        {
+          "name": "subBlockIndex",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "parentBlockType",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "isRoot",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "isEmbedded",
+          "type": "type:Boolean",
+          "required": false
+        },
+        {
+          "name": "diagnostics",
+          "type": "bomcommon:Diagnostic[]",
+          "required": false
+        }
+      ]
+    },
+    {
+      "fqn": "org.blockml.bml.compiler.parser.map.CharacterData",
+      "tsExport": "CharacterData",
+      "pkg": "map",
+      "abstract": false,
+      "baseType": "parser:ParserType",
+      "fields": [
+        {
+          "name": "text",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "form",
+          "type": "bomcommon:CharacterDataForm",
+          "required": true
+        }
+      ]
+    },
+    {
       "fqn": "org.blockml.bml.compiler.parser.config.ParserConstants",
       "tsExport": "ParserConstants",
       "pkg": "config",
@@ -163,7 +291,7 @@
       ],
       "output": {
         "name": "document",
-        "type": "core:Any",
+        "type": "parmap:XmlDomNode",
         "required": true,
         "doc": "DOM Document"
       }
@@ -175,7 +303,7 @@
       "inputs": [
         {
           "name": "document",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -192,13 +320,13 @@
       "inputs": [
         {
           "name": "document",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
       "output": {
         "name": "element",
-        "type": "core:Any",
+        "type": "parmap:XmlDomNode",
         "doc": "Element | null"
       }
     },
@@ -209,7 +337,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -222,7 +350,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -281,7 +409,7 @@
         },
         {
           "name": "options",
-          "type": "core:Any",
+          "type": "parmap:MapContextOptions",
           "required": false
         }
       ],
@@ -298,7 +426,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         },
         {
@@ -325,7 +453,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         },
         {
@@ -347,7 +475,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         },
         {
@@ -369,7 +497,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         },
         {
@@ -391,7 +519,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -408,7 +536,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         },
         {
@@ -519,9 +647,8 @@
       ],
       "output": {
         "name": "value",
-        "type": "core:Any",
-        "required": true,
-        "doc": "MemberValue"
+        "type": "bomvalue:MemberValue",
+        "required": true
       }
     },
     {
@@ -542,9 +669,8 @@
       ],
       "output": {
         "name": "value",
-        "type": "core:Any",
-        "required": true,
-        "doc": "ExpressionValue"
+        "type": "bomvalue:ExpressionValue",
+        "required": true
       }
     },
     {
@@ -554,7 +680,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         },
         {
@@ -565,7 +691,7 @@
       ],
       "output": {
         "name": "directives",
-        "type": "core:Any[]",
+        "type": "bomcomp:DirectiveAttribute[]",
         "required": true
       }
     },
@@ -576,13 +702,13 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
       "output": {
         "name": "meta",
-        "type": "core:Any",
+        "type": "parmap:BmlMeta",
         "required": true
       }
     },
@@ -599,9 +725,8 @@
       ],
       "output": {
         "name": "result",
-        "type": "core:Any",
-        "required": true,
-        "doc": "{ name, visibility }"
+        "type": "parmap:VisibilityParse",
+        "required": true
       }
     },
     {
@@ -685,7 +810,7 @@
       ],
       "output": {
         "name": "parts",
-        "type": "core:Any",
+        "type": "parmap:QNameParts",
         "required": true
       }
     },
@@ -838,7 +963,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         },
         {
@@ -865,7 +990,7 @@
       "inputs": [
         {
           "name": "node",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -882,7 +1007,7 @@
       "inputs": [
         {
           "name": "node",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -899,7 +1024,7 @@
       "inputs": [
         {
           "name": "node",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -916,7 +1041,7 @@
       "inputs": [
         {
           "name": "node",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -933,13 +1058,13 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
       "output": {
         "name": "children",
-        "type": "core:Any[]",
+        "type": "parmap:XmlDomNode[]",
         "required": true
       }
     },
@@ -950,7 +1075,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -967,7 +1092,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
@@ -984,7 +1109,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         },
         {
@@ -1005,13 +1130,13 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],
       "output": {
         "name": "data",
-        "type": "core:Any",
+        "type": "parmap:CharacterData",
         "required": true
       }
     },
@@ -1022,7 +1147,7 @@
       "inputs": [
         {
           "name": "siblings",
-          "type": "core:Any[]",
+          "type": "parmap:XmlDomNode[]",
           "required": true
         },
         {
@@ -1044,7 +1169,7 @@
       "inputs": [
         {
           "name": "siblings",
-          "type": "core:Any[]",
+          "type": "parmap:XmlDomNode[]",
           "required": true
         },
         {
@@ -1066,7 +1191,7 @@
       "inputs": [
         {
           "name": "element",
-          "type": "core:Any",
+          "type": "parmap:XmlDomNode",
           "required": true
         }
       ],

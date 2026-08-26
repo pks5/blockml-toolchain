@@ -503,7 +503,7 @@
       "inputs": [
         {
           "name": "value",
-          "type": "core:Any",
+          "type": "bomvalue:MemberValue",
           "required": true
         }
       ],

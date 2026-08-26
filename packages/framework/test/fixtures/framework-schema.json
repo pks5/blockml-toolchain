@@ -94,7 +94,7 @@
         },
         {
           "name": "value",
-          "type": "core:Any",
+          "type": "type:Text | type:Integer | type:Decimal | type:Boolean",
           "required": true
         }
       ]
@@ -120,6 +120,25 @@
       ]
     },
     {
+      "fqn": "org.blockml.bml.framework.expression.ObjectExpressionEntry",
+      "tsExport": "ObjectExpressionEntry",
+      "pkg": "expression",
+      "abstract": false,
+      "baseType": "framework:FrameworkType",
+      "fields": [
+        {
+          "name": "key",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "fwexpression:ExpressionNode",
+          "required": true
+        }
+      ]
+    },
+    {
       "fqn": "org.blockml.bml.framework.expression.ObjectExpressionNode",
       "tsExport": "ObjectExpressionNode",
       "pkg": "expression",
@@ -134,7 +153,7 @@
         },
         {
           "name": "entries",
-          "type": "core:Any",
+          "type": "fwexpression:ObjectExpressionEntry[]",
           "required": true
         }
       ]

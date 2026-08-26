@@ -15,6 +15,7 @@
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:parser="org.blockml.bml.compiler.parser"
@@ -22,7 +23,11 @@
   xmlns:parconfig="org.blockml.bml.compiler.parser.config"
   xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
   xmlns:parmap="org.blockml.bml.compiler.parser.map"
-  xmlns:type="org.blockml.bml.type">
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
+  xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
 
   <name>IsTextNode</name>
   <type>parcap:IsTextNode</type>
@@ -32,8 +37,8 @@
   <documentation>Type guard: DOM node is text</documentation>
 
   <properties>
-    <node type="core:Any">
-      <documentation>node. TS type: core:Any. (required)</documentation>
+    <node type="parmap:XmlDomNode">
+      <documentation>node. TS type: parmap:XmlDomNode. (required)</documentation>
     </node>
     <result type="type:Boolean">
       <documentation>result. TS type: type:Boolean. (required)</documentation>

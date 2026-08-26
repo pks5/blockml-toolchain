@@ -28,21 +28,20 @@
   <baseType>bom:UrmodellType</baseType>
   <is>Preserve-on-error residual for an unknown authored XML element</is>
 
-  <documentation>Stored when a structural BML error is reported so Format/LSP/serialize
-    can roundtrip the authored construct instead of dropping it.</documentation>
+  <documentation>Stored when a structural BML error is reported so Format/LSP/serialize can roundtrip the authored construct.</documentation>
 
   <properties>
     <localName type="type:Text">
       <documentation>localName (required). TS type: type:Text.</documentation>
     </localName>
     <prefix type="type:Text">
-      <documentation>XML prefix when authored with a colon. (optional)</documentation>
+      <documentation>prefix (optional). TS type: type:Text.</documentation>
     </prefix>
     <attributes type="type:Text">
       <documentation>Record of authored attribute name → value. (required)</documentation>
     </attributes>
     <innerXml type="type:Text">
-      <documentation>Serialized inner XML of the element when it has children or text. (optional)</documentation>
+      <documentation>innerXml (optional). TS type: type:Text.</documentation>
     </innerXml>
     <source type="bomcommon:SourceLocation">
       <documentation>source (optional). TS type: bomcommon:SourceLocation.</documentation>

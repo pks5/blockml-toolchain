@@ -15,6 +15,7 @@
   xmlns:bomcomp="org.blockml.bml.bom.composition"
   xmlns:bomdoc="org.blockml.bml.bom.document"
   xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:serializer="org.blockml.bml.compiler.serializer"
@@ -23,6 +24,8 @@
   xmlns:serdocumentation="org.blockml.bml.compiler.serializer.documentation"
   xmlns:seremit="org.blockml.bml.compiler.serializer.emit"
   xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:bomcap="org.blockml.bml.bom.capability"
   xmlns:doc="org.blockml.bml.documentation">
 
   <name>ScopeExclusions</name>
@@ -36,7 +39,7 @@
     • Render target emit (SCAD, JSON, MBOM serialize) — @blockml/compiler / domain packages
     • Semantic validation — @blockml/validator
     • Parser mapping (BML → BOM) — @blockml/parser
-    • TypeRegistry bootstrap, effective member resolution — @blockml/framework
+    • TypeRegistry bootstrap, effective member resolution — @blockml/core
     • BomBuilder (V3) — future; serializer accepts its output types only
     • File I/O (serializeFile), async, streaming — deferred API surfaces
 
