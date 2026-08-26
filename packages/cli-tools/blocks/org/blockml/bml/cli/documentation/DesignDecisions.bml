@@ -24,21 +24,21 @@
   <name>DesignDecisions</name>
   <type>clidocumentation:DesignDecisions</type>
   <baseType>core:Documentation</baseType>
-  <is>Normative CLI decisions CLI1–CLI21</is>
+  <is>Normative CLI decisions CLI1–CLI22</is>
 
   <documentation>CLI1 missing blockml.config.json → DefaultBomConfig.
     CLI2 empty targets[] → ["blockdoc"].
     CLI3 bootstrapTargets idempotent.
     CLI4 TARGET_FACTORIES blockdoc/xsd/fatblock.
     CLI5 unknown target name throws.
-    CLI6 registry bootstrap: identity seed (blockml.library) plus config/--libraries extras; compile paths=[srcDir]; validate corpusPaths=project source roots.
+    CLI6 registry bootstrap: identity seed (blockml.library) plus config/--libraries extras; compile paths=[srcDir] or blockdoc default project library roots (CLI22); validate corpusPaths=project source roots.
     CLI7 writeOutputFiles cleanOutDir rmSync.
     CLI8 rootFiles beside rootDir (XSD catalog).
     CLI9 parseArgs flag and positional rules.
     CLI10 validate file XOR --all. Default validate = project sources; --all = entire registry.
     CLI11 validate never writes render output.
     CLI12 default compile target blockdoc.
-    CLI13 defaultOutDir xsd→schemas else config.outDir/doc.
+    CLI13 defaultOutDir xsd→schemas; blockdoc→config.outDir/blockdoc.
     CLI14 fatblock requires file + --src.
     CLI15 fatblock separate workspace registry with core Library.
     CLI16 compile scope auto libraries or roots.
@@ -46,7 +46,8 @@
     CLI18 runCli exit code matrix.
     CLI19 target CLI matrix blockdoc/xsd/fatblock.
     CLI20 validate skips bootstrapTargets.
-    CLI21 bin entry uses realpath so npm .bin/blockml symlink invokes runCli.</documentation>
+    CLI21 bin entry uses realpath so npm .bin/blockml symlink invokes runCli.
+    CLI22 blockdoc without --src/--libraries scans cwd + packages/* for blockml.library and documents all .bml under those packages (corpus roots; TypeRegistry may still hold identity seeds for type resolution).</documentation>
   <references>
     <see type="clidocumentation:PackageOwnership" relation="ReadNext"></see>
   </references>

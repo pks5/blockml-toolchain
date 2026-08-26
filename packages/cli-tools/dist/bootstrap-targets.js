@@ -12,7 +12,7 @@ const BUILTIN_FACTORIES = {
 };
 const BUILTIN_HINTS = {
     blockdoc: {
-        defaultOutDir: (config) => config.outDir ?? "doc",
+        defaultOutDir: (config) => config.outDir ?? "blockdoc",
     },
     xsd: {
         defaultOutDir: "schemas",

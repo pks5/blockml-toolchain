@@ -1,8 +1,8 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { readFileSync, realpathSync } from "node:fs";
+import { isAbsolute, relative, resolve } from "node:path";
 import type { BlockDefinition } from "@blockml/bom";
 import type { CompileRequest, RenderContext, RenderOutput, RenderTarget } from "@blockml/compiler";
-import { bootstrapTypeRegistry, getExportedFqns } from "@blockml/framework";
+import { bootstrapTypeRegistry, getExportedFqns, type TypeRegistry } from "@blockml/framework";
 import { parse } from "@blockml/parser";
 import { fqnToHtmlPath } from "./fqn-path.js";
 import {
@@ -29,6 +29,22 @@ interface LibraryRoot {
   indexPath: string;
 }
 
+function canonicalPath(path: string): string {
+  const abs = resolve(path);
+  try {
+    return realpathSync(abs);
+  } catch {
+    return abs;
+  }
+}
+
+function isPathInsideOrEqual(inner: string, outer: string): boolean {
+  const a = canonicalPath(inner);
+  const b = canonicalPath(outer);
+  const rel = relative(b, a);
+  return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+}
+
 function collectExportedFqns(libraryPaths: string[], rootDir: string): Set<string> {
   const bootstrap = bootstrapTypeRegistry({ libraryPaths, rootDir });
   const exported = new Set<string>();
@@ -43,6 +59,24 @@ function collectExportedFqns(libraryPaths: string[], rootDir: string): Set<strin
   return exported;
 }
 
+function fqnFileIsUnderRoots(registry: TypeRegistry, fqn: string, roots: string[]): boolean {
+  const doc = registry.get(fqn);
+  const filePath = doc?.source?.filePath;
+  if (!filePath || filePath.startsWith("<")) {
+    return false;
+  }
+  return roots.some((root) => isPathInsideOrEqual(filePath, root));
+}
+
+function filterFqnsByCorpusRoots(ctx: RenderContext, fqns: string[]): string[] {
+  const roots = ctx.session.corpusRoots;
+  if (!roots?.length) {
+    return fqns;
+  }
+  const registry = ctx.session.typeRegistry;
+  return fqns.filter((fqn) => fqnFileIsUnderRoots(registry, fqn, roots));
+}
+
 function collectBlockFqns(ctx: RenderContext, request: CompileRequest): string[] {
   const options = resolveBlockDocOptions(request.targetOptions);
   const registry = ctx.session.typeRegistry;
@@ -54,7 +88,7 @@ function collectBlockFqns(ctx: RenderContext, request: CompileRequest): string[]
     fqns = fqns.filter((fqn) => exported.has(fqn));
   }
 
-  return [...new Set(fqns)].sort();
+  return [...new Set(filterFqnsByCorpusRoots(ctx, fqns))].sort();
 }
 
 function collectRootBlockFqns(ctx: RenderContext, request: CompileRequest): string[] {
@@ -68,7 +102,7 @@ function collectRootBlockFqns(ctx: RenderContext, request: CompileRequest): stri
     rootFqns = rootFqns.filter((fqn) => exported.has(fqn));
   }
 
-  return rootFqns;
+  return filterFqnsByCorpusRoots(ctx, rootFqns);
 }
 
 function findBlock(root: BlockDefinition, fqn: string): BlockDefinition | undefined {

@@ -50,7 +50,7 @@ blockml compile blockdoc|xsd [--out dir] [--src dir] [--libraries a,b]
 blockml compile file.bml fatblock --src dir [--include a,b] [--out dir]
 ```
 
-Default output directories: `doc` (blockdoc), `schemas` (xsd).
+Default output directories: `blockdoc` (blockdoc), `schemas` (xsd).
 
 ### npm script wrappers
 

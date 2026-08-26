@@ -42,7 +42,7 @@
     encode behavioral contracts.
 
     Pipeline placement: TypeRegistry (+ optional libraryPaths) → BlockDocTarget.render →
-    multi-file HTML under outDir (CLI default doc/). Accepts compile scopes library, corpus, auto.
+    multi-file HTML under outDir (CLI default blockdoc/). Accepts compile scopes library, corpus, auto.
 
     Related host wiring (CLI bootstrap, compileToOutput, scope auto resolution) lives in
     @blockml/compiler / @blockml/cli — see PackageOwnership.</documentation>

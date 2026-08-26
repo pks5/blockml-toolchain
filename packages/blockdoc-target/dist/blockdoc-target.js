@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { readFileSync, realpathSync } from "node:fs";
+import { isAbsolute, relative, resolve } from "node:path";
 import { bootstrapTypeRegistry, getExportedFqns } from "@blockml/framework";
 import { parse } from "@blockml/parser";
 import { fqnToHtmlPath } from "./fqn-path.js";
@@ -9,6 +9,21 @@ import { renderBlockPage, renderIndexPage } from "./render-block-page.js";
 import { resolveBlockDocOptions } from "./options.js";
 import { buildSearchIndexEntry, serializeSearchIndex, } from "./search-index.js";
 import { renderSearchScript } from "./toolbar.js";
+function canonicalPath(path) {
+    const abs = resolve(path);
+    try {
+        return realpathSync(abs);
+    }
+    catch {
+        return abs;
+    }
+}
+function isPathInsideOrEqual(inner, outer) {
+    const a = canonicalPath(inner);
+    const b = canonicalPath(outer);
+    const rel = relative(b, a);
+    return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+}
 function collectExportedFqns(libraryPaths, rootDir) {
     const bootstrap = bootstrapTypeRegistry({ libraryPaths, rootDir });
     const exported = new Set();
@@ -22,6 +37,22 @@ function collectExportedFqns(libraryPaths, rootDir) {
     }
     return exported;
 }
+function fqnFileIsUnderRoots(registry, fqn, roots) {
+    const doc = registry.get(fqn);
+    const filePath = doc?.source?.filePath;
+    if (!filePath || filePath.startsWith("<")) {
+        return false;
+    }
+    return roots.some((root) => isPathInsideOrEqual(filePath, root));
+}
+function filterFqnsByCorpusRoots(ctx, fqns) {
+    const roots = ctx.session.corpusRoots;
+    if (!roots?.length) {
+        return fqns;
+    }
+    const registry = ctx.session.typeRegistry;
+    return fqns.filter((fqn) => fqnFileIsUnderRoots(registry, fqn, roots));
+}
 function collectBlockFqns(ctx, request) {
     const options = resolveBlockDocOptions(request.targetOptions);
     const registry = ctx.session.typeRegistry;
@@ -31,7 +62,7 @@ function collectBlockFqns(ctx, request) {
         const exported = collectExportedFqns(ctx.session.libraryPaths, rootDir);
         fqns = fqns.filter((fqn) => exported.has(fqn));
     }
-    return [...new Set(fqns)].sort();
+    return [...new Set(filterFqnsByCorpusRoots(ctx, fqns))].sort();
 }
 function collectRootBlockFqns(ctx, request) {
     const options = resolveBlockDocOptions(request.targetOptions);
@@ -42,7 +73,7 @@ function collectRootBlockFqns(ctx, request) {
         const exported = collectExportedFqns(ctx.session.libraryPaths, rootDir);
         rootFqns = rootFqns.filter((fqn) => exported.has(fqn));
     }
-    return rootFqns;
+    return filterFqnsByCorpusRoots(ctx, rootFqns);
 }
 function findBlock(root, fqn) {
     if (root.type === fqn) {

@@ -36,30 +36,32 @@ function packageSrcDir(packageDir) {
     }
     return resolve(packageDir, DEFAULT_SRC_DIR);
 }
-function blockmlPackageBlocksRoot(packageDir) {
+function packageDeclaresLibrary(packageDir) {
     const pkg = readJson(join(packageDir, "package.json"));
     const library = pkg?.blockml?.library;
-    const hasLibrary = typeof library === "string" && library.length > 0;
+    return typeof library === "string" && library.length > 0;
+}
+function blockmlPackageBlocksRoot(packageDir) {
+    const hasLibrary = packageDeclaresLibrary(packageDir);
     const hasConfig = existsSync(join(packageDir, CONFIG_FILE));
     if (!hasLibrary && !hasConfig) {
         return undefined;
     }
     return packageSrcDir(packageDir);
 }
-/**
- * Project-owned BML roots: this package's srcDir plus local packages/*
- * BlockML modules. Does not walk parent workspaces or node_modules
- * (realpath of a workspace symlink under packages/ still counts).
- */
-export function projectSourceRoots(rootDir, srcDir = DEFAULT_SRC_DIR) {
-    const roots = new Set();
-    roots.add(resolve(rootDir, srcDir));
+function libraryDeclaredBlocksRoot(packageDir) {
+    if (!packageDeclaresLibrary(packageDir)) {
+        return undefined;
+    }
+    return packageSrcDir(packageDir);
+}
+function forEachLocalPackage(rootDir, visit) {
     let entries;
     try {
         entries = readdirSync(join(rootDir, "packages"));
     }
     catch {
-        return [...roots];
+        return;
     }
     for (const entry of entries) {
         const pkgDir = join(rootDir, "packages", entry);
@@ -71,11 +73,42 @@ export function projectSourceRoots(rootDir, srcDir = DEFAULT_SRC_DIR) {
         catch {
             continue;
         }
+        visit(pkgDir);
+    }
+}
+/**
+ * Project-owned BML roots: this package's srcDir plus local packages/*
+ * BlockML modules. Does not walk parent workspaces or node_modules
+ * (realpath of a workspace symlink under packages/ still counts).
+ */
+export function projectSourceRoots(rootDir, srcDir = DEFAULT_SRC_DIR) {
+    const roots = new Set();
+    roots.add(resolve(rootDir, srcDir));
+    forEachLocalPackage(rootDir, (pkgDir) => {
         const blocksRoot = blockmlPackageBlocksRoot(pkgDir);
         if (blocksRoot) {
             roots.add(blocksRoot);
         }
+    });
+    return [...roots];
+}
+/**
+ * Blocks/srcDir roots of this package and local packages/* that declare
+ * package.json blockml.library. Stricter than projectSourceRoots: config-only
+ * packages are omitted. Does not walk parent workspaces or node_modules.
+ */
+export function projectLibraryPackageRoots(rootDir) {
+    const roots = new Set();
+    const local = libraryDeclaredBlocksRoot(rootDir);
+    if (local) {
+        roots.add(local);
     }
+    forEachLocalPackage(rootDir, (pkgDir) => {
+        const blocksRoot = libraryDeclaredBlocksRoot(pkgDir);
+        if (blocksRoot) {
+            roots.add(blocksRoot);
+        }
+    });
     return [...roots];
 }
 /** Registry file paths whose realpath lies under any of the given roots. */

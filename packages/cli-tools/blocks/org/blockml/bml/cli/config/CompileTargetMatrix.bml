@@ -27,7 +27,7 @@
 
   <documentation>CLI19 target matrix. Document targets require file; library/corpus omit file; --all ignored for corpus targets.</documentation>
   <properties>
-    <blockdoc type="type:Text"><documentation>file omit; --all no; scope auto libraries[] then srcDir.</documentation></blockdoc>
+    <blockdoc type="type:Text"><documentation>file omit; --all no; default outDir blockdoc; no --src/--libraries → project blockml.library packages as corpus; else auto libraries[] then srcDir.</documentation></blockdoc>
     <xsd type="type:Text"><documentation>file omit; --all no; scope auto libraries[]; default outDir schemas.</documentation></xsd>
     <fatblock type="type:Text"><documentation>file required; --src required; document scope; single output file beside host.</documentation></fatblock>
   </properties>

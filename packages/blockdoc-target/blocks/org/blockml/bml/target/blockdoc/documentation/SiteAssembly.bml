@@ -31,10 +31,14 @@
   <name>SiteAssembly</name>
   <type>bddocumentation:SiteAssembly</type>
   <baseType>core:Documentation</baseType>
-  <is>Corpus selection and multi-file emission (BD11, BD13, BD23)</is>
+  <is>Corpus selection and multi-file emission (BD11, BD13, BD23, BD26)</is>
 
   <documentation>FQN selection: TypeRegistry.keys(), sorted unique. includeNonExported=false → FilterExportedFqns
-    from Library aggregation "blocks" (re-parse libraryPaths).
+    from Library aggregation "blocks" (re-parse libraryPaths). When session.corpusRoots is set (corpus
+    compile, including CLI default project-library scan), keep only FQNs whose source.filePath lies
+    under those roots.
+
+    Root FQNs (BD11): shortest FQN per source.filePath — indexes list these only.
 
     Root FQNs (BD11): shortest FQN per source.filePath — indexes list these only.
 

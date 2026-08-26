@@ -28,7 +28,7 @@
 
   <documentation>V1 CLI reads blockml.config.json from project root:
 
-    • outDir — default "doc" (CLI DefaultBomConfig)
+    • outDir — default "blockdoc" (CLI DefaultBomConfig)
     • srcDir — default "blocks" (recommended BlockML source folder)
     • libraries — extra Library.bml seeds (appended to package.json blockml.library)
     • targets — bootstrap list; default ["blockdoc"] (CLI2)

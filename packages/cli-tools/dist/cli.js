@@ -7,7 +7,7 @@ import { compileBmlToBom, compileToOutput, getTarget, validateRegistryDocuments,
 import { bootstrapTargets, getTargetCliHints, } from "./bootstrap-targets.js";
 import { bootstrapProjectTypeRegistry, projectLibrarySeeds } from "./bootstrap-type-registry.js";
 import { loadConfig } from "./load-config.js";
-import { projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
+import { projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { writeOutputFiles } from "./write-output.js";
 const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
     "       blockml compile <file> <document-target> --src dir [--include a,b] [--out dir]\n" +
@@ -158,7 +158,7 @@ function resolveDefaultOutDir(target, config) {
         }
         return hints.defaultOutDir;
     }
-    return config.outDir ?? "doc";
+    return config.outDir ?? "blockdoc";
 }
 function resolveDocumentOutDir(parsed, config, rootDir, hostPath) {
     if (parsed.outDir) {
@@ -308,29 +308,41 @@ async function runCompileDocument(target, parsed, rootDir, config, lines) {
     printCompileSuccess(lines, wrote);
     return 0;
 }
+function isBlockdocProjectLibraryScan(target, parsed, config) {
+    return (target === "blockdoc" &&
+        parsed.srcDir === undefined &&
+        parsed.libraries === undefined &&
+        !(config.libraries && config.libraries.length > 0));
+}
 async function runCompileCorpus(target, parsed, rootDir, config, lines) {
-    const bootstrap = bootstrapProjectTypeRegistry(bootstrapOptsFromParsed(parsed, config, rootDir));
-    const outDir = parsed.outDir ?? resolveDefaultOutDir(target, config);
     const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
     const libraries = projectLibrarySeeds({
         config,
         rootDir,
         ...(parsed.libraries !== undefined ? { librariesOverride: parsed.libraries } : {}),
     });
+    const projectRoots = isBlockdocProjectLibraryScan(target, parsed, config)
+        ? projectLibraryPackageRoots(rootDir)
+        : undefined;
+    const bootstrap = bootstrapProjectTypeRegistry({
+        ...bootstrapOptsFromParsed(parsed, config, rootDir),
+        ...(projectRoots && projectRoots.length > 0 ? { corpusPaths: projectRoots } : {}),
+    });
+    const outDir = parsed.outDir ?? resolveDefaultOutDir(target, config);
     const scope = { kind: "auto" };
-    if (libraries.length > 0) {
-        scope.libraries = libraries;
-    }
-    else {
-        scope.roots = [srcDir];
-    }
     const configHints = {
         rootDir,
     };
-    if (libraries.length > 0) {
+    if (projectRoots && projectRoots.length > 0) {
+        scope.roots = projectRoots;
+        configHints.roots = projectRoots;
+    }
+    else if (libraries.length > 0) {
+        scope.libraries = libraries;
         configHints.libraries = libraries;
     }
     else {
+        scope.roots = [srcDir];
         configHints.roots = [srcDir];
     }
     const result = compileToOutput({

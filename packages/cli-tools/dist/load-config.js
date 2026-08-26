@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 const DEFAULT_CONFIG = {
-    outDir: "doc",
+    outDir: "blockdoc",
     srcDir: "blocks",
     targets: ["blockdoc"],
     defaultTarget: "blockdoc",

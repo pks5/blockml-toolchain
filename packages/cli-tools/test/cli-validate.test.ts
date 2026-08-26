@@ -5,7 +5,7 @@ import { clearTargets } from "@blockml/compiler";
 import { BML_DOCUMENT_NS } from "@blockml/xsd-target";
 import { isCliEntry, parseArgs, runCli } from "../src/cli.js";
 import { resetBootstrapTargets } from "../src/bootstrap-targets.js";
-import { projectSourceRoots } from "../src/project-sources.js";
+import { projectLibraryPackageRoots, projectSourceRoots } from "../src/project-sources.js";
 import {
   parseCatalogUriEntries,
   resolveBmlSchemaPath,
@@ -155,6 +155,24 @@ describe("runCli validate", () => {
     const workspaceRoots = projectSourceRoots(ROOT, "blocks");
     expect(workspaceRoots).toContain(join(ROOT, "blocks"));
     expect(workspaceRoots.some((p) => p.includes(`${join("packages", "bom")}`))).toBe(
+      true,
+    );
+    expect(workspaceRoots.every((p) => !p.includes("node_modules"))).toBe(true);
+  });
+
+  it("projectLibraryPackageRoots is packages with blockml.library, not node_modules", () => {
+    const bomRoots = projectLibraryPackageRoots(join(ROOT, "packages/bom"));
+    expect(bomRoots.some((p) => p.includes(`${join("packages", "bom")}`))).toBe(true);
+    expect(bomRoots.every((p) => !p.includes(`${join("packages", "parser")}`))).toBe(
+      true,
+    );
+
+    const workspaceRoots = projectLibraryPackageRoots(ROOT);
+    expect(workspaceRoots).toContain(join(ROOT, "blocks"));
+    expect(workspaceRoots.some((p) => p.includes(`${join("packages", "bom")}`))).toBe(
+      true,
+    );
+    expect(workspaceRoots.some((p) => p.includes(`${join("packages", "lsp")}`))).toBe(
       true,
     );
     expect(workspaceRoots.every((p) => !p.includes("node_modules"))).toBe(true);

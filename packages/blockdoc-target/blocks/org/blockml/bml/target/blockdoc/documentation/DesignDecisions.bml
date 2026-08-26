@@ -31,7 +31,7 @@
   <name>DesignDecisions</name>
   <type>bddocumentation:DesignDecisions</type>
   <baseType>core:Documentation</baseType>
-  <is>Normative BlockDoc decisions BD1–BD25</is>
+  <is>Normative BlockDoc decisions BD1–BD26</is>
 
   <documentation>BD1 siteMode merged vs perLibrary.
     BD2 outLayout fqn vs package (package may collide when multiple blocks share a package).
@@ -57,7 +57,8 @@
     BD22 package index direct blocks/sub-packages + breadcrumb.
     BD23 AssembleSite orchestration including library prefix = strip .Library.
     BD24 BuildSearchIndex — search-index.json plus inlined search.js of every emitted block page.
-    BD25 sticky black toolbar (BlockDoc + Index + keyword quick search) on all HTML pages.</documentation>
+    BD25 sticky black toolbar (BlockDoc + Index + keyword quick search) on all HTML pages.
+    BD26 when session.corpusRoots is set, restrict emitted FQNs to files under those roots.</documentation>
   <references>
     <see type="bddocumentation:PackageOwnership" relation="ReadNext"></see>
   </references>

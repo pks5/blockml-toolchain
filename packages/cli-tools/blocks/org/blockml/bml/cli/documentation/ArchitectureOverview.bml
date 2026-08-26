@@ -42,7 +42,7 @@
     • load-config.ts → LoadConfig, api/BomConfig
     • bootstrap-targets.ts → BootstrapTargets
     • bootstrap-type-registry.ts → BootstrapProjectTypeRegistry
-    • project-sources.ts → project source roots for default validate
+    • project-sources.ts → project source roots for default validate; project library package roots for default blockdoc
     • write-output.ts → WriteOutputFiles</documentation>
   <references>
     <see type="clidocumentation:V1Scope" relation="ReadNext"></see>

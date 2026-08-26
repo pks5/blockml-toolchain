@@ -25,7 +25,7 @@ export type { TargetCliHints } from "./load-target-plugin.js";
 
 const BUILTIN_HINTS: Record<string, TargetCliHints> = {
   blockdoc: {
-    defaultOutDir: (config) => config.outDir ?? "doc",
+    defaultOutDir: (config) => config.outDir ?? "blockdoc",
   },
   xsd: {
     defaultOutDir: "schemas",

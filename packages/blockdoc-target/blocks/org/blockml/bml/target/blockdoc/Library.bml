@@ -34,7 +34,7 @@
 
   <documentation>
     Canonical BlockDoc specification for BlockML — registry name blockdoc, options,
-    path/link/page/site rules (BD1–BD23). TypeScript in packages/blockdoc-target/src/
+    path/link/page/site rules (BD1–BD26). TypeScript in packages/blockdoc-target/src/
     implements this library. Urmodell input types live in org.blockml.bml.bom.* (@blockml/bom).
     Membership is defined exclusively by this blocks list.
   </documentation>

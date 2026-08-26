@@ -30,7 +30,7 @@
     <see type="clidocumentation:Configuration" relation="SeeAlso" />
   </references>
   <properties>
-    <outDir type="type:Text"><documentation>Output root. Default "doc". (optional)</documentation></outDir>
+    <outDir type="type:Text"><documentation>Output root. Default "blockdoc". (optional)</documentation></outDir>
     <srcDir type="type:Text"><documentation>Source root. Default "blocks" (recommended BlockML source folder). (optional)</documentation></srcDir>
     <libraries type="type:Text"><documentation>Extra Library.bml seeds; appended to package.json blockml.library. (optional)</documentation></libraries>
     <targets type="type:Text"><documentation>Registry names to bootstrap. Default ["blockdoc"]. (optional)</documentation></targets>

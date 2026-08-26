@@ -5,6 +5,12 @@ import { type TypeRegistry } from "@blockml/framework";
  * (realpath of a workspace symlink under packages/ still counts).
  */
 export declare function projectSourceRoots(rootDir: string, srcDir?: string): string[];
+/**
+ * Blocks/srcDir roots of this package and local packages/* that declare
+ * package.json blockml.library. Stricter than projectSourceRoots: config-only
+ * packages are omitted. Does not walk parent workspaces or node_modules.
+ */
+export declare function projectLibraryPackageRoots(rootDir: string): string[];
 /** Registry file paths whose realpath lies under any of the given roots. */
 export declare function registryFilesUnderRoots(registry: TypeRegistry, roots: string[]): string[];
 //# sourceMappingURL=project-sources.d.ts.map

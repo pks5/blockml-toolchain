@@ -40,7 +40,7 @@
     compileToOutput; scope kind resolution for auto.
 
     @blockml/cli owns: bootstrapTargets / targets[] default ["blockdoc"]; writing files under
-    outDir (default doc/); CLI usage strings and exit codes.
+    outDir (default blockdoc/); CLI usage strings and exit codes.
 
     @blockml/bom owns: Urmodell types consumed by render helpers.
 

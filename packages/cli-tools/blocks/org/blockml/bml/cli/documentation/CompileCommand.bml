@@ -31,7 +31,7 @@
     blockml compile file.bml fatblock --src dir [--include a,b] [--out dir]
 
     Default target: blockdoc (CLI12).
-    Default outDir: doc (blockdoc), schemas (xsd), config.outDir or beside host (fatblock) (CLI13).
+    Default outDir: blockdoc (blockdoc), schemas (xsd), config.outDir or beside host (fatblock) (CLI13).
 
     Unsupported target in V1 CLI → exit 2.
     fatblock without file or --src → exit 2 (CLI14).

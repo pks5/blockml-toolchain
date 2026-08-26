@@ -28,7 +28,7 @@
 
   <documentation>CLI19 matrix (V1):
 
-    blockdoc — file omit; --all ignored; scope auto: libraries[] else roots[srcDir]
+    blockdoc — file omit; --all ignored; default outDir blockdoc; without --src/--libraries: project packages with blockml.library as corpus (all .bml); else scope auto: libraries[] else roots[srcDir]
     xsd — file omit; --all ignored; default outDir schemas; may write root catalog.xml
     fatblock — file required; --src required; document scope; single .fat.bml output
 
