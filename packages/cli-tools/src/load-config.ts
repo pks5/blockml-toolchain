@@ -15,7 +15,7 @@ export interface BomConfig {
 
 const DEFAULT_CONFIG: Required<Pick<BomConfig, "outDir" | "srcDir" | "targets" | "defaultTarget">> = {
   outDir: "doc",
-  srcDir: "src",
+  srcDir: "blocks",
   targets: ["blockdoc"],
   defaultTarget: "blockdoc",
 };

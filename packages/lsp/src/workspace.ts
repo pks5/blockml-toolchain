@@ -22,7 +22,7 @@ export interface BomConfig {
 }
 
 const DEFAULT_CONFIG: Required<Pick<BomConfig, "srcDir">> = {
-  srcDir: "src",
+  srcDir: "blocks",
 };
 
 export function loadBomConfig(rootDir: string): BomConfig {

@@ -399,7 +399,7 @@ async function runCompileCorpus(
   );
 
   const outDir = parsed.outDir ?? resolveDefaultOutDir(target, config);
-  const srcDir = parsed.srcDir ?? config.srcDir ?? "src";
+  const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
   const libraries = parsed.libraries ?? config.libraries ?? [];
 
   const scope: {

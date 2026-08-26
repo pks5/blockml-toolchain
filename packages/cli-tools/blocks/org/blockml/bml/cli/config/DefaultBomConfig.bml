@@ -28,7 +28,7 @@
   <documentation>CLI1/CLI2: missing file returns these defaults; empty targets[] becomes ["blockdoc"].</documentation>
   <properties>
     <outDir type="type:Text"><documentation>"doc"</documentation></outDir>
-    <srcDir type="type:Text"><documentation>"src"</documentation></srcDir>
+    <srcDir type="type:Text"><documentation>"blocks"</documentation></srcDir>
     <targets type="type:Text"><documentation>["blockdoc"]</documentation></targets>
   </properties>
 

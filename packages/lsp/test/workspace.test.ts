@@ -34,6 +34,11 @@ describe("loadPackageBlockmlLibrary", () => {
 });
 
 describe("createWorkspace", () => {
+  it("defaults srcDir to blocks when bom.config.json is absent", () => {
+    const workspace = createWorkspace(BOM_PACKAGE);
+    expect(workspace.config.srcDir).toBe("blocks");
+  });
+
   it("bootstraps @blockml/core types when the core package is the workspace root", () => {
     const workspace = createWorkspace(CORE_PACKAGE);
     expect(workspace.registry.has(MEMBER_DEFINITION)).toBe(true);

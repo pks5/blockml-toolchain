@@ -12,7 +12,7 @@ export function bootstrapProjectTypeRegistry(
   options: CliBootstrapOptions,
 ): BootstrapResult {
   const rootDir = options.rootDir ?? process.cwd();
-  const srcDir = options.srcDirOverride ?? options.config.srcDir ?? "src";
+  const srcDir = options.srcDirOverride ?? options.config.srcDir ?? "blocks";
   const libraries = options.librariesOverride ?? options.config.libraries ?? [];
 
   const bootstrapOptions: {

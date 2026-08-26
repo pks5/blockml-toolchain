@@ -134,6 +134,7 @@ describe("CLI BML library", () => {
 
     const loadConfig = readFileSync(join(pkgRoot, "src/load-config.ts"), "utf8");
     expect(loadConfig).toContain('outDir: "doc"');
+    expect(loadConfig).toContain('srcDir: "blocks"');
     expect(loadConfig).toContain('targets: ["blockdoc"]');
     expect(loadConfig).toContain("targetPackages");
     expect(loadConfig).toContain("defaultTarget");
