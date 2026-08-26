@@ -149,17 +149,29 @@ function errorCount(diagnostics: PrintableDiagnostic[]): number {
   return diagnostics.filter((d) => d.severity === "error").length;
 }
 
+function countBySeverity(
+  diagnostics: PrintableDiagnostic[],
+  severity: PrintableDiagnostic["severity"],
+): number {
+  return diagnostics.filter((d) => d.severity === severity).length;
+}
+
 function printValidateOutcome(
   lines: CliOutputLine[],
   blocksTested: number,
   blocksWithErrors: number,
   failed: boolean,
+  diagnostics: PrintableDiagnostic[],
 ): void {
   const word = blocksTested === 1 ? "block" : "blocks";
   const status = failed ? "failed" : "succeeded";
+  const warnings = countBySeverity(diagnostics, "warning");
+  const recommendations = countBySeverity(diagnostics, "recommendation");
+  const warningWord = warnings === 1 ? "warning" : "warnings";
+  const recWord = recommendations === 1 ? "recommendation" : "recommendations";
   pushLines(
     lines,
-    `Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors.`,
+    `Validation ${status}. Tested ${blocksTested} ${word}, ${blocksWithErrors} with errors, ${warnings} ${warningWord}, ${recommendations} ${recWord}.`,
     failed ? "error" : "success",
   );
 }
@@ -406,7 +418,7 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: CliOutputLine[]
     const diagnostics = [...bootstrap.diagnostics, ...result.diagnostics];
     printDiagnostics(diagnostics, lines);
     const failed = diagnostics.some((d) => d.severity === "error");
-    printValidateOutcome(lines, 1, result.success ? 0 : 1, failed);
+    printValidateOutcome(lines, 1, result.success ? 0 : 1, failed, diagnostics);
     return failed ? 1 : 0;
   }
 
@@ -421,6 +433,7 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: CliOutputLine[]
     validated.blocksTested,
     validated.blocksWithErrors,
     failed,
+    diagnostics,
   );
   return failed ? 1 : 0;
 }

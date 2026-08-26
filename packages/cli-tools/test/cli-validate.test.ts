@@ -116,7 +116,7 @@ describe("runCli validate", () => {
     expect([0, 1]).toContain(code);
     expect(stderr).not.toMatch(/Wrote \d+ file\(s\)/);
     expect(stderr).toMatch(
-      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors\./,
+      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors, \d+ warnings?, \d+ recommendations?\./,
     );
     if (code === 1) {
       expect(stderr).toMatch(/\berror\b/);
@@ -131,7 +131,7 @@ describe("runCli validate", () => {
     const { code, stderr } = await runCli(["validate"], bomRoot);
     expect([0, 1]).toContain(code);
     expect(stderr).toMatch(
-      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors\./,
+      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors, \d+ warnings?, \d+ recommendations?\./,
     );
   });
 
@@ -145,7 +145,7 @@ describe("runCli validate", () => {
     expect(stderr).toMatch(/validate \(\d+\):/);
     expect(stderr).toMatch(/registry \(\d+\):/);
     expect(stderr).toMatch(
-      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors\./,
+      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors, \d+ warnings?, \d+ recommendations?\./,
     );
   });
 
@@ -230,7 +230,7 @@ describe("runCli validate", () => {
     expect([0, 1]).toContain(code);
     expect(stderr).not.toMatch(/Wrote \d+ file\(s\)/);
     expect(stderr).toMatch(
-      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors\./,
+      /Validation (succeeded|failed)\. Tested \d+ blocks?, \d+ with errors, \d+ warnings?, \d+ recommendations?\./,
     );
   });
 
@@ -247,7 +247,7 @@ describe("runCli validate", () => {
     expect([0, 1]).toContain(code);
     expect(stderr).not.toMatch(/Wrote \d+ file\(s\)/);
     expect(stderr).toMatch(
-      /Validation (succeeded|failed)\. Tested 1 block, \d+ with errors\./,
+      /Validation (succeeded|failed)\. Tested 1 block, \d+ with errors, \d+ warnings?, \d+ recommendations?\./,
     );
   });
 
@@ -300,7 +300,9 @@ describe("runCli validate (parse + semantic, no XSD)", () => {
     expect(code).toBe(1);
     expect(stderr).toMatch(/BML_UNKNOWN_ELEMENT/);
     expect(stderr).not.toMatch(/BML_XSD_VALIDATION_ERROR/);
-    expect(stderr).toMatch(/Validation failed\. Tested 1 block, 1 with errors\./);
+    expect(stderr).toMatch(
+      /Validation failed\. Tested 1 block, 1 with errors, \d+ warnings?, \d+ recommendations?\./,
+    );
   });
 
   it("fails invalid root without XSD", async () => {

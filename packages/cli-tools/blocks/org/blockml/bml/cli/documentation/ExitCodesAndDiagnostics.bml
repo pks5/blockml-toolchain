@@ -34,7 +34,7 @@
 
     CLI17 diagnostic format: severity code file:line — message (uncolored text).
     Printed first. Then a status line:
-    validate — Validation succeeded|failed. Tested N block(s), M with errors.
+    validate — Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
     compile — Compilation succeeded. Wrote …  |  Compilation failed with K error(s).
     Uncaught exception — Internal CLI error: message (exit 2; no stack dump).
     runCli joins uncolored lines with newlines in CliResult.stderr.

@@ -30,7 +30,7 @@
     --all = entire registry including npm; file = compileBmlToBom for that file.
     --verbose prints bootstrap sources then validate vs registry file lists before diagnostics.
     After CLI17 diagnostics, always print a status line:
-    Validation succeeded|failed. Tested N block(s), M with errors.
+    Validation succeeded|failed. Tested N block(s), M with errors, W warning(s), R recommendation(s).
     Block = unique filePath. XSD is not part of this command.</documentation>
 
   <references>
