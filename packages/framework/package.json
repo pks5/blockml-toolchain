@@ -1,6 +1,6 @@
 {
   "name": "@blockml/framework",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "BlockML framework — TypeRegistry, fork/resolve, parseExpression, validateTypes",
   "license": "Apache-2.0",
   "repository": {
@@ -32,9 +32,9 @@
     "test": "vitest run packages/framework/test"
   },
   "dependencies": {
-    "@blockml/bom": "^0.8.0",
+    "@blockml/bom": "^0.8.1",
     "@blockml/core": "^1.0.6",
-    "@blockml/parser": "^0.8.0"
+    "@blockml/parser": "^0.8.1"
   },
   "engines": {
     "node": ">=20"
