@@ -60,6 +60,13 @@
     resolveLibrarySeeds(rootDir, extras?) prepends package.json blockml.library, then
     extras (config.libraries / --libraries), deduped by realpath.
 
+    bootstrapFullProjectRegistry({ rootDir, srcDir?, libraries? }) is the shared
+    entry point for `blockml validate --all` and `@blockml/search`. It sets
+    corpus paths to projectSourceRoots (this package srcDir plus local packages/*
+    BlockML modules) and library seeds to resolveLibrarySeeds, then calls
+    bootstrapTypeRegistry. The resulting registry is the effective BML corpus:
+    local project files plus the library graph including npm BlockML packages.
+
     bootstrapTypeRegistry also indexes Library.bml under all BlockML packages found in
     node_modules and workspace packages/ along the directory walk (FQN search space).
     First visited Library.bml wins per type FQN; a second file with the same type is not

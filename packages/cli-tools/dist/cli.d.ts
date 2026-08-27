@@ -10,6 +10,11 @@ export interface ParsedArgs {
     include?: string[];
     verbose?: boolean;
     perPackage?: boolean;
+    json?: boolean;
+    force?: boolean;
+    limit?: number;
+    query?: string;
+    index?: boolean;
 }
 interface PrintableDiagnostic {
     severity: string;

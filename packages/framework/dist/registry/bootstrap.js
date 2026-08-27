@@ -1,9 +1,9 @@
-import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
+import { existsSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { TypeRegistry } from "./type-registry.js";
 import { bootstrapFromCorpusPaths, bootstrapFromLibraryPaths, } from "./library-bootstrap.js";
-const CONFIG_FILE = "blockml.config.json";
-const DEFAULT_SRC_DIR = "blocks";
+import { blockmlPackageBlocksRoot, canonicalPath, DEFAULT_SRC_DIR, readJson, } from "./package-paths.js";
+import { projectSourceRoots } from "./project-sources.js";
 function ancestorDirs(fromDir) {
     const dirs = [];
     let dir = resolve(fromDir);
@@ -33,47 +33,8 @@ function resolveInstalledPackageDir(packageName, fromDir) {
     }
     return undefined;
 }
-function readJson(path) {
-    try {
-        return JSON.parse(readFileSync(path, "utf8"));
-    }
-    catch {
-        return undefined;
-    }
-}
-function canonicalPath(path) {
-    const abs = resolve(path);
-    try {
-        return realpathSync(abs);
-    }
-    catch {
-        return abs;
-    }
-}
 function resolveBootstrapPath(path, rootDir) {
     return path.startsWith("/") || path.includes(":") ? path : join(rootDir, path);
-}
-/** srcDir for a package: blockml.config.json override, else default "blocks". */
-function packageSrcDir(packageDir) {
-    const configPath = join(packageDir, CONFIG_FILE);
-    if (existsSync(configPath)) {
-        const cfg = readJson(configPath);
-        if (typeof cfg?.srcDir === "string" && cfg.srcDir.length > 0) {
-            return resolve(packageDir, cfg.srcDir);
-        }
-    }
-    return resolve(packageDir, DEFAULT_SRC_DIR);
-}
-/** Blocks/srcDir root when the package is a BlockML module; otherwise undefined. */
-function blockmlPackageBlocksRoot(packageDir) {
-    const pkg = readJson(join(packageDir, "package.json"));
-    const library = pkg?.blockml?.library;
-    const hasLibrary = typeof library === "string" && library.length > 0;
-    const hasConfig = existsSync(join(packageDir, CONFIG_FILE));
-    if (!hasLibrary && !hasConfig) {
-        return undefined;
-    }
-    return packageSrcDir(packageDir);
 }
 function scanNodeModulesForBlockml(nodeModulesDir, out) {
     let entries;
@@ -218,6 +179,23 @@ function normalizeOptions(optionsOrPaths, rootDirArg) {
         return { ...optionsOrPaths, rootDir: optionsOrPaths.rootDir ?? rootDirArg ?? process.cwd() };
     }
     return { rootDir: rootDirArg ?? process.cwd() };
+}
+/**
+ * Same corpus as `blockml validate --all`: project source roots plus the
+ * resolved library graph (including npm BlockML packages).
+ */
+export function bootstrapFullProjectRegistry(options) {
+    const srcDir = options.srcDir ?? DEFAULT_SRC_DIR;
+    const paths = projectSourceRoots(options.rootDir, srcDir);
+    const libraryPaths = resolveLibrarySeeds(options.rootDir, options.libraries ?? []);
+    const bootstrapOptions = {
+        rootDir: options.rootDir,
+        paths,
+    };
+    if (libraryPaths.length > 0) {
+        bootstrapOptions.libraryPaths = libraryPaths;
+    }
+    return bootstrapTypeRegistry(bootstrapOptions);
 }
 export function bootstrapTypeRegistry(optionsOrPaths, rootDirArg) {
     const options = normalizeOptions(optionsOrPaths, rootDirArg);

@@ -1,5 +1,6 @@
 export { TypeRegistry } from "./registry/type-registry.js";
-export { bootstrapTypeRegistry, defaultBootstrapPaths, resolveLibrarySeeds, } from "./registry/bootstrap.js";
+export { bootstrapTypeRegistry, bootstrapFullProjectRegistry, defaultBootstrapPaths, resolveLibrarySeeds, } from "./registry/bootstrap.js";
+export { projectSourceRoots, projectLibraryPackageRoots, projectLibraryPackageDirs, registryFilesUnderRoots, } from "./registry/project-sources.js";
 export { rootFqnByFilePath, rootFqns } from "./registry/root-fqn.js";
 export { getExportedFqns } from "./registry/library-exports.js";
 export { peekLibraryTypeFqn } from "./registry/library-bootstrap.js";

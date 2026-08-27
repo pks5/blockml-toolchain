@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import {
+  bootstrapFullProjectRegistry,
   rootFqnByFilePath,
   type BootstrapResult,
 } from "@blockml/framework";
@@ -34,13 +35,16 @@ import {
 } from "./cli-style.js";
 import { loadConfig, type BomConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
+import { runSearch } from "./run-search.js";
 import { writeOutputFiles } from "./write-output.js";
 
 const USAGE =
   "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
   "       blockml compile fatblock [--include a,b] [--out dir] [--per-package]\n" +
   "       blockml compile <file> <document-target> [--src dir] [--include a,b] [--out dir]\n" +
-  "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]";
+  "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]\n" +
+  "       blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
+  "       blockml search index [--force] [--src dir] [--libraries a,b]";
 
 function workspaceRoot(from: string): string {
   let dir = resolve(from);
@@ -67,6 +71,11 @@ export interface ParsedArgs {
   include?: string[];
   verbose?: boolean;
   perPackage?: boolean;
+  json?: boolean;
+  force?: boolean;
+  limit?: number;
+  query?: string;
+  index?: boolean;
 }
 
 interface PrintableDiagnostic {
@@ -113,6 +122,18 @@ export function parseArgs(argv: string[]): ParsedArgs {
       result.perPackage = true;
     } else if (flag === "--verbose") {
       result.verbose = true;
+    } else if (flag === "--json") {
+      result.json = true;
+    } else if (flag === "--force") {
+      result.force = true;
+    } else if (flag === "--limit") {
+      const value = args.shift();
+      if (value) {
+        const n = Number(value);
+        if (Number.isFinite(n) && n > 0) {
+          result.limit = Math.floor(n);
+        }
+      }
     } else if (flag && !flag.startsWith("-")) {
       if (result.command === "validate") {
         if (!result.file) {
@@ -123,6 +144,15 @@ export function parseArgs(argv: string[]): ParsedArgs {
           result.file = flag;
         } else if (!result.target) {
           result.target = flag;
+        }
+      } else if (result.command === "search") {
+        if (flag === "index" && result.query === undefined && result.index !== true) {
+          result.index = true;
+        } else if (result.index) {
+          result.index = false;
+          result.query = result.query ? `${result.query} ${flag}` : `index ${flag}`;
+        } else {
+          result.query = result.query ? `${result.query} ${flag}` : flag;
         }
       } else if (!result.target) {
         result.target = flag;
@@ -387,9 +417,10 @@ function runValidate(parsed: ParsedArgs, rootDir: string, lines: CliOutputLine[]
 
   const srcDir = parsed.srcDir ?? config.srcDir ?? "blocks";
   const projectRoots = projectSourceRoots(rootDir, srcDir);
-  const bootstrap = bootstrapProjectTypeRegistry({
-    ...bootstrapOptsFromParsed(parsed, config, rootDir),
-    corpusPaths: projectRoots,
+  const bootstrap = bootstrapFullProjectRegistry({
+    rootDir,
+    srcDir,
+    libraries: parsed.libraries ?? config.libraries ?? [],
   });
 
   const registryFiles = [...rootFqnByFilePath(bootstrap.registry).keys()].sort();
@@ -775,6 +806,18 @@ async function executeCli(
 
     if (parsed.command === "validate") {
       const code = runValidate(parsed, cwd, lines);
+      return { code, lines };
+    }
+
+    if (parsed.command === "search") {
+      let config: BomConfig;
+      try {
+        config = loadConfig(cwd);
+      } catch (e) {
+        pushLines(lines, e instanceof Error ? e.message : String(e), "error");
+        return { code: 2, lines };
+      }
+      const code = await runSearch(parsed, cwd, config, lines, formatDiagnostic, USAGE);
       return { code, lines };
     }
 

@@ -50,6 +50,11 @@ const TS_CAPABILITY_EXPORTS = [
   "peekLibraryTypeFqn",
   "getPropertyNumericValue",
   "isLiteralValue",
+  "projectSourceRoots",
+  "projectLibraryPackageRoots",
+  "projectLibraryPackageDirs",
+  "registryFilesUnderRoots",
+  "bootstrapFullProjectRegistry",
 ];
 
 const TS_FILE_MAP: Record<string, string> = {

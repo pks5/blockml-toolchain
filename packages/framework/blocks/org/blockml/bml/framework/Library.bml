@@ -94,8 +94,13 @@
         <fwconfig:FrameworkDiagnosticCodes />
         <fwcap:TypeRegistry />
         <fwcap:BootstrapTypeRegistry />
+        <fwcap:BootstrapFullProjectRegistry />
         <fwcap:DefaultBootstrapPaths />
         <fwcap:ResolveLibrarySeeds />
+        <fwcap:ProjectSourceRoots />
+        <fwcap:ProjectLibraryPackageRoots />
+        <fwcap:ProjectLibraryPackageDirs />
+        <fwcap:RegistryFilesUnderRoots />
         <fwcap:ForkBom />
         <fwcap:ResolveContracts />
         <fwcap:ResolveEffectiveMembers />

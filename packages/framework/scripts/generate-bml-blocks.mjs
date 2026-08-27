@@ -549,6 +549,62 @@ const capabilities = [
     inputs: [{ name: "value", type: "bomvalue:MemberValue", doc: "Member value or undefined." }],
     output: { name: "result", type: "type:Boolean", required: true },
   },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "ProjectSourceRoots",
+    is: "Project-owned BML roots for this package plus local packages/*",
+    tsExport: "projectSourceRoots",
+    inputs: [
+      { name: "rootDir", type: "type:Text", required: true },
+      { name: "srcDir", type: "type:Text" },
+    ],
+    output: { name: "roots", type: "type:Text[]", required: true },
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "ProjectLibraryPackageRoots",
+    is: "srcDir roots of local packages that declare blockml.library",
+    tsExport: "projectLibraryPackageRoots",
+    inputs: [{ name: "rootDir", type: "type:Text", required: true }],
+    output: { name: "roots", type: "type:Text[]", required: true },
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "ProjectLibraryPackageDirs",
+    is: "Package directories that declare blockml.library",
+    tsExport: "projectLibraryPackageDirs",
+    inputs: [{ name: "rootDir", type: "type:Text", required: true }],
+    output: { name: "dirs", type: "type:Text[]", required: true },
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "RegistryFilesUnderRoots",
+    is: "Registry file paths whose realpath lies under given roots",
+    tsExport: "registryFilesUnderRoots",
+    inputs: [
+      { name: "registry", type: "fwcap:TypeRegistry", required: true },
+      { name: "roots", type: "type:Text[]", required: true },
+    ],
+    output: { name: "files", type: "type:Text[]", required: true },
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
+    name: "BootstrapFullProjectRegistry",
+    is: "Bootstrap the same corpus as blockml validate --all",
+    tsExport: "bootstrapFullProjectRegistry",
+    inputs: [
+      { name: "rootDir", type: "type:Text", required: true },
+      { name: "srcDir", type: "type:Text" },
+      { name: "libraries", type: "type:Text[]" },
+    ],
+    output: { name: "result", type: "fwregistry:BootstrapResult", required: true },
+    refs: ["fwcap:ProjectSourceRoots", "fwcap:BootstrapTypeRegistry", "fwcap:ResolveLibrarySeeds"],
+  },
 ];
 
 function escapeXml(s) {

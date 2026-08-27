@@ -32,5 +32,14 @@ export interface BootstrapResult {
     exportsByLibrary?: Map<string, Set<string>>;
     trace?: BootstrapTrace;
 }
+/**
+ * Same corpus as `blockml validate --all`: project source roots plus the
+ * resolved library graph (including npm BlockML packages).
+ */
+export declare function bootstrapFullProjectRegistry(options: {
+    rootDir: string;
+    srcDir?: string;
+    libraries?: string[];
+}): BootstrapResult;
 export declare function bootstrapTypeRegistry(optionsOrPaths?: BootstrapOptions | string[], rootDirArg?: string): BootstrapResult;
 //# sourceMappingURL=bootstrap.d.ts.map

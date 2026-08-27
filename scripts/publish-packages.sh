@@ -16,6 +16,7 @@ PACKAGES=(
   "@blockml/blockdoc-target"
   "@blockml/xsd-target"
   "@blockml/fatblock-target"
+  "@blockml/search"
   "@blockml/cli"
   "@blockml/lsp"
 )

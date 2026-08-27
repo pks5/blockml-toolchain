@@ -1,0 +1,58 @@
+<!--
+  CLI Capability — RunSearch
+  FQN: org.blockml.bml.cli.capability.RunSearch
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:search="org.blockml.bml.search"
+  xmlns:searchcap="org.blockml.bml.search.capability"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>RunSearch</name>
+  <type>clicap:RunSearch</type>
+  <baseType>core:Capability</baseType>
+  <is>Execute blockml search command</is>
+
+  <documentation>
+    # Execute blockml search command
+
+    search index — rebuildIndex via @blockml/search (full rebuild; --force is an alias).
+    search QUERY — openIndex (auto-build if missing/stale) then search.
+
+    Human output: score, FQN, file (project-relative). --json: SearchResult[].
+    Missing query and not index → exit 2.
+  </documentation>
+
+  <references>
+    <see type="clidocumentation:SearchCommand" relation="SeeAlso" />
+    <see type="clicommand:SearchCommand" relation="SeeAlso" />
+    <see type="searchcap:Search" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <parsed type="cliapi:ParsedArgs">
+      <documentation>Parsed search args. (required)</documentation>
+    </parsed>
+    <rootDir type="type:Text">
+      <documentation>Project root. (required)</documentation>
+    </rootDir>
+    <code type="type:Integer">
+      <documentation>Exit code 0|1|2. (required)</documentation>
+    </code>
+  </properties>
+
+</block>

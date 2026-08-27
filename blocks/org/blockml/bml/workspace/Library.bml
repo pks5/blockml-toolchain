@@ -17,6 +17,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:framework="org.blockml.bml.framework"
+  xmlns:search="org.blockml.bml.search"
   xmlns:blockdoc="org.blockml.bml.target.blockdoc"
   xmlns:fatblock="org.blockml.bml.target.fatblock"
   xmlns:xsd="org.blockml.bml.target.xsd"
@@ -63,6 +64,7 @@
         <framework:Library />
         <parser:Library />
         <runtime:Library />
+        <search:Library />
         <serializer:Library />
         <validator:Library />
         <xsd:Library />

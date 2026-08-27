@@ -1,0 +1,47 @@
+<!--
+  Search Capability — Search
+  FQN: org.blockml.bml.search.capability.Search
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:search="org.blockml.bml.search"
+  xmlns:searchcap="org.blockml.bml.search.capability"
+  xmlns:searchdocumentation="org.blockml.bml.search.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Search</name>
+  <type>searchcap:Search</type>
+  <baseType>core:Capability</baseType>
+  <is>Full-text search over the local BML index</is>
+
+  <documentation>Opens a ready index or rebuilds when missing/stale, then searches. Boost: fqn 10, name 8, aliases 6, keywords 6, documentation 1.</documentation>
+
+  <references>
+    <see type="searchcap:OpenIndex" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <query type="type:Text">
+      <documentation>query. TS type: type:Text. (required)</documentation>
+    </query>
+    <options type="search:SearchOptions">
+      <documentation>options. TS type: search:SearchOptions. (optional)</documentation>
+    </options>
+    <results type="search:SearchResult[]">
+      <documentation>results. TS type: search:SearchResult[]. (required)</documentation>
+    </results>
+  </properties>
+
+</block>

@@ -4,3 +4,4 @@ node_modules
 /blockdoc
 /schemas
 *.fat.bml
+.blockml/

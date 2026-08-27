@@ -10,6 +10,7 @@
     { "path": "../fatblock-target" },
     { "path": "../xsd-target" },
     { "path": "../compiler" },
-    { "path": "../framework" }
+    { "path": "../framework" },
+    { "path": "../search" }
   ]
 }

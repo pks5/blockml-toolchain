@@ -18,6 +18,7 @@
   xmlns:clidocumentation="org.blockml.bml.cli.documentation"
   xmlns:runtime="org.blockml.bml.compiler.runtime"
   xmlns:framework="org.blockml.bml.framework"
+  xmlns:search="org.blockml.bml.search"
   xmlns:type="org.blockml.bml.type">
 
   <name>Library</name>
@@ -32,6 +33,7 @@
     target matrix, exit codes, terminal colors (CLI1–CLI24). TypeScript in packages/cli-tools/src/
     implements this library. Compiler facade and scope live in org.blockml.bml.compiler.runtime.*
     Framework bootstrap lives in org.blockml.bml.framework.*.
+    Local search lives in org.blockml.bml.search.* (@blockml/search).
 
     Membership is defined exclusively by this blocks list.
   </documentation>
@@ -59,6 +61,7 @@
         <blockml:Library />
         <runtime:Library />
         <framework:Library />
+        <search:Library />
       </composition>
     </dependencies>
     <blocks>
@@ -76,12 +79,14 @@
         <cliconfig:CliColorScheme />
         <clicommand:ValidateCommand />
         <clicommand:CompileCommand />
+        <clicommand:SearchCommand />
         <clicap:LoadConfig />
         <clicap:ParseArgs />
         <clicap:FormatDiagnostic />
         <clicap:WriteCliOutput />
         <clicap:RunCli />
         <clicap:RunValidate />
+        <clicap:RunSearch />
         <clicap:ValidateAgainstXsd />
         <clicap:RunCompile />
         <clicap:RunCompileFatBlock />
@@ -100,6 +105,7 @@
         <clidocumentation:Commands />
         <clidocumentation:CompileCommand />
         <clidocumentation:ValidateCommand />
+        <clidocumentation:SearchCommand />
         <clidocumentation:Configuration />
         <clidocumentation:TargetBootstrap />
         <clidocumentation:TargetCliMatrix />

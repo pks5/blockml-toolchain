@@ -17,6 +17,7 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:def="org.blockml.bml.definition"
   xmlns:framework="org.blockml.bml.framework"
+  xmlns:search="org.blockml.bml.search"
   xmlns:blockdoc="org.blockml.bml.target.blockdoc"
   xmlns:fatblock="org.blockml.bml.target.fatblock"
   xmlns:xsd="org.blockml.bml.target.xsd"
@@ -39,7 +40,7 @@
     → emitters / on-disk output
 
     @blockml/serializer round-trips Urmodell → BML.
-    @blockml/cli (blockml) owns host bootstrap, config, validate/compile orchestration,
+    @blockml/cli (blockml) owns host bootstrap, config, validate/compile/search orchestration,
     and writing RenderOutput.
 
     The core is domain-agnostic. Domain knowledge lives in domain packages and

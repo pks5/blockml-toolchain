@@ -1,0 +1,53 @@
+<!--
+  Framework Capability — RegistryFilesUnderRoots
+  FQN: org.blockml.bml.framework.capability.RegistryFilesUnderRoots
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomblock="org.blockml.bml.bom.block"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomcomp="org.blockml.bml.bom.composition"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:bommember="org.blockml.bml.bom.member"
+  xmlns:bomtype="org.blockml.bml.bom.type"
+  xmlns:bomvalue="org.blockml.bml.bom.value"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:fwconfig="org.blockml.bml.framework.config"
+  xmlns:fwdocumentation="org.blockml.bml.framework.documentation"
+  xmlns:fwexpression="org.blockml.bml.framework.expression"
+  xmlns:fwregistry="org.blockml.bml.framework.registry"
+  xmlns:parser="org.blockml.bml.compiler.parser"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:bomdocumentation="org.blockml.bml.bom.documentation"
+  xmlns:pardocumentation="org.blockml.bml.compiler.parser.documentation"
+  xmlns:valdocumentation="org.blockml.bml.compiler.validator.documentation">
+
+  <name>RegistryFilesUnderRoots</name>
+  <type>fwcap:RegistryFilesUnderRoots</type>
+  <baseType>core:Capability</baseType>
+  <is>Registry file paths whose realpath lies under given roots</is>
+
+  <documentation>Filters TypeRegistry document file paths to those under any of the given roots.</documentation>
+
+  <properties>
+    <registry type="fwcap:TypeRegistry">
+      <documentation>registry. TS type: fwcap:TypeRegistry. (required)</documentation>
+    </registry>
+    <roots type="type:Text[]">
+      <documentation>roots. TS type: type:Text[]. (required)</documentation>
+    </roots>
+    <files type="type:Text[]">
+      <documentation>files. TS type: type:Text[]. (required)</documentation>
+    </files>
+  </properties>
+
+</block>

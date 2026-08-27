@@ -798,6 +798,111 @@
         "type": "type:Boolean",
         "required": true
       }
+    },
+    {
+      "name": "ProjectSourceRoots",
+      "tsExport": "projectSourceRoots",
+      "fqn": "org.blockml.bml.framework.capability.ProjectSourceRoots",
+      "inputs": [
+        {
+          "name": "rootDir",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "srcDir",
+          "type": "type:Text",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "roots",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ProjectLibraryPackageRoots",
+      "tsExport": "projectLibraryPackageRoots",
+      "fqn": "org.blockml.bml.framework.capability.ProjectLibraryPackageRoots",
+      "inputs": [
+        {
+          "name": "rootDir",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "roots",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "ProjectLibraryPackageDirs",
+      "tsExport": "projectLibraryPackageDirs",
+      "fqn": "org.blockml.bml.framework.capability.ProjectLibraryPackageDirs",
+      "inputs": [
+        {
+          "name": "rootDir",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "dirs",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "RegistryFilesUnderRoots",
+      "tsExport": "registryFilesUnderRoots",
+      "fqn": "org.blockml.bml.framework.capability.RegistryFilesUnderRoots",
+      "inputs": [
+        {
+          "name": "registry",
+          "type": "fwcap:TypeRegistry",
+          "required": true
+        },
+        {
+          "name": "roots",
+          "type": "type:Text[]",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "files",
+        "type": "type:Text[]",
+        "required": true
+      }
+    },
+    {
+      "name": "BootstrapFullProjectRegistry",
+      "tsExport": "bootstrapFullProjectRegistry",
+      "fqn": "org.blockml.bml.framework.capability.BootstrapFullProjectRegistry",
+      "inputs": [
+        {
+          "name": "rootDir",
+          "type": "type:Text",
+          "required": true
+        },
+        {
+          "name": "srcDir",
+          "type": "type:Text",
+          "required": false
+        },
+        {
+          "name": "libraries",
+          "type": "type:Text[]",
+          "required": false
+        }
+      ],
+      "output": {
+        "name": "result",
+        "type": "fwregistry:BootstrapResult",
+        "required": true
+      }
     }
   ],
   "frameworkDiagnosticCodes": [

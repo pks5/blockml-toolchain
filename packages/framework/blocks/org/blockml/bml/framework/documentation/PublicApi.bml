@@ -41,8 +41,13 @@
 
     TypeRegistry — class; register/get/has/keys/size on BomDocument index
     bootstrapTypeRegistry(options?) → BootstrapResult
+    bootstrapFullProjectRegistry({ rootDir, srcDir?, libraries? }) → BootstrapResult
     defaultBootstrapPaths(rootDir?) → string[]
     resolveLibrarySeeds(rootDir?, extras?) → string[]
+    projectSourceRoots(rootDir, srcDir?) → string[]
+    projectLibraryPackageRoots(rootDir) → string[]
+    projectLibraryPackageDirs(rootDir) → string[]
+    registryFilesUnderRoots(registry, roots) → string[]
     peekLibraryTypeFqn(libraryPath) → string | undefined
     BootstrapOptions — paths?, libraryPaths?, rootDir?
     BootstrapResult — registry, diagnostics, exportsByLibrary?, trace?

@@ -1,0 +1,45 @@
+<!--
+  Search Capability — RebuildIndex
+  FQN: org.blockml.bml.search.capability.RebuildIndex
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:search="org.blockml.bml.search"
+  xmlns:searchcap="org.blockml.bml.search.capability"
+  xmlns:searchdocumentation="org.blockml.bml.search.documentation"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>RebuildIndex</name>
+  <type>searchcap:RebuildIndex</type>
+  <baseType>core:Capability</baseType>
+  <is>Full rebuild and persist of the search index</is>
+
+  <documentation>Full rebuild and persist of the search index</documentation>
+
+  <references>
+    <see type="searchcap:BuildIndex" relation="SeeAlso" />
+    <see type="searchcap:SaveIndex" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <options type="search:SearchIndexOptions">
+      <documentation>options. TS type: search:SearchIndexOptions. (optional)</documentation>
+    </options>
+    <result type="search:BuildIndexResult">
+      <documentation>result. TS type: search:BuildIndexResult. (required)</documentation>
+    </result>
+  </properties>
+
+</block>

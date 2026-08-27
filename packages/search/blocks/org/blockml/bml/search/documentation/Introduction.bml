@@ -1,0 +1,41 @@
+<!--
+  Search Documentation — Introduction
+  FQN: org.blockml.bml.search.documentation.Introduction
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bom="org.blockml.bml.bom"
+  xmlns:bomapi="org.blockml.bml.bom.api"
+  xmlns:bomcommon="org.blockml.bml.bom.common"
+  xmlns:bomdoc="org.blockml.bml.bom.document"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:fwcap="org.blockml.bml.framework.capability"
+  xmlns:search="org.blockml.bml.search"
+  xmlns:searchcap="org.blockml.bml.search.capability"
+  xmlns:searchdocumentation="org.blockml.bml.search.documentation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>Introduction</name>
+  <type>searchdocumentation:Introduction</type>
+  <baseType>core:Documentation</baseType>
+  <is>Purpose and scope of the Search package</is>
+
+  <documentation>The @blockml/search package provides local full-text search over the effective BML corpus of a BlockML project. The corpus is the same set of documents bootstrapped by blockml validate --all.
+
+    This library (org.blockml.bml.search.*) is the SSOT. TypeScript in packages/search/src/ implements it. Orama is an internal engine and is not part of the public API.
+
+    Consumers (CLI, LSP, agents, replicator) call BlockML-owned interfaces only.</documentation>
+
+  <references>
+    <see type="searchdocumentation:LayerSeparation" relation="ReadNext" />
+    <see type="fwcap:BootstrapFullProjectRegistry" relation="SeeAlso" />
+  </references>
+
+</block>
