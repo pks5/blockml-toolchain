@@ -2,6 +2,7 @@ export { TypeRegistry } from "./registry/type-registry.js";
 export { bootstrapTypeRegistry, defaultBootstrapPaths, resolveLibrarySeeds, } from "./registry/bootstrap.js";
 export { rootFqnByFilePath, rootFqns } from "./registry/root-fqn.js";
 export { getExportedFqns } from "./registry/library-exports.js";
+export { peekLibraryTypeFqn } from "./registry/library-bootstrap.js";
 export { forkBom } from "./fork/fork-bom.js";
 export { resolveEffectiveMembers, resolveContracts, collectBaseTypeChain, memberIdentityKey, } from "./resolve/resolve-effective-members.js";
 export { parseExpression } from "./expression/parse-expression.js";

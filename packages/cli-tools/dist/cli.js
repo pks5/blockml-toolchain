@@ -5,7 +5,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { compileBmlToBom, compileToOutput, getTarget, validateRegistryDocuments, } from "@blockml/compiler";
 import { bootstrapTargets, getTargetCliHints, } from "./bootstrap-targets.js";
-import { bootstrapProjectTypeRegistry, projectIdentityLibraryPath, projectLibrarySeeds, } from "./bootstrap-type-registry.js";
+import { bootstrapProjectTypeRegistry, projectIdentityLibraryPath, projectLibrarySeeds, shouldSeedWorkspaceCore, workspaceCoreLibraryPath, } from "./bootstrap-type-registry.js";
 import { diagnosticKind, formatCliOutput, pushLines, writeCliOutput, } from "./cli-style.js";
 import { loadConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
@@ -208,8 +208,9 @@ function bootstrapDocumentTypeRegistry(documentBootstrap, parsed, config, rootDi
                 ? parsed.libraries
                 : (config.libraries ?? [])),
         ];
-        const coreLibrary = join(wsRoot, "node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml");
-        if (existsSync(coreLibrary)) {
+        const coreLibrary = workspaceCoreLibraryPath(wsRoot);
+        if (coreLibrary &&
+            shouldSeedWorkspaceCore(projectIdentityLibraryPath(rootDir), coreLibrary)) {
             extras.push(coreLibrary);
         }
         const bootstrapOpts = { config, rootDir, librariesOverride: extras };

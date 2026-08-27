@@ -22,6 +22,8 @@ import {
   bootstrapProjectTypeRegistry,
   projectIdentityLibraryPath,
   projectLibrarySeeds,
+  shouldSeedWorkspaceCore,
+  workspaceCoreLibraryPath,
 } from "./bootstrap-type-registry.js";
 import {
   diagnosticKind,
@@ -322,11 +324,11 @@ function bootstrapDocumentTypeRegistry(
         ? parsed.libraries
         : (config.libraries ?? [])),
     ];
-    const coreLibrary = join(
-      wsRoot,
-      "node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml",
-    );
-    if (existsSync(coreLibrary)) {
+    const coreLibrary = workspaceCoreLibraryPath(wsRoot);
+    if (
+      coreLibrary &&
+      shouldSeedWorkspaceCore(projectIdentityLibraryPath(rootDir), coreLibrary)
+    ) {
       extras.push(coreLibrary);
     }
     const bootstrapOpts: {

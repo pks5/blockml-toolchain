@@ -115,11 +115,48 @@ function exportedBlockFqns(libraryBlock) {
     }
     return fqns;
 }
+/** Root type FQN of a Library.bml, or undefined if the file cannot be parsed. */
+export function peekLibraryTypeFqn(libraryPath) {
+    const abs = resolve(libraryPath);
+    if (!existsSync(abs)) {
+        return undefined;
+    }
+    try {
+        const source = readFileSync(abs, "utf8");
+        const parsed = parse(source, { filePath: abs, continueOnError: true });
+        return parsed.document?.block.type;
+    }
+    catch {
+        return undefined;
+    }
+}
+function resolveDepCandidate(libraryIndex, typeFqn, selfPath) {
+    const candidates = libraryIndex.get(typeFqn) ?? [];
+    return candidates.find((file) => canonicalPath(file) !== selfPath);
+}
+function transitiveNestedPaths(outerPath, subLibraryEdges) {
+    const nested = [];
+    const seen = new Set([outerPath]);
+    const stack = [...(subLibraryEdges.get(outerPath) ?? [])];
+    while (stack.length > 0) {
+        const inner = stack.pop();
+        if (seen.has(inner)) {
+            continue;
+        }
+        seen.add(inner);
+        nested.push(inner);
+        stack.push(...(subLibraryEdges.get(inner) ?? []));
+    }
+    return nested;
+}
 function resolveLibraryGraph(seedPaths, searchRoots, rootDir, diagnostics) {
     const libraryIndex = indexLibraryFiles(searchRoots);
     const ordered = [];
     const visited = new Set();
+    const visitedTypes = new Set();
     const exportsByLibrary = new Map();
+    const subLibraryEdges = new Map();
+    const libTypeByPath = new Map();
     const visit = (libraryPath) => {
         const abs = canonicalPath(resolve(rootDir, libraryPath));
         if (visited.has(abs)) {
@@ -162,18 +199,35 @@ function resolveLibraryGraph(seedPaths, searchRoots, rootDir, diagnostics) {
             return;
         }
         const libType = parsed.document.block.type;
+        if (visitedTypes.has(libType)) {
+            return;
+        }
+        visitedTypes.add(libType);
         const indexed = libraryIndex.get(libType) ?? [];
         if (!indexed.includes(abs)) {
             indexed.push(abs);
             libraryIndex.set(libType, indexed);
         }
         exportsByLibrary.set(abs, exportedBlockFqns(parsed.document.block));
-        for (const dep of [
-            ...aggregationInstances(parsed.document.block, "dependencies"),
-            ...aggregationInstances(parsed.document.block, "subLibraries"),
-        ]) {
-            const candidates = libraryIndex.get(dep.typeFqn) ?? [];
-            const depPath = candidates.find((file) => canonicalPath(file) !== abs);
+        libTypeByPath.set(abs, libType);
+        const nestedPaths = [];
+        for (const sub of aggregationInstances(parsed.document.block, "subLibraries")) {
+            const depPath = resolveDepCandidate(libraryIndex, sub.typeFqn, abs);
+            if (!depPath) {
+                diagnostics.push({
+                    severity: "error",
+                    code: "BML_LIBRARY_RESOLVE_ERROR",
+                    message: `Unresolved library dependency: ${sub.typeFqn}`,
+                    source: { file: abs, line: sub.source?.line ?? 1, column: sub.source?.column ?? 1 },
+                });
+                continue;
+            }
+            nestedPaths.push(canonicalPath(resolve(rootDir, depPath)));
+            visit(depPath);
+        }
+        subLibraryEdges.set(abs, nestedPaths);
+        for (const dep of aggregationInstances(parsed.document.block, "dependencies")) {
+            const depPath = resolveDepCandidate(libraryIndex, dep.typeFqn, abs);
             if (!depPath) {
                 diagnostics.push({
                     severity: "error",
@@ -190,16 +244,21 @@ function resolveLibraryGraph(seedPaths, searchRoots, rootDir, diagnostics) {
     for (const seed of seedPaths) {
         visit(seed);
     }
-    return { orderedPaths: ordered, exportsByLibrary };
+    return { orderedPaths: ordered, exportsByLibrary, subLibraryEdges, libTypeByPath };
 }
-function checkNestingViolations(exportsByLibrary, diagnostics) {
-    const paths = [...exportsByLibrary.keys()];
-    for (let i = 0; i < paths.length; i++) {
-        const outerPath = paths[i];
+function checkNestingViolations(exportsByLibrary, subLibraryEdges, libTypeByPath, diagnostics) {
+    for (const outerPath of exportsByLibrary.keys()) {
         const outerExports = exportsByLibrary.get(outerPath);
-        for (let j = i + 1; j < paths.length; j++) {
-            const innerPath = paths[j];
+        const outerType = libTypeByPath.get(outerPath);
+        for (const innerPath of transitiveNestedPaths(outerPath, subLibraryEdges)) {
             const innerExports = exportsByLibrary.get(innerPath);
+            if (!innerExports) {
+                continue;
+            }
+            const innerType = libTypeByPath.get(innerPath);
+            if (outerType !== undefined && outerType === innerType) {
+                continue;
+            }
             for (const fqn of outerExports) {
                 if (innerExports.has(fqn)) {
                     diagnostics.push({
@@ -246,8 +305,8 @@ function isPathInsideOrEqual(inner, outer) {
 export function bootstrapFromLibraryPaths(libraryPaths, searchRoots, rootDir, coveredRoots = []) {
     const registry = new TypeRegistry();
     const diagnostics = [];
-    const { orderedPaths, exportsByLibrary } = resolveLibraryGraph(libraryPaths, searchRoots, rootDir, diagnostics);
-    checkNestingViolations(exportsByLibrary, diagnostics);
+    const { orderedPaths, exportsByLibrary, subLibraryEdges, libTypeByPath } = resolveLibraryGraph(libraryPaths, searchRoots, rootDir, diagnostics);
+    checkNestingViolations(exportsByLibrary, subLibraryEdges, libTypeByPath, diagnostics);
     const absCovered = coveredRoots.map((root) => resolve(rootDir, root));
     const seenFiles = new Set();
     const skippedCoveredRoots = [];

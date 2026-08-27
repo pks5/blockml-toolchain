@@ -47,6 +47,7 @@ const TS_CAPABILITY_EXPORTS = [
   "rootFqnByFilePath",
   "rootFqns",
   "getExportedFqns",
+  "peekLibraryTypeFqn",
   "getPropertyNumericValue",
   "isLiteralValue",
 ];

@@ -644,6 +644,23 @@
       }
     },
     {
+      "name": "PeekLibraryTypeFqn",
+      "tsExport": "peekLibraryTypeFqn",
+      "fqn": "org.blockml.bml.framework.capability.PeekLibraryTypeFqn",
+      "inputs": [
+        {
+          "name": "libraryPath",
+          "type": "type:Text",
+          "required": true
+        }
+      ],
+      "output": {
+        "name": "typeFqn",
+        "type": "type:Text",
+        "doc": "Library type FQN, or undefined."
+      }
+    },
+    {
       "name": "ValidateEmbeddedBlocks",
       "tsExport": "validateEmbeddedBlocks",
       "fqn": "org.blockml.bml.framework.capability.ValidateEmbeddedBlocks",

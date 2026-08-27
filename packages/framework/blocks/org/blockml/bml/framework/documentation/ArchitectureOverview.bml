@@ -41,7 +41,8 @@
 
     registry/type-registry.ts — fwcap:TypeRegistry (register, get, has, keys, size)
     registry/bootstrap.ts — fwcap:BootstrapTypeRegistry, fwcap:DefaultBootstrapPaths
-    registry/library-bootstrap.ts — library graph resolution (Library.bml dependencies)
+    registry/library-bootstrap.ts — library graph resolution (Library.bml dependencies),
+      fwcap:PeekLibraryTypeFqn
     fork/fork-bom.ts — fwcap:ForkBom (structuredClone pragmatic copy)
     resolve/resolve-effective-members.ts — fwcap:ResolveEffectiveMembers,
       fwcap:ResolveContracts, fwcap:CollectBaseTypeChain, fwcap:MemberIdentityKey

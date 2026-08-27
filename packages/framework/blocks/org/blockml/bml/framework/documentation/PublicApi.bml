@@ -43,6 +43,7 @@
     bootstrapTypeRegistry(options?) → BootstrapResult
     defaultBootstrapPaths(rootDir?) → string[]
     resolveLibrarySeeds(rootDir?, extras?) → string[]
+    peekLibraryTypeFqn(libraryPath) → string | undefined
     BootstrapOptions — paths?, libraryPaths?, rootDir?
     BootstrapResult — registry, diagnostics, exportsByLibrary?, trace?
     BootstrapTrace — corpusPaths, seeds, searchRoots, librariesVisited, skippedCoveredRoots

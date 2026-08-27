@@ -43,7 +43,7 @@
     - CLI12 default compile target blockdoc.
     - CLI13 defaultOutDir xsd→schemas; blockdoc→config.outDir/blockdoc; fatblock→. (invocation directory).
     - CLI14 fatblock without file/--src defaults to package.json blockml.library as host and that library directory as src; missing both file and library → exit 2.
-    - CLI15 fatblock TypeRegistry from package.json blockml.library graph plus core Library and srcDir corpus.
+    - CLI15 fatblock TypeRegistry from package.json blockml.library graph plus core Library (omitted when identity is already that library by realpath or FQN) and srcDir corpus.
     - CLI16 compile scope auto libraries or roots.
     - CLI17 formatDiagnostic line format.
     - CLI18 runCli exit code matrix.

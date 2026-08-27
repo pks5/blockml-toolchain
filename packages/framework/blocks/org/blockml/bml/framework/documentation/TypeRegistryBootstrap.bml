@@ -45,8 +45,10 @@
     library — when options.libraryPaths is set, resolves each Library.bml dependency graph
     (dependencies, subLibraries) in order, then registers blocks from each library blocks root
     except trees already covered by options.paths (srcDir / corpus). Missing Library path →
-    BML_LIBRARY_RESOLVE_ERROR. Outer re-export of inner-only block →
-    BML_LIBRARY_NESTING_VIOLATION (minimal check).
+    BML_LIBRARY_RESOLVE_ERROR. Outer re-export of a block listed in a nested inner library's
+    blocks (via subLibraries, including transitive nested inners) →
+    BML_LIBRARY_NESTING_VIOLATION. Duplicate files of the same library type FQN are not
+    compared and are not loaded.
 
     defaultBootstrapPaths(rootDir?) returns BlockML srcDir roots for production
     npm dependencies (package.json dependencies + optionalDependencies) of the nearest
@@ -60,9 +62,9 @@
 
     bootstrapTypeRegistry also indexes Library.bml under all BlockML packages found in
     node_modules and workspace packages/ along the directory walk (FQN search space).
-    First Library.bml wins per type FQN unless that file is the current library
-    (self-loop); then another file with the same type is used. node_modules is
-    indexed before workspace packages.
+    First visited Library.bml wins per type FQN; a second file with the same type is not
+    loaded (workspace Core vs an installed copy). node_modules is indexed before
+    workspace packages.
 
     BootstrapResult: { registry, diagnostics, exportsByLibrary?, trace? }
     trace lists corpusPaths, seeds, searchRoots (index only), librariesVisited, and

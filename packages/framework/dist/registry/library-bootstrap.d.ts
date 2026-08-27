@@ -1,5 +1,7 @@
 import type { BomDocument, Diagnostic } from "@blockml/bom";
 import { TypeRegistry } from "./type-registry.js";
+/** Root type FQN of a Library.bml, or undefined if the file cannot be parsed. */
+export declare function peekLibraryTypeFqn(libraryPath: string): string | undefined;
 export declare function bootstrapFromLibraryPaths(libraryPaths: string[], searchRoots: string[], rootDir: string, coveredRoots?: string[]): {
     registry: TypeRegistry;
     diagnostics: Diagnostic[];

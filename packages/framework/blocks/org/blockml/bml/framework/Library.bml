@@ -108,6 +108,7 @@
         <fwcap:RootFqnByFilePath />
         <fwcap:RootFqns />
         <fwcap:GetExportedFqns />
+        <fwcap:PeekLibraryTypeFqn />
         <fwcap:ValidateEmbeddedBlocks />
         <fwcap:ValidateInstances />
         <fwcap:ValidatePresets />

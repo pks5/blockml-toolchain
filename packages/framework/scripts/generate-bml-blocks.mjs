@@ -466,6 +466,17 @@ const capabilities = [
   {
     pkg: "capability",
     prefix: "fwcap",
+    name: "PeekLibraryTypeFqn",
+    is: "Root type FQN of a Library.bml file",
+    doc: "Reads Library.bml and returns document.block.type, or undefined if the file is missing or invalid. Used to compare library identity across realpaths (workspace vs npm copy).",
+    tsExport: "peekLibraryTypeFqn",
+    inputs: [{ name: "libraryPath", type: "type:Text", required: true }],
+    output: { name: "typeFqn", type: "type:Text", doc: "Library type FQN, or undefined." },
+    refs: ["fwcap:ResolveLibrarySeeds"],
+  },
+  {
+    pkg: "capability",
+    prefix: "fwcap",
     name: "ValidateEmbeddedBlocks",
     is: "Embedded block and sub-block placement rules",
     tsExport: "validateEmbeddedBlocks",
