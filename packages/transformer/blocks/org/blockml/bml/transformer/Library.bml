@@ -55,6 +55,8 @@
       <composition>
         <workflow:CompositeTask />
         <workflow:Criterion />
+        <workflow:CriterionEvaluationException />
+        <workflow:CriterionNotSatisfiedException />
         <workflow:InstructionRule />
         <workflow:Rule />
         <workflow:Task />

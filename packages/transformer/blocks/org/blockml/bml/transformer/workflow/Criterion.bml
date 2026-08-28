@@ -31,10 +31,14 @@
   <abstract>true</abstract>
 
   <capabilities>
-    <isSatisfied type="cap:Outbound" outputType="type:Boolean">
+    <satisfy type="cap:Action">
+      <throws>
+        <workflow:CriterionNotSatisfiedException />
+        <workflow:CriterionEvaluationException />
+      </throws>
       <abstract>true</abstract>
       <documentation>Whether this criterion currently holds. Concrete subtypes supply the Outbound implementation.</documentation>
-    </isSatisfied>
+    </satisfy>
   </capabilities>
 
 </block>

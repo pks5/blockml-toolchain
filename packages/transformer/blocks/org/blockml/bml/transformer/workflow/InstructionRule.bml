@@ -7,6 +7,8 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
 
@@ -29,5 +31,14 @@
       <documentation>Prose that states what must be observed during Task.run.</documentation>
     </instructions>
   </properties>
+
+  <capabilities>
+    <apply override="true" type="cap:Action">
+      <documentation>Read the instructions property and follow it in the current Task.run context.</documentation>
+      <implementation language="lang:English">
+        <![CDATA[Read the instructions and follow them.]]>
+      </implementation>
+    </apply>
+  </capabilities>
 
 </block>

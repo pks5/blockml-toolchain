@@ -8,6 +8,7 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:cap="org.blockml.bml.capability"
+  xmlns:lang="org.blockml.bml.language"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
   xmlns:type="org.blockml.bml.type">
@@ -27,21 +28,32 @@
   <abstract>true</abstract>
 
   <aggregations>
-    <prerequisites type="type:TypeReferenceEntity(workflow:Criterion)[]">
+    <prerequisites type="workflow:Criterion[]">
       <documentation>Criteria that must hold before this task may run.</documentation>
     </prerequisites>
-    <rules type="type:TypeReferenceEntity(workflow:Rule)[]">
+    <rules type="workflow:Rule[]">
       <documentation>Rules to observe while this task runs.</documentation>
     </rules>
-    <successCriteria type="type:TypeReferenceEntity(workflow:Criterion)[]">
+    <successCriteria type="workflow:Criterion[]">
       <documentation>Criteria that must hold for this task to be considered successful.</documentation>
     </successCriteria>
   </aggregations>
 
   <capabilities>
-    <run type="core:Capability">
-      <abstract>true</abstract>
+    <run type="cap:Action">
       <documentation>Run this task. Concrete subtypes supply the Action implementation.</documentation>
+      <implementation language="lang:PseudoCode">
+        <![CDATA[
+for each prerequisite in #this.prerequisites:
+    prerequisite.satisfy()
+
+for each rule in #this.rules:
+    rule.apply()
+
+for each successCriterion in #this.successCriteria:
+    successCriterion.satisfy()
+        ]]>
+      </implementation>
     </run>
   </capabilities>
 

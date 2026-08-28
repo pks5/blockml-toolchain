@@ -26,6 +26,8 @@
     <see type="workflow:Task" relation="ReadFirst" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Criterion" relation="SeeAlso" />
+    <see type="workflow:CriterionNotSatisfiedException" relation="SeeAlso" />
+    <see type="workflow:CriterionEvaluationException" relation="SeeAlso" />
     <see type="workflow:Rule" relation="SeeAlso" />
     <see type="workflow:InstructionRule" relation="SeeAlso" />
   </references>

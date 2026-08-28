@@ -7,6 +7,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
+  xmlns:cap="org.blockml.bml.capability"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
@@ -30,5 +31,12 @@
   </references>
 
   <abstract>true</abstract>
+
+  <capabilities>
+    <apply type="cap:Action">
+      <abstract>true</abstract>
+      <documentation>Apply this rule in the current Task.run context. Concrete subtypes supply the Action implementation.</documentation>
+    </apply>
+  </capabilities>
 
 </block>

@@ -28,7 +28,7 @@
   </references>
 
   <aggregations>
-    <subTasks type="type:TypeReferenceEntity(workflow:Task)[]">
+    <subTasks type="workflow:Task[]">
       <documentation>Child tasks that belong to this composite task.</documentation>
     </subTasks>
   </aggregations>
