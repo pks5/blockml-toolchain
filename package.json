@@ -24,6 +24,7 @@
     "@blockml/parser": "workspace:*",
     "@blockml/search": "workspace:*",
     "@blockml/serializer": "workspace:*",
+    "@blockml/transformer": "workspace:*",
     "@blockml/validator": "workspace:*",
     "@blockml/xsd-target": "workspace:*",
     "@types/node": "^22.10.0",

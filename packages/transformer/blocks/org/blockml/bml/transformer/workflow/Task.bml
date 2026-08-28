@@ -1,0 +1,48 @@
+<!--
+  Transformer Workflow — Task
+  FQN: org.blockml.bml.transformer.workflow.Task
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>Task</name>
+  <type>workflow:Task</type>
+  <baseType>core:Block</baseType>
+  <is>An executable workflow task</is>
+
+  <documentation>
+    Abstract workflow unit. Concrete subtypes must implement the execute Action.
+    execute has no inputType or outputType and carries no implementation on this type.
+  </documentation>
+
+  <isNot>Not an authoring TaskGuide (org.blockml.bml.core.TaskGuide / org.blockml.bml.task.*).</isNot>
+
+  <abstract>true</abstract>
+
+  <aggregations>
+    <prerequisites type="type:TypeReferenceEntity(workflow:Criterion)[]">
+      <documentation>Criteria that must hold before this task may run.</documentation>
+    </prerequisites>
+    <rules type="type:TypeReferenceEntity(workflow:Rule)[]">
+      <documentation>Rules to observe while this task runs.</documentation>
+    </rules>
+    <successCriteria type="type:TypeReferenceEntity(workflow:Criterion)[]">
+      <documentation>Criteria that must hold for this task to be considered successful.</documentation>
+    </successCriteria>
+  </aggregations>
+
+  <capabilities>
+    <run type="core:Capability">
+      <abstract>true</abstract>
+      <documentation>Run this task. Concrete subtypes supply the Action implementation.</documentation>
+    </run>
+  </capabilities>
+
+</block>

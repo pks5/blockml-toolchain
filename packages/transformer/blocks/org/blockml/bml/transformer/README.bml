@@ -1,0 +1,33 @@
+<!--
+  BlockML Transformer — README
+  FQN: org.blockml.bml.transformer.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:transformer="org.blockml.bml.transformer"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <name>README</name>
+  <type>transformer:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>Reading entry for the Transformer library</is>
+
+  <documentation>
+    The @blockml/transformer package owns the BlockML transformer library
+    (org.blockml.bml.transformer.*). Workflow types live in
+    org.blockml.bml.transformer.workflow.*.
+  </documentation>
+
+  <references>
+    <see type="workflow:Task" relation="ReadFirst" />
+    <see type="workflow:CompositeTask" relation="SeeAlso" />
+    <see type="workflow:Criterion" relation="SeeAlso" />
+    <see type="workflow:Rule" relation="SeeAlso" />
+    <see type="workflow:InstructionRule" relation="SeeAlso" />
+  </references>
+
+</block>

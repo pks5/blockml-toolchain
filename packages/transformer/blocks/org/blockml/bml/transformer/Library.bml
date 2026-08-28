@@ -1,0 +1,65 @@
+<!--
+  BlockML Transformer Library Descriptor
+  FQN: org.blockml.bml.transformer.Library
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:transformer="org.blockml.bml.transformer"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <name>Library</name>
+  <type>transformer:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>The BlockML Transformer package library catalog</is>
+
+  <documentation>
+    Canonical transformer specification for BlockML. Membership is defined
+    exclusively by this blocks list.
+  </documentation>
+
+  <references>
+    <see type="transformer:README" relation="ReadFirst">
+      Human/LLM reading entry for this library.
+    </see>
+  </references>
+
+  <version>0.8.1</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description override="true">
+      <value>BlockML Transformer library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <transformer:README />
+      </composition>
+    </readMe>
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+    </dependencies>
+    <blocks>
+      <composition>
+        <workflow:CompositeTask />
+        <workflow:Criterion />
+        <workflow:InstructionRule />
+        <workflow:Rule />
+        <workflow:Task />
+      </composition>
+    </blocks>
+  </aggregations>
+
+</block>

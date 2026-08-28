@@ -1,0 +1,28 @@
+{
+  "name": "@blockml/transformer",
+  "version": "0.8.1",
+  "description": "BlockML transformer",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pks5/blockml-toolchain.git",
+    "directory": "packages/transformer"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "blockml": {
+    "library": "./blocks/org/blockml/bml/transformer/Library.bml"
+  },
+  "files": [
+    "blocks"
+  ],
+  "dependencies": {
+    "@blockml/core": "^1.0.7"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

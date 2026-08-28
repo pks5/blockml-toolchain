@@ -47,6 +47,8 @@
       → packages/framework/blocks/org/blockml/bml/framework/Library.bml
     • @blockml/search → org.blockml.bml.search.Library
       → packages/search/blocks/org/blockml/bml/search/Library.bml
+    • @blockml/transformer → org.blockml.bml.transformer.Library
+      → packages/transformer/blocks/org/blockml/bml/transformer/Library.bml
     • @blockml/compiler → org.blockml.bml.compiler.runtime.Library
       → packages/compiler/blocks/org/blockml/bml/compiler/runtime/Library.bml
     • @blockml/cli → org.blockml.bml.cli.Library

@@ -1,0 +1,34 @@
+<!--
+  Transformer Workflow — Rule
+  FQN: org.blockml.bml.transformer.workflow.Rule
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <name>Rule</name>
+  <type>workflow:Rule</type>
+  <baseType>core:Block</baseType>
+  <is>A rule to observe while executing a task</is>
+
+  <documentation>
+    Abstract obligation that applies during Task.run. Concrete subtypes describe what
+    must be respected while the task executes. Unlike Criterion, a Rule is not a
+    true-or-false condition for gating or success; it constrains how the run proceeds.
+  </documentation>
+
+  <isNot>Not a Criterion (evaluable true/false condition) and not a BlockML validation
+    Constraint (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).</isNot>
+
+  <references>
+    <see type="workflow:Criterion" relation="ContrastsWith" />
+    <see type="workflow:Task" relation="SeeAlso" />
+  </references>
+
+  <abstract>true</abstract>
+
+</block>

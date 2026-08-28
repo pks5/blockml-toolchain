@@ -1,0 +1,48 @@
+<!--
+  Transformer Workflow — CompositeTask
+  FQN: org.blockml.bml.transformer.workflow.CompositeTask
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>CompositeTask</name>
+  <type>workflow:CompositeTask</type>
+  <baseType>workflow:Task</baseType>
+  <is>A workflow task composed of child tasks</is>
+
+  <documentation>
+    Task that groups subTasks. run walks subTasks in order and invokes each child's run.
+    Inherits prerequisites and successCriteria from Task.
+  </documentation>
+
+  <references>
+    <see type="workflow:Task" relation="Extends" />
+  </references>
+
+  <aggregations>
+    <subTasks type="type:TypeReferenceEntity(workflow:Task)[]">
+      <documentation>Child tasks that belong to this composite task.</documentation>
+    </subTasks>
+  </aggregations>
+
+  <capabilities>
+    <run override="true" type="cap:Action">
+      <documentation>Run each subTask in order by invoking its run capability.</documentation>
+      <implementation language="lang:PseudoCode">
+        <![CDATA[
+for each subTask in #this.subTasks:
+    subTask.run()
+        ]]>
+      </implementation>
+    </run>
+  </capabilities>
+
+</block>
