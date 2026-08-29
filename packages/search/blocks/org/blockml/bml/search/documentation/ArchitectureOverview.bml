@@ -31,7 +31,7 @@
 
     Search corpus == validate --all corpus. Index is a derived cache; BML remains source of truth.
 
-    Field boost (Orama): fqn 10, name 8, aliases 6, keywords 6, documentation 1.
+    Ranking: exact FQN match (document id) first, then field boost (Orama): fqn 10, name 8, aliases 6, keywords 6, documentation 1.
 
     Persistence: .blockml/search/orama.json plus manifest.json (package.json/lockfile hashes, indexed file mtimes). Missing or stale index → full rebuild.</documentation>
 

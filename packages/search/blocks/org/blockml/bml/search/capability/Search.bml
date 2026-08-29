@@ -26,7 +26,7 @@
   <baseType>core:Capability</baseType>
   <is>Full-text search over the local BML index</is>
 
-  <documentation>Opens a ready index or rebuilds when missing/stale, then searches. Boost: fqn 10, name 8, aliases 6, keywords 6, documentation 1.</documentation>
+  <documentation>Opens a ready index or rebuilds when missing/stale, then searches. Exact FQN lookup (document id) always ranks that block first. Remaining hits use Orama BM25. Boost: fqn 10, name 8, aliases 6, keywords 6, documentation 1.</documentation>
 
   <references>
     <see type="searchcap:OpenIndex" relation="SeeAlso" />

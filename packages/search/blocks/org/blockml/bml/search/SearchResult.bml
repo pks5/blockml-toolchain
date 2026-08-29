@@ -26,7 +26,7 @@
   <baseType>search:SearchType</baseType>
   <is>One ranked hit from search()</is>
 
-  <documentation>Abstracted from Orama hits. Sorted by score descending, then FQN.</documentation>
+  <documentation>Abstracted from Orama hits. Sorted by exact FQN match first, then score descending, then FQN.</documentation>
 
   <properties>
     <fqn type="type:Text">

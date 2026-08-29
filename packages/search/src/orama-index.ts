@@ -1,4 +1,4 @@
-import { create, insertMultiple, search as oramaSearch, type AnyOrama } from "@orama/orama";
+import { create, getByID, insertMultiple, search as oramaSearch, type AnyOrama } from "@orama/orama";
 import { persist, restore } from "@orama/plugin-data-persistence";
 import type { Diagnostic } from "@blockml/bom";
 import type { SearchDocument, SearchIndexHandle, SearchOptions, SearchResult } from "./types.js";
@@ -95,14 +95,24 @@ export class SearchIndex implements SearchIndexHandle {
     if (!term) {
       return [];
     }
+    const limit = options?.limit ?? DEFAULT_SEARCH_LIMIT;
+    const exactDoc = getByID(this.db, term) as IndexedDocument | null | undefined;
     const result = await oramaSearch(this.db, {
       term,
-      limit: options?.limit ?? DEFAULT_SEARCH_LIMIT,
+      limit,
       boost: { ...FIELD_BOOST },
       properties: ["fqn", "fqnText", "name", "aliases", "keywords", "documentation"],
     });
     const hits = result.hits as unknown as Array<{ score: number; document: IndexedDocument }>;
-    return hits.map((hit) => hitToResult(hit)).sort(compareResults);
+    const ranked = hits.map((hit) => hitToResult(hit)).sort(compareResults);
+    if (!exactDoc) {
+      return ranked.slice(0, limit);
+    }
+    const others = ranked.filter((hit) => hit.fqn !== exactDoc.fqn);
+    const bm25Exact = ranked.find((hit) => hit.fqn === exactDoc.fqn);
+    const topOtherScore = others[0]?.score ?? 0;
+    const exactScore = Math.max(bm25Exact?.score ?? 0, topOtherScore) + 1;
+    return [hitToResult({ score: exactScore, document: exactDoc }), ...others].slice(0, limit);
   }
 
   async serialize(): Promise<string> {

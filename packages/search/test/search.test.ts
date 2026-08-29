@@ -166,6 +166,10 @@ describe("search discovery", () => {
 });
 
 describe("search fields and ranking", () => {
+  afterEach(() => {
+    rmSync(TMP, { recursive: true, force: true });
+  });
+
   it("finds FQN, name, alias, keyword, and documentation", async () => {
     const index = await buildMemoryIndex([
       {
@@ -224,6 +228,45 @@ describe("search fields and ranking", () => {
     expect(aliasScore).toBeGreaterThan(docScore);
     expect(keywordScore).toBeGreaterThan(docScore);
   });
+
+  it("ranks an exact FQN hit first even when a longer FQN shares the same prefix", async () => {
+    const index = await buildMemoryIndex([
+      {
+        id: "com.example.Block",
+        fqn: "com.example.Block",
+        name: "Block",
+        aliases: [],
+        keywords: [],
+        documentation: "base block type",
+        file: "/tmp/Block.bml",
+      },
+      {
+        id: "com.example.BlockLibrary",
+        fqn: "com.example.BlockLibrary",
+        name: "BlockLibrary",
+        aliases: [],
+        keywords: [],
+        documentation: "library of blocks that mentions Block many times: Block Block Block",
+        file: "/tmp/BlockLibrary.bml",
+      },
+    ]);
+    const hits = await index.search("com.example.Block");
+    expect(hits[0]?.fqn).toBe("com.example.Block");
+    expect(hits[0]!.score).toBeGreaterThan(hits[1]?.score ?? 0);
+
+    const limited = await index.search("com.example.Block", { limit: 1 });
+    expect(limited).toHaveLength(1);
+    expect(limited[0]?.fqn).toBe("com.example.Block");
+  });
+
+  it("ranks org.blockml.bml.core.Block first in the full project corpus", async () => {
+    const built = await buildIndex({
+      rootDir: ROOT,
+      indexDir: join(TMP, "fqn-rank-index"),
+    });
+    const hits = await built.index.search(CORE_FQN);
+    expect(hits[0]?.fqn).toBe(CORE_FQN);
+  });
 });
 
 describe("search index persistence and freshness", () => {
@@ -255,6 +298,15 @@ describe("search index persistence and freshness", () => {
     expect(loaded).toBeDefined();
     const after = await loaded!.search("persistalias");
     expect(after.map((h) => h.fqn)).toEqual(before.map((h) => h.fqn));
+  });
+
+  it("ranks an exact FQN first after loadIndex", async () => {
+    const options = { rootDir: dir, indexDir: join(dir, ".blockml/search") };
+    await rebuildIndex(options);
+    const loaded = await loadIndex(options);
+    expect(loaded).toBeDefined();
+    const hits = await loaded!.search("com.blockml.test.search.Gamma");
+    expect(hits[0]?.fqn).toBe("com.blockml.test.search.Gamma");
   });
 
   it("rebuildIndex replaces the persisted index", async () => {
