@@ -53,6 +53,9 @@
     <implementation type="bommember:ImplementationBlock">
       <documentation>implementation (optional). TS type: bommember:ImplementationBlock.</documentation>
     </implementation>
+    <throws type="bomblock:TypeReferenceEntityInstance[]">
+      <documentation>Declared exception types (TypeReferenceEntity(core:Exception)[]). (optional)</documentation>
+    </throws>
   </properties>
 
 </block>

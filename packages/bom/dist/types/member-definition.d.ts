@@ -83,6 +83,8 @@ export interface CapabilityDefinition extends MemberDefinitionBase {
     /** Source span of the authored `outputType` attribute value. */
     outputTypeSource?: SourceLocation;
     implementation?: ImplementationBlock;
+    /** Declared exception types (`TypeReferenceEntity(core:Exception)[]`). */
+    throws?: TypeReferenceEntityInstance[];
 }
 export interface ImplementationBlock {
     languageFqn: string;

@@ -270,6 +270,7 @@ const MEMBER_CHILD_METADATA = new Set([
   "suggestions",
   "groups",
   "implementation",
+  "throws",
   "bml:xml",
   "xml",
   "abstract",
@@ -453,6 +454,7 @@ function mapMemberElement(
   if (implEl) {
     cap.implementation = mapImplementation(implEl, ctx);
   }
+  mapCapabilityThrows(element, cap, ctx);
   return finishMember(element, cap, ctx);
 }
 
@@ -1169,6 +1171,74 @@ function mapImplementation(element: Element, ctx: MapContext): ImplementationBlo
     ...(form === "cdata" ? { authoredCharacterDataForm: "cdata" as const } : {}),
     embeddedExpressions,
   };
+}
+
+const CORE_EXCEPTION = "org.blockml.bml.core.Exception";
+
+function mapThrowsReference(
+  child: Element,
+  ctx: MapContext,
+): TypeReferenceEntityInstance | undefined {
+  if (isTypeReferenceEntitySugar(child, ctx)) {
+    const { inst } = mapTypeReferenceEntityInstance(child, ctx, CORE_EXCEPTION);
+    return inst;
+  }
+  if (elementLocalName(child) === "TypeReferenceEntity") {
+    const valueRaw = getAttribute(child, "value") ?? getTextOrAttr(child);
+    if (!valueRaw) {
+      return undefined;
+    }
+    let value: string;
+    try {
+      value = resolveBlockReference(
+        valueRaw,
+        ctx.bindings,
+        ctx.subBlockIndex,
+        ctx.parentBlockType,
+      );
+    } catch {
+      try {
+        value = resolveTypeName(valueRaw, ctx.bindings, "type");
+      } catch {
+        value = valueRaw;
+      }
+    }
+    return {
+      typeFqn: TYPE_REFERENCE_ENTITY,
+      value,
+      boundB: CORE_EXCEPTION,
+    };
+  }
+  return undefined;
+}
+
+function mapCapabilityThrows(
+  element: Element,
+  cap: CapabilityDefinition,
+  ctx: MapContext,
+): void {
+  const throwsEl = elementChildren(element).find((c) => elementLocalName(c) === "throws");
+  if (!throwsEl) {
+    return;
+  }
+  cap.throws = [];
+  const mapChild = (child: Element) => {
+    const inst = mapThrowsReference(child, ctx);
+    if (inst) {
+      cap.throws!.push(inst);
+      return;
+    }
+    reportUnknownElement(child, ctx);
+  };
+  for (const child of elementChildren(throwsEl)) {
+    if (elementLocalName(child) === "composition") {
+      for (const inst of elementChildren(child)) {
+        mapChild(inst);
+      }
+      continue;
+    }
+    mapChild(child);
+  }
 }
 
 export function mapBlock(element: Element, ctx: MapContext): BlockDefinition {

@@ -1507,6 +1507,11 @@
           "name": "implementation",
           "type": "bommember:ImplementationBlock",
           "required": false
+        },
+        {
+          "name": "throws",
+          "type": "bomblock:TypeReferenceEntityInstance[]",
+          "required": false
         }
       ]
     },

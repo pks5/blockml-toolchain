@@ -540,13 +540,33 @@ function emitMember(writer, member, ctx) {
             if (member.outputType) {
                 attrs.push(`outputType="${escapeAttr(emitTypeExpression(member.outputType, ctx.bindings, ctx.useQName))}"`);
             }
-            const hasBody = !!member.implementation || (member.unknownElements?.length ?? 0) > 0;
+            const hasBody = member.throws !== undefined ||
+                !!member.implementation ||
+                (member.documentations?.length ?? 0) > 0 ||
+                (member.summaries?.length ?? 0) > 0 ||
+                (member.examples?.length ?? 0) > 0 ||
+                (member.references?.length ?? 0) > 0 ||
+                member.since !== undefined ||
+                (member.keywords?.length ?? 0) > 0 ||
+                (member.changelog?.length ?? 0) > 0 ||
+                (member.constraints?.length ?? 0) > 0 ||
+                member.xmlRendering?.authoredPlacement === "element" ||
+                (member.unknownElements?.length ?? 0) > 0;
             if (!hasBody) {
                 writer.line(`<${tag} ${attrs.join(" ")} />`);
                 break;
             }
             writer.line(`<${tag} ${attrs.join(" ")}>`);
             writer.pushDepth();
+            if (member.throws) {
+                writer.line("<throws>");
+                writer.pushDepth();
+                for (const t of member.throws) {
+                    emitTypeReferenceEntity(writer, t.value, ctx);
+                }
+                writer.popDepth();
+                writer.line("</throws>");
+            }
             emitMemberCommonChildren(writer, member, ctx);
             if (member.implementation) {
                 const lang = ctx.useQName

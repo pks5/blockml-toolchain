@@ -1,6 +1,6 @@
 <!--
-  Transformer Workflow — CriterionEvaluationException
-  FQN: org.blockml.bml.transformer.workflow.CriterionEvaluationException
+  Transformer Workflow — EvaluationException
+  FQN: org.blockml.bml.transformer.workflow.EvaluationException
 -->
 <block
   xmlns="http://blockml.org/bml"
@@ -10,8 +10,8 @@
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow">
 
-  <name>CriterionEvaluationException</name>
-  <type>workflow:CriterionEvaluationException</type>
+  <name>EvaluationException</name>
+  <type>workflow:EvaluationException</type>
   <baseType>core:Exception</baseType>
   <is>A thrown condition for an unforeseen Criterion evaluation failure</is>
 

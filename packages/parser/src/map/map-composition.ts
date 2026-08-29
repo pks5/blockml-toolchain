@@ -72,7 +72,7 @@ const METADATA_ELEMENTS = new Set([
   "languages",
 ]);
 
-const RESERVED = new Set([...MEMBER_SECTIONS, ...METADATA_ELEMENTS, "composition", "implementation", "value", "groups", "suggestions"]);
+const RESERVED = new Set([...MEMBER_SECTIONS, ...METADATA_ELEMENTS, "composition", "implementation", "throws", "value", "groups", "suggestions"]);
 
 export function mapCompositionTemplate(
   element: Element,

@@ -674,6 +674,7 @@ const blocks = [
       { name: "inputTypeSource", type: "bomcommon:SourceLocation", doc: "Span of the inputType= attribute value." },
       { name: "outputTypeSource", type: "bomcommon:SourceLocation", doc: "Span of the outputType= attribute value." },
       { name: "implementation", type: "bommember:ImplementationBlock" },
+      { name: "throws", type: "bomblock:TypeReferenceEntityInstance[]", doc: "Declared exception types (TypeReferenceEntity(core:Exception)[])." },
     ],
   },
 

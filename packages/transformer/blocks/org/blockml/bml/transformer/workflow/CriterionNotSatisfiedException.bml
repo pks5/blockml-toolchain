@@ -17,16 +17,16 @@
 
   <documentation>
     Base type for known, declared criterion failures (evaluated, does not hold).
-    Distinct from CriterionEvaluationException (unforeseen evaluation faults).
+    Distinct from EvaluationException (unforeseen evaluation faults).
     Inherits message from core:Exception.
   </documentation>
 
-  <isNot>Not CriterionEvaluationException (unforeseen evaluation fault) and not a
+  <isNot>Not EvaluationException (unforeseen evaluation fault) and not a
     validator diagnostic (org.blockml.bml.core.Diagnostic).</isNot>
 
   <references>
     <see type="core:Exception" relation="Extends" />
-    <see type="workflow:CriterionEvaluationException" relation="ContrastsWith" />
+    <see type="workflow:EvaluationException" relation="ContrastsWith" />
     <see type="workflow:Criterion" relation="SeeAlso" />
   </references>
 

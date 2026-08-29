@@ -34,7 +34,7 @@
     <satisfy type="cap:Action">
       <throws>
         <workflow:CriterionNotSatisfiedException />
-        <workflow:CriterionEvaluationException />
+        <workflow:EvaluationException />
       </throws>
       <abstract>true</abstract>
       <documentation>Whether this criterion currently holds. Concrete subtypes supply the Outbound implementation.</documentation>

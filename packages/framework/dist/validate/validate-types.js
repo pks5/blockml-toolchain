@@ -1,5 +1,5 @@
 import { parseExpression } from "../expression/parse-expression.js";
-import { memberIdentityKey, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
+import { collectBaseTypeChain, memberIdentityKey, resolveEffectiveMembers, } from "../resolve/resolve-effective-members.js";
 import { isWellKnownTypeFqn } from "@blockml/parser";
 function diag(code, message, file, loc) {
     const source = {
@@ -17,6 +17,25 @@ function diag(code, message, file, loc) {
 }
 function typeIsKnown(fqn, registry) {
     return registry.has(fqn) || isWellKnownTypeFqn(fqn);
+}
+const CORE_EXCEPTION = "org.blockml.bml.core.Exception";
+/** G on T's baseType chain, or G ∈ T.contracts[] (direct only). */
+function satisfiesTypeBound(typeFqn, boundFqn, registry) {
+    if (typeFqn === boundFqn) {
+        return true;
+    }
+    const start = registry.get(typeFqn)?.block;
+    if (!start) {
+        return false;
+    }
+    if ((start.contracts ?? []).some((c) => c.value === boundFqn)) {
+        return true;
+    }
+    const chain = collectBaseTypeChain(start, registry);
+    if (chain.some((b) => b.type === boundFqn)) {
+        return true;
+    }
+    return chain[0]?.baseType === boundFqn;
 }
 function walkNamedTypes(expr, visit) {
     if (!expr) {
@@ -78,6 +97,16 @@ function validateMemberTypes(member, registry, file, diagnostics) {
                 diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, member.outputTypeSource ?? loc));
             }
         });
+        for (const thrown of member.throws ?? []) {
+            const fqn = thrown.value;
+            if (!typeIsKnown(fqn, registry)) {
+                diagnostics.push(diag("BML_UNKNOWN_TYPE", `Unknown type: ${fqn}`, file, loc));
+                continue;
+            }
+            if (!satisfiesTypeBound(fqn, CORE_EXCEPTION, registry)) {
+                diagnostics.push(diag("BML_TYPE_BOUND_NOT_SATISFIED", `Type ${fqn} does not satisfy bound ${CORE_EXCEPTION}`, file, loc));
+            }
+        }
     }
 }
 function literalNumber(val) {

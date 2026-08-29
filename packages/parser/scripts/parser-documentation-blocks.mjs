@@ -283,6 +283,8 @@ export const documentationBlocks = [
       BML_DUPLICATE_COMPOSITION. Misplaced → BML_STANDALONE_COMPOSITION.
       Sugar without a <composition> wrapper (instances as direct children) stays allowed.
     • Constraints/suggestions → BlockInstance[] in document order
+    • Capability <throws> → TypeReferenceEntityInstance[] (empty-QName sugar or
+      explicit type:TypeReferenceEntity); bound B = core:Exception
     • Sub-Blocks and embedded blocks → nested BlockDefinition trees
     • Redundant aggregation type on override → validator warning B19; parser must not apply
 

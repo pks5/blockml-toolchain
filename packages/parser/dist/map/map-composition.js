@@ -43,7 +43,7 @@ const METADATA_ELEMENTS = new Set([
     "subTypes",
     "languages",
 ]);
-const RESERVED = new Set([...MEMBER_SECTIONS, ...METADATA_ELEMENTS, "composition", "implementation", "value", "groups", "suggestions"]);
+const RESERVED = new Set([...MEMBER_SECTIONS, ...METADATA_ELEMENTS, "composition", "implementation", "throws", "value", "groups", "suggestions"]);
 export function mapCompositionTemplate(element, aggregationName, ctx) {
     const loc = elementSourceLoc(ctx.filePath, ctx.source, element);
     const compositionEls = elementChildren(element).filter((c) => elementLocalName(c) === "composition");
