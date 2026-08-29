@@ -58,6 +58,7 @@
         <workflow:CriterionNotSatisfiedException />
         <workflow:EvaluationException />
         <workflow:InstructionRule />
+        <workflow:Prerequisite />
         <workflow:Rule />
         <workflow:Task />
       </composition>

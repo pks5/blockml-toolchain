@@ -19,8 +19,8 @@
   <is>An executable workflow task</is>
 
   <documentation>
-    Abstract workflow unit. Concrete subtypes must implement the execute Action.
-    execute has no inputType or outputType and carries no implementation on this type.
+    Abstract workflow unit. run first enforces prerequisites, then applies rules,
+    then checks successCriteria. Concrete subtypes may override run.
   </documentation>
 
   <isNot>Not an authoring TaskGuide (org.blockml.bml.core.TaskGuide / org.blockml.bml.task.*).</isNot>
@@ -28,14 +28,14 @@
   <abstract>true</abstract>
 
   <aggregations>
-    <prerequisites type="workflow:Criterion[]">
-      <documentation>Criteria that must hold before this task may run.</documentation>
+    <prerequisites type="workflow:Prerequisite[]">
+      <documentation>Preconditions that must hold before this task may run.</documentation>
     </prerequisites>
     <rules type="workflow:Rule[]">
       <documentation>Rules to observe while this task runs.</documentation>
     </rules>
     <successCriteria type="workflow:Criterion[]">
-      <documentation>Criteria that must hold for this task to be considered successful.</documentation>
+      <documentation>Acceptance criteria that must hold for this task to be considered successful.</documentation>
     </successCriteria>
   </aggregations>
 
@@ -45,13 +45,13 @@
       <implementation language="lang:PseudoCode">
         <![CDATA[
 for each prerequisite in #this.prerequisites:
-    prerequisite.satisfy()
+    prerequisite.require()
 
 for each rule in #this.rules:
     rule.apply()
 
 for each successCriterion in #this.successCriteria:
-    successCriterion.satisfy()
+    successCriterion.isSatisfied()
         ]]>
       </implementation>
     </run>

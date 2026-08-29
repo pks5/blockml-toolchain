@@ -15,30 +15,33 @@
   <name>Criterion</name>
   <type>workflow:Criterion</type>
   <baseType>core:Block</baseType>
-  <is>A criterion of any kind</is>
+  <is>An acceptance criterion for a completed task</is>
 
   <documentation>
-    Abstract condition that can be evaluated to true or false. Concrete subtypes
-    implement isSatisfied; this type carries no implementation.
+    Abstract acceptance (success) condition. After Task.run, each success criterion
+    must hold. Concrete subtypes implement isSatisfied; this type carries no
+    implementation. Preconditions before the task belong on Prerequisite, not here.
   </documentation>
 
-  <isNot>Not a BlockML validation Constraint (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*) and not a workflow Rule (obligation during Task.run).</isNot>
+  <isNot>Not a Prerequisite (precondition before Task.run), not a workflow Rule
+    (obligation during Task.run), and not a BlockML validation Constraint
+    (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).</isNot>
 
   <references>
+    <see type="workflow:Prerequisite" relation="ContrastsWith" />
     <see type="workflow:Rule" relation="ContrastsWith" />
   </references>
 
   <abstract>true</abstract>
 
   <capabilities>
-    <satisfy type="cap:Action">
+    <isSatisfied type="cap:Outbound" outputType="type:Boolean">
       <throws>
-        <workflow:CriterionNotSatisfiedException />
         <workflow:EvaluationException />
       </throws>
       <abstract>true</abstract>
-      <documentation>Whether this criterion currently holds. Concrete subtypes supply the Outbound implementation.</documentation>
-    </satisfy>
+      <documentation>Whether this acceptance criterion currently holds. Concrete subtypes supply the Outbound implementation.</documentation>
+    </isSatisfied>
   </capabilities>
 
 </block>

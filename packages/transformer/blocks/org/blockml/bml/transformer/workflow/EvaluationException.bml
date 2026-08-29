@@ -13,12 +13,12 @@
   <name>EvaluationException</name>
   <type>workflow:EvaluationException</type>
   <baseType>core:Exception</baseType>
-  <is>A thrown condition for an unforeseen Criterion evaluation failure</is>
+  <is>A thrown condition for an unforeseen evaluation failure</is>
 
   <documentation>
-    Unforeseen Criterion.satisfy failure — not declared in advance (missing context, I/O, …).
-    Distinct from CriterionNotSatisfiedException (known unsatisfied criterion).
-    Inherits message from core:Exception.
+    Unforeseen Criterion.isSatisfied or Prerequisite.require failure — not declared
+    in advance (missing context, I/O, …). Distinct from CriterionNotSatisfiedException
+    (known unsatisfied acceptance criterion). Inherits message from core:Exception.
   </documentation>
 
   <isNot>Not CriterionNotSatisfiedException (known unsatisfied criterion) and not a
@@ -28,6 +28,7 @@
     <see type="core:Exception" relation="Extends" />
     <see type="workflow:CriterionNotSatisfiedException" relation="ContrastsWith" />
     <see type="workflow:Criterion" relation="SeeAlso" />
+    <see type="workflow:Prerequisite" relation="SeeAlso" />
   </references>
 
 </block>

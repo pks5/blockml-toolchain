@@ -17,15 +17,16 @@
   <is>A rule to observe while executing a task</is>
 
   <documentation>
-    Abstract obligation that applies during Task.run. Concrete subtypes describe what
-    must be respected while the task executes. Unlike Criterion, a Rule is not a
-    true-or-false condition for gating or success; it constrains how the run proceeds.
+    Abstract obligation during Task.run. Unlike Prerequisite (precondition) and
+    Criterion (acceptance), a Rule constrains how the run proceeds rather than gating it.
   </documentation>
 
-  <isNot>Not a Criterion (evaluable true/false condition) and not a BlockML validation
-    Constraint (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).</isNot>
+  <isNot>Not a Prerequisite (precondition before Task.run), not a Criterion (acceptance
+    after Task.run), and not a BlockML validation Constraint
+    (org.blockml.bml.core.Constraint / org.blockml.bml.constraint.*).</isNot>
 
   <references>
+    <see type="workflow:Prerequisite" relation="ContrastsWith" />
     <see type="workflow:Criterion" relation="ContrastsWith" />
     <see type="workflow:Task" relation="SeeAlso" />
   </references>

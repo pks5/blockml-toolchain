@@ -20,7 +20,7 @@
 
   <documentation>
     Task that groups subTasks. run walks subTasks in order and invokes each child's run.
-    Inherits prerequisites and successCriteria from Task.
+    Inherits prerequisites (Prerequisite) and successCriteria (Criterion) from Task.
   </documentation>
 
   <references>
