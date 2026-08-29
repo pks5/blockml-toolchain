@@ -55,10 +55,10 @@
       <composition>
         <workflow:CompositeTask />
         <workflow:Criterion />
-        <workflow:CriterionNotSatisfiedException />
-        <workflow:EvaluationException />
+        <workflow:ExecutionException />
         <workflow:InstructionRule />
         <workflow:Prerequisite />
+        <workflow:PrerequisiteNotMetException />
         <workflow:Rule />
         <workflow:Task />
       </composition>

@@ -37,7 +37,8 @@
   <capabilities>
     <require type="cap:Action">
       <throws>
-        <workflow:EvaluationException />
+        <workflow:PrerequisiteNotMetException />
+        <workflow:ExecutionException />
       </throws>
       <abstract>true</abstract>
       <documentation>Enforce this precondition. Concrete subtypes supply the Action implementation.</documentation>

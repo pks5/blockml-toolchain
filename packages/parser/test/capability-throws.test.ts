@@ -27,8 +27,8 @@ describe("capability throws mapping", () => {
       [
         '    <satisfy type="cap:Action">',
         "      <throws>",
-        "        <workflow:CriterionNotSatisfiedException />",
-        "        <workflow:EvaluationException />",
+        "        <workflow:PrerequisiteNotMetException />",
+        "        <workflow:ExecutionException />",
         "      </throws>",
         "    </satisfy>",
       ].join("\n"),
@@ -43,11 +43,11 @@ describe("capability throws mapping", () => {
     }
     expect(satisfy.throws).toHaveLength(2);
     expect(satisfy.throws![0]!.value).toBe(
-      "org.blockml.bml.transformer.workflow.CriterionNotSatisfiedException",
+      "org.blockml.bml.transformer.workflow.PrerequisiteNotMetException",
     );
     expect(satisfy.throws![0]!.boundB).toBe("org.blockml.bml.core.Exception");
     expect(satisfy.throws![1]!.value).toBe(
-      "org.blockml.bml.transformer.workflow.EvaluationException",
+      "org.blockml.bml.transformer.workflow.ExecutionException",
     );
   });
 
@@ -56,7 +56,7 @@ describe("capability throws mapping", () => {
       [
         '    <satisfy type="cap:Action">',
         "      <throws>",
-        '        <type:TypeReferenceEntity value="workflow:CriterionNotSatisfiedException" />',
+        '        <type:TypeReferenceEntity value="workflow:PrerequisiteNotMetException" />',
         "      </throws>",
         "    </satisfy>",
       ].join("\n"),
@@ -71,7 +71,7 @@ describe("capability throws mapping", () => {
     }
     expect(satisfy.throws).toHaveLength(1);
     expect(satisfy.throws![0]!.value).toBe(
-      "org.blockml.bml.transformer.workflow.CriterionNotSatisfiedException",
+      "org.blockml.bml.transformer.workflow.PrerequisiteNotMetException",
     );
   });
 
@@ -80,7 +80,7 @@ describe("capability throws mapping", () => {
       [
         '    <satisfy type="cap:Action">',
         "      <throws>",
-        "        <workflow:CriterionNotSatisfiedException />",
+        "        <workflow:PrerequisiteNotMetException />",
         "      </throws>",
         "    </satisfy>",
       ].join("\n"),
@@ -89,6 +89,6 @@ describe("capability throws mapping", () => {
     expect(parsed.document).not.toBeNull();
     const serialized = serialize(parsed.document!);
     expect(serialized.text).toContain("<throws>");
-    expect(serialized.text).toContain("workflow:CriterionNotSatisfiedException");
+    expect(serialized.text).toContain("workflow:PrerequisiteNotMetException");
   });
 });

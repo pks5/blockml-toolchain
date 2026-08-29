@@ -1,0 +1,35 @@
+<!--
+  Transformer Workflow — PrerequisiteNotMetException
+  FQN: org.blockml.bml.transformer.workflow.PrerequisiteNotMetException
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow">
+
+  <name>PrerequisiteNotMetException</name>
+  <type>workflow:PrerequisiteNotMetException</type>
+  <baseType>core:Exception</baseType>
+  <is>A thrown condition when a Prerequisite is not met</is>
+
+  <documentation>
+    Base type for known, declared prerequisite failures (evaluated, does not hold).
+    Distinct from ExecutionException (unforeseen execution faults).
+    Inherits message from core:Exception.
+  </documentation>
+
+  <isNot>Not ExecutionException (unforeseen execution fault) and not a
+    validator diagnostic (org.blockml.bml.core.Diagnostic).</isNot>
+
+  <references>
+    <see type="core:Exception" relation="Extends" />
+    <see type="workflow:ExecutionException" relation="ContrastsWith" />
+    <see type="workflow:Prerequisite" relation="SeeAlso" />
+  </references>
+
+  <abstract>true</abstract>
+
+</block>

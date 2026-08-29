@@ -37,7 +37,7 @@
   <capabilities>
     <isSatisfied type="cap:Outbound" outputType="type:Boolean">
       <throws>
-        <workflow:EvaluationException />
+        <workflow:ExecutionException />
       </throws>
       <abstract>true</abstract>
       <documentation>Whether this acceptance criterion currently holds. Concrete subtypes supply the Outbound implementation.</documentation>

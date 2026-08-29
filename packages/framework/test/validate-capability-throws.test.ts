@@ -51,8 +51,8 @@ function registerCore(registry: TypeRegistry): void {
   );
   registry.register(
     typeDoc({
-      name: "CriterionNotSatisfiedException",
-      type: "org.blockml.bml.transformer.workflow.CriterionNotSatisfiedException",
+      name: "PrerequisiteNotMetException",
+      type: "org.blockml.bml.transformer.workflow.PrerequisiteNotMetException",
       baseType: "org.blockml.bml.core.Exception",
       members: [],
       subBlocks: [],
@@ -87,7 +87,7 @@ describe("validateTypes capability throws", () => {
     const source = sample(
       [
         "      <throws>",
-        "        <workflow:CriterionNotSatisfiedException />",
+        "        <workflow:PrerequisiteNotMetException />",
         "      </throws>",
       ].join("\n"),
     );
