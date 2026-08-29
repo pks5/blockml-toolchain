@@ -52,6 +52,7 @@
     "test:cli": "vitest run packages/cli-tools/test",
     "test:lsp": "vitest run packages/lsp/test",
     "test:search": "vitest run packages/search/test",
+    "test:transformer": "vitest run packages/transformer/test",
     "compile:blockdoc": "node packages/cli-tools/dist/cli.js compile blockdoc",
     "compile:xsd": "node packages/cli-tools/dist/cli.js compile xsd",
     "compile:fatblock": "node packages/cli-tools/dist/cli.js compile fatblock --per-package",

@@ -10,13 +10,15 @@ import { diagnosticKind, formatCliOutput, pushLines, writeCliOutput, } from "./c
 import { loadConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
+import { defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
 const USAGE = "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
     "       blockml compile fatblock [--include a,b] [--out dir] [--per-package]\n" +
     "       blockml compile <file> <document-target> [--src dir] [--include a,b] [--out dir]\n" +
     "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]\n" +
     "       blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
-    "       blockml search index [--force] [--src dir] [--libraries a,b]";
+    "       blockml search index [--force] [--src dir] [--libraries a,b]\n" +
+    "       blockml transform <execution-fqn>";
 function workspaceRoot(from) {
     let dir = resolve(from);
     for (;;) {
@@ -111,6 +113,11 @@ export function parseArgs(argv) {
                 }
                 else {
                     result.query = result.query ? `${result.query} ${flag}` : flag;
+                }
+            }
+            else if (result.command === "transform") {
+                if (!result.executionFqn) {
+                    result.executionFqn = flag;
                 }
             }
             else if (!result.target) {
@@ -546,7 +553,7 @@ async function runCompile(parsed, rootDir, lines) {
     }
     return runCompileCorpus(target, parsed, rootDir, config, lines);
 }
-async function executeCli(argv, cwd) {
+async function executeCli(argv, cwd, options = {}) {
     const lines = [];
     try {
         const parsed = parseArgs(argv);
@@ -566,6 +573,11 @@ async function executeCli(argv, cwd) {
             const code = await runSearch(parsed, cwd, config, lines, formatDiagnostic, USAGE);
             return { code, lines };
         }
+        if (parsed.command === "transform") {
+            const agent = options.transformAgent ?? defaultTransformAgent();
+            const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent);
+            return { code, lines };
+        }
         if (parsed.command !== "compile") {
             pushLines(lines, USAGE, "info");
             return { code: 2, lines };
@@ -579,8 +591,8 @@ async function executeCli(argv, cwd) {
         return { code: 2, lines };
     }
 }
-export async function runCli(argv, cwd = process.cwd()) {
-    const { code, lines } = await executeCli(argv, cwd);
+export async function runCli(argv, cwd = process.cwd(), options = {}) {
+    const { code, lines } = await executeCli(argv, cwd, options);
     return { code, stderr: formatCliOutput(lines) };
 }
 /** True when argv[1] is this CLI module, including an npm `.bin` symlink to it. */

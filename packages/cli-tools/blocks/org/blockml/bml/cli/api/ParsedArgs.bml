@@ -27,7 +27,7 @@
 
   <documentation>CLI9: parsed command-line arguments from process.argv slice.</documentation>
   <properties>
-    <command type="type:Text"><documentation>validate | compile | search. (optional)</documentation></command>
+    <command type="type:Text"><documentation>validate | compile | search | transform. (optional)</documentation></command>
     <target type="type:Text"><documentation>Registry name e.g. blockdoc, xsd, fatblock. (optional)</documentation></target>
     <file type="type:Text"><documentation>Path to .bml file for document targets or validate. (optional)</documentation></file>
     <all type="type:Boolean"><documentation>--all: validate entire registry including npm (validate) or document compile. (optional)</documentation></all>
@@ -42,6 +42,7 @@
     <limit type="type:Integer"><documentation>--limit: max search hits. (optional)</documentation></limit>
     <query type="type:Text"><documentation>Joined positional query for search. (optional)</documentation></query>
     <index type="type:Boolean"><documentation>search index subcommand: full rebuild. (optional)</documentation></index>
+    <executionFqn type="type:Text"><documentation>FQN of a pending TaskExecution for transform. (optional)</documentation></executionFqn>
   </properties>
 
 </block>

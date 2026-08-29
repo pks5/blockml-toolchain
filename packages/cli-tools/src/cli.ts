@@ -36,7 +36,9 @@ import {
 import { loadConfig, type BomConfig } from "./load-config.js";
 import { projectLibraryPackageDirs, projectLibraryPackageRoots, projectSourceRoots, registryFilesUnderRoots } from "./project-sources.js";
 import { runSearch } from "./run-search.js";
+import { defaultTransformAgent, runTransform } from "./run-transform.js";
 import { writeOutputFiles } from "./write-output.js";
+import type { TransformationAgent } from "@blockml/transformer";
 
 const USAGE =
   "Usage: blockml compile <target> [--out dir] [--src dir] [--libraries a,b]\n" +
@@ -44,7 +46,8 @@ const USAGE =
   "       blockml compile <file> <document-target> [--src dir] [--include a,b] [--out dir]\n" +
   "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]\n" +
   "       blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
-  "       blockml search index [--force] [--src dir] [--libraries a,b]";
+  "       blockml search index [--force] [--src dir] [--libraries a,b]\n" +
+  "       blockml transform <execution-fqn>";
 
 function workspaceRoot(from: string): string {
   let dir = resolve(from);
@@ -76,6 +79,11 @@ export interface ParsedArgs {
   limit?: number;
   query?: string;
   index?: boolean;
+  executionFqn?: string;
+}
+
+export interface CliRunOptions {
+  transformAgent?: TransformationAgent;
 }
 
 interface PrintableDiagnostic {
@@ -153,6 +161,10 @@ export function parseArgs(argv: string[]): ParsedArgs {
           result.query = result.query ? `${result.query} ${flag}` : `index ${flag}`;
         } else {
           result.query = result.query ? `${result.query} ${flag}` : flag;
+        }
+      } else if (result.command === "transform") {
+        if (!result.executionFqn) {
+          result.executionFqn = flag;
         }
       } else if (!result.target) {
         result.target = flag;
@@ -799,6 +811,7 @@ async function runCompile(
 async function executeCli(
   argv: string[],
   cwd: string,
+  options: CliRunOptions = {},
 ): Promise<{ code: number; lines: CliOutputLine[] }> {
   const lines: CliOutputLine[] = [];
   try {
@@ -821,6 +834,12 @@ async function executeCli(
       return { code, lines };
     }
 
+    if (parsed.command === "transform") {
+      const agent = options.transformAgent ?? defaultTransformAgent();
+      const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent);
+      return { code, lines };
+    }
+
     if (parsed.command !== "compile") {
       pushLines(lines, USAGE, "info");
       return { code: 2, lines };
@@ -838,8 +857,9 @@ async function executeCli(
 export async function runCli(
   argv: string[],
   cwd = process.cwd(),
+  options: CliRunOptions = {},
 ): Promise<{ code: number; stderr: string }> {
-  const { code, lines } = await executeCli(argv, cwd);
+  const { code, lines } = await executeCli(argv, cwd, options);
   return { code, stderr: formatCliOutput(lines) };
 }
 

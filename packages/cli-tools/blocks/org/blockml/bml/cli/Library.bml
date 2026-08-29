@@ -19,6 +19,7 @@
   xmlns:runtime="org.blockml.bml.compiler.runtime"
   xmlns:framework="org.blockml.bml.framework"
   xmlns:search="org.blockml.bml.search"
+  xmlns:transformer="org.blockml.bml.transformer"
   xmlns:type="org.blockml.bml.type">
 
   <name>Library</name>
@@ -34,6 +35,7 @@
     implements this library. Compiler facade and scope live in org.blockml.bml.compiler.runtime.*
     Framework bootstrap lives in org.blockml.bml.framework.*.
     Local search lives in org.blockml.bml.search.* (@blockml/search).
+    Transformation lives in org.blockml.bml.transformer.* (@blockml/transformer).
 
     Membership is defined exclusively by this blocks list.
   </documentation>
@@ -62,6 +64,7 @@
         <runtime:Library />
         <framework:Library />
         <search:Library />
+        <transformer:Library />
       </composition>
     </dependencies>
     <blocks>
@@ -80,6 +83,7 @@
         <clicommand:ValidateCommand />
         <clicommand:CompileCommand />
         <clicommand:SearchCommand />
+        <clicommand:TransformCommand />
         <clicap:LoadConfig />
         <clicap:ParseArgs />
         <clicap:FormatDiagnostic />
@@ -87,6 +91,7 @@
         <clicap:RunCli />
         <clicap:RunValidate />
         <clicap:RunSearch />
+        <clicap:RunTransform />
         <clicap:ValidateAgainstXsd />
         <clicap:RunCompile />
         <clicap:RunCompileFatBlock />
@@ -106,6 +111,7 @@
         <clidocumentation:CompileCommand />
         <clidocumentation:ValidateCommand />
         <clidocumentation:SearchCommand />
+        <clidocumentation:TransformCommand />
         <clidocumentation:Configuration />
         <clidocumentation:TargetBootstrap />
         <clidocumentation:TargetCliMatrix />

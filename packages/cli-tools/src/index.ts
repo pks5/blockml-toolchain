@@ -10,7 +10,7 @@ export {
 } from "./bootstrap-targets.js";
 export { bootstrapProjectTypeRegistry } from "./bootstrap-type-registry.js";
 export { writeOutputFiles, type WriteOutputOptions, type WriteOutputResult } from "./write-output.js";
-export { parseArgs, runCli, formatDiagnostic, type ParsedArgs } from "./cli.js";
+export { parseArgs, runCli, formatDiagnostic, type ParsedArgs, type CliRunOptions } from "./cli.js";
 export {
   writeCliOutput,
   type CliOutputLine,

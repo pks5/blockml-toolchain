@@ -32,6 +32,7 @@
     • blockml compile [file] target | blockml compile target
     • blockml search QUERY [--json] [--limit] [--src] [--libraries]
     • blockml search index [--force]
+    • blockml transform EXECUTION-FQN
     • Targets: blockdoc (default), xsd, fatblock; custom via registerTargetFactory or targetPackages
     • Config: targets[], targetPackages, targetOptions, defaultTarget
     • Flags: --out, --src, --libraries, --include (fatblock), --per-package (fatblock), --all, --verbose (validate), --json (search), --limit (search), --force (search index)

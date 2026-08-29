@@ -35,6 +35,8 @@
 
     @blockml/framework — bootstrapTypeRegistry, TypeRegistry. CLI wraps as bootstrapProjectTypeRegistry.
 
+    @blockml/transformer — TaskExecution lifecycle and TransformationAgent. CLI wraps as RunTransform.
+
     Target packages (@blockml/blockdoc-target, xsd-target, fatblock-target) — RenderTarget impls
     and targetOptions types. CLI registers via bootstrapTargets; does not own render algorithms.
 

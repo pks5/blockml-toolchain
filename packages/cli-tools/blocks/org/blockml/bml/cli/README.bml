@@ -42,7 +42,8 @@
     Modules: documentation (narrative specs), api/config/command (data types),
     capability (CLI operations).
 
-    Not in this library: domain SCAD CLI, thumbnails, incremental cache, planned commands.
+    Not in this library: domain SCAD CLI, thumbnails, incremental cache, planned commands
+    (init, new, inspect, watch, activate-config).
   </documentation>
 
   <references>

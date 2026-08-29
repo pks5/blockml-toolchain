@@ -25,7 +25,17 @@
   <baseType>core:Capability</baseType>
   <is>Parse process.argv slice into ParsedArgs</is>
 
-  <documentation>CLI9: first non-flag token is command. Flags: --out, --src, --libraries (comma-split), --include (comma-split), --all, --per-package, --verbose, --json, --force, --limit. Positional: validate=file; compile=target or file+target; search=query tokens or subcommand index.</documentation>
+  <documentation>
+    # Parse process.argv slice into ParsedArgs
+
+    CLI9: first non-flag token is command.
+
+    Flags: --out, --src, --libraries (comma-split), --include (comma-split),
+    --all, --per-package, --verbose, --json, --force, --limit.
+
+    Positional: validate=file; compile=target or file+target; search=query
+    tokens or subcommand index; transform=execution FQN.
+  </documentation>
 
   <references>
     <see type="cliapi:ParsedArgs" relation="SeeAlso" />

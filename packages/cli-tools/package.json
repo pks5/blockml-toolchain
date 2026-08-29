@@ -1,7 +1,7 @@
 {
   "name": "@blockml/cli",
   "version": "0.8.1",
-  "description": "BlockML CLI — validate, compile, and search BML",
+  "description": "BlockML CLI — validate, compile, search, and transform BML",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -41,6 +41,7 @@
     "@blockml/core": "^1.0.9",
     "@blockml/framework": "^0.8.1",
     "@blockml/search": "^0.8.1",
+    "@blockml/transformer": "^0.8.1",
     "libxmljs2": "^0.35.0"
   },
   "engines": {

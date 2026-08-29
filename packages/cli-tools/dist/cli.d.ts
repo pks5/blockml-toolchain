@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import type { TransformationAgent } from "@blockml/transformer";
 export interface ParsedArgs {
     command?: string;
     target?: string;
@@ -15,6 +16,10 @@ export interface ParsedArgs {
     limit?: number;
     query?: string;
     index?: boolean;
+    executionFqn?: string;
+}
+export interface CliRunOptions {
+    transformAgent?: TransformationAgent;
 }
 interface PrintableDiagnostic {
     severity: string;
@@ -27,7 +32,7 @@ interface PrintableDiagnostic {
 }
 export declare function parseArgs(argv: string[]): ParsedArgs;
 export declare function formatDiagnostic(d: PrintableDiagnostic): string;
-export declare function runCli(argv: string[], cwd?: string): Promise<{
+export declare function runCli(argv: string[], cwd?: string, options?: CliRunOptions): Promise<{
     code: number;
     stderr: string;
 }>;

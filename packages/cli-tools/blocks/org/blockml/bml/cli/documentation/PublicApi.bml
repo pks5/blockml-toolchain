@@ -40,6 +40,7 @@
     • resetBootstrapTargets()
     • bootstrapProjectTypeRegistry(options) → BootstrapResult
     • runSearch via blockml search (delegates to @blockml/search)
+    • runTransform via blockml transform (delegates to @blockml/transformer)
     • writeOutputFiles(output, outDir, rootDir?, options?) → WriteOutputResult
     • loadTargetFromPackage / resolveTargetPackage / isBuiltinTarget (plugin loader)
 

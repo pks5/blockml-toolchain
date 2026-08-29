@@ -1,0 +1,46 @@
+<!--
+  CLI Documentation — TransformCommand
+  FQN: org.blockml.bml.cli.documentation.TransformCommand
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:def="org.blockml.bml.definition"
+  xmlns:cli="org.blockml.bml.cli"
+  xmlns:cliapi="org.blockml.bml.cli.api"
+  xmlns:clicap="org.blockml.bml.cli.capability"
+  xmlns:clicommand="org.blockml.bml.cli.command"
+  xmlns:cliconfig="org.blockml.bml.cli.config"
+  xmlns:clidocumentation="org.blockml.bml.cli.documentation"
+  xmlns:runtime="org.blockml.bml.compiler.runtime"
+  xmlns:framework="org.blockml.bml.framework"
+  xmlns:transformer="org.blockml.bml.transformer"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:doc="org.blockml.bml.documentation">
+
+  <name>TransformCommand</name>
+  <type>clidocumentation:TransformCommand</type>
+  <baseType>core:Documentation</baseType>
+  <is>blockml transform specification</is>
+
+  <documentation><![CDATA[Syntax:
+    blockml transform EXECUTION-FQN
+
+    EXECUTION-FQN is the FQN of a TaskExecution under
+    {library}._transform.pending. Tasks are not accepted directly.
+
+    The transformer resolves the execution, assigns sequence and startedAt,
+    relocates it to _transform.running, invokes a TransformationAgent (Claude Code
+    by default), and on success relocates the same Block to _transform.completed.
+
+    Failed agent execution leaves the Block in running and exits non-zero.]]></documentation>
+  <references>
+    <see type="clidocumentation:Commands" relation="SeeAlso" />
+    <see type="clicap:RunTransform" relation="SeeAlso" />
+  </references>
+
+</block>

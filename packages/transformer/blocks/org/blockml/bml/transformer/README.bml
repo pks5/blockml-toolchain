@@ -20,6 +20,12 @@
     The @blockml/transformer package owns the BlockML transformer library
     (org.blockml.bml.transformer.*). Workflow types live in
     org.blockml.bml.transformer.workflow.*.
+
+    The TypeScript engine executes TaskExecution instances via
+    `blockml transform EXECUTION-FQN`. It resolves a pending execution,
+    moves it to running, delegates to a TransformationAgent, and on success
+    relocates the same Block to completed. Transformation intelligence
+    lives in the model, not in the engine.
   </documentation>
 
   <references>
