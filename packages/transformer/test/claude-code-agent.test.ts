@@ -45,6 +45,8 @@ describe("ClaudeCodeAgent", () => {
     expect(captured?.command).toBe("claude");
     expect(captured?.args).toContain("-p");
     expect(captured?.args.some((arg) => arg.includes(runningFqn))).toBe(true);
+    expect(captured?.args).toContain("--allowedTools");
+    expect(captured?.args).toContain("Bash(npx blockml *)");
     expect(captured?.args).not.toContain("--verbose");
     expect(captured?.live).toBeUndefined();
     expect(buildClaudeExecutionPrompt(runningFqn)).toContain(runningFqn);
@@ -67,6 +69,7 @@ describe("ClaudeCodeAgent", () => {
     expect(captured?.args).toContain("--verbose");
     expect(captured?.args).toContain("--output-format");
     expect(captured?.args).toContain("stream-json");
+    expect(captured?.args).toContain("--include-partial-messages");
   });
 
   it("does not overwrite an existing AGENTS.md", async () => {

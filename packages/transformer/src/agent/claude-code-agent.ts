@@ -32,6 +32,8 @@ export interface ClaudeCodeAgentOptions {
   verbose?: boolean;
 }
 
+export const CLAUDE_BLOCKML_BASH_PERMISSION = "Bash(npx blockml *)";
+
 export function buildClaudeExecutionPrompt(executionFqn: string): string {
   return [
     "Execute the Task defined by this TaskExecution:",
@@ -68,9 +70,21 @@ export class ClaudeCodeAgent implements TransformationAgent {
   async execute(request: AgentExecutionRequest): Promise<AgentExecutionResult> {
     const agents = ensureAgentsMarkdown(request.workspaceRoot);
     const prompt = buildClaudeExecutionPrompt(request.executionFqn);
-    const args = ["-p", prompt, "--append-system-prompt", agents];
+    const args = [
+      "-p",
+      prompt,
+      "--append-system-prompt",
+      agents,
+      "--allowedTools",
+      CLAUDE_BLOCKML_BASH_PERMISSION,
+    ];
     if (this.verbose) {
-      args.push("--verbose", "--output-format", "stream-json");
+      args.push(
+        "--verbose",
+        "--output-format",
+        "stream-json",
+        "--include-partial-messages",
+      );
     }
 
     const processRequest: ClaudeProcessRequest = {

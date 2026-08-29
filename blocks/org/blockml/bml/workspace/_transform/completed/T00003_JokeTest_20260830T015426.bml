@@ -4,14 +4,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
-  xmlns:pending="org.blockml.bml.workspace._transform.pending"
+  xmlns:completed="org.blockml.bml.workspace._transform.completed"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
   <name>
-    JokeTest
+    T00003_JokeTest_20260830T015426
   </name>
   <type>
-    pending:JokeTest
+    completed:T00003_JokeTest_20260830T015426
   </type>
   <baseType>
     workflow:TaskExecution
@@ -21,11 +21,20 @@
   </is>
   <properties>
     <executionId override="true">
-      <value>e2c2df02-223b-425f-ad0c-c6f9af741189</value>
+      <value>4382fad0-f5ee-48fc-8658-211584a49630</value>
     </executionId>
     <createdAt override="true" type="org.blockml.bml.type.DateTime">
       <value>2026-08-30T01:40:20</value>
     </createdAt>
+    <sequence override="true" type="org.blockml.bml.type.Integer">
+      <value>3</value>
+    </sequence>
+    <startedAt override="true" type="org.blockml.bml.type.DateTime">
+      <value>2026-08-30T01:54:26</value>
+    </startedAt>
+    <completedAt override="true" type="org.blockml.bml.type.DateTime">
+      <value>2026-08-30T01:57:20</value>
+    </completedAt>
   </properties>
   <aggregations>
     <task override="true">
