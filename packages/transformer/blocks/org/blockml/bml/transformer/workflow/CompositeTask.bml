@@ -19,8 +19,9 @@
   <is>A workflow task composed of child tasks</is>
 
   <documentation>
-    Task that groups subTasks. run walks subTasks in order and invokes each child's run.
-    Inherits prerequisites (Prerequisite) and successCriteria (Criterion) from Task.
+    Task that groups subTasks. Protected execute walks subTasks in order and invokes
+    each child's run. Inherits prerequisites (Prerequisite) and successCriteria (Criterion)
+    from Task.
   </documentation>
 
   <references>
@@ -34,15 +35,15 @@
   </aggregations>
 
   <capabilities>
-    <run override="true" type="cap:Action">
-      <documentation>Run each subTask in order by invoking its run capability.</documentation>
+    <_execute override="true" type="cap:Action">
+      <documentation>The composite action: invoke run on each subTask in order.</documentation>
       <implementation language="lang:PseudoCode">
         <![CDATA[
 for each subTask in #this.subTasks:
     subTask.run()
         ]]>
       </implementation>
-    </run>
+    </_execute>
   </capabilities>
 
 </block>

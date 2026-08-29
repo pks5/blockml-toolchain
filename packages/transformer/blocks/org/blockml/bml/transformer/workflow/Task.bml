@@ -19,8 +19,9 @@
   <is>An executable workflow task</is>
 
   <documentation>
-    Abstract workflow unit. run first enforces prerequisites, then applies rules,
-    then checks successCriteria. Concrete subtypes may override run.
+    Abstract workflow unit. Callers invoke run. Concrete subtypes override protected
+    execute with the task's actual action. run itself is the outer template
+    (prerequisites, rules, execute until successCriteria).
   </documentation>
 
   <isNot>Not an authoring TaskGuide (org.blockml.bml.core.TaskGuide / org.blockml.bml.task.*).</isNot>
@@ -41,20 +42,40 @@
 
   <capabilities>
     <run type="cap:Action">
-      <documentation>Run this task. Concrete subtypes supply the Action implementation.</documentation>
-      <implementation language="lang:PseudoCode">
-        <![CDATA[
+      <documentation>
+        External entry point. Enforces prerequisites, applies rules, then calls
+        execute until every success criterion holds. Callers invoke this; override
+        execute, not run.
+      </documentation>
+      <throws>
+        <workflow:ExecutionException />
+      </throws>
+      <implementation language="lang:PseudoCode"><![CDATA[
+
 for each prerequisite in #this.prerequisites:
     prerequisite.require()
 
 for each rule in #this.rules:
     rule.apply()
 
-for each successCriterion in #this.successCriteria:
+repeat:
+    #this._execute()
+until every successCriterion in #this.successCriteria satisfies:
     successCriterion.isSatisfied()
-        ]]>
-      </implementation>
+
+    ]]></implementation>
     </run>
+
+    <_execute type="cap:Action">
+      <abstract>true</abstract>
+      <documentation>
+        The task's actual action. Protected: subtypes override it, external callers
+        do not. Invoked by run after prerequisites and rules.
+      </documentation>
+      <throws>
+        <workflow:ExecutionException />
+      </throws>
+    </_execute>
   </capabilities>
 
 </block>
