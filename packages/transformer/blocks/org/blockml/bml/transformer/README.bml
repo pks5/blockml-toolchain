@@ -31,6 +31,7 @@
     <see type="workflow:ExecutionException" relation="SeeAlso" />
     <see type="workflow:Rule" relation="SeeAlso" />
     <see type="workflow:InstructionRule" relation="SeeAlso" />
+    <see type="workflow:InstructionTask" relation="SeeAlso" />
   </references>
 
 </block>

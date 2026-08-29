@@ -1,0 +1,46 @@
+<!--
+  Transformer Workflow — InstructionTask
+  FQN: org.blockml.bml.transformer.workflow.InstructionTask
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>InstructionTask</name>
+  <type>workflow:InstructionTask</type>
+  <baseType>workflow:Task</baseType>
+  <is>A task described by instruction prose</is>
+
+  <documentation>
+    Task whose action is stated as free-form instructions. run still enforces
+    prerequisites, rules, and successCriteria; execute reads and follows instructions.
+  </documentation>
+
+  <references>
+    <see type="workflow:Task" relation="Extends" />
+    <see type="workflow:InstructionRule" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <instructions type="type:Text">
+      <documentation>Prose that states what this task must do when execute runs.</documentation>
+    </instructions>
+  </properties>
+
+  <capabilities>
+    <_execute override="true" type="cap:Action">
+      <documentation>Read the instructions property and follow them.</documentation>
+      <implementation language="lang:English">
+        <![CDATA[Read the instructions and follow them.]]>
+      </implementation>
+    </_execute>
+  </capabilities>
+
+</block>

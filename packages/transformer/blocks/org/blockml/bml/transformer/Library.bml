@@ -57,6 +57,7 @@
         <workflow:Criterion />
         <workflow:ExecutionException />
         <workflow:InstructionRule />
+        <workflow:InstructionTask />
         <workflow:Prerequisite />
         <workflow:PrerequisiteNotMetException />
         <workflow:Rule />

@@ -48,6 +48,7 @@
         execute, not run.
       </documentation>
       <throws>
+        <workflow:PrerequisiteNotMetException />
         <workflow:ExecutionException />
       </throws>
       <implementation language="lang:PseudoCode"><![CDATA[
@@ -60,10 +61,16 @@ for each rule in #this.rules:
 
 repeat:
     #this._execute()
-until every successCriterion in #this.successCriteria satisfies:
-    successCriterion.isSatisfied()
 
-    ]]></implementation>
+    allSatisfied = true
+
+    for each successCriterion in #this.successCriteria:
+        if not successCriterion.isSatisfied():
+            allSatisfied = false
+
+until allSatisfied
+
+      ]]></implementation>
     </run>
 
     <_execute type="cap:Action">
