@@ -16,6 +16,10 @@ export {
   buildClaudeExecutionPrompt,
   ensureAgentsMarkdown,
 } from "./agent/claude-code-agent.js";
+export {
+  ClaudeLiveFormatter,
+  formatClaudeStreamLine,
+} from "./agent/claude-stream.js";
 export type {
   ClaudeCodeAgentOptions,
   ClaudeProcessRequest,

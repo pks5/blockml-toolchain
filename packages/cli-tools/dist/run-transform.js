@@ -19,7 +19,10 @@ export async function runTransform(executionFqn, rootDir, lines, usage, agent) {
     pushLines(lines, `Transformed ${result.completedFqn}`, "success");
     return 0;
 }
-export function defaultTransformAgent() {
+export function defaultTransformAgent(verbose = false) {
+    if (verbose) {
+        return new ClaudeCodeAgent({ verbose: true });
+    }
     return new ClaudeCodeAgent();
 }
 //# sourceMappingURL=run-transform.js.map

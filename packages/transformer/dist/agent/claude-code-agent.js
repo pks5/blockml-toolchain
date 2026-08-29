@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { ClaudeLiveFormatter } from "./claude-stream.js";
 import { DEFAULT_AGENTS_MD } from "./default-agents.js";
 export function buildClaudeExecutionPrompt(executionFqn) {
     return [
@@ -25,20 +26,29 @@ export function ensureAgentsMarkdown(workspaceRoot) {
 export class ClaudeCodeAgent {
     command;
     runProcess;
+    verbose;
     constructor(options = {}) {
         this.command = options.command ?? "claude";
         this.runProcess = options.runProcess ?? defaultClaudeProcessRunner;
+        this.verbose = options.verbose === true;
     }
     async execute(request) {
         const agents = ensureAgentsMarkdown(request.workspaceRoot);
         const prompt = buildClaudeExecutionPrompt(request.executionFqn);
         const args = ["-p", prompt, "--append-system-prompt", agents];
+        if (this.verbose) {
+            args.push("--verbose", "--output-format", "stream-json");
+        }
+        const processRequest = {
+            command: this.command,
+            args,
+            cwd: request.workspaceRoot,
+        };
+        if (this.verbose) {
+            processRequest.live = true;
+        }
         try {
-            const result = await this.runProcess({
-                command: this.command,
-                args,
-                cwd: request.workspaceRoot,
-            });
+            const result = await this.runProcess(processRequest);
             if (result.exitCode === 0) {
                 return { success: true };
             }
@@ -66,14 +76,26 @@ function defaultClaudeProcessRunner(request) {
         });
         const stdout = [];
         const stderr = [];
+        const formatter = request.live ? new ClaudeLiveFormatter() : undefined;
         child.stdout?.on("data", (chunk) => {
-            stdout.push(String(chunk));
+            const text = String(chunk);
+            stdout.push(text);
+            if (formatter) {
+                process.stdout.write(formatter.push(text));
+            }
         });
         child.stderr?.on("data", (chunk) => {
-            stderr.push(String(chunk));
+            const text = String(chunk);
+            stderr.push(text);
+            if (request.live) {
+                process.stderr.write(text);
+            }
         });
         child.on("error", reject);
         child.on("close", (code) => {
+            if (formatter) {
+                process.stdout.write(formatter.flush());
+            }
             resolve({
                 exitCode: code ?? 1,
                 stdout: stdout.join(""),

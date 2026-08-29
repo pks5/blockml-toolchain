@@ -33,6 +33,9 @@
     TransformationAgent, and on success relocates the same Block to completed.
     Resolve/config errors → exit 2. Agent/execution failure → exit 1 (execution
     remains in running). Missing FQN → exit 2.
+
+    --verbose streams the Claude Code session live to the terminal (thinking,
+    tool calls, assistant text). Claude-specific; the Transformer API stays generic.
   </documentation>
 
   <references>

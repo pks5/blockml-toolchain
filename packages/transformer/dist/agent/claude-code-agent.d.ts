@@ -8,17 +8,20 @@ export interface ClaudeProcessRequest {
     command: string;
     args: string[];
     cwd: string;
+    live?: boolean;
 }
 export type ClaudeProcessRunner = (request: ClaudeProcessRequest) => Promise<ClaudeProcessResult>;
 export interface ClaudeCodeAgentOptions {
     command?: string;
     runProcess?: ClaudeProcessRunner;
+    verbose?: boolean;
 }
 export declare function buildClaudeExecutionPrompt(executionFqn: string): string;
 export declare function ensureAgentsMarkdown(workspaceRoot: string): string;
 export declare class ClaudeCodeAgent implements TransformationAgent {
     private readonly command;
     private readonly runProcess;
+    private readonly verbose;
     constructor(options?: ClaudeCodeAgentOptions);
     execute(request: AgentExecutionRequest): Promise<AgentExecutionResult>;
 }

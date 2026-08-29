@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { ClaudeLiveFormatter } from "./claude-stream.js";
 import { DEFAULT_AGENTS_MD } from "./default-agents.js";
 import type {
   AgentExecutionRequest,
@@ -18,6 +19,7 @@ export interface ClaudeProcessRequest {
   command: string;
   args: string[];
   cwd: string;
+  live?: boolean;
 }
 
 export type ClaudeProcessRunner = (
@@ -27,6 +29,7 @@ export type ClaudeProcessRunner = (
 export interface ClaudeCodeAgentOptions {
   command?: string;
   runProcess?: ClaudeProcessRunner;
+  verbose?: boolean;
 }
 
 export function buildClaudeExecutionPrompt(executionFqn: string): string {
@@ -54,23 +57,33 @@ export function ensureAgentsMarkdown(workspaceRoot: string): string {
 export class ClaudeCodeAgent implements TransformationAgent {
   private readonly command: string;
   private readonly runProcess: ClaudeProcessRunner;
+  private readonly verbose: boolean;
 
   constructor(options: ClaudeCodeAgentOptions = {}) {
     this.command = options.command ?? "claude";
     this.runProcess = options.runProcess ?? defaultClaudeProcessRunner;
+    this.verbose = options.verbose === true;
   }
 
   async execute(request: AgentExecutionRequest): Promise<AgentExecutionResult> {
     const agents = ensureAgentsMarkdown(request.workspaceRoot);
     const prompt = buildClaudeExecutionPrompt(request.executionFqn);
     const args = ["-p", prompt, "--append-system-prompt", agents];
+    if (this.verbose) {
+      args.push("--verbose", "--output-format", "stream-json");
+    }
+
+    const processRequest: ClaudeProcessRequest = {
+      command: this.command,
+      args,
+      cwd: request.workspaceRoot,
+    };
+    if (this.verbose) {
+      processRequest.live = true;
+    }
 
     try {
-      const result = await this.runProcess({
-        command: this.command,
-        args,
-        cwd: request.workspaceRoot,
-      });
+      const result = await this.runProcess(processRequest);
       if (result.exitCode === 0) {
         return { success: true };
       }
@@ -100,14 +113,26 @@ function defaultClaudeProcessRunner(
     });
     const stdout: string[] = [];
     const stderr: string[] = [];
+    const formatter = request.live ? new ClaudeLiveFormatter() : undefined;
     child.stdout?.on("data", (chunk: Buffer | string) => {
-      stdout.push(String(chunk));
+      const text = String(chunk);
+      stdout.push(text);
+      if (formatter) {
+        process.stdout.write(formatter.push(text));
+      }
     });
     child.stderr?.on("data", (chunk: Buffer | string) => {
-      stderr.push(String(chunk));
+      const text = String(chunk);
+      stderr.push(text);
+      if (request.live) {
+        process.stderr.write(text);
+      }
     });
     child.on("error", reject);
     child.on("close", (code) => {
+      if (formatter) {
+        process.stdout.write(formatter.flush());
+      }
       resolve({
         exitCode: code ?? 1,
         stdout: stdout.join(""),

@@ -28,7 +28,7 @@
   <is>blockml transform specification</is>
 
   <documentation><![CDATA[Syntax:
-    blockml transform EXECUTION-FQN
+    blockml transform EXECUTION-FQN [--verbose]
 
     EXECUTION-FQN is the FQN of a TaskExecution under
     {library}._transform.pending. Tasks are not accepted directly.
@@ -36,6 +36,8 @@
     The transformer resolves the execution, assigns sequence and startedAt,
     relocates it to _transform.running, invokes a TransformationAgent (Claude Code
     by default), and on success relocates the same Block to _transform.completed.
+
+    --verbose streams the agent session live (thinking, tools, text).
 
     Failed agent execution leaves the Block in running and exits non-zero.]]></documentation>
   <references>

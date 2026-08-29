@@ -1,5 +1,6 @@
 export { Transformer, runTransformation } from "./runtime/transformer.js";
 export { ClaudeCodeAgent, buildClaudeExecutionPrompt, ensureAgentsMarkdown, } from "./agent/claude-code-agent.js";
+export { ClaudeLiveFormatter, formatClaudeStreamLine, } from "./agent/claude-stream.js";
 export { TransformError } from "./execution/errors.js";
 export { resolvePendingExecution } from "./execution/resolve.js";
 export { startExecution } from "./execution/start.js";

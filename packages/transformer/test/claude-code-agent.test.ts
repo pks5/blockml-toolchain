@@ -23,7 +23,12 @@ describe("ClaudeCodeAgent", () => {
   it("writes AGENTS.md when missing and includes the running execution FQN in the prompt", async () => {
     const runningFqn =
       "com.example.model._transform.running.T00001_JokeTest_20260830T011702";
-    let captured: { command: string; args: string[]; cwd: string } | undefined;
+    let captured: {
+      command: string;
+      args: string[];
+      cwd: string;
+      live?: boolean;
+    } | undefined;
     const agent = new ClaudeCodeAgent({
       runProcess: async (request) => {
         captured = request;
@@ -40,7 +45,28 @@ describe("ClaudeCodeAgent", () => {
     expect(captured?.command).toBe("claude");
     expect(captured?.args).toContain("-p");
     expect(captured?.args.some((arg) => arg.includes(runningFqn))).toBe(true);
+    expect(captured?.args).not.toContain("--verbose");
+    expect(captured?.live).toBeUndefined();
     expect(buildClaudeExecutionPrompt(runningFqn)).toContain(runningFqn);
+  });
+
+  it("streams a verbose Claude session with stream-json", async () => {
+    let captured: { args: string[]; live?: boolean } | undefined;
+    const agent = new ClaudeCodeAgent({
+      verbose: true,
+      runProcess: async (request) => {
+        captured = { args: request.args, live: request.live };
+        return { exitCode: 0, stdout: "", stderr: "" };
+      },
+    });
+    await agent.execute({
+      workspaceRoot: TMP,
+      executionFqn: "com.example.model._transform.running.X",
+    });
+    expect(captured?.live).toBe(true);
+    expect(captured?.args).toContain("--verbose");
+    expect(captured?.args).toContain("--output-format");
+    expect(captured?.args).toContain("stream-json");
   });
 
   it("does not overwrite an existing AGENTS.md", async () => {

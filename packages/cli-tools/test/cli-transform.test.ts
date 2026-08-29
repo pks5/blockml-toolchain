@@ -56,6 +56,18 @@ describe("parseArgs transform", () => {
       "org.blockml.bml.workspace._transform.pending.JokeTest",
     );
   });
+
+  it("maps transform --verbose", () => {
+    const parsed = parseArgs([
+      "transform",
+      "org.blockml.bml.workspace._transform.pending.JokeTest",
+      "--verbose",
+    ]);
+    expect(parsed.verbose).toBe(true);
+    expect(parsed.executionFqn).toBe(
+      "org.blockml.bml.workspace._transform.pending.JokeTest",
+    );
+  });
 });
 
 describe("blockml transform CLI", () => {

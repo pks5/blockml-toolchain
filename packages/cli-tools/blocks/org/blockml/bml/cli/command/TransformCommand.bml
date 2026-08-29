@@ -33,6 +33,7 @@
   </references>
   <properties>
     <executionFqn type="type:Text"><documentation>FQN of a TaskExecution in the library _transform.pending package. (required)</documentation></executionFqn>
+    <verbose type="type:Boolean"><documentation>Stream the transformation agent output live. (optional)</documentation></verbose>
   </properties>
 
 </block>

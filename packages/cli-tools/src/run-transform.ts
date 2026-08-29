@@ -34,6 +34,9 @@ export async function runTransform(
   return 0;
 }
 
-export function defaultTransformAgent(): TransformationAgent {
+export function defaultTransformAgent(verbose = false): TransformationAgent {
+  if (verbose) {
+    return new ClaudeCodeAgent({ verbose: true });
+  }
   return new ClaudeCodeAgent();
 }

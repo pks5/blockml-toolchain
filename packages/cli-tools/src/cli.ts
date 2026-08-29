@@ -47,7 +47,7 @@ const USAGE =
   "       blockml validate [--all] [<file>] [--src dir] [--libraries a,b] [--verbose]\n" +
   "       blockml search <query> [--json] [--limit n] [--src dir] [--libraries a,b]\n" +
   "       blockml search index [--force] [--src dir] [--libraries a,b]\n" +
-  "       blockml transform <execution-fqn>";
+  "       blockml transform <execution-fqn> [--verbose]";
 
 function workspaceRoot(from: string): string {
   let dir = resolve(from);
@@ -835,7 +835,7 @@ async function executeCli(
     }
 
     if (parsed.command === "transform") {
-      const agent = options.transformAgent ?? defaultTransformAgent();
+      const agent = options.transformAgent ?? defaultTransformAgent(parsed.verbose === true);
       const code = await runTransform(parsed.executionFqn, cwd, lines, USAGE, agent);
       return { code, lines };
     }
