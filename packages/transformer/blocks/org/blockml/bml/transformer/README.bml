@@ -24,6 +24,7 @@
 
   <references>
     <see type="workflow:Task" relation="ReadFirst" />
+    <see type="workflow:TaskExecution" relation="SeeAlso" />
     <see type="workflow:CompositeTask" relation="SeeAlso" />
     <see type="workflow:Prerequisite" relation="SeeAlso" />
     <see type="workflow:PrerequisiteNotMetException" relation="SeeAlso" />

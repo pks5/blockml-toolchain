@@ -1,0 +1,56 @@
+<!--
+  Transformer Workflow — TaskExecution
+  FQN: org.blockml.bml.transformer.workflow.TaskExecution
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type">
+
+  <name>TaskExecution</name>
+  <type>workflow:TaskExecution</type>
+  <baseType>core:Block</baseType>
+  <is>A recorded execution of a workflow Task</is>
+
+  <documentation>
+    One execution of a Task against the model. startedAt and finishedAt mark the
+    interval; task is the Task that ran; changedFiles lists paths modified during
+    the execution.
+  </documentation>
+
+  <references>
+    <see type="workflow:Task" relation="SeeAlso" />
+  </references>
+
+  <properties>
+    <executionId type="type:Text">
+      <documentation>Globally unique identifier of this execution.</documentation>
+    </executionId>
+    <sequence type="type:Integer">
+      <documentation>Which execution within the model this task was applied to.</documentation>
+    </sequence>
+    <createdAt type="type:DateTime">
+      <documentation>When this execution was created.</documentation>
+    </createdAt>
+    <startedAt type="type:DateTime">
+      <documentation>When this execution started.</documentation>
+    </startedAt>
+    <completedAt type="type:DateTime">
+      <documentation>When this execution finished.</documentation>
+    </completedAt>
+  </properties>
+
+  <aggregations>
+    <task type="workflow:Task">
+      <documentation>The Task that was executed.</documentation>
+    </task>
+    <changedFiles type="type:FilePathEntity[]">
+      <documentation>Filesystem paths modified during this execution.</documentation>
+    </changedFiles>
+  </aggregations>
+
+</block>

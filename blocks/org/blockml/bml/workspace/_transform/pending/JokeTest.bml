@@ -1,0 +1,33 @@
+<!--
+  Workspace pending transform — JokeTest
+  FQN: org.blockml.bml.workspace._transform.pending.JokeTest
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:pending="org.blockml.bml.workspace._transform.pending">
+
+  <name>JokeTest</name>
+  <type>pending:JokeTest</type>
+  <baseType>workflow:TaskExecution</baseType>
+  <is>A pending TaskExecution that creates a playground Joke block</is>
+
+  <properties>
+    <executionId override="true">
+      <value>d41bf2a3-f51f-4171-a2e4-e71893c16f24</value>
+    </executionId>
+  </properties>
+
+  <aggregations>
+    <task override="true">
+      <composition>
+        <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Joke.bml that contains a random joke. For each execution create a new joke." />
+      </composition>
+    </task>
+  </aggregations>
+
+</block>

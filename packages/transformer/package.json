@@ -20,7 +20,7 @@
     "blocks"
   ],
   "dependencies": {
-    "@blockml/core": "^1.0.8"
+    "@blockml/core": "^1.0.9"
   },
   "engines": {
     "node": ">=20"
