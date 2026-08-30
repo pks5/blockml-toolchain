@@ -9,8 +9,8 @@ const FORBIDDEN_PROPERTIES = [
     "completedAt",
     "sequence",
     "feedback",
-    "changedFiles",
 ];
+const FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"];
 export function resolvePendingExecution(executionFqn, workspaceRoot) {
     const { registry } = bootstrapFullProjectRegistry({ rootDir: workspaceRoot });
     return resolvePendingExecutionInRegistry(executionFqn, registry);
@@ -60,8 +60,10 @@ function assertPendingContract(fqn, block) {
             throw new TransformError("resolve", `${fqn} must not have ${name} set while pending`);
         }
     }
-    if (hasAggregationComposition(block, "exception")) {
-        throw new TransformError("resolve", `${fqn} must not have exception set while pending`);
+    for (const name of FORBIDDEN_AGGREGATIONS) {
+        if (hasAggregationComposition(block, name)) {
+            throw new TransformError("resolve", `${fqn} must not have ${name} set while pending`);
+        }
     }
 }
 //# sourceMappingURL=resolve.js.map

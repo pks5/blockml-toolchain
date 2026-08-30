@@ -1,5 +1,5 @@
 import { collectBaseTypeChain } from "@blockml/framework";
-import { DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, } from "./constants.js";
+import { DATETIME_TYPE_FQN, EXECUTION_EXCEPTION_FQN, EXECUTION_STATUS_FQN, FILE_PATH_ENTITY_FQN, FILE_PATH_TYPE_FQN, INTEGER_TYPE_FQN, MODEL_TRANSFORMATION_FQN, TEXT_TYPE_FQN, } from "./constants.js";
 export function isModelTransformation(block, registry) {
     if (block.type === MODEL_TRANSFORMATION_FQN || block.baseType === MODEL_TRANSFORMATION_FQN) {
         return true;
@@ -127,7 +127,30 @@ export function setFeedback(block, feedback) {
     setOverrideProperty(block, "feedback", TEXT_TYPE_FQN, feedback);
 }
 export function setChangedFiles(block, paths) {
-    setOverridePropertyList(block, "changedFiles", TEXT_TYPE_FQN, paths);
+    const aggregation = {
+        kind: "aggregation",
+        name: "changedFiles",
+        override: true,
+        authoredInAggregationsSection: true,
+        composition: {
+            aggregationName: "changedFiles",
+            children: paths.map((path) => ({
+                kind: "blockInstance",
+                instance: {
+                    typeFqn: FILE_PATH_ENTITY_FQN,
+                    memberValues: {
+                        value: {
+                            kind: "literal",
+                            value: path,
+                            typeFqn: FILE_PATH_TYPE_FQN,
+                            authoredPlacement: "attribute",
+                        },
+                    },
+                },
+            })),
+        },
+    };
+    upsertAggregation(block, aggregation);
 }
 export function setException(block, message) {
     const aggregation = {
