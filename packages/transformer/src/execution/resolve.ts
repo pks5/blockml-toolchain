@@ -30,8 +30,8 @@ const FORBIDDEN_PROPERTIES = [
   "completedAt",
   "sequence",
   "feedback",
-  "changedFiles",
 ] as const;
+const FORBIDDEN_AGGREGATIONS = ["changedFiles", "exception"] as const;
 
 export function resolvePendingExecution(
   executionFqn: string,
@@ -121,10 +121,12 @@ function assertPendingContract(fqn: string, block: BlockDefinition): void {
       );
     }
   }
-  if (hasAggregationComposition(block, "exception")) {
-    throw new TransformError(
-      "resolve",
-      `${fqn} must not have exception set while pending`,
-    );
+  for (const name of FORBIDDEN_AGGREGATIONS) {
+    if (hasAggregationComposition(block, name)) {
+      throw new TransformError(
+        "resolve",
+        `${fqn} must not have ${name} set while pending`,
+      );
+    }
   }
 }

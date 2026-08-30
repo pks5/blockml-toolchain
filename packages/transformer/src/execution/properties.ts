@@ -9,6 +9,8 @@ import {
   DATETIME_TYPE_FQN,
   EXECUTION_EXCEPTION_FQN,
   EXECUTION_STATUS_FQN,
+  FILE_PATH_ENTITY_FQN,
+  FILE_PATH_TYPE_FQN,
   INTEGER_TYPE_FQN,
   MODEL_TRANSFORMATION_FQN,
   TEXT_TYPE_FQN,
@@ -199,7 +201,30 @@ export function setChangedFiles(
   block: BlockDefinition,
   paths: readonly string[],
 ): void {
-  setOverridePropertyList(block, "changedFiles", TEXT_TYPE_FQN, paths);
+  const aggregation: AggregationDefinition = {
+    kind: "aggregation",
+    name: "changedFiles",
+    override: true,
+    authoredInAggregationsSection: true,
+    composition: {
+      aggregationName: "changedFiles",
+      children: paths.map((path) => ({
+        kind: "blockInstance" as const,
+        instance: {
+          typeFqn: FILE_PATH_ENTITY_FQN,
+          memberValues: {
+            value: {
+              kind: "literal" as const,
+              value: path,
+              typeFqn: FILE_PATH_TYPE_FQN,
+              authoredPlacement: "attribute" as const,
+            },
+          },
+        },
+      })),
+    },
+  };
+  upsertAggregation(block, aggregation);
 }
 
 export function setException(block: BlockDefinition, message: string): void {

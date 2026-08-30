@@ -38,7 +38,7 @@
 
   <properties>
     <changedFiles type="type:Text[]">
-      <documentation>Paths to persist onto ModelTransformation.changedFiles. (required)</documentation>
+      <documentation>Workspace-relative paths persisted as FilePathEntity children of ModelTransformation.changedFiles. (required)</documentation>
     </changedFiles>
     <feedback type="type:Text">
       <documentation>Text to persist onto ModelTransformation.feedback. (optional)</documentation>

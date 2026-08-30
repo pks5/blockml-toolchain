@@ -23,6 +23,8 @@
       `_transform` package: Pending, Running, Succeeded, Failed.
     * `startedAt` / `completedAt` — the execution interval.
     * `task` — the Task that ran.
+    * `changedFiles` — workspace-relative paths modified during this execution
+      (`type:FilePathEntity[]`).
     * `exception` — present if and only if `status` is Failed.
     * Persist writes `changedFiles` and `feedback` onto this Block while it is still running.
   </documentation>
@@ -31,6 +33,7 @@
     <see type="workflow:Task" relation="SeeAlso" />
     <see type="workflow:ExecutionStatus" relation="SeeAlso" />
     <see type="core:Exception" relation="SeeAlso" />
+    <see type="type:FilePathEntity" relation="SeeAlso" />
   </references>
 
   <properties>
@@ -55,15 +58,15 @@
     <feedback type="type:Text">
       <documentation>Feedback from the task execution.</documentation>
     </feedback>
-    <changedFiles type="type:Text[]">
-      <documentation>Workspace-relative filesystem paths modified during this execution.</documentation>
-    </changedFiles>
   </properties>
 
   <aggregations>
     <task type="workflow:Task">
       <documentation>The Task that was executed.</documentation>
     </task>
+    <changedFiles type="type:FilePathEntity[]">
+      <documentation>Workspace-relative filesystem paths modified during this execution.</documentation>
+    </changedFiles>
     <exception type="core:Exception">
       <documentation>The Exception thrown during this execution, if any.</documentation>
     </exception>

@@ -4,6 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:core="org.blockml.bml.core"
   xmlns:workflow="org.blockml.bml.transformer.workflow"
+  xmlns:type="org.blockml.bml.type"
   xmlns:succeeded="org.blockml.bml.workspace._transform.succeeded"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd                       ">
 
@@ -49,19 +50,19 @@ Potential issues to review:
 
 Validation NOT re-run: this Reflect stage is read-only and Bash is disabled, and Execute's own stdout in the pipeline log is truncated, so I cannot confirm `npx blockml validate` passed. Recommend the next stage run `npx blockml validate` (and `--all` since node_modules types are referenced) before completing.</value>
     </feedback>
-    <changedFiles override="true" type="org.blockml.bml.type.Text">
-      <value>blocks/org/blockml/bml/workspace/playground/library/AvailabilityStatus.bml</value>
-      <value>blocks/org/blockml/bml/workspace/playground/library/Author.bml</value>
-      <value>blocks/org/blockml/bml/workspace/playground/library/Book.bml</value>
-      <value>blocks/org/blockml/bml/workspace/playground/library/Member.bml</value>
-      <value>blocks/org/blockml/bml/workspace/playground/library/Borrowing.bml</value>
-      <value>blocks/org/blockml/bml/workspace/playground/library/Library.bml</value>
-    </changedFiles>
     <completedAt override="true" type="org.blockml.bml.type.DateTime">
       <value>2026-08-30T04:50:25</value>
     </completedAt>
   </properties>
   <aggregations>
+    <changedFiles override="true">
+      <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/library/AvailabilityStatus.bml" />
+      <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/library/Author.bml" />
+      <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/library/Book.bml" />
+      <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/library/Member.bml" />
+      <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/library/Borrowing.bml" />
+      <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/library/Library.bml" />
+    </changedFiles>
     <task override="true">
       <composition>
         <workflow:InstructionTask>

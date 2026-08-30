@@ -115,7 +115,9 @@ describe("Transformer pipeline", () => {
       ),
     ).toBe(false);
     const running = readFileSync(runningPath, "utf8");
-    expect(running).toContain("model.bml");
+    expect(running).toContain(
+      '<type:FilePathEntity value="model.bml" />',
+    );
     expect(running).toContain(">ok</value>");
   });
 
@@ -144,7 +146,9 @@ describe("Transformer pipeline", () => {
       join(TMP, `blocks/com/example/model/_transform/succeeded/${generated}.bml`),
       "utf8",
     );
-    expect(succeeded).toContain("model.bml");
+    expect(succeeded).toContain(
+      '<type:FilePathEntity value="model.bml" />',
+    );
     expect(succeeded).toContain(">ok</value>");
     expect(succeeded).not.toContain(`_transform/running/${generated}`);
   });
