@@ -43,14 +43,21 @@
   <aggregations>
     <stages override="true">
       <composition>
-        <workflow:Stage status="Running">
+        <workflow:Stage status="Succeeded">
           <startedAt>2026-08-30T23:28:31</startedAt>
           <baseCommit>e18e9d060e9da30a1e5f39f4d650aa872e87665c</baseCommit>
+          <feedback>Stage 1 task was: 'Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem.' Execute created exactly one new file, blocks/org/blockml/bml/workspace/playground/Poem.bml (previously the playground/ directory was untracked/empty). It is a well-formed BML block: FQN header comment, standard namespace declarations, name=Poem, type=playground:Poem, baseType=core:Documentation, an &lt;is> line, and a &lt;documentation> element holding an original 8-line poem. Naming and structure match sibling workspace BML files. The Execute stdout (as captured) shows only read-only exploration commands (ls, find) and is truncated before the write, but the on-disk result is consistent with the instruction. No _transform/ ModelTransformation files were modified — T00001_PoemTest_20260830T232831.bml is unchanged. Stage 2 (translate the poem to Chinese) has not been started. Note: git diff is empty only because the new file is untracked, not because nothing changed.</feedback>
+          <completedAt>2026-08-30T23:29:45</completedAt>
           <task>
             <composition>
               <workflow:InstructionTask instructions="Create or update the block org.blockml.bml.workspace.playground.Poem.bml that contains a random poem. For each execution create a new poem." />
             </composition>
           </task>
+          <changedFiles>
+            <composition>
+              <type:FilePathEntity value="blocks/org/blockml/bml/workspace/playground/Poem.bml" />
+            </composition>
+          </changedFiles>
         </workflow:Stage>
         <workflow:Stage>
           <task>

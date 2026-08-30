@@ -1,0 +1,30 @@
+<!--
+  Workspace Playground — Poem
+  FQN: org.blockml.bml.workspace.playground.Poem
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>Poem</name>
+  <type>playground:Poem</type>
+  <baseType>core:Documentation</baseType>
+  <is>A random poem produced by a workspace transform execution</is>
+
+  <documentation>
+    A harbour wakes before the sun,
+    the fishing boats slip out as one.
+    Grey water folds against the pier,
+    the gulls announce that morning's here.
+
+    Somewhere a kettle starts to sing,
+    a window opens, letting spring
+    walk barefoot through the sleeping town
+    and shake the last of winter down.
+  </documentation>
+
+</block>
