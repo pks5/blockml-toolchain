@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { claudePermissionCliArgs } from "./claude-permissions.js";
 import { ClaudeLiveFormatter } from "./claude-stream.js";
 import { DEFAULT_AGENTS_MD } from "./default-agents.js";
 import type {
@@ -31,8 +32,6 @@ export interface ClaudeCodeAgentOptions {
   runProcess?: ClaudeProcessRunner;
   verbose?: boolean;
 }
-
-export const CLAUDE_BLOCKML_BASH_PERMISSION = "Bash(npx blockml *)";
 
 export function buildClaudeExecutionPrompt(executionFqn: string): string {
   return [
@@ -75,8 +74,7 @@ export class ClaudeCodeAgent implements TransformationAgent {
       prompt,
       "--append-system-prompt",
       agents,
-      "--allowedTools",
-      CLAUDE_BLOCKML_BASH_PERMISSION,
+      ...claudePermissionCliArgs(),
     ];
     if (this.verbose) {
       args.push(

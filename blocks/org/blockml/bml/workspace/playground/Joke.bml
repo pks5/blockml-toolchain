@@ -1,0 +1,24 @@
+<!--
+  Workspace Playground — Joke
+  FQN: org.blockml.bml.workspace.playground.Joke
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:playground="org.blockml.bml.workspace.playground">
+
+  <name>Joke</name>
+  <type>playground:Joke</type>
+  <baseType>core:Documentation</baseType>
+  <is>A random joke produced by a workspace transform execution</is>
+
+  <documentation>
+    Why did the developer go broke?
+
+    Because they used up all their cache.
+  </documentation>
+
+</block>

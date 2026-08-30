@@ -17,6 +17,14 @@ export {
   ensureAgentsMarkdown,
 } from "./agent/claude-code-agent.js";
 export {
+  CLAUDE_TRANSFORM_PERMISSIONS,
+  claudePermissionCliArgs,
+} from "./agent/claude-permissions.js";
+export type {
+  ClaudePermissionMode,
+  ClaudeTransformPermissions,
+} from "./agent/claude-permissions.js";
+export {
   ClaudeLiveFormatter,
   formatClaudeStreamLine,
 } from "./agent/claude-stream.js";

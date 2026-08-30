@@ -66,6 +66,7 @@ export class ClaudeLiveFormatter {
   private streamedThinking = false;
   private streamedText = false;
   private thinkingLabeled = false;
+  private readonly toolBuffers = new Map<number, { id?: string; name: string; json: string }>();
 
   push(chunk: string): string {
     this.leftover += chunk;
@@ -96,6 +97,11 @@ export class ClaudeLiveFormatter {
       const formatted = formatClaudeStreamLine(line);
       return formatted ?? "";
     }
+    this.captureToolInput(event);
+    if (isCompleteAssistant(event)) {
+      event = mergeToolInputs(event, this.toolBuffers);
+      this.toolBuffers.clear();
+    }
     const deltaType = eventDeltaType(event);
     if (deltaType === "thinking_delta") {
       this.streamedThinking = true;
@@ -124,6 +130,27 @@ export class ClaudeLiveFormatter {
       return prefix;
     }
     return `${prefix}${formatted}`;
+  }
+
+  private captureToolInput(event: unknown): void {
+    const start = eventContentBlockStart(event);
+    if (start?.block.type === "tool_use") {
+      const buffer: { id?: string; name: string; json: string } = {
+        name: typeof start.block.name === "string" ? start.block.name : "",
+        json: "",
+      };
+      if (typeof start.block.id === "string") {
+        buffer.id = start.block.id;
+      }
+      this.toolBuffers.set(start.index, buffer);
+    }
+    const delta = eventContentBlockDelta(event);
+    if (delta?.delta.type === "input_json_delta" && typeof delta.delta.partial_json === "string") {
+      const buffer = this.toolBuffers.get(delta.index);
+      if (buffer) {
+        buffer.json += delta.delta.partial_json;
+      }
+    }
   }
 }
 
@@ -197,7 +224,7 @@ function formatToolResult(message: unknown): string | undefined {
     if (block.type !== "tool_result") {
       continue;
     }
-    const text = truncate(blockText(block), TOOL_RESULT_LIMIT);
+    const text = truncate(blockText(block) || toolResultFallback(block), TOOL_RESULT_LIMIT);
     results.push(text ? `[tool result]\n${text}\n` : "[tool result]\n");
   }
   return results.length > 0 ? results.join("") : undefined;
@@ -211,10 +238,13 @@ function formatFinalResult(record: Record<string, unknown>): string | undefined 
 }
 
 function summarizeToolInput(input: unknown): string | undefined {
-  if (!input || typeof input !== "object") {
-    return undefined;
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    return typeof input === "string" && input.trim() ? truncate(input, TOOL_INPUT_LIMIT) : undefined;
   }
   const record = input as Record<string, unknown>;
+  if (Object.keys(record).length === 0) {
+    return undefined;
+  }
   for (const key of TOOL_INPUT_KEYS) {
     const value = record[key];
     if (typeof value === "string" && value.trim()) {
@@ -242,6 +272,19 @@ function messageContent(message: unknown): Array<Record<string, unknown>> | unde
   return content.filter((entry): entry is Record<string, unknown> => {
     return !!entry && typeof entry === "object";
   });
+}
+
+function toolResultFallback(block: Record<string, unknown>): string {
+  for (const key of ["output", "result", "error"]) {
+    const value = block[key];
+    if (typeof value === "string" && value.trim()) {
+      return value;
+    }
+  }
+  if (block.is_error === true) {
+    return "(error)";
+  }
+  return "";
 }
 
 function blockText(block: Record<string, unknown>): string {
@@ -307,29 +350,129 @@ function isCompleteAssistant(event: unknown): boolean {
 }
 
 function eventContentBlock(event: unknown): Record<string, unknown> | undefined {
+  return eventContentBlockStart(event)?.block;
+}
+
+function eventContentBlockStart(
+  event: unknown,
+): { index: number; block: Record<string, unknown> } | undefined {
+  const record = unwrapStreamEvent(event);
+  if (!record || record.type !== "content_block_start") {
+    return undefined;
+  }
+  if (!record.content_block || typeof record.content_block !== "object") {
+    return undefined;
+  }
+  return {
+    index: eventIndex(record),
+    block: record.content_block as Record<string, unknown>,
+  };
+}
+
+function eventContentBlockDelta(
+  event: unknown,
+): { index: number; delta: Record<string, unknown> } | undefined {
+  const record = unwrapStreamEvent(event);
+  if (!record || record.type !== "content_block_delta") {
+    return undefined;
+  }
+  if (!record.delta || typeof record.delta !== "object") {
+    return undefined;
+  }
+  return {
+    index: eventIndex(record),
+    delta: record.delta as Record<string, unknown>,
+  };
+}
+
+function eventIndex(record: Record<string, unknown>): number {
+  return typeof record.index === "number" ? record.index : 0;
+}
+
+function unwrapStreamEvent(event: unknown): Record<string, unknown> | undefined {
   if (!event || typeof event !== "object") {
     return undefined;
   }
   const record = event as Record<string, unknown>;
-  if (record.type === "content_block_start" && record.content_block && typeof record.content_block === "object") {
-    return record.content_block as Record<string, unknown>;
-  }
   if (record.type === "stream_event") {
-    return eventContentBlock(record.event);
+    return unwrapStreamEvent(record.event);
+  }
+  return record;
+}
+
+function mergeToolInputs(
+  event: unknown,
+  buffers: Map<number, { id?: string; name: string; json: string }>,
+): unknown {
+  if (!event || typeof event !== "object") {
+    return event;
+  }
+  const record = event as Record<string, unknown>;
+  const message = record.message;
+  if (!message || typeof message !== "object") {
+    return event;
+  }
+  const content = (message as Record<string, unknown>).content;
+  if (!Array.isArray(content)) {
+    return event;
+  }
+  const merged = content.map((entry) => {
+    if (!entry || typeof entry !== "object") {
+      return entry;
+    }
+    const block = entry as Record<string, unknown>;
+    if (block.type !== "tool_use" || !isEmptyToolInput(block.input)) {
+      return entry;
+    }
+    const buffer = findToolBuffer(buffers, block);
+    if (!buffer?.json) {
+      return entry;
+    }
+    try {
+      return { ...block, input: JSON.parse(buffer.json) as unknown };
+    } catch {
+      return entry;
+    }
+  });
+  return {
+    ...record,
+    message: {
+      ...(message as Record<string, unknown>),
+      content: merged,
+    },
+  };
+}
+
+function findToolBuffer(
+  buffers: Map<number, { id?: string; name: string; json: string }>,
+  block: Record<string, unknown>,
+): { id?: string; name: string; json: string } | undefined {
+  const id = typeof block.id === "string" ? block.id : undefined;
+  if (id) {
+    for (const buffer of buffers.values()) {
+      if (buffer.id === id) {
+        return buffer;
+      }
+    }
+  }
+  const name = typeof block.name === "string" ? block.name : undefined;
+  if (name) {
+    for (const buffer of buffers.values()) {
+      if (buffer.name === name && buffer.json) {
+        return buffer;
+      }
+    }
   }
   return undefined;
 }
 
+function isEmptyToolInput(input: unknown): boolean {
+  if (input == null) {
+    return true;
+  }
+  return typeof input === "object" && !Array.isArray(input) && Object.keys(input as object).length === 0;
+}
+
 function eventDelta(event: unknown): unknown {
-  if (!event || typeof event !== "object") {
-    return undefined;
-  }
-  const record = event as Record<string, unknown>;
-  if (record.type === "content_block_delta") {
-    return record.delta;
-  }
-  if (record.type === "stream_event") {
-    return eventDelta(record.event);
-  }
-  return undefined;
+  return eventContentBlockDelta(event)?.delta;
 }

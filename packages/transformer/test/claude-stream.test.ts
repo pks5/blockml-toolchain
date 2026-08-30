@@ -36,6 +36,33 @@ describe("Claude live stream formatting", () => {
     expect(formatClaudeStreamLine(line)).toBe("[tool result]\nJokeTest.bml\n\n");
   });
 
+  it("fills empty tool_use input from streamed JSON deltas", () => {
+    const formatter = new ClaudeLiveFormatter();
+    const streamed = formatter.push(
+      `${JSON.stringify({
+        type: "stream_event",
+        event: {
+          type: "content_block_start",
+          index: 0,
+          content_block: { type: "tool_use", id: "toolu_1", name: "Bash", input: {} },
+        },
+      })}\n${JSON.stringify({
+        type: "stream_event",
+        event: {
+          type: "content_block_delta",
+          index: 0,
+          delta: { type: "input_json_delta", partial_json: '{"command":"npx blockml validate"}' },
+        },
+      })}\n${JSON.stringify({
+        type: "assistant",
+        message: {
+          content: [{ type: "tool_use", id: "toolu_1", name: "Bash", input: {} }],
+        },
+      })}\n`,
+    );
+    expect(streamed).toBe("[tool] Bash\nnpx blockml validate\n");
+  });
+
   it("streams thinking deltas without extra wrapping", () => {
     const line = JSON.stringify({
       type: "content_block_delta",

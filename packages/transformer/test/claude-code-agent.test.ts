@@ -45,8 +45,11 @@ describe("ClaudeCodeAgent", () => {
     expect(captured?.command).toBe("claude");
     expect(captured?.args).toContain("-p");
     expect(captured?.args.some((arg) => arg.includes(runningFqn))).toBe(true);
+    expect(captured?.args).toContain("--permission-mode");
+    expect(captured?.args).toContain("bypassPermissions");
     expect(captured?.args).toContain("--allowedTools");
-    expect(captured?.args).toContain("Bash(npx blockml *)");
+    expect(captured?.args).toContain("Write");
+    expect(captured?.args).toContain("Bash");
     expect(captured?.args).not.toContain("--verbose");
     expect(captured?.live).toBeUndefined();
     expect(buildClaudeExecutionPrompt(runningFqn)).toContain(runningFqn);

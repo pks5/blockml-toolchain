@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { claudePermissionCliArgs } from "./claude-permissions.js";
 import { ClaudeLiveFormatter } from "./claude-stream.js";
 import { DEFAULT_AGENTS_MD } from "./default-agents.js";
 export function buildClaudeExecutionPrompt(executionFqn) {
@@ -35,9 +36,15 @@ export class ClaudeCodeAgent {
     async execute(request) {
         const agents = ensureAgentsMarkdown(request.workspaceRoot);
         const prompt = buildClaudeExecutionPrompt(request.executionFqn);
-        const args = ["-p", prompt, "--append-system-prompt", agents];
+        const args = [
+            "-p",
+            prompt,
+            "--append-system-prompt",
+            agents,
+            ...claudePermissionCliArgs(),
+        ];
         if (this.verbose) {
-            args.push("--verbose", "--output-format", "stream-json");
+            args.push("--verbose", "--output-format", "stream-json", "--include-partial-messages");
         }
         const processRequest = {
             command: this.command,
